@@ -294,6 +294,9 @@ class GoGui
     {        
         if (m_commandThread == null)
             return;
+        if (m_commandInProgress)
+            if (! showQuestion("Kill program?"))
+                return;
         detachProgram();
     }
 
@@ -1546,6 +1549,9 @@ class GoGui
 
     private void close()
     {
+        if (m_commandInProgress)
+            if (! showQuestion("Kill program?"))
+                return;        
         if (m_setupMode)
             setupDone();
         if (m_needsSave && ! checkSaveGame())
@@ -1554,6 +1560,7 @@ class GoGui
         if (m_commandThread != null && m_isInitialized)
         {
             m_prefs.setString("program", m_program);
+            m_analyzeCommand = null;
             detachProgram();
         }
         else
@@ -1673,8 +1680,6 @@ class GoGui
     {
         if (m_commandInProgress)
         {
-            if (! showQuestion("Kill program?"))
-                return;
             m_commandThread.destroyGtp();
             m_commandThread.close();
         }
