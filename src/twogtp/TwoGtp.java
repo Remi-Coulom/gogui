@@ -31,7 +31,6 @@ public class TwoGtp
             throw new Exception("No black program set.");
         if (white.equals(""))
             throw new Exception("No white program set.");
-        m_verbose = verbose;
         m_sgfFile = sgfFile;
         if (force)
             getResultFile().delete();
@@ -391,8 +390,6 @@ public class TwoGtp
     private boolean m_inconsistentState;
 
     private boolean m_refereeIsDisabled;
-
-    private boolean m_verbose;
 
     private int m_gameIndex;
 

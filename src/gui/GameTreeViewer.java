@@ -335,10 +335,10 @@ public class GameTreeViewer
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        m_scrollPane.getViewport().setBackground(UIManager.getColor("Label.background"));
+        JViewport viewport = m_scrollPane.getViewport();
+        viewport.setBackground(UIManager.getColor("Label.background"));
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         pack();
-        m_listener = listener;
     }
 
     public void redrawCurrentNode()
@@ -366,8 +366,6 @@ public class GameTreeViewer
     private GameTreePanel m_panel;
 
     private JScrollPane m_scrollPane;
-
-    private Listener m_listener;
 }
 
 //-----------------------------------------------------------------------------
