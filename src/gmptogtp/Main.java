@@ -122,7 +122,7 @@ public class Main
                 out = process.getOutputStream();
             }
             int colorIndex = 0;
-            if (color != null)
+            if (! color.equals(""))
             {
                 if (color.equals("black"))
                     colorIndex =  1;
