@@ -184,6 +184,10 @@ public class Reader
                 for (int i = 0; i < values.size(); ++i)
                     node.addBlack(parsePoint((String)values.get(i)));
             }
+            else if (p.equals("AE"))
+            {
+                throw getError("Add empty not supported.");
+            }
             else if (p.equals("AW"))
             {
                 for (int i = 0; i < values.size(); ++i)
