@@ -47,10 +47,12 @@ class GoGui
         m_auto = auto;
         m_verbose = verbose;
         m_initAnalyze = initAnalyze;
+        m_showInfoPanel = true;
+        m_showToolbar = true;
 
         Container contentPane = getContentPane();        
-        JPanel innerPanel = new JPanel(new BorderLayout());
-        contentPane.add(innerPanel, BorderLayout.CENTER);
+        m_innerPanel = new JPanel(new BorderLayout());
+        contentPane.add(m_innerPanel, BorderLayout.CENTER);
         m_toolBar = new ToolBar(this);
         contentPane.add(m_toolBar, BorderLayout.NORTH);
 
@@ -64,7 +66,7 @@ class GoGui
 
         m_guiBoard = new gui.Board(m_board, fastPaint);
         m_guiBoard.setListener(this);
-        innerPanel.add(createStatusBar(), BorderLayout.SOUTH);
+        m_innerPanel.add(createStatusBar(), BorderLayout.SOUTH);
 
         m_squareLayout = new SquareLayout();
         m_squareLayout.setPreferMultipleOf(m_boardSize + 2);
@@ -82,8 +84,8 @@ class GoGui
         // According to the docs, null should remove the action, but it does
         // not seem to work with Sun Java 1.4.2, new Object() works
         splitPaneInputMap.put(KeyStroke.getKeyStroke("F8"), new Object());
-        m_splitPane.setResizeWeight(0.85);
-        innerPanel.add(m_splitPane, BorderLayout.CENTER);
+        m_splitPane.setResizeWeight(1.0);
+        m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
         
         WindowAdapter windowAdapter = new WindowAdapter()
             {
@@ -99,6 +101,8 @@ class GoGui
         m_menuBar = new gogui.MenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
+        m_menuBar.setShowInfoPanel(m_showInfoPanel);
+        m_menuBar.setShowToolbar(m_showToolbar);
         m_menuBar.setShowLastMove(m_prefs.getBool("show-last-move"));
         m_menuBar.setShowVariations(m_prefs.getBool("show-variations"));
         m_showLastMove = m_prefs.getBool("show-last-move");
@@ -250,8 +254,12 @@ class GoGui
             cbShowCursor();
         else if (command.equals("show-gametree"))
             cbShowGameTree();
+        else if (command.equals("show-info-panel"))
+            cbShowInfoPanel();
         else if (command.equals("show-last-move"))
             cbShowLastMove();
+        else if (command.equals("show-toolbar"))
+            cbShowToolbar();
         else if (command.equals("show-variations"))
             cbShowVariations();
         else if (command.equals("truncate"))
@@ -334,6 +342,58 @@ class GoGui
         }
         m_gameTreeViewer.update(m_gameTree, m_currentNode);
         m_gameTreeViewer.toTop();
+    }
+
+    public void cbShowInfoPanel()
+    {
+        boolean showInfoPanel = m_menuBar.getShowInfoPanel();
+        if (showInfoPanel == m_showInfoPanel)
+            return;
+        m_showInfoPanel = showInfoPanel;
+        Dimension size = new Dimension();
+        size.height = getHeight();
+        if (showInfoPanel)
+        {
+            m_innerPanel.remove(m_boardPanel);
+            m_splitPane.add(m_boardPanel);
+            m_innerPanel.add(m_splitPane);
+            size.width =
+                getWidth() + m_splitPane.getWidth() - m_oldBoardPanelWidth;
+        }
+        else
+        {
+            m_splitPane.remove(m_boardPanel);
+            m_innerPanel.remove(m_splitPane);
+            m_innerPanel.add(m_boardPanel);
+            size.width =
+                getWidth() - m_splitPane.getWidth() + m_boardPanel.getWidth();
+            m_oldBoardPanelWidth = m_boardPanel.getWidth();
+        }
+        m_innerPanel.revalidate();
+        setSize(size);
+        validate();
+    }
+
+    public void cbShowToolbar()
+    {
+        boolean showToolbar = m_menuBar.getShowToolbar();
+        if (showToolbar == m_showToolbar)
+            return;
+        m_showToolbar = showToolbar;
+        Dimension size = new Dimension();
+        size.width = getWidth();
+        if (showToolbar)
+        {
+            getContentPane().add(m_toolBar, BorderLayout.NORTH);
+            size.height = getHeight() + m_toolBar.getHeight();
+        }
+        else
+        {
+            getContentPane().remove(m_toolBar);
+            size.height = getHeight() - m_toolBar.getHeight();
+        }
+        setSize(size);
+        validate();
     }
 
     public void clearAnalyzeCommand()
@@ -600,7 +660,11 @@ class GoGui
 
     private boolean m_setupMode;
 
+    private boolean m_showInfoPanel;
+
     private boolean m_showLastMove;
+
+    private boolean m_showToolbar;
 
     private boolean m_showVariations;
 
@@ -613,6 +677,8 @@ class GoGui
     private int m_handicap;
 
     private int m_move;
+
+    private int m_oldBoardPanelWidth;
 
     private go.Board m_board;
 
@@ -641,6 +707,8 @@ class GoGui
     private JPanel m_boardPanel;
 
     private JPanel m_infoPanel;
+
+    private JPanel m_innerPanel;
 
     private JSplitPane m_splitPane;
 
@@ -898,7 +966,6 @@ class GoGui
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
-        clearStatus();
         if (m_commandThread != null
             && isCurrentNodeExecuted()
             && m_analyzeCommand != null
@@ -908,6 +975,10 @@ class GoGui
         else
         {
             resetBoard();
+            if (m_board.getToMove() == go.Color.WHITE)
+                showStatus("White to play");
+            else
+                showStatus("Black to play");
             if (doCheckComputerMove)
                 checkComputerMove();
         }
@@ -2061,11 +2132,16 @@ class GoGui
     private void restoreMainWindow()
     {
         restoreSize(this, "window-gogui", m_boardSize);
-        String name = "splitpane-position-" + m_boardSize;
-        if (m_prefs.contains(name))
+        if (m_showInfoPanel)
         {
-            int dividerLocation = m_prefs.getInt(name);
-            m_splitPane.setDividerLocation(dividerLocation);
+            String name = "splitpane-position-" + m_boardSize;
+            if (m_prefs.contains(name))
+            {
+                int dividerLocation = m_prefs.getInt(name);
+                m_splitPane.setDividerLocation(dividerLocation
+                                               * m_splitPane.getWidth()
+                                               / 1000);
+            }
         }
     }
 
@@ -2182,9 +2258,14 @@ class GoGui
         m_menuBar.saveRecent();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        saveSize(this, "window-gogui");
+        Dimension hidden = new Dimension();
+        if (! m_showInfoPanel)
+            hidden.width += m_splitPane.getWidth() - m_oldBoardPanelWidth;
+        if (! m_showToolbar)
+            hidden.height += m_toolBar.getHeight();
+        saveSize(this, "window-gogui", hidden);
         if (m_help != null)
-            saveSize(m_help, "window-help");
+            saveSize(m_help, "window-help", null);
         if (m_gameTreeViewer != null)
             saveSizeAndVisible(m_gameTreeViewer, "gametree");
         if (m_commandThread != null)
@@ -2195,17 +2276,24 @@ class GoGui
         if (GuiUtils.isNormalSizeMode(this))
         {
             String name = "splitpane-position-" + m_boardSize;
-            m_prefs.setInt(name, m_splitPane.getDividerLocation());
+            m_prefs.setInt(name,
+                           1000 * m_splitPane.getDividerLocation()
+                           / m_splitPane.getWidth());
         }
     }
 
-    private void saveSize(JFrame window, String name)
+    private void saveSize(JFrame window, String name, Dimension hidden)
     {
         if (! GuiUtils.isNormalSizeMode(window))
             return;
         name = name + "-" + m_boardSize;
         java.awt.Point location = window.getLocation();
         Dimension size = window.getSize();
+        if (hidden != null)
+        {
+            size.width += hidden.width;
+            size.height += hidden.height;
+        }
         String value = Integer.toString(location.x) + " " + location.y
             + " " + size.width + " " + size.height;
         m_prefs.setString(name, value);
@@ -2214,7 +2302,7 @@ class GoGui
     private void saveSizeAndVisible(JFrame window, String name)
     {
         if (window != null)
-            saveSize(window, "window-" + name);
+            saveSize(window, "window-" + name, null);
         boolean isVisible = (window != null && window.isVisible());
         m_prefs.setBool("show-" + name, isVisible);
     }

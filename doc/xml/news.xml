@@ -56,7 +56,7 @@ GoGui: new menu item "Node Info" in Game Tree Window
 </listitem>
 <listitem>
 <simpara>
-GoGui: new menu item "Show Variations"
+GoGui: new menu items "Show Variations", "Show Info Panel", "Show Toolbar"
 </simpara>
 </listitem>
 <listitem>

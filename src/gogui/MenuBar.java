@@ -122,9 +122,19 @@ public class MenuBar
         return m_itemShowCursor.isSelected();
     }
 
+    public boolean getShowInfoPanel()
+    {
+        return m_itemShowInfoPanel.isSelected();
+    }
+
     public boolean getShowLastMove()
     {
         return m_itemShowLastMove.isSelected();
+    }
+
+    public boolean getShowToolbar()
+    {
+        return m_itemShowToolbar.isSelected();
     }
 
     public boolean getShowVariations()
@@ -261,9 +271,19 @@ public class MenuBar
         m_itemShowCursor.setSelected(enable);
     }
 
+    public void setShowInfoPanel(boolean enable)
+    {
+        m_itemShowInfoPanel.setSelected(enable);
+    }
+
     public void setShowLastMove(boolean enable)
     {
         m_itemShowLastMove.setSelected(enable);
+    }
+
+    public void setShowToolbar(boolean enable)
+    {
+        m_itemShowToolbar.setSelected(enable);
     }
 
     public void setShowVariations(boolean enable)
@@ -402,6 +422,10 @@ public class MenuBar
     private JMenuItem m_itemSetupBlack;
 
     private JMenuItem m_itemSetupWhite;
+
+    private JMenuItem m_itemShowInfoPanel;
+
+    private JMenuItem m_itemShowToolbar;
 
     private JMenuItem m_itemTruncate;
 
@@ -606,10 +630,16 @@ public class MenuBar
         m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
         m_itemShowCursor.setSelected(true);
         addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_S, "show-cursor");
+        m_itemShowInfoPanel = new JCheckBoxMenuItem("Show Info Panel");
+        addMenuItem(menu, m_itemShowInfoPanel, KeyEvent.VK_I,
+                    "show-info-panel");
         m_itemShowLastMove = new JCheckBoxMenuItem("Show Last Move");
         m_itemShowLastMove.setSelected(true);
         addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
                     "show-last-move");
+        m_itemShowToolbar = new JCheckBoxMenuItem("Show Toolbar");
+        addMenuItem(menu, m_itemShowToolbar, KeyEvent.VK_T,
+                    "show-toolbar");
         m_itemShowVariations = new JCheckBoxMenuItem("Show Variations");
         m_itemShowVariations.setSelected(true);
         addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,

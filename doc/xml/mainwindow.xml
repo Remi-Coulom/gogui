@@ -436,10 +436,30 @@ Show cursor on board for allowing to click on fields with the
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Show Info Panel</guimenuitem></term>
+<listitem>
+<para>
+Show panel on the right side of the board containing game information.
+GoGui always starts up with the info panel enabled.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Show Last Move</guimenuitem></term>
 <listitem>
 <para>
 Mark the last move with a red circle.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Toolbar</guimenuitem></term>
+<listitem>
+<para>
+Show toolbar.
+GoGui always starts up with the toolbar enabled.
 </para>
 </listitem>
 </varlistentry>
