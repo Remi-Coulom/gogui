@@ -248,7 +248,18 @@ class GameTreePanel
         m_map.clear();
         m_maxX = 0;
         m_maxY = 0;
-        createNodes(this, m_gameTree.getRoot(), 0, 0, m_margin, m_margin, 0);
+        try
+        {
+            createNodes(this, m_gameTree.getRoot(), 0, 0, m_margin, m_margin,
+                        0);
+        }
+        catch (OutOfMemoryError e)
+        {
+            // Free some space so that disposing the GameTreeViewer does
+            // not throw another OutOfMemoryError
+            m_map = null;
+            throw e;
+        }
         GameNode gameNode = getGameNode(currentNode);
         gameNode.repaint();
         setPreferredSize(new Dimension(m_maxX + m_nodeDist + m_margin,

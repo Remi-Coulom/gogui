@@ -348,8 +348,9 @@ class GoGui
             m_gameTreeViewer = new GameTreeViewer(this, m_fastPaint);
             restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         }
-        m_gameTreeViewer.update(m_gameTree, m_currentNode);
-        m_gameTreeViewer.toTop();
+        updateGameTree(true);
+        if (m_gameTreeViewer != null) // updateGameTree can close viewer
+            m_gameTreeViewer.toTop();
     }
 
     public void cbShowInfoPanel()
@@ -2045,20 +2046,6 @@ class GoGui
         {
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
-            if (file.length() > 300000L)
-            {
-                Object[] options = { "Continue", "Cancel" };
-                Object message =
-                    "Trying to load a very large file\n" +
-                    "could cause an out of memory error";
-                int n =
-                    JOptionPane.showOptionDialog(this, message, "Question",
-                                                 JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.WARNING_MESSAGE,
-                                                 null, options, options[1]);
-                if (n != 0)
-                    return;
-            }
             java.io.Reader fileReader = new FileReader(file);
             sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
             GameInformation gameInformation =
@@ -2080,7 +2067,7 @@ class GoGui
         }
         catch (sgf.Reader.Error e)
         {
-            showError("Could not read file", e);
+            showError("Could not read file:", e);
         }
     }
 
@@ -2785,18 +2772,33 @@ class GoGui
     private void updateGameInfo(boolean gameTreeChanged)
     {
         m_gameInfo.update(m_currentNode, m_board);
-        if (m_gameTreeViewer != null)
-        {
-            if (gameTreeChanged)
-                m_gameTreeViewer.update(m_gameTree, m_currentNode);
-            else
-                m_gameTreeViewer.update(m_currentNode);
-        }
+        updateGameTree(gameTreeChanged);
         m_comment.setNode(m_currentNode);
         updateBoard();
         m_guiBoard.repaint();
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSelectedColor(m_board.getToMove());
+    }
+
+    private void updateGameTree(boolean gameTreeChanged)
+    {
+        if (m_gameTreeViewer == null)
+            return;
+        if (! gameTreeChanged)
+        {
+            m_gameTreeViewer.update(m_currentNode);
+            return;
+        }
+        try
+        {
+            m_gameTreeViewer.update(m_gameTree, m_currentNode);
+        }
+        catch (OutOfMemoryError e)
+        {
+            m_gameTreeViewer.dispose();
+            m_gameTreeViewer = null;
+            showError("Game tree too large for game tree window");
+        }
     }
 }
 
