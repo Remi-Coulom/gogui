@@ -1888,6 +1888,7 @@ class GoGui
         {
             m_boardSize = size;
             m_guiBoard.initSize(size);
+            m_guiBoard.setShowGrid(m_menuBar.getShowGrid());
             m_squareLayout.setPreferMultipleOf(size + 2);
             restoreMainWindow();
             if (m_gtpShell != null)
