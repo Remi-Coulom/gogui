@@ -1,17 +1,11 @@
 BUGS:
 
-
-
-go.Board: allow setup at any time. GoGui: check if setup will
-capture anything and issue a warning, because setup stones are transmitted
-to the program by play commands
-
+GoGui: check if setup will capture anything and issue a warning, because setup
+stones are transmitted to the program by play commands
 
 var output: strings are not cleared when running a new var command
 
 computer resigns is not always shown (?), only game finished
-
-latex export current variation, not main
 
 
 IMPROVEMENTS:
@@ -20,4 +14,7 @@ GtpRegress: change into gtp test file directory, optional?
 
 GtpRegress: improve documenation (in/out file locations, relative paths)
 
-GoGui: destroy gametree window on close
+GoGui: for programs that don't support interrupt, interrupt should offer to
+kill program
+
+latex export current variation, not main
