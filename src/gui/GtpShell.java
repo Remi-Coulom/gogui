@@ -257,14 +257,15 @@ public class GtpShell
 
     public void itemStateChanged(ItemEvent e)
     {
-        String text = m_textField.getText().trim();
-        if (! text.equals(""))
-        {
-            // On Windows JDK 1.4 seleting an item automatically
-            // selects all text in the text field, so we undo it.
-            m_textField.setText(text);
-            m_textField.setCaretPosition(text.length());
-        }
+        // On Windows JDK 1.4 seleting an item automatically
+        // selects all text in the text field, so we undo it.
+        // Removed. Workaround no longer necessary on Windoes JDK 5
+        //String text = m_textField.getText().trim();
+        //if (! text.equals(""))
+        //{
+        //    m_textField.setText(text);
+        //    m_textField.setCaretPosition(text.length());
+        //}
     }
 
     public void loadHistory()
