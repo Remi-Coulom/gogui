@@ -228,12 +228,14 @@ class ReadThread
     {
         try
         {
+            Random random = new Random();
             while (true)
             {
                 int b;
                 try
                 {
-                    while (! waitForInput(10000))
+                    long timeout = 5000 + (long)(random.nextFloat() * 10000);
+                    while (! waitForInput(timeout))
                     {
                         synchronized (this)
                         {
