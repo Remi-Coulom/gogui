@@ -11,7 +11,7 @@ string/Help/help
 string/List Commands/list_commands
 string/Name/name
 string/Protocol Version/protocol_version
-varb/Reg GenMove/reg_genmove %c
+varc/Reg GenMove/reg_genmove %c
 string/ShowBoard/showboard
 none/Time Left/time_left black %c
 none/Time Settings/time_settings %s
@@ -35,7 +35,7 @@ string/Is Legal/is_legal %c %p
 string/Is Surrounded/is_surrounded %p
 varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
-var/Restricted GenMove/restricted_genmove %c %P
+varc/Restricted GenMove/restricted_genmove %c %P
 none/Set Random Seed/set_random_seed %s
 pspairs/Top Moves/top_moves
 pspairs/Top Moves/top_moves_%c
@@ -50,11 +50,10 @@ pstring/Analyze Semeai After Move/analyze_semeai_after_move %c %P
 pstring/Block Off/block_off %P
 pstring/Break In/break_in %P
 none/Clear Cache/clear_cache
-varb/Combination Attack/combination_attack %c
+varc/Combination Attack/combination_attack %c
 pstring/Combination Defend/combination_defend %c
 string/Does Surround/does_surround %P
-hstring/Dragon Data/dragon_data
-hpstring/Dragon Data At/dragon_data %p
+hpstring/Dragon Data/dragon_data %p
 hpstring/Dragon Status/dragon_status
 pstring/Dragon Status At/dragon_status %p
 plist/Dragon Stones/dragon_stones %p
