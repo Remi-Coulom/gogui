@@ -1,6 +1,0 @@
-gogui
-	command=gogui -f
-	name=GoGui
-	expects_uris=false
-	requires_terminal=false
-	mime_types=application/x-go-sgf
