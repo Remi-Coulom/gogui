@@ -171,6 +171,16 @@ class GameTreePanel
         setFocusable(false);
         setFocusTraversalKeysEnabled(false);
         setOpaque(false);
+        setAutoscrolls(true);
+        MouseMotionListener doScrollRectToVisible = new MouseMotionAdapter()
+            {
+                public void mouseDragged(MouseEvent e)
+                {
+                    Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
+                    ((JPanel)e.getSource()).scrollRectToVisible(r);
+                }
+            };
+        addMouseMotionListener(doScrollRectToVisible);
         m_listener = listener;
         m_mouseListener = new MouseAdapter()
             {
