@@ -2,8 +2,8 @@
 <title>Analyze Commands</title>
   
 <para>
-GoGui allows to define an analyze command.
-The analyze command is sent to the Go program the response is displayed
+GoGui allows to define analyze commands.
+An analyze command is sent to the Go program and the response is displayed
 graphically on the board.
 </para>
   
