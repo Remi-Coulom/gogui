@@ -249,7 +249,7 @@ public class GmpToGtp
         {
             int arg = Integer.parseInt(tokens[1]);
             if (! (m_wait && m_firstGame)
-                && ! (m_simple && m_colorIndex == 2))
+                && ! (m_simple && m_colorIndex == 1))
                 return m_gmp.newGame(arg, response);
             m_firstGame = false;
             return m_gmp.waitNewGame(arg, response);
