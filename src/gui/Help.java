@@ -16,6 +16,21 @@ import javax.swing.text.html.*;
 
 //-----------------------------------------------------------------------------
 
+class AntialiasingEditorPane
+    extends JEditorPane
+{
+    public void paintComponent(Graphics graphics)
+    {
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        if (graphics2D != null)
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON);
+        super.paintComponent(graphics);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
 class Help
     extends JDialog
     implements ActionListener, HyperlinkListener
@@ -27,7 +42,7 @@ class Help
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
         contentPane.add(createButtons(), BorderLayout.NORTH);
-        m_editorPane = new JEditorPane();
+        m_editorPane = new AntialiasingEditorPane();
         m_editorPane.setEditable(false);
         m_editorPane.addHyperlinkListener(this);
         JScrollPane scrollPane =
