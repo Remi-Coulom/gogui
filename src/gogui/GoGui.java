@@ -478,8 +478,11 @@ class GoGui
 
     public void sendGtpCommandContinue()
     {
-        m_commandThread.getException();
         endLengthyCommand();
+        // Program could have been killed in cbInterrupt
+        if (m_commandThread == null)
+            return;
+        m_commandThread.getException();
     }
 
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun)
