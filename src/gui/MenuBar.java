@@ -287,7 +287,7 @@ class MenuBar
 
     private boolean m_isComputerDisabled;
 
-    private final int m_maxRecent = 20;
+    private static final int m_maxRecent = 20;
 
     private int m_numberRecent;
 
