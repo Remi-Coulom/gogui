@@ -1298,6 +1298,7 @@ class GoGui
             m_prefs.setString("rules", gameInformation.m_rules);
             setRules();
         }
+        setTimeSettings();
         setTitle();
     }
 
@@ -2739,13 +2740,13 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
+        if (m_timeSettings == null)
+            return;
         if (! m_commandThread.isCommandSupported("time_settings"))
         {
             showError("Command time_settings not supported");
             return;
         }
-        if (m_timeSettings == null)
-            return;
         long preByoyomi = m_timeSettings.getPreByoyomi() / 1000;
         long byoyomi = 0;
         long byoyomiMoves = 0;
