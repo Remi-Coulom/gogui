@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE book [
+ <!ENTITY readme SYSTEM "readme.xml">
+   ]>
+<book>
+  <title>GoGui</title>
+  
+  &readme;
+  
+</book>
