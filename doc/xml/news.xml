@@ -24,7 +24,7 @@ Add menu items "Next/Previous Earlier Variation"
 </listitem>
 <listitem>
 <simpara>
-New menu item "Find in Comments"
+New menu item "Find in Comments", "Find Next", "Find Variation"
 </simpara>
 </listitem>
 <listitem>
@@ -34,7 +34,7 @@ GoGui: Improve restoring main window size
 </listitem>
 <listitem>
 <simpara>
-Some other minor fixes
+Lots of other fixes and enhancements
 </simpara>
 </listitem>
 </itemizedlist>

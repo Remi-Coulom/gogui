@@ -327,6 +327,7 @@ public class MenuBar
         m_itemForward10.setEnabled(hasChildren);
         m_itemEnd.setEnabled(hasChildren);
         m_itemGoto.setEnabled(hasFather || hasChildren);
+        m_itemGotoVar.setEnabled(hasFather || hasChildren);
         m_itemNextVariation.setEnabled(hasNextVariation);
         m_itemPreviousVariation.setEnabled(hasPrevVariation);
         m_itemNextVariationBackward.setEnabled(hasNextEarlierVariation);
@@ -426,6 +427,8 @@ public class MenuBar
     private JMenuItem m_itemForward10;
 
     private JMenuItem m_itemGoto;
+
+    private JMenuItem m_itemGotoVar;
 
     private JMenuItem m_itemGtpShell;
 
@@ -722,6 +725,9 @@ public class MenuBar
             addMenuItem(menu, "Back to Main Variation", KeyEvent.VK_B,
                         KeyEvent.VK_M, m_shortcutKeyMask,
                         "back-to-main-variation");
+        m_itemGotoVar =
+            addMenuItem(menu, "Go to Variation...",
+                        KeyEvent.VK_V, "goto-variation");
         menu.addSeparator();
         m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
                                         KeyEvent.VK_M, "make-main-variation");

@@ -212,6 +212,8 @@ class GoGui
             cbGameInfo();
         else if (command.equals("goto"))
             cbGoto();
+        else if (command.equals("goto-variation"))
+            cbGotoVariation();
         else if (command.equals("gtp-shell"))
             cbGtpShell();
         else if (command.startsWith("handicap-"))
@@ -1154,6 +1156,23 @@ class GoGui
         {
             showError("Invalid move number");
         }
+    }
+
+    private void cbGotoVariation()
+    {
+        String variation = NodeUtils.getVariationString(m_currentNode);
+        variation = JOptionPane.showInputDialog(this, "Variation", variation);
+        if (variation == null || variation.equals(""))
+            return;
+        Node root = m_gameTree.getRoot();
+        Node node = NodeUtils.findByVariation(root, variation);
+        if (node == null)
+        {
+            showError("Invalid variation");
+            return;
+        }
+        gotoNode(node);
+        boardChangedBegin(false, false);
     }
 
     private void cbHandicap(String handicap)

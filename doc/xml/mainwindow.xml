@@ -342,6 +342,15 @@ Go back to the main variation.
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Go to Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the start node of a certain variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Make Main Variation</guimenuitem></term>
 <listitem>
 <para>

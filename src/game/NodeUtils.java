@@ -40,6 +40,41 @@ public class NodeUtils
         return node;
     }
 
+    public static Node findByVariation(Node root, String variation)
+    {
+        String[] tokens = StringUtils.split(variation, '.');
+        int[] n = new int[tokens.length];
+        for (int i = 0; i < tokens.length; ++i)
+        {
+            try
+            {
+                n[i] = Integer.parseInt(tokens[i]) - 1;
+                if (n[i] < 0)
+                    return null;
+            }
+            catch (NumberFormatException e)
+            {
+                return null;
+            }
+        }
+        if (n.length == 1 && n[0] == 0)
+            return root;
+        Node node = root;
+        for (int i = 0; i < n.length; ++i)
+        {
+            while (node.getNumberChildren() <= 1)
+            {
+                node = node.getChild();
+                if (node == null)
+                    return null;
+            }
+            if (n[i] >= node.getNumberChildren())
+                return null;
+            node = node.getChild(n[i]);
+        }
+        return node;
+    }
+
     public static boolean commentContains(Node node, Pattern pattern)
     {
         String comment = node.getComment();
