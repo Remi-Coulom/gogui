@@ -349,7 +349,8 @@ public abstract class GtpServer
         }
     }
 
-    public void respond(boolean status, boolean hasId, int id, String response)
+    public void respond(boolean status, boolean hasId, int id,
+                        String response)
     {
         StringBuffer fullResponse = new StringBuffer(256);
         if (status)

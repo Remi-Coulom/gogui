@@ -19,10 +19,10 @@ public class GtpAdapter
     extends GtpServer
 {
     public GtpAdapter(InputStream in, OutputStream out, String program,
-                      PrintStream log, boolean version2, int size, String name,
-                      boolean noScore, boolean emuHandicap, boolean emuLoadsgf,
-                      boolean resign, int resignScore, String gtpFile,
-                      boolean verbose, boolean fillPasses)
+                      PrintStream log, boolean version2, int size,
+                      String name, boolean noScore, boolean emuHandicap,
+                      boolean emuLoadsgf, boolean resign, int resignScore,
+                      String gtpFile, boolean verbose, boolean fillPasses)
         throws Exception
     {
         super(in, out, log);
