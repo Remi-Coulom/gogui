@@ -227,7 +227,13 @@ public class SelectProgram
         File file = chooser.getSelectedFile();
         String text = file.toString();
         if (text.indexOf(' ') >= 0)
-            text = "\"" + text + "\"";
+            text = "\"" + text + "\"";        
+        if (file.getName().toLowerCase().startsWith("gnugo"))
+        {
+            String message = "Append option '--mode gtp' for GNU Go?";
+            if (SimpleDialogs.showQuestion(this, message))
+                text = text + " --mode gtp";
+        }
         m_comboBox.insertItemAt(text, 0);
         m_comboBox.setSelectedIndex(0);
         m_textField.setCaretPosition(m_textField.getText().length());
