@@ -34,8 +34,7 @@ It can be increased by using the "-Xmx" option, e.g. for 512MB:
 <userinput>java -Xmx512M -jar gogui.jar</userinput>
 </simpara>
 </blockquote>  
-You will need approximately 3 times the memory of the SGF file size,
-but don't use more memory than there is real memory on the machine,
+Don't use more memory than there is real memory on the machine,
 because using swap space will make the program unusable slow.
 </para>
 </section>
