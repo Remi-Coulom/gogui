@@ -33,7 +33,7 @@ release:
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
 debug:
 	test -d build_dbg || mkdir build_dbg
-	javac -g -deprecation -source 1.4 -d build_dbg @files.txt
+	javac -g -deprecation -sourcepath . -source 1.4 -d build_dbg @files.txt
 	test -d build_dbg/doc || mkdir build_dbg/doc
 	test -d build_dbg/icons || mkdir -p build_dbg/icons
 	test -d build_dbg/org/javalobby/icons/20x20png \

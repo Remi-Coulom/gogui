@@ -209,7 +209,7 @@ class GoGui
             m_analyzePointArg = p;
             m_board.clearAllCrossHair();
             m_board.setCrossHair(p, true);
-            analyzeBegin();
+            analyzeBegin(false);
             return;
         }
         if (m_setupMode)
@@ -354,7 +354,7 @@ class GoGui
         if (m_commandInProgress)
             return;
         if (m_analyzeCmd.indexOf("%p") < 0)
-            analyzeBegin();
+            analyzeBegin(false);
     }
 
     public void windowActivated(WindowEvent e)
@@ -394,6 +394,7 @@ class GoGui
     private boolean m_commandInProgress;
     private boolean m_fillPasses;
     private boolean m_lostOnTimeShown;
+    private boolean m_resetBoardAfterAnalyze;
     private boolean m_scoreMode;
     private boolean m_setupMode;
     private boolean m_verbose;
@@ -424,8 +425,9 @@ class GoGui
     private ToolBar m_toolBar;
     private Vector m_commandList = new Vector(128, 128);
 
-    private void analyzeBegin()
+    private void analyzeBegin(boolean resetBoardAfterAnalyze)
     {
+        m_resetBoardAfterAnalyze = resetBoardAfterAnalyze;
         StringBuffer buffer = new StringBuffer(m_analyzeCmd);
         StringUtils.replace(buffer, "%m", m_board.getToMove().toString());
         if (m_analyzeCmd.indexOf("%p") >= 0)
@@ -448,6 +450,8 @@ class GoGui
         endLengthyCommand();
         try
         {
+            if (m_resetBoardAfterAnalyze)
+                resetBoard();
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
                 throw e;
@@ -560,14 +564,16 @@ class GoGui
 
     private void boardChanged()
     {
-        resetBoard();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
         if (m_analyzeCmd != null)
-            analyzeBegin();
+            analyzeBegin(true);
         else
+        {
+            resetBoard();
             checkComputerMove();
+        }
     }
 
     private void cbAnalyze()
