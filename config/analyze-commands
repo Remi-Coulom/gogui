@@ -1,15 +1,18 @@
 # GoGui Analyze Commands
 
-# Standard GTP commands
+# Standard GTP version 1 and 2 commands
 string/Final Score/final_score
 string/Final Status/final_status %p
 plist/Final Status List Alive/final_status_list alive
 plist/Final Status List Dead/final_status_list dead
 plist/Final Status List Seki/final_status_list seki
+string/Help/help
+string/List Commands/list_commands
 string/Name/name
 string/Protocol Version/protocol_version
 pstring/Reg GenMove Black/reg_genmove black
 pstring/Reg GenMove White/reg_genmove white
+string/ShowBoard/showboard
 none/Time Left/time_left %s
 none/Time Settings/time_settings %s
 string/Version/version
@@ -34,7 +37,6 @@ string/Is Surrounded/is_surrounded %p
 pstring/Ladder Attack/ladder_attack %p
 none/Level/level %s
 none/Set Random Seed/set_random_seed %s
-string/ShowBoard/showboard
 pslist/Top Moves/top_moves
 pslist/Top Moves Black/top_moves black
 pslist/Top Moves White/top_moves white
