@@ -1291,6 +1291,7 @@ class GoGui
         if (! showQuestion("Truncate children?"))
             return;
         m_currentNode.truncateChildren();
+        m_needsSave = true;
         updateGameInfo();
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_currentNode);
