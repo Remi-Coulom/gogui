@@ -45,7 +45,7 @@ install -d $PREFIX/share/applications
 install config/gogui.desktop $PREFIX/share/applications
 
 install -d $PREFIX/share/mime-info
-install config/gogui.{mime,keys} $PREFIX/share/mime-info
+install config/gogui.xml $PREFIX/share/mime/packages
 
 install -d $PREFIX/share/application-registry
 install config/gogui.applications $PREFIX/share/application-registry
