@@ -82,7 +82,7 @@ public final class Gtp
         m_stdErrThread.start();
         if (! m_fastUpdate)
             // Give StdErrThread a chance to start first        
-            Thread.currentThread().yield();
+            Thread.yield();
     }
 
     public void close()
@@ -705,7 +705,7 @@ public final class Gtp
                     {
                         try
                         {
-                            Thread.currentThread().sleep(200);
+                            Thread.sleep(200);
                         }
                         catch (InterruptedException e)
                         {

@@ -733,7 +733,7 @@ public class GtpShell
         {
             int truncateLines = m_numberCommands - m_historyMin;
             String s = m_commands.toString();
-            int index = m_gtpShellText.findTruncateIndex(s, truncateLines);
+            int index = GtpShellText.findTruncateIndex(s, truncateLines);
             assert(index != -1);
             m_commands.delete(0, index);
             m_linesTruncated += truncateLines;
