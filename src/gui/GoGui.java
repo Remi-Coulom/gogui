@@ -237,10 +237,12 @@ class GoGui
             return;
         if (m_setupMode)
         {
+            setFastUpdate(true);
             if (m_board.getColor(p) != m_setupColor)
                 m_board.play(new Move(p, m_setupColor));
             else
                 m_board.play(new Move(p, go.Color.EMPTY));
+            setFastUpdate(false);
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
             m_guiBoard.update();
@@ -721,11 +723,7 @@ class GoGui
     {
         try
         {
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(true);
-                m_gtpShell.setFastUpdate(true);
-            }
+            setFastUpdate(true);
             for (int i = 0; i < n; ++i)
             {
                 if (m_board.getMoveNumber() == 0)
@@ -734,11 +732,7 @@ class GoGui
                     m_commandThread.sendCommand("undo");
                 m_board.undo();
             }
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(false);
-                m_gtpShell.setFastUpdate(false);
-            }
+            setFastUpdate(false);
             boardChanged(false);
         }
         catch (Gtp.Error e)
@@ -1322,11 +1316,7 @@ class GoGui
     {
         try
         {
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(true);
-                m_gtpShell.setFastUpdate(true);
-            }
+            setFastUpdate(true);
             for (int i = 0; i < n; ++i)
             {
                 int moveNumber = m_board.getMoveNumber();
@@ -1335,11 +1325,7 @@ class GoGui
                 Move move = m_board.getMove(moveNumber);
                 play(move);
             }
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(false);
-                m_gtpShell.setFastUpdate(false);
-            }
+            setFastUpdate(false);
         }
         catch (Gtp.Error e)
         {
@@ -1368,7 +1354,9 @@ class GoGui
             go.Point p = m.getPoint();
             if (p != null && m_board.getColor(p) != go.Color.EMPTY)
                     return;
+            setFastUpdate(true);
             play(m);
+            setFastUpdate(false);
             m_timeControl.stopMove();
             if (m_board.getMoveNumber() > 0
                 && m_timeControl.lostOnTime(m.getColor())
@@ -1541,11 +1529,7 @@ class GoGui
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(true);
-                m_gtpShell.setFastUpdate(true);
-            }
+            setFastUpdate(true);
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
@@ -1560,11 +1544,7 @@ class GoGui
                 Move m = new Move(null, m_board.getToMove());
                 setup(m);
             }
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(false);
-                m_gtpShell.setFastUpdate(false);
-            }
+            setFastUpdate(false);
             moves.clear();
             for (int i = 0; i < numberMoves; ++i)
                 moves.add(reader.getMove(i));
@@ -1845,6 +1825,15 @@ class GoGui
         m_guiBoard.setCursor(Cursor.getDefaultCursor());
     }
 
+    private void setFastUpdate(boolean fastUpdate)
+    {
+        if (m_commandThread != null)
+        {
+            m_commandThread.setFastUpdate(fastUpdate);
+            m_gtpShell.setFastUpdate(fastUpdate);
+        }
+    }
+
     private void setKomi()
     {
         if (m_commandThread == null)
@@ -1972,11 +1961,7 @@ class GoGui
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(true);
-                m_gtpShell.setFastUpdate(true);
-            }
+            setFastUpdate(true);
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
@@ -1987,11 +1972,7 @@ class GoGui
                 Move m = new Move(null, m_board.getToMove());
                 setup(m);
             }
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(false);
-                m_gtpShell.setFastUpdate(false);
-            }
+            setFastUpdate(false);
             fileModified();
             m_isModified = true;
             boardChanged(false);
