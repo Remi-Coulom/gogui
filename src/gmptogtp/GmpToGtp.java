@@ -3,11 +3,12 @@
 // $Source$
 //-----------------------------------------------------------------------------
 
-package gmp;
+package gmptogtp;
 
 import java.io.*;
 import java.util.*;
 import javax.comm.*;
+import gmp.*;
 import gtp.GtpServer;
 import utils.*;
 import version.*;

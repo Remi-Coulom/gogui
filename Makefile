@@ -25,6 +25,7 @@ IMAGES= \
 
 PACKAGES= \
   gmp \
+  gmptogtp \
   go \
   gtp \
   gtpregress \
