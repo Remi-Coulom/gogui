@@ -51,7 +51,7 @@ public class Options
         }
         catch (NumberFormatException e)
         {
-            throw new Exception("Option -" + option + " needs float value.");
+            throw new Exception("Option -" + option + " needs float value");
         }
     }
 
@@ -71,8 +71,7 @@ public class Options
         }
         catch (NumberFormatException e)
         {
-            throw new Exception("Option -" + option
-                                + " needs integer value.");
+            throw new Exception("Option -" + option + " needs integer value");
         }
     }
 
@@ -208,10 +207,10 @@ public class Options
                 if (needsValue(spec))
                 {
                     if (n >= args.length)
-                        throw new Exception("Option " + s + " needs value.");
+                        throw new Exception("Option " + s + " needs value");
                     String value = args[n];
                     if (isOptionKey(value))
-                        throw new Exception("Option " + s + " needs value.");
+                        throw new Exception("Option " + s + " needs value");
                     ++n;
                     m_map.put(spec, value);
                 }
