@@ -25,6 +25,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-force</option></arg>
 <arg><option>-games</option></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
+<arg><option>-referee</option> <replaceable>command</replaceable></arg>
 <arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -52,35 +53,38 @@ supporting GTP (Go Text Protocol).
 </para>
 
 <para>
-The adpater forwards the following commands to both programs:
+An optional third GTP Go program can be used as a referee for observing the
+game and answering commands related to the final game score.
+<application>TwoGtp</application> forwards the following commands to all
+programs:
 <itemizedlist>
 <listitem><userinput>boardsize</userinput></listitem>
 <listitem><userinput>black</userinput></listitem>
-<listitem><userinput>komi</userinput></listitem>
+<listitem><userinput>komi</userinput> (if supported)</listitem>
 <listitem><userinput>loadsgf</userinput></listitem>
 <listitem><userinput>quit</userinput></listitem>
-<listitem><userinput>scoring_system</userinput></listitem>
-<listitem><userinput>time_settings</userinput></listitem>
+<listitem><userinput>scoring_system</userinput> (if supported)</listitem>
+<listitem><userinput>time_settings</userinput> (if supported)</listitem>
 <listitem><userinput>undo</userinput></listitem>
 <listitem><userinput>white</userinput></listitem>
 </itemizedlist>
-The following commands are forwarded to the first program
-that implements them (Black is tried first):
+The following commands are forwarded to the referee program, if existsing,
+otherwise to first program that implements them (Black is tried first):
 <itemizedlist>
 <listitem><userinput>final_score</userinput></listitem>
 <listitem><userinput>final_status</userinput></listitem>
 <listitem><userinput>final_status_list</userinput></listitem>
 </itemizedlist>
 The commands <userinput>genmove_black</userinput> and
-<userinput>genmove_white</userinput> are forwarded only to the
-program of the corresponding color, the other program is informed about
-the move with a <userinput>black</userinput> or
-<userinput>white</userinput> command.
+<userinput>genmove_white</userinput> are forwarded only to the program of the
+corresponding color, the other program (and the referee) is informed about the
+move with a <userinput>black</userinput> or <userinput>white</userinput>
+command.
 GTP extension commands implemented by exactly one of the programs are
 forwarded to the program.
-The special comment line <userinput>#&#160;interrupt</userinput>
-used by <application>GoGui</application> to interrupt commands is
-forwarded to both programs.
+The special comment line <userinput>#&#160;interrupt</userinput> used by
+<application>GoGui</application> to interrupt commands is forwarded to all
+programs.
 </para>
 
 <para>
@@ -127,11 +131,14 @@ with a table row containing the most important summary statistics.
 <term><option>-auto</option></term>
 <listitem>
 Automatically play games.
-Use this option if you want to run <command>twogtp</command> as a
-standalone program without a program like
-<application>GoGui</application> which controls the move generation
-with <userinput>genmove_black</userinput> and
-<userinput>genmove_white</userinput> commands.
+Use this option if you want to run <application>TwoGtp</application> as a
+standalone program without a program like <application>GoGui</application>
+which controls the move generation with <userinput>genmove_black</userinput>
+and <userinput>genmove_white</userinput> commands.
+If a result file already exists (as specified with <option>-sgffile</option>)
+and contains less games than specified with <option>-games</option>,
+the remaining games will be played.
+Use <option>-force</option> to overwrite existing result files.
 </listitem>
 </varlistentry>
 
@@ -177,6 +184,13 @@ Display help and exit.
 Komi. If this option is not used, the komi can be set with
 the <userinput>komi</userinput> command or default komi 5.5 will be
 used with option <option>-auto</option>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-referee</option> <replaceable>command</replaceable></term>
+<listitem>
+Command for referee program.
 </listitem>
 </varlistentry>
 
@@ -250,6 +264,15 @@ Return a title for the current game consisting of the game number (if option
 </term>
 <listitem>
 Send <replaceable>command</replaceable> to black player .
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<userinput>twogtp_referee <replaceable>command</replaceable></userinput>
+</term>
+<listitem>
+Send <replaceable>command</replaceable> to referee program .
 </listitem>
 </varlistentry>
 

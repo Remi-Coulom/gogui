@@ -20,8 +20,9 @@ public class TwoGtp
     extends GtpServer
 {
     public TwoGtp(InputStream in, OutputStream out, String black, String white,
-                  int size, Float komi, int numberGames, boolean alternate,
-                  String sgfFile, boolean force, boolean verbose)
+                  String referee, int size, Float komi, int numberGames,
+                  boolean alternate, String sgfFile, boolean force,
+                  boolean verbose)
         throws Exception
     {
         super(in, out, null);
@@ -29,6 +30,7 @@ public class TwoGtp
             throw new Exception("No black program set.");
         if (white.equals(""))
             throw new Exception("No white program set.");
+        m_verbose = verbose;
         m_sgfFile = sgfFile;
         if (force)
             getResultFile().delete();
@@ -38,6 +40,12 @@ public class TwoGtp
         m_black.setLogPrefix("B");
         m_white = new Gtp(white, verbose, null);
         m_white.setLogPrefix("W");
+        m_refereeCommand = referee;
+        if (! referee.equals(""))
+        {
+            m_referee = new Gtp(referee, verbose, null);
+            m_referee.setLogPrefix("R");
+        }
         m_inconsistentState = false;
         m_black.queryProtocolVersion();
         m_white.queryProtocolVersion();
@@ -49,6 +57,14 @@ public class TwoGtp
         m_white.querySupportedCommands();
         m_black.queryInterruptSupport();
         m_white.queryInterruptSupport();
+        if (m_referee != null)
+        {
+            m_referee.queryProtocolVersion();
+            m_refereeName = getName(m_referee);        
+            m_refereeVersion = getVersion(m_referee);        
+            m_referee.querySupportedCommands();
+            m_referee.queryInterruptSupport();
+        }        
         m_size = size;
         m_komi = komi;
         m_alternate = alternate;
@@ -62,6 +78,11 @@ public class TwoGtp
         m_white.close();
         m_black.waitForExit();
         m_white.waitForExit();
+        if (m_referee != null)
+        {
+            m_referee.close();
+            m_referee.waitForExit();
+        }
     }
 
     public boolean handleCommand(String cmdLine, StringBuffer response)
@@ -69,10 +90,12 @@ public class TwoGtp
         String[] cmdArray = StringUtils.tokenize(cmdLine);
         String cmd = cmdArray[0];
         boolean status = true;
-        if (cmd.equals("final_score")
-            || cmd.equals("final_status")
-            || cmd.equals("final_status_list"))
-            return sendEither(cmdLine, response);
+        if (cmd.equals("final_score"))
+            return finalStatusCommand(cmdLine, response);
+        else if (cmd.equals("final_status"))
+            return finalStatusCommand(cmdLine, response);
+        else if (cmd.equals("final_status_list"))
+            return finalStatusCommand(cmdLine, response);
         else if (cmd.equals("gogui_interrupt"))
             ;
         else if (cmd.equals("gogui_title"))
@@ -83,6 +106,8 @@ public class TwoGtp
             status = twogtpColor(m_black, cmdLine, response);
         else if (cmd.equals("twogtp_white"))
             status = twogtpColor(m_white, cmdLine, response);
+        else if (cmd.equals("twogtp_referee"))
+            status = twogtpReferee(cmdLine, response);
         else if (cmd.equals("quit"))
             status = sendBoth(cmdLine, response, false, false);
         else if (cmd.equals("black"))
@@ -125,6 +150,7 @@ public class TwoGtp
                             "scoring_system\n" +
                             "time_settings\n" +
                             "twogtp_black\n" +
+                            "twogtp_referee\n" +
                             "twogtp_white\n" +
                             "undo\n" +
                             "version\n" +
@@ -140,17 +166,27 @@ public class TwoGtp
         {
             boolean isExtCommandBlack = m_black.isCommandSupported(cmd);
             boolean isExtCommandWhite = m_white.isCommandSupported(cmd);
-            if (isExtCommandBlack && ! isExtCommandWhite)
+            boolean isExtCommandReferee = false;
+            if (m_referee != null)
+                isExtCommandReferee = m_referee.isCommandSupported(cmd);
+            if (isExtCommandBlack
+                && ! isExtCommandWhite && ! isExtCommandReferee)
                 return sendSingle(m_black, cmdLine, response);
-            if (isExtCommandWhite && ! isExtCommandBlack)
+            if (isExtCommandWhite
+                && ! isExtCommandBlack && ! isExtCommandReferee)
                 return sendSingle(m_white, cmdLine, response);
-            if (isExtCommandWhite && isExtCommandBlack)
+            if (isExtCommandReferee
+                && ! isExtCommandBlack && ! isExtCommandWhite)
+                return sendSingle(m_referee, cmdLine, response);
+            if (! isExtCommandReferee
+                && ! isExtCommandBlack
+                && ! isExtCommandWhite)
             {
-                response.append("use twogtp_black/white to specify program");
+                response.append("unknown command");
                 return false;
             }
-            response.append("unknown command");
-            status = false;
+            response.append("use twogtp_black/white/referee");
+            return false;
         }
         return status;
     }
@@ -172,6 +208,8 @@ public class TwoGtp
     {
         interruptProgram(m_black);
         interruptProgram(m_white);
+        if (m_referee != null)
+            interruptProgram(m_referee);
     }
 
     public static void main(String[] args)
@@ -188,6 +226,7 @@ public class TwoGtp
                 "games:",
                 "help",
                 "komi:",
+                "referee:",
                 "sgffile:",
                 "size:",
                 "verbose",
@@ -209,6 +248,7 @@ public class TwoGtp
                     "-games        number of games (0=unlimited)\n" +
                     "-help         display this help and exit\n" +
                     "-komi         komi\n" +
+                    "-referee      command for referee program\n" +
                     "-sgffile      filename prefix\n" +
                     "-size         board size for autoplay (default 19)\n" +
                     "-verbose      log GTP streams to stderr\n" +
@@ -240,6 +280,7 @@ public class TwoGtp
             boolean verbose = opt.isSet("verbose");
             String black = opt.getString("black", "");
             String white = opt.getString("white", "");
+            String referee = opt.getString("referee", "");
             int size = opt.getInteger("size", 0, 0);
             Float komi = null;
             if (opt.isSet("komi"))
@@ -251,9 +292,9 @@ public class TwoGtp
             String sgfFile = opt.getString("sgffile", "");
             if (opt.isSet("games") && sgfFile.equals(""))
                 throw new Exception("Use option -sgffile with -games.");
-            TwoGtp twoGtp = new TwoGtp(System.in, System.out, black, white,
-                                       size, komi, games, alternate, sgfFile,
-                                       force, verbose);
+            TwoGtp twoGtp =
+                new TwoGtp(System.in, System.out, black, white, referee, size,
+                           komi, games, alternate, sgfFile, force, verbose);
             if (auto)
                 twoGtp.autoPlay();
             else
@@ -286,6 +327,8 @@ public class TwoGtp
 
     private boolean m_inconsistentState;
 
+    private boolean m_verbose;
+
     private int m_gameIndex;
 
     private int m_numberGames;
@@ -302,6 +345,12 @@ public class TwoGtp
 
     private String m_blackVersion;
 
+    private String m_refereeCommand;
+
+    private String m_refereeName;
+
+    private String m_refereeVersion;
+
     private String m_sgfFile;
 
     private String m_whiteName;
@@ -313,6 +362,8 @@ public class TwoGtp
     private Vector m_games = new Vector(100, 100);;
 
     private Gtp m_black;
+
+    private Gtp m_referee;
 
     private Gtp m_white;
 
@@ -459,6 +510,14 @@ public class TwoGtp
                                filename + " " + duplicate);
             games.add(moves);
         }
+    }
+
+    private boolean finalStatusCommand(String cmdLine, StringBuffer response)
+    {
+        if (m_referee != null)
+            return sendSingle(m_referee, cmdLine, response);
+        else
+            return sendEither(cmdLine, response);
     }
 
     private void findInitialGameIndex()
@@ -614,6 +673,9 @@ public class TwoGtp
         {
             String resultBlack = getResult(m_black);
             String resultWhite = getResult(m_white);
+            String resultReferee = "?";
+            if (m_referee != null)
+                resultReferee = getResult(m_referee);
             double cpuTimeBlack = getCpuTime(m_black) - m_cpuTimeBlack;
             m_cpuTimeBlack = cpuTimeBlack;
             double cpuTimeWhite = getCpuTime(m_white) - m_cpuTimeWhite;
@@ -622,12 +684,13 @@ public class TwoGtp
             {
                 resultBlack = inverseResult(resultBlack);
                 resultWhite = inverseResult(resultWhite);
+                resultReferee = inverseResult(resultReferee);
             }
             Vector moves = getMoves();
             String duplicate = checkDuplicate(m_board, moves, m_games);
-            saveResult(resultBlack, resultWhite, isAlternated(), duplicate,
-                       moves.size(), error, errorMessage, cpuTimeBlack,
-                       cpuTimeWhite);
+            saveResult(resultBlack, resultWhite, resultReferee, isAlternated(),
+                       duplicate, moves.size(), error, errorMessage,
+                       cpuTimeBlack, cpuTimeWhite);
             saveGame(resultBlack, resultWhite);
             ++m_gameIndex;
             m_games.add(moves);
@@ -724,6 +787,13 @@ public class TwoGtp
             m_inconsistentState = true;
             return false;
         }
+        if (m_referee != null)
+        {
+            String commandBoardsize = m_referee.getCommandBoardsize(size);
+            if (commandBoardsize != null)
+                sendToReferee(commandBoardsize);
+            sendToReferee(m_referee.getCommandClearBoard(size));
+        }
         m_inconsistentState = false;
         m_board = new Board(size);
         m_gameSaved = false;
@@ -754,8 +824,12 @@ public class TwoGtp
         Move move = new Move(point, color);
         String cmdBlack = m_black.getCommandPlay(move);
         String cmdWhite = m_white.getCommandPlay(move);
+        String cmdReferee = null;
+        if (m_referee != null)
+            cmdReferee = m_referee.getCommandPlay(move);
         boolean status =
-            send(m_black, m_white, cmdBlack, cmdWhite, response, true, true);
+            send(m_black, m_white, cmdBlack, cmdWhite, cmdReferee, response,
+                 true, true);
         if (status)
             m_board.play(new Move(point, color));
         return status;
@@ -825,8 +899,8 @@ public class TwoGtp
     }
 
     private void saveResult(String resultBlack, String resultWhite,
-                            boolean alternated, String duplicate,
-                            int numberMoves, boolean error,
+                            String resultReferee, boolean alternated,
+                            String duplicate, int numberMoves, boolean error,
                             String errorMessage, double cpuTimeBlack,
                             double cpuTimeWhite)
          throws FileNotFoundException
@@ -844,37 +918,42 @@ public class TwoGtp
                 blackName = m_blackName + ":" + m_blackVersion;
             if (! m_whiteVersion.equals(""))
                 whiteName = m_whiteName + ":" + m_whiteVersion;
+            String refereeName = "-";
+            if (m_referee != null)
+                refereeName = m_refereeName + ":" + m_refereeVersion;
             DateFormat format =
                 DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                DateFormat.FULL);
             Date date = Calendar.getInstance().getTime();
             out.println("# Black: " + blackName);
             out.println("# White: " + whiteName);
+            out.println("# Referee: " + refereeName);
             out.println("# BlackCommand: " + m_black.getProgramCommand());
             out.println("# WhiteCommand: " + m_white.getProgramCommand());
+            out.println("# RefereeCommand: " + m_refereeCommand);
             out.println("# Size: " + m_size);
             out.println("# Komi: " + m_komi);
             out.println("# Date: " + format.format(date));
             out.println("# Host: " + getHost());
-            out.println("# Game\tResB\tResW\tAlt\tDup\tLen\tCpuB\tCpuW\t" +
-                        "Err\tErrMsg");
+            out.println("#GAME\tRES_B\tRES_W\tRES_R\tALT\tDUP\tLEN\tCPU_B\t"
+                        + "CPU_W\tERR\tERR_MSG");
             out.close();
         }
         NumberFormat format = StringUtils.getNumberFormat(1);
         FileOutputStream fileOutputStream = new FileOutputStream(file, true);
         PrintStream out = new PrintStream(fileOutputStream);
-        out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t" +
-                    resultWhite + "\t" + (alternated ? "1" : "0" ) + "\t" +
-                    duplicate + "\t" + numberMoves + "\t" +
-                    format.format(cpuTimeBlack) + "\t" +
+        out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t"
+                    + resultWhite + "\t"  + resultReferee + "\t"
+                    + (alternated ? "1" : "0" ) + "\t" + duplicate + "\t"
+                    + numberMoves + "\t" + format.format(cpuTimeBlack) + "\t" +
                     format.format(cpuTimeWhite) + "\t" +
                     (error ? "1" : "0" ) + "\t" + errorMessage);
         out.close();
     }
 
     private boolean send(Gtp gtp1, Gtp gtp2, String command1, String command2,
-                         StringBuffer response, boolean changesState,
-                         boolean tryUndo)
+                         String commandReferee, StringBuffer response,
+                         boolean changesState, boolean tryUndo)
     {
         assert((gtp1 == m_black && gtp2 == m_white)
                || (gtp1 == m_white && gtp2 == m_black));
@@ -926,14 +1005,15 @@ public class TwoGtp
             status = false;
         }
         mergeResponse(response, response1, response2, prefix1, prefix2);
+        sendToReferee(commandReferee);
         return status;
     }
 
     private boolean sendBoth(String command, StringBuffer response,
                              boolean changesState, boolean tryUndo)
     {
-        return send(m_black, m_white, command, command, response, changesState,
-                    tryUndo);
+        return send(m_black, m_white, command, command, command, response,
+                    changesState, tryUndo);
     }
 
     private boolean sendEither(String command, StringBuffer response)
@@ -942,20 +1022,6 @@ public class TwoGtp
             return true;
         response.setLength(0);
         return sendSingle(m_white, command, response);
-    }
-
-    private boolean sendSingle(Gtp gtp, String command, StringBuffer response)
-    {
-        try
-        {
-            response.append(gtp.sendCommand(command));
-        }
-        catch (Gtp.Error e)
-        {
-            response.append(e.getMessage());
-            return false;
-        }        
-        return true;
     }
 
     private boolean sendGenmove(Color color, StringBuffer response)
@@ -1032,6 +1098,8 @@ public class TwoGtp
             return false;
         }
         response.append(response1);
+        if (m_referee != null)
+            sendToReferee(m_referee.getCommandPlay(color) + " " + response1);
         m_board.play(new Move(point, color));
         if (m_board.bothPassed() && ! m_gameSaved)
         {
@@ -1045,6 +1113,8 @@ public class TwoGtp
     {
         sendIfSupported(m_black, cmd, cmdLine);
         sendIfSupported(m_white, cmd, cmdLine);
+        if (m_referee != null)
+            sendIfSupported(m_referee, cmd, cmdLine);
     }
 
     private void sendIfSupported(Gtp gtp, String cmd, String cmdLine)
@@ -1054,6 +1124,40 @@ public class TwoGtp
             StringBuffer response = new StringBuffer();
             sendSingle(gtp, cmdLine, response);
         }
+    }
+
+    private boolean sendSingle(Gtp gtp, String command, StringBuffer response)
+    {
+        try
+        {
+            response.append(gtp.sendCommand(command));
+        }
+        catch (Gtp.Error e)
+        {
+            response.append(e.getMessage());
+            return false;
+        }        
+        return true;
+    }
+
+    private void sendToReferee(String command)
+    {
+        if (m_referee == null)
+            return;
+        try
+        {
+            m_referee.sendCommand(command);
+        }
+        catch (Gtp.Error e)
+        {
+            if (m_verbose)
+                System.err.println("Referee denied " + command + " command: "
+                                   + e.getMessage() + "\n" +
+                                   "Disabling referee.");
+            m_referee.close();
+            m_referee.waitForExit();
+            m_referee = null;
+        }        
     }
 
     private boolean twogtpColor(Gtp gtp, String command, StringBuffer response)
@@ -1066,6 +1170,16 @@ public class TwoGtp
         }
         command = command.substring(index).trim();
         return sendSingle(gtp, command, response);
+    }
+
+    private boolean twogtpReferee(String command, StringBuffer response)
+    {
+        if (m_referee == null)
+        {
+            response.append("No referee enabled");
+            return false;
+        }
+        return twogtpColor(m_referee, command, response);
     }
 
     private boolean undo(StringBuffer response)

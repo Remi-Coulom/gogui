@@ -7,6 +7,10 @@
 <authorinitials>enz</authorinitials>
 <revremark>
 <itemizedlist>
+<listitem>
+<application>TwoGtp</application>: support an optional third program as a
+referee.
+</listitem>
 </itemizedlist>
 </revremark>
 </revision>

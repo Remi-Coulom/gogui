@@ -36,6 +36,8 @@ public class Analyze
         writeData(dataFile);
     }
 
+    private boolean m_hasReferee;
+
     private int m_duplicates;
 
     private int m_errors;
@@ -50,7 +52,11 @@ public class Analyze
 
     private String m_white = "White";
 
+    private String m_referee = "-";
+
     private String m_blackCommand = "";
+
+    private String m_refereeCommand = "";
 
     private String m_whiteCommand = "";
 
@@ -68,9 +74,13 @@ public class Analyze
 
     private Statistics m_unknownBlack = new Statistics();
 
+    private Statistics m_unknownReferee = new Statistics();
+
     private Statistics m_unknownWhite = new Statistics();
 
     private Statistics m_winBlack = new Statistics();
+
+    private Statistics m_winReferee = new Statistics();
 
     private Statistics m_winWhite = new Statistics();
 
@@ -79,6 +89,8 @@ public class Analyze
     private Statistics m_cpuWhite = new Statistics();
 
     private Histogram m_histoBlack = new Histogram(-400, 400, 10);
+
+    private Histogram m_histoReferee = new Histogram(-400, 400, 10);
 
     private Histogram m_histoWhite = new Histogram(-400, 400, 10);
 
@@ -93,8 +105,7 @@ public class Analyze
                 ++m_errors;
                 continue;
             }
-            if (! e.m_duplicate.equals("")
-                && ! e.m_duplicate.equals("-"))
+            if (! e.m_duplicate.equals("") && ! e.m_duplicate.equals("-"))
             {
                 ++m_duplicates;
                 continue;
@@ -104,6 +115,8 @@ public class Analyze
                         m_unknownBlack);
             parseResult(e.m_resultWhite, m_histoWhite, m_winWhite,
                         m_unknownWhite);
+            parseResult(e.m_resultReferee, m_histoReferee, m_winReferee,
+                        m_unknownReferee);
             m_cpuBlack.addValue(e.m_cpuBlack);
             m_cpuWhite.addValue(e.m_cpuWhite);
             m_length.addValue(e.m_length);
@@ -123,8 +136,15 @@ public class Analyze
             m_black = getCommentValue(comment, "Black:");
         else if (comment.startsWith("White:"))
             m_white = getCommentValue(comment, "White:");
+        else if (comment.startsWith("Referee:"))
+        {
+            m_referee = getCommentValue(comment, "Referee:");
+            m_hasReferee = (! m_referee.equals("") && ! m_referee.equals("-"));
+        }
         else if (comment.startsWith("BlackCommand:"))
             m_blackCommand = getCommentValue(comment, "BlackCommand:");
+        else if (comment.startsWith("RefereeCommand:"))
+            m_refereeCommand = getCommentValue(comment, "RefereeCommand:");
         else if (comment.startsWith("WhiteCommand:"))
             m_whiteCommand = getCommentValue(comment, "WhiteCommand:");
         else if (comment.startsWith("Size:"))
@@ -146,25 +166,27 @@ public class Analyze
             return;
         }
         String[] array = line.split("\\t");
-        if (array.length < 9 || array.length > 10)
+        if (array.length < 10 || array.length > 11)
             throwException("Wrong file format");
         try
         {
             int gameIndex = Integer.parseInt(array[0]);
             String resultBlack = array[1];
             String resultWhite = array[2];
-            boolean alternated = (Integer.parseInt(array[3]) != 0);
-            String duplicate = array[4];
-            int length = Integer.parseInt(array[5]);
-            float cpuBlack = Float.parseFloat(array[6]);
-            float cpuWhite = Float.parseFloat(array[7]);
-            boolean error = (Integer.parseInt(array[8]) != 0);
+            String resultReferee = array[3];
+            boolean alternated = (Integer.parseInt(array[4]) != 0);
+            String duplicate = array[5];
+            int length = Integer.parseInt(array[6]);
+            float cpuBlack = Float.parseFloat(array[7]);
+            float cpuWhite = Float.parseFloat(array[8]);
+            boolean error = (Integer.parseInt(array[9]) != 0);
             String errorMessage = "";
-            if (array.length == 10)
-                errorMessage = array[9];
+            if (array.length == 11)
+                errorMessage = array[10];
             m_entries.add(new Entry(gameIndex, resultBlack, resultWhite,
-                                    alternated, duplicate, length,
-                                    cpuBlack, cpuWhite, error, errorMessage));
+                                    resultReferee, alternated, duplicate,
+                                    length, cpuBlack, cpuWhite, error,
+                                    errorMessage));
 
         }
         catch (NumberFormatException e)
@@ -238,8 +260,8 @@ public class Analyze
                   "<h1>" + m_black + " - " + m_white + "</h1>\n" +
                   "<hr>\n" +
                   "<small>\n" +
-                  "<table>\n" +
-                  "<tr><th align=\"left\">Black:</th><td align=\"left\">"
+                  "<table>\n");
+        out.print("<tr><th align=\"left\">Black:</th><td align=\"left\">"
                   + m_black + "</td></tr>\n" +
                   "<tr><th align=\"left\">White:</th><td align=\"left\">"
                   + m_white + "</td></tr>\n" +
@@ -250,14 +272,21 @@ public class Analyze
                   "<tr><th align=\"left\">Date:</th><td align=\"left\">"
                   + m_date + "</td></tr>\n" +
                   "<tr><th align=\"left\">Host:</th><td align=\"left\">"
-                  + m_host + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Black command:</th>"
+                  + m_host + "</td></tr>\n");
+        if (m_hasReferee)
+            out.print("<tr><th align=\"left\">Referee:</th><td align=\"left\">"
+                      + m_referee + "</td></tr>\n");
+        out.print("<tr><th align=\"left\">Black command:</th>"
                   + "<td align=\"left\"><tt>"
                   + m_blackCommand + "</tt></td></tr>\n" +
                   "<tr><th align=\"left\">White command:</th>"
                   + "<td align=\"left\"><tt>"
-                  + m_whiteCommand + "</tt></td></tr>\n" +
-                  "<tr><th align=\"left\">Games:</th><td align=\"left\">"
+                  + m_whiteCommand + "</tt></td></tr>\n");
+        if (m_hasReferee)
+            out.print("<tr><th align=\"left\">Referee command:</th>"
+                  + "<td align=\"left\"><tt>"
+                  + m_refereeCommand + "</tt></td></tr>\n");
+        out.print("<tr><th align=\"left\">Games:</th><td align=\"left\">"
                   + m_games + "</td></tr>\n" +
                   "<tr><th align=\"left\">Errors:</th><td align=\"left\">"
                   + m_errors + "</td></tr>\n" +
@@ -283,54 +312,26 @@ public class Analyze
                   "</table>\n" +
                   "</small>\n" +
                   "<hr>\n");
-        out.print("<h2>Result [" + m_black + "]</h2>\n" +
-                  "<p>\n" +
-                  "<table>\n" +
-                  "<tr><th align=\"left\">Black score["
-                  + m_black + "]:</th><td align=\"left\">"
-                  + format.format(m_histoBlack.getMean()) + " (&plusmn;"
-                  + format.format(m_histoBlack.getErrorMean())
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Black wins["
-                  + m_black + "]:</th><td align=\"left\">"
-                  + format.format(m_winBlack.getMean() * 100) + "% (&plusmn;"
-                  + format.format(m_winBlack.getErrorMean() * 100)
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Unknown["
-                  + m_black + "]:</th><td align=\"left\">"
-                  + format.format(m_unknownBlack.getMean() * 100) + "%"
-                  + "</td></tr>\n" +
-                  "</table>\n" +
-                  "</p>\n");
-        m_histoBlack.printHtml(out);
-        out.print("<hr>\n" +
-                  "<h2>Result [" + m_white + "]</h2>\n" +
-                  "<p>\n" +
-                  "<table>\n" +
-                  "<tr><th align=\"left\">Black score["
-                  + m_white + "]:</th><td align=\"left\">"
-                  + format.format(m_histoWhite.getMean()) + " (&plusmn;"
-                  + format.format(m_histoWhite.getErrorMean())
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Black wins["
-                  + m_white + "]:</th><td align=\"left\">"
-                  + format.format(m_winWhite.getMean() * 100) + "% (&plusmn;"
-                  + format.format(m_winWhite.getErrorMean() * 100)
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Unknown["
-                  + m_white + "]:</th><td align=\"left\">"
-                  + format.format(m_unknownWhite.getMean() * 100) + "%"
-                  + "</td></tr>\n" +
-                  "</table>\n" +
-                  "</p>\n");
-        m_histoWhite.printHtml(out);
-        out.print("<hr>\n");
+        if (m_hasReferee)
+        {
+            writeHtmlResults(out, m_referee, m_winReferee, m_unknownReferee,
+                             m_histoReferee);
+            out.println("<hr>");
+        }
+        writeHtmlResults(out, m_black, m_winBlack, m_unknownBlack,
+                         m_histoBlack);
+        out.println("<hr>");
+        writeHtmlResults(out, m_white, m_winWhite, m_unknownWhite,
+                         m_histoWhite);
+        out.println("<hr>");
         out.print("<table border=\"1\">\n" +
                   "<thead>\n" +
                   "<th>Game</th>\n" +
                   "<th>Result [" + m_black + "]</th>\n" +
-                  "<th>Result [" + m_white + "]</th>\n" +
-                  "<th>Colors exchanged</th>\n" +
+                  "<th>Result [" + m_white + "]</th>\n");
+        if (m_hasReferee)
+            out.print("<th>Result [" + m_referee + "]</th>\n");
+        out.print("<th>Colors exchanged</th>\n" +
                   "<th>Duplicate</th>\n" +
                   "<th>Length</th>\n" +
                   "<th>CpuTime Black</th>\n" +
@@ -343,10 +344,12 @@ public class Analyze
             Entry e = (Entry)m_entries.get(i);
             String name = prefix + "-" + e.m_gameIndex + ".sgf";
             out.print("<tr align=\"center\">" +
-                      "<td><a href=\"" + name + "\">" + name + "</a></td>\n" +
-                      "<td>" + e.m_resultBlack + "</td>" +
-                      "<td>" + e.m_resultWhite + "</td>" +
-                      "<td>" + (e.m_alternated ? "1" : "0") + "</td>" +
+                      "<td><a href=\"" + name + "\">" + name + "</a></td>\n");
+            if (m_hasReferee)
+                out.print("<td>" + e.m_resultReferee + "</td>");
+            out.print("<td>" + e.m_resultBlack + "</td>" +
+                      "<td>" + e.m_resultWhite + "</td>");
+            out.print("<td>" + (e.m_alternated ? "1" : "0") + "</td>" +
                       "<td>" + e.m_duplicate + "</td>" +
                       "<td>" + e.m_length + "</td>" +
                       "<td>" + e.m_cpuBlack + "</td>" +
@@ -362,13 +365,41 @@ public class Analyze
         out.close();
     }
 
+    private void writeHtmlResults(PrintStream out, String name, Statistics win,
+                                  Statistics unknown, Histogram histo)
+        throws Exception
+    {
+        NumberFormat format = StringUtils.getNumberFormat(1);
+        out.print("<h2>Result [" + name + "]</h2>\n" +
+                  "<p>\n" +
+                  "<table>\n" +
+                  "<tr><th align=\"left\">Black score["
+                  + name + "]:</th><td align=\"left\">"
+                  + format.format(histo.getMean()) + " (&plusmn;"
+                  + format.format(histo.getErrorMean())
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">Black wins["
+                  + name + "]:</th><td align=\"left\">"
+                  + format.format(win.getMean() * 100) + "% (&plusmn;"
+                  + format.format(win.getErrorMean() * 100)
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">Unknown["
+                  + name + "]:</th><td align=\"left\">"
+                  + format.format(unknown.getMean() * 100) + "%"
+                  + "</td></tr>\n" +
+                  "</table>\n" +
+                  "</p>\n");
+        histo.printHtml(out);
+    }
+
     private void writeData(File file) throws Exception
     {
         PrintStream out = new PrintStream(new FileOutputStream(file));
         NumberFormat format1 = StringUtils.getNumberFormat(1);
         NumberFormat format2 = StringUtils.getNumberFormat(2);
-        out.print("# Games\tErr\tDup\tUsed\tResB\tErrResB\tWinB\tErrWinB\t"
-                  + "UnknB\tResB\tErrResB\tWinB\tErrWinB\tUnknB\n" +
+        out.print("#GAMES\tERR\tDUP\tUSED\tRES_B\tERR_B\tWIN_B\tERRW_B\t"
+                  + "UNKN_B\tRES_W\tERR_W\tWIN_W\tERRW_W\tUNKN_W\t"
+                  + "RES_R\tERR_R\tWIN_R\tERRW_R\tUNKN_R\n" +
                   m_games + "\t" + m_errors + "\t" + m_duplicates + "\t"
                   + m_gamesUsed
                   + "\t" + format1.format(m_histoBlack.getMean())
@@ -380,7 +411,13 @@ public class Analyze
                   + "\t" + format1.format(m_histoWhite.getErrorMean())
                   + "\t" + format2.format(m_winWhite.getMean())
                   + "\t" + format2.format(m_winWhite.getErrorMean())
-                  + "\t" + format2.format(m_unknownWhite.getMean()) + "\n");
+                  + "\t" + format2.format(m_unknownWhite.getMean())
+                  + "\t" + format1.format(m_histoReferee.getMean())
+                  + "\t" + format1.format(m_histoReferee.getErrorMean())
+                  + "\t" + format2.format(m_winReferee.getMean())
+                  + "\t" + format2.format(m_winReferee.getErrorMean())
+                  + "\t" + format2.format(m_unknownReferee.getMean())
+                  + "\n");
         out.close();
     }
 }
@@ -390,6 +427,8 @@ class Entry
     public int m_gameIndex;
 
     public String m_resultBlack;
+
+    public String m_resultReferee;
 
     public String m_resultWhite;
 
@@ -408,13 +447,14 @@ class Entry
     public String m_errorMessage;
 
     public Entry(int gameIndex, String resultBlack, String resultWhite,
-                 boolean alternated, String duplicate, int length,
-                 float cpuBlack, float cpuWhite, boolean error,
+                 String resultReferee, boolean alternated, String duplicate,
+                 int length, float cpuBlack, float cpuWhite, boolean error,
                  String errorMessage)
     {
         m_gameIndex = gameIndex;
         m_resultBlack = resultBlack;
         m_resultWhite = resultWhite;
+        m_resultReferee = resultReferee;
         m_alternated = alternated;
         m_duplicate = (duplicate.equals("-") ? "" : duplicate);
         m_length = length;
@@ -517,8 +557,8 @@ class Histogram
                       + (scale - width) + "\">"
                       + m_array[i] + "</td></tr></table></td></tr>\n");
         }
-        out.print("</small>" +
-                  "</table>\n" +
+        out.print("</table>\n" +
+                  "</small>\n" +
                   "</p>\n");
     }
 
