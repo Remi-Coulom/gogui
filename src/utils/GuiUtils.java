@@ -70,6 +70,7 @@ public class GuiUtils
         assert(SwingUtilities.isEventDispatchThread());
         JDialog dialog = new JDialog(owner, message, true);
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        dialog.setResizable(false);
         JProgressBar progressBar = new JProgressBar(0, 100);
         //progressBar.setIndeterminate(true);
         progressBar.setStringPainted(true);
