@@ -103,8 +103,7 @@ class Field
             value = 1.;
         else if (value < -1.)
             value = -1.;
-        if (Math.abs(m_influence - value) > 0.01)
-            repaint();
+        repaint();
         m_influence = value;
         m_influenceSet = true;
     }
@@ -188,21 +187,16 @@ class Field
     private void drawInfluence(Graphics g)
     {
         Dimension size = getSize();
-        int xCenter = size.width / 2;
-        int yCenter = size.height / 2;
         double d = Math.abs(m_influence);
         if (d < 0.01)
             return;
-        d = 0.5 - 0.25 * Math.sqrt(d);
-        int dx = (int)(size.width * d);
-        int dy = (int)(size.height * d);
-        int x[] = {xCenter, size.width - dx + 1, xCenter, dx};
-        int y[] = {dy, yCenter, size.height - dy + 1, yCenter};
         if (m_influence > 0)
             g.setColor(m_influenceBlackColor);
         else
             g.setColor(m_influenceWhiteColor);
-        g.fillPolygon(x, y, 4);
+        int dx = (int)(size.width * (0.29 + (1 - d) * 0.71));
+        int dy = (int)(size.height * (0.29 + (1 - d) * 0.71));
+        g.fillRect(dx / 2, dy / 2, size.width - dx + 1, size.height - dy + 1);
     }
 
     private void drawMarkup(Graphics g)
