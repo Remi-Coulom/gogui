@@ -40,11 +40,11 @@ public class Preferences
         }
     }
 
-    public float getFloat(String key)
+    public double getDouble(String key)
     {
         try
         {
-            return Float.parseFloat(getString(key));
+            return Double.parseDouble(getString(key));
         }
         catch (NumberFormatException e)
         {
@@ -111,14 +111,14 @@ public class Preferences
         setStringDefault(key, value ? "1" : "0");
     }
 
-    public void setFloat(String key, float value)
+    public void setDouble(String key, double value)
     {
-        setString(key, Float.toString(value));
+        setString(key, Double.toString(value));
     }
 
-    public void setFloatDefault(String key, float value)
+    public void setDoubleDefault(String key, double value)
     {
-        setStringDefault(key, Float.toString(value));
+        setStringDefault(key, Double.toString(value));
     }
 
     public void setInt(String key, int value)

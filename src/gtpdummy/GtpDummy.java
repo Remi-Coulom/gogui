@@ -287,7 +287,7 @@ public class GtpDummy
         {
             try
             {
-                millis = (long)(Float.parseFloat(cmdArray[1]) * 1000.0);
+                millis = (long)(Double.parseDouble(cmdArray[1]) * 1000.0);
             }
             catch (NumberFormatException e)
             {

@@ -346,7 +346,7 @@ class WriteThread extends Thread
                     if (m_sendInProgress)
                     {
                         long timeout =
-                            20000 + (long)(random.nextFloat() * 10000);
+                            20000 + (long)(random.nextDouble() * 10000);
                         wait(timeout);
                     }
                     else

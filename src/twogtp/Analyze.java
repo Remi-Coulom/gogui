@@ -176,8 +176,8 @@ public class Analyze
             boolean alternated = (Integer.parseInt(array[4]) != 0);
             String duplicate = array[5];
             int length = Integer.parseInt(array[6]);
-            float cpuBlack = Float.parseFloat(array[7]);
-            float cpuWhite = Float.parseFloat(array[8]);
+            double cpuBlack = Double.parseDouble(array[7]);
+            double cpuWhite = Double.parseDouble(array[8]);
             boolean error = (Integer.parseInt(array[9]) != 0);
             String errorMessage = "";
             if (array.length == 11)
@@ -465,9 +465,9 @@ class Entry
 
     public int m_length;
 
-    public float m_cpuBlack;
+    public double m_cpuBlack;
 
-    public float m_cpuWhite;
+    public double m_cpuWhite;
 
     public boolean m_error;
 
@@ -475,7 +475,7 @@ class Entry
 
     public Entry(int gameIndex, String resultBlack, String resultWhite,
                  String resultReferee, boolean alternated, String duplicate,
-                 int length, float cpuBlack, float cpuWhite, boolean error,
+                 int length, double cpuBlack, double cpuWhite, boolean error,
                  String errorMessage)
     {
         m_gameIndex = gameIndex;

@@ -33,19 +33,20 @@ public class Options
         return m_args;
     }
 
-    public float getFloat(String option) throws Exception
+    public double getDouble(String option) throws Exception
     {
-        return getFloat(option, 0);
+        return getDouble(option, 0);
     }
 
-    public float getFloat(String option, float defaultValue) throws Exception
+    public double getDouble(String option, double defaultValue)
+        throws Exception
     {
-        String value = getString(option, Float.toString(defaultValue));
+        String value = getString(option, Double.toString(defaultValue));
         if (value == null)
             return defaultValue;
         try
         {
-            return Float.parseFloat(value);
+            return Double.parseDouble(value);
         }
         catch (NumberFormatException e)
         {

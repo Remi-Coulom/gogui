@@ -72,14 +72,14 @@ public class GameInfo
                 lastMove += p.toString();
         }
         m_last.setText(lastMove);
-        float timeLeftBlack = node.getTimeLeftBlack();
+        double timeLeftBlack = node.getTimeLeftBlack();
         int movesLeftBlack = node.getMovesLeftBlack();
-        if (! Float.isNaN(timeLeftBlack))
+        if (! Double.isNaN(timeLeftBlack))
             m_timeB.setText(TimeControl.getTimeString(timeLeftBlack,
                                                       movesLeftBlack));
-        float timeLeftWhite = node.getTimeLeftWhite();
+        double timeLeftWhite = node.getTimeLeftWhite();
         int movesLeftWhite = node.getMovesLeftWhite();
-        if (! Float.isNaN(timeLeftWhite))
+        if (! Double.isNaN(timeLeftWhite))
             m_timeW.setText(TimeControl.getTimeString(timeLeftWhite,
                                                       movesLeftWhite));
     }

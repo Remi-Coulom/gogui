@@ -21,7 +21,7 @@ public class GameTree
         m_root = new Node();
     }
 
-    public GameTree(int boardSize, float komi, Vector handicap, String rules)
+    public GameTree(int boardSize, double komi, Vector handicap, String rules)
     {
         m_gameInformation = new GameInformation(boardSize);
         setDate();

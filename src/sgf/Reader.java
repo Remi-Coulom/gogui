@@ -132,12 +132,12 @@ public class Reader
         return c;
     }
 
-    private float parseFloat(String s) throws Error
+    private double parseDouble(String s) throws Error
     {
-        float f = 0;
+        double f = 0;
         try
         {
-            f = Float.parseFloat(s);
+            f = Double.parseDouble(s);
         }
         catch (NumberFormatException e)
         {
@@ -236,7 +236,7 @@ public class Reader
             {
                 try
                 {
-                    node.setTimeLeftBlack(Float.parseFloat(v));
+                    node.setTimeLeftBlack(Double.parseDouble(v));
                 }
                 catch (NumberFormatException e)
                 {
@@ -259,7 +259,7 @@ public class Reader
             else if (p.equals("HA"))
                 m_gameInformation.m_handicap = Integer.parseInt(v);
             else if (p.equals("KM"))
-                m_gameInformation.m_komi = parseFloat(v);
+                m_gameInformation.m_komi = parseDouble(v);
             else if (p.equals("OB"))
             {
                 try
@@ -302,7 +302,7 @@ public class Reader
             {
                 try
                 {
-                    node.setTimeLeftWhite(Float.parseFloat(v));
+                    node.setTimeLeftWhite(Double.parseDouble(v));
                 }
                 catch (NumberFormatException e)
                 {

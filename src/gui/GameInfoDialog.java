@@ -46,7 +46,7 @@ public class GameInfoDialog
         gameInformation.m_date =
             getTextFieldContent(gameInfoDialog.m_date);
         gameInformation.m_komi =
-            Float.parseFloat(getTextFieldContent(gameInfoDialog.m_komi));
+            Double.parseDouble(getTextFieldContent(gameInfoDialog.m_komi));
         //String rules =
         //    getTextFieldContent(gameInfoDialog.m_rules).trim().toLowerCase();
         //if (! rules.equals("chinese") && ! rules.equals("japanese"))
@@ -90,7 +90,7 @@ public class GameInfoDialog
                                   gameInformation.m_whiteRank);
         m_date = createEntry("Date", gameInformation.m_date);
         m_rules = createEntry("Rules", gameInformation.m_rules);
-        m_komi = createEntry("Komi", Float.toString(gameInformation.m_komi));
+        m_komi = createEntry("Komi", Double.toString(gameInformation.m_komi));
         m_result = createEntry("Result", gameInformation.m_result);
         setMessage(panel);
         setOptionType(OK_CANCEL_OPTION);
@@ -115,7 +115,7 @@ public class GameInfoDialog
     {
         try
         {
-            Float.parseFloat(getTextFieldContent(m_komi));
+            Double.parseDouble(getTextFieldContent(m_komi));
         }
         catch (NumberFormatException e)
         {

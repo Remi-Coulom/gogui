@@ -17,13 +17,13 @@ public class Score
 
     public int m_capturedWhite;
 
-    public float m_komi;
+    public double m_komi;
 
-    public float m_result;
+    public double m_result;
 
-    public float m_resultChinese;
+    public double m_resultChinese;
 
-    public float m_resultJapanese;
+    public double m_resultJapanese;
 
     public int m_rules;
 
@@ -36,7 +36,7 @@ public class Score
         return formatResult(m_result);
     }
 
-    public static String formatResult(float result)
+    public static String formatResult(double result)
     {
         if (result > 0)
             return "B+" + result;

@@ -392,7 +392,7 @@ public class Board
         m_dead[p.getX()][p.getY()] = value;
     }
 
-    public Score scoreGet(float komi, int rules)
+    public Score scoreGet(double komi, int rules)
     {
         Score s = new Score();
         s.m_rules = rules;

@@ -400,7 +400,7 @@ class GoGui
         {
             m_guiBoard.scoreSetDead(p);
             m_guiBoard.repaint();
-            float komi = m_gameTree.getGameInformation().m_komi;
+            double komi = m_gameTree.getGameInformation().m_komi;
             m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
             return;
         }
@@ -533,7 +533,7 @@ class GoGui
             String gtpFile = opt.getString("gtpfile", "");
             String gtpCommand = opt.getString("command", "");
             if (opt.contains("komi"))
-                prefs.setFloat("komi", opt.getFloat("komi"));
+                prefs.setDouble("komi", opt.getDouble("komi"));
             int move = opt.getInteger("move", -1);
             if (opt.contains("size"))
                 prefs.setInt("boardsize", opt.getInteger("size"));
@@ -1062,9 +1062,9 @@ class GoGui
     {
         GameInformation gameInformation = m_gameTree.getGameInformation();
         GameInfoDialog.show(this, gameInformation);
-        if (gameInformation.m_komi != m_prefs.getFloat("komi"))
+        if (gameInformation.m_komi != m_prefs.getDouble("komi"))
         {
-            m_prefs.setFloat("komi", gameInformation.m_komi);
+            m_prefs.setDouble("komi", gameInformation.m_komi);
             setKomi(gameInformation.m_komi);
         }
         if (gameInformation.m_rules != null
@@ -1378,7 +1378,7 @@ class GoGui
         m_scoreDialog.setVisible(false);
         if (accepted)
         {
-            float komi = m_gameTree.getGameInformation().m_komi;
+            double komi = m_gameTree.getGameInformation().m_komi;
             setResult(m_board.scoreGet(komi, getRules()).formatResult());
         }
         clearStatus();
@@ -1926,7 +1926,7 @@ class GoGui
         if (handicap == null)
             showWarning("Handicap stone locations are not\n" +
                         "defined for this board size.");
-        m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), handicap,
+        m_gameTree = new GameTree(size, m_prefs.getDouble("komi"), handicap,
                                   m_prefs.getString("rules"));
         m_board.newGame();        
         m_currentNode = m_gameTree.getRoot();
@@ -1986,7 +1986,7 @@ class GoGui
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
-        float komi = m_gameTree.getGameInformation().m_komi;
+        double komi = m_gameTree.getGameInformation().m_komi;
         m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
@@ -2315,7 +2315,7 @@ class GoGui
         }
     }
 
-    private void setKomi(float komi)
+    private void setKomi(double komi)
     {
         if (m_commandThread == null)
             return;
@@ -2334,7 +2334,7 @@ class GoGui
     {
         prefs.setBoolDefault("beep-after-move", true);
         prefs.setIntDefault("boardsize", 19);
-        prefs.setFloatDefault("komi", 0);
+        prefs.setDoubleDefault("komi", 0);
         prefs.setStringDefault("rules", "Chinese");
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);
@@ -2475,7 +2475,7 @@ class GoGui
         go.Color toMove = m_board.getToMove();
         m_boardSize = size;
         m_board.newGame();        
-        m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), null,
+        m_gameTree = new GameTree(size, m_prefs.getDouble("komi"), null,
                                   m_prefs.getString("rules"));
         m_currentNode = m_gameTree.getRoot();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)

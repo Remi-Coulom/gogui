@@ -299,17 +299,17 @@ public class Node
     }
 
     /** Time left for black after move was made.
-        Returns Float.NaN if unknown.
+        Returns Double.NaN if unknown.
     */
-    public float getTimeLeftBlack()
+    public double getTimeLeftBlack()
     {
         return m_timeLeftBlack;
     }
 
     /** Time left for white after move was made.
-        Returns Float.NaN if unknown.
+        Returns Double.NaN if unknown.
     */
-    public float getTimeLeftWhite()
+    public double getTimeLeftWhite()
     {
         return m_timeLeftWhite;
     }
@@ -403,12 +403,12 @@ public class Node
         m_movesLeftWhite = moves;
     }
 
-    public void setTimeLeftBlack(float timeLeft)
+    public void setTimeLeftBlack(double timeLeft)
     {
         m_timeLeftBlack = timeLeft;
     }
 
-    public void setTimeLeftWhite(float timeLeft)
+    public void setTimeLeftWhite(double timeLeft)
     {
         m_timeLeftWhite = timeLeft;
     }
@@ -435,11 +435,11 @@ public class Node
             appendInfo(buffer, "AddWhite", m_addWhite);
         if (getPlayer() != Color.EMPTY)
             appendInfo(buffer, "Player", getPlayer().toString());
-        if (! Float.isNaN(getTimeLeftBlack()))
+        if (! Double.isNaN(getTimeLeftBlack()))
             appendInfo(buffer, "TimeLeftBlack", getTimeLeftBlack());
         if (getMovesLeftBlack() >= 0)
             appendInfo(buffer, "MovesLeftBlack", getMovesLeftBlack());
-        if (! Float.isNaN(getTimeLeftWhite()))
+        if (! Double.isNaN(getTimeLeftWhite()))
             appendInfo(buffer, "TimeLeftWhite", getTimeLeftWhite());
         if (getMovesLeftWhite() >= 0)
             appendInfo(buffer, "MovesLeftWhite", getMovesLeftWhite());
@@ -469,9 +469,9 @@ public class Node
 
     private int m_movesLeftWhite = -1;
 
-    private float m_timeLeftBlack = Float.NaN;
+    private double m_timeLeftBlack = Double.NaN;
 
-    private float m_timeLeftWhite = Float.NaN;
+    private double m_timeLeftWhite = Double.NaN;
 
     private Color m_player = Color.EMPTY;
 
@@ -496,9 +496,9 @@ public class Node
     }
 
     private static void appendInfo(StringBuffer buffer, String label,
-                                   float value)
+                                   double value)
     {
-        appendInfo(buffer, label, Float.toString(value));
+        appendInfo(buffer, label, Double.toString(value));
     }
 
     private static void appendInfo(StringBuffer buffer, String label,

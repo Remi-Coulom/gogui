@@ -74,11 +74,11 @@ public class TimeControl
         {
             movesLeft = timeRecord.m_movesLeft;
         }
-        return getTimeString((float)(time / 1000L), movesLeft);
+        return getTimeString((double)(time / 1000L), movesLeft);
     }
 
     /** If not in byoyomi movesLeft < 0 */
-    public static String getTimeString(float timeLeft, int movesLeft)
+    public static String getTimeString(double timeLeft, int movesLeft)
     {
         StringBuffer buffer = new StringBuffer(8);
         long time = (long)timeLeft;

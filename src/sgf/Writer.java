@@ -40,7 +40,7 @@ public class Writer
         String date = gameInformation.m_date;
         String rules = gameInformation.m_rules;
         int handicap = gameInformation.m_handicap;
-        float komi = gameInformation.m_komi;
+        double komi = gameInformation.m_komi;
         printHeader(file, application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, result, komi, rules);
         printNodes(gameTree.getRoot());        
@@ -110,7 +110,7 @@ public class Writer
     private void printHeader(File file, String application, String version,
                              int handicap, String date, String playerBlack,
                              String playerWhite, String rankBlack,
-                             String rankWhite, String result, float komi,
+                             String rankWhite, String result, double komi,
                              String rules)
     {
         printHeader(file, application, version);
@@ -167,7 +167,7 @@ public class Writer
             printEscaped(comment);
             m_out.println();
         }
-        if (! Float.isNaN(node.getTimeLeftBlack()))
+        if (! Double.isNaN(node.getTimeLeftBlack()))
         {
             m_out.println("BL[" + node.getTimeLeftBlack() + "]");
         }
@@ -175,7 +175,7 @@ public class Writer
         {
             m_out.println("OB[" + node.getMovesLeftBlack() + "]");
         }
-        if (! Float.isNaN(node.getTimeLeftWhite()))
+        if (! Double.isNaN(node.getTimeLeftWhite()))
         {
             m_out.println("WL[" + node.getTimeLeftWhite() + "]");
         }

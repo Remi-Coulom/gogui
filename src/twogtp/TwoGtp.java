@@ -21,7 +21,7 @@ public class TwoGtp
     extends GtpServer
 {
     public TwoGtp(InputStream in, OutputStream out, String black,
-                  String white, String referee, int size, float komi,
+                  String white, String referee, int size, double komi,
                   boolean isKomiFixed, int numberGames, boolean alternate,
                   String sgfFile, boolean force, boolean verbose,
                   boolean estimateScore)
@@ -333,10 +333,10 @@ public class TwoGtp
             String white = opt.getString("white", "");
             String referee = opt.getString("referee", "");
             int size = opt.getInteger("size", 0, 0);
-            float komi = 6.5f;
+            double komi = 6.5;
             boolean isKomiFixed = opt.isSet("komi");
             if (isKomiFixed)
-                komi = opt.getFloat("komi");
+                komi = opt.getDouble("komi");
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
@@ -402,7 +402,7 @@ public class TwoGtp
 
     private int m_size;
 
-    private float m_komi;
+    private double m_komi;
 
     private double m_cpuTimeBlack;
 
@@ -856,10 +856,11 @@ public class TwoGtp
                             + " is fixed by command line option");
             return false;
         }
-        FloatArgument floatArgument = parseFloatArgument(cmdArray, response);
-        if (floatArgument == null)
+        DoubleArgument doubleArgument
+            = parseDoubleArgument(cmdArray, response);
+        if (doubleArgument == null)
             return false;
-        m_komi = floatArgument.m_float;
+        m_komi = doubleArgument.m_double;
         m_gameTree.getGameInformation().m_komi = m_komi;
         sendIfSupported("komi", "komi " + m_komi);
         return true;

@@ -18,7 +18,7 @@ public class GameInformation
 
     public int m_handicap;
 
-    public float m_komi;
+    public double m_komi;
 
     public String m_blackRank;
 

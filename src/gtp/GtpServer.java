@@ -178,9 +178,9 @@ public abstract class GtpServer
         public Point m_point;
     }
 
-    public static class FloatArgument
+    public static class DoubleArgument
     {
-        public float m_float;
+        public double m_double;
     }
 
     public static class IntegerArgument
@@ -301,10 +301,10 @@ public abstract class GtpServer
         @param cmdArray Command line split into words.
         @param response Empty string buffer filled with GTP error message
         if parsing fails.
-        @return Float argument or null if parsing fails.
+        @return Double argument or null if parsing fails.
     */
-    public static FloatArgument parseFloatArgument(String[] cmdArray,
-                                                   StringBuffer response)
+    public static DoubleArgument parseDoubleArgument(String[] cmdArray,
+                                                     StringBuffer response)
     {
         if (cmdArray.length != 2)
         {
@@ -313,10 +313,10 @@ public abstract class GtpServer
         }
         try
         {
-            float f = Float.parseFloat(cmdArray[1]);
-            FloatArgument floatArgument = new FloatArgument();
-            floatArgument.m_float = f;
-            return floatArgument;
+            double f = Double.parseDouble(cmdArray[1]);
+            DoubleArgument doubleArgument = new DoubleArgument();
+            doubleArgument.m_double = f;
+            return doubleArgument;
         }
         catch (NumberFormatException e)
         {
