@@ -77,14 +77,16 @@ class ToolBar
         m_buttonBeginning.setEnabled(enable);
         m_buttonBackward.setEnabled(enable);
         m_buttonBackward10.setEnabled(enable);
-        m_buttonForward.setEnabled(enable);
-        m_buttonForward10.setEnabled(enable);
         m_buttonEnd.setEnabled(enable);
         m_buttonEnter.setEnabled(enable);
+        m_buttonForward.setEnabled(enable);
+        m_buttonForward10.setEnabled(enable);
         m_buttonInfo.setEnabled(enable);
         m_buttonNew.setEnabled(enable);
+        m_buttonNextVariation.setEnabled(enable);
         m_buttonOpen.setEnabled(enable);
         m_buttonPass.setEnabled(enable);
+        m_buttonPreviousVariation.setEnabled(enable);
         m_buttonSave.setEnabled(enable);
         if (enable)
         {
@@ -106,19 +108,19 @@ class ToolBar
 
     private ActionListener m_listener;
 
-    private JButton m_buttonEnter;
+    private JButton m_buttonBeginning;
 
     private JButton m_buttonBackward;
 
     private JButton m_buttonBackward10;
 
-    private JButton m_buttonBeginning;
+    private JButton m_buttonEnd;
+
+    private JButton m_buttonEnter;
 
     private JButton m_buttonForward;
 
     private JButton m_buttonForward10;
-
-    private JButton m_buttonEnd;
 
     private JButton m_buttonInfo;
 
