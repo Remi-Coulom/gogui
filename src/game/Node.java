@@ -42,6 +42,8 @@ public class Node
 
     /** Add other unspecified SGF property.
         Do not add SGF properties that can be set with other member functions.
+        This is for preserving unknown SGF properties that are not used
+        by this program.
     */
     public void addSgfProperty(String label, String value)
     {
@@ -225,7 +227,7 @@ public class Node
     }
 
     /** Get other unspecified SGF properties.
-        Returns null if node has none.
+        @see setSgfProperty.
     */
     public Map getSgfProperties()
     {
