@@ -1,0 +1,8 @@
+src/go/Color.java
+src/go/Point.java
+src/go/Move.java
+src/gtp/Gtp.java
+src/gtp/GtpServer.java
+src/gtp/TwoGtp.java
+src/utils/Options.java
+src/utils/StringUtils.java

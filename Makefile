@@ -33,6 +33,8 @@ PACKAGES= \
   sgf \
   utils
 
+all: release twogtp
+
 release: version
 	mkdir -p build/gogui
 	javac -O -deprecation -sourcepath . -source 1.4 -d build/gogui @build/files-gogui.txt
@@ -55,7 +57,12 @@ version:
 	sed 's/m_version = \".*\"/m_version = \"$(VERSION)\"/' <src/gui/Version.java >src/gui/.Version.java.new
 	mv src/gui/.Version.java.new src/gui/Version.java
 
-.PHONY: gmptogtp
+.PHONY: gmptogtp twogtp
+
+twogtp:
+	mkdir -p build/twogtp
+	javac -O -deprecation -sourcepath . -source 1.4 -d build/twogtp @build/files-twogtp.txt
+	jar cmf build/manifest-twogtp.txt twogtp.jar -C build/twogtp .
 
 gmptogtp:
 	mkdir -p build/gmptogtp
@@ -65,7 +72,7 @@ gmptogtp:
 .PHONY: srcdoc clean doc changelog tags
 
 clean:
-	-rm -r build/gogui build/gogui_debug build/gmptogtp
+	-rm -r build/gogui build/gogui_debug build/gmptogtp build/twogtp
 
 doc:
 	echo "$(VERSION)" >doc/xml/version.xml

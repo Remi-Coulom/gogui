@@ -5,13 +5,14 @@
   </refmeta>
   <refnamediv>
     <refname>twogtp</refname>
+    <refname>twogtp.jar</refname>
     <refpurpose>
       Go Text Protocol adapter for playing games between two Go programs.
     </refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>java -cp gogui.jar gtp.TwoGtp</command>
+      <command>twogtp</command>
       <arg choice="plain">
         <option>-black</option> <replaceable>command</replaceable>
       </arg>
