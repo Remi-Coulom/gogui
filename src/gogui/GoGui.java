@@ -1906,8 +1906,8 @@ class GoGui
             go.Point point = move.getPoint();
             if (point != null && m_board.getColor(point) != go.Color.EMPTY)
                 return;
-            m_needsSave = true;
             boolean newNodeCreated = play(move);
+            m_needsSave = newNodeCreated;
             if (point != null)
             {
                 m_guiBoard.updateFromGoBoard(point);
