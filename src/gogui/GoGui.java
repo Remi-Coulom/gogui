@@ -2487,8 +2487,7 @@ class GoGui
         saveLocation(this, "window-gogui");
         if (m_help != null)
             saveSize(m_help, "window-help");
-        if (m_gameTreeViewer != null)
-            saveSizeAndVisible(m_gameTreeViewer, "gametree");
+        saveSizeAndVisible(m_gameTreeViewer, "gametree");
         if (m_commandThread != null)
         {
             saveSizeAndVisible(m_gtpShell, "gtpshell");
