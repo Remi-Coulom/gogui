@@ -289,32 +289,6 @@ public class Board
         drawShadows(graphics);
     }
 
-    private void drawShadows(Graphics graphics)
-    {
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D == null)
-            return;
-        AlphaComposite composite = 
-            AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f); 
-        graphics2D.setComposite(composite);
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            go.Point point = m_board.getPoint(i);
-            if (m_board.getColor(point) == go.Color.EMPTY)
-                continue;
-            Field field = getField(point);
-            java.awt.Point location = getScreenLocation(point.getX(),
-                                                        point.getY());
-            int size = field.getSize().width - 2 * field.getStoneMargin();
-            int offset = size / 12;
-            graphics.setColor(java.awt.Color.black);
-            graphics.fillOval(location.x - size / 2 + offset,
-                              location.y - size / 2 + offset,
-                              size, size);
-        }
-        graphics.setPaintMode();
-    }
-
     public void paintImmediately(go.Point point)
     {
         Field field = getField(point);
@@ -592,6 +566,9 @@ public class Board
 
     private go.Board m_board;
 
+    private static final AlphaComposite m_composite3
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
+
     private Dimension m_minimumFieldSize;
 
     private Dimension m_preferredFieldSize;
@@ -661,6 +638,30 @@ public class Board
             field.repaint();
             m_lastMove = null;
         }
+    }
+
+    private void drawShadows(Graphics graphics)
+    {
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        if (graphics2D == null)
+            return;
+        graphics2D.setComposite(m_composite3);
+        Field field = m_field[0][0];
+        final int size = field.getSize().width - 2 * field.getStoneMargin();
+        final int offset = size / 12;
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            go.Point point = m_board.getPoint(i);
+            if (m_board.getColor(point) == go.Color.EMPTY)
+                continue;
+            java.awt.Point location = getScreenLocation(point.getX(),
+                                                        point.getY());
+            graphics.setColor(java.awt.Color.black);
+            graphics.fillOval(location.x - size / 2 + offset,
+                              location.y - size / 2 + offset,
+                              size, size);
+        }
+        graphics.setPaintMode();
     }
 
     private Field getField(go.Point p)
