@@ -150,10 +150,6 @@ public class Writer
         m_out.println("\\end{psgoboard}");
     }
 
-    private void printInternalMoves()
-    {
-    }
-
     private String printTree(GameTree gameTree)
     {
         GameInformation gameInformation = gameTree.getGameInformation();

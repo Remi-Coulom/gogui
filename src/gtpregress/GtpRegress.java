@@ -747,14 +747,6 @@ class GtpRegress
     {
         File file = new File(m_prefix + "index.html");
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        String host = "?";
-        try
-        {
-            host = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e)
-        {
-        }
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Regression Test Summary</title>\n" +

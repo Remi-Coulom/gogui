@@ -606,21 +606,6 @@ public final class Gtp
         private Reader m_err;
     }
 
-    private static class Interrupt extends TimerTask
-    {
-        public Interrupt(Thread thread)
-        {
-            m_thread = thread;
-        }
-
-        public void run()
-        {
-            m_thread.interrupt();
-        }
-
-        private Thread m_thread;
-    }
-
     private boolean m_fastUpdate;
 
     private boolean m_isInterruptCommentSupported;

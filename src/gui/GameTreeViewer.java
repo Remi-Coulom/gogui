@@ -406,21 +406,6 @@ public class GameTreeViewer
     }
 
     private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  String command)
-    {
-        JMenuItem item = new JMenuItem(label);
-        return addMenuItem(menu, item, mnemonic, command);        
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  String command, String toolTip)
-    {
-        JMenuItem item = addMenuItem(menu, label, mnemonic, command);
-        item.setToolTipText(toolTip);
-        return item;
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
                                   int accel, int modifier, String command)
     {
         JMenuItem item = new JMenuItem(label);

@@ -65,13 +65,13 @@ public class GtpAdapter
         else if (cmd.equals("boardsize"))
             status = cmdBoardsize(cmdArray, response);
         else if (cmd.equals("clear_board"))
-            status = cmdClearBoard(cmdArray, response);
+            status = cmdClearBoard(response);
         else if (cmd.equals("final_score") && m_noScore)
             status = cmdUnknown(response);
         else if (cmd.equals("final_status_list") && m_noScore)
             status = cmdUnknown(response);
         else if (cmd.equals("genmove"))
-            status = cmdGenmove(cmdLine, cmdArray, response);
+            status = cmdGenmove(cmdArray, response);
         else if (cmd.equals("genmove_black"))
             status = cmdGenmove(Color.BLACK, response);
         else if (cmd.equals("genmove_white"))
@@ -312,7 +312,7 @@ public class GtpAdapter
         return true;
     }
 
-    private boolean cmdClearBoard(String cmdArray[], StringBuffer response)
+    private boolean cmdClearBoard(StringBuffer response)
     {
         String command = m_gtp.getCommandClearBoard(m_boardSize);
         if (! send(command, response))
@@ -322,8 +322,7 @@ public class GtpAdapter
         return true;
     }
 
-    private boolean cmdGenmove(String cmdLine, String cmdArray[],
-                               StringBuffer response)
+    private boolean cmdGenmove(String cmdArray[], StringBuffer response)
     {
         ColorArgument argument = parseColorArgument(cmdArray, response);
         if (argument == null)
@@ -578,7 +577,6 @@ public class GtpAdapter
     {
         for (int i = 1; i < cmdArray.length; ++i)
         {
-            StringBuffer programResponse = new StringBuffer();
             Point point;
             try
             {
@@ -744,29 +742,6 @@ public class GtpAdapter
             {
             }
         }
-    }
-
-    private boolean translateColorCommand(String cmdArray[], String cmdPrefix,
-                                          StringBuffer response)
-    {
-        if (cmdArray.length < 2)
-        {
-            response.append("Need argument");
-            return false;
-        }
-        StringBuffer args = new StringBuffer();
-        for (int i = 2; i < cmdArray.length; ++i)
-        {
-            args.append(" ");
-            args.append(cmdArray[i]);
-        }
-        String color = cmdArray[1].toLowerCase();
-        if (color.equals("white") || color.equals("w"))
-            return send(cmdPrefix + "white" + args, response);
-        if (color.equals("black") || color.equals("b"))
-            return send(cmdPrefix + "black" + args, response);
-        response.append("Invalid argument");
-        return false;
     }
 
     private boolean undo(StringBuffer response)

@@ -10,14 +10,13 @@ import java.awt.event.*;
 import java.net.*;
 import javax.swing.*;
 import game.*;
-import utils.Preferences;
 
 //-----------------------------------------------------------------------------
 
 class ToolBar
     extends JToolBar
 {
-    ToolBar(ActionListener listener, Preferences prefs)
+    ToolBar(ActionListener listener)
     {
         setRollover(true);
         setFloatable(false);

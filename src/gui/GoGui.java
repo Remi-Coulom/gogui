@@ -48,7 +48,7 @@ class GoGui
         Container contentPane = getContentPane();        
         JPanel innerPanel = new JPanel(new BorderLayout());
         contentPane.add(innerPanel, BorderLayout.CENTER);
-        m_toolBar = new ToolBar(this, prefs);
+        m_toolBar = new ToolBar(this);
         contentPane.add(m_toolBar, BorderLayout.NORTH);
 
         m_infoPanel = new JPanel(new BorderLayout());
@@ -2434,13 +2434,6 @@ class GoGui
             {
             }
         }
-    }
-
-    private void setup(Move move) throws Gtp.Error
-    {
-        if (m_commandThread != null)
-            m_commandThread.sendCommandPlay(move);
-        m_board.setup(move);
     }
 
     private void setupDone()
