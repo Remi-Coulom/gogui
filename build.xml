@@ -101,7 +101,7 @@ installation directory.
 <fileset dir="src" includes="images/*.png"/>
 </copy>
 <copy todir="build/doc">
-<fileset dir="doc/html" includes="*.html"/>
+<fileset dir="doc/html" includes="*.html *.css"/>
 </copy>
 <copy todir="build/config">
 <fileset dir="config" includes="analyze-commands"/>
@@ -201,6 +201,7 @@ installation directory.
 <fileset dir="build" includes="
  config/analyze-commands
  doc/*.html
+ doc/*.css
  game/*.class
  go/*.class
  gtp/*.class
