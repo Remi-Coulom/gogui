@@ -32,7 +32,9 @@ public class TimeSettings
 
     public Object clone()
     {
-        return new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
+        if (getUseByoyomi())
+            return new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
+        return new TimeSettings(m_preByoyomi);
     }
 
     public long getByoyomi()
