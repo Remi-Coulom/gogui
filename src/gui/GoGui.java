@@ -1305,6 +1305,8 @@ class GoGui
                 if (! m_gtpFile.equals(""))
                     sendGtpFile(new File(m_gtpFile));
             }
+            else
+                setTitle("GoGui");
             if (m_commandThread == null || m_computerNoneOption)
                 computerNone();
             else
