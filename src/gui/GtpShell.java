@@ -213,25 +213,7 @@ public class GtpShell
         m_fontSize = m_gtpShellText.getFont().getSize();
         m_finalSize = new Dimension(m_fontSize * 40, m_fontSize * 30);
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
-        m_comboBox = new JComboBox();
-        m_editor = m_comboBox.getEditor();
-        m_textField = (JTextField)m_editor.getEditorComponent();
-        m_textField.setFocusTraversalKeysEnabled(false);
-        m_textField.addKeyListener(this);
-        m_model = (MutableComboBoxModel)m_comboBox.getModel();
-        m_comboBox.setEditable(true);
-        m_comboBox.setFont(m_gtpShellText.getFont());
-        m_comboBox.addActionListener(this);
-        m_comboBox.addItemListener(this);
-        addWindowListener(new WindowAdapter()
-            {
-                public void windowActivated(WindowEvent e)
-                {
-                    m_comboBox.requestFocusInWindow();
-                    m_textField.requestFocusInWindow();
-                }
-            });
-        contentPane.add(m_comboBox, BorderLayout.SOUTH);
+        contentPane.add(createCommandInput(), BorderLayout.SOUTH);
         pack();
     }
     
@@ -536,6 +518,7 @@ public class GtpShell
         m_programVersion = version;
     }
 
+        
     private static class UpdateCommand implements Runnable
     {
         public UpdateCommand(GtpShell gtpShell, String text)
@@ -755,6 +738,40 @@ public class GtpShell
         m_prefs.setBool("gtpshell-disable-completions", m_disableCompletions);
     }
 
+    private JPanel createCommandInput()
+    {
+        JPanel panel = new JPanel(new BorderLayout());
+        m_comboBox = new JComboBox();
+        m_editor = m_comboBox.getEditor();
+        m_textField = (JTextField)m_editor.getEditorComponent();
+        m_textField.setFocusTraversalKeysEnabled(false);
+        m_textField.addKeyListener(this);
+        m_model = (MutableComboBoxModel)m_comboBox.getModel();
+        m_comboBox.setEditable(true);
+        m_comboBox.setFont(m_gtpShellText.getFont());
+        m_comboBox.addActionListener(this);
+        m_comboBox.addItemListener(this);
+        addWindowListener(new WindowAdapter()
+            {
+                public void windowActivated(WindowEvent e)
+                {
+                    m_comboBox.requestFocusInWindow();
+                    m_textField.requestFocusInWindow();
+                }
+            });
+        panel.add(m_comboBox);
+        // Workaround for Java 1.4.1 on Mac OS X add some empty space
+        // so that combobox does not overlap the window resize widget
+        if (isOSMac())
+        {
+            Dimension dimension = new Dimension(20, 1);
+            Box.Filler filler =
+                new Box.Filler(dimension, dimension, dimension);
+            panel.add(filler, BorderLayout.EAST);
+        }
+        return panel;
+    }
+
     private void createMenu(boolean highlight)
     {
         JMenuBar menuBar = new JMenuBar();
@@ -855,6 +872,15 @@ public class GtpShell
         boolean highlight = m_itemHighlight.isSelected();
         m_gtpShellText.setHighlight(highlight);
         m_prefs.setBool("gtpshell-highlight", highlight);
+    }
+
+    // Check if operating system is Mac OS X
+    private boolean isOSMac()
+    {
+        String name = System.getProperty("os.name");
+        if (name == null)
+            return false;
+        return name.equals("Mac OS X");
     }
 
     private void popupCompletions()
