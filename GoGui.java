@@ -248,7 +248,7 @@ class GoGui
                     "fillpasses",
                     "gtpshell",
                     "help",
-                    "move",
+                    "move:",
                     "size:",
                     "time:",
                     "verbose"
