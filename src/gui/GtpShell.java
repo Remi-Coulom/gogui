@@ -201,7 +201,7 @@ public class GtpShell
         m_historyMax = prefs.getInt("gtpshell-history-max");
         m_disableCompletions = prefs.getBool("gtpshell-disable-completions");
         boolean highlight = prefs.getBool("gtpshell-highlight");
-        createMenu(highlight);
+        createMenuBar(highlight);
         Container contentPane = getContentPane();
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
         m_gtpShellText.setHighlight(highlight);
@@ -787,7 +787,7 @@ public class GtpShell
         return panel;
     }
 
-    private void createMenu(boolean highlight)
+    private void createMenuBar(boolean highlight)
     {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuFile());
@@ -796,11 +796,17 @@ public class GtpShell
         setJMenuBar(menuBar);
     }
 
+    private JMenu createMenu(String name, int mnemonic)
+    {
+        JMenu menu = new JMenu(name);
+        if (! Platform.isMac())
+            menu.setMnemonic(mnemonic);
+        return menu;
+    }
+
     private JMenu createMenuFile()
     {
-        JMenu menu = new JMenu("File");
-        if (! Platform.isMac())
-            menu.setMnemonic(KeyEvent.VK_F);
+        JMenu menu = createMenu("File", KeyEvent.VK_F);
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
                     m_shortcutKeyMask, "save-log");
         addMenuItem(menu, "Save Commands...", KeyEvent.VK_M, "save-commands");
@@ -815,9 +821,7 @@ public class GtpShell
 
     private JMenu createMenuSettings(boolean highlight)
     {
-        JMenu menu = new JMenu("Settings");
-        if (! Platform.isMac())
-            menu.setMnemonic(KeyEvent.VK_S);
+        JMenu menu = createMenu("Settings", KeyEvent.VK_S);
         m_itemHighlight = new JCheckBoxMenuItem("Highlight");
         m_itemHighlight.setSelected(highlight);
         addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
@@ -830,9 +834,7 @@ public class GtpShell
 
     private JMenu createMenuWindows()
     {
-        JMenu menu = new JMenu("Windows");
-        if (! Platform.isMac())
-            menu.setMnemonic(KeyEvent.VK_W);
+        JMenu menu = createMenu("Windows", KeyEvent.VK_W);
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
                     "analyze");
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,

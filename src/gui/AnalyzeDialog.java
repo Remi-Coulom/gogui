@@ -58,7 +58,7 @@ class AnalyzeDialog
         Container contentPane = getContentPane();
         contentPane.add(createButtons(), BorderLayout.SOUTH);
         contentPane.add(createCommandPanel(), BorderLayout.CENTER);
-        createMenu();
+        createMenuBar();
         comboBoxChanged();
         pack();
         m_list.requestFocusInWindow();
@@ -286,7 +286,15 @@ class AnalyzeDialog
         return panel;
     }
 
-    private void createMenu()
+    private JMenu createMenu(String name, int mnemonic)
+    {
+        JMenu menu = new JMenu(name);
+        if (! Platform.isMac())
+            menu.setMnemonic(mnemonic);
+        return menu;
+    }
+
+    private void createMenuBar()
     {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuFile());
@@ -297,9 +305,7 @@ class AnalyzeDialog
 
     private JMenu createMenuFile()
     {
-        JMenu menu = new JMenu("File");
-        if (! Platform.isMac())
-            menu.setMnemonic(KeyEvent.VK_F);
+        JMenu menu = createMenu("File", KeyEvent.VK_F);
         JMenuItem item =
             addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload",
                         "Reload commands from configuration files");
@@ -311,9 +317,7 @@ class AnalyzeDialog
 
     private JMenu createMenuSettings()
     {
-        JMenu menu = new JMenu("Settings");
-        if (! Platform.isMac())
-            menu.setMnemonic(KeyEvent.VK_S);
+        JMenu menu = createMenu("Settings", KeyEvent.VK_S);
         m_itemOnlySupported =
             new JCheckBoxMenuItem("Only Supported Commands");
         m_itemOnlySupported.setSelected(m_onlySupportedCommands);
@@ -327,9 +331,7 @@ class AnalyzeDialog
 
     private JMenu createMenuWindows()
     {
-        JMenu menu = new JMenu("Windows");
-        if (! Platform.isMac())
-            menu.setMnemonic(KeyEvent.VK_W);
+        JMenu menu = createMenu("Windows", KeyEvent.VK_W);
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
                     "gogui");
         addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,

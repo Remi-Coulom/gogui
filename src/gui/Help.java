@@ -42,7 +42,7 @@ class Help
         super("Help - GoGui");
         m_contents = contents;
         Container contentPane = getContentPane();
-        createMenu();
+        createMenuBar();
         JPanel panel = new JPanel(new BorderLayout());
         contentPane.add(panel);
         panel.add(createButtons(), BorderLayout.NORTH);
@@ -183,18 +183,22 @@ class Help
         historyChanged();
     }
 
-    private void createMenu()
+    private JMenu createMenu(String name, int mnemonic)
+    {
+        JMenu menu = new JMenu(name);
+        if (! Platform.isMac())
+            menu.setMnemonic(mnemonic);
+        return menu;
+    }
+
+    private void createMenuBar()
     {
         JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("File");
-        if (! Platform.isMac())
-            menu.setMnemonic(KeyEvent.VK_F);
+        JMenu menu = createMenu("File", KeyEvent.VK_F);
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     m_shortcutKeyMask, "close");
         menuBar.add(menu);
-        menu = new JMenu("Go");
-        if (! Platform.isMac())
-            menu.setMnemonic(KeyEvent.VK_G);
+        menu = createMenu("Go", KeyEvent.VK_G);
         m_itemBack = addMenuItem(menu, "Back", KeyEvent.VK_B, KeyEvent.VK_B,
                                  m_shortcutKeyMask, "back");
         m_itemForward = addMenuItem(menu, "Forward", KeyEvent.VK_F,
