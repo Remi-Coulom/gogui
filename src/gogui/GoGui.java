@@ -1072,11 +1072,20 @@ class GoGui
             || m_commandThread.isProgramDead())
             return;
         if (m_computerBlack && m_computerWhite)
-            computerNone();
+        {
+            if (showQuestion("Stop computer play?"))
+                computerNone();
+            return;
+        }
         if (! m_commandThread.isInterruptSupported())
         {
-            if (showQuestion("Program does not support interrupt.\n" +
-                             "Kill program?"))
+            Object[] options = { "Kill Program", "Cancel" };
+            Object message = "Program does not support interrupt";
+            int n = JOptionPane.showOptionDialog(this, message, "Question",
+                                                 JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.WARNING_MESSAGE,
+                                                 null, options, options[1]);
+            if (n == 0)
                 m_commandThread.destroyGtp();
             return;
         }
