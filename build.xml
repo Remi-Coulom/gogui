@@ -184,6 +184,7 @@ installation directory.
 <arg line="--param admon.graphics 0"/>
 <arg line="--param chunk.quietly 1"/>
 <arg line="--param chunk.section.depth 0"/>
+<arg line="--stringparam chunker.output.encoding UTF-8"/>
 <arg line="--param footer.rule 0"/>
 <arg line="--param header.rule 0"/>
 <arg line="--param html.cleanup 1"/>
@@ -199,6 +200,9 @@ installation directory.
 <arg line="${docbook_xsl_home}/html/chunk.xsl"/>
 <arg line="doc/xml/book.xml"/>
 </exec>
+<!-- Remove empty div sections that create unwanted space in JEditorPane -->
+<replace dir="doc/html" includes="*.html" token="&lt;div&gt;&lt;/div&gt;"
+ encoding="UTF-8"/>
 <copy todir="doc/html">
 <fileset dir="src/images" includes="project-support.png"/>
 </copy>
