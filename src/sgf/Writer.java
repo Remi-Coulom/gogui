@@ -106,7 +106,7 @@ public class Writer
             if (node.getMove() != null)
                 ++moveNumber;
             node = node.getFather();
-            if (node.getNumberChildren() > 1)
+            if (node != null && node.getNumberChildren() > 1)
                 break;
         }
         return moveNumber;
