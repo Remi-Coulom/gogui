@@ -53,6 +53,7 @@ public class AboutDialog
         JPanel panel = new JPanel(new GridLayout(1, 1));
         panel.setBorder(BorderFactory.createEtchedBorder());        
         JEditorPane editorPane = new JEditorPane();
+        editorPane.setBorder(GuiUtils.createEmptyBorder());        
         panel.add(editorPane);
         JLabel dummyLabel = new JLabel();
         editorPane.setBackground(dummyLabel.getBackground());
