@@ -1389,7 +1389,7 @@ class GoGui
             if (response.toLowerCase().equals("resign"))
             {
                 if (! (m_computerBlack && m_computerWhite))
-                    showInfo("Resign.");
+                    showInfo("The computer resigns.");
                 m_resigned = true;
             }
             else
@@ -1402,7 +1402,7 @@ class GoGui
                 m_board.play(move);
                 if (move.getPoint() == null
                     && ! (m_computerBlack && m_computerWhite))
-                    showInfo("Computer passed.");
+                    showInfo("The computer passed.");
                 fileModified();
                 m_resigned = false;
             }
