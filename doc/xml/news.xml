@@ -72,6 +72,11 @@ GoGui: new setting item "Auto Number" in Gtp shell menu
 </listitem>
 <listitem>
 <simpara>
+Convert tools to GTP version 2
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New tool GtpDisplay
 </simpara>
 </listitem>

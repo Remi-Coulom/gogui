@@ -20,7 +20,7 @@ public class GtpAdapter
     extends GtpServer
 {
     public GtpAdapter(InputStream in, OutputStream out, String program,
-                      PrintStream log, boolean version2, int size,
+                      PrintStream log, boolean version1, int size,
                       String name, boolean noScore, boolean emuHandicap,
                       boolean emuLoadsgf, boolean resign, int resignScore,
                       String gtpFile, boolean verbose, boolean fillPasses)
@@ -39,7 +39,7 @@ public class GtpAdapter
         else
             m_boardSize = 19;
         m_board = new Board(m_boardSize);
-        m_version2 = version2;
+        m_version1 = version1;
         m_noScore = noScore;
         m_emuHandicap = emuHandicap;
         m_emuLoadsgf = emuLoadsgf;
@@ -92,7 +92,7 @@ public class GtpAdapter
         else if (cmd.equals("play"))
             status = cmdPlay(cmdArray, response);
         else if (cmd.equals("protocol_version"))
-            response.append(m_version2 ? "2" : "1");
+            response.append(m_version1 ? "1" : "2");
         else if (cmd.equals("quit"))
             status = cmdQuit(response);
         else if (cmd.equals("set_free_handicap") && m_emuHandicap)
@@ -136,7 +136,7 @@ public class GtpAdapter
 
     private boolean m_resign;
 
-    private boolean m_version2;
+    private boolean m_version1;
 
     /** Only accept this board size.
         A value of -1 means accept any size.
@@ -319,20 +319,20 @@ public class GtpAdapter
         response.append("boardsize\n");
         response.append("protocol_version\n");
         response.append("quit\n");
-        if (m_version2)
-        {
-            response.append("clear_board\n");        
-            response.append("genmove\n");
-            response.append("list_commands\n");
-            response.append("play\n");
-        }
-        else
+        if (m_version1)
         {
             response.append("black\n");
             response.append("help\n");
             response.append("genmove_white\n");
             response.append("genmove_black\n");
             response.append("white\n");
+        }
+        else
+        {
+            response.append("clear_board\n");        
+            response.append("genmove\n");
+            response.append("list_commands\n");
+            response.append("play\n");
         }
         if (m_emuHandicap)
         {

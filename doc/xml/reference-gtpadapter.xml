@@ -26,7 +26,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <arg><option>-resign</option> <replaceable>score</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg><option>-version2</option></arg>
+<arg><option>-version1</option></arg>
 
 <command>gtpadapter</command>
 <arg choice="plain"><option>-help</option></arg>
@@ -196,10 +196,10 @@ Print version and exit.
 </varlistentry>
 
 <varlistentry>
-<term><option>-version2</option></term>
+<term><option>-version1</option></term>
 <listitem>
 <para>
-Sets whether GtpAdapter reports protocol version 2 in response to the
+Sets whether GtpAdapter reports protocol version 1 in response to the
 <userinput>protocol_version</userinput> command.
 GtpAdapter can handle both versions of the commands for playing moves,
 generating moves and starting a new game and will translate them

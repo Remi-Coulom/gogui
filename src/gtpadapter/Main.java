@@ -35,7 +35,7 @@ public class Main
                 "size:",
                 "verbose",
                 "version",
-                "version2"
+                "version1"
             };
             Options opt = new Options(args, options);
             opt.handleConfigOption();
@@ -51,7 +51,7 @@ public class Main
             }
             boolean verbose = opt.isSet("verbose");
             boolean noScore = opt.isSet("noscore");
-            boolean version2 = opt.isSet("version2");
+            boolean version1 = opt.isSet("version1");
             boolean emuHandicap = opt.isSet("emuhandicap");
             boolean emuLoadsgf = opt.isSet("emuloadsgf");
             boolean fillPasses = opt.isSet("fillpasses");
@@ -74,7 +74,7 @@ public class Main
             }
             String program = (String)arguments.get(0);
             GtpAdapter gtpAdapter =
-                new GtpAdapter(System.in, System.out, program, log, version2,
+                new GtpAdapter(System.in, System.out, program, log, version1,
                                size, name, noScore, emuHandicap, emuLoadsgf,
                                resign, resignScore, gtpFile, verbose,
                                fillPasses);
