@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import game.GameInformation;
+import game.TimeSettings;
 import utils.GuiUtils;
 
 //----------------------------------------------------------------------------
@@ -28,8 +29,7 @@ public class GameInfoDialog
                                GameInformation gameInformation)
     {
         GameInfoDialog gameInfoDialog = new GameInfoDialog(gameInformation);
-        JDialog dialog =
-            gameInfoDialog.createDialog(parent, "Game Info");
+        JDialog dialog = gameInfoDialog.createDialog(parent, "Game Info");
         boolean done = false;
         while (! done)
         {
@@ -91,12 +91,45 @@ public class GameInfoDialog
             gameInformation.m_komi = komi;
             changed = true;
         }
+        String preByoyomiContent
+            = getTextFieldContent(gameInfoDialog.m_preByoyomi);
+        String byoyomiContent
+            = getTextFieldContent(gameInfoDialog.m_byoyomi);
+        String byoyomiMovesContent
+            = getTextFieldContent(gameInfoDialog.m_byoyomiMoves);
+        if (! preByoyomiContent.equals(""))
+        {            
+            long preByoyomi = Integer.parseInt(preByoyomiContent) * 60000L;
+            long byoyomi = -1;
+            int byoyomiMoves = -1;
+            if (! byoyomiContent.equals(""))
+                byoyomi = Integer.parseInt(byoyomiContent) * 60000L;
+            if (! byoyomiMovesContent.equals(""))
+                byoyomiMoves = Integer.parseInt(byoyomiMovesContent);
+            if (byoyomi > 0 && byoyomiMoves > 0)
+            {
+                TimeSettings timeSettings = gameInformation.m_timeSettings;
+                if (timeSettings == null
+                    || preByoyomi != timeSettings.getPreByoyomi()
+                    || byoyomi != timeSettings.getByoyomi()
+                    || byoyomiMoves != timeSettings.getByoyomiMoves())
+                {
+                    gameInformation.m_timeSettings
+                        = new TimeSettings(preByoyomi, byoyomi, byoyomiMoves);
+                    changed = true;
+                }
+            }
+        }
         return changed;
     }
 
     private JPanel m_panelLeft;
 
     private JPanel m_panelRight;
+
+    private JTextField m_byoyomi;
+
+    private JTextField m_byoyomiMoves;
 
     private JTextField m_date;
 
@@ -105,6 +138,8 @@ public class GameInfoDialog
     private JTextField m_playerBlack;
 
     private JTextField m_playerWhite;
+
+    private JTextField m_preByoyomi;
 
     private JTextField m_rankBlack;
 
@@ -133,7 +168,7 @@ public class GameInfoDialog
         m_rules = createEntry("Rules", gameInformation.m_rules);
         m_komi = createEntry("Komi", Double.toString(gameInformation.m_komi));
         m_result = createEntry("Result", gameInformation.m_result);
-        createTimeEntry();
+        createTimeEntry(gameInformation.m_timeSettings);
         setMessage(panel);
         setOptionType(OK_CANCEL_OPTION);
     }
@@ -148,7 +183,7 @@ public class GameInfoDialog
         return textField;
     }
 
-    private JTextField createTimeEntry()
+    private void createTimeEntry(TimeSettings timeSettings)
     {
         JLabel label = new JLabel("Time");
         label.setHorizontalAlignment(SwingConstants.LEFT);
@@ -157,18 +192,34 @@ public class GameInfoDialog
         int vgap = 0;
         FlowLayout layout = new FlowLayout(FlowLayout.LEFT, hgap, vgap);
         JPanel panel = new JPanel(layout);
-        JTextField textField;
-        textField = new JTextField(2);
-        panel.add(textField);
+        m_preByoyomi = new JTextField(2);
+        m_preByoyomi.setHorizontalAlignment(JTextField.RIGHT);
+        if (timeSettings != null)
+        {
+            int preByoyomi = (int)(timeSettings.getPreByoyomi() / 60000L);
+            m_preByoyomi.setText(Integer.toString(preByoyomi));
+        }
+        panel.add(m_preByoyomi);
         panel.add(new JLabel("min +"));
-        textField = new JTextField(2);
-        panel.add(textField);
+        m_byoyomi = new JTextField(2);
+        m_byoyomi.setHorizontalAlignment(JTextField.RIGHT);
+        if (timeSettings != null)
+        {
+            int byoyomi = (int)(timeSettings.getByoyomi() / 60000L);
+            m_byoyomi.setText(Integer.toString(byoyomi));
+        }
+        panel.add(m_byoyomi);
         panel.add(new JLabel("min /"));
-        textField = new JTextField(2);
-        panel.add(textField);
+        m_byoyomiMoves = new JTextField(2);
+        m_byoyomiMoves.setHorizontalAlignment(JTextField.RIGHT);
+        if (timeSettings != null)
+        {
+            int byoyomiMoves = timeSettings.getByoyomiMoves();
+            m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));
+        }
+        panel.add(m_byoyomiMoves);
         panel.add(new JLabel("moves"));
         m_panelRight.add(panel);
-        return textField;
     }
 
     private static String getTextFieldContent(JTextField textField)
@@ -178,13 +229,51 @@ public class GameInfoDialog
 
     private boolean validate(Component parent)
     {
+        if (! validateDouble(parent, m_komi, "Invalid komi"))
+            return false;
+        if (! validatePosIntOrEmpty(parent, m_preByoyomi,
+                                    "Invalid time settings"))
+            return false;
+        if (! validatePosIntOrEmpty(parent, m_byoyomi,
+                                    "Invalid time settings"))
+            return false;
+        if (! validatePosIntOrEmpty(parent, m_byoyomiMoves,
+                                    "Invalid time settings"))
+            return false;
+        return true;
+    }
+
+    private boolean validateDouble(Component parent, JTextField textField,
+                                   String errorMessage)
+    {
         try
         {
-            Double.parseDouble(getTextFieldContent(m_komi));
+            Double.parseDouble(getTextFieldContent(textField));
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, "Invalid komi value");
+            SimpleDialogs.showError(parent, errorMessage);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePosIntOrEmpty(Component parent,
+                                          JTextField textField,
+                                          String errorMessage)
+    {
+        try
+        {
+            String content = getTextFieldContent(textField);
+            if (content.equals(""))
+                return true;
+            int value = Integer.parseInt(content);
+            if (value <= 0)
+                return false;
+        }
+        catch (NumberFormatException e)
+        {
+            SimpleDialogs.showError(parent, errorMessage);
             return false;
         }
         return true;
