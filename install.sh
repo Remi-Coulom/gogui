@@ -6,7 +6,7 @@ function usage() {
   printf "Usage: %s [-p prefix]\n" $0
 }
 
-while getopts hP: OPTION; do
+while getopts hp: OPTION; do
   case $OPTION in
     h) usage; exit 0;;
     p) PREFIX="$OPTARG";;
@@ -46,3 +46,6 @@ install config/gogui.desktop $PREFIX/share/applications
 
 install -d $PREFIX/share/mime-info
 install config/gogui.{mime,keys} $PREFIX/share/mime-info
+
+install -d $PREFIX/share/application-registry
+install config/gogui.applications $PREFIX/share/application-registry
