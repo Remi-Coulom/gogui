@@ -146,7 +146,7 @@ This will translate the commands <userinput>play</userinput>,
 <userinput>black</userinput>, <userinput>white</userinput>,
 <userinput>genmove_black</userinput>, <userinput>genmove_white</userinput>,
 <userinput>help</userinput>. The command <userinput>boardsize</userinput>
-will be used only for setting the boardsize.
+will be forwarded to the program and set the boardsize.
 The command <userinput>clear_board</userinput> will be translated into
 a version 1 <userinput>boardsize</userinput> command using the previously
 set board size.

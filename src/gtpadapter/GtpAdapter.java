@@ -210,15 +210,13 @@ public class GtpAdapter
                 return false;
             }
             m_boardSize = boardSize;
-            if (! m_version2)
-                return send("boardsize " + boardSize, response);
+            return send("boardsize " + boardSize, response);
         }
         catch (NumberFormatException e)
         {
             response.append("Need integer argument");
             return false;
         }
-        return true;
     }
 
     private boolean cmdListCommands(StringBuffer response)
