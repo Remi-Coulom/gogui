@@ -41,7 +41,7 @@ class MenuBar
 
     public boolean getBeepAfterMove()
     {
-        return m_itemBeepAfterMove.getState();
+        return m_itemBeepAfterMove.isSelected();
     }
 
     public JMenuBar getMenuBar()
@@ -51,7 +51,7 @@ class MenuBar
 
     public boolean getShowLastMove()
     {
-        return m_itemShowLastMove.getState();
+        return m_itemShowLastMove.isSelected();
     }
 
     public void setComputerBlack()
@@ -101,7 +101,7 @@ class MenuBar
 
     public void setBeepAfterMove(boolean enable)
     {
-        m_itemBeepAfterMove.setState(enable);
+        m_itemBeepAfterMove.setSelected(enable);
     }
 
     public void setCommandInProgress(boolean isInterruptSupported)
@@ -439,7 +439,7 @@ class MenuBar
         addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
                     "beep-after-move");
         m_itemShowLastMove = new JCheckBoxMenuItem("Show last move");
-        m_itemShowLastMove.setState(true);
+        m_itemShowLastMove.setSelected(true);
         addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_S,
                     "show-last-move");
         return menu;

@@ -42,6 +42,11 @@ class Preferences
         return getIntProperty("boardsize");
     }
 
+    public boolean getGtpShellDisableCompletions()
+    {
+        return getIntProperty("gtpshell-disable-completions") != 0;
+    }
+
     public int getGtpShellHistoryMax()
     {
         return getIntProperty("gtpshell-history-max");
@@ -120,6 +125,12 @@ class Preferences
         setIntProperty("boardsize", boardSize);
     }
 
+    public void setDisableCompletions(boolean disableCompletions)
+    {
+        setIntProperty("gtpshell-disable-completions",
+                       disableCompletions ? 1 : 0);
+    }
+
     public void setGtpShellHistoryMax(int value)
     {
         setIntProperty("gtpshell-history-max", value);
@@ -179,6 +190,7 @@ class Preferences
         setStringProperty("analyze-command", "");
         setIntProperty("beep-after-move", 1);
         setIntProperty("boardsize", 19);
+        setIntProperty("gtpshell-disable-completions", 0);
         setIntProperty("gtpshell-history-max", 3000);
         setIntProperty("gtpshell-history-min", 2000);
         setFloatProperty("komi", 0);

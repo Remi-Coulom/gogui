@@ -185,7 +185,9 @@ public class GtpShell
         super(owner, titleprefix + ": GTP Shell");
         m_callback = callback;
         m_historyMin = prefs.getGtpShellHistoryMin();
+        m_prefs = prefs;
         m_historyMax = prefs.getGtpShellHistoryMax();
+        m_disableCompletions = prefs.getGtpShellDisableCompletions();
         createMenu();
         Container contentPane = getContentPane();
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
@@ -213,6 +215,8 @@ public class GtpShell
         String command = event.getActionCommand();
         if (command.equals("comboBoxEdited"))
             comboBoxEdited();
+        else if (command.equals("command-completion"))
+            commandCompletion();
         else if (command.equals("save-log"))
             saveLog();
         else if (command.equals("save-commands"))
@@ -307,6 +311,7 @@ public class GtpShell
         toFront();
         requestFocus();
         m_comboBox.requestFocus();
+        m_textField.requestFocus();
     }
 
     /** Send Gtp command to callback.
@@ -499,6 +504,8 @@ public class GtpShell
         private GtpShell m_gtpShell;
     }
 
+    private boolean m_disableCompletions;
+
     private boolean m_fastUpdate;
 
     private boolean m_isEmpty = true;
@@ -523,6 +530,8 @@ public class GtpShell
 
     private JComboBox m_comboBox;
 
+    private JCheckBoxMenuItem m_commandCompletion;
+
     private JScrollPane m_scrollPane;
 
     private GtpShellText m_gtpShellText;
@@ -538,6 +547,8 @@ public class GtpShell
     private String m_programName = "unknown";
 
     private String m_programVersion = "unknown";
+
+    private Preferences m_prefs;
 
     private void addAllCompletions(Vector completions)
     {
@@ -636,11 +647,25 @@ public class GtpShell
         addAllCompletions(m_history);
         m_editor.setItem(null);
         m_comboBox.requestFocus();
+        m_textField.requestFocus();
+    }
+
+    private void commandCompletion()
+    {
+        m_disableCompletions = ! m_commandCompletion.isSelected();
+        m_prefs.setDisableCompletions(m_disableCompletions);
     }
 
     private void createMenu()
     {
         JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createMenuFile());
+        menuBar.add(createMenuSettings());
+        setJMenuBar(menuBar);
+    }
+
+    private JMenu createMenuFile()
+    {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
@@ -649,8 +674,18 @@ public class GtpShell
         menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     ActionEvent.CTRL_MASK, "close");
-        menuBar.add(menu);
-        setJMenuBar(menuBar);
+        return menu;
+    }
+
+    private JMenu createMenuSettings()
+    {
+        JMenu menu = new JMenu("Settings");
+        menu.setMnemonic(KeyEvent.VK_S);
+        m_commandCompletion = new JCheckBoxMenuItem("Command completion");
+        m_commandCompletion.setSelected(! m_disableCompletions);
+        addMenuItem(menu, m_commandCompletion, KeyEvent.VK_C,
+                    "command-completion");
+        return menu;
     }
 
     private void findBestCompletion()
@@ -700,6 +735,8 @@ public class GtpShell
 
     private void popupCompletions()
     {
+        if (m_disableCompletions)
+            return;
         String text = m_textField.getText();
         text = text.replaceAll("^ *", "");
         Vector completions = new Vector(128, 128);
