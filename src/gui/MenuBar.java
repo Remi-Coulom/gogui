@@ -93,9 +93,13 @@ class MenuBar
         updateRecentMenu();
     }
 
-    public void disableComputer()
+    public void setComputerEnabled(boolean enabled)
     {
-        m_isComputerDisabled = true;
+        m_isComputerDisabled = ! enabled;
+        m_menuComputerColor.setEnabled(enabled);
+        m_itemComputerPlay.setEnabled(enabled);
+        m_itemBeepAfterMove.setEnabled(enabled);
+        m_itemDetachProgram.setEnabled(enabled);
     }
 
     public boolean getBeepAfterMove()
@@ -231,6 +235,7 @@ class MenuBar
             m_menuComputerColor.setEnabled(false);
             m_itemComputerPlay.setEnabled(false);
             m_itemBeepAfterMove.setEnabled(false);
+            m_itemDetachProgram.setEnabled(false);
         }
     }
 
@@ -339,6 +344,8 @@ class MenuBar
 
     private JMenuItem m_itemAbout;
 
+    private JMenuItem m_itemAttachProgram;
+
     private JMenuItem m_itemBackward;
 
     private JMenuItem m_itemBackward10;
@@ -358,6 +365,8 @@ class MenuBar
     private JMenuItem m_itemComputerPlay;
 
     private JMenuItem m_itemComputerWhite;
+
+    private JMenuItem m_itemDetachProgram;
 
     private JMenuItem m_itemEnd;
 
@@ -495,8 +504,10 @@ class MenuBar
                     ActionEvent.CTRL_MASK,
                     "print");
         menu.addSeparator();
-        addMenuItem(menu, "Open with program...", KeyEvent.VK_W,
-                    "open-with-program");
+        m_itemAttachProgram = addMenuItem(menu, "Attach program...",
+                                          KeyEvent.VK_A, "attach-program");
+        m_itemDetachProgram = addMenuItem(menu, "Detach program",
+                                          KeyEvent.VK_D, "detach-program");
         menu.addSeparator();
         m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
                                  ActionEvent.CTRL_MASK, "exit");

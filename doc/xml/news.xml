@@ -16,6 +16,16 @@ Support for game trees and navigation in variations.
 </listitem>
 <listitem>
 <simpara>
+Read, save and edit game information.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Detach current Go programs and attach new program.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New tools: <application>GtpAdapter</application> and
 <application>GtpTerminal</application>.
 </simpara>

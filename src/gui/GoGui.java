@@ -48,17 +48,6 @@ class GoGui
         m_verbose = verbose;
         m_initAnalyze = initAnalyze;
 
-        if (program != null)
-        {
-            program = program.trim();
-            if (! program.equals(""))
-            {
-                m_program = program;
-                m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
-                m_gtpShell.setProgramCommand(program);
-            }
-        }
-
         Container contentPane = getContentPane();        
 
         m_infoPanel = new JPanel();
@@ -107,8 +96,8 @@ class GoGui
         setJMenuBar(m_menuBar.getMenuBar());
         if (m_program == null)
         {
-            m_toolBar.disableComputerButtons();
-            m_menuBar.disableComputer();
+            m_toolBar.setComputerEnabled(false);
+            m_menuBar.setComputerEnabled(false);
         }
         m_menuBar.setNormalMode();
 
@@ -155,6 +144,8 @@ class GoGui
             cbShowAbout();
         else if (command.equals("analyze"))
             cbAnalyze();
+        else if (command.equals("attach-program"))
+            cbAttachProgram();
         else if (command.equals("backward"))
             cbBackward(1);
         else if (command.equals("backward-10"))
@@ -175,6 +166,8 @@ class GoGui
             computerNone();
         else if (command.equals("computer-white"))
             computerWhite();
+        else if (command.equals("detach-program"))
+            cbDetachProgram();
         else if (command.equals("end"))
             cbEnd();
         else if (command.equals("exit"))
@@ -209,8 +202,6 @@ class GoGui
             cbOpen();
         else if (command.equals("open-recent"))
             cbOpenRecent();
-        else if (command.equals("open-with-program"))
-            cbOpenWithProgram();
         else if (command.equals("pass"))
             cbPass();
         else if (command.equals("play"))
@@ -268,6 +259,25 @@ class GoGui
             setTitle();
         }
         m_analyzeDialog.toTop();
+    }
+
+    public void cbAttachProgram()
+    {        
+        if (m_commandThread != null)
+            return;
+        String program = SelectProgram.select(null);
+        if (program == null)
+            return;
+        attachProgram(program);
+    }
+
+    public void cbDetachProgram()
+    {        
+        if (m_commandThread == null)
+            return;
+        if (! showQuestion("Detach program?"))
+            return;
+        detachProgram();
     }
 
     public void cbGtpShell()
@@ -501,9 +511,6 @@ class GoGui
             }
             else if (arguments.size() > 1)
                 throw new Exception("Only one program argument allowed.");
-            else
-                program = SelectProgram.select(null);
-            
             GoGui gui = new GoGui(program, prefs, file, move, time,
                                   verbose, computerBlack, computerWhite, auto,
                                   gtpFile, gtpCommand, initAnalyze);
@@ -855,6 +862,86 @@ class GoGui
         }
     }
 
+    private void attachProgram(String program)
+    {
+        program = program.trim();
+        if (program.equals(""))
+            return;
+        m_program = program;
+        m_gtpShell = new GtpShell(null, "GoGui", this, m_prefs);
+        m_gtpShell.setProgramCommand(program);
+        try
+        {
+            Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
+            m_commandThread = new CommandThread(gtp);
+            m_commandThread.start();
+        }
+        catch (Gtp.Error e)
+        {
+            SimpleDialogs.showError(this,
+                                    e.getMessage() + "\n"
+                                    + "See GTP shell for any error messages\n"
+                                    + "printed by the program.");
+            return;
+        }
+        if (m_rememberWindowSizes)
+            restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+        try
+        {
+            setFastUpdate(true);
+            m_name = m_commandThread.sendCommand("name").trim();
+        }
+        catch (Gtp.Error e)
+        {
+        }
+        finally
+        {
+            setFastUpdate(false);
+        }
+        try
+        {
+            m_commandThread.queryProtocolVersion();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+        }
+        try
+        {
+            m_version = m_commandThread.queryVersion();
+            m_gtpShell.setProgramVersion(m_version);
+            m_commandThread.querySupportedCommands();
+            m_commandThread.queryInterruptSupport();
+        }
+        catch (Gtp.Error e)
+        {
+        }
+        m_gtpShell.setProgramName(m_name);
+        Vector supportedCommands =
+            m_commandThread.getSupportedCommands();
+        m_gtpShell.setInitialCompletions(supportedCommands);
+        if (! m_gtpFile.equals(""))
+            m_gtpShell.sendGtpFile(new File(m_gtpFile));
+        if (! m_gtpCommand.equals(""))
+            sendGtpString(m_gtpCommand);
+        m_menuBar.setComputerEnabled(true);
+        m_toolBar.setComputerEnabled(true);
+        Node oldCurrentNode = m_currentNode;
+        m_currentNode = m_gameTree.getRoot();
+        try
+        {
+            m_commandThread.sendCommandBoardsize(m_boardSize);
+            m_commandThread.sendCommandClearBoard(m_boardSize);
+            executeCurrentNode();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+            return;
+        }
+        gotoNode(oldCurrentNode);
+    }    
+
     private boolean backward(int n)
     {
         setFastUpdate(true);
@@ -1152,29 +1239,6 @@ class GoGui
         loadFile(file, -1);
     }
 
-    private void cbOpenWithProgram()
-    {
-        try
-        {
-            String program = SelectProgram.select(this);
-            if (program == null)
-                return;
-            File file = File.createTempFile("gogui-", "*.sgf");
-            save(file);
-            GoGui gui = new GoGui(program, m_prefs, file.toString(),
-                                  m_board.getMoveNumber(), null,
-                                  m_verbose, false, false, false, "", "", "");
-
-        }
-        catch (Throwable t)
-        {
-            String msg = t.getMessage();
-            if (msg == null)
-                msg = t.getClass().getName();
-            showError(msg);
-        }
-    }
-
     private void cbPass()
     {
         humanMoved(new Move(null, m_board.getToMove()));
@@ -1182,6 +1246,8 @@ class GoGui
 
     private void cbPlay()
     {
+        if (m_commandThread == null)
+            return;
         if (m_board.getToMove() == go.Color.BLACK)
             computerBlack();
         else
@@ -1505,29 +1571,8 @@ class GoGui
             setupDone();
         if (m_needsSave && ! checkSaveGame())
             return;
-        if (m_commandInProgress)
-        {
-            if (! showQuestion("Kill program?"))
-                return;
-            m_commandThread.destroyGtp();
-            m_commandThread.close();
-        }
-        else
-        {
-            if (m_commandThread != null && ! m_commandThread.isProgramDead())
-            {
-                // Some programs do not handle closing the GTP stream
-                // correctly, so we send a quit before
-                try
-                {
-                    m_commandThread.sendCommand("quit");
-                }
-                catch (Gtp.Error e)
-                {
-                }
-                m_commandThread.close();
-            }
-        }
+        if (m_commandThread != null)
+            detachProgram();
         saveSession();
         dispose();
         assert(m_instanceCount > 0);
@@ -1631,6 +1676,38 @@ class GoGui
         m_statusLabel = label;
         clearStatus();
         return panel;
+    }
+
+    private void detachProgram()
+    {
+        if (m_commandInProgress)
+        {
+            if (! showQuestion("Kill program?"))
+                return;
+            m_commandThread.destroyGtp();
+            m_commandThread.close();
+        }
+        else
+        {
+            if (m_commandThread != null && ! m_commandThread.isProgramDead())
+            {
+                // Some programs do not handle closing the GTP stream
+                // correctly, so we send a quit before
+                try
+                {
+                    m_commandThread.sendCommand("quit");
+                }
+                catch (Gtp.Error e)
+                {
+                }
+                m_commandThread.close();
+            }
+        }
+        m_commandThread = null;
+        m_toolBar.setComputerEnabled(false);
+        m_menuBar.setComputerEnabled(false);
+        m_gtpShell.dispose();
+        m_gtpShell = null;
     }
 
     private void endLengthyCommand()
@@ -1777,119 +1854,49 @@ class GoGui
 
     private void initialize()
     {
-        try
+        m_toolBar.enableAll(true, m_currentNode);
+        if (m_program != null)
+            attachProgram(m_program);
+        setTitle();
+        setTitleFromProgram();
+        if (m_commandThread == null
+            || (! m_computerBlack && ! m_computerWhite))
+            computerNone();
+        else if (m_computerBlack && m_computerWhite)
+            computerBoth();
+        else  if (m_computerBlack)
+            computerBlack();
+        else
+            computerWhite();
+        setRules();
+        if (m_prefs.getBool("show-gametree"))
+            cbShowGameTree();
+        File file = null;
+        if (! m_file.equals(""))
+            newGameFile(m_boardSize, new File(m_file), m_move);
+        else
         {
-            m_toolBar.enableAll(true, m_currentNode);
-            if (m_program != null)
-            {
-                try
-                {
-                    Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
-                    m_commandThread = new CommandThread(gtp);
-                    m_commandThread.start();
-                }
-                catch (Gtp.Error e)
-                {
-                    SimpleDialogs.showError(this,
-                                            e.getMessage() + "\n"
-                                            + "See GTP shell for any error"
-                                            + " messages\n"
-                                            + "printed by the program.");
-                }
-            }
-            if (m_commandThread != null)
-            {
-                if (m_rememberWindowSizes)
-                    restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
-                try
-                {
-                    setFastUpdate(true);
-                    m_name = m_commandThread.sendCommand("name").trim();
-                }
-                finally
-                {
-                    setFastUpdate(false);
-                }
-                m_gtpShell.setProgramName(m_name);
-                try
-                {
-                    m_commandThread.queryProtocolVersion();
-                }
-                catch (Gtp.Error e)
-                {
-                    showGtpError(e);
-                }
-                try
-                {
-                    m_version = m_commandThread.queryVersion();
-                    m_gtpShell.setProgramVersion(m_version);
-                    m_commandThread.querySupportedCommands();
-                    m_commandThread.queryInterruptSupport();
-                }
-                catch (Gtp.Error e)
-                {
-                }
-                Vector supportedCommands =
-                    m_commandThread.getSupportedCommands();
-                m_gtpShell.setInitialCompletions(supportedCommands);
-                if (! m_gtpFile.equals(""))
-                    m_gtpShell.sendGtpFile(new File(m_gtpFile));
-                if (! m_gtpCommand.equals(""))
-                    sendGtpString(m_gtpCommand);
-            }
-            setTitle();
-            setTitleFromProgram();
-            if (m_commandThread == null
-                || (! m_computerBlack && ! m_computerWhite))
-                computerNone();
-            else if (m_computerBlack && m_computerWhite)
-                computerBoth();
-            else  if (m_computerBlack)
-                computerBlack();
-            else
-                computerWhite();
-            setRules();
-            if (m_prefs.getBool("show-gametree"))
-                cbShowGameTree();
-            File file = null;
-            if (! m_file.equals(""))
-                newGameFile(m_boardSize, new File(m_file), m_move);
-            else
-            {
-                setKomi();
-                newGame(m_boardSize);
-            }
-            if (! m_initAnalyze.equals(""))
-            {
-                AnalyzeCommand analyzeCommand =
-                    AnalyzeCommand.get(this, m_initAnalyze);
-                if (analyzeCommand == null)
-                    showError("Unknown analyze command \"" + m_initAnalyze
-                              + "\"");
-                else
-                    initAnalyzeCommand(analyzeCommand, true);
-            }
-            if (m_commandThread != null)
-            {
-                if (m_prefs.getBool("show-analyze"))
-                    cbAnalyze();
-                if (m_prefs.getBool("show-gtpshell"))
-                    m_gtpShell.toTop();
-            }
-            setVisible(true);
-            m_guiBoard.setFocus();
+            setKomi();
+            newGame(m_boardSize);
         }
-        catch (Gtp.Error e)
+        if (! m_initAnalyze.equals(""))
         {
-            setVisible(true);
-            if (m_gtpShell != null)
+            AnalyzeCommand analyzeCommand =
+                AnalyzeCommand.get(this, m_initAnalyze);
+            if (analyzeCommand == null)
+                showError("Unknown analyze command \"" + m_initAnalyze + "\"");
+            else
+                initAnalyzeCommand(analyzeCommand, true);
+        }
+        if (m_commandThread != null)
+        {
+            if (m_prefs.getBool("show-analyze"))
+                cbAnalyze();
+            if (m_prefs.getBool("show-gtpshell"))
                 m_gtpShell.toTop();
-            SimpleDialogs.showError(this,
-                                    e.getMessage() + "\n"
-                                    + "See GTP shell for any error messages\n"
-                                    + "printed by the program.");
-            showStatus(e.getMessage());            
         }
+        setVisible(true);
+        m_guiBoard.setFocus();
     }
 
     private void initScore(go.Point[] isDeadStone)

@@ -45,13 +45,13 @@ class ToolBar
         m_buttonAnalyze = addButton("misc.png", "analyze", "Analyze window");
     }
 
-    public void disableComputerButtons()
+    public void setComputerEnabled(boolean enabled)
     {
-        m_computerButtonsEnabled = false;
-        m_buttonEnter.setEnabled(false);
-        m_buttonGtpShell.setEnabled(false);
-        m_buttonAnalyze.setEnabled(false);
-        m_buttonInterrupt.setEnabled(false);
+        m_computerButtonsEnabled = enabled;
+        m_buttonEnter.setEnabled(enabled);
+        m_buttonGtpShell.setEnabled(enabled);
+        m_buttonAnalyze.setEnabled(enabled);
+        m_buttonInterrupt.setEnabled(enabled);
     }
 
     public void updateGameButtons(Node node)
@@ -84,7 +84,7 @@ class ToolBar
         if (enable)
         {
             if (! m_computerButtonsEnabled)
-                disableComputerButtons();
+                setComputerEnabled(false);
             updateGameButtons(node);
             m_buttonInterrupt.setEnabled(false);
         }
