@@ -213,6 +213,11 @@ public class Field
         return m_select;
     }
 
+    public int getStoneMargin()
+    {
+        return getSize().width / 20;
+    }
+
     public String getString()
     {
         return m_string;
@@ -490,7 +495,7 @@ public class Field
                            java.awt.Color colorBright, int radius)
     {
         int size = getSize().width;
-        int margin = getStoneMargin(size);
+        int margin = getStoneMargin();
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
         {
@@ -556,11 +561,6 @@ public class Field
             graphics2D.fillRect(0, 0, size, size);
             graphics2D.setPaintMode();
         }
-    }
-
-    private static int getStoneMargin(int size)
-    {
-        return size / 20;
     }
 }
 

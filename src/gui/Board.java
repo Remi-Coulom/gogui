@@ -179,13 +179,19 @@ public class Board
         m_field = new Field[size][size];
         removeAll();
         setOpaque(false);
+        m_grid = new JPanel(new GridLayout(size, size));
+        m_grid.setOpaque(false);
         GridBagLayout gridBag = (GridBagLayout)getLayout();
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridwidth = 2;
-        constraints.gridheight = 2;
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.gridwidth = 2 * size;
+        constraints.gridheight = 2 * size;
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
+        add(m_grid);
+        gridBag.setConstraints(m_grid, constraints);
         addColumnLabels(size, 0);
         for (int y = size - 1; y >= 0; --y)
         {
@@ -195,10 +201,7 @@ public class Board
             {
                 go.Point p = m_board.getPoint(x, y);
                 Field field = new Field(this, p);
-                add(field);
-                constraints.gridx = 1 + 2 * x;
-                constraints.gridy = 2 * (size - y) - 1;
-                gridBag.setConstraints(field, constraints);
+                m_grid.add(field);
                 m_field[x][y] = field;
                 KeyListener keyListener = new KeyAdapter()
                     {
@@ -274,12 +277,14 @@ public class Board
             if (m_board.getColor(point) == go.Color.EMPTY)
                 continue;
             Field field = getField(point);
-            java.awt.Point location = field.getLocation();
-            int size = field.getSize().width;
+            java.awt.Point location = getScreenLocation(point.getX(),
+                                                        point.getY());
+            int size = field.getSize().width - 2 * field.getStoneMargin();
+            int offset = size / 12;
             graphics.setColor(java.awt.Color.black);
-            int offset = size / 13;
-            graphics.fillOval(location.x + 1 + offset, location.y + 1 + offset,
-                              size - 2, size - 2);
+            graphics.fillOval(location.x - size / 2 + offset,
+                              location.y - size / 2 + offset,
+                              size, size);
         }
         graphics.setPaintMode();
     }
@@ -556,13 +561,15 @@ public class Board
 
     private go.Point m_lastMove;
 
+    private go.Board m_board;
+
     private Dimension m_preferredFieldSize;
 
-    private go.Board m_board;
+    private Field m_field[][];
 
     private ImageIcon m_image;
 
-    private Field m_field[][];
+    private JPanel m_grid;
 
     private Listener m_listener;
 
@@ -661,9 +668,11 @@ public class Board
 
     private java.awt.Point getScreenLocation(int x, int y)
     {
+        java.awt.Point gridLocation = m_grid.getLocation();
         Rectangle bounds = m_field[x][y].getBounds();
-        return new java.awt.Point(bounds.x + bounds.width / 2,
-                                  bounds.y + bounds.height / 2);
+        int screenX = gridLocation.x + bounds.x + bounds.width / 2;
+        int screenY = gridLocation.y + bounds.y + bounds.height / 2;
+        return new java.awt.Point(screenX, screenY);
     }
 
     private void keyPressed(KeyEvent event)
