@@ -602,7 +602,6 @@ class ReadThread extends Thread
             try
             {
                 Util.log("Waiting for " + Cmd.cmdToString(cmd) + " ...");
-                assert(m_state == STATE_IDLE);
                 wait();
                 if (m_state == STATE_INTERRUPTED)
                 {
