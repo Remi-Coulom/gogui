@@ -119,7 +119,7 @@ class SelectProgram
     {
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.setBorder(GuiUtils.createEmptyBorder());
-        JLabel label = new JLabel("Go program command");
+        JLabel label = new JLabel("Go Program Command");
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
         panel.add(createInputPanel());

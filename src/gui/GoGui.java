@@ -1066,7 +1066,7 @@ class GoGui
 
     private void cbGoto()
     {
-        String value = JOptionPane.showInputDialog(this, "Move number");
+        String value = JOptionPane.showInputDialog(this, "Move Number");
         if (value == null || value.equals(""))
             return;
         try
