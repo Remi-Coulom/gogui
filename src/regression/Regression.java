@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 
 import java.io.*;
+import java.net.*;
+import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 import go.*;
@@ -576,6 +578,17 @@ class Regression
     {
         File file = new File("index.html");
         PrintStream out = new PrintStream(new FileOutputStream(file));
+        String host = "?";
+        try
+        {
+            host = InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL);
+        Date date = Calendar.getInstance().getTime();
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Summary</title>\n" +
@@ -583,6 +596,15 @@ class Regression
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
                   "<h1>Summary</h1>\n" +
+                  "<hr>\n" +
+                  "<table>\n" +
+                  "<tr><th align=\"left\">Date</th><td>" + format.format(date)
+                  + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Host</th><td>" + host
+                  + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Command</th><td><tt>" + m_program
+                  + "</tt></td></tr>\n" +
+                  "</table>\n" +
                   "<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
