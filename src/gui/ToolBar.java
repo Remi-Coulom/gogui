@@ -36,7 +36,7 @@ class ToolBar
                                       "Replay 10 moves");
         m_buttonEnd = addButton("images/player_end.png", "end", "End of game");
         add(new JToolBar.Separator());
-        m_buttonPass = addButton("images/button_cancel.png", "pass", "Pass");
+        m_buttonPass = addButton("images/pass.png", "pass", "Pass");
         m_buttonEnter = addButton("images/next.png", "play", "Computer play");
         m_buttonInterrupt =
             addButton("images/stop.png", "interrupt", "Interrupt");

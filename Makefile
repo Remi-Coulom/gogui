@@ -5,7 +5,6 @@
 
 IMAGES= \
   images/back.png \
-  images/button_cancel.png \
   images/filenew.png \
   images/fileopen.png \
   images/filesave2.png \
@@ -14,6 +13,7 @@ IMAGES= \
   images/gohome.png \
   images/next.png \
   images/openterm.png \
+  images/pass.png \
   images/player_back.png \
   images/player_end.png \
   images/player_fwd.png \
