@@ -501,7 +501,7 @@ public class GtpShell
         for (int i = completions.size() - 1; i >= 0; --i)
             appendToHistory(completions.get(i).toString());
         loadHistory();
-        addAllCompletions(m_history, true);
+        addAllCompletions(m_history);
     }
 
     public void setProgramCommand(String command)
@@ -654,7 +654,7 @@ public class GtpShell
 
     private Preferences m_prefs;
 
-    private void addAllCompletions(Vector completions, boolean select)
+    private void addAllCompletions(Vector completions)
     {
         // On Windows JDK 1.4 changing the popup automatically
         // selects all text in the text field, so we remember and
@@ -669,20 +669,9 @@ public class GtpShell
             Object object = wrapperObject((String)completions.get(i));
             m_comboBox.addItem(object);
         }
-        if (! m_disableCompletions && select && oldText.trim().length() > 0
-            && completions.size() > 0)
-        {
-            String text = (String)completions.get(completions.size() - 1);
-            m_comboBox.setSelectedIndex(0);
-            m_textField.setText(text);
-            m_textField.select(oldCaretPosition, text.length());
-        }
-        else
-        {
-            m_comboBox.setSelectedIndex(-1);
-            m_textField.setText(oldText);
-            m_textField.setCaretPosition(oldCaretPosition);
-        }
+        m_comboBox.setSelectedIndex(-1);
+        m_textField.setText(oldText);
+        m_textField.setCaretPosition(oldCaretPosition);
     }
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
@@ -779,7 +768,7 @@ public class GtpShell
         sendCommand(command, null, false);
         appendToHistory(command);
         m_comboBox.hidePopup();
-        addAllCompletions(m_history, false);
+        addAllCompletions(m_history);
         m_editor.setItem(null);
         m_comboBox.requestFocusInWindow();
         m_textField.requestFocusInWindow();
@@ -805,14 +794,11 @@ public class GtpShell
                     int c = e.getKeyCode();        
                     int mod = e.getModifiers();
                     if (c == KeyEvent.VK_ESCAPE)
-                    {
-                        m_textField.replaceSelection("");
                         return;
-                    }
                     else if (c == KeyEvent.VK_TAB)
                     {
                         findBestCompletion();
-                        popupCompletions(true);
+                        popupCompletions();
                     }
                     else if (c == KeyEvent.VK_PAGE_UP
                              && mod == ActionEvent.SHIFT_MASK)
@@ -820,13 +806,8 @@ public class GtpShell
                     else if (c == KeyEvent.VK_PAGE_DOWN
                              && mod == ActionEvent.SHIFT_MASK)
                         scrollPage(false);
-                    else if (c == KeyEvent.VK_BACK_SPACE)
-                    {
-                        popupCompletions(false);
-                        m_comboBox.hidePopup();
-                    }
                     else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED)
-                        popupCompletions(true);
+                        popupCompletions();
                 }
             };
         m_textField.addKeyListener(keyAdapter);
@@ -917,7 +898,7 @@ public class GtpShell
 
     private void findBestCompletion()
     {
-        String text = getTextWithoutSelect();
+        String text = m_textField.getText().trim();
         if (text.equals(""))
             return;
         String bestCompletion = null;
@@ -960,14 +941,6 @@ public class GtpShell
         return new File(dir, "gtpshell-history");
     }
 
-    private String getTextWithoutSelect()
-    {
-        String text = m_textField.getText();
-        if (m_textField.getSelectedText() != null)
-            text = text.substring(0, m_textField.getSelectionStart());
-        return text.trim();
-    }
-
     private void highlight()
     {
         boolean highlight = m_itemHighlight.isSelected();
@@ -991,7 +964,7 @@ public class GtpShell
         }
     }
 
-    private void popupCompletions(boolean select)
+    private void popupCompletions()
     {
         String text = m_textField.getText();
         text = text.replaceAll("^ *", "");
@@ -1002,16 +975,12 @@ public class GtpShell
             if (c.startsWith(text))
                 completions.add(c);
         }
-        addAllCompletions(completions, select);
+        addAllCompletions(completions);
         if (m_disableCompletions)
             return;
-        if (completions.size() == 0)
-        {
-            m_comboBox.hidePopup();
-            return;
-        }
+        int size = completions.size();
         if (text.length() > 0)
-            if (completions.size() > 1)
+            if (size > 1 || (size == 1 && ! text.equals(completions.get(0))))
                 m_comboBox.showPopup();
     }
 
