@@ -400,7 +400,7 @@ class GoGui
         {
         }
         if (Platform.isMac())
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            initializeMac();
         boolean verbose = false;
         try
         {
@@ -1852,6 +1852,14 @@ class GoGui
         m_guiBoard.setFocus();
     }
 
+    private static void initializeMac()
+    {
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+                           "GoGui");
+        System.setProperty("apple.awt.brushMetalLook", "true");
+    }
+
     private void initScore(go.Point[] isDeadStone)
     {
         resetBoard();
@@ -2282,7 +2290,7 @@ class GoGui
         if (gameName != null)
             setTitle(gameName + " - " + appName);
         else
-            setTitle(appName);
+            setTitle(appName);        
     }
 
     private void setTitleFromProgram()
