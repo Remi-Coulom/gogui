@@ -435,7 +435,6 @@ class ReadThread extends Thread
         assert(colorIndex >= 0);
         assert(colorIndex <= 2);
         m_in = in;
-        m_out = out;
         m_size = size;
         m_colorIndex = colorIndex;
         m_simple = simple;
@@ -657,8 +656,6 @@ class ReadThread extends Thread
     private int[] m_inBuffer = new int[4];
 
     private InputStream m_in;
-
-    private OutputStream m_out;
 
     private StringBuffer m_talkLine = new StringBuffer();
 
