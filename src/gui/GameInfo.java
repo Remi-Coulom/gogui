@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import game.*;
 import go.*;
 import utils.*;
 
@@ -59,36 +60,28 @@ class GameInfo
         setTime(go.Color.WHITE);
     }
 
-    public void setBoard(go.Board board)
+    public void update(Node node, go.Board board)
     {
-        m_board = board;
-    }
-
-    public void update()
-    {
-        if (m_board == null)
-            return;
-        if (m_board.getToMove() == go.Color.BLACK)
+        if (board.getToMove() == go.Color.BLACK)
             m_move.setText("Black");
         else
             m_move.setText("White");
-        String capturedB = Integer.toString(m_board.getCapturedB());
+        String capturedB = Integer.toString(board.getCapturedB());
         m_captB.setText(capturedB);
-        String capturedW = Integer.toString(m_board.getCapturedW());
+        String capturedW = Integer.toString(board.getCapturedW());
         m_captW.setText(capturedW);
-        int moveNumber = m_board.getMoveNumber();
+        int moveNumber = node.getMoveNumber();
         String numberString = Integer.toString(moveNumber);
-        if (m_board.getNumberSavedMoves() > moveNumber)
-            numberString += "/" + m_board.getNumberSavedMoves();
+        int movesLeft = node.getMovesLeft();
+        if (movesLeft > 0)
+            numberString += "/" + (moveNumber + movesLeft);
         m_number.setText(numberString);
-        String lastMove;
-        if (moveNumber == 0)
-            lastMove = "";
-        else
+        String lastMove = "";
+        Move move = node.getMove();
+        if (move != null)
         {
-            Move m = m_board.getMove(moveNumber - 1);
-            go.Color c = m.getColor();
-            go.Point p = m.getPoint();
+            go.Color c = move.getColor();
+            go.Point p = move.getPoint();
             lastMove = (c == go.Color.BLACK ? "B" : "W") + " ";
             if (p == null)
                 lastMove += "PASS";

@@ -197,6 +197,7 @@ installation directory.
 <fileset dir="build" includes="
  config/analyze-commands
  doc/*.html
+ game/*.class
  go/*.class
  gtp/*.class
  gui/*.class

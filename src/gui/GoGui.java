@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
+import game.*;
 import go.*;
 import gtp.*;
 import latex.*;
@@ -27,9 +28,9 @@ class GoGui
                GtpShell.Callback, WindowListener
 {
     GoGui(String program, Preferences prefs, String file, int move,
-          String time, boolean verbose, boolean fillPasses,
-          boolean computerBlack, boolean computerWhite, boolean auto,
-          String gtpFile, String gtpCommand, String initAnalyze)
+          String time, boolean verbose, boolean computerBlack,
+          boolean computerWhite, boolean auto, String gtpFile,
+          String gtpCommand, String initAnalyze)
         throws Gtp.Error
     {
         m_prefs = prefs;
@@ -38,7 +39,6 @@ class GoGui
         m_beepAfterMove = prefs.getBool("beep-after-move");
         m_rememberWindowSizes = prefs.getBool("remember-window-sizes");
         m_file = file;
-        m_fillPasses = fillPasses;
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
         m_move = move;
@@ -75,9 +75,13 @@ class GoGui
         m_board = new go.Board(m_boardSize);
         m_board.setKomi(prefs.getFloat("komi"));
         m_board.setRules(prefs.getInt("rules"));
+
+        m_gameTree = new GameTree(m_boardSize);
+        m_currentNode = m_gameTree.getRoot();
+        m_currentNodeExecuted = 0;
+
         m_guiBoard = new Board(m_board);
         m_guiBoard.setListener(this);
-        m_gameInfo.setBoard(m_board);
         m_toolBar = new ToolBar(this, prefs);
         contentPane.add(m_toolBar, BorderLayout.NORTH);
 
@@ -290,7 +294,7 @@ class GoGui
             else
                 m_board.play(new Move(p, go.Color.EMPTY));
             m_board.setToMove(m_setupColor);
-            m_gameInfo.update();
+            updateGameInfo();
             m_guiBoard.updateFromGoBoard();
             m_needsSave = true;
         }
@@ -356,7 +360,6 @@ class GoGui
                 "computer-none",
                 "config:",
                 "file:",
-                "fillpasses",
                 "gtpfile:",
                 "gtpshell",
                 "help",
@@ -385,8 +388,6 @@ class GoGui
                     "-computer-none  computer plays no side\n" +
                     "-config         config file\n" +
                     "-file filename  load SGF file\n" +
-                    "-fillpasses     never send subsequent moves of\n" +
-                    "                the same color to the program\n" +
                     "-gtpfile file   send GTP file at startup\n" +
                     "-help           display this help and exit\n" +
                     "-komi value     set komi\n" +
@@ -419,7 +420,6 @@ class GoGui
             else if (opt.isSet("computer-both"))
                 computerBlack = true;
             String file = opt.getString("file", "");
-            boolean fillPasses = opt.isSet("fillpasses");
             String gtpFile = opt.getString("gtpfile", "");
             String gtpCommand = opt.getString("command", "");
             if (opt.contains("komi"))
@@ -450,9 +450,8 @@ class GoGui
                 program = SelectProgram.select(null);
             
             GoGui gui = new GoGui(program, prefs, file, move, time,
-                                  verbose, fillPasses, computerBlack,
-                                  computerWhite, auto, gtpFile, gtpCommand,
-                                  initAnalyze);
+                                  verbose, computerBlack, computerWhite, auto,
+                                  gtpFile, gtpCommand, initAnalyze);
         }
         catch (AssertionError e)
         {
@@ -631,8 +630,6 @@ class GoGui
 
     private boolean m_commandInProgress;
 
-    private boolean m_fillPasses;
-
     private boolean m_lostOnTimeShown;
 
     private boolean m_needsSave;
@@ -648,6 +645,8 @@ class GoGui
     private boolean m_verbose;
 
     private int m_boardSize;
+
+    private int m_currentNodeExecuted;
 
     private int m_handicap;
 
@@ -667,9 +666,11 @@ class GoGui
 
     private File m_loadedFile;
 
-    private GameInfo m_gameInfo;
+    private GameInfo m_gameInfo;    
 
     private GtpShell m_gtpShell;
+
+    private GameTree m_gameTree;
 
     private Help m_help;
 
@@ -680,6 +681,8 @@ class GoGui
     private JPanel m_infoPanel;
 
     private MenuBar m_menuBar;
+
+    private Node m_currentNode;
 
     private AnalyzeCommand m_analyzeCommand;
 
@@ -782,13 +785,17 @@ class GoGui
         setFastUpdate(true);
         try
         {
-            for (int i = 0; i < n; ++i)
+            for (int i = 0; i < n && m_currentNode.getFather() != null; ++i)
             {
-                if (m_board.getMoveNumber() == 0)
-                    break;
-                if (m_commandThread != null)
-                    m_commandThread.sendCommand("undo");
-                m_board.undo();
+                for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
+                {
+                    if (m_commandThread != null)
+                        m_commandThread.sendCommand("undo");
+                    m_board.undo();
+                }
+                m_currentNode = m_currentNode.getFather();
+                m_currentNodeExecuted =
+                    m_currentNode.getNumberAddStonesAndMoves();
             }
             computerNone();
         }
@@ -797,7 +804,10 @@ class GoGui
             showGtpError(e);
             return;
         }
-        setFastUpdate(false);
+        finally
+        {
+            setFastUpdate(false);
+        }
         boardChangedBegin(false);
     }
 
@@ -816,7 +826,7 @@ class GoGui
     private void boardChangedBegin(boolean doCheckComputerMove)
     {
         m_guiBoard.updateFromGoBoard();
-        m_gameInfo.update();
+        updateGameInfo();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
@@ -842,7 +852,7 @@ class GoGui
 
     private void cbBeginning()
     {
-        backward(m_board.getMoveNumber());
+        backward(m_currentNode.getDepth());
     }
 
     private void cbBackward(int n)
@@ -1032,8 +1042,7 @@ class GoGui
             save(file);
             GoGui gui = new GoGui(program, m_prefs, file.toString(),
                                   m_board.getMoveNumber(), null,
-                                  m_verbose, m_fillPasses,
-                                  false, false, false, "", "", "");
+                                  m_verbose, false, false, false, "", "", "");
 
         }
         catch (Throwable t)
@@ -1198,7 +1207,7 @@ class GoGui
         showStatus("Setup black.");
         m_setupColor = go.Color.BLACK;
         m_board.setToMove(m_setupColor);
-        m_gameInfo.update();
+        updateGameInfo();
     }
 
     private void cbSetupWhite()
@@ -1206,7 +1215,7 @@ class GoGui
         showStatus("Setup white.");
         m_setupColor = go.Color.WHITE;
         m_board.setToMove(m_setupColor);
-        m_gameInfo.update();
+        updateGameInfo();
     }
 
     private void cbShowAbout()
@@ -1249,7 +1258,7 @@ class GoGui
                                 + numberSavedMoves + "?"))
             return;
         m_board.truncate();
-        m_gameInfo.update();
+        updateGameInfo();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
     }
@@ -1399,6 +1408,10 @@ class GoGui
                 if (m_board.willModifyGame(move))
                     m_needsSave = true;
                 m_board.play(move);
+                Node node = new Node(move);
+                m_currentNode.append(node);
+                m_currentNode = node;
+                m_currentNodeExecuted = 1;
                 if (move.getPoint() == null
                     && ! (m_computerBlack && m_computerWhite))
                     showInfo("The computer passed.");
@@ -1463,6 +1476,20 @@ class GoGui
             setBoardCursorDefault();
     }
 
+    private void executeCurrentNode() throws Gtp.Error
+    {
+        m_currentNodeExecuted = 0;
+        Vector moves = m_currentNode.getAddStonesAndMoves();
+        for (int i = 0; i < moves.size(); ++i)
+        {
+            Move move = (Move)moves.get(i);
+            if (m_commandThread != null)
+                m_commandThread.sendCommandPlay(move);
+            m_board.play(move);
+            ++m_currentNodeExecuted;
+        }
+    }
+
     private void fileModified()
     {
         if (m_loadedFile != null)
@@ -1474,23 +1501,27 @@ class GoGui
 
     private void forward(int n)
     {
+        if (m_currentNodeExecuted !=
+            m_currentNode.getNumberAddStonesAndMoves())
+        {
+            showError("Cannot go forward from partially executed game node.");
+            return;
+        }
         setFastUpdate(true);
         try
         {
-            for (int i = 0; i < n; ++i)
+            for (int i = 0; i < n && m_currentNode.getNumberChildren() > 0;
+                 ++i)
             {
-                int moveNumber = m_board.getMoveNumber();
-                if (moveNumber >= m_board.getNumberSavedMoves())
-                    break;
-                Move move = m_board.getMove(moveNumber);
-                play(move);
+                m_currentNode = m_currentNode.getChild(0);
+                executeCurrentNode();
             }
         }
         catch (Gtp.Error e)
         {
             showGtpError(e);
         }
-    setFastUpdate(false);
+        setFastUpdate(false);
     }
 
     private void generateMove()
@@ -1562,6 +1593,9 @@ class GoGui
                                 m_boardSize);
             }
         }
+        m_gameTree = new GameTree(size);
+        m_currentNode = m_gameTree.getRoot();
+        m_currentNodeExecuted = 0;
         m_board.newGame();        
         m_guiBoard.updateFromGoBoard();
         resetBoard();
@@ -1718,56 +1752,20 @@ class GoGui
             }
             m_board.setKomi(reader.getKomi());
             setKomi();
-            Vector moves = new Vector(361, 361);
             Vector setupBlack = reader.getSetupBlack();
             for (int i = 0; i < setupBlack.size(); ++i)
-            {
-                go.Point p = (go.Point)setupBlack.get(i);
-                moves.add(new Move(p, go.Color.BLACK));
-            }
+                m_currentNode.addBlack((go.Point)setupBlack.get(i));
             Vector setupWhite = reader.getSetupWhite();
             for (int i = 0; i < setupWhite.size(); ++i)
+                m_currentNode.addWhite((go.Point)setupWhite.get(i));
+            for (int i = 0; i < reader.getMoves().size(); ++i)
             {
-                go.Point p = (go.Point)setupWhite.get(i);
-                moves.add(new Move(p, go.Color.WHITE));
+                Node node = new Node(reader.getMove(i));
+                m_currentNode.append(node);
+                m_currentNode = node;
             }
-            if (m_fillPasses)
-                moves = Move.fillPasses(moves, m_board.getToMove());
-            int numberMoves;
-            try
-            {
-                setFastUpdate(true);
-                for (int i = 0; i < moves.size(); ++i)
-                {
-                    Move m = (Move)moves.get(i);
-                    setup(m);
-                }
-                numberMoves = reader.getMoves().size();
-                go.Color toMove = reader.getToMove();
-                if (numberMoves > 0)
-                    toMove = reader.getMove(0).getColor();
-                if (toMove != m_board.getToMove())
-                {
-                    Move m = new Move(null, m_board.getToMove());
-                    setup(m);
-                }
-            }
-            finally
-            {
-                setFastUpdate(false);
-            }
-            moves.clear();
-            for (int i = 0; i < numberMoves; ++i)
-                moves.add(reader.getMove(i));
-            if (m_fillPasses)
-                moves = Move.fillPasses(moves, m_board.getToMove());
-            for (int i = 0; i < moves.size(); ++i)
-            {
-                Move m = (Move)moves.get(i);
-                m_board.play(m);
-            }
-            while (m_board.getMoveNumber() > 0)
-                m_board.undo();            
+            m_currentNode = m_gameTree.getRoot();
+            executeCurrentNode();
             if (move > 0)
                 forward(move);
             m_loadedFile = file;
@@ -1812,7 +1810,7 @@ class GoGui
         }
         initGame(size);
         setHandicap();
-        m_gameInfo.update();
+        updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
@@ -1833,7 +1831,7 @@ class GoGui
         initGame(size);
         setHandicap();
         setTimeSettings();
-        m_gameInfo.update();
+        updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
@@ -1845,7 +1843,7 @@ class GoGui
     {
         initGame(size);
         loadFile(new File(m_file), move);
-        m_gameInfo.update();
+        updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
@@ -1854,9 +1852,10 @@ class GoGui
 
     private void play(Move move) throws Gtp.Error
     {
-        if (m_commandThread != null)
-            m_commandThread.sendCommandPlay(move);
-        m_board.play(move);
+        Node node = new Node(move);
+        m_currentNode.append(node);
+        m_currentNode = node;
+        executeCurrentNode();
     }
 
     private void resetBoard()
@@ -2095,8 +2094,6 @@ class GoGui
             go.Point p = (go.Point)handicap.get(i);
             moves.add(new Move(p, go.Color.BLACK));
         }
-        if (m_fillPasses)
-            moves = Move.fillPasses(moves, m_board.getToMove());
         try
         {
             for (int i = 0; i < moves.size(); ++i)
@@ -2262,8 +2259,6 @@ class GoGui
                 if (c != go.Color.EMPTY)
                     moves.add(new Move(p, c));
             }
-            if (m_fillPasses)
-                moves = Move.fillPasses(moves, m_board.getToMove());
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
@@ -2339,6 +2334,11 @@ class GoGui
     private void showWarning(String message)
     {
         SimpleDialogs.showWarning(this, message);
+    }
+
+    private void updateGameInfo()
+    {
+        m_gameInfo.update(m_currentNode, m_board);
     }
 }
 

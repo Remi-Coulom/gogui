@@ -23,7 +23,6 @@
 <arg><option>-command</option> <replaceable>command</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-file</option> <replaceable>filename</replaceable></arg>
-<arg><option>-fillpasses</option></arg>
 <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
 <arg><option>-help</option></arg>
 <arg><option>-komi</option> <replaceable>value</replaceable></arg>
@@ -140,17 +139,6 @@ Read command line options and arguments from <replaceable>file</replaceable>.
 <listitem>
 <para>
 Load SGF file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<option>-fillpasses</option>
-</term>
-<listitem>
-<para>
-Never send subsequent moves of the same color to the program.
 </para>
 </listitem>
 </varlistentry>

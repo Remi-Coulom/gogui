@@ -31,6 +31,13 @@ Nicer HTML output of <application>GtpRegress</application>.
 </listitem>
 <listitem>
 <simpara>
+<application>GoGui</application>: option <option>-fillpasses</option> is no
+longer supported, programs are now expected to be able to play moves by
+either color at any time.
+If there are requests for the old functionality, it might be reimplemented in
+<application>GtpAdapter</application> at a later time.
+</simpara>
+<simpara>
 Other small fixes and improvements.
 </simpara>
 </listitem>
