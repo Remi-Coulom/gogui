@@ -7,6 +7,7 @@ package gtp;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import go.Color;
 import go.Point;
 import go.Move;
@@ -74,24 +75,28 @@ public class GtpUtils
     }
 
     /** Find all points contained in string. */
-    public static Point[] parsePointString(String s, int boardSize)
+    public static Point[] parsePointString(String text, int boardSize)
     {
+        String regex = "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1\\d|[1-9]))\\b";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(text);
         Vector vector = new Vector(32, 32);
-        String p[] = StringUtils.tokenize(s);
-        for (int i = 0; i < p.length; ++i)
-            if (! p[i].equals(""))
+        while (matcher.find())
+        {
+            int start = matcher.start();
+            int end = matcher.end();
+            Point point;
+            try
             {
-                Point point;
-                try
-                {
-                    point = parsePoint(p[i], boardSize);
-                }
-                catch (GtpError e)
-                {
-                    continue;
-                }
-                vector.add(point);
+                point = parsePoint(text.substring(start, end), boardSize);
             }
+            catch (GtpError e)
+            {
+                assert(false);
+                continue;
+            }
+            vector.add(point);
+        }
         Point result[] = new Point[vector.size()];
         for (int i = 0; i < result.length; ++i)
             result[i] = (Point)vector.get(i);
