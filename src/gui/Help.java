@@ -38,7 +38,7 @@ class Help
 {
     public Help(Frame owner, URL contents)
     {
-        super(owner, "GoGui: Help");
+        super(owner, "Help - GoGui");
         m_contents = contents;
         Container contentPane = getContentPane();
         createMenu();

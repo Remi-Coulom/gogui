@@ -35,8 +35,7 @@ public class AboutDialog
             JEditorPane.createEditorKitForContentType("text/html");
         editorPane.setEditorKit(editorKit);
         editorPane.setText(message);
-        JOptionPane.showMessageDialog(parent, editorPane,
-                                      "GoGui: About",
+        JOptionPane.showMessageDialog(parent, editorPane, "About - GoGui",
                                       JOptionPane.PLAIN_MESSAGE);
     }
 }

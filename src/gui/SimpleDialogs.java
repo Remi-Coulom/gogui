@@ -26,7 +26,7 @@ public class SimpleDialogs
     public static void showError(Component frame, String message)
     {
         JOptionPane.showMessageDialog(frame, message,
-                                      m_titlePrefix + "Error",
+                                      "Error - " + m_appName,
                                       JOptionPane.ERROR_MESSAGE);
     }
 
@@ -43,7 +43,7 @@ public class SimpleDialogs
     public static void showInfo(Component frame, String message)
     {
         JOptionPane.showMessageDialog(frame, message,
-                                      m_titlePrefix + "Info",
+                                      "Info - " + m_appName,
                                       JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -67,7 +67,7 @@ public class SimpleDialogs
     public static boolean showQuestion(Component frame, String message)
     {
         int r = JOptionPane.showConfirmDialog(frame, message,
-                                              m_titlePrefix + "Question",
+                                              "Question - " + m_appName,
                                               JOptionPane.YES_NO_OPTION);
         return (r == 0);
     }
@@ -85,7 +85,7 @@ public class SimpleDialogs
     public static void showWarning(Component frame, String message)
     {
         JOptionPane.showMessageDialog(frame, message,
-                                      m_titlePrefix + "Warning",
+                                      "Warning - " + m_appName ,
                                       JOptionPane.WARNING_MESSAGE);
     }
 
@@ -94,7 +94,7 @@ public class SimpleDialogs
         m_lastFile = file;
     }
 
-    private static final String m_titlePrefix = "GoGui: ";
+    private static final String m_appName = "GoGui";
 
     private static File m_lastFile;
 

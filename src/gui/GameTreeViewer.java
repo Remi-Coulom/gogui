@@ -331,7 +331,7 @@ public class GameTreeViewer
 
     public GameTreeViewer(Frame owner, Listener listener)
     {
-        super(owner, "GoGui: Game Tree");
+        super(owner, "Game Tree - GoGui");
         Container contentPane = getContentPane();
         m_panel = new GameTreePanel(listener);
         m_scrollPane =

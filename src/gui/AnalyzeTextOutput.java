@@ -25,7 +25,7 @@ class AnalyzeTextOutput
     public AnalyzeTextOutput(Frame owner, String title, String response,
                              boolean highlight)
     {
-        super(owner, "GoGui: " + title);
+        super(owner, title + " - GoGui");
         setLocationRelativeTo(owner);
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(GuiUtils.createSmallEmptyBorder());

@@ -2258,9 +2258,9 @@ class GoGui
         if (m_commandThread != null && ! m_name.equals(""))
             appName = StringUtils.formatTitle(m_name);
         if (m_gtpShell != null)
-            m_gtpShell.setTitlePrefix(appName);
+            m_gtpShell.setAppName(appName);
         if (m_analyzeDialog != null)
-            m_analyzeDialog.setTitlePrefix(appName);
+            m_analyzeDialog.setAppName(appName);
         String gameName = null;
         GameInformation gameInformation = m_gameTree.getGameInformation();
         String playerBlack = gameInformation.m_playerBlack;

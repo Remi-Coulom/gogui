@@ -38,7 +38,7 @@ class AnalyzeDialog
     public AnalyzeDialog(Frame owner, Callback callback, Preferences prefs,
                          Vector supportedCommands)
     {
-        super(owner, "GoGui: Analyze");
+        super(owner, "Analyze - GoGui");
         m_prefs = prefs;
         setPrefsDefaults(prefs);
         m_onlySupportedCommands =
@@ -87,9 +87,9 @@ class AnalyzeDialog
             sort();
     }
 
-    public void setTitlePrefix(String title)
+    public void setAppName(String name)
     {
-        setTitle(title + ": Analyze");
+        setTitle("Analyze" + " - " + name);
     }
 
     public void toTop()

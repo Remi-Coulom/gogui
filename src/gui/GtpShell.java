@@ -191,10 +191,10 @@ public class GtpShell
         public void toTop();
     }
 
-    GtpShell(Frame owner, String titleprefix, Callback callback,
+    GtpShell(Frame owner, String appName, Callback callback,
              Preferences prefs)
     {
-        super(owner, titleprefix + ": GTP");
+        super(owner, "GTP - " + appName);
         m_callback = callback;
         m_prefs = prefs;
         setPrefsDefaults(prefs);
@@ -410,9 +410,9 @@ public class GtpShell
         SwingUtilities.invokeLater(r);
     }
     
-    public void setTitlePrefix(String title)
+    public void setAppName(String appName)
     {
-        setTitle(title + ": GTP");
+        setTitle("GTP - " + appName);
     }
 
     public void sendGtp(Reader reader)
