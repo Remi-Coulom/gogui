@@ -13,7 +13,7 @@ import utils.GuiUtils;
 
 //----------------------------------------------------------------------------
 
-public class AboutDialog
+public class AboutDialog    
 {
     public static void show(Component parent, String name, String version,
                             String protocolVersion)
@@ -23,7 +23,7 @@ public class AboutDialog
             createPanel("<center>" +
                         "<b>GoGui " + Version.get() + "</b>" +
                         "<p>" +
-                        "Graphical interface to Go programs.<br>" +
+                        "Graphical interface to Go programs<br>" +
                         "&copy; 2003-2004, Markus Enzenberger" +
                         "</p>" +
                         "<p>" +
@@ -61,6 +61,7 @@ public class AboutDialog
         JPanel panel = new JPanel(new GridLayout(1, 1));
         JEditorPane editorPane = new JEditorPane();
         editorPane.setBorder(GuiUtils.createEmptyBorder());        
+        editorPane.setEditable(false);
         panel.add(editorPane);
         JLabel dummyLabel = new JLabel();
         editorPane.setBackground(dummyLabel.getBackground());
