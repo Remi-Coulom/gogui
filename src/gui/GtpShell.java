@@ -552,6 +552,15 @@ public class GtpShell
         return addMenuItem(menu, item, command);        
     }
 
+    private JMenuItem addMenuItem(JMenu menu, String label, int accel,
+                                  int modifier, String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
+        item.setAccelerator(k);
+        return addMenuItem(menu, item, command);
+    }
+
     private void appendResponse(boolean error, String response)
     {
         assert(SwingUtilities.isEventDispatchThread());
@@ -607,10 +616,12 @@ public class GtpShell
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
-        addMenuItem(menu, "Save Log", "save-log");
-        addMenuItem(menu, "Save Commands", "save-commands");
+        addMenuItem(menu, "Save...", KeyEvent.VK_S, ActionEvent.CTRL_MASK,
+                    "save-log");
+        addMenuItem(menu, "Save Commands...", "save-commands");
         menu.addSeparator();
-        addMenuItem(menu, "Close", "close");
+        addMenuItem(menu, "Close", KeyEvent.VK_W, ActionEvent.CTRL_MASK,
+                    "close");
         menuBar.add(menu);
         setJMenuBar(menuBar);
     }
