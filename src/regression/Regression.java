@@ -380,7 +380,9 @@ class Regression
                     "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                     " vlink=\"#551a8b\">\n" +
                     "<h1>Output " + test + "</h1>\n" +
-                    "<hr>\n" +
+                    "<hr>\n");
+        writeInfo(m_out);
+        m_out.print("<hr>\n" +
                     "<pre>\n");
     }
 
@@ -502,7 +504,9 @@ class Regression
                   + " vlink=\"purple\" alink=\"red\">\n" +
                   "<h1>Summary " + test + "</h1>\n" +
                   "<hr>\n");
-        out.print("<table border=\"1\">\n" +
+        writeInfo(out);
+        out.print("<hr>\n" +
+                  "<table border=\"1\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"20%\">\n" +
                   "<col width=\"20%\">\n" +
@@ -582,6 +586,29 @@ class Regression
         out.close();
     }
 
+    private void writeInfo(PrintStream out)
+    {
+        String host = "?";
+        try
+        {
+            host = InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL);
+        Date date = Calendar.getInstance().getTime();
+        out.print("<table>\n" +
+                  "<tr><th align=\"left\">Date</th><td>" + format.format(date)
+                  + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Host</th><td>" + host
+                  + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Command</th><td><tt>" + m_program
+                  + "</tt></td></tr>\n" +
+                  "</table>\n");
+    }
+
     private void writeSummary()
         throws FileNotFoundException
     {
@@ -605,16 +632,9 @@ class Regression
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
                   "<h1>Summary</h1>\n" +
-                  "<hr>\n" +
-                  "<table>\n" +
-                  "<tr><th align=\"left\">Date</th><td>" + format.format(date)
-                  + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Host</th><td>" + host
-                  + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Command</th><td><tt>" + m_program
-                  + "</tt></td></tr>\n" +
-                  "</table>\n" +
-                  "<hr>\n" +
+                  "<hr>\n");
+        writeInfo(out);
+        out.print("<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"25%\">\n" +
