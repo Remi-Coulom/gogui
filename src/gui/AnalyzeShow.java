@@ -10,7 +10,7 @@ import gtp.*;
 
 //----------------------------------------------------------------------------
 
-class AnalyzeShow
+public class AnalyzeShow
 {
     public static void show(AnalyzeCommand command, gui.Board guiBoard,
                             go.Board board, String response) throws Gtp.Error

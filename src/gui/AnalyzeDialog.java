@@ -16,7 +16,7 @@ import utils.*;
 
 //----------------------------------------------------------------------------
 
-class AnalyzeDialog
+public class AnalyzeDialog
     extends JFrame
     implements ActionListener, ListSelectionListener
 {

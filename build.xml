@@ -61,6 +61,7 @@ $Source$
 <fileset dir="build/gtpregress"/>
 <fileset dir="build/gtpserver"/>
 <fileset dir="build/gtpterminal"/>
+<fileset dir="build/gogui"/>
 <fileset dir="build/gui"/>
 <fileset dir="build/images"/>
 <fileset dir="build/latex"/>
@@ -198,7 +199,7 @@ installation directory.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="gui.GoGui"/>
+<attribute name="Main-Class" value="gogui.GoGui"/>
 </manifest>
 <fileset dir="build" includes="
  config/analyze-commands
@@ -206,6 +207,7 @@ installation directory.
  game/*.class
  go/*.class
  gtp/*.class
+ gogui/*.class
  gui/*.class
  images/*.png
  latex/*.class
@@ -324,6 +326,7 @@ installation directory.
   gtpregress.*,
   gtpserver.*,
   gtpterminal.*,
+  gogui.*,
   gui.*,
   latex.*,
   netgtp.*,

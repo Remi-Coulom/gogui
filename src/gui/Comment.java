@@ -14,7 +14,7 @@ import utils.*;
 
 //----------------------------------------------------------------------------
 
-class Comment
+public class Comment
     extends JScrollPane
     implements DocumentListener
 {

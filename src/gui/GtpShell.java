@@ -200,7 +200,7 @@ public class GtpShell
         public void toTop();
     }
 
-    GtpShell(String appName, Callback callback, Preferences prefs)
+    public GtpShell(String appName, Callback callback, Preferences prefs)
     {
         super("GTP - " + appName);
         GuiUtils.setGoIcon(this);
@@ -215,9 +215,10 @@ public class GtpShell
         Container contentPane = getContentPane();
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
         m_gtpShellText.setHighlight(highlight);
-        m_scrollPane = new JScrollPane(m_gtpShellText,
-                                       JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                                       JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        m_scrollPane =
+            new JScrollPane(m_gtpShellText,
+                            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         m_fontSize = m_gtpShellText.getFont().getSize();
         m_finalSize = new Dimension(m_fontSize * 40, m_fontSize * 30);
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
@@ -378,8 +379,8 @@ public class GtpShell
                     || c.startsWith("quit")))
             {
                 String message = 
-                    "This command will modify the board state\n" +
-                    "and will cause the graphical board to be out of sync.\n" +
+                    "This command will modify the board state and\n" +
+                    "will cause the graphical board to be out of sync.\n" +
                     "You must start a new game before using\n" +
                     "the graphical board again.";
                 int messageType = JOptionPane.WARNING_MESSAGE;
@@ -1067,7 +1068,7 @@ public class GtpShell
 
     /** Create wrapper object for addItem.
         See JDK 1.4 doc for JComboBox.addItem.
-     */
+    */
     private Object wrapperObject(final String item)
     {
         return new Object()

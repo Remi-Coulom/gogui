@@ -13,7 +13,7 @@ import game.*;
 
 //----------------------------------------------------------------------------
 
-class MenuBar
+public class MenuBar
     implements ActionListener
 {
     public MenuBar(ActionListener listener)

@@ -14,7 +14,7 @@ import utils.*;
 
 //----------------------------------------------------------------------------
 
-class GameInfo
+public class GameInfo
     extends JPanel
     implements ActionListener
 {

@@ -13,10 +13,10 @@ import game.*;
 
 //----------------------------------------------------------------------------
 
-class ToolBar
+public class ToolBar
     extends JToolBar
 {
-    ToolBar(ActionListener listener)
+    public ToolBar(ActionListener listener)
     {
         setRollover(true);
         setFloatable(false);

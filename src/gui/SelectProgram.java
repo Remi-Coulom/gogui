@@ -15,7 +15,7 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
-class SelectProgram
+public class SelectProgram
     extends JDialog
     implements ActionListener
 {

@@ -13,7 +13,7 @@ import utils.*;
 
 //----------------------------------------------------------------------------
 
-class AnalyzeCommand
+public class AnalyzeCommand
 {
     public static final int BWBOARD = 0;
 

@@ -10,7 +10,7 @@ import go.Color;
 
 //----------------------------------------------------------------------------
 
-class TimeControl
+public class TimeControl
 {
     public static class Error extends Exception
     {

@@ -12,7 +12,7 @@ import gtp.*;
 
 //----------------------------------------------------------------------------
 
-class CommandThread
+public class CommandThread
     extends Thread
 {
     public CommandThread(Gtp gtp)

@@ -3,7 +3,7 @@
 // $Source$
 //----------------------------------------------------------------------------
 
-package gui;
+package gogui;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -15,6 +15,7 @@ import javax.swing.*;
 import game.*;
 import go.*;
 import gtp.*;
+import gui.*;
 import utils.*;
 import version.*;
 
@@ -22,7 +23,7 @@ import version.*;
 
 class GoGui
     extends JFrame
-    implements ActionListener, AnalyzeDialog.Callback, Board.Listener,
+    implements ActionListener, AnalyzeDialog.Callback, gui.Board.Listener,
                GameTreeViewer.Listener, GtpShell.Callback
 {
     GoGui(String program, Preferences prefs, String file, int move,
@@ -59,7 +60,7 @@ class GoGui
 
         m_board = new go.Board(m_boardSize);
 
-        m_guiBoard = new Board(m_board);
+        m_guiBoard = new gui.Board(m_board);
         m_guiBoard.setListener(this);
         innerPanel.add(createStatusBar(), BorderLayout.SOUTH);
 
@@ -76,8 +77,8 @@ class GoGui
                                      m_boardPanel, m_infoPanel);
         int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
         InputMap splitPaneInputMap = m_splitPane.getInputMap(condition);
-        // According to the docs, null should remove the action,
-        // but it does not seem to work with Sun Java 1.4.2, new Object() works
+        // According to the docs, null should remove the action, but it does
+        // not seem to work with Sun Java 1.4.2, new Object() works
         splitPaneInputMap.put(KeyStroke.getKeyStroke("F8"), new Object());
         m_splitPane.setResizeWeight(0.85);
         innerPanel.add(m_splitPane, BorderLayout.CENTER);
@@ -93,7 +94,7 @@ class GoGui
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtils.setGoIcon(this);
 
-        m_menuBar = new MenuBar(this);
+        m_menuBar = new gui.MenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setShowLastMove(m_prefs.getBool("show-last-move"));
@@ -541,8 +542,9 @@ class GoGui
                 program = (String)arguments.get(0);
             else if (arguments.size() > 1)
                 throw new Exception("Only one program argument allowed.");
-            new GoGui(program, prefs, file, move, time, verbose, computerBlack,
-                      computerWhite, auto, gtpFile, gtpCommand, initAnalyze);
+            new GoGui(program, prefs, file, move, time, verbose,
+                      computerBlack, computerWhite, auto, gtpFile, gtpCommand,
+                      initAnalyze);
         }
         catch (AssertionError e)
         {
@@ -700,7 +702,7 @@ class GoGui
 
     private go.Color m_setupColor;
 
-    private Board m_guiBoard;
+    private gui.Board m_guiBoard;
 
     private CommandThread m_commandThread;
 
@@ -726,7 +728,7 @@ class GoGui
 
     private JSplitPane m_splitPane;
 
-    private MenuBar m_menuBar;
+    private gui.MenuBar m_menuBar;
 
     private Node m_currentNode;
 
@@ -796,7 +798,8 @@ class GoGui
                           new AnalyzeContinue(checkComputerMove, resetBoard));
     }
 
-    private void analyzeContinue(boolean checkComputerMove, boolean resetBoard)
+    private void analyzeContinue(boolean checkComputerMove,
+                                 boolean resetBoard)
     {
         endLengthyCommand();
         String title = m_analyzeCommand.getResultTitle();
@@ -1973,7 +1976,8 @@ class GoGui
             AnalyzeCommand analyzeCommand =
                 AnalyzeCommand.get(this, m_initAnalyze);
             if (analyzeCommand == null)
-                showError("Unknown analyze command \"" + m_initAnalyze + "\"");
+                showError("Unknown analyze command \"" + m_initAnalyze
+                          + "\"");
             else
                 initAnalyzeCommand(analyzeCommand, true);
         }
@@ -2127,7 +2131,8 @@ class GoGui
             return;
         try
         {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            Dimension screenSize =
+                Toolkit.getDefaultToolkit().getScreenSize();
             int x = Math.max(0, Integer.parseInt(tokens[0]));
             if (x > screenSize.width)
                 x = 0;
