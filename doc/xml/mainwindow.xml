@@ -444,6 +444,15 @@ Mark the last move with a red circle.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guimenuitem>Show Variations</guimenuitem></term>
+<listitem>
+<para>
+Mark the moves of all variations from this position with 'A', 'B', 'C'...
+</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 </section>
 
