@@ -191,6 +191,16 @@ class GtpRegress
 
     private Set m_dataFiles = new TreeSet();
 
+    private static final String m_colorHeader = "#91aee8";
+
+    private static final String m_colorLightBackground = "#eef6ff";
+
+    private static final String m_colorGrayBackground = "#eeeeee";
+
+    private static final String m_colorGreen = "#5eaf5e";
+
+    private static final String m_colorRed = "#ff5454";
+
     private String m_lastCommand;
 
     private String m_lastFullResponse;
@@ -466,11 +476,12 @@ class GtpRegress
         m_out = new PrintStream(new FileOutputStream(file));
         m_out.print("<html>\n" +
                     "<head>\n" +
-                    "<title>Output " + m_file + "</title>\n" +
+                    "<title>Output: " + m_file + "</title>\n" +
                     "<style type=\"text/css\">\n" +
                     "<!--" +
                     "span.comment { color:#999999; }\n" +
-                    "span.fail { font-weight:bold; color:#ff0000; }\n" +
+                    "span.fail { font-weight:bold; color:" + m_colorRed
+                    + "; }\n" +
                     "span.stderr { font-style: italic; color:#999999; }\n" +
                     "span.pass { font-weight:bold; color:#009900; }\n" +
                     "span.test { font-weight:bold; }\n" +
@@ -479,12 +490,16 @@ class GtpRegress
                     "</head>\n" +
                     "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                     " vlink=\"#551a8b\">\n" +
-                    "<h1>Output " + m_file + "</h1>\n" +
-                    "<hr>\n" +
-                    "<table>\n");
+                    "<table border=\"0\" width=\"100%\" bgcolor=\""
+                    + m_colorHeader + "\">\n" +
+                    "<tr><td>\n" +
+                    "<h1>Output: " + m_file + "</h1>\n" +
+                    "<td><tr>\n" +
+                    "</table>\n" +
+                    "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
+                    + "\">\n");
         writeInfo(m_out);
         m_out.print("</table>\n" +
-                    "<hr>\n" +
                     "<pre>\n");
     }
 
@@ -724,17 +739,22 @@ class GtpRegress
         Date date = Calendar.getInstance().getTime();
         out.print("<html>\n" +
                   "<head>\n" +
-                  "<title>Summary</title>\n" +
+                  "<title>Regression Test Summary</title>\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
-                  "<h1>Summary</h1>\n" +
-                  "<hr>\n" +
-                  "<table>\n");
+                  "<table border=\"0\" width=\"100%\" bgcolor=\""
+                  + m_colorHeader + "\">\n" +
+                  "<tr><td>\n" +
+                  "<h1>Regression Test Summary</h1>\n" +
+                  "<td><tr>\n" +
+                  "</table>\n" +
+                  "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
+                  + "\">\n");
         writeInfo(out);
         out.print("</table>" +
-                  "<hr>\n" +
-                  "<table border=\"1\">\n" +
+                  "<p>" +
+                  "<table bgcolor=\"" + m_colorGrayBackground + "\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"20%\">\n" +
                   "<col width=\"10%\">\n" +
@@ -746,7 +766,8 @@ class GtpRegress
                   "<col width=\"10%\">\n" +
                   "<col width=\"10%\">\n" +
                   "</colgroup>\n" +
-                  "<thead align=\"center\">\n" +
+                  "<thead align=\"center\" bgcolor = \""
+                  + m_colorHeader + "\">\n" +
                   "<th>File</th>" +
                   "<th>Tests</th>" +
                   "<th>FAIL</th>" +
@@ -764,6 +785,7 @@ class GtpRegress
         }
         writeSummaryRow(out, getTotalSummary(), true, true);
         out.print("</table>\n" +
+                  "</p>\n" +
                   "</body>\n" +
                   "</html>\n");
         out.close();
@@ -774,7 +796,11 @@ class GtpRegress
     {
         File file = summary.m_file;
         if (foot)
+        {
             out.print("<tfoot align=\"center\">\n");
+            out.print("<tr align=\"center\" bgcolor=\""
+                      + m_colorHeader + "\">\n");
+        }
         else
             out.print("<tr align=\"center\">\n");
         if (withFileName)
@@ -788,23 +814,26 @@ class GtpRegress
         }
         double time = ((double)summary.m_timeMillis) / 1000F;
         NumberFormat format = StringUtils.getNumberFormat(1);
+        String colorAttrUnexpectedFails = "";
+        if (summary.m_unexpectedFails > 0)
+            colorAttrUnexpectedFails = " bgcolor=\"" + m_colorRed + "\"";
+        String colorAttrUnexpectedPasses = "";
+        if (summary.m_unexpectedPasses > 0)
+            colorAttrUnexpectedPasses = " bgcolor=\"" + m_colorGreen + "\"";
         out.print("<td>" + summary.m_numberTests + "</td>\n" +
-                  "<td bgcolor=\""
-                  + (summary.m_unexpectedFails > 0 ? "#ff0000" : "white")
-                  + "\">\n" + summary.m_unexpectedFails + "</td>\n" +
+                  "<td" + colorAttrUnexpectedFails + ">\n"
+                  + summary.m_unexpectedFails + "</td>\n" +
                   "<td>" + summary.m_expectedFails + "</td>\n" +
-                  "<td bgcolor=\""
-                  + (summary.m_unexpectedPasses > 0 ? "#00ff00" : "white")
-                  + "\">\n" + summary.m_unexpectedPasses + "</td>\n" +
+                  "<td" + colorAttrUnexpectedPasses + ">\n"
+                  + summary.m_unexpectedPasses + "</td>\n" +
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
                   "<td>" + summary.m_otherErrors + "</td>\n" +
                   "<td>" + format.format(time) + "</td>\n" +
                   "<td>" + format.format(summary.m_cpuTime) + "</td>\n" +
                   "</tr>\n");
+        out.print("</tr>\n");
         if (foot)
             out.print("</tfoot>\n");
-        else
-            out.print("</tr>\n");
     }
 
     private void writeTestSummary(TestSummary summary)
@@ -816,21 +845,26 @@ class GtpRegress
         PrintStream out = new PrintStream(new FileOutputStream(file));
         out.print("<html>\n" +
                   "<head>\n" +
-                  "<title>Summary " + m_file + "</title>\n" +
+                  "<title>Summary: " + m_file + "</title>\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
-                  "<h1>Summary " + m_file + "</h1>\n" +
-                  "<hr>\n" +
-                  "<table>\n");
+                  "<table border=\"0\" width=\"100%\" bgcolor=\""
+                  + m_colorHeader + "\">\n" +
+                  "<tr><td>\n" +
+                  "<h1>Summary: " + m_file + "</h1>\n" +
+                  "<td><tr>\n" +
+                  "</table>\n" +
+                  "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
+                  + "\">\n");
         writeInfo(out);
         String outFile = FileUtils.replaceExtension(m_file, "out", "out.html");
         out.print("<tr><th align=\"left\">Output</th><td><a href=\""
                   + m_outFileRelativeName + "\">"
                   + m_outFileRelativeName + "</a></td></tr>\n" +
                   "</table>\n" +
-                  "<hr>\n" +
-                  "<table border=\"1\">\n" +
+                  "<p>\n" +
+                  "<table bgcolor=\"" + m_colorGrayBackground + "\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"12%\">\n" +
                   "<col width=\"12%\">\n" +
@@ -841,7 +875,8 @@ class GtpRegress
                   "<col width=\"12%\">\n" +
                   "<col width=\"12%\">\n" +
                   "</colgroup>\n" +
-                  "<thead align=\"center\">\n" +
+                  "<thead align=\"center\" bgcolor=\"" + m_colorHeader
+                  + "\">\n" +
                   "<th>Tests</th>\n" +
                   "<th>FAIL</th>\n" +
                   "<th>fail</th>\n" +
@@ -853,10 +888,11 @@ class GtpRegress
                   "</thead>\n");
         writeSummaryRow(out, summary, false, false);
         out.print("</table>\n" +
-                  "<hr>\n" +
-                  "<table border=\"1\" style=\"font-size:small\">\n" +
-                  "<thead>\n" +
-                  "<th>Test ID</th>\n" +
+                  "</p>\n" +
+                  "<p>\n" +
+                  "<table>\n" +
+                  "<thead bgcolor=\"" + m_colorHeader + "\">\n" +
+                  "<th>ID</th>\n" +
                   "<th>Status</th>\n" +
                   "<th>Command</th>\n" +
                   "<th>Output</th>\n" +
@@ -866,26 +902,26 @@ class GtpRegress
         for (int i = 0; i < m_tests.size(); ++i)
         {
             Test t = (Test)m_tests.get(i);
-            String statusColor = null;
+            String rowBackground =
+                (i % 2 == 0 ? m_colorLightBackground : "white");
+            String statusColor = rowBackground;
             String status = null;
             if (t.m_fail && t.m_expectedFail)
             {
-                statusColor = "white";
                 status = "fail";
             }
             else if (t.m_fail && ! t.m_expectedFail)
             {
-                statusColor = "#ff0000";
+                statusColor = m_colorRed;
                 status = "FAIL";
             }
             else if (! t.m_fail && t.m_expectedFail)
             {
-                statusColor = "#00ff00";
+                statusColor = m_colorGreen;
                 status = "PASS";
             }
             else if (! t.m_fail && ! t.m_expectedFail)
             {
-                statusColor = "white";
                 status = "pass";
             }
             else
@@ -899,7 +935,7 @@ class GtpRegress
                     lastSgf += "&nbsp;" + t.m_lastSgfMove;
             }
             String command = t.m_command.replaceAll(" ", "&nbsp;");
-            out.print("<tr>\n" +
+            out.print("<tr bgcolor=\"" + rowBackground + "\">\n" +
                       "<td align=\"center\"><a href=\"" + m_outFileRelativeName
                       + "#" + t.m_id + "\">" + t.m_id + "</a></td>\n" +
                       "<td align=\"center\" bgcolor=\"" + statusColor
@@ -911,6 +947,7 @@ class GtpRegress
                       "</tr>\n");
         }
         out.print("</table>\n" +
+                  "</p>\n" +
                   "</body>\n" +
                   "</html>\n");
         out.close();
