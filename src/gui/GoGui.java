@@ -1059,6 +1059,7 @@ class GoGui
                 try
                 {
                     m_commandThread.sendCommand("quit");
+                    m_commandThread.waitForExit();
                 }
                 catch(Gtp.Error e)
                 {

@@ -147,6 +147,11 @@ class CommandThread
         return m_gtp.sendCommandPlay(move);
     }
 
+    public void waitForExit()
+    {
+        m_gtp.waitForExit();
+    }
+
     private boolean m_commandInProgress;
     private Gtp m_gtp;
     private Gtp.Error m_exception;

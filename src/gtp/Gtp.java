@@ -314,6 +314,18 @@ public class Gtp
         return sendCommand(getCommandPlay(move));
     }
 
+    public void waitForExit()
+    {
+        try
+        {
+            m_process.waitFor();
+        }
+        catch (InterruptedException e)
+        {
+            System.err.println("Interrupted");
+        }
+    }
+
     private class StdErrThread extends Thread
     {
         public StdErrThread(Process process)
