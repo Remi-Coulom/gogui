@@ -43,3 +43,6 @@ debug:
 
 clean:
 	-rm -r build build_dbg
+
+changelog:
+	cvs2cl.pl
