@@ -35,7 +35,7 @@
   &analyze;
   &gtpshell;
   &tools;
-  <appendix>
+  <appendix id="reference-index">
     <title>Reference</title>
     &reference-gmptogtp;
     &reference;

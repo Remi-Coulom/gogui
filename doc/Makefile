@@ -15,6 +15,7 @@ doc:
           --param refentry.generate.title 1 \
           --param spacing.paras 0 \
           --param toc.section.depth 0 \
+          --param use.id.as.filename 1 \
           -o html/ \
           $(XSLDIR)/html/chunk.xsl xml/book.xml
         #cp images/*.png css/docbook.css html
