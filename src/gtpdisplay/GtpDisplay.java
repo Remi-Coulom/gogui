@@ -161,7 +161,7 @@ public class GtpDisplay
                 return false;
         }
         m_size = argument.m_integer;
-        m_board = new go.Board(m_size);
+        m_board.newGame();
         command = m_gtp.getCommandClearBoard(m_size);
         if (! send(command, response))
             return false;
@@ -174,7 +174,7 @@ public class GtpDisplay
         String command = m_gtp.getCommandClearBoard(m_size);
         if (! send(command, response))
             return false;
-        m_board = new go.Board(m_size);
+        m_board.newGame();
         m_guiBoard.updateFromGoBoard();
         return true;
     }
