@@ -688,7 +688,6 @@ class AnalyzeDialog
             m_callback.clearAnalyzeCommand();
         m_callback.setAnalyzeCommand(command, autoRun, false);
         m_clearButton.setEnabled(autoRun);
-        m_list.requestFocus();
     }
 
     private static void setPrefsDefaults(Preferences prefs)
