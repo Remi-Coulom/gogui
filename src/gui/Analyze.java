@@ -16,7 +16,7 @@ import utils.*;
 
 //-----------------------------------------------------------------------------
 
-class AnalyzeCommand
+class Analyze
     extends JComboBox
     implements PopupMenuListener
 {
@@ -46,7 +46,7 @@ class AnalyzeCommand
     public static final int STRINGBOARD = 4;
     public static final int COLORBOARD  = 5;
 
-    AnalyzeCommand(Callback callback, Preferences prefs) throws Error
+    Analyze(Callback callback, Preferences prefs) throws Error
     {
         setEnabled(false);
         m_callback = callback;
@@ -209,15 +209,15 @@ class AnalyzeCommand
         String array[] = StringUtils.split(buffer.toString(), '/');
         String typeStr = array[0];
         if (typeStr.equals("cboard"))
-            type = AnalyzeCommand.COLORBOARD;
+            type = Analyze.COLORBOARD;
         else if (typeStr.equals("dboard"))
-            type = AnalyzeCommand.DOUBLEBOARD;
+            type = Analyze.DOUBLEBOARD;
         else if (typeStr.equals("sboard"))
-            type = AnalyzeCommand.STRINGBOARD;
+            type = Analyze.STRINGBOARD;
         else if (typeStr.equals("plist"))
-            type = AnalyzeCommand.POINTLIST;
+            type = Analyze.POINTLIST;
         else if (typeStr.equals("string"))
-            type = AnalyzeCommand.STRING;
+            type = Analyze.STRING;
         String label = array[1];
         String command = array[2];
         if (array.length > 3)

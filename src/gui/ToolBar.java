@@ -18,7 +18,7 @@ class ToolBar
     extends JToolBar
 {
     ToolBar(ActionListener listener, Preferences prefs,
-            AnalyzeCommand.Callback callback) throws AnalyzeCommand.Error
+            Analyze.Callback callback) throws Analyze.Error
     {
         m_listener = listener;
         m_buttonNew = addButton("images/filenew.png", "new-game", "New game");
@@ -46,8 +46,8 @@ class ToolBar
         add(new JToolBar.Separator());
         m_buttonAnalyze = addButton("images/gear.png", "analyze",
                                     "Enable analyze command");
-        m_analyzeCommand = new AnalyzeCommand(callback, prefs);
-        add(m_analyzeCommand);
+        m_analyze = new Analyze(callback, prefs);
+        add(m_analyze);
     }
 
     public void disableComputerButtons()
@@ -57,13 +57,13 @@ class ToolBar
         m_buttonGtpShell.setEnabled(false);
         m_buttonAnalyze.setEnabled(false);
         m_buttonStop.setEnabled(false);
-        m_analyzeCommand.setEnabled(false);
+        m_analyze.setEnabled(false);
     }
 
     public void toggleAnalyze()
     {
-        m_analyzeCommand.setEnabled(! m_analyzeCommand.isEnabled());
-        m_analyzeCommand.setAnalyzeCommand();
+        m_analyze.setEnabled(! m_analyze.isEnabled());
+        m_analyze.setAnalyzeCommand();
     }
 
     public void updateGameButtons(go.Board board)
@@ -99,13 +99,13 @@ class ToolBar
         {
             if (! m_computerButtonsEnabled)
                 disableComputerButtons();
-            m_analyzeCommand.setEnabled(m_analyzeWasEnabled);
+            m_analyze.setEnabled(m_analyzeWasEnabled);
             updateGameButtons(board);
         }
         else
         {
-            m_analyzeWasEnabled = m_analyzeCommand.isEnabled();
-            m_analyzeCommand.setEnabled(false);
+            m_analyzeWasEnabled = m_analyze.isEnabled();
+            m_analyze.setEnabled(false);
         }
     }
 
@@ -117,7 +117,7 @@ class ToolBar
 
     private ActionListener m_listener;
 
-    private AnalyzeCommand m_analyzeCommand;
+    private Analyze m_analyze;
 
     private JButton m_buttonAnalyze;
 

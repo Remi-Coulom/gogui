@@ -14,7 +14,7 @@ src/utils/GuiUtils.java
 src/utils/Options.java
 src/utils/SquareLayout.java
 src/utils/StringUtils.java
-src/gui/AnalyzeCommand.java
+src/gui/Analyze.java
 src/gui/Board.java
 src/gui/CommandThread.java
 src/gui/Field.java

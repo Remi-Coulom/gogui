@@ -21,13 +21,13 @@ import utils.*;
 
 class GoGui
     extends JFrame
-    implements ActionListener, AnalyzeCommand.Callback, Board.Listener,
+    implements ActionListener, Analyze.Callback, Board.Listener,
                GtpShell.Callback, WindowListener
 {
     GoGui(String program, Preferences prefs, String file, int move,
           boolean gtpShell, String time, boolean verbose, boolean fillPasses,
           boolean computerNone, boolean autoplay, String gtpFile)
-        throws Gtp.Error, AnalyzeCommand.Error
+        throws Gtp.Error, Analyze.Error
     {
         if (program != null && ! program.equals(""))
         {
@@ -453,7 +453,7 @@ class GoGui
 
     private boolean m_verbose;
 
-    private int m_analyzeType = AnalyzeCommand.NONE;
+    private int m_analyzeType = Analyze.NONE;
 
     private int m_boardSize;
 
@@ -546,25 +546,25 @@ class GoGui
             if (e != null)
                 throw e;
             String answer = m_commandThread.getAnswer();
-            if (m_analyzeType == AnalyzeCommand.COLORBOARD)
+            if (m_analyzeType == Analyze.COLORBOARD)
             {
                 String board[][] = Gtp.parseStringBoard(answer,
                                                         m_analyzeTitle,
                                                         m_boardSize);
                 showColorBoard(board);
             }
-            else if (m_analyzeType == AnalyzeCommand.DOUBLEBOARD)
+            else if (m_analyzeType == Analyze.DOUBLEBOARD)
             {
                 double board[][] = Gtp.parseDoubleBoard(answer, m_analyzeTitle,
                                                         m_boardSize);
                 showDoubleBoard(board, m_analyzeScale);
             }
-            else if (m_analyzeType == AnalyzeCommand.POINTLIST)
+            else if (m_analyzeType == Analyze.POINTLIST)
             {
                 go.Point pointList[] = Gtp.parsePointList(answer);
                 showPointList(pointList);
             }
-            else if (m_analyzeType == AnalyzeCommand.STRINGBOARD)
+            else if (m_analyzeType == Analyze.STRINGBOARD)
             {
                 String board[][] = Gtp.parseStringBoard(answer,
                                                         m_analyzeTitle,
@@ -577,7 +577,7 @@ class GoGui
                 title.append(" ");
                 title.append(m_analyzePointArg.toString());
             }
-            if (m_analyzeType == AnalyzeCommand.STRING)
+            if (m_analyzeType == Analyze.STRING)
             {
                 if (answer.indexOf("\n") < 0)
                 {
