@@ -766,17 +766,18 @@ class GtpRegress
                   "<col width=\"10%\">\n" +
                   "<col width=\"10%\">\n" +
                   "</colgroup>\n" +
-                  "<thead align=\"center\" bgcolor = \""
-                  + m_colorHeader + "\">\n" +
-                  "<th>File</th>" +
-                  "<th>Tests</th>" +
-                  "<th>FAIL</th>" +
-                  "<th>fail</th>" +
-                  "<th>PASS</th>" +
-                  "<th>pass</th>" +
-                  "<th>Error</th>" +
-                  "<th>Time</th>" +
-                  "<th>CpuTime</th>" +
+                  "<thead align=\"center\">\n" +
+                  "<tr bgcolor = \"" + m_colorHeader + "\">\n" +
+                  "<th>File</th>\n" +
+                  "<th>Tests</th>\n" +
+                  "<th>FAIL</th>\n" +
+                  "<th>fail</th>\n" +
+                  "<th>PASS</th>\n" +
+                  "<th>pass</th>\n" +
+                  "<th>Error</th>\n" +
+                  "<th>Time</th>\n" +
+                  "<th>CpuTime</th>\n" +
+                  "</tr>\n" +
                   "</thead>\n");
         for (int i = 0; i < m_testSummaries.size(); ++i)
         {
@@ -821,7 +822,7 @@ class GtpRegress
         if (summary.m_unexpectedPasses > 0)
             colorAttrUnexpectedPasses = " bgcolor=\"" + m_colorGreen + "\"";
         out.print("<td>" + summary.m_numberTests + "</td>\n" +
-                  "<td" + colorAttrUnexpectedFails + ">\n"
+                  "<td" + colorAttrUnexpectedFails + ">"
                   + summary.m_unexpectedFails + "</td>\n" +
                   "<td>" + summary.m_expectedFails + "</td>\n" +
                   "<td" + colorAttrUnexpectedPasses + ">\n"
@@ -831,7 +832,6 @@ class GtpRegress
                   "<td>" + format.format(time) + "</td>\n" +
                   "<td>" + format.format(summary.m_cpuTime) + "</td>\n" +
                   "</tr>\n");
-        out.print("</tr>\n");
         if (foot)
             out.print("</tfoot>\n");
     }
@@ -875,8 +875,8 @@ class GtpRegress
                   "<col width=\"12%\">\n" +
                   "<col width=\"12%\">\n" +
                   "</colgroup>\n" +
-                  "<thead align=\"center\" bgcolor=\"" + m_colorHeader
-                  + "\">\n" +
+                  "<thead align=\"center\">\n" +
+                  "<tr bgcolor=\"" + m_colorHeader + "\">\n" +
                   "<th>Tests</th>\n" +
                   "<th>FAIL</th>\n" +
                   "<th>fail</th>\n" +
@@ -885,19 +885,22 @@ class GtpRegress
                   "<th>Error</th>\n" +
                   "<th>Time</th>\n" +
                   "<th>CpuTime</th>\n" +
+                  "</tr>\n" +
                   "</thead>\n");
         writeSummaryRow(out, summary, false, false);
         out.print("</table>\n" +
                   "</p>\n" +
                   "<p>\n" +
                   "<table>\n" +
-                  "<thead bgcolor=\"" + m_colorHeader + "\">\n" +
+                  "<thead>\n" +
+                  "<tr bgcolor=\"" + m_colorHeader + "\">\n" +
                   "<th>ID</th>\n" +
                   "<th>Status</th>\n" +
                   "<th>Command</th>\n" +
                   "<th>Output</th>\n" +
                   "<th>Required</th>\n" +
                   "<th>Last SGF</th>\n" +
+                  "</tr>\n" +
                   "</thead>\n");
         for (int i = 0; i < m_tests.size(); ++i)
         {
