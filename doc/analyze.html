@@ -31,11 +31,21 @@
     The command type can be
 
     <dl>
+      <dt><tt>cboard</tt></dt>
+      <dd>
+	The answer of the command is a board of strings with color names.
+	They will be displayed as background colors for the fields.
+	Valid color names are blue, cyan, green, gray, magenta,
+	pink, red, and yellow. Unknown names or the special string ""
+	are ignored.
+      </dd>
       <dt><tt>dboard</tt></dt>
       <dd>
 	The answer of the command is a board of floating point
-	numbers. It will be displayed as shaded colors on the
-	board. The numbers are expected to be between -1 and 1.
+	numbers.
+	They will be displayed as red (positive) and green (negative)
+	polygons on the board.
+	The numbers are expected to be between -1 and 1.
 	Use the <tt>scale</tt> option, if they are not.
       </dd>
       <dt><tt>none</tt></dt>

@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Interrupting commands</title>
+  </head>
+
+  <body>
+    <h1>Interrupting commands</h1>
+
+    <p>
+      Commands can be interrupted, if the Go program supports it.
+    </p>
+    
+    <p>
+      There are two ways of sending the interrupt signal to the program:
+    </p>
+    <ol>
+      <li>
+	If the program can handle INT signals, it indicates this
+	by implementing the <code>gogui_sigint</code> command
+	and returning its process ID.
+	GoGui will then send an INT signal to the process if the user
+	presses the interrupt button
+	(actually GoGui invokes the shell command
+	<code>kill&nbsp;-INT&nbsp;&lt;pid&gt;</code>,
+	so this will work only on UNIX systems).
+      </li>
+      <li>
+	If the program does not implement <code>gogui_sigint</code>,
+	GoGui will send a special comment line (<code>#&nbsp;interrupt</code>)
+	to the program.
+	If the program reads the GTP input stream
+	while processing a command, it can interrupt the command.
+	Programs not aware of this convention will simply ignore
+	the comment line.
+      </li>
+    </ol>
+  </body>
+</html>
+

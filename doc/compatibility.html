@@ -9,9 +9,11 @@
 
     <p>
       GoGui will work with all programs that can understand
-      the most basic commands of version 1 of the
+      the most basic commands of version 1 or 2 of the
       <a href="http://www.lysator.liu.se/~gunnar/gtp/">Go Text Protocol</a>.
     </p>
+
+    <h2>Required commands</h2>
 
     <p>
       It is required that the Go program can handle the following
@@ -19,30 +21,35 @@
     </p>
 
     <ul>
-      <li><tt>boardsize</tt></li>
-      <li><tt>black</tt></li>
-      <li><tt>genmove_black</tt></li>
-      <li><tt>genmove_white</tt></li>
+      <li><tt>boardsize</tt> (<tt>boardsize</tt>, <tt>clear_board</tt>)</li>
+      <li><tt>black</tt>, <tt>white</tt> (<tt>play</tt>)</li>
+      <li><tt>genmove_black</tt>, <tt>genmove_white</tt> (<tt>genmove</tt>)</li>
       <li><tt>name</tt></li>
-      <li><tt>white</tt></li>
     </ul>
+
+    <p>
+      The commands in braces are used if the program supports
+      the <tt>protocol_version</tt> command and responds with 2.
+    </p>
 
     <p>
       In particular the Go program is not required to support
       the <tt>loadsgf</tt> command.
       GoGui translates all moves, setup and handicap stones into a series of
-      <tt>black</tt> and <tt>white</tt> commands.
+      <tt>black</tt>, <tt>white</tt> (<tt>play</tt>) commands.
     </p>
+
+    <h2>Optional commands</h2>
 
     <p>
       The following other commands are used by GoGui.
     </p>
 
     <ul>
-      <li><tt>help</tt></li>
+      <li><tt>help</tt> (<tt>list_commands</tt>)</li>
       <li><tt>komi</tt></li>
       <li><tt>quit</tt></li>
-      <li><tt>scoring_system</tt> <i>(GTP version 2)</i></li>
+      <li><tt>scoring_system</tt></li>
       <li><tt>undo</tt></li>
       <li><tt>version</tt></li>
     </ul>
@@ -51,6 +58,25 @@
       If the Go program does not understand them
       you will still be able to play games,
       but you cannot use all of the functionality of GoGui.
+    </p>
+
+    <p>
+      The command <tt>scoring_system</tt> (from an early draft of GTP
+      version 2 ) is used for setting Japanese or Chinese rules,
+      if the program supports it.
+      Otherwise the rule settings are quietly ignored.
+    </p>
+
+    <h2>Interrupting programs</h2>
+
+    <p>
+      If the program understands the GoGui specific extension GTP command
+      <tt>gogui_sigint</tt>, it indicates that long commands can be
+      interrupted by sending it a SIGINT signal. The program must return its
+      process id as an answer to <tt>gogui_sigint</tt> and GoGui will
+      try to send interrupt signals by using
+      <tt>kill&nbsp;-INT&nbsp;&lt;pid&gt</tt>. Note that this feature works
+      only on operating systems that have a <tt>kill</tt> command.
     </p>
 
   </body>
