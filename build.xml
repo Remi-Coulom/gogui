@@ -8,7 +8,16 @@ $Source$
 
 <project name="GoGui" default="all">
 
-<target name="all" depends="gogui.jar"/>
+<target name="all" depends="
+ gmptogtp.jar,
+ gogui.jar,
+ gtpdummy.jar,
+ gtpregress.jar,
+ gtpserver.jar,
+ netgtp.jar,
+ sgftotex.jar,
+ twogtp.jar
+"/>
 
 <target name="clean">
 <delete failonerror="false" includeEmptyDirs="true">
@@ -41,6 +50,25 @@ $Source$
 <copy todir="build/doc">
 <fileset dir="doc/html" includes="*.html"/>
 </copy>
+<copy todir="build/config">
+<fileset dir="config" includes="analyze-commands"/>
+</copy>
+</target>
+
+<target name="gmptogtp.jar" depends="compile">
+<jar destfile="gmptogtp.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="gmptogtp.GmpToGtp"/>
+</manifest>
+<fileset dir="build" includes="
+ gmp/*.class
+ gmptogtp/*.class
+ gtp/GtpServer.class
+ utils/Options.class
+ utils/StringUtils.class
+ version/Version.class
+"/>
+</jar>
 </target>
 
 <target name="gogui.jar" depends="compile">
@@ -49,6 +77,7 @@ $Source$
 <attribute name="Main-Class" value="gui.GoGui"/>
 </manifest>
 <fileset dir="build" includes="
+ config/analyze-commands
  doc/*.html
  go/*.class
  gtp/*.class
@@ -57,7 +86,109 @@ $Source$
  latex/*.class
  sgf/*.class
  utils/*.class
- version/*.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
+<target name="gtpdummy.jar" depends="compile">
+<jar destfile="gtpdummy.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="gtpdummy.GtpDummy"/>
+</manifest>
+<fileset dir="build" includes="
+ go/Color.class
+ go/Move.class
+ go/Point.class
+ gtp/*.class
+ gtpdummy/*.class
+ utils/Options.class
+ utils/StringUtils.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
+<target name="gtpregress.jar" depends="compile">
+<jar destfile="gtpregress.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="gtpregress.GtpRegress"/>
+</manifest>
+<fileset dir="build" includes="
+ go/Color.class
+ go/Move.class
+ go/Point.class
+ gtp/*.class
+ gtpregress/*.class
+ utils/FileUtils.class
+ utils/Options.class
+ utils/StringUtils.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
+<target name="gtpserver.jar" depends="compile">
+<jar destfile="gtpserver.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="gtpserver.GtpServer"/>
+</manifest>
+<fileset dir="build" includes="
+ gtpserver/*.class
+ utils/Options.class
+ utils/StreamCopy.class
+ utils/StringUtils.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
+<target name="netgtp.jar" depends="compile">
+<jar destfile="netgtp.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="netgtp.NetGtp"/>
+</manifest>
+<fileset dir="build" includes="
+ netgtp/*.class
+ utils/Options.class
+ utils/StreamCopy.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
+<target name="sgftotex.jar" depends="compile">
+<jar destfile="sgftotex.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="sgftotex.SgfToTex"/>
+</manifest>
+<fileset dir="build" includes="
+ go/*.class
+ latex/*.class
+ sgf/*.class
+ sgftotex/*.class
+ utils/FileUtils.class
+ utils/Options.class
+ utils/StringUtils.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
+<target name="twogtp.jar" depends="compile">
+<jar destfile="twogtp.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="twogtp.TwoGtp"/>
+</manifest>
+<fileset dir="build" includes="
+ go/*.class
+ gtp/*.class
+ sgf/*.class
+ twogtp/*.class
+ utils/FileUtils.class
+ utils/Options.class
+ utils/StringUtils.class
+ version/Version.class
 "/>
 </jar>
 </target>
