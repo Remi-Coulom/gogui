@@ -523,7 +523,6 @@ class Histogram
     public Histogram(double min, double max, double step)
     {
         m_min = min;
-        m_max = max;
         m_step = step;
         m_size = (int)((max - min) / step) + 1;
         m_array = new int[m_size];
@@ -565,8 +564,6 @@ class Histogram
     private int m_size;
 
     private double m_min;
-
-    private double m_max;
 
     private double m_step;
 

@@ -1043,8 +1043,6 @@ public class Gmp
     private int m_size;
 
     private ReadThread m_readThread;
-
-    private String m_lastError;
 }
 
 //-----------------------------------------------------------------------------

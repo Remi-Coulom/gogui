@@ -170,6 +170,10 @@ Board size (default 19).
 </term>
 <listitem>
 Print debugging messages.
+<note>
+This option is currently ignored, the output to standard error is always
+verbose.
+</note>
 </listitem>
 </varlistentry>
 

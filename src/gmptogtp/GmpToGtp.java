@@ -18,12 +18,14 @@ import version.*;
 public class GmpToGtp
     extends GtpServer
 {
+    /**
+       @todo Option verbose is ignored, class Gmp is always verbose
+    */
     public GmpToGtp(String title, InputStream in, OutputStream out,
                     boolean verbose, int size, int colorIndex, boolean wait,
                     boolean simple)
     {
         super(System.in, System.out, null);
-        m_verbose = verbose;
         m_simple = simple;
         m_colorIndex = colorIndex;
         m_wait = wait;
@@ -253,8 +255,6 @@ public class GmpToGtp
     private boolean m_firstGame = true;
 
     private boolean m_simple;
-
-    private boolean m_verbose;
 
     private boolean m_wait;
 
