@@ -484,7 +484,8 @@ class GoGui
         }
     }
 
-    public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun)
+    public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
+                                  boolean clearBoard)
     {
         initAnalyzeCommand(command, autoRun);
         if (m_commandInProgress)
@@ -497,7 +498,7 @@ class GoGui
             toTop();
         }
         else
-            analyzeBegin(false, false);
+            analyzeBegin(clearBoard, false);
     }    
 
     public void windowActivated(WindowEvent e)

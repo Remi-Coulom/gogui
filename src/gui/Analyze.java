@@ -270,7 +270,8 @@ interface AnalyzeCallback
 {
     public void clearAnalyzeCommand();
 
-    public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun);
+    public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
+                                  boolean clearBoard);
 }
 
 //-----------------------------------------------------------------------------
@@ -404,6 +405,8 @@ class AnalyzeDialog
 
     private JCheckBox m_autoRun;
 
+    private JCheckBox m_clearBoard;
+
     private JComboBox m_comboBox;
 
     private JList m_list;
@@ -476,22 +479,19 @@ class AnalyzeDialog
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
         innerPanel.setBorder(GuiUtils.createEmptyBorder());
         m_runButton = new JButton("Run");
+        m_runButton.setToolTipText("Run command");
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
         m_runButton.setMnemonic(KeyEvent.VK_R);
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
-        m_clearButton = new JButton("Clear");
+        m_clearButton = new JButton("Cancel Auto");
+        m_clearButton.setToolTipText("Cancel auto run");
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
-        m_clearButton.setMnemonic(KeyEvent.VK_L);
+        m_clearButton.setMnemonic(KeyEvent.VK_C);
         m_clearButton.setEnabled(false);
         innerPanel.add(m_clearButton);
-        JButton closeButton = new JButton("Close");
-        closeButton.setActionCommand("close");
-        closeButton.addActionListener(this);
-        closeButton.setMnemonic(KeyEvent.VK_C);
-        innerPanel.add(closeButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
         return outerPanel;
@@ -519,8 +519,13 @@ class AnalyzeDialog
         m_comboBox = new JComboBox();
         m_comboBox.addActionListener(this);
         panel.add(m_comboBox);
-        m_autoRun = new JCheckBox("Auto run after changes on board");
+        m_autoRun = new JCheckBox("Auto run");
+        m_autoRun.setToolTipText("Auto run after changes on board");
         panel.add(m_autoRun);
+        m_clearBoard = new JCheckBox("Clear board");
+        m_clearBoard.setToolTipText("Clear board before displaying result");
+        panel.add(m_clearBoard);
+        m_clearBoard.setSelected(true);
         loadRecent();
         return panel;
     }
@@ -677,8 +682,10 @@ class AnalyzeDialog
                 return;
             command.setFileArg(fileArg);
         }
-        m_callback.setAnalyzeCommand(command, m_autoRun.isSelected());
-        m_clearButton.setEnabled(true);
+        boolean autoRun = m_autoRun.isSelected();
+        boolean clearBoard = m_clearBoard.isSelected();
+        m_callback.setAnalyzeCommand(command, autoRun, clearBoard);
+        m_clearButton.setEnabled(autoRun);
         m_list.requestFocus();
     }
 
