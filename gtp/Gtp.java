@@ -22,12 +22,8 @@ public class Gtp
         }
     }    
 
-    public interface IOCallback
+    public interface StdErrCallback
     {
-        public void commandSent(String s);
-
-        public void receivedLine(String s);
-
         public void receivedStdErr(String s);
     }    
 
@@ -89,6 +85,11 @@ public class Gtp
         else
             command = command + " " + p.toString();
         return command;
+    }
+
+    public String getLastResponse()
+    {
+        return m_lastResponse;
     }
 
     public String getProgramCommand()
@@ -258,8 +259,6 @@ public class Gtp
         log(">> " + command);
         if (m_isProgramDead)
             throw new Error("Program is dead.");
-        if (m_callback != null)
-            m_callback.commandSent(command);
         m_answer = "";
         m_out.println(command);
         m_out.flush();
@@ -309,7 +308,7 @@ public class Gtp
         return sendCommand(getCommandPlay(move));
     }
 
-    public void setIOCallback(IOCallback callback)
+    public void setStdErrCallback(StdErrCallback callback)
     {
         m_callback = callback;
     }
@@ -373,16 +372,18 @@ public class Gtp
     private boolean m_log;
     private int m_protocolVersion = 1;
     private BufferedReader m_in;
-    private IOCallback m_callback;
+    private StdErrCallback m_callback;
     private PrintStream m_out;
     private Process m_process;
     private String m_answer;
+    private String m_lastResponse;
     private String m_program;
 
     private void readAnswer() throws Error
     {
         try
         {
+            m_lastResponse = "";
             String line = "";
             while (line.trim().equals(""))
             {
@@ -393,9 +394,8 @@ public class Gtp
                     throw new Error("Go program died.");
                 }
                 log("<< " + line);
-                if (m_callback != null)
-                    m_callback.receivedLine(line);
             }
+            m_lastResponse = line + "\n";
             if (! isAnswerLine(line))
                 throw new Error("Invalid response:\n\"" + line + "\"");
             boolean success = (line.charAt(0) == '=');
@@ -410,9 +410,8 @@ public class Gtp
                     throw new Error("Go program died.");
                 }
                 log("<< " + line);
-                if (m_callback != null)
-                    m_callback.receivedLine(line);
                 done = line.equals("");
+                m_lastResponse = m_lastResponse + line + "\n";
                 if (! done)
                     m_answer = m_answer + "\n" + line;
             }

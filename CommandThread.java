@@ -12,9 +12,10 @@ import gtp.*;
 class CommandThread
     extends Thread
 {
-    public CommandThread(Gtp gtp)
+    public CommandThread(Gtp gtp, GtpShell gtpShell)
     {
         m_gtp = gtp;
+        m_gtpShell = gtpShell;
     }
     
     /** Get answer to asynchronous command.
@@ -45,6 +46,7 @@ class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(m_commandInProgress);
         m_commandInProgress = false;
+        m_gtpShell.receivedResponse(m_gtp.getLastResponse());
         return m_exception;
     }
     
@@ -106,6 +108,7 @@ class CommandThread
             m_command = command;
             m_callback = callback;
             m_commandInProgress = true;
+            m_gtpShell.sentCommand(command);
             notifyAll();
         }
     }
@@ -114,7 +117,10 @@ class CommandThread
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        return m_gtp.sendCommand(command);
+        m_gtpShell.sentCommand(command);
+        String answer = m_gtp.sendCommand(command);
+        m_gtpShell.receivedResponse(m_gtp.getLastResponse());
+        return answer;
     }
 
     public String sendCommand(String command, long timeout) throws Gtp.Error
@@ -148,6 +154,7 @@ class CommandThread
     private boolean m_commandInProgress;
     private Gtp m_gtp;
     private Gtp.Error m_exception;
+    private GtpShell m_gtpShell;
     private static JFrame m_mainFrame;
     private Runnable m_callback;
     private String m_command;

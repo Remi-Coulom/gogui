@@ -19,7 +19,7 @@ import utils.*;
 class GoGui
     extends JFrame
     implements ActionListener, AnalyzeCommand.Callback, Board.Listener,
-               Gtp.IOCallback, GtpShell.Callback, WindowListener
+               Gtp.StdErrCallback, GtpShell.Callback, WindowListener
 {
     GoGui(String program, int size, String file, int move,
           String analyzeCommand, boolean gtpShell, String time,
@@ -33,12 +33,16 @@ class GoGui
         m_computerNoneOption = computerNone;
         m_verbose = verbose;
 
-        addWindowListener(this);
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setIconImage(new GoIcon());
-        m_menuBars = new MenuBars(this);
-        m_menuBars.selectBoardSizeItem(m_boardSize);
-        setJMenuBar(m_menuBars.getNormalMenu());
+        if (program != null && ! program.equals(""))
+        {
+            // Must be created before m_gtp (stderr callback of Gtp!)
+            m_gtpShell = new GtpShell(null, "GoGui", this);
+            Gtp gtp = new Gtp(program, m_verbose);
+            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
+            gtp.setStdErrCallback(this);
+            m_commandThread = new CommandThread(gtp, m_gtpShell);
+            m_commandThread.start();
+        }
 
         Container contentPane = getContentPane();        
         m_toolBar = new ToolBar(this, analyzeCommand, this);
@@ -62,20 +66,16 @@ class GoGui
         infoPanel.add(createStatusBar());
         contentPane.add(infoPanel, BorderLayout.SOUTH);
 
-        if (program != null && ! program.equals(""))
-        {
-            // Must be created before m_gtp (stderr callback of Gtp!)
-            m_gtpShell = new GtpShell(null, "GoGui", this);
-            Gtp gtp = new Gtp(program, m_verbose);
-            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
-            gtp.setIOCallback(this);
-            m_commandThread = new CommandThread(gtp);
-            m_commandThread.start();
-        }
-        else
-        {
+        addWindowListener(this);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setIconImage(new GoIcon());
+        m_menuBars = new MenuBars(this);
+        m_menuBars.selectBoardSizeItem(m_boardSize);
+        setJMenuBar(m_menuBars.getNormalMenu());
+
+        if (program == null || program.equals(""))
             m_toolBar.disableComputerButtons();
-        }
+
         pack();
         setVisible(true);
         ++m_instanceCount;
@@ -198,13 +198,6 @@ class GoGui
         clearStatus();
     }
 
-    public void commandSent(String s)
-    {
-        assert(m_gtpShell != null);
-        Runnable r = new UpdateGtpShellCommand(m_gtpShell, s);
-        SwingUtilities.invokeLater(r);
-    }
-    
     public void fieldClicked(board.Point p)
     {
         if (m_commandInProgress)
@@ -316,19 +309,20 @@ class GoGui
         }
     }
 
-    public void receivedLine(String s)
-    {
-        assert(m_gtpShell != null);
-        assert(s != null);
-        Runnable r = new UpdateGtpShellAnswer(m_gtpShell, s);
-        SwingUtilities.invokeLater(r);
-    }
-
     public void receivedStdErr(String s)
     {
         assert(m_gtpShell != null);
         Runnable r = new UpdateGtpShellStdErr(m_gtpShell, s);
-        SwingUtilities.invokeLater(r);
+        try
+        {
+            SwingUtilities.invokeAndWait(r);
+        }
+        catch (InterruptedException e)
+        {
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+        }
     }
 
     public boolean sendGtpCommand(String command) throws Gtp.Error
@@ -404,40 +398,6 @@ class GoGui
 
     public void windowOpened(WindowEvent e)
     {
-    }
-
-    private static class UpdateGtpShellAnswer implements Runnable
-    {
-        public UpdateGtpShellAnswer(GtpShell gtpShell, String answer)
-        {
-            m_gtpShell = gtpShell;
-            m_answer = new String(answer);
-        }
-
-        public void run()
-        {
-            m_gtpShell.receivedLine(m_answer);
-        }
-
-        private String m_answer;
-        private GtpShell m_gtpShell;
-    }
-
-    private static class UpdateGtpShellCommand implements Runnable
-    {
-        public UpdateGtpShellCommand(GtpShell gtpShell, String command)
-        {
-            m_gtpShell = gtpShell;
-            m_command = new String(command);
-        }
-
-        public void run()
-        {
-            m_gtpShell.sentCommand(m_command);
-        }
-
-        private String m_command;
-        private GtpShell m_gtpShell;
     }
 
     private static class UpdateGtpShellStdErr implements Runnable

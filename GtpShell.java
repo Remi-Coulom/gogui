@@ -30,15 +30,15 @@ class GtpShellText
         Style error = addStyle("error", def);
         StyleConstants.setForeground(error, Color.red);
         Style output = addStyle("output", def);
-        StyleConstants.setForeground(output, Color.blue);
-        Style comment = addStyle("comment", def);
-        StyleConstants.setForeground(comment, Color.green);
+        StyleConstants.setBold(output, true);
+        Style log = addStyle("log", def);
+        StyleConstants.setForeground(log, new Color(0.5f, 0.5f, 0.5f));
         setEditable(false);
     }
 
     public void appendComment(String text)
     {
-        appendStyledText(text, "comment");
+        appendStyledText(text, "log");
     }
 
     public void appendError(String text)
@@ -49,6 +49,11 @@ class GtpShellText
     public void appendInput(String text)
     {
         appendStyledText(text, null);
+    }
+
+    public void appendLog(String text)
+    {
+        appendStyledText(text, "log");
     }
 
     public void appendOutput(String text)
@@ -194,19 +199,21 @@ public class GtpShell
         }
     }
 
-    public void receivedLine(String line)
+    public void receivedResponse(String response)
     {
         assert(SwingUtilities.isEventDispatchThread());
-        m_log.append(line);
-        m_log.append("\n");
-        m_gtpShellText.appendInput(line + "\n");
+        m_log.append(response);
+        if (! response.equals("") && response.charAt(0) == '=')
+            m_gtpShellText.appendInput(response);
+        else
+            m_gtpShellText.appendError(response);
     }
     
     public void receivedStdErr(String s)
     {
         assert(SwingUtilities.isEventDispatchThread());
         m_log.append(s);
-        m_gtpShellText.appendError(s);
+        m_gtpShellText.appendLog(s);
     }
     
     public void toTop()
