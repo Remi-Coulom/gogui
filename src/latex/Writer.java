@@ -123,18 +123,45 @@ public class Writer
     private void printMoves()
     {
         m_out.println("\\setcounter{gomove}{0}");
+        boolean truncate = false;
         for (int i = 0; i < m_board.getNumberSavedMoves(); ++i)
         {
             Move move = m_board.getMove(i);
             Point point = move.getPoint();
             Color color = move.getColor();
-            if (point == null
-                || (i % 2 == 0 && color != Color.BLACK)
-                || (i % 2 == 1 && color != Color.WHITE))
-                break;
-            m_out.print("\\move");
-            printCoordinates(point);
-            m_out.print("\n");
+            if (! truncate)
+            {
+                if (point == null)
+                {
+                    m_out.println("% PSGO does not support pass moves");
+                    m_out.println("% Remaining moves:");
+                    truncate = true;
+                }
+                else if ((i % 2 == 0 && color != Color.BLACK)
+                         || (i % 2 == 1 && color != Color.WHITE))
+                {
+                    m_out.println("% PSGO does not support " +
+                                  "non-alternating colors");
+                    m_out.println("% Remaining moves:");
+                    truncate = true;
+                }
+            }
+            if (! truncate)
+            {
+                m_out.print("\\move");
+                printCoordinates(point);
+                m_out.print("\n");
+            }
+            else
+            {
+                m_out.print("% \\move");
+                printColor(color);
+                if (point != null)
+                    printCoordinates(point);
+                else
+                    m_out.print("{}{}");
+                m_out.print("\n");
+            }
         }
     }
 
