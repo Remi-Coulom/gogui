@@ -75,7 +75,7 @@ class TimeControl
         {
             movesLeft = timeRecord.m_movesLeft;
         }
-        return getTimeString((float)time, movesLeft);
+        return getTimeString((float)(time / 1000L), movesLeft);
     }
 
     /** If not in byoyomi movesLeft < 0 */
