@@ -1,0 +1,8 @@
+Source code documentation generation using Doxygen.
+
+Produces better source code documentation than Javadoc.
+Requirements:
+Doxygen 1.3.4 (other versions might work) http://www.doxygen.org
+Dot tool from Graphviz http://www.graphviz.org
+
+Run doxygen in this directory to generate the documentation.
