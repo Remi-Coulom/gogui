@@ -45,6 +45,10 @@
 	    before GUI is visible.
 	  </listitem>
 	  <listitem>
+	    Add network tools <application>GtpNet</application> and
+	    <application>NetGtp</application>.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>

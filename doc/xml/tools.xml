@@ -3,23 +3,12 @@
   <title>Tools</title>
 
   <para>
-    GoGui includes some tools, that provide a GTP interface and
+    GoGui includes some tools.
+    Some of the tools provide a GTP interface and
     can be used as the Go program command given to GoGui:
   </para>
 
   <variablelist>
-    <varlistentry>
-      <term>TwoGtp</term>
-      <listitem>
-        Adpater program for playing games between two Go programs
-	supporting GTP.
-	See
-	<xref linkend="reference-twogtp">
-	<citerefentry><refentrytitle>twogtp</refentrytitle></citerefentry>
-        </xref> 
-        for a complete reference.
-      </listitem>
-    </varlistentry>
     <varlistentry>
       <term>GmpToGtp</term>
       <listitem>
@@ -33,6 +22,49 @@
 	See
 	<xref linkend="reference-gmptogtp">
 	<citerefentry><refentrytitle>twogtp</refentrytitle></citerefentry>
+        </xref> 
+        for a complete reference.
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>NetGtp</term>
+      <listitem>
+        Connects to a Go program supporting GTP on a remote computer.
+	See
+	<xref linkend="reference-netgtp">
+	<citerefentry><refentrytitle>netgtp</refentrytitle></citerefentry>
+        </xref> 
+        for a complete reference.
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>TwoGtp</term>
+      <listitem>
+        Adpater program for playing games between two Go programs
+	supporting GTP.
+	See
+	<xref linkend="reference-twogtp">
+	<citerefentry><refentrytitle>twogtp</refentrytitle></citerefentry>
+        </xref> 
+        for a complete reference.
+      </listitem>
+    </varlistentry>
+  </variablelist>
+
+  <para>
+    The other tools are:
+  </para>  
+
+  <variablelist>
+    <varlistentry>
+      <term>GtpNet</term>
+      <listitem>
+        Runs a Go program supporting GTP and connects it input and output
+	to a listen socket on the local computer so that other programs
+	can connect to it from the network.
+	See
+	<xref linkend="reference-gtpnet">
+	<citerefentry><refentrytitle>gtpnet</refentrytitle></citerefentry>
         </xref> 
         for a complete reference.
       </listitem>

@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # Add -ea option to enable assertions for testing
-java -ea -jar gogui.jar "$@"
+java -jar gtpnet.jar "$@"
