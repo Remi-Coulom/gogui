@@ -1198,7 +1198,18 @@ class GoGui
         else
         {
             if (m_commandThread != null && ! m_commandThread.isProgramDead())
+            {
+                // Some programs do not handle closing the GTP stream
+                // correctly, so we send a quit before
+                try
+                {
+                    m_commandThread.sendCommand("quit");
+                }
+                catch (Gtp.Error e)
+                {
+                }
                 m_commandThread.close();
+            }
         }
         if (m_gtpShell != null)
             m_gtpShell.saveHistory();
