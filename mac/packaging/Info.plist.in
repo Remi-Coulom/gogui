@@ -37,7 +37,7 @@
 <string>GoGui</string>
 
 <key>CFBundleVersion</key>
-<string>0.7pre1.x</string>
+<string>@VERSION@</string>
 
 <key>CFBundlePackageType</key>
 <string>APPL</string>

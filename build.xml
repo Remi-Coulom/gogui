@@ -139,6 +139,7 @@ installation directory.
  lib/*.jar,
  mac/packaging/GoGui.icns,
  mac/packaging/Info.plist,
+ mac/packaging/Info.plist.in,
  mac/packaging/PkgInfo,
  mac/src/specialmac/RegisterSpecialMacHandler.java,
  mac/src/specialmac/RegisterSpecialMacHandler.class,
@@ -557,6 +558,11 @@ installation directory.
  file="doc/xml/version.xml.in"
  tofile="doc/xml/version.xml" overwrite="true"/>
 <replace file="doc/xml/version.xml" token="@VERSION@" value="${version}"/>
+<copy
+ file="mac/packaging/Info.plist.in"
+ tofile="mac/packaging/Info.plist" overwrite="true"/>
+<replace file="mac/packaging/Info.plist" token="@VERSION@"
+ value="${version}"/>
 </target>
 
 <target name="versionCheckUptodate">
