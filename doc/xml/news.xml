@@ -29,7 +29,7 @@ command.
 Use key accelerators more similar to existing UI style guides.
 </listitem>
 <listitem>
-Game scan be saved in LaTex format usinf psgo.sty.
+Games can be saved in LaTex format usinf psgo.sty.
 Standalone converter <command>sgftotex</command>.
 </listitem>
 <listitem>
