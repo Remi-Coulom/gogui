@@ -128,7 +128,7 @@ dist: all docsrc
 	-rm -rf $(patsubst %.jar, build/%, $(JAR))
 
 docsrc:
-	javadoc -sourcepath src -d docsrc -source 1.4 $(PACKAGES)
+	javadoc -sourcepath src -d docsrc -source 1.4 -classpath comm.jar $(PACKAGES)
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
 gogui_debug: doc/html/index.html $(IMAGES) $(shell cat build/files-gogui.txt)
