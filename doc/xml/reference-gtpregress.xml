@@ -14,6 +14,8 @@
     <cmdsynopsis>
       <command>gtpregress</command>
       <arg><option>-help</option></arg>
+      <arg><option>-output</option> <replaceable>directory</replaceable></arg>
+      <arg><option>-version</option></arg>
       <arg choice="plain"><replaceable>program</replaceable></arg>
       <arg choice="plain" rep="repeat">
         <replaceable>test.tst</replaceable>
@@ -63,6 +65,23 @@
 	</term>
 	<listitem>
 	  Display help and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-output</option> <replaceable>directory</replaceable>
+	</term>
+	<listitem>
+	  Write output files to
+	  <filename><replaceable>directory</replaceable></filename>.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-version</option>
+	</term>
+	<listitem>
+	  Print version and exit.
 	</listitem>
       </varlistentry>
     </variablelist>

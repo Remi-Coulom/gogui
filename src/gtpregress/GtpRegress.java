@@ -20,10 +20,21 @@ import version.*;
 class GtpRegress
     implements Gtp.IOCallback
 {
-    GtpRegress(String program, String[] tests)
+    GtpRegress(String program, String[] tests, String output)
         throws Exception
     {
         m_program = program;
+        m_prefix = "";
+        if (! output.equals(""))
+        {
+            File file = new File(output);
+            if (! file.exists())
+                throw new Exception("Directory " + output
+                                    + " does not exists");
+            if (! file.isDirectory())
+                throw new Exception("Not a directory: " + output);
+            m_prefix = output + File.separator;
+        }
         for (int i = 0; i < tests.length; ++i)
             runTest(tests[i]);
         writeSummary();
@@ -35,6 +46,7 @@ class GtpRegress
         {
             String options[] = {
                 "help",
+                "output:",
                 "version"
             };
             Options opt = new Options(args, options);
@@ -48,6 +60,7 @@ class GtpRegress
                 System.out.println("GtpRegress " + Version.m_version);
                 System.exit(0);
             }
+            String output = opt.getString("output", "");
             Vector arguments = opt.getArguments();
             int size = arguments.size();
             if (size < 2)
@@ -59,7 +72,7 @@ class GtpRegress
             String tests[] = new String[size - 1];
             for (int i = 0; i <  size - 1; ++i)
                 tests[i] = (String)arguments.get(i + 1);
-            new GtpRegress(program, tests);
+            new GtpRegress(program, tests, output);
         }
         catch (Error e)
         {
@@ -189,7 +202,13 @@ class GtpRegress
 
     private String m_outFileName;
 
+    private String m_outFileRelativeName;
+
+    private String m_prefix;
+
     private String m_program;
+
+    private String m_relativePath;
 
     private Vector m_tests = new Vector();
 
@@ -438,7 +457,9 @@ class GtpRegress
     private void initOutFile()
         throws Exception
     {
-        m_outFileName = FileUtils.replaceExtension(m_file, "tst", "out.html");
+        m_outFileRelativeName =
+            FileUtils.replaceExtension(m_file, "tst", "out.html");
+        m_outFileName = m_prefix + m_outFileRelativeName;
         File file = new File(m_outFileName);
         m_out = new PrintStream(new FileOutputStream(file));
         m_out.print("<html>\n" +
@@ -470,7 +491,10 @@ class GtpRegress
         try
         {
             if (filename.equals(""))
-                filename = FileUtils.replaceExtension(m_file, "tst", "dat");
+                filename = m_prefix
+                    + FileUtils.replaceExtension(m_file, "tst", "dat");
+            else
+                filename = m_prefix + filename;
             File file = new File(filename);
             if (! m_dataFiles.contains(file))
             {
@@ -507,7 +531,7 @@ class GtpRegress
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append(line.substring(0, matcher.start()));
                 stringBuffer.append("<a href=\"");
-                stringBuffer.append(sgf);
+                stringBuffer.append(m_relativePath + sgf);
                 stringBuffer.append("\">");
                 stringBuffer.append(sgf);
                 stringBuffer.append("</a>");
@@ -598,6 +622,8 @@ class GtpRegress
         m_dataFiles.clear();
         m_otherErrors = 0;
         m_file = new File(test);
+        m_relativePath =
+            FileUtils.getRelativePath(new File(m_prefix), m_file);
         FileReader fileReader = new FileReader(m_file);
         BufferedReader reader = new BufferedReader(fileReader);
         initOutFile();
@@ -653,7 +679,7 @@ class GtpRegress
     private void writeSummary()
         throws FileNotFoundException
     {
-        File file = new File("index.html");
+        File file = new File(m_prefix + "index.html");
         PrintStream out = new PrintStream(new FileOutputStream(file));
         String host = "?";
         try
@@ -756,7 +782,8 @@ class GtpRegress
         throws FileNotFoundException
     {
         File file =
-            new File(FileUtils.replaceExtension(m_file, "tst", "html"));
+            new File(m_prefix
+                     + FileUtils.replaceExtension(m_file, "tst", "html"));
         PrintStream out = new PrintStream(new FileOutputStream(file));
         out.print("<html>\n" +
                   "<head>\n" +
@@ -769,7 +796,7 @@ class GtpRegress
                   "<table>\n");
         writeInfo(out);
         out.print("<tr><th align=\"left\">Output</th><td><a href=\""
-                  + m_outFileName + "\">"
+                  + m_outFileRelativeName + "\">"
                   + FileUtils.replaceExtension(m_file, "tst", "out")
                   + "</a></td></tr>\n" +
                   "</table>\n" +
@@ -837,15 +864,15 @@ class GtpRegress
             String lastSgf = "";
             if (t.m_lastSgf != null)
             {
-                lastSgf = "<a href=\"" + t.m_lastSgf + "\">" + t.m_lastSgf
-                    + "</a>";
+                lastSgf = "<a href=\"" + m_relativePath + t.m_lastSgf + "\">"
+                    + t.m_lastSgf + "</a>";
                 if (t.m_lastSgfMove != -1)
                     lastSgf += "&nbsp;" + t.m_lastSgfMove;
             }
             String command = StringUtils.replace(t.m_command, " ", "&nbsp;");
             out.print("<tr>\n" +
-                      "<td align=\"center\"><a href=\"" + m_outFileName + "#"
-                      + t.m_id + "\">" + t.m_id + "</a></td>\n" +
+                      "<td align=\"center\"><a href=\"" + m_outFileRelativeName
+                      + "#" + t.m_id + "\">" + t.m_id + "</a></td>\n" +
                       "<td align=\"center\" bgcolor=\"" + statusColor
                       + "\">" + status + "</td>\n" +
                       "<td>" + command + "</td>\n" +
