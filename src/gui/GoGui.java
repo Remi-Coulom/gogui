@@ -1428,7 +1428,7 @@ class GoGui
         if (size != m_boardSize)
         {
             m_boardSize = size;
-            m_board.initSize(size);
+            m_guiBoard.initSize(size);
             pack();
         }
         m_board.newGame();

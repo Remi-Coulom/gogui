@@ -29,7 +29,7 @@ public class Board
     {
         m_board = board;
         setPreferredFieldSize();
-        initSize();
+        initSize(m_board.getSize());
     }
 
     public void clearAll()
@@ -72,12 +72,12 @@ public class Board
         return m_preferredFieldSize;
     }
 
-    public void initSize()
+    public void initSize(int size)
     {
+        m_board.initSize(size);
         m_lastMove = null;
-        m_field = new Field[m_board.getSize()][m_board.getSize()];
+        m_field = new Field[size][size];
         removeAll();
-        int size = m_board.getSize();
         setLayout(new GridLayout(size + 2, size + 2));
         addColumnLabels();
         for (int y = size - 1; y >= 0; --y)
