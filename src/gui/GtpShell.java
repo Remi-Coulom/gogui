@@ -759,7 +759,7 @@ public class GtpShell
     {
         JMenu menu = new JMenu("Settings");
         menu.setMnemonic(KeyEvent.VK_S);
-        m_commandCompletion = new JCheckBoxMenuItem("Command completion");
+        m_commandCompletion = new JCheckBoxMenuItem("Popup completions");
         m_commandCompletion.setSelected(! m_disableCompletions);
         addMenuItem(menu, m_commandCompletion, KeyEvent.VK_C,
                     "command-completion");
@@ -824,8 +824,6 @@ public class GtpShell
 
     private void popupCompletions()
     {
-        if (m_disableCompletions)
-            return;
         String text = m_textField.getText();
         text = text.replaceAll("^ *", "");
         Vector completions = new Vector(128, 128);
@@ -836,6 +834,8 @@ public class GtpShell
                 completions.add(c);
         }
         addAllCompletions(completions);
+        if (m_disableCompletions)
+            return;
         if (text.length() > 0)
             if (completions.size() > 1
                 || (completions.size() == 1
