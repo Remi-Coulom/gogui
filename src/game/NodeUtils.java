@@ -189,7 +189,7 @@ public class NodeUtils
     }
 
     /** Return next variation before this node. */
-    public static Node getNextVariationBackward(Node node)
+    public static Node getNextEarlierVariation(Node node)
     {
         Node child = node;
         node = node.getFather();
@@ -236,7 +236,7 @@ public class NodeUtils
     }
 
     /** Return previous variation before this node */
-    public static Node getPreviousVariationBackward(Node node)
+    public static Node getPreviousEarlierVariation(Node node)
     {
         Node child = node;
         node = node.getFather();
@@ -291,22 +291,6 @@ public class NodeUtils
         return result.toString();
     }
 
-    public static boolean hasNextEarlierVariation(Node node)
-    {
-        node = node.getFather();
-        if (node == null)
-            return false;
-        return (getNextVariation(node) != null);
-    }
-
-    public static boolean hasPreviousEarlierVariation(Node node)
-    {
-        node = node.getFather();
-        if (node == null)
-            return false;
-        return (getPreviousVariation(node) != null);
-    }
-
     public static boolean isInMainVariation(Node node)
     {
         while (node.getFather() != null)
@@ -333,7 +317,7 @@ public class NodeUtils
         Node child = node.getChild();
         if (child != null)
             return child;
-        return getNextVariationBackward(node);
+        return getNextEarlierVariation(node);
     }
 
     /** Get next node for iteration in subtree. */

@@ -311,13 +311,13 @@ public class MenuBar
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
         boolean hasNextEarlierVariation =
-            NodeUtils.hasNextEarlierVariation(node);
+            (NodeUtils.getNextEarlierVariation(node) != null);
         boolean hasPrevEarlierVariation =
-            NodeUtils.hasPreviousEarlierVariation(node);
+            (NodeUtils.getPreviousEarlierVariation(node) != null);
         boolean hasPrevVariation =
             (NodeUtils.getPreviousVariation(node) != null);
         boolean hasPrevVariationBackward =
-            (NodeUtils.getPreviousVariationBackward(node) != null);
+            (NodeUtils.getPreviousEarlierVariation(node) != null);
         boolean isInMain = NodeUtils.isInMainVariation(node);
         boolean treeHasVariations = gameTree.hasVariations();
         m_itemBeginning.setEnabled(hasFather);
@@ -330,8 +330,8 @@ public class MenuBar
         m_itemGotoVar.setEnabled(hasFather || hasChildren);
         m_itemNextVariation.setEnabled(hasNextVariation);
         m_itemPreviousVariation.setEnabled(hasPrevVariation);
-        m_itemNextVariationBackward.setEnabled(hasNextEarlierVariation);
-        m_itemPreviousVariationBackward.setEnabled(hasPrevEarlierVariation);
+        m_itemNextEarlierVariation.setEnabled(hasNextEarlierVariation);
+        m_itemPreviousEarlierBackward.setEnabled(hasPrevEarlierVariation);
         m_itemBackToMainVar.setEnabled(! isInMain);
         m_itemTruncate.setEnabled(hasFather);
         m_itemMakeMainVar.setEnabled(! isInMain);
@@ -444,11 +444,11 @@ public class MenuBar
 
     private JMenuItem m_itemNextVariation;
 
-    private JMenuItem m_itemNextVariationBackward;
+    private JMenuItem m_itemNextEarlierVariation;
 
     private JMenuItem m_itemPreviousVariation;
 
-    private JMenuItem m_itemPreviousVariationBackward;
+    private JMenuItem m_itemPreviousEarlierBackward;
 
     private JMenuItem m_itemSetupBlack;
 
@@ -706,6 +706,7 @@ public class MenuBar
 
     private JMenu createVariationMenu()
     {
+        int shiftMask = java.awt.event.InputEvent.SHIFT_MASK;
         JMenu menu = createMenu("Variation", KeyEvent.VK_V);
         m_itemNextVariation =
             addMenuItem(menu, "Next Variation", KeyEvent.VK_N,
@@ -715,12 +716,14 @@ public class MenuBar
             addMenuItem(menu, "Previous Variation", KeyEvent.VK_P,
                         KeyEvent.VK_UP, m_shortcutKeyMask,
                         "previous-variation");
-        m_itemNextVariationBackward =
+        m_itemNextEarlierVariation =
             addMenuItem(menu, "Next Earlier Variation", KeyEvent.VK_E,
-                        "next-variation-backward");
-        m_itemPreviousVariationBackward =
+                        KeyEvent.VK_DOWN, m_shortcutKeyMask | shiftMask,
+                        "next-earlier-variation");
+        m_itemPreviousEarlierBackward =
             addMenuItem(menu, "Previous Earlier Variation", KeyEvent.VK_R,
-                        "previous-variation");
+                        KeyEvent.VK_UP, m_shortcutKeyMask | shiftMask,
+                        "previous-earlier-variation");
         m_itemBackToMainVar =
             addMenuItem(menu, "Back to Main Variation", KeyEvent.VK_B,
                         KeyEvent.VK_M, m_shortcutKeyMask,

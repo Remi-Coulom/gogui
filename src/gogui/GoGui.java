@@ -243,8 +243,8 @@ class GoGui
             cbMakeMainVariation();
         else if (command.equals("next-variation"))
             cbNextVariation();
-        else if (command.equals("next-variation-backward"))
-            cbNextVariationBackward();
+        else if (command.equals("next-earlier-variation"))
+            cbNextEarlierVariation();
         else if (command.equals("new-game"))
             cbNewGame(m_boardSize);
         else if (command.equals("open"))
@@ -257,8 +257,8 @@ class GoGui
             cbPlay();
         else if (command.equals("previous-variation"))
             cbPreviousVariation();
-        else if (command.equals("previous-variation-backward"))
-            cbPreviousVariationBackward();
+        else if (command.equals("previous-earlier-variation"))
+            cbPreviousEarlierVariation();
         else if (command.equals("print"))
             cbPrint();
         else if (command.equals("save"))
@@ -1321,9 +1321,9 @@ class GoGui
             gotoNode(node);
     }
 
-    private void cbNextVariationBackward()
+    private void cbNextEarlierVariation()
     {
-        Node node = NodeUtils.getNextVariationBackward(m_currentNode);
+        Node node = NodeUtils.getNextEarlierVariation(m_currentNode);
         if (node != null)
             gotoNode(node);
     }
@@ -1372,9 +1372,9 @@ class GoGui
             gotoNode(node);
     }
 
-    private void cbPreviousVariationBackward()
+    private void cbPreviousEarlierVariation()
     {
-        Node node = NodeUtils.getPreviousVariationBackward(m_currentNode);
+        Node node = NodeUtils.getPreviousEarlierVariation(m_currentNode);
         if (node != null)
             gotoNode(node);
     }
