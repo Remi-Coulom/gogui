@@ -12,6 +12,8 @@ Game tree viewer should allow to hide variations and start with all
 side variations hidden to allow loading large SGF trees like
 GNU Go's SGF traces.
 
+Implement search in node comments.
+
 SquareLayout should be used in gui.Board
 
 New analyze return type that automatically translates numbers (labels?)
