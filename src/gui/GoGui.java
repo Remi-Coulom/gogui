@@ -1934,7 +1934,6 @@ class GoGui
         Dimension size = component.getSize();
         String value = Integer.toString(location.x) + " " + location.y
             + " " + size.width + " " + size.height;
-        System.err.println("XXX saveSize " + name + " " + value);
         m_prefs.setString(name, value);
     }
 
