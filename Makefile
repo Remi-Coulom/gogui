@@ -34,6 +34,7 @@ PACKAGES= \
   netgtp \
   sgf \
   sgftotex \
+  twogtp \
   utils \
   version
 
