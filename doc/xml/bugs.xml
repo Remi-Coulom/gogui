@@ -2,13 +2,12 @@
 <title>Bugs</title>
 
 <section>
-<title>Going to beginning or end of game is very slow on Windows</title>
+<title>Going to beginning or end of game is very slow</title>
 <para>
 There are no GTP commands for multiple undo or play, so every undo or
 move has to be transmitted separately.
-This can result in a lot of GTP commands when going to the beginning
-or end of a long game and unfortunately inter-process communication via
-pipes is slow on Windows.
+Also some Go programs (like GNU Go) have slow implementations of the play and
+undo commands.
 </para>
 </section>
 
