@@ -127,13 +127,13 @@ public class GtpDisplay
         else if (cmd.equals("name"))
             status = cmdName(response);
         else if (cmd.equals("place_free_handicap"))
-            status = cmdUnknown(response);
+            status = cmdPlaceFreeHandicap(cmdArray, response);
         else if (cmd.equals("play"))
             status = cmdPlay(cmdArray, response);
         else if (cmd.equals("protocol_version"))
             response.append("2");
         else if (cmd.equals("set_free_handicap"))
-            status = cmdUnknown(response);
+            status = cmdSetFreeHandicap(cmdArray, response);
         else if (cmd.equals("version"))
             status = cmdVersion(response);
         else if (cmd.equals("undo"))
