@@ -11,12 +11,14 @@ import java.io.*;
 import java.util.*;
 import game.*;
 import go.*;
+import utils.ErrorMessage;
 
 //----------------------------------------------------------------------------
 
 public class Reader
 {
-    public static class Error extends Exception
+    public static class Error
+        extends ErrorMessage
     {
         public Error(String s)
         {
@@ -37,7 +39,7 @@ public class Reader
             m_name = name;
             m_tokenizer.nextToken();
             if (m_tokenizer.ttype != '(')
-                throw getError("No root tree found.");
+                throw getError("No root tree found");
             Node root = new Node();
             Node node = readNext(root, true);
             while (node != null)
@@ -52,11 +54,15 @@ public class Reader
         }
         catch (FileNotFoundException e)
         {
-            throw new Error("File not found.");
+            throw new Error("File not found");
         }
         catch (IOException e)
         {
-            throw new Error("Error while reading file.");
+            throw new Error("Error while reading file");
+        }
+        catch (OutOfMemoryError e)
+        {
+            throw new Error("Game tree to large");
         }
     }
 
@@ -130,7 +136,7 @@ public class Reader
         else if (s.equals("w") || s.equals("2"))
             c = Color.WHITE;
         else
-            throw getError("Invalid color value.");
+            throw getError("Invalid color value");
         return c;
     }
 
@@ -143,7 +149,7 @@ public class Reader
         }
         catch (NumberFormatException e)
         {
-            throw getError("Floating point number expected.");
+            throw getError("Floating point number expected");
         }
         return f;
     }
@@ -157,7 +163,7 @@ public class Reader
         }
         catch (NumberFormatException e)
         {
-            throw getError("Number expected.");
+            throw getError("Number expected");
         }
         return i;
     }
@@ -214,7 +220,7 @@ public class Reader
             while ((s = readValue()) != null)
                 values.add(s);
             if (values.size() == 0)
-                throw getError("Property '" + p + "' has no value.");
+                throw getError("Property '" + p + "' has no value");
             String v = (String)values.get(0);
             if (p.equals("AB"))
             {
@@ -223,7 +229,7 @@ public class Reader
             }
             else if (p.equals("AE"))
             {
-                throw getError("Add empty not supported.");
+                throw getError("Add empty not supported");
             }
             else if (p.equals("AW"))
             {
@@ -256,7 +262,7 @@ public class Reader
                 // Value should be 1, but sgf2misc produces Go files
                 // with empty value
                 if (! v.equals("1") && ! v.equals(""))
-                    throw getError("Not a Go game.");
+                    throw getError("Not a Go game");
             }
             else if (p.equals("HA"))
                 m_gameInformation.m_handicap = Integer.parseInt(v);
@@ -295,7 +301,7 @@ public class Reader
             else if (p.equals("SZ"))
             {
                 if (! isRoot)
-                    throw getError("Size property outside root node.");
+                    throw getError("Size property outside root node");
                 m_gameInformation.m_boardSize = parseInt(v);
             }
             else if (p.equals("W"))
@@ -335,7 +341,7 @@ public class Reader
         {
             int c = m_in.read();
             if (c < 0)
-                throw getError("Property value incomplete.");
+                throw getError("Property value incomplete");
             if (! quoted && c == ']')
                 break;
             quoted = (c == '\\');
