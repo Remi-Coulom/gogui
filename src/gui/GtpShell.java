@@ -234,6 +234,11 @@ public class GtpShell
         }
     }
 
+    public void setInputEnabled(boolean enabled)
+    {
+        m_comboBox.setEnabled(enabled);
+    }
+
     public void toTop()
     {
         setVisible(true);

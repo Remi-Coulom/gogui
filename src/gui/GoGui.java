@@ -564,7 +564,7 @@ class GoGui
         setBoardCursor(Cursor.WAIT_CURSOR);
         m_menuBars.setCommandInProgress(true);
         m_toolBar.enableAll(false, null);
-        m_gtpShell.setEnabled(false);
+        m_gtpShell.setInputEnabled(false);
         m_commandInProgress = true;
     }
 
@@ -1103,7 +1103,7 @@ class GoGui
         m_menuBars.setCommandInProgress(false);
         m_toolBar.enableAll(true, m_board);
         if (m_gtpShell != null)
-            m_gtpShell.setEnabled(true);
+            m_gtpShell.setInputEnabled(true);
         m_commandInProgress = false;
         if (m_analyzeRequestPoint)
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
