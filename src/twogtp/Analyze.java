@@ -34,6 +34,8 @@ public class Analyze
 
     private int m_games;
 
+    private int m_gamesUsed;
+
     private int m_lineNumber;
 
     private String m_black = "Black";
@@ -42,9 +44,15 @@ public class Analyze
 
     private Vector m_entries = new Vector(128, 128);
 
+    private Statistics m_length = new Statistics();
+
     private Statistics m_winBlack = new Statistics();
 
     private Statistics m_winWhite = new Statistics();
+
+    private Statistics m_cpuBlack = new Statistics();
+
+    private Statistics m_cpuWhite = new Statistics();
 
     private Histogram m_histoBlack = new Histogram(-400, 400, 10);
 
@@ -67,12 +75,16 @@ public class Analyze
                 ++m_duplicates;
                 continue;
             }
+            ++m_gamesUsed;
             double resultBlack = e.parseResultBlack();
             m_histoBlack.addValue(resultBlack);
             m_winBlack.addValue(resultBlack > 0 ? 1 : 0);
             double resultWhite = e.parseResultWhite();
             m_histoWhite.addValue(resultWhite);
             m_winWhite.addValue(resultWhite > 0 ? 1 : 0);
+            m_cpuBlack.addValue(e.m_cpuBlack);
+            m_cpuWhite.addValue(e.m_cpuWhite);
+            m_length.addValue(e.m_length);
         }
     }
 
@@ -176,6 +188,8 @@ public class Analyze
                   + m_errors + "</td></tr>\n" +
                   "<tr><th align=\"left\">Duplicates:</th><td align=\"right\">"
                   + m_duplicates + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Games used:</th><td align=\"right\">"
+                  + m_gamesUsed + "</td></tr>\n" +
                   "<tr><th align=\"left\">Black score["
                   + m_black + "]:</th><td align=\"right\">"
                   + format.format(m_histoBlack.getMean()) + " (&plusmn;"
@@ -195,6 +209,21 @@ public class Analyze
                   + m_white + "]:</th><td align=\"right\">"
                   + format.format(m_winWhite.getMean() * 100) + "% (&plusmn;"
                   + format.format(m_winWhite.getErrorMean() * 100)
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">Game length:</th>"
+                  + "<td align=\"right\">"
+                  + format.format(m_length.getMean()) + " (&plusmn;"
+                  + format.format(m_length.getErrorMean())
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">CpuTime Black:</th>"
+                  + "<td align=\"right\">"
+                  + format.format(m_cpuBlack.getMean()) + " (&plusmn;"
+                  + format.format(m_cpuBlack.getErrorMean())
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">CpuTime White:</th>"
+                  + "<td align=\"right\">"
+                  + format.format(m_cpuWhite.getMean()) + " (&plusmn;"
+                  + format.format(m_cpuWhite.getErrorMean())
                   + ")</td></tr>\n" +
                   "</table>\n" +
                   "</small>\n" +
