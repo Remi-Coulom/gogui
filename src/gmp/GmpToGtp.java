@@ -241,6 +241,7 @@ class StdErrThread
                     for (int i = 0; i < len; ++i)
                         c[i] = buf[i];
                 }
+                sleep(100);
             }
         }
         catch (Exception e)

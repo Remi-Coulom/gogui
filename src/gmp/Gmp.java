@@ -557,7 +557,8 @@ class ReadThread
             m_outputBuffer[3] = makeCmdByte2(val);
             setChecksum();
             writeOutputBuffer();
-            m_status = STATUS_WAIT_OK;
+            if (cmd != Cmd.OK)
+                m_status = STATUS_WAIT_OK;
             return true;
         }
         catch (IOException e)
