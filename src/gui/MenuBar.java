@@ -276,6 +276,7 @@ class MenuBar
         m_itemGoto.setEnabled(hasFather || hasChildren);
         m_itemNextVariation.setEnabled(hasNextVariation);
         m_itemPreviousVariation.setEnabled(hasPreviousVariation);
+        m_itemBackToMainVar.setEnabled(! isInMain);
         m_itemTruncate.setEnabled(hasFather);
         m_itemMakeMainVar.setEnabled(! isInMain);
         m_itemKeepOnlyMainVar.setEnabled(isInMain && treeHasVariations);
@@ -332,6 +333,8 @@ class MenuBar
     private JMenuItem m_itemAbout;
 
     private JMenuItem m_itemAttachProgram;
+
+    private JMenuItem m_itemBackToMainVar;
 
     private JMenuItem m_itemBackward;
 
@@ -418,16 +421,16 @@ class MenuBar
         return addMenuItem(menu, item, mnemonic, command);
     }
 
-    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group, String label,
-                                   String command)
+    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group,
+                                   String label, String command)
     {
         JMenuItem item = new JRadioButtonMenuItem(label);
         group.add(item);
         return addMenuItem(menu, item, command);
     }
 
-    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group, String label,
-                                   int mnemonic, String command)
+    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group,
+                                   String label, int mnemonic, String command)
     {
         JMenuItem item = new JRadioButtonMenuItem(label);
         group.add(item);
@@ -615,11 +618,16 @@ class MenuBar
         JMenu menu = createMenu("Variation", KeyEvent.VK_V);
         m_itemNextVariation =
             addMenuItem(menu, "Next Variation", KeyEvent.VK_N,
-                        KeyEvent.VK_DOWN, m_shortcutKeyMask, "next-variation");
+                        KeyEvent.VK_DOWN, m_shortcutKeyMask,
+                        "next-variation");
         m_itemPreviousVariation =
             addMenuItem(menu, "Previous Variation", KeyEvent.VK_P,
                         KeyEvent.VK_UP, m_shortcutKeyMask,
                         "previous-variation");
+        m_itemBackToMainVar =
+            addMenuItem(menu, "Back to Main Variation", KeyEvent.VK_B,
+                        KeyEvent.VK_M, m_shortcutKeyMask,
+                        "back-to-main-variation");
         m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
                                         KeyEvent.VK_M, "make-main-variation");
         m_itemKeepOnlyMainVar = addMenuItem(menu,

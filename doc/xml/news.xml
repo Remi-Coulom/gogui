@@ -28,6 +28,11 @@ Fix bug that sometimes caused assertion when scoring.
 </listitem>
 <listitem>
 <simpara>
+New menu item "Back to Main Variation".
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other small fixes.
 </simpara>
 </listitem>

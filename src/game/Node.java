@@ -95,6 +95,15 @@ public class Node
         return moves;
     }
 
+    /** Go back to last node that was still in the main variation. */
+    public Node getBackToMainVariation()
+    {
+        Node node = this;
+        while (! node.isInMainVariation())
+            node = node.m_father;
+        return node;
+    }
+
     /** Child of main variation or null if no child */
     public Node getChild()
     {

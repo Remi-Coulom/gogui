@@ -158,6 +158,8 @@ class GoGui
             cbAllToFront();
         else if (command.equals("attach-program"))
             cbAttachProgram();
+        else if (command.equals("back-to-main-variation"))
+            cbBackToMainVar();
         else if (command.equals("backward"))
             cbBackward(1);
         else if (command.equals("backward-10"))
@@ -1017,6 +1019,12 @@ class GoGui
     {
         backward(m_currentNode.getDepth());
         boardChangedBegin(false, false);
+    }
+
+    private void cbBackToMainVar()
+    {
+        Node node = m_currentNode.getBackToMainVariation();
+        gotoNode(node);
     }
 
     private void cbBackward(int n)
