@@ -95,7 +95,7 @@ class GoGui
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtils.setGoIcon(this);
 
-        m_menuBar = new gui.MenuBar(this);
+        m_menuBar = new gogui.MenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setShowLastMove(m_prefs.getBool("show-last-move"));
@@ -742,7 +742,7 @@ class GoGui
 
     private JSplitPane m_splitPane;
 
-    private gui.MenuBar m_menuBar;
+    private gogui.MenuBar m_menuBar;
 
     private Node m_currentNode;
 

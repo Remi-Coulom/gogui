@@ -3,7 +3,7 @@
 // $Source$
 //----------------------------------------------------------------------------
 
-package gui;
+package gogui;
 
 import java.awt.*;
 import java.awt.event.*;
