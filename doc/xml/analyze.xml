@@ -27,7 +27,9 @@ type/label/command[/section[/scale]]
 <section>
 <title>Types</title>
 <para>
-The command type can be
+The command type determines what format the response is expected to be and
+how it is interpreted and displayed.
+It can be one of the following:
 
 <variablelist>
 
@@ -165,9 +167,9 @@ If it has multiple lines, a window will popup.
 The response of the command is a variation of moves
 containing points or passes.
 Text not containg points is ignored.
-The response is also displayed as a string.
 They will be displayed as numbered stones on the board,
 the current color to move is assumed to move first.
+Additionally the response is displayed as a string.
 </simpara>
 </listitem>
 </varlistentry>
@@ -217,7 +219,7 @@ Like <userinput>var</userinput>, but white is assumed to move first.
 <section>
 <title>Label</title>
 <para>
-The label to use for the menu.
+The label to use for this command in the menu.
 </para>
 </section>
 
@@ -256,8 +258,10 @@ Will be replaced by the a point selected by the user.
 <listitem>
 <simpara>
 Will be replaced by a list of points selected by the user.
-The list is finished by clicking on a field with the <keycap>Ctrl</keycap>
-key pressed.
+The points are selected by clicking on the board.
+The last point of the list is selected either by clicking with the
+<keycap>Ctrl</keycap> key pressed, double-clicking or using the right
+mouse button.
 </simpara>
 </listitem>
 </varlistentry>
@@ -278,6 +282,7 @@ Will be replaced by an argument entered by the user.
 <para>
 The response to the command is searched first until a single line
 containing the section name followed by a colon is found.
+The text following from the next line on is parsed as the actual response.
 </para>
 </section>
 
