@@ -750,7 +750,7 @@ class GoGui
                 else
                     showAnalyzeTextOutput(type, title, response);
             }
-            if (! statusContainsResponse)
+            if (! statusContainsResponse && type != AnalyzeCommand.PARAM)
                 showStatus(title);
             if (checkComputerMove)
                 checkComputerMove();
