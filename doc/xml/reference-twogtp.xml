@@ -27,6 +27,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-games</option> <replaceable>n</replaceable></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
 <arg><option>-loadsgf</option></arg>
+<arg><option>-observer</option> <replaceable>command</replaceable></arg>
 <arg><option>-openings</option> <replaceable>dir</replaceable></arg>
 <arg><option>-referee</option> <replaceable>command</replaceable></arg>
 <arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
@@ -62,7 +63,7 @@ supporting GTP (Go Text Protocol).
 </para>
 
 <para>
-An optional third GTP Go program can be used as a referee for observing the
+Optional observer and referee GTP Go programs can be used for observing the
 game and answering commands related to the final game score.
 <application>TwoGtp</application> forwards the following commands to all
 programs:
@@ -98,7 +99,8 @@ programs:
 </itemizedlist>
 
 The following commands are forwarded to the referee program, if existing,
-otherwise to first program that implements them (Black is tried first):
+otherwise to first player program that implements them
+(Black is tried first):
 
 <itemizedlist>
 <listitem>
@@ -114,7 +116,7 @@ otherwise to first program that implements them (Black is tried first):
 
 The commands <userinput>genmove_black</userinput> and
 <userinput>genmove_white</userinput> are forwarded only to the program of the
-corresponding color, the other program (and the referee) is informed about the
+corresponding color, the other programs are informed about the
 move with a <userinput>black</userinput> or <userinput>white</userinput>
 command.
 GTP extension commands implemented by exactly one of the programs are
@@ -277,6 +279,15 @@ See <option>-openings</option>.
 </varlistentry>
 
 <varlistentry>
+<term><option>-observer</option> <replaceable>command</replaceable></term>
+<listitem>
+<para>
+Command for observer program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><option>-openings</option> <replaceable>directory</replaceable></term>
 <listitem>
 <para>
@@ -401,6 +412,17 @@ Return a title for the current game consisting of the game number (if option
 <listitem>
 <para>
 Send command to black player.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<userinput>twogtp_observer <replaceable>command</replaceable></userinput>
+</term>
+<listitem>
+<para>
+Send command to observer program.
 </para>
 </listitem>
 </varlistentry>

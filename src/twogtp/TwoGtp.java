@@ -21,10 +21,11 @@ public class TwoGtp
     extends GtpServer
 {
     public TwoGtp(InputStream in, OutputStream out, String black,
-                  String white, String referee, int size, double komi,
-                  boolean isKomiFixed, int numberGames, boolean alternate,
-                  String sgfFile, boolean force, boolean verbose,
-                  boolean estimateScore, Openings openings, boolean loadsgf)
+                  String white, String referee, String observer, int size,
+                  double komi, boolean isKomiFixed, int numberGames,
+                  boolean alternate, String sgfFile, boolean force,
+                  boolean verbose, boolean estimateScore, Openings openings,
+                  boolean loadsgf)
         throws Exception
     {
         super(in, out, null);
@@ -47,6 +48,11 @@ public class TwoGtp
             m_referee = new Gtp(referee, verbose, null);
             m_referee.setLogPrefix("R");
         }
+        if (! observer.equals(""))
+        {
+            m_observer = new Gtp(observer, verbose, null);
+            m_observer.setLogPrefix("O");
+        }
         m_inconsistentState = false;
         m_black.queryProtocolVersion();
         m_white.queryProtocolVersion();
@@ -65,6 +71,12 @@ public class TwoGtp
             m_refereeVersion = getVersion(m_referee);        
             m_referee.querySupportedCommands();
             m_referee.queryInterruptSupport();
+        }        
+        if (m_observer != null)
+        {
+            m_observer.queryProtocolVersion();
+            m_observer.querySupportedCommands();
+            m_observer.queryInterruptSupport();
         }        
         m_size = size;
         m_komi = komi;
@@ -116,13 +128,16 @@ public class TwoGtp
     {
         m_black.close();
         m_white.close();
+        if (m_referee != null)
+            m_referee.close();
+        if (m_observer != null)
+            m_observer.close();
         m_black.waitForExit();
         m_white.waitForExit();
         if (m_referee != null)
-        {
-            m_referee.close();
             m_referee.waitForExit();
-        }
+        if (m_observer != null)
+            m_observer.waitForExit();
     }    
 
     /** Returns number of games left of -1 if no maximum set. */
@@ -156,6 +171,8 @@ public class TwoGtp
             status = twogtpColor(m_white, cmdLine, response);
         else if (cmd.equals("twogtp_referee"))
             status = twogtpReferee(cmdLine, response);
+        else if (cmd.equals("twogtp_observer"))
+            status = twogtpObserver(cmdLine, response);
         else if (cmd.equals("quit"))
             status = sendBoth(cmdLine, response, false, false);
         else if (cmd.equals("black"))
@@ -198,6 +215,7 @@ public class TwoGtp
                             "scoring_system\n" +
                             "time_settings\n" +
                             "twogtp_black\n" +
+                            "twogtp_observer\n" +
                             "twogtp_referee\n" +
                             "twogtp_white\n" +
                             "undo\n" +
@@ -217,23 +235,30 @@ public class TwoGtp
             boolean isExtCommandReferee = false;
             if (m_referee != null && ! m_refereeIsDisabled)
                 isExtCommandReferee = m_referee.isCommandSupported(cmd);
-            if (isExtCommandBlack
+            boolean isExtCommandObserver = false;
+            if (m_observer != null && ! m_observerIsDisabled)
+                isExtCommandObserver = m_observer.isCommandSupported(cmd);
+            if (isExtCommandBlack && ! isExtCommandObserver
                 && ! isExtCommandWhite && ! isExtCommandReferee)
                 return sendSingle(m_black, cmdLine, response);
-            if (isExtCommandWhite
+            if (isExtCommandWhite && ! isExtCommandObserver
                 && ! isExtCommandBlack && ! isExtCommandReferee)
                 return sendSingle(m_white, cmdLine, response);
-            if (isExtCommandReferee
+            if (isExtCommandReferee && ! isExtCommandObserver
                 && ! isExtCommandBlack && ! isExtCommandWhite)
                 return sendSingle(m_referee, cmdLine, response);
+            if (isExtCommandObserver && ! isExtCommandReferee
+                && ! isExtCommandBlack && ! isExtCommandWhite)
+                return sendSingle(m_observer, cmdLine, response);
             if (! isExtCommandReferee
                 && ! isExtCommandBlack
+                && ! isExtCommandObserver
                 && ! isExtCommandWhite)
             {
                 response.append("unknown command");
                 return false;
             }
-            response.append("use twogtp_black/white/referee");
+            response.append("use twogtp_black/white/referee/observer");
             return false;
         }
         return status;
@@ -258,6 +283,8 @@ public class TwoGtp
         interruptProgram(m_white);
         if (m_referee != null && ! m_refereeIsDisabled)
             interruptProgram(m_referee);
+        if (m_observer != null && ! m_observerIsDisabled)
+            interruptProgram(m_observer);
     }
 
     private static class ScoreEstimate
@@ -280,6 +307,8 @@ public class TwoGtp
     private boolean m_isKomiFixed;
 
     private boolean m_loadsgf;
+
+    private boolean m_observerIsDisabled;
 
     private boolean m_refereeIsDisabled;
 
@@ -336,6 +365,8 @@ public class TwoGtp
     private Vector m_openingMoves;
 
     private Gtp m_black;
+
+    private Gtp m_observer;
 
     private Gtp m_referee;
 
@@ -675,7 +706,7 @@ public class TwoGtp
                 String command = "loadsgf " + m_openingFile;
                 StringBuffer response = new StringBuffer(64);
                 if (! send(m_black, m_white, command, command, command,
-                           response, true, false))
+                           command, response, true, false))
                     throw new Exception("Loadsgf command failed: "
                                         + response);
                 m_openingMovesIndex = m_openingMoves.size();
@@ -787,6 +818,14 @@ public class TwoGtp
                 sendToReferee(commandBoardsize);
             sendToReferee(m_referee.getCommandClearBoard(size));
             m_refereeIsDisabled = false;
+        }
+        if (m_observer != null)
+        {
+            String commandBoardsize = m_observer.getCommandBoardsize(size);
+            if (commandBoardsize != null)
+                sendToObserver(commandBoardsize);
+            sendToObserver(m_observer.getCommandClearBoard(size));
+            m_observerIsDisabled = false;
         }
         m_inconsistentState = false;
         try
@@ -991,8 +1030,9 @@ public class TwoGtp
     }
 
     private boolean send(Gtp gtp1, Gtp gtp2, String command1, String command2,
-                         String commandReferee, StringBuffer response,
-                         boolean changesState, boolean tryUndo)
+                         String commandReferee, String commandObserver,
+                         StringBuffer response, boolean changesState,
+                         boolean tryUndo)
     {
         assert((gtp1 == m_black && gtp2 == m_white)
                || (gtp1 == m_white && gtp2 == m_black));
@@ -1045,14 +1085,15 @@ public class TwoGtp
         }
         mergeResponse(response, response1, response2, prefix1, prefix2);
         sendToReferee(commandReferee);
+        sendToObserver(commandObserver);
         return status;
     }
 
     private boolean sendBoth(String command, StringBuffer response,
                              boolean changesState, boolean tryUndo)
     {
-        return send(m_black, m_white, command, command, command, response,
-                    changesState, tryUndo);
+        return send(m_black, m_white, command, command, command, command,
+                    response, changesState, tryUndo);
     }
 
     private boolean sendGenmove(Color color, StringBuffer response)
@@ -1154,6 +1195,9 @@ public class TwoGtp
             if (m_referee != null && ! m_refereeIsDisabled)
                 sendToReferee(m_referee.getCommandPlay(color) + " "
                               + response1);
+            if (m_observer != null && ! m_observerIsDisabled)
+                sendToObserver(m_observer.getCommandPlay(color) + " "
+                              + response1);
             play(new Move(point, color));
         }
         if (gameOver() && ! m_gameSaved)
@@ -1170,6 +1214,8 @@ public class TwoGtp
         sendIfSupported(m_white, cmd, cmdLine);
         if (m_referee != null && ! m_refereeIsDisabled)
             sendIfSupported(m_referee, cmd, cmdLine);
+        if (m_observer != null && ! m_observerIsDisabled)
+            sendIfSupported(m_observer, cmd, cmdLine);
     }
 
     private void sendIfSupported(Gtp gtp, String cmd, String cmdLine)
@@ -1188,8 +1234,11 @@ public class TwoGtp
         String cmdReferee = null;
         if (m_referee != null)
             cmdReferee = m_referee.getCommandPlay(move);
+        String cmdObserver = null;
+        if (m_observer != null)
+            cmdObserver = m_observer.getCommandPlay(move);
         boolean status = send(m_black, m_white, cmdBlack, cmdWhite,
-                              cmdReferee, response, true, true);
+                              cmdReferee, cmdObserver, response, true, true);
         if (status)
             play(move);
         return status;
@@ -1207,6 +1256,23 @@ public class TwoGtp
             return false;
         }        
         return true;
+    }
+
+    private void sendToObserver(String command)
+    {
+        if (m_observer == null || m_observerIsDisabled)
+            return;
+        try
+        {
+            m_observer.sendCommand(command);
+        }
+        catch (GtpError e)
+        {
+            System.err.println("Observer denied " + command + " command: "
+                               + e.getMessage() + "\n" +
+                               "Disabling observer for this game.");
+            m_observerIsDisabled = true;
+        }        
     }
 
     private void sendToReferee(String command)
@@ -1237,6 +1303,21 @@ public class TwoGtp
         }
         command = command.substring(index).trim();
         return sendSingle(gtp, command, response);
+    }
+
+    private boolean twogtpObserver(String command, StringBuffer response)
+    {
+        if (m_observer == null)
+        {
+            response.append("No observer enabled");
+            return false;
+        }
+        if (m_observerIsDisabled)
+        {
+            response.append("Observer disabled for this game");
+            return false;
+        }
+        return twogtpColor(m_observer, command, response);
     }
 
     private boolean twogtpReferee(String command, StringBuffer response)

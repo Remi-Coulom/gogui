@@ -32,6 +32,7 @@ public class Main
                 "help",
                 "loadsgf",
                 "komi:",
+                "observer:",
                 "openings:",
                 "referee:",
                 "sgffile:",
@@ -58,6 +59,7 @@ public class Main
                     "-help           display this help and exit\n" +
                     "-komi           komi\n" +
                     "-loadsgf        use loadsgf command for openings\n" +
+                    "-observer       command for observer program\n" +
                     "-openings       directory with opening sgf files\n" +
                     "-referee        command for referee program\n" +
                     "-sgffile        filename prefix\n" +
@@ -93,6 +95,7 @@ public class Main
             String black = opt.getString("black", "");
             String white = opt.getString("white", "");
             String referee = opt.getString("referee", "");
+            String observer = opt.getString("observer", "");
             int size = opt.getInteger("size", 0, 0);
             double komi = 6.5;
             boolean isKomiFixed = opt.isSet("komi");
@@ -113,9 +116,10 @@ public class Main
                 throw new Exception("Option -loadsgf can only be used with"
                                     + " -auto");
             TwoGtp twoGtp =
-                new TwoGtp(System.in, System.out, black, white, referee, size,
-                           komi, isKomiFixed, games, alternate, sgfFile,
-                           force, verbose, estimateScore, openings, loadsgf);
+                new TwoGtp(System.in, System.out, black, white, referee,
+                           observer, size, komi, isKomiFixed, games,
+                           alternate, sgfFile, force, verbose, estimateScore,
+                           openings, loadsgf);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)

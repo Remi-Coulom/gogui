@@ -29,7 +29,12 @@ New menu item "Find in Comments", "Find Next", "Find Variation"
 </listitem>
 <listitem>
 <simpara>
-GoGui: Improve restoring main window size
+Improve restoring main window size
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+TwoGtp: new option -observer
 </simpara>
 </listitem>
 <listitem>
