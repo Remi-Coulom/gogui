@@ -43,6 +43,9 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg choice="plain"><option>-compare</option></arg>
 <arg choice="plain" rep="repeat"><replaceable>file.sgf</replaceable></arg>
 
+<command>twogtp</command>
+<arg choice="plain"><option>-version</option></arg>
+
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -230,6 +233,13 @@ default size 19 will be used with option <option>-auto</option>.
 <term><option>-verbose</option></term>
 <listitem>
 Print debugging messages.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+Print version and exit.
 </listitem>
 </varlistentry>
 
