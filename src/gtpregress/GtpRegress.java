@@ -73,6 +73,10 @@ class GtpRegress
                 tests[i] = (String)arguments.get(i + 1);
             new GtpRegress(program, tests, output);
         }
+        catch (ProgramIsDeadException e)
+        {
+            System.err.println("Program died");
+        }
         catch (Error e)
         {
             String msg = e.getMessage();
