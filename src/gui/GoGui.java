@@ -249,6 +249,7 @@ class GoGui
             m_analyzePointArg = p;
             m_guiBoard.clearAllCrossHair();
             m_guiBoard.setCrossHair(p, true);
+            m_guiBoard.repaint();
             analyzeBegin(false, false);
             return;
         }
@@ -700,6 +701,8 @@ class GoGui
             }
             else
                 showStatus(resultTitle);
+            if (m_analyzeRequestPoint)
+                m_boardNeedsReset = true;
             if (! m_analyzeRequestPoint && checkComputerMoveAfterAnalyze)
                 checkComputerMove();
         }
@@ -1121,6 +1124,7 @@ class GoGui
             return saveDialog();
         case 1:
             return true;
+        case -1:
         case 2:
             return false;
         default:

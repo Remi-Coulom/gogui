@@ -126,7 +126,7 @@ public class Board
             }
         }
         m_focusPoint = new go.Point(size / 2, size / 2);
-        clearLastMove();
+        m_lastMove = null;
         revalidate();
         repaint();
     }
