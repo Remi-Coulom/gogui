@@ -14,21 +14,24 @@ public class Point
         set(x, y);
     }
 
-    public void left()
+    public static boolean equals(Point point1, Point point2)
     {
-        if (m_x > 0)
-            --m_x;
+        if (point1 == null && point2 == null)
+            return true;
+        if (point1 == null || point2 == null)
+            return false;
+        return point1.equals(point2);
+    }
+
+    public boolean equals(Point p)
+    {
+        return (m_x == p.m_x && m_y == p.m_y);
     }
 
     public void down()
     {
         if (m_y > 0)
             --m_y;
-    }
-
-    public boolean equals(Point p)
-    {
-        return (m_x == p.m_x && m_y == p.m_y);
     }
 
     public int getX()
@@ -39,6 +42,12 @@ public class Point
     public int getY()
     {
         return m_y;
+    }
+
+    public void left()
+    {
+        if (m_x > 0)
+            --m_x;
     }
 
     public void right(int max)
