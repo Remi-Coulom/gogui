@@ -40,17 +40,12 @@ class ToolBar
         m_buttonPass = addButton("pass.png", "pass", "Pass");
         m_buttonEnter = addButton("next.png", "play", "Computer play");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
-        add(new JToolBar.Separator());
-        m_buttonGtpShell = addButton("openterm.png", "gtp-shell", "GTP shell");
-        m_buttonAnalyze = addButton("misc.png", "analyze", "Analyze window");
     }
 
     public void setComputerEnabled(boolean enabled)
     {
         m_computerButtonsEnabled = enabled;
         m_buttonEnter.setEnabled(enabled);
-        m_buttonGtpShell.setEnabled(enabled);
-        m_buttonAnalyze.setEnabled(enabled);
         m_buttonInterrupt.setEnabled(enabled);
     }
 
@@ -68,8 +63,6 @@ class ToolBar
 
     public void enableAll(boolean enable, Node node)
     {
-        m_buttonGtpShell.setEnabled(true);
-        m_buttonAnalyze.setEnabled(true);
         m_buttonBeginning.setEnabled(enable);
         m_buttonBackward.setEnabled(enable);
         m_buttonBackward10.setEnabled(enable);
@@ -114,10 +107,6 @@ class ToolBar
     private JButton m_buttonForward10;
 
     private JButton m_buttonEnd;
-
-    private JButton m_buttonGtpShell;
-
-    private JButton m_buttonAnalyze ;
 
     private JButton m_buttonInterrupt;
 
