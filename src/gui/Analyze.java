@@ -224,6 +224,8 @@ class AnalyzeDialog
             close();
         else if (command.equals("comboBoxChanged"))
             comboBoxChanged();
+        else if (command.equals("reload"))
+            reload();
         else if (command.equals("run"))
             setCommand();
     }
@@ -427,9 +429,24 @@ class AnalyzeDialog
     {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
+        addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload");
+        menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     ActionEvent.CTRL_MASK, "close");
         return menu;
+    }
+
+    private void reload()
+    {
+        try
+        {
+            AnalyzeCommand.read(m_commands, m_labels);
+            m_list.setListData(m_labels);
+        }
+        catch (Exception e)
+        {            
+            SimpleDialogs.showError(this, e.getMessage());
+        }
     }
 
     private File getRecentFile()
