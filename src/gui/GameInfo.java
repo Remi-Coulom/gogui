@@ -45,9 +45,7 @@ public class GameInfo
 
     public void fastUpdateMoveNumber(Node node)
     {
-        int moveNumber = node.getMoveNumber();
-        String numberString = Integer.toString(moveNumber);
-        m_number.setText(numberString);
+        updateMoveNumber(node);
         m_number.paintImmediately(m_number.getVisibleRect());
     }
 
@@ -61,12 +59,7 @@ public class GameInfo
         m_captB.setText(capturedB);
         String capturedW = Integer.toString(board.getCapturedW());
         m_captW.setText(capturedW);
-        int moveNumber = node.getMoveNumber();
-        String numberString = Integer.toString(moveNumber);
-        int movesLeft = node.getMovesLeft();
-        if (movesLeft > 0)
-            numberString += "/" + (moveNumber + movesLeft);
-        m_number.setText(numberString);
+        updateMoveNumber(node);
         String lastMove = "";
         Move move = node.getMove();
         if (move != null)
@@ -129,6 +122,16 @@ public class GameInfo
             m_timeB.setText(text);
         else
             m_timeW.setText(text);
+    }
+
+    private void updateMoveNumber(Node node)
+    {
+        int moveNumber = node.getMoveNumber();
+        String numberString = Integer.toString(moveNumber);
+        int movesLeft = node.getMovesLeft();
+        if (movesLeft > 0)
+            numberString += "/" + (moveNumber + movesLeft);
+        m_number.setText(numberString);
     }
 }
 
