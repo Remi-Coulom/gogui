@@ -21,10 +21,12 @@ public class TwoGtp
         super(in, out);
         if (black.equals(""))
             throw new Exception("No black program set.");
-        m_black = new Gtp(black, verbose, null);
         if (white.equals(""))
             throw new Exception("No white program set.");
+        m_black = new Gtp(black, verbose, null);
+        m_black.setLogPrefix("B");
         m_white = new Gtp(white, verbose, null);
+        m_white.setLogPrefix("W");
         m_blackToMove.add(Boolean.TRUE);
     }
 

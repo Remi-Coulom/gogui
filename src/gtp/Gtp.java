@@ -345,6 +345,11 @@ public class Gtp
         sendComment("# interrupt");
     }
 
+    public void setLogPrefix(String prefix)
+    {
+        m_logPrefix = prefix;
+    }
+
     public void waitForExit()
     {
         try
@@ -428,6 +433,8 @@ public class Gtp
 
     private String m_answer;
 
+    private String m_logPrefix;
+
     private String m_program;
 
     private void readAnswer() throws Error
@@ -495,6 +502,8 @@ public class Gtp
     {
         if (m_log)
         {
+            if (m_logPrefix != null)
+                System.err.print(m_logPrefix);
             System.err.println(msg);
             System.err.flush();
         }
