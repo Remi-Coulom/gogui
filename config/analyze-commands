@@ -1,0 +1,95 @@
+# GoGui Analyze Commands
+# This file contains some GTP version 1 and 2 commands and GTP extension
+# commands used by GNU Go 3.4
+# Copy this file to ~/.gogui/analyze-commands
+
+plist/AccurateLib Black/accuratelib black %p
+plist/AccurateLib White/accuratelib white %p
+plist/All Legal Black/all_legal black
+plist/All Legal White/all_legal black
+pstring/Analyze Semeai/analyze_semeai %P
+pstring/Analyze Semeai After Move Black/analyze_semeai_after_move black %P
+pstring/Analyze Semeai After Move White/analyze_semeai_after_move white %P
+pstring/Attack/attack %p
+string/Attack Either/attack_either %P
+pstring/Block Off/block_off %P
+pstring/Break In/break_in %P
+none/Clear Cache/clear_cache
+pstring/Combination Attack Black/combination_attack black
+pstring/Combination Attack White/combination_attack white
+pstring/Connect/connect %P
+string/CountLib/countlib %p
+string/CpuTime/cputime
+pstring/Defend/defend %p
+string/Defend Both/defend_both %P
+pstring/Disconnect/disconnect %P
+string/Does Surround/does_surround %P
+string/Dragon Data/dragon_data
+pstring/Dragon Data At/dragon_data %p
+string/Dragon Status/dragon_status
+pstring/Dragon Status At/dragon_status %p
+plist/Dragon Stones/dragon_stones %p
+string/Eval Eye/eval_eye %p
+string/Estimate Score/estimate_score
+string/Experimental Score Black/experimental_score black
+string/Experimental Score White/experimental_score white
+string/Final Score/final_score
+string/Final Status/final_status %p
+plist/Final Status List Alive/final_status_list alive
+plist/Final Status List Black Territory/final_status_list black_territory
+plist/Final Status List Dame/final_status_list dame
+plist/Final Status List Dead/final_status_list dead
+plist/Final Status List Seki/final_status_list seki
+plist/Final Status List White Territory/final_status_list white_territory
+plist/FindLib/findlib %p
+none/Finish SgfTrace/finish_sgftrace %f
+string/Get Connection Node Counter/get_connection_node_counter
+string/Get Life Node Counter/get_life_node_counter
+string/Get Owl Node Counter/get_owl_node_counter
+string/Get Random Seed/get_random_seed
+string/Get Reading Node Counter/get_reading_node_counter
+string/Get TryMove Counter/get_trymove_counter
+dboard/Influence Black (Black)/influence black/black/0.01
+dboard/Influence Black (White)/influence black/white/-0.01
+sboard/Influence Black (Regions)/influence black/regions
+dboard/Influence White (Black)/influence white/black/0.01
+dboard/Influence White (White)/influence white/white/-0.01
+sboard/Influence White (Regions)/influence white/regions
+string/Is Surrounded/is_surrounded %p
+pstring/Ladder Attack/ladder_attack %p
+none/Level/level %s
+plist/List Stones Black/list_stones black
+plist/List Stones White/list_stones white
+pstring/Owl Attack/owl_attack %p
+string/Owl Connection Defends/owl_connection_defends %P
+pstring/Owl Defend/owl_defend %p
+string/Owl Does Attack/owl_does_attack %P
+string/Owl Does Defend/owl_does_defend %P
+string/Owl Substantial/owl_substantial %p
+pstring/Owl Threaten Attack/owl_threaten_attack %p
+pstring/Owl Threaten Defense/owl_threaten_defense %p
+none/PrintSgf/printsgf %f
+pstring/Reg GenMove Black/reg_genmove black
+pstring/Reg GenMove White/reg_genmove white
+none/Reset Connection Node Counter/reset_connection_node_counter
+none/Reset Life Node Counter/reset_life_node_counter
+none/Reset Owl Node Counter/reset_owl_node_counter
+none/Reset Reading Node Counter/reset_reading_node_counter
+none/Reset TryMove Counter/reset_trymove_node_counter
+none/Set Random Seed/set_random_seed %s
+string/ShowBoard/showboard
+none/Start SgfTrace/start_sgftrace
+string/Surround Map/surround_map %P
+pstring/Tactical Analyze Semeai/tactical_analyze_semeai %P
+none/Test EyeShape/test_eyeshape %P
+none/Time Left/time_left %s
+none/Time Settings/time_settings %s
+pslist/Top Moves/top_moves
+pslist/Top Moves Black/top_moves black
+pslist/Top Moves White/top_moves white
+none/Tune Move Ordering/tune_move_ordering %s
+string/Worm Data/worm_data
+string/Worm Data At/worm_data %p
+string/Worm CutStone/worm_cutstone %p
+plist/Worm Stones Black/worm_stones %p black
+plist/Worm Stones White/worm_stones %p white
