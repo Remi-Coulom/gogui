@@ -407,7 +407,6 @@ class GoGui
                 "config:",
                 "file:",
                 "gtpfile:",
-                "gtpshell",
                 "help",
                 "komi:",
                 "move:",
