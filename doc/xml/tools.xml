@@ -27,6 +27,17 @@ for a complete reference.
 </varlistentry>
 
 <varlistentry>
+<term>GtpDummy</term>
+<listitem>
+Dummy Go program for testing GTP controlling programs.
+See <xref linkend="reference-gtpdummy">
+<citerefentry><refentrytitle>gtpdummy</refentrytitle></citerefentry>
+</xref> 
+for a complete reference.
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>NetGtp</term>
 <listitem>
 Connects to a Go program supporting GTP on a remote computer.

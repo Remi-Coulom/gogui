@@ -28,6 +28,7 @@ PACKAGES= \
   gmptogtp \
   go \
   gtp \
+  gtpdummy \
   gtpregress \
   gtpserver \
   gui \
@@ -61,6 +62,7 @@ DOC= \
 
 JAR= \
   gogui.jar \
+  gtpdummy.jar \
   gtpregress.jar \
   gtpserver.jar \
   gmptogtp.jar \
@@ -75,6 +77,8 @@ all: $(JAR)
 gogui.jar: build/gogui/doc/index.html $(patsubst %, build/gogui/%, $(IMAGES)) $(shell cat build/files-gogui.txt)
 
 gmptogtp.jar: $(shell cat build/files-gmptogtp.txt)
+
+gtpdummy.jar: $(shell cat build/files-gtpdummy.txt)
 
 gtpserver.jar: $(shell cat build/files-gtpserver.txt)
 

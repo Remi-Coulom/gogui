@@ -7,7 +7,7 @@ package gtp;
 
 import java.io.*;
 import java.util.*;
-import utils.*;
+import utils.StringUtils;
 
 //-----------------------------------------------------------------------------
 

@@ -1,0 +1,267 @@
+//-----------------------------------------------------------------------------
+// $Id$
+// $Source$
+//-----------------------------------------------------------------------------
+
+package gtpdummy;
+
+import java.io.*;
+import java.net.*;
+import java.text.*;
+import java.util.*;
+import go.*;
+import gtp.*;
+import utils.Options;
+import utils.StringUtils;
+import version.*;
+
+//-----------------------------------------------------------------------------
+
+public class GtpDummy
+    extends GtpServer
+{
+    public GtpDummy(InputStream in, OutputStream out)
+        throws Exception
+    {
+        super(in, out);
+        initSize(19);
+        m_thread = Thread.currentThread();
+    }
+
+    public boolean handleCommand(String cmdLine, StringBuffer response)
+    {
+        String[] cmdArray = StringUtils.getCmdArray(cmdLine);
+        String cmd = cmdArray[0];
+        boolean status = true;
+        if (cmd.equals("black"))
+            status = play(cmdArray, response);
+        else if (cmd.equals("echo"))
+            echo(cmdLine, response);
+        else if (cmd.equals("echo_err"))
+            echoErr(cmdLine);
+        else if (cmd.equals("genmove_black"))
+            status = genmove(response);
+        else if (cmd.equals("boardsize"))
+            status = boardsize(cmdArray, response);
+        else if (cmd.equals("gogui_interrupt"))
+            ;
+        else if (cmd.equals("genmove_white"))
+            status = genmove(response);
+        else if (cmd.equals("name"))
+            response.append("GtpDummy");
+        else if (cmd.equals("protocol_version"))
+            response.append("1");
+        else if (cmd.equals("sleep"))
+            status = sleep(cmdArray, response);
+        else if (cmd.equals("quit"))
+            ;
+        else if (cmd.equals("version"))
+            response.append(Version.m_version);
+        else if (cmd.equals("white"))
+            status = play(cmdArray, response);
+        else if (cmd.equals("help"))
+            response.append("black\n" +
+                            "echo\n" +
+                            "echo_err\n" +
+                            "genmove_black\n" +
+                            "genmove_white\n" +
+                            "gogui_interrupt\n" +
+                            "help\n" +
+                            "white\n" +
+                            "name\n" +
+                            "quit\n" +
+                            "sleep\n" +
+                            "version\n" +
+                            "white\n");
+        else
+        {
+            response.append("unknown command");
+            status = false;
+        }
+        return status;
+    }
+
+    public void interruptCommand()
+    {
+        m_thread.interrupt();
+    }
+
+    public static void main(String[] args)
+    {
+        try
+        {
+            String options[] = {
+                "help",
+                "version"
+            };
+            Options opt = new Options(args, options);
+            if (opt.isSet("help"))
+            {
+                String helpText =
+                    "Usage: java -jar gtpdummy.jar [options]\n" +
+                    "\n" +
+                    "-help         display this help and exit\n" +
+                    "-version      print version and exit\n";
+                System.out.print(helpText);
+                System.exit(0);
+            }
+            if (opt.isSet("version"))
+            {
+                System.out.println("GtpDummy " + Version.m_version);
+                System.exit(0);
+            }
+            GtpDummy gtpDummy = new GtpDummy(System.in, System.out);
+            gtpDummy.mainLoop();
+        }
+        catch (Error e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        catch (RuntimeException e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        catch (Throwable t)
+        {
+            String msg = t.getMessage();
+            if (msg == null)
+                msg = t.getClass().getName();
+            System.err.println(msg);
+            System.exit(-1);
+        }
+    }
+    
+    private int m_size;
+
+    private boolean[][] m_alreadyPlayed;
+
+    private Thread m_thread;
+
+    private boolean boardsize(String[] cmdArray, StringBuffer response)
+    {
+        if (cmdArray.length < 2)
+        {
+            response.append("Missing argument");
+            return false;
+        }
+        int size;
+        try
+        {
+            size = Integer.parseInt(cmdArray[1]);
+        }
+        catch (NumberFormatException e)
+        {
+            response.append("Invalid size");
+            return false;
+        }
+        if (size < 1 || size > 1000)
+        {
+            response.append("Invalid size");
+            return false;
+        }
+        initSize(size);
+        return true;
+    }
+
+    private void echo(String cmdLine, StringBuffer response)
+    {
+        int index = cmdLine.indexOf(" ");
+        if (index < 0)
+            return;
+        response.append(cmdLine.substring(index + 1));
+    }
+
+    private void echoErr(String cmdLine)
+    {
+        int index = cmdLine.indexOf(" ");
+        if (index < 0)
+            return;
+        System.err.println(cmdLine.substring(index + 1));
+    }
+
+    private boolean genmove(StringBuffer response)
+    {
+        int numberPossibleMoves = 0;
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                if (! m_alreadyPlayed[x][y])
+                    ++numberPossibleMoves;
+        Point point = null;
+        if (numberPossibleMoves > 0)
+        {
+            int rand = (int)(Math.random() * numberPossibleMoves);
+            int index = 0;
+            for (int x = 0; x < m_size && point == null; ++x)
+                for (int y = 0; y < m_size && point == null; ++y)
+                    if (! m_alreadyPlayed[x][y])
+                    {
+                        if (index == rand)
+                            point = new Point(x, y);
+                        ++index;
+                    }
+        }
+        response.append(Point.toString(point));
+        if (point != null)
+            m_alreadyPlayed[point.getX()][point.getY()] = true;
+        return true;
+    }
+
+    private void initSize(int size)
+    {
+        m_alreadyPlayed = new boolean[size][size];
+        m_size = size;
+    }
+
+    private boolean play(String[] cmdArray, StringBuffer response)
+    {
+        if (cmdArray.length < 2)
+        {
+            response.append("Missing argument");
+            return false;
+        }
+        Point point = null;
+        try
+        {
+            point = Gtp.parsePoint(cmdArray[1], m_size);
+        }
+        catch (Gtp.Error e)
+        {
+            response.append(e.getMessage());
+            return false;
+        }
+        if (point != null)
+            m_alreadyPlayed[point.getX()][point.getY()] = true;
+        return true;
+    }
+
+    private boolean sleep(String[] cmdArray, StringBuffer response)
+    {
+        long millis = 20000;
+        if (cmdArray.length > 1)
+        {
+            try
+            {
+                millis = (long)(Float.parseFloat(cmdArray[1]) * 1000.0);
+            }
+            catch (NumberFormatException e)
+            {
+                response.append("Invalid argument");
+                return false;
+            }
+        }
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch (InterruptedException e)
+        {
+            response.append("Interrupted");
+            return false;
+        }
+        return true;
+    }
+}
+
+//-----------------------------------------------------------------------------

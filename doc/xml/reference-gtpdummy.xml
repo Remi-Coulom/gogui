@@ -1,0 +1,94 @@
+<refentry id="reference-gtpdummy">
+
+<refmeta>
+<refentrytitle>gtpdummy</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gtpdummy</refname>
+<refname>gtpdummy.jar</refname>
+<refpurpose>
+Dummy Go program for testing GTP controlling programs.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtpdummy</command>
+<arg><option>-help</option></arg>
+<arg><option>-version</option></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Dummy Go program supporting GTP (Go Text Protocol) for testing
+GTP controlling programs.
+Plays random moves.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+Print help and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+Print version and exit.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+<refsection>
+<title>GTP Extensions</title>
+
+<variablelist>
+
+<varlistentry>
+<term><userinput>echo</userinput></term>
+<listitem>
+Print argument as response.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>echo_err</userinput></term>
+<listitem>
+Print argument to standard error.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>gogui_interrupt</userinput></term>
+<listitem>
+Indicate interrupt ability for GoGui.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<userinput>sleep <arg><replaceable>seconds</replaceable></arg></userinput>
+</term>
+<listitem>
+Sleep for a number of seconds (default 20).
+This command can be interrupted.
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</refsection>
+
+</refentry>

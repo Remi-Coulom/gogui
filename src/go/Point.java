@@ -69,6 +69,13 @@ public class Point
         return m_xString[m_x] + Integer.toString(m_y + 1);
     }
     
+    public static String toString(Point point)
+    {
+        if (point == null)
+            return "PASS";
+        return point.toString();
+    }
+    
     public void up(int max)
     {
         if (m_y < max - 1)
