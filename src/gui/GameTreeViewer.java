@@ -112,6 +112,7 @@ class GameNode
     public void setCurrentNode(boolean isCurrent)
     {
         m_isCurrent = isCurrent;
+        repaint();
     }
 
     private boolean m_isCurrent;
@@ -211,14 +212,19 @@ class GameTreePanel
         setPreferredSize(new Dimension(m_maxX + m_nodeDist + m_margin,
                                        m_maxY + m_nodeDist + m_margin));
         revalidate();
-        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeSize,
-                                          m_currentNodeY,
-                                          5 * m_nodeSize, 3 * m_nodeSize));
+        scrollToCurrent();
     }
 
-    private int m_currentNodeX;
-
-    private int m_currentNodeY;
+    public void update(Node currentNode)
+    {
+        assert(currentNode != null);
+        GameNode gameNode = getGameNode(m_currentNode);
+        gameNode.setCurrentNode(false);
+        gameNode = getGameNode(currentNode);
+        gameNode.setCurrentNode(true);
+        m_currentNode = currentNode;
+        scrollToCurrent();
+    }
 
     private int m_nodeSize;
 
@@ -266,11 +272,6 @@ class GameTreePanel
             if (i < numberChildren - 1)
                 dy += m_nodeDist;
         }
-        if (node == m_currentNode)
-        {
-            m_currentNodeX = x;
-            m_currentNodeY = y;
-        }        
         return dy;
     }
 
@@ -295,6 +296,15 @@ class GameTreePanel
     private GameNode getGameNode(Node node)
     {
         return (GameNode)m_map.get(node);
+    }
+
+    private void scrollToCurrent()
+    {
+        GameNode gameNode = getGameNode(m_currentNode);
+        java.awt.Point location = gameNode.getLocation();
+        scrollRectToVisible(new Rectangle(location.x - 2 * m_nodeSize,
+                                          location.y,
+                                          5 * m_nodeSize, 3 * m_nodeSize));
     }
 }
 
@@ -338,6 +348,11 @@ public class GameTreeViewer
     {
         m_panel.update(gameTree, currentNode);
         repaint();
+    }
+
+    public void update(Node currentNode)
+    {
+        m_panel.update(currentNode);
     }
 
     private GameTreePanel m_panel;

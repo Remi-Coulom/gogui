@@ -329,7 +329,7 @@ class GoGui
             else
                 m_board.play(new Move(p, go.Color.EMPTY));
             m_board.setToMove(m_setupColor);
-            updateGameInfo();
+            updateGameInfo(true);
             m_guiBoard.updateFromGoBoard();
             m_needsSave = true;
         }
@@ -408,7 +408,7 @@ class GoGui
                 }
             }
         }
-        boardChangedBegin(false);
+        boardChangedBegin(false, false);
     }
 
     public static void main(String[] args)
@@ -930,10 +930,11 @@ class GoGui
         m_commandInProgress = true;
     }
 
-    private void boardChangedBegin(boolean doCheckComputerMove)
+    private void boardChangedBegin(boolean doCheckComputerMove,
+                                   boolean gameTreeChanged)
     {
         m_guiBoard.updateFromGoBoard();
-        updateGameInfo();
+        updateGameInfo(gameTreeChanged);
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
@@ -961,13 +962,13 @@ class GoGui
     private void cbBeginning()
     {
         backward(m_currentNode.getDepth());
-        boardChangedBegin(false);
+        boardChangedBegin(false, false);
     }
 
     private void cbBackward(int n)
     {
         backward(n);
-        boardChangedBegin(false);
+        boardChangedBegin(false, false);
     }
 
     private void cbBoardSizeOther()
@@ -1009,13 +1010,13 @@ class GoGui
     private void cbEnd()
     {
         forward(m_currentNode.getNodesLeft());
-        boardChangedBegin(false);
+        boardChangedBegin(false, false);
     }
 
     private void cbForward(int n)
     {
         forward(n);
-        boardChangedBegin(false);
+        boardChangedBegin(false, false);
     }
 
     private void cbGameInfo()
@@ -1068,7 +1069,7 @@ class GoGui
                 }
                 forward(numberNodes);
             }
-            boardChangedBegin(false);
+            boardChangedBegin(false, false);
         }
         catch (NumberFormatException e)
         {
@@ -1134,7 +1135,7 @@ class GoGui
             return;
         m_gameTree.keepOnlyMainVariation();
         m_needsSave = true;
-        boardChangedBegin(false);
+        boardChangedBegin(false, true);
     }
 
     private void cbKeepOnlyPosition()
@@ -1157,7 +1158,7 @@ class GoGui
         m_board.initSize(m_boardSize);
         executeRoot();
         m_needsSave = true;
-        boardChangedBegin(false);
+        boardChangedBegin(false, true);
     }
 
     private void cbMakeMainVariation()
@@ -1166,7 +1167,7 @@ class GoGui
             return;
         m_currentNode.makeMainVariation();
         m_needsSave = true;
-        boardChangedBegin(false);
+        boardChangedBegin(false, true);
     }
 
     private void cbNewGame(int size)
@@ -1379,7 +1380,7 @@ class GoGui
         showStatus("Setup black.");
         m_setupColor = go.Color.BLACK;
         m_board.setToMove(m_setupColor);
-        updateGameInfo();
+        updateGameInfo(false);
     }
 
     private void cbSetupWhite()
@@ -1387,7 +1388,7 @@ class GoGui
         showStatus("Setup white.");
         m_setupColor = go.Color.WHITE;
         m_board.setToMove(m_setupColor);
-        updateGameInfo();
+        updateGameInfo(false);
     }
 
     private void cbShowAbout()
@@ -1431,7 +1432,7 @@ class GoGui
         backward(1);
         m_currentNode.removeChild(oldCurrentNode);
         m_needsSave = true;
-        boardChangedBegin(false);
+        boardChangedBegin(false, true);
     }
 
     private void checkComputerMove()
@@ -1568,7 +1569,7 @@ class GoGui
                 fileModified();
                 m_resigned = false;
             }
-            boardChangedBegin(true);
+            boardChangedBegin(true, true);
         }
         catch (Gtp.Error e)
         {
@@ -1784,7 +1785,7 @@ class GoGui
                 m_lostOnTimeShown = true;
             }
             m_resigned = false;
-            boardChangedBegin(true);            
+            boardChangedBegin(true, true);
         }
         catch (Gtp.Error e)
         {
@@ -1916,7 +1917,7 @@ class GoGui
             setTitle();
             SimpleDialogs.setLastFile(file);
             computerNone();
-            boardChangedBegin(false);
+            boardChangedBegin(false, true);
         }
         catch (FileNotFoundException e)
         {
@@ -1932,7 +1933,7 @@ class GoGui
     {
         initGame(size);
         executeRoot();
-        updateGameInfo();
+        updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
@@ -1943,7 +1944,7 @@ class GoGui
     {
         initGame(size);
         loadFile(new File(m_file), move);
-        updateGameInfo();
+        updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
@@ -2334,7 +2335,7 @@ class GoGui
             m_currentNode.setToMove(toMove);
         executeRoot();
         fileModified();
-        boardChangedBegin(false);
+        boardChangedBegin(false, false);
         setFastUpdate(false);
     }
 
@@ -2405,11 +2406,16 @@ class GoGui
         }
     }
 
-    private void updateGameInfo()
+    private void updateGameInfo(boolean gameTreeChanged)
     {
         m_gameInfo.update(m_currentNode, m_board);
         if (m_gameTreeViewer != null)
-            m_gameTreeViewer.update(m_gameTree, m_currentNode);
+        {
+            if (gameTreeChanged)
+                m_gameTreeViewer.update(m_gameTree, m_currentNode);
+            else
+                m_gameTreeViewer.update(m_currentNode);
+        }
         m_comment.setNode(m_currentNode);
     }
 }

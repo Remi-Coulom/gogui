@@ -92,7 +92,7 @@ class Comment
         if (m_duringSetText)
             return;
         String text = m_textArea.getText().trim();
-        if (m_node == null)
+        if (m_node == null || m_node.getComment() == null)
             return;
         String comment = m_node.getComment().trim();
         if (! comment.equals(text))
