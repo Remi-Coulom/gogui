@@ -119,21 +119,29 @@ public class Field
         m_graphics = graphics;
         m_graphics2D = (Graphics2D)graphics;
         m_size = getSize().width;
-        drawFieldColor();
-        if (m_graphics2D == null)
+        if (m_fieldColor != null)
+            drawFieldColor();
+        if (m_territory != go.Color.EMPTY && m_graphics2D == null)
             drawTerritoryGraphics();
-        drawStone();
-        if (m_graphics2D != null)
+        if (m_color != go.Color.EMPTY)
+            drawStone();
+        if (m_territory != go.Color.EMPTY && m_graphics2D != null)
             drawTerritoryGraphics2D();
-        drawInfluence();
-        drawMarkup();
-        drawCrossHair();
-        drawLastMoveMarker();
-        drawSelect();
-        drawString();
-        drawFocus();
+        if (m_influenceSet)
+            drawInfluence();
+        if (m_markup)
+            drawMarkup();
+        if (m_crossHair)
+            drawCrossHair();
+        if (m_lastMoveMarker)
+            drawLastMoveMarker();
+        if (m_select)
+            drawSelect();
+        if (! m_string.equals(""))
+            drawString();
+        if (isFocusOwner() && m_board.getShowCursor())
+            drawFocus();
         m_graphics = null;
-        m_graphics2D = null;
     }
 
     public void setFieldBackground(java.awt.Color color)
@@ -251,8 +259,6 @@ public class Field
 
     private void drawCrossHair()
     {
-        if (! m_crossHair)
-            return;
         setComposite(m_composite7);
         int d = m_size / 5;
         int center = m_size / 2;
@@ -264,19 +270,14 @@ public class Field
 
     private void drawFieldColor()
     {
-        if (m_fieldColor != null)
-        {
-            setComposite(m_composite5);
-            m_graphics.setColor(m_fieldColor);
-            m_graphics.fillRect(0, 0, m_size, m_size);
-            m_graphics.setPaintMode();
-        }
+        setComposite(m_composite5);
+        m_graphics.setColor(m_fieldColor);
+        m_graphics.fillRect(0, 0, m_size, m_size);
+        m_graphics.setPaintMode();
     }
 
     private void drawFocus()
     {
-        if (! isFocusOwner() || ! m_board.getShowCursor())
-            return;
         setComposite(m_composite5);
         int d = m_size / 6;
         int w = m_size;
@@ -295,8 +296,6 @@ public class Field
 
     private void drawInfluence()
     {
-        if (! m_influenceSet)
-            return;
         double d = Math.abs(m_influence);
         if (d < 0.01)
             return;
@@ -312,8 +311,6 @@ public class Field
 
     private void drawLastMoveMarker()
     {
-        if (! m_lastMoveMarker)
-            return;
         setComposite(m_composite7);
         drawCircle(java.awt.Color.red);
         m_graphics.setPaintMode();
@@ -321,8 +318,6 @@ public class Field
 
     private void drawMarkup()
     {
-        if (! m_markup)
-            return;
         setComposite(m_composite7);
         int d = m_size / 4;
         int width = m_size - 2 * d;
@@ -334,8 +329,6 @@ public class Field
 
     private void drawSelect()
     {
-        if (! m_select)
-            return;
         setComposite(m_composite7);
         drawCircle(java.awt.Color.blue);
         m_graphics.setPaintMode();
@@ -374,8 +367,6 @@ public class Field
 
     private void drawString()
     {
-        if (m_string.equals(""))
-            return;
         int stringWidth = m_graphics.getFontMetrics().stringWidth(m_string);
         int stringHeight = m_graphics.getFont().getSize();
         int x = Math.max((m_size - stringWidth) / 2, 0);
@@ -389,8 +380,6 @@ public class Field
 
     private void drawTerritoryGraphics()
     {
-        if (m_territory == go.Color.EMPTY)
-            return;
         if (m_territory == go.Color.BLACK)
             m_graphics.setColor(java.awt.Color.darkGray);
         else
@@ -403,8 +392,6 @@ public class Field
 
     private void drawTerritoryGraphics2D()
     {
-        if (m_territory == go.Color.EMPTY)
-            return;
         setComposite(m_composite5);
         if (m_territory == go.Color.BLACK)
             m_graphics2D.setColor(java.awt.Color.darkGray);
