@@ -1425,6 +1425,7 @@ class GoGui
                 if (m_auto)
                 {
                     newGame(m_boardSize);
+                    checkComputerMove();
                     return;
                 }
                 else
