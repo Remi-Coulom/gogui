@@ -17,22 +17,13 @@ import java.net.*;
 public class Platform
 {
     /** Handler for events from the Application Menu on MacOS. */
-    public static class SpecialMacHandler
+    public interface SpecialMacHandler
     {
-        public boolean handleAbout()
-        {
-            return false;
-        }
+        public boolean handleAbout();
 
-        public boolean handleOpenFile(String filename)
-        {
-            return false;
-        }
+        public boolean handleOpenFile(String filename);
 
-        public boolean handleQuit()
-        {
-            return true;
-        }
+        public boolean handleQuit();
     }
 
     /** Check if the platform is Mac OS X */
