@@ -208,6 +208,11 @@ installation directory.
 </uptodate>
 </target>
 
+<target name="doxygen"
+ description="Generate source code documentation using doxygen">
+<exec executable="doxygen" dir="doxygen"/>
+</target>
+
 <target name="gmptogtp.jar" depends="compile">
 <mkdir dir="lib"/>
 <jar destfile="lib/gmptogtp.jar">
