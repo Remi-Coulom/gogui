@@ -13,6 +13,9 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>twogtp</command>
+      <arg>
+        <option>-auto</option>
+      </arg>
       <arg choice="plain">
         <option>-black</option> <replaceable>command</replaceable>
       </arg>
@@ -56,6 +59,21 @@
     <variablelist>
       <varlistentry>
 	<term>
+	  <option>-auto</option>
+	</term>
+	<listitem>
+	  Automatically play games.
+	  Use this option if you want to run <command>twogtp</command> as a
+	  standalone program without a program like
+	  <application>GoGui</application> which controls the move generation
+	  with <userinput>genmove_black</userinput> and
+	  <userinput>genmove_white</userinput> commands.
+	  The game will be saved as file <filename>twogtp.sgf</filename>
+	  after it is finished.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
 	  <option>-black</option> <replaceable>command</replaceable>
 	</term>
 	<listitem>
@@ -68,6 +86,16 @@
 	</term>
 	<listitem>
 	  Display help and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-size</option> <replaceable>n</replaceable>.
+	</term>
+	<listitem>
+	  Board size for games. If this option is not used the size will
+	  be set with the <userinput>boardsize</userinput> command or
+	  default size 19 will be used with option <option>-auto</option>.
 	</listitem>
       </varlistentry>
       <varlistentry>

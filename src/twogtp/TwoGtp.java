@@ -7,6 +7,7 @@ package gtp;
 
 import java.io.*;
 import java.util.*;
+import go.*;
 import utils.*;
 
 //-----------------------------------------------------------------------------
@@ -15,7 +16,7 @@ public class TwoGtp
     extends GtpServer
 {
     public TwoGtp(InputStream in, OutputStream out, String black, String white,
-                  boolean verbose)
+                  int size, boolean verbose)
         throws Exception
     {
         super(in, out);
@@ -28,70 +29,63 @@ public class TwoGtp
         m_white = new Gtp(white, verbose, null);
         m_white.setLogPrefix("W");
         m_inconsistentState = false;
-        m_blackToMove.add(Boolean.TRUE);
-        String blackName = getName(m_black);
-        String whiteName = getName(m_white);
-        m_name = "TwoGtp (" + blackName + " - " + whiteName + ")";
+        m_blackName = getName(m_black);
+        m_whiteName = getName(m_white);
+        m_name = "TwoGtp (" + m_blackName + " - " + m_whiteName + ")";
+        m_size = size;
+        m_board = new Board(size < 1 ? 19 : size);
     }
 
-    public boolean handleCommand(String command, StringBuffer response)
+    public boolean handleCommand(String cmdLine, StringBuffer response)
     {
+        String[] cmdArray = StringUtils.getCmdArray(cmdLine);
+        String cmd = cmdArray[0];
         boolean status = true;
-        if (command.startsWith("twogtp_black"))
+        if (cmd.equals("twogtp_black"))
         {
-            status = twogtpColor(m_black, command, response);
+            status = twogtpColor(m_black, cmdLine, response);
         }
-        else if (command.startsWith("twogtp_white"))
+        else if (cmd.equals("twogtp_white"))
         {
-            status = twogtpColor(m_white, command, response);
+            status = twogtpColor(m_white, cmdLine, response);
         }
-        else if (command.equals("quit"))
+        else if (cmd.equals("quit"))
         {
-            status = sendBoth(command, response, false, false);
+            status = sendBoth(cmdLine, response, false, false);
         }
-        else if (command.startsWith("black"))
+        else if (cmd.equals("black"))
         {
-            status = sendBoth(command, response, true, true);
-            m_blackToMove.push(Boolean.FALSE);
+            status = play(Color.BLACK, cmdArray, response);
         }
-        else if (command.startsWith("white"))
+        else if (cmd.equals("white"))
         {
-            status = sendBoth(command, response, true, true);
-            m_blackToMove.push(Boolean.TRUE);
+            status = play(Color.WHITE, cmdArray, response);
         }
-        else if (command.startsWith("undo"))
+        else if (cmd.equals("undo"))
         {
-            status = sendBoth(command, response, true, false);
-            m_blackToMove.pop();
+            status = undo(response);
         }
-        else if (command.startsWith("genmove_black"))
+        else if (cmd.equals("genmove_black"))
         {
-            status = sendGenmove(command, response);
-            m_blackToMove.push(Boolean.FALSE);
+            status = sendGenmove(Color.BLACK, response);
         }
-        else if (command.startsWith("genmove_white"))
+        else if (cmd.equals("genmove_white"))
         {
-            status = sendGenmove(command, response);
-            m_blackToMove.push(Boolean.TRUE);
+            status = sendGenmove(Color.WHITE, response);
         }
-        else if (command.startsWith("boardsize"))
+        else if (cmd.equals("boardsize"))
         {
-            status = sendBoth(command, response, true, false);
-            if (status)
-                m_inconsistentState = false;
-            m_blackToMove.clear();
-            m_blackToMove.push(Boolean.TRUE);
+            status = boardsize(cmdArray, response);
         }
-        else if (command.startsWith("komi")
-                 || command.startsWith("scoring_system"))
-            status = sendBoth(command, response, false, false);
-        else if (command.equals("name"))
+        else if (cmd.equals("komi") || cmd.equals("scoring_system"))
+            status = sendBoth(cmdLine, response, false, false);
+        else if (cmd.equals("name"))
             response.append(m_name);
-        else if (command.equals("version"))
+        else if (cmd.equals("version"))
             ;
-        else if (command.equals("protocol_version"))
+        else if (cmd.equals("protocol_version"))
             response.append("1");
-        else if (command.equals("help"))
+        else if (cmd.equals("help"))
             response.append("quit\n" +
                             "black\n" +
                             "white\n" +
@@ -124,8 +118,10 @@ public class TwoGtp
         try
         {
             String options[] = {
+                "auto",
                 "black:",
                 "help",
+                "size:",
                 "verbose",
                 "white:"
             };
@@ -135,19 +131,26 @@ public class TwoGtp
                 String helpText =
                     "Usage: java -jar twogtp.jar [options]\n" +
                     "\n" +
+                    "-auto    autoplay games\n" +
                     "-black   command for black program\n" +
                     "-help    display this help and exit\n" +
+                    "-size    board size for autoplay (default 19)\n" +
                     "-verbose log GTP streams to stderr\n" +
                     "-white   command for white program\n";
                 System.out.print(helpText);
                 System.exit(0);
             }
+            boolean auto = opt.isSet("auto");
             boolean verbose = opt.isSet("verbose");
             String black = opt.getString("black", "");
             String white = opt.getString("white", "");
+            int size = opt.getInteger("size", -1);
             TwoGtp twoGtp = new TwoGtp(System.in, System.out, black, white,
-                                       verbose);
-            twoGtp.mainLoop();
+                                       size, verbose);
+            if (auto)
+                twoGtp.autoPlay();
+            else
+                twoGtp.mainLoop();
         }
         catch (Throwable t)
         {
@@ -162,13 +165,81 @@ public class TwoGtp
 
     private boolean m_inconsistentState;
 
-    private Stack m_blackToMove = new Stack();
+    private int m_size;
+
+    private Board m_board;
+
+    private String m_blackName;
 
     private String m_name;
+
+    private String m_whiteName;
 
     private Gtp m_black;
 
     private Gtp m_white;
+
+    private void autoPlay() throws Exception
+    {
+        System.in.close();
+        StringBuffer response = new StringBuffer(256);
+        boolean error = false;
+        if (newGame(m_size > 0 ? m_size : 19, response))
+        {
+            int numberPass = 0;
+            while (! m_board.bothPassed())
+            {
+                response.setLength(0);
+                if (! sendGenmove(m_board.getToMove(), response))
+                {
+                    error = true;
+                    break;
+                }
+            }
+            File file = new File("twogtp.sgf");
+            new sgf.Writer(file, m_board, "TwoGtp", null, 0, m_blackName,
+                           m_whiteName, null, null);
+        }
+        else
+            error = true;
+        String errorMsg = null;
+        if (error)
+            errorMsg = response.toString();
+        response.setLength(0);
+        sendBoth("quit", response, false, false);
+        if (error)
+            throw new Exception(errorMsg);
+    }
+
+    private boolean boardsize(String[] cmdArray, StringBuffer response)
+    {
+        if (cmdArray.length < 2)
+        {
+            response.append("Missing argument");
+            return false;
+        }
+        try
+        {
+            int size = Integer.parseInt(cmdArray[1]);
+            if (size < 1)
+            {
+                response.append("Invalid argument");
+                return false;
+            }
+            if (m_size > 0 && size != m_size)
+            {
+                response.append("Size must be ");
+                response.append(m_size);
+                return false;
+            }
+            return newGame(size, response);
+        }
+        catch (NumberFormatException e)
+        {
+            response.append("Invalid argument");
+            return false;
+        }
+    }
 
     private boolean checkInconsistentState(StringBuffer response)
     {
@@ -213,6 +284,41 @@ public class TwoGtp
             response.append(": ");
             response.append(response2);
         }
+    }
+
+    private boolean newGame(int size, StringBuffer response)
+    {
+        boolean status = sendBoth("boardsize " + size, response, true, false);
+        if (status)
+            m_inconsistentState = false;
+        m_board = new Board(size);
+        return status;
+    }
+
+    private boolean play(Color color, String[] cmdArray, StringBuffer response)
+    {
+        if (checkInconsistentState(response))
+            return false;
+        if (cmdArray.length < 2)
+        {
+            response.append("Missing argument");
+            return false;
+        }
+        Point point = null;
+        try
+        {
+            point = Gtp.parsePoint(cmdArray[1]);
+        }
+        catch (Gtp.Error e)
+        {
+            response.append(e.getMessage());
+            return false;
+        }
+        String cmdLine = cmdArray[0] + " " + cmdArray[1];
+        boolean status = sendBoth(cmdLine, response, true, true);
+        if (status)
+            m_board.play(new Move(point, color));
+        return status;
     }
 
     private boolean send(Gtp gtp1, Gtp gtp2, String command1, String command2,
@@ -279,7 +385,7 @@ public class TwoGtp
                     tryUndo);
     }
 
-    private boolean sendGenmove(String command, StringBuffer response)
+    private boolean sendGenmove(Color color, StringBuffer response)
     {
         if (checkInconsistentState(response))
             return false;
@@ -287,12 +393,16 @@ public class TwoGtp
         Gtp gtp2;
         String prefix1;
         String prefix2;
-        if (command.startsWith("genmove_black"))
+        String command;
+        String command2;
+        if (color == Color.BLACK)
         {
             gtp1 = m_black;
             gtp2 = m_white;
             prefix1 = "B";
             prefix2 = "W";
+            command = "genmove_black";
+            command2 = "black";
         }
         else
         {
@@ -300,6 +410,8 @@ public class TwoGtp
             gtp2 = m_black;
             prefix1 = "W";
             prefix2 = "B";
+            command = "genmove_white";
+            command2 = "white";
         }
         String response1 = null;
         String response2 = null;
@@ -314,13 +426,21 @@ public class TwoGtp
                           prefix2);
             return false;
         }
-        StringBuffer command2 = new StringBuffer(command);
-        StringUtils.replace(command2, "genmove_", "");
-        command2.append(' ');
-        command2.append(response1);
+        Point point = null;
         try
         {
-            response2 = gtp2.sendCommand(command2.toString());
+            point = Gtp.parsePoint(response1);
+        }
+        catch (Gtp.Error e)
+        {
+            response.append(prefix1 + " played invalid move");
+            m_inconsistentState = true;
+            return false;
+        }
+        command2 = command2 + " " + response1;
+        try
+        {
+            response2 = gtp2.sendCommand(command2);
         }
         catch (Gtp.Error e)
         {
@@ -337,6 +457,7 @@ public class TwoGtp
             return false;
         }
         response.append(response1);
+        m_board.play(new Move(point, color));
         return true;
     }
 
@@ -359,6 +480,16 @@ public class TwoGtp
             return false;
         }        
         return true;
+    }
+
+    private boolean undo(StringBuffer response)
+    {
+        if (checkInconsistentState(response))
+            return false;
+        boolean status = sendBoth("undo", response, true, false);
+        if (status)
+            m_board.undo();
+        return status;
     }
 }
 

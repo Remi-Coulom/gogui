@@ -7,6 +7,10 @@
       <authorinitials>enz</authorinitials>
       <revremark>
 	<itemizedlist>
+	  <listitem>
+	    <command>twogtp</command>: new options <option>-auto</option>,
+	    <option>-size</option> for auto play.
+	  </listitem>
 	</itemizedlist>
       </revremark>
     </revision>

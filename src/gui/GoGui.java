@@ -1633,14 +1633,16 @@ class GoGui
             gameComment =
                 "Program command:\n" + m_commandThread.getProgramCommand();
         }
-        sgf.Writer w = new sgf.Writer(file, m_board, Version.m_version,
-                                      m_handicap, playerBlack, playerWhite,
-                                      gameComment, m_score);
+        sgf.Writer w =
+            new sgf.Writer(file, m_board, "GoGui", Version.m_version,
+                           m_handicap, playerBlack, playerWhite, gameComment,
+                           m_score);
     }
 
     private void savePosition(File file) throws FileNotFoundException
     {
-        sgf.Writer w = new sgf.Writer(file, m_board, Version.m_version);
+        sgf.Writer w =
+            new sgf.Writer(file, m_board, "GoGui", Version.m_version);
     }
 
     private void sendGtpFile(File file)

@@ -24,9 +24,9 @@ public class Writer
         }
     }    
 
-    public Writer(File file, Board board, String version, int handicap,
-                  String playerBlack, String playerWhite, String gameComment,
-                  Score score)
+    public Writer(File file, Board board, String application, String version,
+                  int handicap, String playerBlack, String playerWhite,
+                  String gameComment, Score score)
         throws FileNotFoundException
     {        
         FileOutputStream out = new FileOutputStream(file);
@@ -34,8 +34,8 @@ public class Writer
         m_board = board;
         m_file = file;
         m_out.println("(");
-        printHeader(file, version, handicap, playerBlack, playerWhite,
-                    gameComment, score);
+        printHeader(file, application, version, handicap, playerBlack,
+                    playerWhite, gameComment, score);
         printSetup(m_board.getSetupStonesBlack(),
                    m_board.getSetupStonesWhite());
         if (m_board.getNumberSavedMoves() == 0)
@@ -45,7 +45,7 @@ public class Writer
         m_out.close();
     }
 
-    public Writer(File file, Board board, String version)
+    public Writer(File file, Board board, String application, String version)
         throws FileNotFoundException
     {        
         FileOutputStream out = new FileOutputStream(file);
@@ -53,7 +53,7 @@ public class Writer
         m_board = board;
         m_file = file;
         m_out.println("(");
-        printHeader(file, version);
+        printHeader(file, application, version);
         printPosition();
         m_out.println(")");
         m_out.close();
@@ -75,7 +75,7 @@ public class Writer
         return result;
     }
 
-    private void printHeader(File file, String version)
+    private void printHeader(File file, String application, String version)
     {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -84,11 +84,14 @@ public class Writer
         DecimalFormat format = new DecimalFormat("00");
         String date = Integer.toString(year) + "-" + format.format(month) +
             "-" + format.format(day);
+        String appName = application;
+        if (version != null && ! version.equals(""))
+            appName = appName + ":" + version;
         m_out.println(";\n" +
                       "FF[4]\n" +
                       "GM[1]\n" +
                       "GN[" + getName(file) + "]\n" +
-                      "AP[GoGui:" + version + "]\n" +
+                      "AP[" + appName + "]\n" +
                       "SZ[" + m_board.getSize() + "]");
         int rules = m_board.getRules();
         if (rules == go.Board.RULES_JAPANESE)
@@ -101,11 +104,12 @@ public class Writer
         m_out.println("DT[" + date + "]");
     }
 
-    private void printHeader(File file, String version, int handicap,
-                             String playerBlack, String playerWhite,
-                             String gameComment, go.Score score)
+    private void printHeader(File file, String application, String version,
+                             int handicap, String playerBlack,
+                             String playerWhite, String gameComment,
+                             Score score)
     {
-        printHeader(file, version);
+        printHeader(file, application, version);
         if (handicap > 0)
             m_out.println("HA[" + handicap + "]");
         else
