@@ -43,6 +43,7 @@ public class Writer
         double komi = gameInformation.m_komi;
         printHeader(file, application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, result, komi, rules);
+        printNewLine();
         printNode(gameTree.getRoot(), true);
         print(")");
         m_out.println(m_buffer.toString());
