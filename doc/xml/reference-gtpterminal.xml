@@ -57,7 +57,7 @@ Print help.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>list_commands</userinput></term>
+<term><userinput>list</userinput></term>
 <listitem>
 <simpara>
 Send a <userinput>list_commands</userinput> command to the program.
@@ -75,7 +75,7 @@ for the program.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>new_game [size]</userinput></term>
+<term><userinput>newgame [size]</userinput></term>
 <listitem>
 <simpara>
 Start a new game with a given board size.

@@ -206,11 +206,11 @@ public class GtpTerminal
             genmove();
         else if (cmd.equals("help"))
             help();
-        else if (cmd.equals("list_commands"))
+        else if (cmd.equals("list"))
             listCommands();
         else if (cmd.equals("load"))
             load(cmdArray);
-        else if (cmd.equals("new_game"))
+        else if (cmd.equals("newgame"))
             newGame(cmdArray);
         else if (cmd.equals("save"))
             save(cmdArray);
@@ -246,8 +246,8 @@ public class GtpTerminal
                          "  genmove\n" +
                          "  help\n" +
                          "  load\n" +
-                         "  list_commands\n" +
-                         "  new_game\n" +
+                         "  list\n" +
+                         "  newgame\n" +
                          "  save\n" +
                          "  undo\n" +
                          "  quit\n" +
