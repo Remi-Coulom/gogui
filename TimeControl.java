@@ -36,7 +36,6 @@ class TimeControl
 
     public void disable()
     {
-        System.err.println("XXX disable");
         m_disabled = true;
         m_toMove = Color.EMPTY;
     }
@@ -115,7 +114,6 @@ class TimeControl
 
     public void reset()
     {
-        System.err.println("XXX reset");
         m_disabled = false;
         reset(Color.BLACK);
         reset(Color.WHITE);
