@@ -10,8 +10,6 @@ computer resigns is not always shown (?), only game finished
 
 IMPROVEMENTS:
 
-Move gui.GoGui to new package gogui
-
 SquareLayout should be used in gui.Board
 
 New analyze return type that automatically translates numbers (labels?)
