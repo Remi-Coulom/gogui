@@ -549,8 +549,6 @@ class GoGui
 
     private ToolBar m_toolBar;
 
-    private Vector m_commandList = new Vector(128, 128);
-
     private void analyzeBegin(boolean resetBoardAfterAnalyze)
     {
         if (m_commandThread == null)
@@ -985,7 +983,7 @@ class GoGui
     {
         go.Point[] isDeadStone = null;
         if (m_commandThread != null
-            && m_commandList.contains("final_status_list"))
+            && m_commandThread.isCommandSupported("final_status_list"))
         {
             try
             {
@@ -1411,15 +1409,18 @@ class GoGui
                 try
                 {
                     m_version = m_commandThread.queryVersion();
-                    queryCommandList();
-                    if (m_commandList.contains("gogui_sigint"))
+                    m_gtpShell.setProgramVersion(m_version);
+                    m_commandThread.querySupportedCommands();
+                    if (m_commandThread.isCommandSupported("gogui_sigint"))
                         m_pid =
                             m_commandThread.sendCommand("gogui_sigint").trim();
                 }
                 catch (Gtp.Error e)
                 {
                 }
-                m_gtpShell.setInitialCompletions(m_commandList);
+                Vector supportedCommands =
+                    m_commandThread.getSupportedCommands();
+                m_gtpShell.setInitialCompletions(supportedCommands);
                 if (! m_gtpFile.equals(""))
                     sendGtpFile(new File(m_gtpFile));
             }
@@ -1568,33 +1569,6 @@ class GoGui
         m_board.play(move);
     }
     
-    private void queryCommandList()
-    {
-        assert(m_commandThread != null);
-        m_gtpShell.setProgramVersion(m_version);
-        try
-        {
-            String s = m_commandThread.sendCommandListCommands();
-            BufferedReader r = new BufferedReader(new StringReader(s));
-            try
-            {
-                while (true)
-                {
-                    String line = r.readLine();
-                    if (line == null)
-                        break;
-                    m_commandList.add(line);
-                }
-            }
-            catch (IOException e)
-            {
-            }
-        }
-        catch (Gtp.Error e)
-        {
-        }
-    }
-
     private void resetBoard()
     {
         if (! m_boardNeedsReset)
@@ -1742,7 +1716,7 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
-        if (! m_commandList.contains("scoring_system"))
+        if (! m_commandThread.isCommandSupported("scoring_system"))
             return;
         try
         {
@@ -1762,7 +1736,7 @@ class GoGui
             return;
         if (! m_timeControl.isInitialized())
             return;
-        if (! m_commandList.contains("time_settings"))
+        if (! m_commandThread.isCommandSupported("time_settings"))
             return;
         long preByoyomi = m_timeControl.getPreByoyomi() * 60;
         long byoyomi = 0;

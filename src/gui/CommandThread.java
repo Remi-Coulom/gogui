@@ -5,6 +5,7 @@
 
 package gui;
 
+import java.util.*;
 import javax.swing.*;
 import go.*;
 import gtp.*;
@@ -66,6 +67,19 @@ class CommandThread
         return m_gtp.getProgramCommand();
     }
 
+    public Vector getSupportedCommands()
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        return m_gtp.getSupportedCommands();
+    }
+
+    public boolean isCommandSupported(String command)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        return m_gtp.isCommandSupported(command);
+    }
+
     public boolean isProgramDead()
     {
         assert(SwingUtilities.isEventDispatchThread());
@@ -77,6 +91,13 @@ class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         m_gtp.queryProtocolVersion();
+    }
+
+    public void querySupportedCommands() throws Gtp.Error
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtp.querySupportedCommands();
     }
 
     public String queryVersion() throws Gtp.Error
@@ -157,13 +178,6 @@ class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         m_gtp.sendCommandsClearBoard(size);
-    }
-
-    public String sendCommandListCommands() throws Gtp.Error
-    {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
-        return m_gtp.sendCommandListCommands();
     }
 
     public String sendCommandPlay(Move move) throws Gtp.Error

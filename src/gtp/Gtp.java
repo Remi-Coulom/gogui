@@ -111,6 +111,25 @@ public class Gtp
         return m_program;
     }
 
+    public Vector getSupportedCommands()
+    {
+        Vector result = new Vector(128, 128);
+        if (m_supportedCommands != null)
+            for (int i = 0; i < m_supportedCommands.length; ++i)
+                result.add(m_supportedCommands[i]);
+        return result;
+    }
+
+    public boolean isCommandSupported(String command)
+    {
+        if (m_supportedCommands == null)
+            return false;
+        for (int i = 0; i < m_supportedCommands.length; ++i)
+            if (m_supportedCommands[i].equals(command))
+                return true;
+        return false;
+    }
+
     public boolean isProgramDead()
     {
         return m_isProgramDead;
@@ -267,6 +286,15 @@ public class Gtp
         }
     }
 
+    public void querySupportedCommands() throws Error
+    {
+        String command = (m_protocolVersion == 1 ? "help" : "list_commands");
+        String response = sendCommand(command);
+        m_supportedCommands = StringUtils.split(response, '\n');
+        for (int i = 0; i < m_supportedCommands.length; ++i)
+            m_supportedCommands[i] = m_supportedCommands[i].trim();
+    }
+
     public String queryVersion()
     {
         try
@@ -322,14 +350,6 @@ public class Gtp
             sendCommand("boardsize " + size);
             sendCommand("clear_board");
         }
-    }
-
-    public String sendCommandListCommands() throws Error
-    {
-        if (m_protocolVersion == 1)
-            return sendCommand("help");
-        else
-            return sendCommand("list_commands");
     }
 
     public String sendCommandPlay(Move move) throws Error
@@ -447,6 +467,8 @@ public class Gtp
     private String m_logPrefix;
 
     private String m_program;
+
+    private String[] m_supportedCommands;
 
     private void readAnswer() throws Error
     {

@@ -33,8 +33,8 @@ public class TwoGtp
         m_white.queryProtocolVersion();
         m_blackName = getName(m_black);
         m_whiteName = getName(m_white);        
-        m_blackCommands = m_black.sendCommandListCommands();
-        m_whiteCommands = m_white.sendCommandListCommands();
+        m_black.querySupportedCommands();
+        m_white.querySupportedCommands();
         m_name = "TwoGtp (" + m_blackName + " - " + m_whiteName + ")";
         m_size = size;
         m_sgfFile = sgfFile;
@@ -81,7 +81,7 @@ public class TwoGtp
         else if (cmd.equals("boardsize"))
             status = boardsize(cmdArray, response);
         else if (cmd.equals("komi") || cmd.equals("scoring_system"))
-            status = sendBoth(cmdLine, response, false, false);
+            sendIfSupported(cmd, cmdLine);
         else if (cmd.equals("name"))
             response.append(m_name);
         else if (cmd.equals("version"))
@@ -114,8 +114,8 @@ public class TwoGtp
         }
         else
         {
-            boolean isExtCommandBlack = (m_blackCommands.indexOf(cmd) >= 0);
-            boolean isExtCommandWhite = (m_whiteCommands.indexOf(cmd) >= 0);
+            boolean isExtCommandBlack = m_black.isCommandSupported(cmd);
+            boolean isExtCommandWhite = m_white.isCommandSupported(cmd);
             if (isExtCommandBlack && ! isExtCommandWhite)
                 return sendSingle(m_black, cmdLine, response);
             if (isExtCommandWhite && ! isExtCommandBlack)
@@ -211,15 +211,11 @@ public class TwoGtp
 
     private Board m_board;
 
-    private String m_blackCommands;
-
     private String m_blackName;
 
     private String m_name;
 
     private String m_sgfFile;
-
-    private String m_whiteCommands;
 
     private String m_whiteName;
 
@@ -641,6 +637,21 @@ public class TwoGtp
         m_board.play(new Move(point, color));
         checkEndOfGame();
         return true;
+    }
+
+    private void sendIfSupported(String cmd, String cmdLine)
+    {
+        sendIfSupported(m_black, cmd, cmdLine);
+        sendIfSupported(m_white, cmd, cmdLine);
+    }
+
+    private void sendIfSupported(Gtp gtp, String cmd, String cmdLine)
+    {
+        if (gtp.isCommandSupported(cmd))
+        {
+            StringBuffer response = new StringBuffer();
+            sendSingle(gtp, cmdLine, response);
+        }
     }
 
     private boolean twogtpColor(Gtp gtp, String command, StringBuffer response)
