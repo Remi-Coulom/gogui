@@ -220,7 +220,7 @@ class AnalyzeCommand
         {
             File f = new File(getDir(), "analyze-commands");
             copyDefaults(f);
-            
+            files = getFiles();
         }
         for (int i = 0; i < files.size(); ++i)
             readFile((File)files.get(i), commands, labels, supportedCommands);
