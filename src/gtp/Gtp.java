@@ -1,15 +1,6 @@
 //----------------------------------------------------------------------------
-/* @file Gtp.java
-   Interface to a GTP Go program.
-
-   @note Should use java.nio to keep correct order between stderr and stout
-   of program.
-   But with java.nio in Java 1.4 it does not seem possible to get
-   selectable channels for the streams of a process .
-
-   $Id$
-   $Source$
-*/
+// $Id$
+// $Source$
 //----------------------------------------------------------------------------
 
 package gtp;
@@ -20,6 +11,7 @@ import go.Color;
 import go.Point;
 import go.Move;
 import utils.StringUtils;
+import utils.WaitMultiple;
 
 //----------------------------------------------------------------------------
 
@@ -83,10 +75,13 @@ public final class Gtp
         m_out = new PrintWriter(m_process.getOutputStream());
         m_illegalState = false;
         m_isProgramDead = false;
-        m_stdErrThread = new StdErrThread(m_process);
-        m_stdErrThread.start();
-        // Give StdErrThread a chance to start first        
-        Thread.yield();
+
+        m_inputReadThread = new ReadThread(m_process.getInputStream());
+        m_errorReadThread = new ReadThread(m_process.getErrorStream());
+        Object objects[] = { m_inputReadThread, m_errorReadThread };
+        m_waitMultiple = new WaitMultiple(objects);
+        m_inputReadThread.start();
+        m_errorReadThread.start();
     }
 
     public void close()
@@ -410,12 +405,17 @@ public final class Gtp
         }
     }
 
-    /** Handle standard error stream of the GTP Go program. */
-    private class StdErrThread extends Thread
+    private static class ReadThread
+        extends Thread
     {
-        public StdErrThread(Process process)
+        ReadThread(InputStream in)
         {
-            m_err = new InputStreamReader(process.getErrorStream());
+            m_in = new BufferedReader(new InputStreamReader(in));
+        }
+
+        public synchronized String getLine()
+        {
+            return m_line;
         }
 
         public void run()
@@ -430,37 +430,22 @@ public final class Gtp
             }
         }
 
-        private Reader m_err;
+        private BufferedReader m_in;
 
-        private void mainLoop() throws java.io.IOException
+        private String m_line;
+
+        private void mainLoop() throws IOException, InterruptedException
         {
-            int size = 1024;
-            char[] buffer = new char[size];
-            StringBuffer stringBuffer = new StringBuffer(1024);
-            while (true)
+            synchronized (this)
             {
-                int n = m_err.read(buffer, 0, size);
-                if (n < 0)
+                while (true)
                 {
-                    if (m_callback != null)
-                        m_callback.receivedStdErr(stringBuffer.toString());
-                    return;
+                    m_line = m_in.readLine();
+                    notify();
+                    wait();
                 }
-                if (m_log)
-                {
-                    System.err.print(new String(buffer, 0, n));
-                    System.err.flush();
-                }
-                stringBuffer.append(buffer, 0, n);
-                int index = stringBuffer.lastIndexOf("\n");
-                if (index == -1)
-                    continue;
-                String s = stringBuffer.substring(0, index + 1);
-                stringBuffer.delete(0, index + 1);
-                if (m_callback != null)
-                    m_callback.receivedStdErr(s);
             }
-        }   
+        }
     }
 
     private boolean m_autoNumber;
@@ -497,7 +482,11 @@ public final class Gtp
 
     private String[] m_supportedCommands;
 
-    private StdErrThread m_stdErrThread;
+    private ReadThread m_errorReadThread;
+
+    private ReadThread m_inputReadThread;
+
+    private WaitMultiple m_waitMultiple;
 
     private static boolean isResponseLine(String line)
     {
@@ -520,26 +509,43 @@ public final class Gtp
 
     private String readLine() throws Error
     {
-        try
-        {
-            String line = m_in.readLine();
-            if (line == null)
+        while (true)
+        {            
+            Object object;
+            object = m_waitMultiple.waitFor();
+            if (object == m_inputReadThread)
             {
-                m_isProgramDead = true;
-                throw new Error("Go program died");
+                String line = m_inputReadThread.getLine();
+                if (line == null)
+                {
+                    m_isProgramDead = true;
+                    throw new Error("Go program died");
+                }
+                log("<< " + line);
+                synchronized (object)
+                {
+                    object.notify();
+                }
+                return line;
             }
-            log("<< " + line);
-            return line;
-        }
-        catch (InterruptedIOException e)
-        {
-            m_isProgramDead = true;
-            throw new Error("Timeout while waiting for program");
-        }
-        catch (IOException e)
-        {
-            m_isProgramDead = true;
-            throw new Error(e.getMessage());
+            else if (object == m_errorReadThread)
+            {
+                String line = m_errorReadThread.getLine();
+                if (line == null)
+                {
+                    m_isProgramDead = true;
+                    throw new Error("Go program died");
+                }
+                log("<< " + line);
+                if (m_callback != null)
+                    m_callback.receivedStdErr(line);
+                synchronized (object)
+                {
+                    object.notify();
+                }
+            }
+            else
+                assert(false);
         }
     }
 
