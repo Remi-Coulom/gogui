@@ -69,6 +69,13 @@ Print version and exit.
 <variablelist>
 
 <varlistentry>
+<term><userinput>dummy_bwboard</userinput></term>
+<listitem>
+Output a board randomly filled with "B" and "W".
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><userinput>echo</userinput></term>
 <listitem>
 Print argument as response.

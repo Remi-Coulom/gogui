@@ -35,6 +35,8 @@ public class GtpDummy
         boolean status = true;
         if (cmd.equals("black"))
             status = play(cmdArray, response);
+        else if (cmd.equals("dummy_bwboard"))
+            bwBoard(response);
         else if (cmd.equals("echo"))
             echo(cmdLine, response);
         else if (cmd.equals("echo_err"))
@@ -61,6 +63,7 @@ public class GtpDummy
             status = play(cmdArray, response);
         else if (cmd.equals("help"))
             response.append("black\n" +
+                            "dummy_bwboard\n" +
                             "echo\n" +
                             "echo_err\n" +
                             "genmove_black\n" +
@@ -174,6 +177,17 @@ public class GtpDummy
         }
         initSize(size);
         return true;
+    }
+
+    private void bwBoard(StringBuffer response)
+    {        
+        response.append("\n");
+        for (int x = 0; x < m_size; ++x)
+        {
+            for (int y = 0; y < m_size; ++y)
+                response.append(Math.random() > 0.5 ? "B " : "W ");
+            response.append("\n");
+        }                    
     }
 
     private void echo(String cmdLine, StringBuffer response)
