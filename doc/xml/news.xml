@@ -8,6 +8,14 @@
 <date>9 May 2004</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
+<simpara>
+This release fixes a lot of bugs (mainly in the tools) and introduces
+some enhancements in the analyze command dialog.
+If you upgrade from a previous version, you should overwrite
+the configuration file <filename>$HOME/.gogui/analyze-commands</filename>
+with the file <filename>config/analyze-commands</filename> from this
+package.
+</simpara>
 <itemizedlist>
 <listitem>
 <simpara>
