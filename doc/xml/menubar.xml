@@ -16,42 +16,73 @@ Start a new game.
 <varlistentry>
 <term><guimenuitem>Open...</guimenuitem></term>
 <listitem>
+Open a game from a file in
+<ulink url="http://www.red-bean.com/sgf/">SGF</ulink>
+format.
+<warning>
+<para>
+If you open a file created by another application that contains
+side variations and node properties and save the game by overwriting
+the original file, all this information will be lost.
+</para>
+</warning>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Open recent</guisubmenu></term>
 <listitem>
+Open a game from a list of recently used files.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Save...</guimenuitem></term>
 <listitem>
+Save the current game to a file.
+If the file name ending is <filename>sgf</filename>, the game is saved
+in SGF format.
+If the file name ending is <filename>tex</filename>, the game is exported
+to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
+<ulink url="http://www.abo.fi/~vbos/psgo-frame.html">PSGO</ulink> style.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Save position...</guimenuitem></term>
 <listitem>
+Save the current position to a file.
+If the file name ending is <filename>sgf</filename>, the game is saved
+in SGF format.
+If the file name ending is <filename>tex</filename>, the game is exported
+to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
+<ulink url="http://www.abo.fi/~vbos/psgo-frame.html">PSGO</ulink> style.
+When exporting to LaTeX, some board markups from analyze commands
+are also exported (string labels, marked and selected points).
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Print...</guimenuitem></term>
 <listitem>
+Print the current position.
+A screen shot of the current board including all markups from
+analyze commands is printed.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Open with program...</guimenuitem></term>
 <listitem>
+Open the current game at the current position with a different
+Go program.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Quit</guimenuitem></term>
 <listitem>
+Quit GoGui.
 </listitem>
 </varlistentry>
 
