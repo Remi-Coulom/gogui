@@ -203,6 +203,7 @@ class Help
     private JComponent createButtons()
     {
         JToolBar toolBar = new JToolBar();
+        toolBar.setRollover(true);
         m_buttonBack = createToolBarButton("back.png", "back", "Back");
         toolBar.add(m_buttonBack);
         m_buttonForward = createToolBarButton("forward.png", "forward",
@@ -217,10 +218,19 @@ class Help
     private JButton createToolBarButton(String icon, String command,
                                         String toolTip)
     {
-        JButton button =
-            new ToolBarButton("images/" + icon, "[" + command + "]", toolTip);
+        JButton button = new JButton();
         button.setActionCommand(command);
+        button.setToolTipText(toolTip);
         button.addActionListener(this);
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        URL url = classLoader.getResource("images/" + icon);
+        if (url != null)
+            button.setIcon(new ImageIcon(url, command));
+        else
+            button.setText(command);
+        Insets insets = new Insets(1, 1, 1, 1);
+        button.setMargin(insets);
+        button.setFocusable(false);
         return button;
     }
 

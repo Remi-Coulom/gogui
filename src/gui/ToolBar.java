@@ -20,6 +20,7 @@ class ToolBar
 {
     ToolBar(ActionListener listener, Preferences prefs)
     {
+        setRollover(true);
         m_listener = listener;
         m_buttonNew = addButton("filenew.png", "new-game", "New game");
         m_buttonOpen = addButton("fileopen.png", "open", "Load game");
@@ -137,10 +138,18 @@ class ToolBar
 
     private JButton addButton(String icon, String command, String toolTip)
     {
-        JButton button =
-            new ToolBarButton("images/" + icon, "[" + command + "]", toolTip);
+        JButton button = new JButton();
         button.setActionCommand(command);
+        button.setToolTipText(toolTip);
         button.addActionListener(m_listener);
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        URL url = classLoader.getResource("images/" + icon);
+        if (url != null)
+            button.setIcon(new ImageIcon(url, command));
+        else
+            button.setText(command);
+        Insets insets = new Insets(1, 1, 1, 1);
+        button.setMargin(insets);
         button.setEnabled(false);
         add(button);
         return button;
