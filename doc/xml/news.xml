@@ -29,7 +29,7 @@ TwoGtp: fix bug in setting komi with GTP command komi
 </listitem>
 <listitem>
 <simpara>
-TwoGtp: new options -openings and -loadsgf for using opening SGF files
+TwoGtp: new options -openings and -loadsgf for using opening positions
 </simpara>
 </listitem>
 <listitem>
@@ -83,7 +83,7 @@ GoGui: new setting item "Auto Number" in Gtp shell menu
 </listitem>
 <listitem>
 <simpara>
-GoGui: new option -fast for fast and simple graphics
+GoGui: new option -fast for fast graphics
 </simpara>
 </listitem>
 <listitem>
@@ -104,7 +104,7 @@ ant target "Style"
 </listitem>
 <listitem>
 <simpara>
-Other small fixes and improvements
+Other fixes and improvements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -117,32 +117,32 @@ Other small fixes and improvements
 <authorinitials>enz</authorinitials>
 <revdescription>
 <simpara>
-New stable release.
+New stable release
 </simpara>
 <itemizedlist>
 <listitem>
 <simpara>
-New wildcard %o for analyze commands.
+New wildcard %o for analyze commands
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Option -computer-both and -computer-black will automatically start the game.
+Option -computer-both and -computer-black will automatically start the game
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Fix bug that sometimes caused assertion when scoring.
+Fix bug that sometimes caused assertion when scoring
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New menu item "Back to Main Variation".
+New menu item "Back to Main Variation"
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Other small fixes.
+Other small fixes
 </simpara>
 </listitem>
 </itemizedlist>
@@ -165,35 +165,35 @@ package.
 <itemizedlist>
 <listitem>
 <simpara>
-Allow colors black and white in analyze commands of type cboard.
+Allow colors black and white in analyze commands of type cboard
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GtpAdapter: bugfixes, new option -emuloadsgf.
+GtpAdapter: bugfixes, new option -emuloadsgf
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Color arguments to analyze commands can now be selected in the analyze window.
-New wildcard %c for commands and return type varc.
+New wildcard %c for commands and return type varc
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 If text is selected in the window opened by an analyze command of type
 pstring or hpstring, only the points contained in the selection
-will be marked on the board.
+will be marked on the board
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New Window menu item Bring All to Front.
+New Window menu item Bring All to Front
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Lots of bugfixes.
+Lots of bugfixes
 </simpara>
 </listitem>
 </itemizedlist>
@@ -208,17 +208,17 @@ Lots of bugfixes.
 <itemizedlist>
 <listitem>
 <simpara>
-Remember last Go program attached and automatically attach it on startup.
+Remember last Go program attached and automatically attach it on startup
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GtpAdapter: new option -fillpasses.
+GtpAdapter: new option -fillpasses
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Lots of bugfixes.
+Lots of bugfixes
 </simpara>
 </listitem>
 </itemizedlist>
@@ -233,12 +233,12 @@ Lots of bugfixes.
 <itemizedlist>
 <listitem>
 <simpara>
-TwoGtp: Fix NullPointerException if no komi option was used.
+TwoGtp: Fix NullPointerException if no komi option was used
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GoGui: Fix NullPointerException after leaving setup mode.
+GoGui: Fix NullPointerException after leaving setup mode
 </simpara>
 </listitem>
 <listitem>
@@ -258,22 +258,22 @@ Lots of other small fixes.
 <itemizedlist>
 <listitem>
 <simpara>
-Support for game trees and navigation in variations.
+Support for game trees and navigation in variations
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Read, save and edit game information.
+Read, save and edit game information
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Detach current Go programs and attach new program.
+Detach current Go programs and attach new program
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New tools: GtpAdapter and GtpTerminal.
+New tools: GtpAdapter and GtpTerminal
 </simpara>
 </listitem>
 <listitem>
@@ -282,32 +282,32 @@ GtpServer: port number is now given with option -port.
 New options -remote and -user to make outgoing connections (e.g. required by
 the
 <ulink url="http://www.lysator.liu.se/~gunnar/gtp/random_go_challenge.html">
-Random Go Challenge</ulink>).
+Random Go Challenge</ulink>)
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-TwoGtp: new option -estimate-score.
+TwoGtp: new option -estimate-score
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Nicer HTML output of GtpRegress, and TwoGtp.
+Nicer HTML output of GtpRegress, and TwoGtp
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GoGui: option -fillpasses is no longer supported.
+GoGui: option -fillpasses is no longer supported
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Draw stones using highlights and shadows.
+Draw stones using highlights and shadows
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Other fixes and improvements.
+Other fixes and improvements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -323,34 +323,34 @@ Other fixes and improvements.
 <listitem>
 <simpara>
 Use <ulink url="http://ant.apache.org">Apache Ant</ulink> instead of GNU make
-as a build system.
+as a build system
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-TwoGtp: support an optional third program as a referee.
+TwoGtp: support an optional third program as a referee
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 All programs have now the ability to read command line options and arguments
-from a file with the -config option.
+from a file with the -config option
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 SgfToTex: improved output.
-New options -force, -title.
+New options -force, -title
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Allow to enter non-standard boardsizes from menu Size.
+Allow to enter non-standard boardsizes from menu Size
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Minor fixes and improvements.
+Minor fixes and improvements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -366,7 +366,7 @@ Minor fixes and improvements.
 <listitem>
 <simpara>
 TwoGtp: new option -force;
-forward time_settings; fixes in format of result file.
+forward time_settings; fixes in format of result file
 </simpara>
 </listitem>
 <listitem>
@@ -376,7 +376,7 @@ New Game menu item Truncate.
 </listitem>
 <listitem>
 <simpara>
-New Settings menu item Show cursor.
+New Settings menu item Show cursor
 </simpara>
 </listitem>
 <listitem>
@@ -386,7 +386,7 @@ GmpToGtp: new option -flow
 </listitem>
 <listitem>
 <simpara>
-Minor fixes and improvements.
+Minor fixes and improvements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -402,23 +402,23 @@ Minor fixes and improvements.
 <listitem>
 <simpara>
 Improve export as LaTeX document.
-New option -pass for SgfToTex.
+New option -pass for SgfToTex
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Add documentation for main menu bar.
+Add documentation for main menu bar
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 TwoGtp: option -analyze
-also outputs a text file containing a table row with summary information.
+also outputs a text file containing a table row with summary information
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Other minor fixes and improvements.
+Other minor fixes and improvements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -433,18 +433,18 @@ Other minor fixes and improvements.
 <itemizedlist>
 <listitem>
 <simpara>
-New menu items Open Recent and Goto.
+New menu items Open Recent and Goto
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-TwoGtp: new option -analyze.
+TwoGtp: new option -analyze
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Analyze commands are now selected from a dialog.
-Lots of new analyze command wildcards and result types.
+Lots of new analyze command wildcards and result types
 </simpara>
 </listitem>
 <listitem>
@@ -456,17 +456,17 @@ New tool GtpDummy.
 <simpara>
 Remove GoGui option -gtpshell.
 Instead remember size and visibility of windows with new Settings menu item
-Remember window sizes.
+Remember window sizes
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Support for multiple analyze-commands files.
+Support for multiple analyze-commands files
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Lots of other fixes and enhancements.
+Lots of other fixes and enhancements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -481,7 +481,7 @@ Lots of other fixes and enhancements.
 <itemizedlist>
 <listitem>
 <simpara>
-Minor bugfixes.
+Minor bugfixes
 </simpara>
 </listitem>
 </itemizedlist>
@@ -496,13 +496,13 @@ Minor bugfixes.
 <itemizedlist>
 <listitem>
 <simpara>
-Fix bug when truncating history in GTP shell.
+Fix bug when truncating history in GTP shell
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Fix bug: marker was not cleared after running analyze command
-with point argument.
+with point argument
 </simpara>
 </listitem>
 </itemizedlist>
@@ -517,7 +517,7 @@ with point argument.
 <itemizedlist>
 <listitem>
 <simpara>
-Bugfix release.
+Bugfix release
 </simpara>
 </listitem>
 </itemizedlist>
@@ -534,33 +534,33 @@ Bugfix release.
 <simpara>
 TwoGtp: new options for playing a series of games and saving the results;
 forward GTP extension commands to program that implement them;
-handle GTP version 2 programs.
+handle GTP version 2 programs
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New Settings menu item Show last move.
+New Settings menu item Show last move
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GoGui uses GTP extension command gogui_title if available.
+GoGui uses GTP extension command gogui_title if available
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Fix problem in GTP shell: caret was not redrawn after entering command.
+Fix problem in GTP shell: caret was not redrawn after entering command
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Use key accelerators more similar to existing UI style guides.
+Use key accelerators more similar to existing UI style guides
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Games can be saved in LaTeX format using psgo.sty.
-Standalone converter SgfToTex.
+Standalone converter SgfToTex
 </simpara>
 </listitem>
 <listitem>
@@ -568,34 +568,34 @@ Standalone converter SgfToTex.
 GoGui:
 Rename GoGui option -autoplay to -auto.
 Remove option -autofile.
-New option -command.
+New option -command
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New tool GtpRegress.
+New tool GtpRegress
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Rename GtpNet to GtpServer.
+Rename GtpNet to GtpServer
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Setup and score mode do no longer use their own the menu bar.
+Setup and score mode do no longer use their own the menu bar
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Go programs that can understand the special comment line
 #&#160;interrupt must indicate this by implementing the
-command gogui_interrupt.
+command gogui_interrupt
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Lots of other fixes and enhancements.
+Lots of other fixes and enhancements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -611,63 +611,63 @@ Lots of other fixes and enhancements.
 <listitem>
 <simpara>
 Use GTP command final_status_list if supported by the Go program for
-initializing dead stones when scoring.
+initializing dead stones when scoring
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Make Japanese rules default and store them in preferences.
+Make Japanese rules default and store them in preferences
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-After setting up a position set last setup color as color to move.
+After setting up a position set last setup color as color to move
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Show filename in title bar if game is loaded and not modified.
+Show filename in title bar if game is loaded and not modified
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Add option for beep after move.
+Add option for beep after move
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Use time_settings command if -time option is used.
+Use time_settings command if -time option is used
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New options -autofile, -computer-both, -computer-black.
+New options -autofile, -computer-both, -computer-black
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Compile TwoGtp into its own jar file twogtp.jar.
+Compile TwoGtp into its own jar file twogtp.jar
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Fix bug in GmpToGtp: Black should send NEWGAME if -simple option is used.
+Fix bug in GmpToGtp: Black should send NEWGAME if -simple option is used
 </simpara>
 </listitem>
 <listitem>
 <simpara>
 Fix potential deadlock if program writes to standard error
-before GUI is visible.
+before GUI is visible
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Add network tools GtpNet and NetGtp.
+Add network tools GtpNet and NetGtp
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Lots of other fixes and enhancements.
+Lots of other fixes and enhancements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -682,27 +682,27 @@ Lots of other fixes and enhancements.
 <itemizedlist>
 <listitem>
 <simpara>
-Fix cursor not positioned at last moves if handicap or setup stones exist.
+Fix cursor not positioned at last moves if handicap or setup stones exist
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Fix bug: handicap stones were played after setup done.
+Fix bug: handicap stones were played after setup done
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Clear old markups before showing an analyze command with a point list result.
+Clear old markups before showing an analyze command with a point list result
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Store komi in preferences.
+Store komi in preferences
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Add command reference to documentation.
+Add command reference to documentation
 </simpara>
 </listitem>
 <listitem>
@@ -722,27 +722,27 @@ Other small fixes.
 <itemizedlist>
 <listitem>
 <simpara>
-Board uses background image and antialiasing.
+Board uses background image and antialiasing
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Cursor keys can be used to enter moves.
+Cursor keys can be used to enter moves
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Documentation in docbook format.
+Documentation in docbook format
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Improvements in GmpToGtp adapter.
+Improvements in GmpToGtp adapter
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Lots of other small fixes and improvements.
+Lots of other small fixes and improvements
 </simpara>
 </listitem>
 </itemizedlist>
@@ -757,7 +757,7 @@ Lots of other small fixes and improvements.
 <itemizedlist>
 <listitem>
 <simpara>
-Initial release.
+Initial release
 </simpara>
 </listitem>
 </itemizedlist>
