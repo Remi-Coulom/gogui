@@ -188,16 +188,16 @@ public class Reader
         }
     }
 
-    private Error getError(String message)
+    private SgfError getError(String message)
     {
         int lineNumber = m_tokenizer.lineno() + 1;
         if (m_name != null)
         {
             String s = m_name + ":" + lineNumber + ": " + message;
-            return new Error(s);
+            return new SgfError(s);
         }
         else
-            return new Error(lineNumber + ": " + message);
+            return new SgfError(lineNumber + ": " + message);
     }
 
     private Color parseColor(String s) throws SgfError
