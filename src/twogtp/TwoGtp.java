@@ -204,7 +204,7 @@ public class TwoGtp
             status = false;
         }
         else if (cmd.equals("time_settings"))
-            return sendBoth(cmdLine, response, false, false);
+            sendIfSupported(cmd, cmdLine);
         else
         {
             boolean isExtCommandBlack = m_black.isCommandSupported(cmd);
