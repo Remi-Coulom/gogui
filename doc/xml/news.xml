@@ -31,6 +31,23 @@ Lots of other fixes and enhancements.
 </revision>
 
 <revision>
+<revnumber>0.3.2</revnumber>
+<date>1 Sep 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Fix bug when truncating history in GTP shell.
+</listitem>
+<listitem>
+Fix bug: marker was not cleared after running analyze command
+with point argument.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
 <revnumber>0.3.1</revnumber>
 <date>29 Aug 2003</date>
 <authorinitials>enz</authorinitials>
