@@ -1830,9 +1830,12 @@ class GoGui
 
     private void generateMove()
     {
+        String appName = "Computer";
+        if (! m_name.equals(""))
+            appName = StringUtils.capitalize(m_name);
+        showStatus(appName + " is thinking ...");
         go.Color toMove = m_board.getToMove();
         String command = m_commandThread.getCommandGenmove(toMove);
-        showStatus("Computer is thinking ...");
         Runnable callback = new Runnable()
             {
                 public void run() { computerMoved(); }
