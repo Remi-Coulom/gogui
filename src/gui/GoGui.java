@@ -1399,6 +1399,7 @@ class GoGui
                 m_board.undo();            
             if (move > 0)
                 forward(move);
+            setKomi(reader.getKomi());
             computerNone();
             boardChanged();
         }
