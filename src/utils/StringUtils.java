@@ -12,10 +12,8 @@ import java.util.*;
 
 public class StringUtils
 {
-    /** Format a string for a dialog message.
-        Trims the string and changes first character to uppercase.
-    */
-    public static String formatMessage(String message)
+    /** Capitalize the first word and trim whitespaces. */
+    public static String capitalize(String message)
     {
         message = message.trim();
         if (message.equals(""))
