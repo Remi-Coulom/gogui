@@ -1030,7 +1030,7 @@ class GoGui
         {
             if (showQuestion("Program does not support interrupting.\n"
                              + "Kill program?"))
-                detachProgram();
+                m_commandThread.destroyGtp();
             return;
         }
         if (! showQuestion("Interrupt command?"))
