@@ -138,6 +138,8 @@ public class Reader
             result = result + "Invalid board size value\n";
         if (m_warningWrongPass)
             result = result + "Non-standard pass move encoding\n";
+        if (m_warningSizeOutsideRoot)
+            result = result + "Size property not in root node\n";
         if (m_warningInvalidHandicap)
             result = result + "Invalid handicap value\n";
         if (m_warningLongProps)
@@ -158,6 +160,8 @@ public class Reader
 
     private boolean m_isFile;
 
+    private boolean m_sizeFixed;
+
     private boolean m_warningExtraText;
 
     private boolean m_warningFormat;
@@ -170,6 +174,8 @@ public class Reader
     private boolean m_warningInvalidHandicap;
 
     private boolean m_warningLongProps;
+
+    private boolean m_warningSizeOutsideRoot;
 
     private boolean m_warningWrongPass;
 
@@ -440,6 +446,7 @@ public class Reader
                     m_warningLongProps = true;
                 for (int i = 0; i < values.size(); ++i)
                     node.addBlack(parsePoint((String)values.get(i)));
+                m_sizeFixed = true;
             }
             else if (p.equals("AE") || p.equals("ADDEMPTY"))
             {
@@ -453,12 +460,14 @@ public class Reader
                     m_warningLongProps = true;
                 for (int i = 0; i < values.size(); ++i)
                     node.addWhite(parsePoint((String)values.get(i)));
+                m_sizeFixed = true;
             }
             else if (p.equals("B") || p.equals("BLACK"))
             {
                 if (p.equals("BLACK"))
                     m_warningLongProps = true;
                 node.setMove(getMove(parsePoint(v), Color.BLACK));
+                m_sizeFixed = true;
             }
             else if (p.equals("BL"))
             {
@@ -604,7 +613,11 @@ public class Reader
                 if (p.equals("SIZE"))
                     m_warningLongProps = true;
                 if (! isRoot)
-                    throw getError("Size property outside root node");
+                {
+                    if (m_sizeFixed)
+                        throw getError("Size property outside root node");
+                    m_warningSizeOutsideRoot = true;
+                }
                 try
                 {
                     m_gameInformation.m_boardSize = parseInt(v);
@@ -613,12 +626,14 @@ public class Reader
                 {
                     m_warningInvalidBoardSize = true;
                 }
+                m_sizeFixed = true;
             }
             else if (p.equals("W") || p.equals("WHITE"))
             {
                 if (p.equals("WHITE"))
                     m_warningLongProps = true;
                 node.setMove(getMove(parsePoint(v), Color.WHITE));
+                m_sizeFixed = true;
             }
             else if (p.equals("WL"))
             {
@@ -648,6 +663,7 @@ public class Reader
         try
         {
             m_gameInformation = new GameInformation(19);
+            m_sizeFixed = false;
             if (m_progressShow != null)
             {
                 m_byteCountInputStream = new ByteCountInputStream(in);
