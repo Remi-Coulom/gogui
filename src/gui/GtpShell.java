@@ -188,9 +188,7 @@ public class GtpShell
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);        
         int fontSize = m_gtpShellText.getFont().getSize();
-        scrollPane.setPreferredSize(new Dimension(fontSize * 51,
-                                                  fontSize * 53));
-        JViewport viewport = scrollPane.getViewport();
+        //JViewport viewport = scrollPane.getViewport();
         //viewport.setBackground(m_gtpShellText.getBackground());
         contentPane.add(scrollPane, BorderLayout.CENTER);
         
@@ -206,6 +204,7 @@ public class GtpShell
         m_comboBox.addItemListener(this);
         contentPane.add(m_comboBox, BorderLayout.SOUTH);
         pack();
+        setSize(new Dimension(fontSize * 51, fontSize * 53));
     }
     
     public void actionPerformed(ActionEvent event)
