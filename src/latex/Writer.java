@@ -45,7 +45,7 @@ public class Writer
             String comment = printMoves();
             printEndPSGo();
             if (! comment.equals(""))
-                m_out.println("\n" + comment + "\n");
+                m_out.println("\n" + comment);
         }
         printEndDocument();
         m_out.close();
@@ -147,9 +147,17 @@ public class Writer
             {
                 needsComment[i] = true;
                 needsColorComment[i] = isColorUnexpected;
-                m_out.println("\\toggleblackmove");
+                m_out.print("\\toggleblackmove");
                 blackToMove = ! blackToMove;
-                m_out.println("\\setcounter{gomove}{" + (i + 1) + "}");
+                m_out.print(" \\setcounter{gomove}{" + (i + 1) + "}");
+                if (point != null)
+                {
+                    m_out.print(" % \\move");
+                    printCoordinates(point);
+                }
+                else
+                    m_out.print(" % Pass");
+                m_out.println(" % " + (i + 1));
                 continue;
             }
             else if (isColorUnexpected)
@@ -159,7 +167,7 @@ public class Writer
             }
             m_out.print("\\move");
             printCoordinates(point);
-            m_out.print("\n");
+            m_out.println(" % " + (i + 1));
             firstMoveAtPoint[point.getX()][point.getY()] = i + 1;
             blackToMove = ! blackToMove;
         }
