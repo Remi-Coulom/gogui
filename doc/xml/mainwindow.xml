@@ -42,13 +42,6 @@ Start a new game.
 Open a game from a file in
 <ulink url="http://www.red-bean.com/sgf/">SGF</ulink>
 format.
-<warning>
-<simpara>
-If you open a file created by another application that contains
-side variations and node properties and save the game by overwriting
-the original file, all this information will be lost.
-</simpara>
-</warning>
 </para>
 </listitem>
 </varlistentry>
