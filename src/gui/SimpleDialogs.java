@@ -6,9 +6,13 @@
 package gui;
 
 import java.awt.Component;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
+import java.io.FilenameFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import utils.Platform;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -44,21 +48,14 @@ public class SimpleDialogs
                                       JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static File showOpen(Component parent, String title)
+    public static File showOpen(Frame parent, String title)
     {
-        String dir = System.getProperties().getProperty("user.dir");
-        JFileChooser chooser = new JFileChooser(dir);
-        chooser.setDialogTitle(title);
-        chooser.setMultiSelectionEnabled(false);
-        int ret = chooser.showOpenDialog(parent);
-        if (ret != JFileChooser.APPROVE_OPTION)
-            return null;
-        return chooser.getSelectedFile();
+        return showFileChooser(parent, FILE_OPEN, null, false, title);
     }
 
-    public static File showOpenSgf(Component frame)
+    public static File showOpenSgf(Frame parent)
     {
-        return showSgfFileChooser(frame, FILE_OPEN, null, true, null);
+        return showFileChooser(parent, FILE_OPEN, null, true, null);
     }
 
     public static boolean showQuestion(Component frame, String message)
@@ -71,17 +68,17 @@ public class SimpleDialogs
         return (r == 0);
     }
 
-    public static File showSaveSgf(Component frame)
+    public static File showSaveSgf(Frame parent)
     {
-        File file =
-            showSgfFileChooser(frame, FILE_SAVE, m_lastFile, true, null);
+        File file = showFileChooser(parent, FILE_SAVE, m_lastFile, true,
+                                    null);
         while (file != null)
         {
             if (file.exists())
-                if (! showQuestion(frame, "Overwrite " + file + "?"))
+                if (! showQuestion(parent, "Overwrite " + file + "?"))
                 {
-                    file = showSgfFileChooser(frame, FILE_SAVE, null, true,
-                                              null);
+                    file = showFileChooser(parent, FILE_SAVE, null, true,
+                                           null);
                     continue;
                 }
             break;
@@ -90,18 +87,17 @@ public class SimpleDialogs
     }
 
     /** File selection, unknown whether for load or save. */
-    public static File showSelectFile(Component frame, String title)
+    public static File showSelectFile(Frame parent, String title)
     {
-        return showSgfFileChooser(frame, FILE_SELECT, m_lastFile, false,
-                                  title);
+        return showFileChooser(parent, FILE_SELECT, m_lastFile, false, title);
     }
 
-    public static void showWarning(Component frame, String message)
+    public static void showWarning(Component parent, String message)
     {
         String title = "Warning";
-        if (frame == null)
+        if (parent == null)
             title = title + " - " + m_appName;
-        JOptionPane.showMessageDialog(frame, message, title,
+        JOptionPane.showMessageDialog(parent, message, title,
                                       JOptionPane.WARNING_MESSAGE);
     }
 
@@ -114,15 +110,72 @@ public class SimpleDialogs
 
     private static File m_lastFile;
 
-    private static File showSgfFileChooser(Component frame, int type,
+    private static File getUserDir()
+    {
+        String userDir = System.getProperties().getProperty("user.home");
+        return new File(userDir);
+    }
+
+    private static File showFileChooser(Frame parent, int type, File lastFile,
+                                        boolean setSgfFilter, String title)
+    {
+        if (Platform.isMac())
+            return showFileChooserAWT(parent, type, lastFile, setSgfFilter,
+                                      title);
+        return showFileChooserSwing(parent, type, lastFile, setSgfFilter,
+                                    title);
+    }
+
+    private static File showFileChooserAWT(Frame parent, int type,
                                            File lastFile,
                                            boolean setSgfFilter, String title)
     {
         if (m_lastFile == null)
+            m_lastFile = getUserDir();
+        FileDialog dialog = new FileDialog(parent);
+        if (title == null)
         {
-            String userDir = System.getProperties().getProperty("user.home");
-            m_lastFile = new File(userDir);
+            switch (type)
+            {
+            case FILE_OPEN:
+                title = "Open";
+                break;
+            case FILE_SAVE:
+                title = "Save";
+                break;
+            default:
+                title = "Select";
+            }
         }
+        dialog.setTitle(title);
+        int mode = FileDialog.LOAD;
+        if (type == FILE_SAVE)
+            mode = FileDialog.SAVE;
+        dialog.setMode(mode);
+        /* Commented out, because there is no way to change the filter by the
+           user (at least not on Linux)
+        if (setSgfFilter)
+            dialog.setFilenameFilter(new FilenameFilter() {
+                    public boolean accept(File dir, String name)
+                    {
+                        return name.toLowerCase().endsWith("sgf");
+                    }
+                });
+        */
+        dialog.setLocationRelativeTo(parent);
+        dialog.setVisible(true);
+        if (dialog.getFile() == null)
+            return null;
+        return new File(dialog.getDirectory(), dialog.getFile());
+    }
+
+    private static File showFileChooserSwing(Component parent, int type,
+                                             File lastFile,
+                                             boolean setSgfFilter,
+                                             String title)
+    {
+        if (m_lastFile == null)
+            m_lastFile = getUserDir();
         JFileChooser chooser = new JFileChooser(m_lastFile);
         chooser.setMultiSelectionEnabled(false);
         javax.swing.filechooser.FileFilter sgfFilter = new sgf.Filter();
@@ -141,15 +194,15 @@ public class SimpleDialogs
         switch (type)
         {
         case FILE_SAVE:
-            ret = chooser.showSaveDialog(frame);
+            ret = chooser.showSaveDialog(parent);
             break;
         case FILE_OPEN:
-            ret = chooser.showOpenDialog(frame);
+            ret = chooser.showOpenDialog(parent);
             break;
         default:
             if (title != null)
                 chooser.setDialogTitle(title);
-            ret = chooser.showDialog(frame, "Select");
+            ret = chooser.showDialog(parent, "Select");
             break;
         }
         if (ret != JFileChooser.APPROVE_OPTION)
