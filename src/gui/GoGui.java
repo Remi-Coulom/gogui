@@ -278,7 +278,7 @@ class GoGui
                 m_board.play(new Move(p, go.Color.EMPTY));
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
-            m_guiBoard.update();
+            m_guiBoard.updateFromGoBoard();
             m_isModified = true;
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
@@ -796,7 +796,7 @@ class GoGui
 
     private void boardChangedBegin(boolean doCheckComputerMove)
     {
-        m_guiBoard.update();
+        m_guiBoard.updateFromGoBoard();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
@@ -1480,7 +1480,7 @@ class GoGui
             }
         }
         m_board.newGame();        
-        m_guiBoard.update();
+        m_guiBoard.updateFromGoBoard();
         resetBoard();
         m_timeControl.reset();
         m_lostOnTimeShown = false;
@@ -1732,7 +1732,7 @@ class GoGui
         initGame(size);
         setHandicap();
         m_gameInfo.update();
-        m_guiBoard.update();
+        m_guiBoard.updateFromGoBoard();
     }
 
     private void newGameContinue(int size)
@@ -1750,7 +1750,7 @@ class GoGui
         setHandicap();
         setTimeSettings();
         m_gameInfo.update();
-        m_guiBoard.update();
+        m_guiBoard.updateFromGoBoard();
         checkComputerMove();
     }
 
@@ -1759,7 +1759,7 @@ class GoGui
         initGame(size);
         loadFile(new File(m_file), move);
         m_gameInfo.update();
-        m_guiBoard.update();
+        m_guiBoard.updateFromGoBoard();
     }
 
     private void play(Move move) throws Gtp.Error

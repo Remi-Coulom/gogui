@@ -63,7 +63,7 @@ public class Board
         drawLastMove();
         if (m_variationShown)
         {
-            update();
+            updateFromGoBoard();
             m_variationShown = false;
         }
     }
@@ -500,7 +500,7 @@ public class Board
         m_variationShown = true;
     }
 
-    public void update()
+    public void updateFromGoBoard()
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
