@@ -2589,7 +2589,7 @@ class GoGui
             return;
         m_needsSave = needsSave;
         // Set Swing property on root window, good for e.g. Mac close
-        // buttons
+        // buttons (See Mac QA1146)
         getRootPane().putClientProperty("windowModified",
                                         Boolean.valueOf(needsSave));
     }
