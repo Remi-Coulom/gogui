@@ -456,12 +456,8 @@ class GoGui
             analyzeBegin(false, false);
         }
         else
-        {
-            toFront();
-            requestFocus();
-            m_guiBoard.requestFocus();
-        }
-    }
+            toTop();
+    }    
 
     public void windowActivated(WindowEvent e)
     {
@@ -694,7 +690,7 @@ class GoGui
                     JLabel label = new JLabel(resultTitle);
                     Container contentPane = dialog.getContentPane();
                     contentPane.add(label, BorderLayout.NORTH);
-                    JTextArea textArea = new JTextArea(response, 17, 40);
+                    JTextArea textArea = new JTextArea(response);
                     textArea.setEditable(false);
                     textArea.setFont(new Font("Monospaced", Font.PLAIN,
                                               getFont().getSize()));
@@ -1508,7 +1504,7 @@ class GoGui
                 if (m_showGtpShellAtStart)
                     m_gtpShell.toTop();
             }
-            m_guiBoard.requestFocus();
+            m_guiBoard.setFocus();
         }
         catch (Gtp.Error e)
         {
@@ -2096,6 +2092,12 @@ class GoGui
     private void showWarning(String message)
     {
         SimpleDialogs.showWarning(this, message);
+    }
+
+    private void toTop()
+    {
+        toFront();
+        m_guiBoard.setFocus();
     }
 }
 

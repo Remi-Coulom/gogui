@@ -83,6 +83,23 @@ public class Board
             m_listener.fieldClicked(p);
     }
 
+    public void setFocus()
+    {
+        int moveNumber = m_board.getMoveNumber();
+        if (moveNumber > 0)
+        {
+            Move m = m_board.getMove(moveNumber - 1);
+            go.Point lastMove = m.getPoint();
+            if (lastMove != null && m.getColor() != go.Color.EMPTY)
+                setFocusPoint(lastMove);
+        }
+        else if (m_board.getInternalNumberMoves() == 0)
+        {
+            int size = m_board.getSize();
+            setFocusPoint(m_board.getPoint(size / 2, size / 2));
+        }
+    }
+
     public go.Board getBoard()
     {
         return m_board;
@@ -431,7 +448,6 @@ public class Board
             go.Point lastMove = m.getPoint();
             if (lastMove != null && m.getColor() != go.Color.EMPTY)
             {
-                setFocusPoint(lastMove);
                 if (m_showLastMove)
                 {
                     Field field = getField(lastMove);
@@ -441,11 +457,7 @@ public class Board
                 }
             }
         }
-        else if (m_board.getInternalNumberMoves() == 0)
-        {
-            int size = m_board.getSize();
-            setFocusPoint(m_board.getPoint(size / 2, size / 2));
-        }
+        setFocus();
     }
 
     private Field getField(go.Point p)
