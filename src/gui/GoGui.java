@@ -864,7 +864,6 @@ class GoGui
             m_gtpShell.sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
-        setTitleFromProgram();
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
         Node oldCurrentNode = m_currentNode;
@@ -1842,6 +1841,7 @@ class GoGui
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
+        setTitleFromProgram();
         if (m_commandThread == null
             || (! m_computerBlack && ! m_computerWhite))
             computerNone();
@@ -1937,6 +1937,7 @@ class GoGui
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
+        setTitleFromProgram();
     }
 
     private void newGameFile(int size, File file, int move)
