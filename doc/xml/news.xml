@@ -5,6 +5,22 @@
 
 <revision>
 <revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+<application>TwoGtp</application>: Fix NullPointerException if no komi option
+was used.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.6pre1</revnumber>
 <date>16 Apr 2004</date>
 <authorinitials>enz</authorinitials>
 <revdescription>

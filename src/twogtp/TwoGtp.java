@@ -333,7 +333,7 @@ public class TwoGtp
             String white = opt.getString("white", "");
             String referee = opt.getString("referee", "");
             int size = opt.getInteger("size", 0, 0);
-            Float komi = null;
+            Float komi = new Float(0f);
             if (opt.isSet("komi"))
                 komi = new Float(opt.getFloat("komi"));
             else if (auto)
