@@ -489,6 +489,19 @@ public class TwoGtp
         return new File(m_sgfFile + "-" + gameIndex + ".sgf");
     }
 
+    private static String getHost()
+    {
+        String host = "?";
+        try
+        {
+            host = InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        return host;
+    }
+
     private Vector getMoves()
     {
         Vector moves = new Vector(128, 128);
@@ -787,14 +800,7 @@ public class TwoGtp
             resultWhite = inverseResult(resultBlack);
             resultBlack = resultTmp;
         }
-        String host = "?";
-        try
-        {
-            host = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e)
-        {
-        }
+        String host = getHost();
         String gameComment =
             "B: " + blackCommand +
             "\nW: " + whiteCommand +
@@ -827,8 +833,18 @@ public class TwoGtp
                 blackName = m_blackName + ":" + m_blackVersion;
             if (! m_whiteVersion.equals(""))
                 whiteName = m_whiteName + ":" + m_whiteVersion;
-            out.println("# Black " + blackName);
-            out.println("# White " + whiteName);
+            DateFormat format =
+                DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                               DateFormat.FULL);
+            Date date = Calendar.getInstance().getTime();
+            out.println("# Black: " + blackName);
+            out.println("# White: " + whiteName);
+            out.println("# BlackCommand: " + m_black.getProgramCommand());
+            out.println("# WhiteCommand: " + m_white.getProgramCommand());
+            out.println("# Size: " + m_size);
+            out.println("# Komi: " + m_komi);
+            out.println("# Date: " + format.format(date));
+            out.println("# Host: " + getHost());
             out.println("# Game\tResB\tResW\tAlt\tDup\tLen\tCpuB\tCpuW\t" +
                         "Err\tErrMsg");
             out.close();
