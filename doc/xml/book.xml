@@ -7,6 +7,7 @@
  <!ENTITY interrupt SYSTEM "interrupt.xml">
  <!ENTITY analyze SYSTEM "analyze.xml">
  <!ENTITY news SYSTEM "news.xml">
+ <!ENTITY gpl SYSTEM "gpl.xml">
    ]>
 <book>
   <title>GoGui Documentation</title>
@@ -18,5 +19,6 @@
   &interrupt;
   &analyze;
   &news;
+  &gpl;
   
 </book>
