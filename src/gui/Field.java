@@ -236,6 +236,9 @@ public class Field
     private static final java.awt.Color m_influenceWhiteColor
         = java.awt.Color.white;
 
+    private static final java.awt.Color m_lastMoveMarkerColor
+        = java.awt.Color.decode("#b61a17");
+
     private static final java.awt.Color m_colorBlackStone
         = java.awt.Color.decode("#030303");
 
@@ -325,7 +328,7 @@ public class Field
     private void drawLastMoveMarker()
     {
         setComposite(m_composite7);
-        drawCircle(java.awt.Color.red);
+        drawCircle(m_lastMoveMarkerColor);
         m_graphics.setPaintMode();
     }
 
