@@ -74,6 +74,7 @@ $Source$
 <fileset dir="build/netgtp"/>
 <fileset dir="build/sgf"/>
 <fileset dir="build/sgftotex"/>
+<fileset dir="build/test"/>
 <fileset dir="build/twogtp"/>
 <fileset dir="build/utils"/>
 <fileset dir="build/version"/>
@@ -158,6 +159,7 @@ installation directory.
  src/*/package.html
  src/*/*.java
  src/*/*.java.in
+ test/*/*.java
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
