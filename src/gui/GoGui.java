@@ -1344,7 +1344,7 @@ class GoGui
                 m_board.play(m);
                 if (m.getPoint() == null
                     && ! (m_computerBlack && m_computerWhite))
-                    showInfo("Pass.");
+                    showInfo("Computer passed.");
                 fileModified();
                 m_isModified = true;
                 m_resigned = false;
