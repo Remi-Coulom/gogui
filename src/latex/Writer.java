@@ -122,46 +122,33 @@ public class Writer
 
     private void printMoves()
     {
+        int counter = 0;
+        boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
-        boolean truncate = false;
         for (int i = 0; i < m_board.getNumberSavedMoves(); ++i)
         {
             Move move = m_board.getMove(i);
             Point point = move.getPoint();
             Color color = move.getColor();
-            if (! truncate)
+            if (point == null)
             {
-                if (point == null)
-                {
-                    m_out.println("% PSGO does not support pass moves");
-                    m_out.println("% Remaining moves:");
-                    truncate = true;
-                }
-                else if ((i % 2 == 0 && color != Color.BLACK)
-                         || (i % 2 == 1 && color != Color.WHITE))
-                {
-                    m_out.println("% PSGO does not support " +
-                                  "non-alternating colors");
-                    m_out.println("% Remaining moves:");
-                    truncate = true;
-                }
+                m_out.println("\\toggleblackmove");
+                blackToMove = ! blackToMove;
+                ++counter;
+                m_out.println("\\setcounter{gomove}{" + counter + "}");
+                continue;
             }
-            if (! truncate)
+            else if ((blackToMove && color != Color.BLACK)
+                     || (! blackToMove && color != Color.WHITE))
             {
-                m_out.print("\\move");
-                printCoordinates(point);
-                m_out.print("\n");
+                m_out.println("\\toggleblackmove");
+                blackToMove = ! blackToMove;
             }
-            else
-            {
-                m_out.print("% \\move");
-                printColor(color);
-                if (point != null)
-                    printCoordinates(point);
-                else
-                    m_out.print("{}{}");
-                m_out.print("\n");
-            }
+            m_out.print("\\move");
+            printCoordinates(point);
+            m_out.print("\n");
+            blackToMove = ! blackToMove;
+            ++counter;
         }
     }
 
