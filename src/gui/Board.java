@@ -25,15 +25,6 @@ class BoardLabel
         super(text, JLabel.CENTER);
         setForeground(java.awt.Color.DARK_GRAY);
     }
-
-    public void paintComponent(Graphics graphics)
-    {
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                        RenderingHints.VALUE_ANTIALIAS_ON);
-        super.paintComponent(graphics);
-    }
 }
 
 public class Board
@@ -172,6 +163,10 @@ public class Board
 
     public void paintComponent(Graphics graphics)
     {
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        if (graphics2D != null)
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON);
         Dimension size = getSize();
         graphics.drawImage(m_image.getImage(), 0, 0, size.width, size.height,
                            null);

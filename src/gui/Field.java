@@ -60,10 +60,6 @@ public class Field
 
     public void paintComponent(Graphics graphics)
     {
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                        RenderingHints.VALUE_ANTIALIAS_ON);
         Dimension size = getSize();
         if (m_fieldColor != null)
         {
