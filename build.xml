@@ -122,7 +122,6 @@ installation directory.
  INSTALL
  TODO
  build.xml,
- install.sh,
  config/analyze-commands*,
  config/gogui*.desktop,
  config/gogui.omf,
@@ -155,6 +154,7 @@ installation directory.
  src/*/*.java.in,
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
+ install.sh,
  bin/gmptogtp,
  bin/gogui,
  bin/gtpadapter,
