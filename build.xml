@@ -76,6 +76,7 @@ $Source$
 <fileset dir="build/twogtp"/>
 <fileset dir="build/utils"/>
 <fileset dir="build/version"/>
+<fileset dir="build/GoGui.app"/>
 </delete>
 </target>
 
@@ -210,6 +211,25 @@ installation directory.
  version/Version.class
 "/>
 </jar>
+</target>
+
+<target name="GoGui.app" depends="gogui.jar"
+ description="Make Mac application bundle">
+<property name="appdir" value="build/GoGui.app"/>
+<mkdir dir="${appdir}"/>
+<mkdir dir="${appdir}/Contents"/>
+<mkdir dir="${appdir}/Contents/MacOS"/>
+<mkdir dir="${appdir}/Contents/Resources"/>
+<mkdir dir="${appdir}/Contents/Resources/Java"/>
+<copy file="/System/Library/Frameworks/JavaVM.framework/Versions/Current/Resources/MacOS/JavaApplicationStub"
+  todir="${appdir}/Contents/MacOS"/>
+<exec command="chmod 755 ${appdir}/Contents/MacOS/JavaApplicationStub"/>
+<copy file="/Developer/Applications/Java Tools/Jar Bundler.app/Contents/Resources/GenericJavaApp.icns"
+  todir="${appdir}/Contents/Resources"/>
+<copy file="mac/packaging/Info.plist" todir="${appdir}/Contents"/>  
+<copy file="mac/packaging/PkgInfo" todir="${appdir}/Contents"/>  
+<copy file="lib/gogui.jar" todir="${appdir}/Contents/Resources/Java"/>
+<exec command="/Developer/Tools/SetFile -a B ${appdir}"/>
 </target>
 
 <target name="gogui.jar" depends="compile">
