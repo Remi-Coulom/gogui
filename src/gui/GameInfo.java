@@ -23,7 +23,7 @@ class GameInfo
 {
     public GameInfo(TimeControl timeControl)
     {
-        super(new GridLayout(0, 2));
+        super(new GridLayout(0, 2, GuiUtils.SMALL_PAD, 0));
         m_timeControl = timeControl;
         m_move = addEntry("To play");
         m_number = addEntry("Moves");
