@@ -985,7 +985,7 @@ class GoGui
         }
         if (boardSize <= 0)
         {
-            showError("Invalid board size.");
+            showError("Invalid board size");
             return;
         }
         cbNewGame(boardSize);
@@ -1044,7 +1044,7 @@ class GoGui
             int movesLeft = m_currentNode.getMovesLeft();
             if (gotoNumber < 0 || gotoNumber > moveNumber + movesLeft)
             {
-                showError("Invalid move number.");
+                showError("Invalid move number");
                 return;
             }
             int numberNodes = 0;
@@ -1075,7 +1075,7 @@ class GoGui
         }
         catch (NumberFormatException e)
         {
-            showError("Invalid move number.");
+            showError("Invalid move number");
         }
     }
 
@@ -1103,7 +1103,7 @@ class GoGui
         URL u = getClass().getClassLoader().getResource("doc/index.html");
         if (u == null)
         {
-            showError("Help not found.");
+            showError("Help not found");
             return;
         }
         if (m_help == null)
@@ -1200,7 +1200,7 @@ class GoGui
         if (node != null)
             gotoNode(node);
         else
-            showError("No more comments.");
+            showError("No more comments");
     }
 
     private void cbNextVariation()
@@ -1264,9 +1264,9 @@ class GoGui
             }
             catch (Exception e)
             {
-                showError("Printing failed.", e);
+                showError("Printing failed", e);
             }
-            showInfo("Printing done.");
+            showInfo("Printing done");
         }
     }
 
@@ -1458,7 +1458,7 @@ class GoGui
                 }
                 else
                 {
-                    showInfo("Game finished.");
+                    showInfo("Game finished");
                     computerNone();
                 }
                 return;
