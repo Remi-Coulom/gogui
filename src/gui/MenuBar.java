@@ -388,7 +388,7 @@ class MenuBar
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
                                   String command)
     {
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             item.setMnemonic(mnemonic);
         return addMenuItem(menu, item, command);
     }
@@ -428,7 +428,7 @@ class MenuBar
     private JMenu createBoardSizeMenu()
     {
         JMenu menu = new JMenu("Size");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
         int n = m_possibleBoardSizes.length;
@@ -450,7 +450,7 @@ class MenuBar
     {
         ButtonGroup group = new ButtonGroup();
         JMenu menu = new JMenu("Computer Color");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_C);
         m_itemComputerBlack = addRadioItem(menu, group, "Black", KeyEvent.VK_B,
                                            "computer-black");
@@ -466,7 +466,7 @@ class MenuBar
     private JMenu createFileMenu()
     {
         JMenu menu = new JMenu("File");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "New", KeyEvent.VK_N, KeyEvent.VK_N,
                     m_shortcutKeyMask, "new-game");
@@ -493,7 +493,7 @@ class MenuBar
     private JMenu createGameMenu()
     {
         JMenu menu = new JMenu("Game");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_G);
         addMenuItem(menu, "Info...", KeyEvent.VK_I, KeyEvent.VK_I,
                     m_shortcutKeyMask, "game-info");
@@ -540,7 +540,7 @@ class MenuBar
     private JMenu createHandicapMenu()
     {
         JMenu menu = new JMenu("Handicap");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_H);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < m_possibleHandicaps.length; ++i)
@@ -556,7 +556,7 @@ class MenuBar
     private JMenu createHelpMenu()
     {
         JMenu menu = new JMenu("Help");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_H);
         JMenuItem itemHelp =
             addMenuItem(menu, "Contents", KeyEvent.VK_C, KeyEvent.VK_F1, 0,
@@ -571,7 +571,7 @@ class MenuBar
     private JMenu createRecentMenu()
     {
         m_menuRecent = new JMenu("Open Recent");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             m_menuRecent.setMnemonic(KeyEvent.VK_R);
         loadRecent();
         updateRecentMenu();
@@ -581,7 +581,7 @@ class MenuBar
     private JMenu createSettingsMenu()
     {
         JMenu menu = new JMenu("Settings");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_S);
         m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
         addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
@@ -598,7 +598,7 @@ class MenuBar
     private JMenu createSetupMenu()
     {
         JMenu menu = new JMenu("Setup");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_E);
         m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
         addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
@@ -615,7 +615,7 @@ class MenuBar
     private JMenu createVariationMenu()
     {
         JMenu menu = new JMenu("Variation");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_V);
         m_itemNextVariation =
             addMenuItem(menu, "Next Variation", KeyEvent.VK_N,
@@ -642,7 +642,7 @@ class MenuBar
     private JMenu createWindowsMenu()
     {
         JMenu menu = new JMenu("Windows");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7, 0,
                     "show-gametree");

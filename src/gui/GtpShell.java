@@ -649,7 +649,7 @@ public class GtpShell
     {
         item.addActionListener(this);
         item.setActionCommand(command);
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
@@ -777,7 +777,7 @@ public class GtpShell
         panel.add(m_comboBox);
         // Workaround for Java 1.4.1 on Mac OS X add some empty space
         // so that combobox does not overlap the window resize widget
-        if (Platform.isPlatformMacOSX())
+        if (Platform.isMac())
         {
             Dimension dimension = new Dimension(20, 1);
             Box.Filler filler =
@@ -799,7 +799,7 @@ public class GtpShell
     private JMenu createMenuFile()
     {
         JMenu menu = new JMenu("File");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
                     m_shortcutKeyMask, "save-log");
@@ -816,7 +816,7 @@ public class GtpShell
     private JMenu createMenuSettings(boolean highlight)
     {
         JMenu menu = new JMenu("Settings");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_S);
         m_itemHighlight = new JCheckBoxMenuItem("Highlight");
         m_itemHighlight.setSelected(highlight);
@@ -831,7 +831,7 @@ public class GtpShell
     private JMenu createMenuWindows()
     {
         JMenu menu = new JMenu("Windows");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
                     "analyze");

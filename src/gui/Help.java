@@ -134,7 +134,7 @@ class Help
     {
         item.addActionListener(this);
         item.setActionCommand(command);
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
@@ -187,13 +187,13 @@ class Help
     {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("File");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     m_shortcutKeyMask, "close");
         menuBar.add(menu);
         menu = new JMenu("Go");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_G);
         m_itemBack = addMenuItem(menu, "Back", KeyEvent.VK_B, KeyEvent.VK_B,
                                  m_shortcutKeyMask, "back");
@@ -291,7 +291,7 @@ class Help
     */
     private void openExternal(URL url)
     {
-        if (Platform.isPlatformMacOSX())
+        if (Platform.isMac())
         {
             try
             {

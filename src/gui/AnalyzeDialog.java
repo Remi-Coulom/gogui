@@ -154,7 +154,7 @@ class AnalyzeDialog
     {
         item.addActionListener(this);
         item.setActionCommand(command);
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
@@ -222,7 +222,7 @@ class AnalyzeDialog
         m_runButton.setToolTipText("Run command");
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             m_runButton.setMnemonic(KeyEvent.VK_R);
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
@@ -230,7 +230,7 @@ class AnalyzeDialog
         m_clearButton.setToolTipText("Clear board and cancel auto run");
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             m_clearButton.setMnemonic(KeyEvent.VK_C);
         m_clearButton.setEnabled(false);
         innerPanel.add(m_clearButton);
@@ -298,7 +298,7 @@ class AnalyzeDialog
     private JMenu createMenuFile()
     {
         JMenu menu = new JMenu("File");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_F);
         JMenuItem item =
             addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload",
@@ -312,7 +312,7 @@ class AnalyzeDialog
     private JMenu createMenuSettings()
     {
         JMenu menu = new JMenu("Settings");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_S);
         m_itemOnlySupported =
             new JCheckBoxMenuItem("Only Supported Commands");
@@ -328,7 +328,7 @@ class AnalyzeDialog
     private JMenu createMenuWindows()
     {
         JMenu menu = new JMenu("Windows");
-        if (! Platform.isPlatformMacOSX())
+        if (! Platform.isMac())
             menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
                     "gogui");
