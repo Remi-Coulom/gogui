@@ -289,8 +289,6 @@ class GoGui
     {        
         if (m_commandThread == null)
             return;
-        if (! showQuestion("Detach program?"))
-            return;
         detachProgram();
     }
 
