@@ -762,6 +762,7 @@ class GoGui
                     go.Point pointList[] = Gtp.parsePointString(response,
                                                                 m_boardSize);
                     m_guiBoard.showPointList(pointList);
+                    m_guiBoard.repaint();
                     m_boardNeedsReset = true;
                 }
             }
