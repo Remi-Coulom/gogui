@@ -99,6 +99,13 @@ class GtpShellText
         }
     }
 
+    public void setPositionToEnd()
+    {
+        setEditable(true);
+        setCaretPosition(getStyledDocument().getLength());
+        setEditable(false);
+    }
+
     private int m_fontSize;
 
     private int m_historyMin;
@@ -605,7 +612,8 @@ public class GtpShell
 
     private void comboBoxEdited()
     {
-        String command = m_comboBox.getSelectedItem().toString();
+        m_gtpShellText.setPositionToEnd();
+        String command = m_comboBox.getSelectedItem().toString();        
         sendCommand(command, null);
         appendToHistory(command);
         m_comboBox.hidePopup();
