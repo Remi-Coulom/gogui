@@ -1802,7 +1802,8 @@ class GoGui
             m_menuBar.saveRecent();
             java.io.Reader fileReader = new FileReader(file);
             sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
-            GameInformation gameInformation = m_gameTree.getGameInformation();
+            GameInformation gameInformation =
+                reader.getGameTree().getGameInformation();
             initGame(gameInformation.m_boardSize);
             m_gameTree = reader.getGameTree(); 
             if (m_commandThread != null)
