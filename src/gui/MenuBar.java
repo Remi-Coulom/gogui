@@ -174,6 +174,7 @@ class MenuBar
         m_itemHelp.setEnabled(true);
         m_menuSettings.setEnabled(true);
         m_itemBeepAfterMove.setEnabled(true);
+        m_itemRememberSizes.setEnabled(true);
         m_itemShowLastMove.setEnabled(true);
         m_menuWindows.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
