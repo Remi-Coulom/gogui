@@ -713,10 +713,10 @@ public class MenuBar
                         KeyEvent.VK_UP, m_shortcutKeyMask,
                         "previous-variation");
         m_itemNextVariationBackward =
-            addMenuItem(menu, "Next Earlier Variation", KeyEvent.VK_N,
+            addMenuItem(menu, "Next Earlier Variation", KeyEvent.VK_E,
                         "next-variation-backward");
         m_itemPreviousVariationBackward =
-            addMenuItem(menu, "Previous Earlier Variation", KeyEvent.VK_P,
+            addMenuItem(menu, "Previous Earlier Variation", KeyEvent.VK_R,
                         "previous-variation");
         m_itemBackToMainVar =
             addMenuItem(menu, "Back to Main Variation", KeyEvent.VK_B,
@@ -738,6 +738,8 @@ public class MenuBar
         menu.addSeparator();
         addMenuItem(menu, "Find in Comments", KeyEvent.VK_F, KeyEvent.VK_F,
                     m_shortcutKeyMask, "find-in-comments");
+        addMenuItem(menu, "Find Next", KeyEvent.VK_X, KeyEvent.VK_F3,
+                    0, "find-next");
         return menu;
     }
 

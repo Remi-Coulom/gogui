@@ -202,6 +202,8 @@ class GoGui
             close();
         else if (command.equals("find-in-comments"))
             cbFindInComments();
+        else if (command.equals("find-next"))
+            cbFindNext();
         else if (command.equals("forward"))
             cbForward(1);
         else if (command.equals("forward-10"))
@@ -703,6 +705,8 @@ class GoGui
 
     private Node m_currentNode;
 
+    private Pattern m_pattern;
+
     private AnalyzeCommand m_analyzeCommand;
 
     private File m_file;
@@ -1066,10 +1070,17 @@ class GoGui
         String regex = FindDialog.run(this, m_comment.getSelectedText());
         if (regex == null)
             return;
-        Pattern pattern = Pattern.compile(regex,
-                                          Pattern.MULTILINE
-                                          | Pattern.CASE_INSENSITIVE);
-        Node node = NodeUtils.findInComments(m_currentNode, pattern);
+        m_pattern = Pattern.compile(regex,
+                                    Pattern.MULTILINE
+                                    | Pattern.CASE_INSENSITIVE);
+        cbFindNext();
+    }
+
+    private void cbFindNext()
+    {
+        if (m_pattern == null)
+            return;
+        Node node = NodeUtils.findInComments(m_currentNode, m_pattern);
         if (node == null)
         {
             Node root = m_gameTree.getRoot();
@@ -1080,7 +1091,7 @@ class GoGui
             }
             if (! showQuestion("End of tree reached. Continue from start?"))
                 return;
-            node = NodeUtils.findInComments(root, pattern);
+            node = NodeUtils.findInComments(root, m_pattern);
             if (node == null)
             {
                 showInfo("Not found");

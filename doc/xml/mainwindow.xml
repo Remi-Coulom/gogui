@@ -389,6 +389,15 @@ The search pattern is a regular expression.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guimenuitem>Find Next</guimenuitem></term>
+<listitem>
+<para>
+Find next game node containing the last entered search pattern.
+</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 </section>
 
