@@ -400,7 +400,7 @@ public class NodeUtils
         int numberInner = numberNodes - numberTerminal;
         averageDepth /= numberNodes;
         averageChildren /= numberNodes;
-        averageChildrenInner /= numberInner;
+        averageChildrenInner /= Math.max(numberInner, 1);
         NumberFormat format = StringUtils.getNumberFormat(3);
         StringBuffer buffer = new StringBuffer(512);
         appendInfo(buffer, "Nodes", numberNodes);
