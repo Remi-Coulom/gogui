@@ -652,7 +652,7 @@ class GtpRegress
                   + "\">\n" + summary.m_unexpectedFails + "</td>\n" +
                   "<td>" + summary.m_expectedFails + "</td>\n" +
                   "<td bgcolor=\"#"
-                  + (summary.m_unexpectedFails > 0 ? "00ff00" : "white")
+                  + (summary.m_unexpectedPasses > 0 ? "00ff00" : "white")
                   + "\">\n" + summary.m_unexpectedPasses + "</td>\n" +
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
                   "<td>" + summary.m_otherErrors + "</td>\n" +
