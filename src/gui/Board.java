@@ -7,14 +7,12 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.*;
 import java.awt.print.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
 import go.*;
 import utils.GuiUtils;
-import utils.RadialGradientPaint;
 
 //----------------------------------------------------------------------------
 
@@ -151,37 +149,6 @@ public class Board
     public Dimension getMinimumFieldSize()
     {
         return m_minimumFieldSize;
-    }
-
-    /** Cache RadialGradientPaint for gui.Field */
-    public RadialGradientPaint getPaint(go.Color color, int size,
-                                        java.awt.Color colorNormal,
-                                        java.awt.Color colorBright)
-    {
-        RadialGradientPaint paint;
-        if (color == go.Color.BLACK)
-             paint = m_paintBlack;
-        else
-        {
-            assert(color == go.Color.WHITE);
-            paint = m_paintWhite;
-        }
-        if (size == m_paintSize && paint != null)
-            return paint;
-        int radius = Math.max(size / 3, 1);
-        int center = size / 3;
-        Point2D.Double centerPoint =
-            new Point2D.Double(center, center);
-        Point2D.Double radiusPoint =
-            new Point2D.Double(radius, radius);
-        paint = new RadialGradientPaint(centerPoint, colorBright,
-                                        radiusPoint, colorNormal);
-        if (color == go.Color.BLACK)
-            m_paintBlack = paint;
-        else
-            m_paintWhite = paint;
-        m_paintSize = size;
-        return paint;
     }
 
     public Dimension getPreferredFieldSize()
@@ -604,8 +571,6 @@ public class Board
 
     private boolean m_variationShown;
 
-    private int m_paintSize;
-
     private go.Point m_focusPoint;
 
     private go.Point m_lastMove;
@@ -624,10 +589,6 @@ public class Board
     private Image m_image;
 
     private Listener m_listener;
-
-    private RadialGradientPaint m_paintBlack;
-
-    private RadialGradientPaint m_paintWhite;
 
     private void addColumnLabels(int size)
     {

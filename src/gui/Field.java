@@ -212,6 +212,8 @@ public class Field
 
     private boolean m_select;
 
+    private int m_paintSize;
+
     private int m_size;
 
     private double m_influence;
@@ -255,6 +257,10 @@ public class Field
     private Graphics m_graphics;
 
     private Graphics2D m_graphics2D;
+
+    private RadialGradientPaint m_paintBlack;
+
+    private RadialGradientPaint m_paintWhite;
 
     private void drawCircle(java.awt.Color color)
     {
@@ -356,7 +362,7 @@ public class Field
         if (m_graphics2D != null && m_size >= 7)
         {
             RadialGradientPaint paint =
-                m_board.getPaint(m_color, m_size, colorNormal, colorBright);
+                getPaint(m_color, m_size, colorNormal, colorBright);
             m_graphics2D.setPaint(paint);
         }
         else
@@ -404,6 +410,36 @@ public class Field
         }
         m_graphics2D.fillRect(0, 0, m_size, m_size);
         m_graphics2D.setPaintMode();
+    }
+
+    private RadialGradientPaint getPaint(go.Color color, int size,
+                                         java.awt.Color colorNormal,
+                                         java.awt.Color colorBright)
+    {
+        RadialGradientPaint paint;
+        if (color == go.Color.BLACK)
+             paint = m_paintBlack;
+        else
+        {
+            assert(color == go.Color.WHITE);
+            paint = m_paintWhite;
+        }
+        if (size == m_paintSize && paint != null)
+            return paint;
+        int radius = Math.max(size / 3, 1);
+        int center = size / 3;
+        Point2D.Double centerPoint =
+            new Point2D.Double(center, center);
+        Point2D.Double radiusPoint =
+            new Point2D.Double(radius, radius);
+        paint = new RadialGradientPaint(centerPoint, colorBright,
+                                        radiusPoint, colorNormal);
+        if (color == go.Color.BLACK)
+            m_paintBlack = paint;
+        else
+            m_paintWhite = paint;
+        m_paintSize = size;
+        return paint;
     }
 
     private void setComposite(AlphaComposite composite)
