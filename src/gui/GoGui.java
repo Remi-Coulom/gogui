@@ -2284,13 +2284,15 @@ class GoGui
         if (playerBlack != null && ! playerBlack.trim().equals("")
             && playerWhite != null && ! playerWhite.trim().equals(""))
         {
+            playerBlack = StringUtils.capitalize(playerBlack);
+            playerWhite = StringUtils.capitalize(playerWhite);
             String blackRank = gameInformation.m_blackRank;
             String whiteRank = gameInformation.m_whiteRank;
             if (blackRank != null && ! blackRank.trim().equals(""))
                 playerBlack = playerBlack + "[" + blackRank + "]";
             if (whiteRank != null && ! whiteRank.trim().equals(""))
                 playerWhite = playerWhite + "[" + whiteRank + "]";
-            gameName = playerBlack + " - " + playerWhite;
+            gameName = playerBlack + " vs " + playerWhite;
         }
         else if (m_loadedFile != null)
             gameName= m_loadedFile.getName();
@@ -2383,7 +2385,7 @@ class GoGui
         if (message.length() == 0)
             message = "Command failed";
         else
-            message = StringUtils.formatMessage(message);
+            message = StringUtils.capitalize(message);
         SimpleDialogs.showError(frame, message);
     }
 
