@@ -32,6 +32,8 @@ On Unix systems, it is useful to edit the shell script
 <filename>gogui</filename> to use the locations of
 <filename>gogui.jar</filename> and the correct version
 of <filename>java</filename> and put it somewhere in your path.
+Alternatevely you can add the <filename>bin</filename> directory
+of GoGui to your PATH environment variable.
 The invocation is then simply:
 <blockquote>
 <para>
