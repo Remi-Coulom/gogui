@@ -81,6 +81,11 @@ class GtpServer
             opt.handleConfigOption();
             boolean verbose = opt.isSet("verbose");
             boolean loop = opt.isSet("loop");
+            {
+                System.err.println("Option -loop cannot be used with -remote");
+                System.exit(-1);
+            }
+            if (loop && opt.isSet("remote"))
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
@@ -111,8 +116,8 @@ class GtpServer
                 System.exit(-1);
             }
             String program = (String)arguments.get(0);
-            GtpServer gtpServer = new GtpServer(verbose, loop, program, remoteHost,
-                                                port, userFile);
+            GtpServer gtpServer = new GtpServer(verbose, loop, program,
+                                                remoteHost, port, userFile);
         }
         catch (Throwable t)
         {
