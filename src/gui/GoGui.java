@@ -239,12 +239,6 @@ class GoGui
                                   m_commandThread.getSupportedCommands());
             if (m_rememberWindowSizes)
                 restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
-            else
-            {
-                m_analyzeDialog.setLocationRelativeTo(this);
-                Dimension size = getSize();
-                m_analyzeDialog.setLocation(size.width, 0);
-            }
             setTitle();
         }
         m_analyzeDialog.toTop();
@@ -1549,12 +1543,6 @@ class GoGui
             {
                 if (m_rememberWindowSizes)
                     restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
-                else
-                {
-                    m_gtpShell.setLocationRelativeTo(this);
-                    Dimension size = getSize();
-                    m_gtpShell.setLocation(size.width, 0);
-                }
                 // First command is sent with a timeout, so that we are not
                 // fooled by programs who are not GTP Go programs, but
                 // consume stdin without writing to stdout.
