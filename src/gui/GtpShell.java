@@ -777,7 +777,7 @@ public class GtpShell
         panel.add(m_comboBox);
         // Workaround for Java 1.4.1 on Mac OS X add some empty space
         // so that combobox does not overlap the window resize widget
-        if (isOSMac())
+        if (Platform.isPlatformMacOSX())
         {
             Dimension dimension = new Dimension(20, 1);
             Box.Filler filler =
@@ -887,15 +887,6 @@ public class GtpShell
         boolean highlight = m_itemHighlight.isSelected();
         m_gtpShellText.setHighlight(highlight);
         m_prefs.setBool("gtpshell-highlight", highlight);
-    }
-
-    // Check if operating system is Mac OS X
-    private boolean isOSMac()
-    {
-        String name = System.getProperty("os.name");
-        if (name == null)
-            return false;
-        return name.equals("Mac OS X");
     }
 
     private void popupCompletions()

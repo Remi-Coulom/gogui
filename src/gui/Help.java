@@ -13,6 +13,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
+import utils.Platform;
 import utils.StreamCopy;
 
 //-----------------------------------------------------------------------------
@@ -264,15 +265,6 @@ class Help
         m_itemContents.setEnabled(contentsPossible);
     }
 
-    // Check if operating system is Mac OS X
-    private boolean isOSMac()
-    {
-        String name = System.getProperty("os.name");
-        if (name == null)
-            return false;
-        return name.equals("Mac OS X");
-    }
-
     private void loadURL(URL url)
     {
         try
@@ -296,7 +288,7 @@ class Help
     */
     private void openExternal(URL url)
     {
-        if (isOSMac())
+        if (Platform.isPlatformMacOSX())
         {
             try
             {
