@@ -1517,7 +1517,7 @@ class GoGui
             return true;
         if (! isCurrentNodeExecuted())
         {
-            Object[] options = { "Detach Program", "Ignore" };
+            Object[] options = { "Detach Program", "Cancel" };
             Object message =
                 "Could not synchronize current\n" +
                 "position with Go program";
