@@ -39,6 +39,8 @@ public class TwoGtp
         m_white.queryProtocolVersion();
         m_blackName = getName(m_black);
         m_whiteName = getName(m_white);        
+        m_blackVersion = getVersion(m_black);
+        m_whiteVersion = getVersion(m_white);        
         m_black.querySupportedCommands();
         m_white.querySupportedCommands();
         m_size = size;
@@ -251,9 +253,13 @@ public class TwoGtp
 
     private String m_blackName;
 
+    private String m_blackVersion;
+
     private String m_sgfFile;
 
     private String m_whiteName;
+
+    private String m_whiteVersion;
 
     private Float m_komi;
 
@@ -465,6 +471,20 @@ public class TwoGtp
         return "Unknown";
     }
 
+    private static String getVersion(Gtp gtp)
+    {
+        try
+        {
+            String version = gtp.sendCommand("version");
+            if (! version.trim().equals(""))
+                return version;
+        }
+        catch (Gtp.Error e)
+        {
+        }
+        return "";
+    }
+
     private static String getResult(Gtp gtp)
     {
         try
@@ -487,6 +507,13 @@ public class TwoGtp
         StringBuffer buffer = new StringBuffer();
         String blackName = m_blackName;
         String whiteName = m_whiteName;
+        if (blackName.equals(whiteName))
+        {
+            if (! m_blackVersion.equals(""))
+                m_blackName = m_blackName + ":" + m_blackVersion;
+            if (! m_whiteVersion.equals(""))
+                m_whiteName = m_whiteName + ":" + m_whiteVersion;
+        }
         if (isAlternated())
         {
             blackName = m_whiteName;
