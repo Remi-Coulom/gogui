@@ -145,6 +145,11 @@ class ReadThread
             response.append("Command in progress");
             return false;
         }
+        if (m_status == STATUS_DISCONNECTED)
+        {
+            response.append("GMP connection broken");
+            return false;
+        }
         if (m_commandStack.size() > 0)
         {
             Command stackCommand = (Command)m_commandStack.get(0);
@@ -204,6 +209,11 @@ class ReadThread
                 result.m_success = true;
                 result.m_value = stackCommand.m_val;
                 m_commandStack.remove(0);
+                return result;
+            }
+            if (m_status == STATUS_DISCONNECTED)
+            {
+                result.m_response = "GMP connection broken";
                 return result;
             }
             try
