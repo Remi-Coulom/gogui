@@ -1,0 +1,45 @@
+<chapter>
+  
+  <title>Programs</title>
+  
+  <para>
+    The following Go programs can be used with GoGui:
+  </para>
+  
+  <section>
+    <title>GnuGo</title>
+
+    <para>
+      <ulink url="http://www.gnu.org/software/gnugo/gnugo.html">
+	http://www.gnu.org/software/gnugo/gnugo.html</ulink>
+    </para>
+    <para>
+      Operating systems: Unix, Windows, Macintosh.
+    </para>
+  </section>
+  
+  <section>
+    <title>AmigoPlus</title>
+
+    <para>
+      <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/">
+	http://www.ibiblio.org/pub/Linux/games/strategy/</ulink>
+    </para>
+    <para>
+      Operating systems: Unix.
+    </para>
+  </section>
+  
+  <section>
+    <title>BadukiPlus</title>
+
+    <para>
+      <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/">
+	http://www.ibiblio.org/pub/Linux/games/strategy/</ulink>
+    </para>
+    <para>
+      Operating systems: Unix.
+    </para>
+  </section>
+  
+</chapter>
