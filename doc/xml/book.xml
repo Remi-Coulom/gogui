@@ -18,6 +18,7 @@
 <!ENTITY reference-gmptogtp SYSTEM "reference-gmptogtp.xml">
 <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
 <!ENTITY reference-gtpadapter SYSTEM "reference-gtpadapter.xml">
+<!ENTITY reference-gtpdisplay SYSTEM "reference-gtpdisplay.xml">
 <!ENTITY reference-gtpdummy SYSTEM "reference-gtpdummy.xml">
 <!ENTITY reference-gtpregress SYSTEM "reference-gtpregress.xml">
 <!ENTITY reference-gtpserver SYSTEM "reference-gtpserver.xml">
@@ -53,6 +54,7 @@
 &reference-gogui;
 &reference-gmptogtp;
 &reference-gtpadapter;
+&reference-gtpdisplay;
 &reference-gtpdummy;
 &reference-gtpregress;
 &reference-gtpserver;

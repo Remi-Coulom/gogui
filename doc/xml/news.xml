@@ -11,6 +11,7 @@
 <simpara>
 </simpara>
 <itemizedlist>
+
 <listitem>
 <simpara>
 GtpAdapter: fix some bugs with option -resign
@@ -28,8 +29,18 @@ TwoGtp: fix bug in setting komi with GTP command komi
 </listitem>
 <listitem>
 <simpara>
+TwoGtp: new options -openings and -loadsgf for using opening SGF files
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: interrupt will offer to kill program for programs that don't support
 interrupting commands
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: speed up going to beginning or end in large games
 </simpara>
 </listitem>
 <listitem>
@@ -56,13 +67,13 @@ Application and Dock menu in a safe way
 </listitem>
 <listitem>
 <simpara>
-Use xsltproc for generating the documentation instead of the built-in
-ant target "Style"
+New tool GtpDisplay
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-TwoGtp: new options -openings and -loadsgf for using opening SGF files
+Use xsltproc for generating the documentation instead of the built-in
+ant target "Style"
 </simpara>
 </listitem>
 <listitem>

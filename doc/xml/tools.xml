@@ -37,6 +37,16 @@ See <xref linkend="reference-gtpadapter"/> for a complete reference.
 </varlistentry>
 
 <varlistentry>
+<term>GtpDisplay</term>
+<listitem>
+<para>
+Go Text Protocol adapter showing the current board in a window.
+See <xref linkend="reference-gtpdisplay"/> for a complete reference.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>GtpDummy</term>
 <listitem>
 <para>

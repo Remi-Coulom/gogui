@@ -1,0 +1,94 @@
+<refentry id="reference-gtpdisplay">
+
+<refmeta>
+<refentrytitle>gtpdisplay</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gtpdisplay</refname>
+<refpurpose>
+Go Text Protocol adapter showing the current board in a window.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtpdisplay</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-verbose</option></arg>
+
+<command>gtpdisplay</command>
+<arg choice="plain"><option>-help</option></arg>
+
+<command>gtpdisplay</command>
+<arg choice="plain"><option>-version</option></arg>
+
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Go Text Protocol adapter showing the current board in a window.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Set initial board size.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print the GTP stream from the adapter to the Go program to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+</refentry>

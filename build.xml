@@ -21,6 +21,7 @@ $Source$
  gmptogtp.jar,
  gogui.jar,
  gtpadapter.jar,
+ gtpdisplay.jar,
  gtpdummy.jar,
  gtpregress.jar,
  gtpserver.jar,
@@ -37,6 +38,7 @@ $Source$
    gmptogtp.jar,
    gogui.jar,
    gtpadapter.jar,
+   gtpdisplay.jar,
    gtpdummy.jar,
    gtpregress.jar,
    gtpserver.jar,
@@ -59,6 +61,7 @@ $Source$
 <fileset dir="build/go"/>
 <fileset dir="build/gtp"/>
 <fileset dir="build/gtpadapter"/>
+<fileset dir="build/gtpdisplay"/>
 <fileset dir="build/gtpdummy"/>
 <fileset dir="build/gtpregress"/>
 <fileset dir="build/gtpserver"/>
@@ -144,6 +147,7 @@ installation directory.
  bin/gmptogtp,
  bin/gogui,
  bin/gtpadapter,
+ bin/gtpdisplay,
  bin/gtpdummy,
  bin/gtpregress,
  bin/gtpserver,
@@ -252,6 +256,32 @@ installation directory.
 </jar>
 </target>
 
+<target name="gtpdisplay.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gtpdisplay.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="gtpdisplay.Main"/>
+</manifest>
+<fileset dir="build" includes="
+ game/*.class
+ go/*.class
+ gui/Board*.class
+ gui/BoardLabel.class
+ gui/Field*.class
+ gtp/*.class
+ gtpdisplay/*.class
+ images/icon.png
+ images/wood.png
+ utils/GuiUtils.class
+ utils/Options.class
+ utils/RadialGradient*.class
+ utils/SquareLayout.class
+ utils/StringUtils.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
 <target name="gtpdummy.jar" depends="compile">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpdummy.jar" compress="true">
@@ -341,6 +371,7 @@ installation directory.
   gogui.*,
   gtp.*,
   gtpadapter.*,
+  gtpdisplay.*,
   gtpdummy.*,
   gtpregress.*,
   gtpserver.*,
@@ -365,6 +396,7 @@ installation directory.
 <arg line="doc/xml/reference-gmptogtp.xml"/>
 <arg line="doc/xml/reference-gogui.xml"/>
 <arg line="doc/xml/reference-gtpadapter.xml"/>
+<arg line="doc/xml/reference-gtpdisplay.xml"/>
 <arg line="doc/xml/reference-gtpdummy.xml"/>
 <arg line="doc/xml/reference-gtpregress.xml"/>
 <arg line="doc/xml/reference-gtpserver.xml"/>
