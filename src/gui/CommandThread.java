@@ -81,6 +81,12 @@ public class CommandThread
         return m_gtp.getProgramCommand();
     }
 
+    public int getProtocolVersion()
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        return m_gtp.getProtocolVersion();
+    }
+
     public Vector getSupportedCommands()
     {
         assert(SwingUtilities.isEventDispatchThread());
