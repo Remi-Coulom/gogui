@@ -4,6 +4,22 @@
 <revhistory>
 
 <revision>
+<revnumber>&version;</revnumber>
+<date>9 May 2004</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<simpara>
+</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>0.6pre4</revnumber>
 <date>9 May 2004</date>
 <authorinitials>enz</authorinitials>
