@@ -669,7 +669,7 @@ public class Board
 
     private void setPreferredFieldSize()
     {
-        int size = (int)((double)GuiUtils.getDefaultMonoFontSize() * 2.5);
+        int size = (int)((double)GuiUtils.getDefaultMonoFontSize() * 2.2);
         if (size % 2 == 0)
             ++size;
         m_preferredFieldSize = new Dimension(size, size);
