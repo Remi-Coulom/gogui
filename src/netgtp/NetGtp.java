@@ -61,13 +61,17 @@ class NetGtp
             int port = Integer.parseInt((String)arguments.get(1));
             NetGtp netGtp = new NetGtp(hostname, port);
         }
+        catch (AssertionError e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
         catch (Throwable t)
         {
             String msg = t.getMessage();
             if (msg == null)
                 msg = t.getClass().getName();
             System.err.println(msg);
-            t.printStackTrace(); // XXX
             System.exit(-1);
         }
     }

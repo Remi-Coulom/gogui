@@ -370,14 +370,18 @@ class GoGui
                                   verbose, fillPasses, computerBlack,
                                   computerWhite, autoplay, autoFile, gtpFile);
         }
+        catch (AssertionError e)
+        {
+            SimpleDialogs.showError(null, "Assertion error");
+            e.printStackTrace();
+            System.exit(-1);
+        }
         catch (Throwable t)
         {
             String msg = t.getMessage();
             if (msg == null)
                 msg = t.getClass().getName();
             SimpleDialogs.showError(null, msg);
-            if (verbose)
-                t.printStackTrace();
             System.exit(-1);
         }
     }
