@@ -8,6 +8,9 @@ $Source$
 
 <project name="GoGui" default="all">
 
+<property environment="env"/>
+<property name="xsldir" value="${env.XSLDIR}"/>
+
 <target name="all" depends="
  gmptogtp.jar,
  gogui.jar,
@@ -53,6 +56,30 @@ $Source$
 <copy todir="build/config">
 <fileset dir="config" includes="analyze-commands"/>
 </copy>
+</target>
+
+<target name="doc" depends="docCheckUptodate" unless="docUptodate">
+<style basedir="doc/xml" includes="book.xml" destdir="doc/html"
+ style="${xsldir}/html/chunk.xsl" force="true">
+<param name="admon.graphics" expression="0"/>
+<param name="admon.graphics.path" expression=""/>
+<param name="chunk.section.depth" expression="0"/>
+<param name="html.cleanup" expression="1"/>
+<param name="html.stylesheet" expression="docbook.css"/>
+<param name="make.valid.html" expression="1"/>
+<param name="navig.showtitles" expression="0"/>
+<param name="refentry.generate.name" expression="0"/>
+<param name="refentry.generate.title" expression="1"/>
+<param name="spacing.paras" expression="0"/>
+<param name="toc.section.depth" expression="0"/>
+<param name="use.id.as.filename" expression="1"/>
+</style>
+</target>
+
+<target name="docCheckUptodate">
+<uptodate property="docUptodate" targetfile="doc/html/index.html">
+<srcfiles dir= "doc/xml" includes="*.xml"/>
+</uptodate>
 </target>
 
 <target name="gmptogtp.jar" depends="compile">
