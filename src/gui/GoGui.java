@@ -1420,6 +1420,7 @@ class GoGui
 
     private void endLengthyCommand()
     {
+        clearStatus();
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, m_board);
         m_gtpShell.setInputEnabled(true);
