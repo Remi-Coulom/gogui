@@ -206,10 +206,7 @@ class AnalyzeDialog
         contentPane.add(createCommandPanel(), BorderLayout.CENTER);
         contentPane.add(createButtons(), BorderLayout.SOUTH);
         pack();
-        if (m_comboBox.getItemCount() > 0)
-            m_comboBox.requestFocus();
-        else
-            m_list.requestFocus();
+        toTop();
     }
 
     public void actionPerformed(ActionEvent event)
@@ -270,6 +267,15 @@ class AnalyzeDialog
     {
     }
 
+    public void toTop()
+    {
+        if (m_comboBox.getItemCount() > 0)
+            m_comboBox.requestFocus();
+        else
+            m_list.requestFocus();
+        setVisible(true);
+    }
+
     public void windowActivated(WindowEvent e)
     {
     }
@@ -315,7 +321,7 @@ class AnalyzeDialog
     {
         m_callback.clearAnalyzeCommand();
         saveRecent();
-        dispose();
+        setVisible(false);
     }
 
     private JPanel createButtons()

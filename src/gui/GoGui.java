@@ -595,6 +595,8 @@ class GoGui
 
     private String m_version = "";
 
+    AnalyzeDialog m_analyzeDialog;
+
     /** Preferences.
         Preferences are shared between instances created with
         "Open with program", the last instance of GoGui saves them.
@@ -770,11 +772,15 @@ class GoGui
 
     private void cbAnalyze()
     {        
-        AnalyzeDialog dialog = new AnalyzeDialog(this, this, m_prefs);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-        //return dialog.m_command;
-        //m_toolBar.toggleAnalyze();
+        if (m_analyzeDialog == null)
+        {
+            m_analyzeDialog = new AnalyzeDialog(this, this, m_prefs);
+            m_analyzeDialog.setLocationRelativeTo(null);
+            m_analyzeDialog.setLocationRelativeTo(this);
+            Dimension size = getSize();
+            m_analyzeDialog.setLocation(size.width, 0);
+        }
+        m_analyzeDialog.toTop();
     }
 
     private void cbBeepAfterMove()
