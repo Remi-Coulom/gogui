@@ -45,6 +45,8 @@ public class GtpDummy
             status = cmdClearBoard(response);
         else if (cmd.equals("dummy_bwboard"))
             bwBoard(response);
+        else if (cmd.equals("dummy_delay"))
+            status = cmdDelay(cmdArray, response);
         else if (cmd.equals("dummy_invalid"))
             cmdInvalid();
         else if (cmd.equals("dummy_long_response"))
@@ -76,6 +78,7 @@ public class GtpDummy
                             "clear_board\n" +
                             "dummy_bwboard\n" +
                             "dummy_crash\n" +
+                            "dummy_delay\n" +
                             "dummy_invalid\n" +
                             "dummy_long_response\n" +
                             "dummy_next_success\n" +
@@ -100,6 +103,16 @@ public class GtpDummy
             response.append("unknown command");
             status = false;
         }
+        if (m_delay > 0 && ! cmd.equals("dummy_delay"))
+        {
+            try
+            {
+                Thread.sleep(1000 * m_delay);
+            }
+            catch (InterruptedException e)
+            {
+            }
+        }
         return status;
     }
 
@@ -111,6 +124,9 @@ public class GtpDummy
     private boolean m_nextResponseFixed;
 
     private boolean m_nextStatus;
+
+    /** Delay every command (seconds) */
+    private int m_delay = 0;
 
     private int m_size;
 
@@ -148,6 +164,24 @@ public class GtpDummy
     private boolean cmdClearBoard(StringBuffer response)
     {
         initSize(m_size);
+        return true;
+    }
+
+    private boolean cmdDelay(String[] cmdArray, StringBuffer response)
+    {
+        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
+        if (argument == null)
+        {
+            response.delete(0, response.length());
+            response.append(m_delay);
+            return true;
+        }
+        if (argument.m_integer < 0)
+        {
+            response.append("Argument must be positive");
+            return false;
+        }
+        m_delay = argument.m_integer;
         return true;
     }
 

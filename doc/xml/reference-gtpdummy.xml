@@ -107,6 +107,19 @@ Exit program with return code -1.
 </varlistentry>
 
 <varlistentry>
+<term>
+<userinput>dummy_delay</userinput> <replaceable>seconds</replaceable>
+</term>
+<listitem>
+<para>
+Delay the response to every command.
+An argument of 0 switches of the delay again.
+If no argument is given, the current delay value is returned.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><userinput>dummy_invalid</userinput></term>
 <listitem>
 <para>

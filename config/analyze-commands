@@ -131,6 +131,7 @@ string/GtpAdapter ShowBoard/gtpadapter_showboard
 # GtpDummy extensions
 bwboard/Dummy BWBoard/dummy_bwboard
 none/Dummy Crash/dummy_crash
+none/Dummy Delay/dummy_delay %o
 none/Dummy Invalid/dummy_invalid
 string/Dummy Long Response/dummy_long_response %s
 none/Dummy Next Failure/dummy_next_failure %s
