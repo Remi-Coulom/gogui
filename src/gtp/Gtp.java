@@ -650,78 +650,6 @@ public final class Gtp
 
     private StdErrThread m_stdErrThread;
 
-    private void readResponse() throws Gtp.Error
-    {
-        try
-        {
-            String line = "";
-            while (line.trim().equals(""))
-            {
-                line = m_in.readLine();
-                if (line == null)
-                {
-                    m_isProgramDead = true;
-                    throw new Error("Go program died");
-                }
-                // Give StdErrThread a chance to read stderr first
-                if (m_callback != null)
-                    Thread.yield();
-                log("<< " + line);
-            }
-            StringBuffer response = new StringBuffer(line);
-            response.append("\n");
-            if (! isResponseLine(line))
-            {
-                m_fullResponse = response.toString();
-                m_callback.receivedInvalidResponse(response.toString());
-                m_illegalState = true;
-                throw new Error("Invalid response:\n" + line);
-            }
-            boolean error = (line.charAt(0) != '=');
-            boolean done = false;
-            while (! done)
-            {
-                line = m_in.readLine();
-                if (line == null)
-                {
-                    m_isProgramDead = true;
-                    throw new Error("Go program died");
-                }
-                log("<< " + line);
-                done = line.equals("");
-                response.append(line);
-                response.append("\n");
-            }
-            if (m_callback != null)
-                m_callback.receivedResponse(error, response.toString());
-            m_fullResponse = response.toString();
-            assert(response.length() >= 4);            
-            int index = response.indexOf(" ");
-            if (index < 0)
-                m_response = response.substring(0, response.length() - 2);
-            else
-                m_response =
-                    response.substring(index + 1, response.length() - 2);
-            if (error)
-            {
-                String message = m_response.trim();
-                if (message.equals(""))
-                    message = "GTP command failed";
-                throw new Error(message);
-            }
-        }
-        catch (InterruptedIOException e)
-        {
-            m_isProgramDead = true;
-            throw new Error("Timeout while waiting for program");
-        }
-        catch (IOException e)
-        {
-            m_isProgramDead = true;
-            throw new Error(e.getMessage());
-        }
-    }
-
     private static boolean isResponseLine(String line)
     {
         if (line.length() < 2)
@@ -738,6 +666,73 @@ public final class Gtp
                 System.err.print(m_logPrefix);
             System.err.println(msg);
             System.err.flush();
+        }
+    }
+
+    private String readLine() throws Error
+    {
+        try
+        {
+            String line = m_in.readLine();
+            if (line == null)
+            {
+                m_isProgramDead = true;
+                throw new Error("Go program died");
+            }
+            log("<< " + line);
+            return line;
+        }
+        catch (InterruptedIOException e)
+        {
+            m_isProgramDead = true;
+            throw new Error("Timeout while waiting for program");
+        }
+        catch (IOException e)
+        {
+            m_isProgramDead = true;
+            throw new Error(e.getMessage());
+        }
+    }
+
+    private void readResponse() throws Gtp.Error
+    {
+        String line = "";
+        while (line.trim().equals(""))
+            line = readLine();
+        StringBuffer response = new StringBuffer(line);
+        response.append("\n");
+        if (! isResponseLine(line))
+        {
+            m_fullResponse = response.toString();
+            m_callback.receivedInvalidResponse(response.toString());
+            m_illegalState = true;
+            throw new Error("Invalid response:\n" + line);
+        }
+        boolean error = (line.charAt(0) != '=');
+        boolean done = false;
+        while (! done)
+        {
+            line = readLine();
+            done = line.equals("");
+            response.append(line);
+            response.append("\n");
+        }
+        if (m_callback != null)
+            m_callback.receivedResponse(error, response.toString());
+        m_fullResponse = response.toString();
+        assert(response.length() >= 4);            
+        int index = response.indexOf(" ");
+        if (index < 0)
+            m_response = response.substring(0, response.length() - 2);
+        else
+            m_response =
+                response.substring(index + 1, response.length() - 2);
+        if (error)
+        {
+            String message = m_response.trim();
+            if (message.equals(""))
+                message = "GTP command failed";
+            throw new Error(message);
         }
     }
 }
