@@ -271,18 +271,26 @@ to White.
 <varlistentry>
 <term><guimenuitem>Beep after move</guimenuitem></term>
 <listitem>
+Beep after each computer move.
+With most versions of Java the PC speaker is used for the beep.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Remember window sizes</guimenuitem></term>
 <listitem>
+Remember positions and sizes of the main windows, the Analyze dialog
+and the GTP shell.
+The sizes are remembered depending on the board size to
+allow a different layout of the three windows for different board
+sizes.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Show last move</guimenuitem></term>
 <listitem>
+Mark the last move with a red circle.
 </listitem>
 </varlistentry>
 
@@ -296,12 +304,14 @@ to White.
 <varlistentry>
 <term><guimenuitem>Analyze</guimenuitem></term>
 <listitem>
+Open the Analyze dialog or bring it to front, if already open.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Gtp shell</guimenuitem></term>
 <listitem>
+Open the GTP shell window or bring it to front, if already open.
 </listitem>
 </varlistentry>
 
@@ -315,12 +325,14 @@ to White.
 <varlistentry>
 <term><guimenuitem>Contents</guimenuitem></term>
 <listitem>
+Open a window with the online help.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>About</guimenuitem></term>
 <listitem>
+Show the version of GoGui.
 </listitem>
 </varlistentry>
 
