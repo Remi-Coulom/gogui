@@ -81,11 +81,11 @@ class GtpServer
             opt.handleConfigOption();
             boolean verbose = opt.isSet("verbose");
             boolean loop = opt.isSet("loop");
+            if (loop && opt.isSet("remote"))
             {
                 System.err.println("Option -loop cannot be used with -remote");
                 System.exit(-1);
             }
-            if (loop && opt.isSet("remote"))
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
