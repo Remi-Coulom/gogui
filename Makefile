@@ -58,6 +58,7 @@ DOC = \
   doc/xml/reference-gtpregress.xml \
   doc/xml/reference-gtpserver.xml \
   doc/xml/reference-netgtp.xml \
+  doc/xml/reference-sgftotex.xml \
   doc/xml/reference-twogtp.xml \
   doc/xml/tools.xml \
   doc/xml/version.xml
