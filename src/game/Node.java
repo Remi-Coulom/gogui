@@ -10,23 +10,24 @@ import go.*;
 
 //----------------------------------------------------------------------------
 
+class SetupInfo
+{
+    public Vector m_black = new Vector();
+
+    public Vector m_white = new Vector();
+}
+
+//----------------------------------------------------------------------------
+
 class TimeInfo
 {
-    public TimeInfo()
-    {
-        m_movesLeftBlack = -1;
-        m_movesLeftWhite = -1;
-        m_timeLeftBlack = Double.NaN;
-        m_timeLeftWhite = Double.NaN;
-    }
+    public int m_movesLeftBlack = -1;
 
-    public int m_movesLeftBlack;
+    public int m_movesLeftWhite = -1;
 
-    public int m_movesLeftWhite;
+    public double m_timeLeftBlack = Double.NaN;
 
-    public double m_timeLeftBlack;
-
-    public double m_timeLeftWhite;
+    public double m_timeLeftWhite = Double.NaN;
 
 }
 
@@ -56,9 +57,9 @@ public class Node
     public void addBlack(Point point)
     {
         assert(point != null);
-        if (m_addBlack == null)
-            m_addBlack = new Vector(1);
-        m_addBlack.add(point);
+        if (m_setupInfo == null)
+            m_setupInfo = new SetupInfo();
+        m_setupInfo.m_black.add(point);
     }
 
     /** Add other unspecified SGF property.
@@ -76,19 +77,19 @@ public class Node
     public void addWhite(Point point)
     {
         assert(point != null);
-        if (m_addWhite == null)
-            m_addWhite = new Vector(1);
-        m_addWhite.add(point);
+        if (m_setupInfo == null)
+            m_setupInfo = new SetupInfo();
+        m_setupInfo.m_white.add(point);
     }
 
     public Point getAddBlack(int i)
     {
-        return (Point)m_addBlack.get(i);
+        return (Point)m_setupInfo.m_black.get(i);
     }
 
     public Point getAddWhite(int i)
     {
-        return (Point)m_addWhite.get(i);
+        return (Point)m_setupInfo.m_white.get(i);
     }
 
     /** Get stones added and moves all as moves.
@@ -98,12 +99,12 @@ public class Node
     public Vector getAllAsMoves()
     {
         Vector moves = new Vector();
-        if (m_addBlack != null)
-            for (int i = 0; i < m_addBlack.size(); ++i)
-                moves.add(new Move((Point)m_addBlack.get(i), Color.BLACK));
+        if (m_setupInfo != null)
+            for (int i = 0; i < getNumberAddBlack(); ++i)
+                moves.add(new Move(getAddBlack(i), Color.BLACK));
         if (m_addWhite != null)
-            for (int i = 0; i < m_addWhite.size(); ++i)
-                moves.add(new Move((Point)m_addWhite.get(i), Color.WHITE));
+            for (int i = 0; i < getNumberAddWhite(); ++i)
+                moves.add(new Move(getAddWhite(i), Color.WHITE));
         if (m_move != null)
             moves.add(m_move);
         if (moves.size() > 0)
@@ -168,16 +169,16 @@ public class Node
 
     public int getNumberAddBlack()
     {
-        if (m_addBlack == null)
+        if (m_setupInfo == null)
             return 0;
-        return m_addBlack.size();
+        return m_setupInfo.m_black.size();
     }
 
     public int getNumberAddWhite()
     {
-        if (m_addWhite == null)
+        if (m_setupInfo == null)
             return 0;
-        return m_addWhite.size();
+        return m_setupInfo.m_white.size();
     }
 
     public int getNumberChildren()
@@ -352,13 +353,13 @@ public class Node
 
     private Node m_father;
 
+    private SetupInfo m_setupInfo;
+
     private String m_comment;
 
     private TimeInfo m_timeInfo;
 
     private TreeMap m_sgfProperties;
-
-    private Vector m_addBlack;
 
     private Vector m_addWhite;
 
