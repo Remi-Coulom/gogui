@@ -230,7 +230,7 @@ class IOCallback
 
     public void receivedStdErr(String s)
     {
-        System.err.println(s);
+        System.err.print(s);
         System.err.flush();
     }
 
