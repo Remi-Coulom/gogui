@@ -138,7 +138,7 @@ public class Reader
         s = s.trim().toLowerCase();
         if (s.length() < 2)
             loadError("Invalid coordinates.");
-        if (s.equals("tt") || s.equals(""))
+        if (s.equals("") || (s.equals("tt") && m_boardSize <= 19))
             return null;
         int x = s.charAt(0) - 'a';
         int y = m_boardSize - (s.charAt(1) - 'a') - 1;
