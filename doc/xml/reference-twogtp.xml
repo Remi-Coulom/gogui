@@ -27,8 +27,27 @@
   <refsection>
     <title>Description</title>
     <para>
-        Adpater program for playing games between two Go programs
-	supporting GTP (Go Text Protocol).
+      Adpater program for playing games between two Go programs
+      supporting GTP (Go Text Protocol).
+    </para>
+
+    <para>
+      The adpater forwards the following commands to both programs:
+      <userinput>boardsize</userinput>,
+      <userinput>black</userinput>,
+      <userinput>komi</userinput>,
+      <userinput>quit</userinput>,
+      <userinput>scoring_system</userinput>,
+      <userinput>undo</userinput>,
+      <userinput>white</userinput>.
+      The commands <userinput>genmove_black</userinput> and
+      <userinput>genmove_white</userinput> are forwarded only to the
+      program corresponding to the color, the other program is informed about
+      the move with a <userinput>black</userinput> or
+      <userinput>white</userinput> command.
+      The special comment line <userinput>#&#160;interrupt</userinput>
+      that is used by <application>GoGui</application> to interrupt commands is
+      also forwarded to both programs.
     </para>
   </refsection>
 

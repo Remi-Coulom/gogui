@@ -36,13 +36,28 @@
   <refsection>
     <title>Description</title>
     <para>
-       Go Text Protocol Adpater program for playing games using the
-       Go Modem Protocol over a serial line.
-       For using this tool, an implementation of the
-       <ulink url="http://java.sun.com/products/javacomm/">
-       Java Communications API</ulink> must be installed
-       (<ulink url="http://www.rxtx.org/">rxtx</ulink>
-       is a version supporting Linux).
+      Go Text Protocol adpater program for playing games using the
+      Go Modem Protocol over a serial line.
+      For using this tool, an implementation of the
+      <ulink url="http://java.sun.com/products/javacomm/">
+      Java Communications API</ulink> must be installed
+      (<ulink url="http://www.rxtx.org/">rxtx</ulink>
+      is a version supporting Linux).
+      Note that GMP is an asynchronous protocol and commands can be sent
+      by both sides at any time, while GTP is synchronous.
+      This problem is resolved in the following way:
+      A separate thread always listens to the serial device, acknowledges
+      received GMP commands immediately and puts them on an internal
+      queue.
+      GTP commands that need to receive a command from GMP
+      (like <userinput>genmove_black</userinput>) check if such a command
+      is already on the queue and wait for a new command otherwise.
+      If an unexpected GMP command was received, the GTP command will return
+      with an error and subsequently only a GTP command that corresponds
+      to the GMP command will succeed.
+      GTP commands that are waiting for a GMP command can be interrupted
+      with the an the special comment line
+      <userinput>#&#160;interrupt</userinput>.
     </para>
   </refsection>
 
