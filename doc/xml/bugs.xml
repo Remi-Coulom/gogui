@@ -13,4 +13,14 @@ With other Java versions or on other systems the problem still exists.
 </para>
 </section>
 
+<section>
+<title>Command completions in GTP shell are hiding text entry</title>
+<para>
+The popup window with automatic command completions sometimes hides the
+text entry when typing.
+This is a problem in some implementations of the Java 1.4 libraries.
+You can disable automatic command completion from the GTP shell menu.
+</para>
+</section>
+
 </appendix>
