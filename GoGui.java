@@ -1004,6 +1004,7 @@ class GoGui
             }
             computerNone();
             boardChanged();
+            m_timeControl.disable();
         }
         catch (Gtp.Error e)
         {
@@ -1365,6 +1366,7 @@ class GoGui
 
     private void loadFileBegin(File file, int move)
     {
+        m_timeControl.disable();
         try
         {
             sgf.Reader reader = new sgf.Reader(file);
@@ -1475,6 +1477,7 @@ class GoGui
         }
         for (int i = 0; i < n; ++i)
             m_board.undo();
+        m_timeControl.disable();
     }
 
     private void newGame(int size, float komi) throws Gtp.Error
