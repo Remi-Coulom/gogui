@@ -15,11 +15,20 @@ import version.*;
 
 class GtpServer
 {
-    public GtpServer(boolean verbose, boolean loop, String program, int port)
+    /** Constructor.
+        @param remoteHost If null then the server waits for incoming
+        connections, otherwise it connects to a remote computer with this name.
+        @param userFile file containing login information that is sent to the
+        remote host. Only used if remoteHost is set.
+    */
+    public GtpServer(boolean verbose, boolean loop, String program,
+                     String remoteHost, int port, String userFile)
         throws Exception
     {
         Runtime runtime = Runtime.getRuntime();
-        ServerSocket serverSocket = new ServerSocket(port, 1);
+        ServerSocket serverSocket = null;
+        if (remoteHost == null)
+            serverSocket = new ServerSocket(port, 1);
         while (true)
         {
             Process process = runtime.exec(StringUtils.tokenize(program));
@@ -27,7 +36,11 @@ class GtpServer
             stdErrThread.start();
             if (verbose)
                 System.err.println("gtpnet: Waiting for connection ...");
-            Socket socket = serverSocket.accept();
+            Socket socket;
+            if (remoteHost == null)
+                socket = serverSocket.accept();
+            else
+                socket = connectToRemote(remoteHost, port, userFile);
             if (verbose)
                 System.err.println("gtpnet: Connection from "
                                    + socket.getInetAddress());
@@ -44,7 +57,7 @@ class GtpServer
             fromNet.join();
             socket.close();
             process.waitFor();
-            if (! loop)
+            if (remoteHost == null || ! loop)
                 break;
         }
         serverSocket.close();
@@ -58,6 +71,9 @@ class GtpServer
                 "config:",
                 "help",
                 "loop",
+                "port:",
+                "remote:",
+                "user:",
                 "verbose",
                 "version",
             };
@@ -75,33 +91,74 @@ class GtpServer
                 System.out.println("GtpServer " + Version.get());
                 System.exit(0);
             }
+            if (! opt.isSet("port"))
+            {
+                System.err.println("Please specify port with option -port");
+                System.exit(-1);
+            }
+            int port = opt.getInteger("port");
+            String remoteHost = opt.getString("remote", null);
+            String userFile = opt.getString("user", null);
+            if (userFile != null && remoteHost == null)
+            {
+                System.err.println("Option -user only valid with -remote");
+                System.exit(-1);
+            }
             Vector arguments = opt.getArguments();
-            if (arguments.size() != 2)
+            if (arguments.size() != 1)
             {
                 printUsage(System.err);
                 System.exit(-1);
             }
             String program = (String)arguments.get(0);
-            int port = Integer.parseInt((String)arguments.get(1));
-            GtpServer gtpServer = new GtpServer(verbose, loop, program, port);
+            GtpServer gtpServer = new GtpServer(verbose, loop, program, remoteHost,
+                                                port, userFile);
         }
         catch (Throwable t)
         {
             String msg = t.getMessage();
             if (msg == null)
                 msg = t.getClass().getName();
-            System.err.println(msg);
+	    System.err.println(msg);
             System.exit(-1);
         }
     }
 
+    private static Socket connectToRemote(String remoteHost, int port,
+                                          String userFile) throws Exception
+    {
+        System.err.println("Connecting to " + remoteHost + " " + port);
+        Socket socket = new Socket(remoteHost, port);
+        if (userFile != null)
+        {
+            System.err.println("Sending login information from file "
+                               + userFile);
+            InputStream inputStream = new FileInputStream(new File(userFile));
+            OutputStream outputStream = socket.getOutputStream();
+            byte buffer[] = new byte[1024];
+            while (true)
+            {
+                int n = inputStream.read(buffer);
+                if (n < 0)
+                    break;
+                outputStream.write(buffer, 0, n);
+            }
+            inputStream.close();
+        }
+        System.err.println("Connected.");
+        return socket;
+    }
+
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar gtpnet.jar [options] program port\n" +
+        out.print("Usage: java -jar gtpnet.jar [options] program\n" +
                   "\n" +
                   "-config  config file\n" +
                   "-help    display this help and exit\n" +
                   "-loop    restart after connection finished\n" +
+                  "-port    port of network connection\n" +
+                  "-remote  connect to remote host\n" +
+                  "-user    login information for remote host\n" +
                   "-verbose print debugging messages\n" +
                   "-version print version and exit\n");
     }

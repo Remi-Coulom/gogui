@@ -14,6 +14,15 @@
 New tool <application>GtpAdapter</application>.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+<application>GtpServer</application>: port number is now given with option
+<option>-port</option>. New options <option>-remote</option> and
+<option>-user</option> to make outgoing connections (e.g. required by the
+<ulink url="http://www.lysator.liu.se/~gunnar/gtp/random_go_challenge.html">
+Random Go Challenge</ulink>.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
