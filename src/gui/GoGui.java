@@ -1361,6 +1361,7 @@ class GoGui
             if (move > 0)
                 forward(move);
 
+            computerNone();
             boardChanged();
         }
         catch (sgf.Reader.Error e)
