@@ -270,16 +270,15 @@ class AnalyzeDialog
 
     public void toTop()
     {
-        if (m_comboBox.getItemCount() > 0)
-            m_comboBox.requestFocus();
-        else
-            m_list.requestFocus();
+        setDefaultFocus();
         setVisible(true);
     }
 
     public void valueChanged(ListSelectionEvent e)
     {
         String value = (String)m_list.getSelectedValue();
+        if (m_runButton.hasFocus())
+            setDefaultFocus();
         m_runButton.setEnabled(value != null);
     }
 
@@ -366,7 +365,8 @@ class AnalyzeDialog
     {
         m_callback.clearAnalyzeCommand();
         m_clearButton.setEnabled(false);
-        m_comboBox.requestFocus();
+        if (m_clearButton.hasFocus())
+            setDefaultFocus();
     }
 
     private void close()
@@ -574,6 +574,14 @@ class AnalyzeDialog
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         m_callback.setAnalyzeCommand(command);
         m_clearButton.setEnabled(true);
+    }
+
+    private void setDefaultFocus()
+    {
+        if (m_comboBox.getItemCount() > 0)
+            m_comboBox.requestFocus();
+        else
+            m_list.requestFocus();
     }
 
     private static void setPrefsDefaults(Preferences prefs)
