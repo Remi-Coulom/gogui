@@ -68,9 +68,9 @@ public class AboutDialog
                 createPanel("<p align=\"center\"><b>" + fullName
                             + "</b></p>" +
                             "<p align=\"center\" width=\"" + width + "\">"
-                            + "<tt>" + command + "</tt></p>" +
+                            + "Command: <tt>" + command + "</tt></p>" +
                             "<p align=\"center\">" +
-                            "GTP Protocol Version " + protocolVersion +
+                            "GTP protocol version " + protocolVersion +
                             "</p>");
         }
         else
