@@ -53,10 +53,10 @@ public class Board
             go.Point p = m_board.getPoint(i);
             clearInfluence(p);
             setFieldBackground(p, null);
-            setString(p, "");
         }
         clearAllCrossHair();
         clearAllMarkup();
+        clearAllStrings();
         drawLastMove();
     }
 
@@ -70,6 +70,12 @@ public class Board
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
             setMarkup(m_board.getPoint(i), false);
+    }
+
+    public void clearAllStrings()
+    {
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+            setString(m_board.getPoint(i), "");
     }
 
     public void clearInfluence(go.Point p)
@@ -328,6 +334,18 @@ public class Board
             go.Point p = pointList[i];
             if (p != null)
                 setMarkup(p, true);
+        }
+    }
+
+    public void showPointStringList(Vector pointList, Vector stringList)
+    {
+        clearAllStrings();
+        for (int i = 0; i < pointList.size(); ++i)
+        {
+            go.Point point = (go.Point)pointList.get(i);
+            String string = (String)stringList.get(i);
+            if (point != null)
+                setString(point, string);
         }
     }
 

@@ -674,6 +674,15 @@ class GoGui
                     m_guiBoard.repaint();
                 }
                 break;
+            case AnalyzeCommand.POINTSTRINGLIST:
+                {
+                    Vector pointList = new Vector(32, 32);
+                    Vector stringList = new Vector(32, 32);
+                    Gtp.parsePointStringList(response, pointList, stringList);
+                    m_guiBoard.showPointStringList(pointList, stringList);
+                    m_guiBoard.repaint();
+                }
+                break;
             case AnalyzeCommand.STRINGBOARD:
                 {
                     String board[][] = Gtp.parseStringBoard(response, title,

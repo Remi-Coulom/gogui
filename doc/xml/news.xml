@@ -8,6 +8,9 @@
 <revremark>
 <itemizedlist>
 <listitem>
+New anzlyze result type <userinput>pslist</userinput>.
+</listitem>
+<listitem>
 New menu items <guimenuitem>Open Recent</guimenuitem> and
 <guimenuitem>Goto</guimenuitem>.
 </listitem>

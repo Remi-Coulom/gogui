@@ -61,6 +61,13 @@
 	</listitem>
       </varlistentry>
       <varlistentry>
+	<term><userinput>pslist</userinput></term>
+	<listitem>
+	  The answer of the command is a list of point string pairs.
+	  The strings are displayed as labels on the points.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
 	<term><userinput>sboard</userinput></term>
 	<listitem>
 	  The answer of the command is a board of strings.

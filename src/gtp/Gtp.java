@@ -281,6 +281,7 @@ public class Gtp
     {
         Vector vector = new Vector(32, 32);
         s = StringUtils.replace(s, "\n", " ");
+        s = StringUtils.replace(s, "\t", " ");
         String p[] = StringUtils.split(s, ' ');
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
@@ -289,6 +290,35 @@ public class Gtp
         for (int i = 0; i < result.length; ++i)
             result[i] = (Point)vector.get(i);
         return result;
+    }
+
+    public static void parsePointStringList(String s, Vector pointList,
+                                            Vector stringList) throws Error
+    {
+        pointList.clear();
+        stringList.clear();
+        s = StringUtils.replace(s, "\n", " ");
+        s = StringUtils.replace(s, "\t", " ");
+        String array[] = StringUtils.split(s, ' ');
+        boolean nextIsPoint = true;
+        Point point = null;
+        for (int i = 0; i < array.length; ++i)
+            if (! array[i].equals(""))
+            {
+                if (nextIsPoint)
+                {
+                    point = parsePoint(array[i]);
+                    nextIsPoint = false;
+                }
+                else
+                {
+                    nextIsPoint = true;
+                    pointList.add(point);
+                    stringList.add(array[i]);
+                }
+            }
+        if (! nextIsPoint)
+            throw new Error("Missing string.");
     }
 
     public static String[][] parseStringBoard(String s, String title,
