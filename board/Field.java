@@ -1,0 +1,227 @@
+//=============================================================================
+// $Id$
+// $Source$
+//=============================================================================
+
+package board;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.awt.font.*;
+import java.util.*;
+import javax.swing.*;
+
+//=============================================================================
+
+class Field
+    extends JButton
+    implements ActionListener
+{
+    Field(Board board, Point p, boolean isHandicap)
+    {
+        m_board = board;
+        m_color = Color.EMPTY;
+        m_point = p;
+        m_isHandicap = isHandicap;
+        Dimension size = m_board.getPreferredFieldSize();
+        setPreferredSize(size);
+        setMinimumSize(new Dimension(3, 3));
+        setBorder(null);
+        addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent event)
+    {
+        m_board.fieldClicked(m_point);
+    }
+
+    public void clearInfluence()
+    {
+        if (m_influenceColor != null)
+        {
+            m_influenceColor = null;
+            repaint();
+        }
+    }
+
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        Dimension size = getSize();
+        if (m_influenceColor != null)
+            g.setColor(m_influenceColor);
+        else
+            g.setColor(m_boardColor);
+        g.fillRect(0, 0, size.width, size.height);        
+        if (m_color == Color.BLACK)
+            drawStone(g, java.awt.Color.black);
+        else if (m_color == Color.WHITE)
+            drawStone(g, java.awt.Color.white);
+        else
+            drawGrid(g);
+        if (m_markup)
+            drawMarkup(g);
+        if (m_crossHair)
+            drawCrossHair(g);
+        if (! m_string.equals(""))
+            drawString(g);
+    }
+
+    public void setColor(Color color)
+    {
+        if (m_color != color)
+        {
+            m_color = color;
+            repaint();
+        }
+    }
+
+    public void setCrossHair(boolean crossHair)
+    {
+        if (m_crossHair == crossHair)
+            return;
+        m_crossHair = crossHair;
+        repaint();
+    }
+
+    public void setInfluence(double value)
+    {
+        if (value > 1.)
+            value = 1.;
+        else if (value < -1.)
+            value = -1.;
+        m_influence = value;
+        int r = m_influenceNoneColor.getRed();
+        int g = m_influenceNoneColor.getGreen();
+        int b = m_influenceNoneColor.getBlue();
+        if (value > 0)
+        {
+            r += (int)(value * (m_influenceBlackColor.getRed() - r));
+            g += (int)(value * (m_influenceBlackColor.getGreen() - g));
+            b += (int)(value * (m_influenceBlackColor.getBlue() - b));
+        }
+        else
+        {
+            r -= (int)(value * (m_influenceWhiteColor.getRed() - r));
+            g -= (int)(value * (m_influenceWhiteColor.getGreen() - g));
+            b -= (int)(value * (m_influenceWhiteColor.getBlue() - b));
+        }
+        java.awt.Color color = new java.awt.Color(r, g, b);
+        if (! (m_influenceColor != null && m_influenceColor.equals(color)))
+        {
+            m_influenceColor = color;
+            repaint();
+        }
+    }
+
+    public void setMarkup(boolean markup)
+    {
+        if (m_markup == markup)
+            return;
+        m_markup = markup;
+        repaint();
+    }
+
+    public void setString(String s)
+    {
+        if (! m_string.equals(s))
+        {
+            m_string = s;
+            repaint();
+        }
+    }
+
+    private boolean m_isHandicap;
+    private boolean m_crossHair;
+    private boolean m_markup;
+    private double m_influence;
+    private String m_string = "";
+    private static java.awt.Color m_boardColor
+        // = new java.awt.Color(235, 181, 29);
+        = new java.awt.Color(224, 160, 96);
+    private static java.awt.Color m_influenceBlackColor
+        = new java.awt.Color(255, 63, 63);
+    private static java.awt.Color m_influenceWhiteColor
+        = new java.awt.Color(0, 255, 127);
+    private java.awt.Color m_influenceNoneColor
+        = new java.awt.Color(192, 192, 192);
+    private java.awt.Color m_influenceColor;
+    private Color m_color;
+    private Point m_point;
+    private Board m_board;
+
+    private void drawCrossHair(Graphics g)
+    {
+        Dimension size = getSize();
+        int dx = size.width / 4;
+        int dy = size.height / 4;
+        g.setColor(java.awt.Color.magenta);
+        g.drawLine(dx, size.height / 2, size.width - dx, size.height / 2);
+        g.drawLine(size.width / 2, dy, size.width / 2, size.height - dy);
+    }
+
+    private void drawGrid(Graphics g)
+    {
+        int boardSize = m_board.getBoardSize();
+        Dimension size = getSize();
+        int halfWidth = size.width / 2;
+        int halfHeight = size.height / 2;
+        g.setColor(java.awt.Color.darkGray);
+        int xMin = 0;
+        int xMax = size.width;
+        int yMin = 0;
+        int yMax = size.height;
+        int x = m_point.getX();
+        int y = m_point.getY();
+        if (x == 0)
+            xMin = halfWidth;
+        else if (x == boardSize - 1)
+            xMax = halfWidth;
+        if (y == boardSize - 1)
+            yMin = halfHeight;
+        else if (y == 0)
+            yMax = halfHeight;
+        g.drawLine(xMin, halfHeight, xMax, halfHeight);
+        g.drawLine(halfWidth, yMin, halfWidth, yMax);
+        if (m_isHandicap)
+        {
+            int radiusX = size.width / 10;
+            int radiusY = size.height / 10;
+            g.fillOval(halfWidth - radiusX, halfHeight - radiusY,
+                        2 * radiusX + 1, 2 * radiusY + 1);
+        }
+    }
+
+    private void drawMarkup(Graphics g)
+    {
+        Dimension size = getSize();
+        int dx = size.width / 2;
+        int dy = size.height / 2;
+        g.setColor(java.awt.Color.blue);
+        g.drawRect(dx / 2, dy / 2, size.width - dx + 1, size.height - dy + 1);
+    }
+
+    private void drawStone(Graphics g, java.awt.Color c)
+    {
+        Dimension size = getSize();
+        g.setColor(c);
+        g.fillOval(0, 0, size.width, size.height);
+    }
+
+    private void drawString(Graphics g)
+    {
+        Dimension size = getSize();
+        int stringWidth = g.getFontMetrics().stringWidth(m_string);
+        int stringHeight = g.getFont().getSize();
+        int x = (size.width - stringWidth) / 2;
+        int y = stringHeight + (size.height - stringHeight) / 2;
+        if (m_color == Color.WHITE)
+            g.setColor(java.awt.Color.black);
+        else
+            g.setColor(java.awt.Color.white);
+        g.drawString(m_string, x, y);
+    }
+}
+
+//=============================================================================

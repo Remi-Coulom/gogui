@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Compatibilty</title>
+  </head>
+
+  <body>
+    <h1>Compatibilty</h1>
+
+    <p>
+      GoGui will work with all programs that can understand
+      the most basic commands of version 1 of the
+      <a href="http://www.lysator.liu.se/~gunnar/gtp/">Go Text Protocol</a>.
+    </p>
+
+    <p>
+      It is required that the Go program can handle the following
+      commands:
+    </p>
+
+    <ul>
+      <li><tt>boardsize</tt></li>
+      <li><tt>black</tt></li>
+      <li><tt>genmove_black</tt></li>
+      <li><tt>genmove_white</tt></li>
+      <li><tt>name</tt></li>
+      <li><tt>white</tt></li>
+    </ul>
+
+    <p>
+      In particular the Go program is not required to support
+      the <tt>loadsgf</tt> command.
+      GoGui translates all moves, setup and handicap stones into a series of
+      <tt>black</tt> and <tt>white</tt> commands.
+    </p>
+
+    <p>
+      The following other commands are used by GoGui.
+    </p>
+
+    <ul>
+      <li><tt>help</tt></li>
+      <li><tt>komi</tt></li>
+      <li><tt>quit</tt></li>
+      <li><tt>scoring_system</tt> <i>(GTP version 2)</i></li>
+      <li><tt>undo</tt></li>
+      <li><tt>version</tt></li>
+    </ul>
+
+    <p>
+      If the Go program does not understand them
+      you will still be able to play games,
+      but you cannot use all of the functionality of GoGui.
+    </p>
+
+  </body>
+</html>
