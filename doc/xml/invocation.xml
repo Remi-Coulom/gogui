@@ -5,19 +5,13 @@
 <para>
 <application>GoGui</application> can be invoked with the command:
 <blockquote>
-<para>
-<cmdsynopsis>
-<command>java -jar gogui.jar</command>
-<arg><replaceable>options</replaceable></arg>
-<arg><replaceable>program</replaceable></arg>
-</cmdsynopsis>
-</para>
+<simpara>
+<userinput>java -jar gogui.jar [options] [program]</userinput>
+</simpara>
 </blockquote>  
-The argument <option><replaceable>program</replaceable></option>
-must be a valid command line for executing the actual Go program.
-If no program is given, GoGui will open a dialog and ask for a command.
-If the empty string "" is given as a command, GoGui will start without any Go
-program.
+The argument <userinput>program</userinput> must be a valid command line for
+executing the actual Go program.
+If no program is given, GoGui will start without any Go program attached.
 </para>
 
 <para>
@@ -36,13 +30,9 @@ Alternatevely you can add the <filename>bin</filename> directory
 of GoGui to your PATH environment variable.
 The invocation is then simply:
 <blockquote>
-<para>
-<cmdsynopsis>
-<command>gogui</command>
-<arg><replaceable>options</replaceable></arg>
-<arg><replaceable>program</replaceable></arg>
-</cmdsynopsis>
-</para>
+<simpara>
+<userinput>gogui [options] program</userinput>
+</simpara>
 </blockquote>  
 To register <application>GoGui</application> as a handler
 for <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files,
