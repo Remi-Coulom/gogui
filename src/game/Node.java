@@ -40,6 +40,16 @@ public class Node
         m_addBlack.add(point);
     }
 
+    /** Add other unspecified SGF property.
+        Do not add SGF properties that can be set with other member functions.
+    */
+    public void addSgfProperty(String label, String value)
+    {
+        if (m_sgfProperties == null)
+            m_sgfProperties = new TreeMap();
+        m_sgfProperties.put(label, value);
+    }
+
     public void addWhite(Point point)
     {
         assert(point != null);
@@ -214,6 +224,14 @@ public class Node
         return result;
     }
 
+    /** Get other unspecified SGF properties.
+        Returns null if node has none.
+    */
+    public Map getSgfProperties()
+    {
+        return m_sgfProperties;
+    }
+
     public Vector getShortestPath(Node node)
     {
         Vector rootToThis = getPathFromRoot();
@@ -346,6 +364,8 @@ public class Node
     private Node m_father;
 
     private String m_comment;
+
+    private TreeMap m_sgfProperties;
 
     private Vector m_addBlack;
 

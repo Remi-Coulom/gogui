@@ -237,6 +237,20 @@ public class Writer
         {
             m_out.println("OW[" + node.getMovesLeftWhite() + "]");
         }
+        Map sgfProperties = node.getSgfProperties();
+        if (sgfProperties != null)
+        {
+            Iterator it = sgfProperties.entrySet().iterator();
+            while (it.hasNext())
+            {
+                Map.Entry entry = (Map.Entry)it.next();
+                String label = (String)entry.getKey();
+                String value = (String)entry.getValue();
+                m_out.print(label);
+                printEscaped(value);
+                m_out.println();
+            }
+        }
         int numberChildren = node.getNumberChildren();
         if (numberChildren == 0)
             return;

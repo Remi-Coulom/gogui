@@ -264,6 +264,8 @@ public class Reader
                 {
                 }
             }
+            else
+                node.addSgfProperty(p, v);
             return true;
         }
         m_tokenizer.pushBack();
