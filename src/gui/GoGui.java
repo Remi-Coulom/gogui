@@ -1431,6 +1431,7 @@ class GoGui
                     sendGtpFile(new File(m_gtpFile));
             }
             setTitle();
+            setTitleFromProgram();
             if (m_commandThread == null
                 || (! m_computerBlack && ! m_computerWhite))
                 computerNone();
