@@ -227,7 +227,6 @@ public class GtpDisplay
         }
         m_frame.dispose();
         m_frame = null;
-        System.err.println("XXX closeFrame ->null");
     }
 
     private boolean cmdBoardsize(String cmdArray[], StringBuffer response)
