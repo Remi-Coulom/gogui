@@ -53,7 +53,6 @@ class ToolBar
     {
         m_computerButtonsEnabled = enabled;
         m_buttonEnter.setEnabled(enabled);
-        m_buttonInterrupt.setEnabled(enabled);
     }
 
     public void updateGameButtons(Node node)
@@ -82,6 +81,7 @@ class ToolBar
         m_buttonForward.setEnabled(enable);
         m_buttonForward10.setEnabled(enable);
         m_buttonInfo.setEnabled(enable);
+        m_buttonInterrupt.setEnabled(false);
         m_buttonNew.setEnabled(enable);
         m_buttonNextVariation.setEnabled(enable);
         m_buttonOpen.setEnabled(enable);
@@ -93,7 +93,6 @@ class ToolBar
             if (! m_computerButtonsEnabled)
                 setComputerEnabled(false);
             updateGameButtons(node);
-            m_buttonInterrupt.setEnabled(false);
         }
     }
 
