@@ -560,7 +560,6 @@ class GoGui
             }
             if (m_analyzeType == AnalyzeCommand.STRING)
             {
-                resetBoard();
                 if (answer.indexOf("\n") < 0)
                 {
                     title.append(": ");
@@ -637,6 +636,7 @@ class GoGui
 
     private void boardChanged()
     {
+        resetBoard();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
@@ -1597,14 +1597,12 @@ class GoGui
 
     private void showColorBoard(String[][] board) throws Gtp.Error
     {
-        resetBoard();
         m_board.showColorBoard(board);
         m_boardNeedsReset = true;
     }
 
     private void showDoubleBoard(double[][] board, double scale)
     {
-        resetBoard();
         m_board.showDoubleBoard(board, scale);
         m_boardNeedsReset = true;
     }
