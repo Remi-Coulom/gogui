@@ -39,6 +39,11 @@ GoGui: new menu item "Node Info" in Game Tree Window
 </listitem>
 <listitem>
 <simpara>
+GoGui: new menu item "Show Variations"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: playing a move that is already a child of the current node will no
 longer create a new child
 </simpara>

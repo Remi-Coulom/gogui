@@ -142,6 +142,23 @@ public class Node
         return (Node)m_children.get(i);
     }
 
+    /** Get all children moves.
+        @return Vector contaning the move points, not including passes
+        and independent of color.
+    */
+    public Vector getChildrenMoves()
+    {
+        Vector moves = new Vector();
+        for (int i = 0; i < getNumberChildren(); ++i)
+        {
+            Node child = getChild(i);
+            Move childMove = getChild(i).getMove();
+            if (childMove != null)
+                moves.add(childMove.getPoint());
+        }
+        return moves;
+    }
+
     /** Get child node containg a certain move.
         @return null if no such child existst.
     */

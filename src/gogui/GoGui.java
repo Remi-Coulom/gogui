@@ -98,7 +98,9 @@ class GoGui
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setShowLastMove(m_prefs.getBool("show-last-move"));
+        m_menuBar.setShowVariations(m_prefs.getBool("show-variations"));
         m_showLastMove = m_prefs.getBool("show-last-move");
+        m_showVariations = m_prefs.getBool("show-variations");
         m_menuBar.setShowCursor(m_prefs.getBool("show-cursor"));
         m_guiBoard.setShowCursor(m_prefs.getBool("show-cursor"));
         setJMenuBar(m_menuBar.getMenuBar());
@@ -248,6 +250,8 @@ class GoGui
             cbShowGameTree();
         else if (command.equals("show-last-move"))
             cbShowLastMove();
+        else if (command.equals("show-variations"))
+            cbShowVariations();
         else if (command.equals("truncate"))
             cbTruncate();
         else
@@ -701,6 +705,8 @@ class GoGui
     private boolean m_setupMode;
 
     private boolean m_showLastMove;
+
+    private boolean m_showVariations;
 
     private boolean m_verbose;
 
@@ -1450,6 +1456,14 @@ class GoGui
         updateGameInfo(false);
     }
 
+    private void cbShowVariations()
+    {
+        m_showVariations = m_menuBar.getShowVariations();
+        m_prefs.setBool("show-variations", m_showVariations);
+        resetBoard();
+        updateGameInfo(false);
+    }
+
     private void cbTruncate()
     {
         if (m_currentNode.getFather() == null)
@@ -2101,6 +2115,7 @@ class GoGui
         clearStatus();
         m_guiBoard.resetBoard();
         m_guiBoard.updateFromGoBoard();
+        updateBoard();
         m_guiBoard.repaint();
     }
     
@@ -2345,6 +2360,7 @@ class GoGui
         prefs.setBoolDefault("show-gametree", false);
         prefs.setBoolDefault("show-cursor", true);
         prefs.setBoolDefault("show-last-move", false);
+        prefs.setBoolDefault("show-variations", false);
     }
 
     private void setResult(String result)
@@ -2592,17 +2608,10 @@ class GoGui
         m_guiBoard.updateFromGoBoard();
     }
 
-    private void updateGameInfo(boolean gameTreeChanged)
+    private void updateBoard()
     {
-        m_gameInfo.update(m_currentNode, m_board);
-        if (m_gameTreeViewer != null)
-        {
-            if (gameTreeChanged)
-                m_gameTreeViewer.update(m_gameTree, m_currentNode);
-            else
-                m_gameTreeViewer.update(m_currentNode);
-        }
-        m_comment.setNode(m_currentNode);
+        if (m_showVariations)
+            m_guiBoard.showChildrenMoves(m_currentNode.getChildrenMoves());
         if (m_showLastMove &&
             (m_commandThread == null || isCurrentNodeExecuted()))
         {
@@ -2614,6 +2623,21 @@ class GoGui
         }
         else
             m_guiBoard.markLastMove(null);
+    }
+
+    private void updateGameInfo(boolean gameTreeChanged)
+    {
+        m_gameInfo.update(m_currentNode, m_board);
+        if (m_gameTreeViewer != null)
+        {
+            if (gameTreeChanged)
+                m_gameTreeViewer.update(m_gameTree, m_currentNode);
+            else
+                m_gameTreeViewer.update(m_currentNode);
+        }
+        m_comment.setNode(m_currentNode);
+        updateBoard();
+        m_guiBoard.repaint();
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSelectedColor(m_board.getToMove());
     }

@@ -128,6 +128,11 @@ public class MenuBar
         return m_itemShowLastMove.isSelected();
     }
 
+    public boolean getShowVariations()
+    {
+        return m_itemShowVariations.isSelected();
+    }
+
     public void saveRecent()
     {
         File file = getRecentFile();
@@ -200,6 +205,7 @@ public class MenuBar
         m_itemBeepAfterMove.setEnabled(true);
         m_itemShowCursor.setEnabled(true);
         m_itemShowLastMove.setEnabled(true);
+        m_itemShowVariations.setEnabled(true);
         m_menuWindow.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
     }
@@ -263,6 +269,11 @@ public class MenuBar
         m_itemShowLastMove.setSelected(enable);
     }
 
+    public void setShowVariations(boolean enable)
+    {
+        m_itemShowVariations.setSelected(enable);
+    }
+
     public void updateGameMenuItems(GameTree gameTree, Node node)
     {
         boolean hasFather = (node.getFather() != null);
@@ -311,6 +322,8 @@ public class MenuBar
     private JCheckBoxMenuItem m_itemShowCursor;
 
     private JCheckBoxMenuItem m_itemShowLastMove;
+
+    private JCheckBoxMenuItem m_itemShowVariations;
 
     private JCheckBoxMenuItem m_itemSetup;
 
@@ -602,6 +615,10 @@ public class MenuBar
         m_itemShowLastMove.setSelected(true);
         addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
                     "show-last-move");
+        m_itemShowVariations = new JCheckBoxMenuItem("Show Variations");
+        m_itemShowVariations.setSelected(true);
+        addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,
+                    "show-variations");
         return menu;
     }
 

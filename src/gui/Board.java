@@ -446,6 +446,18 @@ public class Board
         }
     }
 
+    public void showChildrenMoves(Vector childrenMoves)
+    {
+        clearAllStrings();
+        char label = 'A';
+        for (int i = 0; i < childrenMoves.size(); ++i)
+        {
+            go.Point point = (go.Point)childrenMoves.get(i);
+            setString(point, Character.toString(label));
+            ++label;
+        }
+    }
+
     public void showColorBoard(String[][] board)
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
