@@ -25,39 +25,29 @@ body
   text-decoration: underline;
 }
 
-/* Link colors for the top navigation */
-
-.left :link, .center :link, .right :link
+.navheader, .navfooter
 {
-  color: rgb(255,255,255);
-  text-decoration: underline;
-  background-color: rgb(82,80,82);
+  background: rgb(62,145,235);
+  font-weight: bold;
 }
 
-.left :visited, .center :visited, .right :visited
+DIV.navheader TD, DIV.navfooter TD,
+DIV.navheader TH, DIV.navfooter TH
 {
-  color: rgb(186,182,186);
-  text-decoration: underline;
-  background-color: rgb(82,80,82);
+  color: white;
 }
 
-/* Giving this a background color breaks things, and it's not necessary for 
-   either navigation or orientation.. so transparent */
-
-.center
+DIV.navheader HR, DIV.navfooter HR
 {
-  color: rgb(255,255,255);
-  background-color: transparent;
+  noshade;
 }
 
-:active
+.navheader :link, .navfooter :link, .navheader :visited, .navfooter :visited,
+.navheader :active, .navfooter :active
 {
-  color: rgb(186,182,186); 
-  background-color: transparent;
+  color: white;
+  text-decoration: none;
 }
-
-/* A little bit of padding makes the tables for keybindings etc much easier
-   to read */
 
 TABLE
 {
@@ -86,13 +76,6 @@ DIV.INFORMALEXAMPLE
   padding: 10px;
 }
 
-/* But no padding for navigation elements */
-
-.shadow, .headline, .bulb, .end
-{
-  padding: 0px;
-}
-
 TABLE.programlisting
 TABLE.screen
 {
@@ -100,13 +83,6 @@ TABLE.screen
    background-color: rgb(224,224,224);
    table-layout: auto; /* 100%? */
    color: rgb(0,0,0); /* should be inherit */
-}
-
-/* More specific settings */
-
-DIV.navbar P
-{
-  text-align: right;
 }
 
 /* Visual cues for GUI elements etc in the text */

@@ -171,6 +171,8 @@ installation directory.
 <arg line="--param admon.graphics 0"/>
 <arg line="--param chunk.quietly 1"/>
 <arg line="--param chunk.section.depth 0"/>
+<arg line="--param footer.rule 0"/>
+<arg line="--param header.rule 0"/>
 <arg line="--param html.cleanup 1"/>
 <arg line="--stringparam html.stylesheet docbook.css"/>
 <arg line="--param make.valid.html 1"/>
