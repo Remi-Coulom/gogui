@@ -587,7 +587,7 @@ class GtpRegress
         out.print("Usage: java -jar regression.jar [options] program test.tst"
                   + "[...]\n" +
                   "\n" +
-                  "-config    config file\n" +
+                  "-config  config file\n" +
                   "-help    display this help and exit\n" +
                   "-output  output directory\n" +
                   "-version display this help and exit\n");
