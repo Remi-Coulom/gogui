@@ -2023,6 +2023,7 @@ class GoGui
         {
             m_currentNode = node.getFather();
             m_currentNode.removeChild(node);
+            m_currentNodeExecuted = m_currentNode.getNumberAddStonesAndMoves();
             throw error;
         }
     }
