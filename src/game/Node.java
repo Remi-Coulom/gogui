@@ -419,6 +419,46 @@ public class Node
         m_player = color;
     }
 
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer(512);
+        buffer.append("NodeProperties:\n");
+        appendInfo(buffer, "Depth", getDepth());
+        if (getMove() != null)
+        {
+            appendInfo(buffer, "Move", getMove().toString());
+            appendInfo(buffer, "MoveNumber", getMoveNumber());
+        }
+        if (getNumberAddBlack() > 0)
+            appendInfo(buffer, "AddBlack", m_addBlack);
+        if (getNumberAddWhite() > 0)
+            appendInfo(buffer, "AddWhite", m_addWhite);
+        if (getPlayer() != Color.EMPTY)
+            appendInfo(buffer, "Player", getPlayer().toString());
+        if (! Float.isNaN(getTimeLeftBlack()))
+            appendInfo(buffer, "TimeLeftBlack", getTimeLeftBlack());
+        if (getMovesLeftBlack() >= 0)
+            appendInfo(buffer, "MovesLeftBlack", getMovesLeftBlack());
+        if (! Float.isNaN(getTimeLeftWhite()))
+            appendInfo(buffer, "TimeLeftWhite", getTimeLeftWhite());
+        if (getMovesLeftWhite() >= 0)
+            appendInfo(buffer, "MovesLeftWhite", getMovesLeftWhite());
+        Map sgfProperties = getSgfProperties();
+        if (sgfProperties != null)
+        {
+            buffer.append("SgfProperties:\n");
+            Iterator it = sgfProperties.entrySet().iterator();
+            while (it.hasNext())
+            {
+                Map.Entry entry = (Map.Entry)it.next();
+                String label = (String)entry.getKey();
+                String value = (String)entry.getValue();
+                appendInfo(buffer, label, value);
+            }
+        }
+        return buffer.toString();
+    }
+        
     public void removeChild(Node child)
     {
         assert(m_children.contains(child));
@@ -448,6 +488,52 @@ public class Node
     private Vector m_addWhite;
 
     private Vector m_children;
+
+    private static void appendInfo(StringBuffer buffer, String label,
+                                   int value)
+    {
+        appendInfo(buffer, label, Integer.toString(value));
+    }
+
+    private static void appendInfo(StringBuffer buffer, String label,
+                                   float value)
+    {
+        appendInfo(buffer, label, Float.toString(value));
+    }
+
+    private static void appendInfo(StringBuffer buffer, String label,
+                                   Vector points)
+    {
+        appendInfoLabel(buffer, label);
+        for (int i = 0; i < points.size(); ++i)
+        {
+            if (i % 10 == 9 && i < points.size() - 1)
+            {
+                buffer.append('\n');
+                appendInfoLabel(buffer, "");
+            }
+            buffer.append((Point)points.get(i));
+            buffer.append(' ');
+        }
+        buffer.append('\n');
+    }
+
+    private static void appendInfo(StringBuffer buffer, String label,
+                                   String value)
+    {
+        appendInfoLabel(buffer, label);
+        buffer.append(value);
+        buffer.append('\n');
+    }
+
+    private static void appendInfoLabel(StringBuffer buffer, String label)
+    {
+        buffer.append(label);
+        int numberEmpty = Math.max(0, 20 - label.length());
+        for (int i = 0; i < numberEmpty; ++i)
+            buffer.append(' ');
+        buffer.append(' ');
+    }
 
     private void makeMainVariation(Node child)
     {

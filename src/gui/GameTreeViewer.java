@@ -158,6 +158,11 @@ class GameTreePanel
         m_listener = listener;
     }
 
+    public Node getCurrentNode()
+    {
+        return m_currentNode;
+    }
+
     public Dimension getPreferredScrollableViewportSize()
     {
         return new Dimension(m_nodeDist * 10, m_nodeDist * 3);
@@ -358,12 +363,16 @@ public class GameTreeViewer
         String command = event.getActionCommand();
         if (command.equals("analyze"))
             m_listener.cbAnalyze();
-        else if (command.equals("gtp-shell"))
-            m_listener.cbGtpShell();
-        else if (command.equals("gogui"))
-            m_listener.toTop();
         else if (command.equals("close"))
             setVisible(false);
+        else if (command.equals("gogui"))
+            m_listener.toTop();
+        else if (command.equals("gtp-shell"))
+            m_listener.cbGtpShell();
+        else if (command.equals("node-info"))
+            nodeInfo();
+        else
+            assert(false);
     }
     
     public void redrawCurrentNode()
@@ -409,12 +418,19 @@ public class GameTreeViewer
     }
 
     private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  int accel, int modifier, String command)
+                                  String command)
     {
         JMenuItem item = new JMenuItem(label);
-        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
-        item.setAccelerator(k);
         return addMenuItem(menu, item, mnemonic, command);
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  int accel, int modifier, String command)
+    {
+        JMenuItem item = addMenuItem(menu, label, mnemonic, command);
+        KeyStroke accelerator = KeyStroke.getKeyStroke(accel, modifier); 
+        item.setAccelerator(accelerator);
+        return item;
     }
 
     private JMenu createMenu(String name, int mnemonic)
@@ -428,7 +444,15 @@ public class GameTreeViewer
     {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuWindows());
+        menuBar.add(createMenuInfo());
         setJMenuBar(menuBar);
+    }
+
+    private JMenu createMenuInfo()
+    {
+        JMenu menu = createMenu("Info", KeyEvent.VK_I);
+        addMenuItem(menu, "Node Info", KeyEvent.VK_N, "node-info");
+        return menu;
     }
 
     private JMenu createMenuWindows()
@@ -446,6 +470,16 @@ public class GameTreeViewer
         return menu;
     }
 
+    private void nodeInfo()
+    {
+        Node node = m_panel.getCurrentNode();
+        if (node == null)
+        {
+            SimpleDialogs.showError(this, "No node selected");
+            return;
+        }
+        new TextViewer(this, "Node Info", node.toString(), true, null);
+    }
 }
 
 //----------------------------------------------------------------------------

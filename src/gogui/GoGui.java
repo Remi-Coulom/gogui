@@ -2498,10 +2498,10 @@ class GoGui
     {
         boolean highlight = (type == AnalyzeCommand.HSTRING
                              || type == AnalyzeCommand.HPSTRING);
-        AnalyzeTextOutput.Listener listener = null;
+        TextViewer.Listener listener = null;
         if (type == AnalyzeCommand.PSTRING || type == AnalyzeCommand.HPSTRING)
         {
-            listener = new AnalyzeTextOutput.Listener()
+            listener = new TextViewer.Listener()
                 {
                     public void textSelected(String text)
                     {
@@ -2512,7 +2512,7 @@ class GoGui
                     }
                 };
         }
-        new AnalyzeTextOutput(this, title, response, highlight, listener);
+        new TextViewer(this, title, response, highlight, listener);
     }
 
     private void showError(String message, Exception e)

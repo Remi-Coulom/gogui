@@ -32,6 +32,11 @@ GoGui: interrupt will offer to kill program for programs that don't support
 interrupting commands
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GoGui: new menu item "Node Info" in Game Tree Window
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

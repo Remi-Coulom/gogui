@@ -15,7 +15,7 @@ import utils.*;
 
 //----------------------------------------------------------------------------
 
-public class AnalyzeTextOutput
+public class TextViewer
     extends JDialog
 {
     static public interface Listener
@@ -27,8 +27,8 @@ public class AnalyzeTextOutput
         public void textSelected(String text);
     }
 
-    public AnalyzeTextOutput(Frame owner, String title, String response,
-                             boolean highlight, Listener listener)
+    public TextViewer(Frame owner, String title, String text,
+                      boolean highlight, Listener listener)
     {
         super(owner, title);
         setLocationRelativeTo(owner);
@@ -43,7 +43,7 @@ public class AnalyzeTextOutput
         StyledDocument doc = m_textPane.getStyledDocument();
         try
         {
-            doc.insertString(0, response, null);
+            doc.insertString(0, text, null);
         }
         catch (BadLocationException e)
         {
