@@ -59,6 +59,9 @@ class GoGui
             }
         }
 
+        m_gameTreeViewer = new GameTreeViewer(this);
+        m_gameTreeViewer.show();
+
         Container contentPane = getContentPane();        
 
         m_infoPanel = new JPanel();
@@ -194,6 +197,8 @@ class GoGui
             cbInterrupt();
         else if (command.equals("komi"))
             cbKomi();
+        else if (command.equals("next-variation"))
+            cbVariation(true);
         else if (command.equals("new-game"))
             cbNewGame(m_boardSize);
         else if (command.equals("open"))
@@ -206,6 +211,8 @@ class GoGui
             cbPass();
         else if (command.equals("play"))
             cbPlay();
+        else if (command.equals("previous-variation"))
+            cbVariation(false);
         else if (command.equals("print"))
             cbPrint();
         else if (command.equals("remember-sizes"))
@@ -672,6 +679,8 @@ class GoGui
 
     private GameTree m_gameTree;
 
+    private GameTreeViewer m_gameTreeViewer;
+
     private Help m_help;
 
     private JLabel m_statusLabel;
@@ -827,8 +836,8 @@ class GoGui
     {
         m_guiBoard.updateFromGoBoard();
         updateGameInfo();
-        m_toolBar.updateGameButtons(m_board);
-        m_menuBar.updateGameMenuItems(m_board);
+        m_toolBar.updateGameButtons(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         clearStatus();
         if (m_commandThread != null
@@ -891,7 +900,7 @@ class GoGui
 
     private void cbEnd()
     {
-        forward(m_board.getNumberSavedMoves() - m_board.getMoveNumber());
+        forward(m_currentNode.getNodesLeft());
         boardChangedBegin(false);
     }
 
@@ -1178,7 +1187,7 @@ class GoGui
         m_guiBoard.clearAll();
         m_guiBoard.repaint();
         m_scoreMode = false;
-        m_toolBar.enableAll(true, m_board);
+        m_toolBar.enableAll(true, m_currentNode);
         m_menuBar.setNormalMode();
     }
 
@@ -1259,8 +1268,58 @@ class GoGui
             return;
         m_board.truncate();
         updateGameInfo();
-        m_toolBar.updateGameButtons(m_board);
-        m_menuBar.updateGameMenuItems(m_board);
+        m_toolBar.updateGameButtons(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_currentNode);
+    }
+
+    private void cbVariation(boolean forward)
+    {
+        if (m_currentNode.getFather() == null
+            || m_currentNode.getFather().getNumberChildren() < 2)
+            return;
+        setFastUpdate(true);
+        try
+        {
+            for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
+            {
+                if (m_commandThread != null)
+                    m_commandThread.sendCommand("undo");
+                m_board.undo();
+            }
+            computerNone();
+            Node oldChild = m_currentNode;
+            m_currentNode = m_currentNode.getFather();
+            m_currentNodeExecuted = m_currentNode.getNumberAddStonesAndMoves();
+            for (int i = 0; i < m_currentNode.getNumberChildren(); ++i)
+                if (m_currentNode.getChild(i) == oldChild)
+                {
+                    if (forward)
+                    {
+                        ++i;
+                        if (i >= m_currentNode.getNumberChildren())
+                            i = 0;
+                    }
+                    else
+                    {
+                        --i;
+                        if (i < 0)
+                            i = m_currentNode.getNumberChildren() + 1;
+                    }
+                    m_currentNode = m_currentNode.getChild(i);
+                    break;
+                }
+            executeCurrentNode();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+            return;
+        }
+        finally
+        {
+            setFastUpdate(false);
+        }
+        boardChangedBegin(false);
     }
 
     private void checkComputerMove()
@@ -1292,13 +1351,6 @@ class GoGui
                 generateMove();
         }
         m_timeControl.startMove(m_board.getToMove());
-    }
-
-    private boolean checkModifyGame(Move move)
-    {
-        if (! m_needsSave || ! m_board.willModifyGame(move))
-            return true;
-        return checkSaveGame();
     }
 
     private boolean checkSaveGame()
@@ -1465,7 +1517,7 @@ class GoGui
     {
         clearStatus();
         m_menuBar.setNormalMode();
-        m_toolBar.enableAll(true, m_board);
+        m_toolBar.enableAll(true, m_currentNode);
         m_gtpShell.setCommandInProgess(false);
         m_commandInProgress = false;
         if (m_analyzeCommand != null
@@ -1540,8 +1592,6 @@ class GoGui
     {
         try
         {
-            if (! checkModifyGame(move))
-                return;
             go.Point p = move.getPoint();
             if (p != null && m_board.getColor(p) != go.Color.EMPTY)
                     return;
@@ -1610,7 +1660,7 @@ class GoGui
     {
         try
         {
-            m_toolBar.enableAll(true, m_board);
+            m_toolBar.enableAll(true, m_currentNode);
             if (m_program != null)
             {
                 try
@@ -1812,8 +1862,8 @@ class GoGui
         setHandicap();
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
-        m_toolBar.updateGameButtons(m_board);
-        m_menuBar.updateGameMenuItems(m_board);
+        m_toolBar.updateGameButtons(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
@@ -1833,8 +1883,8 @@ class GoGui
         setTimeSettings();
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
-        m_toolBar.updateGameButtons(m_board);
-        m_menuBar.updateGameMenuItems(m_board);
+        m_toolBar.updateGameButtons(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         checkComputerMove();
     }
@@ -1845,8 +1895,8 @@ class GoGui
         loadFile(new File(m_file), move);
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
-        m_toolBar.updateGameButtons(m_board);
-        m_menuBar.updateGameMenuItems(m_board);
+        m_toolBar.updateGameButtons(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
@@ -2233,7 +2283,7 @@ class GoGui
         {
             m_setupMode = false;
             m_menuBar.setNormalMode();
-            m_toolBar.enableAll(true, m_board);
+            m_toolBar.enableAll(true, m_currentNode);
             int size = m_board.getSize();
             go.Color color[][] = new go.Color[size][size];
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
@@ -2339,6 +2389,7 @@ class GoGui
     private void updateGameInfo()
     {
         m_gameInfo.update(m_currentNode, m_board);
+        m_gameTreeViewer.update(m_gameTree, m_currentNode);
     }
 }
 

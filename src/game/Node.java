@@ -130,6 +130,19 @@ public class Node
         return movesLeft;
     }
 
+    /** Nodes left in main variation. */
+    public int getNodesLeft()
+    {
+        int nodesLeft = 0;
+        Node node = this;
+        while (node.m_children != null)
+        {
+            node = node.getChild(0);
+            ++nodesLeft;
+        }
+        return nodesLeft;
+    }
+
     public int getNumberAddBlack()
     {
         if (m_addBlack == null)

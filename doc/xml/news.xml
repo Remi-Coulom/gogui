@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Support for game trees.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New tools: <application>GtpAdapter</application> and
 <application>GtpTerminal</application>.
 </simpara>

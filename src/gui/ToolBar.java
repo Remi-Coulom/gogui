@@ -10,7 +10,7 @@ import java.awt.event.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
-import go.*;
+import game.*;
 import utils.Preferences;
 
 //-----------------------------------------------------------------------------
@@ -54,19 +54,19 @@ class ToolBar
         m_buttonInterrupt.setEnabled(false);
     }
 
-    public void updateGameButtons(go.Board board)
+    public void updateGameButtons(Node node)
     {
-        int moveNumber = board.getMoveNumber();
-        int numberSavedMoves = board.getNumberSavedMoves();
-        m_buttonBeginning.setEnabled(moveNumber > 0);
-        m_buttonBackward.setEnabled(moveNumber > 0);
-        m_buttonBackward10.setEnabled(moveNumber > 0);
-        m_buttonForward.setEnabled(moveNumber < numberSavedMoves);
-        m_buttonForward10.setEnabled(moveNumber < numberSavedMoves);
-        m_buttonEnd.setEnabled(moveNumber < numberSavedMoves);
+        boolean hasFather = (node.getFather() != null);
+        boolean hasChildren = (node.getNumberChildren() > 0);
+        m_buttonBeginning.setEnabled(hasFather);
+        m_buttonBackward.setEnabled(hasFather);
+        m_buttonBackward10.setEnabled(hasFather);
+        m_buttonForward.setEnabled(hasChildren);
+        m_buttonForward10.setEnabled(hasChildren);
+        m_buttonEnd.setEnabled(hasChildren);
     }
 
-    public void enableAll(boolean enable, go.Board board)
+    public void enableAll(boolean enable, Node node)
     {
         m_buttonGtpShell.setEnabled(true);
         m_buttonAnalyze.setEnabled(true);
@@ -85,7 +85,7 @@ class ToolBar
         {
             if (! m_computerButtonsEnabled)
                 disableComputerButtons();
-            updateGameButtons(board);
+            updateGameButtons(node);
             m_buttonInterrupt.setEnabled(false);
         }
     }

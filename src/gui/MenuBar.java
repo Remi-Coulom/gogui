@@ -11,7 +11,7 @@ import java.awt.event.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
-import go.*;
+import game.*;
 
 //-----------------------------------------------------------------------------
 
@@ -271,18 +271,22 @@ class MenuBar
             disableMenu(m_menuWindows);
     }
 
-    public void updateGameMenuItems(go.Board board)
+    public void updateGameMenuItems(Node node)
     {
-        int moveNumber = board.getMoveNumber();
-        int numberSavedMoves = board.getNumberSavedMoves();
-        m_itemBeginning.setEnabled(moveNumber > 0);
-        m_itemBackward.setEnabled(moveNumber > 0);
-        m_itemBackward10.setEnabled(moveNumber > 0);
-        m_itemForward.setEnabled(moveNumber < numberSavedMoves);
-        m_itemForward10.setEnabled(moveNumber < numberSavedMoves);
-        m_itemEnd.setEnabled(moveNumber < numberSavedMoves);
-        m_itemGoto.setEnabled(numberSavedMoves > 0);
-        m_itemTruncate.setEnabled(moveNumber < numberSavedMoves);
+        boolean hasFather = (node.getFather() != null);
+        boolean hasChildren = (node.getNumberChildren() > 0);
+        boolean hasVariation =
+            (hasFather && node.getFather().getNumberChildren() > 1);
+        m_itemBeginning.setEnabled(hasFather);
+        m_itemBackward.setEnabled(hasFather);
+        m_itemBackward10.setEnabled(hasFather);
+        m_itemForward.setEnabled(hasChildren);
+        m_itemForward10.setEnabled(hasChildren);
+        m_itemEnd.setEnabled(hasChildren);
+        m_itemGoto.setEnabled(hasFather || hasChildren);
+        m_itemNextVariation.setEnabled(hasVariation);
+        m_itemPreviousVariation.setEnabled(hasVariation);
+        m_itemTruncate.setEnabled(hasChildren);
     }
 
     private boolean m_isComputerDisabled;
@@ -366,6 +370,10 @@ class MenuBar
     private JMenuItem m_itemHelp;
 
     private JMenuItem m_itemInterrupt;
+
+    private JMenuItem m_itemNextVariation;
+
+    private JMenuItem m_itemPreviousVariation;
 
     private JMenuItem m_itemRulesChinese;
 
@@ -525,6 +533,14 @@ class MenuBar
         m_itemEnd =
             addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
                         ActionEvent.CTRL_MASK, "end");
+        m_itemNextVariation =
+            addMenuItem(menu, "Next variation", KeyEvent.VK_V,
+                        KeyEvent.VK_DOWN, ActionEvent.CTRL_MASK,
+                        "next-variation");
+        m_itemPreviousVariation =
+            addMenuItem(menu, "Previous variation", KeyEvent.VK_A,
+                        KeyEvent.VK_UP, ActionEvent.CTRL_MASK,
+                        "previous-variation");
         m_itemGoto =
             addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
                         ActionEvent.CTRL_MASK, "goto");
