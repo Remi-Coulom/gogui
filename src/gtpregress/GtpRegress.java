@@ -195,11 +195,11 @@ class GtpRegress
 
     private static final String m_colorHeader = "#91aee8";
 
-    private static final String m_colorInfo = "#ffcc99";
+    private static final String m_colorInfo = "#e0e0e0";
 
-    private static final String m_colorLightBackground = "#eef6ff";
+    private static final String m_colorLightBackground = "#e0e0e0";
 
-    private static final String m_colorGrayBackground = "#eeeeee";
+    private static final String m_colorGrayBackground = "#e0e0e0";
 
     private static final String m_colorGreen = "#5eaf5e";
 
@@ -744,8 +744,7 @@ class GtpRegress
         writeInfo(out);
         out.print("</table>\n" +
                   "<p>\n" +
-                  "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
-                  + "\">\n" +
+                  "<table width=\"100%\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"20%\">\n" +
                   "<col width=\"10%\">\n" +
@@ -794,7 +793,8 @@ class GtpRegress
                       + m_colorHeader + "\">\n");
         }
         else
-            out.print("<tr align=\"center\">\n");
+            out.print("<tr align=\"center\" bgcolor=\""
+                      + m_colorGrayBackground + "\">\n");
         if (withFileName)
         {
             if (foot)
@@ -859,8 +859,7 @@ class GtpRegress
                   + m_outFileRelativeName + "</a></td></tr>\n" +
                   "</table>\n" +
                   "<p>\n" +
-                  "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
-                  + "\">\n" +
+                  "<table width=\"100%\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"12%\">\n" +
                   "<col width=\"12%\">\n" +
@@ -901,8 +900,7 @@ class GtpRegress
         for (int i = 0; i < m_tests.size(); ++i)
         {
             Test t = (Test)m_tests.get(i);
-            String rowBackground =
-                (i % 2 == 0 ? m_colorLightBackground : "white");
+            String rowBackground = m_colorLightBackground;
             String statusColor = rowBackground;
             String status = null;
             if (t.m_fail && t.m_expectedFail)
