@@ -331,7 +331,9 @@ class AnalyzeDialog
         m_clearBoard.setToolTipText("Clear board before displaying result");
         leftPanel.add(m_clearBoard);
         m_clearBoard.setSelected(true);
-        lowerPanel.add(createColorPanel());
+        JPanel rightPanel = new JPanel();
+        rightPanel.add(createColorPanel());
+        lowerPanel.add(rightPanel);
         loadRecent();
         return panel;
     }

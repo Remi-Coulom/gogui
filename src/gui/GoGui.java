@@ -810,6 +810,7 @@ class GoGui
                 || type == AnalyzeCommand.HPSTRING
                 || type == AnalyzeCommand.PSTRING
                 || type == AnalyzeCommand.VAR
+                || type == AnalyzeCommand.VARC
                 || type == AnalyzeCommand.VARW
                 || type == AnalyzeCommand.VARB
                 || type == AnalyzeCommand.VARP
