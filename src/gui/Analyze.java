@@ -11,96 +11,12 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
-
 import utils.*;
 
 //-----------------------------------------------------------------------------
 
-class Analyze
-    extends JComboBox
-    implements PopupMenuListener
+class AnalyzeCommand
 {
-    public class Command
-    {
-        public Command(int type, String label, String command, String title,
-                       double scale)
-        {
-            m_type = type;
-            m_label = label;
-            m_command = command;
-            m_title = title;
-            m_scale = scale;
-        }
-
-        double getScale()
-        {
-            return m_scale;
-        }
-
-        String getTitle()
-        {
-            return m_title;
-        }
-
-        int getType()
-        {
-            return m_type;
-        }
-
-        String getResultTitle(go.Point pointArg)
-        {
-            StringBuffer buffer = new StringBuffer(m_label);
-            if (pointArg != null)
-            {
-                buffer.append(" ");
-                buffer.append(pointArg.toString());
-            }
-            return buffer.toString();
-        }
-
-        boolean needsPointArg()
-        {
-            return (m_command.indexOf("%p") >= 0);
-        }
-
-        String replaceWildCards(go.Color toMove, go.Point pointArg)
-        {
-            StringBuffer buffer = new StringBuffer(m_command);
-            StringUtils.replace(buffer, "%m", toMove.toString());
-            if (needsPointArg())
-            {
-                assert(pointArg != null);
-                StringUtils.replace(buffer, "%p", pointArg.toString());
-            }
-            return buffer.toString();
-        }
-
-        private int m_type;
-
-        private String m_label;
-
-        private String m_command;
-
-        private String m_title;
-
-        private double m_scale;
-    }
-
-    public interface Callback
-    {
-        public void clearAnalyzeCommand();
-
-        public void setAnalyzeCommand(Command command);
-    }
-
-    public static class Error extends Exception
-    {
-        public Error(String s)
-        {
-            super(s);
-        }
-    }    
-
     public static final int NONE        = 0;
 
     public static final int STRING      = 1;    
@@ -113,184 +29,417 @@ class Analyze
 
     public static final int COLORBOARD  = 5;
 
-    Analyze(Callback callback, Preferences prefs) throws Error
+    public AnalyzeCommand(String line)
     {
-        setEnabled(false);
-        m_callback = callback;
-        m_prefs = prefs;
-        m_commands = new Vector(32, 32);
-        read();
-        int numberCommands = m_commands.size();
-        addItem("[No command]");
-        for (int i = 0; i < numberCommands; ++i)
-            addItem(StringUtils.split(getCommand(i), '/')[1]);
-        setSelectedIndex(0);
-        addPopupMenuListener(this);
-        String startCommand = prefs.getAnalyzeCommand();
-        setAnalyzeCommand(startCommand, false);
+        m_scale = 1.0;
+        m_title = null;
+        m_type = AnalyzeCommand.NONE;
+        String array[] = StringUtils.split(line, '/');
+        String typeStr = array[0];        
+        if (typeStr.equals("cboard"))
+            m_type = AnalyzeCommand.COLORBOARD;
+        else if (typeStr.equals("dboard"))
+            m_type = AnalyzeCommand.DOUBLEBOARD;
+        else if (typeStr.equals("sboard"))
+            m_type = AnalyzeCommand.STRINGBOARD;
+        else if (typeStr.equals("plist"))
+            m_type = AnalyzeCommand.POINTLIST;
+        else if (typeStr.equals("string"))
+            m_type = AnalyzeCommand.STRING;
+        m_label = array[1];
+        m_command = array[2];
+        if (array.length > 3)
+            m_title = array[3];
+        if (array.length > 4)
+            m_scale = Double.parseDouble(array[4]);
     }
 
-    public void popupMenuCanceled(PopupMenuEvent e)
+    public AnalyzeCommand(int type, String label, String command, String title,
+                          double scale)
     {
+        m_type = type;
+        m_label = label;
+        m_command = command;
+        m_title = title;
+        m_scale = scale;
     }
 
-    public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+    public static AnalyzeCommand get(String label)
     {
-        setCommand(false);
+        Vector commands = new Vector(128, 128);
+        Vector labels = new Vector(128, 128);
+        read(commands, labels);
+        int index = labels.indexOf(label);
+        if (index < 0)
+            return null;
+        return new AnalyzeCommand((String)commands.get(index));
     }
 
-    public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+    public String getLabel()
     {
+        return m_label;
     }
 
-    public void setAnalyzeCommand()
+    public double getScale()
     {
-        if (isEnabled())
-            setCommand(false);
-        else
-            m_callback.clearAnalyzeCommand();
+        return m_scale;
     }
 
-    public void setAnalyzeCommand(String command, boolean informCallback)
+    public String getTitle()
     {
-        if (command != null && ! command.equals(""))
+        return m_title;
+    }
+
+    public int getType()
+    {
+        return m_type;
+    }
+
+    public String getResultTitle(go.Point pointArg)
+    {
+        StringBuffer buffer = new StringBuffer(m_label);
+        if (pointArg != null)
         {
-            for (int i = 0; i < getItemCount(); ++i)
-                if (getItemAt(i).toString().equals(command))
+            buffer.append(" ");
+            buffer.append(pointArg.toString());
+        }
+        return buffer.toString();
+    }
+
+    public boolean needsPointArg()
+    {
+        return (m_command.indexOf("%p") >= 0);
+    }
+
+    public static void read(Vector commands, Vector labels)
+    {
+        commands.clear();
+        labels.clear();
+        try
+        {
+            File file = getFile();
+            BufferedReader in = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = in.readLine()) != null)
+            {
+                line = line.trim();
+                if (line.length() > 0 && line.charAt(0) != '#')
                 {
-                    setSelectedIndex(i);
-                    if (informCallback)
-                        setCommand(false);
-                    return;
-                }
+                    String array[] = StringUtils.split(line, '/');
+                    if (array.length < 3)
+                        break;
+                    String label = array[1];
+                    if (labels.contains(label))
+                        continue;
+                    labels.add(label);
+                    commands.add(line);
+                }                
+            }
+        }
+        catch (IOException e)
+        {
         }
     }
 
-    private Callback m_callback;
-
-    private Preferences m_prefs;
-
-    private Vector m_commands;
-
-    private String getCommand(int index)
+    public String replaceWildCards(go.Color toMove, go.Point pointArg)
     {
-        return (String)m_commands.get(index);
+        StringBuffer buffer = new StringBuffer(m_command);
+        StringUtils.replace(buffer, "%m", toMove.toString());
+        if (needsPointArg())
+        {
+            assert(pointArg != null);
+            StringUtils.replace(buffer, "%p", pointArg.toString());
+        }
+        return buffer.toString();
     }
 
-    private static Vector getDefaults()
-    {
-        String s[] = {
-            "plist/All Legal/all_legal %m",
-            "string/Dragon Data/dragon_data %p",
-            "string/Estimate Score/estimate_score",
-            "string/Final Score/final_score",
-            "sboard/Final Status/final_status %p",
-            "dboard/Influence Black/influence %m/black/0.01",
-            "dboard/Influence White/influence %m/white/-0.01",
-            "sboard/Influence Regions/influence %m/regions",
-            "none/ShowBoard/showboard",
-            "string/Worm Data/worm_data %p"
-        };
-        Vector result = new Vector(32, 32);
-        for (int i = 0; i < s.length; ++i)
-            result.add(s[i]);
-        return result;
-    }
+    private int m_type;
 
-    private File getDir()
+    private String m_label;
+
+    private String m_command;
+
+    private String m_title;
+
+    private double m_scale;
+
+    private static File getDir()
     {
         String home = System.getProperty("user.home");
         return new File(home, ".gogui");
     }
 
-    private File getFile()
+    private static File getFile()
     {
         return new File(getDir(), "analyze-commands");
     }
+}
 
-    private void read() throws Error
+//-----------------------------------------------------------------------------
+
+interface AnalyzeCallback
+{
+    public void clearAnalyzeCommand();
+
+    public void initAnalyzeCommand(AnalyzeCommand command);
+
+    public void setAnalyzeCommand(AnalyzeCommand command);
+
+
+}
+
+//-----------------------------------------------------------------------------
+
+class AnalyzeDialog
+    extends JDialog
+    implements ActionListener, KeyListener, MouseListener, WindowListener
+{
+    public AnalyzeDialog(Frame owner, AnalyzeCallback callback,
+                         Preferences prefs)
     {
-        m_commands = getDefaults();
+        super(owner, "GoGui: Analyze command");
+        m_prefs = prefs;
+        m_callback = callback;
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(this);
+        Container contentPane = getContentPane();
+        contentPane.add(createCommandPanel(), BorderLayout.CENTER);
+        contentPane.add(createButtons(), BorderLayout.SOUTH);
+        pack();
+        if (m_comboBox.getItemCount() > 0)
+            m_comboBox.requestFocus();
+        else
+            m_list.requestFocus();
+    }
+
+    public void actionPerformed(ActionEvent event)
+    {
+        String command = event.getActionCommand();
+        if (command.equals("cancel"))
+            close();
+        else if (command.equals("ok"))
+            setCommand();
+    }
+
+    public void keyPressed(KeyEvent e)
+    {
+        int code = e.getKeyCode();        
+        Object source = e.getSource();
+        if (source == m_comboBox && code == KeyEvent.VK_ENTER)
+            setCommand();
+    }
+
+    public void keyReleased(KeyEvent e) 
+    {
+        int code = e.getKeyCode();        
+        Object source = e.getSource();
+        if (source == m_list && code == KeyEvent.VK_ENTER)
+        {
+            int index = m_list.getSelectedIndex();
+            selectCommand(index);
+        }
+    }
+
+    public void keyTyped(KeyEvent e)
+    {
+    }
+
+    public void mouseClicked(MouseEvent e)
+    {
+        if (e.getClickCount() == 2)
+        {
+            int index = m_list.locationToIndex(e.getPoint());
+            selectCommand(index);
+            setCommand();
+        }
+    }
+
+    public void mouseEntered(MouseEvent e)
+    {
+    }
+
+    public void mouseExited(MouseEvent e)
+    {
+    }
+
+    public void mousePressed(MouseEvent e)
+    {
+    }
+
+    public void mouseReleased(MouseEvent e)
+    {
+    }
+
+    public void windowActivated(WindowEvent e)
+    {
+    }
+
+    public void windowClosed(WindowEvent e)
+    {
+    }
+
+    public void windowClosing(WindowEvent e)
+    {
+        close();
+    }
+
+    public void windowDeactivated(WindowEvent e)
+    {
+    }
+
+    public void windowDeiconified(WindowEvent e)
+    {
+    }
+
+    public void windowIconified(WindowEvent e)
+    {
+    }
+
+    public void windowOpened(WindowEvent e)
+    {
+    }
+
+    private JComboBox m_comboBox;
+
+    private JList m_list;
+
+    private Vector m_commands = new Vector(128, 64);
+
+    private Vector m_labels = new Vector(128, 64);
+
+    private AnalyzeCallback m_callback;
+
+    private Preferences m_prefs;
+
+    private void close()
+    {
+        m_callback.clearAnalyzeCommand();
+        saveRecent();
+        dispose();
+    }
+
+    private JPanel createButtons()
+    {
+        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
+        innerPanel.setBorder(GuiUtils.createEmptyBorder());
+        JButton okButton = new JButton("Ok");
+        okButton.setActionCommand("ok");
+        okButton.addActionListener(this);
+        innerPanel.add(okButton);
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setActionCommand("cancel");
+        cancelButton.addActionListener(this);
+        innerPanel.add(cancelButton);
+        JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        outerPanel.add(innerPanel);
+        return outerPanel;
+    }
+
+    private JPanel createCommandPanel()
+    {
+        AnalyzeCommand.read(m_commands, m_labels);
+        JPanel panel = new JPanel(new BorderLayout());
+        m_list = new JList(m_labels);
+        m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        m_list.setVisibleRowCount(20);
+        m_list.addMouseListener(this);
+        m_list.addKeyListener(this);
+        JScrollPane scrollPane = new JScrollPane(m_list);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(createLowerPanel(), BorderLayout.SOUTH);
+        return panel;
+    }
+
+    private JPanel createLowerPanel()
+    {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 1, GuiUtils.PAD, 0));
+        m_comboBox = new JComboBox();
+        m_comboBox.addKeyListener(this);
+        panel.add(m_comboBox);
+        loadRecent();
+        return panel;
+    }
+
+    private File getRecentFile()
+    {
+        String home = System.getProperty("user.home");
+        return new File(new File(home, ".gogui"), "recent-analyze");
+    }
+
+    private void loadRecent()
+    {
+        m_comboBox.removeAllItems();
+        File file = getRecentFile();
+        BufferedReader reader;
         try
         {
-            File file = getFile();
-            BufferedReader in = new BufferedReader(new FileReader(file));
-            String line = in.readLine();
-            int number = 1;
-            while (line != null)
+            reader = new BufferedReader(new FileReader(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            return;
+        }
+        String line;
+        try
+        {
+            while((line = reader.readLine()) != null)
             {
-                if (line.length() > 0 && line.charAt(0) != '#')
-                {
-                    if (StringUtils.split(line, '/').length < 3)
-                        throw new Error("Invalid line " + number + " in\n"
-                                        + file);
-                    if (! m_commands.contains(line))
-                        m_commands.add(line);
-                }                
-                line = in.readLine();
-                ++number;
+                m_comboBox.addItem(line);
             }
         }
         catch (IOException e)
         {
-            save();
+        }
+        try
+        {
+            reader.close();
+        }
+        catch (IOException e)
+        {
         }
     }
 
-    private void save() throws Error
+    public void saveRecent()
     {
-        File dir = getDir();
-        if (! dir.exists())
-            dir.mkdir();
-        File file = getFile();
+        File file = getRecentFile();
+        PrintStream out;
         try
         {
-            PrintWriter out = new PrintWriter(new FileOutputStream(file));
-            out.println("# GoGui Analyze Commands");
-            for (int i = 0; i < m_commands.size(); ++i)
-                out.println(getCommand(i));
-            out.close();
+            out = new PrintStream(new FileOutputStream(file));
         }
         catch (FileNotFoundException e)
         {
-            throw new Error("File " + file + " not found.");
-        }
-    }
-
-    private void setCommand(boolean init)
-    {
-        int index = getSelectedIndex();
-        if (index == 0)
-        {
-            m_callback.clearAnalyzeCommand();
             return;
         }
-        String analyzeCommand = getCommand(index - 1);
-        double scale = 1.0;
-        String title = null;
-        int type = NONE;
-        StringBuffer buffer = new StringBuffer(analyzeCommand);
-        String array[] = StringUtils.split(buffer.toString(), '/');
-        String typeStr = array[0];
-        if (typeStr.equals("cboard"))
-            type = Analyze.COLORBOARD;
-        else if (typeStr.equals("dboard"))
-            type = Analyze.DOUBLEBOARD;
-        else if (typeStr.equals("sboard"))
-            type = Analyze.STRINGBOARD;
-        else if (typeStr.equals("plist"))
-            type = Analyze.POINTLIST;
-        else if (typeStr.equals("string"))
-            type = Analyze.STRING;
-        String label = array[1];
-        String cmd = array[2];
-        if (array.length > 3)
-            title = array[3];
-        if (array.length > 4)
-            scale = Double.parseDouble(array[4]);
-        Command command = new Command(type, label, cmd, title, scale);
-        if (! init)
-            m_callback.setAnalyzeCommand(command);
+        final int max = 10;
+        for (int i = 0; i < m_comboBox.getItemCount() && i < max; ++i)
+            out.println(m_comboBox.getItemAt(i));
+        out.close();
+    }
+
+    private void selectCommand(int index)
+    {
+        String label = (String)m_labels.get(index);
+        for (int i = 0; i < m_comboBox.getItemCount(); ++i)
+            if (((String)m_comboBox.getItemAt(i)).equals(label))
+            {
+                m_comboBox.removeItemAt(i);
+                break;
+            }
+        m_comboBox.insertItemAt(label, 0);
+        m_comboBox.setSelectedIndex(0);
+    }
+
+    private void setCommand()
+    {
+        String label = (String)m_comboBox.getSelectedItem();        
+        int index = m_labels.indexOf(label);
+        if (index < 0)
+            return;
+        String analyzeCommand = (String)m_commands.get(index);
+        AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
+        m_callback.setAnalyzeCommand(command);
         m_prefs.setAnalyzeCommand(label);
     }
 }

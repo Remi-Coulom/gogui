@@ -23,14 +23,14 @@ import version.*;
 
 class GoGui
     extends JFrame
-    implements ActionListener, Analyze.Callback, Board.Listener,
+    implements ActionListener, AnalyzeCallback, Board.Listener,
                GtpShell.Callback, WindowListener
 {
     GoGui(String program, Preferences prefs, String file, int move,
           boolean gtpShell, String time, boolean verbose, boolean fillPasses,
           boolean computerBlack, boolean computerWhite, boolean auto,
           String gtpFile, String gtpCommand, String initAnalyze)
-        throws Gtp.Error, Analyze.Error
+        throws Gtp.Error
     {
         m_program = program;
         if (program != null && ! program.equals(""))
@@ -72,7 +72,7 @@ class GoGui
         m_guiBoard = new Board(m_board);
         m_guiBoard.setListener(this);
         m_gameInfo.setBoard(m_board);
-        m_toolBar = new ToolBar(this, prefs, this);
+        m_toolBar = new ToolBar(this, prefs);
         contentPane.add(m_toolBar, BorderLayout.NORTH);
 
         contentPane.add(infoPanel, BorderLayout.SOUTH);
@@ -435,7 +435,7 @@ class GoGui
         endLengthyCommand();
     }
 
-    public void initAnalyzeCommand(Analyze.Command command)
+    public void initAnalyzeCommand(AnalyzeCommand command)
     {
         m_analyzeCommand = command;
         m_analyzeRequestPoint = false;
@@ -443,11 +443,11 @@ class GoGui
         {
             m_analyzeRequestPoint = true;
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
-            showStatus("Please select a field.");
+            showStatusSelectTarget();
         }
     }
 
-    public void setAnalyzeCommand(Analyze.Command command)
+    public void setAnalyzeCommand(AnalyzeCommand command)
     {
         initAnalyzeCommand(command);
         if (m_commandInProgress)
@@ -577,7 +577,7 @@ class GoGui
 
     private MenuBar m_menuBar;
 
-    private Analyze.Command m_analyzeCommand;
+    private AnalyzeCommand m_analyzeCommand;
 
     private String m_file;
 
@@ -638,7 +638,7 @@ class GoGui
             int type = m_analyzeCommand.getType();
             switch (type)
             {
-            case Analyze.COLORBOARD:
+            case AnalyzeCommand.COLORBOARD:
                 {
                     String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
@@ -646,7 +646,7 @@ class GoGui
                     m_guiBoard.repaint();
                 }
                 break;
-            case Analyze.DOUBLEBOARD:
+            case AnalyzeCommand.DOUBLEBOARD:
                 {
                     double board[][] = Gtp.parseDoubleBoard(response, title,
                                                             m_boardSize);
@@ -654,14 +654,14 @@ class GoGui
                     m_guiBoard.repaint();
                 }
                 break;
-            case Analyze.POINTLIST:
+            case AnalyzeCommand.POINTLIST:
                 {
                     go.Point pointList[] = Gtp.parsePointList(response);
                     showPointList(pointList);
                     m_guiBoard.repaint();
                 }
                 break;
-            case Analyze.STRINGBOARD:
+            case AnalyzeCommand.STRINGBOARD:
                 {
                     String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
@@ -672,7 +672,7 @@ class GoGui
             }
             String resultTitle =
                 m_analyzeCommand.getResultTitle(m_analyzePointArg);
-            if (type == Analyze.STRING)
+            if (type == AnalyzeCommand.STRING)
             {
                 if (response.indexOf("\n") < 0)
                 {
@@ -695,7 +695,7 @@ class GoGui
                     dialog.pack();
                     dialog.setVisible(true);
                     if (m_analyzeRequestPoint)
-                        showStatus("Please select a field.");
+                        showStatusSelectTarget();
                     else
                         clearStatus();
                 }
@@ -709,7 +709,7 @@ class GoGui
         {                
             showGtpError(e);
             if (m_analyzeRequestPoint)
-                showStatus("Please select a field.");
+                showStatusSelectTarget();
             else
                 clearStatus();
             return;
@@ -770,7 +770,11 @@ class GoGui
 
     private void cbAnalyze()
     {        
-        m_toolBar.toggleAnalyze();
+        AnalyzeDialog dialog = new AnalyzeDialog(this, this, m_prefs);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        //return dialog.m_command;
+        //m_toolBar.toggleAnalyze();
     }
 
     private void cbBeepAfterMove()
@@ -1481,7 +1485,15 @@ class GoGui
             }
             setVisible(true);
             if (! m_initAnalyze.equals(""))
-                m_toolBar.setAnalyzeCommand(m_initAnalyze);
+            {
+                AnalyzeCommand analyzeCommand =
+                    AnalyzeCommand.get(m_initAnalyze);
+                if (analyzeCommand == null)
+                    showError("Unknown analyze command \"" + m_initAnalyze
+                              + "\"");
+                else
+                    initAnalyzeCommand(analyzeCommand);
+            }
             if (m_gtpShell != null)
             {
                 m_gtpShell.setLocationRelativeTo(this);
@@ -1517,7 +1529,7 @@ class GoGui
         m_scoreDialog.setLocation(size.width, 0);
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
-        showStatus("Please remove dead groups.");
+        showStatus("Please mark dead groups.");
     }
 
     private void interrupt()
@@ -2054,6 +2066,11 @@ class GoGui
     {
         m_statusLabel.setText(text);
         m_statusLabel.repaint();
+    }
+
+    private void showStatusSelectTarget()
+    {
+        showStatus("Select a target for " + m_analyzeCommand.getLabel() + ".");
     }
 
     private void showStringBoard(String[][] board) throws Gtp.Error

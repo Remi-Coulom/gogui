@@ -17,8 +17,7 @@ import go.*;
 class ToolBar
     extends JToolBar
 {
-    ToolBar(ActionListener listener, Preferences prefs,
-            Analyze.Callback callback) throws Analyze.Error
+    ToolBar(ActionListener listener, Preferences prefs)
     {
         m_listener = listener;
         m_buttonNew = addButton("images/filenew.png", "new-game", "New game");
@@ -44,11 +43,6 @@ class ToolBar
         add(new JToolBar.Separator());
         m_buttonGtpShell = addButton("images/openterm.png", "gtp-shell",
                                      "GTP shell");
-        add(new JToolBar.Separator());
-        m_buttonAnalyze = addButton("images/gear.png", "analyze",
-                                    "Enable analyze command");
-        m_analyze = new Analyze(callback, prefs);
-        add(m_analyze);
     }
 
     public void disableComputerButtons()
@@ -56,21 +50,7 @@ class ToolBar
         m_computerButtonsEnabled = false;
         m_buttonEnter.setEnabled(false);
         m_buttonGtpShell.setEnabled(false);
-        m_buttonAnalyze.setEnabled(false);
         m_buttonInterrupt.setEnabled(false);
-        m_analyze.setEnabled(false);
-    }
-
-    public void setAnalyzeCommand(String command)
-    {
-        m_analyze.setEnabled(true);
-        m_analyze.setAnalyzeCommand(command, true);
-    }
-
-    public void toggleAnalyze()
-    {
-        m_analyze.setEnabled(! m_analyze.isEnabled());
-        m_analyze.setAnalyzeCommand();
     }
 
     public void updateGameButtons(go.Board board)
@@ -88,7 +68,6 @@ class ToolBar
     public void enableAll(boolean enable, go.Board board)
     {
         m_buttonGtpShell.setEnabled(true);
-        m_buttonAnalyze.setEnabled(enable);
         m_buttonBeginning.setEnabled(enable);
         m_buttonBackward.setEnabled(enable);
         m_buttonBackward10.setEnabled(enable);
@@ -104,14 +83,8 @@ class ToolBar
         {
             if (! m_computerButtonsEnabled)
                 disableComputerButtons();
-            m_analyze.setEnabled(m_analyzeWasEnabled);
             updateGameButtons(board);
             m_buttonInterrupt.setEnabled(false);
-        }
-        else
-        {
-            m_analyzeWasEnabled = m_analyze.isEnabled();
-            m_analyze.setEnabled(false);
         }
     }
 
@@ -122,15 +95,9 @@ class ToolBar
             m_buttonInterrupt.setEnabled(true);
     }
 
-    private boolean m_analyzeWasEnabled;
-
     private boolean m_computerButtonsEnabled = true;
 
     private ActionListener m_listener;
-
-    private Analyze m_analyze;
-
-    private JButton m_buttonAnalyze;
 
     private JButton m_buttonEnter;
 
