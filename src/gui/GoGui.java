@@ -2204,7 +2204,7 @@ class GoGui
     private void showStatusSelectPointList()
     {
         showStatus("Select points for " + m_analyzeCommand.getLabel()
-                   + ". Select last point with Ctrl key down.");
+                   + ". Select last point with double click or Ctrl-Enter.");
     }
 
     private void showStatusSelectTarget()

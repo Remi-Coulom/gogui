@@ -16,8 +16,8 @@ import go.*;
 //-----------------------------------------------------------------------------
 
 public class Field
-    extends JButton
-    implements ActionListener, FocusListener
+    extends JComponent
+    implements FocusListener, KeyListener, MouseListener
 {
     Field(gui.Board board, go.Point p, boolean isHandicap)
     {
@@ -29,15 +29,9 @@ public class Field
         setPreferredSize(size);
         setMinimumSize(new Dimension(3, 3));
         setBorder(null);
-        setOpaque(false);
-        addActionListener(this);
         addFocusListener(this);
-    }
-
-    public void actionPerformed(ActionEvent event)
-    {
-        int modifiers = event.getModifiers();
-        m_board.fieldClicked(m_point, modifiers);
+        addKeyListener(this);
+        addMouseListener(this);
     }
 
     public void clearInfluence()
@@ -49,15 +43,57 @@ public class Field
     public void focusGained(FocusEvent event)
     {
         m_board.setFocusPoint(m_point);
+        repaint();
     }
 
     public void focusLost(FocusEvent event)
     {
+        repaint();
     }
 
     public go.Color getColor()
     {
         return m_color;
+    }
+
+    public void keyPressed(KeyEvent event)
+    {
+        int code = event.getKeyCode();
+        int modifiers = event.getModifiers();
+        if (code == KeyEvent.VK_ENTER)
+            m_board.fieldClicked(m_point, modifiers);
+    }
+
+    public void keyReleased(KeyEvent event)
+    {
+    }
+
+    public void keyTyped(KeyEvent event)
+    {
+    }
+
+    public void mouseClicked(MouseEvent e)
+    {
+        if (e.getClickCount() == 2)
+            m_board.fieldClicked(m_point, ActionEvent.CTRL_MASK);
+        else
+            m_board.fieldClicked(m_point, 0);
+    }
+
+    public void mouseEntered(MouseEvent e)
+    {
+    }
+
+    public void mouseExited(MouseEvent e)
+    {
+    }
+
+    public void mousePressed(MouseEvent e)
+    {
+    }
+
+    public void mouseReleased(MouseEvent e)
+    {
     }
 
     public void paintComponent(Graphics graphics)

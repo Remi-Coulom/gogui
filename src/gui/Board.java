@@ -145,12 +145,8 @@ public class Board
 
     public void keyPressed(KeyEvent event)
     {
-        if (! getField(m_focusPoint).hasFocus())
-        {
-            setFocusPoint(m_focusPoint);
-            return;
-        }
         int code = event.getKeyCode();
+        int modifiers = event.getModifiers();
         int size = m_board.getSize();
         if (code == KeyEvent.VK_DOWN)
             m_focusPoint.down();
@@ -160,8 +156,6 @@ public class Board
             m_focusPoint.left();
         else if (code == KeyEvent.VK_RIGHT)
             m_focusPoint.right(size);
-        else if (code == KeyEvent.VK_ENTER)
-            getField(m_focusPoint).doClick();
         setFocusPoint(m_focusPoint);
     }
 
