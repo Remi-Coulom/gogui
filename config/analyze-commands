@@ -37,8 +37,9 @@ varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
 varc/Restricted GenMove/restricted_genmove %c %P
 none/Set Random Seed/set_random_seed %s
-pspairs/Top Moves/top_moves
-pspairs/Top Moves/top_moves_%c
+pspairs/Top Moves/top_moves %c
+pspairs/Top Moves Black/top_moves_black
+pspairs/Top Moves White/top_moves_white
 
 # Extensions of other Go programs that could be of general interest
 none/SaveSgf/savesgf %f
