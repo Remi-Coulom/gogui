@@ -408,8 +408,33 @@ public class Reader
 
     private void parseOverTimeProp(String value)
     {
-        /* Match the format that sgf.Writer uses */
-        String regex = "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec\\s*";
+        /* Used by sgf.Writer */
+        if (parseOverTimeProp(value,
+                              "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec\\s*",
+                              true, 1000L))
+            return;
+        /* Used by Smart Go */
+        if (parseOverTimeProp(value,
+                              "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*min\\s*",
+                              true, 60000L))
+            return;
+        /* Used by Kiseido Game Server, CGoban 2 */
+        if (parseOverTimeProp(value,
+                              "\\s*(\\d+)x(\\d+)\\s*byo-yomi\\s*",
+                              true, 1000L))
+            return;
+        /* Used Quarry, CGoban 2*/
+        if (parseOverTimeProp(value,
+                              "\\s*(\\d+)/(\\d+)\\s*canadian\\s*",
+                              true, 1000L))
+            return;
+        m_ignoreTimeSettings = true;
+    }
+
+    private boolean parseOverTimeProp(String value, String regex,
+                                      boolean byoyomiMovesFirst,
+                                      long timeUnitFactor)
+    {
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(value);
         if (matcher.matches())
@@ -417,21 +442,32 @@ public class Reader
             assert(matcher.groupCount() == 2);
             try
             {
-                String group1 = matcher.group(1);
-                String group2 = matcher.group(2);
+                String group1;
+                String group2;
+                if (byoyomiMovesFirst)
+                {
+                    group1 = matcher.group(1);
+                    group2 = matcher.group(2);
+                }
+                else
+                {
+                    group1 = matcher.group(2);
+                    group2 = matcher.group(1);
+                }
                 m_byoyomiMoves = Integer.parseInt(group1);
-                m_byoyomi = (long)(Double.parseDouble(group2) * 1000);
+                m_byoyomi
+                    = (long)(Double.parseDouble(group2) * timeUnitFactor);
             }
             catch (NumberFormatException e)
             {
                 setWarning("Invalid byoyomi values");
                 m_ignoreTimeSettings = true;
+                return false;
             }
         }
         else
-        {
-            m_ignoreTimeSettings = true;
-        }
+            return false;
+        return true;
     }
 
     private Point parsePoint(String s) throws SgfError
