@@ -133,7 +133,6 @@ public class Reader
         if (s.length() < 2)
             throw getError("Invalid coordinates: " + s);
         int boardSize = m_gameInformation.m_boardSize;
-        System.err.println("xxx " + boardSize);
         if (s.equals("tt") && boardSize <= 19)
             return null;
         int x = s.charAt(0) - 'a';
