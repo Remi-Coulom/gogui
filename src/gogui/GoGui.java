@@ -352,17 +352,23 @@ class GoGui
 
     public void cbShowInfoPanel()
     {
-        if (m_showInfoPanel)
-            m_comment.setPreferredSize(m_comment.getSize());
-        m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
+        if (GuiUtils.isNormalSizeMode(this))
+        {
+            if (m_showInfoPanel)
+                m_comment.setPreferredSize(m_comment.getSize());
+            m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
+        }
         showInfoPanel();
     }
 
     public void cbShowToolbar()
     {
-        if (m_showInfoPanel)
-            m_comment.setPreferredSize(m_comment.getSize());
-        m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
+        if (GuiUtils.isNormalSizeMode(this))
+        {
+            if (m_showInfoPanel)
+                m_comment.setPreferredSize(m_comment.getSize());
+            m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
+        }
         showToolbar();
     }
 
