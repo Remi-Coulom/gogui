@@ -48,7 +48,7 @@ class GoGui
         m_verbose = verbose;
         m_initAnalyze = initAnalyze;
 
-        m_program = program;
+        m_program = program.trim();
         if (program != null && ! program.equals(""))
         {
             m_gtpShell = new GtpShell(this, "GoGui", this, prefs);
