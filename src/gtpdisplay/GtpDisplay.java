@@ -136,7 +136,15 @@ public class GtpDisplay
         else if (cmd.equals("quit"))
             status = cmdQuit(response);
         else
-            status = send(cmdLine, response);
+        {
+            if (m_gtp == null)
+            {
+                response.append("unknown command");
+                status = false;
+            }
+            else
+                status = send(cmdLine, response);
+        }
         return status;
     }
 
