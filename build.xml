@@ -129,7 +129,11 @@ installation directory.
 <target name="doc" depends="docCheckUptodate" unless="docUptodate">
 <antcall target="checkXslAvailable"/>
 <style basedir="doc/xml" includes="book.xml" destdir="doc/html"
- style="${docbook_xsl_home}/html/chunk.xsl" force="true">
+ style="doc/xml/html.xsl" force="true">
+<xmlcatalog>
+<dtd publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
+ location="${docbook_xsl_home}/html/chunk.xsl"/>
+</xmlcatalog>
 <param name="admon.graphics" expression="0"/>
 <param name="admon.graphics.path" expression=""/>
 <param name="chunk.quietly" expression="1"/>
