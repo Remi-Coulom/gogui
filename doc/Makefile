@@ -6,7 +6,7 @@
 doc:
 	mkdir -p html homepage
 	xsltproc \
-          --param admon.graphics 1 \
+          --param admon.graphics 0 \
           --param admon.graphics.path '""' \
           --param chunk.section.depth 0 \
           --param html.stylesheet '"docbook.css"' \
@@ -16,6 +16,7 @@ doc:
           --param toc.section.depth 0 \
           -o html/ \
           $(XSLDIR)/html/chunk.xsl xml/book.xml
-	cp images/*.png css/docbook.css html
+        #cp images/*.png css/docbook.css html
+	cp css/docbook.css html
 	xsltproc -o homepage/index.html \
           $(XSLDIR)/html/docbook.xsl xml/homepage.xml
