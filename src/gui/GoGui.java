@@ -320,10 +320,16 @@ class GoGui
         }
     }
 
-    public boolean sendGtpCommand(String command) throws Gtp.Error
+    public boolean sendGtpCommand(String command, boolean sync)
+        throws Gtp.Error
     {
         if (m_commandInProgress)
             return false;
+        if (sync)
+        {
+            m_commandThread.sendCommand(command);
+            return true;
+        }
         Runnable callback = new Runnable()
             {
                 public void run() { sendGtpCommandContinue(); }
@@ -1463,18 +1469,7 @@ class GoGui
                 String line = in.readLine();
                 if (line == null)
                     return;
-                line = line.trim();
-                if (! line.equals("") && line.charAt(0) != '#')
-                {
-                    try
-                    {
-                        m_commandThread.sendCommand(line);
-                    }
-                    catch (Gtp.Error e)
-                    {
-                        showGtpError(e);
-                    }
-                }
+                m_gtpShell.sendCommand(line, this);
             }
             catch (IOException e)
             {

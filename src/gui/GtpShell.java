@@ -118,7 +118,8 @@ public class GtpShell
 {
     public interface Callback
     {
-        public boolean sendGtpCommand(String command) throws Gtp.Error;
+        public boolean sendGtpCommand(String command, boolean sync)
+            throws Gtp.Error;
     }
 
     GtpShell(Frame owner, String titleprefix, Callback callback)
@@ -261,6 +262,76 @@ public class GtpShell
         toFront();
         requestFocus();
         m_textField.requestFocus();
+    }
+
+    /** Send Gtp command to callback.
+        If frame != null, send synchronously and display error dialog on
+        parent frame, otherwise send asynchronously.
+    */
+    public void sendCommand(String command, Frame frame)
+    {
+        String c = command.trim();
+        if (c.equals(""))
+            return;
+        if (c.startsWith("#"))
+        {
+            m_gtpShellText.appendComment(command + "\n");
+        }
+        else
+        {
+            c.toLowerCase();
+            if (m_showModifyWarning
+                && (c.startsWith("boardsize ")
+                    || c.startsWith("black ")
+                    || c.startsWith("clear_board ")
+                    || c.startsWith("genmove ")
+                    || c.startsWith("genmove_black ")
+                    || c.startsWith("genmove_white ")
+                    || c.startsWith("loadsgf ")
+                    || c.startsWith("play ")
+                    || c.startsWith("white ")
+                    || c.startsWith("quit")))
+            {
+                String message = 
+                    "This command will modify the board state\n" +
+                    "and will cause the graphical board to be out of sync.\n" +
+                    "You must start a new game before using\n" +
+                    "the graphical board again.";
+                int messageType = JOptionPane.WARNING_MESSAGE;
+                int optionType = JOptionPane.OK_CANCEL_OPTION;
+                JOptionPane optionPane =
+                    new JOptionPane(message, messageType, optionType);
+                JDialog dialog =
+                    optionPane.createDialog(this, "GoGui: Warning");
+                DialogUtils.center(dialog, this);
+                dialog.setVisible(true);
+                
+                Object value = optionPane.getValue();
+                if (value == null)
+                    return;
+                int intValue = ((Integer)value).intValue();
+                if (intValue != JOptionPane.OK_OPTION)
+                    return;
+                message = 
+                    "Would you like to disable the warnings about\n" +
+                    "commands modifying the board state?";
+                m_showModifyWarning =
+                    ! SimpleDialogs.showQuestion(this, message);
+            }
+            try
+            {
+                if (! m_callback.sendGtpCommand(command, frame != null))
+                    return;
+            }
+            catch (Gtp.Error e)
+            {
+                SimpleDialogs.showError(frame, e.getMessage());
+            }
+        }
+        appendToHistory(command);
+        m_comboBox.hidePopup();
+        addAllCompletions(m_history);
+        m_textField.setText("");
     }
 
     public void sentCommand(String command)
@@ -456,64 +527,7 @@ public class GtpShell
     private void comboBoxEdited()
     {
         String command = m_comboBox.getSelectedItem().toString();
-        String c = command.trim();
-        if (c.equals(""))
-            return;
-        if (c.startsWith("#"))
-        {
-            m_gtpShellText.appendComment(command + "\n");
-        }
-        else
-        {
-            c.toLowerCase();
-            if (m_showModifyWarning
-                && (c.startsWith("boardsize")
-                    || c.startsWith("black")
-                    || c.startsWith("genmove_black")
-                    || c.startsWith("genmove_white")
-                    || c.startsWith("loadsgf")
-                    || c.startsWith("white")
-                    || c.startsWith("quit")))
-            {
-                String message = 
-                    "This command will modify the board state\n" +
-                    "and will cause the graphical board to be out of sync.\n" +
-                    "You must start a new game before using\n" +
-                    "the graphical board again.";
-                int messageType = JOptionPane.WARNING_MESSAGE;
-                int optionType = JOptionPane.OK_CANCEL_OPTION;
-                JOptionPane optionPane =
-                    new JOptionPane(message, messageType, optionType);
-                JDialog dialog =
-                    optionPane.createDialog(this, "GoGui: Warning");
-                DialogUtils.center(dialog, this);
-                dialog.setVisible(true);
-                
-                Object value = optionPane.getValue();
-                if (value == null)
-                    return;
-                int intValue = ((Integer)value).intValue();
-                if (intValue != JOptionPane.OK_OPTION)
-                    return;
-                message = 
-                    "Would you like to disable the warnings about\n" +
-                    "commands modifying the board state?";
-                m_showModifyWarning =
-                    ! SimpleDialogs.showQuestion(this, message);
-            }
-            try
-            {
-                if (! m_callback.sendGtpCommand(command))
-                    return;
-            }
-            catch (Gtp.Error e)
-            {
-            }
-        }
-        appendToHistory(command);
-        m_comboBox.hidePopup();
-        addAllCompletions(m_history);
-        m_textField.setText("");
+        sendCommand(command, null);
     }
 
     private void createMenu()
