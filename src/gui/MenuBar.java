@@ -172,6 +172,7 @@ class MenuBar
                 m_itemBoardSize[i].setSelected(true);
                 return;
             }
+        m_itemBoardSizeOther.setSelected(true);
     }
 
     public void selectRulesItem(int rules)
@@ -338,6 +339,8 @@ class MenuBar
 
     private JMenuItem[] m_itemBoardSize;
 
+    private JMenuItem m_itemBoardSizeOther;
+
     private JMenuItem m_itemComputerBlack;
 
     private JMenuItem m_itemComputerBoth;
@@ -434,6 +437,10 @@ class MenuBar
             JMenuItem item = addRadioItem(menu, group, s, "board-size-" + s);
             m_itemBoardSize[i] = item;
         }
+        menu.addSeparator();
+        JMenuItem item = addRadioItem(menu, group, "Other",
+                                      "board-size-other");
+        m_itemBoardSizeOther = item;
         return menu;
     }
 

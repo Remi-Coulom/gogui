@@ -158,6 +158,8 @@ class GoGui
             cbBeepAfterMove();
         else if (command.equals("beginning"))
             cbBeginning();
+        else if (command.equals("board-size-other"))
+            cbBoardSizeOther();
         else if (command.startsWith("board-size-"))
             cbNewGame(command.substring(new String("board-size-").length()));
         else if (command.equals("computer-black"))
@@ -815,6 +817,7 @@ class GoGui
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
+        m_menuBar.selectBoardSizeItem(m_board.getSize());
         clearStatus();
         if (m_commandThread != null
             && m_analyzeCommand != null
@@ -845,6 +848,29 @@ class GoGui
         backward(n);
     }
 
+    private void cbBoardSizeOther()
+    {
+        String value =
+            JOptionPane.showInputDialog(this, "Board size",
+                                        Integer.toString(m_boardSize));
+        if (value == null)
+            return;
+        int boardSize = -1;
+        try
+        {
+            boardSize = Integer.parseInt(value);
+        }
+        catch (NumberFormatException e)
+        {
+        }
+        if (boardSize <= 0)
+        {
+            showError("Invalid board size.");
+            return;
+        }
+        cbNewGame(boardSize);
+    }
+    
     private void cbComputerBoth()
     {
         computerBoth();
@@ -1779,6 +1805,7 @@ class GoGui
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
+        m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
     private void newGameContinue(int size)
@@ -1799,6 +1826,7 @@ class GoGui
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
+        m_menuBar.selectBoardSizeItem(m_board.getSize());
         checkComputerMove();
     }
 
@@ -1810,6 +1838,7 @@ class GoGui
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
         m_menuBar.updateGameMenuItems(m_board);
+        m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
     private void play(Move move) throws Gtp.Error
@@ -1818,7 +1847,7 @@ class GoGui
             m_commandThread.sendCommandPlay(move);
         m_board.play(move);
     }
-    
+
     private void resetBoard()
     {
         clearStatus();

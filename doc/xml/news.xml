@@ -24,6 +24,10 @@ from a file with the <option>-config</option> option.
 New options <option>-force</option>, <option>-title</option>.
 </listitem>
 <listitem>
+Allow to enter non-standard boardsizes from menu
+<guimenuitem>Size</guimenuitem>.
+</listitem>
+<listitem>
 Minor fixes and improvements.
 </listitem>
 </itemizedlist>
