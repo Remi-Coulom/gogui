@@ -26,6 +26,11 @@ Random Go Challenge</ulink>).
 </listitem>
 <listitem>
 <simpara>
+Nicer HTML output of <application>GtpRegress</application>.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other small fixes and improvements.
 </simpara>
 </listitem>
