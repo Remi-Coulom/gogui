@@ -51,7 +51,7 @@ public class Score
             "Area Black: " + m_areaBlack + "\n" +
             "Area White: " + m_areaWhite + "\n" +
             "Captured Black: " + m_capturedBlack + "\n" +
-            "Captured Black: " + m_capturedWhite + "\n" +
+            "Captured White: " + m_capturedWhite + "\n" +
             "Komi: " + m_komi + "\n" +
             "Result Chinese: " + m_resultChinese + "\n" +
             "Result Japanese: " + m_resultJapanese + "\n" +
