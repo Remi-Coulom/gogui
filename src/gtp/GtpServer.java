@@ -173,6 +173,13 @@ public abstract class GtpServer
         public Point m_point;
     }
 
+    public static class ColorPointArgument
+    {
+        public Color m_color;
+
+        public Point m_point;
+    }
+
     public GtpServer(InputStream in, OutputStream out, PrintStream log)
     {
         m_out = new PrintStream(out);
@@ -207,6 +214,45 @@ public abstract class GtpServer
             sendResponse(command);
             if (command.isQuit())
                 return;
+        }
+    }
+
+    /** Utility function for parsing an color and point argument.
+        @param cmdArray Command line split into words.
+        @param response Empty string buffer filled with GTP error message
+        if parsing fails.
+        @return ColorPoint argument or null if parsing fails.
+    */
+    public static ColorPointArgument
+        parseColorPointArgument(String[] cmdArray, StringBuffer response,
+                                int boardSize)
+    {
+        if (cmdArray.length != 3)
+        {
+            response.append("Missing color and vertex argument");
+            return null;
+        }
+        ColorPointArgument argument = new ColorPointArgument();
+        String arg1 = cmdArray[1].toLowerCase();
+        if (arg1.equals("w") || arg1.equals("white"))
+            argument.m_color = Color.WHITE;
+        else if (arg1.equals("b") || arg1.equals("black"))
+            argument.m_color = Color.BLACK;
+        else
+        {
+            response.append("Invalid color argument");
+            return null;
+        }
+        try
+        {
+            Point point = Gtp.parsePoint(cmdArray[2], boardSize);
+            argument.m_point = point;
+            return argument;
+        }
+        catch (Gtp.Error e)
+        {
+            response.append("Invalid vertex argument");
+            return null;
         }
     }
 
