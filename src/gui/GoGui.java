@@ -518,6 +518,8 @@ class GoGui
 
     private boolean m_fillPasses;
 
+    private boolean m_isModified;
+
     private boolean m_lostOnTimeShown;
 
     private boolean m_resetBoardAfterAnalyze;
@@ -881,7 +883,7 @@ class GoGui
 
     private void cbNewGame(int size)
     {
-        if (! checkAbortGame())
+        if (m_isModified && ! checkSaveGame())
             return;
         m_prefs.setBoardSize(size);
         fileModified();
@@ -971,23 +973,7 @@ class GoGui
 
     private void cbSave()
     {
-        File file = SimpleDialogs.showSave(this);
-        if (file == null)
-            return;
-        try
-        {
-            if (file.exists())
-                if (! showQuestion("Overwrite " + file + "?"))
-                    return;
-            save(file);
-            showInfo("Game saved.");
-            m_loadedFile = file.toString();
-            setTitle();
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Could not save game.", e);
-        }
+        saveDialog();
     }
 
     private void cbSavePosition()
@@ -1058,9 +1044,14 @@ class GoGui
     {
         if (! m_setupMode)
         {
+            m_menuBar.setSetupMode();
+            if (m_isModified && ! checkSaveGame())
+            {
+                m_menuBar.setNormalMode();
+                return;
+            }
             resetBoard();
             m_setupMode = true;
-            m_menuBar.setSetupMode();
             m_toolBar.enableAll(false, null);
             showStatus("Setup black.");
             m_setupColor = go.Color.BLACK;
@@ -1096,19 +1087,31 @@ class GoGui
         m_guiBoard.setShowLastMove(m_menuBar.getShowLastMove());
     }
 
-    private boolean checkAbortGame()
-    {
-        if (! m_board.isModified())
-            return true;
-        return showQuestion("Abort game?");
-    }
-    
     private boolean checkModifyGame(Move move)
     {
         if (! m_board.willModifyGame(move))
             return true;
-        return showQuestion("Move will modify the game.\n" +
-                            "Proceed?");
+        return checkSaveGame();
+    }
+
+    private boolean checkSaveGame()
+    {
+        int result =
+            JOptionPane.showConfirmDialog(this, "Save game?",
+                                          "GoGui: Question",
+                                          JOptionPane.YES_NO_CANCEL_OPTION);
+        switch (result)
+        {
+        case 0:
+            return saveDialog();
+        case 1:
+            return true;
+        case 2:
+            return false;
+        default:
+            assert(false);
+            return true;
+        }
     }
     
     private void checkComputerMove()
@@ -1149,11 +1152,10 @@ class GoGui
 
     private void close()
     {
+        if (m_isModified && ! checkSaveGame())
+            return;
         if (m_commandInProgress)
         {
-            String message = "Interrupt command and exit?";
-            if (! showQuestion(message))
-                return;
             interrupt();
             m_commandThread.sendAsyncQuit();
             m_commandThread.close();
@@ -1226,6 +1228,7 @@ class GoGui
                 showInfo("The computer passed.");
             boardChanged();
             fileModified();
+            m_isModified = true;
         }
         catch (Gtp.Error e)
         {
@@ -1350,8 +1353,8 @@ class GoGui
                 showInfo(m.getColor().toString() + " lost on time.");
                 m_lostOnTimeShown = true;
             }
-            boardChanged();
-            fileModified();
+            m_isModified = true;
+            boardChanged();            
         }
         catch (Gtp.Error e)
         {
@@ -1373,6 +1376,7 @@ class GoGui
         m_timeControl.reset();
         m_lostOnTimeShown = false;
         m_score = null;
+        m_isModified = false;
     }
 
     private void initialize()
@@ -1673,6 +1677,35 @@ class GoGui
                            playerWhite, gameComment, m_score);
     }
 
+    private boolean saveDialog()
+    {
+        try
+        {
+            File file;
+            while (true)
+            {
+                file = SimpleDialogs.showSave(this);
+                if (file == null)
+                    return false;
+                if (file.exists())
+                    if (! showQuestion("Overwrite " + file + "?"))
+                        continue;
+                break;
+            }
+            save(file);
+            showInfo("Game saved.");
+            m_loadedFile = file.toString();
+            setTitle();
+            m_isModified = false;
+            return true;
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Could not save game.", e);
+            return false;
+        }
+    }
+
     private void savePosition(File file) throws FileNotFoundException
     {
         OutputStream out = new FileOutputStream(file);
@@ -1907,6 +1940,7 @@ class GoGui
             computerNone();
             boardChanged();
             fileModified();
+            m_isModified = true;
         }
         catch (Gtp.Error e)
         {
