@@ -40,7 +40,6 @@ class Help
     {
         super(owner, "GoGui: Help");
         m_contents = contents;
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
         createMenu();
         JPanel panel = new JPanel(new BorderLayout());
@@ -56,7 +55,6 @@ class Help
         scrollPane.setPreferredSize(new Dimension(600, 600));
         panel.add(scrollPane, BorderLayout.CENTER);
         pack();
-        setVisible(true);
         loadURL(m_contents);
         appendHistory(m_contents);
     }
@@ -67,7 +65,7 @@ class Help
         if (command.equals("back"))
             back();
         else if (command.equals("close"))
-            dispose();
+            setVisible(false);
         else if (command.equals("contents"))
         {
             loadURL(m_contents);
@@ -99,6 +97,12 @@ class Help
                     openExternal(url);
             }
         }
+    }
+
+    public void toTop()
+    {
+        setVisible(true);
+        toFront();
     }
 
     private int m_historyIndex = -1;

@@ -673,6 +673,8 @@ class GoGui
 
     private GtpShell m_gtpShell;
 
+    private Help m_help;
+
     private JLabel m_statusLabel;
 
     private JPanel m_boardPanel;
@@ -939,7 +941,13 @@ class GoGui
             showError("Help not found.");
             return;
         }
-        Help help = new Help(null, u);
+        if (m_help == null)
+        {
+            m_help = new Help(null, u);
+            if (m_rememberWindowSizes)
+                restoreSize(m_help, "window-help", m_boardSize);
+        }
+        m_help.toTop();
     }
 
     private void cbInterrupt()
@@ -1981,11 +1989,16 @@ class GoGui
         m_menuBar.saveRecent();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        if (m_commandThread != null && m_rememberWindowSizes)
+        if (m_rememberWindowSizes)
         {
             saveSize(this, "window-gogui", m_boardSize);
-            saveSizeAndVisible(m_gtpShell, "gtpshell");
-            saveSizeAndVisible(m_analyzeDialog, "analyze");
+            if (m_help != null)
+                saveSize(m_help, "window-help", m_boardSize);
+            if (m_commandThread != null)
+            {
+                saveSizeAndVisible(m_gtpShell, "gtpshell");
+                saveSizeAndVisible(m_analyzeDialog, "analyze");
+            }
         }
     }
 
