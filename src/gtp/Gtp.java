@@ -210,9 +210,10 @@ public final class Gtp
         return (m_isInterruptCommentSupported || m_pid != null);
     }
 
+    /** Check if program is dead or in illegal state. */
     public boolean isProgramDead()
     {
-        return m_isProgramDead;
+        return (m_isProgramDead || m_illegalState);
     }
 
     public static double[][] parseDoubleBoard(String response, String title,
