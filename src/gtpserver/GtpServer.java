@@ -17,7 +17,8 @@ class GtpServer
 {
     /** Constructor.
         @param remoteHost If null then the server waits for incoming
-        connections, otherwise it connects to a remote computer with this name.
+        connections, otherwise it connects to a remote computer with this
+        name.
         @param userFile file containing login information that is sent to the
         remote host. Only used if remoteHost is set.
     */
@@ -35,10 +36,10 @@ class GtpServer
             Thread stdErrThread = new StdErrThread(process);
             stdErrThread.start();
             Socket socket;
-            if (remoteHost == null)
+            if (serverSocket != null)
             {
                 if (verbose)
-                    System.err.println("gtpserver: Waiting for connection...");
+                    System.err.println("Waiting for connection...");
                 socket = serverSocket.accept();
             }
             else
@@ -62,7 +63,7 @@ class GtpServer
             if (remoteHost != null || ! loop)
                 break;
         }
-        if (remoteHost == null)
+        if (serverSocket != null)
             serverSocket.close();
     }
 
@@ -86,7 +87,7 @@ class GtpServer
             boolean loop = opt.isSet("loop");
             if (loop && opt.isSet("remote"))
             {
-                System.err.println("Option -loop cannot be used with -remote");
+                System.err.println("Option -loop can't be used with -remote");
                 System.exit(-1);
             }
             if (opt.isSet("help"))
