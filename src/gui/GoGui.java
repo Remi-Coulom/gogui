@@ -241,6 +241,7 @@ class GoGui
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
             m_guiBoard.update();
+            m_isModified = true;
             return;
         }
         if (m_analyzeRequestPoint)
@@ -1984,7 +1985,6 @@ class GoGui
             }
             setFastUpdate(false);
             fileModified();
-            m_isModified = true;
             boardChangedBegin(false);
         }
         catch (Gtp.Error e)
