@@ -2314,26 +2314,22 @@ class GoGui
                 m_commandThread.sendCommandClearBoard(size);
             }
             m_board.newGame();        
-            Vector moves = new Vector(m_board.getNumberPoints());
+            m_gameTree = new GameTree(size);
+            m_currentNode = m_gameTree.getRoot();
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
-                go.Point p = m_board.getPoint(i);
-                int x = p.getX();
-                int y = p.getY();
+                go.Point point = m_board.getPoint(i);
+                int x = point.getX();
+                int y = point.getY();
                 go.Color c = color[x][y];
-                if (c != go.Color.EMPTY)
-                    moves.add(new Move(p, c));
+                if (c == go.Color.BLACK)
+                    m_currentNode.addBlack(point);
+                else if (c == go.Color.WHITE)
+                    m_currentNode.addWhite(point);
             }
-            for (int i = 0; i < moves.size(); ++i)
-            {
-                Move m = (Move)moves.get(i);
-                setup(m);
-            }
+            executeCurrentNode();
             if (m_board.getToMove() != toMove)
-            {
-                Move m = new Move(null, m_board.getToMove());
-                setup(m);
-            }
+                m_board.setToMove(toMove);
             fileModified();
             boardChangedBegin(false);
         }
