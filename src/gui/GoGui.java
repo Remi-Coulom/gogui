@@ -657,6 +657,8 @@ class GoGui
 
     private CommandThread m_commandThread;
 
+    private File m_loadedFile;
+
     private GameInfo m_gameInfo;
 
     private GoGui m_gui;
@@ -680,8 +682,6 @@ class GoGui
     private String m_gtpFile;
 
     private String m_initAnalyze;
-
-    private String m_loadedFile;
 
     private String m_name = "";
 
@@ -1206,7 +1206,7 @@ class GoGui
                     return;
             savePosition(file);
             showInfo("Position saved.");
-            m_loadedFile = file.toString();
+            m_loadedFile = file;
             setTitle();
         }
         catch (FileNotFoundException e)
@@ -1824,7 +1824,7 @@ class GoGui
                 m_board.undo();            
             if (move > 0)
                 forward(move);
-            m_loadedFile = file.toString();
+            m_loadedFile = file;
             setTitle();
             boardChangedBegin(false);
         }
@@ -1987,7 +1987,7 @@ class GoGui
             }
             save(file);
             showInfo("Game saved.");
-            m_loadedFile = file.toString();
+            m_loadedFile = file;
             setTitle();
             m_isModified = false;
             return true;
@@ -2208,7 +2208,7 @@ class GoGui
     private void setTitle()
     {
         if (m_loadedFile != null)
-            setTitle(m_loadedFile);
+            setTitle(m_loadedFile.getName());
         else if (! m_name.equals(""))
         {
             setTitle(StringUtils.formatTitle(m_name));
