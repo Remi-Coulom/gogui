@@ -1029,7 +1029,7 @@ class GoGui
 
     private void cbShowAbout()
     {
-        String message = "GoGui 0.1\n";
+        String message = "GoGui 0.1.x\n";
         SimpleDialogs.showAbout(this, message);
     }
 
