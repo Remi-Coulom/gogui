@@ -63,7 +63,8 @@ varc/Combination Attack/combination_attack %c
 pstring/Combination Defend/combination_defend %c
 string/Does Surround/does_surround %P
 hpstring/Dragon Data/dragon_data %p
-pstring/Dragon Status/dragon_status %p
+hpstring/Dragon Status/dragon_status
+hpstring/Dragon Status At/dragon_status %p
 plist/Dragon Stones/dragon_stones %p
 none/Draw Search Area/draw_search_area
 none/Dump Stack/dump_stack
