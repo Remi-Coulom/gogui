@@ -17,6 +17,24 @@ import go.*;
 
 //-----------------------------------------------------------------------------
 
+class BoardLabel
+    extends JLabel
+{
+    public BoardLabel(String text)
+    {
+        super(text, JLabel.CENTER);
+    }
+
+    public void paintComponent(Graphics graphics)
+    {
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        if (graphics2D != null)
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON);
+        super.paintComponent(graphics);
+    }
+}
+
 public class Board
     extends JPanel
     implements Printable
@@ -282,8 +300,7 @@ public class Board
         char c = 'A';
         for (int x = 0; x < size; ++x)
         {
-            JLabel label = new JLabel(new Character(c).toString(),
-                                      JLabel.CENTER);
+            JLabel label = new BoardLabel(new Character(c).toString());
             add(label);
             constraints.fill = GridBagConstraints.BOTH;
             constraints.gridx = x + 1;
@@ -303,7 +320,7 @@ public class Board
         for (int y = 0; y < size; ++y)
         {
             String text = Integer.toString(y + 1);
-            JLabel label = new JLabel(text, JLabel.CENTER);
+            JLabel label = new BoardLabel(text);
             add(label);
             constraints.fill = GridBagConstraints.BOTH;
             constraints.gridx = x;
