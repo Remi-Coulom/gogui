@@ -247,7 +247,12 @@ public class NodeUtils
         }
         if (node == null)
             return null;
-        return node.variationBefore(child);
+        node = node.variationBefore(child);
+        if (node == null)
+            return null;
+        while (hasSubtree(node))
+            node = node.getChild(node.getNumberChildren() - 1);
+        return node;
     }
 
     public static Vector getShortestPath(Node start, Node target)
@@ -289,6 +294,14 @@ public class NodeUtils
                 result.append('.');
         }
         return result.toString();
+    }
+
+    /** Subtree of node contains at least one node with 2 or more children. */
+    public static boolean hasSubtree(Node node)
+    {
+        while (node != null && node.getNumberChildren() < 2)
+            node = node.getChild();
+        return (node != null);
     }
 
     public static boolean isInMainVariation(Node node)
