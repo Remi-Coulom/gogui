@@ -3,6 +3,15 @@
 <revhistory>
 
 <revision>
+<revnumber>&version;</revnumber>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
 <revnumber>0.4pre2</revnumber>
 <date>29 Oct 2003</date>
 <authorinitials>enz</authorinitials>
