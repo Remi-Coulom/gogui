@@ -31,7 +31,7 @@ class GoGui
           String time, boolean verbose, boolean computerBlack,
           boolean computerWhite, boolean auto, String gtpFile,
           String gtpCommand, String initAnalyze)
-        throws Gtp.Error
+        throws GtpError
     {
         m_prefs = prefs;
         setPrefsDefaults(m_prefs);
@@ -446,7 +446,7 @@ class GoGui
                 {
                     executeCurrentNode();
                 }
-                catch (Gtp.Error e)
+                catch (GtpError e)
                 {
                     showGtpError(e);
                     break;
@@ -458,7 +458,7 @@ class GoGui
     }
 
     public boolean sendGtpCommand(String command, boolean sync)
-        throws Gtp.Error
+        throws GtpError
     {
         if (m_commandInProgress || m_commandThread == null)
             return false;
@@ -715,7 +715,7 @@ class GoGui
         {
             if (resetBoard)
                 resetBoard();
-            Gtp.Error e = m_commandThread.getException();
+            GtpError e = m_commandThread.getException();
             if (e != null)
                 throw e;
             String response = m_commandThread.getResponse();
@@ -746,7 +746,7 @@ class GoGui
             if (checkComputerMove)
                 checkComputerMove();
         }
-        catch(Gtp.Error e)
+        catch(GtpError e)
         {                
             showStatus(title);
             showGtpError(e);
@@ -790,7 +790,7 @@ class GoGui
             m_commandThread = new CommandThread(gtp, this);
             m_commandThread.start();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             SimpleDialogs.showError(this,
                                     e.getMessage() + "\n"
@@ -806,7 +806,7 @@ class GoGui
         {
             m_name = m_commandThread.sendCommand("name").trim();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             m_name = "Unknown Program";
             showGtpError(e);
@@ -816,7 +816,7 @@ class GoGui
         {
             m_commandThread.queryProtocolVersion();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
         }
@@ -827,7 +827,7 @@ class GoGui
             m_commandThread.querySupportedCommands();
             m_commandThread.queryInterruptSupport();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
         }
         restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
@@ -866,7 +866,7 @@ class GoGui
             }
             computerNone();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
             return false;
@@ -1258,13 +1258,13 @@ class GoGui
         go.Point[] isDeadStone = null;
         try
         {
-            Gtp.Error e = m_commandThread.getException();
+            GtpError e = m_commandThread.getException();
             if (e != null)
                 throw e;
             String response = m_commandThread.getResponse();
             isDeadStone = GtpUtils.parsePointList(response, m_boardSize);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
         }
@@ -1506,7 +1506,7 @@ class GoGui
             java.awt.Toolkit.getDefaultToolkit().beep();
         try
         {
-            Gtp.Error e = m_commandThread.getException();
+            GtpError e = m_commandThread.getException();
             if (e != null)
                 throw e;
             m_timeControl.stopMove();
@@ -1537,7 +1537,7 @@ class GoGui
             }
             boardChangedBegin(true, true);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
             clearStatus();
@@ -1606,7 +1606,7 @@ class GoGui
                 {
                     m_commandThread.sendCommand("quit");
                 }
-                catch (Gtp.Error e)
+                catch (GtpError e)
                 {
                 }
                 m_commandThread.close();
@@ -1640,7 +1640,7 @@ class GoGui
                 executeCurrentNode();
                 m_guiBoard.updateFromGoBoard();
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
                 assert(false);
             }
@@ -1663,7 +1663,7 @@ class GoGui
             setBoardCursorDefault();
     }
 
-    private void executeCurrentNode() throws Gtp.Error
+    private void executeCurrentNode() throws GtpError
     {
         m_currentNodeExecuted = 0;
         Vector moves = m_currentNode.getAllAsMoves();
@@ -1692,7 +1692,7 @@ class GoGui
                 m_commandThread.sendCommandBoardsize(m_boardSize);
                 m_commandThread.sendCommandClearBoard(m_boardSize);
             }
-            catch (Gtp.Error error)
+            catch (GtpError error)
             {
                 showGtpError(error);
                 m_isRootExecuted = false;
@@ -1707,7 +1707,7 @@ class GoGui
         {
             executeCurrentNode();
         }
-        catch (Gtp.Error error)
+        catch (GtpError error)
         {
             showGtpError(error);
             return false;
@@ -1738,7 +1738,7 @@ class GoGui
                 m_gameInfo.fastUpdateMoveNumber(m_currentNode);
             }
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
         }
@@ -1806,7 +1806,7 @@ class GoGui
             m_resigned = false;
             boardChangedBegin(true, true);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
         }
@@ -1995,7 +1995,7 @@ class GoGui
             m_guiBoard.paintImmediately(m_board.getPoint(x, y + 1));
     }
 
-    private void play(Move move) throws Gtp.Error
+    private void play(Move move) throws GtpError
     {
         if (! checkCurrentNodeExecuted())
             return;
@@ -2010,7 +2010,7 @@ class GoGui
         {
             executeCurrentNode();
         }
-        catch (Gtp.Error error)
+        catch (GtpError error)
         {
             m_currentNode = node.getFather();
             m_currentNode.removeChild(node);
@@ -2228,7 +2228,7 @@ class GoGui
         {
             m_commandThread.sendInterrupt();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
         }
@@ -2266,7 +2266,7 @@ class GoGui
             if (m_commandThread.isCommandSupported("komi"))
                 m_commandThread.sendCommand("komi " + komi);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
         }
@@ -2312,7 +2312,7 @@ class GoGui
                 (rules == go.Board.RULES_JAPANESE ? "territory" : "area");
             m_commandThread.sendCommand("scoring_system " + s);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
         }
     }
@@ -2341,7 +2341,7 @@ class GoGui
             m_commandThread.sendCommand("time_settings " + preByoyomi + " "
                                         + byoyomi + " " + byoyomiMoves);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             showGtpError(e);
         }
@@ -2396,7 +2396,7 @@ class GoGui
                 String title = m_commandThread.sendCommand("gogui_title");
                 setTitle(title);
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
             }
         }
@@ -2470,12 +2470,12 @@ class GoGui
         SimpleDialogs.showError(this, message);
     }
 
-    private void showGtpError(Gtp.Error e)
+    private void showGtpError(GtpError e)
     {
         showGtpError(this, e);
     }
 
-    private void showGtpError(Component frame, Gtp.Error e)
+    private void showGtpError(Component frame, GtpError e)
     {        
         String message = e.getMessage().trim();
         if (message.length() == 0)
@@ -2518,7 +2518,7 @@ class GoGui
         SimpleDialogs.showWarning(this, message);
     }
 
-    private void undoCurrentNode() throws Gtp.Error
+    private void undoCurrentNode() throws GtpError
     {
         for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
         {

@@ -13,7 +13,7 @@ import gtp.*;
 public class AnalyzeShow
 {
     public static void show(AnalyzeCommand command, gui.Board guiBoard,
-                            go.Board board, String response) throws Gtp.Error
+                            go.Board board, String response) throws GtpError
     {
         go.Point pointArg = command.getPointArg();
         Vector pointListArg = command.getPointListArg();

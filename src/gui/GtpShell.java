@@ -191,7 +191,7 @@ public class GtpShell
         public void cbShowGameTree();
 
         public boolean sendGtpCommand(String command, boolean sync)
-            throws Gtp.Error;
+            throws GtpError;
 
         public void toTop();
     }
@@ -416,7 +416,7 @@ public class GtpShell
             {
                 m_callback.sendGtpCommand(command, owner != null);
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
                 SimpleDialogs.showError(owner, e.getMessage());
                 if (askContinue)

@@ -246,7 +246,7 @@ public class TwoGtp
             if (gtp.isInterruptSupported())
                 gtp.sendInterrupt();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             System.err.println(e);
         }
@@ -388,7 +388,7 @@ public class TwoGtp
         {
             point = GtpUtils.parsePoint(cmdArray[1], m_board.getSize());
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append(e.getMessage());
             return false;
@@ -490,7 +490,7 @@ public class TwoGtp
             if (gtp.isCpuTimeSupported())
                 result = gtp.getCpuTime();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
         }
         return result;
@@ -522,7 +522,7 @@ public class TwoGtp
             if (! name.trim().equals(""))
                 return name;
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
         }
         return "Unknown";
@@ -536,7 +536,7 @@ public class TwoGtp
             if (! version.trim().equals(""))
                 return version;
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
         }
         return "";
@@ -548,7 +548,7 @@ public class TwoGtp
         {
             return gtp.sendCommand("final_score");
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             return "?";
         }
@@ -760,7 +760,7 @@ public class TwoGtp
             m_black.sendCommandBoardsize(size);
             m_black.sendCommandClearBoard(size);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append("B: " + e.getMessage());
             return false;
@@ -770,7 +770,7 @@ public class TwoGtp
             m_white.sendCommandBoardsize(size);
             m_white.sendCommandClearBoard(size);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append("W: " + e.getMessage());
             m_inconsistentState = true;
@@ -1002,7 +1002,7 @@ public class TwoGtp
         {
             response1 = gtp1.sendCommand(command1);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response1 = e.getMessage();
             status = false;
@@ -1017,7 +1017,7 @@ public class TwoGtp
         {
             response2 = gtp2.sendCommand(command2);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response2 = e.getMessage();
             if (changesState && status)
@@ -1028,7 +1028,7 @@ public class TwoGtp
                     {
                         gtp1.sendCommand("undo");
                     }
-                    catch (Gtp.Error errorUndo)
+                    catch (GtpError errorUndo)
                     {
                         m_inconsistentState = true;
                     }
@@ -1108,7 +1108,7 @@ public class TwoGtp
         {
             response1 = gtp1.sendCommand(command);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response1 = e.getMessage();
             mergeResponse(response, response1, response2, prefix1, prefix2);
@@ -1127,7 +1127,7 @@ public class TwoGtp
             {
                 point = GtpUtils.parsePoint(response1, m_board.getSize());
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
                 response.append(prefix1 + " played invalid move");
                 m_inconsistentState = true;
@@ -1138,14 +1138,14 @@ public class TwoGtp
             {
                 response2 = gtp2.sendCommand(command2);
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
                 response2 = e.getMessage();
                 try
                 {
                     gtp1.sendCommand("undo");
                 }
-                catch (Gtp.Error errorUndo)
+                catch (GtpError errorUndo)
                 {
                     m_inconsistentState = true;
                 }
@@ -1204,7 +1204,7 @@ public class TwoGtp
         {
             response.append(gtp.sendCommand(command));
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append(e.getMessage());
             return false;
@@ -1220,7 +1220,7 @@ public class TwoGtp
         {
             m_referee.sendCommand(command);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             System.err.println("Referee denied " + command + " command: "
                                + e.getMessage() + "\n" +

@@ -345,7 +345,7 @@ class GtpRegress
             {
                 m_lastResponse = m_gtp.sendCommand(line);
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
                 if (m_gtp.isProgramDead())
                     throw new ProgramIsDeadException();
@@ -537,7 +537,7 @@ class GtpRegress
         printOutLine(style, line, -1);
     }
 
-    private String sendCommand(String command) throws Gtp.Error
+    private String sendCommand(String command) throws GtpError
     {
         printOutLine(null, command);
         try
@@ -556,7 +556,7 @@ class GtpRegress
         {
             return Double.parseDouble(sendCommand("cputime"));
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             return 0;
         }
@@ -603,7 +603,7 @@ class GtpRegress
         {
             m_name = sendCommand("name");
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             m_name = "";
         }
@@ -611,7 +611,7 @@ class GtpRegress
         {
             m_version = sendCommand("version");
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             m_version = "";
         }

@@ -131,7 +131,7 @@ public class GtpDisplay
             if (gtp.isInterruptSupported())
                 gtp.sendInterrupt();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             System.err.println(e);
         }
@@ -241,7 +241,7 @@ public class GtpDisplay
         {
             point = GtpUtils.parsePoint(response.toString(), m_size);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append("Program played illegal move");
             return false;
@@ -359,7 +359,7 @@ public class GtpDisplay
             {
                 point = GtpUtils.parsePoint(cmdArray[i], m_size);
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
                 response.append("Invalid vertex");
                 return false;
@@ -442,7 +442,7 @@ public class GtpDisplay
             response.append(m_gtp.sendCommand(cmd));
             return true;
         }
-        catch (Gtp.Error error)
+        catch (GtpError error)
         {
             response.append(error.getMessage());
             return false;

@@ -531,7 +531,7 @@ public class AnalyzeDialog
                     return;
                 command.setOptStringArg(optStringArg);
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
                 SimpleDialogs.showError(this, e.getMessage());
                 return;

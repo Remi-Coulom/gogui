@@ -226,7 +226,7 @@ public class GtpDummy
         {
             point = GtpUtils.parsePoint(cmdArray[1], m_size);
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append(e.getMessage());
             return false;

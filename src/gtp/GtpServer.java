@@ -308,7 +308,7 @@ public abstract class GtpServer
             argument.m_point = point;
             return argument;
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append("Invalid vertex argument");
             return null;
@@ -394,7 +394,7 @@ public abstract class GtpServer
             argument.m_point = point;
             return argument;
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append("Invalid vertex argument");
             return null;

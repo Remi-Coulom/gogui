@@ -22,15 +22,6 @@ import utils.MessageQueue;
 */
 public final class Gtp
 {
-    /** Exception indication the failure of a GTP command. */
-    public static class Error extends Exception
-    {
-        public Error(String s)
-        {
-            super(s);
-        }
-    }    
-
     public interface TimeoutCallback
     {
         public boolean askContinue();
@@ -54,7 +45,7 @@ public final class Gtp
     }    
 
     public Gtp(String program, boolean log, IOCallback callback)
-        throws Gtp.Error
+        throws GtpError
     {
         m_log = log;
         m_program = program;
@@ -77,7 +68,7 @@ public final class Gtp
         }
         catch (IOException e)
         {
-            throw new Gtp.Error("Could not create " + program + ":\n" +
+            throw new GtpError("Could not create " + program + ":\n" +
                                 e.getMessage());
         }
         m_out = new PrintWriter(m_process.getOutputStream());
@@ -153,7 +144,7 @@ public final class Gtp
         return command;
     }
 
-    public double getCpuTime() throws Gtp.Error
+    public double getCpuTime() throws GtpError
     {
         try
         {
@@ -161,7 +152,7 @@ public final class Gtp
         }
         catch (NumberFormatException e)
         {
-            throw new Gtp.Error("Invalid response to cputime command");
+            throw new GtpError("Invalid response to cputime command");
         }
     }
 
@@ -232,7 +223,7 @@ public final class Gtp
             else if (isCommandSupported("gogui_sigint"))
                 m_pid = sendCommand("gogui_sigint").trim();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
         }
     }
@@ -246,13 +237,13 @@ public final class Gtp
         {
             return sendCommand("name");
         }
-        catch (Error e)
+        catch (GtpError e)
         {
             return "Unknown Program";
         }
     }
 
-    public void queryProtocolVersion() throws Gtp.Error
+    public void queryProtocolVersion() throws GtpError
     {
         try
         {            
@@ -261,23 +252,23 @@ public final class Gtp
             {
                 response = sendCommand("protocol_version");
             }
-            catch (Error e)
+            catch (GtpError e)
             {
                 m_protocolVersion = 1;
                 return;
             }
             int v = Integer.parseInt(response);
             if (v < 1 || v > 2)
-                throw new Error("Unknown protocol version: " + v);
+                throw new GtpError("Unknown protocol version: " + v);
             m_protocolVersion = v;
         }
         catch (NumberFormatException e)
         {
-            throw new Error("Invalid protocol version");
+            throw new GtpError("Invalid protocol version");
         }
     }
 
-    public void querySupportedCommands() throws Gtp.Error
+    public void querySupportedCommands() throws GtpError
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
         String response = sendCommand(command);
@@ -292,20 +283,20 @@ public final class Gtp
         {
             return sendCommand("version");
         }
-        catch (Error e)
+        catch (GtpError e)
         {
             return "";
         }
     }
 
-    public String sendCommand(String command) throws Gtp.Error
+    public String sendCommand(String command) throws GtpError
     {
         return sendCommand(command, -1, null);
     }
 
     public String sendCommand(String command, long timeout,
                               TimeoutCallback timeoutCallback)
-        throws Gtp.Error
+        throws GtpError
     {
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
@@ -313,9 +304,9 @@ public final class Gtp
         m_fullResponse = "";
         m_response = "";
         if (m_isProgramDead)
-            throw new Error("Program is dead");
+            throw new GtpError("Program is dead");
         if (m_timedOut)
-            throw new Error("Program timed out");
+            throw new GtpError("Program timed out");
         if (m_autoNumber)
         {
             ++m_commandNumber;
@@ -327,7 +318,7 @@ public final class Gtp
         if (m_out.checkError())
         {
             m_isProgramDead = true;
-            throw new Error("Go program died");
+            throw new GtpError("Go program died");
         }
         if (m_callback != null)
             m_callback.sentCommand(command);
@@ -335,19 +326,19 @@ public final class Gtp
         return m_response;
     }
 
-    public void sendCommandBoardsize(int size) throws Gtp.Error
+    public void sendCommandBoardsize(int size) throws GtpError
     {
         String command = getCommandBoardsize(size);
         if (command != null)
             sendCommand(command);
     }
 
-    public String sendCommandClearBoard(int size) throws Gtp.Error
+    public String sendCommandClearBoard(int size) throws GtpError
     {
         return sendCommand(getCommandClearBoard(size));
     }
 
-    public String sendCommandPlay(Move move) throws Gtp.Error
+    public String sendCommandPlay(Move move) throws GtpError
     {
         return sendCommand(getCommandPlay(move));
     }
@@ -365,7 +356,7 @@ public final class Gtp
         m_out.flush();
     }
 
-    public void sendInterrupt() throws Gtp.Error
+    public void sendInterrupt() throws GtpError
     {
         if (m_isInterruptCommentSupported)
             sendComment("# interrupt");
@@ -379,12 +370,12 @@ public final class Gtp
                 Process process = runtime.exec(command);
                 int result = process.waitFor();
                 if (result != 0)
-                    throw new Gtp.Error("Command \"" + command
+                    throw new GtpError("Command \"" + command
                                         + "\" returned " + result + ".");
             }
             catch (IOException e)
             {
-                throw new Gtp.Error("Could not run command " + command +
+                throw new GtpError("Could not run command " + command +
                                     ":\n" + e);
             }
             catch (InterruptedException e)
@@ -392,7 +383,7 @@ public final class Gtp
             }
         }
         else
-            throw new Gtp.Error("Interrupt not supported");
+            throw new GtpError("Interrupt not supported");
     }
 
     public void enableAutoNumber()
@@ -588,7 +579,7 @@ public final class Gtp
         }
     }
 
-    private String readLine(long timeout) throws Gtp.Error
+    private String readLine(long timeout) throws GtpError
     {
         while (true)
         {            
@@ -607,7 +598,7 @@ public final class Gtp
                         if (! m_timeoutCallback.askContinue())
                         {
                             m_timedOut = true;
-                            throw new Gtp.Error("Program timed out");
+                            throw new GtpError("Program timed out");
                         }
                     }
                 }
@@ -624,7 +615,7 @@ public final class Gtp
                         assert(message.m_isError);
                         handleErrorStream(message.m_text);
                     }
-                    throw new Error("Go program died");
+                    throw new GtpError("Go program died");
                 }
                 log("<< " + line);
                 return line;
@@ -636,7 +627,7 @@ public final class Gtp
         }
     }
 
-    private void readResponse(long timeout) throws Gtp.Error
+    private void readResponse(long timeout) throws GtpError
     {
         String line = "";
         while (line.trim().equals(""))
@@ -680,7 +671,7 @@ public final class Gtp
             String message = m_response.trim();
             if (message.equals(""))
                 message = "GTP command failed";
-            throw new Error(message);
+            throw new GtpError(message);
         }
     }
 }

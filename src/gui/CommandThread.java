@@ -64,7 +64,7 @@ public class CommandThread
     /** Get exception of asynchronous command.
         You must call this before you are allowed to send new a command.
     */
-    public Gtp.Error getException()
+    public GtpError getException()
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(m_commandInProgress);
@@ -90,7 +90,7 @@ public class CommandThread
         return m_gtp.getSupportedCommands();
     }
 
-    public void sendInterrupt() throws Gtp.Error
+    public void sendInterrupt() throws GtpError
     {
         m_gtp.sendInterrupt();
     }
@@ -123,21 +123,21 @@ public class CommandThread
         m_gtp.queryInterruptSupport();
     }
 
-    public void queryProtocolVersion() throws Gtp.Error
+    public void queryProtocolVersion() throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         m_gtp.queryProtocolVersion();
     }
 
-    public void querySupportedCommands() throws Gtp.Error
+    public void querySupportedCommands() throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         m_gtp.querySupportedCommands();
     }
 
-    public String queryVersion() throws Gtp.Error
+    public String queryVersion() throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
@@ -167,7 +167,7 @@ public class CommandThread
                 {
                     m_response = m_gtp.sendCommand(m_command);
                 }
-                catch (Gtp.Error e)
+                catch (GtpError e)
                 {
                     m_exception = e;
                 }
@@ -190,7 +190,7 @@ public class CommandThread
         }
     }
     
-    public String sendCommand(String command) throws Gtp.Error
+    public String sendCommand(String command) throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
@@ -200,17 +200,17 @@ public class CommandThread
         return response;
     }
 
-    public void sendCommandBoardsize(int size) throws Gtp.Error
+    public void sendCommandBoardsize(int size) throws GtpError
     {
         m_gtp.sendCommandBoardsize(size);
     }
 
-    public void sendCommandClearBoard(int size) throws Gtp.Error
+    public void sendCommandClearBoard(int size) throws GtpError
     {
         m_gtp.sendCommandClearBoard(size);
     }
 
-    public String sendCommandPlay(Move move) throws Gtp.Error
+    public String sendCommandPlay(Move move) throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
@@ -243,7 +243,7 @@ public class CommandThread
 
     private Gtp m_gtp;
 
-    private Gtp.Error m_exception;    
+    private GtpError m_exception;    
 
     private Frame m_owner;
 

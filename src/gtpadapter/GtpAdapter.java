@@ -115,7 +115,7 @@ public class GtpAdapter
             if (gtp.isInterruptSupported())
                 gtp.sendInterrupt();
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             System.err.println(e);
         }
@@ -266,7 +266,7 @@ public class GtpAdapter
             m_board.play(new Move(point, color));
             return true;
         }
-        catch (Gtp.Error e)
+        catch (GtpError e)
         {
             response.append(" (program played illegal move)");
             m_board.play(new Move(null, color));
@@ -500,7 +500,7 @@ public class GtpAdapter
             {
                 point = GtpUtils.parsePoint(cmdArray[i], m_boardSize);
             }
-            catch (Gtp.Error e)
+            catch (GtpError e)
             {
                 response.append("Invalid vertex");
                 return false;
@@ -580,7 +580,7 @@ public class GtpAdapter
             response.append(m_gtp.sendCommand(cmd));
             return true;
         }
-        catch (Gtp.Error error)
+        catch (GtpError error)
         {
             response.append(error.getMessage());
             return false;

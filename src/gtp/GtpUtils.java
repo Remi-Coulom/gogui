@@ -17,7 +17,7 @@ import utils.StringUtils;
 public class GtpUtils
 {
     public static double[][] parseDoubleBoard(String response, String title,
-                                              int boardSize) throws Gtp.Error
+                                              int boardSize) throws GtpError
     {
         try
         {
@@ -30,17 +30,17 @@ public class GtpUtils
         }
         catch (NumberFormatException e)
         {
-            throw new Gtp.Error("Floating point number expected");
+            throw new GtpError("Floating point number expected");
         }
     }
 
-    public static Point parsePoint(String s, int boardSize) throws Gtp.Error
+    public static Point parsePoint(String s, int boardSize) throws GtpError
     {
         s = s.trim().toUpperCase();
         if (s.equals("PASS"))
             return null;
         if (s.length() < 2)
-            throw new Gtp.Error("Invalid point or move");
+            throw new GtpError("Invalid point or move");
         char xChar = s.charAt(0);
         if (xChar >= 'J')
             --xChar;
@@ -52,15 +52,15 @@ public class GtpUtils
         }
         catch (NumberFormatException e)
         {
-            throw new Gtp.Error("Invalid point or move");
+            throw new GtpError("Invalid point or move");
         }
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
-            throw new Gtp.Error("Invalid coordinates");
+            throw new GtpError("Invalid coordinates");
         return new Point(x, y);
     }
     
     public static Point[] parsePointList(String s, int boardSize)
-        throws Gtp.Error
+        throws GtpError
     {
         Vector vector = new Vector(32, 32);
         String p[] = StringUtils.tokenize(s);
@@ -86,7 +86,7 @@ public class GtpUtils
                 {
                     point = parsePoint(p[i], boardSize);
                 }
-                catch (Gtp.Error e)
+                catch (GtpError e)
                 {
                     continue;
                 }
@@ -100,7 +100,7 @@ public class GtpUtils
 
     public static void parsePointStringList(String s, Vector pointList,
                                             Vector stringList,
-                                            int boardsize) throws Gtp.Error
+                                            int boardsize) throws GtpError
     {
         pointList.clear();
         stringList.clear();
@@ -123,11 +123,11 @@ public class GtpUtils
                 }
             }
         if (! nextIsPoint)
-            throw new Gtp.Error("Missing string.");
+            throw new GtpError("Missing string.");
     }
 
     public static String[][] parseStringBoard(String s, String title,
-                                              int boardSize) throws Gtp.Error
+                                              int boardSize) throws GtpError
     {
         String result[][] = new String[boardSize][boardSize];
         try
@@ -140,7 +140,7 @@ public class GtpUtils
                 {
                     String line = reader.readLine();
                     if (line == null)
-                        throw new Gtp.Error(title + " not found.");
+                        throw new GtpError(title + " not found.");
                     if (line.trim().equals(pattern))
                         break;
                 }
@@ -149,7 +149,7 @@ public class GtpUtils
             {
                 String line = reader.readLine();
                 if (line == null)
-                    throw new Gtp.Error("Incomplete string board");
+                    throw new GtpError("Incomplete string board");
                 if (line.trim().equals(""))
                 {
                     ++y;
@@ -157,14 +157,14 @@ public class GtpUtils
                 }
                 String[] tokens = StringUtils.tokenize(line);
                 if (tokens.length < boardSize)
-                    throw new Gtp.Error("Incomplete string board");
+                    throw new GtpError("Incomplete string board");
                 for (int x = 0; x < boardSize; ++x)
                     result[x][y] = tokens[x];
             }
         }
         catch (IOException e)
         {
-            throw new Gtp.Error("I/O error");
+            throw new GtpError("I/O error");
         }
         return result;
     }
@@ -195,7 +195,7 @@ public class GtpUtils
                 {
                     point = parsePoint(t, boardSize);
                 }
-                catch (Gtp.Error e)
+                catch (GtpError e)
                 {
                     continue;
                 }

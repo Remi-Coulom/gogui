@@ -132,7 +132,7 @@ public class GtpTerminal
             play(new Move(point, toMove));
             printBoard();
         }
-        catch (Gtp.Error error)
+        catch (GtpError error)
         {
             System.out.println(response);
         }
@@ -178,7 +178,7 @@ public class GtpTerminal
                 Point point = GtpUtils.parsePoint(cmdLine, m_board.getSize());
                 cmdPlay(point);
             }
-            catch (Gtp.Error error)
+            catch (GtpError error)
             {
                 StringBuffer response = new StringBuffer();
                 send(cmdLine, response);
@@ -218,7 +218,7 @@ public class GtpTerminal
         {
             m_gtp.querySupportedCommands();
         }
-        catch (Gtp.Error error)
+        catch (GtpError error)
         {
             System.out.println(error.getMessage());
             return;
@@ -363,7 +363,7 @@ public class GtpTerminal
             response.append(m_gtp.sendCommand(cmd));
             return true;
         }
-        catch (Gtp.Error error)
+        catch (GtpError error)
         {
             response.append(error.getMessage());
             return false;
