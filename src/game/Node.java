@@ -139,6 +139,15 @@ public class Node
         return m_father;
     }
 
+    /** Get last node in main variation. */
+    public Node getLast()
+    {
+        Node node = this;
+        while (node.getNumberChildren() > 0)
+            node = node.getChild();
+        return node;
+    }
+
     public Move getMove()
     {
         return m_move;
