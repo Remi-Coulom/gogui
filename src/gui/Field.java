@@ -101,7 +101,7 @@ public class Field
 
     public int getStoneMargin()
     {
-        return getSize().width / 15;
+        return m_size / 15;
     }
 
     public String getString()
@@ -116,20 +116,24 @@ public class Field
 
     public void paintComponent(Graphics graphics)
     {
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        drawFieldColor(graphics);
-        if (graphics2D == null)
-            drawTerritoryGraphics(graphics);
-        drawStone(graphics);
-        if (graphics2D != null)
-            drawTerritoryGraphics2D(graphics2D);
-        drawInfluence(graphics);
-        drawMarkup(graphics);
-        drawCrossHair(graphics);
-        drawLastMoveMarker(graphics);
-        drawSelect(graphics);
-        drawString(graphics);
-        drawFocus(graphics);
+        m_graphics = graphics;
+        m_graphics2D = (Graphics2D)graphics;
+        m_size = getSize().width;
+        drawFieldColor();
+        if (m_graphics2D == null)
+            drawTerritoryGraphics();
+        drawStone();
+        if (m_graphics2D != null)
+            drawTerritoryGraphics2D();
+        drawInfluence();
+        drawMarkup();
+        drawCrossHair();
+        drawLastMoveMarker();
+        drawSelect();
+        drawString();
+        drawFocus();
+        m_graphics = null;
+        m_graphics2D = null;
     }
 
     public void setFieldBackground(java.awt.Color color)
@@ -193,6 +197,8 @@ public class Field
 
     private boolean m_select;
 
+    private int m_size;
+
     private double m_influence;
 
     private static final AlphaComposite m_composite5
@@ -231,208 +237,193 @@ public class Field
 
     private gui.Board m_board;
 
-    private void drawCircle(Graphics graphics, java.awt.Color color,
-                            boolean fill)
+    private Graphics m_graphics;
+
+    private Graphics2D m_graphics2D;
+
+    private void drawCircle(java.awt.Color color, boolean fill)
     {
-        graphics.setColor(color);
-        int size = getSize().width;
-        int d = size * 36 / 100;
-        int w = size - 2 * d;
+        m_graphics.setColor(color);
+        int d = m_size * 36 / 100;
+        int w = m_size - 2 * d;
         if (fill)
-            graphics.fillOval(d, d, w, w);
+            m_graphics.fillOval(d, d, w, w);
         else
-            graphics.drawOval(d, d, w, w);
+            m_graphics.drawOval(d, d, w, w);
     }
 
-    private void drawCrossHair(Graphics graphics)
+    private void drawCrossHair()
     {
         if (! m_crossHair)
             return;
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
-            graphics2D.setComposite(m_composite7);
-        int size = getSize().width;
-        int d = size / 5;
-        graphics.setColor(java.awt.Color.red);
-        graphics.drawLine(d, size / 2, size - d, size / 2);
-        graphics.drawLine(size / 2, d, size / 2, size - d);
-        graphics.setPaintMode();
+        setComposite(m_composite7);
+        int d = m_size / 5;
+        int center = m_size / 2;
+        m_graphics.setColor(java.awt.Color.red);
+        m_graphics.drawLine(d, center, m_size - d, center);
+        m_graphics.drawLine(center, d, center, m_size - d);
+        m_graphics.setPaintMode();
     }
 
-    private void drawFieldColor(Graphics graphics)
+    private void drawFieldColor()
     {
         if (m_fieldColor != null)
         {
-            Graphics2D graphics2D = (Graphics2D)graphics;
-            if (graphics2D != null)
-                graphics2D.setComposite(m_composite5);
-            graphics.setColor(m_fieldColor);
-            int size = getSize().width;
-            graphics.fillRect(0, 0, size, size);
-            graphics.setPaintMode();
+            setComposite(m_composite5);
+            m_graphics.setColor(m_fieldColor);
+            m_graphics.fillRect(0, 0, m_size, m_size);
+            m_graphics.setPaintMode();
         }
     }
 
-    private void drawFocus(Graphics graphics)
+    private void drawFocus()
     {
         if (! isFocusOwner() || ! m_board.getShowCursor())
             return;
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
-            graphics2D.setComposite(m_composite5);
-        int size = getSize().width;
-        int d = size / 6;
-        int w = size;
-        graphics.setColor(java.awt.Color.red);
-        graphics.drawLine(d, d, 2 * d, d);
-        graphics.drawLine(d, d, d, 2 * d);
-        graphics.drawLine(d, w - 2 * d - 1, d, w - d - 1);
-        graphics.drawLine(d, w - d - 1, 2 * d, w - d - 1);
-        graphics.drawLine(w - 2 * d - 1, d, w - d - 1, d);
-        graphics.drawLine(w - d - 1, d, w - d - 1, 2 * d);
-        graphics.drawLine(w - d - 1, w - d - 1, w - d - 1, w - 2 * d - 1);
-        graphics.drawLine(w - d - 1, w - d - 1, w - 2 * d - 1, w - d - 1);
-        graphics.setPaintMode();
+        setComposite(m_composite5);
+        int d = m_size / 6;
+        int w = m_size;
+        int d2 = 2 * d;
+        m_graphics.setColor(java.awt.Color.red);
+        m_graphics.drawLine(d, d, d2, d);
+        m_graphics.drawLine(d, d, d, d2);
+        m_graphics.drawLine(d, w - d2 - 1, d, w - d - 1);
+        m_graphics.drawLine(d, w - d - 1, d2, w - d - 1);
+        m_graphics.drawLine(w - d2 - 1, d, w - d - 1, d);
+        m_graphics.drawLine(w - d - 1, d, w - d - 1, d2);
+        m_graphics.drawLine(w - d - 1, w - d - 1, w - d - 1, w - d2 - 1);
+        m_graphics.drawLine(w - d - 1, w - d - 1, w - d2 - 1, w - d - 1);
+        m_graphics.setPaintMode();
     }
 
-    private void drawInfluence(Graphics graphics)
+    private void drawInfluence()
     {
         if (! m_influenceSet)
             return;
         double d = Math.abs(m_influence);
         if (d < 0.01)
             return;
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
-            graphics2D.setComposite(m_composite7);
+        setComposite(m_composite7);
         if (m_influence > 0)
-            graphics.setColor(m_influenceBlackColor);
+            m_graphics.setColor(m_influenceBlackColor);
         else
-            graphics.setColor(m_influenceWhiteColor);
-        int size = getSize().width;
-        int dd = (int)(size * (0.38 + (1 - d) * 0.62));
-        int width = size - dd;
-        graphics.fillRect(dd / 2, dd / 2, width, width);
+            m_graphics.setColor(m_influenceWhiteColor);
+        int dd = (int)(m_size * (0.38 + (1 - d) * 0.62));
+        int width = m_size - dd;
+        m_graphics.fillRect(dd / 2, dd / 2, width, width);
     }
 
-    private void drawLastMoveMarker(Graphics graphics)
+    private void drawLastMoveMarker()
     {
         if (! m_lastMoveMarker)
             return;
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
-            graphics2D.setComposite(m_composite7);
-        drawCircle(graphics, java.awt.Color.red, true);
-        graphics.setPaintMode();
+        setComposite(m_composite7);
+        drawCircle(java.awt.Color.red, true);
+        m_graphics.setPaintMode();
     }
 
-    private void drawMarkup(Graphics graphics)
+    private void drawMarkup()
     {
         if (! m_markup)
             return;
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
-            graphics2D.setComposite(m_composite7);
-        int size = getSize().width;
-        int d = size / 4;
-        int width = size - 2 * d;
-        graphics.setColor(java.awt.Color.blue);
-        graphics.drawRect(d, d, width, width);
-        graphics.drawRect(d + 1, d + 1, width - 2, width - 2);
-        graphics.setPaintMode();
+        setComposite(m_composite7);
+        int d = m_size / 4;
+        int width = m_size - 2 * d;
+        m_graphics.setColor(java.awt.Color.blue);
+        m_graphics.drawRect(d, d, width, width);
+        m_graphics.drawRect(d + 1, d + 1, width - 2, width - 2);
+        m_graphics.setPaintMode();
     }
 
-    private void drawSelect(Graphics graphics)
+    private void drawSelect()
     {
         if (! m_select)
             return;
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
-            graphics2D.setComposite(m_composite7);
-        drawCircle(graphics, java.awt.Color.blue, true);
-        graphics.setPaintMode();
+        setComposite(m_composite7);
+        drawCircle(java.awt.Color.blue, true);
+        m_graphics.setPaintMode();
     }
 
-    private void drawStone(Graphics graphics)
+    private void drawStone()
     {
         if (m_color == go.Color.BLACK)
-            drawStone(graphics, m_colorBlackStone, m_colorBlackStoneBright);
+            drawStone(m_colorBlackStone, m_colorBlackStoneBright);
         else if (m_color == go.Color.WHITE)
-            drawStone(graphics, m_colorWhiteStone, m_colorWhiteStoneBright);
+            drawStone(m_colorWhiteStone, m_colorWhiteStoneBright);
     }
 
-    private void drawStone(Graphics graphics, java.awt.Color color,
-                           java.awt.Color colorBright)
+    private void drawStone(java.awt.Color color, java.awt.Color colorBright)
     {
-        int size = getSize().width;
         int margin = getStoneMargin();
-        int radius = size / 3;
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
+        int radius = m_size / 3;
+        if (m_graphics2D != null)
         {
-            int center = size / 3;
+            int center = m_size / 3;
             radius = Math.max(radius, 1);
             RadialGradientPaint paint =
                 new RadialGradientPaint(new Point2D.Double(center, center),
                                         colorBright,
                                         new Point2D.Double(radius, radius),
                                         color);
-            graphics2D.setPaint(paint);
+            m_graphics2D.setPaint(paint);
         }
         else
         {
-            graphics.setColor(color);
+            m_graphics.setColor(color);
         }
-        graphics.fillOval(margin, margin,
-                          size - 2 * margin, size - 2 * margin);
+        m_graphics.fillOval(margin, margin,
+                            m_size - 2 * margin, m_size - 2 * margin);
     }
 
-    private void drawString(Graphics graphics)
+    private void drawString()
     {
         if (m_string.equals(""))
             return;
-        int size = getSize().width;
-        int stringWidth = graphics.getFontMetrics().stringWidth(m_string);
-        int stringHeight = graphics.getFont().getSize();
-        int x = Math.max((size - stringWidth) / 2, 0);
-        int y = stringHeight + (size - stringHeight) / 2;
+        int stringWidth = m_graphics.getFontMetrics().stringWidth(m_string);
+        int stringHeight = m_graphics.getFont().getSize();
+        int x = Math.max((m_size - stringWidth) / 2, 0);
+        int y = stringHeight + (m_size - stringHeight) / 2;
         if (m_color == go.Color.WHITE)
-            graphics.setColor(java.awt.Color.black);
+            m_graphics.setColor(java.awt.Color.black);
         else
-            graphics.setColor(java.awt.Color.white);
-        graphics.drawString(m_string, x, y);
+            m_graphics.setColor(java.awt.Color.white);
+        m_graphics.drawString(m_string, x, y);
     }
 
-    private void drawTerritoryGraphics(Graphics graphics)
+    private void drawTerritoryGraphics()
     {
         if (m_territory == go.Color.EMPTY)
             return;
         if (m_territory == go.Color.BLACK)
-            graphics.setColor(java.awt.Color.darkGray);
+            m_graphics.setColor(java.awt.Color.darkGray);
         else
         {
             assert(m_territory == go.Color.WHITE);
-            graphics.setColor(java.awt.Color.lightGray);
+            m_graphics.setColor(java.awt.Color.lightGray);
         }
-        int size = getSize().width;
-        graphics.fillRect(0, 0, size, size);
+        m_graphics.fillRect(0, 0, m_size, m_size);
     }
 
-    private void drawTerritoryGraphics2D(Graphics2D graphics2D)
+    private void drawTerritoryGraphics2D()
     {
         if (m_territory == go.Color.EMPTY)
             return;
-        graphics2D.setComposite(m_composite5);
+        setComposite(m_composite5);
         if (m_territory == go.Color.BLACK)
-            graphics2D.setColor(java.awt.Color.darkGray);
+            m_graphics2D.setColor(java.awt.Color.darkGray);
         else
         {
             assert(m_territory == go.Color.WHITE);
-            graphics2D.setColor(java.awt.Color.white);
+            m_graphics2D.setColor(java.awt.Color.white);
         }
-        int size = getSize().width;
-        graphics2D.fillRect(0, 0, size, size);
-        graphics2D.setPaintMode();
+        m_graphics2D.fillRect(0, 0, m_size, m_size);
+        m_graphics2D.setPaintMode();
+    }
+
+    private void setComposite(AlphaComposite composite)
+    {
+        if (m_graphics2D != null)
+            m_graphics2D.setComposite(composite);
     }
 }
 
