@@ -34,12 +34,12 @@ class AntialiasingEditorPane
 //-----------------------------------------------------------------------------
 
 class Help
-    extends JDialog
+    extends JFrame
     implements ActionListener, HyperlinkListener
 {
-    public Help(Frame owner, URL contents)
+    public Help(URL contents)
     {
-        super(owner, "Help - GoGui");
+        super("Help - GoGui");
         m_contents = contents;
         Container contentPane = getContentPane();
         createMenu();

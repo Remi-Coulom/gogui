@@ -242,7 +242,7 @@ class GoGui
         {
             Vector supportedCommands = null;
             m_analyzeDialog =
-                new AnalyzeDialog(null, this, m_prefs,
+                new AnalyzeDialog(this, m_prefs,
                                   m_commandThread.getSupportedCommands());
             restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
             setTitle();
@@ -801,7 +801,7 @@ class GoGui
         if (program.equals(""))
             return;
         m_program = program;
-        m_gtpShell = new GtpShell(null, "GoGui", this, m_prefs);
+        m_gtpShell = new GtpShell("GoGui", this, m_prefs);
         m_gtpShell.setProgramCommand(program);
         try
         {
@@ -1090,7 +1090,7 @@ class GoGui
         }
         if (m_help == null)
         {
-            m_help = new Help(null, u);
+            m_help = new Help(u);
             restoreSize(m_help, "window-help", m_boardSize);
         }
         m_help.toTop();

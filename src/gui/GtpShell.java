@@ -178,7 +178,7 @@ class GtpShellText
 //-----------------------------------------------------------------------------
 
 public class GtpShell
-    extends JDialog
+    extends JFrame
     implements ActionListener, Gtp.IOCallback, ItemListener
 {
     public interface Callback
@@ -191,10 +191,9 @@ public class GtpShell
         public void toTop();
     }
 
-    GtpShell(Frame owner, String appName, Callback callback,
-             Preferences prefs)
+    GtpShell(String appName, Callback callback, Preferences prefs)
     {
-        super(owner, "GTP - " + appName);
+        super("GTP - " + appName);
         m_callback = callback;
         m_prefs = prefs;
         setPrefsDefaults(prefs);

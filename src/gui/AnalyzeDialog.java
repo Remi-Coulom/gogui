@@ -20,7 +20,7 @@ import utils.*;
 //-----------------------------------------------------------------------------
 
 class AnalyzeDialog
-    extends JDialog
+    extends JFrame
     implements ActionListener, ListSelectionListener
 {
     public interface Callback
@@ -35,10 +35,10 @@ class AnalyzeDialog
         public void toTop();
     }
 
-    public AnalyzeDialog(Frame owner, Callback callback, Preferences prefs,
+    public AnalyzeDialog(Callback callback, Preferences prefs,
                          Vector supportedCommands)
     {
-        super(owner, "Analyze - GoGui");
+        super("Analyze - GoGui");
         m_prefs = prefs;
         setPrefsDefaults(prefs);
         m_onlySupportedCommands =
@@ -57,7 +57,7 @@ class AnalyzeDialog
         addWindowListener(windowAdapter);
         Container contentPane = getContentPane();
         contentPane.add(createButtons(), BorderLayout.SOUTH);
-        contentPane.add(createCommandPanel(owner), BorderLayout.CENTER);
+        contentPane.add(createCommandPanel(), BorderLayout.CENTER);
         createMenu();
         comboBoxChanged();
         pack();
@@ -239,7 +239,7 @@ class AnalyzeDialog
         return outerPanel;
     }
 
-    private JPanel createCommandPanel(Frame owner)
+    private JPanel createCommandPanel()
     {
         JPanel panel = new JPanel(new BorderLayout());
         m_list = new JList();
