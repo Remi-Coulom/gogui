@@ -52,8 +52,7 @@ public class Gtp
             // RAND_MAX in stdlib.h ist at least 32767
             final int RAND_MAX = 32767;
             int rand = (int)(Math.random() * (RAND_MAX + 1));
-            m_program = StringUtils.replace(m_program, "%SRAND",
-                                            Integer.toString(rand));
+            m_program = m_program.replaceAll("%SRAND", Integer.toString(rand));
         }
         Runtime runtime = Runtime.getRuntime();
         try

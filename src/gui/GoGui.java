@@ -1934,7 +1934,7 @@ class GoGui
 
     private void sendGtpString(String commands)
     {        
-        commands = StringUtils.replace(commands, "\\n", "\n");
+        commands = commands.replaceAll("\\\\n", "\n");
         m_gtpShell.sendGtp(new StringReader(commands));
     }
 

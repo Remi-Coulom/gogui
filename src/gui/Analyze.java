@@ -228,10 +228,9 @@ class AnalyzeCommand
 
     public String replaceWildCards(go.Color toMove)
     {
-        StringBuffer buffer = new StringBuffer(m_command);
-        StringUtils.replace(buffer, "%m", toMove.toString());
+        String result = m_command.replaceAll("%m", toMove.toString());
         if (needsPointArg())
-            StringUtils.replace(buffer, "%p", m_pointArg.toString());
+            result = result.replaceAll("%p", m_pointArg.toString());
         if (needsPointListArg())
         {
             StringBuffer listBuffer = new StringBuffer(128);
@@ -242,19 +241,19 @@ class AnalyzeCommand
                 go.Point point = (go.Point)m_pointListArg.get(i);
                 listBuffer.append(point.toString());
             }
-            StringUtils.replace(buffer, "%P", listBuffer.toString());
+            result = result.replaceAll("%P", listBuffer.toString());
         }
         if (needsFileArg())
         {
             assert(m_fileArg != null);
-            StringUtils.replace(buffer, "%f", m_fileArg.toString());
+            result = result.replaceAll("%f", m_fileArg.toString());
         }
         if (needsStringArg())
         {
             assert(m_stringArg != null);
-            StringUtils.replace(buffer, "%s", m_stringArg);
+            result = result.replaceAll("%s", m_stringArg);
         }
-        return buffer.toString();
+        return result;
     }
 
     public void setFileArg(File file)

@@ -252,7 +252,7 @@ class GtpRegress
 
     private int getId(String line)
     {
-        line = StringUtils.replace(line, "\t", "\n");
+        line = line.replaceAll("\\t", "\n");
         int index = line.indexOf(" ");
         if (index < 0)
             return -1;
@@ -356,7 +356,7 @@ class GtpRegress
             printOutLine("comment", line);
         else
         {
-            line = StringUtils.replace(line, "\t", " ");
+            line = line.replaceAll("\\t", " ");
             int lastId = getId(line);
             if (lastId < 0)
             {
@@ -518,9 +518,9 @@ class GtpRegress
     {
         if (! line.endsWith("\n"))
             line = line + "\n";
-        line = StringUtils.replace(line, "&", "&amp;");
-        line = StringUtils.replace(line, ">", "&gt;");
-        line = StringUtils.replace(line, "<", "&lt;");
+        line = line.replaceAll("&", "&amp;");
+        line = line.replaceAll(">", "&gt;");
+        line = line.replaceAll("<", "&lt;");
         if (style == "command" || style == "test")
         {
             Pattern pattern = Pattern.compile("\\S*\\.[Ss][Gg][Ff]");
@@ -872,7 +872,7 @@ class GtpRegress
                 if (t.m_lastSgfMove != -1)
                     lastSgf += "&nbsp;" + t.m_lastSgfMove;
             }
-            String command = StringUtils.replace(t.m_command, " ", "&nbsp;");
+            String command = t.m_command.replaceAll(" ", "&nbsp;");
             out.print("<tr>\n" +
                       "<td align=\"center\"><a href=\"" + m_outFileRelativeName
                       + "#" + t.m_id + "\">" + t.m_id + "</a></td>\n" +
