@@ -4,7 +4,20 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
-	<key>CFBundleExecutable</key>
+	<key>CFBundleDocumentTypes</key>
+        <array>
+                <dict>
+                        <key>CFBundleTypeExtensions</key>
+                        <array>
+                                <string>sgf</string>
+                        </array>
+                        <key>CFBundleTypeName</key>
+                        <string>SmartGameFormat</string>
+                        <key>CFBundleTypeRole</key>
+                        <string>Editor</string>
+                </dict>
+        </array>
+        <key>CFBundleExecutable</key>
 	<string>JavaApplicationStub</string>
 	<key>CFBundleIconFile</key>
 	<string>GoGui.icns</string>
@@ -29,7 +42,7 @@
 		<key>Properties</key>
 		<dict>
 			<key>apple.laf.useScreenMenuBar</key>
-			<string>true</string>
+			<string>false</string>
 		</dict>
 	</dict>
 </dict>
