@@ -71,8 +71,8 @@ public class Gtp
         m_in = new BufferedReader(reader);
         m_out = new PrintStream(m_process.getOutputStream());
         m_isProgramDead = false;
-        Thread stdErrThread = new StdErrThread(m_process);
-        stdErrThread.start();
+        m_stdErrThread = new StdErrThread(m_process);
+        m_stdErrThread.start();
         if (! m_fastUpdate)
             // Give StdErrThread a chance to start first        
             Thread.currentThread().yield();
@@ -462,6 +462,11 @@ public class Gtp
         {
             m_err = new InputStreamReader(process.getErrorStream());
         }
+
+        public synchronized long getTimeSinceLastReceived()
+        {
+            return System.currentTimeMillis() - m_timeLastReceived;
+        }
     
         public void run()
         {
@@ -483,6 +488,10 @@ public class Gtp
                     {
                         System.err.print(new String(buffer, 0, n));
                         System.err.flush();
+                    }
+                    synchronized (this)
+                    {
+                        m_timeLastReceived = System.currentTimeMillis();
                     }
                     stringBuffer.append(buffer, 0, n);
                     int index = stringBuffer.lastIndexOf("\n");
@@ -536,6 +545,8 @@ public class Gtp
 
     private int m_protocolVersion = 1;
 
+    private long m_timeLastReceived;
+
     private BufferedReader m_in;
 
     private IOCallback m_callback;
@@ -553,6 +564,8 @@ public class Gtp
     private String m_program;
 
     private String[] m_supportedCommands;
+
+    private StdErrThread m_stdErrThread;
 
     private void readResponse() throws Error
     {
@@ -590,10 +603,19 @@ public class Gtp
             }
             if (m_callback != null)
             {
+                // Give StdErrThread a chance to read standard error output
+                // of the program first
                 if (! m_fastUpdate)
-                    // Give StdErrThread a chance to read standard error output
-                    // of the program first
-                    Thread.currentThread().yield();
+                    while (m_stdErrThread.getTimeSinceLastReceived() < 200)
+                    {
+                        try
+                        {
+                            Thread.currentThread().sleep(200);
+                        }
+                        catch (InterruptedException e)
+                        {
+                        }
+                    }
                 m_callback.receivedResponse(error, response.toString());
             }
             m_fullResponse = response.toString();
