@@ -405,12 +405,16 @@ class GoGui
     {
         if (m_commandInProgress)
             return;
-        if (m_setupMode && ! modifiedSelect)
+        if (m_setupMode)
         {
-            if (m_board.getColor(p) != m_setupColor)
-                m_board.play(new Move(p, m_setupColor));
+            go.Color color;
+            if (modifiedSelect)
+                color = m_setupColor.otherColor();
+            else if (m_board.getColor(p) == m_setupColor)
+                color = go.Color.EMPTY;
             else
-                m_board.play(new Move(p, go.Color.EMPTY));
+                color = m_setupColor;
+            m_board.play(new Move(p, color));
             m_board.setToMove(m_setupColor);
             updateGameInfo(true);
             m_guiBoard.updateFromGoBoard();

@@ -401,10 +401,13 @@ The search pattern is a regular expression.
 <listitem>
 <para>
 Enter or leave setup mode.
-In setup mode you can place or remove stones of the current color.
+In setup mode you can place or remove stones of the current color
 The current color can be changed with the <guimenuitem>Black</guimenuitem>
 and <guimenuitem>White</guimenuitem> menu item from the
 <guimenu>Setup</guimenu> menu.
+It is also possible to place stones of the other than current color
+without switching the color by pressing a modifier key while placing a stone
+(Ctrl, Alt or Meta).
 <note>
 <simpara>
 Setting up a position is not reversible.
