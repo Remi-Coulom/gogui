@@ -1,6 +1,25 @@
 <chapter id="menubar">
   
-<title>Menu bar</title>
+<title>Main window</title>
+
+<section>
+<title>Go board</title>
+<para>
+Clicking on an empty field in the Go board plays a move there.
+In setup mode, score mode or after certain analyze commands
+clicking on a field has a special meaning (see
+<xref linkend="setup mode"></xref>, <xref linkend="score"></xref> and
+<xref linkend="analyze"></xref>).
+</para>
+<para>
+Using the keyboard, fields can be selected by moving the
+cursor (the red square corners) with the cursor keys to the target field
+and pressing <keycap>Enter</keycap>.
+Holding <keycap>Shift</keycap> while pressing a cursor key moves the
+cursor to the next handicap line in this direction or to the edge
+of the board.
+</para>
+</section>
 
 <section>
 <title>File menu</title>
@@ -205,7 +224,7 @@ Go to a certain move number.
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<varlistentry id="score">
 <term><guimenuitem>Score</guimenuitem></term>
 <listitem>
 Score the current game.
@@ -229,7 +248,7 @@ file later.
 <title>Setup menu</title>
 <variablelist>
 
-<varlistentry>
+<varlistentry id="setup mode">
 <term><guimenuitem>Setup mode</guimenuitem></term>
 <listitem>
 Enter or leave setup mode.

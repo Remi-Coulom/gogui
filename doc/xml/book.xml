@@ -7,7 +7,7 @@
 <!ENTITY gtpshell SYSTEM "gtpshell.xml">
 <!ENTITY interrupt SYSTEM "interrupt.xml">
 <!ENTITY invocation SYSTEM "invocation.xml">
-<!ENTITY menubar SYSTEM "menubar.xml">
+<!ENTITY mainwindow SYSTEM "mainwindow.xml">
 <!ENTITY news SYSTEM "news.xml">
 <!ENTITY programs SYSTEM "programs.xml">
 <!ENTITY readme SYSTEM "readme.xml">
@@ -37,7 +37,7 @@
 &invocation;
 &programs;
 &compatibility;
-&menubar;
+&mainwindow;
 &interrupt;
 &analyze;
 &gtpshell;
