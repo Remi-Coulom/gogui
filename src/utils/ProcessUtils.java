@@ -9,6 +9,48 @@ import java.io.*;
 
 //----------------------------------------------------------------------------
 
+class ExitWaiter
+    extends Thread
+{
+    public ExitWaiter(Object monitor, Process process)
+    {
+        m_monitor = monitor;
+        m_process = process;
+    }
+
+    public synchronized boolean isFinished()
+    {
+        return m_isFinished;
+    }
+
+    public void run()
+    {
+        try
+        {
+            m_process.waitFor();
+        }
+        catch (InterruptedException e)
+        {
+        }
+        synchronized (this)
+        {
+            m_isFinished = true;
+        }
+        synchronized (m_monitor)
+        {
+            m_monitor.notify();
+        }
+    }
+
+    private boolean m_isFinished;
+
+    private Object m_monitor;
+
+    private Process m_process;
+};
+
+//----------------------------------------------------------------------------
+
 /** Static utility functions and classes related to processes.
 */
 public class ProcessUtils
@@ -39,6 +81,24 @@ public class ProcessUtils
         copyErr.start();
     }
 
+    public static boolean waitForExit(Process process, long timeout)
+    {
+        Object monitor = new Object();
+        ExitWaiter exitWaiter = new ExitWaiter(monitor, process);
+        synchronized (monitor)
+        {
+            exitWaiter.start();
+            try
+            {
+                monitor.wait(timeout);
+                return exitWaiter.isFinished();
+            }
+            catch (InterruptedException e)
+            {
+                return false;
+            }
+        }
+    }
 }
 
 //----------------------------------------------------------------------------

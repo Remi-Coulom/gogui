@@ -12,6 +12,7 @@ import go.Point;
 import go.Move;
 import utils.StringUtils;
 import utils.MessageQueue;
+import utils.ProcessUtils;
 
 //----------------------------------------------------------------------------
 
@@ -565,64 +566,14 @@ public final class Gtp
     public void waitForExit(int timeout, TimeoutCallback timeoutCallback)
     {
         setExitInProcess(true);
-        // I wish there was a Process.waitFor(timeout) function...
         while (true)
         {
-            Thread thread = new Thread()
-                {
-                    public void run()
-                    {
-                        try
-                        {
-                            m_process.waitFor();
-                        }
-                        catch (InterruptedException e)
-                        {
-                        }
-                        synchronized (Gtp.this)
-                        {
-                            Gtp.this.notify();
-                        }
-                    }
-                };
-            synchronized (this)
+            if (ProcessUtils.waitForExit(m_process, timeout))
+                break;
+            if (! timeoutCallback.askContinue())
             {
-                thread.start();
-                try
-                {
-                    wait(timeout);
-                }
-                catch (InterruptedException e)
-                {
-                }
-                if (thread.isAlive())
-                {
-                    // This is not a proper synchronization, thread could
-                    // be still alive, therfore we wait a bit
-                    try
-                    {
-                        Thread.sleep(200);
-                    }
-                    catch (InterruptedException e)
-                    {
-                    }
-                    if (thread.isAlive())
-                    {
-                        if (! timeoutCallback.askContinue())
-                        {
-                            m_process.destroy();
-                            return;
-                        }
-                        // Would like to interrupt the thread before creating
-                        // a new one, but Process.waitFor is not interruptible
-                        else
-                            continue;
-                    }
-                    else
-                        return;
-                }
-                else
-                    return;
+                m_process.destroy();
+                return;
             }
         }
     }
