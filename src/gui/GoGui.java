@@ -98,6 +98,7 @@ class GoGui
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setRememberSizes(m_rememberWindowSizes);
         setJMenuBar(m_menuBar.getMenuBar());
+        m_program = program;
         if (m_program == null)
         {
             m_toolBar.setComputerEnabled(false);
