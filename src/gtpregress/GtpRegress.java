@@ -439,7 +439,7 @@ class GtpRegress
                     + "; }\n" +
                     "span.error { font-weight:bold; color:" + m_colorError
                     + "; }\n" +
-                    "span.stderr { font-style: italic; color:#999999; }\n" +
+                    "span.stderr { font-style: italic; color:#666666; }\n" +
                     "span.invalid { background:" + m_colorRed + ";}\n" +
                     "span.pass { font-weight:bold; color:" + m_colorGreen
                     + "; }\n" +
