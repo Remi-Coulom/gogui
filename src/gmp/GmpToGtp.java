@@ -33,6 +33,8 @@ public class GmpToGtp
             return play(true, command, response);
         else if (command.startsWith("gmp_text"))
             return sendText(command, response);
+        else if (command.startsWith("gmp_queue"))
+            return queue(command, response);
         else if (command.startsWith("white"))
             return play(true, command, response);
         else if (command.startsWith("undo"))
@@ -56,6 +58,7 @@ public class GmpToGtp
                             "genmove_white\n" +
                             "genmove_white\n" +
                             "gmp_text\n" +
+                            "gmp_queue\n" +
                             "name\n" +
                             "undo\n" +
                             "version\n" +
@@ -290,6 +293,11 @@ public class GmpToGtp
             response.append("Needs integer argument");
             return false;
         }
+    }
+
+    private boolean queue(String command, StringBuffer response)
+    {
+        return m_gmp.queue(response);
     }
 
     private boolean sendText(String command, StringBuffer response)

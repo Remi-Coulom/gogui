@@ -213,6 +213,17 @@ class ReadThread
         }
     }
 
+    public synchronized boolean queue(StringBuffer response)
+    {
+        int size = m_cmdQueue.size();
+        for (int i = 0; i < size; ++i)
+        {
+            response.append(((Cmd)m_cmdQueue.get(i)).toString(m_size));
+            response.append('\n');
+        }
+        return true;
+    }
+
     public void run()
     {
         try
@@ -251,16 +262,16 @@ class ReadThread
             response.append("GMP connection broken");
             return false;
         }
-        if (m_cmdStack.size() > 0)
+        if (m_cmdQueue.size() > 0)
         {
-            Cmd stackCmd = (Cmd)m_cmdStack.get(0);
+            Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
             if (! stackCmd.equals(cmd))
             {
                 response.append("Received " +
                                 stackCmd.toString(m_size));
                 return false;
             }
-            m_cmdStack.remove(0);
+            m_cmdQueue.remove(0);
             return true;
         }
         sendCmd(cmd.m_cmd, cmd.m_val);
@@ -326,9 +337,9 @@ class ReadThread
         result.m_success = false;
         while (true)
         {
-            if (m_cmdStack.size() > 0)
+            if (m_cmdQueue.size() > 0)
             {
-                Cmd stackCmd = (Cmd)m_cmdStack.get(0);
+                Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
                 if (stackCmd.m_cmd != cmd
                     || ((stackCmd.m_val & valMask) != valCondition))
                 {
@@ -338,7 +349,7 @@ class ReadThread
                 }
                 result.m_success = true;
                 result.m_val = stackCmd.m_val;
-                m_cmdStack.remove(0);
+                m_cmdQueue.remove(0);
                 return result;
             }
             if (m_state == STATE_DISCONNECTED)
@@ -403,7 +414,7 @@ class ReadThread
 
     private StringBuffer m_talkLine = new StringBuffer();
 
-    private Vector m_cmdStack = new Vector(32, 32);
+    private Vector m_cmdQueue = new Vector(32, 32);
 
     private void answerQuery(int val)
     {
@@ -526,7 +537,7 @@ class ReadThread
             answerQuery(cmd.m_val);
         else
         {
-            m_cmdStack.add(cmd);
+            m_cmdQueue.add(cmd);
             sendOk();
             m_state = STATE_IDLE;
         }
@@ -721,6 +732,11 @@ public class Gmp
         if (x >= 0 && y >= 0)
             val |= (1 + x + y * m_size);
         return m_readThread.send(new Cmd(Cmd.MOVE, val), response);
+    }
+
+    public boolean queue(StringBuffer response)
+    {
+        return m_readThread.queue(response);
     }
 
     public boolean sendText(String text)
