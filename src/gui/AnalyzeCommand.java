@@ -284,7 +284,10 @@ public class AnalyzeCommand
         }
         if (needsFileArg())
         {
-            result = result.replaceAll("%f", m_fileArg.toString());
+            String fileArg = m_fileArg.toString();
+            if (fileArg.indexOf(' ') >= 0)
+                fileArg = "\"" + fileArg + "\"";
+            result = result.replaceAll("%f", fileArg);
         }
         if (needsStringArg())
         {

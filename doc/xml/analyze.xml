@@ -273,6 +273,14 @@ and defaults to the color which is to play.
 <listitem>
 <simpara>
 Will be replaced by a filename entered by the user.
+If the path to the file contains spaces it will be quoted with double quotes.
+<warning>
+<simpara>
+There are Go programs that implement filename arguments to GTP commands
+in a way that does not allow the path to the file to contain spaces
+(e.g. <userinput>printsgf</userinput> in GNU Go 3.6).
+</simpara>
+</warning>
 </simpara>
 </listitem>
 </varlistentry>
