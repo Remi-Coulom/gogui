@@ -52,6 +52,8 @@
 	<listitem>
 	  The output is not displayed.
 	</listitem>
+      </varlistentry>
+      <varlistentry>
 	<term><userinput>plist</userinput></term>
 	<listitem>
 	  The answer of the command is a list of points.
