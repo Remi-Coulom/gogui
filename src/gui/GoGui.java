@@ -926,8 +926,8 @@ class GoGui
         m_gtpShell.setInputEnabled(false);
         if (m_analyzeDialog != null)
         {
-            m_analyzeDialog.setEnabled(false);
             setCursor(m_analyzeDialog, Cursor.WAIT_CURSOR);
+            m_analyzeDialog.setEnabled(false);
         }
         m_commandInProgress = true;
     }

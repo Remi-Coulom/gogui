@@ -105,7 +105,7 @@ pstring/Tactical Analyze Semeai/tactical_analyze_semeai %P
 none/Test EyeShape/test_eyeshape %P
 none/Tune Move Ordering/tune_move_ordering %s
 string/Worm Data/worm_data
-string/Worm Data At/worm_data %p
+pstring/Worm Data At/worm_data %p
 plist/Worm CutStone/worm_cutstone %p
 plist/Worm Stones Black/worm_stones %p black
 plist/Worm Stones White/worm_stones %p white
