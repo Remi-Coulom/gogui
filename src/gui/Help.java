@@ -273,68 +273,13 @@ public class Help
     }
 
     /** Open URL in external browser if possible.
-        Supported on KDE and Windows.
         If it doesn't work, the URL is opened inside this dialog.
     */
     private void openExternal(URL url)
     {
-        if (Platform.isMac())
-        {
-            try
-            {
-                String[] cmd = { "/usr/bin/open", url.toString() };
-                runProcess(cmd);
-                return;
-            }
-            catch (IOException e)
-            {
-            }
-        }
-        else
-        {
-            try
-            {
-                String[] cmd = { "kfmclient", "exec", url.toString() };
-                runProcess(cmd);
-                return;
-            }
-            catch (IOException e)
-            {
-            }
-            try
-            {
-                String[] cmd = { "mozilla", url.toString() };
-                runProcess(cmd);
-                return;
-            }
-            catch (IOException e)
-            {
-            }
-            try
-            {
-                String[] cmd = { "rundll32", "url.dll,FileProtocolHandler",
-                                 url.toString() };
-                runProcess(cmd);
-                return;
-            }
-            catch (IOException e)
-            {
-            }
-        }
-        loadURL(url);
+        if (! Platform.openInExternalBrowser(url))
+            loadURL(url);
         appendHistory(url);        
-    }
-
-    private void runProcess(String[] cmdArray) throws IOException
-    {
-        Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec(cmdArray);
-        Thread copyOut = new StreamCopy(false, process.getInputStream(),
-                                        System.err, false);
-        copyOut.start();
-        Thread copyErr = new StreamCopy(false, process.getErrorStream(),
-                                        System.err, false);
-        copyErr.start();
     }
 }
 
