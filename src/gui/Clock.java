@@ -217,7 +217,7 @@ public class Clock
         TimeRecord record = getRecord(m_toMove);
         long time = new Date().getTime() - m_startMoveTime;
         record.m_time += time;
-        if (getUseByoyomi())
+        if (isInitialized() && getUseByoyomi())
         {
             if (! record.m_isInByoyomi)
             {
