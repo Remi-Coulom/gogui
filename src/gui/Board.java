@@ -348,7 +348,8 @@ public class Board
         else if (m_board.getInternalNumberMoves() == 0)
         {
             int size = m_board.getSize();
-            setFocusPoint(m_board.getPoint(size / 2, size / 2));
+            if (size > 0)
+                setFocusPoint(m_board.getPoint(size / 2, size / 2));
         }
     }
 
