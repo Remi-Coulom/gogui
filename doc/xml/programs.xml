@@ -16,6 +16,9 @@
     <para>
       Operating systems: Unix, Windows, Macintosh.
     </para>
+    <para>
+      Command: <userinput>gnugo --mode gtp</userinput>
+    </para>
   </section>
   
   <section>
@@ -28,6 +31,9 @@
     <para>
       Operating systems: Unix.
     </para>
+    <para>
+      Command: <userinput>amigoplus -gtp</userinput>
+    </para>
   </section>
   
   <section>
@@ -39,6 +45,9 @@
     </para>
     <para>
       Operating systems: Unix.
+    </para>
+    <para>
+      Command: <userinput>badukiplus -gtp</userinput>
     </para>
   </section>
   
