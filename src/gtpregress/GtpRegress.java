@@ -388,7 +388,7 @@ class GtpRegress
             return;
         }
         patternString =
-            patternString.substring(1, patternString.length() - 1);
+            patternString.substring(1, patternString.length() - 1).trim();
         String expectedResponse = patternString;
         boolean notPattern = false;
         if (patternString.startsWith("!"))
