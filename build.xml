@@ -24,7 +24,24 @@ $Source$
  twogtp.jar
 "/>
 
-<target name="clean">
+<target name="clean" depends="cleanBuildDir">
+<delete failonerror="false" includeEmptyDirs="true">
+<fileset dir="."
+ includes="
+   gmptogtp.jar,
+   gogui.jar,
+   gtpdummy.jar,
+   gtpregress.jar,
+   gtpserver.jar,
+   netgtp.jar,
+   sgftotex.jar,
+   twogtp.jar
+  "
+/>
+</delete>
+</target>
+
+<target name="cleanBuildDir">
 <delete failonerror="false" includeEmptyDirs="true">
 <fileset dir="build/doc"/>
 <fileset dir="build/gmp"/>
@@ -42,7 +59,6 @@ $Source$
 <fileset dir="build/twogtp"/>
 <fileset dir="build/utils"/>
 <fileset dir="build/version"/>
-<fileset dir="." includes="gogui.jar"/>
 </delete>
 </target>
 
@@ -76,6 +92,8 @@ and set the environment variable XSLDIR to the installation directory.
 <fileset dir="config" includes="analyze-commands"/>
 </copy>
 </target>
+
+<target name="dist" depends="all,docsrc,cleanBuildDir"/>
 
 <target name="doc" depends="docCheckUptodate" unless="docUptodate">
 <antcall target="checkXslAvailable"/>
