@@ -565,6 +565,7 @@ public final class Gtp
     public void waitForExit(int timeout, TimeoutCallback timeoutCallback)
     {
         setExitInProcess(true);
+        // I wish there was a Process.waitFor(timeout) function...
         while (true)
         {
             Thread thread = new Thread()
@@ -574,13 +575,13 @@ public final class Gtp
                         try
                         {
                             m_process.waitFor();
-                            synchronized (Gtp.this)
-                            {
-                                Gtp.this.notify();
-                            }
                         }
                         catch (InterruptedException e)
                         {
+                        }
+                        synchronized (Gtp.this)
+                        {
+                            Gtp.this.notify();
                         }
                     }
                 };
@@ -596,13 +597,29 @@ public final class Gtp
                 }
                 if (thread.isAlive())
                 {
-                    if (! timeoutCallback.askContinue())
+                    // This is not a proper synchronization, thread could
+                    // be still alive, therfore we wait a bit
+                    try
                     {
-                        m_process.destroy();
-                        return;
+                        Thread.sleep(200);
                     }
-                    // Would like to interrupt the thread before creating
-                    // a new one, but Process.waitFor is not interruptible
+                    catch (InterruptedException e)
+                    {
+                    }
+                    if (thread.isAlive())
+                    {
+                        if (! timeoutCallback.askContinue())
+                        {
+                            m_process.destroy();
+                            return;
+                        }
+                        // Would like to interrupt the thread before creating
+                        // a new one, but Process.waitFor is not interruptible
+                        else
+                            continue;
+                    }
+                    else
+                        return;
                 }
                 else
                     return;
