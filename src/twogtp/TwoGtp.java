@@ -373,7 +373,7 @@ public class TwoGtp
         }
     }
 
-    private class ScoreEstimate
+    private static class ScoreEstimate
     {
         double m_black;
 
