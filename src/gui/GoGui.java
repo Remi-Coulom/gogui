@@ -1338,7 +1338,8 @@ class GoGui
                 m_gameTree = new GameTree(m_boardSize, 0, null, null);
                 m_currentNode = m_gameTree.getRoot();
                 m_currentNode.addBlack(m_board.getPoint(0, 0));
-                m_gameTreeViewer.update(m_gameTree, m_currentNode);
+                m_timeControl.reset();
+                updateGameInfo(true);
             }
             resetBoard();
             m_setupMode = true;
