@@ -18,7 +18,7 @@ GtpAdapter: fix some bugs with option -resign
 </listitem>
 <listitem>
 <simpara>
-TwoGtp: handle resign
+TwoGtp, GtpAdapter: handle resign
 </simpara>
 </listitem>
 </itemizedlist>

@@ -340,6 +340,8 @@ public class GtpAdapter
             undoFillPass(undoResponse);
             return false;
         }
+        if (response.toString().trim().equals("resign"))
+            return true;
         try
         {
             Point point = Gtp.parsePoint(response.toString(), m_boardSize);
@@ -348,7 +350,7 @@ public class GtpAdapter
         }
         catch (Gtp.Error e)
         {
-            response.append("Program played illegal move");
+            response.append(" (program played illegal move)");
             m_board.play(new Move(null, color));
             return false;
         }
