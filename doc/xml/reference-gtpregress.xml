@@ -52,7 +52,7 @@ An additional special comment
 can be used to add the output of the last command to
 <filename><replaceable>file</replaceable></filename> prepended
 by the ID of the last test and 0/1 if the last test passed/failed.
-This is useful if there is are extension commands for printing
+This is useful if there are extension commands for printing
 statistics.
 If the statistics commands output a single line, the resulting
 file can be processed as a table.
