@@ -6,7 +6,7 @@
 package gui;
 
 import javax.swing.*;
-import board.*;
+import go.*;
 import gtp.*;
 
 //=============================================================================
@@ -30,7 +30,7 @@ class CommandThread
         return m_answer;
     }
     
-    public String getCommandGenmove(Color color)
+    public String getCommandGenmove(go.Color color)
     {
         return m_gtp.getCommandGenmove(color);
     }

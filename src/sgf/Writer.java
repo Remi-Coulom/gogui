@@ -10,7 +10,8 @@ package sgf;
 import java.io.*;
 import java.text.*;
 import java.util.*;
-import board.*;
+import go.*;
+import gui.*;
 
 //-----------------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ public class Writer
     }    
 
     public Writer(File file, Board board, int handicap, String playerBlack,
-                  String playerWhite, String gameComment, board.Score score)
+                  String playerWhite, String gameComment, go.Score score)
         throws FileNotFoundException
     {        
         FileOutputStream out = new FileOutputStream(file);
@@ -86,7 +87,7 @@ public class Writer
 
     private void printHeader(int handicap, String playerBlack,
                              String playerWhite, String gameComment,
-                             board.Score score)
+                             go.Score score)
     {
         printHeader();
         if (handicap > 0)

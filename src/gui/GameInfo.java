@@ -12,7 +12,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import board.*;
+import go.*;
 import utils.*;
 
 //=============================================================================
@@ -57,8 +57,8 @@ class GameInfo
 
     public void actionPerformed(ActionEvent evt)
     {
-        setTime(board.Color.BLACK);
-        setTime(board.Color.WHITE);
+        setTime(go.Color.BLACK);
+        setTime(go.Color.WHITE);
     }
 
     public void setBoard(Board board)
@@ -70,7 +70,7 @@ class GameInfo
     {
         if (m_board == null)
             return;
-        if (m_board.getToMove() == board.Color.BLACK)
+        if (m_board.getToMove() == go.Color.BLACK)
             m_move.setText("Black");
         else
             m_move.setText("White");
@@ -86,9 +86,9 @@ class GameInfo
         else
         {
             Move m = m_board.getMove(moveNumber - 1);
-            board.Color c = m.getColor();
-            board.Point p = m.getPoint();
-            lastMove = (c == board.Color.BLACK ? "B" : "W") + " ";
+            go.Color c = m.getColor();
+            go.Point p = m.getPoint();
+            lastMove = (c == go.Color.BLACK ? "B" : "W") + " ";
             if (p == null)
                 lastMove += "PASS";
             else
@@ -121,12 +121,12 @@ class GameInfo
         return label;
     }
 
-    private void setTime(board.Color c)
+    private void setTime(go.Color c)
     {
         String text = m_timeControl.getTimeString(c);
         if (text == null)
             text = " ";
-        if (c == board.Color.BLACK)
+        if (c == go.Color.BLACK)
             m_timeB.setText(text);
         else
             m_timeW.setText(text);

@@ -7,7 +7,7 @@ package gtp;
 
 import java.io.*;
 import java.util.*;
-import board.*;
+import go.*;
 import utils.StringUtils;
 
 //-----------------------------------------------------------------------------
@@ -83,8 +83,8 @@ public class Gtp
     public String getCommandPlay(Move move)
     {
         
-        board.Point p = move.getPoint();
-        board.Color c = move.getColor();
+        go.Point p = move.getPoint();
+        go.Color c = move.getColor();
         String command = "";
         if (m_protocolVersion == 2)
             command = "play ";

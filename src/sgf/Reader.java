@@ -9,7 +9,7 @@ package sgf;
 
 import java.io.*;
 import java.util.*;
-import board.*;
+import go.*;
 
 //-----------------------------------------------------------------------------
 

@@ -10,7 +10,7 @@ import java.awt.event.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
-import board.*;
+import go.*;
 
 //-----------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@ package gui;
 
 import java.text.*;
 import java.util.*;
-import board.Color;
+import go.Color;
 
 //-----------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ class TimeControl
         reset();
     }
 
-    public String getTimeString(Color c)
+    public String getTimeString(go.Color c)
     {
         TimeRecord timeRecord = getRecord(c);
         long time = timeRecord.m_time;
@@ -83,7 +83,7 @@ class TimeControl
         return m_buffer.toString();
     }
 
-    public boolean lostOnTime(Color c)
+    public boolean lostOnTime(go.Color c)
     {
         if (! m_loseOnTime)
             return false;
@@ -147,7 +147,7 @@ class TimeControl
         m_loseOnTime = true;
     }
 
-    public void startMove(Color c)
+    public void startMove(go.Color c)
     {
         if  (m_toMove != Color.EMPTY)
             stopMove();
@@ -200,17 +200,26 @@ class TimeControl
     }
 
     private boolean m_loseOnTime;
+
     private boolean m_useByoyomi;
+
     private int m_byoyomiMoves;
+
     private long m_startMoveTime;
+
     private long m_preByoyomi;
+
     private long m_byoyomi;
-    private Color m_toMove = Color.EMPTY;
+
+    private go.Color m_toMove = Color.EMPTY;
+
     private StringBuffer m_buffer = new StringBuffer(8);
+
     private TimeRecord m_timeRecordBlack = new TimeRecord();
+
     private TimeRecord m_timeRecordWhite = new TimeRecord();
 
-    private TimeRecord getRecord(Color c)
+    private TimeRecord getRecord(go.Color c)
     {
         if (c == Color.BLACK)
             return m_timeRecordBlack;
@@ -218,7 +227,7 @@ class TimeControl
             return m_timeRecordWhite;
     }
 
-    private void reset(Color c)
+    private void reset(go.Color c)
     {
         TimeRecord timeRecord = getRecord(c);
         timeRecord.m_time = 0;

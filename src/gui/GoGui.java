@@ -12,7 +12,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import javax.swing.*;
-import board.*;
+import go.*;
 import gtp.*;
 import sgf.*;
 import utils.*;
@@ -214,7 +214,7 @@ class GoGui
         clearStatus();
     }
 
-    public void fieldClicked(board.Point p)
+    public void fieldClicked(go.Point p)
     {
         if (m_commandInProgress)
         {
@@ -228,7 +228,7 @@ class GoGui
             }
             else
             {
-                m_board.play(new Move(p, board.Color.EMPTY));
+                m_board.play(new Move(p, go.Color.EMPTY));
             }
             return;
         }
@@ -458,11 +458,11 @@ class GoGui
 
     private double m_analyzeScale;
 
-    private board.Color m_setupColor;
+    private go.Color m_setupColor;
 
-    private board.Point m_analyzePointArg;
+    private go.Point m_analyzePointArg;
 
-    private board.Score m_score;
+    private go.Score m_score;
 
     private Board m_board;
 
@@ -552,7 +552,7 @@ class GoGui
             }
             else if (m_analyzeType == AnalyzeCommand.POINTLIST)
             {
-                board.Point pointList[] = Gtp.parsePointList(answer);
+                go.Point pointList[] = Gtp.parsePointList(answer);
                 showPointList(pointList);
             }
             else if (m_analyzeType == AnalyzeCommand.STRINGBOARD)
@@ -840,7 +840,7 @@ class GoGui
 
     private void cbPlay()
     {
-        if (m_board.getToMove() == board.Color.BLACK)
+        if (m_board.getToMove() == go.Color.BLACK)
         {
             m_menuBars.setComputerBlack();
             computerBlack();
@@ -961,13 +961,13 @@ class GoGui
         m_toolBar.enableAll(false, null);
         pack();
         showStatus("Setup black.");
-        m_setupColor = board.Color.BLACK;
+        m_setupColor = go.Color.BLACK;
     }
 
     private void cbSetupBlack()
     {
         showStatus("Setup black.");
-        m_setupColor = board.Color.BLACK;
+        m_setupColor = go.Color.BLACK;
     }
 
     private void cbSetupDone()
@@ -979,22 +979,22 @@ class GoGui
             pack();
             m_toolBar.enableAll(true, m_board);
             int size = m_board.getBoardSize();
-            board.Color color[][] = new board.Color[size][size];
+            go.Color color[][] = new go.Color[size][size];
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
-                board.Point p = m_board.getPoint(i);
+                go.Point p = m_board.getPoint(i);
                 color[p.getX()][p.getY()] = m_board.getColor(p);
             }
-            board.Color toMove = m_board.getToMove();
+            go.Color toMove = m_board.getToMove();
             newGame(size, m_board.getKomi());
             Vector moves = new Vector(m_board.getNumberPoints());
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
-                board.Point p = m_board.getPoint(i);
+                go.Point p = m_board.getPoint(i);
                 int x = p.getX();
                 int y = p.getY();
-                board.Color c = color[x][y];
-                if (c != board.Color.EMPTY)
+                go.Color c = color[x][y];
+                if (c != go.Color.EMPTY)
                 {
                     moves.add(new Move(p, c));
                 }
@@ -1027,7 +1027,7 @@ class GoGui
     private void cbSetupWhite()
     {
         showStatus("Setup white.");
-        m_setupColor = board.Color.WHITE;
+        m_setupColor = go.Color.WHITE;
     }
 
     private void cbShowAbout()
@@ -1146,8 +1146,8 @@ class GoGui
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
                 throw e;
-            board.Point p = Gtp.parsePoint(m_commandThread.getAnswer());
-            board.Color toMove = m_board.getToMove();
+            go.Point p = Gtp.parsePoint(m_commandThread.getAnswer());
+            go.Color toMove = m_board.getToMove();
             Move m = new Move(p, toMove);
             m_board.play(m);
             m_timeControl.stopMove();
@@ -1168,7 +1168,7 @@ class GoGui
 
     private boolean computerToMove()
     {
-        if (m_board.getToMove() == board.Color.BLACK)
+        if (m_board.getToMove() == go.Color.BLACK)
             return m_computerBlack;
         else
             return m_computerWhite;
@@ -1213,7 +1213,7 @@ class GoGui
         Vector result = new Vector(moves.size() * 2);
         if (moves.size() == 0)
             return result;
-        board.Color toMove = m_board.getToMove();
+        go.Color toMove = m_board.getToMove();
         for (int i = 0; i < moves.size(); ++i)
         {
             Move m = (Move)moves.get(i);
@@ -1250,7 +1250,7 @@ class GoGui
 
     private void generateMove()
     {
-        board.Color toMove = m_board.getToMove();
+        go.Color toMove = m_board.getToMove();
         String command = m_commandThread.getCommandGenmove(toMove);
         showStatus("Computer is thinking...");
         Runnable callback = new Runnable()
@@ -1264,8 +1264,8 @@ class GoGui
     {
         try
         {
-            board.Point p = m.getPoint();
-            if (p != null && m_board.getColor(p) != board.Color.EMPTY)
+            go.Point p = m.getPoint();
+            if (p != null && m_board.getColor(p) != go.Color.EMPTY)
                     return;
             if (m_commandThread != null)
                 m_commandThread.sendCommandPlay(m);
@@ -1352,14 +1352,14 @@ class GoGui
             Vector setupBlack = reader.getSetupBlack();
             for (int i = 0; i < setupBlack.size(); ++i)
             {
-                board.Point p = (board.Point)setupBlack.get(i);
-                moves.add(new Move(p, board.Color.BLACK));
+                go.Point p = (go.Point)setupBlack.get(i);
+                moves.add(new Move(p, go.Color.BLACK));
             }
             Vector setupWhite = reader.getSetupWhite();
             for (int i = 0; i < setupWhite.size(); ++i)
             {
-                board.Point p = (board.Point)setupWhite.get(i);
-                moves.add(new Move(p, board.Color.WHITE));
+                go.Point p = (go.Point)setupWhite.get(i);
+                moves.add(new Move(p, go.Color.WHITE));
             }
             if (m_fillPasses)
                 moves = fillPasses(moves);
@@ -1370,7 +1370,7 @@ class GoGui
                 m_commandThread.sendCommandPlay(m);
             }
             int numberMoves = reader.getMoves().size();
-            board.Color toMove = reader.getToMove();
+            go.Color toMove = reader.getToMove();
             if (numberMoves > 0)
                 toMove = reader.getMove(0).getColor();
             if (toMove != m_board.getToMove())
@@ -1573,8 +1573,8 @@ class GoGui
         Vector moves = new Vector(handicap.size());
         for (int i = 0; i < handicap.size(); ++i)
         {
-            board.Point p = (board.Point)handicap.get(i);
-            moves.add(new Move(p, board.Color.BLACK));
+            go.Point p = (go.Point)handicap.get(i);
+            moves.add(new Move(p, go.Color.BLACK));
         }
         if (m_fillPasses)
             moves = fillPasses(moves);
@@ -1676,7 +1676,7 @@ class GoGui
         return SimpleDialogs.showQuestion(this, message);
     }
 
-    private void showPointList(board.Point pointList[]) throws Gtp.Error
+    private void showPointList(go.Point pointList[]) throws Gtp.Error
     {
         m_board.showPointList(pointList);
         m_boardNeedsReset = true;

@@ -3,7 +3,7 @@
 // $Source$
 //-----------------------------------------------------------------------------
 
-package board;
+package gui;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -11,17 +11,18 @@ import java.awt.geom.*;
 import java.awt.font.*;
 import java.util.*;
 import javax.swing.*;
+import go.*;
 
 //-----------------------------------------------------------------------------
 
-class Field
+public class Field
     extends JButton
     implements ActionListener
 {
-    Field(Board board, Point p, boolean isHandicap)
+    Field(Board board, go.Point p, boolean isHandicap)
     {
         m_board = board;
-        m_color = Color.EMPTY;
+        m_color = go.Color.EMPTY;
         m_point = p;
         m_isHandicap = isHandicap;
         Dimension size = m_board.getPreferredFieldSize();
@@ -56,9 +57,9 @@ class Field
         else
             g.setColor(m_boardColor);
         g.fillRect(0, 0, size.width, size.height);        
-        if (m_color == Color.BLACK)
+        if (m_color == go.Color.BLACK)
             drawStone(g, java.awt.Color.black);
-        else if (m_color == Color.WHITE)
+        else if (m_color == go.Color.WHITE)
             drawStone(g, java.awt.Color.white);
         else
             drawGrid(g);
@@ -81,7 +82,7 @@ class Field
         }
     }
 
-    public void setColor(Color color)
+    public void setColor(go.Color color)
     {
         if (m_color != color)
         {
@@ -127,20 +128,32 @@ class Field
     }
 
     private boolean m_isHandicap;
+
     private boolean m_crossHair;
+
     private boolean m_markup;
+
     private boolean m_influenceSet;
+
     private double m_influence;
+
     private String m_string = "";
+
     private static java.awt.Color m_boardColor
         = new java.awt.Color(224, 160, 96);
+
     private java.awt.Color m_fieldColor;
+
     private static java.awt.Color m_influenceBlackColor
         = new java.awt.Color(255, 63, 63);
+
     private static java.awt.Color m_influenceWhiteColor
         = new java.awt.Color(0, 255, 127);
-    private Color m_color;
-    private Point m_point;
+
+    private go.Color m_color;
+
+    private go.Point m_point;
+
     private Board m_board;
 
     private void drawCrossHair(Graphics g)
@@ -223,7 +236,7 @@ class Field
         int stringHeight = g.getFont().getSize();
         int x = (size.width - stringWidth) / 2;
         int y = stringHeight + (size.height - stringHeight) / 2;
-        if (m_color == Color.WHITE)
+        if (m_color == go.Color.WHITE)
             g.setColor(java.awt.Color.black);
         else
             g.setColor(java.awt.Color.white);
