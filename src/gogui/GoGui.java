@@ -1889,7 +1889,7 @@ class GoGui
             if (point != null && m_board.getColor(point) != go.Color.EMPTY)
                 return;
             m_needsSave = true;
-            play(move);
+            boolean newNodeCreated = play(move);
             if (point != null)
             {
                 m_guiBoard.updateFromGoBoard(point);
@@ -1908,7 +1908,7 @@ class GoGui
                 m_lostOnTimeShown = true;
             }
             m_resigned = false;
-            boardChangedBegin(true, true);
+            boardChangedBegin(true, newNodeCreated);
         }
         catch (GtpError e)
         {
@@ -2097,13 +2097,16 @@ class GoGui
         m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
-    private void play(Move move) throws GtpError
+    /** @return true, if new node was created. */
+    private boolean play(Move move) throws GtpError
     {
         if (! checkCurrentNodeExecuted())
-            return;
+            return false;
+        boolean result = false;
         Node node = NodeUtils.getChildWithMove(m_currentNode, move);
         if (node == null)
         {
+            result = true;
             node = new Node(move);
             m_currentNode.append(node);
         }
@@ -2119,6 +2122,7 @@ class GoGui
             m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
             throw error;
         }
+        return result;
     }
 
     private void registerSpecialMacHandler()
