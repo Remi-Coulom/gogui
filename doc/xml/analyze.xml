@@ -3,8 +3,7 @@
   
 <para>
 GoGui allows to define an analyze command.
-The analyze command is sent to the Go program after
-each change on the board and its output is displayed
+The analyze command is sent to the Go program the response is displayed
 graphically on the board.
 </para>
   
