@@ -21,6 +21,16 @@ New wildcard %o for analyze commands.
 Option -computer-both and -computer-black will automatically start the game.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Fix bug that sometimes caused assertion when scoring.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

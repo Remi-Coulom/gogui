@@ -90,14 +90,13 @@ public class Board
         {
             Point p = m_allPoints[i]; 
             Color c = getColor(p);
+            setScore(p, Color.EMPTY);
             if (c != Color.EMPTY)
             {
                 allEmpty = false;
                 if (! scoreGetDead(p))
                     setScore(p, c);
             }
-            else
-                setScore(p, Color.EMPTY);
         }
         if (allEmpty)
             return;
@@ -747,6 +746,7 @@ public class Board
 
     private void setScore(Point p, Color c)
     {
+        assert(c != null);
         m_score[p.getX()][p.getY()] = c;
     }
 }
