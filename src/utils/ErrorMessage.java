@@ -3,20 +3,21 @@
 // $Source$
 //----------------------------------------------------------------------------
 
-package gtp;
-
-import utils.ErrorMessage;
+package utils;
 
 //----------------------------------------------------------------------------
 
-/** Exception indication the failure of a GTP command. */
-public class GtpError
-    extends ErrorMessage
+/** Error with error message.
+    ErrorMessage are exceptions with a message meaningful for presentation
+    to the user.
+*/
+public class ErrorMessage
+    extends Exception
 {
-    public GtpError(String s)
+    public ErrorMessage(String s)
     {
         super(s);
     }
-}    
+}
 
 //----------------------------------------------------------------------------

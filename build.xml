@@ -210,6 +210,7 @@ installation directory.
  go/Point.class
  gtp/*.class
  gtp/ReadThread.class
+ utils/ErrorMessage.class
  utils/Options.class
  utils/ProcessUtils*.class
  utils/StreamCopy.class
@@ -277,6 +278,7 @@ installation directory.
  gtp/*.class
  gtpadapter/*.class
  sgf/*.class
+ utils/ErrorMessage.class
  utils/MessageQueue.class
  utils/Options.class
  utils/StringUtils.class
@@ -304,6 +306,7 @@ installation directory.
  images/wood.png
  latex/Filter.class
  sgf/Filter.class
+ utils/ErrorMessage.class
  utils/GuiUtils.class
  utils/MessageQueue.class
  utils/Platform.class
@@ -328,6 +331,7 @@ installation directory.
  go/Point.class
  gtp/*.class
  gtpdummy/*.class
+ utils/ErrorMessage.class
  utils/Options.class
  utils/StringUtils.class
  version/Version.class
@@ -347,6 +351,7 @@ installation directory.
  go/Point.class
  gtp/*.class
  gtpregress/*.class
+ utils/ErrorMessage.class
  utils/FileUtils.class
  utils/MessageQueue.class
  utils/Options.class
@@ -364,6 +369,7 @@ installation directory.
 </manifest>
 <fileset dir="build" includes="
  gtpserver/*.class
+ utils/ErrorMessage.class
  utils/Options.class
  utils/StreamCopy.class
  utils/StringUtils.class
@@ -384,6 +390,7 @@ installation directory.
  gtp/*.class
  gtpterminal/*.class
  sgf/*.class
+ utils/ErrorMessage.class
  utils/FileUtils.class
  utils/MessageQueue.class
  utils/Options.class
@@ -451,6 +458,7 @@ installation directory.
 </manifest>
 <fileset dir="build" includes="
  netgtp/*.class
+ utils/ErrorMessage.class
  utils/Options.class
  utils/StreamCopy.class
  utils/StringUtils.class
@@ -471,6 +479,7 @@ installation directory.
  latex/*.class
  sgf/*.class
  sgftotex/*.class
+ utils/ErrorMessage.class
  utils/FileUtils.class
  utils/Options.class
  utils/StringUtils.class
@@ -505,6 +514,7 @@ installation directory.
  gtp/*.class
  sgf/*.class
  twogtp/*.class
+ utils/ErrorMessage.class
  utils/FileUtils.class
  utils/MessageQueue.class
  utils/Options.class

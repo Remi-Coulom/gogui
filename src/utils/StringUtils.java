@@ -48,7 +48,9 @@ public class StringUtils
         boolean isSevere = (exception instanceof RuntimeException
                             || exception instanceof Error);     
         String result;
-        if (hasMessage)
+        if (exception instanceof ErrorMessage)
+            result = message;
+        else if (hasMessage)
             result = className + ":\n" + message;
         else
             result = className;

@@ -13,7 +13,7 @@ import java.util.*;
 /** Parser for command line options. */
 public class Options
 {
-    public Options(String[] args, String[] specs) throws Exception
+    public Options(String[] args, String[] specs) throws ErrorMessage
     {
         for (int i = 0; i < specs.length; ++i)
         {
@@ -34,13 +34,13 @@ public class Options
         return m_args;
     }
 
-    public double getDouble(String option) throws Exception
+    public double getDouble(String option) throws ErrorMessage
     {
         return getDouble(option, 0);
     }
 
     public double getDouble(String option, double defaultValue)
-        throws Exception
+        throws ErrorMessage
     {
         String value = getString(option, Double.toString(defaultValue));
         if (value == null)
@@ -51,16 +51,17 @@ public class Options
         }
         catch (NumberFormatException e)
         {
-            throw new Exception("Option -" + option + " needs float value");
+            throw new ErrorMessage("Option -" + option
+                                   + " needs float value");
         }
     }
 
-    public int getInteger(String option) throws Exception
+    public int getInteger(String option) throws ErrorMessage
     {
         return getInteger(option, 0);
     }
 
-    public int getInteger(String option, int defaultValue) throws Exception
+    public int getInteger(String option, int defaultValue) throws ErrorMessage
     {
         String value = getString(option, Integer.toString(defaultValue));
         if (value == null)
@@ -71,31 +72,32 @@ public class Options
         }
         catch (NumberFormatException e)
         {
-            throw new Exception("Option -" + option + " needs integer value");
+            throw new ErrorMessage("Option -" + option
+                                   + " needs integer value");
         }
     }
 
     public int getInteger(String option, int defaultValue, int min)
-        throws Exception
+        throws ErrorMessage
     {
         int value = getInteger(option, defaultValue);
         if (value < min)
-            throw new Exception("Option -" + option + " must be greater than "
-                                + min);
+            throw new ErrorMessage("Option -" + option
+                                   + " must be greater than " + min);
         return value;
     }
 
     public int getInteger(String option, int defaultValue, int min, int max)
-        throws Exception
+        throws ErrorMessage
     {
         int value = getInteger(option, defaultValue);
         if (value < min || value > max)
-            throw new Exception("Option -" + option + " must be in [" +
-                                min + ".." + max + "]");
+            throw new ErrorMessage("Option -" + option + " must be in [" +
+                                   min + ".." + max + "]");
         return value;
     }
 
-    public String getString(String option) throws Exception
+    public String getString(String option) throws ErrorMessage
     {
         return getString(option, "");
     }
@@ -109,7 +111,7 @@ public class Options
         return value;
     }
 
-    public boolean isSet(String option) throws Exception
+    public boolean isSet(String option) throws ErrorMessage
     {
         String value = getString(option, null);
         return (value != null);
@@ -118,12 +120,20 @@ public class Options
     /** Read options from a file given with the option "config".
         Requires that "config" is an allowed option.
     */
-    public void handleConfigOption() throws Exception
+    public void handleConfigOption() throws ErrorMessage
     {
         if (! isSet("config"))
             return;
         String filename = getString("config");
-        InputStream inputStream = new FileInputStream(filename);
+        InputStream inputStream;
+        try
+        {
+            inputStream = new FileInputStream(filename);
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new ErrorMessage("File not found: " + filename);
+        }
         Reader reader = new InputStreamReader(inputStream);
         BufferedReader bufferedReader = new BufferedReader(reader);
         try
@@ -140,9 +150,20 @@ public class Options
             }
             parseArgs(StringUtils.tokenize(buffer.toString()));
         }
+        catch (IOException e)
+        {
+            StringUtils.printException(e);
+        }
         finally
         {
-            bufferedReader.close();
+            try
+            {
+                bufferedReader.close();
+            }
+            catch (IOException e)
+            {
+                StringUtils.printException(e);
+            }
         }
     }
 
@@ -150,7 +171,7 @@ public class Options
         Automatically calls handleConfigOption.
     */
     public static Options parse(String[] args, String[] specs)
-        throws Exception
+        throws ErrorMessage
     {
         Options opt = new Options(args, specs);
         opt.handleConfigOption();
@@ -161,13 +182,13 @@ public class Options
 
     private Map m_map = new TreeMap();
 
-    private String getSpec(String option) throws Exception
+    private String getSpec(String option) throws ErrorMessage
     {
         if (m_map.containsKey(option))
             return option;
         else if (m_map.containsKey(option + ":"))
             return option + ":";
-        throw new Exception("Unknown option -" + option);
+        throw new ErrorMessage("Unknown option -" + option);
     }
 
     private String getValue(String option)
@@ -194,7 +215,7 @@ public class Options
                 && spec.substring(spec.length() - 1).equals(":"));
     }
 
-    private void parseArgs(String args[]) throws Exception
+    private void parseArgs(String args[]) throws ErrorMessage
     {
         int n = 0;
         while (n < args.length)
@@ -207,10 +228,12 @@ public class Options
                 if (needsValue(spec))
                 {
                     if (n >= args.length)
-                        throw new Exception("Option " + s + " needs value");
+                        throw new ErrorMessage("Option " + s
+                                               + " needs value");
                     String value = args[n];
                     if (isOptionKey(value))
-                        throw new Exception("Option " + s + " needs value");
+                        throw new ErrorMessage("Option " + s
+                                               + " needs value");
                     ++n;
                     m_map.put(spec, value);
                 }

@@ -68,7 +68,7 @@ public final class Gtp
         }
         catch (IOException e)
         {
-            throw new GtpError("Could not create " + program + ":\n" +
+            throw new GtpError("Could not execute " + program + ":\n" +
                                 e.getMessage());
         }
         m_out = new PrintWriter(m_process.getOutputStream());
