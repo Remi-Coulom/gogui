@@ -237,7 +237,7 @@ public class Field
         Dimension size = getSize();
         int d = size.width / 6;
         int w = size.width;
-        g.setColor(java.awt.Color.blue);
+        g.setColor(java.awt.Color.red);
         g.drawLine(d, d, 2 * d, d);
         g.drawLine(d, d, d, 2 * d);
         g.drawLine(d, w - 2 * d - 1, d, w - d - 1);
@@ -304,6 +304,7 @@ public class Field
         int width = size.width - 2 * d;
         g.setColor(java.awt.Color.blue);
         g.drawRect(d, d, width, width);
+        g.drawRect(d + 1, d + 1, width - 2, width - 2);
     }
 
     private void drawSelect(Graphics g)
