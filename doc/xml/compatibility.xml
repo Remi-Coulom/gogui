@@ -61,6 +61,11 @@ The following other commands are used by GoGui.
 <itemizedlist>
 <listitem>
 <simpara>
+<userinput>name</userinput>
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 <userinput>final_status_list dead</userinput>
 </simpara>
 </listitem>
