@@ -132,6 +132,7 @@ and set the environment variable XSLDIR to the installation directory.
   gtpregress.*,
   gtpserver.*,
   gui.*,
+  latex.*,
   netgtp.*,
   sgf.*,
   sgftotex.*,
