@@ -5,11 +5,12 @@
 
 package gogui;
 
-import java.util.*;
-import javax.swing.*;
+import java.util.Vector;
 import gui.SimpleDialogs;
-import utils.*;
-import version.*;
+import utils.Options;
+import utils.Preferences;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

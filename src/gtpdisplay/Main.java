@@ -5,15 +5,11 @@
 
 package gtpdisplay;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import game.*;
-import go.*;
-import gtp.*;
-import gui.*;
-import utils.*;
-import version.*;
+import java.io.PrintStream;
+import java.util.Vector;
+import utils.Options;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

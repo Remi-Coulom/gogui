@@ -5,13 +5,20 @@
 
 package gmptogtp;
 
-import java.io.*;
-import java.util.*;
-import javax.comm.*;
-import gmp.*;
-import gtp.GtpServer;
-import utils.*;
-import version.*;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.Vector;
+import javax.comm.CommPortIdentifier;
+import javax.comm.NoSuchPortException;
+import javax.comm.PortInUseException;
+import javax.comm.SerialPort;
+import javax.comm.UnsupportedCommOperationException;
+import utils.Options;
+import utils.ProcessUtils;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

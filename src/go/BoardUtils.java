@@ -5,7 +5,7 @@
 
 package go;
 
-import java.io.*;
+import java.io.PrintStream;
 
 //----------------------------------------------------------------------------
 

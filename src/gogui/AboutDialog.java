@@ -5,16 +5,23 @@
 
 package gogui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.net.URL;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
+import javax.swing.JDialog;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.EditorKit;
 import gui.SimpleDialogs;
 import utils.GuiUtils;
 import utils.Platform;
-import version.*;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

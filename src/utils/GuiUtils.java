@@ -5,11 +5,22 @@
 
 package utils;
 
-import java.awt.*;
-import java.lang.reflect.*;
-import java.net.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.net.URL;
+import javax.swing.Box;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+import javax.swing.border.Border;
 
 //----------------------------------------------------------------------------
 

@@ -5,12 +5,11 @@
 
 package twogtp;
 
-import java.io.*;
-import java.lang.*;
-import java.util.*;
-import game.*;
-import go.*;
-import sgf.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileFilter;
+import game.GameInformation;
+import game.GameTree;
 import utils.ErrorMessage;
 import utils.FileUtils;
 

@@ -5,14 +5,27 @@
 
 package gui;
 
-import java.awt.*;
-import java.util.*;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import game.*;
-import utils.*;
+import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
+import game.Node;
+import utils.GuiUtils;
 
 //----------------------------------------------------------------------------
 

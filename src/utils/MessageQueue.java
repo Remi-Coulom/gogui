@@ -5,7 +5,7 @@
 
 package utils;
 
-import java.util.*;
+import java.util.Vector;
 
 //----------------------------------------------------------------------------
 

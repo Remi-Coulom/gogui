@@ -5,7 +5,7 @@
 
 package gui;
 
-import java.util.*;
+import java.util.Date;
 import go.Color;
 
 //----------------------------------------------------------------------------

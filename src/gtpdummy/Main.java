@@ -5,12 +5,12 @@
 
 package gtpdummy;
 
-import java.io.*;
-import go.*;
-import gtp.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import utils.Options;
 import utils.StringUtils;
-import version.*;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

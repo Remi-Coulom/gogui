@@ -5,10 +5,16 @@
 
 package twogtp;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import utils.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.PrintStream;
+import java.text.NumberFormat;
+import java.util.Vector;
+import utils.ErrorMessage;
+import utils.FileUtils;
+import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 

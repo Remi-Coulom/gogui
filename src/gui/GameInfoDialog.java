@@ -5,9 +5,16 @@
 
 package gui;
 
-import java.awt.*;
-import javax.swing.*;
-import game.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridLayout;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import game.GameInformation;
 import utils.GuiUtils;
 
 //----------------------------------------------------------------------------

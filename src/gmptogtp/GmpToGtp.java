@@ -5,14 +5,14 @@
 
 package gmptogtp;
 
-import java.io.*;
-import java.util.*;
-import gmp.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import gmp.Gmp;
 import go.Color;
 import go.Point;
 import gtp.GtpServer;
-import utils.*;
-import version.*;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

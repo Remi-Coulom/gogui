@@ -5,13 +5,11 @@
 
 package gtpterminal;
 
-import java.io.*;
-import java.util.*;
-import game.*;
-import go.*;
-import gtp.*;
-import utils.*;
-import version.*;
+import java.io.PrintStream;
+import java.util.Vector;
+import utils.Options;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

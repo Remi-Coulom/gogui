@@ -5,13 +5,28 @@
 
 package gtpterminal;
 
-import java.io.*;
-import java.util.*;
-import game.*;
-import go.*;
-import gtp.*;
-import utils.*;
-import version.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Vector;
+import game.GameInformation;
+import game.GameTree;
+import game.Node;
+import go.Board;
+import go.BoardUtils;
+import go.Color;
+import go.Move;
+import go.Point;
+import gtp.Gtp;
+import gtp.GtpError;
+import gtp.GtpUtils;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

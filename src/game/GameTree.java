@@ -5,9 +5,11 @@
 
 package game;
 
-import java.text.*;
-import java.util.*;
-import go.*;
+import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Vector;
+import go.Color;
+import go.Point;
 
 //----------------------------------------------------------------------------
 

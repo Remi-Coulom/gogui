@@ -5,13 +5,35 @@
 
 package gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.print.*;
-import java.net.*;
-import java.util.*;
-import javax.swing.*;
-import go.*;
+import java.awt.AlphaComposite;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.net.URL;
+import java.util.Vector;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import go.Move;
+import go.Point;
 import utils.GuiUtils;
 
 //----------------------------------------------------------------------------

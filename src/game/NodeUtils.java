@@ -5,10 +5,14 @@
 
 package game;
 
-import java.text.*;
-import java.util.*;
-import java.util.regex.*;
-import go.*;
+import java.text.NumberFormat;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+import java.util.regex.Pattern;
+import go.Color;
+import go.Move;
+import go.Point;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------

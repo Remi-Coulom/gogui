@@ -5,9 +5,10 @@
 
 package gui;
 
-import java.awt.*;
-import java.io.*;
-import javax.swing.*;
+import java.awt.Component;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------

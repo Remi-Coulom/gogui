@@ -5,12 +5,18 @@
 
 package gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import game.*;
-import go.*;
-import utils.*;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import game.Node;
+import game.NodeUtils;
+import go.Move;
+import utils.GuiUtils;
 
 //----------------------------------------------------------------------------
 

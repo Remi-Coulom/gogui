@@ -5,10 +5,17 @@
 
 package sgftotex;
 
-import java.io.*;
-import java.util.*;
-import utils.*;
-import version.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Vector;
+import utils.FileUtils;
+import utils.Options;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

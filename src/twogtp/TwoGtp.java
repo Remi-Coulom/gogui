@@ -5,15 +5,40 @@
 
 package twogtp;
 
-import java.io.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
-import game.*;
-import go.*;
-import gtp.*;
-import utils.*;
-import version.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.Reader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Vector;
+import game.GameInformation;
+import game.GameTree;
+import game.Node;
+import game.NodeUtils;
+import go.Board;
+import go.Color;
+import go.Move;
+import go.Point;
+import gtp.Gtp;
+import gtp.GtpError;
+import gtp.GtpUtils;
+import gtp.GtpServer;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

@@ -8,7 +8,7 @@ package latex;
 //----------------------------------------------------------------------------
 
 import java.io.File;
-import javax.swing.filechooser.*;
+import javax.swing.filechooser.FileFilter;
 import utils.FileUtils;
 
 //----------------------------------------------------------------------------

@@ -5,17 +5,37 @@
 
 package gtpdisplay;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import game.*;
-import go.*;
-import gtp.*;
-import gui.*;
-import utils.*;
-import version.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Vector;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import go.Color;
+import go.Move;
+import go.Point;
+import gtp.Gtp;
+import gtp.GtpError;
+import gtp.GtpServer;
+import gtp.GtpUtils;
+import gui.SimpleDialogs;
+import utils.GuiUtils;
+import utils.Platform;
+import utils.SquareLayout;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

@@ -5,10 +5,16 @@
 
 package twogtp;
 
-import java.io.*;
-import java.util.*;
-import game.*;
-import go.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Vector;
+import game.GameInformation;
+import game.GameTree;
+import game.Node;
+import go.Board;
+import go.Color;
+import go.Move;
+import go.Point;
 
 //----------------------------------------------------------------------------
 

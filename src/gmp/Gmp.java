@@ -16,8 +16,11 @@
 
 package gmp;
 
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.IOException;
+import java.util.Random;
+import java.util.Vector;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -443,7 +446,8 @@ class WriteThread extends Thread
 //----------------------------------------------------------------------------
 
 /** Handles incoming packets and allows to send commands. */
-class MainThread extends Thread
+class MainThread
+    extends Thread
 {
     /** Result returned by MainThread.waitCmd. */
     public static class WaitResult

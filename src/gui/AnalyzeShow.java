@@ -5,8 +5,9 @@
 
 package gui;
 
-import java.util.*;
-import gtp.*;
+import java.util.Vector;
+import gtp.GtpError;
+import gtp.GtpUtils;
 
 //----------------------------------------------------------------------------
 

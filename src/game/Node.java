@@ -5,9 +5,13 @@
 
 package game;
 
-import java.io.*;
-import java.util.*;
-import go.*;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+import go.Color;
+import go.Move;
+import go.Point;
 
 //----------------------------------------------------------------------------
 

@@ -5,11 +5,13 @@
 
 package gui;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 //----------------------------------------------------------------------------
 
-class ImageButton extends JButton
+class ImageButton
+    extends JButton
 {
     ImageButton(String imageResourceName, String altText, String toolTipText)
     {

@@ -5,7 +5,8 @@
 
 package utils;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 //----------------------------------------------------------------------------
 

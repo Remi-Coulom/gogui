@@ -5,11 +5,15 @@
 
 package netgtp;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import utils.*;
-import version.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.Vector;
+import utils.Options;
+import utils.StreamCopy;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

@@ -7,10 +7,17 @@ package latex;
 
 //----------------------------------------------------------------------------
 
-import java.io.*;
-import java.util.*;
-import game.*;
-import go.*;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Vector;
+import game.GameInformation;
+import game.GameTree;
+import game.Node;
+import game.NodeUtils;
+import go.Board;
+import go.Color;
+import go.Move;
+import go.Point;
 
 //----------------------------------------------------------------------------
 

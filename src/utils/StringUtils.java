@@ -5,8 +5,9 @@
 
 package utils;
 
-import java.text.*;
-import java.util.*;
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Vector;
 
 //----------------------------------------------------------------------------
 

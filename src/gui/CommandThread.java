@@ -5,11 +5,13 @@
 
 package gui;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-import go.*;
-import gtp.*;
+import java.awt.Component;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import go.Move;
+import gtp.Gtp;
+import gtp.GtpError;
 
 //----------------------------------------------------------------------------
 

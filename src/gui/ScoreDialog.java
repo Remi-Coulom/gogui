@@ -5,10 +5,22 @@
 
 package gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import go.*;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import go.Score;
 import utils.GuiUtils;
 
 //----------------------------------------------------------------------------

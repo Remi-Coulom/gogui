@@ -5,13 +5,23 @@
 
 package sgf;
 
-//----------------------------------------------------------------------------
-
-import java.io.*;
-import java.nio.charset.*;
-import java.util.*;
-import game.*;
-import go.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.StreamTokenizer;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.Vector;
+import game.GameInformation;
+import game.GameTree;
+import game.Node;
+import go.Color;
+import go.Move;
+import go.Point;
 import utils.ErrorMessage;
 import utils.ProgressShow;
 

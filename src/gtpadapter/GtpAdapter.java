@@ -5,13 +5,31 @@
 
 package gtpadapter;
 
-import java.io.*;
-import java.util.*;
-import game.*;
-import go.*;
-import gtp.*;
-import utils.*;
-import version.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Stack;
+import java.util.Vector;
+import game.GameTree;
+import game.Node;
+import go.Board;
+import go.BoardUtils;
+import go.Color;
+import go.Move;
+import go.Point;
+import gtp.Gtp;
+import gtp.GtpError;
+import gtp.GtpServer;
+import gtp.GtpUtils;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

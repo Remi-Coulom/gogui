@@ -5,11 +5,14 @@
 
 package gogui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.net.*;
-import javax.swing.*;
-import game.*;
+import java.io.*;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JToolBar;
+import game.Node;
+import game.NodeUtils;
 
 //----------------------------------------------------------------------------
 

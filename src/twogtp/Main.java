@@ -5,12 +5,11 @@
 
 package twogtp;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
 import utils.ErrorMessage;
 import utils.Options;
 import utils.StringUtils;
-import version.*;
+import version.Version;
 
 //----------------------------------------------------------------------------
 

@@ -5,14 +5,11 @@
 
 package gtpregress;
 
-import java.io.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
-import java.util.regex.*;
-import gtp.*;
-import utils.*;
-import version.*;
+import java.io.PrintStream;
+import java.util.Vector;
+import utils.Options;
+import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 
