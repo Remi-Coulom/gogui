@@ -1,4 +1,7 @@
 //-----------------------------------------------------------------------------
+// The file Version.java is automatically created from Version.java.in.
+// Do not edit Version.java.
+//
 // $Id$
 // $Source$
 //-----------------------------------------------------------------------------
