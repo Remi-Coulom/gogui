@@ -106,8 +106,7 @@ class SelectProgram
         int fontSize = m_comboBox.getFont().getSize();
         m_comboBox.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
-        final String prefix = "org/javalobby/icons/20x20png/";
-        URL u = getClass().getClassLoader().getResource(prefix + "Open.png");
+        URL u = getClass().getClassLoader().getResource("images/fileopen.png");
         JButton button = new JButton(new ImageIcon(u));
         button.setActionCommand("open");
         button.addActionListener(this);
