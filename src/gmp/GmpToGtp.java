@@ -37,7 +37,7 @@ public class GmpToGtp
         else if (command.startsWith("gmp_queue"))
             return queue(command, response);
         else if (command.startsWith("white"))
-            return play(true, command, response);
+            return play(false, command, response);
         else if (command.startsWith("undo"))
             return undo(command, response);
         else if (command.startsWith("genmove_black"))
