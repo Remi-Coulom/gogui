@@ -20,6 +20,10 @@ All programs have now the abilty to read command line options and arguments
 from a file with the <option>-config</option> option.
 </listitem>
 <listitem>
+<application>SgfToTex</application>: use stones in text for multiple moves
+on the same point.
+</listitem>
+<listitem>
 Minor fixes and improvements.
 </listitem>
 </itemizedlist>

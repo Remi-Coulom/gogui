@@ -39,7 +39,7 @@ public class Writer
             printEndPSGo();
             String toMove =
                 (m_board.getToMove() == Color.BLACK ? "Black" : "White");
-            m_out.println("\n" + toMove + " to play.");
+            m_out.println(toMove + " to play.");
         }
         else
         {
@@ -47,13 +47,15 @@ public class Writer
             String comment = printMoves();
             printEndPSGo();
             if (! comment.equals(""))
-                m_out.println("\n" + comment);
+                m_out.println(comment);
         }
         printEndDocument();
         m_out.close();
     }
 
     private boolean m_usePass;
+
+    private boolean m_useStonesInText = true; // XXX
 
     private PrintStream m_out;
 
@@ -73,17 +75,22 @@ public class Writer
         return result.toString();
     }
 
+    private String getStoneInTextString(int moveNumber, Color color)
+    {
+        return ("\\stone[" + moveNumber + "]{"
+                + (color == Color.BLACK ? "black" : "white") + "}");
+    }
+
     private void printBeginDocument()
     {
         String requiredVersion = "0.12";
         if (m_usePass)
             requiredVersion = "0.14";
-        m_out.println("\\documentclass{article}\n"+
-                      "\\usepackage{psgo} % version " + requiredVersion
-                      + " or newer\n" +
-                      "\\pagestyle{empty}\n" +
-                      "\\begin{document}\n" +
-                      "\\begin{center}\n");
+        m_out.println("\\documentclass{article}");
+        m_out.println("\\usepackage{psgo} % version " + requiredVersion
+                      + " or newer");
+        m_out.println("\\pagestyle{empty}");
+        m_out.println("\\begin{document}");
     }
 
     private void printBeginPSGo()
@@ -111,9 +118,8 @@ public class Writer
 
     private void printEndDocument()
     {
-        m_out.println("\n" +
-                      "\\end{center}\n" +
-                      "\\end{document}");
+        m_out.println();
+        m_out.println("\\end{document}");
     }
 
     private void printEndPSGo()
@@ -139,7 +145,6 @@ public class Writer
         int firstMoveAtPoint[][] = new int[size][size];
         int numberMoves = m_board.getNumberSavedMoves();
         boolean needsComment[] = new boolean[numberMoves];
-        boolean needsColorComment[] = new boolean[numberMoves];
         boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
         for (int i = 0; i < numberMoves; ++i)
@@ -154,7 +159,6 @@ public class Writer
             if (isPass || firstMoveAtPoint[point.getX()][point.getY()] > 0)
             {
                 needsComment[i] = true;
-                needsColorComment[i] = isColorUnexpected;
                 if (m_usePass)
                     m_out.print("\\pass");
                 else
@@ -191,22 +195,22 @@ public class Writer
                 Point point = move.getPoint();
                 Color color = move.getColor();
                 if (comment.length() > 0)
-                    comment.append(",\n");
-                if (needsColorComment[i])
-                    comment.append(color == Color.BLACK ? "B" : "W");
-                comment.append(i + 1);
+                    comment.append(" \\enspace\n");
+                    comment.append(getStoneInTextString(i + 1, color));
                 if (point != null)
                 {
                     int x = point.getX();
                     int y = point.getY();
-                    comment.append(" at ");
-                    comment.append(firstMoveAtPoint[x][y]);
+                    comment.append("~at~");
+                    int firstMoveNumber = firstMoveAtPoint[x][y];
+                    Color firstMoveColor =
+                        m_board.getMove(firstMoveNumber - 1).getColor();
+                    comment.append(getStoneInTextString(firstMoveNumber,
+                                                        firstMoveColor));
                 }
                 else
-                    comment.append(" pass");
+                    comment.append("~pass");
             }
-        if (comment.length() > 0)
-            comment.append(".");
         return comment.toString();
     }
 
