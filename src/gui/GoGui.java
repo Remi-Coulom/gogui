@@ -1760,6 +1760,7 @@ class GoGui
         go.Color toMove = m_currentNode.getToMove();
         if (toMove != go.Color.EMPTY)
             m_board.setToMove(toMove);
+        m_guiBoard.updateFromGoBoard();
     }
 
     private boolean executeRoot()
@@ -2542,6 +2543,7 @@ class GoGui
                 m_commandThread.sendCommand("undo");
             m_board.undo();
         }
+        m_guiBoard.updateFromGoBoard();
     }
 
     private void updateGameInfo(boolean gameTreeChanged)
