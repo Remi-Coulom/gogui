@@ -833,9 +833,9 @@ public class GtpShell
     private void createMenuBar(boolean highlight)
     {
         JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createMenuWindows());
         menuBar.add(createMenuFile());
         menuBar.add(createMenuSettings(highlight));
-        menuBar.add(createMenuWindows());
         setJMenuBar(menuBar);
     }
 
@@ -855,9 +855,6 @@ public class GtpShell
         menu.addSeparator();
         m_sendGtpFile =
             addMenuItem(menu, "Send GTP File...", KeyEvent.VK_G, "send-file");
-        menu.addSeparator();
-        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    m_shortcutKeyMask, "close");
         return menu;
     }
 
@@ -883,6 +880,9 @@ public class GtpShell
                     "show-gametree");
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
                     "analyze");
+        menu.addSeparator();
+        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
+                    m_shortcutKeyMask, "close");
         return menu;
     }
 

@@ -439,17 +439,8 @@ public class GameTreeViewer
     private void createMenuBar()
     {
         JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createMenuFile());
         menuBar.add(createMenuWindows());
         setJMenuBar(menuBar);
-    }
-
-    private JMenu createMenuFile()
-    {
-        JMenu menu = createMenu("File", KeyEvent.VK_F);
-        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    m_shortcutKeyMask, "close");
-        return menu;
     }
 
     private JMenu createMenuWindows()
@@ -461,6 +452,9 @@ public class GameTreeViewer
                     "analyze");
         addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,
                     "gtp-shell");
+        menu.addSeparator();
+        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
+                    m_shortcutKeyMask, "close");
         return menu;
     }
 

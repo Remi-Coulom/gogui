@@ -299,21 +299,9 @@ class AnalyzeDialog
     private void createMenuBar()
     {
         JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createMenuFile());
-        menuBar.add(createMenuSettings());
         menuBar.add(createMenuWindows());
+        menuBar.add(createMenuSettings());
         setJMenuBar(menuBar);
-    }
-
-    private JMenu createMenuFile()
-    {
-        JMenu menu = createMenu("File", KeyEvent.VK_F);
-        addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload",
-                    "Reload commands from configuration files");
-        menu.addSeparator();
-        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    m_shortcutKeyMask, "close");
-        return menu;
     }
 
     private JMenu createMenuSettings()
@@ -327,6 +315,9 @@ class AnalyzeDialog
         m_itemSort = new JCheckBoxMenuItem("Sort Alphabetically");
         m_itemSort.setSelected(m_sort);
         addMenuItem(menu, m_itemSort, KeyEvent.VK_S, "sort");
+        menu.addSeparator();
+        addMenuItem(menu, "Reload Configuration File", KeyEvent.VK_R, "reload",
+                    "Reload commands from configuration files");
         return menu;
     }
 
@@ -339,6 +330,9 @@ class AnalyzeDialog
                     "show-gametree");
         addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,
                     "gtp-shell");
+        menu.addSeparator();
+        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
+                    m_shortcutKeyMask, "close");
         return menu;
     }
 
