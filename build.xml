@@ -14,8 +14,8 @@ $Source$
 
 <property environment="env"/>
 <property name="docbook_xsl_home" value="${env.DOCBOOK_XSL_HOME}"/>
-<available property="xslAvailable" file="${docbook_xsl_home}/html/chunk.xsl"/>
-<available property="commAvailable" classname="javax.comm.SerialPort"/>
+<available property="xsl-available" file="${docbook_xsl_home}/html/chunk.xsl"/>
+<available property="comm-available" classname="javax.comm.SerialPort"/>
 
 <target name="all" depends="
  gmptogtp.jar,
@@ -31,7 +31,7 @@ $Source$
  twogtp.jar
 "/>
 
-<target name="clean" depends="cleanBuildDir">
+<target name="clean" depends="clean-build-dir">
 <delete failonerror="false" includeEmptyDirs="true">
 <fileset dir="lib"
  includes="
@@ -51,7 +51,7 @@ $Source$
 </delete>
 </target>
 
-<target name="cleanBuildDir">
+<target name="clean-build-dir">
 <delete failonerror="false" includeEmptyDirs="true">
 <fileset dir="build/config"/>
 <fileset dir="build/depcache"/>
@@ -83,7 +83,7 @@ $Source$
 </delete>
 </target>
 
-<target name="checkCommAvailable" unless="commAvailable">
+<target name="check-comm-available" unless="comm-available">
 <fail>
 Class javax.comm.SerialPort not found in the class path.
 Please install the Java Communications API from
@@ -91,7 +91,7 @@ http://java.sun.com/products/javacomm/
 </fail>
 </target>
 
-<target name="checkXslAvailable" unless="xslAvailable">
+<target name="check-xsl-available" unless="xsl-available">
 <fail>
 File "${docbook_xsl_home}/html/chunk.xsl" not found.
 Please install the DocBook XSL style sheets from
@@ -102,7 +102,7 @@ installation directory.
 </fail>
 </target>
 
-<target name="compile" depends="checkCommAvailable,depend,version,doc">
+<target name="compile" depends="check-comm-available,depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
  deprecation="true" optimize="true" listfiles="yes"/>
@@ -178,9 +178,9 @@ installation directory.
 </zip>
 </target>
 
-<target name="doc" depends="docCheckUptodate" unless="docUptodate"
+<target name="doc" depends="doc-check-uptodate" unless="doc-uptodate"
  description="Generate documentation using xsltproc">
-<antcall target="checkXslAvailable"/>
+<antcall target="check-xsl-available"/>
 <echo message="Running xsltproc"/>
 <exec executable="xsltproc">
 <arg line="--param admon.graphics 0"/>
@@ -210,12 +210,12 @@ installation directory.
 </copy>
 </target>
 
-<target name="doc-style" depends="docCheckUptodate" unless="docUptodate"
+<target name="doc-style" depends="doc-check-uptodate" unless="doc-uptodate"
  description="
 Generate documentation using ant style target.
 Not used at present due to problems with mdash in output (not understood
 by JEditorPane, slow speed and errors with old versions of Xalan).">
-<antcall target="checkXslAvailable"/>
+<antcall target="check-xsl-available"/>
 <style basedir="doc/xml" includes="book.xml" destdir="doc/html"
  style="${docbook_xsl_home}/html/chunk.xsl" force="true">
 <xmlcatalog>
@@ -247,8 +247,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <xmlvalidate file="doc/xml/book.xml"/>
 </target>
 
-<target name="docCheckUptodate">
-<uptodate property="docUptodate" targetfile="doc/html/index.html">
+<target name="doc-check-uptodate">
+<uptodate property="doc-uptodate" targetfile="doc/html/index.html">
 <srcfiles dir= "doc/xml" includes="*.xml"/>
 <srcfiles dir= "doc/html" includes="*.css"/>
 </uptodate>
@@ -523,7 +523,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </target>
 
 <target name="man">
-<antcall target="checkXslAvailable"/>
+<antcall target="check-xsl-available"/>
 <exec executable="xsltproc">
 <arg line="--param chunk.quietly 1"/>
 <arg line="-o doc/man/"/>
@@ -643,8 +643,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </jar>
 </target>
 
-<target name="version" depends="versionCheckUptodate"
- unless="versionUptodate">
+<target name="version" depends="version-check-uptodate"
+ unless="version-uptodate">
 <copy
 file="src/version/Version.java.in"
 tofile="src/version/Version.java" overwrite="true"/>
@@ -661,8 +661,8 @@ tofile="src/version/Version.java" overwrite="true"/>
  value="${version}"/>
 </target>
 
-<target name="versionCheckUptodate">
-<uptodate property="versionUptodate" targetfile="src/version/Version.java">
+<target name="version-check-uptodate">
+<uptodate property="version-uptodate" targetfile="src/version/Version.java">
 <srcfiles dir="."
  includes="
   build.properties,
