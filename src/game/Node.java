@@ -10,6 +10,7 @@ import go.*;
 
 //----------------------------------------------------------------------------
 
+/** Node in a GameTree. */
 public class Node
 {
     public Node()
@@ -316,7 +317,7 @@ public class Node
 
     /** Return color to play if explicitely set.
         Returns Color.EMPTY if color is not explicitely set.
-        @see getToMove() for getting the color to play.
+        @see #getToMove for getting the color to play.
     */
     public Color getPlayer()
     {
@@ -339,7 +340,7 @@ public class Node
     }
 
     /** Get other unspecified SGF properties.
-        @see setSgfProperty.
+        @see #addSgfProperty
     */
     public Map getSgfProperties()
     {
