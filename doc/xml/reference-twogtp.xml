@@ -451,11 +451,66 @@ Send command to white player.
 
 </variablelist>
 </para>
+</refsection>
+
+<refsection>
+<title>Examples</title>
+
+<para>
+Play 100 games between GNU Go default level and GNU Go level 5
+on a 9x9 board with alternating colors,
+save games and results to files beginning with gnugo-5:
+<programlisting>
+<userinput>
+BLACK="gnugo --mode gtp"
+WHITE="gnugo --mode gtp --level 5"
+twogtp -black "$BLACK" -white "$WHITE" -games 100 \
+  -size 9 -alternate -sgffile gnugo5 -auto
+</userinput>
+</programlisting>
+</para>
+
+<para>
+Create a HTML formatted result page of the games played in the previous
+example:
+<programlisting>
+<userinput>
+twogtp -analyze gnugo5.dat
+</userinput>
+</programlisting>
+</para>
+
+<para>
+Play one game between GNU Go default level and GNU Go level 5 using GoGui
+as a graphical display
+(to start play, select Computer Color/Both from the Game menu in GoGui):
+<programlisting>
+<userinput>
+BLACK="gnugo --mode gtp"
+WHITE="gnugo --mode gtp --level 5"
+gogui -program "twogtp -black \"$BLACK\" -white \"$WHITE\""
+</userinput>
+</programlisting>
+</para>
+
+<para>
+Play 100 games with same settings as in the first example with GoGui
+as a graphical display (start games automatically):
+<programlisting>
+<userinput>
+BLACK="gnugo --mode gtp"
+WHITE="gnugo --mode gtp --level 5"
+TWOGTP="twogtp -black \"$BLACK\" -white \"$WHITE\" -games 100 \
+  -size 9 -alternate -sgffile gnugo5"
+gogui -size 9 -program "$TWOGTP" -computer-both -auto
+</userinput>
+</programlisting>
+</para>
 
 <para>
 <!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
 </para>
-
 </refsection>
+
 
 </refentry>
