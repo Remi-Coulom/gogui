@@ -353,6 +353,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  utils/ErrorMessage.class
  utils/MessageQueue.class
  utils/Options.class
+ utils/ProcessUtils*.class
  utils/ProgressShow*.class
  utils/StringUtils.class
  version/Version.class
@@ -428,6 +429,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  utils/FileUtils.class
  utils/MessageQueue.class
  utils/Options.class
+ utils/ProcessUtils*.class
  utils/StringUtils.class
  version/Version.class
 "/>
@@ -444,6 +446,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  gtpserver/*.class
  utils/ErrorMessage.class
  utils/Options.class
+ utils/ProcessUtils*.class
  utils/StreamCopy.class
  utils/StringUtils.class
  version/Version.class
@@ -467,6 +470,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  utils/FileUtils.class
  utils/MessageQueue.class
  utils/Options.class
+ utils/ProcessUtils*.class
  utils/ProgressShow*.class
  utils/StringUtils.class
  version/Version.class
@@ -593,6 +597,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  utils/FileUtils.class
  utils/MessageQueue.class
  utils/Options.class
+ utils/ProcessUtils*.class
  utils/ProgressShow*.class
  utils/StringUtils.class
  version/Version.class
