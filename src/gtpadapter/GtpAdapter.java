@@ -543,7 +543,11 @@ public class GtpAdapter
     {
         if (! fillPass(color, response))
             return false;
-        String command = m_gtp.getCommandPlay(color) + " " + point;
+        String command = m_gtp.getCommandPlay(color) + " ";
+        if (point == null)
+            command = command + "PASS";
+        else
+            command = command + point;
         if (send(command, response))
         {
             m_board.play(new Move(point, color));
