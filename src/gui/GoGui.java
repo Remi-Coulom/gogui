@@ -978,7 +978,7 @@ class GoGui
             return;
         if (! showQuestion("Interrupt command?"))
             return;
-        interrupt();
+        sendInterrupt();
     }
 
     private void cbKomi()
@@ -1304,8 +1304,30 @@ class GoGui
             return;
         if (m_commandInProgress)
         {
-            interrupt();
-            m_commandThread.sendAsyncQuit();
+            int messageType = JOptionPane.YES_NO_CANCEL_OPTION;
+            int result =
+                JOptionPane.showConfirmDialog(this,
+                                              "Command in progress.\n" +
+                                              "Kill program before exiting?",
+                                              "GoGui: Question",
+                                              messageType);
+            switch (result)
+            {
+            case 0:
+                m_commandThread.destroyGtp();
+                break;
+            case 1:
+                if (m_commandThread.isInterruptSupported())
+                    sendInterrupt();
+                m_commandThread.sendAsyncQuit();
+                break;
+            case -1:
+            case 2:
+                return;
+            default:
+                assert(false);
+                break;
+            }
             m_commandThread.close();
         }
         else
@@ -1647,21 +1669,6 @@ class GoGui
         showStatus("Please mark dead groups.");
     }
 
-    private void interrupt()
-    {
-        if (! m_commandInProgress)
-            return;
-        showStatus("Interrupting...");
-        try
-        {
-            m_commandThread.sendInterrupt();
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-        }
-    }
-
     private void loadFile(File file, int move)
     {
         try
@@ -1922,6 +1929,21 @@ class GoGui
     private void sendGtpString(String commands)
     {        
         sendGtp(new StringReader(StringUtils.replace(commands, "\\n", "\n")));
+    }
+
+    private void sendInterrupt()
+    {
+        if (! m_commandInProgress)
+            return;
+        showStatus("Interrupting...");
+        try
+        {
+            m_commandThread.sendInterrupt();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+        }
     }
 
     private void setBoardCursor(int type)

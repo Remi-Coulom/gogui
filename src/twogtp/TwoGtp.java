@@ -155,7 +155,7 @@ public class TwoGtp
         try
         {
             if (gtp.isInterruptSupported())
-                gtp.interrupt();
+                gtp.sendInterrupt();
         }
         catch (Gtp.Error e)
         {

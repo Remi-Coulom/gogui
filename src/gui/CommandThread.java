@@ -29,6 +29,11 @@ class CommandThread
             m_gtp.waitForExit();
         }
     }
+
+    public void destroyGtp()
+    {
+        m_gtp.destroyProcess();
+    }
     
     /** Get response to asynchronous command.
         You must call getException() first.
@@ -80,7 +85,7 @@ class CommandThread
 
     public void sendInterrupt() throws Gtp.Error
     {
-        m_gtp.interrupt();
+        m_gtp.sendInterrupt();
     }
 
     public boolean isCommandSupported(String command)

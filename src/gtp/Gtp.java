@@ -84,6 +84,11 @@ public class Gtp
         m_out.close();
     }
 
+    public void destroyProcess()
+    {
+        m_process.destroy();
+    }
+
     public String getResponse()
     {
         return m_response;
@@ -160,7 +165,7 @@ public class Gtp
         return result;
     }
 
-    public void interrupt() throws Gtp.Error
+    public void sendInterrupt() throws Gtp.Error
     {
         if (m_isInterruptCommentSupported)
             sendComment("# interrupt");
