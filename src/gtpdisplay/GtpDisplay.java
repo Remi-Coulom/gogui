@@ -489,12 +489,11 @@ public class GtpDisplay
                 new Box.Filler(dimension, dimension, dimension);
             outerPanel.add(filler, BorderLayout.EAST);
         }
-        JLabel label = new JLabel();
+        JLabel label = new JLabel(" ");
         label.setBorder(BorderFactory.createLoweredBevelBorder());
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
         m_statusLabel = label;
-        clearStatus();
         return outerPanel;
     }
 
