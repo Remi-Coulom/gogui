@@ -367,7 +367,6 @@ public class GtpShell
         }
         else
         {
-            c.toLowerCase();
             if (m_showModifyWarning
                 && (c.startsWith("boardsize ")
                     || c.startsWith("black ")
