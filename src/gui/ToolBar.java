@@ -36,6 +36,11 @@ class ToolBar
                                       "Replay 10 moves");
         m_buttonEnd = addButton("player_end.png", "end", "End of game");
         add(new JToolBar.Separator());
+        m_buttonNextVariation =
+            addButton("down.png", "next-variation", "Next variation");
+        m_buttonPreviousVariation =
+            addButton("up.png", "previous-variation", "Previous variation");
+        add(new JToolBar.Separator());
         m_buttonPass = addButton("pass.png", "pass", "Pass");
         m_buttonEnter = addButton("next.png", "play", "Computer play");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
@@ -52,12 +57,16 @@ class ToolBar
     {
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
+        boolean hasNextVariation = (node.getNextVariation() != null);
+        boolean hasPreviousVariation = (node.getPreviousVariation() != null);
         m_buttonBeginning.setEnabled(hasFather);
         m_buttonBackward.setEnabled(hasFather);
         m_buttonBackward10.setEnabled(hasFather);
         m_buttonForward.setEnabled(hasChildren);
         m_buttonForward10.setEnabled(hasChildren);
         m_buttonEnd.setEnabled(hasChildren);
+        m_buttonNextVariation.setEnabled(hasNextVariation);
+        m_buttonPreviousVariation.setEnabled(hasPreviousVariation);
     }
 
     public void enableAll(boolean enable, Node node)
@@ -111,9 +120,13 @@ class ToolBar
 
     private JButton m_buttonNew;
 
+    private JButton m_buttonNextVariation;
+
     private JButton m_buttonOpen;
 
     private JButton m_buttonPass;
+
+    private JButton m_buttonPreviousVariation;
 
     private JButton m_buttonSave;
 
