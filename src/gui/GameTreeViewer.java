@@ -50,8 +50,6 @@ class GameNode
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         int width = m_gameTreePanel.getNodeWidth();
-        graphics.setColor(m_colorBackground);
-        graphics.fillRect(0, 0, width, width);
         Move move = m_node.getMove();
         int halfSize = width / 2;
         if (m_node.getNumberAddBlack() + m_node.getNumberAddWhite() > 0)
@@ -102,9 +100,6 @@ class GameNode
     }
 
     private int m_moveNumber;
-
-    private static final java.awt.Color m_colorBackground
-        = UIManager.getColor("Label.background");
 
     private static final java.awt.Color m_colorLightBlue
         = new java.awt.Color(0.57f, 0.68f, 0.91f);
