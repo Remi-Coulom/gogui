@@ -211,7 +211,7 @@ public class TwoGtp
             boolean isExtCommandBlack = m_black.isCommandSupported(cmd);
             boolean isExtCommandWhite = m_white.isCommandSupported(cmd);
             boolean isExtCommandReferee = false;
-            if (m_referee != null)
+            if (m_referee != null && ! m_refereeIsDisabled)
                 isExtCommandReferee = m_referee.isCommandSupported(cmd);
             if (isExtCommandBlack
                 && ! isExtCommandWhite && ! isExtCommandReferee)
@@ -252,7 +252,7 @@ public class TwoGtp
     {
         interruptProgram(m_black);
         interruptProgram(m_white);
-        if (m_referee != null)
+        if (m_referee != null && ! m_refereeIsDisabled)
             interruptProgram(m_referee);
     }
 
@@ -371,6 +371,8 @@ public class TwoGtp
             System.exit(-1);
         }
     }
+
+    private boolean m_refereeIsDisabled;
 
     private boolean m_alternate;
 
@@ -566,7 +568,7 @@ public class TwoGtp
 
     private boolean finalStatusCommand(String cmdLine, StringBuffer response)
     {
-        if (m_referee != null)
+        if (m_referee != null && ! m_refereeIsDisabled)
             return sendSingle(m_referee, cmdLine, response);
         else
             return sendEither(cmdLine, response);
@@ -734,7 +736,7 @@ public class TwoGtp
             String resultBlack = getResult(m_black);
             String resultWhite = getResult(m_white);
             String resultReferee = "?";
-            if (m_referee != null)
+            if (m_referee != null && ! m_refereeIsDisabled)
                 resultReferee = getResult(m_referee);
             double cpuTimeBlack = getCpuTime(m_black) - m_cpuTimeBlack;
             m_cpuTimeBlack = cpuTimeBlack;
@@ -860,6 +862,7 @@ public class TwoGtp
             if (commandBoardsize != null)
                 sendToReferee(commandBoardsize);
             sendToReferee(m_referee.getCommandClearBoard(size));
+            m_refereeIsDisabled = false;
         }
         m_inconsistentState = false;
         initGame(size);
@@ -1141,7 +1144,7 @@ public class TwoGtp
             return false;
         }
         response.append(response1);
-        if (m_referee != null)
+        if (m_referee != null && ! m_refereeIsDisabled)
             sendToReferee(m_referee.getCommandPlay(color) + " " + response1);
         play(new Move(point, color));
         if (m_board.bothPassed() && ! m_gameSaved)
@@ -1156,7 +1159,7 @@ public class TwoGtp
     {
         sendIfSupported(m_black, cmd, cmdLine);
         sendIfSupported(m_white, cmd, cmdLine);
-        if (m_referee != null)
+        if (m_referee != null && ! m_refereeIsDisabled)
             sendIfSupported(m_referee, cmd, cmdLine);
     }
 
@@ -1185,7 +1188,7 @@ public class TwoGtp
 
     private void sendToReferee(String command)
     {
-        if (m_referee == null)
+        if (m_referee == null || m_refereeIsDisabled)
             return;
         try
         {
@@ -1195,10 +1198,8 @@ public class TwoGtp
         {
             System.err.println("Referee denied " + command + " command: "
                                + e.getMessage() + "\n" +
-                               "Disabling referee.");
-            m_referee.close();
-            m_referee.waitForExit();
-            m_referee = null;
+                               "Disabling referee for this game.");
+            m_refereeIsDisabled = true;
         }        
     }
 
@@ -1219,6 +1220,11 @@ public class TwoGtp
         if (m_referee == null)
         {
             response.append("No referee enabled");
+            return false;
+        }
+        if (m_refereeIsDisabled)
+        {
+            response.append("Referee disabled for this game");
             return false;
         }
         return twogtpColor(m_referee, command, response);
