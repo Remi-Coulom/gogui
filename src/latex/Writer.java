@@ -72,7 +72,8 @@ public class Writer
     private void printBeginDocument()
     {
         m_out.println("\\documentclass{article}\n" +
-                      "\\usepackage{psgo}\n" +
+                      "\\usepackage{psgo}" +
+                      " % http://www.abo.fi/~vbos/psgo-frame.html\n" +
                       "\\pagestyle{empty}\n" +
                       "\\begin{document}\n" +
                       "\\begin{center}\n");
