@@ -456,6 +456,11 @@ public final class Gtp
             throw new Error("Program is dead");
         if (m_illegalState)
             throw new Error("Program sent illegal response");
+        if (m_autoNumber)
+        {
+            ++m_commandNumber;
+            command = Integer.toString(m_commandNumber) + " " + command;
+        }
         log(">> " + command);
         m_out.println(command);
         m_out.flush();
@@ -528,6 +533,11 @@ public final class Gtp
         }
         else
             throw new Gtp.Error("Interrupt not supported");
+    }
+
+    public void enableAutoNumber()
+    {
+        m_autoNumber = true;
     }
 
     public void setLogPrefix(String prefix)
@@ -603,6 +613,8 @@ public final class Gtp
         }   
     }
 
+    private boolean m_autoNumber;
+
     private boolean m_isInterruptCommentSupported;
 
     private boolean m_isProgramDead;
@@ -612,6 +624,8 @@ public final class Gtp
     private boolean m_log;
 
     private int m_protocolVersion = 1;
+
+    private int m_commandNumber;
 
     private BufferedReader m_in;
 
