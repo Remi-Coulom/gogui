@@ -10,6 +10,28 @@ import go.*;
 
 //----------------------------------------------------------------------------
 
+class TimeInfo
+{
+    public TimeInfo()
+    {
+        m_movesLeftBlack = -1;
+        m_movesLeftWhite = -1;
+        m_timeLeftBlack = Double.NaN;
+        m_timeLeftWhite = Double.NaN;
+    }
+
+    public int m_movesLeftBlack;
+
+    public int m_movesLeftWhite;
+
+    public double m_timeLeftBlack;
+
+    public double m_timeLeftWhite;
+
+}
+
+//----------------------------------------------------------------------------
+
 /** Node in a GameTree. */
 public class Node
 {
@@ -129,7 +151,9 @@ public class Node
     */
     public int getMovesLeftBlack()
     {
-        return m_movesLeftBlack;
+        if (m_timeInfo == null)
+            return -1;
+        return m_timeInfo.m_movesLeftBlack;
     }
 
     /** Moves left in byoyomi for white.
@@ -137,7 +161,9 @@ public class Node
     */
     public int getMovesLeftWhite()
     {
-        return m_movesLeftWhite;
+        if (m_timeInfo == null)
+            return -1;
+        return m_timeInfo.m_movesLeftWhite;
     }
 
     public int getNumberAddBlack()
@@ -183,7 +209,9 @@ public class Node
     */
     public double getTimeLeftBlack()
     {
-        return m_timeLeftBlack;
+        if (m_timeInfo == null)
+            return Double.NaN;
+        return m_timeInfo.m_timeLeftBlack;
     }
 
     /** Time left for white after move was made.
@@ -191,7 +219,9 @@ public class Node
     */
     public double getTimeLeftWhite()
     {
-        return m_timeLeftWhite;
+        if (m_timeInfo == null)
+            return Double.NaN;
+        return m_timeInfo.m_timeLeftWhite;
     }
 
     /** Get color to move.
@@ -250,22 +280,30 @@ public class Node
 
     public void setMovesLeftBlack(int moves)
     {
-        m_movesLeftBlack = moves;
+        if (m_timeInfo == null)
+            m_timeInfo = new TimeInfo();
+        m_timeInfo.m_movesLeftBlack = moves;
     }
 
     public void setMovesLeftWhite(int moves)
     {
-        m_movesLeftWhite = moves;
+        if (m_timeInfo == null)
+            m_timeInfo = new TimeInfo();
+        m_timeInfo.m_movesLeftWhite = moves;
     }
 
     public void setTimeLeftBlack(double timeLeft)
     {
-        m_timeLeftBlack = timeLeft;
+        if (m_timeInfo == null)
+            m_timeInfo = new TimeInfo();
+        m_timeInfo.m_timeLeftBlack = timeLeft;
     }
 
     public void setTimeLeftWhite(double timeLeft)
     {
-        m_timeLeftWhite = timeLeft;
+        if (m_timeInfo == null)
+            m_timeInfo = new TimeInfo();
+        m_timeInfo.m_timeLeftWhite = timeLeft;
     }
 
     public void setPlayer(Color color)
@@ -308,14 +346,6 @@ public class Node
         return getChild(i - 1);
     }
 
-    private int m_movesLeftBlack = -1;
-
-    private int m_movesLeftWhite = -1;
-
-    private double m_timeLeftBlack = Double.NaN;
-
-    private double m_timeLeftWhite = Double.NaN;
-
     private Color m_player = Color.EMPTY;
 
     private Move m_move;
@@ -323,6 +353,8 @@ public class Node
     private Node m_father;
 
     private String m_comment;
+
+    private TimeInfo m_timeInfo;
 
     private TreeMap m_sgfProperties;
 
