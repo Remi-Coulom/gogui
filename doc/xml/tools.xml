@@ -14,7 +14,7 @@ can be used as the Go program command given to GoGui:
 <term>GmpToGtp</term>
 <listitem>
 <para>
-Adpater program for playing games using the
+Adapter program for playing games using the
 Go Modem Protocol over a serial line.
 For using this tool, an implementation of the
 <ulink url="http://java.sun.com/products/javacomm/">
@@ -60,7 +60,7 @@ See <xref linkend="reference-netgtp"/> for a complete reference.
 <term>TwoGtp</term>
 <listitem>
 <para>
-Adpater program for playing games between two Go programs supporting GTP.
+Adapter program for playing games between two Go programs supporting GTP.
 See <xref linkend="reference-twogtp"/> for a complete reference.
 </para>
 </listitem>
