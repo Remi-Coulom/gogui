@@ -35,17 +35,17 @@ Do not edit Info.plist
 <key>CFBundleGetInfoString</key>
 <string>0.7pre1.x, Copyright 2004 Markus Enzenberger</string>
 
-<key>CFBundleHelpBookName</key>
-<string>GoGui Help</string>
-
 <key>CFBundleHelpBookFolder</key>
 <string>GoGui Help</string>
 
-<key>CFBundleIconFile</key>
-<string>GoGui.icns</string>
+<key>CFBundleHelpBookName</key>
+<string>GoGui Help</string>
 
 <key>CFBundleIdentifier</key>
 <string>net.sourceforge.gogui</string>
+
+<key>CFBundleIconFile</key>
+<string>GoGui.icns</string>
 
 <key>CFBundleInfoDictionaryVersion</key>
 <string>6.0</string>
