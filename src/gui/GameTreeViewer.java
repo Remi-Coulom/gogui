@@ -13,6 +13,7 @@ import game.*;
 import go.*;
 import utils.GuiUtils;
 import utils.Platform;
+import utils.Preferences;
 
 //----------------------------------------------------------------------------
 
@@ -74,23 +75,13 @@ class GameNode
             else
                 graphics.setColor(java.awt.Color.white);
             graphics.fillOval(0, 0, width, width);
-            String text = Integer.toString(m_moveNumber);
-            int textWidth = graphics.getFontMetrics().stringWidth(text);
-            int textHeight = graphics.getFont().getSize();
-            int xText = (width - textWidth) / 2;
-            int yText = textHeight + (width - textHeight) / 2;
-            if (move.getColor() == go.Color.BLACK)
-                graphics.setColor(java.awt.Color.white);
-            else
-                graphics.setColor(java.awt.Color.black);
-            graphics.drawString(text, xText, yText);
+            drawText(graphics);
         }
         if (m_node.getComment() != null
             && ! m_node.getComment().trim().equals(""))
         {
             graphics.setColor(m_colorLightBlue);
             graphics.drawLine(3, width + 2, width - 3, width + 2);
-            graphics.drawLine(3, width + 4, width - 3, width + 4);
         }
         if (m_gameTreePanel.isCurrent(m_node))
         {
@@ -119,6 +110,32 @@ class GameNode
     private GameTreePanel m_gameTreePanel;
 
     private Node m_node;
+
+    private void drawText(Graphics graphics)
+    {
+        if (m_gameTreePanel.getSizeMode() == GameTreePanel.SIZE_TINY)
+            return;
+        Move move = m_node.getMove();
+        int width = m_gameTreePanel.getNodeWidth();
+        String text;
+        if (m_gameTreePanel.getLabelMode() == GameTreePanel.LABEL_MOVE)
+        {
+            if (move.getPoint() == null)
+                return;
+            text = move.getPoint().toString();
+        }
+        else
+            text = Integer.toString(m_moveNumber);
+        int textWidth = graphics.getFontMetrics().stringWidth(text);
+        int textHeight = graphics.getFont().getSize();
+        int xText = (width - textWidth) / 2;
+        int yText = textHeight + (width - textHeight) / 2;
+        if (move.getColor() == go.Color.BLACK)
+            graphics.setColor(java.awt.Color.white);
+        else
+            graphics.setColor(java.awt.Color.black);
+        graphics.drawString(text, xText, yText);
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -127,31 +144,27 @@ class GameTreePanel
     extends JPanel
     implements Scrollable
 {
-    public GameTreePanel(GameTreeViewer.Listener listener, boolean fastPaint)
+    public static final int LABEL_NUMBER = 0;
+
+    public static final int LABEL_MOVE = 1;
+
+    public static final int SIZE_LARGE = 0;
+
+    public static final int SIZE_NORMAL = 1;
+
+    public static final int SIZE_SMALL = 2;
+
+    public static final int SIZE_TINY = 3;
+
+    public GameTreePanel(GameTreeViewer.Listener listener, boolean fastPaint,
+                         int labelMode, int sizeMode)
     {
         super(new SpringLayout());
         m_fastPaint = fastPaint;
         setBackground(UIManager.getColor("Label.background"));
-        m_nodeWidth = 25;
-        m_nodeDist = 35;
-        Font font = UIManager.getFont("Label.font");
-        if (font != null)
-        {
-            Font derivedFont = font.deriveFont(font.getSize() * 0.7f);
-            if (derivedFont != null)
-                font = derivedFont;
-        }
-        if (font != null)
-        {
-            m_nodeWidth = font.getSize() * 2;
-            if (m_nodeWidth % 2 == 0)
-                ++m_nodeWidth;
-            m_nodeDist = font.getSize() * 3;
-            if (m_nodeDist % 2 == 0)
-                ++m_nodeDist;
-        }
-        m_font = font;
-        m_preferredNodeSize = new Dimension(m_nodeWidth, m_nodeDist);
+        m_labelMode = labelMode;
+        m_sizeMode = sizeMode;
+        computeSizes(sizeMode);
         setOpaque(false);
         m_listener = listener;
         m_mouseListener = new MouseAdapter()
@@ -199,6 +212,11 @@ class GameTreePanel
         return m_fastPaint;
     }
     
+    public int getLabelMode()
+    {
+        return m_labelMode;
+    }
+    
     public int getNodeHeight()
     {
         return m_nodeHeight;
@@ -241,6 +259,11 @@ class GameTreePanel
         return m_nodeDist;
     }
 
+    public int getSizeMode()
+    {
+        return m_sizeMode;
+    }
+    
     public void gotoNode(Node node)
     {
         if (m_listener != null)
@@ -266,6 +289,43 @@ class GameTreePanel
     {
         GameNode gameNode = getGameNode(m_currentNode);
         gameNode.repaint();
+    }
+
+    public void setLabelMode(int mode)
+    {
+        switch (mode)
+        {
+        case LABEL_NUMBER:
+        case LABEL_MOVE:
+            if (mode != m_labelMode)
+            {
+                m_labelMode = mode;
+                update(m_gameTree, m_currentNode);
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    public void setSizeMode(int mode)
+    {
+        switch (mode)
+        {
+        case SIZE_LARGE:
+        case SIZE_NORMAL:
+        case SIZE_SMALL:
+        case SIZE_TINY:
+            if (mode != m_sizeMode)
+            {
+                m_sizeMode = mode;
+                computeSizes(m_sizeMode);
+                update(m_gameTree, m_currentNode);
+            }
+            break;
+        default:
+            break;
+        }
     }
 
     public void update(GameTree gameTree, Node currentNode)
@@ -335,6 +395,10 @@ class GameTreePanel
 
     private int m_currentNodeY;
 
+    private int m_labelMode;
+
+    private int m_sizeMode;
+
     private int m_nodeWidth;
 
     private int m_nodeHeight;
@@ -366,6 +430,49 @@ class GameTreePanel
     private MouseListener m_mouseListener;
 
     private java.awt.Point m_popupLocation;
+
+    private void computeSizes(int sizeMode)
+    {
+        float fontScale;
+        switch (sizeMode)
+        {
+        case SIZE_LARGE:
+            fontScale = 1.0f;
+            break;
+        case SIZE_NORMAL:
+            fontScale = 0.7f;
+            break;
+        case SIZE_SMALL:
+            fontScale = 0.5f;
+            break;
+        case SIZE_TINY:
+            fontScale = 0.2f;
+            break;
+        default:
+            fontScale = 0.7f;
+            assert(false);
+        }
+        m_nodeWidth = 25;
+        m_nodeDist = 35;
+        Font font = UIManager.getFont("Label.font");
+        if (font != null)
+        {
+            Font derivedFont = font.deriveFont(font.getSize() * fontScale);
+            if (derivedFont != null)
+                font = derivedFont;
+        }
+        if (font != null)
+        {
+            m_nodeWidth = font.getSize() * 2;
+            if (m_nodeWidth % 2 == 0)
+                ++m_nodeWidth;
+            m_nodeDist = font.getSize() * 3;
+            if (m_nodeDist % 2 == 0)
+                ++m_nodeDist;
+        }
+        m_font = font;
+        m_preferredNodeSize = new Dimension(m_nodeWidth, m_nodeDist);
+    }
 
     private int createNodes(Component father, Node node, int x, int y,
                             int dx, int dy, int moveNumber)
@@ -430,7 +537,7 @@ class GameTreePanel
         if (notExpanded)
         {
             int d1 = m_nodeWidth / 2;
-            int d2 = d1 + 7;
+            int d2 = d1 + 5;
             graphics.drawLine(x, y, x, y + d2);
             graphics.drawLine(x, y + d2, x + d1, y + d2);
         }
@@ -564,7 +671,7 @@ class GameTreePanel
     {
         if (NodeUtils.subtreeGreaterThan(node, 10000)
             && ! SimpleDialogs.showQuestion(this,
-                                            "Really show large subtree?"))
+                                            "Really expand large subtree?"))
             return;
         boolean changed = false;
         int depth = NodeUtils.getDepth(node);
@@ -612,14 +719,19 @@ public class GameTreeViewer
         public void toTop();
     }
 
-    public GameTreeViewer(Listener listener, boolean fastPaint)
+    public GameTreeViewer(Listener listener, boolean fastPaint,
+                          Preferences prefs)
     {
         super("Game Tree");
+        m_prefs = prefs;
+        setPrefsDefaults(prefs);
+        int sizeMode = prefs.getInt("gametree-size");
+        int labelMode = prefs.getInt("gametree-labels");
         GuiUtils.setGoIcon(this);
-        createMenuBar();
+        createMenuBar(labelMode, sizeMode);
         Container contentPane = getContentPane();
         m_listener = listener;
-        m_panel = new GameTreePanel(listener, fastPaint);
+        m_panel = new GameTreePanel(listener, fastPaint, labelMode, sizeMode);
         m_scrollPane =
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -641,6 +753,18 @@ public class GameTreeViewer
             m_listener.toTop();
         else if (command.equals("gtp-shell"))
             m_listener.cbGtpShell();
+        else if (command.equals("label-move"))
+            cbLabelMode(GameTreePanel.LABEL_MOVE);
+        else if (command.equals("label-number"))
+            cbLabelMode(GameTreePanel.LABEL_NUMBER);
+        else if (command.equals("size-large"))
+            cbSizeMode(GameTreePanel.SIZE_LARGE);
+        else if (command.equals("size-normal"))
+            cbSizeMode(GameTreePanel.SIZE_NORMAL);
+        else if (command.equals("size-small"))
+            cbSizeMode(GameTreePanel.SIZE_SMALL);
+        else if (command.equals("size-tiny"))
+            cbSizeMode(GameTreePanel.SIZE_TINY);
         else
             assert(false);
     }
@@ -673,9 +797,23 @@ public class GameTreeViewer
 
     private GameTreePanel m_panel;
 
+    private JMenuItem m_itemLabelNumber;
+
+    private JMenuItem m_itemLabelMove;
+
+    private JMenuItem m_itemSizeLarge;
+
+    private JMenuItem m_itemSizeNormal;
+
+    private JMenuItem m_itemSizeSmall;
+
+    private JMenuItem m_itemSizeTiny;
+
     private JScrollPane m_scrollPane;
 
     private Listener m_listener;
+
+    private Preferences m_prefs;
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
                                   String command)
@@ -703,6 +841,26 @@ public class GameTreeViewer
         return item;
     }
 
+    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group,
+                                   String label, int mnemonic, String command)
+    {
+        JMenuItem item = new JRadioButtonMenuItem(label);
+        group.add(item);
+        return addMenuItem(menu, item, mnemonic, command);
+    }
+
+    private void cbLabelMode(int mode)
+    {
+        m_prefs.setInt("gametree-labels", mode);
+        m_panel.setLabelMode(mode);
+    }
+
+    private void cbSizeMode(int mode)
+    {
+        m_prefs.setInt("gametree-size", mode);
+        m_panel.setSizeMode(mode);
+    }
+
     private JMenu createMenu(String name, int mnemonic)
     {
         JMenu menu = new JMenu(name);
@@ -710,11 +868,64 @@ public class GameTreeViewer
         return menu;
     }
 
-    private void createMenuBar()
+    private void createMenuBar(int labelMode, int sizeMode)
     {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuWindows());
+        menuBar.add(createMenuSettings(labelMode, sizeMode));
         setJMenuBar(menuBar);
+    }
+
+    private JMenu createMenuSettings(int labelMode, int sizeMode)
+    {
+        JMenu menu = createMenu("Settings", KeyEvent.VK_S);
+        JMenu menuLabel = createMenu("Labels", KeyEvent.VK_L);
+        ButtonGroup group = new ButtonGroup();
+        m_itemLabelNumber = addRadioItem(menuLabel, group, "Move Number",
+                                         KeyEvent.VK_N, "label-number");
+        m_itemLabelMove = addRadioItem(menuLabel, group, "Move",
+                                       KeyEvent.VK_M, "label-move");
+        switch (labelMode)
+        {
+        case GameTreePanel.LABEL_NUMBER:
+            m_itemLabelNumber.setSelected(true);
+            break;
+        case GameTreePanel.LABEL_MOVE:
+            m_itemLabelMove.setSelected(true);
+            break;
+        default:
+            break;
+        }
+        menu.add(menuLabel);
+        JMenu menuSize = createMenu("Size", KeyEvent.VK_S);
+        group = new ButtonGroup();
+        m_itemSizeLarge = addRadioItem(menuSize, group, "Large",
+                                        KeyEvent.VK_L, "size-large");
+        m_itemSizeNormal = addRadioItem(menuSize, group, "Normal",
+                                        KeyEvent.VK_N, "size-normal");
+        m_itemSizeSmall = addRadioItem(menuSize, group, "Small",
+                                        KeyEvent.VK_S, "size-small");
+        m_itemSizeTiny = addRadioItem(menuSize, group, "Tiny",
+                                      KeyEvent.VK_T, "size-tiny");
+        switch (sizeMode)
+        {
+        case GameTreePanel.SIZE_LARGE:
+            m_itemSizeLarge.setSelected(true);
+            break;
+        case GameTreePanel.SIZE_NORMAL:
+            m_itemSizeNormal.setSelected(true);
+            break;
+        case GameTreePanel.SIZE_SMALL:
+            m_itemSizeSmall.setSelected(true);
+            break;
+        case GameTreePanel.SIZE_TINY:
+            m_itemSizeTiny.setSelected(true);
+            break;
+        default:
+            break;
+        }
+        menu.add(menuSize);
+        return menu;
     }
 
     private JMenu createMenuWindows()
@@ -733,6 +944,12 @@ public class GameTreeViewer
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     m_shortcutKeyMask, "close");
         return menu;
+    }
+
+    private static void setPrefsDefaults(Preferences prefs)
+    {
+        prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
+        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
     }
 }
 

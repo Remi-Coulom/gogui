@@ -10,7 +10,7 @@ Nodes are displayed as a black or white stone with a move number,
 if the node contains a move.
 A symbol containing four small stones is used for nodes
 containing setup stones and a gray diamond for other nodes.
-Nodes containing a comment have 2 small black lines under the node.
+Nodes containing a comment have a small blue line under the node.
 The current node is marked with a red cursor.
 </para>
 <para>

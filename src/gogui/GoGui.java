@@ -349,7 +349,7 @@ class GoGui
     {
         if (m_gameTreeViewer == null)
         {
-            m_gameTreeViewer = new GameTreeViewer(this, m_fastPaint);
+            m_gameTreeViewer = new GameTreeViewer(this, m_fastPaint, m_prefs);
             restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         }
         updateGameTree(true);
