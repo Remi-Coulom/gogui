@@ -5,10 +5,54 @@
 
 package utils;
 
+import java.util.*;
+
 //-----------------------------------------------------------------------------
 
 public class StringUtils
 {
+    public static String[] getCmdArray(String command)
+    {
+        Vector vector = new Vector();
+        boolean escape = false;
+        boolean inString = false;
+        StringBuffer token = new StringBuffer();
+        for (int i = 0; i < command.length(); ++i)
+        {
+            char c = command.charAt(i);
+            if (c == '"' && ! escape)
+            {
+                if (inString)
+                {
+                    vector.add(token.toString());
+                    token = new StringBuffer();
+                }
+                inString = ! inString;
+            }
+            else if (Character.isWhitespace(c) && ! inString)
+            {
+                if (token.length() > 0)
+                {
+                    vector.add(token.toString());
+                    token = new StringBuffer();
+                }
+            }
+            else
+                token.append(c);
+            escape = (c == '\\');
+        }
+        if (token.length() > 0)
+            vector.add(token.toString());
+        int size = vector.size();
+        String result[] = new String[size];
+        for (int i = 0; i < size; ++i)
+        {
+            result[i] = (String)vector.get(i);
+            System.err.println("Arg " + i + " " + result[i]);
+        }
+        return result;
+    }
+
     public static String replace(String s, String oldStr, String newStr)
     {
         StringBuffer buffer = new StringBuffer(s);
