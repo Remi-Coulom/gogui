@@ -1350,9 +1350,9 @@ class GoGui
         File file = SimpleDialogs.showOpenSgf(this);
         if (file == null)
             return;
-        loadFile(file, -1);
         m_menuBar.addRecent(file);
         m_menuBar.saveRecent();
+        loadFile(file, -1);
     }
 
     private void cbOpenRecent()
@@ -1360,6 +1360,8 @@ class GoGui
         if (m_needsSave && ! checkSaveGame())
             return;
         File file = m_menuBar.getSelectedRecent();
+        m_menuBar.addRecent(file);
+        m_menuBar.saveRecent();
         loadFile(file, -1);
     }
 
