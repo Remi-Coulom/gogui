@@ -85,9 +85,9 @@ class SgfToTex
 
     private static void convert(InputStream in, OutputStream out,
                                 String title, boolean usePass)
-        throws sgf.Reader.Error
+        throws sgf.Reader.SgfError
     {
-        sgf.Reader reader = new sgf.Reader(new InputStreamReader(in), null);
+        sgf.Reader reader = new sgf.Reader(in, null);
         new latex.Writer(title, out, reader.getGameTree(), usePass);
     }
 

@@ -2046,8 +2046,8 @@ class GoGui
         {
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
-            java.io.Reader fileReader = new FileReader(file);
-            sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
+            FileInputStream fileStream = new FileInputStream(file);
+            sgf.Reader reader = new sgf.Reader(fileStream, file.toString());
             GameInformation gameInformation =
                 reader.getGameTree().getGameInformation();
             initGame(gameInformation.m_boardSize);
@@ -2065,7 +2065,7 @@ class GoGui
         {
             showError("File not found:\n" + file);
         }
-        catch (sgf.Reader.Error e)
+        catch (sgf.Reader.SgfError e)
         {
             showError("Could not read file:", e);
         }

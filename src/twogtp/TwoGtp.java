@@ -832,12 +832,13 @@ public class TwoGtp
                 return;
             try
             {
+                FileInputStream fileStream = new FileInputStream(file);
                 sgf.Reader reader =
-                    new sgf.Reader(new FileReader(file), file.toString());
+                    new sgf.Reader(fileStream, file.toString());
                 Node root = reader.getGameTree().getRoot();
                 m_games.add(Compare.getAllAsMoves(root));
             }
-            catch (sgf.Reader.Error e)
+            catch (sgf.Reader.SgfError e)
             {
                 System.err.println("Error reading " + file + ": " +
                                    e.getMessage());

@@ -17,10 +17,10 @@ import utils.ErrorMessage;
 
 public class Reader
 {
-    public static class Error
+    public static class SgfError
         extends ErrorMessage
     {
-        public Error(String s)
+        public SgfError(String s)
         {
             super(s);
         }
@@ -29,11 +29,20 @@ public class Reader
     /** @param reader Stream to read from.
         @param name Name prepended to error messages.
     */
-    public Reader(java.io.Reader reader, String name)
-        throws Error
+    public Reader(InputStream in, String name)
+        throws SgfError
     {
         try
         {
+            InputStreamReader reader;
+            try
+            {
+                reader = new InputStreamReader(in, "ISO-8859-1");
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                reader = new InputStreamReader(in);
+            }
             m_in = new BufferedReader(reader);
             m_tokenizer = new StreamTokenizer(m_in);
             m_name = name;
@@ -127,7 +136,7 @@ public class Reader
             return new Error(lineNumber + ": " + message);
     }
 
-    private Color parseColor(String s) throws Error
+    private Color parseColor(String s) throws SgfError
     {
         Color c;
         s = s.trim().toLowerCase();
@@ -140,7 +149,7 @@ public class Reader
         return c;
     }
 
-    private double parseDouble(String s) throws Error
+    private double parseDouble(String s) throws SgfError
     {
         double f = 0;
         try
@@ -154,7 +163,7 @@ public class Reader
         return f;
     }
 
-    private int parseInt(String s) throws Error
+    private int parseInt(String s) throws SgfError
     {
         int i = -1;
         try
@@ -168,7 +177,7 @@ public class Reader
         return i;
     }
 
-    private Point parsePoint(String s) throws Error
+    private Point parsePoint(String s) throws SgfError
     {
         s = s.trim().toLowerCase();
         if (s.equals(""))
@@ -186,7 +195,7 @@ public class Reader
     }
 
     private Node readNext(Node father, boolean isRoot)
-        throws IOException, Error
+        throws IOException, SgfError
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
@@ -208,7 +217,7 @@ public class Reader
     }
     
     private boolean readProp(Node node, boolean isRoot)
-        throws IOException, Error
+        throws IOException, SgfError
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
@@ -326,7 +335,7 @@ public class Reader
         return false;
     }
 
-    private String readValue() throws IOException, Error
+    private String readValue() throws IOException, SgfError
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;

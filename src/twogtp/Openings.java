@@ -63,8 +63,8 @@ public class Openings
     public void loadFile(int i) throws Exception
     {
         File file = m_files[i];
-        sgf.Reader reader =
-            new sgf.Reader(new FileReader(file), file.toString());
+        FileInputStream fileStream = new FileInputStream(file);
+        sgf.Reader reader = new sgf.Reader(fileStream, file.toString());
         m_gameTree = reader.getGameTree();
         m_currentFile = i;
     }

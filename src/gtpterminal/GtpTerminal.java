@@ -238,8 +238,8 @@ public class GtpTerminal
         File file = new File(cmdArray[1]);
         try
         {
-            java.io.Reader fileReader = new FileReader(file);
-            sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
+            FileInputStream fileStream = new FileInputStream(file);
+            sgf.Reader reader = new sgf.Reader(fileStream, file.toString());
             GameTree gameTree = reader.getGameTree();
             GameInformation gameInformation = gameTree.getGameInformation();
             if (gameInformation.m_handicap > 0)
@@ -271,7 +271,7 @@ public class GtpTerminal
         {
             System.out.println("File not found: " + file);
         }
-        catch (sgf.Reader.Error e)
+        catch (sgf.Reader.SgfError e)
         {
             System.out.println("Could not read file " + file
                                + ": " + e.getMessage());

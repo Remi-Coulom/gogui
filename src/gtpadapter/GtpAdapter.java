@@ -374,8 +374,9 @@ public class GtpAdapter
         Color toMove = Color.EMPTY;
         try
         {
-            java.io.Reader fileReader = new FileReader(new File(filename));
-            sgf.Reader reader = new sgf.Reader(fileReader, filename);
+            FileInputStream fileStream =
+                new FileInputStream(new File(filename));
+            sgf.Reader reader = new sgf.Reader(fileStream, filename);
             GameTree gameTree = reader.getGameTree();
             m_boardSize = gameTree.getGameInformation().m_boardSize;
             m_board = new Board(m_boardSize);
@@ -420,7 +421,7 @@ public class GtpAdapter
             response.append("File not found");
             return false;
         }
-        catch (sgf.Reader.Error e)
+        catch (sgf.Reader.SgfError e)
         {
             response.append("Could not read file");
             return false;
