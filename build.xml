@@ -83,6 +83,7 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="compile" depends="checkCommAvailable,version,doc">
+<mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" deprecation="true"
  optimize="true" listfiles="yes"/>
 <copy todir="build">
