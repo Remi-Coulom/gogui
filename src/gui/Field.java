@@ -204,8 +204,6 @@ public class Field
     private void drawCircle(Graphics g, java.awt.Color color, boolean fill)
     {
         Dimension size = getSize();
-        int dx = size.width / 4;
-        int dy = size.height / 4;
         g.setColor(color);
         int radiusX = size.width / 6;
         int radiusY = size.height / 6;
@@ -302,10 +300,10 @@ public class Field
     private void drawMarkup(Graphics g)
     {
         Dimension size = getSize();
-        int dx = size.width / 2;
-        int dy = size.height / 2;
+        int dx = size.width / 4;
+        int dy = size.height / 4;
         g.setColor(java.awt.Color.blue);
-        g.drawRect(dx / 2, dy / 2, size.width - dx + 1, size.height - dy + 1);
+        g.drawRect(dx, dy, size.width - 2 * dx, size.height - 2 * dy);
     }
 
     private void drawSelect(Graphics g)
