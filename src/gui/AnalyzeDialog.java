@@ -174,6 +174,7 @@ public class AnalyzeDialog
                 m_list.requestFocusInWindow();
             m_runButton.setEnabled(false);
         }
+        m_autoRun.setSelected(false);
     }
 
     private boolean m_onlySupportedCommands;
