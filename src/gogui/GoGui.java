@@ -80,7 +80,8 @@ class GoGui
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_boardPanel, m_infoPanel);
-        m_splitPane.setContinuousLayout(true);
+        if (! m_fastPaint)
+            m_splitPane.setContinuousLayout(true);
         int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
         InputMap splitPaneInputMap = m_splitPane.getInputMap(condition);
         // According to the docs, null should remove the action, but it does
