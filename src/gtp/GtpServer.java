@@ -10,12 +10,87 @@ import utils.*;
 
 //-----------------------------------------------------------------------------
 
+class ReadThread
+    extends Thread
+{
+    public ReadThread(InputStream in)
+    {
+        m_in = new BufferedReader(new InputStreamReader(in));
+    }
+
+    public String getLine()
+    {        
+        synchronized (this)
+        {
+            notifyAll();
+            try
+            {
+                wait();
+            }
+            catch (InterruptedException e)
+            {
+                System.err.println("Interrupted");
+            }
+            assert(m_receivedLine);
+            m_receivedLine = false;
+            return m_line;
+        }
+    }
+
+    public void run()
+    {
+        try
+        {
+            synchronized (this)
+            {
+                while (! m_quit)
+                {
+                    assert(! m_receivedLine);
+                    m_line = m_in.readLine();
+                    if (m_line == null)
+                        return;
+                    m_line = m_line.trim();
+                    if (m_line.equals("") || m_line.charAt(0) == '#')
+                        continue;
+                    m_receivedLine = true;
+                    notifyAll();
+                    wait();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            String msg = e.getMessage();
+            if (msg == null)
+                msg = e.getClass().getName();
+            System.err.println(msg);
+        }
+    }
+
+    public void quit()
+    {
+        synchronized (this)
+        {
+            m_quit = true;
+            notifyAll();
+        }
+    }
+
+    private boolean m_quit = false;
+
+    private boolean m_receivedLine = false;
+
+    private BufferedReader m_in;
+
+    private String m_line;
+}
+
 public abstract class GtpServer
 {
     public GtpServer(InputStream in, OutputStream out)
     {
-        m_in = new BufferedReader(new InputStreamReader(in));
         m_out = new PrintStream(out);
+        m_in = in;
     }
 
     public abstract boolean handleCommand(String command,
@@ -24,16 +99,14 @@ public abstract class GtpServer
     public void mainLoop() throws IOException
     {
         m_quit = false;
-        while (true && ! m_quit)
+        ReadThread readThread = new ReadThread(m_in);
+        readThread.start();
+        while (! m_quit)
         {
-            String line = m_in.readLine();
-            if (line == null)
-                return;
-            line = line.trim();
-            if (line.equals("") || line.charAt(0) == '#')
-                continue;
+            String line = readThread.getLine();
             parseLine(line);
         }
+        readThread.quit();
     }
 
     protected void setQuit()
@@ -47,11 +120,11 @@ public abstract class GtpServer
 
     private int m_commandId;
 
-    private BufferedReader m_in;
+    private InputStream m_in;
 
     private PrintStream m_out;
 
-    private void parseLine(String line)
+    public synchronized void parseLine(String line)
     {
         assert(! line.trim().equals(""));
         int len = line.length();
