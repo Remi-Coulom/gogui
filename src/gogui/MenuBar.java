@@ -122,6 +122,11 @@ public class MenuBar
         return m_itemShowCursor.isSelected();
     }
 
+    public boolean getShowGrid()
+    {
+        return m_itemShowGrid.isSelected();
+    }
+
     public boolean getShowInfoPanel()
     {
         return m_itemShowInfoPanel.isSelected();
@@ -213,7 +218,10 @@ public class MenuBar
         m_menuSettings.setEnabled(true);
         m_itemBeepAfterMove.setEnabled(true);
         m_itemShowCursor.setEnabled(true);
+        m_itemShowGrid.setEnabled(true);
+        m_itemShowInfoPanel.setEnabled(true);
         m_itemShowLastMove.setEnabled(true);
+        m_itemShowToolbar.setEnabled(true);
         m_itemShowVariations.setEnabled(true);
         m_menuWindow.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
@@ -269,6 +277,11 @@ public class MenuBar
     public void setShowCursor(boolean enable)
     {
         m_itemShowCursor.setSelected(enable);
+    }
+
+    public void setShowGrid(boolean enable)
+    {
+        m_itemShowGrid.setSelected(enable);
     }
 
     public void setShowInfoPanel(boolean enable)
@@ -338,6 +351,8 @@ public class MenuBar
     private JCheckBoxMenuItem m_itemBeepAfterMove;
 
     private JCheckBoxMenuItem m_itemShowCursor;
+
+    private JCheckBoxMenuItem m_itemShowGrid;
 
     private JCheckBoxMenuItem m_itemShowLastMove;
 
@@ -629,7 +644,10 @@ public class MenuBar
                     "beep-after-move");
         m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
         m_itemShowCursor.setSelected(true);
-        addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_S, "show-cursor");
+        addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_C, "show-cursor");
+        m_itemShowGrid = new JCheckBoxMenuItem("Show Grid");
+        m_itemShowGrid.setSelected(true);
+        addMenuItem(menu, m_itemShowGrid, KeyEvent.VK_G, "show-grid");
         m_itemShowInfoPanel = new JCheckBoxMenuItem("Show Info Panel");
         addMenuItem(menu, m_itemShowInfoPanel, KeyEvent.VK_I,
                     "show-info-panel");

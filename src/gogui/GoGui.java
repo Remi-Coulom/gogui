@@ -108,7 +108,9 @@ class GoGui
         m_showLastMove = m_prefs.getBool("show-last-move");
         m_showVariations = m_prefs.getBool("show-variations");
         m_menuBar.setShowCursor(m_prefs.getBool("show-cursor"));
+        m_menuBar.setShowGrid(m_prefs.getBool("show-grid"));
         m_guiBoard.setShowCursor(m_prefs.getBool("show-cursor"));
+        m_guiBoard.setShowGrid(m_prefs.getBool("show-grid"));
         setJMenuBar(m_menuBar.getMenuBar());
         if (program != null)
             m_program = program;
@@ -157,6 +159,9 @@ class GoGui
             && ! command.equals("gtp-shell")
             && ! command.equals("help")
             && ! command.equals("interrupt")
+            && ! command.equals("show-grid")
+            && ! command.equals("show-toolbar")
+            && ! command.equals("show-info-panel")
             && ! command.equals("show-last-move")
             && ! command.equals("exit"))
             return;
@@ -252,6 +257,8 @@ class GoGui
             cbSetupWhite();
         else if (command.equals("show-cursor"))
             cbShowCursor();
+        else if (command.equals("show-grid"))
+            cbShowGrid();
         else if (command.equals("show-gametree"))
             cbShowGameTree();
         else if (command.equals("show-info-panel"))
@@ -1441,6 +1448,14 @@ class GoGui
         m_guiBoard.repaint();
     }
 
+    private void cbShowGrid()
+    {
+        boolean showGrid = m_menuBar.getShowGrid();
+        m_guiBoard.setShowGrid(showGrid);
+        m_prefs.setBool("show-grid", showGrid);
+        m_guiBoard.repaint();
+    }
+
     private void cbShowLastMove()
     {
         m_showLastMove = m_menuBar.getShowLastMove();
@@ -2390,6 +2405,7 @@ class GoGui
         prefs.setBoolDefault("show-gtpshell", false);
         prefs.setBoolDefault("show-gametree", false);
         prefs.setBoolDefault("show-cursor", true);
+        prefs.setBoolDefault("show-grid", true);
         prefs.setBoolDefault("show-info-panel", true);
         prefs.setBoolDefault("show-last-move", false);
         prefs.setBoolDefault("show-toolbar", true);

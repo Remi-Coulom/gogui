@@ -436,6 +436,15 @@ Show cursor on board for allowing to click on fields with the
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Show Grid</guimenuitem></term>
+<listitem>
+<para>
+Show grid.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Show Info Panel</guimenuitem></term>
 <listitem>
 <para>

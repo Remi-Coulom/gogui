@@ -25,13 +25,22 @@ class BoardLabel
         setForeground(java.awt.Color.DARK_GRAY);
     }
 
+    public void setShow(boolean show)
+    {
+        m_show = show;
+    }
+
     public void paintComponent(Graphics graphics)
     {
+        if (! m_show)
+            return;
         int stringWidth = graphics.getFontMetrics().stringWidth("XX");
         if (getSize().width < stringWidth)
             return;
         super.paintComponent(graphics);
     }
+
+    private boolean m_show = true;
 }
 
 //----------------------------------------------------------------------------
@@ -193,6 +202,7 @@ public class Board
         removeAll();
         setOpaque(false);        
         setLayout(new GridLayout(size + 2, size + 2));
+        m_labels.clear();
         addColumnLabels(size);
         Font font = UIManager.getFont("Label.font");
         if (font != null)
@@ -412,6 +422,12 @@ public class Board
         m_showCursor = showCursor;
     }
 
+    public void setShowGrid(boolean showGrid)
+    {
+        for (int i = 0; i < m_labels.size(); ++i)
+            ((BoardLabel)m_labels.get(i)).setShow(showGrid);
+    }
+
     public void setSelect(go.Point p, boolean select)
     {
         getField(p).setSelect(select);
@@ -591,6 +607,8 @@ public class Board
 
     private Listener m_listener;
 
+    private Vector m_labels = new Vector(100, 100);
+
     private void addColumnLabels(int size)
     {
         add(Box.createHorizontalGlue());
@@ -598,6 +616,7 @@ public class Board
         for (int x = 0; x < size; ++x)
         {
             BoardLabel label = new BoardLabel(new Character(c).toString());
+            m_labels.add(label);
             add(label);
             ++c;
             if (c == 'I')
@@ -610,6 +629,7 @@ public class Board
     {
         BoardLabel label = new BoardLabel(text);
         add(label);
+        m_labels.add(label);
     }
 
     private void calcScore()
