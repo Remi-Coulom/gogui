@@ -16,6 +16,7 @@ SGF to LaTeX converter.
 
 <cmdsynopsis>
 <command>sgftotex</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-help</option></arg>
 <arg><option>-pass</option></arg>
 <arg><option>-version</option></arg>
@@ -36,6 +37,15 @@ Converts <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files to
 <refsection>
 <title>Options</title>
 <variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+Read command line options and arguments from <replaceable>file</replaceable>.
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><option>-help</option></term>

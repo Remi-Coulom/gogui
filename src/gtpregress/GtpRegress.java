@@ -42,11 +42,13 @@ class GtpRegress
         try
         {
             String options[] = {
+                "config:",
                 "help",
                 "output:",
                 "version"
             };
             Options opt = new Options(args, options);
+            opt.handleConfigOption();
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
@@ -565,9 +567,10 @@ class GtpRegress
         out.print("Usage: java -jar regression.jar [options] program test.tst"
                   + "[...]\n" +
                   "\n" +
-                  "  -help       display this help and exit\n" +
-                  "  -output dir output directory\n" +
-                  "  -version    display this help and exit\n");
+                  "-config    config file\n" +
+                  "-help    display this help and exit\n" +
+                  "-output  output directory\n" +
+                  "-version display this help and exit\n");
     }
 
     private String sendCommand(String command) throws Gtp.Error

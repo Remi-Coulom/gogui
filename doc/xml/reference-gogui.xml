@@ -22,6 +22,7 @@
 <arg choice="plain"><option>-computer-none</option></arg>
 </group>
 <arg><option>-command</option> <replaceable>command</replaceable></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-file</option> <replaceable>filename</replaceable></arg>
 <arg><option>-fillpasses</option></arg>
 <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
@@ -107,6 +108,15 @@ Computer plays both sides.
 </term>
 <listitem>
 Computer plays no side.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+Read command line options and arguments from <replaceable>file</replaceable>.
 </listitem>
 </varlistentry>
 

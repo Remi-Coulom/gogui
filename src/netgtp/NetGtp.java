@@ -46,10 +46,12 @@ class NetGtp
         try
         {
             String options[] = {
+                "config:",
                 "help",
                 "version"
             };
             Options opt = new Options(args, options);
+            opt.handleConfigOption();
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
@@ -89,8 +91,9 @@ class NetGtp
     {
         out.print("Usage: java -jar netgtp.jar [options] hostname port\n" +
                   "\n" +
-                  "  -help    display this help and exit\n" +
-                  "  -version print version and exit\n");
+                  "-config  config file\n" +
+                  "-help    display this help and exit\n" +
+                  "-version print version and exit\n");
     }
 }
     

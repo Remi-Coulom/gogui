@@ -18,6 +18,7 @@ Adpater from Go Text Protocol to Go Modem Protocol.
 <arg><option>-baud</option> <replaceable>n</replaceable></arg>
 <arg><option>-color</option><group choice="plain">
   <arg choice="plain">black</arg><arg choice="plain">white</arg></group></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-device</option> <replaceable>serial</replaceable></arg>
 <arg><option>-flow</option> <group choice="plain">
   <arg choice="plain">rtscts</arg><arg choice="plain">xonxoff</arg>
@@ -89,6 +90,15 @@ Speed of serial device (default 2400).
 </term>
 <listitem>
 Color of the modem player.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+Read command line options and arguments from <replaceable>file</replaceable>.
 </listitem>
 </varlistentry>
 

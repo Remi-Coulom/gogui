@@ -16,6 +16,7 @@ Dummy Go program for testing GTP controlling programs.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gtpdummy</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
 </cmdsynopsis>
 <cmdsynopsis>
@@ -38,6 +39,15 @@ Plays random moves.
 <refsection>
 <title>Options</title>
 <variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+Read command line options and arguments from <replaceable>file</replaceable>.
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><option>-help</option></term>

@@ -110,16 +110,19 @@ public class GtpDummy
         try
         {
             String options[] = {
+                "config:",
                 "help",
                 "log:",
                 "version"
             };
             Options opt = new Options(args, options);
+            opt.handleConfigOption();
             if (opt.isSet("help"))
             {
                 String helpText =
                     "Usage: java -jar gtpdummy.jar [options]\n" +
                     "\n" +
+                    "-config       config file\n" +
                     "-help         display this help and exit\n" +
                     "-log file     log GTP stream to file\n" +
                     "-version      print version and exit\n";

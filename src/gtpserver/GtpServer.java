@@ -55,12 +55,14 @@ class GtpServer
         try
         {
             String options[] = {
+                "config:",
                 "help",
                 "loop",
                 "verbose",
                 "version",
             };
             Options opt = new Options(args, options);
+            opt.handleConfigOption();
             boolean verbose = opt.isSet("verbose");
             boolean loop = opt.isSet("loop");
             if (opt.isSet("help"))
@@ -97,10 +99,11 @@ class GtpServer
     {
         out.print("Usage: java -jar gtpnet.jar [options] program port\n" +
                   "\n" +
-                  "  -help    display this help and exit\n" +
-                  "  -loop    restart after connection finished\n" +
-                  "  -verbose print debugging messages\n" +
-                  "  -version print version and exit\n");
+                  "-config  config file\n" +
+                  "-help    display this help and exit\n" +
+                  "-loop    restart after connection finished\n" +
+                  "-verbose print debugging messages\n" +
+                  "-version print version and exit\n");
     }
 }
     

@@ -102,6 +102,7 @@ public class GmpToGtp
             String options[] = {
                 "baud:",
                 "color:",
+                "config:",
                 "device:",
                 "flow:",
                 "help",
@@ -113,6 +114,7 @@ public class GmpToGtp
                 "version"
             };
             Options opt = new Options(args, options);
+            opt.handleConfigOption();
             if (opt.isSet("help"))
             {
                 String helpText =
@@ -120,6 +122,7 @@ public class GmpToGtp
                     "\n" +
                     "-baud    speed of serial device (default 2400)\n" +
                     "-color   color (black|white)\n" +
+                    "-config  config file\n" +
                     "-device  serial device file\n" +
                     "-flow    flow control (none|rtscts(default)|xonxoff)\n" +
                     "-help    display this help and exit\n" +

@@ -22,6 +22,7 @@ Go Text Protocol adapter for playing games between two Go programs.
   </arg>
 <arg><option>-alternate</option></arg>
 <arg><option>-auto</option></arg>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-force</option></arg>
 <arg><option>-games</option></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
@@ -154,6 +155,15 @@ Command for black program.
 <listitem>
 Compare a list of SGF files given as arguments an exit.
 Works only with SGF files with alternating moves and without setup stones.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+Read command line options and arguments from <replaceable>file</replaceable>.
 </listitem>
 </varlistentry>
 

@@ -222,6 +222,7 @@ public class TwoGtp
                 "auto",
                 "black:",
                 "compare",
+                "config:",
                 "force",
                 "games:",
                 "help",
@@ -234,6 +235,7 @@ public class TwoGtp
                 "white:"
             };
             Options opt = new Options(args, options);
+            opt.handleConfigOption();
             if (opt.isSet("help"))
             {
                 String helpText =
@@ -244,6 +246,7 @@ public class TwoGtp
                     "-auto         autoplay games\n" +
                     "-black        command for black program\n" +
                     "-compare      compare list of sgf files\n" +
+                    "-config       config file\n" +
                     "-force        overwrite existing files\n" +
                     "-games        number of games (0=unlimited)\n" +
                     "-help         display this help and exit\n" +

@@ -21,11 +21,13 @@ class SgfToTex
         try
         {
             String options[] = {
+                "config:",
                 "help",
                 "pass",
                 "version"
             };
             Options opt = new Options(args, options);
+            opt.handleConfigOption();
             boolean usePass = false;
             if (opt.isSet("help"))
             {
@@ -126,9 +128,10 @@ class SgfToTex
     {
         out.print("Usage: java -jar sgftotex.jar [file.sgf [file.tex]]\n" +
                   "\n" +
-                  "  -help    display this help and exit\n" +
-                  "  -pass    use \\pass command\n" +
-                  "  -version print version and exit\n");
+                  "-config  config file\n" +
+                  "-help    display this help and exit\n" +
+                  "-pass    use \\pass command\n" +
+                  "-version print version and exit\n");
     }
 }
     

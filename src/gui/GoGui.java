@@ -347,6 +347,7 @@ class GoGui
                 "computer-black",
                 "computer-both",
                 "computer-none",
+                "config:",
                 "file:",
                 "fillpasses",
                 "gtpfile:",
@@ -361,6 +362,7 @@ class GoGui
                 "version"
             };
             Options opt = new Options(args, options);
+            opt.handleConfigOption();
             if (opt.isSet("help"))
             {
                 String helpText =
@@ -368,24 +370,25 @@ class GoGui
                     "Graphical user interface for Go programs\n" +
                     "using the Go Text Protocol.\n" +
                     "\n" +
-                    "  -analyze name   initialize analyze command\n" +
-                    "  -auto           auto play games (if computer both)\n" +
-                    "  -command cmd    send GTP command at startup\n" +
-                    "  -computer-both  computer plays both sides\n" +
-                    "  -computer-black computer plays black\n" +
-                    "  -computer-none  computer plays no side\n" +
-                    "  -file filename  load SGF file\n" +
-                    "  -fillpasses     never send subsequent moves of\n" +
-                    "                  the same color to the program\n" +
-                    "  -gtpfile file   send GTP file at startup\n" +
-                    "  -help           display this help and exit\n" +
-                    "  -komi value     set komi\n" +
-                    "  -move n         load SGF file until move number\n" +
-                    "  -rules name     use rules (chinese|japanese)\n" +
-                    "  -size n         set board size\n" +
-                    "  -time spec      set time limits (min[+min/moves])\n" +
-                    "  -verbose        print debugging messages\n" +
-                    "  -version        print version and exit\n";
+                    "-analyze name   initialize analyze command\n" +
+                    "-auto           auto play games (if computer both)\n" +
+                    "-command cmd    send GTP command at startup\n" +
+                    "-computer-both  computer plays both sides\n" +
+                    "-computer-black computer plays black\n" +
+                    "-computer-none  computer plays no side\n" +
+                    "-config         config file\n" +
+                    "-file filename  load SGF file\n" +
+                    "-fillpasses     never send subsequent moves of\n" +
+                    "                the same color to the program\n" +
+                    "-gtpfile file   send GTP file at startup\n" +
+                    "-help           display this help and exit\n" +
+                    "-komi value     set komi\n" +
+                    "-move n         load SGF file until move number\n" +
+                    "-rules name     use rules (chinese|japanese)\n" +
+                    "-size n         set board size\n" +
+                    "-time spec      set time limits (min[+min/moves])\n" +
+                    "-verbose        print debugging messages\n" +
+                    "-version        print version and exit\n";
                 System.out.print(helpText);
                 System.exit(0);
             }

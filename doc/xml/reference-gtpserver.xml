@@ -16,6 +16,7 @@ Connects a Go program supporting Go Text Protocol to a listen socket.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gtpserver</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-help</option></arg>
 <arg><option>-loop</option></arg>
 <arg><option>-verbose</option></arg>
@@ -40,6 +41,15 @@ network.
 <refsection>
 <title>Options</title>
 <variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+Read command line options and arguments from <replaceable>file</replaceable>.
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term>

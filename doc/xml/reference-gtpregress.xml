@@ -15,6 +15,7 @@ Runs GTP regression tests.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gtpregress</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-output</option> <replaceable>directory</replaceable></arg>
 <arg choice="plain"><replaceable>program</replaceable></arg>
 <arg choice="plain" rep="repeat">
@@ -65,6 +66,15 @@ will be used.
 <refsection>
 <title>Options</title>
 <variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+Read command line options and arguments from <replaceable>file</replaceable>.
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term>

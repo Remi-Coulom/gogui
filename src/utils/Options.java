@@ -5,6 +5,7 @@
 
 package utils;
 
+import java.io.*;
 import java.util.*;
 
 //-----------------------------------------------------------------------------
@@ -19,34 +20,9 @@ public class Options
             if (spec.length() > 0)
                 m_map.put(spec, null);
         }
-        int n = 0;
-        while (n < args.length)
-        {
-            String s = args[n];
-            ++n;
-            if (isOptionKey(s))
-            {
-                String spec = getSpec(s.substring(1));
-                if (spec.length() > 0
-                    && spec.substring(spec.length() - 1).equals(":"))
-                {
-                    if (n >= args.length)
-                        throw new Exception("Option " + s + " needs value.");
-                    String value = args[n];
-                    if (isOptionKey(value))
-                        throw new Exception("Option " + s + " needs value.");
-                    ++n;
-                    m_map.put(spec, value);
-                }
-                else
-                    m_map.put(spec, "1");
-                
-            }
-            else
-                m_args.add(s);
-        }
+        parseArgs(args);
     }
-    
+
     public boolean contains(String option)
     {
         return getValue(option) != null;
@@ -137,6 +113,37 @@ public class Options
         return (value != null);
     }
 
+    /** Read options from a file given with the option "config".
+        Requires that "config" is an allowed option.
+    */
+    public void handleConfigOption() throws Exception
+    {
+        if (! isSet("config"))
+            return;
+        String filename = getString("config");
+        InputStream inputStream = new FileInputStream(filename);
+        Reader reader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        try
+        {
+            StringBuffer buffer = new StringBuffer(256);
+            String line;
+            while (true)
+            {
+                line = bufferedReader.readLine();
+                if (line == null)
+                    break;
+                buffer.append(line);
+                buffer.append(' ');
+            }
+            parseArgs(StringUtils.tokenize(buffer.toString()));
+        }
+        finally
+        {
+            bufferedReader.close();
+        }
+    }
+
     private Vector m_args = new Vector();
 
     private Map m_map = new TreeMap();
@@ -147,7 +154,7 @@ public class Options
             return option;
         else if (m_map.containsKey(option + ":"))
             return option + ":";
-        throw new Exception("Unknown option " + option);
+        throw new Exception("Unknown option -" + option);
     }
 
     private String getValue(String option)
@@ -166,6 +173,46 @@ public class Options
     private boolean isValidOption(String option)
     {
         return (m_map.containsKey(option) || m_map.containsKey(option + ":"));
+    }
+
+    private boolean needsValue(String spec)
+    {
+        return (spec.length() > 0
+                && spec.substring(spec.length() - 1).equals(":"));
+    }
+
+    private void parseArgs(String args[]) throws Exception
+    {
+        int n = 0;
+        while (n < args.length)
+        {
+            String s = args[n];
+            ++n;
+            if (isOptionKey(s))
+            {
+                String spec = getSpec(s.substring(1));
+                if (needsValue(spec))
+                {
+                    if (n >= args.length)
+                        throw new Exception("Option " + s + " needs value.");
+                    String value = args[n];
+                    if (isOptionKey(value))
+                        throw new Exception("Option " + s + " needs value.");
+                    ++n;
+                    m_map.put(spec, value);
+                }
+                else
+                    m_map.put(spec, "1");
+                
+            }
+            else
+                m_args.add(s);
+        }
+    }
+
+    private void putBoolOption(String spec)
+    {
+        m_map.put(spec, "1");
     }
 }
 

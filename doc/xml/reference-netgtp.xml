@@ -16,6 +16,7 @@ Connects to a remote Go program supporting Go Text Protocol.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>netgtp</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-help</option></arg>
 <arg><option>-version</option></arg>
 <arg choice="plain"><replaceable>hostname</replaceable></arg>
@@ -36,6 +37,15 @@ and input stream to standard input and output.
 <refsection>
 <title>Options</title>
 <variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+Read command line options and arguments from <replaceable>file</replaceable>.
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><option>-help</option></term>

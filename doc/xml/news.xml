@@ -16,6 +16,10 @@ GNU make as a build system.
 referee.
 </listitem>
 <listitem>
+All programs have now the abilty to read command line options and arguments
+from a file with the <option>-config</option> option.
+</listitem>
+<listitem>
 Minor fixes and improvements.
 </listitem>
 </itemizedlist>
