@@ -17,6 +17,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <command>gtpadapter</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-emuhandicap</option></arg>
+<arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
 <arg><option>-name</option> <replaceable>name</replaceable></arg>
 <arg><option>-noscore</option></arg>
@@ -65,6 +66,17 @@ Emulate the commands <userinput>set_free_handicap</userinput> and
 <userinput>place_free_handicap</userinput> by using standard fixed handicap
 locations (if existing) and sending the stones to the program using
 play commands.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-gtpfile</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Send GTP commands from <replaceable>file</replaceable> to program at startup.
 </para>
 </listitem>
 </varlistentry>

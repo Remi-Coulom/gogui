@@ -22,13 +22,15 @@ public class GtpAdapter
     public GtpAdapter(InputStream in, OutputStream out, String program,
                       PrintStream log, boolean version2, int size, String name,
                       boolean noScore, boolean emuHandicap, boolean resign,
-                      int resignScore, boolean verbose)
+                      int resignScore, String gtpFile, boolean verbose)
         throws Exception
     {
         super(in, out, log);
         if (program.equals(""))
             throw new Exception("No program set.");
         m_gtp = new Gtp(program, verbose, null);
+        if (gtpFile != null)
+            sendGtpFile(gtpFile);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
         if (version2 && m_gtp.getProtocolVersion() != 1)
@@ -115,6 +117,7 @@ public class GtpAdapter
             String options[] = {
                 "config:",
                 "emuhandicap",
+                "gtpfile:",
                 "help",
                 "log:",
                 "noscore",
@@ -142,6 +145,7 @@ public class GtpAdapter
             boolean version2 = opt.isSet("version2");
             boolean emuHandicap = opt.isSet("emuhandicap");
             String name = opt.getString("name", null);
+            String gtpFile = opt.getString("gtpfile", null);
             int size = opt.getInteger("size", -1);
             boolean resign = opt.isSet("resign");
             int resignScore = opt.getInteger("resign");            
@@ -161,7 +165,7 @@ public class GtpAdapter
             GtpAdapter gtpAdapter =
                 new GtpAdapter(System.in, System.out, program, log, version2,
                                size, name, noScore, emuHandicap, resign,
-                               resignScore, verbose);
+                               resignScore, gtpFile, verbose);
             gtpAdapter.mainLoop();
             gtpAdapter.close();
             if (log != null)
@@ -432,6 +436,7 @@ public class GtpAdapter
             "\n" +
             "-config       config file\n" +
             "-emuhandicap  emulate free handicap commands\n" +
+            "-gtpfile      file with GTP commands to send at startup\n" +
             "-log file     log GTP stream to file\n" +
             "-noscore      hide score commands\n" +
             "-resign score resign if estimated score is below threshold\n" +
@@ -452,6 +457,63 @@ public class GtpAdapter
         {
             response.append(error.getMessage());
             return false;
+        }
+    }
+
+    private void sendGtpFile(String filename)
+    {        
+        Reader reader;
+        try
+        {
+            reader = new FileReader(new File(filename));
+        }
+        catch (FileNotFoundException e)
+        {
+            System.err.println("File not found: " + filename);
+            return;
+        }
+        java.io.BufferedReader in;
+        in = new BufferedReader(reader);
+        try
+        {
+            while (true)
+            {
+                try
+                {
+                    String line = in.readLine();
+                    if (line == null)
+                    {
+                        in.close();
+                        break;
+                    }
+                    line = line.trim();
+                    if (line.equals("") || line.startsWith("#"))
+                        continue;
+                    StringBuffer response = new StringBuffer();
+                    if (! send(line, response))
+                    {
+                        System.err.println("Sending commands aborted:"
+                                           + response);
+                        break;
+                    }
+                }
+                catch (IOException e)
+                {
+                    System.err.println("Sending commands aborted:"
+                                       + e.getMessage());
+                    break;
+                }
+            }
+        }
+        finally
+        {
+            try
+            {
+                in.close();
+            }
+            catch (IOException e)
+            {
+            }
         }
     }
 
