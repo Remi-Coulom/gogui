@@ -122,6 +122,11 @@ class AnalyzeCommand
         return buffer.toString();
     }
 
+    public boolean needsFileArg()
+    {
+        return (m_command.indexOf("%f") >= 0);
+    }
+
     public boolean needsPointArg()
     {
         return (m_command.indexOf("%p") >= 0);
@@ -178,12 +183,23 @@ class AnalyzeCommand
             assert(pointArg != null);
             StringUtils.replace(buffer, "%p", pointArg.toString());
         }
+        if (needsFileArg())
+        {
+            assert(m_fileArg != null);
+            StringUtils.replace(buffer, "%f", m_fileArg.toString());
+        }
         if (needsStringArg())
         {
             assert(m_stringArg != null);
             StringUtils.replace(buffer, "%s", m_stringArg);
         }
         return buffer.toString();
+    }
+
+    public void setFileArg(File file)
+    {
+        assert(needsFileArg());
+        m_fileArg = file;
     }
 
     public void setStringArg(String value)
@@ -193,6 +209,8 @@ class AnalyzeCommand
     }
 
     private int m_type;
+
+    private File m_fileArg;
 
     private String m_label;
 
@@ -613,6 +631,13 @@ class AnalyzeDialog
             if (stringArg == null)
                 return;
             command.setStringArg(stringArg);
+        }
+        if (command.needsFileArg())
+        {
+            File fileArg = SimpleDialogs.showSelectFile(this);
+            if (fileArg == null)
+                return;
+            command.setFileArg(fileArg);
         }
         m_callback.setAnalyzeCommand(command, m_autoRun.isSelected());
         m_clearButton.setEnabled(true);

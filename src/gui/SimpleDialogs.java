@@ -8,6 +8,7 @@ package gui;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 import java.util.*;
 import sgf.*;
 import latex.*;
@@ -16,6 +17,12 @@ import latex.*;
 
 public class SimpleDialogs
 {
+    public static final int FILE_OPEN = 0;
+
+    public static final int FILE_SAVE = 1;
+
+    public static final int FILE_SELECT = 2;
+
     public static void showAbout(Component frame, String message)
     {
         JOptionPane.showMessageDialog(frame, message,
@@ -51,7 +58,7 @@ public class SimpleDialogs
 
     public static File showOpenSgf(Component frame)
     {
-        return showSgfFileChooser(frame, false);
+        return showSgfFileChooser(frame, FILE_OPEN, true);
     }
 
     public static boolean showQuestion(Component frame, String message)
@@ -62,9 +69,14 @@ public class SimpleDialogs
         return (r == 0);
     }
 
-    public static File showSave(Component frame)
+    public static File showSaveSgf(Component frame)
     {
-        return showSgfFileChooser(frame, true);
+        return showSgfFileChooser(frame, FILE_SAVE, true);
+    }
+
+    public static File showSelectFile(Component frame)
+    {
+        return showSgfFileChooser(frame, FILE_SELECT, false);
     }
 
     public static void showWarning(Component frame, String message)
@@ -78,24 +90,34 @@ public class SimpleDialogs
 
     private static String m_lastFile;
 
-    private static File showSgfFileChooser(Component frame, boolean saveDialog)
+    private static File showSgfFileChooser(Component frame, int type,
+                                           boolean setSgfFilter)
     {
         if (m_lastFile == null)
             m_lastFile = System.getProperties().getProperty("user.dir");
         JFileChooser chooser = new JFileChooser(m_lastFile);
         chooser.setMultiSelectionEnabled(false);
-        if (saveDialog)
-        {
+        javax.swing.filechooser.FileFilter sgfFilter = new sgf.Filter();
+        chooser.addChoosableFileFilter(sgfFilter);
+        if (type == FILE_SAVE)
             chooser.addChoosableFileFilter(new latex.Filter());
-            chooser.setFileFilter(new sgf.Filter());
-        }
+        if (setSgfFilter)
+            chooser.setFileFilter(sgfFilter);
         else
-            chooser.setFileFilter(new sgf.Filter());
+            chooser.setFileFilter(chooser.getAcceptAllFileFilter());
         int ret;
-        if (saveDialog)
+        switch (type)
+        {
+        case FILE_SAVE:
             ret = chooser.showSaveDialog(frame);
-        else
+            break;
+        case FILE_OPEN:
             ret = chooser.showOpenDialog(frame);
+            break;
+        default:
+            ret = chooser.showDialog(frame, "Select");
+            break;
+        }
         if (ret != JFileChooser.APPROVE_OPTION)
             return null;
         File file = chooser.getSelectedFile();

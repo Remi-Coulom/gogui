@@ -102,12 +102,33 @@ The label to use for the menu.
 <section>
 <title>Command</title>
 The command to send to the Go program.
-The wildcard <userinput>%m</userinput>
-will be replaced by the color to move.
-If the command contains the wildcard <userinput>%p</userinput>, GoGui will ask
-the user to select point on the board.
-If the command contains the wildcard <userinput>%s</userinput>, GoGui will ask
-the user to enter an argument for the command.
+It can contain the following wildcards:
+<variablelist>
+<varlistentry>
+<term><userinput>%f</userinput></term>
+<listitem>
+Will be replaced by a filename entered by the user.
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>%m</userinput></term>
+<listitem>
+Will be replaced by the color to play.
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>%p</userinput></term>
+<listitem>
+Will be replaced by the a point selected by the user.
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>%s</userinput></term>
+<listitem>
+Will be replaced by an argument entered by the user.
+</listitem>
+</varlistentry>
+</variablelist>
 </section>
 
 <section>

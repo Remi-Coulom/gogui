@@ -1052,7 +1052,7 @@ class GoGui
 
     private void cbSavePosition()
     {
-        File file = SimpleDialogs.showSave(this);
+        File file = SimpleDialogs.showSaveSgf(this);
         if (file == null)
             return;
         try
@@ -1788,7 +1788,7 @@ class GoGui
             File file;
             while (true)
             {
-                file = SimpleDialogs.showSave(this);
+                file = SimpleDialogs.showSaveSgf(this);
                 if (file == null)
                     return false;
                 if (file.exists())
