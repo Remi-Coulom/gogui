@@ -48,12 +48,16 @@ class GoGui
         m_verbose = verbose;
         m_initAnalyze = initAnalyze;
 
-        m_program = program.trim();
-        if (program != null && ! program.equals(""))
+        if (program != null)
         {
-            m_gtpShell = new GtpShell(this, "GoGui", this, prefs);
-            m_gtpShell.setProgramCommand(program);
+            m_program = program.trim();
+            if (! m_program.equals(""))
+            {
+                m_gtpShell = new GtpShell(this, "GoGui", this, prefs);
+                m_gtpShell.setProgramCommand(program);
+            }
         }
+
         Container contentPane = getContentPane();        
 
         m_infoPanel = new JPanel();
@@ -93,7 +97,7 @@ class GoGui
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setRememberSizes(m_rememberWindowSizes);
         setJMenuBar(m_menuBar.getMenuBar());
-        if (program == null || program.equals(""))
+        if (m_program == null || m_program.equals(""))
         {
             m_toolBar.disableComputerButtons();
             m_menuBar.disableComputer();
