@@ -312,11 +312,23 @@ public class Board
         newGame();
     }
 
+    public boolean isEdgeLine(int i)
+    {
+        return (i == 0 || i == m_size - 1);
+    }
+
+    public boolean isHandicapLine(int i)
+    {
+        return (i == m_handicapLine1
+                || i == m_handicapLine2
+                || i == m_handicapLine3);
+    }
+
     public boolean isHandicap(Point p)
     {
         int x = p.getX();
         int y = p.getY();
-        return (isOnHandicapLine(x) && isOnHandicapLine(y));
+        return (isHandicapLine(x) && isHandicapLine(y));
     }
 
     public boolean isModified()
@@ -691,13 +703,6 @@ public class Board
                  return false;
         return true;
     }    
-
-    private boolean isOnHandicapLine(int i)
-    {
-        return (i == m_handicapLine1
-                || i == m_handicapLine2
-                || i == m_handicapLine3);
-    }
 
     private boolean isTerritory(Point p, Vector territory, Color color)
     {
