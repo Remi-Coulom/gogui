@@ -1967,7 +1967,7 @@ class GoGui
         }
         catch (sgf.Reader.Error e)
         {
-            showError("Could not read file\n" + file, e);
+            showError("Could not read file.", e);
         }
         catch (Gtp.Error e)
         {
