@@ -29,10 +29,7 @@ class GtpRegress
         {
             File file = new File(output);
             if (! file.exists())
-                throw new Exception("Directory " + output
-                                    + " does not exists");
-            if (! file.isDirectory())
-                throw new Exception("Not a directory: " + output);
+                file.mkdir();
             m_prefix = output + File.separator;
         }
         for (int i = 0; i < tests.length; ++i)
@@ -459,8 +456,10 @@ class GtpRegress
     {
         m_outFileRelativeName =
             FileUtils.replaceExtension(m_file, "tst", "out.html");
-        m_outFileName = m_prefix + m_outFileRelativeName;
+        m_outFileName = m_prefix + m_outFileRelativeName;        
         File file = new File(m_outFileName);
+        if (! file.getParentFile().exists())
+            file.getParentFile().mkdir();
         m_out = new PrintStream(new FileOutputStream(file));
         m_out.print("<html>\n" +
                     "<head>\n" +
@@ -562,9 +561,12 @@ class GtpRegress
 
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar regression.jar program test.tst [...]\n" +
+        out.print("Usage: java -jar regression.jar [options] program test.tst"
+                  + "[...]\n" +
                   "\n" +
-                  "  -help    display this help and exit\n");
+                  "  -help       display this help and exit\n" +
+                  "  -output dir output directory\n" +
+                  "  -version    display this help and exit\n");
     }
 
     private String sendCommand(String command) throws Gtp.Error
@@ -795,10 +797,10 @@ class GtpRegress
                   "<hr>\n" +
                   "<table>\n");
         writeInfo(out);
+        String outFile = FileUtils.replaceExtension(m_file, "out", "out.html");
         out.print("<tr><th align=\"left\">Output</th><td><a href=\""
                   + m_outFileRelativeName + "\">"
-                  + FileUtils.replaceExtension(m_file, "tst", "out")
-                  + "</a></td></tr>\n" +
+                  + m_outFileRelativeName + "</a></td></tr>\n" +
                   "</table>\n" +
                   "<hr>\n" +
                   "<table border=\"1\">\n" +

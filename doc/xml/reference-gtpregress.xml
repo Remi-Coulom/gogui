@@ -15,13 +15,17 @@ Runs GTP regression tests.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gtpregress</command>
-<arg><option>-help</option></arg>
 <arg><option>-output</option> <replaceable>directory</replaceable></arg>
-<arg><option>-version</option></arg>
 <arg choice="plain"><replaceable>program</replaceable></arg>
 <arg choice="plain" rep="repeat">
 <replaceable>test.tst</replaceable>
 </arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gtpregress</command> <arg><option>-help</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gtpregress</command> <arg><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
