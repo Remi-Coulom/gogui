@@ -2,6 +2,7 @@
 <!DOCTYPE book [
  <!ENTITY version SYSTEM "version.xml">
  <!ENTITY readme SYSTEM "readme.xml">
+ <!ENTITY reference SYSTEM "reference.xml">
  <!ENTITY programs SYSTEM "programs.xml">
  <!ENTITY compatibility SYSTEM "compatibility.xml">
  <!ENTITY interrupt SYSTEM "interrupt.xml">
@@ -15,6 +16,10 @@
   <bookinfo><releaseinfo>Version &version;</releaseinfo></bookinfo>
   
   &readme;
+  <chapter>
+    <title>Reference</title>
+    &reference;
+  </chapter>
   &programs;
   &compatibility;
   &interrupt;

@@ -15,6 +15,9 @@
 	    Clear old markups before showing an analyze command with
 	    a point list result.
 	  </listitem>
+	  <listitem>
+	    Add command reference to documentation.
+	  </listitem>
 	</itemizedlist>
       </revremark>
     </revision>

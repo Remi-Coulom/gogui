@@ -1,0 +1,140 @@
+<refentry>
+  <refmeta>
+    <refentrytitle>gogui</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>gogui</refname>
+    <refname>gogui.jar</refname>
+    <refpurpose>Graphical user interface for Go programs</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>gogui</command>
+      <arg><option>-analyze</option> <replaceable>command</replaceable></arg>
+      <arg><option>-autoplay</option></arg>
+      <arg><option>-computer-none</option></arg>
+      <arg><option>-file</option> <replaceable>filename</replaceable></arg>
+      <arg><option>-fillpasses</option></arg>
+      <arg><option>-gtpshell</option></arg>
+      <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
+      <arg><option>-help</option></arg>
+      <arg><option>-move</option> <replaceable>n</replaceable></arg>
+      <arg><option>-size</option> <replaceable>n</replaceable></arg>
+      <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
+      <arg><option>-verbose</option></arg>
+      <arg><replaceable>program</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+    <para>
+      GoGui is a graphical interface to programs that play the game of Go
+      and use GTP (Go Text Protocol).      
+    </para>
+  </refsection>
+
+  <refsection>
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-analyze</option> <replaceable>command</replaceable>
+	</term>
+	<listitem>
+	  Initialize analyze command.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-autoplay</option>
+	</term>
+	<listitem>
+	  Auto play games (if computer both).
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-computer-none</option>
+	</term>
+	<listitem>
+	  Computer plays no side.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-file</option> <replaceable>filename</replaceable>
+	</term>
+	<listitem>
+	  Load SGF file.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-fillpasses</option>
+	</term>
+	<listitem>
+	  Never send subsequent moves of the same color to the program.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-gtpshell</option>
+	</term>
+	<listitem>
+	  Open GTP shell at startup.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-gtpfile</option> <replaceable>filename</replaceable>
+	</term>
+	<listitem>
+	  Send GTP file at startup.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-help</option>
+	</term>
+	<listitem>
+	  Display help and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-move</option> <replaceable>n</replaceable>
+	</term>
+	<listitem>
+	  Load SGF file until move number.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-size</option> <replaceable>n</replaceable>
+	</term>
+	<listitem>
+	  Set board size.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-time</option> <replaceable>timespec</replaceable>
+	</term>
+	<listitem>
+	  Set time limits (min[+min/moves]).
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-verbose</option>
+	</term>
+	<listitem>
+	  Print debugging messages.
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+</refentry>
