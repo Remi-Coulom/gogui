@@ -800,6 +800,7 @@ class GoGui
         m_guiBoard.updateFromGoBoard();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
+        m_menuBar.updateGameMenuItems(m_board);
         clearStatus();
         if (m_commandThread != null
             && m_analyzeCommand != null
@@ -1189,6 +1190,7 @@ class GoGui
         m_board.truncate();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
+        m_menuBar.updateGameMenuItems(m_board);
     }
 
     private boolean checkModifyGame(Move move)
@@ -1760,6 +1762,7 @@ class GoGui
         m_gameInfo.update();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
+        m_menuBar.updateGameMenuItems(m_board);
     }
 
     private void newGameContinue(int size)
@@ -1779,6 +1782,7 @@ class GoGui
         m_gameInfo.update();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
+        m_menuBar.updateGameMenuItems(m_board);
         checkComputerMove();
     }
 
@@ -1789,6 +1793,7 @@ class GoGui
         m_gameInfo.update();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_board);
+        m_menuBar.updateGameMenuItems(m_board);
     }
 
     private void play(Move move) throws Gtp.Error

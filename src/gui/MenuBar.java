@@ -61,6 +61,36 @@ class MenuBar
             assert(false);
     }
 
+    public void addRecent(File file)
+    {
+        try
+        {
+            File canonicalFile = file.getCanonicalFile();
+            if (canonicalFile.exists())
+                file = canonicalFile;
+        }
+        catch (IOException e)
+        {
+        }
+        for (int i = 0; i < m_maxRecent; ++i)
+        {
+            if (m_recent[i] == null)
+                break;
+            if (m_recent[i].equals(file))
+            {
+                for (int j = i; j > 0; --j)
+                    m_recent[j] = m_recent[j - 1];
+                m_recent[0] = file;
+                updateRecentMenu();
+                return;
+            }
+        }
+        for (int i = m_maxRecent - 1; i > 0; --i)
+            m_recent[i] = m_recent[i - 1];
+        m_recent[0] = file;
+        updateRecentMenu();
+    }
+
     public void disableComputer()
     {
         m_isComputerDisabled = true;
@@ -234,34 +264,18 @@ class MenuBar
             disableMenu(m_menuWindows);
     }
 
-    public void addRecent(File file)
+    public void updateGameMenuItems(go.Board board)
     {
-        try
-        {
-            File canonicalFile = file.getCanonicalFile();
-            if (canonicalFile.exists())
-                file = canonicalFile;
-        }
-        catch (IOException e)
-        {
-        }
-        for (int i = 0; i < m_maxRecent; ++i)
-        {
-            if (m_recent[i] == null)
-                break;
-            if (m_recent[i].equals(file))
-            {
-                for (int j = i; j > 0; --j)
-                    m_recent[j] = m_recent[j - 1];
-                m_recent[0] = file;
-                updateRecentMenu();
-                return;
-            }
-        }
-        for (int i = m_maxRecent - 1; i > 0; --i)
-            m_recent[i] = m_recent[i - 1];
-        m_recent[0] = file;
-        updateRecentMenu();
+        int moveNumber = board.getMoveNumber();
+        int numberSavedMoves = board.getNumberSavedMoves();
+        m_itemBeginning.setEnabled(moveNumber > 0);
+        m_itemBackward.setEnabled(moveNumber > 0);
+        m_itemBackward10.setEnabled(moveNumber > 0);
+        m_itemForward.setEnabled(moveNumber < numberSavedMoves);
+        m_itemForward10.setEnabled(moveNumber < numberSavedMoves);
+        m_itemEnd.setEnabled(moveNumber < numberSavedMoves);
+        m_itemGoto.setEnabled(numberSavedMoves > 0);
+        m_itemTruncate.setEnabled(moveNumber < numberSavedMoves);
     }
 
     private boolean m_isComputerDisabled;
@@ -308,6 +322,12 @@ class MenuBar
 
     private JMenuItem m_itemAbout;
 
+    private JMenuItem m_itemBackward;
+
+    private JMenuItem m_itemBackward10;
+
+    private JMenuItem m_itemBeginning;
+
     private JMenuItem[] m_itemBoardSize;
 
     private JMenuItem m_itemComputerBlack;
@@ -320,7 +340,15 @@ class MenuBar
 
     private JMenuItem m_itemComputerWhite;
 
+    private JMenuItem m_itemEnd;
+
     private JMenuItem m_itemExit;
+
+    private JMenuItem m_itemForward;
+
+    private JMenuItem m_itemForward10;
+
+    private JMenuItem m_itemGoto;
 
     private JMenuItem m_itemGtpShell;
 
@@ -458,26 +486,33 @@ class MenuBar
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2, 0, "pass");
         m_itemComputerPlay = addMenuItem(menu, "Computer play", KeyEvent.VK_L,
                                          KeyEvent.VK_F5, 0, "play");
-        m_itemInterrupt = addMenuItem(menu, "Interrupt", KeyEvent.VK_I,
-                                      KeyEvent.VK_ESCAPE, 0, "interrupt");
+        m_itemInterrupt =
+            addMenuItem(menu, "Interrupt", KeyEvent.VK_I, KeyEvent.VK_ESCAPE,
+                        0, "interrupt");
         menu.addSeparator();
-        addMenuItem(menu, "Beginning", KeyEvent.VK_N, KeyEvent.VK_HOME,
-                    ActionEvent.CTRL_MASK,
-                    "beginning");
-        addMenuItem(menu, "Backward 10", KeyEvent.VK_D, KeyEvent.VK_LEFT,
-                    ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
-                    "backward-10");
-        addMenuItem(menu, "Backward", KeyEvent.VK_B, KeyEvent.VK_LEFT,
-                    ActionEvent.CTRL_MASK, "backward");
-        addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
-                    ActionEvent.CTRL_MASK, "forward");
-        addMenuItem(menu, "Forward 10", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
-                    ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
-                    "forward-10");
-        addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
-                    ActionEvent.CTRL_MASK, "end");
-        addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
-                    ActionEvent.CTRL_MASK, "goto");
+        m_itemBeginning =
+            addMenuItem(menu, "Beginning", KeyEvent.VK_N, KeyEvent.VK_HOME,
+                        ActionEvent.CTRL_MASK, "beginning");
+        m_itemBackward10 =
+            addMenuItem(menu, "Backward 10", KeyEvent.VK_D, KeyEvent.VK_LEFT,
+                        ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
+                        "backward-10");
+        m_itemBackward =
+            addMenuItem(menu, "Backward", KeyEvent.VK_B, KeyEvent.VK_LEFT,
+                        ActionEvent.CTRL_MASK, "backward");
+        m_itemForward =
+            addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
+                        ActionEvent.CTRL_MASK, "forward");
+        m_itemForward10 =
+            addMenuItem(menu, "Forward 10", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
+                        ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
+                        "forward-10");
+        m_itemEnd =
+            addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
+                        ActionEvent.CTRL_MASK, "end");
+        m_itemGoto =
+            addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
+                        ActionEvent.CTRL_MASK, "goto");
         m_itemTruncate = addMenuItem(menu, "Truncate...", KeyEvent.VK_T,
                                      "truncate");
         menu.addSeparator();
