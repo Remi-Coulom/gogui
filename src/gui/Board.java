@@ -810,6 +810,11 @@ public class Board
         return new java.awt.Point(screenX, screenY);
     }
 
+    private boolean isHandicapLineOrEdge(int line)
+    {
+        return m_board.isHandicapLine(line) || m_board.isEdgeLine(line);
+    }
+
     private void keyPressed(KeyEvent event)
     {
         int code = event.getKeyCode();
@@ -820,43 +825,31 @@ public class Board
         boolean shiftModifier = ((modifiers & ActionEvent.SHIFT_MASK) != 0);
         if (code == KeyEvent.VK_DOWN)
         {
+            m_focusPoint.down();
             if (shiftModifier)
-                do
+                while (! isHandicapLineOrEdge(m_focusPoint.getY()))
                     m_focusPoint.down();
-                while (! m_board.isHandicapLine(m_focusPoint.getY())
-                       && ! m_board.isEdgeLine(m_focusPoint.getY()));
-            else
-                m_focusPoint.down();
         }
         else if (code == KeyEvent.VK_UP)
         {
+            m_focusPoint.up(size);
             if (shiftModifier)
-                do
+                while (! isHandicapLineOrEdge(m_focusPoint.getY()))
                     m_focusPoint.up(size);
-                while (! m_board.isHandicapLine(m_focusPoint.getY())
-                       && ! m_board.isEdgeLine(m_focusPoint.getY()));
-            else
-                m_focusPoint.up(size);
         }
         else if (code == KeyEvent.VK_LEFT)
         {
+            m_focusPoint.left();
             if (shiftModifier)
-                do
+                while (! isHandicapLineOrEdge(m_focusPoint.getX()))
                     m_focusPoint.left();
-                while (! m_board.isHandicapLine(m_focusPoint.getX())
-                       && ! m_board.isEdgeLine(m_focusPoint.getX()));
-            else
-                m_focusPoint.left();
         }
         else if (code == KeyEvent.VK_RIGHT)
         {
+            m_focusPoint.right(size);
             if (shiftModifier)
-                do
+                while (! isHandicapLineOrEdge(m_focusPoint.getX()))
                     m_focusPoint.right(size);
-                while (! m_board.isHandicapLine(m_focusPoint.getX())
-                       && ! m_board.isEdgeLine(m_focusPoint.getX()));
-            else
-                m_focusPoint.right(size);
         }
         setFocusPoint(m_focusPoint);
     }
