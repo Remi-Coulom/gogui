@@ -3,9 +3,9 @@
 
 <para>
 Commands can be interrupted, if the Go program supports it.
-This is useful for example if the move generation takes a long time to give
-the user the ability to stop the current move generation process prematurely
-and gain control over the interface again.
+This is useful for example if the move generation takes a long time to give the
+user the ability to stop the current move generation and gain control over
+the interface again.
 </para>
     
 <para>
