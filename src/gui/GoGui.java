@@ -767,6 +767,8 @@ class GoGui
                     m_boardNeedsReset = true;
                 }
             }
+            if (m_analyzeRequestPoint || m_analyzeRequestPointList)
+                m_boardNeedsReset = true;
             if (! statusContainsResponse)
                 showStatus(resultTitle);
             if (! m_analyzeRequestPoint && checkComputerMove)
