@@ -380,6 +380,7 @@ public class GtpShell
         m_comboBox.hidePopup();
         addAllCompletions(m_history);
         m_textField.setText("");
+        m_textField.setCaretPosition(0);
     }
 
     public void sentCommand(String command)
@@ -617,6 +618,7 @@ public class GtpShell
     {
         String command = m_comboBox.getSelectedItem().toString();
         sendCommand(command, null);
+        m_textField.requestFocus();
     }
 
     private void createMenu()
