@@ -6,6 +6,7 @@
 package gogui;
 
 import java.util.*;
+import javax.swing.*;
 import gui.SimpleDialogs;
 import utils.*;
 import version.*;
@@ -16,8 +17,17 @@ public class Main
 {
     public static void main(String[] args)
     {
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "GoGui");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+                           "GoGui");
         System.setProperty("apple.awt.brushMetalLook", "true");
+        try
+        {
+            String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
+            UIManager.setLookAndFeel(lookAndFeel);
+        }
+        catch (Exception e)
+        {
+        }
         boolean verbose = false;
         try
         {
