@@ -29,28 +29,32 @@ public class AnalyzeShow
         {
         case AnalyzeCommand.BWBOARD:
             {
-                String b[][] = Gtp.parseStringBoard(response, title, size);
+                String b[][] =
+                    GtpUtils.parseStringBoard(response, title, size);
                 guiBoard.showBWBoard(b);
                 guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.CBOARD:
             {
-                String b[][] = Gtp.parseStringBoard(response, title, size);
+                String b[][] =
+                    GtpUtils.parseStringBoard(response, title, size);
                 guiBoard.showColorBoard(b);
                 guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.DBOARD:
             {
-                double b[][] = Gtp.parseDoubleBoard(response, title, size);
+                double b[][] =
+                    GtpUtils.parseDoubleBoard(response, title, size);
                 guiBoard.showDoubleBoard(b, command.getScale());
                 guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.PLIST:
             {
-                go.Point list[] = Gtp.parsePointList(response, size);
+                go.Point list[] =
+                    GtpUtils.parsePointList(response, size);
                 guiBoard.showPointList(list);
                 guiBoard.repaint();
             }
@@ -58,7 +62,7 @@ public class AnalyzeShow
         case AnalyzeCommand.HPSTRING:
         case AnalyzeCommand.PSTRING:
             {
-                go.Point list[] = Gtp.parsePointString(response, size);
+                go.Point list[] = GtpUtils.parsePointString(response, size);
                 guiBoard.showPointList(list);
                 guiBoard.repaint();
             }
@@ -67,43 +71,44 @@ public class AnalyzeShow
             {
                 Vector pointList = new Vector(32, 32);
                 Vector stringList = new Vector(32, 32);
-                Gtp.parsePointStringList(response, pointList, stringList,
-                                         size);
+                GtpUtils.parsePointStringList(response, pointList, stringList,
+                                              size);
                 guiBoard.showPointStringList(pointList, stringList);
                 guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.SBOARD:
             {
-                String b[][] = Gtp.parseStringBoard(response, title, size);
+                String b[][] =
+                    GtpUtils.parseStringBoard(response, title, size);
                 guiBoard.showStringBoard(b);
                 guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.VAR:
             {                    
-                go.Point list[] = Gtp.parsePointString(response, size);
+                go.Point list[] = GtpUtils.parsePointString(response, size);
                 guiBoard.showVariation(list, board.getToMove());
                 guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.VARB:
             {
-                go.Point list[] = Gtp.parsePointString(response, size);
+                go.Point list[] = GtpUtils.parsePointString(response, size);
                 guiBoard.showVariation(list, go.Color.BLACK);
                 guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.VARC:
             {
-                go.Point list[] = Gtp.parsePointString(response, size);
+                go.Point list[] = GtpUtils.parsePointString(response, size);
                 guiBoard.showVariation(list, command.getColorArg());
                 guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.VARW:
             {
-                go.Point list[] = Gtp.parsePointString(response, size);
+                go.Point list[] = GtpUtils.parsePointString(response, size);
                 guiBoard.showVariation(list, go.Color.WHITE);
                 guiBoard.repaint();
             }
@@ -113,7 +118,8 @@ public class AnalyzeShow
                 go.Color c = getColor(board, pointArg, pointListArg);
                 if (c != go.Color.EMPTY)
                 {
-                    go.Point list[] = Gtp.parsePointString(response, size);
+                    go.Point list[] =
+                        GtpUtils.parsePointString(response, size);
                     guiBoard.showVariation(list, c);
                     guiBoard.repaint();
                 }
@@ -124,7 +130,8 @@ public class AnalyzeShow
                 go.Color c = getColor(board, pointArg, pointListArg);
                 if (c != go.Color.EMPTY)
                 {
-                    go.Point list[] = Gtp.parsePointString(response, size);
+                    go.Point list[] =
+                        GtpUtils.parsePointString(response, size);
                     guiBoard.showVariation(list, c.otherColor());
                     guiBoard.repaint();
                 }

@@ -127,7 +127,7 @@ public class GtpTerminal
         try
         {
             Point point =
-                Gtp.parsePoint(response.toString(), m_board.getSize());
+                GtpUtils.parsePoint(response.toString(), m_board.getSize());
             System.out.println("Computer move: " + Point.toString(point));
             play(new Move(point, toMove));
             printBoard();
@@ -175,7 +175,7 @@ public class GtpTerminal
         {
             try
             {
-                Point point = Gtp.parsePoint(cmdLine, m_board.getSize());
+                Point point = GtpUtils.parsePoint(cmdLine, m_board.getSize());
                 cmdPlay(point);
             }
             catch (Gtp.Error error)

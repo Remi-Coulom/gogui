@@ -214,7 +214,7 @@ public class GtpDummy
         Point point = null;
         try
         {
-            point = Gtp.parsePoint(cmdArray[1], m_size);
+            point = GtpUtils.parsePoint(cmdArray[1], m_size);
         }
         catch (Gtp.Error e)
         {

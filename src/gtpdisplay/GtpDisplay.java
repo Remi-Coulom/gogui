@@ -239,7 +239,7 @@ public class GtpDisplay
         go.Point point;
         try
         {
-            point = Gtp.parsePoint(response.toString(), m_size);
+            point = GtpUtils.parsePoint(response.toString(), m_size);
         }
         catch (Gtp.Error e)
         {
@@ -357,7 +357,7 @@ public class GtpDisplay
             go.Point point;
             try
             {
-                point = Gtp.parsePoint(cmdArray[i], m_size);
+                point = GtpUtils.parsePoint(cmdArray[i], m_size);
             }
             catch (Gtp.Error e)
             {

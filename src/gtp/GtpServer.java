@@ -304,7 +304,7 @@ public abstract class GtpServer
         }
         try
         {
-            Point point = Gtp.parsePoint(cmdArray[2], boardSize);
+            Point point = GtpUtils.parsePoint(cmdArray[2], boardSize);
             argument.m_point = point;
             return argument;
         }
@@ -389,7 +389,7 @@ public abstract class GtpServer
         }
         try
         {
-            Point point = Gtp.parsePoint(cmdArray[1], boardSize);
+            Point point = GtpUtils.parsePoint(cmdArray[1], boardSize);
             PointArgument argument = new PointArgument();
             argument.m_point = point;
             return argument;

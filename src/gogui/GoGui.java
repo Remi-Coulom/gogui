@@ -1220,8 +1220,8 @@ class GoGui
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
                 throw e;
-            isDeadStone = Gtp.parsePointList(m_commandThread.getResponse(),
-                                             m_boardSize);
+            String response = m_commandThread.getResponse();
+            isDeadStone = GtpUtils.parsePointList(response, m_boardSize);
         }
         catch (Gtp.Error e)
         {
@@ -1481,7 +1481,7 @@ class GoGui
             }
             else
             {
-                go.Point point = Gtp.parsePoint(response, m_boardSize);
+                go.Point point = GtpUtils.parsePoint(response, m_boardSize);
                 Move move = new Move(point, toMove);
                 m_needsSave = true;
                 m_board.play(move);
@@ -2394,7 +2394,7 @@ class GoGui
                     public void textSelected(String text)
                     {
                         go.Point list[] =
-                            Gtp.parsePointString(text, m_boardSize);
+                            GtpUtils.parsePointString(text, m_boardSize);
                         m_guiBoard.showPointList(list);
                         m_guiBoard.repaint();
                     }

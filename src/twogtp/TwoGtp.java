@@ -386,7 +386,7 @@ public class TwoGtp
         Point point = null;
         try
         {
-            point = Gtp.parsePoint(cmdArray[1], m_board.getSize());
+            point = GtpUtils.parsePoint(cmdArray[1], m_board.getSize());
         }
         catch (Gtp.Error e)
         {
@@ -1125,7 +1125,7 @@ public class TwoGtp
             Point point = null;
             try
             {
-                point = Gtp.parsePoint(response1, m_board.getSize());
+                point = GtpUtils.parsePoint(response1, m_board.getSize());
             }
             catch (Gtp.Error e)
             {

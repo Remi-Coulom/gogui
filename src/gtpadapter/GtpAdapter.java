@@ -261,7 +261,8 @@ public class GtpAdapter
             return true;
         try
         {
-            Point point = Gtp.parsePoint(response.toString(), m_boardSize);
+            Point point =
+                GtpUtils.parsePoint(response.toString(), m_boardSize);
             m_board.play(new Move(point, color));
             return true;
         }
@@ -497,7 +498,7 @@ public class GtpAdapter
             Point point;
             try
             {
-                point = Gtp.parsePoint(cmdArray[i], m_boardSize);
+                point = GtpUtils.parsePoint(cmdArray[i], m_boardSize);
             }
             catch (Gtp.Error e)
             {
