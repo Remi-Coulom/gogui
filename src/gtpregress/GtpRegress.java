@@ -112,12 +112,12 @@ class GtpRegress
     {
     }
 
-    private class ProgramIsDeadException
+    private static class ProgramIsDeadException
         extends Exception
     {
     }
 
-    private class Test
+    private static class Test
     {
         public int m_id;
 
@@ -150,7 +150,7 @@ class GtpRegress
         }
     }
 
-    private class TestSummary
+    private static class TestSummary
     {
         public File m_file;
 

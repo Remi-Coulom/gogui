@@ -223,7 +223,7 @@ class TimeControl
         m_toMove = Color.EMPTY;
     }
 
-    private class TimeRecord
+    private static class TimeRecord
     {
         public boolean m_isInByoyomi;
 
