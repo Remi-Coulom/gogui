@@ -536,6 +536,16 @@ public final class Gtp
 
     private MessageQueue m_queue;
 
+    private void handleErrorStream(String text)
+    {
+        if (text == null)
+            return;
+        if (m_log)
+            System.err.print(text);
+        if (m_callback != null)
+            m_callback.receivedStdErr(text);
+    }
+
     private static boolean isResponseLine(String line)
     {
         if (line.length() < 2)
@@ -565,6 +575,12 @@ public final class Gtp
                 if (line == null)
                 {
                     m_isProgramDead = true;
+                    while (! m_queue.isEmpty())
+                    {
+                        message = (ReadMessage)m_queue.waitFor();
+                        assert(message.m_isError);
+                        handleErrorStream(message.m_text);
+                    }
                     throw new Error("Go program died");
                 }
                 log("<< " + line);
@@ -572,16 +588,7 @@ public final class Gtp
             }
             else
             {
-                String text = message.m_text;
-                if (text == null)
-                {
-                    m_isProgramDead = true;
-                    throw new Error("Go program died");
-                }
-                if (m_log)
-                    System.err.print(text);
-                if (m_callback != null)
-                    m_callback.receivedStdErr(text);
+                handleErrorStream(message.m_text);
             }
         }
     }

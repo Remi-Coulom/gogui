@@ -11,6 +11,23 @@ import java.util.*;
 
 public class MessageQueue
 {
+    public boolean isEmpty()
+    {
+        synchronized(this)
+        {
+            return m_queue.isEmpty();
+        }
+    }
+
+    public void put(Object object)
+    {
+        synchronized(this)
+        {
+            m_queue.add(object);
+            notify();
+        }
+    }
+
     public Object waitFor()
     {
         synchronized(this)
@@ -27,15 +44,6 @@ public class MessageQueue
             }
             assert(! m_queue.isEmpty());
             return m_queue.remove(0);
-        }
-    }
-
-    public void put(Object object)
-    {
-        synchronized(this)
-        {
-            m_queue.add(object);
-            notify();
         }
     }
 
