@@ -67,6 +67,16 @@ All points will be marked on the board.
 <varlistentry>
 <term><userinput>pslist</userinput></term>
 <listitem>
+The answer of the command is a text containing points.
+If the text has only a single line, it will be displayed in the status line.
+If it has multiple lines, a window will popup.
+All valid points contained in the text will be marked on the board.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>pstring</userinput></term>
+<listitem>
 The answer of the command is a list of point string pairs.
 The strings are displayed as labels on the points.
 </listitem>

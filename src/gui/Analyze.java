@@ -27,9 +27,11 @@ class AnalyzeCommand
 
     public static final int POINTSTRINGLIST = 4;
 
-    public static final int STRINGBOARD = 5;
+    public static final int POINTSTRING = 5;
 
-    public static final int COLORBOARD = 6;
+    public static final int STRINGBOARD = 6;
+
+    public static final int COLORBOARD = 7;
 
     public AnalyzeCommand(String line)
     {
@@ -48,6 +50,8 @@ class AnalyzeCommand
             m_type = AnalyzeCommand.POINTLIST;
         else if (typeStr.equals("pslist"))
             m_type = AnalyzeCommand.POINTSTRINGLIST;
+        else if (typeStr.equals("pstring"))
+            m_type = AnalyzeCommand.POINTSTRING;
         else if (typeStr.equals("string"))
             m_type = AnalyzeCommand.STRING;
         m_label = array[1];

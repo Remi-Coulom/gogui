@@ -719,7 +719,8 @@ class GoGui
                 break;
             case AnalyzeCommand.POINTLIST:
                 {
-                    go.Point pointList[] = Gtp.parsePointList(response);
+                    go.Point pointList[] = Gtp.parsePointList(response,
+                                                              m_boardSize);
                     showPointList(pointList);
                     m_guiBoard.repaint();
                 }
@@ -728,7 +729,8 @@ class GoGui
                 {
                     Vector pointList = new Vector(32, 32);
                     Vector stringList = new Vector(32, 32);
-                    Gtp.parsePointStringList(response, pointList, stringList);
+                    Gtp.parsePointStringList(response, pointList, stringList,
+                                             m_boardSize);
                     m_guiBoard.showPointStringList(pointList, stringList);
                     m_guiBoard.repaint();
                 }
@@ -743,7 +745,8 @@ class GoGui
                 break;
             }
             boolean statusContainsResponse = false;
-            if (type == AnalyzeCommand.STRING)
+            if (type == AnalyzeCommand.STRING
+                || type == AnalyzeCommand.POINTSTRING)
             {
                 if (response.indexOf("\n") < 0)
                 {
@@ -753,6 +756,13 @@ class GoGui
                 else
                 {
                     new AnalyzeTextOutput(this, resultTitle, response);
+                }
+                if (type == AnalyzeCommand.POINTSTRING)
+                {
+                    go.Point pointList[] = Gtp.parsePointString(response,
+                                                                m_boardSize);
+                    m_guiBoard.showPointList(pointList);
+                    m_boardNeedsReset = true;
                 }
             }
             if (! statusContainsResponse)
@@ -1145,7 +1155,8 @@ class GoGui
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
                 throw e;
-            isDeadStone = Gtp.parsePointList(m_commandThread.getResponse());
+            isDeadStone = Gtp.parsePointList(m_commandThread.getResponse(),
+                                             m_boardSize);
         }
         catch (Gtp.Error e)
         {
@@ -1349,7 +1360,8 @@ class GoGui
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
                 throw e;
-            go.Point p = Gtp.parsePoint(m_commandThread.getResponse());
+            go.Point p = Gtp.parsePoint(m_commandThread.getResponse(),
+                                        m_boardSize);
             go.Color toMove = m_board.getToMove();
             Move m = new Move(p, toMove);
             m_board.play(m);
