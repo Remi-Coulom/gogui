@@ -229,6 +229,10 @@ class WriteThread extends Thread
                 }
             }
         }
+        catch (InterruptedException e)
+        {
+            return;
+        }
         catch (Exception e)
         {
             String msg = e.getMessage();
@@ -432,25 +436,9 @@ class ReadThread extends Thread
         }
     }
 
-    public boolean sendText(String text)
+    public void sendTalk(String text)
     {
-        int size = text.length();
-        byte buffer[] = new byte[size + 1];
-        for (int i = 0; i < size; ++i)
-        {
-            byte b = (byte)text.charAt(i);
-            buffer[i] = ((b > 3 && b < 127) ? b : (byte)'?');            
-        }
-        buffer[size] = (byte)'\n';
-        try
-        {
-            m_out.write(buffer);
-            m_out.flush();
-        }
-        catch (IOException e)
-        {
-        }
-        return true;
+        m_writeThread.sendTalk(text);
     }
 
     public synchronized WaitResult waitCmd(int cmd, int valMask,
@@ -824,9 +812,9 @@ public class Gmp
         return m_readThread.queue(response);
     }
 
-    public boolean sendText(String text)
+    public void sendTalk(String text)
     {
-        return m_readThread.sendText(text);
+        m_readThread.sendTalk(text);
     }
 
     public boolean undo(StringBuffer response)

@@ -32,7 +32,7 @@ public class GmpToGtp
         else if (command.startsWith("black"))
             return play(true, command, response);
         else if (command.startsWith("gmp_text"))
-            return sendText(command, response);
+            return sendTalk(command, response);
         else if (command.startsWith("gmp_queue"))
             return queue(command, response);
         else if (command.startsWith("white"))
@@ -300,15 +300,11 @@ public class GmpToGtp
         return m_gmp.queue(response);
     }
 
-    private boolean sendText(String command, StringBuffer response)
+    private boolean sendTalk(String command, StringBuffer response)
     {
         int index = command.indexOf(' ');
         if (index > 0)
-            if (! m_gmp.sendText(command.substring(index + 1)))
-            {
-                response.append("I/O error");
-                return false;
-            }
+            m_gmp.sendTalk(command.substring(index + 1));
         return true;
     }
 
