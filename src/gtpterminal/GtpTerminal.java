@@ -301,7 +301,6 @@ public class GtpTerminal
             }
             if (! newGame(gameInformation.m_boardSize))
                 return;
-            m_board.setKomi(gameInformation.m_komi);
             send("komi " + gameInformation.m_komi);
             Node node = gameTree.getRoot();
             while (node != null)

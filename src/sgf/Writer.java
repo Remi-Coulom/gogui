@@ -40,8 +40,10 @@ public class Writer
         String rankWhite = gameInformation.m_whiteRank;
         String date = gameInformation.m_date;
         int handicap = gameInformation.m_handicap;
+        float komi = gameInformation.m_komi;
         printHeader(file, application, version, handicap, date, playerBlack,
-                    playerWhite, rankBlack, rankWhite, gameComment, result);
+                    playerWhite, rankBlack, rankWhite, gameComment, result,
+                    komi);
         printToPlay(board.getToMove());
         printNodes(gameTree.getRoot());        
         m_out.println(")");
@@ -119,13 +121,13 @@ public class Writer
                              int handicap, String date, String playerBlack,
                              String playerWhite, String rankBlack,
                              String rankWhite, String gameComment,
-                             String result)
+                             String result, float komi)
     {
         printHeader(file, application, version);
         if (handicap > 0)
             m_out.println("HA[" + handicap + "]");
         else
-            m_out.println("KM[" + m_board.getKomi() + "]");
+            m_out.println("KM[" + komi + "]");
         if (result != null && ! result.equals(""))
             m_out.println("RE[" + result + "]");
         if (playerBlack != null)

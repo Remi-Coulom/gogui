@@ -368,7 +368,8 @@ class GoGui
         {
             m_guiBoard.scoreSetDead(p);
             m_guiBoard.repaint();
-            m_scoreDialog.showScore(m_board.scoreGet());
+            float komi = m_gameTree.getGameInformation().m_komi;
+            m_scoreDialog.showScore(m_board.scoreGet(komi));
             return;
         }
         else if (! modifiedSelect)
@@ -1351,7 +1352,10 @@ class GoGui
     {
         m_scoreDialog.setVisible(false);
         if (accepted)
-            setResult(m_board.scoreGet().formatResult());
+        {
+            float komi = m_gameTree.getGameInformation().m_komi;
+            setResult(m_board.scoreGet(komi).formatResult());
+        }
         clearStatus();
         m_guiBoard.clearAll();
         m_guiBoard.repaint();
@@ -1893,7 +1897,8 @@ class GoGui
             Dimension size = getSize();
             m_scoreDialog.setLocation(size.width, 0);
         }
-        m_scoreDialog.showScore(m_board.scoreGet());
+        float komi = m_gameTree.getGameInformation().m_komi;
+        m_scoreDialog.showScore(m_board.scoreGet(komi));
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
         showStatus("Please mark dead groups.");
@@ -2186,7 +2191,6 @@ class GoGui
 
     private void setKomi(float komi)
     {
-        m_board.setKomi(komi);
         if (m_commandThread == null)
             return;
         try

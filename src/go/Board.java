@@ -186,11 +186,6 @@ public class Board
         return getHandicapStones(n, new Constants(size));
     }
 
-    public float getKomi()
-    {
-        return m_komi;
-    }
-
     public Move getMove(int i)
     {
         return ((MoveRecord)m_moves.get(i + m_setupNumber)).getMove();
@@ -401,11 +396,11 @@ public class Board
         m_dead[p.getX()][p.getY()] = value;
     }
 
-    public Score scoreGet()
+    public Score scoreGet(float komi)
     {
         Score s = new Score();
         s.m_rules = m_rules;        
-        s.m_komi = getKomi();        
+        s.m_komi = komi;
         s.m_capturedBlack = m_capturedB;
         s.m_capturedWhite = m_capturedW;
         int areaDiff = 0;
@@ -451,9 +446,9 @@ public class Board
                 ++territoryDiff;
             }
         }
-        s.m_resultChinese = areaDiff - m_komi;
+        s.m_resultChinese = areaDiff - komi;
         s.m_resultJapanese =
-            s.m_capturedWhite - s.m_capturedBlack + territoryDiff - m_komi;
+            s.m_capturedWhite - s.m_capturedBlack + territoryDiff - komi;
         if (m_rules == RULES_JAPANESE)
             s.m_result = s.m_resultJapanese;
         else
@@ -467,11 +462,6 @@ public class Board
     public boolean scoreGetDead(Point p)
     {
         return m_dead[p.getX()][p.getY()];
-    }
-
-    public void setKomi(float komi)
-    {
-        m_komi = komi;
     }
 
     public void setToMove(Color toMove)
@@ -586,8 +576,6 @@ public class Board
     private int m_rules = RULES_CHINESE;
 
     private int m_setupNumber;
-
-    private float m_komi = 5.5f;
 
     private Vector m_moves = new Vector(361, 361);
 
