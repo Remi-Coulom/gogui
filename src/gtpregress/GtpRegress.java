@@ -144,6 +144,11 @@ class GtpRegress
         public long m_timeMillis;
 
         public double m_cpuTime;
+
+        public int getNumberPasses()
+        {
+            return m_expectedPasses + m_unexpectedPasses;
+        }
     }
 
     private boolean m_fileComments;
@@ -860,6 +865,16 @@ class GtpRegress
     private void writeTestSummary(TestSummary summary)
         throws FileNotFoundException
     {
+        if (m_longOutput)
+        {
+            // Output compatible with eval.sh in GNU Go
+            System.out.println("Summary: " + summary.getNumberPasses()
+                               + "/" + summary.m_numberTests + " passes. "
+                               + summary.m_unexpectedPasses
+                               + " unexpected passes, "
+                               + summary.m_unexpectedFails
+                               + " unexpected failures");
+        }
         File file =
             new File(m_prefix
                      + FileUtils.replaceExtension(m_file, "tst", "html"));
