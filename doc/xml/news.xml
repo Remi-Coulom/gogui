@@ -16,6 +16,9 @@
 	    a point list result.
 	  </listitem>
 	  <listitem>
+	    Store komi in preferences.
+	  </listitem>
+	  <listitem>
 	    Add command reference to documentation.
 	  </listitem>
 	</itemizedlist>

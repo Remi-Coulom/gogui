@@ -62,6 +62,8 @@ class GoGui
         infoPanel.add(createStatusBar());
 
         m_board = new go.Board(m_boardSize);
+        System.err.println("XXX set komi: " + prefs.getKomi());
+        m_board.setKomi(prefs.getKomi());
         m_guiBoard = new Board(m_board);
         m_guiBoard.setListener(this);
         m_gameInfo.setBoard(m_board);
@@ -270,6 +272,7 @@ class GoGui
                 "gtpfile:",
                 "gtpshell",
                 "help",
+                "komi:",
                 "move:",
                 "size:",
                 "time:",
@@ -290,11 +293,12 @@ class GoGui
                     "  -fillpasses     never send subsequent moves of\n" +
                     "                  the same color to the program\n" +
                     "  -gtpshell       open GTP shell at startup\n" +
-                    "  -gtpfile        send GTP file at startup\n" +
+                    "  -gtpfile file   send GTP file at startup\n" +
                     "  -help           display this help and exit\n" +
-                    "  -move           load SGF file until move number\n" +
-                    "  -size           set board size\n" +
-                    "  -time           set time limits (min[+min/moves])\n" +
+                    "  -komi value     set komi\n" +
+                    "  -move n         load SGF file until move number\n" +
+                    "  -size n         set board size\n" +
+                    "  -time spec      set time limits (min[+min/moves])\n" +
                     "  -verbose        print debugging messages\n";
                 System.out.print(helpText);
                 System.exit(0);
@@ -308,6 +312,8 @@ class GoGui
             boolean fillPasses = opt.isSet("fillpasses");
             boolean gtpShell = opt.isSet("gtpshell");
             String gtpFile = opt.getString("gtpfile", "");
+            if (opt.contains("komi"))
+                prefs.setKomi(opt.getFloat("komi"));
             int move = opt.getInteger("move", -1);
             if (opt.contains("size"))
                 prefs.setBoardSize(opt.getInteger("size"));
@@ -775,6 +781,7 @@ class GoGui
                                         Float.toString(m_board.getKomi()));
         float komi =  Float.parseFloat((String)obj);
         setKomi(komi);
+        m_prefs.setKomi(komi);
     }
 
     private void cbLoad()
@@ -1324,14 +1331,15 @@ class GoGui
             else
                 computerWhite();
             File file = null;
+            float komi = m_prefs.getKomi();
             if (! m_file.equals(""))
-                newGame(m_boardSize, new File(m_file), m_move, 0);
+                newGame(m_boardSize, new File(m_file), m_move, komi);
             else
             {
-                newGame(m_boardSize, null, -1, 0);
+                newGame(m_boardSize, null, -1, komi);
                 boardChanged();
-                m_guiBoard.requestFocus();
             }
+            m_guiBoard.requestFocus();
         }
         catch (Gtp.Error e)
         {

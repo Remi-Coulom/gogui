@@ -19,6 +19,7 @@
       <arg><option>-gtpshell</option></arg>
       <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
       <arg><option>-help</option></arg>
+      <arg><option>-komi</option> <replaceable>value</replaceable></arg>
       <arg><option>-move</option> <replaceable>n</replaceable></arg>
       <arg><option>-size</option> <replaceable>n</replaceable></arg>
       <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
@@ -100,6 +101,14 @@
 	</term>
 	<listitem>
 	  Display help and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-komi</option> <replaceable>value</replaceable>
+	</term>
+	<listitem>
+	  Set the komi value.
 	</listitem>
       </varlistentry>
       <varlistentry>

@@ -52,6 +52,11 @@ class Preferences
         return getIntProperty("gtpshell-history-min");
     }
 
+    public float getKomi()
+    {
+        return getFloatProperty("komi");
+    }
+
     public void load()
     {
         m_changed = true;
@@ -120,6 +125,11 @@ class Preferences
         setIntProperty("gtpshell-history-min", value);
     }
 
+    public void setKomi(float value)
+    {
+        setFloatProperty("komi", value);
+    }
+
     /** Properties changed since last load? */
     private boolean m_changed;
 
@@ -139,6 +149,11 @@ class Preferences
         return new File(dir, "config");        
     }
 
+    private float getFloatProperty(String key)
+    {
+        return Float.parseFloat(getStringProperty(key));
+    }
+
     private int getIntProperty(String key)
     {
         return Integer.parseInt(getStringProperty(key));
@@ -156,6 +171,12 @@ class Preferences
         setIntProperty("boardsize", 19);
         setIntProperty("gtpshell-history-max", 3000);
         setIntProperty("gtpshell-history-min", 2000);
+        setFloatProperty("komi", 0);
+    }
+
+    private void setFloatProperty(String key, float value)
+    {
+        setStringProperty(key, Float.toString(value));
     }
 
     private void setIntProperty(String key, int value)

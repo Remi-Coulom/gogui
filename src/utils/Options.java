@@ -55,6 +55,26 @@ public class Options
         return m_args;
     }
 
+    public float getFloat(String option) throws Exception
+    {
+        return getFloat(option, 0);
+    }
+
+    public float getFloat(String option, float defaultValue) throws Exception
+    {
+        String value = getString(option, Float.toString(defaultValue));
+        if (value == null)
+            return defaultValue;
+        try
+        {
+            return Float.parseFloat(value);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new Exception("Option -" + option + " needs float value.");
+        }
+    }
+
     public int getInteger(String option) throws Exception
     {
         return getInteger(option, 0);
