@@ -201,7 +201,7 @@ installation directory.
 <target name="doc-style" depends="docCheckUptodate" unless="docUptodate"
  description="
 Generate documentation using ant style target.
-Not used at present due to problems with &mdash; in output (not understood
+Not used at present due to problems with mdash in output (not understood
 by JEditorPane, slow speed and errors with old versions of Xalan).">
 <antcall target="checkXslAvailable"/>
 <style basedir="doc/xml" includes="book.xml" destdir="doc/html"
