@@ -571,10 +571,8 @@ class GtpRegress
     private synchronized void printOutLine(String style, String line, int id)
     {
         if (id >= 0)
-            m_out.print("<a name=\"" + id + "\">");
+            m_out.print("<a name=\"" + id + "\"></a>");
         printOutLine(style, line);
-        if (id >= 0)
-            m_out.print("</a>");
     }
 
     private static void printUsage(PrintStream out)
@@ -939,13 +937,14 @@ class GtpRegress
             }
             String command = t.m_command.replaceAll(" ", "&nbsp;");
             out.print("<tr bgcolor=\"" + rowBackground + "\">\n" +
-                      "<td align=\"center\"><a href=\"" + m_outFileRelativeName
+                      "<td align=\"right\"><a href=\"" + m_outFileRelativeName
                       + "#" + t.m_id + "\">" + t.m_id + "</a></td>\n" +
                       "<td align=\"center\" bgcolor=\"" + statusColor
                       + "\">" + status + "</td>\n" +
                       "<td>" + command + "</td>\n" +
-                      "<td>" + t.m_response + "</td>\n" +
-                      "<td>" + wrapRequiredText(t.m_required) + "</td>\n" +
+                      "<td align=\"center\">" + t.m_response + "</td>\n" +
+                      "<td align=\"center\">" + wrapRequiredText(t.m_required)
+                      + "</td>\n" +
                       "<td>" + lastSgf + "</td>\n" +
                       "</tr>\n");
         }
