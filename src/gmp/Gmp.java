@@ -395,6 +395,8 @@ class ReadThread
 
     private OutputStream m_out;
 
+    private StringBuffer m_talkLine = new StringBuffer();
+
     private Vector m_cmdStack = new Vector(32, 32);
 
     private void answerQuery(int val)
@@ -463,7 +465,21 @@ class ReadThread
         // Talk character
         if (b > 3 && b < 128)
         {
-            log("talk '" + (char)b + "'");
+            char c = (char)b;
+            if (c == '\r')
+            {
+                log("talk char '\\r'");
+                return;
+            }
+            if (c == '\n')
+            {
+                log("talk char '\\n'");
+                log("talk: " + m_talkLine);
+                m_talkLine.setLength(0);
+                return;
+            }
+            log("talk '" + c + "'");
+            m_talkLine.append(c);
             return;
         }
         // Start byte
