@@ -486,6 +486,8 @@ class GtpRegress
                     "span.comment { color:#999999; }\n" +
                     "span.fail { font-weight:bold; color:" + m_colorRed
                     + "; }\n" +
+                    "span.error { font-weight:bold; color:" + m_colorError
+                    + "; }\n" +
                     "span.stderr { font-style: italic; color:#999999; }\n" +
                     "span.pass { font-weight:bold; color:" + m_colorGreen
                     + "; }\n" +
