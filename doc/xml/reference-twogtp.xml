@@ -282,7 +282,7 @@ Return a title for the current game consisting of the game number (if option
 <userinput>twogtp_black <replaceable>command</replaceable></userinput>
 </term>
 <listitem>
-Send <replaceable>command</replaceable> to black player .
+Send <replaceable>command</replaceable> to black player.
 </listitem>
 </varlistentry>
 
@@ -291,7 +291,7 @@ Send <replaceable>command</replaceable> to black player .
 <userinput>twogtp_referee <replaceable>command</replaceable></userinput>
 </term>
 <listitem>
-Send <replaceable>command</replaceable> to referee program .
+Send <replaceable>command</replaceable> to referee program.
 </listitem>
 </varlistentry>
 
@@ -300,7 +300,7 @@ Send <replaceable>command</replaceable> to referee program .
 <userinput>twogtp_white <replaceable>command</replaceable></userinput>
 </term>
 <listitem>
-Send <replaceable>command</replaceable> to white player .
+Send <replaceable>command</replaceable> to white player.
 </listitem>
 </varlistentry>
 
