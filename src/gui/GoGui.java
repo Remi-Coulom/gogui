@@ -2451,8 +2451,7 @@ class GoGui
             else if (c == go.Color.WHITE)
                 m_currentNode.addWhite(point);
         }
-        if (m_board.getToMove() != toMove)
-            m_currentNode.setPlayer(toMove);
+        m_currentNode.setPlayer(toMove);
         executeRoot();
         fileModified();
         updateGameInfo(true);
