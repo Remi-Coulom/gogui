@@ -35,14 +35,14 @@ class GtpServer
             Thread stdErrThread = new StdErrThread(process);
             stdErrThread.start();
             if (verbose)
-                System.err.println("gtpnet: Waiting for connection ...");
+                System.err.println("gtpserver: Waiting for connection ...");
             Socket socket;
             if (remoteHost == null)
                 socket = serverSocket.accept();
             else
                 socket = connectToRemote(remoteHost, port, userFile);
             if (verbose)
-                System.err.println("gtpnet: Connection from "
+                System.err.println("gtpserver: Connection from "
                                    + socket.getInetAddress());
             StreamCopy fromNet =
                 new StreamCopy(verbose, socket.getInputStream(),
@@ -156,7 +156,7 @@ class GtpServer
 
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar gtpnet.jar [options] program\n" +
+        out.print("Usage: java -jar gtpserver.jar [options] program\n" +
                   "\n" +
                   "-config  config file\n" +
                   "-help    display this help and exit\n" +
