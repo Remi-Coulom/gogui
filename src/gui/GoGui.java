@@ -2254,22 +2254,34 @@ class GoGui
 
     private void setTitle()
     {
+        String appName = "GoGui";        
         if (m_commandThread != null && ! m_name.equals(""))
+            appName = StringUtils.formatTitle(m_name);
+        if (m_gtpShell != null)
+            m_gtpShell.setTitlePrefix(appName);
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.setTitlePrefix(appName);
+        String gameName = null;
+        GameInformation gameInformation = m_gameTree.getGameInformation();
+        String playerBlack = gameInformation.m_playerBlack;
+        String playerWhite = gameInformation.m_playerWhite;
+        if (playerBlack != null && ! playerBlack.trim().equals("")
+            && playerWhite != null && ! playerWhite.trim().equals(""))
         {
-            String title = StringUtils.formatTitle(m_name);
-            if (m_loadedFile != null)
-                setTitle(title + ": " + m_loadedFile.getName());
-            else
-                setTitle(title);
-            if (m_gtpShell != null)
-                m_gtpShell.setTitlePrefix(title);
-            if (m_analyzeDialog != null)
-                m_analyzeDialog.setTitlePrefix(title);
+            String blackRank = gameInformation.m_blackRank;
+            String whiteRank = gameInformation.m_whiteRank;
+            if (blackRank != null && ! blackRank.trim().equals(""))
+                playerBlack = playerBlack + "[" + blackRank + "]";
+            if (whiteRank != null && ! whiteRank.trim().equals(""))
+                playerWhite = playerWhite + "[" + whiteRank + "]";
+            gameName = playerBlack + " - " + playerWhite;
         }
         else if (m_loadedFile != null)
-            setTitle(m_loadedFile.getName());
+            gameName= m_loadedFile.getName();
+        if (gameName != null)
+            setTitle(gameName + " - " + appName);
         else
-            setTitle("GoGui");
+            setTitle(appName);
     }
 
     private void setTitleFromProgram()
