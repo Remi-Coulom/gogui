@@ -1336,6 +1336,8 @@ class GoGui
         if (file == null)
             return;
         loadFile(file, -1);
+        m_menuBar.addRecent(file);
+        m_menuBar.saveRecent();
     }
 
     private void cbOpenRecent()
@@ -2152,8 +2154,6 @@ class GoGui
     {
         try
         {
-            m_menuBar.addRecent(file);
-            m_menuBar.saveRecent();
             FileInputStream in = new FileInputStream(file);
             LoadFileRunnable runnable = new LoadFileRunnable(in, file);
             if (file.length() > 500000)
