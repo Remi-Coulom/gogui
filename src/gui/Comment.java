@@ -28,6 +28,14 @@ class Comment
         m_textArea.setRows(5);
         m_textArea.setLineWrap(true);
         m_textArea.getDocument().addDocumentListener(this);
+        Set forwardSet  = new HashSet();
+        forwardSet.add(KeyStroke.getKeyStroke("TAB"));
+        int forwardId = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
+        m_textArea.setFocusTraversalKeys(forwardId, forwardSet);
+        Set backwardSet  = new HashSet();
+        backwardSet.add(KeyStroke.getKeyStroke("shift TAB"));
+        int backwardId = KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS;
+        m_textArea.setFocusTraversalKeys(backwardId, backwardSet);
         JScrollPane scrollPane
             = new JScrollPane(m_textArea,
                               JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
