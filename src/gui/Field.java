@@ -21,10 +21,12 @@ public class Field
     extends JComponent
     implements FocusListener
 {
-    public Field(gui.Board board, go.Point point, Font font)
+    public Field(gui.Board board, go.Point point, Font font,
+                 boolean fastPaint)
     {
         m_board = board;
         m_point = point;
+        m_fastPaint = fastPaint;
         setPreferredSize(m_board.getPreferredFieldSize());
         setMinimumSize(m_board.getMinimumFieldSize());
         if (font != null)
@@ -117,7 +119,10 @@ public class Field
     public void paintComponent(Graphics graphics)
     {
         m_graphics = graphics;
-        m_graphics2D = (Graphics2D)graphics;
+        if (m_fastPaint)
+            m_graphics2D = null;
+        else
+            m_graphics2D = (Graphics2D)graphics;
         m_size = getSize().width;
         if (m_fieldColor != null)
             drawFieldColor();
@@ -196,6 +201,8 @@ public class Field
     }
 
     private boolean m_crossHair;
+
+    private boolean m_fastPaint;
 
     private boolean m_lastMoveMarker;
 

@@ -32,6 +32,7 @@ public class Main
                 "computer-none",
                 "config:",
                 "gtpfile:",
+                "fast",
                 "help",
                 "komi:",
                 "move:",
@@ -57,6 +58,7 @@ public class Main
                     "-computer-black computer plays black\n" +
                     "-computer-none  computer plays no side\n" +
                     "-config         config file\n" +
+                    "-fast           fast and simple graphics\n" +
                     "-gtpfile file   send GTP file at startup\n" +
                     "-help           display this help and exit\n" +
                     "-komi value     set komi\n" +
@@ -77,6 +79,7 @@ public class Main
             }
             Preferences prefs = new Preferences();
             String initAnalyze = opt.getString("analyze");
+            boolean fastPaint = opt.isSet("fast");
             boolean auto = opt.isSet("auto");
             boolean computerBlack = false;
             boolean computerWhite = true;
@@ -109,7 +112,7 @@ public class Main
                 throw new Exception("Only one argument allowed.");
             new GoGui(program, prefs, file, move, time, verbose,
                       computerBlack, computerWhite, auto, gtpFile, gtpCommand,
-                      initAnalyze);
+                      initAnalyze, fastPaint);
         }
         catch (Throwable t)
         {

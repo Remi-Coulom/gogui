@@ -16,6 +16,7 @@ Go Text Protocol adapter showing the current board in a window.
 <cmdsynopsis>
 <command>gtpdisplay</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-fast</option></arg>
 <arg><option>-verbose</option></arg>
 <arg><replaceable>program</replaceable></arg>
 </cmdsynopsis>
@@ -51,6 +52,17 @@ genmove commands by waiting for input on the graphical board.
 <listitem>
 <para>
 Read command line options and arguments from file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-fast</option>
+</term>
+<listitem>
+<para>
+Use simple and fast graphics for board.
 </para>
 </listitem>
 </varlistentry>

@@ -25,6 +25,7 @@ public class Main
         {
             String options[] = {
                 "config:",
+                "fast",
                 "help",
                 "verbose",
                 "version"
@@ -41,6 +42,7 @@ public class Main
                 System.exit(0);
             }
             boolean verbose = opt.isSet("verbose");
+            boolean fastPaint = opt.isSet("fast");
             Vector arguments = opt.getArguments();
             if (arguments.size() > 1)
             {
@@ -51,7 +53,8 @@ public class Main
             if (arguments.size() == 1)
                 program = (String)arguments.get(0);
             GtpDisplay gtpDisplay =
-                new GtpDisplay(System.in, System.out, program, verbose);
+                new GtpDisplay(System.in, System.out, program, verbose,
+                               fastPaint);
             gtpDisplay.mainLoop();
             gtpDisplay.close();
         }
@@ -68,6 +71,7 @@ public class Main
             "Usage: java -jar gtpdisplay.jar program\n" +
             "\n" +
             "-config       config file\n" +
+            "-fast         fast and simple graphics\n" +
             "-help         print help and exit\n" +
             "-verbose      log GTP stream to stderr\n" +
             "-version      print version and exit\n";

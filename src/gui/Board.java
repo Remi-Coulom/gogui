@@ -46,9 +46,10 @@ public class Board
         void fieldClicked(go.Point p, boolean modifiedSelect);
     }
 
-    public Board(go.Board board)
+    public Board(go.Board board, boolean fastPaint)
     {
         m_board = board;
+        m_fastPaint = fastPaint;
         setPreferredFieldSize();
         URL url = getClass().getClassLoader().getResource("images/wood.png");
         if (url != null)
@@ -235,7 +236,7 @@ public class Board
             for (int x = 0; x < size; ++x)
             {
                 go.Point p = m_board.getPoint(x, y);
-                Field field = new Field(this, p, font);
+                Field field = new Field(this, p, font, m_fastPaint);
                 add(field);
                 m_field[x][y] = field;
                 KeyListener keyListener = new KeyAdapter()
@@ -273,16 +274,16 @@ public class Board
     public void paintComponent(Graphics graphics)
     {
         Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
+        if (graphics2D != null && ! m_fastPaint)
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         int size = m_board.getSize();
         int width = getSize().width;
-        if (m_image != null)
+        if (m_image != null && ! m_fastPaint)
             graphics.drawImage(m_image, 0, 0, width, width, null);
         else
         {
-            graphics.setColor(java.awt.Color.YELLOW.darker());
+            graphics.setColor(new java.awt.Color(218, 163, 99));
             graphics.fillRect(0, 0, width, width);
         }
         if (width > (size + 2) * 3)
@@ -595,6 +596,8 @@ public class Board
         }
     }
 
+    private boolean m_fastPaint;
+
     private boolean m_needsReset;
 
     private boolean m_showCursor = true;
@@ -672,7 +675,7 @@ public class Board
     private void drawShadows(Graphics graphics)
     {
         Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D == null)
+        if (graphics2D == null || m_fastPaint)
             return;
         graphics2D.setComposite(m_composite3);
         Rectangle grid = getBounds();

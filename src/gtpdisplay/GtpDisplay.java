@@ -23,7 +23,7 @@ public class GtpDisplay
     extends GtpServer
 {
     public GtpDisplay(InputStream in, OutputStream out, String program,
-                      boolean verbose)
+                      boolean verbose, boolean fastPaint)
         throws Exception
     {
         super(in, out, null);
@@ -54,7 +54,7 @@ public class GtpDisplay
         else
             m_frame.setTitle("GtpDisplay");
         Container contentPane = m_frame.getContentPane();
-        m_guiBoard = new gui.Board(m_board);
+        m_guiBoard = new gui.Board(m_board, fastPaint);
         if (m_gtp != null)
             m_guiBoard.setShowCursor(false);
         m_guiBoard.setListener(new gui.Board.Listener()

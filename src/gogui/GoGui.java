@@ -30,7 +30,7 @@ class GoGui
     GoGui(String program, Preferences prefs, String file, int move,
           String time, boolean verbose, boolean computerBlack,
           boolean computerWhite, boolean auto, String gtpFile,
-          String gtpCommand, String initAnalyze)
+          String gtpCommand, String initAnalyze, boolean fastPaint)
         throws GtpError
     {
         m_prefs = prefs;
@@ -62,7 +62,7 @@ class GoGui
 
         m_board = new go.Board(m_boardSize);
 
-        m_guiBoard = new gui.Board(m_board);
+        m_guiBoard = new gui.Board(m_board, fastPaint);
         m_guiBoard.setListener(this);
         innerPanel.add(createStatusBar(), BorderLayout.SOUTH);
 

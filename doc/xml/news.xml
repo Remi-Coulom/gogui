@@ -78,6 +78,11 @@ GoGui: new setting item "Auto Number" in Gtp shell menu
 </listitem>
 <listitem>
 <simpara>
+GoGui: new option -fast for fast and simple graphics
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Convert tools to GTP version 2
 </simpara>
 </listitem>
