@@ -163,11 +163,11 @@ public class Gtp
             tokenizer.ordinaryChars('0', '9');
             tokenizer.ordinaryChar('-');
             tokenizer.ordinaryChar('.');
-            tokenizer.ordinaryChar('?');
             tokenizer.wordChars('0', '9');
             tokenizer.wordChars('-', '-');
             tokenizer.wordChars('.', '.');
             tokenizer.wordChars('?', '?');
+            tokenizer.wordChars('!', '!');
             tokenizer.wordChars('"', '"');
             if (title != null)
             {
