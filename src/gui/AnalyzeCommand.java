@@ -216,7 +216,7 @@ class AnalyzeCommand
         commands.clear();
         labels.clear();
         Vector files = getFiles();
-        if (files.isEmpty())
+        if (! files.contains(new File("analyze-commands")))
         {
             File f = new File(getDir(), "analyze-commands");
             copyDefaults(f);
