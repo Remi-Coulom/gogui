@@ -253,6 +253,14 @@ public class Board
         return Printable.PAGE_EXISTS;
     }
 
+    public void resetBoard()
+    {
+        if (! m_needsReset)
+            return;
+        clearAll();
+        m_needsReset = false;
+    }
+
     public void scoreBegin(go.Point[] isDeadStone)
     {
         m_board.scoreBegin(isDeadStone);
@@ -307,16 +315,19 @@ public class Board
     public void setFieldBackground(go.Point p, java.awt.Color color)
     {
         getField(p).setFieldBackground(color);
+        m_needsReset = true;
     }
 
     public void setCrossHair(go.Point p, boolean crossHair)
     {
         getField(p).setCrossHair(crossHair);
+        m_needsReset = true;
     }
 
     public void setInfluence(go.Point p, double value)
     {
         getField(p).setInfluence(value);
+        m_needsReset = true;
     }
 
     public void setListener(Listener l)
@@ -334,16 +345,19 @@ public class Board
     public void setMarkup(go.Point p, boolean markup)
     {
         getField(p).setMarkup(markup);
+        m_needsReset = true;
     }
 
     public void setSelect(go.Point p, boolean select)
     {
         getField(p).setSelect(select);
+        m_needsReset = true;
     }
 
     public void setString(go.Point p, String s)
     {
         getField(p).setString(s);
+        m_needsReset = true;
     }
 
     public void showBWBoard(String[][] board)
@@ -462,6 +476,8 @@ public class Board
         }
         drawLastMove();
     }
+
+    private boolean m_needsReset;
 
     private boolean m_showLastMove = true;
 

@@ -287,7 +287,6 @@ class GoGui
             m_analyzePointArg = p;
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(p, true);
-            m_boardNeedsReset = true;
             m_guiBoard.repaint();
             analyzeBegin(false, false);
             return;
@@ -306,7 +305,6 @@ class GoGui
                 m_guiBoard.setSelect((go.Point)m_analyzePointListArg.get(i),
                                      true);
             m_guiBoard.repaint();
-            m_boardNeedsReset = true;
             if (modifiedSelect
                 && m_analyzePointListArg.size() > 0)
                 analyzeBegin(false, false);
@@ -613,8 +611,6 @@ class GoGui
 
     private boolean m_beepAfterMove;
 
-    private boolean m_boardNeedsReset;
-
     private boolean m_computerBlack;
 
     private boolean m_computerWhite;
@@ -745,7 +741,7 @@ class GoGui
                 {
                     String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
-                    showBWBoard(board);
+                    m_guiBoard.showBWBoard(board);
                     m_guiBoard.repaint();
                 }
                 break;
@@ -753,7 +749,7 @@ class GoGui
                 {
                     String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
-                    showColorBoard(board);
+                    m_guiBoard.showColorBoard(board);
                     m_guiBoard.repaint();
                 }
                 break;
@@ -761,7 +757,8 @@ class GoGui
                 {
                     double board[][] = Gtp.parseDoubleBoard(response, title,
                                                             m_boardSize);
-                    showDoubleBoard(board, m_analyzeCommand.getScale());
+                    m_guiBoard.showDoubleBoard(board,
+                                               m_analyzeCommand.getScale());
                     m_guiBoard.repaint();
                 }
                 break;
@@ -769,7 +766,7 @@ class GoGui
                 {
                     go.Point list[] =
                         Gtp.parsePointList(response, m_boardSize);
-                    showPointList(list);
+                    m_guiBoard.showPointList(list);
                     m_guiBoard.repaint();
                 }
                 break;
@@ -781,14 +778,13 @@ class GoGui
                                              m_boardSize);
                     m_guiBoard.showPointStringList(pointList, stringList);
                     m_guiBoard.repaint();
-                    m_boardNeedsReset = true;
                 }
                 break;
             case AnalyzeCommand.STRINGBOARD:
                 {
                     String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
-                    showStringBoard(board);
+                    m_guiBoard.showStringBoard(board);
                     m_guiBoard.repaint();
                 }
                 break;
@@ -798,7 +794,6 @@ class GoGui
                         Gtp.parsePointString(response, m_boardSize);
                     m_guiBoard.showVariation(list, m_board.getToMove());
                     m_guiBoard.repaint();
-                    m_boardNeedsReset = true;
                 }
                 break;
             case AnalyzeCommand.VARB:
@@ -807,7 +802,6 @@ class GoGui
                         Gtp.parsePointString(response, m_boardSize);
                     m_guiBoard.showVariation(list, go.Color.BLACK);
                     m_guiBoard.repaint();
-                    m_boardNeedsReset = true;
                 }
                 break;
             case AnalyzeCommand.VARW:
@@ -816,7 +810,6 @@ class GoGui
                         Gtp.parsePointString(response, m_boardSize);
                     m_guiBoard.showVariation(list, go.Color.WHITE);
                     m_guiBoard.repaint();
-                    m_boardNeedsReset = true;
                 }
                 break;
             case AnalyzeCommand.VARP:
@@ -831,7 +824,6 @@ class GoGui
                             m_guiBoard.showVariation(list, c);
                     }
                     m_guiBoard.repaint();
-                    m_boardNeedsReset = true;
                 }
                 break;
             case AnalyzeCommand.VARPO:
@@ -846,7 +838,6 @@ class GoGui
                             m_guiBoard.showVariation(list, c.otherColor());
                     }
                     m_guiBoard.repaint();
-                    m_boardNeedsReset = true;
                 }
                 break;
             }
@@ -874,11 +865,8 @@ class GoGui
                         Gtp.parsePointString(response, m_boardSize);
                     m_guiBoard.showPointList(list);
                     m_guiBoard.repaint();
-                    m_boardNeedsReset = true;
                 }
             }
-            if (m_analyzeRequestPoint || m_analyzeRequestPointList)
-                m_boardNeedsReset = true;
             if (! statusContainsResponse)
                 showStatus(resultTitle);
             if (! m_analyzeRequestPoint && checkComputerMove)
@@ -1932,12 +1920,9 @@ class GoGui
     
     private void resetBoard()
     {
-        if (! m_boardNeedsReset)
-            return;
         clearStatus();
-        m_guiBoard.clearAll();
+        m_guiBoard.resetBoard();
         m_guiBoard.repaint();
-        m_boardNeedsReset = false;
     }
     
     private void restoreSize(Window window, String name, int size)
@@ -2337,24 +2322,6 @@ class GoGui
         }
     }
 
-    private void showBWBoard(String[][] board)
-    {
-        m_guiBoard.showBWBoard(board);
-        m_boardNeedsReset = true;
-    }
-
-    private void showColorBoard(String[][] board) throws Gtp.Error
-    {
-        m_guiBoard.showColorBoard(board);
-        m_boardNeedsReset = true;
-    }
-
-    private void showDoubleBoard(double[][] board, double scale)
-    {
-        m_guiBoard.showDoubleBoard(board, scale);
-        m_boardNeedsReset = true;
-    }
-
     private void showError(String message, Exception e)
     {
         SimpleDialogs.showError(this, message, e);
@@ -2390,12 +2357,6 @@ class GoGui
         return SimpleDialogs.showQuestion(this, message);
     }
 
-    private void showPointList(go.Point pointList[]) throws Gtp.Error
-    {
-        m_guiBoard.showPointList(pointList);
-        m_boardNeedsReset = true;
-    }
-
     private void showStatus(String text)
     {
         m_statusLabel.setText(text);
@@ -2411,12 +2372,6 @@ class GoGui
     private void showStatusSelectTarget()
     {
         showStatus("Select a target for " + m_analyzeCommand.getLabel() + ".");
-    }
-
-    private void showStringBoard(String[][] board) throws Gtp.Error
-    {
-        m_guiBoard.showStringBoard(board);
-        m_boardNeedsReset = true;
     }
 
     private void showWarning(String message)
