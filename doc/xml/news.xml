@@ -32,6 +32,11 @@
 	    Game scan be saved in LaTex format usinf psgo.sty.
 	  </listitem>
 	  <listitem>
+	    Rename <application>GoGui</application> option
+	    <option>-autoplay</option> to <option>-auto</option>.
+	    Remove option <option>-autofile</option>.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>

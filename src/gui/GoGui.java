@@ -27,8 +27,8 @@ class GoGui
 {
     GoGui(String program, Preferences prefs, String file, int move,
           boolean gtpShell, String time, boolean verbose, boolean fillPasses,
-          boolean computerBlack, boolean computerWhite, boolean autoplay,
-          String autoFile, String gtpFile)
+          boolean computerBlack, boolean computerWhite, boolean auto,
+          String gtpFile)
         throws Gtp.Error, Analyze.Error
     {
         m_program = program;
@@ -46,9 +46,7 @@ class GoGui
         m_move = move;
         m_computerBlack = computerBlack;
         m_computerWhite = computerWhite;
-        m_autoplay = autoplay;
-        m_autoplayCounter = 0;
-        m_autoFile = autoFile;
+        m_auto = auto;
         m_verbose = verbose;
 
         Container contentPane = getContentPane();        
@@ -282,8 +280,7 @@ class GoGui
         {
             String options[] = {
                 "analyze:",
-                "autofile:",
-                "autoplay",
+                "auto",
                 "computer-black",
                 "computer-both",
                 "computer-none",
@@ -308,8 +305,7 @@ class GoGui
                     "using the Go Text Protocol.\n" +
                     "\n" +
                     "  -analyze name   initialize analyze command\n" +
-                    "  -autofile       auto save games (if autoplay)\n" +
-                    "  -autoplay       auto play games (if computer both)\n" +
+                    "  -auto           auto play games (if computer both)\n" +
                     "  -computer-both  computer plays both sides\n" +
                     "  -computer-black computer plays black\n" +
                     "  -computer-none  computer plays no side\n" +
@@ -331,8 +327,7 @@ class GoGui
             Preferences prefs = new Preferences();
             if (opt.contains("analyze"))
                 prefs.setAnalyzeCommand(opt.getString("analyze"));
-            String autoFile = opt.getString("autofile", "");
-            boolean autoplay = opt.isSet("autoplay");
+            boolean auto = opt.isSet("auto");
             boolean computerBlack = false;
             boolean computerWhite = true;
             if (opt.isSet("computer-none"))
@@ -377,7 +372,7 @@ class GoGui
             
             GoGui gui = new GoGui(program, prefs, file, move, gtpShell, time,
                                   verbose, fillPasses, computerBlack,
-                                  computerWhite, autoplay, autoFile, gtpFile);
+                                  computerWhite, auto, gtpFile);
         }
         catch (AssertionError e)
         {
@@ -472,7 +467,7 @@ class GoGui
 
     private boolean m_analyzeRequestPoint;
 
-    private boolean m_autoplay;
+    private boolean m_auto;
 
     private boolean m_beepAfterMove;
 
@@ -495,8 +490,6 @@ class GoGui
     private boolean m_setupMode;
 
     private boolean m_verbose;
-
-    private int m_autoplayCounter;
 
     private int m_boardSize;
 
@@ -531,8 +524,6 @@ class GoGui
     private MenuBars m_menuBars;
 
     private Analyze.Command m_analyzeCommand;
-
-    private String m_autoFile;
 
     private String m_file;
 
@@ -864,7 +855,7 @@ class GoGui
             GoGui gui = new GoGui(program, m_prefs, file.toString(),
                                   m_board.getMoveNumber(), false, null,
                                   m_verbose, m_fillPasses,
-                                  false, false, false, "", "");
+                                  false, false, false, "");
 
         }
         catch (Throwable t)
@@ -1124,24 +1115,8 @@ class GoGui
         {
             if (m_board.bothPassed())
             {
-                if (m_autoplay)
+                if (m_auto)
                 {
-                    ++m_autoplayCounter;
-                    try
-                    {
-                        if (m_autoFile != null && ! m_autoFile.equals(""))
-                        {
-                            File file = new File(m_autoFile + "-"
-                                                 + m_autoplayCounter + ".sgf");
-                            if (! file.exists()
-                                || showQuestion("Overwrite " + file + "?"))
-                                save(file);
-                        }
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        showError("Could not save game.", e);
-                    }
                     newGame(m_boardSize);
                     return;
                 }
