@@ -38,14 +38,22 @@ public class RadialGradientContext
         return ColorModel.getRGBdefault();
     }
   
-    public Raster getRaster(int x, int y, int w, int h)
+    public Raster getRaster(int x, int y, int width, int height)
     {
+        if (m_raster != null
+            && x == m_x && y == m_y && width == m_width && height == m_height)
+            return m_raster;
+        m_x = x;
+        m_y = y;
+        m_width = width;
+        m_height = height;
+        ColorModel colorModel = getColorModel();
         WritableRaster raster =
-            getColorModel().createCompatibleWritableRaster(w, h);
-        int[] data = new int[w * h * 4];
+            colorModel.createCompatibleWritableRaster(width, height);
+        int[] data = new int[width * height * 4];
         int index = -1;
-        for (int j = 0; j < h; ++j)
-            for (int i = 0; i < w; ++i)
+        for (int j = 0; j < height; ++j)
+            for (int i = 0; i < width; ++i)
             {
                 double distance = m_point.distance(x + i, y + j);
                 double ratio = Math.min(distance / m_radius, 1.0);
@@ -54,9 +62,18 @@ public class RadialGradientContext
                 data[++index] = (int)(m_blue1 + ratio * m_blueDiff);
                 data[++index] = (int)(m_alpha1 + ratio * m_alphaDiff);
             }
-        raster.setPixels(0, 0, w, h, data);
+        raster.setPixels(0, 0, width, height, data);
+        m_raster = raster;
         return raster;
     }
+
+    private int m_x;
+
+    private int m_y;
+
+    private int m_width;
+
+    private int m_height;
 
     private int m_red1;
 
@@ -77,6 +94,8 @@ public class RadialGradientContext
     private double m_radius;
 
     private Point2D m_point;
+
+    private Raster m_raster;
 }
 
 //----------------------------------------------------------------------------
