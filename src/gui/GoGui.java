@@ -64,7 +64,7 @@ class GoGui
         m_board.setKomi(prefs.getFloat("komi"));
         m_board.setRules(prefs.getInt("rules"));
 
-        m_gameTree = new GameTree(m_boardSize);
+        m_gameTree = new GameTree(m_boardSize, null);
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
 
@@ -1182,7 +1182,7 @@ class GoGui
     {
         if (! showQuestion("Delete all moves?"))
             return;
-        m_gameTree = new GameTree(m_boardSize);
+        m_gameTree = new GameTree(m_boardSize, null);
         Node root = m_gameTree.getRoot();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
@@ -1854,10 +1854,22 @@ class GoGui
                                 m_boardSize);
             }
         }
-        m_gameTree = new GameTree(size);
+        Vector handicap = m_board.getHandicapStones(m_handicap);
+        if (handicap == null)
+            showWarning("Handicap stone locations are not\n" +
+                        "defined for this board size.");
+        m_gameTree = new GameTree(size, handicap);
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
         m_board.newGame();        
+        try
+        {
+            executeCurrentNode();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+        }
         m_guiBoard.updateFromGoBoard();
         resetBoard();
         m_timeControl.reset();
@@ -1996,7 +2008,6 @@ class GoGui
             return;
         }
         initGame(size);
-        setHandicap();
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
@@ -2016,7 +2027,6 @@ class GoGui
         }
         setTitleFromProgram();
         initGame(size);
-        setHandicap();
         setTimeSettings();
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
@@ -2099,7 +2109,7 @@ class GoGui
         else
         {
             new sgf.Writer(out, m_board, m_gameTree, file, "GoGui",
-                           Version.get(), m_handicap, gameComment);
+                           Version.get(), gameComment);
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
         }
@@ -2254,35 +2264,6 @@ class GoGui
         }
     }
 
-    private void setHandicap()
-    {
-        Vector handicap = m_board.getHandicapStones(m_handicap);
-        if (handicap == null)
-        {
-            showWarning("Handicap stone locations are\n" +
-                        "not defined for this board size.");
-            return;
-        }
-        Vector moves = new Vector(handicap.size());
-        for (int i = 0; i < handicap.size(); ++i)
-        {
-            go.Point p = (go.Point)handicap.get(i);
-            moves.add(new Move(p, go.Color.BLACK));
-        }
-        try
-        {
-            for (int i = 0; i < moves.size(); ++i)
-            {
-                Move m = (Move)moves.get(i);
-                setup(m);
-            }
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-        }
-    }
-
     private void setKomi()
     {
         if (m_commandThread == null)
@@ -2430,7 +2411,7 @@ class GoGui
                 m_commandThread.sendCommandClearBoard(size);
             }
             m_board.newGame();        
-            m_gameTree = new GameTree(size);
+            m_gameTree = new GameTree(size, null);
             m_currentNode = m_gameTree.getRoot();
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {

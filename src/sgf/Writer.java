@@ -27,8 +27,7 @@ public class Writer
 
     /** Save game tree. */
     public Writer(OutputStream out, Board board, GameTree gameTree, File file,
-                  String application, String version, int handicap,
-                  String gameComment)
+                  String application, String version, String gameComment)
     {        
         m_out = new PrintStream(out);
         m_board = board;
@@ -40,6 +39,7 @@ public class Writer
         String rankBlack = gameInformation.m_blackRank;
         String rankWhite = gameInformation.m_whiteRank;
         String date = gameInformation.m_date;
+        int handicap = gameInformation.m_handicap;
         printHeader(file, application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, gameComment, result);
         printToPlay(board.getToMove());

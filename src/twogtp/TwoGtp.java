@@ -766,7 +766,7 @@ public class TwoGtp
     private void initGame(int size)
     {
         m_board = new Board(size);
-        m_gameTree = new GameTree(size);
+        m_gameTree = new GameTree(size, null);
         m_currentNode = m_gameTree.getRoot();
     }
 
@@ -941,7 +941,7 @@ public class TwoGtp
         File file = getFile(m_gameIndex);
         OutputStream out = new FileOutputStream(file);
         new sgf.Writer(out, m_board, m_gameTree, file, "TwoGtp",
-                       Version.get(), 0, gameComment);
+                       Version.get(), gameComment);
     }
 
     private void saveResult(String resultBlack, String resultWhite,

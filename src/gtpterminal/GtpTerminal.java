@@ -260,7 +260,7 @@ public class GtpTerminal
     private void initGame(int size)
     {
         m_board = new Board(size);
-        m_gameTree = new GameTree(size);
+        m_gameTree = new GameTree(size, null);
         m_currentNode = m_gameTree.getRoot();
     }
 
@@ -404,7 +404,7 @@ public class GtpTerminal
         {
             OutputStream out = new FileOutputStream(file);
             new sgf.Writer(out, m_board, m_gameTree, file, "GtpTerminal",
-                           Version.get(), 0, null);
+                           Version.get(), null);
         }
         catch (FileNotFoundException e) 
         {

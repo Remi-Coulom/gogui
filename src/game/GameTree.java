@@ -7,6 +7,7 @@ package game;
 
 import java.text.*;
 import java.util.*;
+import go.*;
 
 //-----------------------------------------------------------------------------
 
@@ -20,12 +21,18 @@ public class GameTree
         m_root = new Node();
     }
 
-    public GameTree(int boardSize)
+    public GameTree(int boardSize, Vector handicap)
     {
         m_gameInformation = new GameInformation();
         setDate();
         m_root = new Node();
         m_gameInformation.m_boardSize = boardSize;
+        if (handicap != null)
+        {
+            m_gameInformation.m_handicap = handicap.size();
+            for (int i = 0; i < handicap.size(); ++i)
+                m_root.addBlack((Point)handicap.get(i));
+        }
     }
 
     public GameTree(GameInformation gameInformation, Node root)
