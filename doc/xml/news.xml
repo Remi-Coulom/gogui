@@ -38,6 +38,19 @@ Lots of other fixes and enhancements.
 </revision>
 
 <revision>
+<revnumber>0.3.3</revnumber>
+<date>3 Sep 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Minor bugfixes.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
 <revnumber>0.3.2</revnumber>
 <date>1 Sep 2003</date>
 <authorinitials>enz</authorinitials>
