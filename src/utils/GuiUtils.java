@@ -19,15 +19,24 @@ public class GuiUtils
 
     public static Border createEmptyBorder()
     {
-        int pad = PAD;
-        return BorderFactory.createEmptyBorder(pad, pad, pad, pad);
+        if (m_emptyBorder == null)
+            m_emptyBorder = BorderFactory.createEmptyBorder(PAD, PAD,
+                                                            PAD, PAD);
+        return m_emptyBorder;
     }
 
     public static Border createSmallEmptyBorder()
     {
-        int pad = SMALL_PAD;
-        return BorderFactory.createEmptyBorder(pad, pad, pad, pad);
+        if (m_smallEmptyBorder == null)
+            m_smallEmptyBorder =
+                BorderFactory.createEmptyBorder(SMALL_PAD, SMALL_PAD,
+                                                SMALL_PAD, SMALL_PAD);
+        return m_smallEmptyBorder;
     }
+
+    private static Border m_emptyBorder;
+
+    private static Border m_smallEmptyBorder;
 }
 
 //-----------------------------------------------------------------------------
