@@ -148,6 +148,7 @@ public class Board
         for (int i = 0; i < stones.size(); ++i)
         {
             go.Point stone = (go.Point)stones.get(i);
+            m_board.setDead(stone, dead);
             setCrossHair(stone, dead);
         }
         calcScore();
