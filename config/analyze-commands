@@ -43,10 +43,14 @@ pspairs/Top Moves Black/top_moves_black
 pspairs/Top Moves White/top_moves_white
 
 # Extensions of other Go programs that could be of general interest
+string/Get Handicap/get_handicap
+string/Get Komi/get_komi
+hstring/Move History/move_history
 none/SaveSgf/savesgf %f
 
 # Other GNU Go extensions
 plist/AccurateLib/accuratelib %c %p
+plist/Accurate ApproxLib/accurate_approxlib %c %p
 pstring/Analyze Semeai/analyze_semeai %P
 pstring/Analyze Semeai After Move/analyze_semeai_after_move %c %P
 pstring/Block Off/block_off %P
@@ -84,7 +88,7 @@ dboard/Initital Influence White Strength/initial_influence %c white_strength//-0
 dboard/Influence Black/influence %c/black/0.01
 dboard/Influence White/influence %c/white/-0.01
 sboard/Influence Regions/influence %c/regions
-string/Last Move/last_move
+pstring/Last Move/last_move
 none/Limit Search/limit_search %s
 plist/List Stones/list_stones %c
 pspairs/Move Probabilities/move_probabilities
