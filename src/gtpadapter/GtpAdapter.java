@@ -22,13 +22,13 @@ public class GtpAdapter
     public GtpAdapter(InputStream in, OutputStream out, String program,
                       PrintStream log, boolean version2, int size, String name,
                       boolean noScore, boolean emuHandicap, boolean resign,
-                      int resignScore)
+                      int resignScore, boolean verbose)
         throws Exception
     {
         super(in, out, log);
         if (program.equals(""))
             throw new Exception("No program set.");
-        m_gtp = new Gtp(program, false, null);
+        m_gtp = new Gtp(program, verbose, null);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
         if (version2 && m_gtp.getProtocolVersion() != 1)
@@ -161,7 +161,7 @@ public class GtpAdapter
             GtpAdapter gtpAdapter =
                 new GtpAdapter(System.in, System.out, program, log, version2,
                                size, name, noScore, emuHandicap, resign,
-                               resignScore);
+                               resignScore, verbose);
             gtpAdapter.mainLoop();
             gtpAdapter.close();
             if (log != null)

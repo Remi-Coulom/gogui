@@ -22,6 +22,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <arg><option>-noscore</option></arg>
 <arg><option>-resign</option> <replaceable>score</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-verbose</option></arg>
 <arg><option>-version2</option></arg>
 
 <command>gtpadapter</command>
@@ -139,6 +140,15 @@ is below <replaceable>score</replaceable> against the side to move.
 <para>
 Only accept board size <replaceable>n</replaceable>, even if the program
 accepts other sizes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print the GTP stream from the adapter to the Go program to standard error.
 </para>
 </listitem>
 </varlistentry>
