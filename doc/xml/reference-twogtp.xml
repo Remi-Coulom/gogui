@@ -83,6 +83,8 @@ saved after they are finished and a result text file in table format
 is created with some statistics.
 If the program(s) support the GTP command <userinput>cputime</userinput>
 these statistics include CPU times.
+The errors of the statistics are calculated by the variance of the
+results divided by the square root of the number of unique games.
 </para>
 </refsection>
 
