@@ -245,10 +245,10 @@ class AnalyzeCommand
         commands.clear();
         labels.clear();
         Vector files = getFiles();
-        if (! files.contains(new File("analyze-commands")))
+        File file = new File(getDir(), "analyze-commands");
+        if (! files.contains(file))
         {
-            File f = new File(getDir(), "analyze-commands");
-            copyDefaults(f);
+            copyDefaults(file);
             files = getFiles();
         }
         for (int i = 0; i < files.size(); ++i)
