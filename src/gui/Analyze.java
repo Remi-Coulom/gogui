@@ -289,6 +289,7 @@ class AnalyzeDialog
         setPrefsDefaults(prefs);
         m_onlySupportedCommands =
             prefs.getBool("analyze-only-supported-commands");
+        m_sort = prefs.getBool("analyze-sort");
         m_supportedCommands = supportedCommands;
         m_callback = callback;
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -316,6 +317,8 @@ class AnalyzeDialog
             reload();
         else if (command.equals("run"))
             setCommand();
+        else if (command.equals("sort"))
+            sort();
     }
 
     public void mouseClicked(MouseEvent event)
@@ -400,6 +403,8 @@ class AnalyzeDialog
 
     private boolean m_onlySupportedCommands;
 
+    private boolean m_sort;
+
     private boolean m_recentModified;
 
     private JButton m_clearButton;
@@ -415,6 +420,8 @@ class AnalyzeDialog
     private JList m_list;
 
     private JMenuItem m_itemOnlySupported;
+
+    private JMenuItem m_itemSort;
 
     private Vector m_commands = new Vector(128, 64);
 
@@ -561,7 +568,16 @@ class AnalyzeDialog
         m_itemOnlySupported.setSelected(m_onlySupportedCommands);
         addMenuItem(menu, m_itemOnlySupported, KeyEvent.VK_O,
                     "only-supported");
+        m_itemSort = new JCheckBoxMenuItem("Sort alphabetically");
+        m_itemSort.setSelected(m_sort);
+        addMenuItem(menu, m_itemSort, KeyEvent.VK_S, "sort");
         return menu;
+    }
+
+    private File getRecentFile()
+    {
+        String home = System.getProperty("user.home");
+        return new File(new File(home, ".gogui"), "recent-analyze");
     }
 
     private void onlySupported()
@@ -570,28 +586,6 @@ class AnalyzeDialog
         m_prefs.setBool("analyze-only-supported-commands",
                         m_onlySupportedCommands);
         reload();
-    }
-
-    private void reload()
-    {
-        try
-        {
-            Vector supportedCommands = null;
-            if (m_onlySupportedCommands)
-                supportedCommands = m_supportedCommands;
-            AnalyzeCommand.read(m_commands, m_labels, supportedCommands);
-            m_list.setListData(m_labels);
-        }
-        catch (Exception e)
-        {            
-            SimpleDialogs.showError(this, e.getMessage());
-        }
-    }
-
-    private File getRecentFile()
-    {
-        String home = System.getProperty("user.home");
-        return new File(new File(home, ".gogui"), "recent-analyze");
     }
 
     private void loadRecent()
@@ -624,6 +618,24 @@ class AnalyzeDialog
         }
         catch (IOException e)
         {
+        }
+    }
+
+    private void reload()
+    {
+        try
+        {
+            Vector supportedCommands = null;
+            if (m_onlySupportedCommands)
+                supportedCommands = m_supportedCommands;
+            AnalyzeCommand.read(m_commands, m_labels, supportedCommands);
+            if (m_sort)
+                sortLists();
+            m_list.setListData(m_labels);
+        }
+        catch (Exception e)
+        {            
+            SimpleDialogs.showError(this, e.getMessage());
         }
     }
 
@@ -696,6 +708,33 @@ class AnalyzeDialog
     private static void setPrefsDefaults(Preferences prefs)
     {
         prefs.setBoolDefault("analyze-only-supported-commands", false);
+        prefs.setBoolDefault("analyze-sort", false);
+    }
+
+    private void sort()
+    {
+        m_sort = m_itemSort.isSelected();
+        m_prefs.setBool("analyze-sort", m_sort);
+        reload();
+    }
+
+    private void sortLists()
+    {
+        for (int i = 0; i < m_labels.size() - 1; ++i)
+            for (int j = i + 1; j < m_labels.size(); ++j)
+            {
+                String labelI = (String)m_labels.get(i);
+                String labelJ = (String)m_labels.get(j);
+                if (labelI.compareTo(labelJ) > 0)
+                {
+                    m_labels.set(i, labelJ);
+                    m_labels.set(j, labelI);
+                    String cmdI = (String)m_commands.get(i);
+                    String cmdJ = (String)m_commands.get(j);
+                    m_commands.set(i, cmdJ);
+                    m_commands.set(j, cmdI);
+                }
+            }
     }
 }
 

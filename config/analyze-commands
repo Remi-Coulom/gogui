@@ -93,3 +93,5 @@ string/Worm Data At/worm_data %p
 string/Worm CutStone/worm_cutstone %p
 plist/Worm Stones Black/worm_stones %p black
 plist/Worm Stones White/worm_stones %p white
+
+none/Sleep/sleep
