@@ -99,6 +99,7 @@ class MenuBar
         m_menuComputerColor.setEnabled(enabled);
         m_itemComputerPlay.setEnabled(enabled);
         m_itemBeepAfterMove.setEnabled(enabled);
+        m_itemAttachProgram.setEnabled(! enabled);
         m_itemDetachProgram.setEnabled(enabled);
     }
 
