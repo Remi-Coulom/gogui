@@ -1058,7 +1058,8 @@ class GoGui
             m_menuBar.setComputerWhite();
             computerWhite();
         }
-        checkComputerMove();
+        generateMove();
+        m_timeControl.startMove(m_board.getToMove());
     }
 
     private void cbPrint()
@@ -1255,35 +1256,6 @@ class GoGui
         m_menuBar.updateGameMenuItems(m_board);
     }
 
-    private boolean checkModifyGame(Move move)
-    {
-        if (! m_needsSave || ! m_board.willModifyGame(move))
-            return true;
-        return checkSaveGame();
-    }
-
-    private boolean checkSaveGame()
-    {
-        int result =
-            JOptionPane.showConfirmDialog(this, "Save game?",
-                                          "GoGui: Question",
-                                          JOptionPane.YES_NO_CANCEL_OPTION);
-        switch (result)
-        {
-        case 0:
-            return saveDialog();
-        case 1:
-            m_needsSave = false;
-            return true;
-        case -1:
-        case 2:
-            return false;
-        default:
-            assert(false);
-            return true;
-        }
-    }
-    
     private void checkComputerMove()
     {
         if (m_commandThread == null)
@@ -1315,6 +1287,35 @@ class GoGui
         m_timeControl.startMove(m_board.getToMove());
     }
 
+    private boolean checkModifyGame(Move move)
+    {
+        if (! m_needsSave || ! m_board.willModifyGame(move))
+            return true;
+        return checkSaveGame();
+    }
+
+    private boolean checkSaveGame()
+    {
+        int result =
+            JOptionPane.showConfirmDialog(this, "Save game?",
+                                          "GoGui: Question",
+                                          JOptionPane.YES_NO_CANCEL_OPTION);
+        switch (result)
+        {
+        case 0:
+            return saveDialog();
+        case 1:
+            m_needsSave = false;
+            return true;
+        case -1:
+        case 2:
+            return false;
+        default:
+            assert(false);
+            return true;
+        }
+    }
+    
     private void clearStatus()
     {
         showStatus(" ");
