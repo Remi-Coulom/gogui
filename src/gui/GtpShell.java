@@ -175,8 +175,12 @@ public class GtpShell
 {
     public interface Callback
     {
+        public void cbAnalyze();
+
         public boolean sendGtpCommand(String command, boolean sync)
             throws Gtp.Error;
+
+        public void toTop();
     }
 
     GtpShell(Frame owner, String titleprefix, Callback callback,
@@ -214,10 +218,14 @@ public class GtpShell
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
-        if (command.equals("comboBoxEdited"))
+        if (command.equals("analyze"))
+            m_callback.cbAnalyze();
+        else if (command.equals("comboBoxEdited"))
             comboBoxEdited();
         else if (command.equals("command-completion"))
             commandCompletion();
+        else if (command.equals("gogui"))
+            m_callback.toTop();
         else if (command.equals("save-log"))
             saveLog();
         else if (command.equals("save-commands"))
@@ -704,6 +712,7 @@ public class GtpShell
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuFile());
         menuBar.add(createMenuSettings());
+        menuBar.add(createMenuWindows());
         setJMenuBar(menuBar);
     }
 
@@ -730,6 +739,17 @@ public class GtpShell
         m_commandCompletion.setSelected(! m_disableCompletions);
         addMenuItem(menu, m_commandCompletion, KeyEvent.VK_C,
                     "command-completion");
+        return menu;
+    }
+
+    private JMenu createMenuWindows()
+    {
+        JMenu menu = new JMenu("Windows");
+        menu.setMnemonic(KeyEvent.VK_W);
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
+                    "analyze");
+        addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
+                    "gogui");
         return menu;
     }
 

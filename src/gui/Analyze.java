@@ -274,6 +274,8 @@ interface AnalyzeCallback
 
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                   boolean clearBoard);
+
+    public void toTop();
 }
 
 //-----------------------------------------------------------------------------
@@ -313,6 +315,8 @@ class AnalyzeDialog
             close();
         else if (command.equals("comboBoxChanged"))
             comboBoxChanged();
+        else if (command.equals("gogui"))
+            m_callback.toTop();
         else if (command.equals("gtp-shell"))
             m_callback.cbGtpShell();
         else if (command.equals("only-supported"))
@@ -583,6 +587,8 @@ class AnalyzeDialog
     {
         JMenu menu = new JMenu("Windows");
         menu.setMnemonic(KeyEvent.VK_W);
+        addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
+                    "gogui");
         addMenuItem(menu, "GTP shell", KeyEvent.VK_G, KeyEvent.VK_F8, 0,
                     "gtp-shell");
         return menu;

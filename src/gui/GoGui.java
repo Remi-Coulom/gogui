@@ -217,6 +217,24 @@ class GoGui
             assert(false);
     }
     
+    public void cbAnalyze()
+    {        
+        if (m_commandThread == null)
+            return;
+        if (m_analyzeDialog == null)
+        {
+            Vector supportedCommands = null;
+            m_analyzeDialog =
+                new AnalyzeDialog(null, this, m_prefs,
+                                  m_commandThread.getSupportedCommands());
+            m_analyzeDialog.setLocationRelativeTo(null);
+            m_analyzeDialog.setLocationRelativeTo(this);
+            Dimension size = getSize();
+            m_analyzeDialog.setLocation(size.width, 0);
+        }
+        m_analyzeDialog.toTop();
+    }
+
     public void cbGtpShell()
     {
         if (m_gtpShell != null)
@@ -503,6 +521,12 @@ class GoGui
         else
             analyzeBegin(false, clearBoard);
     }    
+
+    public void toTop()
+    {
+        toFront();
+        m_guiBoard.setFocus();
+    }
 
     public void windowActivated(WindowEvent e)
     {
@@ -849,24 +873,6 @@ class GoGui
             if (doCheckComputerMove)
                 checkComputerMove();
         }
-    }
-
-    private void cbAnalyze()
-    {        
-        if (m_commandThread == null)
-            return;
-        if (m_analyzeDialog == null)
-        {
-            Vector supportedCommands = null;
-            m_analyzeDialog =
-                new AnalyzeDialog(null, this, m_prefs,
-                                  m_commandThread.getSupportedCommands());
-            m_analyzeDialog.setLocationRelativeTo(null);
-            m_analyzeDialog.setLocationRelativeTo(this);
-            Dimension size = getSize();
-            m_analyzeDialog.setLocation(size.width, 0);
-        }
-        m_analyzeDialog.toTop();
     }
 
     private void cbBeepAfterMove()
@@ -2173,12 +2179,6 @@ class GoGui
     private void showWarning(String message)
     {
         SimpleDialogs.showWarning(this, message);
-    }
-
-    private void toTop()
-    {
-        toFront();
-        m_guiBoard.setFocus();
     }
 }
 
