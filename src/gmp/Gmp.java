@@ -10,6 +10,30 @@ import java.util.*;
 
 //-----------------------------------------------------------------------------
 
+class Util
+{
+	public static String format(int i)
+	{
+        StringBuffer s = new StringBuffer(8);
+		for (int k = 0; k < 8; ++k)
+		{
+            if (i % 2 != 0)
+                s.append('1');
+			else
+                s.append('0');
+			i >>= 1;
+		}
+        s.reverse();
+		return s.toString();
+	}
+
+    public static void log(String line)
+    {
+        System.err.println("gmp: " + line);
+    }
+
+}
+
 /** Gmp command. */
 class Cmd
 {
@@ -176,8 +200,107 @@ class Cmd
     }
 };
 
-class ReadThread
-    extends Thread
+class WriteThread extends Thread
+{
+    public WriteThread(OutputStream out)
+    {
+        m_out = out;
+    }
+
+    public void run()
+    {
+        try
+        {
+            synchronized (this)
+            {
+                Random random = new Random();
+                while (true)
+                {
+                    if (m_sendInProgress)
+                    {
+                        long timeout =
+                            10000 + (long)(random.nextFloat() * 10000);
+                        wait(timeout);
+                    }
+                    else
+                        wait();
+                    if (m_sendInProgress)
+                        writePacket();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            String msg = e.getMessage();
+            if (msg == null)
+                msg = e.getClass().getName();
+            System.err.println(msg);
+        }
+    }
+
+    public synchronized void resend()
+    {
+        notifyAll();
+    }
+
+    public synchronized void sendPacket(byte[] packet)
+    {
+        m_packet = packet;
+        m_sendInProgress = true;
+        notifyAll();
+    }
+
+    public synchronized void sendTalk(String talk)
+    {
+        int size = talk.length();
+        byte buffer[] = new byte[size + 1];
+        for (int i = 0; i < size; ++i)
+        {
+            byte b = (byte)talk.charAt(i);
+            buffer[i] = ((b > 3 && b < 127) ? b : (byte)'?');            
+        }
+        buffer[size] = (byte)'\n';
+        try
+        {
+            m_out.write(buffer);
+            m_out.flush();
+        }
+        catch (IOException e)
+        {
+        }
+    }
+
+    public synchronized void stopSend()
+    {
+        m_sendInProgress = false;
+        notifyAll();
+    }
+
+    private boolean m_sendInProgress = false;
+
+    private byte[] m_packet;
+
+    private OutputStream m_out;
+
+    private void writePacket()
+    {
+        Util.log("send "
+                 + Util.format(m_packet[0]) + " "
+                 + Util.format(m_packet[1]) + " "
+                 + Util.format(m_packet[2]) + " "
+                 + Util.format(m_packet[3]));
+        try
+        {
+            m_out.write(m_packet);
+            m_out.flush();
+        }
+        catch (IOException e)
+        {
+        }
+    }
+}
+
+class ReadThread extends Thread
 {
     public static class WaitResult
     {
@@ -188,17 +311,19 @@ class ReadThread
         public int m_val;
     }
 
-    public ReadThread(InputStream input, OutputStream output,
-                      int size, int colorIndex)
+    public ReadThread(InputStream in, OutputStream out, int size,
+                      int colorIndex)
     {
         assert(size >= 1);
         assert(size <= 22);
         assert(colorIndex >= 0);
         assert(colorIndex <= 2);
-        m_in = input;
-        m_out = output;
+        m_in = in;
+        m_out = out;
         m_size = size;
         m_colorIndex = colorIndex;
+        m_writeThread = new WriteThread(out);
+        m_writeThread.start();
     }
 
     public void interruptCommand()
@@ -228,7 +353,6 @@ class ReadThread
     {
         try
         {
-            Random random = new Random();
             while (true)
             {
                 int b = m_in.read();
@@ -237,10 +361,10 @@ class ReadThread
                     if (b < 0)
                     {
                         m_state = STATE_DISCONNECTED;
-                        log("input stream was closed");
+                        Util.log("input stream was closed");
                         break;
                     }
-                    log("recv " + format(b));
+                    Util.log("recv " + Util.format(b));
                     handleByte(b);
                 }
             }
@@ -393,8 +517,6 @@ class ReadThread
 
     private boolean m_myLastSeq = false;
 
-    private byte[] m_outputBuffer = new byte[4];
-
     private int m_state = STATE_IDLE;
 
     private int m_colorIndex = 0;
@@ -412,6 +534,8 @@ class ReadThread
     private StringBuffer m_talkLine = new StringBuffer();
 
     private Vector m_cmdQueue = new Vector(32, 32);
+
+    private WriteThread m_writeThread;
 
     private void answerQuery(int val)
     {
@@ -433,21 +557,6 @@ class ReadThread
         int checksum = getChecksum(b0, b2, b3);
         return (checksum == m_inBuffer[1]);
     }
-
-	private static String format(int i)
-	{
-        StringBuffer s = new StringBuffer(8);
-		for (int k = 0; k < 8; ++k)
-		{
-            if (i % 2 != 0)
-                s.append('1');
-			else
-                s.append('0');
-			i >>= 1;
-		}
-        s.reverse();
-		return s.toString();
-	}
 
     private int getChecksum(int b0, int b2, int b3)
     {
@@ -482,17 +591,17 @@ class ReadThread
             char c = (char)b;
             if (c == '\r')
             {
-                log("talk char '\\r'");
+                Util.log("talk char '\\r'");
                 return;
             }
             if (c == '\n')
             {
-                log("talk char '\\n'");
-                log("talk: " + m_talkLine);
+                Util.log("talk char '\\n'");
+                Util.log("talk: " + m_talkLine);
                 m_talkLine.setLength(0);
                 return;
             }
-            log("talk '" + c + "'");
+            Util.log("talk '" + c + "'");
             m_talkLine.append(c);
             return;
         }
@@ -500,7 +609,7 @@ class ReadThread
         if (b < 4)
         {
             if (m_pending > 0)
-                log("new start byte. discarding old bytes.");
+                Util.log("new start byte. discarding old bytes.");
             m_inBuffer[0] = b;
             m_pending = 3;
             return;
@@ -517,19 +626,19 @@ class ReadThread
             {
                 if (! checkChecksum())
                 {
-                    log("bad checksum");
+                    Util.log("bad checksum");
                     return;
                 }
                 handlePacket();
             }
             return;
         }
-        log("discarding command byte.");
+        Util.log("discarding command byte.");
     }
 
     private void handleCmd(Cmd cmd)
     {
-        log("received " + cmd.toString(m_size));
+        Util.log("received " + cmd.toString(m_size));
         if (cmd.m_cmd == Cmd.QUERY)
             answerQuery(cmd.m_val);
         else
@@ -551,17 +660,17 @@ class ReadThread
             {
                 if (ack != m_myLastSeq)
                 {
-                    log("sequence error");
+                    Util.log("sequence error");
                     return;
                 }
-                log("received OK");
+                Util.log("received OK");
                 m_state = STATE_IDLE;
                 notifyAll();
                 return;
             }
             if (seq == m_hisLastSeq)
             {
-                log("old cmd. resending OK");
+                Util.log("old cmd. resending OK");
                 sendOk();
                 return;
             }
@@ -578,25 +687,25 @@ class ReadThread
                the opponent could have detected the conflict and accepted
                the resent command, so it's easier to ignore the conflict.
             */
-            log("ignore conflict");
-            writeOutputBuffer();
+            Util.log("ignore conflict");
+            m_writeThread.resend();
         }
         else
         {
             assert(m_state == STATE_IDLE);
             if (cmd.m_cmd == Cmd.OK)
             {
-                log("ignoring unexpected OK");
+                Util.log("ignoring unexpected OK");
                 return;
             }
             if (ack != m_myLastSeq)
             {
-                log("ignoring old cmd");
+                Util.log("ignoring old cmd");
                 return;
             }
             if (seq == m_hisLastSeq)
             {
-                log("old cmd. resending OK");
+                Util.log("old cmd. resending OK");
                 sendOk();
                 return;
             }
@@ -604,11 +713,6 @@ class ReadThread
             handleCmd(cmd);
             notifyAll();
         }
-    }
-
-    private void log(String line)
-    {
-        System.err.println("gmp: " + line);
     }
 
 	private byte makeCmdByte1(int cmd, int val)
@@ -624,15 +728,16 @@ class ReadThread
 
     private boolean sendCmd(int cmd, int val)
     {
-        log("send " + (new Cmd(cmd, val)).toString(m_size));
+        Util.log("send " + (new Cmd(cmd, val)).toString(m_size));
         if (cmd != Cmd.OK)
             m_myLastSeq = ! m_myLastSeq;
-        m_outputBuffer[0] = (byte)(m_myLastSeq ? 1 : 0);
-        m_outputBuffer[0] |= (byte)(m_hisLastSeq ? 2 : 0);
-        m_outputBuffer[2] = makeCmdByte1(cmd, val);
-        m_outputBuffer[3] = makeCmdByte2(val);
-        setChecksum();
-        writeOutputBuffer();
+        byte packet[] = new byte[4];
+        packet[0] = (byte)(m_myLastSeq ? 1 : 0);
+        packet[0] |= (byte)(m_hisLastSeq ? 2 : 0);
+        packet[2] = makeCmdByte1(cmd, val);
+        packet[3] = makeCmdByte2(val);
+        setChecksum(packet);
+        m_writeThread.sendPacket(packet);
         if (cmd != Cmd.OK)
             m_state = STATE_WAIT_OK;
         return true;
@@ -643,30 +748,13 @@ class ReadThread
         return sendCmd(Cmd.OK, 0);
     }
 
-    private void setChecksum()
+    private void setChecksum(byte[] packet)
     {
-        int b0 = m_outputBuffer[0];
-        int b2 = m_outputBuffer[2];
-        int b3 = m_outputBuffer[3];
+        int b0 = packet[0];
+        int b2 = packet[2];
+        int b3 = packet[3];
         int checksum = getChecksum(b0, b2, b3);
-        m_outputBuffer[1] = (byte)(0x0080 | checksum);
-    }
-
-    private void writeOutputBuffer()
-    {
-        log("send "
-            + format(m_outputBuffer[0]) + " "
-            + format(m_outputBuffer[1]) + " "
-            + format(m_outputBuffer[2]) + " "
-            + format(m_outputBuffer[3]));
-        try
-        {
-            m_out.write(m_outputBuffer);
-            m_out.flush();
-        }
-        catch (IOException e)
-        {
-        }
+        packet[1] = (byte)(0x0080 | checksum);
     }
 }
 
@@ -764,12 +852,6 @@ public class Gmp
     private ReadThread m_readThread;
 
     private String m_lastError;
-
-
-    private void log(String line)
-    {
-        System.err.println("gmp: " + line);
-    }
 }
 
 //-----------------------------------------------------------------------------
