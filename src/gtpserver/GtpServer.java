@@ -37,7 +37,7 @@ class GtpServer
         while (true)
         {
             Process process = runtime.exec(StringUtils.tokenize(program));
-            Thread stdErrThread = new StdErrThread(process);
+            Thread stdErrThread = new ProcessUtils.StdErrThread(process);
             stdErrThread.start();
             Socket socket;
             if (serverSocket != null)
@@ -178,37 +178,4 @@ class GtpServer
     }
 }
     
-class StdErrThread
-    extends Thread
-{
-    public StdErrThread(Process process)
-    {
-        m_err = new InputStreamReader(process.getErrorStream());
-    }
-    
-    public void run()
-    {
-        try
-        {
-            int size = 1024;
-            char[] buffer = new char[size];
-            while (true)
-            {
-                int n = m_err.read(buffer, 0, size);
-                if (n < 0)
-                    return;
-                String s = new String(buffer, 0, n);
-                System.err.print(s);
-                System.err.flush();
-            }
-        }
-        catch (Exception e)
-        {
-            System.err.println(StringUtils.formatException(e));
-        }
-    }
-
-    private Reader m_err;
-}
-
 //----------------------------------------------------------------------------

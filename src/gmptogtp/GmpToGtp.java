@@ -15,6 +15,7 @@ import version.*;
 
 //----------------------------------------------------------------------------
 
+/** GTP to GMP adapter. */
 public class GmpToGtp
     extends GtpServer
 {
@@ -188,7 +189,7 @@ public class GmpToGtp
             {
                 Runtime runtime = Runtime.getRuntime();
                 process = runtime.exec(StringUtils.tokenize(program));
-                Thread stdErrThread = new StdErrThread(process);
+                Thread stdErrThread = new ProcessUtils.StdErrThread(process);
                 stdErrThread.start();
                 title = title + program;
                 in = process.getInputStream();
@@ -384,43 +385,6 @@ public class GmpToGtp
     {
         return m_gmp.undo(response);
     }
-}
-
-class StdErrThread
-    extends Thread
-{
-    public StdErrThread(Process process)
-    {
-        m_err = new InputStreamReader(process.getErrorStream());
-    }
-    
-    public void run()
-    {
-        try
-        {
-            char buf[] = new char[32768];
-            while (true)
-            {
-                int len = m_err.read(buf);
-                if (len < 0)
-                    return;
-                if (len > 0)
-                {
-                    char c[] = new char[len];
-                    for (int i = 0; i < len; ++i)
-                        c[i] = buf[i];
-                }
-                sleep(100);
-            }
-        }
-        catch (Exception e)
-        {
-            System.err.println(StringUtils.formatException(e));
-            System.err.flush();
-        }
-    }
-    
-    private Reader m_err;
 }
 
 //----------------------------------------------------------------------------

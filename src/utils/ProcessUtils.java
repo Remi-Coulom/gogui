@@ -9,10 +9,20 @@ import java.io.*;
 
 //----------------------------------------------------------------------------
 
-/** Static utility functions related to processes.
+/** Static utility functions and classes related to processes.
 */
 public class ProcessUtils
 {
+    /** Copies standard error of a process to System.err. */
+    public static class StdErrThread
+        extends StreamCopy
+    {
+        public StdErrThread(Process process)
+        {
+            super(false, process.getErrorStream(), System.err, false);
+        }        
+    }
+
     /** Run a process.
         Forwards the stdout/stderr of the child process to stderr of the
         calling process.
@@ -28,6 +38,7 @@ public class ProcessUtils
                                         System.err, false);
         copyErr.start();
     }
+
 }
 
 //----------------------------------------------------------------------------
