@@ -280,12 +280,10 @@ class Help
         }
         catch (IOException e)
         {
-            String message =
-                "Could not load page\n" +
-                url.toString() + ":\n" +
-                e.getMessage();
-            JOptionPane.showMessageDialog(this, message, "Error",
-                                          JOptionPane.ERROR_MESSAGE);
+            SimpleDialogs.showError(this,
+                                    "Could not load page\n" +
+                                    url.toString() + ":\n" +
+                                    e.getMessage());
         }
     }
 

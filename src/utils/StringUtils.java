@@ -33,6 +33,14 @@ public class StringUtils
         return format;
     }
 
+    public static String formatException(Throwable exception)
+    {
+        String result = exception.getClass().getName();
+        if (exception.getMessage() != null)
+            result = result + "\n" + exception.getMessage();
+        return result;
+    }
+
     public static String[] split(String s, char separator)
     {
         int count = 1;

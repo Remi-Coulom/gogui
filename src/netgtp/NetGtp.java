@@ -79,10 +79,7 @@ class NetGtp
         }
         catch (Throwable t)
         {
-            String msg = t.getMessage();
-            if (msg == null)
-                msg = t.getClass().getName();
-            System.err.println(msg);
+            System.err.println(StringUtils.formatException(t));
             System.exit(-1);
         }
     }
@@ -126,10 +123,7 @@ class SocketOutputCopy
         }
         catch (Exception e)
         {
-            String msg = e.getMessage();
-            if (msg == null)
-                msg = e.getClass().getName();
-            System.err.println(msg);
+            System.err.println(StringUtils.formatException(e));
         }
     }
 

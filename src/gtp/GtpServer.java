@@ -99,10 +99,7 @@ class ReadThread extends Thread
         }
         catch (Exception e)
         {
-            String msg = e.getMessage();
-            if (msg == null)
-                msg = e.getClass().getName();
-            System.err.println(msg);
+            System.err.println(StringUtils.formatException(e));
         }
     }
 

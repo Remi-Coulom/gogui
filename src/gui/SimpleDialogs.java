@@ -12,6 +12,7 @@ import javax.swing.filechooser.*;
 import java.util.*;
 import sgf.*;
 import latex.*;
+import utils.StringUtils;
 
 //-----------------------------------------------------------------------------
 
@@ -34,12 +35,7 @@ public class SimpleDialogs
 
     public static void showError(Component frame, String message, Exception e)
     {
-        String m = e.getMessage();
-        String c = e.getClass().getName();
-        if (m == null)
-            showError(frame, message + "\n" + e.getClass().getName());
-        else
-            showError(frame, message + "\n" + m);
+        showError(frame, message + "\n" + StringUtils.formatException(e));
     }
 
     public static void showInfo(Component frame, String message)

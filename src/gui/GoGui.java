@@ -498,19 +498,13 @@ class GoGui
         }
         catch (RuntimeException e)
         {
-            String msg = e.getMessage();
-            if (msg == null)
-                msg = e.getClass().getName();
-            SimpleDialogs.showError(null, msg);
+            SimpleDialogs.showError(null, StringUtils.formatException(e));
             e.printStackTrace();
             System.exit(-1);
         }
         catch (Throwable t)
         {
-            String msg = t.getMessage();
-            if (msg == null)
-                msg = t.getClass().getName();
-            SimpleDialogs.showError(null, msg);
+            SimpleDialogs.showError(null, StringUtils.formatException(t));
             t.printStackTrace();
             System.exit(-1);
         }

@@ -634,17 +634,12 @@ public final class Gtp
             }
             catch (RuntimeException e)
             {
-                String msg = e.getMessage();
-                if (msg != null)
-                    System.err.println(msg);
+                System.err.println(StringUtils.formatException(e));
                 e.printStackTrace();
             }
             catch (Throwable t)
             {
-                String msg = t.getMessage();
-                if (msg == null)
-                    msg = t.getClass().getName();
-                System.err.println(msg);
+                System.err.println(StringUtils.formatException(t));
             }
         }
 

@@ -95,10 +95,7 @@ class GtpRegress
         }
         catch (Throwable t)
         {
-            String msg = t.getMessage();
-            if (msg == null)
-                msg = t.getClass().getName();
-            System.err.println(msg);
+            System.err.println(StringUtils.formatException(t));
             System.exit(-1);
         }
     }

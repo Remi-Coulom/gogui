@@ -216,10 +216,7 @@ public class GmpToGtp
         }
         catch (Throwable t)
         {
-            String msg = t.getMessage();
-            if (msg == null)
-                msg = t.getClass().getName();
-            System.err.println(msg);
+            System.err.println(StringUtils.formatException(t));
             exitStatus = -1;
         }
         finally
@@ -233,7 +230,7 @@ public class GmpToGtp
             }
             catch (IOException e)
             {
-                System.err.println("IOException on close: " + e.getMessage());
+                System.err.println(StringUtils.formatException(e));
             }
             if (process != null)
             {
@@ -433,10 +430,7 @@ class StdErrThread
         }
         catch (Exception e)
         {
-            String msg = e.getMessage();
-            if (msg == null)
-                msg = e.getClass().getName();
-            System.err.println(msg);
+            System.err.println(StringUtils.formatException(e));
             System.err.flush();
         }
     }
