@@ -1776,6 +1776,7 @@ class GoGui
                 m_commandThread.close();
             }
         }
+        saveSession();
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
         m_commandThread = null;
