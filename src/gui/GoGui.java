@@ -85,7 +85,7 @@ class GoGui
 
         m_splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                                      m_boardPanel, m_comment);
-        m_splitPane.setResizeWeight(1.0);
+        m_splitPane.setResizeWeight(0.9);
         contentPane.add(m_splitPane, BorderLayout.CENTER);
         
         WindowAdapter windowAdapter = new WindowAdapter()
