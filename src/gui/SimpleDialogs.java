@@ -27,7 +27,7 @@ public class SimpleDialogs
     {
         JOptionPane.showMessageDialog(frame, message,
                                       m_titlePrefix + "About",
-                                      JOptionPane.INFORMATION_MESSAGE);
+                                      JOptionPane.PLAIN_MESSAGE);
     }
 
     public static void showError(Component frame, String message)
