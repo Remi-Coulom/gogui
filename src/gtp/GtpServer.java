@@ -34,6 +34,11 @@ class ReadThread extends Thread
         m_gtpServer = gtpServer;
     }
 
+    public boolean endOfFile()
+    {
+        return m_endOfFile;
+    }
+
     public Command getCommand()
     {
         synchronized (this)
@@ -49,7 +54,7 @@ class ReadThread extends Thread
             {
                 System.err.println("Interrupted");
             }
-            assert(! m_waitCommand);
+            assert(m_endOfFile || ! m_waitCommand);
             Command result = m_command;
             m_command = null;
             return result;
@@ -65,7 +70,10 @@ class ReadThread extends Thread
                 String line;
                 line = m_in.readLine();
                 if (line == null)
+                {
+                    m_endOfFile = true;
                     return;
+                }
                 line = line.trim();
                 if (line.equals("# interrupt"))
                 {
@@ -95,6 +103,8 @@ class ReadThread extends Thread
             System.err.println(msg);
         }
     }
+
+    private boolean m_endOfFile = false;
 
     private boolean m_quit = false;
 
@@ -177,6 +187,11 @@ public abstract class GtpServer
         while (true)
         {
             Command command = readThread.getCommand();
+            if (readThread.endOfFile())
+            {
+                System.err.println("XXX eof");
+                return;
+            }
             sendResponse(command);
             if (command.isQuit())
                 return;
