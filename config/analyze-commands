@@ -42,9 +42,9 @@ string/Is Legal White/is_legal white %p
 string/Is Surrounded/is_surrounded %p
 varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
-var/Restricted GenMove/reg_genmove %m %P
-varb/Restricted GenMove Black/reg_genmove black %P
-varw/Restricted GenMove White/reg_genmove white %P
+var/Restricted GenMove/restricted_genmove %m %P
+varb/Restricted GenMove Black/restricted_genmove black %P
+varw/Restricted GenMove White/restricted_genmove white %P
 none/Set Random Seed/set_random_seed %s
 pspairs/Top Moves/top_moves
 pspairs/Top Moves Black/top_moves_black
