@@ -145,6 +145,7 @@ class GoGui
             && ! command.equals("computer-both")
             && ! command.equals("computer-none")
             && ! command.equals("computer-white")
+            && ! command.equals("detach-program")
             && ! command.equals("gtp-shell")
             && ! command.equals("help")
             && ! command.equals("interrupt")
@@ -300,8 +301,12 @@ class GoGui
         if (m_commandThread == null)
             return;
         if (m_commandInProgress)
-            if (! showQuestion("Kill program?"))
+        {
+            if (! showQuestion("A command is in progress.\nKill program?"))
                 return;
+        }
+        else if (! showQuestion("Detach program?"))
+            return;
         detachProgram();
         m_prefs.setString("program", "");
     }

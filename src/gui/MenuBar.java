@@ -188,6 +188,7 @@ public class MenuBar
         assert(! m_isComputerDisabled);
         disableAll();
         m_menuFile.setEnabled(true);
+        m_itemDetachProgram.setEnabled(true);
         m_itemExit.setEnabled(true);
         m_menuGame.setEnabled(true);
         m_itemInterrupt.setEnabled(true);
