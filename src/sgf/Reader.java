@@ -131,14 +131,14 @@ public class Reader
         if (s.equals(""))
             return null;
         if (s.length() < 2)
-            throw getError("Invalid coordinates.");
+            throw getError("Invalid coordinates: " + s);
         int boardSize = m_gameInformation.m_boardSize;
         if (s.equals("tt") && boardSize <= 19)
             return null;
         int x = s.charAt(0) - 'a';
         int y = boardSize - (s.charAt(1) - 'a') - 1;
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
-            throw getError("Invalid coordinates.");
+            throw getError("Invalid coordinates: " + s);
         return new Point(x, y);
     }
 
