@@ -41,7 +41,8 @@ public class Gtp
         public void sentCommand(String s);
     }    
 
-    public Gtp(String program, boolean log, IOCallback callback) throws Error
+    public Gtp(String program, boolean log, IOCallback callback)
+        throws Gtp.Error
     {
         m_log = log;
         m_program = program;
@@ -127,7 +128,7 @@ public class Gtp
         return command;
     }
 
-    public double getCpuTime() throws Error
+    public double getCpuTime() throws Gtp.Error
     {
         try
         {
@@ -135,7 +136,7 @@ public class Gtp
         }
         catch (NumberFormatException e)
         {
-            throw new Error("Invalid response to cputime command");
+            throw new Gtp.Error("Invalid response to cputime command");
         }
     }
 
@@ -159,7 +160,7 @@ public class Gtp
         return result;
     }
 
-    public void interrupt() throws Error
+    public void interrupt() throws Gtp.Error
     {
         if (m_isInterruptCommentSupported)
             sendComment("# interrupt");
@@ -173,20 +174,20 @@ public class Gtp
                 Process process = runtime.exec(command);
                 int result = process.waitFor();
                 if (result != 0)
-                    throw new Error("Command \"" + command + "\" returned " +
-                                    result + ".");
+                    throw new Gtp.Error("Command \"" + command
+                                        + "\" returned " + result + ".");
             }
             catch (IOException e)
             {
-                throw new Error("Could not run command " + command + ":\n" +
-                                e);
+                throw new Gtp.Error("Could not run command " + command +
+                                    ":\n" + e);
             }
             catch (InterruptedException e)
             {
             }
         }
         else
-            throw new Error("Interrupt not supported");
+            throw new Gtp.Error("Interrupt not supported");
     }
 
     public boolean isCommandSupported(String command)
@@ -237,7 +238,7 @@ public class Gtp
     }
 
     public static double[][] parseDoubleBoard(String response, String title,
-                                              int boardSize) throws Error
+                                              int boardSize) throws Gtp.Error
     {
         try
         {
@@ -250,11 +251,11 @@ public class Gtp
         }
         catch (NumberFormatException e)
         {
-            throw new Error("Floating point number expected.");
+            throw new Gtp.Error("Floating point number expected.");
         }
     }
 
-    public static Point parsePoint(String s, int boardSize) throws Error
+    public static Point parsePoint(String s, int boardSize) throws Gtp.Error
     {
         s = s.trim().toUpperCase();
         if (s.equals("PASS"))
@@ -272,14 +273,14 @@ public class Gtp
         }
         catch (NumberFormatException e)
         {
-            throw new Error("Invalid point or move.");
+            throw new Gtp.Error("Invalid point or move.");
         }
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
-            throw new Error("Invalid coordinates.");
+            throw new Gtp.Error("Invalid coordinates.");
         return new Point(x, y);
     }
     
-    public static Point[] parsePointList(String s, int boardSize) throws Error
+    public static Point[] parsePointList(String s, int boardSize) throws Gtp.Error
     {
         Vector vector = new Vector(32, 32);
         s = StringUtils.replace(s, "\n", " ");
@@ -296,7 +297,7 @@ public class Gtp
 
     /** Find all points contained in string. */
     public static Point[] parsePointString(String s, int boardSize)
-        throws Error
+        throws Gtp.Error
     {
         Vector vector = new Vector(32, 32);
         s = StringUtils.replace(s, "\n", " ");
@@ -319,7 +320,7 @@ public class Gtp
 
     public static void parsePointStringList(String s, Vector pointList,
                                             Vector stringList,
-                                            int boardsize) throws Error
+                                            int boardsize) throws Gtp.Error
     {
         pointList.clear();
         stringList.clear();
@@ -344,11 +345,11 @@ public class Gtp
                 }
             }
         if (! nextIsPoint)
-            throw new Error("Missing string.");
+            throw new Gtp.Error("Missing string.");
     }
 
     public static String[][] parseStringBoard(String s, String title,
-                                              int boardSize) throws Error
+                                              int boardSize) throws Gtp.Error
     {
         String result[][] = new String[boardSize][boardSize];
         try
@@ -379,11 +380,11 @@ public class Gtp
                             if (ttype == ':')
                                 foundTitle = true;
                             else if (ttype == StreamTokenizer.TT_EOF)
-                                throw new Error(title + " not found.");
+                                throw new Gtp.Error(title + " not found.");
                         }
                         break;
                     case StreamTokenizer.TT_EOF:
-                        throw new Error(title + " not found.");
+                        throw new Gtp.Error(title + " not found.");
                     }
                 }
             }
@@ -401,7 +402,7 @@ public class Gtp
         }
         catch (IOException e)
         {
-            throw new Error("I/O error.");
+            throw new Gtp.Error("I/O error.");
         }
         return result;
     }
@@ -423,7 +424,7 @@ public class Gtp
         }
     }
 
-    public void queryProtocolVersion() throws Error
+    public void queryProtocolVersion() throws Gtp.Error
     {
         try
         {            
@@ -448,7 +449,7 @@ public class Gtp
         }
     }
 
-    public void querySupportedCommands() throws Error
+    public void querySupportedCommands() throws Gtp.Error
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
         String response = sendCommand(command);
@@ -469,7 +470,7 @@ public class Gtp
         }
     }
 
-    public String sendCommand(String command, long timeout) throws Error
+    public String sendCommand(String command, long timeout) throws Gtp.Error
     {
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
@@ -498,23 +499,23 @@ public class Gtp
         return m_response;
     }
 
-    public String sendCommand(String command) throws Error
+    public String sendCommand(String command) throws Gtp.Error
     {
         return sendCommand(command, 0);
     }
 
-    public void sendCommandBoardsize(int size) throws Error
+    public void sendCommandBoardsize(int size) throws Gtp.Error
     {
         if (m_protocolVersion == 2)
             sendCommand("boardsize " + size);
     }
 
-    public String sendCommandClearBoard(int size) throws Error
+    public String sendCommandClearBoard(int size) throws Gtp.Error
     {
         return sendCommand(getCommandClearBoard(size));
     }
 
-    public String sendCommandPlay(Move move) throws Error
+    public String sendCommandPlay(Move move) throws Gtp.Error
     {
         return sendCommand(getCommandPlay(move));
     }
@@ -673,7 +674,7 @@ public class Gtp
 
     private StdErrThread m_stdErrThread;
 
-    private void readResponse() throws Error
+    private void readResponse() throws Gtp.Error
     {
         try
         {
