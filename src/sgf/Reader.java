@@ -191,6 +191,16 @@ public class Reader
             {
                 node.setMove(new Move(parsePoint(v), Color.BLACK));
             }
+            else if (p.equals("BL"))
+            {
+                try
+                {
+                    node.setTimeLeftBlack(Float.parseFloat(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
             else if (p.equals("C"))
             {
                 node.setComment(v);
@@ -220,6 +230,16 @@ public class Reader
             else if (p.equals("W"))
             {
                 node.setMove(new Move(parsePoint(v), Color.WHITE));
+            }
+            else if (p.equals("WL"))
+            {
+                try
+                {
+                    node.setTimeLeftWhite(Float.parseFloat(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
             }
             return true;
         }

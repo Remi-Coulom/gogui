@@ -221,6 +221,14 @@ public class Writer
             printEscaped(comment);
             m_out.println();
         }
+        if (! Float.isNaN(node.getTimeLeftBlack()))
+        {
+            m_out.println("BL[" + node.getTimeLeftBlack() + "]");
+        }
+        if (! Float.isNaN(node.getTimeLeftWhite()))
+        {
+            m_out.println("WL[" + node.getTimeLeftWhite() + "]");
+        }
         int numberChildren = node.getNumberChildren();
         if (numberChildren == 0)
             return;

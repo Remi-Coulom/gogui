@@ -56,8 +56,11 @@ class GameInfo
 
     public void actionPerformed(ActionEvent evt)
     {
-        setTime(go.Color.BLACK);
-        setTime(go.Color.WHITE);
+        if (m_timeControl.isRunning())
+        {
+            setTime(go.Color.BLACK);
+            setTime(go.Color.WHITE);
+        }
     }
 
     public void update(Node node, go.Board board)
@@ -89,6 +92,12 @@ class GameInfo
                 lastMove += p.toString();
         }
         m_last.setText(lastMove);
+        String timeLeftBlack = node.getTimeLeftFomatted(go.Color.BLACK);
+        String timeLeftWhite = node.getTimeLeftFomatted(go.Color.WHITE);
+        if (timeLeftBlack != null)
+            m_timeB.setText(timeLeftBlack);
+        if (timeLeftWhite != null)
+            m_timeW.setText(timeLeftWhite);
     }
 
     private go.Board m_board;

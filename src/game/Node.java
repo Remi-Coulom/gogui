@@ -5,8 +5,10 @@
 
 package game;
 
+import java.text.*;
 import java.util.*;
 import go.*;
+import utils.*;
 
 //-----------------------------------------------------------------------------
 
@@ -44,6 +46,19 @@ public class Node
         if (m_addWhite == null)
             m_addWhite = new Vector(1);
         m_addWhite.add(point);
+    }
+
+    /** Time left for color after move was made formatted as a string.
+        Returns null if unknown.
+    */
+    public String getTimeLeftFomatted(go.Color color)
+    {
+        float timeLeft =
+            (color == go.Color.BLACK ? m_timeLeftBlack : m_timeLeftWhite);
+        if (Float.isNaN(timeLeft))
+            return null;
+        NumberFormat format = StringUtils.getNumberFormat(1);
+        return format.format(timeLeft);
     }
 
     public Point getAddBlack(int i)
@@ -184,6 +199,22 @@ public class Node
         return m_children.size();
     }
 
+    /** Time left for black after move was made.
+        Returns Float.NaN if unknown.
+    */
+    public float getTimeLeftBlack()
+    {
+        return m_timeLeftBlack;
+    }
+
+    /** Time left for white after move was made.
+        Returns Float.NaN if unknown.
+    */
+    public float getTimeLeftWhite()
+    {
+        return m_timeLeftWhite;
+    }
+
     /** @return Color.EMPTY if unknown */
     public Color getToMove()
     {
@@ -210,6 +241,16 @@ public class Node
         m_move = move;
     }
 
+    public void setTimeLeftBlack(float timeLeft)
+    {
+        m_timeLeftBlack = timeLeft;
+    }
+
+    public void setTimeLeftWhite(float timeLeft)
+    {
+        m_timeLeftWhite = timeLeft;
+    }
+
     public void setToMove(Color color)
     {
         assert(color == Color.BLACK || color == Color.WHITE);
@@ -221,6 +262,10 @@ public class Node
         assert(m_children.contains(child));
         m_children.remove(child);
     }
+
+    private float m_timeLeftBlack = Float.NaN;
+
+    private float m_timeLeftWhite = Float.NaN;
 
     private Color m_toMove = Color.EMPTY;
 

@@ -115,6 +115,11 @@ class TimeControl
         return m_initialized;
     }
 
+    public boolean isRunning()
+    {
+        return (m_toMove != go.Color.EMPTY);
+    }
+
     public boolean lostOnTime(go.Color c)
     {
         if (! m_initialized)
