@@ -1,5 +1,5 @@
 <appendix id="bugs">
-<title>Bugs</title>
+<title>Trouble Shooting</title>
 
 <section>
 <title>Rendering errors in the GTP shell</title>
@@ -21,6 +21,22 @@ the popup menu sometimes overlaps the command field and selection from
 the popup menu using the Enter key does not work.
 It is recommended to disable command line completion on the Mac and to
 select from the popup menu only using the mouse.
+</para>
+</section>
+
+<section>
+<title>Out of memory error when loading large SGF trees</title>
+<para>
+Java uses a low maximum memory heap size by default.
+It can be increased by using the "-Xmx" option, e.g. for 512MB:
+<blockquote>
+<simpara>
+<userinput>java -Xmx512M -jar gogui.jar</userinput>
+</simpara>
+</blockquote>  
+You will need approximately 3 times the memory of the SGF file size,
+but don't use more memory than there is real memory on the machine,
+because using swap space will make the program unusable slow.
 </para>
 </section>
 
