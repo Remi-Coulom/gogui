@@ -473,15 +473,10 @@ public class GtpShell
         m_fastUpdate = fastUpdate;
     }
 
-    public void setBounds(int x, int y, int width, int height)
+    public void setFinalSize(int x, int y, int width, int height)
     {
-        if (m_isEmpty)
-        {
-            m_finalSize = new Dimension(width, height);
-            m_finalLocation = new java.awt.Point(x, y);
-        }
-        else
-            super.setBounds(x, y, width, height);
+        m_finalSize = new Dimension(width, height);
+        m_finalLocation = new java.awt.Point(x, y);
     }
 
     public void setInitialCompletions(Vector completions)
@@ -570,7 +565,7 @@ public class GtpShell
 
     private boolean m_fastUpdate;
 
-    private boolean m_isEmpty = true;
+    private boolean m_isFinalSizeSet;
 
     private boolean m_showModifyWarning = true;
 
@@ -920,12 +915,12 @@ public class GtpShell
     */
     private void setFinalSize()
     {
-        if (! m_isEmpty)
+        if (m_isFinalSizeSet)
             return;
-        m_isEmpty = false;
         setSize(m_finalSize);
         if (m_finalLocation != null)
             setLocation(m_finalLocation);
+        m_isFinalSizeSet = true;
     }
 
     private static void setPrefsDefaults(Preferences prefs)

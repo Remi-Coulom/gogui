@@ -1651,6 +1651,16 @@ class GoGui
             }
             if (m_commandThread != null)
             {
+                if (m_rememberWindowSizes)
+                    restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+                else
+                {
+                    m_gtpShell.setLocationRelativeTo(this);
+                    Dimension size = getSize();
+                    m_gtpShell.setLocation(size.width, 0);
+                }
+                if (m_prefs.getBool("show-gtpshell"))
+                    m_gtpShell.toTop();
                 // First command is sent with a timeout, so that we are not
                 // fooled by programs who are not GTP Go programs, but
                 // consume stdin without writing to stdout.
@@ -1716,16 +1726,6 @@ class GoGui
             }
             if (m_commandThread != null)
             {
-                if (m_rememberWindowSizes)
-                    restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
-                else
-                {
-                    m_gtpShell.setLocationRelativeTo(this);
-                    Dimension size = getSize();
-                    m_gtpShell.setLocation(size.width, 0);
-                }
-                if (m_prefs.getBool("show-gtpshell"))
-                    m_gtpShell.toTop();
                 if (m_prefs.getBool("show-analyze"))
                     cbAnalyze();
             }
@@ -1909,7 +1909,7 @@ class GoGui
         m_boardNeedsReset = false;
     }
     
-    private void restoreSize(Component component, String name, int size)
+    private void restoreSize(Window window, String name, int size)
     {
         name = name + "-" + size;
         if (! m_prefs.contains(name))
@@ -1923,7 +1923,10 @@ class GoGui
             int y = Integer.parseInt(tokens[1]);
             int width = Integer.parseInt(tokens[2]);
             int height = Integer.parseInt(tokens[3]);
-            component.setBounds(x, y, width, height);
+            if (window instanceof GtpShell)
+                ((GtpShell)window).setFinalSize(x, y, width, height);
+            else
+                window.setBounds(x, y, width, height);
         }
         catch (NumberFormatException e)
         {
