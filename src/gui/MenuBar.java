@@ -552,7 +552,7 @@ class MenuBar
     private JMenu createWindowsMenu()
     {
         JMenu menu = new JMenu("Windows");
-        menu.setMnemonic(KeyEvent.VK_X);
+        menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
                     "analyze");
         m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,

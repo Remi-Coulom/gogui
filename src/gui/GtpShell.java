@@ -321,11 +321,12 @@ public class GtpShell
         If owner != null, send synchronously and display error dialog on
         owner, otherwise send asynchronously.
     */
-    public void sendCommand(String command, Component owner)
+    public boolean sendCommand(String command, Component owner,
+                               boolean askContinue)
     {
         String c = command.trim();
         if (c.equals(""))
-            return;
+            return true;
         if (c.startsWith("#"))
         {
             m_gtpShellText.appendComment(command + "\n");
@@ -361,10 +362,10 @@ public class GtpShell
                 
                 Object value = optionPane.getValue();
                 if (value == null)
-                    return;
+                    return true;
                 int intValue = ((Integer)value).intValue();
                 if (intValue != JOptionPane.OK_OPTION)
-                    return;
+                    return true;
                 message = 
                     "Would you like to disable the warnings about\n" +
                     "commands modifying the board state?";
@@ -373,14 +374,16 @@ public class GtpShell
             }
             try
             {
-                if (! m_callback.sendGtpCommand(command, owner != null))
-                    return;
+                m_callback.sendGtpCommand(command, owner != null);
             }
             catch (Gtp.Error e)
             {
                 SimpleDialogs.showError(owner, e.getMessage());
+                if (askContinue)
+                    return ! SimpleDialogs.showQuestion(owner, "Abort?");
             }
         }
+        return true;
     }
 
     public void sentCommand(String command)
@@ -429,7 +432,8 @@ public class GtpShell
                     in.close();
                     break;
                 }
-                sendCommand(line, this);
+                if (! sendCommand(line, this, true))
+                    break;
             }
             catch (IOException e)
             {
@@ -680,7 +684,7 @@ public class GtpShell
         String command = m_comboBox.getSelectedItem().toString();        
         if (command.trim().equals(""))
             return;
-        sendCommand(command, null);
+        sendCommand(command, null, false);
         appendToHistory(command);
         m_comboBox.hidePopup();
         addAllCompletions(m_history);
