@@ -288,6 +288,9 @@ class ReadThread
                 return false;
             case STATE_WAIT_OK:
                 continue;
+            case STATE_DISCONNECTED:
+                response.append("GMP connection broken.");
+                return false;
             default:
                 return false;
             }
