@@ -54,5 +54,8 @@ cat config/gogui.omf \
 | sed "s;file:/usr/;file:$PREFIX/;" \
 > $PREFIX/share/omf/gogui/gogui.omf
 
-update-mime-database $PREFIX/share/mime
-scrollkeeper-update
+# Update shared mime database and scroolkeeper.
+# Fail quietly on error, because they might not be installed
+# and are optional.
+update-mime-database $PREFIX/share/mime >/dev/null 2>&1
+scrollkeeper-update >/dev/null 2>&1
