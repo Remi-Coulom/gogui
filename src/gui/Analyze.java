@@ -213,7 +213,9 @@ class AnalyzeDialog
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
-        if (command.equals("close"))
+        if (command.equals("clear"))
+            m_callback.clearAnalyzeCommand();
+        else if (command.equals("close"))
             close();
         else if (command.equals("comboBoxChanged"))
             comboBoxChanged();
@@ -356,12 +358,16 @@ class AnalyzeDialog
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
         innerPanel.setBorder(GuiUtils.createEmptyBorder());
         m_runButton = new JButton("Run");
-        m_runButton.setEnabled(false);
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
         m_runButton.setMnemonic(KeyEvent.VK_R);
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
+        JButton clearButton = new JButton("Clear");
+        clearButton.setActionCommand("clear");
+        clearButton.addActionListener(this);
+        clearButton.setMnemonic(KeyEvent.VK_L);
+        innerPanel.add(clearButton);
         JButton closeButton = new JButton("Close");
         closeButton.setActionCommand("close");
         closeButton.addActionListener(this);
@@ -494,7 +500,6 @@ class AnalyzeDialog
             return;
         selectCommand(index);
         m_lastCommandSent = (String)m_labels.get(index);
-        m_runButton.setEnabled(false);
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         m_callback.setAnalyzeCommand(command);
