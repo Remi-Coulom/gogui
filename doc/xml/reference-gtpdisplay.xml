@@ -18,13 +18,16 @@ Go Text Protocol adapter showing the current board in a window.
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><replaceable>program</replaceable></arg>
+</cmdsynopsis>
 
+<cmdsynopsis>
 <command>gtpdisplay</command>
 <arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
 
+<cmdsynopsis>
 <command>gtpdisplay</command>
 <arg choice="plain"><option>-version</option></arg>
-
 </cmdsynopsis>
 </refsynopsisdiv>
 

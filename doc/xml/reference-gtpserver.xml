@@ -17,13 +17,19 @@ Connects a Go program supporting Go Text Protocol to a socket.
 <command>gtpserver</command>
 <arg choice="plain"><option>-port</option> <replaceable>n</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
-<arg><option>-help</option></arg>
 <arg><option>-loop</option></arg>
 <arg><option>-remote</option> <replaceable>hostname</replaceable></arg>
 <arg><option>-user</option> <replaceable>file</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg><option>-version</option></arg>
 <arg choice="plain"><replaceable>program</replaceable></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gtpserver</command>
+<arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gtpserver</command>
+<arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 

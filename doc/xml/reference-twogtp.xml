@@ -32,22 +32,25 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
-
+</cmdsynopsis>
+<cmdsynopsis>
 <command>twogtp</command>
 <arg choice="plain"><option>-help</option></arg>
-
+</cmdsynopsis>
+<cmdsynopsis>
 <command>twogtp</command>
 <arg choice="plain"><option>-analyze</option></arg>
 <arg choice="plain"><replaceable>file.dat</replaceable></arg>
 <arg><option>-force</option></arg>
-
+</cmdsynopsis>
+<cmdsynopsis>
 <command>twogtp</command>
 <arg choice="plain"><option>-compare</option></arg>
 <arg choice="plain" rep="repeat"><replaceable>file.sgf</replaceable></arg>
-
+</cmdsynopsis>
+<cmdsynopsis>
 <command>twogtp</command>
 <arg choice="plain"><option>-version</option></arg>
-
 </cmdsynopsis>
 </refsynopsisdiv>
 

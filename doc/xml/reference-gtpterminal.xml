@@ -17,13 +17,14 @@ Simple text based interface to Go programs supporting GTP.
 <command>gtpterminal</command>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
-
+</cmdsynopsis>
+<cmdsynopsis>
 <command>gtpterminal</command>
 <arg choice="plain"><option>-help</option></arg>
-
+</cmdsynopsis>
+<cmdsynopsis>
 <command>gtpterminal</command>
 <arg choice="plain"><option>-version</option></arg>
-
 </cmdsynopsis>
 </refsynopsisdiv>
 

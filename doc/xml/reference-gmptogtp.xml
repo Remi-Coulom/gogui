@@ -22,14 +22,22 @@ Adapter from Go Text Protocol to Go Modem Protocol.
 <arg><option>-flow</option> <group choice="plain">
   <arg choice="plain">rtscts</arg><arg choice="plain">xonxoff</arg>
   <arg choice="plain">none</arg></group></arg>
-<arg><option>-help</option></arg>
 <arg><option>-list</option></arg>
 <arg><option>-simple</option></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg><option>-version</option></arg>
 <arg><option>-wait</option></arg>
 <arg><replaceable>program</replaceable></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gmptogtp</command>
+<arg><option choice="plain">-help</option></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gmptogtp</command>
+<arg><option choice="plain">-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 

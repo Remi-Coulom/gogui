@@ -27,13 +27,16 @@ Go Text Protocol adapter for logging or protocol translations.
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><option>-version1</option></arg>
+</cmdsynopsis>
 
+<cmdsynopsis>
 <command>gtpadapter</command>
 <arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
 
+<cmdsynopsis>
 <command>gtpadapter</command>
 <arg choice="plain"><option>-version</option></arg>
-
 </cmdsynopsis>
 </refsynopsisdiv>
 

@@ -33,10 +33,14 @@
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><replaceable>file</replaceable></arg>
+</cmdsynopsis>
 
+<cmdsynopsis>
 <command>gogui</command>
 <arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
 
+<cmdsynopsis>
 <command>gogui</command>
 <arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
