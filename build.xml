@@ -100,7 +100,31 @@ installation directory.
 </copy>
 </target>
 
-<target name="dist" depends="all,javadoc,cleanBuildDir"/>
+<target name="dist" depends="all">
+<zip destfile="gogui-${version}.zip">
+<zipfileset prefix="gogui-${version}" dir="." includes="
+ README
+ bin/gmptogtp,
+ bin/gogui,
+ bin/gtpdummy,
+ bin/gtpregress,
+ bin/gtpserver,
+ bin/netgtp,
+ bin/sgftotex,
+ bin/twogtp,
+ build.xml,
+ config/analyze-commands*,
+ doc/html/*.html,
+ doc/xml/*.xml,
+ doxygen/Doxyfile,
+ lib/*.jar,
+ src/images/*.png,
+ src/overview.html,
+ src/*/package.html,
+ src/*/*.java,
+" />
+</zip>
+</target>
 
 <target name="doc" depends="docCheckUptodate" unless="docUptodate">
 <antcall target="checkXslAvailable"/>
