@@ -281,7 +281,7 @@ class MenuBar
         m_itemGoto.setEnabled(hasFather || hasChildren);
         m_itemNextVariation.setEnabled(hasVariation);
         m_itemPreviousVariation.setEnabled(hasVariation);
-        m_itemTruncate.setEnabled(hasChildren);
+        m_itemTruncate.setEnabled(hasFather);
     }
 
     private boolean m_isComputerDisabled;

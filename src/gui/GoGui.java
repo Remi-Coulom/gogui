@@ -1289,18 +1289,18 @@ class GoGui
 
     private void cbTruncate()
     {
-        if (m_currentNode.getChild() == null)
+        if (m_currentNode.getFather() == null)
         {
-            showError("No children to truncate.");
+            showError("Cannot truncate root node.");
             return;
         }
-        if (! showQuestion("Truncate children?"))
+        if (! showQuestion("Truncate current node and all its children?"))
             return;
-        m_currentNode.truncateChildren();
+        Node oldCurrentNode = m_currentNode;
+        backward(1);
+        m_currentNode.removeChild(oldCurrentNode);
         m_needsSave = true;
-        updateGameInfo();
-        m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_currentNode);
+        boardChangedBegin(false);
     }
 
     private void cbVariation(boolean forward)

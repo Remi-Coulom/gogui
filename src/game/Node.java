@@ -206,10 +206,10 @@ public class Node
         m_toMove = color;
     }
 
-    /** Remove all children. */
-    public void truncateChildren()
+    public void removeChild(Node child)
     {
-        m_children.clear();
+        assert(m_children.contains(child));
+        m_children.remove(child);
     }
 
     private Color m_toMove = Color.EMPTY;

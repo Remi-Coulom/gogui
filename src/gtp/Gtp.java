@@ -23,7 +23,7 @@ import utils.StringUtils;
 //-----------------------------------------------------------------------------
 
 /**
-   This class is final because it starts a thread in it's constructor which
+   This class is final because it starts a thread in its constructor which
    might conflict with subclassing because the subclass constructor will
    be called after the thread is started.
 */
