@@ -16,6 +16,7 @@ Runs GTP regression tests.
 <command>gtpregress</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-output</option> <replaceable>directory</replaceable></arg>
+<arg><option>-verbose</option></arg>
 <arg choice="plain"><replaceable>program</replaceable></arg>
 <arg choice="plain" rep="repeat">
 <replaceable>test.tst</replaceable>
@@ -96,6 +97,15 @@ Display help and exit.
 <para>
 Write output files to
 <filename><replaceable>directory</replaceable></filename>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print the GTP stream to the Go program to standard error.
 </para>
 </listitem>
 </varlistentry>

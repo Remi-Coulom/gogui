@@ -26,6 +26,7 @@ class Main
                 "config:",
                 "help",
                 "output:",
+                "verbose",
                 "version"
             };
             Options opt = Options.parse(args, options);
@@ -39,6 +40,7 @@ class Main
                 System.out.println("GtpRegress " + Version.get());
                 return;
             }
+            boolean verbose = opt.isSet("verbose");
             String output = opt.getString("output", "");
             Vector arguments = opt.getArguments();
             int size = arguments.size();
@@ -51,7 +53,7 @@ class Main
             String tests[] = new String[size - 1];
             for (int i = 0; i <  size - 1; ++i)
                 tests[i] = (String)arguments.get(i + 1);
-            new GtpRegress(program, tests, output);
+            new GtpRegress(program, tests, output, verbose);
         }
         catch (Throwable t)
         {
@@ -68,6 +70,7 @@ class Main
                   "-config  config file\n" +
                   "-help    display this help and exit\n" +
                   "-output  output directory\n" +
+                  "-verbose log GTP stream to stderr\n" +
                   "-version display this help and exit\n");
     }
 }

@@ -20,10 +20,11 @@ import version.*;
 class GtpRegress
     implements Gtp.IOCallback
 {
-    GtpRegress(String program, String[] tests, String output)
+    GtpRegress(String program, String[] tests, String output, boolean verbose)
         throws Exception
     {
         m_program = program;
+        m_verbose = verbose;
         m_prefix = "";
         if (! output.equals(""))
         {
@@ -126,6 +127,8 @@ class GtpRegress
     private boolean m_lastError;
 
     private boolean m_lastTestFailed;
+
+    private boolean m_verbose;
 
     private int m_lastCommandId;
 
@@ -606,7 +609,7 @@ class GtpRegress
         FileReader fileReader = new FileReader(m_file);
         BufferedReader reader = new BufferedReader(fileReader);
         initOutFile();
-        m_gtp = new Gtp(m_program, false, this);
+        m_gtp = new Gtp(m_program, m_verbose, this);
         m_lastSgf = null;
         try
         {
