@@ -55,8 +55,11 @@ public class Field
         addKeyListener(keyAdapter);
         MouseAdapter mouseAdapter = new MouseAdapter()
             {
-                public void mouseClicked(MouseEvent event)
+                public void mouseReleased(MouseEvent event)
                 {
+                    java.awt.Point point = event.getPoint();
+                    if (! contains((int)point.getX(), (int)point.getY()))
+                        return;
                     if (event.getClickCount() == 2)
                         m_board.fieldClicked(m_point, true);
                     else
