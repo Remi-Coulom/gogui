@@ -78,6 +78,8 @@ public class Field
             drawMarkup(graphics);
         if (m_crossHair)
             drawCrossHair(graphics);
+        if (m_lastMoveMarker)
+            drawLastMoveMarker(graphics);
         if (! m_string.equals(""))
             drawString(graphics);
         if (isFocusOwner())
@@ -121,6 +123,14 @@ public class Field
         m_influenceSet = true;
     }
 
+    public void setLastMoveMarker(boolean lastMoveMarker)
+    {
+        if (m_lastMoveMarker == lastMoveMarker)
+            return;
+        m_lastMoveMarker = lastMoveMarker;
+        repaint();
+    }
+
     public void setMarkup(boolean markup)
     {
         if (m_markup == markup)
@@ -138,9 +148,11 @@ public class Field
         }
     }
 
+    private boolean m_crossHair;
+
     private boolean m_isHandicap;
 
-    private boolean m_crossHair;
+    private boolean m_lastMoveMarker;
 
     private boolean m_markup;
 
@@ -176,14 +188,7 @@ public class Field
 
     private void drawFocus(Graphics g)
     {
-        Dimension size = getSize();
-        int dx = size.width / 4;
-        int dy = size.height / 4;
-        g.setColor(java.awt.Color.blue);
-        int radiusX = size.width / 7;
-        int radiusY = size.height / 7;
-        g.fillOval(size.width / 2 - radiusX, size.height / 2 - radiusY,
-                   2 * radiusX + 1, 2 * radiusY + 1);
+        drawPoint(g, java.awt.Color.blue);
     }
 
     private void drawGrid(Graphics g)
@@ -233,6 +238,11 @@ public class Field
         g.fillRect(dx / 2, dy / 2, size.width - dx + 1, size.height - dy + 1);
     }
 
+    private void drawLastMoveMarker(Graphics g)
+    {
+        drawPoint(g, java.awt.Color.red);
+    }
+
     private void drawMarkup(Graphics g)
     {
         Dimension size = getSize();
@@ -240,6 +250,18 @@ public class Field
         int dy = size.height / 2;
         g.setColor(java.awt.Color.blue);
         g.drawRect(dx / 2, dy / 2, size.width - dx + 1, size.height - dy + 1);
+    }
+
+    private void drawPoint(Graphics g, java.awt.Color color)
+    {
+        Dimension size = getSize();
+        int dx = size.width / 4;
+        int dy = size.height / 4;
+        g.setColor(color);
+        int radiusX = size.width / 7;
+        int radiusY = size.height / 7;
+        g.fillOval(size.width / 2 - radiusX, size.height / 2 - radiusY,
+                   2 * radiusX + 1, 2 * radiusY + 1);
     }
 
     private void drawStone(Graphics g, java.awt.Color c)

@@ -407,7 +407,7 @@ public class Board
     {
         if (m_lastMove != null)
         {
-            getField(m_lastMove).setString("");
+            getField(m_lastMove).setLastMoveMarker(false);
             m_lastMove = null;
         }
     }
@@ -426,7 +426,7 @@ public class Board
                 setFocusPoint(lastMove);
                 if (m_showLastMove)
                 {
-                    getField(lastMove).setString(Integer.toString(moveNumber));
+                    getField(lastMove).setLastMoveMarker(true);
                     m_lastMove = lastMove;
                 }
             }
