@@ -7,6 +7,7 @@ package version;
 
 //----------------------------------------------------------------------------
 
+/** Version information for all packages. */
 public class Version
 {
     public static String get()
