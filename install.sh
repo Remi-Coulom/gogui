@@ -9,7 +9,7 @@ function usage() {
 while getopts hP: OPTION; do
   case $OPTION in
     h) usage; exit 0;;
-    P) PREFIX="$OPTARG";;
+    p) PREFIX="$OPTARG";;
     ?) usage; exit -1;;
   esac
 done
