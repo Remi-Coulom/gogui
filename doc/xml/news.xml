@@ -33,11 +33,12 @@
 	    <option>-computer-both</option>, <option>-computer-black</option>.
 	  </listitem>
 	  <listitem>
-	    Compile TwoGtp into its own jar file twogtp.jar.
+	    Compile <application>TwoGtp</application> into its own jar file
+	    <filename>twogtp.jar</filename>.
 	  </listitem>
 	  <listitem>
-	    Fix bug in GmpToGtp: Black should send NEWGAME if
-	    <option>-simple</option> option is used.
+	    Fix bug in <application>GmpToGtp</application>: Black should send
+	    NEWGAME if <option>-simple</option> option is used.
 	  </listitem>
 	  <listitem>
 	    Lots of other fixes and enhancements.
