@@ -47,6 +47,26 @@ public class MessageQueue
         }
     }
 
+    public Object waitFor(long timeout)
+    {
+        synchronized(this)
+        {
+            if (m_queue.isEmpty())
+            {
+                try
+                {
+                    wait(timeout);
+                }
+                catch (InterruptedException e)
+                {
+                }
+            }
+            if (m_queue.isEmpty())
+                return null;
+            return m_queue.remove(0);
+        }
+    }
+
     private Vector m_queue = new Vector();
 }
 

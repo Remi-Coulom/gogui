@@ -31,6 +31,11 @@ public final class Gtp
         }
     }    
 
+    public interface TimeoutCallback
+    {
+        public boolean askContinue();
+    }
+
     /** Callback interface for logging or displaying the GTP stream. */
     public interface IOCallback
     {
@@ -74,6 +79,7 @@ public final class Gtp
         m_in = new BufferedReader(reader);
         m_out = new PrintWriter(m_process.getOutputStream());
         m_illegalState = false;
+        m_timedOut = false;
         m_isProgramDead = false;
         
         m_queue = new MessageQueue();
@@ -209,7 +215,7 @@ public final class Gtp
     /** Check if program is dead or in illegal state. */
     public boolean isProgramDead()
     {
-        return (m_isProgramDead || m_illegalState);
+        return (m_isProgramDead || m_illegalState || m_timedOut);
     }
 
     public void queryInterruptSupport()
@@ -292,14 +298,24 @@ public final class Gtp
 
     public String sendCommand(String command) throws Gtp.Error
     {
+        return sendCommand(command, -1, null);
+    }
+
+    public String sendCommand(String command, long timeout,
+                              TimeoutCallback timeoutCallback)
+        throws Gtp.Error
+    {
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
+        m_timeoutCallback = timeoutCallback;
         m_fullResponse = "";
         m_response = "";
         if (m_isProgramDead)
             throw new Error("Program is dead");
+        if (m_timedOut)
+            throw new Error("Program timed out");
         if (m_illegalState)
-            throw new Error("Program sent illegal response");
+            throw new Error("Program sent invalid response");
         if (m_autoNumber)
         {
             ++m_commandNumber;
@@ -315,7 +331,7 @@ public final class Gtp
         }
         if (m_callback != null)
             m_callback.sentCommand(command);
-        readResponse();
+        readResponse(timeout);
         return m_response;
     }
 
@@ -507,6 +523,8 @@ public final class Gtp
 
     private boolean m_log;
 
+    private boolean m_timedOut;
+
     private int m_protocolVersion = 1;
 
     private int m_commandNumber;
@@ -537,6 +555,8 @@ public final class Gtp
 
     private MessageQueue m_queue;
 
+    private TimeoutCallback m_timeoutCallback;
+
     private void handleErrorStream(String text)
     {
         if (text == null)
@@ -565,11 +585,30 @@ public final class Gtp
         }
     }
 
-    private String readLine() throws Error
+    private String readLine(long timeout) throws Gtp.Error
     {
         while (true)
         {            
-            ReadMessage message = (ReadMessage)m_queue.waitFor();
+            ReadMessage message;
+            if (timeout < 0)
+                message = (ReadMessage)m_queue.waitFor();
+            else
+            {
+                message = null;
+                while (message == null)
+                {
+                    message = (ReadMessage)m_queue.waitFor(timeout);
+                    if (message == null)
+                    {
+                        assert(m_timeoutCallback != null);
+                        if (! m_timeoutCallback.askContinue())
+                        {
+                            m_timedOut = true;
+                            throw new Gtp.Error("Program timed out");
+                        }
+                    }
+                }
+            }
             if (! message.m_isError)
             {
                 String line = message.m_text;
@@ -594,11 +633,11 @@ public final class Gtp
         }
     }
 
-    private void readResponse() throws Gtp.Error
+    private void readResponse(long timeout) throws Gtp.Error
     {
         String line = "";
         while (line.trim().equals(""))
-            line = readLine();
+            line = readLine(timeout);
         StringBuffer response = new StringBuffer(line);
         response.append("\n");
         if (! isResponseLine(line))
@@ -612,7 +651,7 @@ public final class Gtp
         boolean done = false;
         while (! done)
         {
-            line = readLine();
+            line = readLine(timeout);
             done = line.equals("");
             response.append(line);
             response.append("\n");

@@ -192,7 +192,8 @@ public class CommandThread
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        String response = m_gtp.sendCommand(command);
+        TimeoutCallback timeoutCallback = new TimeoutCallback(command);
+        String response = m_gtp.sendCommand(command, 5000, timeoutCallback);
         return response;
     }
 
@@ -212,6 +213,25 @@ public class CommandThread
         assert(! m_commandInProgress);
         return m_gtp.sendCommandPlay(move);
     }
+
+    private static class TimeoutCallback
+        implements Gtp.TimeoutCallback
+    {
+        TimeoutCallback(String command)
+        {
+            m_command = command;
+        }
+
+        public boolean askContinue()
+        {
+            String message = "Program did not respond to command"
+                + " '" + m_command + "'\n" +
+                "Abort waiting?";
+            return ! SimpleDialogs.showQuestion(null, message);
+        }
+
+        private String m_command;
+    };
 
     private boolean m_commandInProgress;
 
