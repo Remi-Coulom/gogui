@@ -107,6 +107,11 @@ public class TwoGtp
                             "undo\n" +
                             "version\n" +
                             "white\n");
+        else if (cmd.equals("genmove"))
+        {
+            response.append("command not supported in protocol version 1");
+            status = false;
+        }
         else
         {
             boolean isExtCommandBlack = (m_blackCommands.indexOf(cmd) >= 0);
@@ -116,7 +121,10 @@ public class TwoGtp
             if (isExtCommandWhite && ! isExtCommandBlack)
                 return sendSingle(m_white, cmdLine, response);
             if (isExtCommandWhite && isExtCommandBlack)
-                return sendBoth(cmdLine, response, false, false);
+            {
+                response.append("use twogtp_black/white to specify program");
+                return false;
+            }
             response.append("unknown command");
             status = false;
         }
@@ -390,12 +398,29 @@ public class TwoGtp
 
     private boolean newGame(int size, StringBuffer response)
     {
-        boolean status = sendBoth("boardsize " + size, response, true, false);
-        if (status)
-            m_inconsistentState = false;
+        try
+        {
+            m_black.sendCommandsClearBoard(size);
+        }
+        catch (Gtp.Error e)
+        {
+            response.append("B: " + e.getMessage());
+            return false;
+        }
+        try
+        {
+            m_white.sendCommandsClearBoard(size);
+        }
+        catch (Gtp.Error e)
+        {
+            response.append("W: " + e.getMessage());
+            m_inconsistentState = true;
+            return false;
+        }
+        m_inconsistentState = false;
         m_board = new Board(size);
         m_gameSaved = false;
-        return status;
+        return true;
     }
 
     private boolean play(Color color, String[] cmdArray, StringBuffer response)
@@ -417,8 +442,11 @@ public class TwoGtp
             response.append(e.getMessage());
             return false;
         }
-        String cmdLine = cmdArray[0] + " " + cmdArray[1];
-        boolean status = sendBoth(cmdLine, response, true, true);
+        Move move = new Move(point, color);
+        String cmdBlack = m_black.getCommandPlay(move);
+        String cmdWhite = m_white.getCommandPlay(move);
+        boolean status =
+            send(m_black, m_white, cmdBlack, cmdWhite, response, true, true);
         if (status)
             m_board.play(new Move(point, color));
         return status;
@@ -554,8 +582,8 @@ public class TwoGtp
             gtp2 = m_white;
             prefix1 = "B";
             prefix2 = "W";
-            command = "genmove_black";
-            command2 = "black";
+            command = m_black.getCommandGenmove(color);
+            command2 = m_white.getCommandPlay(color);
         }
         else
         {
@@ -563,8 +591,8 @@ public class TwoGtp
             gtp2 = m_black;
             prefix1 = "W";
             prefix2 = "B";
-            command = "genmove_white";
-            command2 = "white";
+            command = m_white.getCommandGenmove(color);
+            command2 = m_black.getCommandPlay(color);
         }
         String response1 = null;
         String response2 = null;

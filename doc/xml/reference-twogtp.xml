@@ -58,11 +58,11 @@
       program of the corresponding color, the other program is informed about
       the move with a <userinput>black</userinput> or
       <userinput>white</userinput> command.
-      GTP extension commands are forwarded to the program(s) that implement
-      them.
+      GTP extension commands implemented by exactly one of the programs are
+      forwarded to the program.
       The special comment line <userinput>#&#160;interrupt</userinput>
       used by <application>GoGui</application> to interrupt commands is
-      also forwarded to both programs.
+      forwarded to both programs.
     </para>
   </refsection>
 

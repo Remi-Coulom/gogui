@@ -84,15 +84,21 @@ public class Gtp
             return "genmove " + c;
     }
 
-    public String getCommandPlay(Move move)
+    public String getCommandPlay(Color color)
     {
         
-        go.Point p = move.getPoint();
-        go.Color c = move.getColor();
         String command = "";
         if (m_protocolVersion == 2)
             command = "play ";
-        command = command + c.toString();
+        command = command + color.toString();
+        return command;
+    }
+
+    public String getCommandPlay(Move move)
+    {
+        
+        String command = getCommandPlay(move.getColor());
+        go.Point p = move.getPoint();
         if (p == null)
             command = command + " pass";
         else
@@ -481,7 +487,12 @@ public class Gtp
             assert(response.length() >= 4);
             m_answer = response.substring(2, response.length() - 2);
             if (error)
-                throw new Error(m_answer);
+            {
+                String message = m_answer.trim();
+                if (message.equals(""))
+                    message = "GTP command failed";
+                throw new Error(message);
+            }
         }
         catch (InterruptedIOException e)
         {
