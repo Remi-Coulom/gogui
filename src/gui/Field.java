@@ -203,18 +203,14 @@ public class Field
 
     private void drawCircle(Graphics g, java.awt.Color color, boolean fill)
     {
-        Dimension size = getSize();
         g.setColor(color);
-        int radiusX = size.width / 6;
-        int radiusY = size.height / 6;
-        int x = size.width / 2 - radiusX;
-        int y = size.height / 2 - radiusY;
-        int width = 2 * radiusX + 1;
-        int height = 2 * radiusY + 1;
+        Dimension size = getSize();
+        int d = size.width * 36 / 100;
+        int width = size.width - 2 * d;
         if (fill)
-            g.fillOval(x, y, width, height);
+            g.fillOval(d, d, width, width);
         else
-            g.drawOval(x, y, width, height);
+            g.drawOval(d, d, width, width);
     }
 
     private void drawCrossHair(Graphics g)
@@ -230,19 +226,17 @@ public class Field
     private void drawFocus(Graphics g)
     {
         Dimension size = getSize();
-        int dx = size.width / 6;
-        int dy = size.height / 6;
+        int d = size.width / 6;
+        int w = size.width;
         g.setColor(java.awt.Color.blue);
-        g.drawLine(dx, dy, 2 * dx, dy);
-        g.drawLine(dx, dy, dx, 2 * dy);
-        g.drawLine(dx, size.height - 2 * dy, dx, size.height - dy);
-        g.drawLine(dx, size.height - dy, 2 * dx, size.height - dy);
-        g.drawLine(size.width - 2 * dx, dy, size.width - dx, dy);
-        g.drawLine(size.width - dx, dy, size.width - dx, 2 * dy);
-        g.drawLine(size.width - dx, size.height - dy,
-                   size.width - dx, size.height - 2 * dy);
-        g.drawLine(size.width - dx, size.height - dy,
-                   size.width - 2 * dx, size.height - dy);
+        g.drawLine(d, d, 2 * d, d);
+        g.drawLine(d, d, d, 2 * d);
+        g.drawLine(d, w - 2 * d - 1, d, w - d - 1);
+        g.drawLine(d, w - d - 1, 2 * d, w - d - 1);
+        g.drawLine(w - 2 * d - 1, d, w - d - 1, d);
+        g.drawLine(w - d - 1, d, w - d - 1, 2 * d);
+        g.drawLine(w - d - 1, w - d - 1, w - d - 1, w - 2 * d - 1);
+        g.drawLine(w - d - 1, w - d - 1, w - 2 * d - 1, w - d - 1);
     }
 
     private void drawGrid(Graphics g)
@@ -253,9 +247,9 @@ public class Field
         int halfHeight = size.height / 2;
         g.setColor(java.awt.Color.darkGray);
         int xMin = 0;
-        int xMax = size.width;
+        int xMax = size.width - 1;
         int yMin = 0;
-        int yMax = size.height;
+        int yMax = size.height - 1;
         int x = m_point.getX();
         int y = m_point.getY();
         if (x == 0)
@@ -270,10 +264,8 @@ public class Field
         g.drawLine(halfWidth, yMin, halfWidth, yMax);
         if (m_isHandicap)
         {
-            int radiusX = size.width / 10;
-            int radiusY = size.height / 10;
-            g.fillOval(halfWidth - radiusX, halfHeight - radiusY,
-                       2 * radiusX + 1, 2 * radiusY + 1);
+            int r = size.width / 10;
+            g.fillOval(halfWidth - r, halfHeight - r, 2 * r + 1, 2 * r + 1);
         }
     }
 
@@ -287,9 +279,9 @@ public class Field
             g.setColor(m_influenceBlackColor);
         else
             g.setColor(m_influenceWhiteColor);
-        int dx = (int)(size.width * (0.31 + (1 - d) * 0.69));
-        int dy = (int)(size.height * (0.31 + (1 - d) * 0.69));
-        g.fillRect(dx / 2, dy / 2, size.width - dx + 1, size.height - dy + 1);
+        int dd = (int)(size.width * (0.31 + (1 - d) * 0.69));
+        int width = size.width - dd + 1;
+        g.fillRect(dd / 2, dd / 2, width, width);
     }
 
     private void drawLastMoveMarker(Graphics g)
@@ -300,10 +292,10 @@ public class Field
     private void drawMarkup(Graphics g)
     {
         Dimension size = getSize();
-        int dx = size.width / 4;
-        int dy = size.height / 4;
+        int d = size.width / 4;
+        int width = size.width - 2 * d - 1;
         g.setColor(java.awt.Color.blue);
-        g.drawRect(dx, dy, size.width - 2 * dx, size.height - 2 * dy);
+        g.drawRect(d, d, width, width);
     }
 
     private void drawSelect(Graphics g)
