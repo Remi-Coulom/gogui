@@ -6,6 +6,7 @@
 package gtpdisplay;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -34,9 +35,17 @@ public class GtpDisplay
         m_size = 19;
         m_board = new go.Board(m_size);
         m_frame = new JFrame();
-        String name = m_gtp.queryName();
+        WindowAdapter windowAdapter = new WindowAdapter()
+            {
+                public void windowClosing(WindowEvent event)
+                {
+                    closeFrame();
+                }
+            };
+        m_frame.addWindowListener(windowAdapter);
+        m_name = m_gtp.queryName();
         String version = m_gtp.queryVersion();
-        String title = name;
+        String title = "GtpDisplay: " + m_name;
         if (! version.equals(""))
             title = title + ":" + version;
         m_frame.setTitle(title);
@@ -57,7 +66,16 @@ public class GtpDisplay
     {
         m_gtp.close();
         m_gtp.waitForExit();
-        m_frame.dispose();
+        StringBuffer error = new StringBuffer();
+        if (! invokeAndWait(new Runnable()
+            {
+                public void run()
+                {
+                    if (m_frame != null)
+                        m_frame.setTitle("GtpDisplay: Disconnected");
+                }
+            }, error))
+            System.err.println(error);
     }
 
     public boolean handleCommand(String cmdLine, StringBuffer response)
@@ -138,6 +156,15 @@ public class GtpDisplay
     private Move m_move;
 
     private JFrame m_frame;
+
+    private String m_name;
+
+    private void closeFrame()
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        m_frame.dispose();
+        m_frame = null;
+    }
 
     private boolean cmdBoardsize(String cmdArray[], StringBuffer response)
     {
@@ -266,6 +293,7 @@ public class GtpDisplay
 
     private boolean cmdName(StringBuffer response)
     {
+        response.append(m_name);
         return true;
     }
 
