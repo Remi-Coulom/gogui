@@ -790,6 +790,7 @@ class GoGui
         try
         {
             m_handicap = Integer.parseInt(handicap);
+            computerBlack();
             if (m_board.isModified())
                 showInfo("Handicap will take effect on next game.");
             else
@@ -1587,6 +1588,7 @@ class GoGui
         setHandicap();
         m_gameInfo.update();
         m_guiBoard.update();
+        m_guiBoard.repaint();
     }
 
     private void newGameContinue()
@@ -1604,6 +1606,9 @@ class GoGui
         initGame(m_boardSize);
         setHandicap();
         setTimeSettings();
+        m_gameInfo.update();
+        m_guiBoard.update();
+        m_guiBoard.repaint();
         checkComputerMove();
     }
 
