@@ -641,6 +641,13 @@ class GameTreePanel
         return changed;
     }
 
+    private void hideOthers(Node node)
+    {
+        m_expanded.clear();
+        ensureVisible(node);
+        update(m_gameTree, m_currentNode);
+    }
+
     private void hideSubtree(Node root)
     {
         boolean changed = false;
@@ -707,6 +714,8 @@ class GameTreePanel
                         showVariations(m_popupNode);
                     else if (command.equals("show-subtree"))
                         showSubtree(m_popupNode);
+                    else if (command.equals("hide-others"))
+                        hideOthers(m_popupNode);
                     else if (command.equals("hide-subtree"))
                         hideSubtree(m_popupNode);
                     else if (command.equals("node-info"))
@@ -724,6 +733,16 @@ class GameTreePanel
         item.addActionListener(listener);
         popup.add(item);
         popup.addSeparator();
+        item = new JMenuItem("Hide Others");
+        item.setActionCommand("hide-others");
+        item.addActionListener(listener);
+        popup.add(item);
+        item = new JMenuItem("Hide Subtree");
+        if (! m_expanded.contains(node))
+            item.setEnabled(false);
+        item.setActionCommand("hide-subtree");
+        item.addActionListener(listener);
+        popup.add(item);
         item = new JMenuItem("Show Variations");
         if (m_expanded.contains(node) || node.getNumberChildren() <= 1)
             item.setEnabled(false);
@@ -734,12 +753,6 @@ class GameTreePanel
         if (node.getNumberChildren() == 0)
             item.setEnabled(false);
         item.setActionCommand("show-subtree");
-        item.addActionListener(listener);
-        popup.add(item);
-        item = new JMenuItem("Hide Subtree");
-        if (! m_expanded.contains(node))
-            item.setEnabled(false);
-        item.setActionCommand("hide-subtree");
         item.addActionListener(listener);
         popup.add(item);
         popup.addSeparator();
