@@ -216,13 +216,15 @@ public class Board
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         int size = m_board.getSize();
         Dimension dimension = getSize();
+        int margin = (int)(dimension.width / (size + 2) * 0.92);
+        int width = dimension.width - 2 * margin;
         if (m_image != null)
-            graphics.drawImage(m_image.getImage(), 0, 0, dimension.width,
-                               dimension.width, null);
+            graphics.drawImage(m_image.getImage(), margin, margin,
+                               width, width, null);
         else
         {
             graphics.setColor(java.awt.Color.YELLOW.darker());
-            graphics.fillRect(0, 0, dimension.width, dimension.width);
+            graphics.fillRect(margin, margin, width, width);
         }
         graphics.setColor(java.awt.Color.darkGray);
         for (int y = 0; y < size; ++y)
