@@ -575,6 +575,14 @@ class AnalyzeDialog
     }
 
     private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  String command, String toolTip)
+    {
+        JMenuItem item = addMenuItem(menu, label, mnemonic, command);
+        item.setToolTipText(toolTip);
+        return item;
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
                                   int accel, int modifier, String command)
     {
         JMenuItem item = new JMenuItem(label);
@@ -686,7 +694,9 @@ class AnalyzeDialog
     {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
-        addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload");
+        JMenuItem item =
+            addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload",
+                        "Reload commands from configuration files");
         menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     ActionEvent.CTRL_MASK, "close");
