@@ -464,7 +464,7 @@ public final class Gtp
         }
     }
 
-    private class ErrorThread
+    private static class ErrorThread
         extends Thread
     {
         public ErrorThread(InputStream in, MessageQueue queue)
