@@ -27,6 +27,7 @@ PACKAGES= \
   gmp \
   go \
   gtp \
+  gtpserver \
   gui \
   sgf \
   utils \
@@ -43,18 +44,18 @@ DOC= \
   doc/xml/news.xml \
   doc/xml/programs.xml \
   doc/xml/readme.xml \
-  doc/xml/reference-gogui.xml \
   doc/xml/reference-gmptogtp.xml \
-  doc/xml/reference-gtpnet.xml \
+  doc/xml/reference-gogui.xml \
+  doc/xml/reference-gtpserver.xml \
   doc/xml/reference-netgtp.xml \
-  doc/xml/reference-twogtp.xml \
   doc/xml/reference-regression.xml \
+  doc/xml/reference-twogtp.xml \
   doc/xml/tools.xml
 
 JAR= \
   gogui.jar \
+  gtpserver.jar \
   gmptogtp.jar \
-  gtpnet.jar \
   netgtp.jar \
   regression.jar \
   sgftotex.jar \
@@ -68,7 +69,7 @@ gogui.jar: build/gogui/doc/index.html $(patsubst %, build/gogui/%, $(IMAGES)) $(
 
 gmptogtp.jar: $(shell cat build/files-gmptogtp.txt)
 
-gtpnet.jar: $(shell cat build/files-gtpnet.txt)
+gtpserver.jar: $(shell cat build/files-gtpnet.txt)
 
 netgtp.jar: $(shell cat build/files-netgtp.txt)
 

@@ -1,18 +1,18 @@
-<refentry id="reference-gtpnet">
+<refentry id="reference-gtpserver">
   <refmeta>
-    <refentrytitle>gtpnet</refentrytitle>
+    <refentrytitle>gtpserver</refentrytitle>
     <manvolnum>1</manvolnum>
   </refmeta>
   <refnamediv>
-    <refname>gtpnet</refname>
-    <refname>gtpnet.jar</refname>
+    <refname>gtpserver</refname>
+    <refname>gtpserver.jar</refname>
     <refpurpose>
        Connects a Go program supporting Go Text Protocol to a listen socket.
     </refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>gtpnet</command>
+      <command>gtpserver</command>
       <arg><option>-help</option></arg>
       <arg><option>-loop</option></arg>
       <arg><option>-verbose</option></arg>

@@ -57,24 +57,14 @@
 
   <variablelist>
     <varlistentry>
-      <term>GtpNet</term>
+      <term>GtpServer</term>
       <listitem>
         Runs a Go program supporting GTP and connects it input and output
 	to a listen socket on the local computer so that other programs
 	can connect to it from the network.
 	See
-	<xref linkend="reference-gtpnet">
-	<citerefentry><refentrytitle>gtpnet</refentrytitle></citerefentry>
-        </xref> 
-        for a complete reference.
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>SgfToTex</term>
-      <listitem>
-        SGF to LaTeX converter.
-	<xref linkend="reference-sgftotex">
-	<citerefentry><refentrytitle>sgftotex</refentrytitle></citerefentry>
+	<xref linkend="reference-gtpserver">
+	<citerefentry><refentrytitle>gtpserver</refentrytitle></citerefentry>
         </xref> 
         for a complete reference.
       </listitem>
@@ -85,6 +75,16 @@
         Runs GTP regression tests.
 	<xref linkend="reference-regression">
 	<citerefentry><refentrytitle>regression</refentrytitle></citerefentry>
+        </xref> 
+        for a complete reference.
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>SgfToTex</term>
+      <listitem>
+        SGF to LaTeX converter.
+	<xref linkend="reference-sgftotex">
+	<citerefentry><refentrytitle>sgftotex</refentrytitle></citerefentry>
         </xref> 
         for a complete reference.
       </listitem>

@@ -12,7 +12,7 @@
  <!ENTITY reference-sgftotex SYSTEM "reference-sgftotex.xml">
  <!ENTITY reference-gmptogtp SYSTEM "reference-gmptogtp.xml">
  <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
- <!ENTITY reference-gtpnet SYSTEM "reference-gtpnet.xml">
+ <!ENTITY reference-gtpserver SYSTEM "reference-gtpserver.xml">
  <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
  <!ENTITY reference-regression SYSTEM "reference-regression.xml">
  <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
@@ -40,7 +40,7 @@
     <title>Reference</title>
     &reference-gogui;
     &reference-gmptogtp;
-    &reference-gtpnet;
+    &reference-gtpserver;
     &reference-netgtp;
     &reference-sgftotex;
     &reference-twogtp;

@@ -45,6 +45,10 @@
 	    New tool <command>regression</command>.
 	  </listitem>
 	  <listitem>
+	    Rename <application>GtpNet</application> to
+            <application>GtpServer</application>.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>
