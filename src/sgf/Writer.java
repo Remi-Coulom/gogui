@@ -25,25 +25,6 @@ public class Writer
         }
     }    
 
-    /** Save moves up to current position. */
-    public Writer(OutputStream out, Board board, File file,
-                  String application, String version, int handicap,
-                  String playerBlack, String playerWhite, String gameComment,
-                  String result)
-    {        
-        m_out = new PrintStream(out);
-        m_board = board;
-        m_out.println("(");
-        printHeader(file, application, version, handicap, playerBlack,
-                    playerWhite, gameComment, result);
-        printSetup(m_board.getSetupStonesBlack(),
-                   m_board.getSetupStonesWhite());
-        printToPlay(m_board.getToMove());
-        printMoves();        
-        m_out.println(")");
-        m_out.close();
-    }
-
     /** Save game tree. */
     public Writer(OutputStream out, Board board, GameTree gameTree, File file,
                   String application, String version, int handicap,

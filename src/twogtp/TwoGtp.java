@@ -69,8 +69,8 @@ public class TwoGtp
         m_size = size;
         m_komi = komi;
         m_alternate = alternate;
-        m_numberGames = numberGames;
-        m_board = new Board(size < 1 ? 19 : size);
+        m_numberGames = numberGames;        
+        initGame(size < 1 ? 19 : size);
     }
 
     public void close()
@@ -112,9 +112,9 @@ public class TwoGtp
         else if (cmd.equals("quit"))
             status = sendBoth(cmdLine, response, false, false);
         else if (cmd.equals("black"))
-            status = play(Color.BLACK, cmdArray, response);
+            status = cmdPlay(Color.BLACK, cmdArray, response);
         else if (cmd.equals("white"))
-            status = play(Color.WHITE, cmdArray, response);
+            status = cmdPlay(Color.WHITE, cmdArray, response);
         else if (cmd.equals("undo"))
             status = undo(response);
         else if (cmd.equals("genmove_black"))
@@ -345,6 +345,10 @@ public class TwoGtp
 
     private Board m_board;
 
+    private GameTree m_gameTree;
+
+    private Node m_currentNode;
+
     private String m_blackName;
 
     private String m_blackVersion;
@@ -486,6 +490,40 @@ public class TwoGtp
         if (m_inconsistentState)
             response.append("Inconsistent state");
         return m_inconsistentState;
+    }
+
+    private boolean cmdPlay(Color color, String[] cmdArray,
+                            StringBuffer response)
+    {
+        if (checkInconsistentState(response))
+            return false;
+        if (cmdArray.length < 2)
+        {
+            response.append("Missing argument");
+            return false;
+        }
+        Point point = null;
+        try
+        {
+            point = Gtp.parsePoint(cmdArray[1], m_board.getSize());
+        }
+        catch (Gtp.Error e)
+        {
+            response.append(e.getMessage());
+            return false;
+        }
+        Move move = new Move(point, color);
+        String cmdBlack = m_black.getCommandPlay(move);
+        String cmdWhite = m_white.getCommandPlay(move);
+        String cmdReferee = null;
+        if (m_referee != null)
+            cmdReferee = m_referee.getCommandPlay(move);
+        boolean status =
+            send(m_black, m_white, cmdBlack, cmdWhite, cmdReferee, response,
+                 true, true);
+        if (status)
+            play(move);
+        return status;
     }
 
     private static void compare(Vector filenames) throws Exception
@@ -719,6 +757,13 @@ public class TwoGtp
         }
     }
 
+    private void initGame(int size)
+    {
+        m_board = new Board(size);
+        m_gameTree = new GameTree(size);
+        m_currentNode = m_gameTree.getRoot();
+    }
+
     private String inverseResult(String result)
     {
         if (result.indexOf("B") >= 0)
@@ -813,44 +858,19 @@ public class TwoGtp
             sendToReferee(m_referee.getCommandClearBoard(size));
         }
         m_inconsistentState = false;
-        m_board = new Board(size);
+        initGame(size);
         m_gameSaved = false;
         if (m_komi != null)
             sendIfSupported("komi", "komi " + m_komi.floatValue());
         return true;
     }
 
-    private boolean play(Color color, String[] cmdArray, StringBuffer response)
+    private void play(Move move)
     {
-        if (checkInconsistentState(response))
-            return false;
-        if (cmdArray.length < 2)
-        {
-            response.append("Missing argument");
-            return false;
-        }
-        Point point = null;
-        try
-        {
-            point = Gtp.parsePoint(cmdArray[1], m_board.getSize());
-        }
-        catch (Gtp.Error e)
-        {
-            response.append(e.getMessage());
-            return false;
-        }
-        Move move = new Move(point, color);
-        String cmdBlack = m_black.getCommandPlay(move);
-        String cmdWhite = m_white.getCommandPlay(move);
-        String cmdReferee = null;
-        if (m_referee != null)
-            cmdReferee = m_referee.getCommandPlay(move);
-        boolean status =
-            send(m_black, m_white, cmdBlack, cmdWhite, cmdReferee, response,
-                 true, true);
-        if (status)
-            m_board.play(new Move(point, color));
-        return status;
+        m_board.play(move);
+        Node node = new Node(move);
+        m_currentNode.append(node);
+        m_currentNode = node;
     }
 
     private void readGames()
@@ -913,8 +933,8 @@ public class TwoGtp
             "\nResult according to W: " + resultWhite;
         File file = getFile(m_gameIndex);
         OutputStream out = new FileOutputStream(file);
-        new sgf.Writer(out, m_board, file, "TwoGtp", null, 0,
-                       blackName, whiteName, gameComment, null);
+        new sgf.Writer(out, m_board, m_gameTree, file, "TwoGtp",
+                       Version.get(), 0, blackName, whiteName, gameComment);
     }
 
     private void saveResult(String resultBlack, String resultWhite,
@@ -1119,7 +1139,7 @@ public class TwoGtp
         response.append(response1);
         if (m_referee != null)
             sendToReferee(m_referee.getCommandPlay(color) + " " + response1);
-        m_board.play(new Move(point, color));
+        play(new Move(point, color));
         if (m_board.bothPassed() && ! m_gameSaved)
         {
             handleEndOfGame(false, "");
@@ -1207,7 +1227,10 @@ public class TwoGtp
             return false;
         boolean status = sendBoth("undo", response, true, false);
         if (status)
+        {
             m_board.undo();
+            m_currentNode = m_currentNode.getFather();
+        }
         return status;
     }
 }
