@@ -16,14 +16,6 @@ import go.Color;
 */
 public class Clock
 {
-    public static class Error extends Exception
-    {
-        public Error(String s)
-        {
-            super(s);
-        }
-    }    
-
     public Clock()
     {
         reset();
@@ -169,7 +161,7 @@ public class Clock
         timeRecord.m_byoyomiExceeded = false;
     }
 
-    public void setTimeSettings(TimeSettings settings) throws Error
+    public void setTimeSettings(TimeSettings settings)
     {
         m_timeSettings = settings;
     }

@@ -2767,10 +2767,6 @@ class GoGui
             m_commandThread.sendCommand("time_settings " + preByoyomi + " "
                                         + byoyomi + " " + byoyomiMoves);
         }
-        catch (Clock.Error e)
-        {
-            showWarning(e.getMessage());
-        }
         catch (GtpError e)
         {
             showError(e);
