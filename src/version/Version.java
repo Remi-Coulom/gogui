@@ -11,7 +11,7 @@ public class Version
 {
     public static String get()
     {
-        return "0.6pre3.x";
+        return "0.6pre3.x (20040505 2143)";
     }
 }
 
