@@ -710,6 +710,33 @@ class GoGui
         private String m_line;
     }
 
+    private static class LoadFileRunnable
+        implements GuiUtils.ProgressRunnable
+    {
+        LoadFileRunnable(FileInputStream in, File file)
+        {
+            m_in = in;
+            m_file = file;            
+        }
+
+        public sgf.Reader getReader()
+        {
+            return m_reader;
+        }
+
+        public void run(ProgressShow progressShow) throws Throwable
+        {
+            m_reader = new sgf.Reader(m_in, m_file.toString(), progressShow,
+                                      m_file.length());
+        }
+
+        private File m_file;
+
+        private FileInputStream m_in;
+
+        private sgf.Reader m_reader;
+    }
+
     private boolean m_analyzeAutoRun;
 
     private boolean m_auto;
@@ -1810,8 +1837,7 @@ class GoGui
                 Move move = new Move(point, toMove);
                 setNeedsSave(true);
                 m_board.play(move);
-                Node node = new Node(move);
-                m_currentNode.append(node);
+                Node node = createNode(move);
                 m_currentNode = node;
                 m_currentNodeExecuted = 1;
                 if (point == null && ! (m_computerBlack && m_computerWhite))
@@ -1848,6 +1874,31 @@ class GoGui
         m_computerBlack = false;
         m_computerWhite = true;
         m_menuBar.setComputerWhite();
+    }
+
+    private Node createNode(Move move)
+    {
+        Node node = new Node(move);
+        if (m_clock.isInitialized())
+        {
+            assert(! m_clock.isRunning());
+            go.Color color = move.getColor();
+            if (color == go.Color.BLACK)
+            {
+                node.setTimeLeftBlack(m_clock.getTimeLeft(color) / 1000);
+                if (m_clock.isInByoyomi(color))
+                    node.setMovesLeftBlack(m_clock.getMovesLeft(color));
+            }
+            else
+            {
+                assert(color == go.Color.WHITE);
+                node.setTimeLeftWhite(m_clock.getTimeLeft(color) / 1000);
+                if (m_clock.isInByoyomi(color))
+                    node.setMovesLeftWhite(m_clock.getMovesLeft(color));
+            }
+        }
+        m_currentNode.append(node);
+        return node;
     }
 
     private JComponent createStatusBar()
@@ -2066,6 +2117,7 @@ class GoGui
             go.Point point = move.getPoint();
             if (point != null && m_board.getColor(point) != go.Color.EMPTY)
                 return;
+            m_clock.stopMove();
             boolean newNodeCreated = play(move);
             setNeedsSave(newNodeCreated);
             if (point != null)
@@ -2076,7 +2128,6 @@ class GoGui
                 // Paint point immediately to pretend better responsiveness
                 m_guiBoard.paintImmediately(point);
             }
-            m_clock.stopMove();
             go.Color color = move.getColor();
             if (m_board.getMoveNumber() > 0
                 && m_clock.lostOnTime(color)
@@ -2218,33 +2269,6 @@ class GoGui
         return true;
     }
 
-    private static class LoadFileRunnable
-        implements GuiUtils.ProgressRunnable
-    {
-        LoadFileRunnable(FileInputStream in, File file)
-        {
-            m_in = in;
-            m_file = file;            
-        }
-
-        public sgf.Reader getReader()
-        {
-            return m_reader;
-        }
-
-        public void run(ProgressShow progressShow) throws Throwable
-        {
-            m_reader = new sgf.Reader(m_in, m_file.toString(), progressShow,
-                                      m_file.length());
-        }
-
-        private File m_file;
-
-        private FileInputStream m_in;
-
-        private sgf.Reader m_reader;
-    }
-
     private boolean isCommandInProgress()
     {
         if (m_commandThread == null)
@@ -2336,8 +2360,7 @@ class GoGui
         if (node == null)
         {
             result = true;
-            node = new Node(move);
-            m_currentNode.append(node);
+            node = createNode(move);
         }
         m_currentNode = node;
         try
