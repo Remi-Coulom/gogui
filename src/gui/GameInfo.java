@@ -44,10 +44,7 @@ public class GameInfo
     public void actionPerformed(ActionEvent evt)
     {
         if (m_clock.isRunning())
-        {
-            setTime(go.Color.BLACK);
-            setTime(go.Color.WHITE);
-        }
+            updateTime();
     }
 
     public void fastUpdateMoveNumber(Node node)
@@ -81,16 +78,22 @@ public class GameInfo
         }
         m_last.setText(lastMove);
         m_variation.setText(NodeUtils.getVariationString(node));
-        double timeLeftBlack = node.getTimeLeftBlack();
-        int movesLeftBlack = node.getMovesLeftBlack();
+        double timeLeftBlack = node.getTimeLeft(go.Color.BLACK);
+        int movesLeftBlack = node.getMovesLeft(go.Color.BLACK);
         if (! Double.isNaN(timeLeftBlack))
             m_timeB.setText(Clock.getTimeString(timeLeftBlack,
                                                 movesLeftBlack));
-        double timeLeftWhite = node.getTimeLeftWhite();
-        int movesLeftWhite = node.getMovesLeftWhite();
+        double timeLeftWhite = node.getTimeLeft(go.Color.WHITE);
+        int movesLeftWhite = node.getMovesLeft(go.Color.WHITE);
         if (! Double.isNaN(timeLeftWhite))
             m_timeW.setText(Clock.getTimeString(timeLeftWhite,
                                                 movesLeftWhite));
+    }
+
+    public void updateTime()
+    {
+        updateTime(go.Color.BLACK);
+        updateTime(go.Color.WHITE);
     }
 
     private JTextField m_move;
@@ -124,17 +127,6 @@ public class GameInfo
         return entry;
     }
 
-    private void setTime(go.Color c)
-    {
-        String text = m_clock.getTimeString(c);
-        if (text == null)
-            text = " ";
-        if (c == go.Color.BLACK)
-            m_timeB.setText(text);
-        else
-            m_timeW.setText(text);
-    }
-
     private void updateMoveNumber(Node node)
     {
         int moveNumber = NodeUtils.getMoveNumber(node);
@@ -143,6 +135,17 @@ public class GameInfo
         if (movesLeft > 0)
             numberString += "/" + (moveNumber + movesLeft);
         m_number.setText(numberString);
+    }
+
+    private void updateTime(go.Color color)
+    {
+        String text = m_clock.getTimeString(color);
+        if (text == null)
+            text = " ";
+        if (color == go.Color.BLACK)
+            m_timeB.setText(text);
+        else
+            m_timeW.setText(text);
     }
 }
 

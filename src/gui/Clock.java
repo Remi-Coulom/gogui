@@ -65,8 +65,8 @@ public class Clock
     public long getTimeLeft(Color color)
     {
         assert(m_initialized);
-        TimeRecord timeRecord = getRecord(color);
-        long time = timeRecord.m_time;
+        TimeRecord record = getRecord(color);
+        long time = record.m_time;
         if (! m_useByoyomi)
             return (m_preByoyomi - time);
         else
@@ -75,21 +75,21 @@ public class Clock
 
     public String getTimeString(Color c)
     {
-        TimeRecord timeRecord = getRecord(c);
-        long time = timeRecord.m_time;
+        TimeRecord record = getRecord(c);
+        long time = record.m_time;
         if (m_toMove == c)
             time += new Date().getTime() - m_startMoveTime;
         if (m_initialized)
         {
-            if (timeRecord.m_isInByoyomi)
+            if (record.m_isInByoyomi)
                 time = m_byoyomi - time;
             else
                 time = m_preByoyomi - time;
         }
         int movesLeft = -1;
-        if (m_initialized && timeRecord.m_isInByoyomi)
+        if (m_initialized && record.m_isInByoyomi)
         {
-            movesLeft = timeRecord.m_movesLeft;
+            movesLeft = record.m_movesLeft;
         }
         return getTimeString((double)(time / 1000L), movesLeft);
     }
@@ -144,6 +144,11 @@ public class Clock
 
     public void halt()
     {
+        if (m_toMove == Color.EMPTY)
+            return;
+        TimeRecord record = getRecord(m_toMove);
+        long time = new Date().getTime() - m_startMoveTime;
+        record.m_time += time;
         m_toMove = Color.EMPTY;
     }
 
@@ -166,12 +171,12 @@ public class Clock
     {
         if (! m_initialized)
             return false;
-        TimeRecord timeRecord = getRecord(color);
-        long time = timeRecord.m_time;
+        TimeRecord record = getRecord(color);
+        long time = record.m_time;
         if (! m_useByoyomi)
             return (time > m_preByoyomi);
         else
-            return (timeRecord.m_byoyomiExceeded);
+            return (record.m_byoyomiExceeded);
     }
 
     public void reset()
@@ -179,6 +184,15 @@ public class Clock
         reset(Color.BLACK);
         reset(Color.WHITE);
         m_toMove = Color.EMPTY;
+    }
+
+    public void reset(Color color)
+    {
+        TimeRecord timeRecord = getRecord(color);
+        timeRecord.m_time = 0;
+        timeRecord.m_movesLeft = 0;
+        timeRecord.m_isInByoyomi = false;
+        timeRecord.m_byoyomiExceeded = false;
     }
 
     /** Set time.
@@ -204,21 +218,21 @@ public class Clock
                 preByoyomi = Long.parseLong(s.substring(0, idx)) * 60000L;
                 int idx2 = s.indexOf('/');
                 if (idx2 <= idx)
-                    throw new Error("Invalid time specification.");
+                    throw new Error("Invalid time specification");
                 byoyomi = Long.parseLong(s.substring(idx + 1, idx2)) * 60000L;
                 byoyomiMoves = Integer.parseInt(s.substring(idx2 + 1));
             }
         }
         catch (NumberFormatException e)
         {
-            throw new Error("Invalid time specification.");
+            throw new Error("Invalid time specification");
         }
         if (preByoyomi < 0)
-            throw new Error("Pre byoyomi time must be positive.");
+            throw new Error("Pre byoyomi time must be positive");
         if (byoyomi < 0)
-            throw new Error("Byoyomi time must be positive.");
+            throw new Error("Byoyomi time must be positive");
         if (byoyomiMoves <= 0)
-            throw new Error("Moves for byoyomi time must be greater 0.");
+            throw new Error("Moves for byoyomi time must be greater 0");
         m_useByoyomi = useByoyomi;
         m_preByoyomi = preByoyomi;
         m_byoyomi = byoyomi;
@@ -226,11 +240,35 @@ public class Clock
         m_initialized = true;
     }
 
-    public void startMove(Color c)
+    /** Set time left.
+        @param movesLeft -1, if not in byoyomi.
+    */
+    public void setTimeLeft(Color color, long time, int movesLeft)
+    {
+        halt();
+        TimeRecord record = getRecord(color);
+        record.m_isInByoyomi = (movesLeft >= 0);
+        if (record.m_isInByoyomi)
+        {
+            record.m_time = m_byoyomi - time;
+            record.m_movesLeft = movesLeft;
+            record.m_byoyomiExceeded = time > 0;
+        }
+        else
+        {
+            record.m_time = m_preByoyomi - time;
+            record.m_movesLeft = -1;
+            record.m_byoyomiExceeded = false;
+        }
+        if (m_toMove != Color.EMPTY)
+            startMove(m_toMove);
+    }
+
+    public void startMove(Color color)
     {
         if  (m_toMove != Color.EMPTY)
             stopMove();
-        m_toMove = c;
+        m_toMove = color;
         m_startMoveTime = new Date().getTime();
     }
 
@@ -238,37 +276,37 @@ public class Clock
     {
         if (m_toMove == Color.EMPTY)
             return;
-        TimeRecord timeRecord = getRecord(m_toMove);
+        TimeRecord record = getRecord(m_toMove);
         long time = new Date().getTime() - m_startMoveTime;
-        timeRecord.m_time += time;
+        record.m_time += time;
         if (m_useByoyomi)
         {
-            if (! timeRecord.m_isInByoyomi)
+            if (! record.m_isInByoyomi)
             {
-                if (timeRecord.m_time > m_preByoyomi)
+                if (record.m_time > m_preByoyomi)
                 {
-                    timeRecord.m_isInByoyomi = true;
-                    timeRecord.m_time -= m_preByoyomi;
+                    record.m_isInByoyomi = true;
+                    record.m_time -= m_preByoyomi;
                     assert(m_byoyomiMoves > 0);
-                    timeRecord.m_movesLeft = m_byoyomiMoves;
+                    record.m_movesLeft = m_byoyomiMoves;
                 }
             }
-            if (timeRecord.m_isInByoyomi)
+            if (record.m_isInByoyomi)
             {
-                if (timeRecord.m_time > m_byoyomi)
-                    timeRecord.m_byoyomiExceeded = true;
-                assert(timeRecord.m_movesLeft > 0);
-                --timeRecord.m_movesLeft;
-                if (timeRecord.m_movesLeft == 0)
+                if (record.m_time > m_byoyomi)
+                    record.m_byoyomiExceeded = true;
+                assert(record.m_movesLeft > 0);
+                --record.m_movesLeft;
+                if (record.m_movesLeft == 0)
                 {
-                    timeRecord.m_time = 0;
+                    record.m_time = 0;
                     assert(m_byoyomiMoves > 0);
-                    timeRecord.m_movesLeft = m_byoyomiMoves;
+                    record.m_movesLeft = m_byoyomiMoves;
                 }
             }
         }
         m_toMove = Color.EMPTY;
-    }
+    }    
 
     private static class TimeRecord
     {
@@ -305,15 +343,6 @@ public class Clock
             return m_timeRecordBlack;
         else
             return m_timeRecordWhite;
-    }
-
-    private void reset(Color c)
-    {
-        TimeRecord timeRecord = getRecord(c);
-        timeRecord.m_time = 0;
-        timeRecord.m_movesLeft = 0;
-        timeRecord.m_isInByoyomi = false;
-        timeRecord.m_byoyomiExceeded = false;
     }
 }
 

@@ -258,6 +258,12 @@ class GoGui
             cbBoardSizeOther();
         else if (command.startsWith("board-size-"))
             cbBoardSize(command.substring("board-size-".length()));
+        else if (command.equals("clock-halt"))
+            cbClockHalt();
+        else if (command.equals("clock-resume"))
+            cbClockResume();
+        else if (command.equals("clock-restore"))
+            cbClockRestore();
         else if (command.equals("computer-black"))
             computerBlack();
         else if (command.equals("computer-both"))
@@ -1175,6 +1181,27 @@ class GoGui
         cbNewGame(boardSize);
     }
     
+    private void cbClockHalt()
+    {
+        if (m_clock.isRunning())
+            m_clock.halt();
+    }
+
+    private void cbClockResume()
+    {
+        m_clock.startMove(m_board.getToMove());
+    }
+
+    private void cbClockRestore()
+    {        
+        go.Color color = m_board.getToMove();
+        clockRestore(m_currentNode, color.otherColor());
+        Node father = m_currentNode.getFather();
+        if (father != null)
+            clockRestore(father, color);
+        m_gameInfo.updateTime();
+    }
+
     private void cbCommentChanged()
     {
         setNeedsSave(true);
@@ -1771,6 +1798,23 @@ class GoGui
     private void clearStatus()
     {
         showStatus(" ");
+    }
+
+    private void clockRestore(Node node, go.Color color)
+    {
+        Move move = node.getMove();
+        if (move == null)
+        {
+            if (node == m_gameTree.getRoot())
+                m_clock.reset();
+            return;
+        }
+        if (move.getColor() != color)
+            return;
+        double timeLeft = m_currentNode.getTimeLeft(color);
+        int movesLeft = m_currentNode.getMovesLeft(color);
+        if (! Double.isNaN(timeLeft))
+            m_clock.setTimeLeft(color, (long)(timeLeft * 1000), movesLeft);
     }
 
     private void close()

@@ -540,6 +540,15 @@ public class MenuBar
         return menu;
     }
 
+    private JMenu createClockMenu()
+    {
+        JMenu menu = createMenu("Clock", KeyEvent.VK_K);
+        addMenuItem(menu, "Halt", KeyEvent.VK_H, "clock-halt");
+        addMenuItem(menu, "Resume", KeyEvent.VK_R, "clock-resume");
+        addMenuItem(menu, "Restore", KeyEvent.VK_S, "clock-restore");
+        return menu;
+    }
+
     private JMenu createComputerColorMenu()
     {
         ButtonGroup group = new ButtonGroup();
@@ -588,6 +597,7 @@ public class MenuBar
         menu.add(createHandicapMenu());
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
+        menu.add(createClockMenu());
         menu.addSeparator();
         int shortcutKeyMask = 0;
         if (Platform.isMac())

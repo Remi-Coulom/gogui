@@ -382,14 +382,18 @@ public class NodeUtils
             appendInfo(buffer, "AddWhite", addWhite);
         if (node.getPlayer() != Color.EMPTY)
             appendInfo(buffer, "Player", node.getPlayer().toString());
-        if (! Double.isNaN(node.getTimeLeftBlack()))
-            appendInfo(buffer, "TimeLeftBlack", node.getTimeLeftBlack());
-        if (node.getMovesLeftBlack() >= 0)
-            appendInfo(buffer, "MovesLeftBlack", node.getMovesLeftBlack());
-        if (! Double.isNaN(node.getTimeLeftWhite()))
-            appendInfo(buffer, "TimeLeftWhite", node.getTimeLeftWhite());
-        if (node.getMovesLeftWhite() >= 0)
-            appendInfo(buffer, "MovesLeftWhite", node.getMovesLeftWhite());
+        if (! Double.isNaN(node.getTimeLeft(Color.BLACK)))
+            appendInfo(buffer, "TimeLeftBlack",
+                       node.getTimeLeft(Color.BLACK));
+        if (node.getMovesLeft(Color.BLACK) >= 0)
+            appendInfo(buffer, "MovesLeftBlack",
+                       node.getMovesLeft(Color.BLACK));
+        if (! Double.isNaN(node.getTimeLeft(Color.WHITE)))
+            appendInfo(buffer, "TimeLeftWhite",
+                       node.getTimeLeft(Color.WHITE));
+        if (node.getMovesLeft(Color.WHITE) >= 0)
+            appendInfo(buffer, "MovesLeftWhite",
+                       node.getMovesLeft(Color.WHITE));
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)
         {

@@ -263,21 +263,21 @@ public class Writer
         {
             print("C" + getEscaped(comment));
         }
-        if (! Double.isNaN(node.getTimeLeftBlack()))
+        if (! Double.isNaN(node.getTimeLeft(Color.BLACK)))
         {
-            print("BL[" + node.getTimeLeftBlack() + "]");
+            print("BL[" + node.getTimeLeft(Color.BLACK) + "]");
         }
-        if (node.getMovesLeftBlack() >= 0)
+        if (node.getMovesLeft(Color.BLACK) >= 0)
         {
-            print("OB[" + node.getMovesLeftBlack() + "]");
+            print("OB[" + node.getMovesLeft(Color.BLACK) + "]");
         }
-        if (! Double.isNaN(node.getTimeLeftWhite()))
+        if (! Double.isNaN(node.getTimeLeft(Color.WHITE)))
         {
-            print("WL[" + node.getTimeLeftWhite() + "]");
+            print("WL[" + node.getTimeLeft(Color.WHITE) + "]");
         }
-        if (node.getMovesLeftWhite() >= 0)
+        if (node.getMovesLeft(Color.WHITE) >= 0)
         {
-            print("OW[" + node.getMovesLeftWhite() + "]");
+            print("OW[" + node.getMovesLeft(Color.WHITE) + "]");
         }
         if (node.getPlayer() != Color.EMPTY)
             printToPlay(node.getPlayer());

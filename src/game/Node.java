@@ -195,14 +195,17 @@ public final class Node
         return m_move;
     }
 
-    /** Moves left in byoyomi for black.
+    /** Moves left in byoyomi for color.
         -1 if not in byyomi or unknown.
     */
-    public int getMovesLeftBlack()
+    public int getMovesLeft(Color color)
     {
         if (! hasTimeInfo())
             return -1;
-        return m_extraInfo.m_timeInfo.m_movesLeftBlack;
+        if (color == Color.BLACK)
+            return m_extraInfo.m_timeInfo.m_movesLeftBlack;
+        assert(color == Color.WHITE);
+        return m_extraInfo.m_timeInfo.m_movesLeftWhite;
     }
 
     /** Moves left in byoyomi for white.
@@ -259,23 +262,16 @@ public final class Node
         return m_extraInfo.m_sgfProperties;
     }
 
-    /** Time left for black after move was made.
+    /** Time left for color after move was made.
         Returns Double.NaN if unknown.
     */
-    public double getTimeLeftBlack()
+    public double getTimeLeft(Color color)
     {
         if (! hasTimeInfo())
             return Double.NaN;
-        return m_extraInfo.m_timeInfo.m_timeLeftBlack;
-    }
-
-    /** Time left for white after move was made.
-        Returns Double.NaN if unknown.
-    */
-    public double getTimeLeftWhite()
-    {
-        if (! hasTimeInfo())
-            return Double.NaN;
+        if (color == Color.BLACK)
+            return m_extraInfo.m_timeInfo.m_timeLeftBlack;
+        assert(color == Color.WHITE);
         return m_extraInfo.m_timeInfo.m_timeLeftWhite;
     }
 
