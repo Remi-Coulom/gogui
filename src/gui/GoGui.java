@@ -53,8 +53,6 @@ class GoGui
         m_infoPanel = new JPanel();
         m_infoPanel.setLayout(new BoxLayout(m_infoPanel, BoxLayout.Y_AXIS));
         m_infoPanel.setBorder(utils.GuiUtils.createSmallEmptyBorder());
-        m_comment = new Comment();
-        m_infoPanel.add(m_comment);
         m_timeControl = new TimeControl();
         Dimension pad = new Dimension(0, utils.GuiUtils.PAD);
         m_gameInfo = new GameInfo(m_timeControl);
@@ -82,7 +80,13 @@ class GoGui
         m_boardPanel = new JPanel(m_squareLayout);
         m_boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         m_boardPanel.add(m_guiBoard);
-        contentPane.add(m_boardPanel, BorderLayout.CENTER);
+
+        m_comment = new Comment();
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                                              m_boardPanel, m_comment);
+        splitPane.setResizeWeight(0.8);
+        contentPane.add(splitPane, BorderLayout.CENTER);
         
         addWindowListener(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
