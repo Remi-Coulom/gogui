@@ -136,6 +136,7 @@ class MenuBar
         }
         catch (FileNotFoundException e)
         {
+            System.err.println("Could not save " + file.toString());
             return;
         }
         for (int i = 0; i < m_maxRecent; ++i)

@@ -717,13 +717,14 @@ class GtpRegress
 
     private void writeInfo(PrintStream out, boolean withName)
     {
-        String host = "?";
+        String host;
         try
         {
             host = InetAddress.getLocalHost().getHostName();
         }
         catch (UnknownHostException e)
         {
+            host = "?";
         }
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);

@@ -92,9 +92,11 @@ public class Preferences
         }
         catch (FileNotFoundException e)
         {
+            System.err.println("Could not save " + file.toString());
         }
         catch (IOException e)
         {
+            System.err.println("Could not save " + file.toString());
         }
         m_changed = false;
     }
