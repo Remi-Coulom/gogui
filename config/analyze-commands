@@ -68,6 +68,8 @@ pstring/Dragon Data At/dragon_data %p
 string/Dragon Status/dragon_status
 pstring/Dragon Status At/dragon_status %p
 plist/Dragon Stones/dragon_stones %p
+none/Draw Search Area/draw_search_area
+none/Dump Stack/dump_stack
 string/Eval Eye/eval_eye %p
 string/Experimental Score Black/experimental_score black
 string/Experimental Score White/experimental_score white
@@ -84,6 +86,7 @@ sboard/Influence Black (Regions)/influence black/regions
 dboard/Influence White (Black)/influence white/black/0.01
 dboard/Influence White (White)/influence white/white/-0.01
 sboard/Influence White (Regions)/influence white/regions
+none/Limit Search/limit_search %s
 plist/List Stones Black/list_stones black
 plist/List Stones White/list_stones white
 varpo/Owl Attack/owl_attack %p
@@ -98,7 +101,10 @@ none/Reset Connection Node Counter/reset_connection_node_counter
 none/Reset Life Node Counter/reset_life_node_counter
 none/Reset Owl Node Counter/reset_owl_node_counter
 none/Reset Reading Node Counter/reset_reading_node_counter
+none/Reset Search Mask/reset_search_mask
 none/Reset TryMove Counter/reset_trymove_node_counter
+none/Set Search Diamond/set_search_diamond %p
+none/Set Search Limit/set_search_limit %p
 none/Start SgfTrace/start_sgftrace
 string/Surround Map/surround_map %P
 pstring/Tactical Analyze Semeai/tactical_analyze_semeai %P
