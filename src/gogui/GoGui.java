@@ -810,6 +810,15 @@ class GoGui
             String response = m_commandThread.getResponse();
             AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_board, response);
             int type = m_analyzeCommand.getType();
+            go.Point pointArg = null;
+            if (m_analyzeCommand.needsPointArg())
+                pointArg = m_analyzeCommand.getPointArg();
+            else if (m_analyzeCommand.needsPointListArg())
+            {
+                Vector vector = m_analyzeCommand.getPointListArg();
+                if (vector.size() > 0)
+                    pointArg = (go.Point)vector.get(vector.size() - 1);
+            }
             if (type == AnalyzeCommand.PARAM)
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
                                                title, response,
@@ -832,7 +841,7 @@ class GoGui
                     statusContainsResponse = true;
                 }
                 else
-                    showAnalyzeTextOutput(type, title, response);
+                    showAnalyzeTextOutput(type, pointArg, title, response);
             }
             if (! statusContainsResponse && type != AnalyzeCommand.PARAM)
                 showStatus(title);
@@ -2749,8 +2758,8 @@ class GoGui
         boardChangedBegin(false, false);
     }
 
-    private void showAnalyzeTextOutput(int type, String title,
-                                       String response)
+    private void showAnalyzeTextOutput(int type, go.Point pointArg,
+                                       String title, String response)
     {
         boolean highlight = (type == AnalyzeCommand.HSTRING
                              || type == AnalyzeCommand.HPSTRING);
@@ -2770,6 +2779,12 @@ class GoGui
         }
         TextViewer textViewer =
             new TextViewer(this, title, response, highlight, listener);
+        if (pointArg != null)
+        {
+            java.awt.Point location =
+                m_guiBoard.getLocationOnScreen(pointArg);
+            textViewer.setLocation(location);
+        }
         textViewer.setVisible(true);
     }
 

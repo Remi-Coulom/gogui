@@ -150,6 +150,16 @@ public class Board
         return new Dimension(width, width);
     }
 
+    public java.awt.Point getLocationOnScreen(go.Point point)
+    {
+        Field field = getField(point);
+        java.awt.Point location = field.getLocationOnScreen();
+        Dimension size = field.getSize();
+        location.x += size.width / 2;
+        location.y += size.height / 2;
+        return location;
+    }
+
     public boolean[][] getMarkups()
     {
         int size = m_board.getSize();
