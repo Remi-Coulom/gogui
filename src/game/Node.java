@@ -184,6 +184,11 @@ public class Node
         return m_children.size();
     }
 
+    public void setComment(String comment)
+    {
+        m_comment = comment;
+    }
+
     public void setMove(Move move)
     {
         m_move = move;

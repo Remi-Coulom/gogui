@@ -62,10 +62,11 @@ class GoGui
         Container contentPane = getContentPane();        
 
         m_infoPanel = new JPanel();
-
-        m_timeControl = new TimeControl();
         m_infoPanel.setLayout(new BoxLayout(m_infoPanel, BoxLayout.Y_AXIS));
         m_infoPanel.setBorder(utils.GuiUtils.createSmallEmptyBorder());
+        m_comment = new Comment();
+        m_infoPanel.add(m_comment);
+        m_timeControl = new TimeControl();
         Dimension pad = new Dimension(0, utils.GuiUtils.PAD);
         m_gameInfo = new GameInfo(m_timeControl);
         m_infoPanel.add(m_gameInfo);
@@ -669,6 +670,8 @@ class GoGui
     private Board m_guiBoard;
 
     private CommandThread m_commandThread;
+
+    private Comment m_comment;
 
     private File m_loadedFile;
 
@@ -2394,6 +2397,7 @@ class GoGui
         m_gameInfo.update(m_currentNode, m_board);
         if (m_gameTreeViewer != null)
             m_gameTreeViewer.update(m_gameTree, m_currentNode);
+        m_comment.setText(m_currentNode.getComment());
     }
 }
 

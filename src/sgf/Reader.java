@@ -191,6 +191,10 @@ public class Reader
             {
                 node.setMove(new Move(parsePoint(v), Color.BLACK));
             }
+            else if (p.equals("C"))
+            {
+                node.setComment(v);
+            }
             else if (p.equals("GM"))
             {
                 v = v.trim();
