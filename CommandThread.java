@@ -76,10 +76,10 @@ class CommandThread
                 try
                 {
                     wait();
-                    catch (InterruptedException e)
-                    {
-                        System.err.println("Interrupted.");
-                    }
+                }
+                catch (InterruptedException e)
+                {
+                    System.err.println("Interrupted.");
                 }
                 m_answer = null;
                 m_exception = null;
