@@ -22,8 +22,9 @@ public class TwoGtp
 {
     public TwoGtp(InputStream in, OutputStream out, String black,
                   String white, String referee, int size, float komi,
-                  int numberGames, boolean alternate, String sgfFile,
-                  boolean force, boolean verbose, boolean estimateScore)
+                  boolean isKomiFixed, int numberGames, boolean alternate,
+                  String sgfFile, boolean force, boolean verbose,
+                  boolean estimateScore)
         throws Exception
     {
         super(in, out, null);
@@ -67,6 +68,7 @@ public class TwoGtp
         }        
         m_size = size;
         m_komi = komi;
+        m_isKomiFixed = isKomiFixed;
         m_alternate = alternate;
         m_estimateScore = estimateScore;
         m_numberGames = numberGames;
@@ -332,7 +334,8 @@ public class TwoGtp
             String referee = opt.getString("referee", "");
             int size = opt.getInteger("size", 0, 0);
             float komi = 6.5f;
-            if (opt.isSet("komi"))
+            boolean isKomiFixed = opt.isSet("komi");
+            if (isKomiFixed)
                 komi = opt.getFloat("komi");
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
@@ -341,8 +344,8 @@ public class TwoGtp
                 throw new Exception("Use option -sgffile with -games.");
             TwoGtp twoGtp =
                 new TwoGtp(System.in, System.out, black, white, referee, size,
-                           komi, games, alternate, sgfFile, force, verbose,
-                           estimateScore);
+                           komi, isKomiFixed, games, alternate, sgfFile,
+                           force, verbose, estimateScore);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)
@@ -386,6 +389,8 @@ public class TwoGtp
     private boolean m_gameSaved;
 
     private boolean m_inconsistentState;
+
+    private boolean m_isKomiFixed;
 
     private boolean m_refereeIsDisabled;
 
@@ -843,14 +848,21 @@ public class TwoGtp
         return (m_alternate && m_gameIndex % 2 != 0);
     }
 
-    private void komi(String[] cmdArray, StringBuffer response)
+    private boolean komi(String[] cmdArray, StringBuffer response)
     {
+        if (m_isKomiFixed)
+        {
+            response.append("Komi " + m_komi
+                            + " is fixed by command line option");
+            return false;
+        }
         FloatArgument floatArgument = parseFloatArgument(cmdArray, response);
         if (floatArgument == null)
-            return;
+            return false;
         m_komi = floatArgument.m_float;
         m_gameTree.getGameInformation().m_komi = m_komi;
         sendIfSupported("komi", "komi " + m_komi);
+        return true;
     }
 
     private void mergeResponse(StringBuffer response,
