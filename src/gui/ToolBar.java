@@ -14,41 +14,6 @@ import go.*;
 
 //-----------------------------------------------------------------------------
 
-class ToolBarButton extends JButton implements MouseListener
-{
-    public ToolBarButton(ImageIcon icon)
-    {
-        super(icon);
-        setBorder(BorderFactory.createRaisedBevelBorder());
-        addMouseListener(this);
-        setBorderPainted(false);
-    }
-
-    public void mouseClicked(MouseEvent event)
-    {
-    }
-
-    public void mouseEntered(MouseEvent event)
-    {
-        JButton button = (JButton)event.getSource();
-        button.setBorderPainted(true);
-    }
-    
-    public void mouseExited(MouseEvent event)
-    {
-        JButton button = (JButton)event.getSource();
-        button.setBorderPainted(false);
-    }
-
-    public void mousePressed(MouseEvent event)
-    {
-    }
-
-    public void mouseReleased(MouseEvent event)
-    {
-    }
-};
-
 class ToolBar
     extends JToolBar
 {

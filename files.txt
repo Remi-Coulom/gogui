@@ -29,4 +29,5 @@ src/gui/SelectProgram.java
 src/gui/SimpleDialogs.java
 src/gui/TimeControl.java
 src/gui/ToolBar.java
+src/gui/ToolBarButton.java
 src/gui/Version.java

@@ -75,10 +75,15 @@ class Help
     }
 
     private int m_historyIndex = -1;
+
     private JButton m_buttonBack;
+
     private JButton m_buttonForward;
+
     private JEditorPane m_editorPane;
+
     private java.util.List m_history = new ArrayList();
+
     private URL m_contents;
 
     private void appendHistory(URL url)
@@ -132,9 +137,9 @@ class Help
         URL u = getClass().getClassLoader().getResource(prefix + icon);
         if (u == null)
             // Fallback, shouldn't happen if image exists.
-            button = new JButton(icon);
+            button = new ToolBarButton(icon);
         else
-            button = new JButton(new ImageIcon(u));
+            button = new ToolBarButton(new ImageIcon(u));
         button.setActionCommand(command);
         button.addActionListener(this);
         return button;
