@@ -52,19 +52,11 @@ public class Main
                 printUsage(System.err);
                 System.exit(-1);
             }
-            PrintStream log = null;
-            if (opt.isSet("log"))
-            {
-                File file = new File(opt.getString("log"));
-                log = new PrintStream(new FileOutputStream(file));
-            }
             String program = (String)arguments.get(0);
             GtpDisplay gtpDisplay =
                 new GtpDisplay(System.in, System.out, program, verbose);
             gtpDisplay.mainLoop();
             gtpDisplay.close();
-            if (log != null)
-                log.close();
         }
         catch (Throwable t)
         {
