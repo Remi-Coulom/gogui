@@ -222,7 +222,7 @@ interface AnalyzeCallback
 {
     public void clearAnalyzeCommand();
 
-    public void setAnalyzeCommand(AnalyzeCommand command);
+    public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun);
 }
 
 //-----------------------------------------------------------------------------
@@ -346,6 +346,8 @@ class AnalyzeDialog
 
     private JButton m_runButton;
 
+    private JCheckBox m_autoRun;
+
     private JComboBox m_comboBox;
 
     private JList m_list;
@@ -391,6 +393,7 @@ class AnalyzeDialog
     private void clearCommand()
     {
         m_callback.clearAnalyzeCommand();
+        m_autoRun.setSelected(false);
         m_clearButton.setEnabled(false);
         if (m_clearButton.hasFocus())
             setDefaultFocus();
@@ -398,7 +401,8 @@ class AnalyzeDialog
 
     private void close()
     {
-        clearCommand();
+        if (! m_autoRun.isSelected())
+            clearCommand();
         saveRecent();
         setVisible(false);
     }
@@ -459,6 +463,8 @@ class AnalyzeDialog
         m_comboBox = new JComboBox();
         m_comboBox.addActionListener(this);
         panel.add(m_comboBox);
+        m_autoRun = new JCheckBox("Auto run after changes on board");
+        panel.add(m_autoRun);
         loadRecent();
         return panel;
     }
@@ -608,7 +614,7 @@ class AnalyzeDialog
                 return;
             command.setStringArg(stringArg);
         }
-        m_callback.setAnalyzeCommand(command);
+        m_callback.setAnalyzeCommand(command, m_autoRun.isSelected());
         m_clearButton.setEnabled(true);
     }
 

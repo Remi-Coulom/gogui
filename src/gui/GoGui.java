@@ -437,11 +437,12 @@ class GoGui
         endLengthyCommand();
     }
 
-    public void initAnalyzeCommand(AnalyzeCommand command)
+    public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun)
     {
         m_analyzeCommand = command;
         m_analyzeRequestPoint = false;
         m_analyzePointArg = null;
+        m_analyzeAutoRun = autoRun;
         if (m_commandThread != null && command.needsPointArg())
         {
             m_analyzeRequestPoint = true;
@@ -450,9 +451,9 @@ class GoGui
         }
     }
 
-    public void setAnalyzeCommand(AnalyzeCommand command)
+    public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun)
     {
-        initAnalyzeCommand(command);
+        initAnalyzeCommand(command, autoRun);
         if (m_commandInProgress)
             return;
         if (! m_analyzeCommand.needsPointArg())
@@ -523,6 +524,8 @@ class GoGui
         
         private int m_size;
     }
+
+    private boolean m_analyzeAutoRun;
 
     private boolean m_analyzeRequestPoint;
 
@@ -770,7 +773,9 @@ class GoGui
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
-        if (m_commandThread != null && m_analyzeCommand != null
+        if (m_commandThread != null
+            && m_analyzeCommand != null
+            && m_analyzeAutoRun
             && ! (m_analyzeCommand.needsPointArg()
                   && m_analyzePointArg == null))
             analyzeBegin(true, doCheckComputerMove);
@@ -1539,7 +1544,7 @@ class GoGui
                     showError("Unknown analyze command \"" + m_initAnalyze
                               + "\"");
                 else
-                    initAnalyzeCommand(analyzeCommand);
+                    initAnalyzeCommand(analyzeCommand, true);
             }
             if (m_gtpShell != null)
             {

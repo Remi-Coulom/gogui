@@ -57,7 +57,8 @@ and use GTP (Go Text Protocol).
 <option>-analyze</option> <replaceable>command</replaceable>
 </term>
 <listitem>
-Initialize analyze command.
+Initialize analyze command and automatically run it after
+changes on the board.
 </listitem>
 </varlistentry>
 
