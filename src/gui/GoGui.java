@@ -2079,7 +2079,10 @@ class GoGui
             if (window instanceof GtpShell)
                 ((GtpShell)window).setFinalSize(x, y, width, height);
             else
+            {
                 window.setBounds(x, y, width, height);
+                window.validate();
+            }
         }
         catch (NumberFormatException e)
         {
