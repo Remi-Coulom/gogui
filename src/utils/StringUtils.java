@@ -48,18 +48,11 @@ public class StringUtils
         boolean isSevere = (exception instanceof RuntimeException
                             || exception instanceof Error);     
         String result;
-        String text;
         if (hasMessage)
-        {
-            text = className + ": " + message;
-            result = message + "\n[" + className + "]";
-        }
+            result = className + ":\n" + message;
         else
-        {
-            text = className;
             result = className;
-        }
-        System.err.println(text);
+        System.err.println(result);
         if (isSevere)
             exception.printStackTrace();
         return result; 
