@@ -83,9 +83,8 @@ public final class Gtp
         m_isProgramDead = false;
         m_stdErrThread = new StdErrThread(m_process);
         m_stdErrThread.start();
-        if (! m_fastUpdate)
-            // Give StdErrThread a chance to start first        
-            Thread.yield();
+        // Give StdErrThread a chance to start first        
+        Thread.yield();
     }
 
     public void close()
@@ -160,12 +159,6 @@ public final class Gtp
         {
             throw new Gtp.Error("Invalid response to cputime command");
         }
-    }
-
-    /** @see #setFastUpdate */
-    public boolean getFastUpdate()
-    {
-        return m_fastUpdate;
     }
 
     /** Get full response including status and ID and last command. */
@@ -537,15 +530,6 @@ public final class Gtp
             throw new Gtp.Error("Interrupt not supported");
     }
 
-    /** Don't try to keep stdin/stderr callbacks in correct order.
-        Increases the probablitiy of changing the order of
-        stderr/stdout.
-     */
-    public void setFastUpdate(boolean fastUpdate)
-    {
-        m_fastUpdate = fastUpdate;
-    }
-
     public void setLogPrefix(String prefix)
     {
         synchronized (this)
@@ -628,8 +612,6 @@ public final class Gtp
         }   
     }
 
-    private boolean m_fastUpdate;
-
     private boolean m_isInterruptCommentSupported;
 
     private boolean m_isProgramDead;
@@ -707,17 +689,16 @@ public final class Gtp
             {
                 // Give StdErrThread a chance to read standard error output
                 // of the program first
-                if (! m_fastUpdate)
-                    while (m_stdErrThread.getTimeSinceLastReceived() < 200)
+                while (m_stdErrThread.getTimeSinceLastReceived() < 200)
+                {
+                    try
                     {
-                        try
-                        {
-                            Thread.sleep(200);
-                        }
-                        catch (InterruptedException e)
-                        {
-                        }
+                        Thread.sleep(200);
                     }
+                    catch (InterruptedException e)
+                    {
+                    }
+                }
                 m_callback.receivedResponse(error, response.toString());
             }
             m_fullResponse = response.toString();

@@ -425,41 +425,32 @@ class GoGui
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        setFastUpdate(true);
-        try
+        Vector shortestPath = NodeUtils.getShortestPath(m_currentNode, node);
+        for (int i = 0; i < shortestPath.size(); ++i)
         {
-            Vector shortestPath =
-                NodeUtils.getShortestPath(m_currentNode, node);
-            for (int i = 0; i < shortestPath.size(); ++i)
+            Node nextNode = (Node)shortestPath.get(i);
+            if (nextNode == m_currentNode)
             {
-                Node nextNode = (Node)shortestPath.get(i);
-                if (nextNode == m_currentNode)
-                {
-                    if (! backward(1, false))
-                        break;
-                }
-                else
-                {
-                    if (! checkCurrentNodeExecuted())
-                        break;
-                    assert(nextNode.isChildOf(m_currentNode));
-                    m_currentNode = nextNode;
-                    try
-                    {
-                        executeCurrentNode();
-                    }
-                    catch (Gtp.Error e)
-                    {
-                        showGtpError(e);
-                        break;
-                    }
-                    m_gameInfo.fastUpdateMoveNumber(m_currentNode);
-                }
+                if (! backward(1))
+                    break;
             }
-        }
-        finally
-        {
-            setFastUpdate(false);
+            else
+            {
+                if (! checkCurrentNodeExecuted())
+                    break;
+                assert(nextNode.isChildOf(m_currentNode));
+                m_currentNode = nextNode;
+                try
+                {
+                    executeCurrentNode();
+                }
+                catch (Gtp.Error e)
+                {
+                    showGtpError(e);
+                    break;
+                }
+                m_gameInfo.fastUpdateMoveNumber(m_currentNode);
+            }
         }
         boardChangedBegin(false, false);
     }
@@ -771,17 +762,12 @@ class GoGui
         m_toolBar.setComputerEnabled(true);
         try
         {
-            setFastUpdate(true);
             m_name = m_commandThread.sendCommand("name").trim();
         }
         catch (Gtp.Error e)
         {
             showGtpError(e);
             return false;
-        }
-        finally
-        {
-            setFastUpdate(false);
         }
         try
         {
@@ -822,10 +808,8 @@ class GoGui
         return true;
     }    
 
-    private boolean backward(int n, boolean setFastUpdate)
+    private boolean backward(int n)
     {
-        if (setFastUpdate)
-            setFastUpdate(true);
         try
         {
             for (int i = 0; i < n; ++i)
@@ -843,11 +827,6 @@ class GoGui
         {
             showGtpError(e);
             return false;
-        }
-        finally
-        {
-            if (setFastUpdate)
-                setFastUpdate(false);
         }
         return true;
     }
@@ -892,7 +871,7 @@ class GoGui
 
     private void cbBeginning()
     {
-        backward(NodeUtils.getDepth(m_currentNode), true);
+        backward(NodeUtils.getDepth(m_currentNode));
         boardChangedBegin(false, false);
     }
 
@@ -904,7 +883,7 @@ class GoGui
 
     private void cbBackward(int n)
     {
-        backward(n, true);
+        backward(n);
         boardChangedBegin(false, false);
     }
 
@@ -1354,7 +1333,7 @@ class GoGui
         if (! showQuestion("Truncate current node and all its children?"))
             return;
         Node oldCurrentNode = m_currentNode;
-        backward(1, false);
+        backward(1);
         m_currentNode.removeChild(oldCurrentNode);
         m_needsSave = true;
         boardChangedBegin(false, true);
@@ -1706,7 +1685,6 @@ class GoGui
     {
         if (! checkCurrentNodeExecuted())
             return;
-        setFastUpdate(true);
         try
         {
             for (int i = 0; i < n && m_currentNode.getNumberChildren() > 0;
@@ -1721,7 +1699,6 @@ class GoGui
         {
             showGtpError(e);
         }
-        setFastUpdate(false);
     }
 
     private void generateMove()
@@ -1765,16 +1742,8 @@ class GoGui
             go.Point point = move.getPoint();
             if (point != null && m_board.getColor(point) != go.Color.EMPTY)
                 return;
-            try
-            {
-                setFastUpdate(true);
-                m_needsSave = true;
-                play(move);
-            }
-            finally
-            {
-                setFastUpdate(false);
-            }
+            m_needsSave = true;
+            play(move);
             if (point != null)
             {
                 m_guiBoard.updateFromGoBoard(point);
@@ -1924,7 +1893,7 @@ class GoGui
         }
         catch (sgf.Reader.Error e)
         {
-            showError("Could not read file.", e);
+            showError("Could not read file", e);
         }
     }
 
@@ -2229,16 +2198,6 @@ class GoGui
         component.setCursor(Cursor.getDefaultCursor());
     }
 
-    private void setFastUpdate(boolean fastUpdate)
-    {
-        if (m_commandThread != null)
-        {
-            assert(m_commandThread.getFastUpdate() != fastUpdate);
-            m_commandThread.setFastUpdate(fastUpdate);
-            m_gtpShell.setFastUpdate(fastUpdate);
-        }
-    }
-
     private void setKomi(double komi)
     {
         if (m_commandThread == null)
@@ -2386,7 +2345,6 @@ class GoGui
 
     private void setupDone()
     {
-        setFastUpdate(true);
         m_setupMode = false;
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, m_currentNode);
@@ -2419,7 +2377,6 @@ class GoGui
         fileModified();
         updateGameInfo(true);
         boardChangedBegin(false, false);
-        setFastUpdate(false);
     }
 
     private void showAnalyzeTextOutput(int type, String title,

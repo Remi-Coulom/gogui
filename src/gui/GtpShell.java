@@ -286,26 +286,31 @@ public class GtpShell
 
     public void receivedInvalidResponse(String response)
     {
+        if (SwingUtilities.isEventDispatchThread())
+        {
+            appendInvalidResponse(response);
+            return;
+        }
         Runnable r = new UpdateInvalidResponse(this, response);
-        SwingUtilities.invokeLater(r);
+        invokeAndWait(r);
     }
     
     public void receivedResponse(boolean error, String response)
     {
-        if (m_fastUpdate)
+        if (SwingUtilities.isEventDispatchThread())
         {
-            assert(SwingUtilities.isEventDispatchThread());
             appendResponse(error, response);
             return;
         }
         Runnable r = new UpdateResponse(this, error, response);
-        SwingUtilities.invokeLater(r);
+        invokeAndWait(r);
     }
     
     public void receivedStdErr(String s)
     {
+        assert(! SwingUtilities.isEventDispatchThread());
         Runnable r = new UpdateStdErr(this, s);
-        SwingUtilities.invokeLater(r);
+        invokeAndWait(r);
     }
 
     public void saveHistory()
@@ -353,6 +358,7 @@ public class GtpShell
     public boolean sendCommand(String command, Component owner,
                                boolean askContinue)
     {
+        assert(SwingUtilities.isEventDispatchThread());
         String c = command.trim();
         if (c.equals(""))
             return true;
@@ -416,13 +422,13 @@ public class GtpShell
 
     public void sentCommand(String command)
     {
-        if (m_fastUpdate && SwingUtilities.isEventDispatchThread())
+        if (SwingUtilities.isEventDispatchThread())
         {
             appendSentCommand(command);
             return;
         }
         Runnable r = new UpdateCommand(this, command);
-        SwingUtilities.invokeLater(r);
+        invokeAndWait(r);
     }
     
     public void setAppName(String appName)
@@ -479,16 +485,6 @@ public class GtpShell
         {
             SimpleDialogs.showError(this, "Could not send commands.", e);
         }
-    }
-
-    /** Directly update new stdin/stdout of program.
-        Faster but increases the probablitiy of changing the order of
-        stderr/stdout (stderr is always updated from a different thread).
-     */
-    public void setFastUpdate(boolean fastUpdate)
-    {
-        assert(SwingUtilities.isEventDispatchThread());
-        m_fastUpdate = fastUpdate;
     }
 
     public void setFinalSize(int x, int y, int width, int height)
@@ -604,8 +600,6 @@ public class GtpShell
     }
 
     private boolean m_disableCompletions;
-
-    private boolean m_fastUpdate;
 
     private boolean m_isFinalSizeSet;
 
@@ -932,6 +926,22 @@ public class GtpShell
         boolean highlight = m_itemHighlight.isSelected();
         m_gtpShellText.setHighlight(highlight);
         m_prefs.setBool("gtpshell-highlight", highlight);
+    }
+
+    private void invokeAndWait(Runnable runnable)
+    {
+        try
+        {
+            SwingUtilities.invokeAndWait(runnable);
+        }
+        catch (InterruptedException e)
+        {
+            System.err.println("Thread interrupted");
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+            System.err.println("InvocationTargetException");
+        }
     }
 
     private void popupCompletions()
