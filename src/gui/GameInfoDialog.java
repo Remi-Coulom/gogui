@@ -52,8 +52,8 @@ public class GameInfoDialog
             Float.parseFloat(getTextFieldContent(gameInfoDialog.m_komi));
         String rules =
             getTextFieldContent(gameInfoDialog.m_rules).trim().toLowerCase();
-        if (! rules.equals("chinese") && ! rules.equals("japanese"))
-            SimpleDialogs.showWarning(parent, "Unknown rules");
+        //if (! rules.equals("chinese") && ! rules.equals("japanese"))
+        //    SimpleDialogs.showWarning(parent, "Unknown rules");
     }
 
     private JPanel m_panelLeft;
