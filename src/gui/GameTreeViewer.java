@@ -12,6 +12,7 @@ import javax.swing.*;
 import game.*;
 import go.*;
 import utils.GuiUtils;
+import utils.Platform;
 
 //----------------------------------------------------------------------------
 
@@ -457,13 +458,16 @@ public class GameTreeViewer
 
     private JMenu createMenuWindows()
     {
+        int shortcutKeyMask = 0;
+        if (Platform.isMac())
+            shortcutKeyMask = m_shortcutKeyMask;
         JMenu menu = createMenu("Window", KeyEvent.VK_W);
-        addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
-                    "gogui");
-        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
-                    "analyze");
-        addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,
-                    "gtp-shell");
+        addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6,
+                    shortcutKeyMask, "gogui");
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8,
+                    shortcutKeyMask, "analyze");
+        addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9,
+                    shortcutKeyMask, "gtp-shell");
         menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     m_shortcutKeyMask, "close");

@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import game.*;
+import utils.Platform;
 
 //----------------------------------------------------------------------------
 
@@ -559,9 +560,14 @@ public class MenuBar
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
         menu.addSeparator();
-        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2, 0, "pass");
+        int shortcutKeyMask = 0;
+        if (Platform.isMac())
+            shortcutKeyMask = m_shortcutKeyMask;
+        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
+                    shortcutKeyMask, "pass");
         m_itemComputerPlay = addMenuItem(menu, "Computer Play", KeyEvent.VK_L,
-                                         KeyEvent.VK_F5, 0, "play");
+                                         KeyEvent.VK_F5, shortcutKeyMask,
+                                         "play");
         m_itemInterrupt =
             addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
                         0, "interrupt");
@@ -610,10 +616,13 @@ public class MenuBar
 
     private JMenu createHelpMenu()
     {
+        int shortcutKeyMask = 0;
+        if (Platform.isMac())
+            shortcutKeyMask = m_shortcutKeyMask;
         JMenu menu = createMenu("Help", KeyEvent.VK_H);
         JMenuItem itemHelp =
             addMenuItem(menu, "GoGui Documentation", KeyEvent.VK_C,
-                        KeyEvent.VK_F1, 0, "help");
+                        KeyEvent.VK_F1, shortcutKeyMask, "help");
         JMenuItem itemAbout = addMenuItem(menu, "About", KeyEvent.VK_A,
                                           "about");
         m_itemHelp = itemHelp;
@@ -712,13 +721,18 @@ public class MenuBar
 
     private JMenu createWindowMenu()
     {
+        int shortcutKeyMask = 0;
+        if (Platform.isMac())
+            shortcutKeyMask = m_shortcutKeyMask;
         JMenu menu = createMenu("Window", KeyEvent.VK_W);
-        addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7, 0,
-                    "show-gametree");
+        addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7,
+                    shortcutKeyMask, "show-gametree");
         m_itemAnalyze = addMenuItem(menu, "Analyze", KeyEvent.VK_A,
-                                    KeyEvent.VK_F8, 0, "analyze");
+                                    KeyEvent.VK_F8, shortcutKeyMask,
+                                    "analyze");
         m_itemGtpShell = addMenuItem(menu, "GTP Shell", KeyEvent.VK_G,
-                                     KeyEvent.VK_F9, 0, "gtp-shell");
+                                     KeyEvent.VK_F9, shortcutKeyMask,
+                                     "gtp-shell");
         menu.addSeparator();
         addMenuItem(menu, "Bring All to Front", KeyEvent.VK_F,
                     "all-to-front");
