@@ -73,13 +73,14 @@ public class Reader
     {
         // Note: lineno() does not work correctly for Unix line endings
         // (Sun Java 1.4.0 Linux)
+        int lineNumber = m_tokenizer.lineno() + 1;
         if (m_name != null)
         {
-            String s = m_name + ":" + m_tokenizer.lineno() + ": " + message;
+            String s = m_name + ":" + lineNumber + ": " + message;
             return new Error(s);
         }
         else
-            return new Error(m_tokenizer.lineno() + ": " + message);
+            return new Error(lineNumber + ": " + message);
     }
 
     private Color parseColor(String s) throws Error
