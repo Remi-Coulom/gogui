@@ -1667,9 +1667,7 @@ class GoGui
                 "Program command:\n" + m_commandThread.getProgramCommand();
         }
         if (FileUtils.hasExtension(file, "tex"))
-            new latex.Writer(file, m_board, "GoGui", Version.m_version,
-                             m_handicap, playerBlack, playerWhite,
-                             gameComment, m_score);
+            new latex.Writer(file, m_board);
         else
             new sgf.Writer(file, m_board, "GoGui", Version.m_version,
                            m_handicap, playerBlack, playerWhite,

@@ -24,9 +24,7 @@ public class Writer
         }
     }    
 
-    public Writer(File file, Board board, String application, String version,
-                  int handicap, String playerBlack, String playerWhite,
-                  String gameComment, Score score)
+    public Writer(File file, Board board)
         throws FileNotFoundException
     {        
         FileOutputStream out = new FileOutputStream(file);
