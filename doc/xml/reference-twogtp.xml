@@ -16,26 +16,31 @@ Go Text Protocol adapter for playing games between two Go programs.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>twogtp</command>
-<arg><option>-alternate</option></arg>
-<arg><option>-auto</option></arg>
 <arg choice="plain"><option>-black</option> <replaceable>command</replaceable>
   </arg>
+<arg choice="plain"><option>-white</option> <replaceable>command</replaceable>
+  </arg>
+<arg><option>-alternate</option></arg>
+<arg><option>-auto</option></arg>
+<arg><option>-force</option></arg>
 <arg><option>-games</option></arg>
-<arg><option>-help</option></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
 <arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg choice="plain"><option>-white</option> <replaceable>command</replaceable>
-  </arg>
+
+<command>twogtp</command>
+<arg choice="plain"><option>-help</option></arg>
+
+<command>twogtp</command>
+<arg choice="plain"><option>-analyze</option></arg>
+<arg choice="plain"><replaceable>file.dat</replaceable></arg>
+<arg><option>-force</option></arg>
 
 <command>twogtp</command>
 <arg choice="plain"><option>-compare</option></arg>
 <arg choice="plain" rep="repeat"><replaceable>file.sgf</replaceable></arg>
 
-<command>twogtp</command>
-<arg choice="plain"><option>-analyze</option></arg>
-<arg choice="plain"><replaceable>file.dat</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -141,6 +146,13 @@ Command for black program.
 <listitem>
 Compare a list of SGF files given as arguments an exit.
 Works only with SGF files with alternating moves and without setup stones.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-force</option></term>
+<listitem>
+Overwrite existing files.
 </listitem>
 </varlistentry>
 

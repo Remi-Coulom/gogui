@@ -21,7 +21,7 @@ public class TwoGtp
 {
     public TwoGtp(InputStream in, OutputStream out, String black, String white,
                   int size, Float komi, int numberGames, boolean alternate,
-                  String sgfFile, boolean verbose)
+                  String sgfFile, boolean force, boolean verbose)
         throws Exception
     {
         super(in, out, null);
@@ -30,6 +30,8 @@ public class TwoGtp
         if (white.equals(""))
             throw new Exception("No white program set.");
         m_sgfFile = sgfFile;
+        if (force)
+            getResultFile().delete();
         findInitialGameIndex();
         readGames();
         m_black = new Gtp(black, verbose, null);
@@ -177,8 +179,9 @@ public class TwoGtp
                 "alternate",
                 "analyze:",
                 "auto",
-                "compare",
                 "black:",
+                "compare",
+                "force",
                 "games:",
                 "help",
                 "komi:",
@@ -199,6 +202,7 @@ public class TwoGtp
                     "-auto         autoplay games\n" +
                     "-black        command for black program\n" +
                     "-compare      compare list of sgf files\n" +
+                    "-force        overwrite existing files\n" +
                     "-games        number of games (0=unlimited)\n" +
                     "-help         display this help and exit\n" +
                     "-komi         komi\n" +
@@ -216,6 +220,7 @@ public class TwoGtp
                 compare(opt.getArguments());
                 System.exit(0);
             }
+            boolean force = opt.isSet("force");
             if (opt.isSet("version"))
             {
                 System.out.println("TwoGtp " + Version.m_version);
@@ -224,7 +229,7 @@ public class TwoGtp
             if (opt.contains("analyze"))
             {
                 String filename = opt.getString("analyze");
-                new Analyze(filename);
+                new Analyze(filename, force);
                 return;
             }                
             boolean alternate = opt.isSet("alternate");
@@ -245,7 +250,7 @@ public class TwoGtp
                 throw new Exception("Use option -sgffile with -games.");
             TwoGtp twoGtp = new TwoGtp(System.in, System.out, black, white,
                                        size, komi, games, alternate, sgfFile,
-                                       verbose);
+                                       force, verbose);
             if (auto)
                 twoGtp.autoPlay();
             else
@@ -758,9 +763,14 @@ public class TwoGtp
 
     private void readGames()
     {
-        for (int n = 0; getFile(n).exists(); ++n)
+        for (int n = 0; n < m_gameIndex; ++n)
         {
             File file = getFile(n);
+            if (! file.exists())
+            {
+                System.err.println("Game " + file + " not found.");
+                continue;
+            }
             if (! file.exists())
                 return;
             try

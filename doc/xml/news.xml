@@ -7,6 +7,12 @@
 <authorinitials>enz</authorinitials>
 <revremark>
 <itemizedlist>
+<listitem>
+<application>TwoGtp</application>: new option <option>-force</option>.
+</listitem>
+<listitem>
+Minor fixes and improvements.
+</listitem>
 </itemizedlist>
 </revremark>
 </revision>

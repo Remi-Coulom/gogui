@@ -16,7 +16,7 @@ import utils.*;
 
 public class Analyze
 {
-    public Analyze(String filename) throws Exception
+    public Analyze(String filename, boolean force) throws Exception
     {
         File file = new File(filename);
         readFile(file);
@@ -24,10 +24,13 @@ public class Analyze
             new File(FileUtils.replaceExtension(file, "dat", "html"));
         File dataFile =
             new File(FileUtils.replaceExtension(file, "dat", "summary.dat"));
-        if (htmlFile.exists())
-            throw new Exception("File " + htmlFile + " exists");
-        if (dataFile.exists())
-            throw new Exception("File " + dataFile + " exists");
+        if (! force)
+        {
+            if (htmlFile.exists())
+                throw new Exception("File " + htmlFile + " exists");
+            if (dataFile.exists())
+                throw new Exception("File " + dataFile + " exists");
+        }
         calcStatistics();
         writeHtml(htmlFile);
         writeData(dataFile);
