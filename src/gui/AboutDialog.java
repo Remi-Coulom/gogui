@@ -44,7 +44,7 @@ public class AboutDialog
                               "<tt>http://gogui.sourceforge.net</tt>" +
                               "</p>" +
                               "</center>"));
-        JOptionPane.showMessageDialog(parent, panel, "About - GoGui",
+        JOptionPane.showMessageDialog(parent, panel, "About GoGui",
                                       JOptionPane.PLAIN_MESSAGE);
     }
 
