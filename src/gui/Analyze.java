@@ -90,8 +90,6 @@ class Analyze
     {
         public void clearAnalyzeCommand();
 
-        public void initAnalyzeCommand(Command command);
-
         public void setAnalyzeCommand(Command command);
     }
 
@@ -135,11 +133,7 @@ class Analyze
                 if (getItemAt(i).toString().equals(startCommand))
                 {
                     setSelectedIndex(i);
-                    if (prefs.getAnalyzeCommandEnabled())
-                    {
-                        setEnabled(true);
-                        setCommand(true);
-                    }
+                    setCommand(true);
                     return;
                 }
             throw new Error("Unknown analyze command: " + startCommand);
@@ -164,10 +158,7 @@ class Analyze
         if (isEnabled())
             setCommand(false);
         else
-        {
-            m_prefs.setAnalyzeCommandEnabled(false);
             m_callback.clearAnalyzeCommand();
-        }
     }
 
     private Callback m_callback;
@@ -263,7 +254,6 @@ class Analyze
 
     private void setCommand(boolean init)
     {
-        m_prefs.setAnalyzeCommandEnabled(true);
         int index = getSelectedIndex();
         if (index == 0)
         {
@@ -294,9 +284,7 @@ class Analyze
         if (array.length > 4)
             scale = Double.parseDouble(array[4]);
         Command command = new Command(type, label, cmd, title, scale);
-        if (init && m_prefs.getAnalyzeCommandEnabled())
-            m_callback.initAnalyzeCommand(command);
-        else
+        if (! init)
             m_callback.setAnalyzeCommand(command);
         m_prefs.setAnalyzeCommand(label);
     }

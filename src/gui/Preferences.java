@@ -32,11 +32,6 @@ class Preferences
         return getStringProperty("analyze-command");
     }
 
-    public boolean getAnalyzeCommandEnabled()
-    {
-        return getIntProperty("analyze-command-enabled") != 0;
-    }
-
     public boolean getBeepAfterMove()
     {
         return getIntProperty("beep-after-move") != 0;
@@ -115,11 +110,6 @@ class Preferences
         setStringProperty("analyze-command", analyzeCommand);
     }
 
-    public void setAnalyzeCommandEnabled(boolean enabled)
-    {
-        setIntProperty("analyze-command-enabled", enabled ? 1 : 0);
-    }
-
     public void setBeepAfterMove(boolean enabled)
     {
         setIntProperty("beep-after-move", enabled ? 1 : 0);
@@ -187,7 +177,6 @@ class Preferences
     private void setDefaults()
     {
         setStringProperty("analyze-command", "");
-        setIntProperty("analyze-command-enabled", 0);
         setIntProperty("beep-after-move", 1);
         setIntProperty("boardsize", 19);
         setIntProperty("gtpshell-history-max", 3000);
