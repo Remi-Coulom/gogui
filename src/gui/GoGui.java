@@ -239,16 +239,13 @@ class GoGui
         if (m_setupMode)
         {
             if (m_board.getColor(p) != m_setupColor)
-            {
-                m_board.play(new Move(p, m_setupColor));
-            }
+                m_board.setup(new Move(p, m_setupColor));
             else
-            {
-                m_board.play(new Move(p, go.Color.EMPTY));
-            }
+                m_board.setup(new Move(p, go.Color.EMPTY));
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
             m_guiBoard.update();
+            m_guiBoard.repaint();
             return;
         }
         if (m_analyzeRequestPoint)
