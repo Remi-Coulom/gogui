@@ -1088,6 +1088,14 @@ class GoGui
         return showQuestion("Abort game?");
     }
     
+    private boolean checkModifyGame()
+    {
+        if (m_board.getMoveNumber() == m_board.getNumberSavedMoves())
+            return true;
+        return showQuestion("Move will modify the game.\n" +
+                            "Proceed?");
+    }
+    
     private void checkComputerMove()
     {
         if (m_computerBlack && m_computerWhite)
@@ -1300,6 +1308,8 @@ class GoGui
     {
         try
         {
+            if (! checkModifyGame())
+                return;
             go.Point p = m.getPoint();
             if (p != null && m_board.getColor(p) != go.Color.EMPTY)
                     return;
