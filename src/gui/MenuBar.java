@@ -443,7 +443,7 @@ class MenuBar
     private JMenu createComputerColorMenu()
     {
         ButtonGroup group = new ButtonGroup();
-        JMenu menu = new JMenu("Computer color");
+        JMenu menu = new JMenu("Computer Color");
         menu.setMnemonic(KeyEvent.VK_C);
         m_itemComputerBlack = addRadioItem(menu, group, "Black", KeyEvent.VK_B,
                                            "computer-black");
@@ -468,15 +468,15 @@ class MenuBar
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
                     ActionEvent.CTRL_MASK,
                     "save");
-        addMenuItem(menu, "Save position...", KeyEvent.VK_T, "save-position");
+        addMenuItem(menu, "Save Position...", KeyEvent.VK_T, "save-position");
         menu.addSeparator();
         addMenuItem(menu, "Print...", KeyEvent.VK_P, KeyEvent.VK_P,
                     ActionEvent.CTRL_MASK,
                     "print");
         menu.addSeparator();
-        m_itemAttachProgram = addMenuItem(menu, "Attach program...",
+        m_itemAttachProgram = addMenuItem(menu, "Attach Program...",
                                           KeyEvent.VK_A, "attach-program");
-        m_itemDetachProgram = addMenuItem(menu, "Detach program",
+        m_itemDetachProgram = addMenuItem(menu, "Detach Program",
                                           KeyEvent.VK_D, "detach-program");
         menu.addSeparator();
         m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
@@ -496,7 +496,7 @@ class MenuBar
         menu.add(m_menuComputerColor);
         menu.addSeparator();
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2, 0, "pass");
-        m_itemComputerPlay = addMenuItem(menu, "Computer play", KeyEvent.VK_L,
+        m_itemComputerPlay = addMenuItem(menu, "Computer Play", KeyEvent.VK_L,
                                          KeyEvent.VK_F5, 0, "play");
         m_itemInterrupt =
             addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
@@ -561,7 +561,7 @@ class MenuBar
 
     private JMenu createRecentMenu()
     {
-        m_menuRecent = new JMenu("Open recent");
+        m_menuRecent = new JMenu("Open Recent");
         m_menuRecent.setMnemonic(KeyEvent.VK_R);
         loadRecent();
         updateRecentMenu();
@@ -572,16 +572,15 @@ class MenuBar
     {
         JMenu menu = new JMenu("Settings");
         menu.setMnemonic(KeyEvent.VK_S);
-        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep after move");
+        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
         addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
                     "beep-after-move");
-        m_itemShowCursor = new JCheckBoxMenuItem("Show cursor");
+        m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
         m_itemShowCursor.setSelected(true);
         addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_S, "show-cursor");
-        m_itemShowLastMove = new JCheckBoxMenuItem("Show last move");
+        m_itemShowLastMove = new JCheckBoxMenuItem("Show Last Move");
         m_itemShowLastMove.setSelected(true);
-        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
-                    "show-last-move");
+        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L, "show-last-move");
         return menu;
     }
 
@@ -589,7 +588,7 @@ class MenuBar
     {
         JMenu menu = new JMenu("Setup");
         menu.setMnemonic(KeyEvent.VK_E);
-        m_itemSetup = new JCheckBoxMenuItem("Setup mode");
+        m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
         addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
         menu.addSeparator();
         ButtonGroup group = new ButtonGroup();
@@ -606,21 +605,21 @@ class MenuBar
         JMenu menu = new JMenu("Variation");
         menu.setMnemonic(KeyEvent.VK_V);
         m_itemNextVariation =
-            addMenuItem(menu, "Next variation", KeyEvent.VK_N,
+            addMenuItem(menu, "Next Variation", KeyEvent.VK_N,
                         KeyEvent.VK_DOWN, ActionEvent.CTRL_MASK,
                         "next-variation");
         m_itemPreviousVariation =
-            addMenuItem(menu, "Previous variation", KeyEvent.VK_P,
+            addMenuItem(menu, "Previous Variation", KeyEvent.VK_P,
                         KeyEvent.VK_UP, ActionEvent.CTRL_MASK,
                         "previous-variation");
-        m_itemMakeMainVar = addMenuItem(menu, "Make main variation",
+        m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
                                         KeyEvent.VK_M, "make-main-variation");
         m_itemKeepOnlyMainVar = addMenuItem(menu,
-                                            "Delete side variations",
+                                            "Delete Side Variations",
                                             KeyEvent.VK_D,
                                             "keep-only-main-variation");
         m_itemKeepOnlyPosition = addMenuItem(menu,
-                                             "Keep only position",
+                                             "Keep Only Position",
                                              KeyEvent.VK_K,
                                              "keep-only-position");
         m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
@@ -636,7 +635,7 @@ class MenuBar
                     "show-gametree");
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
                     "analyze");
-        m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
+        m_itemGtpShell = addMenuItem(menu, "GTP Shell", KeyEvent.VK_G,
                                      KeyEvent.VK_F9, 0, "gtp-shell");
         return menu;
     }

@@ -269,10 +269,10 @@ class AnalyzeDialog
         m_comboBox = new JComboBox();
         m_comboBox.addActionListener(this);
         panel.add(m_comboBox);
-        m_autoRun = new JCheckBox("Auto run");
+        m_autoRun = new JCheckBox("Auto Run");
         m_autoRun.setToolTipText("Auto run after changes on board");
         panel.add(m_autoRun);
-        m_clearBoard = new JCheckBox("Clear board");
+        m_clearBoard = new JCheckBox("Clear Board");
         m_clearBoard.setToolTipText("Clear board before displaying result");
         panel.add(m_clearBoard);
         m_clearBoard.setSelected(true);
@@ -307,11 +307,11 @@ class AnalyzeDialog
         JMenu menu = new JMenu("Settings");
         menu.setMnemonic(KeyEvent.VK_S);
         m_itemOnlySupported =
-            new JCheckBoxMenuItem("Only supported commands");
+            new JCheckBoxMenuItem("Only Supported Commands");
         m_itemOnlySupported.setSelected(m_onlySupportedCommands);
         addMenuItem(menu, m_itemOnlySupported, KeyEvent.VK_O,
                     "only-supported");
-        m_itemSort = new JCheckBoxMenuItem("Sort alphabetically");
+        m_itemSort = new JCheckBoxMenuItem("Sort Alphabetically");
         m_itemSort.setSelected(m_sort);
         addMenuItem(menu, m_itemSort, KeyEvent.VK_S, "sort");
         return menu;
@@ -323,7 +323,7 @@ class AnalyzeDialog
         menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
                     "gogui");
-        addMenuItem(menu, "GTP shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,
+        addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,
                     "gtp-shell");
         return menu;
     }

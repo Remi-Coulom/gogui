@@ -802,7 +802,7 @@ public class GtpShell
         addMenuItem(menu, "Save Commands...", KeyEvent.VK_M, "save-commands");
         menu.addSeparator();
         m_sendGtpFile =
-            addMenuItem(menu, "Send GTP file...", KeyEvent.VK_G, "send-file");
+            addMenuItem(menu, "Send GTP File...", KeyEvent.VK_G, "send-file");
         menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     ActionEvent.CTRL_MASK, "close");
@@ -816,7 +816,7 @@ public class GtpShell
         m_itemHighlight = new JCheckBoxMenuItem("Highlight");
         m_itemHighlight.setSelected(highlight);
         addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
-        m_itemCommandCompletion = new JCheckBoxMenuItem("Popup completions");
+        m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
         m_itemCommandCompletion.setSelected(! m_disableCompletions);
         addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_C,
                     "command-completion");
