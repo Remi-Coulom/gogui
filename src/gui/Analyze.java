@@ -318,11 +318,14 @@ class AnalyzeDialog
             setCommand();
     }
 
-    public void mouseClicked(MouseEvent e)
+    public void mouseClicked(MouseEvent event)
     {
-        if (e.getClickCount() == 2)
+        int modifiers = event.getModifiers();
+        int mask = ActionEvent.ALT_MASK;
+        if (event.getClickCount() == 2
+            || ((modifiers & mask) != 0))
         {
-            int index = m_list.locationToIndex(e.getPoint());
+            int index = m_list.locationToIndex(event.getPoint());
             selectCommand(index);
             setCommand();
         }

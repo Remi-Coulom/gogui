@@ -80,7 +80,8 @@ public class Field
         else
         {            
             int modifiers = event.getModifiers();
-            int mask = (ActionEvent.CTRL_MASK | ActionEvent.META_MASK);
+            int mask = (ActionEvent.CTRL_MASK | ActionEvent.ALT_MASK
+                        | ActionEvent.META_MASK);
             boolean modifiedSelect = ((modifiers & mask) != 0);
             m_board.fieldClicked(m_point, modifiedSelect);
         }
