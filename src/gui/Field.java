@@ -414,7 +414,7 @@ public class Field
         Dimension size = getSize();
         int stringWidth = g.getFontMetrics().stringWidth(m_string);
         int stringHeight = g.getFont().getSize();
-        int x = (size.width - stringWidth) / 2;
+        int x = Math.max((size.width - stringWidth) / 2, 0);
         int y = stringHeight + (size.height - stringHeight) / 2;
         if (m_color == go.Color.WHITE)
             g.setColor(java.awt.Color.black);
