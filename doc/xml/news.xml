@@ -7,6 +7,14 @@
       <authorinitials>enz</authorinitials>
       <revremark>
 	<itemizedlist>
+	  <listitem>
+	    Fix cursor not positioned at last moves if handicap or setup
+	    stones exist.
+	  </listitem>
+	  <listitem>
+	    Clear old markups before showing an analyze command with
+	    a point list result.
+	  </listitem>
 	</itemizedlist>
       </revremark>
     </revision>

@@ -61,16 +61,22 @@ public class Board
             go.Point p = m_board.getPoint(i);
             clearInfluence(p);
             setFieldBackground(p, null);
-            setMarkup(p, false);
             setString(p, "");
         }
         clearAllCrossHair();
+        clearAllMarkup();
     }
 
     public void clearAllCrossHair()
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
             setCrossHair(m_board.getPoint(i), false);
+    }
+
+    public void clearAllMarkup()
+    {
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+            setMarkup(m_board.getPoint(i), false);
     }
 
     public void clearInfluence(go.Point p)
@@ -291,6 +297,7 @@ public class Board
 
     public void showPointList(go.Point pointList[])
     {
+        clearAllMarkup();
         for (int i = 0; i < pointList.length; ++i)
         {
             go.Point p = pointList[i];
