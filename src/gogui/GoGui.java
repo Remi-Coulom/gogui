@@ -448,7 +448,7 @@ class GoGui
             // Paint point immediately to pretend better responsiveness
             m_guiBoard.paintImmediately(p);
             m_guiBoard.repaint();
-            m_needsSave = true;
+            setNeedsSave(true);
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
                  && ! modifiedSelect)
@@ -1082,7 +1082,7 @@ class GoGui
     
     private void cbCommentChanged()
     {
-        m_needsSave = true;
+        setNeedsSave(true);
         if (m_gameTreeViewer != null)
             m_gameTreeViewer.redrawCurrentNode();
     }
@@ -1277,7 +1277,7 @@ class GoGui
         if (! showQuestion("Delete all variations but main?"))
             return;
         m_gameTree.keepOnlyMainVariation();
-        m_needsSave = true;
+        setNeedsSave(true);
         boardChangedBegin(false, true);
     }
 
@@ -1301,7 +1301,7 @@ class GoGui
         root.setPlayer(m_board.getToMove());
         m_board.initSize(m_boardSize);
         executeRoot();
-        m_needsSave = true;
+        setNeedsSave(true);
         boardChangedBegin(false, true);
     }
 
@@ -1310,7 +1310,7 @@ class GoGui
         if (! showQuestion("Make current to main variation?"))
             return;
         NodeUtils.makeMainVariation(m_currentNode);
-        m_needsSave = true;
+        setNeedsSave(true);
         boardChangedBegin(false, true);
     }
 
@@ -1426,7 +1426,7 @@ class GoGui
             savePosition(file);
             if (m_currentNode.getFather() == null
                 && m_currentNode.getChild() == null)
-                m_needsSave = false;
+                setNeedsSave(false);
             m_loadedFile = file;
             setTitle();
         }
@@ -1577,7 +1577,7 @@ class GoGui
         Node oldCurrentNode = m_currentNode;
         backward(1);
         m_currentNode.removeChild(oldCurrentNode);
-        m_needsSave = true;
+        setNeedsSave(true);
         boardChangedBegin(false, true);
     }
 
@@ -1646,7 +1646,7 @@ class GoGui
         case 0:
             return saveDialog();
         case 1:
-            m_needsSave = false;
+            setNeedsSave(false);
             return true;
         case -1:
         case 2:
@@ -1724,7 +1724,7 @@ class GoGui
             {
                 go.Point point = GtpUtils.parsePoint(response, m_boardSize);
                 Move move = new Move(point, toMove);
-                m_needsSave = true;
+                setNeedsSave(true);
                 m_board.play(move);
                 Node node = new Node(move);
                 m_currentNode.append(node);
@@ -1981,7 +1981,7 @@ class GoGui
             if (point != null && m_board.getColor(point) != go.Color.EMPTY)
                 return;
             boolean newNodeCreated = play(move);
-            m_needsSave = newNodeCreated;
+            setNeedsSave(newNodeCreated);
             if (point != null)
             {
                 m_guiBoard.updateFromGoBoard(point);
@@ -2038,7 +2038,7 @@ class GoGui
         m_timeControl.reset();
         m_timeControl.startMove(go.Color.BLACK);
         m_lostOnTimeShown = false;
-        m_needsSave = false;
+        setNeedsSave(false);
         m_resigned = false;
     }
 
@@ -2437,7 +2437,7 @@ class GoGui
             save(file);
             m_loadedFile = file;
             setTitle();
-            m_needsSave = false;
+            setNeedsSave(false);
             return true;
         }
         catch (FileNotFoundException e)
@@ -2581,6 +2581,17 @@ class GoGui
         {
             showGtpError(e);
         }
+    }
+
+    private void setNeedsSave(boolean needsSave)
+    {
+        if (m_needsSave == needsSave)
+            return;
+        m_needsSave = needsSave;
+        // Set Swing property on root window, good for e.g. Mac close
+        // buttons
+        getRootPane().putClientProperty("windowModified",
+                                        Boolean.valueOf(needsSave));
     }
     
     private static void setPrefsDefaults(Preferences prefs)
