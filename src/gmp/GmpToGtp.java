@@ -76,6 +76,8 @@ public class GmpToGtp
 
     public static void main(String[] args)
     {
+        Process process = null;
+        SerialPort port = null;
         try
         {
             String options[] = {
@@ -139,13 +141,11 @@ public class GmpToGtp
             }
             InputStream in;
             OutputStream out;
-            Process process = null;
-            RandomAccessFile randomAccessFile = null;
             if (! device.equals(""))
             {
                 CommPortIdentifier portId =
                     CommPortIdentifier.getPortIdentifier(device);
-                SerialPort port = (SerialPort)portId.open("GmpToGtp", 5000);
+                port = (SerialPort)portId.open("GmpToGtp", 5000);
                 port.setSerialPortParams(baud, SerialPort.DATABITS_8,
                                          SerialPort.STOPBITS_1,
                                          SerialPort.PARITY_NONE);
@@ -172,11 +172,6 @@ public class GmpToGtp
             GmpToGtp gmpToGtp = new GmpToGtp(in, out, verbose, size,
                                              colorIndex);
             gmpToGtp.mainLoop();
-            if (process != null)
-            {
-                process.destroy();
-                process.waitFor();
-            }
         }
         catch (Throwable t)
         {
@@ -186,6 +181,23 @@ public class GmpToGtp
             System.err.println(msg);
             t.printStackTrace();
             System.exit(-1);
+        }
+        finally
+        {
+            if (process != null)
+            {
+                process.destroy();
+                try
+                {
+                    process.waitFor();
+                }
+                catch(InterruptedException e)
+                {
+                    System.err.println("Interrupted");
+                }
+            }
+            if (port != null)
+                port.close();
         }
     }
 
