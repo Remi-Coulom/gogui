@@ -899,6 +899,7 @@ class AnalyzeShow
 {
     public static void show(AnalyzeCommand command, gui.Board guiBoard,
                             go.Board board, go.Point analyzePointArg,
+                            Vector analyzePointArgList,
                             String response) throws Gtp.Error
     {
         int type = command.getType();
@@ -981,31 +982,47 @@ class AnalyzeShow
             break;
         case AnalyzeCommand.VARP:
             {
-                go.Point list[] = Gtp.parsePointString(response, size);
-                go.Point p = analyzePointArg;
-                if (p != null)
+                go.Color c = getColor(board, analyzePointArg,
+                                      analyzePointArgList);
+                if (c != go.Color.EMPTY)
                 {
-                    go.Color c = board.getColor(p);
-                    if (c != go.Color.EMPTY)
-                        guiBoard.showVariation(list, c);
+                    go.Point list[] = Gtp.parsePointString(response, size);
+                    guiBoard.showVariation(list, c);
+                    guiBoard.repaint();
                 }
-                guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.VARPO:
             {
-                go.Point list[] = Gtp.parsePointString(response, size);
-                go.Point p = analyzePointArg;
-                if (p != null)
+                go.Color c = getColor(board, analyzePointArg,
+                                      analyzePointArgList);
+                if (c != go.Color.EMPTY)
                 {
-                    go.Color c = board.getColor(p);
-                    if (c != go.Color.EMPTY)
-                        guiBoard.showVariation(list, c.otherColor());
+                    go.Point list[] = Gtp.parsePointString(response, size);
+                    guiBoard.showVariation(list, c.otherColor());
+                    guiBoard.repaint();
                 }
-                guiBoard.repaint();
             }
             break;
         }
+    }
+
+    private static go.Color getColor(go.Board board, go.Point analyzePointArg,
+                                     Vector analyzePointArgList)
+    {
+        go.Color color = go.Color.EMPTY;
+        if (analyzePointArg != null)
+            color = board.getColor(analyzePointArg);
+        if (color != go.Color.EMPTY)
+            return color;
+        for (int i = 0; i < analyzePointArgList.size(); ++i)
+        {
+            go.Point point = (go.Point)analyzePointArgList.get(i);
+            color = board.getColor(point);
+            if (color != go.Color.EMPTY)
+                break;
+        }
+        return color;
     }
 }
 

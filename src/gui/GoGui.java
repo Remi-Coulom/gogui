@@ -737,7 +737,8 @@ class GoGui
                 throw e;
             String response = m_commandThread.getResponse();
             AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_board,
-                             m_analyzePointArg, response);
+                             m_analyzePointArg, m_analyzePointListArg,
+                             response);
             int type = m_analyzeCommand.getType();
             boolean statusContainsResponse = false;
             if (type == AnalyzeCommand.STRING
