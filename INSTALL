@@ -1,0 +1,30 @@
+Basic Installation
+==================
+
+This package requires at least Java version 1.4.
+It comes with precompiled Java jar files for GoGui and the GTP tools
+and in the lib directory.
+
+For Unix systems there are launcher scripts in the bin directory.
+The launcher scripts respect the environment variable JAVA_HOME, if defined,
+and look for the jar files relative to the bin directory.
+
+
+Compiling from the Sources
+==========================
+
+* Compiling GoGui from the sources needs the Ant build system
+  (http://ant.apache.org).
+
+* You will need the class files from the Java Communications API
+  (http://java.sun.com/products/javacomm).
+  Make sure that the class file "comm.jar" is somewhere in your class path.
+
+* The HTML documentation is generated using Docbook.
+  To re-generate the HTML files after changes in the XML files,
+  you need to install the Docbook XSL files (http://docbook.sourceforge.net)
+  and set the environment variable DOCBOOK_XSL_HOME to the installation
+  directory.
+
+* If all requirements are met, simply type "ant" in the main directory
+  of GoGui.

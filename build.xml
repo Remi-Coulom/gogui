@@ -110,6 +110,7 @@ installation directory.
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
+ INSTALL
  TODO
  build.xml,
  config/analyze-commands*,
