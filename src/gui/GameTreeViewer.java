@@ -221,10 +221,17 @@ class GameTreePanel
         GameNode gameNode = getGameNode(m_currentNode);
         gameNode.setCurrentNode(false);
         gameNode = getGameNode(currentNode);
+        java.awt.Point location = gameNode.getLocation();
+        m_currentNodeX = location.x;
+        m_currentNodeY = location.y;
         gameNode.setCurrentNode(true);
         m_currentNode = currentNode;
         scrollToCurrent();
     }
+
+    private int m_currentNodeX;
+
+    private int m_currentNodeY;
 
     private int m_nodeSize;
 
@@ -272,6 +279,11 @@ class GameTreePanel
             if (i < numberChildren - 1)
                 dy += m_nodeDist;
         }
+        if (node == m_currentNode)
+        {
+            m_currentNodeX = x;
+            m_currentNodeY = y;
+        }
         return dy;
     }
 
@@ -301,9 +313,8 @@ class GameTreePanel
     private void scrollToCurrent()
     {
         GameNode gameNode = getGameNode(m_currentNode);
-        java.awt.Point location = gameNode.getLocation();
-        scrollRectToVisible(new Rectangle(location.x - 2 * m_nodeSize,
-                                          location.y,
+        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeSize,
+                                          m_currentNodeY,
                                           5 * m_nodeSize, 3 * m_nodeSize));
     }
 }
