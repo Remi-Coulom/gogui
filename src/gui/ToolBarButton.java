@@ -57,6 +57,8 @@ class ToolBarButton
         setBorder(BorderFactory.createRaisedBevelBorder());
         addMouseListener(this);
         setBorderPainted(false);
+        Insets insets = new Insets(1, 1, 1, 1);
+        setMargin(insets);
     }
 };
 
