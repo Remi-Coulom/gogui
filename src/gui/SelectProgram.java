@@ -22,7 +22,7 @@ class SelectProgram
 {
     public SelectProgram(Frame owner)
     {
-        super(owner, "GoGui: Select program", true);
+        super(owner, "GoGui: Select Program", true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
         contentPane.add(createCommandPanel(), BorderLayout.CENTER);
