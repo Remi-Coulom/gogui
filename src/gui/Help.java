@@ -13,6 +13,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
+import utils.StreamCopy;
 
 //-----------------------------------------------------------------------------
 
@@ -269,25 +270,39 @@ class Help
     */
     private void openExternal(URL url)
     {
-        Runtime runtime = Runtime.getRuntime();
         try
         {
-            runtime.exec("kfmclient exec " + url);
+            String[] cmd = {"kfmclient", "exec", url.toString()};
+            runProcess(cmd);
             return;
         }
-        catch (Exception e)
+        catch (IOException e)
         {
         }
         try
         {
-            runtime.exec("rundll32 url.dll,FileProtocolHandler " + url);
+            String[] cmd =
+                {"rundll32", "url.dll,FileProtocolHandler", url.toString()};
+            runProcess(cmd);
             return;
         }
-        catch (Exception e)
+        catch (IOException e)
         {
         }
         loadURL(url);
         appendHistory(url);        
+    }
+
+    private void runProcess(String[] cmdArray) throws IOException
+    {
+        Runtime runtime = Runtime.getRuntime();
+        Process process = runtime.exec(cmdArray);
+        Thread copyOut =
+            new StreamCopy(false, process.getInputStream(), System.err, false);
+        copyOut.start();
+        Thread copyErr =
+            new StreamCopy(false, process.getErrorStream(), System.err, false);
+        copyErr.start();
     }
 }
 
