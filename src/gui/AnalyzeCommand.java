@@ -389,8 +389,8 @@ public class AnalyzeCommand
         return result;
     }
 
-    public static void readFile(File file, Vector commands, Vector labels,
-                                Vector supportedCommands)
+    private static void readFile(File file, Vector commands, Vector labels,
+                                 Vector supportedCommands)
         throws Exception
     {
         BufferedReader in = new BufferedReader(new FileReader(file));
