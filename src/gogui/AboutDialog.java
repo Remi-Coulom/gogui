@@ -80,7 +80,9 @@ public class AboutDialog
             programPanel = new JPanel();
         tabbedPane.add("Go Program", programPanel);
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_P);
-        if (! isProgramAvailable)
+        if (isProgramAvailable)
+            tabbedPane.setSelectedIndex(1);
+        else
             tabbedPane.setEnabledAt(1, false);
         setMessage(tabbedPane);
         setOptionType(DEFAULT_OPTION);
