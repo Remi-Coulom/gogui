@@ -134,8 +134,12 @@ public class Reader
             result = result + "Extra text before game tree\n";
         if (m_warningFormat)
             result = result + "Unknown SGF file format version\n";
+        if (m_warningInvalidBoardSize)
+            result = result + "Invalid board size value\n";
         if (m_warningWrongPass)
             result = result + "Non-standard pass move encoding\n";
+        if (m_warningInvalidHandicap)
+            result = result + "Invalid handicap value\n";
         if (m_warningLongProps)
             result = result + "Verbose names for standard properties\n";
         if (m_warningGame)
@@ -160,6 +164,10 @@ public class Reader
 
     /** GM value should be 1, sgf2misc produces Go files with empty value */
     private boolean m_warningGame;
+
+    private boolean m_warningInvalidBoardSize;
+
+    private boolean m_warningInvalidHandicap;
 
     private boolean m_warningLongProps;
 
@@ -520,13 +528,26 @@ public class Reader
             {
                 if (p.equals("HANDICAP"))
                     m_warningLongProps = true;
-                m_gameInformation.m_handicap = Integer.parseInt(v);
+                try
+                {
+                    m_gameInformation.m_handicap = Integer.parseInt(v);
+                }
+                catch (NumberFormatException e)
+                {
+                    m_warningInvalidHandicap = true;
+                }
             }
             else if (p.equals("KM") || p.equals("KOMI"))
             {
                 if (p.equals("KOMI"))
                     m_warningLongProps = true;
-                m_gameInformation.m_komi = parseDouble(v);
+                try
+                {
+                    m_gameInformation.m_komi = Double.parseDouble(v);
+                }
+                catch (NumberFormatException e)
+                {
+                }
             }
             else if (p.equals("OB"))
             {
@@ -584,7 +605,14 @@ public class Reader
                     m_warningLongProps = true;
                 if (! isRoot)
                     throw getError("Size property outside root node");
-                m_gameInformation.m_boardSize = parseInt(v);
+                try
+                {
+                    m_gameInformation.m_boardSize = parseInt(v);
+                }
+                catch (NumberFormatException e)
+                {
+                    m_warningInvalidBoardSize = true;
+                }
             }
             else if (p.equals("W") || p.equals("WHITE"))
             {
