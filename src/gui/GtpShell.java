@@ -917,7 +917,7 @@ public class GtpShell
 
     private void findBestCompletion()
     {
-        String text = m_textField.getText().trim();
+        String text = getTextWithoutSelect();
         if (text.equals(""))
             return;
         String bestCompletion = null;
@@ -958,6 +958,14 @@ public class GtpShell
         if (! dir.exists())
             dir.mkdir();
         return new File(dir, "gtpshell-history");
+    }
+
+    private String getTextWithoutSelect()
+    {
+        String text = m_textField.getText();
+        if (m_textField.getSelectedText() != null)
+            text = text.substring(0, m_textField.getSelectionStart());
+        return text.trim();
     }
 
     private void highlight()
