@@ -142,6 +142,9 @@ string/GoGui SigInt/gogui_sigint
 # GmpToGtp extensions
 string/Gmp Queue/gmp_queue
 
+# GtpAdapter extensions
+string/GtpAdapter ShowBoard/gtpadapter_showboard
+
 # GtpDummy extensions
 bwboard/Dummy BWBoard/dummy_bwboard
 none/Dummy Crash/dummy_crash

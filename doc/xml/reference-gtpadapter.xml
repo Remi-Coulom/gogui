@@ -42,6 +42,7 @@ Go Text Protocol adapter for logging or protocol translations.
 The argument <replaceable>program</replaceable> is a command line
 for the Go program .
 </para>
+</refsection>
 
 <refsection>
 <title>Options</title>
@@ -176,16 +177,11 @@ Print version and exit.
 <term><option>-version2</option></term>
 <listitem>
 <para>
-Translate GTP version 2 commands into version 1 commands.
-This will translate the commands <userinput>play</userinput>,
-<userinput>genmove</userinput>, <userinput>list_commands</userinput> into
-<userinput>black</userinput>, <userinput>white</userinput>,
-<userinput>genmove_black</userinput>, <userinput>genmove_white</userinput>,
-<userinput>help</userinput>. The command <userinput>boardsize</userinput>
-will be forwarded to the program and set the boardsize.
-The command <userinput>clear_board</userinput> will be translated into
-a version 1 <userinput>boardsize</userinput> command using the previously
-set board size.
+Sets whether GtpAdapter reports protocol version 2 in response to the
+<userinput>protocol_version</userinput> command.
+GtpAdapter can handle both versions of the commands for playing moves,
+generating moves and starting a new game and will translate them
+correctly to the GTP version of the Go program.
 </para>
 </listitem>
 </varlistentry>
@@ -193,6 +189,24 @@ set board size.
 </variablelist>
 </refsection>
 
+<refsection>
+<title>GTP Extensions</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><userinput>gtpadapter_showboard</userinput></term>
+<listitem>
+<para>
+Show the internal Go board.
+This is different from the <userinput>showboard</userinput> command,
+which is forwarded to the Go program, if it supports it.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</para>
 </refsection>
 
 </refentry>
