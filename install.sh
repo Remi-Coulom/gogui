@@ -49,3 +49,6 @@ install config/gogui.xml $PREFIX/share/mime/packages
 
 install -d $PREFIX/share/application-registry
 install config/gogui.applications $PREFIX/share/application-registry
+
+update-mime-database $PREFIX/share/mime
+
