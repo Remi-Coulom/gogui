@@ -192,7 +192,7 @@ installation directory.
 
 <target name="gmptogtp.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gmptogtp.jar" index="true">
+<jar destfile="lib/gmptogtp.jar">
 <manifest>
 <attribute name="Main-Class" value="gmptogtp.Main"/>
 </manifest>
@@ -214,7 +214,7 @@ installation directory.
 
 <target name="gogui.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gogui.jar" index="true">
+<jar destfile="lib/gogui.jar">
 <manifest>
 <attribute name="Main-Class" value="gogui.Main"/>
 </manifest>
@@ -241,7 +241,7 @@ installation directory.
 
 <target name="gtpadapter.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpadapter.jar" index="true">
+<jar destfile="lib/gtpadapter.jar">
 <manifest>
 <attribute name="Main-Class" value="gtpadapter.Main"/>
 </manifest>
@@ -261,7 +261,7 @@ installation directory.
 
 <target name="gtpdisplay.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpdisplay.jar" index="true">
+<jar destfile="lib/gtpdisplay.jar">
 <manifest>
 <attribute name="Main-Class" value="gtpdisplay.Main"/>
 </manifest>
@@ -288,7 +288,7 @@ installation directory.
 
 <target name="gtpdummy.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpdummy.jar" index="true">
+<jar destfile="lib/gtpdummy.jar">
 <manifest>
 <attribute name="Main-Class" value="gtpdummy.Main"/>
 </manifest>
@@ -307,7 +307,7 @@ installation directory.
 
 <target name="gtpregress.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpregress.jar" index="true">
+<jar destfile="lib/gtpregress.jar">
 <manifest>
 <attribute name="Main-Class" value="gtpregress.Main"/>
 </manifest>
@@ -328,7 +328,7 @@ installation directory.
 
 <target name="gtpserver.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpserver.jar" index="true">
+<jar destfile="lib/gtpserver.jar">
 <manifest>
 <attribute name="Main-Class" value="gtpserver.GtpServer"/>
 </manifest>
@@ -344,7 +344,7 @@ installation directory.
 
 <target name="gtpterminal.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/gtpterminal.jar" index="true">
+<jar destfile="lib/gtpterminal.jar">
 <manifest>
 <attribute name="Main-Class" value="gtpterminal.Main"/>
 </manifest>
@@ -415,7 +415,7 @@ installation directory.
 
 <target name="netgtp.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/netgtp.jar" index="true">
+<jar destfile="lib/netgtp.jar">
 <manifest>
 <attribute name="Main-Class" value="netgtp.NetGtp"/>
 </manifest>
@@ -431,7 +431,7 @@ installation directory.
 
 <target name="sgftotex.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/sgftotex.jar" index="true">
+<jar destfile="lib/sgftotex.jar">
 <manifest>
 <attribute name="Main-Class" value="sgftotex.SgfToTex"/>
 </manifest>
@@ -465,7 +465,7 @@ installation directory.
 
 <target name="twogtp.jar" depends="compile">
 <mkdir dir="lib"/>
-<jar destfile="lib/twogtp.jar" index="true">
+<jar destfile="lib/twogtp.jar">
 <manifest>
 <attribute name="Main-Class" value="twogtp.Main"/>
 </manifest>
