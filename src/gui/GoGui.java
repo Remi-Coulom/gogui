@@ -1178,6 +1178,7 @@ class GoGui
             String message = "Interrupt command and exit?";
             if (! showQuestion(message))
                 return;
+            m_commandThread.close();
         }
         else
         {
