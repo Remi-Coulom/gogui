@@ -74,8 +74,6 @@ public class Reader
 
     private Error getError(String message)
     {
-        // Note: lineno() does not work correctly for Unix line endings
-        // (Sun Java 1.4.0 Linux)
         int lineNumber = m_tokenizer.lineno() + 1;
         if (m_name != null)
         {
