@@ -247,6 +247,15 @@ class Help
         m_itemContents.setEnabled(contentsPossible);
     }
 
+    // Check if operating system is Mac OS X
+    private boolean isOSMac()
+    {
+        String name = System.getProperty("os.name");
+        if (name == null)
+            return false;
+        return name.equals("Mac OS X");
+    }
+
     private void loadURL(URL url)
     {
         try
@@ -270,24 +279,39 @@ class Help
     */
     private void openExternal(URL url)
     {
-        try
+        if (isOSMac())
         {
-            String[] cmd = {"kfmclient", "exec", url.toString()};
-            runProcess(cmd);
-            return;
+            try
+            {
+                String[] cmd = { "/usr/bin/open", url.toString() };
+                runProcess(cmd);
+                return;
+            }
+            catch (IOException e)
+            {
+            }
         }
-        catch (IOException e)
+        else
         {
-        }
-        try
-        {
-            String[] cmd =
-                {"rundll32", "url.dll,FileProtocolHandler", url.toString()};
-            runProcess(cmd);
-            return;
-        }
-        catch (IOException e)
-        {
+            try
+            {
+                String[] cmd = { "kfmclient", "exec", url.toString() };
+                runProcess(cmd);
+                return;
+            }
+            catch (IOException e)
+            {
+            }
+            try
+            {
+                String[] cmd = { "rundll32", "url.dll,FileProtocolHandler",
+                                 url.toString() };
+                runProcess(cmd);
+                return;
+            }
+            catch (IOException e)
+            {
+            }
         }
         loadURL(url);
         appendHistory(url);        
