@@ -33,8 +33,8 @@ class MenuBar
         m_menuBar.add(m_menuSetup);
         m_menuSettings = createSettingsMenu();
         m_menuBar.add(m_menuSettings);
-        m_menuWindows = createWindowsMenu();
-        m_menuBar.add(m_menuWindows);
+        m_menuWindow = createWindowMenu();
+        m_menuBar.add(m_menuWindow);
         m_menuHelp = createHelpMenu();
         m_menuBar.add(m_menuHelp);
     }
@@ -200,7 +200,7 @@ class MenuBar
         m_itemBeepAfterMove.setEnabled(true);
         m_itemShowCursor.setEnabled(true);
         m_itemShowLastMove.setEnabled(true);
-        m_menuWindows.setEnabled(true);
+        m_menuWindow.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
     }
 
@@ -231,7 +231,7 @@ class MenuBar
         m_itemSetupWhite.setEnabled(true);
         m_itemSetupBlack.setSelected(true);
         m_menuFile.setEnabled(true);
-        m_menuWindows.setEnabled(true);
+        m_menuWindow.setEnabled(true);
         m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);
         m_itemExit.setEnabled(true);
@@ -243,7 +243,7 @@ class MenuBar
     {
         disableAll();
         m_menuFile.setEnabled(true);
-        m_menuWindows.setEnabled(true);
+        m_menuWindow.setEnabled(true);
         m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);
         m_itemExit.setEnabled(true);
@@ -329,7 +329,7 @@ class MenuBar
 
     private JMenuBar m_menuBar;
 
-    private JMenu m_menuWindows;
+    private JMenu m_menuWindow;
 
     private JMenuItem m_itemAbout;
 
@@ -637,9 +637,9 @@ class MenuBar
         return menu;
     }
 
-    private JMenu createWindowsMenu()
+    private JMenu createWindowMenu()
     {
-        JMenu menu = createMenu("Windows", KeyEvent.VK_W);
+        JMenu menu = createMenu("Window", KeyEvent.VK_W);
         addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7, 0,
                     "show-gametree");
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
