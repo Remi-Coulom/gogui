@@ -19,7 +19,7 @@ import utils.*;
 class GoGui
     extends JFrame
     implements ActionListener, AnalyzeCommand.Callback, Board.Listener,
-               Gtp.StdErrCallback, GtpShell.Callback, WindowListener
+               GtpShell.Callback, WindowListener
 {
     GoGui(String program, int size, String file, int move,
           String analyzeCommand, boolean gtpShell, String time,
@@ -30,8 +30,7 @@ class GoGui
         {
             // Must be created before m_gtp (stderr callback of Gtp!)
             m_gtpShell = new GtpShell(null, "GoGui", this);
-            Gtp gtp = new Gtp(program, verbose);
-            gtp.setStdErrCallback(this);
+            Gtp gtp = new Gtp(program, verbose, m_gtpShell);
             m_gtpShell.setProgramCommand(gtp.getProgramCommand());
             m_commandThread = new CommandThread(gtp, m_gtpShell);
             m_commandThread.start();
@@ -309,22 +308,6 @@ class GoGui
         }
     }
 
-    public void receivedStdErr(String s)
-    {
-        assert(m_gtpShell != null);
-        Runnable r = new UpdateGtpShellStdErr(m_gtpShell, s);
-        try
-        {
-            SwingUtilities.invokeAndWait(r);
-        }
-        catch (InterruptedException e)
-        {
-        }
-        catch (java.lang.reflect.InvocationTargetException e)
-        {
-        }
-    }
-
     public boolean sendGtpCommand(String command) throws Gtp.Error
     {
         if (m_commandInProgress)
@@ -398,23 +381,6 @@ class GoGui
 
     public void windowOpened(WindowEvent e)
     {
-    }
-
-    private static class UpdateGtpShellStdErr implements Runnable
-    {
-        public UpdateGtpShellStdErr(GtpShell gtpShell, String text)
-        {
-            m_gtpShell = gtpShell;
-            m_text = new String(text);
-        }
-
-        public void run()
-        {
-            m_gtpShell.receivedStdErr(m_text);
-        }
-
-        private String m_text;
-        private GtpShell m_gtpShell;
     }
 
     private boolean m_analyzeRequestPoint;

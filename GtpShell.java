@@ -98,7 +98,7 @@ class GtpShellText
 
 public class GtpShell
     extends JDialog
-    implements ActionListener, ItemListener, KeyListener
+    implements ActionListener, Gtp.IOCallback, ItemListener, KeyListener
 {
     public interface Callback
     {
@@ -199,23 +199,41 @@ public class GtpShell
         }
     }
 
-    public void receivedResponse(String response)
+    public void receivedResponse(boolean error, String response)
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        m_log.append(response);
-        if (! response.equals("") && response.charAt(0) == '=')
-            m_gtpShellText.appendInput(response);
-        else
-            m_gtpShellText.appendError(response);
+        if (SwingUtilities.isEventDispatchThread())
+        {
+            appendResponse(error, response);
+            return;
+        }
+        Runnable r = new UpdateResponse(this, error, response);
+        try
+        {
+            SwingUtilities.invokeAndWait(r);
+        }
+        catch (InterruptedException e)
+        {
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+        }
     }
     
     public void receivedStdErr(String s)
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        m_log.append(s);
-        m_gtpShellText.appendLog(s);
+        Runnable r = new UpdateStdErr(this, s);
+        try
+        {
+            SwingUtilities.invokeAndWait(r);
+        }
+        catch (InterruptedException e)
+        {
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+        }
     }
-    
+
     public void toTop()
     {
         setVisible(true);
@@ -226,12 +244,22 @@ public class GtpShell
 
     public void sentCommand(String command)
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        m_log.append(command);
-        m_log.append("\n");
-        m_commands.append(command);
-        m_commands.append("\n");
-        m_gtpShellText.appendOutput(command + "\n");
+        if (SwingUtilities.isEventDispatchThread())
+        {
+            appendSentCommand(command);
+            return;
+        }
+        Runnable r = new UpdateCommand(this, command);
+        try
+        {
+            SwingUtilities.invokeAndWait(r);
+        }
+        catch (InterruptedException e)
+        {
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+        }
     }
     
     public void saveHistory()
@@ -275,6 +303,61 @@ public class GtpShell
     public void setProgramVersion(String version)
     {
         m_programVersion = version;
+    }
+
+    private static class UpdateCommand implements Runnable
+    {
+        public UpdateCommand(GtpShell gtpShell, String text)
+        {
+            m_gtpShell = gtpShell;
+            m_text = new String(text);
+        }
+
+        public void run()
+        {
+            m_gtpShell.sentCommand(m_text);
+        }
+
+        private String m_text;
+        private GtpShell m_gtpShell;
+    }
+
+    private static class UpdateResponse implements Runnable
+    {
+        public UpdateResponse(GtpShell gtpShell, boolean error, String text)
+        {
+            m_gtpShell = gtpShell;
+            m_error = error;
+            m_text = new String(text);
+        }
+
+        public void run()
+        {
+            m_gtpShell.appendResponse(m_error, m_text);
+        }
+
+        private boolean m_error;
+        private String m_text;
+        private GtpShell m_gtpShell;
+    }
+
+    private static class UpdateStdErr implements Runnable
+    {
+        public UpdateStdErr(GtpShell gtpShell, String text)
+        {
+            m_gtpShell = gtpShell;
+            m_text = new String(text);
+        }
+
+        public void run()
+        {
+            assert(SwingUtilities.isEventDispatchThread());
+            m_gtpShell.m_log.append(m_text);
+            m_gtpShell.m_gtpShellText.appendLog(m_text);
+        }
+
+        private String m_text;
+        private GtpShell m_gtpShell;
     }
 
     private boolean m_showModifyWarning = true;
@@ -325,6 +408,26 @@ public class GtpShell
         return addMenuItem(menu, item, command);        
     }
 
+    private void appendResponse(boolean error, String response)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        m_log.append(response);
+        if (error)
+            m_gtpShellText.appendError(response);
+        else
+            m_gtpShellText.appendInput(response);
+    }
+    
+    private void appendSentCommand(String command)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        m_log.append(command);
+        m_log.append("\n");
+        m_commands.append(command);
+        m_commands.append("\n");
+        m_gtpShellText.appendOutput(command + "\n");
+    }
+    
     private void appendToHistory(String command)
     {
         command = command.trim();

@@ -22,15 +22,20 @@ public class Gtp
         }
     }    
 
-    public interface StdErrCallback
+    public interface IOCallback
     {
+        public void receivedResponse(boolean error, String s);
+
         public void receivedStdErr(String s);
+
+        public void sentCommand(String s);
     }    
 
-    public Gtp(String program, boolean log) throws Error
+    public Gtp(String program, boolean log, IOCallback callback) throws Error
     {
         m_log = log;
         m_program = program;
+        m_callback = callback;
         if (m_program.indexOf("%SRAND") >= 0)
         {
             // RAND_MAX in stdlib.h ist at least 32767
@@ -87,11 +92,6 @@ public class Gtp
         return command;
     }
 
-    public String getLastResponse()
-    {
-        return m_lastResponse;
-    }
-
     public String getProgramCommand()
     {
         return m_program;
@@ -111,7 +111,7 @@ public class Gtp
                 program = args[0];
             else
                 program = "gnugo --mode gtp";
-            Gtp gtp = new Gtp(program, true);
+            Gtp gtp = new Gtp(program, true, null);
             gtp.sendCommand("name");
             gtp.sendCommand("version");
             gtp.sendCommand("quit");
@@ -257,6 +257,8 @@ public class Gtp
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
         log(">> " + command);
+        if (m_callback != null)
+            m_callback.sentCommand(command);
         if (m_isProgramDead)
             throw new Error("Program is dead.");
         m_answer = "";
@@ -306,11 +308,6 @@ public class Gtp
     public String sendCommandPlay(Move move) throws Error
     {
         return sendCommand(getCommandPlay(move));
-    }
-
-    public void setStdErrCallback(StdErrCallback callback)
-    {
-        m_callback = callback;
     }
 
     private class StdErrThread extends Thread
@@ -372,18 +369,16 @@ public class Gtp
     private boolean m_log;
     private int m_protocolVersion = 1;
     private BufferedReader m_in;
-    private StdErrCallback m_callback;
+    private IOCallback m_callback;
     private PrintStream m_out;
     private Process m_process;
     private String m_answer;
-    private String m_lastResponse;
     private String m_program;
 
     private void readAnswer() throws Error
     {
         try
         {
-            m_lastResponse = "";
             String line = "";
             while (line.trim().equals(""))
             {
@@ -395,11 +390,11 @@ public class Gtp
                 }
                 log("<< " + line);
             }
-            m_lastResponse = line + "\n";
+            StringBuffer response = new StringBuffer(line);
+            response.append("\n");
             if (! isAnswerLine(line))
                 throw new Error("Invalid response:\n\"" + line + "\"");
-            boolean success = (line.charAt(0) == '=');
-            m_answer = line.substring(2);
+            boolean error = (line.charAt(0) != '=');
             boolean done = false;
             while (! done)
             {
@@ -411,11 +406,14 @@ public class Gtp
                 }
                 log("<< " + line);
                 done = line.equals("");
-                m_lastResponse = m_lastResponse + line + "\n";
-                if (! done)
-                    m_answer = m_answer + "\n" + line;
+                response.append(line);
+                response.append("\n");
             }
-            if (! success)
+            if (m_callback != null)
+                m_callback.receivedResponse(error, response.toString());
+            assert(response.length() >= 4);
+            m_answer = response.substring(2, response.length() - 2);
+            if (error)
                 throw new Error(m_answer);
         }
         catch (InterruptedIOException e)

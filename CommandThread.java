@@ -46,7 +46,6 @@ class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(m_commandInProgress);
         m_commandInProgress = false;
-        m_gtpShell.receivedResponse(m_gtp.getLastResponse());
         return m_exception;
     }
     
@@ -108,7 +107,6 @@ class CommandThread
             m_command = command;
             m_callback = callback;
             m_commandInProgress = true;
-            m_gtpShell.sentCommand(command);
             notifyAll();
         }
     }
@@ -117,9 +115,7 @@ class CommandThread
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        m_gtpShell.sentCommand(command);
         String answer = m_gtp.sendCommand(command);
-        m_gtpShell.receivedResponse(m_gtp.getLastResponse());
         return answer;
     }
 
