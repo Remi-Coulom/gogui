@@ -152,7 +152,10 @@ class GoGui
         }
         Runnable callback = new Runnable()
             {
-                public void run() { initialize(); }
+                public void run()
+                {
+                    initialize();
+                }
             };
         SwingUtilities.invokeLater(callback);
     }
@@ -545,7 +548,10 @@ class GoGui
         }
         Runnable callback = new Runnable()
             {
-                public void run() { sendGtpCommandContinue(); }
+                public void run()
+                {
+                    sendGtpCommandContinue();
+                }
             };
         beginLengthyCommand();
         m_commandThread.sendCommand(command, callback);
@@ -1459,7 +1465,10 @@ class GoGui
         {
             Runnable callback = new Runnable()
                 {
-                    public void run() { cbScoreContinue(); }
+                    public void run()
+                    {
+                        cbScoreContinue();
+                    }
                 };
             showStatus("Scoring ...");
             runLengthyCommand("final_status_list dead", callback);
@@ -1973,7 +1982,10 @@ class GoGui
         String command = m_commandThread.getCommandGenmove(toMove);
         Runnable callback = new Runnable()
             {
-                public void run() { computerMoved(); }
+                public void run()
+                {
+                    computerMoved();
+                }
             };
         runLengthyCommand(command, callback);
     }
