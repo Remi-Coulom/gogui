@@ -71,6 +71,14 @@ public class Node
         return moves;
     }
 
+    /** Child of main variation or null if no child */
+    public Node getChild()
+    {
+        if (getNumberChildren() == 0)
+            return null;
+        return getChild(0);
+    }
+
     public Node getChild(int i)
     {
         return (Node)m_children.get(i);
@@ -121,11 +129,11 @@ public class Node
     {
         int movesLeft = 0;
         Node node = this;
-        while (node.m_children != null)
+        while (node != null)
         {
-            node = node.getChild(0);
             if (node.m_move != null)
                 ++movesLeft;
+            node = node.getChild();
         }
         return movesLeft;
     }
@@ -135,10 +143,10 @@ public class Node
     {
         int nodesLeft = 0;
         Node node = this;
-        while (node.m_children != null)
+        while (node != null)
         {
-            node = node.getChild(0);
             ++nodesLeft;
+            node = node.getChild();
         }
         return nodesLeft;
     }
@@ -174,6 +182,11 @@ public class Node
         if (m_children == null)
             return 0;
         return m_children.size();
+    }
+
+    public void setMove(Move move)
+    {
+        m_move = move;
     }
 
     /** @return Color.EMPTY if unknown */

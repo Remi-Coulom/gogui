@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.*;
 import java.text.*;
 import java.util.*;
+import game.*;
 import go.*;
 import gtp.*;
 import sgf.*;
@@ -258,30 +259,31 @@ public class GtpTerminal
         {
             java.io.Reader fileReader = new FileReader(file);
             sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
-            if (! newGame(reader.getBoardSize()))
+            GameTree gameTree = reader.getGameTree();
+            GameInformation gameInformation = gameTree.getGameInformation();
+            if (gameInformation.m_handicap > 0)
+            {
+                System.out.println("Handicap games not supported.");
                 return;
-            m_board.setKomi(reader.getKomi());
-            send("komi " + reader.getKomi());
-            Vector moves = new Vector(361, 361);
-            Vector setupBlack = reader.getSetupBlack();
-            for (int i = 0; i < setupBlack.size(); ++i)
-            {
-                go.Point p = (go.Point)setupBlack.get(i);
-                moves.add(new Move(p, go.Color.BLACK));
             }
-            Vector setupWhite = reader.getSetupWhite();
-            for (int i = 0; i < setupWhite.size(); ++i)
+            if (! newGame(gameInformation.m_boardSize))
+                return;
+            m_board.setKomi(gameInformation.m_komi);
+            send("komi " + gameInformation.m_komi);
+            Node node = gameTree.getRoot();
+            while (node != null)
             {
-                go.Point p = (go.Point)setupWhite.get(i);
-                moves.add(new Move(p, go.Color.WHITE));
-            }
-            for (int i = 0; i < reader.getMoves().size(); ++i)
-                moves.add(reader.getMove(i));
-            for (int i = 0; i < moves.size(); ++i)
-            {
-                Move move = (Move)moves.get(i);
-                if (! play(move.getColor(), move.getPoint()))
-                    break;
+                for (int i = 0; i < node.getNumberAddBlack(); ++i)
+                    if (! play(Color.BLACK, node.getAddBlack(i)))
+                        return;
+                for (int i = 0; i < node.getNumberAddWhite(); ++i)
+                    if (! play(Color.WHITE, node.getAddWhite(i)))
+                        return;
+                Move move = node.getMove();
+                if (move != null)
+                    if (! play(move.getColor(), move.getPoint()))
+                        return;
+                node = node.getChild();
             }
             printBoard();
         }

@@ -9,6 +9,7 @@ package sgf;
 
 import java.io.*;
 import java.util.*;
+import game.*;
 import go.*;
 
 //-----------------------------------------------------------------------------
@@ -23,6 +24,7 @@ public class Reader
         }
     }    
 
+    /** @param name Name prepended to error messages */
     public Reader(java.io.Reader reader, String name)
         throws Error
     {
@@ -31,15 +33,16 @@ public class Reader
             m_in = new BufferedReader(reader);
             m_tokenizer = new StreamTokenizer(m_in);
             m_name = name;
-            m_boardSize = 19;
-            m_komi = 0;
-            m_moves.clear();
-            m_toMove = Color.BLACK;
             m_tokenizer.nextToken();
             if (m_tokenizer.ttype != '(')
                 throw getError("No root tree found.");
-            readNextNode(true);
-            while (readNextNode(false));
+            Node root = new Node();
+            Node node = readNext(root, true);
+            while (node != null)
+                node = readNext(node, false);
+            if (root.getNumberChildren() == 1)
+                root = root.getChild();
+            m_gameTree = new GameTree(m_gameInformation, root);
         }
         catch (FileNotFoundException e)
         {
@@ -51,73 +54,21 @@ public class Reader
         }
     }
 
-    public int getBoardSize()
+    public GameTree getGameTree()
     {
-        return m_boardSize;
+        return m_gameTree;
     }
-
-    public float getKomi()
-    {
-        return m_komi;
-    }
-
-    public Move getMove(int i)
-    {
-        return (Move)m_moves.get(i);
-    }
-
-    public Vector getMoves()
-    {
-        return m_moves;
-    }
-
-    public Vector getSetupBlack()
-    {
-        return m_setupBlack;
-    }
-
-    public Vector getSetupWhite()
-    {
-        return m_setupWhite;
-    }
-
-    public Color getToMove()
-    {
-        return m_toMove;
-    }
-
-    private int m_boardSize;
-
-    private float m_komi;
 
     private java.io.Reader m_in;
+
+    private GameInformation m_gameInformation = new GameInformation();
+
+    private GameTree m_gameTree;
 
     private StreamTokenizer m_tokenizer;
 
     private String m_name;
 
-    private Vector m_moves = new Vector(361, 361);
-
-    private Vector m_setupBlack = new Vector(128, 64);
-
-    private Vector m_setupWhite = new Vector(128, 64);
-
-    private Color m_toMove;
-
-    private void discardSubtree() throws IOException, Error
-    {
-        m_tokenizer.nextToken();
-        int ttype = m_tokenizer.ttype;
-        if (ttype == '(')
-            discardSubtree();
-        else if (ttype == ')')
-            return;
-        else if (ttype != ';')
-            throw getError("Next node expected");
-        else
-            while (readNextProp(false));
-    }
-    
     private Error getError(String message)
     {
         // Note: lineno() does not work correctly for Unix line endings
@@ -179,30 +130,40 @@ public class Reader
             return null;
         if (s.length() < 2)
             throw getError("Invalid coordinates.");
-        if (s.equals("tt") && m_boardSize <= 19)
+        int boardSize = m_gameInformation.m_boardSize;
+        if (s.equals("tt") && boardSize <= 19)
             return null;
         int x = s.charAt(0) - 'a';
-        int y = m_boardSize - (s.charAt(1) - 'a') - 1;
-        if (x < 0 || x >= m_boardSize || y < 0 || y >= m_boardSize)
+        int y = boardSize - (s.charAt(1) - 'a') - 1;
+        if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
             throw getError("Invalid coordinates.");
         return new Point(x, y);
     }
 
-    private boolean readNextNode(boolean isRoot) throws IOException, Error
+    private Node readNext(Node father, boolean isRoot)
+        throws IOException, Error
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
         if (ttype == '(')
-            discardSubtree();
-        else if (ttype == ')')
-            return false;
-        else if (ttype != ';')
+        {
+            Node node = father;
+            while (node != null)
+                node = readNext(node, false);
+            return father;
+        }
+        if (ttype == ')')
+            return null;
+        if (ttype != ';')
             throw getError("Next node expected");
-        while (readNextProp(isRoot));
-        return true;
+        Node son = new Node();
+        father.append(son);
+        while (readProp(son, isRoot));
+        return son;
     }
     
-    private boolean readNextProp(boolean isRoot) throws IOException, Error
+    private boolean readProp(Node node, boolean isRoot)
+        throws IOException, Error
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
@@ -218,21 +179,17 @@ public class Reader
             String v = (String)values.get(0);
             if (p.equals("AB"))
             {
-                if (m_moves.size() > 0)
-                    throw getError("Setup stones after moves not supported.");
                 for (int i = 0; i < values.size(); ++i)
-                    m_setupBlack.add(parsePoint((String)values.get(i)));
+                    node.addBlack(parsePoint((String)values.get(i)));
             }
             else if (p.equals("AW"))
             {
-                if (m_moves.size() > 0)
-                    throw getError("Setup stones after moves not supported.");
                 for (int i = 0; i < values.size(); ++i)
-                    m_setupWhite.add(parsePoint((String)values.get(i)));
+                    node.addWhite(parsePoint((String)values.get(i)));
             }
             else if (p.equals("B"))
             {
-                m_moves.add(new Move(parsePoint(v), Color.BLACK));
+                node.setMove(new Move(parsePoint(v), Color.BLACK));
             }
             else if (p.equals("GM"))
             {
@@ -244,23 +201,21 @@ public class Reader
             }
             else if (p.equals("KM"))
             {
-                m_komi = parseFloat(v);
+                m_gameInformation.m_komi = parseFloat(v);
             }
             else if (p.equals("PL"))
             {
-                if (m_moves.size() > 0)
-                    throw getError("Set player after moves not supported.");
-                m_toMove = parseColor(v);
+                node.setToMove(parseColor(v));
             }
             else if (p.equals("SZ"))
             {
                 if (! isRoot)
                     throw getError("Size property outside root node.");
-                m_boardSize = parseInt(v);
+                m_gameInformation.m_boardSize = parseInt(v);
             }
             else if (p.equals("W"))
             {
-                m_moves.add(new Move(parsePoint(v), Color.WHITE));
+                node.setMove(new Move(parsePoint(v), Color.WHITE));
             }
             return true;
         }

@@ -289,6 +289,7 @@ installation directory.
 <attribute name="Main-Class" value="gtpterminal.GtpTerminal"/>
 </manifest>
 <fileset dir="build" includes="
+ game/*.class
  go/*.class
  gtp/*.class
  gtpterminal/*.class
@@ -355,6 +356,7 @@ installation directory.
 <attribute name="Main-Class" value="sgftotex.SgfToTex"/>
 </manifest>
 <fileset dir="build" includes="
+ game/*.class
  go/*.class
  latex/*.class
  sgf/*.class
@@ -374,6 +376,7 @@ installation directory.
 <attribute name="Main-Class" value="twogtp.TwoGtp"/>
 </manifest>
 <fileset dir="build" includes="
+ game/*.class
  go/*.class
  gtp/*.class
  sgf/*.class

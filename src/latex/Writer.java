@@ -10,6 +10,7 @@ package latex;
 import java.io.*;
 import java.text.*;
 import java.util.*;
+import game.*;
 import go.*;
 
 //-----------------------------------------------------------------------------
@@ -25,35 +26,40 @@ public class Writer
     }    
 
     public Writer(String title, OutputStream out, Board board,
-                  boolean writePosition, boolean usePass, String[][] strings,
+                  boolean usePass, String[][] strings,
                   boolean[][] markups, boolean[][] selects)
     {        
         m_out = new PrintStream(out);
-        m_board = board;
         m_usePass = usePass;
         printBeginDocument();
         if (title != null && ! title.trim().equals(""))
             m_out.println("\\section*{" + escape(title) + "}");
-        printBeginPSGo();
-        if (writePosition)
+        printBeginPSGo(board.getSize());
+        printPosition(board, strings, markups, selects);
+        printEndPSGo();
+        m_out.println("\\\\");
+        String toMove = (board.getToMove() == Color.BLACK ? "Black" : "White");
+        m_out.println(toMove + " to play.");
+        printEndDocument();
+        m_out.close();
+    }
+
+    public Writer(String title, OutputStream out, GameTree gameTree,
+                  boolean usePass, String[][] strings,
+                  boolean[][] markups, boolean[][] selects)
+    {        
+        m_out = new PrintStream(out);
+        m_usePass = usePass;
+        printBeginDocument();
+        if (title != null && ! title.trim().equals(""))
+            m_out.println("\\section*{" + escape(title) + "}");
+        printBeginPSGo(gameTree.getGameInformation().m_boardSize);
+        String comment = printTree(gameTree);
+        printEndPSGo();
+        if (! comment.equals(""))
         {
-            printPosition(strings, markups, selects);
-            printEndPSGo();
             m_out.println("\\\\");
-            String toMove =
-                (m_board.getToMove() == Color.BLACK ? "Black" : "White");
-            m_out.println(toMove + " to play.");
-        }
-        else
-        {
-            printInternalMoves();
-            String comment = printMoves();
-            printEndPSGo();
-            if (! comment.equals(""))
-            {
-                m_out.println("\\\\");
-                m_out.println(comment);
-            }
+            m_out.println(comment);
         }
         printEndDocument();
         m_out.close();
@@ -62,8 +68,6 @@ public class Writer
     private boolean m_usePass;
 
     private PrintStream m_out;
-
-    private Board m_board;
 
     /** Escape LaTeX special character in text. */
     private String escape(String text)
@@ -114,9 +118,9 @@ public class Writer
         m_out.println();
     }
 
-    private void printBeginPSGo()
+    private void printBeginPSGo(int size)
     {
-        m_out.println("\\begin{psgoboard}[" + m_board.getSize() + "]");
+        m_out.println("\\begin{psgoboard}[" + size + "]");
     }
 
     private void printColor(Color color)
@@ -150,36 +154,42 @@ public class Writer
 
     private void printInternalMoves()
     {
-        for (int i = 0; i < m_board.getInternalNumberMoves(); ++i)
-        {
-            Move move = m_board.getInternalMove(i);
-            Point point = move.getPoint();
-            if (point != null)
-                printStone(move.getColor(), point, null, false, false);
-        }
     }
 
-    private String printMoves()
+    private String printTree(GameTree gameTree)
     {
+        GameInformation gameInformation = gameTree.getGameInformation();
         StringBuffer comment = new StringBuffer();
-        int size = m_board.getSize();
-        int firstMoveAtPoint[][] = new int[size][size];
-        int numberMoves = m_board.getNumberSavedMoves();
-        boolean needsComment[] = new boolean[numberMoves];
+        int size = gameInformation.m_boardSize;
+        Node firstMoveAtPoint[][] = new Node[size][size];
+        Vector needsComment = new Vector();
         boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
-        for (int i = 0; i < numberMoves; ++i)
+        Node node = gameTree.getRoot();
+        while (node != null)
         {
-            Move move = m_board.getMove(i);
+            for (int i = 0; i < node.getNumberAddBlack(); ++i)
+                printStone(Color.BLACK, node.getAddBlack(i), null, false,
+                           false);
+            for (int i = 0; i < node.getNumberAddWhite(); ++i)
+                printStone(Color.BLACK, node.getAddWhite(i), null, false,
+                           false);
+            Move move = node.getMove();
+            if (move == null)
+            {
+                node = node.getChild();
+                continue;
+            }
             Point point = move.getPoint();
             Color color = move.getColor();
+            int moveNumber = node.getMoveNumber();
             boolean isColorUnexpected =
                 (blackToMove && color != Color.BLACK)
                 || (! blackToMove && color != Color.WHITE);
             boolean isPass = (point == null);
-            if (isPass || firstMoveAtPoint[point.getX()][point.getY()] > 0)
+            if (isPass || firstMoveAtPoint[point.getX()][point.getY()] != null)
             {
-                needsComment[i] = true;
+                needsComment.add(node);
                 if (m_usePass)
                     m_out.print("\\pass");
                 else
@@ -194,55 +204,59 @@ public class Writer
                     m_out.print(" % \\move");
                     printCoordinates(point);
                 }
-                m_out.println(" % " + (blackToMove ? "B " : "W ") + (i + 1));
-                blackToMove = ! blackToMove;
-                continue;
+                m_out.println(" % " + (blackToMove ? "B " : "W ")
+                              + moveNumber);
             }
-            else if (isColorUnexpected)
+            else
             {
-                m_out.println("\\toggleblackmove");
-                blackToMove = ! blackToMove;
-            }
-            m_out.print("\\move");
-            printCoordinates(point);
-            m_out.println(" % " + (blackToMove ? "B " : "W ") + (i + 1));
-            firstMoveAtPoint[point.getX()][point.getY()] = i + 1;
-            blackToMove = ! blackToMove;
-        }
-        for (int i = 0; i < numberMoves; ++i)
-            if (needsComment[i])
-            {
-                Move move = m_board.getMove(i);
-                Point point = move.getPoint();
-                Color color = move.getColor();
-                if (comment.length() > 0)
-                    comment.append(" \\enspace\n");
-                    comment.append(getStoneInTextString(i + 1, color));
-                if (point != null)
+                if (isColorUnexpected)
                 {
-                    int x = point.getX();
-                    int y = point.getY();
-                    comment.append("~at~");
-                    int firstMoveNumber = firstMoveAtPoint[x][y];
-                    Color firstMoveColor =
-                        m_board.getMove(firstMoveNumber - 1).getColor();
-                    comment.append(getStoneInTextString(firstMoveNumber,
-                                                        firstMoveColor));
+                    m_out.println("\\toggleblackmove");
+                    blackToMove = ! blackToMove;
                 }
-                else
-                    comment.append("~pass");
+                m_out.print("\\move");
+                printCoordinates(point);
+                m_out.println(" % " + (blackToMove ? "B " : "W ")
+                              + moveNumber);
+                firstMoveAtPoint[point.getX()][point.getY()] = node;
             }
+            blackToMove = ! blackToMove;
+            node = node.getChild();
+        }
+        for (int i = 0; i < needsComment.size(); ++i)
+        {
+            node = (Node)needsComment.get(i);
+            Move move = node.getMove();
+            Point point = move.getPoint();
+            Color color = move.getColor();
+            if (comment.length() > 0)
+                comment.append(" \\enspace\n");
+            comment.append(getStoneInTextString(i + 1, color));
+            if (point != null)
+            {
+                int x = point.getX();
+                int y = point.getY();
+                comment.append("~at~");
+                Node first = firstMoveAtPoint[x][y];
+                Color firstMoveColor = first.getMove().getColor();
+                int firstMoveNumber = first.getMoveNumber();
+                comment.append(getStoneInTextString(firstMoveNumber,
+                                                    firstMoveColor));
+            }
+            else
+                comment.append("~pass");
+        }
         return comment.toString();
     }
-
-    private void printPosition(String[][] strings, boolean[][] markups,
-                               boolean[][] selects)
+    
+    private void printPosition(Board board, String[][] strings,
+                               boolean[][] markups, boolean[][] selects)
     {
-        int numberPoints = m_board.getNumberPoints();
+        int numberPoints = board.getNumberPoints();
         for (int i = 0; i < numberPoints; ++i)
         {
-            Point point = m_board.getPoint(i);
-            Color color = m_board.getColor(point);
+            Point point = board.getPoint(i);
+            Color color = board.getColor(point);
             int x = point.getX();
             int y = point.getY();
             String string = null;

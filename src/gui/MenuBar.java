@@ -226,7 +226,6 @@ class MenuBar
         m_itemSetupWhite.setEnabled(false);
         if (m_isComputerDisabled)
         {
-            disableMenu(m_menuWindows);
             m_menuComputerColor.setEnabled(false);
             m_itemComputerPlay.setEnabled(false);
             m_itemBeepAfterMove.setEnabled(false);
@@ -253,8 +252,6 @@ class MenuBar
         m_itemExit.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
         m_itemHelp.setEnabled(true);
-        if (m_isComputerDisabled)
-            disableMenu(m_menuWindows);
     }
 
     public void setScoreMode()
@@ -267,8 +264,6 @@ class MenuBar
         m_itemExit.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
         m_itemHelp.setEnabled(true);
-        if (m_isComputerDisabled)
-            disableMenu(m_menuWindows);
     }
 
     public void updateGameMenuItems(Node node)

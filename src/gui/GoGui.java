@@ -795,12 +795,7 @@ class GoGui
         {
             for (int i = 0; i < n && m_currentNode.getFather() != null; ++i)
             {
-                for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
-                {
-                    if (m_commandThread != null)
-                        m_commandThread.sendCommand("undo");
-                    m_board.undo();
-                }
+                undoCurrentNode();
                 m_currentNode = m_currentNode.getFather();
                 m_currentNodeExecuted =
                     m_currentNode.getNumberAddStonesAndMoves();
@@ -1290,12 +1285,7 @@ class GoGui
         setFastUpdate(true);
         try
         {
-            for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
-            {
-                if (m_commandThread != null)
-                    m_commandThread.sendCommand("undo");
-                m_board.undo();
-            }
+            undoCurrentNode();
             computerNone();
             Node oldChild = m_currentNode;
             m_currentNode = m_currentNode.getFather();
@@ -1578,7 +1568,7 @@ class GoGui
             for (int i = 0; i < n && m_currentNode.getNumberChildren() > 0;
                  ++i)
             {
-                m_currentNode = m_currentNode.getChild(0);
+                m_currentNode = m_currentNode.getChild();
                 executeCurrentNode();
             }
         }
@@ -1743,6 +1733,8 @@ class GoGui
             else
                 computerWhite();
             setRules();
+            if (m_prefs.getBool("show-gametree"))
+                cbShowGameTree();
             File file = null;
             if (! m_file.equals(""))
                 newGameFile(m_boardSize, new File(m_file), m_move);
@@ -1768,8 +1760,6 @@ class GoGui
                 if (m_prefs.getBool("show-gtpshell"))
                     m_gtpShell.toTop();
             }
-            if (m_prefs.getBool("show-gametree"))
-                cbShowGameTree();
             setVisible(true);
             m_guiBoard.setFocus();
         }
@@ -1809,30 +1799,20 @@ class GoGui
             m_menuBar.saveRecent();
             java.io.Reader fileReader = new FileReader(file);
             sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
-            initGame(reader.getBoardSize());
+            GameInformation gameInformation = m_gameTree.getGameInformation();
+            initGame(gameInformation.m_boardSize);
+            m_gameTree = reader.getGameTree(); 
             if (m_commandThread != null)
             {
                 m_commandThread.sendCommandBoardsize(m_boardSize);
                 m_commandThread.sendCommandClearBoard(m_boardSize);
             }
-            m_board.setKomi(reader.getKomi());
+            m_board.setKomi(gameInformation.m_komi);
             setKomi();
-            Vector setupBlack = reader.getSetupBlack();
-            for (int i = 0; i < setupBlack.size(); ++i)
-                m_currentNode.addBlack((go.Point)setupBlack.get(i));
-            Vector setupWhite = reader.getSetupWhite();
-            for (int i = 0; i < setupWhite.size(); ++i)
-                m_currentNode.addWhite((go.Point)setupWhite.get(i));
-            for (int i = 0; i < reader.getMoves().size(); ++i)
-            {
-                Node node = new Node(reader.getMove(i));
-                m_currentNode.append(node);
-                m_currentNode = node;
-            }
             m_currentNode = m_gameTree.getRoot();
             executeCurrentNode();
             if (move > 0)
-                forward(move);
+                forward(move);            
             m_loadedFile = file;
             setTitle();
             SimpleDialogs.setLastFile(file);
@@ -1983,8 +1963,7 @@ class GoGui
         {
             String title = FileUtils.removeExtension(new File(file.getName()),
                                                      "tex");
-            new latex.Writer(title, out, m_board, false, false, null, null,
-                             null);
+            new latex.Writer(title, out, m_gameTree, false, null, null, null);
         }
         else
         {
@@ -2032,7 +2011,7 @@ class GoGui
         {
             String title = FileUtils.removeExtension(new File(file.getName()),
                                                      "tex");
-            new latex.Writer(title, out, m_board, true, false,
+            new latex.Writer(title, out, m_board, false,
                              m_guiBoard.getStrings(), m_guiBoard.getMarkups(),
                              m_guiBoard.getSelects());
         }
@@ -2398,6 +2377,16 @@ class GoGui
     private void showWarning(String message)
     {
         SimpleDialogs.showWarning(this, message);
+    }
+
+    private void undoCurrentNode() throws Gtp.Error
+    {
+        for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
+        {
+            if (m_commandThread != null)
+                m_commandThread.sendCommand("undo");
+            m_board.undo();
+        }
     }
 
     private void updateGameInfo()

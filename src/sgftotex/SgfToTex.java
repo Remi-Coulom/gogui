@@ -107,28 +107,8 @@ class SgfToTex
         throws sgf.Reader.Error
     {
         sgf.Reader reader = new sgf.Reader(new InputStreamReader(in), null);
-        Board board = new Board(reader.getBoardSize());
-        Vector setupBlack = reader.getSetupBlack();
-        for (int i = 0; i < setupBlack.size(); ++i)
-        {
-            go.Point p = (go.Point)setupBlack.get(i);
-            board.setup(new Move(p, go.Color.BLACK));
-        }
-        Vector setupWhite = reader.getSetupWhite();
-        for (int i = 0; i < setupWhite.size(); ++i)
-        {
-            go.Point p = (go.Point)setupWhite.get(i);
-            board.setup(new Move(p, go.Color.WHITE));
-        }
-        int numberMoves = reader.getMoves().size();
-        Color toMove = reader.getToMove();
-        if (numberMoves == 0 && board.getToMove() != toMove)
-            board.setup(new Move(null, toMove.otherColor()));
-        for (int i = 0; i < numberMoves; ++i)
-            board.play(reader.getMove(i));
-        boolean writePosition = (numberMoves == 0);
-        new latex.Writer(title, out, board, writePosition, usePass, null,
-                         null, null);
+        new latex.Writer(title, out, reader.getGameTree(), usePass, null, null,
+                         null);
     }
 
     private static void printUsage(PrintStream out)

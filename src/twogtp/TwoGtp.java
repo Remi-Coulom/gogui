@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.*;
 import java.text.*;
 import java.util.*;
+import game.*;
 import go.*;
 import gtp.*;
 import utils.*;
@@ -497,17 +498,15 @@ public class TwoGtp
             File file = new File(filename);
             sgf.Reader reader =
                 new sgf.Reader(new FileReader(file), file.toString());
-            int size = reader.getBoardSize();
+            GameTree gameTree = reader.getGameTree();
+            GameInformation gameInformation = gameTree.getGameInformation();
+            int size = gameInformation.m_boardSize;
             if (board == null)
                 board = new Board(size);
             else if (size != board.getSize())
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
-            if (reader.getSetupBlack().size() > 0
-                || reader.getSetupWhite().size() > 0)
-                throw new Exception("File " + filename +
-                                    " contains setup stones");
-            Vector moves = reader.getMoves();
+            Vector moves = getMoves(gameTree.getRoot(), filename);
             String duplicate = checkDuplicate(board, moves, games);
             System.out.println(Integer.toString(gameNumber) + " " +
                                filename + " " + duplicate);
@@ -577,6 +576,22 @@ public class TwoGtp
         Vector moves = new Vector(128, 128);
         for (int i = 0; i < m_board.getMoveNumber(); ++i)
             moves.add(m_board.getMove(i));
+        return moves;
+    }
+
+    private static Vector getMoves(Node root, String filename) throws Exception
+    {
+        Vector moves = new Vector();
+        Node node = root;
+        while (node != null)
+        {
+            if (node.getNumberAddBlack() + node.getNumberAddWhite() > 0)
+                throw new Exception("File " + filename +
+                                    " contains setup stones");
+            if (node.getMove() != null)
+                moves.add(node.getMove());
+            node = node.getChild();
+        }
         return moves;
     }
 
@@ -854,14 +869,15 @@ public class TwoGtp
             {
                 sgf.Reader reader =
                     new sgf.Reader(new FileReader(file), file.toString());
-                m_games.add(reader.getMoves());
+                m_games.add(getMoves(reader.getGameTree().getRoot(),
+                                     file.toString()));
             }
-            catch (FileNotFoundException e)
+            catch (sgf.Reader.Error e)
             {
                 System.err.println("Error reading " + file + ": " +
                                    e.getMessage());
             }
-            catch (sgf.Reader.Error e)
+            catch (Exception e)
             {
                 System.err.println("Error reading " + file + ": " +
                                    e.getMessage());
