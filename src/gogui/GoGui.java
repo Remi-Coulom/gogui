@@ -37,7 +37,8 @@ class GoGui
         setPrefsDefaults(m_prefs);
         m_boardSize = prefs.getInt("boardsize");
         m_beepAfterMove = prefs.getBool("beep-after-move");
-        m_file = file;
+        if (file != null)
+            m_file = new File(file);
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
         m_move = move;
@@ -647,7 +648,7 @@ class GoGui
 
     private AnalyzeCommand m_analyzeCommand;
 
-    private String m_file;
+    private File m_file;
 
     private String m_gtpCommand;
 
@@ -1844,7 +1845,7 @@ class GoGui
 
     private void initialize()
     {
-        if (! m_file.equals(""))
+        if (m_file != null)
             newGameFile(m_boardSize, m_move);
         else
             newGame(m_boardSize);
@@ -1968,7 +1969,7 @@ class GoGui
     private void newGameFile(int size, int move)
     {
         initGame(size);
-        loadFile(new File(m_file), move);
+        loadFile(m_file, move);
         m_timeControl.halt();
         updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();

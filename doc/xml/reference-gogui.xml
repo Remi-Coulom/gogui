@@ -22,17 +22,17 @@
 </group>
 <arg><option>-command</option> <replaceable>command</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
-<arg><option>-file</option> <replaceable>filename</replaceable></arg>
 <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
 <arg><option>-komi</option> <replaceable>value</replaceable></arg>
 <arg><option>-move</option> <replaceable>n</replaceable></arg>
+<arg><option>-program</option> <replaceable>command</replaceable></arg>
 <arg><option>-rules</option> <group choice="plain">
   <arg choice="plain">chinese</arg> <arg choice="plain">japanese</arg>
   </group></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg><replaceable>program</replaceable></arg>
+<arg><replaceable>file</replaceable></arg>
 
 <command>gogui</command>
 <arg choice="plain"><option>-help</option></arg>
@@ -47,6 +47,7 @@
 <para>
 GoGui is a graphical interface to programs that play the game of Go
 and use GTP (Go Text Protocol).
+Can take an optional SGF file argument.
 </para>
 </refsection>
 
@@ -137,17 +138,6 @@ Read command line options and arguments from file.
 
 <varlistentry>
 <term>
-<option>-file</option> <replaceable>filename</replaceable>
-</term>
-<listitem>
-<para>
-Load SGF file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
 <option>-gtpfile</option> <replaceable>filename</replaceable>
 </term>
 <listitem>
@@ -186,6 +176,17 @@ Set the komi value.
 <listitem>
 <para>
 Load SGF file until move number.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-program</option> <replaceable>command</replaceable>
+</term>
+<listitem>
+<para>
+Go program to attach.
 </para>
 </listitem>
 </varlistentry>

@@ -6,13 +6,13 @@
 <application>GoGui</application> can be invoked with the command:
 <blockquote>
 <simpara>
-<userinput>java -jar gogui.jar [options] [program]</userinput>
+<userinput>java -jar gogui.jar [options] [file]</userinput>
 </simpara>
 </blockquote>  
-The argument <userinput>program</userinput> must be a valid command line for
-executing the actual Go program.
-If no program is given, GoGui will start with the Go program attached
-in the previous run or no Go program if there was none attached.
+The command line for executing the actual Go program can be given
+with the <option>-program</option> option, otherwise GoGui will start with
+the Go program attached in the previous run or no Go program if there was
+none attached.
 You can attach and detach a Go program at any time by using the
 <guimenuitem>Attach Program</guimenuitem> and
 <guimenuitem>Detach Program</guimenuitem> menu item from the
@@ -45,9 +45,9 @@ The invocation is then simply:
 To register <application>GoGui</application> as a handler
 for <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files,
 you can configure a new file association for type
-<userinput>application/sgf</userinput> and filename pattern
+<userinput>application/x-go-sgf</userinput> and filename pattern
 <userinput>*.sgf</userinput> to execute
-<userinput>gogui&#160;""&#160;-file</userinput>
+<userinput>gogui</userinput>
 </para>
 </note>
 </para>

@@ -34,6 +34,12 @@ TwoGtp: new options -openings and -loadsgf for using opening SGF files
 </listitem>
 <listitem>
 <simpara>
+GoGui: command line argument is now interpreted as SGF file, programs can
+be attached with the option -program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: interrupt will offer to kill program for programs that don't support
 interrupting commands
 </simpara>

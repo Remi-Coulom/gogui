@@ -31,11 +31,11 @@ public class Main
                 "computer-both",
                 "computer-none",
                 "config:",
-                "file:",
                 "gtpfile:",
                 "help",
                 "komi:",
                 "move:",
+                "program:",
                 "rules:",
                 "size:",
                 "time:",
@@ -46,7 +46,7 @@ public class Main
             if (opt.isSet("help"))
             {
                 String helpText =
-                    "Usage: java -jar gogui.jar [options] program\n" +
+                    "Usage: java -jar gogui.jar [options] [file]\n" +
                     "Graphical user interface for Go programs\n" +
                     "using the Go Text Protocol.\n" +
                     "\n" +
@@ -57,11 +57,11 @@ public class Main
                     "-computer-black computer plays black\n" +
                     "-computer-none  computer plays no side\n" +
                     "-config         config file\n" +
-                    "-file filename  load SGF file\n" +
                     "-gtpfile file   send GTP file at startup\n" +
                     "-help           display this help and exit\n" +
                     "-komi value     set komi\n" +
                     "-move n         load SGF file until move number\n" +
+                    "-program cmd    Go program to attach\n" +
                     "-rules name     use rules (chinese|japanese)\n" +
                     "-size n         set board size\n" +
                     "-time spec      set time limits (min[+min/moves])\n" +
@@ -89,7 +89,7 @@ public class Main
             }
             else if (opt.isSet("computer-both"))
                 computerBlack = true;
-            String file = opt.getString("file", "");
+            String program = opt.getString("program", null);
             String gtpFile = opt.getString("gtpfile", "");
             String gtpCommand = opt.getString("command", "");
             if (opt.contains("komi"))
@@ -102,11 +102,11 @@ public class Main
             String time = opt.getString("time", null);
             verbose = opt.isSet("verbose");
             Vector arguments = opt.getArguments();
-            String program = null;
+            String file = null;
             if (arguments.size() == 1)
-                program = (String)arguments.get(0);
+                file = (String)arguments.get(0);
             else if (arguments.size() > 1)
-                throw new Exception("Only one program argument allowed.");
+                throw new Exception("Only one argument allowed.");
             new GoGui(program, prefs, file, move, time, verbose,
                       computerBlack, computerWhite, auto, gtpFile, gtpCommand,
                       initAnalyze);
