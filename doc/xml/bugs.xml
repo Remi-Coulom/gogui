@@ -2,7 +2,7 @@
 <title>Bugs</title>
 
 <section>
-<title>Rendering errors in GTP shell</title>
+<title>Rendering errors in the GTP shell</title>
 <para>
 Rendering errors in the GTP shell window occur which disappear after manually
 resizing the window.
@@ -14,12 +14,26 @@ With other Java versions or on other systems the problem still exists.
 </section>
 
 <section>
-<title>Command completions in GTP shell are hiding text entry</title>
+<title>Command completions in the GTP shell are hiding text entry</title>
 <para>
 The popup window with automatic command completions sometimes hides the
 text entry when typing.
 This is a problem in some implementations of the Java 1.4 libraries.
 You can disable automatic command completion from the GTP shell menu.
+</para>
+</section>
+
+<section>
+<title>Stdout and stderr error in the GTP shell are not in order</title>
+<para>
+Unfortunately it is not possible with java.io to guarantee that stdout/stderr
+of the Go program are in order, since stderr must be read from a different
+thread. Using java.nio is not possible with the output streams of a process.
+GoGui tries very hard to keep the order of stdout/stderr, but sometimes
+it fails, especially if the Go program writes a lot to stderr before
+writing the response to a command to stdout.
+Also note that the Go program must flush stderr after writing, because
+stderr is buffered when running a child process.
 </para>
 </section>
 
