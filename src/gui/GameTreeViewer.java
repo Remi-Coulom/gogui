@@ -220,8 +220,9 @@ class GameTreePanel
         setPreferredSize(new Dimension(m_maxX + m_nodeDist + m_margin,
                                        m_maxY + m_nodeDist + m_margin));
         revalidate();
-        scrollRectToVisible(new Rectangle(m_currentNodeX, m_currentNodeY,
-                                          m_nodeSize, m_nodeSize));
+        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeSize,
+                                          m_currentNodeY,
+                                          5 * m_nodeSize, m_nodeSize));
     }
 
     private int m_currentNodeX;
