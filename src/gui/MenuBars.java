@@ -139,6 +139,7 @@ class MenuBars
             m_itemHelp.setEnabled(true);
             m_itemShowLastMove.setEnabled(true);
             m_menuComputerColor.setEnabled(true);
+            m_itemInterrupt.setEnabled(true);
         }
         else
         {
@@ -150,6 +151,7 @@ class MenuBars
                         if (menu.getItem(j) != null)
                             menu.getItem(j).setEnabled(true);
             }
+            m_itemInterrupt.setEnabled(false);
         }
     }
 
@@ -193,6 +195,8 @@ class MenuBars
     private JMenuItem m_itemGtpShell;
 
     private JMenuItem m_itemHelp;
+
+    private JMenuItem m_itemInterrupt;
 
     private JMenuItem m_itemRulesChinese;
 
@@ -314,6 +318,8 @@ class MenuBars
         addMenuItem(menu, "Pass", KeyEvent.VK_F2, 0, "pass");
         m_itemComputerPlay = addMenuItem(menu, "Computer play",
                                          KeyEvent.VK_F5, 0, "play");
+        m_itemInterrupt = addMenuItem(menu, "Interrupt", KeyEvent.VK_ESCAPE, 0,
+                                      "interrupt");
         menu.addSeparator();
         addMenuItem(menu, "Beginning", KeyEvent.VK_HOME, ActionEvent.CTRL_MASK,
                     "beginning");
