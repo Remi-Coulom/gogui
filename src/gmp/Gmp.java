@@ -57,6 +57,32 @@ class Cmd
 
     public static final int MASK_MOVE_POINT = 0x1ff;
 
+    public static final int QUERY_GAME = 0;
+
+    public static final int QUERY_BUFSIZE = 1;
+
+    public static final int QUERY_VERSION = 2;
+
+    public static final int QUERY_NUMSTONES = 3;
+
+    public static final int QUERY_TIMEBLACK = 4;
+
+    public static final int QUERY_TIMEWHITE = 5;
+
+    public static final int QUERY_CHARSET = 6;
+
+    public static final int QUERY_RULES = 7;
+
+    public static final int QUERY_HANDICAP = 8;
+
+    public static final int QUERY_SIZE = 9;
+
+    public static final int QUERY_TIMELIMIT = 10;
+
+    public static final int QUERY_COLOR = 11;
+
+    public static final int QUERY_WHO = 12;
+
     public int m_cmd;
 
     public int m_val;
@@ -65,6 +91,66 @@ class Cmd
     {
         m_cmd = cmd;
         m_val = val;
+    }
+
+    public static String answerValToString(int val, int query)
+    {
+        boolean zeroMeansUnknown = true;
+        switch (query)
+        {
+        case QUERY_GAME:
+            if (val == 1)
+                return "GO";
+            if (val == 2)
+                return "CHESS";
+            if (val == 3)
+                return "OTHELLO";
+            break;
+        case QUERY_BUFSIZE:
+            return Integer.toString(4 + val * 16) + " BYTES";
+        case QUERY_VERSION:
+            zeroMeansUnknown = false;
+            break;
+        case QUERY_CHARSET:
+            if (val == 1)
+                return "ASCII";
+            if (val == 2)
+                return "JAPANESE";
+            break;
+        case QUERY_RULES:
+            if (val == 1)
+                return "JAPANESE";
+            if (val == 2)
+                return "CHINESE (SST)";
+            break;
+        case QUERY_HANDICAP:
+            if (val == 1)
+                return "NONE";
+            break;
+        case QUERY_COLOR:
+            if (val == 1)
+                return "WHITE";
+            if (val == 2)
+                return "BLACK";
+            break;
+        case QUERY_WHO:
+            if (val == 1)
+                return "NEMESIS";
+            if (val == 2)
+                return "MANY FACES OF GO";
+            if (val == 3)
+                return "SMART GO BOARD";
+            if (val == 4)
+                return "GOLIATH";
+            if (val == 5)
+                return "GO INTELLECT";
+            if (val == 6)
+                return "STAR OF POLAND";
+            break;
+        }
+        if (val == 0 && zeroMeansUnknown)
+            return "UNKNOWN";
+        return Integer.toString(val);
     }
 
     public boolean equals(Cmd cmd)
@@ -122,38 +208,38 @@ class Cmd
     {
         switch (val)
         {
-        case 0:
+        case QUERY_GAME:
             return "GAME";
-        case 1:
-            return "BUFFER";
-        case 2:
+        case QUERY_BUFSIZE:
+            return "BUFSIZE";
+        case QUERY_VERSION:
             return "VERSION";
-        case 3:
-            return "STONES";
-        case 4:
+        case QUERY_NUMSTONES:
+            return "NUMSTONES";
+        case QUERY_TIMEBLACK:
             return "TIMEBLACK";
-        case 5:
+        case QUERY_TIMEWHITE:
             return "TIMEWHITE";
-        case 6:
+        case QUERY_CHARSET:
             return "CHARSET";
-        case 7:
+        case QUERY_RULES:
             return "RULES";
-        case 8:
+        case QUERY_HANDICAP:
             return "HANDICAP";
-        case 9:
+        case QUERY_SIZE:
             return "SIZE";
-        case 10:
+        case QUERY_TIMELIMIT:
             return "TIMELIMIT";
-        case 11:
+        case QUERY_COLOR:
             return "COLOR";
-        case 12:
+        case QUERY_WHO:
             return "WHO";
         default:
-            return Integer.toString(val);
+            return "? (" + Integer.toString(val) + ")";
         }
     }
 
-    public String toString(int size)
+    public String toString(int size, int lastQuery)
     {
         StringBuffer buffer = new StringBuffer(32);
         switch (m_cmd)
@@ -175,7 +261,7 @@ class Cmd
         case ANSWER:
             buffer.append("ANSWER");
             buffer.append(' ');
-            buffer.append(m_val);
+            buffer.append(Cmd.answerValToString(m_val, lastQuery));
             break;
         case MOVE:
             buffer.append("MOVE");
@@ -347,7 +433,8 @@ class ReadThread extends Thread
         int size = m_cmdQueue.size();
         for (int i = 0; i < size; ++i)
         {
-            response.append(((Cmd)m_cmdQueue.get(i)).toString(m_size));
+            Cmd cmd = (Cmd)m_cmdQueue.get(i);
+            response.append(cmd.toString(m_size, m_lastQuery));
             response.append('\n');
         }
         return true;
@@ -409,7 +496,7 @@ class ReadThread extends Thread
             if (! stackCmd.equals(cmd))
             {
                 response.append("Received " +
-                                stackCmd.toString(m_size));
+                                stackCmd.toString(m_size, m_lastQuery));
                 return false;
             }
             m_cmdQueue.remove(0);
@@ -463,8 +550,9 @@ class ReadThread extends Thread
                 if (stackCmd.m_cmd != cmd
                     || ((stackCmd.m_val & valMask) != valCondition))
                 {
-                    result.m_response = ("Received " +
-                                         stackCmd.toString(m_size));
+                    result.m_response =
+                        ("Received " +
+                         stackCmd.toString(m_size, m_lastQuery));
                     return result;
                 }
                 result.m_success = true;
@@ -494,12 +582,6 @@ class ReadThread extends Thread
         }
     }
 
-    private static final int QUERY_HANDICAP = 8;
-
-    private static final int QUERY_SIZE = 9;
-
-    private static final int QUERY_COLOR = 11;
-
     private static final int STATE_IDLE = 0;
 
     private static final int STATE_DISCONNECTED = 1;
@@ -515,6 +597,8 @@ class ReadThread extends Thread
     private boolean m_hisLastSeq = false;
 
     private boolean m_myLastSeq = false;
+
+    private int m_lastQuery = 0;
 
     private int m_state = STATE_IDLE;
 
@@ -539,11 +623,12 @@ class ReadThread extends Thread
     private void answerQuery(int val)
     {
         int answer = 0;
-        if (val == QUERY_COLOR)
+        m_lastQuery = val;
+        if (val == Cmd.QUERY_COLOR)
             answer = m_colorIndex;
-        else if (val == QUERY_SIZE)
+        else if (val == Cmd.QUERY_SIZE)
             answer = m_size;
-        else if (val == QUERY_HANDICAP)
+        else if (val == Cmd.QUERY_HANDICAP)
             answer = 1;
         sendCmd(Cmd.ANSWER, answer);
     }
@@ -637,7 +722,7 @@ class ReadThread extends Thread
 
     private void handleCmd(Cmd cmd)
     {
-        Util.log("received " + cmd.toString(m_size));
+        Util.log("received " + cmd.toString(m_size, m_lastQuery));
         if (cmd.m_cmd == Cmd.QUERY)
             answerQuery(cmd.m_val);
         else
@@ -741,7 +826,7 @@ class ReadThread extends Thread
 
     private boolean sendCmd(int cmd, int val)
     {
-        Util.log("send " + (new Cmd(cmd, val)).toString(m_size));
+        Util.log("send " + (new Cmd(cmd, val)).toString(m_size, m_lastQuery));
         if (cmd != Cmd.OK)
             m_myLastSeq = ! m_myLastSeq;
         byte packet[] = new byte[4];
