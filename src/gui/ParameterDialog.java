@@ -193,7 +193,7 @@ public class ParameterDialog
             if (line.startsWith("[bool]"))
             {
                 type = BOOL;
-                line = line.replace("[bool]", "").trim();
+                line = line.replaceFirst("[bool]", "").trim();
             }
             int pos = line.indexOf(' ');
             String key;
