@@ -41,6 +41,10 @@
 	    NEWGAME if <option>-simple</option> option is used.
 	  </listitem>
 	  <listitem>
+	    Fix potential deadlock if program writes to standard error
+	    before GUI is visible.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>
