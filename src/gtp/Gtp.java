@@ -265,8 +265,6 @@ public class Gtp
         throws Gtp.Error
     {
         Vector vector = new Vector(32, 32);
-        s = StringUtils.replace(s, "\n", " ");
-        s = StringUtils.replace(s, "\t", " ");
         String p[] = StringUtils.tokenize(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
@@ -282,7 +280,6 @@ public class Gtp
         throws Gtp.Error
     {
         Vector vector = new Vector(32, 32);
-        s = StringUtils.replace(s, "\n", " ");
         String p[] = StringUtils.tokenize(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
