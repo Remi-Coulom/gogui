@@ -8,6 +8,7 @@ package sgf;
 //----------------------------------------------------------------------------
 
 import java.io.*;
+import java.nio.charset.*;
 import java.util.*;
 import game.*;
 import go.*;
@@ -26,52 +27,44 @@ public class Reader
         }
     }    
 
-    /** @param reader Stream to read from.
-        @param name Name prepended to error messages.
+    /** Read SGF file from stream.
+        Default charset is ISO-8859-1.
+        The charset property is only respected if the stream is a
+        FileInputStream, because it has to be reopened with a different
+        encoding.
+        @param in Stream to read from.
+        @param name Name prepended to error messages (must be the filename
+        for FileInputStream to allow reopening the stream after a charset
+        change)
     */
     public Reader(InputStream in, String name)
         throws SgfError
     {
+        m_name = name;
+        m_isFile = (in instanceof FileInputStream);
         try
         {
-            InputStreamReader reader;
+            readSgf(in, "ISO-8859-1");
+        }
+        catch (SgfCharsetChanged e1)
+        {
             try
             {
-                reader = new InputStreamReader(in, "ISO-8859-1");
+                in = new FileInputStream(new File(name));
             }
-            catch (UnsupportedEncodingException e)
+            catch (IOException e2)
             {
-                reader = new InputStreamReader(in);
+                throw new SgfError("Could not reset SGF stream after"
+                                   + " charset change");
             }
-            m_in = new BufferedReader(reader);
-            m_tokenizer = new StreamTokenizer(m_in);
-            m_name = name;
-            m_tokenizer.nextToken();
-            if (m_tokenizer.ttype != '(')
-                throw getError("No root tree found");
-            Node root = new Node();
-            Node node = readNext(root, true);
-            while (node != null)
-                node = readNext(node, false);
-            if (root.getNumberChildren() == 1)
+            try
             {
-                root = root.getChild();
-                root.setFather(null);
+                readSgf(in, m_newCharset);
             }
-            m_gameTree = new GameTree(m_gameInformation, root);
-            applyFixes();
-        }
-        catch (FileNotFoundException e)
-        {
-            throw new Error("File not found");
-        }
-        catch (IOException e)
-        {
-            throw new Error("Error while reading file");
-        }
-        catch (OutOfMemoryError e)
-        {
-            throw new Error("Game tree to large");
+            catch (SgfCharsetChanged e3)
+            {
+                assert(false);
+            }
         }
     }
 
@@ -80,15 +73,24 @@ public class Reader
         return m_gameTree;
     }
 
-    private java.io.Reader m_in;
+    private static class SgfCharsetChanged
+        extends Exception
+    {
+    }
 
-    private GameInformation m_gameInformation = new GameInformation(19);
+    private boolean m_isFile;
+
+    private java.io.Reader m_reader;
+
+    private GameInformation m_gameInformation;
 
     private GameTree m_gameTree;
 
     private StreamTokenizer m_tokenizer;
 
     private String m_name;
+
+    private String m_newCharset;
 
     /** Apply some fixes for broken SGF files. */
     private void applyFixes()
@@ -195,7 +197,7 @@ public class Reader
     }
 
     private Node readNext(Node father, boolean isRoot)
-        throws IOException, SgfError
+        throws IOException, SgfError, SgfCharsetChanged
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
@@ -217,7 +219,7 @@ public class Reader
     }
     
     private boolean readProp(Node node, boolean isRoot)
-        throws IOException, SgfError
+        throws IOException, SgfError, SgfCharsetChanged
     {
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
@@ -263,6 +265,15 @@ public class Reader
                 m_gameInformation.m_blackRank = v;
             else if (p.equals("C"))
                 node.setComment(v.trim());
+            else if (p.equals("CA"))
+            {
+                if (isRoot && m_isFile && m_newCharset == null)
+                {
+                    m_newCharset = v.trim();
+                    if (Charset.isSupported(m_newCharset))
+                        throw new SgfCharsetChanged();
+                }
+            }
             else if (p.equals("DT"))
                 m_gameInformation.m_date = v;
             else if (p.equals("GM"))
@@ -335,6 +346,52 @@ public class Reader
         return false;
     }
 
+    private void readSgf(InputStream in, String charset)
+        throws SgfError, SgfCharsetChanged
+    {
+        try
+        {
+            m_gameInformation = new GameInformation(19);
+            InputStreamReader reader;
+            try
+            {
+                reader = new InputStreamReader(in, charset);
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                reader = new InputStreamReader(in);
+            }
+            m_reader = new BufferedReader(reader);
+            m_tokenizer = new StreamTokenizer(m_reader);
+            m_tokenizer.nextToken();
+            if (m_tokenizer.ttype != '(')
+                throw getError("No root tree found");
+            Node root = new Node();
+            Node node = readNext(root, true);
+            while (node != null)
+                node = readNext(node, false);
+            if (root.getNumberChildren() == 1)
+            {
+                root = root.getChild();
+                root.setFather(null);
+            }
+            m_gameTree = new GameTree(m_gameInformation, root);
+            applyFixes();
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new SgfError("File not found");
+        }
+        catch (IOException e)
+        {
+            throw new SgfError("Error while reading file");
+        }
+        catch (OutOfMemoryError e)
+        {
+            throw new SgfError("Game tree to large");
+        }
+    }
+
     private String readValue() throws IOException, SgfError
     {
         m_tokenizer.nextToken();
@@ -348,7 +405,7 @@ public class Reader
         boolean quoted = false;
         while (true)
         {
-            int c = m_in.read();
+            int c = m_reader.read();
             if (c < 0)
                 throw getError("Property value incomplete");
             if (! quoted && c == ']')
