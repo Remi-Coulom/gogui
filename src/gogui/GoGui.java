@@ -711,8 +711,6 @@ class GoGui
 
     private String m_lastAnalyzeCommand;
 
-    private String m_lastFindInComments;
-
     private String m_name;
 
     private String m_program;
@@ -1061,11 +1059,9 @@ class GoGui
 
     private void cbFindInComments()
     {
-        String regex = JOptionPane.showInputDialog(this, "Search Pattern",
-                                                   m_lastFindInComments);
+        String regex = FindDialog.run(this);
         if (regex == null)
             return;
-        m_lastFindInComments = regex;
         Pattern pattern = Pattern.compile(regex,
                                           Pattern.MULTILINE
                                           | Pattern.CASE_INSENSITIVE);
