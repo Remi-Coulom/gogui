@@ -8,7 +8,8 @@
 <revremark>
 <itemizedlist>
 <listitem>
-<application>TwoGtp</application>: new option <option>-force</option>.
+<application>TwoGtp</application>: new option <option>-force</option>,
+forward <userinput>time_settings</userinput>.
 </listitem>
 <listitem>
 Minor fixes and improvements.

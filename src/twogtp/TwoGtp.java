@@ -123,6 +123,7 @@ public class TwoGtp
                             "name\n" +
                             "quit\n" +
                             "scoring_system\n" +
+                            "time_settings\n" +
                             "twogtp_black\n" +
                             "twogtp_white\n" +
                             "undo\n" +
@@ -133,6 +134,8 @@ public class TwoGtp
             response.append("command not supported in protocol version 1");
             status = false;
         }
+        else if (cmd.equals("time_settings"))
+            return sendBoth(cmdLine, response, false, false);
         else
         {
             boolean isExtCommandBlack = m_black.isCommandSupported(cmd);
