@@ -96,96 +96,129 @@ Quit GoGui.
 <varlistentry>
 <term><guisubmenu>Size</guisubmenu></term>
 <listitem>
+Change the board size and start a new game.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Komi...</guimenuitem></term>
 <listitem>
+Change the komi.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Rules</guisubmenu></term>
 <listitem>
+Change the rules.
+Japanese rules count only territory, Chinese rules also the stones
+(but ignore prisoners).
+The program is informed by the <userinput>scoring_system</userinput>
+(from an early draft of GTP version 2) if it supports this command.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Handicap</guisubmenu></term>
 <listitem>
+Set the number of handicap stones.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Computer color</guisubmenu></term>
 <listitem>
+Choose what side the Go program plays.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Pass</guimenuitem></term>
 <listitem>
+Do a pass move.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Computer play</guimenuitem></term>
 <listitem>
+Make the computer play a move.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Interrupt</guimenuitem></term>
 <listitem>
+Interrupt the command that is currently running.
+This menu item is only active if a lengthy command (like move
+generation) is running and the Go program supports interrupting
+(see <xref linkend="interrupt">Interrupting commands</xref>).
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Beginning</guimenuitem></term>
 <listitem>
+Retract all moves.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Backward 10</guimenuitem></term>
 <listitem>
+Retract 10 moves.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Backward</guimenuitem></term>
 <listitem>
+Retract a moves.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Forward</guimenuitem></term>
 <listitem>
+Replay a move.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Forward 10</guimenuitem></term>
 <listitem>
+Replay 10 moves.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>End</guimenuitem></term>
 <listitem>
+Replay all moves.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Goto...</guimenuitem></term>
 <listitem>
+Go to a certain move number.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Score</guimenuitem></term>
 <listitem>
+Score the current game.
+A window will be opened containing score information.
+First the Go program will be asked what stones are dead with the
+<userinput>final_status_list dead</userinput> command.
+Dead stones are marked with a cross-hair.
+If the Go program does not support this command or you don't agree with it,
+you can change the status of stones by clicking on them.
+You leave score mode by closing the score window.
+If you close the score window by pressing the <guibutton>Ok</guibutton>
+button, the score will be included in the file if you save the game as an SGF
+file later.
 </listitem>
 </varlistentry>
 
