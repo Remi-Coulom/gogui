@@ -128,7 +128,7 @@ class GameTreePanel
     }
 
     private int paintNode(Graphics graphics, Node node, int x, int y,
-                           int moveNumber)
+                          int moveNumber)
     {
         Move move = node.getMove();
         if (move != null)
@@ -150,14 +150,34 @@ class GameTreePanel
             if (i < numberChildren - 1)
                 yChild += m_nodeDist;
         }
-        if (move == null)
+        drawNode(graphics, node, x, y, moveNumber);
+        return yChild;
+    }
+
+    private void drawNode(Graphics graphics, Node node, int x, int y,
+                             int moveNumber)
+    {
+        Move move = node.getMove();
+        if (node.getNumberAddBlack() + node.getNumberAddWhite() > 0)
+        {
+            graphics.setColor(getBackground());
+            graphics.fillRect(x, y, m_nodeSize, m_nodeSize);
+            int halfSize = m_nodeSize / 2;
+            graphics.setColor(java.awt.Color.black);
+            graphics.fillOval(x, y, halfSize, halfSize);
+            graphics.fillOval(x + halfSize, y + halfSize, halfSize, halfSize);
+            graphics.setColor(java.awt.Color.white);
+            graphics.fillOval(x + halfSize, y, halfSize, halfSize);
+            graphics.fillOval(x, y + halfSize, halfSize, halfSize);
+        }
+        else if (move == null)
         {
             graphics.setColor(java.awt.Color.blue);
             int margin = 7;
             graphics.fillRect(x + margin, y + margin,
                               m_nodeSize - 2 * margin + 1,
                               m_nodeSize - 2 * margin + 1);
-        }
+        }        
         else
         {
             if (move.getColor() == go.Color.BLACK)
@@ -176,12 +196,24 @@ class GameTreePanel
                 graphics.setColor(java.awt.Color.black);
             graphics.drawString(text, xText, yText);
         }
+        if (node.getComment() != null && ! node.getComment().trim().equals(""))
+        {
+            graphics.setColor(getBackground());
+            graphics.fillRect(x + 3, y + m_nodeSize + 2,
+                              m_nodeSize - 6, 4);
+            graphics.setColor(java.awt.Color.black);
+            graphics.drawLine(x + 3, y + m_nodeSize + 2,
+                              x + m_nodeSize - 3, y + m_nodeSize + 2);
+            graphics.drawLine(x + 3, y + m_nodeSize + 4,
+                              x + m_nodeSize - 3, y + m_nodeSize + 4);
+            graphics.drawLine(x + 3, y + m_nodeSize + 6,
+                              x + m_nodeSize - 3, y + m_nodeSize + 6);
+        }
         if (node == m_currentNode)
         {
             graphics.setColor(java.awt.Color.red);
             graphics.drawRect(x, y, m_nodeSize, m_nodeSize);
         }
-        return yChild;
     }
 }
 
