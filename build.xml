@@ -131,6 +131,7 @@ installation directory.
  doc/html/*.css,
  doc/man/*.1,
  doc/xml/*.xml,
+ doc/xml/*.xml.in,
  doxygen/Doxyfile,
  doxygen/footer.html,
  doxygen/README,
@@ -149,6 +150,7 @@ installation directory.
  src/overview.html,
  src/*/package.html,
  src/*/*.java,
+ src/*/*.java.in,
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  bin/gmptogtp,
