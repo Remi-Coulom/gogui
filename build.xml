@@ -231,7 +231,7 @@ installation directory.
 </jar>
 </target>
 
-<target name="app" depends="gogui.jar"
+<target name="gogui.app" depends="gogui.jar"
  description="Make Mac application bundle">
 <property name="appdir" value="build/GoGui.app"/>
 <mkdir dir="${appdir}"/>
@@ -245,16 +245,16 @@ installation directory.
 <arg line="755 ${appdir}/Contents/MacOS/JavaApplicationStub"/>
 </exec>
 <copy file="mac/packaging/GoGui.icns"
-  todir="${appdir}/Contents/Resources"/>
-<copy file="mac/packaging/Info.plist" todir="${appdir}/Contents"/>  
-<copy file="mac/packaging/PkgInfo" todir="${appdir}/Contents"/>  
-<copy file="lib/gogui.jar" todir="${appdir}/Contents/Resources/Java"/>
+  todir="${appdir}/Contents/Resources" overwrite="true"/>
+<copy file="mac/packaging/Info.plist" todir="${appdir}/Contents" overwrite="true"/>  
+<copy file="mac/packaging/PkgInfo" todir="${appdir}/Contents" overwrite="true"/>  
+<copy file="lib/gogui.jar" todir="${appdir}/Contents/Resources/Java" overwrite="true"/>
 <exec executable="/Developer/Tools/SetFile">
 <arg line="-a B ${appdir}"/>
 </exec>
 </target>
 
-<target name="dmg" depends="app"
+<target name="gogui.dmg" depends="gogui.app"
  description="Make Mac compressed disk image">
 <exec executable="hdiutil">
 <arg line="create -fs HFS+ -format UDZO -volname GoGui-${version} -srcfolder build/GoGui.app build/GoGui-${version}.dmg"/>
@@ -550,8 +550,8 @@ installation directory.
 <target name="version" depends="versionCheckUptodate"
  unless="versionUptodate">
 <copy
- file="src/version/Version.java.in"
- tofile="src/version/Version.java" overwrite="true"/>
+file="src/version/Version.java.in"
+tofile="src/version/Version.java" overwrite="true"/>
 <replace file="src/version/Version.java" token="@VERSION@"
  value="${version}"/>
 <copy
