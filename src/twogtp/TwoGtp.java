@@ -200,6 +200,8 @@ public class TwoGtp
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
+            if (games > 0 && sgfFile.equals(""))
+                throw new Exception("Use option -sgffile with -games.");
             TwoGtp twoGtp = new TwoGtp(System.in, System.out, black, white,
                                        size, komi, games, alternate, sgfFile,
                                        verbose);
