@@ -677,9 +677,19 @@ public class GtpShell
             for (int i = 0; i < numberDummy; ++i)
                 m_comboBox.addItem(wrapperObject(new String("")));
         }
-        m_comboBox.setSelectedIndex(-1);
-        m_textField.setText(oldText);
-        m_textField.setCaretPosition(oldCaretPosition);
+        if (oldText.trim().length() > 0 && completions.size() > 0)
+        {
+            String text = (String)completions.get(completions.size() - 1);
+            m_comboBox.setSelectedIndex(0);
+            m_textField.setText(text);
+            m_textField.select(oldCaretPosition, text.length());
+        }
+        else
+        {
+            m_comboBox.setSelectedIndex(-1);
+            m_textField.setText(oldText);
+            m_textField.setCaretPosition(oldCaretPosition);
+        }
     }
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
@@ -802,7 +812,10 @@ public class GtpShell
                     int c = e.getKeyCode();        
                     int mod = e.getModifiers();
                     if (c == KeyEvent.VK_ESCAPE)
+                    {
+                        m_textField.replaceSelection("");
                         return;
+                    }
                     else if (c == KeyEvent.VK_TAB)
                     {
                         findBestCompletion();
@@ -814,6 +827,8 @@ public class GtpShell
                     else if (c == KeyEvent.VK_PAGE_DOWN
                              && mod == ActionEvent.SHIFT_MASK)
                         scrollPage(false);
+                    else if (c == KeyEvent.VK_BACK_SPACE)
+                        m_comboBox.hidePopup();
                     else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED)
                         popupCompletions();
                 }
