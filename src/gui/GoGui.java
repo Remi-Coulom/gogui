@@ -2054,7 +2054,7 @@ class GoGui
         prefs.setBoolDefault("beep-after-move", true);
         prefs.setIntDefault("boardsize", 19);
         prefs.setFloatDefault("komi", 0);
-        prefs.setBoolDefault("remember-window-sizes", false);
+        prefs.setBoolDefault("remember-window-sizes", true);
         prefs.setIntDefault("rules", go.Board.RULES_JAPANESE);
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);
