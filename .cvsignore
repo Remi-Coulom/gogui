@@ -2,6 +2,7 @@ ChangeLog
 docsrc
 gogui.jar
 gmptogtp.jar
+gtpdummy.jar
 gtpregress.jar
 gtpserver.jar
 netgtp.jar
