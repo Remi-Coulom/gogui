@@ -20,7 +20,7 @@ GoGui: Improve restoring main window size
 
 <revision>
 <revnumber>0.7pre1</revnumber>
-<date>29 November 2004</date>
+<date>29 Nov 2004</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -126,7 +126,7 @@ Other fixes and improvements
 
 <revision>
 <revnumber>0.6</revnumber>
-<date>9 July 2004</date>
+<date>9 Jul 2004</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <simpara>
@@ -358,7 +358,7 @@ New options -force, -title
 </listitem>
 <listitem>
 <simpara>
-Allow to enter non-standard boardsizes from menu Size
+Allow to enter non-standard board sizes from menu Size
 </simpara>
 </listitem>
 <listitem>
