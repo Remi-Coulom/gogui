@@ -219,6 +219,8 @@ class GtpRegress
 
     private String m_lastSgf;
 
+    private String m_name;
+
     private String m_outFileName;
 
     private String m_outFileRelativeName;
@@ -228,6 +230,8 @@ class GtpRegress
     private String m_program;
 
     private String m_relativePath;
+
+    private String m_version;
 
     private Vector m_tests = new Vector();
 
@@ -512,7 +516,7 @@ class GtpRegress
                     "</table>\n" +
                     "<table width=\"100%\" bgcolor=\"" + m_colorInfo
                     + "\">\n");
-        writeInfo(m_out);
+        writeInfo(m_out, false);
         m_out.print("</table>\n" +
                     "<pre>\n");
     }
@@ -552,7 +556,7 @@ class GtpRegress
         line = line.replaceAll("&", "&amp;");
         line = line.replaceAll(">", "&gt;");
         line = line.replaceAll("<", "&lt;");
-        if (style.equals("command") || style.equals("test"))
+        if (style != null && (style.equals("command") || style.equals("test")))
         {
             Pattern pattern = Pattern.compile("\\S*\\.[Ss][Gg][Ff]");
             Matcher matcher = pattern.matcher(line);
@@ -662,10 +666,26 @@ class GtpRegress
         initOutFile();
         m_gtp = new Gtp(m_program, false, this);
         m_lastSgf = null;
-        String line;
-        long timeMillis = System.currentTimeMillis();
+        try
+        {
+            m_name = sendCommand("name");
+        }
+        catch (Gtp.Error e)
+        {
+            m_name = "";
+        }
+        try
+        {
+            m_version = sendCommand("version");
+        }
+        catch (Gtp.Error e)
+        {
+            m_version = "";
+        }
         double cpuTime = getCpuTime();
+        long timeMillis = System.currentTimeMillis();
         printOutSeparator();
+        String line;
         while (true)
         {
             line = reader.readLine();
@@ -696,7 +716,7 @@ class GtpRegress
         return string.substring(0, maxLength).trim() + "...";
     }
 
-    private void writeInfo(PrintStream out)
+    private void writeInfo(PrintStream out, boolean withName)
     {
         String host = "?";
         try
@@ -709,6 +729,11 @@ class GtpRegress
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);
         Date date = Calendar.getInstance().getTime();
+        if (withName)
+            out.print("<tr><th align=\"left\">Name</th><td>" + m_name
+                      + "</td></tr>\n" +
+                      "<tr><th align=\"left\">Version</th><td>" + m_version
+                      + "</td></tr>\n");
         out.print("<tr><th align=\"left\">Date</th><td>" + format.format(date)
                   + "</td></tr>\n" +
                   "<tr><th align=\"left\">Host</th><td>" + host
@@ -745,7 +770,7 @@ class GtpRegress
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
                   + "\">\n");
-        writeInfo(out);
+        writeInfo(out, true);
         out.print("</table>\n" +
                   "<p>\n" +
                   "<table width=\"100%\">\n" +
@@ -856,7 +881,7 @@ class GtpRegress
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
                   + "\">\n");
-        writeInfo(out);
+        writeInfo(out, true);
         out.print("<tr><th align=\"left\">Output</th><td><a href=\""
                   + m_outFileRelativeName + "\">"
                   + m_outFileRelativeName + "</a></td></tr>\n" +
