@@ -8,9 +8,6 @@
 <revremark>
 <itemizedlist>
 <listitem>
-New anzlyze result type <userinput>pslist</userinput>.
-</listitem>
-<listitem>
 New menu items <guimenuitem>Open Recent</guimenuitem> and
 <guimenuitem>Goto</guimenuitem>.
 </listitem>
@@ -19,6 +16,8 @@ New menu items <guimenuitem>Open Recent</guimenuitem> and
 </listitem>
 <listitem>
 Analyze commands are now selected from a dialog.
+New analyze result type <userinput>pslist</userinput>.
+Analyze commands can have string argument.
 </listitem>
 <listitem>
 Lots of small fixes and enhancements.

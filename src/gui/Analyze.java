@@ -114,12 +114,22 @@ class AnalyzeCommand
             buffer.append(" ");
             buffer.append(pointArg.toString());
         }
+        if (needsStringArg() && m_stringArg != null)
+        {
+            buffer.append(" ");
+            buffer.append(m_stringArg);
+        }
         return buffer.toString();
     }
 
     public boolean needsPointArg()
     {
         return (m_command.indexOf("%p") >= 0);
+    }
+
+    public boolean needsStringArg()
+    {
+        return (m_command.indexOf("%s") >= 0);
     }
 
     public static void read(Vector commands, Vector labels,
@@ -168,7 +178,18 @@ class AnalyzeCommand
             assert(pointArg != null);
             StringUtils.replace(buffer, "%p", pointArg.toString());
         }
+        if (needsStringArg())
+        {
+            assert(m_stringArg != null);
+            StringUtils.replace(buffer, "%s", m_stringArg);
+        }
         return buffer.toString();
+    }
+
+    public void setStringArg(String value)
+    {
+        assert(needsStringArg());
+        m_stringArg = value;
     }
 
     private int m_type;
@@ -180,6 +201,8 @@ class AnalyzeCommand
     private String m_title;
 
     private double m_scale;
+
+    private String m_stringArg;
 
     private static File getDir()
     {
@@ -576,6 +599,15 @@ class AnalyzeDialog
         selectCommand(index);
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
+        if (command.needsStringArg())
+        {
+            String stringArg =
+                JOptionPane.showInputDialog(this, "Argument for "
+                                            + command.getLabel());
+            if (stringArg == null)
+                return;
+            command.setStringArg(stringArg);
+        }
         m_callback.setAnalyzeCommand(command);
         m_clearButton.setEnabled(true);
     }
