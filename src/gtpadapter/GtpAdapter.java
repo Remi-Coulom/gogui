@@ -208,6 +208,8 @@ public class GtpAdapter
 
     private boolean checkResign(String color, StringBuffer response)
     {
+        if (! m_resign)
+            return false;
         color = color.toLowerCase();
         boolean isBlack;
         if (color.equals("b") || color.equals("black"))
