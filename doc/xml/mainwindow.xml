@@ -395,7 +395,8 @@ node.
 Find next game node containing a search pattern.
 The search is case insensitive.
 The pattern is a regular expression as used by the Java
-java.util.regex.Pattern class, similar to Perl syntax.
+<ulink url="http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</ulink>
+class, similar to Perl syntax.
 </para>
 </listitem>
 </varlistentry>
