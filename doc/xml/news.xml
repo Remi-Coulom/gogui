@@ -9,8 +9,9 @@
 	<itemizedlist>
 	  <listitem>
 	    <command>twogtp</command>: new options <option>-auto</option>,
-	    <option>-games</option>, <option>-sgffile</option>,
-	    <option>-size</option>;
+	    <option>-compare</option>, <option>-games</option>,
+	    <option>-sgffile</option>, <option>-size</option>;
+	    save more game information in results file;
 	    forward GTP extension commands to program that implement them;
 	    handle GTP version 2 programs.
 	  </listitem>

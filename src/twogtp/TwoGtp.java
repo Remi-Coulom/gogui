@@ -143,6 +143,7 @@ public class TwoGtp
         {
             String options[] = {
                 "auto",
+                "compare",
                 "black:",
                 "games:",
                 "help",
@@ -159,6 +160,7 @@ public class TwoGtp
                     "\n" +
                     "-auto    autoplay games\n" +
                     "-black   command for black program\n" +
+                    "-compare compare list of sgf files\n" +
                     "-games   number of games (0=unlimited)\n" +
                     "-help    display this help and exit\n" +
                     "-sgffile filename prefix\n" +
@@ -166,6 +168,12 @@ public class TwoGtp
                     "-verbose log GTP streams to stderr\n" +
                     "-white   command for white program\n";
                 System.out.print(helpText);
+                System.exit(0);
+            }
+            boolean compare = opt.isSet("compare");
+            if (compare)
+            {
+                compare(opt.getArguments());
                 System.exit(0);
             }
             boolean auto = opt.isSet("auto");
@@ -184,7 +192,12 @@ public class TwoGtp
                 twoGtp.mainLoop();
             twoGtp.close();
         }
-        catch (AssertionError e)
+        catch (Error e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        catch (RuntimeException e)
         {
             e.printStackTrace();
             System.exit(-1);
@@ -219,9 +232,19 @@ public class TwoGtp
 
     private String m_whiteName;
 
+    private Vector m_games = new Vector(100, 100);;
+
     private Gtp m_black;
 
     private Gtp m_white;
+
+    private Vector getMoves()
+    {
+        Vector moves = new Vector(128, 128);
+        for (int i = 0; i < m_board.getMoveNumber(); ++i)
+            moves.add(m_board.getMove(i));
+        return moves;
+    }
 
     private void autoPlay() throws Exception
     {
@@ -288,6 +311,45 @@ public class TwoGtp
         }
     }
 
+    private static String checkDuplicate(Board board, Vector moves,
+                                         Vector games)
+    {
+        String result = "-";
+        for (int numberGame = 0; numberGame < games.size(); ++numberGame)
+        {
+            Vector gameMoves = (Vector)games.get(numberGame);
+            for (int rot = 0; rot < Board.NUMBER_ROTATIONS; ++rot)
+            {
+                int numberDifferent = 0;
+                int moveNumber = moves.size();
+                final int maxDifferent = moveNumber / 5;
+                if (gameMoves.size() != moveNumber)
+                {
+                    numberDifferent = Math.abs(gameMoves.size() - moveNumber);
+                    moveNumber = Math.min(gameMoves.size(), moveNumber);
+                }
+                for (int i = 0;
+                     numberDifferent <= maxDifferent && i < moveNumber; ++i)
+                {
+                    Move move = (Move)moves.get(i);
+                    Point point = move.getPoint();
+                    Color color = move.getColor();
+                    Move gameMove = (Move)gameMoves.get(i);
+                    Point gamePoint = board.rotate(rot, gameMove.getPoint());
+                    Color gameColor = gameMove.getColor();                    
+                    if (! color.equals(gameColor)
+                        || ! Point.equals(point, gamePoint))
+                        ++numberDifferent;
+                }
+                if (numberDifferent == 0)
+                    return Integer.toString(numberGame);
+                else if (numberDifferent < maxDifferent)
+                    result = Integer.toString(numberGame) + "?";
+            }
+        }
+        return result;
+    }
+
     private void checkEndOfGame()
     {
         if (m_board.bothPassed() && ! m_gameSaved)
@@ -296,8 +358,11 @@ public class TwoGtp
             {
                 String resultBlack = getResult(m_black);
                 String resultWhite = getResult(m_white);
-                saveResult(resultBlack, resultWhite);
+                Vector moves = getMoves();
+                String duplicate = checkDuplicate(m_board, moves, m_games);
+                saveResult(resultBlack, resultWhite, duplicate, moves.size());
                 saveGame();
+                m_games.add(moves);
             }
             catch (FileNotFoundException e)
             {
@@ -314,11 +379,49 @@ public class TwoGtp
         return m_inconsistentState;
     }
 
+    private static void compare(Vector filenames) throws Exception
+    {
+        Board board = null;
+        Vector games = new Vector();
+        for (int gameNumber = 0; gameNumber < filenames.size(); ++gameNumber)
+        {
+            String filename = (String)filenames.get(gameNumber);
+            File file = new File(filename);
+            sgf.Reader reader = new sgf.Reader(file);
+            int size = reader.getBoardSize();
+            if (board == null)
+                board = new Board(size);
+            else if (size != board.getSize())
+                throw new Exception("Board size in " + filename +
+                                    " does not match other games");
+            Vector moves = reader.getMoves();
+            String duplicate = checkDuplicate(board, moves, games);
+            System.out.println(Integer.toString(gameNumber) + " " +
+                               filename + " " + duplicate);
+            games.add(moves);
+        }
+    }
+
     private void findInitialGameIndex()
     {
         m_gameIndex = 0;
         while (getFile(m_gameIndex).exists())
+        {
+            File file = getFile(m_gameIndex);
+            if (! file.exists())
+                return;
+            try
+            {
+                sgf.Reader reader = new sgf.Reader(file);
+                m_games.add(reader.getMoves());
+            }
+            catch (sgf.Reader.Error e)
+            {
+                System.err.println("Error reading " + file + ": " +
+                                   e.getMessage());
+            }
             ++m_gameIndex;
+        }
     }
 
     private File getFile(int gameIndex)
@@ -457,7 +560,8 @@ public class TwoGtp
         ++m_gameIndex;
     }
 
-    private void saveResult(String resultBlack, String resultWhite)
+    private void saveResult(String resultBlack, String resultWhite,
+                            String duplicate, int numberMoves)
          throws FileNotFoundException
     {
         if (m_sgfFile.equals(""))
@@ -467,14 +571,13 @@ public class TwoGtp
         {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             PrintStream out = new PrintStream(fileOutputStream);
-            out.println("# Game\tResB\tResW");
+            out.println("# Game\tResB\tResW\tDup\tLen");
             out.close();
         }
         FileOutputStream fileOutputStream = new FileOutputStream(file, true);
         PrintStream out = new PrintStream(fileOutputStream);
-        out.println(Integer.toString(m_gameIndex)
-                    + "\t" + resultBlack
-                    + "\t" + resultWhite);
+        out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t" +
+                    resultWhite + "\t" + duplicate + "\t" + numberMoves);
         out.close();
     }
 

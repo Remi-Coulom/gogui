@@ -92,6 +92,14 @@
       </varlistentry>
       <varlistentry>
 	<term>
+	  <option>-compare</option>
+	</term>
+	<listitem>
+	  Compare a list of SGF files given as arguments an exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
 	  <option>-games</option> <replaceable>n</replaceable>
 	</term>
 	<listitem>
