@@ -41,7 +41,7 @@ install -d $PREFIX/share/man/man1
 install doc/man/*.1 $PREFIX/share/man/man1
 
 install -d $PREFIX/share/pixmaps
-install src/images/gogui.png $PREFIX/share/pixmaps
+install src/images/gogui.png src/images/gogui-gnugo.png $PREFIX/share/pixmaps
 
 install -d $PREFIX/share/applications
 install config/gogui*.desktop $PREFIX/share/applications
