@@ -14,6 +14,41 @@ import go.*;
 
 //-----------------------------------------------------------------------------
 
+class ToolBarButton extends JButton implements MouseListener
+{
+    public ToolBarButton(ImageIcon icon)
+    {
+        super(icon);
+        setBorder(BorderFactory.createRaisedBevelBorder());
+        addMouseListener(this);
+        setBorderPainted(false);
+    }
+
+    public void mouseClicked(MouseEvent event)
+    {
+    }
+
+    public void mouseEntered(MouseEvent event)
+    {
+        JButton button = (JButton)event.getSource();
+        button.setBorderPainted(true);
+    }
+    
+    public void mouseExited(MouseEvent event)
+    {
+        JButton button = (JButton)event.getSource();
+        button.setBorderPainted(false);
+    }
+
+    public void mousePressed(MouseEvent event)
+    {
+    }
+
+    public void mouseReleased(MouseEvent event)
+    {
+    }
+};
+
 class ToolBar
     extends JToolBar
 {
@@ -112,30 +147,49 @@ class ToolBar
     }
 
     private boolean m_analyzeWasEnabled;
+
     private boolean m_computerButtonsEnabled = true;
+
     private boolean m_enable = true;
+
     private ActionListener m_listener;
+
     private AnalyzeCommand m_analyzeCommand;
+
     private JButton m_buttonAnalyze;
+
     private JButton m_buttonEnter;
+
     private JButton m_buttonBackward;
+
     private JButton m_buttonBackward10;
+
     private JButton m_buttonBeginning;
+
     private JButton m_buttonForward;
+
     private JButton m_buttonForward10;
+
     private JButton m_buttonEnd;
+
     private JButton m_buttonGtpShell;
+
     private JButton m_buttonStop;
+
     private JButton m_buttonNew;
+
     private JButton m_buttonOpen;
+
     private JButton m_buttonPass;
+
     private JButton m_buttonSave;
+
     private static final String m_prefix = "org/javalobby/icons/20x20png/";
 
     private JButton addButton(String icon, String command, String toolTip)
     {
         URL u = getClass().getClassLoader().getResource(icon);
-        JButton button = new JButton(new ImageIcon(u));
+        JButton button = new ToolBarButton(new ImageIcon(u));
         button.setToolTipText(toolTip);
         button.setActionCommand(command);
         button.addActionListener(m_listener);
