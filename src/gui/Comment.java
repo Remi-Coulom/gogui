@@ -92,9 +92,13 @@ class Comment
         if (m_duringSetText)
             return;
         String text = m_textArea.getText().trim();
-        if (m_node == null || m_node.getComment() == null)
+        if (m_node == null)
             return;
-        String comment = m_node.getComment().trim();
+        String comment = m_node.getComment();
+        if (comment == null)
+            comment = "";
+        else
+            comment = comment.trim();
         if (! comment.equals(text))
         {
             m_node.setComment(text);
