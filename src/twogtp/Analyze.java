@@ -334,11 +334,11 @@ public class Analyze
         out.print("<table border=\"0\">\n" +
                   "<thead>\n" +
                   "<tr bgcolor=\"" + m_colorHeader + "\">\n" +
-                  "<th>Game</th>\n" +
-                  "<th>Result [" + m_black + "]</th>\n" +
-                  "<th>Result [" + m_white + "]</th>\n");
+                  "<th>Game</th>\n");
         if (m_hasReferee)
             out.print("<th>Result [" + m_referee + "]</th>\n");
+        out.print("<th>Result [" + m_black + "]</th>\n" +
+                  "<th>Result [" + m_white + "]</th>\n");
         out.print("<th>Colors exchanged</th>\n" +
                   "<th>Duplicate</th>\n" +
                   "<th>Length</th>\n" +
@@ -355,10 +355,10 @@ public class Analyze
             out.print("<tr align=\"center\" bgcolor=\"" + m_colorInfo
                       + "\">" +
                       "<td><a href=\"" + name + "\">" + name + "</a></td>\n");
-            out.print("<td>" + e.m_resultBlack + "</td>" +
-                      "<td>" + e.m_resultWhite + "</td>");
             if (m_hasReferee)
                 out.print("<td>" + e.m_resultReferee + "</td>");
+            out.print("<td>" + e.m_resultBlack + "</td>" +
+                      "<td>" + e.m_resultWhite + "</td>");
             out.print("<td>" + (e.m_alternated ? "1" : "0") + "</td>" +
                       "<td>" + e.m_duplicate + "</td>" +
                       "<td>" + e.m_length + "</td>" +
