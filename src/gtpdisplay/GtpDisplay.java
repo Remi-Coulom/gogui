@@ -191,6 +191,8 @@ public class GtpDisplay
     private void cbFieldClicked(go.Point point, boolean modifiedSelect)
     {
         assert(SwingUtilities.isEventDispatchThread());
+        if (m_board.getColor(point) != go.Color.EMPTY)
+            return;
         synchronized (this)
         {
             if (modifiedSelect)
