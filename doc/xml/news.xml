@@ -14,6 +14,13 @@
 <application>TwoGtp</application>: Fix NullPointerException if no komi option
 was used.
 </simpara>
+<simpara>
+<application>GoGui</application>: Fix NullPointerException after leaving setup
+mode.
+</simpara>
+<simpara>
+Lots of other small fixes.
+</simpara>
 </listitem>
 </itemizedlist>
 </revdescription>
