@@ -868,6 +868,7 @@ class GoGui
         m_board.initSize(m_boardSize);
         executeRoot();
         gotoNode(oldCurrentNode);
+        setTitle();
     }    
 
     private boolean backward(int n)
