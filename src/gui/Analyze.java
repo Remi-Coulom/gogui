@@ -378,7 +378,9 @@ interface AnalyzeCallback
 {
     public void cbGtpShell();
 
-    public boolean clearAnalyzeCommand();
+    public void clearAnalyzeCommand();
+
+    public boolean isCommandInProgress();
 
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                   boolean clearBoard);
@@ -583,6 +585,11 @@ class AnalyzeDialog
 
     private void clearCommand()
     {
+        if (m_callback.isCommandInProgress())
+        {
+            SimpleDialogs.showError(this, "Command in progress.");
+            return;
+        }
         m_callback.clearAnalyzeCommand();
         m_autoRun.setSelected(false);
         m_clearButton.setEnabled(false);
@@ -818,6 +825,11 @@ class AnalyzeDialog
 
     private void setCommand()
     {
+        if (m_callback.isCommandInProgress())
+        {
+            SimpleDialogs.showError(this, "Command in progress.");
+            return;
+        }
         int index = m_list.getSelectedIndex();        
         if (index < 0)
             return;
@@ -845,8 +857,7 @@ class AnalyzeDialog
         boolean autoRun = m_autoRun.isSelected();
         boolean clearBoard = m_clearBoard.isSelected();
         if (clearBoard)
-            if (! m_callback.clearAnalyzeCommand())
-                return;
+            m_callback.clearAnalyzeCommand();
         m_clearButton.setEnabled(true);
         m_callback.setAnalyzeCommand(command, autoRun, false);
     }

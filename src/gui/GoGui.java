@@ -54,7 +54,6 @@ class GoGui
             if (! program.equals(""))
             {
                 m_program = program;
-                // Using parent window for dialog causes rendering errors with Java 1.4.1 on Mac/WinNT  
                 m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
                 m_gtpShell.setProgramCommand(program);
             }
@@ -235,7 +234,6 @@ class GoGui
         if (m_analyzeDialog == null)
         {
             Vector supportedCommands = null;
-            // Using parent window for dialog leads to rendering errors with Java 1.4.1 on Mac and WinNT
             m_analyzeDialog =
                 new AnalyzeDialog(null, this, m_prefs,
                                   m_commandThread.getSupportedCommands());
@@ -252,18 +250,14 @@ class GoGui
             m_gtpShell.toTop();
     }
 
-    public boolean clearAnalyzeCommand()
+    public void clearAnalyzeCommand()
     {
         if (m_commandInProgress)
-        {
-            showError("Command in progress.");
-            return false;
-        }
+            return;
         m_analyzeCommand = null;
         setBoardCursorDefault();
         resetBoard();
         clearStatus();
-        return true;
     }
 
     public void fieldClicked(go.Point p, boolean modifiedSelect)
@@ -319,6 +313,11 @@ class GoGui
         }
         else if (! modifiedSelect)
             humanMoved(new Move(p, m_board.getToMove()));
+    }
+
+    public boolean isCommandInProgress()
+    {
+        return m_commandInProgress;
     }
     
     public static void main(String[] args)
@@ -510,10 +509,7 @@ class GoGui
                                   boolean clearBoard)
     {
         if (m_commandInProgress)
-        {
-            showError("Command in progress.");
             return;
-        }
         initAnalyzeCommand(command, autoRun);
         if (m_analyzeCommand.needsPointArg()
             || m_analyzeCommand.needsPointListArg())
