@@ -24,10 +24,10 @@ public class GameInfo
     extends JPanel
     implements ActionListener
 {
-    public GameInfo(TimeControl timeControl)
+    public GameInfo(Clock clock)
     {
         super(new GridLayout(0, 2, GuiUtils.SMALL_PAD, 0));
-        m_timeControl = timeControl;
+        m_clock = clock;
         m_move = addEntry("To Play");
         m_number = addEntry("Moves");
         m_last = addEntry("Last Move");
@@ -43,7 +43,7 @@ public class GameInfo
 
     public void actionPerformed(ActionEvent evt)
     {
-        if (m_timeControl.isRunning())
+        if (m_clock.isRunning())
         {
             setTime(go.Color.BLACK);
             setTime(go.Color.WHITE);
@@ -84,13 +84,13 @@ public class GameInfo
         double timeLeftBlack = node.getTimeLeftBlack();
         int movesLeftBlack = node.getMovesLeftBlack();
         if (! Double.isNaN(timeLeftBlack))
-            m_timeB.setText(TimeControl.getTimeString(timeLeftBlack,
-                                                      movesLeftBlack));
+            m_timeB.setText(Clock.getTimeString(timeLeftBlack,
+                                                movesLeftBlack));
         double timeLeftWhite = node.getTimeLeftWhite();
         int movesLeftWhite = node.getMovesLeftWhite();
         if (! Double.isNaN(timeLeftWhite))
-            m_timeW.setText(TimeControl.getTimeString(timeLeftWhite,
-                                                      movesLeftWhite));
+            m_timeW.setText(Clock.getTimeString(timeLeftWhite,
+                                                movesLeftWhite));
     }
 
     private JTextField m_move;
@@ -109,7 +109,7 @@ public class GameInfo
 
     private JTextField m_variation;
 
-    private TimeControl m_timeControl;
+    private Clock m_clock;
 
     private JTextField addEntry(String text)
     {
@@ -126,7 +126,7 @@ public class GameInfo
 
     private void setTime(go.Color c)
     {
-        String text = m_timeControl.getTimeString(c);
+        String text = m_clock.getTimeString(c);
         if (text == null)
             text = " ";
         if (c == go.Color.BLACK)

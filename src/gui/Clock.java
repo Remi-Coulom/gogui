@@ -10,7 +10,8 @@ import go.Color;
 
 //----------------------------------------------------------------------------
 
-public class TimeControl
+/** Time control for a Go game. */
+public class Clock
 {
     public static class Error extends Exception
     {
@@ -20,7 +21,7 @@ public class TimeControl
         }
     }    
 
-    public TimeControl()
+    public Clock()
     {
         reset();
         m_initialized = false;

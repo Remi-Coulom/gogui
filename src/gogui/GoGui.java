@@ -52,6 +52,7 @@ import gtp.GtpUtils;
 import gui.AnalyzeCommand;
 import gui.AnalyzeDialog;
 import gui.AnalyzeShow;
+import gui.Clock;
 import gui.Comment;
 import gui.CommandThread;
 import gui.FindDialog;
@@ -65,7 +66,6 @@ import gui.SelectProgram;
 import gui.ScoreDialog;
 import gui.SimpleDialogs;
 import gui.TextViewer;
-import gui.TimeControl;
 import utils.FileUtils;
 import utils.GuiUtils;
 import utils.Platform;
@@ -114,8 +114,8 @@ class GoGui
         contentPane.add(m_toolBar, BorderLayout.NORTH);
 
         m_infoPanel = new JPanel(new BorderLayout());
-        m_timeControl = new TimeControl();
-        m_gameInfo = new GameInfo(m_timeControl);
+        m_clock = new Clock();
+        m_gameInfo = new GameInfo(m_clock);
         m_gameInfo.setBorder(utils.GuiUtils.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
 
@@ -199,9 +199,9 @@ class GoGui
         try
         {
             if (time != null)
-                m_timeControl.setTime(time);
+                m_clock.setTime(time);
         }
-        catch (TimeControl.Error e)
+        catch (Clock.Error e)
         {
             showWarning(e.getMessage());
         }
@@ -819,7 +819,7 @@ class GoGui
 
     private SquareLayout m_squareLayout;
 
-    private TimeControl m_timeControl;
+    private Clock m_clock;
 
     private ToolBar m_toolBar;
 
@@ -1446,7 +1446,7 @@ class GoGui
         else
             computerWhite();
         generateMove();
-        m_timeControl.startMove(m_board.getToMove());
+        m_clock.startMove(m_board.getToMove());
     }
 
     private void cbPreviousVariation()
@@ -1588,7 +1588,7 @@ class GoGui
                 m_gameTree = new GameTree(m_boardSize, 0, null, null);
                 m_currentNode = m_gameTree.getRoot();
                 m_currentNode.addBlack(m_board.getPoint(0, 0));
-                m_timeControl.reset();
+                m_clock.reset();
                 updateGameInfo(true);
             }
             resetBoard();
@@ -1666,7 +1666,7 @@ class GoGui
 
     private void checkComputerMove()
     {
-        m_timeControl.startMove(m_board.getToMove());
+        m_clock.startMove(m_board.getToMove());
         if (m_commandThread == null || ! isCurrentNodeExecuted())
             return;
         if (m_computerBlack && m_computerWhite)
@@ -1694,7 +1694,7 @@ class GoGui
             if (computerToMove() && ! m_resigned)
                 generateMove();
         }
-        m_timeControl.startMove(m_board.getToMove());
+        m_clock.startMove(m_board.getToMove());
     }
 
     private boolean checkCurrentNodeExecuted()
@@ -1792,7 +1792,7 @@ class GoGui
             GtpError e = m_commandThread.getException();
             if (e != null)
                 throw e;
-            m_timeControl.stopMove();
+            m_clock.stopMove();
             String response = m_commandThread.getResponse();
             go.Color toMove = m_board.getToMove();
             addPlayerComputerToGameInfo(toMove);
@@ -2075,10 +2075,10 @@ class GoGui
                 // Paint point immediately to pretend better responsiveness
                 m_guiBoard.paintImmediately(point);
             }
-            m_timeControl.stopMove();
+            m_clock.stopMove();
             go.Color color = move.getColor();
             if (m_board.getMoveNumber() > 0
-                && m_timeControl.lostOnTime(color)
+                && m_clock.lostOnTime(color)
                 && ! m_lostOnTimeShown)
             {
                 showInfo(color.toString() + " lost on time.");
@@ -2120,8 +2120,8 @@ class GoGui
         m_currentNodeExecuted = 0;
         m_guiBoard.updateFromGoBoard();
         resetBoard();
-        m_timeControl.reset();
-        m_timeControl.startMove(go.Color.BLACK);
+        m_clock.reset();
+        m_clock.startMove(go.Color.BLACK);
         m_lostOnTimeShown = false;
         setNeedsSave(false);
         m_resigned = false;
@@ -2317,7 +2317,7 @@ class GoGui
     {
         initGame(size);
         loadFile(m_file, move);
-        m_timeControl.halt();
+        m_clock.halt();
         updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
@@ -2730,20 +2730,20 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
-        if (! m_timeControl.isInitialized())
+        if (! m_clock.isInitialized())
             return;
         if (! m_commandThread.isCommandSupported("time_settings"))
         {
             showError("Command time_settings not supported");
             return;
         }
-        long preByoyomi = m_timeControl.getPreByoyomi() * 60;
+        long preByoyomi = m_clock.getPreByoyomi() * 60;
         long byoyomi = 0;
         long byoyomiMoves = 0;
-        if (m_timeControl.getUseByoyomi())
+        if (m_clock.getUseByoyomi())
         {
-            byoyomi = m_timeControl.getByoyomi() * 60;
-            byoyomiMoves = m_timeControl.getByoyomiMoves();
+            byoyomi = m_clock.getByoyomi() * 60;
+            byoyomiMoves = m_clock.getByoyomiMoves();
         }
         try
         {
