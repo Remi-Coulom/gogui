@@ -57,59 +57,52 @@ JAR= \
   sgftotex.jar \
   twogtp.jar
 
+JAVAOPT=-deprecation -sourcepath . -source 1.4
+
 all: $(JAR)
 
-gogui.jar: doc/html/index.html $(shell cat build/files-gogui.txt)
-	mkdir -p build/gogui
-	javac -O -deprecation -sourcepath . -source 1.4 -d build/gogui @build/files-gogui.txt
-	mkdir -p build/gogui/doc
-	cp -R doc/html/* build/gogui/doc
-	mkdir -p build/gogui/images
-	for i in $(IMAGES); do cp $$i build/gogui/$$i; done 
-	jar cmf build/manifest-gogui.txt gogui.jar -C build/gogui .
+gogui.jar: build/gogui/doc/index.html $(patsubst %, build/gogui/%, $(IMAGES)) $(shell cat build/files-gogui.txt)
 
 gmptogtp.jar: $(shell cat build/files-gmptogtp.txt)
-	mkdir -p build/gmptogtp
-	javac -O -deprecation -sourcepath . -source 1.4 -d build/gmptogtp @build/files-gmptogtp.txt
-	jar cmf build/manifest-gmptogtp.txt gmptogtp.jar -C build/gmptogtp .
-
-netgtp.jar: $(shell cat build/files-netgtp.txt)
-	mkdir -p build/netgtp
-	javac -O -deprecation -sourcepath . -source 1.4 -d build/netgtp @build/files-netgtp.txt
-	jar cmf build/manifest-netgtp.txt netgtp.jar -C build/netgtp .
 
 gtpnet.jar: $(shell cat build/files-gtpnet.txt)
-	mkdir -p build/gtpnet
-	javac -O -deprecation -sourcepath . -source 1.4 -d build/gtpnet @build/files-gtpnet.txt
-	jar cmf build/manifest-gtpnet.txt gtpnet.jar -C build/gtpnet .
+
+netgtp.jar: $(shell cat build/files-netgtp.txt)
 
 sgftotex.jar: $(shell cat build/files-sgftotex.txt)
-	mkdir -p build/sgftotex
-	javac -O -deprecation -sourcepath . -source 1.4 -d build/sgftotex @build/files-sgftotex.txt
-	jar cmf build/manifest-sgftotex.txt sgftotex.jar -C build/sgftotex .
 
 twogtp.jar: $(shell cat build/files-twogtp.txt)
-	mkdir -p build/twogtp
-	javac -O -deprecation -sourcepath . -source 1.4 -d build/twogtp @build/files-twogtp.txt
-	jar cmf build/manifest-twogtp.txt twogtp.jar -C build/twogtp .
+
+build/gogui/doc/index.html: doc/html/index.html
+	mkdir -p build/gogui/doc
+	cp -R doc/html/* build/gogui/doc
+
+build/gogui/images/%.png: images/%.png
+	mkdir -p build/gogui/images
+	cp $< $@
+
+%.jar: build/files-%.txt
+	mkdir -p build/$*
+	javac -O $(JAVAOPT) -d build/$* @build/files-$*.txt
+	jar cmf build/manifest-$*.txt $*.jar -C build/$* .
 
 .PHONY: changelog clean gogui_debug srcdoc tags
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
-gogui_debug: doc/html/index.html $(shell cat build/files-gogui.txt)
+gogui_debug: doc/html/index.html $(IMAGES) $(shell cat build/files-gogui.txt)
 	mkdir -p build/gogui_debug
-	javac -g -deprecation -sourcepath . -source 1.4 -d build/gogui_debug @build/files-gogui.txt
+	javac -g $(JAVAOPT) -d build/gogui_debug @build/files-gogui.txt
 	mkdir -p build/gogui_debug/doc
+	cp -R doc/html/* build/gogui_debug/doc
 	mkdir -p build/gogui_debug/images
 	for i in $(IMAGES); do cp $$i build/gogui_debug/$$i; done 
-	cp -R doc/html/* build/gogui_debug/doc
 
 src/gui/Version.java: build/version.txt
-	sed 's/m_version = \".*\"/m_version = \"$(VERSION)\"/' <src/gui/Version.java >src/gui/.Version.java.new
+	sed 's/m_version = \".*\"/m_version = \"$(shell cat build/version.txt)\"/' <src/gui/Version.java >src/gui/.Version.java.new
 	mv src/gui/.Version.java.new src/gui/Version.java
 
 clean:
-	-rm -rf build/gogui build/gogui_debug build/gtpnet build/gmptogtp build/netgtp build/sgftotex build/twogtp $(JAR)
+	-rm -rf $(patsubst %.jar, build/%, $(JAR)) $(JAR)
 
 doc/html/index.html: $(DOC) build/version.txt
 	cp build/version.txt doc/xml/version.xml
