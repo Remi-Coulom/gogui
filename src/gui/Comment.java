@@ -35,10 +35,10 @@ public class Comment
 {
     public interface Listener
     {
-        public void changed();
+        void changed();
 
         /** Callback if some text is selected. */
-        public void textSelected(String text);
+        void textSelected(String text);
     }
 
     public Comment(Listener listener)

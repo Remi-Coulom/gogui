@@ -231,14 +231,13 @@ public class GtpShell
 {
     public interface Callback
     {
-        public void cbAnalyze();
+        void cbAnalyze();
 
-        public void cbShowGameTree();
+        void cbShowGameTree();
 
-        public boolean sendGtpCommand(String command, boolean sync)
-            throws GtpError;
+        boolean sendGtpCommand(String command, boolean sync) throws GtpError;
 
-        public void toTop();
+        void toTop();
     }
 
     public GtpShell(String appName, Callback callback, Preferences prefs)

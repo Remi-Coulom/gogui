@@ -42,7 +42,7 @@ public class TextViewer
             If text is unselected again this function will be called
             with the complete text content of the window.
         */
-        public void textSelected(String text);
+        void textSelected(String text);
     }
 
     public TextViewer(Frame owner, String title, String text,

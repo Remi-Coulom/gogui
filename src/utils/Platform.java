@@ -19,11 +19,11 @@ public class Platform
     /** Handler for events from the Application Menu on MacOS. */
     public interface SpecialMacHandler
     {
-        public boolean handleAbout();
+        boolean handleAbout();
 
-        public boolean handleOpenFile(String filename);
+        boolean handleOpenFile(String filename);
 
-        public boolean handleQuit();
+        boolean handleQuit();
     }
 
     /** Check if the platform is Mac OS X. */

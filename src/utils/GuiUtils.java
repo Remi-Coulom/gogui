@@ -28,7 +28,7 @@ public class GuiUtils
 {
     public interface ProgressRunnable
     {
-        public void run(ProgressShow progressShow) throws Throwable;
+        void run(ProgressShow progressShow) throws Throwable;
     }
 
     public static final int PAD = 5;

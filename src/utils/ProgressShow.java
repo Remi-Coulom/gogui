@@ -9,7 +9,7 @@ package utils;
 
 public interface ProgressShow
 {
-    public void showProgress(int percent);
+    void showProgress(int percent);
 }
 
 //----------------------------------------------------------------------------

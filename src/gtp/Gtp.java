@@ -51,7 +51,7 @@ public final class Gtp
     */
     public interface TimeoutCallback
     {
-        public boolean askContinue();
+        boolean askContinue();
     }
 
     /** Callback if an invalid response occured.
@@ -65,19 +65,19 @@ public final class Gtp
     */
     public interface InvalidResponseCallback
     {
-        public void show(String line);
+        void show(String line);
     }
 
     /** Callback interface for logging or displaying the GTP stream. */
     public interface IOCallback
     {
-        public void receivedInvalidResponse(String s);
+        void receivedInvalidResponse(String s);
 
-        public void receivedResponse(boolean error, String s);
+        void receivedResponse(boolean error, String s);
 
-        public void receivedStdErr(String s);
+        void receivedStdErr(String s);
 
-        public void sentCommand(String s);
+        void sentCommand(String s);
     }    
 
     /** Constructor.

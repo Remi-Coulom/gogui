@@ -855,15 +855,15 @@ public class GameTreeViewer
 {
     public interface Listener
     {
-        public void gotoNode(Node node);
+        void gotoNode(Node node);
 
-        public void cbAnalyze();
+        void cbAnalyze();
 
-        public void cbGtpShell();
+        void cbGtpShell();
 
-        public void disposeGameTree();
+        void disposeGameTree();
 
-        public void toTop();
+        void toTop();
     }
 
     public GameTreeViewer(Listener listener, boolean fastPaint,

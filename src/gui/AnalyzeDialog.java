@@ -59,16 +59,16 @@ public class AnalyzeDialog
 {
     public interface Callback
     {
-        public void cbGtpShell();
+        void cbGtpShell();
         
-        public void cbShowGameTree();
+        void cbShowGameTree();
         
-        public void clearAnalyzeCommand();
+        void clearAnalyzeCommand();
         
-        public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
-                                      boolean clearBoard);
+        void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
+                               boolean clearBoard);
         
-        public void toTop();
+        void toTop();
     }
 
     public AnalyzeDialog(Callback callback, Preferences prefs,
