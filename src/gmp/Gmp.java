@@ -205,9 +205,9 @@ class ReadThread
     {
         synchronized (this)
         {
-            if (m_status == STATUS_IDLE)
+            if (m_state == STATE_IDLE)
             {
-                m_status = STATUS_INTERRUPTED;
+                m_state = STATE_INTERRUPTED;
                 notifyAll();
             }
         }
@@ -223,7 +223,7 @@ class ReadThread
                 if (b < 0)
                 {
                     log("input stream was closed");
-                    m_status = STATUS_DISCONNECTED;
+                    m_state = STATE_DISCONNECTED;
                     break;
                 }
                 log("recv " + format(b));
@@ -241,12 +241,12 @@ class ReadThread
 
     public synchronized boolean send(Cmd cmd, StringBuffer response)
     {
-        if (m_status == STATUS_WAIT_OK)
+        if (m_state == STATE_WAIT_OK)
         {
             response.append("Command in progress");
             return false;
         }
-        if (m_status == STATUS_DISCONNECTED)
+        if (m_state == STATE_DISCONNECTED)
         {
             response.append("GMP connection broken");
             return false;
@@ -274,19 +274,19 @@ class ReadThread
             {
                 System.err.println("Interrupted.");
             }
-            switch (m_status)
+            switch (m_state)
             {
-            case STATUS_IDLE:
+            case STATE_IDLE:
                 return true;
-            case STATUS_DENY:
+            case STATE_DENY:
                 response.append("Command denied.");
-                m_status = STATUS_IDLE;
+                m_state = STATE_IDLE;
                 return false;
-            case STATUS_CONFLICT:
+            case STATE_CONFLICT:
                 response.append("Conflict.");
-                m_status = STATUS_IDLE;
+                m_state = STATE_IDLE;
                 return false;
-            case STATUS_WAIT_OK:
+            case STATE_WAIT_OK:
                 continue;
             default:
                 return false;
@@ -338,16 +338,16 @@ class ReadThread
                 m_cmdStack.remove(0);
                 return result;
             }
-            if (m_status == STATUS_DISCONNECTED)
+            if (m_state == STATE_DISCONNECTED)
             {
                 result.m_response = "GMP connection broken";
                 return result;
             }
             try
             {
-                assert(m_status == STATUS_IDLE);
+                assert(m_state == STATE_IDLE);
                 wait();
-                if (m_status == STATUS_INTERRUPTED)
+                if (m_state == STATE_INTERRUPTED)
                 {
                     result.m_response = "Interrupted";
                     return result;
@@ -366,17 +366,17 @@ class ReadThread
 
     private static final int QUERY_COLOR = 11;
 
-    private static final int STATUS_IDLE = 0;
+    private static final int STATE_IDLE = 0;
 
-    private static final int STATUS_DISCONNECTED = 1;
+    private static final int STATE_DISCONNECTED = 1;
 
-    private static final int STATUS_WAIT_OK = 2;
+    private static final int STATE_WAIT_OK = 2;
 
-    private static final int STATUS_CONFLICT = 3;
+    private static final int STATE_CONFLICT = 3;
 
-    private static final int STATUS_DENY = 4;
+    private static final int STATE_DENY = 4;
 
-    private static final int STATUS_INTERRUPTED = 5;
+    private static final int STATE_INTERRUPTED = 5;
 
     private boolean m_hisLastSeq = false;
 
@@ -384,7 +384,7 @@ class ReadThread
 
     private byte[] m_outputBuffer = new byte[4];
 
-    private int m_status = STATUS_IDLE;
+    private int m_state = STATE_IDLE;
 
     private int m_colorIndex = 0;
 
@@ -525,7 +525,7 @@ class ReadThread
         {
             m_cmdStack.add(cmd);
             sendOk();
-            m_status = STATUS_IDLE;
+            m_state = STATE_IDLE;
         }
     }
 
@@ -534,7 +534,7 @@ class ReadThread
         Cmd cmd = getCmd();
         boolean seq = getSeq();
         boolean ack = getAck();
-        if (m_status == STATUS_WAIT_OK)
+        if (m_state == STATE_WAIT_OK)
         {
             if (cmd.m_cmd == Cmd.OK)
             {
@@ -544,7 +544,7 @@ class ReadThread
                     return;
                 }
                 log("received OK");
-                m_status = STATUS_IDLE;
+                m_state = STATE_IDLE;
                 return;
             }
             if (seq == m_hisLastSeq)
@@ -555,20 +555,20 @@ class ReadThread
             }
             if (ack == m_myLastSeq)
             {
-                m_status = STATUS_IDLE;
+                m_state = STATE_IDLE;
                 m_hisLastSeq = seq;
                 handleCmd(cmd);
                 notifyAll();
                 return;
             }
             log("conflict");
-            m_status = STATUS_CONFLICT;
+            m_state = STATE_CONFLICT;
             m_myLastSeq = ! m_myLastSeq;
             notifyAll();
         }
         else
         {
-            assert(m_status == STATUS_IDLE);
+            assert(m_state == STATE_IDLE);
             if (cmd.m_cmd == Cmd.OK)
             {
                 log("ignoring unexpected OK");
@@ -621,7 +621,7 @@ class ReadThread
             setChecksum();
             writeOutputBuffer();
             if (cmd != Cmd.OK)
-                m_status = STATUS_WAIT_OK;
+                m_state = STATE_WAIT_OK;
             return true;
         }
         catch (IOException e)
