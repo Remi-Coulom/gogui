@@ -136,7 +136,7 @@ public class Writer
                 DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                DateFormat.FULL);
             Date date = Calendar.getInstance().getTime();
-            m_out.println("GC[" + gameComment + "\nDate:\n" +
+            m_out.println("GC[" + gameComment + "\nDate: " +
                           format.format(date) + "]");
         }
     }
