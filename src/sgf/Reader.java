@@ -256,6 +256,8 @@ public class Reader
                 if (! v.equals("1") && ! v.equals(""))
                     throw getError("Not a Go game.");
             }
+            else if (p.equals("HA"))
+                m_gameInformation.m_handicap = Integer.parseInt(v);
             else if (p.equals("KM"))
                 m_gameInformation.m_komi = parseFloat(v);
             else if (p.equals("OB"))
