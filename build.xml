@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+Build file for Apache Ant (http://ant.apache.org/)
+
+$Id$
+$Source$
+-->
+
+<project name="GoGui" default="all">
+
+<target name="all" depends="gogui.jar"/>
+
+<target name="compile">
+<javac srcdir="src" destdir="build" source="1.4" deprecation="true">
+</javac>
+</target>
+
+<target name="gogui.jar" depends="compile">
+<jar destfile="gogui.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="gui.GoGui"/>
+</manifest>
+<fileset dir="build" includes="
+  go/*.class
+  gtp/*.class
+  gui/*.class
+  latex/*.class
+  sgf/*.class
+  utils/*.class
+  version/*.class
+"/>
+<fileset dir="." includes="images/*.png"/>
+</jar>
+</target>
+
+</project>
