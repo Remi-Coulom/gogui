@@ -836,29 +836,7 @@ class GoGui
                     statusContainsResponse = true;
                 }
                 else
-                {
-                    boolean highlight =
-                        (type == AnalyzeCommand.HSTRING
-                         || type == AnalyzeCommand.HPSTRING);
-                    AnalyzeTextOutput.Listener listener = null;
-                    if (type == AnalyzeCommand.PSTRING
-                        || type == AnalyzeCommand.HPSTRING)
-                    {
-                        listener = new AnalyzeTextOutput.Listener()
-                            {
-                                public void textSelected(String text)
-                                {
-                                    go.Point list[] =
-                                        Gtp.parsePointString(text,
-                                                             m_boardSize);
-                                    m_guiBoard.showPointList(list);
-                                    m_guiBoard.repaint();
-                                }
-                            };
-                    }
-                    new AnalyzeTextOutput(this, title, response, highlight,
-                                          listener);
-                }
+                    showAnalyzeTextOutput(type, title, response);
             }
             if (! statusContainsResponse)
                 showStatus(title);
@@ -2515,6 +2493,28 @@ class GoGui
         updateGameInfo(true);
         boardChangedBegin(false, false);
         setFastUpdate(false);
+    }
+
+    private void showAnalyzeTextOutput(int type, String title,
+                                       String response)
+    {
+        boolean highlight = (type == AnalyzeCommand.HSTRING
+                             || type == AnalyzeCommand.HPSTRING);
+        AnalyzeTextOutput.Listener listener = null;
+        if (type == AnalyzeCommand.PSTRING || type == AnalyzeCommand.HPSTRING)
+        {
+            listener = new AnalyzeTextOutput.Listener()
+                {
+                    public void textSelected(String text)
+                    {
+                        go.Point list[] =
+                            Gtp.parsePointString(text, m_boardSize);
+                        m_guiBoard.showPointList(list);
+                        m_guiBoard.repaint();
+                    }
+                };
+        }
+        new AnalyzeTextOutput(this, title, response, highlight, listener);
     }
 
     private void showError(String message, Exception e)
