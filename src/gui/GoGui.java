@@ -1536,6 +1536,17 @@ class GoGui
         {
             m_commandThread.sendCommandsClearBoard(size);
             setTimeSettings();
+            if (m_commandThread.isCommandSupported("gogui_title"))
+            {
+                try
+                {
+                    String title = m_commandThread.sendCommand("gogui_title");
+                    setTitle(title);
+                }
+                catch (Gtp.Error e)
+                {
+                }
+            }
         }
         if (size != m_boardSize)
         {

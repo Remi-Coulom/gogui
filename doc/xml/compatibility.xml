@@ -95,11 +95,33 @@
     
     <para>
       The command <userinput>scoring_system</userinput>
-      (from an early draft of GTP
-      version 2 ) is used for setting Japanese or Chinese rules,
-      if the program supports it.
+      (from an early draft of GTP version 2) is used for setting Japanese or
+      Chinese rules, if the program supports it.
       Otherwise the rule settings are quietly ignored.
     </para>
+
+    <para>
+      The following GoGui specific GTP extension commands are used if
+      supported by the program:
+    </para>
+
+    <variablelist>
+      <varlistentry>
+	<term><userinput>gogui_sigint</userinput></term>
+        <listitem>
+	  See <xref linkend="interrupt"></xref>.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><userinput>gogui_title</userinput></term>
+        <listitem>
+	  For providing a window title, which may be game specific or include
+	  a player name that is not known at program creation time.
+	  The title is queried and set after a new game is started.
+	</listitem>
+      </varlistentry>
+    </variablelist>
+
   </section>
   
 </chapter>

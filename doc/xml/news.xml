@@ -25,6 +25,10 @@
 	    <guimenuitem>Show last move</guimenuitem>.
 	  </listitem>
 	  <listitem>
+	    GoGui uses GTP extension command <userinput>gogui_title</userinput>
+	    if available.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>
