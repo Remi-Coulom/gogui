@@ -156,7 +156,7 @@ public class Writer
                     printCoordinates(point);
                 }
                 else
-                    m_out.print(" % pass");
+                    m_out.print(" % \\pass");
                 m_out.println(" % " + (blackToMove ? "B " : "W ") + (i + 1));
                 continue;
             }
