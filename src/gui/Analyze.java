@@ -684,7 +684,9 @@ class AnalyzeDialog
         }
         boolean autoRun = m_autoRun.isSelected();
         boolean clearBoard = m_clearBoard.isSelected();
-        m_callback.setAnalyzeCommand(command, autoRun, clearBoard);
+        if (clearBoard)
+            m_callback.clearAnalyzeCommand();
+        m_callback.setAnalyzeCommand(command, autoRun, false);
         m_clearButton.setEnabled(autoRun);
         m_list.requestFocus();
     }
