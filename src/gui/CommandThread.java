@@ -207,6 +207,11 @@ class CommandThread
         return m_gtp.sendCommandPlay(move);
     }
 
+    public void setFastUpdate(boolean fastUpdate)
+    {
+        m_gtp.setFastUpdate(fastUpdate);
+    }
+
     private boolean m_commandInProgress;
 
     private Gtp m_gtp;

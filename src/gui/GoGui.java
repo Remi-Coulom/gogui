@@ -671,6 +671,11 @@ class GoGui
     {
         try
         {
+            if (m_commandThread != null)
+            {
+                m_commandThread.setFastUpdate(true);
+                m_gtpShell.setFastUpdate(true);
+            }
             for (int i = 0; i < n; ++i)
             {
                 if (m_board.getMoveNumber() == 0)
@@ -678,6 +683,11 @@ class GoGui
                 if (m_commandThread != null)
                     m_commandThread.sendCommand("undo");
                 m_board.undo();
+            }
+            if (m_commandThread != null)
+            {
+                m_commandThread.setFastUpdate(false);
+                m_gtpShell.setFastUpdate(false);
             }
             computerNone();
             boardChanged();
@@ -1303,6 +1313,11 @@ class GoGui
     {
         try
         {
+            if (m_commandThread != null)
+            {
+                m_commandThread.setFastUpdate(true);
+                m_gtpShell.setFastUpdate(true);
+            }
             for (int i = 0; i < n; ++i)
             {
                 int moveNumber = m_board.getMoveNumber();
@@ -1310,6 +1325,11 @@ class GoGui
                     break;
                 Move move = m_board.getMove(moveNumber);
                 play(move);
+            }
+            if (m_commandThread != null)
+            {
+                m_commandThread.setFastUpdate(false);
+                m_gtpShell.setFastUpdate(false);
             }
         }
         catch (Gtp.Error e)

@@ -280,6 +280,12 @@ public class GtpShell
 
     public void receivedResponse(boolean error, String response)
     {
+        if (m_fastUpdate)
+        {
+            assert(SwingUtilities.isEventDispatchThread());
+            appendResponse(error, response);
+            return;
+        }
         Runnable r = new UpdateResponse(this, error, response);
         SwingUtilities.invokeLater(r);
     }
@@ -371,6 +377,12 @@ public class GtpShell
 
     public void sentCommand(String command)
     {
+        if (m_fastUpdate)
+        {
+            assert(SwingUtilities.isEventDispatchThread());
+            appendSentCommand(command);
+            return;
+        }
         Runnable r = new UpdateCommand(this, command);
         SwingUtilities.invokeLater(r);
     }
@@ -393,6 +405,16 @@ public class GtpShell
         {
         }
 
+    }
+
+    /** Directly update new stdin/stdout of program.
+        Faster but increases the probablitiy of changing the order of
+        stderr/stdout (stderr is always updated from a different thread).
+     */
+    public void setFastUpdate(boolean fastUpdate)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        m_fastUpdate = fastUpdate;
     }
 
     public void setInitialCompletions(Vector completions)
@@ -476,6 +498,8 @@ public class GtpShell
 
         private GtpShell m_gtpShell;
     }
+
+    private boolean m_fastUpdate;
 
     private boolean m_isEmpty = true;
 
