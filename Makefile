@@ -97,7 +97,7 @@ build/gogui/images/%.png: images/%.png
 	javac -O $(JAVAOPT) -d build/$* @build/files-$*.txt
 	jar cmf build/manifest-$*.txt $*.jar -C build/$* .
 
-.PHONY: changelog clean gogui_debug srcdoc tags
+.PHONY: changelog clean gogui_debug docsrc tags
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
 gogui_debug: doc/html/index.html $(IMAGES) $(shell cat build/files-gogui.txt)
