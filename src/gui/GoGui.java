@@ -57,11 +57,6 @@ class GoGui
 
         m_board = new go.Board(m_boardSize);
 
-        m_gameTree = new GameTree(m_boardSize, prefs.getFloat("komi"), null,
-                                  prefs.getString("rules"));
-        m_currentNode = m_gameTree.getRoot();
-        m_currentNodeExecuted = 0;
-
         m_guiBoard = new Board(m_board);
         m_guiBoard.setListener(this);
         m_toolBar = new ToolBar(this, prefs);
@@ -1412,6 +1407,7 @@ class GoGui
 
     private void checkComputerMove()
     {
+        m_timeControl.startMove(m_board.getToMove());
         if (m_commandThread == null || ! isCurrentNodeExecuted())
             return;
         if (m_computerBlack && m_computerWhite)
@@ -1811,6 +1807,7 @@ class GoGui
         m_guiBoard.updateFromGoBoard();
         resetBoard();
         m_timeControl.reset();
+        m_timeControl.startMove(go.Color.BLACK);
         m_lostOnTimeShown = false;
         m_needsSave = false;
         m_resigned = false;
@@ -1818,10 +1815,12 @@ class GoGui
 
     private void initialize()
     {
-        m_toolBar.enableAll(true, m_currentNode);
         File file = null;
         if (! m_file.equals(""))
             newGameFile(m_boardSize, new File(m_file), m_move);
+        else
+            newGame(m_boardSize);
+        m_toolBar.enableAll(true, m_currentNode);
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
