@@ -33,9 +33,10 @@ public class Reader
             m_file = file;
             m_boardSize = 19;
             m_moves.clear();
+            m_toMove = Color.BLACK;
             m_tokenizer.nextToken();
             if (m_tokenizer.ttype != '(')
-                loadError("No root tree found.");
+                throw getError("No root tree found.");
             readNextNode(true);
             while (readNextNode(false));
         }
@@ -74,6 +75,11 @@ public class Reader
         return m_setupWhite;
     }
 
+    public Color getToMove()
+    {
+        return m_toMove;
+    }
+
     private int m_boardSize;
     private float m_komi;
     private File m_file;
@@ -82,6 +88,7 @@ public class Reader
     private Vector m_moves = new Vector(361, 361);
     private Vector m_setupBlack = new Vector(128, 64);
     private Vector m_setupWhite = new Vector(128, 64);
+    private Color m_toMove;
 
     private void discardSubtree() throws IOException, Error
     {
@@ -92,17 +99,30 @@ public class Reader
         else if (ttype == ')')
             return;
         else if (ttype != ';')
-            loadError("Next node expected");
+            throw getError("Next node expected");
         else
             while (readNextProp(false));
     }
     
-    private void loadError(String message) throws Error
+    private Error getError(String message)
     {
         // Note: lineno() does not work correctly for Unix line endings
         // (Sun Java 1.4.0 Linux)
         String s = m_file + ":" + m_tokenizer.lineno() + ":\n" + message;
-        throw new Error(s);
+        return new Error(s);
+    }
+
+    private Color parseColor(String s) throws Error
+    {
+        Color c;
+        s = s.trim().toLowerCase();
+        if (s.equals("b"))
+            c = Color.BLACK;
+        else if (s.equals("w"))
+            c = Color.WHITE;
+        else
+            throw getError("Invalid color value.");
+        return c;
     }
 
     private float parseFloat(String s) throws Error
@@ -114,7 +134,7 @@ public class Reader
         }
         catch (NumberFormatException e)
         {
-            loadError("Floating point number expected.");
+            throw getError("Floating point number expected.");
         }
         return f;
     }
@@ -128,7 +148,7 @@ public class Reader
         }
         catch (NumberFormatException e)
         {
-            loadError("Number expected.");
+            throw getError("Number expected.");
         }
         return i;
     }
@@ -139,13 +159,13 @@ public class Reader
         if (s.equals(""))
             return null;
         if (s.length() < 2)
-            loadError("Invalid coordinates.");
+            throw getError("Invalid coordinates.");
         if (s.equals("tt") && m_boardSize <= 19)
             return null;
         int x = s.charAt(0) - 'a';
         int y = m_boardSize - (s.charAt(1) - 'a') - 1;
         if (x < 0 || x >= m_boardSize || y < 0 || y >= m_boardSize)
-            loadError("Invalid coordinates.");
+            throw getError("Invalid coordinates.");
         return new Point(x, y);
     }
 
@@ -158,7 +178,7 @@ public class Reader
         else if (ttype == ')')
             return false;
         else if (ttype != ';')
-            loadError("Next node expected");
+            throw getError("Next node expected");
         while (readNextProp(isRoot));
         return true;
     }
@@ -175,19 +195,19 @@ public class Reader
             while ((s = readValue()) != null)
                 values.add(s);
             if (values.size() == 0)
-                loadError("Property '" + p + "' has no value.");
+                throw getError("Property '" + p + "' has no value.");
             String v = (String)values.get(0);
             if (p.equals("AB"))
             {
                 if (m_moves.size() > 0)
-                    loadError("Setup stones after moves not supported.");
+                    throw getError("Setup stones after moves not supported.");
                 for (int i = 0; i < values.size(); ++i)
                     m_setupBlack.add(parsePoint((String)values.get(i)));
             }
             else if (p.equals("AW"))
             {
                 if (m_moves.size() > 0)
-                    loadError("Setup stones after moves not supported.");
+                    throw getError("Setup stones after moves not supported.");
                 for (int i = 0; i < values.size(); ++i)
                     m_setupWhite.add(parsePoint((String)values.get(i)));
             }
@@ -198,16 +218,22 @@ public class Reader
             else if (p.equals("GM"))
             {
                 if (! v.trim().equals("1"))
-                    loadError("Not a Go game.");
+                    throw getError("Not a Go game.");
             }
             else if (p.equals("KM"))
             {
                 m_komi = parseFloat(v);
             }
+            else if (p.equals("PL"))
+            {
+                if (m_moves.size() > 0)
+                    throw getError("Set player after moves not supported.");
+                m_toMove = parseColor(v);
+            }
             else if (p.equals("SZ"))
             {
                 if (! isRoot)
-                    loadError("Size property outside root node.");
+                    throw getError("Size property outside root node.");
                 m_boardSize = parseInt(v);
             }
             else if (p.equals("W"))
@@ -235,7 +261,7 @@ public class Reader
         {
             int c = m_in.read();
             if (c < 0)
-                loadError("Property value incomplete.");
+                throw getError("Property value incomplete.");
             if (! quoted && c == ']')
                 break;
             v += (char)c;
