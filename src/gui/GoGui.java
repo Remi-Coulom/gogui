@@ -1304,29 +1304,9 @@ class GoGui
             return;
         if (m_commandInProgress)
         {
-            int messageType = JOptionPane.YES_NO_CANCEL_OPTION;
-            int result =
-                JOptionPane.showConfirmDialog(this,
-                                              "Kill program?",
-                                              "GoGui: Question",
-                                              messageType);
-            switch (result)
-            {
-            case 0:
-                m_commandThread.destroyGtp();
-                break;
-            case 1:
-                if (m_commandThread.isInterruptSupported())
-                    sendInterrupt();
-                m_commandThread.sendAsyncQuit();
-                break;
-            case -1:
-            case 2:
+            if (! showQuestion("Command in progess. Kill program?"))
                 return;
-            default:
-                assert(false);
-                break;
-            }
+            m_commandThread.destroyGtp();
             m_commandThread.close();
         }
         else

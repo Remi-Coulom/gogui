@@ -161,18 +161,6 @@ class CommandThread
         }
     }
 
-    public void sendAsyncQuit()
-    {
-        assert(SwingUtilities.isEventDispatchThread());
-        try
-        {
-            m_gtp.sendCommand("quit");
-        }
-        catch (Gtp.Error e)
-        {
-        }
-    }
-
     /** Send asynchronous command. */
     public void sendCommand(String command, Runnable callback)
     {
