@@ -65,13 +65,14 @@ Otherwise pass moves are printed as a combination of
 </listitem>
 </varlistentry>
 
-</variablelist>
 <varlistentry>
 <term><option>-version</option></term>
 <listitem>
 Print version and exit.
 </listitem>
 </varlistentry>
+
+</variablelist>
 
 </refsection>
 

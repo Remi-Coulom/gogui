@@ -54,7 +54,6 @@ Display help and exit.
 </listitem>
 </varlistentry>
 
-</variablelist>
 <varlistentry>
 <term><option>-version</option></term>
 <listitem>
@@ -62,6 +61,7 @@ Print version and exit.
 </listitem>
 </varlistentry>
 
+</variablelist>
 </refsection>
 
 </refentry>
