@@ -39,6 +39,8 @@ public final class Gtp
 
     public interface IOCallback
     {
+        public void receivedInvalidResponse(String s);
+
         public void receivedResponse(boolean error, String s);
 
         public void receivedStdErr(String s);
@@ -712,7 +714,10 @@ public final class Gtp
             StringBuffer response = new StringBuffer(line);
             response.append("\n");
             if (! isResponseLine(line))
-                throw new Error("Invalid response:\n\"" + line + "\"");
+            {
+                m_callback.receivedInvalidResponse(response.toString());
+                throw new Error("Invalid response:\n" + line);
+            }
             boolean error = (line.charAt(0) != '=');
             boolean done = false;
             while (! done)

@@ -828,6 +828,8 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            showGtpError(e);
+            return;
         }
         finally
         {

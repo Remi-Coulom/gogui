@@ -38,6 +38,9 @@ class GtpShellText
         StyleConstants.setBold(output, true);
         Style log = addStyle("log", def);
         StyleConstants.setForeground(log, new Color(0.5f, 0.5f, 0.5f));
+        Style invalid = addStyle("invalid", def);
+        StyleConstants.setForeground(invalid, Color.white);
+        StyleConstants.setBackground(invalid, Color.red);
         setEditable(false);
     }
 
@@ -54,6 +57,11 @@ class GtpShellText
     public void appendInput(String text)
     {
         appendText(text, null);
+    }
+
+    public void appendInvalidResponse(String text)
+    {
+        appendText(text, "invalid");
     }
 
     public void appendLog(String text)
@@ -276,6 +284,12 @@ public class GtpShell
         }
     }
 
+    public void receivedInvalidResponse(String response)
+    {
+        Runnable r = new UpdateInvalidResponse(this, response);
+        SwingUtilities.invokeLater(r);
+    }
+    
     public void receivedResponse(boolean error, String response)
     {
         if (m_fastUpdate)
@@ -529,6 +543,24 @@ public class GtpShell
         private GtpShell m_gtpShell;
     }
 
+    private static class UpdateInvalidResponse implements Runnable
+    {
+        public UpdateInvalidResponse(GtpShell gtpShell, String text)
+        {
+            m_gtpShell = gtpShell;
+            m_text = text;
+        }
+
+        public void run()
+        {
+            m_gtpShell.appendInvalidResponse(m_text);
+        }
+
+        private String m_text;
+
+        private GtpShell m_gtpShell;
+    }
+
     private static class UpdateResponse implements Runnable
     {
         public UpdateResponse(GtpShell gtpShell, boolean error, String text)
@@ -671,6 +703,12 @@ public class GtpShell
         return addMenuItem(menu, item, mnemonic, command);
     }
 
+    private void appendInvalidResponse(String response)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        m_gtpShellText.appendInvalidResponse(response);
+    }
+    
     private void appendResponse(boolean error, String response)
     {
         assert(SwingUtilities.isEventDispatchThread());
