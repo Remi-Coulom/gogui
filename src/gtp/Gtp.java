@@ -57,7 +57,8 @@ public final class Gtp
             // RAND_MAX in stdlib.h ist at least 32767
             final int RAND_MAX = 32767;
             int rand = (int)(Math.random() * (RAND_MAX + 1));
-            m_program = m_program.replaceAll("%SRAND", Integer.toString(rand));
+            m_program = StringUtils.replace(m_program, "%SRAND",
+                                            Integer.toString(rand));
         }
         Runtime runtime = Runtime.getRuntime();
         try
@@ -455,7 +456,7 @@ public final class Gtp
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
         String response = sendCommand(command);
-        m_supportedCommands = response.split("\\n");
+        m_supportedCommands = StringUtils.tokenize(response);
         for (int i = 0; i < m_supportedCommands.length; ++i)
             m_supportedCommands[i] = m_supportedCommands[i].trim();
     }
