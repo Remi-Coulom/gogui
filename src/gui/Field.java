@@ -179,6 +179,7 @@ public class Field
 
     public void setTerritory(go.Color color)
     {
+        assert(color != null);
         m_territory = color;
     }
 
