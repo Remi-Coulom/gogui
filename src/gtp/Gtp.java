@@ -516,8 +516,6 @@ public final class Gtp
 
     private boolean m_log;
 
-    private boolean m_timedOut;
-
     private int m_protocolVersion = 1;
 
     private int m_commandNumber;
