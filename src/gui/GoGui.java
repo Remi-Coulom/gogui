@@ -1853,6 +1853,7 @@ class GoGui
                 forward(move);
             m_loadedFile = file;
             setTitle();
+            SimpleDialogs.setLastFile(file);
             boardChangedBegin(false);
         }
         catch (FileNotFoundException e)

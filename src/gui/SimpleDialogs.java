@@ -96,15 +96,23 @@ public class SimpleDialogs
                                       JOptionPane.WARNING_MESSAGE);
     }
 
+    public static void setLastFile(File file)
+    {
+        m_lastFile = file;
+    }
+
     private static final String m_titlePrefix = "GoGui: ";
 
-    private static String m_lastFile;
+    private static File m_lastFile;
 
     private static File showSgfFileChooser(Component frame, int type,
                                            boolean setSgfFilter, String title)
     {
         if (m_lastFile == null)
-            m_lastFile = System.getProperties().getProperty("user.dir");
+        {
+            String userDir = System.getProperties().getProperty("user.dir");
+            m_lastFile = new File(userDir);
+        }
         JFileChooser chooser = new JFileChooser(m_lastFile);
         chooser.setMultiSelectionEnabled(false);
         javax.swing.filechooser.FileFilter sgfFilter = new sgf.Filter();
@@ -133,7 +141,7 @@ public class SimpleDialogs
         if (ret != JFileChooser.APPROVE_OPTION)
             return null;
         File file = chooser.getSelectedFile();
-        m_lastFile = file.toString();
+        m_lastFile = file;
         return file;
     }
 }
