@@ -7,8 +7,7 @@
     <refname>gmptogtp</refname>
     <refname>gmptogtp.jar</refname>
     <refpurpose>
-       Go Text Protocol adpater for playing games using the
-       Go Modem Protocol over a serial line.
+       Adpater from Go Text Protocol to Go Modem Protocol.
     </refpurpose>
   </refnamediv>
   <refsynopsisdiv>
