@@ -29,20 +29,19 @@ class Comment
     public Comment(Listener listener)
     {
         m_listener = listener;
-        m_textArea = new JTextArea();
-        m_textArea.setColumns(20);
-        m_textArea.setLineWrap(true);
-        m_textArea.setWrapStyleWord(true);
-        m_textArea.getDocument().addDocumentListener(this);
+        m_textPane = new JTextPane();
+        int fontSize = GuiUtils.getDefaultMonoFontSize();
+        setPreferredSize(new Dimension(20 * fontSize, 20 * fontSize));
+        m_textPane.getDocument().addDocumentListener(this);
         Set forwardSet  = new HashSet();
         forwardSet.add(KeyStroke.getKeyStroke("TAB"));
         int forwardId = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
-        m_textArea.setFocusTraversalKeys(forwardId, forwardSet);
+        m_textPane.setFocusTraversalKeys(forwardId, forwardSet);
         Set backwardSet  = new HashSet();
         backwardSet.add(KeyStroke.getKeyStroke("shift TAB"));
         int backwardId = KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS;
-        m_textArea.setFocusTraversalKeys(backwardId, backwardSet);
-        setViewportView(m_textArea);
+        m_textPane.setFocusTraversalKeys(backwardId, backwardSet);
+        setViewportView(m_textPane);
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
@@ -52,6 +51,11 @@ class Comment
         copyContentToNode();
     }
 
+    public boolean getScrollableTracksViewportWidth()
+    {
+        return true;
+    }
+ 
     public void insertUpdate(DocumentEvent e)
     {
         copyContentToNode();
@@ -71,15 +75,15 @@ class Comment
         // setText() generates a remove and insert event, and
         // we don't want to notify the listener about that yet.
         m_duringSetText = true;
-        m_textArea.setText(text);
+        m_textPane.setText(text);
         m_duringSetText = false;
-        m_textArea.setCaretPosition(0);
+        m_textPane.setCaretPosition(0);
         copyContentToNode();
     }
 
     private boolean m_duringSetText;
 
-    private JTextArea m_textArea;
+    private JTextPane m_textPane;
 
     private Listener m_listener;
 
@@ -89,7 +93,7 @@ class Comment
     {
         if (m_duringSetText)
             return;
-        String text = m_textArea.getText().trim();
+        String text = m_textPane.getText().trim();
         if (m_node == null)
             return;
         String comment = m_node.getComment();
