@@ -187,7 +187,7 @@ public class Board
             for (int x = 0; x < size; ++x)
             {
                 go.Point p = m_board.getPoint(x, y);
-                Field field = new Field(this, p, m_board.isHandicap(p));
+                Field field = new Field(this, p);
                 add(field);
                 m_field[x][y] = field;
                 field.addKeyListener(this);
@@ -266,15 +266,39 @@ public class Board
         if (graphics2D != null)
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
-        Dimension size = getSize();
+        Dimension dimension = getSize();
         if (m_image != null)
-            graphics.drawImage(m_image.getImage(), 0, 0, size.width,
-                               size.height, null);
+            graphics.drawImage(m_image.getImage(), 0, 0, dimension.width,
+                               dimension.height, null);
         else
         {
             graphics.setColor(java.awt.Color.YELLOW.darker());
-            graphics.fillRect(0, 0, size.width, size.height);
+            graphics.fillRect(0, 0, dimension.width, dimension.height);
         }
+        int size = m_board.getSize();
+        graphics.setColor(java.awt.Color.darkGray);
+        for (int y = 0; y < size; ++y)
+        {
+            java.awt.Point left = getScreenLocation(0, y);
+            java.awt.Point right = getScreenLocation(size - 1, y);
+            graphics.drawLine(left.x, left.y, right.x, right.y);
+        }
+        for (int x = 0; x < size; ++x)
+        {
+            java.awt.Point top = getScreenLocation(x, 0);
+            java.awt.Point bottom = getScreenLocation(x, size - 1);
+            graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
+        }
+        int r = dimension.width / (size + 2) / 10;
+        for (int x = 0; x < size; ++x)
+            if (m_board.isHandicapLine(x))
+                for (int y = 0; y < size; ++y)
+                    if (m_board.isHandicapLine(y))
+                    {
+                        java.awt.Point point = getScreenLocation(x, y);
+                        graphics.fillOval(point.x - r, point.y - r,
+                                          2 * r + 1, 2 * r + 1);
+                    }
     }
 
     public int print(Graphics g, PageFormat format, int page)
@@ -632,6 +656,16 @@ public class Board
     private void setColor(go.Point p, go.Color color)
     {
         getField(p).setColor(color);
+    }
+
+    private java.awt.Point getScreenLocation(int x, int y)
+    {
+        Dimension dimension = getSize();
+        int size = m_board.getSize();
+        int dx = dimension.width / (size + 2);
+        int dy = dimension.height / (size + 2);
+        return new java.awt.Point(dx / 2 + (x + 1) * dx,
+                                  dy / 2 + (size - y) * dy);
     }
 
     private void setPreferredFieldSize()

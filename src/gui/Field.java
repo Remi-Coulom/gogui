@@ -19,13 +19,12 @@ public class Field
     extends JComponent
     implements FocusListener, KeyListener, MouseListener
 {
-    Field(gui.Board board, go.Point p, boolean isHandicap)
+    Field(gui.Board board, go.Point p)
     {
         m_board = board;
         m_color = go.Color.EMPTY;
         m_territory = go.Color.EMPTY;
         m_point = p;
-        m_isHandicap = isHandicap;
         Dimension size = m_board.getPreferredFieldSize();
         setPreferredSize(size);
         Font font = UIManager.getFont("Label.font");        
@@ -144,8 +143,6 @@ public class Field
             drawStone(graphics, java.awt.Color.black);
         else if (m_color == go.Color.WHITE)
             drawStone(graphics, java.awt.Color.white);
-        else
-            drawGrid(graphics);
         if (m_territory == go.Color.BLACK)
             drawInfluence(graphics, 1.0);
         else if (m_territory == go.Color.WHITE)
@@ -218,8 +215,6 @@ public class Field
 
     private boolean m_crossHair;
 
-    private boolean m_isHandicap;
-
     private boolean m_lastMoveMarker;
 
     private boolean m_markup;
@@ -284,35 +279,6 @@ public class Field
         g.drawLine(w - d - 1, d, w - d - 1, 2 * d);
         g.drawLine(w - d - 1, w - d - 1, w - d - 1, w - 2 * d - 1);
         g.drawLine(w - d - 1, w - d - 1, w - 2 * d - 1, w - d - 1);
-    }
-
-    private void drawGrid(Graphics g)
-    {
-        int boardSize = m_board.getBoard().getSize();
-        Dimension size = getSize();
-        int w2 = size.width / 2;
-        g.setColor(java.awt.Color.darkGray);
-        int xMin = 0;
-        int xMax = size.width - 1;
-        int yMin = 0;
-        int yMax = size.height - 1;
-        int x = m_point.getX();
-        int y = m_point.getY();
-        if (x == 0)
-            xMin = w2;
-        else if (x == boardSize - 1)
-            xMax = w2;
-        if (y == boardSize - 1)
-            yMin = w2;
-        else if (y == 0)
-            yMax = w2;
-        g.drawLine(xMin, w2, xMax, w2);
-        g.drawLine(w2, yMin, w2, yMax);
-        if (m_isHandicap)
-        {
-            int r = size.width / 10;
-            g.fillOval(w2 - r, w2 - r, 2 * r + 1, 2 * r + 1);
-        }
     }
 
     private void drawInfluence(Graphics g, double influence)
