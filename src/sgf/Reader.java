@@ -130,11 +130,13 @@ public class Reader
     {
         String result = "";
         if (m_warningFormat)
-            result = result + "Unknown SGF file format version.\n";
-        if (m_warningLongProps)
-            result = result + "Long property names for standard properties\n";
+            result = result + "Unknown SGF file format version\n";
         if (m_warningWrongPass)
             result = result + "Non-standard pass move encoding\n";
+        if (m_warningLongProps)
+            result = result + "Verbose names for standard properties\n";
+        if (m_warningGame)
+            result = result + "Empty value for game type\n";
         if (result.equals(""))
             return null;
         return result;
@@ -148,6 +150,9 @@ public class Reader
     private static final int CACHE_SIZE = 30;
 
     private boolean m_isFile;
+
+    /** GM value should be 1, sgf2misc produces Go files with empty value */
+    private boolean m_warningGame;
 
     private boolean m_warningFormat;
 
@@ -474,10 +479,11 @@ public class Reader
                 if (p.equals("GAME"))
                     m_warningLongProps = true;
                 v = v.trim();
-                // Value should be 1, but sgf2misc produces Go files
-                // with empty value
-                if (! v.equals("1") && ! v.equals(""))
+                if (v.equals(""))
+                    m_warningGame = true;
+                else if (! v.equals("1"))
                     throw getError("Not a Go game");
+                
             }
             else if (p.equals("HA") || p.equals("HANDICAP"))
             {
