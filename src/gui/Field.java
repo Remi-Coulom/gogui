@@ -386,47 +386,52 @@ public class Field
                           size - 2 * margin, size - 2 * margin);
     }
 
-    private void drawString(Graphics g)
+    private void drawString(Graphics graphics)
     {
         if (m_string.equals(""))
             return;
         int size = getSize().width;
-        int stringWidth = g.getFontMetrics().stringWidth(m_string);
-        int stringHeight = g.getFont().getSize();
+        int stringWidth = graphics.getFontMetrics().stringWidth(m_string);
+        int stringHeight = graphics.getFont().getSize();
         int x = Math.max((size - stringWidth) / 2, 0);
         int y = stringHeight + (size - stringHeight) / 2;
         if (m_color == go.Color.WHITE)
-            g.setColor(java.awt.Color.black);
-            g.setColor(java.awt.Color.white);
-        g.drawString(m_string, x, y);
+            graphics.setColor(java.awt.Color.black);
+        else
+            graphics.setColor(java.awt.Color.white);
+        graphics.drawString(m_string, x, y);
     }
 
     private void drawTerritoryGraphics(Graphics graphics)
     {
-        if (m_territory != go.Color.EMPTY)
+        if (m_territory == go.Color.EMPTY)
+            return;
+        if (m_territory == go.Color.BLACK)
+            graphics.setColor(java.awt.Color.darkGray);
+        else
         {
-            if (m_territory == go.Color.BLACK)
-                graphics.setColor(java.awt.Color.darkGray);
-            else if (m_territory == go.Color.WHITE)
-                graphics.setColor(java.awt.Color.lightGray);
-            int size = getSize().width;
-            graphics.fillRect(0, 0, size, size);
+            assert(m_territory == go.Color.WHITE);
+            graphics.setColor(java.awt.Color.lightGray);
         }
+        int size = getSize().width;
+        graphics.fillRect(0, 0, size, size);
     }
 
     private void drawTerritoryGraphics2D(Graphics2D graphics2D)
     {
-        if (m_territory != go.Color.EMPTY)
+        if (m_territory == go.Color.EMPTY)
+            return;
+        graphics2D.setComposite(m_composite5);
+        if (m_territory == go.Color.BLACK)
+            graphics2D.setColor(java.awt.Color.darkGray);
+        else
         {
-            graphics2D.setComposite(m_composite5);
-            if (m_territory == go.Color.BLACK)
-                graphics2D.setColor(java.awt.Color.darkGray);
-            else if (m_territory == go.Color.WHITE)
-                graphics2D.setColor(java.awt.Color.white);
-            int size = getSize().width;
-            graphics2D.fillRect(0, 0, size, size);
-            graphics2D.setPaintMode();
+            assert(m_territory == go.Color.WHITE);
+            graphics2D.setColor(java.awt.Color.white);
         }
+        int size = getSize().width;
+        graphics2D.fillRect(0, 0, size, size);
+        graphics2D.setPaintMode();
     }
 }
 
