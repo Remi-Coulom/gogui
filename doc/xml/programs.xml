@@ -25,8 +25,8 @@
     <title>AmigoPlus</title>
 
     <para>
-      <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/">
-	http://www.ibiblio.org/pub/Linux/games/strategy/</ulink>
+      <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm">
+	http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm</ulink>
     </para>
     <para>
       Operating systems: Unix.
@@ -40,14 +40,29 @@
     <title>BadukiPlus</title>
 
     <para>
-      <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/">
-	http://www.ibiblio.org/pub/Linux/games/strategy/</ulink>
+      <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm">
+	http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm</ulink>
     </para>
     <para>
       Operating systems: Unix.
     </para>
     <para>
       Command: <userinput>badukiplus -gtp</userinput>
+    </para>
+  </section>
+  
+  <section>
+    <title>WallyPlus</title>
+
+    <para>
+      <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm">
+	http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm</ulink>
+    </para>
+    <para>
+      Operating systems: Unix.
+    </para>
+    <para>
+      Command: <userinput>wallyplus -gtp</userinput>
     </para>
   </section>
   
