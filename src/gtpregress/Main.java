@@ -24,6 +24,7 @@ class Main
         {
             String options[] = {
                 "config:",
+                "filecomments",
                 "help",
                 "long",
                 "output:",
@@ -43,6 +44,7 @@ class Main
             }
             boolean verbose = opt.isSet("verbose");
             boolean longOutput = opt.isSet("long");
+            boolean fileComments = opt.isSet("filecomments");
             String output = opt.getString("output", "");
             Vector arguments = opt.getArguments();
             int size = arguments.size();
@@ -55,7 +57,8 @@ class Main
             String tests[] = new String[size - 1];
             for (int i = 0; i <  size - 1; ++i)
                 tests[i] = (String)arguments.get(i + 1);
-            new GtpRegress(program, tests, output, longOutput, verbose);
+            new GtpRegress(program, tests, output, longOutput, verbose,
+                           fileComments);
         }
         catch (Throwable t)
         {
@@ -69,12 +72,13 @@ class Main
         out.print("Usage: java -jar regression.jar [options] program test.tst"
                   + " [...]\n" +
                   "\n" +
-                  "-config  config file\n" +
-                  "-help    display this help and exit\n" +
-                  "-long    longer output to standard out\n" +
-                  "-output  output directory\n" +
-                  "-verbose log GTP stream to stderr\n" +
-                  "-version display this help and exit\n");
+                  "-config       Config file\n" +
+                  "-filecomments Use special comment #>\n" +
+                  "-help         Display this help and exit\n" +
+                  "-long         Longer output to standard out\n" +
+                  "-output       Output directory\n" +
+                  "-verbose      Log GTP stream to stderr\n" +
+                  "-version      Display this help and exit\n");
     }
 }
     

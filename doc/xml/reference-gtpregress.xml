@@ -15,6 +15,7 @@ Runs GTP regression tests.
 <cmdsynopsis>
 <command>gtpregress</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-filecomments</option></arg>
 <arg><option>-long</option></arg>
 <arg><option>-output</option> <replaceable>directory</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -57,20 +58,6 @@ additional files with name
 <filename><replaceable>test</replaceable>.out.html</filename>
 are generated.
 </para>
-<para>
-An additional special comment
-<userinput>#&gt; <replaceable>file</replaceable></userinput>
-can be used to add the output of the last command to
-<filename><replaceable>file</replaceable></filename> prepended
-by the ID of the last test and 0/1 if the last test passed/failed.
-This is useful if there are extension commands for printing
-statistics.
-If the statistics commands output a single line, the resulting
-file can be processed as a table.
-If no filename is given to <userinput>#&gt;</userinput> the file
-<filename><replaceable>test</replaceable>.dat</filename>
-will be used.
-</para>
 </refsection>
 
 <refsection>
@@ -84,6 +71,28 @@ will be used.
 <listitem>
 <para>
 Read command line options and arguments from file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-filecomments</option>
+</term>
+<listitem>
+<para>
+If this option is enabled, an additional special comment
+<userinput>#&gt; <replaceable>file</replaceable></userinput>
+can be used to add the output of the last command to
+<filename><replaceable>file</replaceable></filename> prepended
+by the ID of the last test and 0/1 if the last test passed/failed.
+This is useful if there are extension commands for printing
+statistics.
+If the statistics commands output a single line, the resulting
+file can be processed as a table.
+If no filename is given to <userinput>#&gt;</userinput> the file
+<filename><replaceable>test</replaceable>.dat</filename>
+will be used.
 </para>
 </listitem>
 </varlistentry>

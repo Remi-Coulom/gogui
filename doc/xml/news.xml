@@ -8,6 +8,14 @@
 <date></date>
 <authorinitials>enz</authorinitials>
 <revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GtpRegress: parse special comments starting with '#>' only if enabled
+with option filecomments
+</simpara>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
 
