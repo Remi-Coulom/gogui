@@ -47,7 +47,8 @@ public class GtpTerminal
                 "config:",
                 "help",
                 "size:",
-                "verbose"
+                "verbose",
+                "version"
             };
             Options opt = new Options(args, options);
             opt.handleConfigOption();
