@@ -949,7 +949,12 @@ class ReadThread extends Thread
     }
 }
 
-public class Gmp
+/**
+   This class is final because it starts a thread in it's constructor which
+   might conflict with subclassing because the subclass constructor will
+   be called after the thread is started.
+*/
+public final class Gmp
 {
     public static class Error extends Exception
     {
@@ -969,8 +974,6 @@ public class Gmp
     }
 
     /** Create a Gmp.
-        The method start() must be called to start the internal read thread
-        before using this class.
         @param size board size 1-22
         Gmp supports only sizes up to 22 (number of bits in MOVE cmd)
         @param colorIndex color computer color on your side
@@ -981,6 +984,7 @@ public class Gmp
     {
         m_size = size;
         m_readThread = new ReadThread(input, output, size, colorIndex, simple);
+        m_readThread.start();
     }
 
     public void interruptCommand()
@@ -1019,11 +1023,6 @@ public class Gmp
     public void sendTalk(String text)
     {
         m_readThread.sendTalk(text);
-    }
-
-    public void start()
-    {
-        m_readThread.start();
     }
 
     public boolean undo(StringBuffer response)

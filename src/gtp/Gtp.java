@@ -22,7 +22,12 @@ import utils.StringUtils;
 
 //-----------------------------------------------------------------------------
 
-public class Gtp
+/**
+   This class is final because it starts a thread in it's constructor which
+   might conflict with subclassing because the subclass constructor will
+   be called after the thread is started.
+*/
+public final class Gtp
 {
     public static class Error extends Exception
     {
