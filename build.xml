@@ -95,7 +95,7 @@ installation directory.
 <target name="compile" depends="checkCommAvailable,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" deprecation="true"
- optimize="true" depend="true" listfiles="yes"/>
+ optimize="true" listfiles="yes"/>
 <copy todir="build">
 <fileset dir="src" includes="images/*.png"/>
 </copy>
