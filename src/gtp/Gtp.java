@@ -563,7 +563,7 @@ public final class Gtp
             {
                 int size = 1024;
                 char[] buffer = new char[size];
-                StringBuffer stringBuffer = new StringBuffer();
+                StringBuffer stringBuffer = new StringBuffer(256);
                 while (true)
                 {
                     int n = m_err.read(buffer, 0, size);
