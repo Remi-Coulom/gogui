@@ -87,32 +87,33 @@ public class GameInfo
                                                       movesLeftWhite));
     }
 
-    private JLabel m_move;
+    private JTextField m_move;
 
-    private JLabel m_number;
+    private JTextField m_number;
 
-    private JLabel m_last;
+    private JTextField m_last;
 
-    private JLabel m_captB;
+    private JTextField m_captB;
 
-    private JLabel m_captW;
+    private JTextField m_captW;
 
-    private JLabel m_timeB;
+    private JTextField m_timeB;
 
-    private JLabel m_timeW;
+    private JTextField m_timeW;
 
-    private JLabel m_variation;
+    private JTextField m_variation;
 
     private TimeControl m_timeControl;
 
-    private JLabel addEntry(String text)
+    private JTextField addEntry(String text)
     {
         JLabel label = new JLabel(text);
         label.setHorizontalAlignment(SwingConstants.LEFT);
         add(label);
-        JLabel entry = new JLabel(" ");
+        JTextField entry = new JTextField(" ");
         entry.setHorizontalAlignment(SwingConstants.LEFT);
         entry.setBorder(BorderFactory.createLoweredBevelBorder());
+        entry.setEditable(false);
         add(entry);
         return entry;
     }

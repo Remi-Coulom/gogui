@@ -81,27 +81,27 @@ public class ScoreDialog
 
     private JButton m_cancelButton;
 
-    private JLabel m_territoryBlack;
+    private JTextField m_territoryBlack;
 
-    private JLabel m_territoryWhite;
+    private JTextField m_territoryWhite;
 
-    private JLabel m_areaBlack;
+    private JTextField m_areaBlack;
 
-    private JLabel m_areaWhite;
+    private JTextField m_areaWhite;
 
-    private JLabel m_capturedBlack;
+    private JTextField m_capturedBlack;
 
-    private JLabel m_capturedWhite;
+    private JTextField m_capturedWhite;
 
-    private JLabel m_komi;
+    private JTextField m_komi;
 
-    private JLabel m_resultChinese;
+    private JTextField m_resultChinese;
 
-    private JLabel m_resultJapanese;
+    private JTextField m_resultJapanese;
 
-    private JLabel m_rules;
+    private JTextField m_rules;
 
-    private JLabel m_result;
+    private JTextField m_result;
 
     private void close()
     {
@@ -109,13 +109,14 @@ public class ScoreDialog
         dispose();
     }
 
-    private JLabel createEntry(JPanel panel, String text)
+    private JTextField createEntry(JPanel panel, String text)
     {
         JLabel label = new JLabel(text);
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
-        JLabel entry = new JLabel("        ");
-        entry.setHorizontalAlignment(SwingConstants.RIGHT);
+        JTextField entry = new JTextField("        ");
+        entry.setEditable(false);
+        entry.setHorizontalAlignment(SwingConstants.LEFT);
         entry.setBorder(BorderFactory.createLoweredBevelBorder());
         panel.add(entry);
         return entry;
