@@ -581,6 +581,12 @@ public class Board
         }
         m_toMove = r.getOldToMove();
     }
+
+    public boolean willModifyGame(Move move)
+    {
+        return (m_moveNumber < m_moves.size()
+                && ! move.equals(getInternalMove(m_moveNumber)));
+    }
     
     private boolean m_mark[][];
 

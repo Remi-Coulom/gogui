@@ -1123,9 +1123,9 @@ class GoGui
         return showQuestion("Abort game?");
     }
     
-    private boolean checkModifyGame()
+    private boolean checkModifyGame(Move move)
     {
-        if (m_board.getMoveNumber() == m_board.getNumberSavedMoves())
+        if (! m_board.willModifyGame(move))
             return true;
         return showQuestion("Move will modify the game.\n" +
                             "Proceed?");
@@ -1356,7 +1356,7 @@ class GoGui
     {
         try
         {
-            if (! checkModifyGame())
+            if (! checkModifyGame(m))
                 return;
             go.Point p = m.getPoint();
             if (p != null && m_board.getColor(p) != go.Color.EMPTY)
