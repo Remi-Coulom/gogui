@@ -21,6 +21,12 @@
       <arg><option>-help</option></arg>
       <arg><option>-komi</option> <replaceable>value</replaceable></arg>
       <arg><option>-move</option> <replaceable>n</replaceable></arg>
+      <arg><option>-rules</option>
+        <group choice="plain">
+          <arg choice="plain">chinese</arg>
+          <arg choice="plain">japanese</arg>
+        </group>
+      </arg>
       <arg><option>-size</option> <replaceable>n</replaceable></arg>
       <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
       <arg><option>-verbose</option></arg>
@@ -117,6 +123,18 @@
 	</term>
 	<listitem>
 	  Load SGF file until move number.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-rules</option>
+          <group choice="plain">
+            <arg choice="plain">chinese</arg>
+            <arg choice="plain">japanese</arg>
+          </group>
+	</term>
+	<listitem>
+	  Set rules.
 	</listitem>
       </varlistentry>
       <varlistentry>
