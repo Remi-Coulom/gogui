@@ -195,8 +195,6 @@ interface AnalyzeCallback
 {
     public void clearAnalyzeCommand();
 
-    public void initAnalyzeCommand(AnalyzeCommand command);
-
     public void setAnalyzeCommand(AnalyzeCommand command);
 
 
