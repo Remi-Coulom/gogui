@@ -184,6 +184,12 @@ public class Node
         return m_children.size();
     }
 
+    /** @return Color.EMPTY if unknown */
+    public Color getToMove()
+    {
+        return m_toMove;
+    }
+
     public void setComment(String comment)
     {
         m_comment = comment;
@@ -194,16 +200,16 @@ public class Node
         m_move = move;
     }
 
-    /** @return Color.EMPTY if unknown */
-    public Color getToMove()
-    {
-        return m_toMove;
-    }
-
     public void setToMove(Color color)
     {
         assert(color == Color.BLACK || color == Color.WHITE);
         m_toMove = color;
+    }
+
+    /** Remove all children. */
+    public void truncateChildren()
+    {
+        m_children.clear();
     }
 
     private Color m_toMove = Color.EMPTY;

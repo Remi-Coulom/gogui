@@ -1146,7 +1146,8 @@ class GoGui
                     return;
             savePosition(file);
             showInfo("Position saved.");
-            if (m_board.getNumberSavedMoves() == 0)
+            if (m_currentNode.getFather() == null
+                && m_currentNode.getChild() == null)
                 m_needsSave = false;
             m_loadedFile = file;
             setTitle();
@@ -1282,22 +1283,14 @@ class GoGui
 
     private void cbTruncate()
     {
-        int numberSavedMoves = m_board.getNumberSavedMoves();
-        int moveNumber = m_board.getMoveNumber();
-        if (moveNumber == numberSavedMoves)
+        if (m_currentNode.getChild() == null)
         {
-            showError("No moves to truncate.");
+            showError("No children to truncate.");
             return;
         }
-        if (moveNumber == numberSavedMoves - 1)
-        {
-            if (! showQuestion("Truncate move " + (moveNumber + 1) + "?"))
-                return;
-        }
-        else if (! showQuestion("Truncate moves " + (moveNumber + 1) + " to "
-                                + numberSavedMoves + "?"))
+        if (! showQuestion("Truncate children?"))
             return;
-        m_board.truncate();
+        m_currentNode.truncateChildren();
         updateGameInfo();
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_currentNode);
