@@ -181,7 +181,7 @@ class Field
             int radiusX = size.width / 10;
             int radiusY = size.height / 10;
             g.fillOval(halfWidth - radiusX, halfHeight - radiusY,
-                        2 * radiusX + 1, 2 * radiusY + 1);
+                       2 * radiusX + 1, 2 * radiusY + 1);
         }
     }
 
@@ -193,11 +193,11 @@ class Field
         double d = Math.abs(m_influence);
         if (d < 0.01)
             return;
-        d = Math.sqrt(d);
-        int dx = (int)((size.width * (1 - d)) / 2);
-        int dy = (int)((size.height * (1 - d)) / 2);
-        int x[] = {xCenter, size.width - dx, xCenter, dx};
-        int y[] = {dy, yCenter, size.height - dy - 1, yCenter};
+        d = 0.5 - 0.25 * Math.sqrt(d);
+        int dx = (int)(size.width * d);
+        int dy = (int)(size.height * d);
+        int x[] = {xCenter, size.width - dx + 1, xCenter, dx};
+        int y[] = {dy, yCenter, size.height - dy + 1, yCenter};
         if (m_influence > 0)
             g.setColor(m_influenceBlackColor);
         else
