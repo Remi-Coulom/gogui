@@ -6,6 +6,7 @@
 package utils;
 
 import java.awt.*;
+import java.net.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -53,6 +54,14 @@ public class GuiUtils
             return 10;
         return font.getSize();
     }
+
+    public static void setGoIcon(Frame frame)
+    {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        URL url = classLoader.getResource("images/icon.png");
+        frame.setIconImage(new ImageIcon(url).getImage());
+    }
+
     private static Border m_emptyBorder;
 
     private static Border m_smallEmptyBorder;

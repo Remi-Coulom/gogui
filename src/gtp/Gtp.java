@@ -62,7 +62,7 @@ public final class Gtp
         Runtime runtime = Runtime.getRuntime();
         try
         {
-            // Create command array with StringUtils::getCmdArray
+            // Create command array with StringUtils::tokenize
             // because Runtime.exec(String) uses a default StringTokenizer
             // which does not respect ".
             m_process = runtime.exec(StringUtils.tokenize(program));

@@ -13,6 +13,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
+import utils.GuiUtils;
 import utils.Platform;
 import utils.StreamCopy;
 
@@ -40,6 +41,7 @@ class Help
     public Help(URL contents)
     {
         super("Help - GoGui");
+        GuiUtils.setGoIcon(this);
         m_contents = contents;
         Container contentPane = getContentPane();
         createMenuBar();
