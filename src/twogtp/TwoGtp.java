@@ -802,7 +802,7 @@ public class TwoGtp
             saveResult(resultBlack, resultWhite, resultReferee, isAlternated(),
                        duplicate, moves.size(), error, errorMessage,
                        cpuTimeBlack, cpuTimeWhite);
-            saveGame(resultBlack, resultWhite);
+            saveGame(resultBlack, resultWhite, resultReferee);
             saveScoreEstimates();
             ++m_gameIndex;
             m_games.add(moves);
@@ -964,32 +964,53 @@ public class TwoGtp
         }
     }
 
-    private void saveGame(String resultBlack, String resultWhite)
+    private void saveGame(String resultBlack, String resultWhite,
+                          String resultReferee)
         throws FileNotFoundException
     {
         if (m_sgfFile.equals(""))
             return;
         String blackName = m_blackName;
+        if (! m_blackVersion.equals(""))
+            blackName = blackName + ":" + m_blackVersion;
         String whiteName = m_whiteName;
+        if (! m_whiteVersion.equals(""))
+            whiteName = whiteName + ":" + m_whiteVersion;
         String blackCommand = m_black.getProgramCommand();
         String whiteCommand = m_white.getProgramCommand();
         if (isAlternated())
         {
             blackName = m_whiteName;
+            if (! m_whiteVersion.equals(""))
+                blackName = blackName + ":" + m_whiteVersion;
             whiteName = m_blackName;
+            if (! m_blackVersion.equals(""))
+                whiteName = whiteName + ":" + m_blackVersion;
             blackCommand = m_white.getProgramCommand();
             whiteCommand = m_black.getProgramCommand();
             String resultTmp = inverseResult(resultWhite);
             resultWhite = inverseResult(resultBlack);
             resultBlack = resultTmp;
         }
+        GameInformation gameInformation = m_gameTree.getGameInformation();
+        gameInformation.m_playerBlack = blackName;
+        gameInformation.m_playerWhite = whiteName;
+        if (m_referee != null)
+            gameInformation.m_result = resultReferee;
+        else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
+            gameInformation.m_result = resultBlack;
         String host = getHost();
         String gameComment =
-            "B: " + blackCommand +
-            "\nW: " + whiteCommand +
-            "\nHost: " + host +
-            "\nResult according to B: " + resultBlack +
-            "\nResult according to W: " + resultWhite;
+            "Black: " + blackCommand +
+            "\nWhite: " + whiteCommand +
+            "\nResult according to Black: " + resultBlack +
+            "\nResult according to White: " + resultWhite;
+        if (m_referee != null)
+            gameComment = gameComment +
+                "\nReferee: " + m_refereeCommand +
+                "\nResult according to referee: " + resultReferee;
+        gameComment = gameComment +
+            "\nHost: " + host;
         File file = getFile(m_gameIndex);
         OutputStream out = new FileOutputStream(file);
         new sgf.Writer(out, m_board, m_gameTree, file, "TwoGtp",
