@@ -1,5 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE book [
+ <!ENTITY bugs SYSTEM "bugs.xml">
  <!ENTITY version SYSTEM "version.xml">
  <!ENTITY readme SYSTEM "readme.xml">
  <!ENTITY invocation SYSTEM "invocation.xml">
@@ -47,6 +48,7 @@
     &reference-twogtp;
   </appendix>
   &news;
+  &bugs;
   &gpl;
   
 </book>

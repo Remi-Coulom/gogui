@@ -37,6 +37,7 @@ PACKAGES= \
 DOC= \
   doc/xml/analyze.xml \
   doc/xml/book.xml \
+  doc/xml/bugs.xml \
   doc/xml/compatibility.xml \
   doc/xml/gpl.xml \
   doc/xml/gtpshell.xml \
