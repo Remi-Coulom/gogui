@@ -710,7 +710,7 @@ class GoGui
                 showInfo("Handicap will take effect on next game.");
             else
             {
-                newGame(m_boardSize, m_board.getKomi(), true);
+                newGame(m_boardSize, true);
                 boardChanged();
             }
         }
@@ -767,8 +767,9 @@ class GoGui
         if (obj == null)
             return;
         float komi = Float.parseFloat((String)obj);
-        setKomi(komi);
+        m_board.setKomi(komi);
         m_prefs.setKomi(komi);
+        setKomi();
     }
 
     private void cbLoad()
@@ -786,7 +787,7 @@ class GoGui
             if (! checkAbortGame())
                 return;
             m_prefs.setBoardSize(size);
-            newGame(size, m_board.getKomi(), true);
+            newGame(size, true);
             boardChanged();
         }
         catch (Gtp.Error e)
@@ -986,7 +987,7 @@ class GoGui
                 color[p.getX()][p.getY()] = m_board.getColor(p);
             }
             go.Color toMove = m_board.getToMove();
-            newGame(size, m_board.getKomi(), false);
+            newGame(size, false);
             Vector moves = new Vector(m_board.getNumberPoints());
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
@@ -1049,7 +1050,7 @@ class GoGui
                 {
                     try
                     {
-                        newGame(m_boardSize, m_board.getKomi(), true);
+                        newGame(m_boardSize, true);
                         boardChanged();
                     }
                     catch (Gtp.Error e)
@@ -1317,13 +1318,14 @@ class GoGui
                 computerNone();
             else
                 computerWhite();
+            setRules();
             File file = null;
-            float komi = m_prefs.getKomi();
             if (! m_file.equals(""))
-                newGame(m_boardSize, new File(m_file), m_move, komi, true);
+                newGame(m_boardSize, new File(m_file), m_move, false);
             else
             {
-                newGame(m_boardSize, null, -1, komi, true);
+                setKomi();
+                newGame(m_boardSize, null, -1, true);
                 boardChanged();
             }
             m_guiBoard.requestFocus();
@@ -1341,7 +1343,7 @@ class GoGui
         {
             sgf.Reader reader = new sgf.Reader(file);
             int boardSize = reader.getBoardSize();
-            newGame(boardSize, 0, false);
+            newGame(boardSize, false);
             Vector moves = new Vector(361, 361);
             Vector setupBlack = reader.getSetupBlack();
             for (int i = 0; i < setupBlack.size(); ++i)
@@ -1385,7 +1387,8 @@ class GoGui
                 m_board.undo();            
             if (move > 0)
                 forward(move);
-            setKomi(reader.getKomi());
+            m_board.setKomi(reader.getKomi());
+            setKomi();
             computerNone();
             boardChanged();
         }
@@ -1399,14 +1402,13 @@ class GoGui
         }
     }
 
-    private void newGame(int size, float komi, boolean setHandicap)
+    private void newGame(int size, boolean setHandicap)
         throws Gtp.Error
     {
-        newGame(size, (File)null, -1, komi, setHandicap);
+        newGame(size, (File)null, -1, setHandicap);
     }
 
-    private void newGame(int size, File file, int move, float komi,
-                         boolean setHandicap)
+    private void newGame(int size, File file, int move, boolean setHandicap)
         throws Gtp.Error
     {
         if (m_commandThread != null)
@@ -1435,8 +1437,6 @@ class GoGui
         {
             if (setHandicap)
                 setHandicap();
-            setKomi(komi);
-            setRules();
         }
     }
 
@@ -1599,14 +1599,13 @@ class GoGui
         m_guiBoard.setCursor(Cursor.getDefaultCursor());
     }
 
-    private void setKomi(float komi)
+    private void setKomi()
     {
-        m_board.setKomi(komi);
         if (m_commandThread == null)
             return;
         try
         {
-            m_commandThread.sendCommand("komi " + komi);
+            m_commandThread.sendCommand("komi " + m_board.getKomi());
         }
         catch (Gtp.Error e)
         {

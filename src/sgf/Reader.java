@@ -32,6 +32,7 @@ public class Reader
             m_tokenizer = new StreamTokenizer(m_in);
             m_file = file;
             m_boardSize = 19;
+            m_komi = 0;
             m_moves.clear();
             m_toMove = Color.BLACK;
             m_tokenizer.nextToken();
@@ -86,13 +87,21 @@ public class Reader
     }
 
     private int m_boardSize;
+
     private float m_komi;
+
     private File m_file;
+
     private java.io.Reader m_in;
+
     private StreamTokenizer m_tokenizer;
+
     private Vector m_moves = new Vector(361, 361);
+
     private Vector m_setupBlack = new Vector(128, 64);
+
     private Vector m_setupWhite = new Vector(128, 64);
+
     private Color m_toMove;
 
     private void discardSubtree() throws IOException, Error
