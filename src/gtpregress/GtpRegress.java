@@ -160,6 +160,8 @@ class GtpRegress
         public int m_unexpectedPasses;
 
         public long m_timeMillis;
+
+        public double m_cpuTime;
     }
 
     private boolean m_lastError;
@@ -243,11 +245,13 @@ class GtpRegress
         }
     }
 
-    private TestSummary getTestSummary(File file, long timeMillis)
+    private TestSummary getTestSummary(File file, long timeMillis,
+                                       double cpuTime)
     {
         TestSummary summary = new TestSummary();
         summary.m_file = file;
         summary.m_timeMillis = timeMillis;
+        summary.m_cpuTime = cpuTime;
         summary.m_otherErrors = m_otherErrors;
         for (int i = 0; i < m_tests.size(); ++i)
         {
@@ -485,6 +489,26 @@ class GtpRegress
                   "  -help    display this help and exit\n");
     }
 
+    private double getCpuTime()
+    {
+        try
+        {
+            String command = "cputime";
+            printOutLine(null, command);
+            String response = m_gtp.sendCommand(command);
+            printOutLine(null, m_gtp.getFullResponse());
+            return Double.parseDouble(response);
+        }
+        catch (Gtp.Error e)
+        {
+            return 0;
+        }
+        catch (NumberFormatException e)
+        {
+            return 0;
+        }
+    }
+
     private void runTest(String test)
         throws Exception
     {
@@ -499,6 +523,7 @@ class GtpRegress
         m_lastSgf = null;
         String line;
         long timeMillis = System.currentTimeMillis();
+        double cpuTime = getCpuTime();
         while (true)
         {
             line = reader.readLine();
@@ -507,13 +532,37 @@ class GtpRegress
             handleLine(line);
         }
         timeMillis = System.currentTimeMillis() - timeMillis;
+        cpuTime = getCpuTime() - cpuTime;
         if (m_lastFullResponse != null)
             handleLastResponse();
         reader.close();
         finishOutFile();
-        TestSummary testSummary = getTestSummary(file, timeMillis);
+        TestSummary testSummary = getTestSummary(file, timeMillis, cpuTime);
         m_testSummaries.add(testSummary);
         writeTestSummary(file, testSummary);
+    }
+
+    private void writeInfo(PrintStream out)
+    {
+        String host = "?";
+        try
+        {
+            host = InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL);
+        Date date = Calendar.getInstance().getTime();
+        out.print("<table>\n" +
+                  "<tr><th align=\"left\">Date</th><td>" + format.format(date)
+                  + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Host</th><td>" + host
+                  + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Command</th><td><tt>" + m_program
+                  + "</tt></td></tr>\n" +
+                  "</table>\n");
     }
 
     private void writeSummary()
@@ -544,7 +593,8 @@ class GtpRegress
         out.print("<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
-                  "<col width=\"30%\">\n" +
+                  "<col width=\"20%\">\n" +
+                  "<col width=\"10%\">\n" +
                   "<col width=\"10%\">\n" +
                   "<col width=\"10%\">\n" +
                   "<col width=\"10%\">\n" +
@@ -562,6 +612,7 @@ class GtpRegress
                   "<th>pass</th>" +
                   "<th>Error</th>" +
                   "<th>Time</th>" +
+                  "<th>CpuTime</th>" +
                   "</tr>\n");
         for (int i = 0; i < m_testSummaries.size(); ++i)
         {
@@ -584,6 +635,8 @@ class GtpRegress
                                                    "html")
                       + "\">" + summary.m_file + "</a></td>");
         double time = (double)(summary.m_timeMillis / 100L) / 10F;
+        NumberFormat format = NumberFormat.getInstance(new Locale("C"));
+        format.setMaximumFractionDigits(1);
         out.print("<td>" + summary.m_numberTests + "</td>\n" +
                   "<td bgcolor=\"#"
                   + (summary.m_unexpectedFails > 0 ? "ff0000" : "white")
@@ -595,6 +648,7 @@ class GtpRegress
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
                   "<td>" + summary.m_otherErrors + "</td>\n" +
                   "<td>" + time + "</td>\n" +
+                  "<td>" + format.format(summary.m_cpuTime) + "</td>\n" +
                   "</tr>\n");
     }
 
@@ -615,22 +669,24 @@ class GtpRegress
         out.print("<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
-                  "<col width=\"14%\">\n" +
-                  "<col width=\"14%\">\n" +
-                  "<col width=\"14%\">\n" +
-                  "<col width=\"14%\">\n" +
-                  "<col width=\"14%\">\n" +
-                  "<col width=\"14%\">\n" +
-                  "<col width=\"14%\">\n" +
+                  "<col width=\"12%\">\n" +
+                  "<col width=\"12%\">\n" +
+                  "<col width=\"12%\">\n" +
+                  "<col width=\"12%\">\n" +
+                  "<col width=\"12%\">\n" +
+                  "<col width=\"12%\">\n" +
+                  "<col width=\"12%\">\n" +
+                  "<col width=\"12%\">\n" +
                   "</colgroup>\n" +
                   "<tr align=\"center\">\n" +
-                  "<th>Tests</th>" +
-                  "<th>FAIL</th>" +
-                  "<th>fail</th>" +
-                  "<th>PASS</th>" +
-                  "<th>pass</th>" +
-                  "<th>Error</th>" +
-                  "<th>Time</th>" +
+                  "<th>Tests</th>\n" +
+                  "<th>FAIL</th>\n" +
+                  "<th>fail</th>\n" +
+                  "<th>PASS</th>\n" +
+                  "<th>pass</th>\n" +
+                  "<th>Error</th>\n" +
+                  "<th>Time</th>\n" +
+                  "<th>CpuTime</th>\n" +
                   "</tr>\n");
         writeSummaryRow(out, summary, false);
         out.print("</table>\n" +
@@ -695,29 +751,6 @@ class GtpRegress
                   "</body>\n" +
                   "</html>\n");
         out.close();
-    }
-
-    private void writeInfo(PrintStream out)
-    {
-        String host = "?";
-        try
-        {
-            host = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e)
-        {
-        }
-        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                                           DateFormat.FULL);
-        Date date = Calendar.getInstance().getTime();
-        out.print("<table>\n" +
-                  "<tr><th align=\"left\">Date</th><td>" + format.format(date)
-                  + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Host</th><td>" + host
-                  + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Command</th><td><tt>" + m_program
-                  + "</tt></td></tr>\n" +
-                  "</table>\n");
     }
 }
     
