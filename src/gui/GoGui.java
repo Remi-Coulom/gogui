@@ -83,7 +83,10 @@ class GoGui
         setJMenuBar(m_menuBars.getNormalMenu());
 
         if (program == null || program.equals(""))
+        {
             m_toolBar.disableComputerButtons();
+            m_menuBars.disableComputerMenus();
+        }
 
         pack();
         setVisible(true);

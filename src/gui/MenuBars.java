@@ -24,7 +24,8 @@ class MenuBars
         m_normalMenuBar.add(createFileMenu());
         m_normalMenuBar.add(createGameMenu());
         m_normalMenuBar.add(createBoardMenu());
-        m_normalMenuBar.add(createAnalyzeMenu());
+        m_menuAnalyze = createAnalyzeMenu();
+        m_normalMenuBar.add(m_menuAnalyze);
         m_normalMenuBar.add(Box.createHorizontalGlue());
         m_normalMenuBar.add(createHelpMenu());
 
@@ -37,6 +38,13 @@ class MenuBars
         m_scoreMenuBar.add(createScoreMenu());
         m_scoreMenuBar.add(Box.createHorizontalGlue());
         m_scoreMenuBar.add(createHelpMenu());
+    }
+
+    public void disableComputerMenus()
+    {
+        m_menuAnalyze.setEnabled(false);
+        m_menuComputerColor.setEnabled(false);
+        m_itemComputerPlay.setEnabled(false);
     }
 
     public void setComputerBlack()
@@ -113,18 +121,35 @@ class MenuBars
         }
     }
 
+
     private static int m_possibleBoardSizes[] = { 9, 11, 13, 15, 17, 19 };
+
     private static int m_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
+
     private ActionListener m_listener;
+
+    private JMenu m_menuAnalyze;
+
     private JMenu m_menuComputerColor;
+
     private JMenuBar m_normalMenuBar;
+
     private JMenuBar m_scoreMenuBar;
+
     private JMenuBar m_setupMenuBar;
+
     private JMenuItem[] m_itemBoardSize;
+
     private JMenuItem m_itemComputerBlack;
+
     private JMenuItem m_itemComputerBoth;
+
     private JMenuItem m_itemComputerNone;
+
+    private JMenuItem m_itemComputerPlay;
+
     private JMenuItem m_itemComputerWhite;
+
     private JMenuItem m_itemExit;
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
@@ -234,7 +259,8 @@ class MenuBars
         addMenuItem(menu, "Score game", "score");
         menu.addSeparator();
         addMenuItem(menu, "Pass", KeyEvent.VK_P, "pass");
-        addMenuItem(menu, "Computer play", KeyEvent.VK_L, "play");
+        m_itemComputerPlay =
+            addMenuItem(menu, "Computer play", KeyEvent.VK_L, "play");
         menu.addSeparator();
         addMenuItem(menu, "Backward", KeyEvent.VK_B, "backward");
         addMenuItem(menu, "Forward", KeyEvent.VK_F, "forward");
