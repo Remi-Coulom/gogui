@@ -922,6 +922,8 @@ class GoGui
                     return;
             save(file);
             showInfo("Game saved.");
+            m_loadedFile = file.toString();
+            setTitle();
         }
         catch (FileNotFoundException e)
         {
@@ -941,6 +943,8 @@ class GoGui
                     return;
             savePosition(file);
             showInfo("Position saved.");
+            m_loadedFile = file.toString();
+            setTitle();
         }
         catch (FileNotFoundException e)
         {
