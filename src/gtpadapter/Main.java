@@ -97,12 +97,15 @@ public class Main
             "\n" +
             "-config       config file\n" +
             "-emuhandicap  emulate free handicap commands\n" +
+            "-emuloadsgf   emulate loadsgf commands\n" +
             "-fillpasses   fill non-alternating moves with pass moves\n" +
             "-gtpfile      file with GTP commands to send at startup\n" +
+            "-help         print help and exit\n" +
             "-log file     log GTP stream to file\n" +
             "-noscore      hide score commands\n" +
             "-resign score resign if estimated score is below threshold\n" +
             "-size         accept only this board size\n" +
+            "-verbose      log GTP stream to stderr\n" +
             "-version      print version and exit\n" +
             "-version2     translate GTP version 2 for version 1 programs\n";
         out.print(helpText);
