@@ -25,9 +25,9 @@ public class Analyze
         if (! force)
         {
             if (htmlFile.exists())
-                throw new Exception("File " + htmlFile + " exists");
+                throw new ErrorMessage("File " + htmlFile + " exists");
             if (dataFile.exists())
-                throw new Exception("File " + dataFile + " exists");
+                throw new ErrorMessage("File " + dataFile + " exists");
         }
         calcStatistics();
         writeHtml(htmlFile);
@@ -127,16 +127,22 @@ public class Analyze
         return comment.substring(key.length()).trim();
     }
 
+    /** Get comment value and replace spaces by HTML non-breaking spaces */
+    private String getCommentValueNbsp(String comment, String key)
+    {
+        return getCommentValue(comment, key).replaceAll(" ", "&nbsp;");
+    }
+
     private void handleComment(String comment)
     {
         comment = comment.trim();
         if (comment.startsWith("Black:"))
-            m_black = getCommentValue(comment, "Black:");
+            m_black = getCommentValueNbsp(comment, "Black:");
         else if (comment.startsWith("White:"))
-            m_white = getCommentValue(comment, "White:");
+            m_white = getCommentValueNbsp(comment, "White:");
         else if (comment.startsWith("Referee:"))
         {
-            m_referee = getCommentValue(comment, "Referee:");
+            m_referee = getCommentValueNbsp(comment, "Referee:");
             m_hasReferee =
                 (! m_referee.equals("") && ! m_referee.equals("-"));
         }
@@ -156,7 +162,7 @@ public class Analyze
             m_host = getCommentValue(comment, "Host:");
     }
 
-    private void handleLine(String line) throws Exception
+    private void handleLine(String line) throws ErrorMessage
     {
         line = line.trim();
         if (line.startsWith("#"))
@@ -166,7 +172,7 @@ public class Analyze
         }
         String[] array = line.split("\\t");
         if (array.length < 10 || array.length > 11)
-            throwException("Wrong file format");
+            throwErrorMessage("Wrong file format");
         try
         {
             int gameIndex = Integer.parseInt(array[0]);
@@ -190,7 +196,7 @@ public class Analyze
         }
         catch (NumberFormatException e)
         {
-            throwException("Wrong file format");
+            throwErrorMessage("Wrong file format");
         }
     }
 
@@ -245,9 +251,9 @@ public class Analyze
         reader.close();
     }
 
-    private void throwException(String message) throws Exception
+    private void throwErrorMessage(String message) throws ErrorMessage
     {
-        throw new Exception("Line " + m_lineNumber + ": " + message);
+        throw new ErrorMessage("Line " + m_lineNumber + ": " + message);
     }
 
     private void writeHtml(File file) throws Exception
@@ -449,6 +455,8 @@ public class Analyze
     }
 }
 
+//----------------------------------------------------------------------------
+
 class Entry
 {
     public int m_gameIndex;
@@ -491,6 +499,8 @@ class Entry
         m_errorMessage = errorMessage;
     }
 }
+
+//----------------------------------------------------------------------------
 
 class Statistics
 {
@@ -543,6 +553,8 @@ class Statistics
 
     private double m_sumSq;
 }
+
+//----------------------------------------------------------------------------
 
 class Histogram
     extends Statistics

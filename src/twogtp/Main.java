@@ -7,8 +7,9 @@ package twogtp;
 
 import java.io.*;
 import java.util.*;
-import utils.StringUtils;
+import utils.ErrorMessage;
 import utils.Options;
+import utils.StringUtils;
 import version.*;
 
 //----------------------------------------------------------------------------
@@ -105,16 +106,16 @@ public class Main
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
             if (opt.isSet("games") && sgfFile.equals(""))
-                throw new Exception("Use option -sgffile with -games.");
+                throw new ErrorMessage("Use option -sgffile with -games.");
             Openings openings = null;
             if (opt.isSet("openings"))
                 openings = new Openings(new File(opt.getString("openings")));
             boolean loadsgf = opt.isSet("loadsgf");
             if (loadsgf && openings == null)
-                throw new Exception("Use option -loadsgf with -openings.");
+                throw new ErrorMessage("Use option -loadsgf with -openings.");
             if (loadsgf && ! auto)
-                throw new Exception("Option -loadsgf can only be used with"
-                                    + " -auto");
+                throw new ErrorMessage("Option -loadsgf can only be used with"
+                                       + " -auto");
             TwoGtp twoGtp =
                 new TwoGtp(System.in, System.out, black, white, referee,
                            observer, size, komi, isKomiFixed, games,
