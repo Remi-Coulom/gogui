@@ -81,7 +81,7 @@ public class Gtp
         board.Point p = move.getPoint();
         board.Color c = move.getColor();
         String command = "";
-        if (m_protocolVersion == 1)
+        if (m_protocolVersion == 2)
             command = "play ";
         command = command + c.toString();
         if (p == null)
@@ -306,7 +306,7 @@ public class Gtp
 
     public String sendCommandPlay(Move move) throws Error
     {
-        return getCommandPlay(move);
+        return sendCommand(getCommandPlay(move));
     }
 
     public void setIOCallback(IOCallback callback)
