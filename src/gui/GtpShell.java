@@ -538,27 +538,30 @@ public class GtpShell
         m_textField.setCaretPosition(oldCaretPosition);
     }
 
-    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
+    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
+                                  String command)
     {
         item.addActionListener(this);
         item.setActionCommand(command);
+        item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
     }
 
-    private JMenuItem addMenuItem(JMenu menu, String label, String command)
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  String command)
     {
         JMenuItem item = new JMenuItem(label);
-        return addMenuItem(menu, item, command);        
+        return addMenuItem(menu, item, mnemonic, command);        
     }
 
-    private JMenuItem addMenuItem(JMenu menu, String label, int accel,
-                                  int modifier, String command)
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  int accel, int modifier, String command)
     {
         JMenuItem item = new JMenuItem(label);
         KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
         item.setAccelerator(k);
-        return addMenuItem(menu, item, command);
+        return addMenuItem(menu, item, mnemonic, command);
     }
 
     private void appendResponse(boolean error, String response)
@@ -616,12 +619,12 @@ public class GtpShell
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
-        addMenuItem(menu, "Save...", KeyEvent.VK_S, ActionEvent.CTRL_MASK,
-                    "save-log");
-        addMenuItem(menu, "Save Commands...", "save-commands");
+        addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
+                    ActionEvent.CTRL_MASK, "save-log");
+        addMenuItem(menu, "Save Commands...", KeyEvent.VK_M, "save-commands");
         menu.addSeparator();
-        addMenuItem(menu, "Close", KeyEvent.VK_W, ActionEvent.CTRL_MASK,
-                    "close");
+        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
+                    ActionEvent.CTRL_MASK, "close");
         menuBar.add(menu);
         setJMenuBar(menuBar);
     }
