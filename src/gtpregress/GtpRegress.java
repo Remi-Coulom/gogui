@@ -663,13 +663,14 @@ class GtpRegress
 
     private void writeInfo(PrintStream out)
     {
-        String host = "?";
+        String host;
         try
         {
             host = InetAddress.getLocalHost().getHostName();
         }
         catch (UnknownHostException e)
         {
+            host = "?";
         }
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);
@@ -687,13 +688,14 @@ class GtpRegress
     {
         File file = new File(m_prefix + "index.html");
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        String host = "?";
+        String host;
         try
         {
             host = InetAddress.getLocalHost().getHostName();
         }
         catch (UnknownHostException e)
         {
+            host = "?";
         }
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);

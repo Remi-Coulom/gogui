@@ -755,16 +755,11 @@ class AnalyzeDialog
             {
                 m_comboBox.addItem(line);
             }
-        }
-        catch (IOException e)
-        {
-        }
-        try
-        {
             reader.close();
         }
         catch (IOException e)
         {
+            System.err.println("IOException in AnalyzeDialog.loadRecent");
         }
     }
 
@@ -803,6 +798,8 @@ class AnalyzeDialog
         }
         catch (FileNotFoundException e)
         {
+            System.err.println("FileNotFoundException in"
+                               + " AnalyzeDialog.saveRecent");
             return;
         }
         final int max = 20;
