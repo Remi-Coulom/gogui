@@ -350,6 +350,7 @@ installation directory.
  netgtp/*.class
  utils/Options.class
  utils/StreamCopy.class
+ utils/StringUtils.class
  version/Version.class
 "/>
 </jar>
