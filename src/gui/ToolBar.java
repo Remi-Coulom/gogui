@@ -21,7 +21,7 @@ class ToolBar
             AnalyzeCommand.Callback callback) throws AnalyzeCommand.Error
     {
         m_listener = listener;
-        m_buttonNew = addButton("icons/NewBoard.png", "new-game", "New game");
+        m_buttonNew = addButton("images/NewBoard.png", "new-game", "New game");
         m_buttonOpen = addButton(m_prefix + "Open.png", "load", "Load game");
         m_buttonSave = addButton(m_prefix + "Save.png", "save", "Save game");
         add(new JToolBar.Separator());

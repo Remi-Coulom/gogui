@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.font.*;
 import java.awt.print.*;
+import java.net.*;
 import java.util.*;
 import javax.swing.*;
 import go.*;
@@ -29,6 +30,8 @@ public class Board
     {
         m_board = board;
         setPreferredFieldSize();
+        URL url = getClass().getClassLoader().getResource("images/wood.png");
+        m_image = new ImageIcon(url);
         initSize(m_board.getSize());
     }
 
@@ -82,8 +85,8 @@ public class Board
         setLayout(gridBag);
         GridBagConstraints constraints = new GridBagConstraints();
         JPanel panel = new JPanel();
+        panel.setOpaque(false);
         panel.setLayout(new GridLayout(size, size));
-        panel.setBackground(m_boardColor);
         add(panel);
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 1;
@@ -107,6 +110,13 @@ public class Board
         }
         revalidate();
         repaint();
+    }
+
+    public void paintComponent(Graphics graphics)
+    {
+        Dimension size = getSize();
+        graphics.drawImage(m_image.getImage(), 0, 0, size.width, size.height,
+                           null);
     }
 
     public int print(Graphics g, PageFormat format, int page)
@@ -252,12 +262,11 @@ public class Board
         drawLastMove();
     }
 
-    private static java.awt.Color m_boardColor
-        = new java.awt.Color(224, 160, 96);
-
     private Dimension m_preferredFieldSize;
 
     private go.Board m_board;
+
+    private ImageIcon m_image;
 
     private Field m_field[][];
 

@@ -5,8 +5,9 @@
 
 VERSION=0.1.x
 
-ICONS= \
-  icons/NewBoard.png \
+IMAGES= \
+  images/NewBoard.png \
+  images/wood.png \
   org/javalobby/icons/20x20png/Computer.png \
   org/javalobby/icons/20x20png/Delete.png \
   org/javalobby/icons/20x20png/Enter.png \
@@ -38,9 +39,9 @@ release: version
 	javac -O -deprecation -sourcepath . -source 1.4 -d build @files.txt
 	mkdir -p build/doc
 	cp -R doc/html/* build/doc
-	test -d build/icons || mkdir -p build/icons
+	mkdir -p build/images
 	mkdir -p build/org/javalobby/icons/20x20png
-	for i in $(ICONS); do cp $$i build/$$i; done 
+	for i in $(IMAGES); do cp $$i build/$$i; done 
 	jar cmf manifest-addition.txt gogui.jar -C build .
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
@@ -48,9 +49,9 @@ debug: version
 	mkdir -p build_dbg
 	javac -g -deprecation -sourcepath . -source 1.4 -d build_dbg @files.txt
 	mkdir -p build_dbg/doc
-	mkdir -p build_dbg/icons
+	mkdir -p build_dbg/images
 	mkdir -p build_dbg/org/javalobby/icons/20x20png
-	for i in $(ICONS); do cp $$i build_dbg/$$i; done 
+	for i in $(IMAGES); do cp $$i build_dbg/$$i; done 
 	cp -R doc/html/* build_dbg/doc
 
 version:
