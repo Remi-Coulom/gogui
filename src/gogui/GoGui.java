@@ -658,6 +658,8 @@ class GoGui
 
     private String m_initAnalyze;
 
+    private String m_lastAnalyzeCommand;
+
     private String m_name;
 
     private String m_program;
@@ -703,8 +705,9 @@ class GoGui
         showStatus("Running " + m_analyzeCommand.getResultTitle() + " ...");
         go.Color toMove = m_board.getToMove();
         go.Color color = m_analyzeDialog.getSelectedColor();
-        String command = m_analyzeCommand.replaceWildCards(toMove, color);
-        runLengthyCommand(command,
+        m_lastAnalyzeCommand
+            = m_analyzeCommand.replaceWildCards(toMove, color);
+        runLengthyCommand(m_lastAnalyzeCommand,
                           new AnalyzeContinue(checkComputerMove, resetBoard));
     }
 
@@ -723,6 +726,10 @@ class GoGui
             String response = m_commandThread.getResponse();
             AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_board, response);
             int type = m_analyzeCommand.getType();
+            if (type == AnalyzeCommand.PARAM)
+                ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
+                                               title, response,
+                                               m_commandThread);
             boolean statusContainsResponse = false;
             if (type == AnalyzeCommand.STRING
                 || type == AnalyzeCommand.HSTRING

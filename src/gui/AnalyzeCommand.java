@@ -27,27 +27,29 @@ public class AnalyzeCommand
 
     public static final int NONE = 5;
 
-    public static final int PLIST = 6;
+    public static final int PARAM = 6;
 
-    public static final int PSTRING = 7;
+    public static final int PLIST = 7;
 
-    public static final int PSPAIRS = 8;
+    public static final int PSTRING = 8;
 
-    public static final int STRING = 9;
+    public static final int PSPAIRS = 9;
 
-    public static final int SBOARD = 10;
+    public static final int STRING = 10;
 
-    public static final int VAR = 11;
+    public static final int SBOARD = 11;
 
-    public static final int VARB = 12;
+    public static final int VAR = 12;
 
-    public static final int VARC = 13;
+    public static final int VARB = 13;
 
-    public static final int VARP = 14;
+    public static final int VARC = 14;
 
-    public static final int VARPO = 15;
+    public static final int VARP = 15;
 
-    public static final int VARW = 16;
+    public static final int VARPO = 16;
+
+    public static final int VARW = 17;
 
     public AnalyzeCommand(String line)
     {
@@ -66,6 +68,8 @@ public class AnalyzeCommand
             m_type = AnalyzeCommand.HSTRING;
         else if (typeStr.equals("hpstring"))
             m_type = AnalyzeCommand.HPSTRING;
+        else if (typeStr.equals("param"))
+            m_type = AnalyzeCommand.PARAM;
         else if (typeStr.equals("plist"))
             m_type = AnalyzeCommand.PLIST;
         else if (typeStr.equals("pspairs"))
@@ -96,8 +100,8 @@ public class AnalyzeCommand
             m_scale = Double.parseDouble(array[4]);
     }
 
-    public AnalyzeCommand(int type, String label, String command, String title,
-                          double scale)
+    public AnalyzeCommand(int type, String label, String command,
+                          String title, double scale)
     {
         m_type = type;
         m_label = label;

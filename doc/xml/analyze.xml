@@ -105,6 +105,23 @@ The response is not displayed.
 </varlistentry>
 
 <varlistentry>
+<term><userinput>param</userinput></term>
+<listitem>
+<simpara>
+The response to the command is a list of program parameters.
+An dialog will be shown to edit the parameters.
+Each line of the response must contain a key and value.
+It must be possible to change a value using the same command with the
+key and new value as arguments.
+Optionally, a line can have the string "[bool]" before the key to indicate
+a boolean parameter.
+No whitespaces are allowed in the parameter keys, but underscores will be
+replaced by spaces in the labels of the dialog.
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><userinput>plist</userinput></term>
 <listitem>
 <simpara>
