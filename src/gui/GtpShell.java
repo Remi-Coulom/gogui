@@ -628,6 +628,8 @@ public class GtpShell
     {
         m_gtpShellText.setPositionToEnd();
         String command = m_comboBox.getSelectedItem().toString();        
+        if (command.trim().equals(""))
+            return;
         sendCommand(command, null);
         appendToHistory(command);
         m_comboBox.hidePopup();
