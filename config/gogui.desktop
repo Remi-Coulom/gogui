@@ -9,5 +9,3 @@ Type=Application
 Categories=Application;Game;BoardGame
 MimeType=application/x-go-sgf
 StartupNotify=true
-DocPath=file:/usr/share/doc/gogui/index.html
-

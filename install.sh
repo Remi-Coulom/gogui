@@ -44,11 +44,15 @@ install -d $PREFIX/share/pixmaps
 install src/images/gogui.png $PREFIX/share/pixmaps
 
 install -d $PREFIX/share/applications
-cat config/gogui.desktop \
-| sed "s;DocPath=file:/usr/share/doc/gogui/index.html;DocPath=file:$PREFIX/share/doc/gogui/index.html;" \
-> $PREFIX/share/applications/gogui.desktop
+install config/gogui.desktop $PREFIX/share/applications
 
 install -d $PREFIX/share/mime-info/packages
 install config/gogui.xml $PREFIX/share/mime/packages
 
+install -d $PREFIX/share/omf/gogui
+cat config/gogui.omf \
+| sed "s;file:/usr/;file:$PREFIX/;" \
+> $PREFIX/share/omf/gogui/gogui.omf
+
 update-mime-database $PREFIX/share/mime
+scrollkeeper-update
