@@ -726,7 +726,7 @@ class GoGui
             {
                 if (response.indexOf("\n") < 0)
                 {
-                    showStatusAnalyzeResult(title + ": " + response);
+                    showStatus(title + ": " + response);
                     statusContainsResponse = true;
                 }
                 else
@@ -738,7 +738,7 @@ class GoGui
                 }
             }
             if (! statusContainsResponse)
-                showStatusAnalyzeResult(title);
+                showStatus(title);
             if (checkComputerMove)
                 checkComputerMove();
         }
@@ -2214,15 +2214,6 @@ class GoGui
 
     private void showStatus(String text)
     {
-        m_statusLabel.setOpaque(false);
-        m_statusLabel.setText(text);
-        m_statusLabel.repaint();
-    }
-
-    private void showStatusAnalyzeResult(String text)
-    {
-        m_statusLabel.setOpaque(true);
-        m_statusLabel.setBackground(java.awt.Color.WHITE);
         m_statusLabel.setText(text);
         m_statusLabel.repaint();
     }
