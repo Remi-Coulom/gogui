@@ -71,7 +71,7 @@ programs:
 <listitem><userinput>undo</userinput></listitem>
 <listitem><userinput>white</userinput></listitem>
 </itemizedlist>
-The following commands are forwarded to the referee program, if existsing,
+The following commands are forwarded to the referee program, if existing,
 otherwise to first program that implements them (Black is tried first):
 <itemizedlist>
 <listitem><userinput>final_score</userinput></listitem>
