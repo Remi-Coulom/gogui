@@ -3,7 +3,7 @@
 # $Source$
 #------------------------------------------------------------------------------
 
-IMAGES= \
+IMAGES = \
   images/back.png \
   images/filenew.png \
   images/fileopen.png \
@@ -23,7 +23,7 @@ IMAGES= \
   images/stop.png \
   images/wood.png
 
-PACKAGES= \
+PACKAGES = \
   gmp \
   gmptogtp \
   go \
@@ -39,7 +39,7 @@ PACKAGES= \
   utils \
   version
 
-DOC= \
+DOC = \
   doc/xml/analyze.xml \
   doc/xml/book.xml \
   doc/xml/bugs.xml \
@@ -61,7 +61,7 @@ DOC= \
   doc/xml/tools.xml \
   doc/xml/version.xml
 
-JAR= \
+JAR = \
   gogui.jar \
   gtpdummy.jar \
   gtpregress.jar \
@@ -71,12 +71,13 @@ JAR= \
   sgftotex.jar \
   twogtp.jar
 
-JAVAOPT=-deprecation -sourcepath . -source 1.4 -classpath comm.jar
+JAVAOPT = -deprecation -sourcepath . -source 1.4
 
 all: $(JAR)
 
 gogui.jar: build/gogui/doc/index.html $(patsubst %, build/gogui/%, $(IMAGES)) $(shell cat build/files-gogui.txt) build/gogui/config/analyze-commands
 
+gmptogtp.jar: JAVAOPT += -classpath comm.jar
 gmptogtp.jar: $(shell cat build/files-gmptogtp.txt)
 
 gtpdummy.jar: $(shell cat build/files-gtpdummy.txt)
