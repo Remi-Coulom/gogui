@@ -691,6 +691,20 @@ public class TwoGtp
             String duplicate =
                 Compare.checkDuplicate(m_board, moves, m_games, m_alternate,
                                        isAlternated());
+            // If a program is dead we wait for a few seconds, because it
+            // could be because the TwoGtp process was killed and we don't
+            // want to write a result in this case.
+            if (m_black.isProgramDead() || m_white.isProgramDead())
+            {
+                try
+                {
+                    Thread.sleep(3000);
+                }
+                catch (InterruptedException e)
+                {
+                    assert(false);
+                }
+            }
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moves.size(), error,
                        errorMessage, cpuTimeBlack, cpuTimeWhite);
