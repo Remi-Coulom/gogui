@@ -184,6 +184,7 @@ installation directory.
  gmp/*.class
  gmptogtp/*.class
  gtp/GtpServer.class
+ gtp/ReadThread.class
  utils/Options.class
  utils/StringUtils.class
  version/Version.class
