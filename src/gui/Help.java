@@ -304,6 +304,15 @@ class Help
             }
             try
             {
+                String[] cmd = { "mozilla", url.toString() };
+                runProcess(cmd);
+                return;
+            }
+            catch (IOException e)
+            {
+            }
+            try
+            {
                 String[] cmd = { "rundll32", "url.dll,FileProtocolHandler",
                                  url.toString() };
                 runProcess(cmd);
