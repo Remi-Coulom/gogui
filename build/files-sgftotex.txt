@@ -8,4 +8,5 @@ src/sgf/Reader.java
 src/sgftotex/SgfToTex.java
 src/utils/FileUtils.java
 src/utils/Options.java
+src/utils/StringUtils.java
 src/version/Version.java
