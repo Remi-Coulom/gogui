@@ -65,9 +65,9 @@ class GameNode
         graphics.setColor(java.awt.Color.lightGray);
         graphics.fillRect(0, 0, m_width, m_width);
         Move move = m_node.getMove();
+        int halfSize = m_width / 2;
         if (m_node.getNumberAddBlack() + m_node.getNumberAddWhite() > 0)
         {
-            int halfSize = m_width / 2;
             graphics.setColor(java.awt.Color.black);
             graphics.fillOval(0, 0, halfSize, halfSize);
             graphics.fillOval(halfSize, halfSize, halfSize, halfSize);
@@ -77,11 +77,10 @@ class GameNode
         }
         else if (move == null)
         {
-            graphics.setColor(java.awt.Color.blue);
-            int margin = 7;
-            graphics.fillRect(margin, margin,
-                              m_width - 2 * margin + 1,
-                              m_width - 2 * margin + 1);
+            graphics.setColor(java.awt.Color.darkGray);
+            int[] xPoints = { halfSize, m_width, halfSize, 0 };
+            int[] yPoints = { 0, halfSize, m_width, halfSize };
+            graphics.fillPolygon(xPoints, yPoints, 4);
         }        
         else
         {
