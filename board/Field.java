@@ -28,6 +28,7 @@ class Field
         setPreferredSize(size);
         setMinimumSize(new Dimension(3, 3));
         setBorder(null);
+        setOpaque(false);
         addActionListener(this);
     }
 
