@@ -7,7 +7,8 @@ doc:
 	mkdir -p html homepage
 	xsltproc \
           --param chunk.section.depth 0 \
-          --param toc.section.depth 1 \
+          --param navig.showtitles 0 \
+          --param toc.section.depth 0 \
           -o html/ \
           $(XSLDIR)/html/chunk.xsl xml/book.xml
 	xsltproc -o homepage/index.html \
