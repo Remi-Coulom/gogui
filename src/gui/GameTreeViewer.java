@@ -48,7 +48,7 @@ class GameNode
         if (graphics2D != null)
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.setColor(UIManager.getColor("Label.background"));
+        graphics.setColor(m_colorBackground);
         graphics.fillRect(0, 0, m_width, m_width);
         Move move = m_node.getMove();
         int halfSize = m_width / 2;
@@ -57,7 +57,7 @@ class GameNode
             graphics.setColor(java.awt.Color.black);
             graphics.fillOval(0, 0, halfSize, halfSize);
             graphics.fillOval(halfSize, halfSize, halfSize, halfSize);
-            graphics.setColor(java.awt.Color.decode("#e2dad3"));
+            graphics.setColor(java.awt.Color.white);
             graphics.fillOval(halfSize, 0, halfSize, halfSize);
             graphics.fillOval(0, halfSize, halfSize, halfSize);
         }
@@ -123,6 +123,9 @@ class GameNode
     public int m_width;
 
     public int m_height;
+
+    private static final java.awt.Color m_colorBackground
+        = UIManager.getColor("Label.background");
 
     private GameTreeViewer.Listener m_listener;
 
