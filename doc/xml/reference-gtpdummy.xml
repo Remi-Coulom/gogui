@@ -44,28 +44,36 @@ Plays random moves.
 <option>-config</option> <replaceable>file</replaceable>
 </term>
 <listitem>
+<para>
 Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-help</option></term>
 <listitem>
+<para>
 Print help and exit.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-log</option> <replaceable>file</replaceable></term>
 <listitem>
+<para>
 Log GTP stream to file.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-version</option></term>
 <listitem>
+<para>
 Print version and exit.
+</para>
 </listitem>
 </varlistentry>
 
@@ -80,66 +88,82 @@ Print version and exit.
 <varlistentry>
 <term><userinput>dummy_bwboard</userinput></term>
 <listitem>
+<para>
 Output a board randomly filled with "B" and "W".
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>dummy_crash</userinput></term>
 <listitem>
+<para>
 Exit program with return code -1.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
-<userinput>dummy_next_failue <arg><replaceable>response</replaceable></arg>
+<userinput>dummy_next_failue <replaceable>response</replaceable>
 </userinput>
 </term>
 <listitem>
-Let next command fail with <arg><replaceable>response</replaceable></arg>.
+<para>
+Let next command fail with <replaceable>response</replaceable>.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
-<userinput>dummy_next_success <arg><replaceable>response</replaceable></arg>
+<userinput>dummy_next_success <replaceable>response</replaceable>
 </userinput>
 </term>
 <listitem>
-Let next command succeed with <arg><replaceable>response</replaceable></arg>.
+<para>
+Let next command succeed with <replaceable>response</replaceable>.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
-<userinput>dummy_sleep <arg><replaceable>seconds</replaceable></arg>
+<userinput>dummy_sleep <replaceable>seconds</replaceable>
 </userinput>
 </term>
 <listitem>
+<para>
 Sleep for a number of seconds (default 20).
 This command can be interrupted.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>echo</userinput></term>
 <listitem>
+<para>
 Print argument as response.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>echo_err</userinput></term>
 <listitem>
+<para>
 Print argument to standard error.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>gogui_interrupt</userinput></term>
 <listitem>
+<para>
 Indicate interrupt ability for GoGui.
+</para>
 </listitem>
 </varlistentry>
 

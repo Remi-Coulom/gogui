@@ -8,8 +8,8 @@
 Clicking on an empty field in the Go board plays a move there.
 In setup mode, score mode or after certain analyze commands
 clicking on a field has a special meaning (see
-<xref linkend="setup mode"></xref>, <xref linkend="score"></xref> and
-<xref linkend="analyze"></xref>).
+<xref linkend="setupmode"/>, <xref linkend="score"/> and
+<xref linkend="analyze"/>).
 </para>
 <para>
 If <guimenuitem>Show cursor</guimenuitem> is enabled in the
@@ -29,48 +29,57 @@ of the board.
 <varlistentry>
 <term><guimenuitem>New</guimenuitem></term>
 <listitem>
+<para>
 Start a new game.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Open...</guimenuitem></term>
 <listitem>
+<para>
 Open a game from a file in
 <ulink url="http://www.red-bean.com/sgf/">SGF</ulink>
 format.
 <warning>
-<para>
+<simpara>
 If you open a file created by another application that contains
 side variations and node properties and save the game by overwriting
 the original file, all this information will be lost.
-</para>
+</simpara>
 </warning>
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Open recent</guisubmenu></term>
 <listitem>
+<para>
 Open a game from a list of recently used files.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Save...</guimenuitem></term>
 <listitem>
+<para>
 Save the current game to a file.
 If the file name ending is <filename>sgf</filename>, the game is saved
 in SGF format.
 If the file name ending is <filename>tex</filename>, the game is exported
 to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
 <ulink url="http://www.abo.fi/~vbos/psgo-frame.html">PSGO</ulink> style.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Save position...</guimenuitem></term>
 <listitem>
+<para>
 Save the current position to a file.
 If the file name ending is <filename>sgf</filename>, the game is saved
 in SGF format.
@@ -79,30 +88,37 @@ to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
 <ulink url="http://www.abo.fi/~vbos/psgo-frame.html">PSGO</ulink> style.
 When exporting to LaTeX, some board markups from analyze commands
 are also exported (string labels, marked and selected points).
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Print...</guimenuitem></term>
 <listitem>
+<para>
 Print the current position.
 A screen shot of the current board including all markups from
 analyze commands is printed.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Open with program...</guimenuitem></term>
 <listitem>
+<para>
 Open the current game at the current position with a different
 Go program.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Quit</guimenuitem></term>
 <listitem>
+<para>
 Quit GoGui.
+</para>
 </listitem>
 </varlistentry>
 
@@ -116,125 +132,158 @@ Quit GoGui.
 <varlistentry>
 <term><guisubmenu>Size</guisubmenu></term>
 <listitem>
+<para>
 Change the board size and start a new game.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Komi...</guimenuitem></term>
 <listitem>
+<para>
 Change the komi.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Rules</guisubmenu></term>
 <listitem>
+<para>
 Change the rules.
 Japanese rules count only territory, Chinese rules also the stones
 (but ignore prisoners).
 The program is informed by the <userinput>scoring_system</userinput>
 (from an early draft of GTP version 2) if it supports this command.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Handicap</guisubmenu></term>
 <listitem>
+<para>
 Set the number of handicap stones.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Computer color</guisubmenu></term>
 <listitem>
+<para>
 Choose what side the Go program plays.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Pass</guimenuitem></term>
 <listitem>
+<para>
 Do a pass move.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Computer play</guimenuitem></term>
 <listitem>
+<para>
 Make the computer play a move.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Interrupt</guimenuitem></term>
 <listitem>
+<para>
 Interrupt the command that is currently running.
 This menu item is only active if a lengthy command (like move
 generation) is running and the Go program supports interrupting
-(see <xref linkend="interrupt">Interrupting commands</xref>).
+(see <xref linkend="interrupt"/>).
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Beginning</guimenuitem></term>
 <listitem>
+<para>
 Retract all moves.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Backward 10</guimenuitem></term>
 <listitem>
+<para>
 Retract 10 moves.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Backward</guimenuitem></term>
 <listitem>
+<para>
 Retract a moves.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Forward</guimenuitem></term>
 <listitem>
+<para>
 Replay a move.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Forward 10</guimenuitem></term>
 <listitem>
+<para>
 Replay 10 moves.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>End</guimenuitem></term>
 <listitem>
+<para>
 Replay all moves.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Goto...</guimenuitem></term>
 <listitem>
+<para>
 Go to a certain move number.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Truncate...</guimenuitem></term>
 <listitem>
+<para>
 Truncate all game moves following the current position.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry id="score">
 <term><guimenuitem>Score</guimenuitem></term>
 <listitem>
+<para>
 Score the current game.
 A window will be opened containing score information.
 First the Go program will be asked what stones are dead with the
@@ -246,6 +295,7 @@ You leave score mode by closing the score window.
 If you close the score window by pressing the <guibutton>Ok</guibutton>
 button, the score will be included in the file if you save the game as an SGF
 file later.
+</para>
 </listitem>
 </varlistentry>
 
@@ -256,35 +306,43 @@ file later.
 <title>Setup menu</title>
 <variablelist>
 
-<varlistentry id="setup mode">
+<varlistentry id="setupmode">
 <term><guimenuitem>Setup mode</guimenuitem></term>
 <listitem>
+<para>
 Enter or leave setup mode.
 In setup mode you can place or remove stones of the current color.
 The current color can be changed with the <guimenuitem>Black</guimenuitem>
 and <guimenuitem>White</guimenuitem> menu item from the
 <guimenu>Setup</guimenu> menu.
 <note>
+<simpara>
 Setting up a position is not reversible.
 After leaving setup mode you are in a new game starting with the current
 position and the current color to move.
+</simpara>
 </note>
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Black</guimenuitem></term>
 <listitem>
+<para>
 Set the current color for setting up stones and to current color to move
 to Black.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>White</guimenuitem></term>
 <listitem>
+<para>
 Set the current color for setting up stones and to current color to move
 to White.
+</para>
 </listitem>
 </varlistentry>
 
@@ -298,32 +356,40 @@ to White.
 <varlistentry>
 <term><guimenuitem>Beep after move</guimenuitem></term>
 <listitem>
+<para>
 Beep after each computer move.
 With most versions of Java the PC speaker is used for the beep.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Remember window sizes</guimenuitem></term>
 <listitem>
+<para>
 Remember positions and sizes of the windows.
 The sizes are remembered depending on the board size to allow a different
 layout for different board sizes.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Show cursor</guimenuitem></term>
 <listitem>
+<para>
 Show cursor on board to allow clicking on fields with the
 <keycap>Enter</keycap> key.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Show last move</guimenuitem></term>
 <listitem>
+<para>
 Mark the last move with a red circle.
+</para>
 </listitem>
 </varlistentry>
 
@@ -337,14 +403,18 @@ Mark the last move with a red circle.
 <varlistentry>
 <term><guimenuitem>Analyze</guimenuitem></term>
 <listitem>
+<para>
 Open the Analyze dialog or bring it to front, if already open.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Gtp shell</guimenuitem></term>
 <listitem>
+<para>
 Open the GTP shell window or bring it to front, if already open.
+</para>
 </listitem>
 </varlistentry>
 
@@ -358,14 +428,18 @@ Open the GTP shell window or bring it to front, if already open.
 <varlistentry>
 <term><guimenuitem>Contents</guimenuitem></term>
 <listitem>
+<para>
 Open a window with the online help.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>About</guimenuitem></term>
 <listitem>
+<para>
 Show the version of GoGui.
+</para>
 </listitem>
 </varlistentry>
 

@@ -48,7 +48,7 @@ additional files with name
 <filename><replaceable>test</replaceable>.out.html</filename>
 are generated.
 An additional special comment
-<userinput>#&gt; <arg><replaceable>file</replaceable></arg></userinput>
+<userinput>#&gt; <replaceable>file</replaceable></userinput>
 can be used to add the output of the last command to
 <filename><replaceable>file</replaceable></filename> prepended
 by the ID of the last test and 0/1 if the last test passed/failed.
@@ -71,7 +71,9 @@ will be used.
 <option>-config</option> <replaceable>file</replaceable>
 </term>
 <listitem>
+<para>
 Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
 </listitem>
 </varlistentry>
 
@@ -80,7 +82,9 @@ Read command line options and arguments from <replaceable>file</replaceable>.
 <option>-help</option>
 </term>
 <listitem>
+<para>
 Display help and exit.
+</para>
 </listitem>
 </varlistentry>
 
@@ -89,8 +93,10 @@ Display help and exit.
 <option>-output</option> <replaceable>directory</replaceable>
 </term>
 <listitem>
+<para>
 Write output files to
 <filename><replaceable>directory</replaceable></filename>.
+</para>
 </listitem>
 </varlistentry>
 
@@ -99,7 +105,9 @@ Write output files to
 <option>-version</option>
 </term>
 <listitem>
+<para>
 Print version and exit.
+</para>
 </listitem>
 </varlistentry>
 

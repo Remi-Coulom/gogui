@@ -47,39 +47,49 @@ Converts <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files to
 <option>-config</option> <replaceable>file</replaceable>
 </term>
 <listitem>
+<para>
 Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-force</option></term>
 <listitem>
+<para>
 Overwrite existing files.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-help</option></term>
 <listitem>
+<para>
 Display help and exit.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-pass</option></term>
 <listitem>
+<para>
 Use <userinput>\pass</userinput> command for pass moves
 (only supported for PSGO style version 0.14 or newer).
 Otherwise pass moves are printed as a combination of
 <userinput>\refstepcounter</userinput> and
 <userinput>\toggleblackmove</userinput> commands.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-version</option></term>
 <listitem>
+<para>
 Print version and exit.
+</para>
 </listitem>
 </varlistentry>
 

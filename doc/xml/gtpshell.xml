@@ -34,26 +34,34 @@ file <filename>~/.gogui/config</filename>.
 <varlistentry>
 <term><keycap>Tab</keycap></term>
 <listitem>
+<simpara>
 Complete command line as far as possible from command history or list of from
 commands supported by the program.
+</simpara>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><keycap>Down</keycap></term>
 <listitem>
+<simpara>
 Popup window with command history.
+</simpara>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><keycombo><keycap>Shift</keycap><keycap>Up</keycap></keycombo></term>
 <listitem>
+<simpara>
 Scroll up.
+</simpara>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><keycombo><keycap>Shift</keycap><keycap>Down</keycap></keycombo></term>
 <listitem>
+<simpara>
 Scroll down.
+</simpara>
 </listitem>
 </varlistentry>
 </variablelist>

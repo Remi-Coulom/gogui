@@ -27,12 +27,15 @@ GoGui requires Java 1.4.
 <title>Project websites</title>
 <itemizedlist>
 <listitem>
-<ulink url="http://gogui.sourceforge.net">
-GoGui home page</ulink>
+<simpara>
+<ulink url="http://gogui.sourceforge.net">GoGui home page</ulink>
+</simpara>
 </listitem>
 <listitem>
-<ulink url="http://sourceforge.net/projects/gogui/">
-GoGui project page at SourceForge</ulink>
+<simpara>
+<ulink url="http://sourceforge.net/projects/gogui/">GoGui project page
+at SourceForge</ulink>
+</simpara>
 </listitem>
 </itemizedlist>
 </section>

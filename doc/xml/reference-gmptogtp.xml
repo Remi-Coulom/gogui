@@ -40,8 +40,7 @@ Go Text Protocol adpater program for playing games using the
 Go Modem Protocol over a serial line.
 </para>
 <para>
-If a <userinput>
-<arg choice="plain"><replaceable>program</replaceable></arg></userinput>
+If a <userinput><option><replaceable>program</replaceable></option></userinput>
 argument is given, then the given program is run as a child process and
 expected to communicate via GMP through its standard input and output.
 For using a serial device, an implementation of the
@@ -77,18 +76,20 @@ with the special comment line
 <option>-baud</option> <replaceable>n</replaceable>
 </term>
 <listitem>
+<para>
 Speed of serial device (default 2400).
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
-<option>-color</option>
-  <group choice="plain"> <arg choice="plain">black</arg>
-  <arg choice="plain">white</arg></group>
+<option>-color</option> black | white
 </term>
 <listitem>
+<para>
 Color of the modem player.
+</para>
 </listitem>
 </varlistentry>
 
@@ -97,7 +98,9 @@ Color of the modem player.
 <option>-config</option> <replaceable>file</replaceable>
 </term>
 <listitem>
+<para>
 Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
 </listitem>
 </varlistentry>
 
@@ -106,21 +109,23 @@ Read command line options and arguments from <replaceable>file</replaceable>.
 <option>-device</option> <replaceable>serial</replaceable>
 </term>
 <listitem>
+<para>
 Serial device name.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
-<option>-flow</option> <group choice="plain">
-  <arg choice="plain">rtscts</arg><arg choice="plain">xonxoff</arg>
-  <arg choice="plain">none</arg></group>
+<option>-flow</option> rtscts | xonxoff | none
 </term>
 <listitem>
+<para>
 Flow control for serial device.
 Possible values are hardware control (RTS/CTS), software control (XON/XOFF) or
 no control. 
 Default: RTS/CTS.
+</para>
 </listitem>
 </varlistentry>
 
@@ -129,7 +134,9 @@ Default: RTS/CTS.
 <option>-help</option>
 </term>
 <listitem>
+<para>
 Display help and exit.
+</para>
 </listitem>
 </varlistentry>
 
@@ -138,7 +145,9 @@ Display help and exit.
 <option>-list</option>
 </term>
 <listitem>
+<para>
 List all serial devices and exit.
+</para>
 </listitem>
 </varlistentry>
 
@@ -147,11 +156,13 @@ List all serial devices and exit.
 <option>-simple</option>
 </term>
 <listitem>
+<para>
 Use simple version of the Go Modem Protocol as defined in the
 Appendix A in Call For Participation to the FJK Computer Go
 Tournament 2000
 (<ulink url="http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt">
 http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt</ulink>)
+</para>
 </listitem>
 </varlistentry>
 
@@ -160,7 +171,9 @@ http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt</ulink>)
 <option>-size</option> <replaceable>n</replaceable>
 </term>
 <listitem>
+<para>
 Board size (default 19).
+</para>
 </listitem>
 </varlistentry>
 
@@ -169,11 +182,15 @@ Board size (default 19).
 <option>-verbose</option>
 </term>
 <listitem>
+<para>
 Print debugging messages.
 <note>
+<simpara>
 This option is currently ignored, the output to standard error is always
 verbose.
+</simpara>
 </note>
+</para>
 </listitem>
 </varlistentry>
 
@@ -182,7 +199,9 @@ verbose.
 <option>-version</option>
 </term>
 <listitem>
+<para>
 Print version and exit.
+</para>
 </listitem>
 </varlistentry>
 
@@ -191,7 +210,9 @@ Print version and exit.
 <option>-wait</option>
 </term>
 <listitem>
+<para>
 Wait for other side to send the first newgame command.
+</para>
 </listitem>
 </varlistentry>
 
@@ -206,29 +227,37 @@ Wait for other side to send the first newgame command.
 <varlistentry>
 <term><userinput>gogui_interrupt</userinput></term>
 <listitem>
+<para>
 Indicate interrupt ability for GoGui.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>gogui_title</userinput></term>
 <listitem>
+<para>
 Return a title for GoGui.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>gmp_queue</userinput></term>
 <listitem>
+<para>
 Print received queued commands that have already been
 acknowledged.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>gmp_text <replaceable>text</replaceable></userinput></term>
 <listitem>
+<para>
 Send text as talk characters.
+</para>
 </listitem>
 </varlistentry>
 

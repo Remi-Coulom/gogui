@@ -11,13 +11,16 @@ There are two ways of sending the interrupt signal to the program:
 
 <orderedlist>
 <listitem>
+<para>
 The Go program reads the GTP input stream while processing a command and can
 interrupt the current command if the special comment line
 <userinput>#&#160;interrupt</userinput> is received.
 The Go program indicates this ability by implementing the command
 <userinput>gogui_interrupt</userinput>.
+</para>
 </listitem>
 <listitem>
+<para>
 The alternative way is that the program can handle INT signals.
 It indicates this by implementing the <userinput>gogui_sigint</userinput>
 command and returning its process ID.
@@ -26,6 +29,7 @@ by invoking the shell command
 <userinput>kill -INT <replaceable>pid</replaceable></userinput>.
 However this will work only on UNIX systems and lacks the feature of
 transmitting interrupt signals over network GTP streams.
+</para>
 </listitem>
 </orderedlist>
 

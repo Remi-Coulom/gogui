@@ -5,13 +5,15 @@
 <para>
 <application>GoGui</application> can be invoked with the command:
 <blockquote>
-<userinput>
+<para>
+<cmdsynopsis>
 <command>java -jar gogui.jar</command>
 <arg><replaceable>options</replaceable></arg>
 <arg><replaceable>program</replaceable></arg>
-</userinput>
+</cmdsynopsis>
+</para>
 </blockquote>  
-The argument <arg choice="plain"><replaceable>program</replaceable></arg>
+The argument <option><replaceable>program</replaceable></option>
 must be a valid command line for executing the actual Go program.
 If no program is given, GoGui will open a dialog and ask for a command.
 If the empty string "" is given as a command, GoGui will start without any Go
@@ -19,11 +21,7 @@ program.
 </para>
 
 <para>
-See
-<xref linkend="reference-gogui">
-<citerefentry><refentrytitle>gogui</refentrytitle></citerefentry>
-</xref>
-for a listing of the possible options.
+See <xref linkend="reference-gogui"/> for a listing of the possible options.
 </para>
 
 <para>
@@ -36,11 +34,13 @@ On Unix systems, it is useful to edit the shell script
 of <filename>java</filename> and put it somewhere in your path.
 The invocation is then simply:
 <blockquote>
-<userinput>
+<para>
+<cmdsynopsis>
 <command>gogui</command>
 <arg><replaceable>options</replaceable></arg>
 <arg><replaceable>program</replaceable></arg>
-</userinput>
+</cmdsynopsis>
+</para>
 </blockquote>  
 To register <application>GoGui</application> as a handler
 for <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files,

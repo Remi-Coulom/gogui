@@ -56,10 +56,12 @@ and use GTP (Go Text Protocol).
 <option>-analyze</option> <replaceable>command</replaceable>
 </term>
 <listitem>
+<para>
 Initialize analyze command and automatically run it after
 changes on the board.
 Work only for commands not containing wildcards that are replaced
 user input.
+</para>
 </listitem>
 </varlistentry>
 
@@ -68,8 +70,10 @@ user input.
 <option>-auto</option>
 </term>
 <listitem>
+<para>
 Automatically start a new game if the program plays both
 colors and a game is finished.
+</para>
 </listitem>
 </varlistentry>
 
@@ -78,8 +82,10 @@ colors and a game is finished.
 <option>-command</option> <replaceable>command</replaceable>
 </term>
 <listitem>
+<para>
 Send Gtp command at startup. The argument can contain multiple
 commands separated by '\n'.
+</para>
 </listitem>
 </varlistentry>
 
@@ -88,7 +94,9 @@ commands separated by '\n'.
 <option>-computer-black</option>
 </term>
 <listitem>
+<para>
 Computer plays black.
+</para>
 </listitem>
 </varlistentry>
 
@@ -97,7 +105,9 @@ Computer plays black.
 <option>-computer-both</option>
 </term>
 <listitem>
+<para>
 Computer plays both sides.
+</para>
 </listitem>
 </varlistentry>
 
@@ -106,7 +116,9 @@ Computer plays both sides.
 <option>-computer-none</option>
 </term>
 <listitem>
+<para>
 Computer plays no side.
+</para>
 </listitem>
 </varlistentry>
 
@@ -115,7 +127,9 @@ Computer plays no side.
 <option>-config</option> <replaceable>file</replaceable>
 </term>
 <listitem>
+<para>
 Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
 </listitem>
 </varlistentry>
 
@@ -124,7 +138,9 @@ Read command line options and arguments from <replaceable>file</replaceable>.
 <option>-file</option> <replaceable>filename</replaceable>
 </term>
 <listitem>
+<para>
 Load SGF file.
+</para>
 </listitem>
 </varlistentry>
 
@@ -133,7 +149,9 @@ Load SGF file.
 <option>-fillpasses</option>
 </term>
 <listitem>
+<para>
 Never send subsequent moves of the same color to the program.
+</para>
 </listitem>
 </varlistentry>
 
@@ -142,7 +160,9 @@ Never send subsequent moves of the same color to the program.
 <option>-gtpfile</option> <replaceable>filename</replaceable>
 </term>
 <listitem>
+<para>
 Send GTP file at startup.
+</para>
 </listitem>
 </varlistentry>
 
@@ -151,7 +171,9 @@ Send GTP file at startup.
 <option>-help</option>
 </term>
 <listitem>
+<para>
 Display help and exit.
+</para>
 </listitem>
 </varlistentry>
 
@@ -160,7 +182,9 @@ Display help and exit.
 <option>-komi</option> <replaceable>value</replaceable>
 </term>
 <listitem>
+<para>
 Set the komi value.
+</para>
 </listitem>
 </varlistentry>
 
@@ -169,17 +193,20 @@ Set the komi value.
 <option>-move</option> <replaceable>n</replaceable>
 </term>
 <listitem>
+<para>
 Load SGF file until move number.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
-<option>-rules</option> <group choice="plain">
-  <arg choice="plain">chinese</arg> <arg choice="plain">japanese</arg> </group>
+<option>-rules</option> chinese | japanese
 </term>
 <listitem>
+<para>
 Set rules.
+</para>
 </listitem>
 </varlistentry>
 
@@ -188,7 +215,9 @@ Set rules.
 <option>-size</option> <replaceable>n</replaceable>
 </term>
 <listitem>
+<para>
 Set board size.
+</para>
 </listitem>
 </varlistentry>
 
@@ -197,7 +226,9 @@ Set board size.
 <option>-time</option> <replaceable>timespec</replaceable>
 </term>
 <listitem>
+<para>
 Set time limits (min[+min/moves]).
+</para>
 </listitem>
 </varlistentry>
 
@@ -206,7 +237,9 @@ Set time limits (min[+min/moves]).
 <option>-verbose</option>
 </term>
 <listitem>
+<para>
 Print debugging messages.
+</para>
 </listitem>
 </varlistentry>
 
@@ -215,7 +248,9 @@ Print debugging messages.
 <option>-version</option>
 </term>
 <listitem>
+<para>
 Print version and exit.
+</para>
 </listitem>
 </varlistentry>
 

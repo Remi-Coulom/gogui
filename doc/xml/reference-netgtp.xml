@@ -42,21 +42,27 @@ and input stream to standard input and output.
 <option>-config</option> <replaceable>file</replaceable>
 </term>
 <listitem>
+<para>
 Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-help</option></term>
 <listitem>
+<para>
 Display help and exit.
+</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><option>-version</option></term>
 <listitem>
+<para>
 Print version and exit.
+</para>
 </listitem>
 </varlistentry>
 

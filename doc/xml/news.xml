@@ -1,359 +1,484 @@
 <appendix id="news">
 <title>Release notes</title>
+<para>
 <revhistory>
 
 <revision>
 <revnumber>&version;</revnumber>
+<date></date>
 <authorinitials>enz</authorinitials>
-<revremark>
-<itemizedlist>
-</itemizedlist>
-</revremark>
 </revision>
 
 <revision>
 <revnumber>0.5</revnumber>
 <date>23 Feb 2004</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Use <ulink url="http://ant.apache.org">Apache Ant</ulink> instead of
 GNU make as a build system.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 <application>TwoGtp</application>: support an optional third program as a
 referee.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 All programs have now the abilty to read command line options and arguments
 from a file with the <option>-config</option> option.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 <application>SgfToTex</application>: improved output.
 New options <option>-force</option>, <option>-title</option>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Allow to enter non-standard boardsizes from menu
 <guimenuitem>Size</guimenuitem>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Minor fixes and improvements.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.4</revnumber>
 <date>19 Nov 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 <application>TwoGtp</application>: new option <option>-force</option>;
 forward <userinput>time_settings</userinput>; fixes in format of result file.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 New <guimenu>Game</guimenu> menu item <guimenuitem>Truncate</guimenuitem>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 New <guimenu>Settings</guimenu> menu item
 <guimenuitem>Show cursor</guimenuitem>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 <application>GmpToGtp</application>: new option <option>-flow</option>
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Minor fixes and improvements.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.4pre2</revnumber>
 <date>29 Oct 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Improve export as LaTeX document.
 New option <option>-pass</option> for <application>SgfToTex</application>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Add documentation for main menu bar.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 <application>TwoGtp</application>: option <option>-analyze</option>
 also outputs a text file containing a table row with summary information.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Other minor fixes and improvements.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.4pre1</revnumber>
 <date>18 Sep 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 New menu items <guimenuitem>Open Recent</guimenuitem> and
 <guimenuitem>Goto</guimenuitem>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 <application>TwoGtp</application>: new option <option>-analyze</option>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Analyze commands are now selected from a dialog.
 Lots of new analyze command wildcards and result types.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 New tool <application>GtpDummy</application>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Remove <application>GoGui</application> option <option>-gtpshell</option>.
 Instead remember size and visibility of windows with new
 <guimenu>Settings</guimenu> item
 <guimenuitem>Remember window sizes</guimenuitem>
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Support for multiple <filename>analyze-commands</filename> files.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Lots of other fixes and enhancements.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.3.3</revnumber>
 <date>3 Sep 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Minor bugfixes.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.3.2</revnumber>
 <date>1 Sep 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Fix bug when truncating history in GTP shell.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Fix bug: marker was not cleared after running analyze command
 with point argument.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.3.1</revnumber>
 <date>29 Aug 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Bugfix release.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.3.0</revnumber>
 <date>25 Aug 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 <application>TwoGto</application>:
 new options for playing a series of games and saving the results;
 forward GTP extension commands to program that implement them;
 handle GTP version 2 programs.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 New <guimenu>Settings</guimenu> item
 <guimenuitem>Show last move</guimenuitem>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 <application>GoGui</application> uses GTP extension command
 <userinput>gogui_title</userinput> if available.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Fix problem in Gtp shell: caret was not redrawn after entering
 command.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Use key accelerators more similar to existing UI style guides.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Games can be saved in LaTex format usinf psgo.sty.
 Standalone converter <command>sgftotex</command>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Rename <application>GoGui</application> option
 <option>-autoplay</option> to <option>-auto</option>.
 Remove option <option>-autofile</option>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 <application>GoGui</application>: new option
 <option>-command</option>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 New tool <application>GtpRegress</application>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Rename <application>GtpNet</application> to
 <application>GtpServer</application>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Setup and score mode do no longer use their own the menu bar.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Go programs that can understand the special comment line
 <userinput>#&#160;interrupt</userinput> must indicate this by implementing the
 command <userinput>gogui_interrupt</userinput>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Lots of other fixes and enhancements.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.2.2</revnumber>
 <date>2 Aug 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Use GTP command <userinput>final_status_list</userinput> if
 supported by the Go program for initializing dead stones when scoring.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Make Japanese rules default and store them in preferences.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 After setting up a position set last setup color as color to move.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Show filename in title bar if game is loaded and not modified.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Add option for beep after move.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Use <userinput>time_settings</userinput> command if
 <option>-time</option> option is used.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 New options <option>-autofile</option>,
 <option>-computer-both</option>, <option>-computer-black</option>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Compile <application>TwoGtp</application> into its own jar file
 <filename>twogtp.jar</filename>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Fix bug in <application>GmpToGtp</application>: Black should send
 NEWGAME if <option>-simple</option> option is used.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Fix potential deadlock if program writes to standard error
 before GUI is visible.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Add network tools <application>GtpNet</application> and
 <application>NetGtp</application>.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Lots of other fixes and enhancements.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.2.1</revnumber>
 <date>23 Jun 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Fix cursor not positioned at last moves if handicap or setup stones exist.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Fix bug: handicap stones were played after setup done.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Clear old markups before showing an analyze command with a point list result.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Store komi in preferences.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Add command reference to documentation.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Other small fixes.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.2</revnumber>
 <date>23 Apr 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Board uses background image and antialiasing.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Cursor keys can be used to enter moves.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Documentation in docbook format.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Improvements in Gmp to Gtp adapter.
+</simpara>
 </listitem>
 <listitem>
+<simpara>
 Lots of other small fixes and improvements.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 <revision>
 <revnumber>0.1</revnumber>
 <date>4 Mar 2003</date>
 <authorinitials>enz</authorinitials>
-<revremark>
+<revdescription>
 <itemizedlist>
 <listitem>
+<simpara>
 Initial release.
+</simpara>
 </listitem>
 </itemizedlist>
-</revremark>
+</revdescription>
 </revision>
 
 </revhistory>
+</para>
 </appendix>
