@@ -471,7 +471,7 @@ public class AnalyzeDialog
                                + " AnalyzeDialog.saveRecent");
             return;
         }
-        final int max = 20;
+        int max = 20;
         for (int i = 0; i < m_comboBoxHistory.getItemCount() && i < max; ++i)
             out.println(m_comboBoxHistory.getItemAt(i));
         out.close();

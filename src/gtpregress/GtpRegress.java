@@ -698,7 +698,7 @@ class GtpRegress
 
     private String truncate(String string)
     {
-        final int maxLength = 25;
+        int maxLength = 25;
         if (string.length() < maxLength)
             return string.trim();
         return string.substring(0, maxLength).trim() + "...";

@@ -154,7 +154,7 @@ public class Writer
             printNewLine();
             return;
         }
-        final int maxCharPerLine = 78;
+        int maxCharPerLine = 78;
         if (m_buffer.length() + text.length() > maxCharPerLine)
             printNewLine();
         m_buffer.append(text);

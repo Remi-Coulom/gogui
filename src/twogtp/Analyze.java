@@ -573,7 +573,7 @@ class Histogram
         for (max = m_size - 1; max > 0 && m_array[max] == 0; --max);
         for (int i = min; i <= max; ++i)
         {
-            final int scale = 630;
+            int scale = 630;
             int width = m_array[i] * scale / getCount();
             out.print("<tr><td align=\"right\">" + (m_min + i * m_step)
                       + "</td><td><table cellspacing=\"0\"" +

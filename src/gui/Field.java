@@ -35,9 +35,9 @@ public class Field
                 {
                     int code = event.getKeyCode();
                     int modifiers = event.getModifiers();
-                    final int mask = (ActionEvent.CTRL_MASK
-                                      | ActionEvent.ALT_MASK
-                                      | ActionEvent.META_MASK);
+                    int mask = (ActionEvent.CTRL_MASK
+                                | ActionEvent.ALT_MASK
+                                | ActionEvent.META_MASK);
                     boolean modifiedSelect = ((modifiers & mask) != 0);
                     if (code == KeyEvent.VK_ENTER && m_board.getShowCursor())
                         m_board.fieldClicked(m_point, modifiedSelect);
@@ -56,9 +56,9 @@ public class Field
                     else
                     {            
                         int modifiers = event.getModifiers();
-                        final int mask = (ActionEvent.CTRL_MASK
-                                          | ActionEvent.ALT_MASK
-                                          | ActionEvent.META_MASK);
+                        int mask = (ActionEvent.CTRL_MASK
+                                    | ActionEvent.ALT_MASK
+                                    | ActionEvent.META_MASK);
                         boolean modifiedSelect = ((modifiers & mask) != 0);
                         m_board.fieldClicked(m_point, modifiedSelect);
                     }

@@ -25,7 +25,7 @@ public class Compare
             {
                 int numberDifferent = 0;
                 int moveNumber = moves.size();
-                final int maxDifferent = moveNumber / 5;
+                int maxDifferent = moveNumber / 5;
                 if (gameMoves.size() != moveNumber)
                 {
                     numberDifferent = Math.abs(gameMoves.size() - moveNumber);

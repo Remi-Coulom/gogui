@@ -187,8 +187,8 @@ public class ParameterDialog
             if (line == null)
                 break;
             line = line.trim();
-            final int STRING = 0;
-            final int BOOL = 1;
+            int STRING = 0;
+            int BOOL = 1;
             int type = STRING;
             if (line.startsWith("[bool]"))
             {
