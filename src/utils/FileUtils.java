@@ -30,6 +30,24 @@ public class FileUtils
             return false;
         return (ext.toLowerCase().equals(extension.toLowerCase()));
     }
+
+    /** Replace extension in file name.
+        If the file does not have the extension oldExtension,
+        the extension will not be replaced but the new extension will be
+        appended.
+    */
+    public static String replaceExtension(File file, String oldExtension,
+                                          String newExtension)
+    {
+        String name = file.toString();
+        if (hasExtension(file, oldExtension))
+        {
+            int index = name.lastIndexOf(".");
+            assert(index >= 0);
+            return name.substring(0, index) + "." + newExtension;
+        }
+        return name + "." + newExtension;
+    }
 }
 
 //-----------------------------------------------------------------------------

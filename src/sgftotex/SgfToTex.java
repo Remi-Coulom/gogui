@@ -46,21 +46,10 @@ class SgfToTex
                 in = new FileInputStream(inFile);
                 String outFileName;
                 if (arguments.size() == 1)
-                {
-                    if (FileUtils.hasExtension(inFile, "sgf"))
-                    {
-                        int index = inFileName.lastIndexOf(".");
-                        outFileName = inFileName.substring(0, index) + ".tex";
-                    }
-                    else
-                    {
-                        outFileName = inFileName + ".tex";
-                    }
-                }
+                    outFileName =
+                        FileUtils.replaceExtension(inFile, "sgf", "tex");
                 else
-                {
                     outFileName = (String)arguments.get(1);
-                }
                 File outFile = new File(outFileName);
                 if (outFile.exists())
                     throw new Exception("File " + outFile + " already exists");
