@@ -42,7 +42,9 @@ class Help
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
         createMenu();
-        contentPane.add(createButtons(), BorderLayout.NORTH);
+        JPanel panel = new JPanel(new BorderLayout());
+        contentPane.add(panel);
+        panel.add(createButtons(), BorderLayout.NORTH);
         m_editorPane = new AntialiasingEditorPane();
         m_editorPane.setEditable(false);
         m_editorPane.addHyperlinkListener(this);
@@ -51,7 +53,7 @@ class Help
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setPreferredSize(new Dimension(600, 600));
-        contentPane.add(scrollPane, BorderLayout.CENTER);
+        panel.add(scrollPane, BorderLayout.CENTER);
         pack();
         setVisible(true);
         loadURL(m_contents);
