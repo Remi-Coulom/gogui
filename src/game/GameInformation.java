@@ -7,6 +7,9 @@ package game;
 
 //----------------------------------------------------------------------------
 
+/** Game information.
+    Contains information about the board size, handicap, rules and players.
+*/
 public class GameInformation
 {
     public GameInformation(int boardSize)
