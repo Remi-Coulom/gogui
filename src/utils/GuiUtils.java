@@ -42,10 +42,7 @@ public class GuiUtils
 
     public static int getDefaultMonoFontSize()
     {
-        Font font = UIManager.getFont("TextArea.font");
-        if (font == null)
-            return 10;
-        return font.getSize();
+        return m_defaultMonoFontSize;
     }
 
     public static boolean isNormalSizeMode(JFrame window)
@@ -63,10 +60,11 @@ public class GuiUtils
 
     public static void setGoIcon(Frame frame)
     {
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        URL url = classLoader.getResource("images/icon.png");
-        frame.setIconImage(new ImageIcon(url).getImage());
+        frame.setIconImage(new ImageIcon(m_iconURL).getImage());
     }
+
+    private static final int m_defaultMonoFontSize =
+        getTextAreaFont() == null ? 10 : getTextAreaFont().getSize();
 
     private static final Border m_emptyBorder =
         BorderFactory.createEmptyBorder(PAD, PAD, PAD, PAD);
@@ -80,6 +78,14 @@ public class GuiUtils
 
     private static final Dimension m_smallFillerDimension =
         new Dimension(SMALL_PAD, SMALL_PAD);
+
+    private static URL m_iconURL =
+        ClassLoader.getSystemClassLoader().getResource("images/icon.png");
+
+    private static Font getTextAreaFont()
+    {
+        return UIManager.getFont("TextArea.font");
+    }
 }
 
 //----------------------------------------------------------------------------
