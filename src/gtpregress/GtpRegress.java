@@ -758,7 +758,7 @@ class GtpRegress
                           + FileUtils.replaceExtension(file, "tst", "html")
                           + "\">" + file + "</a></td>");
         }
-        double time = (double)(summary.m_timeMillis / 100L) / 10F;
+        double time = ((double)summary.m_timeMillis) / 1000F;
         NumberFormat format = NumberFormat.getInstance(new Locale("C"));
         format.setMaximumFractionDigits(1);
         out.print("<td>" + summary.m_numberTests + "</td>\n" +
@@ -771,7 +771,7 @@ class GtpRegress
                   + "\">\n" + summary.m_unexpectedPasses + "</td>\n" +
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
                   "<td>" + summary.m_otherErrors + "</td>\n" +
-                  "<td>" + time + "</td>\n" +
+                  "<td>" + format.format(time) + "</td>\n" +
                   "<td>" + format.format(summary.m_cpuTime) + "</td>\n" +
                   "</tr>\n");
         if (foot)
