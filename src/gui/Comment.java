@@ -7,6 +7,7 @@ package gui;
 
 import java.awt.*;
 import java.util.*;
+import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import game.*;
@@ -52,7 +53,7 @@ public class Comment
     {
         return true;
     }
- 
+
     public void insertUpdate(DocumentEvent e)
     {
         copyContentToNode();

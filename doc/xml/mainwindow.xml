@@ -361,6 +361,15 @@ node.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guimenuitem>Find in Comments</guimenuitem></term>
+<listitem>
+<para>
+Find next game node containing a search pattern.
+</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 </section>
 

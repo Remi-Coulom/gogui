@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+New menu item "Find in Comments"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: Improve restoring main window size
 </simpara>
 </listitem>

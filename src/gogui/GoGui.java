@@ -11,6 +11,7 @@ import java.awt.print.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.regex.*;
 import javax.swing.*;
 import game.*;
 import go.*;
@@ -199,6 +200,8 @@ class GoGui
             cbEnd();
         else if (command.equals("exit"))
             close();
+        else if (command.equals("find-in-comments"))
+            cbFindInComments();
         else if (command.equals("forward"))
             cbForward(1);
         else if (command.equals("forward-10"))
@@ -703,6 +706,8 @@ class GoGui
 
     private String m_lastAnalyzeCommand;
 
+    private String m_lastFindInComments;
+
     private String m_name;
 
     private String m_program;
@@ -1047,6 +1052,37 @@ class GoGui
     {
         forward(NodeUtils.getNodesLeft(m_currentNode));
         boardChangedBegin(false, false);
+    }
+
+    private void cbFindInComments()
+    {
+        String regex = JOptionPane.showInputDialog(this, "Search Pattern",
+                                                   m_lastFindInComments);
+        if (regex == null)
+            return;
+        m_lastFindInComments = regex;
+        Pattern pattern = Pattern.compile(regex,
+                                          Pattern.MULTILINE
+                                          | Pattern.CASE_INSENSITIVE);
+        Node node = NodeUtils.findInComments(m_currentNode, pattern);
+        if (node == null)
+        {
+            Node root = m_gameTree.getRoot();
+            if (m_currentNode == root)
+            {
+                showInfo("Not found");
+                return;
+            }
+            if (! showQuestion("End of tree reached. Continue from start?"))
+                return;
+            node = NodeUtils.findInComments(root, pattern);
+            if (node == null)
+            {
+                showInfo("Not found");
+                return;
+            }
+        }
+        gotoNode(node);
     }
 
     private void cbForward(int n)

@@ -717,6 +717,9 @@ public class MenuBar
                                              "keep-only-position");
         m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
                                      "truncate");
+        menu.addSeparator();
+        addMenuItem(menu, "Find in Comments", KeyEvent.VK_F, KeyEvent.VK_F,
+                    m_shortcutKeyMask, "find-in-comments");
         return menu;
     }
 

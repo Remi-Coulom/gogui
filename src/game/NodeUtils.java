@@ -6,6 +6,7 @@
 package game;
 
 import java.util.*;
+import java.util.regex.*;
 import go.*;
 
 //----------------------------------------------------------------------------
@@ -33,6 +34,22 @@ public class NodeUtils
             while (node.getChild() != null
                    && getMoveNumber(node) < moveNumber)
                 node = node.getChild();
+        }
+        return node;
+    }
+
+    public static Node findInComments(Node node, Pattern pattern)
+    {
+        node = nextNode(node);
+        while (node != null)
+        {
+            String comment = node.getComment();
+            if (comment != null)
+            {
+                if (pattern.matcher(comment).find())
+                    return node;
+            }
+            node = nextNode(node);
         }
         return node;
     }
@@ -211,6 +228,14 @@ public class NodeUtils
             node.getFather().makeMainVariation(node);
             node = node.getFather();
         }
+    }
+
+    public static Node nextNode(Node node)
+    {
+        Node child = node.getChild();
+        if (child != null)
+            return child;
+        return getNextVariation(node);
     }
 
     public static String nodeInfo(Node node)
