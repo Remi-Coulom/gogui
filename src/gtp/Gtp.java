@@ -2,8 +2,10 @@
 /* @file Gtp.java
    Interface to a GTP Go program.
 
-   @todo Should use java.nio to avoid thread switching with Thread.yield()
+   @note Should use java.nio to avoid thread switching with Thread.yield()
    to keep order between stderr and stout of program.
+   But with java.nio in Java 1.4 it does not seem possible to get
+   selectable channels for the streams of a process .
 
    $Id$
    $Source$
@@ -137,7 +139,7 @@ public class Gtp
         }
     }
 
-    /** Get fulle response including status and ID and last command. */
+    /** Get full response including status and ID and last command. */
     public String getFullResponse()
     {
         return m_fullResponse;
