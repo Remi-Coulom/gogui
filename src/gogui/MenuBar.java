@@ -97,7 +97,6 @@ public class MenuBar
         m_menuComputerColor.setEnabled(enabled);
         m_itemComputerPlay.setEnabled(enabled);
         m_itemBeepAfterMove.setEnabled(enabled);
-        m_itemAttachProgram.setEnabled(! enabled);
         m_itemDetachProgram.setEnabled(enabled);
         m_itemGtpShell.setEnabled(enabled);
         m_itemAnalyze.setEnabled(enabled);
@@ -217,14 +216,12 @@ public class MenuBar
         m_itemSetup.setSelected(false);
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
-        m_itemAttachProgram.setEnabled(false);
         if (m_isComputerDisabled)
         {
             m_menuComputerColor.setEnabled(false);
             m_itemComputerPlay.setEnabled(false);
             m_itemBeepAfterMove.setEnabled(false);
             m_itemDetachProgram.setEnabled(false);
-            m_itemAttachProgram.setEnabled(true);
             m_itemGtpShell.setEnabled(false);
             m_itemAnalyze.setEnabled(false);
         }
@@ -351,8 +348,6 @@ public class MenuBar
     private JMenuItem m_itemAbout;
 
     private JMenuItem m_itemAnalyze;
-
-    private JMenuItem m_itemAttachProgram;
 
     private JMenuItem m_itemBackToMainVar;
 
@@ -506,8 +501,8 @@ public class MenuBar
         addMenuItem(menu, "Print...", KeyEvent.VK_P, KeyEvent.VK_P,
                     m_shortcutKeyMask, "print");
         menu.addSeparator();
-        m_itemAttachProgram = addMenuItem(menu, "Attach Program...",
-                                          KeyEvent.VK_A, "attach-program");
+        addMenuItem(menu, "Attach Program...", KeyEvent.VK_A,
+                    "attach-program");
         m_itemDetachProgram = addMenuItem(menu, "Detach Program",
                                           KeyEvent.VK_D, "detach-program");
         menu.addSeparator();

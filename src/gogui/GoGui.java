@@ -291,7 +291,8 @@ class GoGui
     public void cbAttachProgram()
     {        
         if (m_commandThread != null)
-            return;
+            if (! cbDetachProgram())
+                return;
         String program = SelectProgram.select(this);
         if (program == null)
             return;
@@ -301,19 +302,20 @@ class GoGui
             m_prefs.setString("program", "");
     }
 
-    public void cbDetachProgram()
+    public boolean cbDetachProgram()
     {        
         if (m_commandThread == null)
-            return;
+            return false;
         if (m_commandInProgress)
         {
             if (! showQuestion("A command is in progress.\nKill program?"))
-                return;
+                return false;
         }
         else if (! showQuestion("Detach program?"))
-            return;
+            return false;
         detachProgram();
         m_prefs.setString("program", "");
+        return true;
     }
 
     public void cbGtpShell()
