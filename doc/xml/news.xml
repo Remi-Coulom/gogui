@@ -36,6 +36,10 @@
 	    Compile TwoGtp into its own jar file twogtp.jar.
 	  </listitem>
 	  <listitem>
+	    Fix bug in GmpToGtp: Black should send NEWGAME if
+	    <option>-simple</option> option is used.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>
