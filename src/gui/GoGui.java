@@ -791,13 +791,14 @@ class GoGui
                 m_board.undo();
             }
             computerNone();
-            boardChangedBegin(false);
         }
         catch (Gtp.Error e)
         {
             showGtpError(e);
+            return;
         }
         setFastUpdate(false);
+        boardChangedBegin(false);
     }
 
     private void beginLengthyCommand()
