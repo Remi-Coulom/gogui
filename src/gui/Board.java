@@ -26,6 +26,13 @@ class BoardLabel
         super(text, JLabel.CENTER);
         setForeground(java.awt.Color.DARK_GRAY);
     }
+
+    public void paintComponent(Graphics graphics)
+    {
+        if (getSize().height < getFont().getSize())
+            return;
+        super.paintComponent(graphics);
+    }
 }
 
 public class Board

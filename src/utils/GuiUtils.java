@@ -49,7 +49,7 @@ public class GuiUtils
 
     public static int getDefaultMonoFontSize()
     {
-        Font font = UIManager.getFont("TextArea.font");        
+        Font font = UIManager.getFont("TextArea.font");
         if (font == null)
             return 10;
         return font.getSize();
