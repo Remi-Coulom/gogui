@@ -1545,7 +1545,7 @@ class GoGui
     {
         if (m_commandInProgress)
             if (! showQuestion("Kill program?"))
-                return;        
+                return;
         if (m_setupMode)
             setupDone();
         if (m_needsSave && ! checkSaveGame())
@@ -2109,7 +2109,8 @@ class GoGui
                 {
                     assert(SwingUtilities.isEventDispatchThread());
                     close();
-                    return true;
+                    // close() calls System.exit() if not cancelled
+                    return false;
                 }
             };
         Platform.registerSpecialMacHandler(handler);
