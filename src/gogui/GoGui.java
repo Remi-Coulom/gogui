@@ -806,7 +806,6 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
         }
         if (m_name != null)
             m_name = StringUtils.capitalize(m_name);
@@ -818,7 +817,6 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
         }
         try
         {

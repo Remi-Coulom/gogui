@@ -35,11 +35,6 @@ It is required that the Go program can handle the following commands:
 (<userinput>genmove</userinput>)
 </simpara>
 </listitem>
-<listitem>
-<simpara>
-<userinput>name</userinput>
-</simpara>
-</listitem>
 </itemizedlist>
     
 <para>
