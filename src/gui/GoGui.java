@@ -1490,9 +1490,9 @@ class GoGui
             setupDone();
         if (m_needsSave && ! checkSaveGame())
             return;
+        saveSession();
         if (m_commandThread != null)
             detachProgram();
-        saveSession();
         dispose();
         m_prefs.save();
         System.exit(0);
