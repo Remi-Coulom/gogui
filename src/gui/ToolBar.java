@@ -22,7 +22,7 @@ class ToolBar
     {
         m_listener = listener;
         m_buttonNew = addButton("images/filenew.png", "new-game", "New game");
-        m_buttonOpen = addButton("images/fileopen.png", "load", "Load game");
+        m_buttonOpen = addButton("images/fileopen.png", "open", "Load game");
         m_buttonSave = addButton("images/filesave2.png", "save", "Save game");
         add(new JToolBar.Separator());
         m_buttonBeginning = addButton("images/player_start.png", "beginning",

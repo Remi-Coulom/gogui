@@ -176,10 +176,10 @@ class GoGui
             cbInterrupt();
         else if (command.equals("komi"))
             cbKomi();
-        else if (command.equals("load"))
-            cbLoad();
         else if (command.equals("new-game"))
             cbNewGame(m_boardSize);
+        else if (command.equals("open"))
+            cbOpen();
         else if (command.equals("open-with-program"))
             cbOpenWithProgram();
         else if (command.equals("pass"))
@@ -878,14 +878,6 @@ class GoGui
         setKomi();
     }
 
-    private void cbLoad()
-    {
-        File file = SimpleDialogs.showOpenSgf(this);
-        if (file == null)
-            return;
-        loadFile(file, -1);
-    }
-
     private void cbNewGame(int size)
     {
         if (m_isModified && ! checkSaveGame())
@@ -905,6 +897,14 @@ class GoGui
         {
             assert(false);
         }
+    }
+
+    private void cbOpen()
+    {
+        File file = SimpleDialogs.showOpenSgf(this);
+        if (file == null)
+            return;
+        loadFile(file, -1);
     }
 
     private void cbOpenWithProgram()

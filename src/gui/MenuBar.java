@@ -332,7 +332,7 @@ class MenuBar
                     ActionEvent.CTRL_MASK, "new-game");
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     ActionEvent.CTRL_MASK,
-                    "load");
+                    "open");
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
                     ActionEvent.CTRL_MASK,
                     "save");
