@@ -50,6 +50,10 @@ public class Analyze
 
     private String m_black = "Black";
 
+    private static final String m_colorHeader = "#91aee8";
+
+    private static final String m_colorInfo = "#e0e0e0";
+
     private String m_white = "White";
 
     private String m_referee = "-";
@@ -257,10 +261,14 @@ public class Analyze
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                   " vlink=\"#551a8b\">\n" +
+                  "<table border=\"0\" width=\"100%\" bgcolor=\""
+                  + m_colorHeader + "\">\n" +
+                  "<tr><td>\n" +
                   "<h1>" + m_black + " - " + m_white + "</h1>\n" +
-                  "<hr>\n" +
-                  "<small>\n" +
-                  "<table>\n");
+                  "</td></tr>\n" +
+                  "</table>\n" +
+                  "<table width=\"100%\" bgcolor=\"" + m_colorInfo
+                  + "\">\n");
         out.print("<tr><th align=\"left\">Black:</th><td align=\"left\">"
                   + m_black + "</td></tr>\n" +
                   "<tr><th align=\"left\">White:</th><td align=\"left\">"
@@ -310,7 +318,6 @@ public class Analyze
                   + format.format(m_cpuWhite.getErrorMean())
                   + ")</td></tr>\n" +
                   "</table>\n" +
-                  "</small>\n" +
                   "<hr>\n");
         if (m_hasReferee)
         {
@@ -324,8 +331,9 @@ public class Analyze
         writeHtmlResults(out, m_white, m_winWhite, m_unknownWhite,
                          m_histoWhite);
         out.println("<hr>");
-        out.print("<table border=\"1\">\n" +
+        out.print("<table border=\"0\">\n" +
                   "<thead>\n" +
+                  "<tr bgcolor=\"" + m_colorHeader + "\">\n" +
                   "<th>Game</th>\n" +
                   "<th>Result [" + m_black + "]</th>\n" +
                   "<th>Result [" + m_white + "]</th>\n");
@@ -338,12 +346,14 @@ public class Analyze
                   "<th>CpuTime White</th>\n" +
                   "<th>Error</th>\n" +
                   "<th>Error Message</th>\n" +
+                  "</tr>\n" +
                   "</thead>\n");
         for (int i = 0; i < m_entries.size(); ++i)
         {
             Entry e = (Entry)m_entries.get(i);
             String name = prefix + "-" + e.m_gameIndex + ".sgf";
-            out.print("<tr align=\"center\">" +
+            out.print("<tr align=\"center\" bgcolor=\"" + m_colorInfo
+                      + "\">" +
                       "<td><a href=\"" + name + "\">" + name + "</a></td>\n");
             if (m_hasReferee)
                 out.print("<td>" + e.m_resultReferee + "</td>");
@@ -372,7 +382,7 @@ public class Analyze
         NumberFormat format = StringUtils.getNumberFormat(1);
         out.print("<h2>Result [" + name + "]</h2>\n" +
                   "<p>\n" +
-                  "<table>\n" +
+                  "<table border=\"0\">\n" +
                   "<tr><th align=\"left\">Black score["
                   + name + "]:</th><td align=\"left\">"
                   + format.format(histo.getMean()) + " (&plusmn;"
@@ -551,7 +561,7 @@ class Histogram
             out.print("<tr><td align=\"right\">" + (m_min + i * m_step)
                       + "</td><td><table cellspacing=\"0\"" +
                       " cellpadding=\"0\" width=\"" + scale + "\"><tr>" +
-                      "<td bgcolor=\"blue\" width=\"" + width +
+                      "<td bgcolor=\"#666666\" width=\"" + width +
                       "\"></td>" + "<td bgcolor=\"#cccccc\" width=\""
                       + (scale - width) + "\">"
                       + m_array[i] + "</td></tr></table></td></tr>\n");
