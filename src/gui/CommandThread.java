@@ -92,6 +92,11 @@ class CommandThread
         m_gtp.sendInterrupt();
     }
 
+    public boolean isCommandInProgress()
+    {
+        return m_commandInProgress;
+    }
+
     public boolean isCommandSupported(String command)
     {
         assert(SwingUtilities.isEventDispatchThread());

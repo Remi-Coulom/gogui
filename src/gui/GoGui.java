@@ -258,7 +258,8 @@ class GoGui
         {
             m_analyzeDialog =
                 new AnalyzeDialog(this, m_prefs,
-                                  m_commandThread.getSupportedCommands());
+                                  m_commandThread.getSupportedCommands(),
+                                  m_commandThread);
             restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
             setTitle();
         }

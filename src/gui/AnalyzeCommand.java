@@ -232,6 +232,11 @@ class AnalyzeCommand
         return (m_command.indexOf("%s") >= 0);
     }
 
+    public boolean needsOptStringArg()
+    {
+        return (m_command.indexOf("%o") >= 0);
+    }
+
     public static void read(Vector commands, Vector labels,
                             Vector supportedCommands)
         throws Exception
@@ -254,7 +259,7 @@ class AnalyzeCommand
         if (needsColorArg())
             setColorArg(color);
         String result = m_command.replaceAll("%m", toMove.toString());
-        if (needsPointArg())
+        if (needsPointArg() && m_pointArg != null)
             result = result.replaceAll("%p", m_pointArg.toString());
         if (needsPointListArg())
         {
@@ -276,6 +281,11 @@ class AnalyzeCommand
         {
             assert(m_stringArg != null);
             result = result.replaceAll("%s", m_stringArg);
+        }
+        if (needsOptStringArg())
+        {
+            assert(m_optStringArg != null);
+            result = result.replaceAll("%o", m_optStringArg);
         }
         if (needsColorArg())
         {
@@ -307,6 +317,12 @@ class AnalyzeCommand
         m_stringArg = value;
     }
 
+    public void setOptStringArg(String value)
+    {
+        assert(needsOptStringArg());
+        m_optStringArg = value;
+    }
+
     private int m_type;
 
     private double m_scale;
@@ -316,6 +332,8 @@ class AnalyzeCommand
     private File m_fileArg;
 
     private String m_label;
+
+    private String m_optStringArg;
 
     private String m_command;
 

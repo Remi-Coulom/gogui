@@ -240,6 +240,7 @@ The label to use for this command in the menu.
 The command to send to the Go program.
 It can contain one of the following wildcards:
 <variablelist>
+
 <varlistentry>
 <term><userinput>%c</userinput></term>
 <listitem>
@@ -249,6 +250,7 @@ and defaults to the color which is to play.
 </simpara>
 </listitem>
 </varlistentry>
+
 <varlistentry>
 <term><userinput>%f</userinput></term>
 <listitem>
@@ -257,6 +259,7 @@ Will be replaced by a filename entered by the user.
 </simpara>
 </listitem>
 </varlistentry>
+
 <varlistentry>
 <term><userinput>%m</userinput></term>
 <listitem>
@@ -268,6 +271,24 @@ Use <userinput>%c</userinput> instead.
 </simpara>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><userinput>%o</userinput></term>
+<listitem>
+<simpara>
+This wildcard is for commands that take an optional string argument and can
+be used for querying or setting a parameter of the Go program.
+The command should return the current value of the parameter if no argument
+is given and set the parameter to the argument otherwise.
+The command will be run first without an argument to retrieve the current
+value which is used as default value in an input box presented to the
+user.
+If the user changes the value, the command will be run with the new value
+as an argument to set the parameter.
+</simpara>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><userinput>%p</userinput></term>
 <listitem>
@@ -276,6 +297,7 @@ Will be replaced by the a point selected by the user.
 </simpara>
 </listitem>
 </varlistentry>
+
 <varlistentry>
 <term><userinput>%P</userinput></term>
 <listitem>
@@ -288,6 +310,7 @@ mouse button.
 </simpara>
 </listitem>
 </varlistentry>
+
 <varlistentry>
 <term><userinput>%s</userinput></term>
 <listitem>
@@ -296,6 +319,7 @@ Will be replaced by an argument entered by the user.
 </simpara>
 </listitem>
 </varlistentry>
+
 </variablelist>
 </para>
 </section>

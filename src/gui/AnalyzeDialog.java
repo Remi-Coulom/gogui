@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import gtp.*;
 import utils.*;
 
 //----------------------------------------------------------------------------
@@ -34,11 +35,12 @@ class AnalyzeDialog
     }
 
     public AnalyzeDialog(Callback callback, Preferences prefs,
-                         Vector supportedCommands)
+                         Vector supportedCommands, CommandThread commandThread)
     {
         super("Analyze - GoGui");
         GuiUtils.setGoIcon(this);
         m_prefs = prefs;
+        m_commandThread = commandThread;
         setPrefsDefaults(prefs);
         m_onlySupportedCommands =
             prefs.getBool("analyze-only-supported-commands");
@@ -146,6 +148,8 @@ class AnalyzeDialog
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     private go.Color m_selectedColor = go.Color.EMPTY;
+
+    private CommandThread m_commandThread;
 
     private JButton m_clearButton;
 
@@ -492,6 +496,11 @@ class AnalyzeDialog
 
     private void setCommand()
     {
+        if (m_commandThread.isCommandInProgress())
+        {
+            SimpleDialogs.showError(this, "Command in progress");
+            return;
+        }
         int index = m_list.getSelectedIndex();        
         if (index < 0)
             return;
@@ -508,9 +517,28 @@ class AnalyzeDialog
                 return;
             command.setStringArg(stringArg);
         }
+        if (command.needsOptStringArg())
+        {
+            try
+            {
+                command.setOptStringArg("");
+                String commandWithoutArg =
+                    command.replaceWildCards(m_selectedColor, m_selectedColor);
+                String value = m_commandThread.sendCommand(commandWithoutArg);
+                String optStringArg =
+                    JOptionPane.showInputDialog(this, label, value);
+                if (optStringArg == null || optStringArg.equals(value))
+                    return;
+                command.setOptStringArg(optStringArg);
+            }
+            catch (Gtp.Error e)
+            {
+                SimpleDialogs.showError(this, e.getMessage());
+                return;
+            }
+        }
         if (command.needsFileArg())
         {
-            
             File fileArg = SimpleDialogs.showSelectFile(this, label);
             if (fileArg == null)
                 return;
