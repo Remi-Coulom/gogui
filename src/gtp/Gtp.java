@@ -75,6 +75,14 @@ public class Gtp
         return m_response;
     }
 
+    public String getCommandClearBoard(int size)
+    {
+        if (m_protocolVersion == 1)
+            return "boardsize " + size;
+        else
+            return "clear_board";
+    }
+
     public String getCommandGenmove(Color color)
     {
         String c = color.toString();
@@ -341,15 +349,15 @@ public class Gtp
         return sendCommand(command, 0);
     }
 
-    public void sendCommandsClearBoard(int size) throws Error
+    public void sendCommandBoardsize(int size) throws Error
     {
-        if (m_protocolVersion == 1)
+        if (m_protocolVersion == 2)
             sendCommand("boardsize " + size);
-        else
-        {
-            sendCommand("boardsize " + size);
-            sendCommand("clear_board");
-        }
+    }
+
+    public String sendCommandClearBoard(int size) throws Error
+    {
+        return sendCommand(getCommandClearBoard(size));
     }
 
     public String sendCommandPlay(Move move) throws Error

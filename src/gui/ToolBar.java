@@ -90,7 +90,6 @@ class ToolBar
         m_buttonForward10.setEnabled(enable);
         m_buttonEnd.setEnabled(enable);
         m_buttonEnter.setEnabled(enable);
-        m_buttonGtpShell.setEnabled(enable);
         m_buttonNew.setEnabled(enable);
         m_buttonOpen.setEnabled(enable);
         m_buttonPass.setEnabled(enable);

@@ -40,6 +40,11 @@ class CommandThread
         return m_response;
     }
     
+    public String getCommandClearBoard(int size)
+    {
+        return m_gtp.getCommandClearBoard(size);
+    }
+
     public String getCommandGenmove(go.Color color)
     {
         return m_gtp.getCommandGenmove(color);
@@ -173,11 +178,14 @@ class CommandThread
         return m_gtp.sendCommand(command, timeout);
     }
 
-    public void sendCommandsClearBoard(int size) throws Gtp.Error
+    public void sendCommandBoardsize(int size) throws Gtp.Error
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
-        m_gtp.sendCommandsClearBoard(size);
+        m_gtp.sendCommandBoardsize(size);
+    }
+
+    public void sendCommandClearBoard(int size) throws Gtp.Error
+    {
+        m_gtp.sendCommandClearBoard(size);
     }
 
     public String sendCommandPlay(Move move) throws Gtp.Error

@@ -129,6 +129,7 @@ class GoGui
             && ! command.equals("computer-both")
             && ! command.equals("computer-none")
             && ! command.equals("computer-white")
+            && ! command.equals("gtp-shell")
             && ! command.equals("interrupt")
             && ! command.equals("exit"))
             return;
@@ -498,6 +499,8 @@ class GoGui
 
     private static int m_instanceCount;
 
+    private int m_oldBoardSize;
+
     private int m_move;
 
     private go.Board m_board;
@@ -768,18 +771,11 @@ class GoGui
             if (m_board.isModified())
                 showInfo("Handicap will take effect on next game.");
             else
-            {
-                newGame(m_boardSize, true);
-                boardChanged();
-            }
+                newGame(m_boardSize);
         }
         catch (NumberFormatException e)
         {
             assert(false);
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
         }
     }
 
@@ -841,20 +837,11 @@ class GoGui
 
     private void cbNewGame(int size)
     {
-        try
-        {
-            if (! checkAbortGame())
-                return;
-            m_prefs.setBoardSize(size);
-            newGame(size, true);
-            boardChanged();
-            fileModified();
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-            m_menuBars.selectBoardSizeItem(m_boardSize);
-        }
+        if (! checkAbortGame())
+            return;
+        m_prefs.setBoardSize(size);
+        fileModified();
+        newGame(size);
     }
 
     private void cbNewGame(String size)
@@ -1060,7 +1047,12 @@ class GoGui
                 color[p.getX()][p.getY()] = m_board.getColor(p);
             }
             go.Color toMove = m_board.getToMove();
-            newGame(size, false);
+            m_boardSize = size;
+            if (m_commandThread != null)
+            {
+                m_commandThread.sendCommandBoardsize(size);
+                m_commandThread.sendCommandClearBoard(size);
+            }
             Vector moves = new Vector(m_board.getNumberPoints());
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
@@ -1153,15 +1145,8 @@ class GoGui
                     {
                         showError("Could not save game.", e);
                     }
-                    try
-                    {
-                        newGame(m_boardSize, true);
-                        boardChanged();
-                    }
-                    catch (Gtp.Error e)
-                    {
-                        showGtpError(e);
-                    }
+                    newGame(m_boardSize);
+                    return;
                 }
                 else
                 {
@@ -1385,6 +1370,22 @@ class GoGui
         }
     }
 
+    private void initGame(int size)
+    {
+        if (size != m_boardSize)
+        {
+            m_boardSize = size;
+            m_guiBoard.initSize(size);
+            pack();
+        }
+        m_board.newGame();        
+        m_guiBoard.update();
+        resetBoard();
+        m_timeControl.reset();
+        m_lostOnTimeShown = false;
+        m_score = null;
+    }
+
     private void initialize()
     {
         try
@@ -1438,12 +1439,12 @@ class GoGui
             setRules();
             File file = null;
             if (! m_file.equals(""))
-                newGame(m_boardSize, new File(m_file), m_move, false);
+                newGameFile(m_boardSize, new File(m_file), m_move);
             else
             {
                 setKomi();
-                newGame(m_boardSize, null, -1, true);
-                boardChanged();
+                newGame(m_boardSize);
+                return;
             }
             m_guiBoard.requestFocus();
         }
@@ -1462,8 +1463,12 @@ class GoGui
         try
         {
             sgf.Reader reader = new sgf.Reader(file);
-            int boardSize = reader.getBoardSize();
-            newGame(boardSize, false);
+            m_boardSize = reader.getBoardSize();
+            if (m_commandThread != null)
+            {
+                m_commandThread.sendCommandBoardsize(m_boardSize);
+                m_commandThread.sendCommandClearBoard(m_boardSize);
+            }
             m_board.setKomi(reader.getKomi());
             setKomi();
             Vector moves = new Vector(361, 361);
@@ -1524,54 +1529,57 @@ class GoGui
         }
     }
 
-    private void newGame(int size, boolean setHandicap)
-        throws Gtp.Error
+    private void newGame(int size)
     {
-        newGame(size, (File)null, -1, setHandicap);
+        m_oldBoardSize = m_boardSize;
+        m_boardSize = size;
+        if (m_commandThread != null)
+        {
+            try
+            {
+                m_commandThread.sendCommandBoardsize(size);
+            }
+            catch (Gtp.Error e)
+            {
+                showGtpError(e);
+                return;
+            }
+            String command = m_commandThread.getCommandClearBoard(size);
+            Runnable callback = new Runnable()
+                {
+                    public void run() { newGameContinue(); }
+                };
+            beginLengthyCommand();
+            m_commandThread.sendCommand(command, callback);
+            return;
+        }
+        initGame(size);
+        m_gameInfo.update();
+        m_guiBoard.update();
     }
 
-    private void newGame(int size, File file, int move, boolean setHandicap)
-        throws Gtp.Error
+    private void newGameContinue()
     {
-        if (m_commandThread != null && file == null)
+        endLengthyCommand();
+        Gtp.Error e = m_commandThread.getException();
+        if (e != null)
         {
-            m_commandThread.sendCommandsClearBoard(size);
-            setTimeSettings();
-            if (m_commandThread.isCommandSupported("gogui_title"))
-            {
-                try
-                {
-                    String title = m_commandThread.sendCommand("gogui_title");
-                    setTitle(title);
-                }
-                catch (Gtp.Error e)
-                {
-                }
-            }
+            m_boardSize = m_oldBoardSize;
+            showGtpError(e);
+            return;
         }
-        if (size != m_boardSize)
-        {
-            m_boardSize = size;
-            m_guiBoard.initSize(size);
-            pack();
-        }
-        m_board.newGame();        
+        setTitleFromProgram();
+        initGame(m_boardSize);
+        setTimeSettings();
+        setHandicap();
+    }
+
+    private void newGameFile(int size, File file, int move)
+    {
+        initGame(size);
+        loadFile(new File(m_file), move);
+        m_gameInfo.update();
         m_guiBoard.update();
-        resetBoard();
-        m_timeControl.reset();
-        m_lostOnTimeShown = false;
-        m_score = null;
-        if (file != null)
-        {
-            loadFile(new File(m_file), move);
-            m_gameInfo.update();
-            m_guiBoard.update();
-        }
-        else
-        {
-            if (setHandicap)
-                setHandicap();
-        }
     }
 
     private void play(Move move) throws Gtp.Error
@@ -1675,7 +1683,7 @@ class GoGui
         }
     }
 
-    private void setHandicap() throws Gtp.Error
+    private void setHandicap()
     {
         Vector handicap = m_board.getHandicapStones(m_handicap);
         if (handicap == null)
@@ -1692,10 +1700,17 @@ class GoGui
         }
         if (m_fillPasses)
             moves = Move.fillPasses(moves, m_board.getToMove());
-        for (int i = 0; i < moves.size(); ++i)
+        try
         {
-            Move m = (Move)moves.get(i);
-            setup(m);
+            for (int i = 0; i < moves.size(); ++i)
+            {
+                Move m = (Move)moves.get(i);
+                setup(m);
+            }
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
         }
     }
 
@@ -1776,6 +1791,21 @@ class GoGui
             setTitle(m_name);
         else
             setTitle("GoGui");
+    }
+
+    private void setTitleFromProgram()
+    {
+        if (m_commandThread.isCommandSupported("gogui_title"))
+        {
+            try
+            {
+                String title = m_commandThread.sendCommand("gogui_title");
+                setTitle(title);
+            }
+            catch (Gtp.Error e)
+            {
+            }
+        }
     }
 
     private void setup(Move move) throws Gtp.Error
