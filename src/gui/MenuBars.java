@@ -306,6 +306,8 @@ class MenuBars
     {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
+        addMenuItem(menu, "New", KeyEvent.VK_N, KeyEvent.VK_N,
+                    ActionEvent.CTRL_MASK, "new-game");
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     ActionEvent.CTRL_MASK,
                     "load");
@@ -330,8 +332,6 @@ class MenuBars
     {
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
-        addMenuItem(menu, "New", KeyEvent.VK_N, KeyEvent.VK_N,
-                    ActionEvent.CTRL_MASK, "new-game");
         addMenuItem(menu, "Komi...", KeyEvent.VK_K, "komi");
         menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
