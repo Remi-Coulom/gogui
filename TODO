@@ -10,6 +10,9 @@ computer resigns is not always shown (?), only game finished
 
 IMPROVEMENTS:
 
+New analyze return type that automatically translates numbers (labels?)
+to a color board with automatically assigned colors.
+
 GtpRegress: change into gtp test file directory, optional?
 
 GtpRegress: improve documenation (in/out file locations, relative paths)
