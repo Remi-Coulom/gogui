@@ -9,11 +9,12 @@ import java.awt.*;
 import java.io.*;
 import javax.swing.*;
 import java.util.*;
-import sgf.Filter;
+import sgf.*;
+import latex.*;
 
 //-----------------------------------------------------------------------------
 
-class SimpleDialogs
+public class SimpleDialogs
 {
     public static void showAbout(Component frame, String message)
     {
@@ -61,7 +62,7 @@ class SimpleDialogs
         return (r == 0);
     }
 
-    public static File showSaveSgf(Component frame)
+    public static File showSave(Component frame)
     {
         return showSgfFileChooser(frame, true);
     }
@@ -74,6 +75,7 @@ class SimpleDialogs
     }
 
     private static final String m_titlePrefix = "GoGui: ";
+
     private static String m_lastFile;
 
     private static File showSgfFileChooser(Component frame, boolean saveDialog)
@@ -82,7 +84,13 @@ class SimpleDialogs
             m_lastFile = System.getProperties().getProperty("user.dir");
         JFileChooser chooser = new JFileChooser(m_lastFile);
         chooser.setMultiSelectionEnabled(false);
-        chooser.setFileFilter(new Filter());
+        if (saveDialog)
+        {
+            chooser.addChoosableFileFilter(new latex.Filter());
+            chooser.setFileFilter(new sgf.Filter());
+        }
+        else
+            chooser.setFileFilter(new sgf.Filter());
         int ret;
         if (saveDialog)
             ret = chooser.showSaveDialog(frame);

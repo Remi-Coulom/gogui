@@ -14,6 +14,7 @@ import java.util.*;
 import javax.swing.*;
 import go.*;
 import gtp.*;
+import latex.*;
 import sgf.*;
 import utils.*;
 
@@ -922,7 +923,7 @@ class GoGui
 
     private void cbSave()
     {
-        File file = SimpleDialogs.showSaveSgf(this);
+        File file = SimpleDialogs.showSave(this);
         if (file == null)
             return;
         try
@@ -943,7 +944,7 @@ class GoGui
 
     private void cbSavePosition()
     {
-        File file = SimpleDialogs.showSaveSgf(this);
+        File file = SimpleDialogs.showSave(this);
         if (file == null)
             return;
         try
@@ -1655,10 +1656,14 @@ class GoGui
             gameComment =
                 "Program command:\n" + m_commandThread.getProgramCommand();
         }
-        sgf.Writer w =
+        if (FileUtils.hasExtension(file, "tex"))
+            new latex.Writer(file, m_board, "GoGui", Version.m_version,
+                             m_handicap, playerBlack, playerWhite,
+                             gameComment, m_score);
+        else
             new sgf.Writer(file, m_board, "GoGui", Version.m_version,
-                           m_handicap, playerBlack, playerWhite, gameComment,
-                           m_score);
+                           m_handicap, playerBlack, playerWhite,
+                           gameComment, m_score);
     }
 
     private void savePosition(File file) throws FileNotFoundException

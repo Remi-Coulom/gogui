@@ -29,6 +29,9 @@
 	    Use key accelerators more similar to existing UI style guides.
 	  </listitem>
 	  <listitem>
+	    Game scan be saved in LaTex format usinf psgo.sty.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>

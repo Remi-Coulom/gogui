@@ -241,6 +241,11 @@ public class Board
         return ((MoveRecord)m_moves.get(i)).getMove();
     }
 
+    public int getInternalNumberMoves()
+    {
+        return m_setupNumber;
+    }
+
     public int getMoveNumber()
     {
         return m_moveNumber - m_setupNumber;
