@@ -456,6 +456,8 @@ class GoGui
 
     private void analyzeBegin(boolean resetBoardAfterAnalyze)
     {
+        if (m_commandThread == null)
+            return;
         m_resetBoardAfterAnalyze = resetBoardAfterAnalyze;
         StringBuffer buffer = new StringBuffer(m_analyzeCmd);
         StringUtils.replace(buffer, "%m", m_board.getToMove().toString());
