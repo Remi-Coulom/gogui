@@ -32,6 +32,18 @@ Do not edit Info.plist
 <key>CFBundleExecutable</key>
 <string>JavaApplicationStub</string>
 
+<key>CFBundleGetInfoString</key>
+<string>@VERSION@, Copyright 2004 Markus Enzenberger</string>
+
+<key>CFBundleHelpBookFolder</key>
+<string>GoGui Help</string>
+
+<key>CFBundleHelpBookName</key>
+<string>GoGui Help</string>
+
+<key>CFBundleIdentifier</key>
+<string>net.sourceforge.gogui</string>
+
 <key>CFBundleIconFile</key>
 <string>GoGui.icns</string>
 
@@ -41,17 +53,14 @@ Do not edit Info.plist
 <key>CFBundleName</key>
 <string>GoGui</string>
 
-<key>CFBundleVersion</key>
-<string>@VERSION@</string>
-
-<key>CFBundleGetInfoString</key>
-<string>@VERSION@, Copyright 2004 Markus Enzenberger</string>
-
 <key>CFBundlePackageType</key>
 <string>APPL</string>
 
 <key>CFBundleSignature</key>
 <string>????</string>
+
+<key>CFBundleVersion</key>
+<string>@VERSION@</string>
 
 <key>Java</key>
 <dict>
