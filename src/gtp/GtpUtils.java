@@ -40,7 +40,7 @@ public class GtpUtils
         if (s.equals("PASS"))
             return null;
         if (s.length() < 2)
-            throw new Error("Invalid point or move");
+            throw new Gtp.Error("Invalid point or move");
         char xChar = s.charAt(0);
         if (xChar >= 'J')
             --xChar;
