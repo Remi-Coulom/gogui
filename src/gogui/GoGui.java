@@ -157,7 +157,7 @@ class GoGui
             && ! command.equals("exit"))
             return;
         if (command.equals("about"))
-            cbShowAbout();
+            cbAbout();
         else if (command.equals("analyze"))
             cbAnalyze();
         else if (command.equals("all-to-front"))
@@ -903,6 +903,20 @@ class GoGui
         }
     }
 
+    private void cbAbout()
+    {
+        String protocolVersion = null;
+        String command = null;
+        if (m_commandThread != null)
+        {
+            protocolVersion =
+                Integer.toString(m_commandThread.getProtocolVersion());
+            command = m_commandThread.getProgramCommand();
+        }
+        AboutDialog.show(this, getComputerName(), m_version, protocolVersion,
+                         command);
+    }
+
     private void cbBeepAfterMove()
     {
         m_beepAfterMove = m_menuBar.getBeepAfterMove();
@@ -1327,19 +1341,6 @@ class GoGui
         updateGameInfo(false);
     }
 
-    private void cbShowAbout()
-    {
-        String protocolVersion = null;
-        String command = null;
-        if (m_commandThread != null)
-        {
-            protocolVersion =
-                Integer.toString(m_commandThread.getProtocolVersion());
-            command = m_commandThread.getProgramCommand();
-        }
-        AboutDialog.show(this, m_name, m_version, protocolVersion, command);
-    }
-
     private void cbShowCursor()
     {
         boolean showCursor = m_menuBar.getShowCursor();
@@ -1757,7 +1758,7 @@ class GoGui
     {
         if (m_name != null && ! m_name.equals(""))
             return StringUtils.capitalize(m_name);
-        return "Computer";
+        return "Unknown Program";
     }
 
     private int getRules()
@@ -2025,7 +2026,7 @@ class GoGui
                 public boolean handleAbout()
                 {
                     assert(SwingUtilities.isEventDispatchThread());
-                    cbShowAbout();
+                    cbAbout();
                     return true;
                 }
                 
