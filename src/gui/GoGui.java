@@ -241,6 +241,7 @@ class GoGui
                 Dimension size = getSize();
                 m_analyzeDialog.setLocation(size.width, 0);
             }
+            setTitle();
         }
         m_analyzeDialog.toTop();
     }
@@ -2209,7 +2210,13 @@ class GoGui
         if (m_loadedFile != null)
             setTitle(m_loadedFile);
         else if (! m_name.equals(""))
+        {
             setTitle(StringUtils.formatTitle(m_name));
+            if (m_gtpShell != null)
+                m_gtpShell.setTitlePrefix(m_name);
+            if (m_analyzeDialog != null)
+                m_analyzeDialog.setTitlePrefix(m_name);
+        }
         else
             setTitle("GoGui");
     }

@@ -312,6 +312,26 @@ public class GtpShell
         SwingUtilities.invokeLater(r);
     }
 
+    public void saveHistory()
+    {
+        File file = getHistoryFile();
+        try
+        {
+            PrintWriter out = new PrintWriter(new FileOutputStream(file));
+            int maxHistory = 100;
+            int n = m_history.size();
+            if (n > maxHistory)
+                n = maxHistory;
+            for (int i = m_history.size() - n; i < m_history.size(); ++i)
+                out.println(m_history.get(i));
+            out.close();
+        }
+        catch (FileNotFoundException e)
+        {
+        }
+
+    }
+
     public void setInputEnabled(boolean enabled)
     {
         m_comboBox.setEnabled(enabled);
@@ -406,24 +426,9 @@ public class GtpShell
         SwingUtilities.invokeLater(r);
     }
     
-    public void saveHistory()
+    public void setTitlePrefix(String title)
     {
-        File file = getHistoryFile();
-        try
-        {
-            PrintWriter out = new PrintWriter(new FileOutputStream(file));
-            int maxHistory = 100;
-            int n = m_history.size();
-            if (n > maxHistory)
-                n = maxHistory;
-            for (int i = m_history.size() - n; i < m_history.size(); ++i)
-                out.println(m_history.get(i));
-            out.close();
-        }
-        catch (FileNotFoundException e)
-        {
-        }
-
+        setTitle(title + ": GTP Shell");
     }
 
     public void sendGtp(Reader reader)

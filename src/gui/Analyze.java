@@ -337,7 +337,7 @@ class AnalyzeDialog
     public AnalyzeDialog(Frame owner, AnalyzeCallback callback,
                          Preferences prefs, Vector supportedCommands)
     {
-        super(owner, "GoGui: Analyze command");
+        super(owner, "GoGui: Analyze");
         m_prefs = prefs;
         setPrefsDefaults(prefs);
         m_onlySupportedCommands =
@@ -406,6 +406,11 @@ class AnalyzeDialog
 
     public void mouseReleased(MouseEvent e)
     {
+    }
+
+    public void setTitlePrefix(String title)
+    {
+        setTitle(title + ": Analyze");
     }
 
     public void toTop()
