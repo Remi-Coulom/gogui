@@ -11,7 +11,7 @@ GoGui is a graphical interface to programs that play the game of Go and use the
 <para>
 It is especially useful for Go program developers, since it allows
 direct communication with the program by sending any GTP command
-and allows to log and save the complete stream of sent GTP commands
+and to log and save the stream of sent GTP commands
 to facilitate debugging and reproducing errors.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
