@@ -2806,6 +2806,9 @@ class GoGui
 
     private void undoCurrentNode() throws GtpError
     {
+        if (m_commandThread != null
+            && ! m_commandThread.isCommandSupported("undo"))
+            throw new GtpError("Program does not support undo");
         for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
         {
             if (m_commandThread != null)
