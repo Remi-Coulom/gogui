@@ -192,9 +192,20 @@ class GameTreePanel
 
                 public void mousePressed(MouseEvent event)
                 {
-                    GameNode gameNode = (GameNode)event.getSource();
                     if (event.isPopupTrigger())
                     {
+                        GameNode gameNode = (GameNode)event.getSource();
+                        int x = event.getX();
+                        int y = event.getY();
+                        showPopup(x, y, gameNode);
+                    }
+                }
+
+                public void mouseReleased(MouseEvent event)
+                {
+                    if (event.isPopupTrigger())
+                    {
+                        GameNode gameNode = (GameNode)event.getSource();
                         int x = event.getX();
                         int y = event.getY();
                         showPopup(x, y, gameNode);
