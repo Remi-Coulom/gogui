@@ -170,7 +170,8 @@ installation directory.
 </zip>
 </target>
 
-<target name="doc" depends="docCheckUptodate" unless="docUptodate">
+<target name="doc" depends="docCheckUptodate" unless="docUptodate"
+ description="Generate documentation using xsltproc">
 <antcall target="checkXslAvailable"/>
 <echo message="Running xsltproc"/>
 <exec executable="xsltproc">
@@ -192,6 +193,39 @@ installation directory.
 <arg line="${docbook_xsl_home}/html/chunk.xsl"/>
 <arg line="doc/xml/book.xml"/>
 </exec>
+<copy todir="doc/html">
+<fileset dir="src/images" includes="project-support.png"/>
+</copy>
+</target>
+
+<target name="doc-style" depends="docCheckUptodate" unless="docUptodate"
+ description="
+Generate documentation using ant style target.
+Not used at present due to problems with &mdash; in output (not understood
+by JEditorPane, slow speed and errors with old versions of Xalan).">
+<antcall target="checkXslAvailable"/>
+<style basedir="doc/xml" includes="book.xml" destdir="doc/html"
+ style="${docbook_xsl_home}/html/chunk.xsl" force="true">
+<xmlcatalog>
+<dtd
+ publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
+ location="${docbook_xsl_home}/html/chunk.xsl"/>
+</xmlcatalog>
+<param name="admon.graphics" expression="0"/>
+<param name="chunk.quietly" expression="1"/>
+<param name="chunk.section.depth" expression="0"/>
+<param name="footer.rule" expression="0"/>
+<param name="header.rule" expression="0"/>
+<param name="html.cleanup" expression="1"/>
+<param name="html.stylesheet" expression="docbook.css"/>
+<param name="make.valid.html" expression="1"/>
+<param name="navig.showtitles" expression="0"/>
+<param name="refentry.generate.name" expression="0"/>
+<param name="refentry.generate.title" expression="1"/>
+<param name="spacing.paras" expression="0"/>
+<param name="toc.section.depth" expression="0"/>
+<param name="use.id.as.filename" expression="1"/>
+</style>
 <copy todir="doc/html">
 <fileset dir="src/images" includes="project-support.png"/>
 </copy>
