@@ -371,6 +371,8 @@ class GoGui
             m_board.setToMove(m_setupColor);
             updateGameInfo(true);
             m_guiBoard.updateFromGoBoard();
+            // Paint point immediately to pretend better responsiveness
+            m_guiBoard.paintImmediately(p);
             m_guiBoard.repaint();
             m_needsSave = true;
         }
