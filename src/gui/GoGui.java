@@ -796,20 +796,14 @@ class GoGui
 
     private void cbInterrupt()
     {
+        if (! m_commandInProgress || m_commandThread == null
+            || m_commandThread.isProgramDead())
+            return;
         if (m_computerBlack && m_computerWhite)
             computerNone();
-        if (! m_commandInProgress)
-            showError("No command in progress.");
-        else if (m_commandThread == null)
-            showError("No program loaded.");
-        else if (m_commandThread.isProgramDead())
-            showError("Program is dead.");
-        else
-        {
-            if (! showQuestion("Interrupt command?"))
-                return;
-            interrupt();
-        }
+        if (! showQuestion("Interrupt command?"))
+            return;
+        interrupt();
     }
 
     private void cbKomi()
