@@ -378,7 +378,7 @@ class WriteThread extends Thread
         notifyAll();
     }
 
-    public synchronized void sendTalk(String talk)
+    public synchronized boolean sendTalk(String talk)
     {
         int size = talk.length();
         byte buffer[] = new byte[size + 1];
@@ -395,7 +395,9 @@ class WriteThread extends Thread
         }
         catch (IOException e)
         {
+            return false;
         }
+        return false;
     }
 
     public synchronized void stopSend()
@@ -583,9 +585,9 @@ class ReadThread extends Thread
         }
     }
 
-    public void sendTalk(String text)
+    public boolean sendTalk(String text)
     {
-        m_writeThread.sendTalk(text);
+        return m_writeThread.sendTalk(text);
     }
 
     public synchronized WaitResult waitCmd(int cmd, int valMask,
@@ -1020,9 +1022,9 @@ public final class Gmp
         return m_readThread.queue(response);
     }
 
-    public void sendTalk(String text)
+    public boolean sendTalk(String text)
     {
-        m_readThread.sendTalk(text);
+        return m_readThread.sendTalk(text);
     }
 
     public boolean undo(StringBuffer response)

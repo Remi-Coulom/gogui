@@ -387,7 +387,13 @@ public class GmpToGtp
     {
         int index = command.indexOf(' ');
         if (index > 0)
-            m_gmp.sendTalk(command.substring(index + 1));
+        {
+            if (! m_gmp.sendTalk(command.substring(index + 1)))
+            {
+                response.append("Write error");
+                return false;
+            }                
+        }
         return true;
     }
 
