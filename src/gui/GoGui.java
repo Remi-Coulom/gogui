@@ -411,7 +411,7 @@ class GoGui
     {
         m_analyzeCommand = command;
         m_analyzeRequestPoint = false;
-        if (command.needsPointArg())
+        if (m_commandThread != null && command.needsPointArg())
         {
             m_analyzeRequestPoint = true;
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
