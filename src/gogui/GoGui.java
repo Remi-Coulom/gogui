@@ -1518,7 +1518,9 @@ class GoGui
         if (! isCurrentNodeExecuted())
         {
             Object[] options = { "Detach Program", "Ignore" };
-            Object message = "Could not execute current game node";
+            Object message =
+                "Could not synchronize current\n" +
+                "position with Go program";
             int n = JOptionPane.showOptionDialog(this, message, "Error",
                                                  JOptionPane.YES_NO_OPTION,
                                                  JOptionPane.ERROR_MESSAGE,
