@@ -265,7 +265,7 @@ public class Reader
             }
             else if (! p.equals("FF") && ! p.equals("DT") && ! p.equals("RU")
                      && ! p.equals("GM") && ! p.equals("GN")
-                     && ! p.equals("AP"))
+                     && ! p.equals("AP") && ! p.equals("RE"))
                 node.addSgfProperty(p, v);
             return true;
         }
