@@ -232,18 +232,32 @@ file later.
 <varlistentry>
 <term><guimenuitem>Setup mode</guimenuitem></term>
 <listitem>
+Enter or leave setup mode.
+In setup mode you can place or remove stones of the current color.
+The current color can be changed with the <guimenuitem>Black</guimenuitem>
+and <guimenuitem>White</guimenuitem> menu item from the
+<guimenu>Setup</guimenu> menu.
+<note>
+Setting up a position is not reversible.
+After leaving setup mode you are in a new game starting with the current
+position and the current color to move.
+</note>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Black</guimenuitem></term>
 <listitem>
+Set the current color for setting up stones and to current color to move
+to Black.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guimenuitem>White</guimenuitem></term>
 <listitem>
+Set the current color for setting up stones and to current color to move
+to White.
 </listitem>
 </varlistentry>
 
