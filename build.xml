@@ -406,9 +406,9 @@ installation directory.
 </jar>
 </target>
 
-<target name="specialmac"
+<target name="specialmac" depends="compile"
  description="Compile special MAC classes depending on com.apple">
-<javac srcdir="." source="1.4" deprecation="true" classpath="src"
+<javac srcdir="." source="1.4" deprecation="true" classpath="build"
  optimize="true" listfiles="yes"
  includes="specialmac/RegisterSpecialMacHandler.java"/>
 </target>

@@ -27,6 +27,8 @@ class Listener
     {
         event.setHandled(m_handler.handleQuit());
     }
+
+    private Platform.SpecialMacHandler m_handler;
 }
 
 //----------------------------------------------------------------------------
@@ -39,7 +41,6 @@ public class RegisterSpecialMacHandler
 {
     public RegisterSpecialMacHandler(Platform.SpecialMacHandler handler)
     {
-        m_handler = handler;
         Application application = Application.getApplication();
         application.addApplicationListener(new Listener(handler));
     }
