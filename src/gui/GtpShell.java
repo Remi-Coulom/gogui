@@ -186,7 +186,7 @@ public class GtpShell
     GtpShell(Frame owner, String titleprefix, Callback callback,
              Preferences prefs)
     {
-        super(owner, titleprefix + ": GTP Shell");
+        super(owner, titleprefix + ": GTP");
         m_callback = callback;
         m_prefs = prefs;
         setPrefsDefaults(prefs);
@@ -428,7 +428,7 @@ public class GtpShell
     
     public void setTitlePrefix(String title)
     {
-        setTitle(title + ": GTP Shell");
+        setTitle(title + ": GTP");
     }
 
     public void sendGtp(Reader reader)

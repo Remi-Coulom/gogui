@@ -770,7 +770,7 @@ class AnalyzeDialog
         if (command.needsStringArg())
         {
             String stringArg =
-                JOptionPane.showInputDialog(this, "Argument for " + label);
+                JOptionPane.showInputDialog(this, label);
             if (stringArg == null)
                 return;
             command.setStringArg(stringArg);
@@ -779,7 +779,7 @@ class AnalyzeDialog
         {
             
             File fileArg =
-                SimpleDialogs.showSelectFile(this, "File for " + label);
+                SimpleDialogs.showSelectFile(this, label);
             if (fileArg == null)
                 return;
             command.setFileArg(fileArg);
