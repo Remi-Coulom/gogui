@@ -2,15 +2,6 @@
 <title>Bugs</title>
 
 <section>
-<title>Going to beginning or end of game is very slow</title>
-<para>
-There are no GTP commands for multiple undo or play, so every undo or
-move has to be transmitted separately.
-This can make going to the beginning or end of a large game very slow.
-</para>
-</section>
-
-<section>
 <title>Rendering errors in the GTP shell</title>
 <para>
 Rendering errors in the GTP shell window occur which disappear after manually
