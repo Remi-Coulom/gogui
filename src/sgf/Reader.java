@@ -130,6 +130,8 @@ public class Reader
     {
     }
 
+    private static final int CACHE_SIZE = 30;
+
     private boolean m_isFile;
 
     private int m_lastPercent;
@@ -144,15 +146,15 @@ public class Reader
 
     private GameTree m_gameTree;
 
-    private Move[][] m_moveBlackCache = new Move[19][19];
+    private Move[][] m_moveBlackCache = new Move[CACHE_SIZE][CACHE_SIZE];
 
-    private Move[][] m_moveWhiteCache = new Move[19][19];
+    private Move[][] m_moveWhiteCache = new Move[CACHE_SIZE][CACHE_SIZE];
 
     private Move m_passBlackCache = new Move(null, Color.BLACK);
 
     private Move m_passWhiteCache = new Move(null, Color.WHITE);
 
-    private Point[][] m_pointCache = new Point[19][19];
+    private Point[][] m_pointCache = new Point[CACHE_SIZE][CACHE_SIZE];
 
     private ProgressShow m_progressShow;
 
@@ -224,7 +226,7 @@ public class Reader
         }
         int x = point.getX();
         int y = point.getY();
-        if (x < 19 && y < 19)
+        if (x < CACHE_SIZE && y < CACHE_SIZE)
         {
             if (color == Color.BLACK)
             {
@@ -299,7 +301,7 @@ public class Reader
         int y = boardSize - (s.charAt(1) - 'a') - 1;
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
             throw getError("Invalid coordinates: " + s);
-        if (x < 19 && y < 19)
+        if (x < CACHE_SIZE && y < CACHE_SIZE)
         {
             if (m_pointCache[x][y] == null)
                 m_pointCache[x][y] = new Point(x, y);
