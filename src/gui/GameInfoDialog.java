@@ -106,9 +106,9 @@ public class GameInfoDialog
                 byoyomi = Integer.parseInt(byoyomiContent) * 60000L;
             if (! byoyomiMovesContent.equals(""))
                 byoyomiMoves = Integer.parseInt(byoyomiMovesContent);
+            TimeSettings timeSettings = gameInformation.m_timeSettings;
             if (byoyomi > 0 && byoyomiMoves > 0)
             {
-                TimeSettings timeSettings = gameInformation.m_timeSettings;
                 if (timeSettings == null
                     || preByoyomi != timeSettings.getPreByoyomi()
                     || byoyomi != timeSettings.getByoyomi()
@@ -118,6 +118,24 @@ public class GameInfoDialog
                         = new TimeSettings(preByoyomi, byoyomi, byoyomiMoves);
                     changed = true;
                 }
+            }
+            else
+            {
+                if (timeSettings == null
+                    || preByoyomi != timeSettings.getPreByoyomi())
+                {
+                    gameInformation.m_timeSettings
+                        = new TimeSettings(preByoyomi);
+                    changed = true;
+                }
+            }
+        }
+        else
+        {
+            if (gameInformation.m_timeSettings != null)
+            {
+                gameInformation.m_timeSettings = null;
+                changed = true;
             }
         }
         return changed;
@@ -203,7 +221,7 @@ public class GameInfoDialog
         panel.add(new JLabel("min +"));
         m_byoyomi = new JTextField(2);
         m_byoyomi.setHorizontalAlignment(JTextField.RIGHT);
-        if (timeSettings != null)
+        if (timeSettings != null && timeSettings.getUseByoyomi())
         {
             int byoyomi = (int)(timeSettings.getByoyomi() / 60000L);
             m_byoyomi.setText(Integer.toString(byoyomi));
@@ -212,7 +230,7 @@ public class GameInfoDialog
         panel.add(new JLabel("min /"));
         m_byoyomiMoves = new JTextField(2);
         m_byoyomiMoves.setHorizontalAlignment(JTextField.RIGHT);
-        if (timeSettings != null)
+        if (timeSettings != null && timeSettings.getUseByoyomi())
         {
             int byoyomiMoves = timeSettings.getByoyomiMoves();
             m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));

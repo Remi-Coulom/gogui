@@ -198,18 +198,8 @@ class GoGui
         m_menuBar.setNormalMode();
         m_guiBoard.requestFocusInWindow();
         setTitle("GoGui");
-        try
-        {
-            if (time != null)
-            {
-                m_timeSettings = TimeSettings.parse(time);
-                m_clock.setTimeSettings(m_timeSettings);
-            }
-        }
-        catch (Clock.Error e)
-        {
-            showWarning(e.getMessage());
-        }
+        if (time != null)
+            m_timeSettings = TimeSettings.parse(time);
         Runnable callback = new Runnable()
             {
                 public void run()
@@ -1298,7 +1288,14 @@ class GoGui
             m_prefs.setString("rules", gameInformation.m_rules);
             setRules();
         }
-        setTimeSettings();
+        TimeSettings timeSettings = gameInformation.m_timeSettings;
+        if (timeSettings != null)
+        {
+            m_timeSettings = (TimeSettings)timeSettings.clone();
+            setTimeSettings();
+        }
+        else
+            m_timeSettings = null;
         setTitle();
     }
 
@@ -2747,25 +2744,32 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
-        if (m_timeSettings == null)
+        TimeSettings timeSettings =
+            m_gameTree.getGameInformation().m_timeSettings;
+        if (timeSettings == null)
             return;
         if (! m_commandThread.isCommandSupported("time_settings"))
         {
             showError("Command time_settings not supported");
             return;
         }
-        long preByoyomi = m_timeSettings.getPreByoyomi() / 1000;
+        long preByoyomi = timeSettings.getPreByoyomi() / 1000;
         long byoyomi = 0;
         long byoyomiMoves = 0;
-        if (m_timeSettings.getUseByoyomi())
+        if (timeSettings.getUseByoyomi())
         {
-            byoyomi = m_timeSettings.getByoyomi() / 1000;
-            byoyomiMoves = m_timeSettings.getByoyomiMoves();
+            byoyomi = timeSettings.getByoyomi() / 1000;
+            byoyomiMoves = timeSettings.getByoyomiMoves();
         }
         try
         {
+            m_clock.setTimeSettings(m_timeSettings);
             m_commandThread.sendCommand("time_settings " + preByoyomi + " "
                                         + byoyomi + " " + byoyomiMoves);
+        }
+        catch (Clock.Error e)
+        {
+            showWarning(e.getMessage());
         }
         catch (GtpError e)
         {
