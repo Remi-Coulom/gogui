@@ -1393,7 +1393,7 @@ class GoGui
                 }
                 try
                 {
-                    m_commandThread.queryVersion();
+                    m_version = m_commandThread.queryVersion();
                     queryCommandList();
                     if (m_commandList.contains("gogui_sigint"))
                         m_pid =
@@ -1621,10 +1621,13 @@ class GoGui
         String gameComment = null;
         if (m_commandThread != null)
         {
+            String name = m_name;
+            if (m_version != null && ! m_version.equals(""))
+                name = name +  ":" + m_version;
             if (m_computerBlack)
-                playerBlack = m_name + ":" + m_version;
+                playerBlack = name;
             if (m_computerWhite)
-                playerWhite = m_name + ":" + m_version;
+                playerWhite = name;
             gameComment =
                 "Program command: " + m_commandThread.getProgramCommand();
         }
