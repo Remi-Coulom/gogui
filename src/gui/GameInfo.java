@@ -43,6 +43,14 @@ public class GameInfo
         }
     }
 
+    public void fastUpdateMoveNumber(Node node)
+    {
+        int moveNumber = node.getMoveNumber();
+        String numberString = Integer.toString(moveNumber);
+        m_number.setText(numberString);
+        m_number.paintImmediately(m_number.getVisibleRect());
+    }
+
     public void update(Node node, go.Board board)
     {
         if (board.getToMove() == go.Color.BLACK)

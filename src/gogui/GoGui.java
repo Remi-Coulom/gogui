@@ -939,6 +939,7 @@ class GoGui
                 undoCurrentNode();
                 m_currentNode = m_currentNode.getFather();
                 m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
+                m_gameInfo.fastUpdateMoveNumber(m_currentNode);
             }
             computerNone();
         }
@@ -1832,6 +1833,7 @@ class GoGui
             {
                 m_currentNode = m_currentNode.getChild();
                 executeCurrentNode();
+                m_gameInfo.fastUpdateMoveNumber(m_currentNode);
             }
         }
         catch (Gtp.Error e)
