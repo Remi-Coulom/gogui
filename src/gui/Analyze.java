@@ -820,6 +820,7 @@ class AnalyzeTextOutput
     public AnalyzeTextOutput(Frame owner, String title, String response)
     {
         super(owner, "GoGui: " + title);
+        setLocationRelativeTo(owner);
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(GuiUtils.createSmallEmptyBorder());
         Container contentPane = getContentPane();
