@@ -4,7 +4,6 @@
 #------------------------------------------------------------------------------
 
 doc:
-	mkdir -p html homepage
 	xsltproc \
           --param admon.graphics 0 \
           --param admon.graphics.path '""' \
@@ -20,6 +19,5 @@ doc:
           --param use.id.as.filename 1 \
           -o html/ \
           $(XSLDIR)/html/chunk.xsl xml/book.xml
-        #cp images/*.png css/docbook.css html
 	xsltproc -o homepage/index.html \
           $(XSLDIR)/html/docbook.xsl xml/homepage.xml
