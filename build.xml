@@ -96,6 +96,26 @@ and set the environment variable XSLDIR to the installation directory.
 </style>
 </target>
 
+<target name="docsrc">
+<javadoc sourcepath="src" destdir="docsrc" source="1.4"
+ packagenames="
+  gmp.*,
+  gmptogtp.*,
+  go.*,
+  gtp.*,
+  gtpdummy.*,
+  gtpregress.*,
+  gtpserver.*,
+  gui.*,
+  netgtp.*,
+  sgf.*,
+  sgftotex.*,
+  twogtp.*,
+  utils.*,
+  version.*
+"/>
+</target>
+
 <target name="docCheckUptodate">
 <uptodate property="docUptodate" targetfile="doc/html/index.html">
 <srcfiles dir= "doc/xml" includes="*.xml"/>
