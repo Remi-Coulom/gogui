@@ -487,12 +487,12 @@ public class Board
             String s = getField(point).getString();
             if (! s.equals(""))
             {
-                if (! s.endsWith("+"))
-                    setString(point, s + "+");
+                if (! s.endsWith("."))
+                    setString(point, s + ".");
                 continue;
             };
             if (numberMarked >= 26)
-                setString(point, Integer.toString(numberMarked));
+                setString(point, "+");
             else
                 setString(point, Character.toString(label));
             if (numberMarked < 26)

@@ -503,8 +503,8 @@ Show toolbar.
 <listitem>
 <para>
 Mark the moves of all variations from this position with letters
-starting with 'A' (numbers will be used after 'Z').
-If multiple variations start with the same move, a '+' is appended.
+starting with 'A' ('+' will be used after 'Z').
+If multiple variations start with the same move, a '.' is appended.
 </para>
 </listitem>
 </varlistentry>
