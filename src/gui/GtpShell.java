@@ -116,6 +116,7 @@ class GtpShellText
 
     private void appendText(String text, String style)
     {
+        assert(SwingUtilities.isEventDispatchThread());
         if (text.equals(""))
             return;
         int indexNewLine = 0;
