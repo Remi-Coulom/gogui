@@ -16,8 +16,9 @@ import gtp.GtpServer;
 public class GmpToGtp
     extends GtpServer
 {
-    public GmpToGtp(InputStream in, OutputStream out, boolean verbose,
-                    int size, int colorIndex, boolean wait, boolean simple)
+    public GmpToGtp(String title, InputStream in, OutputStream out,
+                    boolean verbose, int size, int colorIndex, boolean wait,
+                    boolean simple)
     {
         super(System.in, System.out);
         m_verbose = verbose;
@@ -25,6 +26,7 @@ public class GmpToGtp
         m_colorIndex = colorIndex;
         m_wait = wait;
         m_gmp = new Gmp(in, out, size, colorIndex, simple);
+        m_title = title;
     }
 
     public boolean handleCommand(String command, StringBuffer response)
@@ -38,6 +40,8 @@ public class GmpToGtp
             return sendTalk(command, response);
         else if (command.startsWith("gmp_queue"))
             return queue(command, response);
+        else if (command.startsWith("gogui_title"))
+            response.append(m_title);
         else if (command.startsWith("white"))
             return play(false, command, response);
         else if (command.startsWith("undo"))
@@ -62,6 +66,7 @@ public class GmpToGtp
                             "genmove_white\n" +
                             "gmp_text\n" +
                             "gmp_queue\n" +
+                            "gogui_title\n" +
                             "name\n" +
                             "undo\n" +
                             "version\n" +
@@ -154,6 +159,7 @@ public class GmpToGtp
                 System.err.println("Missing program argument.");
                 System.exit(-1);
             }
+            String title = "Go Modem ";
             if (! device.equals(""))
             {
                 CommPortIdentifier portId =
@@ -162,6 +168,7 @@ public class GmpToGtp
                 port.setSerialPortParams(baud, SerialPort.DATABITS_8,
                                          SerialPort.STOPBITS_1,
                                          SerialPort.PARITY_NONE);
+                title = title + device;
                 in = port.getInputStream();
                 out = port.getOutputStream();
             }
@@ -171,6 +178,7 @@ public class GmpToGtp
                 process = runtime.exec(StringUtils.getCmdArray(program));
                 Thread stdErrThread = new StdErrThread(process);
                 stdErrThread.start();
+                title = title + program;
                 in = process.getInputStream();
                 out = process.getOutputStream();
             }
@@ -182,7 +190,7 @@ public class GmpToGtp
                 else if (color.equals("white"))
                     colorIndex =  2;
             }
-            GmpToGtp gmpToGtp = new GmpToGtp(in, out, verbose, size,
+            GmpToGtp gmpToGtp = new GmpToGtp(title, in, out, verbose, size,
                                              colorIndex, wait, simple);
             gmpToGtp.mainLoop();
         }
@@ -238,6 +246,8 @@ public class GmpToGtp
     private boolean m_wait;
 
     private int m_colorIndex;
+
+    private String m_title;
 
     private Gmp m_gmp;
 

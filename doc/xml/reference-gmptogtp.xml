@@ -159,6 +159,16 @@
       <variablelist>
 	<varlistentry>
 	  <term>
+            <userinput>
+	      gogui_title
+	    </userinput>
+          </term>
+          <listitem>
+	    Return a title for GoGui.
+	  </listitem>
+        </varlistentry>
+	<varlistentry>
+	  <term>
             <userinput>gmp_queue</userinput>
           </term>
           <listitem>
