@@ -76,7 +76,7 @@ public final class Gtp
         m_illegalState = false;
         m_isProgramDead = false;
 
-        m_inputReadThread = new ReadThread(m_process.getInputStream());
+        m_inputReadThread = new ReadLineThread(m_process.getInputStream());
         m_errorReadThread = new ReadThread(m_process.getErrorStream());
         Object objects[] = { m_inputReadThread, m_errorReadThread };
         m_waitMultiple = new WaitMultiple(objects);
@@ -405,10 +405,10 @@ public final class Gtp
         }
     }
 
-    private static class ReadThread
+    private static class ReadLineThread
         extends Thread
     {
-        ReadThread(InputStream in)
+        ReadLineThread(InputStream in)
         {
             m_in = new BufferedReader(new InputStreamReader(in));
         }
@@ -441,6 +441,55 @@ public final class Gtp
                 while (true)
                 {
                     m_line = m_in.readLine();
+                    notify();
+                    wait();
+                }
+            }
+        }
+    }
+
+    private class ReadThread
+        extends Thread
+    {
+        public ReadThread(InputStream in)
+        {
+            m_in = new InputStreamReader(in);
+        }
+
+        public synchronized String getText()
+        {
+            return m_text;
+        }
+
+        public void run()
+        {
+            try
+            {
+                mainLoop();
+            }
+            catch (Throwable t)
+            {
+                StringUtils.printException(t);
+            }
+        }
+
+        private Reader m_in;
+
+        private String m_text;
+
+        private void mainLoop() throws IOException, InterruptedException
+        {
+            synchronized (this)
+            {
+                int size = 1024;
+                char[] buffer = new char[size];
+                while (true)
+                {
+                    int n = m_in.read(buffer, 0, size);
+                    if (n < 0)
+                        m_text = null;
+                    else
+                        m_text = new String(buffer, 0, n);
                     notify();
                     wait();
                 }
@@ -484,7 +533,7 @@ public final class Gtp
 
     private ReadThread m_errorReadThread;
 
-    private ReadThread m_inputReadThread;
+    private ReadLineThread m_inputReadThread;
 
     private WaitMultiple m_waitMultiple;
 
@@ -503,7 +552,7 @@ public final class Gtp
             if (m_logPrefix != null)
                 System.err.print(m_logPrefix);
             System.err.println(msg);
-            System.err.flush();
+            //System.err.flush();
         }
     }
 
@@ -530,15 +579,16 @@ public final class Gtp
             }
             else if (object == m_errorReadThread)
             {
-                String line = m_errorReadThread.getLine();
-                if (line == null)
+                String text = m_errorReadThread.getText();
+                if (text == null)
                 {
                     m_isProgramDead = true;
                     throw new Error("Go program died");
                 }
-                log("<< " + line);
+                if (m_log)
+                    System.err.print(text);
                 if (m_callback != null)
-                    m_callback.receivedStdErr(line);
+                    m_callback.receivedStdErr(text);
                 synchronized (object)
                 {
                     object.notify();
