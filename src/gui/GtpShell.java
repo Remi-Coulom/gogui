@@ -677,6 +677,12 @@ public class GtpShell
             Object object = wrapperObject((String)completions.get(i));
             m_comboBox.addItem(object);
         }
+        if (Platform.isMac())
+            // Workaround for Mac Java 1.4.2, if popup contains less
+            // items than needed for a scrollbar, then the popup hides
+            // the text field
+            for (int i = 0; i < 9; ++i)
+                m_comboBox.addItem(wrapperObject(new String("")));
         m_comboBox.setSelectedIndex(-1);
         m_textField.setText(oldText);
         m_textField.setCaretPosition(oldCaretPosition);
