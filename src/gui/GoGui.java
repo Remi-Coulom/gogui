@@ -245,24 +245,25 @@ class GoGui
             m_gameInfo.update();
             m_guiBoard.update();
             m_isModified = true;
-            return;
         }
-        if (m_analyzeRequestPoint)
+        else if (m_analyzeRequestPoint)
         {
             m_analyzePointArg = p;
             m_guiBoard.clearAllCrossHair();
             m_guiBoard.setCrossHair(p, true);
+            m_guiBoard.repaint();
             analyzeBegin(false, false);
             return;
         }
-        if (m_scoreMode)
+        else if (m_scoreMode)
         {
             m_guiBoard.scoreSetDead(p);
             m_guiBoard.repaint();
             m_scoreDialog.showScore(m_board.scoreGet());
             return;
         }
-        humanMoved(new Move(p, m_board.getToMove()));
+        else
+            humanMoved(new Move(p, m_board.getToMove()));
     }
     
     public static void main(String[] args)
