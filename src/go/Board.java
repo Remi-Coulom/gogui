@@ -178,36 +178,12 @@ public class Board
 
     public Vector getHandicapStones(int n)
     {
-        Vector result = new Vector(9);
-        if (n == 0)
-            return result;
-        if (m_handicapLine1 < 0)
-            return null;
-        if (n > 4 && m_handicapLine2 < 0)
-            return null;
-        if (n >= 1)
-            result.add(new Point(m_handicapLine1, m_handicapLine1));
-        if (n >= 2)
-            result.add(new Point(m_handicapLine3, m_handicapLine3));
-        if (n >= 3)
-            result.add(new Point(m_handicapLine1, m_handicapLine3));
-        if (n >= 4)
-            result.add(new Point(m_handicapLine3, m_handicapLine1));
-        if (n >= 5)
-            if (n % 2 != 0)
-            {
-                result.add(new Point(m_handicapLine2, m_handicapLine2));
-                --n;
-            }
-        if (n >= 5)
-            result.add(new Point(m_handicapLine1, m_handicapLine2));
-        if (n >= 6)
-            result.add(new Point(m_handicapLine3, m_handicapLine2));
-        if (n >= 7)
-            result.add(new Point(m_handicapLine2, m_handicapLine1));
-        if (n >= 8)
-            result.add(new Point(m_handicapLine2, m_handicapLine3));
-        return result;
+        return getHandicapStones(n, m_constants);
+    }
+
+    public static Vector getHandicapStones(int size, int n)
+    {
+        return getHandicapStones(n, new Constants(size));
     }
 
     public float getKomi()
@@ -294,21 +270,7 @@ public class Board
         m_capturedB = 0;
         m_capturedW = 0;
         initAllPoints();
-        m_handicapLine1 = -1;
-        m_handicapLine2 = -1;
-        m_handicapLine3 = -1;
-        if (m_size >= 13)
-        {
-            m_handicapLine1 = 3;
-            m_handicapLine3 = m_size - 4;
-        }
-        else if (m_size >= 8)
-        {
-            m_handicapLine1 = 2;
-            m_handicapLine3 = m_size - 3;
-        }
-        if (m_size >= 11 && m_size % 2 != 0)
-            m_handicapLine2 = m_size / 2;
+        m_constants = new Constants(size);
         newGame();
     }
 
@@ -319,9 +281,9 @@ public class Board
 
     public boolean isHandicapLine(int i)
     {
-        return (i == m_handicapLine1
-                || i == m_handicapLine2
-                || i == m_handicapLine3);
+        return (i == m_constants.m_handicapLine1
+                || i == m_constants.m_handicapLine2
+                || i == m_constants.m_handicapLine3);
     }
 
     public boolean isHandicap(Point p)
@@ -587,6 +549,35 @@ public class Board
         return (m_moveNumber < m_moves.size()
                 && ! move.equals(getInternalMove(m_moveNumber)));
     }
+
+    /** Some values that are constant fpr a given board size. */
+    private static class Constants
+    {
+        public Constants(int size)
+        {
+            m_handicapLine1 = -1;
+            m_handicapLine2 = -1;
+            m_handicapLine3 = -1;
+            if (size >= 13)
+            {
+                m_handicapLine1 = 3;
+                m_handicapLine3 = size - 4;
+            }
+            else if (size >= 8)
+            {
+                m_handicapLine1 = 2;
+                m_handicapLine3 = size - 3;
+            }
+            if (size >= 11 && size % 2 != 0)
+                m_handicapLine2 = size / 2;
+        }
+
+        public int m_handicapLine1;
+
+        public int m_handicapLine2;
+
+        public int m_handicapLine3;
+    }
     
     private boolean m_mark[][];
 
@@ -597,12 +588,6 @@ public class Board
     private int m_capturedB;
 
     private int m_capturedW;
-
-    private int m_handicapLine1;
-
-    private int m_handicapLine2;
-
-    private int m_handicapLine3;
 
     private int m_moveNumber;
 
@@ -623,6 +608,8 @@ public class Board
     private Color m_score[][];
 
     private Color m_toMove;
+
+    private Constants m_constants;
 
     private Point m_allPoints[];
 
@@ -663,6 +650,49 @@ public class Board
         Vector adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
             findStones((Point)(adj.get(i)), color, stones);
+    }
+
+    private static Vector getHandicapStones(int n, Constants constants)
+    {
+        Vector result = new Vector(9);
+        if (n == 0)
+            return result;
+        if (constants.m_handicapLine1 < 0)
+            return null;
+        if (n > 4 && constants.m_handicapLine2 < 0)
+            return null;
+        if (n >= 1)
+            result.add(new Point(constants.m_handicapLine1,
+                                 constants.m_handicapLine1));
+        if (n >= 2)
+            result.add(new Point(constants.m_handicapLine3,
+                                 constants.m_handicapLine3));
+        if (n >= 3)
+            result.add(new Point(constants.m_handicapLine1,
+                                 constants.m_handicapLine3));
+        if (n >= 4)
+            result.add(new Point(constants.m_handicapLine3,
+                                 constants.m_handicapLine1));
+        if (n >= 5)
+            if (n % 2 != 0)
+            {
+                result.add(new Point(constants.m_handicapLine2,
+                                     constants.m_handicapLine2));
+                --n;
+            }
+        if (n >= 5)
+            result.add(new Point(constants.m_handicapLine1,
+                                 constants.m_handicapLine2));
+        if (n >= 6)
+            result.add(new Point(constants.m_handicapLine3,
+                                 constants.m_handicapLine2));
+        if (n >= 7)
+            result.add(new Point(constants.m_handicapLine2,
+                                 constants.m_handicapLine1));
+        if (n >= 8)
+            result.add(new Point(constants.m_handicapLine2,
+                                 constants.m_handicapLine3));
+        return result;
     }
 
     private boolean getMark(Point p)
