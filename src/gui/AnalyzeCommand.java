@@ -1,7 +1,7 @@
-//=============================================================================
+//-----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,7 +12,7 @@ import javax.swing.event.*;
 
 import utils.*;
 
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 class AnalyzeCommand
     extends JComboBox
@@ -64,7 +64,8 @@ class AnalyzeCommand
                 if (getItemAt(i).toString().equals(startCommand))
                 {
                     setSelectedIndex(i);
-                    setEnabled(true);
+                    if (prefs.getAnalyzeCommandEnabled())
+                        setEnabled(true);
                     setCommand(true);
                     return;
                 }
@@ -90,7 +91,10 @@ class AnalyzeCommand
         if (isEnabled())
             setCommand(false);
         else
+        {
+            m_prefs.setAnalyzeCommandEnabled(false);
             m_callback.clearAnalyzeCommand();
+        }
     }
 
     private Callback m_callback;
@@ -186,6 +190,7 @@ class AnalyzeCommand
 
     private void setCommand(boolean init)
     {
+        m_prefs.setAnalyzeCommandEnabled(true);
         int index = getSelectedIndex();
         if (index == 0)
         {
@@ -215,7 +220,7 @@ class AnalyzeCommand
             title = array[3];
         if (array.length > 4)
             scale = Double.parseDouble(array[4]);
-        if (init)
+        if (init && m_prefs.getAnalyzeCommandEnabled())
             m_callback.initAnalyzeCommand(type, label, command, title, scale);
         else
             m_callback.setAnalyzeCommand(type, label, command, title, scale);
@@ -223,4 +228,4 @@ class AnalyzeCommand
     }
 }
 
-//=============================================================================
+//-----------------------------------------------------------------------------
