@@ -50,6 +50,12 @@ longer create a new child
 </listitem>
 <listitem>
 <simpara>
+GoGui: add special code for Mac OS to handle Quit events from the
+Application and Dock menu in a safe way
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Use xsltproc for generating the documentation instead of the built-in
 ant target "Style"
 </simpara>
