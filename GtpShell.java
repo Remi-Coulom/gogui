@@ -196,6 +196,7 @@ public class GtpShell
 
     public void receivedLine(String line)
     {
+        assert(SwingUtilities.isEventDispatchThread());
         m_log.append(line);
         m_log.append("\n");
         m_gtpShellText.appendInput(line + "\n");
@@ -203,6 +204,7 @@ public class GtpShell
     
     public void receivedStdErr(String s)
     {
+        assert(SwingUtilities.isEventDispatchThread());
         m_log.append(s);
         m_gtpShellText.appendError(s);
     }
@@ -217,6 +219,7 @@ public class GtpShell
 
     public void sentCommand(String command)
     {
+        assert(SwingUtilities.isEventDispatchThread());
         m_log.append(command);
         m_log.append("\n");
         m_commands.append(command);
