@@ -491,8 +491,7 @@ class MenuBar
         addMenuItem(menu, "New", KeyEvent.VK_N, KeyEvent.VK_N,
                     ActionEvent.CTRL_MASK, "new-game");
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
-                    ActionEvent.CTRL_MASK,
-                    "open");
+                    ActionEvent.CTRL_MASK, "open");
         menu.add(createRecentMenu());
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
                     ActionEvent.CTRL_MASK,
@@ -517,7 +516,8 @@ class MenuBar
     {
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
-        addMenuItem(menu, "Info...", KeyEvent.VK_I, "game-info");
+        addMenuItem(menu, "Info...", KeyEvent.VK_I, KeyEvent.VK_I,
+                    ActionEvent.CTRL_MASK, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
