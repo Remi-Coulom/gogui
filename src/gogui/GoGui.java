@@ -1981,6 +1981,7 @@ class GoGui
         }
         updateGameInfo(true);
         registerSpecialMacHandler();
+        m_innerPanel.validate();
         if (! m_prefs.getBool("show-info-panel"))
         {
             m_menuBar.setShowInfoPanel(false);
