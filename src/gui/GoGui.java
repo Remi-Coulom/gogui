@@ -391,14 +391,6 @@ class GoGui
 
     public static void main(String[] args)
     {
-        try
-        {
-            String s = UIManager.getSystemLookAndFeelClassName();
-            UIManager.setLookAndFeel(s);
-        }
-        catch (Exception e)
-        {
-        }
         boolean verbose = false;
         try
         {
