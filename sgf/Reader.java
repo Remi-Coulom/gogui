@@ -60,6 +60,11 @@ public class Reader
         return m_komi;
     }
 
+    public Move getMove(int i)
+    {
+        return (Move)m_moves.get(i);
+    }
+
     public Vector getMoves()
     {
         return m_moves;
