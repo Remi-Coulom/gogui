@@ -96,6 +96,17 @@ public class TextViewer
         m_textPane.setCaretPosition(0);
         m_textPane.setEditable(false);
         pack();
+        // Workaround for problems with oversized windows on some platforms
+        Dimension size = getSize();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int maxHeight = (int)(0.9 * screenSize.height);
+        int maxWidth = (int)(0.9 * screenSize.width);
+        if (size.height > maxHeight || size.width > maxWidth)
+        {
+            size.width = Math.min(size.width, maxWidth);
+            size.height = Math.min(size.height, maxHeight);
+            setSize(size);
+        }
         setVisible(true);
     }
 
