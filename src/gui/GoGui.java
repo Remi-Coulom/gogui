@@ -37,7 +37,6 @@ class GoGui
         setPrefsDefaults(m_prefs);
         m_boardSize = prefs.getInt("boardsize");
         m_beepAfterMove = prefs.getBool("beep-after-move");
-        m_rememberWindowSizes = prefs.getBool("remember-window-sizes");
         m_file = file;
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
@@ -103,7 +102,6 @@ class GoGui
         m_menuBar = new MenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
-        m_menuBar.setRememberSizes(m_rememberWindowSizes);
         setJMenuBar(m_menuBar.getMenuBar());
         m_program = program;
         if (m_program == null)
@@ -116,8 +114,7 @@ class GoGui
         pack();
         m_guiBoard.requestFocusInWindow();
         setTitle("GoGui");
-        if (m_rememberWindowSizes)
-            restoreSize(this, "window-gogui", m_boardSize);
+        restoreSize(this, "window-gogui", m_boardSize);
         try
         {
             if (time != null)
@@ -147,7 +144,6 @@ class GoGui
             && ! command.equals("gtp-shell")
             && ! command.equals("help")
             && ! command.equals("interrupt")
-            && ! command.equals("remember-sizes")
             && ! command.equals("show-last-move")
             && ! command.equals("exit"))
             return;
@@ -223,8 +219,6 @@ class GoGui
             cbPreviousVariation();
         else if (command.equals("print"))
             cbPrint();
-        else if (command.equals("remember-sizes"))
-            cbRememberSizes();
         else if (command.equals("save"))
             cbSave();
         else if (command.equals("save-position"))
@@ -263,8 +257,7 @@ class GoGui
             m_analyzeDialog =
                 new AnalyzeDialog(null, this, m_prefs,
                                   m_commandThread.getSupportedCommands());
-            if (m_rememberWindowSizes)
-                restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
+            restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
             setTitle();
         }
         m_analyzeDialog.toTop();
@@ -653,8 +646,6 @@ class GoGui
 
     private boolean m_needsSave;
 
-    private boolean m_rememberWindowSizes;
-
     private boolean m_resigned;
 
     private boolean m_scoreMode;
@@ -835,12 +826,9 @@ class GoGui
                                     + "printed by the program.");
             return;
         }
-        if (m_rememberWindowSizes)
-        {
-            restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
-            if (m_prefs.getBool("show-gtpshell"))
-                m_gtpShell.toTop();
-        }
+        restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+        if (m_prefs.getBool("show-gtpshell"))
+            m_gtpShell.toTop();
         try
         {
             setFastUpdate(true);
@@ -1109,8 +1097,7 @@ class GoGui
         if (m_help == null)
         {
             m_help = new Help(null, u);
-            if (m_rememberWindowSizes)
-                restoreSize(m_help, "window-help", m_boardSize);
+            restoreSize(m_help, "window-help", m_boardSize);
         }
         m_help.toTop();
     }
@@ -1270,12 +1257,6 @@ class GoGui
         }
     }
 
-    private void cbRememberSizes()
-    {
-        m_rememberWindowSizes = m_menuBar.getRememberSizes();
-        m_prefs.setBool("remember-window-sizes", m_rememberWindowSizes);
-    }
-
     private void cbSave()
     {
         saveDialog();
@@ -1415,8 +1396,7 @@ class GoGui
         if (m_gameTreeViewer == null)
         {
             m_gameTreeViewer = new GameTreeViewer(null, this);
-            if (m_rememberWindowSizes)
-                restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
+            restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         }
         m_gameTreeViewer.update(m_gameTree, m_currentNode);
         m_gameTreeViewer.toTop();
@@ -1824,18 +1804,13 @@ class GoGui
             m_guiBoard.initSize(size);
             m_squareLayout.setPreferMultipleOf(size + 2);
             pack();
-            if (m_rememberWindowSizes)
-            {
-                restoreSize(this, "window-gogui", m_boardSize);
-                if (m_gtpShell != null)
-                    restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
-                if (m_analyzeDialog != null)
-                    restoreSize(m_analyzeDialog, "window-analyze",
-                                m_boardSize);
-                if (m_gameTreeViewer != null)
-                    restoreSize(m_gameTreeViewer, "window-gametree",
-                                m_boardSize);
-            }
+            restoreSize(this, "window-gogui", m_boardSize);
+            if (m_gtpShell != null)
+                restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+            if (m_analyzeDialog != null)
+                restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
+            if (m_gameTreeViewer != null)
+                restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         }
         Vector handicap = m_board.getHandicapStones(m_handicap);
         if (handicap == null)
@@ -2103,18 +2078,15 @@ class GoGui
         m_menuBar.saveRecent();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        if (m_rememberWindowSizes)
+        saveSize(this, "window-gogui");
+        if (m_help != null)
+            saveSize(m_help, "window-help");
+        if (m_gameTreeViewer != null)
+            saveSizeAndVisible(m_gameTreeViewer, "gametree");
+        if (m_commandThread != null)
         {
-            saveSize(this, "window-gogui");
-            if (m_help != null)
-                saveSize(m_help, "window-help");
-            if (m_gameTreeViewer != null)
-                saveSizeAndVisible(m_gameTreeViewer, "gametree");
-            if (m_commandThread != null)
-            {
-                saveSizeAndVisible(m_gtpShell, "gtpshell");
-                saveSizeAndVisible(m_analyzeDialog, "analyze");
-            }
+            saveSizeAndVisible(m_gtpShell, "gtpshell");
+            saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
     }
 
@@ -2218,7 +2190,6 @@ class GoGui
         prefs.setBoolDefault("beep-after-move", true);
         prefs.setIntDefault("boardsize", 19);
         prefs.setFloatDefault("komi", 0);
-        prefs.setBoolDefault("remember-window-sizes", true);
         prefs.setStringDefault("rules", "Chinese");
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);

@@ -374,17 +374,6 @@ With most versions of Java the PC speaker is used for the beep.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Remember window sizes</guimenuitem></term>
-<listitem>
-<para>
-Remember positions and sizes of the windows.
-The sizes are remembered depending on the board size to allow a different
-layout for different board sizes.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>Show cursor</guimenuitem></term>
 <listitem>
 <para>
