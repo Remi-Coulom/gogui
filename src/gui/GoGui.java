@@ -92,8 +92,6 @@ class GoGui
         pack();
         setVisible(true);
         ++m_instanceCount;
-        if (m_gtpShell != null)
-            DialogUtils.center(m_gtpShell, this);
         if (gtpShell && m_gtpShell != null)
         {
             m_gtpShell.toTop();
