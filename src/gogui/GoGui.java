@@ -656,7 +656,7 @@ class GoGui
 
     private String m_initAnalyze;
 
-    private String m_name = "";
+    private String m_name;
 
     private String m_program;
 
@@ -799,16 +799,19 @@ class GoGui
         }
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
+        m_name = null;
         try
         {
             m_name = m_commandThread.sendCommand("name").trim();
         }
         catch (GtpError e)
         {
-            m_name = "Unknown Program";
             showGtpError(e);
-            return false;
         }
+        if (m_name != null)
+            m_name = StringUtils.capitalize(m_name);
+        else
+            m_name = "Unknown Program";
         try
         {
             m_commandThread.queryProtocolVersion();
@@ -913,8 +916,7 @@ class GoGui
                 Integer.toString(m_commandThread.getProtocolVersion());
             command = m_commandThread.getProgramCommand();
         }
-        AboutDialog.show(this, getComputerName(), m_version, protocolVersion,
-                         command);
+        AboutDialog.show(this, m_name, m_version, protocolVersion, command);
     }
 
     private void cbBeepAfterMove()
@@ -1514,7 +1516,7 @@ class GoGui
             if (response.toLowerCase().equals("resign"))
             {
                 if (! (m_computerBlack && m_computerWhite))
-                    showInfo(getComputerName() + " resigns");
+                    showInfo(m_name + " resigns");
                 m_resigned = true;
                 setResult((toMove == go.Color.BLACK ? "W" : "B") + "+Resign");
             }
@@ -1529,7 +1531,7 @@ class GoGui
                 m_currentNode = node;
                 m_currentNodeExecuted = 1;
                 if (point == null && ! (m_computerBlack && m_computerWhite))
-                    showInfo(getComputerName() + " passed");
+                    showInfo(m_name + " passed");
                 fileModified();
                 m_resigned = false;
             }
@@ -1613,8 +1615,8 @@ class GoGui
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
         m_commandThread = null;
-        m_name = "";
-        m_version = "";
+        m_name = null;
+        m_version = null;
         m_toolBar.setComputerEnabled(false);
         m_menuBar.setComputerEnabled(false);
         m_gtpShell.dispose();
@@ -1744,7 +1746,7 @@ class GoGui
 
     private void generateMove()
     {
-        showStatus(getComputerName() + " is thinking ...");
+        showStatus(m_name + " is thinking ...");
         go.Color toMove = m_board.getToMove();
         String command = m_commandThread.getCommandGenmove(toMove);
         Runnable callback = new Runnable()
@@ -1752,13 +1754,6 @@ class GoGui
                 public void run() { computerMoved(); }
             };
         runLengthyCommand(command, callback);
-    }
-
-    private String getComputerName()
-    {
-        if (m_name != null && ! m_name.equals(""))
-            return StringUtils.capitalize(m_name);
-        return "Unknown Program";
     }
 
     private int getRules()
@@ -2357,8 +2352,8 @@ class GoGui
     private void setTitle()
     {
         String appName = "GoGui";        
-        if (m_commandThread != null && ! m_name.equals(""))
-            appName = getComputerName();
+        if (m_commandThread != null)
+            appName = m_name;
         if (m_gtpShell != null)
             m_gtpShell.setAppName(appName);
         if (m_analyzeDialog != null)
