@@ -717,7 +717,7 @@ public class GtpShell
     private void appendLog(String line)
     {
         assert(SwingUtilities.isEventDispatchThread());
-        m_gtpShellText.appendLog(line + "\n");
+        m_gtpShellText.appendLog(line);
     }
     
     private void appendResponse(boolean error, String response)
