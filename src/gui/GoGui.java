@@ -40,6 +40,7 @@ class GoGui
 
         m_prefs = prefs;
         m_boardSize = prefs.getBoardSize();
+        m_beepAfterMove = prefs.getBeepAfterMove();
         m_file = file;
         m_fillPasses = fillPasses;
         m_gtpFile = gtpFile;
@@ -84,6 +85,7 @@ class GoGui
         m_menuBars = new MenuBars(this);
         m_menuBars.selectBoardSizeItem(m_boardSize);
         m_menuBars.selectRulesItem(m_board.getRules());
+        m_menuBars.setBeepAfterMove(m_beepAfterMove);
         setJMenuBar(m_menuBars.getNormalMenu());
 
         if (program == null || program.equals(""))
@@ -136,6 +138,8 @@ class GoGui
             cbBackward(1);
         else if (command.equals("backward-10"))
             cbBackward(10);
+        else if (command.equals("beep-after-move"))
+            cbBeepAfterMove();
         else if (command.equals("beginning"))
             cbBeginning();
         else if (command.startsWith("board-size-"))
@@ -439,6 +443,8 @@ class GoGui
 
     private boolean m_autoplay;
 
+    private boolean m_beepAfterMove;
+
     private boolean m_boardNeedsReset;
 
     private boolean m_computerBlack;
@@ -674,6 +680,12 @@ class GoGui
     private void cbAnalyze()
     {        
         m_toolBar.toggleAnalyze();
+    }
+
+    private void cbBeepAfterMove()
+    {
+        m_beepAfterMove = m_menuBars.getBeepAfterMove();
+        m_prefs.setBeepAfterMove(m_beepAfterMove);
     }
 
     private void cbBeginning()
@@ -1169,7 +1181,8 @@ class GoGui
     {
         assert(m_commandThread != null);
         endLengthyCommand();
-        //java.awt.Toolkit.getDefaultToolkit().beep();
+        if (m_beepAfterMove)
+            java.awt.Toolkit.getDefaultToolkit().beep();
         try
         {
             Gtp.Error e = m_commandThread.getException();

@@ -21,6 +21,9 @@
 	    Show filename in title bar if game is loaded and not modified.
 	  </listitem>
 	  <listitem>
+	    Add option for beep after move.
+	  </listitem>
+	  <listitem>
 	    Other small fixes and enhancements.
 	  </listitem>
 	</itemizedlist>

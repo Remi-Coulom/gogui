@@ -24,6 +24,7 @@ class MenuBars
         m_normalMenuBar.add(createFileMenu());
         m_normalMenuBar.add(createGameMenu());
         m_normalMenuBar.add(createBoardMenu());
+        m_normalMenuBar.add(createSettingsMenu());
         m_menuAnalyze = createAnalyzeMenu();
         m_normalMenuBar.add(m_menuAnalyze);
         m_normalMenuBar.add(Box.createHorizontalGlue());
@@ -45,6 +46,11 @@ class MenuBars
         m_menuAnalyze.setEnabled(false);
         m_menuComputerColor.setEnabled(false);
         m_itemComputerPlay.setEnabled(false);
+    }
+
+    public boolean getBeepAfterMove()
+    {
+        return m_itemBeepAfterMove.getState();
     }
 
     public void setComputerBlack()
@@ -107,6 +113,11 @@ class MenuBars
         }
     }
 
+    public void setBeepAfterMove(boolean enable)
+    {
+        m_itemBeepAfterMove.setState(enable);
+    }
+
     public void setCommandInProgress(boolean commandInProgress)
     {
         if (commandInProgress)
@@ -141,6 +152,8 @@ class MenuBars
     private static int m_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     private ActionListener m_listener;
+
+    private JCheckBoxMenuItem m_itemBeepAfterMove;
 
     private JMenu m_menuAnalyze;
 
@@ -323,6 +336,16 @@ class MenuBars
         m_itemRulesChinese.setSelected(true);
         m_itemRulesJapanese =
             addRadioItem(menu, group, "Japanese", "rules-japanese");
+        return menu;
+    }
+
+    private JMenu createSettingsMenu()
+    {
+        JMenu menu = new JMenu("Settings");
+        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep after Move");
+        m_itemBeepAfterMove.addActionListener(m_listener);
+        m_itemBeepAfterMove.setActionCommand("beep-after-move");
+        menu.add(m_itemBeepAfterMove);
         return menu;
     }
 
