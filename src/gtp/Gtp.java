@@ -220,28 +220,6 @@ public final class Gtp
         return m_isProgramDead;
     }
 
-    public static void main(String[] args)
-    {
-        try
-        {
-            String program;
-            if (args.length > 0)
-                program = args[0];
-            else
-                program = "gnugo --mode gtp";
-            Gtp gtp = new Gtp(program, true, null);
-            gtp.sendCommand("name");
-            gtp.sendCommand("version");
-            gtp.sendCommand("quit");
-            System.exit(0);
-        }
-        catch (Exception e)
-        {
-            System.err.println(e.getMessage());
-            System.exit(-1);
-        }
-    }
-
     public static double[][] parseDoubleBoard(String response, String title,
                                               int boardSize) throws Gtp.Error
     {
