@@ -640,6 +640,8 @@ class MenuBar
                 if (m_numberRecent >= m_maxRecent - 1)
                     break;
                 File recent = new File(line);
+                if (! recent.exists())
+                    continue;
                 m_recent[m_numberRecent] = recent;
                 ++m_numberRecent;
             }
