@@ -9,6 +9,7 @@ import java.io.*;
 
 //----------------------------------------------------------------------------
 
+/** Static utility functions related to class Board. */
 public class BoardUtils
 {
     public static void print(Board board, PrintStream out)

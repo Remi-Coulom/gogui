@@ -9,6 +9,7 @@ import java.util.*;
 
 //----------------------------------------------------------------------------
 
+/** Information necessary to undo a move. */
 class MoveRecord
 {
     public MoveRecord(Color oldToMove, Move m, Color old, Vector killed,
@@ -59,6 +60,7 @@ class MoveRecord
 
 //----------------------------------------------------------------------------
 
+/** Go board. */
 public class Board
 {
     public static final int RULES_UNKNOWN = 0;
@@ -519,7 +521,7 @@ public class Board
         m_toMove = r.getOldToMove();
     }
 
-    /** Some values that are constant fpr a given board size. */
+    /** Some values that are constant for a given board size. */
     private static class Constants
     {
         public Constants(int size)

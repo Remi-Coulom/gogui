@@ -7,6 +7,7 @@ package go;
 
 //----------------------------------------------------------------------------
 
+/** Intersection on the Go board. */
 public class Point
 {
     public Point(int x, int y)

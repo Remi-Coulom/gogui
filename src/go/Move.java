@@ -9,12 +9,17 @@ import java.util.*;
 
 //----------------------------------------------------------------------------
 
+/** Move.
+    Contains a point (null for pass move) and a color.
+    The color is usually black or white, but empty can be used for
+    removing a stone on the board.
+*/
 public class Move
 {
-    public Move(Point p, Color c)
+    public Move(Point point, Color color)
     {
-        m_point = p;
-        m_color = c;
+        m_point = point;
+        m_color = color;
     }
 
     public boolean equals(Object object)

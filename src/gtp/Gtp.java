@@ -21,13 +21,14 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
-/**
-   This class is final because it starts a thread in its constructor which
-   might conflict with subclassing because the subclass constructor will
-   be called after the thread is started.
+/** Interface to a Go program that uses GTP over the standard I/O streams.
+    This class is final because it starts a thread in its constructor which
+    might conflict with subclassing because the subclass constructor will
+    be called after the thread is started.
 */
 public final class Gtp
 {
+    /** Exception indication the failure of a GTP command. */
     public static class Error extends Exception
     {
         public Error(String s)
@@ -36,6 +37,7 @@ public final class Gtp
         }
     }    
 
+    /** Callback interface for logging or displaying the GTP stream. */
     public interface IOCallback
     {
         public void receivedInvalidResponse(String s);
@@ -564,6 +566,7 @@ public final class Gtp
         }
     }
 
+    /** Handle standard error stream of the GTP Go program. */
     private class StdErrThread extends Thread
     {
         public StdErrThread(Process process)
