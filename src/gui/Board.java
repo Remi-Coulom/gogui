@@ -193,6 +193,12 @@ public class Board
         return Printable.PAGE_EXISTS;
     }
 
+    public void scoreBegin()
+    {
+        m_board.scoreBegin();
+        calcScore();
+    }
+
     public void scoreSetDead(go.Point p)
     {
         go.Color c = m_board.getColor(p);

@@ -922,7 +922,7 @@ class GoGui
     private void cbScore()
     {
         resetBoard();
-        m_board.scoreBegin();
+        m_guiBoard.scoreBegin();
         m_scoreMode = true;
         setJMenuBar(m_menuBars.getScoreMenu());
         m_toolBar.enableAll(false, null);
