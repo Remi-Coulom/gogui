@@ -13,6 +13,16 @@ import gtp.*;
 
 //----------------------------------------------------------------------------
 
+/** Wrapper around gtp.Gtp to be used in a GUI environment.
+    Allows to send fast commands immediately in the event dispatch thread
+    and potentially slow commands in a separate thread with a callback
+    in the event thread after the command finished.
+    Fast commands are ones that the Go engine is supposed to answer quickly
+    (like boardsize, play and undo), however they have a timeout (6 sec) to
+    prevent the GUI to hang, if the program does not respond.
+    After the timeout a dialog is opened that allows to kill the program or
+    continue to wait.
+*/
 public class CommandThread
     extends Thread
 {
@@ -190,7 +200,9 @@ public class CommandThread
         }
     }
     
-    public String sendCommand(String command) throws GtpError
+    /** Send command in event dispatch thread */
+    public String sendCommand(String command)
+        throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
