@@ -4,6 +4,50 @@
 
 <revision>
 <revnumber>&version;</revnumber>
+<date>3 Sep 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Minor bugfixes.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
+<revnumber>0.3.2</revnumber>
+<date>1 Sep 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Fix bug when truncating history in GTP shell.
+</listitem>
+<listitem>
+Fix bug: marker was not cleared after running analyze command
+with point argument.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
+<revnumber>0.3.1</revnumber>
+<date>29 Aug 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Bugfix release.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
+<revnumber>0.3.0</revnumber>
+<date>25 Aug 2003</date>
 <authorinitials>enz</authorinitials>
 <revremark>
 <itemizedlist>
@@ -65,7 +109,7 @@ Lots of other fixes and enhancements.
 
 <revision>
 <revnumber>0.2.2</revnumber>
-<date>23 Aug 2003</date>
+<date>2 Aug 2003</date>
 <authorinitials>enz</authorinitials>
 <revremark>
 <itemizedlist>
@@ -118,7 +162,7 @@ Lots of other fixes and enhancements.
 
 <revision>
 <revnumber>0.2.1</revnumber>
-<date>24 Jun 2003</date>
+<date>23 Jun 2003</date>
 <authorinitials>enz</authorinitials>
 <revremark>
 <itemizedlist>
@@ -146,7 +190,7 @@ Other small fixes.
 
 <revision>
 <revnumber>0.2</revnumber>
-<date>24 Apr 2003</date>
+<date>23 Apr 2003</date>
 <authorinitials>enz</authorinitials>
 <revremark>
 <itemizedlist>

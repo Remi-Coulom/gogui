@@ -232,12 +232,18 @@ class GoGui
             return;
         if (m_setupMode)
         {
-            setFastUpdate(true);
-            if (m_board.getColor(p) != m_setupColor)
-                m_board.play(new Move(p, m_setupColor));
-            else
-                m_board.play(new Move(p, go.Color.EMPTY));
-            setFastUpdate(false);
+            try
+            {
+                setFastUpdate(true);
+                if (m_board.getColor(p) != m_setupColor)
+                    m_board.play(new Move(p, m_setupColor));
+                else
+                    m_board.play(new Move(p, go.Color.EMPTY));
+            }
+            finally
+            {
+                setFastUpdate(false);
+            }
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
             m_guiBoard.update();
@@ -249,6 +255,8 @@ class GoGui
             m_analyzePointArg = p;
             m_guiBoard.clearAllCrossHair();
             m_guiBoard.setCrossHair(p, true);
+            m_boardNeedsReset = true;
+            m_guiBoard.repaint();
             analyzeBegin(false, false);
             return;
         }
@@ -700,6 +708,8 @@ class GoGui
             }
             else
                 showStatus(resultTitle);
+            if (m_analyzeRequestPoint)
+                m_boardNeedsReset = true;
             if (! m_analyzeRequestPoint && checkComputerMoveAfterAnalyze)
                 checkComputerMove();
         }
@@ -718,16 +728,22 @@ class GoGui
     {
         try
         {
-            setFastUpdate(true);
-            for (int i = 0; i < n; ++i)
+            try
             {
-                if (m_board.getMoveNumber() == 0)
-                    break;
-                if (m_commandThread != null)
-                    m_commandThread.sendCommand("undo");
-                m_board.undo();
+                setFastUpdate(true);
+                for (int i = 0; i < n; ++i)
+                {
+                    if (m_board.getMoveNumber() == 0)
+                        break;
+                    if (m_commandThread != null)
+                        m_commandThread.sendCommand("undo");
+                    m_board.undo();
+                }
             }
-            setFastUpdate(false);
+            finally
+            {
+                setFastUpdate(false);
+            }
             boardChangedBegin(false);
         }
         catch (Gtp.Error e)
@@ -1121,6 +1137,7 @@ class GoGui
             return saveDialog();
         case 1:
             return true;
+        case -1:
         case 2:
             return false;
         default:
@@ -1315,16 +1332,22 @@ class GoGui
     {
         try
         {
-            setFastUpdate(true);
-            for (int i = 0; i < n; ++i)
+            try
             {
-                int moveNumber = m_board.getMoveNumber();
-                if (moveNumber >= m_board.getNumberSavedMoves())
-                    break;
-                Move move = m_board.getMove(moveNumber);
-                play(move);
+                setFastUpdate(true);
+                for (int i = 0; i < n; ++i)
+                {
+                    int moveNumber = m_board.getMoveNumber();
+                    if (moveNumber >= m_board.getNumberSavedMoves())
+                        break;
+                    Move move = m_board.getMove(moveNumber);
+                    play(move);
+                }
             }
-            setFastUpdate(false);
+            finally
+            {
+                setFastUpdate(false);
+            }
         }
         catch (Gtp.Error e)
         {
@@ -1353,9 +1376,15 @@ class GoGui
             go.Point p = m.getPoint();
             if (p != null && m_board.getColor(p) != go.Color.EMPTY)
                     return;
-            setFastUpdate(true);
-            play(m);
-            setFastUpdate(false);
+            try
+            {
+                setFastUpdate(true);
+                play(m);
+            }
+            finally
+            {
+                setFastUpdate(false);
+            }
             m_timeControl.stopMove();
             if (m_board.getMoveNumber() > 0
                 && m_timeControl.lostOnTime(m.getColor())
@@ -1550,22 +1579,29 @@ class GoGui
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
-            setFastUpdate(true);
-            for (int i = 0; i < moves.size(); ++i)
+            int numberMoves;
+            try
             {
-                Move m = (Move)moves.get(i);
-                setup(m);
+                setFastUpdate(true);
+                for (int i = 0; i < moves.size(); ++i)
+                {
+                    Move m = (Move)moves.get(i);
+                    setup(m);
+                }
+                numberMoves = reader.getMoves().size();
+                go.Color toMove = reader.getToMove();
+                if (numberMoves > 0)
+                    toMove = reader.getMove(0).getColor();
+                if (toMove != m_board.getToMove())
+                {
+                    Move m = new Move(null, m_board.getToMove());
+                    setup(m);
+                }
             }
-            int numberMoves = reader.getMoves().size();
-            go.Color toMove = reader.getToMove();
-            if (numberMoves > 0)
-                toMove = reader.getMove(0).getColor();
-            if (toMove != m_board.getToMove())
+            finally
             {
-                Move m = new Move(null, m_board.getToMove());
-                setup(m);
+                setFastUpdate(false);
             }
-            setFastUpdate(false);
             moves.clear();
             for (int i = 0; i < numberMoves; ++i)
                 moves.add(reader.getMove(i));
@@ -1960,18 +1996,24 @@ class GoGui
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
-            setFastUpdate(true);
-            for (int i = 0; i < moves.size(); ++i)
+            try
             {
-                Move m = (Move)moves.get(i);
-                setup(m);
+                setFastUpdate(true);
+                for (int i = 0; i < moves.size(); ++i)
+                {
+                    Move m = (Move)moves.get(i);
+                    setup(m);
+                }
+                if (m_board.getToMove() != toMove)
+                {
+                    Move m = new Move(null, m_board.getToMove());
+                    setup(m);
+                }
             }
-            if (m_board.getToMove() != toMove)
+            finally
             {
-                Move m = new Move(null, m_board.getToMove());
-                setup(m);
+                setFastUpdate(false);
             }
-            setFastUpdate(false);
             fileModified();
             boardChangedBegin(false);
         }

@@ -129,8 +129,6 @@ class GtpShellText
             ++m_lines;
             ++indexNewLine;
         }
-        if (m_lines > m_historyMax)
-            truncateHistory();
         StyledDocument doc = getStyledDocument();
         Style s = null;
         if (style != null)
@@ -145,6 +143,8 @@ class GtpShellText
         {
             assert(false);
         }
+        if (m_lines > m_historyMax)
+            truncateHistory();
     }
 
     private void truncateHistory()
@@ -284,9 +284,8 @@ public class GtpShell
 
     public void receivedResponse(boolean error, String response)
     {
-        if (m_fastUpdate)
+        if (m_fastUpdate && SwingUtilities.isEventDispatchThread())
         {
-            assert(SwingUtilities.isEventDispatchThread());
             appendResponse(error, response);
             return;
         }
@@ -382,9 +381,8 @@ public class GtpShell
 
     public void sentCommand(String command)
     {
-        if (m_fastUpdate)
+        if (m_fastUpdate && SwingUtilities.isEventDispatchThread())
         {
-            assert(SwingUtilities.isEventDispatchThread());
             appendSentCommand(command);
             return;
         }
