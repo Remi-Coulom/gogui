@@ -1973,6 +1973,7 @@ class GoGui
         setVisible(true);
         m_guiBoard.setFocus();
         setTitleFromProgram();
+        checkComputerMove();
     }
 
     private void initScore(go.Point[] isDeadStone)
