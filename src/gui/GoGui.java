@@ -1656,6 +1656,8 @@ class GoGui
                 m_commandThread.close();
             }
         }
+        if (m_analyzeCommand != null)
+            clearAnalyzeCommand();
         m_commandThread = null;
         m_name = "";
         m_version = "";
