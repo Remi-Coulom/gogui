@@ -42,7 +42,7 @@ class GtpServer
             else
                 socket = connectToRemote(remoteHost, port, userFile);
             if (verbose)
-                System.err.println("gtpserver: Connection from "
+                System.err.println("gtpserver: Connected with "
                                    + socket.getInetAddress());
             StreamCopy fromNet =
                 new StreamCopy(verbose, socket.getInputStream(),
