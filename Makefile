@@ -51,3 +51,6 @@ clean:
 
 changelog:
 	cvs2cl.pl
+
+tags:
+	etags `find . -name "*.java"`
