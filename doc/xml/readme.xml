@@ -38,6 +38,11 @@ at SourceForge</ulink>
 </simpara>
 </listitem>
 </itemizedlist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
 </section>
 
 </article>

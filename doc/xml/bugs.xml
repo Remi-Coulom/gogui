@@ -37,6 +37,11 @@ It can be increased by using the "-Xmx" option, e.g. for 512MB:
 Don't use more memory than there is real memory on the machine,
 because using swap space will make the program unusable slow.
 </para>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
 </section>
 
 </appendix>

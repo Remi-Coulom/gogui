@@ -264,6 +264,11 @@ Send text as talk characters.
 
 </variablelist>
 </para>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
 </refsection>
 
 </refentry>

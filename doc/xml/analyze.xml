@@ -367,6 +367,11 @@ It is recommended that Go engines scale influence data as described for the
 type <userinput>dboard</userinput> above.
 </simpara>
 </warning>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
 </section>
 
 </chapter>

@@ -155,6 +155,10 @@ The title is queried and set after a new game is started.
 </varlistentry>
 </variablelist>
 
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
 </section>
   
 </chapter>
