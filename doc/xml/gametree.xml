@@ -24,9 +24,17 @@ The context menu for a node allows to expand or hide the subtree
 and to display node information and subtree statistics.
 </para>
 <para>
-The game tree panel can be scrolled using the scrollbar, keyboard,
-mouse wheel or by clicking in the panel and dragging the mouse outside the
-window.
+<note>
+<simpara>
+When large game trees are displayed and edited, the necessary updating of the
+game tree can be very slow.
+If this is the case, close the game tree window, if you don't need it,
+or avoid that too many nodes are shown in the window.
+You can hide nodes by using the <guimenuitem>Hide Subtree</guimenuitem>
+and <guimenuitem>Hide Others</guimenuitem> menu items from the context
+menu.
+</simpara>
+</note>
 </para>
 
 <para>
