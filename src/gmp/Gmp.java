@@ -505,7 +505,10 @@ class ReadThread extends Thread
                 msg = e.getClass().getName();
             System.err.println(msg);
         }
-        m_state = STATE_DISCONNECTED;
+        synchronized (this)
+        {
+            m_state = STATE_DISCONNECTED;
+        }
         Util.log("input stream was closed");
         m_writeThread.interrupt();
     }
