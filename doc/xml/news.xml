@@ -1,0 +1,34 @@
+<appendix>
+  <title>NEWS</title>
+
+  <revhistory>
+    <revision>
+      <revnumber>&version;</revnumber>
+      <authorinitials>enz</authorinitials>
+      <revremark>
+	<itemizedlist>
+	  <listitem>
+	    Board uses antialiasing.
+	  </listitem>
+	  <listitem>
+	    Documentation in docbook format.
+	  </listitem>
+	  <listitem>
+	    Improvements in Gmp to Gtp adapter.
+	  </listitem>
+	  <listitem>
+	    Lots of other small fixes and improvements.
+	  </listitem>
+	</itemizedlist>
+      </revremark>
+    </revision>
+    <revision>
+      <revnumber>0.1</revnumber>
+      <date>4 Mar 2003</date>
+      <authorinitials>enz</authorinitials>
+      <revremark>
+	Initial release.
+      </revremark>
+    </revision>
+  </revhistory>
+</appendix>

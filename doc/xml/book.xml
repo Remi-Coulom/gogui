@@ -6,6 +6,7 @@
  <!ENTITY compatibility SYSTEM "compatibility.xml">
  <!ENTITY interrupt SYSTEM "interrupt.xml">
  <!ENTITY analyze SYSTEM "analyze.xml">
+ <!ENTITY news SYSTEM "news.xml">
    ]>
 <book>
   <title>GoGui Documentation</title>
@@ -16,5 +17,6 @@
   &compatibility;
   &interrupt;
   &analyze;
+  &news;
   
 </book>
