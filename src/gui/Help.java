@@ -284,7 +284,7 @@ class Help
                 "Could not load page\n" +
                 url.toString() + ":\n" +
                 e.getMessage();
-            JOptionPane.showMessageDialog(this, message, "GoGui: Error",
+            JOptionPane.showMessageDialog(this, message, "Error",
                                           JOptionPane.ERROR_MESSAGE);
         }
     }

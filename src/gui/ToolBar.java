@@ -22,31 +22,31 @@ class ToolBar
     {
         setRollover(true);
         m_listener = listener;
-        m_buttonNew = addButton("filenew.png", "new-game", "New game");
-        m_buttonOpen = addButton("fileopen.png", "open", "Load game");
-        m_buttonSave = addButton("filesave2.png", "save", "Save game");
+        m_buttonNew = addButton("filenew.png", "new-game", "New Game");
+        m_buttonOpen = addButton("fileopen.png", "open", "Load");
+        m_buttonSave = addButton("filesave2.png", "save", "Save");
         add(new JToolBar.Separator());
         m_buttonBeginning = addButton("beginning.png", "beginning",
-                                      "Beginning of game");
-        m_buttonBackward10 = addButton("backward10.png",
-                                       "backward-10", "Take back 10");
-        m_buttonBackward = addButton("back.png", "backward", "Take back");
+                                      "Beginning");
+        m_buttonBackward10 = addButton("backward10.png", "backward-10",
+                                       "Backward 10");
+        m_buttonBackward = addButton("back.png", "backward", "Backward");
         m_buttonForward = addButton("forward.png", "forward",
-                                    "Replay");
+                                    "Forward");
         m_buttonForward10 = addButton("forward10.png", "forward-10",
-                                      "Replay 10");
-        m_buttonEnd = addButton("end.png", "end", "End of game");
+                                      "Forward 10");
+        m_buttonEnd = addButton("end.png", "end", "End");
         add(new JToolBar.Separator());
         m_buttonNextVariation =
-            addButton("down.png", "next-variation", "Next variation");
+            addButton("down.png", "next-variation", "Next Variation");
         m_buttonPreviousVariation =
-            addButton("up.png", "previous-variation", "Previous variation");
+            addButton("up.png", "previous-variation", "Previous Variation");
         add(new JToolBar.Separator());
         m_buttonPass = addButton("pass.png", "pass", "Pass");
-        m_buttonEnter = addButton("next.png", "play", "Computer play");
+        m_buttonEnter = addButton("next.png", "play", "Computer Play");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         add(new JToolBar.Separator());
-        m_buttonInfo = addButton("info.png", "game-info", "Game information");
+        m_buttonInfo = addButton("info.png", "game-info", "Game Info");
     }
 
     public void setComputerEnabled(boolean enabled)
