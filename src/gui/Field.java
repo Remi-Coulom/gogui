@@ -231,22 +231,37 @@ public class Field
             graphics.setColor(m_fieldColor);
             graphics.fillRect(0, 0, size.width, size.height);
         }
+        if (m_territory != go.Color.EMPTY && graphics2D == null)
+        {
+            if (m_territory == go.Color.BLACK)
+                graphics.setColor(java.awt.Color.darkGray);
+            else if (m_territory == go.Color.WHITE)
+                graphics.setColor(java.awt.Color.lightGray);
+            graphics.fillRect(0, 0, size.width, size.height);
+        }
         if (m_color == go.Color.BLACK)
             drawStone(graphics, java.awt.Color.black, java.awt.Color.gray);
         else if (m_color == go.Color.WHITE)
             drawStone(graphics, new java.awt.Color(0.930f, 0.895f, 0.867f),
                       new java.awt.Color(1.0f, 1.0f, 1.0f));
+        if (m_territory != go.Color.EMPTY && graphics2D != null)
+        {
+            AlphaComposite composite =
+                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f); 
+            graphics2D.setComposite(composite);
+            if (m_territory == go.Color.BLACK)
+                graphics.setColor(java.awt.Color.black);
+            else if (m_territory == go.Color.WHITE)
+                graphics.setColor(java.awt.Color.white);
+            graphics.fillRect(0, 0, size.width, size.height);
+        }
         if (graphics2D != null)
         {
             AlphaComposite composite =
                 AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
             graphics2D.setComposite(composite);
         }
-        if (m_territory == go.Color.BLACK)
-            drawInfluence(graphics, 1.0);
-        else if (m_territory == go.Color.WHITE)
-            drawInfluence(graphics, -1.0);
-        else if (m_influenceSet)
+        if (m_influenceSet)
             drawInfluence(graphics, m_influence);
         if (m_markup)
             drawMarkup(graphics);
@@ -390,19 +405,19 @@ public class Field
         g.drawLine(w - d - 1, w - d - 1, w - 2 * d - 1, w - d - 1);
     }
 
-    private void drawInfluence(Graphics g, double influence)
+    private void drawInfluence(Graphics graphics, double influence)
     {
         Dimension size = getSize();
         double d = Math.abs(influence);
         if (d < 0.01)
             return;
         if (influence > 0)
-            g.setColor(m_influenceBlackColor);
+            graphics.setColor(m_influenceBlackColor);
         else
-            g.setColor(m_influenceWhiteColor);
+            graphics.setColor(m_influenceWhiteColor);
         int dd = (int)(size.width * (0.31 + (1 - d) * 0.69));
         int width = size.width - dd + 1;
-        g.fillRect(dd / 2, dd / 2, width, width);
+        graphics.fillRect(dd / 2, dd / 2, width, width);
     }
 
     private void drawLastMoveMarker(Graphics g)

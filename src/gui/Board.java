@@ -578,12 +578,7 @@ public class Board
         {
             go.Point p = m_board.getPoint(i);
             go.Color c = m_board.getScore(p);
-            if (c == go.Color.BLACK)
-                setInfluence(p, 1.0);
-            else if (c == go.Color.WHITE)
-                setInfluence(p, -1.0);
-            else
-                setInfluence(p, 0);
+            setTerritory(p, c);
         }
     }
 
