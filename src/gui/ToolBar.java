@@ -39,7 +39,8 @@ class ToolBar
         add(new JToolBar.Separator());
         m_buttonPass = addButton("images/button_cancel.png", "pass", "Pass");
         m_buttonEnter = addButton("images/next.png", "play", "Computer play");
-        m_buttonStop = addButton("images/stop.png", "interrupt", "Interrupt");
+        m_buttonInterrupt =
+            addButton("images/stop.png", "interrupt", "Interrupt");
         add(new JToolBar.Separator());
         m_buttonGtpShell = addButton("images/openterm.png", "gtp-shell",
                                      "GTP shell");
@@ -56,7 +57,7 @@ class ToolBar
         m_buttonEnter.setEnabled(false);
         m_buttonGtpShell.setEnabled(false);
         m_buttonAnalyze.setEnabled(false);
-        m_buttonStop.setEnabled(false);
+        m_buttonInterrupt.setEnabled(false);
         m_analyze.setEnabled(false);
     }
 
@@ -100,12 +101,19 @@ class ToolBar
                 disableComputerButtons();
             m_analyze.setEnabled(m_analyzeWasEnabled);
             updateGameButtons(board);
+            m_buttonInterrupt.setEnabled(false);
         }
         else
         {
             m_analyzeWasEnabled = m_analyze.isEnabled();
             m_analyze.setEnabled(false);
         }
+    }
+
+    public void setCommandInProgress()
+    {
+        enableAll(false, null);
+        m_buttonInterrupt.setEnabled(true);
     }
 
     private boolean m_analyzeWasEnabled;
@@ -136,7 +144,7 @@ class ToolBar
 
     private JButton m_buttonGtpShell;
 
-    private JButton m_buttonStop;
+    private JButton m_buttonInterrupt;
 
     private JButton m_buttonNew;
 

@@ -689,7 +689,7 @@ class GoGui
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
         m_menuBars.setCommandInProgress(true);
-        m_toolBar.enableAll(false, null);
+        m_toolBar.setCommandInProgress();
         m_gtpShell.setInputEnabled(false);
         m_commandInProgress = true;
     }
