@@ -10,7 +10,7 @@ $Source$
 
 <tstamp/>
 
-<property name="version" value="0.7pre2.x"/>
+<property file="build.properties"/>
 
 <property environment="env"/>
 <property name="docbook_xsl_home" value="${env.DOCBOOK_XSL_HOME}"/>
@@ -125,37 +125,38 @@ installation directory.
  README
  INSTALL
  TODO
- build.xml,
- config/analyze-commands*,
- config/gogui*.desktop,
- config/gogui.omf,
- config/gogui.xml,
- doc/html/*.html,
- doc/html/*.png,
- doc/html/*.css,
- doc/man/*.1,
- doc/xml/*.xml,
- doc/xml/*.xml.in,
- doxygen/Doxyfile,
- doxygen/footer.html,
- doxygen/README,
- lib/*.jar,
- mac/packaging/GoGui.icns,
- mac/packaging/Info.plist,
- mac/packaging/Info.plist.in,
- mac/packaging/PkgInfo,
- mac/src/specialmac/RegisterSpecialMacHandler.java,
- mac/src/specialmac/RegisterSpecialMacHandler.class,
- mac/src/specialmac/Listener.class,  
- sgf/openings/9x9/README,
- sgf/openings/9x9/*.sgf,
- sgf/openings/19x19/README,
- sgf/openings/19x19/*.sgf,
- src/images/*.png,
- src/overview.html,
- src/*/package.html,
- src/*/*.java,
- src/*/*.java.in,
+ build.properties
+ build.xml
+ config/analyze-commands*
+ config/gogui*.desktop
+ config/gogui.omf
+ config/gogui.xml
+ doc/html/*.html
+ doc/html/*.png
+ doc/html/*.css
+ doc/man/*.1
+ doc/xml/*.xml
+ doc/xml/*.xml.in
+ doxygen/Doxyfile
+ doxygen/footer.html
+ doxygen/README
+ lib/*.jar
+ mac/packaging/GoGui.icns
+ mac/packaging/Info.plist
+ mac/packaging/Info.plist.in
+ mac/packaging/PkgInfo
+ mac/src/specialmac/RegisterSpecialMacHandler.java
+ mac/src/specialmac/RegisterSpecialMacHandler.class
+ mac/src/specialmac/Listener.class  
+ sgf/openings/9x9/README
+ sgf/openings/9x9/*.sgf
+ sgf/openings/19x19/README
+ sgf/openings/19x19/*.sgf
+ src/images/*.png
+ src/overview.html
+ src/*/package.html
+ src/*/*.java
+ src/*/*.java.in
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
@@ -631,7 +632,7 @@ tofile="src/version/Version.java" overwrite="true"/>
 <uptodate property="versionUptodate" targetfile="src/version/Version.java">
 <srcfiles dir="."
  includes="
-  build.xml,
+  build.properties,
   doc/xml/version.xml.in,
   mac/packaging/Info.plist.in,
   src/version/Version.java.in,
