@@ -205,7 +205,7 @@ installation directory.
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="gogui.GoGui"/>
+<attribute name="Main-Class" value="gogui.Main"/>
 </manifest>
 <fileset dir="build" includes="
  config/analyze-commands
