@@ -858,6 +858,7 @@ class GoGui
             m_gtpShell.sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
+        setTitleFromProgram();
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
         Node oldCurrentNode = m_currentNode;
@@ -1620,6 +1621,7 @@ class GoGui
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
+        setTitle();
     }
 
     private void endLengthyCommand()
@@ -1824,7 +1826,6 @@ class GoGui
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
-        setTitleFromProgram();
         if (m_commandThread == null
             || (! m_computerBlack && ! m_computerWhite))
             computerNone();
@@ -2253,7 +2254,7 @@ class GoGui
 
     private void setTitle()
     {
-        if (! m_name.equals(""))
+        if (m_commandThread != null && ! m_name.equals(""))
         {
             String title = StringUtils.formatTitle(m_name);
             if (m_loadedFile != null)
