@@ -1756,6 +1756,7 @@ class GoGui
         setTimeSettings();
         m_gameInfo.update();
         m_guiBoard.updateFromGoBoard();
+        m_toolBar.updateGameButtons(m_board);
         checkComputerMove();
     }
 
@@ -1765,6 +1766,7 @@ class GoGui
         loadFile(new File(m_file), move);
         m_gameInfo.update();
         m_guiBoard.updateFromGoBoard();
+        m_toolBar.updateGameButtons(m_board);
     }
 
     private void play(Move move) throws Gtp.Error
