@@ -288,41 +288,11 @@ public class Board
         if (graphics2D != null && ! m_fastPaint)
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
-        int size = m_board.getSize();
+        drawBackground(graphics);
         int width = getSize().width;
-        if (m_image != null && ! m_fastPaint)
-            graphics.drawImage(m_image, 0, 0, width, width, null);
-        else
-        {
-            graphics.setColor(new java.awt.Color(212, 167, 102));
-            graphics.fillRect(0, 0, width, width);
-        }
+        int size = m_board.getSize();
         if (width >= (size + 2) * 2)
-        {
-            graphics.setColor(java.awt.Color.darkGray);
-            for (int y = 0; y < size; ++y)
-            {
-                java.awt.Point left = getScreenLocation(0, y);
-                java.awt.Point right = getScreenLocation(size - 1, y);
-                graphics.drawLine(left.x, left.y, right.x, right.y);
-            }
-            for (int x = 0; x < size; ++x)
-            {
-                java.awt.Point top = getScreenLocation(x, 0);
-                java.awt.Point bottom = getScreenLocation(x, size - 1);
-                graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
-            }
-            int r = width / (size + 2) / 10;
-            for (int x = 0; x < size; ++x)
-                if (m_board.isHandicapLine(x))
-                    for (int y = 0; y < size; ++y)
-                        if (m_board.isHandicapLine(y))
-                        {
-                            java.awt.Point point = getScreenLocation(x, y);
-                            graphics.fillOval(point.x - r, point.y - r,
-                                              2 * r + 1, 2 * r + 1);
-                        }
-        }
+            drawGrid(graphics);
         if (width > (size + 2) * 5)
             drawShadows(graphics);
     }
@@ -740,6 +710,48 @@ public class Board
             field.repaint();
             m_lastMove = null;
         }
+    }
+
+    private void drawBackground(Graphics graphics)
+    {
+        int size = m_board.getSize();
+        int width = getSize().width;
+        if (m_image != null && ! m_fastPaint)
+            graphics.drawImage(m_image, 0, 0, width, width, null);
+        else
+        {
+            graphics.setColor(new java.awt.Color(212, 167, 102));
+            graphics.fillRect(0, 0, width, width);
+        }
+    }
+
+    private void drawGrid(Graphics graphics)
+    {
+        int size = m_board.getSize();
+        int width = getSize().width;
+        graphics.setColor(java.awt.Color.darkGray);
+        for (int y = 0; y < size; ++y)
+        {
+            java.awt.Point left = getScreenLocation(0, y);
+            java.awt.Point right = getScreenLocation(size - 1, y);
+            graphics.drawLine(left.x, left.y, right.x, right.y);
+        }
+        for (int x = 0; x < size; ++x)
+        {
+            java.awt.Point top = getScreenLocation(x, 0);
+            java.awt.Point bottom = getScreenLocation(x, size - 1);
+            graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
+        }
+        int r = width / (size + 2) / 10;
+        for (int x = 0; x < size; ++x)
+            if (m_board.isHandicapLine(x))
+                for (int y = 0; y < size; ++y)
+                    if (m_board.isHandicapLine(y))
+                    {
+                        java.awt.Point point = getScreenLocation(x, y);
+                        graphics.fillOval(point.x - r, point.y - r,
+                                          2 * r + 1, 2 * r + 1);
+                    }
     }
 
     private void drawShadows(Graphics graphics)
