@@ -269,10 +269,13 @@ public class Analyze
     private void writeHtml(File file) throws Exception
     {
         String prefix = "game";
-        if (file.toString().endsWith(".html"))
+        String gamePrefix = "game";
+        if (file.getName().endsWith(".html"))
         {
-            String filename = file.toString();
-            prefix = filename.substring(0, filename.length() - 5);
+            String path = file.toString();
+            prefix = path.substring(0, path.length() - 5);
+            String name = file.getName();
+            gamePrefix = name.substring(0, name.length() - 5);;
         }
         PrintStream out = new PrintStream(new FileOutputStream(file));
         NumberFormat format = StringUtils.getNumberFormat(1);
@@ -342,10 +345,10 @@ public class Analyze
         for (int i = 0; i < m_entries.size(); ++i)
         {
             Entry e = (Entry)m_entries.get(i);
-            String name = prefix + "-" + e.m_gameIndex + ".sgf";
+            String name = gamePrefix + "-" + e.m_gameIndex + ".sgf";
             out.print("<tr align=\"center\" bgcolor=\"" + m_colorInfo
-                      + "\">" +
-                      "<td><a href=\"" + name + "\">" + name + "</a></td>\n");
+                      + "\"><td><a href=\"" + name + "\">" + name
+                      + "</a></td>\n");
             if (m_hasReferee)
                 out.print("<td>" + e.m_resultReferee + "</td>");
             out.print("<td>" + e.m_resultBlack + "</td>" +
