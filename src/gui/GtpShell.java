@@ -836,6 +836,11 @@ public class GtpShell
         addAllCompletions(completions);
         if (m_disableCompletions)
             return;
+        if (completions.size() == 0)
+        {
+            m_comboBox.hidePopup();
+            return;
+        }
         if (text.length() > 0)
             if (completions.size() > 1
                 || (completions.size() == 1
