@@ -152,6 +152,8 @@ public class Reader
             result = result + "Verbose names for standard properties\n";
         if (m_warningGame)
             result = result + "Empty value for game type\n";
+        if (m_warningTreeNotClosed)
+            result = result + "Game tree not closed\n";
         if (result.equals(""))
             return null;
         return result;
@@ -182,6 +184,8 @@ public class Reader
     private boolean m_warningLongProps;
 
     private boolean m_warningSizeOutsideRoot;
+
+    private boolean m_warningTreeNotClosed;
 
     private boolean m_warningWrongPass;
 
@@ -504,6 +508,11 @@ public class Reader
         }
         if (ttype == ')')
             return null;
+        if (ttype == StreamTokenizer.TT_EOF)
+        {
+            m_warningTreeNotClosed = true;
+            return null;
+        }
         if (ttype != ';')
             throw getError("Next node expected");
         Node son = new Node();
