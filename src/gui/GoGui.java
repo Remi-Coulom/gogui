@@ -1032,6 +1032,7 @@ class GoGui
             m_prefs.setString("rules", gameInformation.m_rules);
             setRules();
         }
+        setTitle();
     }
 
     private void cbGoto()
