@@ -1581,10 +1581,7 @@ class GoGui
         if (m_commandThread == null)
             return;
         if (! m_commandList.contains("scoring_system"))
-        {
-            showWarning("Program does not support command scoring_system.");
             return;
-        }
         try
         {
             int rules = m_board.getRules();
