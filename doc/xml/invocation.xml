@@ -15,12 +15,12 @@
   </para>
 
   <para>
-    The argument <arg><replaceable>program</replaceable></arg>
+    The argument <arg choice="plain"><replaceable>program</replaceable></arg>
     must be a valid command line for executing the actual Go program.
     If no program is given, GoGui will open a dialog and ask for a
     command.
-    If the empty string "" is given as a command, GoGui will start
-    without any Go program.
+    If the empty string "" is given as a command,
+    GoGui will start without any Go program.
   </para>
 
   <para>

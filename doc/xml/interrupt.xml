@@ -16,13 +16,13 @@
 	GoGui will then send an INT signal to the process if the user
 	presses the interrupt button
 	(actually GoGui invokes the shell command
-	<userinput>kill -INT &lt;pid&gt;</userinput>,
+	<userinput>kill -INT <replaceable>pid</replaceable></userinput>,
 	so this will work only on UNIX systems).
       </listitem>
       <listitem>
 	If the program does not implement <userinput>gogui_sigint</userinput>,
 	GoGui will send a special comment line
-	(<userinput># interrupt</userinput>) to the program.
+	(<userinput>#&#160;interrupt</userinput>) to the program.
 	If the program reads the GTP input stream
 	while processing a command, it can interrupt the command.
 	Programs not aware of this convention will simply ignore

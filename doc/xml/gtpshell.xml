@@ -21,7 +21,7 @@
     Note that the history of the GTP streams will be truncated
     depending on the values of <userinput>gtpshell-history-min</userinput>
     and <userinput>gtpshell-history-max</userinput> in the configuration
-    file <userinput>~/.gogui/config</userinput>.
+    file <filename>~/.gogui/config</filename>.
   </para>
   
 </chapter>

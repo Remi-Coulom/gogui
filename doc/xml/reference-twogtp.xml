@@ -42,11 +42,11 @@
       <userinput>white</userinput>.
       The commands <userinput>genmove_black</userinput> and
       <userinput>genmove_white</userinput> are forwarded only to the
-      program corresponding to the color, the other program is informed about
+      program of the corresponding color, the other program is informed about
       the move with a <userinput>black</userinput> or
       <userinput>white</userinput> command.
       The special comment line <userinput>#&#160;interrupt</userinput>
-      that is used by <application>GoGui</application> to interrupt commands is
+      used by <application>GoGui</application> to interrupt commands is
       also forwarded to both programs.
     </para>
   </refsection>
