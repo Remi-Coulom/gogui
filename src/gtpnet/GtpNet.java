@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import utils.*;
+import version.*;
 
 //-----------------------------------------------------------------------------
 
@@ -54,7 +55,8 @@ class GtpNet
             String options[] = {
                 "help",
                 "loop",
-                "verbose"
+                "verbose",
+                "version",
             };
             Options opt = new Options(args, options);
             boolean verbose = opt.isSet("verbose");
@@ -62,6 +64,11 @@ class GtpNet
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
+                System.exit(0);
+            }
+            if (opt.isSet("version"))
+            {
+                System.out.println("GtpNet " + Version.m_version);
                 System.exit(0);
             }
             Vector arguments = opt.getArguments();
@@ -90,7 +97,8 @@ class GtpNet
                   "\n" +
                   "  -help    display this help and exit\n" +
                   "  -loop    restart after connection finished\n" +
-                  "  -verbose print debugging messages\n");
+                  "  -verbose print debugging messages\n" +
+                  "  -version print version and exit\n");
     }
 }
     

@@ -8,6 +8,7 @@ import java.util.*;
 import go.*;
 import sgf.*;
 import utils.*;
+import version.*;
 
 //-----------------------------------------------------------------------------
 
@@ -18,12 +19,18 @@ class SgfToTex
         try
         {
             String options[] = {
-                "help"
+                "help",
+                "version"
             };
             Options opt = new Options(args, options);
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
+                System.exit(0);
+            }
+            if (opt.isSet("version"))
+            {
+                System.out.println("SgfToTex " + Version.m_version);
                 System.exit(0);
             }
             Vector arguments = opt.getArguments();
@@ -103,7 +110,8 @@ class SgfToTex
     {
         out.print("Usage: java -jar sgftotex.jar [file.sgf [file.tex]]\n" +
                   "\n" +
-                  "  -help    display this help and exit\n");
+                  "  -help    display this help and exit\n" +
+                  "  -version print version and exit\n");
     }
 }
     

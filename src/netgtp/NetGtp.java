@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import utils.*;
+import version.*;
 
 //-----------------------------------------------------------------------------
 
@@ -43,12 +44,18 @@ class NetGtp
         try
         {
             String options[] = {
-                "help"
+                "help",
+                "version"
             };
             Options opt = new Options(args, options);
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
+                System.exit(0);
+            }
+            if (opt.isSet("version"))
+            {
+                System.out.println("NetGtp " + Version.m_version);
                 System.exit(0);
             }
             Vector arguments = opt.getArguments();
@@ -80,7 +87,8 @@ class NetGtp
     {
         out.print("Usage: java -jar netgtp.jar [options] hostname port\n" +
                   "\n" +
-                  "  -help    display this help and exit\n");
+                  "  -help    display this help and exit\n" +
+                  "  -version print version and exit\n");
     }
 }
     

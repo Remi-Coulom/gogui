@@ -16,6 +16,7 @@
       <arg><option>-help</option></arg>
       <arg><option>-loop</option></arg>
       <arg><option>-verbose</option></arg>
+      <arg><option>-version</option></arg>
       <arg choice="plain"><replaceable>program</replaceable></arg>
       <arg choice="plain"><replaceable>port</replaceable></arg>
     </cmdsynopsis>
@@ -60,6 +61,14 @@
 	<listitem>
 	  Print debugging messages.
 	</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+	  <option>-version</option>
+        </term>
+        <listitem>
+          Print version and exit.
+        </listitem>
       </varlistentry>
     </variablelist>
   </refsection>

@@ -104,7 +104,8 @@ public class GmpToGtp
                 "simple",
                 "size:",
                 "verbose",
-                "wait"
+                "wait",
+                "version"
             };
             Options opt = new Options(args, options);
             if (opt.isSet("help"))
@@ -119,9 +120,15 @@ public class GmpToGtp
                     "-list    list serial devices and exit\n" +
                     "-simple  use simple version of the protocol\n" +
                     "-size    board size\n" +
-                    "-verbose print logging messages" +
+                    "-verbose print logging messages\n" +
+                    "-version print version and exit\n" +
                     "-wait    wait for first newgame command\n";
                 System.out.print(helpText);
+                System.exit(0);
+            }
+            if (opt.isSet("version"))
+            {
+                System.out.println("GmpToGtp " + Version.m_version);
                 System.exit(0);
             }
             if (opt.isSet("list"))

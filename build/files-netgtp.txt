@@ -1,3 +1,4 @@
 src/netgtp/NetGtp.java
 src/utils/Options.java
 src/utils/StreamCopy.java
+src/version/Version.java

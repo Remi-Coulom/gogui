@@ -14,6 +14,7 @@
     <cmdsynopsis>
       <command>sgftotex</command>
       <arg><option>-help</option></arg>
+      <arg><option>-version</option></arg>
       <arg><replaceable>file.sgf</replaceable>
       <arg><replaceable>file.tex</replaceable></arg></arg>
     </cmdsynopsis>
@@ -40,6 +41,14 @@
 	</listitem>
       </varlistentry>
     </variablelist>
+    <varlistentry>
+      <term>
+	<option>-version</option>
+      </term>
+      <listitem>
+        Print version and exit.
+      </listitem>
+    </varlistentry>
   </refsection>
 
 </refentry>

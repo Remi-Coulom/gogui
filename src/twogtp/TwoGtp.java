@@ -165,6 +165,7 @@ public class TwoGtp
                 "sgffile:",
                 "size:",
                 "verbose",
+                "version",
                 "white:"
             };
             Options opt = new Options(args, options);
@@ -183,6 +184,7 @@ public class TwoGtp
                     "-sgffile   filename prefix\n" +
                     "-size      board size for autoplay (default 19)\n" +
                     "-verbose   log GTP streams to stderr\n" +
+                    "-version   print version and exit\n" +
                     "-white     command for white program\n";
                 System.out.print(helpText);
                 System.exit(0);
@@ -191,6 +193,11 @@ public class TwoGtp
             if (compare)
             {
                 compare(opt.getArguments());
+                System.exit(0);
+            }
+            if (opt.isSet("version"))
+            {
+                System.out.println("TwoGtp " + Version.m_version);
                 System.exit(0);
             }
             boolean alternate = opt.isSet("alternate");

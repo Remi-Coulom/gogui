@@ -11,6 +11,7 @@ import java.util.regex.*;
 import go.*;
 import gtp.*;
 import utils.*;
+import version.*;
 
 //-----------------------------------------------------------------------------
 
@@ -34,12 +35,18 @@ class Regression
         try
         {
             String options[] = {
-                "help"
+                "help",
+                "version"
             };
             Options opt = new Options(args, options);
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
+                System.exit(0);
+            }
+            if (opt.isSet("version"))
+            {
+                System.out.println("Regression " + Version.m_version);
                 System.exit(0);
             }
             Vector arguments = opt.getArguments();

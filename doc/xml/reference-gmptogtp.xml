@@ -27,6 +27,7 @@
       <arg><option>-simple</option></arg>
       <arg><option>-size</option> <replaceable>n</replaceable></arg>
       <arg><option>-verbose</option></arg>
+      <arg><option>-version</option></arg>
       <arg><option>-wait</option></arg>
       <arg><replaceable>program</replaceable></arg>
     </cmdsynopsis>
@@ -140,6 +141,14 @@
 	</term>
 	<listitem>
 	  Print debugging messages.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-version</option>
+	</term>
+	<listitem>
+	  Print version and exit.
 	</listitem>
       </varlistentry>
       <varlistentry>

@@ -295,7 +295,8 @@ class GoGui
                 "rules:",
                 "size:",
                 "time:",
-                "verbose"
+                "verbose",
+                "version"
             };
             Options opt = new Options(args, options);
             if (opt.isSet("help"))
@@ -322,8 +323,14 @@ class GoGui
                     "  -rules name     use rules (chinese|japanese)\n" +
                     "  -size n         set board size\n" +
                     "  -time spec      set time limits (min[+min/moves])\n" +
-                    "  -verbose        print debugging messages\n";
+                    "  -verbose        print debugging messages\n" +
+                    "  -version        print version and exit\n";
                 System.out.print(helpText);
+                System.exit(0);
+            }
+            if (opt.isSet("version"))
+            {
+                System.out.println("GoGui " + Version.m_version);
                 System.exit(0);
             }
             Preferences prefs = new Preferences();
