@@ -1325,7 +1325,10 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
-            showGtpError(e);
+            SimpleDialogs.showError(this,
+                                    e.getMessage() + "\n"
+                                    + "See GTP shell for any error messages\n"
+                                    + "printed by the program.");
             showStatus(e.getMessage());
         }
     }
