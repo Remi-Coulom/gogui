@@ -2,16 +2,17 @@
 <title>Game Tree Window</title>
 
 <para>
-The game tree window shows all variations of the current game as a graph
+The game tree window shows the variations of the current game as a graph
 of nodes.
 </para>
 <para>
-Nodes are displayed as a black or white stone with a move number,
-if the node contains a move.
+Nodes are displayed as a black or white stone.
 A symbol containing four small stones is used for nodes
 containing setup stones and a blue diamond for other nodes.
 Nodes containing a comment have a small blue line under the node.
 The current node is marked with a red cursor.
+You can change the size of the nodes and their labels from the
+<guimenu>Settings</guimenu> menu of the menu bar 
 </para>
 <para>
 If a node is clicked on, the shortest path from the current node to the
@@ -20,7 +21,7 @@ and <userinput>play</userinput> commands is sent to the Go program
 to go there.
 </para>
 <para>
-The context menu for a node allows to expand or hide the subtree
+The context menu for a node allows to expand or hide subtrees
 and to display node information and subtree statistics.
 </para>
 <para>
