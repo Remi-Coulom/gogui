@@ -185,8 +185,7 @@ installation directory.
 <fileset dir="build" includes="
  gmp/*.class
  gmptogtp/*.class
- gtp/Command.class
- gtp/GtpServer.class
+ gtp/*.class
  gtp/ReadThread.class
  utils/Options.class
  utils/StringUtils.class
