@@ -48,7 +48,7 @@
       you can configure a new file association for type
       <userinput>application/sgf</userinput> and filename pattern
       <userinput>*.sgf</userinput> to execute
-      <userinput>gogui&#160;-file&#160;%s</userinput>
+      <userinput>gogui&#160;-file</userinput>
     </para>
   </note>
   </para>
