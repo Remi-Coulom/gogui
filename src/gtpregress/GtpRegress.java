@@ -354,7 +354,7 @@ class GtpRegress
                 m_lastId = lastId;
                 m_lastCommandHadId = true;
             }
-            printOutLine(m_lastId < 0 ? "command" : "test", line,
+            printOutLine(m_lastCommandHadId ? "test" : "command", line,
                          m_lastId);
             checkLastSgf(line);
             m_lastError = false;
@@ -457,9 +457,11 @@ class GtpRegress
                     "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                     " vlink=\"#551a8b\">\n" +
                     "<h1>Output " + m_file + "</h1>\n" +
-                    "<hr>\n");
+                    "<hr>\n" +
+                    "<table>\n");
         writeInfo(m_out);
-        m_out.print("<hr>\n" +
+        m_out.print("</table>\n" +
+                    "<hr>\n" +
                     "<pre>\n");
     }
 
@@ -518,6 +520,11 @@ class GtpRegress
         m_out.print(line);
         if (style != null)
             m_out.print("</span>");
+    }
+
+    private synchronized void printOutSeparator()
+    {
+        m_out.println("<hr>");
     }
 
     private synchronized void printOutLine(String style, String line, int id)
@@ -599,6 +606,7 @@ class GtpRegress
         String line;
         long timeMillis = System.currentTimeMillis();
         double cpuTime = getCpuTime();
+        printOutSeparator();
         while (true)
         {
             line = reader.readLine();
@@ -607,6 +615,7 @@ class GtpRegress
             handleLine(line);
         }
         timeMillis = System.currentTimeMillis() - timeMillis;
+        printOutSeparator();
         cpuTime = getCpuTime() - cpuTime;
         if (m_lastFullResponse != null)
             handleLastResponse();
@@ -633,14 +642,12 @@ class GtpRegress
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);
         Date date = Calendar.getInstance().getTime();
-        out.print("<table>\n" +
-                  "<tr><th align=\"left\">Date</th><td>" + format.format(date)
+        out.print("<tr><th align=\"left\">Date</th><td>" + format.format(date)
                   + "</td></tr>\n" +
                   "<tr><th align=\"left\">Host</th><td>" + host
                   + "</td></tr>\n" +
                   "<tr><th align=\"left\">Command</th><td><tt>" + m_program
-                  + "</tt></td></tr>\n" +
-                  "</table>\n");
+                  + "</tt></td></tr>\n");
     }
 
     private void writeSummary()
@@ -756,9 +763,15 @@ class GtpRegress
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
                   "<h1>Summary " + m_file + "</h1>\n" +
-                  "<hr>\n");
+                  "<hr>\n" +
+                  "<table>\n");
         writeInfo(out);
-        out.print("<hr>\n" +
+        out.print("<tr><th align=\"left\">Output</th><td><a href=\""
+                  + m_outFileName + "\">"
+                  + FileUtils.replaceExtension(m_file, "tst", "out")
+                  + "</a></td></tr>\n" +
+                  "</table>\n" +
+                  "<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"12%\">\n" +
