@@ -61,8 +61,6 @@ public class Writer
 
     private boolean m_usePass;
 
-    private boolean m_useStonesInText = true; // XXX
-
     private PrintStream m_out;
 
     private Board m_board;

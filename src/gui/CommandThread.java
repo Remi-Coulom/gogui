@@ -15,10 +15,9 @@ import gtp.*;
 class CommandThread
     extends Thread
 {
-    public CommandThread(Gtp gtp, GtpShell gtpShell)
+    public CommandThread(Gtp gtp)
     {
         m_gtp = gtp;
-        m_gtpShell = gtpShell;
     }
 
     public void close()
@@ -216,8 +215,6 @@ class CommandThread
 
     private Gtp.Error m_exception;
 
-    private GtpShell m_gtpShell;
-
     private static JFrame m_mainFrame;
 
     private Runnable m_callback;
@@ -225,8 +222,6 @@ class CommandThread
     private String m_command;
 
     private String m_response;
-
-    private Thread m_commandThread;
 }
 
 //-----------------------------------------------------------------------------

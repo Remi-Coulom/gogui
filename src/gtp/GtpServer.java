@@ -27,11 +27,9 @@ class Command
 
 class ReadThread extends Thread
 {
-    public ReadThread(GtpServer gtpServer, InputStream in, PrintStream out,
-                      boolean log)
+    public ReadThread(GtpServer gtpServer, InputStream in, boolean log)
     {
         m_in = new BufferedReader(new InputStreamReader(in));
-        m_out = out;
         m_gtpServer = gtpServer;
         m_log = log;
     }
@@ -112,15 +110,11 @@ class ReadThread extends Thread
 
     private boolean m_log;
 
-    private boolean m_quit = false;
-
     private boolean m_waitCommand = false;
 
     private BufferedReader m_in;
 
     private Command m_command;
-
-    private PrintStream m_out;
 
     private GtpServer m_gtpServer;
 
@@ -195,8 +189,7 @@ public abstract class GtpServer
 
     public void mainLoop() throws IOException
     {
-        ReadThread readThread = new ReadThread(this, m_in, m_out,
-                                               m_log != null);
+        ReadThread readThread = new ReadThread(this, m_in, m_log != null);
         readThread.start();
         while (true)
         {
@@ -227,10 +220,6 @@ public abstract class GtpServer
         if (m_log != null)
             m_log.println(fullResponse);
     }
-
-    private boolean m_commandHadId;
-
-    private int m_commandId;
 
     private InputStream m_in;
 

@@ -12,7 +12,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
-
 import gtp.*;
 import utils.*;
 
@@ -616,8 +615,6 @@ public class GtpShell
 
     private GtpShellText m_gtpShellText;
 
-    private MutableComboBoxModel m_model;
-
     private java.awt.Point m_finalLocation;
 
     private StringBuffer m_commands = new StringBuffer(4096);
@@ -746,7 +743,6 @@ public class GtpShell
         m_textField = (JTextField)m_editor.getEditorComponent();
         m_textField.setFocusTraversalKeysEnabled(false);
         m_textField.addKeyListener(this);
-        m_model = (MutableComboBoxModel)m_comboBox.getModel();
         m_comboBox.setEditable(true);
         m_comboBox.setFont(m_gtpShellText.getFont());
         m_comboBox.addActionListener(this);

@@ -669,8 +669,6 @@ class GoGui
 
     private GameInfo m_gameInfo;
 
-    private GoGui m_gui;
-
     private GtpShell m_gtpShell;
 
     private Help m_help;
@@ -1585,7 +1583,7 @@ class GoGui
                 try
                 {
                     Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
-                    m_commandThread = new CommandThread(gtp, m_gtpShell);
+                    m_commandThread = new CommandThread(gtp);
                     m_commandThread.start();
                 }
                 catch (Gtp.Error e)

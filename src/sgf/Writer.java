@@ -59,8 +59,6 @@ public class Writer
 
     private Board m_board;
 
-    private String m_name;
-
     private static String getName(File file)
     {
         String result = file.getName();
