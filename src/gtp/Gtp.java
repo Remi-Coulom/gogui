@@ -335,6 +335,9 @@ public class Gtp
                         log(c);
                         if (m_callback != null)
                             m_callback.receivedStdErr(new String(c));
+                        // Sleep to avoid too many callbacks,
+                        // because stderr is usually unbuffered.
+                        sleep(100);
                     }
                 }
             }
