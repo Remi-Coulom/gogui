@@ -320,16 +320,17 @@ installation directory.
  windowtitle="GoGui Source Documentation"
  overview="src/overview.html"
  packagenames="
+  game.*,
   gmp.*,
   gmptogtp.*,
   go.*,
+  gogui.*,
   gtp.*,
   gtpadapter.*,
   gtpdummy.*,
   gtpregress.*,
   gtpserver.*,
   gtpterminal.*,
-  gogui.*,
   gui.*,
   latex.*,
   netgtp.*,
