@@ -49,7 +49,9 @@ class Field
     {
         super.paintComponent(g);
         Dimension size = getSize();
-        if (m_influenceColor != null)
+        if (m_fieldColor != null)
+            g.setColor(m_fieldColor);
+        else if (m_influenceColor != null)
             g.setColor(m_influenceColor);
         else
             g.setColor(m_boardColor);
@@ -66,6 +68,15 @@ class Field
             drawCrossHair(g);
         if (! m_string.equals(""))
             drawString(g);
+    }
+
+    public void setFieldBackground(java.awt.Color color)
+    {
+        if (m_fieldColor != color)
+        {
+            m_fieldColor = color;
+            repaint();
+        }
     }
 
     public void setColor(Color color)
@@ -138,8 +149,8 @@ class Field
     private double m_influence;
     private String m_string = "";
     private static java.awt.Color m_boardColor
-        // = new java.awt.Color(235, 181, 29);
         = new java.awt.Color(224, 160, 96);
+    private java.awt.Color m_fieldColor;
     private static java.awt.Color m_influenceBlackColor
         = new java.awt.Color(255, 63, 63);
     private static java.awt.Color m_influenceWhiteColor

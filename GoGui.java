@@ -527,7 +527,14 @@ class GoGui
             if (e != null)
                 throw e;
             String answer = m_commandThread.getAnswer();
-            if (m_analyzeType == AnalyzeCommand.DOUBLEBOARD)
+            if (m_analyzeType == AnalyzeCommand.COLORBOARD)
+            {
+                String board[][] = Gtp.parseStringBoard(answer,
+                                                        m_analyzeTitle,
+                                                        m_boardSize);
+                showColorBoard(board);
+            }
+            else if (m_analyzeType == AnalyzeCommand.DOUBLEBOARD)
             {
                 double board[][] = Gtp.parseDoubleBoard(answer, m_analyzeTitle,
                                                         m_boardSize);
@@ -1588,6 +1595,13 @@ class GoGui
         }
     }
 
+    private void showColorBoard(String[][] board) throws Gtp.Error
+    {
+        resetBoard();
+        m_board.showColorBoard(board);
+        m_boardNeedsReset = true;
+    }
+
     private void showDoubleBoard(double[][] board, double scale)
     {
         resetBoard();
@@ -1636,7 +1650,7 @@ class GoGui
     private void showStringBoard(String[][] board) throws Gtp.Error
     {
         resetBoard();
-        m_board.showStringBoard(board );
+        m_board.showStringBoard(board);
         m_boardNeedsReset = true;
     }
 

@@ -92,6 +92,7 @@ public class Board
         {
             Point p = m_allPoints[i];
             clearInfluence(p);
+            setFieldBackground(p, null);
             setMarkup(p, false);
             setString(p, "");
         }
@@ -438,6 +439,11 @@ public class Board
         return s;
     }
 
+    public void setFieldBackground(Point p, java.awt.Color color)
+    {
+        getField(p).setFieldBackground(color);
+    }
+
     public void setCrossHair(Point p, boolean crossHair)
     {
         if (m_lastMove != null)
@@ -489,6 +495,33 @@ public class Board
         else
             assert(false);
         ++m_setupNumber;
+    }
+
+    public void showColorBoard(String[][] board)
+    {
+        for (int i = 0; i < m_allPoints.length; ++i)
+        {
+            Point p = m_allPoints[i];
+            String s = board[p.getX()][p.getY()];
+            java.awt.Color c = null;
+            if (s.equals("blue"))
+                c = java.awt.Color.blue;
+            else if (s.equals("cyan"))
+                c = java.awt.Color.cyan;
+            else if (s.equals("green"))
+                c = java.awt.Color.green;
+            else if (s.equals("gray"))
+                c = java.awt.Color.lightGray;
+            else if (s.equals("magenta"))
+                c = java.awt.Color.magenta;
+            else if (s.equals("pink"))
+                c = java.awt.Color.pink;
+            else if (s.equals("red"))
+                c = java.awt.Color.red;
+            else if (s.equals("yellow"))
+                c = java.awt.Color.yellow;
+            setFieldBackground(p, c);
+        }
     }
 
     public void showDoubleBoard(double[][] board, double scale)

@@ -42,6 +42,7 @@ class AnalyzeCommand
     public static final int DOUBLEBOARD = 2;
     public static final int POINTLIST   = 3;
     public static final int STRINGBOARD = 4;
+    public static final int COLORBOARD  = 5;
 
     AnalyzeCommand(Callback callback, String startCommand) throws Error
     {
@@ -193,7 +194,9 @@ class AnalyzeCommand
         StringBuffer buffer = new StringBuffer(analyzeCommand);
         String array[] = StringUtils.split(buffer.toString(), '/');
         String typeStr = array[0];
-        if (typeStr.equals("dboard"))
+        if (typeStr.equals("cboard"))
+            type = AnalyzeCommand.COLORBOARD;
+        else if (typeStr.equals("dboard"))
             type = AnalyzeCommand.DOUBLEBOARD;
         else if (typeStr.equals("sboard"))
             type = AnalyzeCommand.STRINGBOARD;
