@@ -104,7 +104,7 @@ public class GmpToGtp
             if (opt.isSet("help"))
             {
                 String helpText =
-                    "Usage: java -cp gogui.jar gmp.GmpToGtp [options]\n" +
+                    "Usage: java -jar gmptogtp.jar [options]\n" +
                     "\n" +
                     "-baud    speed of serial device (default 2400)\n" +
                     "-color   color (black|white)\n" +
