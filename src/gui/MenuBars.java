@@ -90,7 +90,21 @@ class MenuBars
                 m_itemBoardSize[i].setSelected(true);
                 return;
             }
-        return;
+    }
+
+    public void selectRulesItem(int rules)
+    {
+        switch (rules)
+        {
+        case go.Board.RULES_JAPANESE:
+            m_itemRulesJapanese.setSelected(true);
+            break;
+        case go.Board.RULES_CHINESE:
+            m_itemRulesChinese.setSelected(true);
+            break;
+        default:
+            assert false;
+        }
     }
 
     public void setCommandInProgress(boolean commandInProgress)
@@ -151,6 +165,11 @@ class MenuBars
     private JMenuItem m_itemComputerWhite;
 
     private JMenuItem m_itemExit;
+
+    private JMenuItem m_itemRulesChinese;
+
+    private JMenuItem m_itemRulesJapanese;
+
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {
@@ -299,10 +318,11 @@ class MenuBars
     {
         ButtonGroup group = new ButtonGroup();
         JMenu menu = new JMenu("Rules");
-        JMenuItem item =
+        m_itemRulesChinese =
             addRadioItem(menu, group, "Chinese", "rules-chinese");
-        item.setSelected(true);
-        addRadioItem(menu, group, "Japanese", "rules-japanese");
+        m_itemRulesChinese.setSelected(true);
+        m_itemRulesJapanese =
+            addRadioItem(menu, group, "Japanese", "rules-japanese");
         return menu;
     }
 

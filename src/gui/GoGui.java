@@ -63,6 +63,7 @@ class GoGui
 
         m_board = new go.Board(m_boardSize);
         m_board.setKomi(prefs.getKomi());
+        m_board.setRules(prefs.getRules());
         m_guiBoard = new Board(m_board);
         m_guiBoard.setListener(this);
         m_gameInfo.setBoard(m_board);
@@ -82,6 +83,7 @@ class GoGui
         setIconImage(new GoIcon());
         m_menuBars = new MenuBars(this);
         m_menuBars.selectBoardSizeItem(m_boardSize);
+        m_menuBars.selectRulesItem(m_board.getRules());
         setJMenuBar(m_menuBars.getNormalMenu());
 
         if (program == null || program.equals(""))
@@ -273,6 +275,7 @@ class GoGui
                 "help",
                 "komi:",
                 "move:",
+                "rules:",
                 "size:",
                 "time:",
                 "verbose"
@@ -296,6 +299,7 @@ class GoGui
                     "  -help           display this help and exit\n" +
                     "  -komi value     set komi\n" +
                     "  -move n         load SGF file until move number\n" +
+                    "  -rules name     use rules (chinese|japanese)\n" +
                     "  -size n         set board size\n" +
                     "  -time spec      set time limits (min[+min/moves])\n" +
                     "  -verbose        print debugging messages\n";
@@ -316,6 +320,14 @@ class GoGui
             int move = opt.getInteger("move", -1);
             if (opt.contains("size"))
                 prefs.setBoardSize(opt.getInteger("size"));
+            String rules = opt.getString("rules", "");
+            if (rules == "chinese")
+                prefs.setRules(go.Board.RULES_CHINESE);
+            else if (rules == "japanese")
+                prefs.setRules(go.Board.RULES_JAPANESE);
+            else if (rules != "")
+                throw new Exception("Invalid rules argument \""
+                                    + rules + "\"");
             String time = opt.getString("time", null);
             verbose = opt.isSet("verbose");
             Vector arguments = opt.getArguments();
@@ -323,10 +335,7 @@ class GoGui
             if (arguments.size() == 1)
                 program = (String)arguments.get(0);
             else if (arguments.size() > 1)
-            {
-                System.err.println("Only one program argument allowed.");
-                System.exit(-1);
-            }
+                throw new Exception("Only one program argument allowed.");
             else
                 program = SelectProgram.select(null);
             
@@ -873,6 +882,7 @@ class GoGui
     private void cbRules(int rules)
     {
         m_board.setRules(rules);
+        m_prefs.setRules(rules);
         setRules();
     }
 

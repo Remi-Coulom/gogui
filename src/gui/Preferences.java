@@ -57,6 +57,11 @@ class Preferences
         return getFloatProperty("komi");
     }
 
+    public int getRules()
+    {
+        return getIntProperty("rules");
+    }
+
     public void load()
     {
         m_changed = true;
@@ -130,6 +135,11 @@ class Preferences
         setFloatProperty("komi", value);
     }
 
+    public void setRules(int value)
+    {
+        setIntProperty("rules", value);
+    }
+
     /** Properties changed since last load? */
     private boolean m_changed;
 
@@ -172,6 +182,7 @@ class Preferences
         setIntProperty("gtpshell-history-max", 3000);
         setIntProperty("gtpshell-history-min", 2000);
         setFloatProperty("komi", 0);
+        setIntProperty("rules", go.Board.RULES_JAPANESE);
     }
 
     private void setFloatProperty(String key, float value)
