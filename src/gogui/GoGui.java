@@ -992,7 +992,8 @@ class GoGui
     private void cbGameInfo()
     {
         GameInformation gameInformation = m_gameTree.getGameInformation();
-        GameInfoDialog.show(this, gameInformation);
+        if (! GameInfoDialog.show(this, gameInformation))
+            return;
         if (gameInformation.m_komi != m_prefs.getDouble("komi"))
         {
             m_prefs.setDouble("komi", gameInformation.m_komi);

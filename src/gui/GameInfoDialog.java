@@ -15,7 +15,9 @@ import utils.GuiUtils;
 public class GameInfoDialog
     extends JOptionPane
 {
-    public static void show(Component parent, GameInformation gameInformation)
+    /** Returns false if nothing was changed. */
+    public static boolean show(Component parent,
+                               GameInformation gameInformation)
     {
         GameInfoDialog gameInfoDialog = new GameInfoDialog(gameInformation);
         JDialog dialog =
@@ -27,30 +29,61 @@ public class GameInfoDialog
             Object value = gameInfoDialog.getValue();
             if (! (value instanceof Integer)
                 || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
-                return;
+                return false;
             done = gameInfoDialog.validate(parent);
         }
         dialog.dispose();
-        gameInformation.m_playerBlack =
-            getTextFieldContent(gameInfoDialog.m_playerBlack);
-        gameInformation.m_blackRank =
-            getTextFieldContent(gameInfoDialog.m_rankBlack);
-        gameInformation.m_playerWhite =
-            getTextFieldContent(gameInfoDialog.m_playerWhite);
-        gameInformation.m_whiteRank =
-            getTextFieldContent(gameInfoDialog.m_rankWhite);
-        gameInformation.m_rules =
-            getTextFieldContent(gameInfoDialog.m_rules);
-        gameInformation.m_result =
-            getTextFieldContent(gameInfoDialog.m_result);
-        gameInformation.m_date =
-            getTextFieldContent(gameInfoDialog.m_date);
-        gameInformation.m_komi =
+        boolean changed = false;
+        String black = getTextFieldContent(gameInfoDialog.m_playerBlack);
+        if (! black.equals(gameInformation.m_playerBlack))
+        {
+            gameInformation.m_playerBlack = black;
+            changed = true;
+        }
+        String white = getTextFieldContent(gameInfoDialog.m_playerWhite);
+        if (! white.equals(gameInformation.m_playerWhite))
+        {
+            gameInformation.m_playerWhite = white;
+            changed = true;
+        }
+        String rankBlack = getTextFieldContent(gameInfoDialog.m_rankBlack);
+        if (! rankBlack.equals(gameInformation.m_blackRank))
+        {
+            gameInformation.m_blackRank = rankBlack;
+            changed = true;
+        }
+        String rankWhite = getTextFieldContent(gameInfoDialog.m_rankWhite);
+        if (! rankWhite.equals(gameInformation.m_whiteRank))
+        {
+            gameInformation.m_whiteRank = rankWhite;
+            changed = true;
+        }
+        String rules = getTextFieldContent(gameInfoDialog.m_rules);
+        if (! rules.equals(gameInformation.m_rules))
+        {
+            gameInformation.m_rules = rules;
+            changed = true;
+        }
+        String result = getTextFieldContent(gameInfoDialog.m_result);
+        if (! result.equals(gameInformation.m_result))
+        {
+            gameInformation.m_result = result;
+            changed = true;
+        }
+        String date = getTextFieldContent(gameInfoDialog.m_date);
+        if (! date.equals(gameInformation.m_date))
+        {
+            gameInformation.m_date = date;
+            changed = true;
+        }
+        double komi =
             Double.parseDouble(getTextFieldContent(gameInfoDialog.m_komi));
-        //String rules =
-        //    getTextFieldContent(gameInfoDialog.m_rules).trim().toLowerCase();
-        //if (! rules.equals("chinese") && ! rules.equals("japanese"))
-        //    SimpleDialogs.showWarning(parent, "Unknown rules");
+        if (komi != gameInformation.m_komi)
+        {
+            gameInformation.m_komi = komi;
+            changed = true;
+        }
+        return changed;
     }
 
     private JPanel m_panelLeft;
