@@ -255,32 +255,21 @@ public class GtpAdapter
 
     private boolean cmdBoardsize(String cmdArray[], StringBuffer response)
     {
-        if (cmdArray.length != 2)
+        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
+        if (argument == null)
+            return false;
+        if (argument.m_integer < 1)
         {
-            response.append("Need argument");
+            response.append("Invalid board size");
             return false;
         }
-        try
+        if (m_size > 0 && argument.m_integer != m_size)
         {
-            int boardSize = Integer.parseInt(cmdArray[1]);
-            if (boardSize < 1)
-            {
-                response.append("Invalid board size");
-                return false;
-            }
-            if (m_size > 0 && boardSize != m_size)
-            {
-                response.append("Boardsize must be " + m_size);
-                return false;
-            }
-            m_boardSize = boardSize;
-            return send("boardsize " + boardSize, response);
-        }
-        catch (NumberFormatException e)
-        {
-            response.append("Need integer argument");
+            response.append("Boardsize must be " + m_size);
             return false;
         }
+        m_boardSize = argument.m_integer;
+        return send("boardsize " + m_boardSize, response);
     }
 
     private boolean cmdGenmove(String cmdLine, String cmdArray[],
@@ -360,22 +349,11 @@ public class GtpAdapter
     private boolean cmdPlaceFreeHandicap(String cmdArray[],
                                          StringBuffer response)
     {
-        if (cmdArray.length != 2)
-        {
-            response.append("Need argument");
+        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
+        if (argument == null)
             return false;
-        }
-        int numberStones;
-        try
-        {
-            numberStones = Integer.parseInt(cmdArray[1]);
-        }
-        catch (NumberFormatException e)
-        {
-            response.append("Need integer argument");
-            return false;
-        }
-        Vector stones = go.Board.getHandicapStones(m_boardSize, numberStones);
+        Vector stones =
+            go.Board.getHandicapStones(m_boardSize, argument.m_integer);
         if  (stones == null)
         {
             response.append("Invalid number of handicap stones");

@@ -264,26 +264,14 @@ public class GmpToGtp
 
     private boolean boardsize(String command, StringBuffer response)
     {
-        String[] tokens = StringUtils.tokenize(command);
-        if (tokens.length < 2)
-        {
-            response.append("Missing argument");
+        String[] cmdArray = StringUtils.tokenize(command);
+        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
+        if (argument == null)
             return false;
-        }
-        try
-        {
-            int arg = Integer.parseInt(tokens[1]);
-            if (! (m_wait && m_firstGame)
-                && ! (m_simple && m_colorIndex == 1))
-                return m_gmp.newGame(arg, response);
-            m_firstGame = false;
-            return m_gmp.waitNewGame(arg, response);
-        }
-        catch (NumberFormatException e)
-        {
-            response.append("Needs integer argument");
-            return false;
-        }
+        if (! (m_wait && m_firstGame) && ! (m_simple && m_colorIndex == 1))
+            return m_gmp.newGame(argument.m_integer, response);
+        m_firstGame = false;
+        return m_gmp.waitNewGame(argument.m_integer, response);
     }
 
     private boolean genmove(boolean isBlack, StringBuffer response)
@@ -371,7 +359,7 @@ public class GmpToGtp
         }
         catch (NumberFormatException e)
         {
-            response.append("Needs integer argument");
+            response.append("Invalid argument");
             return false;
         }
     }

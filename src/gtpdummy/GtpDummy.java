@@ -176,27 +176,15 @@ public class GtpDummy
 
     private boolean boardsize(String[] cmdArray, StringBuffer response)
     {
-        if (cmdArray.length < 2)
-        {
-            response.append("Missing argument");
+        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
+        if (argument == null)
             return false;
-        }
-        int size;
-        try
-        {
-            size = Integer.parseInt(cmdArray[1]);
-        }
-        catch (NumberFormatException e)
+        if (argument.m_integer < 1 || argument.m_integer > 1000)
         {
             response.append("Invalid size");
             return false;
         }
-        if (size < 1 || size > 1000)
-        {
-            response.append("Invalid size");
-            return false;
-        }
-        initSize(size);
+        initSize(argument.m_integer);
         return true;
     }
 

@@ -162,6 +162,11 @@ class ReadThread extends Thread
 
 public abstract class GtpServer
 {
+    public static class IntegerArgument
+    {
+        public int m_integer;
+    }
+
     public GtpServer(InputStream in, OutputStream out, PrintStream log)
     {
         m_out = new PrintStream(out);
@@ -196,6 +201,34 @@ public abstract class GtpServer
             sendResponse(command);
             if (command.isQuit())
                 return;
+        }
+    }
+
+    /** Utility function for parsing an integer argument.
+        @param cmdArray Command line split into words.
+        @param response Empty string buffer filled with GTP error message
+        if parsing fails.
+        @return Integer argument or null if parsing fails.
+    */
+    public static IntegerArgument parseIntegerArgument(String[] cmdArray,
+                                                       StringBuffer response)
+    {
+        if (cmdArray.length != 2)
+        {
+            response.append("Need integer argument");
+            return null;
+        }
+        try
+        {
+            int integer = Integer.parseInt(cmdArray[1]);
+            IntegerArgument integerArgument = new IntegerArgument();
+            integerArgument.m_integer = integer;
+            return integerArgument;
+        }
+        catch (NumberFormatException e)
+        {
+            response.append("Need integer argument");
+            return null;
         }
     }
 

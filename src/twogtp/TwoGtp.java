@@ -440,38 +440,27 @@ public class TwoGtp
 
     private boolean boardsize(String[] cmdArray, StringBuffer response)
     {
-        if (cmdArray.length < 2)
-        {
-            response.append("Missing argument");
-            return false;
-        }
         if (gamesLeft() == 0)
         {
             response.append("Maximum number of " + m_numberGames +
                             " games reached");
             return false;
         }
-        try
-        {
-            int size = Integer.parseInt(cmdArray[1]);
-            if (size < 1)
-            {
-                response.append("Invalid argument");
-                return false;
-            }
-            if (m_size > 0 && size != m_size)
-            {
-                response.append("Size must be ");
-                response.append(m_size);
-                return false;
-            }
-            return newGame(size, response);
-        }
-        catch (NumberFormatException e)
+        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
+        if (argument == null)
+            return false;
+        if (argument.m_integer < 1)
         {
             response.append("Invalid argument");
             return false;
         }
+        if (m_size > 0 && argument.m_integer != m_size)
+        {
+            response.append("Size must be ");
+            response.append(m_size);
+            return false;
+        }
+        return newGame(argument.m_integer, response);
     }
 
     private static String checkDuplicate(Board board, Vector moves,
