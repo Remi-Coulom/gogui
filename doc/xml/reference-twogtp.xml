@@ -60,7 +60,7 @@ The adpater forwards the following commands to both programs:
 <listitem><userinput>loadsgf</userinput></listitem>
 <listitem><userinput>quit</userinput></listitem>
 <listitem><userinput>scoring_system</userinput></listitem>
-<listitem><userinput>time_settings</userinput></listitem>
+<listitem><userinput>time_settingsy</userinput></listitem>
 <listitem><userinput>undo</userinput></listitem>
 <listitem><userinput>white</userinput></listitem>
 </itemizedlist>

@@ -622,9 +622,6 @@ public class TwoGtp
             {
                 resultBlack = inverseResult(resultBlack);
                 resultWhite = inverseResult(resultWhite);
-                double tmp = cpuTimeBlack;
-                cpuTimeBlack = cpuTimeWhite;
-                cpuTimeWhite = tmp;
             }
             Vector moves = getMoves();
             String duplicate = checkDuplicate(m_board, moves, m_games);

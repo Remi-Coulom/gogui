@@ -8,8 +8,8 @@
 <revremark>
 <itemizedlist>
 <listitem>
-<application>TwoGtp</application>: new option <option>-force</option>,
-forward <userinput>time_settings</userinput>.
+<application>TwoGtp</application>: new option <option>-force</option>;
+forward <userinput>time_settings</userinput>; fixes in format of result file.
 </listitem>
 <listitem>
 New <guimenu>Game</guimenu> menu item <guimenuitem>Truncate</guimenuitem>.
