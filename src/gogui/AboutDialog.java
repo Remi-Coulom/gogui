@@ -42,13 +42,13 @@ public class AboutDialog
         String supportUrl =
             "http://sourceforge.net/donate/index.php?group_id=59117";
         JPanel goguiPanel =
-            createPanel("<p align=\"center\"><b>GoGui " + Version.get()
-                        + "</b></p>" +
+            createPanel("<p align=\"center\"><b>GoGui</b></p>" +
+                        "<p align=\"center\">" +
+                        "Version " + Version.get() + "</p>" +
                         "<p align=\"center\">" +
                         "Graphical interface to Go programs<br>" +
                         "&copy; 2003-2004, Markus Enzenberger" +
-                        "</p>" +
-                        "<p align=\"center\">" +
+                        "<br>" +
                         "<tt><a href=\"" + projectUrl + "\">"
                         + projectUrl + "</a></tt>" +
                         "</p>" +
@@ -62,19 +62,19 @@ public class AboutDialog
         JPanel programPanel;
         if (isProgramAvailable)
         {
-            String fullName = name;
+            String versionInfo = "";
             if (version != null && ! version.equals(""))
-                fullName = fullName + " " + version;
+                versionInfo = "<p align=\"center\">Version " + version
+                    + "</p>";
             int width = GuiUtils.getDefaultMonoFontSize() * 25;
             programPanel =
-                createPanel("<p align=\"center\"><b>" + fullName
-                            + "</b></p>" +
-                            "<p align=\"center\">GTP protocol version "
-                            + protocolVersion + "</p>" +
-                            "<p align=\"center\">Command:</p>" +
-                            "<p align=\"center\" width=\"" + width + "\">"
-                            + "<small><tt>" + command
-                            + "</tt></small></p>");
+                createPanel("<p align=\"center\"><b>" + name + "</b></p>" +
+                            versionInfo +
+                            "<p align=\"center\" width=\"" + width + "\">" +
+                            "GTP protocol version " + protocolVersion
+                            + "<br>" +
+                            "Command: " +
+                            "<tt>" + command + "</tt></p>");
         }
         else
             programPanel = new JPanel();
