@@ -12,7 +12,7 @@
   </refnamediv>
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>gtpnet</command>
+      <command>netgtp</command>
       <arg><option>-help</option></arg>
       <arg choice="plain"><replaceable>hostname</replaceable></arg>
       <arg choice="plain"><replaceable>port</replaceable></arg>
