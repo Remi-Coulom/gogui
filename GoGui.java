@@ -22,14 +22,15 @@ class GoGui
                Gtp.IOCallback, GtpShell.Callback, WindowListener
 {
     GoGui(String program, int size, String file, int move,
-          String analyzeCommand,
-          boolean gtpShell, String time, boolean verbose, boolean fillPasses)
+          String analyzeCommand, boolean gtpShell, String time,
+          boolean verbose, boolean fillPasses, boolean computerNone)
         throws Gtp.Error, AnalyzeCommand.Error
     {
         m_boardSize = size;
         m_file = file;
         m_fillPasses = fillPasses;
         m_move = move;
+        m_computerNoneOption = computerNone;
         m_verbose = verbose;
 
         addWindowListener(this);
@@ -244,6 +245,7 @@ class GoGui
             String options[] =
                 {
                     "analyze:",
+                    "computer-none",
                     "file:",
                     "fillpasses",
                     "gtpshell",
@@ -261,20 +263,22 @@ class GoGui
                     "Graphical user interface for Go programs\n" +
                     "using the Go Text Protocol.\n" +
                     "\n" +
-                    "  -analyze name  initialize analzye command\n" +
-                    "  -gtpshell      open GTP shell at startup\n" +
-                    "  -file filename load SGF file\n" +
-                    "  -fillpasses    never send subsequent moves of\n" +
-                    "                 the same color to the program\n" +
-                    "  -help          display this help and exit\n" +
-                    "  -move          load SGF file until move number\n" +
-                    "  -size          set board size\n" +
-                    "  -time          set time limits (min[+min/moves])\n" +
-                    "  -verbose       print debugging messages\n";
+                    "  -analyze name   initialize analzye command\n" +
+                    "  -computer-none  computer plays no side\n" +
+                    "  -gtpshell       open GTP shell at startup\n" +
+                    "  -file filename  load SGF file\n" +
+                    "  -fillpasses     never send subsequent moves of\n" +
+                    "                  the same color to the program\n" +
+                    "  -help           display this help and exit\n" +
+                    "  -move           load SGF file until move number\n" +
+                    "  -size           set board size\n" +
+                    "  -time           set time limits (min[+min/moves])\n" +
+                    "  -verbose        print debugging messages\n";
                 System.out.print(helpText);
                 System.exit(0);
             }
             String analyzeCommand = opt.getString("analyze", null);
+            boolean computerNone = opt.isSet("computer-none");
             String file = opt.getString("file", "");
             boolean fillPasses = opt.isSet("fillpasses");
             boolean gtpShell = opt.isSet("gtpshell");
@@ -295,7 +299,8 @@ class GoGui
                 program = SelectProgram.select(null);
             
             GoGui gui = new GoGui(program, size, file, move, analyzeCommand,
-                                  gtpShell, time, verbose, fillPasses);
+                                  gtpShell, time, verbose, fillPasses,
+                                  computerNone);
         }
         catch (Throwable t)
         {
@@ -454,6 +459,7 @@ class GoGui
     private boolean m_boardNeedsReset;
     private boolean m_computerBlack;
     private boolean m_computerWhite;
+    private boolean m_computerNoneOption;
     private boolean m_commandInProgress;
     private boolean m_fillPasses;
     private boolean m_lostOnTimeShown;
@@ -823,7 +829,8 @@ class GoGui
             save(file);
             GoGui gui = new GoGui(program, m_boardSize, file.toString(),
                                   m_board.getMoveNumber(), null,
-                                  false, null, m_verbose, m_fillPasses);
+                                  false, null, m_verbose, m_fillPasses,
+                                  m_computerNoneOption);
 
         }
         catch (Throwable t)
@@ -1315,7 +1322,7 @@ class GoGui
                 }
                 initializeGtpShell();
             }
-            if (m_commandThread == null)
+            if (m_commandThread == null || m_computerNoneOption)
                 computerNone();
             else
                 computerWhite();
