@@ -1184,8 +1184,13 @@ class GoGui
             showError("No moves to truncate.");
             return;
         }
-        if (! showQuestion("Truncate moves " + (moveNumber + 1) + "-"
-                           + numberSavedMoves + "?"))
+        if (moveNumber == numberSavedMoves - 1)
+        {
+            if (! showQuestion("Truncate move " + (moveNumber + 1) + "?"))
+                return;
+        }
+        else if (! showQuestion("Truncate moves " + (moveNumber + 1) + " to "
+                                + numberSavedMoves + "?"))
             return;
         m_board.truncate();
         m_gameInfo.update();
