@@ -2256,7 +2256,7 @@ class GoGui
             if (file.length() > 500000)
             {
                 newGame(m_boardSize); // Frees space if already large tree
-                GuiUtils.runProgess(this, "Loading ...", runnable);
+                GuiUtils.runProgress(this, "Loading ...", runnable);
             }
             else
                 runnable.run(null);

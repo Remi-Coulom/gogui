@@ -28,7 +28,7 @@ import javax.swing.border.Border;
 public class GuiUtils
 {
     /** Runnable for running protected my modal progress dialog.
-        @see GuiUtils#runProgress
+        @see #runProgress
     */
     public interface ProgressRunnable
     {
@@ -46,7 +46,7 @@ public class GuiUtils
     public static final int SMALL_PAD = 2;
 
     /** Create empty border with normal padding.
-        @see GuiUtils#PAD
+        @see #PAD
     */
     public static Border createEmptyBorder()
     {
@@ -54,7 +54,7 @@ public class GuiUtils
     }
 
     /** Create empty box with size of normal padding.
-        @see GuiUtils#PAD
+        @see #PAD
     */
     public static Box.Filler createFiller()
     {
@@ -63,7 +63,7 @@ public class GuiUtils
     }
 
     /** Create empty border with small padding.
-        @see GuiUtils#SMALL_PAD
+        @see #SMALL_PAD
     */
     public static Border createSmallEmptyBorder()
     {
@@ -71,7 +71,7 @@ public class GuiUtils
     }
 
     /** Create empty box with size of small padding.
-        @see GuiUtils#SMALL_PAD
+        @see #SMALL_PAD
     */
     public static Box.Filler createSmallFiller()
     {
@@ -111,7 +111,7 @@ public class GuiUtils
         @throws Throwable Any exception that ProgressRunnable.run throwed,
         you have to use instanceof to check for specific exception classes.
     */
-    public static void runProgess(Frame owner, String message,
+    public static void runProgress(Frame owner, String message,
                                   ProgressRunnable runnable)
         throws Throwable
     {
