@@ -1918,16 +1918,8 @@ class GoGui
         if (m_commandThread != null && m_rememberWindowSizes)
         {
             saveSize(this, "window-gogui", m_boardSize);
-            if (m_gtpShell != null)
-                saveSize(m_gtpShell, "window-gtpshell", m_boardSize);
-            if (m_analyzeDialog != null)
-                saveSize(m_analyzeDialog, "window-analyze", m_boardSize);
-            boolean isAnalyzeVisible =
-                (m_analyzeDialog != null && m_analyzeDialog.isVisible());
-            m_prefs.setBool("show-analyze", isAnalyzeVisible);
-            boolean isGtpShellVisible =
-                (m_gtpShell != null && m_gtpShell.isVisible());
-            m_prefs.setBool("show-gtpshell", isGtpShellVisible);
+            saveSizeAndVisible(m_gtpShell, "gtpshell");
+            saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
     }
 
@@ -1947,6 +1939,14 @@ class GoGui
         String value = Integer.toString(location.x) + " " + location.y
             + " " + size.width + " " + size.height;
         m_prefs.setString(name, value);
+    }
+
+    private void saveSizeAndVisible(Window window, String name)
+    {
+        if (window != null)
+            saveSize(window, "window-" + name, m_boardSize);
+        boolean isVisible = (window != null && window.isVisible());
+        m_prefs.setBool("show-" + name, isVisible);
     }
 
     private void sendGtpString(String commands)
