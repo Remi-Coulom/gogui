@@ -71,7 +71,7 @@ JAR= \
   sgftotex.jar \
   twogtp.jar
 
-JAVAOPT=-deprecation -sourcepath . -source 1.4
+JAVAOPT=-deprecation -sourcepath . -source 1.4 -classpath comm.jar
 
 all: $(JAR)
 
