@@ -1426,9 +1426,6 @@ class GoGui
             return;
         try
         {
-            if (file.exists())
-                if (! showQuestion("Overwrite " + file + "?"))
-                    return;
             savePosition(file);
             if (m_currentNode.getFather() == null
                 && m_currentNode.getChild() == null)
@@ -2429,17 +2426,9 @@ class GoGui
     {
         try
         {
-            File file;
-            while (true)
-            {
-                file = SimpleDialogs.showSaveSgf(this);
-                if (file == null)
-                    return false;
-                if (file.exists())
-                    if (! showQuestion("Overwrite " + file + "?"))
-                        continue;
-                break;
-            }
+            File file = SimpleDialogs.showSaveSgf(this);
+            if (file == null)
+                return false;
             save(file);
             m_loadedFile = file;
             setTitle();

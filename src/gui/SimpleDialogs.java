@@ -57,7 +57,7 @@ public class SimpleDialogs
 
     public static File showOpenSgf(Component frame)
     {
-        return showSgfFileChooser(frame, FILE_OPEN, true, null);
+        return showSgfFileChooser(frame, FILE_OPEN, null, true, null);
     }
 
     public static boolean showQuestion(Component frame, String message)
@@ -72,12 +72,27 @@ public class SimpleDialogs
 
     public static File showSaveSgf(Component frame)
     {
-        return showSgfFileChooser(frame, FILE_SAVE, true, null);
+        File file =
+            showSgfFileChooser(frame, FILE_SAVE, m_lastFile, true, null);
+        while (file != null)
+        {
+            if (file.exists())
+                if (! showQuestion(frame, "Overwrite " + file + "?"))
+                {
+                    file = showSgfFileChooser(frame, FILE_SAVE, null, true,
+                                              null);
+                    continue;
+                }
+            break;
+        }
+        return file;
     }
 
+    /** File selection, unknown whether for load or save. */
     public static File showSelectFile(Component frame, String title)
     {
-        return showSgfFileChooser(frame, FILE_SELECT, false, title);
+        return showSgfFileChooser(frame, FILE_SELECT, m_lastFile, false,
+                                  title);
     }
 
     public static void showWarning(Component frame, String message)
@@ -99,6 +114,7 @@ public class SimpleDialogs
     private static File m_lastFile;
 
     private static File showSgfFileChooser(Component frame, int type,
+                                           File lastFile,
                                            boolean setSgfFilter, String title)
     {
         if (m_lastFile == null)
@@ -111,7 +127,11 @@ public class SimpleDialogs
         javax.swing.filechooser.FileFilter sgfFilter = new sgf.Filter();
         chooser.addChoosableFileFilter(sgfFilter);
         if (type == FILE_SAVE)
+        {
             chooser.addChoosableFileFilter(new latex.Filter());
+            if (lastFile != null && lastFile.isFile() && lastFile.exists())
+                chooser.setSelectedFile(lastFile);
+        }
         if (setSgfFilter)
             chooser.setFileFilter(sgfFilter);
         else
