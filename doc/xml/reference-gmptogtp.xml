@@ -158,10 +158,9 @@ List all serial devices and exit.
 <listitem>
 <para>
 Use simple version of the Go Modem Protocol as defined in the
+<ulink url="http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt">
 Appendix A in Call For Participation to the FJK Computer Go
-Tournament 2000
-(<ulink url="http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt">
-http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt</ulink>)
+Tournament 2000</ulink>.
 </para>
 </listitem>
 </varlistentry>
