@@ -129,7 +129,6 @@ class GoGui
         pack();
         m_guiBoard.requestFocusInWindow();
         setTitle("GoGui");
-        restoreMainWindow();
         try
         {
             if (time != null)
@@ -361,26 +360,32 @@ class GoGui
         m_showInfoPanel = showInfoPanel;
         Dimension size = new Dimension();
         size.height = getHeight();
-        if (showInfoPanel)
+        int dividerLocation = 0;
+        if (! showInfoPanel)
         {
-            m_innerPanel.remove(m_boardPanel);
-            m_splitPane.add(m_boardPanel);
-            m_innerPanel.add(m_splitPane);
+            int boardPanelWidth = m_boardPanel.getWidth();
+            m_oldBoardPanelWidth = boardPanelWidth;
             size.width =
-                getWidth() + m_splitPane.getWidth() - m_oldBoardPanelWidth;
-        }
-        else
-        {
+                getWidth() - m_splitPane.getWidth() + boardPanelWidth;
             m_splitPane.remove(m_boardPanel);
             m_innerPanel.remove(m_splitPane);
             m_innerPanel.add(m_boardPanel);
-            size.width =
-                getWidth() - m_splitPane.getWidth() + m_boardPanel.getWidth();
-            m_oldBoardPanelWidth = m_boardPanel.getWidth();
         }
-        m_innerPanel.revalidate();
+        else
+        {
+            size.width =
+                getWidth() + m_splitPane.getWidth() - m_oldBoardPanelWidth;
+            dividerLocation =
+                m_splitPane.getDividerLocation() + m_boardPanel.getWidth()
+                - m_oldBoardPanelWidth;
+            m_innerPanel.remove(m_boardPanel);
+            m_splitPane.add(m_boardPanel);
+            m_innerPanel.add(m_splitPane);
+        }
         setSize(size);
         validate();
+        if (showInfoPanel)
+            m_splitPane.setDividerLocation(dividerLocation);
     }
 
     public void cbShowToolbar()
@@ -1921,6 +1926,7 @@ class GoGui
     {
         if (size != m_boardSize)
         {
+            saveSession();
             m_boardSize = size;
             m_guiBoard.initSize(size);
             m_squareLayout.setPreferMultipleOf(size + 2);
@@ -1984,7 +1990,7 @@ class GoGui
         }
         updateGameInfo(true);
         registerSpecialMacHandler();
-        m_innerPanel.validate();
+        restoreMainWindow();
         if (! m_prefs.getBool("show-info-panel"))
         {
             m_menuBar.setShowInfoPanel(false);
@@ -2186,7 +2192,9 @@ class GoGui
             if (m_prefs.contains(name))
             {
                 int dividerLocation = m_prefs.getInt(name);
-                m_splitPane.setDividerLocation(dividerLocation);
+                if (dividerLocation > 0
+                    && dividerLocation < m_splitPane.getWidth())
+                    m_splitPane.setDividerLocation(dividerLocation);
             }
         }
     }
@@ -2322,12 +2330,11 @@ class GoGui
         if (GuiUtils.isNormalSizeMode(this))
         {
             String name = "splitpane-position-" + m_boardSize;
-            int dividerLocation;
-            dividerLocation = m_splitPane.getDividerLocation();
+            int dividerLocation = m_splitPane.getDividerLocation();
             if (! m_showInfoPanel)
                 dividerLocation =
-                    dividerLocation - m_oldBoardPanelWidth
-                    + m_boardPanel.getWidth();
+                    dividerLocation + m_boardPanel.getWidth()
+                    - m_oldBoardPanelWidth;
             m_prefs.setInt(name, dividerLocation);
         }
     }
