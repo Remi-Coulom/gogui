@@ -71,6 +71,10 @@ class SgfToTex
                 if (outFile.exists() && ! force)
                     throw new Exception("File " + outFile + " already exists");
                 out = new FileOutputStream(outFile);
+                if (title.equals(""))
+                    title =
+                        FileUtils.removeExtension(new File(outFile.getName()),
+                                                  "tex");
             }
             convert(in, out, title, usePass);
         }

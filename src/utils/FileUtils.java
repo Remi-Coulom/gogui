@@ -61,6 +61,22 @@ public class FileUtils
         return (ext.toLowerCase().equals(extension.toLowerCase()));
     }
 
+    /** Remove extension in file name.
+        If the file does not have the extension oldExtension,
+        the extension will not be removed.
+    */
+    public static String removeExtension(File file, String oldExtension)
+    {
+        String name = file.toString();
+        if (hasExtension(file, oldExtension))
+        {
+            int index = name.lastIndexOf(".");
+            assert(index >= 0);
+            return name.substring(0, index);
+        }
+        return name;
+    }
+
     /** Replace extension in file name.
         If the file does not have the extension oldExtension,
         the extension will not be replaced but the new extension will be
