@@ -2219,7 +2219,19 @@ class GoGui
 
     private void showGtpError(Component frame, Gtp.Error e)
     {
-        SimpleDialogs.showError(frame, e.getMessage());
+        StringBuffer message = new StringBuffer(e.getMessage().trim());
+        if (message.length() == 0)
+            message.append("Command failed");
+        else
+        {
+            char last = message.charAt(message.length() - 1);
+            if (Character.isLetterOrDigit(last))
+                message.append('.');
+            char first = message.charAt(0);
+            if (! Character.isUpperCase(first))
+                message.setCharAt(0, Character.toUpperCase(first));
+        }
+        SimpleDialogs.showError(frame, message.toString());
     }
 
     private void showInfo(String message)

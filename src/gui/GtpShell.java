@@ -319,11 +319,11 @@ public class GtpShell
 
     public void toTop()
     {
+        setVisible(true);
         toFront();
         requestFocus();
         m_comboBox.requestFocus();
         m_textField.requestFocus();
-        setVisible(true);
     }
 
     /** Send Gtp command to callback.
