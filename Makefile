@@ -66,8 +66,8 @@ gmptogtp:
 clean:
 	-rm -r build build_dbg
 
-srcdoc:
-	javadoc -sourcepath src -d srcdoc -source 1.4 $(PACKAGES)
+docsrc:
+	javadoc -sourcepath src -d docsrc -source 1.4 $(PACKAGES)
 
 changelog:
 	cvs2cl.pl
