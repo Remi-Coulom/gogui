@@ -4,8 +4,8 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>0.7</revnumber>
+<date>18 Jan 2005</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -13,6 +13,11 @@
 <simpara>
 GtpRegress: parse special comments starting with '#>' only if enabled
 with option filecomments
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes
 </simpara>
 </listitem>
 </itemizedlist>
