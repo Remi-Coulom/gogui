@@ -482,7 +482,8 @@ public class GameTreeViewer
             SimpleDialogs.showError(this, "No node selected");
             return;
         }
-        new TextViewer(this, "Node Info", node.toString(), true, null);
+        new TextViewer(this, "Node Info", NodeUtils.nodeInfo(node), true,
+                       null);
     }
 }
 
