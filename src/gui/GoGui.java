@@ -923,6 +923,7 @@ class GoGui
                 showError("Printing failed.", e);
             }
         }
+        showInfo("Printing done.");
     }
 
     private void cbRules(int rules)
