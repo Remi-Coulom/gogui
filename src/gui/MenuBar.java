@@ -237,7 +237,9 @@ class MenuBar
     {
         try
         {
-            file = file.getCanonicalFile();
+            File canonicalFile = file.getCanonicalFile();
+            if (canonicalFile.exists())
+                file = canonicalFile;
         }
         catch (IOException e)
         {
