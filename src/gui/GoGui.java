@@ -1512,8 +1512,7 @@ class GoGui
             return true;
         if (! isCurrentNodeExecuted())
         {
-            showError("Cannot go forward from\n" +
-                      "partially executed game node");
+            showError("Could not execute current game node");
             return false;
         }
         return true;
