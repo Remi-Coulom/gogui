@@ -42,6 +42,7 @@ public class ToolBar
         m_buttonPass = addButton("pass.png", "pass", "Pass");
         m_buttonEnter = addButton("next.png", "play", "Computer Play");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
+        setFloatable(false);
     }
 
     public void setComputerEnabled(boolean enabled)

@@ -208,6 +208,7 @@ public class Help
         m_buttonContents = createToolBarButton("gohome.png", "contents",
                                                "Contents");
         toolBar.add(m_buttonContents);
+        toolBar.setFloatable(false);
         return toolBar;
     }
 
