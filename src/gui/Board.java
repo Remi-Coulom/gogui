@@ -39,6 +39,7 @@ public class Board
 
     public Board(go.Board board)
     {
+        super(new GridBagLayout());
         m_board = board;
         setPreferredFieldSize();
         URL url = getClass().getClassLoader().getResource("images/wood.png");
@@ -177,18 +178,27 @@ public class Board
         m_board.initSize(size);
         m_field = new Field[size][size];
         removeAll();
-        setLayout(new GridLayout(size + 2, size + 2));
         setOpaque(false);
-        addColumnLabels(size);
+        GridBagLayout gridBag = (GridBagLayout)getLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridwidth = 2;
+        constraints.gridheight = 2;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
+        addColumnLabels(size, 0);
         for (int y = size - 1; y >= 0; --y)
         {
             String text = Integer.toString(y + 1);
-            add(new BoardLabel(text));
+            addRowLabel(0, 2 * (size - y) - 1, text);
             for (int x = 0; x < size; ++x)
             {
                 go.Point p = m_board.getPoint(x, y);
                 Field field = new Field(this, p);
                 add(field);
+                constraints.gridx = 1 + 2 * x;
+                constraints.gridy = 2 * (size - y) - 1;
+                gridBag.setConstraints(field, constraints);
                 m_field[x][y] = field;
                 KeyListener keyListener = new KeyAdapter()
                     {
@@ -199,9 +209,9 @@ public class Board
                     };
                 field.addKeyListener(keyListener);
             }
-            add(new BoardLabel(text));
+            addRowLabel(1 + 2 * size, 2 * (size - y) - 1, text);
         }
-        addColumnLabels(size);
+        addColumnLabels(size, 1 + 2 * size);
         m_focusPoint = new go.Point(size / 2, size / 2);
         m_lastMove = null;
         revalidate();
@@ -216,15 +226,13 @@ public class Board
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         int size = m_board.getSize();
         Dimension dimension = getSize();
-        int margin = (int)(dimension.width / (size + 2) * 0.92);
-        int width = dimension.width - 2 * margin;
         if (m_image != null)
-            graphics.drawImage(m_image.getImage(), margin, margin,
-                               width, width, null);
+            graphics.drawImage(m_image.getImage(), 0, 0,
+                               dimension.width, dimension.width, null);
         else
         {
             graphics.setColor(java.awt.Color.YELLOW.darker());
-            graphics.fillRect(margin, margin, width, width);
+            graphics.fillRect(0, 0, dimension.width, dimension.width);
         }
         graphics.setColor(java.awt.Color.darkGray);
         for (int y = 0; y < size; ++y)
@@ -558,18 +566,41 @@ public class Board
 
     private Listener m_listener;
 
-    private void addColumnLabels(int size)
+    private void addColumnLabels(int size, int y)
     {
-        add(Box.createRigidArea(new Dimension(1, 1)));
+        GridBagLayout gridBag = (GridBagLayout)getLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridy = y;
+        constraints.gridwidth = 2;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
         char c = 'A';
         for (int x = 0; x < size; ++x)
         {
-            add(new BoardLabel(new Character(c).toString()));
+            BoardLabel label = new BoardLabel(new Character(c).toString());
+            add(label);
+            constraints.gridx = 1 + 2 * x;
+            gridBag.setConstraints(label, constraints);
             ++c;
             if (c == 'I')
                 ++c;
         }
-        add(Box.createRigidArea(new Dimension(1, 1)));
+    }
+
+    private void addRowLabel(int x, int y, String text)
+    {
+        GridBagLayout gridBag = (GridBagLayout)getLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = x;
+        constraints.gridy = y;
+        constraints.gridheight = 2;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
+        BoardLabel label = new BoardLabel(text);
+        add(label);
+        gridBag.setConstraints(label, constraints);
     }
 
     private void calcScore()
@@ -630,12 +661,9 @@ public class Board
 
     private java.awt.Point getScreenLocation(int x, int y)
     {
-        Dimension dimension = getSize();
-        int size = m_board.getSize();
-        int dx = dimension.width / (size + 2);
-        int dy = dimension.height / (size + 2);
-        return new java.awt.Point(dx / 2 + (x + 1) * dx,
-                                  dy / 2 + (size - y) * dy);
+        Rectangle bounds = m_field[x][y].getBounds();
+        return new java.awt.Point(bounds.x + bounds.width / 2,
+                                  bounds.y + bounds.height / 2);
     }
 
     private void keyPressed(KeyEvent event)

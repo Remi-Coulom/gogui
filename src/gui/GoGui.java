@@ -1799,7 +1799,7 @@ class GoGui
         {
             m_boardSize = size;
             m_guiBoard.initSize(size);
-            m_squareLayout.setPreferMultipleOf(size + 2);
+            m_squareLayout.setPreferMultipleOf(2 + 2 * size);
             pack();
             restoreMainWindow();
             if (m_gtpShell != null)
