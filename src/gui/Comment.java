@@ -79,12 +79,18 @@ public class Comment
         {
             CharSequence text = doc.getText(0, doc.getLength());
             Matcher matcher = pattern.matcher(text);
+            boolean firstMatch = true;
             while (matcher.find())
             {
                 int start = matcher.start();
                 int end = matcher.end();
                 Style style = doc.getStyle("marked");
                 doc.setCharacterAttributes(start, end - start, style, true);
+                if (firstMatch)
+                {
+                    m_textPane.setCaretPosition(start);
+                    firstMatch = false;
+                }
             }
         }
         catch (BadLocationException e)
