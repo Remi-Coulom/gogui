@@ -90,6 +90,8 @@ public class GtpAdapter
             status = cmdPlay(cmdArray, response);
         else if (cmd.equals("protocol_version"))
             response.append(m_version2 ? "2" : "1");
+        else if (cmd.equals("quit"))
+            status = cmdQuit(response);
         else if (cmd.equals("set_free_handicap") && m_emuHandicap)
             status = cmdSetFreeHandicap(cmdArray, response);
         else if (cmd.equals("version") && m_name != null)
@@ -370,6 +372,7 @@ public class GtpAdapter
                 || cmd.equals("list_commands")
                 || cmd.equals("play")
                 || cmd.equals("protocol_version")
+                || cmd.equals("quit")
                 || cmd.equals("white"))
                     continue;
             if (m_noScore)
@@ -381,6 +384,7 @@ public class GtpAdapter
         }
         response.append("boardsize\n");
         response.append("protocol_version\n");
+        response.append("quit\n");
         if (m_version2)
         {
             response.append("clear_board\n");        
@@ -460,6 +464,11 @@ public class GtpAdapter
         if (argument == null)
             return false;
         return play(color, argument.m_point, response);
+    }
+
+    private boolean cmdQuit(StringBuffer response)
+    {
+        return send("quit", response);
     }
 
     private boolean cmdSetFreeHandicap(String cmdArray[],
