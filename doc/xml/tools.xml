@@ -30,7 +30,7 @@ See <xref linkend="reference-gmptogtp"/> for a complete reference.
 <term>GtpAdapter</term>
 <listitem>
 <para>
-Adapter program for logging the GTP stream or doinyg protocol translations.
+Adapter program for logging the GTP stream or doing protocol translations.
 See <xref linkend="reference-gtpadapter"/> for a complete reference.
 </para>
 </listitem>
