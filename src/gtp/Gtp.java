@@ -11,7 +11,7 @@ import go.Color;
 import go.Point;
 import go.Move;
 import utils.StringUtils;
-import utils.WaitMultiple;
+import utils.MessageQueue;
 
 //----------------------------------------------------------------------------
 
@@ -75,15 +75,14 @@ public final class Gtp
         m_out = new PrintWriter(m_process.getOutputStream());
         m_illegalState = false;
         m_isProgramDead = false;
-
-        m_inputReadThread = new ReadLineThread(m_process.getInputStream());
-        m_errorReadThread = new ReadThread(m_process.getErrorStream());
-        Object objects[] = { m_inputReadThread, m_errorReadThread };
-        m_waitMultiple = new WaitMultiple(objects);
-        m_inputReadThread.start();
-        m_errorReadThread.start();
+        
+        m_queue = new MessageQueue();
+        m_inputThread = new InputThread(m_process.getInputStream(), m_queue);
+        m_errorThread = new ErrorThread(m_process.getErrorStream(), m_queue);
+        m_inputThread.start();
+        m_errorThread.start();
     }
-
+    
     public void close()
     {
         m_out.close();
@@ -405,17 +404,26 @@ public final class Gtp
         }
     }
 
-    private static class ReadLineThread
-        extends Thread
+    private static class ReadMessage
     {
-        ReadLineThread(InputStream in)
+        public ReadMessage(boolean isError, String text)
         {
-            m_in = new BufferedReader(new InputStreamReader(in));
+            m_isError = isError;
+            m_text = text;
         }
 
-        public synchronized String getLine()
+        public boolean m_isError;
+
+        public String m_text;
+    }
+    
+    private static class InputThread
+        extends Thread
+    {
+        InputThread(InputStream in, MessageQueue queue)
         {
-            return m_line;
+            m_in = new BufferedReader(new InputStreamReader(in));
+            m_queue = queue;
         }
 
         public void run()
@@ -432,33 +440,27 @@ public final class Gtp
 
         private BufferedReader m_in;
 
-        private String m_line;
+        private MessageQueue m_queue;
 
         private void mainLoop() throws IOException, InterruptedException
         {
-            synchronized (this)
+            while (true)
             {
-                while (true)
-                {
-                    m_line = m_in.readLine();
-                    notify();
-                    wait();
-                }
+                String line = m_in.readLine();
+                m_queue.put(new ReadMessage(false, line));
+                if (line == null)
+                    return;
             }
         }
     }
 
-    private class ReadThread
+    private class ErrorThread
         extends Thread
     {
-        public ReadThread(InputStream in)
+        public ErrorThread(InputStream in, MessageQueue queue)
         {
             m_in = new InputStreamReader(in);
-        }
-
-        public synchronized String getText()
-        {
-            return m_text;
+            m_queue = queue;
         }
 
         public void run()
@@ -475,24 +477,21 @@ public final class Gtp
 
         private Reader m_in;
 
-        private String m_text;
+        private MessageQueue m_queue;
 
         private void mainLoop() throws IOException, InterruptedException
         {
-            synchronized (this)
+            int size = 1024;
+            char[] buffer = new char[size];
+            while (true)
             {
-                int size = 1024;
-                char[] buffer = new char[size];
-                while (true)
-                {
-                    int n = m_in.read(buffer, 0, size);
-                    if (n < 0)
-                        m_text = null;
-                    else
-                        m_text = new String(buffer, 0, n);
-                    notify();
-                    wait();
-                }
+                int n = m_in.read(buffer, 0, size);
+                String text = null;
+                if (n > 0)
+                    text = new String(buffer, 0, n);
+                m_queue.put(new ReadMessage(true, text));
+                if (text == null)
+                    return;
             }
         }
     }
@@ -531,11 +530,11 @@ public final class Gtp
 
     private String[] m_supportedCommands;
 
-    private ReadThread m_errorReadThread;
+    private ErrorThread m_errorThread;
 
-    private ReadLineThread m_inputReadThread;
+    private InputThread m_inputThread;
 
-    private WaitMultiple m_waitMultiple;
+    private MessageQueue m_queue;
 
     private static boolean isResponseLine(String line)
     {
@@ -552,7 +551,6 @@ public final class Gtp
             if (m_logPrefix != null)
                 System.err.print(m_logPrefix);
             System.err.println(msg);
-            //System.err.flush();
         }
     }
 
@@ -560,26 +558,21 @@ public final class Gtp
     {
         while (true)
         {            
-            Object object;
-            object = m_waitMultiple.waitFor();
-            if (object == m_inputReadThread)
+            ReadMessage message = (ReadMessage)m_queue.waitFor();
+            if (! message.m_isError)
             {
-                String line = m_inputReadThread.getLine();
+                String line = message.m_text;
                 if (line == null)
                 {
                     m_isProgramDead = true;
                     throw new Error("Go program died");
                 }
                 log("<< " + line);
-                synchronized (object)
-                {
-                    object.notify();
-                }
                 return line;
             }
-            else if (object == m_errorReadThread)
+            else
             {
-                String text = m_errorReadThread.getText();
+                String text = message.m_text;
                 if (text == null)
                 {
                     m_isProgramDead = true;
@@ -589,13 +582,7 @@ public final class Gtp
                     System.err.print(text);
                 if (m_callback != null)
                     m_callback.receivedStdErr(text);
-                synchronized (object)
-                {
-                    object.notify();
-                }
             }
-            else
-                assert(false);
         }
     }
 
