@@ -224,7 +224,11 @@ class SelectProgram
             PrintWriter out = new PrintWriter(new FileOutputStream(file));
             int size = history.size();
             for (int i = 0; i < size; ++i)
-                out.println((String)history.get(i));
+            {
+                String s = (String)history.get(i);
+                if (! s.equals(""))
+                    out.println(s);
+            }
             out.close();
         }
         catch (FileNotFoundException e)
