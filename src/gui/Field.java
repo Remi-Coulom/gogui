@@ -60,7 +60,9 @@ public class Field
     {
         int code = event.getKeyCode();
         int modifiers = event.getModifiers();
-        boolean modifiedSelect = ((modifiers & ActionEvent.CTRL_MASK) != 0);
+        int mask = (ActionEvent.CTRL_MASK | ActionEvent.ALT_MASK
+                    | ActionEvent.META_MASK);
+        boolean modifiedSelect = ((modifiers & mask) != 0);
         if (code == KeyEvent.VK_ENTER)
             m_board.fieldClicked(m_point, modifiedSelect);
     }
