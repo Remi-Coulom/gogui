@@ -94,7 +94,7 @@ class GoGui
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setShowLastMove(m_prefs.getBool("show-last-move"));
-        m_guiBoard.setShowLastMove(m_prefs.getBool("show-last-move"));
+        m_showLastMove = m_prefs.getBool("show-last-move");
         m_menuBar.setShowCursor(m_prefs.getBool("show-cursor"));
         m_guiBoard.setShowCursor(m_prefs.getBool("show-cursor"));
         setJMenuBar(m_menuBar.getMenuBar());
@@ -641,6 +641,8 @@ class GoGui
     private boolean m_scoreMode;
 
     private boolean m_setupMode;
+
+    private boolean m_showLastMove;
 
     private boolean m_verbose;
 
@@ -1404,9 +1406,9 @@ class GoGui
 
     private void cbShowLastMove()
     {
-        boolean showLastMove = m_menuBar.getShowLastMove();
-        m_guiBoard.setShowLastMove(showLastMove);
-        m_prefs.setBool("show-last-move", showLastMove);
+        m_showLastMove = m_menuBar.getShowLastMove();
+        m_prefs.setBool("show-last-move", m_showLastMove);
+        updateGameInfo(false);
     }
 
     private void cbTruncate()
@@ -2502,6 +2504,16 @@ class GoGui
                 m_gameTreeViewer.update(m_currentNode);
         }
         m_comment.setNode(m_currentNode);
+        if (m_showLastMove)
+        {
+            Move move = m_currentNode.getMove();
+            if (move != null)
+                m_guiBoard.markLastMove(move.getPoint());
+            else
+                m_guiBoard.markLastMove(null);
+        }
+        else
+            m_guiBoard.markLastMove(null);
     }
 }
 

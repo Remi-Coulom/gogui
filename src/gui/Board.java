@@ -71,7 +71,7 @@ public class Board
         clearAllSelect();
         clearAllStrings();
         clearAllTerritory();
-        drawLastMove();
+        clearLastMove();
         if (m_variationShown)
         {
             updateFromGoBoard();
@@ -231,6 +231,20 @@ public class Board
         m_lastMove = null;
         revalidate();
         repaint();
+    }
+
+    public void markLastMove(go.Point point)
+    {
+        clearLastMove();
+        m_lastMove = point;
+        if (m_lastMove != null)
+        {
+            Field field = getField(m_lastMove);
+            field.setLastMoveMarker(true);
+            field.repaint();
+            m_lastMove = point;
+        }
+        setFocus();
     }
 
     public void paintComponent(Graphics graphics)
@@ -425,13 +439,6 @@ public class Board
         m_showCursor = showCursor;
     }
 
-    public void setShowLastMove(boolean showLastMove)
-    {
-        clearLastMove();
-        m_showLastMove = showLastMove;
-        drawLastMove();
-    }
-
     public void setSelect(go.Point p, boolean select)
     {
         getField(p).setSelect(select);
@@ -555,7 +562,6 @@ public class Board
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
             updateFromGoBoard(m_board.getPoint(i));
-        drawLastMove();
     }
 
     public void updateFromGoBoard(go.Point point)
@@ -573,8 +579,6 @@ public class Board
     private boolean m_needsReset;
 
     private boolean m_showCursor = true;
-
-    private boolean m_showLastMove = true;
 
     private boolean m_variationShown;
 
@@ -653,29 +657,6 @@ public class Board
             field.repaint();
             m_lastMove = null;
         }
-    }
-
-    private void drawLastMove()
-    {
-        if (m_showLastMove)
-            clearLastMove();
-        int moveNumber = m_board.getMoveNumber();
-        if (moveNumber > 0)
-        {
-            Move m = m_board.getMove(moveNumber - 1);
-            go.Point lastMove = m.getPoint();
-            if (lastMove != null && m.getColor() != go.Color.EMPTY)
-            {
-                if (m_showLastMove)
-                {
-                    Field field = getField(lastMove);
-                    field.setLastMoveMarker(true);
-                    field.repaint();
-                    m_lastMove = lastMove;
-                }
-            }
-        }
-        setFocus();
     }
 
     private Field getField(go.Point p)
