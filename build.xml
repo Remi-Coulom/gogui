@@ -275,7 +275,7 @@ installation directory.
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpregress.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="gtpregress.GtpRegress"/>
+<attribute name="Main-Class" value="gtpregress.Main"/>
 </manifest>
 <fileset dir="build" includes="
  go/Color.class
