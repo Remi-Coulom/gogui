@@ -34,7 +34,6 @@ class GtpShellText
         StyleConstants.setForeground(error, Color.red);
         Style output = addStyle("output", def);
         StyleConstants.setBold(output, true);
-        Style input = addStyle("input", def);
         Style log = addStyle("log", def);
         StyleConstants.setForeground(log, new Color(0.5f, 0.5f, 0.5f));
         setEditable(false);
@@ -52,7 +51,7 @@ class GtpShellText
 
     public void appendInput(String text)
     {
-        appendText(text, "input");
+        appendText(text, null);
     }
 
     public void appendLog(String text)
@@ -115,8 +114,6 @@ class GtpShellText
 
     private Font m_font;
 
-    private Style m_currentStyle;
-
     private void appendText(String text, String style)
     {
         if (text.equals(""))
@@ -135,13 +132,8 @@ class GtpShellText
             s = getStyle(style);
         try
         {
-            if (m_currentStyle != s)
-            {
-                setLogicalStyle(s);
-                m_currentStyle = s;
-            }
             setEditable(true);
-            doc.insertString(doc.getLength(), text, null);
+            doc.insertString(doc.getLength(), text, s);
             setEditable(false);
         }
         catch (BadLocationException e)
