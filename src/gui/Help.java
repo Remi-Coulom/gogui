@@ -1,7 +1,7 @@
-//=============================================================================
+//-----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 package gui;
 
@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
 
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 class Help
     extends JDialog
@@ -34,7 +34,7 @@ class Help
             new JScrollPane(m_editorPane,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setPreferredSize(new Dimension(600, 480));
+        scrollPane.setPreferredSize(new Dimension(600, 600));
         contentPane.add(scrollPane, BorderLayout.CENTER);
         pack();
         setVisible(true);
@@ -178,4 +178,4 @@ class Help
     }
 }
 
-//=============================================================================
+//-----------------------------------------------------------------------------
