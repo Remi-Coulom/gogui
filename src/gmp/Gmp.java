@@ -292,12 +292,13 @@ class ReadThread
     public boolean sendText(String text)
     {
         int size = text.length();
-        byte buffer[] = new byte[size];
+        byte buffer[] = new byte[size + 1];
         for (int i = 0; i < size; ++i)
         {
             byte b = (byte)text.charAt(i);
             buffer[i] = ((b > 3 && b < 127) ? b : (byte)'?');            
         }
+        buffer[size] = (byte)'\n';
         try
         {
             m_out.write(buffer);
