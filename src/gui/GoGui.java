@@ -1875,6 +1875,8 @@ class GoGui
             if (point != null)
             {
                 m_guiBoard.updateFromGoBoard(point);
+                if (m_showLastMove)
+                    m_guiBoard.markLastMove(move.getPoint());
                 m_guiBoard.paintImmediately(point);
             }
             m_timeControl.stopMove();
