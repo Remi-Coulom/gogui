@@ -4,6 +4,7 @@
   <revhistory>
     <revision>
       <revnumber>&version;</revnumber>
+      <date>24 Apr 2003</date>
       <authorinitials>enz</authorinitials>
       <revremark>
 	<itemizedlist>
@@ -30,7 +31,11 @@
       <date>4 Mar 2003</date>
       <authorinitials>enz</authorinitials>
       <revremark>
-	Initial release.
+	<itemizedlist>
+	  <listitem>
+	    Initial release.
+	  </listitem>
+	</itemizedlist>
       </revremark>
     </revision>
   </revhistory>
