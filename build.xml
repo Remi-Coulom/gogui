@@ -115,6 +115,7 @@ installation directory.
  config/analyze-commands*,
  config/gogui.desktop,
  doc/html/*.html,
+ doc/html/*.css,
  doc/man/*.1,
  doc/xml/*.xml,
  doxygen/Doxyfile,
