@@ -258,14 +258,7 @@ class GoGui
             return false;
         }
         m_analyzeCommand = null;
-        if (m_analyzeRequestPoint || m_analyzeRequestPointList)
-        {
-            m_analyzeRequestPoint = false;
-            m_analyzeRequestPointList = false;
-            m_analyzePointArg = null;
-            m_analyzePointListArg.clear();
-            setBoardCursorDefault();
-        }
+        setBoardCursorDefault();
         resetBoard();
         clearStatus();
         return true;
@@ -286,31 +279,32 @@ class GoGui
             m_guiBoard.update();
             m_isModified = true;
         }
-        else if (m_analyzeRequestPoint && ! modifiedSelect)
+        else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
+                 && ! modifiedSelect)
         {
-            m_analyzePointArg = p;
+            m_analyzeCommand.setPointArg(p);
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(p, true);
             m_guiBoard.repaint();
             analyzeBegin(false, false);
             return;
         }
-        else if (m_analyzeRequestPointList)
+        else if (m_analyzeCommand != null
+                 && m_analyzeCommand.needsPointListArg())
         {
-            if (m_analyzePointListArg.contains(p))
+            Vector pointListArg = m_analyzeCommand.getPointListArg();
+            if (pointListArg.contains(p))
             {
                 if (! modifiedSelect)
-                    m_analyzePointListArg.remove(p);
+                    pointListArg.remove(p);
             }
             else
-                m_analyzePointListArg.add(p);
+                pointListArg.add(p);
             m_guiBoard.clearAllSelect();
-            for (int i = 0; i < m_analyzePointListArg.size(); ++i)
-                m_guiBoard.setSelect((go.Point)m_analyzePointListArg.get(i),
-                                     true);
+            for (int i = 0; i < pointListArg.size(); ++i)
+                m_guiBoard.setSelect((go.Point)pointListArg.get(i), true);
             m_guiBoard.repaint();
-            if (modifiedSelect
-                && m_analyzePointListArg.size() > 0)
+            if (modifiedSelect && pointListArg.size() > 0)
                 analyzeBegin(false, false);
             return;
         }
@@ -497,20 +491,14 @@ class GoGui
         if (m_commandThread == null)
             return;
         m_analyzeCommand = command;
-        m_analyzeRequestPoint = false;
-        m_analyzeRequestPointList = false;
-        m_analyzePointArg = null;
-        m_analyzePointListArg.clear();
         m_analyzeAutoRun = autoRun;
         if (command.needsPointArg())
         {
-            m_analyzeRequestPoint = true;
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
             showStatusSelectTarget();
         }
         else if (command.needsPointListArg())
         {
-            m_analyzeRequestPointList = true;
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
             showStatusSelectPointList();
         }
@@ -610,10 +598,6 @@ class GoGui
 
     private boolean m_analyzeAutoRun;
 
-    private boolean m_analyzeRequestPoint;
-
-    private boolean m_analyzeRequestPointList;
-
     private boolean m_auto;
 
     private boolean m_beepAfterMove;
@@ -651,8 +635,6 @@ class GoGui
     private go.Board m_board;
 
     private go.Color m_setupColor;
-
-    private go.Point m_analyzePointArg;
 
     private go.Score m_score;
 
@@ -692,8 +674,6 @@ class GoGui
 
     private String m_version = "";
 
-    private Vector m_analyzePointListArg = new Vector();
-
     AnalyzeDialog m_analyzeDialog;
 
     /** Preferences.
@@ -712,18 +692,11 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
-        if ((m_analyzeCommand.needsPointArg() && m_analyzePointArg == null)
-            || (m_analyzeCommand.needsPointListArg()
-                && m_analyzePointListArg.size() == 0))
+        if (m_analyzeCommand.isPointArgMissing())
             return;
-        showStatus("Running " +
-                   m_analyzeCommand.getResultTitle(m_analyzePointArg,
-                                                   m_analyzePointListArg)
-                   + " ...");
+        showStatus("Running " + m_analyzeCommand.getResultTitle() + " ...");
         String command =
-            m_analyzeCommand.replaceWildCards(m_board.getToMove(),
-                                              m_analyzePointArg,
-                                              m_analyzePointListArg);
+            m_analyzeCommand.replaceWildCards(m_board.getToMove());
         runLengthyCommand(command,
                           new AnalyzeContinue(checkComputerMove, resetBoard));
     }
@@ -731,8 +704,7 @@ class GoGui
     private void analyzeContinue(boolean checkComputerMove, boolean resetBoard)
     {
         endLengthyCommand();
-        String title = m_analyzeCommand.getResultTitle(m_analyzePointArg,
-                                                       m_analyzePointListArg);
+        String title = m_analyzeCommand.getResultTitle();
         try
         {
             if (resetBoard)
@@ -741,9 +713,7 @@ class GoGui
             if (e != null)
                 throw e;
             String response = m_commandThread.getResponse();
-            AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_board,
-                             m_analyzePointArg, m_analyzePointListArg,
-                             response);
+            AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_board, response);
             int type = m_analyzeCommand.getType();
             boolean statusContainsResponse = false;
             if (type == AnalyzeCommand.STRING
@@ -766,7 +736,7 @@ class GoGui
             }
             if (! statusContainsResponse)
                 showStatusAnalyzeResult(title);
-            if (! m_analyzeRequestPoint && checkComputerMove)
+            if (checkComputerMove)
                 checkComputerMove();
         }
         catch(Gtp.Error e)
@@ -826,10 +796,7 @@ class GoGui
         if (m_commandThread != null
             && m_analyzeCommand != null
             && m_analyzeAutoRun
-            && ! (m_analyzeCommand.needsPointArg()
-                  && m_analyzePointArg == null)
-            && ! (m_analyzeCommand.needsPointListArg()
-                  && m_analyzePointListArg.size() == 0))
+            && ! m_analyzeCommand.isPointArgMissing())
             analyzeBegin(doCheckComputerMove, true);
         else
         {
@@ -1396,8 +1363,9 @@ class GoGui
         m_toolBar.enableAll(true, m_board);
         m_gtpShell.setCommandInProgess(false);
         m_commandInProgress = false;
-        if (m_analyzeRequestPoint
-            || m_analyzeRequestPointList)
+        if (m_analyzeCommand != null
+            && (m_analyzeCommand.needsPointArg()
+                || m_analyzeCommand.needsPointListArg()))
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
         else
             setBoardCursorDefault();

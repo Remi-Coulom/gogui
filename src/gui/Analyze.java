@@ -121,6 +121,16 @@ class AnalyzeCommand
         return m_label;
     }
 
+    public go.Point getPointArg()
+    {
+        return m_pointArg;
+    }
+
+    public Vector getPointListArg()
+    {
+        return m_pointListArg;
+    }
+
     public double getScale()
     {
         return m_scale;
@@ -136,20 +146,20 @@ class AnalyzeCommand
         return m_type;
     }
 
-    public String getResultTitle(go.Point pointArg, Vector pointListArg)
+    public String getResultTitle()
     {
         StringBuffer buffer = new StringBuffer(m_label);
-        if (needsPointArg() && pointArg != null)
+        if (needsPointArg() && m_pointArg != null)
         {
             buffer.append(' ');
-            buffer.append(pointArg.toString());
+            buffer.append(m_pointArg.toString());
         }
-        else if (needsPointListArg() && pointListArg != null)
+        else if (needsPointListArg())
         {
-            for (int i = 0; i < pointListArg.size(); ++i)
+            for (int i = 0; i < m_pointListArg.size(); ++i)
             {
                 buffer.append(' ');
-                buffer.append(((go.Point)(pointListArg.get(i))).toString());
+                buffer.append(((go.Point)(m_pointListArg.get(i))).toString());
             }
         }
         if (needsStringArg() && m_stringArg != null)
@@ -158,6 +168,15 @@ class AnalyzeCommand
             buffer.append(m_stringArg);
         }
         return buffer.toString();
+    }
+
+    public boolean isPointArgMissing()
+    {
+        if (needsPointArg())
+            return (m_pointArg == null);
+        if (needsPointListArg())
+            return m_pointListArg.isEmpty();
+        return false;
     }
 
     public boolean needsFileArg()
@@ -197,25 +216,21 @@ class AnalyzeCommand
             readFile((File)files.get(i), commands, labels, supportedCommands);
     }
 
-    public String replaceWildCards(go.Color toMove, go.Point pointArg,
-                                   Vector pointListArg)
+    public String replaceWildCards(go.Color toMove)
     {
         StringBuffer buffer = new StringBuffer(m_command);
         StringUtils.replace(buffer, "%m", toMove.toString());
         if (needsPointArg())
-        {
-            assert(pointArg != null);
-            StringUtils.replace(buffer, "%p", pointArg.toString());
-        }
+            StringUtils.replace(buffer, "%p", m_pointArg.toString());
         if (needsPointListArg())
         {
-            assert(pointListArg != null);
             StringBuffer listBuffer = new StringBuffer(128);
-            for (int i = 0; i < pointListArg.size(); ++i)
+            for (int i = 0; i < m_pointListArg.size(); ++i)
             {
                 if (listBuffer.length() > 0)
                     listBuffer.append(' ');
-                listBuffer.append(((go.Point)pointListArg.get(i)).toString());
+                go.Point point = (go.Point)m_pointListArg.get(i);
+                listBuffer.append(point.toString());
             }
             StringUtils.replace(buffer, "%P", listBuffer.toString());
         }
@@ -238,6 +253,11 @@ class AnalyzeCommand
         m_fileArg = file;
     }
 
+    public void setPointArg(go.Point point)
+    {
+        m_pointArg = point;
+    }
+
     public void setStringArg(String value)
     {
         assert(needsStringArg());
@@ -245,6 +265,8 @@ class AnalyzeCommand
     }
 
     private int m_type;
+
+    private double m_scale;
 
     private File m_fileArg;
 
@@ -254,9 +276,11 @@ class AnalyzeCommand
 
     private String m_title;
 
-    private double m_scale;
-
     private String m_stringArg;
+
+    private go.Point m_pointArg;
+
+    private Vector m_pointListArg = new Vector();
 
     private static void copyDefaults(File file)
     {
@@ -899,15 +923,15 @@ class AnalyzeTextOutput
 class AnalyzeShow
 {
     public static void show(AnalyzeCommand command, gui.Board guiBoard,
-                            go.Board board, go.Point analyzePointArg,
-                            Vector analyzePointListArg,
-                            String response) throws Gtp.Error
+                            go.Board board, String response) throws Gtp.Error
     {
+        go.Point pointArg = command.getPointArg();
+        Vector pointListArg = command.getPointListArg();
         guiBoard.clearAllSelect();
-        for (int i = 0; i < analyzePointListArg.size(); ++i)
-            guiBoard.setSelect((go.Point)analyzePointListArg.get(i), true);
-        if (analyzePointArg != null)
-            guiBoard.setSelect(analyzePointArg, true);
+        for (int i = 0; i < pointListArg.size(); ++i)
+            guiBoard.setSelect((go.Point)pointListArg.get(i), true);
+        if (pointArg != null)
+            guiBoard.setSelect(pointArg, true);
         int type = command.getType();
         String title = command.getTitle();
         int size = board.getSize();
@@ -988,8 +1012,7 @@ class AnalyzeShow
             break;
         case AnalyzeCommand.VARP:
             {
-                go.Color c = getColor(board, analyzePointArg,
-                                      analyzePointListArg);
+                go.Color c = getColor(board, pointArg, pointListArg);
                 if (c != go.Color.EMPTY)
                 {
                     go.Point list[] = Gtp.parsePointString(response, size);
@@ -1000,8 +1023,7 @@ class AnalyzeShow
             break;
         case AnalyzeCommand.VARPO:
             {
-                go.Color c = getColor(board, analyzePointArg,
-                                      analyzePointListArg);
+                go.Color c = getColor(board, pointArg, pointListArg);
                 if (c != go.Color.EMPTY)
                 {
                     go.Point list[] = Gtp.parsePointString(response, size);
@@ -1013,17 +1035,17 @@ class AnalyzeShow
         }
     }
 
-    private static go.Color getColor(go.Board board, go.Point analyzePointArg,
-                                     Vector analyzePointArgList)
+    private static go.Color getColor(go.Board board, go.Point pointArg,
+                                     Vector pointListArg)
     {
         go.Color color = go.Color.EMPTY;
-        if (analyzePointArg != null)
-            color = board.getColor(analyzePointArg);
+        if (pointArg != null)
+            color = board.getColor(pointArg);
         if (color != go.Color.EMPTY)
             return color;
-        for (int i = 0; i < analyzePointArgList.size(); ++i)
+        for (int i = 0; i < pointListArg.size(); ++i)
         {
-            go.Point point = (go.Point)analyzePointArgList.get(i);
+            go.Point point = (go.Point)pointListArg.get(i);
             color = board.getColor(point);
             if (color != go.Color.EMPTY)
                 break;
