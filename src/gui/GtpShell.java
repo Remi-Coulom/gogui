@@ -348,7 +348,7 @@ public class GtpShell
                     new JOptionPane(message, messageType, optionType);
                 JDialog dialog =
                     optionPane.createDialog(this, "GoGui: Warning");
-                DialogUtils.center(dialog, this);
+                dialog.setLocationRelativeTo(this);
                 dialog.setVisible(true);
                 
                 Object value = optionPane.getValue();

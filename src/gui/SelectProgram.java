@@ -11,7 +11,6 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 import java.util.*;
-import utils.DialogUtils;
 import utils.GuiUtils;
 
 //-----------------------------------------------------------------------------
@@ -60,7 +59,7 @@ class SelectProgram
     public static String select(Frame owner)
     {
         SelectProgram dialog = new SelectProgram(owner);
-        DialogUtils.center(dialog, null);
+        dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         return dialog.m_command;
     }

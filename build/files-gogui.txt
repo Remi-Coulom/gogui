@@ -26,7 +26,6 @@ src/latex/Writer.java
 src/sgf/Filter.java
 src/sgf/Reader.java
 src/sgf/Writer.java
-src/utils/DialogUtils.java
 src/utils/FileUtils.java
 src/utils/GuiUtils.java
 src/utils/Options.java
