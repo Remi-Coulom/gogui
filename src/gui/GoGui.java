@@ -1658,9 +1658,12 @@ class GoGui
         m_gtpShell = null;
         if (m_analyzeDialog != null)
         {
+            m_analyzeDialog.saveRecent();
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
+        resetBoard();
+        clearStatus();
         setTitle();
         // If this node was only partially executed due to a error of the Go
         // program, we undo and execute it again
