@@ -1865,7 +1865,7 @@ class GoGui
         }
         OutputStream out = new FileOutputStream(file);
         if (FileUtils.hasExtension(file, "tex"))
-            new latex.Writer(out, m_board, false);
+            new latex.Writer(out, m_board, false, null, null, null);
         else
             new sgf.Writer(out, m_board, file, "GoGui",
                            Version.m_version, m_handicap, playerBlack,
@@ -1905,7 +1905,8 @@ class GoGui
     {
         OutputStream out = new FileOutputStream(file);
         if (FileUtils.hasExtension(file, "tex"))
-            new latex.Writer(out, m_board, true);
+            new latex.Writer(out, m_board, true, m_guiBoard.getStrings(),
+                             m_guiBoard.getMarkups(), m_guiBoard.getSelects());
         else
             new sgf.Writer(out, m_board, file, "GoGui",
                            Version.m_version);

@@ -105,7 +105,7 @@ class SgfToTex
         for (int i = 0; i < numberMoves; ++i)
             board.play(reader.getMove(i));
         boolean writePosition = (numberMoves == 0);
-        new latex.Writer(out, board, writePosition);
+        new latex.Writer(out, board, writePosition, null, null, null);
     }
 
     private static void printUsage(PrintStream out)

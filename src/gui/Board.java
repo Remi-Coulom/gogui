@@ -117,9 +117,45 @@ public class Board
         return m_board;
     }
 
+    public boolean[][] getMarkups()
+    {
+        int size = m_board.getSize();
+        boolean[][] result = new boolean[size][size];
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            go.Point point = m_board.getPoint(i);
+            result[point.getX()][point.getY()] = getField(point).getMarkup();
+        }
+        return result;
+    }
+
     public Dimension getPreferredFieldSize()
     {
         return m_preferredFieldSize;
+    }
+
+    public boolean[][] getSelects()
+    {
+        int size = m_board.getSize();
+        boolean[][] result = new boolean[size][size];
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            go.Point point = m_board.getPoint(i);
+            result[point.getX()][point.getY()] = getField(point).getSelect();
+        }
+        return result;
+    }
+
+    public String[][] getStrings()
+    {
+        int size = m_board.getSize();
+        String[][] result = new String[size][size];
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            go.Point point = m_board.getPoint(i);
+            result[point.getX()][point.getY()] = getField(point).getString();
+        }
+        return result;
     }
 
     public void initSize(int size)

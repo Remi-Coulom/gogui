@@ -63,6 +63,21 @@ public class Field
         return m_color;
     }
 
+    public boolean getMarkup()
+    {
+        return m_markup;
+    }
+
+    public boolean getSelect()
+    {
+        return m_select;
+    }
+
+    public String getString()
+    {
+        return m_string;
+    }
+
     public void keyPressed(KeyEvent event)
     {
         int code = event.getKeyCode();

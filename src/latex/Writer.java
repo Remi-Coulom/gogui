@@ -24,7 +24,8 @@ public class Writer
         }
     }    
 
-    public Writer(OutputStream out, Board board, boolean writePosition)
+    public Writer(OutputStream out, Board board, boolean writePosition,
+                  String[][] strings, boolean[][] markups, boolean[][] selects)
     {        
         m_out = new PrintStream(out);
         m_board = board;
@@ -32,7 +33,7 @@ public class Writer
         printBeginPSGo();
         if (writePosition)
         {
-            printPosition();
+            printPosition(strings, markups, selects);
             printEndPSGo();
             String toMove =
                 (m_board.getToMove() == Color.BLACK ? "Black" : "White");
@@ -53,6 +54,20 @@ public class Writer
     private PrintStream m_out;
 
     private Board m_board;
+
+    private String getMarkers(String string, boolean markup, boolean select)
+    {
+        if ((string == null || string.equals("")) && ! markup && ! select)
+            return null;
+        StringBuffer result = new StringBuffer();
+        if (string != null && ! string.equals(""))
+            result.append("\\marklb{" + string + "}");
+        if (markup)
+            result.append("\\marksq");
+        if (select)
+            result.append("\\markdd");
+        return result.toString();
+    }
 
     private void printBeginDocument()
     {
@@ -105,7 +120,7 @@ public class Writer
             Move move = m_board.getInternalMove(i);
             Point point = move.getPoint();
             if (point != null)
-                printStone(move.getColor(), point);
+                printStone(move.getColor(), point, null, false, false);
         }
     }
 
@@ -188,21 +203,43 @@ public class Writer
         return comment.toString();
     }
 
-    private void printPosition()
+    private void printPosition(String[][] strings, boolean[][] markups,
+                               boolean[][] selects)
     {
         int numberPoints = m_board.getNumberPoints();
         for (int i = 0; i < numberPoints; ++i)
         {
             Point point = m_board.getPoint(i);
             Color color = m_board.getColor(point);
+            int x = point.getX();
+            int y = point.getY();
+            String string = null;
+            if (strings != null)
+                string = strings[x][y];
+            boolean markup = (markups != null && markups[x][y]);
+            boolean select = (selects != null && selects[x][y]);
             if (color != Color.EMPTY)
-                printStone(color, point);
+                printStone(color, point, string, markup, select);
+            else
+            {
+                String markers = getMarkers(string, markup, select);
+                if (markers != null)
+                {
+                    m_out.print("\\markpos{" + markers + "}");
+                    printCoordinates(point);
+                    m_out.print("\n");
+                }
+            }
         }
     }
 
-    void printStone(Color color, Point point)
+    private void printStone(Color color, Point point, String string,
+                            boolean markup, boolean select)
     {
         m_out.print("\\stone");
+        String markers = getMarkers(string, markup, select);
+        if (markers != null)
+        m_out.print("[" + markers + "]");
         printColor(color);
         printCoordinates(point);
         m_out.print("\n");
