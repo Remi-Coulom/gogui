@@ -8,9 +8,13 @@
       <revremark>
 	<itemizedlist>
 	  <listitem>
-	    <command>twogtp</command>: new options <option>-auto</option>,
-	    <option>-compare</option>, <option>-games</option>,
-	    <option>-komi</option>, <option>-sgffile</option>,
+	    <command>twogtp</command>: new options
+	    <option>-alternate</option>,
+	    <option>-auto</option>,
+	    <option>-compare</option>,
+	    <option>-games</option>,
+	    <option>-komi</option>,
+	    <option>-sgffile</option>,
 	    <option>-size</option>;
 	    save more game information in results file;
 	    forward GTP extension commands to program that implement them;

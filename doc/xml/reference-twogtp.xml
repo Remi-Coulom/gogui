@@ -14,6 +14,9 @@
     <cmdsynopsis>
       <command>twogtp</command>
       <arg>
+        <option>-alternate</option>
+      </arg>
+      <arg>
         <option>-auto</option>
       </arg>
       <arg>
@@ -88,6 +91,17 @@
   <refsection>
     <title>Options</title>
     <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-alternate</option>
+	</term>
+	<listitem>
+	  Alternate colors. Black and White are exchanged every odd game.
+	  The scores saved in the results table if <option>-sgffile</option>
+	  are still using the name Black and White as given with
+	  <option>-black</option> and <option>-white</option>.
+	</listitem>
+      </varlistentry>
       <varlistentry>
 	<term>
 	  <option>-auto</option>

@@ -16,8 +16,8 @@ public class TwoGtp
     extends GtpServer
 {
     public TwoGtp(InputStream in, OutputStream out, String black, String white,
-                  int size, Float komi, int numberGames, String sgfFile,
-                  boolean verbose)
+                  int size, Float komi, int numberGames, boolean alternate,
+                  String sgfFile, boolean verbose)
         throws Exception
     {
         super(in, out);
@@ -41,6 +41,7 @@ public class TwoGtp
         m_size = size;
         m_komi = komi;
         m_sgfFile = sgfFile;
+        m_alternate = alternate;
         m_numberGames = numberGames;
         m_board = new Board(size < 1 ? 19 : size);
     }
@@ -146,6 +147,7 @@ public class TwoGtp
         try
         {
             String options[] = {
+                "alternate",
                 "auto",
                 "compare",
                 "black:",
@@ -182,6 +184,7 @@ public class TwoGtp
                 compare(opt.getArguments());
                 System.exit(0);
             }
+            boolean alternate = opt.isSet("alternate");
             boolean auto = opt.isSet("auto");
             boolean verbose = opt.isSet("verbose");
             String black = opt.getString("black", "");
@@ -196,7 +199,8 @@ public class TwoGtp
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
             TwoGtp twoGtp = new TwoGtp(System.in, System.out, black, white,
-                                       size, komi, games, sgfFile, verbose);
+                                       size, komi, games, alternate, sgfFile,
+                                       verbose);
             if (auto)
                 twoGtp.autoPlay();
             else
@@ -222,6 +226,8 @@ public class TwoGtp
             System.exit(-1);
         }
     }
+
+    private boolean m_alternate;
 
     private boolean m_gameSaved;
 
@@ -250,14 +256,6 @@ public class TwoGtp
     private Gtp m_black;
 
     private Gtp m_white;
-
-    private Vector getMoves()
-    {
-        Vector moves = new Vector(128, 128);
-        for (int i = 0; i < m_board.getMoveNumber(); ++i)
-            moves.add(m_board.getMove(i));
-        return moves;
-    }
 
     private void autoPlay() throws Exception
     {
@@ -371,10 +369,17 @@ public class TwoGtp
             {
                 String resultBlack = getResult(m_black);
                 String resultWhite = getResult(m_white);
+                if (isAlternated())
+                {
+                    resultBlack = inverseResult(resultBlack);
+                    resultWhite = inverseResult(resultWhite);
+                }
                 Vector moves = getMoves();
                 String duplicate = checkDuplicate(m_board, moves, m_games);
-                saveResult(resultBlack, resultWhite, duplicate, moves.size());
+                saveResult(resultBlack, resultWhite, isAlternated(), duplicate,
+                           moves.size());
                 saveGame();
+                ++m_gameIndex;
                 m_games.add(moves);
             }
             catch (FileNotFoundException e)
@@ -446,6 +451,14 @@ public class TwoGtp
         return new File(m_sgfFile + "-" + gameIndex + ".sgf");
     }
 
+    private Vector getMoves()
+    {
+        Vector moves = new Vector(128, 128);
+        for (int i = 0; i < m_board.getMoveNumber(); ++i)
+            moves.add(m_board.getMove(i));
+        return moves;
+    }
+
     private static String getName(Gtp gtp)
     {
         try
@@ -470,6 +483,21 @@ public class TwoGtp
         {
             return "?";
         }
+    }
+
+    private String inverseResult(String result)
+    {
+        if (result.indexOf("B") >= 0)
+            return StringUtils.replace(result, "B", "W");
+        else if (result.indexOf("W") >= 0)
+            return StringUtils.replace(result, "W", "B");
+        else
+            return result;
+    }
+
+    private boolean isAlternated()
+    {
+        return (m_alternate && m_gameIndex % 2 != 0);
     }
 
     private void komi(String cmdLine)
@@ -581,13 +609,20 @@ public class TwoGtp
     {
         if (m_sgfFile.equals(""))
             return;
+        String blackName = m_blackName;
+        String whiteName = m_whiteName;
+        if (isAlternated())
+        {
+            blackName = m_whiteName;
+            whiteName = m_blackName;
+        }
         new sgf.Writer(getFile(m_gameIndex), m_board, "TwoGtp", null, 0,
-                       m_blackName, m_whiteName, null, null);
-        ++m_gameIndex;
+                       blackName, whiteName, null, null);
     }
 
     private void saveResult(String resultBlack, String resultWhite,
-                            String duplicate, int numberMoves)
+                            boolean alternated, String duplicate,
+                            int numberMoves)
          throws FileNotFoundException
     {
         if (m_sgfFile.equals(""))
@@ -597,13 +632,14 @@ public class TwoGtp
         {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             PrintStream out = new PrintStream(fileOutputStream);
-            out.println("# Game\tResB\tResW\tDup\tLen");
+            out.println("# Game\tResB\tResW\tAlt\tDup\tLen");
             out.close();
         }
         FileOutputStream fileOutputStream = new FileOutputStream(file, true);
         PrintStream out = new PrintStream(fileOutputStream);
         out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t" +
-                    resultWhite + "\t" + duplicate + "\t" + numberMoves);
+                    resultWhite + "\t" +  (alternated ? "1" : "0" ) + "\t" +
+                    duplicate + "\t" + numberMoves);
         out.close();
     }
 
@@ -703,7 +739,9 @@ public class TwoGtp
         String prefix2;
         String command;
         String command2;
-        if (color == Color.BLACK)
+        boolean alternate = isAlternated();
+        if ((color == Color.BLACK && ! alternate)
+            || (color == Color.WHITE && alternate))
         {
             gtp1 = m_black;
             gtp2 = m_white;
