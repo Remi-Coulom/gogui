@@ -12,6 +12,7 @@ import java.net.*;
 import javax.swing.*;
 import java.util.*;
 import utils.GuiUtils;
+import utils.StringUtils;
 
 //-----------------------------------------------------------------------------
 
@@ -47,11 +48,24 @@ class SelectProgram
 
     public static void addHistory(String program)
     {
-        String p = program.trim();
-        if (p.equals(""))
+        program = program.trim();
+        if (program.equals(""))
             return;
+        String[] tokens = StringUtils.tokenize(program);
+        if (tokens.length > 0)
+        {
+            File file = new File(tokens[0]);
+            try
+            {
+                String path = file.getCanonicalPath();
+                program = path + program.substring(tokens[0].length());
+            }
+            catch (IOException e)
+            {
+            }
+        }
         Vector history = loadHistory();
-        history.add(0, p);
+        history.add(0, program);
         saveHistory(history);
     }
 
