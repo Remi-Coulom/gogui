@@ -23,6 +23,7 @@ public class Field
     {
         m_board = board;
         m_color = go.Color.EMPTY;
+        m_territory = go.Color.EMPTY;
         m_point = p;
         m_isHandicap = isHandicap;
         Dimension size = m_board.getPreferredFieldSize();
@@ -76,6 +77,11 @@ public class Field
     public String getString()
     {
         return m_string;
+    }
+
+    public go.Color getTerritory()
+    {
+        return m_territory;
     }
 
     public void keyPressed(KeyEvent event)
@@ -141,8 +147,12 @@ public class Field
             drawStone(graphics, java.awt.Color.white);
         else
             drawGrid(graphics);
-        if (m_influenceSet)
-            drawInfluence(graphics);
+        if (m_territory == go.Color.BLACK)
+            drawInfluence(graphics, 1.0);
+        else if (m_territory == go.Color.WHITE)
+            drawInfluence(graphics, -1.0);
+        else if (m_influenceSet)
+            drawInfluence(graphics, m_influence);
         if (m_markup)
             drawMarkup(graphics);
         if (m_crossHair)
@@ -202,6 +212,11 @@ public class Field
         m_string = s;
     }
 
+    public void setTerritory(go.Color color)
+    {
+        m_territory = color;
+    }
+
     private boolean m_crossHair;
 
     private boolean m_isHandicap;
@@ -219,6 +234,8 @@ public class Field
     private String m_string = "";
 
     private java.awt.Color m_fieldColor;
+
+    private go.Color m_territory;
 
     private static java.awt.Color m_influenceBlackColor
         = new java.awt.Color(96, 96, 96);
@@ -299,13 +316,13 @@ public class Field
         }
     }
 
-    private void drawInfluence(Graphics g)
+    private void drawInfluence(Graphics g, double influence)
     {
         Dimension size = getSize();
-        double d = Math.abs(m_influence);
+        double d = Math.abs(influence);
         if (d < 0.01)
             return;
-        if (m_influence > 0)
+        if (influence > 0)
             g.setColor(m_influenceBlackColor);
         else
             g.setColor(m_influenceWhiteColor);

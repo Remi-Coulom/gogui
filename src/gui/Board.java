@@ -60,6 +60,7 @@ public class Board
         clearAllMarkup();
         clearAllSelect();
         clearAllStrings();
+        clearAllTerritory();
         drawLastMove();
         if (m_variationShown)
         {
@@ -90,6 +91,12 @@ public class Board
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
             setString(m_board.getPoint(i), "");
+    }
+
+    public void clearAllTerritory()
+    {
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+            setTerritory(m_board.getPoint(i), go.Color.EMPTY);
     }
 
     public void clearInfluence(go.Point p)
@@ -371,17 +378,17 @@ public class Board
         m_listener = l;
     }
 
+    public void setMarkup(go.Point p, boolean markup)
+    {
+        getField(p).setMarkup(markup);
+        m_needsReset = true;
+    }
+
     public void setShowLastMove(boolean showLastMove)
     {
         clearLastMove();
         m_showLastMove = showLastMove;
         drawLastMove();
-    }
-
-    public void setMarkup(go.Point p, boolean markup)
-    {
-        getField(p).setMarkup(markup);
-        m_needsReset = true;
     }
 
     public void setSelect(go.Point p, boolean select)
@@ -396,6 +403,12 @@ public class Board
         m_needsReset = true;
     }
 
+    public void setTerritory(go.Point p, go.Color color)
+    {
+        getField(p).setTerritory(color);
+        m_needsReset = true;
+    }
+
     public void showBWBoard(String[][] board)
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
@@ -403,11 +416,11 @@ public class Board
             go.Point p = m_board.getPoint(i);
             String s = board[p.getX()][p.getY()].toLowerCase();
             if (s.equals("b") || s.equals("black"))
-                setInfluence(p, 1);
+                setTerritory(p, go.Color.BLACK);
             else if (s.equals("w") || s.equals("white"))
-                setInfluence(p, -1);
+                setTerritory(p, go.Color.WHITE);
             else
-                setInfluence(p, 0);
+                setTerritory(p, go.Color.EMPTY);
         }
     }
 
