@@ -44,6 +44,18 @@ DIV.navheader TH, DIV.navfooter TH
   text-decoration: none;
 }
 
+DIV.navheader A
+{
+  color: white;
+  text-decoration: none;
+}
+
+DIV.navfooter A
+{
+  color: white;
+  text-decoration: none;
+}
+
 IMG
 {
   border: 0;
