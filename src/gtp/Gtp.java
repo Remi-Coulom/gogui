@@ -78,7 +78,7 @@ public final class Gtp
         }
         Reader reader = new InputStreamReader(m_process.getInputStream());
         m_in = new BufferedReader(reader);
-        m_out = new PrintStream(m_process.getOutputStream());
+        m_out = new PrintWriter(m_process.getOutputStream());
         m_illegalState = false;
         m_isProgramDead = false;
         m_stdErrThread = new StdErrThread(m_process);
@@ -646,7 +646,7 @@ public final class Gtp
 
     private IOCallback m_callback;
 
-    private PrintStream m_out;
+    private PrintWriter m_out;
 
     private Process m_process;
 
