@@ -16,6 +16,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <cmdsynopsis>
 <command>gtpadapter</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-emuhandicap</option></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
 <arg><option>-name</option> <replaceable>name</replaceable></arg>
 <arg><option>-noscore</option></arg>
@@ -50,6 +51,18 @@ for the Go program .
 <listitem>
 <para>
 Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-emuhandicap</option></term>
+<listitem>
+<para>
+Emulate the commands <userinput>set_free_handicap</userinput> and
+<userinput>place_free_handicap</userinput> by using standard fixed handicap
+locations (if existing) and sending the stones to the program using
+play commands.
 </para>
 </listitem>
 </varlistentry>

@@ -212,6 +212,7 @@ installation directory.
 <attribute name="Main-Class" value="gtpadapter.GtpAdapter"/>
 </manifest>
 <fileset dir="build" includes="
+ go/*.class
  gtp/*.class
  gtpadapter/*.class
  utils/Options.class

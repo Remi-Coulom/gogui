@@ -21,7 +21,7 @@ public class GtpAdapter
 {
     public GtpAdapter(InputStream in, OutputStream out, String program,
                       PrintStream log, boolean version2, int size, String name,
-                      boolean noScore)
+                      boolean noScore, boolean emuHandicap)
         throws Exception
     {
         super(in, out, log);
@@ -34,6 +34,7 @@ public class GtpAdapter
             throw new Exception("Program is not GTP version 1.");
         m_version2 = version2;
         m_noScore = noScore;
+        m_emuHandicap = emuHandicap;
         m_size = size;
         m_name = name;
     }
@@ -65,10 +66,14 @@ public class GtpAdapter
             status = cmdListCommands(response);
         else if (cmd.equals("name") && m_name != null)
             status = cmdName(response);
+        else if (cmd.equals("place_free_handicap") && m_emuHandicap)
+            status = cmdPlaceFreeHandicap(cmdArray, response);
         else if (cmd.equals("play") && m_version2)
             status = translateColorCommand(cmdArray, "", response);
         else if (cmd.equals("protocol_version") && m_version2)
             response.append("2");
+        else if (cmd.equals("set_free_handicap") && m_emuHandicap)
+            status = cmdSetFreeHandicap(cmdArray, response);
         else if (cmd.equals("version") && m_name != null)
             status = cmdVersion(response);
         else
@@ -100,6 +105,7 @@ public class GtpAdapter
         {
             String options[] = {
                 "config:",
+                "emuhandicap",
                 "help",
                 "log:",
                 "noscore",
@@ -122,6 +128,7 @@ public class GtpAdapter
             }
             boolean noScore = opt.isSet("noscore");
             boolean version2 = opt.isSet("version2");
+            boolean emuHandicap = opt.isSet("emuhandicap");
             String name = opt.getString("name", null);
             int size = opt.getInteger("size", -1);
             Vector arguments = opt.getArguments();
@@ -139,7 +146,7 @@ public class GtpAdapter
             String program = (String)arguments.get(0);
             GtpAdapter gtpAdapter =
                 new GtpAdapter(System.in, System.out, program, log, version2,
-                               size, name, noScore);
+                               size, name, noScore, emuHandicap);
             gtpAdapter.mainLoop();
             gtpAdapter.close();
             if (log != null)
@@ -164,6 +171,8 @@ public class GtpAdapter
             System.exit(-1);
         }
     }
+
+    private boolean m_emuHandicap;
 
     private boolean m_noScore;
 
@@ -243,6 +252,11 @@ public class GtpAdapter
             response.append("play\n");
             response.append("protocol_version\n");
         }
+        if (m_emuHandicap)
+        {
+            response.append("set_free_handicap\n");
+            response.append("get_free_handicap\n");
+        }
         return true;
     }
 
@@ -254,6 +268,60 @@ public class GtpAdapter
             response.append(m_name);
         else
             response.append(m_name.substring(0, index));
+        return true;
+    }
+
+    private boolean cmdPlaceFreeHandicap(String cmdArray[],
+                                         StringBuffer response)
+    {
+        if (cmdArray.length != 2)
+        {
+            response.append("Need argument");
+            return false;
+        }
+        int numberStones;
+        try
+        {
+            numberStones = Integer.parseInt(cmdArray[1]);
+        }
+        catch (NumberFormatException e)
+        {
+            response.append("Need integer argument");
+            return false;
+        }
+        Vector stones = go.Board.getHandicapStones(m_boardSize, numberStones);
+        if  (stones == null)
+        {
+            response.append("Invalid number of handicap stones");
+            return false;
+        }
+        for (int i = 0; i < stones.size(); ++i)
+        {
+            Point point = (Point)stones.get(i);
+            StringBuffer programResponse = new StringBuffer();
+            String cmd = m_gtp.getCommandPlay(Color.BLACK) + " " + point;
+            if (! send(cmd, programResponse))
+                break;
+            if (response.length() > 0)
+                response.append(" ");
+            response.append(point);
+        }
+        return true;
+    }
+
+    private boolean cmdSetFreeHandicap(String cmdArray[],
+                                       StringBuffer response)
+    {
+        for (int i = 1; i < cmdArray.length; ++i)
+        {
+            StringBuffer programResponse = new StringBuffer();
+            String cmd = m_gtp.getCommandPlay(Color.BLACK) + " " + cmdArray[i];
+            if (! send(cmd, programResponse))
+            {
+                response.append(programResponse);
+                return false;
+            }
+        }
         return true;
     }
 
@@ -278,7 +346,9 @@ public class GtpAdapter
             "Usage: java -jar gtpadapter.jar program\n" +
             "\n" +
             "-config      config file\n" +
+            "-emuhandicap emulate free handicap commands\n" +
             "-log file    log GTP stream to file\n" +
+            "-noscore     hide score commands\n" +
             "-size        accept only this board size\n" +
             "-version     print version and exit\n" +
             "-version2    translate GTP version 2 for version 1 programs\n";
