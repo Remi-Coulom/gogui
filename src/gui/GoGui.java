@@ -2095,20 +2095,17 @@ class GoGui
             saveSizeAndVisible(m_gtpShell, "gtpshell");
             saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
-        String name = "splitpane-position-" + m_boardSize;
-        m_prefs.setInt(name, m_splitPane.getDividerLocation());
+        if (GuiUtils.isNormalSizeMode(this))
+        {
+            String name = "splitpane-position-" + m_boardSize;
+            m_prefs.setInt(name, m_splitPane.getDividerLocation());
+        }
     }
 
-    private void saveSize(Window window, String name)
+    private void saveSize(JFrame window, String name)
     {
-        if (window instanceof Frame)
-        {
-            int state = ((Frame)window).getExtendedState();
-            int mask = Frame.MAXIMIZED_BOTH | Frame.MAXIMIZED_VERT
-                | Frame.MAXIMIZED_HORIZ | Frame.ICONIFIED;
-            if ((state & mask) != 0)
-                return;
-        }
+        if (! GuiUtils.isNormalSizeMode(window))
+            return;
         name = name + "-" + m_boardSize;
         java.awt.Point location = window.getLocation();
         Dimension size = window.getSize();
@@ -2117,7 +2114,7 @@ class GoGui
         m_prefs.setString(name, value);
     }
 
-    private void saveSizeAndVisible(Window window, String name)
+    private void saveSizeAndVisible(JFrame window, String name)
     {
         if (window != null)
             saveSize(window, "window-" + name);
