@@ -265,9 +265,6 @@ Will be replaced by a filename entered by the user.
 <listitem>
 <simpara>
 Will be replaced by the color to play.
-Using this wildcard is deprecated and will not be supported in future
-versions.
-Use <userinput>%c</userinput> instead.
 </simpara>
 </listitem>
 </varlistentry>

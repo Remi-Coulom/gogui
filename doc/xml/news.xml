@@ -47,7 +47,7 @@ GtpAdapter: bugfixes, new option -emuloadsgf.
 <listitem>
 <simpara>
 Color arguments to analyze commands can now be selected in the analyze window.
-New wildcard %c for commands (supersedes %m) and return type varc.
+New wildcard %c for commands and return type varc.
 </simpara>
 </listitem>
 <listitem>
