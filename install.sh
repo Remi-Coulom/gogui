@@ -3,7 +3,7 @@
 PREFIX=/usr/local
 
 function usage() {
-  printf "Usage: %s [-P prefix]\n" $0
+  printf "Usage: %s [-p prefix]\n" $0
 }
 
 while getopts hP: OPTION; do
@@ -37,3 +37,9 @@ install doc/html/*.{html,css} $PREFIX/share/doc/gogui
 
 install -d $PREFIX/share/man/man1
 install doc/man/*.1 $PREFIX/share/man/man1
+
+install -d $PREFIX/share/pixmaps
+install src/images/gogui.png $PREFIX/share/pixmaps
+
+install -d $PREFIX/share/applications
+install config/gogui.desktop $PREFIX/share/applications
