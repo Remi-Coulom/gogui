@@ -769,7 +769,7 @@ public class TwoGtp
         blackName = StringUtils.formatTitle(blackName);
         whiteName = StringUtils.formatTitle(whiteName);
         buffer.append(blackName);
-        buffer.append(" - ");
+        buffer.append(" vs ");
         buffer.append(whiteName);
         if (! m_sgfFile.equals(""))
         {
