@@ -480,7 +480,7 @@ public class Field
         if (m_color == go.Color.BLACK)
             drawStone(graphics, java.awt.Color.black, java.awt.Color.gray);
         else if (m_color == go.Color.WHITE)
-            drawStone(graphics, java.awt.Color.decode("#ded6cf"),
+            drawStone(graphics, java.awt.Color.decode("#e2dad3"),
                       java.awt.Color.decode("#eee5de"));
     }
 
