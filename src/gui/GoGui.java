@@ -50,9 +50,10 @@ class GoGui
 
         if (program != null)
         {
-            m_program = program.trim();
-            if (! m_program.equals(""))
+            program = program.trim();
+            if (! program.equals(""))
             {
+                m_program = program;
                 m_gtpShell = new GtpShell(this, "GoGui", this, prefs);
                 m_gtpShell.setProgramCommand(program);
             }
@@ -97,7 +98,7 @@ class GoGui
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setRememberSizes(m_rememberWindowSizes);
         setJMenuBar(m_menuBar.getMenuBar());
-        if (m_program == null || m_program.equals(""))
+        if (m_program == null)
         {
             m_toolBar.disableComputerButtons();
             m_menuBar.disableComputer();
@@ -1526,7 +1527,7 @@ class GoGui
         try
         {
             m_toolBar.enableAll(true, m_board);
-            if (m_program != null && ! m_program.equals(""))
+            if (m_program != null)
             {
                 try
                 {
