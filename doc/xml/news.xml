@@ -11,6 +11,9 @@
 	    Board uses background image and antialiasing.
 	  </listitem>
 	  <listitem>
+	    Cursor keys can be used to enter moves.
+	  </listitem>
+	  <listitem>
 	    Documentation in docbook format.
 	  </listitem>
 	  <listitem>
