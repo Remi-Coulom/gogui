@@ -85,11 +85,6 @@ class GtpShellText
         return m_truncated;
     }
 
-    public boolean getScrollableTracksViewportWidth()
-    {
-        return false;
-    }
-
     public String getLog()
     {
         StyledDocument doc = getStyledDocument();
@@ -103,7 +98,7 @@ class GtpShellText
             return "";
         }
     }
-    
+
     private int m_fontSize;
 
     private int m_historyMin;
@@ -195,7 +190,8 @@ public class GtpShell
         int fontSize = m_gtpShellText.getFont().getSize();
         scrollPane.setPreferredSize(new Dimension(fontSize * 51,
                                                   fontSize * 53));
-        scrollPane.getViewport().setBackground(m_gtpShellText.getBackground());
+        JViewport viewport = scrollPane.getViewport();
+        //viewport.setBackground(m_gtpShellText.getBackground());
         contentPane.add(scrollPane, BorderLayout.CENTER);
         
         m_comboBox = new JComboBox();
