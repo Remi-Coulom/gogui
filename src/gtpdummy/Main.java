@@ -26,7 +26,7 @@ public class Main
                 "log:",
                 "version"
             };
-            Options opt = Options.parse(options, args);
+            Options opt = Options.parse(args, options);
             if (opt.isSet("help"))
             {
                 String helpText =
