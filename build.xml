@@ -126,10 +126,13 @@ installation directory.
  doxygen/footer.html,
  doxygen/README,
  lib/*.jar,
- sgf/openings/9x9/README
- sgf/openings/9x9/*.sgf
- sgf/openings/19x19/README
- sgf/openings/19x19/*.sgf
+ sgf/openings/9x9/README,
+ sgf/openings/9x9/*.sgf,
+ sgf/openings/19x19/README,
+ sgf/openings/19x19/*.sgf,
+ specialmac/RegisterSpecialMacHandler.java,
+ specialmac/RegisterSpecialMacHandler.class,
+ specialmac/Listener.class,
  src/images/*.png,
  src/overview.html,
  src/*/package.html,
