@@ -61,10 +61,10 @@ class GoGui
         m_infoPanel.add(createStatusBar());
 
         m_board = new go.Board(m_boardSize);
-        m_board.setKomi(prefs.getFloat("komi"));
+        m_komiDefault = prefs.getFloat("komi");
         m_board.setRules(prefs.getInt("rules"));
 
-        m_gameTree = new GameTree(m_boardSize, null);
+        m_gameTree = new GameTree(m_boardSize, m_komiDefault, null);
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
 
@@ -203,8 +203,6 @@ class GoGui
             cbKeepOnlyMainVariation();
         else if (command.equals("keep-only-position"))
             cbKeepOnlyPosition();
-        else if (command.equals("komi"))
-            cbKomi();
         else if (command.equals("make-main-variation"))
             cbMakeMainVariation();
         else if (command.equals("next-variation"))
@@ -693,6 +691,8 @@ class GoGui
 
     private int m_move;
 
+    private float m_komiDefault;
+
     private go.Board m_board;
 
     private go.Color m_setupColor;
@@ -1038,7 +1038,14 @@ class GoGui
 
     private void cbGameInfo()
     {
-        GameInfoDialog.show(this, m_gameTree.getGameInformation());
+        GameInformation gameInformation = m_gameTree.getGameInformation();
+        GameInfoDialog.show(this, gameInformation);
+        if (gameInformation.m_komi != m_komiDefault)
+        {
+            m_komiDefault = gameInformation.m_komi;
+            m_prefs.setFloat("komi", m_komiDefault);
+            setKomi(gameInformation.m_komi);
+        }
     }
 
     private void cbGoto()
@@ -1153,7 +1160,8 @@ class GoGui
     {
         if (! showQuestion("Delete all moves?"))
             return;
-        m_gameTree = new GameTree(m_boardSize, null);
+        GameInformation gameInformation = m_gameTree.getGameInformation();
+        m_gameTree = new GameTree(m_boardSize, gameInformation.m_komi, null);
         Node root = m_gameTree.getRoot();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
@@ -1183,22 +1191,6 @@ class GoGui
         }
         m_needsSave = true;
         boardChangedBegin(false);
-    }
-
-    private void cbKomi()
-    {
-        Object obj =
-            JOptionPane.showInputDialog(this, "Komi value",
-                                        "GoGui: Set komi",
-                                        JOptionPane.PLAIN_MESSAGE,
-                                        null, null,
-                                        Float.toString(m_board.getKomi()));
-        if (obj == null)
-            return;
-        float komi = Float.parseFloat((String)obj);
-        m_board.setKomi(komi);
-        m_prefs.setFloat("komi", komi);
-        setKomi();
     }
 
     private void cbMakeMainVariation()
@@ -1400,7 +1392,7 @@ class GoGui
             {
                 // Create a dummy game tree, so that GameTreeDialog shows
                 // a setup node
-                m_gameTree = new GameTree(m_boardSize, null);
+                m_gameTree = new GameTree(m_boardSize, 0, null);
                 m_currentNode = m_gameTree.getRoot();
                 m_currentNode.addBlack(m_board.getPoint(0, 0));
                 m_gameTreeViewer.update(m_gameTree, m_currentNode);
@@ -1825,7 +1817,7 @@ class GoGui
         if (handicap == null)
             showWarning("Handicap stone locations are not\n" +
                         "defined for this board size.");
-        m_gameTree = new GameTree(size, handicap);
+        m_gameTree = new GameTree(size, m_komiDefault, handicap);
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
         m_board.newGame();        
@@ -1869,7 +1861,7 @@ class GoGui
             newGameFile(m_boardSize, new File(m_file), m_move);
         else
         {
-            setKomi();
+            setKomi(m_komiDefault);
             newGame(m_boardSize);
         }
         if (! m_initAnalyze.equals(""))
@@ -1928,8 +1920,7 @@ class GoGui
                 m_commandThread.sendCommandBoardsize(m_boardSize);
                 m_commandThread.sendCommandClearBoard(m_boardSize);
             }
-            m_board.setKomi(gameInformation.m_komi);
-            setKomi();
+            setKomi(gameInformation.m_komi);
             m_currentNode = m_gameTree.getRoot();
             executeCurrentNode();
             if (move > 0)
@@ -2234,14 +2225,15 @@ class GoGui
         }
     }
 
-    private void setKomi()
+    private void setKomi(float komi)
     {
+        m_board.setKomi(komi);
         if (m_commandThread == null)
             return;
         try
         {
             if (m_commandThread.isCommandSupported("komi"))
-                m_commandThread.sendCommand("komi " + m_board.getKomi());
+                m_commandThread.sendCommand("komi " + komi);
         }
         catch (Gtp.Error e)
         {
@@ -2385,7 +2377,7 @@ class GoGui
                 m_commandThread.sendCommandClearBoard(size);
             }
             m_board.newGame();        
-            m_gameTree = new GameTree(size, null);
+            m_gameTree = new GameTree(size, m_komiDefault, null);
             m_currentNode = m_gameTree.getRoot();
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
