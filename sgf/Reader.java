@@ -99,6 +99,8 @@ public class Reader
     
     private void loadError(String message) throws Error
     {
+        // Note: lineno() does not work correctly for Unix line endings
+        // (Sun Java 1.4.0 Linux)
         String s = m_file + ":" + m_tokenizer.lineno() + ":\n" + message;
         throw new Error(s);
     }
@@ -139,7 +141,7 @@ public class Reader
         int x = s.charAt(0) - 'a';
         int y = m_boardSize - (s.charAt(1) - 'a') - 1;
         if (x < 0 || x >= m_boardSize || y < 0 || y >= m_boardSize)
-            loadError("Point outside board.");
+            loadError("Invalid coordinates.");
         return new Point(x, y);
     }
 
