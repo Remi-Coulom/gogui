@@ -165,7 +165,7 @@ public class Main
                 {
                     process.waitFor();
                 }
-                catch(InterruptedException e)
+                catch (InterruptedException e)
                 {
                     System.err.println("Interrupted");
                 }

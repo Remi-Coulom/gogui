@@ -18,9 +18,9 @@ public final class Color
 
     public Color otherColor()
     {
-        if ( this == BLACK )
+        if (this == BLACK)
             return WHITE;
-        else if ( this == WHITE )
+        else if (this == WHITE)
             return BLACK;
         else
             return EMPTY;
@@ -28,9 +28,9 @@ public final class Color
 
     public String toString()
     {
-        if ( this == BLACK )
+        if (this == BLACK)
             return "black";
-        else if ( this == WHITE )
+        else if (this == WHITE)
             return "white";
         else
             return "empty";

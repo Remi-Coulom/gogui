@@ -705,7 +705,7 @@ public class GtpShell
         if (completions.size() > m_comboBox.getItemCount())
             m_comboBox.hidePopup();
         m_comboBox.removeAllItems();
-        for (int i = completions.size() - 1; i >= 0 ; --i)
+        for (int i = completions.size() - 1; i >= 0; --i)
         {
             Object object = wrapperObject((String)completions.get(i));
             m_comboBox.addItem(object);

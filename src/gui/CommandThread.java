@@ -203,7 +203,7 @@ public class CommandThread
         }
     }
     
-    /** Send command in event dispatch thread */
+    /** Send command in event dispatch thread. */
     public String sendCommand(String command)
         throws GtpError
     {

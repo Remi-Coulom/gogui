@@ -392,8 +392,8 @@ public class Analyze
     private void writeHtmlRow(PrintStream out, String label,
                               String value) throws Exception
     {
-        out.print("<tr><th align=\"left\">" + label +":</th>"
-                  + "<td align=\"left\">" + value +"</td></tr>\n");
+        out.print("<tr><th align=\"left\">" + label + ":</th>"
+                  + "<td align=\"left\">" + value + "</td></tr>\n");
     }
 
     private void writeHtmlRow(PrintStream out, String label,
@@ -420,7 +420,7 @@ public class Analyze
                                          Statistics statistics,
                                          NumberFormat format) throws Exception
     {
-        out.print("<tr><th align=\"left\">" + label +":</th>"
+        out.print("<tr><th align=\"left\">" + label + ":</th>"
                   + "<td align=\"left\">"
                   + format.format(statistics.getMean() * 100) + "% (&plusmn;"
                   + format.format(statistics.getErrorMean() * 100)

@@ -1031,10 +1031,10 @@ public class TwoGtp
         PrintStream out = new PrintStream(fileOutputStream);
         out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t"
                     + resultWhite + "\t"  + resultReferee + "\t"
-                    + (alternated ? "1" : "0" ) + "\t" + duplicate + "\t"
+                    + (alternated ? "1" : "0") + "\t" + duplicate + "\t"
                     + numberMoves + "\t" + format.format(cpuTimeBlack) + "\t"
                     + format.format(cpuTimeWhite) + "\t" +
-                    (error ? "1" : "0" ) + "\t" + errorMessage);
+                    (error ? "1" : "0") + "\t" + errorMessage);
         out.close();
     }
 

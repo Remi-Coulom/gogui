@@ -56,7 +56,7 @@ public class FileUtils
         return result.toString();
     }
 
-    /** Check for extension (case-insensitive) */
+    /** Check for extension (case-insensitive). */
     public static boolean hasExtension(File f, String extension)
     {
         String ext = getExtension(f);

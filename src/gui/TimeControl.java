@@ -73,7 +73,7 @@ public class TimeControl
         return getTimeString((double)(time / 1000L), movesLeft);
     }
 
-    /** If not in byoyomi movesLeft < 0 */
+    /** If not in byoyomi movesLeft < 0. */
     public static String getTimeString(double timeLeft, int movesLeft)
     {
         StringBuffer buffer = new StringBuffer(8);

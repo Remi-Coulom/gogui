@@ -920,7 +920,7 @@ class GoGui
             if (checkComputerMove)
                 checkComputerMove();
         }
-        catch(GtpError e)
+        catch (GtpError e)
         {                
             showStatus(title);
             showGtpError(e);

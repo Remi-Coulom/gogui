@@ -457,7 +457,7 @@ public class AnalyzeDialog
         String line;
         try
         {
-            while((line = reader.readLine()) != null)
+            while ((line = reader.readLine()) != null)
             {
                 m_comboBoxHistory.addItem(line);
             }

@@ -26,7 +26,7 @@ public class Platform
         public boolean handleQuit();
     }
 
-    /** Check if the platform is Mac OS X */
+    /** Check if the platform is Mac OS X. */
     public static boolean isMac()
     {
         // According to the article "Tailoring Java Applications for Mac OS X"
@@ -35,14 +35,14 @@ public class Platform
         return (System.getProperty("mrj.version") != null);
     }
 
-    /** Check if the platform is Unix */
+    /** Check if the platform is Unix. */
     public static boolean isUnix()
     {
         String osName = System.getProperty("os.name");
         return osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0;
     }
 
-    /** Check if the platform is Windows */
+    /** Check if the platform is Windows. */
     public static boolean isWindows()
     {
         return System.getProperty("os.name").startsWith("Windows");
@@ -124,7 +124,7 @@ public class Platform
         return false;
     }
 
-    /** Register handler for events from the Application Menu on MacOS */
+    /** Register handler for events from the Application Menu on MacOS. */
     public static void registerSpecialMacHandler(SpecialMacHandler handler)
     {
         try
@@ -136,7 +136,7 @@ public class Platform
             Constructor constructor = registerClass.getConstructor(arglist);
             constructor.newInstance(args);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             StringUtils.printException(e);
         }

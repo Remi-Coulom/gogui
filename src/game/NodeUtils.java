@@ -239,7 +239,7 @@ public class NodeUtils
         return father.variationBefore(node);
     }
 
-    /** Return previous variation before this node */
+    /** Return previous variation before this node. */
     public static Node getPreviousEarlierVariation(Node node)
     {
         Node child = node;

@@ -65,11 +65,8 @@ public class GuiUtils
     public static boolean isNormalSizeMode(JFrame window)
     {
         int state = window.getExtendedState();
-        int mask =
-            Frame.MAXIMIZED_BOTH |
-            Frame.MAXIMIZED_VERT |
-            Frame.MAXIMIZED_HORIZ |
-            Frame.ICONIFIED;
+        int mask = Frame.MAXIMIZED_BOTH | Frame.MAXIMIZED_VERT
+            | Frame.MAXIMIZED_HORIZ | Frame.ICONIFIED;
         return ((state & mask) == 0);
     }
 

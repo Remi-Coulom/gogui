@@ -148,7 +148,7 @@ public final class Node
         return moves;
     }
 
-    /** Child of main variation or null if no child */
+    /** Child of main variation or null if no child. */
     public Node getChild()
     {
         if (getNumberChildren() == 0)

@@ -5,7 +5,6 @@
 
 package gogui;
 
-import java.io.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import javax.swing.ImageIcon;

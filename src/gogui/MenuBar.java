@@ -842,7 +842,7 @@ public class MenuBar
         String line;
         try
         {
-            while((line = reader.readLine()) != null)
+            while ((line = reader.readLine()) != null)
             {
                 if (m_numberRecent >= m_maxRecent - 1)
                     break;
