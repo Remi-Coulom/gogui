@@ -65,8 +65,10 @@ class AnalyzeCommand
                 {
                     setSelectedIndex(i);
                     if (prefs.getAnalyzeCommandEnabled())
+                    {
                         setEnabled(true);
-                    setCommand(true);
+                        setCommand(true);
+                    }
                     return;
                 }
             throw new Error("Unknown analyze command: " + startCommand);
