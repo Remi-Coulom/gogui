@@ -1396,6 +1396,7 @@ class GoGui
     {
         try
         {
+            m_toolBar.enableAll(true, m_board);
             if (m_program != null && ! m_program.equals(""))
             {
                 Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);

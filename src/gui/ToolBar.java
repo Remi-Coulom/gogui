@@ -81,8 +81,6 @@ class ToolBar
 
     public void enableAll(boolean enable, go.Board board)
     {
-        assert(m_enable != enable);
-        m_enable = enable;
         m_buttonAnalyze.setEnabled(enable);
         m_buttonBeginning.setEnabled(enable);
         m_buttonBackward.setEnabled(enable);
@@ -119,8 +117,6 @@ class ToolBar
     private boolean m_analyzeWasEnabled;
 
     private boolean m_computerButtonsEnabled = true;
-
-    private boolean m_enable = true;
 
     private ActionListener m_listener;
 
@@ -161,6 +157,7 @@ class ToolBar
         button.setToolTipText(toolTip);
         button.setActionCommand(command);
         button.addActionListener(m_listener);
+        button.setEnabled(false);
         add(button);
         return button;
     }
