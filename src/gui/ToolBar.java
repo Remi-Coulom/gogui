@@ -15,7 +15,7 @@ import board.*;
 class ToolBar
     extends JToolBar
 {
-    ToolBar(ActionListener listener, String analyzeCommand,
+    ToolBar(ActionListener listener, Preferences prefs,
             AnalyzeCommand.Callback callback) throws AnalyzeCommand.Error
     {
         m_listener = listener;
@@ -46,7 +46,7 @@ class ToolBar
         add(new JToolBar.Separator());
         m_buttonAnalyze = addButton(m_prefix + "Gearwheel.png", "analyze",
                                     "Enable analyze command");
-        m_analyzeCommand = new AnalyzeCommand(callback, analyzeCommand);
+        m_analyzeCommand = new AnalyzeCommand(callback, prefs);
         add(m_analyzeCommand);
     }
 

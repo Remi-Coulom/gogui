@@ -45,9 +45,19 @@ public class Options
         }
     }
     
+    public boolean contains(String option)
+    {
+        return getValue(option) != null;
+    }
+
     public Vector getArguments()
     {
         return m_args;
+    }
+
+    public int getInteger(String option) throws Exception
+    {
+        return getInteger(option, 0);
     }
 
     public int getInteger(String option, int defaultValue) throws Exception
@@ -63,6 +73,11 @@ public class Options
         {
             throw new Exception("Option -" + option + " needs integer value.");
         }
+    }
+
+    public String getString(String option) throws Exception
+    {
+        return getString(option, "");
     }
 
     public String getString(String option, String defaultValue)

@@ -44,10 +44,11 @@ class AnalyzeCommand
     public static final int STRINGBOARD = 4;
     public static final int COLORBOARD  = 5;
 
-    AnalyzeCommand(Callback callback, String startCommand) throws Error
+    AnalyzeCommand(Callback callback, Preferences prefs) throws Error
     {
         setEnabled(false);
         m_callback = callback;
+        m_prefs = prefs;
         m_commands = new Vector(32, 32);
         read();
         int numberCommands = m_commands.size();
@@ -56,7 +57,8 @@ class AnalyzeCommand
             addItem(StringUtils.split(getCommand(i), '/')[1]);
         setSelectedIndex(0);
         addPopupMenuListener(this);
-        if (startCommand != null)
+        String startCommand = prefs.getAnalyzeCommand();
+        if (startCommand != null && ! startCommand.equals(""))
         {
             for (int i = 0; i < getItemCount(); ++i)
                 if (getItemAt(i).toString().equals(startCommand))
@@ -92,6 +94,9 @@ class AnalyzeCommand
     }
 
     private Callback m_callback;
+
+    private Preferences m_prefs;
+
     private Vector m_commands;
 
     private String getCommand(int index)
@@ -214,6 +219,7 @@ class AnalyzeCommand
             m_callback.initAnalyzeCommand(type, label, command, title, scale);
         else
             m_callback.setAnalyzeCommand(type, label, command, title, scale);
+        m_prefs.setAnalyzeCommand(label);
     }
 }
 

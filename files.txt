@@ -21,6 +21,7 @@ src/gui/GoGui.java
 src/gui/GoIcon.java
 src/gui/Help.java
 src/gui/MenuBars.java
+src/gui/Preferences.java
 src/gui/SelectProgram.java
 src/gui/SimpleDialogs.java
 src/gui/TimeControl.java

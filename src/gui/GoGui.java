@@ -22,10 +22,9 @@ class GoGui
     implements ActionListener, AnalyzeCommand.Callback, Board.Listener,
                GtpShell.Callback, WindowListener
 {
-    GoGui(String program, int size, String file, int move,
-          String analyzeCommand, boolean gtpShell, String time,
-          boolean verbose, boolean fillPasses, boolean computerNone,
-          boolean autoplay, String gtpFile)
+    GoGui(String program, Preferences prefs, String file, int move,
+          boolean gtpShell, String time, boolean verbose, boolean fillPasses,
+          boolean computerNone, boolean autoplay, String gtpFile)
         throws Gtp.Error, AnalyzeCommand.Error
     {
         if (program != null && ! program.equals(""))
@@ -38,7 +37,8 @@ class GoGui
             m_commandThread.start();
         }
 
-        m_boardSize = size;
+        m_prefs = prefs;
+        m_boardSize = prefs.getBoardSize();
         m_file = file;
         m_fillPasses = fillPasses;
         m_gtpFile = gtpFile;
@@ -48,7 +48,7 @@ class GoGui
         m_verbose = verbose;
 
         Container contentPane = getContentPane();        
-        m_toolBar = new ToolBar(this, analyzeCommand, this);
+        m_toolBar = new ToolBar(this, prefs, this);
         contentPane.add(m_toolBar, BorderLayout.NORTH);
         m_timeControl = new TimeControl();
         m_board = new Board(m_boardSize);
@@ -268,7 +268,7 @@ class GoGui
                     "Graphical user interface for Go programs\n" +
                     "using the Go Text Protocol.\n" +
                     "\n" +
-                    "  -analyze name   initialize analzye command\n" +
+                    "  -analyze name   initialize analyze command\n" +
                     "  -autoplay       auto play games (if computer both)\n" +
                     "  -computer-none  computer plays no side\n" +
                     "  -file filename  load SGF file\n" +
@@ -284,7 +284,9 @@ class GoGui
                 System.out.print(helpText);
                 System.exit(0);
             }
-            String analyzeCommand = opt.getString("analyze", null);
+            Preferences prefs = new Preferences();
+            if (opt.contains("analyze"))
+                prefs.setAnalyzeCommand(opt.getString("analyze"));
             boolean autoplay = opt.isSet("autoplay");
             boolean computerNone = opt.isSet("computer-none");
             String file = opt.getString("file", "");
@@ -292,7 +294,8 @@ class GoGui
             boolean gtpShell = opt.isSet("gtpshell");
             String gtpFile = opt.getString("gtpfile", "");
             int move = opt.getInteger("move", -1);
-            int size = opt.getInteger("size", 19);
+            if (opt.contains("size"))
+                prefs.setBoardSize(opt.getInteger("size"));
             String time = opt.getString("time", null);
             boolean verbose = opt.isSet("verbose");
             Vector arguments = opt.getArguments();
@@ -307,7 +310,7 @@ class GoGui
             else
                 program = SelectProgram.select(null);
             
-            GoGui gui = new GoGui(program, size, file, move, analyzeCommand,
+            GoGui gui = new GoGui(program, prefs, file, move,
                                   gtpShell, time, verbose, fillPasses,
                                   computerNone, autoplay, gtpFile);
         }
@@ -440,6 +443,13 @@ class GoGui
     private String m_name = "Unknown Go Program";
     private String m_pid;
     private String m_version = "?";
+
+    /** Preferences.
+        Preferences are shared between instances created with
+        "Open with program", the last instance of GoGui saves them.
+    */
+    private Preferences m_prefs;
+
     private TimeControl m_timeControl;
     private ToolBar m_toolBar;
     private Vector m_commandList = new Vector(128, 128);
@@ -722,6 +732,7 @@ class GoGui
         {
             if (! checkAbortGame())
                 return;
+            m_prefs.setBoardSize(size);
             newGame(size, m_board.getKomi());
             boardChanged();
         }
@@ -753,9 +764,9 @@ class GoGui
                 return;
             File file = File.createTempFile("gogui-", "*.sgf");
             save(file);
-            GoGui gui = new GoGui(program, m_boardSize, file.toString(),
-                                  m_board.getMoveNumber(), null,
-                                  false, null, m_verbose, m_fillPasses,
+            GoGui gui = new GoGui(program, m_prefs, file.toString(),
+                                  m_board.getMoveNumber(), false, null,
+                                  m_verbose, m_fillPasses,
                                   m_computerNoneOption, m_autoplay, "");
 
         }
@@ -800,7 +811,7 @@ class GoGui
             }
             catch (Exception e)
             {
-                showError("Printing failed: " + e.getMessage());
+                showError("Printing failed.", e);
             }
         }
     }
@@ -826,7 +837,7 @@ class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError(e.getMessage());
+            showError("Could not save game.", e);
         }
     }
 
@@ -845,7 +856,7 @@ class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError(e.getMessage());
+            showError("Could not save position.", e);
         }
     }
 
@@ -1045,7 +1056,17 @@ class GoGui
         dispose();
         assert(m_instanceCount > 0);
         if (--m_instanceCount == 0)
+        {
+            try
+            {
+                m_prefs.save();
+            }
+            catch (Preferences.Error e)
+            {
+                showError("Could not save preferences.", e);
+            }
             System.exit(0);
+        }
     }
 
     private void computerBlack()
@@ -1329,7 +1350,7 @@ class GoGui
         }
         catch (sgf.Reader.Error e)
         {
-            showError("Could not read file\n" + e.getMessage());
+            showError("Could not read file.", e);
         }
         catch (Gtp.Error e)
         {
@@ -1422,7 +1443,7 @@ class GoGui
         }
         catch (IOException e)
         {
-            showError(e.getMessage());
+            showError("Could not run program.", e);
         }
         catch (InterruptedException e)
         {
@@ -1469,7 +1490,7 @@ class GoGui
         }
         catch (FileNotFoundException e)
         {
-            showError(e.getMessage());
+            showError("Could not send commands.", e);
             return;
         }
         while (true)
@@ -1483,7 +1504,7 @@ class GoGui
             }
             catch (IOException e)
             {
-                showError(e.getMessage());
+                showError("Sending commands aborted.", e);
                 return;
             }
         }
@@ -1570,6 +1591,16 @@ class GoGui
     {
         m_board.showDoubleBoard(board, scale);
         m_boardNeedsReset = true;
+    }
+
+    private void showError(String message, Exception e)
+    {
+        String m = e.getMessage();
+        String c = e.getClass().getName();
+        if (m == null)
+            showError(message + "\n" + e.getClass().getName());
+        else
+            showError(message + "\n" + m);
     }
 
     private void showError(String message)
