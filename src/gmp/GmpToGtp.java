@@ -235,7 +235,10 @@ public class GmpToGtp
             response.append("PASS");
             return true;
         }
-        response.append((char)('A' + move.m_x));
+        int x = 'A' + move.m_x;
+        if (x >= 'I')
+            ++x;
+        response.append((char)(x));
         response.append(move.m_y + 1);
         return true;
     }
@@ -273,8 +276,11 @@ public class GmpToGtp
             int y = -1;
             if (! arg.equals("PASS"))
             {
-                x = (arg.charAt(0) - 'A');
-                y = Integer.parseInt(arg.substring(1));
+                char xChar = arg.charAt(0);
+                if (xChar >= 'J')
+                    --xChar;
+                x = (xChar - 'A');
+                y = Integer.parseInt(arg.substring(1)) - 1;
                 
             }
             return m_gmp.play(isBlack, x, y, response);

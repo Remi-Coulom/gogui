@@ -64,9 +64,12 @@ class Cmd
                 result.append("PASS");
             else
             {
-                char xChar = (char)('A' + move.m_x);
+                int x = 'A' + move.m_x;
+                if (x >= 'I')
+                    ++x;
+                char xChar = (char)(x);
                 result.append(xChar);
-                result.append(move.m_y);
+                result.append(move.m_y + 1);
             }
         }
         return result.toString();
