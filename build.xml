@@ -8,6 +8,8 @@ $Source$
 
 <project name="GoGui" default="all">
 
+<property name="version" value="0.4.x"/>
+
 <property environment="env"/>
 <property name="xsldir" value="${env.XSLDIR}"/>
 <available property="xslAvailable" file="${xsldir}/html/chunk.xsl"/>
@@ -279,14 +281,21 @@ and set the environment variable XSLDIR to the installation directory.
 </jar>
 </target>
 
-<target name="version">
+<target name="version" depends="versionCheckUptodate" unless="versionUptodate">
 <copy
  file="src/version/Version.java.in"
  tofile="src/version/Version.java" overwrite="true"/>
-<loadfile property="version" srcFile="build/version.txt">
-<filterchain><striplinebreaks/></filterchain>
-</loadfile>
 <replace file="src/version/Version.java" token="@VERSION@" value="${version}"/>
+<copy
+ file="doc/xml/version.xml.in"
+ tofile="doc/xml/version.xml" overwrite="true"/>
+<replace file="doc/xml/version.xml" token="@VERSION@" value="${version}"/>
+</target>
+
+<target name="versionCheckUptodate">
+<uptodate property="versionUptodate" targetfile="src/version/Version.java">
+<srcfiles dir="." includes="build.xml,src/version/Version.java.in,doc/xml/version.xml.in"/>
+</uptodate>
 </target>
 
 </project>
