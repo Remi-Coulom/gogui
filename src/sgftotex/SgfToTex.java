@@ -22,25 +22,25 @@ class SgfToTex
         {
             String options[] = {
                 "config:",
+                "force",
                 "help",
                 "pass",
                 "version"
             };
             Options opt = new Options(args, options);
             opt.handleConfigOption();
-            boolean usePass = false;
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
                 System.exit(0);
             }
-            if (opt.isSet("pass"))
-                usePass = true;
             if (opt.isSet("version"))
             {
                 System.out.println("SgfToTex " + Version.get());
                 System.exit(0);
             }
+            boolean usePass = opt.isSet("pass");
+            boolean force = opt.isSet("force");
             Vector arguments = opt.getArguments();
             InputStream in;
             OutputStream out;
@@ -66,7 +66,7 @@ class SgfToTex
                 else
                     outFileName = (String)arguments.get(1);
                 File outFile = new File(outFileName);
-                if (outFile.exists())
+                if (outFile.exists() && ! force)
                     throw new Exception("File " + outFile + " already exists");
                 out = new FileOutputStream(outFile);
             }
@@ -129,6 +129,7 @@ class SgfToTex
         out.print("Usage: java -jar sgftotex.jar [file.sgf [file.tex]]\n" +
                   "\n" +
                   "-config  config file\n" +
+                  "-force   overwrite existing files\n" +
                   "-help    display this help and exit\n" +
                   "-pass    use \\pass command\n" +
                   "-version print version and exit\n");
