@@ -706,7 +706,7 @@ public final class Gtp
 
     private static boolean isResponseLine(String line)
     {
-        if (line.length() < 2)
+        if (line.length() < 1)
             return false;
         char c = line.charAt(0);
         return (c == '=' || c == '?');
@@ -820,10 +820,10 @@ public final class Gtp
                 m_callback.receivedResponse(error, line + "\n");
         }
         m_fullResponse = response.toString();
-        assert(response.length() >= 4);            
+        assert(response.length() >= 3);            
         int index = response.indexOf(" ");
         if (index < 0)
-            m_response = response.substring(0, response.length() - 2);
+            m_response = response.substring(1, response.length() - 2);
         else
             m_response =
                 response.substring(index + 1, response.length() - 2);
