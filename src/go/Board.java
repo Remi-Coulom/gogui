@@ -87,9 +87,8 @@ public class Board
             Point p = m_allPoints[i]; 
             Color c = getColor(p);
             if (c != Color.EMPTY)
-                allEmpty = false;
-            if (c != Color.EMPTY)
             {
+                allEmpty = false;
                 if (! getDead(p))
                     setScore(p, c);
             }
