@@ -24,8 +24,8 @@ class MenuBar
         m_menuBar.add(createGameMenu());
         m_menuBar.add(createSetupMenu());
         m_menuBar.add(createSettingsMenu());
-        m_menuAnalyze = createAnalyzeMenu();
-        m_menuBar.add(m_menuAnalyze);
+        m_menuExperts = createExpertsMenu();
+        m_menuBar.add(m_menuExperts);
         m_menuBar.add(createHelpMenu());
     }
 
@@ -146,9 +146,9 @@ class MenuBar
 
     private JCheckBoxMenuItem m_itemSetup;
 
-    private JMenu m_menuAnalyze;
-
     private JMenu m_menuComputerColor;
+
+    private JMenu m_menuExperts;
 
     private JMenuBar m_menuBar;
 
@@ -229,18 +229,6 @@ class MenuBar
         return addMenuItem(menu, item, mnemonic, command);
     }
 
-    private JMenu createAnalyzeMenu()
-    {
-        JMenu menu = new JMenu("Experts");
-        menu.setMnemonic(KeyEvent.VK_X);
-        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
-                    "analyze");
-        m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
-                                     KeyEvent.VK_F8, 0, "gtp-shell");
-        addMenuItem(menu, "Send GTP file", KeyEvent.VK_S, "gtp-file");
-        return menu;
-    }
-
     private JMenu createBoardSizeMenu()
     {
         JMenu menu = new JMenu("Size");
@@ -270,6 +258,18 @@ class MenuBar
                                           "computer-both");
         m_itemComputerNone = addRadioItem(menu, group, "None", KeyEvent.VK_N,
                                           "computer-none");
+        return menu;
+    }
+
+    private JMenu createExpertsMenu()
+    {
+        JMenu menu = new JMenu("Experts");
+        menu.setMnemonic(KeyEvent.VK_X);
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
+                    "analyze");
+        m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
+                                     KeyEvent.VK_F8, 0, "gtp-shell");
+        addMenuItem(menu, "Send GTP file", KeyEvent.VK_S, "gtp-file");
         return menu;
     }
 
@@ -412,7 +412,7 @@ class MenuBar
 
     private void disableComputerItems()
     {
-        m_menuAnalyze.setEnabled(false);
+        m_menuExperts.setEnabled(false);
         m_menuComputerColor.setEnabled(false);
         m_itemComputerPlay.setEnabled(false);
     }
