@@ -182,7 +182,7 @@ class GtpShellText
 
 public class GtpShell
     extends JFrame
-    implements ActionListener, Gtp.IOCallback, ItemListener
+    implements ActionListener, Gtp.IOCallback
 {
     public interface Callback
     {
@@ -253,10 +253,6 @@ public class GtpShell
     public boolean getAutoNumber()
     {
         return m_autoNumber;
-    }
-
-    public void itemStateChanged(ItemEvent e)
-    {
     }
 
     public void loadHistory()
@@ -814,7 +810,6 @@ public class GtpShell
         m_comboBox.setEditable(true);
         m_comboBox.setFont(m_gtpShellText.getFont());
         m_comboBox.addActionListener(this);
-        m_comboBox.addItemListener(this);
         // Necessary for Mac Java 1.4.2, otherwise combobox will not have
         // focus after window is re-activated
         addWindowListener(new WindowAdapter()
