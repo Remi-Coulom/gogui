@@ -26,6 +26,7 @@ class GtpShellText
     {
         m_historyMin = historyMin;
         m_historyMax = historyMax;
+        m_highlight = true;
         int fontSize = GuiUtils.getDefaultMonoFontSize();
         Font font = new Font("Monospaced", Font.PLAIN, fontSize);
         setFont(font);
@@ -80,6 +81,11 @@ class GtpShellText
         return -1;
     }
 
+    public boolean getHighlight()
+    {
+        return m_highlight;
+    }
+
     public int getLinesTruncated()
     {
         return m_truncated;
@@ -99,12 +105,19 @@ class GtpShellText
         }
     }
 
+    public void setHighlight(boolean highlight)
+    {
+        m_highlight = highlight;
+    }
+
     public void setPositionToEnd()
     {
         setEditable(true);
         setCaretPosition(getStyledDocument().getLength());
         setEditable(false);
     }
+
+    private boolean m_highlight;
 
     private int m_historyMin;
 
@@ -127,7 +140,7 @@ class GtpShellText
         }
         StyledDocument doc = getStyledDocument();
         Style s = null;
-        if (style != null)
+        if (style != null && m_highlight)
             s = getStyle(style);
         try
         {
@@ -189,9 +202,11 @@ public class GtpShell
         m_historyMin = prefs.getInt("gtpshell-history-min");
         m_historyMax = prefs.getInt("gtpshell-history-max");
         m_disableCompletions = prefs.getBool("gtpshell-disable-completions");
-        createMenu();
+        boolean highlight = prefs.getBool("gtpshell-highlight");
+        createMenu(highlight);
         Container contentPane = getContentPane();
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
+        m_gtpShellText.setHighlight(highlight);
         m_scrollPane = new JScrollPane(m_gtpShellText,
                                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                                        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -231,6 +246,8 @@ public class GtpShell
             commandCompletion();
         else if (command.equals("gogui"))
             m_callback.toTop();
+        else if (command.equals("highlight"))
+            highlight();
         else if (command.equals("save-log"))
             saveLog();
         else if (command.equals("save-commands"))
@@ -606,7 +623,9 @@ public class GtpShell
 
     private JComboBox m_comboBox;
 
-    private JCheckBoxMenuItem m_commandCompletion;
+    private JCheckBoxMenuItem m_itemCommandCompletion;
+
+    private JCheckBoxMenuItem m_itemHighlight;
 
     private JMenuItem m_sendGtpFile;
 
@@ -732,15 +751,15 @@ public class GtpShell
 
     private void commandCompletion()
     {
-        m_disableCompletions = ! m_commandCompletion.isSelected();
+        m_disableCompletions = ! m_itemCommandCompletion.isSelected();
         m_prefs.setBool("gtpshell-disable-completions", m_disableCompletions);
     }
 
-    private void createMenu()
+    private void createMenu(boolean highlight)
     {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuFile());
-        menuBar.add(createMenuSettings());
+        menuBar.add(createMenuSettings(highlight));
         menuBar.add(createMenuWindows());
         setJMenuBar(menuBar);
     }
@@ -761,13 +780,16 @@ public class GtpShell
         return menu;
     }
 
-    private JMenu createMenuSettings()
+    private JMenu createMenuSettings(boolean highlight)
     {
         JMenu menu = new JMenu("Settings");
         menu.setMnemonic(KeyEvent.VK_S);
-        m_commandCompletion = new JCheckBoxMenuItem("Popup completions");
-        m_commandCompletion.setSelected(! m_disableCompletions);
-        addMenuItem(menu, m_commandCompletion, KeyEvent.VK_C,
+        m_itemHighlight = new JCheckBoxMenuItem("Highlight");
+        m_itemHighlight.setSelected(highlight);
+        addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
+        m_itemCommandCompletion = new JCheckBoxMenuItem("Popup completions");
+        m_itemCommandCompletion.setSelected(! m_disableCompletions);
+        addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_C,
                     "command-completion");
         return menu;
     }
@@ -826,6 +848,13 @@ public class GtpShell
         if (! dir.exists())
             dir.mkdir();
         return new File(dir, "gtpshell-history");
+    }
+
+    private void highlight()
+    {
+        boolean highlight = m_itemHighlight.isSelected();
+        m_gtpShellText.setHighlight(highlight);
+        m_prefs.setBool("gtpshell-highlight", highlight);
     }
 
     private void popupCompletions()
@@ -951,6 +980,7 @@ public class GtpShell
     private static void setPrefsDefaults(Preferences prefs)
     {
         prefs.setBoolDefault("gtpshell-disable-completions", false);
+        prefs.setBoolDefault("gtpshell-highlight", true);
         prefs.setIntDefault("gtpshell-history-max", 3000);
         prefs.setIntDefault("gtpshell-history-min", 2000);
     }
