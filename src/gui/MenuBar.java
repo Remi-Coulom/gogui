@@ -653,7 +653,7 @@ class MenuBar
         m_itemMakeMainVar = addMenuItem(menu, "Make main variation",
                                         KeyEvent.VK_M, "make-main-variation");
         m_itemKeepOnlyMainVar = addMenuItem(menu,
-                                            "Delete all variations",
+                                            "Delete side variations",
                                             KeyEvent.VK_D,
                                             "keep-only-main-variation");
         m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
