@@ -44,7 +44,7 @@ $Source$
 </delete>
 </target>
 
-<target name="compile" depends="version">
+<target name="compile" depends="version,doc">
 <javac srcdir="src" destdir="build" source="1.4" deprecation="true"
  optimize="true" listfiles="yes"/>
 <copy todir="build">
