@@ -13,6 +13,51 @@ import java.util.*;
 import game.*;
 import go.*;
 import utils.ErrorMessage;
+import utils.ProgressShow;
+
+//----------------------------------------------------------------------------
+
+class ByteCountInputStream
+    extends InputStream
+{
+    public ByteCountInputStream(InputStream in)
+    {
+        m_in = in;
+    }
+
+    public long getCount()
+    {
+        return m_byteCount;
+    }
+
+    public int read() throws IOException
+    {
+        int result = m_in.read();
+        if (result > 0)
+            ++m_byteCount;
+        return result;
+    }
+
+    public int read(byte[] b) throws IOException
+    {
+        int result = m_in.read(b);
+        if (result > 0)
+            m_byteCount += result;
+        return result;
+    }
+
+    public int read(byte[] b, int off, int len) throws IOException
+    {
+        int result = m_in.read(b, off, len);
+        if (result > 0)
+            m_byteCount += result;
+        return result;
+    }
+
+    private long m_byteCount;
+
+    private InputStream m_in;
+}
 
 //----------------------------------------------------------------------------
 
@@ -36,12 +81,19 @@ public class Reader
         @param name Name prepended to error messages (must be the filename
         for FileInputStream to allow reopening the stream after a charset
         change)
+        @param progressShow Callback to show progress, can be null
+        @param size Size of stream if progressShow != null
     */
-    public Reader(InputStream in, String name)
+    public Reader(InputStream in, String name, ProgressShow progressShow,
+                  long size)
         throws SgfError
     {
         m_name = name;
+        m_progressShow = progressShow;
+        m_size = size;
         m_isFile = (in instanceof FileInputStream);
+        if (progressShow != null)
+            progressShow.showProgress(0);
         try
         {
             readSgf(in, "ISO-8859-1");
@@ -80,13 +132,23 @@ public class Reader
 
     private boolean m_isFile;
 
+    private int m_lastPercent;
+
+    private long m_size;
+
+    private ByteCountInputStream m_byteCountInputStream;
+
     private java.io.Reader m_reader;
 
     private GameInformation m_gameInformation;
 
     private GameTree m_gameTree;
 
+    private ProgressShow m_progressShow;
+
     private StreamTokenizer m_tokenizer;
+
+    private String m_charset;
 
     private String m_name;
 
@@ -199,6 +261,17 @@ public class Reader
     private Node readNext(Node father, boolean isRoot)
         throws IOException, SgfError, SgfCharsetChanged
     {
+        if (m_progressShow != null)
+        {
+            int percent;
+            if (m_size > 0)
+                percent = (int)(m_byteCountInputStream.getCount() * 100 / m_size);
+            else
+                percent = 100;
+            if (percent != m_lastPercent)
+                m_progressShow.showProgress(percent);
+            m_lastPercent = percent;
+        }
         m_tokenizer.nextToken();
         int ttype = m_tokenizer.ttype;
         if (ttype == '(')
@@ -352,6 +425,11 @@ public class Reader
         try
         {
             m_gameInformation = new GameInformation(19);
+            if (m_progressShow != null)
+            {
+                m_byteCountInputStream = new ByteCountInputStream(in);
+                in = m_byteCountInputStream;
+            }
             InputStreamReader reader;
             try
             {

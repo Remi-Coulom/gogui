@@ -239,7 +239,8 @@ public class GtpTerminal
         try
         {
             FileInputStream fileStream = new FileInputStream(file);
-            sgf.Reader reader = new sgf.Reader(fileStream, file.toString());
+            sgf.Reader reader =
+                new sgf.Reader(fileStream, file.toString(), null, 0);
             GameTree gameTree = reader.getGameTree();
             GameInformation gameInformation = gameTree.getGameInformation();
             if (gameInformation.m_handicap > 0)

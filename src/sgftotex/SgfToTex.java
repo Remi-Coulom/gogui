@@ -87,7 +87,7 @@ class SgfToTex
                                 String title, boolean usePass)
         throws sgf.Reader.SgfError
     {
-        sgf.Reader reader = new sgf.Reader(in, null);
+        sgf.Reader reader = new sgf.Reader(in, null, null, 0);
         new latex.Writer(title, out, reader.getGameTree(), usePass);
     }
 

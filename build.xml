@@ -309,6 +309,7 @@ installation directory.
  utils/ErrorMessage.class
  utils/MessageQueue.class
  utils/Options.class
+ utils/ProgressShow*.class
  utils/StringUtils.class
  version/Version.class
 "/>
@@ -422,6 +423,7 @@ installation directory.
  utils/FileUtils.class
  utils/MessageQueue.class
  utils/Options.class
+ utils/ProgressShow*.class
  utils/StringUtils.class
  version/Version.class
 "/>
@@ -510,6 +512,7 @@ installation directory.
  utils/ErrorMessage.class
  utils/FileUtils.class
  utils/Options.class
+ utils/ProgressShow*.class
  utils/StringUtils.class
  version/Version.class
 "/>
@@ -546,6 +549,7 @@ installation directory.
  utils/FileUtils.class
  utils/MessageQueue.class
  utils/Options.class
+ utils/ProgressShow*.class
  utils/StringUtils.class
  version/Version.class
 "/>

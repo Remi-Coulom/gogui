@@ -376,7 +376,7 @@ public class GtpAdapter
         {
             FileInputStream fileStream =
                 new FileInputStream(new File(filename));
-            sgf.Reader reader = new sgf.Reader(fileStream, filename);
+            sgf.Reader reader = new sgf.Reader(fileStream, filename, null, 0);
             GameTree gameTree = reader.getGameTree();
             m_boardSize = gameTree.getGameInformation().m_boardSize;
             m_board = new Board(m_boardSize);

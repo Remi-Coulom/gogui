@@ -834,7 +834,7 @@ public class TwoGtp
             {
                 FileInputStream fileStream = new FileInputStream(file);
                 sgf.Reader reader =
-                    new sgf.Reader(fileStream, file.toString());
+                    new sgf.Reader(fileStream, file.toString(), null, 0);
                 Node root = reader.getGameTree().getRoot();
                 m_games.add(Compare.getAllAsMoves(root));
             }

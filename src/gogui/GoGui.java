@@ -2095,14 +2095,46 @@ class GoGui
         return true;
     }
 
+    private static class LoadFileRunnable
+        implements GuiUtils.ProgressRunnable
+    {
+        LoadFileRunnable(FileInputStream in, File file)
+        {
+            m_in = in;
+            m_file = file;            
+        }
+
+        public sgf.Reader getReader()
+        {
+            return m_reader;
+        }
+
+        public void run(ProgressShow progressShow) throws Throwable
+        {
+            m_reader = new sgf.Reader(m_in, m_file.toString(), progressShow,
+                                      m_file.length());
+        }
+
+        private File m_file;
+
+        private FileInputStream m_in;
+
+        private sgf.Reader m_reader;
+    }
+    
     private void loadFile(File file, int move)
     {
         try
         {
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
-            FileInputStream fileStream = new FileInputStream(file);
-            sgf.Reader reader = new sgf.Reader(fileStream, file.toString());
+            FileInputStream in = new FileInputStream(file);
+            LoadFileRunnable runnable = new LoadFileRunnable(in, file);
+            if (file.length() > 500000)
+                GuiUtils.runProgess(this, "Loading...", runnable);
+            else
+                runnable.run(null);
+            sgf.Reader reader = runnable.getReader();
             GameInformation gameInformation =
                 reader.getGameTree().getGameInformation();
             initGame(gameInformation.m_boardSize);
@@ -2116,13 +2148,21 @@ class GoGui
             computerNone();
             boardChangedBegin(false, true);
         }
-        catch (FileNotFoundException e)
+        catch (Throwable t)
         {
-            showError("File not found:\n" + file);
-        }
-        catch (sgf.Reader.SgfError e)
-        {
-            showError("Could not read file:", e);
+            if (t instanceof FileNotFoundException)
+            {
+                showError("File not found:\n" + file);
+            }
+            else if (t instanceof sgf.Reader.SgfError)
+            {
+                showError("Could not read file:", (sgf.Reader.SgfError)t);
+            }
+            else
+            {
+                t.printStackTrace();
+                assert(false);
+            }
         }
     }
 
