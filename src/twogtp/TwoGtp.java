@@ -450,14 +450,6 @@ public class TwoGtp
         return false;
     }
 
-    private boolean sendEither(String command, StringBuffer response)
-    {
-        if (sendSingle(m_black, command, response))
-            return true;
-        response.setLength(0);
-        return sendSingle(m_white, command, response);
-    }
-
     private void findInitialGameIndex()
     {
         m_gameIndex = 0;
