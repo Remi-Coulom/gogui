@@ -27,11 +27,12 @@ public class GtpDisplay
         throws Exception
     {
         super(in, out, null);
-        if (program.equals(""))
-            throw new Exception("No program set.");
-        m_gtp = new Gtp(program, verbose, null);
-        m_gtp.queryProtocolVersion();
-        m_gtp.querySupportedCommands();
+        if (! (program == null || program.equals("")))
+        {
+            m_gtp = new Gtp(program, verbose, null);
+            m_gtp.queryProtocolVersion();
+            m_gtp.querySupportedCommands();
+        }
         m_size = 19;
         m_board = new go.Board(m_size);
         m_frame = new JFrame();
@@ -43,20 +44,32 @@ public class GtpDisplay
                 }
             };
         m_frame.addWindowListener(windowAdapter);
-        m_name = m_gtp.queryName();
-        String version = m_gtp.queryVersion();
-        String title = "GtpDisplay: " + m_name;
-        if (! version.equals(""))
-            title = title + ":" + version;
-        m_frame.setTitle(title);
-        Container contentPane = m_frame.getContentPane();        
+        if (m_gtp != null)
+        {
+            m_name = m_gtp.queryName();
+            String title = "GtpDisplay: " + m_name;
+            m_frame.setTitle(title);
+        }
+        else
+            m_frame.setTitle("GtpDisplay");
+        Container contentPane = m_frame.getContentPane();
         m_guiBoard = new gui.Board(m_board);
-        m_guiBoard.setShowCursor(false);
+        if (m_gtp != null)
+            m_guiBoard.setShowCursor(false);
+        m_guiBoard.setListener(new gui.Board.Listener()
+            {
+                public void fieldClicked(go.Point point,
+                                         boolean modifiedSelect)
+                {
+                    cbFieldClicked(point, modifiedSelect);
+                }
+            });
         m_squareLayout = new SquareLayout();
         m_squareLayout.setPreferMultipleOf(2 + 2 * m_size);
         JPanel panel = new JPanel(m_squareLayout);
         panel.add(m_guiBoard);
         contentPane.add(panel);
+        contentPane.add(createStatusBar(), BorderLayout.SOUTH);
         GuiUtils.setGoIcon(m_frame);
         m_frame.pack();
         m_frame.setVisible(true);
@@ -64,15 +77,18 @@ public class GtpDisplay
 
     public void close()
     {
-        m_gtp.close();
-        m_gtp.waitForExit();
+        if (m_gtp != null)
+        {
+            m_gtp.close();
+            m_gtp.waitForExit();
+        }
         StringBuffer error = new StringBuffer();
         if (! invokeAndWait(new Runnable()
             {
                 public void run()
                 {
                     if (m_frame != null)
-                        m_frame.setTitle("GtpDisplay: Disconnected");
+                        showStatus("Disconnected");
                 }
             }, error))
             System.err.println(error);
@@ -124,22 +140,19 @@ public class GtpDisplay
         return status;
     }
 
-    public void interruptProgram(Gtp gtp)
+    public void interruptCommand()
     {
+        if (m_gtp == null)
+            return;
         try
         {
-            if (gtp.isInterruptSupported())
-                gtp.sendInterrupt();
+            if (m_gtp.isInterruptSupported())
+                m_gtp.sendInterrupt();
         }
         catch (GtpError e)
         {
             System.err.println(e);
         }
-    }
-
-    public void interruptCommand()
-    {
-        interruptProgram(m_gtp);
     }
 
     /** Only accept this board size.
@@ -149,7 +162,11 @@ public class GtpDisplay
 
     private go.Board m_board;
 
+    private go.Color m_color;
+
     private gui.Board m_guiBoard;
+
+    private go.Point m_fieldClicked;
 
     private Gtp m_gtp;
 
@@ -157,13 +174,40 @@ public class GtpDisplay
 
     private JFrame m_frame;
 
+    private JLabel m_statusLabel;
+
     private String m_name;
 
     private SquareLayout m_squareLayout;
 
+    private void cbFieldClicked(go.Point point, boolean modifiedSelect)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        synchronized (this)
+        {
+            if (modifiedSelect)
+                m_fieldClicked = null;
+            else
+                m_fieldClicked = point;
+            notify();
+        }
+    }
+
+    private void clearStatus()
+    {
+        showStatus(" ");
+    }
+
     private void closeFrame()
     {
         assert(SwingUtilities.isEventDispatchThread());
+        if (m_gtp == null)
+        {
+            if (! SimpleDialogs.showQuestion(m_frame,
+                                             "Terminate GtpDisplay?"))
+                return;
+            System.exit(0);
+        }
         m_frame.dispose();
         m_frame = null;
     }
@@ -178,16 +222,19 @@ public class GtpDisplay
             response.append("Invalid board size");
             return false;
         }
-        String command = m_gtp.getCommandBoardsize(argument.m_integer);
-        if (command != null)
+        int size = argument.m_integer;
+        if (m_gtp != null)
         {
+            String command = m_gtp.getCommandBoardsize(size);
+            if (command != null)
+            {
+                if (! send(command, response))
+                    return false;
+            }
+            command = m_gtp.getCommandClearBoard(size);
             if (! send(command, response))
                 return false;
         }
-        int size = argument.m_integer;
-        command = m_gtp.getCommandClearBoard(size);
-        if (! send(command, response))
-            return false;
         m_size = size;
         if (! invokeAndWait(new Runnable()
             {
@@ -207,9 +254,12 @@ public class GtpDisplay
 
     private boolean cmdClearBoard(StringBuffer response)
     {
-        String command = m_gtp.getCommandClearBoard(m_size);
-        if (! send(command, response))
-            return false;
+        if (m_gtp != null)
+        {
+            String command = m_gtp.getCommandClearBoard(m_size);
+            if (! send(command, response))
+                return false;
+        }
         if (! invokeAndWait(new Runnable()
             {
                 public void run()
@@ -228,32 +278,58 @@ public class GtpDisplay
         ColorArgument argument = parseColorArgument(cmdArray, response);
         if (argument == null)
             return false;
-        return cmdGenmove(argument.m_color, response);
-    }
-
-    private boolean cmdGenmove(go.Color color, StringBuffer response)
-    {
-        String command = m_gtp.getCommandGenmove(color);
-        if (! send(command, response))
-            return false;
-        go.Point point;
-        try
+        go.Color color = argument.m_color;
+        go.Point point;        
+        if (m_gtp == null)
         {
-            point = GtpUtils.parsePoint(response.toString(), m_size);
+            m_color = color;
+            if (! invokeAndWait(new Runnable()
+                {
+                    public void run()
+                    {
+                        showStatus("Input move for " + m_color
+                                   + " (right click for pass)");
+                    }
+                }, response))
+                return false;
+            synchronized (this)
+            {
+                try
+                {
+                    wait();
+                }
+                catch (InterruptedException e)
+                {
+                    System.err.println("InterruptedException");
+                }
+                point = m_fieldClicked;
+            }
+            response.append(go.Point.toString(point));
         }
-        catch (GtpError e)
+        else
         {
-            response.append("Program played illegal move");
-            return false;
+            String command = m_gtp.getCommandGenmove(color);
+            if (! send(command, response))
+                return false;
+            try
+            {
+                point = GtpUtils.parsePoint(response.toString(), m_size);
+            }
+            catch (GtpError e)
+            {
+                response.append("Program played illegal move");
+                return false;
+            }
         }
         m_move = new Move(point, color);
         if (! invokeAndWait(new Runnable()
             {
                 public void run()
-                {
+                {                    
                     m_board.play(m_move);
                     m_guiBoard.updateFromGoBoard();
                     m_guiBoard.markLastMove(m_move.getPoint());
+                    clearStatus();
                 }
             }, response))
             return false;
@@ -262,25 +338,28 @@ public class GtpDisplay
 
     private boolean cmdListCommands(StringBuffer response)
     {
-        Vector commands = m_gtp.getSupportedCommands();
-        for (int i = 0; i < commands.size(); ++i)
+        if (m_gtp != null)
         {
-            String cmd = (String)commands.get(i);
-            if (cmd.equals("boardsize")
-                || cmd.equals("black")
-                || cmd.equals("clear_board")
-                || cmd.equals("genmove")
-                || cmd.equals("genmove_black")
-                || cmd.equals("genmove_white")
-                || cmd.equals("help")
-                || cmd.equals("list_commands")
-                || cmd.equals("play")
-                || cmd.equals("protocol_version")
-                || cmd.equals("quit")
-                || cmd.equals("white"))
-                continue;
-            response.append(cmd);
-            response.append("\n");
+            Vector commands = m_gtp.getSupportedCommands();
+            for (int i = 0; i < commands.size(); ++i)
+            {
+                String cmd = (String)commands.get(i);
+                if (cmd.equals("boardsize")
+                    || cmd.equals("black")
+                    || cmd.equals("clear_board")
+                    || cmd.equals("genmove")
+                    || cmd.equals("genmove_black")
+                    || cmd.equals("genmove_white")
+                    || cmd.equals("help")
+                    || cmd.equals("list_commands")
+                    || cmd.equals("play")
+                    || cmd.equals("protocol_version")
+                    || cmd.equals("quit")
+                    || cmd.equals("white"))
+                    continue;
+                response.append(cmd);
+                response.append("\n");
+            }
         }
         response.append("boardsize\n");
         response.append("clear_board\n");        
@@ -294,7 +373,10 @@ public class GtpDisplay
 
     private boolean cmdName(StringBuffer response)
     {
-        response.append(m_name);
+        if (m_gtp == null)
+            response.append("GtpDisplay");
+        else            
+            response.append(m_name);
         return true;
     }
 
@@ -346,7 +428,9 @@ public class GtpDisplay
 
     private boolean cmdQuit(StringBuffer response)
     {
-        return send("quit", response);
+        if (m_gtp != null)
+            return send("quit", response);
+        return true;
     }
 
     private boolean cmdSetFreeHandicap(String cmdArray[],
@@ -391,6 +475,29 @@ public class GtpDisplay
         return true;
     }
 
+    private JComponent createStatusBar()
+    {
+        JPanel outerPanel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new GridLayout(1, 0));
+        outerPanel.add(panel, BorderLayout.CENTER);
+        // Workaround for Java 1.4.1 on Mac OS X: add some empty space
+        // so that status bar does not overlap the window resize widget
+        if (Platform.isMac())
+        {
+            Dimension dimension = new Dimension(20, 1);
+            Box.Filler filler =
+                new Box.Filler(dimension, dimension, dimension);
+            outerPanel.add(filler, BorderLayout.EAST);
+        }
+        JLabel label = new JLabel();
+        label.setBorder(BorderFactory.createLoweredBevelBorder());
+        label.setHorizontalAlignment(SwingConstants.LEFT);
+        panel.add(label);
+        m_statusLabel = label;
+        clearStatus();
+        return outerPanel;
+    }
+
     private boolean invokeAndWait(Runnable runnable, StringBuffer response)
     {
         try
@@ -414,13 +521,16 @@ public class GtpDisplay
     private boolean play(go.Color color, go.Point point,
                          StringBuffer response)
     {
-        String command = m_gtp.getCommandPlay(color) + " ";
-        if (point == null)
-            command = command + "PASS";
-        else
-            command = command + point;
-        if (! send(command, response))
-            return false;
+        if (m_gtp != null)
+        {
+            String command = m_gtp.getCommandPlay(color) + " ";
+            if (point == null)
+                command = command + "PASS";
+            else
+                command = command + point;
+            if (! send(command, response))
+                return false;
+        }
         m_move = new Move(point, color);
         if (! invokeAndWait(new Runnable()
             {
@@ -449,10 +559,20 @@ public class GtpDisplay
         }
     }
 
+    private void showStatus(String text)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        m_statusLabel.setText(text);
+        m_statusLabel.repaint();
+    }
+
     private boolean undo(StringBuffer response)
     {
-        if (! send("undo", response))
-            return false;
+        if (m_gtp != null)
+        {
+            if (! send("undo", response))
+                return false;
+        }
         if (! invokeAndWait(new Runnable()
             {
                 public void run()

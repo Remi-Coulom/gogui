@@ -17,6 +17,7 @@ Go Text Protocol adapter showing the current board in a window.
 <command>gtpdisplay</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-verbose</option></arg>
+<arg><replaceable>program</replaceable></arg>
 
 <command>gtpdisplay</command>
 <arg choice="plain"><option>-help</option></arg>
@@ -31,6 +32,8 @@ Go Text Protocol adapter showing the current board in a window.
 <title>Description</title>
 <para>
 Go Text Protocol adapter showing the current board in a window.
+If no program argument is given, the adapter generates answers to
+genmove commands by waiting for input on the graphical board.
 </para>
 </refsection>
 

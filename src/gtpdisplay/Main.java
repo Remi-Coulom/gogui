@@ -42,12 +42,14 @@ public class Main
             }
             boolean verbose = opt.isSet("verbose");
             Vector arguments = opt.getArguments();
-            if (arguments.size() != 1)
+            if (arguments.size() > 1)
             {
                 printUsage(System.err);
                 System.exit(-1);
             }
-            String program = (String)arguments.get(0);
+            String program = null;
+            if (arguments.size() == 1)
+                program = (String)arguments.get(0);
             GtpDisplay gtpDisplay =
                 new GtpDisplay(System.in, System.out, program, verbose);
             gtpDisplay.mainLoop();

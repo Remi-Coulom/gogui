@@ -271,12 +271,16 @@ installation directory.
  gui/Board*.class
  gui/BoardLabel.class
  gui/Field*.class
+ gui/SimpleDialogs.class
  gtp/*.class
  gtpdisplay/*.class
  images/icon.png
  images/wood.png
+ latex/Filter.class
+ sgf/Filter.class
  utils/GuiUtils.class
  utils/MessageQueue.class
+ utils/Platform.class
  utils/Options.class
  utils/RadialGradient*.class
  utils/SquareLayout.class
