@@ -602,7 +602,7 @@ class GameTreePanel
         int numberChildren = node.getNumberChildren();
         int xChild = x + m_nodeDist;
         int yChild = y;
-        int lastYChild = y;
+        int lastY = y + m_nodeWidth;
         boolean notExpanded =
             (numberChildren > 1 && ! m_expanded.contains(node));
         int maxChildren = numberChildren;
@@ -610,9 +610,10 @@ class GameTreePanel
             maxChildren = Math.min(numberChildren, 1);
         for (int i = 0; i < maxChildren; ++i)
         {
-            graphics.drawLine(x, lastYChild, x, yChild);
+            if (i > 0)
+                graphics.drawLine(x, lastY, x, yChild);
             graphics.drawLine(x, yChild, xChild, yChild);
-            lastYChild = yChild;
+            lastY = yChild;
             yChild = drawGrid(graphics, node.getChild(i), xChild, yChild);
             if (! notExpanded && i < numberChildren - 1)
                 yChild += m_nodeDist;
