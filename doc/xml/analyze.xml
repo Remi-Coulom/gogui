@@ -69,7 +69,8 @@ Use the <userinput>scale</userinput> option, if they are not.
 <listitem>
 The response is a multi-line text and will be displayed in a window
 using syntax highlighting for lines with a single word ending with ':' (bold),
-points and moves (blue), numbers (green), uppercase words (red).
+points and moves (blue), black and white (purple), numbers (green),
+uppercase words (red).
 </listitem>
 </varlistentry>
 
