@@ -36,26 +36,34 @@ public class StringUtils
     /** Print exception to standard error.
         Prints the class name if the exception has no message.
         For exceptions of type Error or RuntimeException, a stack trace
-        is printed.
-        @return A string with the exception message and/or class.
+        is printed in addition.
+        @return A string with an error message from the exception and class name.
     */
     public static String printException(Throwable exception)
     {
         String message = exception.getMessage();
         boolean hasMessage = (message != null && ! message.trim().equals(""));
         String className = exception.getClass().getName();
-        if (exception instanceof RuntimeException
-            || exception instanceof Error)
+        boolean isSevere = (exception instanceof RuntimeException
+                            || exception instanceof Error);     
+        String result;
+        if (isSevere)
+        {
+            result = className;
+            if (hasMessage)
+                result = result + ":" + message;
+        }
+        else
         {
             if (hasMessage)
-                System.err.println(className + ":" + message);
+                result = message;
             else
-                System.err.println(className);
-            exception.printStackTrace();
+                result = className;
         }
-        if (hasMessage)
-            return message;
-        return className;
+        System.err.println(result);
+        if (isSevere)
+            exception.printStackTrace();
+        return result; 
     }
 
     public static String[] split(String s, char separator)
