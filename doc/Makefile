@@ -9,7 +9,9 @@ doc:
           --param admon.graphics 0 \
           --param admon.graphics.path '""' \
           --param chunk.section.depth 0 \
+          --param html.cleanup 1 \
           --param html.stylesheet '"docbook.css"' \
+          --param make.valid.html 1 \
           --param navig.showtitles 0 \
           --param refentry.generate.name 0 \
           --param refentry.generate.title 1 \
