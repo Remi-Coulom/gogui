@@ -60,7 +60,8 @@ public class GuiUtils
 
     public static void setGoIcon(Frame frame)
     {
-        frame.setIconImage(new ImageIcon(m_iconURL).getImage());
+        if (m_iconURL != null)
+            frame.setIconImage(new ImageIcon(m_iconURL).getImage());
     }
 
     private static final int m_defaultMonoFontSize =
