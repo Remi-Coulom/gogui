@@ -272,31 +272,13 @@ public class GtpShell
             return;
         }
         Runnable r = new UpdateResponse(this, error, response);
-        try
-        {
-            SwingUtilities.invokeAndWait(r);
-        }
-        catch (InterruptedException e)
-        {
-        }
-        catch (java.lang.reflect.InvocationTargetException e)
-        {
-        }
+        SwingUtilities.invokeLater(r);
     }
     
     public void receivedStdErr(String s)
     {
         Runnable r = new UpdateStdErr(this, s);
-        try
-        {
-            SwingUtilities.invokeAndWait(r);
-        }
-        catch (InterruptedException e)
-        {
-        }
-        catch (java.lang.reflect.InvocationTargetException e)
-        {
-        }
+        SwingUtilities.invokeLater(r);
     }
 
     public void setInputEnabled(boolean enabled)
