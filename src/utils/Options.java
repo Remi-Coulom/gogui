@@ -147,6 +147,17 @@ public class Options
         }
     }
 
+    /** Creates a new Options instance from command line.
+        Automatically calls handleConfigOption.
+    */
+    public static Options parse(String[] args, String[] specs)
+        throws Exception
+    {
+        Options opt = new Options(args, specs);
+        opt.handleConfigOption();
+        return opt;
+    }
+
     private Vector m_args = new Vector();
 
     private Map m_map = new TreeMap();

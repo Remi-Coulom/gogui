@@ -50,8 +50,7 @@ public class Main
                 "verbose",
                 "version"
             };
-            Options opt = new Options(args, options);
-            opt.handleConfigOption();
+            Options opt = Options.parse(args, options);
             if (opt.isSet("help"))
             {
                 String helpText =

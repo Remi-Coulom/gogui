@@ -86,8 +86,7 @@ class GtpServer
                 "verbose",
                 "version",
             };
-            Options opt = new Options(args, options);
-            opt.handleConfigOption();
+            Options opt = Options.parse(args, options);
             boolean verbose = opt.isSet("verbose");
             boolean loop = opt.isSet("loop");
             if (loop && opt.isSet("remote"))

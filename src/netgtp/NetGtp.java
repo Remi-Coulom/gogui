@@ -50,8 +50,7 @@ class NetGtp
                 "help",
                 "version"
             };
-            Options opt = new Options(args, options);
-            opt.handleConfigOption();
+            Options opt = Options.parse(args, options);
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
