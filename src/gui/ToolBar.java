@@ -151,6 +151,7 @@ class ToolBar
         Insets insets = new Insets(1, 1, 1, 1);
         button.setMargin(insets);
         button.setEnabled(false);
+        button.setFocusable(false);
         add(button);
         return button;
     }
