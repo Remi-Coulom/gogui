@@ -497,3 +497,43 @@ class AnalyzeDialog
 }
 
 //-----------------------------------------------------------------------------
+
+class AnalyzeTextOutput
+    extends JDialog
+    implements KeyListener
+{
+    public AnalyzeTextOutput(Frame owner, String title, String response)
+    {
+        super(owner, "GoGui: " + title);
+        JLabel label = new JLabel(title);
+        Container contentPane = getContentPane();
+        contentPane.add(label, BorderLayout.NORTH);
+        JTextArea textArea = new JTextArea(response);
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN,
+                                  getFont().getSize()));
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        textArea.addKeyListener(this);
+        pack();
+        setVisible(true);
+    }
+
+    public void keyPressed(KeyEvent e)
+    {
+    }
+
+    public void keyReleased(KeyEvent e) 
+    {
+        int c = e.getKeyCode();        
+        if (c == KeyEvent.VK_ESCAPE)
+            dispose();
+    }
+
+    public void keyTyped(KeyEvent e)
+    {
+    }
+}
+
+//-----------------------------------------------------------------------------

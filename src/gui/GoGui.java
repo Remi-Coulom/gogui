@@ -686,20 +686,7 @@ class GoGui
                 }
                 else
                 {
-                    JDialog dialog =
-                        new JDialog(this, "GoGui: " + resultTitle);
-                    JLabel label = new JLabel(resultTitle);
-                    Container contentPane = dialog.getContentPane();
-                    contentPane.add(label, BorderLayout.NORTH);
-                    JTextArea textArea = new JTextArea(response);
-                    textArea.setEditable(false);
-                    textArea.setFont(new Font("Monospaced", Font.PLAIN,
-                                              getFont().getSize()));
-                    JScrollPane scrollPane = new JScrollPane(textArea);
-                    contentPane.add(scrollPane, BorderLayout.CENTER);
-                    dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                    dialog.pack();
-                    dialog.setVisible(true);
+                    new AnalyzeTextOutput(this, resultTitle, response);
                     if (m_analyzeRequestPoint)
                         showStatusSelectTarget();
                     else
