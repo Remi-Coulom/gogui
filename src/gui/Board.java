@@ -38,6 +38,7 @@ public class Board
 
     public Board(go.Board board)
     {
+        super(new GridBagLayout());
         m_board = board;
         setPreferredFieldSize();
         URL url = getClass().getClassLoader().getResource("images/wood.png");
@@ -97,18 +98,16 @@ public class Board
         m_board.initSize(size);
         m_field = new Field[size][size];
         removeAll();
-        GridBagLayout gridBag = new GridBagLayout();
-        setLayout(gridBag);
         GridBagConstraints constraints = new GridBagConstraints();
-        JPanel panel = new JPanel();
+        JPanel panel = new JPanel(new GridLayout(size, size));
         panel.setOpaque(false);
-        panel.setLayout(new GridLayout(size, size));
         add(panel);
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridheight = constraints.gridwidth = size;
         constraints.weightx = constraints.weighty = (double)size / (size + 1);
+        GridBagLayout gridBag = (GridBagLayout)getLayout();
         gridBag.setConstraints(panel, constraints);
         addColumnLabels(gridBag, size, 0);
         addColumnLabels(gridBag, size, size + 1);

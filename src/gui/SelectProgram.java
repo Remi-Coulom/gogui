@@ -90,8 +90,7 @@ class SelectProgram
 
     private JPanel createButtons()
     {
-        JPanel innerPanel = new JPanel();
-        innerPanel.setLayout(new GridLayout(1, 0, GuiUtils.PAD, 0));
+        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
         innerPanel.setBorder(GuiUtils.createEmptyBorder());
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("ok");
@@ -101,16 +100,14 @@ class SelectProgram
         cancelButton.setActionCommand("cancel");
         cancelButton.addActionListener(this);
         innerPanel.add(cancelButton);
-        JPanel outerPanel = new JPanel();
-        outerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
         return outerPanel;
     }
 
     private JPanel createCommandPanel()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1));
+        JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.setBorder(GuiUtils.createEmptyBorder());
         JLabel label = new JLabel("Go program command");
         label.setHorizontalAlignment(SwingConstants.LEFT);
@@ -121,10 +118,8 @@ class SelectProgram
 
     private JPanel createInputPanel()
     {
-        JPanel outerPanel = new JPanel();
-        outerPanel.setLayout(new BorderLayout());
-        JPanel innerPanel = new JPanel();
-        innerPanel.setLayout(new BorderLayout());
+        JPanel outerPanel = new JPanel(new BorderLayout());
+        JPanel innerPanel = new JPanel(new BorderLayout());
         m_comboBox = new JComboBox(loadHistory());
         m_comboBox.addActionListener(this);
         m_comboBox.setEditable(true);

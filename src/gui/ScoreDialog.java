@@ -20,8 +20,8 @@ public class ScoreDialog
     public ScoreDialog(ActionListener actionListener, Score score)
     {
         setTitle("Score");
-        JPanel panelDetails = new JPanel();
-        panelDetails.setLayout(new GridLayout(0, 2, utils.GuiUtils.PAD, 0));
+        JPanel panelDetails =
+            new JPanel(new GridLayout(0, 2, utils.GuiUtils.PAD, 0));
         panelDetails.setBorder(GuiUtils.createEmptyBorder());
         m_territoryBlack = createEntry(panelDetails, "Territory Black:");
         m_territoryWhite = createEntry(panelDetails, "Territory White:");
@@ -33,8 +33,8 @@ public class ScoreDialog
         m_resultChinese = createEntry(panelDetails, "Result Chinese:");
         m_resultJapanese = createEntry(panelDetails, "Result Japanese:");
         m_rules = createEntry(panelDetails, "Rules:");
-        JPanel panelResult = new JPanel();
-        panelResult.setLayout(new GridLayout(0, 2, utils.GuiUtils.PAD, 0));
+        JPanel panelResult =
+            new JPanel(new GridLayout(0, 2, utils.GuiUtils.PAD, 0));
         panelResult.setBorder(GuiUtils.createEmptyBorder());
         m_result = createEntry(panelResult, "Game result:");
         m_result.setOpaque(true);
@@ -90,8 +90,7 @@ public class ScoreDialog
 
     private JPanel createButtons(ActionListener actionListener)
     {
-        JPanel innerPanel = new JPanel();
-        innerPanel.setLayout(new GridLayout(1, 0, GuiUtils.PAD, 0));
+        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
         innerPanel.setBorder(GuiUtils.createEmptyBorder());
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("score-done");
@@ -101,8 +100,7 @@ public class ScoreDialog
         cancelButton.setActionCommand("score-cancel");
         cancelButton.addActionListener(actionListener);
         innerPanel.add(cancelButton);
-        JPanel outerPanel = new JPanel();
-        outerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
         return outerPanel;
     }

@@ -1,7 +1,7 @@
-//=============================================================================
+//-----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 package gui;
 
@@ -11,11 +11,10 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
-
 import go.*;
 import utils.*;
 
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 class GameInfo
     extends JPanel
@@ -23,9 +22,8 @@ class GameInfo
 {
     public GameInfo(TimeControl timeControl)
     {
+        super(new GridLayout(2, 0, utils.GuiUtils.PAD, 0));
         m_timeControl = timeControl;
-
-        setLayout(new GridLayout(2, 0, utils.GuiUtils.PAD, 0));
 
         add(createLeftAlignedLabel("To play"));
         add(createLeftAlignedLabel("Moves"));
@@ -141,4 +139,4 @@ class GameInfo
     }
 }
 
-//=============================================================================
+//-----------------------------------------------------------------------------
