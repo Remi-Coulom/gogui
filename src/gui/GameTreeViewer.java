@@ -338,6 +338,16 @@ class GameTreePanel
         }
     }
 
+    /** Only used for a workaround on Mac Java 1.4.2,
+        which causes the scrollpane to lose focus after a new layout of
+        this panel. If scrollPane is not null, a requestFocusOnWindow will
+        be called after each new layout
+    */
+    public void setScrollPane(JScrollPane scrollPane)
+    {
+        m_scrollPane = scrollPane;
+    }
+
     public void setSizeMode(int mode)
     {
         switch (mode)
@@ -398,6 +408,8 @@ class GameTreePanel
                                        m_maxY + m_nodeDist + m_margin));
         revalidate();
         scrollToCurrent();
+        if (m_scrollPane != null)
+            m_scrollPane.requestFocusInWindow();
     }
 
     public void update(Node currentNode)
@@ -417,6 +429,8 @@ class GameTreePanel
         gameNode.repaint();
         m_currentNode = currentNode;
         scrollToCurrent();
+        if (m_scrollPane != null)
+            m_scrollPane.requestFocusInWindow();
     }
 
     private boolean m_fastPaint;
@@ -450,6 +464,9 @@ class GameTreePanel
     private GameTreeViewer.Listener m_listener;
 
     private JFrame m_owner;
+
+    /** Used for focus workaround on Mac Java 1.4.2 if not null. */
+    private JScrollPane m_scrollPane;
 
     private Node m_currentNode;
 
@@ -793,6 +810,7 @@ public class GameTreeViewer
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        m_panel.setScrollPane(m_scrollPane);
         m_scrollPane.setFocusable(true);
         m_scrollPane.setFocusTraversalKeysEnabled(false);
         JViewport viewport = m_scrollPane.getViewport();
