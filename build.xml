@@ -613,6 +613,9 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="build/test"/>
 <javac srcdir="test" destdir="build/test" source="1.4" target="1.4"
  deprecation="true" listfiles="yes" classpath="build"/>
+<copy todir="build/test">
+<fileset dir="test" includes="sgf/*.sgf"/>
+</copy>
 </target>
 
 <target name="test-depend">
