@@ -327,7 +327,7 @@ public class Reader
             m_tokenizer.pushBack();
             return null;
         }
-        String v = "";
+        StringBuffer value = new StringBuffer(32);
         boolean quoted = false;
         while (true)
         {
@@ -338,9 +338,9 @@ public class Reader
                 break;
             quoted = (c == '\\');
             if (! quoted)
-                v += (char)c;
+                value.append((char)c);
         }
-        return v;
+        return value.toString();
     }
 }
 
