@@ -397,9 +397,8 @@ public class GtpShell
 
     public void sentCommand(String command)
     {
-        if (m_fastUpdate)
+        if (m_fastUpdate && SwingUtilities.isEventDispatchThread())
         {
-            assert(SwingUtilities.isEventDispatchThread());
             appendSentCommand(command);
             return;
         }
