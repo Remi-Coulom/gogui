@@ -11,6 +11,17 @@ import go.*;
 
 //----------------------------------------------------------------------------
 
+class ExtraInfo
+{
+    public SetupInfo m_setupInfo;
+
+    public TimeInfo m_timeInfo;
+
+    public TreeMap m_sgfProperties;
+}
+
+//----------------------------------------------------------------------------
+
 class SetupInfo
 {
     public Color m_player = Color.EMPTY;
@@ -60,9 +71,7 @@ public class Node
     public void addBlack(Point point)
     {
         assert(point != null);
-        if (m_setupInfo == null)
-            m_setupInfo = new SetupInfo();
-        m_setupInfo.m_black.add(point);
+        createSetupInfo().m_black.add(point);
     }
 
     /** Add other unspecified SGF property.
@@ -72,27 +81,23 @@ public class Node
     */
     public void addSgfProperty(String label, String value)
     {
-        if (m_sgfProperties == null)
-            m_sgfProperties = new TreeMap();
-        m_sgfProperties.put(label, value);
+        createSgfProperties().put(label, value);
     }
 
     public void addWhite(Point point)
     {
         assert(point != null);
-        if (m_setupInfo == null)
-            m_setupInfo = new SetupInfo();
-        m_setupInfo.m_white.add(point);
+        createSetupInfo().m_white.add(point);
     }
 
     public Point getAddBlack(int i)
     {
-        return (Point)m_setupInfo.m_black.get(i);
+        return (Point)m_extraInfo.m_setupInfo.m_black.get(i);
     }
 
     public Point getAddWhite(int i)
     {
-        return (Point)m_setupInfo.m_white.get(i);
+        return (Point)m_extraInfo.m_setupInfo.m_white.get(i);
     }
 
     /** Get stones added and moves all as moves.
@@ -102,12 +107,13 @@ public class Node
     public Vector getAllAsMoves()
     {
         Vector moves = new Vector();
-        if (m_setupInfo != null)
+        if (hasSetupInfo())
+        {
             for (int i = 0; i < getNumberAddBlack(); ++i)
                 moves.add(new Move(getAddBlack(i), Color.BLACK));
-        if (m_setupInfo != null)
             for (int i = 0; i < getNumberAddWhite(); ++i)
                 moves.add(new Move(getAddWhite(i), Color.WHITE));
+        }
         if (m_move != null)
             moves.add(m_move);
         if (moves.size() > 0)
@@ -172,9 +178,9 @@ public class Node
     */
     public int getMovesLeftBlack()
     {
-        if (m_timeInfo == null)
+        if (! hasTimeInfo())
             return -1;
-        return m_timeInfo.m_movesLeftBlack;
+        return m_extraInfo.m_timeInfo.m_movesLeftBlack;
     }
 
     /** Moves left in byoyomi for white.
@@ -182,23 +188,23 @@ public class Node
     */
     public int getMovesLeftWhite()
     {
-        if (m_timeInfo == null)
+        if (! hasTimeInfo())
             return -1;
-        return m_timeInfo.m_movesLeftWhite;
+        return m_extraInfo.m_timeInfo.m_movesLeftWhite;
     }
 
     public int getNumberAddBlack()
     {
-        if (m_setupInfo == null)
-            return 0;
-        return m_setupInfo.m_black.size();
+        if (! hasSetupInfo())
+            return -1;
+        return m_extraInfo.m_setupInfo.m_black.size();
     }
 
     public int getNumberAddWhite()
     {
-        if (m_setupInfo == null)
-            return 0;
-        return m_setupInfo.m_white.size();
+        if (! hasSetupInfo())
+            return -1;
+        return m_extraInfo.m_setupInfo.m_white.size();
     }
 
     public int getNumberChildren()
@@ -214,9 +220,9 @@ public class Node
     */
     public Color getPlayer()
     {
-        if (m_setupInfo == null)
+        if (! hasSetupInfo())
             return Color.EMPTY;
-        return m_setupInfo.m_player;
+        return m_extraInfo.m_setupInfo.m_player;
     }
 
     /** Get other unspecified SGF properties.
@@ -224,7 +230,9 @@ public class Node
     */
     public Map getSgfProperties()
     {
-        return m_sgfProperties;
+        if (! hasSgfProperties())
+            return null;
+        return m_extraInfo.m_sgfProperties;
     }
 
     /** Time left for black after move was made.
@@ -232,9 +240,9 @@ public class Node
     */
     public double getTimeLeftBlack()
     {
-        if (m_timeInfo == null)
+        if (! hasTimeInfo())
             return Double.NaN;
-        return m_timeInfo.m_timeLeftBlack;
+        return m_extraInfo.m_timeInfo.m_timeLeftBlack;
     }
 
     /** Time left for white after move was made.
@@ -242,9 +250,9 @@ public class Node
     */
     public double getTimeLeftWhite()
     {
-        if (m_timeInfo == null)
+        if (! hasTimeInfo())
             return Double.NaN;
-        return m_timeInfo.m_timeLeftWhite;
+        return m_extraInfo.m_timeInfo.m_timeLeftWhite;
     }
 
     /** Get color to move.
@@ -316,38 +324,28 @@ public class Node
 
     public void setMovesLeftBlack(int moves)
     {
-        if (m_timeInfo == null)
-            m_timeInfo = new TimeInfo();
-        m_timeInfo.m_movesLeftBlack = moves;
+        createTimeInfo().m_movesLeftBlack = moves;
     }
 
     public void setMovesLeftWhite(int moves)
     {
-        if (m_timeInfo == null)
-            m_timeInfo = new TimeInfo();
-        m_timeInfo.m_movesLeftWhite = moves;
+        createTimeInfo().m_movesLeftWhite = moves;
     }
 
     public void setTimeLeftBlack(double timeLeft)
     {
-        if (m_timeInfo == null)
-            m_timeInfo = new TimeInfo();
-        m_timeInfo.m_timeLeftBlack = timeLeft;
+        createTimeInfo().m_timeLeftBlack = timeLeft;
     }
 
     public void setTimeLeftWhite(double timeLeft)
     {
-        if (m_timeInfo == null)
-            m_timeInfo = new TimeInfo();
-        m_timeInfo.m_timeLeftWhite = timeLeft;
+        createTimeInfo().m_timeLeftWhite = timeLeft;
     }
 
     public void setPlayer(Color color)
     {
         assert(color == Color.BLACK || color == Color.WHITE);
-        if (m_setupInfo == null)
-            m_setupInfo = new SetupInfo();
-        m_setupInfo.m_player = color;
+        createSetupInfo().m_player = color;
     }
 
     public void removeChild(Node child)
@@ -390,17 +388,55 @@ public class Node
     */
     private byte[] m_comment;
 
+    private ExtraInfo m_extraInfo;
+
     private Move m_move;
 
     private Node m_father;
 
-    private SetupInfo m_setupInfo;
-
-    private TimeInfo m_timeInfo;
-
-    private TreeMap m_sgfProperties;
-
     private Vector m_children;
+
+    private SetupInfo createSetupInfo()
+    {
+        if (m_extraInfo == null)
+            m_extraInfo = new ExtraInfo();
+        if (m_extraInfo.m_setupInfo == null)
+            m_extraInfo.m_setupInfo = new SetupInfo();
+        return m_extraInfo.m_setupInfo;
+    }
+
+    private Map createSgfProperties()
+    {
+        if (m_extraInfo == null)
+            m_extraInfo = new ExtraInfo();
+        if (m_extraInfo.m_sgfProperties == null)
+            m_extraInfo.m_sgfProperties = new TreeMap();
+        return m_extraInfo.m_sgfProperties;
+    }
+
+    private TimeInfo createTimeInfo()
+    {
+        if (m_extraInfo == null)
+            m_extraInfo = new ExtraInfo();
+        if (m_extraInfo.m_timeInfo == null)
+            m_extraInfo.m_timeInfo = new TimeInfo();
+        return m_extraInfo.m_timeInfo;
+    }
+
+    private boolean hasSetupInfo()
+    {
+        return (m_extraInfo != null && m_extraInfo.m_setupInfo != null);
+    }
+
+    private boolean hasSgfProperties()
+    {
+        return (m_extraInfo != null && m_extraInfo.m_sgfProperties != null);
+    }
+
+    private boolean hasTimeInfo()
+    {
+        return (m_extraInfo != null && m_extraInfo.m_timeInfo != null);
+    }
 }
 
 //----------------------------------------------------------------------------
