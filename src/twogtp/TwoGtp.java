@@ -394,7 +394,8 @@ public class TwoGtp
         {
             String filename = (String)filenames.get(gameNumber);
             File file = new File(filename);
-            sgf.Reader reader = new sgf.Reader(file);
+            sgf.Reader reader =
+                new sgf.Reader(new FileReader(file), file.toString());
             int size = reader.getBoardSize();
             if (board == null)
                 board = new Board(size);
@@ -687,8 +688,14 @@ public class TwoGtp
                 return;
             try
             {
-                sgf.Reader reader = new sgf.Reader(file);
+                sgf.Reader reader =
+                    new sgf.Reader(new FileReader(file), file.toString());
                 m_games.add(reader.getMoves());
+            }
+            catch (FileNotFoundException e)
+            {
+                System.err.println("Error reading " + file + ": " +
+                                   e.getMessage());
             }
             catch (sgf.Reader.Error e)
             {

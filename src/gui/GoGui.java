@@ -1482,7 +1482,8 @@ class GoGui
     {
         try
         {
-            sgf.Reader reader = new sgf.Reader(file);
+            java.io.Reader fileReader = new FileReader(file);
+            sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
             initGame(reader.getBoardSize());
             if (m_commandThread != null)
             {
@@ -1538,6 +1539,10 @@ class GoGui
             setTitle();
             computerNone();
             boardChanged();
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("File not found:\n" + file);
         }
         catch (sgf.Reader.Error e)
         {

@@ -23,14 +23,14 @@ public class Reader
         }
     }    
 
-    public Reader(File file)
+    public Reader(java.io.Reader reader, String name)
         throws Error
     {
         try
         {
-            m_in = new BufferedReader(new FileReader(file));
+            m_in = new BufferedReader(reader);
             m_tokenizer = new StreamTokenizer(m_in);
-            m_file = file;
+            m_name = name;
             m_boardSize = 19;
             m_komi = 0;
             m_moves.clear();
@@ -90,11 +90,11 @@ public class Reader
 
     private float m_komi;
 
-    private File m_file;
-
     private java.io.Reader m_in;
 
     private StreamTokenizer m_tokenizer;
+
+    private String m_name;
 
     private Vector m_moves = new Vector(361, 361);
 
@@ -122,8 +122,13 @@ public class Reader
     {
         // Note: lineno() does not work correctly for Unix line endings
         // (Sun Java 1.4.0 Linux)
-        String s = m_file + ":" + m_tokenizer.lineno() + ":\n" + message;
-        return new Error(s);
+        if (m_name != null)
+        {
+            String s = m_name + ":" + m_tokenizer.lineno() + ":\n" + message;
+            return new Error(s);
+        }
+        else
+            return new Error(m_tokenizer.lineno() + ":\n" + message);
     }
 
     private Color parseColor(String s) throws Error
