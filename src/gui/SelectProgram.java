@@ -213,7 +213,7 @@ class SelectProgram
         m_comboBox.insertItemAt(file.toString(), 0);
         m_comboBox.setSelectedIndex(0);
         m_textField.setCaretPosition(m_textField.getText().length());
-        m_textField.requestFocus();
+        m_textField.requestFocusInWindow();
     }
 
     private static void saveHistory(Vector history)

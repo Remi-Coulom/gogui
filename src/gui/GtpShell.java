@@ -212,6 +212,14 @@ public class GtpShell
         m_comboBox.setFont(m_gtpShellText.getFont());
         m_comboBox.addActionListener(this);
         m_comboBox.addItemListener(this);
+        addWindowListener(new WindowAdapter()
+            {
+                public void windowActivated(WindowEvent e)
+                {
+                    m_comboBox.requestFocusInWindow();
+                    m_textField.requestFocusInWindow();
+                }
+            });
         contentPane.add(m_comboBox, BorderLayout.SOUTH);
         pack();
     }
@@ -342,9 +350,6 @@ public class GtpShell
     {
         setVisible(true);
         toFront();
-        requestFocus();
-        m_comboBox.requestFocus();
-        m_textField.requestFocus();
     }
 
     /** Send Gtp command to callback.
@@ -720,8 +725,8 @@ public class GtpShell
         m_comboBox.hidePopup();
         addAllCompletions(m_history);
         m_editor.setItem(null);
-        m_comboBox.requestFocus();
-        m_textField.requestFocus();
+        m_comboBox.requestFocusInWindow();
+        m_textField.requestFocusInWindow();
     }
 
     private void commandCompletion()

@@ -106,6 +106,7 @@ class GoGui
         m_menuBar.setNormalMode();
 
         pack();
+        m_guiBoard.requestFocusInWindow();
         setTitle("GoGui");
         if (m_rememberWindowSizes)
             restoreSize(this, "window-gogui", m_boardSize);
@@ -524,9 +525,7 @@ class GoGui
 
     public void toTop()
     {
-        setVisible(true);
         toFront();
-        m_guiBoard.setFocus();
     }
 
     public void windowActivated(WindowEvent e)
@@ -1587,12 +1586,12 @@ class GoGui
                 if (m_prefs.getBool("show-gtpshell"))
                     m_gtpShell.toTop();
             }
-            toTop();
+            setVisible(true);
             m_guiBoard.setFocus();
         }
         catch (Gtp.Error e)
         {
-            toTop();
+            setVisible(true);
             if (m_gtpShell != null)
                 m_gtpShell.toTop();
             SimpleDialogs.showError(this,

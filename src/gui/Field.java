@@ -50,7 +50,6 @@ public class Field
 
     public void focusGained(FocusEvent event)
     {
-        m_board.setFocusPoint(m_point);
         repaint();
     }
 

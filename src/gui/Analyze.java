@@ -414,7 +414,7 @@ class AnalyzeDialog
         createMenu();
         comboBoxChanged();
         pack();
-        m_list.requestFocus();
+        m_list.requestFocusInWindow();
     }
 
     public void actionPerformed(ActionEvent event)
@@ -476,8 +476,8 @@ class AnalyzeDialog
 
     public void toTop()
     {
-        toFront();
         setVisible(true);
+        toFront();
     }
 
     public void valueChanged(ListSelectionEvent e)
@@ -491,7 +491,7 @@ class AnalyzeDialog
         else
         {
             if (m_runButton.hasFocus())
-                m_list.requestFocus();
+                m_list.requestFocusInWindow();
             m_runButton.setEnabled(false);
         }
     }
@@ -594,7 +594,7 @@ class AnalyzeDialog
         m_autoRun.setSelected(false);
         m_clearButton.setEnabled(false);
         if (m_clearButton.hasFocus())
-            m_list.requestFocus();
+            m_list.requestFocusInWindow();
     }
 
     private void close()

@@ -29,7 +29,7 @@ class BoardLabel
 
 public class Board
     extends JPanel
-    implements FocusListener, Printable, KeyListener
+    implements FocusListener, KeyListener, Printable
 {
     public interface Listener
     {
@@ -45,6 +45,7 @@ public class Board
         initSize(m_board.getSize());
         setFocusable(true);
         addFocusListener(this);
+        setFocusPoint(m_focusPoint);
     }
 
     public void clearAll()
@@ -103,12 +104,6 @@ public class Board
         getField(p).clearInfluence();
     }
 
-    public void fieldClicked(go.Point p, boolean modifiedSelect)
-    {
-        if (m_listener != null)
-            m_listener.fieldClicked(p, modifiedSelect);
-    }
-
     public void focusGained(FocusEvent event)
     {
         setFocusPoint(m_focusPoint);
@@ -116,6 +111,12 @@ public class Board
 
     public void focusLost(FocusEvent event)
     {
+    }
+
+    public void fieldClicked(go.Point p, boolean modifiedSelect)
+    {
+        if (m_listener != null)
+            m_listener.fieldClicked(p, modifiedSelect);
     }
 
     public go.Board getBoard()
@@ -342,7 +343,7 @@ public class Board
     {
         if (! m_board.contains(point))
             return;
-        getField(point).requestFocus();
+        getField(point).requestFocusInWindow();
         m_focusPoint.set(point.getX(), point.getY());
     }
 
