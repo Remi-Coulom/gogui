@@ -7,6 +7,15 @@
 <revnumber>&version;</revnumber>
 <date></date>
 <authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+New tool <application>GtpAdapter</application>.
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
 </revision>
 
 <revision>

@@ -27,6 +27,16 @@ See <xref linkend="reference-gmptogtp"/> for a complete reference.
 </varlistentry>
 
 <varlistentry>
+<term>GtpAdapter</term>
+<listitem>
+<para>
+Adapter program for logging the GTP stream or doinyg protocol translations.
+See <xref linkend="reference-gtpadapter"/> for a complete reference.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>GtpDummy</term>
 <listitem>
 <para>

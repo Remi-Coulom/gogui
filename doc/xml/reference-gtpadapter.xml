@@ -1,0 +1,135 @@
+<refentry id="reference-gtpadapter">
+
+<refmeta>
+<refentrytitle>gtpadapter</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gtpadapter</refname>
+<refpurpose>
+Go Text Protocol adapter for logging or protocol translations.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtpadapter</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-log</option> <replaceable>file</replaceable></arg>
+<arg><option>-name</option> <replaceable>name</replaceable></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-version2</option></arg>
+
+<command>gtpadapter</command>
+<arg choice="plain"><option>-help</option></arg>
+
+<command>gtpadapter</command>
+<arg choice="plain"><option>-version</option></arg>
+
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Go Text Protocol adapter for logging or protocol translations.
+The argument <replaceable>program</replaceable> is a commandline
+for the Go program .
+</para>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-log</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Log the GTP stream of the adapter program to a file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-name</option> <replaceable>name</replaceable>
+</term>
+<listitem>
+<para>
+Use <replaceable>name</replaceable> for answering the
+<userinput>name</userinput> command.
+If <replaceable>name</replaceable> contains a colon, the part after the colon
+is interpreted as a version and used for answering the
+<userinput>version</userinput> command.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Only accept board size <replaceable>n</replaceable>, even if the program
+accepts other sizes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version2</option></term>
+<listitem>
+<para>
+Translate GTP version 2 commands into version 1 commands.
+This will translate the commands <userinput>play</userinput>,
+<userinput>genmove</userinput>, <userinput>list_commands</userinput> into
+<userinput>black</userinput>, <userinput>white</userinput>,
+<userinput>genmove_black</userinput>, <userinput>genmove_white</userinput>,
+<userinput>help</userinput>. The command <userinput>boardsize</userinput>
+will be used only for setting the boardsize.
+The command <userinput>clear_board</userinput> will be translated into
+a version 1 <userinput>boardsize</userinput> command using the previously
+set board size.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+</refsection>
+
+</refentry>

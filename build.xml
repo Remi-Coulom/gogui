@@ -18,6 +18,7 @@ $Source$
 <target name="all" depends="
  gmptogtp.jar,
  gogui.jar,
+ gtpadapter.jar,
  gtpdummy.jar,
  gtpregress.jar,
  gtpserver.jar,
@@ -32,6 +33,7 @@ $Source$
  includes="
    gmptogtp.jar,
    gogui.jar,
+   gtpadapter.jar,
    gtpdummy.jar,
    gtpregress.jar,
    gtpserver.jar,
@@ -51,6 +53,7 @@ $Source$
 <fileset dir="build/gmptogtp"/>
 <fileset dir="build/go"/>
 <fileset dir="build/gtp"/>
+<fileset dir="build/gtpadapter"/>
 <fileset dir="build/gtpdummy"/>
 <fileset dir="build/gtpregress"/>
 <fileset dir="build/gtpserver"/>
@@ -106,6 +109,7 @@ installation directory.
  README
  bin/gmptogtp,
  bin/gogui,
+ bin/gtpadapter,
  bin/gtpdummy,
  bin/gtpregress,
  bin/gtpserver,
@@ -199,6 +203,22 @@ installation directory.
 </jar>
 </target>
 
+<target name="gtpadapter.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gtpadapter.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="gtpadapter.GtpAdapter"/>
+</manifest>
+<fileset dir="build" includes="
+ gtp/*.class
+ gtpadapter/*.class
+ utils/Options.class
+ utils/StringUtils.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
 <target name="gtpdummy.jar" depends="compile">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpdummy.jar" compress="true">
@@ -263,6 +283,7 @@ installation directory.
   gmptogtp.*,
   go.*,
   gtp.*,
+  gtpadapter.*,
   gtpdummy.*,
   gtpregress.*,
   gtpserver.*,
