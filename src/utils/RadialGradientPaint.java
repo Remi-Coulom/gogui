@@ -1,7 +1,7 @@
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 package utils;
 
@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
  
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 public class RadialGradientPaint
     implements Paint
@@ -33,7 +33,8 @@ public class RadialGradientPaint
         Point2D transformedPoint = xform.transform(m_point, null);
         Point2D transformedRadius = xform.deltaTransform(m_radius, null);
         return new RadialGradientContext(transformedPoint, m_pointColor,
-                                         transformedRadius, m_backgroundColor);
+                                         transformedRadius,
+                                         m_backgroundColor);
     }
     
     public int getTransparency()
@@ -54,4 +55,4 @@ public class RadialGradientPaint
     private java.awt.Color m_pointColor;
 }
 
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------

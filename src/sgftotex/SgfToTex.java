@@ -1,7 +1,7 @@
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 package sgftotex;
 
@@ -10,7 +10,7 @@ import java.util.*;
 import utils.*;
 import version.*;
 
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 class SgfToTex
 {
@@ -67,7 +67,8 @@ class SgfToTex
                     outFileName = (String)arguments.get(1);
                 File outFile = new File(outFileName);
                 if (outFile.exists() && ! force)
-                    throw new Exception("File " + outFile + " already exists");
+                    throw new Exception("File " + outFile
+                                        + " already exists");
                 out = new FileOutputStream(outFile);
                 if (title.equals(""))
                     title =
@@ -94,8 +95,8 @@ class SgfToTex
         }
     }
 
-    private static void convert(InputStream in, OutputStream out, String title,
-                                boolean usePass)
+    private static void convert(InputStream in, OutputStream out,
+                                String title, boolean usePass)
         throws sgf.Reader.Error
     {
         sgf.Reader reader = new sgf.Reader(new InputStreamReader(in), null);
@@ -115,4 +116,4 @@ class SgfToTex
     }
 }
     
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------

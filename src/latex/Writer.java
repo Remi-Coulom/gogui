@@ -1,18 +1,18 @@
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 package latex;
 
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 import java.io.*;
 import java.util.*;
 import game.*;
 import go.*;
 
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 public class Writer
 {
@@ -37,7 +37,8 @@ public class Writer
         printPosition(board, strings, markups, selects);
         printEndPSGo();
         m_out.println("\\\\");
-        String toMove = (board.getToMove() == Color.BLACK ? "Black" : "White");
+        String toMove =
+            (board.getToMove() == Color.BLACK ? "Black" : "White");
         m_out.println(toMove + " to play.");
         printEndDocument();
         m_out.close();
@@ -181,7 +182,8 @@ public class Writer
                 (blackToMove && color != Color.BLACK)
                 || (! blackToMove && color != Color.WHITE);
             boolean isPass = (point == null);
-            if (isPass || firstMoveAtPoint[point.getX()][point.getY()] != null)
+            if (isPass
+                || firstMoveAtPoint[point.getX()][point.getY()] != null)
             {
                 needsComment.add(node);
                 if (m_usePass)
@@ -286,4 +288,4 @@ public class Writer
     }
 }
 
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------

@@ -1,7 +1,7 @@
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 package twogtp;
 
@@ -10,7 +10,7 @@ import java.text.*;
 import java.util.*;
 import utils.*;
 
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 public class Analyze
 {
@@ -141,7 +141,8 @@ public class Analyze
         else if (comment.startsWith("Referee:"))
         {
             m_referee = getCommentValue(comment, "Referee:");
-            m_hasReferee = (! m_referee.equals("") && ! m_referee.equals("-"));
+            m_hasReferee =
+                (! m_referee.equals("") && ! m_referee.equals("-"));
         }
         else if (comment.startsWith("BlackCommand:"))
             m_blackCommand = getCommentValue(comment, "BlackCommand:");
@@ -280,7 +281,8 @@ public class Analyze
                   "<tr><th align=\"left\">Host:</th><td align=\"left\">"
                   + m_host + "</td></tr>\n");
         if (m_hasReferee)
-            out.print("<tr><th align=\"left\">Referee:</th><td align=\"left\">"
+            out.print("<tr><th align=\"left\">Referee:</th>"
+                      + "<td align=\"left\">"
                       + m_referee + "</td></tr>\n");
         out.print("<tr><th align=\"left\">Black command:</th>"
                   + "<td align=\"left\"><tt>"
@@ -373,8 +375,9 @@ public class Analyze
         out.close();
     }
 
-    private void writeHtmlResults(PrintStream out, String name, Statistics win,
-                                  Statistics unknown, Histogram histo)
+    private void writeHtmlResults(PrintStream out, String name,
+                                  Statistics win, Statistics unknown,
+                                  Histogram histo)
         throws Exception
     {
         NumberFormat format = StringUtils.getNumberFormat(1);
@@ -578,4 +581,4 @@ class Histogram
     private int[] m_array;
 }
 
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
