@@ -52,7 +52,7 @@ public class CommandThread
     /** Get response to asynchronous command.
         You must call getException() first.
     */
-    public String getResponse()
+    public synchronized String getResponse()
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
@@ -77,7 +77,7 @@ public class CommandThread
     /** Get exception of asynchronous command.
         You must call this before you are allowed to send new a command.
     */
-    public GtpError getException()
+    public synchronized GtpError getException()
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(m_commandInProgress);
