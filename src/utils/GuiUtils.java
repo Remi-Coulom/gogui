@@ -25,6 +25,12 @@ public class GuiUtils
         return m_emptyBorder;
     }
 
+    public static Box.Filler createFiller()
+    {
+        Dimension dim = new Dimension(PAD, PAD);
+        return new Box.Filler(dim, dim, dim);
+    }
+
     public static Border createSmallEmptyBorder()
     {
         if (m_smallEmptyBorder == null)
@@ -34,9 +40,9 @@ public class GuiUtils
         return m_smallEmptyBorder;
     }
 
-    public static Box.Filler createFiller()
+    public static Box.Filler createSmallFiller()
     {
-        Dimension dim = new Dimension(PAD, PAD);
+        Dimension dim = new Dimension(SMALL_PAD, SMALL_PAD);
         return new Box.Filler(dim, dim, dim);
     }
 
