@@ -379,8 +379,6 @@ interface AnalyzeCallback
 
     public void clearAnalyzeCommand();
 
-    public boolean isCommandInProgress();
-
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                   boolean clearBoard);
 
@@ -592,11 +590,6 @@ class AnalyzeDialog
 
     private void clearCommand()
     {
-        if (m_callback.isCommandInProgress())
-        {
-            SimpleDialogs.showError(this, "Command in progress.");
-            return;
-        }
         m_callback.clearAnalyzeCommand();
         m_autoRun.setSelected(false);
         m_clearButton.setEnabled(false);
@@ -834,11 +827,6 @@ class AnalyzeDialog
 
     private void setCommand()
     {
-        if (m_callback.isCommandInProgress())
-        {
-            SimpleDialogs.showError(this, "Command in progress.");
-            return;
-        }
         int index = m_list.getSelectedIndex();        
         if (index < 0)
             return;

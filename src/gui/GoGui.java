@@ -260,7 +260,17 @@ class GoGui
     public void clearAnalyzeCommand()
     {
         if (m_commandInProgress)
+        {
+            showError("Cannot clear analyze command\n" +
+                      "while command in progress.");
             return;
+        }
+        if (m_setupMode)
+        {
+            showError("Cannot clear analyze command\n" +
+                      "in setup mode.");
+            return;
+        }
         m_analyzeCommand = null;
         setBoardCursorDefault();
         resetBoard();
@@ -322,11 +332,6 @@ class GoGui
             humanMoved(new Move(p, m_board.getToMove()));
     }
 
-    public boolean isCommandInProgress()
-    {
-        return m_commandInProgress;
-    }
-    
     public static void main(String[] args)
     {
         try
@@ -519,7 +524,17 @@ class GoGui
                                   boolean clearBoard)
     {
         if (m_commandInProgress)
+        {
+            showError("Cannot run analyze command\n" +
+                      "while command in progress.");
             return;
+        }
+        if (m_setupMode)
+        {
+            showError("Cannot run analyze command\n" +
+                      "in setup mode.");
+            return;
+        }
         initAnalyzeCommand(command, autoRun);
         if (m_analyzeCommand.needsPointArg()
             || m_analyzeCommand.needsPointListArg())
