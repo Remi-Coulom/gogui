@@ -458,8 +458,9 @@ class GtpRegress
             FileUtils.replaceExtension(m_file, "tst", "out.html");
         m_outFileName = m_prefix + m_outFileRelativeName;        
         File file = new File(m_outFileName);
-        if (! file.getParentFile().exists())
-            file.getParentFile().mkdir();
+        File parent = file.getParentFile();
+        if (parent != null && ! parent.exists())
+            parent.mkdir();
         m_out = new PrintStream(new FileOutputStream(file));
         m_out.print("<html>\n" +
                     "<head>\n" +
