@@ -1557,6 +1557,7 @@ class GoGui
                 {
                     public void run() { newGameContinue(); }
                 };
+            showStatus("Starting new game...");
             beginLengthyCommand();
             m_commandThread.sendCommand(command, callback);
             return;
