@@ -7,7 +7,7 @@ package gmp;
 
 import java.io.*;
 import java.util.*;
-//import javax.comm.*;
+import javax.comm.*;
 import utils.*;
 import gtp.GtpServer;
 
@@ -79,9 +79,11 @@ public class GmpToGtp
         try
         {
             String options[] = {
+                "baud:",
                 "color:",
                 "device:",
                 "help",
+                "list",
                 "size:",
                 "verbose"
             };
@@ -91,12 +93,19 @@ public class GmpToGtp
                 String helpText =
                     "Usage: java -cp gogui.jar gmp.GmpToGtp [options]\n" +
                     "\n" +
+                    "-baud    speed of serial device (default 2400)\n" +
                     "-color   color (black|white)\n" +
                     "-device  serial device file\n" +
                     "-help    display this help and exit\n" +
+                    "-list    list serial devices and exit\n" +
                     "-size    board size\n" +
                     "-verbose print logging messages";
                 System.out.print(helpText);
+                System.exit(0);
+            }
+            if (opt.isSet("list"))
+            {
+                listDevices();
                 System.exit(0);
             }
             String color = opt.getString("color", "");
@@ -110,6 +119,9 @@ public class GmpToGtp
             int size = opt.getInteger("size", 19);
             if (size < 1 || size > 22)
                 throw new Exception("invalid size");
+            int baud = opt.getInteger("baud", 2400);
+            if (baud <= 0)
+                throw new Exception("invalid baud value");
             boolean verbose = opt.isSet("verbose");
             String program = null;
             Vector arguments = opt.getArguments();
@@ -131,11 +143,14 @@ public class GmpToGtp
             RandomAccessFile randomAccessFile = null;
             if (! device.equals(""))
             {
-                File file = new File(device);
-                randomAccessFile = new RandomAccessFile(file, "rws");
-                FileDescriptor fd = randomAccessFile.getFD();
-                in = new FileInputStream(fd);
-                out = new FileOutputStream(fd);
+                CommPortIdentifier portId =
+                    CommPortIdentifier.getPortIdentifier(device);
+                SerialPort port = (SerialPort)portId.open("GmpToGtp", 5000);
+                port.setSerialPortParams(baud, SerialPort.DATABITS_8,
+                                         SerialPort.STOPBITS_1,
+                                         SerialPort.PARITY_NONE);
+                in = port.getInputStream();
+                out = port.getOutputStream();
             }
             else
             {
@@ -211,6 +226,18 @@ public class GmpToGtp
         response.append((char)('A' + move.m_x));
         response.append(move.m_y + 1);
         return true;
+    }
+
+    private static void listDevices()
+    {
+        Enumeration portList = CommPortIdentifier.getPortIdentifiers();
+        while (portList.hasMoreElements())
+        {
+            CommPortIdentifier portId =
+                (CommPortIdentifier)portList.nextElement();
+            if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL)
+                System.out.println(portId.getName());
+        }
     }
 
     private boolean play(boolean isBlack, String command,
