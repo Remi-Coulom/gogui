@@ -18,6 +18,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
 <arg><option>-name</option> <replaceable>name</replaceable></arg>
+<arg><option>-noscore</option></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-version2</option></arg>
 
@@ -84,6 +85,19 @@ Use <replaceable>name</replaceable> for answering the
 If <replaceable>name</replaceable> contains a colon, the part after the colon
 is interpreted as a version and used for answering the
 <userinput>version</userinput> command.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-noscore</option>
+</term>
+<listitem>
+<para>
+Hide the <userinput>final_score</userinput> and
+<userinput>final_status_list</userinput> commands, even if the program supports
+them.
 </para>
 </listitem>
 </varlistentry>

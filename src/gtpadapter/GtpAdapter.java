@@ -20,7 +20,8 @@ public class GtpAdapter
     extends GtpServer
 {
     public GtpAdapter(InputStream in, OutputStream out, String program,
-                      PrintStream log, boolean version2, int size, String name)
+                      PrintStream log, boolean version2, int size, String name,
+                      boolean noScore)
         throws Exception
     {
         super(in, out, log);
@@ -32,6 +33,7 @@ public class GtpAdapter
         if (version2 && m_gtp.getProtocolVersion() != 1)
             throw new Exception("Program is not GTP version 1.");
         m_version2 = version2;
+        m_noScore = noScore;
         m_size = size;
         m_name = name;
     }
@@ -51,9 +53,15 @@ public class GtpAdapter
             status = cmdBoardsize(cmdArray, response);
         else if (cmd.equals("clear_board") && m_version2)
             status = send("boardsize " + m_boardSize, response);
+        else if (cmd.equals("final_score") && m_noScore)
+            status = cmdUnknown(response);
+        else if (cmd.equals("final_status_list") && m_noScore)
+            status = cmdUnknown(response);
         else if (cmd.equals("genmove") && m_version2)
             status = translateColorCommand(cmdArray, "genmove_", response);
-        else if (cmd.equals("list_commands") && m_version2)
+        else if (cmd.equals("help"))
+            status = cmdListCommands(response);
+        else if (cmd.equals("list_commands"))
             status = cmdListCommands(response);
         else if (cmd.equals("name") && m_name != null)
             status = cmdName(response);
@@ -94,6 +102,7 @@ public class GtpAdapter
                 "config:",
                 "help",
                 "log:",
+                "noscore",
                 "name:",
                 "size:",
                 "version",
@@ -111,6 +120,7 @@ public class GtpAdapter
                 System.out.println("GtpAdapter " + Version.get());
                 System.exit(0);
             }
+            boolean noScore = opt.isSet("noscore");
             boolean version2 = opt.isSet("version2");
             String name = opt.getString("name", null);
             int size = opt.getInteger("size", -1);
@@ -129,7 +139,7 @@ public class GtpAdapter
             String program = (String)arguments.get(0);
             GtpAdapter gtpAdapter =
                 new GtpAdapter(System.in, System.out, program, log, version2,
-                               size, name);
+                               size, name, noScore);
             gtpAdapter.mainLoop();
             gtpAdapter.close();
             if (log != null)
@@ -154,6 +164,8 @@ public class GtpAdapter
             System.exit(-1);
         }
     }
+
+    private boolean m_noScore;
 
     private boolean m_version2;
 
@@ -215,6 +227,10 @@ public class GtpAdapter
                     || cmd.equals("protocol_version")
                     || cmd.equals("white"))
                     continue;
+            if (m_noScore)
+                if (cmd.equals("final_score")
+                    || (cmd.equals("final_status_list")))
+                    continue;
             response.append(cmd);
             response.append("\n");
         }
@@ -239,6 +255,12 @@ public class GtpAdapter
         else
             response.append(m_name.substring(0, index));
         return true;
+    }
+
+    private boolean cmdUnknown(StringBuffer response)
+    {
+        response.append("Unknown command");
+        return false;
     }
 
     private boolean cmdVersion(StringBuffer response)
