@@ -395,7 +395,9 @@ class AnalyzeDialog
         if (index >= 0)
         {
             m_runButton.setEnabled(true);
-            m_list.ensureIndexIsVisible(index);
+            if (index < m_list.getFirstVisibleIndex()
+                || index >m_list.getLastVisibleIndex())
+                m_list.ensureIndexIsVisible(index);
         }
         else
         {
@@ -514,7 +516,9 @@ class AnalyzeDialog
         String label = (String)m_comboBox.getSelectedItem();        
         if (! m_labels.contains(label))
             return;
-        m_list.setSelectedValue(label, true);
+        String selectedValue = (String)m_list.getSelectedValue();
+        if (selectedValue == null || ! selectedValue.equals(label))
+            m_list.setSelectedValue(label, true);
     }
 
     private JPanel createButtons()

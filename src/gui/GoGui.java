@@ -1316,7 +1316,7 @@ class GoGui
             return;
         if (m_commandInProgress)
         {
-            if (! showQuestion("Command in progess. Kill program?"))
+            if (! showQuestion("Kill program?"))
                 return;
             m_commandThread.destroyGtp();
             m_commandThread.close();
@@ -1945,8 +1945,9 @@ class GoGui
         if (window instanceof Frame)
         {
             int state = ((Frame)window).getExtendedState();
-            int mask = Frame.NORMAL;
-            if ((state & mask) == 0)
+            int mask = Frame.MAXIMIZED_BOTH | Frame.MAXIMIZED_VERT
+                | Frame.MAXIMIZED_HORIZ | Frame.ICONIFIED;
+            if ((state & mask) != 0)
                 return;
         }
         name = name + "-" + boardSize;
