@@ -186,7 +186,7 @@ public class GtpShell
         JScrollPane scrollPane =
             new JScrollPane(m_gtpShellText,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);        
+                            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);        
         int fontSize = m_gtpShellText.getFont().getSize();
         scrollPane.setPreferredSize(new Dimension(fontSize * 51,
                                                   fontSize * 53));
