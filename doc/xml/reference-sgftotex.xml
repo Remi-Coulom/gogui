@@ -17,6 +17,7 @@ SGF to LaTeX converter.
 <cmdsynopsis>
 <command>sgftotex</command>
 <arg><option>-help</option></arg>
+<arg><option>-pass</option></arg>
 <arg><option>-version</option></arg>
 <arg><replaceable>file.sgf</replaceable>
 <arg><replaceable>file.tex</replaceable></arg></arg>
@@ -40,6 +41,17 @@ Converts <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files to
 <term><option>-help</option></term>
 <listitem>
 Display help and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-pass</option></term>
+<listitem>
+Use <userinput>\pass</userinput> command for pass moves
+(only supported for PSGO style version 0.14 or newer).
+Otherwise pass moves are printed as a combination of
+<userinput>\refstepcounter</userinput> and
+<userinput>\toggleblackmove</userinput> commands.
 </listitem>
 </varlistentry>
 

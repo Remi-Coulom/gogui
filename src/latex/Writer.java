@@ -25,10 +25,12 @@ public class Writer
     }    
 
     public Writer(OutputStream out, Board board, boolean writePosition,
-                  String[][] strings, boolean[][] markups, boolean[][] selects)
+                  boolean usePass, String[][] strings, boolean[][] markups,
+                  boolean[][] selects)
     {        
         m_out = new PrintStream(out);
         m_board = board;
+        m_usePass = usePass;
         printBeginDocument();
         printBeginPSGo();
         if (writePosition)
@@ -51,6 +53,8 @@ public class Writer
         m_out.close();
     }
 
+    private boolean m_usePass;
+
     private PrintStream m_out;
 
     private Board m_board;
@@ -71,8 +75,12 @@ public class Writer
 
     private void printBeginDocument()
     {
-        m_out.println("\\documentclass{article}\n" +
-                      "\\usepackage{psgo} % version 0.12 or newer\n" +
+        String requiredVersion = "0.12";
+        if (m_usePass)
+            requiredVersion = "0.14";
+        m_out.println("\\documentclass{article}\n"+
+                      "\\usepackage{psgo} % version " + requiredVersion
+                      + " or newer\n" +
                       "\\pagestyle{empty}\n" +
                       "\\begin{document}\n" +
                       "\\begin{center}\n");
@@ -147,14 +155,17 @@ public class Writer
             {
                 needsComment[i] = true;
                 needsColorComment[i] = isColorUnexpected;
-                m_out.print("\\refstepcounter{gomove} \\toggleblackmove");
-                if (point != null)
+                if (m_usePass)
+                    m_out.print("\\pass");
+                else
+                    m_out.print("\\refstepcounter{gomove} \\toggleblackmove");
+                if (isPass)
+                    m_out.print(" % \\pass");
+                else
                 {
                     m_out.print(" % \\move");
                     printCoordinates(point);
                 }
-                else
-                    m_out.print(" % \\pass");
                 m_out.println(" % " + (blackToMove ? "B " : "W ") + (i + 1));
                 blackToMove = ! blackToMove;
                 continue;

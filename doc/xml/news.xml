@@ -9,6 +9,7 @@
 <itemizedlist>
 <listitem>
 Improve export as LaTeX document.
+New option <option>-pass</option> for <application>SgfToTex</application>.
 </listitem>
 <listitem>
 Add documentation for main menu bar.

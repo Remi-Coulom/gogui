@@ -22,14 +22,18 @@ class SgfToTex
         {
             String options[] = {
                 "help",
+                "pass",
                 "version"
             };
             Options opt = new Options(args, options);
+            boolean usePass = false;
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
                 System.exit(0);
             }
+            if (opt.isSet("pass"))
+                usePass = true;
             if (opt.isSet("version"))
             {
                 System.out.println("SgfToTex " + Version.m_version);
@@ -64,7 +68,7 @@ class SgfToTex
                     throw new Exception("File " + outFile + " already exists");
                 out = new FileOutputStream(outFile);
             }
-            convert(in, out);
+            convert(in, out, usePass);
         }
         catch (AssertionError e)
         {
@@ -90,7 +94,8 @@ class SgfToTex
         }
     }
 
-    private static void convert(InputStream in, OutputStream out)
+    private static void convert(InputStream in, OutputStream out,
+                                boolean usePass)
         throws sgf.Reader.Error
     {
         sgf.Reader reader = new sgf.Reader(new InputStreamReader(in), null);
@@ -114,7 +119,7 @@ class SgfToTex
         for (int i = 0; i < numberMoves; ++i)
             board.play(reader.getMove(i));
         boolean writePosition = (numberMoves == 0);
-        new latex.Writer(out, board, writePosition, null, null, null);
+        new latex.Writer(out, board, writePosition, usePass, null, null, null);
     }
 
     private static void printUsage(PrintStream out)
@@ -122,6 +127,7 @@ class SgfToTex
         out.print("Usage: java -jar sgftotex.jar [file.sgf [file.tex]]\n" +
                   "\n" +
                   "  -help    display this help and exit\n" +
+                  "  -pass    use \\pass command\n" +
                   "  -version print version and exit\n");
     }
 }
