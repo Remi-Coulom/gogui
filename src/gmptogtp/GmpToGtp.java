@@ -231,8 +231,9 @@ public class GmpToGtp
                 if (out != null)
                     out.close();
             }
-            catch (IOException ignore)
+            catch (IOException e)
             {
+                System.err.println("IOException on close: " + e.getMessage());
             }
             if (process != null)
             {
