@@ -100,7 +100,6 @@ class GoGui
 
         pack();
         setTitle("GoGui");
-        setVisible(true);
         ++m_instanceCount;
         if (gtpShell && m_gtpShell != null)
         {
@@ -1450,6 +1449,7 @@ class GoGui
                 setKomi();
                 newGame(m_boardSize);
             }
+            setVisible(true);
             if (! m_initAnalyze.equals(""))
                 m_toolBar.setAnalyzeCommand(m_initAnalyze);
             m_guiBoard.requestFocus();
