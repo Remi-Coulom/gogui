@@ -83,10 +83,10 @@ class GoGui
             { public void changed() { cbCommentChanged(); } };
         m_comment = new Comment(commentListener);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                                              m_boardPanel, m_comment);
-        splitPane.setResizeWeight(0.8);
-        contentPane.add(splitPane, BorderLayout.CENTER);
+        m_splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                                     m_boardPanel, m_comment);
+        m_splitPane.setResizeWeight(1.0);
+        contentPane.add(m_splitPane, BorderLayout.CENTER);
         
         WindowAdapter windowAdapter = new WindowAdapter()
             {
@@ -114,7 +114,7 @@ class GoGui
         pack();
         m_guiBoard.requestFocusInWindow();
         setTitle("GoGui");
-        restoreSize(this, "window-gogui", m_boardSize);
+        restoreMainWindow();
         try
         {
             if (time != null)
@@ -687,6 +687,8 @@ class GoGui
     private JPanel m_boardPanel;
 
     private JPanel m_infoPanel;
+
+    private JSplitPane m_splitPane;
 
     private MenuBar m_menuBar;
 
@@ -1795,7 +1797,7 @@ class GoGui
             m_guiBoard.initSize(size);
             m_squareLayout.setPreferMultipleOf(size + 2);
             pack();
-            restoreSize(this, "window-gogui", m_boardSize);
+            restoreMainWindow();
             if (m_gtpShell != null)
                 restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
             if (m_analyzeDialog != null)
@@ -1959,6 +1961,14 @@ class GoGui
         m_guiBoard.repaint();
     }
     
+    private void restoreMainWindow()
+    {
+        restoreSize(this, "window-gogui", m_boardSize);
+        String name = "splitpane-position-" + m_boardSize;
+        int dividerLocation = m_prefs.getInt(name);
+        m_splitPane.setDividerLocation(dividerLocation);
+    }
+
     private void restoreSize(Window window, String name, int size)
     {
         name = name + "-" + size;
@@ -2079,6 +2089,8 @@ class GoGui
             saveSizeAndVisible(m_gtpShell, "gtpshell");
             saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
+        String name = "splitpane-position-" + m_boardSize;
+        m_prefs.setInt(name, m_splitPane.getDividerLocation());
     }
 
     private void saveSize(Window window, String name)

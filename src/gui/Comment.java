@@ -31,7 +31,7 @@ class Comment
         super(new GridLayout(1, 0));
         m_listener = listener;
         m_textArea = new JTextArea();
-        m_textArea.setRows(5);
+        m_textArea.setRows(3);
         m_textArea.setLineWrap(true);
         m_textArea.setWrapStyleWord(true);
         m_textArea.getDocument().addDocumentListener(this);
