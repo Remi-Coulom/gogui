@@ -20,10 +20,10 @@ import version.*;
 public class TwoGtp
     extends GtpServer
 {
-    public TwoGtp(InputStream in, OutputStream out, String black, String white,
-                  String referee, int size, Float komi, int numberGames,
-                  boolean alternate, String sgfFile, boolean force,
-                  boolean verbose, boolean estimateScore)
+    public TwoGtp(InputStream in, OutputStream out, String black,
+                  String white, String referee, int size, Float komi,
+                  int numberGames, boolean alternate, String sgfFile,
+                  boolean force, boolean verbose, boolean estimateScore)
         throws Exception
     {
         super(in, out, null);
@@ -784,9 +784,9 @@ public class TwoGtp
             }
             Vector moves = getMoves(m_gameTree.getRoot(), null);
             String duplicate = checkDuplicate(m_board, moves, m_games);
-            saveResult(resultBlack, resultWhite, resultReferee, isAlternated(),
-                       duplicate, moves.size(), error, errorMessage,
-                       cpuTimeBlack, cpuTimeWhite);
+            saveResult(resultBlack, resultWhite, resultReferee,
+                       isAlternated(), duplicate, moves.size(), error,
+                       errorMessage, cpuTimeBlack, cpuTimeWhite);
             saveGame(resultBlack, resultWhite, resultReferee);
             saveScoreEstimates();
             ++m_gameIndex;
@@ -1052,8 +1052,8 @@ public class TwoGtp
         out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t"
                     + resultWhite + "\t"  + resultReferee + "\t"
                     + (alternated ? "1" : "0" ) + "\t" + duplicate + "\t"
-                    + numberMoves + "\t" + format.format(cpuTimeBlack) + "\t" +
-                    format.format(cpuTimeWhite) + "\t" +
+                    + numberMoves + "\t" + format.format(cpuTimeBlack) + "\t"
+                    + format.format(cpuTimeWhite) + "\t" +
                     (error ? "1" : "0" ) + "\t" + errorMessage);
         out.close();
     }
@@ -1070,7 +1070,8 @@ public class TwoGtp
         for (Node node = m_gameTree.getRoot(); node != null;
              node = node.getChild())
         {
-            ScoreEstimate estimate = (ScoreEstimate)m_scoreEstimates.get(node);
+            ScoreEstimate estimate =
+                (ScoreEstimate)m_scoreEstimates.get(node);
             if (estimate == null)
                 continue;
             out.println(node.getMoveNumber() + "\t" + estimate.m_black + "\t"
@@ -1285,7 +1286,8 @@ public class TwoGtp
         }        
     }
 
-    private boolean twogtpColor(Gtp gtp, String command, StringBuffer response)
+    private boolean twogtpColor(Gtp gtp, String command,
+                                StringBuffer response)
     {
         int index = command.indexOf(' ');
         if (index < 0)
