@@ -17,13 +17,14 @@ import version.*;
 //-----------------------------------------------------------------------------
 
 public class GtpTerminal
+    implements Gtp.IOCallback
 {
     public GtpTerminal(String program, int size)
         throws Exception
     {
         if (program.equals(""))
             throw new Exception("No program set.");
-        m_gtp = new Gtp(program, false, null);
+        m_gtp = new Gtp(program, false, this);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
         m_board = new Board(size);
@@ -112,6 +113,19 @@ public class GtpTerminal
             System.out.println();
         }
     }
+    
+    public void receivedResponse(boolean error, String s)
+    {
+    }
+    
+    public void receivedStdErr(String s)
+    {
+        System.err.print(s);
+    }
+
+    public void sentCommand(String s)
+    {
+    }
 
     private Board m_board;
 
@@ -153,10 +167,21 @@ public class GtpTerminal
             send("quit");
             return true;
         }
-        if (cmd.equals("undo"))
-            undo();
-        else if (cmd.equals("play"))
+        if (cmd.equals("genmove"))
             genmove();
+        else if (cmd.equals("help"))
+            help();
+        else if (cmd.equals("list_commands"))
+            listCommands();
+        else if (cmd.equals("undo"))
+            undo();
+        else if (cmd.equals("black")
+                 || cmd.equals("boardsize")
+                 || cmd.equals("clear_board")
+                 || cmd.equals("genmove_white")
+                 || cmd.equals("genmove_black")
+                 || cmd.equals("white"))
+            System.out.println("Command not allowed");
         else
         {
             try
@@ -172,6 +197,40 @@ public class GtpTerminal
             }
         }
         return false;
+    }
+
+    private void help()
+    {
+        System.out.println("Enter a move or one of the following commands:\n" +
+                           "  genmove\n" +
+                           "  help\n" +
+                           "  list_commands\n" +
+                           "  undo\n" +
+                           "  quit\n" +
+                           "The following commands are not allowed:\n" +
+                           "  black\n" +
+                           "  boardsize\n" +
+                           "  clear_board\n" +
+                           "  genmove_black\n" +
+                           "  genmove_white\n" +
+                           "  white\n" +
+                           "Other commands are forwarded to the program.\n");
+    }
+
+    private void listCommands()
+    {
+        try
+        {
+            m_gtp.querySupportedCommands();
+        }
+        catch (Gtp.Error error)
+        {
+            System.out.println(error.getMessage());
+            return;
+        }
+        Vector commands = m_gtp.getSupportedCommands();
+        for (int i = 0; i < commands.size(); ++i)
+            System.out.println((String)commands.get(i));
     }
 
     private void newGame()
