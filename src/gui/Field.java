@@ -232,7 +232,7 @@ public class Field
             drawTerritoryGraphics(graphics);
         drawStone(graphics);
         if (graphics2D != null)
-            drawTerritoryGraphics(graphics2D);
+            drawTerritoryGraphics2D(graphics2D);
         drawInfluence(graphics);
         drawMarkup(graphics);
         drawCrossHair(graphics);
@@ -403,36 +403,26 @@ public class Field
 
     private void drawInfluence(Graphics graphics)
     {
-        if (m_influenceSet)
-            drawInfluence(graphics, m_influence);
-    }
-
-    private void drawInfluence(Graphics graphics, double influence)
-    {
+        if (! m_influenceSet)
+            return;
+        double d = Math.abs(m_influence);
+        if (d < 0.01)
+            return;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
         {
             AlphaComposite composite =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
+                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
             graphics2D.setComposite(composite);
         }
-        double d = Math.abs(influence);
-        if (d < 0.01)
-            return;
-        if (influence > 0)
+        if (m_influence > 0)
             graphics.setColor(m_influenceBlackColor);
         else
             graphics.setColor(m_influenceWhiteColor);
         int size = getSize().width;
-        int margin = getStoneMargin(size);
-        int dd;
-        if (graphics2D == null)        
-            dd = (int)(size * (0.32 + (1 - d) * 0.68));
-        else
-            dd = (int)(size * (1 - d));
+        int dd = (int)(size * (0.32 + (1 - d) * 0.68));
         int width = size - dd;
         graphics.fillRect(dd / 2, dd / 2, width, width);
-        graphics.setPaintMode();
     }
 
     private void drawLastMoveMarker(Graphics graphics)
