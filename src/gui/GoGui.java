@@ -50,6 +50,7 @@ class GoGui
         m_computerWhite = computerWhite;
         m_auto = auto;
         m_verbose = verbose;
+        m_showGtpShellAtStart = gtpShell;
         m_initAnalyze = initAnalyze;
 
         Container contentPane = getContentPane();        
@@ -101,11 +102,6 @@ class GoGui
         pack();
         setTitle("GoGui");
         ++m_instanceCount;
-        if (gtpShell && m_gtpShell != null)
-        {
-            m_gtpShell.toTop();
-        }
-
         try
         {
             if (time != null)
@@ -545,6 +541,8 @@ class GoGui
     private boolean m_scoreMode;
 
     private boolean m_setupMode;
+
+    private boolean m_showGtpShellAtStart;
 
     private boolean m_verbose;
 
@@ -1471,11 +1469,21 @@ class GoGui
             setVisible(true);
             if (! m_initAnalyze.equals(""))
                 m_toolBar.setAnalyzeCommand(m_initAnalyze);
+            if (m_gtpShell != null)
+            {
+                m_gtpShell.setLocationRelativeTo(this);
+                Dimension size = getSize();
+                m_gtpShell.setLocation(size.width, 0);
+                if (m_showGtpShellAtStart)
+                    m_gtpShell.toTop();
+            }
             m_guiBoard.requestFocus();
         }
         catch (Gtp.Error e)
         {
             setVisible(true);
+            if (m_gtpShell != null)
+                m_gtpShell.toTop();
             SimpleDialogs.showError(this,
                                     e.getMessage() + "\n"
                                     + "See GTP shell for any error messages\n"
