@@ -41,6 +41,7 @@ class Field
         if (m_influenceSet)
         {
             m_influenceSet = false;
+            m_influence = 0;
             repaint();
         }
     }
