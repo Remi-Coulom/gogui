@@ -335,7 +335,7 @@ public class TwoGtp
             if (opt.isSet("komi"))
                 komi = new Float(opt.getFloat("komi"));
             else if (auto)
-                komi = new Float(5.5);
+                komi = new Float(6.5);
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
