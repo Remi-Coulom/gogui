@@ -12,7 +12,7 @@ The following Go programs can be used with GoGui:
 http://www.gnu.org/software/gnugo/gnugo.html</ulink>
 </para>
 <para>
-Operating systems: Unix, Windows, Macintosh.
+Operating systems: Unix, Windows, Macintosh
 </para>
 <para>
 Command: <userinput>gnugo --mode gtp</userinput>
@@ -24,6 +24,7 @@ Command: <userinput>gnugo --mode gtp</userinput>
 <para>
 <ulink url="http://www32.ocn.ne.jp/~yss/">http://www32.ocn.ne.jp/~yss/</ulink>
 </para>
+<para>
 <note>
 <para>
 Aya (version 5.53) opens its own window which does not repaint correctly in
@@ -37,8 +38,9 @@ Windows emulator, the command would then be:
 <userinput>wine Aya.exe --mode gtp</userinput>
 </para>
 </note>
+</para>
 <para>
-Operating systems: Windows.
+Operating systems: Windows
 </para>
 <para>
 Command: <userinput>Aya.exe --mode gtp</userinput>
@@ -59,7 +61,7 @@ AmigoPlus 0.1.2 has several bugs in its GTP implementation.
 </note>
 </para>
 <para>
-Operating systems: Unix.
+Operating systems: Unix
 </para>
 <para>
 Command: <userinput>amigoplus -gtp</userinput>
@@ -80,7 +82,7 @@ BadukiPlus 0.1.2 has several bugs in its GTP implementation.
 </note>
 </para>
 <para>
-Operating systems: Unix.
+Operating systems: Unix
 </para>
 <para>
 Command: <userinput>badukiplus -gtp</userinput>
@@ -101,7 +103,7 @@ WallyPlus 0.1.2 has several bugs in its GTP implementation.
 </note>
 </para>
 <para>
-Operating systems: Unix.
+Operating systems: Unix
 </para>
 <para>
 Command: <userinput>wallyplus -gtp</userinput>
