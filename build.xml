@@ -244,6 +244,14 @@ installation directory.
 "/>
 </target>
 
+<target name="man">
+<antcall target="checkXslAvailable"/>
+<style destdir="doc/man" basedir="doc/xml" includes="reference-*.xml"
+ style="${docbook_xsl_home}/manpages/docbook.xsl" force="true">
+<param name="chunk.quietly" expression="1"/>
+</style>
+</target>
+
 <target name="netgtp.jar" depends="compile">
 <mkdir dir="lib"/>
 <jar destfile="lib/netgtp.jar" compress="true">
