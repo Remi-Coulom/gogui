@@ -490,9 +490,12 @@ class MenuBar
         {
             JMenu menu = m_menuBar.getMenu(i);
             if (menu != null)
+            {
+                menu.setEnabled(true);
                 for (int j = 0; j < menu.getItemCount(); ++j)
                     if (menu.getItem(j) != null)
                         menu.getItem(j).setEnabled(true);
+            }
         }
     }
 }
