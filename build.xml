@@ -8,6 +8,8 @@ $Source$
 
 <project name="GoGui" default="all">
 
+<tstamp/>
+
 <property name="version" value="0.6.x"/>
 
 <property environment="env"/>
@@ -427,7 +429,7 @@ installation directory.
 <mkdir dir="lib"/>
 <jar destfile="lib/twogtp.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="twogtp.TwoGtp"/>
+<attribute name="Main-Class" value="twogtp.Main"/>
 </manifest>
 <fileset dir="build" includes="
  game/*.class

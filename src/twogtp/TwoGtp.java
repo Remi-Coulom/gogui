@@ -260,125 +260,6 @@ public class TwoGtp
             interruptProgram(m_referee);
     }
 
-    public static void main(String[] args)
-    {
-        try
-        {
-            String options[] = {
-                "alternate",
-                "analyze:",
-                "auto",
-                "black:",
-                "compare",
-                "config:",
-                "estimate-score",
-                "force",
-                "games:",
-                "help",
-                "loadsgf",
-                "komi:",
-                "openings:",
-                "referee:",
-                "sgffile:",
-                "size:",
-                "verbose",
-                "version",
-                "white:"
-            };
-            Options opt = new Options(args, options);
-            opt.handleConfigOption();
-            if (opt.isSet("help"))
-            {
-                String helpText =
-                    "Usage: java -jar twogtp.jar [options]\n" +
-                    "\n" +
-                    "-alternate      alternate colors\n" +
-                    "-analyze file   analyze result file\n" +
-                    "-auto           autoplay games\n" +
-                    "-black          command for black program\n" +
-                    "-compare        compare list of sgf files\n" +
-                    "-config         config file\n" +
-                    "-estimate-score send estimate_score to programs\n" +
-                    "-force          overwrite existing files\n" +
-                    "-games          number of games (0=unlimited)\n" +
-                    "-help           display this help and exit\n" +
-                    "-komi           komi\n" +
-                    "-loadsgf        use loadsgf command for openings\n" +
-                    "-openings       directory with opening sgf files\n" +
-                    "-referee        command for referee program\n" +
-                    "-sgffile        filename prefix\n" +
-                    "-size           board size for autoplay (default 19)\n" +
-                    "-verbose        log GTP streams to stderr\n" +
-                    "-version        print version and exit\n" +
-                    "-white          command for white program\n";
-                System.out.print(helpText);
-                System.exit(0);
-            }
-            boolean compare = opt.isSet("compare");
-            if (compare)
-            {
-                compare(opt.getArguments());
-                System.exit(0);
-            }
-            boolean force = opt.isSet("force");
-            if (opt.isSet("version"))
-            {
-                System.out.println("TwoGtp " + Version.get());
-                System.exit(0);
-            }
-            if (opt.contains("analyze"))
-            {
-                String filename = opt.getString("analyze");
-                new Analyze(filename, force);
-                return;
-            }                
-            boolean alternate = opt.isSet("alternate");
-            boolean estimateScore = opt.isSet("estimate-score");
-            boolean auto = opt.isSet("auto");
-            boolean verbose = opt.isSet("verbose");
-            String black = opt.getString("black", "");
-            String white = opt.getString("white", "");
-            String referee = opt.getString("referee", "");
-            int size = opt.getInteger("size", 0, 0);
-            double komi = 6.5;
-            boolean isKomiFixed = opt.isSet("komi");
-            if (isKomiFixed)
-                komi = opt.getDouble("komi");
-            int defaultGames = (auto ? 1 : 0);
-            int games = opt.getInteger("games", defaultGames, 0);
-            String sgfFile = opt.getString("sgffile", "");
-            if (opt.isSet("games") && sgfFile.equals(""))
-                throw new Exception("Use option -sgffile with -games.");
-            Openings openings = null;
-            if (opt.isSet("openings"))
-                openings = new Openings(new File(opt.getString("openings")));
-            boolean loadsgf = opt.isSet("loadsgf");
-            if (loadsgf && openings == null)
-                throw new Exception("Use option -loadsgf with -openings.");
-            if (loadsgf && ! auto)
-                throw new Exception("Option -loadsgf can only be used with"
-                                    + " -auto");
-            TwoGtp twoGtp =
-                new TwoGtp(System.in, System.out, black, white, referee, size,
-                           komi, isKomiFixed, games, alternate, sgfFile,
-                           force, verbose, estimateScore, openings, loadsgf);
-            if (auto)
-            {
-                if (twoGtp.gamesLeft() == 0)
-                    System.err.println("Already " + games + " games played.");
-                twoGtp.autoPlay();
-            }
-            else
-                twoGtp.mainLoop();
-            twoGtp.close();
-        }
-        catch (Throwable t)
-        {
-            StringUtils.printException(t);
-            System.exit(-1);
-        }
-    }
-
     private static class ScoreEstimate
     {
         double m_black;
@@ -485,45 +366,6 @@ public class TwoGtp
         return newGame(argument.m_integer, response);
     }
 
-    private static String checkDuplicate(Board board, Vector moves,
-                                         Vector games)
-    {
-        String result = "-";
-        for (int numberGame = 0; numberGame < games.size(); ++numberGame)
-        {
-            Vector gameMoves = (Vector)games.get(numberGame);
-            for (int rot = 0; rot < Board.NUMBER_ROTATIONS; ++rot)
-            {
-                int numberDifferent = 0;
-                int moveNumber = moves.size();
-                final int maxDifferent = moveNumber / 5;
-                if (gameMoves.size() != moveNumber)
-                {
-                    numberDifferent = Math.abs(gameMoves.size() - moveNumber);
-                    moveNumber = Math.min(gameMoves.size(), moveNumber);
-                }
-                for (int i = 0;
-                     numberDifferent <= maxDifferent && i < moveNumber; ++i)
-                {
-                    Move move = (Move)moves.get(i);
-                    Point point = move.getPoint();
-                    Color color = move.getColor();
-                    Move gameMove = (Move)gameMoves.get(i);
-                    Point gamePoint = board.rotate(rot, gameMove.getPoint());
-                    Color gameColor = gameMove.getColor();                    
-                    if (! color.equals(gameColor)
-                        || ! Point.equals(point, gamePoint))
-                        ++numberDifferent;
-                }
-                if (numberDifferent == 0)
-                    return Integer.toString(numberGame);
-                else if (numberDifferent < maxDifferent)
-                    result = Integer.toString(numberGame) + "?";
-            }
-        }
-        return result;
-    }
-
     private boolean checkInconsistentState(StringBuffer response)
     {
         if (m_inconsistentState)
@@ -561,32 +403,6 @@ public class TwoGtp
             }
         }
         return sendMove(move, response);
-    }
-
-    private static void compare(Vector filenames) throws Exception
-    {
-        Board board = null;
-        Vector games = new Vector();
-        for (int gameNumber = 0; gameNumber < filenames.size(); ++gameNumber)
-        {
-            String filename = (String)filenames.get(gameNumber);
-            File file = new File(filename);
-            sgf.Reader reader =
-                new sgf.Reader(new FileReader(file), file.toString());
-            GameTree gameTree = reader.getGameTree();
-            GameInformation gameInformation = gameTree.getGameInformation();
-            int size = gameInformation.m_boardSize;
-            if (board == null)
-                board = new Board(size);
-            else if (size != board.getSize())
-                throw new Exception("Board size in " + filename +
-                                    " does not match other games");
-            Vector moves = getAllAsMoves(gameTree.getRoot());
-            String duplicate = checkDuplicate(board, moves, games);
-            System.out.println(Integer.toString(gameNumber) + " " +
-                               filename + " " + duplicate);
-            games.add(moves);
-        }
     }
 
     private void estimateScore()
@@ -664,22 +480,6 @@ public class TwoGtp
     private boolean gameOver()
     {
         return (m_board.bothPassed() || m_resigned);
-    }
-
-    /** Return moves in main variation from node.
-        All setup stones are translated to moves and passes are filled in
-        to ensure that moves are alternating beginning with black.
-    */
-    private static Vector getAllAsMoves(Node node)
-    {
-        Vector moves = new Vector(128, 128);
-        while (node != null)
-        {
-            moves.addAll(node.getAllAsMoves());
-            node = node.getChild();
-        }
-        moves = Move.fillPasses(moves, Color.BLACK);
-        return moves;
     }
 
     private double getCpuTime(Gtp gtp)
@@ -824,8 +624,9 @@ public class TwoGtp
                 resultWhite = inverseResult(resultWhite);
                 resultReferee = inverseResult(resultReferee);
             }
-            Vector moves = getAllAsMoves(m_gameTree.getRoot());
-            String duplicate = checkDuplicate(m_board, moves, m_games);
+            Vector moves = Compare.getAllAsMoves(m_gameTree.getRoot());
+            String duplicate =
+                Compare.checkDuplicate(m_board, moves, m_games);
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moves.size(), error,
                        errorMessage, cpuTimeBlack, cpuTimeWhite);
@@ -861,7 +662,7 @@ public class TwoGtp
             if (m_openings.getGameInformation().m_boardSize != size)
                 throw new Exception("Wrong board size: " + m_openingFile);
             m_gameTree = m_openings.getGameTree();
-            m_openingMoves = getAllAsMoves(m_gameTree.getRoot());
+            m_openingMoves = Compare.getAllAsMoves(m_gameTree.getRoot());
             m_openingMovesIndex = 0;
             Node root = m_gameTree.getRoot();
             m_currentNode = NodeUtils.getLast(root);
@@ -1029,7 +830,8 @@ public class TwoGtp
             {
                 sgf.Reader reader =
                     new sgf.Reader(new FileReader(file), file.toString());
-                m_games.add(getAllAsMoves(reader.getGameTree().getRoot()));
+                Node root = reader.getGameTree().getRoot();
+                m_games.add(Compare.getAllAsMoves(root));
             }
             catch (sgf.Reader.Error e)
             {
