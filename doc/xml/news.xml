@@ -18,6 +18,26 @@
 </revision>
 
 <revision>
+<revnumber>0.7.0.x</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+SgfToTex: fix NullPointerException if SGF file contains charset property
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>0.7</revnumber>
 <date>18 Jan 2005</date>
 <authorinitials>enz</authorinitials>
