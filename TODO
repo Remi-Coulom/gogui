@@ -3,3 +3,5 @@ Same with Stringutils.replace?
 
 Bugs:
 Ignore analyze command from config file if not in analyze-commands.
+
+# interrupt confuses wallyplus
