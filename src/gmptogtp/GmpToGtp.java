@@ -265,7 +265,7 @@ public class GmpToGtp
 
     private boolean boardsize(String command, StringBuffer response)
     {
-        String[] tokens = StringUtils.split(command, ' ');
+        String[] tokens = StringUtils.tokenize(command);
         if (tokens.length < 2)
         {
             response.append("Missing argument");
@@ -320,7 +320,7 @@ public class GmpToGtp
     private boolean play(boolean isBlack, String command,
                          StringBuffer response)
     {
-        String[] tokens = StringUtils.split(command, ' ');
+        String[] tokens = StringUtils.tokenize(command);
         if (tokens.length < 2)
         {
             response.append("Missing argument");

@@ -305,9 +305,7 @@ public class Gtp
     {
         pointList.clear();
         stringList.clear();
-        s = StringUtils.replace(s, "\n", " ");
-        s = StringUtils.replace(s, "\t", " ");
-        String array[] = StringUtils.split(s, ' ');
+        String array[] = StringUtils.tokenize(s);
         boolean nextIsPoint = true;
         Point point = null;
         for (int i = 0; i < array.length; ++i)
