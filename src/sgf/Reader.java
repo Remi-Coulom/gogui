@@ -328,20 +328,6 @@ public class Reader
         return c;
     }
 
-    private double parseDouble(String s) throws SgfError
-    {
-        double f = 0;
-        try
-        {
-            f = Double.parseDouble(s);
-        }
-        catch (NumberFormatException e)
-        {
-            throw getError("Floating point number expected");
-        }
-        return f;
-    }
-
     private int parseInt(String s) throws SgfError
     {
         int i = -1;
