@@ -1012,16 +1012,12 @@ class GoGui
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
-                if (m_commandThread != null)
-                    m_commandThread.sendCommandPlay(m);
-                m_board.setup(m);
+                setup(m);
             }
             if (m_board.getToMove() != toMove)
             {
                 Move m = new Move(null, m_board.getToMove());
-                if (m_commandThread != null)
-                    m_commandThread.sendCommandPlay(m);
-                m_board.setup(m);
+                setup(m);
             }
             computerNone();
             boardChanged();
@@ -1242,10 +1238,8 @@ class GoGui
                 int moveNumber = m_board.getMoveNumber();
                 if (moveNumber >= m_board.getNumberSavedMoves())
                     break;
-                Move m = m_board.getMove(moveNumber);
-                if (m_commandThread != null)
-                    m_commandThread.sendCommandPlay(m);
-                m_board.play(m);
+                Move move = m_board.getMove(moveNumber);
+                play(move);
             }
             computerNone();
             boardChanged();
@@ -1275,9 +1269,7 @@ class GoGui
             go.Point p = m.getPoint();
             if (p != null && m_board.getColor(p) != go.Color.EMPTY)
                     return;
-            if (m_commandThread != null)
-                m_commandThread.sendCommandPlay(m);
-            m_board.play(m);
+            play(m);
             m_timeControl.stopMove();
             if (m_board.getMoveNumber() > 0
                 && m_timeControl.lostOnTime(m.getColor())
@@ -1374,8 +1366,7 @@ class GoGui
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
-                m_board.setup(m);
-                m_commandThread.sendCommandPlay(m);
+                setup(m);
             }
             int numberMoves = reader.getMoves().size();
             go.Color toMove = reader.getToMove();
@@ -1384,8 +1375,7 @@ class GoGui
             if (toMove != m_board.getToMove())
             {
                 Move m = new Move(null, m_board.getToMove());
-                m_board.setup(m);
-                m_commandThread.sendCommandPlay(m);
+                setup(m);
             }
             moves.clear();
             for (int i = 0; i < numberMoves; ++i)
@@ -1450,6 +1440,13 @@ class GoGui
             setKomi(komi);
             setRules();
         }
+    }
+
+    private void play(Move move) throws Gtp.Error
+    {
+        if (m_commandThread != null)
+            m_commandThread.sendCommandPlay(move);
+        m_board.play(move);
     }
     
     private void queryCommandList()
@@ -1588,8 +1585,7 @@ class GoGui
         for (int i = 0; i < moves.size(); ++i)
         {
             Move m = (Move)moves.get(i);
-            m_commandThread.sendCommandPlay(m);
-            m_board.setup(m);
+            setup(m);
         }
     }
 
@@ -1635,6 +1631,13 @@ class GoGui
         catch (Gtp.Error e)
         {
         }
+    }
+
+    private void setup(Move move) throws Gtp.Error
+    {
+        if (m_commandThread != null)
+            m_commandThread.sendCommandPlay(move);
+        m_board.setup(move);
     }
 
     private void showColorBoard(String[][] board) throws Gtp.Error
