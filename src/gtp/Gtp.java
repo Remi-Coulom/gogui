@@ -715,6 +715,7 @@ public final class Gtp
             response.append("\n");
             if (! isResponseLine(line))
             {
+                m_fullResponse = response.toString();
                 m_callback.receivedInvalidResponse(response.toString());
                 throw new Error("Invalid response:\n" + line);
             }
