@@ -1352,6 +1352,8 @@ class GoGui
             
             if (move > 0)
                 forward(move);
+
+            boardChanged();
         }
         catch (sgf.Reader.Error e)
         {
