@@ -316,6 +316,15 @@ Go to the previous variation.
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Back to Main Variation</guimenuitem></term>
+<listitem>
+<para>
+Go back to the main variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Make Main Variation</guimenuitem></term>
 <listitem>
 <para>
