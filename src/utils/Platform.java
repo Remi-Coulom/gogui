@@ -35,6 +35,12 @@ public class Platform
         return (System.getProperty("mrj.version") != null);
     }
 
+    /** Check if the platform is Windows */
+    public static boolean isWindows()
+    {
+        return System.getProperty("os.name").startsWith("Windows");
+    }
+
     /** Try to open a URL in en external browser.
         Tries /usr/bin/open if Platform.isMac(), otherwise (in this order):
         - kfmclient (the KDE browser)
