@@ -215,11 +215,11 @@ public class Analyze
                   "<tr><th align=\"left\">Host:</th><td align=\"left\">"
                   + m_host + "</td></tr>\n" +
                   "<tr><th align=\"left\">Black command:</th>"
-                  + "<td align=\"left\"><small><tt>"
-                  + m_blackCommand + "</tt></small></td></tr>\n" +
+                  + "<td align=\"left\"><tt>"
+                  + m_blackCommand + "</tt></td></tr>\n" +
                   "<tr><th align=\"left\">White command:</th>"
-                  + "<td align=\"left\"><small><tt>"
-                  + m_whiteCommand + "</tt></small></td></tr>\n" +
+                  + "<td align=\"left\"><tt>"
+                  + m_whiteCommand + "</tt></td></tr>\n" +
                   "<tr><th align=\"left\">Games:</th><td align=\"left\">"
                   + m_games + "</td></tr>\n" +
                   "<tr><th align=\"left\">Errors:</th><td align=\"left\">"
