@@ -23,7 +23,7 @@ public class TwoGtp
     public TwoGtp(InputStream in, OutputStream out, String black, String white,
                   String referee, int size, Float komi, int numberGames,
                   boolean alternate, String sgfFile, boolean force,
-                  boolean verbose)
+                  boolean verbose, boolean estimateScore)
         throws Exception
     {
         super(in, out, null);
@@ -69,7 +69,8 @@ public class TwoGtp
         m_size = size;
         m_komi = komi;
         m_alternate = alternate;
-        m_numberGames = numberGames;        
+        m_estimateScore = estimateScore;
+        m_numberGames = numberGames;
         initGame(size < 1 ? 19 : size);
     }
 
@@ -267,6 +268,7 @@ public class TwoGtp
                 "black:",
                 "compare",
                 "config:",
+                "estimate-score",
                 "force",
                 "games:",
                 "help",
@@ -285,22 +287,23 @@ public class TwoGtp
                 String helpText =
                     "Usage: java -jar twogtp.jar [options]\n" +
                     "\n" +
-                    "-alternate    alternate colors\n" +
-                    "-analyze file analyze result file\n" +
-                    "-auto         autoplay games\n" +
-                    "-black        command for black program\n" +
-                    "-compare      compare list of sgf files\n" +
-                    "-config       config file\n" +
-                    "-force        overwrite existing files\n" +
-                    "-games        number of games (0=unlimited)\n" +
-                    "-help         display this help and exit\n" +
-                    "-komi         komi\n" +
-                    "-referee      command for referee program\n" +
-                    "-sgffile      filename prefix\n" +
-                    "-size         board size for autoplay (default 19)\n" +
-                    "-verbose      log GTP streams to stderr\n" +
-                    "-version      print version and exit\n" +
-                    "-white        command for white program\n";
+                    "-alternate      alternate colors\n" +
+                    "-analyze file   analyze result file\n" +
+                    "-auto           autoplay games\n" +
+                    "-black          command for black program\n" +
+                    "-compare        compare list of sgf files\n" +
+                    "-config         config file\n" +
+                    "-estimate-score send estimate_score to programs\n" +
+                    "-force          overwrite existing files\n" +
+                    "-games          number of games (0=unlimited)\n" +
+                    "-help           display this help and exit\n" +
+                    "-komi           komi\n" +
+                    "-referee        command for referee program\n" +
+                    "-sgffile        filename prefix\n" +
+                    "-size           board size for autoplay (default 19)\n" +
+                    "-verbose        log GTP streams to stderr\n" +
+                    "-version        print version and exit\n" +
+                    "-white          command for white program\n";
                 System.out.print(helpText);
                 System.exit(0);
             }
@@ -323,6 +326,7 @@ public class TwoGtp
                 return;
             }                
             boolean alternate = opt.isSet("alternate");
+            boolean estimateScore = opt.isSet("estimate-score");
             boolean auto = opt.isSet("auto");
             boolean verbose = opt.isSet("verbose");
             String black = opt.getString("black", "");
@@ -341,7 +345,8 @@ public class TwoGtp
                 throw new Exception("Use option -sgffile with -games.");
             TwoGtp twoGtp =
                 new TwoGtp(System.in, System.out, black, white, referee, size,
-                           komi, games, alternate, sgfFile, force, verbose);
+                           komi, games, alternate, sgfFile, force, verbose,
+                           estimateScore);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)
@@ -372,13 +377,24 @@ public class TwoGtp
         }
     }
 
-    private boolean m_refereeIsDisabled;
+    private class ScoreEstimate
+    {
+        Double m_black;
+
+        Double m_white;
+
+        Double m_referee;
+    }
 
     private boolean m_alternate;
+
+    private boolean m_estimateScore;
 
     private boolean m_gameSaved;
 
     private boolean m_inconsistentState;
+
+    private boolean m_refereeIsDisabled;
 
     private boolean m_verbose;
 
@@ -413,6 +429,8 @@ public class TwoGtp
     private String m_whiteName;
 
     private String m_whiteVersion;
+
+    private HashMap m_scoreEstimates = new HashMap();
 
     private Float m_komi;
 
@@ -564,6 +582,41 @@ public class TwoGtp
                                filename + " " + duplicate);
             games.add(moves);
         }
+    }
+
+    private void estimateScore()
+    {
+        if (! m_estimateScore)
+            return;
+        ScoreEstimate estimate = new ScoreEstimate();
+        estimate.m_black = estimateScore(m_black);
+        estimate.m_white = estimateScore(m_white);
+        if (m_referee != null && ! m_refereeIsDisabled)
+            estimate.m_referee = estimateScore(m_referee);
+        m_scoreEstimates.put(m_currentNode, estimate);
+    }
+
+    private Double estimateScore(Gtp gtp)
+    {
+        if (! gtp.isCommandSupported("estimate_score"))
+            return null;
+        StringBuffer response = new StringBuffer();
+        if (! sendSingle(gtp, "estimate_score", response))
+            return null;
+        String score = StringUtils.tokenize(response.toString())[0];
+        if (score.equals("?"))
+            return null;
+        try
+        {
+            if (score.indexOf("B+") >= 0)
+                return new Double(score.substring(2));
+            else if (score.indexOf("W+") >= 0)
+                return new Double("-" + score.substring(2));
+        }
+        catch (NumberFormatException e)
+        {            
+        }
+        return null;
     }
 
     private boolean finalStatusCommand(String cmdLine, StringBuffer response)
@@ -754,6 +807,7 @@ public class TwoGtp
                        duplicate, moves.size(), error, errorMessage,
                        cpuTimeBlack, cpuTimeWhite);
             saveGame(resultBlack, resultWhite);
+            saveScoreEstimates();
             ++m_gameIndex;
             m_games.add(moves);
         }
@@ -768,6 +822,7 @@ public class TwoGtp
         m_board = new Board(size);
         m_gameTree = new GameTree(size, m_komi.floatValue(), null, null);
         m_currentNode = m_gameTree.getRoot();
+        m_scoreEstimates.clear();
     }
 
     private String inverseResult(String result)
@@ -878,6 +933,7 @@ public class TwoGtp
         Node node = new Node(move);
         m_currentNode.append(node);
         m_currentNode = node;
+        estimateScore();
     }
 
     private void readGames()
@@ -994,6 +1050,27 @@ public class TwoGtp
                     + numberMoves + "\t" + format.format(cpuTimeBlack) + "\t" +
                     format.format(cpuTimeWhite) + "\t" +
                     (error ? "1" : "0" ) + "\t" + errorMessage);
+        out.close();
+    }
+
+    private void saveScoreEstimates()
+        throws FileNotFoundException
+    {
+        if (! m_estimateScore)
+            return;
+        File file = new File(m_sgfFile + "-" + m_gameIndex + "-score.dat");
+        OutputStream fileOutputStream = new FileOutputStream(file);
+        PrintStream out = new PrintStream(fileOutputStream);
+        out.println("#MOVE\tBLACK\tWHITE\tREFEREE");
+        for (Node node = m_gameTree.getRoot(); node != null;
+             node = node.getChild())
+        {
+            ScoreEstimate estimate = (ScoreEstimate)m_scoreEstimates.get(node);
+            if (estimate == null)
+                continue;
+            out.println(node.getMoveNumber() + "\t" + estimate.m_black + "\t"
+                        + estimate.m_white  + "\t" + estimate.m_referee);
+        }
         out.close();
     }
 
