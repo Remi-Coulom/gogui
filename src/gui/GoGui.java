@@ -298,6 +298,17 @@ class GoGui
             m_gtpShell.toTop();
     }
 
+    public void cbShowGameTree()
+    {
+        if (m_gameTreeViewer == null)
+        {
+            m_gameTreeViewer = new GameTreeViewer(this);
+            restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
+        }
+        m_gameTreeViewer.update(m_gameTree, m_currentNode);
+        m_gameTreeViewer.toTop();
+    }
+
     public void clearAnalyzeCommand()
     {
         if (m_commandInProgress)
@@ -1411,17 +1422,6 @@ class GoGui
         m_guiBoard.setShowCursor(showCursor);
         m_prefs.setBool("show-cursor", showCursor);
         m_guiBoard.repaint();
-    }
-
-    private void cbShowGameTree()
-    {
-        if (m_gameTreeViewer == null)
-        {
-            m_gameTreeViewer = new GameTreeViewer(this);
-            restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
-        }
-        m_gameTreeViewer.update(m_gameTree, m_currentNode);
-        m_gameTreeViewer.toTop();
     }
 
     private void cbShowLastMove()

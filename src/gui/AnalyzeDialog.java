@@ -27,6 +27,8 @@ class AnalyzeDialog
     {
         public void cbGtpShell();
         
+        public void cbShowGameTree();
+        
         public void clearAnalyzeCommand();
         
         public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
@@ -84,6 +86,8 @@ class AnalyzeDialog
             reload();
         else if (command.equals("run"))
             setCommand();
+        else if (command.equals("show-gametree"))
+            m_callback.cbShowGameTree();
         else if (command.equals("sort"))
             sort();
     }
@@ -328,9 +332,11 @@ class AnalyzeDialog
 
     private JMenu createMenuWindows()
     {
-        JMenu menu = createMenu("Windows", KeyEvent.VK_W);
+        JMenu menu = createMenu("Window", KeyEvent.VK_W);
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
                     "gogui");
+        addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7, 0,
+                    "show-gametree");
         addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,
                     "gtp-shell");
         return menu;

@@ -193,6 +193,8 @@ public class GtpShell
     {
         public void cbAnalyze();
 
+        public void cbShowGameTree();
+
         public boolean sendGtpCommand(String command, boolean sync)
             throws Gtp.Error;
 
@@ -233,6 +235,8 @@ public class GtpShell
             comboBoxEdited();
         else if (command.equals("command-completion"))
             commandCompletion();
+        else if (command.equals("show-gametree"))
+            m_callback.cbShowGameTree();
         else if (command.equals("gogui"))
             m_callback.toTop();
         else if (command.equals("highlight"))
@@ -872,11 +876,13 @@ public class GtpShell
 
     private JMenu createMenuWindows()
     {
-        JMenu menu = createMenu("Windows", KeyEvent.VK_W);
-        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
-                    "analyze");
+        JMenu menu = createMenu("Window", KeyEvent.VK_W);
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
                     "gogui");
+        addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7, 0,
+                    "show-gametree");
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
+                    "analyze");
         return menu;
     }
 

@@ -319,17 +319,26 @@ class GameTreePanel
 
 public class GameTreeViewer
     extends JFrame
+    implements ActionListener
 {
     public interface Listener
     {
-        public abstract void gotoNode(Node node);
+        public void gotoNode(Node node);
+
+        public void cbAnalyze();
+
+        public void cbGtpShell();
+
+        public void toTop();
     }
 
     public GameTreeViewer(Listener listener)
     {
         super("Game Tree");
         GuiUtils.setGoIcon(this);
+        createMenuBar();
         Container contentPane = getContentPane();
+        m_listener = listener;
         m_panel = new GameTreePanel(listener);
         m_scrollPane =
             new JScrollPane(m_panel,
@@ -341,6 +350,19 @@ public class GameTreeViewer
         pack();
     }
 
+    public void actionPerformed(ActionEvent event)
+    {
+        String command = event.getActionCommand();
+        if (command.equals("analyze"))
+            m_listener.cbAnalyze();
+        else if (command.equals("gtp-shell"))
+            m_listener.cbGtpShell();
+        else if (command.equals("gogui"))
+            m_listener.toTop();
+        else if (command.equals("close"))
+            setVisible(false);
+    }
+    
     public void redrawCurrentNode()
     {
         m_panel.redrawCurrentNode();
@@ -364,9 +386,84 @@ public class GameTreeViewer
         m_panel.update(currentNode);
     }
 
+    private static final int m_shortcutKeyMask =
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
     private GameTreePanel m_panel;
 
     private JScrollPane m_scrollPane;
+
+    private Listener m_listener;
+
+    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
+                                  String command)
+    {
+        item.addActionListener(this);
+        item.setActionCommand(command);
+        item.setMnemonic(mnemonic);
+        menu.add(item);
+        return item;
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        return addMenuItem(menu, item, mnemonic, command);        
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  String command, String toolTip)
+    {
+        JMenuItem item = addMenuItem(menu, label, mnemonic, command);
+        item.setToolTipText(toolTip);
+        return item;
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  int accel, int modifier, String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
+        item.setAccelerator(k);
+        return addMenuItem(menu, item, mnemonic, command);
+    }
+
+    private JMenu createMenu(String name, int mnemonic)
+    {
+        JMenu menu = new JMenu(name);
+        menu.setMnemonic(mnemonic);
+        return menu;
+    }
+
+    private void createMenuBar()
+    {
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createMenuFile());
+        menuBar.add(createMenuWindows());
+        setJMenuBar(menuBar);
+    }
+
+    private JMenu createMenuFile()
+    {
+        JMenu menu = createMenu("File", KeyEvent.VK_F);
+        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
+                    m_shortcutKeyMask, "close");
+        return menu;
+    }
+
+    private JMenu createMenuWindows()
+    {
+        JMenu menu = createMenu("Window", KeyEvent.VK_W);
+        addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
+                    "gogui");
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
+                    "analyze");
+        addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,
+                    "gtp-shell");
+        return menu;
+    }
+
 }
 
 //-----------------------------------------------------------------------------
