@@ -468,7 +468,7 @@ class GoGui
     public boolean sendGtpCommand(String command, boolean sync)
         throws Gtp.Error
     {
-        if (m_commandInProgress)
+        if (m_commandInProgress || m_commandThread == null)
             return false;
         if (sync)
         {
