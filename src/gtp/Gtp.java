@@ -174,6 +174,15 @@ public final class Gtp
         return m_program;
     }
 
+    /** Get protocol version.
+        You have to call queryProtocolVersion() first, otherwise this method
+        will always return 1.
+    */
+    public int getProtocolVersion()
+    {
+        return m_protocolVersion;
+    }
+
     public Vector getSupportedCommands()
     {
         Vector result = new Vector(128, 128);
