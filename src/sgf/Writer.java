@@ -26,13 +26,13 @@ public class Writer
     }    
 
     /** Save game tree. */
-    public Writer(OutputStream out, Board board, GameTree gameTree, File file,
+    public Writer(OutputStream out, GameTree gameTree, File file,
                   String application, String version, String gameComment)
     {        
         m_out = new PrintStream(out);
-        m_board = board;
         m_out.println("(");
         GameInformation gameInformation = gameTree.getGameInformation();
+        m_size = gameInformation.m_boardSize;
         String result = gameInformation.m_result;
         String playerBlack = gameInformation.m_playerBlack;
         String playerWhite = gameInformation.m_playerWhite;
@@ -45,7 +45,6 @@ public class Writer
         printHeader(file, application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, gameComment, result,
                     komi, rules);
-        printToPlay(board.getToMove());
         printNodes(gameTree.getRoot());        
         m_out.println(")");
         m_out.close();
@@ -55,18 +54,18 @@ public class Writer
     public Writer(OutputStream out, Board board, File file,
                   String application, String version)
     {        
+        m_size = board.getSize();
         m_out = new PrintStream(out);
-        m_board = board;
         m_out.println("(");
         printHeader(file, application, version);
-        printPosition();
+        printPosition(board);
         m_out.println(")");
         m_out.close();
     }
 
-    private PrintStream m_out;
+    private int m_size;
 
-    private Board m_board;
+    private PrintStream m_out;
 
     private static String getName(File file)
     {
@@ -107,7 +106,7 @@ public class Writer
                       "GM[1]\n" +
                       "GN[" + getName(file) + "]\n" +
                       "AP[" + appName + "]\n" +
-                      "SZ[" + m_board.getSize() + "]");
+                      "SZ[" + m_size + "]");
     }
 
     private void printHeader(File file, String application, String version,
@@ -144,21 +143,6 @@ public class Writer
         }
         if (date != null)
             m_out.println("DT[" + date + "]");
-    }
-
-    private void printMoves()
-    {
-        int n = m_board.getMoveNumber();
-        for (int i = 0; i < n; ++i)
-        {
-            Move m = m_board.getMove(i);
-            if (m.getColor() == Color.BLACK)
-                m_out.print(";\nB");
-            else
-                m_out.print(";\nW");
-            printPoint(m.getPoint());
-            m_out.println();
-        }
     }
 
     private void printNodes(Node node)
@@ -244,14 +228,14 @@ public class Writer
     {
         if (p == null)
         {
-            if (m_board.getSize() <= 19)
+            if (m_size <= 19)
                 m_out.print("[tt]");
             else
                 m_out.print("[]");
             return;
         }
         int x = 'a' + p.getX();
-        int y = 'a' + (m_board.getSize() - p.getY() - 1);
+        int y = 'a' + (m_size - p.getY() - 1);
         m_out.print("[" + (char)x + (char)y + "]");
     }
 
@@ -261,22 +245,22 @@ public class Writer
             printPoint((Point)v.get(i));
     }
     
-    private void printPosition()
+    private void printPosition(Board board)
     {
-        int numberPoints = m_board.getNumberPoints();
+        int numberPoints = board.getNumberPoints();
         Vector black = new Vector(numberPoints);
         Vector white = new Vector(numberPoints);
         for (int i = 0; i < numberPoints; ++i)
         {
-            Point p = m_board.getPoint(i);
-            Color c = m_board.getColor(p);
+            Point p = board.getPoint(i);
+            Color c = board.getColor(p);
             if (c == Color.BLACK)
                 black.add(p);
             else if (c == Color.WHITE)
                 white.add(p);
         }
         printSetup(black, white);
-        printToPlay(m_board.getToMove());
+        printToPlay(board.getToMove());
     }
 
     private void printSetup(Vector black, Vector white)

@@ -1013,8 +1013,8 @@ public class TwoGtp
             "\nHost: " + host;
         File file = getFile(m_gameIndex);
         OutputStream out = new FileOutputStream(file);
-        new sgf.Writer(out, m_board, m_gameTree, file, "TwoGtp",
-                       Version.get(), gameComment);
+        new sgf.Writer(out, m_gameTree, file, "TwoGtp", Version.get(),
+                       gameComment);
     }
 
     private void saveResult(String resultBlack, String resultWhite,

@@ -2096,8 +2096,8 @@ class GoGui
         }
         else
         {
-            new sgf.Writer(out, m_board, m_gameTree, file, "GoGui",
-                           Version.get(), gameComment);
+            new sgf.Writer(out, m_gameTree, file, "GoGui", Version.get(),
+                           gameComment);
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
         }
