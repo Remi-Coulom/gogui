@@ -1133,7 +1133,7 @@ public class TwoGtp
             command2 = command2 + " " + response1;
             try
             {
-                response2 = gtp2.sendCommand(command2);
+                gtp2.sendCommand(command2);
             }
             catch (GtpError e)
             {

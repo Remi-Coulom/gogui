@@ -220,9 +220,6 @@ public class Board
         setLayout(new GridLayout(size + 2, size + 2));
         m_labels.clear();
         addColumnLabels(size);
-        Font font = UIManager.getFont("Label.font");
-        if (font != null)
-            font = font.deriveFont(Font.BOLD);
         for (int y = size - 1; y >= 0; --y)
         {
             String text = Integer.toString(y + 1);

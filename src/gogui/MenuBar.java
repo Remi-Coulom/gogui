@@ -316,8 +316,6 @@ public class MenuBar
             (NodeUtils.getPreviousEarlierVariation(node) != null);
         boolean hasPrevVariation =
             (NodeUtils.getPreviousVariation(node) != null);
-        boolean hasPrevVariationBackward =
-            (NodeUtils.getPreviousEarlierVariation(node) != null);
         boolean isInMain = NodeUtils.isInMainVariation(node);
         boolean treeHasVariations = gameTree.hasVariations();
         m_itemBeginning.setEnabled(hasFather);
