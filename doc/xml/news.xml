@@ -12,6 +12,10 @@
 	    <option>-games</option>, <option>-sgffile</option>,
 	    <option>-size</option>.
 	  </listitem>
+	  <listitem>
+	    <command>twogtp</command>: forward GTP extension commands to
+	    program(s) that implement them.
+	  </listitem>
 	</itemizedlist>
       </revremark>
     </revision>

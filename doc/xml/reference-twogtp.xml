@@ -36,18 +36,23 @@
 
     <para>
       The adpater forwards the following commands to both programs:
-      <userinput>boardsize</userinput>,
-      <userinput>black</userinput>,
-      <userinput>komi</userinput>,
-      <userinput>quit</userinput>,
-      <userinput>scoring_system</userinput>,
-      <userinput>undo</userinput>,
-      <userinput>white</userinput>.
+      <itemizedlist>
+        <listitem><userinput>boardsize</userinput></listitem>
+        <listitem><userinput>black</userinput></listitem>
+        <listitem><userinput>komi</userinput></listitem>
+        <listitem><userinput>loadsgf</userinput></listitem>
+        <listitem><userinput>quit</userinput></listitem>
+        <listitem><userinput>scoring_system</userinput></listitem>
+        <listitem><userinput>undo</userinput></listitem>
+        <listitem><userinput>white</userinput></listitem>
+      </itemizedlist>
       The commands <userinput>genmove_black</userinput> and
       <userinput>genmove_white</userinput> are forwarded only to the
       program of the corresponding color, the other program is informed about
       the move with a <userinput>black</userinput> or
       <userinput>white</userinput> command.
+      GTP extension commands are forwarded to the program(s) that implement
+      them.
       The special comment line <userinput>#&#160;interrupt</userinput>
       used by <application>GoGui</application> to interrupt commands is
       also forwarded to both programs.

@@ -29,8 +29,12 @@ public class TwoGtp
         m_white = new Gtp(white, verbose, null);
         m_white.setLogPrefix("W");
         m_inconsistentState = false;
+        m_black.queryProtocolVersion();
+        m_white.queryProtocolVersion();
         m_blackName = getName(m_black);
-        m_whiteName = getName(m_white);
+        m_whiteName = getName(m_white);        
+        m_blackCommands = m_black.sendCommandListCommands();
+        m_whiteCommands = m_white.sendCommandListCommands();
         m_name = "TwoGtp (" + m_blackName + " - " + m_whiteName + ")";
         m_size = size;
         m_sgfFile = sgfFile;
@@ -52,42 +56,26 @@ public class TwoGtp
         String[] cmdArray = StringUtils.getCmdArray(cmdLine);
         String cmd = cmdArray[0];
         boolean status = true;
-        if (cmd.equals("twogtp_black"))
-        {
+        if (cmd.equals("loadsgf"))
+            return sendBoth(cmdLine, response, true, false);
+        else if (cmd.equals("twogtp_black"))
             status = twogtpColor(m_black, cmdLine, response);
-        }
         else if (cmd.equals("twogtp_white"))
-        {
             status = twogtpColor(m_white, cmdLine, response);
-        }
         else if (cmd.equals("quit"))
-        {
             status = sendBoth(cmdLine, response, false, false);
-        }
         else if (cmd.equals("black"))
-        {
             status = play(Color.BLACK, cmdArray, response);
-        }
         else if (cmd.equals("white"))
-        {
             status = play(Color.WHITE, cmdArray, response);
-        }
         else if (cmd.equals("undo"))
-        {
             status = undo(response);
-        }
         else if (cmd.equals("genmove_black"))
-        {
             status = sendGenmove(Color.BLACK, response);
-        }
         else if (cmd.equals("genmove_white"))
-        {
             status = sendGenmove(Color.WHITE, response);
-        }
         else if (cmd.equals("boardsize"))
-        {
             status = boardsize(cmdArray, response);
-        }
         else if (cmd.equals("komi") || cmd.equals("scoring_system"))
             status = sendBoth(cmdLine, response, false, false);
         else if (cmd.equals("name"))
@@ -97,21 +85,31 @@ public class TwoGtp
         else if (cmd.equals("protocol_version"))
             response.append("1");
         else if (cmd.equals("help"))
-            response.append("quit\n" +
+            response.append("boardsize\n" +
                             "black\n" +
-                            "white\n" +
-                            "undo\n" +
                             "genmove_black\n" +
                             "genmove_white\n" +
-                            "boardsize\n" +
+                            "help\n" +
                             "komi\n" +
+                            "loadsgf\n" +
+                            "name\n" +
+                            "quit\n" +
                             "scoring_system\n" +
                             "twogtp_black\n" +
                             "twogtp_white\n" +
-                            "name\n" +
-                            "version\n");
+                            "undo\n" +
+                            "version\n" +
+                            "white\n");
         else
         {
+            boolean isExtCommandBlack = (m_blackCommands.indexOf(cmd) >= 0);
+            boolean isExtCommandWhite = (m_whiteCommands.indexOf(cmd) >= 0);
+            if (isExtCommandBlack && ! isExtCommandWhite)
+                return sendSingle(m_black, cmdLine, response);
+            if (isExtCommandWhite && ! isExtCommandBlack)
+                return sendSingle(m_white, cmdLine, response);
+            if (isExtCommandWhite && isExtCommandBlack)
+                return sendBoth(cmdLine, response, false, false);
             response.append("unknown command");
             status = false;
         }
@@ -159,7 +157,7 @@ public class TwoGtp
             boolean verbose = opt.isSet("verbose");
             String black = opt.getString("black", "");
             String white = opt.getString("white", "");
-            int size = opt.getInteger("size", -1, 1);
+            int size = opt.getInteger("size", 0, 0);
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
@@ -198,11 +196,15 @@ public class TwoGtp
 
     private Board m_board;
 
+    private String m_blackCommands;
+
     private String m_blackName;
 
     private String m_name;
 
     private String m_sgfFile;
+
+    private String m_whiteCommands;
 
     private String m_whiteName;
 
@@ -246,7 +248,7 @@ public class TwoGtp
             response.append("Missing argument");
             return false;
         }
-        if (m_numberGames >= 0 && m_gameIndex >= m_numberGames)
+        if (m_numberGames > 0 && m_gameIndex >= m_numberGames)
         {
             response.append("Maximum number of " + m_numberGames +
                             " games reached");
@@ -344,23 +346,39 @@ public class TwoGtp
                                String prefix1, String prefix2)
     {
         boolean empty1 = (response1 == null || response1.equals(""));
-        boolean empty2 = (response2 == null || response2.equals(""));
+        boolean empty2 = (response2 == null || response2.equals(""));        
         if (empty1 && empty2)
             return;
+        boolean isMultiLine =
+            ((response1 != null && response1.indexOf('\n') >= 0)
+             || (response2 != null && response2.indexOf('\n') >= 0));
         if (! empty1)
         {
             response.append(prefix1);
-            response.append(": ");
+            if (isMultiLine)
+                response.append(":\n");
+            else
+                response.append(": ");
             response.append(response1);
             if (! empty2)
-                response.append("  ");
+            {
+                if (isMultiLine)
+                    response.append("\n");
+                else
+                    response.append("  ");
+            }
         }
         if (! empty2)
         {
             response.append(prefix2);
-            response.append(": ");
+            if (isMultiLine)
+                response.append(":\n");
+            else
+                response.append(": ");
             response.append(response2);
         }
+        if (isMultiLine)
+            StringUtils.replace(response, "\n\n", "\n");
     }
 
     private boolean newGame(int size, StringBuffer response)
@@ -491,6 +509,20 @@ public class TwoGtp
                     tryUndo);
     }
 
+    private boolean sendSingle(Gtp gtp, String command, StringBuffer response)
+    {
+        try
+        {
+            response.append(gtp.sendCommand(command));
+        }
+        catch (Gtp.Error e)
+        {
+            response.append(e.getMessage());
+            return false;
+        }        
+        return true;
+    }
+
     private boolean sendGenmove(Color color, StringBuffer response)
     {
         if (checkInconsistentState(response))
@@ -577,16 +609,7 @@ public class TwoGtp
             return false;
         }
         command = command.substring(index).trim();
-        try
-        {
-            response.append(gtp.sendCommand(command));
-        }
-        catch (Gtp.Error e)
-        {
-            response.append(e.getMessage());
-            return false;
-        }        
-        return true;
+        return sendSingle(gtp, command, response);
     }
 
     private boolean undo(StringBuffer response)
