@@ -1124,6 +1124,8 @@ class GoGui
     
     private void checkComputerMove()
     {
+        if (m_commandThread == null)
+            return;
         if (m_computerBlack && m_computerWhite)
         {
             if (m_board.bothPassed())
@@ -1811,6 +1813,8 @@ class GoGui
 
     private void setTitleFromProgram()
     {
+        if (m_commandThread == null)
+            return;
         if (m_commandThread.isCommandSupported("gogui_title"))
         {
             try
