@@ -880,6 +880,8 @@ public class Board
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             size = screenSize.height / 30;
         }
+        if (size % 2 == 0)
+            ++size;
         m_preferredFieldSize = new Dimension(size, size);
     }
 
