@@ -13,7 +13,6 @@ public class Move
 {
     public Move(Point p, Color c)
     {
-        assert c != Color.EMPTY;
         m_point = p;
         m_color = c;
     }
