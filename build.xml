@@ -222,6 +222,9 @@ installation directory.
  utils/*.class
  version/Version.class
 "/>
+<fileset dir="." includes="
+ specialmac/*.class
+"/>
 </jar>
 </target>
 
@@ -403,6 +406,13 @@ installation directory.
 </jar>
 </target>
 
+<target name="specialmac"
+ description="Compile special MAC classes depending on com.apple">
+<javac srcdir="." source="1.4" deprecation="true" classpath="src"
+ optimize="true" listfiles="yes"
+ includes="specialmac/RegisterSpecialMacHandler.java"/>
+</target>
+
 <target name="tags"
  description="Build a TAGS file for Emacs" >
 <exec executable="sh">
@@ -430,11 +440,13 @@ installation directory.
 </jar>
 </target>
 
-<target name="version" depends="versionCheckUptodate" unless="versionUptodate">
+<target name="version" depends="versionCheckUptodate"
+ unless="versionUptodate">
 <copy
  file="src/version/Version.java.in"
  tofile="src/version/Version.java" overwrite="true"/>
-<replace file="src/version/Version.java" token="@VERSION@" value="${version}"/>
+<replace file="src/version/Version.java" token="@VERSION@"
+ value="${version}"/>
 <copy
  file="doc/xml/version.xml.in"
  tofile="doc/xml/version.xml" overwrite="true"/>
@@ -443,7 +455,8 @@ installation directory.
 
 <target name="versionCheckUptodate">
 <uptodate property="versionUptodate" targetfile="src/version/Version.java">
-<srcfiles dir="." includes="build.xml,src/version/Version.java.in,doc/xml/version.xml.in"/>
+<srcfiles dir="."
+ includes="build.xml,src/version/Version.java.in,doc/xml/version.xml.in"/>
 </uptodate>
 </target>
 

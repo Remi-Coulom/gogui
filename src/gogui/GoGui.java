@@ -1967,6 +1967,7 @@ class GoGui
                 initAnalyzeCommand(analyzeCommand, true);
         }
         updateGameInfo(true);
+        registerSpecialMacHandler();
         setVisible(true);
         m_guiBoard.setFocus();
         setTitleFromProgram();
@@ -2089,6 +2090,29 @@ class GoGui
             m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
             throw error;
         }
+    }
+
+    private void registerSpecialMacHandler()
+    {        
+        if (! Platform.isMac())
+            return;
+        Platform.SpecialMacHandler handler = new Platform.SpecialMacHandler()
+            {
+                public boolean handleAbout()
+                {
+                    assert(SwingUtilities.isEventDispatchThread());
+                    cbShowAbout();
+                    return true;
+                }
+                
+                public boolean handleQuit()
+                {
+                    assert(SwingUtilities.isEventDispatchThread());
+                    close();
+                    return true;
+                }
+            };
+        Platform.registerSpecialMacHandler(handler);
     }
 
     private void resetBoard()

@@ -6,6 +6,7 @@
 package utils;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.*;
 
 //----------------------------------------------------------------------------
@@ -15,10 +16,24 @@ import java.net.*;
 */
 public class Platform
 {
+    /** Handler for events from the Application Menu on MacOS. */
+    public static class SpecialMacHandler
+    {
+        public boolean handleAbout()
+        {
+            return false;
+        }
+
+        public boolean handleQuit()
+        {
+            return true;
+        }
+    }
+
     /** Check if the platform is Mac OS X */
     public static boolean isMac()
     {
-        // According to the article "Tailoring Java Apllications for Mac OS X"
+        // According to the article "Tailoring Java Applications for Mac OS X"
         // (Technical Note TN2042) it is better to check for mrj.version than
         // to parse os.name
         return (System.getProperty("mrj.version") != null);
@@ -78,6 +93,25 @@ public class Platform
         }
         return false;
     }
+
+    /** Register handler for events from the Application Menu on MacOS */
+    public static void registerSpecialMacHandler(SpecialMacHandler handler)
+    {
+        try
+        {
+            Object[] args = { handler };
+            Class[] arglist = { Platform.SpecialMacHandler.class };
+            Class registerClass =
+                Class.forName("specialmac.RegisterSpecialMacHandler");
+            Constructor constructor = registerClass.getConstructor(arglist);
+            constructor.newInstance(args);
+        }
+        catch(Exception e)
+        {
+            StringUtils.printException(e);
+        }
+    }
+
 }
 
 //----------------------------------------------------------------------------
