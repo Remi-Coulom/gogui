@@ -25,6 +25,19 @@ Lots of small fixes and enhancements.
 </revision>
 
 <revision>
+<revnumber>0.3.1</revnumber>
+<date>29 Aug 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Bugfix release.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
 <revnumber>0.3.0</revnumber>
 <date>25 Aug 2003</date>
 <authorinitials>enz</authorinitials>
