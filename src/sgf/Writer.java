@@ -24,8 +24,9 @@ public class Writer
         }
     }    
 
-    public Writer(File file, Board board, int handicap, String playerBlack,
-                  String playerWhite, String gameComment, Score score)
+    public Writer(File file, Board board, String version, int handicap,
+                  String playerBlack, String playerWhite, String gameComment,
+                  Score score)
         throws FileNotFoundException
     {        
         FileOutputStream out = new FileOutputStream(file);
@@ -33,7 +34,8 @@ public class Writer
         m_board = board;
         m_file = file;
         m_out.println("(");
-        printHeader(handicap, playerBlack, playerWhite, gameComment, score);
+        printHeader(version, handicap, playerBlack, playerWhite, gameComment,
+                    score);
         printSetup(m_board.getSetupStonesBlack(),
                    m_board.getSetupStonesWhite());
         if (m_board.getNumberSavedMoves() == 0)
@@ -43,14 +45,15 @@ public class Writer
         m_out.close();
     }
 
-    public Writer(File file, Board board) throws FileNotFoundException
+    public Writer(File file, Board board, String version)
+        throws FileNotFoundException
     {        
         FileOutputStream out = new FileOutputStream(file);
         m_out = new PrintStream(out);
         m_board = board;
         m_file = file;
         m_out.println("(");
-        printHeader();
+        printHeader(version);
         printPosition();
         m_out.println(")");
         m_out.close();
@@ -62,7 +65,7 @@ public class Writer
 
     private Board m_board;
 
-    private void printHeader()
+    private void printHeader(String version)
     {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -72,7 +75,7 @@ public class Writer
             Integer.toString(year) + "-" +
             (month < 10 ? "0" : "") + month + "-" +
             (day < 10 ? "0" : "") + day;
-        m_out.println(";\nFF[4]\nGM[1]\nAP[GoGui]\n" +
+        m_out.println(";\nFF[4]\nGM[1]\nAP[GoGui:" + version + "]\n" +
                       "SZ[" + m_board.getSize() + "]");
         int rules = m_board.getRules();
         if (rules == go.Board.RULES_JAPANESE)
@@ -85,11 +88,11 @@ public class Writer
         m_out.println("DT[" + date + "]");
     }
 
-    private void printHeader(int handicap, String playerBlack,
+    private void printHeader(String version, int handicap, String playerBlack,
                              String playerWhite, String gameComment,
                              go.Score score)
     {
-        printHeader();
+        printHeader(version);
         if (handicap > 0)
             m_out.println("HA[" + handicap + "]");
         else
