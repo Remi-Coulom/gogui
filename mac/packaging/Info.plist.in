@@ -45,7 +45,7 @@ Do not edit Info.plist
 <string>@VERSION@</string>
 
 <key>CFBundleGetInfoString</key>
-<string>@VERSION@, Copyright 2003-2004 Markus Enzenberger</string>
+<string>@VERSION@, Copyright 2004 Markus Enzenberger</string>
 
 <key>CFBundlePackageType</key>
 <string>APPL</string>
