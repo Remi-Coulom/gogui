@@ -401,8 +401,6 @@ class GoGui
         catch (Exception e)
         {
         }
-        if (Platform.isMac())
-            initializeMac();
         boolean verbose = false;
         try
         {
@@ -1852,14 +1850,6 @@ class GoGui
         updateGameInfo(true);
         setVisible(true);
         m_guiBoard.setFocus();
-    }
-
-    private static void initializeMac()
-    {
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-                           "GoGui");
-        System.setProperty("apple.awt.brushMetalLook", "true");
     }
 
     private void initScore(go.Point[] isDeadStone)
