@@ -62,7 +62,8 @@ class GtpServer
             if (remoteHost == null || ! loop)
                 break;
         }
-        serverSocket.close();
+        if (remoteHost == null)
+            serverSocket.close();
     }
 
     public static void main(String[] args)
