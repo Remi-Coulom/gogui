@@ -1445,6 +1445,8 @@ class GoGui
 
     private boolean checkCurrentNodeExecuted()
     {
+        if (m_commandThread == null)
+            return true;
         if (! isCurrentNodeExecuted())
         {
             showError("Cannot go forward from partially executed game node.");
