@@ -561,6 +561,46 @@ public final class Gtp
         }
     }
 
+
+    public void waitForExit(int timeout, TimeoutCallback timeoutCallback)
+    {
+        while (true)
+        {
+            Thread thread = new Thread()
+                {
+                    public void run()
+                    {
+                        try
+                        {
+                            m_process.waitFor();
+                        }
+                        catch (InterruptedException e)
+                        {
+                        }
+                    }
+                };
+            thread.start();
+            try
+            {
+                Thread.sleep(timeout);
+            }
+            catch (InterruptedException e)
+            {
+                assert(false);
+            }
+            if (thread.isAlive())
+            {
+                if (! timeoutCallback.askContinue())
+                {
+                    m_process.destroy();
+                    return;
+                }
+                // Would like to interrupt the thread before creating
+                // a new one, but Process.waitFor is not interruptible
+            }
+        }
+    }
+
     private static class ReadMessage
     {
         public ReadMessage(boolean isError, String text)

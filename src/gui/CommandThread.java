@@ -37,7 +37,8 @@ public class CommandThread
         if (! isProgramDead())
         {
             m_gtp.close();
-            m_gtp.waitForExit();
+            TimeoutCallback timeoutCallback = new TimeoutCallback(null);
+            m_gtp.waitForExit(6000, timeoutCallback);
         }
     }
 
@@ -238,9 +239,13 @@ public class CommandThread
 
         public boolean askContinue()
         {
-            String message = "Program did not respond to command"
-                + " '" + m_command + "'\n" +
-                "Kill program?";
+            String message;
+            if (m_command != null)
+                message = "Program did not respond to command"
+                    + " '" + m_command + "'";
+            else
+                message = "Program did not terminate";
+            message = message + "\nKill program?";
             String title = "Error";
             String options[] = { "Kill Program", "Wait" };
             int result =

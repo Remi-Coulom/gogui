@@ -6,9 +6,6 @@ stones are transmitted to the program by play commands
 
 IMPROVEMENTS:
 
-Allow to use timeout in gtp.Gtp.waitForExit() to offer the user to
-kill the program if it does not exit after its input stream is closed.
-
 SquareLayout should be used in gui.Board
 
 GtpRegress: change into gtp test file directory, optional?
