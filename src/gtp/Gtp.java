@@ -349,7 +349,7 @@ public final class Gtp
             tokenizer.wordChars('!', '!');
             tokenizer.wordChars('*', '*');
             tokenizer.wordChars('"', '"');
-            if (title != null)
+            if (title != null && ! title.trim().equals(""))
             {
                 boolean foundTitle = false;
                 while (! foundTitle)
