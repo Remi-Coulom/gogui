@@ -1196,7 +1196,6 @@ class GoGui
                 if (! showQuestion("Overwrite " + file + "?"))
                     return;
             savePosition(file);
-            showInfo("Position saved.");
             if (m_currentNode.getFather() == null
                 && m_currentNode.getChild() == null)
                 m_needsSave = false;
@@ -2070,7 +2069,6 @@ class GoGui
                 break;
             }
             save(file);
-            showInfo("Game saved.");
             m_loadedFile = file;
             setTitle();
             m_needsSave = false;
