@@ -462,14 +462,14 @@ class MenuBar
         addMenuItem(menu, "Beginning", KeyEvent.VK_N, KeyEvent.VK_HOME,
                     ActionEvent.CTRL_MASK,
                     "beginning");
-        addMenuItem(menu, "Backward 10 moves", KeyEvent.VK_D, KeyEvent.VK_LEFT,
+        addMenuItem(menu, "Backward 10", KeyEvent.VK_D, KeyEvent.VK_LEFT,
                     ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
                     "backward-10");
         addMenuItem(menu, "Backward", KeyEvent.VK_B, KeyEvent.VK_LEFT,
                     ActionEvent.CTRL_MASK, "backward");
         addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
                     ActionEvent.CTRL_MASK, "forward");
-        addMenuItem(menu, "Forward 10 moves", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
+        addMenuItem(menu, "Forward 10", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
                     ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
                     "forward-10");
         addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
