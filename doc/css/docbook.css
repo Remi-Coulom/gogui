@@ -144,7 +144,6 @@ DIV.navbar P
 
 .option, .command
 {
-  background-color: rgb(255,255,255);
   color: rgb(0,96,160);
   font-weight: bold;
 }
@@ -161,4 +160,14 @@ h1, h2, h3, h4, h5, h6
   font-style: italic;
 }
 
-.caption { margin: 0em 2em 3em 2em; }
+.caption
+{
+  margin: 0em 2em 3em 2em;
+}
+
+DIV.note,
+DIV.warning
+{
+  background-color: rgb(240,240,240);
+}
+

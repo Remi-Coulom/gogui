@@ -13,6 +13,7 @@ doc:
           --param navig.showtitles 0 \
           --param refentry.generate.name 0 \
           --param refentry.generate.title 1 \
+          --param spacing.paras 0 \
           --param toc.section.depth 0 \
           -o html/ \
           $(XSLDIR)/html/chunk.xsl xml/book.xml
