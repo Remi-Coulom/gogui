@@ -490,12 +490,11 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </jar>
 </target>
 
-<target name="javadoc">
+<target name="javadoc"
+ description="Create Javadoc documentation for public parts of packages">
 <javadoc sourcepath="src" destdir="javadoc" source="1.4"
  windowtitle="GoGui Source Documentation"
  overview="src/overview.html"
- private="true"
- linksource="true"
  packagenames="
   game.*,
   gmp.*,
