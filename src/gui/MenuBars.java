@@ -28,17 +28,17 @@ class MenuBars
         m_menuAnalyze = createAnalyzeMenu();
         m_normalMenuBar.add(m_menuAnalyze);
         m_normalMenuBar.add(Box.createHorizontalGlue());
-        m_normalMenuBar.add(createHelpMenu());
+        m_normalMenuBar.add(createHelpMenu(true));
 
         m_setupMenuBar = new JMenuBar();
         m_setupMenuBar.add(createSetupMenu());
         m_setupMenuBar.add(Box.createHorizontalGlue());
-        m_setupMenuBar.add(createHelpMenu());
+        m_setupMenuBar.add(createHelpMenu(false));
 
         m_scoreMenuBar = new JMenuBar();
         m_scoreMenuBar.add(createScoreMenu());
         m_scoreMenuBar.add(Box.createHorizontalGlue());
-        m_scoreMenuBar.add(createHelpMenu());
+        m_scoreMenuBar.add(createHelpMenu(false));
     }
 
     public void disableComputerMenus()
@@ -135,11 +135,11 @@ class MenuBars
                         if (menu.getItem(j) != null)
                             menu.getItem(j).setEnabled(false);
             }
-            m_itemAbout.setEnabled(true); // Doesn't work?
+            m_itemAbout.setEnabled(true);
             m_itemBeepAfterMove.setEnabled(true);
             m_itemExit.setEnabled(true);
             m_itemGtpShell.setEnabled(true);
-            m_itemHelp.setEnabled(true); // Doesn't work?
+            m_itemHelp.setEnabled(true);
             m_itemShowLastMove.setEnabled(true);
             m_menuComputerColor.setEnabled(true);
         }
@@ -337,12 +337,17 @@ class MenuBars
         return menu;
     }
 
-    private JMenu createHelpMenu()
+    private JMenu createHelpMenu(boolean store)
     {
         JMenu menu = new JMenu("Help");
         menu.setMnemonic(KeyEvent.VK_H);
-        m_itemHelp = addMenuItem(menu, "Contents", "help");
-        m_itemAbout = addMenuItem(menu, "About", "about");
+        JMenuItem itemHelp = addMenuItem(menu, "Contents", "help");
+        JMenuItem itemAbout = addMenuItem(menu, "About", "about");
+        if (store)
+        {
+            m_itemHelp = itemHelp;
+            m_itemAbout = itemAbout;
+        }
         return menu;
     }
 
