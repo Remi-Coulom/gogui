@@ -25,7 +25,9 @@ public class TwoGtp
             throw new Exception("No black program set.");
         if (white.equals(""))
             throw new Exception("No white program set.");
+        m_sgfFile = sgfFile;
         findInitialGameIndex();
+        readGames();
         m_black = new Gtp(black, verbose, null);
         m_black.setLogPrefix("B");
         m_white = new Gtp(white, verbose, null);
@@ -40,7 +42,6 @@ public class TwoGtp
         m_name = "TwoGtp (" + m_blackName + " - " + m_whiteName + ")";
         m_size = size;
         m_komi = komi;
-        m_sgfFile = sgfFile;
         m_alternate = alternate;
         m_numberGames = numberGames;
         m_board = new Board(size < 1 ? 19 : size);
@@ -265,6 +266,7 @@ public class TwoGtp
         while (m_gameIndex < m_numberGames)
         {
             boolean error = false;
+            response.setLength(0);
             if (newGame(m_size > 0 ? m_size : 19, response))
             {
                 int numberPass = 0;
@@ -280,10 +282,15 @@ public class TwoGtp
             }
             else
                 error = true;
-            String errorMsg = null;
             if (error)
-                throw new Exception(response.toString());
+                handleEndOfGame(true, response.toString());
+            if (m_black.isProgramDead())
+                throw new Exception("Black program died");
+            if (m_white.isProgramDead())
+                throw new Exception("White program died");
         }
+        m_black.sendCommand("quit");
+        m_white.sendCommand("quit");
         close();
     }
 
@@ -362,35 +369,6 @@ public class TwoGtp
         return result;
     }
 
-    private void checkEndOfGame()
-    {
-        if (m_board.bothPassed() && ! m_gameSaved)
-        {
-            try
-            {
-                String resultBlack = getResult(m_black);
-                String resultWhite = getResult(m_white);
-                if (isAlternated())
-                {
-                    resultBlack = inverseResult(resultBlack);
-                    resultWhite = inverseResult(resultWhite);
-                }
-                Vector moves = getMoves();
-                String duplicate = checkDuplicate(m_board, moves, m_games);
-                saveResult(resultBlack, resultWhite, isAlternated(), duplicate,
-                           moves.size());
-                saveGame();
-                ++m_gameIndex;
-                m_games.add(moves);
-            }
-            catch (FileNotFoundException e)
-            {
-                System.err.println("Could not save game: " + e.getMessage());
-            }
-            m_gameSaved = true;
-        }
-    }
-
     private boolean checkInconsistentState(StringBuffer response)
     {
         if (m_inconsistentState)
@@ -428,22 +406,31 @@ public class TwoGtp
     private void findInitialGameIndex()
     {
         m_gameIndex = 0;
-        while (getFile(m_gameIndex).exists())
+        try
         {
-            File file = getFile(m_gameIndex);
-            if (! file.exists())
-                return;
-            try
+            InputStream inputStream = new FileInputStream(getResultFile());
+            Reader reader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String line;
+            while (true)
             {
-                sgf.Reader reader = new sgf.Reader(file);
-                m_games.add(reader.getMoves());
+                line = bufferedReader.readLine();
+                if (line == null)
+                    break;
+                if (line.trim().startsWith("#"))
+                    continue;
+                String[] elements = StringUtils.split(line, '\t');
+                int gameIndex = Integer.parseInt(elements[0]);
+                if (gameIndex + 1 > m_gameIndex)
+                    m_gameIndex = gameIndex + 1;
             }
-            catch (sgf.Reader.Error e)
-            {
-                System.err.println("Error reading " + file + ": " +
-                                   e.getMessage());
-            }
-            ++m_gameIndex;
+            bufferedReader.close();
+        }
+        catch (FileNotFoundException e)
+        {
+        }
+        catch (IOException e)
+        {
         }
     }
 
@@ -483,6 +470,36 @@ public class TwoGtp
         catch (Gtp.Error e)
         {
             return "?";
+        }
+    }
+
+    private File getResultFile()
+    {
+        return new File(m_sgfFile + ".dat");
+    }
+
+    private void handleEndOfGame(boolean error, String errorMessage)
+    {
+        try
+        {
+            String resultBlack = getResult(m_black);
+            String resultWhite = getResult(m_white);
+            if (isAlternated())
+            {
+                resultBlack = inverseResult(resultBlack);
+                resultWhite = inverseResult(resultWhite);
+            }
+            Vector moves = getMoves();
+            String duplicate = checkDuplicate(m_board, moves, m_games);
+            saveResult(resultBlack, resultWhite, isAlternated(), duplicate,
+                       moves.size(), error, errorMessage);
+            saveGame();
+            ++m_gameIndex;
+            m_games.add(moves);
+        }
+        catch (FileNotFoundException e)
+        {
+            System.err.println("Could not save game: " + e.getMessage());
         }
     }
 
@@ -606,6 +623,26 @@ public class TwoGtp
         return status;
     }
 
+    private void readGames()
+    {
+        for (int n = 0; getFile(n).exists(); ++n)
+        {
+            File file = getFile(n);
+            if (! file.exists())
+                return;
+            try
+            {
+                sgf.Reader reader = new sgf.Reader(file);
+                m_games.add(reader.getMoves());
+            }
+            catch (sgf.Reader.Error e)
+            {
+                System.err.println("Error reading " + file + ": " +
+                                   e.getMessage());
+            }
+        }
+    }
+
     private void saveGame() throws FileNotFoundException
     {
         if (m_sgfFile.equals(""))
@@ -623,24 +660,26 @@ public class TwoGtp
 
     private void saveResult(String resultBlack, String resultWhite,
                             boolean alternated, String duplicate,
-                            int numberMoves)
+                            int numberMoves, boolean error,
+                            String errorMessage)
          throws FileNotFoundException
     {
         if (m_sgfFile.equals(""))
             return;
-        File file = new File(m_sgfFile + ".dat");
+        File file = getResultFile();
         if (! file.exists())
         {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             PrintStream out = new PrintStream(fileOutputStream);
-            out.println("# Game\tResB\tResW\tAlt\tDup\tLen");
+            out.println("# Game\tResB\tResW\tAlt\tDup\tLen\tErr\tErrMsg");
             out.close();
         }
         FileOutputStream fileOutputStream = new FileOutputStream(file, true);
         PrintStream out = new PrintStream(fileOutputStream);
         out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t" +
-                    resultWhite + "\t" +  (alternated ? "1" : "0" ) + "\t" +
-                    duplicate + "\t" + numberMoves);
+                    resultWhite + "\t" + (alternated ? "1" : "0" ) + "\t" +
+                    duplicate + "\t" + numberMoves + "\t" +
+                    (error ? "1" : "0" ) + "\t" + errorMessage);
         out.close();
     }
 
@@ -805,7 +844,11 @@ public class TwoGtp
         }
         response.append(response1);
         m_board.play(new Move(point, color));
-        checkEndOfGame();
+        if (m_board.bothPassed() && ! m_gameSaved)
+        {
+            handleEndOfGame(false, "");
+            m_gameSaved = true;
+        }
         return true;
     }
 
