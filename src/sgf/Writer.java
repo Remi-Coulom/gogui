@@ -25,6 +25,7 @@ public class Writer
         }
     }    
 
+    /** Save moves up to current position. */
     public Writer(OutputStream out, Board board, File file,
                   String application, String version, int handicap,
                   String playerBlack, String playerWhite, String gameComment,
@@ -37,13 +38,13 @@ public class Writer
                     playerWhite, gameComment, score);
         printSetup(m_board.getSetupStonesBlack(),
                    m_board.getSetupStonesWhite());
-        if (m_board.getNumberSavedMoves() == 0)
-            printToPlay(m_board.getToMove());
+        printToPlay(m_board.getToMove());
         printMoves();        
         m_out.println(")");
         m_out.close();
     }
 
+    /** Save game tree. */
     public Writer(OutputStream out, Board board, GameTree gameTree, File file,
                   String application, String version, int handicap,
                   String playerBlack, String playerWhite, String gameComment,
@@ -60,6 +61,7 @@ public class Writer
         m_out.close();
     }
 
+    /** Save board position. */
     public Writer(OutputStream out, Board board, File file,
                   String application, String version)
     {        
@@ -173,7 +175,7 @@ public class Writer
 
     private void printMoves()
     {
-        int n = m_board.getNumberSavedMoves();
+        int n = m_board.getMoveNumber();
         for (int i = 0; i < n; ++i)
         {
             Move m = m_board.getMove(i);
