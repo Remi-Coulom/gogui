@@ -144,6 +144,7 @@ public class GtpDummy
 
     private void crash()
     {        
+        System.err.println("Aborting GtpDummy");
         System.exit(-1);
     }
 
