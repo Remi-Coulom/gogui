@@ -72,8 +72,7 @@ public class Writer
     private void printBeginDocument()
     {
         m_out.println("\\documentclass{article}\n" +
-                      "\\usepackage{psgo}" +
-                      " % http://www.abo.fi/~vbos/psgo-frame.html\n" +
+                      "\\usepackage{psgo} % version 0.12 or newer\n" +
                       "\\pagestyle{empty}\n" +
                       "\\begin{document}\n" +
                       "\\begin{center}\n");
@@ -148,16 +147,16 @@ public class Writer
             {
                 needsComment[i] = true;
                 needsColorComment[i] = isColorUnexpected;
-                m_out.print("\\toggleblackmove");
+                m_out.print("\\refstepcounter{gomove}");
+                m_out.print(" \\toggleblackmove");
                 blackToMove = ! blackToMove;
-                m_out.print(" \\setcounter{gomove}{" + (i + 1) + "}");
                 if (point != null)
                 {
                     m_out.print(" % \\move");
                     printCoordinates(point);
                 }
                 else
-                    m_out.print(" % Pass");
+                    m_out.print(" % pass");
                 m_out.println(" % " + (blackToMove ? "B " : "W ") + (i + 1));
                 continue;
             }
@@ -192,7 +191,7 @@ public class Writer
                 }
                 else
                 {
-                    comment.append(" Pass");
+                    comment.append(" pass");
                 }
             }
         if (comment.length() > 0)
