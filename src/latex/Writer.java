@@ -129,7 +129,7 @@ public class Writer
         int size = m_board.getSize();
         boolean mark[][] = new boolean[size][size];
         int numberMoves = m_board.getNumberSavedMoves();
-        boolean moveNeedsComment[] = new boolean[numberMoves];
+        boolean needsComment[] = new boolean[numberMoves];
         boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
         for (int i = 0; i < numberMoves; ++i)
@@ -139,7 +139,7 @@ public class Writer
             Color color = move.getColor();
             if (point == null || mark[point.getX()][point.getY()])
             {
-                moveNeedsComment[i] = true;
+                needsComment[i] = true;
                 m_out.println("\\toggleblackmove");
                 blackToMove = ! blackToMove;
                 m_out.println("\\setcounter{gomove}{" + (i + 1) + "}");
@@ -158,7 +158,7 @@ public class Writer
             blackToMove = ! blackToMove;
         }
         for (int i = 0; i < numberMoves; ++i)
-            if (moveNeedsComment[i])
+            if (needsComment[i])
             {
                 Move move = m_board.getMove(i);
                 Point point = move.getPoint();
@@ -167,11 +167,35 @@ public class Writer
                     comment.append(",\n");
                 comment.append(color == Color.BLACK ? "B" : "W");
                 comment.append(i + 1);
-                comment.append("~");            
                 if (point != null)
+                {
+                    comment.append(" ");            
                     comment.append(point);
+                }
                 else
-                    comment.append("PASS");
+                {
+                    int firstPass = i;
+                    int lastPass = i;
+                    ++i;
+                    for ( ; i < numberMoves; ++i)
+                    {
+                        Move m = m_board.getMove(i);
+                        if ((m.getColor() != color && needsComment[i])
+                            || ! needsComment[i]
+                            || m.getPoint() != null)
+                        {
+                            --i;
+                            break;
+                        }
+                        lastPass = i;
+                    }
+                    if (lastPass != firstPass)
+                    {
+                        comment.append("--");
+                        comment.append(lastPass + 1);
+                    }
+                    comment.append(" PASS");
+                }
             }
         if (comment.length() > 0)
             comment.append(".");
