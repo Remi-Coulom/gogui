@@ -103,6 +103,7 @@ public class GmpToGtp
                 "baud:",
                 "color:",
                 "device:",
+                "flow:",
                 "help",
                 "list",
                 "simple",
@@ -120,6 +121,7 @@ public class GmpToGtp
                     "-baud    speed of serial device (default 2400)\n" +
                     "-color   color (black|white)\n" +
                     "-device  serial device file\n" +
+                    "-flow    flow control (none|rtscts(default)|xonxoff)\n" +
                     "-help    display this help and exit\n" +
                     "-list    list serial devices and exit\n" +
                     "-simple  use simple version of the protocol\n" +
@@ -180,6 +182,19 @@ public class GmpToGtp
                 port.setSerialPortParams(baud, SerialPort.DATABITS_8,
                                          SerialPort.STOPBITS_1,
                                          SerialPort.PARITY_NONE);
+                String flow = opt.getString("flow", "rtscts");                
+                if (flow.equals("rtscts"))
+                    port.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN |
+                                            SerialPort.FLOWCONTROL_RTSCTS_OUT);
+                else if (flow.equals("xonxoff"))
+                    port.setFlowControlMode(SerialPort.FLOWCONTROL_XONXOFF_IN |
+                                            SerialPort.FLOWCONTROL_XONXOFF_OUT);
+                else if (! flow.equals("none"))
+                {
+                    System.err.println("Unknown flow control mode \"" + flow
+                                       + "\"");
+                    System.exit(-1);
+                }
                 title = title + device;
                 in = port.getInputStream();
                 out = port.getOutputStream();

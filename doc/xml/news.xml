@@ -19,6 +19,9 @@ New <guimenu>Settings</guimenu> menu item
 <guimenuitem>Show cursor</guimenuitem>.
 </listitem>
 <listitem>
+<application>GmpToGtp</application>: new option <option>-flow</option>
+</listitem>
+<listitem>
 Minor fixes and improvements.
 </listitem>
 </itemizedlist>

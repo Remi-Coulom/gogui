@@ -19,6 +19,9 @@ Adpater from Go Text Protocol to Go Modem Protocol.
 <arg><option>-color</option><group choice="plain">
   <arg choice="plain">black</arg><arg choice="plain">white</arg></group></arg>
 <arg><option>-device</option> <replaceable>serial</replaceable></arg>
+<arg><option>-flow</option> <group choice="plain">
+  <arg choice="plain">rtscts</arg><arg choice="plain">xonxoff</arg>
+  <arg choice="plain">none</arg></group></arg>
 <arg><option>-help</option></arg>
 <arg><option>-list</option></arg>
 <arg><option>-simple</option></arg>
@@ -95,6 +98,20 @@ Color of the modem player.
 </term>
 <listitem>
 Serial device name.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-flow</option> <group choice="plain">
+  <arg choice="plain">rtscts</arg><arg choice="plain">xonxoff</arg>
+  <arg choice="plain">none</arg></group>
+</term>
+<listitem>
+Flow control for serial device.
+Possible values are hardware control (RTS/CTS), software control (XON/XOFF) or
+no control. 
+Default: RTS/CTS.
 </listitem>
 </varlistentry>
 
