@@ -1,5 +1,5 @@
 <chapter id="interrupt">
-<title>Interrupting commands</title>
+<title>Interrupting Commands</title>
 
 <para>
 Commands can be interrupted, if the Go program supports it.
