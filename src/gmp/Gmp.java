@@ -261,31 +261,33 @@ class ReadThread
             return true;
         }
         sendCmd(cmd.m_cmd, cmd.m_val);
-        try
+        while (true)
         {
-            wait();
-        }
-        catch (InterruptedException e)
-        {
-            System.err.println("Interrupted.");
-        }
-        switch (m_status)
-        {
-        case STATUS_IDLE:
-            return true;
-        case STATUS_DENY:
-            response.append("Command denied.");
-            m_status = STATUS_IDLE;
-            return false;
-        case STATUS_CONFLICT:
-            response.append("Conflict.");
-            m_status = STATUS_IDLE;
-            return false;
-        case STATUS_WAIT_OK:
-            response.append("Command in progress.");
-            return false;
-        default:
-            return false;
+            try
+            {
+                wait();
+            }
+            catch (InterruptedException e)
+            {
+                System.err.println("Interrupted.");
+            }
+            switch (m_status)
+            {
+            case STATUS_IDLE:
+                return true;
+            case STATUS_DENY:
+                response.append("Command denied.");
+                m_status = STATUS_IDLE;
+                return false;
+            case STATUS_CONFLICT:
+                response.append("Conflict.");
+                m_status = STATUS_IDLE;
+                return false;
+            case STATUS_WAIT_OK:
+                continue;
+            default:
+                return false;
+            }
         }
     }
 
