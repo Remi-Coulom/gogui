@@ -388,7 +388,7 @@ public class Board
         int moveNumber = m_board.getMoveNumber();
         if (moveNumber > 0)
         {
-            Move m = m_board.getInternalMove(moveNumber - 1);
+            Move m = m_board.getMove(moveNumber - 1);
             go.Point lastMove = m.getPoint();
             if (lastMove != null && m.getColor() != go.Color.EMPTY)
                 setFocusPoint(lastMove);
