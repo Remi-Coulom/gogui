@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.*;
 import go.Color;
 import go.Point;
+import go.Move;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -165,6 +166,48 @@ public class GtpUtils
         {
             throw new Gtp.Error("I/O error");
         }
+        return result;
+    }
+
+    /** Find all moves contained in string. */
+    public static Move[] parseVariation(String s, Color toMove, int boardSize)
+    {
+        Vector vector = new Vector(32, 32);
+        String token[] = StringUtils.tokenize(s);
+        boolean isColorSet = true;
+        for (int i = 0; i < token.length; ++i)
+        {
+            String t = token[i].toLowerCase();
+            if (t.equals("b") || t.equals("black"))
+            {
+                toMove = Color.BLACK;
+                isColorSet = true;
+            }
+            else if (t.equals("w") || t.equals("white"))
+            {
+                toMove = Color.WHITE;
+                isColorSet = true;
+            }
+            else
+            {
+                Point point;
+                try
+                {
+                    point = parsePoint(t, boardSize);
+                }
+                catch (Gtp.Error e)
+                {
+                    continue;
+                }
+                if (! isColorSet)
+                    toMove = toMove.otherColor();
+                vector.add(new Move(point, toMove));
+                isColorSet = false;
+            }
+        }
+        Move result[] = new Move[vector.size()];
+        for (int i = 0; i < result.length; ++i)
+            result[i] = (Move)vector.get(i);
         return result;
     }
 

@@ -87,54 +87,38 @@ public class AnalyzeShow
             break;
         case AnalyzeCommand.VAR:
             {                    
-                go.Point list[] = GtpUtils.parsePointString(response, size);
-                guiBoard.showVariation(list, board.getToMove());
-                guiBoard.repaint();
+                showVariation(guiBoard, response, board.getToMove(), size);
             }
             break;
         case AnalyzeCommand.VARB:
             {
-                go.Point list[] = GtpUtils.parsePointString(response, size);
-                guiBoard.showVariation(list, go.Color.BLACK);
-                guiBoard.repaint();
+                showVariation(guiBoard, response, go.Color.BLACK, size);
             }
             break;
         case AnalyzeCommand.VARC:
             {
-                go.Point list[] = GtpUtils.parsePointString(response, size);
-                guiBoard.showVariation(list, command.getColorArg());
-                guiBoard.repaint();
+                showVariation(guiBoard, response, command.getColorArg(),
+                              size);
             }
             break;
         case AnalyzeCommand.VARW:
             {
-                go.Point list[] = GtpUtils.parsePointString(response, size);
-                guiBoard.showVariation(list, go.Color.WHITE);
-                guiBoard.repaint();
+                showVariation(guiBoard, response, go.Color.WHITE, size);
             }
             break;
         case AnalyzeCommand.VARP:
             {
                 go.Color c = getColor(board, pointArg, pointListArg);
                 if (c != go.Color.EMPTY)
-                {
-                    go.Point list[] =
-                        GtpUtils.parsePointString(response, size);
-                    guiBoard.showVariation(list, c);
-                    guiBoard.repaint();
-                }
+                    showVariation(guiBoard, response, c, size);
             }
             break;
         case AnalyzeCommand.VARPO:
             {
                 go.Color c = getColor(board, pointArg, pointListArg);
                 if (c != go.Color.EMPTY)
-                {
-                    go.Point list[] =
-                        GtpUtils.parsePointString(response, size);
-                    guiBoard.showVariation(list, c.otherColor());
-                    guiBoard.repaint();
-                }
+                if (c != go.Color.EMPTY)
+                    showVariation(guiBoard, response, c.otherColor(), size);
             }
             break;
         }
@@ -156,6 +140,14 @@ public class AnalyzeShow
                 break;
         }
         return color;
+    }
+
+    private static void showVariation(gui.Board guiBoard, String response,
+                                      go.Color color, int size)
+    {
+        go.Move moves[] = GtpUtils.parseVariation(response, color, size);
+        guiBoard.showVariation(moves);
+        guiBoard.repaint();
     }
 }
 

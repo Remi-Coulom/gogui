@@ -531,19 +531,18 @@ public class Board
         }
     }
 
-    public void showVariation(go.Point[] variation, go.Color toMove)
+    public void showVariation(go.Move[] variation)
     {
         clearAllStrings();
         updateFromGoBoard();
         for (int i = 0; i < variation.length; ++i)
         {
-            go.Point point = variation[i];
-            if (point != null)
+            go.Move move = variation[i];
+            if (move.getPoint() != null)
             {
-                setColor(point, toMove);
-                setString(point, Integer.toString(i + 1));
+                setColor(move.getPoint(), move.getColor());
+                setString(move.getPoint(), Integer.toString(i + 1));
             }
-            toMove = toMove.otherColor();
         }
         m_variationShown = true;
     }

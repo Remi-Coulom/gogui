@@ -45,7 +45,7 @@ pspairs/Top Moves White/top_moves_white
 # Extensions of other Go programs that could be of general interest
 string/Get Handicap/get_handicap
 string/Get Komi/get_komi
-hstring/Move History/move_history
+var/Move History/move_history
 none/SaveSgf/savesgf %f
 
 # Other GNU Go extensions
