@@ -111,9 +111,6 @@ public class GtpDummy
             }
             catch (InterruptedException e)
             {
-                response.delete(0, response.length());
-                response.append("Interrupted");
-                return false;
             }
         }
         return status;
