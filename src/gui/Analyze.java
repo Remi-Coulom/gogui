@@ -36,6 +36,12 @@ class AnalyzeCommand
 
     public static final int COLORBOARD = 8;
 
+    public static final int VAR = 9;
+
+    public static final int VARB = 10;
+
+    public static final int VARW = 11;
+
     public AnalyzeCommand(String line)
     {
         m_scale = 1.0;
@@ -59,6 +65,12 @@ class AnalyzeCommand
             m_type = AnalyzeCommand.POINTSTRING;
         else if (typeStr.equals("string"))
             m_type = AnalyzeCommand.STRING;
+        else if (typeStr.equals("var"))
+            m_type = AnalyzeCommand.VAR;
+        else if (typeStr.equals("varb"))
+            m_type = AnalyzeCommand.VARB;
+        else if (typeStr.equals("varw"))
+            m_type = AnalyzeCommand.VARW;
         m_label = array[1];
         m_command = array[2];
         if (array.length > 3)

@@ -285,7 +285,8 @@ public class Gtp
         return new Point(x, y);
     }
     
-    public static Point[] parsePointList(String s, int boardSize) throws Gtp.Error
+    public static Point[] parsePointList(String s, int boardSize)
+        throws Gtp.Error
     {
         Vector vector = new Vector(32, 32);
         s = StringUtils.replace(s, "\n", " ");

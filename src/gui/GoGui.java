@@ -766,9 +766,9 @@ class GoGui
                 break;
             case AnalyzeCommand.POINTLIST:
                 {
-                    go.Point pointList[] = Gtp.parsePointList(response,
-                                                              m_boardSize);
-                    showPointList(pointList);
+                    go.Point list[] =
+                        Gtp.parsePointList(response, m_boardSize);
+                    showPointList(list);
                     m_guiBoard.repaint();
                 }
                 break;
@@ -789,6 +789,33 @@ class GoGui
                                                             m_boardSize);
                     showStringBoard(board);
                     m_guiBoard.repaint();
+                }
+                break;
+            case AnalyzeCommand.VAR:
+                {                    
+                    go.Point list[] =
+                        Gtp.parsePointList(response, m_boardSize);
+                    m_guiBoard.showVariation(list, m_board.getToMove());
+                    m_guiBoard.repaint();
+                    m_boardNeedsReset = true;
+                }
+                break;
+            case AnalyzeCommand.VARB:
+                {
+                    go.Point list[] =
+                        Gtp.parsePointList(response, m_boardSize);
+                    m_guiBoard.showVariation(list, go.Color.BLACK);
+                    m_guiBoard.repaint();
+                    m_boardNeedsReset = true;
+                }
+                break;
+            case AnalyzeCommand.VARW:
+                {
+                    go.Point list[] =
+                        Gtp.parsePointList(response, m_boardSize);
+                    m_guiBoard.showVariation(list, go.Color.WHITE);
+                    m_guiBoard.repaint();
+                    m_boardNeedsReset = true;
                 }
                 break;
             }

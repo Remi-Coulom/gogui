@@ -61,6 +61,11 @@ public class Board
         clearAllSelect();
         clearAllStrings();
         drawLastMove();
+        if (m_variationShown)
+        {
+            update();
+            m_variationShown = false;
+        }
     }
 
     public void clearAllCrossHair()
@@ -423,6 +428,22 @@ public class Board
         }
     }
 
+    public void showVariation(go.Point[] variation, go.Color toMove)
+    {
+        clearAllStrings();
+        for (int i = 0; i < variation.length; ++i)
+        {
+            go.Point point = variation[i];
+            if (point != null)
+            {
+                setColor(point, toMove);
+                setString(point, Integer.toString(i + 1));
+            }
+            toMove = toMove.otherColor();
+        }
+        m_variationShown = true;
+    }
+
     public void update()
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
@@ -441,6 +462,8 @@ public class Board
     }
 
     private boolean m_showLastMove = true;
+
+    private boolean m_variationShown;
 
     private go.Point m_focusPoint;
 

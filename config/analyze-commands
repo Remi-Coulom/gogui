@@ -10,9 +10,9 @@ string/Help/help
 string/List Commands/list_commands
 string/Name/name
 string/Protocol Version/protocol_version
-pstring/Reg GenMove/reg_genmove %m
-pstring/Reg GenMove Black/reg_genmove black
-pstring/Reg GenMove White/reg_genmove white
+var/Reg GenMove/reg_genmove %m
+varb/Reg GenMove Black/reg_genmove black
+varw/Reg GenMove White/reg_genmove white
 string/ShowBoard/showboard
 none/Time Left/time_left %s
 none/Time Settings/time_settings %s
@@ -59,8 +59,8 @@ pstring/Analyze Semeai After Move White/analyze_semeai_after_move white %P
 pstring/Block Off/block_off %P
 pstring/Break In/break_in %P
 none/Clear Cache/clear_cache
-pstring/Combination Attack Black/combination_attack black
-pstring/Combination Attack White/combination_attack white
+varb/Combination Attack Black/combination_attack black
+varw/Combination Attack White/combination_attack white
 string/Does Surround/does_surround %P
 string/Dragon Data/dragon_data
 pstring/Dragon Data At/dragon_data %p
@@ -105,7 +105,7 @@ none/Test EyeShape/test_eyeshape %P
 none/Tune Move Ordering/tune_move_ordering %s
 string/Worm Data/worm_data
 string/Worm Data At/worm_data %p
-string/Worm CutStone/worm_cutstone %p
+plist/Worm CutStone/worm_cutstone %p
 plist/Worm Stones Black/worm_stones %p black
 plist/Worm Stones White/worm_stones %p white
 

@@ -114,6 +114,30 @@ If it has multiple lines, a window will popup.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><userinput>var</userinput></term>
+<listitem>
+The answer of the command is a variation of moves
+containing points or passes.
+They will be displayed as numbered stones on the board,
+the current color to move is assumed to move first.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varb</userinput></term>
+<listitem>
+Like <userinput>var</userinput>, but black is assumed to move first.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varw</userinput></term>
+<listitem>
+Like <userinput>var</userinput>, but white is assumed to move first.
+</listitem>
+</varlistentry>
+
 </variablelist>
 </section>
 
