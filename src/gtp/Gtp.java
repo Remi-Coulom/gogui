@@ -189,7 +189,7 @@ public class Gtp
         if (s.equals("PASS"))
             return null;
         if (s.length() < 2)
-            throw new Error("Invalid move.");
+            throw new Error("Invalid point or move.");
         char xChar = s.charAt(0);
         if (xChar >= 'J')
             --xChar;
@@ -201,7 +201,7 @@ public class Gtp
         }
         catch (NumberFormatException e)
         {
-            throw new Error("Invalid move.");
+            throw new Error("Invalid point or move.");
         }
         return new Point(x, y);
     }
