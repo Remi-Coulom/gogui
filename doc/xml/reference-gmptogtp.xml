@@ -184,14 +184,6 @@ Board size (default 19).
 <para>
 Print debugging messages.
 </para>
-<!-- note must be outside para, otherwise manpages/docbook.xsl formats the
-list item wrongly -->
-<note>
-<simpara>
-This option is currently ignored, the output to standard error is always
-verbose.
-</simpara>
-</note>
 </listitem>
 </varlistentry>
 
