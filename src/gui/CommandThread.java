@@ -193,7 +193,7 @@ public class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         TimeoutCallback timeoutCallback = new TimeoutCallback(command);
-        String response = m_gtp.sendCommand(command, 5000, timeoutCallback);
+        String response = m_gtp.sendCommand(command, 7000, timeoutCallback);
         return response;
     }
 
