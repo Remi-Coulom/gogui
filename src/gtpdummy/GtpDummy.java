@@ -43,6 +43,8 @@ public class GtpDummy
             status = play(cmdArray, response);
         else if (cmd.equals("dummy_bwboard"))
             bwBoard(response);
+        else if (cmd.equals("dummy_crash"))
+            crash();
         else if (cmd.equals("dummy_next_failure"))
             nextResponseFixed(cmd, cmdLine, false);
         else if (cmd.equals("dummy_next_success"))
@@ -74,6 +76,7 @@ public class GtpDummy
         else if (cmd.equals("help"))
             response.append("black\n" +
                             "dummy_bwboard\n" +
+                            "dummy_crash\n" +
                             "dummy_next_success\n" +
                             "dummy_next_failure\n" +
                             "dummy_sleep\n" +
@@ -206,6 +209,11 @@ public class GtpDummy
                 response.append(Math.random() > 0.5 ? "B " : "W ");
             response.append("\n");
         }                    
+    }
+
+    private void crash()
+    {        
+        System.exit(-1);
     }
 
     private void echo(String cmdLine, StringBuffer response)

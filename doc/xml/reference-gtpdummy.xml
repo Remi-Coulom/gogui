@@ -76,23 +76,9 @@ Output a board randomly filled with "B" and "W".
 </varlistentry>
 
 <varlistentry>
-<term><userinput>echo</userinput></term>
+<term><userinput>dummy_crash</userinput></term>
 <listitem>
-Print argument as response.
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><userinput>echo_err</userinput></term>
-<listitem>
-Print argument to standard error.
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><userinput>gogui_interrupt</userinput></term>
-<listitem>
-Indicate interrupt ability for GoGui.
+Exit program with return code -1.
 </listitem>
 </varlistentry>
 
@@ -124,6 +110,27 @@ Let next command succeed with <arg><replaceable>response</replaceable></arg>.
 <listitem>
 Sleep for a number of seconds (default 20).
 This command can be interrupted.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>echo</userinput></term>
+<listitem>
+Print argument as response.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>echo_err</userinput></term>
+<listitem>
+Print argument to standard error.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>gogui_interrupt</userinput></term>
+<listitem>
+Indicate interrupt ability for GoGui.
 </listitem>
 </varlistentry>
 
