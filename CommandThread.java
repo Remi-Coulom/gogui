@@ -69,31 +69,30 @@ class CommandThread
 
     public void run()
     {
-        try
+        synchronized (this)
         {
-            synchronized (this)
+            while (true)
             {
-                while (true)
+                try
                 {
                     wait();
-                    m_answer = null;
-                    m_exception = null;
-                    try
+                    catch (InterruptedException e)
                     {
-                        m_answer = m_gtp.sendCommand(m_command);
+                        System.err.println("Interrupted.");
                     }
-                    catch (Gtp.Error e)
-                    {
-                        m_exception = e;
-                    }
-                    SwingUtilities.invokeLater(m_callback);
                 }
+                m_answer = null;
+                m_exception = null;
+                try
+                {
+                    m_answer = m_gtp.sendCommand(m_command);
+                }
+                catch (Gtp.Error e)
+                {
+                    m_exception = e;
+                }
+                SwingUtilities.invokeLater(m_callback);
             }
-        }
-        catch (InterruptedException e)
-        {
-            System.err.println("Interrupted.");
-            System.exit(-1);
         }
     }
     
