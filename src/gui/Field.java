@@ -101,7 +101,7 @@ public class Field
 
     public static int getStoneMargin(int size)
     {
-        return size / 15;
+        return size / 20;
     }
 
     public String getString()
