@@ -276,7 +276,7 @@ class GoGui
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
             m_guiBoard.updateFromGoBoard();
-            m_isModified = true;
+            m_needsSave = true;
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
                  && ! modifiedSelect)
@@ -609,9 +609,9 @@ class GoGui
 
     private boolean m_fillPasses;
 
-    private boolean m_isModified;
-
     private boolean m_lostOnTimeShown;
+
+    private boolean m_needsSave;
 
     private boolean m_rememberWindowSizes;
 
@@ -931,7 +931,7 @@ class GoGui
 
     private void cbNewGame(int size)
     {
-        if (m_isModified && ! checkSaveGame())
+        if (m_needsSave && ! checkSaveGame())
             return;
         m_prefs.setInt("boardsize", size);
         fileModified();
@@ -952,7 +952,7 @@ class GoGui
 
     private void cbOpen()
     {
-        if (m_isModified && ! checkSaveGame())
+        if (m_needsSave && ! checkSaveGame())
             return;
         File file = SimpleDialogs.showOpenSgf(this);
         if (file == null)
@@ -962,7 +962,7 @@ class GoGui
 
     private void cbOpenRecent()
     {
-        if (m_isModified && ! checkSaveGame())
+        if (m_needsSave && ! checkSaveGame())
             return;
         File file = m_menuBar.getSelectedRecent();
         loadFile(file, -1);
@@ -1128,7 +1128,7 @@ class GoGui
         if (! m_setupMode)
         {
             m_menuBar.setSetupMode();
-            if (m_isModified && ! checkSaveGame())
+            if (m_needsSave && ! checkSaveGame())
             {
                 m_menuBar.setNormalMode();
                 return;
@@ -1172,7 +1172,7 @@ class GoGui
 
     private boolean checkModifyGame(Move move)
     {
-        if (! m_isModified || ! m_board.willModifyGame(move))
+        if (! m_needsSave || ! m_board.willModifyGame(move))
             return true;
         return checkSaveGame();
     }
@@ -1188,6 +1188,7 @@ class GoGui
         case 0:
             return saveDialog();
         case 1:
+            m_needsSave = false;
             return true;
         case -1:
         case 2:
@@ -1238,7 +1239,7 @@ class GoGui
     {
         if (m_setupMode)
             setupDone();
-        if (m_isModified && ! checkSaveGame())
+        if (m_needsSave && ! checkSaveGame())
             return;
         if (m_commandInProgress)
         {
@@ -1310,13 +1311,14 @@ class GoGui
             {
                 go.Point p = Gtp.parsePoint(response, m_boardSize);
                 go.Color toMove = m_board.getToMove();
-                Move m = new Move(p, toMove);
-                m_board.play(m);
-                if (m.getPoint() == null
+                Move move = new Move(p, toMove);
+                if (m_board.willModifyGame(move))
+                    m_needsSave = true;
+                m_board.play(move);
+                if (move.getPoint() == null
                     && ! (m_computerBlack && m_computerWhite))
                     showInfo("Computer passed.");
                 fileModified();
-                m_isModified = true;
                 m_resigned = false;
             }
             boardChangedBegin(true);
@@ -1425,33 +1427,36 @@ class GoGui
         runLengthyCommand(command, callback);
     }
 
-    private void humanMoved(Move m)
+    private void humanMoved(Move move)
     {
         try
         {
-            if (! checkModifyGame(m))
+            if (! checkModifyGame(move))
                 return;
-            go.Point p = m.getPoint();
+            go.Point p = move.getPoint();
             if (p != null && m_board.getColor(p) != go.Color.EMPTY)
                     return;
             try
             {
                 setFastUpdate(true);
-                play(m);
+                if (m_board.getNumberSavedMoves() == m_board.getMoveNumber()
+                    || m_board.willModifyGame(move))
+                    m_needsSave = true;
+                play(move);
             }
             finally
             {
                 setFastUpdate(false);
             }
             m_timeControl.stopMove();
+            go.Color color = move.getColor();
             if (m_board.getMoveNumber() > 0
-                && m_timeControl.lostOnTime(m.getColor())
+                && m_timeControl.lostOnTime(color)
                 && ! m_lostOnTimeShown)
             {
-                showInfo(m.getColor().toString() + " lost on time.");
+                showInfo(color.toString() + " lost on time.");
                 m_lostOnTimeShown = true;
             }
-            m_isModified = true;
             m_resigned = false;
             boardChangedBegin(true);            
         }
@@ -1485,7 +1490,7 @@ class GoGui
         m_timeControl.reset();
         m_lostOnTimeShown = false;
         m_score = null;
-        m_isModified = false;
+        m_needsSave = false;
         m_resigned = false;
     }
 
@@ -1856,7 +1861,7 @@ class GoGui
             showInfo("Game saved.");
             m_loadedFile = file;
             setTitle();
-            m_isModified = false;
+            m_needsSave = false;
             return true;
         }
         catch (FileNotFoundException e)
