@@ -802,6 +802,15 @@ public class GameTreeViewer
         viewport.setFocusTraversalKeysEnabled(false);
         setFocusTraversalKeysEnabled(false);
         m_scrollPane.requestFocusInWindow();
+        // Necessary for Mac Java 1.4.2, otherwise scrollpane will not have
+        // focus after window is re-activated
+        addWindowListener(new WindowAdapter()
+            {
+                public void windowActivated(WindowEvent e)
+                {
+                    m_scrollPane.requestFocusInWindow();
+                }
+            });
         pack();
     }
 
