@@ -10,6 +10,7 @@ string/Help/help
 string/List Commands/list_commands
 string/Name/name
 string/Protocol Version/protocol_version
+pstring/Reg GenMove/reg_genmove %m
 pstring/Reg GenMove Black/reg_genmove black
 pstring/Reg GenMove White/reg_genmove white
 string/ShowBoard/showboard
@@ -18,6 +19,7 @@ none/Time Settings/time_settings %s
 string/Version/version
 
 # GNU Go extensions that could be of general interest
+plist/All Legal/all_legal %m
 plist/All Legal Black/all_legal black
 plist/All Legal White/all_legal black
 pstring/Attack/attack %p
@@ -33,13 +35,20 @@ plist/Final Status List Black Territory/final_status_list black_territory
 plist/Final Status List White Territory/final_status_list white_territory
 plist/Final Status List Dame/final_status_list dame
 string/Get Random Seed/get_random_seed
+string/Is Legal/is_legal %m %p
+string/Is Legal Black/is_legal black %p
+string/Is Legal White/is_legal white %p
 string/Is Surrounded/is_surrounded %p
 pstring/Ladder Attack/ladder_attack %p
 none/Level/level %s
+none/PrintSgf/printsgf %f
 none/Set Random Seed/set_random_seed %s
 pslist/Top Moves/top_moves
-pslist/Top Moves Black/top_moves black
-pslist/Top Moves White/top_moves white
+pslist/Top Moves Black/top_moves_black
+pslist/Top Moves White/top_moves_white
+
+# Extensions of other programs that could be of general interest
+none/SaveSgf/savesgf %f
 
 # Other GNU Go version 3.4 extensions
 plist/AccurateLib Black/accuratelib black %p
@@ -84,7 +93,6 @@ string/Owl Does Defend/owl_does_defend %P
 string/Owl Substantial/owl_substantial %p
 pstring/Owl Threaten Attack/owl_threaten_attack %p
 pstring/Owl Threaten Defense/owl_threaten_defense %p
-none/PrintSgf/printsgf %f
 none/Reset Connection Node Counter/reset_connection_node_counter
 none/Reset Life Node Counter/reset_life_node_counter
 none/Reset Owl Node Counter/reset_owl_node_counter

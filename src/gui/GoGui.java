@@ -2117,7 +2117,13 @@ class GoGui
         if (m_loadedFile != null)
             setTitle(m_loadedFile);
         else if (! m_name.equals(""))
-            setTitle(m_name);
+        {
+            StringBuffer name = new StringBuffer(m_name);
+            char c = name.charAt(0);
+            if (! Character.isUpperCase(c))
+                name.setCharAt(0, Character.toUpperCase(c));
+            setTitle(name.toString());
+        }
         else
             setTitle("GoGui");
     }
