@@ -87,8 +87,6 @@ class GameInfo
                                                       movesLeftBlack));
     }
 
-    private go.Board m_board;
-
     private JLabel m_move;
 
     private JLabel m_number;

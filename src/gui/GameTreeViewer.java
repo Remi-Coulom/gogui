@@ -244,8 +244,6 @@ class GameTreePanel
 
     private int m_nodeDist;
 
-    private Font m_font;
-
     private GameTree m_gameTree;
 
     private GameTreeViewer.Listener m_listener;

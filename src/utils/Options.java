@@ -209,11 +209,6 @@ public class Options
                 m_args.add(s);
         }
     }
-
-    private void putBoolOption(String spec)
-    {
-        m_map.put(spec, "1");
-    }
 }
 
 //-----------------------------------------------------------------------------

@@ -218,8 +218,6 @@ class CommandThread
 
     private Gtp.Error m_exception;
 
-    private static JFrame m_mainFrame;
-
     private Runnable m_callback;
 
     private String m_command;
