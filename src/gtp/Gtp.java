@@ -546,7 +546,10 @@ public final class Gtp
 
     public void setLogPrefix(String prefix)
     {
-        m_logPrefix = prefix;
+        synchronized (this)
+        {
+            m_logPrefix = prefix;
+        }
     }
 
     public void waitForExit()
