@@ -24,14 +24,16 @@ public class Writer
         }
     }    
 
-    public Writer(OutputStream out, Board board, boolean writePosition,
-                  boolean usePass, String[][] strings, boolean[][] markups,
-                  boolean[][] selects)
+    public Writer(String title, OutputStream out, Board board,
+                  boolean writePosition, boolean usePass, String[][] strings,
+                  boolean[][] markups, boolean[][] selects)
     {        
         m_out = new PrintStream(out);
         m_board = board;
         m_usePass = usePass;
         printBeginDocument();
+        if (title != null && ! title.trim().equals(""))
+            m_out.println("\\section*{" + escape(title) + "}");
         printBeginPSGo();
         if (writePosition)
         {
@@ -64,6 +66,22 @@ public class Writer
     private PrintStream m_out;
 
     private Board m_board;
+
+    /** Escape LaTeX special character in text. */
+    private String escape(String text)
+    {
+        text = text.replaceAll("\\#", "\\\\#");
+        text = text.replaceAll("\\$", "\\\\\\$");
+        text = text.replaceAll("%", "\\\\%");
+        text = text.replaceAll("\\&", "\\\\&");
+        text = text.replaceAll("~", "\\\\~{}");
+        text = text.replaceAll("_", "\\\\_");
+        text = text.replaceAll("\\^", "\\\\^{}");
+        text = text.replaceAll("\\\\", "\\$\\\\backslash\\$");
+        text = text.replaceAll("\\{", "\\\\{");
+        text = text.replaceAll("\\}", "\\\\}");
+        return text;
+    }
 
     private String getMarkers(String string, boolean markup, boolean select)
     {

@@ -21,7 +21,7 @@ from a file with the <option>-config</option> option.
 </listitem>
 <listitem>
 <application>SgfToTex</application>: improved output.
-New option <option>-force</option>.
+New options <option>-force</option>, <option>-title</option>.
 </listitem>
 <listitem>
 Minor fixes and improvements.

@@ -25,6 +25,7 @@ class SgfToTex
                 "force",
                 "help",
                 "pass",
+                "title:",
                 "version"
             };
             Options opt = new Options(args, options);
@@ -41,6 +42,7 @@ class SgfToTex
             }
             boolean usePass = opt.isSet("pass");
             boolean force = opt.isSet("force");
+            String title = opt.getString("title", "");
             Vector arguments = opt.getArguments();
             InputStream in;
             OutputStream out;
@@ -70,7 +72,7 @@ class SgfToTex
                     throw new Exception("File " + outFile + " already exists");
                 out = new FileOutputStream(outFile);
             }
-            convert(in, out, usePass);
+            convert(in, out, title, usePass);
         }
         catch (AssertionError e)
         {
@@ -96,7 +98,7 @@ class SgfToTex
         }
     }
 
-    private static void convert(InputStream in, OutputStream out,
+    private static void convert(InputStream in, OutputStream out, String title,
                                 boolean usePass)
         throws sgf.Reader.Error
     {
@@ -121,7 +123,8 @@ class SgfToTex
         for (int i = 0; i < numberMoves; ++i)
             board.play(reader.getMove(i));
         boolean writePosition = (numberMoves == 0);
-        new latex.Writer(out, board, writePosition, usePass, null, null, null);
+        new latex.Writer(title, out, board, writePosition, usePass, null,
+                         null, null);
     }
 
     private static void printUsage(PrintStream out)
@@ -132,6 +135,7 @@ class SgfToTex
                   "-force   overwrite existing files\n" +
                   "-help    display this help and exit\n" +
                   "-pass    use \\pass command\n" +
+                  "-title   use title\n" +
                   "-version print version and exit\n");
     }
 }
