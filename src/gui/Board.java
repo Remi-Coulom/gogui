@@ -203,6 +203,9 @@ public class Board
         add(m_grid);
         gridBag.setConstraints(m_grid, constraints);
         addColumnLabels(size, 0);
+        Font font = UIManager.getFont("Label.font");
+        if (font != null)
+            font = font.deriveFont(Font.BOLD);
         for (int y = size - 1; y >= 0; --y)
         {
             String text = Integer.toString(y + 1);
@@ -210,7 +213,7 @@ public class Board
             for (int x = 0; x < size; ++x)
             {
                 go.Point p = m_board.getPoint(x, y);
-                Field field = new Field(this, p);
+                Field field = new Field(this, p, font);
                 m_grid.add(field);
                 m_field[x][y] = field;
                 KeyListener keyListener = new KeyAdapter()

@@ -13,27 +13,22 @@ import utils.RadialGradientPaint;
  
 //-----------------------------------------------------------------------------
 
+/** Component representing a field on the board.
+    The implementation assumes that the size of the component is a square,
+    which is automatically guaranteed if the board uses SquareLayout.
+*/
 public class Field
     extends JComponent
     implements FocusListener
 {
-    public Field(gui.Board board, go.Point p)
+    public Field(gui.Board board, go.Point point, Font font)
     {
         m_board = board;
-        m_color = go.Color.EMPTY;
-        m_territory = go.Color.EMPTY;
-        m_point = p;
-        Dimension size = m_board.getPreferredFieldSize();
-        setPreferredSize(size);
+        m_point = point;
+        setPreferredSize(m_board.getPreferredFieldSize());
         setMinimumSize(m_board.getMinimumFieldSize());
-        Font font = UIManager.getFont("Label.font");        
         if (font != null)
-        {
-            font = font.deriveFont(Font.BOLD);
-            if (font != null)
-                setFont(font);
-        }
-        setBorder(null);
+            setFont(font);
         addFocusListener(this);
         KeyAdapter keyAdapter = new KeyAdapter()
             {
@@ -61,9 +56,9 @@ public class Field
                     else
                     {            
                         int modifiers = event.getModifiers();
-                        int mask = (ActionEvent.CTRL_MASK
-                                    | ActionEvent.ALT_MASK
-                                    | ActionEvent.META_MASK);
+                        final int mask = (ActionEvent.CTRL_MASK
+                                          | ActionEvent.ALT_MASK
+                                          | ActionEvent.META_MASK);
                         boolean modifiedSelect = ((modifiers & mask) != 0);
                         m_board.fieldClicked(m_point, modifiedSelect);
                     }
@@ -198,19 +193,37 @@ public class Field
 
     private double m_influence;
 
+    private static final AlphaComposite m_composite5
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+
+    private static final AlphaComposite m_composite7
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
+
     private String m_string = "";
 
     private java.awt.Color m_fieldColor;
 
-    private go.Color m_territory;
+    private go.Color m_territory = go.Color.EMPTY;
 
-    private static java.awt.Color m_influenceBlackColor
+    private static final java.awt.Color m_influenceBlackColor
         = java.awt.Color.gray;
 
-    private static java.awt.Color m_influenceWhiteColor
+    private static final java.awt.Color m_influenceWhiteColor
         = java.awt.Color.white;
 
-    private go.Color m_color;
+    private static final java.awt.Color m_colorBlackStone
+        = java.awt.Color.decode("#030303");
+
+    private static final java.awt.Color m_colorBlackStoneBright
+        = java.awt.Color.decode("#666666");
+
+    private static final java.awt.Color m_colorWhiteStone
+        = java.awt.Color.decode("#d7d0c9");
+
+    private static final java.awt.Color m_colorWhiteStoneBright
+        = java.awt.Color.decode("#f6eee6");
+
+    private go.Color m_color = go.Color.EMPTY;
 
     private go.Point m_point;
 
@@ -220,9 +233,9 @@ public class Field
                             boolean fill)
     {
         graphics.setColor(color);
-        Dimension size = getSize();
-        int d = size.width * 36 / 100;
-        int w = size.width - 2 * d;
+        int width = getSize().width;
+        int d = width * 36 / 100;
+        int w = width - 2 * d;
         if (fill)
             graphics.fillOval(d, d, w, w);
         else
@@ -235,19 +248,12 @@ public class Field
             return;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
-        {
-            AlphaComposite composite =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
-            graphics2D.setComposite(composite);
-        }
-        Dimension size = getSize();
-        int dx = size.width / 5;
-        int dy = size.height / 5;
+            graphics2D.setComposite(m_composite7);
+        int width = getSize().width;
+        int d = width / 5;
         graphics.setColor(java.awt.Color.red);
-        graphics.drawLine(dx, size.height / 2,
-                          size.width - dx, size.height / 2);
-        graphics.drawLine(size.width / 2, dy,
-                          size.width / 2, size.height - dy);
+        graphics.drawLine(d, width / 2, width - d, width / 2);
+        graphics.drawLine(width / 2, d, width / 2, width - d);
         graphics.setPaintMode();
     }
 
@@ -257,11 +263,7 @@ public class Field
         {
             Graphics2D graphics2D = (Graphics2D)graphics;
             if (graphics2D != null)
-            {
-                AlphaComposite composite =
-                    AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f); 
-                graphics2D.setComposite(composite);
-            }
+                graphics2D.setComposite(m_composite5);
             graphics.setColor(m_fieldColor);
             int size = getSize().width;
             graphics.fillRect(0, 0, size, size);
@@ -275,11 +277,7 @@ public class Field
             return;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
-        {
-            AlphaComposite composite =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f); 
-            graphics2D.setComposite(composite);
-        }
+            graphics2D.setComposite(m_composite5);
         Dimension size = getSize();
         int d = size.width / 6;
         int w = size.width;
@@ -304,11 +302,7 @@ public class Field
             return;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
-        {
-            AlphaComposite composite =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
-            graphics2D.setComposite(composite);
-        }
+            graphics2D.setComposite(m_composite7);
         if (m_influence > 0)
             graphics.setColor(m_influenceBlackColor);
         else
@@ -325,11 +319,7 @@ public class Field
             return;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
-        {
-            AlphaComposite composite =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
-            graphics2D.setComposite(composite);
-        }
+            graphics2D.setComposite(m_composite7);
         drawCircle(graphics, java.awt.Color.red, true);
         graphics.setPaintMode();
     }
@@ -340,11 +330,7 @@ public class Field
             return;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
-        {
-            AlphaComposite composite =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
-            graphics2D.setComposite(composite);
-        }
+            graphics2D.setComposite(m_composite7);
         Dimension size = getSize();
         int d = size.width / 4;
         int width = size.width - 2 * d;
@@ -360,35 +346,29 @@ public class Field
             return;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
-        {
-            AlphaComposite composite =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
-            graphics2D.setComposite(composite);
-        }
+            graphics2D.setComposite(m_composite7);
         drawCircle(graphics, java.awt.Color.blue, true);
         graphics.setPaintMode();
     }
 
     private void drawStone(Graphics graphics)
     {
-        int size = getSize().width;
         if (m_color == go.Color.BLACK)
-            drawStone(graphics, java.awt.Color.decode("#030303"),
-                      java.awt.Color.decode("#666666"), size / 3);
+            drawStone(graphics, m_colorBlackStone, m_colorBlackStoneBright);
         else if (m_color == go.Color.WHITE)
-            drawStone(graphics, java.awt.Color.decode("#d7d0c9"),
-                      java.awt.Color.decode("#f6eee6"), size / 3);
+            drawStone(graphics, m_colorWhiteStone, m_colorWhiteStoneBright);
     }
 
     private void drawStone(Graphics graphics, java.awt.Color color,
-                           java.awt.Color colorBright, int radius)
+                           java.awt.Color colorBright)
     {
-        int size = getSize().width;
+        int width = getSize().width;
         int margin = getStoneMargin();
+        int radius = width / 3;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
         {
-            int center = size / 3;
+            int center = width / 3;
             radius = Math.max(radius, 1);
             RadialGradientPaint paint =
                 new RadialGradientPaint(new Point2D.Double(center, center),
@@ -402,23 +382,20 @@ public class Field
             graphics.setColor(color);
         }
         graphics.fillOval(margin, margin,
-                          size - 2 * margin, size - 2 * margin);
+                          width - 2 * margin, width - 2 * margin);
     }
 
     private void drawString(Graphics g)
     {
         if (m_string.equals(""))
             return;
-        Dimension size = getSize();
+        int width = getSize().width;
         int stringWidth = g.getFontMetrics().stringWidth(m_string);
         int stringHeight = g.getFont().getSize();
-        int x = Math.max((size.width - stringWidth) / 2, 0);
-        int y = stringHeight + (size.height - stringHeight) / 2;
+        int x = Math.max((width - stringWidth) / 2, 0);
+        int y = stringHeight + (width - stringHeight) / 2;
         if (m_color == go.Color.WHITE)
             g.setColor(java.awt.Color.black);
-        else if (m_color == go.Color.BLACK)
-            g.setColor(java.awt.Color.white);
-        else
             g.setColor(java.awt.Color.white);
         g.drawString(m_string, x, y);
     }
@@ -440,9 +417,7 @@ public class Field
     {
         if (m_territory != go.Color.EMPTY)
         {
-            AlphaComposite composite =
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f); 
-            graphics2D.setComposite(composite);
+            graphics2D.setComposite(m_composite5);
             if (m_territory == go.Color.BLACK)
                 graphics2D.setColor(java.awt.Color.darkGray);
             else if (m_territory == go.Color.WHITE)
