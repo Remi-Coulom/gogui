@@ -7,6 +7,7 @@ package gtp;
 
 import java.io.*;
 import java.util.*;
+import go.*;
 import utils.StringUtils;
 
 //-----------------------------------------------------------------------------
@@ -167,6 +168,11 @@ public abstract class GtpServer
         public int m_integer;
     }
 
+    public static class PointArgument
+    {
+        public Point m_point;
+    }
+
     public GtpServer(InputStream in, OutputStream out, PrintStream log)
     {
         m_out = new PrintStream(out);
@@ -215,7 +221,7 @@ public abstract class GtpServer
     {
         if (cmdArray.length != 2)
         {
-            response.append("Need integer argument");
+            response.append("Missing integer argument");
             return null;
         }
         try
@@ -227,7 +233,36 @@ public abstract class GtpServer
         }
         catch (NumberFormatException e)
         {
-            response.append("Need integer argument");
+            response.append("Invalid integer argument");
+            return null;
+        }
+    }
+
+    /** Utility function for parsing an point argument.
+        @param cmdArray Command line split into words.
+        @param response Empty string buffer filled with GTP error message
+        if parsing fails.
+        @return Point argument or null if parsing fails.
+    */
+    public static PointArgument parsePointArgument(String[] cmdArray,
+                                                   StringBuffer response,
+                                                   int boardSize)
+    {
+        if (cmdArray.length != 2)
+        {
+            response.append("Missing vertex argument");
+            return null;
+        }
+        try
+        {
+            Point point = Gtp.parsePoint(cmdArray[1], boardSize);
+            PointArgument argument = new PointArgument();
+            argument.m_point = point;
+            return argument;
+        }
+        catch (Gtp.Error e)
+        {
+            response.append("Invalid vertex argument");
             return null;
         }
     }
