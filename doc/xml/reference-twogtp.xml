@@ -46,6 +46,13 @@
         <listitem><userinput>undo</userinput></listitem>
         <listitem><userinput>white</userinput></listitem>
       </itemizedlist>
+      The following commands are forwarded to the first program
+      that implements them (Black is tried first):
+      <itemizedlist>
+        <listitem><userinput>final_score</userinput></listitem>
+        <listitem><userinput>final_status</userinput></listitem>
+        <listitem><userinput>final_status_list</userinput></listitem>
+      </itemizedlist>
       The commands <userinput>genmove_black</userinput> and
       <userinput>genmove_white</userinput> are forwarded only to the
       program of the corresponding color, the other program is informed about

@@ -56,7 +56,11 @@ public class TwoGtp
         String[] cmdArray = StringUtils.getCmdArray(cmdLine);
         String cmd = cmdArray[0];
         boolean status = true;
-        if (cmd.equals("loadsgf"))
+        if (cmd.equals("final_score")
+            || cmd.equals("final_status")
+            || cmd.equals("final_status_list"))
+            return sendEither(cmdLine, response);
+        else if (cmd.equals("loadsgf"))
             return sendBoth(cmdLine, response, true, false);
         else if (cmd.equals("twogtp_black"))
             status = twogtpColor(m_black, cmdLine, response);
@@ -87,6 +91,9 @@ public class TwoGtp
         else if (cmd.equals("help"))
             response.append("boardsize\n" +
                             "black\n" +
+                            "final_score\n" +
+                            "final_status\n" +
+                            "final_status_list\n" +
                             "genmove_black\n" +
                             "genmove_white\n" +
                             "help\n" +
@@ -507,6 +514,14 @@ public class TwoGtp
     {
         return send(m_black, m_white, command, command, response, changesState,
                     tryUndo);
+    }
+
+    private boolean sendEither(String command, StringBuffer response)
+    {
+        if (sendSingle(m_black, command, response))
+            return true;
+        response.setLength(0);
+        return sendSingle(m_white, command, response);
     }
 
     private boolean sendSingle(Gtp gtp, String command, StringBuffer response)
