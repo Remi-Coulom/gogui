@@ -713,6 +713,12 @@ class GoGui
 
     private ToolBar m_toolBar;
 
+    static
+    {
+        // Must be set before static initializers of apple.awt are executed.
+        System.setProperty("apple.awt.brushMetalLook", "true");
+    }
+
     private void addPlayerComputerToGameInfo(go.Color color)
     {
         if (m_commandThread == null)
