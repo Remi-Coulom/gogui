@@ -128,6 +128,8 @@ public class GmpToGtp
                                              process.getOutputStream(),
                                              verbose, size, colorIndex);
             gmpToGtp.mainLoop();
+            process.destroy();
+            process.waitFor();
         }
         catch (Throwable t)
         {
