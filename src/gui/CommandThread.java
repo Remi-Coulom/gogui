@@ -16,7 +16,7 @@ import gtp.*;
 public class CommandThread
     extends Thread
 {
-    public CommandThread(Gtp gtp, Frame owner)
+    public CommandThread(Gtp gtp, Component owner)
     {
         m_gtp = gtp;
         m_owner = owner;
@@ -194,8 +194,7 @@ public class CommandThread
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        TimeoutCallback timeoutCallback =
-            new TimeoutCallback(command, m_owner);
+        TimeoutCallback timeoutCallback = new TimeoutCallback(command);
         String response = m_gtp.sendCommand(command, 6000, timeoutCallback);
         return response;
     }
@@ -217,24 +216,30 @@ public class CommandThread
         return m_gtp.sendCommandPlay(move);
     }
 
-    private static class TimeoutCallback
+    private class TimeoutCallback
         implements Gtp.TimeoutCallback
     {
-        TimeoutCallback(String command, Frame owner)
+        TimeoutCallback(String command)
         {
             m_command = command;
-            m_owner = owner;
         }
 
         public boolean askContinue()
         {
             String message = "Program did not respond to command"
                 + " '" + m_command + "'\n" +
-                "Abort waiting?";
-            return ! SimpleDialogs.showQuestion(m_owner, message);
+                "Kill program?";
+            String title = "Error";
+            String options[] = { "Kill Program", "Wait" };
+            int result =
+                JOptionPane.showOptionDialog(m_owner, message, title,
+                                             JOptionPane.YES_NO_OPTION,
+                                             JOptionPane.ERROR_MESSAGE,
+                                             null, options, options[1]);
+            if (result == 0)
+                return false;
+            return true;
         }
-
-        private Frame m_owner;
 
         private String m_command;
     };
@@ -245,7 +250,7 @@ public class CommandThread
 
     private GtpError m_exception;    
 
-    private Frame m_owner;
+    private Component m_owner;
 
     private Runnable m_callback;
 

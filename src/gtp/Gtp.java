@@ -72,7 +72,6 @@ public final class Gtp
                                 e.getMessage());
         }
         m_out = new PrintWriter(m_process.getOutputStream());
-        m_timedOut = false;
         m_isProgramDead = false;
         
         m_queue = new MessageQueue();
@@ -205,10 +204,10 @@ public final class Gtp
         return (m_isInterruptCommentSupported || m_pid != null);
     }
 
-    /** Check if program is dead or in illegal state. */
+    /** Check if program is dead. */
     public boolean isProgramDead()
     {
-        return (m_isProgramDead || m_timedOut);
+        return m_isProgramDead;
     }
 
     public void queryInterruptSupport()
@@ -304,9 +303,7 @@ public final class Gtp
         m_fullResponse = "";
         m_response = "";
         if (m_isProgramDead)
-            throw new GtpError("Program is dead");
-        if (m_timedOut)
-            throw new GtpError("Program timed out");
+            throwProgramDied();
         if (m_autoNumber)
         {
             ++m_commandNumber;
@@ -318,7 +315,7 @@ public final class Gtp
         if (m_out.checkError())
         {
             m_isProgramDead = true;
-            throw new GtpError("Go program died");
+            throwProgramDied();
         }
         if (m_callback != null)
             m_callback.sentCommand(command);
@@ -597,8 +594,8 @@ public final class Gtp
                         assert(m_timeoutCallback != null);
                         if (! m_timeoutCallback.askContinue())
                         {
-                            m_timedOut = true;
-                            throw new GtpError("Program timed out");
+                            destroyProcess();
+                            throwProgramDied();
                         }
                     }
                 }
@@ -615,7 +612,7 @@ public final class Gtp
                         assert(message.m_isError);
                         handleErrorStream(message.m_text);
                     }
-                    throw new GtpError("Go program died");
+                    throwProgramDied();
                 }
                 log("<< " + line);
                 return line;
@@ -674,6 +671,11 @@ public final class Gtp
                 message = "GTP command failed";
             throw new GtpError(message);
         }
+    }
+
+    private void throwProgramDied() throws GtpError
+    {
+        throw new GtpError("Go program died");
     }
 }
 
