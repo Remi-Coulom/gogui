@@ -124,6 +124,12 @@ public class Gtp
         return command;
     }
 
+    /** Get fulle response including status and ID and last command. */
+    public String getFullResponse()
+    {
+        return m_fullResponse;
+    }
+
     public String getProgramCommand()
     {
         return m_program;
@@ -518,6 +524,8 @@ public class Gtp
 
     private Process m_process;
 
+    private String m_fullResponse;
+
     private String m_response;
 
     private String m_logPrefix;
@@ -566,8 +574,14 @@ public class Gtp
             }
             if (m_callback != null)
                 m_callback.receivedResponse(error, response.toString());
-            assert(response.length() >= 4);
-            m_response = response.substring(2, response.length() - 2);
+            m_fullResponse = response.toString();
+            assert(response.length() >= 4);            
+            int index = response.indexOf(" ");
+            if (index < 0)
+                m_response = response.substring(0, response.length() - 2);
+            else
+                m_response =
+                    response.substring(index + 1, response.length() - 2);
             if (error)
             {
                 String message = m_response.trim();
