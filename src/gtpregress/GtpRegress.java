@@ -673,9 +673,11 @@ class GtpRegress
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
                   "<h1>Summary</h1>\n" +
-                  "<hr>\n");
+                  "<hr>\n" +
+                  "<table>\n");
         writeInfo(out);
-        out.print("<hr>\n" +
+        out.print("</table>" +
+                  "<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"20%\">\n" +
