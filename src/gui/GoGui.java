@@ -1630,7 +1630,7 @@ class GoGui
             if (m_computerWhite)
                 playerWhite = name;
             gameComment =
-                "Program command: " + m_commandThread.getProgramCommand();
+                "Program command:\n" + m_commandThread.getProgramCommand();
         }
         sgf.Writer w = new sgf.Writer(file, m_board, Version.m_version,
                                       m_handicap, playerBlack, playerWhite,
