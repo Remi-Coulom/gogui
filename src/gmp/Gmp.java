@@ -22,6 +22,7 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** Static utility functions. */
 class Util
 {
 	public static String format(int i)
@@ -326,6 +327,7 @@ class Cmd
 
 //----------------------------------------------------------------------------
 
+/** Thread handling sending and resending of packets. */
 class WriteThread extends Thread
 {
     public WriteThread(OutputStream out, boolean verbose)
@@ -440,8 +442,10 @@ class WriteThread extends Thread
 
 //----------------------------------------------------------------------------
 
-class ReadThread extends Thread
+/** Handles incoming packets and allows to send commands. */
+class MainThread extends Thread
 {
+    /** Result returned by MainThread.waitCmd. */
     public static class WaitResult
     {
         public boolean m_success;
@@ -451,7 +455,7 @@ class ReadThread extends Thread
         public int m_val;
     }
 
-    public ReadThread(InputStream in, OutputStream out, int size,
+    public MainThread(InputStream in, OutputStream out, int size,
                       int colorIndex, boolean simple, boolean verbose)
     {
         assert(size >= 1);
@@ -679,8 +683,11 @@ class ReadThread extends Thread
 
     private int m_queryCount;
 
-    private final static int m_queries[] = {
-        Cmd.QUERY_COLOR, Cmd.QUERY_HANDICAP };
+    private final static int m_queries[] =
+    {
+        Cmd.QUERY_COLOR,
+        Cmd.QUERY_HANDICAP
+    };
 
     private int[] m_inBuffer = new int[4];
 
@@ -997,14 +1004,14 @@ public final class Gmp
                int colorIndex, boolean simple, boolean verbose)
     {
         m_size = size;
-        m_readThread =
-            new ReadThread(input, output, size, colorIndex, simple, verbose);
-        m_readThread.start();
+        m_mainThread =
+            new MainThread(input, output, size, colorIndex, simple, verbose);
+        m_mainThread.start();
     }
 
     public void interruptCommand()
     {
-        m_readThread.interruptCommand();
+        m_mainThread.interruptCommand();
     }
 
     public boolean newGame(int size, StringBuffer response)
@@ -1014,7 +1021,7 @@ public final class Gmp
             response.append("Board size must be " + m_size);
             return false;
         }
-        return m_readThread.send(new Cmd(Cmd.NEWGAME, 0), response);
+        return m_mainThread.send(new Cmd(Cmd.NEWGAME, 0), response);
     }
 
     public boolean play(boolean isBlack, int x, int y, StringBuffer response)
@@ -1027,29 +1034,29 @@ public final class Gmp
         int val = (isBlack ? 0 : Cmd.MASK_MOVE_COLOR);
         if (x >= 0 && y >= 0)
             val |= (1 + x + y * m_size);
-        return m_readThread.send(new Cmd(Cmd.MOVE, val), response);
+        return m_mainThread.send(new Cmd(Cmd.MOVE, val), response);
     }
 
     public boolean queue(StringBuffer response)
     {
-        return m_readThread.queue(response);
+        return m_mainThread.queue(response);
     }
 
     public boolean sendTalk(String text)
     {
-        return m_readThread.sendTalk(text);
+        return m_mainThread.sendTalk(text);
     }
 
     public boolean undo(StringBuffer response)
     {
-        return m_readThread.send(new Cmd(Cmd.UNDO, 1), response);
+        return m_mainThread.send(new Cmd(Cmd.UNDO, 1), response);
     }
 
     public Move waitMove(boolean isBlack, StringBuffer response)
     {
-        ReadThread.WaitResult result;
+        MainThread.WaitResult result;
         int valCondition = (isBlack ? 0 : Cmd.MASK_MOVE_COLOR);
-        result = m_readThread.waitCmd(Cmd.MOVE, Cmd.MASK_MOVE_COLOR,
+        result = m_mainThread.waitCmd(Cmd.MOVE, Cmd.MASK_MOVE_COLOR,
                                       valCondition);
         if (result.m_response != null)
             response.append(result.m_response);
@@ -1065,8 +1072,8 @@ public final class Gmp
             response.append("Board size must be " + m_size);
             return false;
         }
-        ReadThread.WaitResult result;
-        result = m_readThread.waitCmd(Cmd.NEWGAME, 0, 0);
+        MainThread.WaitResult result;
+        result = m_mainThread.waitCmd(Cmd.NEWGAME, 0, 0);
         if (result.m_response != null)
             response.append(result.m_response);
         return result.m_success;
@@ -1074,7 +1081,7 @@ public final class Gmp
 
     private int m_size;
 
-    private ReadThread m_readThread;
+    private MainThread m_mainThread;
 }
 
 //----------------------------------------------------------------------------
