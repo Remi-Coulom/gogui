@@ -316,6 +316,8 @@ class GoGui
 
     public void clearAnalyzeCommand()
     {
+        if (m_analyzeCommand == null)
+            return;
         if (m_commandInProgress)
         {
             showError("Cannot clear analyze command\n" +
