@@ -205,8 +205,6 @@ public class Reader
 
     private StreamTokenizer m_tokenizer;
 
-    private String m_charset;
-
     private String m_name;
 
     private String m_newCharset;
