@@ -1509,6 +1509,9 @@ class GoGui
         else
             computerWhite();
         generateMove();
+        if (m_currentNode == m_gameTree.getRoot()
+            && m_currentNode.getNumberChildren() == 0)
+            m_clock.reset();
         m_clock.startMove(m_board.getToMove());
     }
 
