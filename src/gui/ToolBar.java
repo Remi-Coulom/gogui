@@ -21,29 +21,27 @@ class ToolBar
     ToolBar(ActionListener listener, Preferences prefs)
     {
         m_listener = listener;
-        m_buttonNew = addButton("images/filenew.png", "new-game", "New game");
-        m_buttonOpen = addButton("images/fileopen.png", "open", "Load game");
-        m_buttonSave = addButton("images/filesave2.png", "save", "Save game");
+        m_buttonNew = addButton("filenew.png", "new-game", "New game");
+        m_buttonOpen = addButton("fileopen.png", "open", "Load game");
+        m_buttonSave = addButton("filesave2.png", "save", "Save game");
         add(new JToolBar.Separator());
-        m_buttonBeginning = addButton("images/player_start.png", "beginning",
+        m_buttonBeginning = addButton("player_start.png", "beginning",
                                       "Beginning of game");
-        m_buttonBackward10 = addButton("images/player_rew.png",
+        m_buttonBackward10 = addButton("player_rew.png",
                                        "backward-10", "Take back 10 moves");
-        m_buttonBackward = addButton("images/player_back.png", "backward",
+        m_buttonBackward = addButton("player_back.png", "backward",
                                      "Take back move");
-        m_buttonForward = addButton("images/player_next.png", "forward",
+        m_buttonForward = addButton("player_next.png", "forward",
                                     "Replay move");
-        m_buttonForward10 = addButton("images/player_fwd.png", "forward-10",
+        m_buttonForward10 = addButton("player_fwd.png", "forward-10",
                                       "Replay 10 moves");
-        m_buttonEnd = addButton("images/player_end.png", "end", "End of game");
+        m_buttonEnd = addButton("player_end.png", "end", "End of game");
         add(new JToolBar.Separator());
-        m_buttonPass = addButton("images/pass.png", "pass", "Pass");
-        m_buttonEnter = addButton("images/next.png", "play", "Computer play");
-        m_buttonInterrupt =
-            addButton("images/stop.png", "interrupt", "Interrupt");
+        m_buttonPass = addButton("pass.png", "pass", "Pass");
+        m_buttonEnter = addButton("next.png", "play", "Computer play");
+        m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         add(new JToolBar.Separator());
-        m_buttonGtpShell = addButton("images/openterm.png", "gtp-shell",
-                                     "GTP shell");
+        m_buttonGtpShell = addButton("openterm.png", "gtp-shell", "GTP shell");
     }
 
     public void disableComputerButtons()
@@ -128,7 +126,7 @@ class ToolBar
 
     private JButton addButton(String icon, String command, String toolTip)
     {
-        URL u = getClass().getClassLoader().getResource(icon);
+        URL u = getClass().getClassLoader().getResource("images/" + icon);
         JButton button = new ToolBarButton(new ImageIcon(u));
         button.setToolTipText(toolTip);
         button.setActionCommand(command);
