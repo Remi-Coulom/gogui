@@ -661,6 +661,30 @@ class GtpRegress
         writeTestSummary(testSummary);
     }
 
+    /** Wrap text containing required output.
+        Inserts html breaks, so that each line is no longer than 30 characters.
+        Breaks are inserted before '|' characters if possible.
+    */
+    private String wrapRequiredText(String line)
+    {
+        int charactersPerLine = 30;
+        StringBuffer result = new StringBuffer(1024);
+        while (line.length() > charactersPerLine)
+        {
+            int pos;
+            for (pos = charactersPerLine; pos >= 0; --pos)
+                if (line.charAt(pos) == '|')
+                    break;
+            if (pos < 0)
+                pos = charactersPerLine + 1;
+            result.append(line.substring(0, pos));
+            line = line.substring(pos);
+            result.append("<br>");
+        }
+        result.append(line);
+        return result.toString();
+    }
+
     private void writeInfo(PrintStream out)
     {
         String host = "?";
@@ -765,12 +789,12 @@ class GtpRegress
         double time = ((double)summary.m_timeMillis) / 1000F;
         NumberFormat format = StringUtils.getNumberFormat(1);
         out.print("<td>" + summary.m_numberTests + "</td>\n" +
-                  "<td bgcolor=\"#"
-                  + (summary.m_unexpectedFails > 0 ? "ff0000" : "white")
+                  "<td bgcolor=\""
+                  + (summary.m_unexpectedFails > 0 ? "#ff0000" : "white")
                   + "\">\n" + summary.m_unexpectedFails + "</td>\n" +
                   "<td>" + summary.m_expectedFails + "</td>\n" +
-                  "<td bgcolor=\"#"
-                  + (summary.m_unexpectedPasses > 0 ? "00ff00" : "white")
+                  "<td bgcolor=\""
+                  + (summary.m_unexpectedPasses > 0 ? "#00ff00" : "white")
                   + "\">\n" + summary.m_unexpectedPasses + "</td>\n" +
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
                   "<td>" + summary.m_otherErrors + "</td>\n" +
@@ -882,7 +906,7 @@ class GtpRegress
                       + "\">" + status + "</td>\n" +
                       "<td>" + command + "</td>\n" +
                       "<td>" + t.m_response + "</td>\n" +
-                      "<td>" + t.m_required + "</td>\n" +
+                      "<td>" + wrapRequiredText(t.m_required) + "</td>\n" +
                       "<td>" + lastSgf + "</td>\n" +
                       "</tr>\n");
         }
