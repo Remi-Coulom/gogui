@@ -119,6 +119,8 @@ If it has multiple lines, a window will popup.
 <listitem>
 The answer of the command is a variation of moves
 containing points or passes.
+Text not containg points is ignored.
+The answer is also displayed as a string.
 They will be displayed as numbered stones on the board,
 the current color to move is assumed to move first.
 </listitem>
@@ -128,6 +130,22 @@ the current color to move is assumed to move first.
 <term><userinput>varb</userinput></term>
 <listitem>
 Like <userinput>var</userinput>, but black is assumed to move first.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varp</userinput></term>
+<listitem>
+Like <userinput>var</userinput>, but the command needs a point argument
+and the color at that point is assumed to move first.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>varpo</userinput></term>
+<listitem>
+Like <userinput>var</userinput>, but the command needs a point argument
+and the other color than the color at that point is assumed to move first.
 </listitem>
 </varlistentry>
 

@@ -40,7 +40,11 @@ class AnalyzeCommand
 
     public static final int VARB = 10;
 
-    public static final int VARW = 11;
+    public static final int VARP = 11;
+
+    public static final int VARPO = 12;
+
+    public static final int VARW = 13;
 
     public AnalyzeCommand(String line)
     {
@@ -69,6 +73,10 @@ class AnalyzeCommand
             m_type = AnalyzeCommand.VAR;
         else if (typeStr.equals("varb"))
             m_type = AnalyzeCommand.VARB;
+        else if (typeStr.equals("varp"))
+            m_type = AnalyzeCommand.VARP;
+        else if (typeStr.equals("varpo"))
+            m_type = AnalyzeCommand.VARPO;
         else if (typeStr.equals("varw"))
             m_type = AnalyzeCommand.VARW;
         m_label = array[1];

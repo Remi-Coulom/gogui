@@ -23,14 +23,14 @@ string/Version/version
 plist/All Legal/all_legal %m
 plist/All Legal Black/all_legal black
 plist/All Legal White/all_legal black
-pstring/Attack/attack %p
+varpo/Attack/attack %p
 string/Attack Either/attack_either %P
-pstring/Connect/connect %P
+varp/Connect/connect %P
 string/CountLib/countlib %p
 string/CpuTime/cputime
-pstring/Defend/defend %p
+varp/Defend/defend %p
 string/Defend Both/defend_both %P
-pstring/Disconnect/disconnect %P
+varpo/Disconnect/disconnect %P
 string/Estimate Score/estimate_score
 plist/Final Status List Black Territory/final_status_list black_territory
 plist/Final Status List White Territory/final_status_list white_territory
@@ -40,7 +40,7 @@ string/Is Legal/is_legal %m %p
 string/Is Legal Black/is_legal black %p
 string/Is Legal White/is_legal white %p
 string/Is Surrounded/is_surrounded %p
-pstring/Ladder Attack/ladder_attack %p
+varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
 none/PrintSgf/printsgf %f
 none/Set Random Seed/set_random_seed %s
@@ -86,9 +86,9 @@ dboard/Influence White (White)/influence white/white/-0.01
 sboard/Influence White (Regions)/influence white/regions
 plist/List Stones Black/list_stones black
 plist/List Stones White/list_stones white
-pstring/Owl Attack/owl_attack %p
+varpo/Owl Attack/owl_attack %p
 string/Owl Connection Defends/owl_connection_defends %P
-pstring/Owl Defend/owl_defend %p
+varp/Owl Defend/owl_defend %p
 string/Owl Does Attack/owl_does_attack %P
 string/Owl Does Defend/owl_does_defend %P
 string/Owl Substantial/owl_substantial %p

@@ -794,7 +794,7 @@ class GoGui
             case AnalyzeCommand.VAR:
                 {                    
                     go.Point list[] =
-                        Gtp.parsePointList(response, m_boardSize);
+                        Gtp.parsePointString(response, m_boardSize);
                     m_guiBoard.showVariation(list, m_board.getToMove());
                     m_guiBoard.repaint();
                     m_boardNeedsReset = true;
@@ -803,7 +803,7 @@ class GoGui
             case AnalyzeCommand.VARB:
                 {
                     go.Point list[] =
-                        Gtp.parsePointList(response, m_boardSize);
+                        Gtp.parsePointString(response, m_boardSize);
                     m_guiBoard.showVariation(list, go.Color.BLACK);
                     m_guiBoard.repaint();
                     m_boardNeedsReset = true;
@@ -812,8 +812,38 @@ class GoGui
             case AnalyzeCommand.VARW:
                 {
                     go.Point list[] =
-                        Gtp.parsePointList(response, m_boardSize);
+                        Gtp.parsePointString(response, m_boardSize);
                     m_guiBoard.showVariation(list, go.Color.WHITE);
+                    m_guiBoard.repaint();
+                    m_boardNeedsReset = true;
+                }
+                break;
+            case AnalyzeCommand.VARP:
+                {
+                    go.Point list[] =
+                        Gtp.parsePointString(response, m_boardSize);
+                    go.Point p = m_analyzePointArg;
+                    if (p != null)
+                    {
+                        go.Color c = m_board.getColor(p);
+                        if (c != go.Color.EMPTY)
+                            m_guiBoard.showVariation(list, c);
+                    }
+                    m_guiBoard.repaint();
+                    m_boardNeedsReset = true;
+                }
+                break;
+            case AnalyzeCommand.VARPO:
+                {
+                    go.Point list[] =
+                        Gtp.parsePointString(response, m_boardSize);
+                    go.Point p = m_analyzePointArg;
+                    if (p != null)
+                    {
+                        go.Color c = m_board.getColor(p);
+                        if (c != go.Color.EMPTY)
+                            m_guiBoard.showVariation(list, c.otherColor());
+                    }
                     m_guiBoard.repaint();
                     m_boardNeedsReset = true;
                 }
@@ -821,11 +851,16 @@ class GoGui
             }
             boolean statusContainsResponse = false;
             if (type == AnalyzeCommand.STRING
-                || type == AnalyzeCommand.POINTSTRING)
+                || type == AnalyzeCommand.POINTSTRING
+                || type == AnalyzeCommand.VAR
+                || type == AnalyzeCommand.VARW
+                || type == AnalyzeCommand.VARB
+                || type == AnalyzeCommand.VARP
+                || type == AnalyzeCommand.VARPO)
             {
                 if (response.indexOf("\n") < 0)
                 {
-                    showStatus(resultTitle + ": " + response);
+                    showStatus(resultTitle + ":  " + response);
                     statusContainsResponse = true;
                 }
                 else
@@ -834,9 +869,9 @@ class GoGui
                 }
                 if (type == AnalyzeCommand.POINTSTRING)
                 {
-                    go.Point pointList[] = Gtp.parsePointString(response,
-                                                                m_boardSize);
-                    m_guiBoard.showPointList(pointList);
+                    go.Point list[] =
+                        Gtp.parsePointString(response, m_boardSize);
+                    m_guiBoard.showPointList(list);
                     m_guiBoard.repaint();
                     m_boardNeedsReset = true;
                 }
