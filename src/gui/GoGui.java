@@ -2162,7 +2162,10 @@ class GoGui
         if (! m_timeControl.isInitialized())
             return;
         if (! m_commandThread.isCommandSupported("time_settings"))
+        {
+            showError("Command time_settings not supported");
             return;
+        }
         long preByoyomi = m_timeControl.getPreByoyomi() * 60;
         long byoyomi = 0;
         long byoyomiMoves = 0;
@@ -2178,6 +2181,7 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            showGtpError(e);
         }
     }
 
