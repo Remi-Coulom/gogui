@@ -39,8 +39,9 @@ class GoGui
             m_gtpShell.setProgramCommand(program);
         }
         m_prefs = prefs;
-        m_boardSize = prefs.getBoardSize();
-        m_beepAfterMove = prefs.getBeepAfterMove();
+        setPrefsDefaults(m_prefs);
+        m_boardSize = prefs.getInt("boardsize");
+        m_beepAfterMove = prefs.getBool("beep-after-move");
         m_file = file;
         m_fillPasses = fillPasses;
         m_gtpFile = gtpFile;
@@ -67,8 +68,8 @@ class GoGui
         infoPanel.add(createStatusBar());
 
         m_board = new go.Board(m_boardSize);
-        m_board.setKomi(prefs.getKomi());
-        m_board.setRules(prefs.getRules());
+        m_board.setKomi(prefs.getFloat("komi"));
+        m_board.setRules(prefs.getInt("rules"));
         m_guiBoard = new Board(m_board);
         m_guiBoard.setListener(this);
         m_gameInfo.setBoard(m_board);
@@ -333,8 +334,6 @@ class GoGui
                 System.exit(0);
             }
             Preferences prefs = new Preferences();
-            if (opt.contains("analyze"))
-                prefs.setAnalyzeCommand(opt.getString("analyze"));
             String initAnalyze = opt.getString("analyze");
             boolean auto = opt.isSet("auto");
             boolean computerBlack = false;
@@ -354,15 +353,15 @@ class GoGui
             String gtpFile = opt.getString("gtpfile", "");
             String gtpCommand = opt.getString("command", "");
             if (opt.contains("komi"))
-                prefs.setKomi(opt.getFloat("komi"));
+                prefs.setFloat("komi", opt.getFloat("komi"));
             int move = opt.getInteger("move", -1);
             if (opt.contains("size"))
-                prefs.setBoardSize(opt.getInteger("size"));
+                prefs.setInt("boardsize", opt.getInteger("size"));
             String rules = opt.getString("rules", "");
             if (rules == "chinese")
-                prefs.setRules(go.Board.RULES_CHINESE);
+                prefs.setInt("rules", go.Board.RULES_CHINESE);
             else if (rules == "japanese")
-                prefs.setRules(go.Board.RULES_JAPANESE);
+                prefs.setInt("rules", go.Board.RULES_JAPANESE);
             else if (rules != "")
                 throw new Exception("Invalid rules argument \""
                                     + rules + "\"");
@@ -794,7 +793,7 @@ class GoGui
     private void cbBeepAfterMove()
     {
         m_beepAfterMove = m_menuBar.getBeepAfterMove();
-        m_prefs.setBeepAfterMove(m_beepAfterMove);
+        m_prefs.setBool("beep-after-move", m_beepAfterMove);
     }
 
     private void cbBeginning()
@@ -894,7 +893,7 @@ class GoGui
             return;
         float komi = Float.parseFloat((String)obj);
         m_board.setKomi(komi);
-        m_prefs.setKomi(komi);
+        m_prefs.setFloat("komi", komi);
         setKomi();
     }
 
@@ -902,7 +901,7 @@ class GoGui
     {
         if (m_isModified && ! checkSaveGame())
             return;
-        m_prefs.setBoardSize(size);
+        m_prefs.setInt("boardsize", size);
         fileModified();
         newGame(size);
     }
@@ -1002,7 +1001,7 @@ class GoGui
     private void cbRules(int rules)
     {
         m_board.setRules(rules);
-        m_prefs.setRules(rules);
+        m_prefs.setInt("rules", rules);
         setRules();
     }
 
@@ -1231,14 +1230,7 @@ class GoGui
         assert(m_instanceCount > 0);
         if (--m_instanceCount == 0)
         {
-            try
-            {
-                m_prefs.save();
-            }
-            catch (Preferences.Error e)
-            {
-                showError("Could not save preferences.", e);
-            }
+            m_prefs.save();
             System.exit(0);
         }
     }
@@ -1888,6 +1880,14 @@ class GoGui
         {
             showGtpError(e);
         }
+    }
+
+    private static void setPrefsDefaults(Preferences prefs)
+    {
+        prefs.setBoolDefault("beep-after-move", true);
+        prefs.setIntDefault("boardsize", 19);
+        prefs.setFloatDefault("komi", 0);
+        prefs.setIntDefault("rules", go.Board.RULES_JAPANESE);
     }
 
     private void setRules()

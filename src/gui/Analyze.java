@@ -497,7 +497,6 @@ class AnalyzeDialog
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         m_callback.setAnalyzeCommand(command);
-        m_prefs.setAnalyzeCommand(label);
     }
 }
 

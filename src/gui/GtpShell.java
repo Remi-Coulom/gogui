@@ -184,10 +184,11 @@ public class GtpShell
     {
         super(owner, titleprefix + ": GTP Shell");
         m_callback = callback;
-        m_historyMin = prefs.getGtpShellHistoryMin();
         m_prefs = prefs;
-        m_historyMax = prefs.getGtpShellHistoryMax();
-        m_disableCompletions = prefs.getGtpShellDisableCompletions();
+        setPrefsDefaults(prefs);
+        m_historyMin = prefs.getInt("gtpshell-history-min");
+        m_historyMax = prefs.getInt("gtpshell-history-max");
+        m_disableCompletions = prefs.getBool("gtpshell-disable-completions");
         createMenu();
         Container contentPane = getContentPane();
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
@@ -653,7 +654,7 @@ public class GtpShell
     private void commandCompletion()
     {
         m_disableCompletions = ! m_commandCompletion.isSelected();
-        m_prefs.setDisableCompletions(m_disableCompletions);
+        m_prefs.setBool("gtpshell-disable-completions", m_disableCompletions);
     }
 
     private void createMenu()
@@ -837,6 +838,13 @@ public class GtpShell
             return;
         m_isEmpty = false;
         setSize(new Dimension(m_fontSize * 51, m_fontSize * 52));
+    }
+
+    private static void setPrefsDefaults(Preferences prefs)
+    {
+        prefs.setBoolDefault("gtpshell-disable-completions", false);
+        prefs.setIntDefault("gtpshell-history-max", 3000);
+        prefs.setIntDefault("gtpshell-history-min", 2000);
     }
 
     /** Create wrapper object for addItem.

@@ -13,58 +13,45 @@ import java.util.*;
 
 class Preferences
 {
-    public static class Error extends Exception
-    {
-        public Error(String s)
-        {
-            super(s);
-        }
-    }    
-
     public Preferences()
     {
-        setDefaults();
         load();
     }
 
-    public String getAnalyzeCommand()
+    public boolean getBool(String key)
     {
-        return getStringProperty("analyze-command");
+        return (getInt(key) != 0);
     }
 
-    public boolean getBeepAfterMove()
+    public int getInt(String key)
     {
-        return getIntProperty("beep-after-move") != 0;
+        try
+        {
+            return Integer.parseInt(getString(key));
+        }
+        catch (NumberFormatException e)
+        {
+            throwFormatError(key);
+            return 0;
+        }
     }
 
-    public int getBoardSize()
+    public float getFloat(String key)
     {
-        return getIntProperty("boardsize");
+        try
+        {
+            return Float.parseFloat(getString(key));
+        }
+        catch (NumberFormatException e)
+        {
+            throwFormatError(key);
+            return 0f;
+        }
     }
 
-    public boolean getGtpShellDisableCompletions()
+    public String getString(String key)
     {
-        return getIntProperty("gtpshell-disable-completions") != 0;
-    }
-
-    public int getGtpShellHistoryMax()
-    {
-        return getIntProperty("gtpshell-history-max");
-    }
-
-    public int getGtpShellHistoryMin()
-    {
-        return getIntProperty("gtpshell-history-min");
-    }
-
-    public float getKomi()
-    {
-        return getFloatProperty("komi");
-    }
-
-    public int getRules()
-    {
-        return getIntProperty("rules");
+        return m_properties.getProperty(key);
     }
 
     public void load()
@@ -89,7 +76,7 @@ class Preferences
         m_changed = false;
     }
 
-    public void save() throws Error
+    public void save()
     {
         if (! m_changed)
             return;
@@ -101,54 +88,58 @@ class Preferences
         }
         catch (FileNotFoundException e)
         {
-            throw new Error(e.getMessage());
         }
         catch (IOException e)
         {
-            throw new Error(e.getMessage());
         }
         m_changed = false;
     }
 
-    public void setAnalyzeCommand(String analyzeCommand)
+    public void setBool(String key, boolean value)
     {
-        setStringProperty("analyze-command", analyzeCommand);
+        setString(key, value ? "1" : "0");
     }
 
-    public void setBeepAfterMove(boolean enabled)
+    public void setBoolDefault(String key, boolean value)
     {
-        setIntProperty("beep-after-move", enabled ? 1 : 0);
+        setStringDefault(key, value ? "1" : "0");
     }
 
-    public void setBoardSize(int boardSize)
+    public void setFloat(String key, float value)
     {
-        setIntProperty("boardsize", boardSize);
+        setString(key, Float.toString(value));
     }
 
-    public void setDisableCompletions(boolean disableCompletions)
+    public void setFloatDefault(String key, float value)
     {
-        setIntProperty("gtpshell-disable-completions",
-                       disableCompletions ? 1 : 0);
+        setStringDefault(key, Float.toString(value));
     }
 
-    public void setGtpShellHistoryMax(int value)
+    public void setInt(String key, int value)
     {
-        setIntProperty("gtpshell-history-max", value);
+        setString(key, Integer.toString(value));
     }
 
-    public void setGtpShellHistoryMin(int value)
+    public void setIntDefault(String key, int value)
     {
-        setIntProperty("gtpshell-history-min", value);
+        setStringDefault(key, Integer.toString(value));
     }
 
-    public void setKomi(float value)
+    public void setString(String key, String value)
     {
-        setFloatProperty("komi", value);
+        if (contains(key))
+            if (getString(key).equals(value))
+                return;
+        m_properties.setProperty(key, value);
+        m_changed = true;
     }
 
-    public void setRules(int value)
+    public void setStringDefault(String key, String value)
     {
-        setIntProperty("rules", value);
+        if (contains(key))
+            return;
+        m_properties.setProperty(key, value);
+        m_changed = true;
     }
 
     /** Properties changed since last load? */
@@ -170,50 +161,9 @@ class Preferences
         return new File(dir, "config");        
     }
 
-    private float getFloatProperty(String key)
+    private void throwFormatError(String key)
     {
-        return Float.parseFloat(getStringProperty(key));
-    }
-
-    private int getIntProperty(String key)
-    {
-        return Integer.parseInt(getStringProperty(key));
-    }
-
-    private String getStringProperty(String key)
-    {
-        return m_properties.getProperty(key);
-    }
-
-    private void setDefaults()
-    {
-        setStringProperty("analyze-command", "");
-        setIntProperty("beep-after-move", 1);
-        setIntProperty("boardsize", 19);
-        setIntProperty("gtpshell-disable-completions", 0);
-        setIntProperty("gtpshell-history-max", 3000);
-        setIntProperty("gtpshell-history-min", 2000);
-        setFloatProperty("komi", 0);
-        setIntProperty("rules", go.Board.RULES_JAPANESE);
-    }
-
-    private void setFloatProperty(String key, float value)
-    {
-        setStringProperty(key, Float.toString(value));
-    }
-
-    private void setIntProperty(String key, int value)
-    {
-        setStringProperty(key, Integer.toString(value));
-    }
-
-    private void setStringProperty(String key, String value)
-    {
-        if (contains(key))
-            if (getStringProperty(key).equals(value))
-                return;
-        m_properties.setProperty(key, value);
-        m_changed = true;
+        throw new Error("Invalid value in " + getFilename() + " for " + key);
     }
 }
 
