@@ -1743,9 +1743,10 @@ class GoGui
         m_clock.startMove(m_board.getToMove());
         if (m_commandThread == null || ! isCurrentNodeExecuted())
             return;
+        boolean gameFinished = (m_board.bothPassed() || m_resigned);
         if (m_computerBlack && m_computerWhite)
         {
-            if (m_board.bothPassed() || m_resigned)
+            if (gameFinished)
             {
                 if (m_auto)
                 {
@@ -1753,20 +1754,26 @@ class GoGui
                     checkComputerMove();
                     return;
                 }
-                else
-                {
-                    showInfo("Game finished");
-                    computerNone();
-                }
+                m_clock.halt();
+                showInfo("Game finished");
+                computerNone();
                 return;
             }
-            else
-                generateMove();
+            generateMove();            
         }
         else
         {
-            if (computerToMove() && ! m_resigned)
+            if (gameFinished)
+            {
+                m_clock.halt();
+                showInfo("Game finished");
+                computerNone();
+                return;
+            }
+            else if (computerToMove())
+            {
                 generateMove();
+            }
         }
         m_clock.startMove(m_board.getToMove());
     }
