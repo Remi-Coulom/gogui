@@ -35,6 +35,7 @@ string/Is Legal/is_legal %c %p
 string/Is Surrounded/is_surrounded %p
 varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
+none/PrintSgf/printsgf %f
 varc/Restricted GenMove/restricted_genmove %c %P
 none/Set Random Seed/set_random_seed %s
 pspairs/Top Moves/top_moves %c
