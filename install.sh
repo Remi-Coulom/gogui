@@ -44,9 +44,11 @@ install -d $PREFIX/share/pixmaps
 install src/images/gogui.png $PREFIX/share/pixmaps
 
 install -d $PREFIX/share/applications
-install config/gogui.desktop $PREFIX/share/applications
+cat config/gogui.desktop \
+| sed "s;DocPath=file:/usr/share/doc/gogui/index.html;DocPath=file:$PREFIX/share/doc/gogui/index.html;" \
+> $PREFIX/share/applications/gogui.desktop
 
-install -d $PREFIX/share/mime-info
+install -d $PREFIX/share/mime-info/packages
 install config/gogui.xml $PREFIX/share/mime/packages
 
 update-mime-database $PREFIX/share/mime
