@@ -41,7 +41,10 @@ public class Reader
             while (node != null)
                 node = readNext(node, false);
             if (root.getNumberChildren() == 1)
+            {
                 root = root.getChild();
+                root.setFather(null);
+            }
             m_gameTree = new GameTree(m_gameInformation, root);
         }
         catch (FileNotFoundException e)
@@ -148,9 +151,8 @@ public class Reader
         int ttype = m_tokenizer.ttype;
         if (ttype == '(')
         {
-            Node node = father;
-            while (node != null)
-                node = readNext(node, false);
+            while (father != null)
+                father = readNext(father, false);
             return father;
         }
         if (ttype == ')')
