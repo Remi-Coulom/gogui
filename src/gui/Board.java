@@ -264,7 +264,7 @@ public class Board
             graphics.setColor(new java.awt.Color(212, 167, 102));
             graphics.fillRect(0, 0, width, width);
         }
-        if (width > (size + 2) * 3)
+        if (width >= (size + 2) * 2)
         {
             graphics.setColor(java.awt.Color.darkGray);
             for (int y = 0; y < size; ++y)
