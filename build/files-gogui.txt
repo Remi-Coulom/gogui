@@ -20,7 +20,6 @@ src/gui/SimpleDialogs.java
 src/gui/TimeControl.java
 src/gui/ToolBar.java
 src/gui/ToolBarButton.java
-src/gui/Version.java
 src/latex/Filter.java
 src/latex/Writer.java
 src/sgf/Filter.java
@@ -32,3 +31,4 @@ src/utils/GuiUtils.java
 src/utils/Options.java
 src/utils/SquareLayout.java
 src/utils/StringUtils.java
+src/version/Version.java

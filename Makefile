@@ -29,7 +29,8 @@ PACKAGES= \
   gtp \
   gui \
   sgf \
-  utils
+  utils \
+  version
 
 DOC= \
   doc/xml/analyze.xml \
@@ -102,8 +103,8 @@ gogui_debug: doc/html/index.html $(IMAGES) $(shell cat build/files-gogui.txt)
 	for i in $(IMAGES); do cp $$i build/gogui_debug/$$i; done 
 
 src/version/Version.java: build/version.txt
-	sed 's/m_version = \".*\"/m_version = \"$(shell cat build/version.txt)\"/' <src/gui/Version.java >src/gui/.Version.java.new
-	mv src/gui/.Version.java.new src/gui/Version.java
+	sed 's/m_version = \".*\"/m_version = \"$(shell cat build/version.txt)\"/' <src/version/Version.java >src/version/.Version.java.new
+	mv src/version/.Version.java.new src/version/Version.java
 
 clean:
 	-rm -rf $(patsubst %.jar, build/%, $(JAR)) $(JAR)

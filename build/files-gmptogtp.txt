@@ -3,3 +3,4 @@ src/gmp/GmpToGtp.java
 src/gtp/GtpServer.java
 src/utils/Options.java
 src/utils/StringUtils.java
+src/version/Version.java

@@ -8,8 +8,9 @@ package gmp;
 import java.io.*;
 import java.util.*;
 import javax.comm.*;
-import utils.*;
 import gtp.GtpServer;
+import utils.*;
+import version.*;
 
 //-----------------------------------------------------------------------------
 
@@ -55,7 +56,7 @@ public class GmpToGtp
         else if (command.equals("name"))
             response.append("GmpToGtp");
         else if (command.equals("version"))
-            ;
+            response.append(Version.m_version);
         else if (command.equals("protocol_version"))
             response.append("1");
         else if (command.equals("help"))

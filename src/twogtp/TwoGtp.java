@@ -11,6 +11,7 @@ import java.text.*;
 import java.util.*;
 import go.*;
 import utils.*;
+import version.*;
 
 //-----------------------------------------------------------------------------
 
@@ -96,7 +97,7 @@ public class TwoGtp
         else if (cmd.equals("name"))
             response.append("TwoGtp");
         else if (cmd.equals("version"))
-            ;
+            response.append(Version.m_version);
         else if (cmd.equals("protocol_version"))
             response.append("1");
         else if (cmd.equals("help"))

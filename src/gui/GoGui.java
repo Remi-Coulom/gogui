@@ -17,6 +17,7 @@ import gtp.*;
 import latex.*;
 import sgf.*;
 import utils.*;
+import version.*;
 
 //-----------------------------------------------------------------------------
 

@@ -10,3 +10,4 @@ src/sgf/Writer.java
 src/twogtp/TwoGtp.java
 src/utils/Options.java
 src/utils/StringUtils.java
+src/version/Version.java
