@@ -388,25 +388,19 @@ public class GtpShell
                     || c.startsWith("white ")
                     || c.startsWith("quit")))
             {
+
+                Object[] options = { "Ok", "Cancel" };
                 String message = 
                     "This command will modify the board state and\n" +
                     "will cause the graphical board to be out of sync.\n" +
                     "You must start a new game before using\n" +
                     "the graphical board again.";
-                int messageType = JOptionPane.WARNING_MESSAGE;
-                int optionType = JOptionPane.OK_CANCEL_OPTION;
-                JOptionPane optionPane =
-                    new JOptionPane(message, messageType, optionType);
-                JDialog dialog =
-                    optionPane.createDialog(this, "GoGui: Warning");
-                dialog.setLocationRelativeTo(this);
-                dialog.setVisible(true);
-                
-                Object value = optionPane.getValue();
-                if (value == null)
-                    return true;
-                int intValue = ((Integer)value).intValue();
-                if (intValue != JOptionPane.OK_OPTION)
+                int n =
+                    JOptionPane.showOptionDialog(this, message, "Warning",
+                                                 JOptionPane.OK_CANCEL_OPTION,
+                                                 JOptionPane.WARNING_MESSAGE,
+                                                 null, options, options[1]);
+                if (n != 0)
                     return true;
                 message = 
                     "Would you like to disable the warnings about\n" +
