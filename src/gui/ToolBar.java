@@ -29,8 +29,7 @@ class ToolBar
                                       "Beginning of game");
         m_buttonBackward10 = addButton("player_rew.png",
                                        "backward-10", "Take back 10 moves");
-        m_buttonBackward = addButton("player_back.png", "backward",
-                                     "Take back move");
+        m_buttonBackward = addButton("back.png", "backward", "Take back move");
         m_buttonForward = addButton("player_next.png", "forward",
                                     "Replay move");
         m_buttonForward10 = addButton("player_fwd.png", "forward-10",
