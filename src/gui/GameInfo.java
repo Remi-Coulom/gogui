@@ -68,7 +68,7 @@ class GameInfo
         {
             go.Color c = move.getColor();
             go.Point p = move.getPoint();
-            lastMove = (c == go.Color.BLACK ? "B" : "W") + " ";
+            lastMove = (c == go.Color.BLACK ? "Black" : "White") + " ";
             if (p == null)
                 lastMove += "PASS";
             else
