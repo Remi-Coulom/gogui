@@ -23,13 +23,6 @@ public class SimpleDialogs
 
     public static final int FILE_SELECT = 2;
 
-    public static void showAbout(Component frame, String message)
-    {
-        JOptionPane.showMessageDialog(frame, message,
-                                      m_titlePrefix + "About",
-                                      JOptionPane.PLAIN_MESSAGE);
-    }
-
     public static void showError(Component frame, String message)
     {
         JOptionPane.showMessageDialog(frame, message,

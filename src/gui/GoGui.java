@@ -1462,13 +1462,7 @@ class GoGui
 
     private void cbShowAbout()
     {
-        String message =
-            "GoGui " + Version.get() + "\n" +
-            "\n" +
-            "Graphical interface to programs that play the game of Go.\n" +
-            "Copyright 2003-2004, Markus Enzenberger\n" +
-            "http://gogui.sourceforge.net\n";
-        SimpleDialogs.showAbout(this, message);
+        AboutDialog.show(this);
     }
 
     private void cbShowCursor()
