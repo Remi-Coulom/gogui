@@ -912,6 +912,7 @@ class GoGui
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
         m_name = null;
+        m_titleFromProgram = null;
         try
         {
             m_name = m_commandThread.sendCommand("name").trim();
