@@ -41,6 +41,7 @@ class Util
     public static void log(String line)
     {
         System.err.println("gmp: " + line);
+        System.err.flush();
     }
 
 }

@@ -380,6 +380,7 @@ class StdErrThread
             if (msg == null)
                 msg = e.getClass().getName();
             System.err.println(msg);
+            System.err.flush();
         }
     }
     
