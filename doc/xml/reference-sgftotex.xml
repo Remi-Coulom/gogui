@@ -7,7 +7,6 @@
 
 <refnamediv>
 <refname>sgftotex</refname>
-<refname>sgftotex.jar</refname>
 <refpurpose>
 SGF to LaTeX converter.
 </refpurpose>

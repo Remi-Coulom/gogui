@@ -6,7 +6,6 @@
 
 <refnamediv>
 <refname>gmptogtp</refname>
-<refname>gmptogtp.jar</refname>
 <refpurpose>
 Adpater from Go Text Protocol to Go Modem Protocol.
 </refpurpose>

@@ -7,7 +7,6 @@
 
 <refnamediv>
 <refname>twogtp</refname>
-<refname>twogtp.jar</refname>
 <refpurpose>
 Go Text Protocol adapter for playing games between two Go programs.
 </refpurpose>

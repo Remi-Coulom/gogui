@@ -7,7 +7,6 @@
 
 <refnamediv>
 <refname>netgtp</refname>
-<refname>netgtp.jar</refname>
 <refpurpose>
 Connects to a remote Go program supporting Go Text Protocol.
 </refpurpose>

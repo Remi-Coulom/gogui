@@ -7,7 +7,6 @@
 
 <refnamediv>
 <refname>gtpdummy</refname>
-<refname>gtpdummy.jar</refname>
 <refpurpose>
 Dummy Go program for testing GTP controlling programs.
 </refpurpose>

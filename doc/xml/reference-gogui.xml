@@ -7,7 +7,6 @@
 
 <refnamediv>
 <refname>gogui</refname>
-<refname>gogui.jar</refname>
 <refpurpose>Graphical user interface for Go programs</refpurpose>
 </refnamediv>
 

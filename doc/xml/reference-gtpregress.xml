@@ -6,7 +6,6 @@
 
 <refnamediv>
 <refname>gtpregress</refname>
-<refname>gtpregress.jar</refname>
 <refpurpose>
 Runs GTP regression tests.
 </refpurpose>
