@@ -20,12 +20,14 @@ class GameNode
     extends JComponent
 {
     public GameNode(Node node, int moveNumber, GameTreePanel gameTreePanel,
-                    MouseListener mouseListener)
+                    MouseListener mouseListener, Font font)
     {
         m_gameTreePanel = gameTreePanel;
         m_node = node;
         m_moveNumber = moveNumber;
         addMouseListener(mouseListener);
+        if (font != null)
+            setFont(font);
     }
 
     public Node getNode()
@@ -89,7 +91,6 @@ class GameNode
             graphics.setColor(java.awt.Color.black);
             graphics.drawLine(3, width + 2, width - 3, width + 2);
             graphics.drawLine(3, width + 4, width - 3, width + 4);
-            graphics.drawLine(3, width + 6, width - 3, width + 6);
         }
         if (m_gameTreePanel.isCurrent(m_node))
         {
@@ -133,6 +134,12 @@ class GameTreePanel
         Font font = UIManager.getFont("Label.font");
         if (font != null)
         {
+            Font derivedFont = font.deriveFont(font.getSize() * 0.7f);
+            if (derivedFont != null)
+                font = derivedFont;
+        }
+        if (font != null)
+        {
             m_nodeWidth = font.getSize() * 2;
             if (m_nodeWidth % 2 == 0)
                 ++m_nodeWidth;
@@ -140,6 +147,7 @@ class GameTreePanel
             if (m_nodeDist % 2 == 0)
                 ++m_nodeDist;
         }
+        m_font = font;
         m_preferredNodeSize = new Dimension(m_nodeWidth, m_nodeDist);
         setOpaque(false);
         m_listener = listener;
@@ -282,6 +290,8 @@ class GameTreePanel
 
     private Dimension m_preferredNodeSize;
 
+    private Font m_font;
+
     private GameTree m_gameTree;
 
     private GameTreeViewer.Listener m_listener;
@@ -301,7 +311,7 @@ class GameTreePanel
             ++moveNumber;
         m_nodeHeight = m_nodeDist;
         GameNode gameNode =
-            new GameNode(node, moveNumber, this, m_mouseListener);
+            new GameNode(node, moveNumber, this, m_mouseListener, m_font);
         m_map.put(node, gameNode);
         add(gameNode);
         SpringLayout layout = (SpringLayout)getLayout();
