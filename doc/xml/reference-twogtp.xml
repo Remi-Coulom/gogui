@@ -16,14 +16,33 @@
       <arg>
         <option>-auto</option>
       </arg>
+      <arg>
+        <option>-compare</option>
+      </arg>
       <arg choice="plain">
         <option>-black</option> <replaceable>command</replaceable>
+      </arg>
+      <arg>
+        <option>-games</option>
+      </arg>
+      <arg>
+        <option>-help</option>
+      </arg>
+      <arg>
+        <option>-komi</option> <replaceable>komi</replaceable>
+      </arg>
+      <arg>
+        <option>-sgffile</option> <replaceable>prefix</replaceable>
+      </arg>
+      <arg>
+        <option>-size</option> <replaceable>n</replaceable>
+      </arg>
+      <arg>
+        <option>-verbose</option>
       </arg>
       <arg choice="plain">
         <option>-white</option> <replaceable>command</replaceable>
       </arg>
-      <arg><option>-help</option></arg>
-      <arg><option>-verbose</option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
@@ -112,6 +131,16 @@
 	</term>
 	<listitem>
 	  Display help and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-komi</option> <replaceable>komi</replaceable>.
+	</term>
+	<listitem>
+	  Komi. If this option is not used, the komi can be set with
+	  the <userinput>komi</userinput> command or default komi 5.5 will be
+	   used with option <option>-auto</option>.
 	</listitem>
       </varlistentry>
       <varlistentry>

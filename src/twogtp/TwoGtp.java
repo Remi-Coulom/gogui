@@ -16,7 +16,8 @@ public class TwoGtp
     extends GtpServer
 {
     public TwoGtp(InputStream in, OutputStream out, String black, String white,
-                  int size, int numberGames, String sgfFile, boolean verbose)
+                  int size, Float komi, int numberGames, String sgfFile,
+                  boolean verbose)
         throws Exception
     {
         super(in, out);
@@ -24,6 +25,7 @@ public class TwoGtp
             throw new Exception("No black program set.");
         if (white.equals(""))
             throw new Exception("No white program set.");
+        findInitialGameIndex();
         m_black = new Gtp(black, verbose, null);
         m_black.setLogPrefix("B");
         m_white = new Gtp(white, verbose, null);
@@ -37,10 +39,10 @@ public class TwoGtp
         m_white.querySupportedCommands();
         m_name = "TwoGtp (" + m_blackName + " - " + m_whiteName + ")";
         m_size = size;
+        m_komi = komi;
         m_sgfFile = sgfFile;
         m_numberGames = numberGames;
         m_board = new Board(size < 1 ? 19 : size);
-        findInitialGameIndex();
     }
 
     public void close()
@@ -80,7 +82,9 @@ public class TwoGtp
             status = sendGenmove(Color.WHITE, response);
         else if (cmd.equals("boardsize"))
             status = boardsize(cmdArray, response);
-        else if (cmd.equals("komi") || cmd.equals("scoring_system"))
+        else if (cmd.equals("komi"))
+            komi(cmdLine);
+        else if (cmd.equals("scoring_system"))
             sendIfSupported(cmd, cmdLine);
         else if (cmd.equals("name"))
             response.append(m_name);
@@ -147,6 +151,7 @@ public class TwoGtp
                 "black:",
                 "games:",
                 "help",
+                "komi:",
                 "sgffile:",
                 "size:",
                 "verbose",
@@ -163,6 +168,7 @@ public class TwoGtp
                     "-compare compare list of sgf files\n" +
                     "-games   number of games (0=unlimited)\n" +
                     "-help    display this help and exit\n" +
+                    "-komi    komi\n" +
                     "-sgffile filename prefix\n" +
                     "-size    board size for autoplay (default 19)\n" +
                     "-verbose log GTP streams to stderr\n" +
@@ -181,11 +187,16 @@ public class TwoGtp
             String black = opt.getString("black", "");
             String white = opt.getString("white", "");
             int size = opt.getInteger("size", 0, 0);
+            Float komi = null;
+            if (opt.isSet("komi"))
+                komi = new Float(opt.getFloat("komi"));
+            else if (auto)
+                komi = new Float(5.5);
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
             TwoGtp twoGtp = new TwoGtp(System.in, System.out, black, white,
-                                       size, games, sgfFile, verbose);
+                                       size, komi, games, sgfFile, verbose);
             if (auto)
                 twoGtp.autoPlay();
             else
@@ -231,6 +242,8 @@ public class TwoGtp
     private String m_sgfFile;
 
     private String m_whiteName;
+
+    private Float m_komi;
 
     private Vector m_games = new Vector(100, 100);;
 
@@ -455,6 +468,13 @@ public class TwoGtp
         }
     }
 
+    private void komi(String cmdLine)
+    {
+        if (m_komi != null)
+            return;
+        sendIfSupported("komi", cmdLine);
+    }
+
     private void mergeResponse(StringBuffer response,
                                String response1, String response2,
                                String prefix1, String prefix2)
@@ -519,6 +539,8 @@ public class TwoGtp
         m_inconsistentState = false;
         m_board = new Board(size);
         m_gameSaved = false;
+        if (m_komi != null)
+            sendIfSupported("komi", "komi " + m_komi.floatValue());
         return true;
     }
 
