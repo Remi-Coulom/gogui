@@ -160,7 +160,10 @@ public class Writer
                 else
                     m_out.print("\\refstepcounter{gomove} \\toggleblackmove");
                 if (isPass)
-                    m_out.print(" % \\pass");
+                {
+                    if (! m_usePass)
+                        m_out.print(" % \\pass");
+                }
                 else
                 {
                     m_out.print(" % \\move");
