@@ -86,7 +86,9 @@ class GoGui
             };
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setIconImage(new GoIcon());
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        URL url = classLoader.getResource("images/icon.png");
+        setIconImage(new ImageIcon(url).getImage());
 
         m_menuBar = new MenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
