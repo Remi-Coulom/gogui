@@ -189,7 +189,6 @@ public class Writer
     {
         if (black.size() > 0 || white.size() > 0)
         {
-            m_out.println(";");
             if (black.size() > 0)
             {
                 m_out.print("AB");
