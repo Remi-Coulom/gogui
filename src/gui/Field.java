@@ -171,9 +171,9 @@ public class Field
     private void drawCrossHair(Graphics g)
     {
         Dimension size = getSize();
-        int dx = size.width / 4;
-        int dy = size.height / 4;
-        g.setColor(java.awt.Color.magenta);
+        int dx = size.width / 3;
+        int dy = size.height / 3;
+        g.setColor(java.awt.Color.red);
         g.drawLine(dx, size.height / 2, size.width - dx, size.height / 2);
         g.drawLine(size.width / 2, dy, size.width / 2, size.height - dy);
     }
