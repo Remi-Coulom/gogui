@@ -98,6 +98,20 @@ public class Writer
         return result.toString();
     }
 
+    private static int getMoveNumberInVariation(Node node)
+    {
+        int moveNumber = 0;
+        while (node != null)
+        {
+            if (node.getMove() != null)
+                ++moveNumber;
+            node = node.getFather();
+            if (node.getNumberChildren() > 1)
+                break;
+        }
+        return moveNumber;
+    }
+
     private static String getName(File file)
     {
         String result = file.getName();
@@ -195,10 +209,10 @@ public class Writer
         Move move = node.getMove();
         if (! isRoot)
         {
-            if (NodeUtils.isInMainVariation(node) && move != null)
+            if (move != null)
             {
-                int moveNumber = NodeUtils.getMoveNumber(node);
-                if (moveNumber % 10 == 1)
+                int moveNumber = getMoveNumberInVariation(node);
+                if (moveNumber != 1 && moveNumber % 10 == 1)
                     printNewLine();
             }
             print(";");
