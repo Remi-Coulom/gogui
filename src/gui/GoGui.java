@@ -2398,7 +2398,7 @@ class GoGui
         m_gameInfo.update(m_currentNode, m_board);
         if (m_gameTreeViewer != null)
             m_gameTreeViewer.update(m_gameTree, m_currentNode);
-        m_comment.setText(m_currentNode.getComment());
+        m_comment.setNode(m_currentNode);
     }
 }
 

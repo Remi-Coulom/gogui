@@ -19,6 +19,7 @@ import utils.*;
 
 class Comment
     extends JPanel
+    implements DocumentListener
 {
     public Comment()
     {
@@ -26,7 +27,7 @@ class Comment
         m_textArea = new JTextArea();
         m_textArea.setRows(5);
         m_textArea.setLineWrap(true);
-        m_textArea.setEditable(false);
+        m_textArea.getDocument().addDocumentListener(this);
         JScrollPane scrollPane
             = new JScrollPane(m_textArea,
                               JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -34,8 +35,25 @@ class Comment
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void setText(String text)
+    public void changedUpdate(DocumentEvent e) 
     {
+        copyContentToNode();
+    }
+
+    public void insertUpdate(DocumentEvent e)
+    {
+        copyContentToNode();
+    }
+
+    public void removeUpdate(DocumentEvent e)
+    {
+        copyContentToNode();
+    }
+
+    public void setNode(Node node)
+    {
+        m_node = node;
+        String text = node.getComment();
         if (text == null)
             text = "";
         m_textArea.setText(text);
@@ -43,4 +61,12 @@ class Comment
     }
 
     private JTextArea m_textArea;
+
+    private Node m_node;
+
+    private void copyContentToNode()
+    {
+        if (m_node != null)
+            m_node.setComment(m_textArea.getText());
+    }
 }
