@@ -54,11 +54,13 @@ class SelectProgram
         String[] tokens = StringUtils.tokenize(program);
         if (tokens.length > 0)
         {
-            File file = new File(tokens[0]);
             try
             {
-                String path = file.getCanonicalPath();
-                program = path + program.substring(tokens[0].length());
+                File file = new File(tokens[0]);
+                file = file.getCanonicalFile();
+                if (file.exists())
+                    program = file.toString()
+                        + program.substring(tokens[0].length());
             }
             catch (IOException e)
             {
