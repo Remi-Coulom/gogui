@@ -23,6 +23,20 @@ of the board.
 </section>
 
 <section>
+<title>Info Panel</title>
+<para>
+The panel on the right side of the board shows information about the
+current position, e.g. the last move and the variation number.
+A text field exists for displaying and editing comment text for the current
+position.
+If you select text in the comment field, it will automatically parsed for
+valid points which will be marked on the board while the text is selected.
+Selected text in the comment is also used as a default text for
+<guimenuitem>Find in Comments</guimenuitem>.
+</para>
+</section>
+
+<section>
 <title>File Menu</title>
 <variablelist>
 
