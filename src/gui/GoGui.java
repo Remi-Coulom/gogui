@@ -364,6 +364,9 @@ class GoGui
 
     public void gotoNode(Node node)
     {
+        // GameTreeViewer is not disabled in score mode
+        if (m_scoreMode)
+            return;
         Vector shortestPath = m_currentNode.getShortestPath(node);
         for (int i = 0; i < shortestPath.size(); ++i)
         {
