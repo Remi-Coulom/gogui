@@ -41,8 +41,6 @@ If the program does not support any of these methods,
 GoGui will offer to kill and detach the program.
 </para>
 
-<para>
-<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
-</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 
 </chapter>

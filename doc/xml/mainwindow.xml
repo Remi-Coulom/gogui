@@ -20,6 +20,7 @@ Holding <keycap>Shift</keycap> while pressing a cursor key moves the
 cursor to the next handicap line in this direction or to the edge
 of the board.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -34,6 +35,7 @@ valid points which will be marked on the board while the text is selected.
 Selected text in the comment is also used as a default text for
 <guimenuitem>Find in Comments</guimenuitem>.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -139,6 +141,7 @@ Quit GoGui.
 </varlistentry>
 
 </variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -304,6 +307,7 @@ You leave score mode by closing the score window.
 </varlistentry>
 
 </variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -425,6 +429,7 @@ Find next game node containing the last entered search pattern.
 </varlistentry>
 
 </variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -475,6 +480,7 @@ to White.
 </varlistentry>
 
 </variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -549,6 +555,7 @@ If multiple variations start with the same move, a '.' is appended.
 </varlistentry>
 
 </variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -592,6 +599,7 @@ Bring all of the above windows that are already open to front.
 </varlistentry>
 
 </variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -617,11 +625,7 @@ Show the version of GoGui and the Go program (if there is a program attached).
 </varlistentry>
 
 </variablelist>
-
-<para>
-<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
-</para>
-
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 </chapter>

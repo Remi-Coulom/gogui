@@ -247,6 +247,7 @@ Like <userinput>var</userinput>, but white is assumed to move first.
 <para>
 The label to use for this command in the menu.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -350,6 +351,7 @@ It is recommended that Go engines output only one of the response types
 described above.
 </simpara>
 </warning>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>

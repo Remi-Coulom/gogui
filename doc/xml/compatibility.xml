@@ -7,6 +7,7 @@ GoGui will work with all programs that can understand the most basic commands
 of version 1 or 2 of the
 <ulink url="http://www.lysator.liu.se/~gunnar/gtp/">Go Text Protocol</ulink>.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
   
 <section>
 <title>Required commands</title>
@@ -49,6 +50,7 @@ GoGui translates all moves, setup and handicap stones into a series of
 <userinput>black</userinput>, <userinput>white</userinput>
 (<userinput>play</userinput>) commands.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
 <section>
@@ -116,6 +118,7 @@ The following other commands are used by GoGui.
 If the Go program does not understand them you will still be able to play
 games, but you cannot use all of the functionality of GoGui.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
     
 <note>
 <simpara>
@@ -159,11 +162,7 @@ The title is queried and set after a new game is started.
 </listitem>
 </varlistentry>
 </variablelist>
-
-<para>
-<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
-</para>
-
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
 </chapter>

@@ -11,6 +11,7 @@ With Java 1.4.2 for Linux this problem seems to have disappeared after
 introducing a workaround which resets the window size after each text update.
 With other Java versions or on other systems the problem can still exist.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -24,6 +25,7 @@ the popup menu using the Enter key does not work.
 It is recommended to disable command line completion on the Mac and to
 select from the popup menu only using the mouse.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -37,6 +39,7 @@ It can be increased by using the "-Xmx" option, e.g. for 512MB:
 Don't use more memory than there is real memory on the machine,
 because using swap space will make the program unusable slow.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -47,9 +50,7 @@ are sometimes wrong.
 This is due to bugs in the Java class StreamTokenizer that is used
 for parsing the SGF stream.
 </para>
-<para>
-<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
-</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 </appendix>

@@ -14,6 +14,7 @@ direct communication with the program by sending any GTP command
 and allows to log and save the complete stream of sent GTP commands
 to facilitate debugging and reproducing errors.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
 <section>
@@ -21,6 +22,7 @@ to facilitate debugging and reproducing errors.
 <para>
 GoGui requires Java 1.4.
 </para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 
 <section>
@@ -39,9 +41,7 @@ at SourceForge</ulink>
 </listitem>
 </itemizedlist>
 
-<para>
-<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
-</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 
 </section>
 
