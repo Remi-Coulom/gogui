@@ -733,14 +733,14 @@ class GameTreePanel
         item.addActionListener(listener);
         popup.add(item);
         popup.addSeparator();
-        item = new JMenuItem("Hide Others");
-        item.setActionCommand("hide-others");
-        item.addActionListener(listener);
-        popup.add(item);
-        item = new JMenuItem("Hide Subtree");
-        if (! m_expanded.contains(node))
+        item = new JMenuItem("Hide Variations");
+        if (node.getNumberChildren() == 0)
             item.setEnabled(false);
         item.setActionCommand("hide-subtree");
+        item.addActionListener(listener);
+        popup.add(item);
+        item = new JMenuItem("Hide Others");
+        item.setActionCommand("hide-others");
         item.addActionListener(listener);
         popup.add(item);
         item = new JMenuItem("Show Variations");
