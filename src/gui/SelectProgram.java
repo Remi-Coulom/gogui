@@ -28,7 +28,7 @@ class SelectProgram
         contentPane.add(createCommandPanel(), BorderLayout.CENTER);
         contentPane.add(createButtons(), BorderLayout.SOUTH);
         pack();
-   }
+    }
 
     public void actionPerformed(ActionEvent event)
     {
@@ -40,11 +40,18 @@ class SelectProgram
         {
             m_command = m_comboBox.getSelectedItem().toString();
             m_comboBox.insertItemAt(m_command, 0);
-            saveHistory();
+            saveHistory(getHistory());
             dispose();
         }
         else if (command.equals("open"))
             open();
+    }
+
+    public static void addHistory(String program)
+    {
+        Vector history = loadHistory();
+        history.add(0, program);
+        saveHistory(history);
     }
 
     public static String select(Frame owner)
@@ -115,7 +122,20 @@ class SelectProgram
         return outerPanel;
     }
 
-    private File getHistoryFile()
+    private Vector getHistory()
+    {
+        Vector result = new Vector(32, 32);
+        int maxHistory = 10;
+        int itemCount = m_comboBox.getItemCount();
+        int n = itemCount;
+        if (n > maxHistory)
+            n = maxHistory;
+        for (int i = 0; i < n; ++i)
+            result.add(m_comboBox.getItemAt(i).toString().trim());
+        return result;
+    }
+
+    private static File getHistoryFile()
     {
         String home = System.getProperty("user.home");
         File dir = new File(home, ".gogui");
@@ -124,7 +144,7 @@ class SelectProgram
         return new File(dir, "program-history");
     }
 
-    private Vector loadHistory()
+    private static Vector loadHistory()
     {
         Vector result = new Vector(32, 32);
         File file = getHistoryFile();
@@ -161,21 +181,15 @@ class SelectProgram
         m_textField.requestFocus();
     }
 
-    private void saveHistory()
+    private static void saveHistory(Vector history)
     {
         File file = getHistoryFile();
         try
         {
             PrintWriter out = new PrintWriter(new FileOutputStream(file));
-            int maxHistory = 10;
-            int itemCount = m_comboBox.getItemCount();
-            int n = itemCount;
-            if (n > maxHistory)
-                n = maxHistory;
-            for (int i = 0; i < n; ++i)
-            {
-                out.println(m_comboBox.getItemAt(i).toString().trim());
-            }
+            int size = history.size();
+            for (int i = 0; i < size; ++i)
+                out.println((String)history.get(i));
             out.close();
         }
         catch (FileNotFoundException e)

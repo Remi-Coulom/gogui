@@ -333,7 +333,10 @@ class GoGui
             Vector arguments = opt.getArguments();
             String program = null;
             if (arguments.size() == 1)
+            {
                 program = (String)arguments.get(0);
+                SelectProgram.addHistory(program);
+            }
             else if (arguments.size() > 1)
                 throw new Exception("Only one program argument allowed.");
             else
