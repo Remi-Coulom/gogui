@@ -307,6 +307,9 @@ for opening files containing many moves or setup stones.
 Alternatively the option <option>-loadsgf</option> makes TwoGtp to use
 the <userinput>loadsgf</userinput> GTP command for setting up openings,
 this works only with option <option>-auto</option>.
+Note that TwoGtp has no handicap option yet, but openings can also be used
+to play handicap games by creating a directory with a single opening
+file containing the position with handicap stones.
 </para>
 </listitem>
 </varlistentry>
