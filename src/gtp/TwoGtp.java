@@ -74,6 +74,20 @@ public class TwoGtp
             response.append("TwoGtp");
         else if (command.equals("version"))
             ;
+        else if (command.equals("protocol_version"))
+            response.append("1");
+        else if (command.equals("help"))
+            response.append("quit\n" +
+                            "black\n" +
+                            "white\n" +
+                            "undo\n" +
+                            "genmove_black\n" +
+                            "genmove_white\n" +
+                            "boardsize\n" +
+                            "komi\n" +
+                            "scoring_system\n" +
+                            "name\n" +
+                            "version\n");
         else
         {
             response.append("unknown command");
