@@ -156,10 +156,11 @@ class GameTreePanel
 
     public static final int SIZE_TINY = 3;
 
-    public GameTreePanel(GameTreeViewer.Listener listener, boolean fastPaint,
-                         int labelMode, int sizeMode)
+    public GameTreePanel(JFrame owner, GameTreeViewer.Listener listener,
+                         boolean fastPaint, int labelMode, int sizeMode)
     {
         super(new SpringLayout());
+        m_owner = owner;
         m_fastPaint = fastPaint;
         setBackground(UIManager.getColor("Label.background"));
         m_labelMode = labelMode;
@@ -357,7 +358,7 @@ class GameTreePanel
         {
             m_expanded.clear();
             removeAll();
-            SimpleDialogs.showError(this,
+            SimpleDialogs.showError(m_owner,
                                     "Could not show game tree\n" + 
                                     "Out of memory");
             update(gameTree, currentNode);
@@ -418,6 +419,8 @@ class GameTreePanel
     private GameTree m_gameTree;
 
     private GameTreeViewer.Listener m_listener;
+
+    private JFrame m_owner;
 
     private Node m_currentNode;
 
@@ -670,7 +673,7 @@ class GameTreePanel
     private void showSubtree(Node node)
     {
         if (NodeUtils.subtreeGreaterThan(node, 10000)
-            && ! SimpleDialogs.showQuestion(this,
+            && ! SimpleDialogs.showQuestion(m_owner,
                                             "Really expand large subtree?"))
             return;
         boolean changed = false;
@@ -731,7 +734,8 @@ public class GameTreeViewer
         createMenuBar(labelMode, sizeMode);
         Container contentPane = getContentPane();
         m_listener = listener;
-        m_panel = new GameTreePanel(listener, fastPaint, labelMode, sizeMode);
+        m_panel =
+            new GameTreePanel(this, listener, fastPaint, labelMode, sizeMode);
         m_scrollPane =
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -949,7 +953,7 @@ public class GameTreeViewer
     private static void setPrefsDefaults(Preferences prefs)
     {
         prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
-        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
+        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_LARGE);
     }
 }
 
