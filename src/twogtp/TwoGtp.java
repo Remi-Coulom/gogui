@@ -129,7 +129,7 @@ public class TwoGtp
         else if (cmd.equals("name"))
             response.append("TwoGtp");
         else if (cmd.equals("version"))
-            response.append(Version.m_version);
+            response.append(Version.get());
         else if (cmd.equals("protocol_version"))
             response.append("1");
         else if (cmd.equals("help"))
@@ -266,7 +266,7 @@ public class TwoGtp
             boolean force = opt.isSet("force");
             if (opt.isSet("version"))
             {
-                System.out.println("TwoGtp " + Version.m_version);
+                System.out.println("TwoGtp " + Version.get());
                 System.exit(0);
             }
             if (opt.contains("analyze"))

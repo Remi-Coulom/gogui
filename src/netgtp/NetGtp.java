@@ -57,7 +57,7 @@ class NetGtp
             }
             if (opt.isSet("version"))
             {
-                System.out.println("NetGtp " + Version.m_version);
+                System.out.println("NetGtp " + Version.get());
                 System.exit(0);
             }
             Vector arguments = opt.getArguments();

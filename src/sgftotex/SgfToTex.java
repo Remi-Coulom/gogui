@@ -36,7 +36,7 @@ class SgfToTex
                 usePass = true;
             if (opt.isSet("version"))
             {
-                System.out.println("SgfToTex " + Version.m_version);
+                System.out.println("SgfToTex " + Version.get());
                 System.exit(0);
             }
             Vector arguments = opt.getArguments();

@@ -10,9 +10,37 @@ $Source$
 
 <target name="all" depends="gogui.jar"/>
 
-<target name="compile">
-<javac srcdir="src" destdir="build" source="1.4" deprecation="true">
-</javac>
+<target name="clean">
+<delete failonerror="false" includeEmptyDirs="true">
+<fileset dir="build/doc"/>
+<fileset dir="build/gmp"/>
+<fileset dir="build/gmptogtp"/>
+<fileset dir="build/go"/>
+<fileset dir="build/gtp"/>
+<fileset dir="build/gtpdummy"/>
+<fileset dir="build/gtpregress"/>
+<fileset dir="build/gui"/>
+<fileset dir="build/images"/>
+<fileset dir="build/latex"/>
+<fileset dir="build/netgtp"/>
+<fileset dir="build/sgf"/>
+<fileset dir="build/sgftotex"/>
+<fileset dir="build/twogtp"/>
+<fileset dir="build/utils"/>
+<fileset dir="build/version"/>
+<fileset dir="." includes="gogui.jar"/>
+</delete>
+</target>
+
+<target name="compile" depends="version">
+<javac srcdir="src" destdir="build" source="1.4" deprecation="true"
+ optimize="true" listfiles="yes"/>
+<copy todir="build">
+<fileset dir="." includes="images/*.png"/>
+</copy>
+<copy todir="build/doc">
+<fileset dir="doc/html" includes="*.html"/>
+</copy>
 </target>
 
 <target name="gogui.jar" depends="compile">
@@ -21,16 +49,27 @@ $Source$
 <attribute name="Main-Class" value="gui.GoGui"/>
 </manifest>
 <fileset dir="build" includes="
-  go/*.class
-  gtp/*.class
-  gui/*.class
-  latex/*.class
-  sgf/*.class
-  utils/*.class
-  version/*.class
+ doc/*.html
+ go/*.class
+ gtp/*.class
+ gui/*.class
+ images/*.png
+ latex/*.class
+ sgf/*.class
+ utils/*.class
+ version/*.class
 "/>
-<fileset dir="." includes="images/*.png"/>
 </jar>
+</target>
+
+<target name="version">
+<copy
+ file="src/version/Version.java.in"
+ tofile="src/version/Version.java" overwrite="true"/>
+<loadfile property="version" srcFile="build/version.txt">
+<filterchain><striplinebreaks/></filterchain>
+</loadfile>
+<replace file="src/version/Version.java" token="@VERSION@" value="${version}"/>
 </target>
 
 </project>

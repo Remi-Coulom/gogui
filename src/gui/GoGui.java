@@ -391,7 +391,7 @@ class GoGui
             }
             if (opt.isSet("version"))
             {
-                System.out.println("GoGui " + Version.m_version);
+                System.out.println("GoGui " + Version.get());
                 System.exit(0);
             }
             Preferences prefs = new Preferences();
@@ -1162,7 +1162,7 @@ class GoGui
 
     private void cbShowAbout()
     {
-        String message = "GoGui " + Version.m_version;
+        String message = "GoGui " + Version.get();
         SimpleDialogs.showAbout(this, message);
     }
 
@@ -1864,7 +1864,7 @@ class GoGui
             new latex.Writer(out, m_board, false, false, null, null, null);
         else
         {
-            new sgf.Writer(out, m_board, file, "GoGui", Version.m_version,
+            new sgf.Writer(out, m_board, file, "GoGui", Version.get(),
                            m_handicap, playerBlack, playerWhite, gameComment,
                            m_score);
             m_menuBar.addRecent(file);
@@ -1910,7 +1910,7 @@ class GoGui
                              m_guiBoard.getSelects());
         else
         {
-            new sgf.Writer(out, m_board, file, "GoGui", Version.m_version);
+            new sgf.Writer(out, m_board, file, "GoGui", Version.get());
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
         }

@@ -70,7 +70,7 @@ class GtpServer
             }
             if (opt.isSet("version"))
             {
-                System.out.println("GtpServer " + Version.m_version);
+                System.out.println("GtpServer " + Version.get());
                 System.exit(0);
             }
             Vector arguments = opt.getArguments();

@@ -59,7 +59,7 @@ public class GmpToGtp
         else if (command.equals("name"))
             response.append("GmpToGtp");
         else if (command.equals("version"))
-            response.append(Version.m_version);
+            response.append(Version.get());
         else if (command.equals("protocol_version"))
             response.append("1");
         else if (command.equals("help"))
@@ -134,7 +134,7 @@ public class GmpToGtp
             }
             if (opt.isSet("version"))
             {
-                System.out.println("GmpToGtp " + Version.m_version);
+                System.out.println("GmpToGtp " + Version.get());
                 System.exit(0);
             }
             if (opt.isSet("list"))

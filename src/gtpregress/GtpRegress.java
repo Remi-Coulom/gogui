@@ -54,7 +54,7 @@ class GtpRegress
             }
             if (opt.isSet("version"))
             {
-                System.out.println("GtpRegress " + Version.m_version);
+                System.out.println("GtpRegress " + Version.get());
                 System.exit(0);
             }
             String output = opt.getString("output", "");

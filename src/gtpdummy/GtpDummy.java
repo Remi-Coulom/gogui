@@ -70,7 +70,7 @@ public class GtpDummy
         else if (cmd.equals("quit"))
             ;
         else if (cmd.equals("version"))
-            response.append(Version.m_version);
+            response.append(Version.get());
         else if (cmd.equals("white"))
             status = play(cmdArray, response);
         else if (cmd.equals("help"))
@@ -128,7 +128,7 @@ public class GtpDummy
             }
             if (opt.isSet("version"))
             {
-                System.out.println("GtpDummy " + Version.m_version);
+                System.out.println("GtpDummy " + Version.get());
                 System.exit(0);
             }
             PrintStream log = null;

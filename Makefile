@@ -112,9 +112,8 @@ build/gogui/config/analyze-commands: config/analyze-commands
 	javac -O $(JAVAOPT) -d build/$* @build/files-$*.txt
 	jar cmf build/manifest-$*.txt $*.jar -C build/$* .
 
-src/version/Version.java: build/version.txt
-	sed 's/m_version = \".*\"/m_version = \"$(shell cat build/version.txt)\"/' <src/version/Version.java >src/version/.Version.java.new
-	mv src/version/.Version.java.new src/version/Version.java
+src/version/Version.java: build/version.txt src/version/Version.java.in
+	sed 's/@VERSION@/$(shell cat build/version.txt)/' <src/version/Version.java.in >src/version/.Version.java
 
 doc/html/index.html: $(DOC) build/version.txt
 	cp build/version.txt doc/xml/version.xml
