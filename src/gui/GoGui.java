@@ -94,7 +94,7 @@ class GoGui
         if (program == null || program.equals(""))
         {
             m_toolBar.disableComputerButtons();
-            m_menuBars.disableComputerMenus();
+            m_menuBars.disableComputer();
         }
 
         pack();
@@ -203,8 +203,10 @@ class GoGui
             cbSavePosition();
         else if (command.equals("score"))
             cbScore();
+        else if (command.equals("score-cancel"))
+            cbScoreDone(false);
         else if (command.equals("score-done"))
-            cbScoreDone();
+            cbScoreDone(true);
         else if (command.equals("setup"))
             cbSetup();
         else if (command.equals("setup-black"))
@@ -261,7 +263,8 @@ class GoGui
         {
             m_guiBoard.scoreSetDead(p);
             m_guiBoard.repaint();
-	    return;
+            m_scoreDialog.showScore(m_board.scoreGet());
+            return;
         }
         humanMoved(new Move(p, m_board.getToMove()));
     }
@@ -576,6 +579,8 @@ class GoGui
     */
     private Preferences m_prefs;
 
+    private ScoreDialog m_scoreDialog;
+
     private TimeControl m_timeControl;
 
     private ToolBar m_toolBar;
@@ -725,7 +730,7 @@ class GoGui
     private void beginLengthyCommand()
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
-        m_menuBars.setCommandInProgress(true);
+        m_menuBars.setCommandInProgress();
         m_toolBar.setCommandInProgress();
         m_gtpShell.setInputEnabled(false);
         m_commandInProgress = true;
@@ -1021,27 +1026,27 @@ class GoGui
         m_guiBoard.scoreBegin(isDeadStone);
         m_guiBoard.repaint();
         m_scoreMode = true;
-        Dimension size = getSize();
-        setJMenuBar(m_menuBars.getScoreMenu());
-        m_toolBar.enableAll(false, null);
-        pack();
-        setSize(size);
+        m_scoreDialog = new ScoreDialog(this, m_board.scoreGet());
+        m_scoreDialog.setVisible(true);
+        m_menuBars.setScoreMode();
         showStatus("Please remove dead groups.");
     }
 
-    private void cbScoreDone()
+    private void cbScoreDone(boolean accepted)
     {
-        m_score = m_board.scoreGet();
+        if (m_scoreDialog != null)
+        {
+            m_scoreDialog.dispose();
+            m_scoreDialog = null;
+        }
+        if (accepted)
+            m_score = m_board.scoreGet();
         clearStatus();
-        showInfo(m_score.formatDetailedResult());
         m_guiBoard.clearAll();
         m_guiBoard.repaint();
         m_scoreMode = false;
-        Dimension size = getSize();
-        setJMenuBar(m_menuBars.getNormalMenu());
         m_toolBar.enableAll(true, m_board);
-        pack();
-        setSize(size);
+        m_menuBars.setNormalMode();
     }
 
     private void cbSetup()
@@ -1316,7 +1321,7 @@ class GoGui
 
     private void endLengthyCommand()
     {
-        m_menuBars.setCommandInProgress(false);
+        m_menuBars.setNormalMode();
         m_toolBar.enableAll(true, m_board);
         if (m_gtpShell != null)
             m_gtpShell.setInputEnabled(true);

@@ -20,29 +20,23 @@ class MenuBars
     {
         m_listener = listener;
 
-        m_normalMenuBar = new JMenuBar();
-        m_normalMenuBar.add(createFileMenu());
-        m_normalMenuBar.add(createGameMenu());
-        m_normalMenuBar.add(createBoardMenu());
-        m_normalMenuBar.add(createSettingsMenu());
+        m_menuBar = new JMenuBar();
+        m_menuBar.add(createFileMenu());
+        m_menuBar.add(createGameMenu());
+        m_menuBar.add(createBoardMenu());
+        m_menuBar.add(createSettingsMenu());
         m_menuAnalyze = createAnalyzeMenu();
-        m_normalMenuBar.add(m_menuAnalyze);
-        m_normalMenuBar.add(createHelpMenu(true));
+        m_menuBar.add(m_menuAnalyze);
+        m_menuBar.add(createHelpMenu(true));
 
         m_setupMenuBar = new JMenuBar();
         m_setupMenuBar.add(createSetupMenu());
         m_setupMenuBar.add(createHelpMenu(false));
-
-        m_scoreMenuBar = new JMenuBar();
-        m_scoreMenuBar.add(createScoreMenu());
-        m_scoreMenuBar.add(createHelpMenu(false));
     }
 
-    public void disableComputerMenus()
+    public void disableComputer()
     {
-        m_menuAnalyze.setEnabled(false);
-        m_menuComputerColor.setEnabled(false);
-        m_itemComputerPlay.setEnabled(false);
+        m_isComputerDisabled = true;
     }
 
     public boolean getBeepAfterMove()
@@ -77,12 +71,7 @@ class MenuBars
 
     public JMenuBar getNormalMenu()
     {
-        return m_normalMenuBar;
-    }
-
-    public JMenuBar getScoreMenu()
-    {
-        return m_scoreMenuBar;
+        return m_menuBar;
     }
 
     public JMenuBar getSetupMenu()
@@ -120,41 +109,28 @@ class MenuBars
         m_itemBeepAfterMove.setState(enable);
     }
 
-    public void setCommandInProgress(boolean commandInProgress)
+    public void setCommandInProgress()
     {
-        if (commandInProgress)
-        {
-            for (int i = 0; i < m_normalMenuBar.getMenuCount(); ++i)
-            {
-                JMenu menu = m_normalMenuBar.getMenu(i);
-                if (menu != null)
-                    for (int j = 0; j < menu.getItemCount(); ++j)
-                        if (menu.getItem(j) != null)
-                            menu.getItem(j).setEnabled(false);
-            }
-            m_itemAbout.setEnabled(true);
-            m_itemBeepAfterMove.setEnabled(true);
-            m_itemExit.setEnabled(true);
-            m_itemGtpShell.setEnabled(true);
-            m_itemHelp.setEnabled(true);
-            m_itemShowLastMove.setEnabled(true);
-            m_menuComputerColor.setEnabled(true);
-            m_itemInterrupt.setEnabled(true);
-        }
-        else
-        {
-            for (int i = 0; i < m_normalMenuBar.getMenuCount(); ++i)
-            {
-                JMenu menu = m_normalMenuBar.getMenu(i);
-                if (menu != null)
-                    for (int j = 0; j < menu.getItemCount(); ++j)
-                        if (menu.getItem(j) != null)
-                            menu.getItem(j).setEnabled(true);
-            }
-            m_itemInterrupt.setEnabled(false);
-        }
+        assert(! m_isComputerDisabled);
+        disableMost();
+        m_menuComputerColor.setEnabled(true);
+        m_itemInterrupt.setEnabled(true);
     }
 
+    public void setNormalMode()
+    {
+        enableAll();
+        m_itemInterrupt.setEnabled(false);
+        if (m_isComputerDisabled)
+            disableComputerItems();
+    }
+
+    public void setScoreMode()
+    {
+        disableMost();
+    }
+
+    private boolean m_isComputerDisabled;
 
     private static int m_possibleBoardSizes[] = { 9, 11, 13, 15, 17, 19 };
 
@@ -170,9 +146,7 @@ class MenuBars
 
     private JMenu m_menuComputerColor;
 
-    private JMenuBar m_normalMenuBar;
-
-    private JMenuBar m_scoreMenuBar;
+    private JMenuBar m_menuBar;
 
     private JMenuBar m_setupMenuBar;
 
@@ -438,12 +412,41 @@ class MenuBars
         return menu;
     }
 
-    private JMenu createScoreMenu()
+    private void disableComputerItems()
     {
-        JMenu menu = new JMenu("Score");
-        menu.setMnemonic(KeyEvent.VK_S);
-        addMenuItem(menu, "Done", KeyEvent.VK_D, "score-done");
-        return menu;
+        m_menuAnalyze.setEnabled(false);
+        m_menuComputerColor.setEnabled(false);
+        m_itemComputerPlay.setEnabled(false);
+    }
+
+    private void disableMost()
+    {
+        for (int i = 0; i < m_menuBar.getMenuCount(); ++i)
+        {
+            JMenu menu = m_menuBar.getMenu(i);
+            if (menu != null)
+                for (int j = 0; j < menu.getItemCount(); ++j)
+                    if (menu.getItem(j) != null)
+                        menu.getItem(j).setEnabled(false);
+        }
+        m_itemAbout.setEnabled(true);
+        m_itemBeepAfterMove.setEnabled(true);
+        m_itemExit.setEnabled(true);
+        m_itemGtpShell.setEnabled(true);
+        m_itemHelp.setEnabled(true);
+        m_itemShowLastMove.setEnabled(true);
+    }
+
+    private void enableAll()
+    {
+        for (int i = 0; i < m_menuBar.getMenuCount(); ++i)
+        {
+            JMenu menu = m_menuBar.getMenu(i);
+            if (menu != null)
+                for (int j = 0; j < menu.getItemCount(); ++j)
+                    if (menu.getItem(j) != null)
+                        menu.getItem(j).setEnabled(true);
+        }
     }
 }
 
