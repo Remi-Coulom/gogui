@@ -27,16 +27,6 @@ class GoGui
           boolean computerNone, boolean autoplay, String gtpFile)
         throws Gtp.Error, AnalyzeCommand.Error
     {
-        if (program != null && ! program.equals(""))
-        {
-            // Must be created before m_gtp (stderr callback of Gtp!)
-            m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
-            Gtp gtp = new Gtp(program, verbose, m_gtpShell);
-            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
-            m_commandThread = new CommandThread(gtp, m_gtpShell);
-            m_commandThread.start();
-        }
-
         m_prefs = prefs;
         m_boardSize = prefs.getBoardSize();
         m_file = file;
@@ -53,6 +43,17 @@ class GoGui
         m_timeControl = new TimeControl();
         m_board = new Board(m_boardSize);
         m_board.setListener(this);
+
+        if (program != null && ! program.equals(""))
+        {
+            // Must be created after board (initAnalyzeCommand uses m_board)
+            m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
+            Gtp gtp = new Gtp(program, verbose, m_gtpShell);
+            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
+            m_commandThread = new CommandThread(gtp, m_gtpShell);
+            m_commandThread.start();
+        }
+
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new SquareLayout());
         boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
