@@ -130,7 +130,10 @@ public class Writer
     {
         if (p == null)
         {
-            m_out.print("[tt]");
+            if (m_board.getBoardSize() <= 19)
+                m_out.print("[tt]");
+            else
+                m_out.print("[]");
             return;
         }
         int x = 'a' + p.getX();
