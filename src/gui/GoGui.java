@@ -1965,8 +1965,11 @@ class GoGui
     {
         restoreSize(this, "window-gogui", m_boardSize);
         String name = "splitpane-position-" + m_boardSize;
-        int dividerLocation = m_prefs.getInt(name);
-        m_splitPane.setDividerLocation(dividerLocation);
+        if (m_prefs.contains(name))
+        {
+            int dividerLocation = m_prefs.getInt(name);
+            m_splitPane.setDividerLocation(dividerLocation);
+        }
     }
 
     private void restoreSize(Window window, String name, int size)
