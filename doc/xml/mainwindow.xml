@@ -384,7 +384,8 @@ node.
 <listitem>
 <para>
 Find next game node containing a search pattern.
-The search pattern is a regular expression.
+The search pattern is a regular expression as used by the Java
+java.util.regex.Pattern class, similar to Perl syntax.
 </para>
 </listitem>
 </varlistentry>
