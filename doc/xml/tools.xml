@@ -71,7 +71,7 @@ for a complete reference.
 <term>GtpRegress</term>
 <listitem>
 Runs GTP regression tests.
-<xref linkend="reference-gtpregress">
+See <xref linkend="reference-gtpregress">
 <citerefentry><refentrytitle>gtpregress</refentrytitle></citerefentry>
 </xref> 
 for a complete reference.
@@ -82,7 +82,7 @@ for a complete reference.
 <term>SgfToTex</term>
 <listitem>
 SGF to LaTeX converter.
-<xref linkend="reference-sgftotex">
+See <xref linkend="reference-sgftotex">
 <citerefentry><refentrytitle>sgftotex</refentrytitle></citerefentry></xref> 
 for a complete reference.
 </listitem>
