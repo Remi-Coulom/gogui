@@ -481,10 +481,10 @@ Open the GTP shell window or bring it to front, if already open.
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>Contents</guimenuitem></term>
+<term><guimenuitem>GoGui Documentation</guimenuitem></term>
 <listitem>
 <para>
-Open a window with the online help.
+Open a window for browsing the GoGui documentation.
 </para>
 </listitem>
 </varlistentry>
@@ -493,7 +493,7 @@ Open a window with the online help.
 <term><guimenuitem>About</guimenuitem></term>
 <listitem>
 <para>
-Show the version of GoGui.
+Show the version of GoGui and the Go program (if there is a program attached).
 </para>
 </listitem>
 </varlistentry>

@@ -557,8 +557,8 @@ class MenuBar
     {
         JMenu menu = createMenu("Help", KeyEvent.VK_H);
         JMenuItem itemHelp =
-            addMenuItem(menu, "Contents", KeyEvent.VK_C, KeyEvent.VK_F1, 0,
-                        "help");
+            addMenuItem(menu, "GoGui Documentation", KeyEvent.VK_C,
+                        KeyEvent.VK_F1, 0, "help");
         JMenuItem itemAbout = addMenuItem(menu, "About", KeyEvent.VK_A,
                                           "about");
         m_itemHelp = itemHelp;
