@@ -913,8 +913,8 @@ class GoGui
             sendGtpString(m_gtpCommand);
         Node oldCurrentNode = m_currentNode;
         m_board.initSize(m_boardSize);
-        executeRoot();
-        gotoNode(oldCurrentNode);
+        if (executeRoot())
+            gotoNode(oldCurrentNode);
         setTitle();
         return true;
     }    
@@ -2131,7 +2131,10 @@ class GoGui
             FileInputStream in = new FileInputStream(file);
             LoadFileRunnable runnable = new LoadFileRunnable(in, file);
             if (file.length() > 500000)
+            {
+                newGame(m_boardSize); // Frees space if already large tree
                 GuiUtils.runProgess(this, "Loading...", runnable);
+            }
             else
                 runnable.run(null);
             sgf.Reader reader = runnable.getReader();
@@ -2139,9 +2142,9 @@ class GoGui
                 reader.getGameTree().getGameInformation();
             initGame(gameInformation.m_boardSize);
             m_gameTree = reader.getGameTree(); 
-            executeRoot();
-            if (move > 0)
-                forward(move);            
+            if (executeRoot())
+                if (move > 0)
+                    forward(move);            
             m_loadedFile = file;
             setTitle();
             SimpleDialogs.setLastFile(file);
