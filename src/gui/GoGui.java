@@ -190,6 +190,8 @@ class GoGui
             cbInterrupt();
         else if (command.equals("keep-only-main-variation"))
             cbKeepOnlyMainVariation();
+        else if (command.equals("keep-only-position"))
+            cbKeepOnlyPosition();
         else if (command.equals("komi"))
             cbKomi();
         else if (command.equals("make-main-variation"))
@@ -922,12 +924,12 @@ class GoGui
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
         Node oldCurrentNode = m_currentNode;
-        m_currentNode = m_gameTree.getRoot();
         try
         {
             m_board.initSize(m_boardSize);
             m_commandThread.sendCommandBoardsize(m_boardSize);
             m_commandThread.sendCommandClearBoard(m_boardSize);
+            m_currentNode = m_gameTree.getRoot();
             executeCurrentNode();
         }
         catch (Gtp.Error e)
@@ -1167,6 +1169,42 @@ class GoGui
         if (! showQuestion("Delete all variations except main?"))
             return;
         m_gameTree.keepOnlyMainVariation();
+        m_needsSave = true;
+        boardChangedBegin(false);
+    }
+
+    private void cbKeepOnlyPosition()
+    {
+        if (! showQuestion("Delete all moves?"))
+            return;
+        m_gameTree = new GameTree(m_boardSize);
+        Node root = m_gameTree.getRoot();
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            go.Point point = m_board.getPoint(i);
+            go.Color color = m_board.getColor(point);
+            if (color == go.Color.BLACK)
+                root.addBlack(point);
+            else if (color == go.Color.WHITE)
+                root.addWhite(point);
+        }
+        root.setToMove(m_board.getToMove());
+        try
+        {
+            m_board.initSize(m_boardSize);
+            if (m_commandThread != null)
+            {
+                m_commandThread.sendCommandBoardsize(m_boardSize);
+                m_commandThread.sendCommandClearBoard(m_boardSize);
+            }
+            m_currentNode = m_gameTree.getRoot();
+            executeCurrentNode();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+            return;
+        }
         m_needsSave = true;
         boardChangedBegin(false);
     }

@@ -293,6 +293,7 @@ class MenuBar
         m_itemTruncate.setEnabled(hasFather);
         m_itemMakeMainVar.setEnabled(! isInMain);
         m_itemKeepOnlyMainVar.setEnabled(isInMain && treeHasVariations);
+        m_itemKeepOnlyPosition.setEnabled(hasFather || hasChildren);
     }
 
     private boolean m_isComputerDisabled;
@@ -384,6 +385,8 @@ class MenuBar
     private JMenuItem m_itemInterrupt;
 
     private JMenuItem m_itemKeepOnlyMainVar;
+
+    private JMenuItem m_itemKeepOnlyPosition;
 
     private JMenuItem m_itemMakeMainVar;
 
@@ -667,6 +670,10 @@ class MenuBar
                                             "Delete side variations",
                                             KeyEvent.VK_D,
                                             "keep-only-main-variation");
+        m_itemKeepOnlyPosition = addMenuItem(menu,
+                                             "Keep only position",
+                                             KeyEvent.VK_K,
+                                             "keep-only-position");
         m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
                                      "truncate");
         return menu;
