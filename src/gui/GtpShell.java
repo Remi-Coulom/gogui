@@ -181,29 +181,13 @@ public class GtpShell
         m_historyMax = prefs.getGtpShellHistoryMax();
         createMenu();
         Container contentPane = getContentPane();
-
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
         JScrollPane scrollPane =
             new JScrollPane(m_gtpShellText,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);        
-        int fontSize = m_gtpShellText.getFont().getSize();
-
-        // There seems to be a problem with Sun's JDK (version 1.4)
-        // that sometimes garbage text is left if starting with an empty
-        // JTextPane and using JScrollpane.setPreferredSize or
-        // letting the scrollable track the viewport width.
-        // The garbage text disappears after resizing the dialog,
-        // so we use JDialog.setSize (see below) instead of
-        // JScrollpane.setPreferredSize
-
-        //JViewport viewport = scrollPane.getViewport();
-        //viewport.setBackground(m_gtpShellText.getBackground());
-        //scrollPane.setPreferredSize(new Dimension(fontSize * 51,
-        //fontSize * 53));
-
+        m_fontSize = m_gtpShellText.getFont().getSize();
         contentPane.add(scrollPane, BorderLayout.CENTER);
-        
         m_comboBox = new JComboBox();
         m_editor = m_comboBox.getEditor();
         m_textField = (JTextField)m_editor.getEditorComponent();
@@ -216,7 +200,7 @@ public class GtpShell
         m_comboBox.addItemListener(this);
         contentPane.add(m_comboBox, BorderLayout.SOUTH);
         pack();
-        setSize(new Dimension(fontSize * 51, fontSize * 53));
+        setInitialSize();
     }
     
     public void actionPerformed(ActionEvent event)
@@ -520,7 +504,11 @@ public class GtpShell
         private GtpShell m_gtpShell;
     }
 
+    private boolean m_isEmpty = true;
+
     private boolean m_showModifyWarning = true;
+
+    private int m_fontSize;
 
     private int m_historyMax;
 
@@ -593,6 +581,7 @@ public class GtpShell
             m_gtpShellText.appendError(response);
         else
             m_gtpShellText.appendInput(response);
+        setNonEmptySize();
     }
     
     private void appendSentCommand(String command)
@@ -612,6 +601,7 @@ public class GtpShell
             m_numberCommands = 0;
         }
         m_gtpShellText.appendOutput(command + "\n");
+        setNonEmptySize();
     }
     
     private void appendToHistory(String command)
@@ -748,6 +738,34 @@ public class GtpShell
     private void saveCommands()
     {
         save(m_commands.toString(), m_linesTruncated);
+    }
+
+    /** @see setNonEmptySize */
+    private void setInitialSize()
+    {
+        setSize(new Dimension(m_fontSize * 51, m_fontSize * 10));
+    }
+
+    /** Modify dialog size after first write.
+        This is a workaround for problems with a JTextPane in a JScrollable
+        in Sun's JDK (version 1.4)
+        Sometimes garbage text is left after inserting text
+        if the JTextPane was created empty and the size was set by
+        JScrollpane.setPreferredSize or letting the scrollable track the
+        viewport width.
+        The garbage text disappears after resizing the dialog,
+        so we use JDialog.setSize (see below) instead of
+        JScrollpane.setPreferredSize.
+        On Mac JDK 1.4 it is even necessary to resize the dialog twice,
+        so we start with a smaller size and set the final size after the
+        first text was inserted.
+    */
+    private void setNonEmptySize()
+    {
+        if (! m_isEmpty)
+            return;
+        m_isEmpty = false;
+        setSize(new Dimension(m_fontSize * 51, m_fontSize * 52));
     }
 
     /** Create wrapper object for addItem.
