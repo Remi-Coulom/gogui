@@ -207,6 +207,7 @@ class GameTreePanel
 
     public void update(GameTree gameTree, Node currentNode)
     {
+        assert(currentNode != null);
         m_gameTree = gameTree;
         m_currentNode = currentNode;
         removeAll();
@@ -214,7 +215,8 @@ class GameTreePanel
         m_maxX = 0;
         m_maxY = 0;
         createNodes(this, m_gameTree.getRoot(), 0, 0, m_margin, m_margin, 0);
-        getGameNode(currentNode).setCurrentNode(true);
+        GameNode gameNode = getGameNode(currentNode);
+        gameNode.setCurrentNode(true);
         SpringLayout layout = (SpringLayout)getLayout();
         setPreferredSize(new Dimension(m_maxX + m_nodeDist + m_margin,
                                        m_maxY + m_nodeDist + m_margin));
