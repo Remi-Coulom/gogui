@@ -16,6 +16,7 @@ import java.util.Vector;
 import game.GameInformation;
 import game.GameTree;
 import game.Node;
+import game.TimeSettings;
 import go.Color;
 import go.Board;
 import go.Move;
@@ -50,8 +51,10 @@ public class Writer
         String rules = gameInformation.m_rules;
         int handicap = gameInformation.m_handicap;
         double komi = gameInformation.m_komi;
+        TimeSettings timeSettings = gameInformation.m_timeSettings;
         printHeader(file, application, version, handicap, date, playerBlack,
-                    playerWhite, rankBlack, rankWhite, result, komi, rules);
+                    playerWhite, rankBlack, rankWhite, result, komi, rules,
+                    timeSettings);
         printNewLine();
         printNode(gameTree.getRoot(), true);
         print(")");
@@ -198,7 +201,7 @@ public class Writer
                              int handicap, String date, String playerBlack,
                              String playerWhite, String rankBlack,
                              String rankWhite, String result, double komi,
-                             String rules)
+                             String rules, TimeSettings timeSettings)
     {
         printHeader(file, application, version);
         if (handicap > 0)
@@ -207,8 +210,18 @@ public class Writer
             print("KM[" + komi + "]");
         if (rules != null && ! rules.equals(""))
             print("RU[" + rules + "]");
-        if (result != null && ! result.equals(""))
-            print("RE[" + result + "]");
+        if (timeSettings != null)
+        {
+            print("TM[" + timeSettings.getPreByoyomi() / 1000 + "]");
+            if (timeSettings.getUseByoyomi())
+                // I'd really like to use OM/OP properties from FF[3] for
+                // overtime, because the content of OT in FF[4] is not
+                // standardized. At least sgf.Reader should be able to parse
+                // the output of sgf.Writer and maybe a few other ones that
+                // are commonly used
+                print("OT[" + timeSettings.getByoyomiMoves() + " moves / "
+                      + timeSettings.getByoyomi() / 1000 + " sec]");
+        }
         if (playerBlack != null)
             print("PB[" + playerBlack + "]");
         if (playerWhite != null)
@@ -219,6 +232,8 @@ public class Writer
             print("WR[" + rankWhite + "]");
         if (date != null)
             print("DT[" + date + "]");
+        if (result != null && ! result.equals(""))
+            print("RE[" + result + "]");
     }
 
     private void printNode(Node node, boolean isRoot)
