@@ -1634,7 +1634,6 @@ class GoGui
 
     private void showPointList(board.Point pointList[]) throws Gtp.Error
     {
-        resetBoard();
         m_board.showPointList(pointList);
         m_boardNeedsReset = true;
     }
@@ -1647,7 +1646,6 @@ class GoGui
 
     private void showStringBoard(String[][] board) throws Gtp.Error
     {
-        resetBoard();
         m_board.showStringBoard(board);
         m_boardNeedsReset = true;
     }
