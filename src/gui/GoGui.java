@@ -85,16 +85,17 @@ class GoGui
         addWindowListener(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setIconImage(new GoIcon());
-        m_menuBars = new MenuBars(this);
-        m_menuBars.selectBoardSizeItem(m_boardSize);
-        m_menuBars.selectRulesItem(m_board.getRules());
-        m_menuBars.setBeepAfterMove(m_beepAfterMove);
-        setJMenuBar(m_menuBars.getNormalMenu());
 
+        m_menuBar = new MenuBar(this);
+        m_menuBar.setNormalMode();
+        m_menuBar.selectBoardSizeItem(m_boardSize);
+        m_menuBar.selectRulesItem(m_board.getRules());
+        m_menuBar.setBeepAfterMove(m_beepAfterMove);
+        setJMenuBar(m_menuBar.getMenuBar());
         if (program == null || program.equals(""))
         {
             m_toolBar.disableComputerButtons();
-            m_menuBars.disableComputer();
+            m_menuBar.disableComputer();
         }
 
         pack();
@@ -211,8 +212,6 @@ class GoGui
             cbSetup();
         else if (command.equals("setup-black"))
             cbSetupBlack();
-        else if (command.equals("setup-done"))
-            cbSetupDone();
         else if (command.equals("setup-white"))
             cbSetupWhite();
         else if (command.equals("show-last-move"))
@@ -236,15 +235,13 @@ class GoGui
     public void fieldClicked(go.Point p)
     {
         if (m_commandInProgress)
-        {
             return;
-        }
         if (m_setupMode)
         {
             if (m_board.getColor(p) != m_setupColor)
-                m_board.setup(new Move(p, m_setupColor));
+                m_board.play(new Move(p, m_setupColor));
             else
-                m_board.setup(new Move(p, go.Color.EMPTY));
+                m_board.play(new Move(p, go.Color.EMPTY));
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
             m_guiBoard.update();
@@ -393,6 +390,15 @@ class GoGui
         catch (AssertionError e)
         {
             SimpleDialogs.showError(null, "Assertion error");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        catch (RuntimeException e)
+        {
+            String msg = e.getMessage();
+            if (msg == null)
+                msg = e.getClass().getName();
+            SimpleDialogs.showError(null, msg);
             e.printStackTrace();
             System.exit(-1);
         }
@@ -551,7 +557,7 @@ class GoGui
 
     private JLabel m_statusLabel;
 
-    private MenuBars m_menuBars;
+    private MenuBar m_menuBar;
 
     private Analyze.Command m_analyzeCommand;
 
@@ -730,7 +736,7 @@ class GoGui
     private void beginLengthyCommand()
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
-        m_menuBars.setCommandInProgress();
+        m_menuBar.setCommandInProgress();
         m_toolBar.setCommandInProgress();
         m_gtpShell.setInputEnabled(false);
         m_commandInProgress = true;
@@ -761,7 +767,7 @@ class GoGui
 
     private void cbBeepAfterMove()
     {
-        m_beepAfterMove = m_menuBars.getBeepAfterMove();
+        m_beepAfterMove = m_menuBar.getBeepAfterMove();
         m_prefs.setBeepAfterMove(m_beepAfterMove);
     }
 
@@ -928,12 +934,12 @@ class GoGui
     {
         if (m_board.getToMove() == go.Color.BLACK)
         {
-            m_menuBars.setComputerBlack();
+            m_menuBar.setComputerBlack();
             computerBlack();
         }
         else
         {
-            m_menuBars.setComputerWhite();
+            m_menuBar.setComputerWhite();
             computerWhite();
         }
         checkComputerMove();
@@ -1028,7 +1034,7 @@ class GoGui
         m_scoreMode = true;
         m_scoreDialog = new ScoreDialog(this, m_board.scoreGet());
         m_scoreDialog.setVisible(true);
-        m_menuBars.setScoreMode();
+        m_menuBar.setScoreMode();
         showStatus("Please remove dead groups.");
     }
 
@@ -1046,20 +1052,22 @@ class GoGui
         m_guiBoard.repaint();
         m_scoreMode = false;
         m_toolBar.enableAll(true, m_board);
-        m_menuBars.setNormalMode();
+        m_menuBar.setNormalMode();
     }
 
     private void cbSetup()
     {
-        resetBoard();
-        m_setupMode = true;
-        Dimension size = getSize();
-        setJMenuBar(m_menuBars.getSetupMenu());
-        m_toolBar.enableAll(false, null);
-        pack();
-        setSize(size);
-        showStatus("Setup black.");
-        m_setupColor = go.Color.BLACK;
+        if (! m_setupMode)
+        {
+            resetBoard();
+            m_setupMode = true;
+            m_menuBar.setSetupMode();
+            m_toolBar.enableAll(false, null);
+            showStatus("Setup black.");
+            m_setupColor = go.Color.BLACK;
+        }
+        else
+            setupDone();
     }
 
     private void cbSetupBlack()
@@ -1068,63 +1076,6 @@ class GoGui
         m_setupColor = go.Color.BLACK;
         m_board.setToMove(m_setupColor);
         m_gameInfo.update();
-    }
-
-    private void cbSetupDone()
-    {
-        try
-        {
-            m_setupMode = false;
-            Dimension frameSize = getSize();
-            setJMenuBar(m_menuBars.getNormalMenu());
-            pack();
-            setSize(frameSize);
-            m_toolBar.enableAll(true, m_board);
-            int size = m_board.getSize();
-            go.Color color[][] = new go.Color[size][size];
-            for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            {
-                go.Point p = m_board.getPoint(i);
-                color[p.getX()][p.getY()] = m_board.getColor(p);
-            }
-            go.Color toMove = m_board.getToMove();
-            m_boardSize = size;
-            if (m_commandThread != null)
-            {
-                m_commandThread.sendCommandBoardsize(size);
-                m_commandThread.sendCommandClearBoard(size);
-            }
-            m_board.newGame();        
-            Vector moves = new Vector(m_board.getNumberPoints());
-            for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            {
-                go.Point p = m_board.getPoint(i);
-                int x = p.getX();
-                int y = p.getY();
-                go.Color c = color[x][y];
-                if (c != go.Color.EMPTY)
-                    moves.add(new Move(p, c));
-            }
-            if (m_fillPasses)
-                moves = Move.fillPasses(moves, m_board.getToMove());
-            for (int i = 0; i < moves.size(); ++i)
-            {
-                Move m = (Move)moves.get(i);
-                setup(m);
-            }
-            if (m_board.getToMove() != toMove)
-            {
-                Move m = new Move(null, m_board.getToMove());
-                setup(m);
-            }
-            computerNone();
-            boardChanged();
-            fileModified();
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-        }
     }
 
     private void cbSetupWhite()
@@ -1143,7 +1094,7 @@ class GoGui
 
     private void cbShowLastMove()
     {
-        m_guiBoard.setShowLastMove(m_menuBars.getShowLastMove());
+        m_guiBoard.setShowLastMove(m_menuBar.getShowLastMove());
     }
 
     private boolean checkAbortGame()
@@ -1246,14 +1197,14 @@ class GoGui
     {
         m_computerBlack = true;
         m_computerWhite = false;
-        m_menuBars.setComputerBlack();
+        m_menuBar.setComputerBlack();
     }
 
     private void computerBoth()
     {
         m_computerBlack = true;
         m_computerWhite = true;
-        m_menuBars.setComputerBoth();
+        m_menuBar.setComputerBoth();
     }
 
     private void computerMoved()
@@ -1288,7 +1239,7 @@ class GoGui
     {
         m_computerBlack = false;
         m_computerWhite = false;
-        m_menuBars.setComputerNone();
+        m_menuBar.setComputerNone();
     }
 
     private boolean computerToMove()
@@ -1303,7 +1254,7 @@ class GoGui
     {
         m_computerBlack = false;
         m_computerWhite = true;
-        m_menuBars.setComputerWhite();
+        m_menuBar.setComputerWhite();
     }
 
     private JComponent createStatusBar()
@@ -1321,7 +1272,7 @@ class GoGui
 
     private void endLengthyCommand()
     {
-        m_menuBars.setNormalMode();
+        m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, m_board);
         if (m_gtpShell != null)
             m_gtpShell.setInputEnabled(true);
@@ -1907,6 +1858,60 @@ class GoGui
         if (m_commandThread != null)
             m_commandThread.sendCommandPlay(move);
         m_board.setup(move);
+    }
+
+    private void setupDone()
+    {
+        try
+        {
+            m_setupMode = false;
+            m_menuBar.setNormalMode();
+            m_toolBar.enableAll(true, m_board);
+            int size = m_board.getSize();
+            go.Color color[][] = new go.Color[size][size];
+            for (int i = 0; i < m_board.getNumberPoints(); ++i)
+            {
+                go.Point p = m_board.getPoint(i);
+                color[p.getX()][p.getY()] = m_board.getColor(p);
+            }
+            go.Color toMove = m_board.getToMove();
+            m_boardSize = size;
+            if (m_commandThread != null)
+            {
+                m_commandThread.sendCommandBoardsize(size);
+                m_commandThread.sendCommandClearBoard(size);
+            }
+            m_board.newGame();        
+            Vector moves = new Vector(m_board.getNumberPoints());
+            for (int i = 0; i < m_board.getNumberPoints(); ++i)
+            {
+                go.Point p = m_board.getPoint(i);
+                int x = p.getX();
+                int y = p.getY();
+                go.Color c = color[x][y];
+                if (c != go.Color.EMPTY)
+                    moves.add(new Move(p, c));
+            }
+            if (m_fillPasses)
+                moves = Move.fillPasses(moves, m_board.getToMove());
+            for (int i = 0; i < moves.size(); ++i)
+            {
+                Move m = (Move)moves.get(i);
+                setup(m);
+            }
+            if (m_board.getToMove() != toMove)
+            {
+                Move m = new Move(null, m_board.getToMove());
+                setup(m);
+            }
+            computerNone();
+            boardChanged();
+            fileModified();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+        }
     }
 
     private void showColorBoard(String[][] board) throws Gtp.Error

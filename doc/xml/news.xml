@@ -49,6 +49,9 @@
             <application>GtpServer</application>.
 	  </listitem>
 	  <listitem>
+	    Setup and score mode do no longer use their own the menu bar.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>

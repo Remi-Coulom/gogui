@@ -14,24 +14,19 @@ import go.*;
 
 //-----------------------------------------------------------------------------
 
-class MenuBars
+class MenuBar
 {
-    public MenuBars(ActionListener listener)
+    public MenuBar(ActionListener listener)
     {
         m_listener = listener;
-
         m_menuBar = new JMenuBar();
         m_menuBar.add(createFileMenu());
         m_menuBar.add(createGameMenu());
-        m_menuBar.add(createBoardMenu());
+        m_menuBar.add(createSetupMenu());
         m_menuBar.add(createSettingsMenu());
         m_menuAnalyze = createAnalyzeMenu();
         m_menuBar.add(m_menuAnalyze);
-        m_menuBar.add(createHelpMenu(true));
-
-        m_setupMenuBar = new JMenuBar();
-        m_setupMenuBar.add(createSetupMenu());
-        m_setupMenuBar.add(createHelpMenu(false));
+        m_menuBar.add(createHelpMenu());
     }
 
     public void disableComputer()
@@ -42,6 +37,11 @@ class MenuBars
     public boolean getBeepAfterMove()
     {
         return m_itemBeepAfterMove.getState();
+    }
+
+    public JMenuBar getMenuBar()
+    {
+        return m_menuBar;
     }
 
     public boolean getShowLastMove()
@@ -67,16 +67,6 @@ class MenuBars
     public void setComputerWhite()
     {
         m_itemComputerWhite.setSelected(true);
-    }
-
-    public JMenuBar getNormalMenu()
-    {
-        return m_menuBar;
-    }
-
-    public JMenuBar getSetupMenu()
-    {
-        return m_setupMenuBar;
     }
 
     public void selectBoardSizeItem(int size)
@@ -121,8 +111,20 @@ class MenuBars
     {
         enableAll();
         m_itemInterrupt.setEnabled(false);
+        m_itemSetup.setState(false);
+        m_itemSetupBlack.setEnabled(false);
+        m_itemSetupWhite.setEnabled(false);
         if (m_isComputerDisabled)
             disableComputerItems();
+    }
+
+    public void setSetupMode()
+    {
+        disableMost();
+        m_itemSetup.setEnabled(true);
+        m_itemSetupBlack.setEnabled(true);
+        m_itemSetupWhite.setEnabled(true);
+        m_itemSetupBlack.setSelected(true);
     }
 
     public void setScoreMode()
@@ -142,13 +144,13 @@ class MenuBars
 
     private JCheckBoxMenuItem m_itemShowLastMove;
 
+    private JCheckBoxMenuItem m_itemSetup;
+
     private JMenu m_menuAnalyze;
 
     private JMenu m_menuComputerColor;
 
     private JMenuBar m_menuBar;
-
-    private JMenuBar m_setupMenuBar;
 
     private JMenuItem m_itemAbout;
 
@@ -176,6 +178,9 @@ class MenuBars
 
     private JMenuItem m_itemRulesJapanese;
 
+    private JMenuItem m_itemSetupBlack;
+
+    private JMenuItem m_itemSetupWhite;
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {
@@ -233,15 +238,6 @@ class MenuBars
         m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
                                      KeyEvent.VK_F8, 0, "gtp-shell");
         addMenuItem(menu, "Send GTP file", KeyEvent.VK_S, "gtp-file");
-        return menu;
-    }
-
-    private JMenu createBoardMenu()
-    {
-        JMenu menu = new JMenu("Board");
-        menu.setMnemonic(KeyEvent.VK_B);
-        menu.add(createBoardSizeMenu());
-        addMenuItem(menu, "Setup", KeyEvent.VK_S, "setup");
         return menu;
     }
 
@@ -306,10 +302,12 @@ class MenuBars
     {
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
+        menu.add(createBoardSizeMenu());
         addMenuItem(menu, "Komi...", KeyEvent.VK_K, "komi");
         menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
-        addMenuItem(menu, "Score", KeyEvent.VK_S, "score");
+        m_menuComputerColor = createComputerColorMenu();
+        menu.add(m_menuComputerColor);
         menu.addSeparator();
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2, 0, "pass");
         m_itemComputerPlay = addMenuItem(menu, "Computer play", KeyEvent.VK_L,
@@ -333,8 +331,7 @@ class MenuBars
         addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
                     ActionEvent.CTRL_MASK, "end");
         menu.addSeparator();
-        m_menuComputerColor = createComputerColorMenu();
-        menu.add(m_menuComputerColor);
+        addMenuItem(menu, "Score", KeyEvent.VK_S, "score");
         return menu;
     }
 
@@ -352,7 +349,7 @@ class MenuBars
         return menu;
     }
 
-    private JMenu createHelpMenu(boolean store)
+    private JMenu createHelpMenu()
     {
         JMenu menu = new JMenu("Help");
         menu.setMnemonic(KeyEvent.VK_H);
@@ -361,11 +358,8 @@ class MenuBars
                         "help");
         JMenuItem itemAbout = addMenuItem(menu, "About", KeyEvent.VK_A,
                                           "about");
-        if (store)
-        {
-            m_itemHelp = itemHelp;
-            m_itemAbout = itemAbout;
-        }
+        m_itemHelp = itemHelp;
+        m_itemAbout = itemAbout;
         return menu;
     }
 
@@ -402,13 +396,17 @@ class MenuBars
     {
         JMenu menu = new JMenu("Setup");
         menu.setMnemonic(KeyEvent.VK_S);
-        ButtonGroup group = new ButtonGroup();
-        JMenuItem item = addRadioItem(menu, group, "Black", KeyEvent.VK_B,
-                                      "setup-black");
-        item.setSelected(true);
-        addRadioItem(menu, group, "White", KeyEvent.VK_W, "setup-white");
+        m_itemSetup = new JCheckBoxMenuItem("Setup mode");
+        m_itemSetup.setActionCommand("setup");
+        m_itemSetup.addActionListener(m_listener);
+        menu.add(m_itemSetup);
         menu.addSeparator();
-        addMenuItem(menu, "Done", KeyEvent.VK_D, "setup-done");
+        ButtonGroup group = new ButtonGroup();
+        m_itemSetupBlack =
+            addRadioItem(menu, group, "Black", KeyEvent.VK_B, "setup-black");
+        m_itemSetupBlack.setSelected(true);
+        m_itemSetupWhite =
+            addRadioItem(menu, group, "White", KeyEvent.VK_W, "setup-white");
         return menu;
     }
 
