@@ -86,6 +86,25 @@ public class Writer
         return result;
     }
 
+    private void printEscaped(String text)
+    {
+        m_out.print('[');
+        for (int i = 0; i < text.length(); ++i)
+        {
+            char c = text.charAt(i);
+            if ("]:\\".indexOf(c) >= 0)
+            {
+                m_out.print('\\');
+                m_out.print(c);
+            }
+            else if (c != '\n' && Character.isWhitespace(c))
+                m_out.print(' ');
+            else
+                m_out.print(c);
+        }
+        m_out.print(']');
+    }
+
     private void printHeader(File file, String application, String version)
     {
         Calendar cal = Calendar.getInstance();
@@ -169,6 +188,16 @@ public class Writer
 
     private void printNodes(Node node)
     {
+        Move move = node.getMove();
+        if (move != null)
+        {
+            if (move.getColor() == Color.BLACK)
+                m_out.print(";\nB");
+            else
+                m_out.print(";\nW");
+            printPoint(move.getPoint());
+            m_out.println();
+        }
         if (node.getNumberAddBlack() > 0)
         {
             m_out.print("AB");
@@ -183,14 +212,11 @@ public class Writer
                 printPoint(node.getAddWhite(i));
             m_out.println();
         }
-        Move move = node.getMove();
-        if (move != null)
+        String comment = node.getComment();
+        if (comment != null && ! comment.trim().equals(""))
         {
-            if (move.getColor() == Color.BLACK)
-                m_out.print(";\nB");
-            else
-                m_out.print(";\nW");
-            printPoint(move.getPoint());
+            m_out.print("C");
+            printEscaped(comment);
             m_out.println();
         }
         int numberChildren = node.getNumberChildren();
