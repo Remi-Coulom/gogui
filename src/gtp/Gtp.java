@@ -58,7 +58,8 @@ public final class Gtp
             // RAND_MAX in stdlib.h ist at least 32767
             final int RAND_MAX = 32767;
             int rand = (int)(Math.random() * (RAND_MAX + 1));
-            m_program = m_program.replaceAll("%SRAND", Integer.toString(rand));
+            m_program =
+                m_program.replaceAll("%SRAND", Integer.toString(rand));
         }
         Runtime runtime = Runtime.getRuntime();
         try
@@ -576,36 +577,7 @@ public final class Gtp
         {
             try
             {
-                int size = 1024;
-                char[] buffer = new char[size];
-                StringBuffer stringBuffer = new StringBuffer(1024);
-                while (true)
-                {
-                    int n = m_err.read(buffer, 0, size);
-                    if (n < 0)
-                    {
-                        if (m_callback != null)
-                            m_callback.receivedStdErr(stringBuffer.toString());
-                        return;
-                    }
-                    if (m_log)
-                    {
-                        System.err.print(new String(buffer, 0, n));
-                        System.err.flush();
-                    }
-                    synchronized (this)
-                    {
-                        m_timeLastReceived = System.currentTimeMillis();
-                    }
-                    stringBuffer.append(buffer, 0, n);
-                    int index = stringBuffer.lastIndexOf("\n");
-                    if (index == -1)
-                        continue;
-                    String s = stringBuffer.substring(0, index + 1);
-                    stringBuffer.delete(0, index + 1);
-                    if (m_callback != null)
-                        m_callback.receivedStdErr(s);
-                }
+                mainLoop();
             }
             catch (RuntimeException e)
             {
@@ -619,6 +591,40 @@ public final class Gtp
         }
 
         private Reader m_err;
+
+        private void mainLoop() throws java.io.IOException
+        {
+            int size = 1024;
+            char[] buffer = new char[size];
+            StringBuffer stringBuffer = new StringBuffer(1024);
+            while (true)
+            {
+                int n = m_err.read(buffer, 0, size);
+                if (n < 0)
+                {
+                    if (m_callback != null)
+                        m_callback.receivedStdErr(stringBuffer.toString());
+                    return;
+                }
+                if (m_log)
+                {
+                    System.err.print(new String(buffer, 0, n));
+                    System.err.flush();
+                }
+                synchronized (this)
+                {
+                    m_timeLastReceived = System.currentTimeMillis();
+                }
+                stringBuffer.append(buffer, 0, n);
+                int index = stringBuffer.lastIndexOf("\n");
+                if (index == -1)
+                    continue;
+                String s = stringBuffer.substring(0, index + 1);
+                stringBuffer.delete(0, index + 1);
+                if (m_callback != null)
+                    m_callback.receivedStdErr(s);
+            }
+        }   
     }
 
     private boolean m_fastUpdate;
