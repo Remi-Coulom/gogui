@@ -710,7 +710,7 @@ class GoGui
                 showInfo("Handicap will take effect on next game.");
             else
             {
-                newGame(m_boardSize, m_board.getKomi());
+                newGame(m_boardSize, m_board.getKomi(), true);
                 boardChanged();
             }
         }
@@ -786,7 +786,7 @@ class GoGui
             if (! checkAbortGame())
                 return;
             m_prefs.setBoardSize(size);
-            newGame(size, m_board.getKomi());
+            newGame(size, m_board.getKomi(), true);
             boardChanged();
         }
         catch (Gtp.Error e)
@@ -986,7 +986,7 @@ class GoGui
                 color[p.getX()][p.getY()] = m_board.getColor(p);
             }
             go.Color toMove = m_board.getToMove();
-            newGame(size, m_board.getKomi());
+            newGame(size, m_board.getKomi(), false);
             Vector moves = new Vector(m_board.getNumberPoints());
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
@@ -1049,7 +1049,7 @@ class GoGui
                 {
                     try
                     {
-                        newGame(m_boardSize, m_board.getKomi());
+                        newGame(m_boardSize, m_board.getKomi(), true);
                         boardChanged();
                     }
                     catch (Gtp.Error e)
@@ -1320,10 +1320,10 @@ class GoGui
             File file = null;
             float komi = m_prefs.getKomi();
             if (! m_file.equals(""))
-                newGame(m_boardSize, new File(m_file), m_move, komi);
+                newGame(m_boardSize, new File(m_file), m_move, komi, true);
             else
             {
-                newGame(m_boardSize, null, -1, komi);
+                newGame(m_boardSize, null, -1, komi, true);
                 boardChanged();
             }
             m_guiBoard.requestFocus();
@@ -1341,7 +1341,7 @@ class GoGui
         {
             sgf.Reader reader = new sgf.Reader(file);
             int boardSize = reader.getBoardSize();
-            newGame(boardSize, 0);
+            newGame(boardSize, 0, false);
             Vector moves = new Vector(361, 361);
             Vector setupBlack = reader.getSetupBlack();
             for (int i = 0; i < setupBlack.size(); ++i)
@@ -1399,12 +1399,14 @@ class GoGui
         }
     }
 
-    private void newGame(int size, float komi) throws Gtp.Error
+    private void newGame(int size, float komi, boolean setHandicap)
+        throws Gtp.Error
     {
-        newGame(size, (File)null, -1, komi);
+        newGame(size, (File)null, -1, komi, setHandicap);
     }
 
-    private void newGame(int size, File file, int move, float komi)
+    private void newGame(int size, File file, int move, float komi,
+                         boolean setHandicap)
         throws Gtp.Error
     {
         if (m_commandThread != null)
@@ -1431,7 +1433,8 @@ class GoGui
         }
         else
         {
-            setHandicap();
+            if (setHandicap)
+                setHandicap();
             setKomi(komi);
             setRules();
         }

@@ -12,6 +12,9 @@
 	    stones exist.
 	  </listitem>
 	  <listitem>
+	    Fix bug: handicap stones were played after setup done.
+	  </listitem>
+	  <listitem>
 	    Clear old markups before showing an analyze command with
 	    a point list result.
 	  </listitem>
