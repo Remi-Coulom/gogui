@@ -1,4 +1,9 @@
-DOCS=analyze.html index.html compatibility.html
+DOCS= \
+  analyze.html \
+  compatibility.html \
+  index.html \
+  interrupt.html
+
 ICONS= \
   icons/NewBoard.png \
   org/javalobby/icons/20x20png/Computer.png \
