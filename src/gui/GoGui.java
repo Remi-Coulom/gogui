@@ -1600,23 +1600,22 @@ class GoGui
             if (response.toLowerCase().equals("resign"))
             {
                 if (! (m_computerBlack && m_computerWhite))
-                    showInfo("Computer resigns");
+                    showInfo(getComputerName() + " resigns");
                 m_resigned = true;
                 setResult((toMove == go.Color.BLACK ? "W" : "B") + "+Resign");
             }
             else
             {
-                go.Point p = Gtp.parsePoint(response, m_boardSize);
-                Move move = new Move(p, toMove);
+                go.Point point = Gtp.parsePoint(response, m_boardSize);
+                Move move = new Move(point, toMove);
                 m_needsSave = true;
                 m_board.play(move);
                 Node node = new Node(move);
                 m_currentNode.append(node);
                 m_currentNode = node;
                 m_currentNodeExecuted = 1;
-                if (move.getPoint() == null
-                    && ! (m_computerBlack && m_computerWhite))
-                    showInfo("Computer passed");
+                if (point == null && ! (m_computerBlack && m_computerWhite))
+                    showInfo(getComputerName() + " passed");
                 fileModified();
                 m_resigned = false;
             }
@@ -1830,10 +1829,7 @@ class GoGui
 
     private void generateMove()
     {
-        String appName = "Computer";
-        if (! m_name.equals(""))
-            appName = StringUtils.capitalize(m_name);
-        showStatus(appName + " is thinking ...");
+        showStatus(getComputerName() + " is thinking ...");
         go.Color toMove = m_board.getToMove();
         String command = m_commandThread.getCommandGenmove(toMove);
         Runnable callback = new Runnable()
@@ -1841,6 +1837,13 @@ class GoGui
                 public void run() { computerMoved(); }
             };
         runLengthyCommand(command, callback);
+    }
+
+    private String getComputerName()
+    {
+        if (m_name != null && ! m_name.equals(""))
+            return StringUtils.capitalize(m_name);
+        return "Computer";
     }
 
     private int getRules()
@@ -2390,7 +2393,7 @@ class GoGui
     {
         String appName = "GoGui";        
         if (m_commandThread != null && ! m_name.equals(""))
-            appName = StringUtils.capitalize(m_name);
+            appName = getComputerName();
         if (m_gtpShell != null)
             m_gtpShell.setAppName(appName);
         if (m_analyzeDialog != null)
