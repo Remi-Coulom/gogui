@@ -1503,6 +1503,11 @@ class GoGui
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
+            if (m_commandThread != null)
+            {
+                m_commandThread.setFastUpdate(true);
+                m_gtpShell.setFastUpdate(true);
+            }
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
@@ -1517,6 +1522,11 @@ class GoGui
                 Move m = new Move(null, m_board.getToMove());
                 setup(m);
             }
+            if (m_commandThread != null)
+            {
+                m_commandThread.setFastUpdate(false);
+                m_gtpShell.setFastUpdate(false);
+            }
             moves.clear();
             for (int i = 0; i < numberMoves; ++i)
                 moves.add(reader.getMove(i));
@@ -1529,18 +1539,8 @@ class GoGui
             }
             while (m_board.getMoveNumber() > 0)
                 m_board.undo();            
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(true);
-                m_gtpShell.setFastUpdate(true);
-            }
             if (move > 0)
                 forward(move);
-            if (m_commandThread != null)
-            {
-                m_commandThread.setFastUpdate(false);
-                m_gtpShell.setFastUpdate(false);
-            }
             m_loadedFile = file.toString();
             setTitle();
             boardChanged();
