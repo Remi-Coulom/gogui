@@ -124,11 +124,11 @@ public class Reader
         // (Sun Java 1.4.0 Linux)
         if (m_name != null)
         {
-            String s = m_name + ":" + m_tokenizer.lineno() + ":\n" + message;
+            String s = m_name + ":" + m_tokenizer.lineno() + ": " + message;
             return new Error(s);
         }
         else
-            return new Error(m_tokenizer.lineno() + ":\n" + message);
+            return new Error(m_tokenizer.lineno() + ": " + message);
     }
 
     private Color parseColor(String s) throws Error
