@@ -1288,9 +1288,6 @@ class GoGui
                 m_name = m_commandThread.sendCommand("name", 30000).trim();
                 m_gtpShell.setProgramName(m_name);
                 setTitle(m_name);
-            }
-            if (m_commandThread != null)
-            {
                 try
                 {
                     m_commandThread.queryProtocolVersion();
@@ -1344,6 +1341,8 @@ class GoGui
             sgf.Reader reader = new sgf.Reader(file);
             int boardSize = reader.getBoardSize();
             newGame(boardSize, false);
+            m_board.setKomi(reader.getKomi());
+            setKomi();
             Vector moves = new Vector(361, 361);
             Vector setupBlack = reader.getSetupBlack();
             for (int i = 0; i < setupBlack.size(); ++i)
@@ -1387,8 +1386,6 @@ class GoGui
                 m_board.undo();            
             if (move > 0)
                 forward(move);
-            m_board.setKomi(reader.getKomi());
-            setKomi();
             computerNone();
             boardChanged();
         }
@@ -1411,7 +1408,7 @@ class GoGui
     private void newGame(int size, File file, int move, boolean setHandicap)
         throws Gtp.Error
     {
-        if (m_commandThread != null)
+        if (m_commandThread != null && file == null)
         {
             m_commandThread.sendCommandsClearBoard(size);
         }
