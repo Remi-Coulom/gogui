@@ -830,8 +830,6 @@ class GoGui
         if (m_commandThread == null)
             return;
         String name = m_name;
-        if (m_version != null && ! m_version.equals(""))
-            name = name +  ":" + m_version;
         GameInformation gameInformation = m_gameTree.getGameInformation();
         if (color == go.Color.BLACK
             && (gameInformation.m_playerBlack == null
