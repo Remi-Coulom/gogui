@@ -315,6 +315,24 @@ Go to the previous variation.
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Next Earlier Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the next variation earlier in the game tree.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Previous Earlier Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the previous variation earlier in the game tree.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Back to Main Variation</guimenuitem></term>
 <listitem>
 <para>

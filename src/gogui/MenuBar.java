@@ -310,8 +310,12 @@ public class MenuBar
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
-        boolean hasPreviousVariation =
+        boolean hasNextVariationBackward =
+            (NodeUtils.getNextVariationBackward(node) != null);
+        boolean hasPrevVariation =
             (NodeUtils.getPreviousVariation(node) != null);
+        boolean hasPrevVariationBackward =
+            (NodeUtils.getPreviousVariationBackward(node) != null);
         boolean isInMain = NodeUtils.isInMainVariation(node);
         boolean treeHasVariations = gameTree.hasVariations();
         m_itemBeginning.setEnabled(hasFather);
@@ -322,7 +326,9 @@ public class MenuBar
         m_itemEnd.setEnabled(hasChildren);
         m_itemGoto.setEnabled(hasFather || hasChildren);
         m_itemNextVariation.setEnabled(hasNextVariation);
-        m_itemPreviousVariation.setEnabled(hasPreviousVariation);
+        m_itemPreviousVariation.setEnabled(hasPrevVariation);
+        m_itemNextVariationBackward.setEnabled(hasNextVariationBackward);
+        m_itemPreviousVariationBackward.setEnabled(hasPrevVariationBackward);
         m_itemBackToMainVar.setEnabled(! isInMain);
         m_itemTruncate.setEnabled(hasFather);
         m_itemMakeMainVar.setEnabled(! isInMain);
@@ -433,7 +439,11 @@ public class MenuBar
 
     private JMenuItem m_itemNextVariation;
 
+    private JMenuItem m_itemNextVariationBackward;
+
     private JMenuItem m_itemPreviousVariation;
+
+    private JMenuItem m_itemPreviousVariationBackward;
 
     private JMenuItem m_itemSetupBlack;
 
@@ -699,6 +709,12 @@ public class MenuBar
         m_itemPreviousVariation =
             addMenuItem(menu, "Previous Variation", KeyEvent.VK_P,
                         KeyEvent.VK_UP, m_shortcutKeyMask,
+                        "previous-variation");
+        m_itemNextVariationBackward =
+            addMenuItem(menu, "Next Earlier Variation", KeyEvent.VK_N,
+                        "next-variation-backward");
+        m_itemPreviousVariationBackward =
+            addMenuItem(menu, "Previous Earlier Variation", KeyEvent.VK_P,
                         "previous-variation");
         m_itemBackToMainVar =
             addMenuItem(menu, "Back to Main Variation", KeyEvent.VK_B,

@@ -139,9 +139,21 @@ public class NodeUtils
         return movesLeft;
     }
 
-    /** Return start node of next variation before this node. */
+    /** Return next variation of this node. */
     public static Node getNextVariation(Node node)
     {
+        Node father = node.getFather();
+        if (father == null)
+            return null;
+        return father.variationAfter(node);
+    }
+
+    /** Return next variation before root of this node. */
+    public static Node getNextVariationBackward(Node node)
+    {
+        node = node.getFather();
+        if (node == null)
+            return null;
         Node child = node;
         node = node.getFather();
         while (node != null && node.variationAfter(child) == null)
@@ -177,9 +189,21 @@ public class NodeUtils
         return result;
     }
 
-    /** Return start node of previous variation before this node. */
+    /** Return previous variation of this node. */
     public static Node getPreviousVariation(Node node)
     {
+        Node father = node.getFather();
+        if (father == null)
+            return null;
+        return father.variationBefore(node);
+    }
+
+    /** Return previous variation before root of this node */
+    public static Node getPreviousVariationBackward(Node node)
+    {
+        node = node.getFather();
+        if (node == null)
+            return null;
         Node child = node;
         node = node.getFather();
         while (node != null && node.variationBefore(child) == null)
@@ -235,7 +259,7 @@ public class NodeUtils
         Node child = node.getChild();
         if (child != null)
             return child;
-        return getNextVariation(node);
+        return getNextVariationBackward(node);
     }
 
     public static String nodeInfo(Node node)

@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Change behaviour of "Next/Previous Variation".
+Add menu items "Next/Previous Earlier Variation"
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New menu item "Find in Comments"
 </simpara>
 </listitem>
