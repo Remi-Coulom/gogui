@@ -237,7 +237,7 @@ installation directory.
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpadapter.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="gtpadapter.GtpAdapter"/>
+<attribute name="Main-Class" value="gtpadapter.Main"/>
 </manifest>
 <fileset dir="build" includes="
  game/*.class
