@@ -1090,7 +1090,7 @@ class GoGui
         m_guiBoard.updateFromGoBoard();
         updateGameInfo(gameTreeChanged);
         m_toolBar.update(m_currentNode);
-        m_menuBar.update(m_gameTree, m_currentNode);
+        updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         if (m_commandThread != null
             && isCurrentNodeExecuted()
@@ -1184,12 +1184,19 @@ class GoGui
     private void cbClockHalt()
     {
         if (m_clock.isRunning())
+        {
             m_clock.halt();
+            updateMenuBar();
+        }
     }
 
     private void cbClockResume()
     {
-        m_clock.startMove(m_board.getToMove());
+        if (! m_clock.isRunning())
+        {
+            m_clock.startMove(m_board.getToMove());
+            updateMenuBar();
+        }
     }
 
     private void cbClockRestore()
@@ -1200,6 +1207,7 @@ class GoGui
         if (father != null)
             clockRestore(father, color);
         m_gameInfo.updateTime();
+        updateMenuBar();
     }
 
     private void cbCommentChanged()
@@ -2375,7 +2383,7 @@ class GoGui
         updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
         m_toolBar.update(m_currentNode);
-        m_menuBar.update(m_gameTree, m_currentNode);
+        updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         setTitle();
         setTitleFromProgram();
@@ -2390,7 +2398,7 @@ class GoGui
         updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
         m_toolBar.update(m_currentNode);
-        m_menuBar.update(m_gameTree, m_currentNode);
+        updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
@@ -3046,6 +3054,11 @@ class GoGui
             return;
         }
         m_gameTreeViewer.update(m_gameTree, m_currentNode);
+    }
+
+    private void updateMenuBar()
+    {
+        m_menuBar.update(m_gameTree, m_currentNode, m_clock);
     }
 }
 

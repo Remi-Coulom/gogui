@@ -26,6 +26,7 @@ import javax.swing.KeyStroke;
 import game.GameTree;
 import game.Node;
 import game.NodeUtils;
+import gui.Clock;
 import utils.Platform;
 
 //----------------------------------------------------------------------------
@@ -322,9 +323,10 @@ public class MenuBar
     }
 
     /** Enable/disable items according to current position. */
-    public void update(GameTree gameTree, Node node)
+    public void update(GameTree gameTree, Node node, Clock clock)
     {
-        boolean hasFather = (node.getFather() != null);
+        Node father = node.getFather();
+        boolean hasFather = (father != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
         boolean hasNextEarlierVariation =
@@ -352,6 +354,12 @@ public class MenuBar
         m_itemMakeMainVar.setEnabled(! isInMain);
         m_itemKeepOnlyMainVar.setEnabled(isInMain && treeHasVariations);
         m_itemKeepOnlyPosition.setEnabled(hasFather || hasChildren);
+        m_itemClockHalt.setEnabled(clock.isRunning());
+        m_itemClockResume.setEnabled(! clock.isRunning());
+        boolean canRestoreClock
+            = (canRestoreTime(node)
+               || (father != null && canRestoreTime(father)));
+        m_itemClockRestore.setEnabled(canRestoreClock);
     }
 
     private boolean m_isComputerDisabled;
@@ -420,6 +428,12 @@ public class MenuBar
     private JMenuItem[] m_itemBoardSize;
 
     private JMenuItem m_itemBoardSizeOther;
+
+    private JMenuItem m_itemClockHalt;
+
+    private JMenuItem m_itemClockRestore;
+
+    private JMenuItem m_itemClockResume;
 
     private JMenuItem m_itemComputerBlack;
 
@@ -544,9 +558,12 @@ public class MenuBar
     private JMenu createClockMenu()
     {
         JMenu menu = createMenu("Clock", KeyEvent.VK_K);
-        addMenuItem(menu, "Halt", KeyEvent.VK_H, "clock-halt");
-        addMenuItem(menu, "Resume", KeyEvent.VK_R, "clock-resume");
-        addMenuItem(menu, "Restore", KeyEvent.VK_S, "clock-restore");
+        m_itemClockHalt =
+            addMenuItem(menu, "Halt", KeyEvent.VK_H, "clock-halt");
+        m_itemClockResume =
+            addMenuItem(menu, "Resume", KeyEvent.VK_R, "clock-resume");
+        m_itemClockRestore =
+            addMenuItem(menu, "Restore", KeyEvent.VK_S, "clock-restore");
         return menu;
     }
 
@@ -835,6 +852,13 @@ public class MenuBar
     {
         String home = System.getProperty("user.home");
         return new File(new File(home, ".gogui"), "recent-files");
+    }
+
+    private boolean canRestoreTime(Node node)
+    {
+        return ! Double.isNaN(node.getTimeLeft(go.Color.BLACK))
+            || ! Double.isNaN(node.getTimeLeft(go.Color.WHITE))
+            || node.getFather() == null;
     }
 
     private void loadRecent()
