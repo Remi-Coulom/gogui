@@ -5,6 +5,7 @@
 
 package gui;
 
+import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import go.*;
@@ -15,9 +16,10 @@ import gtp.*;
 public class CommandThread
     extends Thread
 {
-    public CommandThread(Gtp gtp)
+    public CommandThread(Gtp gtp, Frame owner)
     {
         m_gtp = gtp;
+        m_owner = owner;
     }
 
     public void close()
@@ -192,8 +194,9 @@ public class CommandThread
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        TimeoutCallback timeoutCallback = new TimeoutCallback(command);
-        String response = m_gtp.sendCommand(command, 7000, timeoutCallback);
+        TimeoutCallback timeoutCallback =
+            new TimeoutCallback(command, m_owner);
+        String response = m_gtp.sendCommand(command, 6000, timeoutCallback);
         return response;
     }
 
@@ -217,9 +220,10 @@ public class CommandThread
     private static class TimeoutCallback
         implements Gtp.TimeoutCallback
     {
-        TimeoutCallback(String command)
+        TimeoutCallback(String command, Frame owner)
         {
             m_command = command;
+            m_owner = owner;
         }
 
         public boolean askContinue()
@@ -227,8 +231,10 @@ public class CommandThread
             String message = "Program did not respond to command"
                 + " '" + m_command + "'\n" +
                 "Abort waiting?";
-            return ! SimpleDialogs.showQuestion(null, message);
+            return ! SimpleDialogs.showQuestion(m_owner, message);
         }
+
+        private Frame m_owner;
 
         private String m_command;
     };
@@ -237,7 +243,9 @@ public class CommandThread
 
     private Gtp m_gtp;
 
-    private Gtp.Error m_exception;
+    private Gtp.Error m_exception;    
+
+    private Frame m_owner;
 
     private Runnable m_callback;
 

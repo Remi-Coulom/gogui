@@ -787,7 +787,7 @@ class GoGui
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             if (m_gtpShell.getAutoNumber())
                 gtp.enableAutoNumber();
-            m_commandThread = new CommandThread(gtp);
+            m_commandThread = new CommandThread(gtp, this);
             m_commandThread.start();
         }
         catch (Gtp.Error e)
