@@ -206,9 +206,7 @@ public class GameInfoDialog
         JLabel label = new JLabel("Time");
         label.setHorizontalAlignment(SwingConstants.LEFT);
         m_panelLeft.add(label);
-        int hgap = 0;
-        int vgap = 0;
-        FlowLayout layout = new FlowLayout(FlowLayout.LEFT, hgap, vgap);
+        FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
         JPanel panel = new JPanel(layout);
         m_preByoyomi = new JTextField(2);
         m_preByoyomi.setHorizontalAlignment(JTextField.RIGHT);
