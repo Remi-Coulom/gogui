@@ -426,7 +426,7 @@ public class Reader
             return true;
         }
         if (ttype != '\n')
-            // Don't pushBack newline, will confuse lineno()
+            // Don't pushBack newline, will confuse lineno() (Bug 4942853)
             m_tokenizer.pushBack();
         return false;
     }
@@ -489,7 +489,7 @@ public class Reader
         if (ttype != '[')
         {
             if (ttype != '\n')
-                // Don't pushBack newline, will confuse lineno()
+                // Don't pushBack newline, will confuse lineno() (Bug 4942853)
                 m_tokenizer.pushBack();
             return null;
         }
