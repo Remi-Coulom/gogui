@@ -135,7 +135,12 @@ class MenuBars
                         if (menu.getItem(j) != null)
                             menu.getItem(j).setEnabled(false);
             }
+            m_itemAbout.setEnabled(true); // Doesn't work?
+            m_itemBeepAfterMove.setEnabled(true);
             m_itemExit.setEnabled(true);
+            m_itemGtpShell.setEnabled(true);
+            m_itemHelp.setEnabled(true); // Doesn't work?
+            m_itemShowLastMove.setEnabled(true);
             m_menuComputerColor.setEnabled(true);
         }
         else
@@ -172,6 +177,8 @@ class MenuBars
 
     private JMenuBar m_setupMenuBar;
 
+    private JMenuItem m_itemAbout;
+
     private JMenuItem[] m_itemBoardSize;
 
     private JMenuItem m_itemComputerBlack;
@@ -185,6 +192,10 @@ class MenuBars
     private JMenuItem m_itemComputerWhite;
 
     private JMenuItem m_itemExit;
+
+    private JMenuItem m_itemGtpShell;
+
+    private JMenuItem m_itemHelp;
 
     private JMenuItem m_itemRulesChinese;
 
@@ -227,7 +238,8 @@ class MenuBars
         JMenu menu = new JMenu("Experts");
         menu.setMnemonic(KeyEvent.VK_E);
         addMenuItem(menu, "Analyze", KeyEvent.VK_Y, "analyze");
-        addMenuItem(menu, "GTP shell", KeyEvent.VK_C, "gtp-shell");
+        m_itemGtpShell =
+            addMenuItem(menu, "GTP shell", KeyEvent.VK_C, "gtp-shell");
         addMenuItem(menu, "Send GTP file", "gtp-file");
         return menu;
     }
@@ -329,8 +341,8 @@ class MenuBars
     {
         JMenu menu = new JMenu("Help");
         menu.setMnemonic(KeyEvent.VK_H);
-        addMenuItem(menu, "Contents", "help");
-        addMenuItem(menu, "About", "about");
+        m_itemHelp = addMenuItem(menu, "Contents", "help");
+        m_itemAbout = addMenuItem(menu, "About", "about");
         return menu;
     }
 

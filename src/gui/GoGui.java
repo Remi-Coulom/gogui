@@ -125,12 +125,16 @@ class GoGui
     {
         String command = event.getActionCommand();
         if (m_commandInProgress
+            && ! command.equals("about")
+            && ! command.equals("beep-after-move")
             && ! command.equals("computer-black")
             && ! command.equals("computer-both")
             && ! command.equals("computer-none")
             && ! command.equals("computer-white")
             && ! command.equals("gtp-shell")
+            && ! command.equals("help")
             && ! command.equals("interrupt")
+            && ! command.equals("show-last-move")
             && ! command.equals("exit"))
             return;
         if (command.equals("about"))
