@@ -351,11 +351,13 @@ class GoGui
 
     public void cbShowGameTree()
     {
-        if (m_gameTreeViewer == null)
+        if (m_gameTreeViewer != null)
         {
-            m_gameTreeViewer = new GameTreeViewer(this, m_fastPaint, m_prefs);
-            restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
+            disposeGameTree();
+            return;
         }
+        m_gameTreeViewer = new GameTreeViewer(this, m_fastPaint, m_prefs);
+        restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         updateGameTree(true);
         if (m_gameTreeViewer != null) // updateGameTree can close viewer
             m_gameTreeViewer.toTop();
@@ -403,6 +405,14 @@ class GoGui
         setBoardCursorDefault();
         resetBoard();
         clearStatus();
+    }
+
+    public void disposeGameTree()
+    {
+        if (m_gameTreeViewer == null)
+            return;
+        m_gameTreeViewer.dispose();
+        m_gameTreeViewer = null;
     }
 
     public void fieldClicked(go.Point p, boolean modifiedSelect)

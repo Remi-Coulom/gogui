@@ -784,6 +784,8 @@ public class GameTreeViewer
 
         public void cbGtpShell();
 
+        public void disposeGameTree();
+
         public void toTop();
     }
 
@@ -811,7 +813,6 @@ public class GameTreeViewer
         JViewport viewport = m_scrollPane.getViewport();
         viewport.setBackground(UIManager.getColor("Label.background"));
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
-        //viewport.setFocusable(false);
         viewport.setFocusTraversalKeysEnabled(false);
         setFocusTraversalKeysEnabled(false);
         m_scrollPane.requestFocusInWindow();
@@ -822,6 +823,11 @@ public class GameTreeViewer
                 public void windowActivated(WindowEvent e)
                 {
                     m_scrollPane.requestFocusInWindow();
+                }
+
+                public void windowClosing(WindowEvent event)
+                {
+                    m_listener.disposeGameTree();
                 }
             });
         pack();
