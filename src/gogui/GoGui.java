@@ -1099,6 +1099,7 @@ class GoGui
             }
         }
         gotoNode(node);
+        m_comment.markAll(m_pattern);
     }
 
     private void cbForward(int n)

@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.text.*;
 import game.*;
 import utils.*;
 
@@ -28,6 +29,13 @@ public class Comment
     {
         m_listener = listener;
         m_textPane = new JTextPane();
+        StyledDocument doc = m_textPane.getStyledDocument();
+        StyleContext context = StyleContext.getDefaultStyleContext();
+        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
+        Style styleMarked = doc.addStyle("marked", def);
+        StyleConstants.setBackground(styleMarked,
+                                     java.awt.Color.decode("#38d878"));
+        StyleConstants.setForeground(styleMarked, java.awt.Color.white);
         int fontSize = GuiUtils.getDefaultMonoFontSize();
         setPreferredSize(new Dimension(20 * fontSize, 10 * fontSize));
         m_textPane.getDocument().addDocumentListener(this);
@@ -62,6 +70,27 @@ public class Comment
     public void insertUpdate(DocumentEvent e)
     {
         copyContentToNode();
+    }
+
+    public void markAll(Pattern pattern)
+    {
+        StyledDocument doc = m_textPane.getStyledDocument();
+        try
+        {
+            CharSequence text = doc.getText(0, doc.getLength());
+            Matcher matcher = pattern.matcher(text);
+            while (matcher.find())
+            {
+                int start = matcher.start();
+                int end = matcher.end();
+                Style style = doc.getStyle("marked");
+                doc.setCharacterAttributes(start, end - start, style, true);
+            }
+        }
+        catch (BadLocationException e)
+        {
+            assert(false);
+        }
     }
 
     public void removeUpdate(DocumentEvent e)
