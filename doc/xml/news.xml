@@ -8,7 +8,7 @@
       <revremark>
 	<itemizedlist>
 	  <listitem>
-	    Board uses antialiasing.
+	    Board uses background image and antialiasing.
 	  </listitem>
 	  <listitem>
 	    Documentation in docbook format.

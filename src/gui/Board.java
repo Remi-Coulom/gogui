@@ -110,7 +110,7 @@ public class Board
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridheight = constraints.gridwidth = size;
-        constraints.weightx = constraints.weighty = (double)size / (size + 2);
+        constraints.weightx = constraints.weighty = 1.0;
         gridBag.setConstraints(panel, constraints);
         addColumnLabels(gridBag, size, 0);
         addColumnLabels(gridBag, size, size + 1);
@@ -296,7 +296,7 @@ public class Board
     {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridheight = constraints.gridwidth = 1;
-        constraints.weightx = constraints.weighty = 1d / (size + 2);
+        constraints.weightx = constraints.weighty = 0;
         char c = 'A';
         for (int x = 0; x < size; ++x)
         {
@@ -316,7 +316,7 @@ public class Board
     {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridheight = constraints.gridwidth = 1;
-        constraints.weightx = constraints.weighty = 1d / (size + 2);
+        constraints.weightx = constraints.weighty = 0;
         for (int y = 0; y < size; ++y)
         {
             String text = Integer.toString(y + 1);
