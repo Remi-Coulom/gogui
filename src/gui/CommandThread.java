@@ -140,16 +140,19 @@ class CommandThread
     {
         synchronized (this)
         {
+            boolean firstWait = true;
             while (true)
             {
                 try
                 {
-                    wait();
+                    if (m_command == null || ! firstWait)
+                        wait();
                 }
                 catch (InterruptedException e)
                 {
                     System.err.println("Interrupted.");
                 }
+                firstWait = false;
                 m_response = null;
                 m_exception = null;
                 try
