@@ -6,10 +6,8 @@
 package twogtp;
 
 import java.io.*;
-import java.net.*;
 import java.text.*;
 import java.util.*;
-import go.*;
 import utils.*;
 
 //-----------------------------------------------------------------------------

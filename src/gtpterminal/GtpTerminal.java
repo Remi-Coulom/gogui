@@ -6,13 +6,10 @@
 package gtpterminal;
 
 import java.io.*;
-import java.net.*;
-import java.text.*;
 import java.util.*;
 import game.*;
 import go.*;
 import gtp.*;
-import sgf.*;
 import utils.*;
 import version.*;
 

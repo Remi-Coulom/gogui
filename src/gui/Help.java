@@ -12,7 +12,6 @@ import java.net.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.text.html.*;
 import utils.GuiUtils;
 import utils.Platform;
 import utils.StreamCopy;

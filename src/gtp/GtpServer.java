@@ -6,7 +6,6 @@
 package gtp;
 
 import java.io.*;
-import java.util.*;
 import go.*;
 import utils.StringUtils;
 

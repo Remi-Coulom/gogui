@@ -8,10 +8,6 @@ package gui;
 import java.awt.*;
 import java.io.*;
 import javax.swing.*;
-import javax.swing.filechooser.*;
-import java.util.*;
-import sgf.*;
-import latex.*;
 import utils.StringUtils;
 
 //-----------------------------------------------------------------------------

@@ -8,7 +8,6 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
-import java.util.*;
 import javax.swing.*;
 import game.*;
 import utils.Preferences;

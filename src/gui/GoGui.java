@@ -15,8 +15,6 @@ import javax.swing.*;
 import game.*;
 import go.*;
 import gtp.*;
-import latex.*;
-import sgf.*;
 import utils.*;
 import version.*;
 

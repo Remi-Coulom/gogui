@@ -10,7 +10,6 @@ import java.net.*;
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
-import go.*;
 import gtp.*;
 import utils.*;
 import version.*;

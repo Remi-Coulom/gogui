@@ -6,13 +6,10 @@
 package gui;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import game.*;
-import go.*;
 import utils.*;
 
 //-----------------------------------------------------------------------------

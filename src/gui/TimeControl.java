@@ -5,7 +5,6 @@
 
 package gui;
 
-import java.text.*;
 import java.util.*;
 import go.Color;
 

@@ -5,10 +5,8 @@
 
 package game;
 
-import java.text.*;
 import java.util.*;
 import go.*;
-import utils.*;
 
 //-----------------------------------------------------------------------------
 

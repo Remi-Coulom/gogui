@@ -7,8 +7,6 @@ package sgftotex;
 
 import java.io.*;
 import java.util.*;
-import go.*;
-import sgf.*;
 import utils.*;
 import version.*;
 

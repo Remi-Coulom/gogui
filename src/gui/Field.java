@@ -8,10 +8,7 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
-import java.awt.font.*;
-import java.util.*;
 import javax.swing.*;
-import go.*;
 import utils.RadialGradientPaint;
  
 //-----------------------------------------------------------------------------

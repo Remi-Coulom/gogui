@@ -8,7 +8,6 @@ package sgf;
 //-----------------------------------------------------------------------------
 
 import java.io.File;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 import utils.FileUtils;
 

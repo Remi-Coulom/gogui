@@ -8,8 +8,6 @@ package gui;
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.*;
-import java.util.*;
 import javax.swing.*;
 import game.*;
 

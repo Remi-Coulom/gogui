@@ -8,7 +8,6 @@ package latex;
 //-----------------------------------------------------------------------------
 
 import java.io.*;
-import java.text.*;
 import java.util.*;
 import game.*;
 import go.*;
