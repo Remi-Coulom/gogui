@@ -450,6 +450,7 @@ public class GtpAdapter
             GameTree gameTree = reader.getGameTree();
             m_boardSize = gameTree.getGameInformation().m_boardSize;
             m_board = new Board(m_boardSize);
+            m_passInserted.clear();
             Node node = gameTree.getRoot();
             int moveNumber = 0;
             while (node != null)
