@@ -88,7 +88,7 @@ and set the environment variable XSLDIR to the installation directory.
 <javac srcdir="src" destdir="build" source="1.4" deprecation="true"
  optimize="true" listfiles="yes"/>
 <copy todir="build">
-<fileset dir="." includes="src/images/*.png"/>
+<fileset dir="src" includes="images/*.png"/>
 </copy>
 <copy todir="build/doc">
 <fileset dir="doc/html" includes="*.html"/>
