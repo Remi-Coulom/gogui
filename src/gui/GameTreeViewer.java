@@ -160,6 +160,7 @@ class GameTreePanel
                          boolean fastPaint, int labelMode, int sizeMode)
     {
         super(new SpringLayout());
+        setFocusable(true);
         m_owner = owner;
         m_fastPaint = fastPaint;
         setBackground(UIManager.getColor("Label.background"));
@@ -252,7 +253,13 @@ class GameTreePanel
     public int getScrollableBlockIncrement(Rectangle visibleRect,
                                            int orientation, int direction)
     {
-        return m_nodeDist * 10;
+        int result;
+        if (orientation == SwingConstants.VERTICAL)
+            result = visibleRect.height;
+        else
+            result = visibleRect.width;
+        result = (result / m_nodeDist) * m_nodeDist;
+        return result;
     }
 
     public boolean getScrollableTracksViewportHeight()
