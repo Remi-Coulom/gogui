@@ -502,11 +502,12 @@ class AnalyzeDialog
         selectCommand(index);
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
-        String label = command.getLabel();
+        if (command.needsColorArg())
+            command.setColorArg(getSelectedColor());
+        String label = command.getResultTitle();        
         if (command.needsStringArg())
         {
-            String stringArg =
-                JOptionPane.showInputDialog(this, label);
+            String stringArg = JOptionPane.showInputDialog(this, label);
             if (stringArg == null)
                 return;
             command.setStringArg(stringArg);
@@ -514,8 +515,7 @@ class AnalyzeDialog
         if (command.needsFileArg())
         {
             
-            File fileArg =
-                SimpleDialogs.showSelectFile(this, label);
+            File fileArg = SimpleDialogs.showSelectFile(this, label);
             if (fileArg == null)
                 return;
             command.setFileArg(fileArg);
