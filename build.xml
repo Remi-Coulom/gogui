@@ -106,6 +106,7 @@ and set the environment variable XSLDIR to the installation directory.
  style="${xsldir}/html/chunk.xsl" force="true">
 <param name="admon.graphics" expression="0"/>
 <param name="admon.graphics.path" expression=""/>
+<param name="chunk.quietly" expression="1"/>
 <param name="chunk.section.depth" expression="0"/>
 <param name="html.cleanup" expression="1"/>
 <param name="html.stylesheet" expression="docbook.css"/>
