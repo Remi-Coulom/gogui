@@ -308,7 +308,7 @@ class GoGui
             return false;
         if (m_commandInProgress)
         {
-            if (! showQuestion("A command is in progress.\nKill program?"))
+            if (! showQuestion("Kill program?"))
                 return false;
         }
         else if (! showQuestion("Detach " + m_name + "?"))
@@ -414,8 +414,7 @@ class GoGui
         else if (! modifiedSelect)
         {
             if (m_board.isSuicide(p, m_board.getToMove())
-                && ! showQuestion("This point is a suicide move.\n" +
-                                  "Do you really want to play there?"))
+                && ! showQuestion("Play suicide?"))
                 return;
             Move move = new Move(p, m_board.getToMove());
             humanMoved(move);
@@ -792,10 +791,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            SimpleDialogs.showError(this,
-                                    e.getMessage() + "\n"
-                                    + "See GTP shell for any error messages\n"
-                                    + "printed by the program.");
+            showGtpError(e);
             m_toolBar.setComputerEnabled(false);
             m_menuBar.setComputerEnabled(false);
             return false;
@@ -947,7 +943,7 @@ class GoGui
         }
         if (boardSize <= 0)
         {
-            showError("Invalid board size");
+            showError("Invalid size");
             return;
         }
         cbNewGame(boardSize);
@@ -1063,8 +1059,8 @@ class GoGui
             computerNone();
         if (! m_commandThread.isInterruptSupported())
         {
-            if (showQuestion("Program does not support interrupting.\n"
-                             + "Kill program?"))
+            if (showQuestion("Program does not support interrupt.\n" +
+                             "Kill program?"))
                 m_commandThread.destroyGtp();
             return;
         }
@@ -1077,7 +1073,7 @@ class GoGui
     {
         if (! NodeUtils.isInMainVariation(m_currentNode))
             return;
-        if (! showQuestion("Delete all variations except main?"))
+        if (! showQuestion("Delete all variations but main?"))
             return;
         m_gameTree.keepOnlyMainVariation();
         m_needsSave = true;
@@ -1110,7 +1106,7 @@ class GoGui
 
     private void cbMakeMainVariation()
     {
-        if (! showQuestion("Make current node to main variation?"))
+        if (! showQuestion("Make current to main variation?"))
             return;
         NodeUtils.makeMainVariation(m_currentNode);
         m_needsSave = true;
@@ -1373,7 +1369,7 @@ class GoGui
             showError("Cannot truncate root node.");
             return;
         }
-        if (! showQuestion("Truncate current node and all its children?"))
+        if (! showQuestion("Truncate current?"))
             return;
         Node oldCurrentNode = m_currentNode;
         backward(1);
@@ -2292,7 +2288,7 @@ class GoGui
         if (! (oldResult == null || oldResult.equals("")
                || oldResult.equals(result))
             && ! showQuestion("Overwrite old result " + oldResult + "\n" +
-                              "with new score " + result + "?"))
+                              "with " + result + "?"))
             return;
         m_gameTree.getGameInformation().m_result = result;
     }

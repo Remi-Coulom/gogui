@@ -640,7 +640,8 @@ public final class Gtp
             if (isResponseLine(line))
                 break;
             m_fullResponse = response.toString();
-            m_callback.receivedInvalidResponse(response.toString());
+            if (m_callback != null)
+                m_callback.receivedInvalidResponse(response.toString());
             if (m_invalidResponseCallback != null)
                 m_invalidResponseCallback.show(line);       
             line = readLine(timeout);
