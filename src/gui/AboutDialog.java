@@ -17,6 +17,8 @@ public class AboutDialog
 {
     public static void show(Component parent)
     {
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createEtchedBorder());        
         String message =
             "<center>" +
             "<b>GoGui " + Version.get() + "</b>" +
@@ -29,13 +31,14 @@ public class AboutDialog
             "</p>" +
             "</center>";
         JEditorPane editorPane = new JEditorPane();
+        panel.add(editorPane);
         JLabel dummyLabel = new JLabel();
         editorPane.setBackground(dummyLabel.getBackground());
         EditorKit editorKit =
             JEditorPane.createEditorKitForContentType("text/html");
         editorPane.setEditorKit(editorKit);
         editorPane.setText(message);
-        JOptionPane.showMessageDialog(parent, editorPane, "About - GoGui",
+        JOptionPane.showMessageDialog(parent, panel, "About - GoGui",
                                       JOptionPane.PLAIN_MESSAGE);
     }
 }
