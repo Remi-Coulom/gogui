@@ -100,7 +100,7 @@ installation directory.
 </copy>
 </target>
 
-<target name="dist" depends="all">
+<target name="dist" depends="all,man">
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
@@ -115,6 +115,7 @@ installation directory.
  build.xml,
  config/analyze-commands*,
  doc/html/*.html,
+ doc/man/*.1,
  doc/xml/*.xml,
  doxygen/Doxyfile,
  lib/*.jar,
