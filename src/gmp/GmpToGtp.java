@@ -202,7 +202,7 @@ public class GmpToGtp
             int y = -1;
             if (! arg.equals("PASS"))
             {
-                x = (arg.charAt(0) - 'D');
+                x = (arg.charAt(0) - 'A');
                 y = Integer.parseInt(arg.substring(1));
                 
             }

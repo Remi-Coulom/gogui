@@ -10,7 +10,8 @@ import java.util.*;
 
 //-----------------------------------------------------------------------------
 
-class Command
+/** Gmp command. */
+class Cmd
 {
     public static final int OK = 0;
 
@@ -28,22 +29,104 @@ class Command
 
     public static final int EXTENDED = 7;
 
+    public static final int MASK_MOVE_COLOR = 0x200;
+
+    public static final int MASK_MOVE_POINT = 0x1ff;
+
     public int m_cmd;
 
     public int m_val;
 
-    public Command(int cmd, int val)
+    public Cmd(int cmd, int val)
     {
         m_cmd = cmd;
         m_val = val;
     }
 
-    public boolean equals(Command cmd)
+    public boolean equals(Cmd cmd)
     {
         return (cmd.m_cmd == m_cmd && cmd.m_val == m_val);
     }
 
-    public String toString()
+    public static String moveValToString(int val, int size)
+    {
+        StringBuffer result = new StringBuffer(16);
+        if ((val & MASK_MOVE_COLOR) != 0)
+            result.append("W ");
+        else
+            result.append("B ");
+        if (size == 0)
+            result.append(val & MASK_MOVE_POINT);
+        else
+        {
+            Gmp.Move move = parseMove(val, size);
+            if (move.m_x < 0 || move.m_y < 0)
+                result.append("PASS");
+            else
+            {
+                char xChar = (char)('A' + move.m_x);
+                result.append(xChar);
+                result.append(move.m_y);
+            }
+        }
+        return result.toString();
+    }
+
+    public static Gmp.Move parseMove(int val, int size)
+    {
+        Gmp.Move move = new Gmp.Move();
+        move.m_isBlack = ((val & MASK_MOVE_COLOR) == 0);
+        val &= MASK_MOVE_POINT;
+        if (val == 0)
+        {
+            move.m_x = -1;
+            move.m_y = -1;
+        }
+        else
+        {
+            val -= 1;
+            move.m_x = val % size;
+            move.m_y = val / size;
+        }
+        return move;
+    }
+
+    public static String queryValToString(int val)
+    {
+        switch (val)
+        {
+        case 0:
+            return "GAME";
+        case 1:
+            return "BUFFER";
+        case 2:
+            return "VERSION";
+        case 3:
+            return "STONES";
+        case 4:
+            return "TIMEBLACK";
+        case 5:
+            return "TIMEWHITE";
+        case 6:
+            return "CHARSET";
+        case 7:
+            return "RULES";
+        case 8:
+            return "HANDICAP";
+        case 9:
+            return "SIZE";
+        case 10:
+            return "TIMELIMIT";
+        case 11:
+            return "COLOR";
+        case 12:
+            return "WHO";
+        default:
+            return Integer.toString(val);
+        }
+    }
+
+    public String toString(int size)
     {
         StringBuffer buffer = new StringBuffer(32);
         switch (m_cmd)
@@ -59,25 +142,33 @@ class Command
             break;
         case QUERY:
             buffer.append("QUERY");
+            buffer.append(' ');
+            buffer.append(Cmd.queryValToString(m_val));
             break;
         case ANSWER:
             buffer.append("ANSWER");
+            buffer.append(' ');
+            buffer.append(m_val);
             break;
         case MOVE:
             buffer.append("MOVE");
+            buffer.append(' ');
+            buffer.append(Cmd.moveValToString(m_val, size));
             break;
         case UNDO:
             buffer.append("UNDO");
+            buffer.append(' ');
+            buffer.append(m_val);
             break;
         case EXTENDED:
             buffer.append("EXTENDED");
+            buffer.append(' ');
+            buffer.append(m_val);
             break;
         default:
             buffer.append(m_cmd);
             break;
         }
-        buffer.append(' ');
-        buffer.append(m_val);
         return buffer.toString();
     }
 };
@@ -91,7 +182,7 @@ class ReadThread
 
         public String m_response;
 
-        public int m_value;
+        public int m_val;
     }
 
     public ReadThread(InputStream input, OutputStream output,
@@ -105,11 +196,6 @@ class ReadThread
         m_out = output;
         m_size = size;
         m_colorIndex = colorIndex;
-    }
-
-    public int getSize()
-    {
-        return m_size;
     }
 
     public void run()
@@ -138,7 +224,7 @@ class ReadThread
         }
     }
 
-    public synchronized boolean send(Command cmd, StringBuffer response)
+    public synchronized boolean send(Cmd cmd, StringBuffer response)
     {
         if (m_status == STATUS_WAIT_OK)
         {
@@ -150,18 +236,19 @@ class ReadThread
             response.append("GMP connection broken");
             return false;
         }
-        if (m_commandStack.size() > 0)
+        if (m_cmdStack.size() > 0)
         {
-            Command stackCommand = (Command)m_commandStack.get(0);
-            if (! stackCommand.equals(cmd))
+            Cmd stackCmd = (Cmd)m_cmdStack.get(0);
+            if (! stackCmd.equals(cmd))
             {
-                response.append("Received " + stackCommand.toString());
+                response.append("Received " +
+                                stackCmd.toString(m_size));
                 return false;
             }
-            m_commandStack.remove(0);
+            m_cmdStack.remove(0);
             return true;
         }
-        sendCommand(cmd.m_cmd, cmd.m_val);
+        sendCmd(cmd.m_cmd, cmd.m_val);
         try
         {
             wait();
@@ -190,25 +277,26 @@ class ReadThread
         }
     }
 
-    public synchronized WaitResult waitCmd(int cmd, int valueMask,
-                                           int valueCondition)
+    public synchronized WaitResult waitCmd(int cmd, int valMask,
+                                           int valCondition)
     {
         WaitResult result = new WaitResult();
         result.m_success = false;
         while (true)
         {
-            if (m_commandStack.size() > 0)
+            if (m_cmdStack.size() > 0)
             {
-                Command stackCommand = (Command)m_commandStack.get(0);
-                if (stackCommand.m_cmd != cmd
-                    || ((stackCommand.m_cmd & valueMask) != valueCondition))
+                Cmd stackCmd = (Cmd)m_cmdStack.get(0);
+                if (stackCmd.m_cmd != cmd
+                    || ((stackCmd.m_cmd & valMask) != valCondition))
                 {
-                    result.m_response = ("Received " + stackCommand);
+                    result.m_response = ("Received " +
+                                         stackCmd.toString(m_size));
                     return result;
                 }
                 result.m_success = true;
-                result.m_value = stackCommand.m_val;
-                m_commandStack.remove(0);
+                result.m_val = stackCmd.m_val;
+                m_cmdStack.remove(0);
                 return result;
             }
             if (m_status == STATUS_DISCONNECTED)
@@ -263,7 +351,7 @@ class ReadThread
 
     private OutputStream m_out;
 
-    private Vector m_commandStack = new Vector(32, 32);
+    private Vector m_cmdStack = new Vector(32, 32);
 
     private void answerQuery(int val)
     {
@@ -274,7 +362,7 @@ class ReadThread
             answer = m_size;
         else if (val == QUERY_HANDICAP)
             answer = 1;
-        sendCommand(Command.ANSWER, answer);
+        sendCmd(Cmd.ANSWER, answer);
     }
 
     private boolean checkChecksum()
@@ -313,11 +401,11 @@ class ReadThread
         return (ack != 0);
     }
 
-    private Command getCommand()
+    private Cmd getCmd()
     {
         int cmd = (m_inBuffer[2] >> 4) & 0x7;
         int val = ((m_inBuffer[2] & 0x03) << 7) | (m_inBuffer[3] & 0x7f);
-        return new Command(cmd, val);
+        return new Cmd(cmd, val);
     }
 
     private boolean getSeq()
@@ -365,14 +453,14 @@ class ReadThread
         log("discarding command byte.");
     }
 
-    private void handleCommand(Command cmd)
+    private void handleCmd(Cmd cmd)
     {
-        log("received " + cmd);
-        if (cmd.m_cmd == Command.QUERY)
+        log("received " + cmd.toString(m_size));
+        if (cmd.m_cmd == Cmd.QUERY)
             answerQuery(cmd.m_val);
         else
         {
-            m_commandStack.add(cmd);
+            m_cmdStack.add(cmd);
             sendOk();
             m_status = STATUS_IDLE;
         }
@@ -380,12 +468,12 @@ class ReadThread
 
     private void handlePacket()
     {
-        Command cmd = getCommand();
+        Cmd cmd = getCmd();
         boolean seq = getSeq();
         boolean ack = getAck();
         if (m_status == STATUS_WAIT_OK)
         {
-            if (cmd.m_cmd == Command.OK)
+            if (cmd.m_cmd == Cmd.OK)
             {
                 if (ack != m_myLastSeq)
                 {
@@ -397,7 +485,7 @@ class ReadThread
             }
             if (seq == m_hisLastSeq)
             {
-                log("old command. resending OK");
+                log("old cmd. resending OK");
                 sendOk();
                 return;
             }
@@ -405,7 +493,7 @@ class ReadThread
             {
                 m_status = STATUS_IDLE;
                 m_hisLastSeq = seq;
-                handleCommand(cmd);
+                handleCmd(cmd);
                 notifyAll();
                 return;
             }
@@ -415,24 +503,24 @@ class ReadThread
         else
         {
             assert(m_status == STATUS_IDLE);
-            if (cmd.m_cmd == Command.OK)
+            if (cmd.m_cmd == Cmd.OK)
             {
                 log("ignoring unexpected OK");
                 return;
             }
             if (ack != m_myLastSeq)
             {
-                log("ignoring old command");
+                log("ignoring old cmd");
                 return;
             }
             if (seq == m_hisLastSeq)
             {
-                log("old command. resending OK");
+                log("old cmd. resending OK");
                 sendOk();
                 return;
             }
             m_hisLastSeq = seq;
-            handleCommand(cmd);
+            handleCmd(cmd);
             notifyAll();
         }
     }
@@ -442,28 +530,28 @@ class ReadThread
         System.err.println("gmp: " + line);
     }
 
-	private byte makeCommandByte1(int command, int value)
+	private byte makeCmdByte1(int cmd, int val)
 	{
-        value = value & 0x000003FF;
-		return (byte)(0x0080 | (command << 4) | (value >> 7));
+        val = val & 0x000003FF;
+		return (byte)(0x0080 | (cmd << 4) | (val >> 7));
 	}
 	
-	private byte makeCommandByte2(int value)
+	private byte makeCmdByte2(int val)
 	{
-        return (byte)(0x0080 | (value & 0x0000007F));
+        return (byte)(0x0080 | (val & 0x0000007F));
 	}	
 
-    private boolean sendCommand(int cmd, int val)
+    private boolean sendCmd(int cmd, int val)
     {
-        log("send " + new Command(cmd, val));
+        log("send " + (new Cmd(cmd, val)).toString(m_size));
         try
         {
-            if (cmd != Command.OK)
+            if (cmd != Cmd.OK)
                 m_myLastSeq = ! m_myLastSeq;
             m_outputBuffer[0] = (byte)(m_myLastSeq ? 1 : 0);
             m_outputBuffer[0] |= (byte)(m_hisLastSeq ? 2 : 0);
-            m_outputBuffer[2] = makeCommandByte1(cmd, val);
-            m_outputBuffer[3] = makeCommandByte2(val);
+            m_outputBuffer[2] = makeCmdByte1(cmd, val);
+            m_outputBuffer[3] = makeCmdByte2(val);
             setChecksum();
             writeOutputBuffer();
             m_status = STATUS_WAIT_OK;
@@ -478,7 +566,7 @@ class ReadThread
 
     private boolean sendOk()
     {
-        return sendCommand(Command.OK, 0);
+        return sendCmd(Cmd.OK, 0);
     }
 
     private void setChecksum()
@@ -515,11 +603,11 @@ public class Gmp
     public static class Move
     {
         public boolean m_isBlack;
-
+        
         public int m_x;
-
+        
         public int m_y;
-    }    
+    }
 
     /** Create a Gmp.
         @param size board size 1-22
@@ -530,6 +618,7 @@ public class Gmp
     public Gmp(InputStream input, OutputStream output, int size,
                int colorIndex)
     {
+        m_size = size;
         m_readThread = new ReadThread(input, output, size, colorIndex);
         log("starting read thread");
         m_readThread.start();
@@ -537,39 +626,41 @@ public class Gmp
 
     public boolean newGame(int size, StringBuffer response)
     {
-        if (size != m_readThread.getSize())
+        if (size != m_size)
         {
-            response.append("Board size must be " + m_readThread.getSize());
+            response.append("Board size must be " + m_size);
             return false;
         }
-        return m_readThread.send(new Command(Command.NEWGAME, 0), response);
+        return m_readThread.send(new Cmd(Cmd.NEWGAME, 0), response);
     }
 
     public boolean play(boolean isBlack, int x, int y, StringBuffer response)
     {
-        int size = m_readThread.getSize();
-        if (x >= size || y >= size)
+        if (x >= m_size || y >= m_size)
         {
             response.append("Invalid coordinates");
             return false;
         }
-        int val = (isBlack ? 0 : 0x200);
+        int val = (isBlack ? 0 : Cmd.MASK_MOVE_COLOR);
         if (x >= 0 && y >= 0)
-            val |= (1 + x + y * size);
-        return m_readThread.send(new Command(Command.MOVE, val), response);
+            val |= (1 + x + y * m_size);
+        return m_readThread.send(new Cmd(Cmd.MOVE, val), response);
     }
 
     public Move waitMove(boolean isBlack, StringBuffer response)
     {
         ReadThread.WaitResult result;
-        int valCondition = (isBlack ? 0 : 0x200);
-        result = m_readThread.waitCmd(Command.MOVE, 0x200, valCondition);
+        int valCondition = (isBlack ? 0 : Cmd.MASK_MOVE_COLOR);
+        result = m_readThread.waitCmd(Cmd.MOVE, Cmd.MASK_MOVE_COLOR,
+                                      valCondition);
         if (result.m_response != null)
             response.append(result.m_response);
         if (! result.m_success)
             return null;
-        return parseMove(result.m_value);
+        return Cmd.parseMove(result.m_val, m_size);
     }
+
+    private int m_size;
 
     private ReadThread m_readThread;
 
@@ -580,26 +671,6 @@ public class Gmp
     {
         System.err.println("gmp: " + line);
     }
-
-    private Move parseMove(int value)
-    {
-        Move move = new Move();
-        move.m_isBlack = ((value & 0x200) == 0);
-        value &= 0x1ff;
-        if (value == 0)
-        {
-            move.m_x = -1;
-            move.m_y = -1;
-        }
-        else
-        {
-            value -= 1;
-            move.m_x = value % m_readThread.getSize();
-            move.m_y = value / m_readThread.getSize();
-        }
-        return move;
-    }
-
 }
 
 //-----------------------------------------------------------------------------
