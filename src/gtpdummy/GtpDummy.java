@@ -20,10 +20,10 @@ import version.*;
 public class GtpDummy
     extends GtpServer
 {
-    public GtpDummy(InputStream in, OutputStream out)
+    public GtpDummy(InputStream in, OutputStream out, PrintStream log)
         throws Exception
     {
-        super(in, out, null);
+        super(in, out, log);
         initSize(19);
         m_thread = Thread.currentThread();
     }
@@ -92,6 +92,7 @@ public class GtpDummy
         {
             String options[] = {
                 "help",
+                "log:",
                 "version"
             };
             Options opt = new Options(args, options);
@@ -101,6 +102,7 @@ public class GtpDummy
                     "Usage: java -jar gtpdummy.jar [options]\n" +
                     "\n" +
                     "-help         display this help and exit\n" +
+                    "-log file     log GTP stream to file\n" +
                     "-version      print version and exit\n";
                 System.out.print(helpText);
                 System.exit(0);
@@ -110,8 +112,16 @@ public class GtpDummy
                 System.out.println("GtpDummy " + Version.m_version);
                 System.exit(0);
             }
-            GtpDummy gtpDummy = new GtpDummy(System.in, System.out);
+            PrintStream log = null;
+            if (opt.isSet("log"))
+            {
+                File file = new File(opt.getString("log"));
+                log = new PrintStream(new FileOutputStream(file));
+            }
+            GtpDummy gtpDummy = new GtpDummy(System.in, System.out, log);
             gtpDummy.mainLoop();
+            if (log != null)
+                log.close();
         }
         catch (Error e)
         {

@@ -16,8 +16,13 @@ Dummy Go program for testing GTP controlling programs.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gtpdummy</command>
-<arg><option>-help</option></arg>
-<arg><option>-version</option></arg>
+<arg><option>-log</option> <replaceable>file</replaceable></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gtpdummy</command><arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gtpdummy</command><arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -38,6 +43,13 @@ Plays random moves.
 <term><option>-help</option></term>
 <listitem>
 Print help and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-log</option> <replaceable>file</replaceable></term>
+<listitem>
+Log GTP stream to file.
 </listitem>
 </varlistentry>
 

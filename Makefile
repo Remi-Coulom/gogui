@@ -53,6 +53,7 @@ DOC= \
   doc/xml/readme.xml \
   doc/xml/reference-gmptogtp.xml \
   doc/xml/reference-gogui.xml \
+  doc/xml/reference-gtpdummy.xml \
   doc/xml/reference-gtpregress.xml \
   doc/xml/reference-gtpserver.xml \
   doc/xml/reference-netgtp.xml \
