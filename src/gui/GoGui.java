@@ -885,6 +885,8 @@ class GoGui
                                     e.getMessage() + "\n"
                                     + "See GTP shell for any error messages\n"
                                     + "printed by the program.");
+            m_toolBar.setComputerEnabled(false);
+            m_menuBar.setComputerEnabled(false);
             return false;
         }
         m_menuBar.setComputerEnabled(true);
