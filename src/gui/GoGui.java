@@ -61,10 +61,9 @@ class GoGui
         m_infoPanel.add(createStatusBar());
 
         m_board = new go.Board(m_boardSize);
-        m_komiDefault = prefs.getFloat("komi");
         m_board.setRules(prefs.getInt("rules"));
 
-        m_gameTree = new GameTree(m_boardSize, m_komiDefault, null);
+        m_gameTree = new GameTree(m_boardSize, prefs.getFloat("komi"), null);
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
 
@@ -691,8 +690,6 @@ class GoGui
 
     private int m_move;
 
-    private float m_komiDefault;
-
     private go.Board m_board;
 
     private go.Color m_setupColor;
@@ -1040,10 +1037,9 @@ class GoGui
     {
         GameInformation gameInformation = m_gameTree.getGameInformation();
         GameInfoDialog.show(this, gameInformation);
-        if (gameInformation.m_komi != m_komiDefault)
+        if (gameInformation.m_komi != m_prefs.getFloat("komi"))
         {
-            m_komiDefault = gameInformation.m_komi;
-            m_prefs.setFloat("komi", m_komiDefault);
+            m_prefs.setFloat("komi", gameInformation.m_komi);
             setKomi(gameInformation.m_komi);
         }
     }
@@ -1817,7 +1813,7 @@ class GoGui
         if (handicap == null)
             showWarning("Handicap stone locations are not\n" +
                         "defined for this board size.");
-        m_gameTree = new GameTree(size, m_komiDefault, handicap);
+        m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), handicap);
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
         m_board.newGame();        
@@ -1861,7 +1857,7 @@ class GoGui
             newGameFile(m_boardSize, new File(m_file), m_move);
         else
         {
-            setKomi(m_komiDefault);
+            setKomi(m_prefs.getFloat("komi"));
             newGame(m_boardSize);
         }
         if (! m_initAnalyze.equals(""))
@@ -2377,7 +2373,7 @@ class GoGui
                 m_commandThread.sendCommandClearBoard(size);
             }
             m_board.newGame();        
-            m_gameTree = new GameTree(size, m_komiDefault, null);
+            m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), null);
             m_currentNode = m_gameTree.getRoot();
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {

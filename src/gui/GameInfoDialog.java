@@ -16,18 +16,24 @@ import utils.GuiUtils;
 //-----------------------------------------------------------------------------
 
 public class GameInfoDialog
-    extends JPanel
+    extends JOptionPane
 {
     public static void show(Component parent, GameInformation gameInformation)
     {
         GameInfoDialog gameInfoDialog = new GameInfoDialog(gameInformation);
-        int result =
-            JOptionPane.showConfirmDialog(parent, gameInfoDialog,
-                                          "GoGui: Game Information",
-                                          JOptionPane.OK_CANCEL_OPTION,
-                                          JOptionPane.PLAIN_MESSAGE);
-        if (result != JOptionPane.OK_OPTION)
-            return;
+        JDialog dialog =
+            gameInfoDialog.createDialog(parent, "GoGui: Game Information");
+        boolean done = false;
+        while (! done)
+        {
+            dialog.show();
+            Object value = gameInfoDialog.getValue();
+            if (! (value instanceof Integer)
+                || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
+                return;
+            done = gameInfoDialog.validate(parent);
+        }
+        dialog.dispose();
         gameInformation.m_playerBlack =
             getTextFieldContent(gameInfoDialog.m_playerBlack);
         gameInformation.m_blackRank =
@@ -40,15 +46,11 @@ public class GameInfoDialog
             getTextFieldContent(gameInfoDialog.m_result);
         gameInformation.m_date =
             getTextFieldContent(gameInfoDialog.m_date);
-        try
-        {
-            gameInformation.m_komi =
-                Float.parseFloat(getTextFieldContent(gameInfoDialog.m_komi));
-        }
-        catch (NumberFormatException e)
-        {
-        }
+        gameInformation.m_komi =
+            Float.parseFloat(getTextFieldContent(gameInfoDialog.m_komi));
     }
+
+    private JPanel m_panel;
 
     private JTextField m_date;
 
@@ -66,7 +68,7 @@ public class GameInfoDialog
 
     private GameInfoDialog(GameInformation gameInformation)
     {
-        super(new GridLayout(0, 2, 0, 0));
+        m_panel = new JPanel(new GridLayout(0, 2, 0, 0));
         m_playerBlack = createEntry("Black player",
                                     gameInformation.m_playerBlack);
         m_rankBlack = createEntry("Black rank",
@@ -78,21 +80,37 @@ public class GameInfoDialog
         m_date = createEntry("Date", gameInformation.m_date);
         m_komi = createEntry("Komi", Float.toString(gameInformation.m_komi));
         m_result = createEntry("Result", gameInformation.m_result);
+        setMessage(m_panel);
+        setOptionType(OK_CANCEL_OPTION);
     }
 
     private JTextField createEntry(String labelText, String text)
     {
         JLabel label = new JLabel(labelText);
         label.setHorizontalAlignment(SwingConstants.LEFT);
-        add(label);
+        m_panel.add(label);
         JTextField textField = new JTextField(text);
-        add(textField);
+        m_panel.add(textField);
         return textField;
     }
 
     private static String getTextFieldContent(JTextField textField)
     {
         return textField.getText().trim();
+    }
+
+    private boolean validate(Component parent)
+    {
+        try
+        {
+            float komi = Float.parseFloat(getTextFieldContent(m_komi));
+        }
+        catch (NumberFormatException e)
+        {
+            SimpleDialogs.showError(parent, "Invalid komi value");
+            return false;
+        }
+        return true;
     }
 }
 
