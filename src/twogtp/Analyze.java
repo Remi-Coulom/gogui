@@ -42,6 +42,18 @@ public class Analyze
 
     private String m_white = "White";
 
+    private String m_blackCommand = "";
+
+    private String m_whiteCommand = "";
+
+    private String m_size = "";
+
+    private String m_komi = "";
+
+    private String m_date = "";
+
+    private String m_host = "";
+
     private Vector m_entries = new Vector(128, 128);
 
     private Statistics m_length = new Statistics();
@@ -101,6 +113,18 @@ public class Analyze
             m_black = getCommentValue(comment, "Black:");
         else if (comment.startsWith("White:"))
             m_white = getCommentValue(comment, "White:");
+        else if (comment.startsWith("BlackCommand:"))
+            m_blackCommand = getCommentValue(comment, "BlackCommand:");
+        else if (comment.startsWith("WhiteCommand:"))
+            m_whiteCommand = getCommentValue(comment, "WhiteCommand:");
+        else if (comment.startsWith("Size:"))
+            m_size = getCommentValue(comment, "Size:");
+        else if (comment.startsWith("Komi:"))
+            m_komi = getCommentValue(comment, "Komi:");
+        else if (comment.startsWith("Date:"))
+            m_date = getCommentValue(comment, "Date:");
+        else if (comment.startsWith("Host:"))
+            m_host = getCommentValue(comment, "Host:");
     }
 
     private void handleLine(String line) throws Exception
@@ -178,50 +202,64 @@ public class Analyze
                   "<hr>\n" +
                   "<small>\n" +
                   "<table>\n" +
-                  "<tr><th align=\"left\">Black:</th><td align=\"right\">"
+                  "<tr><th align=\"left\">Black:</th><td align=\"left\">"
                   + m_black + "</td></tr>\n" +
-                  "<tr><th align=\"left\">White:</th><td align=\"right\">"
+                  "<tr><th align=\"left\">White:</th><td align=\"left\">"
                   + m_white + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Games:</th><td align=\"right\">"
+                  "<tr><th align=\"left\">Size:</th><td align=\"left\">"
+                  + m_size + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Komi:</th><td align=\"left\">"
+                  + m_komi + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Date:</th><td align=\"left\">"
+                  + m_date + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Host:</th><td align=\"left\">"
+                  + m_host + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Black command:</th>"
+                  + "<td align=\"left\"><small><tt>"
+                  + m_blackCommand + "</tt></small></td></tr>\n" +
+                  "<tr><th align=\"left\">White command:</th>"
+                  + "<td align=\"left\"><small><tt>"
+                  + m_whiteCommand + "</tt></small></td></tr>\n" +
+                  "<tr><th align=\"left\">Games:</th><td align=\"left\">"
                   + m_games + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Errors:</th><td align=\"right\">"
+                  "<tr><th align=\"left\">Errors:</th><td align=\"left\">"
                   + m_errors + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Duplicates:</th><td align=\"right\">"
+                  "<tr><th align=\"left\">Duplicates:</th><td align=\"left\">"
                   + m_duplicates + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Games used:</th><td align=\"right\">"
+                  "<tr><th align=\"left\">Games used:</th><td align=\"left\">"
                   + m_gamesUsed + "</td></tr>\n" +
                   "<tr><th align=\"left\">Black score["
-                  + m_black + "]:</th><td align=\"right\">"
+                  + m_black + "]:</th><td align=\"left\">"
                   + format.format(m_histoBlack.getMean()) + " (&plusmn;"
                   + format.format(m_histoBlack.getErrorMean())
                   + ")</td></tr>\n" +
                   "<tr><th align=\"left\">Black score["
-                  + m_white + "]:</th><td align=\"right\">"
+                  + m_white + "]:</th><td align=\"left\">"
                   + format.format(m_histoWhite.getMean()) + " (&plusmn;"
                   + format.format(m_histoWhite.getErrorMean())
                   + ")</td></tr>\n" +
                   "<tr><th align=\"left\">Black wins["
-                  + m_black + "]:</th><td align=\"right\">"
+                  + m_black + "]:</th><td align=\"left\">"
                   + format.format(m_winBlack.getMean() * 100) + "% (&plusmn;"
                   + format.format(m_winBlack.getErrorMean() * 100)
                   + ")</td></tr>\n" +
                   "<tr><th align=\"left\">Black wins["
-                  + m_white + "]:</th><td align=\"right\">"
+                  + m_white + "]:</th><td align=\"left\">"
                   + format.format(m_winWhite.getMean() * 100) + "% (&plusmn;"
                   + format.format(m_winWhite.getErrorMean() * 100)
                   + ")</td></tr>\n" +
                   "<tr><th align=\"left\">Game length:</th>"
-                  + "<td align=\"right\">"
+                  + "<td align=\"left\">"
                   + format.format(m_length.getMean()) + " (&plusmn;"
                   + format.format(m_length.getErrorMean())
                   + ")</td></tr>\n" +
                   "<tr><th align=\"left\">CpuTime Black:</th>"
-                  + "<td align=\"right\">"
+                  + "<td align=\"left\">"
                   + format.format(m_cpuBlack.getMean()) + " (&plusmn;"
                   + format.format(m_cpuBlack.getErrorMean())
                   + ")</td></tr>\n" +
                   "<tr><th align=\"left\">CpuTime White:</th>"
-                  + "<td align=\"right\">"
+                  + "<td align=\"left\">"
                   + format.format(m_cpuWhite.getMean()) + " (&plusmn;"
                   + format.format(m_cpuWhite.getErrorMean())
                   + ")</td></tr>\n" +
