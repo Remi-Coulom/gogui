@@ -25,8 +25,10 @@ public class SimpleDialogs
 
     public static void showError(Component frame, String message)
     {
-        JOptionPane.showMessageDialog(frame, message,
-                                      "Error - " + m_appName,
+        String title = "Error";
+        if (frame == null)
+            title = title + " - " + m_appName;
+        JOptionPane.showMessageDialog(frame, message, title,
                                       JOptionPane.ERROR_MESSAGE);
     }
 
@@ -42,8 +44,10 @@ public class SimpleDialogs
 
     public static void showInfo(Component frame, String message)
     {
-        JOptionPane.showMessageDialog(frame, message,
-                                      "Info - " + m_appName,
+        String title = "Info";
+        if (frame == null)
+            title = title + " - " + m_appName;
+        JOptionPane.showMessageDialog(frame, message, title,
                                       JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -66,8 +70,10 @@ public class SimpleDialogs
 
     public static boolean showQuestion(Component frame, String message)
     {
-        int r = JOptionPane.showConfirmDialog(frame, message,
-                                              "Question - " + m_appName,
+        String title = "Question";
+        if (frame == null)
+            title = title + " - " + m_appName;
+        int r = JOptionPane.showConfirmDialog(frame, message, title,
                                               JOptionPane.YES_NO_OPTION);
         return (r == 0);
     }
@@ -84,8 +90,10 @@ public class SimpleDialogs
 
     public static void showWarning(Component frame, String message)
     {
-        JOptionPane.showMessageDialog(frame, message,
-                                      "Warning - " + m_appName ,
+        String title = "Warning";
+        if (frame == null)
+            title = title + " - " + m_appName;
+        JOptionPane.showMessageDialog(frame, message, title,
                                       JOptionPane.WARNING_MESSAGE);
     }
 
