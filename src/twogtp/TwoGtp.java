@@ -941,7 +941,7 @@ public class TwoGtp
         File file = getFile(m_gameIndex);
         OutputStream out = new FileOutputStream(file);
         new sgf.Writer(out, m_board, m_gameTree, file, "TwoGtp",
-                       Version.get(), 0, blackName, whiteName, gameComment);
+                       Version.get(), 0, gameComment);
     }
 
     private void saveResult(String resultBlack, String resultWhite,

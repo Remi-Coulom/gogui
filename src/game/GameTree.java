@@ -5,6 +5,9 @@
 
 package game;
 
+import java.text.*;
+import java.util.*;
+
 //-----------------------------------------------------------------------------
 
 /** Game tree. */
@@ -13,12 +16,14 @@ public class GameTree
     public GameTree()
     {
         m_gameInformation = new GameInformation();
+        setDate();
         m_root = new Node();
     }
 
     public GameTree(int boardSize)
     {
         m_gameInformation = new GameInformation();
+        setDate();
         m_root = new Node();
         m_gameInformation.m_boardSize = boardSize;
     }
@@ -64,6 +69,18 @@ public class GameTree
     private GameInformation m_gameInformation;
 
     private Node m_root;
+
+    private void setDate()
+    {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        DecimalFormat format = new DecimalFormat("00");
+        m_gameInformation.m_date =
+            Integer.toString(year) + "-" + format.format(month)
+            + "-" + format.format(day);
+    }
 }
 
 //-----------------------------------------------------------------------------

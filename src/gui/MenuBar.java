@@ -507,6 +507,7 @@ class MenuBar
     {
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
+        addMenuItem(menu, "Info...", KeyEvent.VK_I, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
@@ -517,7 +518,7 @@ class MenuBar
         m_itemComputerPlay = addMenuItem(menu, "Computer play", KeyEvent.VK_L,
                                          KeyEvent.VK_F5, 0, "play");
         m_itemInterrupt =
-            addMenuItem(menu, "Interrupt", KeyEvent.VK_I, KeyEvent.VK_ESCAPE,
+            addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
                         0, "interrupt");
         menu.addSeparator();
         m_itemBeginning =

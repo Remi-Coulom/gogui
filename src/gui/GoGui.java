@@ -183,6 +183,8 @@ class GoGui
             cbForward(1);
         else if (command.equals("forward-10"))
             cbForward(10);
+        else if (command.equals("game-info"))
+            cbGameInfo();
         else if (command.equals("goto"))
             cbGoto();
         else if (command.equals("gtp-shell"))
@@ -771,6 +773,24 @@ class GoGui
 
     private ToolBar m_toolBar;
 
+    private void addPlayerComputerToGameInfo(go.Color color)
+    {
+        if (m_commandThread == null)
+            return;
+        String name = m_name;
+        if (m_version != null && ! m_version.equals(""))
+            name = name +  ":" + m_version;
+        GameInformation gameInformation = m_gameTree.getGameInformation();
+        if (color == go.Color.BLACK
+            && (gameInformation.m_playerBlack == null
+                || gameInformation.m_playerBlack.trim().equals("")))
+            gameInformation.m_playerBlack = name;
+        if (color == go.Color.WHITE
+            && (gameInformation.m_playerWhite == null
+                || gameInformation.m_playerWhite.trim().equals("")))
+            gameInformation.m_playerWhite = name;
+    }
+
     private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
     {
         if (m_commandThread == null)
@@ -953,6 +973,11 @@ class GoGui
     {
         forward(n);
         boardChangedBegin(false);
+    }
+
+    private void cbGameInfo()
+    {
+        GameInfoDialog.show(this, m_gameTree.getGameInformation());
     }
 
     private void cbGoto()
@@ -1437,7 +1462,8 @@ class GoGui
 
     private boolean checkCurrentNodeExecuted()
     {
-        int numberAddStonesAndMoves = m_currentNode.getNumberAddStonesAndMoves();
+        int numberAddStonesAndMoves =
+            m_currentNode.getNumberAddStonesAndMoves();
         if (m_currentNodeExecuted != numberAddStonesAndMoves)
         {
             showError("Cannot go forward from partially executed game node.");
@@ -1540,6 +1566,7 @@ class GoGui
             m_timeControl.stopMove();
             String response = m_commandThread.getResponse();
             go.Color toMove = m_board.getToMove();
+            addPlayerComputerToGameInfo(toMove);
             if (response.toLowerCase().equals("resign"))
             {
                 if (! (m_computerBlack && m_computerWhite))
@@ -2037,21 +2064,10 @@ class GoGui
 
     private void save(File file) throws FileNotFoundException
     {
-        String playerBlack = null;
-        String playerWhite = null;
         String gameComment = null;
         if (m_commandThread != null)
-        {
-            String name = m_name;
-            if (m_version != null && ! m_version.equals(""))
-                name = name +  ":" + m_version;
-            if (m_computerBlack)
-                playerBlack = name;
-            if (m_computerWhite)
-                playerWhite = name;
             gameComment =
                 "Program command:\n" + m_commandThread.getProgramCommand();
-        }
         OutputStream out = new FileOutputStream(file);
         if (FileUtils.hasExtension(file, "tex"))
         {
@@ -2062,8 +2078,7 @@ class GoGui
         else
         {
             new sgf.Writer(out, m_board, m_gameTree, file, "GoGui",
-                           Version.get(), m_handicap, playerBlack, playerWhite,
-                           gameComment);
+                           Version.get(), m_handicap, gameComment);
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
         }
@@ -2261,7 +2276,7 @@ class GoGui
             showGtpError(e);
         }
     }
-
+    
     private static void setPrefsDefaults(Preferences prefs)
     {
         prefs.setBoolDefault("beep-after-move", true);

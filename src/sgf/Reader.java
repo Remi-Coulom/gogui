@@ -203,10 +203,12 @@ public class Reader
                 {
                 }
             }
+            else if (p.equals("BR"))
+                m_gameInformation.m_blackRank = v;
             else if (p.equals("C"))
-            {
                 node.setComment(v.trim());
-            }
+            else if (p.equals("DT"))
+                m_gameInformation.m_date = v;
             else if (p.equals("GM"))
             {
                 v = v.trim();
@@ -216,9 +218,7 @@ public class Reader
                     throw getError("Not a Go game.");
             }
             else if (p.equals("KM"))
-            {
                 m_gameInformation.m_komi = parseFloat(v);
-            }
             else if (p.equals("OB"))
             {
                 try
@@ -239,14 +239,14 @@ public class Reader
                 {
                 }
             }
+            else if (p.equals("PB"))
+                m_gameInformation.m_playerBlack = v;
+            else if (p.equals("PW"))
+                m_gameInformation.m_playerWhite = v;
             else if (p.equals("PL"))
-            {
                 node.setToMove(parseColor(v));
-            }
             else if (p.equals("RE"))
-            {
                 m_gameInformation.m_result = v;
-            }
             else if (p.equals("SZ"))
             {
                 if (! isRoot)
@@ -254,9 +254,7 @@ public class Reader
                 m_gameInformation.m_boardSize = parseInt(v);
             }
             else if (p.equals("W"))
-            {
                 node.setMove(new Move(parsePoint(v), Color.WHITE));
-            }
             else if (p.equals("WL"))
             {
                 try
@@ -267,8 +265,9 @@ public class Reader
                 {
                 }
             }
-            else if (! p.equals("FF") && ! p.equals("DT") && ! p.equals("RU")
-                     && ! p.equals("GM") && ! p.equals("GN")
+            else if (p.equals("WR"))
+                m_gameInformation.m_whiteRank = v;
+            else if (! p.equals("FF") && ! p.equals("RU") && ! p.equals("GN")
                      && ! p.equals("AP"))
                 node.addSgfProperty(p, v);
             return true;

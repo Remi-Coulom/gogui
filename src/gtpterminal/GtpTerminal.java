@@ -404,7 +404,7 @@ public class GtpTerminal
         {
             OutputStream out = new FileOutputStream(file);
             new sgf.Writer(out, m_board, m_gameTree, file, "GtpTerminal",
-                           Version.get(), 0, null, null, null);
+                           Version.get(), 0, null);
         }
         catch (FileNotFoundException e) 
         {

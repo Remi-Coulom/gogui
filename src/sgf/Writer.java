@@ -28,15 +28,20 @@ public class Writer
     /** Save game tree. */
     public Writer(OutputStream out, Board board, GameTree gameTree, File file,
                   String application, String version, int handicap,
-                  String playerBlack, String playerWhite, String gameComment)
+                  String gameComment)
     {        
         m_out = new PrintStream(out);
         m_board = board;
         m_out.println("(");
         GameInformation gameInformation = gameTree.getGameInformation();
         String result = gameInformation.m_result;
-        printHeader(file, application, version, handicap, playerBlack,
-                    playerWhite, gameComment, result);
+        String playerBlack = gameInformation.m_playerBlack;
+        String playerWhite = gameInformation.m_playerWhite;
+        String rankBlack = gameInformation.m_blackRank;
+        String rankWhite = gameInformation.m_whiteRank;
+        String date = gameInformation.m_date;
+        printHeader(file, application, version, handicap, date, playerBlack,
+                    playerWhite, rankBlack, rankWhite, gameComment, result);
         printToPlay(board.getToMove());
         printNodes(gameTree.getRoot());        
         m_out.println(")");
@@ -91,13 +96,6 @@ public class Writer
 
     private void printHeader(File file, String application, String version)
     {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        DecimalFormat format = new DecimalFormat("00");
-        String date = Integer.toString(year) + "-" + format.format(month) +
-            "-" + format.format(day);
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
@@ -115,12 +113,12 @@ public class Writer
             assert(rules == go.Board.RULES_CHINESE);
             m_out.println("RU[GOE]");
         }
-        m_out.println("DT[" + date + "]");
     }
 
     private void printHeader(File file, String application, String version,
-                             int handicap, String playerBlack,
-                             String playerWhite, String gameComment,
+                             int handicap, String date, String playerBlack,
+                             String playerWhite, String rankBlack,
+                             String rankWhite, String gameComment,
                              String result)
     {
         printHeader(file, application, version);
@@ -134,15 +132,21 @@ public class Writer
             m_out.println("PB[" + playerBlack + "]");
         if (playerWhite != null)
             m_out.println("PW[" + playerWhite + "]");
+        if (rankBlack != null)
+            m_out.println("BR[" + rankBlack + "]");
+        if (rankWhite != null)
+            m_out.println("WR[" + rankWhite + "]");
         if (gameComment != null)
         {
             DateFormat format =
                 DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                DateFormat.FULL);
-            Date date = Calendar.getInstance().getTime();
             m_out.println("GC[" + gameComment + "\nDate: " +
-                          format.format(date) + "]");
+                          format.format(Calendar.getInstance().getTime())
+                          + "]");
         }
+        if (date != null)
+            m_out.println("DT[" + date + "]");
     }
 
     private void printMoves()
