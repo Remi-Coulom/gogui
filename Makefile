@@ -75,7 +75,7 @@ JAVAOPT=-deprecation -sourcepath . -source 1.4
 
 all: $(JAR)
 
-gogui.jar: build/gogui/doc/index.html $(patsubst %, build/gogui/%, $(IMAGES)) $(shell cat build/files-gogui.txt)
+gogui.jar: build/gogui/doc/index.html $(patsubst %, build/gogui/%, $(IMAGES)) $(shell cat build/files-gogui.txt) build/gogui/config/analyze-commands
 
 gmptogtp.jar: $(shell cat build/files-gmptogtp.txt)
 
@@ -97,6 +97,10 @@ build/gogui/doc/index.html: doc/html/index.html
 
 build/gogui/images/%.png: images/%.png
 	mkdir -p build/gogui/images
+	cp $< $@
+
+build/gogui/config/analyze-commands: config/analyze-commands
+	mkdir -p build/gogui/config
 	cp $< $@
 
 %.jar: build/files-%.txt

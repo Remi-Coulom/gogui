@@ -8,6 +8,7 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -161,6 +162,8 @@ class AnalyzeCommand
         commands.clear();
         labels.clear();
         File file = getFile();
+        if (! file.exists())
+            copyDefaults(file);
         BufferedReader in = new BufferedReader(new FileReader(file));
         String line;
         int lineNumber = 0;
@@ -251,6 +254,28 @@ class AnalyzeCommand
     private double m_scale;
 
     private String m_stringArg;
+
+    private static void copyDefaults(File file)
+    {
+        String resource = "config/analyze-commands";
+        URL url = ClassLoader.getSystemClassLoader().getResource(resource);
+        if (url == null)
+            return;
+        try
+        {
+            InputStream in = url.openStream();
+            OutputStream out = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int n;
+            while ((n = in.read(buffer)) >= 0)
+                out.write(buffer, 0, n);
+            in.close();
+            out.close();
+        }
+        catch (Exception e)
+        {
+        }
+    }
 
     private static File getDir()
     {
