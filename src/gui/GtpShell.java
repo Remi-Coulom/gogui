@@ -188,8 +188,20 @@ public class GtpShell
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);        
         int fontSize = m_gtpShellText.getFont().getSize();
+
+        // There seems to be a problem with Sun's JDK (version 1.4)
+        // that sometimes garbage text is left if starting with an empty
+        // JTextPane and using JScrollpane.setPreferredSize or
+        // letting the scrollable track the viewport width.
+        // The garbage text disappears after resizing the dialog,
+        // so we use JDialog.setSize (see below) instead of
+        // JScrollpane.setPreferredSize
+
         //JViewport viewport = scrollPane.getViewport();
         //viewport.setBackground(m_gtpShellText.getBackground());
+        //scrollPane.setPreferredSize(new Dimension(fontSize * 51,
+        //fontSize * 53));
+
         contentPane.add(scrollPane, BorderLayout.CENTER);
         
         m_comboBox = new JComboBox();
