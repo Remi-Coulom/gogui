@@ -88,7 +88,11 @@ public class GtpDisplay
                 public void run()
                 {
                     if (m_frame != null)
-                        showStatus("Disconnected");
+                    {
+                        SimpleDialogs.showInfo(m_frame,
+                                               "GTP stream was closed");
+                        showStatus("GTP stream was closed");
+                    }
                 }
             }, error))
             System.err.println(error);
