@@ -17,7 +17,12 @@
    ]>
 <book>
   <title>GoGui Documentation</title>
-  <bookinfo><releaseinfo>Version &version;</releaseinfo></bookinfo>
+  <bookinfo>
+    <author>
+      <firstname>Markus</firstname><surname>Enzenberger</surname>
+    </author>
+    <releaseinfo>Version &version;</releaseinfo>
+  </bookinfo>
   
   &readme;
   &invocation;
@@ -28,10 +33,10 @@
   &gtpshell;
   &tools;
   <appendix>
-  <title>References</title>
-  &reference;
-  &reference-twogtp;
-  &reference-gmptogtp;
+    <title>References</title>
+    &reference;
+    &reference-twogtp;
+    &reference-gmptogtp;
   </appendix>
   &news;
   &gpl;
