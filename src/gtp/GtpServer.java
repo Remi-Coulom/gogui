@@ -163,6 +163,18 @@ class ReadThread extends Thread
 
 public abstract class GtpServer
 {
+    public static class ColorArgument
+    {
+        public Color m_color;
+    }
+
+    public static class ColorPointArgument
+    {
+        public Color m_color;
+
+        public Point m_point;
+    }
+
     public static class IntegerArgument
     {
         public int m_integer;
@@ -170,13 +182,6 @@ public abstract class GtpServer
 
     public static class PointArgument
     {
-        public Point m_point;
-    }
-
-    public static class ColorPointArgument
-    {
-        public Color m_color;
-
         public Point m_point;
     }
 
@@ -217,7 +222,35 @@ public abstract class GtpServer
         }
     }
 
-    /** Utility function for parsing an color and point argument.
+    /** Utility function for parsing a color argument.
+        @param cmdArray Command line split into words.
+        @param response Empty string buffer filled with GTP error message
+        if parsing fails.
+        @return Color argument or null if parsing fails.
+    */
+    public static ColorArgument parseColorArgument(String[] cmdArray,
+                                                   StringBuffer response)
+    {
+        if (cmdArray.length != 2)
+        {
+            response.append("Missing color argument");
+            return null;
+        }
+        ColorArgument argument = new ColorArgument();
+        String arg1 = cmdArray[1].toLowerCase();
+        if (arg1.equals("w") || arg1.equals("white"))
+            argument.m_color = Color.WHITE;
+        else if (arg1.equals("b") || arg1.equals("black"))
+            argument.m_color = Color.BLACK;
+        else
+        {
+            response.append("Invalid color argument");
+            return null;
+        }
+        return argument;
+    }
+
+    /** Utility function for parsing a color and point argument.
         @param cmdArray Command line split into words.
         @param response Empty string buffer filled with GTP error message
         if parsing fails.
