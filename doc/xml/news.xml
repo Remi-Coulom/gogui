@@ -18,6 +18,9 @@
 	    After setting up a position set last setup color as color to move.
 	  </listitem>
 	  <listitem>
+	    Show filename in title bar if game is loaded and not modified.
+	  </listitem>
+	  <listitem>
 	    Other small fixes and enhancements.
 	  </listitem>
 	</itemizedlist>

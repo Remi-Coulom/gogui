@@ -497,6 +497,8 @@ class GoGui
 
     private String m_gtpFile;
 
+    private String m_loadedFile;
+
     private String m_name = "";
 
     private String m_pid;
@@ -807,6 +809,7 @@ class GoGui
             m_prefs.setBoardSize(size);
             newGame(size, true);
             boardChanged();
+            fileModified();
         }
         catch (Gtp.Error e)
         {
@@ -1040,6 +1043,7 @@ class GoGui
             }
             computerNone();
             boardChanged();
+            fileModified();
         }
         catch (Gtp.Error e)
         {
@@ -1179,6 +1183,7 @@ class GoGui
             if (m.getPoint() == null && ! (m_computerBlack && m_computerWhite))
                 showInfo("The computer passed.");
             boardChanged();
+            fileModified();
         }
         catch (Gtp.Error e)
         {
@@ -1234,6 +1239,15 @@ class GoGui
             setBoardCursorDefault();
     }
 
+    private void fileModified()
+    {
+        if (m_loadedFile != null)
+        {
+            m_loadedFile = null;
+            setTitle();
+        }
+    }
+
     private void forward(int n)
     {
         try
@@ -1282,6 +1296,7 @@ class GoGui
                 m_lostOnTimeShown = true;
             }
             boardChanged();
+            fileModified();
         }
         catch (Gtp.Error e)
         {
@@ -1297,7 +1312,6 @@ class GoGui
             {
                 m_name = m_commandThread.sendCommand("name", 30000).trim();
                 m_gtpShell.setProgramName(m_name);
-                setTitle(m_name);
                 try
                 {
                     m_commandThread.queryProtocolVersion();
@@ -1321,8 +1335,7 @@ class GoGui
                 if (! m_gtpFile.equals(""))
                     sendGtpFile(new File(m_gtpFile));
             }
-            else
-                setTitle("GoGui");
+            setTitle();
             if (m_commandThread == null || m_computerNoneOption)
                 computerNone();
             else
@@ -1401,6 +1414,8 @@ class GoGui
                 m_board.undo();            
             if (move > 0)
                 forward(move);
+            m_loadedFile = file.toString();
+            setTitle();
             computerNone();
             boardChanged();
         }
@@ -1640,6 +1655,16 @@ class GoGui
         catch (Gtp.Error e)
         {
         }
+    }
+
+    private void setTitle()
+    {
+        if (m_loadedFile != null)
+            setTitle(m_loadedFile);
+        else if (! m_name.equals(""))
+            setTitle(m_name);
+        else
+            setTitle("GoGui");
     }
 
     private void setup(Move move) throws Gtp.Error
