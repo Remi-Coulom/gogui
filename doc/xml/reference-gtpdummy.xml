@@ -98,7 +98,28 @@ Indicate interrupt ability for GoGui.
 
 <varlistentry>
 <term>
-<userinput>sleep <arg><replaceable>seconds</replaceable></arg></userinput>
+<userinput>dummy_next_failue <arg><replaceable>response</replaceable></arg>
+</userinput>
+</term>
+<listitem>
+Let next command fail with <arg><replaceable>response</replaceable></arg>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<userinput>dummy_next_success <arg><replaceable>response</replaceable></arg>
+</userinput>
+</term>
+<listitem>
+Let next command succeed with <arg><replaceable>response</replaceable></arg>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<userinput>dummy_sleep <arg><replaceable>seconds</replaceable></arg>
+</userinput>
 </term>
 <listitem>
 Sleep for a number of seconds (default 20).

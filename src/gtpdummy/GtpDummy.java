@@ -33,10 +33,20 @@ public class GtpDummy
         String[] cmdArray = StringUtils.tokenize(cmdLine);
         String cmd = cmdArray[0];
         boolean status = true;
-        if (cmd.equals("black"))
+        if (m_nextResponseFixed)
+        {
+            status = m_nextStatus;
+            response.append(m_nextResponse);
+            m_nextResponseFixed = false;
+        }
+        else if (cmd.equals("black"))
             status = play(cmdArray, response);
         else if (cmd.equals("dummy_bwboard"))
             bwBoard(response);
+        else if (cmd.equals("dummy_next_failure"))
+            nextResponseFixed(cmd, cmdLine, false);
+        else if (cmd.equals("dummy_next_success"))
+            nextResponseFixed(cmd, cmdLine, true);
         else if (cmd.equals("echo"))
             echo(cmdLine, response);
         else if (cmd.equals("echo_err"))
@@ -53,7 +63,7 @@ public class GtpDummy
             response.append("GtpDummy");
         else if (cmd.equals("protocol_version"))
             response.append("1");
-        else if (cmd.equals("sleep"))
+        else if (cmd.equals("dummy_sleep"))
             status = sleep(cmdArray, response);
         else if (cmd.equals("quit"))
             ;
@@ -64,6 +74,9 @@ public class GtpDummy
         else if (cmd.equals("help"))
             response.append("black\n" +
                             "dummy_bwboard\n" +
+                            "dummy_next_success\n" +
+                            "dummy_next_failure\n" +
+                            "dummy_sleep\n" +
                             "echo\n" +
                             "echo_err\n" +
                             "genmove_black\n" +
@@ -74,7 +87,6 @@ public class GtpDummy
                             "name\n" +
                             "protocol_version\n" +
                             "quit\n" +
-                            "sleep\n" +
                             "version\n" +
                             "white\n");
         else
@@ -147,9 +159,15 @@ public class GtpDummy
         }
     }
     
+    private boolean m_nextResponseFixed;
+
+    private boolean m_nextStatus;
+
     private int m_size;
 
     private boolean[][] m_alreadyPlayed;
+
+    private String m_nextResponse;
 
     private Thread m_thread;
 
@@ -237,6 +255,14 @@ public class GtpDummy
     {
         m_alreadyPlayed = new boolean[size][size];
         m_size = size;
+    }
+
+    private void nextResponseFixed(String cmd, String cmdLine,
+                                   boolean nextStatus)
+    {
+        m_nextResponseFixed = true;
+        m_nextStatus = nextStatus;
+        m_nextResponse = cmdLine.substring(cmd.length()).trim();
     }
 
     private boolean play(String[] cmdArray, StringBuffer response)
