@@ -23,16 +23,9 @@ import go.Point;
 
 //----------------------------------------------------------------------------
 
+/** Write to SGF file. */
 public class Writer
 {
-    public static class Error extends Exception
-    {
-        public Error(String s)
-        {
-            super(s);
-        }
-    }    
-
     /** Save game tree. */
     public Writer(OutputStream out, GameTree gameTree, File file,
                   String application, String version)
