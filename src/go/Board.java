@@ -327,6 +327,8 @@ public class Board
         m_capturedB = 0;
         m_capturedW = 0;
         m_toMove = Color.BLACK;
+        m_setupStonesBlack.clear();
+        m_setupStonesWhite.clear();
     }
 
     public void play(Move m)
