@@ -40,7 +40,6 @@ Don't use more memory than there is real memory on the machine,
 because using swap space will make the program unusable slow.
 </para>
 
-<section>
 <title>Wrong line numbers in SGF error messages</title>
 <para>
 This is a known problem on Unix and due to a bug in the Java class
