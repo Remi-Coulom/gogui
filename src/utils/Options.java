@@ -24,7 +24,7 @@ public class Options
         {
             String s = args[n];
             ++n;
-            if (s.length() > 0 && s.charAt(0) == '-')
+            if (isOptionKey(s))
             {
                 String spec = getSpec(s.substring(1));
                 if (spec.length() > 0
@@ -33,6 +33,8 @@ public class Options
                     if (n >= args.length)
                         throw new Exception("Option " + s + " needs value.");
                     String value = args[n];
+                    if (isOptionKey(value))
+                        throw new Exception("Option " + s + " needs value.");
                     ++n;
                     m_map.put(spec, value);
                 }
@@ -136,6 +138,7 @@ public class Options
     }
 
     private Vector m_args = new Vector();
+
     private Map m_map = new TreeMap();
 
     private String getSpec(String option) throws Exception
@@ -153,6 +156,11 @@ public class Options
         if (m_map.containsKey(option))
             return (String)m_map.get(option);
         return (String)m_map.get(option + ":");
+    }
+
+    private boolean isOptionKey(String s)
+    {
+        return (s.length() > 0 && s.charAt(0) == '-');
     }
 
     private boolean isValidOption(String option)
