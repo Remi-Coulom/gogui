@@ -49,7 +49,7 @@ class ReadThread
         m_log = log;
     }
 
-    public boolean endOfFile()
+    public synchronized boolean endOfFile()
     {
         return m_endOfFile;
     }
@@ -85,7 +85,10 @@ class ReadThread
                 String line = m_in.readLine();
                 if (line == null)
                 {
-                    m_endOfFile = true;
+                    synchronized (this)
+                    {
+                        m_endOfFile = true;
+                    }
                 }
                 else
                 {
