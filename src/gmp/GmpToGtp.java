@@ -75,6 +75,7 @@ public class GmpToGtp
         {
             String options[] = {
                 "color:",
+                "device:",
                 "help",
                 "size:",
                 "verbose"
@@ -86,6 +87,7 @@ public class GmpToGtp
                     "Usage: java -cp gogui.jar gmp.GmpToGtp [options]\n" +
                     "\n" +
                     "-color   color (black|white)\n" +
+                    "-device  serial device file\n" +
                     "-help    display this help and exit\n" +
                     "-size    board size\n" +
                     "-verbose print logging messages";
@@ -99,6 +101,7 @@ public class GmpToGtp
                 if (! color.equals("black") && ! color.equals("white"))
                     throw new Exception("invalid color");
             }
+            String device = opt.getString("device", "");
             int size = opt.getInteger("size", 19);
             if (size < 1 || size > 22)
                 throw new Exception("invalid size");
@@ -112,15 +115,29 @@ public class GmpToGtp
                 System.err.println("Only one program argument allowed.");
                 System.exit(-1);
             }
-            else
+            else if (device.equals(""))
             {
                 System.err.println("Missing program argument.");
                 System.exit(-1);
             }
-            Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec(StringUtils.getCmdArray(program));
-            Thread stdErrThread = new StdErrThread(process);
-            stdErrThread.start();
+            InputStream in;
+            OutputStream out;
+            Process process = null;
+            if (! device.equals(""))
+            {
+                File file = new File(device);
+                in = new FileInputStream(file);
+                out = new FileOutputStream(((FileInputStream)in).getFD());
+            }
+            else
+            {
+                Runtime runtime = Runtime.getRuntime();
+                process = runtime.exec(StringUtils.getCmdArray(program));
+                Thread stdErrThread = new StdErrThread(process);
+                stdErrThread.start();
+                in = process.getInputStream();
+                out = process.getOutputStream();
+            }
             int colorIndex = 0;
             if (color != null)
             {
@@ -129,12 +146,14 @@ public class GmpToGtp
                 else if (color.equals("white"))
                     colorIndex =  2;
             }
-            GmpToGtp gmpToGtp = new GmpToGtp(process.getInputStream(),
-                                             process.getOutputStream(),
-                                             verbose, size, colorIndex);
+            GmpToGtp gmpToGtp = new GmpToGtp(in, out, verbose, size,
+                                             colorIndex);
             gmpToGtp.mainLoop();
-            process.destroy();
-            process.waitFor();
+            if (process != null)
+            {
+                process.destroy();
+                process.waitFor();
+            }
         }
         catch (Throwable t)
         {
