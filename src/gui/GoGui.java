@@ -62,7 +62,6 @@ class GoGui
         infoPanel.add(createStatusBar());
 
         m_board = new go.Board(m_boardSize);
-        System.err.println("XXX set komi: " + prefs.getKomi());
         m_board.setKomi(prefs.getKomi());
         m_guiBoard = new Board(m_board);
         m_guiBoard.setListener(this);
@@ -779,7 +778,9 @@ class GoGui
                                         JOptionPane.PLAIN_MESSAGE,
                                         null, null,
                                         Float.toString(m_board.getKomi()));
-        float komi =  Float.parseFloat((String)obj);
+        if (obj == null)
+            return;
+        float komi = Float.parseFloat((String)obj);
         setKomi(komi);
         m_prefs.setKomi(komi);
     }
