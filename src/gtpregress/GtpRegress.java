@@ -26,7 +26,6 @@ import gtp.Gtp;
 import gtp.GtpError;
 import utils.FileUtils;
 import utils.StringUtils;
-import version.Version;
 
 //----------------------------------------------------------------------------
 

@@ -44,7 +44,6 @@ import javax.swing.Scrollable;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import game.GameInformation;
 import game.GameTree;
 import game.Node;
 import game.NodeUtils;

@@ -18,7 +18,6 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Calendar;

@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import go.Point;
 import gtp.GtpServer;
-import utils.Options;
 import utils.StringUtils;
 import version.Version;
 

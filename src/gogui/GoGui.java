@@ -45,7 +45,6 @@ import game.GameInformation;
 import game.GameTree;
 import game.Node;
 import game.NodeUtils;
-import go.Point;
 import go.Move;
 import gtp.Gtp;
 import gtp.GtpError;

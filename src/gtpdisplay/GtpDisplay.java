@@ -23,9 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import go.Color;
 import go.Move;
-import go.Point;
 import gtp.Gtp;
 import gtp.GtpError;
 import gtp.GtpServer;
@@ -35,7 +33,6 @@ import utils.GuiUtils;
 import utils.Platform;
 import utils.SquareLayout;
 import utils.StringUtils;
-import version.Version;
 
 //----------------------------------------------------------------------------
 

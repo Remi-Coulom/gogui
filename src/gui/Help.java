@@ -35,7 +35,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import utils.GuiUtils;
 import utils.Platform;
-import utils.StreamCopy;
 
 //----------------------------------------------------------------------------
 

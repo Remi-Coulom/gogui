@@ -24,7 +24,6 @@ import java.awt.event.KeyListener;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.net.URL;
 import java.util.Vector;
 import javax.swing.Box;
@@ -33,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import go.Move;
-import go.Point;
 import utils.GuiUtils;
 
 //----------------------------------------------------------------------------

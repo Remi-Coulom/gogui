@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.Vector;
 import go.Color;
-import go.Point;
 import go.Move;
 import utils.StringUtils;
 import utils.MessageQueue;
