@@ -1884,7 +1884,15 @@ class GoGui
                 m_guiBoard.updateFromGoBoard(point);
                 if (m_showLastMove)
                     m_guiBoard.markLastMove(move.getPoint());
+                // Paint point and some neighbors (because of the shadows)
+                // immediately to pretend better responsiveness
                 m_guiBoard.paintImmediately(point);
+                int x = point.getX();
+                int y = point.getY();
+                if (x < m_boardSize - 1)
+                    m_guiBoard.paintImmediately(m_board.getPoint(x + 1, y));
+                if (y < m_boardSize - 1)
+                    m_guiBoard.paintImmediately(m_board.getPoint(x, y + 1));
             }
             m_timeControl.stopMove();
             go.Color color = move.getColor();
