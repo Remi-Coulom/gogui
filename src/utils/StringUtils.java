@@ -88,29 +88,6 @@ public class StringUtils
         return result;
     }
 
-    public static String replace(String s, String oldStr, String newStr)
-    {
-        StringBuffer buffer = new StringBuffer(s);
-        replace(buffer, oldStr, newStr);
-        return new String(buffer);
-    }
-
-    public static void replace(StringBuffer buffer, String oldStr,
-                               String newStr)
-    {
-        int newLen = newStr.length();
-        int oldLen = oldStr.length();
-        int idx = 0;
-        while (true)
-        {
-            int i = buffer.toString().indexOf(oldStr, idx);
-            if (i < 0)
-                break;
-            buffer.replace(i, i + oldLen, newStr);
-            idx += newLen;
-        }
-    }
-
     public static String[] split(String s, char separator)
     {
         int count = 1;

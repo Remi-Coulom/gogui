@@ -636,9 +636,9 @@ public class TwoGtp
     private String inverseResult(String result)
     {
         if (result.indexOf("B") >= 0)
-            return StringUtils.replace(result, "B", "W");
+            return result.replaceAll("B", "W");
         else if (result.indexOf("W") >= 0)
-            return StringUtils.replace(result, "W", "B");
+            return result.replaceAll("W", "B");
         else
             return result;
     }
@@ -691,8 +691,7 @@ public class TwoGtp
                 response.append(": ");
             response.append(response2);
         }
-        if (isMultiLine)
-            StringUtils.replace(response, "\n\n", "\n");
+        assert response.indexOf("\n\n") < 0;
     }
 
     private boolean newGame(int size, StringBuffer response)
