@@ -349,6 +349,7 @@ class GoGui
         boolean showInfoPanel = m_menuBar.getShowInfoPanel();
         if (showInfoPanel == m_showInfoPanel)
             return;
+        m_prefs.setBool("show-info-panel", showInfoPanel);
         m_showInfoPanel = showInfoPanel;
         Dimension size = new Dimension();
         size.height = getHeight();
@@ -379,6 +380,7 @@ class GoGui
         boolean showToolbar = m_menuBar.getShowToolbar();
         if (showToolbar == m_showToolbar)
             return;
+        m_prefs.setBool("show-toolbar", showToolbar);
         m_showToolbar = showToolbar;
         Dimension size = new Dimension();
         size.width = getWidth();
@@ -1961,6 +1963,16 @@ class GoGui
         }
         updateGameInfo(true);
         registerSpecialMacHandler();
+        if (! m_prefs.getBool("show-info-panel"))
+        {
+            m_menuBar.setShowInfoPanel(false);
+            cbShowInfoPanel();
+        }
+        if (! m_prefs.getBool("show-toolbar"))
+        {
+            m_menuBar.setShowToolbar(false);
+            cbShowToolbar();
+        }
         setVisible(true);
         m_guiBoard.setFocus();
         setTitleFromProgram();
@@ -2378,7 +2390,9 @@ class GoGui
         prefs.setBoolDefault("show-gtpshell", false);
         prefs.setBoolDefault("show-gametree", false);
         prefs.setBoolDefault("show-cursor", true);
+        prefs.setBoolDefault("show-info-panel", true);
         prefs.setBoolDefault("show-last-move", false);
+        prefs.setBoolDefault("show-toolbar", true);
         prefs.setBoolDefault("show-variations", false);
     }
 

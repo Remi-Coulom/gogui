@@ -440,7 +440,6 @@ Show cursor on board for allowing to click on fields with the
 <listitem>
 <para>
 Show panel on the right side of the board containing game information.
-GoGui always starts up with the info panel enabled.
 </para>
 </listitem>
 </varlistentry>
@@ -459,7 +458,6 @@ Mark the last move with a red circle.
 <listitem>
 <para>
 Show toolbar.
-GoGui always starts up with the toolbar enabled.
 </para>
 </listitem>
 </varlistentry>
