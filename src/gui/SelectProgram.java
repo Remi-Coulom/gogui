@@ -49,8 +49,11 @@ class SelectProgram
 
     public static void addHistory(String program)
     {
+        String p = program.trim();
+        if (p.equals(""))
+            return;
         Vector history = loadHistory();
-        history.add(0, program);
+        history.add(0, p);
         saveHistory(history);
     }
 
