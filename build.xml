@@ -299,6 +299,7 @@ installation directory.
  gtp/*.class
  gtpterminal/*.class
  sgf/*.class
+ utils/FileUtils.class
  utils/Options.class
  utils/StringUtils.class
  version/Version.class
