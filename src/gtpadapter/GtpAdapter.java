@@ -9,8 +9,10 @@ import java.io.*;
 import java.net.*;
 import java.text.*;
 import java.util.*;
+import game.*;
 import go.*;
 import gtp.*;
+import sgf.*;
 import utils.*;
 import version.*;
 
@@ -82,6 +84,8 @@ public class GtpAdapter
             status = cmdListCommands(response);
         else if (cmd.equals("list_commands"))
             status = cmdListCommands(response);
+        else if (cmd.equals("loadsgf"))
+            status = cmdLoadsgf(cmdArray, response);
         else if (cmd.equals("name") && m_name != null)
             status = cmdName(response);
         else if (cmd.equals("place_free_handicap") && m_emuHandicap)
@@ -414,6 +418,73 @@ public class GtpAdapter
         return true;
     }
 
+    private boolean cmdLoadsgf(String[] cmdArray, StringBuffer response)
+    {
+        if (cmdArray.length < 2)
+        {
+            response.append("Need filename argument");
+            return false;
+        }
+        String filename = cmdArray[1];
+        String command = "loadsgf " + filename;
+        int maxMove = -1;
+        if (cmdArray.length > 2)
+        {
+            try
+            {
+                maxMove = Integer.parseInt(cmdArray[2]);
+                command = command + " " + maxMove;
+            }
+            catch (NumberFormatException e)
+            {
+                response.append("Invalid move number argument");
+                return false;
+            }
+        }
+        if (! send(command, response))
+            return false;
+        try
+        {
+            java.io.Reader fileReader = new FileReader(new File(filename));
+            sgf.Reader reader = new sgf.Reader(fileReader, filename);
+            GameTree gameTree = reader.getGameTree();
+            m_boardSize = gameTree.getGameInformation().m_boardSize;
+            m_board = new Board(m_boardSize);
+            Node node = gameTree.getRoot();
+            int moveNumber = 0;
+            while (node != null)
+            {
+                if (node.getMove() != null)
+                {
+                    ++moveNumber;
+                    if (maxMove >= 0 && moveNumber >= maxMove)
+                        break;
+                }
+                Vector moves = node.getAllAsMoves();
+                for (int i = 0; i < moves.size(); ++i)
+                {
+                    Move move = (Move)moves.get(i);
+                    m_board.play(move);
+                }
+                Color toMove = node.getToMove();
+                if (toMove != Color.EMPTY)
+                    m_board.setToMove(toMove);
+                node = node.getChild();
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            response.append("File not found");
+            return false;
+        }
+        catch (sgf.Reader.Error e)
+        {
+            response.append("Could not read file");
+            return false;
+        }
+        return true;
+    }
+
     private boolean cmdName(StringBuffer response)
     {
         assert(m_name != null);
@@ -594,7 +665,7 @@ public class GtpAdapter
 
     private void sendGtpFile(String filename)
     {        
-        Reader reader;
+        java.io.Reader reader;
         try
         {
             reader = new FileReader(new File(filename));
