@@ -16,6 +16,11 @@
 New wildcard %o for analyze commands.
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Option -computer-both and -computer-black will automatically start the game.
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
