@@ -598,6 +598,7 @@ class GoGui
                     String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
                     showColorBoard(board);
+                    m_guiBoard.repaint();
                 }
                 break;
             case Analyze.DOUBLEBOARD:
@@ -605,12 +606,14 @@ class GoGui
                     double board[][] = Gtp.parseDoubleBoard(response, title,
                                                             m_boardSize);
                     showDoubleBoard(board, m_analyzeCommand.getScale());
+                    m_guiBoard.repaint();
                 }
                 break;
             case Analyze.POINTLIST:
                 {
                     go.Point pointList[] = Gtp.parsePointList(response);
                     showPointList(pointList);
+                    m_guiBoard.repaint();
                 }
                 break;
             case Analyze.STRINGBOARD:
@@ -618,6 +621,7 @@ class GoGui
                     String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
                     showStringBoard(board);
+                    m_guiBoard.repaint();
                 }
                 break;
             }
@@ -1624,6 +1628,7 @@ class GoGui
             return;
         clearStatus();
         m_guiBoard.clearAll();
+        m_guiBoard.repaint();
         m_boardNeedsReset = false;
     }
     
