@@ -228,8 +228,7 @@ public class Analyze
             prefix = filename.substring(0, filename.length() - 5);
         }
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        NumberFormat format = NumberFormat.getInstance(new Locale("C"));
-        format.setMaximumFractionDigits(1);
+        NumberFormat format = StringUtils.getNumberFormat(1);
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + m_black + " - " + m_white + "</title>\n" +
@@ -366,10 +365,8 @@ public class Analyze
     private void writeData(File file) throws Exception
     {
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        NumberFormat format1 = NumberFormat.getInstance(new Locale("C"));
-        format1.setMaximumFractionDigits(1);
-        NumberFormat format2 = NumberFormat.getInstance(new Locale("C"));
-        format2.setMaximumFractionDigits(2);
+        NumberFormat format1 = StringUtils.getNumberFormat(1);
+        NumberFormat format2 = StringUtils.getNumberFormat(2);
         out.print("# Games\tErr\tDup\tUsed\tResB\tErrResB\tWinB\tErrWinB\t"
                   + "UnknB\tResB\tErrResB\tWinB\tErrWinB\tUnknB\n" +
                   m_games + "\t" + m_errors + "\t" + m_duplicates + "\t"

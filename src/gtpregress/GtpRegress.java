@@ -760,8 +760,7 @@ class GtpRegress
                           + "\">" + file + "</a></td>");
         }
         double time = ((double)summary.m_timeMillis) / 1000F;
-        NumberFormat format = NumberFormat.getInstance(new Locale("C"));
-        format.setMaximumFractionDigits(1);
+        NumberFormat format = StringUtils.getNumberFormat(1);
         out.print("<td>" + summary.m_numberTests + "</td>\n" +
                   "<td bgcolor=\"#"
                   + (summary.m_unexpectedFails > 0 ? "ff0000" : "white")

@@ -863,8 +863,7 @@ public class TwoGtp
                         "Err\tErrMsg");
             out.close();
         }
-        NumberFormat format = NumberFormat.getInstance(new Locale("C"));
-        format.setMaximumFractionDigits(1);
+        NumberFormat format = StringUtils.getNumberFormat(1);
         FileOutputStream fileOutputStream = new FileOutputStream(file, true);
         PrintStream out = new PrintStream(fileOutputStream);
         out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t" +

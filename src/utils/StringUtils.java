@@ -5,6 +5,7 @@
 
 package utils;
 
+import java.text.*;
 import java.util.*;
 
 //-----------------------------------------------------------------------------
@@ -44,6 +45,14 @@ public class StringUtils
         StringBuffer buffer = new StringBuffer(title);
         buffer.setCharAt(0, Character.toUpperCase(c));
         return buffer.toString();
+    }    
+
+    public static NumberFormat getNumberFormat(int maximumFractionDigits)
+    {
+        NumberFormat format = NumberFormat.getInstance(new Locale("C"));
+        format.setMaximumFractionDigits(maximumFractionDigits);
+        format.setGroupingUsed(false);
+        return format;
     }
 
     /** Split string into words.
