@@ -157,7 +157,7 @@ public class Writer
                 }
                 else
                     m_out.print(" % Pass");
-                m_out.println(" % " + (i + 1));
+                m_out.println(" % " + (blackToMove ? "B " : "W ") + (i + 1));
                 continue;
             }
             else if (isColorUnexpected)
@@ -167,7 +167,7 @@ public class Writer
             }
             m_out.print("\\move");
             printCoordinates(point);
-            m_out.println(" % " + (i + 1));
+            m_out.println(" % " + (blackToMove ? "B " : "W ") + (i + 1));
             firstMoveAtPoint[point.getX()][point.getY()] = i + 1;
             blackToMove = ! blackToMove;
         }
