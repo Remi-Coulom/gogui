@@ -3,6 +3,8 @@
 // $Source$
 //-----------------------------------------------------------------------------
 
+package sgftotex;
+
 import java.io.*;
 import java.util.*;
 import go.*;

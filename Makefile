@@ -30,7 +30,9 @@ PACKAGES= \
   gtpregress \
   gtpserver \
   gui \
+  netgtp \
   sgf \
+  sgftotex \
   utils \
   version
 
