@@ -399,6 +399,7 @@ public class Board
     {
         Score s = new Score();
         s.m_rules = m_rules;        
+        s.m_komi = getKomi();        
         s.m_capturedBlack = m_capturedB;
         s.m_capturedWhite = m_capturedW;
         int areaDiff = 0;

@@ -952,25 +952,8 @@ class GoGui
     private void cbScoreDone()
     {
         m_score = m_board.scoreGet();
-        int black = m_score.m_territoryBlack;
-        int white = m_score.m_territoryWhite;
         clearStatus();
-        String rules =
-            (m_score.m_rules == go.Board.RULES_JAPANESE ?
-             "Japanese" : "Chinese");
-        showInfo("Territory Black: " + black + "\n" +
-                 "Territory White: " + white + "\n" +
-                 "Area Black: " + m_score.m_areaBlack + "\n" +
-                 "Area White: " + m_score.m_areaWhite + "\n" +
-                 "Captured Black: " + m_score.m_capturedBlack + "\n" +
-                 "Captured Black: " + m_score.m_capturedWhite + "\n" +
-                 "Komi: " + m_board.getKomi() + "\n" +
-                 "Result Chinese: " + m_score.m_resultChinese + "\n" +
-                 "Result Japanese: " + m_score.m_resultJapanese + "\n" +
-                 "Rules: " + rules + "\n" +
-                 "\n" +
-                 "Game result:\n" + 
-                 m_score.formatResult());
+        showInfo(m_score.formatDetailedResult());
         m_guiBoard.clearAll();
         m_scoreMode = false;
         setJMenuBar(m_menuBars.getNormalMenu());

@@ -17,6 +17,8 @@ public class Score
 
     public int m_capturedWhite;
 
+    public float m_komi;
+
     public float m_result;
 
     public float m_resultChinese;
@@ -37,6 +39,25 @@ public class Score
             return "White wins by " + (-m_result);
         else
             return "Even";
+    }
+
+    public String formatDetailedResult()
+    {
+        String rules =
+            (m_rules == go.Board.RULES_JAPANESE ? "Japanese" : "Chinese");
+        return
+            "Territory Black: " + m_territoryBlack + "\n" +
+            "Territory White: " + m_territoryWhite + "\n" +
+            "Area Black: " + m_areaBlack + "\n" +
+            "Area White: " + m_areaWhite + "\n" +
+            "Captured Black: " + m_capturedBlack + "\n" +
+            "Captured Black: " + m_capturedWhite + "\n" +
+            "Komi: " + m_komi + "\n" +
+            "Result Chinese: " + m_resultChinese + "\n" +
+            "Result Japanese: " + m_resultJapanese + "\n" +
+            "Rules: " + rules + "\n" +
+            "\n" +
+            "Game result:\n" + formatResult();
     }
 }
 
