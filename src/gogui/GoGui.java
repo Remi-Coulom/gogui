@@ -1567,7 +1567,8 @@ class GoGui
     private boolean checkSaveGame()
     {
         int result =
-            JOptionPane.showConfirmDialog(this, "Save game?", "Question",
+            JOptionPane.showConfirmDialog(this, "Save current game?",
+                                          "Question",
                                           JOptionPane.YES_NO_CANCEL_OPTION);
         switch (result)
         {
