@@ -111,7 +111,7 @@ class MenuBar
     {
         enableAll();
         m_itemInterrupt.setEnabled(false);
-        m_itemSetup.setState(false);
+        m_itemSetup.setSelected(false);
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
         if (m_isComputerDisabled)
