@@ -31,8 +31,8 @@ public class Comment
         m_textPane = new JTextPane();
         StyledDocument doc = m_textPane.getStyledDocument();
         StyleContext context = StyleContext.getDefaultStyleContext();
-        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
-        Style styleMarked = doc.addStyle("marked", def);
+        m_defaultStyle = context.getStyle(StyleContext.DEFAULT_STYLE);
+        Style styleMarked = doc.addStyle("marked", m_defaultStyle);
         StyleConstants.setBackground(styleMarked,
                                      java.awt.Color.decode("#38d878"));
         StyleConstants.setForeground(styleMarked, java.awt.Color.white);
@@ -85,12 +85,14 @@ public class Comment
                 int start = matcher.start();
                 int end = matcher.end();
                 Style style = doc.getStyle("marked");
-                doc.setCharacterAttributes(start, end - start, style, true);
                 if (firstMatch)
                 {
+                    doc.setCharacterAttributes(0, doc.getLength(),
+                                               m_defaultStyle, true);
                     m_textPane.setCaretPosition(start);
                     firstMatch = false;
                 }
+                doc.setCharacterAttributes(start, end - start, style, true);
             }
         }
         catch (BadLocationException e)
@@ -110,13 +112,11 @@ public class Comment
         String text = node.getComment();
         if (text == null)
             text = "";
-        StyledDocument doc = m_textPane.getStyledDocument();
-        StyleContext context = StyleContext.getDefaultStyleContext();
-        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
         // setText() generates a remove and insert event, and
         // we don't want to notify the listener about that yet.
         m_duringSetText = true;
-        doc.setCharacterAttributes(0, doc.getLength(), def, true);
+        StyledDocument doc = m_textPane.getStyledDocument();
+        doc.setCharacterAttributes(0, doc.getLength(), m_defaultStyle, true);
         m_textPane.setText(text);
         m_textPane.setCaretPosition(0);
         m_duringSetText = false;
@@ -130,6 +130,8 @@ public class Comment
     private Listener m_listener;
 
     private Node m_node;
+
+    private Style m_defaultStyle;
 
     private void copyContentToNode()
     {
