@@ -301,6 +301,12 @@ public class Board
         graphics.setPaintMode();
     }
 
+    public void paintImmediately(go.Point point)
+    {
+        Field field = getField(point);
+        field.paintImmediately(field.getVisibleRect());
+    }
+
     public int print(Graphics g, PageFormat format, int page)
         throws PrinterException
     {
@@ -547,18 +553,20 @@ public class Board
     public void updateFromGoBoard()
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            go.Point point = m_board.getPoint(i);
-            Field field = getField(point);
-            go.Color color = m_board.getColor(point);
-            go.Color oldColor = field.getColor();
-            if (color != oldColor)
-            {
-                setColor(point, color);
-                field.repaint();
-            }
-        }
+            updateFromGoBoard(m_board.getPoint(i));
         drawLastMove();
+    }
+
+    public void updateFromGoBoard(go.Point point)
+    {
+        Field field = getField(point);
+        go.Color color = m_board.getColor(point);
+        go.Color oldColor = field.getColor();
+        if (color != oldColor)
+        {
+            setColor(point, color);
+            field.repaint();
+        }
     }
 
     private boolean m_needsReset;

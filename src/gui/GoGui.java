@@ -1786,9 +1786,9 @@ class GoGui
     {
         try
         {
-            go.Point p = move.getPoint();
-            if (p != null && m_board.getColor(p) != go.Color.EMPTY)
-                    return;
+            go.Point point = move.getPoint();
+            if (point != null && m_board.getColor(point) != go.Color.EMPTY)
+                return;
             try
             {
                 setFastUpdate(true);
@@ -1798,6 +1798,11 @@ class GoGui
             finally
             {
                 setFastUpdate(false);
+            }
+            if (point != null)
+            {
+                m_guiBoard.updateFromGoBoard(point);
+                m_guiBoard.paintImmediately(point);
             }
             m_timeControl.stopMove();
             go.Color color = move.getColor();
