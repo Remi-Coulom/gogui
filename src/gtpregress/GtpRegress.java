@@ -178,11 +178,11 @@ class GtpRegress
         public double m_cpuTime;
     }
 
-    private boolean m_lastCommandHadId;
-
     private boolean m_lastError;
 
     private boolean m_lastTestFailed;
+
+    private int m_lastCommandId;
 
     private int m_lastId;
 
@@ -316,24 +316,24 @@ class GtpRegress
 
     private synchronized void handleLastResponse()
     {
-        if (m_lastCommandHadId)
+        if (m_lastCommandId >= 0)
         {
             boolean fail = false;
             if (m_lastError)
             {
                 printOutLine("fail", m_lastFullResponse);
                 if (m_lastResponse.equals(""))
-                    System.out.println(Integer.toString(m_lastId)
+                    System.out.println(Integer.toString(m_lastCommandId)
                                        + " unexpected FAIL");
                 else
-                    System.out.println(Integer.toString(m_lastId)
+                    System.out.println(Integer.toString(m_lastCommandId)
                                        + " unexpected FAIL: '" + m_lastResponse
                                        + "'");
                 fail = true;
             }
             else
                 printOutLine("test", m_lastFullResponse);
-            m_tests.add(new Test(m_lastId, m_lastCommand, fail, false,
+            m_tests.add(new Test(m_lastCommandId, m_lastCommand, fail, false,
                                  "", m_lastResponse, m_lastSgf,
                                  m_lastSgfMove));
             m_lastTestFailed = fail;
@@ -382,20 +382,17 @@ class GtpRegress
         else
         {
             line = line.replaceAll("\\t", " ");
-            m_lastId = getId(line);
-            if (m_lastId < 0)
-            {
+            m_lastCommandId = getId(line);
+            if (m_lastCommandId < 0)
                 m_lastCommand = line;
-                m_lastCommandHadId = false;
-            }
             else
             {
                 int index = line.indexOf(" ");
                 m_lastCommand = line.substring(index + 1);
-                m_lastCommandHadId = true;
+                m_lastId = m_lastCommandId;
             }
-            printOutLine(m_lastCommandHadId ? "test" : "command", line,
-                         m_lastId);
+            printOutLine(m_lastCommandId >= 0 ? "test" : "command", line,
+                         m_lastCommandId);
             checkLastSgf(line);
             m_lastError = false;
             assert(m_lastFullResponse == null);
@@ -463,16 +460,16 @@ class GtpRegress
             style = "test";
         printOutLine(style, m_lastFullResponse);
         if (fail && ! expectedFail)
-            System.out.println(Integer.toString(m_lastId)
+            System.out.println(Integer.toString(m_lastCommandId)
                                + " unexpected FAIL: Correct '"
                                + expectedResponse + "', got '" + response
                                + "'");
         else if (! fail && expectedFail)
-            System.out.println(Integer.toString(m_lastId)
+            System.out.println(Integer.toString(m_lastCommandId)
                                + " unexpected PASS!");
-        m_tests.add(new Test(m_lastId, m_lastCommand, fail, expectedFail,
-                             expectedResponse, response, m_lastSgf,
-                             m_lastSgfMove));
+        m_tests.add(new Test(m_lastCommandId, m_lastCommand, fail,
+                             expectedFail, expectedResponse, response,
+                             m_lastSgf, m_lastSgfMove));
     }
 
     private void initOutFile()
@@ -537,8 +534,8 @@ class GtpRegress
             }
             FileOutputStream outputStream = new FileOutputStream(file, true);
             PrintStream out = new PrintStream(outputStream);
-            out.println(m_lastId + " " +  (m_lastTestFailed ? "1" : "0") + " "
-                        + m_lastResponse);
+            out.println(m_lastId + " " +  (m_lastTestFailed ? "1" : "0")
+                        + " " + m_lastResponse);
             out.close();
         }
         catch (FileNotFoundException e)
