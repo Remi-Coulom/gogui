@@ -14,6 +14,7 @@ import java.net.*;
 import java.util.*;
 import javax.swing.*;
 import go.*;
+import utils.GuiUtils;
 
 //-----------------------------------------------------------------------------
 
@@ -615,15 +616,7 @@ public class Board
 
     private void setPreferredFieldSize()
     {
-        int size;
-        Font font = UIManager.getFont("Label.font");        
-        if (font != null)
-            size = (int)((double)font.getSize() * 2.5);
-        else
-        {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            size = screenSize.height / 30;
-        }
+        int size = (int)((double)GuiUtils.getDefaultMonoFontSize() * 2.5);
         if (size % 2 == 0)
             ++size;
         m_preferredFieldSize = new Dimension(size, size);

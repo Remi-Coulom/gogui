@@ -26,9 +26,9 @@ class GtpShellText
     {
         m_historyMin = historyMin;
         m_historyMax = historyMax;
-        m_fontSize = getFont().getSize();
-        m_font = new Font("Monospaced", Font.PLAIN, m_fontSize);
-        setFont(m_font);
+        int fontSize = GuiUtils.getDefaultMonoFontSize();
+        Font font = new Font("Monospaced", Font.PLAIN, fontSize);
+        setFont(font);
         StyleContext context = StyleContext.getDefaultStyleContext();
         Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
         StyleConstants.setLineSpacing(def, 0f);
@@ -106,8 +106,6 @@ class GtpShellText
         setEditable(false);
     }
 
-    private int m_fontSize;
-
     private int m_historyMin;
 
     private int m_historyMax;
@@ -115,8 +113,6 @@ class GtpShellText
     private int m_lines;
 
     private int m_truncated;
-
-    private Font m_font;
 
     private void appendText(String text, String style)
     {

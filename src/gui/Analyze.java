@@ -922,8 +922,8 @@ class AnalyzeTextOutput
         {
             assert(false);
         }
-        Font font = getFont();
-        m_textPane.setFont(new Font("Monospaced", Font.PLAIN, font.getSize()));
+        int fontSize = GuiUtils.getDefaultMonoFontSize();
+        m_textPane.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         JScrollPane scrollPane = new JScrollPane(m_textPane);
         panel.add(scrollPane, BorderLayout.CENTER);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

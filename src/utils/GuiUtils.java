@@ -34,6 +34,13 @@ public class GuiUtils
         return m_smallEmptyBorder;
     }
 
+    public static int getDefaultMonoFontSize()
+    {
+        Font font = UIManager.getFont("TextArea.font");        
+        if (font == null)
+            return 10;
+        return font.getSize();
+    }
     private static Border m_emptyBorder;
 
     private static Border m_smallEmptyBorder;

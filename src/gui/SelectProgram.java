@@ -145,7 +145,7 @@ class SelectProgram
         m_textField.setColumns(40);
         m_textField.selectAll();
         m_textField.addKeyListener(this);
-        int fontSize = m_comboBox.getFont().getSize();
+        int fontSize = GuiUtils.getDefaultMonoFontSize();
         m_comboBox.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
         URL u = getClass().getClassLoader().getResource("images/fileopen.png");
