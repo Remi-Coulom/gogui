@@ -126,8 +126,13 @@ class Help
     private JButton createToolBarButton(String icon, String command)
     {
         final String prefix = "org/javalobby/icons/20x20png/";
+        JButton button;
         URL u = getClass().getClassLoader().getResource(prefix + icon);
-        JButton button = new JButton(new ImageIcon(u));
+        if (u == null)
+            // Fallback, shouldn't happen if image exists.
+            button = new JButton(icon);
+        else
+            button = new JButton(new ImageIcon(u));
         button.setActionCommand(command);
         button.addActionListener(this);
         return button;
