@@ -17,12 +17,11 @@ import utils.GuiUtils;
 public class ScoreDialog
     extends JDialog
 {
-    public ScoreDialog(ActionListener actionListener, Score score)
+    public ScoreDialog(ActionListener listener)
     {
         setTitle("Score");
-        JPanel panelDetails =
-            new JPanel(new GridLayout(0, 2, utils.GuiUtils.PAD, 0));
-        panelDetails.setBorder(GuiUtils.createEmptyBorder());
+        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        JPanel panelDetails = new JPanel(new GridLayout(0, 2, 0, 0));
         m_territoryBlack = createEntry(panelDetails, "Territory Black:");
         m_territoryWhite = createEntry(panelDetails, "Territory White:");
         m_areaBlack = createEntry(panelDetails, "Area Black:");
@@ -33,21 +32,28 @@ public class ScoreDialog
         m_resultChinese = createEntry(panelDetails, "Result Chinese:");
         m_resultJapanese = createEntry(panelDetails, "Result Japanese:");
         m_rules = createEntry(panelDetails, "Rules:");
-        JPanel panelResult =
-            new JPanel(new GridLayout(0, 2, utils.GuiUtils.PAD, 0));
-        panelResult.setBorder(GuiUtils.createEmptyBorder());
+        JPanel panelResult = new JPanel(new GridLayout(0, 2, 0, 0));
         m_result = createEntry(panelResult, "Game result:");
-        m_result.setOpaque(true);
-        m_result.setBackground(java.awt.Color.GREEN);
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(panelDetails);
+        panel.add(GuiUtils.createFiller());
+        panel.add(new JSeparator(SwingConstants.HORIZONTAL));
+        panel.add(GuiUtils.createFiller());
         panel.add(panelResult);
-        Container contentPane = getContentPane();
-        contentPane.add(panel);
-        contentPane.add(createButtons(actionListener), BorderLayout.SOUTH);
+        JButton okButton = new JButton("Ok");
+        okButton.setActionCommand("score-done");
+        okButton.addActionListener(listener);
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setActionCommand("score-cancel");
+        cancelButton.addActionListener(listener);
+        Object options[] = { okButton, cancelButton };
+        JOptionPane optionPane = new JOptionPane(panel,
+                                                 JOptionPane.PLAIN_MESSAGE,
+                                                 JOptionPane.OK_CANCEL_OPTION,
+                                                 null, options, options[0]);
+        setContentPane(optionPane);
         pack();
-        showScore(score);
     }
 
     public void showScore(Score score)
@@ -65,8 +71,6 @@ public class ScoreDialog
                         : "Chinese");
         m_result.setText(score.formatResult());
     }
-
-    private JButton m_cancelButton;
 
     private JLabel m_territoryBlack;
 
@@ -89,26 +93,6 @@ public class ScoreDialog
     private JLabel m_rules;
 
     private JLabel m_result;
-
-    private JPanel createButtons(ActionListener actionListener)
-    {
-        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
-        innerPanel.setBorder(GuiUtils.createEmptyBorder());
-        JButton okButton = new JButton("Ok");
-        okButton.setActionCommand("score-done");
-        okButton.addActionListener(actionListener);
-        okButton.setMnemonic(KeyEvent.VK_O);
-        getRootPane().setDefaultButton(okButton);
-        innerPanel.add(okButton);
-        m_cancelButton = new JButton("Cancel");
-        m_cancelButton.setActionCommand("score-cancel");
-        m_cancelButton.addActionListener(actionListener);
-        m_cancelButton.setMnemonic(KeyEvent.VK_C);
-        innerPanel.add(m_cancelButton);
-        JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        outerPanel.add(innerPanel);
-        return outerPanel;
-    }
 
     private JLabel createEntry(JPanel panel, String text)
     {

@@ -1265,11 +1265,7 @@ class GoGui
 
     private void cbScoreDone(boolean accepted)
     {
-        if (m_scoreDialog != null)
-        {
-            m_scoreDialog.dispose();
-            m_scoreDialog = null;
-        }
+        m_scoreDialog.setVisible(false);
         if (accepted)
             m_score = m_board.scoreGet();
         clearStatus();
@@ -1877,10 +1873,14 @@ class GoGui
         m_guiBoard.scoreBegin(isDeadStone);
         m_guiBoard.repaint();
         m_scoreMode = true;
-        m_scoreDialog = new ScoreDialog(this, m_board.scoreGet());
-        m_scoreDialog.setLocationRelativeTo(this);
-        Dimension size = getSize();
-        m_scoreDialog.setLocation(size.width, 0);
+        if (m_scoreDialog == null)
+        {
+            m_scoreDialog = new ScoreDialog(this);
+            m_scoreDialog.setLocationRelativeTo(this);
+            Dimension size = getSize();
+            m_scoreDialog.setLocation(size.width, 0);
+        }
+        m_scoreDialog.showScore(m_board.scoreGet());
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
         showStatus("Please mark dead groups.");
