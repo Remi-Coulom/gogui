@@ -8,15 +8,8 @@
       <revremark>
 	<itemizedlist>
 	  <listitem>
-	    <command>twogtp</command>: new options
-	    <option>-alternate</option>,
-	    <option>-auto</option>,
-	    <option>-compare</option>,
-	    <option>-games</option>,
-	    <option>-komi</option>,
-	    <option>-sgffile</option>,
-	    <option>-size</option>;
-	    save more game information in results file;
+	    <application>TwoGto</application>:
+	    new options for playing a series of games and saving the results;
 	    forward GTP extension commands to program that implement them;
 	    handle GTP version 2 programs.
 	  </listitem>
@@ -29,7 +22,7 @@
 	    if available.
 	  </listitem>
 	  <listitem>
-	    Fix problem in GtpShell: caret was not redrawn after entering
+	    Fix problem in Gtp shell: caret was not redrawn after entering
 	    command.
 	  </listitem>
 	  <listitem>
