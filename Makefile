@@ -34,24 +34,22 @@ PACKAGES= \
   utils
 
 release: version
-	mkdir -p build
-	javac -O -deprecation -sourcepath . -source 1.4 -d build @files.txt
-	mkdir -p build/doc
-	cp -R doc/html/* build/doc
-	mkdir -p build/images
-	mkdir -p build/org/javalobby/icons/20x20png
-	for i in $(IMAGES); do cp $$i build/$$i; done 
-	jar cmf manifest-addition.txt gogui.jar -C build .
+	mkdir -p build/gogui
+	javac -O -deprecation -sourcepath . -source 1.4 -d build/gogui @files.txt
+	mkdir -p build/gogui/doc
+	cp -R doc/html/* build/gogui/doc
+	mkdir -p build/gogui/images
+	for i in $(IMAGES); do cp $$i build/gogui/$$i; done 
+	jar cmf manifest-addition.txt gogui.jar -C build/gogui .
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
 debug: version
-	mkdir -p build_dbg
-	javac -g -deprecation -sourcepath . -source 1.4 -d build_dbg @files.txt
-	mkdir -p build_dbg/doc
-	mkdir -p build_dbg/images
-	mkdir -p build_dbg/org/javalobby/icons/20x20png
-	for i in $(IMAGES); do cp $$i build_dbg/$$i; done 
-	cp -R doc/html/* build_dbg/doc
+	mkdir -p build/gogui_debug
+	javac -g -deprecation -sourcepath . -source 1.4 -d build/gogui_debug @files.txt
+	mkdir -p build/gogui_debug/doc
+	mkdir -p build/gogui_debug/images
+	for i in $(IMAGES); do cp $$i build/gogui_debug/$$i; done 
+	cp -R doc/html/* build/gogui_debug/doc
 
 version:
 	sed 's/m_version = \".*\"/m_version = \"$(VERSION)\"/' <src/gui/Version.java >src/gui/.Version.java.new
@@ -60,14 +58,14 @@ version:
 .PHONY: gmptogtp
 
 gmptogtp:
-	test -d build-gmptogtp || mkdir build-gmptogtp
-	javac -O -deprecation -sourcepath . -source 1.4 -d build-gmptogtp @files-gmptogtp.txt
-	jar cmf manifest-addition.txt gmptogtp.jar -C build-gmptogtp .
+	mkdir -p build/gmptogtp
+	javac -O -deprecation -sourcepath . -source 1.4 -d build/gmptogtp @files-gmptogtp.txt
+	jar cmf manifest-addition.txt gmptogtp.jar -C build/gmptogtp .
 
 .PHONY: srcdoc clean doc changelog tags
 
 clean:
-	-rm -r build build_dbg
+	-rm -r build
 
 doc:
 	echo "$(VERSION)" >doc/xml/version.xml
