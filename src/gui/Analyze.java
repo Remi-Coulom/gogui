@@ -321,10 +321,18 @@ class AnalyzeDialog
 
     public void valueChanged(ListSelectionEvent e)
     {
-        String value = (String)m_list.getSelectedValue();
-        if (m_runButton.hasFocus())
-            setDefaultFocus();
-        m_runButton.setEnabled(value != null);
+        int index = m_list.getSelectedIndex();
+        if (index >= 0)
+        {
+            m_runButton.setEnabled(true);
+            m_list.ensureIndexIsVisible(index);
+        }
+        else
+        {
+            if (m_runButton.hasFocus())
+                setDefaultFocus();
+            m_runButton.setEnabled(false);
+        }
     }
 
     public void windowActivated(WindowEvent e)
