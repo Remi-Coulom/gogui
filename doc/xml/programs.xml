@@ -51,6 +51,21 @@ Command: <userinput>Aya.exe --mode gtp</userinput>
 </section>
   
 <section>
+<title>INDIGO</title>
+<para>
+<ulink url="http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html">
+http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html</ulink>
+</para>
+<para>
+Operating systems: Linux, Windows
+</para>
+<para>
+Command: <userinput>Indigo2004-Linux.exe -gtp</userinput>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+  
+<section>
 <title>AmigoPlus</title>
 <para>
 <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm">
