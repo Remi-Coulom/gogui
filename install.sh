@@ -1,6 +1,8 @@
 #!/bin/sh
 
-PREFIX=/usr/local
+# Default prefix should be /usr/local, but some desktop
+# environments have problems finding resources there
+PREFIX=/usr
 
 function usage() {
   printf "Usage: %s [-p prefix]\n" $0
@@ -23,12 +25,12 @@ install -d $PREFIX/share/gogui/lib
 install lib/*.jar $PREFIX/share/gogui/lib
 
 install -d $PREFIX/bin
-for f in bin/*; do
-  if [ -f $f -a -x $f ]; then
-    cat $f \
+for FILE in bin/*; do
+  if [ -f $FILE -a -x $FILE ]; then
+    cat $FILE \
     | sed "s;GOGUI_LIB=.*;GOGUI_LIB=$PREFIX/share/gogui/lib;" \
-    > $PREFIX/$f
-    chmod a+x $PREFIX/$f
+    > $PREFIX/$FILE
+    chmod a+x $PREFIX/$FILE
   fi
 done
 
