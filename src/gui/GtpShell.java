@@ -189,12 +189,11 @@ public class GtpShell
         createMenu();
         Container contentPane = getContentPane();
         m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
-        JScrollPane scrollPane =
-            new JScrollPane(m_gtpShellText,
-                            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);        
+        m_scrollPane = new JScrollPane(m_gtpShellText,
+                                       JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                                       JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         m_fontSize = m_gtpShellText.getFont().getSize();
-        contentPane.add(scrollPane, BorderLayout.CENTER);
+        contentPane.add(m_scrollPane, BorderLayout.CENTER);
         m_comboBox = new JComboBox();
         m_editor = m_comboBox.getEditor();
         m_textField = (JTextField)m_editor.getEditorComponent();
@@ -240,13 +239,21 @@ public class GtpShell
 
     public void keyReleased(KeyEvent e) 
     {
-        char c = e.getKeyChar();        
-        if (c == KeyEvent.CHAR_UNDEFINED
-            || c == KeyEvent.VK_ESCAPE)
+        int c = e.getKeyCode();        
+        int mod = e.getModifiers();
+        if (c == KeyEvent.VK_ESCAPE)
             return;
         else if (c == KeyEvent.VK_TAB)
+        {
             findBestCompletion();
-        popupCompletions();
+            popupCompletions();
+        }
+        else if (c == KeyEvent.VK_PAGE_UP && mod == ActionEvent.SHIFT_MASK)
+            scrollPage(true);
+        else if (c == KeyEvent.VK_PAGE_DOWN && mod == ActionEvent.SHIFT_MASK)
+            scrollPage(false);
+        else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED)
+            popupCompletions();
     }
 
     public void keyTyped(KeyEvent e)
@@ -511,6 +518,8 @@ public class GtpShell
 
     private JComboBox m_comboBox;
 
+    private JScrollPane m_scrollPane;
+
     private GtpShellText m_gtpShellText;
 
     private MutableComboBoxModel m_model;
@@ -743,6 +752,29 @@ public class GtpShell
     private void saveCommands()
     {
         save(m_commands.toString(), m_linesTruncated);
+    }
+
+    private void scrollPage(boolean up)
+    {
+        JViewport viewport = m_scrollPane.getViewport();
+        Point position = viewport.getViewPosition();
+        int delta = m_scrollPane.getSize().height
+            - m_gtpShellText.getFont().getSize();
+        if (up)
+        {
+            position.y -= delta;
+            if (position.y < 0)
+                position.y = 0;
+        }
+        else
+        {
+            position.y += delta;
+            int max = viewport.getViewSize().height
+                - m_scrollPane.getSize().height;
+            if (position.y > max)
+                position.y = max;
+        }
+        viewport.setViewPosition(position);
     }
 
     /** Modify dialog size after first write.
