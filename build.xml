@@ -51,6 +51,7 @@ $Source$
 <delete failonerror="false" includeEmptyDirs="true">
 <fileset dir="build/config"/>
 <fileset dir="build/doc"/>
+<fileset dir="build/game"/>
 <fileset dir="build/gmp"/>
 <fileset dir="build/gmptogtp"/>
 <fileset dir="build/go"/>
