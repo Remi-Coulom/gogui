@@ -1566,7 +1566,9 @@ class GoGui
                 // First command is sent with a timeout, so that we are not
                 // fooled by programs who are not GTP Go programs, but
                 // consume stdin without writing to stdout.
+                setFastUpdate(true);
                 m_name = m_commandThread.sendCommand("name", 30000).trim();
+                setFastUpdate(false);
                 m_gtpShell.setProgramName(m_name);
                 try
                 {
