@@ -25,7 +25,7 @@ import version.*;
 class GoGui
     extends JFrame
     implements ActionListener, AnalyzeCallback, Board.Listener,
-               GtpShell.Callback, WindowListener
+               GameTreeViewer.Listener, GtpShell.Callback, WindowListener
 {
     GoGui(String program, Preferences prefs, String file, int move,
           String time, boolean verbose, boolean computerBlack,
@@ -351,6 +351,37 @@ class GoGui
                 return;
             humanMoved(new Move(p, m_board.getToMove()));
         }
+    }
+
+    public void gotoNode(Node node)
+    {
+        Vector shortestPath = m_currentNode.getShortestPath(node);
+        for (int i = 0; i < shortestPath.size(); ++i)
+        {
+            Node nextNode = (Node)shortestPath.get(i);
+            if (nextNode == m_currentNode)
+            {
+                if (! backward(1))
+                    break;
+            }
+            else
+            {
+                if (! checkCurrentNodeExecuted())
+                    break;
+                assert(nextNode.isChildOf(m_currentNode));
+                m_currentNode = nextNode;
+                try
+                {
+                    executeCurrentNode();
+                }
+                catch (Gtp.Error e)
+                {
+                    showGtpError(e);
+                    break;
+                }
+            }
+        }
+        boardChangedBegin(false);
     }
 
     public static void main(String[] args)
@@ -799,13 +830,15 @@ class GoGui
         }
     }
 
-    private void backward(int n)
+    private boolean backward(int n)
     {
         setFastUpdate(true);
         try
         {
-            for (int i = 0; i < n && m_currentNode.getFather() != null; ++i)
+            for (int i = 0; i < n; ++i)
             {
+                if (m_currentNode.getFather() == null)
+                    return false;
                 undoCurrentNode();
                 m_currentNode = m_currentNode.getFather();
                 m_currentNodeExecuted =
@@ -816,12 +849,13 @@ class GoGui
         catch (Gtp.Error e)
         {
             showGtpError(e);
-            return;
+            return false;
         }
         finally
         {
             setFastUpdate(false);
         }
+        return true;
     }
 
     private void beginLengthyCommand()
@@ -1286,7 +1320,7 @@ class GoGui
     {
         if (m_gameTreeViewer == null)
         {
-            m_gameTreeViewer = new GameTreeViewer(null);
+            m_gameTreeViewer = new GameTreeViewer(null, this);
             if (m_rememberWindowSizes)
                 restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         }
@@ -1388,6 +1422,17 @@ class GoGui
                 generateMove();
         }
         m_timeControl.startMove(m_board.getToMove());
+    }
+
+    private boolean checkCurrentNodeExecuted()
+    {
+        int numberAddStonesAndMoves = m_currentNode.getNumberAddStonesAndMoves();
+        if (m_currentNodeExecuted != numberAddStonesAndMoves)
+        {
+            showError("Cannot go forward from partially executed game node.");
+            return false;
+        }
+        return true;
     }
 
     private boolean checkSaveGame()
@@ -1592,12 +1637,8 @@ class GoGui
 
     private void forward(int n)
     {
-        if (m_currentNodeExecuted !=
-            m_currentNode.getNumberAddStonesAndMoves())
-        {
-            showError("Cannot go forward from partially executed game node.");
+        if (! checkCurrentNodeExecuted())
             return;
-        }
         setFastUpdate(true);
         try
         {

@@ -202,6 +202,36 @@ public class Node
         return m_children.size();
     }
 
+    public Vector getPathFromRoot()
+    {
+        Vector result = new Vector();
+        Node node = this;
+        while (node != null)
+        {
+            result.add(0, node);
+            node = node.getFather();
+        }
+        return result;
+    }
+
+    public Vector getShortestPath(Node node)
+    {
+        Vector rootToThis = getPathFromRoot();
+        Vector rootToNode = node.getPathFromRoot();
+        while (rootToThis.size() > 0 && rootToNode.size() > 0
+               && rootToThis.get(0) == rootToNode.get(0))
+        {
+            rootToThis.remove(0);
+            rootToNode.remove(0);
+        }
+        Vector result = new Vector();
+        for (int i = rootToThis.size() - 1; i >= 0; --i)
+            result.add(rootToThis.get(i));
+        for (int i = 0; i < rootToNode.size(); ++i)
+            result.add(rootToNode.get(i));
+        return result;
+    }
+
     /** Time left for black after move was made.
         Returns Float.NaN if unknown.
     */
@@ -222,6 +252,14 @@ public class Node
     public Color getToMove()
     {
         return m_toMove;
+    }
+
+    public boolean isChildOf(Node node)
+    {
+        for (int i = 0; i < node.getNumberChildren(); ++i)
+            if (node.getChild(i) == this)
+                return true;
+        return false;
     }
 
     public void makeMainVariation()

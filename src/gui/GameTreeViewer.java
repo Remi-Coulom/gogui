@@ -6,6 +6,7 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import game.*;
@@ -15,17 +16,43 @@ import go.*;
 
 class GameNode
     extends JComponent
+    implements MouseListener
 {
-    public GameNode(Node node, int moveNumber, int size)
+    public GameNode(Node node, int moveNumber, int size,
+                    GameTreeViewer.Listener listener)
     {
         m_node = node;
         m_moveNumber = moveNumber;
         m_size = size;
+        m_listener = listener;
+        addMouseListener(this);
     }
 
     public Dimension getPreferredSize()
     {
-        return new Dimension(m_size * 10, m_size * 3);
+        return new Dimension(m_size, m_size);
+    }
+
+    public void mouseClicked(MouseEvent event)
+    {
+        if (m_listener != null)
+            m_listener.gotoNode(m_node);
+    }
+
+    public void mouseEntered(MouseEvent e)
+    {
+    }
+
+    public void mouseExited(MouseEvent e)
+    {
+    }
+
+    public void mousePressed(MouseEvent e)
+    {
+    }
+
+    public void mouseReleased(MouseEvent e)
+    {
     }
 
     public void paintComponent(Graphics graphics)
@@ -97,6 +124,8 @@ class GameNode
 
     public int m_size = 25;
 
+    private GameTreeViewer.Listener m_listener;
+
     private Node m_node;
 }
 
@@ -106,7 +135,7 @@ class GameTreePanel
     extends JPanel
     implements Scrollable
 {
-    public GameTreePanel()
+    public GameTreePanel(GameTreeViewer.Listener listener)
     {
         super(new SpringLayout());
         setBackground(java.awt.Color.lightGray);
@@ -115,6 +144,7 @@ class GameTreePanel
         if (font != null)
             m_nodeSize = font.getSize() * 2;
         setOpaque(false);
+        m_listener = listener;
     }
 
     public Dimension getPreferredScrollableViewportSize()
@@ -162,7 +192,7 @@ class GameTreePanel
         m_maxX = 0;
         m_maxY = 0;
         createNodes(this, m_gameTree.getRoot(), 0, 0, m_margin, m_margin, 0);
-        getGameNode(m_currentNode).setCurrentNode(true);
+        getGameNode(currentNode).setCurrentNode(true);
         SpringLayout layout = (SpringLayout)getLayout();
         setPreferredSize(new Dimension(m_maxX + m_nodeDist + m_margin,
                                        m_maxY + m_nodeDist + m_margin));
@@ -189,6 +219,8 @@ class GameTreePanel
 
     private GameTree m_gameTree;
 
+    private GameTreeViewer.Listener m_listener;
+
     private Node m_currentNode;
 
     private HashMap m_map = new HashMap();
@@ -200,7 +232,8 @@ class GameTreePanel
         m_maxY = Math.max(y, m_maxY);
         if (node.getMove() != null)
             ++moveNumber;
-        GameNode gameNode = new GameNode(node, moveNumber, m_nodeSize);
+        GameNode gameNode = new GameNode(node, moveNumber, m_nodeSize,
+                                         m_listener);
         m_map.put(node, gameNode);
         add(gameNode);
         SpringLayout layout = (SpringLayout)getLayout();
@@ -255,11 +288,16 @@ class GameTreePanel
 public class GameTreeViewer
     extends JDialog
 {
-    public GameTreeViewer(Frame owner)
+    public interface Listener
+    {
+        public abstract void gotoNode(Node node);
+    }
+
+    public GameTreeViewer(Frame owner, Listener listener)
     {
         super(owner, "GoGui: Game Tree");
         Container contentPane = getContentPane();
-        m_panel = new GameTreePanel();
+        m_panel = new GameTreePanel(listener);
         m_scrollPane =
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -267,6 +305,7 @@ public class GameTreeViewer
         m_scrollPane.getViewport().setBackground(java.awt.Color.lightGray);
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         pack();
+        m_listener = listener;
     }
 
     public void toTop()
@@ -284,6 +323,8 @@ public class GameTreeViewer
     private GameTreePanel m_panel;
 
     private JScrollPane m_scrollPane;
+
+    private Listener m_listener;
 }
 
 //-----------------------------------------------------------------------------
