@@ -4,10 +4,12 @@ ICONS= \
   org/javalobby/icons/20x20png/Computer.png \
   org/javalobby/icons/20x20png/Delete.png \
   org/javalobby/icons/20x20png/Enter.png \
+  org/javalobby/icons/20x20png/Left.png \
   org/javalobby/icons/20x20png/Gearwheel.png \
   org/javalobby/icons/20x20png/Home.png \
   org/javalobby/icons/20x20png/New.png \
   org/javalobby/icons/20x20png/Open.png \
+  org/javalobby/icons/20x20png/Right.png \
   org/javalobby/icons/20x20png/Save.png \
   org/javalobby/icons/20x20png/Stop.png \
   org/javalobby/icons/20x20png/VCRBack.png \
