@@ -29,15 +29,12 @@ class GoGui
           boolean computerNone, boolean autoplay, String gtpFile)
         throws Gtp.Error, Analyze.Error
     {
+        m_program = program;
         if (program != null && ! program.equals(""))
         {
             m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
-            Gtp gtp = new Gtp(program, verbose, m_gtpShell);
-            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
-            m_commandThread = new CommandThread(gtp, m_gtpShell);
-            m_commandThread.start();
+            m_gtpShell.setProgramCommand(program);
         }
-
         m_prefs = prefs;
         m_boardSize = prefs.getBoardSize();
         m_beepAfterMove = prefs.getBeepAfterMove();
@@ -508,6 +505,8 @@ class GoGui
     private String m_name = "";
 
     private String m_pid;
+
+    private String m_program;
 
     private String m_version = "";
 
@@ -1335,6 +1334,12 @@ class GoGui
     {
         try
         {
+            if (m_program != null && ! m_program.equals(""))
+            {
+                Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
+                m_commandThread = new CommandThread(gtp, m_gtpShell);
+                m_commandThread.start();
+            }
             if (m_commandThread != null)
             {
                 m_name = m_commandThread.sendCommand("name", 30000).trim();
