@@ -16,9 +16,7 @@ New menu items <guimenuitem>Open Recent</guimenuitem> and
 </listitem>
 <listitem>
 Analyze commands are now selected from a dialog.
-New analyze result types <userinput>pslist</userinput>,
-<userinput>pstring</userinput>.
-Analyze commands can have string, file and pointlist arguments.
+New analyze command wildcards and result types.
 </listitem>
 <listitem>
 New tool <application>GtpDummy</application>.

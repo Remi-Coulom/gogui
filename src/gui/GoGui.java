@@ -740,6 +740,14 @@ class GoGui
             int type = m_analyzeCommand.getType();
             switch (type)
             {
+            case AnalyzeCommand.BWBOARD:
+                {
+                    String board[][] = Gtp.parseStringBoard(response, title,
+                                                            m_boardSize);
+                    showBWBoard(board);
+                    m_guiBoard.repaint();
+                }
+                break;
             case AnalyzeCommand.COLORBOARD:
                 {
                     String board[][] = Gtp.parseStringBoard(response, title,
@@ -2199,6 +2207,12 @@ class GoGui
         {
             showGtpError(e);
         }
+    }
+
+    private void showBWBoard(String[][] board)
+    {
+        m_guiBoard.showBWBoard(board);
+        m_boardNeedsReset = true;
     }
 
     private void showColorBoard(String[][] board) throws Gtp.Error

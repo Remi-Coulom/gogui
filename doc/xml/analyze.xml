@@ -27,6 +27,16 @@ The command type can be
 <variablelist>
 
 <varlistentry>
+<term><userinput>bwboard</userinput></term>
+<listitem>
+The answer of the command is a board of strings.
+Strings "b" or "black" will be displayed as black squares,
+"w" or "white" as white squares, all other strings are
+not displayed.
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><userinput>cboard</userinput></term>
 <listitem>
 The answer of the command is a board of strings with color names.
@@ -42,8 +52,8 @@ are ignored.
 <listitem>
 The answer of the command is a board of floating point
 numbers.
-They will be displayed as red (positive) and green (negative)
-polygons on the board.
+They will be displayed as black (positive) and white (negative)
+squares on the board.
 The numbers are expected to be between -1 and 1.
 Use the <userinput>scale</userinput> option, if they are not.
 </listitem>

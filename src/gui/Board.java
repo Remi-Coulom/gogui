@@ -339,6 +339,21 @@ public class Board
         getField(p).setString(s);
     }
 
+    public void showBWBoard(String[][] board)
+    {
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            go.Point p = m_board.getPoint(i);
+            String s = board[p.getX()][p.getY()].toLowerCase();
+            if (s.equals("b") || s.equals("black"))
+                setInfluence(p, 1);
+            else if (s.equals("w") || s.equals("white"))
+                setInfluence(p, -1);
+            else
+                setInfluence(p, 0);
+        }
+    }
+
     public void showColorBoard(String[][] board)
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)

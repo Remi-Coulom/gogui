@@ -18,21 +18,23 @@ import utils.*;
 
 class AnalyzeCommand
 {
-    public static final int NONE = 0;
+    public static final int BWBOARD = 0;
 
-    public static final int STRING = 1;    
+    public static final int NONE = 1;
 
-    public static final int DOUBLEBOARD = 2;
+    public static final int STRING = 2;    
 
-    public static final int POINTLIST = 3;
+    public static final int DOUBLEBOARD = 3;
 
-    public static final int POINTSTRINGLIST = 4;
+    public static final int POINTLIST = 4;
 
-    public static final int POINTSTRING = 5;
+    public static final int POINTSTRINGLIST = 5;
 
-    public static final int STRINGBOARD = 6;
+    public static final int POINTSTRING = 6;
 
-    public static final int COLORBOARD = 7;
+    public static final int STRINGBOARD = 7;
+
+    public static final int COLORBOARD = 8;
 
     public AnalyzeCommand(String line)
     {
@@ -41,7 +43,9 @@ class AnalyzeCommand
         m_type = AnalyzeCommand.NONE;
         String array[] = StringUtils.split(line, '/');
         String typeStr = array[0];        
-        if (typeStr.equals("cboard"))
+        if (typeStr.equals("bwboard"))
+            m_type = AnalyzeCommand.BWBOARD;
+        else if (typeStr.equals("cboard"))
             m_type = AnalyzeCommand.COLORBOARD;
         else if (typeStr.equals("dboard"))
             m_type = AnalyzeCommand.DOUBLEBOARD;

@@ -116,6 +116,6 @@ string/GoGui SigInt/gogui_sigint
 string/Gmp Queue/gmp_queue
 
 # GtpDummy extensions
-#bwboard/Dummy BWBoard/dummy_bwboard
+bwboard/Dummy BWBoard/dummy_bwboard
 none/Dummy Sleep/dummy_sleep %s
 none/Dummy Sleep 20/dummy_sleep
