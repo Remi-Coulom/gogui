@@ -9,7 +9,7 @@ of nodes.
 Nodes are displayed as a black or white stone with a move number,
 if the node contains a move.
 A symbol containing four small stones is used for nodes
-containing setup stones and a gray diamond for other nodes.
+containing setup stones and a blue diamond for other nodes.
 Nodes containing a comment have a small blue line under the node.
 The current node is marked with a red cursor.
 </para>
@@ -27,6 +27,10 @@ and to display node information and subtree statistics.
 The game tree panel can be scrolled using the scrollbar, keyboard,
 mouse wheel or by clicking in the panel and dragging the mouse outside the
 window.
+</para>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
 </para>
     
 </chapter>
