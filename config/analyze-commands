@@ -1,4 +1,5 @@
 # GoGui Analyze Commands
+# Copy this file to ~/.gogui/analyze-commands
 
 # Standard GTP version 1 and 2 commands
 string/Final Score/final_score
