@@ -371,7 +371,7 @@ class AnalyzeCommand
         for (int i = 0; i < files.length; ++i)
         {
             File f = files[i];
-            if (f.toString().startsWith(s))
+            if (f.toString().startsWith(s) && ! f.toString().endsWith("~"))
                 result.add(f);
         }
         return result;
