@@ -224,6 +224,8 @@ public class Board
 
     public void setFocusPoint(go.Point point)
     {
+        if (! m_board.contains(point))
+            return;
         getField(point).requestFocus();
         m_focusPoint.set(point.getX(), point.getY());
     }
