@@ -21,12 +21,10 @@ public class TwoGtp
         super(in, out);
         if (black.equals(""))
             throw new Exception("No black program set.");
-        m_callbackBlack = new IOCallback();
-        m_black = new Gtp(black, verbose, m_callbackBlack);
+        m_black = new Gtp(black, verbose, null);
         if (white.equals(""))
             throw new Exception("No white program set.");
-        m_callbackWhite = new IOCallback();
-        m_white = new Gtp(white, verbose, m_callbackWhite);
+        m_white = new Gtp(white, verbose, null);
         m_blackToMove.add(Boolean.TRUE);
     }
 
@@ -148,10 +146,6 @@ public class TwoGtp
 
     private Gtp m_white;
 
-    private IOCallback m_callbackBlack;
-
-    private IOCallback m_callbackWhite;
-
     private boolean sendBoth(String command, StringBuffer response)
     {
         boolean status = true;
@@ -218,24 +212,6 @@ public class TwoGtp
             return false;
         }
         return true;
-    }
-}
-
-class IOCallback
-    implements Gtp.IOCallback
-{
-    public void receivedResponse(boolean error, String s)
-    {
-    }
-
-    public void receivedStdErr(String s)
-    {
-        System.err.print(s);
-        System.err.flush();
-    }
-
-    public void sentCommand(String s)
-    {
     }
 }
 
