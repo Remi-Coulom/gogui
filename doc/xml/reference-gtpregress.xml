@@ -15,6 +15,7 @@ Runs GTP regression tests.
 <cmdsynopsis>
 <command>gtpregress</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-long</option></arg>
 <arg><option>-output</option> <replaceable>directory</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg choice="plain"><replaceable>program</replaceable></arg>
@@ -85,6 +86,15 @@ Read command line options and arguments from file.
 <listitem>
 <para>
 Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-long</option></term>
+<listitem>
+<para>
+Print longer output to standard output, one line per test.
 </para>
 </listitem>
 </varlistentry>

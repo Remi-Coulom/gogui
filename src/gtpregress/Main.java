@@ -25,6 +25,7 @@ class Main
             String options[] = {
                 "config:",
                 "help",
+                "long",
                 "output:",
                 "verbose",
                 "version"
@@ -41,6 +42,7 @@ class Main
                 return;
             }
             boolean verbose = opt.isSet("verbose");
+            boolean longOutput = opt.isSet("long");
             String output = opt.getString("output", "");
             Vector arguments = opt.getArguments();
             int size = arguments.size();
@@ -53,7 +55,7 @@ class Main
             String tests[] = new String[size - 1];
             for (int i = 0; i <  size - 1; ++i)
                 tests[i] = (String)arguments.get(i + 1);
-            new GtpRegress(program, tests, output, verbose);
+            new GtpRegress(program, tests, output, longOutput, verbose);
         }
         catch (Throwable t)
         {
@@ -69,6 +71,7 @@ class Main
                   "\n" +
                   "-config  config file\n" +
                   "-help    display this help and exit\n" +
+                  "-long    longer output to standard out\n" +
                   "-output  output directory\n" +
                   "-verbose log GTP stream to stderr\n" +
                   "-version display this help and exit\n");

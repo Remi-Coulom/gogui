@@ -20,10 +20,12 @@ import version.*;
 class GtpRegress
     implements Gtp.IOCallback
 {
-    GtpRegress(String program, String[] tests, String output, boolean verbose)
+    GtpRegress(String program, String[] tests, String output,
+               boolean longOutput, boolean verbose)
         throws Exception
     {
         m_program = program;
+        m_longOutput = longOutput;
         m_verbose = verbose;
         m_prefix = "";
         if (! output.equals(""))
@@ -127,6 +129,8 @@ class GtpRegress
     private boolean m_lastError;
 
     private boolean m_lastTestFailed;
+
+    private boolean m_longOutput;
 
     private boolean m_verbose;
 
@@ -408,14 +412,38 @@ class GtpRegress
         else
             style = "test";
         printOutLine(style, m_lastFullResponse);
-        if (fail && ! expectedFail)
-            System.out.println(Integer.toString(m_lastCommandId)
-                               + " unexpected FAIL: Correct '"
-                               + expectedResponse + "', got '" + response
-                               + "'");
-        else if (! fail && expectedFail)
-            System.out.println(Integer.toString(m_lastCommandId)
-                               + " unexpected PASS!");
+        if (m_longOutput)
+        {
+            // Output compatible with eval.sh in GNU Go
+            if (fail && ! expectedFail)
+                System.out.println(Integer.toString(m_lastCommandId)
+                                   + " FAILED: Correct '"
+                                   + expectedResponse + "', got '" + response
+                                   + "'");
+            else if (fail && expectedFail)
+                System.out.println(Integer.toString(m_lastCommandId)
+                                   + " failed: Correct '"
+                                   + expectedResponse + "', got '" + response
+                                   + "'");
+            else if (! fail && expectedFail)
+                System.out.println(Integer.toString(m_lastCommandId)
+                                   + " PASSED");
+            else if (! fail && ! expectedFail)
+                System.out.println(Integer.toString(m_lastCommandId)
+                                   + " passed");
+        }
+        else
+        {
+            // Output compatible with regress.sh in GNU Go
+            if (fail && ! expectedFail)
+                System.out.println(Integer.toString(m_lastCommandId)
+                                   + " unexpected FAIL: Correct '"
+                                   + expectedResponse + "', got '" + response
+                                   + "'");
+            else if (! fail && expectedFail)
+                System.out.println(Integer.toString(m_lastCommandId)
+                                   + " unexpected PASS!");
+        }
         m_tests.add(new Test(m_lastCommandId, m_lastCommand, fail,
                              expectedFail, expectedResponse, response,
                              m_lastSgf, m_lastSgfMove));
