@@ -252,30 +252,33 @@ public class Board
             graphics.setColor(java.awt.Color.YELLOW.darker());
             graphics.fillRect(0, 0, width, width);
         }
-        graphics.setColor(java.awt.Color.darkGray);
-        for (int y = 0; y < size; ++y)
+        if (width > (size + 2) * 2)
         {
-            java.awt.Point left = getScreenLocation(0, y);
-            java.awt.Point right = getScreenLocation(size - 1, y);
-            graphics.drawLine(left.x, left.y, right.x, right.y);
+            graphics.setColor(java.awt.Color.darkGray);
+            for (int y = 0; y < size; ++y)
+            {
+                java.awt.Point left = getScreenLocation(0, y);
+                java.awt.Point right = getScreenLocation(size - 1, y);
+                graphics.drawLine(left.x, left.y, right.x, right.y);
+            }
+            for (int x = 0; x < size; ++x)
+            {
+                java.awt.Point top = getScreenLocation(x, 0);
+                java.awt.Point bottom = getScreenLocation(x, size - 1);
+                graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
+            }
+            int r = width / (size + 2) / 10;
+            for (int x = 0; x < size; ++x)
+                if (m_board.isHandicapLine(x))
+                    for (int y = 0; y < size; ++y)
+                        if (m_board.isHandicapLine(y))
+                        {
+                            java.awt.Point point = getScreenLocation(x, y);
+                            graphics.fillOval(point.x - r, point.y - r,
+                                              2 * r + 1, 2 * r + 1);
+                        }
+            drawShadows(graphics);
         }
-        for (int x = 0; x < size; ++x)
-        {
-            java.awt.Point top = getScreenLocation(x, 0);
-            java.awt.Point bottom = getScreenLocation(x, size - 1);
-            graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
-        }
-        int r = width / (size + 2) / 10;
-        for (int x = 0; x < size; ++x)
-            if (m_board.isHandicapLine(x))
-                for (int y = 0; y < size; ++y)
-                    if (m_board.isHandicapLine(y))
-                    {
-                        java.awt.Point point = getScreenLocation(x, y);
-                        graphics.fillOval(point.x - r, point.y - r,
-                                          2 * r + 1, 2 * r + 1);
-                    }
-        drawShadows(graphics);
     }
 
     public void paintImmediately(go.Point point)
