@@ -206,6 +206,7 @@ public class GtpShell
         m_historyMin = prefs.getInt("gtpshell-history-min");
         m_historyMax = prefs.getInt("gtpshell-history-max");
         m_disableCompletions = prefs.getBool("gtpshell-disable-completions");
+        m_autoNumber = prefs.getBool("gtpshell-autonumber");
         boolean highlight = prefs.getBool("gtpshell-highlight");
         createMenuBar(highlight);
         Container contentPane = getContentPane();
@@ -227,6 +228,8 @@ public class GtpShell
         String command = event.getActionCommand();
         if (command.equals("analyze"))
             m_callback.cbAnalyze();
+        else if (command.equals("auto-number"))
+            autoNumber();
         else if (command.equals("comboBoxEdited"))
             comboBoxEdited();
         else if (command.equals("command-completion"))
@@ -247,6 +250,11 @@ public class GtpShell
             setVisible(false);
     }
     
+    public boolean getAutoNumber()
+    {
+        return m_autoNumber;
+    }
+
     public void itemStateChanged(ItemEvent e)
     {
         String text = m_textField.getText().trim();
@@ -599,6 +607,8 @@ public class GtpShell
         private GtpShell m_gtpShell;
     }
 
+    private boolean m_autoNumber;
+
     private boolean m_disableCompletions;
 
     private boolean m_isFinalSizeSet;
@@ -627,6 +637,8 @@ public class GtpShell
     private JTextField m_textField;
 
     private JComboBox m_comboBox;
+
+    private JCheckBoxMenuItem m_itemAutoNumber;
 
     private JCheckBoxMenuItem m_itemCommandCompletion;
 
@@ -741,6 +753,14 @@ public class GtpShell
         if (i >= 0)
             m_history.remove(i);
         m_history.add(command);
+    }
+
+    private void autoNumber()
+    {
+        m_autoNumber = m_itemAutoNumber.isSelected();        
+        m_prefs.setBool("gtpshell-autonumber", m_autoNumber);
+        SimpleDialogs.showInfo(this,
+                               "Setting will take effect on next start");
     }
 
     private void comboBoxEdited()
@@ -858,6 +878,10 @@ public class GtpShell
         m_itemCommandCompletion.setSelected(! m_disableCompletions);
         addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_C,
                     "command-completion");
+        m_itemAutoNumber = new JCheckBoxMenuItem("Auto Number");
+        m_itemAutoNumber.setSelected(m_autoNumber);
+        addMenuItem(menu, m_itemAutoNumber, KeyEvent.VK_A,
+                    "auto-number");
         return menu;
     }
 
@@ -1066,6 +1090,7 @@ public class GtpShell
 
     private static void setPrefsDefaults(Preferences prefs)
     {
+        prefs.setBoolDefault("gtpshell-autonumber", false);
         prefs.setBoolDefault("gtpshell-disable-completions", false);
         prefs.setBoolDefault("gtpshell-highlight", true);
         prefs.setIntDefault("gtpshell-history-max", 3000);

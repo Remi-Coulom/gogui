@@ -745,7 +745,8 @@ class GoGui
         try
         {
             Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
-            gtp.enableAutoNumber();
+            if (m_gtpShell.getAutoNumber())
+                gtp.enableAutoNumber();
             m_commandThread = new CommandThread(gtp);
             m_commandThread.start();
         }

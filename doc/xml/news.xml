@@ -67,6 +67,11 @@ Application and Dock menu in a safe way
 </listitem>
 <listitem>
 <simpara>
+GoGui: new setting item "Auto Number" in Gtp shell menu
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New tool GtpDisplay
 </simpara>
 </listitem>
