@@ -1422,11 +1422,17 @@ class GoGui
     {
         if (! m_setupMode)
         {
-            m_menuBar.setSetupMode();
             if (m_needsSave && ! checkSaveGame())
-            {
-                m_menuBar.setNormalMode();
                 return;
+            m_menuBar.setSetupMode();
+            if (m_gameTreeViewer != null)
+            {
+                // Create a dummy game tree, so that GameTreeDialog shows
+                // a setup node
+                m_gameTree = new GameTree(m_boardSize, null);
+                m_currentNode = m_gameTree.getRoot();
+                m_currentNode.addBlack(m_board.getPoint(0, 0));
+                m_gameTreeViewer.update(m_gameTree, m_currentNode);
             }
             resetBoard();
             m_setupMode = true;
