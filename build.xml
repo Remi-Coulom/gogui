@@ -10,7 +10,7 @@ $Source$
 
 <tstamp/>
 
-<property name="version" value="0.7pre1"/>
+<property name="version" value="0.7pre1.x"/>
 
 <property environment="env"/>
 <property name="docbook_xsl_home" value="${env.DOCBOOK_XSL_HOME}"/>
