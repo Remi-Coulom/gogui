@@ -48,6 +48,10 @@ class GoGui
         m_initAnalyze = initAnalyze;
 
         Container contentPane = getContentPane();        
+        JPanel innerPanel = new JPanel(new BorderLayout());
+        contentPane.add(innerPanel, BorderLayout.CENTER);
+        m_toolBar = new ToolBar(this, prefs);
+        contentPane.add(m_toolBar, BorderLayout.NORTH);
 
         m_infoPanel = new JPanel(new BorderLayout());
         m_timeControl = new TimeControl();
@@ -59,9 +63,7 @@ class GoGui
 
         m_guiBoard = new Board(m_board);
         m_guiBoard.setListener(this);
-        m_toolBar = new ToolBar(this, prefs);
-        contentPane.add(m_toolBar, BorderLayout.NORTH);
-        contentPane.add(createStatusBar(), BorderLayout.SOUTH);
+        innerPanel.add(createStatusBar(), BorderLayout.SOUTH);
 
         m_squareLayout = new SquareLayout();
         m_squareLayout.setPreferMultipleOf(2 + 2 * m_boardSize);
@@ -75,7 +77,7 @@ class GoGui
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_boardPanel, m_infoPanel);
         m_splitPane.setResizeWeight(0.85);
-        contentPane.add(m_splitPane, BorderLayout.CENTER);
+        innerPanel.add(m_splitPane, BorderLayout.CENTER);
         
         WindowAdapter windowAdapter = new WindowAdapter()
             {
