@@ -94,7 +94,7 @@ Display help and exit.
 <term><option>-long</option></term>
 <listitem>
 <para>
-Print longer output to standard output, one line per test.
+Print lyonger output to standard output, one line per test.
 </para>
 </listitem>
 </varlistentry>

@@ -36,7 +36,13 @@ class GtpRegress
             m_prefix = output + File.separator;
         }
         for (int i = 0; i < tests.length; ++i)
+        {
+            if (tests.length > 1)
+                m_outPrefix = tests[i] + " ";
+            else
+                m_outPrefix = "";
             runTest(tests[i]);
+        }
         writeSummary();
     }
 
@@ -162,6 +168,8 @@ class GtpRegress
 
     private static final String m_colorRed = "#ff5454";
 
+    private String m_prefix;
+
     private String m_lastCommand;
 
     private String m_lastFullResponse;
@@ -176,7 +184,7 @@ class GtpRegress
 
     private String m_outFileRelativeName;
 
-    private String m_prefix;
+    private String m_outPrefix;
 
     private String m_program;
 
@@ -275,10 +283,12 @@ class GtpRegress
             {
                 printOutLine("fail", m_lastFullResponse);
                 if (m_lastResponse.equals(""))
-                    System.out.println(Integer.toString(m_lastCommandId)
+                    System.out.println(m_outPrefix
+                                       + Integer.toString(m_lastCommandId)
                                        + " unexpected FAIL");
                 else
-                    System.out.println(Integer.toString(m_lastCommandId)
+                    System.out.println(m_outPrefix
+                                       + Integer.toString(m_lastCommandId)
                                        + " unexpected FAIL: '"
                                        + m_lastResponse + "'");
                 fail = true;
@@ -416,32 +426,38 @@ class GtpRegress
         {
             // Output compatible with eval.sh in GNU Go
             if (fail && ! expectedFail)
-                System.out.println(Integer.toString(m_lastCommandId)
+                System.out.println(m_outPrefix
+                                   + Integer.toString(m_lastCommandId)
                                    + " FAILED: Correct '"
                                    + expectedResponse + "', got '" + response
                                    + "'");
             else if (fail && expectedFail)
-                System.out.println(Integer.toString(m_lastCommandId)
+                System.out.println(m_outPrefix
+                                   + Integer.toString(m_lastCommandId)
                                    + " failed: Correct '"
                                    + expectedResponse + "', got '" + response
                                    + "'");
             else if (! fail && expectedFail)
-                System.out.println(Integer.toString(m_lastCommandId)
+                System.out.println(m_outPrefix
+                                   + Integer.toString(m_lastCommandId)
                                    + " PASSED");
             else if (! fail && ! expectedFail)
-                System.out.println(Integer.toString(m_lastCommandId)
+                System.out.println(m_outPrefix
+                                   + Integer.toString(m_lastCommandId)
                                    + " passed");
         }
         else
         {
             // Output compatible with regress.sh in GNU Go
             if (fail && ! expectedFail)
-                System.out.println(Integer.toString(m_lastCommandId)
+                System.out.println(m_outPrefix
+                                   + Integer.toString(m_lastCommandId)
                                    + " unexpected FAIL: Correct '"
                                    + expectedResponse + "', got '" + response
                                    + "'");
             else if (! fail && expectedFail)
-                System.out.println(Integer.toString(m_lastCommandId)
+                System.out.println(m_outPrefix
+                                   + Integer.toString(m_lastCommandId)
                                    + " unexpected PASS!");
         }
         m_tests.add(new Test(m_lastCommandId, m_lastCommand, fail,
@@ -627,7 +643,6 @@ class GtpRegress
     private void runTest(String test)
         throws Exception
     {
-        System.err.println(test);
         m_tests.clear();
         m_dataFiles.clear();
         m_otherErrors = 0;
