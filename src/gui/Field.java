@@ -477,15 +477,17 @@ public class Field
 
     private void drawStone(Graphics graphics)
     {
+        int size = getSize().width;
         if (m_color == go.Color.BLACK)
-            drawStone(graphics, java.awt.Color.black, java.awt.Color.gray);
+            drawStone(graphics, java.awt.Color.decode("#030303"),
+                      java.awt.Color.decode("#666666"), size / 3);
         else if (m_color == go.Color.WHITE)
             drawStone(graphics, java.awt.Color.decode("#e2dad3"),
-                      java.awt.Color.decode("#eee5de"));
+                      java.awt.Color.decode("#f0e7e0"), size / 5);
     }
 
     private void drawStone(Graphics graphics, java.awt.Color color,
-                           java.awt.Color colorBright)
+                           java.awt.Color colorBright, int radius)
     {
         int size = getSize().width;
         int margin = getStoneMargin(size);
@@ -493,7 +495,6 @@ public class Field
         if (graphics2D != null)
         {
             int center = size / 3;
-            int radius = Math.max(size / 4, 1);
             RadialGradientPaint paint =
                 new RadialGradientPaint(new Point2D.Double(center, center),
                                         colorBright,
