@@ -85,6 +85,7 @@ public class StringUtils
     */
     public static String[] tokenize(String string)
     {
+        assert(string != null);
         Vector vector = new Vector();
         boolean escape = false;
         boolean inString = false;

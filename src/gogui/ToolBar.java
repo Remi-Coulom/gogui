@@ -53,6 +53,7 @@ public class ToolBar
 
     public void updateGameButtons(Node node)
     {
+        assert(node != null);
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);

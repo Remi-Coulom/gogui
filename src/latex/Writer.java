@@ -133,9 +133,10 @@ public class Writer
         }
     }
 
-    private void printCoordinates(Point p)
+    private void printCoordinates(Point point)
     {
-        String s = p.toString();
+        assert(point != null);
+        String s = point.toString();
         m_out.print("{" + s.substring(0, 1).toLowerCase() + "}{" +
                     s.substring(1) + "}");
     }
