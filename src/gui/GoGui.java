@@ -1873,6 +1873,8 @@ class GoGui
         m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), handicap,
                                   m_prefs.getString("rules"));
         m_board.newGame();        
+        m_currentNode = m_gameTree.getRoot();
+        m_currentNodeExecuted = 0;
         m_guiBoard.updateFromGoBoard();
         resetBoard();
         m_timeControl.reset();
