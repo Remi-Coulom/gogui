@@ -2,8 +2,8 @@
 /* @file Gtp.java
    Interface to a GTP Go program.
 
-   @note Should use java.nio to avoid thread switching with Thread.yield()
-   to keep order between stderr and stout of program.
+   @note Should use java.nio to keep correct order between stderr and stout
+   of program.
    But with java.nio in Java 1.4 it does not seem possible to get
    selectable channels for the streams of a process .
 
@@ -558,11 +558,6 @@ public final class Gtp
             m_err = new InputStreamReader(process.getErrorStream());
         }
 
-        public synchronized long getTimeSinceLastReceived()
-        {
-            return System.currentTimeMillis() - m_timeLastReceived;
-        }
-    
         public void run()
         {
             try
@@ -596,10 +591,6 @@ public final class Gtp
                     System.err.print(new String(buffer, 0, n));
                     System.err.flush();
                 }
-                synchronized (this)
-                {
-                    m_timeLastReceived = System.currentTimeMillis();
-                }
                 stringBuffer.append(buffer, 0, n);
                 int index = stringBuffer.lastIndexOf("\n");
                 if (index == -1)
@@ -621,8 +612,6 @@ public final class Gtp
     private boolean m_log;
 
     private int m_protocolVersion = 1;
-
-    private long m_timeLastReceived;
 
     private BufferedReader m_in;
 
@@ -659,6 +648,9 @@ public final class Gtp
                     m_isProgramDead = true;
                     throw new Error("Go program died");
                 }
+                // Give StdErrThread a chance to read stderr first
+                if (m_callback != null)
+                    Thread.yield();
                 log("<< " + line);
             }
             StringBuffer response = new StringBuffer(line);
@@ -686,21 +678,7 @@ public final class Gtp
                 response.append("\n");
             }
             if (m_callback != null)
-            {
-                // Give StdErrThread a chance to read standard error output
-                // of the program first
-                while (m_stdErrThread.getTimeSinceLastReceived() < 200)
-                {
-                    try
-                    {
-                        Thread.sleep(200);
-                    }
-                    catch (InterruptedException e)
-                    {
-                    }
-                }
                 m_callback.receivedResponse(error, response.toString());
-            }
             m_fullResponse = response.toString();
             assert(response.length() >= 4);            
             int index = response.indexOf(" ");
