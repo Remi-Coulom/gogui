@@ -23,15 +23,4 @@ You can disable automatic command completion from the GTP shell menu.
 </para>
 </section>
 
-<section>
-<title>Stdout and stderr error in the GTP shell are not in order</title>
-<para>
-Unfortunately it is not possible with java.io to guarantee that stdout/stderr
-of the Go program are in order, since stderr must be read from a different
-thread. Using java.nio is not possible with the output streams of a process.
-Also note that the Go program must flush stderr after writing, because
-stderr is buffered when running a child process.
-</para>
-</section>
-
 </appendix>
