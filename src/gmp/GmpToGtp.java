@@ -36,7 +36,7 @@ public class GmpToGtp
         else if (command.startsWith("white"))
             return play(true, command, response);
         else if (command.startsWith("undo"))
-            ;
+            return undo(command, response);
         else if (command.startsWith("genmove_black"))
             return genmove(true, response);
         else if (command.startsWith("genmove_white"))
@@ -302,6 +302,11 @@ public class GmpToGtp
                 return false;
             }
         return true;
+    }
+
+    private boolean undo(String command, StringBuffer response)
+    {
+        return m_gmp.undo(response);
     }
 }
 

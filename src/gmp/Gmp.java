@@ -728,6 +728,11 @@ public class Gmp
         return m_readThread.sendText(text);
     }
 
+    public boolean undo(StringBuffer response)
+    {
+        return m_readThread.send(new Cmd(Cmd.UNDO, 1), response);
+    }
+
     public Move waitMove(boolean isBlack, StringBuffer response)
     {
         ReadThread.WaitResult result;
