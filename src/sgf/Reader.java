@@ -46,6 +46,7 @@ public class Reader
                 root.setFather(null);
             }
             m_gameTree = new GameTree(m_gameInformation, root);
+            applyFixes();
         }
         catch (FileNotFoundException e)
         {
@@ -71,6 +72,40 @@ public class Reader
     private StreamTokenizer m_tokenizer;
 
     private String m_name;
+
+    /** Apply some fixes for broken SGF files. */
+    private void applyFixes()
+    {
+        Node root = m_gameTree.getRoot();
+        GameInformation gameInformation = m_gameTree.getGameInformation();
+        if ((root.getNumberAddWhite() + root.getNumberAddBlack() > 0)
+            && root.getPlayer() == Color.EMPTY)
+        {
+            if (gameInformation.m_handicap > 0)
+            {
+                root.setPlayer(Color.WHITE);
+            }
+            else
+            {
+                boolean hasBlackChildMoves = false;
+                boolean hasWhiteChildMoves = false;
+                for (int i = 0; i < root.getNumberChildren(); ++i)
+                {
+                    Move move = root.getChild(i).getMove();
+                    if (move == null)
+                        continue;
+                    if (move.getColor() == Color.BLACK)
+                        hasBlackChildMoves = true;
+                    if (move.getColor() == Color.WHITE)
+                        hasWhiteChildMoves = true;
+                }
+                if (hasBlackChildMoves && ! hasWhiteChildMoves)
+                    root.setPlayer(Color.BLACK);
+                if (hasWhiteChildMoves && ! hasBlackChildMoves)
+                    root.setPlayer(Color.WHITE);
+            }
+        }
+    }
 
     private Error getError(String message)
     {
