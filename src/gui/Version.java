@@ -9,7 +9,7 @@ package gui;
 
 class Version
 {
-    final static String m_version = "0.2";
+    final static String m_version = "0.2.x";
 }
 
 //-----------------------------------------------------------------------------
