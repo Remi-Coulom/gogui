@@ -1018,6 +1018,7 @@ class GoGui
         }
         resetBoard();
         m_guiBoard.scoreBegin(isDeadStone);
+        m_guiBoard.repaint();
         m_scoreMode = true;
         Dimension size = getSize();
         setJMenuBar(m_menuBars.getScoreMenu());
@@ -1033,6 +1034,7 @@ class GoGui
         clearStatus();
         showInfo(m_score.formatDetailedResult());
         m_guiBoard.clearAll();
+        m_guiBoard.repaint();
         m_scoreMode = false;
         Dimension size = getSize();
         setJMenuBar(m_menuBars.getNormalMenu());
