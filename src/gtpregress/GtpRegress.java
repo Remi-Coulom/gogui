@@ -27,9 +27,6 @@ class GtpRegress
         for (int i = 0; i < tests.length; ++i)
             runTest(tests[i]);
         writeSummary();
-        if (! m_gtp.isProgramDead())
-            m_gtp.sendCommand("quit");
-        m_gtp.waitForExit();
     }
 
     public static void main(String[] args)
@@ -489,15 +486,24 @@ class GtpRegress
                   "  -help    display this help and exit\n");
     }
 
+    private String sendCommand(String command) throws Gtp.Error
+    {
+        printOutLine(null, command);
+        try
+        {
+            return m_gtp.sendCommand(command);
+        }
+        finally
+        {
+            printOutLine(null, m_gtp.getFullResponse());
+        }
+    }
+
     private double getCpuTime()
     {
         try
         {
-            String command = "cputime";
-            printOutLine(null, command);
-            String response = m_gtp.sendCommand(command);
-            printOutLine(null, m_gtp.getFullResponse());
-            return Double.parseDouble(response);
+            return Double.parseDouble(sendCommand("cputime"));
         }
         catch (Gtp.Error e)
         {
@@ -535,6 +541,9 @@ class GtpRegress
         cpuTime = getCpuTime() - cpuTime;
         if (m_lastFullResponse != null)
             handleLastResponse();
+        if (! m_gtp.isProgramDead())
+            sendCommand("quit");
+        m_gtp.waitForExit();
         reader.close();
         finishOutFile();
         TestSummary testSummary = getTestSummary(file, timeMillis, cpuTime);
