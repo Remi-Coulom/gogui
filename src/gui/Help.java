@@ -50,11 +50,13 @@ public class Help
         m_editorPane = new AntialiasingEditorPane();
         m_editorPane.setEditable(false);
         m_editorPane.addHyperlinkListener(this);
+        int width = GuiUtils.getDefaultMonoFontSize() * 55;
+        int height = GuiUtils.getDefaultMonoFontSize() * 57;
         JScrollPane scrollPane =
             new JScrollPane(m_editorPane,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(600, 600));
+        scrollPane.setPreferredSize(new Dimension(width, height));
         panel.add(scrollPane, BorderLayout.CENTER);
         pack();
         loadURL(m_contents);
