@@ -12,6 +12,8 @@ import go.*;
 
 class SetupInfo
 {
+    public Color m_player = Color.EMPTY;
+
     public Vector m_black = new Vector();
 
     public Vector m_white = new Vector();
@@ -102,7 +104,7 @@ public class Node
         if (m_setupInfo != null)
             for (int i = 0; i < getNumberAddBlack(); ++i)
                 moves.add(new Move(getAddBlack(i), Color.BLACK));
-        if (m_addWhite != null)
+        if (m_setupInfo != null)
             for (int i = 0; i < getNumberAddWhite(); ++i)
                 moves.add(new Move(getAddWhite(i), Color.WHITE));
         if (m_move != null)
@@ -194,7 +196,9 @@ public class Node
     */
     public Color getPlayer()
     {
-        return m_player;
+        if (m_setupInfo == null)
+            return Color.EMPTY;
+        return m_setupInfo.m_player;
     }
 
     /** Get other unspecified SGF properties.
@@ -232,8 +236,9 @@ public class Node
     */
     public Color getToMove()
     {
-        if (m_player != Color.EMPTY)
-            return m_player;
+        Color player = getPlayer();
+        if (player != Color.EMPTY)
+            return player;
         if (m_move != null)
             return m_move.getColor().otherColor();
         return Color.EMPTY;
@@ -310,7 +315,9 @@ public class Node
     public void setPlayer(Color color)
     {
         assert(color == Color.BLACK || color == Color.WHITE);
-        m_player = color;
+        if (m_setupInfo == null)
+            m_setupInfo = new SetupInfo();
+        m_setupInfo.m_player = color;
     }
 
     public void removeChild(Node child)
@@ -347,8 +354,6 @@ public class Node
         return getChild(i - 1);
     }
 
-    private Color m_player = Color.EMPTY;
-
     private Move m_move;
 
     private Node m_father;
@@ -360,8 +365,6 @@ public class Node
     private TimeInfo m_timeInfo;
 
     private TreeMap m_sgfProperties;
-
-    private Vector m_addWhite;
 
     private Vector m_children;
 }
