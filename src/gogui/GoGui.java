@@ -2138,9 +2138,7 @@ class GoGui
             if (m_prefs.contains(name))
             {
                 int dividerLocation = m_prefs.getInt(name);
-                m_splitPane.setDividerLocation(dividerLocation
-                                               * m_splitPane.getWidth()
-                                               / 1000);
+                m_splitPane.setDividerLocation(dividerLocation);
             }
         }
     }
@@ -2276,9 +2274,13 @@ class GoGui
         if (GuiUtils.isNormalSizeMode(this))
         {
             String name = "splitpane-position-" + m_boardSize;
-            m_prefs.setInt(name,
-                           1000 * m_splitPane.getDividerLocation()
-                           / m_splitPane.getWidth());
+            int dividerLocation;
+            dividerLocation = m_splitPane.getDividerLocation();
+            if (! m_showInfoPanel)
+                dividerLocation =
+                    dividerLocation - m_oldBoardPanelWidth
+                    + m_boardPanel.getWidth();
+            m_prefs.setInt(name, dividerLocation);
         }
     }
 
