@@ -111,13 +111,17 @@ public class AnalyzeTextOutput
         Style styleTitle = doc.addStyle("title", def);
         StyleConstants.setBold(styleTitle, true);
         Style stylePoint = doc.addStyle("point", def);
-        StyleConstants.setForeground(stylePoint, new Color(0.25f, 0.5f, 0.7f));
+        Color colorPoint = new Color(0.25f, 0.5f, 0.7f);
+        StyleConstants.setForeground(stylePoint, colorPoint);
         Style styleNumber = doc.addStyle("number", def);
-        StyleConstants.setForeground(styleNumber, new Color(0f, 0.54f, 0f));
+        Color colorNumber = new Color(0f, 0.54f, 0f);
+        StyleConstants.setForeground(styleNumber, colorNumber);
         Style styleConst = doc.addStyle("const", def);
-        StyleConstants.setForeground(styleConst, new Color(0.8f, 0f, 0f));
+        Color colorConst = new Color(0.8f, 0f, 0f);
+        StyleConstants.setForeground(styleConst, colorConst);
         Style styleColor = doc.addStyle("color", def);
-        StyleConstants.setForeground(styleColor, new Color(0.54f, 0f, 0.54f));
+        Color colorColor = new Color(0.54f, 0f, 0.54f);
+        StyleConstants.setForeground(styleColor, colorColor);
         m_textPane.setEditable(true);
         highlight("number", "\\b-?\\d+\\.?\\d*\\b");
         highlight("const", "\\b[A-Z_][A-Z_]+[A-Z]\\b");
@@ -128,19 +132,20 @@ public class AnalyzeTextOutput
         m_textPane.setEditable(false);
     }
 
-    private void highlight(String style, String regex)
+    private void highlight(String styleName, String regex)
     {
         StyledDocument doc = m_textPane.getStyledDocument();
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         try
         {
-            Matcher matcher = pattern.matcher(doc.getText(0, doc.getLength()));
+            CharSequence text = doc.getText(0, doc.getLength());
+            Matcher matcher = pattern.matcher(text);
             while (matcher.find())
             {
                 int start = matcher.start();
                 int end = matcher.end();
-                doc.setCharacterAttributes(start, end - start,
-                                           doc.getStyle(style), true);
+                Style style = doc.getStyle(styleName);
+                doc.setCharacterAttributes(start, end - start, style, true);
             }
         }
         catch (BadLocationException e)
