@@ -1,0 +1,361 @@
+<chapter id="menubar">
+  
+<title>Main window</title>
+
+<section>
+<title>Go board</title>
+<para>
+Clicking on an empty field in the Go board plays a move there.
+In setup mode, score mode or after certain analyze commands
+clicking on a field has a special meaning (see
+<xref linkend="setup mode"></xref>, <xref linkend="score"></xref> and
+<xref linkend="analyze"></xref>).
+</para>
+<para>
+Using the keyboard, fields can be selected by moving the
+cursor (the red square corners) with the cursor keys to the target field
+and pressing <keycap>Enter</keycap>.
+Holding <keycap>Shift</keycap> while pressing a cursor key moves the
+cursor to the next handicap line in this direction or to the edge
+of the board.
+</para>
+</section>
+
+<section>
+<title>File menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>New</guimenuitem></term>
+<listitem>
+Start a new game.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Open...</guimenuitem></term>
+<listitem>
+Open a game from a file in
+<ulink url="http://www.red-bean.com/sgf/">SGF</ulink>
+format.
+<warning>
+<para>
+If you open a file created by another application that contains
+side variations and node properties and save the game by overwriting
+the original file, all this information will be lost.
+</para>
+</warning>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Open recent</guisubmenu></term>
+<listitem>
+Open a game from a list of recently used files.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save...</guimenuitem></term>
+<listitem>
+Save the current game to a file.
+If the file name ending is <filename>sgf</filename>, the game is saved
+in SGF format.
+If the file name ending is <filename>tex</filename>, the game is exported
+to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
+<ulink url="http://www.abo.fi/~vbos/psgo-frame.html">PSGO</ulink> style.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save position...</guimenuitem></term>
+<listitem>
+Save the current position to a file.
+If the file name ending is <filename>sgf</filename>, the game is saved
+in SGF format.
+If the file name ending is <filename>tex</filename>, the game is exported
+to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
+<ulink url="http://www.abo.fi/~vbos/psgo-frame.html">PSGO</ulink> style.
+When exporting to LaTeX, some board markups from analyze commands
+are also exported (string labels, marked and selected points).
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Print...</guimenuitem></term>
+<listitem>
+Print the current position.
+A screen shot of the current board including all markups from
+analyze commands is printed.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Open with program...</guimenuitem></term>
+<listitem>
+Open the current game at the current position with a different
+Go program.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Quit</guimenuitem></term>
+<listitem>
+Quit GoGui.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</section>
+
+<section>
+<title>Game menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guisubmenu>Size</guisubmenu></term>
+<listitem>
+Change the board size and start a new game.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Komi...</guimenuitem></term>
+<listitem>
+Change the komi.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Rules</guisubmenu></term>
+<listitem>
+Change the rules.
+Japanese rules count only territory, Chinese rules also the stones
+(but ignore prisoners).
+The program is informed by the <userinput>scoring_system</userinput>
+(from an early draft of GTP version 2) if it supports this command.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Handicap</guisubmenu></term>
+<listitem>
+Set the number of handicap stones.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Computer color</guisubmenu></term>
+<listitem>
+Choose what side the Go program plays.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Pass</guimenuitem></term>
+<listitem>
+Do a pass move.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Computer play</guimenuitem></term>
+<listitem>
+Make the computer play a move.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Interrupt</guimenuitem></term>
+<listitem>
+Interrupt the command that is currently running.
+This menu item is only active if a lengthy command (like move
+generation) is running and the Go program supports interrupting
+(see <xref linkend="interrupt">Interrupting commands</xref>).
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Beginning</guimenuitem></term>
+<listitem>
+Retract all moves.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Backward 10</guimenuitem></term>
+<listitem>
+Retract 10 moves.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Backward</guimenuitem></term>
+<listitem>
+Retract a moves.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Forward</guimenuitem></term>
+<listitem>
+Replay a move.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Forward 10</guimenuitem></term>
+<listitem>
+Replay 10 moves.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>End</guimenuitem></term>
+<listitem>
+Replay all moves.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Goto...</guimenuitem></term>
+<listitem>
+Go to a certain move number.
+</listitem>
+</varlistentry>
+
+<varlistentry id="score">
+<term><guimenuitem>Score</guimenuitem></term>
+<listitem>
+Score the current game.
+A window will be opened containing score information.
+First the Go program will be asked what stones are dead with the
+<userinput>final_status_list dead</userinput> command.
+Dead stones are marked with a cross-hair.
+If the Go program does not support this command or you don't agree with it,
+you can change the status of stones by clicking on them.
+You leave score mode by closing the score window.
+If you close the score window by pressing the <guibutton>Ok</guibutton>
+button, the score will be included in the file if you save the game as an SGF
+file later.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</section>
+
+<section>
+<title>Setup menu</title>
+<variablelist>
+
+<varlistentry id="setup mode">
+<term><guimenuitem>Setup mode</guimenuitem></term>
+<listitem>
+Enter or leave setup mode.
+In setup mode you can place or remove stones of the current color.
+The current color can be changed with the <guimenuitem>Black</guimenuitem>
+and <guimenuitem>White</guimenuitem> menu item from the
+<guimenu>Setup</guimenu> menu.
+<note>
+Setting up a position is not reversible.
+After leaving setup mode you are in a new game starting with the current
+position and the current color to move.
+</note>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Black</guimenuitem></term>
+<listitem>
+Set the current color for setting up stones and to current color to move
+to Black.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>White</guimenuitem></term>
+<listitem>
+Set the current color for setting up stones and to current color to move
+to White.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</section>
+
+<section>
+<title>Settings menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Beep after move</guimenuitem></term>
+<listitem>
+Beep after each computer move.
+With most versions of Java the PC speaker is used for the beep.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Remember window sizes</guimenuitem></term>
+<listitem>
+Remember positions and sizes of the main windows, the Analyze dialog
+and the GTP shell.
+The sizes are remembered depending on the board size to
+allow a different layout of the three windows for different board
+sizes.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show last move</guimenuitem></term>
+<listitem>
+Mark the last move with a red circle.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</section>
+
+<section>
+<title>Windows menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Analyze</guimenuitem></term>
+<listitem>
+Open the Analyze dialog or bring it to front, if already open.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Gtp shell</guimenuitem></term>
+<listitem>
+Open the GTP shell window or bring it to front, if already open.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</section>
+
+<section>
+<title>Help menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Contents</guimenuitem></term>
+<listitem>
+Open a window with the online help.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>About</guimenuitem></term>
+<listitem>
+Show the version of GoGui.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</section>
+
+</chapter>
