@@ -7,8 +7,10 @@ package go;
 
 //----------------------------------------------------------------------------
 
-/** Intersection on the Go board. */
-public class Point
+/** Intersection on the Go board.
+    This class is immutable.
+*/
+public final class Point
 {
     public Point(int x, int y)
     {

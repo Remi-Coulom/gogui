@@ -13,8 +13,9 @@ import java.util.*;
     Contains a point (null for pass move) and a color.
     The color is usually black or white, but empty can be used for
     removing a stone on the board.
+    This class is immutable.
 */
-public class Move
+public final class Move
 {
     public Move(Point point, Color color)
     {
