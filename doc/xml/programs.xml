@@ -39,6 +39,11 @@ Command: <userinput>Aya.exe --mode gtp</userinput>
 http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm</ulink>
 </para>
 <para>
+<note>
+AmigoPlus 0.1.2 has several bugs in its GTP implementation.
+</note>
+</para>
+<para>
 Operating systems: Unix.
 </para>
 <para>
@@ -53,6 +58,11 @@ Command: <userinput>amigoplus -gtp</userinput>
 http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm</ulink>
 </para>
 <para>
+<note>
+BadukiPlus 0.1.2 has several bugs in its GTP implementation.
+</note>
+</para>
+<para>
 Operating systems: Unix.
 </para>
 <para>
@@ -65,6 +75,11 @@ Command: <userinput>badukiplus -gtp</userinput>
 <para>
 <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm">
 http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm</ulink>
+</para>
+<para>
+<note>
+WallyPlus 0.1.2 has several bugs in its GTP implementation.
+</note>
 </para>
 <para>
 Operating systems: Unix.
