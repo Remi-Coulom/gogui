@@ -65,6 +65,13 @@ public class Writer
 
     private PrintStream m_out;
 
+    private static String getDefaultEncoding()
+    {
+        OutputStreamWriter out =
+            new OutputStreamWriter(new ByteArrayOutputStream());
+        return out.getEncoding();
+    }
+
     private static String getName(File file)
     {
         String result = file.getName();
@@ -99,12 +106,13 @@ public class Writer
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
-        m_out.println(";\n" +
-                      "FF[4]\n" +
-                      "GM[1]\n" +
-                      "GN[" + getName(file) + "]\n" +
-                      "AP[" + appName + "]\n" +
-                      "SZ[" + m_size + "]");
+        m_out.print(";\n" +
+                    "FF[4]\n" +
+                    "GM[1]\n" +
+                    "GN[" + getName(file) + "]\n" +
+                    "AP[" + appName + "]\n" +
+                    "SZ[" + m_size + "]\n" +
+                    "CA[" + getDefaultEncoding() + "]\n");
     }
 
     private void printHeader(File file, String application, String version,
