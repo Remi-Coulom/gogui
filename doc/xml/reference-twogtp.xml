@@ -1,253 +1,232 @@
 <refentry id="reference-twogtp">
-  <refmeta>
-    <refentrytitle>twogtp</refentrytitle>
-    <manvolnum>1</manvolnum>
-  </refmeta>
-  <refnamediv>
-    <refname>twogtp</refname>
-    <refname>twogtp.jar</refname>
-    <refpurpose>
-      Go Text Protocol adapter for playing games between two Go programs.
-    </refpurpose>
-  </refnamediv>
-  <refsynopsisdiv>
-    <cmdsynopsis>
-      <command>twogtp</command>
-      <arg>
-        <option>-alternate</option>
-      </arg>
-      <arg>
-        <option>-auto</option>
-      </arg>
-      <arg>
-        <option>-compare</option>
-      </arg>
-      <arg choice="plain">
-        <option>-black</option> <replaceable>command</replaceable>
-      </arg>
-      <arg>
-        <option>-games</option>
-      </arg>
-      <arg>
-        <option>-help</option>
-      </arg>
-      <arg>
-        <option>-komi</option> <replaceable>komi</replaceable>
-      </arg>
-      <arg>
-        <option>-sgffile</option> <replaceable>prefix</replaceable>
-      </arg>
-      <arg>
-        <option>-size</option> <replaceable>n</replaceable>
-      </arg>
-      <arg>
-        <option>-verbose</option>
-      </arg>
-      <arg choice="plain">
-        <option>-white</option> <replaceable>command</replaceable>
-      </arg>
-    </cmdsynopsis>
-  </refsynopsisdiv>
 
-  <refsection>
-    <title>Description</title>
-    <para>
-      Adpater program for playing games between two Go programs
-      supporting GTP (Go Text Protocol).
-    </para>
+<refmeta>
+<refentrytitle>twogtp</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
 
-    <para>
-      The adpater forwards the following commands to both programs:
-      <itemizedlist>
-        <listitem><userinput>boardsize</userinput></listitem>
-        <listitem><userinput>black</userinput></listitem>
-        <listitem><userinput>komi</userinput></listitem>
-        <listitem><userinput>loadsgf</userinput></listitem>
-        <listitem><userinput>quit</userinput></listitem>
-        <listitem><userinput>scoring_system</userinput></listitem>
-        <listitem><userinput>undo</userinput></listitem>
-        <listitem><userinput>white</userinput></listitem>
-      </itemizedlist>
-      The following commands are forwarded to the first program
-      that implements them (Black is tried first):
-      <itemizedlist>
-        <listitem><userinput>final_score</userinput></listitem>
-        <listitem><userinput>final_status</userinput></listitem>
-        <listitem><userinput>final_status_list</userinput></listitem>
-      </itemizedlist>
-      The commands <userinput>genmove_black</userinput> and
-      <userinput>genmove_white</userinput> are forwarded only to the
-      program of the corresponding color, the other program is informed about
-      the move with a <userinput>black</userinput> or
-      <userinput>white</userinput> command.
-      GTP extension commands implemented by exactly one of the programs are
-      forwarded to the program.
-      The special comment line <userinput>#&#160;interrupt</userinput>
-      used by <application>GoGui</application> to interrupt commands is
-      forwarded to both programs.
-    </para>
+<refnamediv>
+<refname>twogtp</refname>
+<refname>twogtp.jar</refname>
+<refpurpose>
+Go Text Protocol adapter for playing games between two Go programs.
+</refpurpose>
+</refnamediv>
 
-    <para>
-      If the option <option>-sgffile</option> is used, the games are
-      saved after they are finished and a result text file in table format
-      is created with some statistics.
-      If the program(s) support the GTP command <userinput>cputime</userinput>
-      these statistics include CPU times.
-    </para>
-  </refsection>
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>twogtp</command>
+<arg><option>-alternate</option></arg>
+<arg><option>-auto</option></arg>
+<arg><option>-compare</option></arg>
+<arg choice="plain"><option>-black</option> <replaceable>command</replaceable>
+  </arg>
+<arg><option>-games</option></arg>
+<arg><option>-help</option></arg>
+<arg><option>-komi</option> <replaceable>komi</replaceable></arg>
+<arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg choice="plain"><option>-white</option> <replaceable>command</replaceable>
+  </arg>
+</cmdsynopsis>
+</refsynopsisdiv>
 
-  <refsection>
-    <title>Options</title>
-    <variablelist>
-      <varlistentry>
-	<term>
-	  <option>-alternate</option>
-	</term>
-	<listitem>
-	  Alternate colors. Black and White are exchanged every odd game.
-	  The scores saved in the results table if <option>-sgffile</option>
-	  are still using the name Black and White as given with
-	  <option>-black</option> and <option>-white</option>.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-auto</option>
-	</term>
-	<listitem>
-	  Automatically play games.
-	  Use this option if you want to run <command>twogtp</command> as a
-	  standalone program without a program like
-	  <application>GoGui</application> which controls the move generation
-	  with <userinput>genmove_black</userinput> and
-	  <userinput>genmove_white</userinput> commands.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-black</option> <replaceable>command</replaceable>
-	</term>
-	<listitem>
-	  Command for black program.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-compare</option>
-	</term>
-	<listitem>
-	  Compare a list of SGF files given as arguments an exit.
-	  Works only with SGF files with alternating moves and without setup
-	  stones.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-games</option> <replaceable>n</replaceable>
-	</term>
-	<listitem>
-	  Number of games to play (0 means no limit).
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-help</option>
-	</term>
-	<listitem>
-	  Display help and exit.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-komi</option> <replaceable>komi</replaceable>.
-	</term>
-	<listitem>
-	  Komi. If this option is not used, the komi can be set with
-	  the <userinput>komi</userinput> command or default komi 5.5 will be
-	   used with option <option>-auto</option>.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-sgffile</option> <replaceable>prefix</replaceable>.
-	</term>
-	<listitem>
-	  Save games after they are finished with filename
-	  <filename>
-	    <replaceable>prefix</replaceable>-<replaceable>n</replaceable>.sgf
-	  </filename>
-	  with <replaceable>n</replaceable> being the game number.
-	  The results are appended to the file
-	  <filename><replaceable>prefix</replaceable>.dat</filename>.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-size</option> <replaceable>n</replaceable>.
-	</term>
-	<listitem>
-	  Board size for games. If this option is not used the size will
-	  be set with the <userinput>boardsize</userinput> command or
-	  default size 19 will be used with option <option>-auto</option>.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-verbose</option>
-	</term>
-	<listitem>
-	  Print debugging messages.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-white</option> <replaceable>command</replaceable>
-	</term>
-	<listitem>
-	  Command for white program.
-	</listitem>
-      </varlistentry>
-    </variablelist>
-  </refsection>
+<refsection>
+<title>Description</title>
+<para>
+Adpater program for playing games between two Go programs
+supporting GTP (Go Text Protocol).
+</para>
 
-  <refsection>
-    <title>GTP Extensions</title>
-    <para>
-      <variablelist>
-	<varlistentry>
-	  <term>
-            <userinput>
-	      gogui_title
-	    </userinput>
-          </term>
-          <listitem>
-	    Return a title for the current game consisting of the game number
-	    (if option <option>-sgffile</option> was used) and the player
-	    names.
-	  </listitem>
-        </varlistentry>
-	<varlistentry>
-	  <term>
-            <userinput>
-	      twogtp_black <replaceable>command</replaceable>
-	    </userinput>
-          </term>
-          <listitem>
-	    Send <replaceable>command</replaceable> to black player .
-	  </listitem>
-        </varlistentry>
-	<varlistentry>
-	  <term>
-            <userinput>
-	      twogtp_white <replaceable>command</replaceable>
-	    </userinput>
-          </term>
-          <listitem>
-	    Send <replaceable>command</replaceable> to white player .
-	  </listitem>
-        </varlistentry>
-      </variablelist>    
-    </para>
-  </refsection>
+<para>
+The adpater forwards the following commands to both programs:
+<itemizedlist>
+<listitem><userinput>boardsize</userinput></listitem>
+<listitem><userinput>black</userinput></listitem>
+<listitem><userinput>komi</userinput></listitem>
+<listitem><userinput>loadsgf</userinput></listitem>
+<listitem><userinput>quit</userinput></listitem>
+<listitem><userinput>scoring_system</userinput></listitem>
+<listitem><userinput>undo</userinput></listitem>
+<listitem><userinput>white</userinput></listitem>
+</itemizedlist>
+The following commands are forwarded to the first program
+that implements them (Black is tried first):
+<itemizedlist>
+<listitem><userinput>final_score</userinput></listitem>
+<listitem><userinput>final_status</userinput></listitem>
+<listitem><userinput>final_status_list</userinput></listitem>
+</itemizedlist>
+The commands <userinput>genmove_black</userinput> and
+<userinput>genmove_white</userinput> are forwarded only to the
+program of the corresponding color, the other program is informed about
+the move with a <userinput>black</userinput> or
+<userinput>white</userinput> command.
+GTP extension commands implemented by exactly one of the programs are
+forwarded to the program.
+The special comment line <userinput>#&#160;interrupt</userinput>
+used by <application>GoGui</application> to interrupt commands is
+forwarded to both programs.
+</para>
+
+<para>
+If the option <option>-sgffile</option> is used, the games are
+saved after they are finished and a result text file in table format
+is created with some statistics.
+If the program(s) support the GTP command <userinput>cputime</userinput>
+these statistics include CPU times.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term><option>-alternate</option></term>
+<listitem>
+Alternate colors. Black and White are exchanged every odd game.
+The scores saved in the results table if <option>-sgffile</option>
+are still using the name Black and White as given with
+<option>-black</option> and <option>-white</option>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-auto</option></term>
+<listitem>
+Automatically play games.
+Use this option if you want to run <command>twogtp</command> as a
+standalone program without a program like
+<application>GoGui</application> which controls the move generation
+with <userinput>genmove_black</userinput> and
+<userinput>genmove_white</userinput> commands.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-black</option> <replaceable>command</replaceable></term>
+<listitem>
+Command for black program.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-compare</option></term>
+<listitem>
+Compare a list of SGF files given as arguments an exit.
+Works only with SGF files with alternating moves and without setup stones.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-games</option> <replaceable>n</replaceable></term>
+<listitem>
+Number of games to play (0 means no limit).
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+Display help and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-komi</option> <replaceable>komi</replaceable></term>
+<listitem>
+Komi. If this option is not used, the komi can be set with
+the <userinput>komi</userinput> command or default komi 5.5 will be
+used with option <option>-auto</option>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-sgffile</option> <replaceable>prefix</replaceable></term>
+<listitem>
+Save games after they are finished with filename
+<filename>
+<replaceable>prefix</replaceable>-<replaceable>n</replaceable>.sgf
+</filename>
+with <replaceable>n</replaceable> being the game number.
+The results are appended to the file
+<filename><replaceable>prefix</replaceable>.dat</filename>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-size</option> <replaceable>n</replaceable></term>
+<listitem>
+Board size for games. If this option is not used the size will
+be set with the <userinput>boardsize</userinput> command or
+default size 19 will be used with option <option>-auto</option>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+Print debugging messages.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-white</option> <replaceable>command</replaceable></term>
+<listitem>
+Command for white program.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+<refsection>
+<title>GTP Extensions</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><userinput>gogui_interrupt</userinput></term>
+<listitem>
+Indicate interrupt ability for GoGui.
+<application>TwoGtp</application> will forward the interrupt to both
+programs with the appropriate method if they implement either
+<userinput>gogui_interrupt</userinput> or <userinput>gogui_sigint</userinput>.
+See the chapter <xref linkend="interrupt">Interrupting commands</xref>
+of the <application>GoGui</application> documentation.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>gogui_title</userinput></term>
+<listitem>
+Return a title for the current game consisting of the game number (if option
+<option>-sgffile</option> was used) and the player names.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<userinput>twogtp_black <replaceable>command</replaceable></userinput>
+</term>
+<listitem>
+Send <replaceable>command</replaceable> to black player .
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<userinput>twogtp_white <replaceable>command</replaceable></userinput>
+</term>
+<listitem>
+Send <replaceable>command</replaceable> to white player .
+</listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</refsection>
 
 </refentry>

@@ -1,179 +1,186 @@
 <appendix id="news">
-  <title>Release notes</title>
+<title>Release notes</title>
+<revhistory>
 
-  <revhistory>
-    <revision>
-      <revnumber>&version;</revnumber>
-      <authorinitials>enz</authorinitials>
-      <revremark>
-	<itemizedlist>
-	  <listitem>
-	    <application>TwoGto</application>:
-	    new options for playing a series of games and saving the results;
-	    forward GTP extension commands to program that implement them;
-	    handle GTP version 2 programs.
-	  </listitem>
-	  <listitem>
-	    New <guimenu>Settings</guimenu> item
-	    <guimenuitem>Show last move</guimenuitem>.
-	  </listitem>
-	  <listitem>
-	    <application>GoGui</application> uses GTP extension command
-	    <userinput>gogui_title</userinput> if available.
-	  </listitem>
-	  <listitem>
-	    Fix problem in Gtp shell: caret was not redrawn after entering
-	    command.
-	  </listitem>
-	  <listitem>
-	    Use key accelerators more similar to existing UI style guides.
-	  </listitem>
-	  <listitem>
-	    Game scan be saved in LaTex format usinf psgo.sty.
-	    Standalone converter <command>sgftotex</command>.
-	  </listitem>
-	  <listitem>
-	    Rename <application>GoGui</application> option
-	    <option>-autoplay</option> to <option>-auto</option>.
-	    Remove option <option>-autofile</option>.
-	  </listitem>
-	  <listitem>
-	    <application>GoGui</application>: new option
-	    <option>-command</option>.
-	  </listitem>
-	  <listitem>
-	    New tool <application>GtpRegress</application>.
-	  </listitem>
-	  <listitem>
-	    Rename <application>GtpNet</application> to
-            <application>GtpServer</application>.
-	  </listitem>
-	  <listitem>
-	    Setup and score mode do no longer use their own the menu bar.
-	  </listitem>
-	  <listitem>
-	    Lots of other fixes and enhancements.
-	  </listitem>
-	</itemizedlist>
-      </revremark>
-    </revision>
-    <revision>
-      <revnumber>0.2.2</revnumber>
-      <date>23 Aug 2003</date>
-      <authorinitials>enz</authorinitials>
-      <revremark>
-	<itemizedlist>
-	  <listitem>
-	    Use GTP command <userinput>final_status_list</userinput> if
-	    supported by the Go program for initializing dead stones when
-	     scoring.
-	  </listitem>
-	  <listitem>
-	    Make Japanese rules default and store them in preferences.
-	  </listitem>
-	  <listitem>
-	    After setting up a position set last setup color as color to move.
-	  </listitem>
-	  <listitem>
-	    Show filename in title bar if game is loaded and not modified.
-	  </listitem>
-	  <listitem>
-	    Add option for beep after move.
-	  </listitem>
-	  <listitem>
-	    Use <userinput>time_settings</userinput> command if
-	    <option>-time</option> option is used.
-	  </listitem>
-	  <listitem>
-	    New options <option>-autofile</option>,
-	    <option>-computer-both</option>, <option>-computer-black</option>.
-	  </listitem>
-	  <listitem>
-	    Compile <application>TwoGtp</application> into its own jar file
-	    <filename>twogtp.jar</filename>.
-	  </listitem>
-	  <listitem>
-	    Fix bug in <application>GmpToGtp</application>: Black should send
-	    NEWGAME if <option>-simple</option> option is used.
-	  </listitem>
-	  <listitem>
-	    Fix potential deadlock if program writes to standard error
-	    before GUI is visible.
-	  </listitem>
-	  <listitem>
-	    Add network tools <application>GtpNet</application> and
-	    <application>NetGtp</application>.
-	  </listitem>
-	  <listitem>
-	    Lots of other fixes and enhancements.
-	  </listitem>
-	</itemizedlist>
-      </revremark>
-    </revision>
-    <revision>
-      <revnumber>0.2.1</revnumber>
-      <date>24 Jun 2003</date>
-      <authorinitials>enz</authorinitials>
-      <revremark>
-	<itemizedlist>
-	  <listitem>
-	    Fix cursor not positioned at last moves if handicap or setup
-	    stones exist.
-	  </listitem>
-	  <listitem>
-	    Fix bug: handicap stones were played after setup done.
-	  </listitem>
-	  <listitem>
-	    Clear old markups before showing an analyze command with
-	    a point list result.
-	  </listitem>
-	  <listitem>
-	    Store komi in preferences.
-	  </listitem>
-	  <listitem>
-	    Add command reference to documentation.
-	  </listitem>
-	  <listitem>
-	    Other small fixes.
-	  </listitem>
-	</itemizedlist>
-      </revremark>
-    </revision>
-    <revision>
-      <revnumber>0.2</revnumber>
-      <date>24 Apr 2003</date>
-      <authorinitials>enz</authorinitials>
-      <revremark>
-	<itemizedlist>
-	  <listitem>
-	    Board uses background image and antialiasing.
-	  </listitem>
-	  <listitem>
-	    Cursor keys can be used to enter moves.
-	  </listitem>
-	  <listitem>
-	    Documentation in docbook format.
-	  </listitem>
-	  <listitem>
-	    Improvements in Gmp to Gtp adapter.
-	  </listitem>
-	  <listitem>
-	    Lots of other small fixes and improvements.
-	  </listitem>
-	</itemizedlist>
-      </revremark>
-    </revision>
-    <revision>
-      <revnumber>0.1</revnumber>
-      <date>4 Mar 2003</date>
-      <authorinitials>enz</authorinitials>
-      <revremark>
-	<itemizedlist>
-	  <listitem>
-	    Initial release.
-	  </listitem>
-	</itemizedlist>
-      </revremark>
-    </revision>
-  </revhistory>
+<revision>
+<revnumber>&version;</revnumber>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+<application>TwoGto</application>:
+new options for playing a series of games and saving the results;
+forward GTP extension commands to program that implement them;
+handle GTP version 2 programs.
+</listitem>
+<listitem>
+New <guimenu>Settings</guimenu> item
+<guimenuitem>Show last move</guimenuitem>.
+</listitem>
+<listitem>
+<application>GoGui</application> uses GTP extension command
+<userinput>gogui_title</userinput> if available.
+</listitem>
+<listitem>
+Fix problem in Gtp shell: caret was not redrawn after entering
+command.
+</listitem>
+<listitem>
+Use key accelerators more similar to existing UI style guides.
+</listitem>
+<listitem>
+Game scan be saved in LaTex format usinf psgo.sty.
+Standalone converter <command>sgftotex</command>.
+</listitem>
+<listitem>
+Rename <application>GoGui</application> option
+<option>-autoplay</option> to <option>-auto</option>.
+Remove option <option>-autofile</option>.
+</listitem>
+<listitem>
+<application>GoGui</application>: new option
+<option>-command</option>.
+</listitem>
+<listitem>
+New tool <application>GtpRegress</application>.
+</listitem>
+<listitem>
+Rename <application>GtpNet</application> to
+<application>GtpServer</application>.
+</listitem>
+<listitem>
+Setup and score mode do no longer use their own the menu bar.
+</listitem>
+<listitem>
+Go programs that can understand the special comment line
+<userinput>#&#160;interrupt</userinput> must indicate this by implementing the
+command <userinput>gogui_interrupt</userinput>.
+</listitem>
+<listitem>
+Lots of other fixes and enhancements.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
+<revnumber>0.2.2</revnumber>
+<date>23 Aug 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Use GTP command <userinput>final_status_list</userinput> if
+supported by the Go program for initializing dead stones when scoring.
+</listitem>
+<listitem>
+Make Japanese rules default and store them in preferences.
+</listitem>
+<listitem>
+After setting up a position set last setup color as color to move.
+</listitem>
+<listitem>
+Show filename in title bar if game is loaded and not modified.
+</listitem>
+<listitem>
+Add option for beep after move.
+</listitem>
+<listitem>
+Use <userinput>time_settings</userinput> command if
+<option>-time</option> option is used.
+</listitem>
+<listitem>
+New options <option>-autofile</option>,
+<option>-computer-both</option>, <option>-computer-black</option>.
+</listitem>
+<listitem>
+Compile <application>TwoGtp</application> into its own jar file
+<filename>twogtp.jar</filename>.
+</listitem>
+<listitem>
+Fix bug in <application>GmpToGtp</application>: Black should send
+NEWGAME if <option>-simple</option> option is used.
+</listitem>
+<listitem>
+Fix potential deadlock if program writes to standard error
+before GUI is visible.
+</listitem>
+<listitem>
+Add network tools <application>GtpNet</application> and
+<application>NetGtp</application>.
+</listitem>
+<listitem>
+Lots of other fixes and enhancements.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
+<revnumber>0.2.1</revnumber>
+<date>24 Jun 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Fix cursor not positioned at last moves if handicap or setup stones exist.
+</listitem>
+<listitem>
+Fix bug: handicap stones were played after setup done.
+</listitem>
+<listitem>
+Clear old markups before showing an analyze command with a point list result.
+</listitem>
+<listitem>
+Store komi in preferences.
+</listitem>
+<listitem>
+Add command reference to documentation.
+</listitem>
+<listitem>
+Other small fixes.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
+<revnumber>0.2</revnumber>
+<date>24 Apr 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Board uses background image and antialiasing.
+</listitem>
+<listitem>
+Cursor keys can be used to enter moves.
+</listitem>
+<listitem>
+Documentation in docbook format.
+</listitem>
+<listitem>
+Improvements in Gmp to Gtp adapter.
+</listitem>
+<listitem>
+Lots of other small fixes and improvements.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+<revision>
+<revnumber>0.1</revnumber>
+<date>4 Mar 2003</date>
+<authorinitials>enz</authorinitials>
+<revremark>
+<itemizedlist>
+<listitem>
+Initial release.
+</listitem>
+</itemizedlist>
+</revremark>
+</revision>
+
+</revhistory>
 </appendix>

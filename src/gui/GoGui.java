@@ -589,8 +589,6 @@ class GoGui
 
     private String m_name = "";
 
-    private String m_pid;
-
     private String m_program;
 
     private String m_version = "";
@@ -741,8 +739,11 @@ class GoGui
     private void beginLengthyCommand()
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
-        m_menuBar.setCommandInProgress();
-        m_toolBar.setCommandInProgress();
+        boolean isInterruptSupported =
+            (m_commandThread.isInterruptSupported()
+             || (m_computerBlack && m_computerWhite));
+        m_menuBar.setCommandInProgress(isInterruptSupported);
+        m_toolBar.setCommandInProgress(isInterruptSupported);
         m_gtpShell.setInputEnabled(false);
         m_commandInProgress = true;
     }
@@ -854,6 +855,8 @@ class GoGui
             return;
         if (m_computerBlack && m_computerWhite)
             computerNone();
+        if (! m_commandThread.isInterruptSupported())
+            return;
         if (! showQuestion("Interrupt command?"))
             return;
         interrupt();
@@ -1429,9 +1432,7 @@ class GoGui
                     m_version = m_commandThread.queryVersion();
                     m_gtpShell.setProgramVersion(m_version);
                     m_commandThread.querySupportedCommands();
-                    if (m_commandThread.isCommandSupported("gogui_sigint"))
-                        m_pid =
-                            m_commandThread.sendCommand("gogui_sigint").trim();
+                    m_commandThread.queryInterruptSupport();
                 }
                 catch (Gtp.Error e)
                 {
@@ -1507,10 +1508,17 @@ class GoGui
 
     private void interrupt()
     {
-        if (m_pid != null)
-            runCommand("kill -INT " + m_pid);
-        else
+        if (! m_commandInProgress)
+            return;
+        showStatus("Interrupting...");
+        try
+        {
             m_commandThread.sendInterrupt();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+        }
     }
 
     private void loadFile(File file, int move)
@@ -1660,26 +1668,6 @@ class GoGui
         m_boardNeedsReset = false;
     }
     
-    private void runCommand(String command)
-    {
-        Runtime runtime = Runtime.getRuntime();
-        try
-        {
-            Process process = runtime.exec(command);
-            int result = process.waitFor();
-            if (result != 0)
-                showError("Command \"" + command + "\" returned " +
-                          result + ".");
-        }
-        catch (IOException e)
-        {
-            showError("Could not run program.", e);
-        }
-        catch (InterruptedException e)
-        {
-        }
-    }
-
     private void runLengthyCommand(String cmd, Runnable callback)
     {
         assert(m_commandThread != null);

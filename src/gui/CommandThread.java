@@ -78,6 +78,11 @@ class CommandThread
         return m_gtp.getSupportedCommands();
     }
 
+    public void sendInterrupt() throws Gtp.Error
+    {
+        m_gtp.interrupt();
+    }
+
     public boolean isCommandSupported(String command)
     {
         assert(SwingUtilities.isEventDispatchThread());
@@ -85,10 +90,20 @@ class CommandThread
         return m_gtp.isCommandSupported(command);
     }
 
+    public boolean isInterruptSupported()
+    {
+        return m_gtp.isInterruptSupported();
+    }
+
     public boolean isProgramDead()
     {
         assert(SwingUtilities.isEventDispatchThread());
         return m_gtp.isProgramDead();
+    }
+
+    public void queryInterruptSupport()
+    {
+        m_gtp.queryInterruptSupport();
     }
 
     public void queryProtocolVersion() throws Gtp.Error
@@ -153,14 +168,6 @@ class CommandThread
         }
     }
 
-    /** Send special comment line for interrupting commands.
-        Only allowed while no command or command with callback is running.
-     */
-    public void sendInterrupt()
-    {
-        m_gtp.sendInterrupt();
-    }
-    
     /** Send asynchronous command. */
     public void sendCommand(String command, Runnable callback)
     {

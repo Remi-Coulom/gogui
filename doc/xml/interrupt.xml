@@ -1,32 +1,32 @@
-  <chapter id="interrupt">
-    <title>Interrupting commands</title>
+<chapter id="interrupt">
+<title>Interrupting commands</title>
 
-    <para>
-      Commands can be interrupted, if the Go program supports it.
-    </para>
+<para>
+Commands can be interrupted, if the Go program supports it.
+</para>
     
-    <para>
-      There are two ways of sending the interrupt signal to the program:
-    </para>
-    <orderedlist>
-      <listitem>
-	If the program can handle INT signals, it indicates this
-	by implementing the <userinput>gogui_sigint</userinput> command
-	and returning its process ID.
-	GoGui will then send an INT signal to the process if the user
-	presses the interrupt button
-	(actually GoGui invokes the shell command
-	<userinput>kill -INT <replaceable>pid</replaceable></userinput>,
-	so this will work only on UNIX systems).
-      </listitem>
-      <listitem>
-	If the program does not implement <userinput>gogui_sigint</userinput>,
-	GoGui will send a special comment line
-	(<userinput>#&#160;interrupt</userinput>) to the program.
-	If the program reads the GTP input stream
-	while processing a command, it can interrupt the command.
-	Programs not aware of this convention will simply ignore
-	the comment line.
-      </listitem>
-    </orderedlist>
-  </chapter>
+<para>
+There are two ways of sending the interrupt signal to the program:
+</para>
+
+<orderedlist>
+<listitem>
+The Go program reads the GTP input stream while processing a command and can
+interrupt the current command if the special comment line
+<userinput>#&#160;interrupt</userinput> is received.
+The Go program indicates this ability by implementing the command
+<userinput>gogui_interrupt</userinput>.
+</listitem>
+<listitem>
+The alternative way is that the program can handle INT signals.
+It indicates this by implementing the <userinput>gogui_sigint</userinput>
+command and returning its process ID.
+GoGui will then send an INT signal to the process
+by invoking the shell command
+<userinput>kill -INT <replaceable>pid</replaceable></userinput>.
+However this will work only on UNIX systems and lacks the feature of
+transmitting interrupt signals over network GTP streams.
+</listitem>
+</orderedlist>
+
+</chapter>

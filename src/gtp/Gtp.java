@@ -159,6 +159,36 @@ public class Gtp
         return result;
     }
 
+    public void interrupt() throws Error
+    {
+        if (m_isInterruptCommentSupported)
+            sendComment("# interrupt");
+        else if (m_pid != null)
+        {
+            String command = "kill -INT " + m_pid;
+            log(" " + command);
+            Runtime runtime = Runtime.getRuntime();
+            try
+            {
+                Process process = runtime.exec(command);
+                int result = process.waitFor();
+                if (result != 0)
+                    throw new Error("Command \"" + command + "\" returned " +
+                                    result + ".");
+            }
+            catch (IOException e)
+            {
+                throw new Error("Could not run command " + command + ":\n" +
+                                e);
+            }
+            catch (InterruptedException e)
+            {
+            }
+        }
+        else
+            throw new Error("Interrupt not supported");
+    }
+
     public boolean isCommandSupported(String command)
     {
         if (m_supportedCommands == null)
@@ -172,6 +202,11 @@ public class Gtp
     public boolean isCpuTimeSupported()
     {
         return isCommandSupported("cputime");
+    }
+
+    public boolean isInterruptSupported()
+    {
+        return (m_isInterruptCommentSupported || m_pid != null);
     }
 
     public boolean isProgramDead()
@@ -315,6 +350,23 @@ public class Gtp
         return result;
     }
 
+    public void queryInterruptSupport()
+    {
+        try
+        {
+            if (isCommandSupported("gogui_interrupt"))
+            {
+                String response = sendCommand("gogui_interrupt");
+                m_isInterruptCommentSupported = true;
+            }
+            else if (isCommandSupported("gogui_sigint"))
+                m_pid = sendCommand("gogui_sigint").trim();
+        }
+        catch (Gtp.Error e)
+        {
+        }
+    }
+
     public void queryProtocolVersion() throws Error
     {
         try
@@ -422,12 +474,6 @@ public class Gtp
             m_callback.sentCommand(comment);
         m_out.println(comment);
         m_out.flush();
-    }
-
-    /** Send interrupt comment. */
-    public void sendInterrupt()
-    {
-        sendComment("# interrupt");
     }
 
     /** Don't try to keep stdin/stderr callbacks in correct order.
@@ -539,6 +585,8 @@ public class Gtp
 
     private boolean m_fastUpdate;
 
+    private boolean m_isInterruptCommentSupported;
+
     private boolean m_isProgramDead;
 
     private boolean m_log;
@@ -560,6 +608,8 @@ public class Gtp
     private String m_response;
 
     private String m_logPrefix;
+
+    private String m_pid;
 
     private String m_program;
 

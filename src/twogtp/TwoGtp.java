@@ -44,6 +44,8 @@ public class TwoGtp
         m_whiteVersion = getVersion(m_white);        
         m_black.querySupportedCommands();
         m_white.querySupportedCommands();
+        m_black.queryInterruptSupport();
+        m_white.queryInterruptSupport();
         m_size = size;
         m_komi = komi;
         m_alternate = alternate;
@@ -68,6 +70,8 @@ public class TwoGtp
             || cmd.equals("final_status")
             || cmd.equals("final_status_list"))
             return sendEither(cmdLine, response);
+        else if (cmd.equals("gogui_interrupt"))
+            ;
         else if (cmd.equals("gogui_title"))
             response.append(getTitle());
         else if (cmd.equals("loadsgf"))
@@ -108,6 +112,7 @@ public class TwoGtp
                             "final_status_list\n" +
                             "genmove_black\n" +
                             "genmove_white\n" +
+                            "gogui_interrupt\n" +
                             "gogui_title\n" +
                             "help\n" +
                             "komi\n" +
@@ -144,10 +149,23 @@ public class TwoGtp
         return status;
     }
 
+    public void interruptProgram(Gtp gtp)
+    {
+        try
+        {
+            if (gtp.isInterruptSupported())
+                gtp.interrupt();
+        }
+        catch (Gtp.Error e)
+        {
+            System.err.println(e);
+        }
+    }
+
     public void interruptCommand()
     {
-        m_black.sendInterrupt();
-        m_white.sendInterrupt();
+        interruptProgram(m_black);
+        interruptProgram(m_white);
     }
 
     public static void main(String[] args)

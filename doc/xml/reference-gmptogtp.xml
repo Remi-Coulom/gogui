@@ -1,200 +1,209 @@
 <refentry id="reference-gmptogtp">
-  <refmeta>
-    <refentrytitle>gmptogtp</refentrytitle>
-    <manvolnum>1</manvolnum>
-  </refmeta>
-  <refnamediv>
-    <refname>gmptogtp</refname>
-    <refname>gmptogtp.jar</refname>
-    <refpurpose>
-       Adpater from Go Text Protocol to Go Modem Protocol.
-    </refpurpose>
-  </refnamediv>
-  <refsynopsisdiv>
-    <cmdsynopsis>
-      <command>gmptogtp</command>
-      <arg><option>-baud</option> <replaceable>n</replaceable></arg>
-      <arg>
-        <option>-color</option>
-        <group choice="plain">
-          <arg choice="plain">black</arg>
-          <arg choice="plain">white</arg>
-        </group>
-      </arg>
-      <arg><option>-device</option> <replaceable>serial</replaceable></arg>
-      <arg><option>-help</option></arg>
-      <arg><option>-list</option></arg>
-      <arg><option>-simple</option></arg>
-      <arg><option>-size</option> <replaceable>n</replaceable></arg>
-      <arg><option>-verbose</option></arg>
-      <arg><option>-version</option></arg>
-      <arg><option>-wait</option></arg>
-      <arg><replaceable>program</replaceable></arg>
-    </cmdsynopsis>
-  </refsynopsisdiv>
 
-  <refsection>
-    <title>Description</title>
-    <para>
-      Go Text Protocol adpater program for playing games using the
-      Go Modem Protocol over a serial line.
-    </para>
-    <para>
-      If a <userinput>
-      <arg choice="plain"><replaceable>program</replaceable></arg></userinput>
-      argument is given, then the given program is run as a child process and
-      expected to communicate via GMP through its standard input and output.
-      For using a serial device, an implementation of the
-      <ulink url="http://java.sun.com/products/javacomm/">
-      Java Communications API</ulink> must be installed
-      (<ulink url="http://www.rxtx.org/">rxtx</ulink>
-      is a version supporting Linux).
-      Note that GMP is an asynchronous protocol and commands can be sent
-      by both sides at any time, while GTP is synchronous.
-      This problem is resolved in the following way:
-      A separate thread always listens to the serial device, acknowledges
-      received GMP commands immediately and puts them on an internal
-      queue.
-      GTP commands that need to receive a command from GMP
-      (like <userinput>genmove_black</userinput>) check if such a command
-      is already on the queue and wait for a new command otherwise.
-      If an unexpected GMP command was received, the GTP command will return
-      with an error and subsequently only a GTP command that corresponds
-      to the GMP command will succeed.
-      GTP commands that are waiting for a GMP command can be interrupted
-      with the special comment line
-      <userinput>#&#160;interrupt</userinput> used by
-      <application>GoGui</application> to interrupt commands.
-    </para>
-  </refsection>
+<refmeta>
+<refentrytitle>gmptogtp</refentrytitle> <manvolnum>1</manvolnum>
+</refmeta>
 
-  <refsection>
-    <title>Options</title>
-    <variablelist>
-      <varlistentry>
-	<term>
-	  <option>-baud</option> <replaceable>n</replaceable>
-	</term>
-	<listitem>
-	  Speed of serial device (default 2400).
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-          <option>-color</option>
-          <group choice="plain">
-            <arg choice="plain">black</arg>
-            <arg choice="plain">white</arg>
-          </group>
-	</term>
-	<listitem>
-	  Color of the modem player.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-device</option> <replaceable>serial</replaceable>
-	</term>
-	<listitem>
-	  Serial device name.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-help</option>
-	</term>
-	<listitem>
-	  Display help and exit.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-list</option>
-	</term>
-	<listitem>
-	  List all serial devices and exit.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-simple</option>
-	</term>
-	<listitem>
-	  Use simple version of the Go Modem Protocol as defined in the
-          Appendix A in Call For Participation to the FJK Computer Go
-          Tournament 2000
-          (<ulink url="http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt">
-	  http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt</ulink>)
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-size</option> <replaceable>n</replaceable>
-	</term>
-	<listitem>
-	  Board size (default 19).
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-verbose</option>
-	</term>
-	<listitem>
-	  Print debugging messages.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-version</option>
-	</term>
-	<listitem>
-	  Print version and exit.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-wait</option>
-	</term>
-	<listitem>
-	  Wait for other side to send the first newgame command.
-	</listitem>
-      </varlistentry>
-    </variablelist>
-  </refsection>
+<refnamediv>
+<refname>gmptogtp</refname>
+<refname>gmptogtp.jar</refname>
+<refpurpose>
+Adpater from Go Text Protocol to Go Modem Protocol.
+</refpurpose>
+</refnamediv>
 
-  <refsection>
-    <title>GTP Extensions</title>
-    <para>
-      <variablelist>
-	<varlistentry>
-	  <term>
-            <userinput>
-	      gogui_title
-	    </userinput>
-          </term>
-          <listitem>
-	    Return a title for GoGui.
-	  </listitem>
-        </varlistentry>
-	<varlistentry>
-	  <term>
-            <userinput>gmp_queue</userinput>
-          </term>
-          <listitem>
-	    Print received queued commands that have already been
-            acknowledged.
-	  </listitem>
-        </varlistentry>
-	<varlistentry>
-	  <term>
-            <userinput>gmp_text <replaceable>text</replaceable></userinput>
-          </term>
-          <listitem>
-	    Send text as talk characters.
-	  </listitem>
-        </varlistentry>
-      </variablelist>    
-    </para>
-  </refsection>
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gmptogtp</command>
+<arg><option>-baud</option> <replaceable>n</replaceable></arg>
+<arg><option>-color</option><group choice="plain">
+  <arg choice="plain">black</arg><arg choice="plain">white</arg></group></arg>
+<arg><option>-device</option> <replaceable>serial</replaceable></arg>
+<arg><option>-help</option></arg>
+<arg><option>-list</option></arg>
+<arg><option>-simple</option></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg><option>-version</option></arg>
+<arg><option>-wait</option></arg>
+<arg><replaceable>program</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Go Text Protocol adpater program for playing games using the
+Go Modem Protocol over a serial line.
+</para>
+<para>
+If a <userinput>
+<arg choice="plain"><replaceable>program</replaceable></arg></userinput>
+argument is given, then the given program is run as a child process and
+expected to communicate via GMP through its standard input and output.
+For using a serial device, an implementation of the
+<ulink url="http://java.sun.com/products/javacomm/">
+Java Communications API</ulink> must be installed
+(<ulink url="http://www.rxtx.org/">rxtx</ulink>
+is a version supporting Linux).
+Note that GMP is an asynchronous protocol and commands can be sent
+by both sides at any time, while GTP is synchronous.
+This problem is resolved in the following way:
+A separate thread always listens to the serial device, acknowledges
+received GMP commands immediately and puts them on an internal
+queue.
+GTP commands that need to receive a command from GMP
+(like <userinput>genmove_black</userinput>) check if such a command
+is already on the queue and wait for a new command otherwise.
+If an unexpected GMP command was received, the GTP command will return
+with an error and subsequently only a GTP command that corresponds
+to the GMP command will succeed.
+GTP commands that are waiting for a GMP command can be interrupted
+with the special comment line
+<userinput>#&#160;interrupt</userinput> used by
+<application>GoGui</application> to interrupt commands.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<option>-baud</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+Speed of serial device (default 2400).
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-color</option>
+  <group choice="plain"> <arg choice="plain">black</arg>
+  <arg choice="plain">white</arg></group>
+</term>
+<listitem>
+Color of the modem player.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-device</option> <replaceable>serial</replaceable>
+</term>
+<listitem>
+Serial device name.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-help</option>
+</term>
+<listitem>
+Display help and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-list</option>
+</term>
+<listitem>
+List all serial devices and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-simple</option>
+</term>
+<listitem>
+Use simple version of the Go Modem Protocol as defined in the
+Appendix A in Call For Participation to the FJK Computer Go
+Tournament 2000
+(<ulink url="http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt">
+http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt</ulink>)
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+Board size (default 19).
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-verbose</option>
+</term>
+<listitem>
+Print debugging messages.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-version</option>
+</term>
+<listitem>
+Print version and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-wait</option>
+</term>
+<listitem>
+Wait for other side to send the first newgame command.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+<refsection>
+<title>GTP Extensions</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><userinput>gogui_interrupt</userinput></term>
+<listitem>
+Indicate interrupt ability for GoGui.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>gogui_title</userinput></term>
+<listitem>
+Return a title for GoGui.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>gmp_queue</userinput></term>
+<listitem>
+Print received queued commands that have already been
+acknowledged.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>gmp_text <replaceable>text</replaceable></userinput></term>
+<listitem>
+Send text as talk characters.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</refsection>
 
 </refentry>

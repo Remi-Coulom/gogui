@@ -115,10 +115,11 @@ class ToolBar
         }
     }
 
-    public void setCommandInProgress()
+    public void setCommandInProgress(boolean isInterruptSupported)
     {
         enableAll(false, null);
-        m_buttonInterrupt.setEnabled(true);
+        if (isInterruptSupported)
+            m_buttonInterrupt.setEnabled(true);
     }
 
     private boolean m_analyzeWasEnabled;

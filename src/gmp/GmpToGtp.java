@@ -43,6 +43,8 @@ public class GmpToGtp
             return queue(command, response);
         else if (command.startsWith("gogui_title"))
             response.append(m_title);
+        else if (command.startsWith("gogui_interrupt"))
+            ;
         else if (command.startsWith("white"))
             return play(false, command, response);
         else if (command.startsWith("undo"))
@@ -67,6 +69,7 @@ public class GmpToGtp
                             "genmove_white\n" +
                             "gmp_text\n" +
                             "gmp_queue\n" +
+                            "gogui_interrupt\n" +
                             "gogui_title\n" +
                             "name\n" +
                             "undo\n" +

@@ -107,6 +107,12 @@
 
     <variablelist>
       <varlistentry>
+	<term><userinput>gogui_interrupt</userinput></term>
+        <listitem>
+	  See <xref linkend="interrupt"></xref>.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
 	<term><userinput>gogui_sigint</userinput></term>
         <listitem>
 	  See <xref linkend="interrupt"></xref>.
