@@ -413,7 +413,7 @@ class WriteThread extends Thread
         notifyAll();
     }
 
-    private boolean m_sendInProgress = false;
+    private boolean m_sendInProgress;
 
     private boolean m_verbose;
 
@@ -665,21 +665,21 @@ class MainThread extends Thread
 
     private boolean m_verbose;
 
-    private boolean m_hisLastSeq = false;
+    private boolean m_hisLastSeq;
 
-    private boolean m_myLastSeq = false;
+    private boolean m_myLastSeq;
 
     private boolean m_simple;
 
-    private int m_lastQuery = 0;
+    private int m_lastQuery;
 
     private int m_state = STATE_IDLE;
 
-    private int m_colorIndex = 0;
+    private int m_colorIndex;
 
-    private int m_pending = 0;
+    private int m_pending;
 
-    private int m_size = 0;
+    private int m_size;
 
     private int m_queryCount;
 

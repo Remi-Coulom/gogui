@@ -116,11 +116,11 @@ class ReadThread
         }
     }
 
-    private boolean m_endOfFile = false;
+    private boolean m_endOfFile;
 
     private boolean m_log;
 
-    private boolean m_waitCommand = false;
+    private boolean m_waitCommand;
 
     private BufferedReader m_in;
 

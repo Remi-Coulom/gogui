@@ -126,7 +126,7 @@ public class GtpDummy
     private boolean m_nextStatus;
 
     /** Delay every command (seconds) */
-    private int m_delay = 0;
+    private int m_delay;
 
     private int m_size;
 
