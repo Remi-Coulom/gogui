@@ -19,6 +19,15 @@ class CommandThread
         m_gtp = gtp;
         m_gtpShell = gtpShell;
     }
+
+    public void close()
+    {
+        if (! isProgramDead())
+        {
+            m_gtp.close();
+            m_gtp.waitForExit();
+        }
+    }
     
     /** Get answer to asynchronous command.
         You must call getException() first.
@@ -164,19 +173,22 @@ class CommandThread
         return m_gtp.sendCommandPlay(move);
     }
 
-    public void waitForExit()
-    {
-        m_gtp.waitForExit();
-    }
-
     private boolean m_commandInProgress;
+
     private Gtp m_gtp;
+
     private Gtp.Error m_exception;
+
     private GtpShell m_gtpShell;
+
     private static JFrame m_mainFrame;
+
     private Runnable m_callback;
+
     private String m_command;
+
     private String m_answer;
+
     private Thread m_commandThread;
 }
 

@@ -1187,14 +1187,7 @@ class GoGui
         else
         {
             if (m_commandThread != null && ! m_commandThread.isProgramDead())
-                try
-                {
-                    m_commandThread.sendCommand("quit");
-                    m_commandThread.waitForExit();
-                }
-                catch(Gtp.Error e)
-                {
-                }
+                m_commandThread.close();
         }
         if (m_gtpShell != null)
             m_gtpShell.saveHistory();
