@@ -4,14 +4,13 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>0.7pre1</revnumber>
+<date>29 November 2004</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <simpara>
 </simpara>
 <itemizedlist>
-
 <listitem>
 <simpara>
 GtpAdapter: fix some bugs with option -resign
