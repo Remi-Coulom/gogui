@@ -32,8 +32,17 @@ Do not edit Info.plist
 <key>CFBundleExecutable</key>
 <string>JavaApplicationStub</string>
 
+<key>CFBundleHelpBookFolder</key>
+<string>GoGui Help</string>
+
+<key>CFBundleHelpBookName</key>
+<string>GoGui Help</string>
+
 <key>CFBundleIconFile</key>
 <string>GoGui.icns</string>
+
+<key>CFBundleIdentifier</key>
+<string>net.sourceforge.gogui</string>
 
 <key>CFBundleInfoDictionaryVersion</key>
 <string>6.0</string>

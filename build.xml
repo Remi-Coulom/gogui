@@ -77,7 +77,7 @@ $Source$
 <fileset dir="build/utils"/>
 <fileset dir="build/version"/>
 <fileset dir="build/GoGui.app"/>
-<fileset dir="build/GoGui*.dmg"/>
+<fileset dir="build" includes="GoGui*.dmg"/>
 </delete>
 </target>
 
@@ -283,11 +283,18 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <exec executable="chmod">
 <arg line="755 ${appdir}/Contents/MacOS/JavaApplicationStub"/>
 </exec>
-<copy file="mac/packaging/GoGui.icns"
-  todir="${appdir}/Contents/Resources" overwrite="true"/>
-<copy file="mac/packaging/Info.plist" todir="${appdir}/Contents" overwrite="true"/>  
-<copy file="mac/packaging/PkgInfo" todir="${appdir}/Contents" overwrite="true"/>  
-<copy file="lib/gogui.jar" todir="${appdir}/Contents/Resources/Java" overwrite="true"/>
+<copy todir="${appdir}/Contents" overwrite="true">
+<fileset dir="mac/packaging" includes="Info.plist PkgInfo"/>
+</copy>
+<copy todir="${appdir}/Contents/Resources" overwrite="true">
+<fileset dir="mac/packaging" includes="GoGui.icns"/>
+</copy>
+<copy todir="${appdir}/Contents/Resources/GoGui Help" overwrite="true">
+<fileset dir="doc/html" includes="*.html *.css *.png"/>
+</copy>
+<copy todir="${appdir}/Contents/Resources/Java" overwrite="true">
+<fileset dir="lib" includes="*.jar"/>
+</copy>
 <exec executable="/Developer/Tools/SetFile">
 <arg line="-a B ${appdir}"/>
 </exec>
