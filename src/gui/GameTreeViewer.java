@@ -19,41 +19,36 @@ import utils.Platform;
 class GameNode
     extends JComponent
 {
-    public GameNode(Node node, int moveNumber, int width, int height,
-                    GameTreeViewer.Listener listener, boolean fastPaint)
+    public GameNode(Node node, int moveNumber, GameTreePanel gameTreePanel,
+                    MouseListener mouseListener)
     {
-        m_fastPaint = fastPaint;
+        m_gameTreePanel = gameTreePanel;
         m_node = node;
         m_moveNumber = moveNumber;
-        m_width = width;
-        m_height = height;
-        m_listener = listener;
-        MouseAdapter mouseAdapter = new MouseAdapter()
-            {
-                public void mouseClicked(MouseEvent event)
-                {
-                    if (m_listener != null)
-                        m_listener.gotoNode(m_node);
-                }
-            };
-        addMouseListener(mouseAdapter);
+        addMouseListener(mouseListener);
+    }
+
+    public Node getNode()
+    {
+        return m_node;
     }
 
     public Dimension getPreferredSize()
     {
-        return new Dimension(m_width, m_height);
+        return m_gameTreePanel.getPreferredNodeSize();
     }
 
     public void paintComponent(Graphics graphics)
     {
         Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null && ! m_fastPaint)
+        if (graphics2D != null && ! m_gameTreePanel.getFastPaint())
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
+        int width = m_gameTreePanel.getNodeWidth();
         graphics.setColor(m_colorBackground);
-        graphics.fillRect(0, 0, m_width, m_width);
+        graphics.fillRect(0, 0, width, width);
         Move move = m_node.getMove();
-        int halfSize = m_width / 2;
+        int halfSize = width / 2;
         if (m_node.getNumberAddBlack() + m_node.getNumberAddWhite() > 0)
         {
             graphics.setColor(java.awt.Color.black);
@@ -66,8 +61,8 @@ class GameNode
         else if (move == null)
         {
             graphics.setColor(new java.awt.Color(0.57f, 0.68f, 0.91f));
-            int[] xPoints = { halfSize, m_width, halfSize, 0 };
-            int[] yPoints = { 0, halfSize, m_width, halfSize };
+            int[] xPoints = { halfSize, width, halfSize, 0 };
+            int[] yPoints = { 0, halfSize, width, halfSize };
             graphics.fillPolygon(xPoints, yPoints, 4);
         }        
         else
@@ -76,12 +71,12 @@ class GameNode
                 graphics.setColor(java.awt.Color.black);
             else
                 graphics.setColor(java.awt.Color.white);
-            graphics.fillOval(0, 0, m_width, m_width);
+            graphics.fillOval(0, 0, width, width);
             String text = Integer.toString(m_moveNumber);
             int textWidth = graphics.getFontMetrics().stringWidth(text);
             int textHeight = graphics.getFont().getSize();
-            int xText = (m_width - textWidth) / 2;
-            int yText = textHeight + (m_width - textHeight) / 2;
+            int xText = (width - textWidth) / 2;
+            int yText = textHeight + (width - textHeight) / 2;
             if (move.getColor() == go.Color.BLACK)
                 graphics.setColor(java.awt.Color.white);
             else
@@ -92,15 +87,15 @@ class GameNode
             && ! m_node.getComment().trim().equals(""))
         {
             graphics.setColor(java.awt.Color.black);
-            graphics.drawLine(3, m_width + 2, m_width - 3, m_width + 2);
-            graphics.drawLine(3, m_width + 4, m_width - 3, m_width + 4);
-            graphics.drawLine(3, m_width + 6, m_width - 3, m_width + 6);
+            graphics.drawLine(3, width + 2, width - 3, width + 2);
+            graphics.drawLine(3, width + 4, width - 3, width + 4);
+            graphics.drawLine(3, width + 6, width - 3, width + 6);
         }
-        if (m_isCurrent)
+        if (m_gameTreePanel.isCurrent(m_node))
         {
             graphics.setColor(java.awt.Color.red);
-            int d = m_width / 6;
-            int w = m_width;
+            int d = width / 6;
+            int w = width;
             graphics.drawLine(d, d, 2 * d, d);
             graphics.drawLine(d, d, d, 2 * d);
             graphics.drawLine(d, w - 2 * d - 1, d, w - d - 1);
@@ -112,26 +107,12 @@ class GameNode
         }
     }
 
-    public void setCurrentNode(boolean isCurrent)
-    {
-        m_isCurrent = isCurrent;
-        repaint();
-    }
-
-    private boolean m_fastPaint;
-
-    private boolean m_isCurrent;
-
     private int m_moveNumber;
-
-    public int m_width;
-
-    public int m_height;
 
     private static final java.awt.Color m_colorBackground
         = UIManager.getColor("Label.background");
 
-    private GameTreeViewer.Listener m_listener;
+    private GameTreePanel m_gameTreePanel;
 
     private Node m_node;
 }
@@ -147,25 +128,53 @@ class GameTreePanel
         super(new SpringLayout());
         m_fastPaint = fastPaint;
         setBackground(UIManager.getColor("Label.background"));
-        m_nodeSize = 25;
+        m_nodeWidth = 25;
         m_nodeDist = 35;
         Font font = UIManager.getFont("Label.font");
         if (font != null)
         {
-            m_nodeSize = font.getSize() * 2;
-            if (m_nodeSize % 2 == 0)
-                ++m_nodeSize;
+            m_nodeWidth = font.getSize() * 2;
+            if (m_nodeWidth % 2 == 0)
+                ++m_nodeWidth;
             m_nodeDist = font.getSize() * 3;
             if (m_nodeDist % 2 == 0)
                 ++m_nodeDist;
         }
+        m_preferredNodeSize = new Dimension(m_nodeWidth, m_nodeDist);
         setOpaque(false);
         m_listener = listener;
+        m_mouseListener = new MouseAdapter()
+            {
+                public void mouseClicked(MouseEvent event)
+                {
+                    gotoNode(((GameNode)event.getSource()).getNode());
+                }
+            };
     }
 
     public Node getCurrentNode()
     {
         return m_currentNode;
+    }
+
+    public boolean getFastPaint()
+    {
+        return m_fastPaint;
+    }
+    
+    public int getNodeHeight()
+    {
+        return m_nodeHeight;
+    }
+    
+    public int getNodeWidth()
+    {
+        return m_nodeWidth;
+    }
+    
+    public Dimension getPreferredNodeSize()
+    {
+        return m_preferredNodeSize;
     }
 
     public Dimension getPreferredScrollableViewportSize()
@@ -195,12 +204,23 @@ class GameTreePanel
         return m_nodeDist;
     }
 
+    public void gotoNode(Node node)
+    {
+        if (m_listener != null)
+            m_listener.gotoNode(node);
+    }
+
+    public boolean isCurrent(Node node)
+    {
+        return node == m_currentNode;
+    }
+
     public void paintComponent(Graphics graphics)
     {
         if (m_gameTree == null)
             return;
         drawGrid(graphics, m_gameTree.getRoot(),
-                 m_margin + m_nodeSize / 2, m_margin + m_nodeSize / 2);
+                 m_margin + m_nodeWidth / 2, m_margin + m_nodeWidth / 2);
         super.paintComponent(graphics);
     }
 
@@ -221,7 +241,7 @@ class GameTreePanel
         m_maxY = 0;
         createNodes(this, m_gameTree.getRoot(), 0, 0, m_margin, m_margin, 0);
         GameNode gameNode = getGameNode(currentNode);
-        gameNode.setCurrentNode(true);
+        gameNode.repaint();
         setPreferredSize(new Dimension(m_maxX + m_nodeDist + m_margin,
                                        m_maxY + m_nodeDist + m_margin));
         revalidate();
@@ -232,12 +252,12 @@ class GameTreePanel
     {
         assert(currentNode != null);
         GameNode gameNode = getGameNode(m_currentNode);
-        gameNode.setCurrentNode(false);
+        gameNode.repaint();
         gameNode = getGameNode(currentNode);
         java.awt.Point location = gameNode.getLocation();
         m_currentNodeX = location.x;
         m_currentNodeY = location.y;
-        gameNode.setCurrentNode(true);
+        gameNode.repaint();
         m_currentNode = currentNode;
         scrollToCurrent();
     }
@@ -248,7 +268,9 @@ class GameTreePanel
 
     private int m_currentNodeY;
 
-    private int m_nodeSize;
+    private int m_nodeWidth;
+
+    private int m_nodeHeight;
 
     private static final int m_margin = 15;
 
@@ -258,13 +280,17 @@ class GameTreePanel
 
     private int m_nodeDist;
 
+    private Dimension m_preferredNodeSize;
+
     private GameTree m_gameTree;
 
     private GameTreeViewer.Listener m_listener;
 
     private Node m_currentNode;
 
-    private HashMap m_map = new HashMap();
+    private HashMap m_map = new HashMap(500, 0.8f);
+
+    private MouseListener m_mouseListener;
 
     private int createNodes(Component father, Node node, int x, int y,
                             int dx, int dy, int moveNumber)
@@ -273,9 +299,9 @@ class GameTreePanel
         m_maxY = Math.max(y, m_maxY);
         if (node.getMove() != null)
             ++moveNumber;
+        m_nodeHeight = m_nodeDist;
         GameNode gameNode =
-            new GameNode(node, moveNumber, m_nodeSize, m_nodeDist, m_listener,
-                         m_fastPaint);
+            new GameNode(node, moveNumber, this, m_mouseListener);
         m_map.put(node, gameNode);
         add(gameNode);
         SpringLayout layout = (SpringLayout)getLayout();
@@ -325,9 +351,9 @@ class GameTreePanel
 
     private void scrollToCurrent()
     {
-        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeSize,
+        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeWidth,
                                           m_currentNodeY,
-                                          5 * m_nodeSize, 3 * m_nodeSize));
+                                          5 * m_nodeWidth, 3 * m_nodeWidth));
     }
 }
 
@@ -382,7 +408,7 @@ public class GameTreeViewer
         else
             assert(false);
     }
-    
+
     public void redrawCurrentNode()
     {
         m_panel.redrawCurrentNode();
