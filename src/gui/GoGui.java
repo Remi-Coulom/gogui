@@ -259,7 +259,7 @@ class GoGui
     {        
         if (m_commandThread != null)
             return;
-        String program = SelectProgram.select(null);
+        String program = SelectProgram.select(this);
         if (program == null)
             return;
         attachProgram(program);
