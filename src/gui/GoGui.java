@@ -896,21 +896,26 @@ class GoGui
     {
         try
         {
-            setFastUpdate(true);
-            for (int i = 0; i < n; ++i)
+            try
             {
-                if (m_board.getMoveNumber() == 0)
-                    break;
-                if (m_commandThread != null)
-                    m_commandThread.sendCommand("undo");
-                m_board.undo();
+                setFastUpdate(true);
+                for (int i = 0; i < n; ++i)
+                {
+                    if (m_board.getMoveNumber() == 0)
+                        break;
+                    if (m_commandThread != null)
+                        m_commandThread.sendCommand("undo");
+                    m_board.undo();
+                }
             }
-            setFastUpdate(false);
+            finally
+            {
+                setFastUpdate(false);
+            }
             boardChangedBegin(false);
         }
         catch (Gtp.Error e)
         {
-            setFastUpdate(false);
             showGtpError(e);
         }
     }
@@ -1541,20 +1546,25 @@ class GoGui
     {
         try
         {
-            setFastUpdate(true);
-            for (int i = 0; i < n; ++i)
+            try
             {
-                int moveNumber = m_board.getMoveNumber();
-                if (moveNumber >= m_board.getNumberSavedMoves())
-                    break;
-                Move move = m_board.getMove(moveNumber);
-                play(move);
+                setFastUpdate(true);
+                for (int i = 0; i < n; ++i)
+                {
+                    int moveNumber = m_board.getMoveNumber();
+                    if (moveNumber >= m_board.getNumberSavedMoves())
+                        break;
+                    Move move = m_board.getMove(moveNumber);
+                    play(move);
+                }
             }
-            setFastUpdate(false);
+            finally
+            {
+                setFastUpdate(false);
+            }
         }
         catch (Gtp.Error e)
         {
-            setFastUpdate(false);
             showGtpError(e);
         }
     }
@@ -1580,9 +1590,15 @@ class GoGui
             go.Point p = m.getPoint();
             if (p != null && m_board.getColor(p) != go.Color.EMPTY)
                     return;
-            setFastUpdate(true);
-            play(m);
-            setFastUpdate(false);
+            try
+            {
+                setFastUpdate(true);
+                play(m);
+            }
+            finally
+            {
+                setFastUpdate(false);
+            }
             m_timeControl.stopMove();
             if (m_board.getMoveNumber() > 0
                 && m_timeControl.lostOnTime(m.getColor())
@@ -1597,7 +1613,6 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
-            setFastUpdate(false);
             showGtpError(e);
         }
     }
@@ -1664,9 +1679,15 @@ class GoGui
                 // First command is sent with a timeout, so that we are not
                 // fooled by programs who are not GTP Go programs, but
                 // consume stdin without writing to stdout.
-                setFastUpdate(true);
-                m_name = m_commandThread.sendCommand("name", 30000).trim();
-                setFastUpdate(false);
+                try
+                {
+                    setFastUpdate(true);
+                    m_name = m_commandThread.sendCommand("name", 30000).trim();
+                }
+                finally
+                {
+                    setFastUpdate(false);
+                }
                 m_gtpShell.setProgramName(m_name);
                 try
                 {
@@ -1736,7 +1757,6 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
-            setFastUpdate(false);
             toTop();
             if (m_gtpShell != null)
                 m_gtpShell.toTop();
@@ -1794,22 +1814,29 @@ class GoGui
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
-            setFastUpdate(true);
-            for (int i = 0; i < moves.size(); ++i)
+            int numberMoves;
+            try
             {
-                Move m = (Move)moves.get(i);
-                setup(m);
+                setFastUpdate(true);
+                for (int i = 0; i < moves.size(); ++i)
+                {
+                    Move m = (Move)moves.get(i);
+                    setup(m);
+                }
+                numberMoves = reader.getMoves().size();
+                go.Color toMove = reader.getToMove();
+                if (numberMoves > 0)
+                    toMove = reader.getMove(0).getColor();
+                if (toMove != m_board.getToMove())
+                {
+                    Move m = new Move(null, m_board.getToMove());
+                    setup(m);
+                }
             }
-            int numberMoves = reader.getMoves().size();
-            go.Color toMove = reader.getToMove();
-            if (numberMoves > 0)
-                toMove = reader.getMove(0).getColor();
-            if (toMove != m_board.getToMove())
+            finally
             {
-                Move m = new Move(null, m_board.getToMove());
-                setup(m);
+                setFastUpdate(false);
             }
-            setFastUpdate(false);
             moves.clear();
             for (int i = 0; i < numberMoves; ++i)
                 moves.add(reader.getMove(i));
@@ -1838,7 +1865,6 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
-            setFastUpdate(false);
             showGtpError(e);
         }
     }
@@ -2211,11 +2237,14 @@ class GoGui
             setTitle(m_loadedFile.getName());
         else if (! m_name.equals(""))
         {
-            setTitle(StringUtils.formatTitle(m_name));
+            String title = StringUtils.formatTitle(m_name);
+            if (m_loadedFile != null)
+                title = title + ": " + m_loadedFile.getName();
+            setTitle(title);
             if (m_gtpShell != null)
-                m_gtpShell.setTitlePrefix(m_name);
+                m_gtpShell.setTitlePrefix(title);
             if (m_analyzeDialog != null)
-                m_analyzeDialog.setTitlePrefix(m_name);
+                m_analyzeDialog.setTitlePrefix(title);
         }
         else
             setTitle("GoGui");
@@ -2279,24 +2308,29 @@ class GoGui
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
-            setFastUpdate(true);
-            for (int i = 0; i < moves.size(); ++i)
+            try
             {
-                Move m = (Move)moves.get(i);
-                setup(m);
+                setFastUpdate(true);
+                for (int i = 0; i < moves.size(); ++i)
+                {
+                    Move m = (Move)moves.get(i);
+                    setup(m);
+                }
+                if (m_board.getToMove() != toMove)
+                {
+                    Move m = new Move(null, m_board.getToMove());
+                    setup(m);
+                }
             }
-            if (m_board.getToMove() != toMove)
+            finally
             {
-                Move m = new Move(null, m_board.getToMove());
-                setup(m);
+                setFastUpdate(false);
             }
-            setFastUpdate(false);
             fileModified();
             boardChangedBegin(false);
         }
         catch (Gtp.Error e)
         {
-            setFastUpdate(false);
             showGtpError(e);
         }
     }
