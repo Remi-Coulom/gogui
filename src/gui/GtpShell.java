@@ -508,7 +508,7 @@ public class GtpShell
     public void setInitialCompletions(Vector completions)
     {
         for (int i = completions.size() - 1; i >= 0; --i)
-            m_history.add(completions.get(i));
+            appendToHistory(completions.get(i).toString());
         loadHistory();
         addAllCompletions(m_history);
     }
