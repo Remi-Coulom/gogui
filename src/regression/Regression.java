@@ -149,6 +149,8 @@ class Regression
         public int m_expectedPasses;
 
         public int m_unexpectedPasses;
+
+        public long m_timeMillis;
     }
 
     private boolean m_lastError;
@@ -228,10 +230,11 @@ class Regression
         }
     }
 
-    private TestSummary getTestSummary(File file)
+    private TestSummary getTestSummary(File file, long timeMillis)
     {
         TestSummary summary = new TestSummary();
         summary.m_file = file;
+        summary.m_timeMillis = timeMillis;
         for (int i = 0; i < m_tests.size(); ++i)
         {
             Test t = (Test)m_tests.get(i);
@@ -454,6 +457,7 @@ class Regression
         m_gtp = new Gtp(m_program, false, this);
         m_lastSgf = null;
         String line;
+        long timeMillis = System.currentTimeMillis();
         while (true)
         {
             line = reader.readLine();
@@ -461,11 +465,12 @@ class Regression
                 break;
             handleLine(line);
         }
+        timeMillis = System.currentTimeMillis() - timeMillis;
         if (m_lastResponse != null)
             printOutLastResponse();
         reader.close();
         finishOutFile();
-        TestSummary testSummary = getTestSummary(file);
+        TestSummary testSummary = getTestSummary(file, timeMillis);
         m_testSummaries.add(testSummary);
         writeTestSummary(file, testSummary);
     }
@@ -479,6 +484,7 @@ class Regression
                       + FileUtils.replaceExtension(summary.m_file, "tst",
                                                    "html")
                       + "\">" + summary.m_file + "</a></td>");
+        double time = (double)(summary.m_timeMillis / 100L) / 10F;
         out.print("<td>" + summary.m_numberTests + "</td>\n" +
                   "<td bgcolor=\"#"
                   + (summary.m_unexpectedFails > 0 ? "ff0000" : "white")
@@ -488,6 +494,7 @@ class Regression
                   + (summary.m_unexpectedFails > 0 ? "00ff00" : "white")
                   + "\">\n" + summary.m_unexpectedPasses + "</td>\n" +
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
+                  "<td>" + time + "</td>\n" +
                   "</tr>\n");
     }
 
@@ -508,11 +515,12 @@ class Regression
         out.print("<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
-                  "<col width=\"20%\">\n" +
-                  "<col width=\"20%\">\n" +
-                  "<col width=\"20%\">\n" +
-                  "<col width=\"20%\">\n" +
-                  "<col width=\"20%\">\n" +
+                  "<col width=\"17%\">\n" +
+                  "<col width=\"17%\">\n" +
+                  "<col width=\"17%\">\n" +
+                  "<col width=\"17%\">\n" +
+                  "<col width=\"17%\">\n" +
+                  "<col width=\"17%\">\n" +
                   "</colgroup>\n" +
                   "<tr align=\"center\">\n" +
                   "<th>Tests</th>" +
@@ -520,6 +528,7 @@ class Regression
                   "<th>fail</th>" +
                   "<th>PASS</th>" +
                   "<th>pass</th>" +
+                  "<th>Time</th>" +
                   "</tr>\n");
         writeSummaryRow(out, summary, false);
         out.print("</table>\n" +
@@ -637,12 +646,13 @@ class Regression
         out.print("<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
-                  "<col width=\"25%\">\n" +
-                  "<col width=\"15%\">\n" +
-                  "<col width=\"15%\">\n" +
-                  "<col width=\"15%\">\n" +
-                  "<col width=\"15%\">\n" +
-                  "<col width=\"15%\">\n" +
+                  "<col width=\"22%\">\n" +
+                  "<col width=\"13%\">\n" +
+                  "<col width=\"13%\">\n" +
+                  "<col width=\"13%\">\n" +
+                  "<col width=\"13%\">\n" +
+                  "<col width=\"13%\">\n" +
+                  "<col width=\"13%\">\n" +
                   "</colgroup>\n" +
                   "<tr align=\"center\">\n" +
                   "<th>File</th>" +
@@ -651,6 +661,7 @@ class Regression
                   "<th>fail</th>" +
                   "<th>PASS</th>" +
                   "<th>pass</th>" +
+                  "<th>Time</th>" +
                   "</tr>\n");
         for (int i = 0; i < m_testSummaries.size(); ++i)
         {
