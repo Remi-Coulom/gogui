@@ -23,7 +23,7 @@ public class GameInfoDialog
         boolean done = false;
         while (! done)
         {
-            dialog.show();
+            dialog.setVisible(true);
             Object value = gameInfoDialog.getValue();
             if (! (value instanceof Integer)
                 || ((Integer)value).intValue() != JOptionPane.OK_OPTION)
