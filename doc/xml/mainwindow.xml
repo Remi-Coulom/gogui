@@ -42,6 +42,11 @@ Start a new game.
 Open a game from a file in
 <ulink url="http://www.red-bean.com/sgf/">SGF</ulink>
 format.
+<note>
+Only a subset of the SGF definition is supported.
+Most notably removing stones and game collections are not supported.
+Unknown SGF properties are preserved if the game is saved to a file again.
+</note>
 </para>
 </listitem>
 </varlistentry>
