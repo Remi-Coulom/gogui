@@ -652,6 +652,7 @@ class ReadThread extends Thread
                 }
                 Util.log("received OK");
                 m_state = STATE_IDLE;
+                m_writeThread.stopSend();
                 notifyAll();
                 return;
             }
@@ -664,6 +665,7 @@ class ReadThread extends Thread
             if (ack == m_myLastSeq)
             {
                 m_state = STATE_IDLE;
+                m_writeThread.stopSend();
                 m_hisLastSeq = seq;
                 handleCmd(cmd);
                 notifyAll();
