@@ -8,7 +8,7 @@ package go;
 //----------------------------------------------------------------------------
 
 /** State of a point on the board (black, white, empty). */
-public class Color
+public final class Color
 {
     public static final Color BLACK = new Color();
 
