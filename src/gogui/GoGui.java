@@ -2534,6 +2534,12 @@ class GoGui
         GameInformation gameInformation = m_gameTree.getGameInformation();
         String playerBlack = gameInformation.m_playerBlack;
         String playerWhite = gameInformation.m_playerWhite;
+        String filename = null;
+        if (m_loadedFile != null)
+        {
+            String fileNoExt = FileUtils.removeExtension(m_loadedFile, "sgf");
+            filename = new File(fileNoExt).getName();
+        }
         if (playerBlack != null && ! playerBlack.trim().equals("")
             && playerWhite != null && ! playerWhite.trim().equals(""))
         {
@@ -2545,14 +2551,14 @@ class GoGui
                 playerBlack = playerBlack + " [" + blackRank + "]";
             if (whiteRank != null && ! whiteRank.trim().equals(""))
                 playerWhite = playerWhite + " [" + whiteRank + "]";
-            if (m_loadedFile != null)
-                gameName = m_loadedFile.getName() + " - "
+            if (filename != null)
+                gameName = filename + " - "
                     + playerBlack + " vs " + playerWhite;
             else
                 gameName = playerBlack + " vs " + playerWhite;
         }
-        else if (m_loadedFile != null)
-            gameName= m_loadedFile.getName();
+        else if (filename != null)
+            gameName = filename;
         if (gameName != null)
             setTitle(gameName + " - " + appName);
         else
