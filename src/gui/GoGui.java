@@ -205,6 +205,8 @@ class GoGui
             cbSetupDone();
         else if (command.equals("setup-white"))
             cbSetupWhite();
+        else if (command.equals("show-last-move"))
+            cbShowLastMove();
         else
             assert(false);
     }
@@ -1106,6 +1108,11 @@ class GoGui
     {
         String message = "GoGui " + Version.m_version;
         SimpleDialogs.showAbout(this, message);
+    }
+
+    private void cbShowLastMove()
+    {
+        m_guiBoard.setShowLastMove(m_menuBars.getShowLastMove());
     }
 
     private boolean checkAbortGame()

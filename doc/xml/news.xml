@@ -16,6 +16,10 @@
 	    <command>twogtp</command>: forward GTP extension commands to
 	    program(s) that implement them.
 	  </listitem>
+	  <listitem>
+	    New <guimenu>Settings</guimenu> item
+	    <guimenuitem>Show last move</guimenuitem>.
+	  </listitem>
 	</itemizedlist>
       </revremark>
     </revision>

@@ -53,6 +53,11 @@ class MenuBars
         return m_itemBeepAfterMove.getState();
     }
 
+    public boolean getShowLastMove()
+    {
+        return m_itemShowLastMove.getState();
+    }
+
     public void setComputerBlack()
     {
         m_itemComputerBlack.setSelected(true);
@@ -154,6 +159,8 @@ class MenuBars
     private ActionListener m_listener;
 
     private JCheckBoxMenuItem m_itemBeepAfterMove;
+
+    private JCheckBoxMenuItem m_itemShowLastMove;
 
     private JMenu m_menuAnalyze;
 
@@ -342,10 +349,15 @@ class MenuBars
     private JMenu createSettingsMenu()
     {
         JMenu menu = new JMenu("Settings");
-        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep after Move");
+        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep after move");
         m_itemBeepAfterMove.addActionListener(m_listener);
         m_itemBeepAfterMove.setActionCommand("beep-after-move");
         menu.add(m_itemBeepAfterMove);
+        m_itemShowLastMove = new JCheckBoxMenuItem("Show last move");
+        m_itemShowLastMove.addActionListener(m_listener);
+        m_itemShowLastMove.setActionCommand("show-last-move");
+        m_itemShowLastMove.setState(true);
+        menu.add(m_itemShowLastMove);
         return menu;
     }
 

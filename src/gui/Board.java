@@ -65,6 +65,7 @@ public class Board
         }
         clearAllCrossHair();
         clearAllMarkup();
+        drawLastMove();
     }
 
     public void clearAllCrossHair()
@@ -251,6 +252,17 @@ public class Board
         m_listener = l;
     }
 
+    public void setShowLastMove(boolean showLastMove)
+    {
+        if (m_lastMove != null)
+        {
+            getField(m_lastMove).setString("");
+            m_lastMove = null;
+        }
+        m_showLastMove = showLastMove;
+        drawLastMove();
+    }
+
     public void setMarkup(go.Point p, boolean markup)
     {
         getField(p).setMarkup(markup);
@@ -328,7 +340,11 @@ public class Board
         drawLastMove();
     }
 
+    private boolean m_showLastMove = true;
+
     private go.Point m_focusPoint;
+
+    private go.Point m_lastMove;
 
     private Dimension m_preferredFieldSize;
 
@@ -400,8 +416,23 @@ public class Board
         {
             Move m = m_board.getMove(moveNumber - 1);
             go.Point lastMove = m.getPoint();
+            if (m_showLastMove)
+            {
+                if (m_lastMove != null)
+                {
+                    getField(m_lastMove).setString("");
+                    m_lastMove = null;
+                }
+            }
             if (lastMove != null && m.getColor() != go.Color.EMPTY)
+            {
                 setFocusPoint(lastMove);
+                if (m_showLastMove)
+                {
+                    getField(lastMove).setString(Integer.toString(moveNumber));
+                    m_lastMove = lastMove;
+                }
+            }
         }
     }
 
