@@ -63,14 +63,13 @@ are ignored.
 <listitem>
 <simpara>
 The response of the command is a board of floating point
-numbers.
+numbers that represent influence data.
 They will be displayed as black (positive) and white (negative)
 squares on the board.
 The maximum size of a square is such that the corner would touch
 the edge of a stone on that field and the edge length of the
 square is proportional to the floating point number.
 The numbers are expected to be between -1 and 1.
-Use the <userinput>scale</userinput> option, if they are not.
 </simpara>
 </listitem>
 </varlistentry>
@@ -284,6 +283,13 @@ The response to the command is searched first until a single line
 containing the section name followed by a colon is found.
 The text following from the next line on is parsed as the actual response.
 </para>
+<warning>
+<simpara>
+Using section headers is deprecated and will not be supported in the future.
+It is recommended that Go engines output only one of the response types
+described above.
+</simpara>
+</warning>
 </section>
 
 <section>
@@ -292,6 +298,13 @@ The text following from the next line on is parsed as the actual response.
 If the type is <userinput>dboard</userinput>, the numbers are scaled by
 this factor.
 </para>
+<warning>
+<simpara>
+Using scaling factors is deprecated and will not be supported in the future.
+It is recommended that Go engines scale influence data as described for the
+type <userinput>dboard</userinput> above.
+</simpara>
+</warning>
 </section>
 
 </chapter>
