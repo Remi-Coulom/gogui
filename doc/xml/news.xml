@@ -27,7 +27,10 @@
 	    Use time_settings command if -time option is used.
 	  </listitem>
 	  <listitem>
-	    Other small fixes and enhancements.
+	    New option -autofile.
+	  </listitem>
+	  <listitem>
+	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>
       </revremark>

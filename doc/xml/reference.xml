@@ -12,6 +12,7 @@
     <cmdsynopsis>
       <command>gogui</command>
       <arg><option>-analyze</option> <replaceable>command</replaceable></arg>
+      <arg><option>-autofile</option> <replaceable>prefix</replaceable></arg>
       <arg><option>-autoplay</option></arg>
       <arg><option>-computer-none</option></arg>
       <arg><option>-file</option> <replaceable>filename</replaceable></arg>
@@ -55,10 +56,23 @@
       </varlistentry>
       <varlistentry>
 	<term>
+	  <option>-autofile</option> <replaceable>prefix</replaceable>
+	</term>
+	<listitem>
+	  If the <option>-autoplay</option> option is used, automatically save
+	  a game after it is finished.
+	  The filename will be
+	  <replaceable>prefix</replaceable>-<replaceable>N</replaceable>.sgf
+	  with <replaceable>N</replaceable> being the number of the game.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
 	  <option>-autoplay</option>
 	</term>
 	<listitem>
-	  Auto play games (if computer both).
+	  Automatically start a new game if the program plays both
+	  colors and a game is finished.
 	</listitem>
       </varlistentry>
       <varlistentry>

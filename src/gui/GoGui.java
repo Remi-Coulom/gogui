@@ -26,7 +26,8 @@ class GoGui
 {
     GoGui(String program, Preferences prefs, String file, int move,
           boolean gtpShell, String time, boolean verbose, boolean fillPasses,
-          boolean computerNone, boolean autoplay, String gtpFile)
+          boolean computerNone, boolean autoplay, String autoFile,
+          String gtpFile)
         throws Gtp.Error, Analyze.Error
     {
         m_program = program;
@@ -44,6 +45,8 @@ class GoGui
         m_move = move;
         m_computerNoneOption = computerNone;
         m_autoplay = autoplay;
+        m_autoplayCounter = 0;
+        m_autoFile = autoFile;
         m_verbose = verbose;
 
         Container contentPane = getContentPane();        
@@ -269,6 +272,7 @@ class GoGui
         {
             String options[] = {
                 "analyze:",
+                "autofile:",
                 "autoplay",
                 "computer-none",
                 "file:",
@@ -292,6 +296,7 @@ class GoGui
                     "using the Go Text Protocol.\n" +
                     "\n" +
                     "  -analyze name   initialize analyze command\n" +
+                    "  -autofile       auto save games (if autoplay)\n" +
                     "  -autoplay       auto play games (if computer both)\n" +
                     "  -computer-none  computer plays no side\n" +
                     "  -file filename  load SGF file\n" +
@@ -312,6 +317,7 @@ class GoGui
             Preferences prefs = new Preferences();
             if (opt.contains("analyze"))
                 prefs.setAnalyzeCommand(opt.getString("analyze"));
+            String autoFile = opt.getString("autofile", "");
             boolean autoplay = opt.isSet("autoplay");
             boolean computerNone = opt.isSet("computer-none");
             String file = opt.getString("file", "");
@@ -347,7 +353,7 @@ class GoGui
             
             GoGui gui = new GoGui(program, prefs, file, move,
                                   gtpShell, time, verbose, fillPasses,
-                                  computerNone, autoplay, gtpFile);
+                                  computerNone, autoplay, autoFile, gtpFile);
         }
         catch (Throwable t)
         {
@@ -464,6 +470,8 @@ class GoGui
 
     private boolean m_verbose;
 
+    private int m_autoplayCounter;
+
     private int m_boardSize;
 
     private int m_handicap;
@@ -495,6 +503,8 @@ class GoGui
     private MenuBars m_menuBars;
 
     private Analyze.Command m_analyzeCommand;
+
+    private String m_autoFile;
 
     private String m_file;
 
@@ -853,7 +863,7 @@ class GoGui
             GoGui gui = new GoGui(program, m_prefs, file.toString(),
                                   m_board.getMoveNumber(), false, null,
                                   m_verbose, m_fillPasses,
-                                  m_computerNoneOption, m_autoplay, "");
+                                  m_computerNoneOption, false, "", "");
 
         }
         catch (Throwable t)
@@ -1103,6 +1113,22 @@ class GoGui
             {
                 if (m_autoplay)
                 {
+                    ++m_autoplayCounter;
+                    try
+                    {
+                        if (m_autoFile != null && ! m_autoFile.equals(""))
+                        {
+                            File file = new File(m_autoFile + "-"
+                                                 + m_autoplayCounter + ".sgf");
+                            if (! file.exists()
+                                || showQuestion("Overwrite " + file + "?"))
+                                save(file);
+                        }
+                    }
+                    catch (FileNotFoundException e)
+                    {
+                        showError("Could not save game.", e);
+                    }
                     try
                     {
                         newGame(m_boardSize, true);
