@@ -1447,8 +1447,14 @@ class GoGui
 
     private void cbScore()
     {
-        if (m_commandThread != null
-            && m_commandThread.isCommandSupported("final_status_list"))
+        if (m_commandThread == null)
+        {
+            showInfo("No program attached\n" +
+                     "Plase mark dead groups manually");
+            initScore(null);
+            return;
+        }
+        if (m_commandThread.isCommandSupported("final_status_list"))
         {
             Runnable callback = new Runnable()
                 {
@@ -1458,7 +1464,11 @@ class GoGui
             runLengthyCommand("final_status_list dead", callback);
         }
         else
+        {
+            showInfo(m_name + "does not support scoring\n" +
+                     "Plase mark dead groups manually");
             initScore(null);
+        }
     }
 
     private void cbScoreContinue()
@@ -2113,7 +2123,7 @@ class GoGui
         m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
-        showStatus("Please mark dead groups.");
+        showStatus("Please mark dead groups");
     }
 
     private void invokeAndWait(Runnable runnable)
