@@ -930,6 +930,7 @@ class GoGui
         m_currentNode = m_gameTree.getRoot();
         try
         {
+            m_board.initSize(m_boardSize);
             m_commandThread.sendCommandBoardsize(m_boardSize);
             m_commandThread.sendCommandClearBoard(m_boardSize);
             executeCurrentNode();
@@ -1708,6 +1709,11 @@ class GoGui
         m_menuBar.setComputerEnabled(false);
         m_gtpShell.dispose();
         m_gtpShell = null;
+        if (m_analyzeDialog != null)
+        {
+            m_analyzeDialog.dispose();
+            m_analyzeDialog = null;
+        }
     }
 
     private void endLengthyCommand()
