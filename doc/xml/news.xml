@@ -21,7 +21,7 @@ GtpAdapter: new option -fillpasses.
 </listitem>
 <listitem>
 <simpara>
-Lots of bug-fixes.
+Lots of bugfixes.
 </simpara>
 </listitem>
 </itemizedlist>
@@ -100,10 +100,7 @@ Nicer HTML output of GtpRegress, and TwoGtp.
 </listitem>
 <listitem>
 <simpara>
-GoGui: option -fillpasses is no longer supported, programs are now expected to
-be able to play moves by either color at any time.
-If there are requests for the old functionality, it might be reimplemented in
-GtpAdapter at a later time.
+GoGui: option -fillpasses is no longer supported.
 </simpara>
 </listitem>
 <listitem>
@@ -543,7 +540,7 @@ Documentation in docbook format.
 </listitem>
 <listitem>
 <simpara>
-Improvements in Gmp to Gtp adapter.
+Improvements in GmpToGtp adapter.
 </simpara>
 </listitem>
 <listitem>
