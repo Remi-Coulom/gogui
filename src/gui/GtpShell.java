@@ -200,7 +200,6 @@ public class GtpShell
         m_comboBox.addItemListener(this);
         contentPane.add(m_comboBox, BorderLayout.SOUTH);
         pack();
-        setInitialSize();
     }
     
     public void actionPerformed(ActionEvent event)
@@ -581,7 +580,7 @@ public class GtpShell
             m_gtpShellText.appendError(response);
         else
             m_gtpShellText.appendInput(response);
-        setNonEmptySize();
+        setFinalSize();
     }
     
     private void appendSentCommand(String command)
@@ -601,7 +600,7 @@ public class GtpShell
             m_numberCommands = 0;
         }
         m_gtpShellText.appendOutput(command + "\n");
-        setNonEmptySize();
+        setFinalSize();
     }
     
     private void appendToHistory(String command)
@@ -740,12 +739,6 @@ public class GtpShell
         save(m_commands.toString(), m_linesTruncated);
     }
 
-    /** @see setNonEmptySize */
-    private void setInitialSize()
-    {
-        setSize(new Dimension(m_fontSize * 51, m_fontSize * 10));
-    }
-
     /** Modify dialog size after first write.
         This is a workaround for problems with a JTextPane in a JScrollable
         in Sun's JDK (version 1.4)
@@ -760,7 +753,7 @@ public class GtpShell
         so we start with a smaller size and set the final size after the
         first text was inserted.
     */
-    private void setNonEmptySize()
+    private void setFinalSize()
     {
         if (! m_isEmpty)
             return;
