@@ -395,9 +395,7 @@ class AnalyzeDialog
         if (index >= 0)
         {
             m_runButton.setEnabled(true);
-            if (index < m_list.getFirstVisibleIndex()
-                || index >m_list.getLastVisibleIndex())
-                m_list.ensureIndexIsVisible(index);
+            m_list.ensureIndexIsVisible(index);
         }
         else
         {
@@ -711,13 +709,13 @@ class AnalyzeDialog
     private void selectCommand(int index)
     {
         String label = (String)m_labels.get(index);
-        for (int i = 0; i < m_comboBox.getItemCount(); ++i)
+        m_comboBox.insertItemAt(label, 0);
+        for (int i = 1; i < m_comboBox.getItemCount(); ++i)
             if (((String)m_comboBox.getItemAt(i)).equals(label))
             {
                 m_comboBox.removeItemAt(i);
                 break;
             }
-        m_comboBox.insertItemAt(label, 0);
         m_comboBox.setSelectedIndex(0);
         m_recentModified = true;
     }
