@@ -10,8 +10,10 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.text.*;
 import gtp.*;
 import utils.*;
 
@@ -391,6 +393,7 @@ class AnalyzeDialog
         setPrefsDefaults(prefs);
         m_onlySupportedCommands =
             prefs.getBool("analyze-only-supported-commands");
+        m_highlight = prefs.getBool("analyze-highlight");
         m_sort = prefs.getBool("analyze-sort");
         m_supportedCommands = supportedCommands;
         m_callback = callback;
@@ -418,6 +421,8 @@ class AnalyzeDialog
             m_callback.toTop();
         else if (command.equals("gtp-shell"))
             m_callback.cbGtpShell();
+        else if (command.equals("highlight"))
+            highlight();
         else if (command.equals("only-supported"))
             onlySupported();
         else if (command.equals("reload"))
@@ -426,6 +431,11 @@ class AnalyzeDialog
             setCommand();
         else if (command.equals("sort"))
             sort();
+    }
+
+    boolean getHighlight()
+    {
+        return m_highlight;
     }
 
     public void mouseClicked(MouseEvent event)
@@ -515,6 +525,8 @@ class AnalyzeDialog
 
     private boolean m_onlySupportedCommands;
 
+    private boolean m_highlight;
+
     private boolean m_sort;
 
     private boolean m_recentModified;
@@ -532,6 +544,8 @@ class AnalyzeDialog
     private JList m_list;
 
     private JMenuItem m_itemOnlySupported;
+
+    private JMenuItem m_itemHighlight;
 
     private JMenuItem m_itemSort;
 
@@ -688,6 +702,9 @@ class AnalyzeDialog
         m_itemSort = new JCheckBoxMenuItem("Sort alphabetically");
         m_itemSort.setSelected(m_sort);
         addMenuItem(menu, m_itemSort, KeyEvent.VK_S, "sort");
+        m_itemHighlight = new JCheckBoxMenuItem("Highlight text output");
+        m_itemHighlight.setSelected(m_highlight);
+        addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
         return menu;
     }
 
@@ -706,6 +723,12 @@ class AnalyzeDialog
     {
         String home = System.getProperty("user.home");
         return new File(new File(home, ".gogui"), "recent-analyze");
+    }
+
+    private void highlight()
+    {
+        m_highlight = m_itemHighlight.isSelected();
+        m_prefs.setBool("analyze-highlight", m_highlight);
     }
 
     private void onlySupported()
@@ -845,6 +868,7 @@ class AnalyzeDialog
     {
         prefs.setBoolDefault("analyze-only-supported-commands", true);
         prefs.setBoolDefault("analyze-sort", true);
+        prefs.setBoolDefault("analyze-highlight", true);
     }
 
     private void sort()
@@ -880,7 +904,8 @@ class AnalyzeTextOutput
     extends JDialog
     implements KeyListener
 {
-    public AnalyzeTextOutput(Frame owner, String title, String response)
+    public AnalyzeTextOutput(Frame owner, String title, String response,
+                             boolean highlight)
     {
         super(owner, "GoGui: " + title);
         setLocationRelativeTo(owner);
@@ -890,14 +915,25 @@ class AnalyzeTextOutput
         contentPane.add(panel, BorderLayout.CENTER);
         JLabel label = new JLabel(title);
         panel.add(label, BorderLayout.NORTH);
-        JTextArea textArea = new JTextArea(response);
-        textArea.setEditable(false);
-        textArea.setFont(new Font("Monospaced", Font.PLAIN,
-                                  getFont().getSize()));
-        JScrollPane scrollPane = new JScrollPane(textArea);
+        m_textPane = new JTextPane();
+        StyledDocument doc = m_textPane.getStyledDocument();
+        try
+        {
+            doc.insertString(0, response, null);
+        }
+        catch (BadLocationException e)
+        {
+            assert(false);
+        }
+        Font font = getFont();
+        m_textPane.setFont(new Font("Monospaced", Font.PLAIN, font.getSize()));
+        JScrollPane scrollPane = new JScrollPane(m_textPane);
         panel.add(scrollPane, BorderLayout.CENTER);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        textArea.addKeyListener(this);
+        m_textPane.addKeyListener(this);
+        if (highlight)
+            doSyntaxHighlight();
+        m_textPane.setEditable(false);
         pack();
         setVisible(true);
     }
@@ -915,6 +951,54 @@ class AnalyzeTextOutput
 
     public void keyTyped(KeyEvent e)
     {
+    }
+
+    private JTextPane m_textPane;
+
+    private void doSyntaxHighlight()
+    {
+        StyledDocument doc = m_textPane.getStyledDocument();
+        StyleContext context = StyleContext.getDefaultStyleContext();
+        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
+        Style styleTitle = doc.addStyle("title", def);
+        StyleConstants.setBold(styleTitle, true);
+        Style stylePoint = doc.addStyle("point", def);
+        StyleConstants.setForeground(stylePoint, new Color(0.25f, 0.5f, 0.7f));
+        Style styleNumber = doc.addStyle("number", def);
+        StyleConstants.setForeground(styleNumber, new Color(0f, 0.54f, 0f));
+        Style styleConst = doc.addStyle("const", def);
+        StyleConstants.setForeground(styleConst, new Color(0.8f, 0f, 0f));
+        Style styleColor = doc.addStyle("color", def);
+        StyleConstants.setForeground(styleColor, new Color(0.54f, 0f, 0.54f));
+        m_textPane.setEditable(true);
+        highlight("number", "\\b-?[0-9]+\\.?+[0-9]*\\b");
+        highlight("const", "\\b[A-Z_][A-Z_]+[A-Z]\\b");
+        highlight("color",
+                  "\\b([Bb][Ll][Aa][Cc][Kk]|[Ww][Hh][Ii][Tt][Ee])\\b");
+        highlight("point", "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t]1?+[1-9])\\b");
+        highlight("title", "^\\S+:\\s*$");
+        m_textPane.setEditable(false);
+    }
+
+    private void highlight(String style, String regex)
+    {
+        StyledDocument doc = m_textPane.getStyledDocument();
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        try
+        {
+            Matcher matcher = pattern.matcher(doc.getText(0, doc.getLength()));
+            while (matcher.find())
+            {
+                int start = matcher.start();
+                int end = matcher.end();
+                doc.setCharacterAttributes(start, end - start,
+                                           doc.getStyle(style), true);
+            }
+        }
+        catch (BadLocationException e)
+        {
+            assert(false);
+        }
     }
 }
 

@@ -731,7 +731,10 @@ class GoGui
                 }
                 else
                 {
-                    new AnalyzeTextOutput(this, title, response);
+                    boolean highlight = false;
+                    if (m_analyzeDialog != null)
+                        highlight = m_analyzeDialog.getHighlight();
+                    new AnalyzeTextOutput(this, title, response, highlight);
                 }
             }
             if (! statusContainsResponse)

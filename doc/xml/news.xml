@@ -31,6 +31,9 @@ Instead remember size and visibility of windows with new
 Support for multiple <filename>analyze-commands</filename> files.
 </listitem>
 <listitem>
+Syntax highlighting in analyze multi-line text output.
+</listitem>
+<listitem>
 Lots of other fixes and enhancements.
 </listitem>
 </itemizedlist>
