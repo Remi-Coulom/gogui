@@ -790,6 +790,8 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
+        if (m_analyzeCommand == null)
+            return;
         if (m_analyzeCommand.isPointArgMissing())
             return;
         showStatus("Running " + m_analyzeCommand.getResultTitle() + " ...");
