@@ -268,13 +268,13 @@ class MenuBars
     {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
-        addMenuItem(menu, "Load game", "load");
-        addMenuItem(menu, "Save game", "save");
-        addMenuItem(menu, "Save position", "save-position");
+        addMenuItem(menu, "Load...", "load");
+        addMenuItem(menu, "Save...", "save");
+        addMenuItem(menu, "Save position...", "save-position");
         menu.addSeparator();
-        addMenuItem(menu, "Print", "print");
+        addMenuItem(menu, "Print...", "print");
         menu.addSeparator();
-        addMenuItem(menu, "Open with program", "open-with-program");
+        addMenuItem(menu, "Open with program...", "open-with-program");
         menu.addSeparator();
         m_itemExit = addMenuItem(menu, "Exit", KeyEvent.VK_X, "exit");
         return menu;
@@ -284,11 +284,11 @@ class MenuBars
     {
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
-        addMenuItem(menu, "New game", "new-game");
-        addMenuItem(menu, "Komi", "komi");
+        addMenuItem(menu, "New", "new-game");
+        addMenuItem(menu, "Komi...", "komi");
         menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
-        addMenuItem(menu, "Score game", "score");
+        addMenuItem(menu, "Score", "score");
         menu.addSeparator();
         addMenuItem(menu, "Pass", KeyEvent.VK_P, "pass");
         m_itemComputerPlay =
