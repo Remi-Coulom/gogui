@@ -95,6 +95,26 @@ public class Options
         }
     }
 
+    public int getInteger(String option, int defaultValue, int min)
+        throws Exception
+    {
+        int value = getInteger(option, defaultValue);
+        if (value < min)
+            throw new Exception("Option -" + option + " must be greater than "
+                                + min);
+        return value;
+    }
+
+    public int getInteger(String option, int defaultValue, int min, int max)
+        throws Exception
+    {
+        int value = getInteger(option, defaultValue);
+        if (value < min || value > max)
+            throw new Exception("Option -" + option + " must be in [" +
+                                min + ".." + max + "]");
+        return value;
+    }
+
     public String getString(String option) throws Exception
     {
         return getString(option, "");
