@@ -21,7 +21,7 @@ ICONS= \
 
 release:
 	test -d build || mkdir build
-	javac -O -deprecation -source 1.4 -d build @files.txt
+	javac -O -deprecation -sourcepath . -source 1.4 -d build @files.txt
 	test -d build/doc || mkdir build/doc
 	for d in $(DOCS); do cp doc/$$d build/doc/$$d; done 
 	test -d build/icons || mkdir -p build/icons
@@ -30,7 +30,7 @@ release:
 	for i in $(ICONS); do cp $$i build/$$i; done 
 	jar cmf manifest-addition.txt gogui.jar -C build .
 
-# Run with 'jdb -classpath build_dbg -sourcepath . GoGui'
+# Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
 debug:
 	test -d build_dbg || mkdir build_dbg
 	javac -g -deprecation -source 1.4 -d build_dbg @files.txt
