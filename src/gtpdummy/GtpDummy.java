@@ -43,6 +43,8 @@ public class GtpDummy
             status = play(cmdArray, response);
         else if (cmd.equals("dummy_bwboard"))
             bwBoard(response);
+        else if (cmd.equals("dummy_invalid"))
+            cmdInvalid();
         else if (cmd.equals("dummy_crash"))
             crash();
         else if (cmd.equals("dummy_next_failure"))
@@ -77,6 +79,7 @@ public class GtpDummy
             response.append("black\n" +
                             "dummy_bwboard\n" +
                             "dummy_crash\n" +
+                            "dummy_invalid\n" +
                             "dummy_next_success\n" +
                             "dummy_next_failure\n" +
                             "dummy_sleep\n" +
@@ -140,6 +143,12 @@ public class GtpDummy
                 response.append(Math.random() > 0.5 ? "B " : "W ");
             response.append("\n");
         }                    
+    }
+
+    private void cmdInvalid()
+    {        
+        printInvalidResponse("This is an invalid GTP response.\n" +
+                             "It does not start with a status character.\n");
     }
 
     private void crash()

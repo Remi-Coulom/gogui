@@ -401,6 +401,17 @@ public abstract class GtpServer
         }
     }
 
+    /** Print invalid response directly to output stream.
+        Should only be used for simulationg broken GTP implementations
+        like used in GtpDummy's dummy_invalid command.
+        @param text Text to print to output stream.
+        No newline will be appended.
+    */
+    public void printInvalidResponse(String text)
+    {
+        m_out.print(text);
+    }
+
     public void respond(boolean status, boolean hasId, int id,
                         String response)
     {

@@ -107,6 +107,15 @@ Exit program with return code -1.
 </varlistentry>
 
 <varlistentry>
+<term><userinput>dummy_invalid</userinput></term>
+<listitem>
+<para>
+Print an invalid GTP response which does not start with a status character.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <userinput>dummy_next_failure <replaceable>response</replaceable>
 </userinput>
