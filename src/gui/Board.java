@@ -144,9 +144,10 @@ public class Board
         return m_board;
     }
 
-    public int getFieldSize()
+    public Dimension getFieldSize()
     {
-        return m_field[0][0].getWidth();
+        int width = m_field[0][0].getWidth();
+        return new Dimension(width, width);
     }
 
     public boolean[][] getMarkups()

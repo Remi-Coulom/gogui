@@ -354,7 +354,7 @@ class GoGui
     {
         if (m_showInfoPanel)
             m_comment.setPreferredSize(m_comment.getSize());
-        m_guiBoard.setPreferredFieldSize(m_guiBoard.getPreferredFieldSize());
+        m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
         showInfoPanel();
     }
 
@@ -362,7 +362,7 @@ class GoGui
     {
         if (m_showInfoPanel)
             m_comment.setPreferredSize(m_comment.getSize());
-        m_guiBoard.setPreferredFieldSize(m_guiBoard.getPreferredFieldSize());
+        m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
         showToolbar();
     }
 
@@ -2329,7 +2329,7 @@ class GoGui
         if (GuiUtils.isNormalSizeMode(this))
         {            
             String name = "fieldsize-" + m_boardSize;
-            m_prefs.setInt(name, m_guiBoard.getFieldSize());
+            m_prefs.setInt(name, m_guiBoard.getFieldSize().width);
             name = "commentsize-" + m_boardSize;
             String value = Integer.toString(m_comment.getWidth()) + " "
                 + Integer.toString(m_comment.getHeight());
