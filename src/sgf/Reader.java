@@ -125,6 +125,17 @@ public class Reader
         return m_gameTree;
     }
 
+    /** Returns string with warning messages or null if no warnings. */
+    public String getWarnings()
+    {
+        String result = "";
+        if (m_warningLongProps)
+            result = result + "Long property names for standard properties\n";
+        if (result.equals(""))
+            return null;
+        return result;
+    }
+
     private static class SgfCharsetChanged
         extends Exception
     {
@@ -133,6 +144,8 @@ public class Reader
     private static final int CACHE_SIZE = 30;
 
     private boolean m_isFile;
+
+    private boolean m_warningLongProps;
 
     private int m_lastPercent;
 
@@ -362,22 +375,30 @@ public class Reader
             if (values.size() == 0)
                 throw getError("Property '" + p + "' has no value");
             String v = (String)values.get(0);
-            if (p.equals("AB"))
+            if (p.equals("AB") || p.equals("ADDBLACK"))
             {
+                if (p.equals("ADDBLACK"))
+                    m_warningLongProps = true;
                 for (int i = 0; i < values.size(); ++i)
                     node.addBlack(parsePoint((String)values.get(i)));
             }
-            else if (p.equals("AE"))
+            else if (p.equals("AE") || p.equals("ADDEMPTY"))
             {
+                if (p.equals("ADDEMPTY"))
+                    m_warningLongProps = true;
                 throw getError("Add empty not supported");
             }
-            else if (p.equals("AW"))
+            else if (p.equals("AW") || p.equals("ADDWHITE"))
             {
+                if (p.equals("ADDWHITE"))
+                    m_warningLongProps = true;
                 for (int i = 0; i < values.size(); ++i)
                     node.addWhite(parsePoint((String)values.get(i)));
             }
-            else if (p.equals("B"))
+            else if (p.equals("B") || p.equals("BLACK"))
             {
+                if (p.equals("BLACK"))
+                    m_warningLongProps = true;
                 node.setMove(getMove(parsePoint(v), Color.BLACK));
             }
             else if (p.equals("BL"))
@@ -392,8 +413,10 @@ public class Reader
             }
             else if (p.equals("BR"))
                 m_gameInformation.m_blackRank = v;
-            else if (p.equals("C"))
+            else if (p.equals("C") || p.equals("COMMENT"))
             {
+                if (p.equals("COMMENT"))
+                    m_warningLongProps = true;
                 String comment;
                 if (node.getComment() != null)
                     comment = node.getComment() + "\n" + v.trim();
@@ -410,20 +433,34 @@ public class Reader
                         throw new SgfCharsetChanged();
                 }
             }
-            else if (p.equals("DT"))
-                m_gameInformation.m_date = v;
-            else if (p.equals("GM"))
+            else if (p.equals("DT") || p.equals("DATE"))
             {
+                if (p.equals("DATE"))
+                    m_warningLongProps = true;
+                m_gameInformation.m_date = v;
+            }
+            else if (p.equals("GM") || p.equals("GAME"))
+            {
+                if (p.equals("GAME"))
+                    m_warningLongProps = true;
                 v = v.trim();
                 // Value should be 1, but sgf2misc produces Go files
                 // with empty value
                 if (! v.equals("1") && ! v.equals(""))
                     throw getError("Not a Go game");
             }
-            else if (p.equals("HA"))
+            else if (p.equals("HA") || p.equals("HANDICAP"))
+            {
+                if (p.equals("HANDICAP"))
+                    m_warningLongProps = true;
                 m_gameInformation.m_handicap = Integer.parseInt(v);
-            else if (p.equals("KM"))
+            }
+            else if (p.equals("KM") || p.equals("KOMI"))
+            {
+                if (p.equals("KOMI"))
+                    m_warningLongProps = true;
                 m_gameInformation.m_komi = parseDouble(v);
+            }
             else if (p.equals("OB"))
             {
                 try
@@ -444,24 +481,50 @@ public class Reader
                 {
                 }
             }
-            else if (p.equals("PB"))
-                m_gameInformation.m_playerBlack = v;
-            else if (p.equals("PW"))
-                m_gameInformation.m_playerWhite = v;
-            else if (p.equals("PL"))
-                node.setPlayer(parseColor(v));
-            else if (p.equals("RE"))
-                m_gameInformation.m_result = v;
-            else if (p.equals("RU"))
-                m_gameInformation.m_rules = v;
-            else if (p.equals("SZ"))
+            else if (p.equals("PB") || p.equals("PLAYERBLACK"))
             {
+                if (p.equals("PLAYERBLACK"))
+                    m_warningLongProps = true;
+                m_gameInformation.m_playerBlack = v;
+            }
+            else if (p.equals("PW") || p.equals("PLAYERWHITE"))
+            {
+                if (p.equals("PLAYERWHITE"))
+                    m_warningLongProps = true;
+                m_gameInformation.m_playerWhite = v;
+            }
+            else if (p.equals("PL") || p.equals("PLAYER"))
+            {
+                if (p.equals("PLAYER"))
+                    m_warningLongProps = true;
+                node.setPlayer(parseColor(v));
+            }
+            else if (p.equals("RE") || p.equals("RESULT"))
+            {
+                if (p.equals("RESULT"))
+                    m_warningLongProps = true;
+                m_gameInformation.m_result = v;
+            }
+            else if (p.equals("RU") || p.equals("RULES"))
+            {
+                if (p.equals("RULES"))
+                    m_warningLongProps = true;
+                m_gameInformation.m_rules = v;
+            }
+            else if (p.equals("SZ") || p.equals("SIZE"))
+            {
+                if (p.equals("SIZE"))
+                    m_warningLongProps = true;
                 if (! isRoot)
                     throw getError("Size property outside root node");
                 m_gameInformation.m_boardSize = parseInt(v);
             }
-            else if (p.equals("W"))
+            else if (p.equals("W") || p.equals("WHITE"))
+            {
+                if (p.equals("WHITE"))
+                    m_warningLongProps = true;
                 node.setMove(getMove(parsePoint(v), Color.WHITE));
+            }
             else if (p.equals("WL"))
             {
                 try

@@ -2167,12 +2167,15 @@ class GoGui
             GameInformation gameInformation =
                 reader.getGameTree().getGameInformation();
             initGame(gameInformation.m_boardSize);
-            m_gameTree = reader.getGameTree(); 
+            m_gameTree = reader.getGameTree();
             if (executeRoot())
                 if (move > 0)
                     forward(move);            
             m_loadedFile = file;
             setTitle();
+            String warnings = reader.getWarnings();
+            if (warnings != null)
+                showWarning("Warnings while reading SGF file:\n" + warnings);
             SimpleDialogs.setLastFile(file);
             computerNone();
             boardChangedBegin(false, true);
