@@ -166,6 +166,7 @@ public class GtpDisplay
         if (! send(command, response))
             return false;
         m_guiBoard.updateFromGoBoard();
+        m_guiBoard.markLastMove(null);
         return true;
     }
 
@@ -176,6 +177,7 @@ public class GtpDisplay
             return false;
         m_board.newGame();
         m_guiBoard.updateFromGoBoard();
+        m_guiBoard.markLastMove(null);
         return true;
     }
 
@@ -200,6 +202,7 @@ public class GtpDisplay
             go.Point point = Gtp.parsePoint(response.toString(), m_size);
             m_board.play(new Move(point, color));
             m_guiBoard.updateFromGoBoard();
+            m_guiBoard.markLastMove(point);
             return true;
         }
         catch (Gtp.Error e)
@@ -207,6 +210,7 @@ public class GtpDisplay
             response.append("Program played illegal move");
             m_board.play(new Move(null, color));
             m_guiBoard.updateFromGoBoard();
+            m_guiBoard.markLastMove(null);
             return false;
         }
     }
@@ -363,6 +367,7 @@ public class GtpDisplay
         if (send(command, response))
         {
             m_board.play(new Move(point, color));
+            m_guiBoard.markLastMove(point);
             m_guiBoard.updateFromGoBoard();
             return true;
         }
@@ -389,6 +394,7 @@ public class GtpDisplay
         {
             m_board.undo();
             m_guiBoard.updateFromGoBoard();
+            m_guiBoard.markLastMove(null);
             return true;
         }
         return false;
