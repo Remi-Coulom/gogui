@@ -733,7 +733,7 @@ class GoGui
                 m_board.undo();
             }
             setFastUpdate(false);
-            boardChanged(false);
+            boardChangedBegin(false);
         }
         catch (Gtp.Error e)
         {
@@ -750,7 +750,7 @@ class GoGui
         m_commandInProgress = true;
     }
 
-    private void boardChanged(boolean doCheckComputerMove)
+    private void boardChangedBegin(boolean doCheckComputerMove)
     {
         m_guiBoard.update();
         m_guiBoard.repaint();
@@ -799,13 +799,13 @@ class GoGui
     private void cbEnd()
     {
         forward(m_board.getNumberSavedMoves() - m_board.getMoveNumber());
-        boardChanged(false);
+        boardChangedBegin(false);
     }
 
     private void cbForward(int n)
     {
         forward(n);
-        boardChanged(false);
+        boardChangedBegin(false);
     }
 
     private void cbGtpFile()
@@ -1246,7 +1246,7 @@ class GoGui
                 showInfo("The computer passed.");
             fileModified();
             m_isModified = true;
-            boardChanged(true);
+            boardChangedBegin(true);
         }
         catch (Gtp.Error e)
         {
@@ -1366,7 +1366,7 @@ class GoGui
                 m_lostOnTimeShown = true;
             }
             m_isModified = true;
-            boardChanged(true);            
+            boardChangedBegin(true);            
         }
         catch (Gtp.Error e)
         {
@@ -1561,7 +1561,7 @@ class GoGui
                 forward(move);
             m_loadedFile = file.toString();
             setTitle();
-            boardChanged(false);
+            boardChangedBegin(false);
         }
         catch (FileNotFoundException e)
         {
@@ -1975,7 +1975,7 @@ class GoGui
             setFastUpdate(false);
             fileModified();
             m_isModified = true;
-            boardChanged(false);
+            boardChangedBegin(false);
         }
         catch (Gtp.Error e)
         {
