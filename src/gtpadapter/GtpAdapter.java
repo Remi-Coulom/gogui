@@ -23,9 +23,9 @@ public class GtpAdapter
 {
     public GtpAdapter(InputStream in, OutputStream out, String program,
                       PrintStream log, boolean version2, int size, String name,
-                      boolean noScore, boolean emuHandicap, boolean resign,
-                      int resignScore, String gtpFile, boolean verbose,
-                      boolean fillPasses)
+                      boolean noScore, boolean emuHandicap, boolean emuLoadsgf,
+                      boolean resign, int resignScore, String gtpFile,
+                      boolean verbose, boolean fillPasses)
         throws Exception
     {
         super(in, out, log);
@@ -44,6 +44,7 @@ public class GtpAdapter
         m_version2 = version2;
         m_noScore = noScore;
         m_emuHandicap = emuHandicap;
+        m_emuLoadsgf = emuLoadsgf;
         m_size = size;
         m_name = name;
         m_resign = resign;
@@ -134,6 +135,7 @@ public class GtpAdapter
             String options[] = {
                 "config:",
                 "emuhandicap",
+                "emuloadsgf",
                 "fillpasses",
                 "gtpfile:",
                 "help",
@@ -162,6 +164,7 @@ public class GtpAdapter
             boolean noScore = opt.isSet("noscore");
             boolean version2 = opt.isSet("version2");
             boolean emuHandicap = opt.isSet("emuhandicap");
+            boolean emuLoadsgf = opt.isSet("emuloadsgf");
             boolean fillPasses = opt.isSet("fillpasses");
             String name = opt.getString("name", null);
             String gtpFile = opt.getString("gtpfile", null);
@@ -183,8 +186,9 @@ public class GtpAdapter
             String program = (String)arguments.get(0);
             GtpAdapter gtpAdapter =
                 new GtpAdapter(System.in, System.out, program, log, version2,
-                               size, name, noScore, emuHandicap, resign,
-                               resignScore, gtpFile, verbose, fillPasses);
+                               size, name, noScore, emuHandicap, emuLoadsgf,
+                               resign, resignScore, gtpFile, verbose,
+                               fillPasses);
             gtpAdapter.mainLoop();
             gtpAdapter.close();
             if (log != null)
@@ -209,6 +213,8 @@ public class GtpAdapter
     }
 
     private boolean m_emuHandicap;
+
+    private boolean m_emuLoadsgf;
 
     private boolean m_fillPasses;
 
@@ -383,7 +389,13 @@ public class GtpAdapter
                 || cmd.equals("protocol_version")
                 || cmd.equals("quit")
                 || cmd.equals("white"))
-                    continue;
+                continue;
+            if ((cmd.equals("set_free_handicap")
+                 || cmd.equals("get_free_handicap"))
+                && m_emuHandicap)
+                continue;
+            if (cmd.equals("loadsgf") && m_emuLoadsgf)
+                continue;
             if (m_noScore)
                 if (cmd.equals("final_score")
                     || (cmd.equals("final_status_list")))
@@ -414,6 +426,8 @@ public class GtpAdapter
             response.append("set_free_handicap\n");
             response.append("get_free_handicap\n");
         }
+        if (m_emuLoadsgf)
+            response.append("loadsgf\n");
         response.append("gtpadapter_showboard\n");
         return true;
     }
@@ -441,8 +455,10 @@ public class GtpAdapter
                 return false;
             }
         }
-        if (! send(command, response))
-            return false;
+        if (! m_emuLoadsgf)
+            if (! send(command, response))
+                return false;
+        Color toMove = Color.EMPTY;
         try
         {
             java.io.Reader fileReader = new FileReader(new File(filename));
@@ -465,12 +481,24 @@ public class GtpAdapter
                 for (int i = 0; i < moves.size(); ++i)
                 {
                     Move move = (Move)moves.get(i);
-                    m_board.play(move);
+                    if (! m_emuLoadsgf)
+                        m_board.play(move);
+                    else
+                    {
+                        if (! play(move.getColor(), move.getPoint(), response))
+                            return false;
+                    }
                 }
-                Color toMove = node.getToMove();
-                if (toMove != Color.EMPTY)
-                    m_board.setToMove(toMove);
+                toMove = node.getToMove();
                 node = node.getChild();
+            }
+            if (toMove != Color.EMPTY && toMove != m_board.getToMove())
+            {
+                if (! m_emuLoadsgf)
+                    m_board.setToMove(toMove);
+                else
+                    if (! play(m_board.getToMove(), null, response))
+                        return false;
             }
         }
         catch (FileNotFoundException e)

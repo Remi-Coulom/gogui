@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+GtpAdapter: bugfixes, new option -emuloadsgf.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Color arguments to analyze commands can now be selected in the analyze window.
 New wildcard %c for commands (supersedes %m) and return type varc.
 </simpara>
