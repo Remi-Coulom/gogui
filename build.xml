@@ -121,6 +121,8 @@ and set the environment variable XSLDIR to the installation directory.
 
 <target name="docsrc">
 <javadoc sourcepath="src" destdir="docsrc" source="1.4"
+ windowtitle="GoGui Source Documentation"
+ overview="src/overview.html"
  packagenames="
   gmp.*,
   gmptogtp.*,
