@@ -175,6 +175,7 @@ public class TwoGtp
         {
             String options[] = {
                 "alternate",
+                "analyze:",
                 "auto",
                 "compare",
                 "black:",
@@ -193,18 +194,19 @@ public class TwoGtp
                 String helpText =
                     "Usage: java -jar twogtp.jar [options]\n" +
                     "\n" +
-                    "-alternate alternate colors\n" +
-                    "-auto      autoplay games\n" +
-                    "-black     command for black program\n" +
-                    "-compare   compare list of sgf files\n" +
-                    "-games     number of games (0=unlimited)\n" +
-                    "-help      display this help and exit\n" +
-                    "-komi      komi\n" +
-                    "-sgffile   filename prefix\n" +
-                    "-size      board size for autoplay (default 19)\n" +
-                    "-verbose   log GTP streams to stderr\n" +
-                    "-version   print version and exit\n" +
-                    "-white     command for white program\n";
+                    "-alternate    alternate colors\n" +
+                    "-analyze file analyze result file\n" +
+                    "-auto         autoplay games\n" +
+                    "-black        command for black program\n" +
+                    "-compare      compare list of sgf files\n" +
+                    "-games        number of games (0=unlimited)\n" +
+                    "-help         display this help and exit\n" +
+                    "-komi         komi\n" +
+                    "-sgffile      filename prefix\n" +
+                    "-size         board size for autoplay (default 19)\n" +
+                    "-verbose      log GTP streams to stderr\n" +
+                    "-version      print version and exit\n" +
+                    "-white        command for white program\n";
                 System.out.print(helpText);
                 System.exit(0);
             }
@@ -219,6 +221,12 @@ public class TwoGtp
                 System.out.println("TwoGtp " + Version.m_version);
                 System.exit(0);
             }
+            if (opt.contains("analyze"))
+            {
+                String filename = opt.getString("analyze");
+                new Analyze(filename);
+                return;
+            }                
             boolean alternate = opt.isSet("alternate");
             boolean auto = opt.isSet("auto");
             boolean verbose = opt.isSet("verbose");
@@ -542,9 +550,9 @@ public class TwoGtp
         if (blackName.equals(whiteName))
         {
             if (! m_blackVersion.equals(""))
-                m_blackName = m_blackName + ":" + m_blackVersion;
+                blackName = m_blackName + ":" + m_blackVersion;
             if (! m_whiteVersion.equals(""))
-                m_whiteName = m_whiteName + ":" + m_whiteVersion;
+                whiteName = m_whiteName + ":" + m_whiteVersion;
         }
         if (isAlternated())
         {
@@ -813,6 +821,14 @@ public class TwoGtp
         {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             PrintStream out = new PrintStream(fileOutputStream);
+            String blackName = m_blackName;
+            String whiteName = m_whiteName;
+            if (! m_blackVersion.equals(""))
+                blackName = m_blackName + ":" + m_blackVersion;
+            if (! m_whiteVersion.equals(""))
+                whiteName = m_whiteName + ":" + m_whiteVersion;
+            out.println("# Black " + blackName);
+            out.println("# White " + whiteName);
             out.println("# Game\tResB\tResW\tAlt\tDup\tLen\tCpuB\tCpuW\t" +
                         "Err\tErrMsg");
             out.close();

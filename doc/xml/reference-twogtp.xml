@@ -18,7 +18,6 @@ Go Text Protocol adapter for playing games between two Go programs.
 <command>twogtp</command>
 <arg><option>-alternate</option></arg>
 <arg><option>-auto</option></arg>
-<arg><option>-compare</option></arg>
 <arg choice="plain"><option>-black</option> <replaceable>command</replaceable>
   </arg>
 <arg><option>-games</option></arg>
@@ -29,6 +28,14 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-verbose</option></arg>
 <arg choice="plain"><option>-white</option> <replaceable>command</replaceable>
   </arg>
+
+<command>twogtp</command>
+<arg choice="plain"><option>-compare</option></arg>
+<arg choice="plain" rep="repeat"><replaceable>file.sgf</replaceable></arg>
+
+<command>twogtp</command>
+<arg choice="plain"><option>-analyze</option></arg>
+<arg choice="plain"><replaceable>file.dat</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -90,6 +97,14 @@ Alternate colors. Black and White are exchanged every odd game.
 The scores saved in the results table if <option>-sgffile</option>
 are still using the name Black and White as given with
 <option>-black</option> and <option>-white</option>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-analyze</option> <replaceable>file.dat</replaceable></term>
+<listitem>
+Analyze the result file <replaceable>file.dat</replaceable> and create
+a HTML file <replaceable>file.html</replaceable> with some statistics.
 </listitem>
 </varlistentry>
 

@@ -7,6 +7,9 @@
 <authorinitials>enz</authorinitials>
 <revremark>
 <itemizedlist>
+<listitem>
+<application>TwoGtp</application>: new option <option>-analyze</option>.
+</listitem>
 </itemizedlist>
 </revremark>
 </revision>
