@@ -2072,10 +2072,17 @@ class GoGui
             return;
         try
         {
-            int x = Integer.parseInt(tokens[0]);
-            int y = Integer.parseInt(tokens[1]);
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = Math.max(0, Integer.parseInt(tokens[0]));
+            if (x > screenSize.width)
+                x = 0;
+            int y = Math.max(0, Integer.parseInt(tokens[1]));
+            if (y > screenSize.height)
+                y = 0;
             int width = Integer.parseInt(tokens[2]);
+            width = Math.min(width, screenSize.width);
             int height = Integer.parseInt(tokens[3]);
+            height = Math.min(height, screenSize.height);
             if (window instanceof GtpShell)
                 ((GtpShell)window).setFinalSize(x, y, width, height);
             else
