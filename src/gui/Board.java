@@ -247,6 +247,35 @@ public class Board
                         graphics.fillOval(point.x - r, point.y - r,
                                           2 * r + 1, 2 * r + 1);
                     }
+        drawShadows(graphics);
+    }
+
+    private void drawShadows(Graphics graphics)
+    {
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        if (graphics2D == null)
+            return;
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            go.Point point = m_board.getPoint(i);
+            if (m_board.getColor(point) == go.Color.EMPTY)
+                continue;
+            Field field = getField(point);
+            java.awt.Point location = field.getLocation();
+            int size = field.getSize().width;
+            if (graphics instanceof Graphics2D)
+            {
+                AlphaComposite composite = 
+                    AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f); 
+                graphics2D.setComposite(composite);
+                graphics.setColor(java.awt.Color.black);
+                int offset = size / 15;
+                graphics.fillOval(location.x + 1 + offset,
+                                  location.y + 1 + offset,
+                                  size - 2, size - 2);
+            }
+        }
+        graphics.setPaintMode();
     }
 
     public int print(Graphics g, PageFormat format, int page)

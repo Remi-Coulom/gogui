@@ -58,6 +58,13 @@ either color at any time.
 If there are requests for the old functionality, it might be reimplemented in
 <application>GtpAdapter</application> at a later time.
 </simpara>
+</listitem>
+<listitem>
+<simpara>
+Draw stones using highlights and shadows.
+</simpara>
+</listitem>
+<listitem>
 <simpara>
 Other fixes and improvements.
 </simpara>

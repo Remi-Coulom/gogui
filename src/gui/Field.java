@@ -13,6 +13,116 @@ import java.util.*;
 import javax.swing.*;
 import go.*;
 
+
+import java.awt.image.*;
+ 
+//-----------------------------------------------------------------------------
+
+class RadialGradientPaint
+    implements Paint
+{
+    public RadialGradientPaint(double x, double y, java.awt.Color pointColor,
+                               Point2D radius, java.awt.Color backgroundColor)
+    {
+        assert(radius.distance(0, 0) > 0);
+        m_point = new Point2D.Double(x, y);
+        m_pointColor = pointColor;
+        m_radius = radius;
+        m_backgroundColor = backgroundColor;
+    }
+    
+    public PaintContext createContext(ColorModel colorModel,
+                                      Rectangle deviceBounds,
+                                      Rectangle2D userBounds,
+                                      AffineTransform xform,
+                                      RenderingHints hints)
+    {
+        Point2D transformedPoint = xform.transform(m_point, null);
+        Point2D transformedRadius = xform.deltaTransform(m_radius, null);
+        return new RadialGradientContext(transformedPoint, m_pointColor,
+                                         transformedRadius, m_backgroundColor);
+    }
+    
+    public int getTransparency()
+    {
+        int a1 = m_pointColor.getAlpha();
+        int a2 = m_backgroundColor.getAlpha();
+        return (((a1 & a2) == 0xff) ? OPAQUE : TRANSLUCENT);
+    }
+
+    private Point2D m_point;
+
+    private Point2D m_radius;
+
+    private java.awt.Color m_pointColor;
+
+    private java.awt.Color m_backgroundColor;
+}
+
+//-----------------------------------------------------------------------------
+
+class RadialGradientContext
+    implements PaintContext
+{
+    public RadialGradientContext(Point2D p, java.awt.Color c1, Point2D r,
+                                 java.awt.Color c2)
+    {
+        m_point = p;
+        mC1 = c1;
+        m_radius = r;
+        mC2 = c2;
+    }
+    
+    public void dispose()
+    {
+    }
+    
+    public ColorModel getColorModel()
+    {
+        return ColorModel.getRGBdefault();
+    }
+  
+    public Raster getRaster(int x, int y, int w, int h)
+    {
+        WritableRaster raster =
+            getColorModel().createCompatibleWritableRaster(w, h);
+        
+        int[] data = new int[w * h * 4];
+        for (int j = 0; j < h; j++)
+        {
+            for (int i = 0; i < w; i++)
+            {
+                double distance = m_point.distance(x + i, y + j);
+                double radius = m_radius.distance(0, 0);
+                double ratio = distance / radius;
+                if (ratio > 1.0)
+                    ratio = 1.0;
+                
+                int base = (j * w + i) * 4;
+                data[base + 0] = (int)(mC1.getRed() + ratio *
+                                       (mC2.getRed() - mC1.getRed()));
+                data[base + 1] = (int)(mC1.getGreen() + ratio *
+                                       (mC2.getGreen() - mC1.getGreen()));
+                data[base + 2] = (int)(mC1.getBlue() + ratio *
+                                       (mC2.getBlue() - mC1.getBlue()));
+                data[base + 3] = (int)(mC1.getAlpha() + ratio *
+                                       (mC2.getAlpha() - mC1.getAlpha()));
+            }
+        }
+        raster.setPixels(0, 0, w, h, data);
+        
+        return raster;
+    }
+
+    private Point2D m_point;
+
+    private Point2D m_radius;
+
+    private java.awt.Color mC1;
+
+    private java.awt.Color mC2;
+}
+
 //-----------------------------------------------------------------------------
 
 public class Field
@@ -121,9 +231,10 @@ public class Field
             graphics.fillRect(0, 0, size.width, size.height);
         }
         if (m_color == go.Color.BLACK)
-            drawStone(graphics, java.awt.Color.black);
+            drawStone(graphics, java.awt.Color.black, java.awt.Color.gray);
         else if (m_color == go.Color.WHITE)
-            drawStone(graphics, java.awt.Color.white);
+            drawStone(graphics, new java.awt.Color(0.930f, 0.895f, 0.867f),
+                      new java.awt.Color(1.0f, 1.0f, 1.0f));
         if (m_territory == go.Color.BLACK)
             drawInfluence(graphics, 1.0);
         else if (m_territory == go.Color.WHITE)
@@ -297,11 +408,28 @@ public class Field
         drawCircle(g, java.awt.Color.blue, true);
     }
 
-    private void drawStone(Graphics g, java.awt.Color c)
+    private void drawStone(Graphics graphics, java.awt.Color color,
+                           java.awt.Color colorBright)
     {
         Dimension size = getSize();
-        g.setColor(c);
-        g.fillOval(0, 0, size.width, size.height);
+        int width = size.width;
+        int height = size.height;
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        if (graphics2D != null)
+        {
+            RadialGradientPaint paint =
+                new RadialGradientPaint(width / 3, height / 3,
+                                       colorBright,
+                                       new Point2D.Double(width / 4 , height / 4),
+                                       color);
+            graphics2D.setPaint(paint);
+            graphics.fillOval(1, 1, width - 2, height - 2);
+        }
+        else
+        {
+            graphics.setColor(color);
+            graphics.fillOval(1, 1, width - 2, height - 2);
+        }
     }
 
     private void drawString(Graphics g)
