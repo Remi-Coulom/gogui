@@ -222,8 +222,6 @@ public class Help
             button.setIcon(new ImageIcon(url, command));
         else
             button.setText(command);
-        Insets insets = new Insets(1, 1, 1, 1);
-        button.setMargin(insets);
         button.setFocusable(false);
         return button;
     }
