@@ -24,7 +24,6 @@
 <arg><option>-command</option> <replaceable>command</replaceable></arg>
 <arg><option>-file</option> <replaceable>filename</replaceable></arg>
 <arg><option>-fillpasses</option></arg>
-<arg><option>-gtpshell</option></arg>
 <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
 <arg><option>-help</option></arg>
 <arg><option>-komi</option> <replaceable>value</replaceable></arg>
@@ -126,15 +125,6 @@ Load SGF file.
 </term>
 <listitem>
 Never send subsequent moves of the same color to the program.
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<option>-gtpshell</option>
-</term>
-<listitem>
-Open GTP shell at startup.
 </listitem>
 </varlistentry>
 

@@ -27,7 +27,7 @@ class GoGui
                GtpShell.Callback, WindowListener
 {
     GoGui(String program, Preferences prefs, String file, int move,
-          boolean gtpShell, String time, boolean verbose, boolean fillPasses,
+          String time, boolean verbose, boolean fillPasses,
           boolean computerBlack, boolean computerWhite, boolean auto,
           String gtpFile, String gtpCommand, String initAnalyze)
         throws Gtp.Error
@@ -46,7 +46,6 @@ class GoGui
         m_computerWhite = computerWhite;
         m_auto = auto;
         m_verbose = verbose;
-        m_showGtpShellAtStart = gtpShell;
         m_initAnalyze = initAnalyze;
 
         m_program = program;
@@ -373,7 +372,6 @@ class GoGui
                     "  -file filename  load SGF file\n" +
                     "  -fillpasses     never send subsequent moves of\n" +
                     "                  the same color to the program\n" +
-                    "  -gtpshell       open GTP shell at startup\n" +
                     "  -gtpfile file   send GTP file at startup\n" +
                     "  -help           display this help and exit\n" +
                     "  -komi value     set komi\n" +
@@ -407,7 +405,6 @@ class GoGui
                 computerBlack = true;
             String file = opt.getString("file", "");
             boolean fillPasses = opt.isSet("fillpasses");
-            boolean gtpShell = opt.isSet("gtpshell");
             String gtpFile = opt.getString("gtpfile", "");
             String gtpCommand = opt.getString("command", "");
             if (opt.contains("komi"))
@@ -437,7 +434,7 @@ class GoGui
             else
                 program = SelectProgram.select(null);
             
-            GoGui gui = new GoGui(program, prefs, file, move, gtpShell, time,
+            GoGui gui = new GoGui(program, prefs, file, move, time,
                                   verbose, fillPasses, computerBlack,
                                   computerWhite, auto, gtpFile, gtpCommand,
                                   initAnalyze);
@@ -633,8 +630,6 @@ class GoGui
     private boolean m_scoreMode;
 
     private boolean m_setupMode;
-
-    private boolean m_showGtpShellAtStart;
 
     private boolean m_verbose;
 
@@ -1054,7 +1049,7 @@ class GoGui
             File file = File.createTempFile("gogui-", "*.sgf");
             save(file);
             GoGui gui = new GoGui(program, m_prefs, file.toString(),
-                                  m_board.getMoveNumber(), false, null,
+                                  m_board.getMoveNumber(), null,
                                   m_verbose, m_fillPasses,
                                   false, false, false, "", "", "");
 
@@ -1339,19 +1334,7 @@ class GoGui
                 m_commandThread.close();
             }
         }
-        if (m_gtpShell != null)
-            m_gtpShell.saveHistory();
-        m_menuBar.saveRecent();
-        if (m_analyzeDialog != null)
-            m_analyzeDialog.saveRecent();
-        if (m_rememberWindowSizes)
-        {
-            saveSize(this, "window-gogui", m_boardSize);
-            if (m_gtpShell != null)
-                saveSize(m_gtpShell, "window-gtpshell", m_boardSize);
-            if (m_analyzeDialog != null)
-                saveSize(m_analyzeDialog, "window-analyze", m_boardSize);
-        }
+        saveSession();
         dispose();
         assert(m_instanceCount > 0);
         if (--m_instanceCount == 0)
@@ -1642,7 +1625,7 @@ class GoGui
                 else
                     initAnalyzeCommand(analyzeCommand, true);
             }
-            if (m_gtpShell != null)
+            if (m_commandThread != null)
             {
                 if (m_rememberWindowSizes)
                     restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
@@ -1652,8 +1635,10 @@ class GoGui
                     Dimension size = getSize();
                     m_gtpShell.setLocation(size.width, 0);
                 }
-                if (m_showGtpShellAtStart)
+                if (m_prefs.getBool("show-gtpshell"))
                     m_gtpShell.toTop();
+                if (m_prefs.getBool("show-analyze"))
+                    cbAnalyze();
             }
             m_guiBoard.setFocus();
         }
@@ -1927,6 +1912,29 @@ class GoGui
                            Version.m_version);
     }
 
+    private void saveSession()
+    {
+        if (m_gtpShell != null)
+            m_gtpShell.saveHistory();
+        m_menuBar.saveRecent();
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.saveRecent();
+        if (m_rememberWindowSizes)
+        {
+            saveSize(this, "window-gogui", m_boardSize);
+            if (m_gtpShell != null)
+                saveSize(m_gtpShell, "window-gtpshell", m_boardSize);
+            if (m_analyzeDialog != null)
+                saveSize(m_analyzeDialog, "window-analyze", m_boardSize);
+            boolean isAnalyzeVisible =
+                (m_analyzeDialog != null && m_analyzeDialog.isVisible());
+            m_prefs.setBool("show-analyze", isAnalyzeVisible);
+            boolean isGtpShellVisible =
+                (m_gtpShell != null && m_gtpShell.isVisible());
+            m_prefs.setBool("show-gtpshell", isGtpShellVisible);
+        }
+    }
+
     private void saveSize(Component component, String name, int boardSize)
     {
         name = name + "-" + boardSize;
@@ -2043,6 +2051,8 @@ class GoGui
         prefs.setFloatDefault("komi", 0);
         prefs.setBoolDefault("remember-window-sizes", false);
         prefs.setIntDefault("rules", go.Board.RULES_JAPANESE);
+        prefs.setBoolDefault("show-analyze", false);
+        prefs.setBoolDefault("show-gtpshell", false);
     }
 
     private void setRules()
