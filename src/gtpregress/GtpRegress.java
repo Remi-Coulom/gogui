@@ -674,28 +674,12 @@ class GtpRegress
         writeTestSummary(testSummary);
     }
 
-    /** Wrap text containing required output.
-        Inserts html breaks, so that each line is no longer than 30 characters.
-        Breaks are inserted before '|' characters if possible.
-    */
-    private String wrapRequiredText(String line)
+    private String truncate(String string)
     {
-        int charactersPerLine = 30;
-        StringBuffer result = new StringBuffer(1024);
-        while (line.length() > charactersPerLine)
-        {
-            int pos;
-            for (pos = charactersPerLine; pos >= 0; --pos)
-                if (line.charAt(pos) == '|')
-                    break;
-            if (pos < 0)
-                pos = charactersPerLine + 1;
-            result.append(line.substring(0, pos));
-            line = line.substring(pos);
-            result.append("<br>");
-        }
-        result.append(line);
-        return result.toString();
+        final int maxLength = 25;
+        if (string.length() < maxLength)
+            return string.trim();
+        return string.substring(0, maxLength).trim() + "...";
     }
 
     private void writeInfo(PrintStream out)
@@ -942,8 +926,9 @@ class GtpRegress
                       "<td align=\"center\" bgcolor=\"" + statusColor
                       + "\">" + status + "</td>\n" +
                       "<td>" + command + "</td>\n" +
-                      "<td align=\"center\">" + t.m_response + "</td>\n" +
-                      "<td align=\"center\">" + wrapRequiredText(t.m_required)
+                      "<td align=\"center\">" + truncate(t.m_response)
+                      + "</td>\n" +
+                      "<td align=\"center\">" + truncate(t.m_required)
                       + "</td>\n" +
                       "<td>" + lastSgf + "</td>\n" +
                       "</tr>\n");
