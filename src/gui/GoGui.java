@@ -796,8 +796,8 @@ class GoGui
         }
         catch(Gtp.Error e)
         {                
-            showGtpError(e);
             showStatus(title);
+            showGtpError(e);
             return;
         }
     }
