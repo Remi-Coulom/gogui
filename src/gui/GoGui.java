@@ -270,7 +270,7 @@ class GoGui
     {
         if (m_commandInProgress)
             return;
-        if (m_setupMode)
+        if (m_setupMode && ! modifiedSelect)
         {
             setFastUpdate(true);
             if (m_board.getColor(p) != m_setupColor)
@@ -283,7 +283,7 @@ class GoGui
             m_guiBoard.update();
             m_isModified = true;
         }
-        else if (m_analyzeRequestPoint)
+        else if (m_analyzeRequestPoint && ! modifiedSelect)
         {
             m_analyzePointArg = p;
             m_guiBoard.clearAllSelect();
@@ -313,14 +313,14 @@ class GoGui
                 analyzeBegin(false, false);
             return;
         }
-        else if (m_scoreMode)
+        else if (m_scoreMode && ! modifiedSelect)
         {
             m_guiBoard.scoreSetDead(p);
             m_guiBoard.repaint();
             m_scoreDialog.showScore(m_board.scoreGet());
             return;
         }
-        else
+        else if (! modifiedSelect)
             humanMoved(new Move(p, m_board.getToMove()));
     }
     
