@@ -29,6 +29,9 @@ public class TwoGtp
         m_white.setLogPrefix("W");
         m_inconsistentState = false;
         m_blackToMove.add(Boolean.TRUE);
+        String blackName = getName(m_black);
+        String whiteName = getName(m_white);
+        m_name = "TwoGtp (" + blackName + " - " + whiteName + ")";
     }
 
     public boolean handleCommand(String command, StringBuffer response)
@@ -83,7 +86,7 @@ public class TwoGtp
                  || command.startsWith("scoring_system"))
             status = sendBoth(command, response, false, false);
         else if (command.equals("name"))
-            response.append("TwoGtp");
+            response.append(m_name);
         else if (command.equals("version"))
             ;
         else if (command.equals("protocol_version"))
@@ -161,6 +164,8 @@ public class TwoGtp
 
     private Stack m_blackToMove = new Stack();
 
+    private String m_name;
+
     private Gtp m_black;
 
     private Gtp m_white;
@@ -170,6 +175,20 @@ public class TwoGtp
         if (m_inconsistentState)
             response.append("Inconsistent state");
         return m_inconsistentState;
+    }
+
+    private static String getName(Gtp gtp)
+    {
+        try
+        {
+            String name = gtp.sendCommand("name");
+            if (! name.trim().equals(""))
+                return name;
+        }
+        catch (Gtp.Error e)
+        {
+        }
+        return "Unknown";
     }
 
     private void mergeResponse(StringBuffer response,
