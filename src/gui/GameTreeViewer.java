@@ -591,8 +591,8 @@ class GameTreePanel
         }
         if (changed)
         {
-            scrollTo(root);
             update(m_gameTree, m_currentNode);
+            scrollTo(root);
         }
     }
 
