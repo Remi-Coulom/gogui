@@ -457,7 +457,7 @@ Open the Analyze dialog or bring it to front, if already open.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Gtp Shell</guimenuitem></term>
+<term><guimenuitem>GTP Shell</guimenuitem></term>
 <listitem>
 <para>
 Open the GTP shell window or bring it to front, if already open.

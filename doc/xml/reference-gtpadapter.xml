@@ -39,7 +39,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <title>Description</title>
 <para>
 Go Text Protocol adapter for logging or protocol translations.
-The argument <replaceable>program</replaceable> is a commandline
+The argument <replaceable>program</replaceable> is a command line
 for the Go program .
 </para>
 

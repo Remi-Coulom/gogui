@@ -131,7 +131,7 @@ The strings are displayed as labels on the points.
 <simpara>
 The response of the command is a text containing points.
 If the text has only a single line, it will be displayed in the status line.
-If it has multiple lines, a window will popup.
+If it has multiple lines, a window will pop up.
 All valid points contained in the text will be marked on the board.
 </simpara>
 </listitem>
@@ -155,7 +155,7 @@ The special string "" is used for no string on a point.
 <simpara>
 The response of the command is a text.
 If the text has only a single line, it will be displayed in the status line.
-If it has multiple lines, a window will popup.
+If it has multiple lines, a window will pop up.
 </simpara>
 </listitem>
 </varlistentry>
@@ -166,7 +166,7 @@ If it has multiple lines, a window will popup.
 <simpara>
 The response of the command is a variation of moves
 containing points or passes.
-Text not containg points is ignored.
+Text not containing points is ignored.
 They will be displayed as numbered stones on the board,
 the current color to move is assumed to move first.
 Additionally the response is displayed as a string.

@@ -52,7 +52,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <refsection>
 <title>Description</title>
 <para>
-Adpater program for playing games between two Go programs
+Adapter program for playing games between two Go programs
 supporting GTP (Go Text Protocol).
 </para>
 

@@ -7,7 +7,7 @@
 <refnamediv>
 <refname>gmptogtp</refname>
 <refpurpose>
-Adpater from Go Text Protocol to Go Modem Protocol.
+Adapter from Go Text Protocol to Go Modem Protocol.
 </refpurpose>
 </refnamediv>
 
@@ -36,7 +36,7 @@ Adpater from Go Text Protocol to Go Modem Protocol.
 <refsection>
 <title>Description</title>
 <para>
-Go Text Protocol adpater program for playing games using the
+Go Text Protocol adapter program for playing games using the
 Go Modem Protocol over a serial line.
 </para>
 <para>

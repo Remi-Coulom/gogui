@@ -44,7 +44,7 @@ commands supported by the program.
 <term><keycap>Down</keycap></term>
 <listitem>
 <simpara>
-Popup window with command history.
+Pop up window with command history.
 </simpara>
 </listitem>
 </varlistentry>

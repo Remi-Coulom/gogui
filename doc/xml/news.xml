@@ -134,7 +134,7 @@ referee.
 </listitem>
 <listitem>
 <simpara>
-All programs have now the abilty to read command line options and arguments
+All programs have now the ability to read command line options and arguments
 from a file with the <option>-config</option> option.
 </simpara>
 </listitem>
@@ -337,7 +337,7 @@ Bugfix release.
 <itemizedlist>
 <listitem>
 <simpara>
-<application>TwoGto</application>:
+<application>TwoGtp</application>:
 new options for playing a series of games and saving the results;
 forward GTP extension commands to program that implement them;
 handle GTP version 2 programs.
@@ -357,7 +357,7 @@ New <guimenu>Settings</guimenu> item
 </listitem>
 <listitem>
 <simpara>
-Fix problem in Gtp shell: caret was not redrawn after entering
+Fix problem in GTP shell: caret was not redrawn after entering
 command.
 </simpara>
 </listitem>
@@ -368,7 +368,7 @@ Use key accelerators more similar to existing UI style guides.
 </listitem>
 <listitem>
 <simpara>
-Games can be saved in LaTex format usinf psgo.sty.
+Games can be saved in LaTeX format using psgo.sty.
 Standalone converter <command>sgftotex</command>.
 </simpara>
 </listitem>
