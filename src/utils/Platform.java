@@ -49,76 +49,51 @@ public class Platform
     }
 
     /** Try to open a URL in en external browser.
-        Tries /usr/bin/open if Platform.isMac(), otherwise (in this order):
-        - kfmclient (the KDE browser)
+        Tries /usr/bin/open if Platform.isMac(),
+        rundll32 url.dll,FileProtocolHandler if Platform.isWindows(),
+        and if isUnix() in this order:
+        - kfmclient
+        - firefox
         - mozilla
-        - rundll32 url.dll,FileProtocolHandler (Windows)
+        - opera
         @return false if everything failed
     */
     public static boolean openInExternalBrowser(URL url)
     {
         if (isMac())
         {
-            try
-            {
-                String[] cmd = { "/usr/bin/open", url.toString() };
-                ProcessUtils.runProcess(cmd);
+            String[] cmd = { "/usr/bin/open", url.toString() };
+            if (runProcess(cmd))
                 return true;
-            }
-            catch (IOException e)
-            {
-            }
         }
         else if (isWindows())
         {
-            try
-            {
-                String[] cmd = { "rundll32", "url.dll,FileProtocolHandler",
-                                 url.toString() };
-                ProcessUtils.runProcess(cmd);
+            String[] cmd = { "rundll32", "url.dll,FileProtocolHandler",
+                             url.toString() };
+            if (runProcess(cmd))
                 return true;
-            }
-            catch (IOException e)
-            {
-            }
         }
         else if (isUnix())
         {
-            try
             {
-                String[] cmd = { "kfmclient", "exec", url.toString() };
-                ProcessUtils.runProcess(cmd);
-                return true;
+                String[] cmd = { "kfmclient", "openURL", url.toString() };
+                if (runProcess(cmd))
+                    return true;
             }
-            catch (IOException e)
-            {
-            }
-            try
             {
                 String[] cmd = { "firefox", url.toString() };
-                ProcessUtils.runProcess(cmd);
-                return true;
+                if (runProcess(cmd))
+                    return true;
             }
-            catch (IOException e)
-            {
-            }
-            try
             {
                 String[] cmd = { "mozilla", url.toString() };
-                ProcessUtils.runProcess(cmd);
-                return true;
+                if (runProcess(cmd))
+                    return true;
             }
-            catch (IOException e)
-            {
-            }
-            try
             {
                 String[] cmd = { "opera", url.toString() };
-                ProcessUtils.runProcess(cmd);
-                return true;
-            }
-            catch (IOException e)
-            {
+                if (runProcess(cmd))
+                    return true;
             }
         }
         return false;
@@ -142,6 +117,18 @@ public class Platform
         }
     }
 
+    private static boolean runProcess(String[] cmd)
+    {
+        try
+        {
+            ProcessUtils.runProcess(cmd);
+            return true;
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
+    }
 }
 
 //----------------------------------------------------------------------------
