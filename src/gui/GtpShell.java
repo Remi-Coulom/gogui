@@ -20,8 +20,10 @@ class GtpShellText
     extends JTextPane
     implements Scrollable
 {
-    public GtpShellText()
+    public GtpShellText(int historyMin, int historyMax)
     {
+        m_historyMin = historyMin;
+        m_historyMax = historyMax;
         m_fontSize = getFont().getSize();
         m_font = new Font("Monospaced", Font.PLAIN, m_fontSize);
         setFont(m_font);
@@ -40,27 +42,46 @@ class GtpShellText
 
     public void appendComment(String text)
     {
-        appendStyledText(text, "log");
+        appendText(text, "log");
     }
 
     public void appendError(String text)
     {
-        appendStyledText(text, "error");
+        appendText(text, "error");
     }
 
     public void appendInput(String text)
     {
-        appendStyledText(text, "input");
+        appendText(text, "input");
     }
 
     public void appendLog(String text)
     {
-        appendStyledText(text, "log");
+        appendText(text, "log");
     }
 
     public void appendOutput(String text)
     {
-        appendStyledText(text, "output");
+        appendText(text, "output");
+    }
+
+    public static int findTruncateIndex(String text, int truncateLines)
+    {
+        int indexNewLine = 0;
+        int lines = 0;
+        while ((indexNewLine = text.indexOf('\n', indexNewLine)) != -1)
+        {
+            ++indexNewLine;
+            ++lines;
+            if (lines == truncateLines)
+                return indexNewLine;
+        }
+        return -1;
+    }
+
+    public int getLinesTruncated()
+    {
+        return m_truncated;
     }
 
     public boolean getScrollableTracksViewportWidth()
@@ -83,11 +104,31 @@ class GtpShellText
     }
     
     private int m_fontSize;
+
+    private int m_historyMin;
+
+    private int m_historyMax;
+
+    private int m_lines;
+
+    private int m_truncated;
+
     private Font m_font;
+
     private Style m_currentStyle;
 
-    private void appendStyledText(String text, String style)
+    private void appendText(String text, String style)
     {
+        if (text.equals(""))
+            return;
+        int indexNewLine = 0;
+        while ((indexNewLine = text.indexOf('\n', indexNewLine)) != -1)
+        {
+            ++m_lines;
+            ++indexNewLine;
+        }
+        if (m_lines > m_historyMax)
+            truncateHistory();
         StyledDocument doc = getStyledDocument();
         Style s = null;
         if (style != null)
@@ -108,6 +149,25 @@ class GtpShellText
             assert(false);
         }
     }
+
+    private void truncateHistory()
+    {
+        int truncateLines = m_lines - m_historyMin;
+        StyledDocument doc = getStyledDocument();
+        try
+        {
+            String text = doc.getText(0, doc.getLength());
+            int truncateIndex = findTruncateIndex(text, truncateLines);
+            assert(truncateIndex != -1);
+            doc.remove(0, truncateIndex);
+            m_lines -= truncateLines;
+            m_truncated += truncateLines;
+        }
+        catch (BadLocationException e)
+        {
+            assert(false);
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -122,14 +182,17 @@ public class GtpShell
             throws Gtp.Error;
     }
 
-    GtpShell(Frame owner, String titleprefix, Callback callback)
+    GtpShell(Frame owner, String titleprefix, Callback callback,
+             Preferences prefs)
     {
         super(owner, titleprefix + ": GTP Shell");
         m_callback = callback;
+        m_historyMin = prefs.getGtpShellHistoryMin();
+        m_historyMax = prefs.getGtpShellHistoryMax();
         createMenu();
         Container contentPane = getContentPane();
 
-        m_gtpShellText = new GtpShellText();
+        m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
         JScrollPane scrollPane =
             new JScrollPane(m_gtpShellText,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -452,16 +515,35 @@ public class GtpShell
     }
 
     private boolean m_showModifyWarning = true;
+
+    private int m_historyMax;
+
+    private int m_historyMin;
+
+    private int m_linesTruncated;
+
+    private int m_numberCommands;
+
     private Callback m_callback;
+
     private ComboBoxEditor m_editor;
+
     private JTextField m_textField;
+
     private JComboBox m_comboBox;
+
     private GtpShellText m_gtpShellText;
+
     private MutableComboBoxModel m_model;
+
     private StringBuffer m_commands = new StringBuffer(4096);
+
     private Vector m_history = new Vector(128, 128);
+
     private String m_programCommand = "unknown";
+
     private String m_programName = "unknown";
+
     private String m_programVersion = "unknown";
 
     private void addAllCompletions(Vector completions)
@@ -512,6 +594,17 @@ public class GtpShell
         assert(SwingUtilities.isEventDispatchThread());
         m_commands.append(command);
         m_commands.append("\n");
+        ++m_numberCommands;
+        if (m_numberCommands > m_historyMax)
+        {
+            int truncateLines = m_numberCommands - m_historyMin;
+            String s = m_commands.toString();
+            int index = m_gtpShellText.findTruncateIndex(s, truncateLines);
+            assert(index != -1);
+            m_commands.delete(0, index);
+            m_linesTruncated += truncateLines;
+            m_numberCommands = 0;
+        }
         m_gtpShellText.appendOutput(command + "\n");
     }
     
@@ -618,7 +711,7 @@ public class GtpShell
         return null;
     }
 
-    private void save(String s)
+    private void save(String s, int linesTruncated)
     {
         File file = queryFile();
         if (file == null)
@@ -629,6 +722,7 @@ public class GtpShell
             out.println("# Name: " + m_programName);
             out.println("# Version: " + m_programVersion);
             out.println("# Command: " + m_programCommand);
+            out.println("# Lines truncated: " + linesTruncated);
             out.print(s);
             out.close();
         }
@@ -642,12 +736,12 @@ public class GtpShell
 
     private void saveLog()
     {
-        save(m_gtpShellText.getLog());
+        save(m_gtpShellText.getLog(), m_gtpShellText.getLinesTruncated());
     }
 
     private void saveCommands()
     {
-        save(m_commands.toString());
+        save(m_commands.toString(), m_linesTruncated);
     }
 
     /** Create wrapper object for addItem.

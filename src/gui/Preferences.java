@@ -35,6 +35,16 @@ class Preferences
         return getIntProperty("boardsize");
     }
 
+    public int getGtpShellHistoryMax()
+    {
+        return getIntProperty("gtpshell-history-max");
+    }
+
+    public int getGtpShellHistoryMin()
+    {
+        return getIntProperty("gtpshell-history-min");
+    }
+
     public void load()
     {
         m_changed = true;
@@ -88,6 +98,16 @@ class Preferences
         setIntProperty("boardsize", boardSize);
     }
 
+    public void setGtpShellHistoryMax(int value)
+    {
+        setIntProperty("gtpshell-history-max", value);
+    }
+
+    public void setGtpShellHistoryMin(int value)
+    {
+        setIntProperty("gtpshell-history-min", value);
+    }
+
     /** Properties changed since last load? */
     private boolean m_changed;
 
@@ -119,8 +139,10 @@ class Preferences
 
     private void setDefaults()
     {
-        setIntProperty("boardsize", 19);
         setStringProperty("analyze-command", "");
+        setIntProperty("boardsize", 19);
+        setIntProperty("gtpshell-history-max", 3000);
+        setIntProperty("gtpshell-history-min", 2000);
     }
 
     private void setIntProperty(String key, int value)

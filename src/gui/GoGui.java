@@ -30,7 +30,7 @@ class GoGui
         if (program != null && ! program.equals(""))
         {
             // Must be created before m_gtp (stderr callback of Gtp!)
-            m_gtpShell = new GtpShell(null, "GoGui", this);
+            m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
             Gtp gtp = new Gtp(program, verbose, m_gtpShell);
             m_gtpShell.setProgramCommand(gtp.getProgramCommand());
             m_commandThread = new CommandThread(gtp, m_gtpShell);
