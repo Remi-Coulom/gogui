@@ -5,6 +5,7 @@
 
 package gui;
 
+import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
@@ -15,6 +16,7 @@ import go.*;
 //-----------------------------------------------------------------------------
 
 class MenuBar
+    implements ActionListener
 {
     public MenuBar(ActionListener listener)
     {
@@ -34,6 +36,31 @@ class MenuBar
         m_menuBar.add(m_menuHelp);
     }
 
+    public void actionPerformed(ActionEvent event)
+    {
+        String command = event.getActionCommand();
+        if (command.startsWith("open-recent-"))
+        {
+            try
+            {
+                String indexString =
+                    command.substring(new String("open-recent-").length());
+                int index = Integer.parseInt(indexString);
+                m_selectedRecent = m_recent[index];
+                assert(m_selectedRecent != null);
+                m_listener.actionPerformed(new ActionEvent(this, 0,
+                                                           "open-recent"));
+            }
+            catch (NumberFormatException e)
+            {
+                assert(false);
+                return;
+            }
+        }
+        else
+            assert(false);
+    }
+
     public void disableComputer()
     {
         m_isComputerDisabled = true;
@@ -49,9 +76,32 @@ class MenuBar
         return m_menuBar;
     }
 
+    public File getSelectedRecent()
+    {
+        return m_selectedRecent;
+    }
+
     public boolean getShowLastMove()
     {
         return m_itemShowLastMove.isSelected();
+    }
+
+    public void saveRecent()
+    {
+        File file = getRecentFile();
+        PrintStream out;
+        try
+        {
+            out = new PrintStream(new FileOutputStream(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            return;
+        }
+        for (int i = 0; i < m_maxRecent; ++i)
+            if (m_recent[i] != null)
+                out.println(m_recent[i].toString());
+        out.close();
     }
 
     public void setComputerBlack()
@@ -173,13 +223,49 @@ class MenuBar
             disableMenu(m_menuExperts);
     }
 
+    public void addRecent(File file)
+    {
+        try
+        {
+            file = file.getCanonicalFile();
+        }
+        catch (IOException e)
+        {
+        }
+        for (int i = 0; i < m_maxRecent; ++i)
+        {
+            if (m_recent[i] == null)
+                break;
+            if (m_recent[i].equals(file))
+            {
+                for (int j = i; j > 0; --j)
+                    m_recent[i] = m_recent[i - 1];
+                m_recent[0] = file;
+                updateRecentMenu();
+                return;
+            }
+        }
+        for (int i = m_maxRecent - 1; i > 0; --i)
+            m_recent[i] = m_recent[i - 1];
+        m_recent[0] = file;
+        updateRecentMenu();
+    }
+
     private boolean m_isComputerDisabled;
+
+    private final int m_maxRecent = 15;
+
+    private int m_numberRecent;
 
     private static int m_possibleBoardSizes[] = { 9, 11, 13, 15, 17, 19 };
 
     private static int m_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     private ActionListener m_listener;
+
+    private File[] m_recent = new File[m_maxRecent];
+
+    private File m_selectedRecent;
 
     private JCheckBoxMenuItem m_itemBeepAfterMove;
 
@@ -196,6 +282,8 @@ class MenuBar
     private JMenu m_menuGame;
 
     private JMenu m_menuHelp;
+
+    private JMenu m_menuRecent;
 
     private JMenu m_menuSettings;
 
@@ -333,6 +421,7 @@ class MenuBar
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     ActionEvent.CTRL_MASK,
                     "open");
+        menu.add(createRecentMenu());
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
                     ActionEvent.CTRL_MASK,
                     "save");
@@ -416,6 +505,15 @@ class MenuBar
         return menu;
     }
 
+    private JMenu createRecentMenu()
+    {
+        m_menuRecent = new JMenu("Open recent");
+        m_menuRecent.setMnemonic(KeyEvent.VK_R);
+        loadRecent();
+        updateRecentMenu();
+        return m_menuRecent;
+    }
+
     private JMenu createRulesMenu()
     {
         ButtonGroup group = new ButtonGroup();
@@ -492,6 +590,65 @@ class MenuBar
                         menu.getItem(j).setEnabled(true);
             }
         }
+        m_menuRecent.setEnabled(m_numberRecent > 0);
+    }
+
+    private File getRecentFile()
+    {
+        String home = System.getProperty("user.home");
+        return new File(new File(home, ".gogui"), "recent-files");
+    }
+
+    private void loadRecent()
+    {
+        m_numberRecent = 0;
+        File file = getRecentFile();
+        BufferedReader reader;
+        try
+        {
+            reader = new BufferedReader(new FileReader(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            return;
+        }
+        String line;
+        try
+        {
+            while((line = reader.readLine()) != null)
+            {
+                m_recent[m_numberRecent] = new File(line);
+                ++m_numberRecent;
+            }
+        }
+        catch (IOException e)
+        {
+        }
+        try
+        {
+            reader.close();
+        }
+        catch (IOException e)
+        {
+        }
+    }
+
+    private void updateRecentMenu()
+    {
+        m_menuRecent.removeAll();
+        m_numberRecent = 0;
+        for (int i = 0; i < m_maxRecent; ++i)
+        {
+            File file = m_recent[i];
+            if (file == null)
+                break;
+            ++m_numberRecent;
+            JMenuItem item = new JMenuItem(file.getName());
+            item.addActionListener(this);
+            item.setActionCommand("open-recent-" + i);
+            m_menuRecent.add(item);
+        }
+        m_menuRecent.setEnabled(m_numberRecent > 0);
     }
 }
 

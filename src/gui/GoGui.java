@@ -180,6 +180,8 @@ class GoGui
             cbNewGame(m_boardSize);
         else if (command.equals("open"))
             cbOpen();
+        else if (command.equals("open-recent"))
+            cbOpenRecent();
         else if (command.equals("open-with-program"))
             cbOpenWithProgram();
         else if (command.equals("pass"))
@@ -909,6 +911,14 @@ class GoGui
         loadFile(file, -1);
     }
 
+    private void cbOpenRecent()
+    {
+        if (m_isModified && ! checkSaveGame())
+            return;
+        File file = m_menuBar.getSelectedRecent();
+        loadFile(file, -1);
+    }
+
     private void cbOpenWithProgram()
     {
         try
@@ -1197,6 +1207,7 @@ class GoGui
         }
         if (m_gtpShell != null)
             m_gtpShell.saveHistory();
+        m_menuBar.saveRecent();
         dispose();
         assert(m_instanceCount > 0);
         if (--m_instanceCount == 0)
@@ -1527,6 +1538,8 @@ class GoGui
     {
         try
         {
+            m_menuBar.addRecent(file);
+            m_menuBar.saveRecent();
             java.io.Reader fileReader = new FileReader(file);
             sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
             initGame(reader.getBoardSize());
