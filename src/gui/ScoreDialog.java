@@ -66,6 +66,8 @@ public class ScoreDialog
         m_result.setText(score.formatResult());
     }
 
+    private JButton m_cancelButton;
+
     private JLabel m_territoryBlack;
 
     private JLabel m_territoryWhite;
@@ -95,11 +97,14 @@ public class ScoreDialog
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("score-done");
         okButton.addActionListener(actionListener);
+        okButton.setMnemonic(KeyEvent.VK_O);
+        getRootPane().setDefaultButton(okButton);
         innerPanel.add(okButton);
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.setActionCommand("score-cancel");
-        cancelButton.addActionListener(actionListener);
-        innerPanel.add(cancelButton);
+        m_cancelButton = new JButton("Cancel");
+        m_cancelButton.setActionCommand("score-cancel");
+        m_cancelButton.addActionListener(actionListener);
+        m_cancelButton.setMnemonic(KeyEvent.VK_C);
+        innerPanel.add(m_cancelButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
         return outerPanel;
