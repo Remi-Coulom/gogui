@@ -291,6 +291,7 @@ installation directory.
  go/*.class
  gtp/*.class
  gtpterminal/*.class
+ sgf/*.class
  utils/Options.class
  utils/StringUtils.class
  version/Version.class

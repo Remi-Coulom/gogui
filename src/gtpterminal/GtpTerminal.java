@@ -11,6 +11,7 @@ import java.text.*;
 import java.util.*;
 import go.*;
 import gtp.*;
+import sgf.*;
 import utils.*;
 import version.*;
 
@@ -180,8 +181,12 @@ public class GtpTerminal
             help();
         else if (cmd.equals("list_commands"))
             listCommands();
+        else if (cmd.equals("load"))
+            load(cmdArray);
         else if (cmd.equals("new_game"))
             newGame(cmdArray);
+        else if (cmd.equals("save"))
+            save(cmdArray);
         else if (cmd.equals("undo"))
             undo();
         else if (cmd.equals("black")
@@ -213,8 +218,10 @@ public class GtpTerminal
         System.out.print("Enter a move or one of the following commands:\n" +
                          "  genmove\n" +
                          "  help\n" +
+                         "  load\n" +
                          "  list_commands\n" +
                          "  new_game\n" +
+                         "  save\n" +
                          "  undo\n" +
                          "  quit\n" +
                          "The following commands are not allowed:\n" +
@@ -239,7 +246,57 @@ public class GtpTerminal
             System.out.println((String)commands.get(i));
     }
 
-    private void newGame(int size)
+    private void load(String[] cmdArray)
+    {
+        if (cmdArray.length < 2)
+        {
+            System.out.println("Need filename argument.");
+            return;
+        }
+        File file = new File(cmdArray[1]);
+        try
+        {
+            java.io.Reader fileReader = new FileReader(file);
+            sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
+            if (! newGame(reader.getBoardSize()))
+                return;
+            m_board.setKomi(reader.getKomi());
+            send("komi " + reader.getKomi());
+            Vector moves = new Vector(361, 361);
+            Vector setupBlack = reader.getSetupBlack();
+            for (int i = 0; i < setupBlack.size(); ++i)
+            {
+                go.Point p = (go.Point)setupBlack.get(i);
+                moves.add(new Move(p, go.Color.BLACK));
+            }
+            Vector setupWhite = reader.getSetupWhite();
+            for (int i = 0; i < setupWhite.size(); ++i)
+            {
+                go.Point p = (go.Point)setupWhite.get(i);
+                moves.add(new Move(p, go.Color.WHITE));
+            }
+            for (int i = 0; i < reader.getMoves().size(); ++i)
+                moves.add(reader.getMove(i));
+            for (int i = 0; i < moves.size(); ++i)
+            {
+                Move move = (Move)moves.get(i);
+                if (! play(move.getColor(), move.getPoint()))
+                    break;
+            }
+            printBoard();
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("File not found: " + file);
+        }
+        catch (sgf.Reader.Error e)
+        {
+            System.out.println("Could not read file " + file
+                               + ": " + e.getMessage());
+        }
+    }
+
+    private boolean newGame(int size)
     {
         String command;
         StringBuffer response = new StringBuffer();
@@ -247,15 +304,16 @@ public class GtpTerminal
         if (command != null && ! send(command, response))
         {
             System.out.println(response);
-            return;
+            return false;
         }
         command = m_gtp.getCommandClearBoard(size);
         if (! send(command, response))
         {
             System.out.println(response);
-            return;
+            return false;
         }
         m_board = new Board(size);
+        return true;
     }
 
     private void newGame(String[] cmdArray)
@@ -275,18 +333,24 @@ public class GtpTerminal
 
     private void play(Point point)
     {
-        Color toMove = m_board.getToMove();
-        String command = m_gtp.getCommandPlay(toMove);
+        if (! play(m_board.getToMove(), point))
+            return;
+        printBoard();
+        genmove();
+    }
+
+    private boolean play(Color color, Point point)
+    {
+        String command = m_gtp.getCommandPlay(color);
         command = command + " " + Point.toString(point);
         StringBuffer response = new StringBuffer();
         if (! send(command, response))
         {
             System.out.println(response);
-            return;
+            return false;
         }
-        m_board.play(new Move(point, toMove));
-        printBoard();
-        genmove();
+        m_board.play(new Move(point, color));
+        return true;
     }
 
     private void printBoard()
@@ -305,6 +369,27 @@ public class GtpTerminal
             "-verbose      print debug information\n" +
             "-version      print version and exit\n";
         out.print(helpText);
+    }
+
+    private void save(String[] cmdArray)
+    {
+        if (cmdArray.length < 2)
+        {
+            System.out.println("Need filename argument.");
+            return;
+        }
+        File file = new File(cmdArray[1]);
+        try
+        {
+            OutputStream out = new FileOutputStream(file);
+            new sgf.Writer(out, m_board, file, "GtpTerminal", Version.get(),
+                           0, null, null, null, null);
+        }
+        catch (FileNotFoundException e) 
+        {
+            System.out.println("Write error.");
+            return;
+        }
     }
 
     private String send(String cmd)

@@ -65,10 +65,28 @@ Send a <userinput>list_commands</userinput> command to the program.
 </listitem>
 </varlistentry>
 <varlistentry>
+<term><userinput>load</userinput></term>
+<listitem>
+<simpara>
+Load game from SGF file.
+Moves are translated into <userinput>play</userinput> commands
+for the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
 <term><userinput>new_game [size]</userinput></term>
 <listitem>
 <simpara>
 Start a new game with a given board size.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>save</userinput></term>
+<listitem>
+<simpara>
+Save game to file in SGF format.
 </simpara>
 </listitem>
 </varlistentry>
