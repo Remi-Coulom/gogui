@@ -515,6 +515,24 @@ class GtpRegress
         }
     }
 
+    private TestSummary getTotalSummary()
+    {
+        TestSummary total = new TestSummary();
+        for (int i = 0; i < m_testSummaries.size(); ++i)
+        {
+            TestSummary summary = (TestSummary)m_testSummaries.get(i);
+            total.m_numberTests += summary.m_numberTests;
+            total.m_otherErrors += summary.m_otherErrors;
+            total.m_unexpectedFails += summary.m_unexpectedFails;
+            total.m_expectedFails += summary.m_expectedFails;
+            total.m_expectedPasses += summary.m_expectedPasses;
+            total.m_unexpectedPasses += summary.m_unexpectedPasses;
+            total.m_timeMillis += summary.m_timeMillis;
+            total.m_cpuTime += summary.m_cpuTime;
+        }
+        return total;
+    }
+
     private void runTest(String test)
         throws Exception
     {
@@ -612,7 +630,7 @@ class GtpRegress
                   "<col width=\"10%\">\n" +
                   "<col width=\"10%\">\n" +
                   "</colgroup>\n" +
-                  "<tr align=\"center\">\n" +
+                  "<thead align=\"center\">\n" +
                   "<th>File</th>" +
                   "<th>Tests</th>" +
                   "<th>FAIL</th>" +
@@ -622,12 +640,13 @@ class GtpRegress
                   "<th>Error</th>" +
                   "<th>Time</th>" +
                   "<th>CpuTime</th>" +
-                  "</tr>\n");
+                  "</thead>\n");
         for (int i = 0; i < m_testSummaries.size(); ++i)
         {
             TestSummary summary = (TestSummary)m_testSummaries.get(i);
-            writeSummaryRow(out, summary, true);
+            writeSummaryRow(out, summary, true, false);
         }
+        writeSummaryRow(out, getTotalSummary(), true, true);
         out.print("</table>\n" +
                   "</body>\n" +
                   "</html>\n");
@@ -635,14 +654,22 @@ class GtpRegress
     }
 
     private void writeSummaryRow(PrintStream out, TestSummary summary,
-                                 boolean withFileName)
+                                 boolean withFileName, boolean foot)
     {
-        out.print("<tr align=\"center\">\n");
+        File file = summary.m_file;
+        if (foot)
+            out.print("<tfoot align=\"center\">\n");
+        else
+            out.print("<tr align=\"center\">\n");
         if (withFileName)
-            out.print("<td><a href=\""
-                      + FileUtils.replaceExtension(summary.m_file, "tst",
-                                                   "html")
-                      + "\">" + summary.m_file + "</a></td>");
+        {
+            if (foot)
+                out.print("<td><b>Total</b></td>");
+            else
+                out.print("<td><a href=\""
+                          + FileUtils.replaceExtension(file, "tst", "html")
+                          + "\">" + file + "</a></td>");
+        }
         double time = (double)(summary.m_timeMillis / 100L) / 10F;
         NumberFormat format = NumberFormat.getInstance(new Locale("C"));
         format.setMaximumFractionDigits(1);
@@ -659,6 +686,10 @@ class GtpRegress
                   "<td>" + time + "</td>\n" +
                   "<td>" + format.format(summary.m_cpuTime) + "</td>\n" +
                   "</tr>\n");
+        if (foot)
+            out.print("</tfoot>\n");
+        else
+            out.print("</tr>\n");
     }
 
     private void writeTestSummary(File test, TestSummary summary)
@@ -687,7 +718,7 @@ class GtpRegress
                   "<col width=\"12%\">\n" +
                   "<col width=\"12%\">\n" +
                   "</colgroup>\n" +
-                  "<tr align=\"center\">\n" +
+                  "<thead align=\"center\">\n" +
                   "<th>Tests</th>\n" +
                   "<th>FAIL</th>\n" +
                   "<th>fail</th>\n" +
@@ -696,19 +727,19 @@ class GtpRegress
                   "<th>Error</th>\n" +
                   "<th>Time</th>\n" +
                   "<th>CpuTime</th>\n" +
-                  "</tr>\n");
-        writeSummaryRow(out, summary, false);
+                  "</thead>\n");
+        writeSummaryRow(out, summary, false, false);
         out.print("</table>\n" +
                   "<hr>\n" +
                   "<table border=\"1\" style=\"font-size:small\">\n" +
-                  "<tr>\n" +
+                  "<thead>\n" +
                   "<th>Test ID</th>\n" +
                   "<th>Status</th>\n" +
                   "<th>Command</th>\n" +
                   "<th>Output</th>\n" +
                   "<th>Required</th>\n" +
                   "<th>Last SGF</th>\n" +
-                  "</tr>\n");
+                  "</thead>\n");
         for (int i = 0; i < m_tests.size(); ++i)
         {
             Test t = (Test)m_tests.get(i);
