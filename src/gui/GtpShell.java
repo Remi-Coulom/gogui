@@ -27,7 +27,6 @@ class GtpShellText
         m_historyMin = historyMin;
         m_historyMax = historyMax;
         m_fontSize = getFont().getSize();
-        Font font = getFont().deriveFont(Font.TRUETYPE_FONT);
         m_font = new Font("Monospaced", Font.PLAIN, m_fontSize);
         setFont(m_font);
         StyleContext context = StyleContext.getDefaultStyleContext();
