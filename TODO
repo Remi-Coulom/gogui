@@ -8,6 +8,10 @@ var output: strings are not cleared when running a new var command
 
 IMPROVEMENTS:
 
+Game tree viewer should allow to hide variations and start with all
+side variations hidden to allow loading large SGF trees like
+GNU Go's SGF traces.
+
 SquareLayout should be used in gui.Board
 
 New analyze return type that automatically translates numbers (labels?)
