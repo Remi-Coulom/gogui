@@ -944,7 +944,7 @@ class GoGui
                 board.Point p = m_board.getPoint(i);
                 color[p.getX()][p.getY()] = m_board.getColor(p);
             }
-            board.Color toMove = m_board.getToMove().otherColor();
+            board.Color toMove = m_board.getToMove();
             newGame(size, m_board.getKomi());
             Vector moves = new Vector(m_board.getNumberPoints());
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
@@ -972,7 +972,7 @@ class GoGui
                 Move m = new Move(null, m_board.getToMove());
                 if (m_commandThread != null)
                     m_commandThread.sendCommandPlay(m);
-                m_board.play(m);
+                m_board.setup(m);
             }
             computerNone();
             boardChanged();
