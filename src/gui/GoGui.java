@@ -1741,10 +1741,12 @@ class GoGui
             return;
         try
         {
-            m_commandThread.sendCommand("komi " + m_board.getKomi());
+            if (m_commandThread.isCommandSupported("komi"))
+                m_commandThread.sendCommand("komi " + m_board.getKomi());
         }
         catch (Gtp.Error e)
         {
+            showGtpError(e);
         }
     }
 
