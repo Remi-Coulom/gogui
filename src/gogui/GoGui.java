@@ -1073,7 +1073,10 @@ class GoGui
         m_pattern = Pattern.compile(regex,
                                     Pattern.MULTILINE
                                     | Pattern.CASE_INSENSITIVE);
-        cbFindNext();
+        if (NodeUtils.commentContains(m_currentNode, m_pattern))
+            m_comment.markAll(m_pattern);
+        else
+            cbFindNext();
     }
 
     private void cbFindNext()

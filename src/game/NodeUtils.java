@@ -40,20 +40,25 @@ public class NodeUtils
         return node;
     }
 
+    public static boolean commentContains(Node node, Pattern pattern)
+    {
+        String comment = node.getComment();
+        if (comment != null)
+            if (pattern.matcher(comment).find())
+                return true;
+        return false;
+    }
+
     public static Node findInComments(Node node, Pattern pattern)
     {
         node = nextNode(node);
         while (node != null)
         {
-            String comment = node.getComment();
-            if (comment != null)
-            {
-                if (pattern.matcher(comment).find())
-                    return node;
-            }
+            if (commentContains(node, pattern))
+                return node;
             node = nextNode(node);
         }
-        return node;
+        return null;
     }
 
     /** Find the last node that was still in the main variation. */
