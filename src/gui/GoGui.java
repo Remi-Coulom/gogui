@@ -1251,6 +1251,7 @@ class GoGui
         catch (Gtp.Error e)
         {
             showGtpError(e);
+            clearStatus();
         }
     }
 
