@@ -15,7 +15,8 @@ var/Reg GenMove/reg_genmove %m
 varb/Reg GenMove Black/reg_genmove black
 varw/Reg GenMove White/reg_genmove white
 string/ShowBoard/showboard
-none/Time Left/time_left %s
+none/Time Left Black/time_left black %s
+none/Time Left White/time_left white %s
 none/Time Settings/time_settings %s
 string/Version/version
 
@@ -41,14 +42,13 @@ string/Is Legal White/is_legal white %p
 string/Is Surrounded/is_surrounded %p
 varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
-none/PrintSgf/printsgf %f
+var/Restricted GenMove/reg_genmove %m %P
+varb/Restricted GenMove Black/reg_genmove black %P
+varw/Restricted GenMove White/reg_genmove white %P
 none/Set Random Seed/set_random_seed %s
 pspairs/Top Moves/top_moves
 pspairs/Top Moves Black/top_moves_black
 pspairs/Top Moves White/top_moves_white
-
-# Extensions of other programs that could be of general interest
-none/SaveSgf/savesgf %f
 
 # Other GNU Go extensions
 plist/AccurateLib Black/accuratelib black %p
@@ -61,17 +61,20 @@ pstring/Break In/break_in %P
 none/Clear Cache/clear_cache
 varb/Combination Attack Black/combination_attack black
 varw/Combination Attack White/combination_attack white
+pstring/Combination Defend Black/combination_defend black
+pstring/Combination Defend White/combination_defend white
 string/Does Surround/does_surround %P
 hstring/Dragon Data/dragon_data
 hpstring/Dragon Data At/dragon_data %p
 hpstring/Dragon Status/dragon_status
 pstring/Dragon Status At/dragon_status %p
 plist/Dragon Stones/dragon_stones %p
-none/Draw Search Area/draw_search_area
 none/Dump Stack/dump_stack
 pstring/Eval Eye/eval_eye %p
 string/Experimental Score Black/experimental_score black
 string/Experimental Score White/experimental_score white
+hpstring/Eye Data Black/eye_data black %p
+hpstring/Eye Data White/eye_data white %p
 plist/FindLib/findlib %p
 none/Finish SgfTrace/finish_sgftrace %f
 string/Get Connection Node Counter/get_connection_node_counter
@@ -79,6 +82,18 @@ string/Get Life Node Counter/get_life_node_counter
 string/Get Owl Node Counter/get_owl_node_counter
 string/Get Reading Node Counter/get_reading_node_counter
 string/Get TryMove Counter/get_trymove_counter
+hpstring/Half Eye Data/half_eye_data %p
+sboard/Initital Influence Black Attenuation/initial_influence %m black_attenuation
+dboard/Initital Influence Black Influence/initial_influence %m black_influence//0.01
+dboard/Initital Influence Black Permeability/initial_influence %m black_permeability
+dboard/Initital Influence Black Strength/initial_influence %m black_strength//0.01
+dboard/Initital Influence Territory/initial_influence %m territory_value//-1
+sboard/Initital Influence Regions/initial_influence %m influence_regions//0.01
+sboard/Initital Influence Non Territory/initial_influence %m non_territory//0.01
+sboard/Initital Influence White Attenuation/initial_influence %m white_attenuation
+dboard/Initital Influence White Influence/initial_influence %m white_influence//-0.01
+dboard/Initital Influence White Permeability/initial_influence %m white_permeability//-1
+dboard/Initital Influence White Strength/initial_influence %m white_strength//-0.01
 dboard/Influence Black (Black)/influence black/black/0.01
 dboard/Influence Black (White)/influence black/white/-0.01
 sboard/Influence Black (Regions)/influence black/regions
@@ -90,6 +105,7 @@ none/Limit Search/limit_search %s
 plist/List Stones Black/list_stones black
 plist/List Stones White/list_stones white
 pspairs/Move Probabilities/move_probabilities
+hpstring/Move Reasons/move_reasons %p
 string/Move Uncertainty/move_uncertainty
 varpo/Owl Attack/owl_attack %p
 string/Owl Connection Defends/owl_connection_defends %P
@@ -111,10 +127,9 @@ none/Start SgfTrace/start_sgftrace
 string/Surround Map/surround_map %P
 pstring/Tactical Analyze Semeai/tactical_analyze_semeai %P
 none/Test EyeShape/test_eyeshape %P
-none/Tune Move Ordering/tune_move_ordering %s
+string/Unconditional Status/unconditional_status %p
 hstring/Worm Data/worm_data
 hpstring/Worm Data At/worm_data %p
-plist/Worm CutStone/worm_cutstone %p
 plist/Worm Stones Black/worm_stones %p black
 plist/Worm Stones White/worm_stones %p white
 
