@@ -200,6 +200,7 @@ public class GtpShell
                                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                                        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         m_fontSize = m_gtpShellText.getFont().getSize();
+        m_finalSize = new Dimension(m_fontSize * 51, m_fontSize * 52);
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         m_comboBox = new JComboBox();
         m_editor = m_comboBox.getEditor();
@@ -473,6 +474,17 @@ public class GtpShell
         m_fastUpdate = fastUpdate;
     }
 
+    public void setBounds(int x, int y, int width, int height)
+    {
+        if (m_isEmpty)
+        {
+            m_finalSize = new Dimension(width, height);
+            m_finalLocation = new java.awt.Point(x, y);
+        }
+        else
+            super.setBounds(x, y, width, height);
+    }
+
     public void setInitialCompletions(Vector completions)
     {
         for (int i = completions.size() - 1; i >= 0; --i)
@@ -577,6 +589,8 @@ public class GtpShell
 
     private ComboBoxEditor m_editor;
 
+    private Dimension m_finalSize;
+
     private JTextField m_textField;
 
     private JComboBox m_comboBox;
@@ -588,6 +602,8 @@ public class GtpShell
     private GtpShellText m_gtpShellText;
 
     private MutableComboBoxModel m_model;
+
+    private java.awt.Point m_finalLocation;
 
     private StringBuffer m_commands = new StringBuffer(4096);
 
@@ -908,7 +924,9 @@ public class GtpShell
         if (! m_isEmpty)
             return;
         m_isEmpty = false;
-        setSize(new Dimension(m_fontSize * 51, m_fontSize * 52));
+        setSize(m_finalSize);
+        if (m_finalLocation != null)
+            setLocation(m_finalLocation);
     }
 
     private static void setPrefsDefaults(Preferences prefs)

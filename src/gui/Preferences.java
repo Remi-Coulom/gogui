@@ -18,6 +18,11 @@ class Preferences
         load();
     }
 
+    public boolean contains(String key)
+    {
+        return m_properties.getProperty(key) != null;
+    }
+
     public boolean getBool(String key)
     {
         return (getInt(key) != 0);
@@ -146,11 +151,6 @@ class Preferences
     private boolean m_changed;
 
     private Properties m_properties = new Properties();
-
-    private boolean contains(String key)
-    {
-        return m_properties.getProperty(key) != null;
-    }
 
     private File getFilename()
     {

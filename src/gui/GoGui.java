@@ -32,16 +32,11 @@ class GoGui
           String gtpFile, String gtpCommand, String initAnalyze)
         throws Gtp.Error
     {
-        m_program = program;
-        if (program != null && ! program.equals(""))
-        {
-            m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
-            m_gtpShell.setProgramCommand(program);
-        }
         m_prefs = prefs;
         setPrefsDefaults(m_prefs);
         m_boardSize = prefs.getInt("boardsize");
         m_beepAfterMove = prefs.getBool("beep-after-move");
+        m_rememberWindowSizes = prefs.getBool("remember-window-sizes");
         m_file = file;
         m_fillPasses = fillPasses;
         m_gtpFile = gtpFile;
@@ -54,6 +49,12 @@ class GoGui
         m_showGtpShellAtStart = gtpShell;
         m_initAnalyze = initAnalyze;
 
+        m_program = program;
+        if (program != null && ! program.equals(""))
+        {
+            m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
+            m_gtpShell.setProgramCommand(program);
+        }
         Container contentPane = getContentPane();        
 
         m_infoPanel = new JPanel();
@@ -92,6 +93,7 @@ class GoGui
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.selectRulesItem(m_board.getRules());
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
+        m_menuBar.setRememberSizes(m_rememberWindowSizes);
         setJMenuBar(m_menuBar.getMenuBar());
         if (program == null || program.equals(""))
         {
@@ -102,6 +104,8 @@ class GoGui
 
         pack();
         setTitle("GoGui");
+        if (m_rememberWindowSizes)
+            restoreSize(this, "window-gogui", m_boardSize);
         ++m_instanceCount;
         try
         {
@@ -132,6 +136,7 @@ class GoGui
             && ! command.equals("gtp-shell")
             && ! command.equals("help")
             && ! command.equals("interrupt")
+            && ! command.equals("remember-sizes")
             && ! command.equals("show-last-move")
             && ! command.equals("exit"))
             return;
@@ -191,6 +196,8 @@ class GoGui
             cbPlay();
         else if (command.equals("print"))
             cbPrint();
+        else if (command.equals("remember-sizes"))
+            cbRememberSizes();
         else if (command.equals("rules-chinese"))
             cbRules(go.Board.RULES_CHINESE);
         else if (command.equals("rules-japanese"))
@@ -227,10 +234,14 @@ class GoGui
             m_analyzeDialog =
                 new AnalyzeDialog(null, this, m_prefs,
                                   m_commandThread.getSupportedCommands());
-            m_analyzeDialog.setLocationRelativeTo(null);
-            m_analyzeDialog.setLocationRelativeTo(this);
-            Dimension size = getSize();
-            m_analyzeDialog.setLocation(size.width, 0);
+            if (m_rememberWindowSizes)
+                restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
+            else
+            {
+                m_analyzeDialog.setLocationRelativeTo(this);
+                Dimension size = getSize();
+                m_analyzeDialog.setLocation(size.width, 0);
+            }
         }
         m_analyzeDialog.toTop();
     }
@@ -616,6 +627,8 @@ class GoGui
     private boolean m_isModified;
 
     private boolean m_lostOnTimeShown;
+
+    private boolean m_rememberWindowSizes;
 
     private boolean m_scoreMode;
 
@@ -1093,6 +1106,12 @@ class GoGui
         }
     }
 
+    private void cbRememberSizes()
+    {
+        m_rememberWindowSizes = m_menuBar.getRememberSizes();
+        m_prefs.setBool("remember-window-sizes", m_rememberWindowSizes);
+    }
+
     private void cbRules(int rules)
     {
         m_board.setRules(rules);
@@ -1325,6 +1344,14 @@ class GoGui
         m_menuBar.saveRecent();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
+        if (m_rememberWindowSizes)
+        {
+            saveSize(this, "window-gogui", m_boardSize);
+            if (m_gtpShell != null)
+                saveSize(m_gtpShell, "window-gtpshell", m_boardSize);
+            if (m_analyzeDialog != null)
+                saveSize(m_analyzeDialog, "window-analyze", m_boardSize);
+        }
         dispose();
         assert(m_instanceCount > 0);
         if (--m_instanceCount == 0)
@@ -1510,6 +1537,15 @@ class GoGui
             m_boardSize = size;
             m_guiBoard.initSize(size);
             pack();
+            if (m_rememberWindowSizes)
+            {
+                restoreSize(this, "window-gogui", m_boardSize);
+                if (m_gtpShell != null)
+                    restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+                if (m_analyzeDialog != null)
+                    restoreSize(m_analyzeDialog, "window-analyze",
+                                m_boardSize);
+            }
         }
         m_board.newGame();        
         m_guiBoard.update();
@@ -1608,9 +1644,14 @@ class GoGui
             }
             if (m_gtpShell != null)
             {
-                m_gtpShell.setLocationRelativeTo(this);
-                Dimension size = getSize();
-                m_gtpShell.setLocation(size.width, 0);
+                if (m_rememberWindowSizes)
+                    restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+                else
+                {
+                    m_gtpShell.setLocationRelativeTo(this);
+                    Dimension size = getSize();
+                    m_gtpShell.setLocation(size.width, 0);
+                }
                 if (m_showGtpShellAtStart)
                     m_gtpShell.toTop();
             }
@@ -1793,6 +1834,27 @@ class GoGui
         m_boardNeedsReset = false;
     }
     
+    private void restoreSize(Component component, String name, int size)
+    {
+        name = name + "-" + size;
+        if (! m_prefs.contains(name))
+            return;
+        String[] tokens = StringUtils.tokenize(m_prefs.getString(name));
+        if (tokens.length < 4)
+            return;
+        try
+        {
+            int x = Integer.parseInt(tokens[0]);
+            int y = Integer.parseInt(tokens[1]);
+            int width = Integer.parseInt(tokens[2]);
+            int height = Integer.parseInt(tokens[3]);
+            component.setBounds(x, y, width, height);
+        }
+        catch (NumberFormatException e)
+        {
+        }
+    }
+
     private void runLengthyCommand(String cmd, Runnable callback)
     {
         assert(m_commandThread != null);
@@ -1863,6 +1925,17 @@ class GoGui
         else
             new sgf.Writer(out, m_board, file, "GoGui",
                            Version.m_version);
+    }
+
+    private void saveSize(Component component, String name, int boardSize)
+    {
+        name = name + "-" + boardSize;
+        java.awt.Point location = component.getLocation();
+        Dimension size = component.getSize();
+        String value = Integer.toString(location.x) + " " + location.y
+            + " " + size.width + " " + size.height;
+        System.err.println("XXX saveSize " + name + " " + value);
+        m_prefs.setString(name, value);
     }
 
     private void sendGtpString(String commands)
@@ -1969,6 +2042,7 @@ class GoGui
         prefs.setBoolDefault("beep-after-move", true);
         prefs.setIntDefault("boardsize", 19);
         prefs.setFloatDefault("komi", 0);
+        prefs.setBoolDefault("remember-window-sizes", false);
         prefs.setIntDefault("rules", go.Board.RULES_JAPANESE);
     }
 

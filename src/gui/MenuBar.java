@@ -71,6 +71,11 @@ class MenuBar
         return m_itemBeepAfterMove.isSelected();
     }
 
+    public boolean getRememberSizes()
+    {
+        return m_itemRememberSizes.isSelected();
+    }
+
     public JMenuBar getMenuBar()
     {
         return m_menuBar;
@@ -190,6 +195,11 @@ class MenuBar
         }
     }
 
+    public void setRememberSizes(boolean enable)
+    {
+        m_itemRememberSizes.setSelected(enable);
+    }
+
     public void setSetupMode()
     {
         disableAll();
@@ -268,6 +278,8 @@ class MenuBar
     private File m_selectedRecent;
 
     private JCheckBoxMenuItem m_itemBeepAfterMove;
+
+    private JCheckBoxMenuItem m_itemRememberSizes;
 
     private JCheckBoxMenuItem m_itemShowLastMove;
 
@@ -526,6 +538,10 @@ class MenuBar
         m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep after move");
         addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
                     "beep-after-move");
+        m_itemRememberSizes = new JCheckBoxMenuItem("Remember window sizes");
+        m_itemRememberSizes.setSelected(false);
+        addMenuItem(menu, m_itemRememberSizes, KeyEvent.VK_R,
+                    "remember-sizes");
         m_itemShowLastMove = new JCheckBoxMenuItem("Show last move");
         m_itemShowLastMove.setSelected(true);
         addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_S,
