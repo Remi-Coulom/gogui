@@ -78,6 +78,8 @@ class Help
 
     private JButton m_buttonBack;
 
+    private JButton m_buttonContents;
+
     private JButton m_buttonForward;
 
     private JEditorPane m_editorPane;
@@ -123,9 +125,9 @@ class Help
                                               "Forward");
         m_buttonForward.setEnabled(false);
         toolBar.add(m_buttonForward);
-        JButton contents = createToolBarButton("gohome.png", "contents",
+        m_buttonContents = createToolBarButton("gohome.png", "contents",
                                                "Contents");
-        toolBar.add(contents);
+        toolBar.add(m_buttonContents);
         return toolBar;
     }
 
@@ -162,6 +164,8 @@ class Help
     {
         m_buttonBack.setEnabled((m_historyIndex > 0));
         m_buttonForward.setEnabled((m_historyIndex < m_history.size() - 1));
+        URL currentUrl = getHistory(m_historyIndex);
+        m_buttonContents.setEnabled(! currentUrl.equals(m_contents));
     }
 
     private void loadURL(URL url)
