@@ -2,9 +2,10 @@
 Encoding=UTF-8
 Name=GoGui
 Comment=Graphical user interface to Go programs
-Exec=gogui
+Exec=gogui %f
 Icon=gogui.png
 Terminal=false
 Type=Application
-Categories=Application;Game;BoardGame;
-MimeType=application/x-go-sgf;
+Categories=Application;Game;BoardGame
+MimeType=application/x-go-sgf
+
