@@ -103,7 +103,7 @@ public class SimpleDialogs
     {
         if (m_lastFile == null)
         {
-            String userDir = System.getProperties().getProperty("user.dir");
+            String userDir = System.getProperties().getProperty("user.home");
             m_lastFile = new File(userDir);
         }
         JFileChooser chooser = new JFileChooser(m_lastFile);
