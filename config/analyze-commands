@@ -123,7 +123,7 @@ plist/Worm Stones/worm_stones %p %c
 string/GoGui SigInt/gogui_sigint
 
 # GmpToGtp extensions
-string/Gmp Queue/gmp_queue
+hpstring/Gmp Queue/gmp_queue
 
 # GtpAdapter extensions
 string/GtpAdapter ShowBoard/gtpadapter_showboard
