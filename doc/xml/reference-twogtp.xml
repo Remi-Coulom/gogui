@@ -24,8 +24,10 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-estimate-score</option></arg>
 <arg><option>-force</option></arg>
-<arg><option>-games</option></arg>
+<arg><option>-games</option> <replaceable>n</replaceable></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
+<arg><option>-loadsgf</option></arg>
+<arg><option>-openings</option> <replaceable>dir</replaceable></arg>
 <arg><option>-referee</option> <replaceable>command</replaceable></arg>
 <arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
@@ -258,6 +260,39 @@ Display help and exit.
 Komi. If this option is not used, the komi can be set with
 the <userinput>komi</userinput> command or default komi 6.5 will be
 used.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-loadsgf</option></term>
+<listitem>
+<para>
+See <option>-openings</option>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-openings</option> <replaceable>directory</replaceable></term>
+<listitem>
+<para>
+Use openings from SGF files in the given directory.
+The openings will be cycled through in alphabetical order.
+If option <option>-alternate</option> is set, each opening is played twice
+with colors exchanged.
+There are two ways, how the opening moves can be sent to the programs.
+By default all moves and setup stones are sent as alternating
+<userinput>play</userinput> commands, so instead of forwarding the first
+<userinput>genmove</userinput> commands to the program to play,
+TwoGtp responds with moves from the opening and informs the programs with
+<userinput>play</userinput> commands.
+The advantage of this method is that it still works if TwoGtp is used
+interactively with GoGui as a graphical frontend, however it is very slow
+for opening files containing many moves or setup stones.
+Alternatively the option <option>-loadsgf</option> makes TwoGtp to use
+the <userinput>loadsgf</userinput> GTP command for setting up openings,
+this works only with option <option>-auto</option>.
 </para>
 </listitem>
 </varlistentry>

@@ -24,7 +24,7 @@ public class TwoGtp
                   String white, String referee, int size, double komi,
                   boolean isKomiFixed, int numberGames, boolean alternate,
                   String sgfFile, boolean force, boolean verbose,
-                  boolean estimateScore)
+                  boolean estimateScore, Openings openings, boolean loadsgf)
         throws Exception
     {
         super(in, out, null);
@@ -72,6 +72,9 @@ public class TwoGtp
         m_alternate = alternate;
         m_estimateScore = estimateScore;
         m_numberGames = numberGames;
+        m_openings = openings;
+        m_verbose = verbose;
+        m_loadsgf = loadsgf;
         initGame(size < 1 ? 19 : size);
     }
 
@@ -272,7 +275,9 @@ public class TwoGtp
                 "force",
                 "games:",
                 "help",
+                "loadsgf",
                 "komi:",
+                "openings:",
                 "referee:",
                 "sgffile:",
                 "size:",
@@ -298,6 +303,8 @@ public class TwoGtp
                     "-games          number of games (0=unlimited)\n" +
                     "-help           display this help and exit\n" +
                     "-komi           komi\n" +
+                    "-loadsgf        use loadsgf command for openings\n" +
+                    "-openings       directory with opening sgf files\n" +
                     "-referee        command for referee program\n" +
                     "-sgffile        filename prefix\n" +
                     "-size           board size for autoplay (default 19)\n" +
@@ -342,10 +349,19 @@ public class TwoGtp
             String sgfFile = opt.getString("sgffile", "");
             if (opt.isSet("games") && sgfFile.equals(""))
                 throw new Exception("Use option -sgffile with -games.");
+            Openings openings = null;
+            if (opt.isSet("openings"))
+                openings = new Openings(new File(opt.getString("openings")));
+            boolean loadsgf = opt.isSet("loadsgf");
+            if (loadsgf && openings == null)
+                throw new Exception("Use option -loadsgf with -openings.");
+            if (loadsgf && ! auto)
+                throw new Exception("Option -loadsgf can only be used with"
+                                    + " -auto");
             TwoGtp twoGtp =
                 new TwoGtp(System.in, System.out, black, white, referee, size,
                            komi, isKomiFixed, games, alternate, sgfFile,
-                           force, verbose, estimateScore);
+                           force, verbose, estimateScore, openings, loadsgf);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)
@@ -392,13 +408,19 @@ public class TwoGtp
 
     private boolean m_isKomiFixed;
 
+    private boolean m_loadsgf;
+
     private boolean m_refereeIsDisabled;
 
     private boolean m_resigned;
 
+    private boolean m_verbose;
+
     private int m_gameIndex;
 
     private int m_numberGames;
+
+    private int m_openingMovesIndex;
 
     private int m_size;
 
@@ -416,9 +438,13 @@ public class TwoGtp
 
     private Node m_currentNode;
 
+    private Openings m_openings;
+
     private String m_blackName;
 
     private String m_blackVersion;
+
+    private String m_openingFile;
 
     private String m_refereeCommand;
 
@@ -435,6 +461,8 @@ public class TwoGtp
     private HashMap m_scoreEstimates = new HashMap();
 
     private Vector m_games = new Vector(100, 100);;
+
+    private Vector m_openingMoves;
 
     private Gtp m_black;
 
@@ -534,17 +562,15 @@ public class TwoGtp
             return false;
         }
         Move move = new Move(point, color);
-        String cmdBlack = m_black.getCommandPlay(move);
-        String cmdWhite = m_white.getCommandPlay(move);
-        String cmdReferee = null;
-        if (m_referee != null)
-            cmdReferee = m_referee.getCommandPlay(move);
-        boolean status =
-            send(m_black, m_white, cmdBlack, cmdWhite, cmdReferee, response,
-                 true, true);
-        if (status)
-            play(move);
-        return status;
+        if (m_openings != null)
+        {
+            if (! move.equals((Move)m_openingMoves.get(m_openingMovesIndex)))
+            {
+                response.append("Move not allowed if openings are used");
+                return false;
+            }
+        }
+        return sendMove(move, response);
     }
 
     private static void compare(Vector filenames) throws Exception
@@ -565,7 +591,7 @@ public class TwoGtp
             else if (size != board.getSize())
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
-            Vector moves = getMoves(gameTree.getRoot(), filename);
+            Vector moves = getAllAsMoves(gameTree.getRoot());
             String duplicate = checkDuplicate(board, moves, games);
             System.out.println(Integer.toString(gameNumber) + " " +
                                filename + " " + duplicate);
@@ -650,6 +676,22 @@ public class TwoGtp
         return (m_board.bothPassed() || m_resigned);
     }
 
+    /** Return moves in main variation from node.
+        All setup stones are translated to moves and passes are filled in
+        to ensure that moves are alternating beginning with black.
+    */
+    private static Vector getAllAsMoves(Node node)
+    {
+        Vector moves = new Vector(128, 128);
+        while (node != null)
+        {
+            moves.addAll(node.getAllAsMoves());
+            node = node.getChild();
+        }
+        moves = Move.fillPasses(moves, Color.BLACK);
+        return moves;
+    }
+
     private double getCpuTime(Gtp gtp)
     {
         double result = 0;
@@ -680,22 +722,6 @@ public class TwoGtp
         {
         }
         return host;
-    }
-
-    private static Vector getMoves(Node root, String filename)
-    {
-        Vector moves = new Vector();
-        Node node = root;
-        while (node != null)
-        {
-            if (node.getNumberAddBlack() + node.getNumberAddWhite() > 0)
-                throw new RuntimeException("File " + filename +
-                                           " contains setup stones");
-            if (node.getMove() != null)
-                moves.add(node.getMove());
-            node = node.getChild();
-        }
-        return moves;
     }
 
     private static String getName(Gtp gtp)
@@ -808,7 +834,7 @@ public class TwoGtp
                 resultWhite = inverseResult(resultWhite);
                 resultReferee = inverseResult(resultReferee);
             }
-            Vector moves = getMoves(m_gameTree.getRoot(), null);
+            Vector moves = getAllAsMoves(m_gameTree.getRoot());
             String duplicate = checkDuplicate(m_board, moves, m_games);
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moves.size(), error,
@@ -824,13 +850,42 @@ public class TwoGtp
         }
     }
 
-    private void initGame(int size)
+    private void initGame(int size) throws Exception
     {
         m_board = new Board(size);
         m_gameTree = new GameTree(size, m_komi, null, null);
         m_currentNode = m_gameTree.getRoot();
         m_scoreEstimates.clear();
         m_resigned = false;
+        if (m_openings != null)
+        {
+            int openingFileIndex;
+            if (m_alternate)
+                openingFileIndex = (m_gameIndex / 2) % m_openings.getNumber();
+            else
+                openingFileIndex = m_gameIndex % m_openings.getNumber();
+            m_openings.loadFile(openingFileIndex);
+            m_openingFile = m_openings.getFilename();
+            if (m_verbose)
+                System.err.println("Loaded opening " + m_openingFile);
+            if (m_openings.getGameInformation().m_boardSize != size)
+                throw new Exception("Wrong board size: " + m_openingFile);
+            m_gameTree = m_openings.getGameTree();
+            m_openingMoves = getAllAsMoves(m_gameTree.getRoot());
+            m_openingMovesIndex = 0;
+            Node root = m_gameTree.getRoot();
+            m_currentNode = root.getLast();
+            if (m_loadsgf)
+            {
+                String command = "loadsgf " + m_openingFile;
+                StringBuffer response = new StringBuffer(64);
+                if (! send(m_black, m_white, command, command, command,
+                           response, true, false))
+                    throw new Exception("Loadsgf command failed: "
+                                        + response);
+                m_openingMovesIndex = m_openingMoves.size();
+            }
+        }
     }
 
     private String inverseResult(String result)
@@ -939,7 +994,15 @@ public class TwoGtp
             m_refereeIsDisabled = false;
         }
         m_inconsistentState = false;
-        initGame(size);
+        try
+        {
+            initGame(size);
+        }
+        catch (Exception e)
+        {
+            response.append(e.getMessage());
+            return false;
+        }
         m_gameSaved = false;
         sendIfSupported("komi", "komi " + m_komi);
         return true;
@@ -947,11 +1010,17 @@ public class TwoGtp
 
     private void play(Move move)
     {
-        m_board.play(move);
-        Node node = new Node(move);
-        m_currentNode.append(node);
-        m_currentNode = node;
-        estimateScore();
+        m_board.play(move);        
+        if (m_openings != null)
+            ++m_openingMovesIndex;
+        if (m_openings == null
+            || m_openingMovesIndex > m_openingMoves.size())
+        {
+            Node node = new Node(move);
+            m_currentNode.append(node);
+            m_currentNode = node;
+            estimateScore();
+        }
     }
 
     private void readGames()
@@ -970,8 +1039,7 @@ public class TwoGtp
             {
                 sgf.Reader reader =
                     new sgf.Reader(new FileReader(file), file.toString());
-                m_games.add(getMoves(reader.getGameTree().getRoot(),
-                                     file.toString()));
+                m_games.add(getAllAsMoves(reader.getGameTree().getRoot()));
             }
             catch (sgf.Reader.Error e)
             {
@@ -1024,7 +1092,11 @@ public class TwoGtp
         String host = getHost();
         String gameComment =
             "Black: " + blackCommand +
-            "\nWhite: " + whiteCommand +
+            "\nWhite: " + whiteCommand;
+        if (m_openings != null)
+            gameComment = gameComment +
+                "\nOpening: " + m_openingFile;
+        gameComment = gameComment +
             "\nResult according to Black: " + resultBlack +
             "\nResult according to White: " + resultWhite;
         if (m_referee != null)
@@ -1038,6 +1110,8 @@ public class TwoGtp
             "\nDate: " + format.format(Calendar.getInstance().getTime());
         m_gameTree.getRoot().setComment(gameComment);
         File file = getFile(m_gameIndex);
+        if (m_verbose)
+            System.err.println("Saving " + file);
         OutputStream out = new FileOutputStream(file);
         new sgf.Writer(out, m_gameTree, file, "TwoGtp", Version.get());
     }
@@ -1194,6 +1268,20 @@ public class TwoGtp
     {
         if (checkInconsistentState(response))
             return false;
+        if (m_openings != null && m_openingMovesIndex < m_openingMoves.size()
+            && ! m_loadsgf)
+        {
+            Move move = (Move)m_openingMoves.get(m_openingMovesIndex);
+            if (move.getColor() != color)
+            {
+                response.append("Not allowed if openings are used");
+                return false;
+            }
+            if (! sendMove(move, response))
+                return false;
+            response.append(Point.toString(move.getPoint()));
+            return true;
+        }
         Gtp gtp1;
         Gtp gtp2;
         String prefix1;
@@ -1302,6 +1390,20 @@ public class TwoGtp
         }
     }
 
+    private boolean sendMove(Move move, StringBuffer response)
+    {
+        String cmdBlack = m_black.getCommandPlay(move);
+        String cmdWhite = m_white.getCommandPlay(move);
+        String cmdReferee = null;
+        if (m_referee != null)
+            cmdReferee = m_referee.getCommandPlay(move);
+        boolean status = send(m_black, m_white, cmdBlack, cmdWhite,
+                              cmdReferee, response, true, true);
+        if (status)
+            play(move);
+        return status;
+    }
+
     private boolean sendSingle(Gtp gtp, String command, StringBuffer response)
     {
         try
@@ -1369,7 +1471,16 @@ public class TwoGtp
         if (status)
         {
             m_board.undo();
-            m_currentNode = m_currentNode.getFather();
+            if (m_openings == null
+                || m_openingMovesIndex > m_openingMoves.size())
+                m_currentNode = m_currentNode.getFather();
+            if (m_openings != null)
+            {
+                --m_openingMovesIndex;
+                // Shouldn't happen if programs don't accept undo w/o moves
+                if (m_openingMovesIndex < 0)
+                    m_openingMovesIndex = 0;
+            }
         }
         return status;
     }

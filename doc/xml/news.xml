@@ -43,6 +43,16 @@ Use xsltproc for generating the documentation instead of the built-in
 ant target "Style"
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+TwoGtp: new options -openings and -loadsgf for using opening SGF files
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other small fixes and improvements
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
