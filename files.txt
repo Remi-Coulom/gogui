@@ -4,6 +4,8 @@ src/board/Field.java
 src/board/Point.java
 src/board/Move.java
 src/board/Score.java
+src/gmp/Gmp.java
+src/gmp/GmpToGtp.java
 src/gtp/Gtp.java
 src/gtp/GtpServer.java
 src/gtp/TwoGtp.java
