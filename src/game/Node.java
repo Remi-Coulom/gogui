@@ -153,7 +153,7 @@ public class Node
         {
             Node child = getChild(i);
             Move childMove = getChild(i).getMove();
-            if (childMove != null)
+            if (childMove != null && childMove.getPoint() != null)
                 moves.add(childMove.getPoint());
         }
         return moves;
