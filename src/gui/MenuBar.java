@@ -232,7 +232,7 @@ class MenuBar
     private JMenu createAnalyzeMenu()
     {
         JMenu menu = new JMenu("Experts");
-        menu.setMnemonic(KeyEvent.VK_E);
+        menu.setMnemonic(KeyEvent.VK_X);
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
                     "analyze");
         m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
@@ -244,6 +244,7 @@ class MenuBar
     private JMenu createBoardSizeMenu()
     {
         JMenu menu = new JMenu("Size");
+        menu.setMnemonic(KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
         int n = m_possibleBoardSizes.length;
         m_itemBoardSize = new JMenuItem[n];
@@ -290,7 +291,7 @@ class MenuBar
                     ActionEvent.CTRL_MASK,
                     "print");
         menu.addSeparator();
-        addMenuItem(menu, "Open with program...", KeyEvent.VK_G,
+        addMenuItem(menu, "Open with program...", KeyEvent.VK_W,
                     "open-with-program");
         menu.addSeparator();
         m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
@@ -321,7 +322,7 @@ class MenuBar
         addMenuItem(menu, "Backward 10 moves", KeyEvent.VK_D, KeyEvent.VK_LEFT,
                     ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
                     "backward-10");
-        addMenuItem(menu, "Backward", KeyEvent.VK_LEFT, KeyEvent.VK_LEFT,
+        addMenuItem(menu, "Backward", KeyEvent.VK_B, KeyEvent.VK_LEFT,
                     ActionEvent.CTRL_MASK, "backward");
         addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
                     ActionEvent.CTRL_MASK, "forward");
@@ -331,13 +332,14 @@ class MenuBar
         addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
                     ActionEvent.CTRL_MASK, "end");
         menu.addSeparator();
-        addMenuItem(menu, "Score", KeyEvent.VK_S, "score");
+        addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
     }
 
     private JMenu createHandicapMenu()
     {
         JMenu menu = new JMenu("Handicap");
+        menu.setMnemonic(KeyEvent.VK_H);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < m_possibleHandicaps.length; ++i)
         {
@@ -367,6 +369,7 @@ class MenuBar
     {
         ButtonGroup group = new ButtonGroup();
         JMenu menu = new JMenu("Rules");
+        menu.setMnemonic(KeyEvent.VK_U);
         m_itemRulesChinese =
             addRadioItem(menu, group, "Chinese", KeyEvent.VK_C,
                          "rules-chinese");
@@ -380,26 +383,23 @@ class MenuBar
     private JMenu createSettingsMenu()
     {
         JMenu menu = new JMenu("Settings");
+        menu.setMnemonic(KeyEvent.VK_S);
         m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep after move");
-        m_itemBeepAfterMove.addActionListener(m_listener);
-        m_itemBeepAfterMove.setActionCommand("beep-after-move");
-        menu.add(m_itemBeepAfterMove);
+        addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
+                    "beep-after-move");
         m_itemShowLastMove = new JCheckBoxMenuItem("Show last move");
-        m_itemShowLastMove.addActionListener(m_listener);
-        m_itemShowLastMove.setActionCommand("show-last-move");
         m_itemShowLastMove.setState(true);
-        menu.add(m_itemShowLastMove);
+        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_S,
+                    "show-last-move");
         return menu;
     }
 
     private JMenu createSetupMenu()
     {
         JMenu menu = new JMenu("Setup");
-        menu.setMnemonic(KeyEvent.VK_S);
+        menu.setMnemonic(KeyEvent.VK_E);
         m_itemSetup = new JCheckBoxMenuItem("Setup mode");
-        m_itemSetup.setActionCommand("setup");
-        m_itemSetup.addActionListener(m_listener);
-        menu.add(m_itemSetup);
+        addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
         menu.addSeparator();
         ButtonGroup group = new ButtonGroup();
         m_itemSetupBlack =
