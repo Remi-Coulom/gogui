@@ -201,18 +201,22 @@ class AnalyzeDialog
         m_prefs = prefs;
         m_callback = callback;
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addKeyListener(this);
         addWindowListener(this);
         Container contentPane = getContentPane();
         contentPane.add(createCommandPanel(), BorderLayout.CENTER);
         contentPane.add(createButtons(), BorderLayout.SOUTH);
+        createMenu();
         pack();
     }
 
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
-        if (command.equals("cancel"))
+        if (command.equals("close"))
             close();
+        else if (command.equals("comboBoxChanged"))
+            comboBoxChanged();
         else if (command.equals("run"))
             setCommand();
     }
@@ -312,11 +316,45 @@ class AnalyzeDialog
 
     private Preferences m_prefs;
 
+    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
+                                  String command)
+    {
+        item.addActionListener(this);
+        item.setActionCommand(command);
+        item.setMnemonic(mnemonic);
+        menu.add(item);
+        return item;
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        return addMenuItem(menu, item, mnemonic, command);        
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  int accel, int modifier, String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
+        item.setAccelerator(k);
+        return addMenuItem(menu, item, mnemonic, command);
+    }
+
     private void close()
     {
         m_callback.clearAnalyzeCommand();
         saveRecent();
         setVisible(false);
+    }
+
+    private void comboBoxChanged()
+    {
+        String label = (String)m_comboBox.getSelectedItem();        
+        if (! m_labels.contains(label))
+            return;
+        m_list.setSelectedValue(label, true);
     }
 
     private JPanel createButtons()
@@ -329,11 +367,11 @@ class AnalyzeDialog
         runButton.setMnemonic(KeyEvent.VK_R);
         getRootPane().setDefaultButton(runButton);
         innerPanel.add(runButton);
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.setActionCommand("cancel");
-        cancelButton.addActionListener(this);
-        cancelButton.setMnemonic(KeyEvent.VK_C);
-        innerPanel.add(cancelButton);
+        JButton closeButton = new JButton("Close");
+        closeButton.setActionCommand("close");
+        closeButton.addActionListener(this);
+        closeButton.setMnemonic(KeyEvent.VK_C);
+        innerPanel.add(closeButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
         return outerPanel;
@@ -347,7 +385,6 @@ class AnalyzeDialog
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         m_list.setVisibleRowCount(20);
         m_list.addMouseListener(this);
-        m_list.addKeyListener(this);
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createLowerPanel(), BorderLayout.SOUTH);
@@ -359,9 +396,26 @@ class AnalyzeDialog
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, GuiUtils.PAD, 0));
         m_comboBox = new JComboBox();
+        m_comboBox.addActionListener(this);
         panel.add(m_comboBox);
         loadRecent();
         return panel;
+    }
+
+    private void createMenu()
+    {
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createMenuFile());
+        setJMenuBar(menuBar);
+    }
+
+    private JMenu createMenuFile()
+    {
+        JMenu menu = new JMenu("File");
+        menu.setMnemonic(KeyEvent.VK_F);
+        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
+                    ActionEvent.CTRL_MASK, "close");
+        return menu;
     }
 
     private File getRecentFile()
