@@ -51,7 +51,8 @@ public class Gtp
         }
         catch (IOException e)
         {
-            throw new Gtp.Error(e.getMessage());
+            throw new Gtp.Error("Could not create " + program + ":\n" +
+                                e.getMessage());
         }
         Reader reader;
         reader = new InputStreamReader(m_process.getInputStream());
