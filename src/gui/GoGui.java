@@ -1926,6 +1926,7 @@ class GoGui
     {
         initGame(size);
         loadFile(new File(m_file), move);
+        m_timeControl.halt();
         updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);

@@ -121,6 +121,11 @@ class TimeControl
         return buffer.toString();
     }
 
+    public void halt()
+    {
+        m_toMove = Color.EMPTY;
+    }
+
     public boolean isInitialized()
     {
         return m_initialized;
