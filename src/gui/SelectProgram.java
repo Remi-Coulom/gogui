@@ -158,7 +158,7 @@ class SelectProgram
     private Vector getHistory()
     {
         Vector result = new Vector(32, 32);
-        int maxHistory = 10;
+        int maxHistory = 20;
         int itemCount = m_comboBox.getItemCount();
         int n = itemCount;
         if (n > maxHistory)
