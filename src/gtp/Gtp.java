@@ -282,8 +282,18 @@ public class Gtp
     public void queryProtocolVersion() throws Error
     {
         try
-        {
-            int v = Integer.parseInt(sendCommand("protocol_version"));
+        {            
+            String response;
+            try
+            {
+                response = sendCommand("protocol_version");
+            }
+            catch (Error e)
+            {
+                m_protocolVersion = 1;
+                return;
+            }
+            int v = Integer.parseInt(response);
             if (v < 1 || v > 2)
                 throw new Error("Unknown protocol version: " + v);
             m_protocolVersion = v;

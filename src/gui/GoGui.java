@@ -1577,6 +1577,7 @@ class GoGui
     private void newGameContinue()
     {
         endLengthyCommand();
+        showStatus(" ");
         Gtp.Error e = m_commandThread.getException();
         if (e != null)
         {
