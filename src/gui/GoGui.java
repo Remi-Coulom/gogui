@@ -854,7 +854,7 @@ class GoGui
         {
             Vector supportedCommands = null;
             m_analyzeDialog =
-                new AnalyzeDialog(this, this, m_prefs,
+                new AnalyzeDialog(null, this, m_prefs,
                                   m_commandThread.getSupportedCommands());
             m_analyzeDialog.setLocationRelativeTo(null);
             m_analyzeDialog.setLocationRelativeTo(this);
