@@ -1738,6 +1738,7 @@ class GoGui
         setHandicap();
         m_gameInfo.update();
         m_guiBoard.updateFromGoBoard();
+        m_toolBar.updateGameButtons(m_board);
     }
 
     private void newGameContinue(int size)
