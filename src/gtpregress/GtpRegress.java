@@ -483,7 +483,8 @@ class GtpRegress
                     "span.fail { font-weight:bold; color:" + m_colorRed
                     + "; }\n" +
                     "span.stderr { font-style: italic; color:#999999; }\n" +
-                    "span.pass { font-weight:bold; color:#009900; }\n" +
+                    "span.pass { font-weight:bold; color:" + m_colorGreen
+                    + "; }\n" +
                     "span.test { font-weight:bold; }\n" +
                     "-->\n" +
                     "</style>\n" +
@@ -699,7 +700,8 @@ class GtpRegress
                   + "</td></tr>\n" +
                   "<tr><th align=\"left\">Host</th><td>" + host
                   + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Command</th><td><tt>" + m_program
+                  "<tr><th align=\"left\" valign=\"top\">Command</th>\n" +
+                  "<td valign=\"top\"><tt>" + m_program
                   + "</tt></td></tr>\n");
     }
 
@@ -734,9 +736,10 @@ class GtpRegress
                   "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
                   + "\">\n");
         writeInfo(out);
-        out.print("</table>" +
-                  "<p>" +
-                  "<table bgcolor=\"" + m_colorGrayBackground + "\">\n" +
+        out.print("</table>\n" +
+                  "<p>\n" +
+                  "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
+                  + "\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"20%\">\n" +
                   "<col width=\"10%\">\n" +
@@ -846,7 +849,8 @@ class GtpRegress
                   + m_outFileRelativeName + "</a></td></tr>\n" +
                   "</table>\n" +
                   "<p>\n" +
-                  "<table bgcolor=\"" + m_colorGrayBackground + "\">\n" +
+                  "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
+                  + "\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"12%\">\n" +
                   "<col width=\"12%\">\n" +
@@ -873,7 +877,7 @@ class GtpRegress
         out.print("</table>\n" +
                   "</p>\n" +
                   "<p>\n" +
-                  "<table>\n" +
+                  "<table width=\"100%\">\n" +
                   "<thead>\n" +
                   "<tr bgcolor=\"" + m_colorHeader + "\">\n" +
                   "<th>ID</th>\n" +
