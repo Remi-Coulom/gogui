@@ -901,6 +901,8 @@ class GoGui
 
     private void cbOpen()
     {
+        if (m_isModified && ! checkSaveGame())
+            return;
         File file = SimpleDialogs.showOpenSgf(this);
         if (file == null)
             return;
