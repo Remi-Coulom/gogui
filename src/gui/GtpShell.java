@@ -669,14 +669,6 @@ public class GtpShell
             Object object = wrapperObject((String)completions.get(i));
             m_comboBox.addItem(object);
         }
-        if (Platform.isMac())
-        {
-            int numberDummy = Math.max(12 - m_comboBox.getItemCount(), 0);
-            // Workaround for Mac Java 1.4.2, if popup contains too few
-            // items, then the popup hides the text field
-            for (int i = 0; i < numberDummy; ++i)
-                m_comboBox.addItem(wrapperObject(new String("")));
-        }
         if (select && oldText.trim().length() > 0 && completions.size() > 0)
         {
             String text = (String)completions.get(completions.size() - 1);
