@@ -63,6 +63,8 @@ public class Gtp
         m_isProgramDead = false;
         Thread stdErrThread = new StdErrThread(m_process);
         stdErrThread.start();
+        // Give StdErrThread a chance to start first
+        Thread.currentThread().yield();
     }
 
     public void close()
@@ -490,6 +492,9 @@ public class Gtp
 
     private void readResponse() throws Error
     {
+        // Give StdErrThread a chance to read standard error output of the
+        // program first
+        Thread.currentThread().yield();
         try
         {
             String line = "";

@@ -280,11 +280,6 @@ public class GtpShell
 
     public void receivedResponse(boolean error, String response)
     {
-        if (SwingUtilities.isEventDispatchThread())
-        {
-            appendResponse(error, response);
-            return;
-        }
         Runnable r = new UpdateResponse(this, error, response);
         SwingUtilities.invokeLater(r);
     }
@@ -376,22 +371,8 @@ public class GtpShell
 
     public void sentCommand(String command)
     {
-        if (SwingUtilities.isEventDispatchThread())
-        {
-            appendSentCommand(command);
-            return;
-        }
         Runnable r = new UpdateCommand(this, command);
-        try
-        {
-            SwingUtilities.invokeAndWait(r);
-        }
-        catch (InterruptedException e)
-        {
-        }
-        catch (java.lang.reflect.InvocationTargetException e)
-        {
-        }
+        SwingUtilities.invokeLater(r);
     }
     
     public void saveHistory()
@@ -447,7 +428,7 @@ public class GtpShell
 
         public void run()
         {
-            m_gtpShell.sentCommand(m_text);
+            m_gtpShell.appendSentCommand(m_text);
         }
 
         private String m_text;
