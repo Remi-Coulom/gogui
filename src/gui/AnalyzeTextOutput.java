@@ -83,7 +83,7 @@ class AnalyzeTextOutput
         Style styleColor = doc.addStyle("color", def);
         StyleConstants.setForeground(styleColor, new Color(0.54f, 0f, 0.54f));
         m_textPane.setEditable(true);
-        highlight("number", "\\b-?[0-9]+\\.?+[0-9]*\\b");
+        highlight("number", "\\b-?[0-9]+\\.?[0-9]*\\b");
         highlight("const", "\\b[A-Z_][A-Z_]+[A-Z]\\b");
         highlight("color",
                   "\\b([Bb][Ll][Aa][Cc][Kk]|[Ww][Hh][Ii][Tt][Ee])\\b");
