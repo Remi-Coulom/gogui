@@ -5,10 +5,27 @@
 
 <revision>
 <revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<simpara>
+</simpara>
+<itemizedlist>
+<listitem>
+<simpara>
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.6</revnumber>
 <date>9 July 2004</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <simpara>
+New stable release.
 </simpara>
 <itemizedlist>
 <listitem>
