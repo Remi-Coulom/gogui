@@ -1,15 +1,16 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE book [
- <!ENTITY bugs SYSTEM "bugs.xml">
- <!ENTITY version SYSTEM "version.xml">
- <!ENTITY readme SYSTEM "readme.xml">
- <!ENTITY invocation SYSTEM "invocation.xml">
- <!ENTITY programs SYSTEM "programs.xml">
- <!ENTITY compatibility SYSTEM "compatibility.xml">
- <!ENTITY interrupt SYSTEM "interrupt.xml">
- <!ENTITY gtpshell SYSTEM "gtpshell.xml">
  <!ENTITY analyze SYSTEM "analyze.xml">
- <!ENTITY tools SYSTEM "tools.xml">
+ <!ENTITY bugs SYSTEM "bugs.xml">
+ <!ENTITY compatibility SYSTEM "compatibility.xml">
+ <!ENTITY gpl SYSTEM "gpl.xml">
+ <!ENTITY gtpshell SYSTEM "gtpshell.xml">
+ <!ENTITY interrupt SYSTEM "interrupt.xml">
+ <!ENTITY invocation SYSTEM "invocation.xml">
+ <!ENTITY menubar SYSTEM "menubar.xml">
+ <!ENTITY news SYSTEM "news.xml">
+ <!ENTITY programs SYSTEM "programs.xml">
+ <!ENTITY readme SYSTEM "readme.xml">
  <!ENTITY reference-sgftotex SYSTEM "reference-sgftotex.xml">
  <!ENTITY reference-gmptogtp SYSTEM "reference-gmptogtp.xml">
  <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
@@ -18,8 +19,8 @@
  <!ENTITY reference-gtpserver SYSTEM "reference-gtpserver.xml">
  <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
  <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
- <!ENTITY news SYSTEM "news.xml">
- <!ENTITY gpl SYSTEM "gpl.xml">
+ <!ENTITY tools SYSTEM "tools.xml">
+ <!ENTITY version SYSTEM "version.xml">
    ]>
 <book>
   <title>GoGui Documentation</title>
@@ -34,6 +35,7 @@
   &invocation;
   &programs;
   &compatibility;
+  &menubar;
   &interrupt;
   &analyze;
   &gtpshell;

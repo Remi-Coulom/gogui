@@ -7,6 +7,15 @@
 <authorinitials>enz</authorinitials>
 <revremark>
 <itemizedlist>
+<listitem>
+Improve export as LaTeX document.
+</listitem>
+<listitem>
+Add documentation for main menu bar.
+</listitem>
+<listitem>
+Other minor fixes and improvements.
+</listitem>
 </itemizedlist>
 </revremark>
 </revision>

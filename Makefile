@@ -48,6 +48,7 @@ DOC = \
   doc/xml/gtpshell.xml \
   doc/xml/interrupt.xml \
   doc/xml/invocation.xml \
+  doc/xml/menubar.xml \
   doc/xml/news.xml \
   doc/xml/programs.xml \
   doc/xml/readme.xml \
