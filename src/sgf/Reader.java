@@ -215,6 +215,10 @@ public class Reader
 
     private String m_newCharset;
 
+    private StringBuffer m_valueBuffer = new StringBuffer(512);
+
+    private Vector m_valueVector = new Vector();
+
     /** Apply some fixes for broken SGF files. */
     private void applyFixes()
     {
@@ -247,6 +251,99 @@ public class Reader
                     root.setPlayer(Color.WHITE);
             }
         }
+    }
+
+    /** Check for obsolete long names for standard properties.
+        @param property Property name (must have been retrieved with
+        String.intern() because comparisons are done with ==
+        @return Short standard version of the property or original property
+    */
+    private String checkForObsoleteLongProps(String property)
+    {
+        assert(property == property.intern());
+        if (property.length() <= 2)
+            return property;
+        if (property == "ADDBLACK")
+        {
+            m_warningLongProps = true;
+            return "AB";
+        }
+        if (property == "ADDEMPTY")
+        {
+            m_warningLongProps = true;
+            return "AE";
+        }
+        if (property == "ADDWHITE")
+        {
+            m_warningLongProps = true;
+            return "AW";
+        }
+        if (property == "BLACK")
+        {
+            m_warningLongProps = true;
+            return "B";
+        }
+        if (property == "COMMENT")
+        {
+            m_warningLongProps = true;
+            return "C";
+        }
+        if (property == "DATE")
+        {
+            m_warningLongProps = true;
+            return "DT";
+        }
+        if (property == "GAME")
+        {
+            m_warningLongProps = true;
+            return "GM";
+        }
+        if (property == "HANDICAP")
+        {
+            m_warningLongProps = true;
+            return "HA";
+        }
+        if (property == "KOMI")
+        {
+            m_warningLongProps = true;
+            return "KM";
+        }
+        if (property == "PLAYERBLACK")
+        {
+            m_warningLongProps = true;
+            return "PB";
+        }
+        if (property == "PLAYERWHITE")
+        {
+            m_warningLongProps = true;
+            return "PW";
+        }
+        if (property == "PLAYER")
+        {
+            m_warningLongProps = true;
+            return "PL";
+        }
+        if (property == "RESULT")
+        {
+            m_warningLongProps = true;
+            return "RE";
+        }
+        if (property == "RULES")
+        {
+            m_warningLongProps = true;
+            return "RU";
+        }
+        if (property == "SIZE")
+        {
+            m_warningLongProps = true;
+            return "SZ";
+        }
+        if (property == "WHITE")
+        {
+            m_warningLongProps = true;
+            return "W";
+        }
+        return property;
     }
 
     private void findRoot() throws SgfError, IOException
@@ -422,44 +519,38 @@ public class Reader
         int ttype = m_tokenizer.ttype;
         if (ttype == StreamTokenizer.TT_WORD)
         {
-            String p = m_tokenizer.sval.toUpperCase();
-            Vector values = new Vector();
+            // Use intern() to allow fast comparsion with ==
+            String p = m_tokenizer.sval.toUpperCase().intern();
+            m_valueVector.clear();
             String s;
             while ((s = readValue()) != null)
-                values.add(s);
-            if (values.size() == 0)
+                m_valueVector.add(s);
+            if (m_valueVector.size() == 0)
                 throw getError("Property '" + p + "' has no value");
-            String v = (String)values.get(0);
-            if (p.equals("AB") || p.equals("ADDBLACK"))
+            String v = (String)m_valueVector.get(0);
+            p = checkForObsoleteLongProps(p);
+            if (p == "AB")
             {
-                if (p.equals("ADDBLACK"))
-                    m_warningLongProps = true;
-                for (int i = 0; i < values.size(); ++i)
-                    node.addBlack(parsePoint((String)values.get(i)));
+                for (int i = 0; i < m_valueVector.size(); ++i)
+                    node.addBlack(parsePoint((String)m_valueVector.get(i)));
                 m_sizeFixed = true;
             }
-            else if (p.equals("AE") || p.equals("ADDEMPTY"))
+            else if (p == "AE")
             {
-                if (p.equals("ADDEMPTY"))
-                    m_warningLongProps = true;
                 throw getError("Add empty not supported");
             }
-            else if (p.equals("AW") || p.equals("ADDWHITE"))
+            else if (p == "AW")
             {
-                if (p.equals("ADDWHITE"))
-                    m_warningLongProps = true;
-                for (int i = 0; i < values.size(); ++i)
-                    node.addWhite(parsePoint((String)values.get(i)));
+                for (int i = 0; i < m_valueVector.size(); ++i)
+                    node.addWhite(parsePoint((String)m_valueVector.get(i)));
                 m_sizeFixed = true;
             }
-            else if (p.equals("B") || p.equals("BLACK"))
+            else if (p == "B")
             {
-                if (p.equals("BLACK"))
-                    m_warningLongProps = true;
                 node.setMove(getMove(parsePoint(v), Color.BLACK));
                 m_sizeFixed = true;
             }
-            else if (p.equals("BL"))
+            else if (p == "BL")
             {
                 try
                 {
@@ -469,12 +560,10 @@ public class Reader
                 {
                 }
             }
-            else if (p.equals("BR"))
+            else if (p == "BR")
                 m_gameInformation.m_blackRank = v;
-            else if (p.equals("C") || p.equals("COMMENT"))
+            else if (p == "C")
             {
-                if (p.equals("COMMENT"))
-                    m_warningLongProps = true;
                 String comment;
                 if (node.getComment() != null)
                     comment = node.getComment() + "\n" + v.trim();
@@ -482,7 +571,7 @@ public class Reader
                     comment = v.trim();
                 node.setComment(comment);
             }
-            else if (p.equals("CA"))
+            else if (p == "CA")
             {
                 if (isRoot && m_isFile && m_newCharset == null)
                 {
@@ -491,13 +580,11 @@ public class Reader
                         throw new SgfCharsetChanged();
                 }
             }
-            else if (p.equals("DT") || p.equals("DATE"))
+            else if (p == "DT")
             {
-                if (p.equals("DATE"))
-                    m_warningLongProps = true;
                 m_gameInformation.m_date = v;
             }
-            else if (p.equals("FF"))
+            else if (p == "FF")
             {
                 int format = -1;
                 try
@@ -512,10 +599,8 @@ public class Reader
                     m_warningFormat = true;
                 }
             }
-            else if (p.equals("GM") || p.equals("GAME"))
+            else if (p == "GM")
             {
-                if (p.equals("GAME"))
-                    m_warningLongProps = true;
                 v = v.trim();
                 if (v.equals(""))
                     m_warningGame = true;
@@ -523,10 +608,8 @@ public class Reader
                     throw getError("Not a Go game");
                 
             }
-            else if (p.equals("HA") || p.equals("HANDICAP"))
+            else if (p == "HA")
             {
-                if (p.equals("HANDICAP"))
-                    m_warningLongProps = true;
                 try
                 {
                     m_gameInformation.m_handicap = Integer.parseInt(v);
@@ -536,10 +619,8 @@ public class Reader
                     m_warningInvalidHandicap = true;
                 }
             }
-            else if (p.equals("KM") || p.equals("KOMI"))
+            else if (p == "KM")
             {
-                if (p.equals("KOMI"))
-                    m_warningLongProps = true;
                 try
                 {
                     m_gameInformation.m_komi = Double.parseDouble(v);
@@ -548,7 +629,7 @@ public class Reader
                 {
                 }
             }
-            else if (p.equals("OB"))
+            else if (p == "OB")
             {
                 try
                 {
@@ -558,7 +639,7 @@ public class Reader
                 {
                 }
             }
-            else if (p.equals("OW"))
+            else if (p == "OW")
             {
                 try
                 {
@@ -568,40 +649,28 @@ public class Reader
                 {
                 }
             }
-            else if (p.equals("PB") || p.equals("PLAYERBLACK"))
+            else if (p == "PB")
             {
-                if (p.equals("PLAYERBLACK"))
-                    m_warningLongProps = true;
                 m_gameInformation.m_playerBlack = v;
             }
-            else if (p.equals("PW") || p.equals("PLAYERWHITE"))
+            else if (p == "PW")
             {
-                if (p.equals("PLAYERWHITE"))
-                    m_warningLongProps = true;
                 m_gameInformation.m_playerWhite = v;
             }
-            else if (p.equals("PL") || p.equals("PLAYER"))
+            else if (p == "PL")
             {
-                if (p.equals("PLAYER"))
-                    m_warningLongProps = true;
                 node.setPlayer(parseColor(v));
             }
-            else if (p.equals("RE") || p.equals("RESULT"))
+            else if (p == "RE")
             {
-                if (p.equals("RESULT"))
-                    m_warningLongProps = true;
                 m_gameInformation.m_result = v;
             }
-            else if (p.equals("RU") || p.equals("RULES"))
+            else if (p == "RU")
             {
-                if (p.equals("RULES"))
-                    m_warningLongProps = true;
                 m_gameInformation.m_rules = v;
             }
-            else if (p.equals("SZ") || p.equals("SIZE"))
+            else if (p == "SZ")
             {
-                if (p.equals("SIZE"))
-                    m_warningLongProps = true;
                 if (! isRoot)
                 {
                     if (m_sizeFixed)
@@ -618,14 +687,12 @@ public class Reader
                 }
                 m_sizeFixed = true;
             }
-            else if (p.equals("W") || p.equals("WHITE"))
+            else if (p == "W")
             {
-                if (p.equals("WHITE"))
-                    m_warningLongProps = true;
                 node.setMove(getMove(parsePoint(v), Color.WHITE));
                 m_sizeFixed = true;
             }
-            else if (p.equals("WL"))
+            else if (p == "WL")
             {
                 try
                 {
@@ -635,9 +702,9 @@ public class Reader
                 {
                 }
             }
-            else if (p.equals("WR"))
+            else if (p == "WR")
                 m_gameInformation.m_whiteRank = v;
-            else if (! p.equals("FF") && ! p.equals("GN") && ! p.equals("AP"))
+            else if (p != "FF" && p != "GN" && p != "AP")
                 node.addSgfProperty(p, v);
             return true;
         }
@@ -708,7 +775,7 @@ public class Reader
                 m_tokenizer.pushBack();
             return null;
         }
-        StringBuffer value = new StringBuffer(32);
+        m_valueBuffer.setLength(0);
         boolean quoted = false;
         while (true)
         {
@@ -719,9 +786,9 @@ public class Reader
                 break;
             quoted = (c == '\\');
             if (! quoted)
-                value.append((char)c);
+                m_valueBuffer.append((char)c);
         }
-        return value.toString();
+        return m_valueBuffer.toString();
     }
 }
 
