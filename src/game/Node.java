@@ -141,7 +141,7 @@ public class Node
             return null;
         try
         {
-            return new String(m_comment, "ISO-8859-1");
+            return new String(m_comment, "UTF-8");
         }
         catch (UnsupportedEncodingException e)
         {
@@ -288,7 +288,7 @@ public class Node
         }
         try
         {
-            m_comment = comment.getBytes("ISO-8859-1");
+            m_comment = comment.getBytes("UTF-8");
         }
         catch (UnsupportedEncodingException e)
         {
@@ -379,6 +379,7 @@ public class Node
     /** Comment stored as bytes.
         The default charset for SGF is ISO-8859-1, which is only one byte
         per character, i.e. half the size of a regular String.
+        We actually use UTF-8 which is downward compatible with ISO-8859-1.
     */
     private byte[] m_comment;
 
