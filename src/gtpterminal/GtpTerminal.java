@@ -201,20 +201,16 @@ public class GtpTerminal
 
     private void help()
     {
-        System.out.println("Enter a move or one of the following commands:\n" +
-                           "  genmove\n" +
-                           "  help\n" +
-                           "  list_commands\n" +
-                           "  undo\n" +
-                           "  quit\n" +
-                           "The following commands are not allowed:\n" +
-                           "  black\n" +
-                           "  boardsize\n" +
-                           "  clear_board\n" +
-                           "  genmove_black\n" +
-                           "  genmove_white\n" +
-                           "  white\n" +
-                           "Other commands are forwarded to the program.\n");
+        System.out.print("Enter a move or one of the following commands:\n" +
+                         "  genmove\n" +
+                         "  help\n" +
+                         "  list_commands\n" +
+                         "  undo\n" +
+                         "  quit\n" +
+                         "The following commands are not allowed:\n" +
+                         "  black, boardsize, clear_board, genmove_black\n" +
+                         "  genmove_white, white\n" +
+                         "Other commands are forwarded to the program.\n");
     }
 
     private void listCommands()
