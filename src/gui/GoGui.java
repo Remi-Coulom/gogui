@@ -1453,7 +1453,8 @@ class GoGui
             return true;
         if (! isCurrentNodeExecuted())
         {
-            showError("Cannot go forward from partially executed game node.");
+            showError("Cannot go forward from\n" +
+                      "partially executed game node");
             return false;
         }
         return true;
@@ -1531,7 +1532,7 @@ class GoGui
             if (response.toLowerCase().equals("resign"))
             {
                 if (! (m_computerBlack && m_computerWhite))
-                    showInfo("The computer resigns.");
+                    showInfo("Computer resigns");
                 m_resigned = true;
                 setResult((toMove == go.Color.BLACK ? "W" : "B") + "+Resign");
             }
@@ -1547,7 +1548,7 @@ class GoGui
                 m_currentNodeExecuted = 1;
                 if (move.getPoint() == null
                     && ! (m_computerBlack && m_computerWhite))
-                    showInfo("The computer passed.");
+                    showInfo("Computer passed");
                 fileModified();
                 m_resigned = false;
             }
@@ -1641,6 +1642,20 @@ class GoGui
             m_analyzeDialog = null;
         }
         setTitle();
+        // If this node was only partially executed due to a error of the Go
+        // program, we undo and execute it again
+        if (! isCurrentNodeExecuted())
+        {
+            try
+            {
+                undoCurrentNode();
+                executeCurrentNode();
+            }
+            catch (Gtp.Error e)
+            {
+                assert(false);
+            }
+        }
     }
 
     private void endLengthyCommand()
@@ -1963,7 +1978,16 @@ class GoGui
         Node node = new Node(move);
         m_currentNode.append(node);
         m_currentNode = node;
-        executeCurrentNode();
+        try
+        {
+            executeCurrentNode();
+        }
+        catch (Gtp.Error error)
+        {
+            m_currentNode = node.getFather();
+            m_currentNode.removeChild(node);
+            throw error;
+        }
     }
 
     private void resetBoard()
