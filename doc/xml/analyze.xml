@@ -8,7 +8,7 @@ graphically on the board.
 </para>
   
 <para>
-The possible analyze commands are defined in the
+Analyze commands are defined in the
 configuration file <userinput>~/.gogui/analyze-commands</userinput>.
 All files beginning with <userinput>~/.gogui/analyze-commands</userinput>
 are loaded.
@@ -38,9 +38,8 @@ It can be one of the following:
 <listitem>
 <simpara>
 The response of the command is a board of strings.
-Strings "b" or "black" will be displayed as black squares,
-"w" or "white" as white squares, all other strings are
-not displayed.
+Strings "b" or "black" will be displayed as black,
+"w" or "white" as white, all other strings are not displayed.
 </simpara>
 </listitem>
 </varlistentry>
@@ -79,9 +78,10 @@ The numbers are expected to be between -1 and 1.
 <listitem>
 <simpara>
 The response is a multi-line text and will be displayed in a window
-using syntax highlighting for lines beginning with a word ending with ':'
-(bold), points and moves (blue), black and white (purple), numbers (green),
-uppercase words (red).
+using syntax highlighting.
+Lines beginning with a word followed by a colon are displayed in bold,
+points and moves in blue, the strings "black" and "white" in purple,
+numbers in green and words that are completely uppercase in red.
 </simpara>
 </listitem>
 </varlistentry>

@@ -12,7 +12,7 @@ clicking on a field has a special meaning (see
 <xref linkend="analyze"/>).
 </para>
 <para>
-If <guimenuitem>Show cursor</guimenuitem> is enabled in the
+If <guimenuitem>Show Cursor</guimenuitem> is enabled in the
 <guimenu>Settings</guimenu> menu, then fields can be selected using
 the keyboard by moving the cursor (the red square corners) with the cursor
 keys to the target field and pressing <keycap>Enter</keycap>.
@@ -99,9 +99,8 @@ are also exported (string labels, marked and selected points).
 <term><guimenuitem>Print</guimenuitem></term>
 <listitem>
 <para>
-Print the current position.
-A screen shot of the current board including all markups from
-analyze commands is printed.
+Print a screen shot of the current board position including all markups from
+analyze commands.
 </para>
 </listitem>
 </varlistentry>
@@ -110,8 +109,7 @@ analyze commands is printed.
 <term><guimenuitem>Attach Program</guimenuitem></term>
 <listitem>
 <para>
-Attach a Go program (if none is attached yet) to the current game at the
-current position.
+Attach a Go program to the current game at the current position.
 </para>
 </listitem>
 </varlistentry>
@@ -187,7 +185,7 @@ Choose what side the Go program plays.
 <term><guimenuitem>Pass</guimenuitem></term>
 <listitem>
 <para>
-Do a pass move.
+Make a pass move.
 </para>
 </listitem>
 </varlistentry>
@@ -235,7 +233,7 @@ Retract 10 moves.
 <term><guimenuitem>Backward</guimenuitem></term>
 <listitem>
 <para>
-Retract a moves.
+Retract one moves.
 </para>
 </listitem>
 </varlistentry>
@@ -244,7 +242,7 @@ Retract a moves.
 <term><guimenuitem>Forward</guimenuitem></term>
 <listitem>
 <para>
-Replay a move.
+Replay one move.
 </para>
 </listitem>
 </varlistentry>
@@ -288,9 +286,6 @@ Dead stones are marked with a cross-hair.
 If the Go program does not support this command or you don't agree with it,
 you can change the status of stones by clicking on them.
 You leave score mode by closing the score window.
-If you close the score window by pressing the <guibutton>Ok</guibutton>
-button, the score will be included in the file if you save the game as an SGF
-file later.
 </para>
 </listitem>
 </varlistentry>
@@ -389,7 +384,7 @@ position and the current color to move.
 <term><guimenuitem>Black</guimenuitem></term>
 <listitem>
 <para>
-Set the current color for setting up stones and to current color to move
+Set the current color for setting up stones and the color to move
 to Black.
 </para>
 </listitem>
@@ -399,7 +394,7 @@ to Black.
 <term><guimenuitem>White</guimenuitem></term>
 <listitem>
 <para>
-Set the current color for setting up stones and to current color to move
+Set the current color for setting up stones and the color to move
 to White.
 </para>
 </listitem>
@@ -426,7 +421,7 @@ With most versions of Java the PC speaker is used for the beep.
 <term><guimenuitem>Show Cursor</guimenuitem></term>
 <listitem>
 <para>
-Show cursor on board to allow clicking on fields with the
+Show cursor on board for allowing to click on fields with the
 <keycap>Enter</keycap> key.
 </para>
 </listitem>
@@ -452,7 +447,7 @@ Mark the last move with a red circle.
 <term><guimenuitem>Game Tree</guimenuitem></term>
 <listitem>
 <para>
-Show the game tree window or bring it to front, if already open.
+Show the game tree window or bring it to front if already open.
 </para>
 </listitem>
 </varlistentry>
@@ -461,7 +456,7 @@ Show the game tree window or bring it to front, if already open.
 <term><guimenuitem>Analyze</guimenuitem></term>
 <listitem>
 <para>
-Open the Analyze dialog or bring it to front, if already open.
+Open the Analyze dialog or bring it to front if already open.
 </para>
 </listitem>
 </varlistentry>
@@ -470,7 +465,7 @@ Open the Analyze dialog or bring it to front, if already open.
 <term><guimenuitem>GTP Shell</guimenuitem></term>
 <listitem>
 <para>
-Open the GTP shell window or bring it to front, if already open.
+Open the GTP shell window or bring it to front if already open.
 </para>
 </listitem>
 </varlistentry>

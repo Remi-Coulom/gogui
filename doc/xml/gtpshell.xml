@@ -9,9 +9,11 @@ Also, it allows to enter any command and send it to the Go program.
 <warning>
 <title>Commands altering the board state</title>
 <para>
-It is not advisable to send any GTP commands to the Go program
-directly that alter the board state, since it will cause
+It is not advisable to send GTP commands directly to the Go program
+that alter the board state, since it will cause
 the graphical board to be out of sync with the Go program.
+For standard GTP commands that alter the board state, GoGui will
+show a warning.
 </para>
 </warning>
 </para>
@@ -20,7 +22,7 @@ the graphical board to be out of sync with the Go program.
 <title>Saving the history</title>
 <para>
 From the menu of the GTP shell window it is possible to save
-the GTP commands and responses or the commands only to a file.
+the GTP commands and responses or only the commands to a file.
 Note that the history of the GTP streams will be truncated
 depending on the values of <userinput>gtpshell-history-min</userinput>
 and <userinput>gtpshell-history-max</userinput> in the configuration
