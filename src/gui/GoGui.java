@@ -1285,7 +1285,7 @@ class GoGui
                 {
                     public void run() { cbScoreContinue(); }
                 };
-            showStatus("Scoring...");
+            showStatus("Scoring ...");
             runLengthyCommand("final_status_list dead", callback);
         }
         else
@@ -1743,7 +1743,7 @@ class GoGui
     {
         go.Color toMove = m_board.getToMove();
         String command = m_commandThread.getCommandGenmove(toMove);
-        showStatus("Computer is thinking...");
+        showStatus("Computer is thinking ...");
         Runnable callback = new Runnable()
             {
                 public void run() { computerMoved(); }
@@ -2143,7 +2143,7 @@ class GoGui
     {
         if (! m_commandInProgress)
             return;
-        showStatus("Interrupting...");
+        showStatus("Interrupting ...");
         try
         {
             m_commandThread.sendInterrupt();
