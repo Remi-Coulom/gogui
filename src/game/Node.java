@@ -277,6 +277,11 @@ public class Node
         m_comment = comment;
     }
 
+    public void setFather(Node father)
+    {
+        m_father = father;
+    }
+
     public void setMove(Move move)
     {
         m_move = move;
