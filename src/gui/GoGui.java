@@ -416,41 +416,77 @@ class GoGui
     }
 
     private boolean m_analyzeRequestPoint;
+
     private boolean m_autoplay;
+
     private boolean m_boardNeedsReset;
+
     private boolean m_computerBlack;
+
     private boolean m_computerWhite;
+
     private boolean m_computerNoneOption;
+
     private boolean m_commandInProgress;
+
     private boolean m_fillPasses;
+
     private boolean m_lostOnTimeShown;
+
     private boolean m_resetBoardAfterAnalyze;
+
     private boolean m_scoreMode;
+
     private boolean m_setupMode;
+
     private boolean m_verbose;
+
     private int m_analyzeType = AnalyzeCommand.NONE;
+
     private int m_boardSize;
+
     private int m_handicap;
+
     private static int m_instanceCount;
+
     private int m_move;
+
     private double m_analyzeScale;
+
     private board.Color m_setupColor;
+
     private board.Point m_analyzePointArg;
+
     private board.Score m_score;
+
     private Board m_board;
+
     private CommandThread m_commandThread;
+
     private GameInfo m_gameInfo;
+
     private GoGui m_gui;
+
     private GtpShell m_gtpShell;
+
     private JLabel m_statusLabel;
+
     private MenuBars m_menuBars;
+
     private String m_analyzeCmd;
+
     private String m_analyzeLabel;
+
     private String m_analyzeTitle;
+
     private String m_file;
+
     private String m_gtpFile;
+
     private String m_name = "Unknown Go Program";
+
     private String m_pid;
+
     private String m_version = "?";
 
     /** Preferences.
@@ -708,14 +744,14 @@ class GoGui
             showError("No program loaded.");
         else if (m_commandThread.isProgramDead())
             showError("Program is dead.");
-        else if (m_pid.equals(""))
-            showError("Program does not support interrupting.\n" +
-                      "See documentation section \"Interrupting programs\".");
         else
         {
             if (! showQuestion("Interrupt command?"))
                 return;
-            runCommand("kill -INT " + m_pid);
+            if (m_pid != null)
+                runCommand("kill -INT " + m_pid);
+            else
+                m_commandThread.sendInterrupt();
         }
     }
 

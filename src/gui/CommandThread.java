@@ -96,6 +96,14 @@ class CommandThread
             }
         }
     }
+
+    /** Send special comment line for interrupting commands.
+        Only allowed while no command or command with callback is running.
+     */
+    public void sendInterrupt()
+    {
+        m_gtp.sendComment("# interrupt");
+    }
     
     /** Send asynchronous command. */
     public void sendCommand(String command, Runnable callback)

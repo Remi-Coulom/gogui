@@ -22,17 +22,19 @@ class Command
 
 class ReadThread extends Thread
 {
-    public ReadThread(InputStream in, PrintStream out)
+    public ReadThread(GtpServer gtpServer, InputStream in, PrintStream out)
     {
         m_in = new BufferedReader(new InputStreamReader(in));
         m_out = out;
+        m_gtpServer = gtpServer;
     }
 
     public Command getCommand()
-    {        
+    {
         synchronized (this)
         {
-            answerAbortCommands();
+            assert(! m_waitCommand);
+            m_waitCommand = true;
             notifyAll();
             try
             {
@@ -42,6 +44,7 @@ class ReadThread extends Thread
             {
                 System.err.println("Interrupted");
             }
+            assert(! m_waitCommand);
             Command result = m_command;
             m_command = null;
             return result;
@@ -51,27 +54,31 @@ class ReadThread extends Thread
     public void run()
     {
         try
-        {
-            synchronized (this)
+        {            
+            while (true)
             {
-                while (! m_quit)
+                String line;
+                line = m_in.readLine();
+                if (line == null)
+                    return;
+                line = line.trim();
+                if (line.equals("# interrupt"))
                 {
-                    String line;
-                    line = m_in.readLine();
-                    if (line == null)
-                        return;
-                    line = line.trim();
-                    if (line.equals("") || line.charAt(0) == '#')
-                        continue;
-                    Command cmd = parseLine(line);
-                    if (cmd.m_command.trim().toLowerCase().equals("abort"))
-                        handleAbort(cmd);
-                    else
+                    m_gtpServer.interruptCommand();
+                }
+                if (line.equals("") || line.charAt(0) == '#')
+                    continue;
+                synchronized (this)
+                {
+                    while (! m_waitCommand)
                     {
-                        m_command = cmd;
-                        notifyAll();
                         wait();
                     }
+                    if (m_quit)
+                        return;
+                    m_command = parseLine(line);
+                    notifyAll();
+                    m_waitCommand = false;
                 }
             }
         }
@@ -84,16 +91,15 @@ class ReadThread extends Thread
         }
     }
 
-    public void quit()
+    public synchronized void quit()
     {
-        synchronized (this)
-        {
-            m_quit = true;
-            notifyAll();
-        }
+        m_quit = true;
+        notifyAll();
     }
 
     private boolean m_quit = false;
+
+    private boolean m_waitCommand = false;
 
     private BufferedReader m_in;
 
@@ -101,23 +107,7 @@ class ReadThread extends Thread
 
     private PrintStream m_out;
 
-    private Vector m_abortCmds = new Vector();
-
-    private void answerAbortCommands()
-    {
-        for (int i = 0; i < m_abortCmds.size(); ++i)
-        {
-            Command cmd = (Command)m_abortCmds.get(i);
-            GtpServer.respond(m_out, true, cmd.m_hasId, cmd.m_id, "");
-        }
-        m_abortCmds.clear();
-    }
-
-    private void handleAbort(Command cmd)
-    {        
-        m_abortCmds.add(cmd);
-        System.err.println("aborted. FIXME: notify GtpServer");
-    }
+    private GtpServer m_gtpServer;
 
     private Command parseLine(String line)
     {
@@ -172,13 +162,19 @@ public abstract class GtpServer
         m_in = in;
     }
 
+    /** Callback for interrupting commands.
+        This callback will be invoked if the special comment line
+        "# interrupt" is received. It will be invoked from a different thread.
+    */
+    public abstract void interruptCommand();
+
     public abstract boolean handleCommand(String command,
                                           StringBuffer response);
 
     public void mainLoop() throws IOException
     {
         m_quit = false;
-        ReadThread readThread = new ReadThread(m_in, m_out);
+        ReadThread readThread = new ReadThread(this, m_in, m_out);
         readThread.start();
         while (! m_quit)
         {

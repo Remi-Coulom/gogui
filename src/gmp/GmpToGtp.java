@@ -64,6 +64,11 @@ public class GmpToGtp
         return status;
     }
 
+    public void interruptCommand()
+    {
+        m_gmp.interruptCommand();
+    }
+
     public static void main(String[] args)
     {
         try
@@ -142,11 +147,9 @@ public class GmpToGtp
         }
     }
 
-
     private boolean m_verbose;
 
     private Gmp m_gmp;
-
 
     private boolean boardsize(String command, StringBuffer response)
     {

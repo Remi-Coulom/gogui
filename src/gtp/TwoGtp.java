@@ -98,6 +98,10 @@ public class TwoGtp
         return status;
     }
 
+    public void interruptCommand()
+    {
+    }
+
     public static void main(String[] args)
     {
         try

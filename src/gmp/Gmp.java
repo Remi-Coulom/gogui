@@ -198,6 +198,18 @@ class ReadThread
         m_colorIndex = colorIndex;
     }
 
+    public void interruptCommand()
+    {
+        synchronized (this)
+        {
+            if (m_status == STATUS_IDLE)
+            {
+                m_status = STATUS_INTERRUPTED;
+                notifyAll();
+            }
+        }
+    }
+
     public void run()
     {
         try
@@ -306,7 +318,13 @@ class ReadThread
             }
             try
             {
+                assert(m_status == STATUS_IDLE);
                 wait();
+                if (m_status == STATUS_INTERRUPTED)
+                {
+                    result.m_response = "Interrupted";
+                    return result;
+                }
             }
             catch (InterruptedException e)
             {
@@ -330,6 +348,8 @@ class ReadThread
     private static final int STATUS_CONFLICT = 3;
 
     private static final int STATUS_DENY = 4;
+
+    private static final int STATUS_INTERRUPTED = 5;
 
     private boolean m_hisLastSeq = false;
 
@@ -626,6 +646,11 @@ public class Gmp
         m_readThread = new ReadThread(input, output, size, colorIndex);
         log("starting read thread");
         m_readThread.start();
+    }
+
+    public void interruptCommand()
+    {
+        m_readThread.interruptCommand();
     }
 
     public boolean newGame(int size, StringBuffer response)

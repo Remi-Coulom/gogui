@@ -314,6 +314,19 @@ public class Gtp
         return sendCommand(getCommandPlay(move));
     }
 
+    /** Send comment.
+        @param comment comment line (must start with '#').
+    */
+    public void sendComment(String comment)
+    {
+        assert(comment.trim().startsWith("#"));
+        log(">> " + comment);
+        if (m_callback != null)
+            m_callback.sentCommand(comment);
+        m_out.println(comment);
+        m_out.flush();
+    }
+
     public void waitForExit()
     {
         try
