@@ -17,7 +17,7 @@ import utils.GuiUtils;
 
 class SelectProgram
     extends JDialog
-    implements ActionListener
+    implements ActionListener, KeyListener
 {
     public SelectProgram(Frame owner)
     {
@@ -56,6 +56,24 @@ class SelectProgram
         saveHistory(history);
     }
 
+    public void keyPressed(KeyEvent e)
+    {
+        int c = e.getKeyCode();        
+        if (c == KeyEvent.VK_ESCAPE)
+        {
+            if (! m_comboBox.isPopupVisible())
+                dispose();
+        }
+    }
+
+    public void keyReleased(KeyEvent e) 
+    {
+    }
+
+    public void keyTyped(KeyEvent e)
+    {
+    }
+
     public static String select(Frame owner)
     {
         SelectProgram dialog = new SelectProgram(owner);
@@ -65,7 +83,9 @@ class SelectProgram
     }
 
     private JComboBox m_comboBox;
+
     private JTextField m_textField;
+
     private String m_command;
 
     private JPanel createButtons()
@@ -112,6 +132,7 @@ class SelectProgram
         m_textField = (JTextField)editor.getEditorComponent();
         m_textField.setColumns(40);
         m_textField.selectAll();
+        m_textField.addKeyListener(this);
         int fontSize = m_comboBox.getFont().getSize();
         m_comboBox.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
