@@ -142,6 +142,8 @@ class GameTreePanel
         {
             graphics.setColor(java.awt.Color.DARK_GRAY);
             graphics.drawLine(x + offset, y + offset,
+                              x + offset, yChild + offset);
+            graphics.drawLine(x + offset, yChild + offset,
                               xChild + offset, yChild + offset);
             yChild = paintNode(graphics, node.getChild(i), xChild, yChild,
                                moveNumber);
@@ -151,9 +153,10 @@ class GameTreePanel
         if (move == null)
         {
             graphics.setColor(java.awt.Color.blue);
-            int margin = 5;
-            graphics.fillRect(x + margin, y + margin, m_nodeSize - 2 * margin,
-                              m_nodeSize - 2 * margin);
+            int margin = 7;
+            graphics.fillRect(x + margin, y + margin,
+                              m_nodeSize - 2 * margin + 1,
+                              m_nodeSize - 2 * margin + 1);
         }
         else
         {
