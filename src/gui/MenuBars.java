@@ -90,7 +90,7 @@ class MenuBars
                 m_itemBoardSize[i].setSelected(true);
                 return;
             }
-        assert(false);
+        return;
     }
 
     public void setCommandInProgress(boolean commandInProgress)

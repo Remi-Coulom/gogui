@@ -11,7 +11,6 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 import go.*;
-import gui.*;
 
 //-----------------------------------------------------------------------------
 
@@ -26,7 +25,7 @@ public class Writer
     }    
 
     public Writer(File file, Board board, int handicap, String playerBlack,
-                  String playerWhite, String gameComment, go.Score score)
+                  String playerWhite, String gameComment, Score score)
         throws FileNotFoundException
     {        
         FileOutputStream out = new FileOutputStream(file);
@@ -44,8 +43,7 @@ public class Writer
         m_out.close();
     }
 
-    public Writer(File file, Board board)
-        throws FileNotFoundException
+    public Writer(File file, Board board) throws FileNotFoundException
     {        
         FileOutputStream out = new FileOutputStream(file);
         m_out = new PrintStream(out);
@@ -59,7 +57,9 @@ public class Writer
     }
 
     private File m_file;
+
     private PrintStream m_out;
+
     private Board m_board;
 
     private void printHeader()
@@ -73,13 +73,13 @@ public class Writer
             (month < 10 ? "0" : "") + month + "-" +
             (day < 10 ? "0" : "") + day;
         m_out.println(";\nFF[4]\nGM[1]\nAP[GoGui]\n" +
-                      "SZ[" + m_board.getBoardSize() + "]");
+                      "SZ[" + m_board.getSize() + "]");
         int rules = m_board.getRules();
-        if (rules == Board.RULES_JAPANESE)
+        if (rules == go.Board.RULES_JAPANESE)
             m_out.println("RU[Japanese]");
         else
         {
-            assert(rules == Board.RULES_CHINESE);
+            assert(rules == go.Board.RULES_CHINESE);
             m_out.println("RU[GOE]");
         }
         m_out.println("DT[" + date + "]");
@@ -133,14 +133,14 @@ public class Writer
     {
         if (p == null)
         {
-            if (m_board.getBoardSize() <= 19)
+            if (m_board.getSize() <= 19)
                 m_out.print("[tt]");
             else
                 m_out.print("[]");
             return;
         }
         int x = 'a' + p.getX();
-        int y = 'a' + (m_board.getBoardSize() - p.getY() - 1);
+        int y = 'a' + (m_board.getSize() - p.getY() - 1);
         m_out.print("[" + (char)x + (char)y + "]");
     }
 

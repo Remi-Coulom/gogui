@@ -68,7 +68,7 @@ class ToolBar
         m_analyzeCommand.setAnalyzeCommand();
     }
 
-    public void updateGameButtons(Board board)
+    public void updateGameButtons(go.Board board)
     {
         int moveNumber = board.getMoveNumber();
         int numberSavedMoves = board.getNumberSavedMoves();
@@ -80,7 +80,7 @@ class ToolBar
         m_buttonEnd.setEnabled(moveNumber < numberSavedMoves);
     }
 
-    public void enableAll(boolean enable, Board board)
+    public void enableAll(boolean enable, go.Board board)
     {
         assert(m_enable != enable);
         m_enable = enable;

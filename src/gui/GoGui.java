@@ -61,8 +61,9 @@ class GoGui
         infoPanel.add(Box.createRigidArea(pad));
         infoPanel.add(createStatusBar());
 
-        m_board = new Board(m_boardSize);
-        m_board.setListener(this);
+        m_board = new go.Board(m_boardSize);
+        m_guiBoard = new Board(m_board);
+        m_guiBoard.setListener(this);
         m_gameInfo.setBoard(m_board);
         m_toolBar = new ToolBar(this, prefs, this);
         contentPane.add(m_toolBar, BorderLayout.NORTH);
@@ -72,7 +73,7 @@ class GoGui
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new SquareLayout());
         boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-        boardPanel.add(m_board);
+        boardPanel.add(m_guiBoard);
         contentPane.add(boardPanel, BorderLayout.CENTER);
         
         addWindowListener(this);
@@ -179,9 +180,9 @@ class GoGui
         else if (command.equals("print"))
             cbPrint();
         else if (command.equals("rules-chinese"))
-            cbRules(Board.RULES_CHINESE);
+            cbRules(go.Board.RULES_CHINESE);
         else if (command.equals("rules-japanese"))
-            cbRules(Board.RULES_JAPANESE);
+            cbRules(go.Board.RULES_JAPANESE);
         else if (command.equals("save"))
             cbSave();
         else if (command.equals("save-position"))
@@ -224,25 +225,25 @@ class GoGui
         {
             if (m_board.getColor(p) != m_setupColor)
             {
-                m_board.play(new Move(p, m_setupColor));
+                m_guiBoard.play(new Move(p, m_setupColor));
             }
             else
             {
-                m_board.play(new Move(p, go.Color.EMPTY));
+                m_guiBoard.play(new Move(p, go.Color.EMPTY));
             }
             return;
         }
         if (m_analyzeRequestPoint)
         {
             m_analyzePointArg = p;
-            m_board.clearAllCrossHair();
-            m_board.setCrossHair(p, true);
+            m_guiBoard.clearAllCrossHair();
+            m_guiBoard.setCrossHair(p, true);
             analyzeBegin(false);
             return;
         }
         if (m_scoreMode)
         {
-            m_board.scoreSetDead(p);
+            m_guiBoard.scoreSetDead(p);
             return;
         }
         humanMoved(new Move(p, m_board.getToMove()));
@@ -458,13 +459,15 @@ class GoGui
 
     private double m_analyzeScale;
 
+    private go.Board m_board;
+
     private go.Color m_setupColor;
 
     private go.Point m_analyzePointArg;
 
     private go.Score m_score;
 
-    private Board m_board;
+    private Board m_guiBoard;
 
     private CommandThread m_commandThread;
 
@@ -623,7 +626,7 @@ class GoGui
                     break;
                 if (m_commandThread != null)
                     m_commandThread.sendCommand("undo");
-                m_board.undo();
+                m_guiBoard.undo();
             }
             computerNone();
             boardChanged();
@@ -856,7 +859,7 @@ class GoGui
     private void cbPrint()
     {
         PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPrintable(m_board);
+        job.setPrintable(m_guiBoard);
         if (job.printDialog())
         {
             try
@@ -932,7 +935,8 @@ class GoGui
         int white = m_score.m_territoryWhite;
         clearStatus();
         String rules =
-            (m_score.m_rules == Board.RULES_JAPANESE ? "Japanese" : "Chinese");
+            (m_score.m_rules == go.Board.RULES_JAPANESE ?
+             "Japanese" : "Chinese");
         showInfo("Territory Black: " + black + "\n" +
                  "Territory White: " + white + "\n" +
                  "Area Black: " + m_score.m_areaBlack + "\n" +
@@ -946,7 +950,7 @@ class GoGui
                  "\n" +
                  "Game result:\n" + 
                  m_score.formatResult());
-        m_board.clearAll();
+        m_guiBoard.clearAll();
         m_scoreMode = false;
         setJMenuBar(m_menuBars.getNormalMenu());
         m_toolBar.enableAll(true, m_board);
@@ -978,7 +982,7 @@ class GoGui
             setJMenuBar(m_menuBars.getNormalMenu());
             pack();
             m_toolBar.enableAll(true, m_board);
-            int size = m_board.getBoardSize();
+            int size = m_board.getSize();
             go.Color color[][] = new go.Color[size][size];
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
@@ -1149,7 +1153,7 @@ class GoGui
             go.Point p = Gtp.parsePoint(m_commandThread.getAnswer());
             go.Color toMove = m_board.getToMove();
             Move m = new Move(p, toMove);
-            m_board.play(m);
+            m_guiBoard.play(m);
             m_timeControl.stopMove();
             boardChanged();
         }
@@ -1237,7 +1241,7 @@ class GoGui
                 Move m = m_board.getMove(moveNumber);
                 if (m_commandThread != null)
                     m_commandThread.sendCommandPlay(m);
-                m_board.play(m);
+                m_guiBoard.play(m);
             }
             computerNone();
             boardChanged();
@@ -1269,7 +1273,7 @@ class GoGui
                     return;
             if (m_commandThread != null)
                 m_commandThread.sendCommandPlay(m);
-            m_board.play(m);
+            m_guiBoard.play(m);
             m_timeControl.stopMove();
             if (m_board.getMoveNumber() > 0
                 && m_timeControl.lostOnTime(m.getColor())
@@ -1388,7 +1392,7 @@ class GoGui
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
-                m_board.play(m);
+                m_guiBoard.play(m);
             }
             while (m_board.getMoveNumber() > 0)
                 m_board.undo();
@@ -1477,7 +1481,7 @@ class GoGui
         if (! m_boardNeedsReset)
             return;
         clearStatus();
-        m_board.clearAll();
+        m_guiBoard.clearAll();
         m_boardNeedsReset = false;
     }
     
@@ -1590,12 +1594,12 @@ class GoGui
     {
         Cursor cursor = Cursor.getPredefinedCursor(type);
         assert(m_board != null);
-        m_board.setCursor(cursor);
+        m_guiBoard.setCursor(cursor);
     }
 
     private void setBoardCursorDefault()
     {
-        m_board.setCursor(Cursor.getDefaultCursor());
+        m_guiBoard.setCursor(Cursor.getDefaultCursor());
     }
 
     private void setKomi(float komi)
@@ -1621,7 +1625,8 @@ class GoGui
         try
         {
             int rules = m_board.getRules();
-            String s = (rules == Board.RULES_JAPANESE ? "territory" : "area");
+            String s =
+                (rules == go.Board.RULES_JAPANESE ? "territory" : "area");
             m_commandThread.sendCommand("scoring_system " + s);
         }
         catch (Gtp.Error e)
@@ -1631,13 +1636,13 @@ class GoGui
 
     private void showColorBoard(String[][] board) throws Gtp.Error
     {
-        m_board.showColorBoard(board);
+        m_guiBoard.showColorBoard(board);
         m_boardNeedsReset = true;
     }
 
     private void showDoubleBoard(double[][] board, double scale)
     {
-        m_board.showDoubleBoard(board, scale);
+        m_guiBoard.showDoubleBoard(board, scale);
         m_boardNeedsReset = true;
     }
 
@@ -1678,7 +1683,7 @@ class GoGui
 
     private void showPointList(go.Point pointList[]) throws Gtp.Error
     {
-        m_board.showPointList(pointList);
+        m_guiBoard.showPointList(pointList);
         m_boardNeedsReset = true;
     }
 
@@ -1690,7 +1695,7 @@ class GoGui
 
     private void showStringBoard(String[][] board) throws Gtp.Error
     {
-        m_board.showStringBoard(board);
+        m_guiBoard.showStringBoard(board);
         m_boardNeedsReset = true;
     }
 

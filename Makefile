@@ -25,8 +25,8 @@ ICONS= \
   org/javalobby/icons/20x20png/VCRRewind.png
 
 PACKAGES= \
-  board \
   gmp \
+  go \
   gtp \
   gui \
   sgf \

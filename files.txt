@@ -1,9 +1,8 @@
-src/board/Board.java
-src/board/Color.java
-src/board/Field.java
-src/board/Point.java
-src/board/Move.java
-src/board/Score.java
+src/go/Board.java
+src/go/Color.java
+src/go/Point.java
+src/go/Move.java
+src/go/Score.java
 src/gtp/Gtp.java
 src/gtp/GtpServer.java
 src/gtp/TwoGtp.java
@@ -16,7 +15,9 @@ src/utils/Options.java
 src/utils/SquareLayout.java
 src/utils/StringUtils.java
 src/gui/AnalyzeCommand.java
+src/gui/Board.java
 src/gui/CommandThread.java
+src/gui/Field.java
 src/gui/GameInfo.java
 src/gui/GtpShell.java
 src/gui/GoGui.java

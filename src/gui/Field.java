@@ -19,7 +19,7 @@ public class Field
     extends JButton
     implements ActionListener
 {
-    Field(Board board, go.Point p, boolean isHandicap)
+    Field(gui.Board board, go.Point p, boolean isHandicap)
     {
         m_board = board;
         m_color = go.Color.EMPTY;
@@ -154,7 +154,7 @@ public class Field
 
     private go.Point m_point;
 
-    private Board m_board;
+    private gui.Board m_board;
 
     private void drawCrossHair(Graphics g)
     {
@@ -168,7 +168,7 @@ public class Field
 
     private void drawGrid(Graphics g)
     {
-        int boardSize = m_board.getBoardSize();
+        int boardSize = m_board.getBoard().getSize();
         Dimension size = getSize();
         int halfWidth = size.width / 2;
         int halfHeight = size.height / 2;

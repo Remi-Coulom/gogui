@@ -61,7 +61,7 @@ class GameInfo
         setTime(go.Color.WHITE);
     }
 
-    public void setBoard(Board board)
+    public void setBoard(go.Board board)
     {
         m_board = board;
     }
@@ -97,14 +97,22 @@ class GameInfo
         m_last.setText(lastMove);
     }
 
-    private Board m_board;
+    private go.Board m_board;
+
     private JLabel m_move;
+
     private JLabel m_number;
+
     private JLabel m_last;
+
     private JLabel m_captB;
+
     private JLabel m_captW;
+
     private JLabel m_timeB;
+
     private JLabel m_timeW;
+
     private TimeControl m_timeControl;
 
     private JLabel createLeftAlignedLabel(String text)
