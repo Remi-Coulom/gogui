@@ -123,6 +123,8 @@ installation directory.
  doc/xml/*.xml,
  doxygen/Doxyfile,
  lib/*.jar,
+ sgf/openings/19x19/README
+ sgf/openings/19x19/*.sgf
  src/images/*.png,
  src/overview.html,
  src/*/package.html,
