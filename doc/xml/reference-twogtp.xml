@@ -82,10 +82,32 @@
       </varlistentry>
       <varlistentry>
 	<term>
+	  <option>-games</option> <replaceable>n</replaceable>
+	</term>
+	<listitem>
+	  Number of games to play (0 means no limit).
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
 	  <option>-help</option>
 	</term>
 	<listitem>
 	  Display help and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-sgffile</option> <replaceable>prefix</replaceable>.
+	</term>
+	<listitem>
+	  Save games after they are finished with filename
+	  <filename>
+	    <replaceable>prefix</replaceable>-<replaceable>n</replaceable>.sgf
+	  </filename>
+	  with <replaceable>n</replaceable> being the game number.
+	  The results are appended to the file
+	  <filename><replaceable>prefix</replaceable>.dat</filename>.
 	</listitem>
       </varlistentry>
       <varlistentry>

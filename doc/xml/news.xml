@@ -9,7 +9,8 @@
 	<itemizedlist>
 	  <listitem>
 	    <command>twogtp</command>: new options <option>-auto</option>,
-	    <option>-size</option> for auto play.
+	    <option>-games</option>, <option>-sgffile</option>,
+	    <option>-size</option>.
 	  </listitem>
 	</itemizedlist>
       </revremark>
