@@ -42,11 +42,12 @@ DOC= \
   doc/xml/news.xml \
   doc/xml/programs.xml \
   doc/xml/readme.xml \
+  doc/xml/reference.xml \
   doc/xml/reference-gmptogtp.xml \
   doc/xml/reference-gtpnet.xml \
   doc/xml/reference-netgtp.xml \
   doc/xml/reference-twogtp.xml \
-  doc/xml/reference.xml \
+  doc/xml/reference-regression.xml \
   doc/xml/tools.xml
 
 JAR= \
@@ -100,7 +101,7 @@ gogui_debug: doc/html/index.html $(IMAGES) $(shell cat build/files-gogui.txt)
 	mkdir -p build/gogui_debug/images
 	for i in $(IMAGES); do cp $$i build/gogui_debug/$$i; done 
 
-src/gui/Version.java: build/version.txt
+src/version/Version.java: build/version.txt
 	sed 's/m_version = \".*\"/m_version = \"$(shell cat build/version.txt)\"/' <src/gui/Version.java >src/gui/.Version.java.new
 	mv src/gui/.Version.java.new src/gui/Version.java
 

@@ -15,6 +15,7 @@
  <!ENTITY reference-gmptogtp SYSTEM "reference-gmptogtp.xml">
  <!ENTITY reference-gtpnet SYSTEM "reference-gtpnet.xml">
  <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
+ <!ENTITY reference-regression SYSTEM "reference-regression.xml">
  <!ENTITY news SYSTEM "news.xml">
  <!ENTITY gpl SYSTEM "gpl.xml">
    ]>
@@ -43,6 +44,7 @@
     &reference-netgtp;
     &reference-sgftotex;
     &reference-twogtp;
+    &reference-regression;
   </appendix>
   &news;
   &gpl;

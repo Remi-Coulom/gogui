@@ -42,6 +42,9 @@
 	    <option>-command</option>.
 	  </listitem>
 	  <listitem>
+	    New tool <command>regression</command>.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>

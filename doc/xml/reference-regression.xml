@@ -1,0 +1,52 @@
+<refentry id="reference-regression">
+  <refmeta>
+    <refentrytitle>regression</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>regression</refname>
+    <refname>regression.jar</refname>
+    <refpurpose>
+       Runs GTP regression tests.
+    </refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>regression</command>
+      <arg><option>-help</option></arg>
+      <arg choice="plain"><replaceable>program</replaceable></arg>
+      <arg choice="plain" rep="repeat">
+        <replaceable>test.tst</replaceable>
+      </arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+    <para>
+       Runs a regression test for a Go program supporting the Go Text Protocol
+       and formats the output as HTML.
+       The regression tests are GTP files using the special comment
+       <userinput>#?</userinput> as used for the
+       <ulink url="http://www.gnu.org/software/gnugo/gnugo.html">GNU Go</ulink>
+       regression tests (see section 
+       <ulink url="http://www.uni-bonn.de/~uzsxtn/gnugo_22.html#SEC212">
+       Regression testing</ulink> of the GNU Go documentation.
+    </para>
+  </refsection>
+
+  <refsection>
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-help</option>
+	</term>
+	<listitem>
+	  Display help and exit.
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+</refentry>
