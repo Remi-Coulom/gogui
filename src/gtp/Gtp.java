@@ -468,11 +468,18 @@ public class Gtp
                         m_callback.receivedStdErr(s);
                 }
             }
-            catch (Exception e)
+            catch (RuntimeException e)
             {
                 String msg = e.getMessage();
+                if (msg != null)
+                    System.err.println(msg);
+                e.printStackTrace();
+            }
+            catch (Throwable t)
+            {
+                String msg = t.getMessage();
                 if (msg == null)
-                    msg = e.getClass().getName();
+                    msg = t.getClass().getName();
                 System.err.println(msg);
             }
         }
