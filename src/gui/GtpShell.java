@@ -469,6 +469,7 @@ public class GtpShell
         }
 
         private String m_text;
+
         private GtpShell m_gtpShell;
     }
 
@@ -487,7 +488,9 @@ public class GtpShell
         }
 
         private boolean m_error;
+
         private String m_text;
+
         private GtpShell m_gtpShell;
     }
 
@@ -506,6 +509,7 @@ public class GtpShell
         }
 
         private String m_text;
+
         private GtpShell m_gtpShell;
     }
 

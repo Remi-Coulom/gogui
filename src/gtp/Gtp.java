@@ -57,8 +57,7 @@ public class Gtp
             throw new Gtp.Error("Could not create " + program + ":\n" +
                                 e.getMessage());
         }
-        Reader reader;
-        reader = new InputStreamReader(m_process.getInputStream());
+        Reader reader = new InputStreamReader(m_process.getInputStream());
         m_in = new BufferedReader(reader);
         m_out = new PrintStream(m_process.getOutputStream());
         m_isProgramDead = false;
@@ -343,31 +342,22 @@ public class Gtp
     {
         public StdErrThread(Process process)
         {
-            m_err = new InputStreamReader(process.getErrorStream());
+            Reader reader = new InputStreamReader(process.getErrorStream());
+            m_err = new BufferedReader(reader);
         }
     
         public void run()
         {
             try
             {
-                char buf[] = new char[32768];
                 while (true)
                 {
-                    int len = m_err.read(buf);
-                    if (len < 0)
+                    String line = m_err.readLine();
+                    if (line == null)
                         return;
-                    if (len > 0)
-                    {
-                        char c[] = new char[len];
-                        for (int i = 0; i < len; ++i)
-                            c[i] = buf[i];
-                        log(c);
-                        if (m_callback != null)
-                            m_callback.receivedStdErr(new String(c));
-                        // Sleep to avoid too many callbacks,
-                        // because stderr is usually unbuffered.
-                        sleep(100);
-                    }
+                    log(line);
+                    if (m_callback != null)
+                        m_callback.receivedStdErr(line + '\n');
                 }
             }
             catch (Exception e)
@@ -379,7 +369,7 @@ public class Gtp
             }
         }
 
-        private Reader m_err;
+        private BufferedReader m_err;
     }
 
     private static class Interrupt extends TimerTask
@@ -398,13 +388,21 @@ public class Gtp
     }
 
     private boolean m_isProgramDead;
+
     private boolean m_log;
+
     private int m_protocolVersion = 1;
+
     private BufferedReader m_in;
+
     private IOCallback m_callback;
+
     private PrintStream m_out;
+
     private Process m_process;
+
     private String m_answer;
+
     private String m_program;
 
     private void readAnswer() throws Error
@@ -472,12 +470,6 @@ public class Gtp
     {
         if (m_log)
             System.err.println(msg);
-    }
-
-    private synchronized void log(char[] c)
-    {
-        if (m_log)
-            System.err.print(c);
     }
 }
 
