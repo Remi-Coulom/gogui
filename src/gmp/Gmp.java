@@ -1,6 +1,19 @@
 //-----------------------------------------------------------------------------
-// $Id$
-// $Source$
+/*
+  Go Modem Protocol
+
+  Documents:
+
+  Go Modem Protocol Specification
+  http://www.britgo.org/tech/gmp.html
+  
+  Restricted version of Go Modem Protocol.
+  Appendix A in Call For Participation to the FJK Computer Go Tournament 2000
+  http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt
+  
+  $Id$
+  $Source$
+*/
 //-----------------------------------------------------------------------------
 
 package gmp;
