@@ -496,6 +496,7 @@ public class GtpShell
         {
             assert(SwingUtilities.isEventDispatchThread());
             m_gtpShell.m_gtpShellText.appendLog(m_text);
+            m_gtpShell.setFinalSize();
         }
 
         private String m_text;
@@ -741,17 +742,13 @@ public class GtpShell
 
     /** Modify dialog size after first write.
         This is a workaround for problems with a JTextPane in a JScrollable
-        in Sun's JDK (version 1.4)
+        in Sun JDK 1.4 and Mac JDK 1.4.
         Sometimes garbage text is left after inserting text
         if the JTextPane was created empty and the size was set by
         JScrollpane.setPreferredSize or letting the scrollable track the
         viewport width.
         The garbage text disappears after resizing the dialog,
-        so we use JDialog.setSize (see below) instead of
-        JScrollpane.setPreferredSize.
-        On Mac JDK 1.4 it is even necessary to resize the dialog twice,
-        so we start with a smaller size and set the final size after the
-        first text was inserted.
+        so we use JDialog.setSize after the first text was inserted.
     */
     private void setFinalSize()
     {
