@@ -111,8 +111,9 @@ An dialog will be shown to edit the parameters.
 Each line of the response must contain a key and value.
 It must be possible to change a value using the same command with the
 key and new value as arguments.
-Optionally, a line can have the string "[bool]" before the key to indicate
-a boolean parameter using "1" for true and "0" for false.
+Optionally, a line can have a type identifier for the value before the key.
+Currently the types "[string]" and "[bool]" (boolean parameter using "1" for
+true and "0" for false) are supported.
 No whitespaces are allowed in the parameter keys, but underscores will be
 replaced by spaces in the labels of the dialog.
 </simpara>

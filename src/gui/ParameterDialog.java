@@ -197,24 +197,27 @@ public class ParameterDialog
             int STRING = 0;
             int BOOL = 1;
             int type = STRING;
+            if (line.startsWith("[") && line.endsWith("]"))
+            {
+                // Might be used as label for grouping parameters on tabbing
+                // panes in a later version of GoGui, so we silently accept it
+                continue;
+            }
             if (line.startsWith("[bool]"))
             {
                 type = BOOL;
                 line = line.replaceFirst("\\[bool\\]", "").trim();
             }
+            else if (line.startsWith("[string]"))
+            {
+                type = STRING;
+                line = line.replaceFirst("\\[string\\]", "").trim();
+            }
             int pos = line.indexOf(' ');
-            String key;
-            String value;
-            if (pos > 0)
-            {
-                key = line.substring(0, pos).trim();
-                value = line.substring(pos + 1).trim();
-            }
-            else
-            {
-                key = line;
-                value = "";
-            }
+            if (pos < 0)
+                continue;
+            String key = line.substring(0, pos).trim();
+            String value = line.substring(pos + 1).trim();
             if (type == BOOL)
                 parameters.add(new BoolParameter(key, value));
             else
