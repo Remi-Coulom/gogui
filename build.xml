@@ -302,7 +302,7 @@ installation directory.
  gui/SimpleDialogs.class
  gtp/*.class
  gtpdisplay/*.class
- images/icon.png
+ images/gogui.png
  images/wood.png
  latex/Filter.class
  sgf/Filter.class
