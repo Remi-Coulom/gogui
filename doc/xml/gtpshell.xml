@@ -1,0 +1,27 @@
+<chapter>
+  <title>The GTP shell</title>
+  
+  <para>
+    The GTP shell is a window that allows to trace the
+    stream of GTP commands and responses that are sent to and
+    received from the Go program.
+    Also, it allows to enter any command and send it to the Go program.
+    <warning>
+      <para>
+	It is not advisable to send any GTP commands to the Go program
+	directly that alter the board state, since it will cause
+	the graphical board to be out of sync with the Go program.
+      </para>
+    </warning>
+  </para>
+  
+  <para>
+    From the menu of the GTP shell window it is possible to save
+    the GTP commands and responses or the commands only to a file.
+    Note that the history of the GTP streams will be truncated
+    depending on the values of <userinput>gtpshell-history-min</userinput>
+    and <userinput>gtpshell-history-max</userinput> in the configuration
+    file <userinput>~/.gogui/config</userinput>.
+  </para>
+  
+</chapter>

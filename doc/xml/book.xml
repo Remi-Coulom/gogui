@@ -5,6 +5,7 @@
  <!ENTITY programs SYSTEM "programs.xml">
  <!ENTITY compatibility SYSTEM "compatibility.xml">
  <!ENTITY interrupt SYSTEM "interrupt.xml">
+ <!ENTITY gtpshell SYSTEM "gtpshell.xml">
  <!ENTITY analyze SYSTEM "analyze.xml">
  <!ENTITY news SYSTEM "news.xml">
  <!ENTITY gpl SYSTEM "gpl.xml">
@@ -18,6 +19,7 @@
   &compatibility;
   &interrupt;
   &analyze;
+  &gtpshell;
   &news;
   &gpl;
   
