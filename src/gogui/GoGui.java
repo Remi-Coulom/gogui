@@ -2028,6 +2028,13 @@ class GoGui
                     return true;
                 }
                 
+                public boolean handleOpenFile(String filename)
+                {
+                    assert(SwingUtilities.isEventDispatchThread());
+                    loadFile(new File(filename), -1);
+                    return true;
+                }
+                
                 public boolean handleQuit()
                 {
                     assert(SwingUtilities.isEventDispatchThread());

@@ -24,6 +24,11 @@ public class Platform
             return false;
         }
 
+        public boolean handleOpenFile(String filename)
+        {
+            return false;
+        }
+
         public boolean handleQuit()
         {
             return true;

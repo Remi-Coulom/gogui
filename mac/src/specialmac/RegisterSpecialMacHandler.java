@@ -23,6 +23,11 @@ class Listener
         event.setHandled(m_handler.handleAbout());
     }
 
+    public void handleOpenFile(ApplicationEvent event)
+    {
+        event.setHandled(m_handler.handleOpenFile(event.getFilename()));
+    }
+
     public void handleQuit(ApplicationEvent event)
     {
         event.setHandled(m_handler.handleQuit());
