@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=GNU Go
-Comment=Go program GNU Go (using GoGui as graphical user interface)
+Name=GoGui - GNU Go
+Comment=Go program GNU Go running in GoGui
 Exec=gogui -program 'gnugo --mode gtp' %f
 TryExec=gnugo
 Icon=gogui-gnugo.png
