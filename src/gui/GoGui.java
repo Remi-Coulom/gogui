@@ -1162,6 +1162,8 @@ class GoGui
             Move m = new Move(p, toMove);
             m_board.play(m);
             m_timeControl.stopMove();
+            if (m.getPoint() == null && ! (m_computerBlack && m_computerWhite))
+                showInfo("The computer passed.");
             boardChanged();
         }
         catch (Gtp.Error e)
