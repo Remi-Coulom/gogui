@@ -259,10 +259,7 @@ class AnalyzeDialog
     public void valueChanged(ListSelectionEvent e)
     {
         String value = (String)m_list.getSelectedValue();
-        if (value == null)
-            m_runButton.setEnabled(false);
-        else
-            m_runButton.setEnabled(! value.equals(m_lastCommandSent));
+        m_runButton.setEnabled(value != null);
     }
 
     public void windowActivated(WindowEvent e)
