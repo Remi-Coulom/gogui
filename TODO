@@ -3,21 +3,13 @@ BUGS:
 GoGui: check if setup will capture anything and issue a warning, because setup
 stones are transmitted to the program by play commands
 
-var output: strings are not cleared when running a new var command
-
 
 IMPROVEMENTS:
 
-Game tree viewer should allow to hide variations and start with all
-side variations hidden to allow loading large SGF trees like
-GNU Go's SGF traces.
-
-Implement search in node comments.
+Allow to use timeout in gtp.Gtp.waitForExit() to offer the user to
+kill the program if it does not exit after its input stream is closed.
 
 SquareLayout should be used in gui.Board
-
-New analyze return type that automatically translates numbers (labels?)
-to a color board with automatically assigned colors.
 
 GtpRegress: change into gtp test file directory, optional?
 
