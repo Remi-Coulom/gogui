@@ -2043,7 +2043,7 @@ class GoGui
         m_menuBar.saveRecent();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        if (m_rememberWindowSizes)
+        if (m_commandThread != null && m_rememberWindowSizes)
         {
             saveSize(this, "window-gogui", m_boardSize);
             if (m_gtpShell != null)
