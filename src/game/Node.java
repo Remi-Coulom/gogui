@@ -142,6 +142,21 @@ public class Node
         return (Node)m_children.get(i);
     }
 
+    /** Get child node containg a certain move.
+        @return null if no such child existst.
+    */
+    public Node getChildWithMove(Move move)
+    {
+        for (int i = 0; i < getNumberChildren(); ++i)
+        {
+            Node child = getChild(i);
+            Move childMove = getChild(i).getMove();
+            if (childMove != null && childMove.equals(move))
+                return child;
+        }
+        return null;
+    }
+
     public String getComment()
     {
         return m_comment;
