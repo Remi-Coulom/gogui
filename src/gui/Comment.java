@@ -21,9 +21,15 @@ class Comment
     extends JPanel
     implements DocumentListener
 {
-    public Comment()
+    public interface Listener
+    {
+        public void changed();
+    }
+
+    public Comment(Listener listener)
     {
         super(new GridLayout(1, 0));
+        m_listener = listener;
         m_textArea = new JTextArea();
         m_textArea.setRows(5);
         m_textArea.setLineWrap(true);
@@ -70,11 +76,14 @@ class Comment
 
     private JTextArea m_textArea;
 
+    private Listener m_listener;
+
     private Node m_node;
 
     private void copyContentToNode()
     {
         if (m_node != null)
             m_node.setComment(m_textArea.getText().trim());
+        m_listener.changed();
     }
 }

@@ -80,7 +80,9 @@ class GoGui
         m_boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         m_boardPanel.add(m_guiBoard);
 
-        m_comment = new Comment();
+        Comment.Listener commentListener = new Comment.Listener()
+            { public void changed() { cbCommentChanged(); } };
+        m_comment = new Comment(commentListener);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                                               m_boardPanel, m_comment);
@@ -991,6 +993,12 @@ class GoGui
         cbNewGame(boardSize);
     }
     
+    private void cbCommentChanged()
+    {
+        m_needsSave = true;
+        m_gameTreeViewer.redrawCurrentNode();
+    }
+
     private void cbComputerBoth()
     {
         computerBoth();

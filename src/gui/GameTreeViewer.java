@@ -189,6 +189,12 @@ class GameTreePanel
         super.paintComponent(graphics);
     }
 
+    public void redrawCurrentNode()
+    {
+        GameNode gameNode = getGameNode(m_currentNode);
+        gameNode.repaint();
+    }
+
     public void update(GameTree gameTree, Node currentNode)
     {
         assert(currentNode != null);
@@ -315,6 +321,11 @@ public class GameTreeViewer
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         pack();
         m_listener = listener;
+    }
+
+    public void redrawCurrentNode()
+    {
+        m_panel.redrawCurrentNode();
     }
 
     public void toTop()
