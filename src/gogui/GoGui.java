@@ -420,31 +420,40 @@ class GoGui
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        Vector shortestPath = m_currentNode.getShortestPath(node);
-        for (int i = 0; i < shortestPath.size(); ++i)
+        setFastUpdate(true);
+        try
         {
-            Node nextNode = (Node)shortestPath.get(i);
-            if (nextNode == m_currentNode)
+            Vector shortestPath = m_currentNode.getShortestPath(node);
+            for (int i = 0; i < shortestPath.size(); ++i)
             {
-                if (! backward(1))
-                    break;
-            }
-            else
-            {
-                if (! checkCurrentNodeExecuted())
-                    break;
-                assert(nextNode.isChildOf(m_currentNode));
-                m_currentNode = nextNode;
-                try
+                Node nextNode = (Node)shortestPath.get(i);
+                if (nextNode == m_currentNode)
                 {
-                    executeCurrentNode();
+                    if (! backward(1, false))
+                        break;
                 }
-                catch (Gtp.Error e)
+                else
                 {
-                    showGtpError(e);
-                    break;
+                    if (! checkCurrentNodeExecuted())
+                        break;
+                    assert(nextNode.isChildOf(m_currentNode));
+                    m_currentNode = nextNode;
+                    try
+                    {
+                        executeCurrentNode();
+                    }
+                    catch (Gtp.Error e)
+                    {
+                        showGtpError(e);
+                        break;
+                    }
+                    m_gameInfo.fastUpdateMoveNumber(m_currentNode);
                 }
             }
+        }
+        finally
+        {
+            setFastUpdate(false);
         }
         boardChangedBegin(false, false);
     }
@@ -927,9 +936,10 @@ class GoGui
         return true;
     }    
 
-    private boolean backward(int n)
+    private boolean backward(int n, boolean setFastUpdate)
     {
-        setFastUpdate(true);
+        if (setFastUpdate)
+            setFastUpdate(true);
         try
         {
             for (int i = 0; i < n; ++i)
@@ -950,7 +960,8 @@ class GoGui
         }
         finally
         {
-            setFastUpdate(false);
+            if (setFastUpdate)
+                setFastUpdate(false);
         }
         return true;
     }
@@ -995,7 +1006,7 @@ class GoGui
 
     private void cbBeginning()
     {
-        backward(m_currentNode.getDepth());
+        backward(m_currentNode.getDepth(), true);
         boardChangedBegin(false, false);
     }
 
@@ -1007,7 +1018,7 @@ class GoGui
 
     private void cbBackward(int n)
     {
-        backward(n);
+        backward(n, true);
         boardChangedBegin(false, false);
     }
 
@@ -1092,30 +1103,20 @@ class GoGui
                 showError("Invalid move number");
                 return;
             }
-            int numberNodes = 0;
             Node node = m_currentNode;
-            if (gotoNumber < moveNumber)
+            if (gotoNumber < node.getMoveNumber())
             {
-                while (node.getFather() != null && moveNumber > gotoNumber)
-                {
-                    if (node.getMove() != null)
-                        --moveNumber;
-                    ++numberNodes;
+                while (node.getFather() != null
+                       && node.getMoveNumber() > gotoNumber)
                     node = node.getFather();
-                }
-                backward(numberNodes);
             }
             else
             {
-                while (node.getChild() != null && moveNumber < gotoNumber)
-                {
-                    if (node.getMove() != null)
-                        ++moveNumber;
-                    ++numberNodes;
+                while (node.getChild() != null
+                       && node.getMoveNumber() < gotoNumber)
                     node = node.getChild();
-                }
-                forward(numberNodes);
             }
+            gotoNode(node);
             boardChangedBegin(false, false);
         }
         catch (NumberFormatException e)
@@ -1473,7 +1474,7 @@ class GoGui
         if (! showQuestion("Truncate current node and all its children?"))
             return;
         Node oldCurrentNode = m_currentNode;
-        backward(1);
+        backward(1, false);
         m_currentNode.removeChild(oldCurrentNode);
         m_needsSave = true;
         boardChangedBegin(false, true);
