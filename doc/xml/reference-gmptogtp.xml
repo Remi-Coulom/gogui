@@ -41,7 +41,7 @@
        For using this tool, an implementation of the
        <ulink url="http://java.sun.com/products/javacomm/">
        Java Communications API</ulink> must be installed
-       <ulink url="http://www.rxtx.org/">rxtx</ulink>
+       (<ulink url="http://www.rxtx.org/">rxtx</ulink>
        is a version supporting Linux).
     </para>
   </refsection>
@@ -71,7 +71,7 @@
       </varlistentry>
       <varlistentry>
 	<term>
-	  <option>-device</option><replaceable>serial</replaceable>
+	  <option>-device</option> <replaceable>serial</replaceable>
 	</term>
 	<listitem>
 	  Serial device name.
