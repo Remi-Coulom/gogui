@@ -490,15 +490,15 @@ public class TwoGtp
             blackName = m_whiteName;
             whiteName = m_blackName;
         }
-        if (! m_sgfFile.equals(""))
-        {
-            buffer.append("Game ");
-            buffer.append(m_gameIndex + 1);
-            buffer.append("  ");
-        }
         buffer.append(blackName);
         buffer.append(" - ");
         buffer.append(whiteName);
+        if (! m_sgfFile.equals(""))
+        {
+            buffer.append(" (");
+            buffer.append(m_gameIndex + 1);
+            buffer.append(")");
+        }
         return buffer.toString();
     }
 
