@@ -386,23 +386,23 @@ public class Analyze
         out.print("<h2>Result [" + name + "]</h2>\n" +
                   "<p>\n" +
                   "<table border=\"0\">\n" +
-                  "<tr><th align=\"left\">Black score["
-                  + name + "]:</th><td align=\"left\">"
+                  "<tr><th align=\"left\">Black score"
+                  + ":</th><td align=\"left\">"
                   + format.format(statistics.m_histo.getMean()) + " (&plusmn;"
                   + format.format(statistics.m_histo.getErrorMean())
                   + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Black wins["
-                  + name + "]:</th><td align=\"left\">"
+                  "<tr><th align=\"left\">Black wins"
+                  + ":</th><td align=\"left\">"
                   + format.format(statistics.m_win.getMean() * 100)
                   + "% (&plusmn;"
                   + format.format(statistics.m_win.getErrorMean() * 100)
                   + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Unknown Result["
-                  + name + "]:</th><td align=\"left\">"
+                  "<tr><th align=\"left\">Unknown Result"
+                  + ":</th><td align=\"left\">"
                   + format.format(statistics.m_unknownResult.getMean() * 100)
                   + "%" + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Unknown Score["
-                  + name + "]:</th><td align=\"left\">"
+                  "<tr><th align=\"left\">Unknown Score"
+                  + ":</th><td align=\"left\">"
                   + format.format(statistics.m_unknownScore.getMean() * 100)
                   + "%" + "</td></tr>\n" +
                   "</table>\n" +
