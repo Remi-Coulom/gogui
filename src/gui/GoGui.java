@@ -337,8 +337,9 @@ class GoGui
             Vector pointListArg = m_analyzeCommand.getPointListArg();
             if (pointListArg.contains(p))
             {
-                if (! modifiedSelect)
-                    pointListArg.remove(p);
+                pointListArg.remove(p);
+                if (modifiedSelect)
+                    pointListArg.add(p);
             }
             else
                 pointListArg.add(p);
