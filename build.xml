@@ -122,6 +122,7 @@ installation directory.
  doc/man/*.1,
  doc/xml/*.xml,
  doxygen/Doxyfile,
+ doxygen/footer.html,
  lib/*.jar,
  sgf/openings/9x9/README
  sgf/openings/9x9/*.sgf
