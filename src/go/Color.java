@@ -9,9 +9,11 @@ package go;
 
 public class Color
 {
-    public static Color BLACK = new Color();
-    public static Color WHITE = new Color();
-    public static Color EMPTY = new Color();
+    public static final Color BLACK = new Color();
+
+    public static final Color WHITE = new Color();
+
+    public static final Color EMPTY = new Color();
 
     public Color otherColor()
     {

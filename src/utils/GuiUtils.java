@@ -13,9 +13,9 @@ import javax.swing.border.*;
 
 public class GuiUtils
 {
-    public static int PAD = 5;
+    public static final int PAD = 5;
 
-    public static int SMALL_PAD = 2;
+    public static final int SMALL_PAD = 2;
 
     public static Border createEmptyBorder()
     {
