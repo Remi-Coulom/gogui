@@ -1,16 +1,16 @@
 <appendix id="bugs">
-  <title>Bugs</title>
-  <section>
-    <title>Rendering errors in GTP shell</title>
-    <para>
-      Rendering errors in the GTP shell window occur which disappear
-      after manually resizing the window.
-      This is probably a bug in the Java libraries.
-      With Java 1.4.2 for Linux this problem seems to have disappeared
-      after introducing a workaround which resets the window size
-      after each text update.
-      With other Java versions or on other systems the problem still
-      exists.
-    </para>
-  </section>
+<title>Bugs</title>
+
+<section>
+<title>Rendering errors in GTP shell</title>
+<para>
+Rendering errors in the GTP shell window occur which disappear after manually
+resizing the window.
+This is probably a bug in the Java libraries.
+With Java 1.4.2 for Linux this problem seems to have disappeared after
+introducing a workaround which resets the window size after each text update.
+With other Java versions or on other systems the problem still exists.
+</para>
+</section>
+
 </appendix>

@@ -1,76 +1,83 @@
 <refentry id="reference-gtpserver">
-  <refmeta>
-    <refentrytitle>gtpserver</refentrytitle>
-    <manvolnum>1</manvolnum>
-  </refmeta>
-  <refnamediv>
-    <refname>gtpserver</refname>
-    <refname>gtpserver.jar</refname>
-    <refpurpose>
-       Connects a Go program supporting Go Text Protocol to a listen socket.
-    </refpurpose>
-  </refnamediv>
-  <refsynopsisdiv>
-    <cmdsynopsis>
-      <command>gtpserver</command>
-      <arg><option>-help</option></arg>
-      <arg><option>-loop</option></arg>
-      <arg><option>-verbose</option></arg>
-      <arg><option>-version</option></arg>
-      <arg choice="plain"><replaceable>program</replaceable></arg>
-      <arg choice="plain"><replaceable>port</replaceable></arg>
-    </cmdsynopsis>
-  </refsynopsisdiv>
 
-  <refsection>
-    <title>Description</title>
-    <para>
-       Runs a Go program supporting the Go Text Protocol by executing
-       <arg choice="plain"><replaceable>program</replaceable></arg>
-       and connects its input and output to a listen socket on port number
-       <arg choice="plain"><replaceable>port</replaceable></arg>
-       of the local computer so that other programs can connect to it from the
-       network.
-    </para>
-  </refsection>
+<refmeta>
+<refentrytitle>gtpserver</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
 
-  <refsection>
-    <title>Options</title>
-    <variablelist>
-      <varlistentry>
-	<term>
-	  <option>-help</option>
-	</term>
-	<listitem>
-	  Display help and exit.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-loop</option>
-	</term>
-	<listitem>
-	  Restart program and wait for next connection after connection
-	  is finished.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-verbose</option>
-	</term>
-	<listitem>
-	  Print debugging messages.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-        <term>
-	  <option>-version</option>
-        </term>
-        <listitem>
-          Print version and exit.
-        </listitem>
-      </varlistentry>
-    </variablelist>
-  </refsection>
+<refnamediv>
+<refname>gtpserver</refname>
+<refname>gtpserver.jar</refname>
+<refpurpose>
+Connects a Go program supporting Go Text Protocol to a listen socket.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtpserver</command>
+<arg><option>-help</option></arg>
+<arg><option>-loop</option></arg>
+<arg><option>-verbose</option></arg>
+<arg><option>-version</option></arg>
+<arg choice="plain"><replaceable>program</replaceable></arg>
+<arg choice="plain"><replaceable>port</replaceable></arg>
+  </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Runs a Go program supporting the Go Text Protocol by executing
+<arg choice="plain"><replaceable>program</replaceable></arg>
+and connects its input and output to a listen socket on port number
+<arg choice="plain"><replaceable>port</replaceable></arg>
+of the local computer so that other programs can connect to it from the
+network.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-help</option>
+</term>
+<listitem>
+Display help and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-loop</option>
+</term>
+<listitem>
+Restart program and wait for next connection after connection is finished.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-verbose</option>
+</term>
+<listitem>
+Print debugging messages.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-version</option>
+</term>
+<listitem>
+Print version and exit.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
 
 </refentry>

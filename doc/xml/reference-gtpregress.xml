@@ -1,90 +1,96 @@
 <refentry id="reference-gtpregress">
-  <refmeta>
-    <refentrytitle>gtpregress</refentrytitle>
-    <manvolnum>1</manvolnum>
-  </refmeta>
-  <refnamediv>
-    <refname>gtpregress</refname>
-    <refname>gtpregress.jar</refname>
-    <refpurpose>
-       Runs GTP regression tests.
-    </refpurpose>
-  </refnamediv>
-  <refsynopsisdiv>
-    <cmdsynopsis>
-      <command>gtpregress</command>
-      <arg><option>-help</option></arg>
-      <arg><option>-output</option> <replaceable>directory</replaceable></arg>
-      <arg><option>-version</option></arg>
-      <arg choice="plain"><replaceable>program</replaceable></arg>
-      <arg choice="plain" rep="repeat">
-        <replaceable>test.tst</replaceable>
-      </arg>
-    </cmdsynopsis>
-  </refsynopsisdiv>
+<refmeta>
+<refentrytitle>gtpregress</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
 
-  <refsection>
-    <title>Description</title>
-    <para>
-       Runs a regression test for a Go program supporting the Go Text Protocol
-       and formats the output as HTML.
-       The regression tests are GTP files using the special comment
-       <userinput>#?</userinput> as used for the
-       <ulink url="http://www.gnu.org/software/gnugo/gnugo.html">GNU Go</ulink>
-       regression tests (see section 
-       <ulink url="http://www.uni-bonn.de/~uzsxtn/gnugo_22.html#SEC212">
-       Regression testing</ulink> of the GNU Go documentation.
-       The main output file is <filename>index.html</filename>.
-       For each test file
-       <filename><replaceable>test</replaceable>.tst</filename>
-       additional files with name
-       <filename><replaceable>test</replaceable>.html</filename> and
-       <filename><replaceable>test</replaceable>.out.html</filename>
-       are generated.
-       An additional special comment
-       <userinput>#&gt; <arg><replaceable>file</replaceable></arg></userinput>
-       can be used to add the output of the last command to
-       <filename><replaceable>file</replaceable></filename> prepended
-       by the ID of the last test and 0/1 if the last test passed/failed.
-       This is useful if there is are extension commands for printing
-       statistics.
-       If the statistics commands output a single line, the resulting
-       file can be processed as a table.
-       If no filename is given to <userinput>#&gt;</userinput> the file
-       <filename><replaceable>test</replaceable>.dat</filename>
-       will be used.
-    </para>
-  </refsection>
+<refnamediv>
+<refname>gtpregress</refname>
+<refname>gtpregress.jar</refname>
+<refpurpose>
+Runs GTP regression tests.
+</refpurpose>
+</refnamediv>
 
-  <refsection>
-    <title>Options</title>
-    <variablelist>
-      <varlistentry>
-	<term>
-	  <option>-help</option>
-	</term>
-	<listitem>
-	  Display help and exit.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-output</option> <replaceable>directory</replaceable>
-	</term>
-	<listitem>
-	  Write output files to
-	  <filename><replaceable>directory</replaceable></filename>.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-version</option>
-	</term>
-	<listitem>
-	  Print version and exit.
-	</listitem>
-      </varlistentry>
-    </variablelist>
-  </refsection>
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtpregress</command>
+<arg><option>-help</option></arg>
+<arg><option>-output</option> <replaceable>directory</replaceable></arg>
+<arg><option>-version</option></arg>
+<arg choice="plain"><replaceable>program</replaceable></arg>
+<arg choice="plain" rep="repeat">
+<replaceable>test.tst</replaceable>
+</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Runs a regression test for a Go program supporting the Go Text Protocol
+and formats the output as HTML.
+The regression tests are GTP files using the special comment
+<userinput>#?</userinput> as used for the
+<ulink url="http://www.gnu.org/software/gnugo/gnugo.html">GNU Go</ulink>
+regression tests (see section 
+<ulink url="http://www.uni-bonn.de/~uzsxtn/gnugo_22.html#SEC212">
+Regression testing</ulink> of the GNU Go documentation.
+The main output file is <filename>index.html</filename>.
+For each test file
+<filename><replaceable>test</replaceable>.tst</filename>
+additional files with name
+<filename><replaceable>test</replaceable>.html</filename> and
+<filename><replaceable>test</replaceable>.out.html</filename>
+are generated.
+An additional special comment
+<userinput>#&gt; <arg><replaceable>file</replaceable></arg></userinput>
+can be used to add the output of the last command to
+<filename><replaceable>file</replaceable></filename> prepended
+by the ID of the last test and 0/1 if the last test passed/failed.
+This is useful if there is are extension commands for printing
+statistics.
+If the statistics commands output a single line, the resulting
+file can be processed as a table.
+If no filename is given to <userinput>#&gt;</userinput> the file
+<filename><replaceable>test</replaceable>.dat</filename>
+will be used.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-help</option>
+</term>
+<listitem>
+Display help and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-output</option> <replaceable>directory</replaceable>
+</term>
+<listitem>
+Write output files to
+<filename><replaceable>directory</replaceable></filename>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-version</option>
+</term>
+<listitem>
+Print version and exit.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
 
 </refentry>

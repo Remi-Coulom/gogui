@@ -1,55 +1,57 @@
 <refentry id="reference-netgtp">
-  <refmeta>
-    <refentrytitle>netgtp</refentrytitle>
-    <manvolnum>1</manvolnum>
-  </refmeta>
-  <refnamediv>
-    <refname>netgtp</refname>
-    <refname>netgtp.jar</refname>
-    <refpurpose>
-      Connects to a remote Go program supporting Go Text Protocol.
-    </refpurpose>
-  </refnamediv>
-  <refsynopsisdiv>
-    <cmdsynopsis>
-      <command>netgtp</command>
-      <arg><option>-help</option></arg>
-      <arg><option>-version</option></arg>
-      <arg choice="plain"><replaceable>hostname</replaceable></arg>
-      <arg choice="plain"><replaceable>port</replaceable></arg>
-    </cmdsynopsis>
-  </refsynopsisdiv>
 
-  <refsection>
-    <title>Description</title>
-    <para>
-      Connects to a Go program supporting Go Text Protocol on a remote
-      computer with host name <replaceable>hostname</replaceable>
-      on port <replaceable>port</replaceable> and connects the network output
-      and input stream to standard input and output.
-    </para>
-  </refsection>
+<refmeta>
+<refentrytitle>netgtp</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
 
-  <refsection>
-    <title>Options</title>
-    <variablelist>
-      <varlistentry>
-	<term>
-	  <option>-help</option>
-	</term>
-	<listitem>
-	  Display help and exit.
-	</listitem>
-      </varlistentry>
-    </variablelist>
-    <varlistentry>
-      <term>
-	<option>-version</option>
-      </term>
-      <listitem>
-        Print version and exit.
-      </listitem>
-    </varlistentry>
-  </refsection>
+<refnamediv>
+<refname>netgtp</refname>
+<refname>netgtp.jar</refname>
+<refpurpose>
+Connects to a remote Go program supporting Go Text Protocol.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>netgtp</command>
+<arg><option>-help</option></arg>
+<arg><option>-version</option></arg>
+<arg choice="plain"><replaceable>hostname</replaceable></arg>
+<arg choice="plain"><replaceable>port</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Connects to a Go program supporting Go Text Protocol on a remote
+computer with host name <replaceable>hostname</replaceable>
+on port <replaceable>port</replaceable> and connects the network output
+and input stream to standard input and output.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+Display help and exit.
+</listitem>
+</varlistentry>
+
+</variablelist>
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+Print version and exit.
+</listitem>
+</varlistentry>
+
+</refsection>
 
 </refentry>

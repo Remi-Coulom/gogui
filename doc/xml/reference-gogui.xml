@@ -1,207 +1,223 @@
 <refentry id="reference-gogui">
-  <refmeta>
-    <refentrytitle>gogui</refentrytitle>
-    <manvolnum>1</manvolnum>
-  </refmeta>
-  <refnamediv>
-    <refname>gogui</refname>
-    <refname>gogui.jar</refname>
-    <refpurpose>Graphical user interface for Go programs</refpurpose>
-  </refnamediv>
-  <refsynopsisdiv>
-    <cmdsynopsis>
-      <command>gogui</command>
-      <arg><option>-analyze</option> <replaceable>command</replaceable></arg>
-      <arg><option>-auto</option></arg>
-      <group choice="opt">
-	<arg choice="plain"><option>-computer-black</option></arg>
-	<arg choice="plain"><option>-computer-both</option></arg>
-	<arg choice="plain"><option>-computer-none</option></arg>
-      </group>
-      <arg><option>-command</option> <replaceable>command</replaceable></arg>
-      <arg><option>-file</option> <replaceable>filename</replaceable></arg>
-      <arg><option>-fillpasses</option></arg>
-      <arg><option>-gtpshell</option></arg>
-      <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
-      <arg><option>-help</option></arg>
-      <arg><option>-komi</option> <replaceable>value</replaceable></arg>
-      <arg><option>-move</option> <replaceable>n</replaceable></arg>
-      <arg><option>-rules</option>
-        <group choice="plain">
-          <arg choice="plain">chinese</arg>
-          <arg choice="plain">japanese</arg>
-        </group>
-      </arg>
-      <arg><option>-size</option> <replaceable>n</replaceable></arg>
-      <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
-      <arg><option>-verbose</option></arg>
-      <arg><option>-version</option></arg>
-      <arg><replaceable>program</replaceable></arg>
-    </cmdsynopsis>
-  </refsynopsisdiv>
 
-  <refsection>
-    <title>Description</title>
-    <para>
-      GoGui is a graphical interface to programs that play the game of Go
-      and use GTP (Go Text Protocol).      
-    </para>
-  </refsection>
+<refmeta>
+<refentrytitle>gogui</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
 
-  <refsection>
-    <title>Options</title>
-    <variablelist>
-      <varlistentry>
-	<term>
-	  <option>-analyze</option> <replaceable>command</replaceable>
-	</term>
-	<listitem>
-	  Initialize analyze command.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-auto</option>
-	</term>
-	<listitem>
-	  Automatically start a new game if the program plays both
-	  colors and a game is finished.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-command</option> <replaceable>command</replaceable>
-	</term>
-	<listitem>
-	  Send Gtp command at startup. The argument can contain multiple
-	  commands separated by '\n'.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-computer-black</option>
-	</term>
-	<listitem>
-	  Computer plays black.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-computer-both</option>
-	</term>
-	<listitem>
-	  Computer plays both sides.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-computer-none</option>
-	</term>
-	<listitem>
-	  Computer plays no side.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-file</option> <replaceable>filename</replaceable>
-	</term>
-	<listitem>
-	  Load SGF file.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-fillpasses</option>
-	</term>
-	<listitem>
-	  Never send subsequent moves of the same color to the program.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-gtpshell</option>
-	</term>
-	<listitem>
-	  Open GTP shell at startup.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-gtpfile</option> <replaceable>filename</replaceable>
-	</term>
-	<listitem>
-	  Send GTP file at startup.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-help</option>
-	</term>
-	<listitem>
-	  Display help and exit.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-komi</option> <replaceable>value</replaceable>
-	</term>
-	<listitem>
-	  Set the komi value.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-move</option> <replaceable>n</replaceable>
-	</term>
-	<listitem>
-	  Load SGF file until move number.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-rules</option>
-          <group choice="plain">
-            <arg choice="plain">chinese</arg>
-            <arg choice="plain">japanese</arg>
-          </group>
-	</term>
-	<listitem>
-	  Set rules.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-size</option> <replaceable>n</replaceable>
-	</term>
-	<listitem>
-	  Set board size.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-time</option> <replaceable>timespec</replaceable>
-	</term>
-	<listitem>
-	  Set time limits (min[+min/moves]).
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-verbose</option>
-	</term>
-	<listitem>
-	  Print debugging messages.
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>
-	  <option>-version</option>
-	</term>
-	<listitem>
-	  Print version and exit.
-	</listitem>
-      </varlistentry>
-    </variablelist>
-  </refsection>
+<refnamediv>
+<refname>gogui</refname>
+<refname>gogui.jar</refname>
+<refpurpose>Graphical user interface for Go programs</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gogui</command>
+<arg><option>-analyze</option> <replaceable>command</replaceable></arg>
+<arg><option>-auto</option></arg>
+<group choice="opt">
+<arg choice="plain"><option>-computer-black</option></arg>
+<arg choice="plain"><option>-computer-both</option></arg>
+<arg choice="plain"><option>-computer-none</option></arg>
+</group>
+<arg><option>-command</option> <replaceable>command</replaceable></arg>
+<arg><option>-file</option> <replaceable>filename</replaceable></arg>
+<arg><option>-fillpasses</option></arg>
+<arg><option>-gtpshell</option></arg>
+<arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
+<arg><option>-help</option></arg>
+<arg><option>-komi</option> <replaceable>value</replaceable></arg>
+<arg><option>-move</option> <replaceable>n</replaceable></arg>
+<arg><option>-rules</option> <group choice="plain">
+  <arg choice="plain">chinese</arg> <arg choice="plain">japanese</arg>
+  </group></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-time</option> <replaceable>timespec</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg><option>-version</option></arg>
+<arg><replaceable>program</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+GoGui is a graphical interface to programs that play the game of Go
+and use GTP (Go Text Protocol).
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-analyze</option> <replaceable>command</replaceable>
+</term>
+<listitem>
+Initialize analyze command.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-auto</option>
+</term>
+<listitem>
+Automatically start a new game if the program plays both
+colors and a game is finished.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-command</option> <replaceable>command</replaceable>
+</term>
+<listitem>
+Send Gtp command at startup. The argument can contain multiple
+commands separated by '\n'.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-computer-black</option>
+</term>
+<listitem>
+Computer plays black.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-computer-both</option>
+</term>
+<listitem>
+Computer plays both sides.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-computer-none</option>
+</term>
+<listitem>
+Computer plays no side.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-file</option> <replaceable>filename</replaceable>
+</term>
+<listitem>
+Load SGF file.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-fillpasses</option>
+</term>
+<listitem>
+Never send subsequent moves of the same color to the program.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-gtpshell</option>
+</term>
+<listitem>
+Open GTP shell at startup.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-gtpfile</option> <replaceable>filename</replaceable>
+</term>
+<listitem>
+Send GTP file at startup.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-help</option>
+</term>
+<listitem>
+Display help and exit.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-komi</option> <replaceable>value</replaceable>
+</term>
+<listitem>
+Set the komi value.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-move</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+Load SGF file until move number.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-rules</option> <group choice="plain">
+  <arg choice="plain">chinese</arg> <arg choice="plain">japanese</arg> </group>
+</term>
+<listitem>
+Set rules.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+Set board size.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-time</option> <replaceable>timespec</replaceable>
+</term>
+<listitem>
+Set time limits (min[+min/moves]).
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-verbose</option>
+</term>
+<listitem>
+Print debugging messages.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-version</option>
+</term>
+<listitem>
+Print version and exit.
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
 
 </refentry>
