@@ -237,7 +237,7 @@ public class GtpShell
         else if (command.equals("send-file"))
             sendFile();
         else if (command.equals("close"))
-            hide();
+            setVisible(false);
     }
     
     public void itemStateChanged(ItemEvent e)
