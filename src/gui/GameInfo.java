@@ -25,6 +25,7 @@ public class GameInfo
         m_move = addEntry("To Play");
         m_number = addEntry("Moves");
         m_last = addEntry("Last Move");
+        m_variation = addEntry("Variation");
         m_captB = addEntry("Captured Black");
         m_captW = addEntry("Captured White");
         m_timeB = addEntry("Time Black");
@@ -73,6 +74,7 @@ public class GameInfo
                 lastMove += p.toString();
         }
         m_last.setText(lastMove);
+        m_variation.setText(NodeUtils.getVariationString(node));
         double timeLeftBlack = node.getTimeLeftBlack();
         int movesLeftBlack = node.getMovesLeftBlack();
         if (! Double.isNaN(timeLeftBlack))
@@ -98,6 +100,8 @@ public class GameInfo
     private JLabel m_timeB;
 
     private JLabel m_timeW;
+
+    private JLabel m_variation;
 
     private TimeControl m_timeControl;
 
