@@ -369,10 +369,13 @@ public class Board
         m_toMove = otherColor;        
     }
 
-    public void scoreBegin()
+    public void scoreBegin(Point[] isDeadStone)
     {
         for (int i = 0; i < m_allPoints.length; ++i)
             setDead(m_allPoints[i], false);
+        if (isDeadStone != null)
+            for (int i = 0; i < isDeadStone.length; ++i)
+                setDead(isDeadStone[i], true);
         calcScore();
     }
 

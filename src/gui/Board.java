@@ -199,9 +199,9 @@ public class Board
         return Printable.PAGE_EXISTS;
     }
 
-    public void scoreBegin()
+    public void scoreBegin(go.Point[] isDeadStone)
     {
-        m_board.scoreBegin();
+        m_board.scoreBegin(isDeadStone);
         calcScore();
     }
 

@@ -7,6 +7,10 @@
       <authorinitials>enz</authorinitials>
       <revremark>
 	<itemizedlist>
+	  <listitem>
+	    Use GTP command "final_status_list" if supported by the Go program
+	    for initializing dead stones when scoring.
+	  </listitem>
 	</itemizedlist>
       </revremark>
     </revision>

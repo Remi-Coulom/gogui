@@ -916,8 +916,22 @@ class GoGui
 
     private void cbScore()
     {
+        go.Point[] isDeadStone = null;
+        if (m_commandThread != null
+            && m_commandList.contains("final_status_list"))
+        {
+            try
+            {
+                String answer =
+                    m_commandThread.sendCommand("final_status_list dead");
+                isDeadStone = Gtp.parsePointList(answer);
+            }
+            catch (Gtp.Error e)
+            {
+            }
+        }
         resetBoard();
-        m_guiBoard.scoreBegin();
+        m_guiBoard.scoreBegin(isDeadStone);
         m_scoreMode = true;
         setJMenuBar(m_menuBars.getScoreMenu());
         m_toolBar.enableAll(false, null);

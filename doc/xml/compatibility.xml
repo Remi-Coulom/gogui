@@ -61,6 +61,9 @@
     
     <itemizedlist>
       <listitem>
+	<userinput>final_status_list dead</userinput>
+      </listitem>
+      <listitem>
 	<userinput>help</userinput>
 	(<userinput>list_commands</userinput>)
       </listitem>
