@@ -108,25 +108,19 @@ class MenuBar
     {
         assert(! m_isComputerDisabled);
         disableAll();
+        m_menuFile.setEnabled(true);
+        m_itemExit.setEnabled(true);
+        m_menuGame.setEnabled(true);
         m_menuComputerColor.setEnabled(true);
         m_itemInterrupt.setEnabled(true);
-        m_menuFile.setEnabled(true);
-        m_menuSettings.setEnabled(true);
-        m_menuExperts.setEnabled(true);
         m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);
-        m_itemBeepAfterMove.setEnabled(true);
-        m_itemExit.setEnabled(true);
-        m_itemGtpShell.setEnabled(true);
         m_itemHelp.setEnabled(true);
+        m_menuSettings.setEnabled(true);
+        m_itemBeepAfterMove.setEnabled(true);
         m_itemShowLastMove.setEnabled(true);
-        if (m_isComputerDisabled)
-        {
-            disableMenu(m_menuExperts);
-            m_menuComputerColor.setEnabled(false);
-            m_itemComputerPlay.setEnabled(false);
-            m_itemBeepAfterMove.setEnabled(false);
-        }
+        m_menuExperts.setEnabled(true);
+        m_itemGtpShell.setEnabled(true);
     }
 
     public void setNormalMode()
