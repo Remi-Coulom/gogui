@@ -399,6 +399,8 @@ class GoGui
         catch (Exception e)
         {
         }
+        if (Platform.isPlatformMacOSX())
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
         boolean verbose = false;
         try
         {
