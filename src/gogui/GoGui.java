@@ -748,6 +748,8 @@ class GoGui
 
     private String m_program;
 
+    private String m_titleFromProgram;
+
     private String m_version = "";
 
     private AnalyzeDialog m_analyzeDialog;    
@@ -2674,6 +2676,11 @@ class GoGui
 
     private void setTitle()
     {
+        if (m_titleFromProgram != null)
+        {
+            setTitle(m_titleFromProgram);
+            return;
+        }
         String appName = "GoGui";        
         if (m_commandThread != null)
             appName = m_name;
@@ -2729,14 +2736,16 @@ class GoGui
 
     private void setTitleFromProgram()
     {
+        m_titleFromProgram = null;
         if (m_commandThread == null)
             return;
         if (m_commandThread.isCommandSupported("gogui_title"))
         {
             try
             {
-                String title = m_commandThread.sendCommand("gogui_title");
-                setTitle(title);
+                m_titleFromProgram =
+                    m_commandThread.sendCommand("gogui_title");
+                setTitle(m_titleFromProgram);
             }
             catch (GtpError e)
             {
