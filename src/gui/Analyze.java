@@ -17,17 +17,17 @@ import utils.*;
 
 class AnalyzeCommand
 {
-    public static final int NONE        = 0;
+    public static final int NONE = 0;
 
-    public static final int STRING      = 1;    
+    public static final int STRING = 1;    
 
     public static final int DOUBLEBOARD = 2;
 
-    public static final int POINTLIST   = 3;
+    public static final int POINTLIST = 3;
 
     public static final int STRINGBOARD = 4;
 
-    public static final int COLORBOARD  = 5;
+    public static final int COLORBOARD = 5;
 
     public AnalyzeCommand(String line)
     {
@@ -206,7 +206,6 @@ class AnalyzeDialog
         contentPane.add(createCommandPanel(), BorderLayout.CENTER);
         contentPane.add(createButtons(), BorderLayout.SOUTH);
         pack();
-        toTop();
     }
 
     public void actionPerformed(ActionEvent event)
@@ -214,16 +213,12 @@ class AnalyzeDialog
         String command = event.getActionCommand();
         if (command.equals("cancel"))
             close();
-        else if (command.equals("ok"))
+        else if (command.equals("run"))
             setCommand();
     }
 
     public void keyPressed(KeyEvent e)
     {
-        int code = e.getKeyCode();        
-        Object source = e.getSource();
-        if (source == m_comboBox && code == KeyEvent.VK_ENTER)
-            setCommand();
     }
 
     public void keyReleased(KeyEvent e) 
@@ -328,13 +323,16 @@ class AnalyzeDialog
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
         innerPanel.setBorder(GuiUtils.createEmptyBorder());
-        JButton okButton = new JButton("Ok");
-        okButton.setActionCommand("ok");
-        okButton.addActionListener(this);
-        innerPanel.add(okButton);
+        JButton runButton = new JButton("Run");
+        runButton.setActionCommand("run");
+        runButton.addActionListener(this);
+        runButton.setMnemonic(KeyEvent.VK_R);
+        getRootPane().setDefaultButton(runButton);
+        innerPanel.add(runButton);
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setActionCommand("cancel");
         cancelButton.addActionListener(this);
+        cancelButton.setMnemonic(KeyEvent.VK_C);
         innerPanel.add(cancelButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
@@ -361,7 +359,6 @@ class AnalyzeDialog
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1, GuiUtils.PAD, 0));
         m_comboBox = new JComboBox();
-        m_comboBox.addKeyListener(this);
         panel.add(m_comboBox);
         loadRecent();
         return panel;

@@ -453,7 +453,15 @@ class GoGui
         if (m_commandInProgress)
             return;
         if (! m_analyzeCommand.needsPointArg())
+        {
             analyzeBegin(false, false);
+        }
+        else
+        {
+            toFront();
+            requestFocus();
+            m_guiBoard.requestFocus();
+        }
     }
 
     public void windowActivated(WindowEvent e)
