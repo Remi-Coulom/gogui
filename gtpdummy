@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# Add -ea option to enable assertions for testing
-java -jar gtpdummy.jar "$@"

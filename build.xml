@@ -28,7 +28,7 @@ $Source$
 
 <target name="clean" depends="cleanBuildDir">
 <delete failonerror="false" includeEmptyDirs="true">
-<fileset dir="."
+<fileset dir="lib"
  includes="
    gmptogtp.jar,
    gogui.jar,
@@ -126,7 +126,8 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="gmptogtp.jar" depends="compile">
-<jar destfile="gmptogtp.jar" compress="true">
+<mkdir dir="lib"/>
+<jar destfile="lib/gmptogtp.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="gmptogtp.GmpToGtp"/>
 </manifest>
@@ -142,7 +143,8 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="gogui.jar" depends="compile">
-<jar destfile="gogui.jar" compress="true">
+<mkdir dir="lib"/>
+<jar destfile="lib/gogui.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="gui.GoGui"/>
 </manifest>
@@ -162,7 +164,8 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="gtpdummy.jar" depends="compile">
-<jar destfile="gtpdummy.jar" compress="true">
+<mkdir dir="lib"/>
+<jar destfile="lib/gtpdummy.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="gtpdummy.GtpDummy"/>
 </manifest>
@@ -180,7 +183,8 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="gtpregress.jar" depends="compile">
-<jar destfile="gtpregress.jar" compress="true">
+<mkdir dir="lib"/>
+<jar destfile="lib/gtpregress.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="gtpregress.GtpRegress"/>
 </manifest>
@@ -199,7 +203,8 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="gtpserver.jar" depends="compile">
-<jar destfile="gtpserver.jar" compress="true">
+<mkdir dir="lib"/>
+<jar destfile="lib/gtpserver.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="gtpserver.GtpServer"/>
 </manifest>
@@ -237,7 +242,8 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="netgtp.jar" depends="compile">
-<jar destfile="netgtp.jar" compress="true">
+<mkdir dir="lib"/>
+<jar destfile="lib/netgtp.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="netgtp.NetGtp"/>
 </manifest>
@@ -251,7 +257,8 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="sgftotex.jar" depends="compile">
-<jar destfile="sgftotex.jar" compress="true">
+<mkdir dir="lib"/>
+<jar destfile="lib/sgftotex.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="sgftotex.SgfToTex"/>
 </manifest>
@@ -269,7 +276,8 @@ and set the environment variable XSLDIR to the installation directory.
 </target>
 
 <target name="twogtp.jar" depends="compile">
-<jar destfile="twogtp.jar" compress="true">
+<mkdir dir="lib"/>
+<jar destfile="lib/twogtp.jar" compress="true">
 <manifest>
 <attribute name="Main-Class" value="twogtp.TwoGtp"/>
 </manifest>

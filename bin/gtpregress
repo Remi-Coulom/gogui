@@ -1,0 +1,5 @@
+#!/bin/sh
+
+LIB=`dirname $0`/../lib
+
+java -jar $LIB/gtpregress.jar "$@"

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+LIB=`dirname $0`/../lib
+
+# Add -Dgnu.io.rxtx.SerialPorts=... for ports with rxtx
+# -noverify avoids a problem with rxtx 2.05/2.16
+# (Illegal use of nonvirtual function call)
+java -jar $LIB/gmptogtp.jar "$@"
