@@ -268,6 +268,8 @@ class AnalyzeCommand
 
 interface AnalyzeCallback
 {
+    public void cbGtpShell();
+
     public void clearAnalyzeCommand();
 
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
@@ -311,6 +313,8 @@ class AnalyzeDialog
             close();
         else if (command.equals("comboBoxChanged"))
             comboBoxChanged();
+        else if (command.equals("gtp-shell"))
+            m_callback.cbGtpShell();
         else if (command.equals("only-supported"))
             onlySupported();
         else if (command.equals("reload"))
@@ -545,6 +549,7 @@ class AnalyzeDialog
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuFile());
         menuBar.add(createMenuSettings());
+        menuBar.add(createMenuWindows());
         setJMenuBar(menuBar);
     }
 
@@ -571,6 +576,15 @@ class AnalyzeDialog
         m_itemSort = new JCheckBoxMenuItem("Sort alphabetically");
         m_itemSort.setSelected(m_sort);
         addMenuItem(menu, m_itemSort, KeyEvent.VK_S, "sort");
+        return menu;
+    }
+
+    private JMenu createMenuWindows()
+    {
+        JMenu menu = new JMenu("Windows");
+        menu.setMnemonic(KeyEvent.VK_W);
+        addMenuItem(menu, "GTP shell", KeyEvent.VK_G, KeyEvent.VK_F8, 0,
+                    "gtp-shell");
         return menu;
     }
 

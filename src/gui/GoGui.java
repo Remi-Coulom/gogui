@@ -217,6 +217,12 @@ class GoGui
             assert(false);
     }
     
+    public void cbGtpShell()
+    {
+        if (m_gtpShell != null)
+            m_gtpShell.toTop();
+    }
+
     public void clearAnalyzeCommand()
     {
         m_analyzeCommand = null;
@@ -920,12 +926,6 @@ class GoGui
         {
             showError("Invalid move number.");
         }
-    }
-
-    private void cbGtpShell()
-    {
-        if (m_gtpShell != null)
-            m_gtpShell.toTop();
     }
 
     private void cbHandicap(String handicap)
