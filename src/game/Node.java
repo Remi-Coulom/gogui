@@ -190,6 +190,16 @@ public class Node
         return m_toMove;
     }
 
+    public void makeMainVariation()
+    {
+        Node node = this;
+        while (node.m_father != null)
+        {
+            node.m_father.makeMainVariation(node);
+            node = node.m_father;
+        }
+    }
+
     public void setComment(String comment)
     {
         m_comment = comment;
@@ -225,6 +235,13 @@ public class Node
     private Vector m_addWhite;
 
     private Vector m_children;
+
+    private void makeMainVariation(Node child)
+    {
+        assert(m_children.contains(child));
+        m_children.remove(child);
+        m_children.add(0, child);
+    }
 }
 
 //-----------------------------------------------------------------------------

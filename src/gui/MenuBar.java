@@ -366,6 +366,8 @@ class MenuBar
 
     private JMenuItem m_itemInterrupt;
 
+    private JMenuItem m_itemMakeMainVar;
+
     private JMenuItem m_itemNextVariation;
 
     private JMenuItem m_itemPreviousVariation;
@@ -528,6 +530,10 @@ class MenuBar
         m_itemEnd =
             addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
                         ActionEvent.CTRL_MASK, "end");
+        m_itemGoto =
+            addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
+                        ActionEvent.CTRL_MASK, "goto");
+        menu.addSeparator();
         m_itemNextVariation =
             addMenuItem(menu, "Next variation", KeyEvent.VK_V,
                         KeyEvent.VK_DOWN, ActionEvent.CTRL_MASK,
@@ -536,9 +542,8 @@ class MenuBar
             addMenuItem(menu, "Previous variation", KeyEvent.VK_A,
                         KeyEvent.VK_UP, ActionEvent.CTRL_MASK,
                         "previous-variation");
-        m_itemGoto =
-            addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
-                        ActionEvent.CTRL_MASK, "goto");
+        m_itemMakeMainVar = addMenuItem(menu, "Make main variation...",
+                                        KeyEvent.VK_M, "make-main-variation");
         m_itemTruncate = addMenuItem(menu, "Truncate...", KeyEvent.VK_T,
                                      "truncate");
         menu.addSeparator();

@@ -272,10 +272,20 @@ Go to a certain move number.
 </varlistentry>
 
 <varlistentry>
+<term><guimenuitem>Make main variation...</guimenuitem></term>
+<listitem>
+<para>
+Make the current variation to the main variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Truncate...</guimenuitem></term>
 <listitem>
 <para>
-Truncate all game moves following the current position.
+Truncate the current variation beginning at and including the current
+node.
 </para>
 </listitem>
 </varlistentry>

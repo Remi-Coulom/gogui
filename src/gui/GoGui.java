@@ -195,6 +195,8 @@ class GoGui
             cbInterrupt();
         else if (command.equals("komi"))
             cbKomi();
+        else if (command.equals("make-main-variation"))
+            cbMakeMainVariation();
         else if (command.equals("next-variation"))
             cbVariation(true);
         else if (command.equals("new-game"))
@@ -1025,6 +1027,15 @@ class GoGui
         m_board.setKomi(komi);
         m_prefs.setFloat("komi", komi);
         setKomi();
+    }
+
+    private void cbMakeMainVariation()
+    {
+        if (! showQuestion("Make current node to main variation?"))
+            return;
+        m_currentNode.makeMainVariation();
+        m_needsSave = true;
+        boardChangedBegin(false);
     }
 
     private void cbNewGame(int size)
