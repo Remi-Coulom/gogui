@@ -26,12 +26,14 @@ options to <userinput>gogui</userinput>.
 <note>
 <title><application>GoGui</application> on Unix systems</title>
 <para>
-On Unix systems, it is useful to edit the shell script
-<filename>gogui</filename> to use the locations of
-<filename>gogui.jar</filename> and the correct version
-of <filename>java</filename> and put it somewhere in your path.
-Alternatively you can add the <filename>bin</filename> directory
-of GoGui to your PATH environment variable.
+For Unix systems there are launcher scripts in the
+<filename class="directory">bin</filename> directory.
+The launcher scripts respect the environment variable
+<userinput>JAVA_HOME</userinput>, if defined, and look for the jar files
+in <filename class="directory">../lib</filename>
+relative to the <filename class="directory">bin</filename> directory.
+You can add the <filename>bin</filename> directory of GoGui to your
+<userinput>PATH</userinput> environment variable.
 The invocation is then simply:
 <blockquote>
 <simpara>

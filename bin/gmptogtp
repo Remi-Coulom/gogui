@@ -1,8 +1,13 @@
 #!/bin/sh
 
-LIB=`dirname $0`/../lib
+GOGUI_LIB=`dirname $0`/../lib
+if test -z "$JAVA_HOME"; then
+  JAVA=java
+else
+  JAVA=$JAVA_HOME/bin/java
+fi
 
 # Add -Dgnu.io.rxtx.SerialPorts=... for ports with rxtx
 # -noverify avoids a problem with rxtx 2.05/2.16
 # (Illegal use of nonvirtual function call)
-java -jar $LIB/gmptogtp.jar "$@"
+$JAVA -jar $GOGUI_LIB/gmptogtp.jar "$@"
