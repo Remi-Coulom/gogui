@@ -2040,6 +2040,20 @@ class GoGui
         {
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
+            if (file.length() > 300000L)
+            {
+                Object[] options = { "Continue", "Cancel" };
+                Object message =
+                    "Trying to load a very large file\n" +
+                    "could cause an out of memory error";
+                int n =
+                    JOptionPane.showOptionDialog(this, message, "Question",
+                                                 JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.WARNING_MESSAGE,
+                                                 null, options, options[1]);
+                if (n != 0)
+                    return;
+            }
             java.io.Reader fileReader = new FileReader(file);
             sgf.Reader reader = new sgf.Reader(fileReader, file.toString());
             GameInformation gameInformation =
