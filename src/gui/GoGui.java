@@ -54,7 +54,8 @@ class GoGui
             if (! program.equals(""))
             {
                 m_program = program;
-                m_gtpShell = new GtpShell(this, "GoGui", this, prefs);
+                // Using parent window for dialog causes rendering errors with Java 1.4.1 on Mac/WinNT  
+                m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
                 m_gtpShell.setProgramCommand(program);
             }
         }
@@ -234,8 +235,9 @@ class GoGui
         if (m_analyzeDialog == null)
         {
             Vector supportedCommands = null;
+            // Using parent window for dialog leads to rendering errors with Java 1.4.1 on Mac and WinNT
             m_analyzeDialog =
-                new AnalyzeDialog(this, this, m_prefs,
+                new AnalyzeDialog(null, this, m_prefs,
                                   m_commandThread.getSupportedCommands());
             if (m_rememberWindowSizes)
                 restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
