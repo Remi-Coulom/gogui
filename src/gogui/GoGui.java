@@ -76,7 +76,20 @@ class GoGui
         m_boardPanel.add(m_guiBoard);
 
         Comment.Listener commentListener = new Comment.Listener()
-            { public void changed() { cbCommentChanged(); } };
+            {
+                public void changed()
+                {
+                    cbCommentChanged();
+                }
+
+                public void textSelected(String text)
+                {
+                    go.Point list[] =
+                        GtpUtils.parsePointString(text, m_boardSize);
+                    m_guiBoard.showPointList(list);
+                    m_guiBoard.repaint();
+                }
+            };
         m_comment = new Comment(commentListener);
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,

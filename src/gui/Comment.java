@@ -23,6 +23,9 @@ public class Comment
     public interface Listener
     {
         public void changed();
+
+        /** Callback if some text is selected. */
+        public void textSelected(String text);
     }
 
     public Comment(Listener listener)
@@ -39,6 +42,27 @@ public class Comment
         int fontSize = GuiUtils.getDefaultMonoFontSize();
         setPreferredSize(new Dimension(20 * fontSize, 10 * fontSize));
         m_textPane.getDocument().addDocumentListener(this);
+        CaretListener caretListener = new CaretListener()
+            {
+                public void caretUpdate(CaretEvent event)
+                {
+                    if (m_listener == null)
+                        return;
+                    int start = m_textPane.getSelectionStart();
+                    int end = m_textPane.getSelectionEnd();
+                    StyledDocument doc = m_textPane.getStyledDocument();
+                    try
+                    {
+                        String text = doc.getText(start, end - start);
+                        m_listener.textSelected(text);
+                    }
+                    catch (BadLocationException e)
+                    {
+                        assert(false);
+                    }   
+                }
+            };
+        m_textPane.addCaretListener(caretListener);
         Set forwardSet  = new HashSet();
         forwardSet.add(KeyStroke.getKeyStroke("TAB"));
         int forwardId = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
