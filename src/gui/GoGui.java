@@ -722,9 +722,8 @@ class GoGui
     private void analyzeContinue(boolean checkComputerMove, boolean resetBoard)
     {
         endLengthyCommand();
-        String resultTitle =
-            m_analyzeCommand.getResultTitle(m_analyzePointArg,
-                                            m_analyzePointListArg);
+        String title = m_analyzeCommand.getResultTitle(m_analyzePointArg,
+                                                       m_analyzePointListArg);
         try
         {
             if (resetBoard)
@@ -733,114 +732,9 @@ class GoGui
             if (e != null)
                 throw e;
             String response = m_commandThread.getResponse();
-            String title = m_analyzeCommand.getTitle();
+            AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_board,
+                             m_analyzePointArg, response);
             int type = m_analyzeCommand.getType();
-            switch (type)
-            {
-            case AnalyzeCommand.BWBOARD:
-                {
-                    String board[][] = Gtp.parseStringBoard(response, title,
-                                                            m_boardSize);
-                    m_guiBoard.showBWBoard(board);
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.COLORBOARD:
-                {
-                    String board[][] = Gtp.parseStringBoard(response, title,
-                                                            m_boardSize);
-                    m_guiBoard.showColorBoard(board);
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.DOUBLEBOARD:
-                {
-                    double board[][] = Gtp.parseDoubleBoard(response, title,
-                                                            m_boardSize);
-                    m_guiBoard.showDoubleBoard(board,
-                                               m_analyzeCommand.getScale());
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.POINTLIST:
-                {
-                    go.Point list[] =
-                        Gtp.parsePointList(response, m_boardSize);
-                    m_guiBoard.showPointList(list);
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.POINTSTRINGLIST:
-                {
-                    Vector pointList = new Vector(32, 32);
-                    Vector stringList = new Vector(32, 32);
-                    Gtp.parsePointStringList(response, pointList, stringList,
-                                             m_boardSize);
-                    m_guiBoard.showPointStringList(pointList, stringList);
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.STRINGBOARD:
-                {
-                    String board[][] = Gtp.parseStringBoard(response, title,
-                                                            m_boardSize);
-                    m_guiBoard.showStringBoard(board);
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.VAR:
-                {                    
-                    go.Point list[] =
-                        Gtp.parsePointString(response, m_boardSize);
-                    m_guiBoard.showVariation(list, m_board.getToMove());
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.VARB:
-                {
-                    go.Point list[] =
-                        Gtp.parsePointString(response, m_boardSize);
-                    m_guiBoard.showVariation(list, go.Color.BLACK);
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.VARW:
-                {
-                    go.Point list[] =
-                        Gtp.parsePointString(response, m_boardSize);
-                    m_guiBoard.showVariation(list, go.Color.WHITE);
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.VARP:
-                {
-                    go.Point list[] =
-                        Gtp.parsePointString(response, m_boardSize);
-                    go.Point p = m_analyzePointArg;
-                    if (p != null)
-                    {
-                        go.Color c = m_board.getColor(p);
-                        if (c != go.Color.EMPTY)
-                            m_guiBoard.showVariation(list, c);
-                    }
-                    m_guiBoard.repaint();
-                }
-                break;
-            case AnalyzeCommand.VARPO:
-                {
-                    go.Point list[] =
-                        Gtp.parsePointString(response, m_boardSize);
-                    go.Point p = m_analyzePointArg;
-                    if (p != null)
-                    {
-                        go.Color c = m_board.getColor(p);
-                        if (c != go.Color.EMPTY)
-                            m_guiBoard.showVariation(list, c.otherColor());
-                    }
-                    m_guiBoard.repaint();
-                }
-                break;
-            }
             boolean statusContainsResponse = false;
             if (type == AnalyzeCommand.STRING
                 || type == AnalyzeCommand.POINTSTRING
@@ -852,30 +746,23 @@ class GoGui
             {
                 if (response.indexOf("\n") < 0)
                 {
-                    showStatus(resultTitle + ":  " + response);
+                    showStatus(title + ":  " + response);
                     statusContainsResponse = true;
                 }
                 else
                 {
-                    new AnalyzeTextOutput(this, resultTitle, response);
-                }
-                if (type == AnalyzeCommand.POINTSTRING)
-                {
-                    go.Point list[] =
-                        Gtp.parsePointString(response, m_boardSize);
-                    m_guiBoard.showPointList(list);
-                    m_guiBoard.repaint();
+                    new AnalyzeTextOutput(this, title, response);
                 }
             }
             if (! statusContainsResponse)
-                showStatus(resultTitle);
+                showStatus(title);
             if (! m_analyzeRequestPoint && checkComputerMove)
                 checkComputerMove();
         }
         catch(Gtp.Error e)
         {                
             showGtpError(e);
-            showStatus(resultTitle);
+            showStatus(title);
             return;
         }
     }
