@@ -630,6 +630,8 @@ class GoGui
 
     private boolean m_rememberWindowSizes;
 
+    private boolean m_resigned;
+
     private boolean m_scoreMode;
 
     private boolean m_setupMode;
@@ -1348,7 +1350,7 @@ class GoGui
             return;
         if (m_computerBlack && m_computerWhite)
         {
-            if (m_board.bothPassed())
+            if (m_board.bothPassed() || m_resigned)
             {
                 if (m_auto)
                 {
@@ -1367,7 +1369,7 @@ class GoGui
         }
         else
         {
-            if (computerToMove())
+            if (computerToMove() && ! m_resigned)
                 generateMove();
         }
         m_timeControl.startMove(m_board.getToMove());
@@ -1442,16 +1444,27 @@ class GoGui
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
                 throw e;
-            go.Point p = Gtp.parsePoint(m_commandThread.getResponse(),
-                                        m_boardSize);
-            go.Color toMove = m_board.getToMove();
-            Move m = new Move(p, toMove);
-            m_board.play(m);
             m_timeControl.stopMove();
-            if (m.getPoint() == null && ! (m_computerBlack && m_computerWhite))
-                showInfo("The computer passed.");
-            fileModified();
-            m_isModified = true;
+            String response = m_commandThread.getResponse();
+            if (response.toLowerCase().equals("resign"))
+            {
+                if (! (m_computerBlack && m_computerWhite))
+                    showInfo("Resign.");
+                m_resigned = true;
+            }
+            else
+            {
+                go.Point p = Gtp.parsePoint(response, m_boardSize);
+                go.Color toMove = m_board.getToMove();
+                Move m = new Move(p, toMove);
+                m_board.play(m);
+                if (m.getPoint() == null
+                    && ! (m_computerBlack && m_computerWhite))
+                    showInfo("Pass.");
+                fileModified();
+                m_isModified = true;
+                m_resigned = false;
+            }
             boardChangedBegin(true);
         }
         catch (Gtp.Error e)
@@ -1578,6 +1591,7 @@ class GoGui
                 m_lostOnTimeShown = true;
             }
             m_isModified = true;
+            m_resigned = false;
             boardChangedBegin(true);            
         }
         catch (Gtp.Error e)
@@ -1610,6 +1624,7 @@ class GoGui
         m_lostOnTimeShown = false;
         m_score = null;
         m_isModified = false;
+        m_resigned = false;
     }
 
     private void initialize()
