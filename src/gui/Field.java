@@ -211,7 +211,9 @@ public class Field
 
     private boolean m_select;
 
-    private int m_paintSize;
+    private int m_paintSizeBlack;
+
+    private int m_paintSizeWhite;
 
     private int m_size;
 
@@ -432,14 +434,19 @@ public class Field
                                          java.awt.Color colorBright)
     {
         RadialGradientPaint paint;
+        int paintSize;
         if (color == go.Color.BLACK)
-             paint = m_paintBlack;
+        {
+            paint = m_paintBlack;
+            paintSize = m_paintSizeBlack;
+        }
         else
         {
             assert(color == go.Color.WHITE);
             paint = m_paintWhite;
+            paintSize = m_paintSizeWhite;
         }
-        if (size == m_paintSize && paint != null)
+        if (size == paintSize && paint != null)
             return paint;
         int radius = Math.max(size / 3, 1);
         int center = size / 3;
@@ -450,10 +457,15 @@ public class Field
         paint = new RadialGradientPaint(centerPoint, colorBright,
                                         radiusPoint, colorNormal);
         if (color == go.Color.BLACK)
+        {
             m_paintBlack = paint;
+            m_paintSizeBlack = size;
+        }
         else
+        {
             m_paintWhite = paint;
-        m_paintSize = size;
+            m_paintSizeWhite = size;
+        }
         return paint;
     }
 
