@@ -34,8 +34,8 @@ public class Writer
         m_board = board;
         m_file = file;
         m_out.println("(");
-        printHeader(version, handicap, playerBlack, playerWhite, gameComment,
-                    score);
+        printHeader(file, version, handicap, playerBlack, playerWhite,
+                    gameComment, score);
         printSetup(m_board.getSetupStonesBlack(),
                    m_board.getSetupStonesWhite());
         if (m_board.getNumberSavedMoves() == 0)
@@ -53,7 +53,7 @@ public class Writer
         m_board = board;
         m_file = file;
         m_out.println("(");
-        printHeader(version);
+        printHeader(file, version);
         printPosition();
         m_out.println(")");
         m_out.close();
@@ -65,7 +65,17 @@ public class Writer
 
     private Board m_board;
 
-    private void printHeader(String version)
+    private static String getName(File file)
+    {
+        String result = file.getName();
+        int len = result.length();
+        if (len >= 4
+            && result.substring(len - 4).toLowerCase().equals(".sgf"))
+            result = result.substring(0, len - 4);
+        return result;
+    }
+
+    private void printHeader(File file, String version)
     {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -75,7 +85,11 @@ public class Writer
             Integer.toString(year) + "-" +
             (month < 10 ? "0" : "") + month + "-" +
             (day < 10 ? "0" : "") + day;
-        m_out.println(";\nFF[4]\nGM[1]\nAP[GoGui:" + version + "]\n" +
+        m_out.println(";\n" +
+                      "FF[4]\n" +
+                      "GM[1]\n" +
+                      "GN[" + getName(file) + "]\n" +
+                      "AP[GoGui:" + version + "]\n" +
                       "SZ[" + m_board.getSize() + "]");
         int rules = m_board.getRules();
         if (rules == go.Board.RULES_JAPANESE)
@@ -88,11 +102,11 @@ public class Writer
         m_out.println("DT[" + date + "]");
     }
 
-    private void printHeader(String version, int handicap, String playerBlack,
-                             String playerWhite, String gameComment,
-                             go.Score score)
+    private void printHeader(File file, String version, int handicap,
+                             String playerBlack, String playerWhite,
+                             String gameComment, go.Score score)
     {
-        printHeader(version);
+        printHeader(file, version);
         if (handicap > 0)
             m_out.println("HA[" + handicap + "]");
         else
