@@ -227,6 +227,7 @@ class GameTreePanel
     {
         if (m_gameTree == null)
             return;
+        graphics.setColor(java.awt.Color.DARK_GRAY);
         drawGrid(graphics, m_gameTree.getRoot(),
                  m_margin + m_nodeWidth / 2, m_margin + m_nodeWidth / 2);
         super.paintComponent(graphics);
@@ -342,11 +343,12 @@ class GameTreePanel
         int numberChildren = node.getNumberChildren();
         int xChild = x + m_nodeDist;
         int yChild = y;
+        int lastYChild = y;
         for (int i = 0; i < numberChildren; ++i)
         {
-            graphics.setColor(java.awt.Color.DARK_GRAY);
-            graphics.drawLine(x, y, x, yChild);
+            graphics.drawLine(x, lastYChild, x, yChild);
             graphics.drawLine(x, yChild, xChild, yChild);
+            lastYChild = yChild;
             yChild = drawGrid(graphics, node.getChild(i), xChild, yChild);
             if (i < numberChildren - 1)
                 yChild += m_nodeDist;
