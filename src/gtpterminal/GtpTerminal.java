@@ -53,12 +53,12 @@ public class GtpTerminal
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
-                System.exit(0);
+                return;
             }
             if (opt.isSet("version"))
             {
                 System.out.println("GtpTerminal " + Version.get());
-                System.exit(0);
+                return;
             }
             int size = opt.getInteger("size", 19, 1);
             boolean verbose = opt.isSet("verbose");

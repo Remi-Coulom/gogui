@@ -151,12 +151,12 @@ public class GtpAdapter
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
-                System.exit(0);
+                return;
             }
             if (opt.isSet("version"))
             {
                 System.out.println("GtpAdapter " + Version.get());
-                System.exit(0);
+                return;
             }
             boolean verbose = opt.isSet("verbose");
             boolean noScore = opt.isSet("noscore");

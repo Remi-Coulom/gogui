@@ -98,12 +98,12 @@ class GtpServer
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
-                System.exit(0);
+                return;
             }
             if (opt.isSet("version"))
             {
                 System.out.println("GtpServer " + Version.get());
-                System.exit(0);
+                return;
             }
             if (! opt.isSet("port"))
             {

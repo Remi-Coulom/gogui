@@ -52,12 +52,12 @@ class GtpRegress
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
-                System.exit(0);
+                return;
             }
             if (opt.isSet("version"))
             {
                 System.out.println("GtpRegress " + Version.get());
-                System.exit(0);
+                return;
             }
             String output = opt.getString("output", "");
             Vector arguments = opt.getArguments();

@@ -127,12 +127,12 @@ public class GtpDummy
                     "-log file     log GTP stream to file\n" +
                     "-version      print version and exit\n";
                 System.out.print(helpText);
-                System.exit(0);
+                return;
             }
             if (opt.isSet("version"))
             {
                 System.out.println("GtpDummy " + Version.get());
-                System.exit(0);
+                return;
             }
             PrintStream log = null;
             if (opt.isSet("log"))

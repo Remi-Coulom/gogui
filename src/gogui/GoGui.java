@@ -515,12 +515,12 @@ class GoGui
                     "-verbose        print debugging messages\n" +
                     "-version        print version and exit\n";
                 System.out.print(helpText);
-                System.exit(0);
+                return;
             }
             if (opt.isSet("version"))
             {
                 System.out.println("GoGui " + Version.get());
-                System.exit(0);
+                return;
             }
             Preferences prefs = new Preferences();
             String initAnalyze = opt.getString("analyze");

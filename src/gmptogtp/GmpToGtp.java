@@ -133,17 +133,17 @@ public class GmpToGtp
                     "-version print version and exit\n" +
                     "-wait    wait for first newgame command\n";
                 System.out.print(helpText);
-                System.exit(0);
+                return;
             }
             if (opt.isSet("version"))
             {
                 System.out.println("GmpToGtp " + Version.get());
-                System.exit(0);
+                return;
             }
             if (opt.isSet("list"))
             {
                 listDevices();
-                System.exit(0);
+                return;
             }
             String color = opt.getString("color", "");
             if (! color.equals(""))
