@@ -383,6 +383,16 @@ class ReadThread extends Thread
 
     public synchronized boolean send(Cmd cmd, StringBuffer response)
     {
+        while (m_state == STATE_WAIT_ANSWER_OK)
+        {
+            try
+            {
+                sleep(1000);
+            }
+            catch (InterruptedException ignored)
+            {
+            }
+        }
         if (m_state == STATE_WAIT_OK)
         {
             response.append("Command in progress");
@@ -499,6 +509,8 @@ class ReadThread extends Thread
     private static final int STATE_DENY = 3;
 
     private static final int STATE_INTERRUPTED = 4;
+
+    private static final int STATE_WAIT_ANSWER_OK = 5;
 
     private boolean m_hisLastSeq = false;
 
@@ -630,9 +642,23 @@ class ReadThread extends Thread
             answerQuery(cmd.m_val);
         else
         {
-            m_cmdQueue.add(cmd);
             sendOk();
-            m_state = STATE_IDLE;
+            if (cmd.m_cmd == Cmd.DENY)
+            {
+                if (m_state == STATE_WAIT_ANSWER_OK)
+                    m_state = STATE_IDLE;
+                else
+                {
+                    m_state = STATE_DENY;
+                    notifyAll();
+                }
+            }
+            else
+            {
+                m_cmdQueue.add(cmd);
+                m_state = STATE_IDLE;
+                notifyAll();
+            }
         }
     }
 
@@ -641,7 +667,7 @@ class ReadThread extends Thread
         Cmd cmd = getCmd();
         boolean seq = getSeq();
         boolean ack = getAck();
-        if (m_state == STATE_WAIT_OK)
+        if (m_state == STATE_WAIT_OK || m_state == STATE_WAIT_ANSWER_OK)
         {
             if (cmd.m_cmd == Cmd.OK)
             {
@@ -668,7 +694,6 @@ class ReadThread extends Thread
                 m_writeThread.stopSend();
                 m_hisLastSeq = seq;
                 handleCmd(cmd);
-                notifyAll();
                 return;
             }
             /* Actually GMP requires to abandon command on conflict,
@@ -700,7 +725,6 @@ class ReadThread extends Thread
             }
             m_hisLastSeq = seq;
             handleCmd(cmd);
-            notifyAll();
         }
     }
 
@@ -728,7 +752,8 @@ class ReadThread extends Thread
         setChecksum(packet);
         m_writeThread.sendPacket(packet);
         if (cmd != Cmd.OK)
-            m_state = STATE_WAIT_OK;
+            m_state =
+                (cmd == Cmd.ANSWER ? STATE_WAIT_ANSWER_OK : STATE_WAIT_OK);
         return true;
     }
 
