@@ -19,9 +19,10 @@ public class FindDialog
     extends JDialog
     implements ActionListener
 {
-    public FindDialog(Frame owner)
+    public FindDialog(Frame owner, String initialValue)
     {
         super(owner, "Find", true);
+        m_initialValue = initialValue;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         Container contentPane = getContentPane();
         contentPane.add(createPanel(), BorderLayout.CENTER);
@@ -53,9 +54,9 @@ public class FindDialog
         }
     }
 
-    public static String run(Frame owner)
+    public static String run(Frame owner, String initialValue)
     {
-        FindDialog dialog = new FindDialog(owner);
+        FindDialog dialog = new FindDialog(owner, initialValue);
         dialog.setLocationRelativeTo(owner);
         dialog.setVisible(true);
         return dialog.m_pattern;
@@ -64,6 +65,8 @@ public class FindDialog
     private JComboBox m_comboBox;
 
     private JTextField m_textField;
+
+    private String m_initialValue;
 
     private String m_pattern;
 
@@ -154,9 +157,11 @@ public class FindDialog
         return new File(dir, "find-history");
     }
 
-    private static Vector loadHistory()
+    private Vector loadHistory()
     {
         Vector result = new Vector(32, 32);
+        if (m_initialValue != null)
+            result.add(m_initialValue);
         File file = getHistoryFile();
         try
         {

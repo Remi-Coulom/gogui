@@ -54,6 +54,11 @@ public class Comment
         return true;
     }
 
+    public String getSelectedText()
+    {
+        return m_textPane.getSelectedText();
+    }
+
     public void insertUpdate(DocumentEvent e)
     {
         copyContentToNode();

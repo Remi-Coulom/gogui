@@ -1063,7 +1063,7 @@ class GoGui
 
     private void cbFindInComments()
     {
-        String regex = FindDialog.run(this);
+        String regex = FindDialog.run(this, m_comment.getSelectedText());
         if (regex == null)
             return;
         Pattern pattern = Pattern.compile(regex,
