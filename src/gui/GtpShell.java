@@ -65,6 +65,20 @@ class GtpShellText
     {
         return false;
     }
+
+    public String getLog()
+    {
+        StyledDocument doc = getStyledDocument();
+        try
+        {
+            return doc.getText(0, doc.getLength());
+        }
+        catch (BadLocationException e)
+        {
+            assert(false);
+            return "";
+        }
+    }
     
     private int m_fontSize;
     private Font m_font;
@@ -357,7 +371,6 @@ public class GtpShell
         public void run()
         {
             assert(SwingUtilities.isEventDispatchThread());
-            m_gtpShell.m_log.append(m_text);
             m_gtpShell.m_gtpShellText.appendLog(m_text);
         }
 
@@ -372,7 +385,6 @@ public class GtpShell
     private JComboBox m_comboBox;
     private GtpShellText m_gtpShellText;
     private MutableComboBoxModel m_model;
-    private StringBuffer m_log = new StringBuffer(8192);
     private StringBuffer m_commands = new StringBuffer(4096);
     private Vector m_history = new Vector(128, 128);
     private String m_programCommand = "unknown";
@@ -416,7 +428,6 @@ public class GtpShell
     private void appendResponse(boolean error, String response)
     {
         assert(SwingUtilities.isEventDispatchThread());
-        m_log.append(response);
         if (error)
             m_gtpShellText.appendError(response);
         else
@@ -426,8 +437,6 @@ public class GtpShell
     private void appendSentCommand(String command)
     {
         assert(SwingUtilities.isEventDispatchThread());
-        m_log.append(command);
-        m_log.append("\n");
         m_commands.append(command);
         m_commands.append("\n");
         m_gtpShellText.appendOutput(command + "\n");
@@ -450,8 +459,6 @@ public class GtpShell
             return;
         if (c.startsWith("#"))
         {
-            m_log.append(command);
-            m_log.append("\n");
             m_gtpShellText.appendComment(command + "\n");
         }
         else
@@ -595,7 +602,7 @@ public class GtpShell
         return null;
     }
 
-    private void save(StringBuffer s)
+    private void save(String s)
     {
         File file = queryFile();
         if (file == null)
@@ -619,12 +626,12 @@ public class GtpShell
 
     private void saveLog()
     {
-        save(m_log);
+        save(m_gtpShellText.getLog());
     }
 
     private void saveCommands()
     {
-        save(m_commands);
+        save(m_commands.toString());
     }
 
     /** Create wrapper object for addItem.
