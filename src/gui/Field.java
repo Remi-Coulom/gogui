@@ -90,7 +90,7 @@ public class Field
         int mask = (ActionEvent.CTRL_MASK | ActionEvent.ALT_MASK
                     | ActionEvent.META_MASK);
         boolean modifiedSelect = ((modifiers & mask) != 0);
-        if (code == KeyEvent.VK_ENTER)
+        if (code == KeyEvent.VK_ENTER && m_board.getShowCursor())
             m_board.fieldClicked(m_point, modifiedSelect);
     }
 
@@ -162,7 +162,7 @@ public class Field
             drawSelect(graphics);
         if (! m_string.equals(""))
             drawString(graphics);
-        if (isFocusOwner())
+        if (isFocusOwner() && m_board.getShowCursor())
             drawFocus(graphics);
     }
 

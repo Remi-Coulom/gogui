@@ -224,6 +224,8 @@ class GoGui
             cbSetupBlack();
         else if (command.equals("setup-white"))
             cbSetupWhite();
+        else if (command.equals("show-cursor"))
+            cbShowCursor();
         else if (command.equals("show-last-move"))
             cbShowLastMove();
         else if (command.equals("truncate"))
@@ -1168,6 +1170,12 @@ class GoGui
     {
         String message = "GoGui " + Version.m_version;
         SimpleDialogs.showAbout(this, message);
+    }
+
+    private void cbShowCursor()
+    {
+        m_guiBoard.setShowCursor(m_menuBar.getShowCursor());
+        m_guiBoard.repaint();
     }
 
     private void cbShowLastMove()

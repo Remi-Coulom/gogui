@@ -154,6 +154,11 @@ public class Board
         return result;
     }
 
+    public boolean getShowCursor()
+    {
+        return m_showCursor;
+    }
+
     public String[][] getStrings()
     {
         int size = m_board.getSize();
@@ -377,6 +382,11 @@ public class Board
         m_needsReset = true;
     }
 
+    public void setShowCursor(boolean showCursor)
+    {
+        m_showCursor = showCursor;
+    }
+
     public void setShowLastMove(boolean showLastMove)
     {
         clearLastMove();
@@ -520,6 +530,8 @@ public class Board
     }
 
     private boolean m_needsReset;
+
+    private boolean m_showCursor = true;
 
     private boolean m_showLastMove = true;
 

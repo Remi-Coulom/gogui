@@ -15,6 +15,10 @@ forward <userinput>time_settings</userinput>; fixes in format of result file.
 New <guimenu>Game</guimenu> menu item <guimenuitem>Truncate</guimenuitem>.
 </listitem>
 <listitem>
+New <guimenu>Settings</guimenu> menu item
+<guimenuitem>Show cursor</guimenuitem>.
+</listitem>
+<listitem>
 Minor fixes and improvements.
 </listitem>
 </itemizedlist>

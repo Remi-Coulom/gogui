@@ -12,9 +12,10 @@ clicking on a field has a special meaning (see
 <xref linkend="analyze"></xref>).
 </para>
 <para>
-Using the keyboard, fields can be selected by moving the
-cursor (the red square corners) with the cursor keys to the target field
-and pressing <keycap>Enter</keycap>.
+If <guimenuitem>Show cursor</guimenuitem> is enabled in the
+<guimenu>Settings</guimenu> menu, then fields can be selected using
+the keyboard by moving the cursor (the red square corners) with the cursor
+keys to the target field and pressing <keycap>Enter</keycap>.
 Holding <keycap>Shift</keycap> while pressing a cursor key moves the
 cursor to the next handicap line in this direction or to the edge
 of the board.
@@ -310,6 +311,14 @@ and the GTP shell.
 The sizes are remembered depending on the board size to
 allow a different layout of the three windows for different board
 sizes.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show cursor</guimenuitem></term>
+<listitem>
+Show cursor on board to allow clicking on fields with the
+<keycap>Enter</keycap> key.
 </listitem>
 </varlistentry>
 

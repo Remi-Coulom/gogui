@@ -116,6 +116,11 @@ class MenuBar
         return m_selectedRecent;
     }
 
+    public boolean getShowCursor()
+    {
+        return m_itemShowCursor.isSelected();
+    }
+
     public boolean getShowLastMove()
     {
         return m_itemShowLastMove.isSelected();
@@ -205,6 +210,7 @@ class MenuBar
         m_menuSettings.setEnabled(true);
         m_itemBeepAfterMove.setEnabled(true);
         m_itemRememberSizes.setEnabled(true);
+        m_itemShowCursor.setEnabled(true);
         m_itemShowLastMove.setEnabled(true);
         m_menuWindows.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
@@ -297,6 +303,8 @@ class MenuBar
     private JCheckBoxMenuItem m_itemBeepAfterMove;
 
     private JCheckBoxMenuItem m_itemRememberSizes;
+
+    private JCheckBoxMenuItem m_itemShowCursor;
 
     private JCheckBoxMenuItem m_itemShowLastMove;
 
@@ -584,9 +592,12 @@ class MenuBar
         m_itemRememberSizes.setSelected(false);
         addMenuItem(menu, m_itemRememberSizes, KeyEvent.VK_R,
                     "remember-sizes");
+        m_itemShowCursor = new JCheckBoxMenuItem("Show cursor");
+        m_itemShowCursor.setSelected(true);
+        addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_S, "show-cursor");
         m_itemShowLastMove = new JCheckBoxMenuItem("Show last move");
         m_itemShowLastMove.setSelected(true);
-        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_S,
+        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
                     "show-last-move");
         return menu;
     }
