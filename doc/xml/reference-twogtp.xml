@@ -115,6 +115,8 @@
 	</term>
 	<listitem>
 	  Compare a list of SGF files given as arguments an exit.
+	  Works only with SGF files with alternating moves and without setup
+	  stones.
 	</listitem>
       </varlistentry>
       <varlistentry>
