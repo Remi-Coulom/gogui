@@ -38,7 +38,7 @@ public class Platform
             try
             {
                 String[] cmd = { "/usr/bin/open", url.toString() };
-                runProcess(cmd);
+                ProcessUtils.runProcess(cmd);
                 return true;
             }
             catch (IOException e)
@@ -50,7 +50,7 @@ public class Platform
             try
             {
                 String[] cmd = { "kfmclient", "exec", url.toString() };
-                runProcess(cmd);
+                ProcessUtils.runProcess(cmd);
                 return true;
             }
             catch (IOException e)
@@ -59,7 +59,7 @@ public class Platform
             try
             {
                 String[] cmd = { "mozilla", url.toString() };
-                runProcess(cmd);
+                ProcessUtils.runProcess(cmd);
                 return true;
             }
             catch (IOException e)
@@ -69,7 +69,7 @@ public class Platform
             {
                 String[] cmd = { "rundll32", "url.dll,FileProtocolHandler",
                                  url.toString() };
-                runProcess(cmd);
+                ProcessUtils.runProcess(cmd);
                 return true;
             }
             catch (IOException e)
@@ -77,22 +77,6 @@ public class Platform
             }
         }
         return false;
-    }
-
-    /** Run a process.
-        Forwards the stdout/stderr of the child process to stderr of the
-        calling process.
-    */
-    public static void runProcess(String[] cmdArray) throws IOException
-    {
-        Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec(cmdArray);
-        Thread copyOut = new StreamCopy(false, process.getInputStream(),
-                                        System.err, false);
-        copyOut.start();
-        Thread copyErr = new StreamCopy(false, process.getErrorStream(),
-                                        System.err, false);
-        copyErr.start();
     }
 }
 
