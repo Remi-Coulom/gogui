@@ -11,6 +11,7 @@ import java.util.*;
 import javax.swing.*;
 import game.*;
 import go.*;
+import utils.GuiUtils;
 
 //-----------------------------------------------------------------------------
 
@@ -322,16 +323,17 @@ class GameTreePanel
 //-----------------------------------------------------------------------------
 
 public class GameTreeViewer
-    extends JDialog
+    extends JFrame
 {
     public interface Listener
     {
         public abstract void gotoNode(Node node);
     }
 
-    public GameTreeViewer(Frame owner, Listener listener)
+    public GameTreeViewer(Listener listener)
     {
-        super(owner, "Game Tree - GoGui");
+        super("Game Tree - GoGui");
+        GuiUtils.setGoIcon(this);
         Container contentPane = getContentPane();
         m_panel = new GameTreePanel(listener);
         m_scrollPane =

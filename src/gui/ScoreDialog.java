@@ -17,9 +17,9 @@ import utils.GuiUtils;
 public class ScoreDialog
     extends JDialog
 {
-    public ScoreDialog(ActionListener listener)
+    public ScoreDialog(Frame owner, ActionListener listener)
     {
-        setTitle("Score - GoGui");
+        super(owner, "Score - GoGui");
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         JPanel panelDetails = new JPanel(new GridLayout(0, 2, 0, 0));
         m_territoryBlack = createEntry(panelDetails, "Territory Black");

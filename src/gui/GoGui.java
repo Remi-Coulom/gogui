@@ -86,9 +86,7 @@ class GoGui
             };
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        URL url = classLoader.getResource("images/icon.png");
-        setIconImage(new ImageIcon(url).getImage());
+        GuiUtils.setGoIcon(this);
 
         m_menuBar = new MenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
@@ -1386,7 +1384,7 @@ class GoGui
     {
         if (m_gameTreeViewer == null)
         {
-            m_gameTreeViewer = new GameTreeViewer(null, this);
+            m_gameTreeViewer = new GameTreeViewer(this);
             restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         }
         m_gameTreeViewer.update(m_gameTree, m_currentNode);
@@ -1877,7 +1875,7 @@ class GoGui
         m_scoreMode = true;
         if (m_scoreDialog == null)
         {
-            m_scoreDialog = new ScoreDialog(this);
+            m_scoreDialog = new ScoreDialog(this, this);
             m_scoreDialog.setLocationRelativeTo(this);
             Dimension size = getSize();
             m_scoreDialog.setLocation(size.width, 0);

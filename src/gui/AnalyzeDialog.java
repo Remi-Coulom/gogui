@@ -39,6 +39,7 @@ class AnalyzeDialog
                          Vector supportedCommands)
     {
         super("Analyze - GoGui");
+        GuiUtils.setGoIcon(this);
         m_prefs = prefs;
         setPrefsDefaults(prefs);
         m_onlySupportedCommands =

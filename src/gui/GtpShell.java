@@ -194,6 +194,7 @@ public class GtpShell
     GtpShell(String appName, Callback callback, Preferences prefs)
     {
         super("GTP - " + appName);
+        GuiUtils.setGoIcon(this);
         m_callback = callback;
         m_prefs = prefs;
         setPrefsDefaults(prefs);
