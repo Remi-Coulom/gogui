@@ -353,6 +353,7 @@ class AnalyzeDialog
         createMenu();
         comboBoxChanged();
         pack();
+        m_list.requestFocus();
     }
 
     public void actionPerformed(ActionEvent event)
@@ -409,7 +410,7 @@ class AnalyzeDialog
 
     public void toTop()
     {
-        m_list.requestFocus();
+        toFront();
         setVisible(true);
     }
 
@@ -537,7 +538,10 @@ class AnalyzeDialog
     {
         String label = (String)m_comboBox.getSelectedItem();        
         if (! m_labels.contains(label))
+        {
+            m_list.clearSelection();
             return;
+        }
         String selectedValue = (String)m_list.getSelectedValue();
         if (selectedValue == null || ! selectedValue.equals(label))
             m_list.setSelectedValue(label, true);
