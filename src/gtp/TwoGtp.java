@@ -35,7 +35,6 @@ public class TwoGtp
         boolean status = true;
         if (command.equals("quit"))
         {
-            setQuit();
             status = sendBoth(command, response);
         }
         else if (command.startsWith("black"))

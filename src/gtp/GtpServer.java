@@ -13,11 +13,16 @@ import utils.*;
 
 class Command
 {
-    boolean m_hasId;
+    public boolean m_hasId;
     
-    int m_id;
+    public int m_id;
     
-    String m_command;
+    public String m_command;
+
+    public boolean isQuit()
+    {
+        return m_command.trim().toLowerCase().equals("quit");
+    }
 }
 
 class ReadThread extends Thread
@@ -74,11 +79,11 @@ class ReadThread extends Thread
                     {
                         wait();
                     }
-                    if (m_quit)
-                        return;
                     m_command = parseLine(line);
                     notifyAll();
                     m_waitCommand = false;
+                    if (m_command.isQuit())
+                        return;
                 }
             }
         }
@@ -89,12 +94,6 @@ class ReadThread extends Thread
                 msg = e.getClass().getName();
             System.err.println(msg);
         }
-    }
-
-    public synchronized void quit()
-    {
-        m_quit = true;
-        notifyAll();
     }
 
     private boolean m_quit = false;
@@ -173,15 +172,15 @@ public abstract class GtpServer
 
     public void mainLoop() throws IOException
     {
-        m_quit = false;
         ReadThread readThread = new ReadThread(this, m_in, m_out);
         readThread.start();
-        while (! m_quit)
+        while (true)
         {
             Command command = readThread.getCommand();
             sendResponse(command);
+            if (command.isQuit())
+                return;
         }
-        readThread.quit();
     }
 
     public static void respond(PrintStream out, boolean status, boolean hasId,
@@ -201,14 +200,7 @@ public abstract class GtpServer
         out.print('\n');
     }
 
-    protected void setQuit()
-    {
-        m_quit = true;
-    }
-
     private boolean m_commandHadId;
-
-    private boolean m_quit;
 
     private int m_commandId;
 

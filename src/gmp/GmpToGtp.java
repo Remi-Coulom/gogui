@@ -28,7 +28,7 @@ public class GmpToGtp
     {
         boolean status = true;
         if (command.equals("quit"))
-            setQuit();
+            return true;
         else if (command.startsWith("black"))
             return play(true, command, response);
         else if (command.startsWith("gmp_text"))
