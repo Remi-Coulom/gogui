@@ -645,6 +645,8 @@ class MenuBar
                     "analyze");
         m_itemGtpShell = addMenuItem(menu, "GTP Shell", KeyEvent.VK_G,
                                      KeyEvent.VK_F9, 0, "gtp-shell");
+        menu.addSeparator();
+        addMenuItem(menu, "Bring All to Front", KeyEvent.VK_F, "all-to-front");
         return menu;
     }
 
