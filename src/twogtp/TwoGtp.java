@@ -6,6 +6,8 @@
 package gtp;
 
 import java.io.*;
+import java.net.*;
+import java.text.*;
 import java.util.*;
 import go.*;
 import utils.*;
@@ -517,7 +519,7 @@ public class TwoGtp
             String duplicate = checkDuplicate(m_board, moves, m_games);
             saveResult(resultBlack, resultWhite, isAlternated(), duplicate,
                        moves.size(), error, errorMessage);
-            saveGame();
+            saveGame(resultBlack, resultWhite);
             ++m_gameIndex;
             m_games.add(moves);
         }
@@ -667,19 +669,41 @@ public class TwoGtp
         }
     }
 
-    private void saveGame() throws FileNotFoundException
+    private void saveGame(String resultBlack, String resultWhite)
+        throws FileNotFoundException
     {
         if (m_sgfFile.equals(""))
             return;
         String blackName = m_blackName;
         String whiteName = m_whiteName;
+        String blackCommand = m_black.getProgramCommand();
+        String whiteCommand = m_white.getProgramCommand();
         if (isAlternated())
         {
             blackName = m_whiteName;
             whiteName = m_blackName;
+            blackCommand = m_white.getProgramCommand();
+            whiteCommand = m_black.getProgramCommand();
+            String resultTmp = inverseResult(resultWhite);
+            resultWhite = inverseResult(resultBlack);
+            resultBlack = resultTmp;
         }
+        String host = "?";
+        try
+        {
+            host = InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        String gameComment =
+            "B: " + blackCommand +
+            "\nW: " + whiteCommand +
+            "\nHost: " + host +
+            "\nResult according to B: " + resultBlack +
+            "\nResult according to W: " + resultWhite;
         new sgf.Writer(getFile(m_gameIndex), m_board, "TwoGtp", null, 0,
-                       blackName, whiteName, null, null);
+                       blackName, whiteName, gameComment, null);
     }
 
     private void saveResult(String resultBlack, String resultWhite,
