@@ -384,7 +384,7 @@ class GoGui
         setSize(size);
         validate();
         if (showInfoPanel)
-            m_splitPane.setDividerLocation(dividerLocation);
+            setDividerLocation(dividerLocation);
     }
 
     public void cbShowToolbar()
@@ -2190,9 +2190,7 @@ class GoGui
             if (m_prefs.contains(name))
             {
                 int dividerLocation = m_prefs.getInt(name);
-                if (dividerLocation > 0
-                    && dividerLocation < m_splitPane.getWidth())
-                    m_splitPane.setDividerLocation(dividerLocation);
+                setDividerLocation(dividerLocation);
             }
         }
     }
@@ -2404,6 +2402,16 @@ class GoGui
     private void setCursorDefault(Component component)
     {
         component.setCursor(Cursor.getDefaultCursor());
+    }
+
+    private void setDividerLocation(int location)
+    {
+        int width = m_splitPane.getWidth();
+        if (location < 0.1 * width)
+            location = (int)(0.1 * width);
+        if (location > 0.9 * width)
+            location = (int)(0.9 * width);
+        m_splitPane.setDividerLocation(location);
     }
 
     private void setKomi(double komi)
