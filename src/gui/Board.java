@@ -202,6 +202,9 @@ public class Board
     public void scoreBegin(go.Point[] isDeadStone)
     {
         m_board.scoreBegin(isDeadStone);
+        if (isDeadStone != null)
+            for (int i = 0; i < isDeadStone.length; ++i)
+                setCrossHair(isDeadStone[i], true);
         calcScore();
     }
 
