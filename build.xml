@@ -568,7 +568,12 @@ installation directory.
 <target name="versionCheckUptodate">
 <uptodate property="versionUptodate" targetfile="src/version/Version.java">
 <srcfiles dir="."
- includes="build.xml,src/version/Version.java.in,doc/xml/version.xml.in"/>
+ includes="
+  build.xml,
+  doc/xml/version.xml.in,
+  mac/packaging/Info.plist.in,
+  src/version/Version.java.in,
+"/>
 </uptodate>
 </target>
 
