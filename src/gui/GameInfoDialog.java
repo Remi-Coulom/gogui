@@ -56,7 +56,9 @@ public class GameInfoDialog
             SimpleDialogs.showWarning(parent, "Unknown rules");
     }
 
-    private JPanel m_panel;
+    private JPanel m_panelLeft;
+
+    private JPanel m_panelRight;
 
     private JTextField m_date;
 
@@ -76,7 +78,11 @@ public class GameInfoDialog
 
     private GameInfoDialog(GameInformation gameInformation)
     {
-        m_panel = new JPanel(new GridLayout(0, 2, 0, 0));
+        JPanel panel = new JPanel(new BorderLayout(GuiUtils.PAD, 0));
+        m_panelLeft = new JPanel(new GridLayout(0, 1, 0, 0));
+        panel.add(m_panelLeft, BorderLayout.WEST);
+        m_panelRight = new JPanel(new GridLayout(0, 1, 0, 0));
+        panel.add(m_panelRight, BorderLayout.CENTER);
         m_playerBlack = createEntry("Black player",
                                     gameInformation.m_playerBlack);
         m_rankBlack = createEntry("Black rank",
@@ -89,7 +95,7 @@ public class GameInfoDialog
         m_rules = createEntry("Rules", gameInformation.m_rules);
         m_komi = createEntry("Komi", Float.toString(gameInformation.m_komi));
         m_result = createEntry("Result", gameInformation.m_result);
-        setMessage(m_panel);
+        setMessage(panel);
         setOptionType(OK_CANCEL_OPTION);
     }
 
@@ -97,9 +103,9 @@ public class GameInfoDialog
     {
         JLabel label = new JLabel(labelText);
         label.setHorizontalAlignment(SwingConstants.LEFT);
-        m_panel.add(label);
+        m_panelLeft.add(label);
         JTextField textField = new JTextField(text);
-        m_panel.add(textField);
+        m_panelRight.add(textField);
         return textField;
     }
 
