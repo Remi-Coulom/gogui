@@ -1846,6 +1846,7 @@ class GoGui
             else
                 initAnalyzeCommand(analyzeCommand, true);
         }
+        updateGameInfo(true);
         setVisible(true);
         m_guiBoard.setFocus();
     }
