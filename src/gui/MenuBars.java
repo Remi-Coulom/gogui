@@ -349,7 +349,7 @@ class MenuBars
         addMenuItem(menu, "Backward 10 moves", KeyEvent.VK_D, KeyEvent.VK_LEFT,
                     ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
                     "backward-10");
-        addMenuItem(menu, "Backward", KeyEvent.VK_LEFT, KeyEvent.VK_W,
+        addMenuItem(menu, "Backward", KeyEvent.VK_LEFT, KeyEvent.VK_LEFT,
                     ActionEvent.CTRL_MASK, "backward");
         addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
                     ActionEvent.CTRL_MASK, "forward");
