@@ -33,6 +33,8 @@ public class GtpAdapter
         m_gtp.querySupportedCommands();
         if (version2 && m_gtp.getProtocolVersion() != 1)
             throw new Exception("Program is not GTP version 1.");
+        if (size > 0)
+            m_boardSize = size;
         m_version2 = version2;
         m_noScore = noScore;
         m_emuHandicap = emuHandicap;
