@@ -5,6 +5,20 @@
 
 <revision>
 <revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.6pre2</revnumber>
 <date>21 Apr 2004</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
@@ -14,10 +28,14 @@
 <application>TwoGtp</application>: Fix NullPointerException if no komi option
 was used.
 </simpara>
+</listitem>
+<listitem>
 <simpara>
 <application>GoGui</application>: Fix NullPointerException after leaving setup
 mode.
 </simpara>
+</listitem>
+<listitem>
 <simpara>
 Lots of other small fixes.
 </simpara>
