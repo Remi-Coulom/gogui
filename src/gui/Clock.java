@@ -10,7 +10,9 @@ import go.Color;
 
 //----------------------------------------------------------------------------
 
-/** Time control for a Go game. */
+/** Time control for a Go game.
+    The time unit is milliseconds.
+*/
 public class Clock
 {
     public static class Error extends Exception
@@ -43,17 +45,35 @@ public class Clock
         return m_byoyomiMoves;
     }
 
+    /** Get moves left.
+        Requires: getUseByoyomi() && isInByoyomi(color)
+    */
+    public int getMovesLeft(Color color)
+    {
+        assert(getUseByoyomi() && isInByoyomi(color));
+        return getRecord(color).m_movesLeft;
+    }
+
     public long getPreByoyomi()
     {
         return m_preByoyomi / 60000L;
     }
 
-    public boolean getUseByoyomi()
+    /** Get time left.
+        Requires: isInitialized()
+    */
+    public long getTimeLeft(Color color)
     {
-        return m_useByoyomi;
+        assert(m_initialized);
+        TimeRecord timeRecord = getRecord(color);
+        long time = timeRecord.m_time;
+        if (! m_useByoyomi)
+            return (m_preByoyomi - time);
+        else
+            return (m_byoyomi - time);
     }
 
-    public String getTimeString(go.Color c)
+    public String getTimeString(Color c)
     {
         TimeRecord timeRecord = getRecord(c);
         long time = timeRecord.m_time;
@@ -117,6 +137,11 @@ public class Clock
         return buffer.toString();
     }
 
+    public boolean getUseByoyomi()
+    {
+        return m_useByoyomi;
+    }
+
     public void halt()
     {
         m_toMove = Color.EMPTY;
@@ -127,16 +152,21 @@ public class Clock
         return m_initialized;
     }
 
-    public boolean isRunning()
+    public boolean isInByoyomi(Color color)
     {
-        return (m_toMove != go.Color.EMPTY);
+        return getUseByoyomi() && getRecord(color).m_isInByoyomi;
     }
 
-    public boolean lostOnTime(go.Color c)
+    public boolean isRunning()
+    {
+        return (m_toMove != Color.EMPTY);
+    }
+
+    public boolean lostOnTime(Color color)
     {
         if (! m_initialized)
             return false;
-        TimeRecord timeRecord = getRecord(c);
+        TimeRecord timeRecord = getRecord(color);
         long time = timeRecord.m_time;
         if (! m_useByoyomi)
             return (time > m_preByoyomi);
@@ -196,7 +226,7 @@ public class Clock
         m_initialized = true;
     }
 
-    public void startMove(go.Color c)
+    public void startMove(Color c)
     {
         if  (m_toMove != Color.EMPTY)
             stopMove();
@@ -263,13 +293,13 @@ public class Clock
 
     private long m_byoyomi;
 
-    private go.Color m_toMove = Color.EMPTY;
+    private Color m_toMove = Color.EMPTY;
 
     private TimeRecord m_timeRecordBlack = new TimeRecord();
 
     private TimeRecord m_timeRecordWhite = new TimeRecord();
 
-    private TimeRecord getRecord(go.Color c)
+    private TimeRecord getRecord(Color c)
     {
         if (c == Color.BLACK)
             return m_timeRecordBlack;
@@ -277,7 +307,7 @@ public class Clock
             return m_timeRecordWhite;
     }
 
-    private void reset(go.Color c)
+    private void reset(Color c)
     {
         TimeRecord timeRecord = getRecord(c);
         timeRecord.m_time = 0;
