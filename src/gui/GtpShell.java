@@ -316,7 +316,11 @@ public class GtpShell
     
     public void receivedStdErr(String s)
     {
-        assert(! SwingUtilities.isEventDispatchThread());
+        if (SwingUtilities.isEventDispatchThread())
+        {
+            appendLog(s);
+            return;
+        }
         Runnable r = new UpdateStdErr(this, s);
         invokeAndWait(r);
     }
@@ -592,7 +596,7 @@ public class GtpShell
         public void run()
         {
             assert(SwingUtilities.isEventDispatchThread());
-            m_gtpShell.m_gtpShellText.appendLog(m_text);
+            m_gtpShell.appendLog(m_text);
             m_gtpShell.setFinalSize();
         }
 
@@ -708,6 +712,12 @@ public class GtpShell
     {
         assert(SwingUtilities.isEventDispatchThread());
         m_gtpShellText.appendInvalidResponse(response);
+    }
+    
+    private void appendLog(String line)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        m_gtpShellText.appendLog(line + "\n");
     }
     
     private void appendResponse(boolean error, String response)
