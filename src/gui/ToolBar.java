@@ -44,8 +44,6 @@ class ToolBar
         m_buttonPass = addButton("pass.png", "pass", "Pass");
         m_buttonEnter = addButton("next.png", "play", "Computer Play");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
-        addSeparator();
-        m_buttonInfo = addButton("info.png", "game-info", "Game Info");
     }
 
     public void setComputerEnabled(boolean enabled)
@@ -79,7 +77,6 @@ class ToolBar
         m_buttonEnter.setEnabled(enable);
         m_buttonForward.setEnabled(enable);
         m_buttonForward10.setEnabled(enable);
-        m_buttonInfo.setEnabled(enable);
         m_buttonInterrupt.setEnabled(false);
         m_buttonNew.setEnabled(enable);
         m_buttonNextVariation.setEnabled(enable);
@@ -119,8 +116,6 @@ class ToolBar
     private JButton m_buttonForward;
 
     private JButton m_buttonForward10;
-
-    private JButton m_buttonInfo;
 
     private JButton m_buttonInterrupt;
 
