@@ -51,7 +51,7 @@ class GoGui
         m_program = program;
         if (program != null && ! program.equals(""))
         {
-            m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
+            m_gtpShell = new GtpShell(this, "GoGui", this, prefs);
             m_gtpShell.setProgramCommand(program);
         }
         Container contentPane = getContentPane();        
@@ -231,7 +231,7 @@ class GoGui
         {
             Vector supportedCommands = null;
             m_analyzeDialog =
-                new AnalyzeDialog(null, this, m_prefs,
+                new AnalyzeDialog(this, this, m_prefs,
                                   m_commandThread.getSupportedCommands());
             if (m_rememberWindowSizes)
                 restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
