@@ -598,7 +598,7 @@ class GoGui
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
-        if (m_analyzeCmd != null)
+        if (m_commandThread != null && m_analyzeCmd != null)
             analyzeBegin(true);
         else
         {
