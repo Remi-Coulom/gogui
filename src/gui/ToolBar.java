@@ -42,6 +42,7 @@ class ToolBar
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         add(new JToolBar.Separator());
         m_buttonGtpShell = addButton("openterm.png", "gtp-shell", "GTP shell");
+        m_buttonAnalyze = addButton("misc.png", "analyze", "Analyze window");
     }
 
     public void disableComputerButtons()
@@ -49,6 +50,7 @@ class ToolBar
         m_computerButtonsEnabled = false;
         m_buttonEnter.setEnabled(false);
         m_buttonGtpShell.setEnabled(false);
+        m_buttonAnalyze.setEnabled(false);
         m_buttonInterrupt.setEnabled(false);
     }
 
@@ -67,6 +69,7 @@ class ToolBar
     public void enableAll(boolean enable, go.Board board)
     {
         m_buttonGtpShell.setEnabled(true);
+        m_buttonAnalyze.setEnabled(true);
         m_buttonBeginning.setEnabled(enable);
         m_buttonBackward.setEnabled(enable);
         m_buttonBackward10.setEnabled(enable);
@@ -113,6 +116,8 @@ class ToolBar
     private JButton m_buttonEnd;
 
     private JButton m_buttonGtpShell;
+
+    private JButton m_buttonAnalyze ;
 
     private JButton m_buttonInterrupt;
 

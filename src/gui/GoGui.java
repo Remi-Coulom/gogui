@@ -759,23 +759,16 @@ class GoGui
 
     private void backward(int n)
     {
+        setFastUpdate(true);
         try
         {
-            try
+            for (int i = 0; i < n; ++i)
             {
-                setFastUpdate(true);
-                for (int i = 0; i < n; ++i)
-                {
-                    if (m_board.getMoveNumber() == 0)
-                        break;
-                    if (m_commandThread != null)
-                        m_commandThread.sendCommand("undo");
-                    m_board.undo();
-                }
-            }
-            finally
-            {
-                setFastUpdate(false);
+                if (m_board.getMoveNumber() == 0)
+                    break;
+                if (m_commandThread != null)
+                    m_commandThread.sendCommand("undo");
+                m_board.undo();
             }
             boardChangedBegin(false);
         }
@@ -783,6 +776,7 @@ class GoGui
         {
             showGtpError(e);
         }
+        setFastUpdate(false);
     }
 
     private void beginLengthyCommand()
@@ -1426,29 +1420,23 @@ class GoGui
 
     private void forward(int n)
     {
+        setFastUpdate(true);
         try
         {
-            try
+            for (int i = 0; i < n; ++i)
             {
-                setFastUpdate(true);
-                for (int i = 0; i < n; ++i)
-                {
-                    int moveNumber = m_board.getMoveNumber();
-                    if (moveNumber >= m_board.getNumberSavedMoves())
-                        break;
-                    Move move = m_board.getMove(moveNumber);
-                    play(move);
-                }
-            }
-            finally
-            {
-                setFastUpdate(false);
+                int moveNumber = m_board.getMoveNumber();
+                if (moveNumber >= m_board.getNumberSavedMoves())
+                    break;
+                Move move = m_board.getMove(moveNumber);
+                play(move);
             }
         }
         catch (Gtp.Error e)
         {
             showGtpError(e);
         }
+    setFastUpdate(false);
     }
 
     private void generateMove()

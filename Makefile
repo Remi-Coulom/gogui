@@ -11,6 +11,7 @@ IMAGES = \
   images/forward.png \
   images/gear.png \
   images/gohome.png \
+  images/misc.png \
   images/next.png \
   images/openterm.png \
   images/pass.png \
