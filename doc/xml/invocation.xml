@@ -25,7 +25,7 @@
 
   <para>
     See
-    <xref linkend="reference">
+    <xref linkend="reference-gogui">
       <citerefentry><refentrytitle>gogui</refentrytitle></citerefentry>
     </xref>
     for a listing of the possible options.

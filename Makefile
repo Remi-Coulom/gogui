@@ -43,7 +43,7 @@ DOC= \
   doc/xml/news.xml \
   doc/xml/programs.xml \
   doc/xml/readme.xml \
-  doc/xml/reference.xml \
+  doc/xml/reference-gogui.xml \
   doc/xml/reference-gmptogtp.xml \
   doc/xml/reference-gtpnet.xml \
   doc/xml/reference-netgtp.xml \
