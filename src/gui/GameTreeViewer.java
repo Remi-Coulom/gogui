@@ -57,7 +57,7 @@ class GameNode
             graphics.setColor(java.awt.Color.black);
             graphics.fillOval(0, 0, halfSize, halfSize);
             graphics.fillOval(halfSize, halfSize, halfSize, halfSize);
-            graphics.setColor(java.awt.Color.white);
+            graphics.setColor(java.awt.Color.decode("#e2dad3"));
             graphics.fillOval(halfSize, 0, halfSize, halfSize);
             graphics.fillOval(0, halfSize, halfSize, halfSize);
         }
@@ -73,7 +73,7 @@ class GameNode
             if (move.getColor() == go.Color.BLACK)
                 graphics.setColor(java.awt.Color.black);
             else
-                graphics.setColor(java.awt.Color.white);
+                graphics.setColor(java.awt.Color.decode("#e2dad3"));
             graphics.fillOval(0, 0, m_width, m_width);
             String text = Integer.toString(m_moveNumber);
             int textWidth = graphics.getFontMetrics().stringWidth(text);
