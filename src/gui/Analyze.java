@@ -70,7 +70,7 @@ class AnalyzeCommand
         Vector labels = new Vector(128, 128);
         try
         {
-            read(commands, labels);
+            read(commands, labels, null);
         }
         catch (Exception e)
         {            
@@ -118,7 +118,8 @@ class AnalyzeCommand
         return (m_command.indexOf("%p") >= 0);
     }
 
-    public static void read(Vector commands, Vector labels)
+    public static void read(Vector commands, Vector labels,
+                            Vector supportedCommands)
         throws Exception
     {
         commands.clear();
@@ -137,6 +138,14 @@ class AnalyzeCommand
                 if (array.length < 3 || array.length > 5)
                     throw new Exception("Error in " + file + " line "
                                         + lineNumber);
+                if (supportedCommands != null)
+                {
+                    String[] cmdArray
+                        = StringUtils.getCmdArray(array[2].trim());
+                    if (cmdArray.length == 0
+                        || ! supportedCommands.contains(cmdArray[0]))
+                        continue;
+                }
                 String label = array[1];
                 if (labels.contains(label))
                     continue;
@@ -201,10 +210,14 @@ class AnalyzeDialog
                WindowListener
 {
     public AnalyzeDialog(Frame owner, AnalyzeCallback callback,
-                         Preferences prefs)
+                         Preferences prefs, Vector supportedCommands)
     {
         super(owner, "GoGui: Analyze command");
         m_prefs = prefs;
+        setPrefsDefaults(prefs);
+        m_onlySupportedCommands =
+            prefs.getBool("analyze-only-supported-commands");
+        m_supportedCommands = supportedCommands;
         m_callback = callback;
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(this);
@@ -224,6 +237,8 @@ class AnalyzeDialog
             close();
         else if (command.equals("comboBoxChanged"))
             comboBoxChanged();
+        else if (command.equals("only-supported"))
+            onlySupported();
         else if (command.equals("reload"))
             reload();
         else if (command.equals("run"))
@@ -300,6 +315,8 @@ class AnalyzeDialog
     {
     }
 
+    private boolean m_onlySupportedCommands;
+
     private boolean m_recentModified;
 
     private JButton m_runButton;
@@ -308,9 +325,13 @@ class AnalyzeDialog
 
     private JList m_list;
 
+    private JMenuItem m_itemOnlySupported;
+
     private String m_lastCommandSent = "";
 
     private Vector m_commands = new Vector(128, 64);
+
+    private Vector m_supportedCommands;
 
     private Vector m_labels = new Vector(128, 64);
 
@@ -387,16 +408,8 @@ class AnalyzeDialog
 
     private JPanel createCommandPanel(Frame owner)
     {
-        try
-        {
-            AnalyzeCommand.read(m_commands, m_labels);
-        }
-        catch (Exception e)
-        {            
-            SimpleDialogs.showError(owner, e.getMessage());
-        }
         JPanel panel = new JPanel(new BorderLayout());
-        m_list = new JList(m_labels);
+        m_list = new JList();
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         m_list.setVisibleRowCount(20);
         m_list.addMouseListener(this);
@@ -404,6 +417,7 @@ class AnalyzeDialog
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createLowerPanel(), BorderLayout.SOUTH);
+        reload();
         return panel;
     }
 
@@ -422,6 +436,7 @@ class AnalyzeDialog
     {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuFile());
+        menuBar.add(createMenuSettings());
         setJMenuBar(menuBar);
     }
 
@@ -436,11 +451,34 @@ class AnalyzeDialog
         return menu;
     }
 
+    private JMenu createMenuSettings()
+    {
+        JMenu menu = new JMenu("Settings");
+        menu.setMnemonic(KeyEvent.VK_S);
+        m_itemOnlySupported =
+            new JCheckBoxMenuItem("Only supported commands");
+        m_itemOnlySupported.setSelected(m_onlySupportedCommands);
+        addMenuItem(menu, m_itemOnlySupported, KeyEvent.VK_O,
+                    "only-supported");
+        return menu;
+    }
+
+    private void onlySupported()
+    {
+        m_onlySupportedCommands = m_itemOnlySupported.isSelected();
+        m_prefs.setBool("analyze-only-supported-commands",
+                        m_onlySupportedCommands);
+        reload();
+    }
+
     private void reload()
     {
         try
         {
-            AnalyzeCommand.read(m_commands, m_labels);
+            Vector supportedCommands = null;
+            if (m_onlySupportedCommands)
+                supportedCommands = m_supportedCommands;
+            AnalyzeCommand.read(m_commands, m_labels, supportedCommands);
             m_list.setListData(m_labels);
         }
         catch (Exception e)
@@ -532,6 +570,11 @@ class AnalyzeDialog
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         m_callback.setAnalyzeCommand(command);
+    }
+
+    private static void setPrefsDefaults(Preferences prefs)
+    {
+        prefs.setBoolDefault("analyze-only-supported-commands", false);
     }
 }
 

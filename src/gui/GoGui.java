@@ -774,9 +774,14 @@ class GoGui
 
     private void cbAnalyze()
     {        
+        if (m_commandThread == null)
+            return;
         if (m_analyzeDialog == null)
         {
-            m_analyzeDialog = new AnalyzeDialog(this, this, m_prefs);
+            Vector supportedCommands = null;
+            m_analyzeDialog =
+                new AnalyzeDialog(this, this, m_prefs,
+                                  m_commandThread.getSupportedCommands());
             m_analyzeDialog.setLocationRelativeTo(null);
             m_analyzeDialog.setLocationRelativeTo(this);
             Dimension size = getSize();
