@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=GoGui
+Exec=gogui
+Type=Application
+Comment=Graphical user interface to Go programs

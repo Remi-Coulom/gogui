@@ -113,6 +113,7 @@ installation directory.
  TODO
  build.xml,
  config/analyze-commands*,
+ config/gogui.desktop,
  doc/html/*.html,
  doc/man/*.1,
  doc/xml/*.xml,
