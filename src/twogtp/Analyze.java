@@ -58,6 +58,10 @@ public class Analyze
 
     private Statistics m_length = new Statistics();
 
+    private Statistics m_unknownBlack = new Statistics();
+
+    private Statistics m_unknownWhite = new Statistics();
+
     private Statistics m_winBlack = new Statistics();
 
     private Statistics m_winWhite = new Statistics();
@@ -88,12 +92,10 @@ public class Analyze
                 continue;
             }
             ++m_gamesUsed;
-            double resultBlack = e.parseResultBlack();
-            m_histoBlack.addValue(resultBlack);
-            m_winBlack.addValue(resultBlack > 0 ? 1 : 0);
-            double resultWhite = e.parseResultWhite();
-            m_histoWhite.addValue(resultWhite);
-            m_winWhite.addValue(resultWhite > 0 ? 1 : 0);
+            parseResult(e.m_resultBlack, m_histoBlack, m_winBlack,
+                        m_unknownBlack);
+            parseResult(e.m_resultWhite, m_histoWhite, m_winWhite,
+                        m_unknownWhite);
             m_cpuBlack.addValue(e.m_cpuBlack);
             m_cpuWhite.addValue(e.m_cpuWhite);
             m_length.addValue(e.m_length);
@@ -163,6 +165,34 @@ public class Analyze
         }
     }
 
+    private void parseResult(String result, Statistics statResult,
+                             Statistics statWin, Statistics statUnknown)
+    {
+        boolean isValid = false;
+        double r = 0;
+        String s = result.trim();
+        try
+        {
+            if (! s.equals("?"))
+            {
+                if (s.indexOf("B+") >= 0)
+                    r = Double.parseDouble(s.substring(2));
+                else if (s.indexOf("W+") >= 0)
+                    r = - Double.parseDouble(s.substring(2));
+                isValid = true;
+            }
+        }
+        catch (NumberFormatException e)
+        {
+        }
+        if (isValid)
+        {
+            statResult.addValue(r);
+            statWin.addValue(r > 0 ? 1 : 0);
+        }
+        statUnknown.addValue(isValid ? 0 : 1);
+    }
+
     private void readFile(File file) throws Exception
     {
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -201,7 +231,7 @@ public class Analyze
                   "<h1>" + m_black + " - " + m_white + "</h1>\n" +
                   "<hr>\n" +
                   "<small>\n" +
-                  "<table align=\"left\">\n" +
+                  "<table>\n" +
                   "<tr><th align=\"left\">Black:</th><td align=\"left\">"
                   + m_black + "</td></tr>\n" +
                   "<tr><th align=\"left\">White:</th><td align=\"left\">"
@@ -228,26 +258,6 @@ public class Analyze
                   + m_duplicates + "</td></tr>\n" +
                   "<tr><th align=\"left\">Games used:</th><td align=\"left\">"
                   + m_gamesUsed + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Black score["
-                  + m_black + "]:</th><td align=\"left\">"
-                  + format.format(m_histoBlack.getMean()) + " (&plusmn;"
-                  + format.format(m_histoBlack.getErrorMean())
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Black score["
-                  + m_white + "]:</th><td align=\"left\">"
-                  + format.format(m_histoWhite.getMean()) + " (&plusmn;"
-                  + format.format(m_histoWhite.getErrorMean())
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Black wins["
-                  + m_black + "]:</th><td align=\"left\">"
-                  + format.format(m_winBlack.getMean() * 100) + "% (&plusmn;"
-                  + format.format(m_winBlack.getErrorMean() * 100)
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Black wins["
-                  + m_white + "]:</th><td align=\"left\">"
-                  + format.format(m_winWhite.getMean() * 100) + "% (&plusmn;"
-                  + format.format(m_winWhite.getErrorMean() * 100)
-                  + ")</td></tr>\n" +
                   "<tr><th align=\"left\">Game length:</th>"
                   + "<td align=\"left\">"
                   + format.format(m_length.getMean()) + " (&plusmn;"
@@ -265,8 +275,50 @@ public class Analyze
                   + ")</td></tr>\n" +
                   "</table>\n" +
                   "</small>\n" +
-                  "<hr>\n" +
-                  "<table align=\"left\" border=\"1\">\n" +
+                  "<hr>\n");
+        out.print("<h2>Result [" + m_black + "]</h2>\n" +
+                  "<p>\n" +
+                  "<table>\n" +
+                  "<tr><th align=\"left\">Black score["
+                  + m_black + "]:</th><td align=\"left\">"
+                  + format.format(m_histoBlack.getMean()) + " (&plusmn;"
+                  + format.format(m_histoBlack.getErrorMean())
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">Black wins["
+                  + m_black + "]:</th><td align=\"left\">"
+                  + format.format(m_winBlack.getMean() * 100) + "% (&plusmn;"
+                  + format.format(m_winBlack.getErrorMean() * 100)
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">Unknown["
+                  + m_black + "]:</th><td align=\"left\">"
+                  + format.format(m_unknownBlack.getMean() * 100) + "%"
+                  + "</td></tr>\n" +
+                  "</table>\n" +
+                  "</p>\n");
+        m_histoBlack.printHtml(out);
+        out.print("<hr>\n" +
+                  "<h2>Result [" + m_white + "]</h2>\n" +
+                  "<p>\n" +
+                  "<table>\n" +
+                  "<tr><th align=\"left\">Black score["
+                  + m_white + "]:</th><td align=\"left\">"
+                  + format.format(m_histoWhite.getMean()) + " (&plusmn;"
+                  + format.format(m_histoWhite.getErrorMean())
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">Black wins["
+                  + m_white + "]:</th><td align=\"left\">"
+                  + format.format(m_winWhite.getMean() * 100) + "% (&plusmn;"
+                  + format.format(m_winWhite.getErrorMean() * 100)
+                  + ")</td></tr>\n" +
+                  "<tr><th align=\"left\">Unknown["
+                  + m_white + "]:</th><td align=\"left\">"
+                  + format.format(m_unknownWhite.getMean() * 100) + "%"
+                  + "</td></tr>\n" +
+                  "</table>\n" +
+                  "</p>\n");
+        m_histoWhite.printHtml(out);
+        out.print("<hr>\n");
+        out.print("<table border=\"1\">\n" +
                   "<thead>\n" +
                   "<th>Game</th>\n" +
                   "<th>Result [" + m_black + "]</th>\n" +
@@ -297,14 +349,8 @@ public class Analyze
                       "</tr>\n");
         }
         out.print("</table>\n" +
-                  "<hr>\n" +
-                  "<h2>Result [" + m_black + "]</h2>\n");
-        m_histoBlack.printHtml(out);
-        out.print("<hr>\n" +
-                  "<h2>Result [" + m_white + "]</h2>\n");
-        m_histoWhite.printHtml(out);
-        out.print("<hr>\n" +
-                  "</body>\n" +
+                  "<hr>\n");
+        out.print("</body>\n" +
                   "</html>\n");
         out.close();
     }
@@ -347,34 +393,6 @@ class Entry
         m_cpuWhite = cpuWhite;
         m_error = error;
         m_errorMessage = errorMessage;
-    }
-
-    public double parseResultBlack()
-    {
-        return parseResult(m_resultBlack);
-    }
-
-    public double parseResultWhite()
-    {
-        return parseResult(m_resultWhite);
-    }
-
-    private double parseResult(String result)
-    {
-        String s = result.trim();
-        double r = 0;
-        try
-        {
-            if (s.indexOf("B+") >= 0)
-                r = Double.parseDouble(s.substring(2));
-            else if (s.indexOf("W+") >= 0)
-                r = - Double.parseDouble(s.substring(2));
-        }
-        catch (NumberFormatException e)
-        {
-            System.err.println("Cannot parse result " + s);
-        }
-        return r;
     }
 }
 
@@ -451,7 +469,8 @@ class Histogram
 
     public void printHtml(PrintStream out)
     {
-        out.print("<small>\n" +
+        out.print("<p>\n" +
+                  "<small>\n" +
                   "<table cellspacing=\"1\" cellpadding=\"0\">\n");
         int min;
         for (min = 0; min < m_size - 1 && m_array[min] == 0; ++min);
@@ -470,7 +489,8 @@ class Histogram
                       + m_array[i] + "</td></tr></table></td></tr>\n");
         }
         out.print("</small>" +
-                  "</table>\n");
+                  "</table>\n" +
+                  "</p>\n");
     }
 
     private int m_size;
