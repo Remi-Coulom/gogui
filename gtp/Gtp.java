@@ -168,6 +168,7 @@ public class Gtp
             tokenizer.wordChars('.', '.');
             tokenizer.wordChars('?', '?');
             tokenizer.wordChars('!', '!');
+            tokenizer.wordChars('*', '*');
             tokenizer.wordChars('"', '"');
             if (title != null)
             {
