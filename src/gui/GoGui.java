@@ -24,7 +24,7 @@ import version.*;
 
 class GoGui
     extends JFrame
-    implements ActionListener, AnalyzeCallback, Board.Listener,
+    implements ActionListener, AnalyzeDialog.Callback, Board.Listener,
                GameTreeViewer.Listener, GtpShell.Callback
 {
     GoGui(String program, Preferences prefs, String file, int move,
