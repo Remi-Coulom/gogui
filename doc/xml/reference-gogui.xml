@@ -24,7 +24,6 @@
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-file</option> <replaceable>filename</replaceable></arg>
 <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
-<arg><option>-help</option></arg>
 <arg><option>-komi</option> <replaceable>value</replaceable></arg>
 <arg><option>-move</option> <replaceable>n</replaceable></arg>
 <arg><option>-rules</option> <group choice="plain">
@@ -33,8 +32,13 @@
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg><option>-version</option></arg>
 <arg><replaceable>program</replaceable></arg>
+
+<command>gogui</command>
+<arg choice="plain"><option>-help</option></arg>
+
+<command>gogui</command>
+<arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -58,8 +62,7 @@ and use GTP (Go Text Protocol).
 <para>
 Initialize analyze command and automatically run it after
 changes on the board.
-Work only for commands not containing wildcards that are replaced
-user input.
+Work only for commands not containing wildcards.
 </para>
 </listitem>
 </varlistentry>
