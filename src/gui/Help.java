@@ -82,23 +82,14 @@ class Help
     {
         if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
         {
-            if (e instanceof HTMLFrameHyperlinkEvent)
+            URL url = e.getURL();
+            if (url.getProtocol().equals("jar"))
             {
-                HTMLFrameHyperlinkEvent  evt = (HTMLFrameHyperlinkEvent)e;
-                HTMLDocument doc = (HTMLDocument)m_editorPane.getDocument();
-                doc.processHTMLFrameHyperlinkEvent(evt);
+                loadURL(url);
+                appendHistory(url);
             }
             else
-            {
-                URL url = e.getURL();
-                if (url.getProtocol().equals("jar"))
-                {
-                    loadURL(url);
-                    appendHistory(url);
-                }
-                else
-                    openExternal(url);
-            }
+                openExternal(url);
         }
     }
 
