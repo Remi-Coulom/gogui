@@ -192,6 +192,8 @@ installation directory.
  gtp/*.class
  gtp/ReadThread.class
  utils/Options.class
+ utils/ProcessUtils*.class
+ utils/StreamCopy.class
  utils/StringUtils.class
  version/Version.class
 "/>
