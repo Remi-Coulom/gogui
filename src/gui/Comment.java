@@ -43,7 +43,7 @@ class Comment
         int backwardId = KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS;
         m_textArea.setFocusTraversalKeys(backwardId, backwardSet);
         setViewportView(m_textArea);
-        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
