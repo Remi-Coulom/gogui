@@ -1509,7 +1509,7 @@ class GoGui
             if (! m_initAnalyze.equals(""))
             {
                 AnalyzeCommand analyzeCommand =
-                    AnalyzeCommand.get(m_initAnalyze);
+                    AnalyzeCommand.get(this, m_initAnalyze);
                 if (analyzeCommand == null)
                     showError("Unknown analyze command \"" + m_initAnalyze
                               + "\"");

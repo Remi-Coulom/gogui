@@ -64,11 +64,18 @@ class AnalyzeCommand
         m_scale = scale;
     }
 
-    public static AnalyzeCommand get(String label)
+    public static AnalyzeCommand get(Frame owner, String label)
     {
         Vector commands = new Vector(128, 128);
         Vector labels = new Vector(128, 128);
-        read(commands, labels);
+        try
+        {
+            read(commands, labels);
+        }
+        catch (Exception e)
+        {            
+            SimpleDialogs.showError(owner, e.getMessage());
+        }
         int index = labels.indexOf(label);
         if (index < 0)
             return null;
@@ -112,32 +119,30 @@ class AnalyzeCommand
     }
 
     public static void read(Vector commands, Vector labels)
+        throws Exception
     {
         commands.clear();
         labels.clear();
-        try
+        File file = getFile();
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        String line;
+        int lineNumber = 0;
+        while ((line = in.readLine()) != null)
         {
-            File file = getFile();
-            BufferedReader in = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = in.readLine()) != null)
+            ++lineNumber;
+            line = line.trim();
+            if (line.length() > 0 && line.charAt(0) != '#')
             {
-                line = line.trim();
-                if (line.length() > 0 && line.charAt(0) != '#')
-                {
-                    String array[] = StringUtils.split(line, '/');
-                    if (array.length < 3)
-                        break;
-                    String label = array[1];
-                    if (labels.contains(label))
-                        continue;
-                    labels.add(label);
-                    commands.add(line);
-                }                
-            }
-        }
-        catch (IOException e)
-        {
+                String array[] = StringUtils.split(line, '/');
+                if (array.length < 3 || array.length > 5)
+                    throw new Exception("Error in " + file + " line "
+                                        + lineNumber);
+                String label = array[1];
+                if (labels.contains(label))
+                    continue;
+                labels.add(label);
+                commands.add(line);
+            }                
         }
     }
 
@@ -205,7 +210,7 @@ class AnalyzeDialog
         addWindowListener(this);
         Container contentPane = getContentPane();
         contentPane.add(createButtons(), BorderLayout.SOUTH);
-        contentPane.add(createCommandPanel(), BorderLayout.CENTER);
+        contentPane.add(createCommandPanel(owner), BorderLayout.CENTER);
         createMenu();
         pack();
     }
@@ -378,9 +383,16 @@ class AnalyzeDialog
         return outerPanel;
     }
 
-    private JPanel createCommandPanel()
+    private JPanel createCommandPanel(Frame owner)
     {
-        AnalyzeCommand.read(m_commands, m_labels);
+        try
+        {
+            AnalyzeCommand.read(m_commands, m_labels);
+        }
+        catch (Exception e)
+        {            
+            SimpleDialogs.showError(owner, e.getMessage());
+        }
         JPanel panel = new JPanel(new BorderLayout());
         m_list = new JList(m_labels);
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
