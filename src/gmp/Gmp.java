@@ -165,6 +165,31 @@ class Cmd
         return Integer.toString(val);
     }
 
+    public static String cmdToString(int cmd)
+    {
+        switch (cmd)
+        {
+        case OK:
+            return "OK";
+        case DENY:
+            return "DENY";
+        case NEWGAME:
+            return "NEWGAME";
+        case QUERY:
+            return "QUERY";
+        case ANSWER:
+            return "ANSWER";
+        case MOVE:
+            return "MOVE";
+        case UNDO:
+            return "UNDO";
+        case EXTENDED:
+            return "EXTENDED";
+        default:
+            return Integer.toString(cmd);
+        }
+    }
+
     public boolean equals(Cmd cmd)
     {
         return (cmd.m_cmd == m_cmd && cmd.m_val == m_val);
@@ -254,44 +279,28 @@ class Cmd
     public String toString(int size, int lastQuery)
     {
         StringBuffer buffer = new StringBuffer(32);
+        buffer.append(Cmd.cmdToString(m_cmd));
         switch (m_cmd)
         {
         case OK:
-            buffer.append("OK");
-            break;
         case DENY:
-            buffer.append("DENY");
-            break;
         case NEWGAME:
-            buffer.append("NEWGAME");
             break;
         case QUERY:
-            buffer.append("QUERY");
             buffer.append(' ');
             buffer.append(Cmd.queryValToString(m_val));
             break;
         case ANSWER:
-            buffer.append("ANSWER");
             buffer.append(' ');
             buffer.append(Cmd.answerValToString(m_val, lastQuery));
             break;
         case MOVE:
-            buffer.append("MOVE");
             buffer.append(' ');
             buffer.append(Cmd.moveValToString(m_val, size));
             break;
-        case UNDO:
-            buffer.append("UNDO");
-            buffer.append(' ');
-            buffer.append(m_val);
-            break;
-        case EXTENDED:
-            buffer.append("EXTENDED");
-            buffer.append(' ');
-            buffer.append(m_val);
-            break;
         default:
-            buffer.append(m_cmd);
+            buffer.append(' ');
+            buffer.append(m_val);
             break;
         }
         return buffer.toString();
@@ -592,6 +601,7 @@ class ReadThread extends Thread
             }
             try
             {
+                Util.log("Waiting for " + Cmd.cmdToString(cmd) + " ...");
                 assert(m_state == STATE_IDLE);
                 wait();
                 if (m_state == STATE_INTERRUPTED)
