@@ -63,13 +63,13 @@ public class StreamCopy
         }
     }
 
-    boolean m_verbose;
+    private boolean m_verbose;
 
-    boolean m_close;
+    private boolean m_close;
 
-    InputStream m_src;
+    private InputStream m_src;
 
-    OutputStream m_dest;
+    private OutputStream m_dest;
 };
 
 //----------------------------------------------------------------------------
