@@ -67,17 +67,5 @@
       Otherwise the rule settings are quietly ignored.
     </p>
 
-    <h2>Interrupting programs</h2>
-
-    <p>
-      If the program understands the GoGui specific extension GTP command
-      <tt>gogui_sigint</tt>, it indicates that long commands can be
-      interrupted by sending it a SIGINT signal. The program must return its
-      process id as an answer to <tt>gogui_sigint</tt> and GoGui will
-      try to send interrupt signals by using
-      <tt>kill&nbsp;-INT&nbsp;&lt;pid&gt</tt>. Note that this feature works
-      only on operating systems that have a <tt>kill</tt> command.
-    </p>
-
   </body>
 </html>
