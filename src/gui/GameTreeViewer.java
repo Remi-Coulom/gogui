@@ -585,9 +585,15 @@ class GameTreePanel
             node = NodeUtils.nextNode(node, depth);
         }
         if (currentChanged)
+        {
             gotoNode(m_currentNode);
+            root = m_currentNode;
+        }
         if (changed)
+        {
+            scrollTo(root);
             update(m_gameTree, m_currentNode);
+        }
     }
 
     private void nodeInfo(java.awt.Point location, Node node)
@@ -598,6 +604,17 @@ class GameTreePanel
             new TextViewer(null, title, nodeInfo, true, null);
         textViewer.setLocation(location);
         textViewer.setVisible(true);
+    }
+
+    private void scrollTo(Node node)
+    {
+        GameNode gameNode = getGameNode(node);
+        Rectangle rectangle = new Rectangle();
+        rectangle.x = gameNode.getLocation().x;
+        rectangle.y = gameNode.getLocation().y;
+        rectangle.width = m_nodeWidth;
+        rectangle.height = m_nodeDist;
+        scrollRectToVisible(rectangle);
     }
 
     private void scrollToCurrent()
@@ -670,13 +687,14 @@ class GameTreePanel
         m_popupLocation = popup.getLocationOnScreen();
     }
 
-    private void showSubtree(Node node)
+    private void showSubtree(Node root)
     {
-        if (NodeUtils.subtreeGreaterThan(node, 10000)
+        if (NodeUtils.subtreeGreaterThan(root, 10000)
             && ! SimpleDialogs.showQuestion(m_owner,
                                             "Really expand large subtree?"))
             return;
         boolean changed = false;
+        Node node = root;
         int depth = NodeUtils.getDepth(node);
         while (node != null)
         {
@@ -685,13 +703,19 @@ class GameTreePanel
             node = NodeUtils.nextNode(node, depth);
         }
         if (changed)
+        {
             update(m_gameTree, m_currentNode);
+            scrollTo(root);
+        }
     }
 
     private void showVariations(Node node)
     {
         if (node.getNumberChildren() > 1 && m_expanded.add(node))
+        {
             update(m_gameTree, m_currentNode);
+            scrollTo(node);
+        }
     }
 
     private void treeInfo(java.awt.Point location, Node node)
