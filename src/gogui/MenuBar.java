@@ -321,7 +321,8 @@ public class MenuBar
         m_itemShowVariations.setSelected(enable);
     }
 
-    public void updateGameMenuItems(GameTree gameTree, Node node)
+    /** Enable/disable items according to current position. */
+    public void update(GameTree gameTree, Node node)
     {
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);

@@ -53,7 +53,8 @@ public class ToolBar
         m_buttonEnter.setEnabled(enabled);
     }
 
-    public void updateGameButtons(Node node)
+    /** Enable/disable buttons according to current position. */
+    public void update(Node node)
     {
         assert(node != null);
         boolean hasFather = (node.getFather() != null);
@@ -91,7 +92,7 @@ public class ToolBar
         {
             if (! m_computerButtonsEnabled)
                 setComputerEnabled(false);
-            updateGameButtons(node);
+            update(node);
         }
     }
 

@@ -1089,8 +1089,8 @@ class GoGui
     {
         m_guiBoard.updateFromGoBoard();
         updateGameInfo(gameTreeChanged);
-        m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
+        m_toolBar.update(m_currentNode);
+        m_menuBar.update(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         if (m_commandThread != null
             && isCurrentNodeExecuted()
@@ -2374,8 +2374,8 @@ class GoGui
         executeRoot();
         updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
-        m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
+        m_toolBar.update(m_currentNode);
+        m_menuBar.update(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         setTitle();
         setTitleFromProgram();
@@ -2389,8 +2389,8 @@ class GoGui
         m_clock.halt();
         updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
-        m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
+        m_toolBar.update(m_currentNode);
+        m_menuBar.update(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
