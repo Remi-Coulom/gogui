@@ -1460,8 +1460,7 @@ class GoGui
                 go.Point p = Gtp.parsePoint(response, m_boardSize);
                 go.Color toMove = m_board.getToMove();
                 Move move = new Move(p, toMove);
-                if (m_board.willModifyGame(move))
-                    m_needsSave = true;
+                m_needsSave = true;
                 m_board.play(move);
                 Node node = new Node(move);
                 m_currentNode.append(node);
@@ -1604,9 +1603,7 @@ class GoGui
             try
             {
                 setFastUpdate(true);
-                if (m_board.getNumberSavedMoves() == m_board.getMoveNumber()
-                    || m_board.willModifyGame(move))
-                    m_needsSave = true;
+                m_needsSave = true;
                 play(move);
             }
             finally

@@ -544,12 +544,6 @@ public class Board
         m_toMove = r.getOldToMove();
     }
 
-    public boolean willModifyGame(Move move)
-    {
-        return (m_moveNumber < m_moves.size()
-                && ! move.equals(getInternalMove(m_moveNumber)));
-    }
-
     /** Some values that are constant fpr a given board size. */
     private static class Constants
     {
