@@ -21,7 +21,8 @@ public class GtpAdapter
 {
     public GtpAdapter(InputStream in, OutputStream out, String program,
                       PrintStream log, boolean version2, int size, String name,
-                      boolean noScore, boolean emuHandicap)
+                      boolean noScore, boolean emuHandicap, boolean resign,
+                      int resignScore)
         throws Exception
     {
         super(in, out, log);
@@ -37,6 +38,8 @@ public class GtpAdapter
         m_emuHandicap = emuHandicap;
         m_size = size;
         m_name = name;
+        m_resign = resign;
+        m_resignScore = Math.abs(resignScore);
     }
 
     public void close()
@@ -58,8 +61,12 @@ public class GtpAdapter
             status = cmdUnknown(response);
         else if (cmd.equals("final_status_list") && m_noScore)
             status = cmdUnknown(response);
-        else if (cmd.equals("genmove") && m_version2)
-            status = translateColorCommand(cmdArray, "genmove_", response);
+        else if (cmd.equals("genmove"))
+            status = cmdGenmove(cmdLine, cmdArray, response);
+        else if (cmd.equals("genmove_black"))
+            status = cmdGenmoveColor(cmdLine, "black", response);
+        else if (cmd.equals("genmove_white"))
+            status = cmdGenmoveColor(cmdLine, "white", response);
         else if (cmd.equals("help"))
             status = cmdListCommands(response);
         else if (cmd.equals("list_commands"))
@@ -110,6 +117,7 @@ public class GtpAdapter
                 "log:",
                 "noscore",
                 "name:",
+                "resign:",
                 "size:",
                 "version",
                 "version2"
@@ -131,6 +139,8 @@ public class GtpAdapter
             boolean emuHandicap = opt.isSet("emuhandicap");
             String name = opt.getString("name", null);
             int size = opt.getInteger("size", -1);
+            boolean resign = opt.isSet("resign");
+            int resignScore = opt.getInteger("resign");            
             Vector arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
@@ -146,7 +156,8 @@ public class GtpAdapter
             String program = (String)arguments.get(0);
             GtpAdapter gtpAdapter =
                 new GtpAdapter(System.in, System.out, program, log, version2,
-                               size, name, noScore, emuHandicap);
+                               size, name, noScore, emuHandicap, resign,
+                               resignScore);
             gtpAdapter.mainLoop();
             gtpAdapter.close();
             if (log != null)
@@ -176,6 +187,8 @@ public class GtpAdapter
 
     private boolean m_noScore;
 
+    private boolean m_resign;
+
     private boolean m_version2;
 
     /** Only accept this board size.
@@ -185,9 +198,53 @@ public class GtpAdapter
 
     private int m_boardSize = 19;
 
+    private int m_resignScore;
+
     private String m_name;
 
     private Gtp m_gtp;
+
+    private boolean checkResign(String color, StringBuffer response)
+    {
+        color = color.toLowerCase();
+        boolean isBlack;
+        if (color.equals("b") || color.equals("black"))
+            isBlack = true;
+        else if (color.equals("w") || color.equals("white"))
+            isBlack = false;
+        else
+            return false;
+        StringBuffer programResponse = new StringBuffer();
+        if (! send("estimate_score", programResponse))
+            return false;
+        boolean isValid = false;
+        double score = 0;
+        String s = programResponse.toString().trim();
+        try
+        {
+            if (! s.equals("?"))
+            {
+                if (s.indexOf("B+") >= 0)
+                    score = Double.parseDouble(s.substring(2));
+                else if (s.indexOf("W+") >= 0)
+                    score = - Double.parseDouble(s.substring(2));
+                isValid = true;
+            }
+        }
+        catch (NumberFormatException e)
+        {
+        }
+        if (isValid)
+        {
+            if ((isBlack && score < - m_resignScore)
+                || (! isBlack && score > m_resignScore))
+            {
+                response.append("resign");
+                return true;
+            }
+        }
+        return false;
+    }
 
     private boolean cmdBoardsize(String cmdArray[], StringBuffer response)
     {
@@ -217,6 +274,30 @@ public class GtpAdapter
             response.append("Need integer argument");
             return false;
         }
+    }
+
+    private boolean cmdGenmove(String cmdLine, String cmdArray[],
+                               StringBuffer response)
+    {
+        if (cmdArray.length != 2)
+        {
+            response.append("Need argument");
+            return false;
+        }
+        if (checkResign(cmdArray[1], response))
+            return true;
+        if (m_version2)
+            return translateColorCommand(cmdArray, "genmove_", response);
+        else
+            return send(cmdLine, response);
+    }
+
+    private boolean cmdGenmoveColor(String cmdLine, String color,
+                                    StringBuffer response)
+    {
+        if (checkResign(color, response))
+            return true;
+        return send(cmdLine, response);
     }
 
     private boolean cmdListCommands(StringBuffer response)
@@ -343,13 +424,14 @@ public class GtpAdapter
         String helpText =
             "Usage: java -jar gtpadapter.jar program\n" +
             "\n" +
-            "-config      config file\n" +
-            "-emuhandicap emulate free handicap commands\n" +
-            "-log file    log GTP stream to file\n" +
-            "-noscore     hide score commands\n" +
-            "-size        accept only this board size\n" +
-            "-version     print version and exit\n" +
-            "-version2    translate GTP version 2 for version 1 programs\n";
+            "-config       config file\n" +
+            "-emuhandicap  emulate free handicap commands\n" +
+            "-log file     log GTP stream to file\n" +
+            "-noscore      hide score commands\n" +
+            "-resign score resign if estimated score is below threshold\n" +
+            "-size         accept only this board size\n" +
+            "-version      print version and exit\n" +
+            "-version2     translate GTP version 2 for version 1 programs\n";
         out.print(helpText);
     }
 
