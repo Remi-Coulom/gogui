@@ -100,7 +100,7 @@ installation directory.
 </fail>
 </target>
 
-<target name="compile" depends="checkCommAvailable,version,doc">
+<target name="compile" depends="checkCommAvailable,depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
  deprecation="true" optimize="true" listfiles="yes"/>
@@ -113,6 +113,10 @@ installation directory.
 <copy todir="build/config">
 <fileset dir="config" includes="analyze-commands"/>
 </copy>
+</target>
+
+<target name="depend">
+<depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
 <target name="dist" depends="all,man">
