@@ -141,6 +141,18 @@ class CommandThread
         }
     }
 
+    public void sendAsyncQuit()
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        try
+        {
+            m_gtp.sendCommand("quit");
+        }
+        catch (Gtp.Error e)
+        {
+        }
+    }
+
     /** Send special comment line for interrupting commands.
         Only allowed while no command or command with callback is running.
      */

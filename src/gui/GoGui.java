@@ -804,10 +804,7 @@ class GoGui
         {
             if (! showQuestion("Interrupt command?"))
                 return;
-            if (m_pid != null)
-                runCommand("kill -INT " + m_pid);
-            else
-                m_commandThread.sendInterrupt();
+            interrupt();
         }
     }
 
@@ -1178,6 +1175,8 @@ class GoGui
             String message = "Interrupt command and exit?";
             if (! showQuestion(message))
                 return;
+            interrupt();
+            m_commandThread.sendAsyncQuit();
             m_commandThread.close();
         }
         else
@@ -1457,6 +1456,14 @@ class GoGui
                                     + "printed by the program.");
             showStatus(e.getMessage());
         }
+    }
+
+    private void interrupt()
+    {
+        if (m_pid != null)
+            runCommand("kill -INT " + m_pid);
+        else
+            m_commandThread.sendInterrupt();
     }
 
     private void loadFile(File file, int move)
