@@ -186,37 +186,15 @@ class AnalyzeCommand
     {
         commands.clear();
         labels.clear();
-        File file = getFile();
-        if (! file.exists())
-            copyDefaults(file);
-        BufferedReader in = new BufferedReader(new FileReader(file));
-        String line;
-        int lineNumber = 0;
-        while ((line = in.readLine()) != null)
+        Vector files = getFiles();
+        if (files.isEmpty())
         {
-            ++lineNumber;
-            line = line.trim();
-            if (line.length() > 0 && line.charAt(0) != '#')
-            {
-                String array[] = StringUtils.split(line, '/');
-                if (array.length < 3 || array.length > 5)
-                    throw new Exception("Error in " + file + " line "
-                                        + lineNumber);
-                if (supportedCommands != null)
-                {
-                    String[] cmdArray
-                        = StringUtils.tokenize(array[2].trim());
-                    if (cmdArray.length == 0
-                        || ! supportedCommands.contains(cmdArray[0]))
-                        continue;
-                }
-                String label = array[1];
-                if (labels.contains(label))
-                    continue;
-                labels.add(label);
-                commands.add(line);
-            }                
+            File f = new File(getDir(), "analyze-commands");
+            copyDefaults(f);
+            
         }
+        for (int i = 0; i < files.size(); ++i)
+            readFile((File)files.get(i), commands, labels, supportedCommands);
     }
 
     public String replaceWildCards(go.Color toMove, go.Point pointArg,
@@ -308,9 +286,55 @@ class AnalyzeCommand
         return new File(home, ".gogui");
     }
 
-    private static File getFile()
+    private static Vector getFiles()
     {
-        return new File(getDir(), "analyze-commands");
+        Vector result = new Vector();
+        File[] files = getDir().listFiles();
+        if (files == null)
+            return result;
+        String s = new File(getDir(), "analyze-commands").toString();
+        for (int i = 0; i < files.length; ++i)
+        {
+            File f = files[i];
+            if (f.toString().startsWith(s))
+                result.add(f);
+        }
+        return result;
+    }
+
+    public static void readFile(File file, Vector commands, Vector labels,
+                                Vector supportedCommands)
+        throws Exception
+    {
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        String line;
+        int lineNumber = 0;
+        while ((line = in.readLine()) != null)
+        {
+            ++lineNumber;
+            line = line.trim();
+            if (line.length() > 0 && line.charAt(0) != '#')
+            {
+                String array[] = StringUtils.split(line, '/');
+                if (array.length < 3 || array.length > 5)
+                    throw new Exception("Error in " + file + " line "
+                                        + lineNumber);
+                if (supportedCommands != null)
+                {
+                    String[] cmdArray
+                        = StringUtils.tokenize(array[2].trim());
+                    if (cmdArray.length == 0
+                        || ! supportedCommands.contains(cmdArray[0]))
+                        continue;
+                }
+                String label = array[1];
+                if (labels.contains(label))
+                    continue;
+                labels.add(label);
+                commands.add(line);
+            }                
+        }
+        in.close();
     }
 }
 

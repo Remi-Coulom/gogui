@@ -10,6 +10,9 @@ graphically on the board.
 <para>
 The possible analyze commands are defined in the
 configuration file <userinput>~/.gogui/analyze-commands</userinput>.
+All files beginning with <userinput>~/.gogui/analyze-commands</userinput>
+are loaded.
+If none exists, a default file is created.
 There is one line per command in the format:
 </para>
   

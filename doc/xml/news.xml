@@ -28,6 +28,9 @@ Instead remember size and visibility of windows with new
 <guimenuitem>Remember window sizes</guimenuitem>
 </listitem>
 <listitem>
+Support for multiple <filename>analyze-commands</filename> files.
+</listitem>
+<listitem>
 Lots of other fixes and enhancements.
 </listitem>
 </itemizedlist>
