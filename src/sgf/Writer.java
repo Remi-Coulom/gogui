@@ -225,9 +225,17 @@ public class Writer
         {
             m_out.println("BL[" + node.getTimeLeftBlack() + "]");
         }
+        if (node.getMovesLeftBlack() >= 0)
+        {
+            m_out.println("OB[" + node.getMovesLeftBlack() + "]");
+        }
         if (! Float.isNaN(node.getTimeLeftWhite()))
         {
             m_out.println("WL[" + node.getTimeLeftWhite() + "]");
+        }
+        if (node.getMovesLeftWhite() >= 0)
+        {
+            m_out.println("OW[" + node.getMovesLeftWhite() + "]");
         }
         int numberChildren = node.getNumberChildren();
         if (numberChildren == 0)

@@ -70,13 +70,24 @@ class TimeControl
             else
                 time = m_preByoyomi - time;
         }
-        m_buffer.setLength(0);
+        int movesLeft = -1;
+        if (m_initialized && timeRecord.m_isInByoyomi)
+        {
+            movesLeft = timeRecord.m_movesLeft;
+        }
+        return getTimeString((float)time, movesLeft);
+    }
+
+    /** If not in byoyomi movesLeft < 0 */
+    public static String getTimeString(float timeLeft, int movesLeft)
+    {
+        StringBuffer buffer = new StringBuffer(8);
+        long time = (long)timeLeft;
         if (time < 0)
         {
-            m_buffer.append('-');
+            buffer.append('-');
             time *= -1;
         }
-        time /= 1000;
         long hours = time / 3600;
         time %= 3600;
         long minutes = time / 60;
@@ -84,30 +95,30 @@ class TimeControl
         long seconds = time;
         if (hours > 0)
         {
-            m_buffer.append(hours);
-            m_buffer.append(":");
+            buffer.append(hours);
+            buffer.append(":");
         }
         if (minutes >= 10)
-            m_buffer.append(minutes);
+            buffer.append(minutes);
         else
         {
-            m_buffer.append('0');
-            m_buffer.append(minutes);
+            buffer.append('0');
+            buffer.append(minutes);
         }
-        m_buffer.append(":");
+        buffer.append(":");
         if (seconds >= 10)
-            m_buffer.append(seconds);
+            buffer.append(seconds);
         else
         {
-            m_buffer.append('0');
-            m_buffer.append(seconds);
+            buffer.append('0');
+            buffer.append(seconds);
         }
-        if (m_initialized && timeRecord.m_isInByoyomi)
+        if (movesLeft >= 0)
         {
-            m_buffer.append('/');
-            m_buffer.append(timeRecord.m_movesLeft);
+            buffer.append('/');
+            buffer.append(movesLeft);
         }
-        return m_buffer.toString();
+        return buffer.toString();
     }
 
     public boolean isInitialized()
@@ -252,8 +263,6 @@ class TimeControl
     private long m_byoyomi;
 
     private go.Color m_toMove = Color.EMPTY;
-
-    private StringBuffer m_buffer = new StringBuffer(8);
 
     private TimeRecord m_timeRecordBlack = new TimeRecord();
 

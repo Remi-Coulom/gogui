@@ -217,6 +217,26 @@ public class Reader
             {
                 m_gameInformation.m_komi = parseFloat(v);
             }
+            else if (p.equals("OB"))
+            {
+                try
+                {
+                    node.setMovesLeftBlack(Integer.parseInt(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
+            else if (p.equals("OW"))
+            {
+                try
+                {
+                    node.setMovesLeftWhite(Integer.parseInt(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
             else if (p.equals("PL"))
             {
                 node.setToMove(parseColor(v));

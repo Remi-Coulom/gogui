@@ -48,19 +48,6 @@ public class Node
         m_addWhite.add(point);
     }
 
-    /** Time left for color after move was made formatted as a string.
-        Returns null if unknown.
-    */
-    public String getTimeLeftFomatted(go.Color color)
-    {
-        float timeLeft =
-            (color == go.Color.BLACK ? m_timeLeftBlack : m_timeLeftWhite);
-        if (Float.isNaN(timeLeft))
-            return null;
-        NumberFormat format = StringUtils.getNumberFormat(1);
-        return format.format(timeLeft);
-    }
-
     public Point getAddBlack(int i)
     {
         return (Point)m_addBlack.get(i);
@@ -153,6 +140,22 @@ public class Node
         return movesLeft;
     }
 
+    /** Moves left in byoyomi for black.
+        -1 if not in byyomi or unknown.
+    */
+    public int getMovesLeftBlack()
+    {
+        return m_movesLeftBlack;
+    }
+
+    /** Moves left in byoyomi for white.
+        -1 if not in byyomi or unknown.
+    */
+    public int getMovesLeftWhite()
+    {
+        return m_movesLeftWhite;
+    }
+
     /** Nodes left in main variation. */
     public int getNodesLeft()
     {
@@ -241,6 +244,16 @@ public class Node
         m_move = move;
     }
 
+    public void setMovesLeftBlack(int moves)
+    {
+        m_movesLeftBlack = moves;
+    }
+
+    public void setMovesLeftWhite(int moves)
+    {
+        m_movesLeftWhite = moves;
+    }
+
     public void setTimeLeftBlack(float timeLeft)
     {
         m_timeLeftBlack = timeLeft;
@@ -262,6 +275,10 @@ public class Node
         assert(m_children.contains(child));
         m_children.remove(child);
     }
+
+    private int m_movesLeftBlack = -1;
+
+    private int m_movesLeftWhite = -1;
 
     private float m_timeLeftBlack = Float.NaN;
 

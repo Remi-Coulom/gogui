@@ -92,12 +92,14 @@ class GameInfo
                 lastMove += p.toString();
         }
         m_last.setText(lastMove);
-        String timeLeftBlack = node.getTimeLeftFomatted(go.Color.BLACK);
-        String timeLeftWhite = node.getTimeLeftFomatted(go.Color.WHITE);
-        if (timeLeftBlack != null)
-            m_timeB.setText(timeLeftBlack);
-        if (timeLeftWhite != null)
-            m_timeW.setText(timeLeftWhite);
+        float timeLeftBlack = node.getTimeLeftBlack();
+        if (! Float.isNaN(timeLeftBlack))
+            m_timeB.setText(TimeControl.getTimeString(timeLeftBlack,
+                                                      node.getMovesLeftBlack()));
+        float timeLeftWhite = node.getTimeLeftWhite();
+        if (! Float.isNaN(timeLeftWhite))
+            m_timeW.setText(TimeControl.getTimeString(timeLeftWhite,
+                                                      node.getMovesLeftWhite()));
     }
 
     private go.Board m_board;
