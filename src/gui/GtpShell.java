@@ -179,7 +179,7 @@ class GtpShellText
 
 public class GtpShell
     extends JDialog
-    implements ActionListener, Gtp.IOCallback, ItemListener, KeyListener
+    implements ActionListener, Gtp.IOCallback, ItemListener
 {
     public interface Callback
     {
@@ -249,33 +249,6 @@ public class GtpShell
             m_textField.setText(text);
             m_textField.setCaretPosition(text.length());
         }
-    }
-
-    public void keyPressed(KeyEvent e)
-    {
-    }
-
-    public void keyReleased(KeyEvent e) 
-    {
-        int c = e.getKeyCode();        
-        int mod = e.getModifiers();
-        if (c == KeyEvent.VK_ESCAPE)
-            return;
-        else if (c == KeyEvent.VK_TAB)
-        {
-            findBestCompletion();
-            popupCompletions();
-        }
-        else if (c == KeyEvent.VK_PAGE_UP && mod == ActionEvent.SHIFT_MASK)
-            scrollPage(true);
-        else if (c == KeyEvent.VK_PAGE_DOWN && mod == ActionEvent.SHIFT_MASK)
-            scrollPage(false);
-        else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED)
-            popupCompletions();
-    }
-
-    public void keyTyped(KeyEvent e)
-    {
     }
 
     public void loadHistory()
@@ -762,7 +735,30 @@ public class GtpShell
         m_editor = m_comboBox.getEditor();
         m_textField = (JTextField)m_editor.getEditorComponent();
         m_textField.setFocusTraversalKeysEnabled(false);
-        m_textField.addKeyListener(this);
+        KeyAdapter keyAdapter = new KeyAdapter()
+            {
+                public void keyReleased(KeyEvent e) 
+                {
+                    int c = e.getKeyCode();        
+                    int mod = e.getModifiers();
+                    if (c == KeyEvent.VK_ESCAPE)
+                        return;
+                    else if (c == KeyEvent.VK_TAB)
+                    {
+                        findBestCompletion();
+                        popupCompletions();
+                    }
+                    else if (c == KeyEvent.VK_PAGE_UP
+                             && mod == ActionEvent.SHIFT_MASK)
+                        scrollPage(true);
+                    else if (c == KeyEvent.VK_PAGE_DOWN
+                             && mod == ActionEvent.SHIFT_MASK)
+                        scrollPage(false);
+                    else if (e.getKeyChar() != KeyEvent.CHAR_UNDEFINED)
+                        popupCompletions();
+                }
+            };
+        m_textField.addKeyListener(keyAdapter);
         m_comboBox.setEditable(true);
         m_comboBox.setFont(m_gtpShellText.getFont());
         m_comboBox.addActionListener(this);

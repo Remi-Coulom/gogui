@@ -16,7 +16,6 @@ import go.*;
 
 class GameNode
     extends JComponent
-    implements MouseListener
 {
     public GameNode(Node node, int moveNumber, int width, int height,
                     GameTreeViewer.Listener listener)
@@ -26,34 +25,20 @@ class GameNode
         m_width = width;
         m_height = height;
         m_listener = listener;
-        addMouseListener(this);
+        MouseAdapter mouseAdapter = new MouseAdapter()
+            {
+                public void mouseClicked(MouseEvent event)
+                {
+                    if (m_listener != null)
+                        m_listener.gotoNode(m_node);
+                }
+            };
+        addMouseListener(mouseAdapter);
     }
 
     public Dimension getPreferredSize()
     {
         return new Dimension(m_width, m_height);
-    }
-
-    public void mouseClicked(MouseEvent event)
-    {
-        if (m_listener != null)
-            m_listener.gotoNode(m_node);
-    }
-
-    public void mouseEntered(MouseEvent e)
-    {
-    }
-
-    public void mouseExited(MouseEvent e)
-    {
-    }
-
-    public void mousePressed(MouseEvent e)
-    {
-    }
-
-    public void mouseReleased(MouseEvent e)
-    {
     }
 
     public void paintComponent(Graphics graphics)

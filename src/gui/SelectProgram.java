@@ -18,7 +18,7 @@ import utils.StringUtils;
 
 class SelectProgram
     extends JDialog
-    implements ActionListener, KeyListener
+    implements ActionListener
 {
     public SelectProgram(Frame owner)
     {
@@ -81,14 +81,6 @@ class SelectProgram
         }
     }
 
-    public void keyReleased(KeyEvent e) 
-    {
-    }
-
-    public void keyTyped(KeyEvent e)
-    {
-    }
-
     public static String select(Frame owner)
     {
         SelectProgram dialog = new SelectProgram(owner);
@@ -144,7 +136,19 @@ class SelectProgram
         m_textField = (JTextField)editor.getEditorComponent();
         m_textField.setColumns(40);
         m_textField.selectAll();
-        m_textField.addKeyListener(this);
+        KeyListener keyListener = new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent e)
+                {
+                    int c = e.getKeyCode();        
+                    if (c == KeyEvent.VK_ESCAPE)
+                    {
+                        if (! m_comboBox.isPopupVisible())
+                            dispose();
+                    }
+                }
+            };
+        m_textField.addKeyListener(keyListener);
         int fontSize = GuiUtils.getDefaultMonoFontSize();
         m_comboBox.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         innerPanel.add(m_comboBox, BorderLayout.CENTER);

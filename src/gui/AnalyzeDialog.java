@@ -389,7 +389,7 @@ interface AnalyzeCallback
 
 class AnalyzeDialog
     extends JDialog
-    implements ActionListener, ListSelectionListener, MouseListener
+    implements ActionListener, ListSelectionListener
 {
     public AnalyzeDialog(Frame owner, AnalyzeCallback callback,
                          Preferences prefs, Vector supportedCommands)
@@ -441,35 +441,6 @@ class AnalyzeDialog
             setCommand();
         else if (command.equals("sort"))
             sort();
-    }
-
-    public void mouseClicked(MouseEvent event)
-    {
-        int modifiers = event.getModifiers();
-        int mask = ActionEvent.ALT_MASK;
-        if (event.getClickCount() == 2
-            || ((modifiers & mask) != 0))
-        {
-            int index = m_list.locationToIndex(event.getPoint());
-            selectCommand(index);
-            setCommand();
-        }
-    }
-
-    public void mouseEntered(MouseEvent e)
-    {
-    }
-
-    public void mouseExited(MouseEvent e)
-    {
-    }
-
-    public void mousePressed(MouseEvent e)
-    {
-    }
-
-    public void mouseReleased(MouseEvent e)
-    {
     }
 
     public void setTitlePrefix(String title)
@@ -624,7 +595,22 @@ class AnalyzeDialog
         m_list = new JList();
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         m_list.setVisibleRowCount(25);
-        m_list.addMouseListener(this);
+        MouseAdapter mouseAdapter = new MouseAdapter()
+            {
+                public void mouseClicked(MouseEvent event)
+                {
+                    int modifiers = event.getModifiers();
+                    int mask = ActionEvent.ALT_MASK;
+                    if (event.getClickCount() == 2
+                        || ((modifiers & mask) != 0))
+                    {
+                        int index = m_list.locationToIndex(event.getPoint());
+                        selectCommand(index);
+                        setCommand();
+                    }
+                }
+            };
+        m_list.addMouseListener(mouseAdapter);
         m_list.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -870,7 +856,6 @@ class AnalyzeDialog
 
 class AnalyzeTextOutput
     extends JDialog
-    implements KeyListener
 {
     public AnalyzeTextOutput(Frame owner, String title, String response,
                              boolean highlight)
@@ -898,27 +883,21 @@ class AnalyzeTextOutput
         JScrollPane scrollPane = new JScrollPane(m_textPane);
         panel.add(scrollPane, BorderLayout.CENTER);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        m_textPane.addKeyListener(this);
+        KeyListener keyListener = new KeyAdapter()
+            {
+                public void keyReleased(KeyEvent e) 
+                {
+                    int c = e.getKeyCode();        
+                    if (c == KeyEvent.VK_ESCAPE)
+                        dispose();
+                }
+            };
+        m_textPane.addKeyListener(keyListener);
         if (highlight)
             doSyntaxHighlight();
         m_textPane.setEditable(false);
         pack();
         setVisible(true);
-    }
-
-    public void keyPressed(KeyEvent e)
-    {
-    }
-
-    public void keyReleased(KeyEvent e) 
-    {
-        int c = e.getKeyCode();        
-        if (c == KeyEvent.VK_ESCAPE)
-            dispose();
-    }
-
-    public void keyTyped(KeyEvent e)
-    {
     }
 
     private JTextPane m_textPane;

@@ -30,7 +30,7 @@ class BoardLabel
 
 public class Board
     extends JPanel
-    implements FocusListener, KeyListener, Printable
+    implements FocusListener, Printable
 {
     public interface Listener
     {
@@ -190,7 +190,14 @@ public class Board
                 Field field = new Field(this, p);
                 add(field);
                 m_field[x][y] = field;
-                field.addKeyListener(this);
+                KeyListener keyListener = new KeyAdapter()
+                    {
+                        public void keyPressed(KeyEvent event)
+                        {
+                            Board.this.keyPressed(event);
+                        }
+                    };
+                field.addKeyListener(keyListener);
             }
             add(new BoardLabel(text));
         }
@@ -199,65 +206,6 @@ public class Board
         m_lastMove = null;
         revalidate();
         repaint();
-    }
-
-    public void keyPressed(KeyEvent event)
-    {
-        int code = event.getKeyCode();
-        int modifiers = event.getModifiers();
-        int size = m_board.getSize();
-        if ((modifiers & ActionEvent.CTRL_MASK) != 0)
-            return;
-        boolean shiftModifier = ((modifiers & ActionEvent.SHIFT_MASK) != 0);
-        if (code == KeyEvent.VK_DOWN)
-        {
-            if (shiftModifier)
-                do
-                    m_focusPoint.down();
-                while (! m_board.isHandicapLine(m_focusPoint.getY())
-                       && ! m_board.isEdgeLine(m_focusPoint.getY()));
-            else
-                m_focusPoint.down();
-        }
-        else if (code == KeyEvent.VK_UP)
-        {
-            if (shiftModifier)
-                do
-                    m_focusPoint.up(size);
-                while (! m_board.isHandicapLine(m_focusPoint.getY())
-                       && ! m_board.isEdgeLine(m_focusPoint.getY()));
-            else
-                m_focusPoint.up(size);
-        }
-        else if (code == KeyEvent.VK_LEFT)
-        {
-            if (shiftModifier)
-                do
-                    m_focusPoint.left();
-                while (! m_board.isHandicapLine(m_focusPoint.getX())
-                       && ! m_board.isEdgeLine(m_focusPoint.getX()));
-            else
-                m_focusPoint.left();
-        }
-        else if (code == KeyEvent.VK_RIGHT)
-        {
-            if (shiftModifier)
-                do
-                    m_focusPoint.right(size);
-                while (! m_board.isHandicapLine(m_focusPoint.getX())
-                       && ! m_board.isEdgeLine(m_focusPoint.getX()));
-            else
-                m_focusPoint.right(size);
-        }
-        setFocusPoint(m_focusPoint);
-    }
-
-    public void keyReleased(KeyEvent event)
-    {
-    }
-
-    public void keyTyped(KeyEvent event)
-    {
     }
 
     public void paintComponent(Graphics graphics)
@@ -666,6 +614,57 @@ public class Board
         int dy = dimension.height / (size + 2);
         return new java.awt.Point(dx / 2 + (x + 1) * dx,
                                   dy / 2 + (size - y) * dy);
+    }
+
+    private void keyPressed(KeyEvent event)
+    {
+        int code = event.getKeyCode();
+        int modifiers = event.getModifiers();
+        int size = m_board.getSize();
+        if ((modifiers & ActionEvent.CTRL_MASK) != 0)
+            return;
+        boolean shiftModifier = ((modifiers & ActionEvent.SHIFT_MASK) != 0);
+        if (code == KeyEvent.VK_DOWN)
+        {
+            if (shiftModifier)
+                do
+                    m_focusPoint.down();
+                while (! m_board.isHandicapLine(m_focusPoint.getY())
+                       && ! m_board.isEdgeLine(m_focusPoint.getY()));
+            else
+                m_focusPoint.down();
+        }
+        else if (code == KeyEvent.VK_UP)
+        {
+            if (shiftModifier)
+                do
+                    m_focusPoint.up(size);
+                while (! m_board.isHandicapLine(m_focusPoint.getY())
+                       && ! m_board.isEdgeLine(m_focusPoint.getY()));
+            else
+                m_focusPoint.up(size);
+        }
+        else if (code == KeyEvent.VK_LEFT)
+        {
+            if (shiftModifier)
+                do
+                    m_focusPoint.left();
+                while (! m_board.isHandicapLine(m_focusPoint.getX())
+                       && ! m_board.isEdgeLine(m_focusPoint.getX()));
+            else
+                m_focusPoint.left();
+        }
+        else if (code == KeyEvent.VK_RIGHT)
+        {
+            if (shiftModifier)
+                do
+                    m_focusPoint.right(size);
+                while (! m_board.isHandicapLine(m_focusPoint.getX())
+                       && ! m_board.isEdgeLine(m_focusPoint.getX()));
+            else
+                m_focusPoint.right(size);
+        }
+        setFocusPoint(m_focusPoint);
     }
 
     private void setPreferredFieldSize()

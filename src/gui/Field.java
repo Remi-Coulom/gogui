@@ -17,7 +17,7 @@ import go.*;
 
 public class Field
     extends JComponent
-    implements FocusListener, KeyListener, MouseListener
+    implements FocusListener
 {
     public Field(gui.Board board, go.Point p)
     {
@@ -37,8 +37,38 @@ public class Field
         setMinimumSize(new Dimension(3, 3));
         setBorder(null);
         addFocusListener(this);
-        addKeyListener(this);
-        addMouseListener(this);
+        KeyAdapter keyAdapter = new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent event)
+                {
+                    int code = event.getKeyCode();
+                    int modifiers = event.getModifiers();
+                    int mask = (ActionEvent.CTRL_MASK | ActionEvent.ALT_MASK
+                                | ActionEvent.META_MASK);
+                    boolean modifiedSelect = ((modifiers & mask) != 0);
+                    if (code == KeyEvent.VK_ENTER && m_board.getShowCursor())
+                        m_board.fieldClicked(m_point, modifiedSelect);
+                }
+            };
+        addKeyListener(keyAdapter);
+        MouseAdapter mouseAdapter = new MouseAdapter()
+            {
+                public void mouseClicked(MouseEvent event)
+                {
+                    if (event.getClickCount() == 2)
+                        m_board.fieldClicked(m_point, true);
+                    else
+                    {            
+                        int modifiers = event.getModifiers();
+                        int mask = (ActionEvent.CTRL_MASK
+                                    | ActionEvent.ALT_MASK
+                                    | ActionEvent.META_MASK);
+                        boolean modifiedSelect = ((modifiers & mask) != 0);
+                        m_board.fieldClicked(m_point, modifiedSelect);
+                    }
+                }
+            };
+        addMouseListener(mouseAdapter);
     }
 
     public void clearInfluence()
@@ -80,55 +110,6 @@ public class Field
     public go.Color getTerritory()
     {
         return m_territory;
-    }
-
-    public void keyPressed(KeyEvent event)
-    {
-        int code = event.getKeyCode();
-        int modifiers = event.getModifiers();
-        int mask = (ActionEvent.CTRL_MASK | ActionEvent.ALT_MASK
-                    | ActionEvent.META_MASK);
-        boolean modifiedSelect = ((modifiers & mask) != 0);
-        if (code == KeyEvent.VK_ENTER && m_board.getShowCursor())
-            m_board.fieldClicked(m_point, modifiedSelect);
-    }
-
-    public void keyReleased(KeyEvent event)
-    {
-    }
-
-    public void keyTyped(KeyEvent event)
-    {
-    }
-
-    public void mouseClicked(MouseEvent event)
-    {
-        if (event.getClickCount() == 2)
-            m_board.fieldClicked(m_point, true);
-        else
-        {            
-            int modifiers = event.getModifiers();
-            int mask = (ActionEvent.CTRL_MASK | ActionEvent.ALT_MASK
-                        | ActionEvent.META_MASK);
-            boolean modifiedSelect = ((modifiers & mask) != 0);
-            m_board.fieldClicked(m_point, modifiedSelect);
-        }
-    }
-
-    public void mouseEntered(MouseEvent e)
-    {
-    }
-
-    public void mouseExited(MouseEvent e)
-    {
-    }
-
-    public void mousePressed(MouseEvent e)
-    {
-    }
-
-    public void mouseReleased(MouseEvent e)
-    {
     }
 
     public void paintComponent(Graphics graphics)
