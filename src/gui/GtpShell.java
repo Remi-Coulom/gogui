@@ -129,8 +129,6 @@ class GtpShellText
             ++m_lines;
             ++indexNewLine;
         }
-        if (m_lines > m_historyMax)
-            truncateHistory();
         StyledDocument doc = getStyledDocument();
         Style s = null;
         if (style != null)
@@ -145,6 +143,8 @@ class GtpShellText
         {
             assert(false);
         }
+        if (m_lines > m_historyMax)
+            truncateHistory();
     }
 
     private void truncateHistory()
