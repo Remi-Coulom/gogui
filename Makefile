@@ -53,7 +53,9 @@ DOC= \
 
 all: gogui gmptogtp gtpnet netgtp twogtp 
 
-gogui: doc version
+.PHONY: doc gmptogtp gtpnet netgtp twogtp
+
+gogui: doc/html/index.html version
 	mkdir -p build/gogui
 	javac -O -deprecation -sourcepath . -source 1.4 -d build/gogui @build/files-gogui.txt
 	mkdir -p build/gogui/doc
@@ -74,8 +76,6 @@ gogui_debug: version
 version:
 	sed 's/m_version = \".*\"/m_version = \"$(VERSION)\"/' <src/gui/Version.java >src/gui/.Version.java.new
 	mv src/gui/.Version.java.new src/gui/Version.java
-
-.PHONY: gmptogtp gtpnet netgtp twogtp
 
 gmptogtp:
 	mkdir -p build/gmptogtp
@@ -102,7 +102,9 @@ twogtp:
 clean:
 	-rm -r build/gogui build/gogui_debug build/gmptogtp build/netgtp build/twogtp
 
-doc: $(DOC)
+doc: doc/html/index.html
+
+doc/html/index.html: $(DOC)
 	echo "$(VERSION)" >doc/xml/version.xml
 	$(MAKE) -C doc
 
