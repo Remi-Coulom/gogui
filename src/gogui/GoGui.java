@@ -2797,7 +2797,7 @@ class GoGui
         {
             m_gameTreeViewer.dispose();
             m_gameTreeViewer = null;
-            showError("Game tree too large for game tree window");
+            showError("Could not open game tree window:\nOut of memory");
         }
     }
 }

@@ -384,11 +384,11 @@ public class Reader
         }
         catch (IOException e)
         {
-            throw new SgfError("Error while reading file");
+            throw new SgfError("IO error");
         }
         catch (OutOfMemoryError e)
         {
-            throw new SgfError("Game tree to large");
+            throw new SgfError("Out of memory");
         }
     }
 
