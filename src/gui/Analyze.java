@@ -196,8 +196,6 @@ interface AnalyzeCallback
     public void clearAnalyzeCommand();
 
     public void setAnalyzeCommand(AnalyzeCommand command);
-
-
 }
 
 //-----------------------------------------------------------------------------
@@ -223,6 +221,7 @@ class AnalyzeDialog
         contentPane.add(createButtons(), BorderLayout.SOUTH);
         contentPane.add(createCommandPanel(owner), BorderLayout.CENTER);
         createMenu();
+        comboBoxChanged();
         pack();
     }
 
@@ -230,7 +229,7 @@ class AnalyzeDialog
     {
         String command = event.getActionCommand();
         if (command.equals("clear"))
-            m_callback.clearAnalyzeCommand();
+            clearCommand();
         else if (command.equals("close"))
             close();
         else if (command.equals("comboBoxChanged"))
@@ -317,6 +316,8 @@ class AnalyzeDialog
 
     private boolean m_recentModified;
 
+    private JButton m_clearButton;
+
     private JButton m_runButton;
 
     private JComboBox m_comboBox;
@@ -324,8 +325,6 @@ class AnalyzeDialog
     private JList m_list;
 
     private JMenuItem m_itemOnlySupported;
-
-    private String m_lastCommandSent = "";
 
     private Vector m_commands = new Vector(128, 64);
 
@@ -363,10 +362,16 @@ class AnalyzeDialog
         return addMenuItem(menu, item, mnemonic, command);
     }
 
-    private void close()
+    private void clearCommand()
     {
         m_callback.clearAnalyzeCommand();
-        m_lastCommandSent = "";
+        m_clearButton.setEnabled(false);
+        m_comboBox.requestFocus();
+    }
+
+    private void close()
+    {
+        clearCommand();
         saveRecent();
         setVisible(false);
     }
@@ -389,11 +394,12 @@ class AnalyzeDialog
         m_runButton.setMnemonic(KeyEvent.VK_R);
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
-        JButton clearButton = new JButton("Clear");
-        clearButton.setActionCommand("clear");
-        clearButton.addActionListener(this);
-        clearButton.setMnemonic(KeyEvent.VK_L);
-        innerPanel.add(clearButton);
+        m_clearButton = new JButton("Clear");
+        m_clearButton.setActionCommand("clear");
+        m_clearButton.addActionListener(this);
+        m_clearButton.setMnemonic(KeyEvent.VK_L);
+        m_clearButton.setEnabled(false);
+        innerPanel.add(m_clearButton);
         JButton closeButton = new JButton("Close");
         closeButton.setActionCommand("close");
         closeButton.addActionListener(this);
@@ -564,10 +570,10 @@ class AnalyzeDialog
         if (index < 0)
             return;
         selectCommand(index);
-        m_lastCommandSent = (String)m_labels.get(index);
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         m_callback.setAnalyzeCommand(command);
+        m_clearButton.setEnabled(true);
     }
 
     private static void setPrefsDefaults(Preferences prefs)
