@@ -619,7 +619,22 @@ public final class Gtp
             }
             else
             {
-                handleErrorStream(message.m_text);
+                StringBuffer buffer = new StringBuffer(2048);
+                while (message != null)
+                {
+                    buffer.append(message.m_text);
+                    synchronized (m_queue)
+                    {
+                        message = (ReadMessage)m_queue.unsynchronizedPeek();
+                        if (message != null && ! message.m_isError)
+                            message = null;
+                    }
+                    if (message != null)
+                    {
+                        message = (ReadMessage)m_queue.getIfAvaliable();
+                    }
+                }
+                handleErrorStream(buffer.toString());
             }
         }
     }

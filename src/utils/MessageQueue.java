@@ -19,6 +19,16 @@ public class MessageQueue
         }
     }
 
+    public Object getIfAvaliable()
+    {
+        synchronized(this)
+        {
+            if (m_queue.isEmpty())
+                return null;
+            return m_queue.remove(0);
+        }
+    }
+
     public void put(Object object)
     {
         synchronized(this)
@@ -26,6 +36,14 @@ public class MessageQueue
             m_queue.add(object);
             notify();
         }
+    }
+
+    public Object unsynchronizedPeek()
+    {
+        assert(Thread.currentThread().holdsLock(this));
+        if (m_queue.isEmpty())
+            return null;
+        return m_queue.get(0);
     }
 
     public Object waitFor()
