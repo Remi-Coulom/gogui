@@ -131,6 +131,10 @@ class SelectProgram
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new BorderLayout());
         m_comboBox = new JComboBox(loadHistory());
+        StringBuffer prototype = new StringBuffer(80);
+        for (int i = 0; i < 80; ++i)
+            prototype.append('-');
+        m_comboBox.setPrototypeDisplayValue(prototype.toString());
         m_comboBox.setEditable(true);
         ComboBoxEditor editor = m_comboBox.getEditor();
         m_textField = (JTextField)editor.getEditorComponent();
