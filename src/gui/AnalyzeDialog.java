@@ -35,7 +35,8 @@ public class AnalyzeDialog
     }
 
     public AnalyzeDialog(Callback callback, Preferences prefs,
-                         Vector supportedCommands, CommandThread commandThread)
+                         Vector supportedCommands,
+                         CommandThread commandThread)
     {
         super("Analyze - GoGui");
         GuiUtils.setGoIcon(this);
@@ -278,6 +279,7 @@ public class AnalyzeDialog
         m_colorPanel.add(m_labelColor);
         String[] colors = {"Black", "White"};
         m_comboBoxColor = new JComboBox(colors);
+        m_comboBoxColor.setToolTipText("Color argument for command");
         m_colorPanel.add(m_comboBoxColor);
         return m_colorPanel;
     }
@@ -365,8 +367,8 @@ public class AnalyzeDialog
         m_itemSort.setSelected(m_sort);
         addMenuItem(menu, m_itemSort, KeyEvent.VK_S, "sort");
         menu.addSeparator();
-        addMenuItem(menu, "Reload Configuration File", KeyEvent.VK_R, "reload",
-                    "Reload commands from configuration files");
+        addMenuItem(menu, "Reload Configuration File", KeyEvent.VK_R,
+                    "reload", "Reload commands from configuration files");
         return menu;
     }
 
@@ -523,7 +525,8 @@ public class AnalyzeDialog
             {
                 command.setOptStringArg("");
                 String commandWithoutArg =
-                    command.replaceWildCards(m_selectedColor, m_selectedColor);
+                    command.replaceWildCards(m_selectedColor,
+                                             m_selectedColor);
                 String value = m_commandThread.sendCommand(commandWithoutArg);
                 String optStringArg =
                     JOptionPane.showInputDialog(this, label, value);
