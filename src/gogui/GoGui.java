@@ -561,7 +561,6 @@ class GoGui
         catch (Throwable t)
         {
             SimpleDialogs.showError(null, StringUtils.printException(t));
-            t.printStackTrace();
             System.exit(-1);
         }
     }
