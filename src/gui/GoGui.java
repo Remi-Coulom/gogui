@@ -260,6 +260,7 @@ class GoGui
         catch (Exception e)
         {
         }
+        boolean verbose = false;
         try
         {
             String options[] = {
@@ -313,7 +314,7 @@ class GoGui
             if (opt.contains("size"))
                 prefs.setBoardSize(opt.getInteger("size"));
             String time = opt.getString("time", null);
-            boolean verbose = opt.isSet("verbose");
+            verbose = opt.isSet("verbose");
             Vector arguments = opt.getArguments();
             String program = null;
             if (arguments.size() == 1)
@@ -336,7 +337,8 @@ class GoGui
             if (msg == null)
                 msg = t.getClass().getName();
             SimpleDialogs.showError(null, msg);
-            t.printStackTrace();
+            if (verbose)
+                t.printStackTrace();
             System.exit(-1);
         }
     }
