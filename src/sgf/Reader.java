@@ -64,7 +64,7 @@ public class Reader
 
     private java.io.Reader m_in;
 
-    private GameInformation m_gameInformation = new GameInformation();
+    private GameInformation m_gameInformation = new GameInformation(19);
 
     private GameTree m_gameTree;
 
@@ -133,6 +133,7 @@ public class Reader
         if (s.length() < 2)
             throw getError("Invalid coordinates: " + s);
         int boardSize = m_gameInformation.m_boardSize;
+        System.err.println("xxx " + boardSize);
         if (s.equals("tt") && boardSize <= 19)
             return null;
         int x = s.charAt(0) - 'a';

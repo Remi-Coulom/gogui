@@ -9,6 +9,11 @@ package game;
 
 public class GameInformation
 {
+    public GameInformation(int boardSize)
+    {
+        m_boardSize = boardSize;
+    }
+
     public int m_boardSize;
 
     public int m_handicap;

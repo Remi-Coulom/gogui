@@ -16,17 +16,16 @@ public class GameTree
 {
     public GameTree()
     {
-        m_gameInformation = new GameInformation();
+        m_gameInformation = new GameInformation(19);
         setDate();
         m_root = new Node();
     }
 
     public GameTree(int boardSize, float komi, Vector handicap, String rules)
     {
-        m_gameInformation = new GameInformation();
+        m_gameInformation = new GameInformation(boardSize);
         setDate();
         m_root = new Node();
-        m_gameInformation.m_boardSize = boardSize;
         m_gameInformation.m_komi = komi;
         m_gameInformation.m_rules = rules;
         if (handicap != null)
