@@ -255,6 +255,18 @@ public class Gtp
         }
     }
 
+    public String queryVersion()
+    {
+        try
+        {
+            return sendCommand("version");
+        }
+        catch (Error e)
+        {
+            return "";
+        }
+    }
+
     public String sendCommand(String command, long timeout) throws Error
     {
         assert(! command.trim().equals(""));

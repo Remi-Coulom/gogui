@@ -483,11 +483,11 @@ class GoGui
 
     private String m_gtpFile;
 
-    private String m_name = "Unknown Go Program";
+    private String m_name = "";
 
     private String m_pid;
 
-    private String m_version = "?";
+    private String m_version = "";
 
     /** Preferences.
         Preferences are shared between instances created with
@@ -1298,7 +1298,7 @@ class GoGui
                 }
                 try
                 {
-                    m_version = m_commandThread.sendCommand("version").trim();
+                    m_commandThread.queryVersion();
                     queryCommandList();
                     if (m_commandList.contains("gogui_sigint"))
                         m_pid =

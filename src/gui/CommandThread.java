@@ -70,6 +70,13 @@ class CommandThread
         m_gtp.queryProtocolVersion();
     }
 
+    public void queryVersion() throws Gtp.Error
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtp.queryVersion();
+    }
+
     public void run()
     {
         synchronized (this)
