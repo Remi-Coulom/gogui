@@ -1002,7 +1002,6 @@ public final class Gmp
         m_readThread =
             new ReadThread(input, output, size, colorIndex, simple, verbose);
         m_readThread.start();
-        m_verbose = verbose;
     }
 
     public void interruptCommand()
@@ -1074,8 +1073,6 @@ public final class Gmp
             response.append(result.m_response);
         return result.m_success;
     }
-
-    private boolean m_verbose;
 
     private int m_size;
 

@@ -28,7 +28,6 @@ public class GmpToGtp
         m_wait = wait;
         m_gmp = new Gmp(in, out, size, colorIndex, simple, verbose);
         m_title = title;
-        m_verbose = verbose;
     }
 
     public boolean handleCommand(String command, StringBuffer response)
@@ -247,8 +246,6 @@ public class GmpToGtp
         }
         System.exit(exitStatus);
     }
-
-    private boolean m_verbose;
 
     private boolean m_firstGame = true;
 
