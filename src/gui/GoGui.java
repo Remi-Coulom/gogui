@@ -49,15 +49,11 @@ class GoGui
 
         Container contentPane = getContentPane();        
 
-        m_infoPanel = new JPanel();
-        m_infoPanel.setLayout(new BoxLayout(m_infoPanel, BoxLayout.Y_AXIS));
-        m_infoPanel.setBorder(utils.GuiUtils.createSmallEmptyBorder());
+        m_infoPanel = new JPanel(new BorderLayout());
         m_timeControl = new TimeControl();
-        Dimension pad = new Dimension(0, utils.GuiUtils.PAD);
         m_gameInfo = new GameInfo(m_timeControl);
-        m_infoPanel.add(m_gameInfo);
-        m_infoPanel.add(Box.createRigidArea(pad));
-        m_infoPanel.add(createStatusBar());
+        m_gameInfo.setBorder(utils.GuiUtils.createSmallEmptyBorder());
+        m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
 
         m_board = new go.Board(m_boardSize);
 
@@ -70,22 +66,20 @@ class GoGui
         m_guiBoard.setListener(this);
         m_toolBar = new ToolBar(this, prefs);
         contentPane.add(m_toolBar, BorderLayout.NORTH);
-
-        contentPane.add(m_infoPanel, BorderLayout.SOUTH);
+        contentPane.add(createStatusBar(), BorderLayout.SOUTH);
 
         m_squareLayout = new SquareLayout();
         m_squareLayout.setPreferMultipleOf(m_boardSize + 2);
         m_boardPanel = new JPanel(m_squareLayout);
-        m_boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         m_boardPanel.add(m_guiBoard);
 
         Comment.Listener commentListener = new Comment.Listener()
             { public void changed() { cbCommentChanged(); } };
         m_comment = new Comment(commentListener);
-
-        m_splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                                     m_boardPanel, m_comment);
-        m_splitPane.setResizeWeight(0.9);
+        m_infoPanel.add(m_comment, BorderLayout.CENTER);
+        m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                                     m_boardPanel, m_infoPanel);
+        m_splitPane.setResizeWeight(0.85);
         contentPane.add(m_splitPane, BorderLayout.CENTER);
         
         WindowAdapter windowAdapter = new WindowAdapter()

@@ -23,34 +23,17 @@ class GameInfo
 {
     public GameInfo(TimeControl timeControl)
     {
-        super(new GridLayout(2, 0, utils.GuiUtils.PAD, 0));
+        super(new GridLayout(0, 1));
         m_timeControl = timeControl;
-
-        add(createLeftAlignedLabel("To play"));
-        add(createLeftAlignedLabel("Moves"));
-        add(createLeftAlignedLabel("Last move"));
-        add(createLeftAlignedLabel("Captured B"));
-        add(createLeftAlignedLabel("Captured W"));
-        add(createLeftAlignedLabel("Time B"));
-        add(createLeftAlignedLabel("Time W"));
-
-        m_move = createEntry();
-        add(m_move);
-        m_number = createEntry();
-        add(m_number);
-        m_last = createEntry();
-        add(m_last);
-        m_captB = createEntry();
-        add(m_captB);
-        m_captW = createEntry();
-        add(m_captW);
-        m_timeB = createEntry();
+        m_move = addEntry("To play");
+        m_number = addEntry("Moves");
+        m_last = addEntry("Last move");
+        m_captB = addEntry("Captured Black");
+        m_captW = addEntry("Captured White");
+        m_timeB = addEntry("Time Black");
+        m_timeW = addEntry("Time White");
         m_timeB.setText("00:00");
-        add(m_timeB);
-        m_timeW = createEntry();
         m_timeW.setText("00:00");
-        add(m_timeW);
-
         new javax.swing.Timer(1000, this).start();
     }
 
@@ -93,13 +76,15 @@ class GameInfo
         }
         m_last.setText(lastMove);
         float timeLeftBlack = node.getTimeLeftBlack();
+        int movesLeftBlack = node.getMovesLeftBlack();
         if (! Float.isNaN(timeLeftBlack))
             m_timeB.setText(TimeControl.getTimeString(timeLeftBlack,
-                                                      node.getMovesLeftBlack()));
+                                                      movesLeftBlack));
         float timeLeftWhite = node.getTimeLeftWhite();
+        int movesLeftWhite = node.getMovesLeftWhite();
         if (! Float.isNaN(timeLeftWhite))
             m_timeW.setText(TimeControl.getTimeString(timeLeftWhite,
-                                                      node.getMovesLeftWhite()));
+                                                      movesLeftBlack));
     }
 
     private go.Board m_board;
@@ -120,18 +105,16 @@ class GameInfo
 
     private TimeControl m_timeControl;
 
-    private JLabel createLeftAlignedLabel(String text)
+    private JLabel addEntry(String text)
     {
         JLabel label = new JLabel(text);
         label.setHorizontalAlignment(SwingConstants.LEFT);
-        return label;
-    }
-
-    private JLabel createEntry()
-    {
-        JLabel label = createLeftAlignedLabel(" ");
-        label.setBorder(BorderFactory.createLoweredBevelBorder());
-        return label;
+        add(label);
+        JLabel entry = new JLabel(" ");
+        entry.setHorizontalAlignment(SwingConstants.LEFT);
+        entry.setBorder(BorderFactory.createLoweredBevelBorder());
+        add(entry);
+        return entry;
     }
 
     private void setTime(go.Color c)

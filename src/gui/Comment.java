@@ -18,7 +18,7 @@ import utils.*;
 //-----------------------------------------------------------------------------
 
 class Comment
-    extends JPanel
+    extends JScrollPane
     implements DocumentListener
 {
     public interface Listener
@@ -28,10 +28,9 @@ class Comment
 
     public Comment(Listener listener)
     {
-        super(new GridLayout(1, 0));
         m_listener = listener;
         m_textArea = new JTextArea();
-        m_textArea.setRows(3);
+        m_textArea.setColumns(15);
         m_textArea.setLineWrap(true);
         m_textArea.setWrapStyleWord(true);
         m_textArea.getDocument().addDocumentListener(this);
@@ -43,11 +42,9 @@ class Comment
         backwardSet.add(KeyStroke.getKeyStroke("shift TAB"));
         int backwardId = KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS;
         m_textArea.setFocusTraversalKeys(backwardId, backwardSet);
-        JScrollPane scrollPane
-            = new JScrollPane(m_textArea,
-                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                              JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        add(scrollPane, BorderLayout.CENTER);
+        setViewportView(m_textArea);
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
     public void changedUpdate(DocumentEvent e) 
