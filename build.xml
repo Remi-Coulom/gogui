@@ -174,7 +174,7 @@ installation directory.
 <arg line="--param html.cleanup 1"/>
 <arg line="--stringparam html.stylesheet docbook.css"/>
 <arg line="--param make.valid.html 1"/>
-<arg line="--param navig.showtitles 0"/>
+<arg line="--param navig.showtitles 1"/>
 <arg line="--param refentry.generate.name 0"/>
 <arg line="--param refentry.generate.title 1"/>
 <arg line="--param spacing.paras 0"/>
@@ -193,6 +193,7 @@ installation directory.
 <target name="docCheckUptodate">
 <uptodate property="docUptodate" targetfile="doc/html/index.html">
 <srcfiles dir= "doc/xml" includes="*.xml"/>
+<srcfiles dir= "doc/html" includes="*.css"/>
 </uptodate>
 </target>
 
