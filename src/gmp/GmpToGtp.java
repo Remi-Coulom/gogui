@@ -15,11 +15,12 @@ import gtp.GtpServer;
 public class GmpToGtp
     extends GtpServer
 {
-    public GmpToGtp(InputStream in, OutputStream out, boolean verbose)
+    public GmpToGtp(InputStream in, OutputStream out, boolean verbose,
+                    int size, int colorIndex)
     {
         super(System.in, System.out);
         m_verbose = verbose;
-        m_gmp = new Gmp(in, out);
+        m_gmp = new Gmp(in, out, size, colorIndex);
     }
 
     public boolean handleCommand(String command, StringBuffer response)
@@ -68,7 +69,9 @@ public class GmpToGtp
         try
         {
             String options[] = {
+                "color:",
                 "help",
+                "size:",
                 "verbose"
             };
             Options opt = new Options(args, options);
@@ -77,11 +80,23 @@ public class GmpToGtp
                 String helpText =
                     "Usage: java -cp gogui.jar gmp.GmpToGtp [options]\n" +
                     "\n" +
+                    "-color   color (black|white)\n" +
                     "-help    display this help and exit\n" +
+                    "-size    board size\n" +
                     "-verbose print logging messages";
                 System.out.print(helpText);
                 System.exit(0);
             }
+            String color = opt.getString("color", "");
+            if (! color.equals(""))
+            {
+                color = color.toLowerCase();
+                if (! color.equals("black") && ! color.equals("white"))
+                    throw new Exception("invalid color");
+            }
+            int size = opt.getInteger("size", 19);
+            if (size < 1 || size > 22)
+                throw new Exception("invalid size");
             boolean verbose = opt.isSet("verbose");
             String program = null;
             Vector arguments = opt.getArguments();
@@ -101,9 +116,17 @@ public class GmpToGtp
             Process process = runtime.exec(StringUtils.getCmdArray(program));
             Thread stdErrThread = new StdErrThread(process);
             stdErrThread.start();
+            int colorIndex = 0;
+            if (color != null)
+            {
+                if (color.equals("black"))
+                    colorIndex =  1;
+                else if (color.equals("white"))
+                    colorIndex =  2;
+            }
             GmpToGtp gmpToGtp = new GmpToGtp(process.getInputStream(),
                                              process.getOutputStream(),
-                                             verbose);
+                                             verbose, size, colorIndex);
             gmpToGtp.mainLoop();
         }
         catch (Throwable t)

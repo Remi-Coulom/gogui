@@ -94,15 +94,22 @@ class ReadThread
         public int m_value;
     }
 
-    public ReadThread(InputStream input, OutputStream output)
+    public ReadThread(InputStream input, OutputStream output,
+                      int size, int colorIndex)
     {
+        assert(size >= 1);
+        assert(size <= 22);
+        assert(colorIndex >= 0);
+        assert(colorIndex <= 2);
         m_in = input;
         m_out = output;
+        m_size = size;
+        m_colorIndex = colorIndex;
     }
 
     public int getSize()
     {
-        return 19;
+        return m_size;
     }
 
     public void run()
@@ -234,7 +241,11 @@ class ReadThread
 
     private int m_status = STATUS_IDLE;
 
+    private int m_colorIndex = 0;
+
     private int m_pending = 0;
+
+    private int m_size = 0;
 
     private int[] m_inBuffer = new int[4];
 
@@ -248,9 +259,9 @@ class ReadThread
     {
         int answer = 0;
         if (val == QUERY_COLOR)
-            answer = 1; // XXX
+            answer = m_colorIndex;
         else if (val == QUERY_SIZE)
-            answer = getSize();
+            answer = m_size;
         else if (val == QUERY_HANDICAP)
             answer = 1;
         sendCommand(Command.ANSWER, answer);
@@ -500,9 +511,16 @@ public class Gmp
         public int m_y;
     }    
 
-    public Gmp(InputStream input, OutputStream output)
+    /** Create a Gmp.
+        @param size board size 1-22
+        Gmp supports only sizes up to 22 (number of bits in MOVE cmd)
+        @param colorIndex color computer color on your side
+        0=unknown, 1=white, 2=black
+    */
+    public Gmp(InputStream input, OutputStream output, int size,
+               int colorIndex)
     {
-        m_readThread = new ReadThread(input, output);
+        m_readThread = new ReadThread(input, output, size, colorIndex);
         log("starting read thread");
         m_readThread.start();
     }
@@ -527,7 +545,7 @@ public class Gmp
         }
         int val = (isBlack ? 0 : 0x200);
         if (x >= 0 && y >= 0)
-        val &= (1 + x + y * size);
+            val |= (1 + x + y * size);
         return m_readThread.send(new Command(Command.MOVE, val), response);
     }
 
