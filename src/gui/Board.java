@@ -267,7 +267,7 @@ public class Board
             java.awt.Point location = field.getLocation();
             int size = field.getSize().width;
             graphics.setColor(java.awt.Color.black);
-            int offset = size / 15;
+            int offset = size / 13;
             graphics.fillOval(location.x + 1 + offset,
                               location.y + 1 + offset,
                               size - 2, size - 2);
