@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=GNU Go (GoGui)
+Comment=Go program GNU Go (with GoGui as graphical user interface)
+Exec=gogui -program 'gnugo --mode gtp' %f
+TryExec=gnugo
+Icon=gogui.png
+Terminal=false
+Type=Application
+Categories=Application;Game;BoardGame
+MimeType=application/x-go-sgf
+

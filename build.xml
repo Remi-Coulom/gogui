@@ -123,7 +123,7 @@ installation directory.
  build.xml,
  install.sh,
  config/analyze-commands*,
- config/gogui.desktop,
+ config/gogui*.desktop,
  config/gogui.omf,
  config/gogui.xml,
  doc/html/*.html,

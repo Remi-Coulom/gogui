@@ -44,7 +44,7 @@ install -d $PREFIX/share/pixmaps
 install src/images/gogui.png $PREFIX/share/pixmaps
 
 install -d $PREFIX/share/applications
-install config/gogui.desktop $PREFIX/share/applications
+install config/gogui*.desktop $PREFIX/share/applications
 
 install -d $PREFIX/share/mime/packages
 install config/gogui.xml $PREFIX/share/mime/packages
