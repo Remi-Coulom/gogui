@@ -1103,7 +1103,10 @@ public class GtpShell
     private static void setPrefsDefaults(Preferences prefs)
     {
         prefs.setBoolDefault("gtpshell-autonumber", false);
-        prefs.setBoolDefault("gtpshell-disable-completions", false);
+        // JComboBox has problems on the Mac, see section Bugs in
+        // documentation
+        prefs.setBoolDefault("gtpshell-disable-completions",
+                             Platform.isMac());
         prefs.setBoolDefault("gtpshell-highlight", true);
         prefs.setIntDefault("gtpshell-history-max", 3000);
         prefs.setIntDefault("gtpshell-history-min", 2000);
