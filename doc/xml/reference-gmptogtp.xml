@@ -22,12 +22,16 @@ Adapter from Go Text Protocol to Go Modem Protocol.
 <arg><option>-flow</option> <group choice="plain">
   <arg choice="plain">rtscts</arg><arg choice="plain">xonxoff</arg>
   <arg choice="plain">none</arg></group></arg>
-<arg><option>-list</option></arg>
 <arg><option>-simple</option></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><option>-wait</option></arg>
 <arg><replaceable>program</replaceable></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>gmptogtp</command>
+<arg choice="plain"><option>-list</option></arg>
 </cmdsynopsis>
 
 <cmdsynopsis>
@@ -264,11 +268,40 @@ Send text as talk characters.
 
 </variablelist>
 </para>
+</refsection>
+
+<refsection>
+<title>Examples</title>
+
+<para>
+Test if GmpToGtp can see serial ports:
+<programlisting>
+<userinput>
+gmptogtp -list
+</userinput>
+</programlisting>
+</para>
+
+<para>
+Use GoGui and TwoGtp to play a game between GNU Go as Black and GMP as White
+on the first serial port.
+Note that the colors and board size are fixed by the command line options,
+they cannot be negotiated.
+Other options that might be necessary for gmptogtp are -flow or -simple:
+<programlisting>
+<userinput>
+BLACK="gnugo --mode gtp"
+WHITE="gmptogtp -color white -size 19 -device /dev/ttyS0 \
+  -baud 2400 -verbose"
+TWOGTP="twogtp -black \"$BLACK\" -white \"WHITE\" -verbose"
+gogui -size 19 -program "$TWOGTP" -verbose -computer-both -auto
+</userinput>
+</programlisting>
+</para>
 
 <para>
 <!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
 </para>
-
 </refsection>
 
 </refentry>
