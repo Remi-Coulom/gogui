@@ -599,11 +599,19 @@ public final class Gtp
 
         private MessageQueue m_queue;
 
-        private void mainLoop() throws IOException, InterruptedException
+        private void mainLoop() throws InterruptedException
         {
             while (true)
             {
-                String line = m_in.readLine();
+                String line;
+                try
+                {
+                    line = m_in.readLine();
+                }
+                catch (IOException e)
+                {
+                    line = null;
+                }
                 Thread.yield(); // Give ErrorThread a chance to read first
                 m_queue.put(new ReadMessage(false, line));
                 if (line == null)
@@ -637,13 +645,21 @@ public final class Gtp
 
         private MessageQueue m_queue;
 
-        private void mainLoop() throws IOException, InterruptedException
+        private void mainLoop() throws InterruptedException
         {
             int size = 1024;
             char[] buffer = new char[size];
             while (true)
-            {
-                int n = m_in.read(buffer, 0, size);
+            {                
+                int n;
+                try
+                {
+                    n = m_in.read(buffer, 0, size);
+                }
+                catch (IOException e)
+                {
+                    n = -1;
+                }
                 String text = null;
                 if (n > 0)
                     text = new String(buffer, 0, n);
