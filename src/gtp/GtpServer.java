@@ -178,6 +178,11 @@ public abstract class GtpServer
         public Point m_point;
     }
 
+    public static class FloatArgument
+    {
+        public float m_float;
+    }
+
     public static class IntegerArgument
     {
         public int m_integer;
@@ -288,6 +293,34 @@ public abstract class GtpServer
         catch (Gtp.Error e)
         {
             response.append("Invalid vertex argument");
+            return null;
+        }
+    }
+
+    /** Utility function for parsing an integer argument.
+        @param cmdArray Command line split into words.
+        @param response Empty string buffer filled with GTP error message
+        if parsing fails.
+        @return Float argument or null if parsing fails.
+    */
+    public static FloatArgument parseFloatArgument(String[] cmdArray,
+                                                   StringBuffer response)
+    {
+        if (cmdArray.length != 2)
+        {
+            response.append("Missing float argument");
+            return null;
+        }
+        try
+        {
+            float f = Float.parseFloat(cmdArray[1]);
+            FloatArgument floatArgument = new FloatArgument();
+            floatArgument.m_float = f;
+            return floatArgument;
+        }
+        catch (NumberFormatException e)
+        {
+            response.append("Invalid float argument");
             return null;
         }
     }
