@@ -206,6 +206,7 @@ class Help
     {
         JToolBar toolBar = new JToolBar();
         toolBar.setRollover(true);
+        toolBar.setFloatable(false);
         m_buttonBack = createToolBarButton("back.png", "back", "Back");
         toolBar.add(m_buttonBack);
         m_buttonForward = createToolBarButton("forward.png", "forward",

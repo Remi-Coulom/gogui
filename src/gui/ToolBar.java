@@ -21,6 +21,7 @@ class ToolBar
     ToolBar(ActionListener listener, Preferences prefs)
     {
         setRollover(true);
+        setFloatable(false);
         m_listener = listener;
         m_buttonNew = addButton("filenew.png", "new-game", "New Game");
         m_buttonOpen = addButton("fileopen.png", "open", "Load");
