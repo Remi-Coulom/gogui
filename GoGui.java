@@ -775,10 +775,12 @@ class GoGui
 
     private void cbInterrupt()
     {
-        if (m_commandThread == null)
-            showError("No program loaded.");
-        else if (! m_commandInProgress)
+        if (! m_commandInProgress)
             showError("No command in progress.");
+        else if (m_commandThread == null)
+            showError("No program loaded.");
+        else if (m_commandThread.isProgramDead())
+            showError("Program is dead.");
         else if (m_pid.equals(""))
             showError("Program does not support interrupting.\n" +
                       "See documentation section \"Interrupting programs\".");
