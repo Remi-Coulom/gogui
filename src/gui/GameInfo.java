@@ -77,7 +77,10 @@ class GameInfo
         String capturedW = Integer.toString(m_board.getCapturedW());
         m_captW.setText(capturedW);
         int moveNumber = m_board.getMoveNumber();
-        m_number.setText(Integer.toString(moveNumber));
+        String numberString = Integer.toString(moveNumber);
+        if (m_board.getNumberSavedMoves() > moveNumber)
+            numberString += "/" + m_board.getNumberSavedMoves();
+        m_number.setText(numberString);
         String lastMove;
         if (moveNumber == 0)
             lastMove = "";
