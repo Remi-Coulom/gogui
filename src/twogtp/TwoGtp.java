@@ -993,7 +993,8 @@ public class TwoGtp
             out.println("# Size: " + m_size);
             out.println("# Komi: " + m_komi);
             if (m_openings != null)
-                out.println("# Openings: " + m_openings.getDirectory());
+                out.println("# Openings: " + m_openings.getDirectory()
+                            + " (" + m_openings.getNumber() + " files)");
             out.println("# Date: " + format.format(date));
             out.println("# Host: " + getHost());
             out.println("#GAME\tRES_B\tRES_W\tRES_R\tALT\tDUP\tLEN\tCPU_B\t"
