@@ -342,24 +342,19 @@ public class Field
             drawStone(m_colorWhiteStone, m_colorWhiteStoneBright);
     }
 
-    private void drawStone(java.awt.Color color, java.awt.Color colorBright)
+    private void drawStone(java.awt.Color colorNormal,
+                           java.awt.Color colorBright)
     {
         int margin = getStoneMargin(m_size);
-        int radius = m_size / 3;
         if (m_graphics2D != null && m_size >= 7)
         {
-            int center = m_size / 3;
-            radius = Math.max(radius, 1);
             RadialGradientPaint paint =
-                new RadialGradientPaint(new Point2D.Double(center, center),
-                                        colorBright,
-                                        new Point2D.Double(radius, radius),
-                                        color);
+                m_board.getPaint(m_color, m_size, colorNormal, colorBright);
             m_graphics2D.setPaint(paint);
         }
         else
         {
-            m_graphics.setColor(color);
+            m_graphics.setColor(colorNormal);
         }
         m_graphics.fillOval(margin, margin,
                             m_size - 2 * margin, m_size - 2 * margin);
