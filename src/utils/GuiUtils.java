@@ -80,7 +80,7 @@ public class GuiUtils
         new Dimension(SMALL_PAD, SMALL_PAD);
 
     private static URL m_iconURL =
-        ClassLoader.getSystemClassLoader().getResource("images/icon.png");
+        ClassLoader.getSystemClassLoader().getResource("images/gogui.png");
 
     private static Font getTextAreaFont()
     {
