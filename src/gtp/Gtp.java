@@ -279,7 +279,6 @@ public final class Gtp
 
     /** Find all points contained in string. */
     public static Point[] parsePointString(String s, int boardSize)
-        throws Gtp.Error
     {
         Vector vector = new Vector(32, 32);
         String p[] = StringUtils.tokenize(s);
