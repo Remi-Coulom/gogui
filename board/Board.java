@@ -480,6 +480,11 @@ public class Board
         getField(p).setString(s);
     }
 
+    public void setToMove(Color toMove)
+    {
+        m_toMove = toMove;
+    }
+
     /** Set a stone on the board.
         Will remove dead stones.
         Requires: getMoveNumber() == 0
