@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.Iterator;
+import java.util.TreeSet;
 import java.util.Vector;
 import game.GameInformation;
 import game.GameTree;
@@ -148,29 +150,17 @@ public class Reader
     */
     public String getWarnings()
     {
-        String result = "";
-        // More severe warnings first
-        if (m_warningExtraText)
-            result = result + "Extra text before game tree\n";
-        if (m_warningFormat)
-            result = result + "Unknown SGF file format version\n";
-        if (m_warningInvalidBoardSize)
-            result = result + "Invalid board size value\n";
-        if (m_warningWrongPass)
-            result = result + "Non-standard pass move encoding\n";
-        if (m_warningSizeOutsideRoot)
-            result = result + "Size property not in root node\n";
-        if (m_warningInvalidHandicap)
-            result = result + "Invalid handicap value\n";
-        if (m_warningLongProps)
-            result = result + "Verbose names for standard properties\n";
-        if (m_warningGame)
-            result = result + "Empty value for game type\n";
-        if (m_warningTreeNotClosed)
-            result = result + "Game tree not closed\n";
-        if (result.equals(""))
+        if (m_warnings.isEmpty())
             return null;
-        return result;
+        StringBuffer result = new StringBuffer(m_warnings.size() * 80);
+        Iterator iter = m_warnings.iterator();
+        while (iter.hasNext())
+        {
+            String s = (String)iter.next();
+            result.append(s);
+            result.append('\n');
+        }
+        return result.toString();
     }
 
     private static class SgfCharsetChanged
@@ -183,25 +173,6 @@ public class Reader
     private boolean m_isFile;
 
     private boolean m_sizeFixed;
-
-    private boolean m_warningExtraText;
-
-    private boolean m_warningFormat;
-
-    /** GM value should be 1, sgf2misc produces Go files with empty value */
-    private boolean m_warningGame;
-
-    private boolean m_warningInvalidBoardSize;
-
-    private boolean m_warningInvalidHandicap;
-
-    private boolean m_warningLongProps;
-
-    private boolean m_warningSizeOutsideRoot;
-
-    private boolean m_warningTreeNotClosed;
-
-    private boolean m_warningWrongPass;
 
     private int m_lastPercent;
 
@@ -226,6 +197,9 @@ public class Reader
     private Point[][] m_pointCache = new Point[CACHE_SIZE][CACHE_SIZE];
 
     private ProgressShow m_progressShow;
+
+    /** Contains strings with warnings. */
+    private TreeSet m_warnings = new TreeSet();
 
     private StreamTokenizer m_tokenizer;
 
@@ -281,85 +255,43 @@ public class Reader
         assert(property == property.intern());
         if (property.length() <= 2)
             return property;
+        String shortName = null;
         if (property == "ADDBLACK")
-        {
-            m_warningLongProps = true;
-            return "AB";
-        }
+            shortName = "AB";
         if (property == "ADDEMPTY")
-        {
-            m_warningLongProps = true;
-            return "AE";
-        }
+            shortName = "AE";
         if (property == "ADDWHITE")
-        {
-            m_warningLongProps = true;
-            return "AW";
-        }
+            shortName = "AW";
         if (property == "BLACK")
-        {
-            m_warningLongProps = true;
-            return "B";
-        }
+            shortName = "B";
         if (property == "COMMENT")
-        {
-            m_warningLongProps = true;
-            return "C";
-        }
+            shortName = "C";
         if (property == "DATE")
-        {
-            m_warningLongProps = true;
-            return "DT";
-        }
+            shortName = "DT";
         if (property == "GAME")
-        {
-            m_warningLongProps = true;
-            return "GM";
-        }
+            shortName = "GM";
         if (property == "HANDICAP")
-        {
-            m_warningLongProps = true;
-            return "HA";
-        }
+            shortName = "HA";
         if (property == "KOMI")
-        {
-            m_warningLongProps = true;
-            return "KM";
-        }
+            shortName = "KM";
         if (property == "PLAYERBLACK")
-        {
-            m_warningLongProps = true;
-            return "PB";
-        }
+            shortName = "PB";
         if (property == "PLAYERWHITE")
-        {
-            m_warningLongProps = true;
-            return "PW";
-        }
+            shortName = "PW";
         if (property == "PLAYER")
-        {
-            m_warningLongProps = true;
-            return "PL";
-        }
+            shortName = "PL";
         if (property == "RESULT")
-        {
-            m_warningLongProps = true;
-            return "RE";
-        }
+            shortName = "RE";
         if (property == "RULES")
-        {
-            m_warningLongProps = true;
-            return "RU";
-        }
+            shortName = "RU";
         if (property == "SIZE")
-        {
-            m_warningLongProps = true;
-            return "SZ";
-        }
+            shortName = "SZ";
         if (property == "WHITE")
+            shortName = "W";
+        if (shortName != null)
         {
-            m_warningLongProps = true;
-            return "W";
+            setWarning("Verbose names for standard properties");
+            return shortName;
         }
         return property;
     }
@@ -381,12 +313,12 @@ public class Reader
                     return;
                 }
                 else
-                    m_warningExtraText = true;
+                    setWarning("Extra text before SGF tree");
             }
             else if (t == StreamTokenizer.TT_EOF)
                 throw getError("No root tree found");
             else
-                m_warningExtraText = true;
+                setWarning("Extra text before SGF tree");
         }
     }
 
@@ -479,7 +411,7 @@ public class Reader
         {
             if (x == boardSize && y == -1)
             {
-                m_warningWrongPass = true;
+                setWarning("Non-standard pass move encoding");
                 return null;
             }
             throw getError("Invalid coordinates: " + s);
@@ -524,7 +456,7 @@ public class Reader
             return null;
         if (ttype == StreamTokenizer.TT_EOF)
         {
-            m_warningTreeNotClosed = true;
+            setWarning("Game tree not closed");
             return null;
         }
         if (ttype != ';')
@@ -618,15 +550,13 @@ public class Reader
                 {
                 }
                 if (format < 1 || format > 4)
-                {
-                    m_warningFormat = true;
-                }
+                    setWarning("Unknown SGF file format version");
             }
             else if (p == "GM")
             {
                 v = v.trim();
                 if (v.equals(""))
-                    m_warningGame = true;
+                    setWarning("");
                 else if (! v.equals("1"))
                     throw getError("Not a Go game");
                 
@@ -639,7 +569,7 @@ public class Reader
                 }
                 catch (NumberFormatException e)
                 {
-                    m_warningInvalidHandicap = true;
+                    setWarning("Invalid handicap value");
                 }
             }
             else if (p == "KM")
@@ -698,7 +628,7 @@ public class Reader
                 {
                     if (m_sizeFixed)
                         throw getError("Size property outside root node");
-                    m_warningSizeOutsideRoot = true;
+                    setWarning("Size property not in root node");
                 }
                 try
                 {
@@ -706,7 +636,7 @@ public class Reader
                 }
                 catch (NumberFormatException e)
                 {
-                    m_warningInvalidBoardSize = true;
+                    setWarning("Invalid board size value");
                 }
                 m_sizeFixed = true;
             }
@@ -812,6 +742,11 @@ public class Reader
                 m_valueBuffer.append((char)c);
         }
         return m_valueBuffer.toString();
+    }
+
+    private void setWarning(String message)
+    {
+        m_warnings.add(message);
     }
 }
 
