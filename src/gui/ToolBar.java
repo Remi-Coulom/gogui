@@ -11,6 +11,7 @@ import java.net.*;
 import java.util.*;
 import javax.swing.*;
 import go.*;
+import utils.Preferences;
 
 //-----------------------------------------------------------------------------
 

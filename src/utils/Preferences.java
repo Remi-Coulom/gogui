@@ -3,7 +3,7 @@
 // $Source$
 //-----------------------------------------------------------------------------
 
-package gui;
+package utils;
 
 import java.io.*;
 import java.lang.*;
@@ -11,7 +11,7 @@ import java.util.*;
 
 //-----------------------------------------------------------------------------
 
-class Preferences
+public class Preferences
 {
     public Preferences()
     {

@@ -14,7 +14,6 @@ src/gui/GoGui.java
 src/gui/GoIcon.java
 src/gui/Help.java
 src/gui/MenuBar.java
-src/gui/Preferences.java
 src/gui/ScoreDialog.java
 src/gui/SelectProgram.java
 src/gui/SimpleDialogs.java
@@ -29,6 +28,7 @@ src/sgf/Writer.java
 src/utils/FileUtils.java
 src/utils/GuiUtils.java
 src/utils/Options.java
+src/utils/Preferences.java
 src/utils/SquareLayout.java
 src/utils/StringUtils.java
 src/version/Version.java
