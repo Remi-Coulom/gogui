@@ -18,7 +18,7 @@ class NetGtp
     public NetGtp(String hostname, int port)
         throws Exception
     {
-        Socket socket = new Socket(InetAddress.getByName(hostname), port);
+        Socket socket = new Socket(hostname, port);
         StreamCopy fromNet = new StreamCopy(false, socket.getInputStream(),
                                             System.out, false);
         SocketOutputCopy toNet = new SocketOutputCopy(socket);
@@ -30,7 +30,7 @@ class NetGtp
         //   toNet.join();
         //   socket.close();
         // is good enough to terminate thread toNet, but the read on System.in
-        // blocks even after a close(). Also it seems not to be possioble to
+        // blocks even after a close(). Also it seems not to be possible to
         // use java.nio and have System.in as a interruptible channel. So
         // System.exit() is called to kill this thread. If you find a cleaner
         // solution to terminate both threads, please tell me.
