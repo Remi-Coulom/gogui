@@ -1,0 +1,154 @@
+<refentry id="reference-gtpterminal">
+
+<refmeta>
+<refentrytitle>gtpterminal</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gtpterminal</refname>
+<refpurpose>
+Simple text based interface to Go programs supporting GTP.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtpterminal</command>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-verbose</option></arg>
+
+<command>gtpterminal</command>
+<arg choice="plain"><option>-help</option></arg>
+
+<command>gtpterminal</command>
+<arg choice="plain"><option>-version</option></arg>
+
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Simple text based interface to Go programs supporting the
+Go Text Protocol.
+It keeps track of the board and prints it after each change on the board.
+If a move (coordinate on the board or pass) is entered, it is played
+on the board for the color which is to move and a
+<userinput>genmove</userinput> command is sent to the program.
+Other supported commands are:
+</para>
+<variablelist>
+<varlistentry>
+<term><userinput>genmove</userinput></term>
+<listitem>
+<simpara>
+Send a <userinput>genmove</userinput> command for the color which is
+to move to the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>help</userinput></term>
+<listitem>
+<simpara>
+Print help.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>list_commands</userinput></term>
+<listitem>
+<simpara>
+Send a <userinput>list_commands</userinput> command to the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>new_game [size]</userinput></term>
+<listitem>
+<simpara>
+Start a new game with a given board size.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>undo</userinput></term>
+<listitem>
+<simpara>
+Send a <userinput>undo</userinput> command to the program.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>quit</userinput></term>
+<listitem>
+<simpara>
+Terminate program and exit.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<para>
+The following commands are not allowed:
+<userinput>black</userinput>,
+<userinput>boardsize</userinput>,
+<userinput>clear_board</userinput>,
+<userinput>genmove_black</userinput>,
+<userinput>genmove_white</userinput>,
+<userinput>white</userinput>.
+All other commands are forwarded directly to the program as GTP commands.
+</para>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from <replaceable>file</replaceable>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Board size.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-verbose</option>
+</term>
+<listitem>
+<para>
+Log GTP stream to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</refsection>
+
+</refsection>
+
+</refentry>

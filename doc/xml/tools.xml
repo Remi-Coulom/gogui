@@ -97,6 +97,16 @@ See <xref linkend="reference-gtpregress"/> for a complete reference.
 </varlistentry>
 
 <varlistentry>
+<term>GtpTerminal</term>
+<listitem>
+<para>
+Simple text based interface to Go programs supporting GTP.
+See <xref linkend="reference-gtpterminal"/> for a complete reference.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>SgfToTex</term>
 <listitem>
 <para>

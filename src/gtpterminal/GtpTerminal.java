@@ -300,6 +300,7 @@ public class GtpTerminal
             "Usage: java -jar gtpterminal.jar program\n" +
             "\n" +
             "-config       config file\n" +
+            "-help         print help and exit\n" +
             "-size n       board size (default 19)\n" +
             "-verbose      print debug information\n" +
             "-version      print version and exit\n";

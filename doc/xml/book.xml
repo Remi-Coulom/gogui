@@ -19,6 +19,7 @@
 <!ENTITY reference-gtpdummy SYSTEM "reference-gtpdummy.xml">
 <!ENTITY reference-gtpregress SYSTEM "reference-gtpregress.xml">
 <!ENTITY reference-gtpserver SYSTEM "reference-gtpserver.xml">
+<!ENTITY reference-gtpterminal SYSTEM "reference-gtpterminal.xml">
 <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
 <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
 <!ENTITY tools SYSTEM "tools.xml">
@@ -52,6 +53,7 @@
 &reference-gtpdummy;
 &reference-gtpregress;
 &reference-gtpserver;
+&reference-gtpterminal;
 &reference-netgtp;
 &reference-sgftotex;
 &reference-twogtp;

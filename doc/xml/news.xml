@@ -11,7 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
-New tool <application>GtpAdapter</application>.
+New tools: <application>GtpAdapter</application> and
+<application>GtpTerminal</application>.
 </simpara>
 </listitem>
 <listitem>
@@ -20,7 +21,7 @@ New tool <application>GtpAdapter</application>.
 <option>-port</option>. New options <option>-remote</option> and
 <option>-user</option> to make outgoing connections (e.g. required by the
 <ulink url="http://www.lysator.liu.se/~gunnar/gtp/random_go_challenge.html">
-Random Go Challenge</ulink>.
+Random Go Challenge</ulink>).
 </simpara>
 </listitem>
 <listitem>
