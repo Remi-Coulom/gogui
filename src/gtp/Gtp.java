@@ -77,6 +77,7 @@ public final class Gtp
         Reader reader = new InputStreamReader(m_process.getInputStream());
         m_in = new BufferedReader(reader);
         m_out = new PrintStream(m_process.getOutputStream());
+        m_illegalState = false;
         m_isProgramDead = false;
         m_stdErrThread = new StdErrThread(m_process);
         m_stdErrThread.start();
@@ -478,10 +479,13 @@ public final class Gtp
     {
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
+        m_fullResponse = "";
+        m_response = "";
         if (m_isProgramDead)
             throw new Error("Program is dead");
+        if (m_illegalState)
+            throw new Error("Program sent illegal response");
         log(">> " + command);
-        m_response = "";
         m_out.println(command);
         m_out.flush();
         if (m_out.checkError())
@@ -668,6 +672,8 @@ public final class Gtp
 
     private boolean m_isProgramDead;
 
+    private boolean m_illegalState;
+
     private boolean m_log;
 
     private int m_protocolVersion = 1;
@@ -717,6 +723,7 @@ public final class Gtp
             {
                 m_fullResponse = response.toString();
                 m_callback.receivedInvalidResponse(response.toString());
+                m_illegalState = true;
                 throw new Error("Invalid response:\n" + line);
             }
             boolean error = (line.charAt(0) != '=');

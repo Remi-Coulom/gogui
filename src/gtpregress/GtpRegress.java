@@ -101,7 +101,7 @@ class GtpRegress
 
     public void receivedInvalidResponse(String s)
     {
-        printOutLine(null, s);
+        printOutLine("invalid", "Program sent invalid response!");
     }
 
     public void receivedResponse(boolean error, String s)
@@ -494,6 +494,7 @@ class GtpRegress
                     "span.error { font-weight:bold; color:" + m_colorError
                     + "; }\n" +
                     "span.stderr { font-style: italic; color:#999999; }\n" +
+                    "span.invalid { background:" + m_colorRed + ";}\n" +
                     "span.pass { font-weight:bold; color:" + m_colorGreen
                     + "; }\n" +
                     "span.test { font-weight:bold; }\n" +
