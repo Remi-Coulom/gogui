@@ -362,9 +362,9 @@ class WriteThread extends Thread
         {
             return;
         }
-        catch (Exception e)
+        catch (Throwable e)
         {
-            System.err.println(StringUtils.formatException(e));
+            StringUtils.printException(e);
         }
     }
 
@@ -515,9 +515,9 @@ class MainThread extends Thread
                 }
             }
         }
-        catch (Exception e)
+        catch (Throwable e)
         {
-            System.err.println(StringUtils.formatException(e));
+            StringUtils.printException(e);
         }
         synchronized (this)
         {

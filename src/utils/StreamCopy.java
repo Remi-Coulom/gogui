@@ -56,9 +56,9 @@ public class StreamCopy
                 m_dest.flush();
             }
         }
-        catch (Exception e)
+        catch (Throwable e)
         {
-            System.err.println(StringUtils.formatException(e));
+            StringUtils.printException(e);
         }
     }
 

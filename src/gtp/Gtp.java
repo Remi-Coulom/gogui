@@ -585,14 +585,9 @@ public final class Gtp
             {
                 mainLoop();
             }
-            catch (RuntimeException e)
-            {
-                System.err.println(StringUtils.formatException(e));
-                e.printStackTrace();
-            }
             catch (Throwable t)
             {
-                System.err.println(StringUtils.formatException(t));
+                StringUtils.printException(t);
             }
         }
 

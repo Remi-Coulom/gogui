@@ -73,19 +73,9 @@ public class GtpTerminal
             gtpTerminal.mainLoop();
             gtpTerminal.close();
         }
-        catch (Error e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        catch (RuntimeException e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
-        }
         catch (Throwable t)
         {
-            System.err.println(StringUtils.formatException(t));
+            StringUtils.printException(t);
             System.exit(-1);
         }
     }

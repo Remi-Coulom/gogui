@@ -72,14 +72,9 @@ class NetGtp
             int port = Integer.parseInt((String)arguments.get(1));
             new NetGtp(hostname, port);
         }
-        catch (AssertionError e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
-        }
         catch (Throwable t)
         {
-            System.err.println(StringUtils.formatException(t));
+            StringUtils.printException(t);
             System.exit(-1);
         }
     }
@@ -121,9 +116,9 @@ class SocketOutputCopy
                 dest.flush();
             }
         }
-        catch (Exception e)
+        catch (Throwable e)
         {
-            System.err.println(StringUtils.formatException(e));
+            StringUtils.printException(e);
         }
     }
 

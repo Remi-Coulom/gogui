@@ -207,14 +207,9 @@ public class GmpToGtp
                                              colorIndex, wait, simple);
             gmpToGtp.mainLoop();
         }
-        catch (AssertionError e)
-        {
-            e.printStackTrace();
-            exitStatus = -1;
-        }
         catch (Throwable t)
         {
-            System.err.println(StringUtils.formatException(t));
+            StringUtils.printException(t);
             exitStatus = -1;
         }
         finally
@@ -228,7 +223,7 @@ public class GmpToGtp
             }
             catch (IOException e)
             {
-                System.err.println(StringUtils.formatException(e));
+                StringUtils.printException(e);
             }
             if (process != null)
             {

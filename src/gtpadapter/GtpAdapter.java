@@ -192,20 +192,9 @@ public class GtpAdapter
             if (log != null)
                 log.close();
         }
-        catch (Error e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        catch (RuntimeException e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
-        }
         catch (Throwable t)
         {
-            System.err.println(StringUtils.formatException(t));
-            t.printStackTrace();
+            StringUtils.printException(t);
             System.exit(-1);
         }
     }

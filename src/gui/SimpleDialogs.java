@@ -31,7 +31,7 @@ public class SimpleDialogs
 
     public static void showError(Component frame, String message, Exception e)
     {
-        showError(frame, message + "\n" + StringUtils.formatException(e));
+        showError(frame, message + "\n" + StringUtils.printException(e));
     }
 
     public static void showInfo(Component frame, String message)

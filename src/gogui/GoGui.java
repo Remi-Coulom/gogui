@@ -558,21 +558,9 @@ class GoGui
                       computerBlack, computerWhite, auto, gtpFile, gtpCommand,
                       initAnalyze);
         }
-        catch (AssertionError e)
-        {
-            SimpleDialogs.showError(null, "Assertion error");
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        catch (RuntimeException e)
-        {
-            SimpleDialogs.showError(null, StringUtils.formatException(e));
-            e.printStackTrace();
-            System.exit(-1);
-        }
         catch (Throwable t)
         {
-            SimpleDialogs.showError(null, StringUtils.formatException(t));
+            SimpleDialogs.showError(null, StringUtils.printException(t));
             t.printStackTrace();
             System.exit(-1);
         }

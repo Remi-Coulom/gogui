@@ -33,12 +33,29 @@ public class StringUtils
         return format;
     }
 
-    public static String formatException(Throwable exception)
+    /** Print exception to standard error.
+        Prints the class name if the exception has no message.
+        For exceptions of type Error or RuntimeException, a stack trace
+        is printed.
+        @return A string with the exception message and/or class.
+    */
+    public static String printException(Throwable exception)
     {
-        String result = exception.getClass().getName();
-        if (exception.getMessage() != null)
-            result = result + "\n" + exception.getMessage();
-        return result;
+        String message = exception.getMessage();
+        boolean hasMessage = (message != null && ! message.trim().equals(""));
+        String className = exception.getClass().getName();
+        if (exception instanceof RuntimeException
+            || exception instanceof Error)
+        {
+            if (hasMessage)
+                System.err.println(className + ":" + message);
+            else
+                System.err.println(className);
+            exception.printStackTrace();
+        }
+        if (hasMessage)
+            return message;
+        return className;
     }
 
     public static String[] split(String s, char separator)

@@ -77,20 +77,9 @@ class SgfToTex
             }
             convert(in, out, title, usePass);
         }
-        catch (AssertionError e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        catch (RuntimeException e)
-        {
-            System.err.println(StringUtils.formatException(e));
-            e.printStackTrace();
-            System.exit(-1);
-        }
         catch (Throwable t)
         {
-            System.err.println(StringUtils.formatException(t));
+            StringUtils.printException(t);
             System.exit(-1);
         }
     }

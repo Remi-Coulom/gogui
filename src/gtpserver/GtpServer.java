@@ -127,14 +127,9 @@ class GtpServer
             String program = (String)arguments.get(0);
             new GtpServer(verbose, loop, program, remoteHost, port, userFile);
         }
-        catch (RuntimeException e)
-        {
-            e.printStackTrace();
-            System.exit(-1);
-        }
         catch (Throwable t)
         {
-            System.err.println(StringUtils.formatException(t));
+            StringUtils.printException(t);
             System.exit(-1);
         }
     }

@@ -73,29 +73,9 @@ class GtpRegress
                 tests[i] = (String)arguments.get(i + 1);
             new GtpRegress(program, tests, output);
         }
-        catch (ProgramIsDeadException e)
-        {
-            System.err.println("Program died");
-        }
-        catch (Error e)
-        {
-            String msg = e.getMessage();
-            if (msg != null)
-                System.err.println(msg);
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        catch (RuntimeException e)
-        {
-            String msg = e.getMessage();
-            if (msg != null)
-                System.err.println(msg);
-            e.printStackTrace();
-            System.exit(-1);
-        }
         catch (Throwable t)
         {
-            System.err.println(StringUtils.formatException(t));
+            StringUtils.printException(t);
             System.exit(-1);
         }
     }
@@ -122,6 +102,10 @@ class GtpRegress
     private static class ProgramIsDeadException
         extends Exception
     {
+        public String getMessage()
+        {
+            return "Program died";
+        }
     }
 
     /** Information about one test and its result. */
