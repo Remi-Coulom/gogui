@@ -81,10 +81,9 @@ public class Writer
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        String date =
-            Integer.toString(year) + "-" +
-            (month < 10 ? "0" : "") + month + "-" +
-            (day < 10 ? "0" : "") + day;
+        DecimalFormat format = new DecimalFormat("00");
+        String date = Integer.toString(year) + "-" + format.format(month) +
+            "-" + format.format(day);
         m_out.println(";\n" +
                       "FF[4]\n" +
                       "GM[1]\n" +
@@ -128,7 +127,14 @@ public class Writer
         if (playerWhite != null)
             m_out.println("PW[" + playerWhite + "]");
         if (gameComment != null)
-            m_out.println("GC[" + gameComment + "]");
+        {
+            DateFormat format =
+                DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                               DateFormat.FULL);
+            Date date = Calendar.getInstance().getTime();
+            m_out.println("GC[" + gameComment + "\nDate:\n" +
+                          format.format(date) + "]");
+        }
     }
 
     private void printMoves()
