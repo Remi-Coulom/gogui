@@ -83,7 +83,9 @@ class GoGui
 
         contentPane.add(m_infoPanel, BorderLayout.SOUTH);
 
-        m_boardPanel = new JPanel(new SquareLayout());
+        m_squareLayout = new SquareLayout();
+        m_squareLayout.setPreferMultipleOf(m_boardSize + 2);
+        m_boardPanel = new JPanel(m_squareLayout);
         m_boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         m_boardPanel.add(m_guiBoard);
         contentPane.add(m_boardPanel, BorderLayout.CENTER);
@@ -671,7 +673,7 @@ class GoGui
 
     private String m_version = "";
 
-    AnalyzeDialog m_analyzeDialog;
+    private AnalyzeDialog m_analyzeDialog;    
 
     /** Preferences.
         Preferences are shared between instances created with
@@ -680,6 +682,8 @@ class GoGui
     private Preferences m_prefs;
 
     private ScoreDialog m_scoreDialog;
+
+    private SquareLayout m_squareLayout;
 
     private TimeControl m_timeControl;
 
@@ -1463,6 +1467,7 @@ class GoGui
         {
             m_boardSize = size;
             m_guiBoard.initSize(size);
+            m_squareLayout.setPreferMultipleOf(size + 2);
             pack();
             if (m_rememberWindowSizes)
             {

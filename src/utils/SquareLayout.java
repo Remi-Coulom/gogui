@@ -26,6 +26,8 @@ public class SquareLayout
         size.width -= insets.left + insets.right;
         size.height -= insets.top + insets.bottom;
         int len = size.width < size.height ? size.width : size.height;
+        if (m_preferMultipleOf > 0)
+            len = len / m_preferMultipleOf * m_preferMultipleOf;
         int x = (size.width - len) / 2;
         int y = (size.height - len) / 2;
         parent.getComponent(0).setBounds(x + insets.left, y + insets.top,
@@ -49,6 +51,13 @@ public class SquareLayout
     public void removeLayoutComponent(Component comp)
     {
     }
+
+    public void setPreferMultipleOf(int preferMultipleOf)
+    {
+        m_preferMultipleOf = preferMultipleOf;
+    }
+
+    private int m_preferMultipleOf;
 }
 
 //-----------------------------------------------------------------------------
