@@ -83,7 +83,7 @@ public class SelectProgram
     public static String select(Frame owner)
     {
         SelectProgram dialog = new SelectProgram(owner);
-        dialog.setLocationRelativeTo(null);
+        dialog.setLocationRelativeTo(owner);
         dialog.setVisible(true);
         return dialog.m_command;
     }
