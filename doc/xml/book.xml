@@ -36,7 +36,12 @@
 <author>
 <firstname>Markus</firstname><surname>Enzenberger</surname>
 </author>
-<releaseinfo>Version &version;</releaseinfo>
+<releaseinfo>Revision &version;</releaseinfo>
+<copyright>
+<year>2003</year>
+<year>2004</year>
+<holder>Markus Enzenberger</holder>
+</copyright>
 </bookinfo>
   
 &readme;
