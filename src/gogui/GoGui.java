@@ -1276,6 +1276,8 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
+        if (! checkCurrentNodeExecuted())
+            return;
         if (m_board.getToMove() == go.Color.BLACK)
             computerBlack();
         else
@@ -1515,7 +1517,14 @@ class GoGui
             return true;
         if (! isCurrentNodeExecuted())
         {
-            showError("Could not execute current game node");
+            Object[] options = { "Detach Program", "Ignore" };
+            Object message = "Could not execute current game node";
+            int n = JOptionPane.showOptionDialog(this, message, "Error",
+                                                 JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.ERROR_MESSAGE,
+                                                 null, options, options[1]);
+            if (n == 0)
+                cbDetachProgram();
             return false;
         }
         return true;
