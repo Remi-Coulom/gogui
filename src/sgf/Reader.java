@@ -265,7 +265,10 @@ public class Reader
         {
             int percent;
             if (m_size > 0)
-                percent = (int)(m_byteCountInputStream.getCount() * 100 / m_size);
+            {
+                long count = m_byteCountInputStream.getCount();
+                percent = (int)(count * 100 / m_size);
+            }
             else
                 percent = 100;
             if (percent != m_lastPercent)
@@ -337,7 +340,14 @@ public class Reader
             else if (p.equals("BR"))
                 m_gameInformation.m_blackRank = v;
             else if (p.equals("C"))
-                node.setComment(v.trim());
+            {
+                String comment;
+                if (node.getComment() != null)
+                    comment = node.getComment() + "\n" + v.trim();
+                else
+                    comment = v.trim();
+                node.setComment(comment);
+            }
             else if (p.equals("CA"))
             {
                 if (isRoot && m_isFile && m_newCharset == null)
