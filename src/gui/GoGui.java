@@ -1810,7 +1810,6 @@ class GoGui
                         "defined for this board size.");
         m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), handicap);
         m_board.newGame();        
-        executeRoot();
         m_guiBoard.updateFromGoBoard();
         resetBoard();
         m_timeControl.reset();
@@ -1822,6 +1821,9 @@ class GoGui
     private void initialize()
     {
         m_toolBar.enableAll(true, m_currentNode);
+        File file = null;
+        if (! m_file.equals(""))
+            newGameFile(m_boardSize, new File(m_file), m_move);
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
@@ -1837,9 +1839,6 @@ class GoGui
             computerWhite();
         if (m_prefs.getBool("show-gametree"))
             cbShowGameTree();
-        File file = null;
-        if (! m_file.equals(""))
-            newGameFile(m_boardSize, new File(m_file), m_move);
         if (! m_initAnalyze.equals(""))
         {
             AnalyzeCommand analyzeCommand =
@@ -1923,6 +1922,7 @@ class GoGui
     private void newGame(int size)
     {
         initGame(size);
+        executeRoot();
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
