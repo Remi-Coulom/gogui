@@ -344,6 +344,11 @@ public class GtpShell
     {
         m_comboBox.setEnabled(! commandInProgess);
         m_sendGtpFile.setEnabled(! commandInProgess);
+        if (! commandInProgess)
+        {
+            m_comboBox.requestFocusInWindow();
+            m_textField.requestFocusInWindow();
+        }
     }
 
     public void toTop()
