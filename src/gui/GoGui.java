@@ -195,7 +195,7 @@ class GoGui
         else if (command.equals("make-main-variation"))
             cbMakeMainVariation();
         else if (command.equals("next-variation"))
-            cbVariation(true);
+            cbNextVariation();
         else if (command.equals("new-game"))
             cbNewGame(m_boardSize);
         else if (command.equals("open"))
@@ -207,7 +207,7 @@ class GoGui
         else if (command.equals("play"))
             cbPlay();
         else if (command.equals("previous-variation"))
-            cbVariation(false);
+            cbPreviousVariation();
         else if (command.equals("print"))
             cbPrint();
         else if (command.equals("remember-sizes"))
@@ -1222,6 +1222,13 @@ class GoGui
         }
     }
 
+    private void cbNextVariation()
+    {
+        Node node = m_currentNode.getNextVariation();
+        if (node != null)
+            gotoNode(node);
+    }
+
     private void cbOpen()
     {
         if (m_needsSave && ! checkSaveGame())
@@ -1255,6 +1262,13 @@ class GoGui
             computerWhite();
         generateMove();
         m_timeControl.startMove(m_board.getToMove());
+    }
+
+    private void cbPreviousVariation()
+    {
+        Node node = m_currentNode.getPreviousVariation();
+        if (node != null)
+            gotoNode(node);
     }
 
     private void cbPrint()
@@ -1449,51 +1463,6 @@ class GoGui
         backward(1);
         m_currentNode.removeChild(oldCurrentNode);
         m_needsSave = true;
-        boardChangedBegin(false);
-    }
-
-    private void cbVariation(boolean forward)
-    {
-        if (m_currentNode.getFather() == null
-            || m_currentNode.getFather().getNumberChildren() < 2)
-            return;
-        setFastUpdate(true);
-        try
-        {
-            undoCurrentNode();
-            computerNone();
-            Node oldChild = m_currentNode;
-            m_currentNode = m_currentNode.getFather();
-            m_currentNodeExecuted = m_currentNode.getNumberAddStonesAndMoves();
-            for (int i = 0; i < m_currentNode.getNumberChildren(); ++i)
-                if (m_currentNode.getChild(i) == oldChild)
-                {
-                    if (forward)
-                    {
-                        ++i;
-                        if (i >= m_currentNode.getNumberChildren())
-                            i = 0;
-                    }
-                    else
-                    {
-                        --i;
-                        if (i < 0)
-                            i = m_currentNode.getNumberChildren() - 1;
-                    }
-                    m_currentNode = m_currentNode.getChild(i);
-                    break;
-                }
-            executeCurrentNode();
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-            return;
-        }
-        finally
-        {
-            setFastUpdate(false);
-        }
         boardChangedBegin(false);
     }
 

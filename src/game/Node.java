@@ -168,6 +168,21 @@ public class Node
         return m_movesLeftWhite;
     }
 
+    /** Return start node of next variation before this node. */
+    public Node getNextVariation()
+    {
+        Node child = this;
+        Node node = getFather();
+        while (node != null && node.variationAfter(child) == null)
+        {
+            child = node;
+            node = node.getFather();
+        }
+        if (node == null)
+            return null;
+        return node.variationAfter(child);
+    }
+
     /** Nodes left in main variation. */
     public int getNodesLeft()
     {
@@ -224,6 +239,21 @@ public class Node
             node = node.getFather();
         }
         return result;
+    }
+
+    /** Return start node of previous variation before this node. */
+    public Node getPreviousVariation()
+    {
+        Node child = this;
+        Node node = getFather();
+        while (node != null && node.variationBefore(child) == null)
+        {
+            child = node;
+            node = node.getFather();
+        }
+        if (node == null)
+            return null;
+        return node.variationBefore(child);
     }
 
     /** Get other unspecified SGF properties.
@@ -401,6 +431,35 @@ public class Node
         m_children.remove(child);
         m_children.add(0, child);
     }
+
+    private Node variationBefore(Node child)
+    {
+        int numberChildren = getNumberChildren();
+        if (numberChildren == 1)
+            return null;
+        int i;
+        for (i = 0; i < numberChildren; ++i)
+            if (getChild(i) == child)
+                break;
+        if (i == 0)
+            return null;
+        return getChild(i - 1);
+    }
+
+    private Node variationAfter(Node child)
+    {
+        int numberChildren = getNumberChildren();
+        if (numberChildren == 1)
+            return null;
+        int i;
+        for (i = 0; i < numberChildren; ++i)
+            if (getChild(i) == child)
+                break;
+        if (i == numberChildren - 1)
+            return null;
+        return getChild(i + 1);
+    }
+
 }
 
 //-----------------------------------------------------------------------------

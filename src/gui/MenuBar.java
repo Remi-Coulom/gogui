@@ -277,9 +277,9 @@ class MenuBar
     {
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
-        boolean hasVariation =
-            (hasFather && node.getFather().getNumberChildren() > 1);
-        boolean isInMainVariation = node.isInMainVariation();
+        boolean hasNextVariation = (node.getNextVariation() != null);
+        boolean hasPreviousVariation = (node.getPreviousVariation() != null);
+        boolean isInMain = node.isInMainVariation();
         boolean treeHasVariations = gameTree.hasVariations();
         m_itemBeginning.setEnabled(hasFather);
         m_itemBackward.setEnabled(hasFather);
@@ -288,12 +288,11 @@ class MenuBar
         m_itemForward10.setEnabled(hasChildren);
         m_itemEnd.setEnabled(hasChildren);
         m_itemGoto.setEnabled(hasFather || hasChildren);
-        m_itemNextVariation.setEnabled(hasVariation);
-        m_itemPreviousVariation.setEnabled(hasVariation);
+        m_itemNextVariation.setEnabled(hasNextVariation);
+        m_itemPreviousVariation.setEnabled(hasPreviousVariation);
         m_itemTruncate.setEnabled(hasFather);
-        m_itemMakeMainVar.setEnabled(! isInMainVariation);
-        m_itemKeepOnlyMainVar.setEnabled(isInMainVariation
-                                         && treeHasVariations);
+        m_itemMakeMainVar.setEnabled(! isInMain);
+        m_itemKeepOnlyMainVar.setEnabled(isInMain && treeHasVariations);
     }
 
     private boolean m_isComputerDisabled;
