@@ -6,7 +6,23 @@
 VERSION=0.1.x
 
 IMAGES= \
-  images/NewBoard.png \
+  images/back.png \
+  images/button_cancel.png \
+  images/filenew.png \
+  images/fileopen.png \
+  images/filesave2.png \
+  images/forward.png \
+  images/gear.png \
+  images/gohome.png \
+  images/next.png \
+  images/openterm.png \
+  images/player_back.png \
+  images/player_end.png \
+  images/player_fwd.png \
+  images/player_next.png \
+  images/player_rew.png \
+  images/player_start.png \
+  images/stop.png \
   images/wood.png \
   org/javalobby/icons/20x20png/Computer.png \
   org/javalobby/icons/20x20png/Delete.png \

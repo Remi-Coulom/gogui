@@ -21,32 +21,30 @@ class ToolBar
             AnalyzeCommand.Callback callback) throws AnalyzeCommand.Error
     {
         m_listener = listener;
-        m_buttonNew = addButton("images/NewBoard.png", "new-game", "New game");
-        m_buttonOpen = addButton(m_prefix + "Open.png", "load", "Load game");
-        m_buttonSave = addButton(m_prefix + "Save.png", "save", "Save game");
+        m_buttonNew = addButton("images/filenew.png", "new-game", "New game");
+        m_buttonOpen = addButton("images/fileopen.png", "load", "Load game");
+        m_buttonSave = addButton("images/filesave2.png", "save", "Save game");
         add(new JToolBar.Separator());
-        m_buttonBeginning = addButton(m_prefix + "VCRBegin.png", "beginning",
+        m_buttonBeginning = addButton("images/player_start.png", "beginning",
                                       "Beginning of game");
-        m_buttonBackward10 = addButton(m_prefix + "VCRRewind.png",
+        m_buttonBackward10 = addButton("images/player_rew.png",
                                        "backward-10", "Take back 10 moves");
-        m_buttonBackward = addButton(m_prefix + "VCRBack.png", "backward",
+        m_buttonBackward = addButton("images/player_back.png", "backward",
                                      "Take back move");
-        m_buttonForward = addButton(m_prefix + "VCRForward.png", "forward",
+        m_buttonForward = addButton("images/player_next.png", "forward",
                                     "Replay move");
-        m_buttonForward10 = addButton(m_prefix + "VCRFastForward.png",
-                                      "forward-10", "Replay 10 moves");
-        m_buttonEnd = addButton(m_prefix + "VCREnd.png", "end", "End of game");
+        m_buttonForward10 = addButton("images/player_fwd.png", "forward-10",
+                                      "Replay 10 moves");
+        m_buttonEnd = addButton("images/player_end.png", "end", "End of game");
         add(new JToolBar.Separator());
-        m_buttonPass = addButton(m_prefix + "Delete.png", "pass", "Pass");
-        m_buttonEnter = addButton(m_prefix + "Enter.png", "play",
-                                  "Computer play");
-        m_buttonStop = addButton(m_prefix + "Stop.png", "interrupt",
-                                      "Interrupt");
+        m_buttonPass = addButton("images/button_cancel.png", "pass", "Pass");
+        m_buttonEnter = addButton("images/next.png", "play", "Computer play");
+        m_buttonStop = addButton("images/stop.png", "interrupt", "Interrupt");
         add(new JToolBar.Separator());
-        m_buttonGtpShell = addButton(m_prefix + "Computer.png", "gtp-shell",
+        m_buttonGtpShell = addButton("images/openterm.png", "gtp-shell",
                                      "GTP shell");
         add(new JToolBar.Separator());
-        m_buttonAnalyze = addButton(m_prefix + "Gearwheel.png", "analyze",
+        m_buttonAnalyze = addButton("images/gear.png", "analyze",
                                     "Enable analyze command");
         m_analyzeCommand = new AnalyzeCommand(callback, prefs);
         add(m_analyzeCommand);
@@ -148,8 +146,6 @@ class ToolBar
     private JButton m_buttonPass;
 
     private JButton m_buttonSave;
-
-    private static final String m_prefix = "org/javalobby/icons/20x20png/";
 
     private JButton addButton(String icon, String command, String toolTip)
     {
