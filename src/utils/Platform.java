@@ -10,6 +10,9 @@ import java.net.*;
 
 //----------------------------------------------------------------------------
 
+/** Static utility functions for platform detection and platform-dependent
+    behavior.
+*/
 public class Platform
 {
     /** Check if the platform is Mac OS X */

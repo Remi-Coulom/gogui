@@ -10,6 +10,7 @@ import java.util.*;
 
 //----------------------------------------------------------------------------
 
+/** Parser for command line options. */
 public class Options
 {
     public Options(String[] args, String[] specs) throws Exception
