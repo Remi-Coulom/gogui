@@ -253,6 +253,15 @@ public class Board
         drawLastMove();
     }
     
+    public void updateFields()
+    {
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            go.Point p = m_board.getPoint(i);
+            setColor(p, m_board.getColor(p));
+        }
+    }
+
     private Dimension m_preferredFieldSize;
 
     private go.Board m_board;
@@ -339,15 +348,6 @@ public class Board
         if (size % 2 == 0)
             ++size;
         m_preferredFieldSize = new Dimension(size, size);
-    }
-
-    private void updateFields()
-    {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            go.Point p = m_board.getPoint(i);
-            setColor(p, m_board.getColor(p));
-        }
     }
 }
 

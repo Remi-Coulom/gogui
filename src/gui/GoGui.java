@@ -1431,7 +1431,7 @@ class GoGui
             m_guiBoard.initSize(size);
             pack();
         }
-        m_board.newGame();
+        m_guiBoard.newGame();
         resetBoard();
         m_timeControl.reset();
         m_lostOnTimeShown = false;
@@ -1440,6 +1440,7 @@ class GoGui
         {
             loadFile(new File(m_file), move);
             m_gameInfo.update();
+            m_guiBoard.updateFields();
         }
         else
         {
