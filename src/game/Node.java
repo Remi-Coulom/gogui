@@ -238,9 +238,9 @@ public final class Node
         return ((Vector)m_children).size();
     }
 
-    /** Return color to play if explicitely set.
-        Returns Color.EMPTY if color is not explicitely set.
+    /** Color to play if explicitely set.
         @see #getToMove for getting the color to play.
+        @return Color to play or Color.EMPTY if color is not explicitely set.
     */
     public Color getPlayer()
     {

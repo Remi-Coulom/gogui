@@ -19,10 +19,21 @@ public class Platform
     /** Handler for events from the Application Menu on MacOS. */
     public interface SpecialMacHandler
     {
+        /** Handle about menu event.
+            @return true if event was handled successfully.
+        */
         boolean handleAbout();
 
+        /** Handle open file event.
+            @param filename name of file.
+            @return true if event was handled successfully.
+        */
         boolean handleOpenFile(String filename);
 
+        /** Handle quit application event.
+            @return true if event was handled successfully, false if quit
+            should be aborted.
+        */
         boolean handleQuit();
     }
 
@@ -56,7 +67,8 @@ public class Platform
         - firefox
         - mozilla
         - opera
-        @return false if everything failed
+        @param url URL to open.
+        @return false if everything failed.
     */
     public static boolean openInExternalBrowser(URL url)
     {
@@ -99,7 +111,9 @@ public class Platform
         return false;
     }
 
-    /** Register handler for events from the Application Menu on MacOS. */
+    /** Register handler for events from the Application Menu on MacOS.
+        @param handler Handler to register.
+    */
     public static void registerSpecialMacHandler(SpecialMacHandler handler)
     {
         try

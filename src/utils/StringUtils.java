@@ -11,6 +11,7 @@ import java.util.Vector;
 
 //----------------------------------------------------------------------------
 
+/** Static utility functions related to strings. */
 public class StringUtils
 {
     /** Capitalize the first word and trim whitespaces. */
@@ -61,6 +62,7 @@ public class StringUtils
         return result; 
     }
 
+    /** Split string into tokens. */
     public static String[] split(String s, char separator)
     {
         int count = 1;

@@ -26,6 +26,7 @@ class Filter
 
 //----------------------------------------------------------------------------
 
+/** Access opening SGF files from directory. */
 public class Openings
 {
     public Openings(File directory) throws Exception
@@ -40,11 +41,13 @@ public class Openings
         m_currentFile = -1;
     }
 
+    /** Get name of directory. */
     public String getDirectory()
     {
         return m_directory.toString();
     }
 
+    /** Get name of currently loaded file. */
     public String getFilename()
     {
         return m_files[m_currentFile].toString();
@@ -62,6 +65,7 @@ public class Openings
         return m_gameTree;
     }
 
+    /** Get number of opening files in directory. */
     public int getNumber()
     {
         return m_files.length;

@@ -13,8 +13,10 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** GtpTerminal main function. */
 public class Main
 {
+    /** GtpTerminal main function. */
     public static void main(String[] args)
     {
         try

@@ -43,13 +43,14 @@ import utils.ProcessUtils;
 */
 public final class Gtp
 {
-    /** Callback if a timeout occured.
-        If the function askContinue returns true, Gtp.sendCommand will
-        wait for another timeout period, if it returns false, the program
-        will be killed.
-    */
+    /** Callback if a timeout occured. */
     public interface TimeoutCallback
     {
+        /** Ask for continuation.
+            If this function returns true, Gtp.sendCommand will wait for
+            another timeout period, if it returns false, the program will be
+            killed.
+        */
         boolean askContinue();
     }
 

@@ -219,6 +219,7 @@ public class NodeUtils
         return nodesLeft;
     }
 
+    /** Get nodes in path from root to a given node. */
     public static Vector getPathFromRoot(Node node)
     {
         Vector result = new Vector();
@@ -259,6 +260,11 @@ public class NodeUtils
         return node;
     }
 
+    /** Get nodes in shortest path between start and target node.
+        The shortest path goes backward from the start node (exclusive) until
+        the last common moves of the variations of both nodes and then forward
+        to the target node (inclusive).
+    */
     public static Vector getShortestPath(Node start, Node target)
     {
         Vector rootToStart = getPathFromRoot(start);
@@ -277,6 +283,12 @@ public class NodeUtils
         return result;
     }
 
+    /** Get a text representation of the variation to a certain node.
+        The string contains the number of the child for each node with more
+        than one child in the path from the root node to this node.
+        The childs are counted starting with 1 and the numbers are separated
+        by colons.
+    */
     public static String getVariationString(Node node)
     {
         Vector vector = new Vector();

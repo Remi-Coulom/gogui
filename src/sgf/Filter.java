@@ -11,6 +11,7 @@ import utils.FileUtils;
 
 //----------------------------------------------------------------------------
 
+/** Swing file filter for SGF files. */
 public class Filter
     extends FileFilter
 {

@@ -18,8 +18,25 @@ import go.Point;
 
 //----------------------------------------------------------------------------
 
+/** Find duplicates in games. */
 public class Compare
 {
+    /** Check if game already exists in game collection.
+        All games must have the same board size.
+        Also finds rotated duplicates.
+        @param board Board with the correct size (only used for
+        go.Board.rotate).
+        @param moves Moves of game to check.
+        @param games Vector containing games (vector of moves) in collection.
+        @param useAlternate If true, assume that players are exchanged every
+        second game. Only check games where player played the same color.
+        @param isAlternated If useAlternate, indicate if game to check
+        had players exchanged.
+        @return String containing number of first identical game in
+        collection or "-" if no duplicate was found. If a nearly identical
+        game is found (<= 20% identical moves comparing moves by number),
+        the game number is returned with a question mark appended.
+    */
     public static String checkDuplicate(Board board, Vector moves,
                                         Vector games, boolean useAlternate,
                                         boolean isAlternated)
@@ -62,6 +79,11 @@ public class Compare
         return result;
     }
 
+    /** Compare a set of SGF files.
+        Prints the results to standard output, one line per game
+        with the filename and the duplicate information as returned by
+        Compare.checkDuplicate.
+    */
     public static void compare(Vector filenames) throws Exception
     {
         Board board = null;

@@ -9,6 +9,7 @@ import java.util.Vector;
 
 //----------------------------------------------------------------------------
 
+/** Message queue for synchronized passing of messages between threads. */
 public class MessageQueue
 {
     public synchronized boolean isEmpty()
@@ -34,6 +35,10 @@ public class MessageQueue
         notify();
     }
 
+    /** Unsynchronized peek at next object.
+        Requires that the caller holds a lock on the message queue.
+        @return Next object or null if none exists.
+    */
     public Object unsynchronizedPeek()
     {
         assert(Thread.currentThread().holdsLock(this));

@@ -23,10 +23,17 @@ import go.Point;
 
 //----------------------------------------------------------------------------
 
-/** Write to SGF file. */
+/** Write in SGF format. */
 public class Writer
 {
-    /** Save game tree. */
+    /** Write game tree in SGF format.
+        @param out Output stream.
+        @param gameTree Game tree to write.
+        @param file File name for GN property.
+        @param application Application name for AP property.
+        @param version If not null, version appended to application name in
+        AP property.
+    */
     public Writer(OutputStream out, GameTree gameTree, File file,
                   String application, String version)
     {        
@@ -52,7 +59,14 @@ public class Writer
         m_out.close();
     }
 
-    /** Save board position. */
+    /** Write position in SGF format.
+        @param out Output stream.
+        @param board Position to write.
+        @param file File name for GN property.
+        @param application Application name for AP property.
+        @param version If not null, version appended to application name in
+        AP property.
+    */
     public Writer(OutputStream out, Board board, File file,
                   String application, String version)
     {        

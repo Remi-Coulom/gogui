@@ -79,6 +79,7 @@ class ByteCountInputStream
 */
 public class Reader
 {
+    /** SGF read error. */
     public static class SgfError
         extends ErrorMessage
     {
@@ -99,6 +100,7 @@ public class Reader
         change)
         @param progressShow Callback to show progress, can be null
         @param size Size of stream if progressShow != null
+        @throws SgfError If reading fails.
     */
     public Reader(InputStream in, String name, ProgressShow progressShow,
                   long size)
@@ -136,12 +138,15 @@ public class Reader
         }
     }
 
+    /** Get game tree of loaded SGF file. */
     public GameTree getGameTree()
     {
         return m_gameTree;
     }
 
-    /** Returns string with warning messages or null if no warnings. */
+    /** Get warnings that occurred during loading SGF file.
+        @return String with warning messages or null if no warnings.
+    */
     public String getWarnings()
     {
         String result = "";

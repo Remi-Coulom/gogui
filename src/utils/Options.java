@@ -37,6 +37,7 @@ public class Options
         return getValue(option) != null;
     }
 
+    /** Get remaining arguments that are not options. */
     public Vector getArguments()
     {
         return m_args;
@@ -100,8 +101,8 @@ public class Options
     {
         int value = getInteger(option, defaultValue);
         if (value < min || value > max)
-            throw new ErrorMessage("Option -" + option + " must be in [" +
-                                   min + ".." + max + "]");
+            throw new ErrorMessage("Option -" + option + " must be in ["
+                                   + min + ".." + max + "]");
         return value;
     }
 
@@ -119,6 +120,7 @@ public class Options
         return value;
     }
 
+    /** Check if option is set. */
     public boolean isSet(String option) throws ErrorMessage
     {
         String value = getString(option, null);

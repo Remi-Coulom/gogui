@@ -16,6 +16,7 @@ import java.awt.image.ColorModel;
  
 //----------------------------------------------------------------------------
 
+/** Creates a PaintContext for a radial gradient. */
 public class RadialGradientPaint
     implements Paint
 {

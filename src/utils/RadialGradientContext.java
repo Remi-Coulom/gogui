@@ -13,6 +13,7 @@ import java.awt.image.WritableRaster;
  
 //----------------------------------------------------------------------------
 
+/** Creates a raster with a radial color gradient. */
 public class RadialGradientContext
     implements PaintContext
 {

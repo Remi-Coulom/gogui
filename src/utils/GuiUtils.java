@@ -24,44 +24,74 @@ import javax.swing.border.Border;
 
 //----------------------------------------------------------------------------
 
+/** GUI utility classes and static functions. */
 public class GuiUtils
 {
+    /** Runnable for running protected my modal progress dialog.
+        @see GuiUtils#runProgress
+    */
     public interface ProgressRunnable
     {
+        /** Function to run.
+            The function is expected to call ProgressShow.showProgress
+            regularly to indicate progress made.
+        */
         void run(ProgressShow progressShow) throws Throwable;
     }
 
+    /** Constant used for padding in dialogs. */
     public static final int PAD = 5;
 
+    /** Constant used for small padding in dialogs. */
     public static final int SMALL_PAD = 2;
 
+    /** Create empty border with normal padding.
+        @see GuiUtils#PAD
+    */
     public static Border createEmptyBorder()
     {
         return m_emptyBorder;
     }
 
+    /** Create empty box with size of normal padding.
+        @see GuiUtils#PAD
+    */
     public static Box.Filler createFiller()
     {
         return new Box.Filler(m_fillerDimension, m_fillerDimension,
                               m_fillerDimension);
     }
 
+    /** Create empty border with small padding.
+        @see GuiUtils#SMALL_PAD
+    */
     public static Border createSmallEmptyBorder()
     {
         return m_smallEmptyBorder;
     }
 
+    /** Create empty box with size of small padding.
+        @see GuiUtils#SMALL_PAD
+    */
     public static Box.Filler createSmallFiller()
     {
         return new Box.Filler(m_smallFillerDimension, m_smallFillerDimension,
                               m_smallFillerDimension);
     }
 
+    /** Get size of default monspaced font.
+        Can be used for setting the initial size of some GUI elements.
+        BUG: Does not return the size in pixels but in points.
+    */
     public static int getDefaultMonoFontSize()
     {
         return m_defaultMonoFontSize;
     }
 
+    /** Check window for normal state.
+        Checks if window is not maximized (in either or both directions) and
+        not iconified.
+    */
     public static boolean isNormalSizeMode(JFrame window)
     {
         int state = window.getExtendedState();
@@ -70,7 +100,17 @@ public class GuiUtils
         return ((state & mask) == 0);
     }
 
-    /** Run in separate thread protected by a modal progress dialog. */
+    /** Run in separate thread protected by a modal progress dialog.
+        Ensures that the GUI gets repaint events while the runnable is
+        running, but cannot get other events and displays a progress bar
+        as a user feedback.
+        The progress dialog is displayed for at least one second.
+        @param owner Parent for the progress dialog.
+        @param message Title for the progress dialog.
+        @param runnable Runnable to run.
+        @throws Throwable Any exception that ProgressRunnable.run throwed,
+        you have to use instanceof to check for specific exception classes.
+    */
     public static void runProgess(Frame owner, String message,
                                   ProgressRunnable runnable)
         throws Throwable
@@ -96,6 +136,7 @@ public class GuiUtils
             throw thread.getThrowable();
     }
 
+    /** Set Go icon on frame. */
     public static void setGoIcon(Frame frame)
     {
         URL url = m_iconURL;
