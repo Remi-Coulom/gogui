@@ -99,6 +99,8 @@ public class MenuBar
         m_itemBeepAfterMove.setEnabled(enabled);
         m_itemAttachProgram.setEnabled(! enabled);
         m_itemDetachProgram.setEnabled(enabled);
+        m_itemGtpShell.setEnabled(enabled);
+        m_itemAnalyze.setEnabled(enabled);
     }
 
     public boolean getBeepAfterMove()
@@ -217,6 +219,8 @@ public class MenuBar
             m_itemBeepAfterMove.setEnabled(false);
             m_itemDetachProgram.setEnabled(false);
             m_itemAttachProgram.setEnabled(true);
+            m_itemGtpShell.setEnabled(false);
+            m_itemAnalyze.setEnabled(false);
         }
     }
 
@@ -331,6 +335,8 @@ public class MenuBar
     private JMenu m_menuWindow;
 
     private JMenuItem m_itemAbout;
+
+    private JMenuItem m_itemAnalyze;
 
     private JMenuItem m_itemAttachProgram;
 
@@ -460,10 +466,10 @@ public class MenuBar
     {
         ButtonGroup group = new ButtonGroup();
         JMenu menu = createMenu("Computer Color", KeyEvent.VK_C);
-        m_itemComputerBlack = addRadioItem(menu, group, "Black", KeyEvent.VK_B,
-                                           "computer-black");
-        m_itemComputerWhite = addRadioItem(menu, group, "White", KeyEvent.VK_W,
-                                           "computer-white");
+        m_itemComputerBlack = addRadioItem(menu, group, "Black",
+                                           KeyEvent.VK_B, "computer-black");
+        m_itemComputerWhite = addRadioItem(menu, group, "White",
+                                           KeyEvent.VK_W, "computer-white");
         m_itemComputerBoth = addRadioItem(menu, group, "Both", KeyEvent.VK_T,
                                           "computer-both");
         m_itemComputerNone = addRadioItem(menu, group, "None", KeyEvent.VK_N,
@@ -594,7 +600,8 @@ public class MenuBar
         addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_S, "show-cursor");
         m_itemShowLastMove = new JCheckBoxMenuItem("Show Last Move");
         m_itemShowLastMove.setSelected(true);
-        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L, "show-last-move");
+        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
+                    "show-last-move");
         return menu;
     }
 
@@ -648,12 +655,13 @@ public class MenuBar
         JMenu menu = createMenu("Window", KeyEvent.VK_W);
         addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7, 0,
                     "show-gametree");
-        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
-                    "analyze");
+        m_itemAnalyze = addMenuItem(menu, "Analyze", KeyEvent.VK_A,
+                                    KeyEvent.VK_F8, 0, "analyze");
         m_itemGtpShell = addMenuItem(menu, "GTP Shell", KeyEvent.VK_G,
                                      KeyEvent.VK_F9, 0, "gtp-shell");
         menu.addSeparator();
-        addMenuItem(menu, "Bring All to Front", KeyEvent.VK_F, "all-to-front");
+        addMenuItem(menu, "Bring All to Front", KeyEvent.VK_F,
+                    "all-to-front");
         return menu;
     }
 
