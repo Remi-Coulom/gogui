@@ -790,6 +790,7 @@ class GoGui
                     m_commandThread.sendCommand("undo");
                 m_board.undo();
             }
+            computerNone();
             boardChangedBegin(false);
         }
         catch (Gtp.Error e)
@@ -919,11 +920,13 @@ class GoGui
         try
         {
             m_handicap = Integer.parseInt(handicap);
-            computerBlack();
             if (m_board.isModified())
                 showInfo("Handicap will take effect on next game.");
             else
+            {
+                computerBlack();
                 newGame(m_boardSize);
+            }
         }
         catch (NumberFormatException e)
         {
@@ -1049,15 +1052,9 @@ class GoGui
     private void cbPlay()
     {
         if (m_board.getToMove() == go.Color.BLACK)
-        {
-            m_menuBar.setComputerBlack();
             computerBlack();
-        }
         else
-        {
-            m_menuBar.setComputerWhite();
             computerWhite();
-        }
         generateMove();
         m_timeControl.startMove(m_board.getToMove());
     }
@@ -1775,6 +1772,7 @@ class GoGui
             m_loadedFile = file;
             setTitle();
             SimpleDialogs.setLastFile(file);
+            computerNone();
             boardChangedBegin(false);
         }
         catch (FileNotFoundException e)
