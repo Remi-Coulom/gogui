@@ -603,6 +603,20 @@ public class TwoGtp
         }
     }
 
+    private double getCpuTime(Gtp gtp)
+    {
+        double result = 0;
+        try
+        {
+            if (gtp.isCpuTimeSupported())
+                result = gtp.getCpuTime();
+        }
+        catch (Gtp.Error e)
+        {
+        }
+        return result;
+    }
+
     private File getFile(int gameIndex)
     {
         return new File(m_sgfFile + "-" + gameIndex + ".sgf");
@@ -621,23 +635,15 @@ public class TwoGtp
         return host;
     }
 
-    private Vector getMoves()
-    {
-        Vector moves = new Vector(128, 128);
-        for (int i = 0; i < m_board.getMoveNumber(); ++i)
-            moves.add(m_board.getMove(i));
-        return moves;
-    }
-
-    private static Vector getMoves(Node root, String filename) throws Exception
+    private static Vector getMoves(Node root, String filename)
     {
         Vector moves = new Vector();
         Node node = root;
         while (node != null)
         {
             if (node.getNumberAddBlack() + node.getNumberAddWhite() > 0)
-                throw new Exception("File " + filename +
-                                    " contains setup stones");
+                throw new RuntimeException("File " + filename +
+                                           " contains setup stones");
             if (node.getMove() != null)
                 moves.add(node.getMove());
             node = node.getChild();
@@ -721,20 +727,6 @@ public class TwoGtp
         return buffer.toString();
     }
 
-    private double getCpuTime(Gtp gtp)
-    {
-        double result = 0;
-        try
-        {
-            if (gtp.isCpuTimeSupported())
-                result = gtp.getCpuTime();
-        }
-        catch (Gtp.Error e)
-        {
-        }
-        return result;
-    }
-
     private void handleEndOfGame(boolean error, String errorMessage)
     {
         try
@@ -754,7 +746,7 @@ public class TwoGtp
                 resultWhite = inverseResult(resultWhite);
                 resultReferee = inverseResult(resultReferee);
             }
-            Vector moves = getMoves();
+            Vector moves = getMoves(m_gameTree.getRoot(), null);
             String duplicate = checkDuplicate(m_board, moves, m_games);
             saveResult(resultBlack, resultWhite, resultReferee, isAlternated(),
                        duplicate, moves.size(), error, errorMessage,
@@ -1201,10 +1193,9 @@ public class TwoGtp
         }
         catch (Gtp.Error e)
         {
-            if (m_verbose)
-                System.err.println("Referee denied " + command + " command: "
-                                   + e.getMessage() + "\n" +
-                                   "Disabling referee.");
+            System.err.println("Referee denied " + command + " command: "
+                               + e.getMessage() + "\n" +
+                               "Disabling referee.");
             m_referee.close();
             m_referee.waitForExit();
             m_referee = null;
