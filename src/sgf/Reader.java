@@ -144,6 +144,16 @@ public class Reader
 
     private GameTree m_gameTree;
 
+    private Move[][] m_moveBlackCache = new Move[19][19];
+
+    private Move[][] m_moveWhiteCache = new Move[19][19];
+
+    private Move m_passBlackCache = new Move(null, Color.BLACK);
+
+    private Move m_passWhiteCache = new Move(null, Color.WHITE);
+
+    private Point[][] m_pointCache = new Point[19][19];
+
     private ProgressShow m_progressShow;
 
     private StreamTokenizer m_tokenizer;
@@ -198,6 +208,40 @@ public class Reader
         }
         else
             return new SgfError(lineNumber + ": " + message);
+    }
+
+    private Move getMove(Point point, Color color)
+    {
+        if (point == null)
+        {
+            if (color == Color.BLACK)
+                return m_passBlackCache;
+            else
+            {
+                assert(color == Color.WHITE);
+                return m_passWhiteCache;
+            }
+        }
+        int x = point.getX();
+        int y = point.getY();
+        if (x < 19 && y < 19)
+        {
+            if (color == Color.BLACK)
+            {
+                if (m_moveBlackCache[x][y] == null)
+                    m_moveBlackCache[x][y] = new Move(point, color);
+                return m_moveBlackCache[x][y];
+            }
+            else
+            {
+                assert(color == Color.WHITE);
+                if (m_moveWhiteCache[x][y] == null)
+                    m_moveWhiteCache[x][y] = new Move(point, color);
+                return m_moveWhiteCache[x][y];
+            }
+        }
+        else
+            return new Move(point, color);
     }
 
     private Color parseColor(String s) throws SgfError
@@ -255,7 +299,14 @@ public class Reader
         int y = boardSize - (s.charAt(1) - 'a') - 1;
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
             throw getError("Invalid coordinates: " + s);
-        return new Point(x, y);
+        if (x < 19 && y < 19)
+        {
+            if (m_pointCache[x][y] == null)
+                m_pointCache[x][y] = new Point(x, y);
+            return m_pointCache[x][y];
+        }
+        else
+            return new Point(x, y);
     }
 
     private Node readNext(Node father, boolean isRoot)
@@ -325,7 +376,7 @@ public class Reader
             }
             else if (p.equals("B"))
             {
-                node.setMove(new Move(parsePoint(v), Color.BLACK));
+                node.setMove(getMove(parsePoint(v), Color.BLACK));
             }
             else if (p.equals("BL"))
             {
@@ -408,7 +459,7 @@ public class Reader
                 m_gameInformation.m_boardSize = parseInt(v);
             }
             else if (p.equals("W"))
-                node.setMove(new Move(parsePoint(v), Color.WHITE));
+                node.setMove(getMove(parsePoint(v), Color.WHITE));
             else if (p.equals("WL"))
             {
                 try
