@@ -352,17 +352,19 @@ public class GtpTerminal
 
     private void newGame(String[] cmdArray)
     {
+        int size = m_board.getSize();
         if (cmdArray.length > 1)
         {
             try
             {
-                int size = Integer.parseInt(cmdArray[1]);
-                newGame(size);
+                size = Integer.parseInt(cmdArray[1]);
             }
             catch (NumberFormatException exception)
             {
             }
         }
+        newGame(size);
+        printBoard();
     }
 
     private void play(Move move)
