@@ -29,7 +29,7 @@ public class Writer
                   String application, String version)
     {        
         m_out = new PrintStream(out);
-        m_out.println("(");
+        print("(");
         GameInformation gameInformation = gameTree.getGameInformation();
         m_size = gameInformation.m_boardSize;
         String result = gameInformation.m_result;
@@ -43,8 +43,9 @@ public class Writer
         double komi = gameInformation.m_komi;
         printHeader(file, application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, result, komi, rules);
-        printNodes(gameTree.getRoot());        
-        m_out.println(")");
+        printNode(gameTree.getRoot(), true);
+        print(")");
+        m_out.println(m_buffer.toString());
         m_out.close();
     }
 
@@ -54,12 +55,16 @@ public class Writer
     {        
         m_size = board.getSize();
         m_out = new PrintStream(out);
-        m_out.println("(");
+        print("(");
         printHeader(file, application, version);
+        printNewLine();
         printPosition(board);
-        m_out.println(")");
+        print(")");
+        m_out.println(m_buffer.toString());
         m_out.close();
     }
+
+    private StringBuffer m_buffer = new StringBuffer(128);
 
     private int m_size;
 
@@ -72,6 +77,27 @@ public class Writer
         return out.getEncoding();
     }
 
+    private String getEscaped(String text)
+    {
+        StringBuffer result = new StringBuffer(2 * text.length());
+        result.append('[');
+        for (int i = 0; i < text.length(); ++i)
+        {
+            char c = text.charAt(i);
+            if ("]:\\".indexOf(c) >= 0)
+            {
+                result.append('\\');
+                result.append(c);
+            }
+            else if (c != '\n' && Character.isWhitespace(c))
+                result.append(' ');
+            else
+                result.append(c);
+        }
+        result.append(']');
+        return result.toString();
+    }
+
     private static String getName(File file)
     {
         String result = file.getName();
@@ -82,23 +108,50 @@ public class Writer
         return result;
     }
 
-    private void printEscaped(String text)
+    private String getPoint(Point p)
     {
-        m_out.print('[');
-        for (int i = 0; i < text.length(); ++i)
+        if (p == null)
         {
-            char c = text.charAt(i);
-            if ("]:\\".indexOf(c) >= 0)
-            {
-                m_out.print('\\');
-                m_out.print(c);
-            }
-            else if (c != '\n' && Character.isWhitespace(c))
-                m_out.print(' ');
+            if (m_size <= 19)
+                return "[tt]";
             else
-                m_out.print(c);
+                return "[]";
         }
-        m_out.print(']');
+        int x = 'a' + p.getX();
+        int y = 'a' + (m_size - p.getY() - 1);
+        return "[" + (char)x + (char)y + "]";
+    }
+
+    private String getPointList(Vector v)
+    {
+        StringBuffer buffer = new StringBuffer(128);
+        for (int i = 0; i < v.size(); ++i)
+            buffer.append(getPoint((Point)v.get(i)));
+        return buffer.toString();
+    }
+    
+    private void print(String text)
+    {
+        if (text.indexOf('\n') > 0)
+        {
+            printNewLine();
+            m_buffer.append(text);
+            printNewLine();
+            return;
+        }
+        final int maxCharPerLine = 78;
+        if (m_buffer.length() + text.length() > maxCharPerLine)
+            printNewLine();
+        m_buffer.append(text);
+    }
+
+    private void printNewLine()
+    {
+        if (m_buffer.length() > 0)
+        {
+            m_out.println(m_buffer.toString());
+            m_buffer.replace(0, m_buffer.length(), "");
+        }
     }
 
     private void printHeader(File file, String application, String version)
@@ -106,13 +159,8 @@ public class Writer
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
-        m_out.print(";\n" +
-                    "FF[4]\n" +
-                    "CA[" + getDefaultEncoding() + "]\n" +
-                    "GM[1]\n" +
-                    "GN[" + getName(file) + "]\n" +
-                    "AP[" + appName + "]\n" +
-                    "SZ[" + m_size + "]\n");
+        print(";FF[4]CA[" + getDefaultEncoding() + "]GM[1]GN["
+              + getName(file) + "]AP[" + appName + "]SZ[" + m_size + "]");
     }
 
     private void printHeader(File file, String application, String version,
@@ -123,73 +171,82 @@ public class Writer
     {
         printHeader(file, application, version);
         if (handicap > 0)
-            m_out.println("HA[" + handicap + "]");
+            print("HA[" + handicap + "]");
         else
-            m_out.println("KM[" + komi + "]");
+            print("KM[" + komi + "]");
         if (rules != null && ! rules.equals(""))
-            m_out.println("RU[" + rules + "]");
+            print("RU[" + rules + "]");
         if (result != null && ! result.equals(""))
-            m_out.println("RE[" + result + "]");
+            print("RE[" + result + "]");
         if (playerBlack != null)
-            m_out.println("PB[" + playerBlack + "]");
+            print("PB[" + playerBlack + "]");
         if (playerWhite != null)
-            m_out.println("PW[" + playerWhite + "]");
+            print("PW[" + playerWhite + "]");
         if (rankBlack != null)
-            m_out.println("BR[" + rankBlack + "]");
+            print("BR[" + rankBlack + "]");
         if (rankWhite != null)
-            m_out.println("WR[" + rankWhite + "]");
+            print("WR[" + rankWhite + "]");
         if (date != null)
-            m_out.println("DT[" + date + "]");
+            print("DT[" + date + "]");
     }
 
-    private void printNodes(Node node)
+    private void printNode(Node node, boolean isRoot)
     {
         Move move = node.getMove();
+        if (! isRoot)
+        {
+            if (NodeUtils.isInMainVariation(node) && move != null)
+            {
+                int moveNumber = NodeUtils.getMoveNumber(node);
+                if (moveNumber % 10 == 1)
+                    printNewLine();
+            }
+            print(";");
+        }
         if (move != null)
         {
+            String point = getPoint(move.getPoint());
             if (move.getColor() == Color.BLACK)
-                m_out.print(";\nB");
+                print("B" + point);
             else
-                m_out.print(";\nW");
-            printPoint(move.getPoint());
-            m_out.println();
+                print("W" + point);
         }
         if (node.getNumberAddBlack() > 0)
         {
-            m_out.print("AB");
+            StringBuffer buffer = new StringBuffer(128);
+            buffer.append("AB");
             for (int i = 0; i < node.getNumberAddBlack(); ++i)
-                printPoint(node.getAddBlack(i));
-            m_out.println();
+                buffer.append(getPoint(node.getAddBlack(i)));
+            print(buffer.toString());
         }
         if (node.getNumberAddWhite() > 0)
         {
-            m_out.print("AW");
+            StringBuffer buffer = new StringBuffer(128);
+            buffer.append("AW");
             for (int i = 0; i < node.getNumberAddWhite(); ++i)
-                printPoint(node.getAddWhite(i));
-            m_out.println();
+                buffer.append(getPoint(node.getAddWhite(i)));
+            print(buffer.toString());
         }
         String comment = node.getComment();
         if (comment != null && ! comment.trim().equals(""))
         {
-            m_out.print("C");
-            printEscaped(comment);
-            m_out.println();
+            print("C" + getEscaped(comment));
         }
         if (! Double.isNaN(node.getTimeLeftBlack()))
         {
-            m_out.println("BL[" + node.getTimeLeftBlack() + "]");
+            print("BL[" + node.getTimeLeftBlack() + "]");
         }
         if (node.getMovesLeftBlack() >= 0)
         {
-            m_out.println("OB[" + node.getMovesLeftBlack() + "]");
+            print("OB[" + node.getMovesLeftBlack() + "]");
         }
         if (! Double.isNaN(node.getTimeLeftWhite()))
         {
-            m_out.println("WL[" + node.getTimeLeftWhite() + "]");
+            print("WL[" + node.getTimeLeftWhite() + "]");
         }
         if (node.getMovesLeftWhite() >= 0)
         {
-            m_out.println("OW[" + node.getMovesLeftWhite() + "]");
+            print("OW[" + node.getMovesLeftWhite() + "]");
         }
         if (node.getPlayer() != Color.EMPTY)
             printToPlay(node.getPlayer());
@@ -202,9 +259,7 @@ public class Writer
                 Map.Entry entry = (Map.Entry)it.next();
                 String label = (String)entry.getKey();
                 String value = (String)entry.getValue();
-                m_out.print(label);
-                printEscaped(value);
-                m_out.println();
+                print(label + getEscaped(value));
             }
         }
         int numberChildren = node.getNumberChildren();
@@ -212,38 +267,17 @@ public class Writer
             return;
         if (numberChildren == 1)
         {
-            printNodes(node.getChild());
+            printNode(node.getChild(), false);
             return;
         }
         for (int i = 0; i < numberChildren; ++i)
         {
-            m_out.println("(");
-            printNodes(node.getChild(i));
-            m_out.println(")");
+            print("(");
+            printNode(node.getChild(i), false);
+            print(")");
         }
     }
 
-    private void printPoint(Point p)
-    {
-        if (p == null)
-        {
-            if (m_size <= 19)
-                m_out.print("[tt]");
-            else
-                m_out.print("[]");
-            return;
-        }
-        int x = 'a' + p.getX();
-        int y = 'a' + (m_size - p.getY() - 1);
-        m_out.print("[" + (char)x + (char)y + "]");
-    }
-
-    private void printPointList(Vector v)
-    {
-        for (int i = 0; i < v.size(); ++i)
-            printPoint((Point)v.get(i));
-    }
-    
     private void printPosition(Board board)
     {
         int numberPoints = board.getNumberPoints();
@@ -259,6 +293,7 @@ public class Writer
                 white.add(p);
         }
         printSetup(black, white);
+        printNewLine();
         printToPlay(board.getToMove());
     }
 
@@ -267,26 +302,19 @@ public class Writer
         if (black.size() > 0 || white.size() > 0)
         {
             if (black.size() > 0)
-            {
-                m_out.print("AB");
-                printPointList(black);
-                m_out.println();
-            }
+                print("AB" + getPointList(black));
+            printNewLine();
             if (white.size() > 0)
-            {
-                m_out.print("AW");
-                printPointList(white);
-                m_out.println();
-            }
+                print("AW" + getPointList(white));
         }
     }
 
     private void printToPlay(Color color)
     {
         if (color == Color.BLACK)
-            m_out.println("PL[B]");
+            print("PL[B]");
         else
-            m_out.println("PL[W]");
+            print("PL[W]");
     }
 }
 
