@@ -24,6 +24,9 @@
 	    Add option for beep after move.
 	  </listitem>
 	  <listitem>
+	    Use time_settings command if -time option is used.
+	  </listitem>
+	  <listitem>
 	    Other small fixes and enhancements.
 	  </listitem>
 	</itemizedlist>

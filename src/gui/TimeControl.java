@@ -28,6 +28,33 @@ class TimeControl
     public TimeControl()
     {
         reset();
+        m_initialized = false;
+    }
+
+    /** Get byoyomi time.
+        Requires: getUseByoyomi()
+    */
+    public long getByoyomi()
+    {
+        return m_byoyomi / 60000L;
+    }
+
+    /** Get byoyomi moves.
+        Requires: getUseByoyomi()
+    */
+    public long getByoyomiMoves()
+    {
+        return m_byoyomiMoves;
+    }
+
+    public long getPreByoyomi()
+    {
+        return m_preByoyomi / 60000L;
+    }
+
+    public boolean getUseByoyomi()
+    {
+        return m_useByoyomi;
     }
 
     public String getTimeString(go.Color c)
@@ -36,7 +63,7 @@ class TimeControl
         long time = timeRecord.m_time;
         if (m_toMove == c)
             time += new Date().getTime() - m_startMoveTime;
-        if (m_loseOnTime)
+        if (m_initialized)
         {
             if (timeRecord.m_isInByoyomi)
                 time = m_byoyomi - time;
@@ -75,7 +102,7 @@ class TimeControl
             m_buffer.append('0');
             m_buffer.append(seconds);
         }
-        if (m_loseOnTime && timeRecord.m_isInByoyomi)
+        if (m_initialized && timeRecord.m_isInByoyomi)
         {
             m_buffer.append('/');
             m_buffer.append(timeRecord.m_movesLeft);
@@ -83,9 +110,14 @@ class TimeControl
         return m_buffer.toString();
     }
 
+    public boolean isInitialized()
+    {
+        return m_initialized;
+    }
+
     public boolean lostOnTime(go.Color c)
     {
-        if (! m_loseOnTime)
+        if (! m_initialized)
             return false;
         TimeRecord timeRecord = getRecord(c);
         long time = timeRecord.m_time;
@@ -144,7 +176,7 @@ class TimeControl
         m_preByoyomi = preByoyomi;
         m_byoyomi = byoyomi;
         m_byoyomiMoves = byoyomiMoves;
-        m_loseOnTime = true;
+        m_initialized = true;
     }
 
     public void startMove(go.Color c)
@@ -194,12 +226,15 @@ class TimeControl
     private class TimeRecord
     {
         public boolean m_isInByoyomi;
+
         public boolean m_byoyomiExceeded;
+
         public int m_movesLeft;
+
         public long m_time;
     }
 
-    private boolean m_loseOnTime;
+    private boolean m_initialized;
 
     private boolean m_useByoyomi;
 

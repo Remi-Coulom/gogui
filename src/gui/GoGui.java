@@ -1468,6 +1468,7 @@ class GoGui
         if (m_commandThread != null && file == null)
         {
             m_commandThread.sendCommandsClearBoard(size);
+            setTimeSettings();
         }
         if (size != m_boardSize)
         {
@@ -1678,6 +1679,32 @@ class GoGui
             String s =
                 (rules == go.Board.RULES_JAPANESE ? "territory" : "area");
             m_commandThread.sendCommand("scoring_system " + s);
+        }
+        catch (Gtp.Error e)
+        {
+        }
+    }
+
+    private void setTimeSettings()
+    {
+        if (m_commandThread == null)
+            return;
+        if (! m_timeControl.isInitialized())
+            return;
+        if (! m_commandList.contains("time_settings"))
+            return;
+        long preByoyomi = m_timeControl.getPreByoyomi() * 60;
+        long byoyomi = 0;
+        long byoyomiMoves = 0;
+        if (m_timeControl.getUseByoyomi())
+        {
+            byoyomi = m_timeControl.getByoyomi() * 60;
+            byoyomiMoves = m_timeControl.getByoyomiMoves();
+        }
+        try
+        {
+            m_commandThread.sendCommand("time_settings " + preByoyomi + " "
+                                        + byoyomi + " " + byoyomiMoves);
         }
         catch (Gtp.Error e)
         {

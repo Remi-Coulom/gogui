@@ -77,6 +77,9 @@
 	<userinput>scoring_system</userinput>
       </listitem>
       <listitem>
+	<userinput>time_settings</userinput>
+      </listitem>
+      <listitem>
 	<userinput>undo</userinput>
       </listitem>
       <listitem>
