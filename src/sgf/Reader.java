@@ -231,7 +231,10 @@ public class Reader
             }
             else if (p.equals("GM"))
             {
-                if (! v.trim().equals("1"))
+                v = v.trim();
+                // Value should be 1, but sgf2misc produces Go files
+                // with empty value
+                if (! v.equals("1") && ! v.equals(""))
                     throw getError("Not a Go game.");
             }
             else if (p.equals("KM"))
