@@ -27,6 +27,7 @@ public class TwoGtp
         m_black.setLogPrefix("B");
         m_white = new Gtp(white, verbose, null);
         m_white.setLogPrefix("W");
+        m_inconsistentState = false;
         m_blackToMove.add(Boolean.TRUE);
     }
 
@@ -43,21 +44,21 @@ public class TwoGtp
         }
         else if (command.equals("quit"))
         {
-            status = sendBoth(command, response);
+            status = sendBoth(command, response, false, false);
         }
         else if (command.startsWith("black"))
         {
-            status = sendBoth(command, response);
+            status = sendBoth(command, response, true, true);
             m_blackToMove.push(Boolean.FALSE);
         }
         else if (command.startsWith("white"))
         {
-            status = sendBoth(command, response);
+            status = sendBoth(command, response, true, true);
             m_blackToMove.push(Boolean.TRUE);
         }
         else if (command.startsWith("undo"))
         {
-            status = sendBoth(command, response);
+            status = sendBoth(command, response, true, false);
             m_blackToMove.pop();
         }
         else if (command.startsWith("genmove_black"))
@@ -72,13 +73,15 @@ public class TwoGtp
         }
         else if (command.startsWith("boardsize"))
         {
-            status = sendBoth(command, response);
+            status = sendBoth(command, response, true, false);
+            if (status)
+                m_inconsistentState = false;
             m_blackToMove.clear();
             m_blackToMove.push(Boolean.TRUE);
         }
         else if (command.startsWith("komi")
                  || command.startsWith("scoring_system"))
-            status = sendBoth(command, response);
+            status = sendBoth(command, response, false, false);
         else if (command.equals("name"))
             response.append("TwoGtp");
         else if (command.equals("version"))
@@ -154,80 +157,167 @@ public class TwoGtp
         }
     }
 
+    private boolean m_inconsistentState;
+
     private Stack m_blackToMove = new Stack();
 
     private Gtp m_black;
 
     private Gtp m_white;
 
-    private boolean sendBoth(String command, StringBuffer response)
+    private boolean checkInconsistentState(StringBuffer response)
     {
+        if (m_inconsistentState)
+            response.append("Inconsistent state");
+        return m_inconsistentState;
+    }
+
+    private void mergeResponse(StringBuffer response,
+                               String response1, String response2,
+                               String prefix1, String prefix2)
+    {
+        boolean empty1 = (response1 == null || response1.equals(""));
+        boolean empty2 = (response2 == null || response2.equals(""));
+        if (empty1 && empty2)
+            return;
+        if (! empty1)
+        {
+            response.append(prefix1);
+            response.append(": ");
+            response.append(response1);
+            if (! empty2)
+                response.append("  ");
+        }
+        if (! empty2)
+        {
+            response.append(prefix2);
+            response.append(": ");
+            response.append(response2);
+        }
+    }
+
+    private boolean send(Gtp gtp1, Gtp gtp2, String command1, String command2,
+                         StringBuffer response, boolean changesState,
+                         boolean tryUndo)
+    {
+        assert((gtp1 == m_black && gtp2 == m_white)
+               || (gtp1 == m_white && gtp2 == m_black));
+        if (changesState && checkInconsistentState(response))
+            return false;
+        String prefix1 = (gtp1 == m_black ? "B" : "W");
+        String prefix2 = (gtp2 == m_black ? "B" : "W");
+        String response1 = null;
+        String response2 = null;
         boolean status = true;
         try
         {
-            response.append(m_black.sendCommand(command));
+            response1 = gtp1.sendCommand(command1);
         }
         catch (Gtp.Error e)
         {
-            response.append("B: ");
-            response.append(e.getMessage());
+            response1 = e.getMessage();
             status = false;
+            if (changesState)
+            {
+                mergeResponse(response, response1, response2, prefix1,
+                              prefix2);
+                return status;
+            }
         }
         try
         {
-            response.append(m_white.sendCommand(command));
+            response2 = gtp2.sendCommand(command2);
         }
         catch (Gtp.Error e)
         {
-            if (! status)
-                response.append("  ");
-            response.append("W: ");
-            response.append(e.getMessage());
+            response2 = e.getMessage();
+            if (changesState && status)
+            {
+                if (tryUndo)
+                {
+                    try
+                    {
+                        gtp1.sendCommand("undo");
+                    }
+                    catch (Gtp.Error errorUndo)
+                    {
+                        m_inconsistentState = true;
+                    }
+                }
+                else
+                    m_inconsistentState = true;
+            }
             status = false;
         }
+        mergeResponse(response, response1, response2, prefix1, prefix2);
         return status;
+    }
+
+    private boolean sendBoth(String command, StringBuffer response,
+                             boolean changesState, boolean tryUndo)
+    {
+        return send(m_black, m_white, command, command, response, changesState,
+                    tryUndo);
     }
 
     private boolean sendGenmove(String command, StringBuffer response)
     {
-        Gtp program;
-        Gtp other;
+        if (checkInconsistentState(response))
+            return false;
+        Gtp gtp1;
+        Gtp gtp2;
+        String prefix1;
+        String prefix2;
         if (command.startsWith("genmove_black"))
         {
-            program = m_black;
-            other = m_white;
+            gtp1 = m_black;
+            gtp2 = m_white;
+            prefix1 = "B";
+            prefix2 = "W";
         }
         else
         {
-            program = m_white;
-            other = m_black;
+            gtp1 = m_white;
+            gtp2 = m_black;
+            prefix1 = "W";
+            prefix2 = "B";
         }
+        String response1 = null;
+        String response2 = null;
         try
         {
-            response.append(program.sendCommand(command));
+            response1 = gtp1.sendCommand(command);
         }
         catch (Gtp.Error e)
         {
-            response.append(e.getMessage());
+            response1 = e.getMessage();
+            mergeResponse(response, response1, response2, prefix1,
+                          prefix2);
             return false;
         }
-        
+        StringBuffer command2 = new StringBuffer(command);
+        StringUtils.replace(command2, "genmove_", "");
+        command2.append(' ');
+        command2.append(response1);
         try
         {
-            StringBuffer playCommand = new StringBuffer(command);
-            StringUtils.replace(playCommand, "genmove_", "");
-            playCommand.append(' ');
-            playCommand.append(response);
-            if (response.length() > 0)
-                response.append(' ');
-            response.append(other.sendCommand(playCommand.toString()));
+            response2 = gtp2.sendCommand(command2.toString());
         }
         catch (Gtp.Error e)
         {
-            response.setLength(0);
-            response.append(e.getMessage());
+            response2 = e.getMessage();
+            try
+            {
+                gtp1.sendCommand("undo");
+            }
+            catch (Gtp.Error errorUndo)
+            {
+                m_inconsistentState = true;
+            }
+            mergeResponse(response, response1, response2, prefix1, prefix2);
             return false;
         }
+        response.append(response1);
         return true;
     }
 
@@ -243,13 +333,13 @@ public class TwoGtp
         try
         {
             response.append(gtp.sendCommand(command));
-            return true;
         }
         catch (Gtp.Error e)
         {
             response.append(e.getMessage());
             return false;
-        }
+        }        
+        return true;
     }
 }
 
