@@ -30,7 +30,7 @@ release:
 	for i in $(ICONS); do cp $$i build/$$i; done 
 	jar cmf manifest-addition.txt gogui.jar -C build .
 
-# Run with 'jdb -classpath build_dbg GoGui'
+# Run with 'jdb -classpath build_dbg -sourcepath . GoGui'
 debug:
 	test -d build_dbg || mkdir build_dbg
 	javac -g -deprecation -source 1.4 -d build_dbg @files.txt
