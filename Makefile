@@ -35,17 +35,17 @@ PACKAGES= \
 
 release: version
 	mkdir -p build/gogui
-	javac -O -deprecation -sourcepath . -source 1.4 -d build/gogui @files.txt
+	javac -O -deprecation -sourcepath . -source 1.4 -d build/gogui @build/files-gogui.txt
 	mkdir -p build/gogui/doc
 	cp -R doc/html/* build/gogui/doc
 	mkdir -p build/gogui/images
 	for i in $(IMAGES); do cp $$i build/gogui/$$i; done 
-	jar cmf manifest-addition.txt gogui.jar -C build/gogui .
+	jar cmf build/manifest-gogui.txt gogui.jar -C build/gogui .
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
 debug: version
 	mkdir -p build/gogui_debug
-	javac -g -deprecation -sourcepath . -source 1.4 -d build/gogui_debug @files.txt
+	javac -g -deprecation -sourcepath . -source 1.4 -d build/gogui_debug @build/files-gogui.txt
 	mkdir -p build/gogui_debug/doc
 	mkdir -p build/gogui_debug/images
 	for i in $(IMAGES); do cp $$i build/gogui_debug/$$i; done 
@@ -59,13 +59,13 @@ version:
 
 gmptogtp:
 	mkdir -p build/gmptogtp
-	javac -O -deprecation -sourcepath . -source 1.4 -d build/gmptogtp @files-gmptogtp.txt
-	jar cmf manifest-addition.txt gmptogtp.jar -C build/gmptogtp .
+	javac -O -deprecation -sourcepath . -source 1.4 -d build/gmptogtp @build/files-gmptogtp.txt
+	jar cmf build/manifest-gmptogtp.txt gmptogtp.jar -C build/gmptogtp .
 
 .PHONY: srcdoc clean doc changelog tags
 
 clean:
-	-rm -r build
+	-rm -r build/gogui build/gogui_debug build/gmptogtp
 
 doc:
 	echo "$(VERSION)" >doc/xml/version.xml

@@ -3,4 +3,4 @@
 # Add -ea option to enable assertions for testing
 # Add -Dgnu.io.rxtx.SerialPorts=... for ports with rxtx
 # -noverify avoids a problem with rxtx 2.05/2.16 (Illegal use of nonvirtual function call)
-java -noverify -cp gmptogtp.jar gmp.GmpToGtp "$@"
+java -noverify -jar gmptogtp.jar "$@"
