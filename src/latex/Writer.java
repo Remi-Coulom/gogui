@@ -94,11 +94,6 @@ public class Writer
 
     private void printCoordinates(Point p)
     {
-        if (p == null)
-        {
-            m_out.print("{u}{20}");
-            return;
-        }
         String s = p.toString();
         m_out.print("{" + s.substring(0, 1).toLowerCase() + "}{" +
                     s.substring(1) + "}");
@@ -119,7 +114,9 @@ public class Writer
         for (int i = 0; i < m_board.getInternalNumberMoves(); ++i)
         {
             Move move = m_board.getInternalMove(i);
-            printStone(move.getColor(), move.getPoint());
+            Point point = move.getPoint();
+            if (point != null)
+                printStone(move.getColor(), point);
         }
     }
 
