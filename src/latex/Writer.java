@@ -24,43 +24,31 @@ public class Writer
         }
     }    
 
-    public Writer(File file, Board board)
-        throws FileNotFoundException
+    public Writer(OutputStream out, Board board, boolean writePosition)
     {        
-        FileOutputStream out = new FileOutputStream(file);
         m_out = new PrintStream(out);
         m_board = board;
-        m_file = file;
         printBeginDocument();
         printBeginPSGo();
-        printInternalMoves();
-        String comment = printMoves();
-        printEndPSGo();
-        if (! comment.equals(""))
-            m_out.println("\n" + comment + "\n");
+        if (writePosition)
+        {
+            printPosition();
+            printEndPSGo();
+            String toMove =
+                (m_board.getToMove() == Color.BLACK ? "Black" : "White");
+            m_out.println("\n" + toMove + " to play.");
+        }
+        else
+        {
+            printInternalMoves();
+            String comment = printMoves();
+            printEndPSGo();
+            if (! comment.equals(""))
+                m_out.println("\n" + comment + "\n");
+        }
         printEndDocument();
         m_out.close();
     }
-
-    public Writer(File file, Board board, String application, String version)
-        throws FileNotFoundException
-    {        
-        FileOutputStream out = new FileOutputStream(file);
-        m_out = new PrintStream(out);
-        m_board = board;
-        m_file = file;
-        printBeginDocument();
-        printBeginPSGo();
-        printPosition();
-        printEndPSGo();
-        String toMove =
-            (m_board.getToMove() == Color.BLACK ? "Black" : "White");
-        m_out.println("\n" + toMove + " to play.");
-        printEndDocument();
-        m_out.close();
-    }
-
-    private File m_file;
 
     private PrintStream m_out;
 

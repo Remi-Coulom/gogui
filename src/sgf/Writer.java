@@ -24,15 +24,13 @@ public class Writer
         }
     }    
 
-    public Writer(File file, Board board, String application, String version,
-                  int handicap, String playerBlack, String playerWhite,
-                  String gameComment, Score score)
-        throws FileNotFoundException
+    public Writer(OutputStream out, Board board, File file,
+                  String application, String version, int handicap,
+                  String playerBlack, String playerWhite, String gameComment,
+                  Score score)
     {        
-        FileOutputStream out = new FileOutputStream(file);
         m_out = new PrintStream(out);
         m_board = board;
-        m_file = file;
         m_out.println("(");
         printHeader(file, application, version, handicap, playerBlack,
                     playerWhite, gameComment, score);
@@ -45,13 +43,11 @@ public class Writer
         m_out.close();
     }
 
-    public Writer(File file, Board board, String application, String version)
-        throws FileNotFoundException
+    public Writer(OutputStream out, Board board, File file,
+                  String application, String version)
     {        
-        FileOutputStream out = new FileOutputStream(file);
         m_out = new PrintStream(out);
         m_board = board;
-        m_file = file;
         m_out.println("(");
         printHeader(file, application, version);
         printPosition();
@@ -59,11 +55,11 @@ public class Writer
         m_out.close();
     }
 
-    private File m_file;
-
     private PrintStream m_out;
 
     private Board m_board;
+
+    private String m_name;
 
     private static String getName(File file)
     {

@@ -1666,20 +1666,23 @@ class GoGui
             gameComment =
                 "Program command:\n" + m_commandThread.getProgramCommand();
         }
+        OutputStream out = new FileOutputStream(file);
         if (FileUtils.hasExtension(file, "tex"))
-            new latex.Writer(file, m_board);
+            new latex.Writer(out, m_board, false);
         else
-            new sgf.Writer(file, m_board, "GoGui", Version.m_version,
-                           m_handicap, playerBlack, playerWhite,
-                           gameComment, m_score);
+            new sgf.Writer(out, m_board, file, "GoGui",
+                           Version.m_version, m_handicap, playerBlack,
+                           playerWhite, gameComment, m_score);
     }
 
     private void savePosition(File file) throws FileNotFoundException
     {
+        OutputStream out = new FileOutputStream(file);
         if (FileUtils.hasExtension(file, "tex"))
-            new latex.Writer(file, m_board, "GoGui", Version.m_version);
+            new latex.Writer(out, m_board, true);
         else
-            new sgf.Writer(file, m_board, "GoGui", Version.m_version);
+            new sgf.Writer(out, m_board, file, "GoGui",
+                           Version.m_version);
     }
 
     private void sendGtp(java.io.Reader reader)
