@@ -31,11 +31,14 @@ varpo/Disconnect/disconnect %P
 string/Estimate Score/estimate_score
 plist/Final Status List Territory/final_status_list %c_territory
 plist/Final Status List Dame/final_status_list dame
+string/Get Handicap/get_handicap
+string/Get Komi/get_komi
 string/Get Random Seed/get_random_seed
 string/Is Legal/is_legal %c %p
 string/Is Surrounded/is_surrounded %p
 varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
+var/Move History/move_history
 none/PrintSgf/printsgf %f
 varc/Restricted GenMove/restricted_genmove %c %P
 none/Set Random Seed/set_random_seed %s
@@ -44,9 +47,6 @@ pspairs/Top Moves Black/top_moves_black
 pspairs/Top Moves White/top_moves_white
 
 # Extensions of other Go programs that could be of general interest
-string/Get Handicap/get_handicap
-string/Get Komi/get_komi
-var/Move History/move_history
 none/SaveSgf/savesgf %f
 
 # Other GNU Go extensions
