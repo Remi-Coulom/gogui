@@ -105,7 +105,7 @@ installation directory.
 <target name="compile" depends="check-comm-available,depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
- deprecation="true" optimize="true" listfiles="yes"/>
+ deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"/>
 <copy todir="build">
 <fileset dir="src" includes="images/*.png"/>
 </copy>
