@@ -1668,7 +1668,9 @@ class GoGui
 
     private void savePosition(File file) throws FileNotFoundException
     {
-        sgf.Writer w =
+        if (FileUtils.hasExtension(file, "tex"))
+            new latex.Writer(file, m_board, "GoGui", Version.m_version);
+        else
             new sgf.Writer(file, m_board, "GoGui", Version.m_version);
     }
 

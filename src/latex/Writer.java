@@ -42,6 +42,26 @@ public class Writer
         m_out.close();
     }
 
+    public Writer(File file, Board board, String application, String version)
+        throws FileNotFoundException
+    {        
+        FileOutputStream out = new FileOutputStream(file);
+        m_out = new PrintStream(out);
+        m_board = board;
+        m_file = file;
+        printBeginDocument();
+        printBeginPSGo();
+        printPosition();
+        printEndPSGo();
+        String toMove =
+            (m_board.getToMove() == Color.BLACK ? "Black" : "White");
+        m_out.println("\n\\begin{center}\n" +
+                      toMove + " to move.\n" +
+                      "\\end{center}");
+        printEndDocument();
+        m_out.close();
+    }
+
     private File m_file;
 
     private PrintStream m_out;
@@ -52,6 +72,7 @@ public class Writer
     {
         m_out.println("\\documentclass{article}\n" +
                       "\\usepackage{psgo}\n" +
+                      "\\pagestyle{empty}\n" +
                       "\\begin{document}\n");
     }
 
@@ -98,10 +119,7 @@ public class Writer
         for (int i = 0; i < m_board.getInternalNumberMoves(); ++i)
         {
             Move move = m_board.getInternalMove(i);
-            m_out.print("\\stone");
-            printColor(move.getColor());
-            printCoordinates(move.getPoint());
-            m_out.print("\n");
+            printStone(move.getColor(), move.getPoint());
         }
     }
 
@@ -121,6 +139,26 @@ public class Writer
             printCoordinates(point);
             m_out.print("\n");
         }
+    }
+
+    private void printPosition()
+    {
+        int numberPoints = m_board.getNumberPoints();
+        for (int i = 0; i < numberPoints; ++i)
+        {
+            Point point = m_board.getPoint(i);
+            Color color = m_board.getColor(point);
+            if (color != Color.EMPTY)
+                printStone(color, point);
+        }
+    }
+
+    void printStone(Color color, Point point)
+    {
+        m_out.print("\\stone");
+        printColor(color);
+        printCoordinates(point);
+        m_out.print("\n");
     }
 }
 
