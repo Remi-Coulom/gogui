@@ -26,8 +26,8 @@ class GoGui
 {
     GoGui(String program, Preferences prefs, String file, int move,
           boolean gtpShell, String time, boolean verbose, boolean fillPasses,
-          boolean computerNone, boolean autoplay, String autoFile,
-          String gtpFile)
+          boolean computerBlack, boolean computerWhite, boolean autoplay,
+          String autoFile, String gtpFile)
         throws Gtp.Error, Analyze.Error
     {
         m_program = program;
@@ -43,7 +43,8 @@ class GoGui
         m_fillPasses = fillPasses;
         m_gtpFile = gtpFile;
         m_move = move;
-        m_computerNoneOption = computerNone;
+        m_computerBlack = computerBlack;
+        m_computerWhite = computerWhite;
         m_autoplay = autoplay;
         m_autoplayCounter = 0;
         m_autoFile = autoFile;
@@ -274,6 +275,8 @@ class GoGui
                 "analyze:",
                 "autofile:",
                 "autoplay",
+                "computer-black",
+                "computer-both",
                 "computer-none",
                 "file:",
                 "fillpasses",
@@ -298,6 +301,8 @@ class GoGui
                     "  -analyze name   initialize analyze command\n" +
                     "  -autofile       auto save games (if autoplay)\n" +
                     "  -autoplay       auto play games (if computer both)\n" +
+                    "  -computer-both  computer plays both sides\n" +
+                    "  -computer-black computer plays black\n" +
                     "  -computer-none  computer plays no side\n" +
                     "  -file filename  load SGF file\n" +
                     "  -fillpasses     never send subsequent moves of\n" +
@@ -319,7 +324,17 @@ class GoGui
                 prefs.setAnalyzeCommand(opt.getString("analyze"));
             String autoFile = opt.getString("autofile", "");
             boolean autoplay = opt.isSet("autoplay");
-            boolean computerNone = opt.isSet("computer-none");
+            boolean computerBlack = false;
+            boolean computerWhite = true;
+            if (opt.isSet("computer-none"))
+                computerWhite = false;
+            else if (opt.isSet("computer-black"))
+            {
+                computerBlack = true;
+                computerWhite = false;
+            }
+            else if (opt.isSet("computer-both"))
+                computerBlack = true;
             String file = opt.getString("file", "");
             boolean fillPasses = opt.isSet("fillpasses");
             boolean gtpShell = opt.isSet("gtpshell");
@@ -351,9 +366,9 @@ class GoGui
             else
                 program = SelectProgram.select(null);
             
-            GoGui gui = new GoGui(program, prefs, file, move,
-                                  gtpShell, time, verbose, fillPasses,
-                                  computerNone, autoplay, autoFile, gtpFile);
+            GoGui gui = new GoGui(program, prefs, file, move, gtpShell, time,
+                                  verbose, fillPasses, computerBlack,
+                                  computerWhite, autoplay, autoFile, gtpFile);
         }
         catch (Throwable t)
         {
@@ -453,8 +468,6 @@ class GoGui
     private boolean m_computerBlack;
 
     private boolean m_computerWhite;
-
-    private boolean m_computerNoneOption;
 
     private boolean m_commandInProgress;
 
@@ -863,7 +876,7 @@ class GoGui
             GoGui gui = new GoGui(program, m_prefs, file.toString(),
                                   m_board.getMoveNumber(), false, null,
                                   m_verbose, m_fillPasses,
-                                  m_computerNoneOption, false, "", "");
+                                  false, false, false, "", "");
 
         }
         catch (Throwable t)
@@ -1394,8 +1407,13 @@ class GoGui
                     sendGtpFile(new File(m_gtpFile));
             }
             setTitle();
-            if (m_commandThread == null || m_computerNoneOption)
+            if (m_commandThread == null
+                || (! m_computerBlack && ! m_computerWhite))
                 computerNone();
+            else if (m_computerBlack && m_computerWhite)
+                computerBoth();
+            else  if (m_computerBlack)
+                computerBlack();
             else
                 computerWhite();
             setRules();

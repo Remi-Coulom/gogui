@@ -14,7 +14,11 @@
       <arg><option>-analyze</option> <replaceable>command</replaceable></arg>
       <arg><option>-autofile</option> <replaceable>prefix</replaceable></arg>
       <arg><option>-autoplay</option></arg>
-      <arg><option>-computer-none</option></arg>
+      <group choice="opt">
+	<arg choice="plain"><option>-computer-black</option></arg>
+	<arg choice="plain"><option>-computer-both</option></arg>
+	<arg choice="plain"><option>-computer-none</option></arg>
+      </group>
       <arg><option>-file</option> <replaceable>filename</replaceable></arg>
       <arg><option>-fillpasses</option></arg>
       <arg><option>-gtpshell</option></arg>
@@ -73,6 +77,22 @@
 	<listitem>
 	  Automatically start a new game if the program plays both
 	  colors and a game is finished.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-computer-black</option>
+	</term>
+	<listitem>
+	  Computer plays black.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-computer-both</option>
+	</term>
+	<listitem>
+	  Computer plays both sides.
 	</listitem>
       </varlistentry>
       <varlistentry>
