@@ -136,9 +136,11 @@ public class Reader
     private Point parsePoint(String s) throws Error
     {
         s = s.trim().toLowerCase();
+        if (s.equals(""))
+            return null;
         if (s.length() < 2)
             loadError("Invalid coordinates.");
-        if (s.equals("") || (s.equals("tt") && m_boardSize <= 19))
+        if (s.equals("tt") && m_boardSize <= 19)
             return null;
         int x = s.charAt(0) - 'a';
         int y = m_boardSize - (s.charAt(1) - 'a') - 1;
