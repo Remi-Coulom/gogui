@@ -1,4 +1,4 @@
-/* Similar to kde-defaults.css */
+/* Similar to kde-default.css */
 
 body
 {
@@ -35,6 +35,7 @@ DIV.navheader TD, DIV.navfooter TD,
 DIV.navheader TH, DIV.navfooter TH
 {
   color: white;
+  font-size: small;
 }
 
 .navheader :link, .navfooter :link, .navheader :visited, .navfooter :visited,
@@ -48,12 +49,16 @@ DIV.navheader A
 {
   color: white;
   text-decoration: none;
+  font-size: small;
+  height: 1.7em;
 }
 
 DIV.navfooter A
 {
   color: white;
   text-decoration: none;
+  font-size: small;
+  height: 1.7em;
 }
 
 IMG
