@@ -150,6 +150,10 @@ installation directory.
 </style>
 </target>
 
+<target name="docvalidate">
+<xmlvalidate file="doc/xml/book.xml"/>
+</target>
+
 <target name="docCheckUptodate">
 <uptodate property="docUptodate" targetfile="doc/html/index.html">
 <srcfiles dir= "doc/xml" includes="*.xml"/>
