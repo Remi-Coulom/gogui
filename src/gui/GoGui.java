@@ -1060,6 +1060,8 @@ class GoGui
                     return;
             savePosition(file);
             showInfo("Position saved.");
+            if (m_board.getNumberSavedMoves() == 0)
+                m_needsSave = false;
             m_loadedFile = file;
             setTitle();
         }
