@@ -118,9 +118,7 @@ class GtpShellText
 
     public void setPositionToEnd()
     {
-        setEditable(true);
         setCaretPosition(getStyledDocument().getLength());
-        setEditable(false);
     }
 
     private boolean m_highlight;
@@ -150,9 +148,7 @@ class GtpShellText
             s = getStyle(style);
         try
         {
-            setEditable(true);
             doc.insertString(doc.getLength(), text, s);
-            setEditable(false);
         }
         catch (BadLocationException e)
         {
