@@ -166,7 +166,7 @@ public class Writer
                 printStone(Color.BLACK, node.getAddBlack(i), null, false,
                            false);
             for (int i = 0; i < node.getNumberAddWhite(); ++i)
-                printStone(Color.BLACK, node.getAddWhite(i), null, false,
+                printStone(Color.WHITE, node.getAddWhite(i), null, false,
                            false);
             Move move = node.getMove();
             if (move == null)
