@@ -1025,7 +1025,7 @@ class GoGui
                 }
             }
             if (m_fillPasses)
-                moves = fillPasses(moves);
+                moves = Move.fillPasses(moves, m_board.getToMove());
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
@@ -1228,24 +1228,6 @@ class GoGui
             setBoardCursorDefault();
     }
 
-    private Vector fillPasses(Vector moves)
-    {
-        assert(m_fillPasses);
-        Vector result = new Vector(moves.size() * 2);
-        if (moves.size() == 0)
-            return result;
-        go.Color toMove = m_board.getToMove();
-        for (int i = 0; i < moves.size(); ++i)
-        {
-            Move m = (Move)moves.get(i);
-            if (m.getColor() != toMove)
-                result.add(new Move(null, toMove));
-            result.add(m);
-            toMove = m.getColor().otherColor();
-        }
-        return result;
-    }
-
     private void forward(int n)
     {
         try
@@ -1381,7 +1363,7 @@ class GoGui
                 moves.add(new Move(p, go.Color.WHITE));
             }
             if (m_fillPasses)
-                moves = fillPasses(moves);
+                moves = Move.fillPasses(moves, m_board.getToMove());
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
@@ -1400,7 +1382,7 @@ class GoGui
             for (int i = 0; i < numberMoves; ++i)
                 moves.add(reader.getMove(i));
             if (m_fillPasses)
-                moves = fillPasses(moves);
+                moves = Move.fillPasses(moves, m_board.getToMove());
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
@@ -1600,7 +1582,7 @@ class GoGui
             moves.add(new Move(p, go.Color.BLACK));
         }
         if (m_fillPasses)
-            moves = fillPasses(moves);
+            moves = Move.fillPasses(moves, m_board.getToMove());
         for (int i = 0; i < moves.size(); ++i)
         {
             Move m = (Move)moves.get(i);
