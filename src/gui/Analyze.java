@@ -698,7 +698,7 @@ class AnalyzeDialog
         {
             return;
         }
-        final int max = 10;
+        final int max = 20;
         for (int i = 0; i < m_comboBox.getItemCount() && i < max; ++i)
             out.println(m_comboBox.getItemAt(i));
         out.close();
