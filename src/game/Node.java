@@ -63,9 +63,20 @@ public final class Node
     {
         assert(node.m_father == null);
         if (m_children == null)
-            m_children = new Vector(1);
+        {
+            m_children = node;
+        }
+        else
+        {
+            if (m_children instanceof Node)
+            {
+                Vector vector = new Vector(2);
+                vector.add(m_children);
+                m_children = vector;
+            }
+            ((Vector)m_children).add(node);
+        }
         node.m_father = this;
-        m_children.add(node);
     }
 
     public void addBlack(Point point)
@@ -138,7 +149,9 @@ public final class Node
 
     public Node getChild(int i)
     {
-        return (Node)m_children.get(i);
+        if (getNumberChildren() == 1)
+            return (Node)m_children;
+        return (Node)((Vector)m_children).get(i);
     }
 
     public int getChildIndex(Node child)
@@ -211,7 +224,9 @@ public final class Node
     {
         if (m_children == null)
             return 0;
-        return m_children.size();
+        if (m_children instanceof Node)
+            return 1;
+        return ((Vector)m_children).size();
     }
 
     /** Return color to play if explicitely set.
@@ -280,19 +295,20 @@ public final class Node
 
     public void makeMainVariation(Node child)
     {
-        assert(m_children.contains(child));
-        m_children.remove(child);
-        m_children.add(0, child);
+        if (getNumberChildren() <= 1)
+            return;
+        Vector vector = (Vector)m_children;
+        vector.remove(child);
+        vector.add(0, child);
     }
 
     /** Remove all children but the first. */
     public void removeVariations()
     {
-        if (m_children == null || m_children.size() <= 1)
+        if (getNumberChildren() <= 1)
             return;
         Node child = getChild(0);
-        m_children.removeAllElements();
-        m_children.add(child);
+        m_children = child;
     }
 
     public void setComment(String comment)
@@ -350,8 +366,27 @@ public final class Node
 
     public void removeChild(Node child)
     {
-        assert(m_children.contains(child));
-        m_children.remove(child);
+        int numberChildren = getNumberChildren();
+        assert(numberChildren > 0);
+        if (numberChildren == 1)
+        {
+            assert(m_children == child);
+            m_children = null;
+            return;
+        }
+        else if (numberChildren == 2)
+        {
+            Vector vector = (Vector)m_children;
+            assert(vector.contains(child));
+            m_children = child;
+            return;
+        }
+        else if (numberChildren > 2)
+        {
+            Vector vector = (Vector)m_children;
+            assert(vector.contains(child));
+            vector.remove(child);
+        }
     }
 
     public Node variationAfter(Node child)
@@ -394,7 +429,7 @@ public final class Node
 
     private Node m_father;
 
-    private Vector m_children;
+    private Object m_children;
 
     private SetupInfo createSetupInfo()
     {
