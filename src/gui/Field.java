@@ -487,8 +487,8 @@ public class Field
             drawStone(graphics, java.awt.Color.decode("#030303"),
                       java.awt.Color.decode("#666666"), size / 3);
         else if (m_color == go.Color.WHITE)
-            drawStone(graphics, java.awt.Color.decode("#e2dad3"),
-                      java.awt.Color.decode("#f0e7e0"), size / 5);
+            drawStone(graphics, java.awt.Color.decode("#d0c9c2"),
+                      java.awt.Color.decode("#f6ede6"), size / 2);
     }
 
     private void drawStone(Graphics graphics, java.awt.Color color,
