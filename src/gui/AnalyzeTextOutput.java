@@ -19,17 +19,6 @@ import utils.*;
 
 //-----------------------------------------------------------------------------
 
-class TextPane
-    extends JTextPane
-{
-    public boolean getScrollableTracksViewportWidth()
-    {
-        return false;
-    }
-}
-
-//-----------------------------------------------------------------------------
-
 public class AnalyzeTextOutput
     extends JDialog
 {
@@ -54,7 +43,7 @@ public class AnalyzeTextOutput
         contentPane.add(panel, BorderLayout.CENTER);
         JLabel label = new JLabel(title);
         panel.add(label, BorderLayout.NORTH);
-        m_textPane = new TextPane();
+        m_textPane = new JTextPane();
         StyledDocument doc = m_textPane.getStyledDocument();
         try
         {
