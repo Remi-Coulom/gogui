@@ -47,6 +47,8 @@ public class GtpDummy
             bwBoard(response);
         else if (cmd.equals("dummy_invalid"))
             cmdInvalid();
+        else if (cmd.equals("dummy_long_response"))
+            status = cmdLongResponse(cmdArray, response);
         else if (cmd.equals("dummy_crash"))
             crash();
         else if (cmd.equals("dummy_next_failure"))
@@ -75,6 +77,7 @@ public class GtpDummy
                             "dummy_bwboard\n" +
                             "dummy_crash\n" +
                             "dummy_invalid\n" +
+                            "dummy_long_response\n" +
                             "dummy_next_success\n" +
                             "dummy_next_failure\n" +
                             "dummy_sleep\n" +
@@ -179,6 +182,19 @@ public class GtpDummy
     {        
         printInvalidResponse("This is an invalid GTP response.\n" +
                              "It does not start with a status character.\n");
+    }
+
+    private boolean cmdLongResponse(String[] cmdArray, StringBuffer response)
+    {        
+        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
+        if (argument == null)
+            return false;
+        for (int i = 1; i <= argument.m_integer; ++i)
+        {
+            response.append(i);
+            response.append("\n");
+        }
+        return true;
     }
 
     private boolean cmdPlay(String[] cmdArray, StringBuffer response)

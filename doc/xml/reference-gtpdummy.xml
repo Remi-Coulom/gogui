@@ -117,6 +117,17 @@ Print an invalid GTP response which does not start with a status character.
 
 <varlistentry>
 <term>
+<userinput>dummy_long_response</userinput><replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Print a GTP response with <replaceable>n</replaceable> lines.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
 <userinput>dummy_next_failure <replaceable>response</replaceable>
 </userinput>
 </term>
