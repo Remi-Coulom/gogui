@@ -3,8 +3,6 @@
 # $Source$
 #------------------------------------------------------------------------------
 
-VERSION=0.2.2.x
-
 IMAGES= \
   images/back.png \
   images/button_cancel.png \
@@ -61,7 +59,7 @@ JAR= \
 
 all: $(JAR)
 
-gogui.jar: doc/html/index.html version $(shell cat build/files-gogui.txt)
+gogui.jar: doc/html/index.html $(shell cat build/files-gogui.txt)
 	mkdir -p build/gogui
 	javac -O -deprecation -sourcepath . -source 1.4 -d build/gogui @build/files-gogui.txt
 	mkdir -p build/gogui/doc
@@ -95,10 +93,10 @@ twogtp.jar: $(shell cat build/files-twogtp.txt)
 	javac -O -deprecation -sourcepath . -source 1.4 -d build/twogtp @build/files-twogtp.txt
 	jar cmf build/manifest-twogtp.txt twogtp.jar -C build/twogtp .
 
-.PHONY: changelog clean gogui_debug srcdoc tags version
+.PHONY: changelog clean gogui_debug srcdoc tags
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
-gogui_debug: doc/html/index.html version
+gogui_debug: doc/html/index.html $(shell cat build/files-gogui.txt)
 	mkdir -p build/gogui_debug
 	javac -g -deprecation -sourcepath . -source 1.4 -d build/gogui_debug @build/files-gogui.txt
 	mkdir -p build/gogui_debug/doc
@@ -106,15 +104,15 @@ gogui_debug: doc/html/index.html version
 	for i in $(IMAGES); do cp $$i build/gogui_debug/$$i; done 
 	cp -R doc/html/* build/gogui_debug/doc
 
-version:
+src/gui/Version.java: build/version.txt
 	sed 's/m_version = \".*\"/m_version = \"$(VERSION)\"/' <src/gui/Version.java >src/gui/.Version.java.new
 	mv src/gui/.Version.java.new src/gui/Version.java
 
 clean:
 	-rm -rf build/gogui build/gogui_debug build/gtpnet build/gmptogtp build/netgtp build/sgftotex build/twogtp $(JAR)
 
-doc/html/index.html: $(DOC)
-	echo "$(VERSION)" >doc/xml/version.xml
+doc/html/index.html: $(DOC) build/version.txt
+	cp build/version.txt doc/xml/version.xml
 	$(MAKE) -C doc
 
 docsrc:
