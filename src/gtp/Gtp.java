@@ -447,6 +447,7 @@ public final class Gtp
             while (true)
             {
                 String line = m_in.readLine();
+                Thread.yield(); // Give ErrorThread a chance to read first
                 m_queue.put(new ReadMessage(false, line));
                 if (line == null)
                     return;
