@@ -2,6 +2,17 @@
 <title>Bugs</title>
 
 <section>
+<title>Going to beginning or end of game is very slow on Windows</title>
+<para>
+There are no GTP commands for multiple undo or play, so every undo or
+move has to be transmitted separately.
+This can result in a lot of GTP commands when going to the beginning
+or end of a long game and unfortunately inter-process communication via
+pipes is slow on Windows.
+</para>
+</section>
+
+<section>
 <title>Rendering errors in the GTP shell</title>
 <para>
 Rendering errors in the GTP shell window occur which disappear after manually
@@ -9,7 +20,7 @@ resizing the window.
 This is probably a bug in the Java libraries.
 With Java 1.4.2 for Linux this problem seems to have disappeared after
 introducing a workaround which resets the window size after each text update.
-With other Java versions or on other systems the problem still exists.
+With other Java versions or on other systems the problem can still exist.
 </para>
 </section>
 
