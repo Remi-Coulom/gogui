@@ -342,7 +342,13 @@ class GoGui
             return;
         }
         else if (! modifiedSelect)
+        {
+            if (m_board.isSuicide(p, m_board.getToMove())
+                && ! showQuestion("This point is a suicide move.\n" +
+                                  "Do you really want to play there?"))
+                return;
             humanMoved(new Move(p, m_board.getToMove()));
+        }
     }
 
     public static void main(String[] args)

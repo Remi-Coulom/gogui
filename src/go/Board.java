@@ -293,6 +293,17 @@ public class Board
         return (m_moves.size() > 0 || m_setupNumber > 0);
     }
 
+    public boolean isSuicide(Point point, Color toMove)
+    {
+        if (getColor(point) != Color.EMPTY)
+            return false;
+        play(new Move(point, toMove));
+        MoveRecord moveRecord = (MoveRecord)m_moves.get(m_moveNumber - 1);
+        boolean result = (moveRecord.getSuicide().size() > 0);
+        undo();
+        return result;
+    }
+
     public void newGame()
     {
         for (int i = 0; i < m_allPoints.length; ++i)
