@@ -1,11 +1,11 @@
 ChangeLog
 build
-docsrc
 gogui.jar
 gmptogtp.jar
 gtpdummy.jar
 gtpregress.jar
 gtpserver.jar
+javadoc
 netgtp.jar
 sgftotex.jar
 twogtp.jar

@@ -98,7 +98,7 @@ and set the environment variable XSLDIR to the installation directory.
 </copy>
 </target>
 
-<target name="dist" depends="all,docsrc,cleanBuildDir"/>
+<target name="dist" depends="all,javadoc,cleanBuildDir"/>
 
 <target name="doc" depends="docCheckUptodate" unless="docUptodate">
 <antcall target="checkXslAvailable"/>
@@ -117,29 +117,6 @@ and set the environment variable XSLDIR to the installation directory.
 <param name="toc.section.depth" expression="0"/>
 <param name="use.id.as.filename" expression="1"/>
 </style>
-</target>
-
-<target name="docsrc">
-<javadoc sourcepath="src" destdir="docsrc" source="1.4"
- windowtitle="GoGui Source Documentation"
- overview="src/overview.html"
- packagenames="
-  gmp.*,
-  gmptogtp.*,
-  go.*,
-  gtp.*,
-  gtpdummy.*,
-  gtpregress.*,
-  gtpserver.*,
-  gui.*,
-  latex.*,
-  netgtp.*,
-  sgf.*,
-  sgftotex.*,
-  twogtp.*,
-  utils.*,
-  version.*
-"/>
 </target>
 
 <target name="docCheckUptodate">
@@ -234,6 +211,29 @@ and set the environment variable XSLDIR to the installation directory.
  version/Version.class
 "/>
 </jar>
+</target>
+
+<target name="javadoc">
+<javadoc sourcepath="src" destdir="javadoc" source="1.4"
+ windowtitle="GoGui Source Documentation"
+ overview="src/overview.html"
+ packagenames="
+  gmp.*,
+  gmptogtp.*,
+  go.*,
+  gtp.*,
+  gtpdummy.*,
+  gtpregress.*,
+  gtpserver.*,
+  gui.*,
+  latex.*,
+  netgtp.*,
+  sgf.*,
+  sgftotex.*,
+  twogtp.*,
+  utils.*,
+  version.*
+"/>
 </target>
 
 <target name="netgtp.jar" depends="compile">
