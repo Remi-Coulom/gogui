@@ -1387,7 +1387,9 @@ class GoGui
             m_readerMoves.addAll(reader.getMoves());
             if (m_fillPasses)
                 m_readerMoves = fillPasses(m_readerMoves);
-            if (move < 0 || move > m_readerMoves.size())
+            if (move < 0)
+                m_readerMove = m_readerSetupStones;
+            else if (move > m_readerMoves.size())
                 m_readerMove = m_readerMoves.size();
             else
                 m_readerMove = m_readerSetupStones + move;
