@@ -268,12 +268,9 @@ public class Analyze
 
     private void writeHtml(File file) throws Exception
     {
-        String prefix = "game";
         String gamePrefix = "game";
         if (file.getName().endsWith(".html"))
         {
-            String path = file.toString();
-            prefix = path.substring(0, path.length() - 5);
             String name = file.getName();
             gamePrefix = name.substring(0, name.length() - 5);;
         }
