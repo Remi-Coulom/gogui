@@ -27,6 +27,15 @@ class GoGui
           boolean computerNone, boolean autoplay, String gtpFile)
         throws Gtp.Error, AnalyzeCommand.Error
     {
+        if (program != null && ! program.equals(""))
+        {
+            m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
+            Gtp gtp = new Gtp(program, verbose, m_gtpShell);
+            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
+            m_commandThread = new CommandThread(gtp, m_gtpShell);
+            m_commandThread.start();
+        }
+
         m_prefs = prefs;
         m_boardSize = prefs.getBoardSize();
         m_file = file;
@@ -38,21 +47,25 @@ class GoGui
         m_verbose = verbose;
 
         Container contentPane = getContentPane();        
-        m_toolBar = new ToolBar(this, prefs, this);
-        contentPane.add(m_toolBar, BorderLayout.NORTH);
+
+        JPanel infoPanel = new JPanel();
+
         m_timeControl = new TimeControl();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBorder(utils.GuiUtils.createSmallEmptyBorder());
+        Dimension pad = new Dimension(0, utils.GuiUtils.PAD);
+        m_gameInfo = new GameInfo(m_timeControl);
+        infoPanel.add(m_gameInfo);
+        infoPanel.add(Box.createRigidArea(pad));
+        infoPanel.add(createStatusBar());
+
         m_board = new Board(m_boardSize);
         m_board.setListener(this);
+        m_gameInfo.setBoard(m_board);
+        m_toolBar = new ToolBar(this, prefs, this);
+        contentPane.add(m_toolBar, BorderLayout.NORTH);
 
-        if (program != null && ! program.equals(""))
-        {
-            // Must be created after board (initAnalyzeCommand uses m_board)
-            m_gtpShell = new GtpShell(null, "GoGui", this, prefs);
-            Gtp gtp = new Gtp(program, verbose, m_gtpShell);
-            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
-            m_commandThread = new CommandThread(gtp, m_gtpShell);
-            m_commandThread.start();
-        }
+        contentPane.add(infoPanel, BorderLayout.SOUTH);
 
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new SquareLayout());
@@ -60,16 +73,6 @@ class GoGui
         boardPanel.add(m_board);
         contentPane.add(boardPanel, BorderLayout.CENTER);
         
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBorder(utils.GuiUtils.createSmallEmptyBorder());
-        Dimension pad = new Dimension(0, utils.GuiUtils.PAD);
-        m_gameInfo = new GameInfo(m_board, m_timeControl);
-        infoPanel.add(m_gameInfo);
-        infoPanel.add(Box.createRigidArea(pad));
-        infoPanel.add(createStatusBar());
-        contentPane.add(infoPanel, BorderLayout.SOUTH);
-
         addWindowListener(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setIconImage(new GoIcon());
@@ -1540,6 +1543,7 @@ class GoGui
     private void setBoardCursor(int type)
     {
         Cursor cursor = Cursor.getPredefinedCursor(type);
+        assert(m_board != null);
         m_board.setCursor(cursor);
     }
 

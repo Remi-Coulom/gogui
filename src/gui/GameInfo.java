@@ -19,9 +19,8 @@ class GameInfo
     extends JPanel
     implements ActionListener
 {
-    public GameInfo(Board board, TimeControl timeControl)
+    public GameInfo(TimeControl timeControl)
     {
-        m_board = board;
         m_timeControl = timeControl;
 
         setLayout(new GridLayout(2, 0, utils.GuiUtils.PAD, 0));
@@ -60,8 +59,15 @@ class GameInfo
         setTime(board.Color.WHITE);
     }
 
+    public void setBoard(Board board)
+    {
+        m_board = board;
+    }
+
     public void update()
     {
+        if (m_board == null)
+            return;
         if (m_board.getToMove() == board.Color.BLACK)
             m_move.setText("Black");
         else
