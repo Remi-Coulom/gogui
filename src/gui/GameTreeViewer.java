@@ -115,8 +115,6 @@ class GameNode
 
     private void drawText(Graphics graphics)
     {
-        if (m_gameTreePanel.getSizeMode() == GameTreePanel.SIZE_TINY)
-            return;
         Move move = m_node.getMove();
         int width = m_gameTreePanel.getNodeWidth();
         String text;
