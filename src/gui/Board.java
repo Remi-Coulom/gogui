@@ -38,7 +38,6 @@ public class Board
 
     public Board(go.Board board)
     {
-        super(new GridBagLayout());
         m_board = board;
         setPreferredFieldSize();
         URL url = getClass().getClassLoader().getResource("images/wood.png");
@@ -170,32 +169,24 @@ public class Board
         m_board.initSize(size);
         m_field = new Field[size][size];
         removeAll();
-        GridBagConstraints constraints = new GridBagConstraints();
-        JPanel panel = new JPanel(new GridLayout(size, size));
-        panel.setOpaque(false);
-        add(panel);
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        constraints.gridheight = constraints.gridwidth = size;
-        constraints.weightx = constraints.weighty = (double)size / (size + 1);
-        GridBagLayout gridBag = (GridBagLayout)getLayout();
-        gridBag.setConstraints(panel, constraints);
-        addColumnLabels(gridBag, size, 0);
-        addColumnLabels(gridBag, size, size + 1);
-        addRowLabels(gridBag, size, 0);
-        addRowLabels(gridBag, size, size + 1);
+        setLayout(new GridLayout(size + 2, size + 2));
+        setOpaque(false);
+        addColumnLabels(size);
         for (int y = size - 1; y >= 0; --y)
         {
+            String text = Integer.toString(y + 1);
+            add(new BoardLabel(text));
             for (int x = 0; x < size; ++x)
             {
                 go.Point p = m_board.getPoint(x, y);
                 Field field = new Field(this, p, m_board.isHandicap(p));
-                panel.add(field);
+                add(field);
                 m_field[x][y] = field;
                 field.addKeyListener(this);
             }
+            add(new BoardLabel(text));
         }
+        addColumnLabels(size);
         m_focusPoint = new go.Point(size / 2, size / 2);
         m_lastMove = null;
         revalidate();
@@ -546,41 +537,18 @@ public class Board
 
     private Listener m_listener;
 
-    private void addColumnLabels(GridBagLayout gridBag, int size, int y)
+    private void addColumnLabels(int size)
     {
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridheight = constraints.gridwidth = 1;
-        constraints.weightx = constraints.weighty = 0.5 / (size + 1);
+        add(Box.createRigidArea(new Dimension(1, 1)));
         char c = 'A';
         for (int x = 0; x < size; ++x)
         {
-            JLabel label = new BoardLabel(new Character(c).toString());
-            add(label);
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.gridx = x + 1;
-            constraints.gridy = y;
-            gridBag.setConstraints(label, constraints);
+            add(new BoardLabel(new Character(c).toString()));
             ++c;
             if (c == 'I')
                 ++c;
         }
-    }
-
-    private void addRowLabels(GridBagLayout gridBag, int size, int x)
-    {
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridheight = constraints.gridwidth = 1;
-        constraints.weightx = constraints.weighty = 0.5 / (size + 1);
-        for (int y = 0; y < size; ++y)
-        {
-            String text = Integer.toString(y + 1);
-            JLabel label = new BoardLabel(text);
-            add(label);
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.gridx = x;
-            constraints.gridy = size - y;
-            gridBag.setConstraints(label, constraints);
-        }
+        add(Box.createRigidArea(new Dimension(1, 1)));
     }
 
     private void calcScore()
