@@ -12,6 +12,7 @@ import java.net.*;
 import javax.swing.*;
 import java.util.*;
 import utils.GuiUtils;
+import utils.Platform;
 import utils.StringUtils;
 
 //-----------------------------------------------------------------------------
@@ -102,13 +103,15 @@ class SelectProgram
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("ok");
         okButton.addActionListener(this);
-        okButton.setMnemonic(KeyEvent.VK_O);
+        if (! Platform.isPlatformMacOSX())
+            okButton.setMnemonic(KeyEvent.VK_O);
         getRootPane().setDefaultButton(okButton);
         innerPanel.add(okButton);
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setActionCommand("cancel");
         cancelButton.addActionListener(this);
-        cancelButton.setMnemonic(KeyEvent.VK_C);
+        if (! Platform.isPlatformMacOSX())
+            cancelButton.setMnemonic(KeyEvent.VK_C);
         innerPanel.add(cancelButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);

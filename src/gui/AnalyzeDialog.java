@@ -154,7 +154,8 @@ class AnalyzeDialog
     {
         item.addActionListener(this);
         item.setActionCommand(command);
-        item.setMnemonic(mnemonic);
+        if (! Platform.isPlatformMacOSX())
+            item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
     }
@@ -221,14 +222,16 @@ class AnalyzeDialog
         m_runButton.setToolTipText("Run command");
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
-        m_runButton.setMnemonic(KeyEvent.VK_R);
+        if (! Platform.isPlatformMacOSX())
+            m_runButton.setMnemonic(KeyEvent.VK_R);
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
         m_clearButton = new JButton("Clear");
         m_clearButton.setToolTipText("Clear board and cancel auto run");
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
-        m_clearButton.setMnemonic(KeyEvent.VK_C);
+        if (! Platform.isPlatformMacOSX())
+            m_clearButton.setMnemonic(KeyEvent.VK_C);
         m_clearButton.setEnabled(false);
         innerPanel.add(m_clearButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -295,7 +298,8 @@ class AnalyzeDialog
     private JMenu createMenuFile()
     {
         JMenu menu = new JMenu("File");
-        menu.setMnemonic(KeyEvent.VK_F);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_F);
         JMenuItem item =
             addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload",
                         "Reload commands from configuration files");
@@ -308,7 +312,8 @@ class AnalyzeDialog
     private JMenu createMenuSettings()
     {
         JMenu menu = new JMenu("Settings");
-        menu.setMnemonic(KeyEvent.VK_S);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_S);
         m_itemOnlySupported =
             new JCheckBoxMenuItem("Only Supported Commands");
         m_itemOnlySupported.setSelected(m_onlySupportedCommands);
@@ -323,7 +328,8 @@ class AnalyzeDialog
     private JMenu createMenuWindows()
     {
         JMenu menu = new JMenu("Windows");
-        menu.setMnemonic(KeyEvent.VK_W);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
                     "gogui");
         addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,

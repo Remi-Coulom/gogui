@@ -650,7 +650,8 @@ public class GtpShell
     {
         item.addActionListener(this);
         item.setActionCommand(command);
-        item.setMnemonic(mnemonic);
+        if (! Platform.isPlatformMacOSX())
+            item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
     }
@@ -799,7 +800,8 @@ public class GtpShell
     private JMenu createMenuFile()
     {
         JMenu menu = new JMenu("File");
-        menu.setMnemonic(KeyEvent.VK_F);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
                     m_shortcutKeyMask, "save-log");
         addMenuItem(menu, "Save Commands...", KeyEvent.VK_M, "save-commands");
@@ -815,7 +817,8 @@ public class GtpShell
     private JMenu createMenuSettings(boolean highlight)
     {
         JMenu menu = new JMenu("Settings");
-        menu.setMnemonic(KeyEvent.VK_S);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_S);
         m_itemHighlight = new JCheckBoxMenuItem("Highlight");
         m_itemHighlight.setSelected(highlight);
         addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
@@ -829,7 +832,8 @@ public class GtpShell
     private JMenu createMenuWindows()
     {
         JMenu menu = new JMenu("Windows");
-        menu.setMnemonic(KeyEvent.VK_W);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
                     "analyze");
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,

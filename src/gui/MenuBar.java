@@ -12,6 +12,7 @@ import java.net.*;
 import java.util.*;
 import javax.swing.*;
 import game.*;
+import utils.Platform;
 
 //-----------------------------------------------------------------------------
 
@@ -387,7 +388,8 @@ class MenuBar
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
                                   String command)
     {
-        item.setMnemonic(mnemonic);
+        if (! Platform.isPlatformMacOSX())
+            item.setMnemonic(mnemonic);
         return addMenuItem(menu, item, command);
     }
 
@@ -426,7 +428,8 @@ class MenuBar
     private JMenu createBoardSizeMenu()
     {
         JMenu menu = new JMenu("Size");
-        menu.setMnemonic(KeyEvent.VK_S);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
         int n = m_possibleBoardSizes.length;
         m_itemBoardSize = new JMenuItem[n];
@@ -447,7 +450,8 @@ class MenuBar
     {
         ButtonGroup group = new ButtonGroup();
         JMenu menu = new JMenu("Computer Color");
-        menu.setMnemonic(KeyEvent.VK_C);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_C);
         m_itemComputerBlack = addRadioItem(menu, group, "Black", KeyEvent.VK_B,
                                            "computer-black");
         m_itemComputerWhite = addRadioItem(menu, group, "White", KeyEvent.VK_W,
@@ -462,7 +466,8 @@ class MenuBar
     private JMenu createFileMenu()
     {
         JMenu menu = new JMenu("File");
-        menu.setMnemonic(KeyEvent.VK_F);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "New", KeyEvent.VK_N, KeyEvent.VK_N,
                     m_shortcutKeyMask, "new-game");
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
@@ -488,7 +493,8 @@ class MenuBar
     private JMenu createGameMenu()
     {
         JMenu menu = new JMenu("Game");
-        menu.setMnemonic(KeyEvent.VK_G);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_G);
         addMenuItem(menu, "Info...", KeyEvent.VK_I, KeyEvent.VK_I,
                     m_shortcutKeyMask, "game-info");
         menu.add(createBoardSizeMenu());
@@ -534,7 +540,8 @@ class MenuBar
     private JMenu createHandicapMenu()
     {
         JMenu menu = new JMenu("Handicap");
-        menu.setMnemonic(KeyEvent.VK_H);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_H);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < m_possibleHandicaps.length; ++i)
         {
@@ -549,7 +556,8 @@ class MenuBar
     private JMenu createHelpMenu()
     {
         JMenu menu = new JMenu("Help");
-        menu.setMnemonic(KeyEvent.VK_H);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_H);
         JMenuItem itemHelp =
             addMenuItem(menu, "Contents", KeyEvent.VK_C, KeyEvent.VK_F1, 0,
                         "help");
@@ -563,7 +571,8 @@ class MenuBar
     private JMenu createRecentMenu()
     {
         m_menuRecent = new JMenu("Open Recent");
-        m_menuRecent.setMnemonic(KeyEvent.VK_R);
+        if (! Platform.isPlatformMacOSX())
+            m_menuRecent.setMnemonic(KeyEvent.VK_R);
         loadRecent();
         updateRecentMenu();
         return m_menuRecent;
@@ -572,7 +581,8 @@ class MenuBar
     private JMenu createSettingsMenu()
     {
         JMenu menu = new JMenu("Settings");
-        menu.setMnemonic(KeyEvent.VK_S);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_S);
         m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
         addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
                     "beep-after-move");
@@ -588,7 +598,8 @@ class MenuBar
     private JMenu createSetupMenu()
     {
         JMenu menu = new JMenu("Setup");
-        menu.setMnemonic(KeyEvent.VK_E);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_E);
         m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
         addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
         menu.addSeparator();
@@ -604,7 +615,8 @@ class MenuBar
     private JMenu createVariationMenu()
     {
         JMenu menu = new JMenu("Variation");
-        menu.setMnemonic(KeyEvent.VK_V);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_V);
         m_itemNextVariation =
             addMenuItem(menu, "Next Variation", KeyEvent.VK_N,
                         KeyEvent.VK_DOWN, m_shortcutKeyMask, "next-variation");
@@ -630,7 +642,8 @@ class MenuBar
     private JMenu createWindowsMenu()
     {
         JMenu menu = new JMenu("Windows");
-        menu.setMnemonic(KeyEvent.VK_W);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7, 0,
                     "show-gametree");
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,

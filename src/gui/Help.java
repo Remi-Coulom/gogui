@@ -134,7 +134,8 @@ class Help
     {
         item.addActionListener(this);
         item.setActionCommand(command);
-        item.setMnemonic(mnemonic);
+        if (! Platform.isPlatformMacOSX())
+            item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
     }
@@ -186,12 +187,14 @@ class Help
     {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("File");
-        menu.setMnemonic(KeyEvent.VK_F);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     m_shortcutKeyMask, "close");
         menuBar.add(menu);
         menu = new JMenu("Go");
-        menu.setMnemonic(KeyEvent.VK_G);
+        if (! Platform.isPlatformMacOSX())
+            menu.setMnemonic(KeyEvent.VK_G);
         m_itemBack = addMenuItem(menu, "Back", KeyEvent.VK_B, KeyEvent.VK_B,
                                  m_shortcutKeyMask, "back");
         m_itemForward = addMenuItem(menu, "Forward", KeyEvent.VK_F,
