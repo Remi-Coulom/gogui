@@ -97,7 +97,24 @@ build/gogui/images/%.png: images/%.png
 	javac -O $(JAVAOPT) -d build/$* @build/files-$*.txt
 	jar cmf build/manifest-$*.txt $*.jar -C build/$* .
 
-.PHONY: changelog clean gogui_debug docsrc tags
+src/version/Version.java: build/version.txt
+	sed 's/m_version = \".*\"/m_version = \"$(shell cat build/version.txt)\"/' <src/version/Version.java >src/version/.Version.java.new
+	mv src/version/.Version.java.new src/version/Version.java
+
+doc/html/index.html: $(DOC) build/version.txt
+	cp build/version.txt doc/xml/version.xml
+	$(MAKE) -C doc
+
+.PHONY: clean dist docsrc gogui_debug tags
+
+clean:
+	-rm -rf $(patsubst %.jar, build/%, $(JAR)) $(JAR)
+
+dist: all docsrc
+	-rm -rf $(patsubst %.jar, build/%, $(JAR))
+
+docsrc:
+	javadoc -sourcepath src -d docsrc -source 1.4 $(PACKAGES)
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
 gogui_debug: doc/html/index.html $(IMAGES) $(shell cat build/files-gogui.txt)
@@ -107,20 +124,6 @@ gogui_debug: doc/html/index.html $(IMAGES) $(shell cat build/files-gogui.txt)
 	cp -R doc/html/* build/gogui_debug/doc
 	mkdir -p build/gogui_debug/images
 	for i in $(IMAGES); do cp $$i build/gogui_debug/$$i; done 
-
-src/version/Version.java: build/version.txt
-	sed 's/m_version = \".*\"/m_version = \"$(shell cat build/version.txt)\"/' <src/version/Version.java >src/version/.Version.java.new
-	mv src/version/.Version.java.new src/version/Version.java
-
-clean:
-	-rm -rf $(patsubst %.jar, build/%, $(JAR)) $(JAR)
-
-doc/html/index.html: $(DOC) build/version.txt
-	cp build/version.txt doc/xml/version.xml
-	$(MAKE) -C doc
-
-docsrc:
-	javadoc -sourcepath src -d docsrc -source 1.4 $(PACKAGES)
 
 tags:
 	etags `find . -name "*.java"`
