@@ -57,7 +57,7 @@ public class Writer
         printEndPSGo();
         String toMove =
             (m_board.getToMove() == Color.BLACK ? "Black" : "White");
-        m_out.println("\n" + toMove + " to move.");
+        m_out.println("\n" + toMove + " to play.");
         printEndDocument();
         m_out.close();
     }
