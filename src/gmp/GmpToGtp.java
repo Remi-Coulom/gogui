@@ -30,6 +30,8 @@ public class GmpToGtp
             setQuit();
         else if (command.startsWith("black"))
             return play(true, command, response);
+        else if (command.startsWith("gmp_text"))
+            return sendText(command, response);
         else if (command.startsWith("white"))
             return play(true, command, response);
         else if (command.startsWith("undo"))
@@ -47,15 +49,17 @@ public class GmpToGtp
         else if (command.equals("protocol_version"))
             response.append("1");
         else if (command.equals("help"))
-            response.append("quit\n" +
+            response.append("boardsize\n" +
                             "black\n" +
-                            "white\n" +
-                            "undo\n" +
                             "genmove_black\n" +
                             "genmove_white\n" +
-                            "boardsize\n" +
+                            "genmove_white\n" +
+                            "gmp_text\n" +
                             "name\n" +
-                            "version\n");
+                            "undo\n" +
+                            "version\n" +
+                            "white\n" +
+                            "quit\n");
         else
         {
             response.append("unknown command");
@@ -239,6 +243,17 @@ public class GmpToGtp
         }
     }
 
+    private boolean sendText(String command, StringBuffer response)
+    {
+        int index = command.indexOf(' ');
+        if (index > 0)
+            if (! m_gmp.sendText(command.substring(index + 1)))
+            {
+                response.append("I/O error");
+                return false;
+            }
+        return true;
+    }
 }
 
 class StdErrThread

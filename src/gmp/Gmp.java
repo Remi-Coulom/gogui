@@ -289,6 +289,26 @@ class ReadThread
         }
     }
 
+    public boolean sendText(String text)
+    {
+        int size = text.length();
+        byte buffer[] = new byte[size];
+        for (int i = 0; i < size; ++i)
+        {
+            byte b = (byte)text.charAt(i);
+            buffer[i] = ((b > 3 && b < 127) ? b : (byte)'?');            
+        }
+        try
+        {
+            m_out.write(buffer);
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public synchronized WaitResult waitCmd(int cmd, int valMask,
                                            int valCondition)
     {
@@ -674,6 +694,11 @@ public class Gmp
         if (x >= 0 && y >= 0)
             val |= (1 + x + y * m_size);
         return m_readThread.send(new Cmd(Cmd.MOVE, val), response);
+    }
+
+    public boolean sendText(String text)
+    {
+        return m_readThread.sendText(text);
     }
 
     public Move waitMove(boolean isBlack, StringBuffer response)
