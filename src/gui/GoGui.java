@@ -245,26 +245,25 @@ class GoGui
         }
         try
         {
-            String options[] =
-                {
-                    "analyze:",
-                    "autoplay",
-                    "computer-none",
-                    "file:",
-                    "fillpasses",
-                    "gtpfile:",
-                    "gtpshell",
-                    "help",
-                    "move:",
-                    "size:",
-                    "time:",
-                    "verbose"
-                };
+            String options[] = {
+                "analyze:",
+                "autoplay",
+                "computer-none",
+                "file:",
+                "fillpasses",
+                "gtpfile:",
+                "gtpshell",
+                "help",
+                "move:",
+                "size:",
+                "time:",
+                "verbose"
+            };
             Options opt = new Options(args, options);
             if (opt.isSet("help"))
             {
                 String helpText =
-                    "Usage: java -jar GoGui.jar [options] program\n" +
+                    "Usage: java -jar gogui.jar [options] program\n" +
                     "Graphical user interface for Go programs\n" +
                     "using the Go Text Protocol.\n" +
                     "\n" +
