@@ -32,6 +32,9 @@ Dummy Go program for testing GTP controlling programs.
 Dummy Go program supporting GTP (Go Text Protocol) for testing
 GTP controlling programs.
 Plays random moves.
+Never plays at a point at which already a move was made, even
+after the point becomes free again, because of capture.
+Illegal moves sent to the program are not checked and always accepted.
 </para>
 </refsection>
 
