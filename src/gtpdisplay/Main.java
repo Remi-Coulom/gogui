@@ -26,7 +26,6 @@ public class Main
             String options[] = {
                 "config:",
                 "help",
-                "size:",
                 "verbose",
                 "version"
             };
@@ -43,7 +42,6 @@ public class Main
                 System.exit(0);
             }
             boolean verbose = opt.isSet("verbose");
-            int size = opt.getInteger("size", 19);
             Vector arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
@@ -52,7 +50,7 @@ public class Main
             }
             String program = (String)arguments.get(0);
             GtpDisplay gtpDisplay =
-                new GtpDisplay(System.in, System.out, program, size, verbose);
+                new GtpDisplay(System.in, System.out, program, verbose);
             gtpDisplay.mainLoop();
             gtpDisplay.close();
         }
@@ -70,7 +68,6 @@ public class Main
             "\n" +
             "-config       config file\n" +
             "-help         print help and exit\n" +
-            "-size         accept only this board size\n" +
             "-verbose      log GTP stream to stderr\n" +
             "-version      print version and exit\n";
         out.print(helpText);

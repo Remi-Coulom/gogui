@@ -23,7 +23,7 @@ public class GtpDisplay
     extends GtpServer
 {
     public GtpDisplay(InputStream in, OutputStream out, String program,
-                      int size, boolean verbose)
+                      boolean verbose)
         throws Exception
     {
         super(in, out, null);
@@ -32,7 +32,7 @@ public class GtpDisplay
         m_gtp = new Gtp(program, verbose, null);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
-        m_size = size;
+        m_size = 19;
         m_board = new go.Board(m_size);
         m_frame = new JFrame();
         WindowAdapter windowAdapter = new WindowAdapter()
@@ -52,9 +52,9 @@ public class GtpDisplay
         Container contentPane = m_frame.getContentPane();        
         m_guiBoard = new gui.Board(m_board);
         m_guiBoard.setShowCursor(false);
-        SquareLayout squareLayout = new SquareLayout();
-        squareLayout.setPreferMultipleOf(2 + 2 * m_size);
-        JPanel panel = new JPanel(squareLayout);
+        m_squareLayout = new SquareLayout();
+        m_squareLayout.setPreferMultipleOf(2 + 2 * m_size);
+        JPanel panel = new JPanel(m_squareLayout);
         panel.add(m_guiBoard);
         contentPane.add(panel);
         GuiUtils.setGoIcon(m_frame);
@@ -159,6 +159,8 @@ public class GtpDisplay
 
     private String m_name;
 
+    private SquareLayout m_squareLayout;
+
     private void closeFrame()
     {
         assert(SwingUtilities.isEventDispatchThread());
@@ -176,26 +178,25 @@ public class GtpDisplay
             response.append("Invalid board size");
             return false;
         }
-        if (m_size > 0 && argument.m_integer != m_size)
-        {
-            response.append("Boardsize must be " + m_size);
-            return false;
-        }
         String command = m_gtp.getCommandBoardsize(argument.m_integer);
         if (command != null)
         {
             if (! send(command, response))
                 return false;
         }
-        m_size = argument.m_integer;
-        command = m_gtp.getCommandClearBoard(m_size);
+        int size = argument.m_integer;
+        command = m_gtp.getCommandClearBoard(size);
         if (! send(command, response))
             return false;
+        m_size = size;
         if (! invokeAndWait(new Runnable()
             {
                 public void run()
                 {
-                    m_board.newGame();
+                    m_board.initSize(m_size);
+                    m_guiBoard.initSize(m_size);
+                    m_squareLayout.setPreferMultipleOf(2 + 2 * m_size);
+                    m_frame.pack();
                     m_guiBoard.updateFromGoBoard();
                     m_guiBoard.markLastMove(null);
                 }
