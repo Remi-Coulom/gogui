@@ -1330,6 +1330,7 @@ class GoGui
             {
                 newGame(m_boardSize, null, -1, 0);
                 boardChanged();
+                m_guiBoard.requestFocus();
             }
         }
         catch (Gtp.Error e)

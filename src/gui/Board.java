@@ -38,7 +38,7 @@ class BoardLabel
 
 public class Board
     extends JPanel
-    implements Printable
+    implements Printable, KeyListener
 {
     public interface Listener
     {
@@ -97,7 +97,6 @@ public class Board
     public void initSize(int size)
     {
         m_board.initSize(size);
-        m_lastMove = null;
         m_field = new Field[size][size];
         removeAll();
         GridBagLayout gridBag = new GridBagLayout();
@@ -125,10 +124,42 @@ public class Board
                 Field field = new Field(this, p, m_board.isHandicap(p));
                 panel.add(field);
                 m_field[x][y] = field;
+                field.addKeyListener(this);
             }
         }
+        m_focusPoint = new go.Point(size / 2, size / 2);
         revalidate();
         repaint();
+    }
+
+    public void keyPressed(KeyEvent event)
+    {
+        if (! getField(m_focusPoint).hasFocus())
+        {
+            setFocusPoint(m_focusPoint);
+            return;
+        }
+        int code = event.getKeyCode();
+        int size = m_board.getSize();
+        if (code == KeyEvent.VK_DOWN)
+            m_focusPoint.down();
+        else if (code == KeyEvent.VK_UP)
+            m_focusPoint.up(size);
+        else if (code == KeyEvent.VK_LEFT)
+            m_focusPoint.left();
+        else if (code == KeyEvent.VK_RIGHT)
+            m_focusPoint.right(size);
+        else if (code == KeyEvent.VK_ENTER)
+            getField(m_focusPoint).doClick();
+        setFocusPoint(m_focusPoint);
+    }
+
+    public void keyReleased(KeyEvent event)
+    {
+    }
+
+    public void keyTyped(KeyEvent event)
+    {
     }
 
     public void paintComponent(Graphics graphics)
@@ -179,6 +210,12 @@ public class Board
         calcScore();
     }
 
+    public void setFocusPoint(go.Point point)
+    {
+        getField(point).requestFocus();
+        m_focusPoint.set(point.getX(), point.getY());
+    }
+
     public void setFieldBackground(go.Point p, java.awt.Color color)
     {
         getField(p).setFieldBackground(color);
@@ -186,12 +223,6 @@ public class Board
 
     public void setCrossHair(go.Point p, boolean crossHair)
     {
-        if (m_lastMove != null)
-        {
-            Field f = getField(m_lastMove);
-            f.setCrossHair(false);
-            m_lastMove = null;
-        }
         getField(p).setCrossHair(crossHair);
     }
 
@@ -281,6 +312,8 @@ public class Board
         drawLastMove();
     }
 
+    private go.Point m_focusPoint;
+
     private Dimension m_preferredFieldSize;
 
     private go.Board m_board;
@@ -290,8 +323,6 @@ public class Board
     private Field m_field[][];
 
     private Listener m_listener;
-
-    private go.Point m_lastMove;
 
     private void addColumnLabels(GridBagLayout gridBag, int size, int y)
     {
@@ -348,22 +379,13 @@ public class Board
 
     private void drawLastMove()
     {
-        if (m_lastMove != null)
-        {
-            Field f = getField(m_lastMove);
-            f.setCrossHair(false);
-            m_lastMove = null;
-        }
         int moveNumber = m_board.getMoveNumber();
         if (moveNumber > 0)
         {
             Move m = m_board.getInternalMove(moveNumber - 1);
-            m_lastMove = m.getPoint();
-            if (m_lastMove != null && m.getColor() != go.Color.EMPTY)
-            {
-                Field f = m_field[m_lastMove.getX()][m_lastMove.getY()];
-                f.setCrossHair(true);
-            }
+            go.Point lastMove = m.getPoint();
+            if (lastMove != null && m.getColor() != go.Color.EMPTY)
+                setFocusPoint(lastMove);
         }
     }
 

@@ -17,7 +17,7 @@ import go.*;
 
 public class Field
     extends JButton
-    implements ActionListener
+    implements ActionListener, FocusListener
 {
     Field(gui.Board board, go.Point p, boolean isHandicap)
     {
@@ -31,6 +31,7 @@ public class Field
         setBorder(null);
         setOpaque(false);
         addActionListener(this);
+        addFocusListener(this);
     }
 
     public void actionPerformed(ActionEvent event)
@@ -46,6 +47,15 @@ public class Field
             m_influence = 0;
             repaint();
         }
+    }
+
+    public void focusGained(FocusEvent event)
+    {
+        m_board.setFocusPoint(m_point);
+    }
+
+    public void focusLost(FocusEvent event)
+    {
     }
 
     public void paintComponent(Graphics graphics)
@@ -74,6 +84,8 @@ public class Field
             drawCrossHair(graphics);
         if (! m_string.equals(""))
             drawString(graphics);
+        if (isFocusOwner())
+            drawFocus(graphics);
     }
 
     public void setFieldBackground(java.awt.Color color)
@@ -164,6 +176,18 @@ public class Field
         g.setColor(java.awt.Color.magenta);
         g.drawLine(dx, size.height / 2, size.width - dx, size.height / 2);
         g.drawLine(size.width / 2, dy, size.width / 2, size.height - dy);
+    }
+
+    private void drawFocus(Graphics g)
+    {
+        Dimension size = getSize();
+        int dx = size.width / 4;
+        int dy = size.height / 4;
+        g.setColor(java.awt.Color.blue);
+        int radiusX = size.width / 7;
+        int radiusY = size.height / 7;
+        g.fillOval(size.width / 2 - radiusX, size.height / 2 - radiusY,
+                   2 * radiusX + 1, 2 * radiusY + 1);
     }
 
     private void drawGrid(Graphics g)
