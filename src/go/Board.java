@@ -390,21 +390,21 @@ public class Board
         switch (rotationIndex)
         {
         case 0:
-            getPoint(x, y);
+            return getPoint(x, y);
         case 1:
-            getPoint(size - x - 1, y);
+            return getPoint(size - x - 1, y);
         case 2:
-            getPoint(x, size - y - 1);
+            return getPoint(x, size - y - 1);
         case 3:
-            getPoint(y, x);
+            return getPoint(y, x);
         case 4:
-            getPoint(size - y - 1, x);
+            return getPoint(size - y - 1, x);
         case 5:
-            getPoint(y, size - x - 1);
+            return getPoint(y, size - x - 1);
         case 6:
-            getPoint(size - x - 1, size - y - 1);
+            return getPoint(size - x - 1, size - y - 1);
         case 7:
-            getPoint(size - y - 1, size - x - 1);
+            return getPoint(size - y - 1, size - x - 1);
         default:
             return getPoint(x, y);
         }
