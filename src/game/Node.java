@@ -5,6 +5,7 @@
 
 package game;
 
+import java.io.*;
 import java.util.*;
 import go.*;
 
@@ -136,7 +137,16 @@ public class Node
 
     public String getComment()
     {
-        return m_comment;
+        if (m_comment == null)
+            return null;
+        try
+        {
+            return new String(m_comment, "ISO-8859-1");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            return new String(m_comment);
+        }
     }
 
     public Node getFather()
@@ -271,7 +281,19 @@ public class Node
 
     public void setComment(String comment)
     {
-        m_comment = comment;
+        if (comment == null)
+        {
+            m_comment = null;
+            return;
+        }
+        try
+        {
+            m_comment = comment.getBytes("ISO-8859-1");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            m_comment = comment.getBytes();
+        }
     }
 
     public void setFather(Node father)
@@ -354,13 +376,17 @@ public class Node
         return getChild(i - 1);
     }
 
+    /** Comment stored as bytes.
+        The default charset for SGF is ISO-8859-1, which is only one byte
+        per character, i.e. half the size of a regular String.
+    */
+    private byte[] m_comment;
+
     private Move m_move;
 
     private Node m_father;
 
     private SetupInfo m_setupInfo;
-
-    private String m_comment;
 
     private TimeInfo m_timeInfo;
 
