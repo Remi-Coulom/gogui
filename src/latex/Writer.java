@@ -37,6 +37,7 @@ public class Writer
         {
             printPosition(strings, markups, selects);
             printEndPSGo();
+            m_out.println("\\\\");
             String toMove =
                 (m_board.getToMove() == Color.BLACK ? "Black" : "White");
             m_out.println(toMove + " to play.");
@@ -47,7 +48,10 @@ public class Writer
             String comment = printMoves();
             printEndPSGo();
             if (! comment.equals(""))
+            {
+                m_out.println("\\\\");
                 m_out.println(comment);
+            }
         }
         printEndDocument();
         m_out.close();
@@ -91,6 +95,7 @@ public class Writer
                       + " or newer");
         m_out.println("\\pagestyle{empty}");
         m_out.println("\\begin{document}");
+        m_out.println();
     }
 
     private void printBeginPSGo()
