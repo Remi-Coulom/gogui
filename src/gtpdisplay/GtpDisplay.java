@@ -36,6 +36,7 @@ public class GtpDisplay
         m_size = 19;
         m_board = new go.Board(m_size);
         m_frame = new JFrame();
+        m_frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         WindowAdapter windowAdapter = new WindowAdapter()
             {
                 public void windowClosing(WindowEvent event)
@@ -93,6 +94,8 @@ public class GtpDisplay
                                                "GTP stream was closed");
                         showStatus("GTP stream was closed");
                     }
+                    else if (m_gtp == null)
+                        System.exit(0);
                 }
             }, error))
             System.err.println(error);
@@ -224,6 +227,7 @@ public class GtpDisplay
         }
         m_frame.dispose();
         m_frame = null;
+        System.err.println("XXX closeFrame ->null");
     }
 
     private boolean cmdBoardsize(String cmdArray[], StringBuffer response)
@@ -294,7 +298,7 @@ public class GtpDisplay
             return false;
         go.Color color = argument.m_color;
         go.Point point;        
-        if (m_gtp == null)
+        if (m_gtp == null && m_frame != null)
         {
             m_color = color;
             if (! invokeAndWait(new Runnable()
