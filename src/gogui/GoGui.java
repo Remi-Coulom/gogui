@@ -556,6 +556,22 @@ class GoGui
         private boolean m_resetBoard;
     }
 
+    private class ShowInvalidResponse
+        implements Runnable
+    {
+        public ShowInvalidResponse(String line)
+        {
+            m_line = line;
+        }
+
+        public void run()
+        {
+            showError("Invalid response:\n" + m_line);
+        }
+        
+        private String m_line;
+    }
+
     private boolean m_analyzeAutoRun;
 
     private boolean m_auto;
@@ -567,6 +583,8 @@ class GoGui
     private boolean m_computerWhite;
 
     private boolean m_commandInProgress;
+
+    private boolean m_ignoreInvalidResponses;
 
     private boolean m_isRootExecuted;
 
@@ -747,9 +765,26 @@ class GoGui
         m_program = program;
         m_gtpShell = new GtpShell("GoGui", this, m_prefs);
         m_gtpShell.setProgramCommand(program);
+        m_ignoreInvalidResponses = false;
+        Gtp.InvalidResponseCallback invalidResponseCallback =
+            new Gtp.InvalidResponseCallback()
+            {
+                public void show(String line)
+                {
+                    if (m_ignoreInvalidResponses)
+                        return;
+                    m_ignoreInvalidResponses = true;
+                    Runnable runnable = new ShowInvalidResponse(line);
+                    if (SwingUtilities.isEventDispatchThread())
+                        runnable.run();
+                    else
+                        invokeAndWait(runnable);
+                }
+            };
         try
         {
             Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
+            gtp.setInvalidResponseCallback(invalidResponseCallback);
             if (m_gtpShell.getAutoNumber())
                 gtp.enableAutoNumber();
             m_commandThread = new CommandThread(gtp);
@@ -1863,6 +1898,22 @@ class GoGui
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
         showStatus("Please mark dead groups.");
+    }
+
+    private void invokeAndWait(Runnable runnable)
+    {
+        try
+        {
+            SwingUtilities.invokeAndWait(runnable);
+        }
+        catch (InterruptedException e)
+        {
+            System.err.println("Thread interrupted");
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+            System.err.println("InvocationTargetException");
+        }
     }
 
     private boolean isCurrentNodeExecuted()

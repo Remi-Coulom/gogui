@@ -36,6 +36,11 @@ public final class Gtp
         public boolean askContinue();
     }
 
+    public interface InvalidResponseCallback
+    {
+        public void show(String line);
+    }
+
     /** Callback interface for logging or displaying the GTP stream. */
     public interface IOCallback
     {
@@ -76,7 +81,6 @@ public final class Gtp
                                 e.getMessage());
         }
         m_out = new PrintWriter(m_process.getOutputStream());
-        m_illegalState = false;
         m_timedOut = false;
         m_isProgramDead = false;
         
@@ -213,7 +217,7 @@ public final class Gtp
     /** Check if program is dead or in illegal state. */
     public boolean isProgramDead()
     {
-        return (m_isProgramDead || m_illegalState || m_timedOut);
+        return (m_isProgramDead || m_timedOut);
     }
 
     public void queryInterruptSupport()
@@ -312,8 +316,6 @@ public final class Gtp
             throw new Error("Program is dead");
         if (m_timedOut)
             throw new Error("Program timed out");
-        if (m_illegalState)
-            throw new Error("Program sent invalid response");
         if (m_autoNumber)
         {
             ++m_commandNumber;
@@ -396,6 +398,11 @@ public final class Gtp
     public void enableAutoNumber()
     {
         m_autoNumber = true;
+    }
+
+    public void setInvalidResponseCallback(InvalidResponseCallback callback)
+    {
+        m_invalidResponseCallback = callback;
     }
 
     public void setLogPrefix(String prefix)
@@ -513,11 +520,11 @@ public final class Gtp
 
     private boolean m_autoNumber;
 
+    private InvalidResponseCallback m_invalidResponseCallback;
+
     private boolean m_isInterruptCommentSupported;
 
     private boolean m_isProgramDead;
-
-    private boolean m_illegalState;
 
     private boolean m_log;
 
@@ -634,14 +641,18 @@ public final class Gtp
         String line = "";
         while (line.trim().equals(""))
             line = readLine(timeout);
-        StringBuffer response = new StringBuffer(line);
-        response.append("\n");
-        if (! isResponseLine(line))
+        StringBuffer response;
+        while (true)
         {
+            response = new StringBuffer(line);
+            response.append("\n");
+            if (isResponseLine(line))
+                break;
             m_fullResponse = response.toString();
             m_callback.receivedInvalidResponse(response.toString());
-            m_illegalState = true;
-            throw new Error("Invalid response:\n" + line);
+            if (m_invalidResponseCallback != null)
+                m_invalidResponseCallback.show(line);       
+            line = readLine(timeout);
         }
         boolean error = (line.charAt(0) != '=');
         if (m_callback != null)
