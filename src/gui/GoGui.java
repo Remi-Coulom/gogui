@@ -1569,8 +1569,6 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
-            showWarning("Program does not accept komi\n" +
-                        "(" + e.getMessage() + ").");
         }
     }
 
@@ -1588,8 +1586,6 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
-            showWarning("Program does not accept scoring system\n" +
-                        "(" + e.getMessage() + ").");
         }
     }
 
