@@ -742,6 +742,8 @@ class GoGui
         m_menuBar.setCommandInProgress(isInterruptSupported);
         m_toolBar.setCommandInProgress(isInterruptSupported);
         m_gtpShell.setInputEnabled(false);
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.setEnabled(false);
         m_commandInProgress = true;
     }
 
@@ -1330,8 +1332,9 @@ class GoGui
     {
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, m_board);
-        if (m_gtpShell != null)
-            m_gtpShell.setInputEnabled(true);
+        m_gtpShell.setInputEnabled(true);
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.setEnabled(true);
         m_commandInProgress = false;
         if (m_analyzeRequestPoint)
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
@@ -1828,6 +1831,17 @@ class GoGui
         sendGtp(new StringReader(StringUtils.replace(commands, "\\n", "\n")));
     }
 
+    private void setCursor(Component component, int type)
+    {
+        Cursor cursor = Cursor.getPredefinedCursor(type);
+        component.setCursor(cursor);
+    }
+
+    private void setCursorDefault(Component component)
+    {
+        component.setCursor(Cursor.getDefaultCursor());
+    }
+
     private void setHandicap()
     {
         Vector handicap = m_board.getHandicapStones(m_handicap);
@@ -1861,14 +1875,12 @@ class GoGui
 
     private void setBoardCursor(int type)
     {
-        Cursor cursor = Cursor.getPredefinedCursor(type);
-        assert(m_board != null);
-        m_guiBoard.setCursor(cursor);
+        setCursor(m_guiBoard, type);
     }
 
     private void setBoardCursorDefault()
     {
-        m_guiBoard.setCursor(Cursor.getDefaultCursor());
+        setCursorDefault(m_guiBoard);
     }
 
     private void setFastUpdate(boolean fastUpdate)
