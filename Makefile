@@ -9,6 +9,7 @@ ICONS= \
   org/javalobby/icons/20x20png/New.png \
   org/javalobby/icons/20x20png/Open.png \
   org/javalobby/icons/20x20png/Save.png \
+  org/javalobby/icons/20x20png/Stop.png \
   org/javalobby/icons/20x20png/VCRBack.png \
   org/javalobby/icons/20x20png/VCRBegin.png \
   org/javalobby/icons/20x20png/VCRFastForward.png \

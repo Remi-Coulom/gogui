@@ -111,6 +111,7 @@ class GoGui
             && ! command.equals("computer-both")
             && ! command.equals("computer-none")
             && ! command.equals("computer-white")
+            && ! command.equals("interrupt")
             && ! command.equals("exit"))
             return;
         if (command.equals("about"))
@@ -147,6 +148,8 @@ class GoGui
             cbHandicap(command.substring(new String("handicap-").length()));
         else if (command.equals("help"))
             cbHelp();
+        else if (command.equals("interrupt"))
+            cbInterrupt();
         else if (command.equals("komi"))
             cbKomi();
         else if (command.equals("load"))
@@ -490,6 +493,7 @@ class GoGui
     private String m_analyzeTitle;
     private String m_file;
     private String m_name = "Unknown Go Program";
+    private String m_pid;
     private String m_version = "?";
     private TimeControl m_timeControl;
     private ToolBar m_toolBar;
@@ -767,6 +771,23 @@ class GoGui
             return;
         }
         Help help = new Help(null, u);
+    }
+
+    private void cbInterrupt()
+    {
+        if (m_commandThread == null)
+            showError("No program loaded.");
+        else if (! m_commandInProgress)
+            showError("No command in progress.");
+        else if (m_pid.equals(""))
+            showError("Program does not support interrupting.\n" +
+                      "See documentation section \"Interrupting programs\".");
+        else
+        {
+            if (! showQuestion("Interrupt command?"))
+                return;
+            runCommand("kill -INT " + m_pid);
+        }
     }
 
     private void cbKomi()
@@ -1316,6 +1337,7 @@ class GoGui
                 try
                 {
                     m_version = m_commandThread.sendCommand("version").trim();
+                    m_pid = m_commandThread.sendCommand("gogui_sigint").trim();
                 }
                 catch (Gtp.Error e)
                 {
@@ -1532,6 +1554,26 @@ class GoGui
         m_boardNeedsReset = false;
     }
     
+    private void runCommand(String command)
+    {
+        Runtime runtime = Runtime.getRuntime();
+        try
+        {
+            Process process = runtime.exec(command);
+            int result = process.waitFor();
+            if (result != 0)
+                showError("Command \"" + command + "\" returned " +
+                          result + ".");
+        }
+        catch (IOException e)
+        {
+            showError(e.getMessage());
+        }
+        catch (InterruptedException e)
+        {
+        }
+    }
+
     private void runLengthyCommand(String cmd, Runnable callback)
     {
         assert(m_commandThread != null);

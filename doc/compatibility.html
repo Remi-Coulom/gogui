@@ -13,6 +13,8 @@
       <a href="http://www.lysator.liu.se/~gunnar/gtp/">Go Text Protocol</a>.
     </p>
 
+    <h2>Required commands</h2>
+
     <p>
       It is required that the Go program can handle the following
       commands:
@@ -34,6 +36,8 @@
       <tt>black</tt> and <tt>white</tt> commands.
     </p>
 
+    <h2>Optional commands</h2>
+
     <p>
       The following other commands are used by GoGui.
     </p>
@@ -51,6 +55,16 @@
       If the Go program does not understand them
       you will still be able to play games,
       but you cannot use all of the functionality of GoGui.
+    </p>
+
+    <h2>Interrupting programs</h2>
+
+    <p>
+      If the program understands the GoGui specific extension GTP command
+      <tt>gogui_sigint</tt>, it indicates that long commands can be
+      interrupted by sending it a SIGINT signal. The program must return its
+      process id as an answer to <tt>gogui_sigint</tt> and GoGui will
+      try to send interrupt signals by using <tt>kill -INT &lt;pid&gt</tt>.
     </p>
 
   </body>

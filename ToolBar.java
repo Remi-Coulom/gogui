@@ -38,6 +38,8 @@ class ToolBar
         m_buttonPass = addButton(m_prefix + "Delete.png", "pass", "Pass");
         m_buttonEnter = addButton(m_prefix + "Enter.png", "play",
                                   "Computer play");
+        m_buttonInterrupt = addButton(m_prefix + "Stop.png", "interrupt",
+                                      "Interrupt");
         add(new JToolBar.Separator());
         m_buttonGtpShell = addButton(m_prefix + "Computer.png", "gtp-shell",
                                      "GTP shell");
@@ -119,6 +121,7 @@ class ToolBar
     private JButton m_buttonForward10;
     private JButton m_buttonEnd;
     private JButton m_buttonGtpShell;
+    private JButton m_buttonInterrupt;
     private JButton m_buttonNew;
     private JButton m_buttonOpen;
     private JButton m_buttonPass;
