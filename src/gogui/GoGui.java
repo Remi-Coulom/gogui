@@ -80,12 +80,13 @@ class GoGui
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_boardPanel, m_infoPanel);
+        m_splitPane.setContinuousLayout(true);
         int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
         InputMap splitPaneInputMap = m_splitPane.getInputMap(condition);
         // According to the docs, null should remove the action, but it does
         // not seem to work with Sun Java 1.4.2, new Object() works
         splitPaneInputMap.put(KeyStroke.getKeyStroke("F8"), new Object());
-        m_splitPane.setResizeWeight(1.0);
+        m_splitPane.setResizeWeight(0.85);
         m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
         
         WindowAdapter windowAdapter = new WindowAdapter()
@@ -125,7 +126,6 @@ class GoGui
             m_menuBar.setComputerEnabled(false);
         }
         m_menuBar.setNormalMode();
-        pack();
         m_guiBoard.requestFocusInWindow();
         setTitle("GoGui");
         try
@@ -185,7 +185,7 @@ class GoGui
         else if (command.equals("board-size-other"))
             cbBoardSizeOther();
         else if (command.startsWith("board-size-"))
-            cbNewGame(command.substring("board-size-".length()));
+            cbBoardSize(command.substring("board-size-".length()));
         else if (command.equals("computer-black"))
             computerBlack();
         else if (command.equals("computer-both"))
@@ -352,62 +352,18 @@ class GoGui
 
     public void cbShowInfoPanel()
     {
-        boolean showInfoPanel = m_menuBar.getShowInfoPanel();
-        if (showInfoPanel == m_showInfoPanel)
-            return;
-        m_prefs.setBool("show-info-panel", showInfoPanel);
-        m_showInfoPanel = showInfoPanel;
-        Dimension size = new Dimension();
-        size.height = getHeight();
-        int dividerLocation = 0;
-        if (! showInfoPanel)
-        {
-            int boardPanelWidth = m_boardPanel.getWidth();
-            m_oldBoardPanelWidth = boardPanelWidth;
-            size.width =
-                getWidth() - m_splitPane.getWidth() + boardPanelWidth;
-            m_splitPane.remove(m_boardPanel);
-            m_innerPanel.remove(m_splitPane);
-            m_innerPanel.add(m_boardPanel);
-        }
-        else
-        {
-            size.width =
-                getWidth() + m_splitPane.getWidth() - m_oldBoardPanelWidth;
-            dividerLocation =
-                m_splitPane.getDividerLocation() + m_boardPanel.getWidth()
-                - m_oldBoardPanelWidth;
-            m_innerPanel.remove(m_boardPanel);
-            m_splitPane.add(m_boardPanel);
-            m_innerPanel.add(m_splitPane);
-        }
-        setSize(size);
-        validate();
-        if (showInfoPanel)
-            setDividerLocation(dividerLocation);
+        if (m_showInfoPanel)
+            m_comment.setPreferredSize(m_comment.getSize());
+        m_guiBoard.setPreferredFieldSize(m_guiBoard.getPreferredFieldSize());
+        showInfoPanel();
     }
 
     public void cbShowToolbar()
     {
-        boolean showToolbar = m_menuBar.getShowToolbar();
-        if (showToolbar == m_showToolbar)
-            return;
-        m_prefs.setBool("show-toolbar", showToolbar);
-        m_showToolbar = showToolbar;
-        Dimension size = new Dimension();
-        size.width = getWidth();
-        if (showToolbar)
-        {
-            getContentPane().add(m_toolBar, BorderLayout.NORTH);
-            size.height = getHeight() + m_toolBar.getHeight();
-        }
-        else
-        {
-            getContentPane().remove(m_toolBar);
-            size.height = getHeight() - m_toolBar.getHeight();
-        }
-        setSize(size);
-        validate();
+        if (m_showInfoPanel)
+            m_comment.setPreferredSize(m_comment.getSize());
+        m_guiBoard.setPreferredFieldSize(m_guiBoard.getPreferredFieldSize());
+        showToolbar();
     }
 
     public void clearAnalyzeCommand()
@@ -693,8 +649,6 @@ class GoGui
     private int m_handicap;
 
     private int m_move;
-
-    private int m_oldBoardPanelWidth;
 
     private go.Board m_board;
 
@@ -1037,8 +991,22 @@ class GoGui
         boardChangedBegin(false, false);
     }
 
+    private void cbBoardSize(String size)
+    {
+        try
+        {
+            saveSession();
+            cbNewGame(Integer.parseInt(size));
+        }
+        catch (NumberFormatException e)
+        {
+            assert(false);
+        }
+    }
+
     private void cbBoardSizeOther()
     {
+        saveSession();
         String value =
             JOptionPane.showInputDialog(this, "Board size",
                                         Integer.toString(m_boardSize));
@@ -1244,18 +1212,6 @@ class GoGui
         m_prefs.setInt("boardsize", size);
         fileModified();
         newGame(size);
-    }
-
-    private void cbNewGame(String size)
-    {
-        try
-        {
-            cbNewGame(Integer.parseInt(size));
-        }
-        catch (NumberFormatException e)
-        {
-            assert(false);
-        }
     }
 
     private void cbNextVariation()
@@ -1928,7 +1884,6 @@ class GoGui
             m_boardSize = size;
             m_guiBoard.initSize(size);
             m_squareLayout.setPreferMultipleOf(size + 2);
-            pack();
             restoreMainWindow();
             if (m_gtpShell != null)
                 restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
@@ -1988,17 +1943,17 @@ class GoGui
         }
         updateGameInfo(true);
         registerSpecialMacHandler();
-        restoreMainWindow();
         if (! m_prefs.getBool("show-info-panel"))
         {
             m_menuBar.setShowInfoPanel(false);
-            cbShowInfoPanel();
+            showInfoPanel();
         }
         if (! m_prefs.getBool("show-toolbar"))
         {
             m_menuBar.setShowToolbar(false);
-            cbShowToolbar();
+            showToolbar();
         }
+        restoreMainWindow();
         setVisible(true);
         m_guiBoard.setFocus();
         setTitleFromProgram();
@@ -2181,18 +2136,59 @@ class GoGui
         m_guiBoard.repaint();
     }
     
+    private void restoreLocation(Window window, String name, int size)
+    {
+        name = name + "-" + size;
+        if (! m_prefs.contains(name))
+            return;
+        String[] tokens = StringUtils.tokenize(m_prefs.getString(name));
+        if (tokens.length < 2)
+            return;
+        try
+        {
+            Dimension screenSize =
+                Toolkit.getDefaultToolkit().getScreenSize();
+            int x = Math.max(0, Integer.parseInt(tokens[0]));
+            if (x > screenSize.width)
+                x = 0;
+            int y = Math.max(0, Integer.parseInt(tokens[1]));
+            if (y > screenSize.height)
+                y = 0;
+            window.setLocation(x, y);
+        }
+        catch (NumberFormatException e)
+        {
+        }
+    }
+
     private void restoreMainWindow()
     {
-        restoreSize(this, "window-gogui", m_boardSize);
-        if (m_showInfoPanel)
+        restoreLocation(this, "window-gogui", m_boardSize);
+        try
         {
-            String name = "splitpane-position-" + m_boardSize;
+            String name = "fieldsize-" + m_boardSize;
             if (m_prefs.contains(name))
             {
-                int dividerLocation = m_prefs.getInt(name);
-                setDividerLocation(dividerLocation);
+                String value = m_prefs.getString(name);
+                int fieldSize = Integer.parseInt(value);
+                m_guiBoard.setPreferredFieldSize(new Dimension(fieldSize,
+                                                               fieldSize));
+            }
+            name = "commentsize-" + m_boardSize;
+            if (m_prefs.contains(name))
+            {
+                String[] tokens
+                    = StringUtils.tokenize(m_prefs.getString(name));
+                int width = Integer.parseInt(tokens[0]);                
+                int height = Integer.parseInt(tokens[1]);
+                m_comment.setPreferredSize(new Dimension(width, height));
             }
         }
+        catch (NumberFormatException e)
+        {
+        }
+        m_splitPane.resetToPreferredSizes();
+        pack();
     }
 
     private void restoreSize(Window window, String name, int size)
@@ -2213,9 +2209,11 @@ class GoGui
             int y = Math.max(0, Integer.parseInt(tokens[1]));
             if (y > screenSize.height)
                 y = 0;
-            int width = Integer.parseInt(tokens[2]);
+            int width;
+            int height;
+            width = Integer.parseInt(tokens[2]);
             width = Math.min(width, screenSize.width);
-            int height = Integer.parseInt(tokens[3]);
+            height = Integer.parseInt(tokens[3]);
             height = Math.min(height, screenSize.height);
             if (window instanceof GtpShell)
                 ((GtpShell)window).setFinalSize(x, y, width, height);
@@ -2282,6 +2280,16 @@ class GoGui
         }
     }
 
+    private void saveLocation(JFrame window, String name)
+    {
+        if (! GuiUtils.isNormalSizeMode(window))
+            return;
+        name = name + "-" + m_boardSize;
+        java.awt.Point location = window.getLocation();
+        String value = Integer.toString(location.x) + " " + location.y;
+        m_prefs.setString(name, value);
+    }
+
     private void savePosition(File file) throws FileNotFoundException
     {
         OutputStream out = new FileOutputStream(file);
@@ -2308,14 +2316,9 @@ class GoGui
         m_menuBar.saveRecent();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        Dimension hidden = new Dimension();
-        if (! m_showInfoPanel)
-            hidden.width += m_splitPane.getWidth() - m_oldBoardPanelWidth;
-        if (! m_showToolbar)
-            hidden.height += m_toolBar.getHeight();
-        saveSize(this, "window-gogui", hidden);
+        saveLocation(this, "window-gogui");
         if (m_help != null)
-            saveSize(m_help, "window-help", null);
+            saveSize(m_help, "window-help");
         if (m_gameTreeViewer != null)
             saveSizeAndVisible(m_gameTreeViewer, "gametree");
         if (m_commandThread != null)
@@ -2324,29 +2327,23 @@ class GoGui
             saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
         if (GuiUtils.isNormalSizeMode(this))
-        {
-            String name = "splitpane-position-" + m_boardSize;
-            int dividerLocation = m_splitPane.getDividerLocation();
-            if (! m_showInfoPanel)
-                dividerLocation =
-                    dividerLocation + m_boardPanel.getWidth()
-                    - m_oldBoardPanelWidth;
-            m_prefs.setInt(name, dividerLocation);
+        {            
+            String name = "fieldsize-" + m_boardSize;
+            m_prefs.setInt(name, m_guiBoard.getFieldSize());
+            name = "commentsize-" + m_boardSize;
+            String value = Integer.toString(m_comment.getWidth()) + " "
+                + Integer.toString(m_comment.getHeight());
+            m_prefs.setString(name, value);
         }
     }
 
-    private void saveSize(JFrame window, String name, Dimension hidden)
+    private void saveSize(JFrame window, String name)
     {
         if (! GuiUtils.isNormalSizeMode(window))
             return;
         name = name + "-" + m_boardSize;
         java.awt.Point location = window.getLocation();
         Dimension size = window.getSize();
-        if (hidden != null)
-        {
-            size.width += hidden.width;
-            size.height += hidden.height;
-        }
         String value = Integer.toString(location.x) + " " + location.y
             + " " + size.width + " " + size.height;
         m_prefs.setString(name, value);
@@ -2355,7 +2352,7 @@ class GoGui
     private void saveSizeAndVisible(JFrame window, String name)
     {
         if (window != null)
-            saveSize(window, "window-" + name, null);
+            saveSize(window, "window-" + name);
         boolean isVisible = (window != null && window.isVisible());
         m_prefs.setBool("show-" + name, isVisible);
     }
@@ -2402,16 +2399,6 @@ class GoGui
     private void setCursorDefault(Component component)
     {
         component.setCursor(Cursor.getDefaultCursor());
-    }
-
-    private void setDividerLocation(int location)
-    {
-        int width = m_splitPane.getWidth();
-        if (location < 0.1 * width)
-            location = (int)(0.1 * width);
-        if (location > 0.9 * width)
-            location = (int)(0.9 * width);
-        m_splitPane.setDividerLocation(location);
     }
 
     private void setKomi(double komi)
@@ -2650,6 +2637,29 @@ class GoGui
         SimpleDialogs.showInfo(this, message);
     }
 
+    private void showInfoPanel()
+    {
+        boolean showInfoPanel = m_menuBar.getShowInfoPanel();
+        if (showInfoPanel == m_showInfoPanel)
+            return;
+        m_prefs.setBool("show-info-panel", showInfoPanel);
+        m_showInfoPanel = showInfoPanel;
+        if (! showInfoPanel)
+        {
+            m_splitPane.remove(m_boardPanel);
+            m_innerPanel.remove(m_splitPane);
+            m_innerPanel.add(m_boardPanel);
+        }
+        else
+        {
+            m_innerPanel.remove(m_boardPanel);
+            m_splitPane.add(m_boardPanel);
+            m_innerPanel.add(m_splitPane);
+        }
+        m_splitPane.resetToPreferredSizes();
+        pack();
+    }
+
     private boolean showQuestion(String message)
     {
         return SimpleDialogs.showQuestion(this, message);
@@ -2671,6 +2681,21 @@ class GoGui
     {
         showStatus("Select a target for "
                    + m_analyzeCommand.getResultTitle());
+    }
+
+    private void showToolbar()
+    {
+        boolean showToolbar = m_menuBar.getShowToolbar();
+        if (showToolbar == m_showToolbar)
+            return;
+        m_prefs.setBool("show-toolbar", showToolbar);
+        m_showToolbar = showToolbar;
+        if (showToolbar)
+            getContentPane().add(m_toolBar, BorderLayout.NORTH);
+        else
+            getContentPane().remove(m_toolBar);
+        m_splitPane.resetToPreferredSizes();
+        pack();
     }
 
     private void showWarning(String message)

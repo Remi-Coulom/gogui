@@ -144,6 +144,11 @@ public class Board
         return m_board;
     }
 
+    public int getFieldSize()
+    {
+        return m_field[0][0].getWidth();
+    }
+
     public boolean[][] getMarkups()
     {
         int size = m_board.getSize();
@@ -360,6 +365,15 @@ public class Board
             setCrossHair(stone, dead);
         }
         calcScore();
+    }
+
+    public void setPreferredFieldSize(Dimension size)
+    {
+        m_preferredFieldSize = size;
+        int boardSize = m_board.getSize();
+        for (int x = 0; x < boardSize; ++x)
+            for (int y = 0; y < boardSize; ++y)
+                m_field[x][y].setPreferredSize(m_preferredFieldSize);
     }
 
     public void setFocus()

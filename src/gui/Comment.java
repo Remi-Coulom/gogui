@@ -28,7 +28,7 @@ public class Comment
         m_listener = listener;
         m_textPane = new JTextPane();
         int fontSize = GuiUtils.getDefaultMonoFontSize();
-        setPreferredSize(new Dimension(20 * fontSize, 20 * fontSize));
+        setPreferredSize(new Dimension(20 * fontSize, 10 * fontSize));
         m_textPane.getDocument().addDocumentListener(this);
         Set forwardSet  = new HashSet();
         forwardSet.add(KeyStroke.getKeyStroke("TAB"));
