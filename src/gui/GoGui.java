@@ -625,6 +625,8 @@ class GoGui
 
     private boolean m_commandInProgress;
 
+    private boolean m_isInitialized;
+
     private boolean m_isRootExecuted;
 
     private boolean m_lostOnTimeShown;
@@ -803,6 +805,7 @@ class GoGui
         if (program.equals(""))
             return;
         m_program = program;
+        m_isInitialized = false;
         m_gtpShell = new GtpShell("GoGui", this, m_prefs);
         m_gtpShell.setProgramCommand(program);
         try
@@ -835,6 +838,7 @@ class GoGui
         {
             setFastUpdate(false);
         }
+        m_isInitialized = true;
         try
         {
             m_commandThread.queryProtocolVersion();
@@ -1496,7 +1500,7 @@ class GoGui
         if (m_needsSave && ! checkSaveGame())
             return;
         saveSession();        
-        if (m_commandThread != null)
+        if (m_commandThread != null && m_isInitialized)
         {
             m_prefs.setString("program", m_program);
             detachProgram();
