@@ -311,7 +311,7 @@ installation directory.
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpterminal.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="gtpterminal.GtpTerminal"/>
+<attribute name="Main-Class" value="gtpterminal.Main"/>
 </manifest>
 <fileset dir="build" includes="
  game/*.class
