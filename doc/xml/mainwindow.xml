@@ -306,11 +306,9 @@ With most versions of Java the PC speaker is used for the beep.
 <varlistentry>
 <term><guimenuitem>Remember window sizes</guimenuitem></term>
 <listitem>
-Remember positions and sizes of the main windows, the Analyze dialog
-and the GTP shell.
-The sizes are remembered depending on the board size to
-allow a different layout of the three windows for different board
-sizes.
+Remember positions and sizes of the windows.
+The sizes are remembered depending on the board size to allow a different
+layout for different board sizes.
 </listitem>
 </varlistentry>
 
