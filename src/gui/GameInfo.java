@@ -126,9 +126,9 @@ public class GameInfo
 
     private void updateMoveNumber(Node node)
     {
-        int moveNumber = node.getMoveNumber();
+        int moveNumber = NodeUtils.getMoveNumber(node);
         String numberString = Integer.toString(moveNumber);
-        int movesLeft = node.getMovesLeft();
+        int movesLeft = NodeUtils.getMovesLeft(node);
         if (movesLeft > 0)
             numberString += "/" + (moveNumber + movesLeft);
         m_number.setText(numberString);

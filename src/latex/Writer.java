@@ -177,7 +177,7 @@ public class Writer
             }
             Point point = move.getPoint();
             Color color = move.getColor();
-            int moveNumber = node.getMoveNumber();
+            int moveNumber = NodeUtils.getMoveNumber(node);
             boolean isColorUnexpected =
                 (blackToMove && color != Color.BLACK)
                 || (! blackToMove && color != Color.WHITE);
@@ -235,7 +235,7 @@ public class Writer
                 comment.append("~at~");
                 Node first = firstMoveAtPoint[x][y];
                 Color firstMoveColor = first.getMove().getColor();
-                int firstMoveNumber = first.getMoveNumber();
+                int firstMoveNumber = NodeUtils.getMoveNumber(first);
                 comment.append(getStoneInTextString(firstMoveNumber,
                                                     firstMoveColor));
             }

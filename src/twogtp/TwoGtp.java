@@ -874,7 +874,7 @@ public class TwoGtp
             m_openingMoves = getAllAsMoves(m_gameTree.getRoot());
             m_openingMovesIndex = 0;
             Node root = m_gameTree.getRoot();
-            m_currentNode = root.getLast();
+            m_currentNode = NodeUtils.getLast(root);
             if (m_loadsgf)
             {
                 String command = "loadsgf " + m_openingFile;
@@ -1185,8 +1185,10 @@ public class TwoGtp
                 (ScoreEstimate)m_scoreEstimates.get(node);
             if (estimate == null)
                 continue;
-            out.println(node.getMoveNumber() + "\t" + estimate.m_black + "\t"
-                        + estimate.m_white  + "\t" + estimate.m_referee);
+            out.println(NodeUtils.getMoveNumber(node) + "\t"
+                        + estimate.m_black + "\t"
+                        + estimate.m_white  + "\t"
+                        + estimate.m_referee);
         }
         out.close();
     }

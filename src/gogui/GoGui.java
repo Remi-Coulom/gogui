@@ -427,7 +427,8 @@ class GoGui
         setFastUpdate(true);
         try
         {
-            Vector shortestPath = m_currentNode.getShortestPath(node);
+            Vector shortestPath =
+                NodeUtils.getShortestPath(m_currentNode, node);
             for (int i = 0; i < shortestPath.size(); ++i)
             {
                 Node nextNode = (Node)shortestPath.get(i);
@@ -1012,13 +1013,13 @@ class GoGui
 
     private void cbBeginning()
     {
-        backward(m_currentNode.getDepth(), true);
+        backward(NodeUtils.getDepth(m_currentNode), true);
         boardChangedBegin(false, false);
     }
 
     private void cbBackToMainVar()
     {
-        Node node = m_currentNode.getBackToMainVariation();
+        Node node = NodeUtils.getBackToMainVariation(m_currentNode);
         gotoNode(node);
     }
 
@@ -1066,7 +1067,7 @@ class GoGui
 
     private void cbEnd()
     {
-        forward(m_currentNode.getNodesLeft());
+        forward(NodeUtils.getNodesLeft(m_currentNode));
         boardChangedBegin(false, false);
     }
 
@@ -1102,7 +1103,7 @@ class GoGui
         try
         {
             int moveNumber = Integer.parseInt(value);
-            Node node = m_currentNode.findByMoveNumber(moveNumber);
+            Node node = NodeUtils.findByMoveNumber(m_currentNode, moveNumber);
             if (node == null)
             {
                 showError("Invalid move number");
@@ -1173,7 +1174,7 @@ class GoGui
 
     private void cbKeepOnlyMainVariation()
     {
-        if (! m_currentNode.isInMainVariation())
+        if (! NodeUtils.isInMainVariation(m_currentNode))
             return;
         if (! showQuestion("Delete all variations except main?"))
             return;
@@ -1210,7 +1211,7 @@ class GoGui
     {
         if (! showQuestion("Make current node to main variation?"))
             return;
-        m_currentNode.makeMainVariation();
+        NodeUtils.makeMainVariation(m_currentNode);
         m_needsSave = true;
         boardChangedBegin(false, true);
     }
@@ -1238,7 +1239,7 @@ class GoGui
 
     private void cbNextVariation()
     {
-        Node node = m_currentNode.getNextVariation();
+        Node node = NodeUtils.getNextVariation(m_currentNode);
         if (node != null)
             gotoNode(node);
     }
@@ -1282,7 +1283,7 @@ class GoGui
 
     private void cbPreviousVariation()
     {
-        Node node = m_currentNode.getPreviousVariation();
+        Node node = NodeUtils.getPreviousVariation(m_currentNode);
         if (node != null)
             gotoNode(node);
     }
@@ -2090,7 +2091,7 @@ class GoGui
     {
         if (! checkCurrentNodeExecuted())
             return;
-        Node node = m_currentNode.getChildWithMove(move);
+        Node node = NodeUtils.getChildWithMove(m_currentNode, move);
         if (node == null)
         {
             node = new Node(move);
@@ -2611,7 +2612,10 @@ class GoGui
     private void updateBoard()
     {
         if (m_showVariations)
-            m_guiBoard.showChildrenMoves(m_currentNode.getChildrenMoves());
+        {
+            Vector childrenMoves = NodeUtils.getChildrenMoves(m_currentNode);
+            m_guiBoard.showChildrenMoves(childrenMoves);
+        }
         if (m_showLastMove &&
             (m_commandThread == null || isCurrentNodeExecuted()))
         {

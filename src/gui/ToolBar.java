@@ -56,8 +56,9 @@ public class ToolBar
     {
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
-        boolean hasNextVariation = (node.getNextVariation() != null);
-        boolean hasPreviousVariation = (node.getPreviousVariation() != null);
+        boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
+        boolean hasPreviousVariation =
+            (NodeUtils.getPreviousVariation(node) != null);
         m_buttonBeginning.setEnabled(hasFather);
         m_buttonBackward.setEnabled(hasFather);
         m_buttonBackward10.setEnabled(hasFather);
