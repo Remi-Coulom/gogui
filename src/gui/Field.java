@@ -206,11 +206,11 @@ public class Field
         g.setColor(color);
         Dimension size = getSize();
         int d = size.width * 36 / 100;
-        int width = size.width - 2 * d;
+        int w = size.width - 2 * d;
         if (fill)
-            g.fillOval(d, d, width, width);
+            g.fillOval(d, d, w, w);
         else
-            g.drawOval(d, d, width, width);
+            g.drawOval(d, d, w, w);
     }
 
     private void drawCrossHair(Graphics g)
@@ -243,8 +243,7 @@ public class Field
     {
         int boardSize = m_board.getBoard().getSize();
         Dimension size = getSize();
-        int halfWidth = size.width / 2;
-        int halfHeight = size.height / 2;
+        int w2 = size.width / 2;
         g.setColor(java.awt.Color.darkGray);
         int xMin = 0;
         int xMax = size.width - 1;
@@ -253,19 +252,19 @@ public class Field
         int x = m_point.getX();
         int y = m_point.getY();
         if (x == 0)
-            xMin = halfWidth;
+            xMin = w2;
         else if (x == boardSize - 1)
-            xMax = halfWidth;
+            xMax = w2;
         if (y == boardSize - 1)
-            yMin = halfHeight;
+            yMin = w2;
         else if (y == 0)
-            yMax = halfHeight;
-        g.drawLine(xMin, halfHeight, xMax, halfHeight);
-        g.drawLine(halfWidth, yMin, halfWidth, yMax);
+            yMax = w2;
+        g.drawLine(xMin, w2, xMax, w2);
+        g.drawLine(w2, yMin, w2, yMax);
         if (m_isHandicap)
         {
             int r = size.width / 10;
-            g.fillOval(halfWidth - r, halfHeight - r, 2 * r + 1, 2 * r + 1);
+            g.fillOval(w2 - r, w2 - r, 2 * r + 1, 2 * r + 1);
         }
     }
 
@@ -293,7 +292,7 @@ public class Field
     {
         Dimension size = getSize();
         int d = size.width / 4;
-        int width = size.width - 2 * d - 1;
+        int width = size.width - 2 * d;
         g.setColor(java.awt.Color.blue);
         g.drawRect(d, d, width, width);
     }
