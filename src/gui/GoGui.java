@@ -91,6 +91,10 @@ class GoGui
         m_menuBar = new MenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
+        m_menuBar.setShowLastMove(m_prefs.getBool("show-last-move"));
+        m_guiBoard.setShowLastMove(m_prefs.getBool("show-last-move"));
+        m_menuBar.setShowCursor(m_prefs.getBool("show-cursor"));
+        m_guiBoard.setShowCursor(m_prefs.getBool("show-cursor"));
         setJMenuBar(m_menuBar.getMenuBar());
         m_program = program;
         if (m_program == null)
@@ -1369,7 +1373,9 @@ class GoGui
 
     private void cbShowCursor()
     {
-        m_guiBoard.setShowCursor(m_menuBar.getShowCursor());
+        boolean showCursor = m_menuBar.getShowCursor();
+        m_guiBoard.setShowCursor(showCursor);
+        m_prefs.setBool("show-cursor", showCursor);
         m_guiBoard.repaint();
     }
 
@@ -1386,7 +1392,9 @@ class GoGui
 
     private void cbShowLastMove()
     {
-        m_guiBoard.setShowLastMove(m_menuBar.getShowLastMove());
+        boolean showLastMove = m_menuBar.getShowLastMove();
+        m_guiBoard.setShowLastMove(showLastMove);
+        m_prefs.setBool("show-last-move", showLastMove);
     }
 
     private void cbTruncate()
@@ -2200,6 +2208,8 @@ class GoGui
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);
         prefs.setBoolDefault("show-gametree", false);
+        prefs.setBoolDefault("show-cursor", true);
+        prefs.setBoolDefault("show-last-move", false);
     }
 
     private void setResult(String result)

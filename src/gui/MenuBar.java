@@ -251,6 +251,16 @@ class MenuBar
         m_itemHelp.setEnabled(true);
     }
 
+    public void setShowCursor(boolean enable)
+    {
+        m_itemShowCursor.setSelected(enable);
+    }
+
+    public void setShowLastMove(boolean enable)
+    {
+        m_itemShowLastMove.setSelected(enable);
+    }
+
     public void updateGameMenuItems(GameTree gameTree, Node node)
     {
         boolean hasFather = (node.getFather() != null);
