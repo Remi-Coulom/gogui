@@ -161,7 +161,7 @@ class GoGui
         else if (command.equals("board-size-other"))
             cbBoardSizeOther();
         else if (command.startsWith("board-size-"))
-            cbNewGame(command.substring(new String("board-size-").length()));
+            cbNewGame(command.substring("board-size-".length()));
         else if (command.equals("computer-black"))
             computerBlack();
         else if (command.equals("computer-both"))
@@ -183,7 +183,7 @@ class GoGui
         else if (command.equals("gtp-shell"))
             cbGtpShell();
         else if (command.startsWith("handicap-"))
-            cbHandicap(command.substring(new String("handicap-").length()));
+            cbHandicap(command.substring("handicap-".length()));
         else if (command.equals("help"))
             cbHelp();
         else if (command.equals("interrupt"))

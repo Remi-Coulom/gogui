@@ -523,7 +523,7 @@ public class GtpShell
         public UpdateCommand(GtpShell gtpShell, String text)
         {
             m_gtpShell = gtpShell;
-            m_text = new String(text);
+            m_text = text;
         }
 
         public void run()
@@ -542,7 +542,7 @@ public class GtpShell
         {
             m_gtpShell = gtpShell;
             m_error = error;
-            m_text = new String(text);
+            m_text = text;
         }
 
         public void run()
@@ -562,7 +562,7 @@ public class GtpShell
         public UpdateStdErr(GtpShell gtpShell, String text)
         {
             m_gtpShell = gtpShell;
-            m_text = new String(text);
+            m_text = text;
         }
 
         public void run()

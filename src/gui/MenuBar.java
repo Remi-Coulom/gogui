@@ -44,7 +44,7 @@ class MenuBar
             try
             {
                 String indexString =
-                    command.substring(new String("open-recent-").length());
+                    command.substring("open-recent-".length());
                 int index = Integer.parseInt(indexString);
                 m_selectedRecent = m_recent[index];
                 assert(m_selectedRecent != null);
