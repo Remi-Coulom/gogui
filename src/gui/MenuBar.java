@@ -20,13 +20,18 @@ class MenuBar
     {
         m_listener = listener;
         m_menuBar = new JMenuBar();
-        m_menuBar.add(createFileMenu());
-        m_menuBar.add(createGameMenu());
-        m_menuBar.add(createSetupMenu());
-        m_menuBar.add(createSettingsMenu());
+        m_menuFile = createFileMenu();
+        m_menuBar.add(m_menuFile);
+        m_menuGame = createGameMenu();
+        m_menuBar.add(m_menuGame);
+        m_menuSetup = createSetupMenu();
+        m_menuBar.add(m_menuSetup);
+        m_menuSettings = createSettingsMenu();
+        m_menuBar.add(m_menuSettings);
         m_menuExperts = createExpertsMenu();
         m_menuBar.add(m_menuExperts);
-        m_menuBar.add(createHelpMenu());
+        m_menuHelp = createHelpMenu();
+        m_menuBar.add(m_menuHelp);
     }
 
     public void disableComputer()
@@ -102,9 +107,26 @@ class MenuBar
     public void setCommandInProgress()
     {
         assert(! m_isComputerDisabled);
-        disableMost();
+        disableAll();
         m_menuComputerColor.setEnabled(true);
         m_itemInterrupt.setEnabled(true);
+        m_menuFile.setEnabled(true);
+        m_menuSettings.setEnabled(true);
+        m_menuExperts.setEnabled(true);
+        m_menuHelp.setEnabled(true);
+        m_itemAbout.setEnabled(true);
+        m_itemBeepAfterMove.setEnabled(true);
+        m_itemExit.setEnabled(true);
+        m_itemGtpShell.setEnabled(true);
+        m_itemHelp.setEnabled(true);
+        m_itemShowLastMove.setEnabled(true);
+        if (m_isComputerDisabled)
+        {
+            disableMenu(m_menuExperts);
+            m_menuComputerColor.setEnabled(false);
+            m_itemComputerPlay.setEnabled(false);
+            m_itemBeepAfterMove.setEnabled(false);
+        }
     }
 
     public void setNormalMode()
@@ -115,21 +137,45 @@ class MenuBar
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
         if (m_isComputerDisabled)
-            disableComputerItems();
+        {
+            disableMenu(m_menuExperts);
+            m_menuComputerColor.setEnabled(false);
+            m_itemComputerPlay.setEnabled(false);
+            m_itemBeepAfterMove.setEnabled(false);
+        }
     }
 
     public void setSetupMode()
     {
-        disableMost();
+        disableAll();
+        m_menuSetup.setEnabled(true);
         m_itemSetup.setEnabled(true);
         m_itemSetupBlack.setEnabled(true);
         m_itemSetupWhite.setEnabled(true);
         m_itemSetupBlack.setSelected(true);
+        m_menuFile.setEnabled(true);
+        m_menuExperts.setEnabled(true);
+        m_menuHelp.setEnabled(true);
+        m_itemAbout.setEnabled(true);
+        m_itemExit.setEnabled(true);
+        m_itemGtpShell.setEnabled(true);
+        m_itemHelp.setEnabled(true);
+        if (m_isComputerDisabled)
+            disableMenu(m_menuExperts);
     }
 
     public void setScoreMode()
     {
-        disableMost();
+        disableAll();
+        m_menuFile.setEnabled(true);
+        m_menuExperts.setEnabled(true);
+        m_menuHelp.setEnabled(true);
+        m_itemAbout.setEnabled(true);
+        m_itemExit.setEnabled(true);
+        m_itemGtpShell.setEnabled(true);
+        m_itemHelp.setEnabled(true);
+        if (m_isComputerDisabled)
+            disableMenu(m_menuExperts);
     }
 
     private boolean m_isComputerDisabled;
@@ -149,6 +195,16 @@ class MenuBar
     private JMenu m_menuComputerColor;
 
     private JMenu m_menuExperts;
+
+    private JMenu m_menuFile;
+
+    private JMenu m_menuGame;
+
+    private JMenu m_menuHelp;
+
+    private JMenu m_menuSettings;
+
+    private JMenu m_menuSetup;
 
     private JMenuBar m_menuBar;
 
@@ -410,29 +466,22 @@ class MenuBar
         return menu;
     }
 
-    private void disableComputerItems()
-    {
-        m_menuExperts.setEnabled(false);
-        m_menuComputerColor.setEnabled(false);
-        m_itemComputerPlay.setEnabled(false);
-    }
-
-    private void disableMost()
+    private void disableAll()
     {
         for (int i = 0; i < m_menuBar.getMenuCount(); ++i)
         {
             JMenu menu = m_menuBar.getMenu(i);
             if (menu != null)
-                for (int j = 0; j < menu.getItemCount(); ++j)
-                    if (menu.getItem(j) != null)
-                        menu.getItem(j).setEnabled(false);
+                disableMenu(menu);
         }
-        m_itemAbout.setEnabled(true);
-        m_itemBeepAfterMove.setEnabled(true);
-        m_itemExit.setEnabled(true);
-        m_itemGtpShell.setEnabled(true);
-        m_itemHelp.setEnabled(true);
-        m_itemShowLastMove.setEnabled(true);
+    }
+
+    private void disableMenu(JMenu menu)
+    {
+        menu.setEnabled(false);
+        for (int i = 0; i < menu.getItemCount(); ++i)
+            if (menu.getItem(i) != null)
+                menu.getItem(i).setEnabled(false);
     }
 
     private void enableAll()

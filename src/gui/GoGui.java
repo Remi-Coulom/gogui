@@ -88,7 +88,6 @@ class GoGui
         setIconImage(new GoIcon());
 
         m_menuBar = new MenuBar(this);
-        m_menuBar.setNormalMode();
         m_menuBar.selectBoardSizeItem(m_boardSize);
         m_menuBar.selectRulesItem(m_board.getRules());
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
@@ -98,6 +97,7 @@ class GoGui
             m_toolBar.disableComputerButtons();
             m_menuBar.disableComputer();
         }
+        m_menuBar.setNormalMode();
 
         pack();
         setTitle("GoGui");
