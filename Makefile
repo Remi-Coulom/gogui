@@ -111,8 +111,5 @@ doc/html/index.html: $(DOC)
 docsrc:
 	javadoc -sourcepath src -d docsrc -source 1.4 $(PACKAGES)
 
-changelog:
-	cvs2cl.pl
-
 tags:
 	etags `find . -name "*.java"`
