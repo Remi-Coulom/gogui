@@ -385,7 +385,16 @@ public class Field
             m_graphics.setColor(java.awt.Color.black);
         else
             m_graphics.setColor(java.awt.Color.white);
+        Rectangle clip = null;
+        if (stringWidth > 0.9 * m_size)
+        {
+            clip = m_graphics.getClipBounds();
+            m_graphics.setClip(clip.x, clip.y,
+                               (int)(0.9 * clip.width), clip.height);
+        }
         m_graphics.drawString(m_string, x, y);
+        if (clip != null)
+            m_graphics.setClip(clip.x, clip.y, clip.width, clip.height);
     }
 
     private void drawTerritoryGraphics()
