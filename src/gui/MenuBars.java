@@ -211,37 +211,54 @@ class MenuBars
         return item;
     }
 
-    private JMenuItem addMenuItem(JMenu menu, String label, String command)
+    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
+                                  String command)
     {
-        JMenuItem item = new JMenuItem(label);
-        return addMenuItem(menu, item, command);        
+        item.setMnemonic(mnemonic);
+        return addMenuItem(menu, item, command);
     }
 
-    private JMenuItem addMenuItem(JMenu menu, String label, int accel,
-                                  int modifier, String command)
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        return addMenuItem(menu, item, mnemonic, command);        
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  int accel, int modifier, String command)
     {
         JMenuItem item = new JMenuItem(label);
         KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
         item.setAccelerator(k);
-        return addMenuItem(menu, item, command);
+        return addMenuItem(menu, item, mnemonic, command);
     }
 
-    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group,
-                                   String label, String command)
+    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group, String label,
+                                   String command)
     {
         JMenuItem item = new JRadioButtonMenuItem(label);
         group.add(item);
         return addMenuItem(menu, item, command);
     }
 
+    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group, String label,
+                                   int mnemonic, String command)
+    {
+        JMenuItem item = new JRadioButtonMenuItem(label);
+        group.add(item);
+        return addMenuItem(menu, item, mnemonic, command);
+    }
+
     private JMenu createAnalyzeMenu()
     {
         JMenu menu = new JMenu("Experts");
         menu.setMnemonic(KeyEvent.VK_E);
-        addMenuItem(menu, "Analyze", KeyEvent.VK_F9, 0, "analyze");
-        m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_F8,
-                                     0, "gtp-shell");
-        addMenuItem(menu, "Send GTP file", "gtp-file");
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
+                    "analyze");
+        m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
+                                     KeyEvent.VK_F8, 0, "gtp-shell");
+        addMenuItem(menu, "Send GTP file", KeyEvent.VK_S, "gtp-file");
         return menu;
     }
 
@@ -250,7 +267,7 @@ class MenuBars
         JMenu menu = new JMenu("Board");
         menu.setMnemonic(KeyEvent.VK_B);
         menu.add(createBoardSizeMenu());
-        addMenuItem(menu, "Setup", "setup");
+        addMenuItem(menu, "Setup", KeyEvent.VK_S, "setup");
         return menu;
     }
 
@@ -273,13 +290,14 @@ class MenuBars
     {
         ButtonGroup group = new ButtonGroup();
         JMenu menu = new JMenu("Computer color");
-        m_itemComputerBlack = addRadioItem(menu, group, "Black",
+        menu.setMnemonic(KeyEvent.VK_C);
+        m_itemComputerBlack = addRadioItem(menu, group, "Black", KeyEvent.VK_B,
                                            "computer-black");
-        m_itemComputerWhite = addRadioItem(menu, group, "White",
+        m_itemComputerWhite = addRadioItem(menu, group, "White", KeyEvent.VK_W,
                                            "computer-white");
-        m_itemComputerBoth = addRadioItem(menu, group, "Both",
+        m_itemComputerBoth = addRadioItem(menu, group, "Both", KeyEvent.VK_T,
                                           "computer-both");
-        m_itemComputerNone = addRadioItem(menu, group, "None",
+        m_itemComputerNone = addRadioItem(menu, group, "None", KeyEvent.VK_N,
                                           "computer-none");
         return menu;
     }
@@ -288,18 +306,22 @@ class MenuBars
     {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
-        addMenuItem(menu, "Open...", KeyEvent.VK_O, ActionEvent.CTRL_MASK,
+        addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
+                    ActionEvent.CTRL_MASK,
                     "load");
-        addMenuItem(menu, "Save...", KeyEvent.VK_S, ActionEvent.CTRL_MASK,
+        addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
+                    ActionEvent.CTRL_MASK,
                     "save");
-        addMenuItem(menu, "Save position...", "save-position");
+        addMenuItem(menu, "Save position...", KeyEvent.VK_T, "save-position");
         menu.addSeparator();
-        addMenuItem(menu, "Print...", KeyEvent.VK_P, ActionEvent.CTRL_MASK,
+        addMenuItem(menu, "Print...", KeyEvent.VK_P, KeyEvent.VK_P,
+                    ActionEvent.CTRL_MASK,
                     "print");
         menu.addSeparator();
-        addMenuItem(menu, "Open with program...", "open-with-program");
+        addMenuItem(menu, "Open with program...", KeyEvent.VK_G,
+                    "open-with-program");
         menu.addSeparator();
-        m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q,
+        m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
                                  ActionEvent.CTRL_MASK, "exit");
         return menu;
     }
@@ -308,33 +330,34 @@ class MenuBars
     {
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
-        addMenuItem(menu, "New", KeyEvent.VK_N, ActionEvent.CTRL_MASK,
-                    "new-game");
-        addMenuItem(menu, "Komi...", "komi");
+        addMenuItem(menu, "New", KeyEvent.VK_N, KeyEvent.VK_N,
+                    ActionEvent.CTRL_MASK, "new-game");
+        addMenuItem(menu, "Komi...", KeyEvent.VK_K, "komi");
         menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
-        addMenuItem(menu, "Score", "score");
+        addMenuItem(menu, "Score", KeyEvent.VK_S, "score");
         menu.addSeparator();
-        addMenuItem(menu, "Pass", KeyEvent.VK_F2, 0, "pass");
-        m_itemComputerPlay = addMenuItem(menu, "Computer play",
+        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2, 0, "pass");
+        m_itemComputerPlay = addMenuItem(menu, "Computer play", KeyEvent.VK_L,
                                          KeyEvent.VK_F5, 0, "play");
-        m_itemInterrupt = addMenuItem(menu, "Interrupt", KeyEvent.VK_ESCAPE, 0,
-                                      "interrupt");
+        m_itemInterrupt = addMenuItem(menu, "Interrupt", KeyEvent.VK_I,
+                                      KeyEvent.VK_ESCAPE, 0, "interrupt");
         menu.addSeparator();
-        addMenuItem(menu, "Beginning", KeyEvent.VK_HOME, ActionEvent.CTRL_MASK,
+        addMenuItem(menu, "Beginning", KeyEvent.VK_N, KeyEvent.VK_HOME,
+                    ActionEvent.CTRL_MASK,
                     "beginning");
-        addMenuItem(menu, "Backward 10 moves", KeyEvent.VK_LEFT,
+        addMenuItem(menu, "Backward 10 moves", KeyEvent.VK_D, KeyEvent.VK_LEFT,
                     ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
                     "backward-10");
-        addMenuItem(menu, "Backward", KeyEvent.VK_LEFT, ActionEvent.CTRL_MASK,
-                    "backward");
-        addMenuItem(menu, "Forward", KeyEvent.VK_RIGHT, ActionEvent.CTRL_MASK,
-                    "forward");
-        addMenuItem(menu, "Forward 10 moves", KeyEvent.VK_RIGHT,
+        addMenuItem(menu, "Backward", KeyEvent.VK_LEFT, KeyEvent.VK_W,
+                    ActionEvent.CTRL_MASK, "backward");
+        addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
+                    ActionEvent.CTRL_MASK, "forward");
+        addMenuItem(menu, "Forward 10 moves", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
                     ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
                     "forward-10");
-        addMenuItem(menu, "End", KeyEvent.VK_END, ActionEvent.CTRL_MASK,
-                    "end");
+        addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
+                    ActionEvent.CTRL_MASK, "end");
         menu.addSeparator();
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
@@ -360,8 +383,10 @@ class MenuBars
         JMenu menu = new JMenu("Help");
         menu.setMnemonic(KeyEvent.VK_H);
         JMenuItem itemHelp =
-            addMenuItem(menu, "Contents", KeyEvent.VK_F1, 0, "help");
-        JMenuItem itemAbout = addMenuItem(menu, "About", "about");
+            addMenuItem(menu, "Contents", KeyEvent.VK_C, KeyEvent.VK_F1, 0,
+                        "help");
+        JMenuItem itemAbout = addMenuItem(menu, "About", KeyEvent.VK_A,
+                                          "about");
         if (store)
         {
             m_itemHelp = itemHelp;
@@ -375,10 +400,12 @@ class MenuBars
         ButtonGroup group = new ButtonGroup();
         JMenu menu = new JMenu("Rules");
         m_itemRulesChinese =
-            addRadioItem(menu, group, "Chinese", "rules-chinese");
+            addRadioItem(menu, group, "Chinese", KeyEvent.VK_C,
+                         "rules-chinese");
         m_itemRulesChinese.setSelected(true);
         m_itemRulesJapanese =
-            addRadioItem(menu, group, "Japanese", "rules-japanese");
+            addRadioItem(menu, group, "Japanese", KeyEvent.VK_J,
+                         "rules-japanese");
         return menu;
     }
 
@@ -402,11 +429,12 @@ class MenuBars
         JMenu menu = new JMenu("Setup");
         menu.setMnemonic(KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
-        JMenuItem item = addRadioItem(menu, group, "Black", "setup-black");
+        JMenuItem item = addRadioItem(menu, group, "Black", KeyEvent.VK_B,
+                                      "setup-black");
         item.setSelected(true);
-        addRadioItem(menu, group, "White", "setup-white");
+        addRadioItem(menu, group, "White", KeyEvent.VK_W, "setup-white");
         menu.addSeparator();
-        addMenuItem(menu, "Done", "setup-done");
+        addMenuItem(menu, "Done", KeyEvent.VK_D, "setup-done");
         return menu;
     }
 
@@ -414,7 +442,7 @@ class MenuBars
     {
         JMenu menu = new JMenu("Score");
         menu.setMnemonic(KeyEvent.VK_S);
-        addMenuItem(menu, "Done", "score-done");
+        addMenuItem(menu, "Done", KeyEvent.VK_D, "score-done");
         return menu;
     }
 }
