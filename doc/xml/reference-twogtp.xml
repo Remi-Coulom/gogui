@@ -70,4 +70,32 @@
     </variablelist>
   </refsection>
 
+  <refsection>
+    <title>GTP Extensions</title>
+    <para>
+      <variablelist>
+	<varlistentry>
+	  <term>
+            <userinput>
+	      twogtp_black <replaceable>command</replaceable>
+	    </userinput>
+          </term>
+          <listitem>
+	    Send <replaceable>command</replaceable> to black player .
+	  </listitem>
+        </varlistentry>
+	<varlistentry>
+	  <term>
+            <userinput>
+	      twogtp_white <replaceable>command</replaceable>
+	    </userinput>
+          </term>
+          <listitem>
+	    Send <replaceable>command</replaceable> to white player .
+	  </listitem>
+        </varlistentry>
+      </variablelist>    
+    </para>
+  </refsection>
+
 </refentry>

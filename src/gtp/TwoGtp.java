@@ -31,7 +31,15 @@ public class TwoGtp
     public boolean handleCommand(String command, StringBuffer response)
     {
         boolean status = true;
-        if (command.equals("quit"))
+        if (command.startsWith("twogtp_black"))
+        {
+            status = twogtpColor(m_black, command, response);
+        }
+        else if (command.startsWith("twogtp_white"))
+        {
+            status = twogtpColor(m_white, command, response);
+        }
+        else if (command.equals("quit"))
         {
             status = sendBoth(command, response);
         }
@@ -85,6 +93,8 @@ public class TwoGtp
                             "boardsize\n" +
                             "komi\n" +
                             "scoring_system\n" +
+                            "twogtp_black\n" +
+                            "twogtp_white\n" +
                             "name\n" +
                             "version\n");
         else
@@ -217,6 +227,27 @@ public class TwoGtp
             return false;
         }
         return true;
+    }
+
+    private boolean twogtpColor(Gtp gtp, String command, StringBuffer response)
+    {
+        int index = command.indexOf(' ');
+        if (index < 0)
+        {
+            response.append("Missing argument");
+            return false;
+        }
+        command = command.substring(index).trim();
+        try
+        {
+            response.append(gtp.sendCommand(command));
+            return true;
+        }
+        catch (Gtp.Error e)
+        {
+            response.append(e.getMessage());
+            return false;
+        }
     }
 }
 
