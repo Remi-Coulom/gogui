@@ -54,6 +54,11 @@ public class Field
     {
     }
 
+    public go.Color getColor()
+    {
+        return m_color;
+    }
+
     public void paintComponent(Graphics graphics)
     {
         Dimension size = getSize();

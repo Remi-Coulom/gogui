@@ -328,8 +328,15 @@ public class Board
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
-            go.Point p = m_board.getPoint(i);
-            setColor(p, m_board.getColor(p));
+            go.Point point = m_board.getPoint(i);
+            Field field = getField(point);
+            go.Color color = m_board.getColor(point);
+            go.Color oldColor = field.getColor();
+            if (color != oldColor)
+            {
+                setColor(point, color);
+                field.repaint();
+            }
         }
         drawLastMove();
     }
@@ -407,7 +414,9 @@ public class Board
     {
         if (m_lastMove != null)
         {
-            getField(m_lastMove).setLastMoveMarker(false);
+            Field field = getField(m_lastMove);
+            field.setLastMoveMarker(false);
+            field.repaint();
             m_lastMove = null;
         }
     }
@@ -426,7 +435,9 @@ public class Board
                 setFocusPoint(lastMove);
                 if (m_showLastMove)
                 {
-                    getField(lastMove).setLastMoveMarker(true);
+                    Field field = getField(lastMove);
+                    field.setLastMoveMarker(true);
+                    field.repaint();
                     m_lastMove = lastMove;
                 }
             }

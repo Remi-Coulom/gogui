@@ -111,7 +111,6 @@ class GoGui
         {
             showWarning(e.getMessage());
         }
-
         Runnable callback = new Runnable()
             {
                 public void run() { initialize(); }
@@ -242,7 +241,6 @@ class GoGui
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
             m_guiBoard.update();
-            m_guiBoard.repaint();
             return;
         }
         if (m_analyzeRequestPoint)
@@ -751,7 +749,6 @@ class GoGui
     private void boardChangedBegin(boolean doCheckComputerMove)
     {
         m_guiBoard.update();
-        m_guiBoard.repaint();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
@@ -1616,7 +1613,6 @@ class GoGui
         setHandicap();
         m_gameInfo.update();
         m_guiBoard.update();
-        m_guiBoard.repaint();
     }
 
     private void newGameContinue(int size)
@@ -1635,7 +1631,6 @@ class GoGui
         setTimeSettings();
         m_gameInfo.update();
         m_guiBoard.update();
-        m_guiBoard.repaint();
         checkComputerMove();
     }
 
