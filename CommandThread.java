@@ -4,6 +4,7 @@
 //=============================================================================
 
 import javax.swing.*;
+import board.*;
 import gtp.*;
 
 //=============================================================================
@@ -26,6 +27,16 @@ class CommandThread
         return m_answer;
     }
     
+    public String getCommandGenmove(Color color)
+    {
+        return m_gtp.getCommandGenmove(color);
+    }
+
+    public String getCommandPlay(Move move)
+    {
+        return m_gtp.getCommandPlay(move);
+    }
+
     /** Get exception of asynchronous command.
         You must call this before you are allowed to send new a command.
     */
@@ -48,6 +59,13 @@ class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         return m_gtp.isProgramDead();
+    }
+
+    public void queryProtocolVersion() throws Gtp.Error
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtp.queryProtocolVersion();
     }
 
     public void run()
@@ -106,6 +124,27 @@ class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         return m_gtp.sendCommand(command, timeout);
+    }
+
+    public void sendCommandsClearBoard(int size) throws Gtp.Error
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtp.sendCommandsClearBoard(size);
+    }
+
+    public String sendCommandListCommands() throws Gtp.Error
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        return m_gtp.sendCommandListCommands();
+    }
+
+    public String sendCommandPlay(Move move) throws Gtp.Error
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        return m_gtp.sendCommandPlay(move);
     }
 
     private boolean m_commandInProgress;

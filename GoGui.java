@@ -498,6 +498,7 @@ class GoGui
     private TimeControl m_timeControl;
     private ToolBar m_toolBar;
     private Vector m_readerMoves;
+    private Vector m_commandList = new Vector(128, 128);
 
     private void analyzeBegin()
     {
@@ -968,14 +969,14 @@ class GoGui
             {
                 Move m = (Move)moves.get(i);
                 if (m_commandThread != null)
-                    m_commandThread.sendCommand(getPlayCommand(m));
+                    m_commandThread.sendCommandPlay(m);
                 m_board.setup(m);
             }
             if (m_board.getToMove() != toMove)
             {
                 Move m = new Move(null, m_board.getToMove());
                 if (m_commandThread != null)
-                    m_commandThread.sendCommand(getPlayCommand(m));
+                    m_commandThread.sendCommandPlay(m);
                 m_board.play(m);
             }
             computerNone();
@@ -1178,7 +1179,7 @@ class GoGui
                     break;
                 Move m = m_board.getMove(moveNumber);
                 if (m_commandThread != null)
-                    m_commandThread.sendCommand(getPlayCommand(m));
+                    m_commandThread.sendCommandPlay(m);
                 m_board.play(m);
             }
             computerNone();
@@ -1194,25 +1195,13 @@ class GoGui
     private void generateMove()
     {
         board.Color toMove = m_board.getToMove();
-        String command = "genmove_" + toMove.toString();
+        String command = m_commandThread.getCommandGenmove(toMove);
         showStatus("Computer is thinking...");
         Runnable callback = new Runnable()
             {
                 public void run() { computerMoved(); }
             };
         runLengthyCommand(command, callback);
-    }
-
-    private String getPlayCommand(Move m)
-    {
-        board.Point p = m.getPoint();
-        board.Color c = m.getColor();
-        String command = c.toString();
-        if (p == null)
-            command = command + " pass";
-        else
-            command = command + " " + p.toString();
-        return command;
     }
 
     private void humanMoved(Move m)
@@ -1223,7 +1212,7 @@ class GoGui
             if (p != null && m_board.getColor(p) != board.Color.EMPTY)
                     return;
             if (m_commandThread != null)
-                m_commandThread.sendCommand(getPlayCommand(m));
+                m_commandThread.sendCommandPlay(m);
             m_board.play(m);
             if (! m_timeControl.isDisabled())
             {
@@ -1257,13 +1246,24 @@ class GoGui
             {
                 try
                 {
+                    m_commandThread.queryProtocolVersion();
+                }
+                catch (Gtp.Error e)
+                {
+                    showGtpError(e);
+                }
+                try
+                {
                     m_version = m_commandThread.sendCommand("version").trim();
-                    m_pid = m_commandThread.sendCommand("gogui_sigint").trim();
+                    queryCommandList();
+                    if (m_commandList.contains("gogui_sigint"))
+                        m_pid =
+                            m_commandThread.sendCommand("gogui_sigint").trim();
                 }
                 catch (Gtp.Error e)
                 {
                 }
-                initializeGtpShell();
+                m_gtpShell.setInitialCompletions(m_commandList);
             }
             if (m_commandThread == null || m_computerNoneOption)
                 computerNone();
@@ -1282,35 +1282,6 @@ class GoGui
         {
             showGtpError(e);
             showStatus(e.getMessage());
-        }
-    }
-
-    private void initializeGtpShell()
-    {
-        assert(m_commandThread != null);
-        m_gtpShell.setProgramVersion(m_version);
-        try
-        {
-            String s = m_commandThread.sendCommand("help");
-            Vector v = new Vector(128, 128);
-            BufferedReader r = new BufferedReader(new StringReader(s));
-            try
-            {
-                while (true)
-                {
-                    String line = r.readLine();
-                    if (line == null)
-                        break;
-                    v.add(line);
-                }
-            }
-            catch (IOException e)
-            {
-            }
-            m_gtpShell.setInitialCompletions(v);
-        }
-        catch (Gtp.Error e)
-        {
         }
     }
 
@@ -1359,7 +1330,7 @@ class GoGui
                 return;
             }
             Move m = (Move)m_readerMoves.get(m_readerIndex);
-            String command = getPlayCommand(m);
+            String command = m_commandThread.getCommandPlay(m);
             Runnable callback = new Runnable()
                 {
                     public void run() { loadFileContinue(); }
@@ -1409,7 +1380,7 @@ class GoGui
             return;
         }        
         move = (Move)m_readerMoves.get(m_readerIndex);
-        String command = getPlayCommand(move);
+        String command = m_commandThread.getCommandPlay(move);
         Runnable callback = new Runnable()
             {
                 public void run() { loadFileContinue(); }
@@ -1440,7 +1411,7 @@ class GoGui
     {
         if (m_commandThread != null)
         {
-            m_commandThread.sendCommand("boardsize " + size);
+            m_commandThread.sendCommandsClearBoard(size);
         }
         if (size != m_boardSize)
         {
@@ -1463,6 +1434,33 @@ class GoGui
             setHandicap();
             setKomi(komi);
             setRules();
+        }
+    }
+
+    private void queryCommandList()
+    {
+        assert(m_commandThread != null);
+        m_gtpShell.setProgramVersion(m_version);
+        try
+        {
+            String s = m_commandThread.sendCommandListCommands();
+            BufferedReader r = new BufferedReader(new StringReader(s));
+            try
+            {
+                while (true)
+                {
+                    String line = r.readLine();
+                    if (line == null)
+                        break;
+                    m_commandList.add(line);
+                }
+            }
+            catch (IOException e)
+            {
+            }
+        }
+        catch (Gtp.Error e)
+        {
         }
     }
 
@@ -1546,7 +1544,7 @@ class GoGui
         for (int i = 0; i < moves.size(); ++i)
         {
             Move m = (Move)moves.get(i);
-            m_commandThread.sendCommand(getPlayCommand(m));
+            m_commandThread.sendCommandPlay(m);
             m_board.setup(m);
         }
     }
@@ -1582,6 +1580,11 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
+        if (! m_commandList.contains("scoring_system"))
+        {
+            showWarning("Program does not support command scoring_system.");
+            return;
+        }
         try
         {
             int rules = m_board.getRules();

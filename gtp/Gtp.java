@@ -66,6 +66,31 @@ public class Gtp
         return m_answer;
     }
 
+    public String getCommandGenmove(Color color)
+    {
+        String c = color.toString();
+        if (m_protocolVersion == 1)
+            return "genmove_" + c;
+        else
+            return "genmove " + c;
+    }
+
+    public String getCommandPlay(Move move)
+    {
+        
+        board.Point p = move.getPoint();
+        board.Color c = move.getColor();
+        String command = "";
+        if (m_protocolVersion == 1)
+            command = "play ";
+        command = command + c.toString();
+        if (p == null)
+            command = command + " pass";
+        else
+            command = command + " " + p.toString();
+        return command;
+    }
+
     public String getProgramCommand()
     {
         return m_program;
@@ -211,6 +236,21 @@ public class Gtp
         return result;
     }
 
+    public void queryProtocolVersion() throws Error
+    {
+        try
+        {
+            int v = Integer.parseInt(sendCommand("protocol_version"));
+            if (v < 1 || v > 2)
+                throw new Error("Unknown protocol version: " + v);
+            m_protocolVersion = v;
+        }
+        catch (NumberFormatException e)
+        {
+            throw new Error(e.getMessage());
+        }
+    }
+
     public String sendCommand(String command, long timeout) throws Error
     {
         assert(! command.trim().equals(""));
@@ -243,6 +283,30 @@ public class Gtp
     public String sendCommand(String command) throws Error
     {
         return sendCommand(command, 0);
+    }
+
+    public void sendCommandsClearBoard(int size) throws Error
+    {
+        if (m_protocolVersion == 1)
+            sendCommand("boardsize " + size);
+        else
+        {
+            sendCommand("boardsize " + size);
+            sendCommand("clear_board");
+        }
+    }
+
+    public String sendCommandListCommands() throws Error
+    {
+        if (m_protocolVersion == 1)
+            return sendCommand("help");
+        else
+            return sendCommand("list_commands");
+    }
+
+    public String sendCommandPlay(Move move) throws Error
+    {
+        return getCommandPlay(move);
     }
 
     public void setIOCallback(IOCallback callback)
@@ -307,6 +371,7 @@ public class Gtp
 
     private boolean m_isProgramDead;
     private boolean m_log;
+    private int m_protocolVersion = 1;
     private BufferedReader m_in;
     private IOCallback m_callback;
     private PrintStream m_out;
