@@ -30,6 +30,7 @@ public class GmpToGtp
         m_colorIndex = colorIndex;
         m_wait = wait;
         m_gmp = new Gmp(in, out, size, colorIndex, simple);
+        m_gmp.start();
         m_title = title;
     }
 

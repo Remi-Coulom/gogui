@@ -979,7 +979,6 @@ public class Gmp
     {
         m_size = size;
         m_readThread = new ReadThread(input, output, size, colorIndex, simple);
-        m_readThread.start();
     }
 
     public void interruptCommand()
@@ -1018,6 +1017,11 @@ public class Gmp
     public void sendTalk(String text)
     {
         m_readThread.sendTalk(text);
+    }
+
+    public void start()
+    {
+        m_readThread.start();
     }
 
     public boolean undo(StringBuffer response)
