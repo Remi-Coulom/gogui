@@ -441,6 +441,7 @@ class GoGui
     {
         m_analyzeCommand = command;
         m_analyzeRequestPoint = false;
+        m_analyzePointArg = null;
         if (m_commandThread != null && command.needsPointArg())
         {
             m_analyzeRequestPoint = true;

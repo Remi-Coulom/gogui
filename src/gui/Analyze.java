@@ -105,7 +105,7 @@ class AnalyzeCommand
     public String getResultTitle(go.Point pointArg)
     {
         StringBuffer buffer = new StringBuffer(m_label);
-        if (pointArg != null)
+        if (needsPointArg() && pointArg != null)
         {
             buffer.append(" ");
             buffer.append(pointArg.toString());
