@@ -49,7 +49,7 @@ public class Board
         setPreferredFieldSize();
         URL url = getClass().getClassLoader().getResource("images/wood.png");
         if (url != null)
-            m_image = new ImageIcon(url);
+            m_image = new ImageIcon(url).getImage();
         initSize(m_board.getSize());
         setFocusable(true);
         addFocusListener(this);
@@ -252,14 +252,13 @@ public class Board
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         int size = m_board.getSize();
-        Dimension dimension = getSize();
+        int width = getSize().width;
         if (m_image != null)
-            graphics.drawImage(m_image.getImage(), 0, 0,
-                               dimension.width, dimension.width, null);
+            graphics.drawImage(m_image, 0, 0, width, width, null);
         else
         {
             graphics.setColor(java.awt.Color.YELLOW.darker());
-            graphics.fillRect(0, 0, dimension.width, dimension.width);
+            graphics.fillRect(0, 0, width, width);
         }
         graphics.setColor(java.awt.Color.darkGray);
         for (int y = 0; y < size; ++y)
@@ -274,7 +273,7 @@ public class Board
             java.awt.Point bottom = getScreenLocation(x, size - 1);
             graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
         }
-        int r = dimension.width / (size + 2) / 10;
+        int r = width / (size + 2) / 10;
         for (int x = 0; x < size; ++x)
             if (m_board.isHandicapLine(x))
                 for (int y = 0; y < size; ++y)
@@ -596,7 +595,7 @@ public class Board
 
     private Field m_field[][];
 
-    private ImageIcon m_image;
+    private Image m_image;
 
     private JPanel m_grid;
 
