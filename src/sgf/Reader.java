@@ -190,7 +190,7 @@ public class Reader
 
     private SgfError getError(String message)
     {
-        int lineNumber = m_tokenizer.lineno() + 1;
+        int lineNumber = m_tokenizer.lineno();
         if (m_name != null)
         {
             String s = m_name + ":" + lineNumber + ": " + message;
@@ -425,7 +425,9 @@ public class Reader
                 node.addSgfProperty(p, v);
             return true;
         }
-        m_tokenizer.pushBack();
+        if (ttype != '\n')
+            // Don't pushBack newline, will confuse lineno()
+            m_tokenizer.pushBack();
         return false;
     }
 
@@ -486,7 +488,9 @@ public class Reader
         int ttype = m_tokenizer.ttype;
         if (ttype != '[')
         {
-            m_tokenizer.pushBack();
+            if (ttype != '\n')
+                // Don't pushBack newline, will confuse lineno()
+                m_tokenizer.pushBack();
             return null;
         }
         StringBuffer value = new StringBuffer(32);
