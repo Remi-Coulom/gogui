@@ -6,8 +6,7 @@
 <para>
 There are no GTP commands for multiple undo or play, so every undo or
 move has to be transmitted separately.
-Also some Go programs (like GNU Go) have slow implementations of the play and
-undo commands.
+This can make going to the beginning or end of a large game very slow.
 </para>
 </section>
 
