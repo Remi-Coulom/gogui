@@ -31,7 +31,7 @@ The command type can be
 <varlistentry>
 <term><userinput>bwboard</userinput></term>
 <listitem>
-The answer of the command is a board of strings.
+The response of the command is a board of strings.
 Strings "b" or "black" will be displayed as black squares,
 "w" or "white" as white squares, all other strings are
 not displayed.
@@ -41,7 +41,7 @@ not displayed.
 <varlistentry>
 <term><userinput>cboard</userinput></term>
 <listitem>
-The answer of the command is a board of strings with color names.
+The response of the command is a board of strings with color names.
 They will be displayed as background colors for the fields.
 Valid color names are blue, cyan, green, gray, magenta,
 pink, red, and yellow. Unknown names or the special string ""
@@ -52,7 +52,7 @@ are ignored.
 <varlistentry>
 <term><userinput>dboard</userinput></term>
 <listitem>
-The answer of the command is a board of floating point
+The response of the command is a board of floating point
 numbers.
 They will be displayed as black (positive) and white (negative)
 squares on the board.
@@ -65,24 +65,48 @@ Use the <userinput>scale</userinput> option, if they are not.
 </varlistentry>
 
 <varlistentry>
+<term><userinput>hstring</userinput></term>
+<listitem>
+The response is a multi-line text and will be displayed in a window
+using syntax highlighting for lines with a single word ending with ':' (bold),
+points and moves (blue), numbers (green), uppercase words (red).
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>hpstring</userinput></term>
+<listitem>
+Combines <userinput>pstring</userinput> and <userinput>hstring</userinput>.
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><userinput>none</userinput></term>
 <listitem>
-The output is not displayed.
+The response is not displayed.
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>plist</userinput></term>
 <listitem>
-The answer of the command is a list of points.
+The response of the command is a list of points.
 All points will be marked on the board.
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><userinput>pslist</userinput></term>
+<term><userinput>pspairs</userinput></term>
 <listitem>
-The answer of the command is a text containing points.
+The response of the command is a list of point string pairs.
+The strings are displayed as labels on the points.
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>pstring</userinput></term>
+<listitem>
+The response of the command is a text containing points.
 If the text has only a single line, it will be displayed in the status line.
 If it has multiple lines, a window will popup.
 All valid points contained in the text will be marked on the board.
@@ -90,17 +114,9 @@ All valid points contained in the text will be marked on the board.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>pstring</userinput></term>
-<listitem>
-The answer of the command is a list of point string pairs.
-The strings are displayed as labels on the points.
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><userinput>sboard</userinput></term>
 <listitem>
-The answer of the command is a board of strings.
+The response of the command is a board of strings.
 A string should not be longer than 3-4 characters to fit on a point on the
 board and may not contain white spaces.
 The special string "" is used for no string on a point.
@@ -110,7 +126,7 @@ The special string "" is used for no string on a point.
 <varlistentry>
 <term><userinput>string</userinput></term>
 <listitem>
-The answer of the command is a text.
+The response of the command is a text.
 If the text has only a single line, it will be displayed in the status line.
 If it has multiple lines, a window will popup.
 </listitem>
@@ -119,10 +135,10 @@ If it has multiple lines, a window will popup.
 <varlistentry>
 <term><userinput>var</userinput></term>
 <listitem>
-The answer of the command is a variation of moves
+The response of the command is a variation of moves
 containing points or passes.
 Text not containg points is ignored.
-The answer is also displayed as a string.
+The response is also displayed as a string.
 They will be displayed as numbered stones on the board,
 the current color to move is assumed to move first.
 </listitem>
@@ -208,7 +224,7 @@ Will be replaced by an argument entered by the user.
 
 <section>
 <title>Section</title>
-The answer to the command is searched first until a single line
+The response to the command is searched first until a single line
 containing the section name followed by a colon is found.
 </section>
 

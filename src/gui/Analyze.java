@@ -23,31 +23,35 @@ class AnalyzeCommand
 {
     public static final int BWBOARD = 0;
 
-    public static final int NONE = 1;
+    public static final int CBOARD = 1;
 
-    public static final int STRING = 2;    
+    public static final int DBOARD = 2;
 
-    public static final int DOUBLEBOARD = 3;
+    public static final int HSTRING = 3;
 
-    public static final int POINTLIST = 4;
+    public static final int HPSTRING = 4;
 
-    public static final int POINTSTRINGLIST = 5;
+    public static final int NONE = 5;
 
-    public static final int POINTSTRING = 6;
+    public static final int PLIST = 6;
 
-    public static final int STRINGBOARD = 7;
+    public static final int PSTRING = 7;
 
-    public static final int COLORBOARD = 8;
+    public static final int PSPAIRS = 8;
 
-    public static final int VAR = 9;
+    public static final int STRING = 9;
 
-    public static final int VARB = 10;
+    public static final int SBOARD = 10;
 
-    public static final int VARP = 11;
+    public static final int VAR = 11;
 
-    public static final int VARPO = 12;
+    public static final int VARB = 12;
 
-    public static final int VARW = 13;
+    public static final int VARP = 13;
+
+    public static final int VARPO = 14;
+
+    public static final int VARW = 15;
 
     public AnalyzeCommand(String line)
     {
@@ -59,19 +63,23 @@ class AnalyzeCommand
         if (typeStr.equals("bwboard"))
             m_type = AnalyzeCommand.BWBOARD;
         else if (typeStr.equals("cboard"))
-            m_type = AnalyzeCommand.COLORBOARD;
+            m_type = AnalyzeCommand.CBOARD;
         else if (typeStr.equals("dboard"))
-            m_type = AnalyzeCommand.DOUBLEBOARD;
-        else if (typeStr.equals("sboard"))
-            m_type = AnalyzeCommand.STRINGBOARD;
+            m_type = AnalyzeCommand.DBOARD;
+        else if (typeStr.equals("hstring"))
+            m_type = AnalyzeCommand.HSTRING;
+        else if (typeStr.equals("hpstring"))
+            m_type = AnalyzeCommand.HPSTRING;
         else if (typeStr.equals("plist"))
-            m_type = AnalyzeCommand.POINTLIST;
-        else if (typeStr.equals("pslist"))
-            m_type = AnalyzeCommand.POINTSTRINGLIST;
+            m_type = AnalyzeCommand.PLIST;
+        else if (typeStr.equals("pspairs"))
+            m_type = AnalyzeCommand.PSPAIRS;
         else if (typeStr.equals("pstring"))
-            m_type = AnalyzeCommand.POINTSTRING;
+            m_type = AnalyzeCommand.PSTRING;
         else if (typeStr.equals("string"))
             m_type = AnalyzeCommand.STRING;
+        else if (typeStr.equals("sboard"))
+            m_type = AnalyzeCommand.SBOARD;
         else if (typeStr.equals("var"))
             m_type = AnalyzeCommand.VAR;
         else if (typeStr.equals("varb"))
@@ -393,7 +401,6 @@ class AnalyzeDialog
         setPrefsDefaults(prefs);
         m_onlySupportedCommands =
             prefs.getBool("analyze-only-supported-commands");
-        m_highlight = prefs.getBool("analyze-highlight");
         m_sort = prefs.getBool("analyze-sort");
         m_supportedCommands = supportedCommands;
         m_callback = callback;
@@ -421,8 +428,6 @@ class AnalyzeDialog
             m_callback.toTop();
         else if (command.equals("gtp-shell"))
             m_callback.cbGtpShell();
-        else if (command.equals("highlight"))
-            highlight();
         else if (command.equals("only-supported"))
             onlySupported();
         else if (command.equals("reload"))
@@ -431,11 +436,6 @@ class AnalyzeDialog
             setCommand();
         else if (command.equals("sort"))
             sort();
-    }
-
-    boolean getHighlight()
-    {
-        return m_highlight;
     }
 
     public void mouseClicked(MouseEvent event)
@@ -525,8 +525,6 @@ class AnalyzeDialog
 
     private boolean m_onlySupportedCommands;
 
-    private boolean m_highlight;
-
     private boolean m_sort;
 
     private boolean m_recentModified;
@@ -544,8 +542,6 @@ class AnalyzeDialog
     private JList m_list;
 
     private JMenuItem m_itemOnlySupported;
-
-    private JMenuItem m_itemHighlight;
 
     private JMenuItem m_itemSort;
 
@@ -702,9 +698,6 @@ class AnalyzeDialog
         m_itemSort = new JCheckBoxMenuItem("Sort alphabetically");
         m_itemSort.setSelected(m_sort);
         addMenuItem(menu, m_itemSort, KeyEvent.VK_S, "sort");
-        m_itemHighlight = new JCheckBoxMenuItem("Highlight text output");
-        m_itemHighlight.setSelected(m_highlight);
-        addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
         return menu;
     }
 
@@ -723,12 +716,6 @@ class AnalyzeDialog
     {
         String home = System.getProperty("user.home");
         return new File(new File(home, ".gogui"), "recent-analyze");
-    }
-
-    private void highlight()
-    {
-        m_highlight = m_itemHighlight.isSelected();
-        m_prefs.setBool("analyze-highlight", m_highlight);
     }
 
     private void onlySupported()
@@ -868,7 +855,6 @@ class AnalyzeDialog
     {
         prefs.setBoolDefault("analyze-only-supported-commands", true);
         prefs.setBoolDefault("analyze-sort", true);
-        prefs.setBoolDefault("analyze-highlight", true);
     }
 
     private void sort()
@@ -1028,35 +1014,36 @@ class AnalyzeShow
                 guiBoard.repaint();
             }
             break;
-        case AnalyzeCommand.COLORBOARD:
+        case AnalyzeCommand.CBOARD:
             {
                 String b[][] = Gtp.parseStringBoard(response, title, size);
                 guiBoard.showColorBoard(b);
                 guiBoard.repaint();
             }
             break;
-        case AnalyzeCommand.DOUBLEBOARD:
+        case AnalyzeCommand.DBOARD:
             {
                 double b[][] = Gtp.parseDoubleBoard(response, title, size);
                 guiBoard.showDoubleBoard(b, command.getScale());
                 guiBoard.repaint();
             }
             break;
-        case AnalyzeCommand.POINTLIST:
+        case AnalyzeCommand.PLIST:
             {
                 go.Point list[] = Gtp.parsePointList(response, size);
                 guiBoard.showPointList(list);
                 guiBoard.repaint();
             }
             break;
-        case AnalyzeCommand.POINTSTRING:
+        case AnalyzeCommand.HPSTRING:
+        case AnalyzeCommand.PSTRING:
             {
                 go.Point list[] = Gtp.parsePointString(response, size);
                 guiBoard.showPointList(list);
                 guiBoard.repaint();
             }
             break;
-        case AnalyzeCommand.POINTSTRINGLIST:
+        case AnalyzeCommand.PSPAIRS:
             {
                 Vector pointList = new Vector(32, 32);
                 Vector stringList = new Vector(32, 32);
@@ -1066,7 +1053,7 @@ class AnalyzeShow
                 guiBoard.repaint();
             }
             break;
-        case AnalyzeCommand.STRINGBOARD:
+        case AnalyzeCommand.SBOARD:
             {
                 String b[][] = Gtp.parseStringBoard(response, title, size);
                 guiBoard.showStringBoard(b);

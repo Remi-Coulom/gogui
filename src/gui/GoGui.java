@@ -717,7 +717,9 @@ class GoGui
             int type = m_analyzeCommand.getType();
             boolean statusContainsResponse = false;
             if (type == AnalyzeCommand.STRING
-                || type == AnalyzeCommand.POINTSTRING
+                || type == AnalyzeCommand.HSTRING
+                || type == AnalyzeCommand.HPSTRING
+                || type == AnalyzeCommand.PSTRING
                 || type == AnalyzeCommand.VAR
                 || type == AnalyzeCommand.VARW
                 || type == AnalyzeCommand.VARB
@@ -731,9 +733,9 @@ class GoGui
                 }
                 else
                 {
-                    boolean highlight = false;
-                    if (m_analyzeDialog != null)
-                        highlight = m_analyzeDialog.getHighlight();
+                    boolean highlight =
+                        (type == AnalyzeCommand.HSTRING
+                         || type == AnalyzeCommand.HPSTRING);
                     new AnalyzeTextOutput(this, title, response, highlight);
                 }
             }

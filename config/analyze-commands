@@ -44,9 +44,9 @@ varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
 none/PrintSgf/printsgf %f
 none/Set Random Seed/set_random_seed %s
-pslist/Top Moves/top_moves
-pslist/Top Moves Black/top_moves_black
-pslist/Top Moves White/top_moves_white
+pspairs/Top Moves/top_moves
+pspairs/Top Moves Black/top_moves_black
+pspairs/Top Moves White/top_moves_white
 
 # Extensions of other programs that could be of general interest
 none/SaveSgf/savesgf %f
@@ -63,8 +63,8 @@ none/Clear Cache/clear_cache
 varb/Combination Attack Black/combination_attack black
 varw/Combination Attack White/combination_attack white
 string/Does Surround/does_surround %P
-string/Dragon Data/dragon_data
-pstring/Dragon Data At/dragon_data %p
+hstring/Dragon Data/dragon_data
+hpstring/Dragon Data At/dragon_data %p
 string/Dragon Status/dragon_status
 pstring/Dragon Status At/dragon_status %p
 plist/Dragon Stones/dragon_stones %p
@@ -110,8 +110,8 @@ string/Surround Map/surround_map %P
 pstring/Tactical Analyze Semeai/tactical_analyze_semeai %P
 none/Test EyeShape/test_eyeshape %P
 none/Tune Move Ordering/tune_move_ordering %s
-string/Worm Data/worm_data
-pstring/Worm Data At/worm_data %p
+hstring/Worm Data/worm_data
+hpstring/Worm Data At/worm_data %p
 plist/Worm CutStone/worm_cutstone %p
 plist/Worm Stones Black/worm_stones %p black
 plist/Worm Stones White/worm_stones %p white
