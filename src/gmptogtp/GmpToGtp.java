@@ -8,6 +8,8 @@ package gmptogtp;
 import java.io.*;
 import java.util.*;
 import gmp.*;
+import go.Color;
+import go.Point;
 import gtp.GtpServer;
 import utils.*;
 import version.*;
@@ -28,54 +30,54 @@ public class GmpToGtp
         m_wait = wait;
         m_gmp = new Gmp(in, out, size, colorIndex, simple, verbose);
         m_title = title;
+        m_size = size;
     }
 
-    public boolean handleCommand(String command, StringBuffer response)
+    public boolean handleCommand(String cmdLine, StringBuffer response)
     {
+        String[] cmdArray = StringUtils.tokenize(cmdLine);
+        String cmd = cmdArray[0];
         boolean status = true;
-        if (command.equals("quit"))
-            return true;
-        else if (command.startsWith("black"))
-            return play(true, command, response);
-        else if (command.startsWith("gmp_text"))
-            return sendTalk(command, response);
-        else if (command.startsWith("gmp_queue"))
+        if (cmd.equals("boardsize"))
+            return cmdBoardsize(cmdArray, response);
+        else if (cmd.equals("clear_board"))
+            return cmdClearBoard(response);
+        else if (cmd.equals("genmove"))
+            return cmdGenmove(cmdArray, response);
+        else if (cmd.equals("gmp_queue"))
             return queue(response);
-        else if (command.startsWith("gogui_title"))
-            response.append(m_title);
-        else if (command.startsWith("gogui_interrupt"))
+        else if (cmd.equals("gmp_text"))
+            return sendTalk(cmdLine, response);
+        else if (cmd.equals("gogui_interrupt"))
             ;
-        else if (command.startsWith("white"))
-            return play(false, command, response);
-        else if (command.startsWith("undo"))
-            return undo(response);
-        else if (command.startsWith("genmove_black"))
-            return genmove(true, response);
-        else if (command.startsWith("genmove_white"))
-            return genmove(false, response);
-        else if (command.startsWith("boardsize"))
-            return boardsize(command, response);
-        else if (command.equals("name"))
-            response.append("GmpToGtp");
-        else if (command.equals("version"))
-            response.append(Version.get());
-        else if (command.equals("protocol_version"))
-            response.append("1");
-        else if (command.equals("help"))
+        else if (cmd.equals("gogui_title"))
+            response.append(m_title);
+        else if (cmd.equals("list_commands"))
             response.append("boardsize\n" +
-                            "black\n" +
-                            "genmove_black\n" +
-                            "genmove_white\n" +
-                            "genmove_white\n" +
+                            "clear_board\n" +
+                            "genmove\n" +
                             "gmp_text\n" +
                             "gmp_queue\n" +
                             "gogui_interrupt\n" +
                             "gogui_title\n" +
+                            "list_commands\n" +
                             "name\n" +
+                            "play\n" +
                             "undo\n" +
                             "version\n" +
-                            "white\n" +
                             "quit\n");
+        else if (cmd.equals("name"))
+            response.append("GmpToGtp");
+        else if (cmd.equals("play"))
+            return cmdPlay(cmdArray, response);
+        else if (cmd.equals("protocol_version"))
+            response.append("2");
+        else if (cmd.equals("quit"))
+            return true;
+        else if (cmd.equals("undo"))
+            return undo(response);
+        else if (cmd.equals("version"))
+            response.append(Version.get());
         else
         {
             response.append("unknown command");
@@ -97,24 +99,39 @@ public class GmpToGtp
 
     private int m_colorIndex;
 
+    private int m_size;
+
     private String m_title;
 
     private Gmp m_gmp;
 
-    private boolean boardsize(String command, StringBuffer response)
+    private boolean cmdBoardsize(String[] cmdArray, StringBuffer response)
     {
-        String[] cmdArray = StringUtils.tokenize(command);
         IntegerArgument argument = parseIntegerArgument(cmdArray, response);
         if (argument == null)
             return false;
-        if (! (m_wait && m_firstGame) && ! (m_simple && m_colorIndex == 1))
-            return m_gmp.newGame(argument.m_integer, response);
-        m_firstGame = false;
-        return m_gmp.waitNewGame(argument.m_integer, response);
+        if (argument.m_integer != m_size)
+        {
+            response.append("size must be " + m_size);
+            return false;
+        }
+        return true;
     }
 
-    private boolean genmove(boolean isBlack, StringBuffer response)
+    private boolean cmdClearBoard(StringBuffer response)
     {
+        if (! (m_wait && m_firstGame) && ! (m_simple && m_colorIndex == 1))
+            return m_gmp.newGame(m_size, response);
+        m_firstGame = false;
+        return m_gmp.waitNewGame(m_size, response);
+    }
+
+    private boolean cmdGenmove(String[] cmdArray, StringBuffer response)
+    {
+        ColorArgument argument = parseColorArgument(cmdArray, response);
+        if (argument == null)
+            return false;
+        boolean isBlack = (argument.m_color == Color.BLACK);
         Gmp.Move move = m_gmp.waitMove(isBlack, response);
         if (move == null)
             return false;
@@ -131,41 +148,22 @@ public class GmpToGtp
         return true;
     }
 
-    private boolean play(boolean isBlack, String command,
-                         StringBuffer response)
+    private boolean cmdPlay(String[] cmdArray, StringBuffer response)
     {
-        String[] tokens = StringUtils.tokenize(command);
-        if (tokens.length < 2)
-        {
-            response.append("Missing argument");
+        ColorPointArgument argument =
+            parseColorPointArgument(cmdArray, response, m_size);
+        if (argument == null)
             return false;
-        }
-        try
+        int x = -1;
+        int y = -1;
+        Point point = argument.m_point;
+        if (point != null)
         {
-            String arg = tokens[1].toUpperCase();
-            if (arg.length() < 2)
-            {
-                response.append("Invalid argument");
-                return false;
-            }
-            int x = -1;
-            int y = -1;
-            if (! arg.equals("PASS"))
-            {
-                char xChar = arg.charAt(0);
-                if (xChar >= 'J')
-                    --xChar;
-                x = (xChar - 'A');
-                y = Integer.parseInt(arg.substring(1)) - 1;
-                
-            }
-            return m_gmp.play(isBlack, x, y, response);
+            x = point.getX();
+            y = point.getY();
+            
         }
-        catch (NumberFormatException e)
-        {
-            response.append("Invalid argument");
-            return false;
-        }
+        return m_gmp.play(argument.m_color == Color.BLACK, x, y, response);
     }
 
     private boolean queue(StringBuffer response)

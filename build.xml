@@ -199,6 +199,8 @@ installation directory.
 <fileset dir="build" includes="
  gmp/*.class
  gmptogtp/*.class
+ go/Color.class
+ go/Point.class
  gtp/*.class
  gtp/ReadThread.class
  utils/Options.class
