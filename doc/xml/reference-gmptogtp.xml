@@ -132,4 +132,29 @@
     </variablelist>
   </refsection>
 
+  <refsection>
+    <title>GTP Extensions</title>
+    <para>
+      <variablelist>
+	<varlistentry>
+	  <term>
+            <userinput>gmp_queue</userinput>
+          </term>
+          <listitem>
+	    Print received queued commands that have already been
+            acknowledged.
+	  </listitem>
+        </varlistentry>
+	<varlistentry>
+	  <term>
+            <userinput>gmp_text <replaceable>text</replaceable></userinput>
+          </term>
+          <listitem>
+	    Send text as talk characters.
+	  </listitem>
+        </varlistentry>
+      </variablelist>    
+    </para>
+  </refsection>
+
 </refentry>
