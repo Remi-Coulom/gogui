@@ -29,7 +29,7 @@ class BoardLabel
 
 public class Board
     extends JPanel
-    implements Printable, KeyListener
+    implements FocusListener, Printable, KeyListener
 {
     public interface Listener
     {
@@ -44,6 +44,8 @@ public class Board
         URL url = getClass().getClassLoader().getResource("images/wood.png");
         m_image = new ImageIcon(url);
         initSize(m_board.getSize());
+        setFocusable(true);
+        addFocusListener(this);
     }
 
     public void clearAll()
@@ -94,6 +96,15 @@ public class Board
     {
         if (m_listener != null)
             m_listener.fieldClicked(p, modifiers);
+    }
+
+    public void focusGained(FocusEvent event)
+    {
+        setFocusPoint(m_focusPoint);
+    }
+
+    public void focusLost(FocusEvent event)
+    {
     }
 
     public go.Board getBoard()
