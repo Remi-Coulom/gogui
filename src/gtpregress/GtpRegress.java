@@ -494,7 +494,7 @@ class GtpRegress
                     + m_colorHeader + "\">\n" +
                     "<tr><td>\n" +
                     "<h1>Output: " + m_file + "</h1>\n" +
-                    "<td><tr>\n" +
+                    "</td></tr>\n" +
                     "</table>\n" +
                     "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
                     + "\">\n");
@@ -747,7 +747,7 @@ class GtpRegress
                   + m_colorHeader + "\">\n" +
                   "<tr><td>\n" +
                   "<h1>Regression Test Summary</h1>\n" +
-                  "<td><tr>\n" +
+                  "</td></tr>\n" +
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
                   + "\">\n");
@@ -853,7 +853,7 @@ class GtpRegress
                   + m_colorHeader + "\">\n" +
                   "<tr><td>\n" +
                   "<h1>Summary: " + m_file + "</h1>\n" +
-                  "<td><tr>\n" +
+                  "</td></tr>\n" +
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + m_colorGrayBackground
                   + "\">\n");
