@@ -43,12 +43,14 @@ Open a game from a file in
 <ulink url="http://www.red-bean.com/sgf/">SGF</ulink>
 format.
 <note>
+<simpara>
 Only a subset of the SGF definition is supported.
 Most notably removing stones and game collections are not supported.
 Setup stones are always translated to <userinput>play</userinput>
 commands for the Go program which differs from the SGF standard for setup
 stones that would lead to illegal Go positions.
 Unknown SGF properties are preserved if the game is saved to a file again.
+</simpara>
 </note>
 </para>
 </listitem>
