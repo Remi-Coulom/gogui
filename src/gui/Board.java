@@ -94,23 +94,8 @@ public class Board
             add(new JLabel(yLabel, JLabel.CENTER));
         }
         addColumnLabels();
-        newGame();
         revalidate();
         repaint();
-    }
-
-    public void newGame()
-    {
-        m_board.newGame();
-        updateFields();
-        drawLastMove();
-    }
-
-    public void play(Move m)
-    {
-        m_board.play(m);
-        updateFields();
-        drawLastMove();
     }
 
     public int print(Graphics g, PageFormat format, int page)
@@ -246,20 +231,14 @@ public class Board
         }
     }
 
-    public void undo()
-    {
-        m_board.undo();
-        updateFields();
-        drawLastMove();
-    }
-    
-    public void updateFields()
+    public void update()
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
             go.Point p = m_board.getPoint(i);
             setColor(p, m_board.getColor(p));
         }
+        drawLastMove();
     }
 
     private Dimension m_preferredFieldSize;

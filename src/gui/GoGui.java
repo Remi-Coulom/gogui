@@ -225,12 +225,13 @@ class GoGui
         {
             if (m_board.getColor(p) != m_setupColor)
             {
-                m_guiBoard.play(new Move(p, m_setupColor));
+                m_board.play(new Move(p, m_setupColor));
             }
             else
             {
-                m_guiBoard.play(new Move(p, go.Color.EMPTY));
+                m_board.play(new Move(p, go.Color.EMPTY));
             }
+            m_guiBoard.update();
             return;
         }
         if (m_analyzeRequestPoint)
@@ -626,7 +627,7 @@ class GoGui
                     break;
                 if (m_commandThread != null)
                     m_commandThread.sendCommand("undo");
-                m_guiBoard.undo();
+                m_board.undo();
             }
             computerNone();
             boardChanged();
@@ -648,6 +649,7 @@ class GoGui
 
     private void boardChanged()
     {
+        m_guiBoard.update();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
@@ -1153,7 +1155,7 @@ class GoGui
             go.Point p = Gtp.parsePoint(m_commandThread.getAnswer());
             go.Color toMove = m_board.getToMove();
             Move m = new Move(p, toMove);
-            m_guiBoard.play(m);
+            m_board.play(m);
             m_timeControl.stopMove();
             boardChanged();
         }
@@ -1241,7 +1243,7 @@ class GoGui
                 Move m = m_board.getMove(moveNumber);
                 if (m_commandThread != null)
                     m_commandThread.sendCommandPlay(m);
-                m_guiBoard.play(m);
+                m_board.play(m);
             }
             computerNone();
             boardChanged();
@@ -1273,7 +1275,7 @@ class GoGui
                     return;
             if (m_commandThread != null)
                 m_commandThread.sendCommandPlay(m);
-            m_guiBoard.play(m);
+            m_board.play(m);
             m_timeControl.stopMove();
             if (m_board.getMoveNumber() > 0
                 && m_timeControl.lostOnTime(m.getColor())
@@ -1383,7 +1385,6 @@ class GoGui
                 m_board.setup(m);
                 m_commandThread.sendCommandPlay(m);
             }
-
             moves.clear();
             for (int i = 0; i < numberMoves; ++i)
                 moves.add(reader.getMove(i));
@@ -1392,14 +1393,12 @@ class GoGui
             for (int i = 0; i < moves.size(); ++i)
             {
                 Move m = (Move)moves.get(i);
-                m_guiBoard.play(m);
+                m_board.play(m);
             }
             while (m_board.getMoveNumber() > 0)
-                m_board.undo();
-            
+                m_board.undo();            
             if (move > 0)
                 forward(move);
-
             computerNone();
             boardChanged();
         }
@@ -1429,9 +1428,10 @@ class GoGui
         {
             m_boardSize = size;
             m_guiBoard.initSize(size);
+            m_guiBoard.update();
             pack();
         }
-        m_guiBoard.newGame();
+        m_board.newGame();        
         resetBoard();
         m_timeControl.reset();
         m_lostOnTimeShown = false;
@@ -1440,7 +1440,7 @@ class GoGui
         {
             loadFile(new File(m_file), move);
             m_gameInfo.update();
-            m_guiBoard.updateFields();
+            m_guiBoard.update();
         }
         else
         {
