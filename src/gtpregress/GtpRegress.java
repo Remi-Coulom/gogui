@@ -149,7 +149,7 @@ class GtpRegress
 
         public int m_programDied;
 
-        public int m_errors;
+        public int m_otherErrors;
 
         public int m_unexpectedFails;
 
@@ -167,6 +167,8 @@ class GtpRegress
     private int m_lastId;
 
     private int m_lastSgfMove;
+
+    private int m_otherErrors;
 
     private PrintStream m_out;
 
@@ -246,6 +248,7 @@ class GtpRegress
         TestSummary summary = new TestSummary();
         summary.m_file = file;
         summary.m_timeMillis = timeMillis;
+        summary.m_otherErrors = m_otherErrors;
         for (int i = 0; i < m_tests.size(); ++i)
         {
             Test t = (Test)m_tests.get(i);
@@ -286,7 +289,10 @@ class GtpRegress
         else
         {
             if (m_lastError)
+            {
                 printOutLine("error", m_lastFullResponse);
+                ++m_otherErrors;
+            }
             else
                 printOutLine(null, m_lastFullResponse);
         }
@@ -484,6 +490,7 @@ class GtpRegress
     {
         System.err.println(test);
         m_tests.clear();
+        m_otherErrors = 0;
         File file = new File(test);
         FileReader fileReader = new FileReader(file);
         BufferedReader reader = new BufferedReader(fileReader);
@@ -509,6 +516,64 @@ class GtpRegress
         writeTestSummary(file, testSummary);
     }
 
+    private void writeSummary()
+        throws FileNotFoundException
+    {
+        File file = new File("index.html");
+        PrintStream out = new PrintStream(new FileOutputStream(file));
+        String host = "?";
+        try
+        {
+            host = InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL);
+        Date date = Calendar.getInstance().getTime();
+        out.print("<html>\n" +
+                  "<head>\n" +
+                  "<title>Summary</title>\n" +
+                  "</head>\n" +
+                  "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
+                  + " vlink=\"purple\" alink=\"red\">\n" +
+                  "<h1>Summary</h1>\n" +
+                  "<hr>\n");
+        writeInfo(out);
+        out.print("<hr>\n" +
+                  "<table border=\"1\">\n" +
+                  "<colgroup>\n" +
+                  "<col width=\"30%\">\n" +
+                  "<col width=\"10%\">\n" +
+                  "<col width=\"10%\">\n" +
+                  "<col width=\"10%\">\n" +
+                  "<col width=\"10%\">\n" +
+                  "<col width=\"10%\">\n" +
+                  "<col width=\"10%\">\n" +
+                  "<col width=\"10%\">\n" +
+                  "</colgroup>\n" +
+                  "<tr align=\"center\">\n" +
+                  "<th>File</th>" +
+                  "<th>Tests</th>" +
+                  "<th>FAIL</th>" +
+                  "<th>fail</th>" +
+                  "<th>PASS</th>" +
+                  "<th>pass</th>" +
+                  "<th>Error</th>" +
+                  "<th>Time</th>" +
+                  "</tr>\n");
+        for (int i = 0; i < m_testSummaries.size(); ++i)
+        {
+            TestSummary summary = (TestSummary)m_testSummaries.get(i);
+            writeSummaryRow(out, summary, true);
+        }
+        out.print("</table>\n" +
+                  "</body>\n" +
+                  "</html>\n");
+        out.close();
+    }
+
     private void writeSummaryRow(PrintStream out, TestSummary summary,
                                  boolean withFileName)
     {
@@ -528,6 +593,7 @@ class GtpRegress
                   + (summary.m_unexpectedFails > 0 ? "00ff00" : "white")
                   + "\">\n" + summary.m_unexpectedPasses + "</td>\n" +
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
+                  "<td>" + summary.m_otherErrors + "</td>\n" +
                   "<td>" + time + "</td>\n" +
                   "</tr>\n");
     }
@@ -549,12 +615,13 @@ class GtpRegress
         out.print("<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<colgroup>\n" +
-                  "<col width=\"17%\">\n" +
-                  "<col width=\"17%\">\n" +
-                  "<col width=\"17%\">\n" +
-                  "<col width=\"17%\">\n" +
-                  "<col width=\"17%\">\n" +
-                  "<col width=\"17%\">\n" +
+                  "<col width=\"14%\">\n" +
+                  "<col width=\"14%\">\n" +
+                  "<col width=\"14%\">\n" +
+                  "<col width=\"14%\">\n" +
+                  "<col width=\"14%\">\n" +
+                  "<col width=\"14%\">\n" +
+                  "<col width=\"14%\">\n" +
                   "</colgroup>\n" +
                   "<tr align=\"center\">\n" +
                   "<th>Tests</th>" +
@@ -562,6 +629,7 @@ class GtpRegress
                   "<th>fail</th>" +
                   "<th>PASS</th>" +
                   "<th>pass</th>" +
+                  "<th>Error</th>" +
                   "<th>Time</th>" +
                   "</tr>\n");
         writeSummaryRow(out, summary, false);
@@ -650,62 +718,6 @@ class GtpRegress
                   "<tr><th align=\"left\">Command</th><td><tt>" + m_program
                   + "</tt></td></tr>\n" +
                   "</table>\n");
-    }
-
-    private void writeSummary()
-        throws FileNotFoundException
-    {
-        File file = new File("index.html");
-        PrintStream out = new PrintStream(new FileOutputStream(file));
-        String host = "?";
-        try
-        {
-            host = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e)
-        {
-        }
-        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                                           DateFormat.FULL);
-        Date date = Calendar.getInstance().getTime();
-        out.print("<html>\n" +
-                  "<head>\n" +
-                  "<title>Summary</title>\n" +
-                  "</head>\n" +
-                  "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
-                  + " vlink=\"purple\" alink=\"red\">\n" +
-                  "<h1>Summary</h1>\n" +
-                  "<hr>\n");
-        writeInfo(out);
-        out.print("<hr>\n" +
-                  "<table border=\"1\">\n" +
-                  "<colgroup>\n" +
-                  "<col width=\"22%\">\n" +
-                  "<col width=\"13%\">\n" +
-                  "<col width=\"13%\">\n" +
-                  "<col width=\"13%\">\n" +
-                  "<col width=\"13%\">\n" +
-                  "<col width=\"13%\">\n" +
-                  "<col width=\"13%\">\n" +
-                  "</colgroup>\n" +
-                  "<tr align=\"center\">\n" +
-                  "<th>File</th>" +
-                  "<th>Tests</th>" +
-                  "<th>FAIL</th>" +
-                  "<th>fail</th>" +
-                  "<th>PASS</th>" +
-                  "<th>pass</th>" +
-                  "<th>Time</th>" +
-                  "</tr>\n");
-        for (int i = 0; i < m_testSummaries.size(); ++i)
-        {
-            TestSummary summary = (TestSummary)m_testSummaries.get(i);
-            writeSummaryRow(out, summary, true);
-        }
-        out.print("</table>\n" +
-                  "</body>\n" +
-                  "</html>\n");
-        out.close();
     }
 }
     
