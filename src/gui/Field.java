@@ -228,6 +228,12 @@ public class Field
         Dimension size = getSize();
         if (m_fieldColor != null)
         {
+            if (graphics2D != null)
+            {
+                AlphaComposite composite =
+                    AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f); 
+                graphics2D.setComposite(composite);
+            }
             graphics.setColor(m_fieldColor);
             graphics.fillRect(0, 0, size.width, size.height);
         }
