@@ -363,14 +363,21 @@ public class Gtp
         {
             try
             {
+                int size = 1024;
+                char[] buffer = new char[size];
                 while (true)
                 {
-                    String line = m_err.readLine();
-                    if (line == null)
+                    int n = m_err.read(buffer, 0, size);
+                    if (n < 0)
                         return;
-                    log(line);
+                    String s = new String(buffer, 0, n);
+                    if (m_log)
+                    {
+                        System.err.print(s);
+                        System.err.flush();
+                    }
                     if (m_callback != null)
-                        m_callback.receivedStdErr(line + '\n');
+                        m_callback.receivedStdErr(s);
                 }
             }
             catch (Exception e)
@@ -482,7 +489,10 @@ public class Gtp
     private synchronized void log(String msg)
     {
         if (m_log)
+        {
             System.err.println(msg);
+            System.err.flush();
+        }
     }
 }
 
