@@ -1980,12 +1980,7 @@ class GoGui
         m_guiBoard.repaint();
         m_scoreMode = true;
         if (m_scoreDialog == null)
-        {
             m_scoreDialog = new ScoreDialog(this, this);
-            m_scoreDialog.setLocationRelativeTo(this);
-            Dimension size = getSize();
-            m_scoreDialog.setLocation(size.width, 0);
-        }
         float komi = m_gameTree.getGameInformation().m_komi;
         m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
         m_scoreDialog.setVisible(true);
