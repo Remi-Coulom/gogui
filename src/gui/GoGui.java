@@ -1017,7 +1017,8 @@ class GoGui
             m_prefs.setFloat("komi", gameInformation.m_komi);
             setKomi(gameInformation.m_komi);
         }
-        if (! gameInformation.m_rules.equals(m_prefs.getString("rules")))
+        if (gameInformation.m_rules != null
+            && ! gameInformation.m_rules.equals(m_prefs.getString("rules")))
         {
             m_prefs.setString("rules", gameInformation.m_rules);
             setRules();
