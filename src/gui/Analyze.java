@@ -127,7 +127,7 @@ class Analyze
         setSelectedIndex(0);
         addPopupMenuListener(this);
         String startCommand = prefs.getAnalyzeCommand();
-        setAnalyzeCommand(startCommand);
+        setAnalyzeCommand(startCommand, false);
     }
 
     public void popupMenuCanceled(PopupMenuEvent e)
@@ -151,7 +151,7 @@ class Analyze
             m_callback.clearAnalyzeCommand();
     }
 
-    public void setAnalyzeCommand(String command)
+    public void setAnalyzeCommand(String command, boolean informCallback)
     {
         if (command != null && ! command.equals(""))
         {
@@ -159,7 +159,8 @@ class Analyze
                 if (getItemAt(i).toString().equals(command))
                 {
                     setSelectedIndex(i);
-                    setCommand(false);
+                    if (informCallback)
+                        setCommand(false);
                     return;
                 }
         }
