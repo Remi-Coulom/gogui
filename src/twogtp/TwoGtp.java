@@ -165,16 +165,17 @@ public class TwoGtp
                 String helpText =
                     "Usage: java -jar twogtp.jar [options]\n" +
                     "\n" +
-                    "-auto    autoplay games\n" +
-                    "-black   command for black program\n" +
-                    "-compare compare list of sgf files\n" +
-                    "-games   number of games (0=unlimited)\n" +
-                    "-help    display this help and exit\n" +
-                    "-komi    komi\n" +
-                    "-sgffile filename prefix\n" +
-                    "-size    board size for autoplay (default 19)\n" +
-                    "-verbose log GTP streams to stderr\n" +
-                    "-white   command for white program\n";
+                    "-alternate alternate colors\n" +
+                    "-auto      autoplay games\n" +
+                    "-black     command for black program\n" +
+                    "-compare   compare list of sgf files\n" +
+                    "-games     number of games (0=unlimited)\n" +
+                    "-help      display this help and exit\n" +
+                    "-komi      komi\n" +
+                    "-sgffile   filename prefix\n" +
+                    "-size      board size for autoplay (default 19)\n" +
+                    "-verbose   log GTP streams to stderr\n" +
+                    "-white     command for white program\n";
                 System.out.print(helpText);
                 System.exit(0);
             }
