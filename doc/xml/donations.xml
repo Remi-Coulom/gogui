@@ -3,11 +3,20 @@
 
 <para>
 If you found this program useful, you can support its development and
-maintainance by making a donation at its support page at SourceForge:
+maintainance by making a donation at its support page at SourceForge.
 </para>
 <para>
 <ulink url="http://sourceforge.net/donate/index.php?group_id=59117">
-http://sourceforge.net/donate/index.php?group_id=59117</ulink>
+<inlinemediaobject>
+<imageobject>
+<imagedata fileref="project-support.png"/>
+</imageobject>
+</inlinemediaobject>
+</ulink>
+</para>
+
+<para>
+<!-- Dummy para for creating distance to footer in JEditorPane -->
 </para>
 
 </appendix>

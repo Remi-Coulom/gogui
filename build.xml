@@ -107,7 +107,7 @@ installation directory.
 <fileset dir="src" includes="images/*.png"/>
 </copy>
 <copy todir="build/doc">
-<fileset dir="doc/html" includes="*.html *.css"/>
+<fileset dir="doc/html" includes="*.html *.css *.png"/>
 </copy>
 <copy todir="build/config">
 <fileset dir="config" includes="analyze-commands"/>
@@ -127,6 +127,7 @@ installation directory.
  config/gogui.omf,
  config/gogui.xml,
  doc/html/*.html,
+ doc/html/*.png,
  doc/html/*.css,
  doc/man/*.1,
  doc/xml/*.xml,
@@ -167,6 +168,7 @@ installation directory.
 
 <target name="doc" depends="docCheckUptodate" unless="docUptodate">
 <antcall target="checkXslAvailable"/>
+<echo message="Running xsltproc"/>
 <exec executable="xsltproc">
 <arg line="--param admon.graphics 0"/>
 <arg line="--param chunk.quietly 1"/>
@@ -186,6 +188,9 @@ installation directory.
 <arg line="${docbook_xsl_home}/html/chunk.xsl"/>
 <arg line="doc/xml/book.xml"/>
 </exec>
+<copy todir="doc/html">
+<fileset dir="src/images" includes="project-support.png"/>
+</copy>
 </target>
 
 <target name="docvalidate">
@@ -250,6 +255,7 @@ installation directory.
 <fileset dir="build" includes="
  config/analyze-commands
  doc/*.html
+ doc/*.png
  doc/*.css
  game/*.class
  go/*.class

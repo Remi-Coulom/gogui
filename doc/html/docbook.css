@@ -37,16 +37,16 @@ DIV.navheader TH, DIV.navfooter TH
   color: white;
 }
 
-DIV.navheader HR, DIV.navfooter HR
-{
-  noshade;
-}
-
 .navheader :link, .navfooter :link, .navheader :visited, .navfooter :visited,
 .navheader :active, .navfooter :active
 {
   color: white;
   text-decoration: none;
+}
+
+IMG
+{
+  border: 0;
 }
 
 TABLE

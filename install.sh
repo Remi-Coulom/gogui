@@ -35,7 +35,7 @@ for FILE in bin/*; do
 done
 
 install -d $PREFIX/share/doc/gogui
-install doc/html/*.{html,css} $PREFIX/share/doc/gogui
+install doc/html/*.{html,css,png} $PREFIX/share/doc/gogui
 
 install -d $PREFIX/share/man/man1
 install doc/man/*.1 $PREFIX/share/man/man1
