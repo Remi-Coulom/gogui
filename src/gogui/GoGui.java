@@ -201,7 +201,10 @@ class GoGui
         try
         {
             if (time != null)
-                m_clock.setTime(time);
+            {
+                m_timeSettings = TimeSettings.parse(time);
+                m_clock.setTimeSettings(m_timeSettings);
+            }
         }
         catch (Clock.Error e)
         {
@@ -794,6 +797,8 @@ class GoGui
 
     private gui.Board m_guiBoard;
 
+    private Clock m_clock;
+
     private CommandThread m_commandThread;
 
     private Comment m_comment;
@@ -854,7 +859,7 @@ class GoGui
 
     private SquareLayout m_squareLayout;
 
-    private Clock m_clock;
+    private TimeSettings m_timeSettings;
 
     private ToolBar m_toolBar;
 
@@ -1422,7 +1427,8 @@ class GoGui
             return;
         GameInformation gameInformation = m_gameTree.getGameInformation();
         m_gameTree = new GameTree(m_boardSize, gameInformation.m_komi, null,
-                                  gameInformation.m_rules);
+                                  gameInformation.m_rules,
+                                  gameInformation.m_timeSettings);
         Node root = m_gameTree.getRoot();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
@@ -1652,7 +1658,7 @@ class GoGui
             {
                 // Create a dummy game tree, so that GameTreeDialog shows
                 // a setup node
-                m_gameTree = new GameTree(m_boardSize, 0, null, null);
+                m_gameTree = new GameTree(m_boardSize, 0, null, null, null);
                 m_currentNode = m_gameTree.getRoot();
                 m_currentNode.addBlack(m_board.getPoint(0, 0));
                 m_clock.reset();
@@ -2222,7 +2228,7 @@ class GoGui
             showWarning("Handicap stone locations are not\n" +
                         "defined for this board size.");
         m_gameTree = new GameTree(size, m_prefs.getDouble("komi"), handicap,
-                                  m_prefs.getString("rules"));
+                                  m_prefs.getString("rules"), m_timeSettings);
         m_board.newGame();        
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
@@ -2738,17 +2744,15 @@ class GoGui
             showError("Command time_settings not supported");
             return;
         }
-        GameInformation gameInformation = m_gameTree.getGameInformation();
-        TimeSettings settings = gameInformation.m_timeSettings;
-        if (settings == null)
+        if (m_timeSettings == null)
             return;
-        long preByoyomi = settings.getPreByoyomi() / 1000;
+        long preByoyomi = m_timeSettings.getPreByoyomi() / 1000;
         long byoyomi = 0;
         long byoyomiMoves = 0;
-        if (settings.getUseByoyomi())
+        if (m_timeSettings.getUseByoyomi())
         {
-            byoyomi = settings.getByoyomi() / 1000;
-            byoyomiMoves = settings.getByoyomiMoves();
+            byoyomi = m_timeSettings.getByoyomi() / 1000;
+            byoyomiMoves = m_timeSettings.getByoyomiMoves();
         }
         try
         {
@@ -2856,7 +2860,7 @@ class GoGui
         m_boardSize = size;
         m_board.newGame();        
         m_gameTree = new GameTree(size, m_prefs.getDouble("komi"), null,
-                                  m_prefs.getString("rules"));
+                                  m_prefs.getString("rules"), null);
         m_currentNode = m_gameTree.getRoot();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {

@@ -169,13 +169,9 @@ public class Clock
         timeRecord.m_byoyomiExceeded = false;
     }
 
-    /** Set time.
-        @param s Time specification in format minutes[+minutes/moves]
-    */
-    public void setTime(String s) throws Error
+    public void setTimeSettings(TimeSettings settings) throws Error
     {
-        reset();
-        m_timeSettings = TimeSettings.parse(s);
+        m_timeSettings = settings;
     }
 
     /** Set time left.

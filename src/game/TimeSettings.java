@@ -30,6 +30,11 @@ public class TimeSettings
         m_byoyomiMoves = byoyomiMoves;
     }
 
+    public Object clone()
+    {
+        return new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
+    }
+
     public long getByoyomi()
     {
         assert(getUseByoyomi());

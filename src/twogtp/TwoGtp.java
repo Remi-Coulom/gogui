@@ -722,7 +722,7 @@ public class TwoGtp
     private void initGame(int size) throws Exception
     {
         m_board = new Board(size);
-        m_gameTree = new GameTree(size, m_komi, null, null);
+        m_gameTree = new GameTree(size, m_komi, null, null, null);
         m_currentNode = m_gameTree.getRoot();
         m_scoreEstimates.clear();
         m_resigned = false;
