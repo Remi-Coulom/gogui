@@ -48,29 +48,33 @@ public class Field
         }
     }
 
-    public void paintComponent(Graphics g)
+    public void paintComponent(Graphics graphics)
     {
-        super.paintComponent(g);
+        super.paintComponent(graphics);
+        Graphics2D graphics2D = (Graphics2D)graphics;
+        if (graphics2D != null)
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON);
         Dimension size = getSize();
         if (m_fieldColor != null)
-            g.setColor(m_fieldColor);
+            graphics.setColor(m_fieldColor);
         else
-            g.setColor(m_boardColor);
-        g.fillRect(0, 0, size.width, size.height);        
+            graphics.setColor(m_boardColor);
+        graphics.fillRect(0, 0, size.width, size.height);        
         if (m_color == go.Color.BLACK)
-            drawStone(g, java.awt.Color.black);
+            drawStone(graphics, java.awt.Color.black);
         else if (m_color == go.Color.WHITE)
-            drawStone(g, java.awt.Color.white);
+            drawStone(graphics, java.awt.Color.white);
         else
-            drawGrid(g);
+            drawGrid(graphics);
         if (m_influenceSet)
-            drawInfluence(g);
+            drawInfluence(graphics);
         if (m_markup)
-            drawMarkup(g);
+            drawMarkup(graphics);
         if (m_crossHair)
-            drawCrossHair(g);
+            drawCrossHair(graphics);
         if (! m_string.equals(""))
-            drawString(g);
+            drawString(graphics);
     }
 
     public void setFieldBackground(java.awt.Color color)
