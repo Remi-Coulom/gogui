@@ -13,6 +13,7 @@ src/gui/GtpShell.java
 src/gui/GoGui.java
 src/gui/GoIcon.java
 src/gui/Help.java
+src/gui/ImageButton.java
 src/gui/MenuBar.java
 src/gui/ScoreDialog.java
 src/gui/SelectProgram.java

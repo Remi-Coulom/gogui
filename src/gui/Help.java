@@ -206,14 +206,8 @@ class Help
     private JButton createToolBarButton(String icon, String command,
                                         String toolTip)
     {
-        JButton button;
-        URL u = getClass().getClassLoader().getResource("images/" + icon);
-        if (u == null)
-            // Fallback, shouldn't happen if image exists.
-            button = new ToolBarButton(icon);
-        else
-            button = new ToolBarButton(new ImageIcon(u));
-        button.setToolTipText(toolTip);
+        JButton button =
+            new ToolBarButton("images/" + icon, "[" + command + "]", toolTip);
         button.setActionCommand(command);
         button.addActionListener(this);
         return button;

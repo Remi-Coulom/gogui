@@ -42,7 +42,8 @@ public class Board
         m_board = board;
         setPreferredFieldSize();
         URL url = getClass().getClassLoader().getResource("images/wood.png");
-        m_image = new ImageIcon(url);
+        if (url != null)
+            m_image = new ImageIcon(url);
         initSize(m_board.getSize());
         setFocusable(true);
         addFocusListener(this);
@@ -266,8 +267,14 @@ public class Board
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         Dimension size = getSize();
-        graphics.drawImage(m_image.getImage(), 0, 0, size.width, size.height,
-                           null);
+        if (m_image != null)
+            graphics.drawImage(m_image.getImage(), 0, 0, size.width,
+                               size.height, null);
+        else
+        {
+            graphics.setColor(java.awt.Color.YELLOW.darker());
+            graphics.fillRect(0, 0, size.width, size.height);
+        }
     }
 
     public int print(Graphics g, PageFormat format, int page)

@@ -131,9 +131,8 @@ class ToolBar
 
     private JButton addButton(String icon, String command, String toolTip)
     {
-        URL u = getClass().getClassLoader().getResource("images/" + icon);
-        JButton button = new ToolBarButton(new ImageIcon(u));
-        button.setToolTipText(toolTip);
+        JButton button =
+            new ToolBarButton("images/" + icon, "[" + command + "]", toolTip);
         button.setActionCommand(command);
         button.addActionListener(m_listener);
         button.setEnabled(false);

@@ -148,8 +148,9 @@ class SelectProgram
         int fontSize = GuiUtils.getDefaultMonoFontSize();
         m_comboBox.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
-        URL u = getClass().getClassLoader().getResource("images/fileopen.png");
-        JButton button = new JButton(new ImageIcon(u));
+        JButton button =
+            new ImageButton("images/fileopen.png", "Browse",
+                            "Browse for Go program");
         button.setActionCommand("open");
         button.addActionListener(this);
         innerPanel.add(button, BorderLayout.EAST);

@@ -13,19 +13,19 @@ import javax.swing.*;
 //-----------------------------------------------------------------------------
 
 class ToolBarButton
-    extends JButton
+    extends ImageButton
     implements MouseListener
 {
-    public ToolBarButton(ImageIcon icon)
+    public ToolBarButton(String imageResourceName, String altText,
+                         String toolTipText)
     {
-        super(icon);
-        init();
-    }
-
-    public ToolBarButton(String text)
-    {
-        super(text);
-        init();
+        super(imageResourceName, altText, toolTipText);
+        setBorder(BorderFactory.createRaisedBevelBorder());
+        addMouseListener(this);
+        setBorderPainted(false);
+        Insets insets = new Insets(1, 1, 1, 1);
+        setMargin(insets);
+        setFocusable(false);
     }
 
     public void mouseClicked(MouseEvent event)
@@ -50,16 +50,6 @@ class ToolBarButton
 
     public void mouseReleased(MouseEvent event)
     {
-    }
-
-    private void init()
-    {
-        setBorder(BorderFactory.createRaisedBevelBorder());
-        addMouseListener(this);
-        setBorderPainted(false);
-        Insets insets = new Insets(1, 1, 1, 1);
-        setMargin(insets);
-        setFocusable(false);
     }
 };
 
