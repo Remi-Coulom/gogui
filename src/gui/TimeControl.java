@@ -20,10 +20,6 @@ public class TimeControl
         }
     }    
 
-    /** Time control.
-        @param time Specification string for time or null.
-        The format of the specification string is "minutes[+minutes/moves]"
-    */
     public TimeControl()
     {
         reset();
