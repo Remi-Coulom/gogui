@@ -2083,10 +2083,6 @@ class GoGui
 
     private void save(File file) throws FileNotFoundException
     {
-        String gameComment = null;
-        if (m_commandThread != null)
-            gameComment =
-                "Program command:\n" + m_commandThread.getProgramCommand();
         OutputStream out = new FileOutputStream(file);
         if (FileUtils.hasExtension(file, "tex"))
         {
@@ -2096,8 +2092,7 @@ class GoGui
         }
         else
         {
-            new sgf.Writer(out, m_gameTree, file, "GoGui", Version.get(),
-                           gameComment);
+            new sgf.Writer(out, m_gameTree, file, "GoGui", Version.get());
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
         }

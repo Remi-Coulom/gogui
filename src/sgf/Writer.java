@@ -27,7 +27,7 @@ public class Writer
 
     /** Save game tree. */
     public Writer(OutputStream out, GameTree gameTree, File file,
-                  String application, String version, String gameComment)
+                  String application, String version)
     {        
         m_out = new PrintStream(out);
         m_out.println("(");
@@ -43,8 +43,7 @@ public class Writer
         int handicap = gameInformation.m_handicap;
         float komi = gameInformation.m_komi;
         printHeader(file, application, version, handicap, date, playerBlack,
-                    playerWhite, rankBlack, rankWhite, gameComment, result,
-                    komi, rules);
+                    playerWhite, rankBlack, rankWhite, result, komi, rules);
         printNodes(gameTree.getRoot());        
         m_out.println(")");
         m_out.close();
@@ -112,8 +111,8 @@ public class Writer
     private void printHeader(File file, String application, String version,
                              int handicap, String date, String playerBlack,
                              String playerWhite, String rankBlack,
-                             String rankWhite, String gameComment,
-                             String result, float komi, String rules)
+                             String rankWhite, String result, float komi,
+                             String rules)
     {
         printHeader(file, application, version);
         if (handicap > 0)
@@ -132,15 +131,6 @@ public class Writer
             m_out.println("BR[" + rankBlack + "]");
         if (rankWhite != null)
             m_out.println("WR[" + rankWhite + "]");
-        if (gameComment != null)
-        {
-            DateFormat format =
-                DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                               DateFormat.FULL);
-            m_out.println("GC[" + gameComment + "\nDate: " +
-                          format.format(Calendar.getInstance().getTime())
-                          + "]");
-        }
         if (date != null)
             m_out.println("DT[" + date + "]");
     }

@@ -1009,12 +1009,15 @@ public class TwoGtp
             gameComment = gameComment +
                 "\nReferee: " + m_refereeCommand +
                 "\nResult according to referee: " + resultReferee;
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL);
         gameComment = gameComment +
-            "\nHost: " + host;
+            "\nHost: " + host +
+            "\nDate: " + format.format(Calendar.getInstance().getTime());
+        m_gameTree.getRoot().setComment(gameComment);
         File file = getFile(m_gameIndex);
         OutputStream out = new FileOutputStream(file);
-        new sgf.Writer(out, m_gameTree, file, "TwoGtp", Version.get(),
-                       gameComment);
+        new sgf.Writer(out, m_gameTree, file, "TwoGtp", Version.get());
     }
 
     private void saveResult(String resultBlack, String resultWhite,
