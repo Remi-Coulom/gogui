@@ -960,6 +960,7 @@ public class TwoGtp
             String resultTmp = inverseResult(resultWhite);
             resultWhite = inverseResult(resultBlack);
             resultBlack = resultTmp;
+            resultReferee = inverseResult(resultReferee);
         }
         GameInformation gameInformation = m_gameTree.getGameInformation();
         gameInformation.m_playerBlack = blackName;
@@ -976,12 +977,12 @@ public class TwoGtp
             gameComment = gameComment +
                 "\nOpening: " + m_openingFile;
         gameComment = gameComment +
-            "\nResult [Black]: " + resultBlack +
-            "\nResult [White]: " + resultWhite;
+            "\nResult[Black]: " + resultBlack +
+            "\nResult[White]: " + resultWhite;
         if (m_referee != null)
             gameComment = gameComment +
                 "\nReferee: " + m_refereeCommand +
-                "\nResult [Referee]: " + resultReferee;
+                "\nResult[Referee]: " + resultReferee;
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);
         gameComment = gameComment +
