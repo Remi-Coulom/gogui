@@ -1938,11 +1938,18 @@ class GoGui
         }
     }
 
-    private void saveSize(Component component, String name, int boardSize)
+    private void saveSize(Window window, String name, int boardSize)
     {
+        if (window instanceof Frame)
+        {
+            int state = ((Frame)window).getExtendedState();
+            int mask = Frame.NORMAL;
+            if ((state & mask) == 0)
+                return;
+        }
         name = name + "-" + boardSize;
-        java.awt.Point location = component.getLocation();
-        Dimension size = component.getSize();
+        java.awt.Point location = window.getLocation();
+        Dimension size = window.getSize();
         String value = Integer.toString(location.x) + " " + location.y
             + " " + size.width + " " + size.height;
         m_prefs.setString(name, value);
