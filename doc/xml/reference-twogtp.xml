@@ -68,8 +68,6 @@
 	  <application>GoGui</application> which controls the move generation
 	  with <userinput>genmove_black</userinput> and
 	  <userinput>genmove_white</userinput> commands.
-	  The game will be saved as file <filename>twogtp.sgf</filename>
-	  after it is finished.
 	</listitem>
       </varlistentry>
       <varlistentry>
