@@ -498,7 +498,7 @@ class GoGui
             toTop();
         }
         else
-            analyzeBegin(clearBoard, false);
+            analyzeBegin(false, clearBoard);
     }    
 
     public void windowActivated(WindowEvent e)
@@ -533,17 +533,21 @@ class GoGui
     private class AnalyzeContinue
         implements Runnable
     {
-        public AnalyzeContinue(boolean checkComputerMoveAfterAnalyze)
+        public AnalyzeContinue(boolean checkComputerMove,
+                               boolean resetBoard)
         {
-            m_checkComputerMoveAfterAnalyze = checkComputerMoveAfterAnalyze;
+            m_checkComputerMove = checkComputerMove;
+            m_resetBoard = resetBoard;
         }
 
         public void run()
         {
-            analyzeContinue(m_checkComputerMoveAfterAnalyze);
+            analyzeContinue(m_checkComputerMove, m_resetBoard);
         }
         
-        private boolean m_checkComputerMoveAfterAnalyze;
+        private boolean m_checkComputerMove;
+
+        private boolean m_resetBoard;
     }
 
     private class NewGameContinue
@@ -585,8 +589,6 @@ class GoGui
     private boolean m_isModified;
 
     private boolean m_lostOnTimeShown;
-
-    private boolean m_resetBoardAfterAnalyze;
 
     private boolean m_scoreMode;
 
@@ -664,12 +666,10 @@ class GoGui
 
     private ToolBar m_toolBar;
 
-    private void analyzeBegin(boolean resetBoardAfterAnalyze,
-                              boolean checkComputerMoveAfterAnalyze)
+    private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
     {
         if (m_commandThread == null)
             return;
-        m_resetBoardAfterAnalyze = resetBoardAfterAnalyze;
         if (m_analyzeCommand.needsPointArg() && m_analyzePointArg == null)
             return;
         showStatus("Running " +
@@ -681,10 +681,10 @@ class GoGui
                                               m_analyzePointArg,
                                               m_analyzePointListArg);
         runLengthyCommand(command,
-                          new AnalyzeContinue(checkComputerMoveAfterAnalyze));
+                          new AnalyzeContinue(checkComputerMove, resetBoard));
     }
 
-    private void analyzeContinue(boolean checkComputerMoveAfterAnalyze)
+    private void analyzeContinue(boolean checkComputerMove, boolean resetBoard)
     {
         endLengthyCommand();
         String resultTitle =
@@ -692,7 +692,7 @@ class GoGui
                                             m_analyzePointListArg);
         try
         {
-            if (m_resetBoardAfterAnalyze)
+            if (resetBoard)
                 resetBoard();
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
@@ -734,6 +734,7 @@ class GoGui
                                              m_boardSize);
                     m_guiBoard.showPointStringList(pointList, stringList);
                     m_guiBoard.repaint();
+                    m_boardNeedsReset = true;
                 }
                 break;
             case AnalyzeCommand.STRINGBOARD:
@@ -769,8 +770,7 @@ class GoGui
             }
             if (! statusContainsResponse)
                 showStatus(resultTitle);
-            if (! m_analyzeRequestPoint
-                && checkComputerMoveAfterAnalyze)
+            if (! m_analyzeRequestPoint && checkComputerMove)
                 checkComputerMove();
         }
         catch(Gtp.Error e)
@@ -837,7 +837,7 @@ class GoGui
             && m_analyzeAutoRun
             && ! (m_analyzeCommand.needsPointArg()
                   && m_analyzePointArg == null))
-            analyzeBegin(true, doCheckComputerMove);
+            analyzeBegin(doCheckComputerMove, true);
         else
         {
             resetBoard();
