@@ -11,6 +11,41 @@ import java.util.*;
 
 public class StringUtils
 {
+    /** Format a string for a dialog message.
+        Trims the string, changes first character to uppercase
+        and appends '.' if necessary.
+    */
+    public static String formatMessage(String message)
+    {
+        message = message.trim();
+        if (message.equals(""))
+            return message;
+        StringBuffer buffer = new StringBuffer(message);
+        char last = buffer.charAt(buffer.length() - 1);
+        if (Character.isLetterOrDigit(last))
+            buffer.append('.');
+        char first = buffer.charAt(0);
+        if (! Character.isUpperCase(first))
+            buffer.setCharAt(0, Character.toUpperCase(first));
+        return buffer.toString();
+    }
+
+    /** Format a string for a window title.
+        Trims the string and changes first character to uppercase.
+    */
+    public static String formatTitle(String title)
+    {
+        title = title.trim();
+        if (title.equals(""))
+            return title;
+        char c = title.charAt(0);
+        if (Character.isUpperCase(c))
+            return title;
+        StringBuffer buffer = new StringBuffer(title);
+        buffer.setCharAt(0, Character.toUpperCase(c));
+        return buffer.toString();
+    }
+
     /** Split string into words.
         Allows " for words containing whitespaces.
     */

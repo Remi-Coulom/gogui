@@ -572,6 +572,8 @@ public class TwoGtp
             blackName = m_whiteName;
             whiteName = m_blackName;
         }
+        blackName = StringUtils.formatTitle(blackName);
+        whiteName = StringUtils.formatTitle(whiteName);
         buffer.append(blackName);
         buffer.append(" - ");
         buffer.append(whiteName);

@@ -2117,13 +2117,7 @@ class GoGui
         if (m_loadedFile != null)
             setTitle(m_loadedFile);
         else if (! m_name.equals(""))
-        {
-            StringBuffer name = new StringBuffer(m_name);
-            char c = name.charAt(0);
-            if (! Character.isUpperCase(c))
-                name.setCharAt(0, Character.toUpperCase(c));
-            setTitle(name.toString());
-        }
+            setTitle(StringUtils.formatTitle(m_name));
         else
             setTitle("GoGui");
     }
@@ -2235,20 +2229,13 @@ class GoGui
     }
 
     private void showGtpError(Component frame, Gtp.Error e)
-    {
-        StringBuffer message = new StringBuffer(e.getMessage().trim());
+    {        
+        String message = e.getMessage().trim();
         if (message.length() == 0)
-            message.append("Command failed");
+            message = "Command failed";
         else
-        {
-            char last = message.charAt(message.length() - 1);
-            if (Character.isLetterOrDigit(last))
-                message.append('.');
-            char first = message.charAt(0);
-            if (! Character.isUpperCase(first))
-                message.setCharAt(0, Character.toUpperCase(first));
-        }
-        SimpleDialogs.showError(frame, message.toString());
+            message = StringUtils.formatMessage(message);
+        SimpleDialogs.showError(frame, message);
     }
 
     private void showInfo(String message)
