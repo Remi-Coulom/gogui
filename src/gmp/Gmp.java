@@ -51,7 +51,7 @@ class Util
 
 //----------------------------------------------------------------------------
 
-/** Gmp command. */
+/** GMP command. */
 class Cmd
 {
     public static final int OK = 0;
@@ -525,7 +525,8 @@ class ReadThread extends Thread
 
     public synchronized boolean send(Cmd cmd, StringBuffer response)
     {
-        while (m_state == STATE_WAIT_ANSWER_OK || m_state == STATE_WAIT_ANSWER)
+        while (m_state == STATE_WAIT_ANSWER_OK
+               || m_state == STATE_WAIT_ANSWER)
         {
             try
             {
@@ -965,21 +966,14 @@ class ReadThread extends Thread
 
 //----------------------------------------------------------------------------
 
-/**
-   This class is final because it starts a thread in its constructor which
-   might conflict with subclassing because the subclass constructor will
-   be called after the thread is started.
+/** GMP connection.
+    This class is final because it starts a thread in its constructor which
+    might conflict with subclassing because the subclass constructor will
+    be called after the thread is started.
 */
 public final class Gmp
 {
-    public static class Error extends Exception
-    {
-        public Error(String s)
-        {
-            super(s);
-        }
-    }    
-
+    /** Result returned by Gmp.waitMove. */
     public static class Move
     {
         public boolean m_isBlack;
