@@ -240,9 +240,6 @@ class StdErrThread
                     char c[] = new char[len];
                     for (int i = 0; i < len; ++i)
                         c[i] = buf[i];
-                    // Sleep to avoid too many callbacks,
-                    // because stderr is usually unbuffered.
-                    sleep(100);
                 }
             }
         }

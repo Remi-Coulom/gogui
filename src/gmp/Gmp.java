@@ -288,7 +288,7 @@ class ReadThread
             {
                 Cmd stackCmd = (Cmd)m_cmdStack.get(0);
                 if (stackCmd.m_cmd != cmd
-                    || ((stackCmd.m_cmd & valMask) != valCondition))
+                    || ((stackCmd.m_val & valMask) != valCondition))
                 {
                     result.m_response = ("Received " +
                                          stackCmd.toString(m_size));
@@ -404,7 +404,7 @@ class ReadThread
     private Cmd getCmd()
     {
         int cmd = (m_inBuffer[2] >> 4) & 0x7;
-        int val = ((m_inBuffer[2] & 0x03) << 7) | (m_inBuffer[3] & 0x7f);
+        int val = ((m_inBuffer[2] & 0x07) << 7) | (m_inBuffer[3] & 0x7f);
         return new Cmd(cmd, val);
     }
 
@@ -480,6 +480,7 @@ class ReadThread
                     log("sequence error");
                     return;
                 }
+                log("received OK");
                 m_status = STATUS_IDLE;
                 return;
             }
@@ -497,8 +498,10 @@ class ReadThread
                 notifyAll();
                 return;
             }
+            log("conflict");
             m_status = STATUS_CONFLICT;
             m_myLastSeq = ! m_myLastSeq;
+            notifyAll();
         }
         else
         {
