@@ -291,7 +291,7 @@ public class GtpShell
         setVisible(true);
         toFront();
         requestFocus();
-        m_textField.requestFocus();
+        m_comboBox.requestFocus();
     }
 
     /** Send Gtp command to callback.
@@ -358,11 +358,6 @@ public class GtpShell
                 SimpleDialogs.showError(frame, e.getMessage());
             }
         }
-        appendToHistory(command);
-        m_comboBox.hidePopup();
-        addAllCompletions(m_history);
-        m_textField.setText("");
-        m_textField.setCaretPosition(0);
     }
 
     public void sentCommand(String command)
@@ -600,7 +595,11 @@ public class GtpShell
     {
         String command = m_comboBox.getSelectedItem().toString();
         sendCommand(command, null);
-        m_textField.requestFocus();
+        appendToHistory(command);
+        m_comboBox.hidePopup();
+        addAllCompletions(m_history);
+        m_editor.setItem(null);
+        m_comboBox.requestFocus();
     }
 
     private void createMenu()

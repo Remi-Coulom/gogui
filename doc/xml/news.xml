@@ -29,6 +29,10 @@
 	    if available.
 	  </listitem>
 	  <listitem>
+	    Fix problem in GtpShell: caret was not redrawn after entering
+	    command.
+	  </listitem>
+	  <listitem>
 	    Lots of other fixes and enhancements.
 	  </listitem>
 	</itemizedlist>
