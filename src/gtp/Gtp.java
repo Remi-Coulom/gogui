@@ -644,6 +644,8 @@ public final class Gtp
             throw new Error("Invalid response:\n" + line);
         }
         boolean error = (line.charAt(0) != '=');
+        if (m_callback != null)
+            m_callback.receivedResponse(error, response.toString());
         boolean done = false;
         while (! done)
         {
@@ -651,9 +653,9 @@ public final class Gtp
             done = line.equals("");
             response.append(line);
             response.append("\n");
+            if (m_callback != null)
+                m_callback.receivedResponse(error, line + "\n");
         }
-        if (m_callback != null)
-            m_callback.receivedResponse(error, response.toString());
         m_fullResponse = response.toString();
         assert(response.length() >= 4);            
         int index = response.indexOf(" ");
