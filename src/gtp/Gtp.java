@@ -295,13 +295,18 @@ public final class Gtp
         String p[] = StringUtils.tokenize(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
+            {
+                Point point;
                 try
                 {
-                    vector.add(parsePoint(p[i], boardSize));
+                    point = parsePoint(p[i], boardSize);
                 }
                 catch (Error e)
                 {
+                    continue;
                 }
+                vector.add(point);
+            }
         Point result[] = new Point[vector.size()];
         for (int i = 0; i < result.length; ++i)
             result[i] = (Point)vector.get(i);
