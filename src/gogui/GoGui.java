@@ -1616,6 +1616,7 @@ class GoGui
             {
                 undoCurrentNode();
                 executeCurrentNode();
+                m_guiBoard.updateFromGoBoard();
             }
             catch (Gtp.Error e)
             {
@@ -1655,7 +1656,6 @@ class GoGui
         go.Color toMove = m_currentNode.getToMove();
         if (toMove != go.Color.EMPTY)
             m_board.setToMove(toMove);
-        m_guiBoard.updateFromGoBoard();
     }
 
     private boolean executeRoot()
