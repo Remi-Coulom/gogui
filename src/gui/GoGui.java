@@ -226,6 +226,8 @@ class GoGui
             cbSetupWhite();
         else if (command.equals("show-last-move"))
             cbShowLastMove();
+        else if (command.equals("truncate"))
+            cbTruncate();
         else
             assert(false);
     }
@@ -1170,6 +1172,23 @@ class GoGui
     private void cbShowLastMove()
     {
         m_guiBoard.setShowLastMove(m_menuBar.getShowLastMove());
+    }
+
+    private void cbTruncate()
+    {
+        int numberSavedMoves = m_board.getNumberSavedMoves();
+        int moveNumber = m_board.getMoveNumber();
+        if (moveNumber == numberSavedMoves)
+        {
+            showError("No moves to truncate.");
+            return;
+        }
+        if (! showQuestion("Truncate moves " + (moveNumber + 1) + "-"
+                           + numberSavedMoves + "?"))
+            return;
+        m_board.truncate();
+        m_gameInfo.update();
+        m_toolBar.updateGameButtons(m_board);
     }
 
     private boolean checkModifyGame(Move move)

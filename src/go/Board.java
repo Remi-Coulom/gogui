@@ -538,6 +538,11 @@ public class Board
         m_rules = rules;
     }
 
+    public void truncate()
+    {
+        m_moves.setSize(m_moveNumber);
+    }
+
     public void undo()
     {
         if (getMoveNumber() == 0)

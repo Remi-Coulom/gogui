@@ -336,6 +336,8 @@ class MenuBar
 
     private JMenuItem m_itemSetupWhite;
 
+    private JMenuItem m_itemTruncate;
+
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {
         item.addActionListener(m_listener);
@@ -476,6 +478,8 @@ class MenuBar
                     ActionEvent.CTRL_MASK, "end");
         addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
                     ActionEvent.CTRL_MASK, "goto");
+        m_itemTruncate = addMenuItem(menu, "Truncate...", KeyEvent.VK_T,
+                                     "truncate");
         menu.addSeparator();
         addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
