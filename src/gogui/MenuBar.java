@@ -552,7 +552,8 @@ public class MenuBar
             addMenuItem(menu, "Go To...", KeyEvent.VK_G, KeyEvent.VK_G,
                         m_shortcutKeyMask, "goto");
         menu.addSeparator();
-        addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
+        addMenuItem(menu, "Score", KeyEvent.VK_R, KeyEvent.VK_R,
+                    m_shortcutKeyMask, "score");
         return menu;
     }
 
