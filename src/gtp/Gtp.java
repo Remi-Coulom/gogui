@@ -1,6 +1,13 @@
 //-----------------------------------------------------------------------------
-// $Id$
-// $Source$
+/* @file Gtp.java
+   Interface to a GTP Go program.
+
+   @todo Should use java.nio to avoid thread switching with Thread.yield()
+   to keep order between stderr and stout of program.
+
+   $Id$
+   $Source$
+*/
 //-----------------------------------------------------------------------------
 
 package gtp;
