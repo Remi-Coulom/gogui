@@ -34,6 +34,15 @@ public class Analyze
         writeData(dataFile);
     }
 
+    private final class ResultStatistics
+    {
+        public Statistics m_unknown = new Statistics();
+
+        public Statistics m_win = new Statistics();
+
+        public Histogram m_histo = new Histogram(-400, 400, 10);
+    }
+
     private boolean m_hasReferee;
 
     private int m_duplicates;
@@ -74,27 +83,15 @@ public class Analyze
 
     private Statistics m_length = new Statistics();
 
-    private Statistics m_unknownBlack = new Statistics();
+    private ResultStatistics m_statisticsBlack = new ResultStatistics();
 
-    private Statistics m_unknownReferee = new Statistics();
+    private ResultStatistics m_statisticsReferee = new ResultStatistics();
 
-    private Statistics m_unknownWhite = new Statistics();
-
-    private Statistics m_winBlack = new Statistics();
-
-    private Statistics m_winReferee = new Statistics();
-
-    private Statistics m_winWhite = new Statistics();
+    private ResultStatistics m_statisticsWhite = new ResultStatistics();
 
     private Statistics m_cpuBlack = new Statistics();
 
     private Statistics m_cpuWhite = new Statistics();
-
-    private Histogram m_histoBlack = new Histogram(-400, 400, 10);
-
-    private Histogram m_histoReferee = new Histogram(-400, 400, 10);
-
-    private Histogram m_histoWhite = new Histogram(-400, 400, 10);
 
     private void calcStatistics()
     {
@@ -113,12 +110,9 @@ public class Analyze
                 continue;
             }
             ++m_gamesUsed;
-            parseResult(e.m_resultBlack, m_histoBlack, m_winBlack,
-                        m_unknownBlack);
-            parseResult(e.m_resultWhite, m_histoWhite, m_winWhite,
-                        m_unknownWhite);
-            parseResult(e.m_resultReferee, m_histoReferee, m_winReferee,
-                        m_unknownReferee);
+            parseResult(e.m_resultBlack, m_statisticsBlack);
+            parseResult(e.m_resultWhite, m_statisticsWhite);
+            parseResult(e.m_resultReferee, m_statisticsReferee);
             m_cpuBlack.addValue(e.m_cpuBlack);
             m_cpuWhite.addValue(e.m_cpuWhite);
             m_length.addValue(e.m_length);
@@ -198,8 +192,7 @@ public class Analyze
         }
     }
 
-    private void parseResult(String result, Statistics statResult,
-                             Statistics statWin, Statistics statUnknown)
+    private void parseResult(String result, ResultStatistics statistics)
     {
         boolean isValid = false;
         double r = 0;
@@ -220,10 +213,10 @@ public class Analyze
         }
         if (isValid)
         {
-            statResult.addValue(r);
-            statWin.addValue(r > 0 ? 1 : 0);
+            statistics.m_histo.addValue(r);
+            statistics.m_win.addValue(r > 0 ? 1 : 0);
         }
-        statUnknown.addValue(isValid ? 0 : 1);
+        statistics.m_unknown.addValue(isValid ? 0 : 1);
     }
 
     private void readFile(File file) throws Exception
@@ -321,15 +314,12 @@ public class Analyze
                   "<hr>\n");
         if (m_hasReferee)
         {
-            writeHtmlResults(out, m_referee, m_winReferee, m_unknownReferee,
-                             m_histoReferee);
+            writeHtmlResults(out, m_referee, m_statisticsReferee);
             out.println("<hr>");
         }
-        writeHtmlResults(out, m_black, m_winBlack, m_unknownBlack,
-                         m_histoBlack);
+        writeHtmlResults(out, m_black, m_statisticsBlack);
         out.println("<hr>");
-        writeHtmlResults(out, m_white, m_winWhite, m_unknownWhite,
-                         m_histoWhite);
+        writeHtmlResults(out, m_white, m_statisticsWhite);
         out.println("<hr>");
         out.print("<table border=\"0\">\n" +
                   "<thead>\n" +
@@ -376,8 +366,7 @@ public class Analyze
     }
 
     private void writeHtmlResults(PrintStream out, String name,
-                                  Statistics win, Statistics unknown,
-                                  Histogram histo)
+                                  ResultStatistics statistics)
         throws Exception
     {
         NumberFormat format = StringUtils.getNumberFormat(1);
@@ -386,21 +375,22 @@ public class Analyze
                   "<table border=\"0\">\n" +
                   "<tr><th align=\"left\">Black score["
                   + name + "]:</th><td align=\"left\">"
-                  + format.format(histo.getMean()) + " (&plusmn;"
-                  + format.format(histo.getErrorMean())
+                  + format.format(statistics.m_histo.getMean()) + " (&plusmn;"
+                  + format.format(statistics.m_histo.getErrorMean())
                   + ")</td></tr>\n" +
                   "<tr><th align=\"left\">Black wins["
                   + name + "]:</th><td align=\"left\">"
-                  + format.format(win.getMean() * 100) + "% (&plusmn;"
-                  + format.format(win.getErrorMean() * 100)
+                  + format.format(statistics.m_win.getMean() * 100)
+                  + "% (&plusmn;"
+                  + format.format(statistics.m_win.getErrorMean() * 100)
                   + ")</td></tr>\n" +
                   "<tr><th align=\"left\">Unknown["
                   + name + "]:</th><td align=\"left\">"
-                  + format.format(unknown.getMean() * 100) + "%"
+                  + format.format(statistics.m_unknown.getMean() * 100) + "%"
                   + "</td></tr>\n" +
                   "</table>\n" +
                   "</p>\n");
-        histo.printHtml(out);
+        statistics.m_histo.printHtml(out);
     }
 
     private void writeData(File file) throws Exception
@@ -408,26 +398,35 @@ public class Analyze
         PrintStream out = new PrintStream(new FileOutputStream(file));
         NumberFormat format1 = StringUtils.getNumberFormat(1);
         NumberFormat format2 = StringUtils.getNumberFormat(2);
+        Histogram histoBlack = m_statisticsBlack.m_histo;
+        Histogram histoWhite = m_statisticsWhite.m_histo;
+        Histogram histoReferee = m_statisticsReferee.m_histo;
+        Statistics winBlack = m_statisticsBlack.m_win;
+        Statistics winWhite = m_statisticsWhite.m_win;
+        Statistics winReferee = m_statisticsReferee.m_win;
+        Statistics unknownBlack = m_statisticsBlack.m_unknown;
+        Statistics unknownWhite = m_statisticsWhite.m_unknown;
+        Statistics unknownReferee = m_statisticsReferee.m_unknown;
         out.print("#GAMES\tERR\tDUP\tUSED\tRES_B\tERR_B\tWIN_B\tERRW_B\t"
                   + "UNKN_B\tRES_W\tERR_W\tWIN_W\tERRW_W\tUNKN_W\t"
                   + "RES_R\tERR_R\tWIN_R\tERRW_R\tUNKN_R\n" +
                   m_games + "\t" + m_errors + "\t" + m_duplicates + "\t"
                   + m_gamesUsed
-                  + "\t" + format1.format(m_histoBlack.getMean())
-                  + "\t" + format1.format(m_histoBlack.getErrorMean())
-                  + "\t" + format2.format(m_winBlack.getMean())
-                  + "\t" + format2.format(m_winBlack.getErrorMean())
-                  + "\t" + format2.format(m_unknownBlack.getMean())
-                  + "\t" + format1.format(m_histoWhite.getMean())
-                  + "\t" + format1.format(m_histoWhite.getErrorMean())
-                  + "\t" + format2.format(m_winWhite.getMean())
-                  + "\t" + format2.format(m_winWhite.getErrorMean())
-                  + "\t" + format2.format(m_unknownWhite.getMean())
-                  + "\t" + format1.format(m_histoReferee.getMean())
-                  + "\t" + format1.format(m_histoReferee.getErrorMean())
-                  + "\t" + format2.format(m_winReferee.getMean())
-                  + "\t" + format2.format(m_winReferee.getErrorMean())
-                  + "\t" + format2.format(m_unknownReferee.getMean())
+                  + "\t" + format1.format(histoBlack.getMean())
+                  + "\t" + format1.format(histoBlack.getErrorMean())
+                  + "\t" + format2.format(winBlack.getMean())
+                  + "\t" + format2.format(winBlack.getErrorMean())
+                  + "\t" + format2.format(unknownBlack.getMean())
+                  + "\t" + format1.format(histoWhite.getMean())
+                  + "\t" + format1.format(histoWhite.getErrorMean())
+                  + "\t" + format2.format(winWhite.getMean())
+                  + "\t" + format2.format(winWhite.getErrorMean())
+                  + "\t" + format2.format(unknownWhite.getMean())
+                  + "\t" + format1.format(histoReferee.getMean())
+                  + "\t" + format1.format(histoReferee.getErrorMean())
+                  + "\t" + format2.format(winReferee.getMean())
+                  + "\t" + format2.format(winReferee.getErrorMean())
+                  + "\t" + format2.format(unknownReferee.getMean())
                   + "\n");
         out.close();
     }
