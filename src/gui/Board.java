@@ -353,7 +353,7 @@ public class Board
         if (font != null)
         {
             FontMetrics metrics = graphics.getFontMetrics(font);
-            float scale = (float)fieldSize / metrics.getAscent() / 2f;
+            float scale = (float)fieldSize / metrics.getAscent() / 2.3f;
             if (scale < 0.95f)
             {
                 int size = font.getSize();
