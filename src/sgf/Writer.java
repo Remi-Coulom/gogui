@@ -184,6 +184,8 @@ public class Writer
         {
             m_out.println("OW[" + node.getMovesLeftWhite() + "]");
         }
+        if (node.getPlayer() != Color.EMPTY)
+            printToPlay(node.getPlayer());
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)
         {

@@ -1189,7 +1189,7 @@ class GoGui
             else if (color == go.Color.WHITE)
                 root.addWhite(point);
         }
-        root.setToMove(m_board.getToMove());
+        root.setPlayer(m_board.getToMove());
         m_board.initSize(m_boardSize);
         executeRoot();
         m_needsSave = true;
@@ -1726,7 +1726,7 @@ class GoGui
     private void executeCurrentNode() throws Gtp.Error
     {
         m_currentNodeExecuted = 0;
-        Vector moves = m_currentNode.getAddStonesAndMoves();
+        Vector moves = m_currentNode.getAllAsMoves();
         for (int i = 0; i < moves.size(); ++i)
         {
             Move move = (Move)moves.get(i);
@@ -2452,7 +2452,7 @@ class GoGui
                 m_currentNode.addWhite(point);
         }
         if (m_board.getToMove() != toMove)
-            m_currentNode.setToMove(toMove);
+            m_currentNode.setPlayer(toMove);
         executeRoot();
         fileModified();
         updateGameInfo(true);

@@ -70,8 +70,11 @@ public class Node
         return (Point)m_addWhite.get(i);
     }
 
-    /** Get stones added and moves all as moves. */
-    public Vector getAddStonesAndMoves()
+    /** Get stones added and moves all as moves.
+        Also might include a pass move at the end to make sure, that the
+        right color is to move after executing all returned moves.
+    */
+    public Vector getAllAsMoves()
     {
         Vector moves = new Vector();
         if (m_addBlack != null)
@@ -82,6 +85,15 @@ public class Node
                 moves.add(new Move((Point)m_addWhite.get(i), Color.WHITE));
         if (m_move != null)
             moves.add(m_move);
+        if (moves.size() > 0)
+        {
+            Color toMove = getToMove();
+            if (toMove == Color.EMPTY)
+                toMove = Color.BLACK;
+            Move lastMove = (Move)moves.get(moves.size() - 1);
+            if (toMove != lastMove.getColor().otherColor())
+                moves.add(new Move(null, lastMove.getColor().otherColor()));
+        }
         return moves;
     }
 
@@ -241,6 +253,15 @@ public class Node
         return result;
     }
 
+    /** Return color to play if explicitely set.
+        Returns Color.EMPTY if color is not explicitely set.
+        @see getToMove() for getting the color to play.
+    */
+    public Color getPlayer()
+    {
+        return m_player;
+    }
+
     /** Return start node of previous variation before this node. */
     public Node getPreviousVariation()
     {
@@ -298,10 +319,24 @@ public class Node
         return m_timeLeftWhite;
     }
 
-    /** @return Color.EMPTY if unknown */
+    /** Get color to move.
+        Determining the color to move takes into consideration an explicitely
+        set player color and moves contained in this node or its children.
+        If nothing is known about the color to move, it returns Color.EMPTY.
+    */
     public Color getToMove()
     {
-        return m_toMove;
+        if (m_player != Color.EMPTY)
+            return m_player;
+        if (m_move != null)
+            return m_move.getColor().otherColor();
+        boolean hasChildrenBlack = hasChildrenMovesWithColor(Color.BLACK);
+        boolean hasChildrenWhite = hasChildrenMovesWithColor(Color.WHITE);
+        if (hasChildrenBlack && ! hasChildrenWhite)
+            return Color.BLACK;
+        if (hasChildrenWhite && ! hasChildrenBlack)
+            return Color.WHITE;
+        return Color.EMPTY;
     }
 
     public boolean hasChildWithMove(Move move)
@@ -389,10 +424,10 @@ public class Node
         m_timeLeftWhite = timeLeft;
     }
 
-    public void setToMove(Color color)
+    public void setPlayer(Color color)
     {
         assert(color == Color.BLACK || color == Color.WHITE);
-        m_toMove = color;
+        m_player = color;
     }
 
     public void removeChild(Node child)
@@ -409,7 +444,7 @@ public class Node
 
     private float m_timeLeftWhite = Float.NaN;
 
-    private Color m_toMove = Color.EMPTY;
+    private Color m_player = Color.EMPTY;
 
     private Move m_move;
 
@@ -424,6 +459,18 @@ public class Node
     private Vector m_addWhite;
 
     private Vector m_children;
+
+    private boolean hasChildrenMovesWithColor(Color color)
+    {
+        int numberChildren = getNumberChildren();
+        for (int i = 0; i < numberChildren; ++i)
+        {
+            Node child = getChild(i);
+            if (child.m_move != null && child.m_move.getColor() == color)
+                return true;
+        }
+        return false;
+    }
 
     private void makeMainVariation(Node child)
     {

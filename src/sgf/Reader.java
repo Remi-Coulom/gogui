@@ -248,7 +248,7 @@ public class Reader
             else if (p.equals("PW"))
                 m_gameInformation.m_playerWhite = v;
             else if (p.equals("PL"))
-                node.setToMove(parseColor(v));
+                node.setPlayer(parseColor(v));
             else if (p.equals("RE"))
                 m_gameInformation.m_result = v;
             else if (p.equals("RU"))
