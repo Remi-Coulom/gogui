@@ -343,6 +343,14 @@ class Regression
         else if (! fail && expectedFail)
             style = "pass";
         printOutLine(style, m_lastResponse);
+        if (fail && ! expectedFail)
+            System.out.println(Integer.toString(m_lastId)
+                               + " unexpected FAIL: Correct '"
+                               + expectedResponse + "', got '" + response
+                               + "'");
+        else if (! fail && expectedFail)
+            System.out.println(Integer.toString(m_lastId)
+                               + " unexpected PASS!");
         m_tests.add(new Test(m_lastId, m_lastCommand, fail, expectedFail,
                              expectedResponse, response, m_lastSgf,
                              m_lastSgfMove));
@@ -435,6 +443,7 @@ class Regression
     private void runTest(String test)
         throws Exception
     {
+        System.err.println(test);
         m_tests.clear();
         File file = new File(test);
         FileReader fileReader = new FileReader(file);
