@@ -38,9 +38,9 @@ class Field
 
     public void clearInfluence()
     {
-        if (m_influenceColor != null)
+        if (m_influenceSet)
         {
-            m_influenceColor = null;
+            m_influenceSet = false;
             repaint();
         }
     }
@@ -51,8 +51,6 @@ class Field
         Dimension size = getSize();
         if (m_fieldColor != null)
             g.setColor(m_fieldColor);
-        else if (m_influenceColor != null)
-            g.setColor(m_influenceColor);
         else
             g.setColor(m_boardColor);
         g.fillRect(0, 0, size.width, size.height);        
@@ -62,6 +60,8 @@ class Field
             drawStone(g, java.awt.Color.white);
         else
             drawGrid(g);
+        if (m_influenceSet)
+            drawInfluence(g);
         if (m_markup)
             drawMarkup(g);
         if (m_crossHair)
@@ -102,28 +102,10 @@ class Field
             value = 1.;
         else if (value < -1.)
             value = -1.;
-        m_influence = value;
-        int r = m_influenceNoneColor.getRed();
-        int g = m_influenceNoneColor.getGreen();
-        int b = m_influenceNoneColor.getBlue();
-        if (value > 0)
-        {
-            r += (int)(value * (m_influenceBlackColor.getRed() - r));
-            g += (int)(value * (m_influenceBlackColor.getGreen() - g));
-            b += (int)(value * (m_influenceBlackColor.getBlue() - b));
-        }
-        else
-        {
-            r -= (int)(value * (m_influenceWhiteColor.getRed() - r));
-            g -= (int)(value * (m_influenceWhiteColor.getGreen() - g));
-            b -= (int)(value * (m_influenceWhiteColor.getBlue() - b));
-        }
-        java.awt.Color color = new java.awt.Color(r, g, b);
-        if (! (m_influenceColor != null && m_influenceColor.equals(color)))
-        {
-            m_influenceColor = color;
+        if (Math.abs(m_influence - value) > 0.01)
             repaint();
-        }
+        m_influence = value;
+        m_influenceSet = true;
     }
 
     public void setMarkup(boolean markup)
@@ -146,6 +128,7 @@ class Field
     private boolean m_isHandicap;
     private boolean m_crossHair;
     private boolean m_markup;
+    private boolean m_influenceSet;
     private double m_influence;
     private String m_string = "";
     private static java.awt.Color m_boardColor
@@ -155,9 +138,6 @@ class Field
         = new java.awt.Color(255, 63, 63);
     private static java.awt.Color m_influenceWhiteColor
         = new java.awt.Color(0, 255, 127);
-    private java.awt.Color m_influenceNoneColor
-        = new java.awt.Color(192, 192, 192);
-    private java.awt.Color m_influenceColor;
     private Color m_color;
     private Point m_point;
     private Board m_board;
@@ -202,6 +182,26 @@ class Field
             g.fillOval(halfWidth - radiusX, halfHeight - radiusY,
                         2 * radiusX + 1, 2 * radiusY + 1);
         }
+    }
+
+    private void drawInfluence(Graphics g)
+    {
+        Dimension size = getSize();
+        int xCenter = size.width / 2;
+        int yCenter = size.height / 2;
+        double d = Math.abs(m_influence);
+        if (d < 0.01)
+            return;
+        d = Math.sqrt(d);
+        int dx = (int)((size.width * (1 - d)) / 2);
+        int dy = (int)((size.height * (1 - d)) / 2);
+        int x[] = {xCenter, size.width - dx, xCenter, dx};
+        int y[] = {dy, yCenter, size.height - dy - 1, yCenter};
+        if (m_influence > 0)
+            g.setColor(m_influenceBlackColor);
+        else
+            g.setColor(m_influenceWhiteColor);
+        g.fillPolygon(x, y, 4);
     }
 
     private void drawMarkup(Graphics g)
