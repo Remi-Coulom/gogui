@@ -93,6 +93,14 @@ public class Gtp
         return m_response;
     }
 
+    public String getCommandBoardsize(int size)
+    {
+        if (m_protocolVersion == 2)
+            return ("boardsize " + size);
+        else
+            return null;
+    }
+
     public String getCommandClearBoard(int size)
     {
         if (m_protocolVersion == 1)
@@ -481,8 +489,9 @@ public class Gtp
 
     public void sendCommandBoardsize(int size) throws Gtp.Error
     {
-        if (m_protocolVersion == 2)
-            sendCommand("boardsize " + size);
+        String command = getCommandBoardsize(size);
+        if (command != null)
+            sendCommand(command);
     }
 
     public String sendCommandClearBoard(int size) throws Gtp.Error
