@@ -1566,6 +1566,7 @@ class GoGui
             return;
         }
         initGame(size);
+        setHandicap();
         m_gameInfo.update();
         m_guiBoard.update();
     }
@@ -1583,8 +1584,8 @@ class GoGui
         }
         setTitleFromProgram();
         initGame(m_boardSize);
-        setTimeSettings();
         setHandicap();
+        setTimeSettings();
         checkComputerMove();
     }
 
