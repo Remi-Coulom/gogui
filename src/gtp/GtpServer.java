@@ -218,7 +218,7 @@ public abstract class GtpServer
         while (true)
         {
             Command command = readThread.getCommand();
-            if (readThread.endOfFile())
+            if (command == null)
                 return;
             sendResponse(command);
             if (command.isQuit())
