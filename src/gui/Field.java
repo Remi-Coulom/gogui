@@ -316,7 +316,7 @@ public class Field
         else
             graphics.setColor(m_influenceWhiteColor);
         int size = getSize().width;
-        int dd = (int)(size * (0.32 + (1 - d) * 0.68));
+        int dd = (int)(size * (0.34 + (1 - d) * 0.66));
         int width = size - dd;
         graphics.fillRect(dd / 2, dd / 2, width, width);
     }
