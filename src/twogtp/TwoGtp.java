@@ -763,8 +763,9 @@ public class TwoGtp
         }
         if (isAlternated())
         {
-            blackName = m_whiteName;
-            whiteName = m_blackName;
+            String tmpName = blackName;
+            blackName = whiteName;
+            whiteName = tmpName;
         }
         blackName = StringUtils.capitalize(blackName);
         whiteName = StringUtils.capitalize(whiteName);
