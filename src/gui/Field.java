@@ -145,7 +145,7 @@ public class Field
     private java.awt.Color m_fieldColor;
 
     private static java.awt.Color m_influenceBlackColor
-        = new java.awt.Color(64, 64, 64);
+        = new java.awt.Color(96, 96, 96);
 
     private static java.awt.Color m_influenceWhiteColor
         = new java.awt.Color(224, 224, 224);
