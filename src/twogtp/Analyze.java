@@ -201,7 +201,7 @@ public class Analyze
                   "<h1>" + m_black + " - " + m_white + "</h1>\n" +
                   "<hr>\n" +
                   "<small>\n" +
-                  "<table>\n" +
+                  "<table align=\"left\">\n" +
                   "<tr><th align=\"left\">Black:</th><td align=\"left\">"
                   + m_black + "</td></tr>\n" +
                   "<tr><th align=\"left\">White:</th><td align=\"left\">"
@@ -266,7 +266,7 @@ public class Analyze
                   "</table>\n" +
                   "</small>\n" +
                   "<hr>\n" +
-                  "<table border=\"1\">\n" +
+                  "<table align=\"left\" border=\"1\">\n" +
                   "<thead>\n" +
                   "<th>Game</th>\n" +
                   "<th>Result [" + m_black + "]</th>\n" +
