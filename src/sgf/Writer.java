@@ -272,6 +272,7 @@ public class Writer
         }
         for (int i = 0; i < numberChildren; ++i)
         {
+            printNewLine();
             print("(");
             printNode(node.getChild(i), false);
             print(")");
