@@ -728,18 +728,20 @@ class AnalyzeDialog
         selectCommand(index);
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
+        String label = command.getLabel();
         if (command.needsStringArg())
         {
             String stringArg =
-                JOptionPane.showInputDialog(this, "Argument for "
-                                            + command.getLabel());
+                JOptionPane.showInputDialog(this, "Argument for " + label);
             if (stringArg == null)
                 return;
             command.setStringArg(stringArg);
         }
         if (command.needsFileArg())
         {
-            File fileArg = SimpleDialogs.showSelectFile(this);
+            
+            File fileArg =
+                SimpleDialogs.showSelectFile(this, "File for " + label);
             if (fileArg == null)
                 return;
             command.setFileArg(fileArg);

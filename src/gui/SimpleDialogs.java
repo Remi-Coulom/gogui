@@ -68,7 +68,7 @@ public class SimpleDialogs
 
     public static File showOpenSgf(Component frame)
     {
-        return showSgfFileChooser(frame, FILE_OPEN, true);
+        return showSgfFileChooser(frame, FILE_OPEN, true, null);
     }
 
     public static boolean showQuestion(Component frame, String message)
@@ -81,12 +81,12 @@ public class SimpleDialogs
 
     public static File showSaveSgf(Component frame)
     {
-        return showSgfFileChooser(frame, FILE_SAVE, true);
+        return showSgfFileChooser(frame, FILE_SAVE, true, null);
     }
 
-    public static File showSelectFile(Component frame)
+    public static File showSelectFile(Component frame, String title)
     {
-        return showSgfFileChooser(frame, FILE_SELECT, false);
+        return showSgfFileChooser(frame, FILE_SELECT, false, title);
     }
 
     public static void showWarning(Component frame, String message)
@@ -101,7 +101,7 @@ public class SimpleDialogs
     private static String m_lastFile;
 
     private static File showSgfFileChooser(Component frame, int type,
-                                           boolean setSgfFilter)
+                                           boolean setSgfFilter, String title)
     {
         if (m_lastFile == null)
             m_lastFile = System.getProperties().getProperty("user.dir");
@@ -125,6 +125,8 @@ public class SimpleDialogs
             ret = chooser.showOpenDialog(frame);
             break;
         default:
+            if (title != null)
+                chooser.setDialogTitle(title);
             ret = chooser.showDialog(frame, "Select");
             break;
         }
