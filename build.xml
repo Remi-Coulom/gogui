@@ -294,7 +294,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </copy>
 <replace file="${appdir}/Contents/Resources/GoGui Help/index.html"
  token="&lt;head&gt;"
- value="&lt;head&gt;&lt;meta name=&quot;AppleTitle&quot; content=&quot;GoGui Help&quot;/&gt;"/>
+ value="&lt;head&gt;&lt;meta name=&quot;AppleTitle&quot; content=&quot;GoGui Help&quot;&gt;"/>
 <copy todir="${appdir}/Contents/Resources/Java" overwrite="true">
 <fileset dir="lib" includes="*.jar"/>
 </copy>
