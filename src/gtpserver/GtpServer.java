@@ -13,6 +13,7 @@ import version.*;
 
 //----------------------------------------------------------------------------
 
+/** Connects a Go program supporting GTP to a socket. */
 class GtpServer
 {
     /** @param verbose Log everything sent and received to stderr

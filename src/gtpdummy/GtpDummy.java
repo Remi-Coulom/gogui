@@ -14,6 +14,7 @@ import version.*;
 
 //----------------------------------------------------------------------------
 
+/** Dummy Go program for testing GTP controlling programs. */
 public class GtpDummy
     extends GtpServer
 {

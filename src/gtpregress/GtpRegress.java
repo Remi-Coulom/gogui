@@ -16,6 +16,7 @@ import version.*;
 
 //----------------------------------------------------------------------------
 
+/** Runs GTP regression tests. */
 class GtpRegress
     implements Gtp.IOCallback
 {
@@ -117,11 +118,13 @@ class GtpRegress
     {
     }
 
+    /** Exception thrown if Go program died. */
     private static class ProgramIsDeadException
         extends Exception
     {
     }
 
+    /** Information about one test and its result. */
     private static class Test
     {
         public int m_id;
@@ -140,9 +143,9 @@ class GtpRegress
 
         public String m_lastSgf;
 
-        public Test(int id, String command, boolean fail, boolean expectedFail,
-                    String required, String response, String lastSgf,
-                    int lastSgfMove)
+        public Test(int id, String command, boolean fail,
+                    boolean expectedFail, String required, String response,
+                    String lastSgf, int lastSgfMove)
         {
             m_id = id;
             m_fail = fail;
@@ -155,6 +158,7 @@ class GtpRegress
         }
     }
 
+    /** Information about test results of one test file. */
     private static class TestSummary
     {
         public File m_file;
@@ -327,8 +331,8 @@ class GtpRegress
                                        + " unexpected FAIL");
                 else
                     System.out.println(Integer.toString(m_lastCommandId)
-                                       + " unexpected FAIL: '" + m_lastResponse
-                                       + "'");
+                                       + " unexpected FAIL: '"
+                                       + m_lastResponse + "'");
                 fail = true;
             }
             else
@@ -425,7 +429,8 @@ class GtpRegress
             handleLastResponse();
             return;
         }
-        patternString = patternString.substring(1, patternString.length() - 1);
+        patternString =
+            patternString.substring(1, patternString.length() - 1);
         String expectedResponse = patternString;
         boolean notPattern = false;
         if (patternString.startsWith("!"))
@@ -501,8 +506,8 @@ class GtpRegress
                     "-->\n" +
                     "</style>\n" +
                     "</head>\n" +
-                    "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
-                    " vlink=\"#551a8b\">\n" +
+                    "<body bgcolor=\"white\" text=\"black\"" +
+                    " link=\"#0000ee\" vlink=\"#551a8b\">\n" +
                     "<table border=\"0\" width=\"100%\" bgcolor=\""
                     + m_colorHeader + "\">\n" +
                     "<tr><td>\n" +
@@ -551,7 +556,8 @@ class GtpRegress
         line = line.replaceAll("&", "&amp;");
         line = line.replaceAll(">", "&gt;");
         line = line.replaceAll("<", "&lt;");
-        if (style != null && (style.equals("command") || style.equals("test")))
+        if (style != null
+            && (style.equals("command") || style.equals("test")))
         {
             Pattern pattern = Pattern.compile("\\S*\\.[Ss][Gg][Ff]");
             Matcher matcher = pattern.matcher(line);

@@ -15,6 +15,7 @@ import version.*;
 
 //----------------------------------------------------------------------------
 
+/** Simple text based interface to Go programs supporting GTP. */
 public class GtpTerminal
     implements Gtp.IOCallback
 {

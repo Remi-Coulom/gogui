@@ -11,6 +11,7 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** GTP command. */
 class Command
 {
     public boolean m_hasId;
@@ -25,7 +26,15 @@ class Command
     }
 }
 
-class ReadThread extends Thread
+//----------------------------------------------------------------------------
+
+/** Thread reading the command stream.
+    Reading is done in a seperate thread to allow the notification
+    of GtpServer about an asynchronous interrupt received using
+    the special comment line '# interrupt'.
+*/
+class ReadThread
+    extends Thread
 {
     public ReadThread(GtpServer gtpServer, InputStream in, boolean log)
     {
@@ -164,13 +173,18 @@ class ReadThread extends Thread
     }
 }
 
+//----------------------------------------------------------------------------
+
+/** Base class for Go programs and tools implementing GTP. */
 public abstract class GtpServer
 {
+    /** Returned by parseColorArgument. */
     public static class ColorArgument
     {
         public Color m_color;
     }
 
+    /** Returned by parseColorPointArgument. */
     public static class ColorPointArgument
     {
         public Color m_color;
@@ -178,16 +192,19 @@ public abstract class GtpServer
         public Point m_point;
     }
 
+    /** Returned by parseDoubleArgument. */
     public static class DoubleArgument
     {
         public double m_double;
     }
 
+    /** Returned by parseIntegerArgument. */
     public static class IntegerArgument
     {
         public int m_integer;
     }
 
+    /** Returned by parsePointArgument. */
     public static class PointArgument
     {
         public Point m_point;

@@ -21,6 +21,7 @@ import version.*;
 
 //----------------------------------------------------------------------------
 
+/** Graphical user interface to a Go program. */
 class GoGui
     extends JFrame
     implements ActionListener, AnalyzeDialog.Callback, gui.Board.Listener,

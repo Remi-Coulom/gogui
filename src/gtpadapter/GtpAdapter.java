@@ -15,6 +15,7 @@ import version.*;
 
 //----------------------------------------------------------------------------
 
+/** GTP adapter for logging or protocol translations. */
 public class GtpAdapter
     extends GtpServer
 {
