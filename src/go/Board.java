@@ -75,7 +75,7 @@ public class Board
         if (m_moveNumber < 2)
             return false;
         return (getInternalMove(m_moveNumber - 1).getPoint() == null
-                 && getInternalMove(m_moveNumber - 2).getPoint() == null);
+                && getInternalMove(m_moveNumber - 2).getPoint() == null);
     }
 
     public void calcScore()
@@ -111,18 +111,15 @@ public class Board
                 }
                 else
                 {
-                    for (int j = 0; j < territory.size(); ++j)
-                        setMark((Point)territory.get(j), false);
+                    setMark(territory, false);
                     if (isTerritory(p, territory, Color.WHITE))
                     {
                         for (int j = 0; j < territory.size(); ++j)
-                            setScore((Point)territory.get(j),
-                                     Color.WHITE);
+                            setScore((Point)territory.get(j), Color.WHITE);
                     }
                     else
                     {
-                        for (int j = 0; j < territory.size(); ++j)
-                            setMark((Point)territory.get(j), false);
+                        setMark(territory, false);
                     }
                 }
             }
@@ -275,11 +272,7 @@ public class Board
     {
         assert(isMarkCleared());
         findStones(p, color, stones);
-        for (int i = 0; i < stones.size(); ++i)
-        {
-            go.Point stone = (go.Point)stones.get(i);
-            setMark(p, false);
-        }
+        setMark(stones, false);
         assert(isMarkCleared());
     }
 
@@ -594,8 +587,7 @@ public class Board
             for (int i = 0; i < stones.size(); ++i)
                 setColor((Point)stones.get(i), Color.EMPTY);
         }
-        for (int i = 0; i < stones.size(); ++i)
-            setMark((Point)stones.get(i), false);
+        setMark(stones, false);
         assert(isMarkCleared());
     }
 
@@ -695,6 +687,13 @@ public class Board
     private void setMark(Point p, boolean value)
     {
         m_mark[p.getX()][p.getY()] = value;
+    }
+
+    private void setMark(Vector points, boolean value)
+    {
+        int size = points.size();
+        for (int i = 0; i < size; ++i)
+            setMark((Point)points.get(i), value);
     }
 
     private void setScore(Point p, Color c)
