@@ -1967,9 +1967,9 @@ class GoGui
         }
         else
         {
-            new sgf.Writer(out, m_board, file, "GoGui", Version.get(),
-                           m_handicap, playerBlack, playerWhite, gameComment,
-                           m_score);
+            new sgf.Writer(out, m_board, m_gameTree, file, "GoGui",
+                           Version.get(), m_handicap, playerBlack, playerWhite,
+                           gameComment, m_score);
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
         }

@@ -10,6 +10,7 @@ package sgf;
 import java.io.*;
 import java.text.*;
 import java.util.*;
+import game.*;
 import go.*;
 
 //-----------------------------------------------------------------------------
@@ -37,8 +38,24 @@ public class Writer
         printSetup(m_board.getSetupStonesBlack(),
                    m_board.getSetupStonesWhite());
         if (m_board.getNumberSavedMoves() == 0)
-            printToPlay();
+            printToPlay(m_board.getToMove());
         printMoves();        
+        m_out.println(")");
+        m_out.close();
+    }
+
+    public Writer(OutputStream out, Board board, GameTree gameTree, File file,
+                  String application, String version, int handicap,
+                  String playerBlack, String playerWhite, String gameComment,
+                  Score score)
+    {        
+        m_out = new PrintStream(out);
+        m_board = board;
+        m_out.println("(");
+        printHeader(file, application, version, handicap, playerBlack,
+                    playerWhite, gameComment, score);
+        printToPlay(board.getToMove());
+        printNodes(gameTree.getRoot());        
         m_out.println(")");
         m_out.close();
     }
@@ -150,6 +167,48 @@ public class Writer
         }
     }
 
+    private void printNodes(Node node)
+    {
+        if (node.getNumberAddBlack() > 0)
+        {
+            m_out.print("AB");
+            for (int i = 0; i < node.getNumberAddBlack(); ++i)
+                printPoint(node.getAddBlack(i));
+            m_out.println();
+        }
+        if (node.getNumberAddWhite() > 0)
+        {
+            m_out.print("AW");
+            for (int i = 0; i < node.getNumberAddWhite(); ++i)
+                printPoint(node.getAddWhite(i));
+            m_out.println();
+        }
+        Move move = node.getMove();
+        if (move != null)
+        {
+            if (move.getColor() == Color.BLACK)
+                m_out.print(";\nB");
+            else
+                m_out.print(";\nW");
+            printPoint(move.getPoint());
+            m_out.println();
+        }
+        int numberChildren = node.getNumberChildren();
+        if (numberChildren == 0)
+            return;
+        if (numberChildren == 1)
+        {
+            printNodes(node.getChild());
+            return;
+        }
+        for (int i = 0; i < numberChildren; ++i)
+        {
+            m_out.println("(");
+            printNodes(node.getChild(i));
+            m_out.println(")");
+        }
+    }
+
     private void printPoint(Point p)
     {
         if (p == null)
@@ -186,7 +245,7 @@ public class Writer
                 white.add(p);
         }
         printSetup(black, white);
-        printToPlay();
+        printToPlay(m_board.getToMove());
     }
 
     private void printSetup(Vector black, Vector white)
@@ -208,9 +267,9 @@ public class Writer
         }
     }
 
-    private void printToPlay()
+    private void printToPlay(Color color)
     {
-        if (m_board.getToMove() == Color.BLACK)
+        if (color == Color.BLACK)
             m_out.println("PL[B]");
         else
             m_out.println("PL[W]");
