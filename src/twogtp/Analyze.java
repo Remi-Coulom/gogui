@@ -164,6 +164,7 @@ public class Analyze
                   " vlink=\"#551a8b\">\n" +
                   "<h1>" + m_black + " - " + m_white + "</h1>\n" +
                   "<hr>\n" +
+                  "<small>\n" +
                   "<table>\n" +
                   "<tr><th align=\"left\">Black:</th><td align=\"right\">"
                   + m_black + "</td></tr>\n" +
@@ -196,6 +197,7 @@ public class Analyze
                   + format.format(m_winWhite.getErrorMean() * 100)
                   + ")</td></tr>\n" +
                   "</table>\n" +
+                  "</small>\n" +
                   "<hr>\n" +
                   "<table border=\"1\">\n" +
                   "<thead>\n" +
@@ -390,13 +392,14 @@ class Histogram
         for (max = m_size - 1; max > 0 && m_array[max] == 0; --max);
         for (int i = min; i <= max; ++i)
         {
-            int width = m_array[i] * 300 / getCount();
+            final int scale = 630;
+            int width = m_array[i] * scale / getCount();
             out.print("<tr><td align=\"right\">" + (m_min + i * m_step)
                       + "</td><td><table cellspacing=\"0\"" +
-                      " cellpadding=\"0\" width=\"300\"><tr>" +
+                      " cellpadding=\"0\" width=\"" + scale + "\"><tr>" +
                       "<td bgcolor=\"blue\" width=\"" + width +
                       "\"></td>" + "<td bgcolor=\"#cccccc\" width=\""
-                      + (300 - width) + "\">"
+                      + (scale - width) + "\">"
                       + m_array[i] + "</td></tr></table></td></tr>\n");
         }
         out.print("</small>" +
