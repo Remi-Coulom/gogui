@@ -453,6 +453,11 @@ public class Gtp
         }
     }
 
+    /** Send a command and timeout if no response is received within a
+        time limit.
+        @bug Doesn't work yet, BufferedReader blocks even if thread is
+        interrupted.
+    */
     public String sendCommand(String command, long timeout) throws Gtp.Error
     {
         assert(! command.trim().equals(""));
