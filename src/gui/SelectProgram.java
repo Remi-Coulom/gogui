@@ -34,8 +34,7 @@ class SelectProgram
         String command = event.getActionCommand();
         if (command.equals("cancel"))
             dispose();
-        else if (command.equals("comboBoxEdited")
-                 || command.equals("ok"))
+        else if (command.equals("ok"))
         {
             m_command = m_comboBox.getSelectedItem().toString();
             m_comboBox.insertItemAt(m_command, 0);
@@ -95,10 +94,13 @@ class SelectProgram
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("ok");
         okButton.addActionListener(this);
+        okButton.setMnemonic(KeyEvent.VK_O);
+        getRootPane().setDefaultButton(okButton);
         innerPanel.add(okButton);
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setActionCommand("cancel");
         cancelButton.addActionListener(this);
+        cancelButton.setMnemonic(KeyEvent.VK_C);
         innerPanel.add(cancelButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
@@ -121,7 +123,6 @@ class SelectProgram
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new BorderLayout());
         m_comboBox = new JComboBox(loadHistory());
-        m_comboBox.addActionListener(this);
         m_comboBox.setEditable(true);
         ComboBoxEditor editor = m_comboBox.getEditor();
         m_textField = (JTextField)editor.getEditorComponent();
@@ -181,8 +182,8 @@ class SelectProgram
         catch (IOException e)
         {
         }
-        if (! result.contains("gnugo --mode gtp -r %SRAND"))
-            result.add("gnugo --mode gtp -r %SRAND");
+        if (! result.contains("gnugo --mode gtp"))
+            result.add("gnugo --mode gtp");
         return result;
     }
 
