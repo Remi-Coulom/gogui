@@ -616,7 +616,7 @@ public final class Gtp
         public String m_text;
     }
     
-    private static class InputThread
+    private class InputThread
         extends Thread
     {
         InputThread(InputStream in, MessageQueue queue)
@@ -658,11 +658,12 @@ public final class Gtp
                 m_queue.put(new ReadMessage(false, line));
                 if (line == null)
                     return;
+                log("<< " + line);
             }
         }
     }
 
-    private static class ErrorThread
+    private class ErrorThread
         extends Thread
     {
         public ErrorThread(InputStream in, MessageQueue queue)
@@ -708,6 +709,7 @@ public final class Gtp
                 m_queue.put(new ReadMessage(true, text));
                 if (text == null)
                     return;
+                logError(text);
             }
         }
     }
@@ -756,8 +758,6 @@ public final class Gtp
     {
         if (text == null)
             return;
-        if (m_log)
-            System.err.print(text);
         if (m_callback != null)
             m_callback.receivedStdErr(text);
     }
@@ -778,6 +778,12 @@ public final class Gtp
                 System.err.print(m_logPrefix);
             System.err.println(msg);
         }
+    }
+
+    private synchronized void logError(String text)
+    {
+        if (m_log)
+            System.err.print(text);
     }
 
     private String readLine(long timeout) throws GtpError
@@ -819,7 +825,6 @@ public final class Gtp
                     }
                     throwProgramDied();
                 }
-                log("<< " + line);
                 return line;
             }
             else
