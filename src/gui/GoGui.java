@@ -1659,8 +1659,6 @@ class GoGui
                     Dimension size = getSize();
                     m_gtpShell.setLocation(size.width, 0);
                 }
-                if (m_prefs.getBool("show-gtpshell"))
-                    m_gtpShell.toTop();
                 // First command is sent with a timeout, so that we are not
                 // fooled by programs who are not GTP Go programs, but
                 // consume stdin without writing to stdout.
@@ -1728,6 +1726,8 @@ class GoGui
             {
                 if (m_prefs.getBool("show-analyze"))
                     cbAnalyze();
+                if (m_prefs.getBool("show-gtpshell"))
+                    m_gtpShell.toTop();
             }
             toTop();
             m_guiBoard.setFocus();

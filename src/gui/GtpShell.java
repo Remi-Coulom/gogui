@@ -475,8 +475,13 @@ public class GtpShell
 
     public void setFinalSize(int x, int y, int width, int height)
     {
-        m_finalSize = new Dimension(width, height);
-        m_finalLocation = new java.awt.Point(x, y);
+        if (m_isFinalSizeSet)
+            setBounds(x, y, width, height);
+        else
+        {
+            m_finalSize = new Dimension(width, height);
+            m_finalLocation = new java.awt.Point(x, y);
+        }
     }
 
     public void setInitialCompletions(Vector completions)
