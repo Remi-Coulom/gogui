@@ -2292,7 +2292,7 @@ class GoGui
                 playerBlack = playerBlack + "[" + blackRank + "]";
             if (whiteRank != null && ! whiteRank.trim().equals(""))
                 playerWhite = playerWhite + "[" + whiteRank + "]";
-            gameName = playerBlack + " vs " + playerWhite;
+            gameName = playerBlack + "(Black) vs " + playerWhite;
         }
         else if (m_loadedFile != null)
             gameName= m_loadedFile.getName();
