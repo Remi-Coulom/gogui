@@ -826,9 +826,6 @@ class GoGui
                                     + "printed by the program.");
             return;
         }
-        restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
-        if (m_prefs.getBool("show-gtpshell"))
-            m_gtpShell.toTop();
         try
         {
             setFastUpdate(true);
@@ -859,6 +856,11 @@ class GoGui
         catch (Gtp.Error e)
         {
         }
+        restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+        if (m_prefs.getBool("show-gtpshell"))
+            m_gtpShell.toTop();
+        if (m_prefs.getBool("show-analyze"))
+            cbAnalyze();
         m_gtpShell.setProgramName(m_name);
         Vector supportedCommands =
             m_commandThread.getSupportedCommands();
@@ -1849,13 +1851,6 @@ class GoGui
                 showError("Unknown analyze command \"" + m_initAnalyze + "\"");
             else
                 initAnalyzeCommand(analyzeCommand, true);
-        }
-        if (m_commandThread != null)
-        {
-            if (m_prefs.getBool("show-analyze"))
-                cbAnalyze();
-            if (m_prefs.getBool("show-gtpshell"))
-                m_gtpShell.toTop();
         }
         setVisible(true);
         m_guiBoard.setFocus();
