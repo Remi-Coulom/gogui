@@ -1,19 +1,39 @@
-  <article>
-    <title>README</title>
-    
+<article>
+  <title>README</title>
+  
+  <section>
+    <title>Description</title>
     <para>
       GoGui is a graphical interface to programs that play the game of Go
       and use GTP (Go Text Protocol).
     </para>
-    
     <para>
       It is especially useful for Go program developers, since it allows
       direct communication with the program by sending any GTP command
       and allows to log and save the complete stream of sent GTP commands
       to facilitate debugging and reproducing errors.
     </para>
-    
+  </section>
+  
+  <section>
+    <title>Requirements</title>
     <para>
       GoGui requires Java 1.4.
     </para>
-  </article>
+  </section>
+
+  <section>
+    <title>Project websites</title>
+    <itemizedlist>
+      <listitem>
+	<ulink url="http://gogui.sourceforge.net">
+	  GoGui home page at SourceForge</ulink>
+      </listitem>
+      <listitem>
+	<ulink url="http://sourceforge.net/projects/gogui/">
+	  GoGui project page at SourceForge</ulink>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+</article>
