@@ -57,8 +57,7 @@ public final class Gtp
             // RAND_MAX in stdlib.h ist at least 32767
             final int RAND_MAX = 32767;
             int rand = (int)(Math.random() * (RAND_MAX + 1));
-            m_program = StringUtils.replace(m_program, "%SRAND",
-                                            Integer.toString(rand));
+            m_program = m_program.replaceAll("%SRAND", Integer.toString(rand));
         }
         Runtime runtime = Runtime.getRuntime();
         try
@@ -618,8 +617,7 @@ public final class Gtp
                         m_timeLastReceived = System.currentTimeMillis();
                     }
                     stringBuffer.append(buffer, 0, n);
-                    // GCJ 3.3.1 does not implement StringBuffer.lastIndexOf
-                    int index = stringBuffer.toString().lastIndexOf("\n");
+                    int index = stringBuffer.lastIndexOf("\n");
                     if (index == -1)
                         continue;
                     String s = stringBuffer.substring(0, index + 1);
@@ -749,8 +747,7 @@ public final class Gtp
             }
             m_fullResponse = response.toString();
             assert(response.length() >= 4);            
-            // GCJ 3.3.1 does not implement StringBuffer.indexOf
-            int index = response.toString().indexOf(" ");
+            int index = response.indexOf(" ");
             if (index < 0)
                 m_response = response.substring(0, response.length() - 2);
             else
