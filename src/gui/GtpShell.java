@@ -669,7 +669,8 @@ public class GtpShell
             Object object = wrapperObject((String)completions.get(i));
             m_comboBox.addItem(object);
         }
-        if (select && oldText.trim().length() > 0 && completions.size() > 0)
+        if (! m_disableCompletions && select && oldText.trim().length() > 0
+            && completions.size() > 0)
         {
             String text = (String)completions.get(completions.size() - 1);
             m_comboBox.setSelectedIndex(0);
