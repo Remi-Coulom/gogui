@@ -17,6 +17,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <command>gtpadapter</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-emuhandicap</option></arg>
+<arg><option>-fillpasses</option></arg>
 <arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
 <arg><option>-name</option> <replaceable>name</replaceable></arg>
@@ -87,6 +88,16 @@ Send GTP commands from file to program at startup.
 <listitem>
 <para>
 Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-fillpasses</option></term>
+<listitem>
+<para>
+Fill non-alternating moves with pass moves for programs that
+can only handle move sequences with alternating color.
 </para>
 </listitem>
 </varlistentry>

@@ -22,7 +22,8 @@ public class GtpAdapter
     public GtpAdapter(InputStream in, OutputStream out, String program,
                       PrintStream log, boolean version2, int size, String name,
                       boolean noScore, boolean emuHandicap, boolean resign,
-                      int resignScore, String gtpFile, boolean verbose)
+                      int resignScore, String gtpFile, boolean verbose,
+                      boolean fillPasses)
         throws Exception
     {
         super(in, out, log);
@@ -45,6 +46,7 @@ public class GtpAdapter
         m_name = name;
         m_resign = resign;
         m_resignScore = Math.abs(resignScore);
+        m_fillPasses = fillPasses;
     }
 
     public void close()
@@ -126,6 +128,7 @@ public class GtpAdapter
             String options[] = {
                 "config:",
                 "emuhandicap",
+                "fillpasses",
                 "gtpfile:",
                 "help",
                 "log:",
@@ -153,6 +156,7 @@ public class GtpAdapter
             boolean noScore = opt.isSet("noscore");
             boolean version2 = opt.isSet("version2");
             boolean emuHandicap = opt.isSet("emuhandicap");
+            boolean fillPasses = opt.isSet("fillpasses");
             String name = opt.getString("name", null);
             String gtpFile = opt.getString("gtpfile", null);
             int size = opt.getInteger("size", -1);
@@ -174,7 +178,7 @@ public class GtpAdapter
             GtpAdapter gtpAdapter =
                 new GtpAdapter(System.in, System.out, program, log, version2,
                                size, name, noScore, emuHandicap, resign,
-                               resignScore, gtpFile, verbose);
+                               resignScore, gtpFile, verbose, fillPasses);
             gtpAdapter.mainLoop();
             gtpAdapter.close();
             if (log != null)
@@ -199,6 +203,8 @@ public class GtpAdapter
 
     private boolean m_emuHandicap;
 
+    private boolean m_fillPasses;
+
     private boolean m_noScore;
 
     private boolean m_resign;
@@ -217,6 +223,8 @@ public class GtpAdapter
     private Board m_board;
 
     private Gtp m_gtp;
+
+    private Stack m_passInserted = new Stack();
 
     private String m_name;
 
@@ -287,6 +295,7 @@ public class GtpAdapter
         }
         m_boardSize = argument.m_integer;
         m_board = new Board(m_boardSize);
+        m_passInserted.clear();
         command = m_gtp.getCommandClearBoard(m_boardSize);
         if (! send(command, response))
             return false;
@@ -299,6 +308,7 @@ public class GtpAdapter
         if (! send(command, response))
             return false;
         m_board = new Board(m_boardSize);
+        m_passInserted.clear();
         return true;
     }
 
@@ -317,6 +327,8 @@ public class GtpAdapter
     {
         String command = m_gtp.getCommandGenmove(color);
         if (! send(command, response))
+            return false;
+        if (! fillPass(color, response))
             return false;
         try
         {
@@ -447,7 +459,7 @@ public class GtpAdapter
             parsePointArgument(cmdArray, response, m_boardSize);
         if (argument == null)
             return false;
-        return play(Color.BLACK, argument.m_point, response);
+        return play(color, argument.m_point, response);
     }
 
     private boolean cmdSetFreeHandicap(String cmdArray[],
@@ -500,8 +512,31 @@ public class GtpAdapter
         return true;
     }
 
+    private boolean fillPass(Color color, StringBuffer response)
+    {
+        if (! m_fillPasses)
+            return true;
+        Color toMove = m_board.getToMove();
+        if (color == toMove)
+        {
+            m_passInserted.push(new Boolean(false));
+            return true;
+        }
+        String command = m_gtp.getCommandPlay(toMove) + " PASS";
+        if (send(command, response))
+        {
+            m_board.play(new Move(null, toMove));
+            m_passInserted.push(new Boolean(true));
+            return true;
+        }
+        m_passInserted.push(new Boolean(false));
+        return false;
+    }
+
     private boolean play(Color color, Point point, StringBuffer response)
     {
+        if (! fillPass(color, response))
+            return false;
         String command = m_gtp.getCommandPlay(color) + " " + point;
         if (send(command, response))
         {
@@ -518,6 +553,7 @@ public class GtpAdapter
             "\n" +
             "-config       config file\n" +
             "-emuhandicap  emulate free handicap commands\n" +
+            "-fillpasses   fill non-alternating moves with pass moves\n" +
             "-gtpfile      file with GTP commands to send at startup\n" +
             "-log file     log GTP stream to file\n" +
             "-noscore      hide score commands\n" +
@@ -627,9 +663,19 @@ public class GtpAdapter
         if (send("undo", response))
         {
             m_board.undo();
-            return true;
+            return undoFillPass(response);
         }
         return false;
+    }
+
+    private boolean undoFillPass(StringBuffer response)
+    {
+        if (! m_fillPasses)
+            return true;
+        Boolean passInserted = (Boolean)m_passInserted.pop();
+        if (passInserted.booleanValue())
+            return send("undo", response);
+        return true;
     }
 }
 
