@@ -43,6 +43,7 @@ $Source$
 
 <target name="cleanBuildDir">
 <delete failonerror="false" includeEmptyDirs="true">
+<fileset dir="build/config"/>
 <fileset dir="build/doc"/>
 <fileset dir="build/gmp"/>
 <fileset dir="build/gmptogtp"/>
