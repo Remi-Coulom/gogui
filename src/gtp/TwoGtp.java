@@ -204,10 +204,13 @@ public class TwoGtp
             StringUtils.replace(playCommand, "genmove_", "");
             playCommand.append(' ');
             playCommand.append(response);
+            if (response.length() > 0)
+                response.append(' ');
             response.append(other.sendCommand(playCommand.toString()));
         }
         catch (Gtp.Error e)
         {
+            response.setLength(0);
             response.append(e.getMessage());
             return false;
         }
