@@ -118,7 +118,6 @@ class GoGui
         setTitle("GoGui");
         if (m_rememberWindowSizes)
             restoreSize(this, "window-gogui", m_boardSize);
-        ++m_instanceCount;
         try
         {
             if (time != null)
@@ -692,8 +691,6 @@ class GoGui
 
     private int m_handicap;
 
-    private static int m_instanceCount;
-
     private int m_move;
 
     private go.Board m_board;
@@ -746,10 +743,6 @@ class GoGui
 
     private AnalyzeDialog m_analyzeDialog;    
 
-    /** Preferences.
-        Preferences are shared between instances created with
-        "Open with program", the last instance of GoGui saves them.
-    */
     private Preferences m_prefs;
 
     private ScoreDialog m_scoreDialog;
@@ -1562,12 +1555,8 @@ class GoGui
             detachProgram();
         saveSession();
         dispose();
-        assert(m_instanceCount > 0);
-        if (--m_instanceCount == 0)
-        {
-            m_prefs.save();
-            System.exit(0);
-        }
+        m_prefs.save();
+        System.exit(0);
     }
 
     private void computerBlack()
