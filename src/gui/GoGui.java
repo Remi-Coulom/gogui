@@ -204,7 +204,7 @@ class GoGui
     
     public void clearAnalyzeCommand()
     {
-        m_analyzeCmd = null;
+        m_analyzeCommand = null;
         if (m_analyzeRequestPoint)
         {
             m_analyzeRequestPoint = false;
@@ -371,16 +371,11 @@ class GoGui
         endLengthyCommand();
     }
 
-    public void initAnalyzeCommand(int type, String label, String command,
-                                   String title, double scale)
+    public void initAnalyzeCommand(Analyze.Command command)
     {
-        m_analyzeType = type;
-        m_analyzeTitle = title;
-        m_analyzeLabel = label;
-        m_analyzeCmd = command;
-        m_analyzeScale = scale;
+        m_analyzeCommand = command;
         m_analyzeRequestPoint = false;
-        if (m_analyzeCmd.indexOf("%p") >= 0)
+        if (command.needsPointArg())
         {
             m_analyzeRequestPoint = true;
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
@@ -388,13 +383,12 @@ class GoGui
         }
     }
 
-    public void setAnalyzeCommand(int type, String label, String command,
-                                  String title, double scale)
+    public void setAnalyzeCommand(Analyze.Command command)
     {
-        initAnalyzeCommand(type, label, command, title, scale);
+        initAnalyzeCommand(command);
         if (m_commandInProgress)
             return;
-        if (m_analyzeCmd.indexOf("%p") < 0)
+        if (! m_analyzeCommand.needsPointArg())
             analyzeBegin(false);
     }
 
@@ -453,8 +447,6 @@ class GoGui
 
     private boolean m_verbose;
 
-    private int m_analyzeType = Analyze.NONE;
-
     private int m_boardSize;
 
     private int m_handicap;
@@ -462,8 +454,6 @@ class GoGui
     private static int m_instanceCount;
 
     private int m_move;
-
-    private double m_analyzeScale;
 
     private go.Board m_board;
 
@@ -487,11 +477,7 @@ class GoGui
 
     private MenuBars m_menuBars;
 
-    private String m_analyzeCmd;
-
-    private String m_analyzeLabel;
-
-    private String m_analyzeTitle;
+    private Analyze.Command m_analyzeCommand;
 
     private String m_file;
 
@@ -510,7 +496,9 @@ class GoGui
     private Preferences m_prefs;
 
     private TimeControl m_timeControl;
+
     private ToolBar m_toolBar;
+
     private Vector m_commandList = new Vector(128, 128);
 
     private void analyzeBegin(boolean resetBoardAfterAnalyze)
@@ -518,21 +506,17 @@ class GoGui
         if (m_commandThread == null)
             return;
         m_resetBoardAfterAnalyze = resetBoardAfterAnalyze;
-        StringBuffer buffer = new StringBuffer(m_analyzeCmd);
-        StringUtils.replace(buffer, "%m", m_board.getToMove().toString());
-        if (m_analyzeCmd.indexOf("%p") >= 0)
-        {
-            if (m_analyzePointArg == null)
-                return;
-            StringUtils.replace(buffer, "%p",
-                                m_analyzePointArg.toString());
-        }
+        if (m_analyzeCommand.needsPointArg() && m_analyzePointArg == null)
+            return;
         showStatus("Running analyze command...");
+        String command =
+            m_analyzeCommand.replaceWildCards(m_board.getToMove(),
+                                              m_analyzePointArg);
         Runnable callback = new Runnable()
             {
                 public void run() { analyzeContinue(); }
             };
-        runLengthyCommand(buffer.toString(), callback);
+        runLengthyCommand(command, callback);
     }
 
     private void analyzeContinue()
@@ -546,49 +530,51 @@ class GoGui
             if (e != null)
                 throw e;
             String answer = m_commandThread.getAnswer();
-            if (m_analyzeType == Analyze.COLORBOARD)
+            String title = m_analyzeCommand.getTitle();
+            int type = m_analyzeCommand.getType();
+            switch (type)
             {
-                String board[][] = Gtp.parseStringBoard(answer,
-                                                        m_analyzeTitle,
-                                                        m_boardSize);
-                showColorBoard(board);
+            case Analyze.COLORBOARD:
+                {
+                    String board[][] = Gtp.parseStringBoard(answer, title,
+                                                            m_boardSize);
+                    showColorBoard(board);
+                }
+                break;
+            case Analyze.DOUBLEBOARD:
+                {
+                    double board[][] = Gtp.parseDoubleBoard(answer, title,
+                                                            m_boardSize);
+                    showDoubleBoard(board, m_analyzeCommand.getScale());
+                }
+                break;
+            case Analyze.POINTLIST:
+                {
+                    go.Point pointList[] = Gtp.parsePointList(answer);
+                    showPointList(pointList);
+                }
+                break;
+            case Analyze.STRINGBOARD:
+                {
+                    String board[][] = Gtp.parseStringBoard(answer, title,
+                                                            m_boardSize);
+                    showStringBoard(board);
+                }
+                break;
             }
-            else if (m_analyzeType == Analyze.DOUBLEBOARD)
-            {
-                double board[][] = Gtp.parseDoubleBoard(answer, m_analyzeTitle,
-                                                        m_boardSize);
-                showDoubleBoard(board, m_analyzeScale);
-            }
-            else if (m_analyzeType == Analyze.POINTLIST)
-            {
-                go.Point pointList[] = Gtp.parsePointList(answer);
-                showPointList(pointList);
-            }
-            else if (m_analyzeType == Analyze.STRINGBOARD)
-            {
-                String board[][] = Gtp.parseStringBoard(answer,
-                                                        m_analyzeTitle,
-                                                        m_boardSize);
-                showStringBoard(board);
-            }
-            StringBuffer title = new StringBuffer(m_analyzeLabel);
-            if (m_analyzePointArg != null)
-            {
-                title.append(" ");
-                title.append(m_analyzePointArg.toString());
-            }
-            if (m_analyzeType == Analyze.STRING)
+            String resultTitle =
+                m_analyzeCommand.getResultTitle(m_analyzePointArg);
+            if (type == Analyze.STRING)
             {
                 if (answer.indexOf("\n") < 0)
                 {
-                    title.append(": ");
-                    title.append(answer);
-                    showStatus(title.toString());
+                    showStatus(resultTitle + ": " + answer);
                 }
                 else
                 {
-                    JDialog dialog = new JDialog(this, "GoGui: " + title);
-                    JLabel label = new JLabel(title.toString());
+                    JDialog dialog =
+                        new JDialog(this, "GoGui: " + resultTitle);
+                    JLabel label = new JLabel(resultTitle);
                     Container contentPane = dialog.getContentPane();
                     contentPane.add(label, BorderLayout.NORTH);
                     JTextArea textArea = new JTextArea(answer, 17, 40);
@@ -607,7 +593,7 @@ class GoGui
                 }
             }
             else
-                showStatus(title.toString());
+                showStatus(resultTitle);
             if (! m_analyzeRequestPoint)
                 checkComputerMove();
         }
@@ -658,8 +644,8 @@ class GoGui
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
-        if (m_commandThread != null && m_analyzeCmd != null
-            && ! (m_analyzeCmd.indexOf("%p") >= 0
+        if (m_commandThread != null && m_analyzeCommand != null
+            && ! (m_analyzeCommand.needsPointArg()
                   && m_analyzePointArg == null))
             analyzeBegin(true);
         else

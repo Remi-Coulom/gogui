@@ -20,15 +20,79 @@ class Analyze
     extends JComboBox
     implements PopupMenuListener
 {
+    public class Command
+    {
+        public Command(int type, String label, String command, String title,
+                       double scale)
+        {
+            m_type = type;
+            m_label = label;
+            m_command = command;
+            m_title = title;
+            m_scale = scale;
+        }
+
+        double getScale()
+        {
+            return m_scale;
+        }
+
+        String getTitle()
+        {
+            return m_title;
+        }
+
+        int getType()
+        {
+            return m_type;
+        }
+
+        String getResultTitle(go.Point pointArg)
+        {
+            StringBuffer buffer = new StringBuffer(m_label);
+            if (pointArg != null)
+            {
+                buffer.append(" ");
+                buffer.append(pointArg.toString());
+            }
+            return buffer.toString();
+        }
+
+        boolean needsPointArg()
+        {
+            return (m_command.indexOf("%p") >= 0);
+        }
+
+        String replaceWildCards(go.Color toMove, go.Point pointArg)
+        {
+            StringBuffer buffer = new StringBuffer(m_command);
+            StringUtils.replace(buffer, "%m", toMove.toString());
+            if (needsPointArg())
+            {
+                assert(pointArg != null);
+                StringUtils.replace(buffer, "%p", pointArg.toString());
+            }
+            return buffer.toString();
+        }
+
+        private int m_type;
+
+        private String m_label;
+
+        private String m_command;
+
+        private String m_title;
+
+        private double m_scale;
+    }
+
     public interface Callback
     {
         public void clearAnalyzeCommand();
 
-        public void initAnalyzeCommand(int type, String label, String command,
-                                       String title, double scale);
+        public void initAnalyzeCommand(Command command);
 
-        public void setAnalyzeCommand(int type, String label, String command,
-                                      String title, double scale);
+        public void setAnalyzeCommand(Command command);
     }
 
     public static class Error extends Exception
@@ -40,10 +104,15 @@ class Analyze
     }    
 
     public static final int NONE        = 0;
+
     public static final int STRING      = 1;    
+
     public static final int DOUBLEBOARD = 2;
+
     public static final int POINTLIST   = 3;
+
     public static final int STRINGBOARD = 4;
+
     public static final int COLORBOARD  = 5;
 
     Analyze(Callback callback, Preferences prefs) throws Error
@@ -219,15 +288,16 @@ class Analyze
         else if (typeStr.equals("string"))
             type = Analyze.STRING;
         String label = array[1];
-        String command = array[2];
+        String cmd = array[2];
         if (array.length > 3)
             title = array[3];
         if (array.length > 4)
             scale = Double.parseDouble(array[4]);
+        Command command = new Command(type, label, cmd, title, scale);
         if (init && m_prefs.getAnalyzeCommandEnabled())
-            m_callback.initAnalyzeCommand(type, label, command, title, scale);
+            m_callback.initAnalyzeCommand(command);
         else
-            m_callback.setAnalyzeCommand(type, label, command, title, scale);
+            m_callback.setAnalyzeCommand(command);
         m_prefs.setAnalyzeCommand(label);
     }
 }
