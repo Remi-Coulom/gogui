@@ -532,6 +532,7 @@ class GoGui
 
     public void toTop()
     {
+        setVisible(true);
         toFront();
         m_guiBoard.setFocus();
     }
@@ -1616,7 +1617,6 @@ class GoGui
                 setKomi();
                 newGame(m_boardSize);
             }
-            setVisible(true);
             if (! m_initAnalyze.equals(""))
             {
                 AnalyzeCommand analyzeCommand =
@@ -1642,11 +1642,12 @@ class GoGui
                 if (m_prefs.getBool("show-analyze"))
                     cbAnalyze();
             }
+            toTop();
             m_guiBoard.setFocus();
         }
         catch (Gtp.Error e)
         {
-            setVisible(true);
+            toTop();
             if (m_gtpShell != null)
                 m_gtpShell.toTop();
             SimpleDialogs.showError(this,
