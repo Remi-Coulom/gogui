@@ -124,12 +124,7 @@ public class Board
                 }
             }
         }
-        for (int i = 0; i < m_allPoints.length; ++i)
-        {
-            Point p = m_allPoints[i];
-            setMark(p, false);
-        }
-        assert(isMarkCleared());
+        clearMark();
     }
 
     public Vector getAdjacentPoints(Point p)
@@ -589,6 +584,15 @@ public class Board
         }
         setMark(stones, false);
         assert(isMarkCleared());
+    }
+
+    private void clearMark()
+    {
+        for (int i = 0; i < m_allPoints.length; ++i)
+        {
+            Point p = m_allPoints[i];
+            setMark(p, false);
+        }
     }
 
     private void findStones(Point p, Color color, Vector stones)
