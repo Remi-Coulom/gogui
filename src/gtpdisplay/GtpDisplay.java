@@ -223,7 +223,7 @@ public class GtpDisplay
                 m_fieldClicked = null;
             else
                 m_fieldClicked = point;
-            notify();
+            notifyAll();
         }
     }
 

@@ -32,7 +32,7 @@ public class MessageQueue
     public synchronized void put(Object object)
     {
         m_queue.add(object);
-        notify();
+        notifyAll();
     }
 
     /** Unsynchronized peek at next object.

@@ -38,7 +38,7 @@ class ExitWaiter
         }
         synchronized (m_monitor)
         {
-            m_monitor.notify();
+            m_monitor.notifyAll();
         }
     }
 
