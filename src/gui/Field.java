@@ -27,6 +27,13 @@ public class Field
         m_isHandicap = isHandicap;
         Dimension size = m_board.getPreferredFieldSize();
         setPreferredSize(size);
+        Font font = UIManager.getFont("Label.font");        
+        if (font != null)
+        {
+            font = font.deriveFont(Font.BOLD);
+            if (font != null)
+                setFont(font);
+        }
         setMinimumSize(new Dimension(3, 3));
         setBorder(null);
         addFocusListener(this);
@@ -328,6 +335,8 @@ public class Field
         int y = stringHeight + (size.height - stringHeight) / 2;
         if (m_color == go.Color.WHITE)
             g.setColor(java.awt.Color.black);
+        else if (m_color == go.Color.BLACK)
+            g.setColor(java.awt.Color.white);
         else
             g.setColor(java.awt.Color.white);
         g.drawString(m_string, x, y);
