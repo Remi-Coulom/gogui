@@ -77,6 +77,7 @@ $Source$
 <fileset dir="build/utils"/>
 <fileset dir="build/version"/>
 <fileset dir="build/GoGui.app"/>
+<fileset dir="build/GoGui.dmg"/>
 </delete>
 </target>
 
@@ -249,6 +250,13 @@ installation directory.
 <copy file="lib/gogui.jar" todir="${appdir}/Contents/Resources/Java"/>
 <exec executable="/Developer/Tools/SetFile">
 <arg line="-a B ${appdir}"/>
+</exec>
+</target>
+
+<target name="GoGui.dmg" depends="GoGui.app"
+ description="Make Mac compressed disk image">
+<exec executable="hdiutil">
+<arg line="create -fs HFS+ -format UDZO -volname GoGui -srcfolder build/GoGui.app build/GoGui.dmg"/>
 </exec>
 </target>
 
