@@ -273,6 +273,7 @@ installation directory.
  images/icon.png
  images/wood.png
  utils/GuiUtils.class
+ utils/MessageQueue.class
  utils/Options.class
  utils/RadialGradient*.class
  utils/SquareLayout.class
