@@ -39,7 +39,7 @@ You can add the <filename>bin</filename> directory of GoGui to your
 The invocation is then simply:
 <blockquote>
 <simpara>
-<userinput>gogui [options] program</userinput>
+<userinput>gogui [options] [file]</userinput>
 </simpara>
 </blockquote>  
 To register <application>GoGui</application> as a handler
