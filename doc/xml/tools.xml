@@ -1,0 +1,42 @@
+<chapter>
+  
+  <title>Tools</title>
+
+  <para>
+    GoGui includes some tools, that provide a GTP interface and
+    can be used as the Go program command given to GoGui:
+  </para>
+
+  <variablelist>
+    <varlistentry>
+      <term>TwoGtp</term>
+      <listitem>
+        Adpater program for playing games between two Go programs
+	supporting GTP.
+	See
+	<xref linkend="reference-twogtp">
+	<citerefentry><refentrytitle>twogtp</refentrytitle></citerefentry>
+        </xref> 
+        for a complete reference.
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>GmpToGtp</term>
+      <listitem>
+        Adpater program for playing games using the
+        Go Modem Protocol over a serial line.
+        For using this tool, an implementation of the
+        <ulink url="http://java.sun.com/products/javacomm/">
+        Java Communications API</ulink> must be installed
+	(<ulink url="http://www.rxtx.org/">rxtx</ulink>
+        is a version supporting Linux).
+	See
+	<xref linkend="reference-gmptogtp">
+	<citerefentry><refentrytitle>twogtp</refentrytitle></citerefentry>
+        </xref> 
+        for a complete reference.
+      </listitem>
+    </varlistentry>
+  </variablelist>
+
+</chapter>

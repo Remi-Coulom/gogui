@@ -1,0 +1,72 @@
+<refentry id="reference-twogtp">
+  <refmeta>
+    <refentrytitle>twogtp</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>twogtp</refname>
+    <refpurpose>
+      Go Text Protocol adapter for playing games between two Go programs.
+    </refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>java -cp gogui.jar gtp.TwoGtp</command>
+      <arg choice="plain">
+        <option>-black</option> <replaceable>command</replaceable>
+      </arg>
+      <arg choice="plain">
+        <option>-white</option> <replaceable>command</replaceable>
+      </arg>
+      <arg><option>-help</option></arg>
+      <arg><option>-verbose</option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+    <para>
+        Adpater program for playing games between two Go programs
+	supporting GTP (Go Text Protocol).
+    </para>
+  </refsection>
+
+  <refsection>
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-black</option> <replaceable>command</replaceable>
+	</term>
+	<listitem>
+	  Command for black program.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-help</option>
+	</term>
+	<listitem>
+	  Display help and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-verbose</option>
+	</term>
+	<listitem>
+	  Print debugging messages.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-white</option> <replaceable>command</replaceable>
+	</term>
+	<listitem>
+	  Command for white program.
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+</refentry>

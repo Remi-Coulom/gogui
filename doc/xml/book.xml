@@ -8,7 +8,10 @@
  <!ENTITY interrupt SYSTEM "interrupt.xml">
  <!ENTITY gtpshell SYSTEM "gtpshell.xml">
  <!ENTITY analyze SYSTEM "analyze.xml">
+ <!ENTITY tools SYSTEM "tools.xml">
  <!ENTITY reference SYSTEM "reference.xml">
+ <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
+ <!ENTITY reference-gmptogtp SYSTEM "reference-gmptogtp.xml">
  <!ENTITY news SYSTEM "news.xml">
  <!ENTITY gpl SYSTEM "gpl.xml">
    ]>
@@ -23,9 +26,12 @@
   &interrupt;
   &analyze;
   &gtpshell;
+  &tools;
   <appendix>
   <title>References</title>
   &reference;
+  &reference-twogtp;
+  &reference-gmptogtp;
   </appendix>
   &news;
   &gpl;

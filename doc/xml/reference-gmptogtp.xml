@@ -1,0 +1,135 @@
+<refentry id="reference-gmptogtp">
+  <refmeta>
+    <refentrytitle>gmptogtp</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>gmptogtp</refname>
+    <refname>gmptogtp.jar</refname>
+    <refpurpose>
+       Go Text Protocol adpater for playing games using the
+       Go Modem Protocol over a serial line.
+    </refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>gmptogtp</command>
+      <arg><option>-baud</option> <replaceable>n</replaceable></arg>
+      <arg>
+        <option>-color</option>
+        <group choice="plain">
+          <arg choice="plain">black</arg>
+          <arg choice="plain">white</arg>
+        </group>
+      </arg>
+      <arg><option>-device</option> <replaceable>serial</replaceable></arg>
+      <arg><option>-help</option></arg>
+      <arg><option>-list</option></arg>
+      <arg><option>-simple</option></arg>
+      <arg><option>-size</option> <replaceable>n</replaceable></arg>
+      <arg><option>-verbose</option></arg>
+      <arg><option>-wait</option></arg>
+      <arg><replaceable>program</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+    <para>
+       Go Text Protocol Adpater program for playing games using the
+       Go Modem Protocol over a serial line.
+       For using this tool, an implementation of the
+       <ulink url="http://java.sun.com/products/javacomm/">
+       Java Communications API</ulink> must be installed
+       <ulink url="http://www.rxtx.org/">rxtx</ulink>
+       is a version supporting Linux).
+    </para>
+  </refsection>
+
+  <refsection>
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-baud</option> <replaceable>n</replaceable>
+	</term>
+	<listitem>
+	  Speed of serial device (default 2400).
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+          <option>-color</option>
+          <group choice="plain">
+            <arg choice="plain">black</arg>
+            <arg choice="plain">white</arg>
+          </group>
+	</term>
+	<listitem>
+	  Color of the modem player.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-device</option><replaceable>serial</replaceable>
+	</term>
+	<listitem>
+	  Serial device name.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-help</option>
+	</term>
+	<listitem>
+	  Display help and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-list</option>
+	</term>
+	<listitem>
+	  List all serial devices and exit.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-simple</option>
+	</term>
+	<listitem>
+	  Use simple version of the Go Modem Protocol as defined in the
+          Appendix A in Call For Participation to the FJK Computer Go
+          Tournament 2000
+          (<ulink url="http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt">
+	  http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt</ulink>)
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-size</option> <replaceable>n</replaceable>
+	</term>
+	<listitem>
+	  Board size (default 19).
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-verbose</option>
+	</term>
+	<listitem>
+	  Print debugging messages.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-wait</option>
+	</term>
+	<listitem>
+	  Wait for other side to send the first newgame command.
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+</refentry>
