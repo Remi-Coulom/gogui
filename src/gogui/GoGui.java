@@ -1422,6 +1422,9 @@ class GoGui
     {
         endLengthyCommand();
         clearStatus();
+        // Program could have been detached whil running final_score
+        if (m_commandThread == null)
+            return;
         go.Point[] isDeadStone = null;
         try
         {
