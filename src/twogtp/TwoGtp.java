@@ -311,13 +311,13 @@ public class TwoGtp
             interruptProgram(m_observer);
     }
 
-    private static class ScoreEstimate
+    private static final class ScoreEstimate
     {
-        double m_black;
+        public double m_black;
 
-        double m_white;
+        public double m_white;
 
-        double m_referee;
+        public double m_referee;
     }
 
     private boolean m_alternate;
