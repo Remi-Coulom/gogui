@@ -243,6 +243,10 @@ public class Reader
             {
                 node.setToMove(parseColor(v));
             }
+            else if (p.equals("RE"))
+            {
+                m_gameInformation.m_result = v;
+            }
             else if (p.equals("SZ"))
             {
                 if (! isRoot)
@@ -265,7 +269,7 @@ public class Reader
             }
             else if (! p.equals("FF") && ! p.equals("DT") && ! p.equals("RU")
                      && ! p.equals("GM") && ! p.equals("GN")
-                     && ! p.equals("AP") && ! p.equals("RE"))
+                     && ! p.equals("AP"))
                 node.addSgfProperty(p, v);
             return true;
         }

@@ -711,8 +711,6 @@ class GoGui
 
     private go.Color m_setupColor;
 
-    private go.Score m_score;
-
     private Board m_guiBoard;
 
     private CommandThread m_commandThread;
@@ -1267,7 +1265,7 @@ class GoGui
     {
         m_scoreDialog.setVisible(false);
         if (accepted)
-            m_score = m_board.scoreGet();
+            setResult(m_board.scoreGet().formatResult());
         clearStatus();
         m_guiBoard.clearAll();
         m_guiBoard.repaint();
@@ -1541,16 +1539,17 @@ class GoGui
                 throw e;
             m_timeControl.stopMove();
             String response = m_commandThread.getResponse();
+            go.Color toMove = m_board.getToMove();
             if (response.toLowerCase().equals("resign"))
             {
                 if (! (m_computerBlack && m_computerWhite))
                     showInfo("The computer resigns.");
                 m_resigned = true;
+                setResult((toMove == go.Color.BLACK ? "W" : "B") + "+Resign");
             }
             else
             {
                 go.Point p = Gtp.parsePoint(response, m_boardSize);
-                go.Color toMove = m_board.getToMove();
                 Move move = new Move(p, toMove);
                 m_needsSave = true;
                 m_board.play(move);
@@ -1745,7 +1744,6 @@ class GoGui
         resetBoard();
         m_timeControl.reset();
         m_lostOnTimeShown = false;
-        m_score = null;
         m_needsSave = false;
         m_resigned = false;
     }
@@ -2065,7 +2063,7 @@ class GoGui
         {
             new sgf.Writer(out, m_board, m_gameTree, file, "GoGui",
                            Version.get(), m_handicap, playerBlack, playerWhite,
-                           gameComment, m_score);
+                           gameComment);
             m_menuBar.addRecent(file);
             m_menuBar.saveRecent();
         }
@@ -2274,6 +2272,11 @@ class GoGui
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);
         prefs.setBoolDefault("show-gametree", false);
+    }
+
+    private void setResult(String result)
+    {
+        m_gameTree.getGameInformation().m_result = result;
     }
 
     private void setRules()

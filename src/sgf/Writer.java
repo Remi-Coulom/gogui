@@ -29,13 +29,13 @@ public class Writer
     public Writer(OutputStream out, Board board, File file,
                   String application, String version, int handicap,
                   String playerBlack, String playerWhite, String gameComment,
-                  Score score)
+                  String result)
     {        
         m_out = new PrintStream(out);
         m_board = board;
         m_out.println("(");
         printHeader(file, application, version, handicap, playerBlack,
-                    playerWhite, gameComment, score);
+                    playerWhite, gameComment, result);
         printSetup(m_board.getSetupStonesBlack(),
                    m_board.getSetupStonesWhite());
         printToPlay(m_board.getToMove());
@@ -47,14 +47,15 @@ public class Writer
     /** Save game tree. */
     public Writer(OutputStream out, Board board, GameTree gameTree, File file,
                   String application, String version, int handicap,
-                  String playerBlack, String playerWhite, String gameComment,
-                  Score score)
+                  String playerBlack, String playerWhite, String gameComment)
     {        
         m_out = new PrintStream(out);
         m_board = board;
         m_out.println("(");
+        GameInformation gameInformation = gameTree.getGameInformation();
+        String result = gameInformation.m_result;
         printHeader(file, application, version, handicap, playerBlack,
-                    playerWhite, gameComment, score);
+                    playerWhite, gameComment, result);
         printToPlay(board.getToMove());
         printNodes(gameTree.getRoot());        
         m_out.println(")");
@@ -139,25 +140,15 @@ public class Writer
     private void printHeader(File file, String application, String version,
                              int handicap, String playerBlack,
                              String playerWhite, String gameComment,
-                             Score score)
+                             String result)
     {
         printHeader(file, application, version);
         if (handicap > 0)
             m_out.println("HA[" + handicap + "]");
         else
             m_out.println("KM[" + m_board.getKomi() + "]");
-        if (score != null)
-        {
-            m_out.print("RE[");
-            float result = score.m_result;
-            if (result > 0)
-                m_out.print("B+" + result);
-            else if (result < 0)
-                m_out.print("W+" + (-result));
-            else
-                m_out.print("0");
-            m_out.println("]");
-        }
+        if (result != null && ! result.equals(""))
+            m_out.println("RE[" + result + "]");
         if (playerBlack != null)
             m_out.println("PB[" + playerBlack + "]");
         if (playerWhite != null)

@@ -23,6 +23,8 @@ public class GameInformation
 
     public String m_playerWhite;
 
+    public String m_result;
+
     public String m_whiteRank;
 }
 
