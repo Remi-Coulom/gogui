@@ -7,4 +7,4 @@ else
   JAVA=$JAVA_HOME/bin/java
 fi
 
-$JAVA -jar $GOGUI_LIB/gogui.jar "$@"
+$JAVA -Dapple.awt.brushMetalLook=true -jar $GOGUI_LIB/gogui.jar "$@"

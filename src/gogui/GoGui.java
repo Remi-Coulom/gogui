@@ -765,12 +765,6 @@ class GoGui
 
     private ToolBar m_toolBar;
 
-    static
-    {
-        // Must be set before static initializers of apple.awt are executed.
-        System.setProperty("apple.awt.brushMetalLook", "true");
-    }
-
     private void addPlayerComputerToGameInfo(go.Color color)
     {
         if (m_commandThread == null)
@@ -2566,7 +2560,8 @@ class GoGui
 
     private void showStatusSelectTarget()
     {
-        showStatus("Select a target for " + m_analyzeCommand.getResultTitle());
+        showStatus("Select a target for "
+                   + m_analyzeCommand.getResultTitle());
     }
 
     private void showWarning(String message)
