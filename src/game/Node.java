@@ -48,7 +48,7 @@ class TimeInfo
 //----------------------------------------------------------------------------
 
 /** Node in a GameTree. */
-public class Node
+public final class Node
 {
     public Node()
     {
