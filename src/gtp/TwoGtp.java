@@ -113,7 +113,7 @@ public class TwoGtp
             if (opt.isSet("help"))
             {
                 String helpText =
-                    "Usage: java -cp gogui.jar gtp.TwoGtp [options]\n" +
+                    "Usage: java -jar twogtp.jar [options]\n" +
                     "\n" +
                     "-black   command for black program\n" +
                     "-help    display this help and exit\n" +
