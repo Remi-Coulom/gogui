@@ -72,6 +72,9 @@ public class SimpleDialogs
     {
         File file = showFileChooser(parent, FILE_SAVE, m_lastFile, true,
                                     null);
+        if (Platform.isMac())
+            // Overwrite warning is already part of FileDialog
+            return file;
         while (file != null)
         {
             if (file.exists())
