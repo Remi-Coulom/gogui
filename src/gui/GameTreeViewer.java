@@ -553,23 +553,23 @@ class GameTreePanel
 
     private void computeSizes(int sizeMode)
     {
-        float fontScale;
+        double fontScale;
         switch (sizeMode)
         {
         case SIZE_LARGE:
-            fontScale = 1.0f;
+            fontScale = 1.0;
             break;
         case SIZE_NORMAL:
-            fontScale = 0.7f;
+            fontScale = 0.7;
             break;
         case SIZE_SMALL:
-            fontScale = 0.5f;
+            fontScale = 0.5;
             break;
         case SIZE_TINY:
-            fontScale = 0.2f;
+            fontScale = 0.2;
             break;
         default:
-            fontScale = 0.7f;
+            fontScale = 0.7;
             assert(false);
         }
         m_nodeWidth = 25;
@@ -577,7 +577,8 @@ class GameTreePanel
         Font font = UIManager.getFont("Label.font");
         if (font != null)
         {
-            Font derivedFont = font.deriveFont(font.getSize() * fontScale);
+            Font derivedFont
+                = font.deriveFont((float)(font.getSize() * fontScale));
             if (derivedFont != null)
                 font = derivedFont;
         }

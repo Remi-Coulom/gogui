@@ -380,11 +380,12 @@ public class Board
         if (font != null)
         {
             FontMetrics metrics = graphics.getFontMetrics(font);
-            float scale = (float)fieldSize / metrics.getAscent() / 2.3f;
-            if (scale < 0.95f)
+            double scale = (double)fieldSize / metrics.getAscent() / 2.3;
+            if (scale < 0.95)
             {
                 int size = font.getSize();
-                Font derivedFont = font.deriveFont(Font.BOLD, size * scale);
+                Font derivedFont
+                    = font.deriveFont(Font.BOLD, (float)(size * scale));
                 if (derivedFont != null)
                     font = derivedFont;
             }
