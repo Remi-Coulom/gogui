@@ -556,10 +556,6 @@ public class Gtp
 
     private void readResponse() throws Error
     {
-        if (! m_fastUpdate)
-            // Give StdErrThread a chance to read standard error output of the
-            // program first
-            Thread.currentThread().yield();
         try
         {
             String line = "";
@@ -593,7 +589,13 @@ public class Gtp
                 response.append("\n");
             }
             if (m_callback != null)
+            {
+                if (! m_fastUpdate)
+                    // Give StdErrThread a chance to read standard error output
+                    // of the program first
+                    Thread.currentThread().yield();
                 m_callback.receivedResponse(error, response.toString());
+            }
             m_fullResponse = response.toString();
             assert(response.length() >= 4);            
             int index = response.indexOf(" ");
