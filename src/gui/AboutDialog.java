@@ -15,42 +15,50 @@ import utils.GuiUtils;
 
 public class AboutDialog
 {
-    public static void show(Component parent, String name, String version)
+    public static void show(Component parent, String name, String version,
+                            String protocolVersion)
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        String program = null;
-        if (name != null && ! name.equals(""))
+        JTabbedPane tabbedPane = new JTabbedPane();
+        JPanel goguiPanel =
+            createPanel("<center>" +
+                        "<b>GoGui " + Version.get() + "</b>" +
+                        "<p>" +
+                        "Graphical interface to Go programs.<br>" +
+                        "&copy; 2003-2004, Markus Enzenberger" +
+                        "</p>" +
+                        "<p>" +
+                        "<tt>http://gogui.sourceforge.net</tt>" +
+                        "</p>" +
+                        "</center>");
+        tabbedPane.add("GoGui", goguiPanel);
+        boolean isProgramAvailable = (name != null && ! name.equals(""));
+        JPanel programPanel;
+        if (isProgramAvailable)
         {
-            program = name;
-            if (version != null && ! version.equals(""))
-                program = program + " " + version;
+            String fullName = name;
+            if (version != null || ! version.equals(""))
+                fullName = fullName + " " + version;
+            programPanel =
+                createPanel("<center>" +
+                            "<b>" + fullName + "</b>" +
+                            "<p>" +
+                            "GTP Protocol Version " + protocolVersion
+                            + "<br>" +
+                            "</p>" +
+                            "</center>");
         }
-        if (program != null)
-        {
-            panel.add(createPanel("<center>" +
-                                  "<b>" + program + "</b>" +
-                                  "</center>"));
-            panel.add(GuiUtils.createSmallFiller());
-        }
-        panel.add(createPanel("<center>" +
-                              "<b>GoGui " + Version.get() + "</b>" +
-                              "<p>" +
-                              "Graphical interface to Go programs.<br>" +
-                              "&copy; 2003-2004, Markus Enzenberger" +
-                              "</p>" +
-                              "<p>" +
-                              "<tt>http://gogui.sourceforge.net</tt>" +
-                              "</p>" +
-                              "</center>"));
-        JOptionPane.showMessageDialog(parent, panel, "About",
+        else
+            programPanel = new JPanel();
+        tabbedPane.add("Go Program", programPanel);
+        if (! isProgramAvailable)
+            tabbedPane.setEnabledAt(1, false);
+        JOptionPane.showMessageDialog(parent, tabbedPane, "About",
                                       JOptionPane.PLAIN_MESSAGE);
     }
 
     private static JPanel createPanel(String text)
     {
         JPanel panel = new JPanel(new GridLayout(1, 1));
-        panel.setBorder(BorderFactory.createEtchedBorder());        
         JEditorPane editorPane = new JEditorPane();
         editorPane.setBorder(GuiUtils.createEmptyBorder());        
         panel.add(editorPane);
@@ -63,3 +71,5 @@ public class AboutDialog
         return panel;
     }
 }
+
+//----------------------------------------------------------------------------
