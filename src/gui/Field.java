@@ -493,7 +493,7 @@ public class Field
         if (graphics2D != null)
         {
             int center = size / 3;
-            int radius = size / 4;
+            int radius = Math.max(size / 4, 1);
             RadialGradientPaint paint =
                 new RadialGradientPaint(new Point2D.Double(center, center),
                                         colorBright,
