@@ -610,7 +610,8 @@ public final class Gtp
                     {
                         message = (ReadMessage)m_queue.waitFor();
                         assert(message.m_isError);
-                        handleErrorStream(message.m_text);
+                        if (message.m_text != null)
+                            handleErrorStream(message.m_text);
                     }
                     throwProgramDied();
                 }
@@ -622,7 +623,8 @@ public final class Gtp
                 StringBuffer buffer = new StringBuffer(2048);
                 while (message != null)
                 {
-                    buffer.append(message.m_text);
+                    if (message.m_text != null)
+                        buffer.append(message.m_text);
                     synchronized (m_queue)
                     {
                         message = (ReadMessage)m_queue.unsynchronizedPeek();
