@@ -2,12 +2,13 @@
 <!DOCTYPE book [
  <!ENTITY version SYSTEM "version.xml">
  <!ENTITY readme SYSTEM "readme.xml">
- <!ENTITY reference SYSTEM "reference.xml">
+ <!ENTITY invocation SYSTEM "invocation.xml">
  <!ENTITY programs SYSTEM "programs.xml">
  <!ENTITY compatibility SYSTEM "compatibility.xml">
  <!ENTITY interrupt SYSTEM "interrupt.xml">
  <!ENTITY gtpshell SYSTEM "gtpshell.xml">
  <!ENTITY analyze SYSTEM "analyze.xml">
+ <!ENTITY reference SYSTEM "reference.xml">
  <!ENTITY news SYSTEM "news.xml">
  <!ENTITY gpl SYSTEM "gpl.xml">
    ]>
@@ -16,15 +17,16 @@
   <bookinfo><releaseinfo>Version &version;</releaseinfo></bookinfo>
   
   &readme;
-  <chapter>
-    <title>Reference</title>
-    &reference;
-  </chapter>
+  &invocation;
   &programs;
   &compatibility;
   &interrupt;
   &analyze;
   &gtpshell;
+  <appendix>
+  <title>References</title>
+  &reference;
+  </appendix>
   &news;
   &gpl;
   

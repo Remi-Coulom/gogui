@@ -1,0 +1,52 @@
+<chapter>
+  
+  <title>Invocation</title>
+
+  <para>
+    GoGui can be invoked with the command:
+
+    <blockquote>
+      <userinput>
+        <command>java -jar gogui.jar</command>
+        <arg><replaceable>options</replaceable></arg>
+	<arg><replaceable>program</replaceable></arg>
+      </userinput>
+    </blockquote>  
+  </para>
+
+  <para>
+    The argument <arg><replaceable>program</replaceable></arg>
+    must be a valid command line for executing the actual Go program.
+    If no program is given, GoGui will open a dialog and ask for a
+    command.
+    If the empty string "" is given as a command, GoGui will start
+    without any Go program.
+  </para>
+
+  <para>
+    See
+    <link linkend="reference">
+      <citerefentry><refentrytitle>gogui</refentrytitle></citerefentry>
+    </link>
+    for a listing of the possible options.
+  </para>
+
+  <note>
+    <para>
+      On Unix systems, it is useful to edit the shell script
+      <filename>gogui</filename> to use the locations of
+      <filename>gogui.jar</filename> and the correct version
+      of <filename>java</filename> and put it somewhere in your
+      path. The invocation is then simply:
+  
+      <blockquote>
+        <userinput>
+          <command>gogui</command>
+          <arg><replaceable>options</replaceable></arg>
+          <arg><replaceable>program</replaceable></arg>
+        </userinput>
+      </blockquote>  
+    </para>
+  </note>
+
+</chapter>
