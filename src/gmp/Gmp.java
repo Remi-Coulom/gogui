@@ -461,15 +461,22 @@ class ReadThread extends Thread
     {
         try
         {
+            byte buffer[] = new byte[16];
             while (true)
             {
-                int b = m_in.read();
+                int n = m_in.read(buffer);
                 synchronized (this)
                 {
-                    if (b < 0)
+                    if (n < 0)
                         break;
-                    Util.log("recv " + Util.format(b));
-                    handleByte(b);
+                    for (int i = 0; i < n; ++i)
+                    {
+                        int b = buffer[i];
+                        if (b < 0)
+                            b += 256;
+                        Util.log("recv " + Util.format(b));
+                        handleByte(b);
+                    }
                 }
             }
         }

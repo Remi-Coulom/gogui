@@ -26,7 +26,7 @@ PACKAGES= \
   sgf \
   utils
 
-release: doc
+release:
 	mkdir -p build
 	javac -O -deprecation -sourcepath . -source 1.4 -d build @files.txt
 	mkdir -p build/doc
