@@ -253,7 +253,7 @@ public final class Gtp
         }
         catch (NumberFormatException e)
         {
-            throw new Gtp.Error("Floating point number expected.");
+            throw new Gtp.Error("Floating point number expected");
         }
     }
 
@@ -263,7 +263,7 @@ public final class Gtp
         if (s.equals("PASS"))
             return null;
         if (s.length() < 2)
-            throw new Error("Invalid point or move.");
+            throw new Error("Invalid point or move");
         char xChar = s.charAt(0);
         if (xChar >= 'J')
             --xChar;
@@ -275,10 +275,10 @@ public final class Gtp
         }
         catch (NumberFormatException e)
         {
-            throw new Gtp.Error("Invalid point or move.");
+            throw new Gtp.Error("Invalid point or move");
         }
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
-            throw new Gtp.Error("Invalid coordinates.");
+            throw new Gtp.Error("Invalid coordinates");
         return new Point(x, y);
     }
     
@@ -395,7 +395,7 @@ public final class Gtp
                 {
                     int ttype = tokenizer.nextToken();
                     if (ttype != StreamTokenizer.TT_WORD)
-                        throw new Error("Word expected.");
+                        throw new Error("Word expected");
                     if (tokenizer.sval.equals("\"\""))
                         result[x][y] = "";
                     else
@@ -404,7 +404,7 @@ public final class Gtp
         }
         catch (IOException e)
         {
-            throw new Gtp.Error("I/O error.");
+            throw new Gtp.Error("I/O error");
         }
         return result;
     }
@@ -477,7 +477,7 @@ public final class Gtp
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
         if (m_isProgramDead)
-            throw new Error("Program is dead.");
+            throw new Error("Program is dead");
         log(">> " + command);
         m_response = "";
         m_out.println(command);
@@ -485,7 +485,7 @@ public final class Gtp
         if (m_out.checkError())
         {
             m_isProgramDead = true;
-            throw new Error("Go program died.");
+            throw new Error("Go program died");
         }
         if (m_callback != null)
             m_callback.sentCommand(command);
@@ -705,7 +705,7 @@ public final class Gtp
                 if (line == null)
                 {
                     m_isProgramDead = true;
-                    throw new Error("Go program died.");
+                    throw new Error("Go program died");
                 }
                 log("<< " + line);
             }
@@ -721,7 +721,7 @@ public final class Gtp
                 if (line == null)
                 {
                     m_isProgramDead = true;
-                    throw new Error("Go program died.");
+                    throw new Error("Go program died");
                 }
                 log("<< " + line);
                 done = line.equals("");
@@ -764,7 +764,7 @@ public final class Gtp
         catch (InterruptedIOException e)
         {
             m_isProgramDead = true;
-            throw new Error("Timeout while waiting for program.");
+            throw new Error("Timeout while waiting for program");
         }
         catch (IOException e)
         {
