@@ -2212,8 +2212,10 @@ class GoGui
     private void setResult(String result)
     {
         String oldResult = m_gameTree.getGameInformation().m_result;
-        if (! (oldResult == null || oldResult.equals(""))
-            && ! showQuestion("Overwrite game result in game information?"))
+        if (! (oldResult == null || oldResult.equals("")
+               || oldResult.equals(result))
+            && ! showQuestion("Overwrite old result " + oldResult + "\n" +
+                              "with new score " + result + "?"))
             return;
         m_gameTree.getGameInformation().m_result = result;
     }
