@@ -97,6 +97,8 @@ public class TwoGtp
 
     public void interruptCommand()
     {
+        m_black.sendInterrupt();
+        m_white.sendInterrupt();
     }
 
     public static void main(String[] args)
