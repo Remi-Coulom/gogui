@@ -773,11 +773,17 @@ class GoGui
         if (color == go.Color.BLACK
             && (gameInformation.m_playerBlack == null
                 || gameInformation.m_playerBlack.trim().equals("")))
+        {
             gameInformation.m_playerBlack = name;
-        if (color == go.Color.WHITE
+            setTitle();
+        }
+        else if (color == go.Color.WHITE
             && (gameInformation.m_playerWhite == null
                 || gameInformation.m_playerWhite.trim().equals("")))
+        {
             gameInformation.m_playerWhite = name;
+            setTitle();
+        }
     }
 
     private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
@@ -2592,6 +2598,7 @@ class GoGui
         // buttons (See Mac QA1146)
         getRootPane().putClientProperty("windowModified",
                                         Boolean.valueOf(needsSave));
+        setTitle();
     }
     
     private static void setPrefsDefaults(Preferences prefs)
@@ -2690,12 +2697,23 @@ class GoGui
         {
             String fileNoExt = FileUtils.removeExtension(m_loadedFile, "sgf");
             filename = new File(fileNoExt).getName();
+            if (m_needsSave)
+                filename = filename + " (Modified)";
         }
-        if (playerBlack != null && ! playerBlack.trim().equals("")
-            && playerWhite != null && ! playerWhite.trim().equals(""))
+        boolean playerBlackKnown =
+            (playerBlack != null && ! playerBlack.trim().equals(""));
+        boolean playerWhiteKnown =
+            (playerWhite != null && ! playerWhite.trim().equals(""));
+        if (playerBlackKnown || playerWhiteKnown)
         {
-            playerBlack = StringUtils.capitalize(playerBlack);
-            playerWhite = StringUtils.capitalize(playerWhite);
+            if (playerBlackKnown)
+                playerBlack = StringUtils.capitalize(playerBlack);
+            else
+                playerBlack = "Unknown";
+            if (playerWhiteKnown)
+                playerWhite = StringUtils.capitalize(playerWhite);
+            else
+                playerWhite = "Unknown";
             String blackRank = gameInformation.m_blackRank;
             String whiteRank = gameInformation.m_whiteRank;
             if (blackRank != null && ! blackRank.trim().equals(""))
