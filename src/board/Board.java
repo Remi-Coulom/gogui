@@ -306,6 +306,8 @@ public class Board
         m_moves.clear();
         m_moveNumber = 0;
         m_setupNumber = 0;
+        m_capturedB = 0;
+        m_capturedW = 0;
         m_toMove = Color.BLACK;
         drawLastMove();
     }
