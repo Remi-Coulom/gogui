@@ -23,9 +23,16 @@ public class Point
         return point1.equals(point2);
     }
 
-    public boolean equals(Point p)
+    public boolean equals(Object object)
     {
-        return (m_x == p.m_x && m_y == p.m_y);
+        if (this == object)
+            return true;
+        if (object instanceof Point)
+        {
+            Point point = (Point)object;
+            return (m_x == point.m_x && m_y == point.m_y);
+        }
+        return false;
     }
 
     public void down()

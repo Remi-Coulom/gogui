@@ -190,9 +190,16 @@ class Cmd
         }
     }
 
-    public boolean equals(Cmd cmd)
+    public boolean equals(Object object)
     {
-        return (cmd.m_cmd == m_cmd && cmd.m_val == m_val);
+        if (this == object)
+            return true;
+        if (object instanceof Cmd)
+        {
+            Cmd cmd = (Cmd)object;
+            return (cmd.m_cmd == m_cmd && cmd.m_val == m_val);
+        }
+        return false;
     }
 
     public static String moveValToString(int val, int size)

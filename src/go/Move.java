@@ -17,15 +17,22 @@ public class Move
         m_color = c;
     }
 
-    public boolean equals(Move m)
+    public boolean equals(Object object)
     {
-        if (m_color != m.m_color)
-            return false;
-        if (m_point == null)
-            return (m.m_point == null);
-        if (m.m_point == null)
-            return false;
-        return (m_point.equals(m.m_point));
+        if (this == object)
+            return true;
+        if (object instanceof Move)
+        {
+            Move move = (Move)object;
+            if (m_color != move.m_color)
+                return false;
+            if (m_point == null)
+                return (move.m_point == null);
+            if (move.m_point == null)
+                return false;
+            return (m_point.equals(move.m_point));
+        }
+        return false;
     }
 
     /** Fill a list of moves with pass moves.
