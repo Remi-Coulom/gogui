@@ -171,8 +171,10 @@ class SelectProgram
             int n = itemCount;
             if (n > maxHistory)
                 n = maxHistory;
-            for (int i = itemCount - n; i < itemCount; ++i)
+            for (int i = 0; i < n; ++i)
+            {
                 out.println(m_comboBox.getItemAt(i).toString().trim());
+            }
             out.close();
         }
         catch (FileNotFoundException e)
