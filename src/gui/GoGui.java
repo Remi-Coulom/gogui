@@ -950,9 +950,11 @@ class GoGui
         resetBoard();
         m_guiBoard.scoreBegin(isDeadStone);
         m_scoreMode = true;
+        Dimension size = getSize();
         setJMenuBar(m_menuBars.getScoreMenu());
         m_toolBar.enableAll(false, null);
         pack();
+        setSize(size);
         showStatus("Please remove dead groups.");
     }
 
@@ -963,18 +965,22 @@ class GoGui
         showInfo(m_score.formatDetailedResult());
         m_guiBoard.clearAll();
         m_scoreMode = false;
+        Dimension size = getSize();
         setJMenuBar(m_menuBars.getNormalMenu());
         m_toolBar.enableAll(true, m_board);
         pack();
+        setSize(size);
     }
 
     private void cbSetup()
     {
         resetBoard();
         m_setupMode = true;
+        Dimension size = getSize();
         setJMenuBar(m_menuBars.getSetupMenu());
         m_toolBar.enableAll(false, null);
         pack();
+        setSize(size);
         showStatus("Setup black.");
         m_setupColor = go.Color.BLACK;
     }
@@ -990,8 +996,10 @@ class GoGui
         try
         {
             m_setupMode = false;
+            Dimension frameSize = getSize();
             setJMenuBar(m_menuBars.getNormalMenu());
             pack();
+            setSize(frameSize);
             m_toolBar.enableAll(true, m_board);
             int size = m_board.getSize();
             go.Color color[][] = new go.Color[size][size];
