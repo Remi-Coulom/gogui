@@ -1589,6 +1589,7 @@ class GoGui
         initGame(m_boardSize);
         setTimeSettings();
         setHandicap();
+        checkComputerMove();
     }
 
     private void newGameFile(int size, File file, int move)
