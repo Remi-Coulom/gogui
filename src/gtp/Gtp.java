@@ -145,7 +145,7 @@ public class Gtp
         }
     }
 
-    /** @see Gtp.setFastUpdate */
+    /** @see #setFastUpdate */
     public boolean getFastUpdate()
     {
         return m_fastUpdate;
