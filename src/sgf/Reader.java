@@ -135,9 +135,9 @@ public class Reader
     {
         Color c;
         s = s.trim().toLowerCase();
-        if (s.equals("b"))
+        if (s.equals("b") || s.equals("1"))
             c = Color.BLACK;
-        else if (s.equals("w"))
+        else if (s.equals("w") || s.equals("2"))
             c = Color.WHITE;
         else
             throw getError("Invalid color value.");
