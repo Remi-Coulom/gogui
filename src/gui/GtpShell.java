@@ -332,9 +332,10 @@ public class GtpShell
 
     }
 
-    public void setInputEnabled(boolean enabled)
+    public void setCommandInProgess(boolean commandInProgess)
     {
-        m_comboBox.setEnabled(enabled);
+        m_comboBox.setEnabled(! commandInProgess);
+        m_sendGtpFile.setEnabled(! commandInProgess);
     }
 
     public void toTop()
@@ -601,6 +602,8 @@ public class GtpShell
 
     private JCheckBoxMenuItem m_commandCompletion;
 
+    private JMenuItem m_sendGtpFile;
+
     private JScrollPane m_scrollPane;
 
     private GtpShellText m_gtpShellText;
@@ -744,7 +747,8 @@ public class GtpShell
                     ActionEvent.CTRL_MASK, "save-log");
         addMenuItem(menu, "Save Commands...", KeyEvent.VK_M, "save-commands");
         menu.addSeparator();
-        addMenuItem(menu, "Send GTP file...", KeyEvent.VK_G, "send-file");
+        m_sendGtpFile =
+            addMenuItem(menu, "Send GTP file...", KeyEvent.VK_G, "send-file");
         menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     ActionEvent.CTRL_MASK, "close");

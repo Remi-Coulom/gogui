@@ -802,7 +802,7 @@ class GoGui
              || (m_computerBlack && m_computerWhite));
         m_menuBar.setCommandInProgress(isInterruptSupported);
         m_toolBar.setCommandInProgress(isInterruptSupported);
-        m_gtpShell.setInputEnabled(false);
+        m_gtpShell.setCommandInProgess(true);
         if (m_analyzeDialog != null)
         {
             setCursor(m_analyzeDialog, Cursor.WAIT_CURSOR);
@@ -1392,7 +1392,7 @@ class GoGui
         clearStatus();
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, m_board);
-        m_gtpShell.setInputEnabled(true);
+        m_gtpShell.setCommandInProgess(false);
         if (m_analyzeDialog != null)
         {
             m_analyzeDialog.setEnabled(true);
