@@ -31,7 +31,7 @@ public class TextViewer
                       boolean highlight, Listener listener)
     {
         super(owner, title);
-        setLocationRelativeTo(owner);
+        //setLocationRelativeTo(owner);
         m_listener = listener;
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(GuiUtils.createSmallEmptyBorder());
