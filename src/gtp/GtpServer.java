@@ -149,7 +149,7 @@ class ReadThread extends Thread
                 wasLastSpace = false;
             }
         }
-        String[] array = StringUtils.split(buffer.toString(), ' ');
+        String[] array = StringUtils.tokenize(buffer.toString());
         assert(array.length > 0);
         String command = buffer.toString();
         Command result = new Command();

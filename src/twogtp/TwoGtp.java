@@ -469,7 +469,7 @@ public class TwoGtp
                     break;
                 if (line.trim().startsWith("#"))
                     continue;
-                String[] elements = StringUtils.split(line, '\t');
+                String[] elements = line.split("\\t");
                 int gameIndex = Integer.parseInt(elements[0]);
                 if (gameIndex + 1 > m_gameIndex)
                     m_gameIndex = gameIndex + 1;

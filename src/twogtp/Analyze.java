@@ -142,7 +142,7 @@ public class Analyze
             handleComment(line.substring(1));
             return;
         }
-        String[] array = line.split("\t");
+        String[] array = line.split("\\t");
         if (array.length < 9 || array.length > 10)
             throwException("Wrong file format");
         try

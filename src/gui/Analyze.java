@@ -58,7 +58,7 @@ class AnalyzeCommand
         m_scale = 1.0;
         m_title = null;
         m_type = AnalyzeCommand.NONE;
-        String array[] = StringUtils.split(line, '/');
+        String array[] = line.split("/");
         String typeStr = array[0];        
         if (typeStr.equals("bwboard"))
             m_type = AnalyzeCommand.BWBOARD;
@@ -349,7 +349,7 @@ class AnalyzeCommand
             line = line.trim();
             if (line.length() > 0 && line.charAt(0) != '#')
             {
-                String array[] = StringUtils.split(line, '/');
+                String array[] = line.split("/");
                 if (array.length < 3 || array.length > 5)
                     throw new Exception("Error in " + file + " line "
                                         + lineNumber);

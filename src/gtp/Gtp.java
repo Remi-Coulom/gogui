@@ -432,7 +432,7 @@ public class Gtp
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
         String response = sendCommand(command);
-        m_supportedCommands = StringUtils.split(response, '\n');
+        m_supportedCommands = response.split("\\n");
         for (int i = 0; i < m_supportedCommands.length; ++i)
             m_supportedCommands[i] = m_supportedCommands[i].trim();
     }
