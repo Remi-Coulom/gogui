@@ -75,8 +75,6 @@ public final class Gtp
             throw new Gtp.Error("Could not create " + program + ":\n" +
                                 e.getMessage());
         }
-        Reader reader = new InputStreamReader(m_process.getInputStream());
-        m_in = new BufferedReader(reader);
         m_out = new PrintWriter(m_process.getOutputStream());
         m_illegalState = false;
         m_timedOut = false;
@@ -528,8 +526,6 @@ public final class Gtp
     private int m_protocolVersion = 1;
 
     private int m_commandNumber;
-
-    private BufferedReader m_in;
 
     private IOCallback m_callback;
 
