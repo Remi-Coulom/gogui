@@ -37,7 +37,7 @@ file <filename>~/.gogui/config</filename>.
 <term><keycap>Tab</keycap></term>
 <listitem>
 <simpara>
-Complete command line as far as possible from command history or list of from
+Complete command line as far as possible from history and from
 commands supported by the program.
 </simpara>
 </listitem>

@@ -108,7 +108,7 @@ Exit program with return code -1.
 
 <varlistentry>
 <term>
-<userinput>dummy_next_failure<replaceable>response</replaceable>
+<userinput>dummy_next_failure <replaceable>response</replaceable>
 </userinput>
 </term>
 <listitem>

@@ -147,9 +147,8 @@ Quit GoGui.
 Edit the game information.
 Changes to the komi and rules are transmitted to the Go program.
 The only supported rules are "Chinese" and "Japanese".
-The program is informed about the rules by a
-<userinput>scoring_system area/territory</userinput>
-(from an early draft of GTP version 2) if it supports this command.
+The program is informed about the komi and the rules
+with GTP commands if supported (see <xref linkend="compatibility"/>).
 </para>
 </listitem>
 </varlistentry>
@@ -233,7 +232,7 @@ Retract 10 moves.
 <term><guimenuitem>Backward</guimenuitem></term>
 <listitem>
 <para>
-Retract one moves.
+Retract one move.
 </para>
 </listitem>
 </varlistentry>

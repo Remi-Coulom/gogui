@@ -112,12 +112,14 @@ If the Go program does not understand them you will still be able to play
 games, but you cannot use all of the functionality of GoGui.
 </para>
     
-<para>
-The command <userinput>scoring_system</userinput> (from an early draft of GTP
-version 2) is used for setting Japanese or Chinese rules, if the program
-supports it.
+<note>
+<simpara>
+The command <userinput>scoring_system area/territory</userinput>
+(from an early draft of GTP version 2) is used for setting Chinese/Japanese
+rules, if the command is supported by the program.
 Otherwise the rule settings are quietly ignored.
-</para>
+</simpara>
+</note>
 
 <para>
 The following GoGui specific GTP extension commands are used if supported by
