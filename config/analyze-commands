@@ -64,12 +64,12 @@ varw/Combination Attack White/combination_attack white
 string/Does Surround/does_surround %P
 hstring/Dragon Data/dragon_data
 hpstring/Dragon Data At/dragon_data %p
-string/Dragon Status/dragon_status
+hpstring/Dragon Status/dragon_status
 pstring/Dragon Status At/dragon_status %p
 plist/Dragon Stones/dragon_stones %p
 none/Draw Search Area/draw_search_area
 none/Dump Stack/dump_stack
-string/Eval Eye/eval_eye %p
+pstring/Eval Eye/eval_eye %p
 string/Experimental Score Black/experimental_score black
 string/Experimental Score White/experimental_score white
 plist/FindLib/findlib %p

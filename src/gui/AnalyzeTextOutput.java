@@ -88,7 +88,7 @@ class AnalyzeTextOutput
         highlight("color",
                   "\\b([Bb][Ll][Aa][Cc][Kk]|[Ww][Hh][Ii][Tt][Ee])\\b");
         highlight("point", "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1[0-9]|[1-9]))\\b");
-        highlight("title", "^\\S+:\\s*$");
+        highlight("title", "^\\S+:\\s+y");
         m_textPane.setEditable(false);
     }
 
