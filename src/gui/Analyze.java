@@ -752,8 +752,8 @@ class AnalyzeDialog
 
     private static void setPrefsDefaults(Preferences prefs)
     {
-        prefs.setBoolDefault("analyze-only-supported-commands", false);
-        prefs.setBoolDefault("analyze-sort", false);
+        prefs.setBoolDefault("analyze-only-supported-commands", true);
+        prefs.setBoolDefault("analyze-sort", true);
     }
 
     private void sort()
