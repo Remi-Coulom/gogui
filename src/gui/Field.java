@@ -36,8 +36,9 @@ public class Field
                 {
                     int code = event.getKeyCode();
                     int modifiers = event.getModifiers();
-                    int mask = (ActionEvent.CTRL_MASK | ActionEvent.ALT_MASK
-                                | ActionEvent.META_MASK);
+                    final int mask = (ActionEvent.CTRL_MASK
+                                      | ActionEvent.ALT_MASK
+                                      | ActionEvent.META_MASK);
                     boolean modifiedSelect = ((modifiers & mask) != 0);
                     if (code == KeyEvent.VK_ENTER && m_board.getShowCursor())
                         m_board.fieldClicked(m_point, modifiedSelect);
@@ -233,9 +234,9 @@ public class Field
                             boolean fill)
     {
         graphics.setColor(color);
-        int width = getSize().width;
-        int d = width * 36 / 100;
-        int w = width - 2 * d;
+        int size = getSize().width;
+        int d = size * 36 / 100;
+        int w = size - 2 * d;
         if (fill)
             graphics.fillOval(d, d, w, w);
         else
@@ -249,11 +250,11 @@ public class Field
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
             graphics2D.setComposite(m_composite7);
-        int width = getSize().width;
-        int d = width / 5;
+        int size = getSize().width;
+        int d = size / 5;
         graphics.setColor(java.awt.Color.red);
-        graphics.drawLine(d, width / 2, width - d, width / 2);
-        graphics.drawLine(width / 2, d, width / 2, width - d);
+        graphics.drawLine(d, size / 2, size - d, size / 2);
+        graphics.drawLine(size / 2, d, size / 2, size - d);
         graphics.setPaintMode();
     }
 
@@ -278,9 +279,9 @@ public class Field
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
             graphics2D.setComposite(m_composite5);
-        Dimension size = getSize();
-        int d = size.width / 6;
-        int w = size.width;
+        int size = getSize().width;
+        int d = size / 6;
+        int w = size;
         graphics.setColor(java.awt.Color.red);
         graphics.drawLine(d, d, 2 * d, d);
         graphics.drawLine(d, d, d, 2 * d);
@@ -331,9 +332,9 @@ public class Field
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
             graphics2D.setComposite(m_composite7);
-        Dimension size = getSize();
-        int d = size.width / 4;
-        int width = size.width - 2 * d;
+        int size = getSize().width;
+        int d = size / 4;
+        int width = size - 2 * d;
         graphics.setColor(java.awt.Color.blue);
         graphics.drawRect(d, d, width, width);
         graphics.drawRect(d + 1, d + 1, width - 2, width - 2);
@@ -362,13 +363,13 @@ public class Field
     private void drawStone(Graphics graphics, java.awt.Color color,
                            java.awt.Color colorBright)
     {
-        int width = getSize().width;
+        int size = getSize().width;
         int margin = getStoneMargin();
-        int radius = width / 3;
+        int radius = size / 3;
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D != null)
         {
-            int center = width / 3;
+            int center = size / 3;
             radius = Math.max(radius, 1);
             RadialGradientPaint paint =
                 new RadialGradientPaint(new Point2D.Double(center, center),
@@ -382,18 +383,18 @@ public class Field
             graphics.setColor(color);
         }
         graphics.fillOval(margin, margin,
-                          width - 2 * margin, width - 2 * margin);
+                          size - 2 * margin, size - 2 * margin);
     }
 
     private void drawString(Graphics g)
     {
         if (m_string.equals(""))
             return;
-        int width = getSize().width;
+        int size = getSize().width;
         int stringWidth = g.getFontMetrics().stringWidth(m_string);
         int stringHeight = g.getFont().getSize();
-        int x = Math.max((width - stringWidth) / 2, 0);
-        int y = stringHeight + (width - stringHeight) / 2;
+        int x = Math.max((size - stringWidth) / 2, 0);
+        int y = stringHeight + (size - stringHeight) / 2;
         if (m_color == go.Color.WHITE)
             g.setColor(java.awt.Color.black);
             g.setColor(java.awt.Color.white);
