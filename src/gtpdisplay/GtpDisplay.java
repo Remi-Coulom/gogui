@@ -65,7 +65,7 @@ public class GtpDisplay
                 }
             });
         m_squareLayout = new SquareLayout();
-        m_squareLayout.setPreferMultipleOf(2 + 2 * m_size);
+        m_squareLayout.setPreferMultipleOf(m_size + 2);
         JPanel panel = new JPanel(m_squareLayout);
         panel.add(m_guiBoard);
         contentPane.add(panel);
@@ -242,7 +242,7 @@ public class GtpDisplay
                 {
                     m_board.initSize(m_size);
                     m_guiBoard.initSize(m_size);
-                    m_squareLayout.setPreferMultipleOf(2 + 2 * m_size);
+                    m_squareLayout.setPreferMultipleOf(m_size + 2);
                     m_frame.pack();
                     m_guiBoard.updateFromGoBoard();
                     m_guiBoard.markLastMove(null);

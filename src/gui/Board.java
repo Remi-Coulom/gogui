@@ -33,6 +33,8 @@ class BoardLabel
     }
 }
 
+//----------------------------------------------------------------------------
+
 public class Board
     extends JPanel
     implements FocusListener, Printable
@@ -44,7 +46,6 @@ public class Board
 
     public Board(go.Board board)
     {
-        super(new GridBagLayout());
         m_board = board;
         setPreferredFieldSize();
         URL url = getClass().getClassLoader().getResource("images/wood.png");
@@ -188,33 +189,21 @@ public class Board
         m_board.initSize(size);
         m_field = new Field[size][size];
         removeAll();
-        setOpaque(false);
-        m_grid = new JPanel(new GridLayout(size, size));
-        m_grid.setOpaque(false);
-        GridBagLayout gridBag = (GridBagLayout)getLayout();
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        constraints.gridwidth = 2 * size;
-        constraints.gridheight = 2 * size;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.fill = GridBagConstraints.BOTH;
-        add(m_grid);
-        gridBag.setConstraints(m_grid, constraints);
-        addColumnLabels(size, 0);
+        setOpaque(false);        
+        setLayout(new GridLayout(size + 2, size + 2));
+        addColumnLabels(size);
         Font font = UIManager.getFont("Label.font");
         if (font != null)
             font = font.deriveFont(Font.BOLD);
         for (int y = size - 1; y >= 0; --y)
         {
             String text = Integer.toString(y + 1);
-            addRowLabel(0, 2 * (size - y) - 1, text);
+            addRowLabel(text);
             for (int x = 0; x < size; ++x)
             {
                 go.Point p = m_board.getPoint(x, y);
                 Field field = new Field(this, p, font);
-                m_grid.add(field);
+                add(field);
                 m_field[x][y] = field;
                 KeyListener keyListener = new KeyAdapter()
                     {
@@ -225,9 +214,9 @@ public class Board
                     };
                 field.addKeyListener(keyListener);
             }
-            addRowLabel(1 + 2 * size, 2 * (size - y) - 1, text);
+            addRowLabel(text);
         }
-        addColumnLabels(size, 1 + 2 * size);
+        addColumnLabels(size);
         m_focusPoint = new go.Point(size / 2, size / 2);
         m_lastMove = null;
         revalidate();
@@ -588,45 +577,27 @@ public class Board
 
     private Image m_image;
 
-    private JPanel m_grid;
-
     private Listener m_listener;
 
-    private void addColumnLabels(int size, int y)
+    private void addColumnLabels(int size)
     {
-        GridBagLayout gridBag = (GridBagLayout)getLayout();
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridy = y;
-        constraints.gridwidth = 2;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.fill = GridBagConstraints.BOTH;
+        add(Box.createHorizontalGlue());
         char c = 'A';
         for (int x = 0; x < size; ++x)
         {
             BoardLabel label = new BoardLabel(new Character(c).toString());
             add(label);
-            constraints.gridx = 1 + 2 * x;
-            gridBag.setConstraints(label, constraints);
             ++c;
             if (c == 'I')
                 ++c;
         }
+        add(Box.createHorizontalGlue());
     }
 
-    private void addRowLabel(int x, int y, String text)
+    private void addRowLabel(String text)
     {
-        GridBagLayout gridBag = (GridBagLayout)getLayout();
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridx = x;
-        constraints.gridy = y;
-        constraints.gridheight = 2;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.fill = GridBagConstraints.BOTH;
         BoardLabel label = new BoardLabel(text);
         add(label);
-        gridBag.setConstraints(label, constraints);
     }
 
     private void calcScore()
@@ -657,8 +628,8 @@ public class Board
         if (graphics2D == null)
             return;
         graphics2D.setComposite(m_composite3);
-        Rectangle bounds = m_field[0][0].getBounds();
-        int width = getScreenLocation(1, 0).x - getScreenLocation(0, 0).x;
+        Rectangle grid = getBounds();
+        int width = grid.width / (m_board.getSize() + 2);
         final int size = width - 2 * Field.getStoneMargin(width);
         final int offset = size / 12;
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
@@ -689,10 +660,13 @@ public class Board
 
     private java.awt.Point getScreenLocation(int x, int y)
     {
-        java.awt.Point gridLocation = m_grid.getLocation();
-        Rectangle bounds = m_field[x][y].getBounds();
-        int screenX = gridLocation.x + bounds.x + bounds.width / 2;
-        int screenY = gridLocation.y + bounds.y + bounds.height / 2;
+        int size = m_board.getSize();
+        assert(x >= 0 && x < size);
+        assert(y >= 0 && y < size);
+        int width = getSize().width;
+        int offset = width / (size + 2) / 2;
+        int screenX = ((x + 1) * width) / (size + 2) + offset;
+        int screenY = ((size - y) * width) / (size + 2) + offset;
         return new java.awt.Point(screenX, screenY);
     }
 

@@ -67,7 +67,7 @@ class GoGui
         innerPanel.add(createStatusBar(), BorderLayout.SOUTH);
 
         m_squareLayout = new SquareLayout();
-        m_squareLayout.setPreferMultipleOf(2 + 2 * m_boardSize);
+        m_squareLayout.setPreferMultipleOf(m_boardSize + 2);
         m_boardPanel = new JPanel(m_squareLayout);
         m_boardPanel.add(m_guiBoard);
 
@@ -1815,7 +1815,7 @@ class GoGui
         {
             m_boardSize = size;
             m_guiBoard.initSize(size);
-            m_squareLayout.setPreferMultipleOf(2 + 2 * size);
+            m_squareLayout.setPreferMultipleOf(size + 2);
             pack();
             restoreMainWindow();
             if (m_gtpShell != null)
