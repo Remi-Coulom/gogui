@@ -174,27 +174,10 @@ public class GmpToGtp
                 System.exit(-1);
             }
             String title = "Go Modem ";
+            String flow = opt.getString("flow", "rtscts");                
             if (! device.equals(""))
             {
-                CommPortIdentifier portId =
-                    CommPortIdentifier.getPortIdentifier(device);
-                port = (SerialPort)portId.open("GmpToGtp", 5000);
-                port.setSerialPortParams(baud, SerialPort.DATABITS_8,
-                                         SerialPort.STOPBITS_1,
-                                         SerialPort.PARITY_NONE);
-                String flow = opt.getString("flow", "rtscts");                
-                if (flow.equals("rtscts"))
-                    port.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN |
-                                            SerialPort.FLOWCONTROL_RTSCTS_OUT);
-                else if (flow.equals("xonxoff"))
-                    port.setFlowControlMode(SerialPort.FLOWCONTROL_XONXOFF_IN |
-                                            SerialPort.FLOWCONTROL_XONXOFF_OUT);
-                else if (! flow.equals("none"))
-                {
-                    System.err.println("Unknown flow control mode \"" + flow
-                                       + "\"");
-                    System.exit(-1);
-                }
+                port = openPort(device, baud, flow);
                 title = title + device;
                 in = port.getInputStream();
                 out = port.getOutputStream();
@@ -330,6 +313,29 @@ public class GmpToGtp
             if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL)
                 System.out.println(portId.getName());
         }
+    }
+
+    private static SerialPort openPort(String device, int baud, String flow)
+        throws Error, NoSuchPortException, PortInUseException,
+               UnsupportedCommOperationException
+    {
+        CommPortIdentifier portId =
+            CommPortIdentifier.getPortIdentifier(device);
+        SerialPort port = (SerialPort)portId.open("GmpToGtp", 5000);
+        port.setSerialPortParams(baud, SerialPort.DATABITS_8,
+                                 SerialPort.STOPBITS_1,
+                                 SerialPort.PARITY_NONE);
+        if (flow.equals("rtscts"))
+            port.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN |
+                                    SerialPort.FLOWCONTROL_RTSCTS_OUT);
+        else if (flow.equals("xonxoff"))
+            port.setFlowControlMode(SerialPort.FLOWCONTROL_XONXOFF_IN |
+                                    SerialPort.FLOWCONTROL_XONXOFF_OUT);
+        else if (flow.equals("none"))
+            port.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
+        else
+            throw new Error("Unknown flow control mode \"" + flow + "\"");
+        return port;
     }
 
     private boolean play(boolean isBlack, String command,
