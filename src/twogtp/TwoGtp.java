@@ -379,11 +379,11 @@ public class TwoGtp
 
     private class ScoreEstimate
     {
-        Double m_black;
+        double m_black;
 
-        Double m_white;
+        double m_white;
 
-        Double m_referee;
+        double m_referee;
     }
 
     private boolean m_alternate;
@@ -596,27 +596,25 @@ public class TwoGtp
         m_scoreEstimates.put(m_currentNode, estimate);
     }
 
-    private Double estimateScore(Gtp gtp)
+    private double estimateScore(Gtp gtp)
     {
         if (! gtp.isCommandSupported("estimate_score"))
-            return null;
+            return 0.0;
         StringBuffer response = new StringBuffer();
         if (! sendSingle(gtp, "estimate_score", response))
-            return null;
+            return 0.0;
         String score = StringUtils.tokenize(response.toString())[0];
-        if (score.equals("?"))
-            return null;
         try
         {
             if (score.indexOf("B+") >= 0)
-                return new Double(score.substring(2));
+                return Double.parseDouble(score.substring(2));
             else if (score.indexOf("W+") >= 0)
-                return new Double("-" + score.substring(2));
+                return Double.parseDouble("-" + score.substring(2));
         }
         catch (NumberFormatException e)
         {            
         }
-        return null;
+        return 0.0;
     }
 
     private boolean finalStatusCommand(String cmdLine, StringBuffer response)

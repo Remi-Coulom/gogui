@@ -4,6 +4,7 @@
 <!ENTITY analyze SYSTEM "analyze.xml">
 <!ENTITY bugs SYSTEM "bugs.xml">
 <!ENTITY compatibility SYSTEM "compatibility.xml">
+<!ENTITY gametree SYSTEM "gametree.xml">
 <!ENTITY gpl SYSTEM "gpl.xml">
 <!ENTITY gtpshell SYSTEM "gtpshell.xml">
 <!ENTITY interrupt SYSTEM "interrupt.xml">
@@ -42,8 +43,9 @@
 &compatibility;
 &mainwindow;
 &interrupt;
-&analyze;
+&gametree;
 &gtpshell;
+&analyze;
 &tools;
 <appendix id="reference-index">
 <title>Reference</title>

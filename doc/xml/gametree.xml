@@ -1,0 +1,22 @@
+<chapter id="gametree">
+<title>Game tree window</title>
+
+<para>
+The game tree window shows all variations of the current game as a graph
+of nodes.
+</para>
+<para>
+Nodes are displayed as a black or white stone with a move number,
+if the node contains a move, a symbol containing four small stones for nodes
+containing setup stones or a gray diamond for other nodes.
+Nodes that contain a comment have 3 small black lines under the node.
+The current node is marked with a red cursor.
+</para>
+<para>
+If a node is clicked on, the shortest path from the current node to the
+target node is computed and a series of <userinput>undo</userinput>
+and <userinput>play</userinput> commands is sent to the Go program
+to go there.
+</para>
+    
+</chapter>
