@@ -84,7 +84,7 @@ class GameInfo
         int movesLeftWhite = node.getMovesLeftWhite();
         if (! Float.isNaN(timeLeftWhite))
             m_timeW.setText(TimeControl.getTimeString(timeLeftWhite,
-                                                      movesLeftBlack));
+                                                      movesLeftWhite));
     }
 
     private JLabel m_move;
