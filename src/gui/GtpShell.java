@@ -284,11 +284,18 @@ public class GtpShell
         try
         {
             BufferedReader in = new BufferedReader(new FileReader(file));
-            String line = in.readLine();
-            while (line != null)
+            try
             {
-                appendToHistory(line);
-                line = in.readLine();
+                String line = in.readLine();
+                while (line != null)
+                {
+                    appendToHistory(line);
+                    line = in.readLine();
+                }
+            }
+            finally
+            {
+                in.close();
             }
         }
         catch (IOException e)
@@ -439,23 +446,37 @@ public class GtpShell
     {
         java.io.BufferedReader in;
         in = new BufferedReader(reader);
-        while (true)
+        try
+        {
+            while (true)
+            {
+                try
+                {
+                    String line = in.readLine();
+                    if (line == null)
+                    {
+                        in.close();
+                        break;
+                    }
+                    if (! sendCommand(line, this, true))
+                        break;
+                }
+                catch (IOException e)
+                {
+                    SimpleDialogs.showError(this, "Sending commands aborted",
+                                            e);
+                    break;
+                }
+            }
+        }
+        finally
         {
             try
             {
-                String line = in.readLine();
-                if (line == null)
-                {
-                    in.close();
-                    break;
-                }
-                if (! sendCommand(line, this, true))
-                    break;
+                in.close();
             }
             catch (IOException e)
             {
-                SimpleDialogs.showError(this, "Sending commands aborted", e);
-                return;
             }
         }
     }
