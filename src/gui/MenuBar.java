@@ -253,7 +253,7 @@ class MenuBar
 
     private boolean m_isComputerDisabled;
 
-    private final int m_maxRecent = 15;
+    private final int m_maxRecent = 10;
 
     private int m_numberRecent;
 
@@ -617,7 +617,12 @@ class MenuBar
         {
             while((line = reader.readLine()) != null)
             {
-                m_recent[m_numberRecent] = new File(line);
+                if (m_numberRecent >= m_maxRecent - 1)
+                    break;
+                File recent = new File(line);
+                if (! recent.exists())
+                    continue;
+                m_recent[m_numberRecent] = recent;
                 ++m_numberRecent;
             }
         }
