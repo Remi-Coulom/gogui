@@ -707,6 +707,11 @@ class AnalyzeDialog
             if (m_sort)
                 sortLists();
             m_list.setListData(m_labels);
+            if (m_labels.size() > 0)
+                // Avoid focus problem with Sun JDK 1.4.2 if focus was at an
+                // index greater than the new list length
+                m_list.setSelectedIndex(0);
+            comboBoxChanged();
         }
         catch (Exception e)
         {            
