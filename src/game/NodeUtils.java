@@ -255,7 +255,10 @@ public class NodeUtils
             if (i < vector.size() - 1)
                 result.append('.');
         }
-        return result.toString();
+        if (result.length() == 0)
+            return "1";
+        else
+            return result.toString();
     }
 
     public static boolean hasNextEarlierVariation(Node node)
