@@ -280,7 +280,8 @@ class Help
         }
         try
         {
-            runtime.exec("rundll32 url.dll,FileProtocolHandler" + url);
+            runtime.exec("rundll32 url.dll,FileProtocolHandler " + url);
+            return;
         }
         catch (Exception e)
         {
