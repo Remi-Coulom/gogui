@@ -78,22 +78,33 @@ public class Board
         m_lastMove = null;
         m_field = new Field[size][size];
         removeAll();
-        setLayout(new GridLayout(size + 2, size + 2));
-        addColumnLabels();
+        GridBagLayout gridBag = new GridBagLayout();
+        setLayout(gridBag);
+        GridBagConstraints constraints = new GridBagConstraints();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(size, size));
+        panel.setBackground(m_boardColor);
+        add(panel);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.gridheight = constraints.gridwidth = size;
+        constraints.weightx = constraints.weighty = (double)size / (size + 2);
+        gridBag.setConstraints(panel, constraints);
+        addColumnLabels(gridBag, size, 0);
+        addColumnLabels(gridBag, size, size + 1);
+        addRowLabels(gridBag, size, 0);
+        addRowLabels(gridBag, size, size + 1);
         for (int y = size - 1; y >= 0; --y)
         {
-            String yLabel = Integer.toString(y + 1);
-            add(new JLabel(yLabel, JLabel.CENTER));
             for (int x = 0; x < size; ++x)
             {
                 go.Point p = m_board.getPoint(x, y);
                 Field field = new Field(this, p, m_board.isHandicap(p));
-                add(field);
+                panel.add(field);
                 m_field[x][y] = field;
             }
-            add(new JLabel(yLabel, JLabel.CENTER));
         }
-        addColumnLabels();
         revalidate();
         repaint();
     }
@@ -241,6 +252,9 @@ public class Board
         drawLastMove();
     }
 
+    private static java.awt.Color m_boardColor
+        = new java.awt.Color(224, 160, 96);
+
     private Dimension m_preferredFieldSize;
 
     private go.Board m_board;
@@ -251,18 +265,42 @@ public class Board
 
     private go.Point m_lastMove;
 
-    private void addColumnLabels()
+    private void addColumnLabels(GridBagLayout gridBag, int size, int y)
     {
-        add(Box.createHorizontalGlue());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridheight = constraints.gridwidth = 1;
+        constraints.weightx = constraints.weighty = 1d / (size + 2);
         char c = 'A';
-        for (int x = 0; x < m_board.getSize(); ++x)
+        for (int x = 0; x < size; ++x)
         {
-            add(new JLabel(new Character(c).toString(), JLabel.CENTER));
+            JLabel label = new JLabel(new Character(c).toString(),
+                                      JLabel.CENTER);
+            add(label);
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.gridx = x + 1;
+            constraints.gridy = y;
+            gridBag.setConstraints(label, constraints);
             ++c;
             if (c == 'I')
                 ++c;
         }
-        add(Box.createHorizontalGlue());
+    }
+
+    private void addRowLabels(GridBagLayout gridBag, int size, int x)
+    {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridheight = constraints.gridwidth = 1;
+        constraints.weightx = constraints.weighty = 1d / (size + 2);
+        for (int y = 0; y < size; ++y)
+        {
+            String text = Integer.toString(y + 1);
+            JLabel label = new JLabel(text, JLabel.CENTER);
+            add(label);
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.gridx = x;
+            constraints.gridy = size - y;
+            gridBag.setConstraints(label, constraints);
+        }
     }
 
     private void calcScore()
