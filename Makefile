@@ -1,3 +1,10 @@
+#------------------------------------------------------------------------------
+# $Id$
+# $Source$
+#------------------------------------------------------------------------------
+
+VERSION=0.1.x
+
 ICONS= \
   icons/NewBoard.png \
   org/javalobby/icons/20x20png/Computer.png \
@@ -26,7 +33,7 @@ PACKAGES= \
   sgf \
   utils
 
-release:
+release: version
 	mkdir -p build
 	javac -O -deprecation -sourcepath . -source 1.4 -d build @files.txt
 	mkdir -p build/doc
@@ -37,7 +44,7 @@ release:
 	jar cmf manifest-addition.txt gogui.jar -C build .
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
-debug: doc
+debug: version
 	mkdir -p build_dbg
 	javac -g -deprecation -sourcepath . -source 1.4 -d build_dbg @files.txt
 	mkdir -p build_dbg/doc
@@ -45,6 +52,10 @@ debug: doc
 	mkdir -p build_dbg/org/javalobby/icons/20x20png
 	for i in $(ICONS); do cp $$i build_dbg/$$i; done 
 	cp -R doc/html/* build_dbg/doc
+
+version:
+	sed 's/m_version = \".*\"/m_version = \"$(VERSION)\"/' <src/gui/Version.java >src/gui/.Version.java.new
+	mv src/gui/.Version.java.new src/gui/Version.java
 
 .PHONY: gmptogtp
 
@@ -59,6 +70,7 @@ clean:
 	-rm -r build build_dbg
 
 doc:
+	echo "$(VERSION)" >doc/xml/version.xml
 	$(MAKE) -C doc
 
 docsrc:

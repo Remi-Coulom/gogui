@@ -1,5 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE book [
+ <!ENTITY version SYSTEM "version.xml">
  <!ENTITY readme SYSTEM "readme.xml">
  <!ENTITY compatibility SYSTEM "compatibility.xml">
  <!ENTITY interrupt SYSTEM "interrupt.xml">
@@ -7,6 +8,7 @@
    ]>
 <book>
   <title>GoGui Documentation</title>
+  <bookinfo><releaseinfo>Version &version;</releaseinfo></bookinfo>
   
   &readme;
   &compatibility;
