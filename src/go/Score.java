@@ -31,12 +31,17 @@ public class Score
 
     public int m_territoryWhite;
 
-    public String formatResultShort()
+    public String formatResult()
     {
-        if (m_result > 0)
-            return "B+" + m_result;
-        else if (m_result < 0)
-            return "W+" + (-m_result);
+        return formatResult(m_result);
+    }
+
+    public static String formatResult(float result)
+    {
+        if (result > 0)
+            return "B+" + result;
+        else if (result < 0)
+            return "W+" + (-result);
         else
             return "0";
     }

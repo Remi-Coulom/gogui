@@ -59,11 +59,11 @@ public class ScoreDialog
         m_capturedBlack.setText(Integer.toString(score.m_capturedBlack));
         m_capturedWhite.setText(Integer.toString(score.m_capturedWhite));
         m_komi.setText(Float.toString(score.m_komi));
-        m_resultChinese.setText(Float.toString(score.m_resultChinese));
-        m_resultJapanese.setText(Float.toString(score.m_resultJapanese));
+        m_resultChinese.setText(Score.formatResult(score.m_resultChinese));
+        m_resultJapanese.setText(Score.formatResult(score.m_resultJapanese));
         m_rules.setText(score.m_rules == go.Board.RULES_JAPANESE ? "Japanese"
                         : "Chinese");
-        m_result.setText(score.formatResultShort());
+        m_result.setText(score.formatResult());
     }
 
     private JLabel m_territoryBlack;
