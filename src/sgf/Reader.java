@@ -24,7 +24,9 @@ public class Reader
         }
     }    
 
-    /** @param name Name prepended to error messages */
+    /** @param reader Stream to read from.
+        @param name Name prepended to error messages.
+    */
     public Reader(java.io.Reader reader, String name)
         throws Error
     {

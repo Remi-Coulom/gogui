@@ -262,6 +262,7 @@ public abstract class GtpServer
         @param cmdArray Command line split into words.
         @param response Empty string buffer filled with GTP error message
         if parsing fails.
+        @param boardSize Board size is needed for parsing the point
         @return ColorPoint argument or null if parsing fails.
     */
     public static ColorPointArgument
@@ -357,6 +358,7 @@ public abstract class GtpServer
         @param cmdArray Command line split into words.
         @param response Empty string buffer filled with GTP error message
         if parsing fails.
+        @param boardSize Board size is needed for parsing the point
         @return Point argument or null if parsing fails.
     */
     public static PointArgument parsePointArgument(String[] cmdArray,

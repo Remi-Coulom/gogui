@@ -15,10 +15,14 @@ import version.*;
 
 class GtpServer
 {
-    /** Constructor.
+    /** @param verbose Log everything sent and received to stderr
+        @param loop Restart program and wait for new connection after
+        connection is closed (only for incoming connections)
+        @param program Command line for Go program
         @param remoteHost If null then the server waits for incoming
         connections, otherwise it connects to a remote computer with this
         name.
+        @param port Port number at remote host
         @param userFile file containing login information that is sent to the
         remote host. Only used if remoteHost is set.
     */

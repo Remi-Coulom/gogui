@@ -989,11 +989,15 @@ public final class Gmp
         public int m_y;
     }
 
-    /** Create a Gmp.
-        @param size board size 1-22
+    /** Create a GMP connection.
+        @param input Input stream
+        @param output Output stream
+        @param size Board size 1-22
         Gmp supports only sizes up to 22 (number of bits in MOVE cmd)
-        @param colorIndex color computer color on your side
+        @param simple Use simple version of GMP
+        @param colorIndex Color computer color on your side
         0=unknown, 1=white, 2=black
+        @param verbose Log everything sent and received to stderr
     */
     public Gmp(InputStream input, OutputStream output, int size,
                int colorIndex, boolean simple, boolean verbose)
