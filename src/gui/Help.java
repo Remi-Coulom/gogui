@@ -116,27 +116,30 @@ class Help
     private JComponent createButtons()
     {
         JToolBar toolBar = new JToolBar();
-        m_buttonBack = createToolBarButton("images/back.png", "back");
+        m_buttonBack = createToolBarButton("back.png", "back", "Back");
         m_buttonBack.setEnabled(false);
         toolBar.add(m_buttonBack);
-        m_buttonForward = createToolBarButton("images/forward.png", "forward");
+        m_buttonForward = createToolBarButton("forward.png", "forward",
+                                              "Forward");
         m_buttonForward.setEnabled(false);
         toolBar.add(m_buttonForward);
-        JButton contents = createToolBarButton("images/gohome.png",
-                                               "contents");
+        JButton contents = createToolBarButton("gohome.png", "contents",
+                                               "Contents");
         toolBar.add(contents);
         return toolBar;
     }
 
-    private JButton createToolBarButton(String icon, String command)
+    private JButton createToolBarButton(String icon, String command,
+                                        String toolTip)
     {
         JButton button;
-        URL u = getClass().getClassLoader().getResource(icon);
+        URL u = getClass().getClassLoader().getResource("images/" + icon);
         if (u == null)
             // Fallback, shouldn't happen if image exists.
             button = new ToolBarButton(icon);
         else
             button = new ToolBarButton(new ImageIcon(u));
+        button.setToolTipText(toolTip);
         button.setActionCommand(command);
         button.addActionListener(this);
         return button;
