@@ -1491,6 +1491,9 @@ class GoGui
         m_guiBoard.repaint();
         m_scoreMode = true;
         m_scoreDialog = new ScoreDialog(this, m_board.scoreGet());
+        m_scoreDialog.setLocationRelativeTo(this);
+        Dimension size = getSize();
+        m_scoreDialog.setLocation(size.width, 0);
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
         showStatus("Please remove dead groups.");
