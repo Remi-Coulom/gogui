@@ -256,7 +256,7 @@ installation directory.
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpdummy.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="gtpdummy.GtpDummy"/>
+<attribute name="Main-Class" value="gtpdummy.Main"/>
 </manifest>
 <fileset dir="build" includes="
  go/Color.class
