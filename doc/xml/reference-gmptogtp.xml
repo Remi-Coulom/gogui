@@ -32,12 +32,12 @@ Adapter from Go Text Protocol to Go Modem Protocol.
 
 <cmdsynopsis>
 <command>gmptogtp</command>
-<arg><option choice="plain">-help</option></arg>
+<arg choice="plain"><option>-help</option></arg>
 </cmdsynopsis>
 
 <cmdsynopsis>
 <command>gmptogtp</command>
-<arg><option choice="plain">-version</option></arg>
+<arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
