@@ -652,7 +652,7 @@ public class Board
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
             go.Point point = m_board.getPoint(i);
-            if (m_board.getColor(point) == go.Color.EMPTY)
+            if (getField(point).getColor() == go.Color.EMPTY)
                 continue;
             java.awt.Point location = getScreenLocation(point.getX(),
                                                         point.getY());
