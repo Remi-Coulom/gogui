@@ -61,7 +61,7 @@ public class AboutDialog
         if (isProgramAvailable)
         {
             String fullName = name;
-            if (version != null || ! version.equals(""))
+            if (version != null && ! version.equals(""))
                 fullName = fullName + " " + version;
             int width = GuiUtils.getDefaultMonoFontSize() * 25;
             programPanel =
