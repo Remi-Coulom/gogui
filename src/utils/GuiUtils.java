@@ -20,31 +20,24 @@ public class GuiUtils
 
     public static Border createEmptyBorder()
     {
-        if (m_emptyBorder == null)
-            m_emptyBorder = BorderFactory.createEmptyBorder(PAD, PAD,
-                                                            PAD, PAD);
         return m_emptyBorder;
     }
 
     public static Box.Filler createFiller()
     {
-        Dimension dim = new Dimension(PAD, PAD);
-        return new Box.Filler(dim, dim, dim);
+        return new Box.Filler(m_fillerDimension, m_fillerDimension,
+                              m_fillerDimension);
     }
 
     public static Border createSmallEmptyBorder()
     {
-        if (m_smallEmptyBorder == null)
-            m_smallEmptyBorder =
-                BorderFactory.createEmptyBorder(SMALL_PAD, SMALL_PAD,
-                                                SMALL_PAD, SMALL_PAD);
         return m_smallEmptyBorder;
     }
 
     public static Box.Filler createSmallFiller()
     {
-        Dimension dim = new Dimension(SMALL_PAD, SMALL_PAD);
-        return new Box.Filler(dim, dim, dim);
+        return new Box.Filler(m_smallFillerDimension, m_smallFillerDimension,
+                              m_smallFillerDimension);
     }
 
     public static int getDefaultMonoFontSize()
@@ -75,9 +68,18 @@ public class GuiUtils
         frame.setIconImage(new ImageIcon(url).getImage());
     }
 
-    private static Border m_emptyBorder;
+    private static final Border m_emptyBorder =
+        BorderFactory.createEmptyBorder(PAD, PAD, PAD, PAD);
 
-    private static Border m_smallEmptyBorder;
+    private static final Border m_smallEmptyBorder =
+        BorderFactory.createEmptyBorder(SMALL_PAD, SMALL_PAD,
+                                        SMALL_PAD, SMALL_PAD);
+
+    private static final Dimension m_fillerDimension =
+        new Dimension(PAD, PAD);
+
+    private static final Dimension m_smallFillerDimension =
+        new Dimension(SMALL_PAD, SMALL_PAD);
 }
 
 //----------------------------------------------------------------------------
