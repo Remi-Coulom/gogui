@@ -442,8 +442,20 @@ public class TwoGtp
     {
         if (m_referee != null && ! m_refereeIsDisabled)
             return sendSingle(m_referee, cmdLine, response);
-        else
-            return sendEither(cmdLine, response);
+        if (m_black.isCommandSupported("final_status"))
+            return sendSingle(m_black, cmdLine, response);
+        if (m_white.isCommandSupported("final_status"))
+            return sendSingle(m_white, cmdLine, response);
+        response.append("Neither player supports final_status command");
+        return false;
+    }
+
+    private boolean sendEither(String command, StringBuffer response)
+    {
+        if (sendSingle(m_black, command, response))
+            return true;
+        response.setLength(0);
+        return sendSingle(m_white, command, response);
     }
 
     private void findInitialGameIndex()
@@ -1048,14 +1060,6 @@ public class TwoGtp
     {
         return send(m_black, m_white, command, command, command, response,
                     changesState, tryUndo);
-    }
-
-    private boolean sendEither(String command, StringBuffer response)
-    {
-        if (sendSingle(m_black, command, response))
-            return true;
-        response.setLength(0);
-        return sendSingle(m_white, command, response);
     }
 
     private boolean sendGenmove(Color color, StringBuffer response)
