@@ -241,15 +241,12 @@ public class Field
 
     private Graphics2D m_graphics2D;
 
-    private void drawCircle(java.awt.Color color, boolean fill)
+    private void drawCircle(java.awt.Color color)
     {
         m_graphics.setColor(color);
         int d = m_size * 36 / 100;
         int w = m_size - 2 * d;
-        if (fill)
-            m_graphics.fillOval(d, d, w, w);
-        else
-            m_graphics.drawOval(d, d, w, w);
+        m_graphics.fillOval(d, d, w, w);
     }
 
     private void drawCrossHair()
@@ -318,7 +315,7 @@ public class Field
         if (! m_lastMoveMarker)
             return;
         setComposite(m_composite7);
-        drawCircle(java.awt.Color.red, true);
+        drawCircle(java.awt.Color.red);
         m_graphics.setPaintMode();
     }
 
@@ -340,7 +337,7 @@ public class Field
         if (! m_select)
             return;
         setComposite(m_composite7);
-        drawCircle(java.awt.Color.blue, true);
+        drawCircle(java.awt.Color.blue);
         m_graphics.setPaintMode();
     }
 
