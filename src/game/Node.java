@@ -274,6 +274,17 @@ public class Node
         return m_toMove;
     }
 
+    public boolean hasChildWithMove(Move move)
+    {
+        for (int i = 0; i < getNumberChildren(); ++i)
+        {
+            Move m = getChild(i).getMove();
+            if (m != null && m.equals(move))
+                return true;
+        }
+        return false;
+    }
+
     public boolean isChildOf(Node node)
     {
         for (int i = 0; i < node.getNumberChildren(); ++i)

@@ -349,7 +349,13 @@ class GoGui
                 && ! showQuestion("This point is a suicide move.\n" +
                                   "Do you really want to play there?"))
                 return;
-            humanMoved(new Move(p, m_board.getToMove()));
+            Move move = new Move(p, m_board.getToMove());
+            if (m_currentNode.hasChildWithMove(move)
+                && ! showQuestion("There is already a variation with this"
+                                  + " move.\n" +
+                                  "Do you want to create a new variation?"))
+                return;
+            humanMoved(move);
         }
     }
 
