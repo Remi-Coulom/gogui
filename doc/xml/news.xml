@@ -18,8 +18,8 @@
 	    <guimenuitem>Show last move</guimenuitem>.
 	  </listitem>
 	  <listitem>
-	    GoGui uses GTP extension command <userinput>gogui_title</userinput>
-	    if available.
+	    <application>GoGui</application> uses GTP extension command
+	    <userinput>gogui_title</userinput> if available.
 	  </listitem>
 	  <listitem>
 	    Fix problem in Gtp shell: caret was not redrawn after entering
@@ -35,6 +35,10 @@
 	    Rename <application>GoGui</application> option
 	    <option>-autoplay</option> to <option>-auto</option>.
 	    Remove option <option>-autofile</option>.
+	  </listitem>
+	  <listitem>
+	    <application>GoGui</application>: new option
+	    <option>-command</option>.
 	  </listitem>
 	  <listitem>
 	    Lots of other fixes and enhancements.

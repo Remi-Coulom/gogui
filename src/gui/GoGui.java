@@ -28,7 +28,7 @@ class GoGui
     GoGui(String program, Preferences prefs, String file, int move,
           boolean gtpShell, String time, boolean verbose, boolean fillPasses,
           boolean computerBlack, boolean computerWhite, boolean auto,
-          String gtpFile)
+          String gtpFile, String gtpCommand)
         throws Gtp.Error, Analyze.Error
     {
         m_program = program;
@@ -43,6 +43,7 @@ class GoGui
         m_file = file;
         m_fillPasses = fillPasses;
         m_gtpFile = gtpFile;
+        m_gtpCommand = gtpCommand;
         m_move = move;
         m_computerBlack = computerBlack;
         m_computerWhite = computerWhite;
@@ -281,6 +282,7 @@ class GoGui
             String options[] = {
                 "analyze:",
                 "auto",
+                "command:",
                 "computer-black",
                 "computer-both",
                 "computer-none",
@@ -306,6 +308,7 @@ class GoGui
                     "\n" +
                     "  -analyze name   initialize analyze command\n" +
                     "  -auto           auto play games (if computer both)\n" +
+                    "  -command cmd    send GTP command at startup\n" +
                     "  -computer-both  computer plays both sides\n" +
                     "  -computer-black computer plays black\n" +
                     "  -computer-none  computer plays no side\n" +
@@ -343,6 +346,7 @@ class GoGui
             boolean fillPasses = opt.isSet("fillpasses");
             boolean gtpShell = opt.isSet("gtpshell");
             String gtpFile = opt.getString("gtpfile", "");
+            String gtpCommand = opt.getString("command", "");
             if (opt.contains("komi"))
                 prefs.setKomi(opt.getFloat("komi"));
             int move = opt.getInteger("move", -1);
@@ -372,7 +376,7 @@ class GoGui
             
             GoGui gui = new GoGui(program, prefs, file, move, gtpShell, time,
                                   verbose, fillPasses, computerBlack,
-                                  computerWhite, auto, gtpFile);
+                                  computerWhite, auto, gtpFile, gtpCommand);
         }
         catch (AssertionError e)
         {
@@ -526,6 +530,8 @@ class GoGui
     private Analyze.Command m_analyzeCommand;
 
     private String m_file;
+
+    private String m_gtpCommand;
 
     private String m_gtpFile;
 
@@ -855,7 +861,7 @@ class GoGui
             GoGui gui = new GoGui(program, m_prefs, file.toString(),
                                   m_board.getMoveNumber(), false, null,
                                   m_verbose, m_fillPasses,
-                                  false, false, false, "");
+                                  false, false, false, "", "");
 
         }
         catch (Throwable t)
@@ -1401,6 +1407,8 @@ class GoGui
                 m_gtpShell.setInitialCompletions(supportedCommands);
                 if (! m_gtpFile.equals(""))
                     sendGtpFile(new File(m_gtpFile));
+                if (! m_gtpCommand.equals(""))
+                    sendGtpString(m_gtpCommand);
             }
             setTitle();
             setTitleFromProgram();
@@ -1649,25 +1657,20 @@ class GoGui
             new sgf.Writer(file, m_board, "GoGui", Version.m_version);
     }
 
-    private void sendGtpFile(File file)
+    private void sendGtp(java.io.Reader reader)
     {
         java.io.BufferedReader in;
-        try
-        {
-            in = new BufferedReader(new FileReader(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Could not send commands.", e);
-            return;
-        }
+        in = new BufferedReader(reader);
         while (true)
         {
             try
             {
                 String line = in.readLine();
                 if (line == null)
-                    return;
+                {
+                    in.close();
+                    break;
+                }
                 m_gtpShell.sendCommand(line, this);
             }
             catch (IOException e)
@@ -1676,6 +1679,23 @@ class GoGui
                 return;
             }
         }
+    }
+
+    private void sendGtpFile(File file)
+    {
+        try
+        {
+            sendGtp(new FileReader(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Could not send commands.", e);
+        }
+    }
+
+    private void sendGtpString(String commands)
+    {        
+        sendGtp(new StringReader(StringUtils.replace(commands, "\\n", "\n")));
     }
 
     private void setHandicap()

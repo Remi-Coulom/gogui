@@ -18,6 +18,7 @@
 	<arg choice="plain"><option>-computer-both</option></arg>
 	<arg choice="plain"><option>-computer-none</option></arg>
       </group>
+      <arg><option>-command</option> <replaceable>command</replaceable></arg>
       <arg><option>-file</option> <replaceable>filename</replaceable></arg>
       <arg><option>-fillpasses</option></arg>
       <arg><option>-gtpshell</option></arg>
@@ -64,6 +65,15 @@
 	<listitem>
 	  Automatically start a new game if the program plays both
 	  colors and a game is finished.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-command</option> <replaceable>command</replaceable>
+	</term>
+	<listitem>
+	  Send Gtp command at startup. The argument can contain multiple
+	  commands separated by '\n'.
 	</listitem>
       </varlistentry>
       <varlistentry>
