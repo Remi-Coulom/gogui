@@ -604,7 +604,8 @@ class Histogram
     public void printHtml(PrintStream out)
     {
         out.print("<p>\n" +
-                  "<table cellspacing=\"1\" cellpadding=\"0\">\n");
+                  "<table cellspacing=\"1\" cellpadding=\"0\""
+                  + " rules=\"groups\">\n");
         int min;
         for (min = 0; min < m_size - 1 && m_array[min] == 0; ++min);
         int max;
@@ -613,6 +614,8 @@ class Histogram
         {
             int scale = 630;
             int width = m_array[i] * scale / getCount();
+            if (m_min + i * m_step >= 0 && m_min + (i - 1) * m_step < 0)
+                out.print("<tbody>\n");
             out.print("<tr><td align=\"right\"><small>" + (m_min + i * m_step)
                       + "</small></td><td><table cellspacing=\"0\"" +
                       " cellpadding=\"0\" width=\"" + scale + "\"><tr>" +
