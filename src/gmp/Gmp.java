@@ -25,20 +25,20 @@ import utils.StringUtils;
 /** Static utility functions. */
 class Util
 {
-	public static String format(int i)
-	{
+    public static String format(int i)
+    {
         StringBuffer s = new StringBuffer(8);
-		for (int k = 0; k < 8; ++k)
-		{
+        for (int k = 0; k < 8; ++k)
+        {
             if (i % 2 != 0)
                 s.append('1');
-			else
+            else
                 s.append('0');
-			i >>= 1;
-		}
+            i >>= 1;
+        }
         s.reverse();
-		return s.toString();
-	}
+        return s.toString();
+    }
 
     public static void log(String line, boolean verbose)
     {
@@ -919,16 +919,16 @@ class MainThread extends Thread
         }
     }
 
-	private byte makeCmdByte1(int cmd, int val)
-	{
+    private byte makeCmdByte1(int cmd, int val)
+    {
         val = val & 0x000003FF;
-		return (byte)(0x0080 | (cmd << 4) | (val >> 7));
-	}
-	
-	private byte makeCmdByte2(int val)
-	{
+        return (byte)(0x0080 | (cmd << 4) | (val >> 7));
+    }
+    
+    private byte makeCmdByte2(int val)
+    {
         return (byte)(0x0080 | (val & 0x0000007F));
-	}	
+    }   
 
     private boolean sendCmd(int cmd, int val)
     {
