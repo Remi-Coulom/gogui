@@ -813,6 +813,8 @@ class GoGui
     private void cbGoto()
     {
         String value = JOptionPane.showInputDialog(this, "Move number");
+        if (value == null || value.equals(""))
+            return;
         try
         {
             int moveNumber = Integer.parseInt(value);
