@@ -595,7 +595,8 @@ public class TwoGtp
     {
         try
         {
-            m_black.sendCommandsClearBoard(size);
+            m_black.sendCommandBoardsize(size);
+            m_black.sendCommandClearBoard(size);
         }
         catch (Gtp.Error e)
         {
@@ -604,7 +605,8 @@ public class TwoGtp
         }
         try
         {
-            m_white.sendCommandsClearBoard(size);
+            m_white.sendCommandBoardsize(size);
+            m_white.sendCommandClearBoard(size);
         }
         catch (Gtp.Error e)
         {
