@@ -111,7 +111,7 @@ class CommandThread
      */
     public void sendInterrupt()
     {
-        m_gtp.sendComment("# interrupt");
+        m_gtp.sendInterrupt();
     }
     
     /** Send asynchronous command. */

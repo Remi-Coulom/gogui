@@ -339,6 +339,12 @@ public class Gtp
         m_out.flush();
     }
 
+    /** Send interrupt comment. */
+    public void sendInterrupt()
+    {
+        sendComment("# interrupt");
+    }
+
     public void waitForExit()
     {
         try
