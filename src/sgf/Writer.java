@@ -108,11 +108,11 @@ public class Writer
             appName = appName + ":" + version;
         m_out.print(";\n" +
                     "FF[4]\n" +
+                    "CA[" + getDefaultEncoding() + "]\n" +
                     "GM[1]\n" +
                     "GN[" + getName(file) + "]\n" +
                     "AP[" + appName + "]\n" +
-                    "SZ[" + m_size + "]\n" +
-                    "CA[" + getDefaultEncoding() + "]\n");
+                    "SZ[" + m_size + "]\n");
     }
 
     private void printHeader(File file, String application, String version,
