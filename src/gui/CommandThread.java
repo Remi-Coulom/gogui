@@ -35,6 +35,11 @@ class CommandThread
         m_gtp.destroyProcess();
     }
     
+    public boolean getFastUpdate()
+    {
+        return m_gtp.getFastUpdate();
+    }
+
     /** Get response to asynchronous command.
         You must call getException() first.
     */

@@ -145,6 +145,12 @@ public class Gtp
         }
     }
 
+    /** @see Gtp.setFastUpdate */
+    public boolean getFastUpdate()
+    {
+        return m_fastUpdate;
+    }
+
     /** Get full response including status and ID and last command. */
     public String getFullResponse()
     {
@@ -163,36 +169,6 @@ public class Gtp
             for (int i = 0; i < m_supportedCommands.length; ++i)
                 result.add(m_supportedCommands[i]);
         return result;
-    }
-
-    public void sendInterrupt() throws Gtp.Error
-    {
-        if (m_isInterruptCommentSupported)
-            sendComment("# interrupt");
-        else if (m_pid != null)
-        {
-            String command = "kill -INT " + m_pid;
-            log(" " + command);
-            Runtime runtime = Runtime.getRuntime();
-            try
-            {
-                Process process = runtime.exec(command);
-                int result = process.waitFor();
-                if (result != 0)
-                    throw new Gtp.Error("Command \"" + command
-                                        + "\" returned " + result + ".");
-            }
-            catch (IOException e)
-            {
-                throw new Gtp.Error("Could not run command " + command +
-                                    ":\n" + e);
-            }
-            catch (InterruptedException e)
-            {
-            }
-        }
-        else
-            throw new Gtp.Error("Interrupt not supported");
     }
 
     public boolean isCommandSupported(String command)
@@ -536,6 +512,36 @@ public class Gtp
             m_callback.sentCommand(comment);
         m_out.println(comment);
         m_out.flush();
+    }
+
+    public void sendInterrupt() throws Gtp.Error
+    {
+        if (m_isInterruptCommentSupported)
+            sendComment("# interrupt");
+        else if (m_pid != null)
+        {
+            String command = "kill -INT " + m_pid;
+            log(" " + command);
+            Runtime runtime = Runtime.getRuntime();
+            try
+            {
+                Process process = runtime.exec(command);
+                int result = process.waitFor();
+                if (result != 0)
+                    throw new Gtp.Error("Command \"" + command
+                                        + "\" returned " + result + ".");
+            }
+            catch (IOException e)
+            {
+                throw new Gtp.Error("Could not run command " + command +
+                                    ":\n" + e);
+            }
+            catch (InterruptedException e)
+            {
+            }
+        }
+        else
+            throw new Gtp.Error("Interrupt not supported");
     }
 
     /** Don't try to keep stdin/stderr callbacks in correct order.

@@ -272,12 +272,10 @@ class GoGui
             return;
         if (m_setupMode && ! modifiedSelect)
         {
-            setFastUpdate(true);
             if (m_board.getColor(p) != m_setupColor)
                 m_board.play(new Move(p, m_setupColor));
             else
                 m_board.play(new Move(p, go.Color.EMPTY));
-            setFastUpdate(false);
             m_board.setToMove(m_setupColor);
             m_gameInfo.update();
             m_guiBoard.update();
@@ -911,6 +909,7 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            setFastUpdate(false);
             showGtpError(e);
         }
     }
@@ -1554,6 +1553,7 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            setFastUpdate(false);
             showGtpError(e);
         }
     }
@@ -1596,6 +1596,7 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            setFastUpdate(false);
             showGtpError(e);
         }
     }
@@ -1734,6 +1735,7 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            setFastUpdate(false);
             toTop();
             if (m_gtpShell != null)
                 m_gtpShell.toTop();
@@ -1835,6 +1837,7 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            setFastUpdate(false);
             showGtpError(e);
         }
     }
@@ -2094,6 +2097,7 @@ class GoGui
     {
         if (m_commandThread != null)
         {
+            assert(m_commandThread.getFastUpdate() != fastUpdate);
             m_commandThread.setFastUpdate(fastUpdate);
             m_gtpShell.setFastUpdate(fastUpdate);
         }
@@ -2285,6 +2289,7 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            setFastUpdate(false);
             showGtpError(e);
         }
     }
