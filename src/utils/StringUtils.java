@@ -11,15 +11,18 @@ import java.util.*;
 
 public class StringUtils
 {
-    public static String[] getCmdArray(String command)
+    /** Split string into words.
+        Allows " for words containing whitespaces.
+    */
+    public static String[] tokenize(String string)
     {
         Vector vector = new Vector();
         boolean escape = false;
         boolean inString = false;
         StringBuffer token = new StringBuffer();
-        for (int i = 0; i < command.length(); ++i)
+        for (int i = 0; i < string.length(); ++i)
         {
-            char c = command.charAt(i);
+            char c = string.charAt(i);
             if (c == '"' && ! escape)
             {
                 if (inString)

@@ -61,7 +61,7 @@ public class Gtp
             // Create command array with StringUtils::getCmdArray
             // because Runtime.exec(String) uses a default StringTokenizer
             // which does not respect ".
-            m_process = runtime.exec(StringUtils.getCmdArray(program));
+            m_process = runtime.exec(StringUtils.tokenize(program));
         }
         catch (IOException e)
         {

@@ -22,7 +22,7 @@ class GtpServer
         ServerSocket serverSocket = new ServerSocket(port, 1);
         while (true)
         {
-            Process process = runtime.exec(StringUtils.getCmdArray(program));
+            Process process = runtime.exec(StringUtils.tokenize(program));
             Thread stdErrThread = new StdErrThread(process);
             stdErrThread.start();
             if (verbose)

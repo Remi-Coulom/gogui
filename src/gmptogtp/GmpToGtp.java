@@ -187,7 +187,7 @@ public class GmpToGtp
             else
             {
                 Runtime runtime = Runtime.getRuntime();
-                process = runtime.exec(StringUtils.getCmdArray(program));
+                process = runtime.exec(StringUtils.tokenize(program));
                 Thread stdErrThread = new StdErrThread(process);
                 stdErrThread.start();
                 title = title + program;

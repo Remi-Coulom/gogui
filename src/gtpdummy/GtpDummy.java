@@ -30,7 +30,7 @@ public class GtpDummy
 
     public boolean handleCommand(String cmdLine, StringBuffer response)
     {
-        String[] cmdArray = StringUtils.getCmdArray(cmdLine);
+        String[] cmdArray = StringUtils.tokenize(cmdLine);
         String cmd = cmdArray[0];
         boolean status = true;
         if (cmd.equals("black"))
