@@ -69,6 +69,16 @@
         for a complete reference.
       </listitem>
     </varlistentry>
+    <varlistentry>
+      <term>SgfToTex</term>
+      <listitem>
+        SGF to LaTeX converter.
+	<xref linkend="reference-sgftotex">
+	<citerefentry><refentrytitle>sgftotex</refentrytitle></citerefentry>
+        </xref> 
+        for a complete reference.
+      </listitem>
+    </varlistentry>
   </variablelist>
 
 </chapter>

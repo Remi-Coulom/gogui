@@ -10,6 +10,7 @@
  <!ENTITY analyze SYSTEM "analyze.xml">
  <!ENTITY tools SYSTEM "tools.xml">
  <!ENTITY reference SYSTEM "reference.xml">
+ <!ENTITY reference-sgftotex SYSTEM "reference-sgftotex.xml">
  <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
  <!ENTITY reference-gmptogtp SYSTEM "reference-gmptogtp.xml">
  <!ENTITY reference-gtpnet SYSTEM "reference-gtpnet.xml">
@@ -40,6 +41,7 @@
     &reference;
     &reference-gtpnet;
     &reference-netgtp;
+    &reference-sgftotex;
     &reference-twogtp;
   </appendix>
   &news;

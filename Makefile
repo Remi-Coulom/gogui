@@ -51,9 +51,9 @@ DOC= \
   doc/xml/reference.xml \
   doc/xml/tools.xml
 
-all: gogui gmptogtp gtpnet netgtp twogtp 
+all: gogui gmptogtp gtpnet netgtp sgftotex twogtp
 
-.PHONY: doc gmptogtp gtpnet netgtp twogtp
+.PHONY: doc gmptogtp gtpnet netgtp sgftotex twogtp
 
 gogui: doc/html/index.html version
 	mkdir -p build/gogui
@@ -92,6 +92,11 @@ gtpnet:
 	javac -O -deprecation -sourcepath . -source 1.4 -d build/gtpnet @build/files-gtpnet.txt
 	jar cmf build/manifest-gtpnet.txt gtpnet.jar -C build/gtpnet .
 
+sgftotex:
+	mkdir -p build/sgftotex
+	javac -O -deprecation -sourcepath . -source 1.4 -d build/sgftotex @build/files-sgftotex.txt
+	jar cmf build/manifest-sgftotex.txt sgftotex.jar -C build/sgftotex .
+
 twogtp:
 	mkdir -p build/twogtp
 	javac -O -deprecation -sourcepath . -source 1.4 -d build/twogtp @build/files-twogtp.txt
@@ -100,7 +105,7 @@ twogtp:
 .PHONY: srcdoc clean doc changelog tags
 
 clean:
-	-rm -r build/gogui build/gogui_debug build/gmptogtp build/netgtp build/twogtp
+	-rm -r build/gogui build/gogui_debug build/gtpnet build/gmptogtp build/netgtp build/sgftotex build/twogtp
 
 doc: doc/html/index.html
 

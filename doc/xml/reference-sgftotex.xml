@@ -1,0 +1,45 @@
+<refentry id="reference-sgftotex">
+  <refmeta>
+    <refentrytitle>sgftotex</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+  <refnamediv>
+    <refname>sgftotex</refname>
+    <refname>sgftotex.jar</refname>
+    <refpurpose>
+      SGF to LaTeX converter.
+    </refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>sgftotex</command>
+      <arg><option>-help</option></arg>
+      <arg><replaceable>file.sgf</replaceable>
+      <arg><replaceable>file.tex</replaceable></arg></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsection>
+    <title>Description</title>
+    <para>
+      Converts <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files to
+      <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
+      <ulink url="http://www.abo.fi/~vbos/psgo-frame.html">PSGO</ulink> style.
+    </para>
+  </refsection>
+
+  <refsection>
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-help</option>
+	</term>
+	<listitem>
+	  Display help and exit.
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+
+</refentry>

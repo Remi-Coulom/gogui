@@ -1,0 +1,10 @@
+src/go/Board.java
+src/go/Color.java
+src/go/Point.java
+src/go/Move.java
+src/go/Score.java
+src/latex/Writer.java
+src/sgf/Reader.java
+src/sgftotex/SgfToTex.java
+src/utils/FileUtils.java
+src/utils/Options.java

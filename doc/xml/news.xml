@@ -30,6 +30,7 @@
 	  </listitem>
 	  <listitem>
 	    Game scan be saved in LaTex format usinf psgo.sty.
+	    Standalone converter <command>sgftotex</command>.
 	  </listitem>
 	  <listitem>
 	    Rename <application>GoGui</application> option
