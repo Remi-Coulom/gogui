@@ -40,6 +40,15 @@ Don't use more memory than there is real memory on the machine,
 because using swap space will make the program unusable slow.
 </para>
 
+<section>
+<title>Wrong line numbers in SGF error messages</title>
+<para>
+If reading an SGF file fails, the line numbers of the error messages
+are sometimes wrong.
+This is due to bugs in the Java class StreamTokenizer that is used
+for parsing the SGF stream.
+</para>
+
 <para>
 <!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
 </para>
