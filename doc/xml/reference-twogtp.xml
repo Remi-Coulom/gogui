@@ -257,7 +257,7 @@ Display help and exit.
 <para>
 Komi. If this option is not used, the komi can be set with
 the <userinput>komi</userinput> command or default komi 6.5 will be
-used with option <option>-auto</option>.
+used.
 </para>
 </listitem>
 </varlistentry>

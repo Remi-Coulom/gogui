@@ -21,6 +21,11 @@ GtpAdapter: fix some bugs with option -resign
 TwoGtp, GtpAdapter: handle resign
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+TwoGtp: fix bug in setting komi with GTP command komi
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

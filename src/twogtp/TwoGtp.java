@@ -21,7 +21,7 @@ public class TwoGtp
     extends GtpServer
 {
     public TwoGtp(InputStream in, OutputStream out, String black,
-                  String white, String referee, int size, Float komi,
+                  String white, String referee, int size, float komi,
                   int numberGames, boolean alternate, String sgfFile,
                   boolean force, boolean verbose, boolean estimateScore)
         throws Exception
@@ -166,7 +166,7 @@ public class TwoGtp
         else if (cmd.equals("boardsize"))
             status = boardsize(cmdArray, response);
         else if (cmd.equals("komi"))
-            komi(cmdLine);
+            komi(cmdArray, response);
         else if (cmd.equals("scoring_system"))
             sendIfSupported(cmd, cmdLine);
         else if (cmd.equals("name"))
@@ -331,11 +331,9 @@ public class TwoGtp
             String white = opt.getString("white", "");
             String referee = opt.getString("referee", "");
             int size = opt.getInteger("size", 0, 0);
-            Float komi = new Float(0f);
+            float komi = 6.5f;
             if (opt.isSet("komi"))
-                komi = new Float(opt.getFloat("komi"));
-            else if (auto)
-                komi = new Float(6.5);
+                komi = opt.getFloat("komi");
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
@@ -399,6 +397,8 @@ public class TwoGtp
 
     private int m_size;
 
+    private float m_komi;
+
     private double m_cpuTimeBlack;
 
     private double m_cpuTimeWhite;
@@ -428,8 +428,6 @@ public class TwoGtp
     private String m_whiteVersion;
 
     private HashMap m_scoreEstimates = new HashMap();
-
-    private Float m_komi;
 
     private Vector m_games = new Vector(100, 100);;
 
@@ -824,7 +822,7 @@ public class TwoGtp
     private void initGame(int size)
     {
         m_board = new Board(size);
-        m_gameTree = new GameTree(size, m_komi.floatValue(), null, null);
+        m_gameTree = new GameTree(size, m_komi, null, null);
         m_currentNode = m_gameTree.getRoot();
         m_scoreEstimates.clear();
         m_resigned = false;
@@ -845,11 +843,14 @@ public class TwoGtp
         return (m_alternate && m_gameIndex % 2 != 0);
     }
 
-    private void komi(String cmdLine)
+    private void komi(String[] cmdArray, StringBuffer response)
     {
-        if (m_komi != null)
+        FloatArgument floatArgument = parseFloatArgument(cmdArray, response);
+        if (floatArgument == null)
             return;
-        sendIfSupported("komi", cmdLine);
+        m_komi = floatArgument.m_float;
+        m_gameTree.getGameInformation().m_komi = m_komi;
+        sendIfSupported("komi", "komi " + m_komi);
     }
 
     private void mergeResponse(StringBuffer response,
@@ -927,8 +928,7 @@ public class TwoGtp
         m_inconsistentState = false;
         initGame(size);
         m_gameSaved = false;
-        if (m_komi != null)
-            sendIfSupported("komi", "komi " + m_komi.floatValue());
+        sendIfSupported("komi", "komi " + m_komi);
         return true;
     }
 
