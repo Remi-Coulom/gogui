@@ -505,7 +505,7 @@ public final class Gtp
                 int result = process.waitFor();
                 if (result != 0)
                     throw new GtpError("Command \"" + command
-                                        + "\" returned " + result + ".");
+                                        + "\" returned " + result);
             }
             catch (IOException e)
             {
@@ -562,8 +562,10 @@ public final class Gtp
     }
 
 
+    /** More sophisticated version of waitFor with timeout. */
     public void waitForExit(int timeout, TimeoutCallback timeoutCallback)
     {
+        setExitInProcess(true);
         while (true)
         {
             Thread thread = new Thread()
@@ -659,6 +661,10 @@ public final class Gtp
                 if (line == null)
                     return;
                 log("<< " + line);
+                // Avoid programs flooding stderr or stdout after trying
+                // to exit
+                if (getExitInProcess())
+                    Thread.sleep(m_queue.getSize() / 10);
             }
         }
     }
@@ -710,6 +716,10 @@ public final class Gtp
                 if (text == null)
                     return;
                 logError(text);
+                // Avoid programs flooding stderr or stdout after trying
+                // to exit
+                if (getExitInProcess())
+                    Thread.sleep(m_queue.getSize() / 10);
             }
         }
     }
@@ -717,6 +727,8 @@ public final class Gtp
     private boolean m_autoNumber;
 
     private InvalidResponseCallback m_invalidResponseCallback;
+
+    private boolean m_exitInProcess;
 
     private boolean m_isInterruptCommentSupported;
 
@@ -753,6 +765,11 @@ public final class Gtp
     private MessageQueue m_queue;
 
     private TimeoutCallback m_timeoutCallback;
+
+    private synchronized boolean getExitInProcess()
+    {
+        return m_exitInProcess;
+    }
 
     private void handleErrorStream(String text)
     {
@@ -897,6 +914,11 @@ public final class Gtp
                 message = "GTP command failed";
             throw new GtpError(message);
         }
+    }
+
+    private synchronized void setExitInProcess(boolean exitInProcess)
+    {
+        m_exitInProcess = exitInProcess;
     }
 
     private void throwProgramDied() throws GtpError

@@ -11,31 +11,27 @@ import java.util.*;
 
 public class MessageQueue
 {
-    public boolean isEmpty()
+    public synchronized boolean isEmpty()
     {
-        synchronized(this)
-        {
-            return m_queue.isEmpty();
-        }
+        return m_queue.isEmpty();
     }
 
-    public Object getIfAvaliable()
+    public synchronized Object getIfAvaliable()
     {
-        synchronized(this)
-        {
-            if (m_queue.isEmpty())
-                return null;
-            return m_queue.remove(0);
-        }
+        if (m_queue.isEmpty())
+            return null;
+        return m_queue.remove(0);
     }
 
-    public void put(Object object)
+    public synchronized int getSize()
     {
-        synchronized(this)
-        {
-            m_queue.add(object);
-            notify();
-        }
+        return m_queue.size();
+    }
+
+    public synchronized void put(Object object)
+    {
+        m_queue.add(object);
+        notify();
     }
 
     public Object unsynchronizedPeek()
@@ -46,43 +42,37 @@ public class MessageQueue
         return m_queue.get(0);
     }
 
-    public Object waitFor()
+    public synchronized Object waitFor()
     {
-        synchronized(this)
+        if (m_queue.isEmpty())
         {
-            if (m_queue.isEmpty())
+            try
             {
-                try
-                {
-                    wait();
-                }
-                catch (InterruptedException e)
-                {
-                }
+                wait();
             }
-            assert(! m_queue.isEmpty());
-            return m_queue.remove(0);
+            catch (InterruptedException e)
+            {
+            }
         }
+        assert(! m_queue.isEmpty());
+        return m_queue.remove(0);
     }
 
-    public Object waitFor(long timeout)
+    public synchronized Object waitFor(long timeout)
     {
-        synchronized(this)
+        if (m_queue.isEmpty())
         {
-            if (m_queue.isEmpty())
+            try
             {
-                try
-                {
-                    wait(timeout);
-                }
-                catch (InterruptedException e)
-                {
-                }
+                wait(timeout);
             }
-            if (m_queue.isEmpty())
-                return null;
-            return m_queue.remove(0);
+            catch (InterruptedException e)
+            {
+            }
         }
+        if (m_queue.isEmpty())
+            return null;
+        return m_queue.remove(0);
     }
 
     private Vector m_queue = new Vector();
