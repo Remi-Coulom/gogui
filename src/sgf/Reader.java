@@ -37,7 +37,7 @@ public class Reader
             InputStreamReader reader;
             try
             {
-                reader = new InputStreamReader(in, "UTF-8");
+                reader = new InputStreamReader(in, "ISO-8859-1");
             }
             catch (UnsupportedEncodingException e)
             {

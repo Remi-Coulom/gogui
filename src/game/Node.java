@@ -141,7 +141,7 @@ public class Node
             return null;
         try
         {
-            return new String(m_comment, "UTF-8");
+            return new String(m_comment, "ISO-8859-1");
         }
         catch (UnsupportedEncodingException e)
         {
@@ -288,7 +288,7 @@ public class Node
         }
         try
         {
-            m_comment = comment.getBytes("UTF-8");
+            m_comment = comment.getBytes("ISO-8859-1");
         }
         catch (UnsupportedEncodingException e)
         {
