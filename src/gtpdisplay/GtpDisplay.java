@@ -74,9 +74,9 @@ public class GtpDisplay
         else if (cmd.equals("genmove"))
             status = cmdGenmove(cmdArray, response);
         else if (cmd.equals("genmove_black"))
-            status = cmdGenmove(go.Color.BLACK, response);
+            status = cmdUnknown(response);
         else if (cmd.equals("genmove_white"))
-            status = cmdGenmove(go.Color.WHITE, response);
+            status = cmdUnknown(response);
         else if (cmd.equals("help"))
             status = cmdListCommands(response);
         else if (cmd.equals("list_commands"))
@@ -90,7 +90,7 @@ public class GtpDisplay
         else if (cmd.equals("play"))
             status = cmdPlay(cmdArray, response);
         else if (cmd.equals("protocol_version"))
-            response.append(m_version2 ? "2" : "1");
+            response.append("2");
         else if (cmd.equals("set_free_handicap"))
             status = cmdUnknown(response);
         else if (cmd.equals("version"))
@@ -124,8 +124,6 @@ public class GtpDisplay
         interruptProgram(m_gtp);
     }
 
-    private boolean m_version2;
-
     /** Only accept this board size.
         A value of -1 means accept any size.
     */
@@ -136,6 +134,8 @@ public class GtpDisplay
     private gui.Board m_guiBoard;
 
     private Gtp m_gtp;
+
+    private Move m_move;
 
     private JFrame m_frame;
 
@@ -161,12 +161,19 @@ public class GtpDisplay
                 return false;
         }
         m_size = argument.m_integer;
-        m_board.newGame();
         command = m_gtp.getCommandClearBoard(m_size);
         if (! send(command, response))
             return false;
-        m_guiBoard.updateFromGoBoard();
-        m_guiBoard.markLastMove(null);
+        if (! invokeAndWait(new Runnable()
+            {
+                public void run()
+                {
+                    m_board.newGame();
+                    m_guiBoard.updateFromGoBoard();
+                    m_guiBoard.markLastMove(null);
+                }
+            }, response))
+            return false;
         return true;
     }
 
@@ -175,9 +182,16 @@ public class GtpDisplay
         String command = m_gtp.getCommandClearBoard(m_size);
         if (! send(command, response))
             return false;
-        m_board.newGame();
-        m_guiBoard.updateFromGoBoard();
-        m_guiBoard.markLastMove(null);
+        if (! invokeAndWait(new Runnable()
+            {
+                public void run()
+                {
+                    m_board.newGame();
+                    m_guiBoard.updateFromGoBoard();
+                    m_guiBoard.markLastMove(null);
+                }
+            }, response))
+            return false;
         return true;
     }
 
@@ -193,26 +207,29 @@ public class GtpDisplay
     {
         String command = m_gtp.getCommandGenmove(color);
         if (! send(command, response))
-        {
-            StringBuffer undoResponse = new StringBuffer();
             return false;
-        }
+        go.Point point;
         try
         {
-            go.Point point = Gtp.parsePoint(response.toString(), m_size);
-            m_board.play(new Move(point, color));
-            m_guiBoard.updateFromGoBoard();
-            m_guiBoard.markLastMove(point);
-            return true;
+            point = Gtp.parsePoint(response.toString(), m_size);
         }
         catch (Gtp.Error e)
         {
             response.append("Program played illegal move");
-            m_board.play(new Move(null, color));
-            m_guiBoard.updateFromGoBoard();
-            m_guiBoard.markLastMove(null);
             return false;
         }
+        m_move = new Move(point, color);
+        if (! invokeAndWait(new Runnable()
+            {
+                public void run()
+                {
+                    m_board.play(m_move);
+                    m_guiBoard.updateFromGoBoard();
+                    m_guiBoard.markLastMove(m_move.getPoint());
+                }
+            }, response))
+            return false;
+        return true;
     }
 
     private boolean cmdListCommands(StringBuffer response)
@@ -238,23 +255,12 @@ public class GtpDisplay
             response.append("\n");
         }
         response.append("boardsize\n");
+        response.append("clear_board\n");        
+        response.append("genmove\n");
+        response.append("list_commands\n");
+        response.append("play\n");
         response.append("protocol_version\n");
         response.append("quit\n");
-        if (m_version2)
-        {
-            response.append("clear_board\n");        
-            response.append("genmove\n");
-            response.append("list_commands\n");
-            response.append("play\n");
-        }
-        else
-        {
-            response.append("black\n");
-            response.append("help\n");
-            response.append("genmove_white\n");
-            response.append("genmove_black\n");
-            response.append("white\n");
-        }
         return true;
     }
 
@@ -356,6 +362,26 @@ public class GtpDisplay
         return true;
     }
 
+    private boolean invokeAndWait(Runnable runnable, StringBuffer response)
+    {
+        try
+        {
+            SwingUtilities.invokeAndWait(runnable);
+        }
+        catch (InterruptedException e)
+        {
+            // Shouldn't happen
+            response.append("InterruptedException");
+            return false;
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+            response.append("InvocationTargetException");
+            return false;
+        }
+        return true;
+    }
+
     private boolean play(go.Color color, go.Point point,
                          StringBuffer response)
     {
@@ -364,14 +390,20 @@ public class GtpDisplay
             command = command + "PASS";
         else
             command = command + point;
-        if (send(command, response))
-        {
-            m_board.play(new Move(point, color));
-            m_guiBoard.markLastMove(point);
-            m_guiBoard.updateFromGoBoard();
-            return true;
-        }
-        return false;
+        if (! send(command, response))
+            return false;
+        m_move = new Move(point, color);
+        if (! invokeAndWait(new Runnable()
+            {
+                public void run()
+                {
+                    m_board.play(m_move);
+                    m_guiBoard.markLastMove(m_move.getPoint());
+                    m_guiBoard.updateFromGoBoard();
+                }
+            }, response))
+            return false;
+        return true;
     }
 
     private boolean send(String cmd, StringBuffer response)
@@ -390,14 +422,19 @@ public class GtpDisplay
 
     private boolean undo(StringBuffer response)
     {
-        if (send("undo", response))
-        {
-            m_board.undo();
-            m_guiBoard.updateFromGoBoard();
-            m_guiBoard.markLastMove(null);
-            return true;
-        }
-        return false;
+        if (! send("undo", response))
+            return false;
+        if (! invokeAndWait(new Runnable()
+            {
+                public void run()
+                {
+                    m_board.undo();
+                    m_guiBoard.updateFromGoBoard();
+                    m_guiBoard.markLastMove(null);
+                }
+            }, response))
+            return false;
+        return true;
     }
 }
 
