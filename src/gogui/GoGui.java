@@ -853,28 +853,6 @@ class GoGui
 
     private ToolBar m_toolBar;
 
-    private void addPlayerComputerToGameInfo(go.Color color)
-    {
-        if (m_commandThread == null)
-            return;
-        String name = m_name;
-        GameInformation gameInformation = m_gameTree.getGameInformation();
-        if (color == go.Color.BLACK
-            && (gameInformation.m_playerBlack == null
-                || gameInformation.m_playerBlack.trim().equals("")))
-        {
-            gameInformation.m_playerBlack = name;
-            setTitle();
-        }
-        else if (color == go.Color.WHITE
-            && (gameInformation.m_playerWhite == null
-                || gameInformation.m_playerWhite.trim().equals("")))
-        {
-            gameInformation.m_playerWhite = name;
-            setTitle();
-        }
-    }
-
     private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
     {
         if (m_commandThread == null)
@@ -1890,7 +1868,6 @@ class GoGui
             m_clock.stopMove();
             String response = m_commandThread.getResponse();
             go.Color toMove = m_board.getToMove();
-            addPlayerComputerToGameInfo(toMove);
             if (response.toLowerCase().equals("resign"))
             {
                 if (! (m_computerBlack && m_computerWhite))
