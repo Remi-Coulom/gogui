@@ -1307,8 +1307,7 @@ class GoGui
             int messageType = JOptionPane.YES_NO_CANCEL_OPTION;
             int result =
                 JOptionPane.showConfirmDialog(this,
-                                              "Command in progress.\n" +
-                                              "Kill program before exiting?",
+                                              "Kill program?",
                                               "GoGui: Question",
                                               messageType);
             switch (result)
