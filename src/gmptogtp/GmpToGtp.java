@@ -22,7 +22,7 @@ public class GmpToGtp
                     boolean verbose, int size, int colorIndex, boolean wait,
                     boolean simple)
     {
-        super(System.in, System.out);
+        super(System.in, System.out, null);
         m_verbose = verbose;
         m_simple = simple;
         m_colorIndex = colorIndex;

@@ -27,11 +27,13 @@ class Command
 
 class ReadThread extends Thread
 {
-    public ReadThread(GtpServer gtpServer, InputStream in, PrintStream out)
+    public ReadThread(GtpServer gtpServer, InputStream in, PrintStream out,
+                      boolean log)
     {
         m_in = new BufferedReader(new InputStreamReader(in));
         m_out = out;
         m_gtpServer = gtpServer;
+        m_log = log;
     }
 
     public boolean endOfFile()
@@ -74,6 +76,8 @@ class ReadThread extends Thread
                     m_endOfFile = true;
                     return;
                 }
+                if (m_log)
+                    m_gtpServer.log(line);
                 line = line.trim();
                 if (line.equals("# interrupt"))
                 {
@@ -105,6 +109,8 @@ class ReadThread extends Thread
     }
 
     private boolean m_endOfFile = false;
+
+    private boolean m_log;
 
     private boolean m_quit = false;
 
@@ -165,10 +171,11 @@ class ReadThread extends Thread
 
 public abstract class GtpServer
 {
-    public GtpServer(InputStream in, OutputStream out)
+    public GtpServer(InputStream in, OutputStream out, PrintStream log)
     {
         m_out = new PrintStream(out);
         m_in = in;
+        m_log = log;
     }
 
     /** Callback for interrupting commands.
@@ -180,9 +187,16 @@ public abstract class GtpServer
     public abstract boolean handleCommand(String command,
                                           StringBuffer response);
 
+    public synchronized void log(String line)
+    {
+        assert(m_log != null);
+        m_log.println(line);
+    }
+
     public void mainLoop() throws IOException
     {
-        ReadThread readThread = new ReadThread(this, m_in, m_out);
+        ReadThread readThread = new ReadThread(this, m_in, m_out,
+                                               m_log != null);
         readThread.start();
         while (true)
         {
@@ -195,21 +209,23 @@ public abstract class GtpServer
         }
     }
 
-    public static void respond(PrintStream out, boolean status, boolean hasId,
-                               int id, String response)
+    public void respond(boolean status, boolean hasId, int id, String response)
     {
+        StringBuffer fullResponse = new StringBuffer(256);
         if (status)
-            out.print('=');
+            fullResponse.append('=');
         else
-            out.print('?');
+            fullResponse.append('?');
         if (hasId)
-            out.print(id);
-        out.print(' ');
-        out.print(response);
+            fullResponse.append(id);
+        fullResponse.append(' ');
+        fullResponse.append(response);
         if (response.length() == 0
             || response.charAt(response.length() - 1) != '\n')
-            out.print('\n');
-        out.print('\n');
+            fullResponse.append('\n');
+        m_out.println(fullResponse);
+        if (m_log != null)
+            m_log.println(fullResponse);
     }
 
     private boolean m_commandHadId;
@@ -218,13 +234,15 @@ public abstract class GtpServer
 
     private InputStream m_in;
 
+    private PrintStream m_log;
+
     private PrintStream m_out;
 
     private void sendResponse(Command cmd)
     {
         StringBuffer response = new StringBuffer();
         boolean status = handleCommand(cmd.m_command.trim(), response);
-        respond(m_out, status, cmd.m_hasId, cmd.m_id, response.toString());
+        respond(status, cmd.m_hasId, cmd.m_id, response.toString());
     }
 }
 

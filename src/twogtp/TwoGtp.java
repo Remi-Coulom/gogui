@@ -24,7 +24,7 @@ public class TwoGtp
                   String sgfFile, boolean verbose)
         throws Exception
     {
-        super(in, out);
+        super(in, out, null);
         if (black.equals(""))
             throw new Exception("No black program set.");
         if (white.equals(""))

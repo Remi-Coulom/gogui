@@ -23,7 +23,7 @@ public class GtpDummy
     public GtpDummy(InputStream in, OutputStream out)
         throws Exception
     {
-        super(in, out);
+        super(in, out, null);
         initSize(19);
         m_thread = Thread.currentThread();
     }
