@@ -245,8 +245,9 @@ public class Reader
                 throw getError("Property value incomplete.");
             if (! quoted && c == ']')
                 break;
-            v += (char)c;
             quoted = (c == '\\');
+            if (! quoted)
+                v += (char)c;
         }
         return v;
     }
