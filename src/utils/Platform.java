@@ -35,6 +35,13 @@ public class Platform
         return (System.getProperty("mrj.version") != null);
     }
 
+    /** Check if the platform is Unix */
+    public static boolean isUnix()
+    {
+        String osName = System.getProperty("os.name");
+        return osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0;
+    }
+
     /** Check if the platform is Windows */
     public static boolean isWindows()
     {
@@ -50,7 +57,7 @@ public class Platform
     */
     public static boolean openInExternalBrowser(URL url)
     {
-        if (Platform.isMac())
+        if (isMac())
         {
             try
             {
@@ -62,11 +69,33 @@ public class Platform
             {
             }
         }
-        else
+        else if (isWindows())
+        {
+            try
+            {
+                String[] cmd = { "rundll32", "url.dll,FileProtocolHandler",
+                                 url.toString() };
+                ProcessUtils.runProcess(cmd);
+                return true;
+            }
+            catch (IOException e)
+            {
+            }
+        }
+        else if (isUnix())
         {
             try
             {
                 String[] cmd = { "kfmclient", "exec", url.toString() };
+                ProcessUtils.runProcess(cmd);
+                return true;
+            }
+            catch (IOException e)
+            {
+            }
+            try
+            {
+                String[] cmd = { "firefox", url.toString() };
                 ProcessUtils.runProcess(cmd);
                 return true;
             }
@@ -84,8 +113,7 @@ public class Platform
             }
             try
             {
-                String[] cmd = { "rundll32", "url.dll,FileProtocolHandler",
-                                 url.toString() };
+                String[] cmd = { "opera", url.toString() };
                 ProcessUtils.runProcess(cmd);
                 return true;
             }
