@@ -1728,7 +1728,8 @@ class GoGui
                 // correctly, so we send a quit before
                 try
                 {
-                    m_commandThread.sendCommand("quit");
+                    if (m_commandThread.isCommandSupported("quit"))
+                        m_commandThread.sendCommand("quit");
                 }
                 catch (GtpError e)
                 {

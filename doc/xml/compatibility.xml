@@ -105,6 +105,11 @@ The following other commands are used by GoGui.
 <userinput>version</userinput>
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+<userinput>quit</userinput>
+</simpara>
+</listitem>
 </itemizedlist>
     
 <para>
