@@ -128,9 +128,10 @@ public class Writer
     {
         StringBuffer comment = new StringBuffer();
         int size = m_board.getSize();
-        boolean mark[][] = new boolean[size][size];
+        int firstMoveAtPoint[][] = new int[size][size];
         int numberMoves = m_board.getNumberSavedMoves();
         boolean needsComment[] = new boolean[numberMoves];
+        boolean needsColorComment[] = new boolean[numberMoves];
         boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
         for (int i = 0; i < numberMoves; ++i)
@@ -138,16 +139,20 @@ public class Writer
             Move move = m_board.getMove(i);
             Point point = move.getPoint();
             Color color = move.getColor();
-            if (point == null || mark[point.getX()][point.getY()])
+            boolean isColorUnexpected =
+                (blackToMove && color != Color.BLACK)
+                || (! blackToMove && color != Color.WHITE);
+            if (point == null
+                || firstMoveAtPoint[point.getX()][point.getY()] > 0)
             {
                 needsComment[i] = true;
+                needsColorComment[i] = isColorUnexpected;
                 m_out.println("\\toggleblackmove");
                 blackToMove = ! blackToMove;
                 m_out.println("\\setcounter{gomove}{" + (i + 1) + "}");
                 continue;
             }
-            else if ((blackToMove && color != Color.BLACK)
-                     || (! blackToMove && color != Color.WHITE))
+            else if (isColorUnexpected)
             {
                 m_out.println("\\toggleblackmove");
                 blackToMove = ! blackToMove;
@@ -155,7 +160,7 @@ public class Writer
             m_out.print("\\move");
             printCoordinates(point);
             m_out.print("\n");
-            mark[point.getX()][point.getY()] = true;
+            firstMoveAtPoint[point.getX()][point.getY()] = i + 1;
             blackToMove = ! blackToMove;
         }
         for (int i = 0; i < numberMoves; ++i)
@@ -166,36 +171,19 @@ public class Writer
                 Color color = move.getColor();
                 if (comment.length() > 0)
                     comment.append(",\n");
-                comment.append(color == Color.BLACK ? "B" : "W");
+                if (needsColorComment[i])
+                    comment.append(color == Color.BLACK ? "B" : "W");
                 comment.append(i + 1);
                 if (point != null)
                 {
-                    comment.append(" ");            
-                    comment.append(point);
+                    int x = point.getX();
+                    int y = point.getY();
+                    comment.append(" at ");
+                    comment.append(firstMoveAtPoint[x][y]);
                 }
                 else
                 {
-                    int firstPass = i;
-                    int lastPass = i;
-                    ++i;
-                    for ( ; i < numberMoves; ++i)
-                    {
-                        Move m = m_board.getMove(i);
-                        if ((m.getColor() != color && needsComment[i])
-                            || ! needsComment[i]
-                            || m.getPoint() != null)
-                        {
-                            --i;
-                            break;
-                        }
-                        lastPass = i;
-                    }
-                    if (lastPass != firstPass)
-                    {
-                        comment.append("--");
-                        comment.append(lastPass + 1);
-                    }
-                    comment.append(" PASS");
+                    comment.append(" Pass");
                 }
             }
         if (comment.length() > 0)
