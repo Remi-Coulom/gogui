@@ -190,7 +190,7 @@ installation directory.
 <mkdir dir="lib"/>
 <jar destfile="lib/gmptogtp.jar" compress="true">
 <manifest>
-<attribute name="Main-Class" value="gmptogtp.GmpToGtp"/>
+<attribute name="Main-Class" value="gmptogtp.Main"/>
 </manifest>
 <fileset dir="build" includes="
  gmp/*.class
