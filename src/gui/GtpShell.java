@@ -222,6 +222,8 @@ public class GtpShell
             saveLog();
         else if (command.equals("save-commands"))
             saveCommands();
+        else if (command.equals("send-file"))
+            sendFile();
         else if (command.equals("close"))
             hide();
     }
@@ -316,10 +318,10 @@ public class GtpShell
     }
 
     /** Send Gtp command to callback.
-        If frame != null, send synchronously and display error dialog on
-        parent frame, otherwise send asynchronously.
+        If owner != null, send synchronously and display error dialog on
+        owner, otherwise send asynchronously.
     */
-    public void sendCommand(String command, Frame frame)
+    public void sendCommand(String command, Component owner)
     {
         String c = command.trim();
         if (c.equals(""))
@@ -371,12 +373,12 @@ public class GtpShell
             }
             try
             {
-                if (! m_callback.sendGtpCommand(command, frame != null))
+                if (! m_callback.sendGtpCommand(command, owner != null))
                     return;
             }
             catch (Gtp.Error e)
             {
-                SimpleDialogs.showError(frame, e.getMessage());
+                SimpleDialogs.showError(owner, e.getMessage());
             }
         }
     }
@@ -411,6 +413,42 @@ public class GtpShell
         {
         }
 
+    }
+
+    public void sendGtp(Reader reader)
+    {
+        java.io.BufferedReader in;
+        in = new BufferedReader(reader);
+        while (true)
+        {
+            try
+            {
+                String line = in.readLine();
+                if (line == null)
+                {
+                    in.close();
+                    break;
+                }
+                sendCommand(line, this);
+            }
+            catch (IOException e)
+            {
+                SimpleDialogs.showError(this, "Sending commands aborted", e);
+                return;
+            }
+        }
+    }
+
+    public void sendGtpFile(File file)
+    {
+        try
+        {
+            sendGtp(new FileReader(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            SimpleDialogs.showError(this, "Could not send commands.", e);
+        }
     }
 
     /** Directly update new stdin/stdout of program.
@@ -673,6 +711,8 @@ public class GtpShell
                     ActionEvent.CTRL_MASK, "save-log");
         addMenuItem(menu, "Save Commands...", KeyEvent.VK_M, "save-commands");
         menu.addSeparator();
+        addMenuItem(menu, "Send GTP file...", KeyEvent.VK_G, "send-file");
+        menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     ActionEvent.CTRL_MASK, "close");
         return menu;
@@ -797,6 +837,13 @@ public class GtpShell
     private void saveCommands()
     {
         save(m_commands.toString(), m_linesTruncated);
+    }
+
+    private void sendFile()
+    {
+        File file = SimpleDialogs.showOpen(this, "Choose GTP file.");
+        if (file != null)
+            sendGtpFile(file);
     }
 
     private void scrollPage(boolean up)

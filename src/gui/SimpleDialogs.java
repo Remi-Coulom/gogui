@@ -37,6 +37,16 @@ public class SimpleDialogs
                                       JOptionPane.ERROR_MESSAGE);
     }
 
+    public static void showError(Component frame, String message, Exception e)
+    {
+        String m = e.getMessage();
+        String c = e.getClass().getName();
+        if (m == null)
+            showError(frame, message + "\n" + e.getClass().getName());
+        else
+            showError(frame, message + "\n" + m);
+    }
+
     public static void showInfo(Component frame, String message)
     {
         JOptionPane.showMessageDialog(frame, message,
@@ -44,7 +54,7 @@ public class SimpleDialogs
                                       JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static File showOpen(Frame parent, String title)
+    public static File showOpen(Component parent, String title)
     {
         String dir = System.getProperties().getProperty("user.dir");
         JFileChooser chooser = new JFileChooser(dir);

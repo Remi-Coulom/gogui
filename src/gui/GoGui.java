@@ -167,8 +167,6 @@ class GoGui
             cbForward(10);
         else if (command.equals("goto"))
             cbGoto();
-        else if (command.equals("gtp-file"))
-            cbGtpFile();
         else if (command.equals("gtp-shell"))
             cbGtpShell();
         else if (command.startsWith("handicap-"))
@@ -924,15 +922,6 @@ class GoGui
         }
     }
 
-    private void cbGtpFile()
-    {
-        if (m_commandThread == null)
-            return;
-        File file = SimpleDialogs.showOpen(this, "Choose GTP file.");
-        if (file != null)
-            sendGtpFile(file);
-    }
-
     private void cbGtpShell()
     {
         if (m_gtpShell != null)
@@ -1576,7 +1565,7 @@ class GoGui
                     m_commandThread.getSupportedCommands();
                 m_gtpShell.setInitialCompletions(supportedCommands);
                 if (! m_gtpFile.equals(""))
-                    sendGtpFile(new File(m_gtpFile));
+                    m_gtpShell.sendGtpFile(new File(m_gtpFile));
                 if (! m_gtpCommand.equals(""))
                     sendGtpString(m_gtpCommand);
             }
@@ -1870,45 +1859,10 @@ class GoGui
                            Version.m_version);
     }
 
-    private void sendGtp(java.io.Reader reader)
-    {
-        java.io.BufferedReader in;
-        in = new BufferedReader(reader);
-        while (true)
-        {
-            try
-            {
-                String line = in.readLine();
-                if (line == null)
-                {
-                    in.close();
-                    break;
-                }
-                m_gtpShell.sendCommand(line, this);
-            }
-            catch (IOException e)
-            {
-                showError("Sending commands aborted.", e);
-                return;
-            }
-        }
-    }
-
-    private void sendGtpFile(File file)
-    {
-        try
-        {
-            sendGtp(new FileReader(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Could not send commands.", e);
-        }
-    }
-
     private void sendGtpString(String commands)
     {        
-        sendGtp(new StringReader(StringUtils.replace(commands, "\\n", "\n")));
+        commands = StringUtils.replace(commands, "\\n", "\n");
+        m_gtpShell.sendGtp(new StringReader(commands));
     }
 
     private void sendInterrupt()
@@ -2159,12 +2113,7 @@ class GoGui
 
     private void showError(String message, Exception e)
     {
-        String m = e.getMessage();
-        String c = e.getClass().getName();
-        if (m == null)
-            showError(message + "\n" + e.getClass().getName());
-        else
-            showError(message + "\n" + m);
+        SimpleDialogs.showError(this, message, e);
     }
 
     private void showError(String message)

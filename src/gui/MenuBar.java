@@ -30,8 +30,8 @@ class MenuBar
         m_menuBar.add(m_menuSetup);
         m_menuSettings = createSettingsMenu();
         m_menuBar.add(m_menuSettings);
-        m_menuExperts = createExpertsMenu();
-        m_menuBar.add(m_menuExperts);
+        m_menuWindows = createWindowsMenu();
+        m_menuBar.add(m_menuWindows);
         m_menuHelp = createHelpMenu();
         m_menuBar.add(m_menuHelp);
     }
@@ -170,7 +170,7 @@ class MenuBar
         m_menuSettings.setEnabled(true);
         m_itemBeepAfterMove.setEnabled(true);
         m_itemShowLastMove.setEnabled(true);
-        m_menuExperts.setEnabled(true);
+        m_menuWindows.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
     }
 
@@ -183,7 +183,7 @@ class MenuBar
         m_itemSetupWhite.setEnabled(false);
         if (m_isComputerDisabled)
         {
-            disableMenu(m_menuExperts);
+            disableMenu(m_menuWindows);
             m_menuComputerColor.setEnabled(false);
             m_itemComputerPlay.setEnabled(false);
             m_itemBeepAfterMove.setEnabled(false);
@@ -199,28 +199,28 @@ class MenuBar
         m_itemSetupWhite.setEnabled(true);
         m_itemSetupBlack.setSelected(true);
         m_menuFile.setEnabled(true);
-        m_menuExperts.setEnabled(true);
+        m_menuWindows.setEnabled(true);
         m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);
         m_itemExit.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
         m_itemHelp.setEnabled(true);
         if (m_isComputerDisabled)
-            disableMenu(m_menuExperts);
+            disableMenu(m_menuWindows);
     }
 
     public void setScoreMode()
     {
         disableAll();
         m_menuFile.setEnabled(true);
-        m_menuExperts.setEnabled(true);
+        m_menuWindows.setEnabled(true);
         m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);
         m_itemExit.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
         m_itemHelp.setEnabled(true);
         if (m_isComputerDisabled)
-            disableMenu(m_menuExperts);
+            disableMenu(m_menuWindows);
     }
 
     public void addRecent(File file)
@@ -275,8 +275,6 @@ class MenuBar
 
     private JMenu m_menuComputerColor;
 
-    private JMenu m_menuExperts;
-
     private JMenu m_menuFile;
 
     private JMenu m_menuGame;
@@ -290,6 +288,8 @@ class MenuBar
     private JMenu m_menuSetup;
 
     private JMenuBar m_menuBar;
+
+    private JMenu m_menuWindows;
 
     private JMenuItem m_itemAbout;
 
@@ -397,18 +397,6 @@ class MenuBar
                                           "computer-both");
         m_itemComputerNone = addRadioItem(menu, group, "None", KeyEvent.VK_N,
                                           "computer-none");
-        return menu;
-    }
-
-    private JMenu createExpertsMenu()
-    {
-        JMenu menu = new JMenu("Experts");
-        menu.setMnemonic(KeyEvent.VK_X);
-        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
-                    "analyze");
-        m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
-                                     KeyEvent.VK_F8, 0, "gtp-shell");
-        addMenuItem(menu, "Send GTP file", KeyEvent.VK_S, "gtp-file");
         return menu;
     }
 
@@ -558,6 +546,17 @@ class MenuBar
         m_itemSetupBlack.setSelected(true);
         m_itemSetupWhite =
             addRadioItem(menu, group, "White", KeyEvent.VK_W, "setup-white");
+        return menu;
+    }
+
+    private JMenu createWindowsMenu()
+    {
+        JMenu menu = new JMenu("Windows");
+        menu.setMnemonic(KeyEvent.VK_X);
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
+                    "analyze");
+        m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
+                                     KeyEvent.VK_F8, 0, "gtp-shell");
         return menu;
     }
 
