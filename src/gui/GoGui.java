@@ -145,6 +145,8 @@ class GoGui
             cbForward(1);
         else if (command.equals("forward-10"))
             cbForward(10);
+        else if (command.equals("gtp-file"))
+            cbGtpFile();
         else if (command.equals("gtp-shell"))
             cbGtpShell();
         else if (command.startsWith("handicap-"))
@@ -622,6 +624,15 @@ class GoGui
     private void cbForward(int n)
     {
         forward(n);
+    }
+
+    private void cbGtpFile()
+    {
+        if (m_commandThread == null)
+            return;
+        File file = SimpleDialogs.showOpen(this, "Choose GTP file.");
+        if (file != null)
+            sendGtpFile(file);
     }
 
     private void cbGtpShell()
@@ -1234,7 +1245,7 @@ class GoGui
                 }
                 m_gtpShell.setInitialCompletions(m_commandList);
                 if (! m_gtpFile.equals(""))
-                    sendGtpFile();
+                    sendGtpFile(new File(m_gtpFile));
             }
             if (m_commandThread == null || m_computerNoneOption)
                 computerNone();
@@ -1449,9 +1460,8 @@ class GoGui
         sgf.Writer w = new sgf.Writer(file, m_board);
     }
 
-    private void sendGtpFile()
+    private void sendGtpFile(File file)
     {
-        File file = new File(m_gtpFile);
         java.io.BufferedReader in;
         try
         {

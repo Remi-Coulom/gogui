@@ -162,6 +162,7 @@ class MenuBars
         menu.setMnemonic(KeyEvent.VK_E);
         addMenuItem(menu, "Analyze", KeyEvent.VK_Y, "analyze");
         addMenuItem(menu, "GTP shell", KeyEvent.VK_C, "gtp-shell");
+        addMenuItem(menu, "Send GTP file", "gtp-file");
         return menu;
     }
 

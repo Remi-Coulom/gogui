@@ -34,6 +34,18 @@ class SimpleDialogs
                                       JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static File showOpen(Frame parent, String title)
+    {
+        String dir = System.getProperties().getProperty("user.dir");
+        JFileChooser chooser = new JFileChooser(dir);
+        chooser.setDialogTitle(title);
+        chooser.setMultiSelectionEnabled(false);
+        int ret = chooser.showOpenDialog(parent);
+        if (ret != JFileChooser.APPROVE_OPTION)
+            return null;
+        return chooser.getSelectedFile();
+    }
+
     public static File showOpenSgf(Component frame)
     {
         return showSgfFileChooser(frame, false);
