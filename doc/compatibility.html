@@ -65,7 +65,8 @@
       interrupted by sending it a SIGINT signal. The program must return its
       process id as an answer to <tt>gogui_sigint</tt> and GoGui will
       try to send interrupt signals by using
-      <tt>kill&nbsp;-INT&nbsp;&lt;pid&gt</tt>.
+      <tt>kill&nbsp;-INT&nbsp;&lt;pid&gt</tt>. Note that this feature works
+      only on operating systems that have a <tt>kill</tt> command.
     </p>
 
   </body>
