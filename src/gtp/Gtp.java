@@ -254,7 +254,7 @@ public class Gtp
         }
     }
 
-    public static Point parsePoint(String s) throws Error
+    public static Point parsePoint(String s, int boardSize) throws Error
     {
         s = s.trim().toUpperCase();
         if (s.equals("PASS"))
@@ -274,10 +274,12 @@ public class Gtp
         {
             throw new Error("Invalid point or move.");
         }
+        if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
+            throw new Error("Invalid coordinates.");
         return new Point(x, y);
     }
     
-    public static Point[] parsePointList(String s) throws Error
+    public static Point[] parsePointList(String s, int boardSize) throws Error
     {
         Vector vector = new Vector(32, 32);
         s = StringUtils.replace(s, "\n", " ");
@@ -285,7 +287,30 @@ public class Gtp
         String p[] = StringUtils.split(s, ' ');
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
-                vector.add(parsePoint(p[i]));
+                vector.add(parsePoint(p[i], boardSize));
+        Point result[] = new Point[vector.size()];
+        for (int i = 0; i < result.length; ++i)
+            result[i] = (Point)vector.get(i);
+        return result;
+    }
+
+    /** Find all points contained in string. */
+    public static Point[] parsePointString(String s, int boardSize)
+        throws Error
+    {
+        Vector vector = new Vector(32, 32);
+        s = StringUtils.replace(s, "\n", " ");
+        s = StringUtils.replace(s, "\t", " ");
+        String p[] = StringUtils.split(s, ' ');
+        for (int i = 0; i < p.length; ++i)
+            if (! p[i].equals(""))
+                try
+                {
+                    vector.add(parsePoint(p[i], boardSize));
+                }
+                catch (Error e)
+                {
+                }
         Point result[] = new Point[vector.size()];
         for (int i = 0; i < result.length; ++i)
             result[i] = (Point)vector.get(i);
@@ -293,7 +318,8 @@ public class Gtp
     }
 
     public static void parsePointStringList(String s, Vector pointList,
-                                            Vector stringList) throws Error
+                                            Vector stringList,
+                                            int boardsize) throws Error
     {
         pointList.clear();
         stringList.clear();
@@ -307,7 +333,7 @@ public class Gtp
             {
                 if (nextIsPoint)
                 {
-                    point = parsePoint(array[i]);
+                    point = parsePoint(array[i], boardsize);
                     nextIsPoint = false;
                 }
                 else
