@@ -99,6 +99,11 @@ class GtpRegress
         }
     }
 
+    public void receivedInvalidResponse(String s)
+    {
+        printOutLine(null, s);
+    }
+
     public void receivedResponse(boolean error, String s)
     {
     }

@@ -119,6 +119,11 @@ public class GtpTerminal
         }
     }
     
+    public void receivedInvalidResponse(String s)
+    {
+        System.out.print(s);
+    }
+    
     public void receivedResponse(boolean error, String s)
     {
     }
