@@ -57,8 +57,6 @@ public class NodeUtils
                 return null;
             }
         }
-        if (n.length == 1 && n[0] == 0)
-            return root;
         Node node = root;
         for (int i = 0; i < n.length; ++i)
         {
@@ -290,10 +288,7 @@ public class NodeUtils
             if (i < vector.size() - 1)
                 result.append('.');
         }
-        if (result.length() == 0)
-            return "1";
-        else
-            return result.toString();
+        return result.toString();
     }
 
     public static boolean hasNextEarlierVariation(Node node)
