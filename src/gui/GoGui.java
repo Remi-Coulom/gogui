@@ -96,7 +96,12 @@ class GoGui
         m_menuBar.setShowCursor(m_prefs.getBool("show-cursor"));
         m_guiBoard.setShowCursor(m_prefs.getBool("show-cursor"));
         setJMenuBar(m_menuBar.getMenuBar());
-        m_program = program;
+        if (program != null)
+            m_program = program;
+        else if (m_prefs.contains("program"))
+            m_program = m_prefs.getString("program");
+        if (m_program != null && m_program.trim().equals(""))
+            m_program = null;
         if (m_program == null)
         {
             m_toolBar.setComputerEnabled(false);
@@ -1490,9 +1495,14 @@ class GoGui
             setupDone();
         if (m_needsSave && ! checkSaveGame())
             return;
-        saveSession();
+        saveSession();        
         if (m_commandThread != null)
+        {
+            m_prefs.setString("program", m_program);
             detachProgram();
+        }
+        else
+            m_prefs.setString("program", "");
         dispose();
         m_prefs.save();
         System.exit(0);
