@@ -1416,9 +1416,20 @@ class GoGui
             m_toolBar.enableAll(true, m_board);
             if (m_program != null && ! m_program.equals(""))
             {
-                Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
-                m_commandThread = new CommandThread(gtp, m_gtpShell);
-                m_commandThread.start();
+                try
+                {
+                    Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
+                    m_commandThread = new CommandThread(gtp, m_gtpShell);
+                    m_commandThread.start();
+                }
+                catch (Gtp.Error e)
+                {
+                    SimpleDialogs.showError(this,
+                                            e.getMessage() + "\n"
+                                            + "See GTP shell for any error"
+                                            + " messages\n"
+                                            + "printed by the program.");
+                }
             }
             if (m_commandThread != null)
             {
