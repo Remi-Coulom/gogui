@@ -31,7 +31,9 @@ public class GtpDummy
         String[] cmdArray = StringUtils.tokenize(cmdLine);
         String cmd = cmdArray[0];
         boolean status = true;
-        if (m_nextResponseFixed)
+        if (m_nextResponseFixed
+            && ! (cmd.equals("dummy_next_failure")
+                  || cmd.equals("dummy_next_success")))
         {
             status = m_nextStatus;
             response.append(m_nextResponse);
