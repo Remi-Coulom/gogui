@@ -81,6 +81,8 @@ public class Analyze
 
     private String m_host = "";
 
+    private String m_openings;
+
     private Vector m_entries = new Vector(128, 128);
 
     private Statistics m_length = new Statistics();
@@ -156,6 +158,8 @@ public class Analyze
             m_size = getCommentValue(comment, "Size:");
         else if (comment.startsWith("Komi:"))
             m_komi = getCommentValue(comment, "Komi:");
+        else if (comment.startsWith("Openings:"))
+            m_openings = getCommentValue(comment, "Openings:");
         else if (comment.startsWith("Date:"))
             m_date = getCommentValue(comment, "Date:");
         else if (comment.startsWith("Host:"))
@@ -280,56 +284,28 @@ public class Analyze
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
                   + "\">\n");
-        out.print("<tr><th align=\"left\">Black:</th><td align=\"left\">"
-                  + m_black + "</td></tr>\n" +
-                  "<tr><th align=\"left\">White:</th><td align=\"left\">"
-                  + m_white + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Size:</th><td align=\"left\">"
-                  + m_size + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Komi:</th><td align=\"left\">"
-                  + m_komi + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Date:</th><td align=\"left\">"
-                  + m_date + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Host:</th><td align=\"left\">"
-                  + m_host + "</td></tr>\n");
+        writeHtmlRow(out, "Black", m_black);
+        writeHtmlRow(out, "White", m_white);
+        writeHtmlRow(out, "Size", m_size);
+        writeHtmlRow(out, "Komi", m_komi);
+        if (m_openings != null)
+            writeHtmlRow(out, "Openings", m_openings);
+        writeHtmlRow(out, "Date", m_date);
+        writeHtmlRow(out, "Host", m_host);
         if (m_hasReferee)
-            out.print("<tr><th align=\"left\">Referee:</th>"
-                      + "<td align=\"left\">"
-                      + m_referee + "</td></tr>\n");
-        out.print("<tr><th align=\"left\">Black command:</th>"
-                  + "<td align=\"left\"><tt>"
-                  + m_blackCommand + "</tt></td></tr>\n" +
-                  "<tr><th align=\"left\">White command:</th>"
-                  + "<td align=\"left\"><tt>"
-                  + m_whiteCommand + "</tt></td></tr>\n");
+            writeHtmlRow(out, "Referee", m_referee);
+        writeHtmlRow(out, "Black command", m_blackCommand);
+        writeHtmlRow(out, "White command", m_whiteCommand);
         if (m_hasReferee)
-            out.print("<tr><th align=\"left\">Referee command:</th>"
-                  + "<td align=\"left\"><tt>"
-                  + m_refereeCommand + "</tt></td></tr>\n");
-        out.print("<tr><th align=\"left\">Games:</th><td align=\"left\">"
-                  + m_games + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Errors:</th><td align=\"left\">"
-                  + m_errors + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Duplicates:</th><td align=\"left\">"
-                  + m_duplicates + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Games used:</th><td align=\"left\">"
-                  + m_gamesUsed + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Game length:</th>"
-                  + "<td align=\"left\">"
-                  + format.format(m_length.getMean()) + " (&plusmn;"
-                  + format.format(m_length.getErrorMean())
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">CpuTime Black:</th>"
-                  + "<td align=\"left\">"
-                  + format.format(m_cpuBlack.getMean()) + " (&plusmn;"
-                  + format.format(m_cpuBlack.getErrorMean())
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">CpuTime White:</th>"
-                  + "<td align=\"left\">"
-                  + format.format(m_cpuWhite.getMean()) + " (&plusmn;"
-                  + format.format(m_cpuWhite.getErrorMean())
-                  + ")</td></tr>\n" +
-                  "</table>\n" +
+            writeHtmlRow(out, "Referee command", m_refereeCommand);
+        writeHtmlRow(out, "Games", m_games);
+        writeHtmlRow(out, "Errors", m_errors);
+        writeHtmlRow(out, "Duplicates", m_duplicates);
+        writeHtmlRow(out, "Games used", m_gamesUsed);
+        writeHtmlRow(out, "Game length", m_length, format);
+        writeHtmlRow(out, "CpuTime Black", m_cpuBlack, format);
+        writeHtmlRow(out, "CpuTime White", m_cpuWhite, format);
+        out.print("</table>\n" +
                   "<hr>\n");
         if (m_hasReferee)
         {
@@ -391,19 +367,10 @@ public class Analyze
         NumberFormat format = StringUtils.getNumberFormat(1);
         out.print("<h2>Result [" + name + "]</h2>\n" +
                   "<p>\n" +
-                  "<table border=\"0\">\n" +
-                  "<tr><th align=\"left\">Black score"
-                  + ":</th><td align=\"left\">"
-                  + format.format(statistics.m_histo.getMean()) + " (&plusmn;"
-                  + format.format(statistics.m_histo.getErrorMean())
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Black wins"
-                  + ":</th><td align=\"left\">"
-                  + format.format(statistics.m_win.getMean() * 100)
-                  + "% (&plusmn;"
-                  + format.format(statistics.m_win.getErrorMean() * 100)
-                  + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Unknown Result"
+                  "<table border=\"0\">\n");
+        writeHtmlRow(out, "Black score", statistics.m_histo, format);
+        writeHtmlRowPercentData(out, "Black wins", statistics.m_win, format);
+        out.print("<tr><th align=\"left\">Unknown Result"
                   + ":</th><td align=\"left\">"
                   + format.format(statistics.m_unknownResult.getMean() * 100)
                   + "%" + "</td></tr>\n" +
@@ -414,6 +381,44 @@ public class Analyze
                   "</table>\n" +
                   "</p>\n");
         statistics.m_histo.printHtml(out);
+    }
+
+    private void writeHtmlRow(PrintStream out, String label,
+                              String value) throws Exception
+    {
+        out.print("<tr><th align=\"left\">" + label +":</th>"
+                  + "<td align=\"left\">" + value +"</td></tr>\n");
+    }
+
+    private void writeHtmlRow(PrintStream out, String label,
+                              int value) throws Exception
+    {
+        writeHtmlRow(out, label, Integer.toString(value));
+    }
+
+    private void writeHtmlRow(PrintStream out, String label,
+                              Statistics statistics,
+                              NumberFormat format) throws Exception
+    {
+        String value =
+            format.format(statistics.getMean()) + " (&plusmn;"
+            + format.format(statistics.getErrorMean())
+            + ") <small>min=" + format.format(statistics.getMin())
+            + " max=" + format.format(statistics.getMax())
+            + " deviation=" + format.format(statistics.getDeviation())
+            + "</small>";
+        writeHtmlRow(out, label, value);
+    }
+
+    private void writeHtmlRowPercentData(PrintStream out, String label,
+                                         Statistics statistics,
+                                         NumberFormat format) throws Exception
+    {
+        out.print("<tr><th align=\"left\">" + label +":</th>"
+                  + "<td align=\"left\">"
+                  + format.format(statistics.getMean() * 100) + "% (&plusmn;"
+                  + format.format(statistics.getErrorMean() * 100)
+                  + ")</td></tr>\n");
     }
 
     private void writeData(File file) throws Exception
@@ -510,6 +515,8 @@ class Statistics
 
     public void addValue(double value)
     {
+        m_min = Math.min(value, m_min);
+        m_max = Math.max(value, m_max);
         m_sum += value;
         m_sumSq += (value * value);
         ++m_count;
@@ -539,6 +546,16 @@ class Statistics
         return m_sum / m_count;
     }
 
+    public double getMax()
+    {
+        return m_max;
+    }
+
+    public double getMin()
+    {
+        return m_min;
+    }
+
     public double getVariance()
     {
         if (m_count == 0)
@@ -548,6 +565,10 @@ class Statistics
     }
 
     private int m_count;
+
+    private double m_max = Double.NEGATIVE_INFINITY;
+
+    private double m_min = Double.POSITIVE_INFINITY;
 
     private double m_sum;
 
@@ -577,7 +598,6 @@ class Histogram
     public void printHtml(PrintStream out)
     {
         out.print("<p>\n" +
-                  "<small>\n" +
                   "<table cellspacing=\"1\" cellpadding=\"0\">\n");
         int min;
         for (min = 0; min < m_size - 1 && m_array[min] == 0; ++min);
@@ -587,16 +607,16 @@ class Histogram
         {
             int scale = 630;
             int width = m_array[i] * scale / getCount();
-            out.print("<tr><td align=\"right\">" + (m_min + i * m_step)
-                      + "</td><td><table cellspacing=\"0\"" +
+            out.print("<tr><td align=\"right\"><small>" + (m_min + i * m_step)
+                      + "</small></td><td><table cellspacing=\"0\"" +
                       " cellpadding=\"0\" width=\"" + scale + "\"><tr>" +
                       "<td bgcolor=\"#666666\" width=\"" + width +
                       "\"></td>" + "<td bgcolor=\"#cccccc\" width=\""
-                      + (scale - width) + "\">"
-                      + m_array[i] + "</td></tr></table></td></tr>\n");
+                      + (scale - width) + "\"><small>"
+                      + m_array[i]
+                      + "</small></td></tr></table></td></tr>\n");
         }
         out.print("</table>\n" +
-                  "</small>\n" +
                   "</p>\n");
     }
 

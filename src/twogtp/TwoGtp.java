@@ -650,8 +650,12 @@ public class TwoGtp
                     resultReferee = getResult(m_referee);
             }
             double cpuTimeBlack = getCpuTime(m_black) - m_cpuTimeBlack;
+            if (cpuTimeBlack < 0)
+                cpuTimeBlack = 0;
             m_cpuTimeBlack = cpuTimeBlack;
             double cpuTimeWhite = getCpuTime(m_white) - m_cpuTimeWhite;
+            if (cpuTimeWhite < 0)
+                cpuTimeWhite = 0;
             m_cpuTimeWhite = cpuTimeWhite;
             if (isAlternated())
             {
@@ -661,7 +665,8 @@ public class TwoGtp
             }
             Vector moves = Compare.getAllAsMoves(m_gameTree.getRoot());
             String duplicate =
-                Compare.checkDuplicate(m_board, moves, m_games);
+                Compare.checkDuplicate(m_board, moves, m_games, m_alternate,
+                                       isAlternated());
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moves.size(), error,
                        errorMessage, cpuTimeBlack, cpuTimeWhite);
@@ -987,6 +992,8 @@ public class TwoGtp
             out.println("# RefereeCommand: " + m_refereeCommand);
             out.println("# Size: " + m_size);
             out.println("# Komi: " + m_komi);
+            if (m_openings != null)
+                out.println("# Openings: " + m_openings.getDirectory());
             out.println("# Date: " + format.format(date));
             out.println("# Host: " + getHost());
             out.println("#GAME\tRES_B\tRES_W\tRES_R\tALT\tDUP\tLEN\tCPU_B\t"

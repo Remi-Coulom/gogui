@@ -15,11 +15,14 @@ import go.*;
 public class Compare
 {
     public static String checkDuplicate(Board board, Vector moves,
-                                         Vector games)
+                                        Vector games, boolean useAlternate,
+                                        boolean isAlternated)
     {
         String result = "-";
         for (int numberGame = 0; numberGame < games.size(); ++numberGame)
         {
+            if (useAlternate && ((numberGame % 2 != 0) != isAlternated))
+                continue;
             Vector gameMoves = (Vector)games.get(numberGame);
             for (int rot = 0; rot < Board.NUMBER_ROTATIONS; ++rot)
             {
@@ -73,7 +76,8 @@ public class Compare
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
             Vector moves = getAllAsMoves(gameTree.getRoot());
-            String duplicate = checkDuplicate(board, moves, games);
+            String duplicate =
+                checkDuplicate(board, moves, games, false, false);
             System.out.println(Integer.toString(gameNumber) + " " +
                                filename + " " + duplicate);
             games.add(moves);

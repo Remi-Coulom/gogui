@@ -11,6 +11,7 @@ import java.util.*;
 import game.*;
 import go.*;
 import sgf.*;
+import utils.ErrorMessage;
 import utils.FileUtils;
 
 //----------------------------------------------------------------------------
@@ -31,10 +32,18 @@ public class Openings
     public Openings(File directory) throws Exception
     {
         if (! directory.isDirectory())
-            throw new Exception(directory + " is not a directory");
+            throw new ErrorMessage(directory + " is not a directory");
+        m_directory = directory;
         m_files = directory.listFiles(new Filter());
-        sortFiles();
+        if (m_files.length == 0)
+            throw new ErrorMessage("No SGF files found in " + directory);
+        sortFiles();        
         m_currentFile = -1;
+    }
+
+    public String getDirectory()
+    {
+        return m_directory.toString();
     }
 
     public String getFilename()
@@ -71,6 +80,8 @@ public class Openings
     }
 
     private int m_currentFile;
+
+    private File m_directory;
 
     private File[] m_files;
 
