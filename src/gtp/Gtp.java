@@ -443,17 +443,27 @@ public class Gtp
             {
                 int size = 1024;
                 char[] buffer = new char[size];
+                StringBuffer stringBuffer = new StringBuffer();
                 while (true)
                 {
                     int n = m_err.read(buffer, 0, size);
                     if (n < 0)
+                    {
+                        if (m_callback != null)
+                            m_callback.receivedStdErr(stringBuffer.toString());
                         return;
-                    String s = new String(buffer, 0, n);
+                    }
                     if (m_log)
                     {
-                        System.err.print(s);
+                        System.err.print(new String(buffer, 0, n));
                         System.err.flush();
                     }
+                    stringBuffer.append(buffer, 0, n);
+                    int index = stringBuffer.lastIndexOf("\n");
+                    if (index == -1)
+                        continue;
+                    String s = stringBuffer.substring(0, index + 1);
+                    stringBuffer.delete(0, index + 1);
                     if (m_callback != null)
                         m_callback.receivedStdErr(s);
                 }
