@@ -1298,10 +1298,12 @@ class GoGui
                 m_board.setup(m);
                 m_commandThread.sendCommandPlay(m);
             }
-            if (reader.getMoves().size() == 0
-                && reader.getToMove() != m_board.getToMove())
+            int numberMoves = reader.getMoves().size();
+            board.Color toMove = reader.getToMove();
+            if (numberMoves > 0)
+                toMove = reader.getMove(0).getColor();
+            if (toMove != m_board.getToMove())
             {
-                board.Color toMove = reader.getToMove();
                 if (m_fillPasses)
                 {
                     Move m = new Move(null, m_board.getToMove());
@@ -1313,8 +1315,8 @@ class GoGui
             }
 
             moves.clear();
-            for (int i = 0; i < reader.getMoves().size(); ++i)
-                moves.add(reader.getMoves().get(i));
+            for (int i = 0; i < numberMoves; ++i)
+                moves.add(reader.getMove(i));
             if (m_fillPasses)
                 moves = fillPasses(moves);
             for (int i = 0; i < moves.size(); ++i)
