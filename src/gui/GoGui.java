@@ -2296,6 +2296,10 @@ class GoGui
 
     private void setResult(String result)
     {
+        String oldResult = m_gameTree.getGameInformation().m_result;
+        if (! (oldResult == null || oldResult.equals(""))
+            && ! showQuestion("Overwrite game result in game information?"))
+            return;
         m_gameTree.getGameInformation().m_result = result;
     }
 
