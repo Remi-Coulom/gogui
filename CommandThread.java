@@ -57,7 +57,6 @@ class CommandThread
     public boolean isProgramDead()
     {
         assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
         return m_gtp.isProgramDead();
     }
 

@@ -722,6 +722,8 @@ class GoGui
 
     private void cbInterrupt()
     {
+        if (m_computerBlack && m_computerWhite)
+            computerNone();
         if (! m_commandInProgress)
             showError("No command in progress.");
         else if (m_commandThread == null)
