@@ -1841,7 +1841,6 @@ class GoGui
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
-        setTitleFromProgram();
         if (m_commandThread == null
             || (! m_computerBlack && ! m_computerWhite))
             computerNone();
@@ -1865,6 +1864,7 @@ class GoGui
         updateGameInfo(true);
         setVisible(true);
         m_guiBoard.setFocus();
+        setTitleFromProgram();
     }
 
     private void initScore(go.Point[] isDeadStone)
