@@ -821,6 +821,8 @@ class GoGui
                                     + "printed by the program.");
             return;
         }
+        m_menuBar.setComputerEnabled(true);
+        m_toolBar.setComputerEnabled(true);
         try
         {
             setFastUpdate(true);
@@ -866,8 +868,6 @@ class GoGui
             m_gtpShell.sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
-        m_menuBar.setComputerEnabled(true);
-        m_toolBar.setComputerEnabled(true);
         Node oldCurrentNode = m_currentNode;
         m_board.initSize(m_boardSize);
         executeRoot();
