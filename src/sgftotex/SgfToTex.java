@@ -71,6 +71,15 @@ class SgfToTex
             e.printStackTrace();
             System.exit(-1);
         }
+        catch (RuntimeException e)
+        {
+            String msg = e.getMessage();
+            if (msg == null)
+                msg = e.getClass().getName();
+            System.err.println(msg);
+            e.printStackTrace();
+            System.exit(-1);
+        }
         catch (Throwable t)
         {
             String msg = t.getMessage();
