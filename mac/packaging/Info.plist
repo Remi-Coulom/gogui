@@ -44,6 +44,9 @@ Do not edit Info.plist
 <key>CFBundleVersion</key>
 <string>0.7pre1.x</string>
 
+<key>CFBundleGetInfoString</key>
+<string>0.7pre1.x, Copyright 2003-2004 Markus Enzenberger</string>
+
 <key>CFBundlePackageType</key>
 <string>APPL</string>
 
