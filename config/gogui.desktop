@@ -6,4 +6,4 @@ Exec=gogui
 Icon=gogui.png
 Terminal=false
 Type=Application
-Categories=Games
+Categories=Application;Game;BoardGame
