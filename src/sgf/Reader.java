@@ -131,6 +131,8 @@ public class Reader
         String result = "";
         if (m_warningLongProps)
             result = result + "Long property names for standard properties\n";
+        if (m_warningWrongPass)
+            result = result + "Non-standard pass move encoding\n";
         if (result.equals(""))
             return null;
         return result;
@@ -146,6 +148,8 @@ public class Reader
     private boolean m_isFile;
 
     private boolean m_warningLongProps;
+
+    private boolean m_warningWrongPass;
 
     private int m_lastPercent;
 
@@ -313,7 +317,14 @@ public class Reader
         int x = s.charAt(0) - 'a';
         int y = boardSize - (s.charAt(1) - 'a') - 1;
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
+        {
+            if (x == boardSize && y == -1)
+            {
+                m_warningWrongPass = true;
+                return null;
+            }
             throw getError("Invalid coordinates: " + s);
+        }
         if (x < CACHE_SIZE && y < CACHE_SIZE)
         {
             if (m_pointCache[x][y] == null)
