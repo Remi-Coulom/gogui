@@ -260,7 +260,8 @@ class GoGui
         if (m_scoreMode)
         {
             m_guiBoard.scoreSetDead(p);
-            return;
+            m_guiBoard.repaint();
+	    return;
         }
         humanMoved(new Move(p, m_board.getToMove()));
     }
