@@ -25,7 +25,7 @@ import version.*;
 class GoGui
     extends JFrame
     implements ActionListener, AnalyzeCallback, Board.Listener,
-               GameTreeViewer.Listener, GtpShell.Callback, WindowListener
+               GameTreeViewer.Listener, GtpShell.Callback
 {
     GoGui(String program, Preferences prefs, String file, int move,
           String time, boolean verbose, boolean computerBlack,
@@ -88,7 +88,14 @@ class GoGui
         splitPane.setResizeWeight(0.8);
         contentPane.add(splitPane, BorderLayout.CENTER);
         
-        addWindowListener(this);
+        WindowAdapter windowAdapter = new WindowAdapter()
+            {
+                public void windowClosing(WindowEvent event)
+                {
+                    close();
+                }
+            };
+        addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setIconImage(new GoIcon());
 
@@ -615,35 +622,6 @@ class GoGui
     public void toTop()
     {
         toFront();
-    }
-
-    public void windowActivated(WindowEvent e)
-    {
-    }
-
-    public void windowClosed(WindowEvent e)
-    {
-    }
-
-    public void windowClosing(WindowEvent e)
-    {
-        close();
-    }
-
-    public void windowDeactivated(WindowEvent e)
-    {
-    }
-
-    public void windowDeiconified(WindowEvent e)
-    {
-    }
-
-    public void windowIconified(WindowEvent e)
-    {
-    }
-
-    public void windowOpened(WindowEvent e)
-    {
     }
 
     private class AnalyzeContinue

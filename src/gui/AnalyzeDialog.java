@@ -389,8 +389,7 @@ interface AnalyzeCallback
 
 class AnalyzeDialog
     extends JDialog
-    implements ActionListener, ListSelectionListener, MouseListener,
-               WindowListener
+    implements ActionListener, ListSelectionListener, MouseListener
 {
     public AnalyzeDialog(Frame owner, AnalyzeCallback callback,
                          Preferences prefs, Vector supportedCommands)
@@ -404,7 +403,14 @@ class AnalyzeDialog
         m_supportedCommands = supportedCommands;
         m_callback = callback;
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        addWindowListener(this);
+        WindowAdapter windowAdapter = new WindowAdapter()
+            {
+                public void windowClosing(WindowEvent event)
+                {
+                    close();
+                }
+            };
+        addWindowListener(windowAdapter);
         Container contentPane = getContentPane();
         contentPane.add(createButtons(), BorderLayout.SOUTH);
         contentPane.add(createCommandPanel(owner), BorderLayout.CENTER);
@@ -491,35 +497,6 @@ class AnalyzeDialog
                 m_list.requestFocusInWindow();
             m_runButton.setEnabled(false);
         }
-    }
-
-    public void windowActivated(WindowEvent e)
-    {
-    }
-
-    public void windowClosed(WindowEvent e)
-    {
-    }
-
-    public void windowClosing(WindowEvent e)
-    {
-        close();
-    }
-
-    public void windowDeactivated(WindowEvent e)
-    {
-    }
-
-    public void windowDeiconified(WindowEvent e)
-    {
-    }
-
-    public void windowIconified(WindowEvent e)
-    {
-    }
-
-    public void windowOpened(WindowEvent e)
-    {
     }
 
     private boolean m_onlySupportedCommands;
