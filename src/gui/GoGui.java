@@ -212,21 +212,27 @@ class GoGui
     public void fieldClicked(board.Point p)
     {
         if (m_commandInProgress)
+        {
             return;
+        }
+        if (m_setupMode)
+        {
+            if (m_board.getColor(p) != m_setupColor)
+            {
+                m_board.play(new Move(p, m_setupColor));
+            }
+            else
+            {
+                m_board.play(new Move(p, board.Color.EMPTY));
+            }
+            return;
+        }
         if (m_analyzeRequestPoint)
         {
             m_analyzePointArg = p;
             m_board.clearAllCrossHair();
             m_board.setCrossHair(p, true);
             analyzeBegin(false);
-            return;
-        }
-        if (m_setupMode)
-        {
-            if (m_board.getColor(p) != m_setupColor)
-                m_board.play(new Move(p, m_setupColor));
-            else
-                m_board.play(new Move(p, board.Color.EMPTY));
             return;
         }
         if (m_scoreMode)
