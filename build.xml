@@ -239,13 +239,17 @@ installation directory.
 <mkdir dir="${appdir}/Contents/Resources/Java"/>
 <copy file="/System/Library/Frameworks/JavaVM.framework/Versions/Current/Resources/MacOS/JavaApplicationStub"
   todir="${appdir}/Contents/MacOS"/>
-<exec command="chmod 755 ${appdir}/Contents/MacOS/JavaApplicationStub"/>
+<exec executable="chmod">
+<arg line="755 ${appdir}/Contents/MacOS/JavaApplicationStub"/>
+</exec>
 <copy file="mac/packaging/GoGui.icns"
   todir="${appdir}/Contents/Resources"/>
 <copy file="mac/packaging/Info.plist" todir="${appdir}/Contents"/>  
 <copy file="mac/packaging/PkgInfo" todir="${appdir}/Contents"/>  
 <copy file="lib/gogui.jar" todir="${appdir}/Contents/Resources/Java"/>
-<exec command="/Developer/Tools/SetFile -a B ${appdir}"/>
+<exec executable="/Developer/Tools/SetFile">
+<arg line="-a B ${appdir}"/>
+</exec>
 </target>
 
 <target name="gogui.jar" depends="compile">
