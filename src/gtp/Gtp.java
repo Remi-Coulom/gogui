@@ -389,6 +389,21 @@ public final class Gtp
         }
     }
 
+    /** Queries the name.
+        @return Name or "Unknown Program" if name command not supported
+    */
+    public String queryName()
+    {
+        try
+        {
+            return sendCommand("name");
+        }
+        catch (Error e)
+        {
+            return "Unknown Program";
+        }
+    }
+
     public void queryProtocolVersion() throws Gtp.Error
     {
         try
