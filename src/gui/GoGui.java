@@ -929,8 +929,7 @@ class GoGui
                     return false;
                 undoCurrentNode();
                 m_currentNode = m_currentNode.getFather();
-                m_currentNodeExecuted =
-                    m_currentNode.getNumberAddStonesAndMoves();
+                m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
             }
             computerNone();
         }
@@ -1964,8 +1963,7 @@ class GoGui
 
     private boolean isCurrentNodeExecuted()
     {
-        int numberAddStonesAndMoves =
-            m_currentNode.getNumberAddStonesAndMoves();
+        int numberAddStonesAndMoves = m_currentNode.getAllAsMoves().size();
         if (! m_isRootExecuted
             || m_currentNodeExecuted != numberAddStonesAndMoves)
             return false;
@@ -2043,7 +2041,7 @@ class GoGui
         {
             m_currentNode = node.getFather();
             m_currentNode.removeChild(node);
-            m_currentNodeExecuted = m_currentNode.getNumberAddStonesAndMoves();
+            m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
             throw error;
         }
     }

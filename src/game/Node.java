@@ -215,18 +215,6 @@ public class Node
         return m_addBlack.size();
     }
 
-    public int getNumberAddStonesAndMoves()
-    {
-        int result = 0;
-        if (m_addBlack != null)
-            result += m_addBlack.size();
-        if (m_addWhite != null)
-            result += m_addWhite.size();
-        if (m_move != null)
-            ++result;
-        return result;
-    }
-
     public int getNumberAddWhite()
     {
         if (m_addWhite == null)
