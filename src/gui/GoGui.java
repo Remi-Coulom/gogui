@@ -2233,19 +2233,20 @@ class GoGui
 
     private void setTitle()
     {
-        if (m_loadedFile != null)
-            setTitle(m_loadedFile.getName());
-        else if (! m_name.equals(""))
+        if (! m_name.equals(""))
         {
             String title = StringUtils.formatTitle(m_name);
             if (m_loadedFile != null)
-                title = title + ": " + m_loadedFile.getName();
-            setTitle(title);
+                setTitle(title + ": " + m_loadedFile.getName());
+            else
+                setTitle(title);
             if (m_gtpShell != null)
                 m_gtpShell.setTitlePrefix(title);
             if (m_analyzeDialog != null)
                 m_analyzeDialog.setTitlePrefix(title);
         }
+        else if (m_loadedFile != null)
+            setTitle(m_loadedFile.getName());
         else
             setTitle("GoGui");
     }
