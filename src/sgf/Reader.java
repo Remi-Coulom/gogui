@@ -72,10 +72,9 @@ class ByteCountInputStream
 //----------------------------------------------------------------------------
 
 /** SGF reader.
-    BUG: the error messages sometimes contain wrong line numbers,
-    because of problems in StreamTokenizer.lineno().
-    The implementation should be replaced not using StreamTokenizer, because
-    this class is a legacy class.
+    @bug The error messages sometimes contain wrong line numbers, because of
+    problems in StreamTokenizer.lineno(). The implementation should be
+    replaced not using StreamTokenizer, because this class is a legacy class.
 */
 public class Reader
 {

@@ -81,7 +81,7 @@ public class GuiUtils
 
     /** Get size of default monspaced font.
         Can be used for setting the initial size of some GUI elements.
-        BUG: Does not return the size in pixels but in points.
+        @bug Does not return the size in pixels but in points.
     */
     public static int getDefaultMonoFontSize()
     {

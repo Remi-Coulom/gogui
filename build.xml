@@ -516,7 +516,10 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
   twogtp.*,
   utils.*,
   version.*
-"/>
+">
+<tag name="bug" scope="all" description="Bugs:"/>
+<tag name="todo" scope="all" description="To do:"/>
+</javadoc>
 </target>
 
 <target name="man">
