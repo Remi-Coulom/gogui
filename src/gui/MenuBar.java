@@ -363,8 +363,6 @@ class MenuBar
 
     private JMenuItem m_itemMakeMainVar;
 
-    private JMenuItem m_itemNextComment;
-
     private JMenuItem m_itemNextVariation;
 
     private JMenuItem m_itemPreviousVariation;
@@ -627,9 +625,6 @@ class MenuBar
                                              "keep-only-position");
         m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
                                      "truncate");
-        menu.addSeparator();
-        m_itemNextComment = addMenuItem(menu, "Next comment", KeyEvent.VK_C,
-                                        "next-comment");
         return menu;
     }
 

@@ -201,8 +201,6 @@ class GoGui
             cbKeepOnlyPosition();
         else if (command.equals("make-main-variation"))
             cbMakeMainVariation();
-        else if (command.equals("next-comment"))
-            cbNextComment();
         else if (command.equals("next-variation"))
             cbNextVariation();
         else if (command.equals("new-game"))
@@ -1179,15 +1177,6 @@ class GoGui
         {
             assert(false);
         }
-    }
-
-    private void cbNextComment()
-    {
-        Node node = NodeUtils.findNextComment(m_currentNode);
-        if (node != null)
-            gotoNode(node);
-        else
-            showError("No more comments");
     }
 
     private void cbNextVariation()
