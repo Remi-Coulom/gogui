@@ -59,9 +59,6 @@ class GoGui
             }
         }
 
-        m_gameTreeViewer = new GameTreeViewer(this);
-        m_gameTreeViewer.show();
-
         Container contentPane = getContentPane();        
 
         m_infoPanel = new JPanel();
@@ -239,6 +236,8 @@ class GoGui
             cbSetupWhite();
         else if (command.equals("show-cursor"))
             cbShowCursor();
+        else if (command.equals("show-gametree"))
+            cbShowGameTree();
         else if (command.equals("show-last-move"))
             cbShowLastMove();
         else if (command.equals("truncate"))
@@ -1244,6 +1243,17 @@ class GoGui
         m_guiBoard.repaint();
     }
 
+    private void cbShowGameTree()
+    {
+        if (m_gameTreeViewer == null)
+        {
+            m_gameTreeViewer = new GameTreeViewer(null);
+            if (m_rememberWindowSizes)
+                restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
+        }
+        m_gameTreeViewer.toTop();
+    }
+
     private void cbShowLastMove()
     {
         m_guiBoard.setShowLastMove(m_menuBar.getShowLastMove());
@@ -1755,6 +1765,8 @@ class GoGui
                 if (m_prefs.getBool("show-gtpshell"))
                     m_gtpShell.toTop();
             }
+            if (m_prefs.getBool("show-gametree"))
+                cbShowGameTree();
             setVisible(true);
             m_guiBoard.setFocus();
         }
@@ -2038,9 +2050,11 @@ class GoGui
             m_analyzeDialog.saveRecent();
         if (m_rememberWindowSizes)
         {
-            saveSize(this, "window-gogui", m_boardSize);
+            saveSize(this, "window-gogui");
             if (m_help != null)
-                saveSize(m_help, "window-help", m_boardSize);
+                saveSize(m_help, "window-help");
+            if (m_gameTreeViewer != null)
+                saveSizeAndVisible(m_gameTreeViewer, "gametree");
             if (m_commandThread != null)
             {
                 saveSizeAndVisible(m_gtpShell, "gtpshell");
@@ -2049,7 +2063,7 @@ class GoGui
         }
     }
 
-    private void saveSize(Window window, String name, int boardSize)
+    private void saveSize(Window window, String name)
     {
         if (window instanceof Frame)
         {
@@ -2059,7 +2073,7 @@ class GoGui
             if ((state & mask) != 0)
                 return;
         }
-        name = name + "-" + boardSize;
+        name = name + "-" + m_boardSize;
         java.awt.Point location = window.getLocation();
         Dimension size = window.getSize();
         String value = Integer.toString(location.x) + " " + location.y
@@ -2070,7 +2084,7 @@ class GoGui
     private void saveSizeAndVisible(Window window, String name)
     {
         if (window != null)
-            saveSize(window, "window-" + name, m_boardSize);
+            saveSize(window, "window-" + name);
         boolean isVisible = (window != null && window.isVisible());
         m_prefs.setBool("show-" + name, isVisible);
     }
@@ -2182,6 +2196,7 @@ class GoGui
         prefs.setIntDefault("rules", go.Board.RULES_JAPANESE);
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);
+        prefs.setBoolDefault("show-gametree", false);
     }
 
     private void setRules()
@@ -2389,7 +2404,8 @@ class GoGui
     private void updateGameInfo()
     {
         m_gameInfo.update(m_currentNode, m_board);
-        m_gameTreeViewer.update(m_gameTree, m_currentNode);
+        if (m_gameTreeViewer != null)
+            m_gameTreeViewer.update(m_gameTree, m_currentNode);
     }
 }
 

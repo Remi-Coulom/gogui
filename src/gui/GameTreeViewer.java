@@ -200,6 +200,12 @@ public class GameTreeViewer
         pack();
     }
 
+    public void toTop()
+    {
+        setVisible(true);
+        toFront();
+    }
+
     public void update(GameTree gameTree, Node currentNode)
     {
         m_panel.update(gameTree, currentNode);

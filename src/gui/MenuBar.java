@@ -645,6 +645,8 @@ class MenuBar
     {
         JMenu menu = new JMenu("Windows");
         menu.setMnemonic(KeyEvent.VK_W);
+        addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7, 0,
+                    "show-gametree");
         addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
                     "analyze");
         m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
