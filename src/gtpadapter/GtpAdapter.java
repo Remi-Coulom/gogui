@@ -501,10 +501,7 @@ public class GtpAdapter
             response.append("No arguments allowed");
             return false;
         }
-        if (! undo(response))
-            return false;
-        m_board.undo();
-        return true;
+        return undo(response);
     }
 
     private boolean cmdUnknown(StringBuffer response)
@@ -535,7 +532,6 @@ public class GtpAdapter
         String command = m_gtp.getCommandPlay(toMove) + " PASS";
         if (send(command, response))
         {
-            m_board.play(new Move(null, toMove));
             m_passInserted.push(new Boolean(true));
             return true;
         }
