@@ -598,6 +598,8 @@ public final class Gtp
                 // Would like to interrupt the thread before creating
                 // a new one, but Process.waitFor is not interruptible
             }
+            else
+                return;
         }
     }
 
