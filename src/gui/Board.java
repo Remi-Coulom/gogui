@@ -285,7 +285,11 @@ public class Board
     public void paintImmediately(go.Point point)
     {
         Field field = getField(point);
-        field.paintImmediately(field.getVisibleRect());
+        Rectangle rect = field.getVisibleRect();
+        int offset = getShadowOffset();
+        rect.width += offset;
+        rect.height += offset;
+        field.paintImmediately(rect);
     }
 
     public int print(Graphics g, PageFormat format, int page)
@@ -634,8 +638,8 @@ public class Board
         graphics2D.setComposite(m_composite3);
         Rectangle grid = getBounds();
         int width = grid.width / (m_board.getSize() + 2);
-        final int size = width - 2 * Field.getStoneMargin(width);
-        final int offset = size / 12;
+        int size = width - 2 * Field.getStoneMargin(width);
+        int offset = getShadowOffset();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
             go.Point point = m_board.getPoint(i);
@@ -660,6 +664,14 @@ public class Board
     private void setColor(go.Point p, go.Color color)
     {
         getField(p).setColor(color);
+    }
+
+    private int getShadowOffset()
+    {
+        Rectangle grid = getBounds();
+        int width = grid.width / (m_board.getSize() + 2);
+        int size = width - 2 * Field.getStoneMargin(width);
+        return size / 12;
     }
 
     private java.awt.Point getScreenLocation(int x, int y)
