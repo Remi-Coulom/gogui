@@ -30,7 +30,7 @@ class Comment
     {
         m_listener = listener;
         m_textArea = new JTextArea();
-        m_textArea.setColumns(15);
+        m_textArea.setColumns(20);
         m_textArea.setLineWrap(true);
         m_textArea.setWrapStyleWord(true);
         m_textArea.getDocument().addDocumentListener(this);
