@@ -2031,6 +2031,8 @@ class GoGui
                 public boolean handleOpenFile(String filename)
                 {
                     assert(SwingUtilities.isEventDispatchThread());
+                    if (m_needsSave && ! checkSaveGame())
+                        return true;
                     loadFile(new File(filename), -1);
                     return true;
                 }
