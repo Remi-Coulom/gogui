@@ -107,15 +107,6 @@ installation directory.
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
- bin/gmptogtp,
- bin/gogui,
- bin/gtpadapter,
- bin/gtpdummy,
- bin/gtpregress,
- bin/gtpserver,
- bin/netgtp,
- bin/sgftotex,
- bin/twogtp,
  build.xml,
  config/analyze-commands*,
  doc/html/*.html,
@@ -127,6 +118,17 @@ installation directory.
  src/overview.html,
  src/*/package.html,
  src/*/*.java,
+" />
+<zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
+ bin/gmptogtp,
+ bin/gogui,
+ bin/gtpadapter,
+ bin/gtpdummy,
+ bin/gtpregress,
+ bin/gtpserver,
+ bin/netgtp,
+ bin/sgftotex,
+ bin/twogtp,
 " />
 </zip>
 </target>
