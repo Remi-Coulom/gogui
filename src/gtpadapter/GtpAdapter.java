@@ -329,10 +329,14 @@ public class GtpAdapter
     private boolean cmdGenmove(Color color, StringBuffer response)
     {
         String command = m_gtp.getCommandGenmove(color);
-        if (! send(command, response))
-            return false;
         if (! fillPass(color, response))
             return false;
+        if (! send(command, response))
+        {
+            StringBuffer undoResponse = new StringBuffer();
+            undoFillPass(undoResponse);
+            return false;
+        }
         try
         {
             Point point = Gtp.parsePoint(response.toString(), m_boardSize);
