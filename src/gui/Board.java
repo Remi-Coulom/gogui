@@ -255,6 +255,9 @@ public class Board
         Graphics2D graphics2D = (Graphics2D)graphics;
         if (graphics2D == null)
             return;
+        AlphaComposite composite = 
+            AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f); 
+        graphics2D.setComposite(composite);
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
             go.Point point = m_board.getPoint(i);
@@ -263,17 +266,11 @@ public class Board
             Field field = getField(point);
             java.awt.Point location = field.getLocation();
             int size = field.getSize().width;
-            if (graphics instanceof Graphics2D)
-            {
-                AlphaComposite composite = 
-                    AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f); 
-                graphics2D.setComposite(composite);
-                graphics.setColor(java.awt.Color.black);
-                int offset = size / 15;
-                graphics.fillOval(location.x + 1 + offset,
-                                  location.y + 1 + offset,
-                                  size - 2, size - 2);
-            }
+            graphics.setColor(java.awt.Color.black);
+            int offset = size / 15;
+            graphics.fillOval(location.x + 1 + offset,
+                              location.y + 1 + offset,
+                              size - 2, size - 2);
         }
         graphics.setPaintMode();
     }
