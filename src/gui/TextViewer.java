@@ -133,7 +133,7 @@ public class TextViewer
         Color colorColor = new Color(0.54f, 0f, 0.54f);
         StyleConstants.setForeground(styleColor, colorColor);
         m_textPane.setEditable(true);
-        highlight("number", "\\b-?\\d+\\.?\\d*\\b");
+        highlight("number", "\\b-?\\d+\\.?\\d*([Ee][+-]\\d+)?\\b");
         highlight("const", "\\b[A-Z_][A-Z_]+[A-Z]\\b");
         highlight("color",
                   "\\b([Bb][Ll][Aa][Cc][Kk]|[Ww][Hh][Ii][Tt][Ee])\\b");
