@@ -47,7 +47,10 @@ class TimeInfo
 
 //----------------------------------------------------------------------------
 
-/** Node in a GameTree. */
+/** Node in a GameTree.
+    The memory requirement is optimized for nodes containing only a move and
+    comment property (e.g. for GNU Go's large SGF traces).
+*/
 public final class Node
 {
     public Node()
@@ -72,9 +75,11 @@ public final class Node
             {
                 Vector vector = new Vector(2);
                 vector.add(m_children);
+                vector.add(node);
                 m_children = vector;
             }
-            ((Vector)m_children).add(node);
+            else
+                ((Vector)m_children).add(node);
         }
         node.m_father = this;
     }
