@@ -20,6 +20,14 @@ public class ScoreDialog
     public ScoreDialog(Frame owner, ActionListener listener)
     {
         super(owner, "Score");
+        WindowAdapter windowAdapter = new WindowAdapter()
+            {
+                public void windowClosing(WindowEvent event)
+                {
+                    close();
+                }
+            };
+        addWindowListener(windowAdapter);
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         JPanel panelDetails = new JPanel(new GridLayout(0, 2, 0, 0));
         m_territoryBlack = createEntry(panelDetails, "Territory Black");
@@ -44,10 +52,10 @@ public class ScoreDialog
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("score-done");
         okButton.addActionListener(listener);
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.setActionCommand("score-cancel");
-        cancelButton.addActionListener(listener);
-        Object options[] = { okButton, cancelButton };
+        m_cancelButton = new JButton("Cancel");
+        m_cancelButton.setActionCommand("score-cancel");
+        m_cancelButton.addActionListener(listener);
+        Object options[] = { okButton, m_cancelButton };
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
                                                  JOptionPane.OK_CANCEL_OPTION,
@@ -72,6 +80,8 @@ public class ScoreDialog
         m_result.setText(score.formatResult());
     }
 
+    private JButton m_cancelButton;
+
     private JLabel m_territoryBlack;
 
     private JLabel m_territoryWhite;
@@ -93,6 +103,12 @@ public class ScoreDialog
     private JLabel m_rules;
 
     private JLabel m_result;
+
+    private void close()
+    {
+        m_cancelButton.doClick();
+        dispose();
+    }
 
     private JLabel createEntry(JPanel panel, String text)
     {
