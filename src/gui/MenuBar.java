@@ -181,21 +181,6 @@ class MenuBar
         m_itemBoardSizeOther.setSelected(true);
     }
 
-    public void selectRulesItem(int rules)
-    {
-        switch (rules)
-        {
-        case go.Board.RULES_JAPANESE:
-            m_itemRulesJapanese.setSelected(true);
-            break;
-        case go.Board.RULES_CHINESE:
-            m_itemRulesChinese.setSelected(true);
-            break;
-        default:
-            assert false;
-        }
-    }
-
     public void setBeepAfterMove(boolean enable)
     {
         m_itemBeepAfterMove.setSelected(enable);
@@ -396,10 +381,6 @@ class MenuBar
 
     private JMenuItem m_itemPreviousVariation;
 
-    private JMenuItem m_itemRulesChinese;
-
-    private JMenuItem m_itemRulesJapanese;
-
     private JMenuItem m_itemSetupBlack;
 
     private JMenuItem m_itemSetupWhite;
@@ -524,7 +505,6 @@ class MenuBar
         addMenuItem(menu, "Info...", KeyEvent.VK_I, KeyEvent.VK_I,
                     ActionEvent.CTRL_MASK, "game-info");
         menu.add(createBoardSizeMenu());
-        menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
@@ -600,21 +580,6 @@ class MenuBar
         loadRecent();
         updateRecentMenu();
         return m_menuRecent;
-    }
-
-    private JMenu createRulesMenu()
-    {
-        ButtonGroup group = new ButtonGroup();
-        JMenu menu = new JMenu("Rules");
-        menu.setMnemonic(KeyEvent.VK_U);
-        m_itemRulesChinese =
-            addRadioItem(menu, group, "Chinese", KeyEvent.VK_C,
-                         "rules-chinese");
-        m_itemRulesChinese.setSelected(true);
-        m_itemRulesJapanese =
-            addRadioItem(menu, group, "Japanese", KeyEvent.VK_J,
-                         "rules-japanese");
-        return menu;
     }
 
     private JMenu createSettingsMenu()

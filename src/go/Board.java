@@ -61,9 +61,11 @@ class MoveRecord
 
 public class Board
 {
-    public static final int RULES_JAPANESE = 0;
+    public static final int RULES_UNKNOWN = 0;
 
     public static final int RULES_CHINESE = 1;
+
+    public static final int RULES_JAPANESE = 2;
 
     public static final int NUMBER_ROTATIONS = 8;
 
@@ -219,11 +221,6 @@ public class Board
     public int getNumberPoints()
     {
         return m_allPoints.length;
-    }
-
-    public int getRules()
-    {
-        return m_rules;
     }
 
     public Vector getSetupStonesBlack()
@@ -396,10 +393,10 @@ public class Board
         m_dead[p.getX()][p.getY()] = value;
     }
 
-    public Score scoreGet(float komi)
+    public Score scoreGet(float komi, int rules)
     {
         Score s = new Score();
-        s.m_rules = m_rules;        
+        s.m_rules = rules;
         s.m_komi = komi;
         s.m_capturedBlack = m_capturedB;
         s.m_capturedWhite = m_capturedW;
@@ -449,13 +446,10 @@ public class Board
         s.m_resultChinese = areaDiff - komi;
         s.m_resultJapanese =
             s.m_capturedWhite - s.m_capturedBlack + territoryDiff - komi;
-        if (m_rules == RULES_JAPANESE)
+        if (rules == RULES_JAPANESE)
             s.m_result = s.m_resultJapanese;
         else
-        {
-            assert(m_rules == RULES_CHINESE);
             s.m_result = s.m_resultChinese;
-        }
         return s;
     }
 
@@ -484,12 +478,6 @@ public class Board
         else
             assert(false);
         ++m_setupNumber;
-    }
-
-    public void setRules(int rules)
-    {
-        assert(rules == RULES_JAPANESE || rules == RULES_CHINESE);
-        m_rules = rules;
     }
 
     public void undo()
@@ -572,8 +560,6 @@ public class Board
     private int m_capturedW;
 
     private int m_moveNumber;
-
-    private int m_rules = RULES_CHINESE;
 
     private int m_setupNumber;
 

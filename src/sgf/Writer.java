@@ -39,11 +39,12 @@ public class Writer
         String rankBlack = gameInformation.m_blackRank;
         String rankWhite = gameInformation.m_whiteRank;
         String date = gameInformation.m_date;
+        String rules = gameInformation.m_rules;
         int handicap = gameInformation.m_handicap;
         float komi = gameInformation.m_komi;
         printHeader(file, application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, gameComment, result,
-                    komi);
+                    komi, rules);
         printToPlay(board.getToMove());
         printNodes(gameTree.getRoot());        
         m_out.println(")");
@@ -107,27 +108,21 @@ public class Writer
                       "GN[" + getName(file) + "]\n" +
                       "AP[" + appName + "]\n" +
                       "SZ[" + m_board.getSize() + "]");
-        int rules = m_board.getRules();
-        if (rules == go.Board.RULES_JAPANESE)
-            m_out.println("RU[Japanese]");
-        else
-        {
-            assert(rules == go.Board.RULES_CHINESE);
-            m_out.println("RU[GOE]");
-        }
     }
 
     private void printHeader(File file, String application, String version,
                              int handicap, String date, String playerBlack,
                              String playerWhite, String rankBlack,
                              String rankWhite, String gameComment,
-                             String result, float komi)
+                             String result, float komi, String rules)
     {
         printHeader(file, application, version);
         if (handicap > 0)
             m_out.println("HA[" + handicap + "]");
         else
             m_out.println("KM[" + komi + "]");
+        if (rules != null && ! rules.equals(""))
+            m_out.println("RU[" + rules + "]");
         if (result != null && ! result.equals(""))
             m_out.println("RE[" + result + "]");
         if (playerBlack != null)

@@ -42,12 +42,18 @@ public class GameInfoDialog
             getTextFieldContent(gameInfoDialog.m_playerWhite);
         gameInformation.m_whiteRank =
             getTextFieldContent(gameInfoDialog.m_rankWhite);
+        gameInformation.m_rules =
+            getTextFieldContent(gameInfoDialog.m_rules);
         gameInformation.m_result =
             getTextFieldContent(gameInfoDialog.m_result);
         gameInformation.m_date =
             getTextFieldContent(gameInfoDialog.m_date);
         gameInformation.m_komi =
             Float.parseFloat(getTextFieldContent(gameInfoDialog.m_komi));
+        String rules =
+            getTextFieldContent(gameInfoDialog.m_rules).trim().toLowerCase();
+        if (! rules.equals("chinese") && ! rules.equals("japanese"))
+            SimpleDialogs.showWarning(parent, "Unknown rules");
     }
 
     private JPanel m_panel;
@@ -66,6 +72,8 @@ public class GameInfoDialog
 
     private JTextField m_result;
 
+    private JTextField m_rules;
+
     private GameInfoDialog(GameInformation gameInformation)
     {
         m_panel = new JPanel(new GridLayout(0, 2, 0, 0));
@@ -78,6 +86,7 @@ public class GameInfoDialog
         m_rankWhite = createEntry("White rank",
                                   gameInformation.m_whiteRank);
         m_date = createEntry("Date", gameInformation.m_date);
+        m_rules = createEntry("Rules", gameInformation.m_rules);
         m_komi = createEntry("Komi", Float.toString(gameInformation.m_komi));
         m_result = createEntry("Result", gameInformation.m_result);
         setMessage(m_panel);

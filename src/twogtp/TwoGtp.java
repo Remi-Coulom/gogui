@@ -766,7 +766,7 @@ public class TwoGtp
     private void initGame(int size)
     {
         m_board = new Board(size);
-        m_gameTree = new GameTree(size, m_komi.floatValue(), null);
+        m_gameTree = new GameTree(size, m_komi.floatValue(), null, null);
         m_currentNode = m_gameTree.getRoot();
     }
 

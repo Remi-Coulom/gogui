@@ -25,6 +25,8 @@ public class GameInformation
 
     public String m_result;
 
+    public String m_rules;
+
     public String m_whiteRank;
 }
 

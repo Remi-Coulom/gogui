@@ -61,9 +61,9 @@ class GoGui
         m_infoPanel.add(createStatusBar());
 
         m_board = new go.Board(m_boardSize);
-        m_board.setRules(prefs.getInt("rules"));
 
-        m_gameTree = new GameTree(m_boardSize, prefs.getFloat("komi"), null);
+        m_gameTree = new GameTree(m_boardSize, prefs.getFloat("komi"), null,
+                                  prefs.getString("rules"));
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
 
@@ -102,7 +102,6 @@ class GoGui
 
         m_menuBar = new MenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
-        m_menuBar.selectRulesItem(m_board.getRules());
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setRememberSizes(m_rememberWindowSizes);
         setJMenuBar(m_menuBar.getMenuBar());
@@ -226,10 +225,6 @@ class GoGui
             cbPrint();
         else if (command.equals("remember-sizes"))
             cbRememberSizes();
-        else if (command.equals("rules-chinese"))
-            cbRules(go.Board.RULES_CHINESE);
-        else if (command.equals("rules-japanese"))
-            cbRules(go.Board.RULES_JAPANESE);
         else if (command.equals("save"))
             cbSave();
         else if (command.equals("save-position"))
@@ -369,7 +364,7 @@ class GoGui
             m_guiBoard.scoreSetDead(p);
             m_guiBoard.repaint();
             float komi = m_gameTree.getGameInformation().m_komi;
-            m_scoreDialog.showScore(m_board.scoreGet(komi));
+            m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
             return;
         }
         else if (! modifiedSelect)
@@ -503,13 +498,7 @@ class GoGui
             if (opt.contains("size"))
                 prefs.setInt("boardsize", opt.getInteger("size"));
             String rules = opt.getString("rules", "");
-            if (rules.equals("chinese"))
-                prefs.setInt("rules", go.Board.RULES_CHINESE);
-            else if (rules.equals("japanese"))
-                prefs.setInt("rules", go.Board.RULES_JAPANESE);
-            else if (! rules.equals(""))
-                throw new Exception("Invalid rules argument \""
-                                    + rules + "\"");
+            prefs.setString("rules", rules);
             String time = opt.getString("time", null);
             verbose = opt.isSet("verbose");
             Vector arguments = opt.getArguments();
@@ -546,6 +535,7 @@ class GoGui
             if (msg == null)
                 msg = t.getClass().getName();
             SimpleDialogs.showError(null, msg);
+            t.printStackTrace();
             System.exit(-1);
         }
     }
@@ -1031,6 +1021,11 @@ class GoGui
             m_prefs.setFloat("komi", gameInformation.m_komi);
             setKomi(gameInformation.m_komi);
         }
+        if (! gameInformation.m_rules.equals(m_prefs.getString("rules")))
+        {
+            m_prefs.setString("rules", gameInformation.m_rules);
+            setRules();
+        }
     }
 
     private void cbGoto()
@@ -1146,7 +1141,8 @@ class GoGui
         if (! showQuestion("Delete all moves?"))
             return;
         GameInformation gameInformation = m_gameTree.getGameInformation();
-        m_gameTree = new GameTree(m_boardSize, gameInformation.m_komi, null);
+        m_gameTree = new GameTree(m_boardSize, gameInformation.m_komi, null,
+                                  gameInformation.m_rules);
         Node root = m_gameTree.getRoot();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
@@ -1276,13 +1272,6 @@ class GoGui
         m_prefs.setBool("remember-window-sizes", m_rememberWindowSizes);
     }
 
-    private void cbRules(int rules)
-    {
-        m_board.setRules(rules);
-        m_prefs.setInt("rules", rules);
-        setRules();
-    }
-
     private void cbSave()
     {
         saveDialog();
@@ -1354,7 +1343,7 @@ class GoGui
         if (accepted)
         {
             float komi = m_gameTree.getGameInformation().m_komi;
-            setResult(m_board.scoreGet(komi).formatResult());
+            setResult(m_board.scoreGet(komi, getRules()).formatResult());
         }
         clearStatus();
         m_guiBoard.clearAll();
@@ -1375,7 +1364,7 @@ class GoGui
             {
                 // Create a dummy game tree, so that GameTreeDialog shows
                 // a setup node
-                m_gameTree = new GameTree(m_boardSize, 0, null);
+                m_gameTree = new GameTree(m_boardSize, 0, null, null);
                 m_currentNode = m_gameTree.getRoot();
                 m_currentNode.addBlack(m_board.getPoint(0, 0));
                 m_gameTreeViewer.update(m_gameTree, m_currentNode);
@@ -1773,6 +1762,21 @@ class GoGui
         runLengthyCommand(command, callback);
     }
 
+    private int getRules()
+    {
+        int result = go.Board.RULES_UNKNOWN;
+        String rules = m_gameTree.getGameInformation().m_rules;
+        if (rules != null)
+        {
+            rules = rules.trim().toLowerCase();
+            if (rules.equals("japanese"))
+                result = go.Board.RULES_JAPANESE;
+            else if (rules.equals("chinese"))
+                result = go.Board.RULES_CHINESE;
+        }
+        return result;
+    }
+
     private void humanMoved(Move move)
     {
         try
@@ -1833,7 +1837,8 @@ class GoGui
         if (handicap == null)
             showWarning("Handicap stone locations are not\n" +
                         "defined for this board size.");
-        m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), handicap);
+        m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), handicap,
+                                  m_prefs.getString("rules"));
         m_board.newGame();        
         m_guiBoard.updateFromGoBoard();
         resetBoard();
@@ -1898,7 +1903,7 @@ class GoGui
             m_scoreDialog.setLocation(size.width, 0);
         }
         float komi = m_gameTree.getGameInformation().m_komi;
-        m_scoreDialog.showScore(m_board.scoreGet(komi));
+        m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
         showStatus("Please mark dead groups.");
@@ -2210,7 +2215,7 @@ class GoGui
         prefs.setIntDefault("boardsize", 19);
         prefs.setFloatDefault("komi", 0);
         prefs.setBoolDefault("remember-window-sizes", true);
-        prefs.setIntDefault("rules", go.Board.RULES_JAPANESE);
+        prefs.setStringDefault("rules", "Chinese");
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);
         prefs.setBoolDefault("show-gametree", false);
@@ -2229,11 +2234,13 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
+        int rules = getRules();
+        if (rules == go.Board.RULES_UNKNOWN)
+            return;
         if (! m_commandThread.isCommandSupported("scoring_system"))
             return;
         try
         {
-            int rules = m_board.getRules();
             String s =
                 (rules == go.Board.RULES_JAPANESE ? "territory" : "area");
             m_commandThread.sendCommand("scoring_system " + s);
@@ -2333,7 +2340,8 @@ class GoGui
         go.Color toMove = m_board.getToMove();
         m_boardSize = size;
         m_board.newGame();        
-        m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), null);
+        m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), null,
+                                  m_prefs.getString("rules"));
         m_currentNode = m_gameTree.getRoot();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
