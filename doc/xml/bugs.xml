@@ -31,11 +31,9 @@ select from the popup menu only using the mouse.
 <para>
 Java uses a low maximum memory heap size by default.
 It can be increased by using the "-Xmx" option, e.g. for 512MB:
-<blockquote>
-<simpara>
+<programlisting>
 <userinput>java -Xmx512M -jar gogui.jar</userinput>
-</simpara>
-</blockquote>  
+</programlisting>
 Don't use more memory than there is real memory on the machine,
 because using swap space will make the program unusable slow.
 </para>

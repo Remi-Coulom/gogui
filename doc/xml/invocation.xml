@@ -4,11 +4,9 @@
 
 <para>
 <application>GoGui</application> can be invoked with the command:
-<blockquote>
-<simpara>
+<programlisting>
 <userinput>java -jar gogui.jar [options] [file]</userinput>
-</simpara>
-</blockquote>  
+</programlisting>  
 The command line for executing the actual Go program can be given
 with the <option>-program</option> option, otherwise GoGui will start with
 the Go program attached in the previous run or no Go program if there was
@@ -37,11 +35,9 @@ relative to the <filename class="directory">bin</filename> directory.
 You can add the <filename>bin</filename> directory of GoGui to your
 <userinput>PATH</userinput> environment variable.
 The invocation is then simply:
-<blockquote>
-<simpara>
+<programlisting>
 <userinput>gogui [options] [file]</userinput>
-</simpara>
-</blockquote>  
+</programlisting>
 To register <application>GoGui</application> as a handler
 for <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files,
 you can configure a new file association for type

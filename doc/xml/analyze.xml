@@ -16,13 +16,11 @@ If none exists, a default file is created.
 There is one line per command in the format:
 </para>
   
-<blockquote>
-<simpara>
+<programlisting>
 <userinput>
 type/label/command[/section[/scale]]
 </userinput>
-</simpara>
-</blockquote>
+</programlisting>
   
 <section>
 <title>Types</title>
