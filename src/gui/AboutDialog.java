@@ -67,12 +67,12 @@ public class AboutDialog
             programPanel =
                 createPanel("<p align=\"center\"><b>" + fullName
                             + "</b></p>" +
+                            "<p align=\"center\">GTP protocol version "
+                            + protocolVersion + "</p>" +
                             "<p align=\"center\">Command:</p>" +
                             "<p align=\"center\" width=\"" + width + "\">"
                             + "<small><tt>" + command
-                            + "</tt></small></p>" + "<p align=\"center\">" +
-                            "GTP protocol version " + protocolVersion +
-                            "</p>");
+                            + "</tt></small></p>");
         }
         else
             programPanel = new JPanel();
