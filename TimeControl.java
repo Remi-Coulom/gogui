@@ -1,13 +1,13 @@
-//=============================================================================
+//-----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 import java.text.*;
 import java.util.*;
 import board.Color;
 
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 class TimeControl
 {
@@ -28,22 +28,8 @@ class TimeControl
         reset();
     }
 
-    public void abortMove()
-    {
-        assert(m_toMove != Color.EMPTY);
-        m_toMove = Color.EMPTY;
-    }
-
-    public void disable()
-    {
-        m_disabled = true;
-        m_toMove = Color.EMPTY;
-    }
-
     public String getTimeString(Color c)
     {
-        if (m_disabled)
-            return null;
         TimeRecord timeRecord = getRecord(c);
         long time = timeRecord.m_time;
         if (m_toMove == c)
@@ -107,14 +93,8 @@ class TimeControl
             return (timeRecord.m_byoyomiExceeded);
     }
 
-    public boolean isDisabled()
-    {
-        return m_disabled;
-    }
-
     public void reset()
     {
-        m_disabled = false;
         reset(Color.BLACK);
         reset(Color.WHITE);
         m_toMove = Color.EMPTY;
@@ -167,14 +147,16 @@ class TimeControl
 
     public void startMove(Color c)
     {
-        assert(m_toMove == Color.EMPTY);
+        if  (m_toMove != Color.EMPTY)
+            stopMove();
         m_toMove = c;
         m_startMoveTime = new Date().getTime();
     }
 
     public void stopMove()
     {
-        assert(m_toMove != Color.EMPTY);
+        if (m_toMove == Color.EMPTY)
+            return;
         TimeRecord timeRecord = getRecord(m_toMove);
         long time = new Date().getTime() - m_startMoveTime;
         timeRecord.m_time += time;
@@ -217,7 +199,6 @@ class TimeControl
 
     private boolean m_loseOnTime;
     private boolean m_useByoyomi;
-    private boolean m_disabled;
     private int m_byoyomiMoves;
     private long m_startMoveTime;
     private long m_preByoyomi;
@@ -245,4 +226,4 @@ class TimeControl
     }
 }
 
-//=============================================================================
+//-----------------------------------------------------------------------------

@@ -371,7 +371,6 @@ class GoGui
                                   String title, double scale)
     {
         initAnalyzeCommand(type, label, command, title, scale);
-        m_timeControl.disable();
         if (m_commandInProgress)
             return;
         if (m_analyzeCmd.indexOf("%p") < 0)
@@ -617,7 +616,6 @@ class GoGui
                 m_board.undo();
             }
             computerNone();
-            m_timeControl.disable();
             boardChanged();
         }
         catch (Gtp.Error e)
@@ -665,8 +663,6 @@ class GoGui
     private void cbComputerBoth()
     {
         computerBoth();
-        if (! m_timeControl.isDisabled())
-            m_timeControl.abortMove();
         checkComputerMove();
     }
 
@@ -758,7 +754,6 @@ class GoGui
         File file = SimpleDialogs.showOpenSgf(this);
         if (file == null)
             return;
-        m_timeControl.disable();
         loadFileBegin(file, -1);
     }
 
@@ -821,7 +816,6 @@ class GoGui
 
     private void cbPlay()
     {
-        m_timeControl.disable();
         if (m_board.getToMove() == board.Color.BLACK)
         {
             m_menuBars.setComputerBlack();
@@ -927,7 +921,6 @@ class GoGui
         pack();
         showStatus("Setup black.");
         m_setupColor = board.Color.BLACK;
-        m_timeControl.disable();
     }
 
     private void cbSetupBlack()
@@ -983,7 +976,6 @@ class GoGui
             }
             computerNone();
             boardChanged();
-            m_timeControl.disable();
         }
         catch (Gtp.Error e)
         {
@@ -1030,8 +1022,7 @@ class GoGui
             if (computerToMove())
                 generateMove();
         }
-        if (! m_timeControl.isDisabled())
-            m_timeControl.startMove(m_board.getToMove());
+        m_timeControl.startMove(m_board.getToMove());
     }
 
     private void clearStatus()
@@ -1094,8 +1085,7 @@ class GoGui
             board.Color toMove = m_board.getToMove();
             Move m = new Move(p, toMove);
             m_board.play(m);
-            if (! m_timeControl.isDisabled())
-                m_timeControl.stopMove();
+            m_timeControl.stopMove();
             boardChanged();
         }
         catch (Gtp.Error e)
@@ -1185,7 +1175,6 @@ class GoGui
                 m_board.play(m);
             }
             computerNone();
-            m_timeControl.disable();
             boardChanged();
         }
         catch (Gtp.Error e)
@@ -1216,15 +1205,13 @@ class GoGui
             if (m_commandThread != null)
                 m_commandThread.sendCommandPlay(m);
             m_board.play(m);
-            if (! m_timeControl.isDisabled())
+            m_timeControl.stopMove();
+            if (m_board.getMoveNumber() > 0
+                && m_timeControl.lostOnTime(m.getColor())
+                && ! m_lostOnTimeShown)
             {
-                m_timeControl.stopMove();
-                if (m_timeControl.lostOnTime(m.getColor())
-                    && ! m_lostOnTimeShown)
-                {
-                    showInfo(m.getColor().toString() + " lost on time.");
-                    m_lostOnTimeShown = true;
-                }
+                showInfo(m.getColor().toString() + " lost on time.");
+                m_lostOnTimeShown = true;
             }
             boardChanged();
         }
@@ -1289,7 +1276,6 @@ class GoGui
 
     private void loadFileBegin(File file, int move)
     {
-        m_timeControl.disable();
         try
         {
             sgf.Reader reader = new sgf.Reader(file);
@@ -1400,7 +1386,6 @@ class GoGui
         }
         for (int i = 0; i < n; ++i)
             m_board.undo();
-        m_timeControl.disable();
     }
 
     private void newGame(int size, float komi) throws Gtp.Error
@@ -1428,7 +1413,6 @@ class GoGui
         m_score = null;
         if (file != null)
         {
-            m_timeControl.disable();
             loadFileBegin(new File(m_file), move);
         }
         else
