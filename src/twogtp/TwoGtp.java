@@ -257,6 +257,10 @@ public class TwoGtp
 
     private int m_size;
 
+    private double m_cpuTimeBlack;
+
+    private double m_cpuTimeWhite;
+
     private Board m_board;
 
     private String m_blackName;
@@ -540,21 +544,43 @@ public class TwoGtp
         return buffer.toString();
     }
 
+    private double getCpuTime(Gtp gtp)
+    {
+        double result = 0;
+        try
+        {
+            if (gtp.isCpuTimeSupported())
+                result = gtp.getCpuTime();
+        }
+        catch (Gtp.Error e)
+        {
+        }
+        return result;
+    }
+
     private void handleEndOfGame(boolean error, String errorMessage)
     {
         try
         {
             String resultBlack = getResult(m_black);
             String resultWhite = getResult(m_white);
+            double cpuTimeBlack = getCpuTime(m_black) - m_cpuTimeBlack;
+            m_cpuTimeBlack = cpuTimeBlack;
+            double cpuTimeWhite = getCpuTime(m_white) - m_cpuTimeWhite;
+            m_cpuTimeWhite = cpuTimeWhite;
             if (isAlternated())
             {
                 resultBlack = inverseResult(resultBlack);
                 resultWhite = inverseResult(resultWhite);
+                double tmp = cpuTimeBlack;
+                cpuTimeBlack = cpuTimeWhite;
+                cpuTimeWhite = tmp;
             }
             Vector moves = getMoves();
             String duplicate = checkDuplicate(m_board, moves, m_games);
             saveResult(resultBlack, resultWhite, isAlternated(), duplicate,
-                       moves.size(), error, errorMessage);
+                       moves.size(), error, errorMessage, cpuTimeBlack,
+                       cpuTimeWhite);
             saveGame(resultBlack, resultWhite);
             ++m_gameIndex;
             m_games.add(moves);
@@ -629,6 +655,8 @@ public class TwoGtp
 
     private boolean newGame(int size, StringBuffer response)
     {
+        m_cpuTimeBlack = getCpuTime(m_black);
+        m_cpuTimeWhite = getCpuTime(m_white);
         try
         {
             m_black.sendCommandBoardsize(size);
@@ -755,7 +783,8 @@ public class TwoGtp
     private void saveResult(String resultBlack, String resultWhite,
                             boolean alternated, String duplicate,
                             int numberMoves, boolean error,
-                            String errorMessage)
+                            String errorMessage, double cpuTimeBlack,
+                            double cpuTimeWhite)
          throws FileNotFoundException
     {
         if (m_sgfFile.equals(""))
@@ -765,14 +794,19 @@ public class TwoGtp
         {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             PrintStream out = new PrintStream(fileOutputStream);
-            out.println("# Game\tResB\tResW\tAlt\tDup\tLen\tErr\tErrMsg");
+            out.println("# Game\tResB\tResW\tAlt\tDup\tLen\tCpuB\tCpuW\t" +
+                        "Err\tErrMsg");
             out.close();
         }
+        NumberFormat format = NumberFormat.getInstance(new Locale("C"));
+        format.setMaximumFractionDigits(1);
         FileOutputStream fileOutputStream = new FileOutputStream(file, true);
         PrintStream out = new PrintStream(fileOutputStream);
         out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t" +
                     resultWhite + "\t" + (alternated ? "1" : "0" ) + "\t" +
                     duplicate + "\t" + numberMoves + "\t" +
+                    format.format(cpuTimeBlack) + "\t" +
+                    format.format(cpuTimeWhite) + "\t" +
                     (error ? "1" : "0" ) + "\t" + errorMessage);
         out.close();
     }

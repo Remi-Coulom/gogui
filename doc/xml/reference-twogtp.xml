@@ -86,6 +86,14 @@
       used by <application>GoGui</application> to interrupt commands is
       forwarded to both programs.
     </para>
+
+    <para>
+      If the option <option>-sgffile</option> is used, the games are
+      saved after they are finished and a result text file in table format
+      is created with some statistics.
+      If the program(s) support the GTP command <userinput>cputime</userinput>
+      these statistics include CPU times.
+    </para>
   </refsection>
 
   <refsection>

@@ -124,6 +124,18 @@ public class Gtp
         return command;
     }
 
+    public double getCpuTime() throws Error
+    {
+        try
+        {
+            return Double.parseDouble(sendCommand("cputime"));
+        }
+        catch (NumberFormatException e)
+        {
+            throw new Error("Invalid response to cputime command");
+        }
+    }
+
     /** Get fulle response including status and ID and last command. */
     public String getFullResponse()
     {
@@ -152,6 +164,11 @@ public class Gtp
             if (m_supportedCommands[i].equals(command))
                 return true;
         return false;
+    }
+
+    public boolean isCpuTimeSupported()
+    {
+        return isCommandSupported("cputime");
     }
 
     public boolean isProgramDead()
