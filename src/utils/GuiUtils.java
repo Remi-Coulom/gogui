@@ -34,6 +34,12 @@ public class GuiUtils
         return m_smallEmptyBorder;
     }
 
+    public static Box.Filler createFiller()
+    {
+        Dimension dim = new Dimension(PAD, PAD);
+        return new Box.Filler(dim, dim, dim);
+    }
+
     public static int getDefaultMonoFontSize()
     {
         Font font = UIManager.getFont("TextArea.font");        
