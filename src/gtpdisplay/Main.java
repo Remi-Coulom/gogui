@@ -28,8 +28,7 @@ public class Main
                 "help",
                 "size:",
                 "verbose",
-                "version",
-                "version2"
+                "version"
             };
             Options opt = new Options(args, options);
             opt.handleConfigOption();
@@ -44,8 +43,7 @@ public class Main
                 System.exit(0);
             }
             boolean verbose = opt.isSet("verbose");
-            boolean version2 = opt.isSet("version2");
-            int size = opt.getInteger("size", -1);
+            int size = opt.getInteger("size", 19);
             Vector arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
@@ -54,7 +52,7 @@ public class Main
             }
             String program = (String)arguments.get(0);
             GtpDisplay gtpDisplay =
-                new GtpDisplay(System.in, System.out, program, verbose);
+                new GtpDisplay(System.in, System.out, program, size, verbose);
             gtpDisplay.mainLoop();
             gtpDisplay.close();
         }

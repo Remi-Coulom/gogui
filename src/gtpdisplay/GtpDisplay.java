@@ -23,7 +23,7 @@ public class GtpDisplay
     extends GtpServer
 {
     public GtpDisplay(InputStream in, OutputStream out, String program,
-                      boolean verbose)
+                      int size, boolean verbose)
         throws Exception
     {
         super(in, out, null);
@@ -32,7 +32,7 @@ public class GtpDisplay
         m_gtp = new Gtp(program, verbose, null);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
-        m_size = 19;
+        m_size = size;
         m_board = new go.Board(m_size);
         m_frame = new JFrame();
         WindowAdapter windowAdapter = new WindowAdapter()
