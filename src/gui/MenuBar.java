@@ -473,7 +473,7 @@ class MenuBar
     private JMenu createFileMenu()
     {
         JMenu menu = createMenu("File", KeyEvent.VK_F);
-        addMenuItem(menu, "New", KeyEvent.VK_N, KeyEvent.VK_N,
+        addMenuItem(menu, "New Game", KeyEvent.VK_N, KeyEvent.VK_N,
                     m_shortcutKeyMask, "new-game");
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     m_shortcutKeyMask, "open");
