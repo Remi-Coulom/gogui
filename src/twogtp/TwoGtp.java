@@ -36,6 +36,14 @@ public class TwoGtp
         m_board = new Board(size < 1 ? 19 : size);
     }
 
+    public void close()
+    {
+        m_black.close();
+        m_white.close();
+        m_black.waitForExit();
+        m_white.waitForExit();
+    }
+
     public boolean handleCommand(String cmdLine, StringBuffer response)
     {
         String[] cmdArray = StringUtils.getCmdArray(cmdLine);
@@ -151,6 +159,7 @@ public class TwoGtp
                 twoGtp.autoPlay();
             else
                 twoGtp.mainLoop();
+            twoGtp.close();
         }
         catch (Throwable t)
         {
@@ -204,11 +213,8 @@ public class TwoGtp
             error = true;
         String errorMsg = null;
         if (error)
-            errorMsg = response.toString();
-        response.setLength(0);
-        sendBoth("quit", response, false, false);
-        if (error)
-            throw new Exception(errorMsg);
+            throw new Exception(response.toString());
+        close();
     }
 
     private boolean boardsize(String[] cmdArray, StringBuffer response)

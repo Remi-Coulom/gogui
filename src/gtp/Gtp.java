@@ -65,6 +65,11 @@ public class Gtp
         stdErrThread.start();
     }
 
+    public void close()
+    {
+        m_out.close();
+    }
+
     public String getAnswer()
     {
         return m_answer;

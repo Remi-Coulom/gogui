@@ -188,10 +188,7 @@ public abstract class GtpServer
         {
             Command command = readThread.getCommand();
             if (readThread.endOfFile())
-            {
-                System.err.println("XXX eof");
                 return;
-            }
             sendResponse(command);
             if (command.isQuit())
                 return;
