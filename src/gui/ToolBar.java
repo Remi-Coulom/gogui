@@ -81,6 +81,7 @@ class ToolBar
 
     public void enableAll(boolean enable, go.Board board)
     {
+        m_buttonGtpShell.setEnabled(true);
         m_buttonAnalyze.setEnabled(enable);
         m_buttonBeginning.setEnabled(enable);
         m_buttonBackward.setEnabled(enable);
