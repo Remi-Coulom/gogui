@@ -1368,7 +1368,7 @@ class GoGui
 
     private void cbShowAbout()
     {
-        AboutDialog.show(this);
+        AboutDialog.show(this, m_name, m_version);
     }
 
     private void cbShowCursor()
