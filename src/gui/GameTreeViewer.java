@@ -349,6 +349,13 @@ class GameTreePanel
         gameNode.repaint();
     }
 
+    public void scrollToCurrent()
+    {
+        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeWidth,
+                                          m_currentNodeY,
+                                          5 * m_nodeWidth, 3 * m_nodeWidth));
+    }
+
     public void setLabelMode(int mode)
     {
         switch (mode)
@@ -685,14 +692,7 @@ class GameTreePanel
         scrollRectToVisible(rectangle);
     }
 
-    private void scrollToCurrent()
-    {
-        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeWidth,
-                                          m_currentNodeY,
-                                          5 * m_nodeWidth, 3 * m_nodeWidth));
-    }
-
-    public void showPopup(int x, int y, GameNode gameNode)
+    private void showPopup(int x, int y, GameNode gameNode)
     {
         Node node = gameNode.getNode();
         m_popupNode = node;
@@ -869,6 +869,8 @@ public class GameTreeViewer
             setVisible(false);
         else if (command.equals("gogui"))
             m_listener.toTop();
+        else if (command.equals("goto-current"))
+            m_panel.scrollToCurrent();
         else if (command.equals("gtp-shell"))
             m_listener.cbGtpShell();
         else if (command.equals("label-move"))
@@ -994,13 +996,13 @@ public class GameTreeViewer
     {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuWindows());
-        menuBar.add(createMenuSettings(labelMode, sizeMode));
+        menuBar.add(createMenuView(labelMode, sizeMode));
         setJMenuBar(menuBar);
     }
 
-    private JMenu createMenuSettings(int labelMode, int sizeMode)
+    private JMenu createMenuView(int labelMode, int sizeMode)
     {
-        JMenu menu = createMenu("Settings", KeyEvent.VK_S);
+        JMenu menu = createMenu("View", KeyEvent.VK_V);
         JMenu menuLabel = createMenu("Labels", KeyEvent.VK_L);
         ButtonGroup group = new ButtonGroup();
         m_itemLabelNumber = addRadioItem(menuLabel, group, "Move Number",
@@ -1052,6 +1054,8 @@ public class GameTreeViewer
             break;
         }
         menu.add(menuSize);
+        menu.addSeparator();
+        addMenuItem(menu, "Go to Current", KeyEvent.VK_G, "goto-current");
         return menu;
     }
 
