@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Allow colors black and white in analyze commands of type cboard.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpAdapter: bugfixes, new option -emuloadsgf.
 </simpara>
 </listitem>

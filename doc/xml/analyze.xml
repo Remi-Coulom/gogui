@@ -51,9 +51,9 @@ not displayed.
 <simpara>
 The response of the command is a board of strings with color names.
 They will be displayed as background colors for the fields.
-Valid color names are blue, cyan, green, gray, magenta,
-pink, red, and yellow. Unknown names or the special string ""
-are ignored.
+Valid color names are black, blue, cyan, green, gray, magenta,
+pink, red, white and yellow.
+Unknown names or the special string "" are ignored.
 </simpara>
 </listitem>
 </varlistentry>

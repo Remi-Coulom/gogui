@@ -495,6 +495,10 @@ public class Board
                 c = java.awt.Color.red;
             else if (s.equals("yellow"))
                 c = java.awt.Color.yellow;
+            else if (s.equals("black"))
+                c = java.awt.Color.black;
+            else if (s.equals("white"))
+                c = java.awt.Color.white;
             setFieldBackground(p, c);
         }
     }
