@@ -19,7 +19,18 @@ import utils.*;
 
 //-----------------------------------------------------------------------------
 
-class AnalyzeTextOutput
+class TextPane
+    extends JTextPane
+{
+    public boolean getScrollableTracksViewportWidth()
+    {
+        return false;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+public class AnalyzeTextOutput
     extends JDialog
 {
     public AnalyzeTextOutput(Frame owner, String title, String response,
@@ -33,7 +44,7 @@ class AnalyzeTextOutput
         contentPane.add(panel, BorderLayout.CENTER);
         JLabel label = new JLabel(title);
         panel.add(label, BorderLayout.NORTH);
-        m_textPane = new JTextPane();
+        m_textPane = new TextPane();
         StyledDocument doc = m_textPane.getStyledDocument();
         try
         {
