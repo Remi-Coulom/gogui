@@ -284,6 +284,7 @@ class MenuBar
         m_itemNextVariation.setEnabled(hasVariation);
         m_itemPreviousVariation.setEnabled(hasVariation);
         m_itemTruncate.setEnabled(hasFather);
+        m_itemMakeMainVar.setEnabled(! node.isInMainVariation());
     }
 
     private boolean m_isComputerDisabled;

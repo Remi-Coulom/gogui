@@ -262,6 +262,18 @@ public class Node
         return false;
     }
 
+    public boolean isInMainVariation()
+    {
+        Node node = this;
+        while (node.m_father != null)
+        {
+            if (node.m_father.getChild(0) != node)
+                return false;
+            node = node.m_father;
+        }
+        return true;
+    }
+
     public void makeMainVariation()
     {
         Node node = this;
