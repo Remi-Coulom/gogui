@@ -230,7 +230,29 @@ class ReadThread
         {
             while (true)
             {
-                int b = m_in.read();
+                int b = 0;
+                while (true)
+                {
+                    java.util.Timer timer = null;
+                    if (m_state == STATE_WAIT_OK)
+                    {
+                        timer = new java.util.Timer();
+                        timer.schedule(new Interrupt(Thread.currentThread()),
+                                       10000);
+                    }
+                    try
+                    {
+                        b = m_in.read();
+                        break;
+                    }
+                    catch (InterruptedIOException e)
+                    {
+                        assert(m_state == STATE_WAIT_OK);
+                        writeOutputBuffer();
+                    }
+                    if (timer != null)
+                        timer.cancel();
+                }
                 if (b < 0)
                 {
                     log("input stream was closed");
@@ -372,6 +394,21 @@ class ReadThread
                 System.err.println("Interrupted.");
             }
         }
+    }
+
+    private static class Interrupt extends TimerTask
+    {
+        public Interrupt(Thread thread)
+        {
+            m_thread = thread;
+        }
+
+        public void run()
+        {
+            m_thread.interrupt();
+        }
+
+        private Thread m_thread;
     }
 
     private static final int QUERY_HANDICAP = 8;
