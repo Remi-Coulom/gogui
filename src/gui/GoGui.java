@@ -1233,7 +1233,7 @@ class GoGui
 
     private boolean checkModifyGame(Move move)
     {
-        if (! m_board.willModifyGame(move))
+        if (! m_isModified || ! m_board.willModifyGame(move))
             return true;
         return checkSaveGame();
     }
