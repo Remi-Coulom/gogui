@@ -27,7 +27,8 @@ class BoardLabel
 
     public void paintComponent(Graphics graphics)
     {
-        if (getSize().height < getFont().getSize())
+        int stringWidth = graphics.getFontMetrics().stringWidth("XX");
+        if (getSize().width < stringWidth)
             return;
         super.paintComponent(graphics);
     }
