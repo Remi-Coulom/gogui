@@ -2599,7 +2599,8 @@ class GoGui
                 m_gameTreeViewer.update(m_currentNode);
         }
         m_comment.setNode(m_currentNode);
-        if (m_showLastMove && checkCurrentNodeExecuted())
+        if (m_showLastMove &&
+            (m_commandThread == null || isCurrentNodeExecuted()))
         {
             Move move = m_currentNode.getMove();
             if (move != null)
