@@ -54,6 +54,9 @@ The answer of the command is a board of floating point
 numbers.
 They will be displayed as black (positive) and white (negative)
 squares on the board.
+The maximum size of a square is such that the corner would touch
+the edge of a stone on that field and the edge length of the
+square is proportional to the floating point number.
 The numbers are expected to be between -1 and 1.
 Use the <userinput>scale</userinput> option, if they are not.
 </listitem>
