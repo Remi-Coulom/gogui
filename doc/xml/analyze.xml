@@ -1,0 +1,113 @@
+<chapter>
+  <title>Analyze commands</title>
+  
+  <para>
+    GoGui allows to define an analyze command.
+    The analyze command is sent to the Go program after
+    each change on the board and its output is displayed
+    graphically on the board.
+  </para>
+  
+  <para>
+    The possible analyze commands are defined in the
+    configuration file <userinput>~/.gogui/analyze-commands</userinput>.
+    There is one line per command in the format:
+  </para>
+  
+  <blockquote>
+    <userinput>
+      type/label/command[/section[/scale]]
+    </userinput>
+  </blockquote>
+  
+  <section>
+    <title>Types</title>
+    
+    The command type can be
+    
+    <variablelist>
+      <varlistentry>
+	<term><userinput>cboard</userinput></term>
+	<listitem>
+	  The answer of the command is a board of strings with color names.
+	  They will be displayed as background colors for the fields.
+	  Valid color names are blue, cyan, green, gray, magenta,
+	  pink, red, and yellow. Unknown names or the special string ""
+	  are ignored.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><userinput>dboard</userinput></term>
+	<listitem>
+	  The answer of the command is a board of floating point
+	  numbers.
+	  They will be displayed as red (positive) and green (negative)
+	  polygons on the board.
+	  The numbers are expected to be between -1 and 1.
+	  Use the <userinput>scale</userinput> option, if they are not.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><userinput>none</userinput></term>
+	<listitem>
+	  The output is not displayed.
+	</listitem>
+	<term><userinput>plist</userinput></term>
+	<listitem>
+	  The answer of the command is a list of points.
+	  All points will be marked on the board.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><userinput>sboard</userinput></term>
+	<listitem>
+	  The answer of the command is a board of strings.
+	  A string should not be longer than 3-4 characters
+	  to fit on a point on the board and may not contain white
+	  spaces. The special string "" is used for no string
+	  on a point.
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><userinput>string</userinput></term>
+	<listitem>
+	  The answer of the command is a text.
+	  If the text has only a single line, it will be displayed
+	  in the status line. If it has multiple lines,
+	  a window will popup.
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </section>
+    
+  <section>
+    <title>Label</title>
+    
+    The label to use for the menu.
+  </section>
+    
+  <section>
+    <title>Command</title>
+    
+    The command to send to the Go program.
+    The wildcard <userinput>%m</userinput>
+    will be replaced by the color to move. If the command contains
+    the wildcard <userinput>%p</userinput>, GoGui will ask the user to select
+    point on the board.
+  </section>
+    
+  <section>
+    <title>Section</title>
+    
+    The answer to the command is searched first until a single line
+    containing the section name followed by a colon is found.
+  </section>
+    
+  <section>
+    <title>Scale</title>
+    
+    If the type is <userinput>dboard</userinput>, the numbers are scaled by
+    this factor.
+  </section>
+    
+</chapter>

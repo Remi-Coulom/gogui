@@ -1,40 +1,32 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
+  <chapter>
     <title>Interrupting commands</title>
-  </head>
 
-  <body>
-    <h1>Interrupting commands</h1>
-
-    <p>
+    <para>
       Commands can be interrupted, if the Go program supports it.
-    </p>
+    </para>
     
-    <p>
+    <para>
       There are two ways of sending the interrupt signal to the program:
-    </p>
-    <ol>
-      <li>
+    </para>
+    <orderedlist>
+      <listitem>
 	If the program can handle INT signals, it indicates this
-	by implementing the <code>gogui_sigint</code> command
+	by implementing the <userinput>gogui_sigint</userinput> command
 	and returning its process ID.
 	GoGui will then send an INT signal to the process if the user
 	presses the interrupt button
 	(actually GoGui invokes the shell command
-	<code>kill&nbsp;-INT&nbsp;&lt;pid&gt;</code>,
+	<userinput>kill -INT &lt;pid&gt;</userinput>,
 	so this will work only on UNIX systems).
-      </li>
-      <li>
-	If the program does not implement <code>gogui_sigint</code>,
-	GoGui will send a special comment line (<code>#&nbsp;interrupt</code>)
-	to the program.
+      </listitem>
+      <listitem>
+	If the program does not implement <userinput>gogui_sigint</userinput>,
+	GoGui will send a special comment line
+	(<userinput># interrupt</userinput>) to the program.
 	If the program reads the GTP input stream
 	while processing a command, it can interrupt the command.
 	Programs not aware of this convention will simply ignore
 	the comment line.
-      </li>
-    </ol>
-  </body>
-</html>
-
+      </listitem>
+    </orderedlist>
+  </chapter>

@@ -1,0 +1,99 @@
+<chapter>
+  
+  <title>Compatibilty</title>
+  
+  <para>
+    GoGui will work with all programs that can understand
+    the most basic commands of version 1 or 2 of the
+    <ulink url="http://www.lysator.liu.se/~gunnar/gtp/">
+      Go Text Protocol</ulink>.
+  </para>
+  
+  <section>
+    <title>Required commands</title>
+
+    <para>
+      It is required that the Go program can handle the following
+      commands:
+    </para>
+    
+    <itemizedlist>
+      <listitem>
+	<userinput>boardsize</userinput>
+	(<userinput>boardsize</userinput>,
+	<userinput>clear_board</userinput>)
+      </listitem>
+      <listitem>
+	<userinput>black</userinput>,
+	<userinput>white</userinput>
+	(<userinput>play</userinput>)
+      </listitem>
+      <listitem>
+	<userinput>genmove_black</userinput>,
+	<userinput>genmove_white</userinput>
+	(<userinput>genmove</userinput>)
+      </listitem>
+      <listitem>
+	<userinput>name</userinput>
+      </listitem>
+    </itemizedlist>
+    
+    <para>
+      The commands in braces are used if the program supports
+      the <userinput>protocol_version</userinput> command and responds with 2.
+    </para>
+    
+    <para>
+      In particular the Go program is not required to support
+      the <userinput>loadsgf</userinput> command.
+      GoGui translates all moves, setup and handicap stones into a series of
+      <userinput>black</userinput>, <userinput>white</userinput>
+      (<userinput>play</userinput>) commands.
+    </para>
+  </section>
+  
+  <section>
+    <title>Optional commands</title>
+    
+    <para>
+      The following other commands are used by GoGui.
+    </para>
+    
+    <itemizedlist>
+      <listitem>
+	<userinput>help</userinput>
+	(<userinput>list_commands</userinput>)
+      </listitem>
+      <listitem>
+	<userinput>komi</userinput>
+      </listitem>
+      <listitem>
+	<userinput>quit</userinput>
+      </listitem>
+      <listitem>
+	<userinput>scoring_system</userinput>
+      </listitem>
+      <listitem>
+	<userinput>undo</userinput>
+      </listitem>
+      <listitem>
+	<userinput>version</userinput>
+      </listitem>
+    </itemizedlist>
+    
+    <para>
+      If the Go program does not understand them
+      you will still be able to play games,
+      but you cannot use all of the functionality of GoGui.
+    </para>
+    
+    <para>
+      The command <userinput>scoring_system</userinput>
+      (from an early draft of GTP
+      version 2 ) is used for setting Japanese or Chinese rules,
+      if the program supports it.
+      Otherwise the rule settings are quietly ignored.
+    </para>
+  </section>
+  
+</chapter>

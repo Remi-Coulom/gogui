@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE book [
+ <!ENTITY readme SYSTEM "readme.xml">
+ <!ENTITY compatibility SYSTEM "compatibility.xml">
+ <!ENTITY interrupt SYSTEM "interrupt.xml">
+ <!ENTITY analyze SYSTEM "analyze.xml">
+   ]>
+<book>
+  <title>GoGui Documentation</title>
+  
+  &readme;
+  &compatibility;
+  &interrupt;
+  &analyze;
+  
+</book>

@@ -1,9 +1,3 @@
-DOCS= \
-  analyze.html \
-  compatibility.html \
-  index.html \
-  interrupt.html
-
 ICONS= \
   icons/NewBoard.png \
   org/javalobby/icons/20x20png/Computer.png \
@@ -32,27 +26,25 @@ PACKAGES= \
   sgf \
   utils
 
-release:
-	test -d build || mkdir build
+release: doc
+	mkdir -p build
 	javac -O -deprecation -sourcepath . -source 1.4 -d build @files.txt
-	test -d build/doc || mkdir build/doc
-	for d in $(DOCS); do cp doc/$$d build/doc/$$d; done 
+	mkdir -p build/doc
+	cp -R doc/html/* build/doc
 	test -d build/icons || mkdir -p build/icons
-	test -d build/org/javalobby/icons/20x20png \
-	|| mkdir -p build/org/javalobby/icons/20x20png
+	mkdir -p build/org/javalobby/icons/20x20png
 	for i in $(ICONS); do cp $$i build/$$i; done 
 	jar cmf manifest-addition.txt gogui.jar -C build .
 
 # Run with 'jdb -classpath build_dbg -sourcepath src GoGui'
-debug:
-	test -d build_dbg || mkdir build_dbg
+debug: doc
+	mkdir -p build_dbg
 	javac -g -deprecation -sourcepath . -source 1.4 -d build_dbg @files.txt
-	test -d build_dbg/doc || mkdir build_dbg/doc
-	test -d build_dbg/icons || mkdir -p build_dbg/icons
-	test -d build_dbg/org/javalobby/icons/20x20png \
-	|| mkdir -p build_dbg/org/javalobby/icons/20x20png
+	mkdir -p build_dbg/doc
+	mkdir -p build_dbg/icons
+	mkdir -p build_dbg/org/javalobby/icons/20x20png
 	for i in $(ICONS); do cp $$i build_dbg/$$i; done 
-	for d in $(DOCS); do cp doc/$$d build_dbg/doc/$$d; done 
+	cp -R doc/html/* build_dbg/doc
 
 .PHONY: gmptogtp
 
@@ -61,10 +53,13 @@ gmptogtp:
 	javac -O -deprecation -sourcepath . -source 1.4 -d build-gmptogtp @files-gmptogtp.txt
 	jar cmf manifest-addition.txt gmptogtp.jar -C build-gmptogtp .
 
-.PHONY: srcdoc clean changelog tags
+.PHONY: srcdoc clean doc changelog tags
 
 clean:
 	-rm -r build build_dbg
+
+doc:
+	$(MAKE) -C doc
 
 docsrc:
 	javadoc -sourcepath src -d docsrc -source 1.4 $(PACKAGES)
