@@ -88,8 +88,14 @@ class Help
             }
             else
             {
-                loadURL(e.getURL());
-                appendHistory(e.getURL());
+                URL url = e.getURL();
+                if (url.getProtocol().equals("jar"))
+                {
+                    loadURL(url);
+                    appendHistory(url);
+                }
+                else
+                    openExternal(url);
             }
         }
     }
@@ -255,6 +261,32 @@ class Help
             JOptionPane.showMessageDialog(this, message, "GoGui: Error",
                                           JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    /** Open URL in external browser if possible.
+        Supported on KDE and Windows.
+        If it doesn't work, the URL is opened inside this dialog.
+    */
+    private void openExternal(URL url)
+    {
+        Runtime runtime = Runtime.getRuntime();
+        try
+        {
+            runtime.exec("kfmclient exec " + url);
+            return;
+        }
+        catch (Exception e)
+        {
+        }
+        try
+        {
+            runtime.exec("rundll32 url.dll,FileProtocolHandler" + url);
+        }
+        catch (Exception e)
+        {
+        }
+        loadURL(url);
+        appendHistory(url);        
     }
 }
 
