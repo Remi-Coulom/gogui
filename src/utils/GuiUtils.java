@@ -58,8 +58,18 @@ public class GuiUtils
 
     public static void setGoIcon(Frame frame)
     {
-        if (m_iconURL != null)
-            frame.setIconImage(new ImageIcon(m_iconURL).getImage());
+        URL url = m_iconURL;
+        if (Platform.isWindows())
+            url = m_iconNoTransURL;
+        if (url != null)
+            frame.setIconImage(new ImageIcon(url).getImage());
+    }
+
+    static
+    {
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        m_iconURL = loader.getResource("images/gogui.png");
+        m_iconNoTransURL = loader.getResource("images/gogui-notrans.png");
     }
 
     private static final int m_defaultMonoFontSize =
@@ -78,8 +88,9 @@ public class GuiUtils
     private static final Dimension m_smallFillerDimension =
         new Dimension(SMALL_PAD, SMALL_PAD);
 
-    private static URL m_iconURL =
-        ClassLoader.getSystemClassLoader().getResource("images/gogui.png");
+    private static URL m_iconURL;
+
+    private static URL m_iconNoTransURL;
 
     private static Font getTextAreaFont()
     {
