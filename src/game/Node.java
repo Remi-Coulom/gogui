@@ -434,6 +434,7 @@ public final class Node
 
     private Node m_father;
 
+    /** Node if one child only, Vector otherwise. */
     private Object m_children;
 
     private SetupInfo createSetupInfo()
