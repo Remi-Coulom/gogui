@@ -230,34 +230,26 @@ class ReadThread
         {
             while (true)
             {
-                int b = 0;
-                while (true)
+                int b;
+                try
                 {
-                    java.util.Timer timer = null;
-                    if (m_state == STATE_WAIT_OK)
+                    while (! waitForInput(10000))
                     {
-                        timer = new java.util.Timer();
-                        timer.schedule(new Interrupt(Thread.currentThread()),
-                                       10000);
+                        synchronized (this)
+                        {
+                            if (m_state == STATE_WAIT_OK)
+                                writeOutputBuffer();
+                        }
                     }
-                    try
-                    {
-                        b = m_in.read();
-                        break;
-                    }
-                    catch (InterruptedIOException e)
-                    {
-                        assert(m_state == STATE_WAIT_OK);
-                        writeOutputBuffer();
-                    }
-                    if (timer != null)
-                        timer.cancel();
+                    b = m_in.read();
+                    if (b < 0)
+                        throw new IOException();
                 }
-                if (b < 0)
+                catch (IOException e)
                 {
                     log("input stream was closed");
                     m_state = STATE_DISCONNECTED;
-                    break;
+                    break;                    
                 }
                 log("recv " + format(b));
                 handleByte(b);
@@ -394,21 +386,6 @@ class ReadThread
                 System.err.println("Interrupted.");
             }
         }
-    }
-
-    private static class Interrupt extends TimerTask
-    {
-        public Interrupt(Thread thread)
-        {
-            m_thread = thread;
-        }
-
-        public void run()
-        {
-            m_thread.interrupt();
-        }
-
-        private Thread m_thread;
     }
 
     private static final int QUERY_HANDICAP = 8;
@@ -697,6 +674,24 @@ class ReadThread
         m_outputBuffer[1] = (byte)(0x0080 | checksum);
     }
 
+    private boolean waitForInput(long milliseconds) throws IOException
+    {
+        long startTime = System.currentTimeMillis();
+        while (m_in.available() <= 0)
+            try
+            {
+                if (System.currentTimeMillis() - startTime >= milliseconds)
+                    return false;
+                Thread.sleep(milliseconds);
+            }
+            catch (InterruptedException e)
+            {
+                System.err.println("Interrupted");
+                return false;
+            }
+        return true;
+    }
+    
     private void writeOutputBuffer() throws IOException
     {
         log("send "
@@ -739,7 +734,6 @@ public class Gmp
     {
         m_size = size;
         m_readThread = new ReadThread(input, output, size, colorIndex);
-        log("starting read thread");
         m_readThread.start();
     }
 
