@@ -14,50 +14,52 @@ public class BoardUtils
 {
     public static void print(Board board, PrintStream out)
     {
+        StringBuffer s = new StringBuffer(1024);
         int size = board.getSize();
-        printXCoords(size, out);
+        printXCoords(size, s);
         for (int y = size - 1; y >= 0; --y)
         {
-            printYCoord(y, out);
-            out.print(" ");
+            printYCoord(y, s);
+            s.append(" ");
             for (int x = 0; x < size; ++x)
             {
                 Point point = board.getPoint(x, y);
                 Color color = board.getColor(point);
                 if (color == Color.BLACK)
-                    out.print("@ ");
+                    s.append("@ ");
                 else if (color == Color.WHITE)
-                    out.print("O ");
+                    s.append("O ");
                 else
                 {
                     if (board.isHandicap(point))
-                        out.print("+ ");
+                        s.append("+ ");
                     else
-                        out.print(". ");
+                        s.append(". ");
                 }
             }
-            printYCoord(y, out);
-            printGameInfo(board, out, y);
-            out.println();
+            printYCoord(y, s);
+            printGameInfo(board, s, y);
+            s.append("\n");
         }
-        printXCoords(size, out);
+        printXCoords(size, s);
+        out.print(s);
     }
 
-    private static void printGameInfo(Board board, PrintStream out, int yIndex)
+    private static void printGameInfo(Board board, StringBuffer s, int yIndex)
     {
         int size = board.getSize();
         if (yIndex == size - 1)
         {
-            out.print("  ");
-            out.print(board.getToMove() == Color.BLACK ? "Black" : "White");
-            out.print(" to move.");
+            s.append("  ");
+            s.append(board.getToMove() == Color.BLACK ? "Black" : "White");
+            s.append(" to move.");
         }
         else if (yIndex == size - 2)
         {
-            out.print("  Prisoners: B ");
-            out.print(board.getCapturedB());
-            out.print("  W ");
-            out.print(board.getCapturedW());
+            s.append("  Prisoners: B ");
+            s.append(board.getCapturedB());
+            s.append("  W ");
+            s.append(board.getCapturedW());
         }
         else
         {
@@ -65,36 +67,36 @@ public class BoardUtils
             if (n >= 0)
             {
                 Move move = board.getMove(n);
-                out.print("  ");
-                out.print(n + 1);
-                out.print(" ");
-                out.print(move.getColor() == Color.BLACK ? "B " : "W ");
-                out.print(Point.toString(move.getPoint()));
+                s.append("  ");
+                s.append(n + 1);
+                s.append(" ");
+                s.append(move.getColor() == Color.BLACK ? "B " : "W ");
+                s.append(Point.toString(move.getPoint()));
             }
         }
     }
 
-    private static void printXCoords(int size, PrintStream out)
+    private static void printXCoords(int size, StringBuffer s)
     {
-        out.print("   ");
+        s.append("   ");
         int x;
         char c;
         for (x = 0, c = 'A'; x < size; ++x, ++c)
         {
             if (c == 'I')
                 ++c;
-            out.print(c);
-            out.print(" ");
+            s.append(c);
+            s.append(" ");
         }
-        out.println();
+        s.append("\n");
     }
 
-    private static void printYCoord(int y, PrintStream out)
+    private static void printYCoord(int y, StringBuffer s)
     {
         String string = Integer.toString(y + 1);
-        out.print(string);
+        s.append(string);
         if (string.length() == 1)
-            out.print(" ");
+            s.append(" ");
     }
 }
 
