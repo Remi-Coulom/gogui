@@ -571,10 +571,10 @@ class MenuBar
     {
         JMenu menu = new JMenu("Windows");
         menu.setMnemonic(KeyEvent.VK_W);
-        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
                     "analyze");
         m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_G,
-                                     KeyEvent.VK_F8, 0, "gtp-shell");
+                                     KeyEvent.VK_F9, 0, "gtp-shell");
         return menu;
     }
 

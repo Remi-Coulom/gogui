@@ -673,7 +673,7 @@ class AnalyzeDialog
         menu.setMnemonic(KeyEvent.VK_W);
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
                     "gogui");
-        addMenuItem(menu, "GTP shell", KeyEvent.VK_G, KeyEvent.VK_F8, 0,
+        addMenuItem(menu, "GTP shell", KeyEvent.VK_G, KeyEvent.VK_F9, 0,
                     "gtp-shell");
         return menu;
     }

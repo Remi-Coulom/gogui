@@ -766,7 +766,7 @@ public class GtpShell
     {
         JMenu menu = new JMenu("Windows");
         menu.setMnemonic(KeyEvent.VK_W);
-        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F9, 0,
+        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8, 0,
                     "analyze");
         addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6, 0,
                     "gogui");
