@@ -31,6 +31,7 @@ public class GameTree
         if (handicap != null)
         {
             m_gameInformation.m_handicap = handicap.size();
+            m_root.setPlayer(Color.WHITE);
             for (int i = 0; i < handicap.size(); ++i)
                 m_root.addBlack((Point)handicap.get(i));
         }
