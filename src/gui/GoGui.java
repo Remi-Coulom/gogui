@@ -1981,8 +1981,8 @@ class GoGui
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
-        setTitleFromProgram();
         setTitle();
+        setTitleFromProgram();
     }
 
     private void newGameFile(int size, File file, int move)
