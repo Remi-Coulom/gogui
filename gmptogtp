@@ -1,4 +1,5 @@
 #!/bin/sh
 
 # Add -ea option to enable assertions for testing
+# Add -Dgnu.io.rxtx.SerialPorts=... for ports with rxtx
 java -ea -cp gmptogtp.jar gmp.GmpToGtp "$@"
