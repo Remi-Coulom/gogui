@@ -224,7 +224,7 @@ installation directory.
 <copy file="/System/Library/Frameworks/JavaVM.framework/Versions/Current/Resources/MacOS/JavaApplicationStub"
   todir="${appdir}/Contents/MacOS"/>
 <exec command="chmod 755 ${appdir}/Contents/MacOS/JavaApplicationStub"/>
-<copy file="/Developer/Applications/Java Tools/Jar Bundler.app/Contents/Resources/GenericJavaApp.icns"
+<copy file="mac/packaging/GoGui.icns"
   todir="${appdir}/Contents/Resources"/>
 <copy file="mac/packaging/Info.plist" todir="${appdir}/Contents"/>  
 <copy file="mac/packaging/PkgInfo" todir="${appdir}/Contents"/>  
