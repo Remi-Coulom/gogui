@@ -232,6 +232,8 @@ class GoGui
             {
                 m_board.play(new Move(p, go.Color.EMPTY));
             }
+            m_board.setToMove(m_setupColor);
+            m_gameInfo.update();
             m_guiBoard.update();
             return;
         }
@@ -989,6 +991,8 @@ class GoGui
     {
         showStatus("Setup black.");
         m_setupColor = go.Color.BLACK;
+        m_board.setToMove(m_setupColor);
+        m_gameInfo.update();
     }
 
     private void cbSetupDone()
@@ -1047,6 +1051,8 @@ class GoGui
     {
         showStatus("Setup white.");
         m_setupColor = go.Color.WHITE;
+        m_board.setToMove(m_setupColor);
+        m_gameInfo.update();
     }
 
     private void cbShowAbout()

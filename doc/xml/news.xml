@@ -15,6 +15,9 @@
 	    Make Japanese rules default and store them in preferences.
 	  </listitem>
 	  <listitem>
+	    After setting up a position set last setup color as color to move.
+	  </listitem>
+	  <listitem>
 	    Other small fixes and enhancements.
 	  </listitem>
 	</itemizedlist>
