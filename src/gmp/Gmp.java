@@ -426,6 +426,7 @@ class WriteThread extends Thread
         }
         catch (IOException e)
         {
+            Util.log("IOException");
         }
     }
 }
