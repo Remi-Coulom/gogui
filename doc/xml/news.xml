@@ -4,6 +4,14 @@
 <revhistory>
 
 <revision>
+<revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>0.7pre2</revnumber>
 <date>16 Dec 2004</date>
 <authorinitials>enz</authorinitials>
