@@ -9,9 +9,15 @@ import java.io.*;
 
 //----------------------------------------------------------------------------
 
+/** Thread copying the output of one stream to another stream. */
 public class StreamCopy
     extends Thread
 {
+    /** @param verbose Also copy everything to stderr
+        @param src Source stream
+        @param dest Destination stream
+        @param close Close destination after eof in source
+    */
     public StreamCopy(boolean verbose, InputStream src, OutputStream dest,
                       boolean close)
     {
@@ -21,6 +27,9 @@ public class StreamCopy
         m_close = close;
     }
 
+    /** Run method.
+        Exceptions caught are written to stderr.
+    */
     public void run()
     {
         try

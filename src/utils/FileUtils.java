@@ -9,8 +9,12 @@ import java.io.*;
 
 //----------------------------------------------------------------------------
 
+/** Static file utility functions. */
 public class FileUtils
 {
+    /** Return the file extension of a file name.
+        @return File extension or null if file name has no extension.
+    */
     public static String getExtension(File f)
     {
         String ext = null;
