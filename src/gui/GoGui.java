@@ -1541,10 +1541,10 @@ class GoGui
         {
             m_boardSize = size;
             m_guiBoard.initSize(size);
-            m_guiBoard.update();
             pack();
         }
         m_board.newGame();        
+        m_guiBoard.update();
         resetBoard();
         m_timeControl.reset();
         m_lostOnTimeShown = false;

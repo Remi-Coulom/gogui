@@ -135,6 +135,7 @@ public class Board
             }
         }
         m_focusPoint = new go.Point(size / 2, size / 2);
+        clearLastMove();
         revalidate();
         repaint();
     }
@@ -254,11 +255,7 @@ public class Board
 
     public void setShowLastMove(boolean showLastMove)
     {
-        if (m_lastMove != null)
-        {
-            getField(m_lastMove).setString("");
-            m_lastMove = null;
-        }
+        clearLastMove();
         m_showLastMove = showLastMove;
         drawLastMove();
     }
@@ -409,21 +406,24 @@ public class Board
         }
     }
 
+    private void clearLastMove()
+    {
+        if (m_lastMove != null)
+        {
+            getField(m_lastMove).setString("");
+            m_lastMove = null;
+        }
+    }
+
     private void drawLastMove()
     {
+        if (m_showLastMove)
+            clearLastMove();
         int moveNumber = m_board.getMoveNumber();
         if (moveNumber > 0)
         {
             Move m = m_board.getMove(moveNumber - 1);
             go.Point lastMove = m.getPoint();
-            if (m_showLastMove)
-            {
-                if (m_lastMove != null)
-                {
-                    getField(m_lastMove).setString("");
-                    m_lastMove = null;
-                }
-            }
             if (lastMove != null && m.getColor() != go.Color.EMPTY)
             {
                 setFocusPoint(lastMove);
@@ -433,6 +433,11 @@ public class Board
                     m_lastMove = lastMove;
                 }
             }
+        }
+        else
+        {
+            int size = m_board.getSize();
+            setFocusPoint(m_board.getPoint(size / 2, size / 2));
         }
     }
 
