@@ -17,7 +17,4 @@ GtpRegress: change into gtp test file directory, optional?
 
 GtpRegress: improve documenation (in/out file locations, relative paths)
 
-GoGui: for programs that don't support interrupt, interrupt should offer to
-kill program
-
 latex export current variation, not main

@@ -183,15 +183,14 @@ public class MenuBar
         m_itemBeepAfterMove.setSelected(enable);
     }
 
-    public void setCommandInProgress(boolean isInterruptSupported)
+    public void setCommandInProgress()
     {
         assert(! m_isComputerDisabled);
         disableAll();
         m_menuFile.setEnabled(true);
         m_itemExit.setEnabled(true);
         m_menuGame.setEnabled(true);
-        if (isInterruptSupported)
-            m_itemInterrupt.setEnabled(true);
+        m_itemInterrupt.setEnabled(true);
         m_menuComputerColor.setEnabled(true);
         m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);

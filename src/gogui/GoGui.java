@@ -980,11 +980,8 @@ class GoGui
     private void beginLengthyCommand()
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
-        boolean isInterruptSupported =
-            (m_commandThread.isInterruptSupported()
-             || (m_computerBlack && m_computerWhite));
-        m_menuBar.setCommandInProgress(isInterruptSupported);
-        m_toolBar.setCommandInProgress(isInterruptSupported);
+        m_menuBar.setCommandInProgress();
+        m_toolBar.setCommandInProgress();
         m_gtpShell.setCommandInProgess(true);
         m_commandInProgress = true;
     }
@@ -1192,7 +1189,12 @@ class GoGui
         if (m_computerBlack && m_computerWhite)
             computerNone();
         if (! m_commandThread.isInterruptSupported())
+        {
+            if (showQuestion("Program does not support interrupting.\n"
+                             + "Kill program?"))
+                detachProgram();
             return;
+        }
         if (! showQuestion("Interrupt command?"))
             return;
         sendInterrupt();
@@ -1596,8 +1598,10 @@ class GoGui
 
     private void computerMoved()
     {
-        assert(m_commandThread != null);
         endLengthyCommand();
+        // Program could have been killed in cbInterrupt
+        if (m_commandThread == null)
+            return;
         if (m_beepAfterMove)
             java.awt.Toolkit.getDefaultToolkit().beep();
         try
@@ -1747,7 +1751,8 @@ class GoGui
         clearStatus();
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, m_currentNode);
-        m_gtpShell.setCommandInProgess(false);
+        if (m_gtpShell != null)
+            m_gtpShell.setCommandInProgess(false);
         m_commandInProgress = false;
         if (m_analyzeCommand != null
             && (m_analyzeCommand.needsPointArg()

@@ -3,8 +3,8 @@
 
 <para>
 Commands can be interrupted, if the Go program supports it.
-This is useful for example if the move generation takes a long time to give the
-user the ability to stop the current move generation and gain control over
+This is useful for example if the move generation takes a long time to give
+the user the ability to stop the current move generation and gain control over
 the interface again.
 </para>
     
@@ -35,5 +35,10 @@ transmitting interrupt signals over network GTP streams.
 </para>
 </listitem>
 </orderedlist>
+
+<para>
+If the program does not support any of these methods,
+GoGui will offer to kill and detach the program.
+</para>
 
 </chapter>

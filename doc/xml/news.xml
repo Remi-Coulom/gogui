@@ -26,6 +26,12 @@ TwoGtp, GtpAdapter: handle resign
 TwoGtp: fix bug in setting komi with GTP command komi
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GoGui: interrupt will offer to kill program for programs that don't support
+interrupting commands
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

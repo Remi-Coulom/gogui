@@ -92,11 +92,10 @@ public class ToolBar
         }
     }
 
-    public void setCommandInProgress(boolean isInterruptSupported)
+    public void setCommandInProgress()
     {
         enableAll(false, null);
-        if (isInterruptSupported)
-            m_buttonInterrupt.setEnabled(true);
+        m_buttonInterrupt.setEnabled(true);
     }
 
     private boolean m_computerButtonsEnabled = true;
