@@ -34,7 +34,7 @@ public class FindDialog
         String command = event.getActionCommand();
         if (command.equals("cancel"))
             dispose();
-        else if (command.equals("find"))
+        else if (command.equals("comboBoxEdited") || command.equals("find"))
         {
             m_pattern = m_comboBox.getSelectedItem().toString();
             m_comboBox.insertItemAt(m_pattern, 0);
@@ -109,6 +109,7 @@ public class FindDialog
         m_comboBox.setPrototypeDisplayValue(prototype.toString());
         m_comboBox.setEditable(true);
         ComboBoxEditor editor = m_comboBox.getEditor();
+        m_comboBox.addActionListener(this);
         m_textField = (JTextField)editor.getEditorComponent();
         m_textField.selectAll();
         KeyListener keyListener = new KeyAdapter()
