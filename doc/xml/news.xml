@@ -8,8 +8,9 @@
       <revremark>
 	<itemizedlist>
 	  <listitem>
-	    Use GTP command "final_status_list" if supported by the Go program
-	    for initializing dead stones when scoring.
+	    Use GTP command <userinput>final_status_list</userinput> if
+	    supported by the Go program for initializing dead stones when
+	     scoring.
 	  </listitem>
 	  <listitem>
 	    Make Japanese rules default and store them in preferences.
@@ -24,10 +25,12 @@
 	    Add option for beep after move.
 	  </listitem>
 	  <listitem>
-	    Use time_settings command if -time option is used.
+	    Use <userinput>time_settings</userinput> command if
+	    <option>-time</option> option is used.
 	  </listitem>
 	  <listitem>
-	    New options -autofile, -computer-both, -computer-black.
+	    New options <option>-autofile</option>,
+	    <option>-computer-both</option>, <option>-computer-black</option>.
 	  </listitem>
 	  <listitem>
 	    Compile TwoGtp into its own jar file twogtp.jar.
