@@ -2170,6 +2170,7 @@ class GoGui
 
     private void setupDone()
     {
+        setFastUpdate(true);
         try
         {
             m_setupMode = false;
@@ -2202,23 +2203,15 @@ class GoGui
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
-            try
+            for (int i = 0; i < moves.size(); ++i)
             {
-                setFastUpdate(true);
-                for (int i = 0; i < moves.size(); ++i)
-                {
-                    Move m = (Move)moves.get(i);
-                    setup(m);
-                }
-                if (m_board.getToMove() != toMove)
-                {
-                    Move m = new Move(null, m_board.getToMove());
-                    setup(m);
-                }
+                Move m = (Move)moves.get(i);
+                setup(m);
             }
-            finally
+            if (m_board.getToMove() != toMove)
             {
-                setFastUpdate(false);
+                Move m = new Move(null, m_board.getToMove());
+                setup(m);
             }
             fileModified();
             boardChangedBegin(false);
@@ -2227,6 +2220,7 @@ class GoGui
         {
             showGtpError(e);
         }
+        setFastUpdate(false);
     }
 
     private void showError(String message, Exception e)
