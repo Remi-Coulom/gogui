@@ -34,7 +34,7 @@ public class Analyze
         writeData(dataFile);
     }
 
-    private final class ResultStatistics
+    private static final class ResultStatistics
     {
         public Statistics m_unknownResult = new Statistics();
 
