@@ -135,6 +135,14 @@ public class Node
         return (Node)m_children.get(i);
     }
 
+    public int getChildIndex(Node child)
+    {
+        for (int i = 0; i < getNumberChildren(); ++i)
+            if (getChild(i) == child)
+                return i;
+        return -1;
+    }
+
     public String getComment()
     {
         if (m_comment == null)

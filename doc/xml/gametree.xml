@@ -19,5 +19,9 @@ target node is computed and a series of <userinput>undo</userinput>
 and <userinput>play</userinput> commands is sent to the Go program
 to go there.
 </para>
+<para>
+The context menu for a node allows to expand or hide the subtree
+and to display node information and subtree statistics.
+</para>
     
 </chapter>

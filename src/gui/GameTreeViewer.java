@@ -62,7 +62,7 @@ class GameNode
         }
         else if (move == null)
         {
-            graphics.setColor(new java.awt.Color(0.57f, 0.68f, 0.91f));
+            graphics.setColor(m_colorLightBlue);
             int[] xPoints = { halfSize, width, halfSize, 0 };
             int[] yPoints = { 0, halfSize, width, halfSize };
             graphics.fillPolygon(xPoints, yPoints, 4);
@@ -88,7 +88,7 @@ class GameNode
         if (m_node.getComment() != null
             && ! m_node.getComment().trim().equals(""))
         {
-            graphics.setColor(java.awt.Color.black);
+            graphics.setColor(m_colorLightBlue);
             graphics.drawLine(3, width + 2, width - 3, width + 2);
             graphics.drawLine(3, width + 4, width - 3, width + 4);
         }
@@ -112,6 +112,9 @@ class GameNode
 
     private static final java.awt.Color m_colorBackground
         = UIManager.getColor("Label.background");
+
+    private static final java.awt.Color m_colorLightBlue
+        = new java.awt.Color(0.57f, 0.68f, 0.91f);
 
     private GameTreePanel m_gameTreePanel;
 
@@ -155,7 +158,33 @@ class GameTreePanel
             {
                 public void mouseClicked(MouseEvent event)
                 {
-                    gotoNode(((GameNode)event.getSource()).getNode());
+                    if (event.getButton() != MouseEvent.BUTTON1)
+                        return;
+                    GameNode gameNode = (GameNode)event.getSource();
+                    if (event.getClickCount() == 2)
+                    {
+                        Node node = gameNode.getNode();
+                        if (node.getNumberChildren() > 1)
+                        {
+                            if (m_expanded.contains(node))
+                                hideSubtree(node);
+                            else
+                                showVariations(node);
+                        }
+                    }
+                    else
+                        gotoNode(gameNode.getNode());
+                }
+
+                public void mousePressed(MouseEvent event)
+                {
+                    GameNode gameNode = (GameNode)event.getSource();
+                    if (event.isPopupTrigger())
+                    {
+                        int x = event.getX();
+                        int y = event.getY();
+                        showPopup(x, y, gameNode);
+                    }
                 }
             };
     }
@@ -242,6 +271,10 @@ class GameTreePanel
     public void update(GameTree gameTree, Node currentNode)
     {
         assert(currentNode != null);
+        boolean gameTreeChanged = (gameTree != m_gameTree);
+        if (gameTreeChanged)
+            m_expanded.clear();
+        ensureVisible(currentNode);
         m_gameTree = gameTree;
         m_currentNode = currentNode;
         removeAll();
@@ -250,15 +283,24 @@ class GameTreePanel
         m_maxY = 0;
         try
         {
-            createNodes(this, m_gameTree.getRoot(), 0, 0, m_margin, m_margin,
-                        0);
+            Node root = m_gameTree.getRoot();
+            createNodes(this, root, 0, 0, m_margin, m_margin, 0);
+            if (gameTreeChanged)
+            {
+                if (NodeUtils.subtreeGreaterThan(root, 10000))
+                    showVariations(root);
+                else
+                    showSubtree(root);
+            }
         }
         catch (OutOfMemoryError e)
         {
-            // Free some space so that disposing the GameTreeViewer does
-            // not throw another OutOfMemoryError
-            m_map = null;
-            throw e;
+            m_expanded.clear();
+            removeAll();
+            SimpleDialogs.showError(this,
+                                    "Could not show game tree\n" + 
+                                    "Out of memory");
+            update(gameTree, currentNode);
         }
         GameNode gameNode = getGameNode(currentNode);
         gameNode.repaint();
@@ -271,6 +313,11 @@ class GameTreePanel
     public void update(Node currentNode)
     {
         assert(currentNode != null);
+        if (ensureVisible(currentNode))
+        {
+            update(m_gameTree, currentNode);
+            return;
+        }
         GameNode gameNode = getGameNode(m_currentNode);
         gameNode.repaint();
         gameNode = getGameNode(currentNode);
@@ -310,9 +357,15 @@ class GameTreePanel
 
     private Node m_currentNode;
 
+    private Node m_popupNode;
+
     private HashMap m_map = new HashMap(500, 0.8f);
 
+    private HashSet m_expanded = new HashSet(200);
+
     private MouseListener m_mouseListener;
+
+    private java.awt.Point m_popupLocation;
 
     private int createNodes(Component father, Node node, int x, int y,
                             int dx, int dy, int moveNumber)
@@ -334,11 +387,16 @@ class GameTreePanel
         int numberChildren = node.getNumberChildren();
         dx = m_nodeDist;
         dy = 0;
-        for (int i = 0; i < numberChildren; ++i)
+        int maxChildren = numberChildren;
+        boolean notExpanded =
+            (numberChildren > 1 && ! m_expanded.contains(node));
+        if (notExpanded)
+            maxChildren = Math.min(numberChildren, 1);
+        for (int i = 0; i < maxChildren; ++i)
         {
             dy += createNodes(gameNode, node.getChild(i),
                               x + dx, y + dy, dx, dy, moveNumber);
-            if (i < numberChildren - 1)
+            if (! notExpanded && i < numberChildren - 1)
                 dy += m_nodeDist;
         }
         if (node == m_currentNode)
@@ -355,14 +413,26 @@ class GameTreePanel
         int xChild = x + m_nodeDist;
         int yChild = y;
         int lastYChild = y;
-        for (int i = 0; i < numberChildren; ++i)
+        boolean notExpanded =
+            (numberChildren > 1 && ! m_expanded.contains(node));
+        int maxChildren = numberChildren;
+        if (notExpanded)
+            maxChildren = Math.min(numberChildren, 1);
+        for (int i = 0; i < maxChildren; ++i)
         {
             graphics.drawLine(x, lastYChild, x, yChild);
             graphics.drawLine(x, yChild, xChild, yChild);
             lastYChild = yChild;
             yChild = drawGrid(graphics, node.getChild(i), xChild, yChild);
-            if (i < numberChildren - 1)
+            if (! notExpanded && i < numberChildren - 1)
                 yChild += m_nodeDist;
+        }
+        if (notExpanded)
+        {
+            int d1 = m_nodeWidth / 2;
+            int d2 = d1 + 7;
+            graphics.drawLine(x, y, x, y + d2);
+            graphics.drawLine(x, y + d2, x + d1, y + d2);
         }
         return yChild;
     }
@@ -372,11 +442,156 @@ class GameTreePanel
         return (GameNode)m_map.get(node);
     }
 
+    private boolean ensureVisible(Node node)
+    {
+        boolean changed = false;
+        while (node != null)
+        {
+            Node father = node.getFather();
+            if (father != null && father.getChild() != node)
+                if (m_expanded.add(father))
+                    changed = true;
+            node = father;
+        }
+        return changed;
+    }
+
+    private void hideSubtree(Node root)
+    {
+        boolean changed = false;
+        boolean currentChanged = false;
+        int depth = NodeUtils.getDepth(root);
+        Node node = root;
+        while (node != null)
+        {
+            if (node == m_currentNode)
+            {
+                m_currentNode = root;
+                currentChanged = true;
+                changed = true;
+            }
+            if (m_expanded.remove(node))
+                changed = true;
+            node = NodeUtils.nextNode(node, depth);
+        }
+        if (currentChanged)
+            gotoNode(m_currentNode);
+        if (changed)
+            update(m_gameTree, m_currentNode);
+    }
+
+    private void nodeInfo(java.awt.Point location, Node node)
+    {
+        String nodeInfo = NodeUtils.nodeInfo(node);
+        String title = "Node Info";
+        TextViewer textViewer =
+            new TextViewer(null, title, nodeInfo, true, null);
+        textViewer.setLocation(location);
+        textViewer.setVisible(true);
+    }
+
     private void scrollToCurrent()
     {
         scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeWidth,
                                           m_currentNodeY,
                                           5 * m_nodeWidth, 3 * m_nodeWidth));
+    }
+
+    public void showPopup(int x, int y, GameNode gameNode)
+    {
+        Node node = gameNode.getNode();
+        m_popupNode = node;
+        ActionListener listener = new ActionListener()
+            {
+                public void actionPerformed(ActionEvent event)
+                {
+                    String command = event.getActionCommand();
+                    if (command.equals("goto"))
+                        gotoNode(m_popupNode);
+                    else if (command.equals("show-variations"))
+                        showVariations(m_popupNode);
+                    else if (command.equals("show-subtree"))
+                        showSubtree(m_popupNode);
+                    else if (command.equals("hide-subtree"))
+                        hideSubtree(m_popupNode);
+                    else if (command.equals("node-info"))
+                        nodeInfo(m_popupLocation, m_popupNode);
+                    else if (command.equals("tree-info"))
+                        treeInfo(m_popupLocation, m_popupNode);
+                    else
+                        assert(false);
+                }
+            };
+        JPopupMenu popup = new JPopupMenu();
+        JMenuItem item;
+        item = new JMenuItem("Go To");
+        item.setActionCommand("goto");
+        item.addActionListener(listener);
+        popup.add(item);
+        popup.addSeparator();
+        item = new JMenuItem("Show Variations");
+        if (m_expanded.contains(node) || node.getNumberChildren() <= 1)
+            item.setEnabled(false);
+        item.setActionCommand("show-variations");
+        item.addActionListener(listener);
+        popup.add(item);
+        item = new JMenuItem("Show Subtree");
+        if (node.getNumberChildren() == 0)
+            item.setEnabled(false);
+        item.setActionCommand("show-subtree");
+        item.addActionListener(listener);
+        popup.add(item);
+        item = new JMenuItem("Hide Subtree");
+        if (! m_expanded.contains(node))
+            item.setEnabled(false);
+        item.setActionCommand("hide-subtree");
+        item.addActionListener(listener);
+        popup.add(item);
+        popup.addSeparator();
+        item = new JMenuItem("Node Info");
+        item.setActionCommand("node-info");
+        item.addActionListener(listener);
+        popup.add(item);
+        item = new JMenuItem("Subtree Statistics");
+        item.setActionCommand("tree-info");
+        item.addActionListener(listener);
+        popup.add(item);
+        popup.show(gameNode, x, y);
+        m_popupLocation = popup.getLocationOnScreen();
+    }
+
+    private void showSubtree(Node node)
+    {
+        if (NodeUtils.subtreeGreaterThan(node, 10000)
+            && ! SimpleDialogs.showQuestion(this,
+                                            "Really show large subtree?"))
+            return;
+        boolean changed = false;
+        int depth = NodeUtils.getDepth(node);
+        while (node != null)
+        {
+            if (node.getNumberChildren() > 1 && m_expanded.add(node))
+                changed = true;
+            node = NodeUtils.nextNode(node, depth);
+        }
+        if (changed)
+            update(m_gameTree, m_currentNode);
+    }
+
+    private void showVariations(Node node)
+    {
+        if (node.getNumberChildren() > 1 && m_expanded.add(node))
+            update(m_gameTree, m_currentNode);
+    }
+
+    private void treeInfo(java.awt.Point location, Node node)
+    {
+        String treeInfo = NodeUtils.treeInfo(node);
+        String title = "Subtree Info";
+        TextViewer textViewer =
+            new TextViewer(null, title, treeInfo, true, null);
+        textViewer.setLocation(location);
+        textViewer.setVisible(true);
     }
 }
 
@@ -426,8 +641,6 @@ public class GameTreeViewer
             m_listener.toTop();
         else if (command.equals("gtp-shell"))
             m_listener.cbGtpShell();
-        else if (command.equals("node-info"))
-            nodeInfo();
         else
             assert(false);
     }
@@ -501,15 +714,7 @@ public class GameTreeViewer
     {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createMenuWindows());
-        menuBar.add(createMenuInfo());
         setJMenuBar(menuBar);
-    }
-
-    private JMenu createMenuInfo()
-    {
-        JMenu menu = createMenu("Info", KeyEvent.VK_I);
-        addMenuItem(menu, "Node Info", KeyEvent.VK_N, "node-info");
-        return menu;
     }
 
     private JMenu createMenuWindows()
@@ -528,21 +733,6 @@ public class GameTreeViewer
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     m_shortcutKeyMask, "close");
         return menu;
-    }
-
-    private void nodeInfo()
-    {
-        Node node = m_panel.getCurrentNode();
-        if (node == null)
-        {
-            SimpleDialogs.showError(this, "No node selected");
-            return;
-        }
-        String nodeInfo = NodeUtils.nodeInfo(node);
-        String title = "Node Info";
-        TextViewer textViewer =
-            new TextViewer(this, title, nodeInfo, true, null);
-        textViewer.setLocationRelativeTo(this);
     }
 }
 

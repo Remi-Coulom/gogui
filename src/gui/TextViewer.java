@@ -107,7 +107,6 @@ public class TextViewer
             size.height = Math.min(size.height, maxHeight);
             setSize(size);
         }
-        setVisible(true);
     }
 
     private JTextPane m_textPane;

@@ -310,8 +310,10 @@ public class MenuBar
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
-        boolean hasNextVariationBackward =
-            (NodeUtils.getNextVariationBackward(node) != null);
+        boolean hasNextEarlierVariation =
+            NodeUtils.hasNextEarlierVariation(node);
+        boolean hasPrevEarlierVariation =
+            NodeUtils.hasPreviousEarlierVariation(node);
         boolean hasPrevVariation =
             (NodeUtils.getPreviousVariation(node) != null);
         boolean hasPrevVariationBackward =
@@ -327,8 +329,8 @@ public class MenuBar
         m_itemGoto.setEnabled(hasFather || hasChildren);
         m_itemNextVariation.setEnabled(hasNextVariation);
         m_itemPreviousVariation.setEnabled(hasPrevVariation);
-        m_itemNextVariationBackward.setEnabled(hasNextVariationBackward);
-        m_itemPreviousVariationBackward.setEnabled(hasPrevVariationBackward);
+        m_itemNextVariationBackward.setEnabled(hasNextEarlierVariation);
+        m_itemPreviousVariationBackward.setEnabled(hasPrevEarlierVariation);
         m_itemBackToMainVar.setEnabled(! isInMain);
         m_itemTruncate.setEnabled(hasFather);
         m_itemMakeMainVar.setEnabled(! isInMain);

@@ -5,9 +5,11 @@
 
 package game;
 
+import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 import go.*;
+import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
@@ -148,12 +150,9 @@ public class NodeUtils
         return father.variationAfter(node);
     }
 
-    /** Return next variation before root of this node. */
+    /** Return next variation before this node. */
     public static Node getNextVariationBackward(Node node)
     {
-        node = node.getFather();
-        if (node == null)
-            return null;
         Node child = node;
         node = node.getFather();
         while (node != null && node.variationAfter(child) == null)
@@ -198,12 +197,9 @@ public class NodeUtils
         return father.variationBefore(node);
     }
 
-    /** Return previous variation before root of this node */
+    /** Return previous variation before this node */
     public static Node getPreviousVariationBackward(Node node)
     {
-        node = node.getFather();
-        if (node == null)
-            return null;
         Node child = node;
         node = node.getFather();
         while (node != null && node.variationBefore(child) == null)
@@ -234,6 +230,45 @@ public class NodeUtils
         return result;
     }
 
+    public static String getVariationString(Node node)
+    {
+        Vector vector = new Vector();
+        while (node != null)
+        {
+            Node father = node.getFather();
+            if (father != null && father.getNumberChildren() > 1)
+            {
+                int index = father.getChildIndex(node) + 1;
+                vector.insertElementAt(Integer.toString(index), 0);
+            }
+            node = father;
+        }
+        StringBuffer result = new StringBuffer(vector.size() * 3);
+        for (int i = 0; i < vector.size(); ++i)
+        {
+            result.append((String)vector.get(i));
+            if (i < vector.size() - 1)
+                result.append('.');
+        }
+        return result.toString();
+    }
+
+    public static boolean hasNextEarlierVariation(Node node)
+    {
+        node = node.getFather();
+        if (node == null)
+            return false;
+        return (getNextVariation(node) != null);
+    }
+
+    public static boolean hasPreviousEarlierVariation(Node node)
+    {
+        node = node.getFather();
+        if (node == null)
+            return false;
+        return (getPreviousVariation(node) != null);
+    }
+
     public static boolean isInMainVariation(Node node)
     {
         while (node.getFather() != null)
@@ -254,6 +289,7 @@ public class NodeUtils
         }
     }
 
+    /** Get next node for iteration in complete tree. */
     public static Node nextNode(Node node)
     {
         Node child = node.getChild();
@@ -262,16 +298,27 @@ public class NodeUtils
         return getNextVariationBackward(node);
     }
 
+    /** Get next node for iteration in subtree. */
+    public static Node nextNode(Node node, int depth)
+    {
+        node = nextNode(node);
+        if (node == null || NodeUtils.getDepth(node) <= depth)
+            return null;
+        return node;
+    }
+
     public static String nodeInfo(Node node)
     {
         StringBuffer buffer = new StringBuffer(512);
         buffer.append("NodeProperties:\n");
         appendInfo(buffer, "Depth", getDepth(node));
+        appendInfo(buffer, "Children", node.getNumberChildren());
         if (node.getMove() != null)
         {
             appendInfo(buffer, "Move", node.getMove().toString());
             appendInfo(buffer, "MoveNumber", getMoveNumber(node));
         }
+        appendInfo(buffer, "Variation", getVariationString(node));
         Vector addBlack = new Vector();
         for (int i = 0; i < node.getNumberAddBlack(); ++i)
             addBlack.add(node.getAddBlack(i));
@@ -308,6 +355,66 @@ public class NodeUtils
         return buffer.toString();
     }
         
+    public static boolean subtreeGreaterThan(Node node, int size)
+    {
+        int n = 0;
+        int depth = NodeUtils.getDepth(node);
+        while (node != null)
+        {
+            ++n;
+            if (n > size)
+                return true;
+            node = nextNode(node, depth);
+        }
+        return false;
+    }
+
+    public static String treeInfo(Node node)
+    {
+        int numberNodes = 0;
+        int numberTerminal = 0;
+        int maxDepth = 0;
+        int maxChildren = 0;
+        double averageDepth = 0;
+        double averageChildren = 0;
+        double averageChildrenInner = 0;
+        int rootDepth = getDepth(node);
+        while (node != null)
+        {
+            ++numberNodes;
+            int numberChildren = node.getNumberChildren();
+            int depth = getDepth(node) - rootDepth;
+            assert(depth >= 0);
+            if (depth > maxDepth)
+                maxDepth = depth;
+            if (numberChildren > maxChildren)
+                maxChildren = numberChildren;
+            if (numberChildren == 0)
+                ++numberTerminal;
+            else
+                averageChildrenInner += numberChildren;
+            averageDepth += depth;
+            averageChildren += numberChildren;
+            node = nextNode(node, rootDepth);
+        }
+        int numberInner = numberNodes - numberTerminal;
+        averageDepth /= numberNodes;
+        averageChildren /= numberNodes;
+        averageChildrenInner /= numberInner;
+        NumberFormat format = StringUtils.getNumberFormat(3);
+        StringBuffer buffer = new StringBuffer(512);
+        appendInfo(buffer, "Nodes", numberNodes);
+        appendInfo(buffer, "Terminal", numberTerminal);
+        appendInfo(buffer, "Inner", numberInner);
+        appendInfo(buffer, "AvgDepth", format.format(averageDepth));
+        appendInfo(buffer, "MaxDepth", maxDepth);
+        appendInfo(buffer, "AvgChildren", format.format(averageChildren));
+        appendInfo(buffer, "AvgChildrenInner",
+                   format.format(averageChildrenInner));
+        appendInfo(buffer, "MaxChildren", maxChildren);
+        return buffer.toString();
+    }
+
     private static void appendInfo(StringBuffer buffer, String label,
                                    int value)
     {

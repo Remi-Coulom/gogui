@@ -2659,7 +2659,9 @@ class GoGui
                     }
                 };
         }
-        new TextViewer(this, title, response, highlight, listener);
+        TextViewer textViewer =
+            new TextViewer(this, title, response, highlight, listener);
+        textViewer.setVisible(true);
     }
 
     private void showError(String message, Exception e)
@@ -2817,16 +2819,7 @@ class GoGui
             m_gameTreeViewer.update(m_currentNode);
             return;
         }
-        try
-        {
-            m_gameTreeViewer.update(m_gameTree, m_currentNode);
-        }
-        catch (OutOfMemoryError e)
-        {
-            m_gameTreeViewer.dispose();
-            m_gameTreeViewer = null;
-            showError("Could not open game tree window:\nOut of memory");
-        }
+        m_gameTreeViewer.update(m_gameTree, m_currentNode);
     }
 }
 

@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Subtrees can now be hidden and expanded in the game tree window.
+New context menu for nodes.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Change behaviour of "Next/Previous Variation".
 Add menu items "Next/Previous Earlier Variation"
 </simpara>
