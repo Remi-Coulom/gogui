@@ -218,7 +218,7 @@ class GoGui
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
-        if (m_commandInProgress
+        if (isCommandInProgress()
             && ! command.equals("about")
             && ! command.equals("beep-after-move")
             && ! command.equals("computer-black")
@@ -402,7 +402,7 @@ class GoGui
     {        
         if (m_commandThread == null)
             return false;
-        if (m_commandInProgress)
+        if (isCommandInProgress())
         {
             if (! showQuestion("Kill program?"))
                 return false;
@@ -460,7 +460,7 @@ class GoGui
     {
         if (m_analyzeCommand == null)
             return;
-        if (m_commandInProgress)
+        if (isCommandInProgress())
         {
             showError("Cannot clear analyze command\n" +
                       "while command in progress.");
@@ -488,7 +488,7 @@ class GoGui
 
     public void fieldClicked(go.Point p, boolean modifiedSelect)
     {
-        if (m_commandInProgress)
+        if (isCommandInProgress())
             return;
         if (m_setupMode)
         {
@@ -594,7 +594,7 @@ class GoGui
     public boolean sendGtpCommand(String command, boolean sync)
         throws GtpError
     {
-        if (m_commandInProgress || m_commandThread == null)
+        if (isCommandInProgress() || m_commandThread == null)
             return false;
         if (sync)
         {
@@ -643,7 +643,7 @@ class GoGui
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                   boolean clearBoard)
     {
-        if (m_commandInProgress)
+        if (isCommandInProgress())
         {
             showError("Cannot run analyze command\n" +
                       "while command in progress.");
@@ -718,8 +718,6 @@ class GoGui
     private boolean m_computerBlack;
 
     private boolean m_computerWhite;
-
-    private boolean m_commandInProgress;
 
     private boolean m_fastPaint;
 
@@ -1050,7 +1048,6 @@ class GoGui
         m_menuBar.setCommandInProgress();
         m_toolBar.setCommandInProgress();
         m_gtpShell.setCommandInProgess(true);
-        m_commandInProgress = true;
     }
 
     private void boardChangedBegin(boolean doCheckComputerMove,
@@ -1160,7 +1157,7 @@ class GoGui
     private void cbComputerBoth()
     {
         computerBoth();
-        if (! m_commandInProgress)
+        if (! isCommandInProgress())
             checkComputerMove();
     }
 
@@ -1315,7 +1312,7 @@ class GoGui
 
     private void cbInterrupt()
     {
-        if (! m_commandInProgress || m_commandThread == null
+        if (! isCommandInProgress() || m_commandThread == null
             || m_commandThread.isProgramDead())
             return;
         if (m_computerBlack && m_computerWhite)
@@ -1750,7 +1747,7 @@ class GoGui
 
     private void close()
     {
-        if (m_commandInProgress)
+        if (isCommandInProgress())
             if (! showQuestion("Kill program?"))
                 return;
         if (m_setupMode)
@@ -1877,7 +1874,7 @@ class GoGui
 
     private void detachProgram()
     {
-        if (m_commandInProgress)
+        if (isCommandInProgress())
         {
             m_commandThread.destroyGtp();
             m_commandThread.close();
@@ -1942,7 +1939,6 @@ class GoGui
         m_toolBar.enableAll(true, m_currentNode);
         if (m_gtpShell != null)
             m_gtpShell.setCommandInProgess(false);
-        m_commandInProgress = false;
         if (m_analyzeCommand != null
             && (m_analyzeCommand.needsPointArg()
                 || m_analyzeCommand.needsPointListArg()))
@@ -2246,6 +2242,13 @@ class GoGui
         private FileInputStream m_in;
 
         private sgf.Reader m_reader;
+    }
+
+    private boolean isCommandInProgress()
+    {
+        if (m_commandThread == null)
+            return false;
+        return m_commandThread.isCommandInProgress();
     }
     
     private void loadFile(File file, int move)
@@ -2612,7 +2615,7 @@ class GoGui
 
     private void sendInterrupt()
     {
-        if (! m_commandInProgress)
+        if (! isCommandInProgress())
             return;
         showStatus("Interrupting ...");
         try
