@@ -79,8 +79,11 @@ public class GmpToGtp
 
     public static void main(String[] args)
     {
+        int exitStatus = 0;
         Process process = null;
         SerialPort port = null;
+        InputStream in = null;
+        OutputStream out = null;
         try
         {
             String options[] = {
@@ -142,8 +145,6 @@ public class GmpToGtp
                 System.err.println("Missing program argument.");
                 System.exit(-1);
             }
-            InputStream in;
-            OutputStream out;
             if (! device.equals(""))
             {
                 CommPortIdentifier portId =
@@ -183,10 +184,18 @@ public class GmpToGtp
                 msg = t.getClass().getName();
             System.err.println(msg);
             t.printStackTrace();
-            System.exit(-1);
+            exitStatus = -1;
         }
         finally
         {
+            try
+            {
+                in.close();
+                out.close();
+            }
+            catch (IOException ignore)
+            {
+            }
             if (process != null)
             {
                 process.destroy();
@@ -202,6 +211,7 @@ public class GmpToGtp
             if (port != null)
                 port.close();
         }
+        System.exit(exitStatus);
     }
 
     private boolean m_verbose;

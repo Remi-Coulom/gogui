@@ -363,11 +363,7 @@ class ReadThread extends Thread
                 synchronized (this)
                 {
                     if (b < 0)
-                    {
-                        m_state = STATE_DISCONNECTED;
-                        Util.log("input stream was closed");
                         break;
-                    }
                     Util.log("recv " + Util.format(b));
                     handleByte(b);
                 }
@@ -380,6 +376,9 @@ class ReadThread extends Thread
                 msg = e.getClass().getName();
             System.err.println(msg);
         }
+        m_state = STATE_DISCONNECTED;
+        Util.log("input stream was closed");
+        m_writeThread.interrupt();
     }
 
     public synchronized boolean send(Cmd cmd, StringBuffer response)
