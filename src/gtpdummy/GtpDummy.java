@@ -69,6 +69,7 @@ public class GtpDummy
                             "help\n" +
                             "white\n" +
                             "name\n" +
+                            "protocol_version\n" +
                             "quit\n" +
                             "sleep\n" +
                             "version\n" +
