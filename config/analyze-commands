@@ -20,9 +20,8 @@ none/Time Settings/time_settings %s
 string/Version/version
 
 # GNU Go extensions that could be of general interest
-plist/All Legal/all_legal %m
 plist/All Legal Black/all_legal black
-plist/All Legal White/all_legal black
+plist/All Legal White/all_legal white
 varpo/Attack/attack %p
 string/Attack Either/attack_either %P
 varp/Connect/connect %P
@@ -86,6 +85,7 @@ sboard/Influence Black (Regions)/influence black/regions
 dboard/Influence White (Black)/influence white/black/0.01
 dboard/Influence White (White)/influence white/white/-0.01
 sboard/Influence White (Regions)/influence white/regions
+string/Last Move/last_move
 none/Limit Search/limit_search %s
 plist/List Stones Black/list_stones black
 plist/List Stones White/list_stones white

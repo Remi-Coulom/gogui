@@ -537,6 +537,7 @@ public class Board
     public void showVariation(go.Point[] variation, go.Color toMove)
     {
         clearAllStrings();
+        updateFromGoBoard();
         for (int i = 0; i < variation.length; ++i)
         {
             go.Point point = variation[i];

@@ -2017,6 +2017,7 @@ class GoGui
     {
         clearStatus();
         m_guiBoard.resetBoard();
+        m_guiBoard.updateFromGoBoard();
         m_guiBoard.repaint();
     }
     
