@@ -1210,6 +1210,8 @@ class GoGui
         if (m_gtpShell != null)
             m_gtpShell.saveHistory();
         m_menuBar.saveRecent();
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.saveRecent();
         dispose();
         assert(m_instanceCount > 0);
         if (--m_instanceCount == 0)

@@ -291,6 +291,8 @@ class AnalyzeDialog
     {
     }
 
+    private boolean m_recentModified;
+
     private JButton m_runButton;
 
     private JComboBox m_comboBox;
@@ -453,6 +455,8 @@ class AnalyzeDialog
 
     public void saveRecent()
     {
+        if (! m_recentModified)
+            return;
         File file = getRecentFile();
         PrintStream out;
         try
@@ -480,6 +484,7 @@ class AnalyzeDialog
             }
         m_comboBox.insertItemAt(label, 0);
         m_comboBox.setSelectedIndex(0);
+        m_recentModified = true;
     }
 
     private void setCommand()
