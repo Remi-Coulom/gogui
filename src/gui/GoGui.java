@@ -1377,7 +1377,7 @@ class GoGui
             resetBoard();
             m_setupMode = true;
             m_toolBar.enableAll(false, null);
-            showStatus("Setup black.");
+            showStatus("Setup Black");
             m_setupColor = go.Color.BLACK;
         }
         else
@@ -1386,7 +1386,7 @@ class GoGui
 
     private void cbSetupBlack()
     {
-        showStatus("Setup black.");
+        showStatus("Setup Black");
         m_setupColor = go.Color.BLACK;
         m_board.setToMove(m_setupColor);
         updateGameInfo(false);
@@ -1394,7 +1394,7 @@ class GoGui
 
     private void cbSetupWhite()
     {
-        showStatus("Setup white.");
+        showStatus("Setup White");
         m_setupColor = go.Color.WHITE;
         m_board.setToMove(m_setupColor);
         updateGameInfo(false);
