@@ -1335,14 +1335,9 @@ class GoGui
                 toMove = reader.getMove(0).getColor();
             if (toMove != m_board.getToMove())
             {
-                if (m_fillPasses)
-                {
-                    Move m = new Move(null, m_board.getToMove());
-                    m_board.setup(m);
-                    m_commandThread.sendCommandPlay(m);
-                }
-                else
-                    m_board.setToMove(toMove);
+                Move m = new Move(null, m_board.getToMove());
+                m_board.setup(m);
+                m_commandThread.sendCommandPlay(m);
             }
 
             moves.clear();
