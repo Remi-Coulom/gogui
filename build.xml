@@ -120,7 +120,7 @@ installation directory.
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="all,man">
+<target name="dist" depends="all,test,man">
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
@@ -589,6 +589,30 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <exec executable="sh">
 <arg line="-c 'etags `find src -name &quot;*.java&quot;`'" />
 </exec>
+</target>
+
+<target name="test" depends="test-compile"
+ description="Run JUnit tests" >
+<junit printsummary="true" fork="true" haltonfailure="true">
+<classpath>
+<pathelement location="build"/>
+<pathelement location="build/test"/>
+</classpath>
+<formatter type="brief" usefile="false"/>
+<batchtest todir="build">
+<fileset dir="build/test" includes="**/*Test.class"/>
+</batchtest>
+</junit>
+</target>
+
+<target name="test-compile" depends="compile,test-depend">
+<mkdir dir="build/test"/>
+<javac srcdir="test" destdir="build/test" source="1.4" target="1.4"
+ deprecation="true" listfiles="yes" classpath="build"/>
+</target>
+
+<target name="test-depend">
+<depend srcdir="test" destdir="build/test" cache="build/depcache-test"/>
 </target>
 
 <target name="twogtp.jar" depends="compile">
