@@ -194,8 +194,8 @@ class Field
             g.setColor(m_influenceBlackColor);
         else
             g.setColor(m_influenceWhiteColor);
-        int dx = (int)(size.width * (0.29 + (1 - d) * 0.71));
-        int dy = (int)(size.height * (0.29 + (1 - d) * 0.71));
+        int dx = (int)(size.width * (0.31 + (1 - d) * 0.69));
+        int dy = (int)(size.height * (0.31 + (1 - d) * 0.69));
         g.fillRect(dx / 2, dy / 2, size.width - dx + 1, size.height - dy + 1);
     }
 
