@@ -814,7 +814,6 @@ class GoGui
         {
             setFastUpdate(false);
         }
-        boardChangedBegin(false);
     }
 
     private void beginLengthyCommand()
@@ -859,11 +858,13 @@ class GoGui
     private void cbBeginning()
     {
         backward(m_currentNode.getDepth());
+        boardChangedBegin(false);
     }
 
     private void cbBackward(int n)
     {
         backward(n);
+        boardChangedBegin(false);
     }
 
     private void cbBoardSizeOther()
@@ -914,16 +915,38 @@ class GoGui
             return;
         try
         {
-            int moveNumber = Integer.parseInt(value);
-            if (moveNumber < 0 || moveNumber > m_board.getNumberSavedMoves())
+            int gotoNumber = Integer.parseInt(value);
+            int moveNumber = m_currentNode.getMoveNumber();
+            int movesLeft = m_currentNode.getMovesLeft();
+            if (gotoNumber < 0 || gotoNumber > moveNumber + movesLeft)
             {
                 showError("Invalid move number.");
                 return;
             }
-            if (moveNumber < m_board.getMoveNumber())
-                backward(m_board.getMoveNumber() - moveNumber);
+            int numberNodes = 0;
+            Node node = m_currentNode;
+            if (gotoNumber < moveNumber)
+            {
+                while (node.getFather() != null && moveNumber > gotoNumber)
+                {
+                    if (node.getMove() != null)
+                        --moveNumber;
+                    ++numberNodes;
+                    node = node.getFather();
+                }
+                backward(numberNodes);
+            }
             else
-                forward(moveNumber - m_board.getMoveNumber());
+            {
+                while (node.getChild() != null && moveNumber < gotoNumber)
+                {
+                    if (node.getMove() != null)
+                        ++moveNumber;
+                    ++numberNodes;
+                    node = node.getChild();
+                }
+                forward(numberNodes);
+            }
             boardChangedBegin(false);
         }
         catch (NumberFormatException e)
