@@ -119,12 +119,17 @@ class GtpServer
             GtpServer gtpServer = new GtpServer(verbose, loop, program,
                                                 remoteHost, port, userFile);
         }
+        catch (RuntimeException e)
+        {
+            e.printStackTrace();
+            System.exit(-1);
+        }
         catch (Throwable t)
         {
             String msg = t.getMessage();
             if (msg == null)
                 msg = t.getClass().getName();
-	    System.err.println(msg);
+            System.err.println(msg);
             System.exit(-1);
         }
     }
