@@ -311,7 +311,7 @@ class GoGui
             if (! showQuestion("A command is in progress.\nKill program?"))
                 return false;
         }
-        else if (! showQuestion("Detach program?"))
+        else if (! showQuestion("Detach " + m_name + "?"))
             return false;
         detachProgram();
         m_prefs.setString("program", "");
@@ -770,6 +770,7 @@ class GoGui
         }
         catch (Gtp.Error e)
         {
+            m_name = "Unknown Program";
             showGtpError(e);
             return false;
         }
