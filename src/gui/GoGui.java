@@ -252,7 +252,7 @@ class GoGui
             m_analyzePointArg = p;
             m_guiBoard.clearAllCrossHair();
             m_guiBoard.setCrossHair(p, true);
-            analyzeBegin(false);
+            analyzeBegin(false, false);
             return;
         }
         if (m_scoreMode)
@@ -454,7 +454,7 @@ class GoGui
         if (m_commandInProgress)
             return;
         if (! m_analyzeCommand.needsPointArg())
-            analyzeBegin(false);
+            analyzeBegin(false, false);
     }
 
     public void windowActivated(WindowEvent e)
@@ -484,6 +484,22 @@ class GoGui
 
     public void windowOpened(WindowEvent e)
     {
+    }
+
+    private class AnalyzeContinue
+        implements Runnable
+    {
+        public AnalyzeContinue(boolean checkComputerMoveAfterAnalyze)
+        {
+            m_checkComputerMoveAfterAnalyze = checkComputerMoveAfterAnalyze;
+        }
+
+        public void run()
+        {
+            analyzeContinue(m_checkComputerMoveAfterAnalyze);
+        }
+        
+        private boolean m_checkComputerMoveAfterAnalyze;
     }
 
     private class NewGameContinue
@@ -592,7 +608,8 @@ class GoGui
 
     private ToolBar m_toolBar;
 
-    private void analyzeBegin(boolean resetBoardAfterAnalyze)
+    private void analyzeBegin(boolean resetBoardAfterAnalyze,
+                              boolean checkComputerMoveAfterAnalyze)
     {
         if (m_commandThread == null)
             return;
@@ -603,14 +620,11 @@ class GoGui
         String command =
             m_analyzeCommand.replaceWildCards(m_board.getToMove(),
                                               m_analyzePointArg);
-        Runnable callback = new Runnable()
-            {
-                public void run() { analyzeContinue(); }
-            };
-        runLengthyCommand(command, callback);
+        runLengthyCommand(command,
+                          new AnalyzeContinue(checkComputerMoveAfterAnalyze));
     }
 
-    private void analyzeContinue()
+    private void analyzeContinue(boolean checkComputerMoveAfterAnalyze)
     {
         endLengthyCommand();
         try
@@ -689,7 +703,7 @@ class GoGui
             }
             else
                 showStatus(resultTitle);
-            if (! m_analyzeRequestPoint)
+            if (! m_analyzeRequestPoint && checkComputerMoveAfterAnalyze)
                 checkComputerMove();
         }
         catch(Gtp.Error e)
@@ -725,7 +739,7 @@ class GoGui
                 m_commandThread.setFastUpdate(false);
                 m_gtpShell.setFastUpdate(false);
             }
-            boardChanged();
+            boardChanged(false);
         }
         catch (Gtp.Error e)
         {
@@ -742,7 +756,7 @@ class GoGui
         m_commandInProgress = true;
     }
 
-    private void boardChanged()
+    private void boardChanged(boolean doCheckComputerMove)
     {
         m_guiBoard.update();
         m_guiBoard.repaint();
@@ -752,9 +766,13 @@ class GoGui
         if (m_commandThread != null && m_analyzeCommand != null
             && ! (m_analyzeCommand.needsPointArg()
                   && m_analyzePointArg == null))
-            analyzeBegin(true);
+            analyzeBegin(true, doCheckComputerMove);
         else
+        {
             resetBoard();
+            if (doCheckComputerMove)
+                checkComputerMove();
+        }
     }
 
     private void cbAnalyze()
@@ -787,13 +805,13 @@ class GoGui
     private void cbEnd()
     {
         forward(m_board.getNumberSavedMoves() - m_board.getMoveNumber());
-        boardChanged();
+        boardChanged(false);
     }
 
     private void cbForward(int n)
     {
         forward(n);
-        boardChanged();
+        boardChanged(false);
     }
 
     private void cbGtpFile()
@@ -1234,8 +1252,7 @@ class GoGui
                 showInfo("The computer passed.");
             fileModified();
             m_isModified = true;
-            boardChanged();
-            checkComputerMove();
+            boardChanged(true);
         }
         catch (Gtp.Error e)
         {
@@ -1361,8 +1378,7 @@ class GoGui
                 m_lostOnTimeShown = true;
             }
             m_isModified = true;
-            boardChanged();            
-            checkComputerMove();
+            boardChanged(true);            
         }
         catch (Gtp.Error e)
         {
@@ -1565,7 +1581,7 @@ class GoGui
                 forward(move);
             m_loadedFile = file.toString();
             setTitle();
-            boardChanged();
+            boardChanged(false);
         }
         catch (FileNotFoundException e)
         {
@@ -1976,9 +1992,9 @@ class GoGui
                 m_commandThread.setFastUpdate(false);
                 m_gtpShell.setFastUpdate(false);
             }
-            boardChanged();
             fileModified();
             m_isModified = true;
+            boardChanged(false);
         }
         catch (Gtp.Error e)
         {
