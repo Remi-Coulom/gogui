@@ -138,6 +138,7 @@ public class Field
         m_point = p;
         Dimension size = m_board.getPreferredFieldSize();
         setPreferredSize(size);
+        setMinimumSize(m_board.getMinimumFieldSize());
         Font font = UIManager.getFont("Label.font");        
         if (font != null)
         {
@@ -145,7 +146,6 @@ public class Field
             if (font != null)
                 setFont(font);
         }
-        setMinimumSize(new Dimension(3, 3));
         setBorder(null);
         addFocusListener(this);
         KeyAdapter keyAdapter = new KeyAdapter()

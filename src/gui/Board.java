@@ -139,6 +139,11 @@ public class Board
         return result;
     }
 
+    public Dimension getMinimumFieldSize()
+    {
+        return m_minimumFieldSize;
+    }
+
     public Dimension getPreferredFieldSize()
     {
         return m_preferredFieldSize;
@@ -563,6 +568,8 @@ public class Board
 
     private go.Board m_board;
 
+    private Dimension m_minimumFieldSize;
+
     private Dimension m_preferredFieldSize;
 
     private Field m_field[][];
@@ -732,6 +739,10 @@ public class Board
         if (size % 2 == 0)
             ++size;
         m_preferredFieldSize = new Dimension(size, size);
+        size = GuiUtils.getDefaultMonoFontSize();
+        if (size % 2 == 0)
+            ++size;
+        m_minimumFieldSize = new Dimension(size, size);
     }
 }
 
