@@ -27,15 +27,6 @@ of the board.
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>New Game</guimenuitem></term>
-<listitem>
-<para>
-Start a new game.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>Open</guimenuitem></term>
 <listitem>
 <para>
@@ -139,6 +130,15 @@ Quit GoGui.
 <section>
 <title>Game Menu</title>
 <variablelist>
+
+<varlistentry>
+<term><guimenuitem>New Game</guimenuitem></term>
+<listitem>
+<para>
+Start a new game.
+</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Info</guimenuitem></term>

@@ -489,8 +489,6 @@ public class MenuBar
     private JMenu createFileMenu()
     {
         JMenu menu = createMenu("File", KeyEvent.VK_F);
-        addMenuItem(menu, "New Game", KeyEvent.VK_N, KeyEvent.VK_N,
-                    m_shortcutKeyMask, "new-game");
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     m_shortcutKeyMask, "open");
         menu.add(createRecentMenu());
@@ -514,6 +512,7 @@ public class MenuBar
     private JMenu createGameMenu()
     {
         JMenu menu = createMenu("Game", KeyEvent.VK_G);
+        addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
         addMenuItem(menu, "Info...", KeyEvent.VK_I, KeyEvent.VK_I,
                     m_shortcutKeyMask, "game-info");
         menu.add(createBoardSizeMenu());
@@ -552,8 +551,7 @@ public class MenuBar
             addMenuItem(menu, "Go To...", KeyEvent.VK_G, KeyEvent.VK_G,
                         m_shortcutKeyMask, "goto");
         menu.addSeparator();
-        addMenuItem(menu, "Score", KeyEvent.VK_R, KeyEvent.VK_R,
-                    m_shortcutKeyMask, "score");
+        addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
     }
 
