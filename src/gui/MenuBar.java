@@ -239,7 +239,7 @@ class MenuBar
             if (m_recent[i].equals(file))
             {
                 for (int j = i; j > 0; --j)
-                    m_recent[i] = m_recent[i - 1];
+                    m_recent[j] = m_recent[j - 1];
                 m_recent[0] = file;
                 updateRecentMenu();
                 return;
