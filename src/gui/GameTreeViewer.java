@@ -20,8 +20,9 @@ class GameNode
     extends JComponent
 {
     public GameNode(Node node, int moveNumber, int width, int height,
-                    GameTreeViewer.Listener listener)
+                    GameTreeViewer.Listener listener, boolean fastPaint)
     {
+        m_fastPaint = fastPaint;
         m_node = node;
         m_moveNumber = moveNumber;
         m_width = width;
@@ -46,7 +47,7 @@ class GameNode
     public void paintComponent(Graphics graphics)
     {
         Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
+        if (graphics2D != null && ! m_fastPaint)
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setColor(m_colorBackground);
@@ -117,6 +118,8 @@ class GameNode
         repaint();
     }
 
+    private boolean m_fastPaint;
+
     private boolean m_isCurrent;
 
     private int m_moveNumber;
@@ -139,9 +142,10 @@ class GameTreePanel
     extends JPanel
     implements Scrollable
 {
-    public GameTreePanel(GameTreeViewer.Listener listener)
+    public GameTreePanel(GameTreeViewer.Listener listener, boolean fastPaint)
     {
         super(new SpringLayout());
+        m_fastPaint = fastPaint;
         setBackground(UIManager.getColor("Label.background"));
         m_nodeSize = 25;
         m_nodeDist = 35;
@@ -238,6 +242,8 @@ class GameTreePanel
         scrollToCurrent();
     }
 
+    private boolean m_fastPaint;
+
     private int m_currentNodeX;
 
     private int m_currentNodeY;
@@ -267,8 +273,9 @@ class GameTreePanel
         m_maxY = Math.max(y, m_maxY);
         if (node.getMove() != null)
             ++moveNumber;
-        GameNode gameNode = new GameNode(node, moveNumber,
-                                         m_nodeSize, m_nodeDist, m_listener);
+        GameNode gameNode =
+            new GameNode(node, moveNumber, m_nodeSize, m_nodeDist, m_listener,
+                         m_fastPaint);
         m_map.put(node, gameNode);
         add(gameNode);
         SpringLayout layout = (SpringLayout)getLayout();
@@ -341,14 +348,14 @@ public class GameTreeViewer
         public void toTop();
     }
 
-    public GameTreeViewer(Listener listener)
+    public GameTreeViewer(Listener listener, boolean fastPaint)
     {
         super("Game Tree");
         GuiUtils.setGoIcon(this);
         createMenuBar();
         Container contentPane = getContentPane();
         m_listener = listener;
-        m_panel = new GameTreePanel(listener);
+        m_panel = new GameTreePanel(listener, fastPaint);
         m_scrollPane =
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

@@ -33,6 +33,7 @@ class GoGui
           String gtpCommand, String initAnalyze, boolean fastPaint)
         throws GtpError
     {
+        m_fastPaint = fastPaint;
         m_prefs = prefs;
         setPrefsDefaults(m_prefs);
         m_boardSize = prefs.getInt("boardsize");
@@ -344,7 +345,7 @@ class GoGui
     {
         if (m_gameTreeViewer == null)
         {
-            m_gameTreeViewer = new GameTreeViewer(this);
+            m_gameTreeViewer = new GameTreeViewer(this, m_fastPaint);
             restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         }
         m_gameTreeViewer.update(m_gameTree, m_currentNode);
@@ -654,6 +655,8 @@ class GoGui
     private boolean m_computerWhite;
 
     private boolean m_commandInProgress;
+
+    private boolean m_fastPaint;
 
     private boolean m_ignoreInvalidResponses;
 
