@@ -288,6 +288,7 @@ class GoGui
             m_analyzePointArg = p;
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(p, true);
+            m_boardNeedsReset = true;
             m_guiBoard.repaint();
             analyzeBegin(false, false);
             return;
@@ -306,6 +307,7 @@ class GoGui
                 m_guiBoard.setSelect((go.Point)m_analyzePointListArg.get(i),
                                      true);
             m_guiBoard.repaint();
+            m_boardNeedsReset = true;
             if (modifiedSelect
                 && m_analyzePointListArg.size() > 0)
                 analyzeBegin(false, false);
