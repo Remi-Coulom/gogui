@@ -20,14 +20,6 @@ public class Main
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
                            "GoGui");
         System.setProperty("apple.awt.brushMetalLook", "true");
-        try
-        {
-            String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
-            UIManager.setLookAndFeel(lookAndFeel);
-        }
-        catch (Exception e)
-        {
-        }
         boolean verbose = false;
         try
         {

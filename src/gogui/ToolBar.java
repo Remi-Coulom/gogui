@@ -18,8 +18,6 @@ public class ToolBar
 {
     public ToolBar(ActionListener listener)
     {
-        setRollover(true);
-        setFloatable(false);
         m_listener = listener;
         m_buttonNew = addButton("filenew.png", "new-game", "New Game");
         m_buttonOpen = addButton("fileopen.png", "open", "Open");
@@ -143,8 +141,6 @@ public class ToolBar
             button.setIcon(new ImageIcon(url, command));
         else
             button.setText(command);
-        Insets insets = new Insets(1, 1, 1, 1);
-        button.setMargin(insets);
         button.setEnabled(false);
         button.setFocusable(false);
         add(button);

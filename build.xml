@@ -124,6 +124,8 @@ installation directory.
  install.sh,
  config/analyze-commands*,
  config/gogui.desktop,
+ config/gogui.mime,
+ config/gogui.keys,
  doc/html/*.html,
  doc/html/*.css,
  doc/man/*.1,
