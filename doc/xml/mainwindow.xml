@@ -258,7 +258,7 @@ Replay all moves.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Goto</guimenuitem></term>
+<term><guimenuitem>Go To</guimenuitem></term>
 <listitem>
 <para>
 Go to a certain move number.
