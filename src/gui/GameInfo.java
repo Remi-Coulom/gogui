@@ -25,9 +25,9 @@ class GameInfo
     {
         super(new GridLayout(0, 2, GuiUtils.SMALL_PAD, 0));
         m_timeControl = timeControl;
-        m_move = addEntry("To play");
+        m_move = addEntry("To Play");
         m_number = addEntry("Moves");
-        m_last = addEntry("Last move");
+        m_last = addEntry("Last Move");
         m_captB = addEntry("Captured Black");
         m_captW = addEntry("Captured White");
         m_timeB = addEntry("Time Black");
