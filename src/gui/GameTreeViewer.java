@@ -130,10 +130,13 @@ class GameNode
 
     private void drawText(Graphics graphics)
     {
+        int labelMode = m_gameTreePanel.getLabelMode();
+        if (labelMode == GameTreePanel.LABEL_NONE)
+            return;
         Move move = m_node.getMove();
         int width = m_gameTreePanel.getNodeWidth();
         String text;
-        if (m_gameTreePanel.getLabelMode() == GameTreePanel.LABEL_MOVE)
+        if (labelMode == GameTreePanel.LABEL_MOVE)
         {
             if (move.getPoint() == null)
                 return;
@@ -162,6 +165,8 @@ class GameTreePanel
     public static final int LABEL_NUMBER = 0;
 
     public static final int LABEL_MOVE = 1;
+
+    public static final int LABEL_NONE = 2;
 
     public static final int SIZE_LARGE = 0;
 
@@ -350,6 +355,7 @@ class GameTreePanel
         {
         case LABEL_NUMBER:
         case LABEL_MOVE:
+        case LABEL_NONE:
             if (mode != m_labelMode)
             {
                 m_labelMode = mode;
@@ -869,6 +875,8 @@ public class GameTreeViewer
             cbLabelMode(GameTreePanel.LABEL_MOVE);
         else if (command.equals("label-number"))
             cbLabelMode(GameTreePanel.LABEL_NUMBER);
+        else if (command.equals("label-none"))
+            cbLabelMode(GameTreePanel.LABEL_NONE);
         else if (command.equals("size-large"))
             cbSizeMode(GameTreePanel.SIZE_LARGE);
         else if (command.equals("size-normal"))
@@ -912,6 +920,8 @@ public class GameTreeViewer
     private JMenuItem m_itemLabelNumber;
 
     private JMenuItem m_itemLabelMove;
+
+    private JMenuItem m_itemLabelNone;
 
     private JMenuItem m_itemSizeLarge;
 
@@ -997,6 +1007,8 @@ public class GameTreeViewer
                                          KeyEvent.VK_N, "label-number");
         m_itemLabelMove = addRadioItem(menuLabel, group, "Move",
                                        KeyEvent.VK_M, "label-move");
+        m_itemLabelNone = addRadioItem(menuLabel, group, "None",
+                                       KeyEvent.VK_O, "label-none");
         switch (labelMode)
         {
         case GameTreePanel.LABEL_NUMBER:
@@ -1004,6 +1016,9 @@ public class GameTreeViewer
             break;
         case GameTreePanel.LABEL_MOVE:
             m_itemLabelMove.setSelected(true);
+            break;
+        case GameTreePanel.LABEL_NONE:
+            m_itemLabelNone.setSelected(true);
             break;
         default:
             break;
@@ -1061,7 +1076,7 @@ public class GameTreeViewer
     private static void setPrefsDefaults(Preferences prefs)
     {
         prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
-        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_LARGE);
+        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
     }
 }
 
