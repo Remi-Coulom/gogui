@@ -1646,6 +1646,8 @@ class GoGui
             }
         }
         m_commandThread = null;
+        m_name = "";
+        m_version = "";
         m_toolBar.setComputerEnabled(false);
         m_menuBar.setComputerEnabled(false);
         m_gtpShell.dispose();
