@@ -27,6 +27,7 @@ class GameNode
         m_node = node;
         m_moveNumber = moveNumber;
         addMouseListener(mouseListener);
+        setOpaque(true);
         setFocusable(false);
         setFocusTraversalKeysEnabled(false);
         if (font != null)
@@ -50,8 +51,25 @@ class GameNode
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         int width = m_gameTreePanel.getNodeWidth();
-        Move move = m_node.getMove();
+        int height = m_gameTreePanel.getNodeHeight();
+        graphics.setColor(GameTreePanel.m_background);
+        graphics.fillRect(0, 0, width, height);
         int halfSize = width / 2;
+        if (m_node.getNumberChildren() > 1)
+        {
+            graphics.setColor(java.awt.Color.DARK_GRAY);
+            if (! m_gameTreePanel.isExpanded(m_node))
+            {
+                int d1 = width / 2;
+                int d2 = (height - width) / 2;
+                graphics.drawLine(halfSize, width, halfSize, width + d2);
+                graphics.drawLine(halfSize, width + d2, halfSize + d1,
+                                  width + d2);
+            }
+            else
+                graphics.drawLine(halfSize, width, halfSize, height);
+        }
+        Move move = m_node.getMove();
         if (m_node.getNumberAddBlack() + m_node.getNumberAddWhite() > 0)
         {
             graphics.setColor(java.awt.Color.black);
@@ -81,7 +99,9 @@ class GameNode
             && ! m_node.getComment().trim().equals(""))
         {
             graphics.setColor(m_colorLightBlue);
-            graphics.drawLine(3, width + 2, width - 3, width + 2);
+            int y = width + (height - width) / 4;
+            int d = width / 5;
+            graphics.drawLine(d, y, width - d, y);
         }
         if (m_gameTreePanel.isCurrent(m_node))
         {
@@ -102,7 +122,7 @@ class GameNode
     private int m_moveNumber;
 
     private static final java.awt.Color m_colorLightBlue
-        = new java.awt.Color(0.57f, 0.68f, 0.91f);
+        = new java.awt.Color(103, 122, 164);
 
     private GameTreePanel m_gameTreePanel;
 
@@ -151,19 +171,22 @@ class GameTreePanel
 
     public static final int SIZE_TINY = 3;
 
+    public static final java.awt.Color m_background =
+        new java.awt.Color(192, 192, 192);
+
     public GameTreePanel(JFrame owner, GameTreeViewer.Listener listener,
                          boolean fastPaint, int labelMode, int sizeMode)
     {
         super(new SpringLayout());
         m_owner = owner;
         m_fastPaint = fastPaint;
-        setBackground(UIManager.getColor("Label.background"));
+        setBackground(m_background);
         m_labelMode = labelMode;
         m_sizeMode = sizeMode;
         computeSizes(sizeMode);
         setFocusable(false);
         setFocusTraversalKeysEnabled(false);
-        setOpaque(false);
+        setOpaque(true);
         setAutoscrolls(true);
         MouseMotionListener doScrollRectToVisible = new MouseMotionAdapter()
             {
@@ -300,14 +323,19 @@ class GameTreePanel
         return node == m_currentNode;
     }
 
+    public boolean isExpanded(Node node)
+    {
+        return m_expanded.contains(node);
+    }
+
     public void paintComponent(Graphics graphics)
     {
+        super.paintComponent(graphics);
         if (m_gameTree == null)
             return;
         graphics.setColor(java.awt.Color.DARK_GRAY);
         drawGrid(graphics, m_gameTree.getRoot(),
                  m_margin + m_nodeWidth / 2, m_margin + m_nodeWidth / 2);
-        super.paintComponent(graphics);
     }
 
     public void redrawCurrentNode()
@@ -578,13 +606,6 @@ class GameTreePanel
             if (! notExpanded && i < numberChildren - 1)
                 yChild += m_nodeDist;
         }
-        if (notExpanded)
-        {
-            int d1 = m_nodeWidth / 2;
-            int d2 = d1 + 5;
-            graphics.drawLine(x, y, x, y + d2);
-            graphics.drawLine(x, y + d2, x + d1, y + d2);
-        }
         return yChild;
     }
 
@@ -811,7 +832,7 @@ public class GameTreeViewer
         m_scrollPane.setFocusable(true);
         m_scrollPane.setFocusTraversalKeysEnabled(false);
         JViewport viewport = m_scrollPane.getViewport();
-        viewport.setBackground(UIManager.getColor("Label.background"));
+        viewport.setBackground(GameTreePanel.m_background);
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         viewport.setFocusTraversalKeysEnabled(false);
         setFocusTraversalKeysEnabled(false);
