@@ -211,12 +211,14 @@ class MenuBar
         m_itemSetup.setSelected(false);
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
+        m_itemAttachProgram.setEnabled(false);
         if (m_isComputerDisabled)
         {
             m_menuComputerColor.setEnabled(false);
             m_itemComputerPlay.setEnabled(false);
             m_itemBeepAfterMove.setEnabled(false);
             m_itemDetachProgram.setEnabled(false);
+            m_itemAttachProgram.setEnabled(true);
         }
     }
 
