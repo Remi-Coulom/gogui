@@ -54,8 +54,7 @@ varc/Combination Attack/combination_attack %c
 pstring/Combination Defend/combination_defend %c
 string/Does Surround/does_surround %P
 hpstring/Dragon Data/dragon_data %p
-hpstring/Dragon Status/dragon_status
-pstring/Dragon Status At/dragon_status %p
+pstring/Dragon Status/dragon_status %p
 plist/Dragon Stones/dragon_stones %p
 none/Dump Stack/dump_stack
 pstring/Eval Eye/eval_eye %p
@@ -110,8 +109,7 @@ string/Surround Map/surround_map %P
 pstring/Tactical Analyze Semeai/tactical_analyze_semeai %P
 none/Test EyeShape/test_eyeshape %P
 string/Unconditional Status/unconditional_status %p
-hstring/Worm Data/worm_data
-hpstring/Worm Data At/worm_data %p
+hpstring/Worm Data/worm_data %p
 plist/Worm Stones/worm_stones %p %c
 
 # GoGui extensions
