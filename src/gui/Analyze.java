@@ -203,7 +203,7 @@ class AnalyzeCommand
             StringBuffer listBuffer = new StringBuffer(128);
             for (int i = 0; i < pointListArg.size(); ++i)
             {
-                if (listBuffer.length() == 0)
+                if (listBuffer.length() > 0)
                     listBuffer.append(' ');
                 listBuffer.append(((go.Point)pointListArg.get(i)).toString());
             }

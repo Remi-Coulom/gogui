@@ -810,6 +810,12 @@ class GoGui
 
     private void boardChangedBegin(boolean doCheckComputerMove)
     {
+        if (m_analyzePointListArg.size() > 0)
+        {
+            m_analyzePointListArg.clear();
+            m_guiBoard.clearAllSelect();
+            m_guiBoard.repaint();
+        }
         m_guiBoard.update();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
