@@ -1269,7 +1269,7 @@ class GoGui
         TimeSettings timeSettings = gameInformation.m_timeSettings;
         if (timeSettings != null)
         {
-            m_timeSettings = (TimeSettings)timeSettings.clone();
+            m_timeSettings = new TimeSettings(timeSettings);
             setTimeSettings();
         }
         else

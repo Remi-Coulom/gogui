@@ -10,7 +10,7 @@ package game;
 /** Time settings.
     Unit is milliseconds.
 */
-public class TimeSettings
+public final class TimeSettings
 {
     public TimeSettings(long totalTime)
     {
@@ -30,11 +30,11 @@ public class TimeSettings
         m_byoyomiMoves = byoyomiMoves;
     }
 
-    public Object clone()
+    public TimeSettings(TimeSettings timeSettings)
     {
-        if (getUseByoyomi())
-            return new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
-        return new TimeSettings(m_preByoyomi);
+        m_preByoyomi = timeSettings.m_preByoyomi;
+        m_byoyomi = timeSettings.m_byoyomi;
+        m_byoyomiMoves = timeSettings.m_byoyomiMoves;
     }
 
     public long getByoyomi()

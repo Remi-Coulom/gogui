@@ -32,8 +32,7 @@ public class GameTree
         m_gameInformation.m_komi = komi;
         m_gameInformation.m_rules = rules;
         if (timeSettings != null)
-            m_gameInformation.m_timeSettings
-                = (TimeSettings)timeSettings.clone();
+            m_gameInformation.m_timeSettings = new TimeSettings(timeSettings);
         if (handicap != null)
         {
             m_gameInformation.m_handicap = handicap.size();
