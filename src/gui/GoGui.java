@@ -1049,6 +1049,7 @@ class GoGui
                 m_commandThread.sendCommandBoardsize(size);
                 m_commandThread.sendCommandClearBoard(size);
             }
+            m_board.newGame();        
             Vector moves = new Vector(m_board.getNumberPoints());
             for (int i = 0; i < m_board.getNumberPoints(); ++i)
             {
@@ -1057,9 +1058,7 @@ class GoGui
                 int y = p.getY();
                 go.Color c = color[x][y];
                 if (c != go.Color.EMPTY)
-                {
                     moves.add(new Move(p, c));
-                }
             }
             if (m_fillPasses)
                 moves = Move.fillPasses(moves, m_board.getToMove());
