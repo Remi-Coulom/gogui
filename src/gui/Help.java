@@ -40,6 +40,7 @@ class Help
         super(owner, "GoGui: Help");
         m_contents = contents;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        createMenu();
         Container contentPane = getContentPane();
         contentPane.add(createButtons(), BorderLayout.NORTH);
         m_editorPane = new AntialiasingEditorPane();
@@ -62,6 +63,8 @@ class Help
         String command = event.getActionCommand();
         if (command.equals("back"))
             back();
+        else if (command.equals("close"))
+            dispose();
         else if (command.equals("contents"))
         {
             loadURL(m_contents);
@@ -103,6 +106,32 @@ class Help
 
     private URL m_contents;
 
+    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
+                                  String command)
+    {
+        item.addActionListener(this);
+        item.setActionCommand(command);
+        item.setMnemonic(mnemonic);
+        menu.add(item);
+        return item;
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        return addMenuItem(menu, item, mnemonic, command);        
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  int accel, int modifier, String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
+        item.setAccelerator(k);
+        return addMenuItem(menu, item, mnemonic, command);
+    }
+
     private void appendHistory(URL url)
     {
         if (m_historyIndex >= 0 && getHistory(m_historyIndex).equals(url))
@@ -128,6 +157,17 @@ class Help
         --m_historyIndex;
         loadURL(getHistory(m_historyIndex));
         historyChanged();
+    }
+
+    private void createMenu()
+    {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("File");
+        menu.setMnemonic(KeyEvent.VK_F);
+        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
+                    ActionEvent.CTRL_MASK, "close");
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
     }
 
     private JComponent createButtons()
