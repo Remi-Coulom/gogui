@@ -2295,9 +2295,9 @@ class GoGui
             String blackRank = gameInformation.m_blackRank;
             String whiteRank = gameInformation.m_whiteRank;
             if (blackRank != null && ! blackRank.trim().equals(""))
-                playerBlack = playerBlack + "[" + blackRank + "]";
+                playerBlack = playerBlack + " [" + blackRank + "]";
             if (whiteRank != null && ! whiteRank.trim().equals(""))
-                playerWhite = playerWhite + "[" + whiteRank + "]";
+                playerWhite = playerWhite + " [" + whiteRank + "]";
             gameName = playerBlack + " vs " + playerWhite;
         }
         else if (m_loadedFile != null)
