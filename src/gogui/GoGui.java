@@ -2076,8 +2076,12 @@ class GoGui
     {
         if (! checkCurrentNodeExecuted())
             return;
-        Node node = new Node(move);
-        m_currentNode.append(node);
+        Node node = m_currentNode.getChildWithMove(move);
+        if (node == null)
+        {
+            node = new Node(move);
+            m_currentNode.append(node);
+        }
         m_currentNode = node;
         try
         {

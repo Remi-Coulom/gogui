@@ -39,6 +39,12 @@ GoGui: new menu item "Node Info" in Game Tree Window
 </listitem>
 <listitem>
 <simpara>
+GoGui: playing a move that is already a child of the current node will no
+longer create a new child
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Use xsltproc for generating the documentation instead of the built-in
 ant target "Style"
 </simpara>
