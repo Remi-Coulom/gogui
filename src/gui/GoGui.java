@@ -1550,6 +1550,9 @@ class GoGui
             m_board.play(move);
             ++m_currentNodeExecuted;
         }
+        go.Color toMove = m_currentNode.getToMove();
+        if (toMove != go.Color.EMPTY)
+            m_board.setToMove(toMove);
     }
 
     private void fileModified()
@@ -2327,9 +2330,9 @@ class GoGui
                 else if (c == go.Color.WHITE)
                     m_currentNode.addWhite(point);
             }
-            executeCurrentNode();
             if (m_board.getToMove() != toMove)
-                m_board.setToMove(toMove);
+                m_currentNode.setToMove(toMove);
+            executeCurrentNode();
             fileModified();
             boardChangedBegin(false);
         }
