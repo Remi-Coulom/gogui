@@ -91,7 +91,7 @@ public class Board
             if (c != Color.EMPTY)
             {
                 allEmpty = false;
-                if (! getDead(p))
+                if (! scoreGetDead(p))
                     setScore(p, c);
             }
             else
@@ -149,12 +149,6 @@ public class Board
         if (y < m_size - 1)
             result.add(m_point[x][y + 1]);
         return result;
-    }
-
-    /** @see setDead. */
-    public boolean getDead(Point p)
-    {
-        return m_dead[p.getX()][p.getY()];
     }
 
     public Color getScore(Point p)
@@ -418,27 +412,17 @@ public class Board
     public void scoreBegin(Point[] isDeadStone)
     {
         for (int i = 0; i < m_allPoints.length; ++i)
-            setDead(m_allPoints[i], false);
+            scoreSetDead(m_allPoints[i], false);
         if (isDeadStone != null)
             for (int i = 0; i < isDeadStone.length; ++i)
-                setDead(isDeadStone[i], true);
+                scoreSetDead(isDeadStone[i], true);
         calcScore();
     }
 
-    public void scoreSetDead(Point p)
+    /** Mark point as dead for scoring. */
+    public void scoreSetDead(Point p, boolean value)
     {
-        Color c = getColor(p);
-        if (c == Color.EMPTY)
-            return;
-        Vector stones = new Vector(getNumberPoints());
-        getStones(p, c, stones);
-        boolean dead = ! getDead((Point)(stones.get(0)));
-        for (int i = 0; i < stones.size(); ++i)
-        {
-            Point stone = (Point)stones.get(i);
-            setDead(stone, dead);
-        }
-        calcScore();
+        m_dead[p.getX()][p.getY()] = value;
     }
 
     public Score scoreGet()
@@ -504,10 +488,9 @@ public class Board
         return s;
     }
 
-    /** Mark point as dead for scoring. */
-    public void setDead(Point p, boolean value)
+    public boolean scoreGetDead(Point p)
     {
-        m_dead[p.getX()][p.getY()] = value;
+        return m_dead[p.getX()][p.getY()];
     }
 
     public void setKomi(float komi)
@@ -719,11 +702,11 @@ public class Board
     private boolean isTerritory(Point p, Vector territory, Color color)
     {
         Color c = getColor(p);
-        if (c == color.otherColor() && ! getDead(p))
+        if (c == color.otherColor() && ! scoreGetDead(p))
             return false;
         if (c == color)
         {
-            if (getDead(p))
+            if (scoreGetDead(p))
                 return false;
             else
                 return true;

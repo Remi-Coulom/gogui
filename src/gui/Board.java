@@ -212,11 +212,11 @@ public class Board
             return;
         Vector stones = new Vector(m_board.getNumberPoints());
         m_board.getStones(p, c, stones);
-        boolean dead = ! m_board.getDead((go.Point)(stones.get(0)));
+        boolean dead = ! m_board.scoreGetDead((go.Point)(stones.get(0)));
         for (int i = 0; i < stones.size(); ++i)
         {
             go.Point stone = (go.Point)stones.get(i);
-            m_board.setDead(stone, dead);
+            m_board.scoreSetDead(stone, dead);
             setCrossHair(stone, dead);
         }
         calcScore();
