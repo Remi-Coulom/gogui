@@ -92,7 +92,10 @@ public class SimpleDialogs
     /** File selection, unknown whether for load or save. */
     public static File showSelectFile(Frame parent, String title)
     {
-        return showFileChooser(parent, FILE_SELECT, m_lastFile, false, title);
+        /* We have to use JFileChooser here even on the Mac, because
+           awt.FileDialog is no good if we don't know if it's load or save */
+        return showFileChooserSwing(parent, FILE_SELECT, m_lastFile, false,
+                                    title);
     }
 
     public static void showWarning(Component parent, String message)
