@@ -125,7 +125,7 @@ class SocketOutputCopy
         }
     }
 
-    Socket m_socket;
+    private Socket m_socket;
 };
 
 //----------------------------------------------------------------------------
