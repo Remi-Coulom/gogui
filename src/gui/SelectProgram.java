@@ -12,7 +12,6 @@ import java.net.*;
 import javax.swing.*;
 import java.util.*;
 import utils.GuiUtils;
-import utils.Platform;
 import utils.StringUtils;
 
 //-----------------------------------------------------------------------------

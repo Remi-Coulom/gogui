@@ -12,7 +12,6 @@ import java.awt.font.*;
 import java.util.*;
 import javax.swing.*;
 import go.*;
-import utils.RadialGradientContext;
 import utils.RadialGradientPaint;
  
 //-----------------------------------------------------------------------------
