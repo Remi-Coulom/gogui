@@ -92,9 +92,24 @@ class AnalyzeDialog
             sort();
     }
 
+    public go.Color getSelectedColor()
+    {
+        String selectedItem = (String)m_comboBoxColor.getSelectedItem();
+        if (selectedItem.equals("White"))
+            return go.Color.WHITE;
+        assert(selectedItem.equals("Black"));
+        return go.Color.BLACK;
+    }
+
     public void setAppName(String name)
     {
         setTitle("Analyze" + " - " + name);
+    }
+
+    public void setSelectedColor(go.Color color)
+    {
+        m_selectedColor = color;
+        selectColor();
     }
 
     public void toTop()
@@ -109,6 +124,11 @@ class AnalyzeDialog
         int index = m_list.getSelectedIndex();
         if (index >= 0)
         {
+            boolean needsColorArg =
+                AnalyzeCommand.needsColorArg((String)m_commands.get(index));
+            m_labelColor.setEnabled(needsColorArg);
+            m_comboBoxColor.setEnabled(needsColorArg);
+            selectColor();
             m_runButton.setEnabled(true);
             m_list.ensureIndexIsVisible(index);
         }
@@ -129,6 +149,8 @@ class AnalyzeDialog
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
+    private go.Color m_selectedColor = go.Color.EMPTY;
+
     private JButton m_clearButton;
 
     private JButton m_runButton;
@@ -137,13 +159,19 @@ class AnalyzeDialog
 
     private JCheckBox m_clearBoard;
 
-    private JComboBox m_comboBox;
+    private JComboBox m_comboBoxHistory;
+
+    private JComboBox m_comboBoxColor;
+
+    private JLabel m_labelColor;
 
     private JList m_list;
 
     private JMenuItem m_itemOnlySupported;
 
     private JMenuItem m_itemSort;
+
+    private JPanel m_colorPanel;
 
     private Vector m_commands = new Vector(128, 64);
 
@@ -208,7 +236,7 @@ class AnalyzeDialog
 
     private void comboBoxChanged()
     {
-        String label = (String)m_comboBox.getSelectedItem();        
+        String label = (String)m_comboBoxHistory.getSelectedItem();        
         if (! m_labels.contains(label))
         {
             m_list.clearSelection();
@@ -240,6 +268,18 @@ class AnalyzeDialog
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
         return outerPanel;
+    }
+
+    private JPanel createColorPanel()
+    {
+        m_colorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        m_labelColor = new JLabel("Color");
+        m_labelColor.setHorizontalAlignment(SwingConstants.LEFT);
+        m_colorPanel.add(m_labelColor);
+        String[] colors = {"Black", "White"};
+        m_comboBoxColor = new JComboBox(colors);
+        m_colorPanel.add(m_comboBoxColor);
+        return m_colorPanel;
     }
 
     private JPanel createCommandPanel()
@@ -274,17 +314,24 @@ class AnalyzeDialog
 
     private JPanel createLowerPanel()
     {
-        JPanel panel = new JPanel(new GridLayout(0, 1, GuiUtils.PAD, 0));
-        m_comboBox = new JComboBox();
-        m_comboBox.addActionListener(this);
-        panel.add(m_comboBox);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        m_comboBoxHistory = new JComboBox();
+        m_comboBoxHistory.addActionListener(this);
+        panel.add(m_comboBoxHistory);
+        JPanel lowerPanel = new JPanel(new GridLayout(0, 2, GuiUtils.PAD, 0));
+        panel.add(lowerPanel);
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        lowerPanel.add(leftPanel);
         m_autoRun = new JCheckBox("Auto Run");
         m_autoRun.setToolTipText("Auto run after changes on board");
-        panel.add(m_autoRun);
+        leftPanel.add(m_autoRun);
         m_clearBoard = new JCheckBox("Clear Board");
         m_clearBoard.setToolTipText("Clear board before displaying result");
-        panel.add(m_clearBoard);
+        leftPanel.add(m_clearBoard);
         m_clearBoard.setSelected(true);
+        lowerPanel.add(createColorPanel());
         loadRecent();
         return panel;
     }
@@ -352,7 +399,7 @@ class AnalyzeDialog
 
     private void loadRecent()
     {
-        m_comboBox.removeAllItems();
+        m_comboBoxHistory.removeAllItems();
         File file = getRecentFile();
         BufferedReader reader;
         try
@@ -368,7 +415,7 @@ class AnalyzeDialog
         {
             while((line = reader.readLine()) != null)
             {
-                m_comboBox.addItem(line);
+                m_comboBoxHistory.addItem(line);
             }
             reader.close();
         }
@@ -418,23 +465,31 @@ class AnalyzeDialog
             return;
         }
         final int max = 20;
-        for (int i = 0; i < m_comboBox.getItemCount() && i < max; ++i)
-            out.println(m_comboBox.getItemAt(i));
+        for (int i = 0; i < m_comboBoxHistory.getItemCount() && i < max; ++i)
+            out.println(m_comboBoxHistory.getItemAt(i));
         out.close();
     }
 
     private void selectCommand(int index)
     {
         String label = (String)m_labels.get(index);
-        m_comboBox.insertItemAt(label, 0);
-        for (int i = 1; i < m_comboBox.getItemCount(); ++i)
-            if (((String)m_comboBox.getItemAt(i)).equals(label))
+        m_comboBoxHistory.insertItemAt(label, 0);
+        for (int i = 1; i < m_comboBoxHistory.getItemCount(); ++i)
+            if (((String)m_comboBoxHistory.getItemAt(i)).equals(label))
             {
-                m_comboBox.removeItemAt(i);
+                m_comboBoxHistory.removeItemAt(i);
                 break;
             }
-        m_comboBox.setSelectedIndex(0);
+        m_comboBoxHistory.setSelectedIndex(0);
         m_recentModified = true;
+    }
+
+    private void selectColor()
+    {
+        if (m_selectedColor == go.Color.BLACK)
+            m_comboBoxColor.setSelectedItem("Black");
+        else if (m_selectedColor == go.Color.WHITE)
+            m_comboBoxColor.setSelectedItem("White");
     }
 
     private void setCommand()
@@ -463,6 +518,8 @@ class AnalyzeDialog
                 return;
             command.setFileArg(fileArg);
         }
+        if (command.needsColorArg())
+            command.setColorArg(getSelectedColor());
         boolean autoRun = m_autoRun.isSelected();
         boolean clearBoard = m_clearBoard.isSelected();
         if (clearBoard)

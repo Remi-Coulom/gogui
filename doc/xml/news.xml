@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Color arguments to analyze commands can now be selected in the analyze window.
+New wildcard %c for commands (supersedes %m) and return type varc.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 If text is selected in the window opened by an analyze command of type
 pstring or hpstring, only the points contained in the selected text
 will be marked on the board.

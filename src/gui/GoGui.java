@@ -783,8 +783,9 @@ class GoGui
         if (m_analyzeCommand.isPointArgMissing())
             return;
         showStatus("Running " + m_analyzeCommand.getResultTitle() + " ...");
-        String command =
-            m_analyzeCommand.replaceWildCards(m_board.getToMove());
+        go.Color toMove = m_board.getToMove();
+        go.Color color = m_analyzeDialog.getSelectedColor();
+        String command = m_analyzeCommand.replaceWildCards(toMove, color);
         runLengthyCommand(command,
                           new AnalyzeContinue(checkComputerMove, resetBoard));
     }
@@ -2518,12 +2519,12 @@ class GoGui
     private void showStatusSelectPointList()
     {
         showStatus("Select points for " + m_analyzeCommand.getLabel()
-                   + " (last point with right button or Ctrl key down).");
+                   + " (last point with right button or Ctrl key down)");
     }
 
     private void showStatusSelectTarget()
     {
-        showStatus("Select a target for " + m_analyzeCommand.getLabel() + ".");
+        showStatus("Select a target for " + m_analyzeCommand.getResultTitle());
     }
 
     private void showWarning(String message)
@@ -2562,6 +2563,8 @@ class GoGui
         }
         else
             m_guiBoard.markLastMove(null);
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.setSelectedColor(m_board.getToMove());
     }
 }
 

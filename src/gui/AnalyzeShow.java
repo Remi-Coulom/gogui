@@ -103,6 +103,13 @@ class AnalyzeShow
                 guiBoard.repaint();
             }
             break;
+        case AnalyzeCommand.VARC:
+            {
+                go.Point list[] = Gtp.parsePointString(response, size);
+                guiBoard.showVariation(list, command.getColorArg());
+                guiBoard.repaint();
+            }
+            break;
         case AnalyzeCommand.VARW:
             {
                 go.Point list[] = Gtp.parsePointString(response, size);

@@ -47,11 +47,13 @@ class AnalyzeCommand
 
     public static final int VARB = 12;
 
-    public static final int VARP = 13;
+    public static final int VARC = 13;
 
-    public static final int VARPO = 14;
+    public static final int VARP = 14;
 
-    public static final int VARW = 15;
+    public static final int VARPO = 15;
+
+    public static final int VARW = 16;
 
     public AnalyzeCommand(String line)
     {
@@ -84,6 +86,8 @@ class AnalyzeCommand
             m_type = AnalyzeCommand.VAR;
         else if (typeStr.equals("varb"))
             m_type = AnalyzeCommand.VARB;
+        else if (typeStr.equals("varc"))
+            m_type = AnalyzeCommand.VARC;
         else if (typeStr.equals("varp"))
             m_type = AnalyzeCommand.VARP;
         else if (typeStr.equals("varpo"))
@@ -131,6 +135,11 @@ class AnalyzeCommand
         return m_label;
     }
 
+    public go.Color getColorArg()
+    {
+        return m_colorArg;
+    }
+
     public go.Point getPointArg()
     {
         return m_pointArg;
@@ -159,6 +168,16 @@ class AnalyzeCommand
     public String getResultTitle()
     {
         StringBuffer buffer = new StringBuffer(m_label);
+        if (needsColorArg() && m_colorArg != null)
+        {
+            if (m_colorArg == go.Color.BLACK)
+                buffer.append(" Black");
+            else
+            {
+                assert(m_colorArg == go.Color.WHITE);
+                buffer.append(" White");
+            }
+        }
         if (needsPointArg() && m_pointArg != null)
         {
             buffer.append(' ');
@@ -187,6 +206,16 @@ class AnalyzeCommand
         if (needsPointListArg())
             return m_pointListArg.isEmpty();
         return false;
+    }
+
+    public boolean needsColorArg()
+    {
+        return needsColorArg(m_command);
+    }
+
+    public static boolean needsColorArg(String command)
+    {
+        return (command.indexOf("%c") >= 0);
     }
 
     public boolean needsFileArg()
@@ -226,8 +255,10 @@ class AnalyzeCommand
             readFile((File)files.get(i), commands, labels, supportedCommands);
     }
 
-    public String replaceWildCards(go.Color toMove)
+    public String replaceWildCards(go.Color toMove, go.Color color)
     {
+        if (needsColorArg())
+            setColorArg(color);
         String result = m_command.replaceAll("%m", toMove.toString());
         if (needsPointArg())
             result = result.replaceAll("%p", m_pointArg.toString());
@@ -245,7 +276,6 @@ class AnalyzeCommand
         }
         if (needsFileArg())
         {
-            assert(m_fileArg != null);
             result = result.replaceAll("%f", m_fileArg.toString());
         }
         if (needsStringArg())
@@ -253,7 +283,17 @@ class AnalyzeCommand
             assert(m_stringArg != null);
             result = result.replaceAll("%s", m_stringArg);
         }
+        if (needsColorArg())
+        {
+            result = result.replaceAll("%c", m_colorArg.toString());
+        }
         return result;
+    }
+
+    public void setColorArg(go.Color color)
+    {
+        assert(needsColorArg());
+        m_colorArg = color;
     }
 
     public void setFileArg(File file)
@@ -276,6 +316,8 @@ class AnalyzeCommand
     private int m_type;
 
     private double m_scale;
+
+    private go.Color m_colorArg;
 
     private File m_fileArg;
 
