@@ -171,6 +171,7 @@ public class Gtp
     public static Point[] parsePointList(String s) throws Error
     {
         Vector vector = new Vector(32, 32);
+        s = StringUtils.replace(s, "\n", " ");
         String p[] = StringUtils.split(s, ' ');
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
