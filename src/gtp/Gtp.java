@@ -337,51 +337,35 @@ public final class Gtp
         String result[][] = new String[boardSize][boardSize];
         try
         {
-            Reader reader = new StringReader(s);
-            StreamTokenizer tokenizer = new StreamTokenizer(reader);
-            tokenizer.ordinaryChars('0', '9');
-            tokenizer.ordinaryChar('-');
-            tokenizer.ordinaryChar('.');
-            tokenizer.wordChars('0', '9');
-            tokenizer.wordChars('-', '-');
-            tokenizer.wordChars('.', '.');
-            tokenizer.wordChars('?', '?');
-            tokenizer.wordChars('!', '!');
-            tokenizer.wordChars('*', '*');
-            tokenizer.wordChars('"', '"');
+            BufferedReader reader = new BufferedReader(new StringReader(s));
             if (title != null && ! title.trim().equals(""))
             {
-                boolean foundTitle = false;
-                while (! foundTitle)
+                String pattern = title + ":";
+                while (true)
                 {
-                    switch (tokenizer.nextToken())
-                    {
-                    case StreamTokenizer.TT_WORD:
-                        if (tokenizer.sval.equals(title))
-                        {
-                            int ttype = tokenizer.nextToken();
-                            if (ttype == ':')
-                                foundTitle = true;
-                            else if (ttype == StreamTokenizer.TT_EOF)
-                                throw new Gtp.Error(title + " not found.");
-                        }
-                        break;
-                    case StreamTokenizer.TT_EOF:
+                    String line = reader.readLine();
+                    if (line == null)
                         throw new Gtp.Error(title + " not found.");
-                    }
+                    if (line.trim().equals(pattern))
+                        break;
                 }
             }
             for (int y = boardSize - 1; y >= 0; --y)
-                for (int x = 0; x < boardSize; ++x)
+            {
+                String line = reader.readLine();
+                if (line == null)
+                    throw new Gtp.Error("Incomplete string board");
+                if (line.trim().equals(""))
                 {
-                    int ttype = tokenizer.nextToken();
-                    if (ttype != StreamTokenizer.TT_WORD)
-                        throw new Error("Word expected");
-                    if (tokenizer.sval.equals("\"\""))
-                        result[x][y] = "";
-                    else
-                        result[x][y] = tokenizer.sval;
+                    ++y;
+                    continue;
                 }
+                String[] tokens = StringUtils.tokenize(line);
+                if (tokens.length < boardSize)
+                    throw new Gtp.Error("Incomplete string board");
+                for (int x = 0; x < boardSize; ++x)
+                    result[x][y] = tokens[x];
+            }
         }
         catch (IOException e)
         {
