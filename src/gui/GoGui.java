@@ -1647,6 +1647,9 @@ class GoGui
                 if (m_analyzeDialog != null)
                     restoreSize(m_analyzeDialog, "window-analyze",
                                 m_boardSize);
+                if (m_gameTreeViewer != null)
+                    restoreSize(m_gameTreeViewer, "window-gametree",
+                                m_boardSize);
             }
         }
         m_gameTree = new GameTree(size);
