@@ -997,25 +997,35 @@ class GoGui
         if (m_commandThread != null
             && m_commandThread.isCommandSupported("final_status_list"))
         {
-            try
-            {
-                String response =
-                    m_commandThread.sendCommand("final_status_list dead");
-                isDeadStone = Gtp.parsePointList(response);
-            }
-            catch (Gtp.Error e)
-            {
-            }
+            Runnable callback = new Runnable()
+                {
+                    public void run() { cbScoreContinue(); }
+                };
+            showStatus("Scoring...");
+            runLengthyCommand("final_status_list dead", callback);
         }
-        resetBoard();
-        m_guiBoard.scoreBegin(isDeadStone);
-        m_guiBoard.repaint();
-        m_scoreMode = true;
-        m_scoreDialog = new ScoreDialog(this, m_board.scoreGet());
-        m_scoreDialog.setVisible(true);
-        m_menuBar.setScoreMode();
-        showStatus("Please remove dead groups.");
+        else
+            initScore(null);
     }
+
+    private void cbScoreContinue()
+    {
+        endLengthyCommand();
+        clearStatus();
+        go.Point[] isDeadStone = null;
+        try
+        {
+            Gtp.Error e = m_commandThread.getException();
+            if (e != null)
+                throw e;
+            isDeadStone = Gtp.parsePointList(m_commandThread.getResponse());
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+        }
+        initScore(isDeadStone);
+    }    
 
     private void cbScoreDone(boolean accepted)
     {
@@ -1466,6 +1476,18 @@ class GoGui
         }
     }
 
+    private void initScore(go.Point[] isDeadStone)
+    {
+        resetBoard();
+        m_guiBoard.scoreBegin(isDeadStone);
+        m_guiBoard.repaint();
+        m_scoreMode = true;
+        m_scoreDialog = new ScoreDialog(this, m_board.scoreGet());
+        m_scoreDialog.setVisible(true);
+        m_menuBar.setScoreMode();
+        showStatus("Please remove dead groups.");
+    }
+
     private void interrupt()
     {
         if (m_pid != null)
@@ -1589,7 +1611,7 @@ class GoGui
     private void newGameContinue(int size)
     {
         endLengthyCommand();
-        showStatus(" ");
+        clearStatus();
         Gtp.Error e = m_commandThread.getException();
         if (e != null)
         {
