@@ -766,8 +766,8 @@ public class TwoGtp
             blackName = m_whiteName;
             whiteName = m_blackName;
         }
-        blackName = StringUtils.formatTitle(blackName);
-        whiteName = StringUtils.formatTitle(whiteName);
+        blackName = StringUtils.capitalize(blackName);
+        whiteName = StringUtils.capitalize(whiteName);
         buffer.append(blackName);
         buffer.append(" vs ");
         buffer.append(whiteName);

@@ -25,22 +25,6 @@ public class StringUtils
         return buffer.toString();
     }
 
-    /** Format a string for a window title.
-        Trims the string and changes first character to uppercase.
-    */
-    public static String formatTitle(String title)
-    {
-        title = title.trim();
-        if (title.equals(""))
-            return title;
-        char c = title.charAt(0);
-        if (Character.isUpperCase(c))
-            return title;
-        StringBuffer buffer = new StringBuffer(title);
-        buffer.setCharAt(0, Character.toUpperCase(c));
-        return buffer.toString();
-    }    
-
     public static NumberFormat getNumberFormat(int maximumFractionDigits)
     {
         NumberFormat format = NumberFormat.getInstance(new Locale("C"));

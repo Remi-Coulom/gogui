@@ -2278,7 +2278,7 @@ class GoGui
     {
         String appName = "GoGui";        
         if (m_commandThread != null && ! m_name.equals(""))
-            appName = StringUtils.formatTitle(m_name);
+            appName = StringUtils.capitalize(m_name);
         if (m_gtpShell != null)
             m_gtpShell.setAppName(appName);
         if (m_analyzeDialog != null)
