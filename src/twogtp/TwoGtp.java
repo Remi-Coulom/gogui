@@ -73,6 +73,41 @@ public class TwoGtp
         initGame(size < 1 ? 19 : size);
     }
 
+    public void autoPlay() throws Exception
+    {
+        System.in.close();
+        StringBuffer response = new StringBuffer(256);
+        while (m_gameIndex < m_numberGames)
+        {
+            boolean error = false;
+            response.setLength(0);
+            if (newGame(m_size > 0 ? m_size : 19, response))
+            {
+                int numberPass = 0;
+                while (! m_board.bothPassed())
+                {
+                    response.setLength(0);
+                    if (! sendGenmove(m_board.getToMove(), response))
+                    {
+                        error = true;
+                        break;
+                    }
+                }
+            }
+            else
+                error = true;
+            if (error)
+                handleEndOfGame(true, response.toString());
+            if (m_black.isProgramDead())
+                throw new Exception("Black program died");
+            if (m_white.isProgramDead())
+                throw new Exception("White program died");
+        }
+        m_black.sendCommand("quit");
+        m_white.sendCommand("quit");
+        close();
+    }
+
     public void close()
     {
         m_black.close();
@@ -84,6 +119,14 @@ public class TwoGtp
             m_referee.close();
             m_referee.waitForExit();
         }
+    }
+
+    /** Returns number of games left of -1 if no maximum set. */
+    public int gamesLeft()
+    {
+        if (m_numberGames <= 0)
+            return -1;
+        return m_numberGames - m_gameIndex;
     }
 
     public boolean handleCommand(String cmdLine, StringBuffer response)
@@ -300,7 +343,11 @@ public class TwoGtp
                 new TwoGtp(System.in, System.out, black, white, referee, size,
                            komi, games, alternate, sgfFile, force, verbose);
             if (auto)
+            {
+                if (twoGtp.gamesLeft() == 0)
+                    System.err.println("Already " + games + " games played.");
                 twoGtp.autoPlay();
+            }
             else
                 twoGtp.mainLoop();
             twoGtp.close();
@@ -375,41 +422,6 @@ public class TwoGtp
 
     private Gtp m_white;
 
-    private void autoPlay() throws Exception
-    {
-        System.in.close();
-        StringBuffer response = new StringBuffer(256);
-        while (m_gameIndex < m_numberGames)
-        {
-            boolean error = false;
-            response.setLength(0);
-            if (newGame(m_size > 0 ? m_size : 19, response))
-            {
-                int numberPass = 0;
-                while (! m_board.bothPassed())
-                {
-                    response.setLength(0);
-                    if (! sendGenmove(m_board.getToMove(), response))
-                    {
-                        error = true;
-                        break;
-                    }
-                }
-            }
-            else
-                error = true;
-            if (error)
-                handleEndOfGame(true, response.toString());
-            if (m_black.isProgramDead())
-                throw new Exception("Black program died");
-            if (m_white.isProgramDead())
-                throw new Exception("White program died");
-        }
-        m_black.sendCommand("quit");
-        m_white.sendCommand("quit");
-        close();
-    }
-
     private boolean boardsize(String[] cmdArray, StringBuffer response)
     {
         if (cmdArray.length < 2)
@@ -417,7 +429,7 @@ public class TwoGtp
             response.append("Missing argument");
             return false;
         }
-        if (m_numberGames > 0 && m_gameIndex >= m_numberGames)
+        if (gamesLeft() == 0)
         {
             response.append("Maximum number of " + m_numberGames +
                             " games reached");
