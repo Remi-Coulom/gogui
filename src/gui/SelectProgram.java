@@ -225,7 +225,10 @@ public class SelectProgram
         if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
             return;
         File file = chooser.getSelectedFile();
-        m_comboBox.insertItemAt(file.toString(), 0);
+        String text = file.toString();
+        if (text.indexOf(' ') >= 0)
+            text = "\"" + text + "\"";
+        m_comboBox.insertItemAt(text, 0);
         m_comboBox.setSelectedIndex(0);
         m_textField.setCaretPosition(m_textField.getText().length());
         m_textField.requestFocusInWindow();
