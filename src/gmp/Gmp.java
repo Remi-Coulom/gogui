@@ -545,6 +545,7 @@ class ReadThread
                 }
                 log("received OK");
                 m_state = STATE_IDLE;
+                notifyAll();
                 return;
             }
             if (seq == m_hisLastSeq)
