@@ -250,7 +250,7 @@ public class Board
             graphics.drawImage(m_image, 0, 0, width, width, null);
         else
         {
-            graphics.setColor(new java.awt.Color(218, 163, 99));
+            graphics.setColor(new java.awt.Color(212, 167, 102));
             graphics.fillRect(0, 0, width, width);
         }
         if (width > (size + 2) * 3)
