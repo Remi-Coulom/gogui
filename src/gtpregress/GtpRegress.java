@@ -492,6 +492,8 @@ class GtpRegress
 
     private synchronized void printOutLine(String style, String line, int id)
     {
+        if (line == null)
+            return;
         if (! line.endsWith("\n"))
             line = line + "\n";
         line = line.replaceAll("&", "&amp;");
