@@ -23,7 +23,7 @@ of the board.
 </section>
 
 <section>
-<title>File menu</title>
+<title>File Menu</title>
 <variablelist>
 
 <varlistentry>
@@ -36,7 +36,7 @@ Start a new game.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Open...</guimenuitem></term>
+<term><guimenuitem>Open</guimenuitem></term>
 <listitem>
 <para>
 Open a game from a file in
@@ -54,7 +54,7 @@ the original file, all this information will be lost.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Open recent</guisubmenu></term>
+<term><guisubmenu>Open Recent</guisubmenu></term>
 <listitem>
 <para>
 Open a game from a list of recently used files.
@@ -63,7 +63,7 @@ Open a game from a list of recently used files.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Save...</guimenuitem></term>
+<term><guimenuitem>Save</guimenuitem></term>
 <listitem>
 <para>
 Save the current game to a file.
@@ -77,7 +77,7 @@ to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Save position...</guimenuitem></term>
+<term><guimenuitem>Save Position</guimenuitem></term>
 <listitem>
 <para>
 Save the current position to a file.
@@ -93,7 +93,7 @@ are also exported (string labels, marked and selected points).
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Print...</guimenuitem></term>
+<term><guimenuitem>Print</guimenuitem></term>
 <listitem>
 <para>
 Print the current position.
@@ -104,11 +104,21 @@ analyze commands is printed.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Open with program...</guimenuitem></term>
+<term><guimenuitem>Attach Program</guimenuitem></term>
 <listitem>
 <para>
-Open the current game at the current position with a different
-Go program.
+Attach a Go program (if none is attached yet) to the current game at the
+current position.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Detach Program</guimenuitem></term>
+<listitem>
+<para>
+Detach currently attached Go program from game and terminate
+the Go program.
 </para>
 </listitem>
 </varlistentry>
@@ -126,36 +136,28 @@ Quit GoGui.
 </section>
 
 <section>
-<title>Game menu</title>
+<title>Game Menu</title>
 <variablelist>
+
+<varlistentry>
+<term><guimenuitem>Info</guimenuitem></term>
+<listitem>
+<para>
+Edit the game information.
+Changes to the komi and rules are transmitted to the Go program.
+The only supported rules are "Chinese" and "Japanese".
+The program is informed about the rules by a
+<userinput>scoring_system area/territory</userinput>
+(from an early draft of GTP version 2) if it supports this command.
+</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Size</guisubmenu></term>
 <listitem>
 <para>
 Change the board size and start a new game.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Komi...</guimenuitem></term>
-<listitem>
-<para>
-Change the komi.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guisubmenu>Rules</guisubmenu></term>
-<listitem>
-<para>
-Change the rules.
-Japanese rules count only territory, Chinese rules also the stones
-(but ignore prisoners).
-The program is informed by the <userinput>scoring_system</userinput>
-(from an early draft of GTP version 2) if it supports this command.
 </para>
 </listitem>
 </varlistentry>
@@ -170,7 +172,7 @@ Set the number of handicap stones.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Computer color</guisubmenu></term>
+<term><guisubmenu>Computer Color</guisubmenu></term>
 <listitem>
 <para>
 Choose what side the Go program plays.
@@ -188,7 +190,7 @@ Do a pass move.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Computer play</guimenuitem></term>
+<term><guimenuitem>Computer Play</guimenuitem></term>
 <listitem>
 <para>
 Make the computer play a move.
@@ -263,29 +265,10 @@ Replay all moves.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Goto...</guimenuitem></term>
+<term><guimenuitem>Goto</guimenuitem></term>
 <listitem>
 <para>
 Go to a certain move number.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Make main variation...</guimenuitem></term>
-<listitem>
-<para>
-Make the current variation to the main variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Truncate...</guimenuitem></term>
-<listitem>
-<para>
-Truncate the current variation beginning at and including the current
-node.
 </para>
 </listitem>
 </varlistentry>
@@ -313,7 +296,70 @@ file later.
 </section>
 
 <section>
-<title>Setup menu</title>
+<title>Variation Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Next Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the next variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Previous Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the previous variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Make Main Variation</guimenuitem></term>
+<listitem>
+<para>
+Make the current variation to the main variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Delete Side Variation</guimenuitem></term>
+<listitem>
+<para>
+Delete all variations except for the main variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Keep Only Position</guimenuitem></term>
+<listitem>
+<para>
+Delete all variations and create a new game tree with the current
+position as setup stones.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Truncate</guimenuitem></term>
+<listitem>
+<para>
+Truncate the current variation beginning at and including the current
+node.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</section>
+
+<section>
+<title>Setup Menu</title>
 <variablelist>
 
 <varlistentry id="setupmode">
@@ -360,11 +406,11 @@ to White.
 </section>
 
 <section>
-<title>Settings menu</title>
+<title>Settings Menu</title>
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>Beep after move</guimenuitem></term>
+<term><guimenuitem>Beep After Move</guimenuitem></term>
 <listitem>
 <para>
 Beep after each computer move.
@@ -374,7 +420,7 @@ With most versions of Java the PC speaker is used for the beep.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Show cursor</guimenuitem></term>
+<term><guimenuitem>Show Cursor</guimenuitem></term>
 <listitem>
 <para>
 Show cursor on board to allow clicking on fields with the
@@ -384,7 +430,7 @@ Show cursor on board to allow clicking on fields with the
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Show last move</guimenuitem></term>
+<term><guimenuitem>Show Last Move</guimenuitem></term>
 <listitem>
 <para>
 Mark the last move with a red circle.
@@ -396,8 +442,17 @@ Mark the last move with a red circle.
 </section>
 
 <section>
-<title>Windows menu</title>
+<title>Windows Menu</title>
 <variablelist>
+
+<varlistentry>
+<term><guimenuitem>Game Tree</guimenuitem></term>
+<listitem>
+<para>
+Show the game tree window or bring it to front, if already open.
+</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Analyze</guimenuitem></term>
@@ -409,7 +464,7 @@ Open the Analyze dialog or bring it to front, if already open.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Gtp shell</guimenuitem></term>
+<term><guimenuitem>Gtp Shell</guimenuitem></term>
 <listitem>
 <para>
 Open the GTP shell window or bring it to front, if already open.
@@ -421,7 +476,7 @@ Open the GTP shell window or bring it to front, if already open.
 </section>
 
 <section>
-<title>Help menu</title>
+<title>Help Menu</title>
 <variablelist>
 
 <varlistentry>
