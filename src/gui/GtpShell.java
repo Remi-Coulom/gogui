@@ -200,7 +200,7 @@ public class GtpShell
                                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                                        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         m_fontSize = m_gtpShellText.getFont().getSize();
-        m_finalSize = new Dimension(m_fontSize * 51, m_fontSize * 52);
+        m_finalSize = new Dimension(m_fontSize * 40, m_fontSize * 30);
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         m_comboBox = new JComboBox();
         m_editor = m_comboBox.getEditor();

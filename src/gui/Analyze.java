@@ -605,7 +605,7 @@ class AnalyzeDialog
         JPanel panel = new JPanel(new BorderLayout());
         m_list = new JList();
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        m_list.setVisibleRowCount(35);
+        m_list.setVisibleRowCount(25);
         m_list.addMouseListener(this);
         m_list.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(m_list);
