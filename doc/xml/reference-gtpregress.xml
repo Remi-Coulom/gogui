@@ -32,11 +32,25 @@
        regression tests (see section 
        <ulink url="http://www.uni-bonn.de/~uzsxtn/gnugo_22.html#SEC212">
        Regression testing</ulink> of the GNU Go documentation.
-       The generated output files are <filename>index.html</filename>
-       and for each test file
+       The main output file is <filename>index.html</filename>.
+       For each test file
        <filename><replaceable>test</replaceable>.tst</filename>
+       additional files with name
        <filename><replaceable>test</replaceable>.html</filename> and
-       <filename><replaceable>test</replaceable>.out.html</filename>.
+       <filename><replaceable>test</replaceable>.out.html</filename>
+       are generated.
+       An additional special comment
+       <userinput>#&gt; <arg><replaceable>file</replaceable></arg></userinput>
+       can be used to add the output of the last command to
+       <filename><replaceable>file</replaceable></filename> prepended
+       by the ID of the last test and 0/1 if the last test passed/failed.
+       This is useful if there is are extension commands for printing
+       statistics.
+       If the statistics commands output a single line, the resulting
+       file can be processed as a table.
+       If no filename is given to <userinput>#&gt;</userinput> the file
+       <filename><replaceable>test</replaceable>.dat</filename>
+       will be used.
     </para>
   </refsection>
 

@@ -161,7 +161,11 @@ class GtpRegress
         public double m_cpuTime;
     }
 
+    private boolean m_lastCommandHadId;
+
     private boolean m_lastError;
+
+    private boolean m_lastTestFailed;
 
     private int m_lastId;
 
@@ -169,7 +173,11 @@ class GtpRegress
 
     private int m_otherErrors;
 
+    private File m_file;
+
     private PrintStream m_out;
+
+    private Set m_dataFiles = new TreeSet();
 
     private String m_lastCommand;
 
@@ -242,11 +250,10 @@ class GtpRegress
         }
     }
 
-    private TestSummary getTestSummary(File file, long timeMillis,
-                                       double cpuTime)
+    private TestSummary getTestSummary(long timeMillis, double cpuTime)
     {
         TestSummary summary = new TestSummary();
-        summary.m_file = file;
+        summary.m_file = m_file;
         summary.m_timeMillis = timeMillis;
         summary.m_cpuTime = cpuTime;
         summary.m_otherErrors = m_otherErrors;
@@ -268,8 +275,9 @@ class GtpRegress
 
     private synchronized void handleLastResponse()
     {
-        if (m_lastId >= 0)
+        if (m_lastCommandHadId)
         {
+            boolean fail = false;
             if (m_lastError)
             {
                 printOutLine("fail", m_lastFullResponse);
@@ -280,12 +288,14 @@ class GtpRegress
                     System.out.println(Integer.toString(m_lastId)
                                        + " unexpected FAIL: '" + m_lastResponse
                                        + "'");
+                fail = true;
             }
             else
-                printOutLine(null, m_lastFullResponse);
-            m_tests.add(new Test(m_lastId, m_lastCommand, m_lastError, false,
+                printOutLine("test", m_lastFullResponse);
+            m_tests.add(new Test(m_lastId, m_lastCommand, fail, false,
                                  "", m_lastResponse, m_lastSgf,
                                  m_lastSgfMove));
+            m_lastTestFailed = fail;
         }
         else
         {
@@ -310,6 +320,15 @@ class GtpRegress
             m_lastFullResponse = null;
             return;
         }
+        if (line.startsWith("#>"))
+        {
+            printOutLine(null, line);
+            if (m_lastFullResponse != null)
+                handleLastResponse();
+            printDataFile(line.substring(2).trim());
+            m_lastFullResponse = null;
+            return;
+        }
         if (m_lastFullResponse != null)
         {
             handleLastResponse();
@@ -322,13 +341,18 @@ class GtpRegress
         else
         {
             line = StringUtils.replace(line, "\t", " ");
-            m_lastId = getId(line);
-            if (m_lastId < 0)
+            int lastId = getId(line);
+            if (lastId < 0)
+            {
                 m_lastCommand = line;
+                m_lastCommandHadId = false;
+            }
             else
             {
                 int index = line.indexOf(" ");
                 m_lastCommand = line.substring(index + 1);
+                m_lastId = lastId;
+                m_lastCommandHadId = true;
             }
             printOutLine(m_lastId < 0 ? "command" : "test", line,
                          m_lastId);
@@ -389,6 +413,7 @@ class GtpRegress
                 || (matcher.matches() && notPattern))
                 fail = true;
         }
+        m_lastTestFailed = fail;
         String style = null;
         if (fail && ! expectedFail)
             style = "fail";
@@ -410,15 +435,15 @@ class GtpRegress
                              m_lastSgfMove));
     }
 
-    private void initOutFile(File test)
+    private void initOutFile()
         throws Exception
     {
-        m_outFileName = FileUtils.replaceExtension(test, "tst", "out.html");
+        m_outFileName = FileUtils.replaceExtension(m_file, "tst", "out.html");
         File file = new File(m_outFileName);
         m_out = new PrintStream(new FileOutputStream(file));
         m_out.print("<html>\n" +
                     "<head>\n" +
-                    "<title>Output " + test + "</title>\n" +
+                    "<title>Output " + m_file + "</title>\n" +
                     "<style type=\"text/css\">\n" +
                     "<!--" +
                     "span.comment { color:#999999; }\n" +
@@ -431,20 +456,45 @@ class GtpRegress
                     "</head>\n" +
                     "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                     " vlink=\"#551a8b\">\n" +
-                    "<h1>Output " + test + "</h1>\n" +
+                    "<h1>Output " + m_file + "</h1>\n" +
                     "<hr>\n");
         writeInfo(m_out);
         m_out.print("<hr>\n" +
                     "<pre>\n");
     }
 
+    private void printDataFile(String filename)
+    {
+        try
+        {
+            if (filename.equals(""))
+                filename = FileUtils.replaceExtension(m_file, "tst", "dat");
+            File file = new File(filename);
+            if (! m_dataFiles.contains(file))
+            {
+                if (file.exists())
+                    file.delete();
+                m_dataFiles.add(file);
+            }
+            FileOutputStream outputStream = new FileOutputStream(file, true);
+            PrintStream out = new PrintStream(outputStream);
+            out.println(m_lastId + " " +  (m_lastTestFailed ? "1" : "0") + " "
+                        + m_lastResponse);
+            out.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            System.err.println("Could not open file '" + filename + "'");
+        }
+    }
+
     private synchronized void printOutLine(String style, String line)
     {
         if (! line.endsWith("\n"))
             line = line + "\n";
+        line = StringUtils.replace(line, "&", "&amp;");
         line = StringUtils.replace(line, ">", "&gt;");
         line = StringUtils.replace(line, "<", "&lt;");
-        line = StringUtils.replace(line, "&", "&amp;");
         if (style == "command" || style == "test")
         {
             Pattern pattern = Pattern.compile("\\S*\\.[Ss][Gg][Ff]");
@@ -538,11 +588,12 @@ class GtpRegress
     {
         System.err.println(test);
         m_tests.clear();
+        m_dataFiles.clear();
         m_otherErrors = 0;
-        File file = new File(test);
-        FileReader fileReader = new FileReader(file);
+        m_file = new File(test);
+        FileReader fileReader = new FileReader(m_file);
         BufferedReader reader = new BufferedReader(fileReader);
-        initOutFile(file);
+        initOutFile();
         m_gtp = new Gtp(m_program, false, this);
         m_lastSgf = null;
         String line;
@@ -564,9 +615,9 @@ class GtpRegress
         m_gtp.waitForExit();
         reader.close();
         finishOutFile();
-        TestSummary testSummary = getTestSummary(file, timeMillis, cpuTime);
+        TestSummary testSummary = getTestSummary(timeMillis, cpuTime);
         m_testSummaries.add(testSummary);
-        writeTestSummary(file, testSummary);
+        writeTestSummary(testSummary);
     }
 
     private void writeInfo(PrintStream out)
@@ -692,18 +743,19 @@ class GtpRegress
             out.print("</tr>\n");
     }
 
-    private void writeTestSummary(File test, TestSummary summary)
+    private void writeTestSummary(TestSummary summary)
         throws FileNotFoundException
     {
-        File file = new File(FileUtils.replaceExtension(test, "tst", "html"));
+        File file =
+            new File(FileUtils.replaceExtension(m_file, "tst", "html"));
         PrintStream out = new PrintStream(new FileOutputStream(file));
         out.print("<html>\n" +
                   "<head>\n" +
-                  "<title>Summary " + test + "</title>\n" +
+                  "<title>Summary " + m_file + "</title>\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
-                  "<h1>Summary " + test + "</h1>\n" +
+                  "<h1>Summary " + m_file + "</h1>\n" +
                   "<hr>\n");
         writeInfo(out);
         out.print("<hr>\n" +
