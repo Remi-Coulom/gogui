@@ -47,7 +47,7 @@ class GameNode
         if (graphics2D != null)
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.setColor(java.awt.Color.lightGray);
+        graphics.setColor(UIManager.getColor("Label.background"));
         graphics.fillRect(0, 0, m_width, m_width);
         Move move = m_node.getMove();
         int halfSize = m_width / 2;
@@ -62,7 +62,7 @@ class GameNode
         }
         else if (move == null)
         {
-            graphics.setColor(java.awt.Color.darkGray);
+            graphics.setColor(new java.awt.Color(0.57f, 0.68f, 0.91f));
             int[] xPoints = { halfSize, m_width, halfSize, 0 };
             int[] yPoints = { 0, halfSize, m_width, halfSize };
             graphics.fillPolygon(xPoints, yPoints, 4);
@@ -137,7 +137,7 @@ class GameTreePanel
     public GameTreePanel(GameTreeViewer.Listener listener)
     {
         super(new SpringLayout());
-        setBackground(java.awt.Color.lightGray);
+        setBackground(UIManager.getColor("Label.background"));
         m_nodeSize = 25;
         m_nodeDist = 35;
         Font font = UIManager.getFont("Label.font");
@@ -338,7 +338,7 @@ public class GameTreeViewer
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        m_scrollPane.getViewport().setBackground(java.awt.Color.lightGray);
+        m_scrollPane.getViewport().setBackground(UIManager.getColor("Label.background"));
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         pack();
         m_listener = listener;
