@@ -55,6 +55,7 @@ $Source$
 <delete failonerror="false" includeEmptyDirs="true">
 <fileset dir="build/config"/>
 <fileset dir="build/depcache"/>
+<fileset dir="build/depcache-test"/>
 <fileset dir="build/doc"/>
 <fileset dir="build/game"/>
 <fileset dir="build/gmp"/>
