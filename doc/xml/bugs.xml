@@ -14,9 +14,11 @@ With other Java versions or on other systems the problem can still exist.
 </section>
 
 <section>
-<title>Problems with command completion in GTP shell on Mac OS X</title>
+<title>
+Problems with command completion in GTP shell on Mac&nbsp;OS&nbsp;X
+</title>
 <para>
-There are two known problems with Java 1.4.2 on Mac OS X:
+There are two known problems with Java 1.4.2 on Mac&nbsp;OS&nbsp;X:
 the popup menu sometimes overlaps the command field and selection from
 the popup menu using the Enter key does not work.
 It is recommended to disable command line completion on the Mac and to
