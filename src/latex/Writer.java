@@ -81,9 +81,6 @@ public class Writer
     private void printBeginPSGo()
     {
         m_out.println("\\begin{psgoboard}[" + m_board.getSize() + "]");
-        m_out.println("\\newcommand{\\pass}{\\refstepcounter{gomove}" +
-                      " \\toggleblackmove}");        
-        m_out.println("\\newcommand{\\skipmove}{\\pass}");
     }
 
     private void printColor(Color color)
@@ -150,17 +147,16 @@ public class Writer
             {
                 needsComment[i] = true;
                 needsColorComment[i] = isColorUnexpected;
-                if (isPass)
-                    m_out.print("\\pass");
-                else
-                    m_out.print("\\skipmove");
-                blackToMove = ! blackToMove;
+                m_out.print("\\refstepcounter{gomove} \\toggleblackmove");
                 if (point != null)
                 {
                     m_out.print(" % \\move");
                     printCoordinates(point);
                 }
+                else
+                    m_out.print(" % \\pass");
                 m_out.println(" % " + (blackToMove ? "B " : "W ") + (i + 1));
+                blackToMove = ! blackToMove;
                 continue;
             }
             else if (isColorUnexpected)
