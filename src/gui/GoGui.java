@@ -1478,7 +1478,7 @@ class GoGui
         try
         {
             sgf.Reader reader = new sgf.Reader(file);
-            m_boardSize = reader.getBoardSize();
+            initGame(reader.getBoardSize());
             if (m_commandThread != null)
             {
                 m_commandThread.sendCommandBoardsize(m_boardSize);
