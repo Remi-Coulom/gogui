@@ -26,23 +26,23 @@ class GoGui
           boolean verbose, boolean fillPasses, boolean computerNone)
         throws Gtp.Error, AnalyzeCommand.Error
     {
+        if (program != null && ! program.equals(""))
+        {
+            // Must be created before m_gtp (stderr callback of Gtp!)
+            m_gtpShell = new GtpShell(null, "GoGui", this);
+            Gtp gtp = new Gtp(program, verbose);
+            gtp.setStdErrCallback(this);
+            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
+            m_commandThread = new CommandThread(gtp, m_gtpShell);
+            m_commandThread.start();
+        }
+
         m_boardSize = size;
         m_file = file;
         m_fillPasses = fillPasses;
         m_move = move;
         m_computerNoneOption = computerNone;
         m_verbose = verbose;
-
-        if (program != null && ! program.equals(""))
-        {
-            // Must be created before m_gtp (stderr callback of Gtp!)
-            m_gtpShell = new GtpShell(null, "GoGui", this);
-            Gtp gtp = new Gtp(program, m_verbose);
-            m_gtpShell.setProgramCommand(gtp.getProgramCommand());
-            gtp.setStdErrCallback(this);
-            m_commandThread = new CommandThread(gtp, m_gtpShell);
-            m_commandThread.start();
-        }
 
         Container contentPane = getContentPane();        
         m_toolBar = new ToolBar(this, analyzeCommand, this);
