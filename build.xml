@@ -22,6 +22,7 @@ $Source$
  gtpdummy.jar,
  gtpregress.jar,
  gtpserver.jar,
+ gtpterminal.jar,
  netgtp.jar,
  sgftotex.jar,
  twogtp.jar
@@ -126,6 +127,7 @@ installation directory.
  bin/gtpdummy,
  bin/gtpregress,
  bin/gtpserver,
+ bin/gtpterminal,
  bin/netgtp,
  bin/sgftotex,
  bin/twogtp,
@@ -271,6 +273,23 @@ installation directory.
  gtpserver/*.class
  utils/Options.class
  utils/StreamCopy.class
+ utils/StringUtils.class
+ version/Version.class
+"/>
+</jar>
+</target>
+
+<target name="gtpterminal.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/gtpterminal.jar" compress="true">
+<manifest>
+<attribute name="Main-Class" value="gtpterminal.GtpTerminal"/>
+</manifest>
+<fileset dir="build" includes="
+ go/*.class
+ gtp/*.class
+ gtpterminal/*.class
+ utils/Options.class
  utils/StringUtils.class
  version/Version.class
 "/>
