@@ -59,8 +59,6 @@ public class GuiUtils
     public static void setGoIcon(Frame frame)
     {
         URL url = m_iconURL;
-        if (Platform.isWindows())
-            url = m_iconNoTransURL;
         if (url != null)
             frame.setIconImage(new ImageIcon(url).getImage());
     }
@@ -68,8 +66,10 @@ public class GuiUtils
     static
     {
         ClassLoader loader = ClassLoader.getSystemClassLoader();
-        m_iconURL = loader.getResource("images/gogui.png");
-        m_iconNoTransURL = loader.getResource("images/gogui-notrans.png");
+        // There are problems on most platforms with larger icons auto-scaled
+        // down and transparency issues (Windows, Linux Sun Java 1.5.0)
+        // Best solution for now is to take a 16x16 icon with no transparency
+        m_iconURL = loader.getResource("images/gogui-16x16-notrans.png");
     }
 
     private static final int m_defaultMonoFontSize =
@@ -89,8 +89,6 @@ public class GuiUtils
         new Dimension(SMALL_PAD, SMALL_PAD);
 
     private static URL m_iconURL;
-
-    private static URL m_iconNoTransURL;
 
     private static Font getTextAreaFont()
     {
