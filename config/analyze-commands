@@ -13,7 +13,7 @@ string/Name/name
 string/Protocol Version/protocol_version
 varc/Reg GenMove/reg_genmove %c
 string/ShowBoard/showboard
-none/Time Left/time_left black %c
+none/Time Left/time_left %c %s
 none/Time Settings/time_settings %s
 string/Version/version
 
