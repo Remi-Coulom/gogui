@@ -27,6 +27,8 @@ class GameNode
         m_node = node;
         m_moveNumber = moveNumber;
         addMouseListener(mouseListener);
+        setFocusable(false);
+        setFocusTraversalKeysEnabled(false);
         if (font != null)
             setFont(font);
     }
@@ -160,13 +162,13 @@ class GameTreePanel
                          boolean fastPaint, int labelMode, int sizeMode)
     {
         super(new SpringLayout());
-        setFocusable(true);
         m_owner = owner;
         m_fastPaint = fastPaint;
         setBackground(UIManager.getColor("Label.background"));
         m_labelMode = labelMode;
         m_sizeMode = sizeMode;
         computeSizes(sizeMode);
+        setFocusTraversalKeysEnabled(false);
         setOpaque(false);
         m_listener = listener;
         m_mouseListener = new MouseAdapter()
@@ -782,9 +784,14 @@ public class GameTreeViewer
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        m_scrollPane.setFocusable(true);
+        m_scrollPane.setFocusTraversalKeysEnabled(false);
         JViewport viewport = m_scrollPane.getViewport();
+        viewport.setFocusable(false);
         viewport.setBackground(UIManager.getColor("Label.background"));
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
+        viewport.setFocusTraversalKeysEnabled(false);
+        setFocusTraversalKeysEnabled(false);
         pack();
     }
 
