@@ -59,6 +59,7 @@ class ToolBarButton
         setBorderPainted(false);
         Insets insets = new Insets(1, 1, 1, 1);
         setMargin(insets);
+        setFocusable(false);
     }
 };
 
