@@ -453,12 +453,7 @@ public class Gtp
         }
     }
 
-    /** Send a command and timeout if no response is received within a
-        time limit.
-        @bug Doesn't work yet, BufferedReader blocks even if thread is
-        interrupted.
-    */
-    public String sendCommand(String command, long timeout) throws Gtp.Error
+    public String sendCommand(String command) throws Gtp.Error
     {
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
@@ -475,21 +470,8 @@ public class Gtp
         }
         if (m_callback != null)
             m_callback.sentCommand(command);
-        java.util.Timer timer = null;
-        if (timeout > 0)
-        {
-            timer = new java.util.Timer();
-            timer.schedule(new Interrupt(Thread.currentThread()), timeout);
-        }
         readResponse();
-        if (timer != null)
-            timer.cancel();
         return m_response;
-    }
-
-    public String sendCommand(String command) throws Gtp.Error
-    {
-        return sendCommand(command, 0);
     }
 
     public void sendCommandBoardsize(int size) throws Gtp.Error

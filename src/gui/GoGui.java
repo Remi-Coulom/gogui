@@ -1562,13 +1562,10 @@ class GoGui
             {
                 if (m_rememberWindowSizes)
                     restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
-                // First command is sent with a timeout, so that we are not
-                // fooled by programs who are not GTP Go programs, but
-                // consume stdin without writing to stdout.
                 try
                 {
                     setFastUpdate(true);
-                    m_name = m_commandThread.sendCommand("name", 30000).trim();
+                    m_name = m_commandThread.sendCommand("name").trim();
                 }
                 finally
                 {

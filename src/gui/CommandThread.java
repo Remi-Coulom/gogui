@@ -188,13 +188,6 @@ class CommandThread
         return response;
     }
 
-    public String sendCommand(String command, long timeout) throws Gtp.Error
-    {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
-        return m_gtp.sendCommand(command, timeout);
-    }
-
     public void sendCommandBoardsize(int size) throws Gtp.Error
     {
         m_gtp.sendCommandBoardsize(size);
