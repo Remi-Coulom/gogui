@@ -382,8 +382,8 @@ class GtpRegress
         else
         {
             line = line.replaceAll("\\t", " ");
-            int lastId = getId(line);
-            if (lastId < 0)
+            m_lastId = getId(line);
+            if (m_lastId < 0)
             {
                 m_lastCommand = line;
                 m_lastCommandHadId = false;
@@ -392,7 +392,6 @@ class GtpRegress
             {
                 int index = line.indexOf(" ");
                 m_lastCommand = line.substring(index + 1);
-                m_lastId = lastId;
                 m_lastCommandHadId = true;
             }
             printOutLine(m_lastCommandHadId ? "test" : "command", line,
@@ -548,7 +547,7 @@ class GtpRegress
         }
     }
 
-    private synchronized void printOutLine(String style, String line)
+    private synchronized void printOutLine(String style, String line, int id)
     {
         if (! line.endsWith("\n"))
             line = line + "\n";
@@ -575,7 +574,11 @@ class GtpRegress
         }
         if (style != null)
             m_out.print("<span class=\"" + style + "\">");
+        if (id >= 0)
+            m_out.print("<a name=\"" + id + "\">");            
         m_out.print(line);
+        if (id >= 0)
+            m_out.print("</a>");            
         if (style != null)
             m_out.print("</span>");
     }
@@ -585,11 +588,9 @@ class GtpRegress
         m_out.println("<hr>");
     }
 
-    private synchronized void printOutLine(String style, String line, int id)
+    private synchronized void printOutLine(String style, String line)
     {
-        if (id >= 0)
-            m_out.print("<a name=\"" + id + "\"></a>");
-        printOutLine(style, line);
+        printOutLine(style, line, -1);
     }
 
     private static void printUsage(PrintStream out)
