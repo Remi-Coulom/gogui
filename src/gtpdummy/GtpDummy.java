@@ -107,7 +107,7 @@ public class GtpDummy
         {
             try
             {
-                Thread.sleep(1000 * m_delay);
+                Thread.sleep(1000L * m_delay);
             }
             catch (InterruptedException e)
             {
