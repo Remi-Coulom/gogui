@@ -70,11 +70,11 @@
       </listitem>
     </varlistentry>
     <varlistentry>
-      <term>Regression</term>
+      <term>GtpRegress</term>
       <listitem>
         Runs GTP regression tests.
-	<xref linkend="reference-regression">
-	<citerefentry><refentrytitle>regression</refentrytitle></citerefentry>
+	<xref linkend="reference-gtpregress">
+	<citerefentry><refentrytitle>gtpregress</refentrytitle></citerefentry>
         </xref> 
         for a complete reference.
       </listitem>

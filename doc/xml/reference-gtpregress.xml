@@ -1,18 +1,18 @@
-<refentry id="reference-regression">
+<refentry id="reference-gtpregress">
   <refmeta>
-    <refentrytitle>regression</refentrytitle>
+    <refentrytitle>gtpregress</refentrytitle>
     <manvolnum>1</manvolnum>
   </refmeta>
   <refnamediv>
-    <refname>regression</refname>
-    <refname>regression.jar</refname>
+    <refname>gtpregress</refname>
+    <refname>gtpregress.jar</refname>
     <refpurpose>
        Runs GTP regression tests.
     </refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>regression</command>
+      <command>gtpregress</command>
       <arg><option>-help</option></arg>
       <arg choice="plain"><replaceable>program</replaceable></arg>
       <arg choice="plain" rep="repeat">

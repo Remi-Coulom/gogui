@@ -42,7 +42,7 @@
 	    <option>-command</option>.
 	  </listitem>
 	  <listitem>
-	    New tool <command>regression</command>.
+	    New tool <application>GtpRegress</application>.
 	  </listitem>
 	  <listitem>
 	    Rename <application>GtpNet</application> to

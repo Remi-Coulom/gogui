@@ -3,6 +3,8 @@
 // $Source$
 //-----------------------------------------------------------------------------
 
+package gtpregress;
+
 import java.io.*;
 import java.net.*;
 import java.text.*;
@@ -15,10 +17,10 @@ import version.*;
 
 //-----------------------------------------------------------------------------
 
-class Regression
+class GtpRegress
     implements Gtp.IOCallback
 {
-    Regression(String program, String[] tests)
+    GtpRegress(String program, String[] tests)
         throws Exception
     {
         m_program = program;
@@ -46,7 +48,7 @@ class Regression
             }
             if (opt.isSet("version"))
             {
-                System.out.println("Regression " + Version.m_version);
+                System.out.println("GtpRegress " + Version.m_version);
                 System.exit(0);
             }
             Vector arguments = opt.getArguments();
@@ -60,7 +62,7 @@ class Regression
             String tests[] = new String[size - 1];
             for (int i = 0; i <  size - 1; ++i)
                 tests[i] = (String)arguments.get(i + 1);
-            new Regression(program, tests);
+            new GtpRegress(program, tests);
         }
         catch (Error e)
         {
@@ -170,6 +172,8 @@ class Regression
 
     private String m_lastCommand;
 
+    private String m_lastFullResponse;
+
     private String m_lastResponse;
 
     private String m_lastSgf;
@@ -258,6 +262,36 @@ class Regression
         return summary;
     }
 
+    private synchronized void handleLastResponse()
+    {
+        if (m_lastId >= 0)
+        {
+            if (m_lastError)
+            {
+                printOutLine("fail", m_lastFullResponse);
+                if (m_lastResponse.equals(""))
+                    System.out.println(Integer.toString(m_lastId)
+                                       + " unexpected FAIL");
+                else
+                    System.out.println(Integer.toString(m_lastId)
+                                       + " unexpected FAIL: '" + m_lastResponse
+                                       + "'");
+            }
+            else
+                printOutLine(null, m_lastFullResponse);
+            m_tests.add(new Test(m_lastId, m_lastCommand, m_lastError, false,
+                                 "", m_lastResponse, m_lastSgf,
+                                 m_lastSgfMove));
+        }
+        else
+        {
+            if (m_lastError)
+                printOutLine("error", m_lastFullResponse);
+            else
+                printOutLine(null, m_lastFullResponse);
+        }
+    }
+
     private void handleLine(String line)
         throws ProgramIsDeadException
     {
@@ -266,13 +300,13 @@ class Regression
         {
             printOutLine("test", line);
             handleTest(line.substring(2).trim());
-            m_lastResponse = null;
+            m_lastFullResponse = null;
             return;
         }
-        if (m_lastResponse != null)
+        if (m_lastFullResponse != null)
         {
-            printOutLastResponse();
-            m_lastResponse = null;
+            handleLastResponse();
+            m_lastFullResponse = null;
         }
         if (line.equals(""))
             printOutLine(null, line);
@@ -289,13 +323,14 @@ class Regression
                 int index = line.indexOf(" ");
                 m_lastCommand = line.substring(index + 1);
             }
-            printOutLine("command", line, m_lastId);
+            printOutLine(m_lastId < 0 ? "command" : "test", line,
+                         m_lastId);
             checkLastSgf(line);
             m_lastError = false;
-            assert(m_lastResponse == null);
+            assert(m_lastFullResponse == null);
             try
             {
-                m_gtp.sendCommand(line);
+                m_lastResponse = m_gtp.sendCommand(line);
             }
             catch (Gtp.Error e)
             {
@@ -303,7 +338,7 @@ class Regression
                     throw new ProgramIsDeadException();
                 m_lastError = true;
             }
-            m_lastResponse = m_gtp.getFullResponse();
+            m_lastFullResponse = m_gtp.getFullResponse();
         }
     }
 
@@ -319,7 +354,7 @@ class Regression
         if (! patternString.startsWith("[")
             || ! patternString.endsWith("]"))
         {
-            printOutLastResponse();
+            handleLastResponse();
             return;
         }
         patternString = patternString.substring(1, patternString.length() - 1);
@@ -337,11 +372,11 @@ class Regression
         else
         {
             Pattern pattern = Pattern.compile(patternString);
-            int index = m_lastResponse.indexOf(" ");
+            int index = m_lastFullResponse.indexOf(" ");
             if (index < 0)
                 response = "";
             else
-                response = m_lastResponse.substring(index).trim();
+                response = m_lastFullResponse.substring(index).trim();
             Matcher matcher = pattern.matcher(response);
             if ((! matcher.matches() && ! notPattern)
                 || (matcher.matches() && notPattern))
@@ -352,7 +387,9 @@ class Regression
             style = "fail";
         else if (! fail && expectedFail)
             style = "pass";
-        printOutLine(style, m_lastResponse);
+        else
+            style = "test";
+        printOutLine(style, m_lastFullResponse);
         if (fail && ! expectedFail)
             System.out.println(Integer.toString(m_lastId)
                                + " unexpected FAIL: Correct '"
@@ -377,9 +414,7 @@ class Regression
                     "<title>Output " + test + "</title>\n" +
                     "<style type=\"text/css\">\n" +
                     "<!--" +
-                    "span.command { font-weight:bold; }\n" +
                     "span.comment { color:#999999; }\n" +
-                    "span.error { color:#ff0000; }\n" +
                     "span.fail { font-weight:bold; color:#ff0000; }\n" +
                     "span.stderr { font-style: italic; color:#999999; }\n" +
                     "span.pass { font-weight:bold; color:#009900; }\n" +
@@ -396,14 +431,6 @@ class Regression
                     "<pre>\n");
     }
 
-    private synchronized void printOutLastResponse()
-    {
-        if (m_lastError)
-            printOutLine("error", m_lastResponse);
-        else
-            printOutLine(null, m_lastResponse);
-    }
-
     private synchronized void printOutLine(String style, String line)
     {
         if (! line.endsWith("\n"))
@@ -411,7 +438,7 @@ class Regression
         line = StringUtils.replace(line, ">", "&gt;");
         line = StringUtils.replace(line, "<", "&lt;");
         line = StringUtils.replace(line, "&", "&amp;");
-        if (style == "command")
+        if (style == "command" || style == "test")
         {
             Pattern pattern = Pattern.compile("\\S*\\.[Ss][Gg][Ff]");
             Matcher matcher = pattern.matcher(line);
@@ -473,8 +500,8 @@ class Regression
             handleLine(line);
         }
         timeMillis = System.currentTimeMillis() - timeMillis;
-        if (m_lastResponse != null)
-            printOutLastResponse();
+        if (m_lastFullResponse != null)
+            handleLastResponse();
         reader.close();
         finishOutFile();
         TestSummary testSummary = getTestSummary(file, timeMillis);
