@@ -39,7 +39,6 @@ public class TwoGtp
         m_whiteName = getName(m_white);        
         m_black.querySupportedCommands();
         m_white.querySupportedCommands();
-        m_name = "TwoGtp (" + m_blackName + " - " + m_whiteName + ")";
         m_size = size;
         m_komi = komi;
         m_alternate = alternate;
@@ -64,6 +63,8 @@ public class TwoGtp
             || cmd.equals("final_status")
             || cmd.equals("final_status_list"))
             return sendEither(cmdLine, response);
+        else if (cmd.equals("gogui_title"))
+            response.append(getTitle());
         else if (cmd.equals("loadsgf"))
             return sendBoth(cmdLine, response, true, false);
         else if (cmd.equals("twogtp_black"))
@@ -89,7 +90,7 @@ public class TwoGtp
         else if (cmd.equals("scoring_system"))
             sendIfSupported(cmd, cmdLine);
         else if (cmd.equals("name"))
-            response.append(m_name);
+            response.append("TwoGtp");
         else if (cmd.equals("version"))
             ;
         else if (cmd.equals("protocol_version"))
@@ -102,6 +103,7 @@ public class TwoGtp
                             "final_status_list\n" +
                             "genmove_black\n" +
                             "genmove_white\n" +
+                            "gogui_title\n" +
                             "help\n" +
                             "komi\n" +
                             "loadsgf\n" +
@@ -200,7 +202,7 @@ public class TwoGtp
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
-            if (games > 0 && sgfFile.equals(""))
+            if (opt.isSet("games") && sgfFile.equals(""))
                 throw new Exception("Use option -sgffile with -games.");
             TwoGtp twoGtp = new TwoGtp(System.in, System.out, black, white,
                                        size, komi, games, alternate, sgfFile,
@@ -246,8 +248,6 @@ public class TwoGtp
     private Board m_board;
 
     private String m_blackName;
-
-    private String m_name;
 
     private String m_sgfFile;
 
@@ -478,6 +478,28 @@ public class TwoGtp
     private File getResultFile()
     {
         return new File(m_sgfFile + ".dat");
+    }
+
+    private String getTitle()
+    {
+        StringBuffer buffer = new StringBuffer();
+        String blackName = m_blackName;
+        String whiteName = m_whiteName;
+        if (isAlternated())
+        {
+            blackName = m_whiteName;
+            whiteName = m_blackName;
+        }
+        if (! m_sgfFile.equals(""))
+        {
+            buffer.append("Game ");
+            buffer.append(m_gameIndex + 1);
+            buffer.append("  ");
+        }
+        buffer.append(blackName);
+        buffer.append(" - ");
+        buffer.append(whiteName);
+        return buffer.toString();
     }
 
     private void handleEndOfGame(boolean error, String errorMessage)

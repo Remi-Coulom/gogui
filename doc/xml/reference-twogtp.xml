@@ -209,6 +209,18 @@
 	<varlistentry>
 	  <term>
             <userinput>
+	      gogui_title
+	    </userinput>
+          </term>
+          <listitem>
+	    Return a title for the current game consisting of the game number
+	    (if option <option>-sgffile</option> was used) and the player
+	    names.
+	  </listitem>
+        </varlistentry>
+	<varlistentry>
+	  <term>
+            <userinput>
 	      twogtp_black <replaceable>command</replaceable>
 	    </userinput>
           </term>
