@@ -969,6 +969,8 @@ public class Gmp
     }
 
     /** Create a Gmp.
+        The method start() must be called to start the internal read thread
+        before using this class.
         @param size board size 1-22
         Gmp supports only sizes up to 22 (number of bits in MOVE cmd)
         @param colorIndex color computer color on your side
