@@ -27,7 +27,10 @@
 	    Use time_settings command if -time option is used.
 	  </listitem>
 	  <listitem>
-	    New option -autofile.
+	    New options -autofile, -computer-both, -computer-black.
+	  </listitem>
+	  <listitem>
+	    Compile TwoGtp into its own jar file twogtp.jar.
 	  </listitem>
 	  <listitem>
 	    Lots of other fixes and enhancements.
