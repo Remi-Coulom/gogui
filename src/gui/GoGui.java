@@ -355,6 +355,7 @@ class GoGui
             m_board.setToMove(m_setupColor);
             updateGameInfo(true);
             m_guiBoard.updateFromGoBoard();
+            m_guiBoard.repaint();
             m_needsSave = true;
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
@@ -1884,15 +1885,7 @@ class GoGui
                 m_guiBoard.updateFromGoBoard(point);
                 if (m_showLastMove)
                     m_guiBoard.markLastMove(move.getPoint());
-                // Paint point and some neighbors (because of the shadows)
-                // immediately to pretend better responsiveness
-                m_guiBoard.paintImmediately(point);
-                int x = point.getX();
-                int y = point.getY();
-                if (x < m_boardSize - 1)
-                    m_guiBoard.paintImmediately(m_board.getPoint(x + 1, y));
-                if (y < m_boardSize - 1)
-                    m_guiBoard.paintImmediately(m_board.getPoint(x, y + 1));
+                paintImmediately(point);
             }
             m_timeControl.stopMove();
             go.Color color = move.getColor();
@@ -2060,6 +2053,20 @@ class GoGui
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
+    }
+
+    /** Paint point and some neighbors (because of the shadows)
+        immediately to pretend better responsiveness
+    */
+    private void paintImmediately(go.Point point)
+    {
+        m_guiBoard.paintImmediately(point);
+        int x = point.getX();
+        int y = point.getY();
+        if (x < m_boardSize - 1)
+            m_guiBoard.paintImmediately(m_board.getPoint(x + 1, y));
+        if (y < m_boardSize - 1)
+            m_guiBoard.paintImmediately(m_board.getPoint(x, y + 1));
     }
 
     private void play(Move move) throws Gtp.Error
