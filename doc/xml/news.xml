@@ -52,7 +52,7 @@ New wildcard %c for commands (supersedes %m) and return type varc.
 <listitem>
 <simpara>
 If text is selected in the window opened by an analyze command of type
-pstring or hpstring, only the points contained in the selected text
+pstring or hpstring, only the points contained in the selection
 will be marked on the board.
 </simpara>
 </listitem>
