@@ -333,9 +333,14 @@ class WriteThread extends Thread
         notifyAll();
     }
 
-    public synchronized void sendPacket(byte[] packet)
+    public synchronized void sendPacket(byte[] packet, boolean onlyOnce)
     {
         m_packet = packet;
+        if (onlyOnce)
+        {
+            writePacket();
+            return;
+        }
         m_sendInProgress = true;
         notifyAll();
     }
@@ -827,7 +832,8 @@ class ReadThread extends Thread
     private boolean sendCmd(int cmd, int val)
     {
         Util.log("send " + (new Cmd(cmd, val)).toString(m_size, m_lastQuery));
-        if (cmd != Cmd.OK)
+        boolean isOkCmd = (cmd == Cmd.OK);
+        if (! isOkCmd)
             m_myLastSeq = ! m_myLastSeq;
         byte packet[] = new byte[4];
         packet[0] = (byte)(m_myLastSeq ? 1 : 0);
@@ -835,8 +841,8 @@ class ReadThread extends Thread
         packet[2] = makeCmdByte1(cmd, val);
         packet[3] = makeCmdByte2(val);
         setChecksum(packet);
-        m_writeThread.sendPacket(packet);
-        if (cmd != Cmd.OK)
+        m_writeThread.sendPacket(packet, isOkCmd);
+        if (! isOkCmd)
             m_state =
                 (cmd == Cmd.ANSWER ? STATE_WAIT_ANSWER_OK : STATE_WAIT_OK);
         return true;
