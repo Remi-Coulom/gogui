@@ -26,6 +26,8 @@ class MenuBar
         m_menuBar.add(m_menuFile);
         m_menuGame = createGameMenu();
         m_menuBar.add(m_menuGame);
+        m_menuVariation = createVariationMenu();
+        m_menuBar.add(m_menuVariation);
         m_menuSetup = createSetupMenu();
         m_menuBar.add(m_menuSetup);
         m_menuSettings = createSettingsMenu();
@@ -324,6 +326,8 @@ class MenuBar
 
     private JMenu m_menuSetup;
 
+    private JMenu m_menuVariation;
+
     private JMenuBar m_menuBar;
 
     private JMenu m_menuWindows;
@@ -497,7 +501,6 @@ class MenuBar
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
         menu.add(createBoardSizeMenu());
-        addMenuItem(menu, "Komi...", KeyEvent.VK_K, "komi");
         menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
         m_menuComputerColor = createComputerColorMenu();
@@ -533,19 +536,6 @@ class MenuBar
         m_itemGoto =
             addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
                         ActionEvent.CTRL_MASK, "goto");
-        menu.addSeparator();
-        m_itemNextVariation =
-            addMenuItem(menu, "Next variation", KeyEvent.VK_V,
-                        KeyEvent.VK_DOWN, ActionEvent.CTRL_MASK,
-                        "next-variation");
-        m_itemPreviousVariation =
-            addMenuItem(menu, "Previous variation", KeyEvent.VK_A,
-                        KeyEvent.VK_UP, ActionEvent.CTRL_MASK,
-                        "previous-variation");
-        m_itemMakeMainVar = addMenuItem(menu, "Make main variation...",
-                                        KeyEvent.VK_M, "make-main-variation");
-        m_itemTruncate = addMenuItem(menu, "Truncate...", KeyEvent.VK_T,
-                                     "truncate");
         menu.addSeparator();
         addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
@@ -638,6 +628,25 @@ class MenuBar
         m_itemSetupBlack.setSelected(true);
         m_itemSetupWhite =
             addRadioItem(menu, group, "White", KeyEvent.VK_W, "setup-white");
+        return menu;
+    }
+
+    private JMenu createVariationMenu()
+    {
+        JMenu menu = new JMenu("Variation");
+        menu.setMnemonic(KeyEvent.VK_V);
+        m_itemNextVariation =
+            addMenuItem(menu, "Next variation", KeyEvent.VK_N,
+                        KeyEvent.VK_DOWN, ActionEvent.CTRL_MASK,
+                        "next-variation");
+        m_itemPreviousVariation =
+            addMenuItem(menu, "Previous variation", KeyEvent.VK_P,
+                        KeyEvent.VK_UP, ActionEvent.CTRL_MASK,
+                        "previous-variation");
+        m_itemMakeMainVar = addMenuItem(menu, "Make main variation...",
+                                        KeyEvent.VK_M, "make-main-variation");
+        m_itemTruncate = addMenuItem(menu, "Truncate...", KeyEvent.VK_T,
+                                     "truncate");
         return menu;
     }
 
