@@ -33,7 +33,7 @@ public class Board
 {
     public interface Listener
     {
-        void fieldClicked(go.Point p);
+        void fieldClicked(go.Point p, int modifiers);
     }
 
     public Board(go.Board board)
@@ -56,6 +56,7 @@ public class Board
         }
         clearAllCrossHair();
         clearAllMarkup();
+        clearAllSelect();
         clearAllStrings();
         drawLastMove();
     }
@@ -72,6 +73,12 @@ public class Board
             setMarkup(m_board.getPoint(i), false);
     }
 
+    public void clearAllSelect()
+    {
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+            setSelect(m_board.getPoint(i), false);
+    }
+
     public void clearAllStrings()
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
@@ -83,27 +90,10 @@ public class Board
         getField(p).clearInfluence();
     }
 
-    public void fieldClicked(go.Point p)
+    public void fieldClicked(go.Point p, int modifiers)
     {
         if (m_listener != null)
-            m_listener.fieldClicked(p);
-    }
-
-    public void setFocus()
-    {
-        int moveNumber = m_board.getMoveNumber();
-        if (moveNumber > 0)
-        {
-            Move m = m_board.getMove(moveNumber - 1);
-            go.Point lastMove = m.getPoint();
-            if (lastMove != null && m.getColor() != go.Color.EMPTY)
-                setFocusPoint(lastMove);
-        }
-        else if (m_board.getInternalNumberMoves() == 0)
-        {
-            int size = m_board.getSize();
-            setFocusPoint(m_board.getPoint(size / 2, size / 2));
-        }
+            m_listener.fieldClicked(p, modifiers);
     }
 
     public go.Board getBoard()
@@ -244,6 +234,23 @@ public class Board
         calcScore();
     }
 
+    public void setFocus()
+    {
+        int moveNumber = m_board.getMoveNumber();
+        if (moveNumber > 0)
+        {
+            Move m = m_board.getMove(moveNumber - 1);
+            go.Point lastMove = m.getPoint();
+            if (lastMove != null && m.getColor() != go.Color.EMPTY)
+                setFocusPoint(lastMove);
+        }
+        else if (m_board.getInternalNumberMoves() == 0)
+        {
+            int size = m_board.getSize();
+            setFocusPoint(m_board.getPoint(size / 2, size / 2));
+        }
+    }
+
     public void setFocusPoint(go.Point point)
     {
         if (! m_board.contains(point))
@@ -282,6 +289,11 @@ public class Board
     public void setMarkup(go.Point p, boolean markup)
     {
         getField(p).setMarkup(markup);
+    }
+
+    public void setSelect(go.Point p, boolean select)
+    {
+        getField(p).setSelect(select);
     }
 
     public void setString(go.Point p, String s)

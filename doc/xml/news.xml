@@ -17,7 +17,7 @@ New menu items <guimenuitem>Open Recent</guimenuitem> and
 <listitem>
 Analyze commands are now selected from a dialog.
 New analyze result type <userinput>pslist</userinput>.
-Analyze commands can have string or file argument.
+Analyze commands can have string, file and pointlist arguments.
 </listitem>
 <listitem>
 Lots of small fixes and enhancements.

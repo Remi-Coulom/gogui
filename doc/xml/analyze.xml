@@ -102,7 +102,7 @@ The label to use for the menu.
 <section>
 <title>Command</title>
 The command to send to the Go program.
-It can contain the following wildcards:
+It can contain one of the following wildcards:
 <variablelist>
 <varlistentry>
 <term><userinput>%f</userinput></term>
@@ -120,6 +120,14 @@ Will be replaced by the color to play.
 <term><userinput>%p</userinput></term>
 <listitem>
 Will be replaced by the a point selected by the user.
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><userinput>%P</userinput></term>
+<listitem>
+Will be replaced by a list of points selected by the user.
+The list is finished by clicking on a field with the <keycap>Ctrl</keycap>
+key pressed.
 </listitem>
 </varlistentry>
 <varlistentry>

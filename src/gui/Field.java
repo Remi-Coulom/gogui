@@ -36,7 +36,8 @@ public class Field
 
     public void actionPerformed(ActionEvent event)
     {
-        m_board.fieldClicked(m_point);
+        int modifiers = event.getModifiers();
+        m_board.fieldClicked(m_point, modifiers);
     }
 
     public void clearInfluence()
@@ -81,6 +82,8 @@ public class Field
             drawCrossHair(graphics);
         if (m_lastMoveMarker)
             drawLastMoveMarker(graphics);
+        if (m_select)
+            drawSelect(graphics);
         if (! m_string.equals(""))
             drawString(graphics);
         if (isFocusOwner())
@@ -122,6 +125,11 @@ public class Field
         m_markup = markup;
     }
 
+    public void setSelect(boolean select)
+    {
+        m_select = select;
+    }
+
     public void setString(String s)
     {
         m_string = s;
@@ -136,6 +144,8 @@ public class Field
     private boolean m_markup;
 
     private boolean m_influenceSet;
+
+    private boolean m_select;
 
     private double m_influence;
 
@@ -155,11 +165,29 @@ public class Field
 
     private gui.Board m_board;
 
+    private void drawCircle(Graphics g, java.awt.Color color, boolean fill)
+    {
+        Dimension size = getSize();
+        int dx = size.width / 4;
+        int dy = size.height / 4;
+        g.setColor(color);
+        int radiusX = size.width / 6;
+        int radiusY = size.height / 6;
+        int x = size.width / 2 - radiusX;
+        int y = size.height / 2 - radiusY;
+        int width = 2 * radiusX + 1;
+        int height = 2 * radiusY + 1;
+        if (fill)
+            g.fillOval(x, y, width, height);
+        else
+            g.drawOval(x, y, width, height);
+    }
+
     private void drawCrossHair(Graphics g)
     {
         Dimension size = getSize();
-        int dx = size.width / 3;
-        int dy = size.height / 3;
+        int dx = size.width / 5;
+        int dy = size.height / 5;
         g.setColor(java.awt.Color.red);
         g.drawLine(dx, size.height / 2, size.width - dx, size.height / 2);
         g.drawLine(size.width / 2, dy, size.width / 2, size.height - dy);
@@ -167,7 +195,20 @@ public class Field
 
     private void drawFocus(Graphics g)
     {
-        drawPoint(g, java.awt.Color.blue);
+        Dimension size = getSize();
+        int dx = size.width / 6;
+        int dy = size.height / 6;
+        g.setColor(java.awt.Color.blue);
+        g.drawLine(dx, dy, 2 * dx, dy);
+        g.drawLine(dx, dy, dx, 2 * dy);
+        g.drawLine(dx, size.height - 2 * dy, dx, size.height - dy);
+        g.drawLine(dx, size.height - dy, 2 * dx, size.height - dy);
+        g.drawLine(size.width - 2 * dx, dy, size.width - dx, dy);
+        g.drawLine(size.width - dx, dy, size.width - dx, 2 * dy);
+        g.drawLine(size.width - dx, size.height - dy,
+                   size.width - dx, size.height - 2 * dy);
+        g.drawLine(size.width - dx, size.height - dy,
+                   size.width - 2 * dx, size.height - dy);
     }
 
     private void drawGrid(Graphics g)
@@ -219,7 +260,7 @@ public class Field
 
     private void drawLastMoveMarker(Graphics g)
     {
-        drawPoint(g, java.awt.Color.red);
+        drawCircle(g, java.awt.Color.red, true);
     }
 
     private void drawMarkup(Graphics g)
@@ -231,16 +272,9 @@ public class Field
         g.drawRect(dx / 2, dy / 2, size.width - dx + 1, size.height - dy + 1);
     }
 
-    private void drawPoint(Graphics g, java.awt.Color color)
+    private void drawSelect(Graphics g)
     {
-        Dimension size = getSize();
-        int dx = size.width / 4;
-        int dy = size.height / 4;
-        g.setColor(color);
-        int radiusX = size.width / 7;
-        int radiusY = size.height / 7;
-        g.fillOval(size.width / 2 - radiusX, size.height / 2 - radiusY,
-                   2 * radiusX + 1, 2 * radiusY + 1);
+        drawCircle(g, java.awt.Color.blue, true);
     }
 
     private void drawStone(Graphics g, java.awt.Color c)

@@ -106,17 +106,25 @@ class AnalyzeCommand
         return m_type;
     }
 
-    public String getResultTitle(go.Point pointArg)
+    public String getResultTitle(go.Point pointArg, Vector pointListArg)
     {
         StringBuffer buffer = new StringBuffer(m_label);
         if (needsPointArg() && pointArg != null)
         {
-            buffer.append(" ");
+            buffer.append(' ');
             buffer.append(pointArg.toString());
+        }
+        else if (needsPointListArg() && pointListArg != null)
+        {
+            for (int i = 0; i < pointListArg.size(); ++i)
+            {
+                buffer.append(' ');
+                buffer.append(((go.Point)(pointListArg.get(i))).toString());
+            }
         }
         if (needsStringArg() && m_stringArg != null)
         {
-            buffer.append(" ");
+            buffer.append(' ');
             buffer.append(m_stringArg);
         }
         return buffer.toString();
@@ -130,6 +138,11 @@ class AnalyzeCommand
     public boolean needsPointArg()
     {
         return (m_command.indexOf("%p") >= 0);
+    }
+
+    public boolean needsPointListArg()
+    {
+        return (m_command.indexOf("%P") >= 0);
     }
 
     public boolean needsStringArg()
@@ -174,7 +187,8 @@ class AnalyzeCommand
         }
     }
 
-    public String replaceWildCards(go.Color toMove, go.Point pointArg)
+    public String replaceWildCards(go.Color toMove, go.Point pointArg,
+                                   Vector pointListArg)
     {
         StringBuffer buffer = new StringBuffer(m_command);
         StringUtils.replace(buffer, "%m", toMove.toString());
@@ -182,6 +196,18 @@ class AnalyzeCommand
         {
             assert(pointArg != null);
             StringUtils.replace(buffer, "%p", pointArg.toString());
+        }
+        if (needsPointListArg())
+        {
+            assert(pointListArg != null);
+            StringBuffer listBuffer = new StringBuffer(128);
+            for (int i = 0; i < pointListArg.size(); ++i)
+            {
+                if (listBuffer.length() == 0)
+                    listBuffer.append(' ');
+                listBuffer.append(((go.Point)pointListArg.get(i)).toString());
+            }
+            StringUtils.replace(buffer, "%P", listBuffer.toString());
         }
         if (needsFileArg())
         {
