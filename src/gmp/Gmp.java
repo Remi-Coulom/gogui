@@ -861,6 +861,20 @@ public class Gmp
         return Cmd.parseMove(result.m_val, m_size);
     }
 
+    public boolean waitNewGame(int size, StringBuffer response)
+    {
+        if (size != m_size)
+        {
+            response.append("Board size must be " + m_size);
+            return false;
+        }
+        ReadThread.WaitResult result;
+        result = m_readThread.waitCmd(Cmd.NEWGAME, 0, 0);
+        if (result.m_response != null)
+            response.append(result.m_response);
+        return result.m_success;
+    }
+
     private int m_size;
 
     private ReadThread m_readThread;

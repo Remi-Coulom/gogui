@@ -17,10 +17,11 @@ public class GmpToGtp
     extends GtpServer
 {
     public GmpToGtp(InputStream in, OutputStream out, boolean verbose,
-                    int size, int colorIndex)
+                    int size, int colorIndex, boolean wait)
     {
         super(System.in, System.out);
         m_verbose = verbose;
+        m_wait = wait;
         m_gmp = new Gmp(in, out, size, colorIndex);
     }
 
@@ -93,7 +94,8 @@ public class GmpToGtp
                 "help",
                 "list",
                 "size:",
-                "verbose"
+                "verbose",
+                "wait"
             };
             Options opt = new Options(args, options);
             if (opt.isSet("help"))
@@ -107,7 +109,8 @@ public class GmpToGtp
                     "-help    display this help and exit\n" +
                     "-list    list serial devices and exit\n" +
                     "-size    board size\n" +
-                    "-verbose print logging messages";
+                    "-verbose print logging messages" +
+                    "-wait    wait for first newgame command\n";
                 System.out.print(helpText);
                 System.exit(0);
             }
@@ -131,6 +134,7 @@ public class GmpToGtp
             if (baud <= 0)
                 throw new Exception("invalid baud value");
             boolean verbose = opt.isSet("verbose");
+            boolean wait = opt.isSet("wait");
             String program = null;
             Vector arguments = opt.getArguments();
             if (arguments.size() == 1)
@@ -174,7 +178,7 @@ public class GmpToGtp
                     colorIndex =  2;
             }
             GmpToGtp gmpToGtp = new GmpToGtp(in, out, verbose, size,
-                                             colorIndex);
+                                             colorIndex, wait);
             gmpToGtp.mainLoop();
         }
         catch (Throwable t)
@@ -214,7 +218,11 @@ public class GmpToGtp
         System.exit(exitStatus);
     }
 
+    private boolean m_firstGame = true;
+
     private boolean m_verbose;
+
+    private boolean m_wait;
 
     private Gmp m_gmp;
 
@@ -229,7 +237,10 @@ public class GmpToGtp
         try
         {
             int arg = Integer.parseInt(tokens[1]);
-            return m_gmp.newGame(arg, response);
+            if (! m_firstGame || ! m_wait)
+                return m_gmp.newGame(arg, response);
+            m_firstGame = false;
+            return m_gmp.waitNewGame(arg, response);
         }
         catch (NumberFormatException e)
         {
