@@ -226,11 +226,6 @@ public class Board
         return m_allPoints.length;
     }
 
-    public int getNumberSavedMoves()
-    {
-        return m_moves.size() - m_setupNumber;
-    }
-
     public int getRules()
     {
         return m_rules;
@@ -342,12 +337,8 @@ public class Board
                 }
             }
         }
-        if (m_moveNumber == m_moves.size()
-             || ! m.equals(getInternalMove(m_moveNumber)))
-        {
-            m_moves.setSize(m_moveNumber);
-            m_moves.add(new MoveRecord(m_toMove, m, old, killed, suicide));
-        }
+        m_moves.setSize(m_moveNumber);
+        m_moves.add(new MoveRecord(m_toMove, m, old, killed, suicide));
         ++m_moveNumber;
         m_toMove = otherColor;        
     }
@@ -506,6 +497,7 @@ public class Board
             return;
         --m_moveNumber;
         MoveRecord r = (MoveRecord)m_moves.get(m_moveNumber);
+        m_moves.setSize(m_moveNumber);
         Move m = r.getMove();
         Color c = m.getColor();
         Color otherColor = c.otherColor();
