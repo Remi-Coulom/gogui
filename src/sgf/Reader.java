@@ -129,6 +129,8 @@ public class Reader
     public String getWarnings()
     {
         String result = "";
+        if (m_warningFormat)
+            result = result + "Unknown SGF file format version.\n";
         if (m_warningLongProps)
             result = result + "Long property names for standard properties\n";
         if (m_warningWrongPass)
@@ -146,6 +148,8 @@ public class Reader
     private static final int CACHE_SIZE = 30;
 
     private boolean m_isFile;
+
+    private boolean m_warningFormat;
 
     private boolean m_warningLongProps;
 
@@ -449,6 +453,21 @@ public class Reader
                 if (p.equals("DATE"))
                     m_warningLongProps = true;
                 m_gameInformation.m_date = v;
+            }
+            else if (p.equals("FF"))
+            {
+                int format = -1;
+                try
+                {
+                    format = Integer.parseInt(v);
+                }
+                catch (NumberFormatException e)
+                {
+                }
+                if (format < 1 || format > 4)
+                {
+                    m_warningFormat = true;
+                }
             }
             else if (p.equals("GM") || p.equals("GAME"))
             {
