@@ -30,7 +30,7 @@ public class GtpTerminal
         m_gtp = new Gtp(program, verbose, this);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
-        m_board = new Board(size);
+        initGame(size);
     }
 
     public void close()
@@ -138,7 +138,33 @@ public class GtpTerminal
 
     private Board m_board;
 
+    private GameTree m_gameTree;
+
     private Gtp m_gtp;
+
+    private Node m_currentNode;
+
+    private void cmdPlay(Point point)
+    {
+        if (! cmdPlay(m_board.getToMove(), point))
+            return;
+        printBoard();
+        genmove();
+    }
+
+    private boolean cmdPlay(Color color, Point point)
+    {
+        String command = m_gtp.getCommandPlay(color);
+        command = command + " " + Point.toString(point);
+        StringBuffer response = new StringBuffer();
+        if (! send(command, response))
+        {
+            System.out.println(response);
+            return false;
+        }
+        play(new Move(point, color));
+        return true;
+    }
 
     private void genmove()
     {
@@ -155,7 +181,7 @@ public class GtpTerminal
             Point point =
                 Gtp.parsePoint(response.toString(), m_board.getSize());
             System.out.println("Computer move: " + Point.toString(point));
-            m_board.play(new Move(point, toMove));
+            play(new Move(point, toMove));
             printBoard();
         }
         catch (Gtp.Error error)
@@ -202,7 +228,7 @@ public class GtpTerminal
             try
             {
                 Point point = Gtp.parsePoint(cmdLine, m_board.getSize());
-                play(point);
+                cmdPlay(point);
             }
             catch (Gtp.Error error)
             {
@@ -229,6 +255,13 @@ public class GtpTerminal
                          "  black, boardsize, clear_board, genmove_black\n" +
                          "  genmove_white, white\n" +
                          "Other commands are forwarded to the program.\n");
+    }
+
+    private void initGame(int size)
+    {
+        m_board = new Board(size);
+        m_gameTree = new GameTree(size);
+        m_currentNode = m_gameTree.getRoot();
     }
 
     private void listCommands()
@@ -274,14 +307,14 @@ public class GtpTerminal
             while (node != null)
             {
                 for (int i = 0; i < node.getNumberAddBlack(); ++i)
-                    if (! play(Color.BLACK, node.getAddBlack(i)))
+                    if (! cmdPlay(Color.BLACK, node.getAddBlack(i)))
                         return;
                 for (int i = 0; i < node.getNumberAddWhite(); ++i)
-                    if (! play(Color.WHITE, node.getAddWhite(i)))
+                    if (! cmdPlay(Color.WHITE, node.getAddWhite(i)))
                         return;
                 Move move = node.getMove();
                 if (move != null)
-                    if (! play(move.getColor(), move.getPoint()))
+                    if (! cmdPlay(move.getColor(), move.getPoint()))
                         return;
                 node = node.getChild();
             }
@@ -314,7 +347,7 @@ public class GtpTerminal
             System.out.println(response);
             return false;
         }
-        m_board = new Board(size);
+        initGame(size);
         return true;
     }
 
@@ -333,26 +366,12 @@ public class GtpTerminal
         }
     }
 
-    private void play(Point point)
+    private void play(Move move)
     {
-        if (! play(m_board.getToMove(), point))
-            return;
-        printBoard();
-        genmove();
-    }
-
-    private boolean play(Color color, Point point)
-    {
-        String command = m_gtp.getCommandPlay(color);
-        command = command + " " + Point.toString(point);
-        StringBuffer response = new StringBuffer();
-        if (! send(command, response))
-        {
-            System.out.println(response);
-            return false;
-        }
-        m_board.play(new Move(point, color));
-        return true;
+        m_board.play(move);
+        Node node = new Node(move);
+        m_currentNode.append(node);
+        m_currentNode = node;
     }
 
     private void printBoard()
@@ -384,8 +403,8 @@ public class GtpTerminal
         try
         {
             OutputStream out = new FileOutputStream(file);
-            new sgf.Writer(out, m_board, file, "GtpTerminal", Version.get(),
-                           0, null, null, null, null);
+            new sgf.Writer(out, m_board, m_gameTree, file, "GtpTerminal",
+                           Version.get(), 0, null, null, null);
         }
         catch (FileNotFoundException e) 
         {
@@ -424,6 +443,7 @@ public class GtpTerminal
             return;
         }
         m_board.undo();
+        m_currentNode = m_currentNode.getFather();
         printBoard();
     }
 }
