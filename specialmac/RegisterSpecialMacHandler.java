@@ -42,6 +42,9 @@ public class RegisterSpecialMacHandler
     public RegisterSpecialMacHandler(Platform.SpecialMacHandler handler)
     {
         Application application = Application.getApplication();
+        application.removePreferencesMenuItem();
+        application.addAboutMenuItem();
+        application.setEnabledAboutMenu(true);
         application.addApplicationListener(new Listener(handler));
     }
 }
