@@ -61,6 +61,12 @@ class ToolBar
         m_analyze.setEnabled(false);
     }
 
+    public void setAnalyzeCommand(String command)
+    {
+        m_analyze.setEnabled(true);
+        m_analyze.setAnalyzeCommand(command);
+    }
+
     public void toggleAnalyze()
     {
         m_analyze.setEnabled(! m_analyze.isEnabled());

@@ -28,7 +28,7 @@ class GoGui
     GoGui(String program, Preferences prefs, String file, int move,
           boolean gtpShell, String time, boolean verbose, boolean fillPasses,
           boolean computerBlack, boolean computerWhite, boolean auto,
-          String gtpFile, String gtpCommand)
+          String gtpFile, String gtpCommand, String initAnalyze)
         throws Gtp.Error, Analyze.Error
     {
         m_program = program;
@@ -49,6 +49,7 @@ class GoGui
         m_computerWhite = computerWhite;
         m_auto = auto;
         m_verbose = verbose;
+        m_initAnalyze = initAnalyze;
 
         Container contentPane = getContentPane();        
 
@@ -330,6 +331,7 @@ class GoGui
             Preferences prefs = new Preferences();
             if (opt.contains("analyze"))
                 prefs.setAnalyzeCommand(opt.getString("analyze"));
+            String initAnalyze = opt.getString("analyze");
             boolean auto = opt.isSet("auto");
             boolean computerBlack = false;
             boolean computerWhite = true;
@@ -376,7 +378,8 @@ class GoGui
             
             GoGui gui = new GoGui(program, prefs, file, move, gtpShell, time,
                                   verbose, fillPasses, computerBlack,
-                                  computerWhite, auto, gtpFile, gtpCommand);
+                                  computerWhite, auto, gtpFile, gtpCommand,
+                                  initAnalyze);
         }
         catch (AssertionError e)
         {
@@ -534,6 +537,8 @@ class GoGui
     private String m_gtpCommand;
 
     private String m_gtpFile;
+
+    private String m_initAnalyze;
 
     private String m_loadedFile;
 
@@ -861,7 +866,7 @@ class GoGui
             GoGui gui = new GoGui(program, m_prefs, file.toString(),
                                   m_board.getMoveNumber(), false, null,
                                   m_verbose, m_fillPasses,
-                                  false, false, false, "", "");
+                                  false, false, false, "", "", "");
 
         }
         catch (Throwable t)
@@ -1429,8 +1434,9 @@ class GoGui
             {
                 setKomi();
                 newGame(m_boardSize);
-                return;
             }
+            if (! m_initAnalyze.equals(""))
+                m_toolBar.setAnalyzeCommand(m_initAnalyze);
             m_guiBoard.requestFocus();
         }
         catch (Gtp.Error e)
