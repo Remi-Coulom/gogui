@@ -836,7 +836,11 @@ class GoGui
             return;
         }
         if (m_rememberWindowSizes)
+        {
             restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+            if (m_prefs.getBool("show-gtpshell"))
+                m_gtpShell.toTop();
+        }
         try
         {
             setFastUpdate(true);
