@@ -691,11 +691,15 @@ class GoGui
     private void cbEnd()
     {
         forward(m_board.getNumberSavedMoves() - m_board.getMoveNumber());
+        computerNone();
+        boardChanged();
     }
 
     private void cbForward(int n)
     {
         forward(n);
+        computerNone();
+        boardChanged();
     }
 
     private void cbGtpFile()
@@ -1226,8 +1230,6 @@ class GoGui
                 Move move = m_board.getMove(moveNumber);
                 play(move);
             }
-            computerNone();
-            boardChanged();
         }
         catch (Gtp.Error e)
         {
