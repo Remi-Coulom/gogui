@@ -428,11 +428,11 @@ class GoGui
             if (opt.contains("size"))
                 prefs.setInt("boardsize", opt.getInteger("size"));
             String rules = opt.getString("rules", "");
-            if (rules == "chinese")
+            if (rules.equals("chinese"))
                 prefs.setInt("rules", go.Board.RULES_CHINESE);
-            else if (rules == "japanese")
+            else if (rules.equals("japanese"))
                 prefs.setInt("rules", go.Board.RULES_JAPANESE);
-            else if (rules != "")
+            else if (! rules.equals(""))
                 throw new Exception("Invalid rules argument \""
                                     + rules + "\"");
             String time = opt.getString("time", null);

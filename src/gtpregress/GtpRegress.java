@@ -523,7 +523,7 @@ class GtpRegress
         line = line.replaceAll("&", "&amp;");
         line = line.replaceAll(">", "&gt;");
         line = line.replaceAll("<", "&lt;");
-        if (style == "command" || style == "test")
+        if (style.equals("command") || style.equals("test"))
         {
             Pattern pattern = Pattern.compile("\\S*\\.[Ss][Gg][Ff]");
             Matcher matcher = pattern.matcher(line);
