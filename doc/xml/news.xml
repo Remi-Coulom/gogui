@@ -13,6 +13,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
+GtpAdapter: fix some bugs with option -resign
 </simpara>
 </listitem>
 </itemizedlist>

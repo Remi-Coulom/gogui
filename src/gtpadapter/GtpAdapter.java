@@ -238,40 +238,37 @@ public class GtpAdapter
 
     private String m_name;
 
-    private boolean checkResign(String color, StringBuffer response)
+    private boolean checkResign(Color color, StringBuffer response)
     {
         if (! m_resign)
-            return false;
-        color = color.toLowerCase();
-        boolean isBlack;
-        if (color.equals("b") || color.equals("black"))
-            isBlack = true;
-        else if (color.equals("w") || color.equals("white"))
-            isBlack = false;
-        else
             return false;
         StringBuffer programResponse = new StringBuffer();
         if (! send("estimate_score", programResponse))
             return false;
         boolean isValid = false;
         double score = 0;
-        String s = programResponse.toString().trim();
-        try
+        String[] tokens = StringUtils.tokenize(programResponse.toString());
+        if (tokens.length > 0)
         {
-            if (! s.equals("?"))
+            String s = tokens[0];
+            try
             {
-                if (s.indexOf("B+") >= 0)
-                    score = Double.parseDouble(s.substring(2));
-                else if (s.indexOf("W+") >= 0)
-                    score = - Double.parseDouble(s.substring(2));
-                isValid = true;
+                if (! s.equals("?"))
+                {
+                    if (s.indexOf("B+") >= 0)
+                        score = Double.parseDouble(s.substring(2));
+                    else if (s.indexOf("W+") >= 0)
+                        score = - Double.parseDouble(s.substring(2));
+                    isValid = true;
+                }
             }
-        }
-        catch (NumberFormatException e)
-        {
+            catch (NumberFormatException e)
+            {
+            }
         }
         if (isValid)
         {
+            boolean isBlack = (color == Color.BLACK);
             if ((isBlack && score < - m_resignScore)
                 || (! isBlack && score > m_resignScore))
             {
@@ -327,13 +324,13 @@ public class GtpAdapter
         ColorArgument argument = parseColorArgument(cmdArray, response);
         if (argument == null)
             return false;
-        if (checkResign(cmdArray[1], response))
-            return true;
         return cmdGenmove(argument.m_color, response);
     }
 
     private boolean cmdGenmove(Color color, StringBuffer response)
     {
+        if (checkResign(color, response))
+            return true;
         String command = m_gtp.getCommandGenmove(color);
         if (! fillPass(color, response))
             return false;
