@@ -1583,14 +1583,25 @@ class GoGui
 
     private JComponent createStatusBar()
     {
+        JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel panel = new JPanel(new GridLayout(1, 0));
+        outerPanel.add(panel, BorderLayout.CENTER);
+        // Workaround for Java 1.4.1 on Mac OS X: add some empty space
+        // so that status bar does not overlap the window resize widget
+        if (Platform.isMac())
+        {
+            Dimension dimension = new Dimension(20, 1);
+            Box.Filler filler =
+                new Box.Filler(dimension, dimension, dimension);
+            outerPanel.add(filler, BorderLayout.EAST);
+        }
         JLabel label = new JLabel();
         label.setBorder(BorderFactory.createLoweredBevelBorder());
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
         m_statusLabel = label;
         clearStatus();
-        return panel;
+        return outerPanel;
     }
 
     private void detachProgram()
