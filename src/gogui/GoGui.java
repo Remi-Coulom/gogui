@@ -63,6 +63,7 @@ import gui.GtpShell;
 import gui.Help;
 import gui.ParameterDialog;
 import gui.SelectProgram;
+import gui.Session;
 import gui.ScoreDialog;
 import gui.SimpleDialogs;
 import gui.TextViewer;
@@ -365,7 +366,7 @@ class GoGui
                 new AnalyzeDialog(this, m_prefs,
                                   m_commandThread.getSupportedCommands(),
                                   m_commandThread);
-            restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
+            restoreSize(m_analyzeDialog, "window-analyze");
             setTitle();
         }
         m_analyzeDialog.toTop();
@@ -428,7 +429,7 @@ class GoGui
             return;
         }
         m_gameTreeViewer = new GameTreeViewer(this, m_fastPaint, m_prefs);
-        restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
+        restoreSize(m_gameTreeViewer, "window-gametree");
         updateGameTree(true);
         if (m_gameTreeViewer != null) // updateGameTree can close viewer
             m_gameTreeViewer.toTop();
@@ -998,7 +999,7 @@ class GoGui
         catch (GtpError e)
         {
         }
-        restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+        restoreSize(m_gtpShell, "window-gtpshell");
         if (m_prefs.getBool("show-gtpshell"))
             m_gtpShell.toTop();
         if (m_prefs.getBool("show-analyze"))
@@ -1305,7 +1306,7 @@ class GoGui
         if (m_help == null)
         {
             m_help = new Help(u);
-            restoreSize(m_help, "window-help", m_boardSize);
+            restoreSize(m_help, "window-help");
         }
         m_help.toTop();
     }
@@ -2103,11 +2104,11 @@ class GoGui
             m_squareLayout.setPreferMultipleOf(size + 2);
             restoreMainWindow();
             if (m_gtpShell != null)
-                restoreSize(m_gtpShell, "window-gtpshell", m_boardSize);
+                restoreSize(m_gtpShell, "window-gtpshell");
             if (m_analyzeDialog != null)
-                restoreSize(m_analyzeDialog, "window-analyze", m_boardSize);
+                restoreSize(m_analyzeDialog, "window-analyze");
             if (m_gameTreeViewer != null)
-                restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
+                restoreSize(m_gameTreeViewer, "window-gametree");
         }
         Vector handicap = m_board.getHandicapStones(m_handicap);
         if (handicap == null)
@@ -2395,34 +2396,9 @@ class GoGui
         m_guiBoard.repaint();
     }
     
-    private void restoreLocation(Window window, String name, int size)
-    {
-        name = name + "-" + size;
-        if (! m_prefs.contains(name))
-            return;
-        String[] tokens = StringUtils.tokenize(m_prefs.getString(name));
-        if (tokens.length < 2)
-            return;
-        try
-        {
-            Dimension screenSize =
-                Toolkit.getDefaultToolkit().getScreenSize();
-            int x = Math.max(0, Integer.parseInt(tokens[0]));
-            if (x > screenSize.width)
-                x = 0;
-            int y = Math.max(0, Integer.parseInt(tokens[1]));
-            if (y > screenSize.height)
-                y = 0;
-            window.setLocation(x, y);
-        }
-        catch (NumberFormatException e)
-        {
-        }
-    }
-
     private void restoreMainWindow()
     {
-        restoreLocation(this, "window-gogui", m_boardSize);
+        Session.restoreLocation(this, m_prefs, "window-gogui", m_boardSize);
         try
         {
             String name = "fieldsize-" + m_boardSize;
@@ -2450,41 +2426,9 @@ class GoGui
         pack();
     }
 
-    private void restoreSize(Window window, String name, int size)
+    private void restoreSize(Window window, String name)
     {
-        name = name + "-" + size;
-        if (! m_prefs.contains(name))
-            return;
-        String[] tokens = StringUtils.tokenize(m_prefs.getString(name));
-        if (tokens.length < 4)
-            return;
-        try
-        {
-            Dimension screenSize =
-                Toolkit.getDefaultToolkit().getScreenSize();
-            int x = Math.max(0, Integer.parseInt(tokens[0]));
-            if (x > screenSize.width)
-                x = 0;
-            int y = Math.max(0, Integer.parseInt(tokens[1]));
-            if (y > screenSize.height)
-                y = 0;
-            int width;
-            int height;
-            width = Integer.parseInt(tokens[2]);
-            width = Math.min(width, screenSize.width);
-            height = Integer.parseInt(tokens[3]);
-            height = Math.min(height, screenSize.height);
-            if (window instanceof GtpShell)
-                ((GtpShell)window).setFinalSize(x, y, width, height);
-            else
-            {
-                window.setBounds(x, y, width, height);
-                window.validate();
-            }
-        }
-        catch (NumberFormatException e)
-        {
-        }
+        Session.restoreSize(window, m_prefs, name, m_boardSize);
     }
 
     private void runLengthyCommand(String cmd, Runnable callback)
@@ -2531,16 +2475,6 @@ class GoGui
         }
     }
 
-    private void saveLocation(JFrame window, String name)
-    {
-        if (! GuiUtils.isNormalSizeMode(window))
-            return;
-        name = name + "-" + m_boardSize;
-        java.awt.Point location = window.getLocation();
-        String value = Integer.toString(location.x) + " " + location.y;
-        m_prefs.setString(name, value);
-    }
-
     private void savePosition(File file) throws FileNotFoundException
     {
         OutputStream out = new FileOutputStream(file);
@@ -2567,7 +2501,7 @@ class GoGui
         m_menuBar.saveRecent();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        saveLocation(this, "window-gogui");
+        Session.saveLocation(this, m_prefs, "window-gogui", m_boardSize);
         if (m_help != null)
             saveSize(m_help, "window-help");
         saveSizeAndVisible(m_gameTreeViewer, "gametree");
@@ -2589,22 +2523,12 @@ class GoGui
 
     private void saveSize(JFrame window, String name)
     {
-        if (! GuiUtils.isNormalSizeMode(window))
-            return;
-        name = name + "-" + m_boardSize;
-        java.awt.Point location = window.getLocation();
-        Dimension size = window.getSize();
-        String value = Integer.toString(location.x) + " " + location.y
-            + " " + size.width + " " + size.height;
-        m_prefs.setString(name, value);
+        Session.saveSize(window, m_prefs, name, m_boardSize);
     }
 
     private void saveSizeAndVisible(JFrame window, String name)
     {
-        if (window != null)
-            saveSize(window, "window-" + name);
-        boolean isVisible = (window != null && window.isVisible());
-        m_prefs.setBool("show-" + name, isVisible);
+        Session.saveSizeAndVisible(window, m_prefs, name, m_boardSize);
     }
 
     private void sendGtpString(String commands)
