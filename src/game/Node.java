@@ -128,7 +128,7 @@ public class Node
     public int getMovesLeft()
     {
         int movesLeft = 0;
-        Node node = this;
+        Node node = getChild();
         while (node != null)
         {
             if (node.m_move != null)
