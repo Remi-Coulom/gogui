@@ -479,20 +479,25 @@ public class Board
     public void showChildrenMoves(Vector childrenMoves)
     {
         clearAllStrings();
-        Vector marked = new Vector();
         int numberMarked = 0;
         char label = 'A';
         for (int i = 0; i < childrenMoves.size(); ++i)
         {
             go.Point point = (go.Point)childrenMoves.get(i);
-            if (marked.contains(point))
+            String s = getField(point).getString();
+            if (! s.equals(""))
+            {
+                if (! s.endsWith("+"))
+                    setString(point, s + "+");
                 continue;
-            setString(point, Character.toString(label));
-            marked.add(point);
-            ++label;
-            ++numberMarked;            
+            };
             if (numberMarked >= 26)
-                break;
+                setString(point, Integer.toString(numberMarked));
+            else
+                setString(point, Character.toString(label));
+            if (numberMarked < 26)
+                ++label;
+            ++numberMarked;            
         }
     }
 
