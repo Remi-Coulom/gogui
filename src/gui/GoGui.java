@@ -1427,6 +1427,7 @@ class GoGui
             if (m_rememberWindowSizes)
                 restoreSize(m_gameTreeViewer, "window-gametree", m_boardSize);
         }
+        m_gameTreeViewer.update(m_gameTree, m_currentNode);
         m_gameTreeViewer.toTop();
     }
 
