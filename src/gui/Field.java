@@ -41,12 +41,8 @@ public class Field
 
     public void clearInfluence()
     {
-        if (m_influenceSet)
-        {
-            m_influenceSet = false;
-            m_influence = 0;
-            repaint();
-        }
+        m_influenceSet = false;
+        m_influence = 0;
     }
 
     public void focusGained(FocusEvent event)
@@ -88,28 +84,17 @@ public class Field
 
     public void setFieldBackground(java.awt.Color color)
     {
-        if (m_fieldColor != color)
-        {
-            m_fieldColor = color;
-            repaint();
-        }
+        m_fieldColor = color;
     }
 
     public void setColor(go.Color color)
     {
-        if (m_color != color)
-        {
-            m_color = color;
-            repaint();
-        }
+        m_color = color;
     }
 
     public void setCrossHair(boolean crossHair)
     {
-        if (m_crossHair == crossHair)
-            return;
         m_crossHair = crossHair;
-        repaint();
     }
 
     public void setInfluence(double value)
@@ -118,34 +103,23 @@ public class Field
             value = 1.;
         else if (value < -1.)
             value = -1.;
-        repaint();
         m_influence = value;
         m_influenceSet = true;
     }
 
     public void setLastMoveMarker(boolean lastMoveMarker)
     {
-        if (m_lastMoveMarker == lastMoveMarker)
-            return;
         m_lastMoveMarker = lastMoveMarker;
-        repaint();
     }
 
     public void setMarkup(boolean markup)
     {
-        if (m_markup == markup)
-            return;
         m_markup = markup;
-        repaint();
     }
 
     public void setString(String s)
     {
-        if (! m_string.equals(s))
-        {
-            m_string = s;
-            repaint();
-        }
+        m_string = s;
     }
 
     private boolean m_crossHair;

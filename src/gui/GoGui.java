@@ -700,6 +700,7 @@ class GoGui
     private void boardChanged()
     {
         m_guiBoard.update();
+        m_guiBoard.repaint();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
         clearStatus();
