@@ -704,6 +704,7 @@ public class MenuBar
             addMenuItem(menu, "Back to Main Variation", KeyEvent.VK_B,
                         KeyEvent.VK_M, m_shortcutKeyMask,
                         "back-to-main-variation");
+        menu.addSeparator();
         m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
                                         KeyEvent.VK_M, "make-main-variation");
         m_itemKeepOnlyMainVar = addMenuItem(menu,
