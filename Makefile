@@ -54,6 +54,7 @@ JAR= \
   gmptogtp.jar \
   gtpnet.jar \
   netgtp.jar \
+  regression.jar \
   sgftotex.jar \
   twogtp.jar
 
@@ -68,6 +69,8 @@ gmptogtp.jar: $(shell cat build/files-gmptogtp.txt)
 gtpnet.jar: $(shell cat build/files-gtpnet.txt)
 
 netgtp.jar: $(shell cat build/files-netgtp.txt)
+
+regression.jar: $(shell cat build/files-regression.txt)
 
 sgftotex.jar: $(shell cat build/files-sgftotex.txt)
 

@@ -469,6 +469,22 @@ class GoGui
     {
     }
 
+    private class NewGameContinue
+        implements Runnable
+    {
+        public NewGameContinue(int size)
+        {
+            m_size = size;
+        }
+
+        public void run()
+        {
+            newGameContinue(m_size);
+        }
+        
+        private int m_size;
+    }
+
     private boolean m_analyzeRequestPoint;
 
     private boolean m_auto;
@@ -500,8 +516,6 @@ class GoGui
     private int m_handicap;
 
     private static int m_instanceCount;
-
-    private int m_oldBoardSize;
 
     private int m_move;
 
@@ -1558,8 +1572,6 @@ class GoGui
 
     private void newGame(int size)
     {
-        m_oldBoardSize = m_boardSize;
-        m_boardSize = size;
         if (m_commandThread != null)
         {
             try
@@ -1572,10 +1584,7 @@ class GoGui
                 return;
             }
             String command = m_commandThread.getCommandClearBoard(size);
-            Runnable callback = new Runnable()
-                {
-                    public void run() { newGameContinue(); }
-                };
+            Runnable callback = new NewGameContinue(size);
             showStatus("Starting new game...");
             beginLengthyCommand();
             m_commandThread.sendCommand(command, callback);
@@ -1588,19 +1597,18 @@ class GoGui
         m_guiBoard.repaint();
     }
 
-    private void newGameContinue()
+    private void newGameContinue(int size)
     {
         endLengthyCommand();
         showStatus(" ");
         Gtp.Error e = m_commandThread.getException();
         if (e != null)
         {
-            m_boardSize = m_oldBoardSize;
             showGtpError(e);
             return;
         }
         setTitleFromProgram();
-        initGame(m_boardSize);
+        initGame(size);
         setHandicap();
         setTimeSettings();
         m_gameInfo.update();
