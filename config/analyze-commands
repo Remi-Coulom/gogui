@@ -51,7 +51,7 @@ pspairs/Top Moves White/top_moves_white
 # Extensions of other programs that could be of general interest
 none/SaveSgf/savesgf %f
 
-# Other GNU Go version 3.4 extensions
+# Other GNU Go extensions
 plist/AccurateLib Black/accuratelib black %p
 plist/AccurateLib White/accuratelib white %p
 pstring/Analyze Semeai/analyze_semeai %P
@@ -89,6 +89,8 @@ sboard/Influence White (Regions)/influence white/regions
 none/Limit Search/limit_search %s
 plist/List Stones Black/list_stones black
 plist/List Stones White/list_stones white
+pspairs/Move Probabilities/move_probabilities
+string/Move Uncertainty/move_uncertainty
 varpo/Owl Attack/owl_attack %p
 string/Owl Connection Defends/owl_connection_defends %P
 varp/Owl Defend/owl_defend %p
