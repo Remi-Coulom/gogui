@@ -130,9 +130,10 @@ class SelectProgram
         try
         {
             BufferedReader in = new BufferedReader(new FileReader(file));
-            String line = in.readLine().trim();
+            String line = in.readLine();
             while (line != null)
             {
+                line = line.trim();
                 if (! result.contains(line))
                     result.add(line);
                 line = in.readLine();
