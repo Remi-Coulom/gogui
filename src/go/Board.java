@@ -65,6 +65,8 @@ public class Board
 
     public static final int RULES_CHINESE = 1;
 
+    public static final int NUMBER_ROTATIONS = 8;
+
     public Board(int boardSize)
     {
         initSize(boardSize);
@@ -125,6 +127,12 @@ public class Board
             }
         }
         clearMark();
+    }
+
+    public boolean contains(Point point)
+    {
+        int size = getSize();
+        return (point.getX() < size && point.getY() < size);
     }
 
     public Vector getAdjacentPoints(Point p)
@@ -369,6 +377,37 @@ public class Board
         }
         ++m_moveNumber;
         m_toMove = otherColor;        
+    }
+
+    public Point rotate(int rotationIndex, Point point)
+    {
+        assert(rotationIndex < NUMBER_ROTATIONS);
+        if (point == null)
+            return null;
+        int x = point.getX();
+        int y = point.getY();
+        int size = getSize();
+        switch (rotationIndex)
+        {
+        case 0:
+            getPoint(x, y);
+        case 1:
+            getPoint(size - x - 1, y);
+        case 2:
+            getPoint(x, size - y - 1);
+        case 3:
+            getPoint(y, x);
+        case 4:
+            getPoint(size - y - 1, x);
+        case 5:
+            getPoint(y, size - x - 1);
+        case 6:
+            getPoint(size - x - 1, size - y - 1);
+        case 7:
+            getPoint(size - y - 1, size - x - 1);
+        default:
+            return getPoint(x, y);
+        }
     }
 
     public void scoreBegin(Point[] isDeadStone)
