@@ -649,8 +649,7 @@ public class GtpShell
     {
         item.addActionListener(this);
         item.setActionCommand(command);
-        if (! Platform.isMac())
-            item.setMnemonic(mnemonic);
+        item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
     }
@@ -799,8 +798,7 @@ public class GtpShell
     private JMenu createMenu(String name, int mnemonic)
     {
         JMenu menu = new JMenu(name);
-        if (! Platform.isMac())
-            menu.setMnemonic(mnemonic);
+        menu.setMnemonic(mnemonic);
         return menu;
     }
 

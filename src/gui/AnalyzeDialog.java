@@ -154,8 +154,7 @@ class AnalyzeDialog
     {
         item.addActionListener(this);
         item.setActionCommand(command);
-        if (! Platform.isMac())
-            item.setMnemonic(mnemonic);
+        item.setMnemonic(mnemonic);
         menu.add(item);
         return item;
     }
@@ -222,16 +221,14 @@ class AnalyzeDialog
         m_runButton.setToolTipText("Run command");
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
-        if (! Platform.isMac())
-            m_runButton.setMnemonic(KeyEvent.VK_R);
+        m_runButton.setMnemonic(KeyEvent.VK_R);
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
         m_clearButton = new JButton("Clear");
         m_clearButton.setToolTipText("Clear board and cancel auto run");
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
-        if (! Platform.isMac())
-            m_clearButton.setMnemonic(KeyEvent.VK_C);
+        m_clearButton.setMnemonic(KeyEvent.VK_C);
         m_clearButton.setEnabled(false);
         innerPanel.add(m_clearButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -289,8 +286,7 @@ class AnalyzeDialog
     private JMenu createMenu(String name, int mnemonic)
     {
         JMenu menu = new JMenu(name);
-        if (! Platform.isMac())
-            menu.setMnemonic(mnemonic);
+        menu.setMnemonic(mnemonic);
         return menu;
     }
 

@@ -388,8 +388,7 @@ class MenuBar
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
                                   String command)
     {
-        if (! Platform.isMac())
-            item.setMnemonic(mnemonic);
+        item.setMnemonic(mnemonic);
         return addMenuItem(menu, item, command);
     }
 
@@ -559,8 +558,7 @@ class MenuBar
     private JMenu createMenu(String name, int mnemonic)
     {
         JMenu menu = new JMenu(name);
-        if (! Platform.isMac())
-            menu.setMnemonic(mnemonic);
+        menu.setMnemonic(mnemonic);
         return menu;
     }
 

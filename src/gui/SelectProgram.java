@@ -103,15 +103,13 @@ class SelectProgram
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("ok");
         okButton.addActionListener(this);
-        if (! Platform.isMac())
-            okButton.setMnemonic(KeyEvent.VK_O);
+        okButton.setMnemonic(KeyEvent.VK_O);
         getRootPane().setDefaultButton(okButton);
         innerPanel.add(okButton);
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setActionCommand("cancel");
         cancelButton.addActionListener(this);
-        if (! Platform.isMac())
-            cancelButton.setMnemonic(KeyEvent.VK_C);
+        cancelButton.setMnemonic(KeyEvent.VK_C);
         innerPanel.add(cancelButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
