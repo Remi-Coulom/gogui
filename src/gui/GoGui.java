@@ -56,16 +56,16 @@ class GoGui
 
         Container contentPane = getContentPane();        
 
-        JPanel infoPanel = new JPanel();
+        m_infoPanel = new JPanel();
 
         m_timeControl = new TimeControl();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBorder(utils.GuiUtils.createSmallEmptyBorder());
+        m_infoPanel.setLayout(new BoxLayout(m_infoPanel, BoxLayout.Y_AXIS));
+        m_infoPanel.setBorder(utils.GuiUtils.createSmallEmptyBorder());
         Dimension pad = new Dimension(0, utils.GuiUtils.PAD);
         m_gameInfo = new GameInfo(m_timeControl);
-        infoPanel.add(m_gameInfo);
-        infoPanel.add(Box.createRigidArea(pad));
-        infoPanel.add(createStatusBar());
+        m_infoPanel.add(m_gameInfo);
+        m_infoPanel.add(Box.createRigidArea(pad));
+        m_infoPanel.add(createStatusBar());
 
         m_board = new go.Board(m_boardSize);
         m_board.setKomi(prefs.getFloat("komi"));
@@ -76,13 +76,13 @@ class GoGui
         m_toolBar = new ToolBar(this, prefs);
         contentPane.add(m_toolBar, BorderLayout.NORTH);
 
-        contentPane.add(infoPanel, BorderLayout.SOUTH);
+        contentPane.add(m_infoPanel, BorderLayout.SOUTH);
 
-        JPanel boardPanel = new JPanel();
-        boardPanel.setLayout(new SquareLayout());
-        boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-        boardPanel.add(m_guiBoard);
-        contentPane.add(boardPanel, BorderLayout.CENTER);
+        m_boardPanel = new JPanel();
+        m_boardPanel.setLayout(new SquareLayout());
+        m_boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+        m_boardPanel.add(m_guiBoard);
+        contentPane.add(m_boardPanel, BorderLayout.CENTER);
         
         addWindowListener(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -581,6 +581,10 @@ class GoGui
 
     private JLabel m_statusLabel;
 
+    private JPanel m_boardPanel;
+
+    private JPanel m_infoPanel;
+
     private MenuBar m_menuBar;
 
     private AnalyzeCommand m_analyzeCommand;
@@ -743,7 +747,10 @@ class GoGui
         m_toolBar.setCommandInProgress(isInterruptSupported);
         m_gtpShell.setInputEnabled(false);
         if (m_analyzeDialog != null)
+        {
             m_analyzeDialog.setEnabled(false);
+            setCursor(m_analyzeDialog, Cursor.WAIT_CURSOR);
+        }
         m_commandInProgress = true;
     }
 
@@ -1334,7 +1341,10 @@ class GoGui
         m_toolBar.enableAll(true, m_board);
         m_gtpShell.setInputEnabled(true);
         if (m_analyzeDialog != null)
+        {
             m_analyzeDialog.setEnabled(true);
+            setCursorDefault(m_analyzeDialog);
+        }
         m_commandInProgress = false;
         if (m_analyzeRequestPoint)
             setBoardCursor(Cursor.CROSSHAIR_CURSOR);
@@ -1831,6 +1841,18 @@ class GoGui
         sendGtp(new StringReader(StringUtils.replace(commands, "\\n", "\n")));
     }
 
+    private void setBoardCursor(int type)
+    {
+        setCursor(m_boardPanel, type);
+        setCursor(m_infoPanel, type);
+    }
+
+    private void setBoardCursorDefault()
+    {
+        setCursorDefault(m_boardPanel);
+        setCursorDefault(m_infoPanel);
+    }
+
     private void setCursor(Component component, int type)
     {
         Cursor cursor = Cursor.getPredefinedCursor(type);
@@ -1840,6 +1862,15 @@ class GoGui
     private void setCursorDefault(Component component)
     {
         component.setCursor(Cursor.getDefaultCursor());
+    }
+
+    private void setFastUpdate(boolean fastUpdate)
+    {
+        if (m_commandThread != null)
+        {
+            m_commandThread.setFastUpdate(fastUpdate);
+            m_gtpShell.setFastUpdate(fastUpdate);
+        }
     }
 
     private void setHandicap()
@@ -1870,25 +1901,6 @@ class GoGui
         catch (Gtp.Error e)
         {
             showGtpError(e);
-        }
-    }
-
-    private void setBoardCursor(int type)
-    {
-        setCursor(m_guiBoard, type);
-    }
-
-    private void setBoardCursorDefault()
-    {
-        setCursorDefault(m_guiBoard);
-    }
-
-    private void setFastUpdate(boolean fastUpdate)
-    {
-        if (m_commandThread != null)
-        {
-            m_commandThread.setFastUpdate(fastUpdate);
-            m_gtpShell.setFastUpdate(fastUpdate);
         }
     }
 
