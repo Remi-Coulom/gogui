@@ -101,7 +101,7 @@ public class Field
 
     public static int getStoneMargin(int size)
     {
-        return size / 20;
+        return size / 17;
     }
 
     public String getString()
@@ -346,7 +346,7 @@ public class Field
     {
         int margin = getStoneMargin(m_size);
         int radius = m_size / 3;
-        if (m_graphics2D != null && m_size >= 5)
+        if (m_graphics2D != null && m_size >= 7)
         {
             int center = m_size / 3;
             radius = Math.max(radius, 1);

@@ -252,7 +252,7 @@ public class Board
             graphics.setColor(java.awt.Color.YELLOW.darker());
             graphics.fillRect(0, 0, width, width);
         }
-        if (width > (size + 2) * 2)
+        if (width > (size + 2) * 3)
         {
             graphics.setColor(java.awt.Color.darkGray);
             for (int y = 0; y < size; ++y)
@@ -277,8 +277,9 @@ public class Board
                             graphics.fillOval(point.x - r, point.y - r,
                                               2 * r + 1, 2 * r + 1);
                         }
-            drawShadows(graphics);
         }
+        if (width > (size + 2) * 5)
+            drawShadows(graphics);
     }
 
     public void paintImmediately(go.Point point)
