@@ -202,6 +202,11 @@ class Cmd
         return false;
     }
 
+    public int hashCode()
+    {
+        return (m_cmd << 16) | m_val;
+    }
+
     public static String moveValToString(int val, int size)
     {
         StringBuffer result = new StringBuffer(16);
