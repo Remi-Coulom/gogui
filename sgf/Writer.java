@@ -36,6 +36,8 @@ public class Writer
         printHeader(handicap, playerBlack, playerWhite, gameComment, score);
         printSetup(m_board.getSetupStonesBlack(),
                    m_board.getSetupStonesWhite());
+        if (m_board.getNumberSavedMoves() == 0)
+            printToPlay();
         printMoves();        
         m_out.println(")");
         m_out.close();
@@ -162,6 +164,7 @@ public class Writer
                 white.add(p);
         }
         printSetup(black, white);
+        printToPlay();
     }
 
     private void printSetup(Vector black, Vector white)
@@ -181,12 +184,15 @@ public class Writer
                 printPointList(white);
                 m_out.println();
             }
-            if (m_board.getNumberSavedMoves() == 0)
-            {
-                String c = m_board.getToMove().toString();
-                m_out.println("C[" + c + " to play]");
-            }
         }
+    }
+
+    private void printToPlay()
+    {
+        if (m_board.getToMove() == Color.BLACK)
+            m_out.println("PL[B]");
+        else
+            m_out.println("PL[W]");
     }
 }
 
