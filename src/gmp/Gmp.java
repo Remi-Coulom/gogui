@@ -39,13 +39,17 @@ class Util
 		return s.toString();
 	}
 
-    public static void log(String line)
+    public static void log(String line, boolean verbose)
     {
+        if (! verbose)
+            return;
         System.err.println("gmp: " + line);
         System.err.flush();
     }
 
 }
+
+//-----------------------------------------------------------------------------
 
 /** Gmp command. */
 class Cmd
@@ -320,11 +324,14 @@ class Cmd
     }
 };
 
+//-----------------------------------------------------------------------------
+
 class WriteThread extends Thread
 {
-    public WriteThread(OutputStream out)
+    public WriteThread(OutputStream out, boolean verbose)
     {
         m_out = out;
+        m_verbose = verbose;
     }
 
     public void run()
@@ -406,6 +413,8 @@ class WriteThread extends Thread
 
     private boolean m_sendInProgress = false;
 
+    private boolean m_verbose;
+
     private byte[] m_packet;
 
     private OutputStream m_out;
@@ -416,7 +425,7 @@ class WriteThread extends Thread
                  + Util.format(m_packet[0]) + " "
                  + Util.format(m_packet[1]) + " "
                  + Util.format(m_packet[2]) + " "
-                 + Util.format(m_packet[3]));
+                 + Util.format(m_packet[3]), m_verbose);
         try
         {
             m_out.write(m_packet);
@@ -424,10 +433,12 @@ class WriteThread extends Thread
         }
         catch (IOException e)
         {
-            Util.log("IOException");
+            Util.log("IOException", true);
         }
     }
 }
+
+//-----------------------------------------------------------------------------
 
 class ReadThread extends Thread
 {
@@ -441,17 +452,18 @@ class ReadThread extends Thread
     }
 
     public ReadThread(InputStream in, OutputStream out, int size,
-                      int colorIndex, boolean simple)
+                      int colorIndex, boolean simple, boolean verbose)
     {
         assert(size >= 1);
         assert(size <= 22);
         assert(colorIndex >= 0);
         assert(colorIndex <= 2);
+        m_verbose = verbose;
         m_in = in;
         m_size = size;
         m_colorIndex = colorIndex;
         m_simple = simple;
-        m_writeThread = new WriteThread(out);
+        m_writeThread = new WriteThread(out, verbose);
         m_writeThread.start();
     }
 
@@ -493,7 +505,7 @@ class ReadThread extends Thread
                         int b = buffer[i];
                         if (b < 0)
                             b += 256;
-                        Util.log("recv " + Util.format(b));
+                        Util.log("recv " + Util.format(b), m_verbose);
                         handleByte(b);
                     }
                 }
@@ -507,7 +519,7 @@ class ReadThread extends Thread
         {
             m_state = STATE_DISCONNECTED;
         }
-        Util.log("input stream was closed");
+        Util.log("input stream was closed", true);
         m_writeThread.interrupt();
     }
 
@@ -616,7 +628,8 @@ class ReadThread extends Thread
             }
             try
             {
-                Util.log("Waiting for " + Cmd.cmdToString(cmd) + " ...");
+                Util.log("Waiting for " + Cmd.cmdToString(cmd) + " ...",
+                         m_verbose);
                 wait();
                 if (m_state == STATE_INTERRUPTED)
                 {
@@ -644,6 +657,8 @@ class ReadThread extends Thread
     private static final int STATE_WAIT_ANSWER_OK = 5;
 
     private static final int STATE_WAIT_ANSWER = 6;
+
+    private boolean m_verbose;
 
     private boolean m_hisLastSeq = false;
 
@@ -731,17 +746,17 @@ class ReadThread extends Thread
             char c = (char)b;
             if (c == '\r')
             {
-                Util.log("talk char '\\r'");
+                Util.log("talk char '\\r'", m_verbose);
                 return;
             }
             if (c == '\n')
             {
-                Util.log("talk char '\\n'");
-                Util.log("talk: " + m_talkLine);
+                Util.log("talk char '\\n'", m_verbose);
+                Util.log("talk: " + m_talkLine, m_verbose);
                 m_talkLine.setLength(0);
                 return;
             }
-            Util.log("talk '" + c + "'");
+            Util.log("talk '" + c + "'", m_verbose);
             m_talkLine.append(c);
             return;
         }
@@ -749,7 +764,7 @@ class ReadThread extends Thread
         if (b < 4)
         {
             if (m_pending > 0)
-                Util.log("new start byte. discarding old bytes.");
+                Util.log("new start byte. discarding old bytes", m_verbose);
             m_inBuffer[0] = b;
             m_pending = 3;
             return;
@@ -766,19 +781,19 @@ class ReadThread extends Thread
             {
                 if (! checkChecksum())
                 {
-                    Util.log("bad checksum");
+                    Util.log("bad checksum", m_verbose);
                     return;
                 }
                 handlePacket();
             }
             return;
         }
-        Util.log("discarding command byte.");
+        Util.log("discarding command byte", m_verbose);
     }
 
     private void handleCmd(Cmd cmd)
     {
-        Util.log("received " + cmd.toString(m_size, m_lastQuery));
+        Util.log("received " + cmd.toString(m_size, m_lastQuery), m_verbose);
         if (cmd.m_cmd == Cmd.QUERY)
             answerQuery(cmd.m_val);
         else if (cmd.m_cmd == Cmd.ANSWER)
@@ -841,10 +856,10 @@ class ReadThread extends Thread
             {
                 if (ack != m_myLastSeq)
                 {
-                    Util.log("sequence error");
+                    Util.log("sequence error", m_verbose);
                     return;
                 }
-                Util.log("received OK");
+                Util.log("received OK", m_verbose);
                 m_state = STATE_IDLE;
                 m_writeThread.stopSend();
                 notifyAll();
@@ -852,7 +867,7 @@ class ReadThread extends Thread
             }
             if (seq == m_hisLastSeq)
             {
-                Util.log("old cmd. resending OK");
+                Util.log("old cmd. resending OK", m_verbose);
                 sendOk();
                 return;
             }
@@ -869,7 +884,7 @@ class ReadThread extends Thread
                the opponent could have detected the conflict and accepted
                the resent command, so it's easier to ignore the conflict.
             */
-            Util.log("ignore conflict");
+            Util.log("ignore conflict", m_verbose);
             m_writeThread.resend();
         }
         else
@@ -877,17 +892,17 @@ class ReadThread extends Thread
             assert(m_state == STATE_IDLE);
             if (cmd.m_cmd == Cmd.OK)
             {
-                Util.log("ignoring unexpected OK");
+                Util.log("ignoring unexpected OK", m_verbose);
                 return;
             }
             if (ack != m_myLastSeq)
             {
-                Util.log("ignoring old cmd");
+                Util.log("ignoring old cmd", m_verbose);
                 return;
             }
             if (seq == m_hisLastSeq)
             {
-                Util.log("old cmd. resending OK");
+                Util.log("old cmd. resending OK", m_verbose);
                 sendOk();
                 return;
             }
@@ -909,7 +924,8 @@ class ReadThread extends Thread
 
     private boolean sendCmd(int cmd, int val)
     {
-        Util.log("send " + (new Cmd(cmd, val)).toString(m_size, m_lastQuery));
+        Util.log("send " + (new Cmd(cmd, val)).toString(m_size, m_lastQuery),
+                 m_verbose);
         boolean isOkCmd = (cmd == Cmd.OK);
         if (! isOkCmd)
             m_myLastSeq = ! m_myLastSeq;
@@ -947,6 +963,8 @@ class ReadThread extends Thread
     }
 }
 
+//-----------------------------------------------------------------------------
+
 /**
    This class is final because it starts a thread in its constructor which
    might conflict with subclassing because the subclass constructor will
@@ -978,11 +996,13 @@ public final class Gmp
         0=unknown, 1=white, 2=black
     */
     public Gmp(InputStream input, OutputStream output, int size,
-               int colorIndex, boolean simple)
+               int colorIndex, boolean simple, boolean verbose)
     {
         m_size = size;
-        m_readThread = new ReadThread(input, output, size, colorIndex, simple);
+        m_readThread =
+            new ReadThread(input, output, size, colorIndex, simple, verbose);
         m_readThread.start();
+        m_verbose = verbose;
     }
 
     public void interruptCommand()
@@ -1054,6 +1074,8 @@ public final class Gmp
             response.append(result.m_response);
         return result.m_success;
     }
+
+    private boolean m_verbose;
 
     private int m_size;
 
