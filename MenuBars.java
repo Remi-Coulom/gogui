@@ -212,6 +212,8 @@ class MenuBars
         addMenuItem(menu, "Save game", "save");
         addMenuItem(menu, "Save position", "save-position");
         menu.addSeparator();
+        addMenuItem(menu, "Print", "print");
+        menu.addSeparator();
         addMenuItem(menu, "Open with program", "open-with-program");
         menu.addSeparator();
         m_itemExit = addMenuItem(menu, "Exit", KeyEvent.VK_X, "exit");

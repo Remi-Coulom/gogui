@@ -5,6 +5,7 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.print.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -161,6 +162,8 @@ class GoGui
             cbPass();
         else if (command.equals("play"))
             cbPlay();
+        else if (command.equals("print"))
+            cbPrint();
         else if (command.equals("rules-chinese"))
             cbRules(Board.RULES_CHINESE);
         else if (command.equals("rules-japanese"))
@@ -751,6 +754,23 @@ class GoGui
         checkComputerMove();
     }
 
+    private void cbPrint()
+    {
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable(m_board);
+        if (job.printDialog())
+        {
+            try
+            {
+                job.print();
+            }
+            catch (Exception e)
+            {
+                showError("Printing failed: " + e.getMessage());
+            }
+        }
+    }
+
     private void cbRules(int rules)
     {
         m_board.setRules(rules);
@@ -1301,7 +1321,7 @@ class GoGui
             setRules();
         }
     }
-
+    
     private void queryCommandList()
     {
         assert(m_commandThread != null);

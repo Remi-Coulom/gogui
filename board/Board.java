@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.font.*;
+import java.awt.print.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -62,6 +63,7 @@ class MoveRecord
 
 public class Board
     extends JPanel
+    implements Printable
 {
     public interface Listener
     {
@@ -347,6 +349,30 @@ public class Board
         ++m_moveNumber;
         m_toMove = otherColor;        
         drawLastMove();
+    }
+
+    public int print(Graphics g, PageFormat format, int page)
+        throws PrinterException
+    {
+        if (page >= 1)
+        {
+            return Printable.NO_SUCH_PAGE;
+        }
+        double width = getSize().width;
+        double height = getSize().height;
+        double pageWidth = format.getImageableWidth();
+        double pageHeight = format.getImageableHeight();
+        double scale = 1;
+        if (width >= pageWidth)
+            scale = pageWidth / width;
+        double xSpace = (pageWidth - width * scale) / 2;
+        double ySpace = (pageHeight - height * scale) / 2;
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.translate(format.getImageableX() + xSpace,
+                      format.getImageableY() + ySpace);
+        g2d.scale(scale, scale);
+        print(g2d);
+        return Printable.PAGE_EXISTS;
     }
 
     public void scoreBegin()
