@@ -58,6 +58,31 @@ public class Node
         m_addWhite.add(point);
     }
 
+    /** Find node with a certain move number in main variation containing
+        this node.
+        @return null if no such node exists.
+    */
+    public Node findByMoveNumber(int moveNumber)
+    {
+        int maxMoveNumber = getMoveNumber() + getMovesLeft();
+        if (moveNumber < 0 || moveNumber >  maxMoveNumber)
+            return null;
+        Node node = this;
+        if (moveNumber < node.getMoveNumber())
+        {
+            while (node.getFather() != null
+                   && node.getMoveNumber() > moveNumber)
+                node = node.getFather();
+        }
+        else
+        {
+            while (node.getChild() != null
+                   && node.getMoveNumber() < moveNumber)
+                node = node.getChild();
+        }
+        return node;
+    }
+
     public Point getAddBlack(int i)
     {
         return (Point)m_addBlack.get(i);

@@ -1095,26 +1095,12 @@ class GoGui
             return;
         try
         {
-            int gotoNumber = Integer.parseInt(value);
-            int moveNumber = m_currentNode.getMoveNumber();
-            int movesLeft = m_currentNode.getMovesLeft();
-            if (gotoNumber < 0 || gotoNumber > moveNumber + movesLeft)
+            int moveNumber = Integer.parseInt(value);
+            Node node = m_currentNode.findByMoveNumber(moveNumber);
+            if (node == null)
             {
                 showError("Invalid move number");
                 return;
-            }
-            Node node = m_currentNode;
-            if (gotoNumber < node.getMoveNumber())
-            {
-                while (node.getFather() != null
-                       && node.getMoveNumber() > gotoNumber)
-                    node = node.getFather();
-            }
-            else
-            {
-                while (node.getChild() != null
-                       && node.getMoveNumber() < gotoNumber)
-                    node = node.getChild();
             }
             gotoNode(node);
             boardChangedBegin(false, false);
