@@ -582,7 +582,7 @@ class GoGui
                 }
                 catch (GtpError e)
                 {
-                    showGtpError(e);
+                    showError(e);
                     break;
                 }
                 m_gameInfo.fastUpdateMoveNumber(m_currentNode);
@@ -918,7 +918,7 @@ class GoGui
         catch (GtpError e)
         {                
             showStatus(title);
-            showGtpError(e);
+            showError(e);
             return;
         }
     }
@@ -961,7 +961,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
             m_toolBar.setComputerEnabled(false);
             m_menuBar.setComputerEnabled(false);
             return false;
@@ -1036,7 +1036,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
             return false;
         }
         return true;
@@ -1553,7 +1553,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
         }
         initScore(isDeadStone);
     }    
@@ -1822,7 +1822,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
             clearStatus();
         }
     }
@@ -1978,7 +1978,7 @@ class GoGui
             }
             catch (GtpError error)
             {
-                showGtpError(error);
+                showError(error);
                 m_isRootExecuted = false;
                 return false;
             }
@@ -1993,7 +1993,7 @@ class GoGui
         }
         catch (GtpError error)
         {
-            showGtpError(error);
+            showError(error);
             return false;
         }
         return true;
@@ -2024,7 +2024,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
         }
     }
 
@@ -2089,7 +2089,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
         }
     }
 
@@ -2624,7 +2624,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
         }
     }
 
@@ -2662,7 +2662,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
         }
     }
 
@@ -2752,7 +2752,7 @@ class GoGui
         }
         catch (GtpError e)
         {
-            showGtpError(e);
+            showError(e);
         }
     }
 
@@ -2906,24 +2906,19 @@ class GoGui
         SimpleDialogs.showError(this, message, e);
     }
 
-    private void showError(String message)
-    {
-        SimpleDialogs.showError(this, message);
-    }
-
-    private void showGtpError(GtpError e)
-    {
-        showGtpError(this, e);
-    }
-
-    private void showGtpError(Component frame, GtpError e)
+    private void showError(GtpError error)
     {        
-        String message = e.getMessage().trim();
+        String message = error.getMessage().trim();
         if (message.length() == 0)
             message = "Command failed";
         else
             message = StringUtils.capitalize(message);
-        SimpleDialogs.showError(frame, message);
+        SimpleDialogs.showError(this, message);
+    }
+
+    private void showError(String message)
+    {
+        SimpleDialogs.showError(this, message);
     }
 
     private void showInfo(String message)
