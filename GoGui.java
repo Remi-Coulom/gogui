@@ -473,9 +473,6 @@ class GoGui
     private int m_handicap;
     private static int m_instanceCount;
     private int m_move;
-    private int m_readerIndex;
-    private int m_readerMove;
-    private int m_readerSetupStones;
     private double m_analyzeScale;
     private board.Color m_setupColor;
     private board.Point m_analyzePointArg;
@@ -496,7 +493,6 @@ class GoGui
     private String m_version = "?";
     private TimeControl m_timeControl;
     private ToolBar m_toolBar;
-    private Vector m_readerMoves;
     private Vector m_commandList = new Vector(128, 128);
 
     private void analyzeBegin()
@@ -754,7 +750,7 @@ class GoGui
         File file = SimpleDialogs.showOpenSgf(this);
         if (file == null)
             return;
-        loadFileBegin(file, -1);
+        loadFile(file, -1);
     }
 
     private void cbNewGame(int size)
@@ -1274,56 +1270,50 @@ class GoGui
         }
     }
 
-    private void loadFileBegin(File file, int move)
+    private void loadFile(File file, int move)
     {
         try
         {
             sgf.Reader reader = new sgf.Reader(file);
             int boardSize = reader.getBoardSize();
-            m_readerIndex = 0;
-            m_readerMoves = new Vector(361, 361);
+            newGame(boardSize, 0);
+            Vector moves = new Vector(361, 361);
             Vector setupBlack = reader.getSetupBlack();
             for (int i = 0; i < setupBlack.size(); ++i)
             {
                 board.Point p = (board.Point)setupBlack.get(i);
-                m_readerMoves.add(new Move(p, board.Color.BLACK));
+                moves.add(new Move(p, board.Color.BLACK));
             }
             Vector setupWhite = reader.getSetupWhite();
             for (int i = 0; i < setupWhite.size(); ++i)
             {
                 board.Point p = (board.Point)setupWhite.get(i);
-                m_readerMoves.add(new Move(p, board.Color.WHITE));
+                moves.add(new Move(p, board.Color.WHITE));
             }
-            m_readerSetupStones = setupBlack.size() + setupWhite.size();
-            m_readerMoves.addAll(reader.getMoves());
             if (m_fillPasses)
-                m_readerMoves = fillPasses(m_readerMoves);
-            if (move < 0)
-                m_readerMove = m_readerSetupStones;
-            else if (move > m_readerMoves.size())
-                m_readerMove = m_readerMoves.size();
-            else
-                m_readerMove = m_readerSetupStones + move;
-            newGame(boardSize, 0);
-            if (m_readerIndex == m_readerMove)
+                moves = fillPasses(moves);
+            for (int i = 0; i < moves.size(); ++i)
             {
-                loadFileFinish();
-                return;
+                Move m = (Move)moves.get(i);
+                m_board.setup(m);
+                m_commandThread.sendCommandPlay(m);
             }
-            showStatus("Loading game...");
-            resetBoard();
-            if (m_commandThread == null)
+
+            moves.clear();
+            for (int i = 0; i < reader.getMoves().size(); ++i)
+                moves.add(reader.getMoves().get(i));
+            if (m_fillPasses)
+                moves = fillPasses(moves);
+            for (int i = 0; i < moves.size(); ++i)
             {
-                loadFileContinue();
-                return;
+                Move m = (Move)moves.get(i);
+                m_board.play(m);
             }
-            Move m = (Move)m_readerMoves.get(m_readerIndex);
-            String command = m_commandThread.getCommandPlay(m);
-            Runnable callback = new Runnable()
-                {
-                    public void run() { loadFileContinue(); }
-                };
-            runLengthyCommand(command, callback);
+            while (m_board.getMoveNumber() > 0)
+                m_board.undo();
+            
+            if (move > 0)
+                forward(move);
         }
         catch (sgf.Reader.Error e)
         {
@@ -1333,59 +1323,6 @@ class GoGui
         {
             showGtpError(e);
         }
-    }
-
-    private void loadFileContinue()
-    {
-        assert(m_readerIndex < m_readerMoves.size());
-        if (m_commandThread != null)
-        {
-            endLengthyCommand();
-            Gtp.Error e = m_commandThread.getException();
-            if (e != null)
-            {
-                showGtpError(e);
-                clearStatus();
-                return;
-            }
-        }
-        Move move = (Move)m_readerMoves.get(m_readerIndex);
-        if (m_readerIndex < m_readerSetupStones)
-            m_board.setup(move);
-        else
-            m_board.play(move);
-        ++m_readerIndex;
-        if (m_readerIndex == m_readerMove)
-        {
-            loadFileFinish();
-            computerNone();
-            boardChanged();
-            return;
-        }
-        if (m_commandThread == null)
-        {
-            loadFileContinue();
-            return;
-        }        
-        move = (Move)m_readerMoves.get(m_readerIndex);
-        String command = m_commandThread.getCommandPlay(move);
-        Runnable callback = new Runnable()
-            {
-                public void run() { loadFileContinue(); }
-            };
-        runLengthyCommand(command, callback);
-    }
-
-    private void loadFileFinish()
-    {
-        int n = m_readerMoves.size() - m_readerIndex;
-        for (int i = 0; i < n; ++i)
-        {
-            Move move = (Move)m_readerMoves.get(m_readerIndex + i);
-            m_board.play(move);
-        }
-        for (int i = 0; i < n; ++i)
-            m_board.undo();
     }
 
     private void newGame(int size, float komi) throws Gtp.Error
@@ -1413,7 +1350,8 @@ class GoGui
         m_score = null;
         if (file != null)
         {
-            loadFileBegin(new File(m_file), move);
+            loadFile(new File(m_file), move);
+            m_gameInfo.update();
         }
         else
         {
