@@ -20,12 +20,17 @@ public class Analyze
     {
         File file = new File(filename);
         readFile(file);
-        File outputFile =
+        File htmlFile =
             new File(FileUtils.replaceExtension(file, "dat", "html"));
-        if (outputFile.exists())
-            throw new Exception("File " + outputFile + " exists");
+        File dataFile =
+            new File(FileUtils.replaceExtension(file, "dat", "summary.dat"));
+        if (htmlFile.exists())
+            throw new Exception("File " + htmlFile + " exists");
+        if (dataFile.exists())
+            throw new Exception("File " + dataFile + " exists");
         calcStatistics();
-        writeOutput(outputFile);
+        writeHtml(htmlFile);
+        writeData(dataFile);
     }
 
     private int m_duplicates;
@@ -211,7 +216,7 @@ public class Analyze
         throw new Exception("Line " + m_lineNumber + ": " + message);
     }
 
-    private void writeOutput(File file) throws Exception
+    private void writeHtml(File file) throws Exception
     {
         String prefix = "game";
         if (file.toString().endsWith(".html"))
@@ -352,6 +357,30 @@ public class Analyze
                   "<hr>\n");
         out.print("</body>\n" +
                   "</html>\n");
+        out.close();
+    }
+
+    private void writeData(File file) throws Exception
+    {
+        PrintStream out = new PrintStream(new FileOutputStream(file));
+        NumberFormat format1 = NumberFormat.getInstance(new Locale("C"));
+        format1.setMaximumFractionDigits(1);
+        NumberFormat format2 = NumberFormat.getInstance(new Locale("C"));
+        format2.setMaximumFractionDigits(2);
+        out.print("# Games\tErr\tDup\tUsed\tResB\tErrResB\tWinB\tErrWinB\t"
+                  + "UnknB\tResB\tErrResB\tWinB\tErrWinB\tUnknB\n" +
+                  m_games + "\t" + m_errors + "\t" + m_duplicates + "\t"
+                  + m_gamesUsed
+                  + "\t" + format1.format(m_histoBlack.getMean())
+                  + "\t" + format1.format(m_histoBlack.getErrorMean())
+                  + "\t" + format2.format(m_winBlack.getMean())
+                  + "\t" + format2.format(m_winBlack.getErrorMean())
+                  + "\t" + format2.format(m_unknownBlack.getMean())
+                  + "\t" + format1.format(m_histoWhite.getMean())
+                  + "\t" + format1.format(m_histoWhite.getErrorMean())
+                  + "\t" + format2.format(m_winWhite.getMean())
+                  + "\t" + format2.format(m_winWhite.getErrorMean())
+                  + "\t" + format2.format(m_unknownWhite.getMean()) + "\n");
         out.close();
     }
 }

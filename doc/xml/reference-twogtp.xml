@@ -107,8 +107,13 @@ are still using the name Black and White as given with
 <varlistentry>
 <term><option>-analyze</option> <replaceable>file.dat</replaceable></term>
 <listitem>
-Analyze the result file <replaceable>file.dat</replaceable> and create
-a HTML file <replaceable>file.html</replaceable> with some statistics.
+Analyze the result file
+<filename><replaceable>file.dat</replaceable></filename>.
+Creates a HTML file <filename><replaceable>file.html</replaceable></filename>
+with links to the games and summary statistics.
+Also creates a text file
+<filename><replaceable>file.summary.dat</replaceable></filename>
+with a table row containing the most important summary statistics.
 </listitem>
 </varlistentry>
 
@@ -213,7 +218,7 @@ Indicate interrupt ability for GoGui.
 <application>TwoGtp</application> will forward the interrupt to both
 programs with the appropriate method if they implement either
 <userinput>gogui_interrupt</userinput> or <userinput>gogui_sigint</userinput>.
-See the chapter <xref linkend="interrupt">Interrupting commands</xref>
+See <xref linkend="interrupt">Interrupting commands</xref>
 of the <application>GoGui</application> documentation.
 </listitem>
 </varlistentry>

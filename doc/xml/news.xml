@@ -14,6 +14,10 @@ Improve export as LaTeX document.
 Add documentation for main menu bar.
 </listitem>
 <listitem>
+<application>TwoGtp</application>: option <option>-analyze</option>
+also outputs a text file containing a table row with summary information.
+</listitem>
+<listitem>
 Other minor fixes and improvements.
 </listitem>
 </itemizedlist>
