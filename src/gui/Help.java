@@ -40,8 +40,8 @@ class Help
         super(owner, "GoGui: Help");
         m_contents = contents;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        createMenu();
         Container contentPane = getContentPane();
+        createMenu();
         contentPane.add(createButtons(), BorderLayout.NORTH);
         m_editorPane = new AntialiasingEditorPane();
         m_editorPane.setEditable(false);
@@ -103,6 +103,12 @@ class Help
     private JEditorPane m_editorPane;
 
     private java.util.List m_history = new ArrayList();
+
+    private JMenuItem m_itemBack;
+
+    private JMenuItem m_itemContents;
+
+    private JMenuItem m_itemForward;
 
     private URL m_contents;
 
@@ -167,6 +173,17 @@ class Help
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     ActionEvent.CTRL_MASK, "close");
         menuBar.add(menu);
+        menu = new JMenu("Go");
+        menu.setMnemonic(KeyEvent.VK_G);
+        m_itemBack = addMenuItem(menu, "Back", KeyEvent.VK_B, KeyEvent.VK_B,
+                                 ActionEvent.CTRL_MASK, "back");
+        m_itemForward = addMenuItem(menu, "Forward", KeyEvent.VK_F,
+                                    KeyEvent.VK_F, ActionEvent.CTRL_MASK,
+                                    "forward");
+        m_itemContents = addMenuItem(menu, "Contents", KeyEvent.VK_C,
+                                     KeyEvent.VK_E, ActionEvent.CTRL_MASK,
+                                     "contents");
+        menuBar.add(menu);
         setJMenuBar(menuBar);
     }
 
@@ -174,11 +191,9 @@ class Help
     {
         JToolBar toolBar = new JToolBar();
         m_buttonBack = createToolBarButton("back.png", "back", "Back");
-        m_buttonBack.setEnabled(false);
         toolBar.add(m_buttonBack);
         m_buttonForward = createToolBarButton("forward.png", "forward",
                                               "Forward");
-        m_buttonForward.setEnabled(false);
         toolBar.add(m_buttonForward);
         m_buttonContents = createToolBarButton("gohome.png", "contents",
                                                "Contents");
@@ -216,11 +231,17 @@ class Help
     }
 
     private void historyChanged()
-    {
-        m_buttonBack.setEnabled((m_historyIndex > 0));
-        m_buttonForward.setEnabled((m_historyIndex < m_history.size() - 1));
+    {        
         URL currentUrl = getHistory(m_historyIndex);
-        m_buttonContents.setEnabled(! currentUrl.equals(m_contents));
+        boolean backPossible = (m_historyIndex > 0);
+        boolean forwardPossible = (m_historyIndex < m_history.size() - 1);
+        boolean contentsPossible = (! currentUrl.equals(m_contents));
+        m_buttonBack.setEnabled(backPossible);
+        m_buttonForward.setEnabled(forwardPossible);
+        m_buttonContents.setEnabled(contentsPossible);
+        m_itemBack.setEnabled(backPossible);
+        m_itemForward.setEnabled(forwardPossible);
+        m_itemContents.setEnabled(contentsPossible);
     }
 
     private void loadURL(URL url)
