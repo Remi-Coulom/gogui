@@ -725,7 +725,6 @@ class GoGui
                 m_commandThread.setFastUpdate(false);
                 m_gtpShell.setFastUpdate(false);
             }
-            computerNone();
             boardChanged();
         }
         catch (Gtp.Error e)
@@ -755,10 +754,7 @@ class GoGui
                   && m_analyzePointArg == null))
             analyzeBegin(true);
         else
-        {
             resetBoard();
-            checkComputerMove();
-        }
     }
 
     private void cbAnalyze()
@@ -791,14 +787,12 @@ class GoGui
     private void cbEnd()
     {
         forward(m_board.getNumberSavedMoves() - m_board.getMoveNumber());
-        computerNone();
         boardChanged();
     }
 
     private void cbForward(int n)
     {
         forward(n);
-        computerNone();
         boardChanged();
     }
 
@@ -1226,9 +1220,10 @@ class GoGui
             m_timeControl.stopMove();
             if (m.getPoint() == null && ! (m_computerBlack && m_computerWhite))
                 showInfo("The computer passed.");
-            boardChanged();
             fileModified();
             m_isModified = true;
+            boardChanged();
+            checkComputerMove();
         }
         catch (Gtp.Error e)
         {
@@ -1355,6 +1350,7 @@ class GoGui
             }
             m_isModified = true;
             boardChanged();            
+            checkComputerMove();
         }
         catch (Gtp.Error e)
         {
@@ -1535,7 +1531,6 @@ class GoGui
                 forward(move);
             m_loadedFile = file.toString();
             setTitle();
-            computerNone();
             boardChanged();
         }
         catch (FileNotFoundException e)
@@ -1937,7 +1932,6 @@ class GoGui
                 Move m = new Move(null, m_board.getToMove());
                 setup(m);
             }
-            computerNone();
             boardChanged();
             fileModified();
             m_isModified = true;
