@@ -617,7 +617,8 @@ public final class Gtp
                         m_timeLastReceived = System.currentTimeMillis();
                     }
                     stringBuffer.append(buffer, 0, n);
-                    int index = stringBuffer.lastIndexOf("\n");
+                    // GCJ 3.3.1 does not implement StringBuffer.lastIndexOf
+                    int index = stringBuffer.toString().lastIndexOf("\n");
                     if (index == -1)
                         continue;
                     String s = stringBuffer.substring(0, index + 1);
@@ -747,7 +748,8 @@ public final class Gtp
             }
             m_fullResponse = response.toString();
             assert(response.length() >= 4);            
-            int index = response.indexOf(" ");
+            // GCJ 3.3.1 does not implement StringBuffer.indexOf
+            int index = response.toString().indexOf(" ");
             if (index < 0)
                 m_response = response.substring(0, response.length() - 2);
             else
