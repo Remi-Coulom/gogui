@@ -214,10 +214,10 @@ class MenuBars
     }
 
     private JMenuItem addMenuItem(JMenu menu, String label, int accel,
-                                  String command)
+                                  int modifier, String command)
     {
         JMenuItem item = new JMenuItem(label);
-        KeyStroke k = KeyStroke.getKeyStroke(accel, ActionEvent.CTRL_MASK); 
+        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
         item.setAccelerator(k);
         return addMenuItem(menu, item, command);
     }
@@ -234,9 +234,9 @@ class MenuBars
     {
         JMenu menu = new JMenu("Experts");
         menu.setMnemonic(KeyEvent.VK_E);
-        addMenuItem(menu, "Analyze", KeyEvent.VK_Y, "analyze");
-        m_itemGtpShell =
-            addMenuItem(menu, "GTP shell", KeyEvent.VK_C, "gtp-shell");
+        addMenuItem(menu, "Analyze", KeyEvent.VK_F9, 0, "analyze");
+        m_itemGtpShell = addMenuItem(menu, "GTP shell", KeyEvent.VK_F8,
+                                     0, "gtp-shell");
         addMenuItem(menu, "Send GTP file", "gtp-file");
         return menu;
     }
@@ -284,15 +284,19 @@ class MenuBars
     {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
-        addMenuItem(menu, "Load...", "load");
-        addMenuItem(menu, "Save...", "save");
+        addMenuItem(menu, "Open...", KeyEvent.VK_O, ActionEvent.CTRL_MASK,
+                    "load");
+        addMenuItem(menu, "Save...", KeyEvent.VK_S, ActionEvent.CTRL_MASK,
+                    "save");
         addMenuItem(menu, "Save position...", "save-position");
         menu.addSeparator();
-        addMenuItem(menu, "Print...", "print");
+        addMenuItem(menu, "Print...", KeyEvent.VK_P, ActionEvent.CTRL_MASK,
+                    "print");
         menu.addSeparator();
         addMenuItem(menu, "Open with program...", "open-with-program");
         menu.addSeparator();
-        m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, "exit");
+        m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q,
+                                 ActionEvent.CTRL_MASK, "exit");
         return menu;
     }
 
@@ -300,20 +304,31 @@ class MenuBars
     {
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
-        addMenuItem(menu, "New", "new-game");
+        addMenuItem(menu, "New", KeyEvent.VK_N, ActionEvent.CTRL_MASK,
+                    "new-game");
         addMenuItem(menu, "Komi...", "komi");
         menu.add(createRulesMenu());
         menu.add(createHandicapMenu());
         addMenuItem(menu, "Score", "score");
         menu.addSeparator();
-        addMenuItem(menu, "Pass", KeyEvent.VK_P, "pass");
-        m_itemComputerPlay =
-            addMenuItem(menu, "Computer play", KeyEvent.VK_L, "play");
+        addMenuItem(menu, "Pass", KeyEvent.VK_F2, 0, "pass");
+        m_itemComputerPlay = addMenuItem(menu, "Computer play",
+                                         KeyEvent.VK_F5, 0, "play");
         menu.addSeparator();
-        addMenuItem(menu, "Backward", KeyEvent.VK_B, "backward");
-        addMenuItem(menu, "Forward", KeyEvent.VK_F, "forward");
-        addMenuItem(menu, "Beginning", KeyEvent.VK_A, "beginning");
-        addMenuItem(menu, "End", KeyEvent.VK_E, "end");
+        addMenuItem(menu, "Beginning", KeyEvent.VK_HOME, ActionEvent.CTRL_MASK,
+                    "beginning");
+        addMenuItem(menu, "Backward 10 moves", KeyEvent.VK_LEFT,
+                    ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
+                    "backward-10");
+        addMenuItem(menu, "Backward", KeyEvent.VK_LEFT, ActionEvent.CTRL_MASK,
+                    "backward");
+        addMenuItem(menu, "Forward", KeyEvent.VK_RIGHT, ActionEvent.CTRL_MASK,
+                    "forward");
+        addMenuItem(menu, "Forward 10 moves", KeyEvent.VK_RIGHT,
+                    ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
+                    "forward-10");
+        addMenuItem(menu, "End", KeyEvent.VK_END, ActionEvent.CTRL_MASK,
+                    "end");
         menu.addSeparator();
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
@@ -338,7 +353,8 @@ class MenuBars
     {
         JMenu menu = new JMenu("Help");
         menu.setMnemonic(KeyEvent.VK_H);
-        JMenuItem itemHelp = addMenuItem(menu, "Contents", "help");
+        JMenuItem itemHelp =
+            addMenuItem(menu, "Contents", KeyEvent.VK_F1, 0, "help");
         JMenuItem itemAbout = addMenuItem(menu, "About", "about");
         if (store)
         {
