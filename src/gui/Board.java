@@ -220,7 +220,7 @@ public class Board
             for (int x = 0; x < size; ++x)
             {
                 go.Point p = m_board.getPoint(x, y);
-                Field field = new Field(this, p, font, m_fastPaint);
+                Field field = new Field(this, p, m_fastPaint);
                 add(field);
                 m_field[x][y] = field;
                 KeyListener keyListener = new KeyAdapter()
@@ -340,6 +340,34 @@ public class Board
             return;
         clearAll();
         m_needsReset = false;
+    }
+
+    public void setFont(Graphics graphics, int fieldSize)
+    {
+        if (m_cachedFont != null && m_cachedFontFieldSize == fieldSize)
+        {
+            graphics.setFont(m_cachedFont);
+            return;
+        }
+        Font font = UIManager.getFont("Label.font");
+        if (font != null)
+        {
+            FontMetrics metrics = graphics.getFontMetrics(font);
+            float scale = (float)fieldSize / metrics.getAscent() / 2f;
+            if (scale < 0.95f)
+            {
+                int size = font.getSize();
+                Font derivedFont = font.deriveFont(Font.BOLD, size * scale);
+                if (derivedFont != null)
+                    font = derivedFont;
+            }
+            else
+                font = font.deriveFont(Font.BOLD);
+        }
+        m_cachedFont = font;
+        m_cachedFontFieldSize = fieldSize;
+        graphics.setFont(font);
+        return;
     }
 
     public void scoreBegin(go.Point[] isDeadStone)
@@ -616,6 +644,8 @@ public class Board
 
     private boolean m_variationShown;
 
+    private int m_cachedFontFieldSize;
+
     private go.Point m_focusPoint;
 
     private go.Point m_lastMove;
@@ -630,6 +660,8 @@ public class Board
     private Dimension m_preferredFieldSize;
 
     private Field m_field[][];
+
+    private Font m_cachedFont;
 
     private Image m_image;
 

@@ -177,8 +177,15 @@ public class GuiUtils
         private Throwable m_throwable;
     }
 
-    private static final int m_defaultMonoFontSize =
-        getTextAreaFont() == null ? 10 : getTextAreaFont().getSize();
+    static
+    {
+        // That is not correct, since Font.getSize does not return pixels
+        // Should query some default Graphics device
+        m_defaultMonoFontSize =
+            getTextAreaFont() == null ? 10 : getTextAreaFont().getSize();
+    }
+
+    private static final int m_defaultMonoFontSize;
 
     private static final Border m_emptyBorder =
         BorderFactory.createEmptyBorder(PAD, PAD, PAD, PAD);

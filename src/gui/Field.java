@@ -21,16 +21,13 @@ public class Field
     extends JComponent
     implements FocusListener
 {
-    public Field(gui.Board board, go.Point point, Font font,
-                 boolean fastPaint)
+    public Field(gui.Board board, go.Point point, boolean fastPaint)
     {
         m_board = board;
         m_point = point;
         m_fastPaint = fastPaint;
         setPreferredSize(m_board.getPreferredFieldSize());
         setMinimumSize(m_board.getMinimumFieldSize());
-        if (font != null)
-            setFont(font);
         addFocusListener(this);
         KeyAdapter keyAdapter = new KeyAdapter()
             {
@@ -378,8 +375,10 @@ public class Field
 
     private void drawString()
     {
-        int stringWidth = m_graphics.getFontMetrics().stringWidth(m_string);
-        int stringHeight = m_graphics.getFont().getSize();
+        m_board.setFont(m_graphics, m_size);
+        FontMetrics metrics = m_graphics.getFontMetrics();
+        int stringWidth = metrics.stringWidth(m_string);
+        int stringHeight = metrics.getAscent();
         int x = Math.max((m_size - stringWidth) / 2, 0);
         int y = stringHeight + (m_size - stringHeight) / 2;
         if (m_color == go.Color.WHITE)
