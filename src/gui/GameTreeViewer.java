@@ -348,6 +348,7 @@ public class GameTreeViewer
 
     public void toTop()
     {
+        setState(Frame.NORMAL);
         setVisible(true);
         toFront();
     }

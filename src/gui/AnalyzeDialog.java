@@ -95,6 +95,7 @@ class AnalyzeDialog
 
     public void toTop()
     {
+        setState(Frame.NORMAL);
         setVisible(true);
         toFront();
     }

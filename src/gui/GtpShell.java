@@ -341,6 +341,7 @@ public class GtpShell
 
     public void toTop()
     {
+        setState(Frame.NORMAL);
         setVisible(true);
         toFront();
     }

@@ -599,6 +599,7 @@ class GoGui
 
     public void toTop()
     {
+        setState(Frame.NORMAL);
         toFront();
     }
 
