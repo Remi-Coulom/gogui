@@ -206,7 +206,7 @@ public class Reader
             }
             else if (p.equals("C"))
             {
-                node.setComment(v);
+                node.setComment(v.trim());
             }
             else if (p.equals("GM"))
             {

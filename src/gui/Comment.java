@@ -75,6 +75,6 @@ class Comment
     private void copyContentToNode()
     {
         if (m_node != null)
-            m_node.setComment(m_textArea.getText());
+            m_node.setComment(m_textArea.getText().trim());
     }
 }
