@@ -6,7 +6,7 @@ The following Go programs can be used with GoGui:
 </para>
   
 <section>
-<title>GnuGo</title>
+<title>GNU Go</title>
 <para>
 <ulink url="http://www.gnu.org/software/gnugo/gnugo.html">
 http://www.gnu.org/software/gnugo/gnugo.html</ulink>
@@ -16,6 +16,19 @@ Operating systems: Unix, Windows, Macintosh.
 </para>
 <para>
 Command: <userinput>gnugo --mode gtp</userinput>
+</para>
+</section>
+  
+<section>
+<title>Aya</title>
+<para>
+<ulink url="http://www32.ocn.ne.jp/~yss/">http://www32.ocn.ne.jp/~yss/</ulink>
+</para>
+<para>
+Operating systems: Windows.
+</para>
+<para>
+Command: <userinput>Aya.exe --mode gtp</userinput>
 </para>
 </section>
   
