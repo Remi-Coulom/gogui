@@ -476,6 +476,8 @@ Show toolbar.
 <listitem>
 <para>
 Mark the moves of all variations from this position with 'A', 'B', 'C'...
+A maximum of 26 variations will be marked and if variations start with the
+same move only the first one will be marked.
 </para>
 </listitem>
 </varlistentry>
