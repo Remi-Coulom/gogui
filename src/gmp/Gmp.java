@@ -2,12 +2,10 @@
 /*
   Go Modem Protocol
 
-  Documents:
-
   Go Modem Protocol Specification
   http://www.britgo.org/tech/gmp.html
   
-  Restricted version of Go Modem Protocol.
+  Simple version of the protocol:
   Appendix A in Call For Participation to the FJK Computer Go Tournament 2000
   http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt
   
@@ -420,7 +418,7 @@ class ReadThread extends Thread
     }
 
     public ReadThread(InputStream in, OutputStream out, int size,
-                      int colorIndex)
+                      int colorIndex, boolean simple)
     {
         assert(size >= 1);
         assert(size <= 22);
@@ -430,6 +428,7 @@ class ReadThread extends Thread
         m_out = out;
         m_size = size;
         m_colorIndex = colorIndex;
+        m_simple = simple;
         m_writeThread = new WriteThread(out);
         m_writeThread.start();
     }
@@ -488,7 +487,7 @@ class ReadThread extends Thread
 
     public synchronized boolean send(Cmd cmd, StringBuffer response)
     {
-        while (m_state == STATE_WAIT_ANSWER_OK)
+        while (m_state == STATE_WAIT_ANSWER_OK || m_state == STATE_WAIT_ANSWER)
         {
             try
             {
@@ -612,9 +611,13 @@ class ReadThread extends Thread
 
     private static final int STATE_WAIT_ANSWER_OK = 5;
 
+    private static final int STATE_WAIT_ANSWER = 6;
+
     private boolean m_hisLastSeq = false;
 
     private boolean m_myLastSeq = false;
+
+    private boolean m_simple;
 
     private int m_lastQuery = 0;
 
@@ -625,6 +628,11 @@ class ReadThread extends Thread
     private int m_pending = 0;
 
     private int m_size = 0;
+
+    private int m_queryCount;
+
+    private final static int m_queries[] = {
+        Cmd.QUERY_COLOR, Cmd.QUERY_HANDICAP };
 
     private int[] m_inBuffer = new int[4];
 
@@ -743,6 +751,31 @@ class ReadThread extends Thread
         Util.log("received " + cmd.toString(m_size, m_lastQuery));
         if (cmd.m_cmd == Cmd.QUERY)
             answerQuery(cmd.m_val);
+        else if (cmd.m_cmd == Cmd.ANSWER)
+        {
+            if (m_queryCount < m_queries.length - 1)
+            {
+                ++m_queryCount;
+                int val = m_queries[m_queryCount];
+                m_lastQuery = val;
+                sendCmd(Cmd.QUERY, val);
+            }
+            else
+            {
+                sendOk();
+                m_state = STATE_IDLE;
+                notifyAll();
+            }
+        }
+        else if (cmd.m_cmd == Cmd.NEWGAME && m_simple)
+        {
+            m_cmdQueue.add(cmd);
+            m_queryCount = 0;
+            int val = m_queries[m_queryCount];
+            m_lastQuery = val;
+            sendCmd(Cmd.QUERY, val);
+            notifyAll();
+        }
         else
         {
             sendOk();
@@ -770,7 +803,9 @@ class ReadThread extends Thread
         Cmd cmd = getCmd();
         boolean seq = getSeq();
         boolean ack = getAck();
-        if (m_state == STATE_WAIT_OK || m_state == STATE_WAIT_ANSWER_OK)
+        if (m_state == STATE_WAIT_OK
+            || m_state == STATE_WAIT_ANSWER_OK
+            || m_state == STATE_WAIT_ANSWER)
         {
             if (cmd.m_cmd == Cmd.OK)
             {
@@ -856,8 +891,14 @@ class ReadThread extends Thread
         setChecksum(packet);
         m_writeThread.sendPacket(packet, isOkCmd);
         if (! isOkCmd)
-            m_state =
-                (cmd == Cmd.ANSWER ? STATE_WAIT_ANSWER_OK : STATE_WAIT_OK);
+        {
+            if (cmd == Cmd.ANSWER)
+                m_state = STATE_WAIT_ANSWER_OK;
+            else if (cmd == Cmd.QUERY)
+                m_state = STATE_WAIT_ANSWER;
+            else
+                m_state = STATE_WAIT_OK;
+        }
         return true;
     }
 
@@ -902,10 +943,10 @@ public class Gmp
         0=unknown, 1=white, 2=black
     */
     public Gmp(InputStream input, OutputStream output, int size,
-               int colorIndex)
+               int colorIndex, boolean simple)
     {
         m_size = size;
-        m_readThread = new ReadThread(input, output, size, colorIndex);
+        m_readThread = new ReadThread(input, output, size, colorIndex, simple);
         m_readThread.start();
     }
 
