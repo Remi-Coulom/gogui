@@ -129,6 +129,9 @@ public class Reader
     public String getWarnings()
     {
         String result = "";
+        // More severe warnings first
+        if (m_warningExtraText)
+            result = result + "Extra text before game tree\n";
         if (m_warningFormat)
             result = result + "Unknown SGF file format version\n";
         if (m_warningWrongPass)
@@ -151,10 +154,12 @@ public class Reader
 
     private boolean m_isFile;
 
-    /** GM value should be 1, sgf2misc produces Go files with empty value */
-    private boolean m_warningGame;
+    private boolean m_warningExtraText;
 
     private boolean m_warningFormat;
+
+    /** GM value should be 1, sgf2misc produces Go files with empty value */
+    private boolean m_warningGame;
 
     private boolean m_warningLongProps;
 
@@ -223,6 +228,32 @@ public class Reader
                 if (hasWhiteChildMoves && ! hasBlackChildMoves)
                     root.setPlayer(Color.WHITE);
             }
+        }
+    }
+
+    private void findRoot() throws SgfError, IOException
+    {
+        while (true)
+        {
+            m_tokenizer.nextToken();
+            int t = m_tokenizer.ttype;
+            if (t == '(')
+            {
+                // Better make sure that ( is followed by a node
+                m_tokenizer.nextToken();
+                t = m_tokenizer.ttype;
+                if (t == ';')
+                {
+                    m_tokenizer.pushBack();
+                    return;
+                }
+                else
+                    m_warningExtraText = true;
+            }
+            else if (t == StreamTokenizer.TT_EOF)
+                throw getError("No root tree found");
+            else
+                m_warningExtraText = true;
         }
     }
 
@@ -605,9 +636,7 @@ public class Reader
             }
             m_reader = new BufferedReader(reader);
             m_tokenizer = new StreamTokenizer(m_reader);
-            m_tokenizer.nextToken();
-            if (m_tokenizer.ttype != '(')
-                throw getError("No root tree found");
+            findRoot();
             Node root = new Node();
             Node node = readNext(root, true);
             while (node != null)
