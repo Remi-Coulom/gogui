@@ -283,7 +283,7 @@ class MenuBars
         menu.addSeparator();
         addMenuItem(menu, "Open with program...", "open-with-program");
         menu.addSeparator();
-        m_itemExit = addMenuItem(menu, "Exit", KeyEvent.VK_X, "exit");
+        m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, "exit");
         return menu;
     }
 
