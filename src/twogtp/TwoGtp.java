@@ -83,7 +83,7 @@ public class TwoGtp
             response.setLength(0);
             if (newGame(m_size > 0 ? m_size : 19, response))
             {
-                while (! m_board.bothPassed())
+                while (! gameOver())
                 {
                     response.setLength(0);
                     if (! sendGenmove(m_board.getToMove(), response))
@@ -118,7 +118,7 @@ public class TwoGtp
             m_referee.close();
             m_referee.waitForExit();
         }
-    }
+    }    
 
     /** Returns number of games left of -1 if no maximum set. */
     public int gamesLeft()
@@ -391,6 +391,8 @@ public class TwoGtp
 
     private boolean m_refereeIsDisabled;
 
+    private boolean m_resigned;
+
     private int m_gameIndex;
 
     private int m_numberGames;
@@ -402,6 +404,8 @@ public class TwoGtp
     private double m_cpuTimeWhite;
 
     private Board m_board;
+
+    private Color m_resignColor;
 
     private GameTree m_gameTree;
 
@@ -638,6 +642,11 @@ public class TwoGtp
         }
     }
 
+    private boolean gameOver()
+    {
+        return (m_board.bothPassed() || m_resigned);
+    }
+
     private double getCpuTime(Gtp gtp)
     {
         double result = 0;
@@ -767,11 +776,25 @@ public class TwoGtp
     {
         try
         {
-            String resultBlack = getResult(m_black);
-            String resultWhite = getResult(m_white);
-            String resultReferee = "?";
-            if (m_referee != null && ! m_refereeIsDisabled)
-                resultReferee = getResult(m_referee);
+            String resultBlack;
+            String resultWhite;
+            String resultReferee;
+            if (m_resigned)
+            {
+                String result = (m_resignColor == Color.BLACK ? "W" : "B");
+                result = result + "+R";
+                resultBlack = result;
+                resultWhite = result;
+                resultReferee = result;
+            }
+            else
+            {
+                resultBlack = getResult(m_black);
+                resultWhite = getResult(m_white);
+                resultReferee = "?";
+                if (m_referee != null && ! m_refereeIsDisabled)
+                    resultReferee = getResult(m_referee);
+            }
             double cpuTimeBlack = getCpuTime(m_black) - m_cpuTimeBlack;
             m_cpuTimeBlack = cpuTimeBlack;
             double cpuTimeWhite = getCpuTime(m_white) - m_cpuTimeWhite;
@@ -804,6 +827,7 @@ public class TwoGtp
         m_gameTree = new GameTree(size, m_komi.floatValue(), null, null);
         m_currentNode = m_gameTree.getRoot();
         m_scoreEstimates.clear();
+        m_resigned = false;
     }
 
     private String inverseResult(String result)
@@ -1192,45 +1216,55 @@ public class TwoGtp
         catch (Gtp.Error e)
         {
             response1 = e.getMessage();
-            mergeResponse(response, response1, response2, prefix1,
-                          prefix2);
-            return false;
-        }
-        Point point = null;
-        try
-        {
-            point = Gtp.parsePoint(response1, m_board.getSize());
-        }
-        catch (Gtp.Error e)
-        {
-            response.append(prefix1 + " played invalid move");
-            m_inconsistentState = true;
-            return false;
-        }
-        command2 = command2 + " " + response1;
-        try
-        {
-            response2 = gtp2.sendCommand(command2);
-        }
-        catch (Gtp.Error e)
-        {
-            response2 = e.getMessage();
-            try
-            {
-                gtp1.sendCommand("undo");
-            }
-            catch (Gtp.Error errorUndo)
-            {
-                m_inconsistentState = true;
-            }
             mergeResponse(response, response1, response2, prefix1, prefix2);
             return false;
         }
-        response.append(response1);
-        if (m_referee != null && ! m_refereeIsDisabled)
-            sendToReferee(m_referee.getCommandPlay(color) + " " + response1);
-        play(new Move(point, color));
-        if (m_board.bothPassed() && ! m_gameSaved)
+        if (response1.toLowerCase().equals("resign"))
+        {
+            response.append("resign");
+            m_resigned = true;
+            m_resignColor = color;
+        }
+        else
+        {
+            Point point = null;
+            try
+            {
+                point = Gtp.parsePoint(response1, m_board.getSize());
+            }
+            catch (Gtp.Error e)
+            {
+                response.append(prefix1 + " played invalid move");
+                m_inconsistentState = true;
+                return false;
+            }
+            command2 = command2 + " " + response1;
+            try
+            {
+                response2 = gtp2.sendCommand(command2);
+            }
+            catch (Gtp.Error e)
+            {
+                response2 = e.getMessage();
+                try
+                {
+                    gtp1.sendCommand("undo");
+                }
+                catch (Gtp.Error errorUndo)
+                {
+                    m_inconsistentState = true;
+                }
+                mergeResponse(response, response1, response2, prefix1,
+                              prefix2);
+                return false;
+            }
+            response.append(response1);
+            if (m_referee != null && ! m_refereeIsDisabled)
+                sendToReferee(m_referee.getCommandPlay(color) + " "
+                              + response1);
+            play(new Move(point, color));
+        }
+        if (gameOver() && ! m_gameSaved)
         {
             handleEndOfGame(false, "");
             m_gameSaved = true;

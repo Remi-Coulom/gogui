@@ -36,7 +36,9 @@ public class Analyze
 
     private final class ResultStatistics
     {
-        public Statistics m_unknown = new Statistics();
+        public Statistics m_unknownResult = new Statistics();
+
+        public Statistics m_unknownScore = new Statistics();
 
         public Statistics m_win = new Statistics();
 
@@ -194,29 +196,40 @@ public class Analyze
 
     private void parseResult(String result, ResultStatistics statistics)
     {
-        boolean isValid = false;
-        double r = 0;
+        boolean hasResult = false;
+        boolean hasScore = false;
+        boolean win = false;
+        double score = 0f;
         String s = result.trim();
         try
         {
             if (! s.equals("?"))
             {
                 if (s.indexOf("B+") >= 0)
-                    r = Double.parseDouble(s.substring(2));
+                {
+                    hasResult = true;
+                    win = true;
+                    score = Double.parseDouble(s.substring(2));
+                    hasScore = true;
+                }
                 else if (s.indexOf("W+") >= 0)
-                    r = - Double.parseDouble(s.substring(2));
-                isValid = true;
+                {
+                    hasResult = true;
+                    win = false;
+                    score = -Double.parseDouble(s.substring(2));
+                    hasScore = true;
+                }
             }
         }
         catch (NumberFormatException e)
         {
         }
-        if (isValid)
-        {
-            statistics.m_histo.addValue(r);
-            statistics.m_win.addValue(r > 0 ? 1 : 0);
-        }
-        statistics.m_unknown.addValue(isValid ? 0 : 1);
+        statistics.m_unknownResult.addValue(hasResult ? 0 : 1);
+        if (hasResult)
+            statistics.m_win.addValue(win ? 1 : 0);
+        statistics.m_unknownScore.addValue(hasScore ? 0 : 1);
+        if (hasScore)
+            statistics.m_histo.addValue(score);
     }
 
     private void readFile(File file) throws Exception
@@ -384,10 +397,14 @@ public class Analyze
                   + "% (&plusmn;"
                   + format.format(statistics.m_win.getErrorMean() * 100)
                   + ")</td></tr>\n" +
-                  "<tr><th align=\"left\">Unknown["
+                  "<tr><th align=\"left\">Unknown Result["
                   + name + "]:</th><td align=\"left\">"
-                  + format.format(statistics.m_unknown.getMean() * 100) + "%"
-                  + "</td></tr>\n" +
+                  + format.format(statistics.m_unknownResult.getMean() * 100)
+                  + "%" + "</td></tr>\n" +
+                  "<tr><th align=\"left\">Unknown Score["
+                  + name + "]:</th><td align=\"left\">"
+                  + format.format(statistics.m_unknownScore.getMean() * 100)
+                  + "%" + "</td></tr>\n" +
                   "</table>\n" +
                   "</p>\n");
         statistics.m_histo.printHtml(out);
@@ -404,9 +421,9 @@ public class Analyze
         Statistics winBlack = m_statisticsBlack.m_win;
         Statistics winWhite = m_statisticsWhite.m_win;
         Statistics winReferee = m_statisticsReferee.m_win;
-        Statistics unknownBlack = m_statisticsBlack.m_unknown;
-        Statistics unknownWhite = m_statisticsWhite.m_unknown;
-        Statistics unknownReferee = m_statisticsReferee.m_unknown;
+        Statistics unknownBlack = m_statisticsBlack.m_unknownScore;
+        Statistics unknownWhite = m_statisticsWhite.m_unknownScore;
+        Statistics unknownReferee = m_statisticsReferee.m_unknownScore;
         out.print("#GAMES\tERR\tDUP\tUSED\tRES_B\tERR_B\tWIN_B\tERRW_B\t"
                   + "UNKN_B\tRES_W\tERR_W\tWIN_W\tERRW_W\tUNKN_W\t"
                   + "RES_R\tERR_R\tWIN_R\tERRW_R\tUNKN_R\n" +
