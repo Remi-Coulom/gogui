@@ -77,7 +77,7 @@ $Source$
 <fileset dir="build/utils"/>
 <fileset dir="build/version"/>
 <fileset dir="build/GoGui.app"/>
-<fileset dir="build/GoGui.dmg"/>
+<fileset dir="build/GoGui*.dmg"/>
 </delete>
 </target>
 
@@ -231,7 +231,7 @@ installation directory.
 </jar>
 </target>
 
-<target name="GoGui.app" depends="gogui.jar"
+<target name="app" depends="gogui.jar"
  description="Make Mac application bundle">
 <property name="appdir" value="build/GoGui.app"/>
 <mkdir dir="${appdir}"/>
@@ -254,10 +254,10 @@ installation directory.
 </exec>
 </target>
 
-<target name="GoGui.dmg" depends="GoGui.app"
+<target name="dmg" depends="app"
  description="Make Mac compressed disk image">
 <exec executable="hdiutil">
-<arg line="create -fs HFS+ -format UDZO -volname GoGui -srcfolder build/GoGui.app build/GoGui.dmg"/>
+<arg line="create -fs HFS+ -format UDZO -volname GoGui-${version} -srcfolder build/GoGui.app build/GoGui-${version}.dmg"/>
 </exec>
 </target>
 
