@@ -249,6 +249,7 @@ installation directory.
  gtp/*.class
  gtpadapter/*.class
  sgf/*.class
+ utils/MessageQueue.class
  utils/Options.class
  utils/StringUtils.class
  version/Version.class
@@ -315,6 +316,7 @@ installation directory.
  gtp/*.class
  gtpregress/*.class
  utils/FileUtils.class
+ utils/MessageQueue.class
  utils/Options.class
  utils/StringUtils.class
  version/Version.class
@@ -351,6 +353,7 @@ installation directory.
  gtpterminal/*.class
  sgf/*.class
  utils/FileUtils.class
+ utils/MessageQueue.class
  utils/Options.class
  utils/StringUtils.class
  version/Version.class
@@ -471,6 +474,7 @@ installation directory.
  sgf/*.class
  twogtp/*.class
  utils/FileUtils.class
+ utils/MessageQueue.class
  utils/Options.class
  utils/StringUtils.class
  version/Version.class
