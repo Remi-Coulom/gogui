@@ -59,7 +59,7 @@ class GtpServer
             fromNet.join();
             socket.close();
             process.waitFor();
-            if (remoteHost == null || ! loop)
+            if (remoteHost != null || ! loop)
                 break;
         }
         if (remoteHost == null)
