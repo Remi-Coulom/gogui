@@ -125,7 +125,6 @@ class GoGui
             m_menuBar.setComputerEnabled(false);
         }
         m_menuBar.setNormalMode();
-
         pack();
         m_guiBoard.requestFocusInWindow();
         setTitle("GoGui");
@@ -1926,7 +1925,6 @@ class GoGui
     {
         if (size != m_boardSize)
         {
-            saveSession();
             m_boardSize = size;
             m_guiBoard.initSize(size);
             m_squareLayout.setPreferMultipleOf(size + 2);
