@@ -321,7 +321,7 @@ public class Node
 
     /** Get color to move.
         Determining the color to move takes into consideration an explicitely
-        set player color and moves contained in this node or its children.
+        set player color and moves contained in this node.
         If nothing is known about the color to move, it returns Color.EMPTY.
     */
     public Color getToMove()
@@ -330,12 +330,6 @@ public class Node
             return m_player;
         if (m_move != null)
             return m_move.getColor().otherColor();
-        boolean hasChildrenBlack = hasChildrenMovesWithColor(Color.BLACK);
-        boolean hasChildrenWhite = hasChildrenMovesWithColor(Color.WHITE);
-        if (hasChildrenBlack && ! hasChildrenWhite)
-            return Color.BLACK;
-        if (hasChildrenWhite && ! hasChildrenBlack)
-            return Color.WHITE;
         return Color.EMPTY;
     }
 
@@ -459,18 +453,6 @@ public class Node
     private Vector m_addWhite;
 
     private Vector m_children;
-
-    private boolean hasChildrenMovesWithColor(Color color)
-    {
-        int numberChildren = getNumberChildren();
-        for (int i = 0; i < numberChildren; ++i)
-        {
-            Node child = getChild(i);
-            if (child.m_move != null && child.m_move.getColor() == color)
-                return true;
-        }
-        return false;
-    }
 
     private void makeMainVariation(Node child)
     {
