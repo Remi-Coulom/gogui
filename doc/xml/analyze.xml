@@ -129,9 +129,11 @@ The strings are displayed as labels on the points.
 <listitem>
 <simpara>
 The response of the command is a text containing points.
+All valid points contained in the text will be marked on the board.
 If the text has only a single line, it will be displayed in the status line.
 If it has multiple lines, a window will pop up.
-All valid points contained in the text will be marked on the board.
+If text in the window is selected, only the valid points contained in
+the selected text are marked on the board.
 </simpara>
 </listitem>
 </varlistentry>

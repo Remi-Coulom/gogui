@@ -33,11 +33,21 @@ class TextPane
 public class AnalyzeTextOutput
     extends JDialog
 {
+    static public interface Listener
+    {
+        /** Callback if some text is selected.
+            If text is unselected again this function will be called
+            with the complete text content of the window.
+        */
+        public void textSelected(String text);
+    }
+
     public AnalyzeTextOutput(Frame owner, String title, String response,
-                             boolean highlight)
+                             boolean highlight, Listener listener)
     {
         super(owner, title);
         setLocationRelativeTo(owner);
+        m_listener = listener;
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(GuiUtils.createSmallEmptyBorder());
         Container contentPane = getContentPane();
@@ -69,6 +79,33 @@ public class AnalyzeTextOutput
                 }
             };
         m_textPane.addKeyListener(keyListener);
+        CaretListener caretListener = new CaretListener()
+            {
+                public void caretUpdate(CaretEvent event)
+                {
+                    if (m_listener == null)
+                        return;
+                    int start = m_textPane.getSelectionStart();
+                    int end = m_textPane.getSelectionEnd();
+                    StyledDocument doc = m_textPane.getStyledDocument();
+                    try
+                    {
+                        if (start == end)
+                        {
+                            String text = doc.getText(0, doc.getLength());
+                            m_listener.textSelected(text);
+                            return;
+                        }
+                        String text = doc.getText(start, end - start);
+                        m_listener.textSelected(text);
+                    }
+                    catch (BadLocationException e)
+                    {
+                        assert(false);
+                    }   
+                }
+            };
+        m_textPane.addCaretListener(caretListener);
         if (highlight)
             doSyntaxHighlight();
         m_textPane.setCaretPosition(0);
@@ -78,6 +115,8 @@ public class AnalyzeTextOutput
     }
 
     private JTextPane m_textPane;
+
+    private Listener m_listener;
 
     private void doSyntaxHighlight()
     {

@@ -824,7 +824,24 @@ class GoGui
                     boolean highlight =
                         (type == AnalyzeCommand.HSTRING
                          || type == AnalyzeCommand.HPSTRING);
-                    new AnalyzeTextOutput(this, title, response, highlight);
+                    AnalyzeTextOutput.Listener listener = null;
+                    if (type == AnalyzeCommand.PSTRING
+                        || type == AnalyzeCommand.HPSTRING)
+                    {
+                        listener = new AnalyzeTextOutput.Listener()
+                            {
+                                public void textSelected(String text)
+                                {
+                                    go.Point list[] =
+                                        Gtp.parsePointString(text,
+                                                             m_boardSize);
+                                    m_guiBoard.showPointList(list);
+                                    m_guiBoard.repaint();
+                                }
+                            };
+                    }
+                    new AnalyzeTextOutput(this, title, response, highlight,
+                                          listener);
                 }
             }
             if (! statusContainsResponse)
