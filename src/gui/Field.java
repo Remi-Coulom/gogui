@@ -548,7 +548,7 @@ public class Field
                 AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f); 
             graphics2D.setComposite(composite);
             if (m_territory == go.Color.BLACK)
-                graphics2D.setColor(java.awt.Color.black);
+                graphics2D.setColor(java.awt.Color.darkGray);
             else if (m_territory == go.Color.WHITE)
                 graphics2D.setColor(java.awt.Color.white);
             int size = getSize().width;
