@@ -1,4 +1,4 @@
-application/sgf:
+application/x-go-sgf:
 	description=Go Game
 	default_action_type=application
 	short_list_application=gogui
