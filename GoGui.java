@@ -597,84 +597,7 @@ class GoGui
         }
     }
 
-    private void beginLengthyCommand()
-    {
-        setBoardCursor(Cursor.WAIT_CURSOR);
-        m_menuBars.setCommandInProgress(true);
-        m_toolBar.enableAll(false, null);
-        m_gtpShell.setEnabled(false);
-        m_commandInProgress = true;
-    }
-
-    private void beginningBegin()
-    {
-        if (m_commandThread == null)
-        {
-            while (m_board.getMoveNumber() > 0)
-                m_board.undo();
-            computerNone();
-        }
-        if (m_board.getMoveNumber() == 0)
-        {
-            boardChanged();
-            return;
-        }
-        resetBoard();
-        showStatus("Retracting all moves...");
-        Runnable callback = new Runnable()
-            {
-                public void run() { beginningContinue(); }
-            };
-        runLengthyCommand("undo", callback);
-    }
-    
-    private void beginningContinue()
-    {
-        assert(m_board.getMoveNumber() > 0);
-        endLengthyCommand();
-        Gtp.Error e = m_commandThread.getException();
-        if (e != null)
-        {
-            showGtpError(e);
-            clearStatus();
-        }
-        m_board.undo();
-        if (m_board.getMoveNumber() == 0)
-        {
-            computerNone();
-            boardChanged();
-            return;
-        }
-        Runnable callback = new Runnable()
-            {
-                public void run() { beginningContinue(); }
-            };
-        runLengthyCommand("undo", callback);
-    }
-
-    private void boardChanged()
-    {
-        m_gameInfo.update();
-        m_toolBar.updateGameButtons(m_board);
-        clearStatus();
-        if (m_analyzeCmd != null)
-            analyzeBegin();
-        else
-            checkComputerMove();
-    }
-
-    private void cbAnalyze()
-    {        
-        m_toolBar.toggleAnalyze();
-    }
-
-    private void cbBeginning()
-    {
-        m_timeControl.disable();
-        beginningBegin();
-    }
-
-    private void cbBackward(int n)
+    private void backward(int n)
     {
         try
         {
@@ -696,6 +619,41 @@ class GoGui
         }
     }
 
+    private void beginLengthyCommand()
+    {
+        setBoardCursor(Cursor.WAIT_CURSOR);
+        m_menuBars.setCommandInProgress(true);
+        m_toolBar.enableAll(false, null);
+        m_gtpShell.setEnabled(false);
+        m_commandInProgress = true;
+    }
+
+    private void boardChanged()
+    {
+        m_gameInfo.update();
+        m_toolBar.updateGameButtons(m_board);
+        clearStatus();
+        if (m_analyzeCmd != null)
+            analyzeBegin();
+        else
+            checkComputerMove();
+    }
+
+    private void cbAnalyze()
+    {        
+        m_toolBar.toggleAnalyze();
+    }
+
+    private void cbBeginning()
+    {
+        backward(m_board.getMoveNumber());
+    }
+
+    private void cbBackward(int n)
+    {
+        backward(n);
+    }
+
     private void cbComputerBoth()
     {
         computerBoth();
@@ -706,31 +664,12 @@ class GoGui
 
     private void cbEnd()
     {
-        endBegin();
+        forward(m_board.getNumberSavedMoves() - m_board.getMoveNumber());
     }
 
     private void cbForward(int n)
     {
-        try
-        {
-            for (int i = 0; i < n; ++i)
-            {
-                int moveNumber = m_board.getMoveNumber();
-                if (moveNumber >= m_board.getNumberSavedMoves())
-                    break;
-                Move m = m_board.getMove(moveNumber);
-                if (m_commandThread != null)
-                    m_commandThread.sendCommand(getPlayCommand(m));
-                m_board.play(m);
-            }
-            computerNone();
-            m_timeControl.disable();
-            boardChanged();
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-        }
+        forward(n);
     }
 
     private void cbGtpShell()
@@ -1190,57 +1129,6 @@ class GoGui
         return panel;
     }
 
-    private void endBegin()
-    {
-        if (m_commandThread == null)
-        {
-            while (m_board.getMoveNumber() < m_board.getNumberSavedMoves())
-                m_board.play(m_board.getMove(m_board.getMoveNumber()));
-            computerNone();
-        }
-        if (m_board.getMoveNumber() == m_board.getNumberSavedMoves())
-        {
-            boardChanged();
-            return;
-        }
-        resetBoard();
-        showStatus("Replaying all moves...");
-        Runnable callback = new Runnable()
-            {
-                public void run() { endContinue(); }
-            };
-        String command =
-            getPlayCommand(m_board.getMove(m_board.getMoveNumber()));
-        runLengthyCommand(command, callback);
-    }
-    
-    private void endContinue()
-    {
-        assert(m_board.getMoveNumber() < m_board.getNumberSavedMoves());
-        endLengthyCommand();
-        Gtp.Error e = m_commandThread.getException();
-        if (e != null)
-        {
-            showGtpError(e);
-            clearStatus();
-            return;
-        }
-        m_board.play(m_board.getMove(m_board.getMoveNumber()));
-        if (m_board.getMoveNumber() == m_board.getNumberSavedMoves())
-        {
-            computerNone();
-            boardChanged();
-            return;
-        }
-        Runnable callback = new Runnable()
-            {
-                    public void run() { endContinue(); }
-            };
-        String command =
-            getPlayCommand(m_board.getMove(m_board.getMoveNumber()));
-        runLengthyCommand(command, callback);
-    }
-
     private void endLengthyCommand()
     {
         m_menuBars.setCommandInProgress(false);
@@ -1270,6 +1158,30 @@ class GoGui
             toMove = m.getColor().otherColor();
         }
         return result;
+    }
+
+    private void forward(int n)
+    {
+        try
+        {
+            for (int i = 0; i < n; ++i)
+            {
+                int moveNumber = m_board.getMoveNumber();
+                if (moveNumber >= m_board.getNumberSavedMoves())
+                    break;
+                Move m = m_board.getMove(moveNumber);
+                if (m_commandThread != null)
+                    m_commandThread.sendCommand(getPlayCommand(m));
+                m_board.play(m);
+            }
+            computerNone();
+            m_timeControl.disable();
+            boardChanged();
+        }
+        catch (Gtp.Error e)
+        {
+            showGtpError(e);
+        }
     }
 
     private void generateMove()
