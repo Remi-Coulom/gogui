@@ -1160,7 +1160,8 @@ class GoGui
     private void cbComputerBoth()
     {
         computerBoth();
-        checkComputerMove();
+        if (! m_commandInProgress)
+            checkComputerMove();
     }
 
     private void cbEnd()
