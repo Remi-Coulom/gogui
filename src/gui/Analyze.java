@@ -900,9 +900,14 @@ class AnalyzeShow
 {
     public static void show(AnalyzeCommand command, gui.Board guiBoard,
                             go.Board board, go.Point analyzePointArg,
-                            Vector analyzePointArgList,
+                            Vector analyzePointListArg,
                             String response) throws Gtp.Error
     {
+        guiBoard.clearAllSelect();
+        for (int i = 0; i < analyzePointListArg.size(); ++i)
+            guiBoard.setSelect((go.Point)analyzePointListArg.get(i), true);
+        if (analyzePointArg != null)
+            guiBoard.setSelect(analyzePointArg, true);
         int type = command.getType();
         String title = command.getTitle();
         int size = board.getSize();
@@ -984,7 +989,7 @@ class AnalyzeShow
         case AnalyzeCommand.VARP:
             {
                 go.Color c = getColor(board, analyzePointArg,
-                                      analyzePointArgList);
+                                      analyzePointListArg);
                 if (c != go.Color.EMPTY)
                 {
                     go.Point list[] = Gtp.parsePointString(response, size);
@@ -996,7 +1001,7 @@ class AnalyzeShow
         case AnalyzeCommand.VARPO:
             {
                 go.Color c = getColor(board, analyzePointArg,
-                                      analyzePointArgList);
+                                      analyzePointListArg);
                 if (c != go.Color.EMPTY)
                 {
                     go.Point list[] = Gtp.parsePointString(response, size);

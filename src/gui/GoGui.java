@@ -712,7 +712,9 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
-        if (m_analyzeCommand.needsPointArg() && m_analyzePointArg == null)
+        if ((m_analyzeCommand.needsPointArg() && m_analyzePointArg == null)
+            || (m_analyzeCommand.needsPointListArg()
+                && m_analyzePointListArg.size() == 0))
             return;
         showStatus("Running " +
                    m_analyzeCommand.getResultTitle(m_analyzePointArg,
@@ -754,7 +756,7 @@ class GoGui
             {
                 if (response.indexOf("\n") < 0)
                 {
-                    showStatusAnalyzeResult(title + ":  " + response);
+                    showStatusAnalyzeResult(title + ": " + response);
                     statusContainsResponse = true;
                 }
                 else
@@ -817,12 +819,6 @@ class GoGui
 
     private void boardChangedBegin(boolean doCheckComputerMove)
     {
-        if (m_analyzePointListArg.size() > 0)
-        {
-            m_analyzePointListArg.clear();
-            m_guiBoard.clearAllSelect();
-            m_guiBoard.repaint();
-        }
         m_guiBoard.update();
         m_gameInfo.update();
         m_toolBar.updateGameButtons(m_board);
@@ -831,7 +827,9 @@ class GoGui
             && m_analyzeCommand != null
             && m_analyzeAutoRun
             && ! (m_analyzeCommand.needsPointArg()
-                  && m_analyzePointArg == null))
+                  && m_analyzePointArg == null)
+            && ! (m_analyzeCommand.needsPointListArg()
+                  && m_analyzePointListArg.size() == 0))
             analyzeBegin(doCheckComputerMove, true);
         else
         {
