@@ -7,6 +7,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -132,6 +133,7 @@ public class GameInfoDialog
         m_rules = createEntry("Rules", gameInformation.m_rules);
         m_komi = createEntry("Komi", Double.toString(gameInformation.m_komi));
         m_result = createEntry("Result", gameInformation.m_result);
+        createTimeEntry();
         setMessage(panel);
         setOptionType(OK_CANCEL_OPTION);
     }
@@ -143,6 +145,29 @@ public class GameInfoDialog
         m_panelLeft.add(label);
         JTextField textField = new JTextField(text);
         m_panelRight.add(textField);
+        return textField;
+    }
+
+    private JTextField createTimeEntry()
+    {
+        JLabel label = new JLabel("Time");
+        label.setHorizontalAlignment(SwingConstants.LEFT);
+        m_panelLeft.add(label);
+        int hgap = 0;
+        int vgap = 0;
+        FlowLayout layout = new FlowLayout(FlowLayout.LEFT, hgap, vgap);
+        JPanel panel = new JPanel(layout);
+        JTextField textField;
+        textField = new JTextField(2);
+        panel.add(textField);
+        panel.add(new JLabel("min +"));
+        textField = new JTextField(2);
+        panel.add(textField);
+        panel.add(new JLabel("min /"));
+        textField = new JTextField(2);
+        panel.add(textField);
+        panel.add(new JLabel("moves"));
+        m_panelRight.add(panel);
         return textField;
     }
 

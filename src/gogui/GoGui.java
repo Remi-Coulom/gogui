@@ -45,6 +45,7 @@ import game.GameInformation;
 import game.GameTree;
 import game.Node;
 import game.NodeUtils;
+import game.TimeSettings;
 import go.Move;
 import gtp.Gtp;
 import gtp.GtpError;
@@ -2732,20 +2733,22 @@ class GoGui
     {
         if (m_commandThread == null)
             return;
-        if (! m_clock.isInitialized())
-            return;
         if (! m_commandThread.isCommandSupported("time_settings"))
         {
             showError("Command time_settings not supported");
             return;
         }
-        long preByoyomi = m_clock.getPreByoyomi() * 60;
+        GameInformation gameInformation = m_gameTree.getGameInformation();
+        TimeSettings settings = gameInformation.m_timeSettings;
+        if (settings == null)
+            return;
+        long preByoyomi = settings.getPreByoyomi() / 1000;
         long byoyomi = 0;
         long byoyomiMoves = 0;
-        if (m_clock.getUseByoyomi())
+        if (settings.getUseByoyomi())
         {
-            byoyomi = m_clock.getByoyomi() * 60;
-            byoyomiMoves = m_clock.getByoyomiMoves();
+            byoyomi = settings.getByoyomi() / 1000;
+            byoyomiMoves = settings.getByoyomiMoves();
         }
         try
         {
