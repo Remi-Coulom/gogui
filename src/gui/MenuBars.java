@@ -27,17 +27,14 @@ class MenuBars
         m_normalMenuBar.add(createSettingsMenu());
         m_menuAnalyze = createAnalyzeMenu();
         m_normalMenuBar.add(m_menuAnalyze);
-        m_normalMenuBar.add(Box.createHorizontalGlue());
         m_normalMenuBar.add(createHelpMenu(true));
 
         m_setupMenuBar = new JMenuBar();
         m_setupMenuBar.add(createSetupMenu());
-        m_setupMenuBar.add(Box.createHorizontalGlue());
         m_setupMenuBar.add(createHelpMenu(false));
 
         m_scoreMenuBar = new JMenuBar();
         m_scoreMenuBar.add(createScoreMenu());
-        m_scoreMenuBar.add(Box.createHorizontalGlue());
         m_scoreMenuBar.add(createHelpMenu(false));
     }
 
