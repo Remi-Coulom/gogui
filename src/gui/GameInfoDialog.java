@@ -30,10 +30,10 @@ public class GameInfoDialog
             return;
         gameInformation.m_playerBlack =
             getTextFieldContent(gameInfoDialog.m_playerBlack);
-        gameInformation.m_playerWhite =
-            getTextFieldContent(gameInfoDialog.m_playerWhite);
         gameInformation.m_blackRank =
             getTextFieldContent(gameInfoDialog.m_rankBlack);
+        gameInformation.m_playerWhite =
+            getTextFieldContent(gameInfoDialog.m_playerWhite);
         gameInformation.m_whiteRank =
             getTextFieldContent(gameInfoDialog.m_rankWhite);
         gameInformation.m_result =
@@ -69,10 +69,10 @@ public class GameInfoDialog
         super(new GridLayout(0, 2, 0, 0));
         m_playerBlack = createEntry("Black player",
                                     gameInformation.m_playerBlack);
-        m_playerWhite = createEntry("White player",
-                                    gameInformation.m_playerWhite);
         m_rankBlack = createEntry("Black rank",
                                   gameInformation.m_blackRank);
+        m_playerWhite = createEntry("White player",
+                                    gameInformation.m_playerWhite);
         m_rankWhite = createEntry("White rank",
                                   gameInformation.m_whiteRank);
         m_date = createEntry("Date", gameInformation.m_date);
