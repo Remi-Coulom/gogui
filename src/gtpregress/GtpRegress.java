@@ -48,7 +48,7 @@ class GtpRegress
 
     public void receivedStdErr(String s)
     {
-        printOutLine("stderr", s);
+        printOut("stderr", s, -1);
     }
 
     public void sentCommand(String s)
@@ -490,12 +490,10 @@ class GtpRegress
         }
     }
 
-    private synchronized void printOutLine(String style, String line, int id)
+    private synchronized void printOut(String style, String line, int id)
     {
         if (line == null)
             return;
-        if (! line.endsWith("\n"))
-            line = line + "\n";
         line = line.replaceAll("&", "&amp;");
         line = line.replaceAll(">", "&gt;");
         line = line.replaceAll("<", "&lt;");
@@ -527,6 +525,15 @@ class GtpRegress
             m_out.print("</a>");            
         if (style != null)
             m_out.print("</span>");
+    }
+
+    private synchronized void printOutLine(String style, String line, int id)
+    {
+        if (line == null)
+            return;
+        if (! line.endsWith("\n"))
+            line = line + "\n";
+        printOut(style, line, id);
     }
 
     private synchronized void printOutSeparator()
