@@ -64,7 +64,7 @@ class GoGui
         contentPane.add(createStatusBar(), BorderLayout.SOUTH);
 
         m_squareLayout = new SquareLayout();
-        m_squareLayout.setPreferMultipleOf(m_boardSize + 2);
+        m_squareLayout.setPreferMultipleOf(2 + 2 * m_boardSize);
         m_boardPanel = new JPanel(m_squareLayout);
         m_boardPanel.add(m_guiBoard);
 
