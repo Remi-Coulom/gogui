@@ -37,6 +37,12 @@ interrupting commands
 GoGui: new menu item "Node Info" in Game Tree Window
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Use xsltproc for generating the documentation instead of the built-in
+ant target "Style"
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

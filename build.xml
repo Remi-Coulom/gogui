@@ -145,26 +145,23 @@ installation directory.
 
 <target name="doc" depends="docCheckUptodate" unless="docUptodate">
 <antcall target="checkXslAvailable"/>
-<style basedir="doc/xml" includes="book.xml" destdir="doc/html"
- style="doc/xml/html.xsl" force="true">
-<xmlcatalog>
-<dtd publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
- location="${docbook_xsl_home}/html/chunk.xsl"/>
-</xmlcatalog>
-<param name="admon.graphics" expression="0"/>
-<param name="admon.graphics.path" expression=""/>
-<param name="chunk.quietly" expression="1"/>
-<param name="chunk.section.depth" expression="0"/>
-<param name="html.cleanup" expression="1"/>
-<param name="html.stylesheet" expression="docbook.css"/>
-<param name="make.valid.html" expression="1"/>
-<param name="navig.showtitles" expression="0"/>
-<param name="refentry.generate.name" expression="0"/>
-<param name="refentry.generate.title" expression="1"/>
-<param name="spacing.paras" expression="0"/>
-<param name="toc.section.depth" expression="0"/>
-<param name="use.id.as.filename" expression="1"/>
-</style>
+<exec executable="xsltproc">
+<arg line="--param admon.graphics 0"/>
+<arg line="--param chunk.quietly 1"/>
+<arg line="--param chunk.section.depth 0"/>
+<arg line="--param html.cleanup 1"/>
+<arg line="--stringparam html.stylesheet docbook.css"/>
+<arg line="--param make.valid.html 1"/>
+<arg line="--param navig.showtitles 0"/>
+<arg line="--param refentry.generate.name 0"/>
+<arg line="--param refentry.generate.title 1"/>
+<arg line="--param spacing.paras 0"/>
+<arg line="--param toc.section.depth 0"/>
+<arg line="--param use.id.as.filename 1"/>
+<arg line="-o doc/html/"/>
+<arg line="${docbook_xsl_home}/html/chunk.xsl"/>
+<arg line="doc/xml/book.xml"/>
+</exec>
 </target>
 
 <target name="docvalidate">
@@ -340,10 +337,21 @@ installation directory.
 
 <target name="man">
 <antcall target="checkXslAvailable"/>
-<style destdir="doc/man" basedir="doc/xml" includes="reference-*.xml"
- style="${docbook_xsl_home}/manpages/docbook.xsl" force="true">
-<param name="chunk.quietly" expression="1"/>
-</style>
+<exec executable="xsltproc">
+<arg line="--param chunk.quietly 1"/>
+<arg line="-o doc/man/"/>
+<arg line="${docbook_xsl_home}/manpages/docbook.xsl"/>
+<arg line="doc/xml/reference-gmptogtp.xml"/>
+<arg line="doc/xml/reference-gogui.xml"/>
+<arg line="doc/xml/reference-gtpadapter.xml"/>
+<arg line="doc/xml/reference-gtpdummy.xml"/>
+<arg line="doc/xml/reference-gtpregress.xml"/>
+<arg line="doc/xml/reference-gtpserver.xml"/>
+<arg line="doc/xml/reference-gtpterminal.xml"/>
+<arg line="doc/xml/reference-netgtp.xml"/>
+<arg line="doc/xml/reference-sgftotex.xml"/>
+<arg line="doc/xml/reference-twogtp.xml"/>
+</exec>
 </target>
 
 <target name="netgtp.jar" depends="compile">
