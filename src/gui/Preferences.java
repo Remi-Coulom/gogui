@@ -3,6 +3,8 @@
 // $Source$
 //-----------------------------------------------------------------------------
 
+package gui;
+
 import java.io.*;
 import java.lang.*;
 import java.util.*;

@@ -3,6 +3,8 @@
 // $Source$
 //=============================================================================
 
+package gui;
+
 import javax.swing.*;
 import board.*;
 import gtp.*;
