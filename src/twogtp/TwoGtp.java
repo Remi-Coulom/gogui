@@ -976,12 +976,12 @@ public class TwoGtp
             gameComment = gameComment +
                 "\nOpening: " + m_openingFile;
         gameComment = gameComment +
-            "\nResult according to Black: " + resultBlack +
-            "\nResult according to White: " + resultWhite;
+            "\nResult [Black]: " + resultBlack +
+            "\nResult [White]: " + resultWhite;
         if (m_referee != null)
             gameComment = gameComment +
                 "\nReferee: " + m_refereeCommand +
-                "\nResult according to referee: " + resultReferee;
+                "\nResult [Referee]: " + resultReferee;
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);
         gameComment = gameComment +
