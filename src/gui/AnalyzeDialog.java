@@ -120,6 +120,9 @@ class AnalyzeDialog
 
     private boolean m_recentModified;
 
+    private static final int m_shortcutKeyMask =
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
     private JButton m_clearButton;
 
     private JButton m_runButton;
@@ -298,7 +301,7 @@ class AnalyzeDialog
                         "Reload commands from configuration files");
         menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    ActionEvent.CTRL_MASK, "close");
+                    m_shortcutKeyMask, "close");
         return menu;
     }
 

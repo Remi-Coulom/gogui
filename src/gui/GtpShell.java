@@ -588,6 +588,9 @@ public class GtpShell
 
     private int m_numberCommands;
 
+    private static final int m_shortcutKeyMask =
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
     private Callback m_callback;
 
     private ComboBoxEditor m_editor;
@@ -798,14 +801,14 @@ public class GtpShell
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
-                    ActionEvent.CTRL_MASK, "save-log");
+                    m_shortcutKeyMask, "save-log");
         addMenuItem(menu, "Save Commands...", KeyEvent.VK_M, "save-commands");
         menu.addSeparator();
         m_sendGtpFile =
             addMenuItem(menu, "Send GTP File...", KeyEvent.VK_G, "send-file");
         menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    ActionEvent.CTRL_MASK, "close");
+                    m_shortcutKeyMask, "close");
         return menu;
     }
 

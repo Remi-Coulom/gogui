@@ -107,6 +107,9 @@ class Help
 
     private int m_historyIndex = -1;
 
+    private static final int m_shortcutKeyMask =
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
     private JButton m_buttonBack;
 
     private JButton m_buttonContents;
@@ -184,17 +187,17 @@ class Help
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    ActionEvent.CTRL_MASK, "close");
+                    m_shortcutKeyMask, "close");
         menuBar.add(menu);
         menu = new JMenu("Go");
         menu.setMnemonic(KeyEvent.VK_G);
         m_itemBack = addMenuItem(menu, "Back", KeyEvent.VK_B, KeyEvent.VK_B,
-                                 ActionEvent.CTRL_MASK, "back");
+                                 m_shortcutKeyMask, "back");
         m_itemForward = addMenuItem(menu, "Forward", KeyEvent.VK_F,
-                                    KeyEvent.VK_F, ActionEvent.CTRL_MASK,
+                                    KeyEvent.VK_F, m_shortcutKeyMask,
                                     "forward");
         m_itemContents = addMenuItem(menu, "Contents", KeyEvent.VK_C,
-                                     KeyEvent.VK_E, ActionEvent.CTRL_MASK,
+                                     KeyEvent.VK_E, m_shortcutKeyMask,
                                      "contents");
         menuBar.add(menu);
         setJMenuBar(menuBar);

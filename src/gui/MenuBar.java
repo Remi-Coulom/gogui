@@ -281,6 +281,9 @@ class MenuBar
 
     private static int m_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
 
+    private static final int m_shortcutKeyMask =
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
     private ActionListener m_listener;
 
     private File[] m_recent = new File[m_maxRecent];
@@ -461,18 +464,16 @@ class MenuBar
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
         addMenuItem(menu, "New", KeyEvent.VK_N, KeyEvent.VK_N,
-                    ActionEvent.CTRL_MASK, "new-game");
+                    m_shortcutKeyMask, "new-game");
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
-                    ActionEvent.CTRL_MASK, "open");
+                    m_shortcutKeyMask, "open");
         menu.add(createRecentMenu());
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
-                    ActionEvent.CTRL_MASK,
-                    "save");
+                    m_shortcutKeyMask, "save");
         addMenuItem(menu, "Save Position...", KeyEvent.VK_T, "save-position");
         menu.addSeparator();
         addMenuItem(menu, "Print...", KeyEvent.VK_P, KeyEvent.VK_P,
-                    ActionEvent.CTRL_MASK,
-                    "print");
+                    m_shortcutKeyMask, "print");
         menu.addSeparator();
         m_itemAttachProgram = addMenuItem(menu, "Attach Program...",
                                           KeyEvent.VK_A, "attach-program");
@@ -480,7 +481,7 @@ class MenuBar
                                           KeyEvent.VK_D, "detach-program");
         menu.addSeparator();
         m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
-                                 ActionEvent.CTRL_MASK, "exit");
+                                 m_shortcutKeyMask, "exit");
         return menu;
     }
 
@@ -489,7 +490,7 @@ class MenuBar
         JMenu menu = new JMenu("Game");
         menu.setMnemonic(KeyEvent.VK_G);
         addMenuItem(menu, "Info...", KeyEvent.VK_I, KeyEvent.VK_I,
-                    ActionEvent.CTRL_MASK, "game-info");
+                    m_shortcutKeyMask, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createHandicapMenu());
         m_menuComputerColor = createComputerColorMenu();
@@ -504,27 +505,27 @@ class MenuBar
         menu.addSeparator();
         m_itemBeginning =
             addMenuItem(menu, "Beginning", KeyEvent.VK_N, KeyEvent.VK_HOME,
-                        ActionEvent.CTRL_MASK, "beginning");
+                        m_shortcutKeyMask, "beginning");
         m_itemBackward10 =
             addMenuItem(menu, "Backward 10", KeyEvent.VK_D, KeyEvent.VK_LEFT,
-                        ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
+                        m_shortcutKeyMask | ActionEvent.SHIFT_MASK,
                         "backward-10");
         m_itemBackward =
             addMenuItem(menu, "Backward", KeyEvent.VK_B, KeyEvent.VK_LEFT,
-                        ActionEvent.CTRL_MASK, "backward");
+                        m_shortcutKeyMask, "backward");
         m_itemForward =
             addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
-                        ActionEvent.CTRL_MASK, "forward");
+                        m_shortcutKeyMask, "forward");
         m_itemForward10 =
             addMenuItem(menu, "Forward 10", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
-                        ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK,
+                        m_shortcutKeyMask | ActionEvent.SHIFT_MASK,
                         "forward-10");
         m_itemEnd =
             addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
-                        ActionEvent.CTRL_MASK, "end");
+                        m_shortcutKeyMask, "end");
         m_itemGoto =
             addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
-                        ActionEvent.CTRL_MASK, "goto");
+                        m_shortcutKeyMask, "goto");
         menu.addSeparator();
         addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
@@ -606,11 +607,10 @@ class MenuBar
         menu.setMnemonic(KeyEvent.VK_V);
         m_itemNextVariation =
             addMenuItem(menu, "Next Variation", KeyEvent.VK_N,
-                        KeyEvent.VK_DOWN, ActionEvent.CTRL_MASK,
-                        "next-variation");
+                        KeyEvent.VK_DOWN, m_shortcutKeyMask, "next-variation");
         m_itemPreviousVariation =
             addMenuItem(menu, "Previous Variation", KeyEvent.VK_P,
-                        KeyEvent.VK_UP, ActionEvent.CTRL_MASK,
+                        KeyEvent.VK_UP, m_shortcutKeyMask,
                         "previous-variation");
         m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
                                         KeyEvent.VK_M, "make-main-variation");
