@@ -50,6 +50,9 @@ pspairs/Top Moves/top_moves
 pspairs/Top Moves Black/top_moves_black
 pspairs/Top Moves White/top_moves_white
 
+# Extensions of other Go programs that could be of general interest
+none/SaveSgf/savesgf %f
+
 # Other GNU Go extensions
 plist/AccurateLib Black/accuratelib black %p
 plist/AccurateLib White/accuratelib white %p
