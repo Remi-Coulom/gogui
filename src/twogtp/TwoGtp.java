@@ -460,6 +460,8 @@ public class TwoGtp
     private void saveResult(String resultBlack, String resultWhite)
          throws FileNotFoundException
     {
+        if (m_sgfFile.equals(""))
+            return;
         File file = new File(m_sgfFile + ".dat");
         if (! file.exists())
         {
