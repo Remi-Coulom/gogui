@@ -796,15 +796,18 @@ class AnalyzeTextOutput
     public AnalyzeTextOutput(Frame owner, String title, String response)
     {
         super(owner, "GoGui: " + title);
-        JLabel label = new JLabel(title);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(GuiUtils.createSmallEmptyBorder());
         Container contentPane = getContentPane();
-        contentPane.add(label, BorderLayout.NORTH);
+        contentPane.add(panel, BorderLayout.CENTER);
+        JLabel label = new JLabel(title);
+        panel.add(label, BorderLayout.NORTH);
         JTextArea textArea = new JTextArea(response);
         textArea.setEditable(false);
         textArea.setFont(new Font("Monospaced", Font.PLAIN,
                                   getFont().getSize()));
         JScrollPane scrollPane = new JScrollPane(textArea);
-        contentPane.add(scrollPane, BorderLayout.CENTER);
+        panel.add(scrollPane, BorderLayout.CENTER);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         textArea.addKeyListener(this);
         pack();
