@@ -47,7 +47,7 @@ for <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files,
 you can configure a new file association for type
 <userinput>application/sgf</userinput> and filename pattern
 <userinput>*.sgf</userinput> to execute
-<userinput>gogui&#160;-file</userinput>
+<userinput>gogui&#160;""&#160;-file</userinput>
 </para>
 </note>
 </para>

@@ -60,6 +60,7 @@ class AnalyzeTextOutput
         m_textPane.addKeyListener(keyListener);
         if (highlight)
             doSyntaxHighlight();
+        m_textPane.setCaretPosition(0);
         m_textPane.setEditable(false);
         pack();
         setVisible(true);
