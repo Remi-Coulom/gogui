@@ -101,8 +101,7 @@ class Help
         else
             m_history.add(url);
         ++m_historyIndex;
-        if (m_historyIndex > 0)
-            m_buttonBack.setEnabled(true);
+        historyChanged();
     }
 
     private void back()
@@ -111,9 +110,7 @@ class Help
         assert(m_historyIndex < m_history.size());
         --m_historyIndex;
         loadURL(getHistory(m_historyIndex));
-        if (m_historyIndex == 0)
-            m_buttonBack.setEnabled(false);
-        m_buttonForward.setEnabled(true);
+        historyChanged();
     }
 
     private JComponent createButtons()
@@ -150,14 +147,18 @@ class Help
         assert(m_historyIndex + 1 < m_history.size());
         ++m_historyIndex;
         loadURL(getHistory(m_historyIndex));
-        if (m_historyIndex == m_history.size() - 1)
-            m_buttonForward.setEnabled(false);
-        m_buttonBack.setEnabled(true);
+        historyChanged();
     }
 
     private URL getHistory(int index)
     {
         return (URL)m_history.get(index);
+    }
+
+    private void historyChanged()
+    {
+        m_buttonBack.setEnabled((m_historyIndex > 0));
+        m_buttonForward.setEnabled((m_historyIndex < m_history.size() - 1));
     }
 
     private void loadURL(URL url)
