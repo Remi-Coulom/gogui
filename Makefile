@@ -24,6 +24,14 @@ ICONS= \
   org/javalobby/icons/20x20png/VCREnd.png \
   org/javalobby/icons/20x20png/VCRRewind.png
 
+PACKAGES= \
+  board \
+  gmp \
+  gtp \
+  gui \
+  sgf \
+  utils
+
 release:
 	test -d build || mkdir build
 	javac -O -deprecation -sourcepath . -source 1.4 -d build @files.txt
@@ -53,8 +61,13 @@ gmptogtp:
 	javac -O -deprecation -sourcepath . -source 1.4 -d build-gmptogtp @files-gmptogtp.txt
 	jar cmf manifest-addition.txt gmptogtp.jar -C build-gmptogtp .
 
+.PHONY: srcdoc clean changelog tags
+
 clean:
 	-rm -r build build_dbg
+
+srcdoc:
+	javadoc -sourcepath src -d srcdoc -source 1.4 $(PACKAGES)
 
 changelog:
 	cvs2cl.pl
