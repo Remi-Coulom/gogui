@@ -18,9 +18,12 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import game.GameInformation;
 import game.GameTree;
 import game.Node;
+import game.TimeSettings;
 import go.Color;
 import go.Move;
 import go.Point;
@@ -170,11 +173,19 @@ public class Reader
 
     private static final int CACHE_SIZE = 30;
 
+    private boolean m_ignoreTimeSettings;
+
     private boolean m_isFile;
 
     private boolean m_sizeFixed;
 
+    private int m_byoyomiMoves = -1;
+
     private int m_lastPercent;
+
+    private long m_byoyomi = -1;
+
+    private long m_preByoyomi = -1;
 
     private long m_size;
 
@@ -258,35 +269,35 @@ public class Reader
         String shortName = null;
         if (property == "ADDBLACK")
             shortName = "AB";
-        if (property == "ADDEMPTY")
+        else if (property == "ADDEMPTY")
             shortName = "AE";
-        if (property == "ADDWHITE")
+        else if (property == "ADDWHITE")
             shortName = "AW";
-        if (property == "BLACK")
+        else if (property == "BLACK")
             shortName = "B";
-        if (property == "COMMENT")
+        else if (property == "COMMENT")
             shortName = "C";
-        if (property == "DATE")
+        else if (property == "DATE")
             shortName = "DT";
-        if (property == "GAME")
+        else if (property == "GAME")
             shortName = "GM";
-        if (property == "HANDICAP")
+        else if (property == "HANDICAP")
             shortName = "HA";
-        if (property == "KOMI")
+        else if (property == "KOMI")
             shortName = "KM";
-        if (property == "PLAYERBLACK")
+        else if (property == "PLAYERBLACK")
             shortName = "PB";
-        if (property == "PLAYERWHITE")
+        else if (property == "PLAYERWHITE")
             shortName = "PW";
-        if (property == "PLAYER")
+        else if (property == "PLAYER")
             shortName = "PL";
-        if (property == "RESULT")
+        else if (property == "RESULT")
             shortName = "RE";
-        if (property == "RULES")
+        else if (property == "RULES")
             shortName = "RU";
-        if (property == "SIZE")
+        else if (property == "SIZE")
             shortName = "SZ";
-        if (property == "WHITE")
+        else if (property == "WHITE")
             shortName = "W";
         if (shortName != null)
         {
@@ -370,15 +381,15 @@ public class Reader
 
     private Color parseColor(String s) throws SgfError
     {
-        Color c;
+        Color color;
         s = s.trim().toLowerCase();
         if (s.equals("b") || s.equals("1"))
-            c = Color.BLACK;
+            color = Color.BLACK;
         else if (s.equals("w") || s.equals("2"))
-            c = Color.WHITE;
+            color = Color.WHITE;
         else
             throw getError("Invalid color value");
-        return c;
+        return color;
     }
 
     private int parseInt(String s) throws SgfError
@@ -393,6 +404,34 @@ public class Reader
             throw getError("Number expected");
         }
         return i;
+    }
+
+    private void parseOverTimeProp(String value)
+    {
+        /* Match the format that sgf.Writer uses */
+        String regex = "\\s*(\\d+)\\s*moves\\s*/\\s*(\\d+)\\s*sec\\s*";
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(value);
+        if (matcher.matches())
+        {
+            assert(matcher.groupCount() == 2);
+            try
+            {
+                String group1 = matcher.group(1);
+                String group2 = matcher.group(2);
+                m_byoyomiMoves = Integer.parseInt(group1);
+                m_byoyomi = (long)(Double.parseDouble(group2) * 1000);
+            }
+            catch (NumberFormatException e)
+            {
+                setWarning("Invalid byoyomi values");
+                m_ignoreTimeSettings = true;
+            }
+        }
+        else
+        {
+            m_ignoreTimeSettings = true;
+        }
     }
 
     private Point parsePoint(String s) throws SgfError
@@ -556,7 +595,7 @@ public class Reader
             {
                 v = v.trim();
                 if (v.equals(""))
-                    setWarning("");
+                    setWarning("Empty value for game type");
                 else if (! v.equals("1"))
                     throw getError("Not a Go game");
                 
@@ -580,6 +619,7 @@ public class Reader
                 }
                 catch (NumberFormatException e)
                 {
+                    setWarning("Invalid value for komi");
                 }
             }
             else if (p == "OB")
@@ -591,6 +631,34 @@ public class Reader
                 catch (NumberFormatException e)
                 {
                 }
+            }
+            else if (p == "OM")
+            {
+                try
+                {
+                    m_byoyomiMoves = Integer.parseInt(v);
+                }
+                catch (NumberFormatException e)
+                {
+                    setWarning("Invalid value for byoyomi moves");
+                    m_ignoreTimeSettings = true;
+                }
+            }
+            else if (p == "OP")
+            {
+                try
+                {
+                    m_byoyomi = (long)(Double.parseDouble(v) * 1000);
+                }
+                catch (NumberFormatException e)
+                {
+                    setWarning("Invalid value for byoyomi time");
+                    m_ignoreTimeSettings = true;
+                }
+            }
+            else if (p == "OT")
+            {
+                parseOverTimeProp(v);
             }
             else if (p == "OW")
             {
@@ -639,6 +707,18 @@ public class Reader
                     setWarning("Invalid board size value");
                 }
                 m_sizeFixed = true;
+            }
+            else if (p == "TM")
+            {
+                try
+                {
+                    m_preByoyomi = (long)(Double.parseDouble(v) * 1000);
+                }
+                catch (NumberFormatException e)
+                {
+                    setWarning("Invalid value for time");
+                    m_ignoreTimeSettings = true;
+                }
             }
             else if (p == "W")
             {
@@ -700,6 +780,7 @@ public class Reader
                 root = root.getChild();
                 root.setFather(null);
             }
+            setTimeSettings();
             m_gameTree = new GameTree(m_gameInformation, root);
             applyFixes();
         }
@@ -742,6 +823,19 @@ public class Reader
                 m_valueBuffer.append((char)c);
         }
         return m_valueBuffer.toString();
+    }
+
+    private void setTimeSettings()
+    {
+        if (m_ignoreTimeSettings || m_preByoyomi <= 0)
+            return;
+        if (m_byoyomi <= 0 || m_byoyomiMoves <= 0)
+        {
+            m_gameInformation.m_timeSettings = new TimeSettings(m_preByoyomi);
+            return;
+        }
+        m_gameInformation.m_timeSettings
+            = new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
     }
 
     private void setWarning(String message)
