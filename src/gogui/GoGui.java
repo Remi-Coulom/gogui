@@ -1435,10 +1435,14 @@ class GoGui
     private void cbShowAbout()
     {
         String protocolVersion = null;
+        String command = null;
         if (m_commandThread != null)
+        {
             protocolVersion =
                 Integer.toString(m_commandThread.getProtocolVersion());
-        AboutDialog.show(this, m_name, m_version, protocolVersion);
+            command = m_commandThread.getProgramCommand();
+        }
+        AboutDialog.show(this, m_name, m_version, protocolVersion, command);
     }
 
     private void cbShowCursor()

@@ -6,6 +6,7 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -20,16 +21,17 @@ public class AboutDialog
     extends JOptionPane
 {
     public static void show(Component parent, String name, String version,
-                            String protocolVersion)
+                            String protocolVersion, String command)
     {
         AboutDialog aboutDialog =
-            new AboutDialog(name, version, protocolVersion);
+            new AboutDialog(name, version, protocolVersion, command);
         JDialog dialog = aboutDialog.createDialog(parent, "About");
         dialog.setVisible(true);
         dialog.dispose();
     }
 
-    private AboutDialog(String name, String version, String protocolVersion)
+    private AboutDialog(String name, String version, String protocolVersion,
+                        String command)
     {
         JTabbedPane tabbedPane = new JTabbedPane();
         ClassLoader classLoader = getClass().getClassLoader();
@@ -38,22 +40,22 @@ public class AboutDialog
         String supportUrl =
             "http://sourceforge.net/donate/index.php?group_id=59117";
         JPanel goguiPanel =
-            createPanel("<center>" +
-                        "<b>GoGui " + Version.get() + "</b>" +
-                        "<p>" +
+            createPanel("<p align=\"center\"><b>GoGui " + Version.get()
+                        + "</b></p>" +
+                        "<p align=\"center\">" +
                         "Graphical interface to Go programs<br>" +
                         "&copy; 2003-2004, Markus Enzenberger" +
                         "</p>" +
-                        "<p>" +
+                        "<p align=\"center\">" +
                         "<tt><a href=\"" + projectUrl + "\">"
                         + projectUrl + "</a></tt>" +
                         "</p>" +
-                        "<p>" +
+                        "<p align=\"center\">" +
                         "<a href=\"" + supportUrl + "\">"
                         + "<img src=\"" + imageUrl + "\" border=\"0\"></a>" +
-                        "</p>" +
-                        "</center>");
+                        "</p>");
         tabbedPane.add("GoGui", goguiPanel);
+        tabbedPane.setMnemonicAt(0, KeyEvent.VK_G);
         boolean isProgramAvailable = (name != null && ! name.equals(""));
         JPanel programPanel;
         if (isProgramAvailable)
@@ -61,18 +63,20 @@ public class AboutDialog
             String fullName = name;
             if (version != null || ! version.equals(""))
                 fullName = fullName + " " + version;
+            int width = GuiUtils.getDefaultMonoFontSize() * 25;
             programPanel =
-                createPanel("<center>" +
-                            "<b>" + fullName + "</b>" +
-                            "<p>" +
-                            "GTP Protocol Version " + protocolVersion
-                            + "<br>" +
-                            "</p>" +
-                            "</center>");
+                createPanel("<p align=\"center\"><b>" + fullName
+                            + "</b></p>" +
+                            "<p align=\"center\" width=\"" + width + "\">"
+                            + "<tt>" + command + "</tt></p>" +
+                            "<p align=\"center\">" +
+                            "GTP Protocol Version " + protocolVersion +
+                            "</p>");
         }
         else
             programPanel = new JPanel();
         tabbedPane.add("Go Program", programPanel);
+        tabbedPane.setMnemonicAt(1, KeyEvent.VK_P);
         if (! isProgramAvailable)
             tabbedPane.setEnabledAt(1, false);
         setMessage(tabbedPane);
