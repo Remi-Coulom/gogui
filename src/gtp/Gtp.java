@@ -561,7 +561,6 @@ public final class Gtp
         }
     }
 
-
     /** More sophisticated version of waitFor with timeout. */
     public void waitForExit(int timeout, TimeoutCallback timeoutCallback)
     {
@@ -575,33 +574,39 @@ public final class Gtp
                         try
                         {
                             m_process.waitFor();
+                            synchronized (Gtp.this)
+                            {
+                                Gtp.this.notify();
+                            }
                         }
                         catch (InterruptedException e)
                         {
                         }
                     }
                 };
-            thread.start();
-            try
+            synchronized (this)
             {
-                Thread.sleep(timeout);
-            }
-            catch (InterruptedException e)
-            {
-                assert(false);
-            }
-            if (thread.isAlive())
-            {
-                if (! timeoutCallback.askContinue())
+                thread.start();
+                try
                 {
-                    m_process.destroy();
-                    return;
+                    wait(timeout);
                 }
-                // Would like to interrupt the thread before creating
-                // a new one, but Process.waitFor is not interruptible
+                catch (InterruptedException e)
+                {
+                }
+                if (thread.isAlive())
+                {
+                    if (! timeoutCallback.askContinue())
+                    {
+                        m_process.destroy();
+                        return;
+                    }
+                    // Would like to interrupt the thread before creating
+                    // a new one, but Process.waitFor is not interruptible
+                }
+                else
+                    return;
             }
-            else
-                return;
         }
     }
 
