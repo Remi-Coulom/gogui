@@ -731,7 +731,9 @@ public class TwoGtp
             "\nHost: " + host +
             "\nResult according to B: " + resultBlack +
             "\nResult according to W: " + resultWhite;
-        new sgf.Writer(getFile(m_gameIndex), m_board, "TwoGtp", null, 0,
+        File file = getFile(m_gameIndex);
+        OutputStream out = new FileOutputStream(file);
+        new sgf.Writer(out, m_board, file, "TwoGtp", null, 0,
                        blackName, whiteName, gameComment, null);
     }
 
