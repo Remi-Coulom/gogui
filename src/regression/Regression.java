@@ -21,6 +21,7 @@ class Regression
         m_program = program;
         for (int i = 0; i < tests.length; ++i)
             runTest(tests[i]);
+        writeSummary();
         if (! m_gtp.isProgramDead())
             m_gtp.sendCommand("quit");
         m_gtp.waitForExit();
@@ -131,6 +132,8 @@ class Regression
 
     private class TestSummary
     {
+        public File m_file;
+
         public int m_numberTests;
 
         public int m_programDied;
@@ -223,9 +226,10 @@ class Regression
         }
     }
 
-    private TestSummary getTestSummary()
+    private TestSummary getTestSummary(File file)
     {
         TestSummary summary = new TestSummary();
+        summary.m_file = file;
         for (int i = 0; i < m_tests.size(); ++i)
         {
             Test t = (Test)m_tests.get(i);
@@ -448,61 +452,72 @@ class Regression
             printOutLastResponse();
         reader.close();
         finishOutFile();
-        TestSummary testSummary = getTestSummary();
+        TestSummary testSummary = getTestSummary(file);
         m_testSummaries.add(testSummary);
         writeTestSummary(file, testSummary);
+    }
+
+    private void writeSummaryRow(PrintStream out, TestSummary summary,
+                                 boolean withFileName)
+    {
+        out.print("<tr align=\"center\">\n");
+        if (withFileName)
+            out.print("<td><a href=\""
+                      + FileUtils.replaceExtension(summary.m_file, "tst",
+                                                   "html")
+                      + "\">" + summary.m_file + "</a></td>");
+        out.print("<td>" + summary.m_numberTests + "</td>\n" +
+                  "<td bgcolor=\"#"
+                  + (summary.m_unexpectedFails > 0 ? "ff0000" : "white")
+                  + "\">\n" + summary.m_unexpectedFails + "</td>\n" +
+                  "<td>" + summary.m_expectedFails + "</td>\n" +
+                  "<td bgcolor=\"#"
+                  + (summary.m_unexpectedFails > 0 ? "00ff00" : "white")
+                  + "\">\n" + summary.m_unexpectedPasses + "</td>\n" +
+                  "<td>" + summary.m_expectedPasses + "</td>\n" +
+                  "</tr>\n");
     }
 
     private void writeTestSummary(File test, TestSummary summary)
         throws FileNotFoundException
     {
         File file = new File(FileUtils.replaceExtension(test, "tst", "html"));
-        m_out = new PrintStream(new FileOutputStream(file));
-        m_out.print("<html>\n" +
-                    "<head>\n" +
-                    "<title>Summary " + test + "</title>\n" +
-                    "</head>\n" +
-                    "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
-                    + " vlink=\"purple\" alink=\"red\">\n" +
-                    "<h1>Summary " + test + "</h1>\n" +
-                    "<hr>\n");
-        m_out.print("<table border=\"1\">\n" +
-                    "<colgroup>\n" +
-                    "<col width=\"20%\">\n" +
-                    "<col width=\"20%\">\n" +
-                    "<col width=\"20%\">\n" +
-                    "<col width=\"20%\">\n" +
-                    "<col width=\"20%\">\n" +
-                    "</colgroup>\n" +
-                    "<tr align=\"center\">\n" +
-                    "<th>Tests</th>" +
-                    "<th>FAIL</th>" +
-                    "<th>fail</th>" +
-                    "<th>PASS</th>" +
-                    "<th>pass</th>" +
-                    "</tr>\n" +
-                    "<tr align=\"center\">\n" +
-                    "<td>" + summary.m_numberTests + "</td>\n" +
-                    "<td bgcolor=\"#"
-                    + (summary.m_unexpectedFails > 0 ? "ff0000" : "white")
-                    + "\">\n" + summary.m_unexpectedFails + "</td>\n" +
-                    "<td>" + summary.m_expectedFails + "</td>\n" +
-                    "<td bgcolor=\"#"
-                    + (summary.m_unexpectedFails > 0 ? "00ff00" : "white")
-                    + "\">\n" + summary.m_unexpectedPasses + "</td>\n" +
-                    "<td>" + summary.m_expectedPasses + "</td>\n" +
-                    "</tr>\n" +
-                    "</table>\n" +
-                    "<hr>\n");
-        m_out.print("<table border=\"1\" style=\"font-size:small\">\n" +
-                    "<tr>\n" +
-                    "<th>Test ID</th>\n" +
-                    "<th>Status</th>\n" +
-                    "<th>Command</th>\n" +
-                    "<th>Output</th>\n" +
-                    "<th>Required</th>\n" +
-                    "<th>Last SGF</th>\n" +
-                    "</tr>\n");
+        PrintStream out = new PrintStream(new FileOutputStream(file));
+        out.print("<html>\n" +
+                  "<head>\n" +
+                  "<title>Summary " + test + "</title>\n" +
+                  "</head>\n" +
+                  "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
+                  + " vlink=\"purple\" alink=\"red\">\n" +
+                  "<h1>Summary " + test + "</h1>\n" +
+                  "<hr>\n");
+        out.print("<table border=\"1\">\n" +
+                  "<colgroup>\n" +
+                  "<col width=\"20%\">\n" +
+                  "<col width=\"20%\">\n" +
+                  "<col width=\"20%\">\n" +
+                  "<col width=\"20%\">\n" +
+                  "<col width=\"20%\">\n" +
+                  "</colgroup>\n" +
+                  "<tr align=\"center\">\n" +
+                  "<th>Tests</th>" +
+                  "<th>FAIL</th>" +
+                  "<th>fail</th>" +
+                  "<th>PASS</th>" +
+                  "<th>pass</th>" +
+                  "</tr>\n");
+        writeSummaryRow(out, summary, false);
+        out.print("</table>\n" +
+                  "<hr>\n" +
+                  "<table border=\"1\" style=\"font-size:small\">\n" +
+                  "<tr>\n" +
+                  "<th>Test ID</th>\n" +
+                  "<th>Status</th>\n" +
+                  "<th>Command</th>\n" +
+                  "<th>Output</th>\n" +
+                  "<th>Required</th>\n" +
+                  "<th>Last SGF</th>\n" +
+                  "</tr>\n");
         for (int i = 0; i < m_tests.size(); ++i)
         {
             Test t = (Test)m_tests.get(i);
@@ -539,20 +554,62 @@ class Regression
                     lastSgf += "&nbsp;" + t.m_lastSgfMove;
             }
             String command = StringUtils.replace(t.m_command, " ", "&nbsp;");
-            m_out.print("<tr>\n" +
-                        "<td align=\"center\"><a href=\"" + m_outFileName + "#"
-                        + t.m_id + "\">" + t.m_id + "</a></td>\n" +
-                        "<td align=\"center\" bgcolor=\"" + statusColor
-                        + "\">" + status + "</td>\n" +
-                        "<td>" + command + "</td>\n" +
-                        "<td>" + t.m_response + "</td>\n" +
-                        "<td>" + t.m_required + "</td>\n" +
-                        "<td>" + lastSgf + "</td>\n" +
-                        "</tr>\n");
+            out.print("<tr>\n" +
+                      "<td align=\"center\"><a href=\"" + m_outFileName + "#"
+                      + t.m_id + "\">" + t.m_id + "</a></td>\n" +
+                      "<td align=\"center\" bgcolor=\"" + statusColor
+                      + "\">" + status + "</td>\n" +
+                      "<td>" + command + "</td>\n" +
+                      "<td>" + t.m_response + "</td>\n" +
+                      "<td>" + t.m_required + "</td>\n" +
+                      "<td>" + lastSgf + "</td>\n" +
+                      "</tr>\n");
         }
-        m_out.print("</table>\n" +
-                    "</body>\n" +
-                    "</html>\n");
+        out.print("</table>\n" +
+                  "</body>\n" +
+                  "</html>\n");
+        out.close();
+    }
+
+    private void writeSummary()
+        throws FileNotFoundException
+    {
+        File file = new File("index.html");
+        PrintStream out = new PrintStream(new FileOutputStream(file));
+        out.print("<html>\n" +
+                  "<head>\n" +
+                  "<title>Summary</title>\n" +
+                  "</head>\n" +
+                  "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
+                  + " vlink=\"purple\" alink=\"red\">\n" +
+                  "<h1>Summary</h1>\n" +
+                  "<hr>\n" +
+                  "<table border=\"1\">\n" +
+                  "<colgroup>\n" +
+                  "<col width=\"25%\">\n" +
+                  "<col width=\"15%\">\n" +
+                  "<col width=\"15%\">\n" +
+                  "<col width=\"15%\">\n" +
+                  "<col width=\"15%\">\n" +
+                  "<col width=\"15%\">\n" +
+                  "</colgroup>\n" +
+                  "<tr align=\"center\">\n" +
+                  "<th>File</th>" +
+                  "<th>Tests</th>" +
+                  "<th>FAIL</th>" +
+                  "<th>fail</th>" +
+                  "<th>PASS</th>" +
+                  "<th>pass</th>" +
+                  "</tr>\n");
+        for (int i = 0; i < m_testSummaries.size(); ++i)
+        {
+            TestSummary summary = (TestSummary)m_testSummaries.get(i);
+            writeSummaryRow(out, summary, true);
+        }
+        out.print("</table>\n" +
+                  "</body>\n" +
+                  "</html>\n");
+        out.close();
     }
 }
     

@@ -32,6 +32,11 @@
        regression tests (see section 
        <ulink url="http://www.uni-bonn.de/~uzsxtn/gnugo_22.html#SEC212">
        Regression testing</ulink> of the GNU Go documentation.
+       The generated output files are <filename>index.html</filename>
+       and for each test file
+       <filename><replaceable>test</replaceable>.tst</filename>
+       <filename><replaceable>test</replaceable>.html</filename> and
+       <filename><replaceable>test</replaceable>.out.html</filename>.
     </para>
   </refsection>
 
