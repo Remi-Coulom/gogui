@@ -625,16 +625,16 @@ public class GtpAdapter
         Color toMove = m_board.getToMove();
         if (color == toMove)
         {
-            m_passInserted.push(new Boolean(false));
+            m_passInserted.push(Boolean.FALSE);
             return true;
         }
         String command = m_gtp.getCommandPlay(toMove) + " PASS";
         if (send(command, response))
         {
-            m_passInserted.push(new Boolean(true));
+            m_passInserted.push(Boolean.TRUE);
             return true;
         }
-        m_passInserted.push(new Boolean(false));
+        m_passInserted.push(Boolean.FALSE);
         return false;
     }
 
