@@ -1,7 +1,7 @@
-//=============================================================================
+//-----------------------------------------------------------------------------
 // $Id$
 // $Source$
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 import java.awt.*;
 import java.awt.event.*;
@@ -14,7 +14,7 @@ import javax.swing.text.*;
 import gtp.*;
 import utils.*;
 
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 class GtpShellText
     extends JTextPane
@@ -27,10 +27,12 @@ class GtpShellText
         setFont(m_font);
         StyleContext context = StyleContext.getDefaultStyleContext();
         Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
+        StyleConstants.setLineSpacing(def, 0f);
         Style error = addStyle("error", def);
         StyleConstants.setForeground(error, Color.red);
         Style output = addStyle("output", def);
         StyleConstants.setBold(output, true);
+        Style input = addStyle("input", def);
         Style log = addStyle("log", def);
         StyleConstants.setForeground(log, new Color(0.5f, 0.5f, 0.5f));
         setEditable(false);
@@ -48,7 +50,7 @@ class GtpShellText
 
     public void appendInput(String text)
     {
-        appendStyledText(text, null);
+        appendStyledText(text, "input");
     }
 
     public void appendLog(String text)
@@ -108,7 +110,7 @@ class GtpShellText
     }
 }
 
-//=============================================================================
+//-----------------------------------------------------------------------------
 
 public class GtpShell
     extends JDialog
@@ -649,3 +651,5 @@ public class GtpShell
     }
 
 }
+
+//-----------------------------------------------------------------------------
