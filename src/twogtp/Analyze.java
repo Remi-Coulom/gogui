@@ -468,7 +468,7 @@ public class Analyze
 
 //----------------------------------------------------------------------------
 
-class Entry
+final class Entry
 {
     public int m_gameIndex;
 
