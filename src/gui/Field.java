@@ -224,6 +224,7 @@ public class Field
 
     public void paintComponent(Graphics graphics)
     {
+        Graphics2D graphics2D = (Graphics2D)graphics;
         Dimension size = getSize();
         if (m_fieldColor != null)
         {
@@ -235,6 +236,12 @@ public class Field
         else if (m_color == go.Color.WHITE)
             drawStone(graphics, new java.awt.Color(0.930f, 0.895f, 0.867f),
                       new java.awt.Color(1.0f, 1.0f, 1.0f));
+        if (graphics2D != null)
+        {
+            AlphaComposite composite =
+                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
+            graphics2D.setComposite(composite);
+        }
         if (m_territory == go.Color.BLACK)
             drawInfluence(graphics, 1.0);
         else if (m_territory == go.Color.WHITE)
@@ -249,10 +256,20 @@ public class Field
             drawLastMoveMarker(graphics);
         if (m_select)
             drawSelect(graphics);
+        if (graphics2D != null)
+            graphics.setPaintMode();
         if (! m_string.equals(""))
             drawString(graphics);
+        if (graphics2D != null)
+        {
+            AlphaComposite composite =
+                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
+            graphics2D.setComposite(composite);
+        }
         if (isFocusOwner() && m_board.getShowCursor())
             drawFocus(graphics);
+        if (graphics2D != null)
+            graphics.setPaintMode();
     }
 
     public void setFieldBackground(java.awt.Color color)
