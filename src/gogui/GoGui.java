@@ -1322,7 +1322,10 @@ class GoGui
         if (m_computerBlack && m_computerWhite)
         {
             if (showQuestion("Stop computer play?"))
+            {
                 computerNone();
+                showStatus("Waiting for current move to finish ...");
+            }
             return;
         }
         if (! m_commandThread.isInterruptSupported())
@@ -2255,7 +2258,7 @@ class GoGui
             if (file.length() > 500000)
             {
                 newGame(m_boardSize); // Frees space if already large tree
-                GuiUtils.runProgess(this, "Loading...", runnable);
+                GuiUtils.runProgess(this, "Loading ...", runnable);
             }
             else
                 runnable.run(null);
