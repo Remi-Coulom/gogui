@@ -1099,12 +1099,15 @@ class GoGui
 
     private void cbGoto()
     {
-        String value = JOptionPane.showInputDialog(this, "Move Number");
+        int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
+        String value =
+            JOptionPane.showInputDialog(this, "Move Number",
+                                        Integer.toString(moveNumber));
         if (value == null || value.equals(""))
             return;
         try
         {
-            int moveNumber = Integer.parseInt(value);
+            moveNumber = Integer.parseInt(value);
             Node node = NodeUtils.findByMoveNumber(m_currentNode, moveNumber);
             if (node == null)
             {
