@@ -136,6 +136,8 @@ public class Reader
     private Point parsePoint(String s) throws Error
     {
         s = s.trim().toLowerCase();
+        if (s.length() < 2)
+            loadError("Invalid coordinates.");
         if (s.equals("tt"))
             return null;
         int x = s.charAt(0) - 'a';
