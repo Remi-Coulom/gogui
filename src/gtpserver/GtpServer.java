@@ -34,11 +34,13 @@ class GtpServer
             Process process = runtime.exec(StringUtils.tokenize(program));
             Thread stdErrThread = new StdErrThread(process);
             stdErrThread.start();
-            if (verbose)
-                System.err.println("gtpserver: Waiting for connection ...");
             Socket socket;
             if (remoteHost == null)
+            {
+                if (verbose)
+                    System.err.println("gtpserver: Waiting for connection...");
                 socket = serverSocket.accept();
+            }
             else
                 socket = connectToRemote(remoteHost, port, userFile);
             if (verbose)
