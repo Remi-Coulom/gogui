@@ -141,6 +141,8 @@ public class Field
             drawSelect();
         if (! m_string.equals(""))
             drawString();
+        else
+            setToolTipText(null);
         if (isFocusOwner() && m_board.getShowCursor())
             drawFocus();
         m_graphics = null;
@@ -386,8 +388,10 @@ public class Field
         else
             m_graphics.setColor(java.awt.Color.white);
         Rectangle clip = null;
+        setToolTipText(null);
         if (stringWidth > 0.95 * m_size)
         {
+            setToolTipText(m_string);
             clip = m_graphics.getClipBounds();
             m_graphics.setClip(clip.x, clip.y,
                                (int)(0.95 * clip.width), clip.height);
