@@ -478,7 +478,7 @@ class GtpRegress
                     "<head>\n" +
                     "<title>Output: " + m_file + "</title>\n" +
                     "<style type=\"text/css\">\n" +
-                    "<!--" +
+                    "<!--\n" +
                     "span.comment { color:#999999; }\n" +
                     "span.fail { font-weight:bold; color:" + m_colorRed
                     + "; }\n" +
