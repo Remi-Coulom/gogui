@@ -593,8 +593,7 @@ class AnalyzeDialog
 
     private JPanel createLowerPanel()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1, GuiUtils.PAD, 0));
+        JPanel panel = new JPanel(new GridLayout(0, 1, GuiUtils.PAD, 0));
         m_comboBox = new JComboBox();
         m_comboBox.addActionListener(this);
         panel.add(m_comboBox);

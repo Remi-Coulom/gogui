@@ -78,8 +78,7 @@ class GoGui
 
         contentPane.add(m_infoPanel, BorderLayout.SOUTH);
 
-        m_boardPanel = new JPanel();
-        m_boardPanel.setLayout(new SquareLayout());
+        m_boardPanel = new JPanel(new SquareLayout());
         m_boardPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         m_boardPanel.add(m_guiBoard);
         contentPane.add(m_boardPanel, BorderLayout.CENTER);
@@ -1378,8 +1377,7 @@ class GoGui
 
     private JComponent createStatusBar()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(1, 0));
+        JPanel panel = new JPanel(new GridLayout(1, 0));
         JLabel label = new JLabel();
         label.setBorder(BorderFactory.createLoweredBevelBorder());
         label.setHorizontalAlignment(SwingConstants.LEFT);
