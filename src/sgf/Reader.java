@@ -149,8 +149,9 @@ public class Reader
         int ttype = m_tokenizer.ttype;
         if (ttype == '(')
         {
-            while (father != null)
-                father = readNext(father, false);
+            Node node = father;
+            while (node != null)
+                node = readNext(node, false);
             return father;
         }
         if (ttype == ')')
