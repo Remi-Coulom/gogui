@@ -407,6 +407,10 @@ public class TwoGtp
             else if (size != board.getSize())
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
+            if (reader.getSetupBlack().size() > 0
+                || reader.getSetupWhite().size() > 0)
+                throw new Exception("File " + filename +
+                                    " contains setup stones");
             Vector moves = reader.getMoves();
             String duplicate = checkDuplicate(board, moves, games);
             System.out.println(Integer.toString(gameNumber) + " " +
