@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # Add -ea option to enable assertions for testing
-java -ea -cp gogui.jar gmp.GmpToGtp "$@"
+java -ea -cp gmptogtp.jar gmp.GmpToGtp "$@"

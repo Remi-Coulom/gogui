@@ -301,6 +301,7 @@ class ReadThread
         try
         {
             m_out.write(buffer);
+            m_out.flush();
         }
         catch (IOException e)
         {

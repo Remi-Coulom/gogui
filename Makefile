@@ -46,6 +46,11 @@ debug:
 	for i in $(ICONS); do cp $$i build_dbg/$$i; done 
 	for d in $(DOCS); do cp doc/$$d build_dbg/doc/$$d; done 
 
+gmptogtp.jar:
+	test -d build-gmptogtp || mkdir build-gmptogtp
+	javac -O -deprecation -sourcepath . -source 1.4 -d build-gmptogtp @files-gmptogtp.txt
+	jar cmf manifest-addition.txt gmptogtp.jar -C build-gmptogtp .
+
 clean:
 	-rm -r build build_dbg
 

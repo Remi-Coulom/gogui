@@ -7,6 +7,7 @@ package gmp;
 
 import java.io.*;
 import java.util.*;
+//import javax.comm.*;
 import utils.*;
 import gtp.GtpServer;
 
@@ -127,11 +128,14 @@ public class GmpToGtp
             InputStream in;
             OutputStream out;
             Process process = null;
+            RandomAccessFile randomAccessFile = null;
             if (! device.equals(""))
             {
                 File file = new File(device);
-                in = new FileInputStream(file);
-                out = new FileOutputStream(((FileInputStream)in).getFD());
+                randomAccessFile = new RandomAccessFile(file, "rws");
+                FileDescriptor fd = randomAccessFile.getFD();
+                in = new FileInputStream(fd);
+                out = new FileOutputStream(fd);
             }
             else
             {
