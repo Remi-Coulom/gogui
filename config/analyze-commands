@@ -19,6 +19,7 @@ string/Version/version
 
 # GNU Go extensions that could be of general interest
 plist/All Legal/all_legal %c
+pspairs/All Move Values/all_move_values
 varpo/Attack/attack %p
 string/Attack Either/attack_either %P
 varp/Connect/connect %P
