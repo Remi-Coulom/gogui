@@ -39,6 +39,28 @@ public class GameTree
         return m_root;
     }
 
+    public boolean hasVariations()
+    {        
+        Node node = m_root;
+        while (node != null)
+        {
+            if (node.getNumberChildren() > 1)
+                return true;
+            node = node.getChild();
+        }
+        return false;
+    }
+
+    public void keepOnlyMainVariation()
+    {
+        Node node = m_root;
+        while (node != null)
+        {
+            node.removeVariations();
+            node = node.getChild();
+        }
+    }
+
     private GameInformation m_gameInformation;
 
     private Node m_root;

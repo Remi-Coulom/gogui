@@ -268,12 +268,14 @@ class MenuBar
         m_itemHelp.setEnabled(true);
     }
 
-    public void updateGameMenuItems(Node node)
+    public void updateGameMenuItems(GameTree gameTree, Node node)
     {
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasVariation =
             (hasFather && node.getFather().getNumberChildren() > 1);
+        boolean isInMainVariation = node.isInMainVariation();
+        boolean treeHasVariations = gameTree.hasVariations();
         m_itemBeginning.setEnabled(hasFather);
         m_itemBackward.setEnabled(hasFather);
         m_itemBackward10.setEnabled(hasFather);
@@ -284,7 +286,9 @@ class MenuBar
         m_itemNextVariation.setEnabled(hasVariation);
         m_itemPreviousVariation.setEnabled(hasVariation);
         m_itemTruncate.setEnabled(hasFather);
-        m_itemMakeMainVar.setEnabled(! node.isInMainVariation());
+        m_itemMakeMainVar.setEnabled(! isInMainVariation);
+        m_itemKeepOnlyMainVar.setEnabled(isInMainVariation
+                                         && treeHasVariations);
     }
 
     private boolean m_isComputerDisabled;
@@ -370,6 +374,8 @@ class MenuBar
     private JMenuItem m_itemHelp;
 
     private JMenuItem m_itemInterrupt;
+
+    private JMenuItem m_itemKeepOnlyMainVar;
 
     private JMenuItem m_itemMakeMainVar;
 
@@ -646,6 +652,10 @@ class MenuBar
                         "previous-variation");
         m_itemMakeMainVar = addMenuItem(menu, "Make main variation...",
                                         KeyEvent.VK_M, "make-main-variation");
+        m_itemKeepOnlyMainVar = addMenuItem(menu,
+                                            "Delete variations...",
+                                            KeyEvent.VK_D,
+                                            "keep-only-main-variation");
         m_itemTruncate = addMenuItem(menu, "Truncate...", KeyEvent.VK_T,
                                      "truncate");
         return menu;

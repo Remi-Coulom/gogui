@@ -315,6 +315,15 @@ public class Node
         }
     }
 
+    public void removeVariations()
+    {
+        if (m_children == null || m_children.size() <= 1)
+            return;
+        Node child = getChild(0);
+        m_children.removeAllElements();
+        m_children.add(child);
+    }
+
     public void setComment(String comment)
     {
         m_comment = comment;

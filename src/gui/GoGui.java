@@ -193,6 +193,8 @@ class GoGui
             cbHelp();
         else if (command.equals("interrupt"))
             cbInterrupt();
+        else if (command.equals("keep-only-main-variation"))
+            cbKeepOnlyMainVariation();
         else if (command.equals("komi"))
             cbKomi();
         else if (command.equals("make-main-variation"))
@@ -880,7 +882,7 @@ class GoGui
         m_guiBoard.updateFromGoBoard();
         updateGameInfo();
         m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         clearStatus();
         if (m_commandThread != null
@@ -1050,6 +1052,17 @@ class GoGui
         if (! showQuestion("Interrupt command?"))
             return;
         sendInterrupt();
+    }
+
+    private void cbKeepOnlyMainVariation()
+    {
+        if (! m_currentNode.isInMainVariation())
+            return;
+        if (! showQuestion("Delete all variations except main?"))
+            return;
+        m_gameTree.keepOnlyMainVariation();
+        m_needsSave = true;
+        boardChangedBegin(false);
     }
 
     private void cbKomi()
@@ -1941,7 +1954,7 @@ class GoGui
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
@@ -1962,7 +1975,7 @@ class GoGui
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         checkComputerMove();
     }
@@ -1974,7 +1987,7 @@ class GoGui
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_currentNode);
+        m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
 
