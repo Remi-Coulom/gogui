@@ -471,6 +471,8 @@ class MenuBar
                     "forward-10");
         addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
                     ActionEvent.CTRL_MASK, "end");
+        addMenuItem(menu, "Goto...", KeyEvent.VK_G, KeyEvent.VK_G,
+                    ActionEvent.CTRL_MASK, "goto");
         menu.addSeparator();
         addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;

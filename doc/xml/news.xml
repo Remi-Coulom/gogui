@@ -8,7 +8,8 @@
 <revremark>
 <itemizedlist>
 <listitem>
-New menu item <guimenuitem>Open Recent</guimenuitem>.
+New menu items <guimenuitem>Open Recent</guimenuitem> and
+<guimenuitem>Goto</guimenuitem>.
 </listitem>
 <listitem>
 <application>TwoGtp</application>: new option <option>-analyze</option>.

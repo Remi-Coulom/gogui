@@ -165,6 +165,8 @@ class GoGui
             cbForward(1);
         else if (command.equals("forward-10"))
             cbForward(10);
+        else if (command.equals("goto"))
+            cbGoto();
         else if (command.equals("gtp-file"))
             cbGtpFile();
         else if (command.equals("gtp-shell"))
@@ -806,6 +808,29 @@ class GoGui
     {
         forward(n);
         boardChangedBegin(false);
+    }
+
+    private void cbGoto()
+    {
+        String value = JOptionPane.showInputDialog(this, "Move number");
+        try
+        {
+            int moveNumber = Integer.parseInt(value);
+            if (moveNumber < 0 || moveNumber > m_board.getNumberSavedMoves())
+            {
+                showError("Invalid move number.");
+                return;
+            }
+            if (moveNumber < m_board.getMoveNumber())
+                backward(m_board.getMoveNumber() - moveNumber);
+            else
+                forward(moveNumber - m_board.getMoveNumber());
+            boardChangedBegin(false);
+        }
+        catch (NumberFormatException e)
+        {
+            showError("Invalid move number.");
+        }
     }
 
     private void cbGtpFile()
