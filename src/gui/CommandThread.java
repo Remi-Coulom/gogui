@@ -221,11 +221,11 @@ public class CommandThread
         m_gtp.sendCommandClearBoard(size);
     }
 
-    public String sendCommandPlay(Move move) throws GtpError
+    public void sendCommandPlay(Move move) throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        return m_gtp.sendCommandPlay(move);
+        m_gtp.sendCommandPlay(move);
     }
 
     private class TimeoutCallback

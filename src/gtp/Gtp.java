@@ -16,17 +16,47 @@ import utils.MessageQueue;
 //----------------------------------------------------------------------------
 
 /** Interface to a Go program that uses GTP over the standard I/O streams.
+    <p>
     This class is final because it starts a thread in its constructor which
     might conflict with subclassing because the subclass constructor will
     be called after the thread is started.
+    </p>
+    <p>
+    GTP commands are sent with the sendCommand functions.
+    Callbacks can be registered to monitor the input, output and error stream
+    and to handle timeout and invalid responses.
+    All callbacks are only called in the sendCommand functions and from
+    the caller's thread.
+    </p>
+    <p>
+    Internally the class reads the output and error streams from different
+    threads and puts them on a message queue, so that the callbacks should
+    be in the same order as the received data.
+    It was not possible to use java.nio.Selector, because the streams in
+    class Process are not SelectableChannels (Java 1.5.0).
+    </p>
 */
 public final class Gtp
 {
+    /** Callback if a timeout occured.
+        If the function askContinue returns true, Gtp.sendCommand will
+        wait for another timeout period, if it returns false, the program
+        will be killed.
+    */
     public interface TimeoutCallback
     {
         public boolean askContinue();
     }
 
+    /** Callback if an invalid response occured.
+        Can be used to display invalid responses (without a status character)
+        immediately, because sendCommand will not abort on an invalid response
+        but continue to wait for a valid response line.
+        This is necessary for some Go programs with broken GTP implementation
+        which write debug data to standard output (e.g. Wallyplus 0.1.2).
+        This callback will only be called at the first invalid response,
+        subsequent invalid responses will be ignored quietly.
+    */
     public interface InvalidResponseCallback
     {
         public void show(String line);
@@ -44,6 +74,17 @@ public final class Gtp
         public void sentCommand(String s);
     }    
 
+    /** Constructor.
+        @param program Command line for program.
+        Will be split into words with respect to " as in StringUtils.tokenize.
+        If the command line contains the string "%SRAND", it will be replaced
+        by a random seed. This is useful if the random seed can be set by
+        a command line option to produce deterministic randomness (the
+        command returned by getProgramCommand() will contain the actual
+        random seed used).
+        @param log Log input, output and error stream to standard error.
+        @param callback Callback for external display of the streams.
+    */
     public Gtp(String program, boolean log, IOCallback callback)
         throws GtpError
     {
@@ -81,21 +122,29 @@ public final class Gtp
         m_errorThread.start();
     }
     
+    /** Close the output stream to the program. */
     public void close()
     {
         m_out.close();
     }
 
+    /** Kill the Go program. */
     public void destroyProcess()
     {
         m_process.destroy();
     }
 
+    /** Get response to last command sent. */
     public String getResponse()
     {
         return m_response;
     }
 
+    /** Get command for setting the board size.
+        Note: call queryProtocolVersion first
+        @return The boardsize command for GTP version 2 programs,
+        otherwise null.
+    */
     public String getCommandBoardsize(int size)
     {
         if (m_protocolVersion == 2)
@@ -104,6 +153,11 @@ public final class Gtp
             return null;
     }
 
+    /** Get command for starting a new game.
+        Note: call queryProtocolVersion first
+        @return The boardsize command for GTP version 1 programs,
+        otherwise the clear_board command.
+    */
     public String getCommandClearBoard(int size)
     {
         if (m_protocolVersion == 1)
@@ -112,6 +166,10 @@ public final class Gtp
             return "clear_board";
     }
 
+    /** Get command for generating a move.
+        Note: call queryProtocolVersion first
+        @return The right command depending on the GTP version.
+    */
     public String getCommandGenmove(Color color)
     {
         String c = color.toString();
@@ -121,6 +179,10 @@ public final class Gtp
             return "genmove " + c;
     }
 
+    /** Get command for playing a move without the point argument.
+        Note: call queryProtocolVersion first
+        @return The right command depending on the GTP version.
+    */
     public String getCommandPlay(Color color)
     {
         
@@ -131,6 +193,10 @@ public final class Gtp
         return command;
     }
 
+    /** Get command for playing a move.
+        Note: call queryProtocolVersion first
+        @return The right command depending on the GTP version.
+    */
     public String getCommandPlay(Move move)
     {
         
@@ -143,6 +209,10 @@ public final class Gtp
         return command;
     }
 
+    /** Send command cputime and convert the result to double.
+        @throws GtpError if command fails or does not return a floating point
+        number.
+    */
     public double getCpuTime() throws GtpError
     {
         try
@@ -161,6 +231,9 @@ public final class Gtp
         return m_fullResponse;
     }
 
+    /** Get the command line that was used for invoking the Go program.
+        @return The command line that was given to the constructor.
+    */
     public String getProgramCommand()
     {
         return m_program;
@@ -175,6 +248,10 @@ public final class Gtp
         return m_protocolVersion;
     }
 
+    /** Get the supported commands.
+        Note: call querySupportedCommands() first.
+        @return A vector of strings with the supported commands.
+    */
     public Vector getSupportedCommands()
     {
         Vector result = new Vector(128, 128);
@@ -184,6 +261,9 @@ public final class Gtp
         return result;
     }
 
+    /** Check if a command is supported.
+        Note: call querySupportedCommands() first.
+    */
     public boolean isCommandSupported(String command)
     {
         if (m_supportedCommands == null)
@@ -194,11 +274,20 @@ public final class Gtp
         return false;
     }
 
+    /** Check if cputime command is supported.
+        Note: call querySupportedCommands() first.
+    */
     public boolean isCpuTimeSupported()
     {
         return isCommandSupported("cputime");
     }
 
+    /** Check if interrupting a command is supported.
+        Interrupting can supported by ANSI C signals or the special
+        comment line "# interrupt" as described in the GoGui documentation
+        chapter "Interrupting commands".
+        Note: call queryInterruptSupport() first.
+    */
     public boolean isInterruptSupported()
     {
         return (m_isInterruptCommentSupported || m_pid != null);
@@ -210,6 +299,9 @@ public final class Gtp
         return m_isProgramDead;
     }
 
+    /** Query if interrupting is supported.
+        @see Gtp#isInterruptSupported
+    */
     public void queryInterruptSupport()
     {
         try
@@ -242,6 +334,12 @@ public final class Gtp
         }
     }
 
+    /** Query the protocol version.
+        Sets the protocol version to the response or to 1 protocol_version
+        command fails.
+        @see Gtp#getProtocolVersion
+        @throws GtpError if the response to protocol_version is not 1 or 2.
+    */
     public void queryProtocolVersion() throws GtpError
     {
         try
@@ -267,6 +365,10 @@ public final class Gtp
         }
     }
 
+    /** Query the supported commands.
+        @see Gtp#getSupportedCommands
+        @see Gtp#isCommandSupported
+    */
     public void querySupportedCommands() throws GtpError
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
@@ -276,6 +378,9 @@ public final class Gtp
             m_supportedCommands[i] = m_supportedCommands[i].trim();
     }
 
+    /** Queries the program version..
+        @return The version or an empty string if the version command fails.
+    */
     public String queryVersion()
     {
         try
@@ -288,11 +393,25 @@ public final class Gtp
         }
     }
 
+    /** Send a command.
+        @return The response text of the successful response not including
+        the status character.
+        @throws GtpError containing the response if the command fails.
+    */
     public String sendCommand(String command) throws GtpError
     {
         return sendCommand(command, -1, null);
     }
 
+    /** Send a command with timeout.
+        @param command The command to send
+        @param timeout Timeout in milliseconds or -1, if no timeout
+        @param timeoutCallback Timeout callback or null if no timeout.
+        @return The response text of the successful response not including
+        the status character.
+        @throws GtpError containing the response if the command fails.
+        @see TimeoutCallback
+    */
     public String sendCommand(String command, long timeout,
                               TimeoutCallback timeoutCallback)
         throws GtpError
@@ -323,6 +442,11 @@ public final class Gtp
         return m_response;
     }
 
+    /** Send command for setting the board size.
+        Send the command if it exists in the GTP protocol version.
+        Note: call queryProtocolVersion first
+        @see Gtp#getCommandBoardsize
+    */
     public void sendCommandBoardsize(int size) throws GtpError
     {
         String command = getCommandBoardsize(size);
@@ -330,14 +454,21 @@ public final class Gtp
             sendCommand(command);
     }
 
-    public String sendCommandClearBoard(int size) throws GtpError
+    /** Send command for staring a new game.
+        Note: call queryProtocolVersion first
+        @see Gtp#getCommandClearBoard
+    */
+    public void sendCommandClearBoard(int size) throws GtpError
     {
-        return sendCommand(getCommandClearBoard(size));
+        sendCommand(getCommandClearBoard(size));
     }
 
-    public String sendCommandPlay(Move move) throws GtpError
+    /** Send command for playing a move.
+        Note: call queryProtocolVersion first
+    */
+    public void sendCommandPlay(Move move) throws GtpError
     {
-        return sendCommand(getCommandPlay(move));
+        sendCommand(getCommandPlay(move));
     }
 
     /** Send comment.
@@ -353,6 +484,12 @@ public final class Gtp
         m_out.flush();
     }
 
+    /** Interrupt current command.
+        Can be called from a different thread during a sendCommand.
+        Note: call queryInterruptSupport first
+        @see Gtp#isInterruptSupported
+        @throws GtpError if interrupting commands is not supported.
+    */
     public void sendInterrupt() throws GtpError
     {
         if (m_isInterruptCommentSupported)
@@ -383,16 +520,26 @@ public final class Gtp
             throw new GtpError("Interrupt not supported");
     }
 
+    /** Enable auto-numbering commands.
+        Every command will be prepended by an integer as defined in the GTP
+        standard, the integer is incremented after each command.
+    */
     public void enableAutoNumber()
     {
         m_autoNumber = true;
     }
 
+    /** Set the callback for invalid responses.
+        @see InvalidResponseCallback
+    */
     public void setInvalidResponseCallback(InvalidResponseCallback callback)
     {
         m_invalidResponseCallback = callback;
     }
 
+    /** Set a prefix for logging to standard error.
+        Only used if logging was enabled in the constructor.
+    */
     public void setLogPrefix(String prefix)
     {
         synchronized (this)
@@ -401,6 +548,7 @@ public final class Gtp
         }
     }
 
+    /** Wait until the process of the program exits. */
     public void waitForExit()
     {
         try
