@@ -76,6 +76,11 @@ class GoGui
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_boardPanel, m_infoPanel);
+        int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
+        InputMap splitPaneInputMap = m_splitPane.getInputMap(condition);
+        // According to the docs, null should remove the action,
+        // but it does not seem to work with Sun Java 1.4.2, new Object() works
+        splitPaneInputMap.put(KeyStroke.getKeyStroke("F8"), new Object());
         m_splitPane.setResizeWeight(0.85);
         innerPanel.add(m_splitPane, BorderLayout.CENTER);
         
