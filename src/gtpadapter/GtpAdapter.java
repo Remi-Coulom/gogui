@@ -121,6 +121,7 @@ public class GtpAdapter
                 "name:",
                 "resign:",
                 "size:",
+                "verbose",
                 "version",
                 "version2"
             };
@@ -136,6 +137,7 @@ public class GtpAdapter
                 System.out.println("GtpAdapter " + Version.get());
                 System.exit(0);
             }
+            boolean verbose = opt.isSet("verbose");
             boolean noScore = opt.isSet("noscore");
             boolean version2 = opt.isSet("version2");
             boolean emuHandicap = opt.isSet("emuhandicap");

@@ -83,13 +83,9 @@ Display help and exit.
 </term>
 <listitem>
 <para>
-Log the GTP stream to a file.
-<note>
-<simpara>
-Logging is done for the GTP stream of the adapter program,
-not the one from the adapter to the Go program.
-</simpara>
-</note>
+Log the GTP stream to a file
+(the stream of the adapter program,
+not the one from the adapter to the Go program).
 </para>
 </listitem>
 </varlistentry>
