@@ -51,7 +51,8 @@ DOC= \
   doc/xml/reference-gtpserver.xml \
   doc/xml/reference-netgtp.xml \
   doc/xml/reference-twogtp.xml \
-  doc/xml/tools.xml
+  doc/xml/tools.xml \
+  doc/xml/version.xml
 
 JAR= \
   gogui.jar \
