@@ -112,12 +112,12 @@ class GtpRegress
     {
     }
 
-    private static class ProgramIsDeadException
+    private class ProgramIsDeadException
         extends Exception
     {
     }
 
-    private static class Test
+    private class Test
     {
         public int m_id;
 
@@ -150,7 +150,7 @@ class GtpRegress
         }
     }
 
-    private static class TestSummary
+    private class TestSummary
     {
         public File m_file;
 
@@ -523,7 +523,7 @@ class GtpRegress
         line = line.replaceAll("&", "&amp;");
         line = line.replaceAll(">", "&gt;");
         line = line.replaceAll("<", "&lt;");
-        if (style != null && (style.equals("command") || style.equals("test")))
+        if (style == "command" || style == "test")
         {
             Pattern pattern = Pattern.compile("\\S*\\.[Ss][Gg][Ff]");
             Matcher matcher = pattern.matcher(line);
@@ -663,14 +663,13 @@ class GtpRegress
 
     private void writeInfo(PrintStream out)
     {
-        String host;
+        String host = "?";
         try
         {
             host = InetAddress.getLocalHost().getHostName();
         }
         catch (UnknownHostException e)
         {
-            host = "?";
         }
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);
@@ -688,14 +687,13 @@ class GtpRegress
     {
         File file = new File(m_prefix + "index.html");
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        String host;
+        String host = "?";
         try
         {
             host = InetAddress.getLocalHost().getHostName();
         }
         catch (UnknownHostException e)
         {
-            host = "?";
         }
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
                                                            DateFormat.FULL);
