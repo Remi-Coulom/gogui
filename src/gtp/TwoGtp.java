@@ -142,12 +142,6 @@ public class TwoGtp
         }
     }
 
-    public static void receivedStdErr(String s)
-    {
-        System.err.print(s);
-        System.err.flush();
-    }
-
     private Stack m_blackToMove = new Stack();
 
     private Gtp m_black;
