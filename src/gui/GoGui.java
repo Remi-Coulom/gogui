@@ -640,22 +640,6 @@ class GoGui
         private boolean m_resetBoard;
     }
 
-    private class NewGameContinue
-        implements Runnable
-    {
-        public NewGameContinue(int size)
-        {
-            m_size = size;
-        }
-
-        public void run()
-        {
-            newGameContinue(m_size);
-        }
-        
-        private int m_size;
-    }
-
     private boolean m_analyzeAutoRun;
 
     private boolean m_auto;
@@ -667,6 +651,8 @@ class GoGui
     private boolean m_computerWhite;
 
     private boolean m_commandInProgress;
+
+    private boolean m_isRootExecuted;
 
     private boolean m_lostOnTimeShown;
 
@@ -897,19 +883,8 @@ class GoGui
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
         Node oldCurrentNode = m_currentNode;
-        try
-        {
-            m_board.initSize(m_boardSize);
-            m_commandThread.sendCommandBoardsize(m_boardSize);
-            m_commandThread.sendCommandClearBoard(m_boardSize);
-            m_currentNode = m_gameTree.getRoot();
-            executeCurrentNode();
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-            return;
-        }
+        m_board.initSize(m_boardSize);
+        executeRoot();
         gotoNode(oldCurrentNode);
     }    
 
@@ -962,6 +937,7 @@ class GoGui
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         clearStatus();
         if (m_commandThread != null
+            && isCurrentNodeExecuted()
             && m_analyzeCommand != null
             && m_analyzeAutoRun
             && ! m_analyzeCommand.isPointArgMissing())
@@ -1169,22 +1145,8 @@ class GoGui
                 root.addWhite(point);
         }
         root.setToMove(m_board.getToMove());
-        try
-        {
-            m_board.initSize(m_boardSize);
-            if (m_commandThread != null)
-            {
-                m_commandThread.sendCommandBoardsize(m_boardSize);
-                m_commandThread.sendCommandClearBoard(m_boardSize);
-            }
-            m_currentNode = m_gameTree.getRoot();
-            executeCurrentNode();
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-            return;
-        }
+        m_board.initSize(m_boardSize);
+        executeRoot();
         m_needsSave = true;
         boardChangedBegin(false);
     }
@@ -1465,7 +1427,7 @@ class GoGui
 
     private void checkComputerMove()
     {
-        if (m_commandThread == null)
+        if (m_commandThread == null || ! isCurrentNodeExecuted())
             return;
         if (m_computerBlack && m_computerWhite)
         {
@@ -1496,9 +1458,7 @@ class GoGui
 
     private boolean checkCurrentNodeExecuted()
     {
-        int numberAddStonesAndMoves =
-            m_currentNode.getNumberAddStonesAndMoves();
-        if (m_currentNodeExecuted != numberAddStonesAndMoves)
+        if (! isCurrentNodeExecuted())
         {
             showError("Cannot go forward from partially executed game node.");
             return false;
@@ -1711,6 +1671,41 @@ class GoGui
             m_board.setToMove(toMove);
     }
 
+    private boolean executeRoot()
+    {
+        m_currentNode = m_gameTree.getRoot();
+        m_currentNodeExecuted = 0;
+        m_isRootExecuted = true;
+        if (m_commandThread != null)
+        {
+            try
+            {
+                m_commandThread.sendCommandBoardsize(m_boardSize);
+                m_commandThread.sendCommandClearBoard(m_boardSize);
+            }
+            catch (Gtp.Error error)
+            {
+                showGtpError(error);
+                m_isRootExecuted = false;
+                return false;
+            }
+        }
+        GameInformation gameInformation = m_gameTree.getGameInformation();
+        setKomi(gameInformation.m_komi);
+        setRules();
+        setTimeSettings();
+        try
+        {
+            executeCurrentNode();
+        }
+        catch (Gtp.Error error)
+        {
+            showGtpError(error);
+            return false;
+        }
+        return true;
+    }
+
     private void fileModified()
     {
         if (m_loadedFile != null)
@@ -1814,17 +1809,8 @@ class GoGui
             showWarning("Handicap stone locations are not\n" +
                         "defined for this board size.");
         m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), handicap);
-        m_currentNode = m_gameTree.getRoot();
-        m_currentNodeExecuted = 0;
         m_board.newGame();        
-        try
-        {
-            executeCurrentNode();
-        }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-        }
+        executeRoot();
         m_guiBoard.updateFromGoBoard();
         resetBoard();
         m_timeControl.reset();
@@ -1849,17 +1835,11 @@ class GoGui
             computerBlack();
         else
             computerWhite();
-        setRules();
         if (m_prefs.getBool("show-gametree"))
             cbShowGameTree();
         File file = null;
         if (! m_file.equals(""))
             newGameFile(m_boardSize, new File(m_file), m_move);
-        else
-        {
-            setKomi(m_prefs.getFloat("komi"));
-            newGame(m_boardSize);
-        }
         if (! m_initAnalyze.equals(""))
         {
             AnalyzeCommand analyzeCommand =
@@ -1899,6 +1879,16 @@ class GoGui
         showStatus("Please mark dead groups.");
     }
 
+    private boolean isCurrentNodeExecuted()
+    {
+        int numberAddStonesAndMoves =
+            m_currentNode.getNumberAddStonesAndMoves();
+        if (! m_isRootExecuted
+            || m_currentNodeExecuted != numberAddStonesAndMoves)
+            return false;
+        return true;
+    }
+
     private void loadFile(File file, int move)
     {
         try
@@ -1911,14 +1901,7 @@ class GoGui
                 reader.getGameTree().getGameInformation();
             initGame(gameInformation.m_boardSize);
             m_gameTree = reader.getGameTree(); 
-            if (m_commandThread != null)
-            {
-                m_commandThread.sendCommandBoardsize(m_boardSize);
-                m_commandThread.sendCommandClearBoard(m_boardSize);
-            }
-            setKomi(gameInformation.m_komi);
-            m_currentNode = m_gameTree.getRoot();
-            executeCurrentNode();
+            executeRoot();
             if (move > 0)
                 forward(move);            
             m_loadedFile = file;
@@ -1935,59 +1918,16 @@ class GoGui
         {
             showError("Could not read file.", e);
         }
-        catch (Gtp.Error e)
-        {
-            showGtpError(e);
-        }
     }
 
     private void newGame(int size)
     {
-        if (m_commandThread != null)
-        {
-            try
-            {
-                m_commandThread.sendCommandBoardsize(size);
-            }
-            catch (Gtp.Error e)
-            {
-                showGtpError(e);
-                return;
-            }
-            String command = m_commandThread.getCommandClearBoard(size);
-            Runnable callback = new NewGameContinue(size);
-            showStatus("Starting new game...");
-            beginLengthyCommand();
-            m_commandThread.sendCommand(command, callback);
-            return;
-        }
         initGame(size);
         updateGameInfo();
         m_guiBoard.updateFromGoBoard();
         m_toolBar.updateGameButtons(m_currentNode);
         m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
         m_menuBar.selectBoardSizeItem(m_board.getSize());
-    }
-
-    private void newGameContinue(int size)
-    {
-        endLengthyCommand();
-        clearStatus();
-        Gtp.Error e = m_commandThread.getException();
-        if (e != null)
-        {
-            showGtpError(e);
-            return;
-        }
-        setTitleFromProgram();
-        initGame(size);
-        setTimeSettings();
-        updateGameInfo();
-        m_guiBoard.updateFromGoBoard();
-        m_toolBar.updateGameButtons(m_currentNode);
-        m_menuBar.updateGameMenuItems(m_gameTree, m_currentNode);
-        m_menuBar.selectBoardSizeItem(m_board.getSize());
-        checkComputerMove();
     }
 
     private void newGameFile(int size, File file, int move)
@@ -2003,6 +1943,8 @@ class GoGui
 
     private void play(Move move) throws Gtp.Error
     {
+        if (! checkCurrentNodeExecuted())
+            return;
         Node node = new Node(move);
         m_currentNode.append(node);
         m_currentNode = node;
@@ -2353,49 +2295,37 @@ class GoGui
     private void setupDone()
     {
         setFastUpdate(true);
-        try
+        m_setupMode = false;
+        m_menuBar.setNormalMode();
+        m_toolBar.enableAll(true, m_currentNode);
+        int size = m_board.getSize();
+        go.Color color[][] = new go.Color[size][size];
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
-            m_setupMode = false;
-            m_menuBar.setNormalMode();
-            m_toolBar.enableAll(true, m_currentNode);
-            int size = m_board.getSize();
-            go.Color color[][] = new go.Color[size][size];
-            for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            {
-                go.Point p = m_board.getPoint(i);
-                color[p.getX()][p.getY()] = m_board.getColor(p);
-            }
-            go.Color toMove = m_board.getToMove();
-            m_boardSize = size;
-            if (m_commandThread != null)
-            {
-                m_commandThread.sendCommandBoardsize(size);
-                m_commandThread.sendCommandClearBoard(size);
-            }
-            m_board.newGame();        
-            m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), null);
-            m_currentNode = m_gameTree.getRoot();
-            for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            {
-                go.Point point = m_board.getPoint(i);
-                int x = point.getX();
-                int y = point.getY();
-                go.Color c = color[x][y];
-                if (c == go.Color.BLACK)
-                    m_currentNode.addBlack(point);
-                else if (c == go.Color.WHITE)
-                    m_currentNode.addWhite(point);
-            }
-            if (m_board.getToMove() != toMove)
-                m_currentNode.setToMove(toMove);
-            executeCurrentNode();
-            fileModified();
-            boardChangedBegin(false);
+            go.Point p = m_board.getPoint(i);
+            color[p.getX()][p.getY()] = m_board.getColor(p);
         }
-        catch (Gtp.Error e)
+        go.Color toMove = m_board.getToMove();
+        m_boardSize = size;
+        m_board.newGame();        
+        m_gameTree = new GameTree(size, m_prefs.getFloat("komi"), null);
+        m_currentNode = m_gameTree.getRoot();
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
-            showGtpError(e);
+            go.Point point = m_board.getPoint(i);
+            int x = point.getX();
+            int y = point.getY();
+            go.Color c = color[x][y];
+            if (c == go.Color.BLACK)
+                m_currentNode.addBlack(point);
+            else if (c == go.Color.WHITE)
+                m_currentNode.addWhite(point);
         }
+        if (m_board.getToMove() != toMove)
+            m_currentNode.setToMove(toMove);
+        executeRoot();
+        fileModified();
+        boardChangedBegin(false);
         setFastUpdate(false);
     }
 
