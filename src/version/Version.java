@@ -9,7 +9,7 @@ package version;
 
 public class Version
 {
-    public final static String m_version = "0.4pre1.x";
+    public final static String m_version = "0.4pre2";
 }
 
 //-----------------------------------------------------------------------------
