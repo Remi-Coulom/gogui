@@ -192,7 +192,8 @@ interface AnalyzeCallback
 
 class AnalyzeDialog
     extends JDialog
-    implements ActionListener, KeyListener, MouseListener, WindowListener
+    implements ActionListener, ListSelectionListener, MouseListener,
+               WindowListener
 {
     public AnalyzeDialog(Frame owner, AnalyzeCallback callback,
                          Preferences prefs)
@@ -201,11 +202,10 @@ class AnalyzeDialog
         m_prefs = prefs;
         m_callback = callback;
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        addKeyListener(this);
         addWindowListener(this);
         Container contentPane = getContentPane();
-        contentPane.add(createCommandPanel(), BorderLayout.CENTER);
         contentPane.add(createButtons(), BorderLayout.SOUTH);
+        contentPane.add(createCommandPanel(), BorderLayout.CENTER);
         createMenu();
         pack();
     }
@@ -219,25 +219,6 @@ class AnalyzeDialog
             comboBoxChanged();
         else if (command.equals("run"))
             setCommand();
-    }
-
-    public void keyPressed(KeyEvent e)
-    {
-    }
-
-    public void keyReleased(KeyEvent e) 
-    {
-        int code = e.getKeyCode();        
-        Object source = e.getSource();
-        if (source == m_list && code == KeyEvent.VK_ENTER)
-        {
-            int index = m_list.getSelectedIndex();
-            selectCommand(index);
-        }
-    }
-
-    public void keyTyped(KeyEvent e)
-    {
     }
 
     public void mouseClicked(MouseEvent e)
@@ -275,6 +256,15 @@ class AnalyzeDialog
         setVisible(true);
     }
 
+    public void valueChanged(ListSelectionEvent e)
+    {
+        String value = (String)m_list.getSelectedValue();
+        if (value == null)
+            m_runButton.setEnabled(false);
+        else
+            m_runButton.setEnabled(! value.equals(m_lastCommandSent));
+    }
+
     public void windowActivated(WindowEvent e)
     {
     }
@@ -304,9 +294,13 @@ class AnalyzeDialog
     {
     }
 
+    private JButton m_runButton;
+
     private JComboBox m_comboBox;
 
     private JList m_list;
+
+    private String m_lastCommandSent = "";
 
     private Vector m_commands = new Vector(128, 64);
 
@@ -345,6 +339,7 @@ class AnalyzeDialog
     private void close()
     {
         m_callback.clearAnalyzeCommand();
+        m_lastCommandSent = "";
         saveRecent();
         setVisible(false);
     }
@@ -361,12 +356,13 @@ class AnalyzeDialog
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
         innerPanel.setBorder(GuiUtils.createEmptyBorder());
-        JButton runButton = new JButton("Run");
-        runButton.setActionCommand("run");
-        runButton.addActionListener(this);
-        runButton.setMnemonic(KeyEvent.VK_R);
-        getRootPane().setDefaultButton(runButton);
-        innerPanel.add(runButton);
+        m_runButton = new JButton("Run");
+        m_runButton.setEnabled(false);
+        m_runButton.setActionCommand("run");
+        m_runButton.addActionListener(this);
+        m_runButton.setMnemonic(KeyEvent.VK_R);
+        getRootPane().setDefaultButton(m_runButton);
+        innerPanel.add(m_runButton);
         JButton closeButton = new JButton("Close");
         closeButton.setActionCommand("close");
         closeButton.addActionListener(this);
@@ -385,6 +381,7 @@ class AnalyzeDialog
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         m_list.setVisibleRowCount(20);
         m_list.addMouseListener(this);
+        m_list.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createLowerPanel(), BorderLayout.SOUTH);
@@ -490,10 +487,12 @@ class AnalyzeDialog
 
     private void setCommand()
     {
-        String label = (String)m_comboBox.getSelectedItem();        
-        int index = m_labels.indexOf(label);
+        int index = m_list.getSelectedIndex();        
         if (index < 0)
             return;
+        selectCommand(index);
+        m_lastCommandSent = (String)m_labels.get(index);
+        m_runButton.setEnabled(false);
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         m_callback.setAnalyzeCommand(command);

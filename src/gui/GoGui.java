@@ -624,7 +624,7 @@ class GoGui
         m_resetBoardAfterAnalyze = resetBoardAfterAnalyze;
         if (m_analyzeCommand.needsPointArg() && m_analyzePointArg == null)
             return;
-        showStatus("Running analyze command...");
+        showStatus("Running " + m_analyzeCommand.getLabel() + " ...");
         String command =
             m_analyzeCommand.replaceWildCards(m_board.getToMove(),
                                               m_analyzePointArg);
