@@ -11,7 +11,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Support for game trees.
+Support for game trees and navigation in variations.
 </simpara>
 </listitem>
 <listitem>
@@ -43,7 +43,7 @@ If there are requests for the old functionality, it might be reimplemented in
 <application>GtpAdapter</application> at a later time.
 </simpara>
 <simpara>
-Other small fixes and improvements.
+Other fixes and improvements.
 </simpara>
 </listitem>
 </itemizedlist>
