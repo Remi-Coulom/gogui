@@ -4,6 +4,7 @@
 <!ENTITY analyze SYSTEM "analyze.xml">
 <!ENTITY bugs SYSTEM "bugs.xml">
 <!ENTITY compatibility SYSTEM "compatibility.xml">
+<!ENTITY donations SYSTEM "donations.xml">
 <!ENTITY gametree SYSTEM "gametree.xml">
 <!ENTITY gpl SYSTEM "gpl.xml">
 <!ENTITY gtpshell SYSTEM "gtpshell.xml">
@@ -62,6 +63,7 @@
 </appendix>
 &news;
 &bugs;
+&donations;
 &gpl;
   
 </book>
