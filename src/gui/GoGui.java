@@ -286,7 +286,10 @@ class GoGui
         String program = SelectProgram.select(this);
         if (program == null)
             return;
-        attachProgram(program);
+        if (attachProgram(program))
+            m_prefs.setString("program", m_program);
+        else
+            m_prefs.setString("program", "");
     }
 
     public void cbDetachProgram()
@@ -297,6 +300,7 @@ class GoGui
             if (! showQuestion("Kill program?"))
                 return;
         detachProgram();
+        m_prefs.setString("program", "");
     }
 
     public void cbGtpShell()
@@ -531,10 +535,7 @@ class GoGui
             Vector arguments = opt.getArguments();
             String program = null;
             if (arguments.size() == 1)
-            {
                 program = (String)arguments.get(0);
-                SelectProgram.addHistory(program);
-            }
             else if (arguments.size() > 1)
                 throw new Exception("Only one program argument allowed.");
             new GoGui(program, prefs, file, move, time, verbose, computerBlack,
@@ -667,8 +668,6 @@ class GoGui
     private boolean m_computerWhite;
 
     private boolean m_commandInProgress;
-
-    private boolean m_isInitialized;
 
     private boolean m_isRootExecuted;
 
@@ -863,13 +862,15 @@ class GoGui
         }
     }
 
-    private void attachProgram(String program)
+    /** Attach program.
+        @return true if program was successfully attached.
+    */
+    private boolean attachProgram(String program)
     {
         program = program.trim();
         if (program.equals(""))
-            return;
+            return false;
         m_program = program;
-        m_isInitialized = false;
         m_gtpShell = new GtpShell("GoGui", this, m_prefs);
         m_gtpShell.setProgramCommand(program);
         try
@@ -884,7 +885,7 @@ class GoGui
                                     e.getMessage() + "\n"
                                     + "See GTP shell for any error messages\n"
                                     + "printed by the program.");
-            return;
+            return false;
         }
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
@@ -896,13 +897,12 @@ class GoGui
         catch (Gtp.Error e)
         {
             showGtpError(e);
-            return;
+            return false;
         }
         finally
         {
             setFastUpdate(false);
         }
-        m_isInitialized = true;
         try
         {
             m_commandThread.queryProtocolVersion();
@@ -939,6 +939,7 @@ class GoGui
         executeRoot();
         gotoNode(oldCurrentNode);
         setTitle();
+        return true;
     }    
 
     private boolean backward(int n)
@@ -1555,14 +1556,11 @@ class GoGui
         if (m_needsSave && ! checkSaveGame())
             return;
         saveSession();        
-        if (m_commandThread != null && m_isInitialized)
+        if (m_commandThread != null)
         {
-            m_prefs.setString("program", m_program);
             m_analyzeCommand = null;
             detachProgram();
         }
-        else
-            m_prefs.setString("program", "");
         dispose();
         m_prefs.save();
         System.exit(0);
