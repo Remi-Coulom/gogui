@@ -67,8 +67,9 @@ public class AboutDialog
             programPanel =
                 createPanel("<p align=\"center\"><b>" + fullName
                             + "</b></p>" +
+                            "<p align=\"center\">Command:</p>" +
                             "<p align=\"center\" width=\"" + width + "\">"
-                            + "Command:<br><small><tt>" + command
+                            + "<small><tt>" + command
                             + "</tt></small></p>" + "<p align=\"center\">" +
                             "GTP protocol version " + protocolVersion +
                             "</p>");
