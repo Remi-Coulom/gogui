@@ -355,8 +355,7 @@ public class Gtp
     {
         public StdErrThread(Process process)
         {
-            Reader reader = new InputStreamReader(process.getErrorStream());
-            m_err = new BufferedReader(reader);
+            m_err = new InputStreamReader(process.getErrorStream());
         }
     
         public void run()
@@ -389,7 +388,7 @@ public class Gtp
             }
         }
 
-        private BufferedReader m_err;
+        private Reader m_err;
     }
 
     private static class Interrupt extends TimerTask
