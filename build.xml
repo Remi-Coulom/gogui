@@ -11,8 +11,8 @@ $Source$
 <property name="version" value="0.4.x"/>
 
 <property environment="env"/>
-<property name="xsldir" value="${env.XSLDIR}"/>
-<available property="xslAvailable" file="${xsldir}/html/chunk.xsl"/>
+<property name="docbook_xsl_home" value="${env.DOCBOOK_XSL_HOME}"/>
+<available property="xslAvailable" file="${docbook_xsl_home}/html/chunk.xsl"/>
 <available property="commAvailable" classname="javax.comm.SerialPort"/>
 
 <target name="all" depends="
@@ -76,10 +76,12 @@ http://java.sun.com/products/javacomm/
 
 <target name="checkXslAvailable" unless="xslAvailable">
 <fail>
-File "${xsldir}/html/chunk.xsl" not found.
+File "${docbook_xsl_home}/html/chunk.xsl" not found.
 Please install the DocBook XSL style sheets from
 http://sourceforge.net/projects/docbook/
-and set the environment variable XSLDIR to the installation directory.
+and set the environment variable DOCBOOK_XSL_HOME to the
+installation directory.
+
 </fail>
 </target>
 
@@ -103,7 +105,7 @@ and set the environment variable XSLDIR to the installation directory.
 <target name="doc" depends="docCheckUptodate" unless="docUptodate">
 <antcall target="checkXslAvailable"/>
 <style basedir="doc/xml" includes="book.xml" destdir="doc/html"
- style="${xsldir}/html/chunk.xsl" force="true">
+ style="${docbook_xsl_home}/html/chunk.xsl" force="true">
 <param name="admon.graphics" expression="0"/>
 <param name="admon.graphics.path" expression=""/>
 <param name="chunk.quietly" expression="1"/>
