@@ -12,10 +12,14 @@
 The argument <userinput>program</userinput> must be a valid command line for
 executing the actual Go program.
 If no program is given, GoGui will start without any Go program attached.
+You can attach a Go program at any time by using the
+<guimenuitem>Attach Program</guimenuitem> menu item from the
+<guimenu>File</guimenu> menu.
 </para>
 
 <para>
-See <xref linkend="reference-gogui"/> for a listing of the possible options.
+See <xref linkend="reference-gogui"/> for a complete listing of the possible
+options to <userinput>gogui</userinput>.
 </para>
 
 <para>
