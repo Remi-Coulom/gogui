@@ -485,8 +485,8 @@ class AnalyzeDialog
         m_runButton.setMnemonic(KeyEvent.VK_R);
         getRootPane().setDefaultButton(m_runButton);
         innerPanel.add(m_runButton);
-        m_clearButton = new JButton("Cancel Auto");
-        m_clearButton.setToolTipText("Cancel auto run");
+        m_clearButton = new JButton("Clear");
+        m_clearButton.setToolTipText("Clear board and cancel auto run");
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
         m_clearButton.setMnemonic(KeyEvent.VK_C);
@@ -686,8 +686,8 @@ class AnalyzeDialog
         boolean clearBoard = m_clearBoard.isSelected();
         if (clearBoard)
             m_callback.clearAnalyzeCommand();
+        m_clearButton.setEnabled(true);
         m_callback.setAnalyzeCommand(command, autoRun, false);
-        m_clearButton.setEnabled(autoRun);
     }
 
     private static void setPrefsDefaults(Preferences prefs)
