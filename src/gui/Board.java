@@ -657,8 +657,9 @@ public class Board
         if (graphics2D == null)
             return;
         graphics2D.setComposite(m_composite3);
-        Field field = m_field[0][0];
-        final int size = field.getSize().width - 2 * field.getStoneMargin();
+        Rectangle bounds = m_field[0][0].getBounds();
+        int width = getScreenLocation(1, 0).x - getScreenLocation(0, 0).x;
+        final int size = width - 2 * Field.getStoneMargin(width);
         final int offset = size / 12;
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {

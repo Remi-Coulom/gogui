@@ -99,9 +99,9 @@ public class Field
         return m_select;
     }
 
-    public int getStoneMargin()
+    public static int getStoneMargin(int size)
     {
-        return m_size / 15;
+        return size / 15;
     }
 
     public String getString()
@@ -344,7 +344,7 @@ public class Field
 
     private void drawStone(java.awt.Color color, java.awt.Color colorBright)
     {
-        int margin = getStoneMargin();
+        int margin = getStoneMargin(m_size);
         int radius = m_size / 3;
         if (m_graphics2D != null)
         {
