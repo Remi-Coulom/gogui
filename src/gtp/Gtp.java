@@ -70,9 +70,9 @@ public class Gtp
         m_out.close();
     }
 
-    public String getAnswer()
+    public String getResponse()
     {
-        return m_answer;
+        return m_response;
     }
 
     public String getCommandGenmove(Color color)
@@ -157,13 +157,13 @@ public class Gtp
         }
     }
 
-    public static double[][] parseDoubleBoard(String answer, String title,
+    public static double[][] parseDoubleBoard(String response, String title,
                                               int boardSize) throws Error
     {
         try
         {
             double result[][] = new double[boardSize][boardSize];
-            String s[][] = parseStringBoard(answer, title, boardSize);
+            String s[][] = parseStringBoard(response, title, boardSize);
             for (int x = 0; x < boardSize; ++x)
                 for (int y = 0; y < boardSize; ++y)
                     result[x][y] = Double.parseDouble(s[x][y]);
@@ -314,7 +314,7 @@ public class Gtp
         if (m_isProgramDead)
             throw new Error("Program is dead.");
         log(">> " + command);
-        m_answer = "";
+        m_response = "";
         m_out.println(command);
         m_out.flush();
         if (m_out.checkError())
@@ -330,10 +330,10 @@ public class Gtp
             timer = new java.util.Timer();
             timer.schedule(new Interrupt(Thread.currentThread()), timeout);
         }
-        readAnswer();
+        readResponse();
         if (timer != null)
             timer.cancel();
-        return m_answer;
+        return m_response;
     }
 
     public String sendCommand(String command) throws Error
@@ -462,7 +462,7 @@ public class Gtp
 
     private Process m_process;
 
-    private String m_answer;
+    private String m_response;
 
     private String m_logPrefix;
 
@@ -470,7 +470,7 @@ public class Gtp
 
     private String[] m_supportedCommands;
 
-    private void readAnswer() throws Error
+    private void readResponse() throws Error
     {
         try
         {
@@ -487,7 +487,7 @@ public class Gtp
             }
             StringBuffer response = new StringBuffer(line);
             response.append("\n");
-            if (! isAnswerLine(line))
+            if (! isResponseLine(line))
                 throw new Error("Invalid response:\n\"" + line + "\"");
             boolean error = (line.charAt(0) != '=');
             boolean done = false;
@@ -507,10 +507,10 @@ public class Gtp
             if (m_callback != null)
                 m_callback.receivedResponse(error, response.toString());
             assert(response.length() >= 4);
-            m_answer = response.substring(2, response.length() - 2);
+            m_response = response.substring(2, response.length() - 2);
             if (error)
             {
-                String message = m_answer.trim();
+                String message = m_response.trim();
                 if (message.equals(""))
                     message = "GTP command failed";
                 throw new Error(message);
@@ -528,7 +528,7 @@ public class Gtp
         }
     }
 
-    private static boolean isAnswerLine(String line)
+    private static boolean isResponseLine(String line)
     {
         if (line.length() < 2)
             return false;

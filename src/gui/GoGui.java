@@ -577,34 +577,34 @@ class GoGui
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
                 throw e;
-            String answer = m_commandThread.getAnswer();
+            String response = m_commandThread.getResponse();
             String title = m_analyzeCommand.getTitle();
             int type = m_analyzeCommand.getType();
             switch (type)
             {
             case Analyze.COLORBOARD:
                 {
-                    String board[][] = Gtp.parseStringBoard(answer, title,
+                    String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
                     showColorBoard(board);
                 }
                 break;
             case Analyze.DOUBLEBOARD:
                 {
-                    double board[][] = Gtp.parseDoubleBoard(answer, title,
+                    double board[][] = Gtp.parseDoubleBoard(response, title,
                                                             m_boardSize);
                     showDoubleBoard(board, m_analyzeCommand.getScale());
                 }
                 break;
             case Analyze.POINTLIST:
                 {
-                    go.Point pointList[] = Gtp.parsePointList(answer);
+                    go.Point pointList[] = Gtp.parsePointList(response);
                     showPointList(pointList);
                 }
                 break;
             case Analyze.STRINGBOARD:
                 {
-                    String board[][] = Gtp.parseStringBoard(answer, title,
+                    String board[][] = Gtp.parseStringBoard(response, title,
                                                             m_boardSize);
                     showStringBoard(board);
                 }
@@ -614,9 +614,9 @@ class GoGui
                 m_analyzeCommand.getResultTitle(m_analyzePointArg);
             if (type == Analyze.STRING)
             {
-                if (answer.indexOf("\n") < 0)
+                if (response.indexOf("\n") < 0)
                 {
-                    showStatus(resultTitle + ": " + answer);
+                    showStatus(resultTitle + ": " + response);
                 }
                 else
                 {
@@ -625,7 +625,7 @@ class GoGui
                     JLabel label = new JLabel(resultTitle);
                     Container contentPane = dialog.getContentPane();
                     contentPane.add(label, BorderLayout.NORTH);
-                    JTextArea textArea = new JTextArea(answer, 17, 40);
+                    JTextArea textArea = new JTextArea(response, 17, 40);
                     textArea.setEditable(false);
                     textArea.setFont(new Font("Monospaced", Font.PLAIN,
                                               getFont().getSize()));
@@ -987,9 +987,9 @@ class GoGui
         {
             try
             {
-                String answer =
+                String response =
                     m_commandThread.sendCommand("final_status_list dead");
-                isDeadStone = Gtp.parsePointList(answer);
+                isDeadStone = Gtp.parsePointList(response);
             }
             catch (Gtp.Error e)
             {
@@ -1252,7 +1252,7 @@ class GoGui
             Gtp.Error e = m_commandThread.getException();
             if (e != null)
                 throw e;
-            go.Point p = Gtp.parsePoint(m_commandThread.getAnswer());
+            go.Point p = Gtp.parsePoint(m_commandThread.getResponse());
             go.Color toMove = m_board.getToMove();
             Move m = new Move(p, toMove);
             m_board.play(m);

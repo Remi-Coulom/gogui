@@ -30,14 +30,14 @@ class CommandThread
         }
     }
     
-    /** Get answer to asynchronous command.
+    /** Get response to asynchronous command.
         You must call getException() first.
     */
-    public String getAnswer()
+    public String getResponse()
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        return m_answer;
+        return m_response;
     }
     
     public String getCommandGenmove(go.Color color)
@@ -121,11 +121,11 @@ class CommandThread
                 {
                     System.err.println("Interrupted.");
                 }
-                m_answer = null;
+                m_response = null;
                 m_exception = null;
                 try
                 {
-                    m_answer = m_gtp.sendCommand(m_command);
+                    m_response = m_gtp.sendCommand(m_command);
                 }
                 catch (Gtp.Error e)
                 {
@@ -162,8 +162,8 @@ class CommandThread
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        String answer = m_gtp.sendCommand(command);
-        return answer;
+        String response = m_gtp.sendCommand(command);
+        return response;
     }
 
     public String sendCommand(String command, long timeout) throws Gtp.Error
@@ -201,7 +201,7 @@ class CommandThread
 
     private String m_command;
 
-    private String m_answer;
+    private String m_response;
 
     private Thread m_commandThread;
 }
