@@ -996,7 +996,8 @@ class GoGui
     private void cbCommentChanged()
     {
         m_needsSave = true;
-        m_gameTreeViewer.redrawCurrentNode();
+        if (m_gameTreeViewer != null)
+            m_gameTreeViewer.redrawCurrentNode();
     }
 
     private void cbComputerBoth()

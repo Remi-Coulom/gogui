@@ -70,9 +70,16 @@ class Comment
         String text = node.getComment();
         if (text == null)
             text = "";
+        // setText() generates a remove and insert event, and
+        // we don't want to notify the listener about that yet.
+        m_duringSetText = true;
         m_textArea.setText(text);
+        m_duringSetText = false;
         m_textArea.setCaretPosition(0);
+        copyContentToNode();
     }
+
+    private boolean m_duringSetText;
 
     private JTextArea m_textArea;
 
@@ -82,8 +89,16 @@ class Comment
 
     private void copyContentToNode()
     {
-        if (m_node != null)
-            m_node.setComment(m_textArea.getText().trim());
-        m_listener.changed();
+        if (m_duringSetText)
+            return;
+        String text = m_textArea.getText().trim();
+        if (m_node == null)
+            return;
+        String comment = m_node.getComment().trim();
+        if (! comment.equals(text))
+        {
+            m_node.setComment(text);
+            m_listener.changed();
+        }
     }
 }
