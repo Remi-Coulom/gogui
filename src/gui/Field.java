@@ -149,10 +149,10 @@ public class Field
     private java.awt.Color m_fieldColor;
 
     private static java.awt.Color m_influenceBlackColor
-        = new java.awt.Color(255, 63, 63);
+        = new java.awt.Color(64, 64, 64);
 
     private static java.awt.Color m_influenceWhiteColor
-        = new java.awt.Color(0, 255, 127);
+        = new java.awt.Color(224, 224, 224);
 
     private go.Color m_color;
 
