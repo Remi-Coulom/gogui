@@ -447,11 +447,8 @@ class ReadThread extends Thread
     {
         synchronized (this)
         {
-            if (m_state == STATE_IDLE)
-            {
-                m_state = STATE_INTERRUPTED;
-                notifyAll();
-            }
+            m_state = STATE_INTERRUPTED;
+            notifyAll();
         }
     }
 
@@ -557,6 +554,12 @@ class ReadThread extends Thread
                 return false;
             case STATE_WAIT_OK:
                 continue;
+            case STATE_INTERRUPTED:
+                // GMP connection cannot be used anymore after sending
+                // was interrupted
+                response.append("GMP connection closed");
+                m_state = STATE_DISCONNECTED;
+                return false;
             case STATE_DISCONNECTED:
                 response.append("GMP connection broken.");
                 return false;
