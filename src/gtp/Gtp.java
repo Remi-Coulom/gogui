@@ -447,7 +447,7 @@ public final class Gtp
         }
         catch (NumberFormatException e)
         {
-            throw new Error(e.getMessage());
+            throw new Error("Invalid protocol version");
         }
     }
 
