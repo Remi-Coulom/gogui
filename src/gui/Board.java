@@ -164,6 +164,8 @@ public class Board
         int code = event.getKeyCode();
         int modifiers = event.getModifiers();
         int size = m_board.getSize();
+        if ((modifiers & ActionEvent.CTRL_MASK) != 0)
+            return;
         boolean shiftModifier = ((modifiers & ActionEvent.SHIFT_MASK) != 0);
         if (code == KeyEvent.VK_DOWN)
         {
