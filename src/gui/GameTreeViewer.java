@@ -168,6 +168,7 @@ class GameTreePanel
         m_labelMode = labelMode;
         m_sizeMode = sizeMode;
         computeSizes(sizeMode);
+        setFocusable(false);
         setFocusTraversalKeysEnabled(false);
         setOpaque(false);
         m_listener = listener;
@@ -787,11 +788,12 @@ public class GameTreeViewer
         m_scrollPane.setFocusable(true);
         m_scrollPane.setFocusTraversalKeysEnabled(false);
         JViewport viewport = m_scrollPane.getViewport();
-        viewport.setFocusable(false);
         viewport.setBackground(UIManager.getColor("Label.background"));
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
+        //viewport.setFocusable(false);
         viewport.setFocusTraversalKeysEnabled(false);
         setFocusTraversalKeysEnabled(false);
+        m_scrollPane.requestFocusInWindow();
         pack();
     }
 
