@@ -231,30 +231,18 @@ class ReadThread
             Random random = new Random();
             while (true)
             {
-                int b;
-                try
+                int b = m_in.read();
+                synchronized (this)
                 {
-                    long timeout = 5000 + (long)(random.nextFloat() * 10000);
-                    while (! waitForInput(timeout))
-                    {
-                        synchronized (this)
-                        {
-                            if (m_state == STATE_WAIT_OK)
-                                writeOutputBuffer();
-                        }
-                    }
-                    b = m_in.read();
                     if (b < 0)
-                        throw new IOException();
+                    {
+                        m_state = STATE_DISCONNECTED;
+                        log("input stream was closed");
+                        break;
+                    }
+                    log("recv " + format(b));
+                    handleByte(b);
                 }
-                catch (IOException e)
-                {
-                    log("input stream was closed");
-                    m_state = STATE_DISCONNECTED;
-                    break;                    
-                }
-                log("recv " + format(b));
-                handleByte(b);
             }
         }
         catch (Exception e)
@@ -309,10 +297,6 @@ class ReadThread
                 response.append("Command denied.");
                 m_state = STATE_IDLE;
                 return false;
-            case STATE_CONFLICT:
-                response.append("Conflict.");
-                m_state = STATE_IDLE;
-                return false;
             case STATE_WAIT_OK:
                 continue;
             case STATE_DISCONNECTED:
@@ -341,7 +325,6 @@ class ReadThread
         }
         catch (IOException e)
         {
-            return false;
         }
         return true;
     }
@@ -402,11 +385,9 @@ class ReadThread
 
     private static final int STATE_WAIT_OK = 2;
 
-    private static final int STATE_CONFLICT = 3;
+    private static final int STATE_DENY = 3;
 
-    private static final int STATE_DENY = 4;
-
-    private static final int STATE_INTERRUPTED = 5;
+    private static final int STATE_INTERRUPTED = 4;
 
     private boolean m_hisLastSeq = false;
 
@@ -493,7 +474,7 @@ class ReadThread
         return (seq != 0);
     }
 
-    private synchronized void handleByte(int b)
+    private void handleByte(int b)
     {
         // Talk character
         if (b > 3 && b < 128)
@@ -592,10 +573,13 @@ class ReadThread
                 notifyAll();
                 return;
             }
-            log("conflict");
-            m_state = STATE_CONFLICT;
-            m_myLastSeq = ! m_myLastSeq;
-            notifyAll();
+            /* Actually GMP requires to abandon command on conflict,
+               but since we might have sent it out repeatedly already,
+               the opponent could have detected the conflict and accepted
+               the resent command, so it's easier to ignore the conflict.
+            */
+            log("ignore conflict");
+            writeOutputBuffer();
         }
         else
         {
@@ -641,25 +625,17 @@ class ReadThread
     private boolean sendCmd(int cmd, int val)
     {
         log("send " + (new Cmd(cmd, val)).toString(m_size));
-        try
-        {
-            if (cmd != Cmd.OK)
-                m_myLastSeq = ! m_myLastSeq;
-            m_outputBuffer[0] = (byte)(m_myLastSeq ? 1 : 0);
-            m_outputBuffer[0] |= (byte)(m_hisLastSeq ? 2 : 0);
-            m_outputBuffer[2] = makeCmdByte1(cmd, val);
-            m_outputBuffer[3] = makeCmdByte2(val);
-            setChecksum();
-            writeOutputBuffer();
-            if (cmd != Cmd.OK)
-                m_state = STATE_WAIT_OK;
-            return true;
-        }
-        catch (IOException e)
-        {
-            log("write error");
-            return false;
-        }
+        if (cmd != Cmd.OK)
+            m_myLastSeq = ! m_myLastSeq;
+        m_outputBuffer[0] = (byte)(m_myLastSeq ? 1 : 0);
+        m_outputBuffer[0] |= (byte)(m_hisLastSeq ? 2 : 0);
+        m_outputBuffer[2] = makeCmdByte1(cmd, val);
+        m_outputBuffer[3] = makeCmdByte2(val);
+        setChecksum();
+        writeOutputBuffer();
+        if (cmd != Cmd.OK)
+            m_state = STATE_WAIT_OK;
+        return true;
     }
 
     private boolean sendOk()
@@ -676,33 +652,21 @@ class ReadThread
         m_outputBuffer[1] = (byte)(0x0080 | checksum);
     }
 
-    private boolean waitForInput(long milliseconds) throws IOException
-    {
-        long startTime = System.currentTimeMillis();
-        while (m_in.available() <= 0)
-            try
-            {
-                if (System.currentTimeMillis() - startTime >= milliseconds)
-                    return false;
-                Thread.sleep(milliseconds);
-            }
-            catch (InterruptedException e)
-            {
-                System.err.println("Interrupted");
-                return false;
-            }
-        return true;
-    }
-    
-    private void writeOutputBuffer() throws IOException
+    private void writeOutputBuffer()
     {
         log("send "
             + format(m_outputBuffer[0]) + " "
             + format(m_outputBuffer[1]) + " "
             + format(m_outputBuffer[2]) + " "
             + format(m_outputBuffer[3]));
-        m_out.write(m_outputBuffer);
-        m_out.flush();
+        try
+        {
+            m_out.write(m_outputBuffer);
+            m_out.flush();
+        }
+        catch (IOException e)
+        {
+        }
     }
 }
 
