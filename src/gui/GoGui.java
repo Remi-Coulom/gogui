@@ -1303,7 +1303,7 @@ class GoGui
                     {
                         --i;
                         if (i < 0)
-                            i = m_currentNode.getNumberChildren() + 1;
+                            i = m_currentNode.getNumberChildren() - 1;
                     }
                     m_currentNode = m_currentNode.getChild(i);
                     break;
