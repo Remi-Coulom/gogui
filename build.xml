@@ -8,7 +8,7 @@ $Source$
 
 <project name="GoGui" default="all">
 
-<property name="version" value="0.5"/>
+<property name="version" value="0.5.x"/>
 
 <property environment="env"/>
 <property name="docbook_xsl_home" value="${env.DOCBOOK_XSL_HOME}"/>
