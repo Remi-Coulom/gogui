@@ -344,7 +344,7 @@ interface AnalyzeCallback
 {
     public void cbGtpShell();
 
-    public void clearAnalyzeCommand();
+    public boolean clearAnalyzeCommand();
 
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                   boolean clearBoard);
@@ -811,7 +811,8 @@ class AnalyzeDialog
         boolean autoRun = m_autoRun.isSelected();
         boolean clearBoard = m_clearBoard.isSelected();
         if (clearBoard)
-            m_callback.clearAnalyzeCommand();
+            if (! m_callback.clearAnalyzeCommand())
+                return;
         m_clearButton.setEnabled(true);
         m_callback.setAnalyzeCommand(command, autoRun, false);
     }

@@ -250,8 +250,13 @@ class GoGui
             m_gtpShell.toTop();
     }
 
-    public void clearAnalyzeCommand()
+    public boolean clearAnalyzeCommand()
     {
+        if (m_commandInProgress)
+        {
+            showError("Command in progress.");
+            return false;
+        }
         m_analyzeCommand = null;
         if (m_analyzeRequestPoint || m_analyzeRequestPointList)
         {
@@ -263,6 +268,7 @@ class GoGui
         }
         resetBoard();
         clearStatus();
+        return true;
     }
 
     public void fieldClicked(go.Point p, boolean modifiedSelect)
@@ -513,9 +519,12 @@ class GoGui
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                   boolean clearBoard)
     {
-        initAnalyzeCommand(command, autoRun);
         if (m_commandInProgress)
+        {
+            showError("Command in progress.");
             return;
+        }
+        initAnalyzeCommand(command, autoRun);
         if (m_analyzeCommand.needsPointArg()
             || m_analyzeCommand.needsPointListArg())
         {
@@ -803,11 +812,6 @@ class GoGui
         m_menuBar.setCommandInProgress(isInterruptSupported);
         m_toolBar.setCommandInProgress(isInterruptSupported);
         m_gtpShell.setCommandInProgess(true);
-        if (m_analyzeDialog != null)
-        {
-            setCursor(m_analyzeDialog, Cursor.WAIT_CURSOR);
-            m_analyzeDialog.setEnabled(false);
-        }
         m_commandInProgress = true;
     }
 
@@ -1393,11 +1397,6 @@ class GoGui
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, m_board);
         m_gtpShell.setCommandInProgess(false);
-        if (m_analyzeDialog != null)
-        {
-            m_analyzeDialog.setEnabled(true);
-            setCursorDefault(m_analyzeDialog);
-        }
         m_commandInProgress = false;
         if (m_analyzeRequestPoint
             || m_analyzeRequestPointList)
