@@ -21,6 +21,5 @@ doc:
           -o html/ \
           $(XSLDIR)/html/chunk.xsl xml/book.xml
         #cp images/*.png css/docbook.css html
-	cp css/docbook.css html
 	xsltproc -o homepage/index.html \
           $(XSLDIR)/html/docbook.xsl xml/homepage.xml

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>gtpregress</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.61.2"><link rel="home" href="index.html" title="GoGui Documentation"><link rel="up" href="reference-index.html" title="Appendix A. Reference"><link rel="previous" href="reference-gmptogtp.html" title="gmptogtp"><link rel="next" href="reference-gtpserver.html" title="gtpserver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td width="20%" align="left"><a accesskey="p" href="reference-gmptogtp.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="reference-gtpserver.html">Next</a></td></tr></table><hr></div><div class="refentry" lang="en"><a name="reference-gtpregress"></a><div class="titlepage"><div></div><div></div></div><div class="refnamediv"><h2><span class="refentrytitle">gtpregress</span></h2><p>gtpregress, gtpregress.jar &#8212; 
+Runs GTP regression tests.
+</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><tt class="command">gtpregress</tt>  [<tt class="option">-help</tt>] [<tt class="option">-output</tt> <i class="replaceable"><tt>directory</tt></i>] [<tt class="option">-version</tt>]  <i class="replaceable"><tt>program</tt></i>   
+<i class="replaceable"><tt>test.tst</tt></i>
+... </p></div></div><div class="refsection" lang="en">
+<h2>Description</h2>
+<p>
+Runs a regression test for a Go program supporting the Go Text Protocol
+and formats the output as HTML.
+The regression tests are GTP files using the special comment
+<b class="userinput"><tt>#?</tt></b> as used for the
+<a href="http://www.gnu.org/software/gnugo/gnugo.html" target="_top">GNU Go</a>
+regression tests (see section 
+<a href="http://www.uni-bonn.de/~uzsxtn/gnugo_22.html#SEC212" target="_top">
+Regression testing</a> of the GNU Go documentation.
+The main output file is <tt class="filename">index.html</tt>.
+For each test file
+<tt class="filename"><i class="replaceable"><tt>test</tt></i>.tst</tt>
+additional files with name
+<tt class="filename"><i class="replaceable"><tt>test</tt></i>.html</tt> and
+<tt class="filename"><i class="replaceable"><tt>test</tt></i>.out.html</tt>
+are generated.
+An additional special comment
+<b class="userinput"><tt>#&gt;  [<i class="replaceable"><tt>file</tt></i>]</tt></b>
+can be used to add the output of the last command to
+<tt class="filename"><i class="replaceable"><tt>file</tt></i></tt> prepended
+by the ID of the last test and 0/1 if the last test passed/failed.
+This is useful if there is are extension commands for printing
+statistics.
+If the statistics commands output a single line, the resulting
+file can be processed as a table.
+If no filename is given to <b class="userinput"><tt>#&gt;</tt></b> the file
+<tt class="filename"><i class="replaceable"><tt>test</tt></i>.dat</tt>
+will be used.
+</p>
+</div><div class="refsection" lang="en">
+<h2>Options</h2>
+<div class="variablelist"><dl><dt><span class="term">
+<tt class="option">-help</tt>
+</span></dt><dd>
+Display help and exit.
+</dd><dt><span class="term">
+<tt class="option">-output</tt> <i class="replaceable"><tt>directory</tt></i>
+</span></dt><dd>
+Write output files to
+<tt class="filename"><i class="replaceable"><tt>directory</tt></i></tt>.
+</dd><dt><span class="term">
+<tt class="option">-version</tt>
+</span></dt><dd>
+Print version and exit.
+</dd></dl></div>
+</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="reference-gmptogtp.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="reference-index.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="reference-gtpserver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

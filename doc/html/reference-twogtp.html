@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>twogtp</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.61.2"><link rel="home" href="index.html" title="GoGui Documentation"><link rel="up" href="reference-index.html" title="Appendix A. Reference"><link rel="previous" href="reference-sgftotex.html" title="sgftotex"><link rel="next" href="news.html" title="Appendix B. Release notes"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><td width="20%" align="left"><a accesskey="p" href="reference-sgftotex.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="news.html">Next</a></td></tr></table><hr></div><div class="refentry" lang="en"><a name="reference-twogtp"></a><div class="titlepage"><div></div><div></div></div><div class="refnamediv"><h2><span class="refentrytitle">twogtp</span></h2><p>twogtp, twogtp.jar &#8212; 
+Go Text Protocol adapter for playing games between two Go programs.
+</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><tt class="command">twogtp</tt>  [<tt class="option">-alternate</tt>] [<tt class="option">-auto</tt>] [<tt class="option">-compare</tt>]  <tt class="option">-black</tt> <i class="replaceable"><tt>command</tt></i>
+    [<tt class="option">-games</tt>] [<tt class="option">-help</tt>] [<tt class="option">-komi</tt> <i class="replaceable"><tt>komi</tt></i>] [<tt class="option">-sgffile</tt> <i class="replaceable"><tt>prefix</tt></i>] [<tt class="option">-size</tt> <i class="replaceable"><tt>n</tt></i>] [<tt class="option">-verbose</tt>]  <tt class="option">-white</tt> <i class="replaceable"><tt>command</tt></i>
+   </p></div></div><div class="refsection" lang="en">
+<h2>Description</h2>
+<p>
+Adpater program for playing games between two Go programs
+supporting GTP (Go Text Protocol).
+</p>
+
+<p>
+The adpater forwards the following commands to both programs:
+</p><div class="itemizedlist"><ul type="disc"><li><b class="userinput"><tt>boardsize</tt></b></li><li><b class="userinput"><tt>black</tt></b></li><li><b class="userinput"><tt>komi</tt></b></li><li><b class="userinput"><tt>loadsgf</tt></b></li><li><b class="userinput"><tt>quit</tt></b></li><li><b class="userinput"><tt>scoring_system</tt></b></li><li><b class="userinput"><tt>undo</tt></b></li><li><b class="userinput"><tt>white</tt></b></li></ul></div><p>
+The following commands are forwarded to the first program
+that implements them (Black is tried first):
+</p><div class="itemizedlist"><ul type="disc"><li><b class="userinput"><tt>final_score</tt></b></li><li><b class="userinput"><tt>final_status</tt></b></li><li><b class="userinput"><tt>final_status_list</tt></b></li></ul></div><p>
+The commands <b class="userinput"><tt>genmove_black</tt></b> and
+<b class="userinput"><tt>genmove_white</tt></b> are forwarded only to the
+program of the corresponding color, the other program is informed about
+the move with a <b class="userinput"><tt>black</tt></b> or
+<b class="userinput"><tt>white</tt></b> command.
+GTP extension commands implemented by exactly one of the programs are
+forwarded to the program.
+The special comment line <b class="userinput"><tt># interrupt</tt></b>
+used by <span class="application">GoGui</span> to interrupt commands is
+forwarded to both programs.
+</p>
+
+<p>
+If the option <tt class="option">-sgffile</tt> is used, the games are
+saved after they are finished and a result text file in table format
+is created with some statistics.
+If the program(s) support the GTP command <b class="userinput"><tt>cputime</tt></b>
+these statistics include CPU times.
+</p>
+</div><div class="refsection" lang="en">
+<h2>Options</h2>
+<div class="variablelist"><dl><dt><span class="term"><tt class="option">-alternate</tt></span></dt><dd>
+Alternate colors. Black and White are exchanged every odd game.
+The scores saved in the results table if <tt class="option">-sgffile</tt>
+are still using the name Black and White as given with
+<tt class="option">-black</tt> and <tt class="option">-white</tt>.
+</dd><dt><span class="term"><tt class="option">-auto</tt></span></dt><dd>
+Automatically play games.
+Use this option if you want to run <b class="command">twogtp</b> as a
+standalone program without a program like
+<span class="application">GoGui</span> which controls the move generation
+with <b class="userinput"><tt>genmove_black</tt></b> and
+<b class="userinput"><tt>genmove_white</tt></b> commands.
+</dd><dt><span class="term"><tt class="option">-black</tt> <i class="replaceable"><tt>command</tt></i></span></dt><dd>
+Command for black program.
+</dd><dt><span class="term"><tt class="option">-compare</tt></span></dt><dd>
+Compare a list of SGF files given as arguments an exit.
+Works only with SGF files with alternating moves and without setup stones.
+</dd><dt><span class="term"><tt class="option">-games</tt> <i class="replaceable"><tt>n</tt></i></span></dt><dd>
+Number of games to play (0 means no limit).
+</dd><dt><span class="term"><tt class="option">-help</tt></span></dt><dd>
+Display help and exit.
+</dd><dt><span class="term"><tt class="option">-komi</tt> <i class="replaceable"><tt>komi</tt></i></span></dt><dd>
+Komi. If this option is not used, the komi can be set with
+the <b class="userinput"><tt>komi</tt></b> command or default komi 5.5 will be
+used with option <tt class="option">-auto</tt>.
+</dd><dt><span class="term"><tt class="option">-sgffile</tt> <i class="replaceable"><tt>prefix</tt></i></span></dt><dd>
+Save games after they are finished with filename
+<tt class="filename">
+<i class="replaceable"><tt>prefix</tt></i>-<i class="replaceable"><tt>n</tt></i>.sgf
+</tt>
+with <i class="replaceable"><tt>n</tt></i> being the game number.
+The results are appended to the file
+<tt class="filename"><i class="replaceable"><tt>prefix</tt></i>.dat</tt>.
+</dd><dt><span class="term"><tt class="option">-size</tt> <i class="replaceable"><tt>n</tt></i></span></dt><dd>
+Board size for games. If this option is not used the size will
+be set with the <b class="userinput"><tt>boardsize</tt></b> command or
+default size 19 will be used with option <tt class="option">-auto</tt>.
+</dd><dt><span class="term"><tt class="option">-verbose</tt></span></dt><dd>
+Print debugging messages.
+</dd><dt><span class="term"><tt class="option">-white</tt> <i class="replaceable"><tt>command</tt></i></span></dt><dd>
+Command for white program.
+</dd></dl></div>
+</div><div class="refsection" lang="en">
+<h2>GTP Extensions</h2>
+<p>
+</p><div class="variablelist"><dl><dt><span class="term"><b class="userinput"><tt>gogui_interrupt</tt></b></span></dt><dd>
+Indicate interrupt ability for GoGui.
+<span class="application">TwoGtp</span> will forward the interrupt to both
+programs with the appropriate method if they implement either
+<b class="userinput"><tt>gogui_interrupt</tt></b> or <b class="userinput"><tt>gogui_sigint</tt></b>.
+See the chapter <a href="interrupt.html" title="Chapter 4. Interrupting commands">Chapter 4, <i>Interrupting commands</i></a>
+of the <span class="application">GoGui</span> documentation.
+</dd><dt><span class="term"><b class="userinput"><tt>gogui_title</tt></b></span></dt><dd>
+Return a title for the current game consisting of the game number (if option
+<tt class="option">-sgffile</tt> was used) and the player names.
+</dd><dt><span class="term">
+<b class="userinput"><tt>twogtp_black <i class="replaceable"><tt>command</tt></i></tt></b>
+</span></dt><dd>
+Send <i class="replaceable"><tt>command</tt></i> to black player .
+</dd><dt><span class="term">
+<b class="userinput"><tt>twogtp_white <i class="replaceable"><tt>command</tt></i></tt></b>
+</span></dt><dd>
+Send <i class="replaceable"><tt>command</tt></i> to white player .
+</dd></dl></div><p>
+</p>
+</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="reference-sgftotex.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="reference-index.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="news.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>
