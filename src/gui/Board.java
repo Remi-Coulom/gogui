@@ -33,7 +33,7 @@ public class Board
 {
     public interface Listener
     {
-        void fieldClicked(go.Point p, int modifiers);
+        void fieldClicked(go.Point p, boolean modifiedSelect);
     }
 
     public Board(go.Board board)
@@ -92,10 +92,10 @@ public class Board
         getField(p).clearInfluence();
     }
 
-    public void fieldClicked(go.Point p, int modifiers)
+    public void fieldClicked(go.Point p, boolean modifiedSelect)
     {
         if (m_listener != null)
-            m_listener.fieldClicked(p, modifiers);
+            m_listener.fieldClicked(p, modifiedSelect);
     }
 
     public void focusGained(FocusEvent event)

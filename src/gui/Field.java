@@ -60,8 +60,9 @@ public class Field
     {
         int code = event.getKeyCode();
         int modifiers = event.getModifiers();
+        boolean modifiedSelect = ((modifiers & ActionEvent.CTRL_MASK) != 0);
         if (code == KeyEvent.VK_ENTER)
-            m_board.fieldClicked(m_point, modifiers);
+            m_board.fieldClicked(m_point, modifiedSelect);
     }
 
     public void keyReleased(KeyEvent event)
@@ -72,12 +73,17 @@ public class Field
     {
     }
 
-    public void mouseClicked(MouseEvent e)
+    public void mouseClicked(MouseEvent event)
     {
-        if (e.getClickCount() == 2)
-            m_board.fieldClicked(m_point, ActionEvent.CTRL_MASK);
+        if (event.getClickCount() == 2)
+            m_board.fieldClicked(m_point, true);
         else
-            m_board.fieldClicked(m_point, 0);
+        {            
+            int modifiers = event.getModifiers();
+            int mask = (ActionEvent.CTRL_MASK | ActionEvent.META_MASK);
+            boolean modifiedSelect = ((modifiers & mask) != 0);
+            m_board.fieldClicked(m_point, modifiedSelect);
+        }
     }
 
     public void mouseEntered(MouseEvent e)

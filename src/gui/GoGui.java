@@ -234,7 +234,7 @@ class GoGui
         clearStatus();
     }
 
-    public void fieldClicked(go.Point p, int modifiers)
+    public void fieldClicked(go.Point p, boolean modifiedSelect)
     {
         if (m_commandInProgress)
             return;
@@ -262,10 +262,9 @@ class GoGui
         }
         else if (m_analyzeRequestPointList)
         {
-            boolean controlClick = ((modifiers & ActionEvent.CTRL_MASK) != 0);
             if (m_analyzePointListArg.contains(p))
             {
-                if (! controlClick)
+                if (! modifiedSelect)
                     m_analyzePointListArg.remove(p);
             }
             else
@@ -275,7 +274,7 @@ class GoGui
                 m_guiBoard.setSelect((go.Point)m_analyzePointListArg.get(i),
                                      true);
             m_guiBoard.repaint();
-            if (controlClick
+            if (modifiedSelect
                 && m_analyzePointListArg.size() > 0)
                 analyzeBegin(false, false);
             return;
@@ -2204,7 +2203,7 @@ class GoGui
     private void showStatusSelectPointList()
     {
         showStatus("Select points for " + m_analyzeCommand.getLabel()
-                   + ". Select last point with double click or Ctrl-Enter.");
+                   + " (last point with right button or Ctrl key down).");
     }
 
     private void showStatusSelectTarget()
