@@ -2366,6 +2366,7 @@ class GoGui
             m_currentNode.setToMove(toMove);
         executeRoot();
         fileModified();
+        updateGameInfo(true);
         boardChangedBegin(false, false);
         setFastUpdate(false);
     }
