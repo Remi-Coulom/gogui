@@ -19,7 +19,7 @@ public class Field
     extends JComponent
     implements FocusListener, KeyListener, MouseListener
 {
-    Field(gui.Board board, go.Point p)
+    public Field(gui.Board board, go.Point p)
     {
         m_board = board;
         m_color = go.Color.EMPTY;
