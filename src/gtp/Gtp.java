@@ -259,11 +259,9 @@ public class Gtp
     {
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
-        log(">> " + command);
-        if (m_callback != null)
-            m_callback.sentCommand(command);
         if (m_isProgramDead)
             throw new Error("Program is dead.");
+        log(">> " + command);
         m_answer = "";
         m_out.println(command);
         m_out.flush();
@@ -272,6 +270,8 @@ public class Gtp
             m_isProgramDead = true;
             throw new Error("Go program died.");
         }
+        if (m_callback != null)
+            m_callback.sentCommand(command);
         java.util.Timer timer = null;
         if (timeout > 0)
         {
