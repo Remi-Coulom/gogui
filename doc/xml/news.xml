@@ -8,6 +8,10 @@
 <revremark>
 <itemizedlist>
 <listitem>
+Use <ulink url="http://ant.apache.org">Apache Ant</ulink> instead of
+GNU make as a build system.
+</listitem>
+<listitem>
 <application>TwoGtp</application>: support an optional third program as a
 referee.
 </listitem>
