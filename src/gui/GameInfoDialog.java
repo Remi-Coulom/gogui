@@ -22,7 +22,7 @@ public class GameInfoDialog
     {
         GameInfoDialog gameInfoDialog = new GameInfoDialog(gameInformation);
         JDialog dialog =
-            gameInfoDialog.createDialog(parent, "Game Info - GoGui");
+            gameInfoDialog.createDialog(parent, "Game Info");
         boolean done = false;
         while (! done)
         {

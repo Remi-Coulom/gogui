@@ -332,7 +332,7 @@ public class GameTreeViewer
 
     public GameTreeViewer(Listener listener)
     {
-        super("Game Tree - GoGui");
+        super("Game Tree");
         GuiUtils.setGoIcon(this);
         Container contentPane = getContentPane();
         m_panel = new GameTreePanel(listener);

@@ -19,7 +19,7 @@ public class ScoreDialog
 {
     public ScoreDialog(Frame owner, ActionListener listener)
     {
-        super(owner, "Score - GoGui");
+        super(owner, "Score");
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         JPanel panelDetails = new JPanel(new GridLayout(0, 2, 0, 0));
         m_territoryBlack = createEntry(panelDetails, "Territory Black");
