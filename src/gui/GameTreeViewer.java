@@ -209,7 +209,6 @@ class GameTreePanel
         createNodes(this, m_gameTree.getRoot(), 0, 0, m_margin, m_margin, 0);
         GameNode gameNode = getGameNode(currentNode);
         gameNode.setCurrentNode(true);
-        SpringLayout layout = (SpringLayout)getLayout();
         setPreferredSize(new Dimension(m_maxX + m_nodeDist + m_margin,
                                        m_maxY + m_nodeDist + m_margin));
         revalidate();
@@ -289,7 +288,6 @@ class GameTreePanel
     private int drawGrid(Graphics graphics, Node node, int x, int y)
     {
         int numberChildren = node.getNumberChildren();
-        int offset = m_nodeSize / 2;        
         int xChild = x + m_nodeDist;
         int yChild = y;
         for (int i = 0; i < numberChildren; ++i)
@@ -311,7 +309,6 @@ class GameTreePanel
 
     private void scrollToCurrent()
     {
-        GameNode gameNode = getGameNode(m_currentNode);
         scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeSize,
                                           m_currentNodeY,
                                           5 * m_nodeSize, 3 * m_nodeSize));

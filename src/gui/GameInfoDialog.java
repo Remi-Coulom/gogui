@@ -118,7 +118,7 @@ public class GameInfoDialog
     {
         try
         {
-            float komi = Float.parseFloat(getTextFieldContent(m_komi));
+            Float.parseFloat(getTextFieldContent(m_komi));
         }
         catch (NumberFormatException e)
         {

@@ -251,7 +251,6 @@ class GoGui
             return;
         if (m_analyzeDialog == null)
         {
-            Vector supportedCommands = null;
             m_analyzeDialog =
                 new AnalyzeDialog(this, m_prefs,
                                   m_commandThread.getSupportedCommands());
@@ -505,9 +504,8 @@ class GoGui
             }
             else if (arguments.size() > 1)
                 throw new Exception("Only one program argument allowed.");
-            GoGui gui = new GoGui(program, prefs, file, move, time,
-                                  verbose, computerBlack, computerWhite, auto,
-                                  gtpFile, gtpCommand, initAnalyze);
+            new GoGui(program, prefs, file, move, time, verbose, computerBlack,
+                      computerWhite, auto, gtpFile, gtpCommand, initAnalyze);
         }
         catch (AssertionError e)
         {
@@ -1294,7 +1292,6 @@ class GoGui
 
     private void cbScore()
     {
-        go.Point[] isDeadStone = null;
         if (m_commandThread != null
             && m_commandThread.isCommandSupported("final_status_list"))
         {
@@ -1887,7 +1884,6 @@ class GoGui
 
     private void initialize()
     {
-        File file = null;
         if (! m_file.equals(""))
             newGameFile(m_boardSize, new File(m_file), m_move);
         else
@@ -2088,7 +2084,7 @@ class GoGui
         {
             String title = FileUtils.removeExtension(new File(file.getName()),
                                                      "tex");
-            new latex.Writer(title, out, m_gameTree, false, null, null, null);
+            new latex.Writer(title, out, m_gameTree, false);
         }
         else
         {

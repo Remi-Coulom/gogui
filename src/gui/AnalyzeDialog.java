@@ -303,9 +303,8 @@ class AnalyzeDialog
     private JMenu createMenuFile()
     {
         JMenu menu = createMenu("File", KeyEvent.VK_F);
-        JMenuItem item =
-            addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload",
-                        "Reload commands from configuration files");
+        addMenuItem(menu, "Reload", KeyEvent.VK_R, "reload",
+                    "Reload commands from configuration files");
         menu.addSeparator();
         addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
                     m_shortcutKeyMask, "close");

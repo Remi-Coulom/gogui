@@ -84,7 +84,6 @@ public class TwoGtp
             response.setLength(0);
             if (newGame(m_size > 0 ? m_size : 19, response))
             {
-                int numberPass = 0;
                 while (! m_board.bothPassed())
                 {
                     response.setLength(0);

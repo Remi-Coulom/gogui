@@ -396,7 +396,7 @@ public final class Gtp
         {
             if (isCommandSupported("gogui_interrupt"))
             {
-                String response = sendCommand("gogui_interrupt");
+                sendCommand("gogui_interrupt");
                 m_isInterruptCommentSupported = true;
             }
             else if (isCommandSupported("gogui_sigint"))

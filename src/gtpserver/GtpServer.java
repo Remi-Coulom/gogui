@@ -119,8 +119,7 @@ class GtpServer
                 System.exit(-1);
             }
             String program = (String)arguments.get(0);
-            GtpServer gtpServer = new GtpServer(verbose, loop, program,
-                                                remoteHost, port, userFile);
+            new GtpServer(verbose, loop, program, remoteHost, port, userFile);
         }
         catch (RuntimeException e)
         {

@@ -101,8 +101,7 @@ class SgfToTex
         throws sgf.Reader.Error
     {
         sgf.Reader reader = new sgf.Reader(new InputStreamReader(in), null);
-        new latex.Writer(title, out, reader.getGameTree(), usePass, null, null,
-                         null);
+        new latex.Writer(title, out, reader.getGameTree(), usePass);
     }
 
     private static void printUsage(PrintStream out)

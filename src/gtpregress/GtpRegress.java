@@ -731,9 +731,6 @@ class GtpRegress
         catch (UnknownHostException e)
         {
         }
-        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                                           DateFormat.FULL);
-        Date date = Calendar.getInstance().getTime();
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Regression Test Summary</title>\n" +
@@ -860,7 +857,6 @@ class GtpRegress
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
                   + "\">\n");
         writeInfo(out);
-        String outFile = FileUtils.replaceExtension(m_file, "out", "out.html");
         out.print("<tr><th align=\"left\">Output</th><td><a href=\""
                   + m_outFileRelativeName + "\">"
                   + m_outFileRelativeName + "</a></td></tr>\n" +

@@ -125,7 +125,6 @@ public class Field
     public void paintComponent(Graphics graphics)
     {
         Graphics2D graphics2D = (Graphics2D)graphics;
-        Dimension size = getSize();
         drawFieldColor(graphics);
         if (graphics2D == null)
             drawTerritoryGraphics(graphics);

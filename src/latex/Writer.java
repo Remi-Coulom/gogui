@@ -45,8 +45,7 @@ public class Writer
     }
 
     public Writer(String title, OutputStream out, GameTree gameTree,
-                  boolean usePass, String[][] strings,
-                  boolean[][] markups, boolean[][] selects)
+                  boolean usePass)
     {        
         m_out = new PrintStream(out);
         m_usePass = usePass;

@@ -70,7 +70,7 @@ class NetGtp
             }
             String hostname = (String)arguments.get(0);
             int port = Integer.parseInt((String)arguments.get(1));
-            NetGtp netGtp = new NetGtp(hostname, port);
+            new NetGtp(hostname, port);
         }
         catch (AssertionError e)
         {

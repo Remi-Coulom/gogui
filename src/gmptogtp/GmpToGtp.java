@@ -43,7 +43,7 @@ public class GmpToGtp
         else if (command.startsWith("gmp_text"))
             return sendTalk(command, response);
         else if (command.startsWith("gmp_queue"))
-            return queue(command, response);
+            return queue(response);
         else if (command.startsWith("gogui_title"))
             response.append(m_title);
         else if (command.startsWith("gogui_interrupt"))
@@ -51,7 +51,7 @@ public class GmpToGtp
         else if (command.startsWith("white"))
             return play(false, command, response);
         else if (command.startsWith("undo"))
-            return undo(command, response);
+            return undo(response);
         else if (command.startsWith("genmove_black"))
             return genmove(true, response);
         else if (command.startsWith("genmove_white"))
@@ -376,7 +376,7 @@ public class GmpToGtp
         }
     }
 
-    private boolean queue(String command, StringBuffer response)
+    private boolean queue(StringBuffer response)
     {
         return m_gmp.queue(response);
     }
@@ -395,7 +395,7 @@ public class GmpToGtp
         return true;
     }
 
-    private boolean undo(String command, StringBuffer response)
+    private boolean undo(StringBuffer response)
     {
         return m_gmp.undo(response);
     }
