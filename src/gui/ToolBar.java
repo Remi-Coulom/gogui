@@ -25,16 +25,16 @@ class ToolBar
         m_buttonOpen = addButton("fileopen.png", "open", "Load game");
         m_buttonSave = addButton("filesave2.png", "save", "Save game");
         add(new JToolBar.Separator());
-        m_buttonBeginning = addButton("player_start.png", "beginning",
+        m_buttonBeginning = addButton("beginning.png", "beginning",
                                       "Beginning of game");
-        m_buttonBackward10 = addButton("player_rew.png",
-                                       "backward-10", "Take back 10 moves");
-        m_buttonBackward = addButton("back.png", "backward", "Take back move");
-        m_buttonForward = addButton("player_next.png", "forward",
-                                    "Replay move");
-        m_buttonForward10 = addButton("player_fwd.png", "forward-10",
-                                      "Replay 10 moves");
-        m_buttonEnd = addButton("player_end.png", "end", "End of game");
+        m_buttonBackward10 = addButton("backward10.png",
+                                       "backward-10", "Take back");
+        m_buttonBackward = addButton("back.png", "backward", "Take back");
+        m_buttonForward = addButton("forward.png", "forward",
+                                    "Replay");
+        m_buttonForward10 = addButton("forward10.png", "forward-10",
+                                      "Replay 10");
+        m_buttonEnd = addButton("end.png", "end", "End of game");
         add(new JToolBar.Separator());
         m_buttonNextVariation =
             addButton("down.png", "next-variation", "Next variation");
