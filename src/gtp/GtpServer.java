@@ -68,32 +68,36 @@ class ReadThread extends Thread
         {            
             while (true)
             {
-                String line;
-                line = m_in.readLine();
+                String line = m_in.readLine();
                 if (line == null)
                 {
                     m_endOfFile = true;
-                    return;
                 }
-                if (m_log)
-                    m_gtpServer.log(line);
-                line = line.trim();
-                if (line.equals("# interrupt"))
+                else
                 {
-                    m_gtpServer.interruptCommand();
+                    if (m_log)
+                        m_gtpServer.log(line);
+                    line = line.trim();
+                    if (line.equals("# interrupt"))
+                    {
+                        m_gtpServer.interruptCommand();
+                    }
+                    if (line.equals("") || line.charAt(0) == '#')
+                        continue;
                 }
-                if (line.equals("") || line.charAt(0) == '#')
-                    continue;
                 synchronized (this)
                 {
                     while (! m_waitCommand)
                     {
                         wait();
                     }
-                    m_command = parseLine(line);
+                    if (line == null)
+                        m_command = null;
+                    else
+                        m_command = parseLine(line);
                     notifyAll();
                     m_waitCommand = false;
-                    if (m_command.isQuit())
+                    if (m_command == null || m_command.isQuit())
                         return;
                 }
             }

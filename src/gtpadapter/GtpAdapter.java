@@ -199,6 +199,7 @@ public class GtpAdapter
         catch (Throwable t)
         {
             System.err.println(StringUtils.formatException(t));
+            t.printStackTrace();
             System.exit(-1);
         }
     }
