@@ -1885,7 +1885,7 @@ class GoGui
     private void initialize()
     {
         if (! m_file.equals(""))
-            newGameFile(m_boardSize, new File(m_file), m_move);
+            newGameFile(m_boardSize, m_move);
         else
             newGame(m_boardSize);
         m_toolBar.enableAll(true, m_currentNode);
@@ -1992,7 +1992,7 @@ class GoGui
         setTitleFromProgram();
     }
 
-    private void newGameFile(int size, File file, int move)
+    private void newGameFile(int size, int move)
     {
         initGame(size);
         loadFile(new File(m_file), move);
