@@ -25,7 +25,7 @@ class GoGui
     GoGui(String program, int size, String file, int move,
           String analyzeCommand, boolean gtpShell, String time,
           boolean verbose, boolean fillPasses, boolean computerNone,
-          boolean autoplay)
+          boolean autoplay, String gtpFile)
         throws Gtp.Error, AnalyzeCommand.Error
     {
         if (program != null && ! program.equals(""))
@@ -41,6 +41,7 @@ class GoGui
         m_boardSize = size;
         m_file = file;
         m_fillPasses = fillPasses;
+        m_gtpFile = gtpFile;
         m_move = move;
         m_computerNoneOption = computerNone;
         m_autoplay = autoplay;
@@ -249,6 +250,7 @@ class GoGui
                     "computer-none",
                     "file:",
                     "fillpasses",
+                    "gtpfile:",
                     "gtpshell",
                     "help",
                     "move:",
@@ -267,10 +269,11 @@ class GoGui
                     "  -analyze name   initialize analzye command\n" +
                     "  -autoplay       auto play games (if computer both)\n" +
                     "  -computer-none  computer plays no side\n" +
-                    "  -gtpshell       open GTP shell at startup\n" +
                     "  -file filename  load SGF file\n" +
                     "  -fillpasses     never send subsequent moves of\n" +
                     "                  the same color to the program\n" +
+                    "  -gtpshell       open GTP shell at startup\n" +
+                    "  -gtpfile        send GTP file at startup\n" +
                     "  -help           display this help and exit\n" +
                     "  -move           load SGF file until move number\n" +
                     "  -size           set board size\n" +
@@ -285,6 +288,7 @@ class GoGui
             String file = opt.getString("file", "");
             boolean fillPasses = opt.isSet("fillpasses");
             boolean gtpShell = opt.isSet("gtpshell");
+            String gtpFile = opt.getString("gtpfile", "");
             int move = opt.getInteger("move", -1);
             int size = opt.getInteger("size", 19);
             String time = opt.getString("time", null);
@@ -303,7 +307,7 @@ class GoGui
             
             GoGui gui = new GoGui(program, size, file, move, analyzeCommand,
                                   gtpShell, time, verbose, fillPasses,
-                                  computerNone, autoplay);
+                                  computerNone, autoplay, gtpFile);
         }
         catch (Throwable t)
         {
@@ -424,6 +428,7 @@ class GoGui
     private String m_analyzeLabel;
     private String m_analyzeTitle;
     private String m_file;
+    private String m_gtpFile;
     private String m_name = "Unknown Go Program";
     private String m_pid;
     private String m_version = "?";
@@ -734,7 +739,7 @@ class GoGui
             GoGui gui = new GoGui(program, m_boardSize, file.toString(),
                                   m_board.getMoveNumber(), null,
                                   false, null, m_verbose, m_fillPasses,
-                                  m_computerNoneOption, m_autoplay);
+                                  m_computerNoneOption, m_autoplay, "");
 
         }
         catch (Throwable t)
@@ -1222,6 +1227,8 @@ class GoGui
                 {
                 }
                 m_gtpShell.setInitialCompletions(m_commandList);
+                if (! m_gtpFile.equals(""))
+                    sendGtpFile();
             }
             if (m_commandThread == null || m_computerNoneOption)
                 computerNone();
@@ -1434,6 +1441,47 @@ class GoGui
     private void savePosition(File file) throws FileNotFoundException
     {
         sgf.Writer w = new sgf.Writer(file, m_board);
+    }
+
+    private void sendGtpFile()
+    {
+        File file = new File(m_gtpFile);
+        java.io.BufferedReader in;
+        try
+        {
+            in = new BufferedReader(new FileReader(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            showError(e.getMessage());
+            return;
+        }
+        while (true)
+        {
+            try
+            {
+                String line = in.readLine();
+                if (line == null)
+                    return;
+                line = line.trim();
+                if (! line.equals("") && line.charAt(0) != '#')
+                {
+                    try
+                    {
+                        m_commandThread.sendCommand(line);
+                    }
+                    catch (Gtp.Error e)
+                    {
+                        showGtpError(e);
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                showError(e.getMessage());
+                return;
+            }
+        }
     }
 
     private void setHandicap() throws Gtp.Error
