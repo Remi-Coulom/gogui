@@ -14,13 +14,19 @@ import java.awt.image.*;
 public class RadialGradientContext
     implements PaintContext
 {
-    public RadialGradientContext(Point2D p, java.awt.Color c1, Point2D r,
-                                 java.awt.Color c2)
+    public RadialGradientContext(Point2D point, java.awt.Color color1,
+                                 Point2D radius, java.awt.Color color2)
     {
-        m_point = p;
-        m_color1 = c1;
-        m_color2 = c2;
-        m_radius = r;
+        m_point = point;
+        m_red1 = color1.getRed();
+        m_green1 = color1.getGreen();
+        m_blue1 = color1.getBlue();
+        m_alpha1 = color1.getAlpha();
+        m_radius = radius.distance(0, 0);
+        m_redDiff = color2.getRed() - m_red1;
+        m_greenDiff = color2.getGreen() - m_green1;
+        m_blueDiff = color2.getBlue() - m_blue1;
+        m_alphaDiff = color2.getAlpha() - m_alpha1;
     }
     
     public void dispose()
@@ -37,39 +43,40 @@ public class RadialGradientContext
         WritableRaster raster =
             getColorModel().createCompatibleWritableRaster(w, h);
         int[] data = new int[w * h * 4];
+        int index = -1;
         for (int j = 0; j < h; ++j)
-        {
             for (int i = 0; i < w; ++i)
             {
                 double distance = m_point.distance(x + i, y + j);
-                double radius = m_radius.distance(0, 0);
-                double ratio = Math.min(distance / radius, 1.0);
-                int base = (j * w + i) * 4;
-                data[base + 0] =
-                    (int)(m_color1.getRed() + ratio *
-                          (m_color2.getRed() - m_color1.getRed()));
-                data[base + 1] =
-                    (int)(m_color1.getGreen() + ratio *
-                          (m_color2.getGreen() - m_color1.getGreen()));
-                data[base + 2] =
-                    (int)(m_color1.getBlue() + ratio *
-                          (m_color2.getBlue() - m_color1.getBlue()));
-                data[base + 3] =
-                    (int)(m_color1.getAlpha() + ratio *
-                          (m_color2.getAlpha() - m_color1.getAlpha()));
+                double ratio = Math.min(distance / m_radius, 1.0);
+                data[++index] = (int)(m_red1 + ratio * m_redDiff);
+                data[++index] = (int)(m_green1 + ratio * m_greenDiff);
+                data[++index] = (int)(m_blue1 + ratio * m_blueDiff);
+                data[++index] = (int)(m_alpha1 + ratio * m_alphaDiff);
             }
-        }
         raster.setPixels(0, 0, w, h, data);
         return raster;
     }
 
+    private int m_red1;
+
+    private int m_redDiff;
+
+    private int m_green1;
+
+    private int m_greenDiff;
+
+    private int m_blue1;
+
+    private int m_blueDiff;
+
+    private int m_alpha1;
+
+    private int m_alphaDiff;
+
+    private double m_radius;
+
     private Point2D m_point;
-
-    private Point2D m_radius;
-
-    private java.awt.Color m_color1;
-
-    private java.awt.Color m_color2;
 }
 
 //-----------------------------------------------------------------------------
