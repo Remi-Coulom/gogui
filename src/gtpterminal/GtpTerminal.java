@@ -19,12 +19,13 @@ import version.*;
 public class GtpTerminal
     implements Gtp.IOCallback
 {
-    public GtpTerminal(String program, int size)
+    public GtpTerminal(String program, int size, boolean verbose)
         throws Exception
     {
         if (program.equals(""))
             throw new Exception("No program set.");
-        m_gtp = new Gtp(program, false, this);
+        m_verbose = verbose;
+        m_gtp = new Gtp(program, verbose, this);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
         m_board = new Board(size);
@@ -43,7 +44,8 @@ public class GtpTerminal
             String options[] = {
                 "config:",
                 "help",
-                "size:"
+                "size:",
+                "verbose"
             };
             Options opt = new Options(args, options);
             opt.handleConfigOption();
@@ -58,6 +60,7 @@ public class GtpTerminal
                 System.exit(0);
             }
             int size = opt.getInteger("size", 19, 1);
+            boolean verbose = opt.isSet("verbose");
             Vector arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
@@ -65,7 +68,7 @@ public class GtpTerminal
                 System.exit(-1);
             }
             String program = (String)arguments.get(0);
-            GtpTerminal gtpTerminal = new GtpTerminal(program, size);
+            GtpTerminal gtpTerminal = new GtpTerminal(program, size, verbose);
             gtpTerminal.mainLoop();
             gtpTerminal.close();
         }
@@ -91,7 +94,7 @@ public class GtpTerminal
 
     public void mainLoop() throws IOException
     {
-        newGame();
+        newGame(m_board.getSize());
         printBoard();
         BufferedReader reader =
             new BufferedReader(new InputStreamReader(System.in));
@@ -120,12 +123,16 @@ public class GtpTerminal
     
     public void receivedStdErr(String s)
     {
-        System.err.print(s);
+        // If m_verbose, logging is already done by Gtp
+        if (! m_verbose)
+            System.err.print(s);
     }
 
     public void sentCommand(String s)
     {
     }
+
+    private boolean m_verbose;
 
     private Board m_board;
 
@@ -173,6 +180,8 @@ public class GtpTerminal
             help();
         else if (cmd.equals("list_commands"))
             listCommands();
+        else if (cmd.equals("new_game"))
+            newGame(cmdArray);
         else if (cmd.equals("undo"))
             undo();
         else if (cmd.equals("black")
@@ -205,6 +214,7 @@ public class GtpTerminal
                          "  genmove\n" +
                          "  help\n" +
                          "  list_commands\n" +
+                         "  new_game\n" +
                          "  undo\n" +
                          "  quit\n" +
                          "The following commands are not allowed:\n" +
@@ -229,21 +239,37 @@ public class GtpTerminal
             System.out.println((String)commands.get(i));
     }
 
-    private void newGame()
+    private void newGame(int size)
     {
         String command;
         StringBuffer response = new StringBuffer();
-        command = m_gtp.getCommandBoardsize(m_board.getSize());
+        command = m_gtp.getCommandBoardsize(size);
         if (command != null && ! send(command, response))
         {
             System.out.println(response);
             return;
         }
-        command = m_gtp.getCommandClearBoard(m_board.getSize());
+        command = m_gtp.getCommandClearBoard(size);
         if (! send(command, response))
         {
             System.out.println(response);
             return;
+        }
+        m_board = new Board(size);
+    }
+
+    private void newGame(String[] cmdArray)
+    {
+        if (cmdArray.length > 1)
+        {
+            try
+            {
+                int size = Integer.parseInt(cmdArray[1]);
+                newGame(size);
+            }
+            catch (NumberFormatException exception)
+            {
+            }
         }
     }
 
@@ -275,6 +301,7 @@ public class GtpTerminal
             "\n" +
             "-config       config file\n" +
             "-size n       board size (default 19)\n" +
+            "-verbose      print debug information\n" +
             "-version      print version and exit\n";
         out.print(helpText);
     }
