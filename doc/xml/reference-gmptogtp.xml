@@ -40,9 +40,9 @@ Go Text Protocol adpater program for playing games using the
 Go Modem Protocol over a serial line.
 </para>
 <para>
-If a <userinput><option><replaceable>program</replaceable></option></userinput>
-argument is given, then the given program is run as a child process and
-expected to communicate via GMP through its standard input and output.
+If a program argument is given, then the given program is run as a child
+process and expected to communicate via GMP through its standard input and
+output.
 For using a serial device, an implementation of the
 <ulink url="http://java.sun.com/products/javacomm/">
 Java Communications API</ulink> must be installed

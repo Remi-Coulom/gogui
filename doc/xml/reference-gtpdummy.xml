@@ -48,7 +48,7 @@ Illegal moves sent to the program are not checked and always accepted.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from <replaceable>file</replaceable>.
+Read command line options and arguments from file.
 </para>
 </listitem>
 </varlistentry>

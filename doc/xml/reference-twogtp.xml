@@ -205,7 +205,7 @@ Works only with SGF files with alternating moves and without setup stones.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from <replaceable>file</replaceable>.
+Read command line options and arguments from file.
 </para>
 </listitem>
 </varlistentry>
@@ -362,7 +362,7 @@ Return a title for the current game consisting of the game number (if option
 </term>
 <listitem>
 <para>
-Send <replaceable>command</replaceable> to black player.
+Send command to black player.
 </para>
 </listitem>
 </varlistentry>
@@ -373,7 +373,7 @@ Send <replaceable>command</replaceable> to black player.
 </term>
 <listitem>
 <para>
-Send <replaceable>command</replaceable> to referee program.
+Send command to referee program.
 </para>
 </listitem>
 </varlistentry>
@@ -384,7 +384,7 @@ Send <replaceable>command</replaceable> to referee program.
 </term>
 <listitem>
 <para>
-Send <replaceable>command</replaceable> to white player.
+Send command to white player.
 </para>
 </listitem>
 </varlistentry>

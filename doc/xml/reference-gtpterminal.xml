@@ -128,7 +128,7 @@ All other commands are forwarded directly to the program as GTP commands.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from <replaceable>file</replaceable>.
+Read command line options and arguments from file.
 </para>
 </listitem>
 </varlistentry>

@@ -48,7 +48,7 @@ Converts <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files to
 </term>
 <listitem>
 <para>
-Read command line options and arguments from <replaceable>file</replaceable>.
+Read command line options and arguments from file.
 </para>
 </listitem>
 </varlistentry>

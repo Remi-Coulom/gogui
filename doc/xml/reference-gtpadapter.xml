@@ -53,7 +53,7 @@ for the Go program .
 </term>
 <listitem>
 <para>
-Read command line options and arguments from <replaceable>file</replaceable>.
+Read command line options and arguments from file.
 </para>
 </listitem>
 </varlistentry>
@@ -76,7 +76,7 @@ play commands.
 </term>
 <listitem>
 <para>
-Send GTP commands from <replaceable>file</replaceable> to program at startup.
+Send GTP commands from file to program at startup.
 </para>
 </listitem>
 </varlistentry>
@@ -109,9 +109,8 @@ not the one from the adapter to the Go program).
 </term>
 <listitem>
 <para>
-Use <replaceable>name</replaceable> for answering the
-<userinput>name</userinput> command.
-If <replaceable>name</replaceable> contains a colon, the part after the colon
+Name used for answering the <userinput>name</userinput> command.
+If the name contains a colon, the part after the colon
 is interpreted as a version and used for answering the
 <userinput>version</userinput> command.
 </para>
@@ -137,9 +136,9 @@ them.
 </term>
 <listitem>
 <para>
-Send an <replaceable>estimate_score</replaceable> to the program before
-each <replaceable>genmove</replaceable> command and resign, if the estimation
-is below <replaceable>score</replaceable> against the side to move.
+Send an <userinput>estimate_score</userinput> to the program before
+each <userinput>genmove</userinput> command and resign, if the estimation
+is below the given score (to the disadvantage of the side to move).
 </para>
 </listitem>
 </varlistentry>
@@ -150,8 +149,7 @@ is below <replaceable>score</replaceable> against the side to move.
 </term>
 <listitem>
 <para>
-Only accept board size <replaceable>n</replaceable>, even if the program
-accepts other sizes.
+Only accept this board size , even if the program accepts other sizes.
 </para>
 </listitem>
 </varlistentry>

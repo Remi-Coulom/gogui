@@ -85,7 +85,7 @@ colors and a game is finished.
 </term>
 <listitem>
 <para>
-Send Gtp command at startup. The argument can contain multiple
+Send GTP command at startup. The argument can contain multiple
 commands separated by '\n'.
 </para>
 </listitem>
@@ -130,7 +130,7 @@ Computer plays no side.
 </term>
 <listitem>
 <para>
-Read command line options and arguments from <replaceable>file</replaceable>.
+Read command line options and arguments from file.
 </para>
 </listitem>
 </varlistentry>
