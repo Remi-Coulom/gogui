@@ -81,7 +81,8 @@ If the file name ending is <filename>sgf</filename>, the game is saved
 in SGF format.
 If the file name ending is <filename>tex</filename>, the game is exported
 to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
-<ulink url="http://www.abo.fi/~vbos/psgo-frame.html">PSGO</ulink> style.
+<ulink url="http://www.ctan.org/tex-archive/graphics/pstricks/contrib/psgo/">
+PSGO</ulink> style.
 </para>
 </listitem>
 </varlistentry>

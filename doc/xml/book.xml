@@ -37,7 +37,7 @@
 <firstname>Markus</firstname><surname>Enzenberger</surname>
 </author>
 <releaseinfo>Revision &version;</releaseinfo>
-<copyright><year>2004</year><holder>Markus Enzenberger</holder></copyright>
+<copyright><year>2005</year><holder>Markus Enzenberger</holder></copyright>
 <abstract>
 <para>
 GoGui is a graphical interface to programs that play the game of Go.

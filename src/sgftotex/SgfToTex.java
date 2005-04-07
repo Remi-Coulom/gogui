@@ -55,6 +55,7 @@ class SgfToTex
                 printUsage(System.err);
                 System.exit(-1);
             }
+            String inFileName = null;
             if (arguments.size() == 0)
             {
                 in = System.in;
@@ -62,7 +63,7 @@ class SgfToTex
             }
             else
             {
-                String inFileName = (String)arguments.get(0);
+                inFileName = (String)arguments.get(0);
                 File inFile = new File(inFileName);
                 in = new FileInputStream(inFile);
                 String outFileName;
@@ -81,7 +82,7 @@ class SgfToTex
                         FileUtils.removeExtension(new File(outFile.getName()),
                                                   "tex");
             }
-            convert(in, out, title, usePass);
+            convert(in, inFileName, out, title, usePass);
         }
         catch (Throwable t)
         {
@@ -90,11 +91,11 @@ class SgfToTex
         }
     }
 
-    private static void convert(InputStream in, OutputStream out,
+    private static void convert(InputStream in, String name, OutputStream out,
                                 String title, boolean usePass)
         throws sgf.Reader.SgfError
     {
-        sgf.Reader reader = new sgf.Reader(in, null, null, 0);
+        sgf.Reader reader = new sgf.Reader(in, name, null, 0);
         new latex.Writer(title, out, reader.getGameTree(), usePass);
     }
 

@@ -108,7 +108,7 @@ public class Reader
         m_name = name;
         m_progressShow = progressShow;
         m_size = size;
-        m_isFile = (in instanceof FileInputStream);
+        m_isFile = (in instanceof FileInputStream && name != null);
         if (progressShow != null)
             progressShow.showProgress(0);
         try
