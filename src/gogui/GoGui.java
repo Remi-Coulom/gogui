@@ -1207,11 +1207,12 @@ class GoGui
     private void cbFindInComments()
     {
         String regex = FindDialog.run(this, m_comment.getSelectedText());
-        if (regex == null)
+        if (regex == null || regex.trim().equals(""))
             return;
         m_pattern = Pattern.compile(regex,
                                     Pattern.MULTILINE
                                     | Pattern.CASE_INSENSITIVE);
+        m_menuBar.enableFindNext(true);
         if (NodeUtils.commentContains(m_currentNode, m_pattern))
             m_comment.markAll(m_pattern);
         else
@@ -1229,6 +1230,7 @@ class GoGui
             if (m_currentNode == root)
             {
                 showInfo("Not found");
+                m_menuBar.enableFindNext(false);
                 return;
             }
             if (! showQuestion("End of tree reached. Continue from start?"))
@@ -1237,6 +1239,7 @@ class GoGui
             if (node == null)
             {
                 showInfo("Not found");
+                m_menuBar.enableFindNext(false);
                 return;
             }
         }
@@ -2221,6 +2224,7 @@ class GoGui
         m_lostOnTimeShown = false;
         setNeedsSave(false);
         m_resigned = false;
+        m_menuBar.enableFindNext(false);
     }
 
     private void initialize()

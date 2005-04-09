@@ -109,15 +109,10 @@ public class MenuBar
         updateRecentMenu();
     }
 
-    public void setComputerEnabled(boolean enabled)
+    public void enableFindNext(boolean enable)
     {
-        m_isComputerDisabled = ! enabled;
-        m_menuComputerColor.setEnabled(enabled);
-        m_itemComputerPlay.setEnabled(enabled);
-        m_itemBeepAfterMove.setEnabled(enabled);
-        m_itemDetachProgram.setEnabled(enabled);
-        m_itemGtpShell.setEnabled(enabled);
-        m_itemAnalyze.setEnabled(enabled);
+        m_findNextEnabled = enable;
+        m_itemFindNext.setEnabled(enable);
     }
 
     public boolean getBeepAfterMove()
@@ -194,6 +189,17 @@ public class MenuBar
         m_itemComputerBoth.setSelected(true);
     }
 
+    public void setComputerEnabled(boolean enabled)
+    {
+        m_isComputerDisabled = ! enabled;
+        m_menuComputerColor.setEnabled(enabled);
+        m_itemComputerPlay.setEnabled(enabled);
+        m_itemBeepAfterMove.setEnabled(enabled);
+        m_itemDetachProgram.setEnabled(enabled);
+        m_itemGtpShell.setEnabled(enabled);
+        m_itemAnalyze.setEnabled(enabled);
+    }
+
     public void setComputerNone()
     {
         m_itemComputerNone.setSelected(true);
@@ -252,6 +258,7 @@ public class MenuBar
         m_itemSetup.setSelected(false);
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
+        m_itemFindNext.setEnabled(m_findNextEnabled);
         if (m_isComputerDisabled)
         {
             m_menuComputerColor.setEnabled(false);
@@ -362,6 +369,8 @@ public class MenuBar
         m_itemClockRestore.setEnabled(canRestoreClock);
     }
 
+    private boolean m_findNextEnabled;
+
     private boolean m_isComputerDisabled;
 
     private static final int m_maxRecent = 20;
@@ -450,6 +459,8 @@ public class MenuBar
     private JMenuItem m_itemEnd;
 
     private JMenuItem m_itemExit;
+
+    private JMenuItem m_itemFindNext;
 
     private JMenuItem m_itemForward;
 
@@ -789,8 +800,9 @@ public class MenuBar
         menu.addSeparator();
         addMenuItem(menu, "Find in Comments", KeyEvent.VK_F, KeyEvent.VK_F,
                     m_shortcutKeyMask, "find-in-comments");
-        addMenuItem(menu, "Find Next", KeyEvent.VK_X, KeyEvent.VK_F3,
-                    0, "find-next");
+        m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_X,
+                                     KeyEvent.VK_F3, 0, "find-next");
+        m_itemFindNext.setEnabled(false);
         return menu;
     }
 
