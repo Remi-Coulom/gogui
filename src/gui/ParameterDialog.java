@@ -16,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import gtp.GtpError;
 import utils.GuiUtils;
@@ -30,12 +31,14 @@ public class ParameterDialog
                                       CommandThread commandThread)
     {
         Vector parameters = parseResponse(response);
-        JPanel panel = new JPanel(new GridLayout(0, 1));
-        for (int i = 0; i < parameters.size(); ++i)
+        int numberParameters = parameters.size();
+        JPanel panel = new JPanel(new GridLayout(0, numberParameters / 25));
+        for (int i = 0; i < numberParameters; ++i)
             panel.add(((Parameter)parameters.get(i)).getComponent());
+        JScrollPane scrollPane = new JScrollPane(panel);
         Object options[] = { "Ok", "Cancel" };
         int r =
-            JOptionPane.showOptionDialog(owner, panel, title,
+            JOptionPane.showOptionDialog(owner, scrollPane, title,
                                          JOptionPane.OK_CANCEL_OPTION,
                                          JOptionPane.PLAIN_MESSAGE, null,
                                          options, options[0]);
