@@ -32,13 +32,13 @@ public class ParameterDialog
     {
         Vector parameters = parseResponse(response);
         int numberParameters = parameters.size();
-        JPanel panel = new JPanel(new GridLayout(0, numberParameters / 25));
+        int cols = Math.max(1, numberParameters / 25);
+        JPanel panel = new JPanel(new GridLayout(0, cols));
         for (int i = 0; i < numberParameters; ++i)
             panel.add(((Parameter)parameters.get(i)).getComponent());
-        JScrollPane scrollPane = new JScrollPane(panel);
         Object options[] = { "Ok", "Cancel" };
         int r =
-            JOptionPane.showOptionDialog(owner, scrollPane, title,
+            JOptionPane.showOptionDialog(owner, panel, title,
                                          JOptionPane.OK_CANCEL_OPTION,
                                          JOptionPane.PLAIN_MESSAGE, null,
                                          options, options[0]);
