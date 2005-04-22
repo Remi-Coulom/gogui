@@ -9,19 +9,19 @@ body
 
 :link
 {
-  color: rgb(170,0,0);
+  color: #41597A;
   text-decoration: underline;
 }
 
 :visited
 {
-  color: rgb(170,0,85);
+  color: #597ba8;
   text-decoration: underline;
 }
 
 :active
 {
-  color: rgb(170,0,0);
+  color: #41597A;
   text-decoration: underline;
 }
 
