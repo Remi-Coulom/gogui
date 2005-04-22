@@ -140,6 +140,7 @@ installation directory.
  doc/man/*.1
  doc/xml/*.xml
  doc/xml/*.xml.in
+ doc/xml/*.xsl
  doxygen/Doxyfile
  doxygen/footer.html
  doxygen/README
