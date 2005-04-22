@@ -7,6 +7,12 @@ body
   color: black;
 }
 
+a
+{
+  color: #41597A;
+  text-decoration: underline;
+}
+
 :link
 {
   color: #41597A;
