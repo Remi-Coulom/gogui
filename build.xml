@@ -184,6 +184,7 @@ installation directory.
 <antcall target="check-xsl-available"/>
 <echo message="Running xsltproc"/>
 <exec executable="xsltproc">
+<arg line="--path ${docbook_xsl_home}/html"/>
 <arg line="--param admon.graphics 0"/>
 <arg line="--param chunk.quietly 1"/>
 <arg line="--param chunk.section.depth 0"/>
@@ -200,7 +201,7 @@ installation directory.
 <arg line="--param toc.section.depth 0"/>
 <arg line="--param use.id.as.filename 1"/>
 <arg line="-o doc/html/"/>
-<arg line="${docbook_xsl_home}/html/chunk.xsl"/>
+<arg line="doc/xml/custom.xsl"/>
 <arg line="doc/xml/book.xml"/>
 </exec>
 <!-- Remove empty div sections that create unwanted space in JEditorPane -->
@@ -250,7 +251,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 
 <target name="doc-check-uptodate">
 <uptodate property="doc-uptodate" targetfile="doc/html/index.html">
-<srcfiles dir= "doc/xml" includes="*.xml"/>
+<srcfiles dir= "doc/xml" includes="*.xml,*.xsl"/>
 <srcfiles dir= "doc/html" includes="*.css"/>
 </uptodate>
 </target>
