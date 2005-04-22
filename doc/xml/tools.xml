@@ -4,7 +4,7 @@
 
 <para>
 GoGui includes some tools.
-Some of the tools provide a GTP interface and
+Some of the tools provide a GTP interface; they
 can be used as the Go program command given to GoGui:
 </para>
 
@@ -18,7 +18,7 @@ Adapter program for playing games using the
 Go Modem Protocol over a serial line.
 For using this tool, an implementation of the
 <ulink url="http://java.sun.com/products/javacomm/">
-Java Communications API</ulink> must be installed
+Java Communications API</ulink> should be installed
 (<ulink url="http://www.rxtx.org/">rxtx</ulink>
 is a version supporting Linux).
 See <xref linkend="reference-gmptogtp"/> for a complete reference.
@@ -89,7 +89,7 @@ The other tools are:
 <listitem>
 <para>
 Runs a Go program supporting GTP and connects it input and output
-to a listen socket on the local computer so that other programs
+to a listen socket on the local computer, so that other programs
 can connect to it from the network.
 See <xref linkend="reference-gtpserver"/> for a complete reference.
 </para>

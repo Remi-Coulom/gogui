@@ -68,7 +68,7 @@ Can take an optional SGF file argument.
 <para>
 Initialize analyze command and automatically run it after
 changes on the board.
-Work only for commands not containing wildcards.
+Works only for commands not containing wildcards.
 </para>
 </listitem>
 </varlistentry>
@@ -79,7 +79,7 @@ Work only for commands not containing wildcards.
 </term>
 <listitem>
 <para>
-Automatically start a new game if the program plays both
+Automatically start a new game, if the program plays both
 colors and a game is finished.
 </para>
 </listitem>

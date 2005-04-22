@@ -52,25 +52,25 @@ Go Text Protocol adapter program for playing games using the
 Go Modem Protocol over a serial line.
 </para>
 <para>
-If a program argument is given, then the given program is run as a child
+If a program argument is given, the given program is run as a child
 process and expected to communicate via GMP through its standard input and
 output.
 For using a serial device, an implementation of the
 <ulink url="http://java.sun.com/products/javacomm/">
-Java Communications API</ulink> must be installed
+Java Communications API</ulink> should be installed
 (<ulink url="http://www.rxtx.org/">rxtx</ulink>
 is a version supporting Linux).
-Note that GMP is an asynchronous protocol and commands can be sent
+Note that GMP is an asynchronous protocol, commands can be sent
 by both sides at any time, while GTP is synchronous.
 This problem is resolved in the following way:
 A separate thread always listens to the serial device, acknowledges
-received GMP commands immediately and puts them on an internal
+received GMP commands immediately, and puts them on an internal
 queue.
 GTP commands that need to receive a command from GMP
-(like <userinput>genmove_black</userinput>) check if such a command
-is already on the queue and wait for a new command otherwise.
+(e.g. <userinput>genmove_black</userinput>) check, if such a command
+is already on the queue, and wait for a new command otherwise.
 If an unexpected GMP command was received, the GTP command will return
-with an error and subsequently only a GTP command that corresponds
+with an error; subsequently only a GTP command that corresponds
 to the GMP command will succeed.
 GTP commands that are waiting for a GMP command can be interrupted
 with the special comment line
@@ -134,8 +134,8 @@ Serial device name.
 <listitem>
 <para>
 Flow control for serial device.
-Possible values are hardware control (RTS/CTS), software control (XON/XOFF) or
-no control. 
+Possible values are hardware control (RTS/CTS), software control (XON/XOFF),
+or no control. 
 Default: RTS/CTS.
 </para>
 </listitem>
@@ -169,7 +169,7 @@ List all serial devices and exit.
 </term>
 <listitem>
 <para>
-Use simple version of the Go Modem Protocol as defined in the
+Use simple version of the Go Modem Protocol, as defined in the
 <ulink url="http://www.tanaka.ecc.u-tokyo.ac.jp/sig-gi/fjk2k-go/cfp-english.txt">
 Appendix A in Call For Participation to the FJK Computer Go
 Tournament 2000</ulink>.
@@ -251,7 +251,7 @@ Return a title for GoGui.
 <term><userinput>gmp_queue</userinput></term>
 <listitem>
 <para>
-Print received queued commands that have already been
+Print received queued commands, which have already been
 acknowledged.
 </para>
 </listitem>
@@ -274,7 +274,7 @@ Send text as talk characters.
 <title>Examples</title>
 
 <para>
-Test if GmpToGtp can see serial ports:
+Test, if GmpToGtp can see serial ports:
 <programlisting>
 <userinput>
 gmptogtp -list
@@ -283,11 +283,11 @@ gmptogtp -list
 </para>
 
 <para>
-Use GoGui and TwoGtp to play a game between GNU Go as Black and GMP as White
+Use GoGui and TwoGtp to play a game between GNU Go as Black, and GMP as White,
 on the first serial port.
-Note that the colors and board size are fixed by the command line options,
+Note that the colors and board size are fixed by the command line options;
 they cannot be negotiated.
-Other options that might be necessary for gmptogtp are -flow or -simple:
+Other options, which might be necessary for gmptogtp, are -flow or -simple:
 <programlisting>
 <userinput>
 BLACK="gnugo --mode gtp"

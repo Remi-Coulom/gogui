@@ -4,12 +4,12 @@
 <section>
 <title>Rendering errors in the GTP shell</title>
 <para>
-Rendering errors in the GTP shell window occur which disappear after manually
+Rendering errors in the GTP shell window occur, which disappear after manually
 resizing the window.
 This is probably a bug in the Java libraries.
-With Java 1.4.2 for Linux this problem seems to have disappeared after
-introducing a workaround which resets the window size after each text update.
-With other Java versions or on other systems the problem can still exist.
+With Java 1.4.2 for Linux, this problem seems to have disappeared after
+introducing a workaround, which resets the window size after each text update.
+With other Java versions, or on other systems, the problem can still exist.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -32,7 +32,7 @@ select from the popup menu only using the mouse.
 <title>Out of memory error when loading large SGF trees</title>
 <para>
 Java uses a low maximum memory heap size by default.
-It can be increased by using the "-Xmx" option, e.g. for 512MB:
+It can be increased by using the "-Xmx" option, for example for 512MB:
 <programlisting>
 <userinput>java -Xmx512M -jar gogui.jar</userinput>
 </programlisting>
@@ -47,7 +47,7 @@ because using swap space will make the program unusable slow.
 <para>
 If reading an SGF file fails, the line numbers of the error messages
 are sometimes wrong.
-This is due to bugs in the Java class StreamTokenizer that is used
+This is due to bugs in the Java class StreamTokenizer, which is used
 for parsing the SGF stream.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>

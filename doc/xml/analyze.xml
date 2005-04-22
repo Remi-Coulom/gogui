@@ -25,7 +25,7 @@ type/label/command[/section[/scale]]
 <section>
 <title>Types</title>
 <para>
-The command type determines what format the response is expected to be and
+The command type determines in what format the response is expected to be and
 how it is interpreted and displayed.
 It can be one of the following:
 
@@ -49,7 +49,7 @@ Strings "b" or "black" will be displayed as black,
 The response of the command is a board of strings with color names.
 They will be displayed as background colors for the fields.
 Valid color names are black, blue, cyan, green, gray, magenta,
-pink, red, white and yellow.
+pink, red, white, and yellow.
 Unknown names or the special string "" are ignored.
 </simpara>
 </listitem>
@@ -64,7 +64,7 @@ numbers that represent influence data.
 They will be displayed as black (positive) and white (negative)
 squares on the board.
 The maximum size of a square is such that the corner would touch
-the edge of a stone on that field and the edge length of the
+the edge of a stone on that field; the edge length of the
 square is proportional to the floating point number.
 The numbers are expected to be between -1 and 1.
 </simpara>
@@ -75,11 +75,11 @@ The numbers are expected to be between -1 and 1.
 <term><userinput>hstring</userinput></term>
 <listitem>
 <simpara>
-The response is a multi-line text and will be displayed in a window
-using syntax highlighting.
+The response is a multi-line text.
+It will be displayed in a window using syntax highlighting.
 Lines beginning with a word followed by a colon are displayed in bold,
 points and moves in blue, the strings "black" and "white" in purple,
-numbers in green and words that are completely uppercase in red.
+numbers in green, and words that are completely uppercase in red.
 </simpara>
 </listitem>
 </varlistentry>
@@ -109,10 +109,10 @@ The response is not displayed.
 The response to the command is a list of program parameters.
 An dialog will be shown to edit the parameters.
 Each line of the response must contain a key and value.
-It must be possible to change a value using the same command with the
+It must be possible to change a value using the same command, with the
 key and new value as arguments.
 Optionally, a line can have a type identifier for the value before the key.
-Currently the types "[string]" and "[bool]" (boolean parameter using "1" for
+Currently, the types "[string]" and "[bool]" (boolean parameter using "1" for
 true and "0" for false) are supported.
 No whitespaces are allowed in the parameter keys, but underscores will be
 replaced by spaces in the labels of the dialog.
@@ -159,8 +159,8 @@ the selected text are marked on the board.
 <listitem>
 <simpara>
 The response of the command is a board of strings.
-A string should not be longer than 3-4 characters to fit on a point on the
-board and may not contain white spaces.
+A string should not be longer than 3-4 characters, to fit on a point on the
+board, and may not contain white spaces.
 The special string "" is used for no string on a point.
 </simpara>
 </listitem>
@@ -184,7 +184,7 @@ If it has multiple lines, a window will pop up.
 The response of the command is a variation of moves
 containing points or passes.
 Text not containing points is ignored.
-They will be displayed as numbered stones on the board,
+They will be displayed as numbered stones on the board;
 the current color to move is assumed to move first.
 Additionally the response is displayed as a string.
 </simpara>
@@ -214,8 +214,8 @@ assumed to move first (see below).
 <term><userinput>varp</userinput></term>
 <listitem>
 <simpara>
-Like <userinput>var</userinput>, but the command needs a point argument
-and the color at that point is assumed to move first.
+Like <userinput>var</userinput>, but the command needs a point argument;
+the color at that point is assumed to move first.
 </simpara>
 </listitem>
 </varlistentry>
@@ -262,8 +262,8 @@ It can contain one of the following wildcards:
 <term><userinput>%c</userinput></term>
 <listitem>
 <simpara>
-Will be replaced by a color that can be selected in the analyze window
-and defaults to the color which is to play.
+Will be replaced by a color, which can be selected in the analyze window;
+default is the color which is to play.
 </simpara>
 </listitem>
 </varlistentry>
@@ -273,7 +273,7 @@ and defaults to the color which is to play.
 <listitem>
 <simpara>
 Will be replaced by a filename entered by the user.
-If the path to the file contains spaces it will be quoted with double quotes.
+If the path to the file contains spaces, it will be quoted with double quotes.
 <warning>
 <simpara>
 There are Go programs that implement filename arguments to GTP commands
@@ -300,10 +300,10 @@ Will be replaced by the color to play.
 <simpara>
 This wildcard is for commands that take an optional string argument and can
 be used for querying or setting a parameter of the Go program.
-The command should return the current value of the parameter if no argument
-is given and set the parameter to the argument otherwise.
+The command should return the current value of the parameter, if no argument
+is given, and set the parameter to the argument otherwise.
 The command will be run first without an argument to retrieve the current
-value which is used as default value in an input box presented to the
+value, which is used as default value in an input box presented to the
 user.
 If the user changes the value, the command will be run with the new value
 as an argument to set the parameter.
@@ -327,7 +327,7 @@ Will be replaced by the a point selected by the user.
 Will be replaced by a list of points selected by the user.
 The points are selected by clicking on the board.
 The last point of the list is selected either by clicking with the
-<keycap>Ctrl</keycap> key pressed, double-clicking or using the right
+<keycap>Ctrl</keycap> key pressed, double-clicking, or using the right
 mouse button.
 </simpara>
 </listitem>
@@ -349,13 +349,13 @@ Will be replaced by an argument entered by the user.
 <section>
 <title>Section</title>
 <para>
-The response to the command is searched first until a single line
+The response to the command is searched first, until a single line
 containing the section name followed by a colon is found.
 The text following from the next line on is parsed as the actual response.
 </para>
 <warning>
 <simpara>
-Using section headers is deprecated and will not be supported in the future.
+Using section headers is deprecated; it will not be supported in the future.
 It is recommended that Go engines output only one of the response types
 described above.
 </simpara>
@@ -371,7 +371,7 @@ this factor.
 </para>
 <warning>
 <simpara>
-Using scaling factors is deprecated and will not be supported in the future.
+Using scaling factors is deprecated; it will not be supported in the future.
 It is recommended that Go engines scale influence data as described for the
 type <userinput>dboard</userinput> above.
 </simpara>

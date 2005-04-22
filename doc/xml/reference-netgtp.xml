@@ -27,8 +27,8 @@ Connects to a remote Go program supporting Go Text Protocol.
 <title>Description</title>
 <para>
 Connects to a Go program supporting Go Text Protocol on a remote
-computer with host name <replaceable>hostname</replaceable>
-on port <replaceable>port</replaceable> and connects the network output
+computer, with host name <replaceable>hostname</replaceable>
+on port <replaceable>port</replaceable>, and connects the network output
 and input stream to standard input and output.
 </para>
 </refsection>

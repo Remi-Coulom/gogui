@@ -110,8 +110,8 @@ Display help and exit.
 <term><option>-fillpasses</option></term>
 <listitem>
 <para>
-Fill non-alternating moves with pass moves for programs that
-can only handle move sequences with alternating color.
+Fill non-alternating moves with pass moves (for programs that
+can only handle move sequences with alternating color).
 </para>
 </listitem>
 </varlistentry>
@@ -175,7 +175,7 @@ is below the given score (to the disadvantage of the side to move).
 </term>
 <listitem>
 <para>
-Only accept this board size , even if the program accepts other sizes.
+Only accept this board size, even if the program accepts other sizes.
 </para>
 </listitem>
 </varlistentry>
@@ -202,10 +202,10 @@ Print version and exit.
 <term><option>-version1</option></term>
 <listitem>
 <para>
-Sets whether GtpAdapter reports protocol version 1 in response to the
+Sets, whether GtpAdapter reports protocol version 1 in response to the
 <userinput>protocol_version</userinput> command.
 GtpAdapter can handle both versions of the commands for playing moves,
-generating moves and starting a new game and will translate them
+generating moves, and starting a new game; it will translate them
 correctly to the GTP version of the Go program.
 </para>
 </listitem>

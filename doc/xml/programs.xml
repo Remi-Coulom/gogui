@@ -30,7 +30,7 @@ Command: <userinput>gnugo --mode gtp</userinput>
 <note>
 <para>
 Aya (version 5.53) opens its own window which does not repaint correctly in
-GTP mode but this window can simply be ignored and minimized.
+GTP mode, however, this window can simply be ignored and minimized.
 </para>
 <para>
 Aya also works on Unix in the <ulink url="http://www.winehq.com">Wine</ulink>

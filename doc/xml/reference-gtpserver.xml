@@ -37,11 +37,11 @@ Connects a Go program supporting Go Text Protocol to a socket.
 <title>Description</title>
 <para>
 Runs a Go program supporting the Go Text Protocol by executing
-<replaceable>program</replaceable> and connects its input and output to a
+<replaceable>program</replaceable>, and connects its input and output to a
 listen socket on port number <replaceable>port</replaceable> of the local
-computer so that other programs can connect to it from the network.
+computer, so that other programs can connect to it from the network.
 If the option <option>-remote</option> is used, an connection to another
-host is made instead of waiting for incoming connections.
+host is made, instead of waiting for incoming connections.
 </para>
 </refsection>
 
@@ -77,7 +77,8 @@ Display help and exit.
 </term>
 <listitem>
 <para>
-Restart program and wait for next connection after connection is finished.
+After connection is finished, restart the program and wait for next
+connection, .
 </para>
 </listitem>
 </varlistentry>
@@ -99,7 +100,7 @@ Port number to user for the socket.
 </term>
 <listitem>
 <para>
-Connect to a remote host instead of waiting for incoming connections.
+Connect to a remote host, instead of waiting for incoming connections.
 See also <option>-user</option>.
 </para>
 </listitem>
@@ -111,11 +112,12 @@ See also <option>-user</option>.
 </term>
 <listitem>
 <para>
-If the option <option>-remote</option> is used and the remote program requires
-that any connecting program sends some plain text login information before
-waiting for commands, then this option can be used.
-The argument is a filename.
-The content of this file is sent verbatim to the remote computer.
+If the option <option>-remote</option> is used,
+and the remote program requires that any connecting program sends some plain
+text login information before waiting for commands,
+then this option can be used.
+The argument is a filename;
+the content of this file is sent verbatim to the remote computer.
 </para>
 </listitem>
 </varlistentry>

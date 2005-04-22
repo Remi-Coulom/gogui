@@ -34,7 +34,7 @@ GTP controlling programs.
 Plays random moves.
 Never plays at a point at which already a move was made, even
 after the point becomes free again, because of capture.
-Illegal moves sent to the program are not checked and always accepted.
+Illegal moves sent to the program are not checked; they are always accepted.
 </para>
 </refsection>
 

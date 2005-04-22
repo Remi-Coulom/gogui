@@ -121,8 +121,8 @@ move with a <userinput>black</userinput> or <userinput>white</userinput>
 command.
 GTP extension commands implemented by exactly one of the programs are
 forwarded to the program.
-The special comment line <userinput>#&#160;interrupt</userinput> used by
-<application>GoGui</application> to interrupt commands is forwarded to all
+The special comment line <userinput>#&#160;interrupt</userinput>, used by
+<application>GoGui</application> to interrupt commands, is forwarded to all
 programs.
 </para>
 
@@ -130,10 +130,10 @@ programs.
 If the option <option>-sgffile</option> is used, the games are
 saved after they are finished and a result text file in table format
 is created with some statistics.
-If the program(s) support the GTP command <userinput>cputime</userinput>
+If the program(s) support the GTP command <userinput>cputime</userinput>,
 these statistics include CPU times.
 The errors of the statistics are calculated by the standard deviation of the
-results divided by the square root of the number of unique games, which is
+results, divided by the square root of the number of unique games, which is
 correct only for a sufficiently large number of games (especially if
 the percentage of wins is close to 0% or 100%).
 </para>
@@ -147,9 +147,9 @@ the percentage of wins is close to 0% or 100%).
 <term><option>-alternate</option></term>
 <listitem>
 <para>
-Alternate colors. Black and White are exchanged every odd game.
-The scores saved in the results table if <option>-sgffile</option>
-are still using the name Black and White as given with
+Alternate colors. Black and White are exchanged every odd game;
+the scores saved in the results table <option>-sgffile</option>
+are still using the name Black and White, as given with
 <option>-black</option> and <option>-white</option>.
 </para>
 </listitem>
@@ -164,7 +164,7 @@ Analyze the result file
 Creates a HTML file <filename><replaceable>file.html</replaceable></filename>
 with links to the games and summary statistics.
 Also creates a text file
-<filename><replaceable>file.summary.dat</replaceable></filename>
+<filename><replaceable>file.summary.dat</replaceable></filename>,
 with a table row containing the most important summary statistics.
 </para>
 </listitem>
@@ -176,10 +176,10 @@ with a table row containing the most important summary statistics.
 <para>
 Automatically play games.
 Use this option if you want to run <application>TwoGtp</application> as a
-standalone program without a program like <application>GoGui</application>
+standalone program, without a program like <application>GoGui</application>
 which controls the move generation with <userinput>genmove_black</userinput>
 and <userinput>genmove_white</userinput> commands.
-If a result file already exists (as specified with <option>-sgffile</option>)
+If a result file already exists (as specified with <option>-sgffile</option>),
 and contains less games than specified with <option>-games</option>,
 the remaining games will be played.
 Use <option>-force</option> to overwrite existing result files.
@@ -222,8 +222,8 @@ Read command line options and arguments from file.
 <listitem>
 <para>
 Send an <userinput>estimate_score</userinput> command to all programs
-after each move and save them to a file after the game.
-The responses to <userinput>estimate_score</userinput> must begin with
+after each move; save them to a file after the game.
+The responses to <userinput>estimate_score</userinput> should begin with
 a score in the form <userinput>B+</userinput> or <userinput>W+</userinput>.
 The file is a table with valid scores translated to floating point numbers
 (positive for program <option>-black</option>).
@@ -263,7 +263,7 @@ Display help and exit.
 <listitem>
 <para>
 Komi. If this option is not used, the komi can be set with
-the <userinput>komi</userinput> command or default komi 6.5 will be
+the <userinput>komi</userinput> command, or a default komi of 6.5 will be
 used.
 </para>
 </listitem>
@@ -295,21 +295,21 @@ Use openings from SGF files in the given directory.
 The openings will be cycled through in alphabetical order.
 If option <option>-alternate</option> is set, each opening is played twice
 with colors exchanged.
-There are two ways, how the opening moves can be sent to the programs.
-By default all moves and setup stones are sent as alternating
+There are two ways how the opening moves can be sent to the programs.
+By default, all moves and setup stones are sent as alternating
 <userinput>play</userinput> commands, so instead of forwarding the first
 <userinput>genmove</userinput> commands to the program to play,
 TwoGtp responds with moves from the opening and informs the programs with
 <userinput>play</userinput> commands.
-The advantage of this method is that it still works if TwoGtp is used
-interactively with GoGui as a graphical frontend, however it is very slow
+The advantage of this method is that it still works, if TwoGtp is used
+interactively with GoGui as a graphical frontend; however, it is very slow
 for opening files containing many moves or setup stones.
 Alternatively the option <option>-loadsgf</option> makes TwoGtp to use
-the <userinput>loadsgf</userinput> GTP command for setting up openings,
+the <userinput>loadsgf</userinput> GTP command for setting up openings;
 this works only with option <option>-auto</option>.
-Note that TwoGtp has no handicap option yet, but openings can also be used
+Note that TwoGtp has no handicap option yet, but openings can be used
 to play handicap games by creating a directory with a single opening
-file containing the position with handicap stones.
+file, containing the position with handicap stones.
 </para>
 </listitem>
 </varlistentry>
@@ -331,7 +331,7 @@ Save games after they are finished with filename
 <filename>
 <replaceable>prefix</replaceable>-<replaceable>n</replaceable>.sgf
 </filename>
-with <replaceable>n</replaceable> being the game number.
+(<replaceable>n</replaceable> is the game number).
 The results are appended to the file
 <filename><replaceable>prefix</replaceable>.dat</filename>.
 </para>
@@ -342,9 +342,9 @@ The results are appended to the file
 <term><option>-size</option> <replaceable>n</replaceable></term>
 <listitem>
 <para>
-Board size for games. If this option is not used the size will
-be set with the <userinput>boardsize</userinput> command or
-default size 19 will be used with option <option>-auto</option>.
+Board size for games. If this option is not used, the size will
+be set with the <userinput>boardsize</userinput> command, or the
+default size 19 will be used when option <option>-auto</option> is set.
 </para>
 </listitem>
 </varlistentry>
@@ -390,7 +390,7 @@ Command for white program.
 <para>
 Indicate interrupt ability for GoGui.
 <application>TwoGtp</application> will forward the interrupt to both
-programs with the appropriate method if they implement either
+programs, with the appropriate method, if they implement either
 <userinput>gogui_interrupt</userinput> or <userinput>gogui_sigint</userinput>.
 See <xref linkend="interrupt"/> of the <application>GoGui</application>
 documentation.
@@ -402,7 +402,7 @@ documentation.
 <term><userinput>gogui_title</userinput></term>
 <listitem>
 <para>
-Return a title for the current game consisting of the game number (if option
+Return a title for the current game, consisting of the game number (if option
 <option>-sgffile</option> was used) and the player names.
 </para>
 </listitem>
@@ -460,9 +460,9 @@ Send command to white player.
 <title>Examples</title>
 
 <para>
-Play 100 games between GNU Go default level and GNU Go level 5
-on a 9x9 board with alternating colors,
-save games and results to files beginning with gnugo-5:
+Play 100 games between GNU Go, default level, and GNU Go, level 5,
+on a 9x9 board, with alternating colors;
+save games and results to files, beginning with gnugo-5:
 <programlisting>
 <userinput>
 BLACK="gnugo --mode gtp"
@@ -484,7 +484,7 @@ twogtp -analyze gnugo5.dat
 </para>
 
 <para>
-Play one game between GNU Go default level and GNU Go level 5 using GoGui
+Play one game between GNU Go, default level, and GNU Go, level 5, using GoGui
 as a graphical display
 (to start play, select Computer Color/Both from the Game menu in GoGui):
 <programlisting>
@@ -497,7 +497,7 @@ gogui -program "twogtp -black \"$BLACK\" -white \"$WHITE\""
 </para>
 
 <para>
-Play 100 games with same settings as in the first example with GoGui
+Play 100 games with same settings as in the first example, with GoGui
 as a graphical display (start games automatically):
 <programlisting>
 <userinput>

@@ -115,7 +115,7 @@ The following other commands are used by GoGui:
 </itemizedlist>
     
 <para>
-If the Go program does not understand them you will still be able to play
+If the Go program does not understand them, you will still be able to play
 games, but you cannot use all of the functionality of GoGui.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
@@ -155,7 +155,7 @@ See <xref linkend="interrupt"/>.
 <term><userinput>gogui_title</userinput></term>
 <listitem>
 <para>
-For providing a window title, which may be game specific or include
+For providing a window title, which may be game specific, or include
 a player name that is not known at program creation time.
 The title is queried and set after a new game is started.
 </para>

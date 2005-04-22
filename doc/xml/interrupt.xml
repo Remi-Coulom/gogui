@@ -3,7 +3,7 @@
 
 <para>
 Commands can be interrupted, if the Go program supports it.
-This is useful for example if the move generation takes a long time to give
+This is useful, for example, if the move generation takes a long time, to give
 the user the ability to stop the current move generation and gain control over
 the interface again.
 </para>
@@ -15,8 +15,8 @@ There are two ways of sending the interrupt signal to the program:
 <orderedlist>
 <listitem>
 <para>
-The Go program reads the GTP input stream while processing a command and can
-interrupt the current command if the special comment line
+The Go program reads the GTP input stream, while processing a command, and can
+interrupt the current command, if the special comment line
 <userinput>#&#160;interrupt</userinput> is received.
 The Go program indicates this ability by implementing the command
 <userinput>gogui_interrupt</userinput>.
@@ -30,7 +30,7 @@ command and returning its process ID.
 GoGui will then send an INT signal to the process
 by invoking the shell command
 <userinput>kill -INT <replaceable>pid</replaceable></userinput>.
-However this will work only on UNIX systems and lacks the feature of
+However, this will work only on UNIX systems and lacks the feature of
 transmitting interrupt signals over network GTP streams.
 </para>
 </listitem>

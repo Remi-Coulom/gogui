@@ -33,7 +33,7 @@ SGF to LaTeX converter.
 <title>Description</title>
 <para>
 Converts <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files to
-<ulink url="http://www.latex-project.org/">LaTeX</ulink> using the
+<ulink url="http://www.latex-project.org/">LaTeX</ulink>, using the
 <ulink url="http://www.ctan.org/tex-archive/graphics/pstricks/contrib/psgo/">
 PSGO</ulink> style.
 </para>

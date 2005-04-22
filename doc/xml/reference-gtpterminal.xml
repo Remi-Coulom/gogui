@@ -35,8 +35,8 @@ Simple text based interface to Go programs supporting the
 Go Text Protocol.
 It keeps track of the board and prints it after each change on the board.
 If a move (coordinate on the board or pass) is entered, it is played
-on the board for the color which is to move and a
-<userinput>genmove</userinput> command is sent to the program.
+on the board for the color which is to move, followed by a
+<userinput>genmove</userinput> command sent to the program.
 Other supported commands are:
 </para>
 <variablelist>
@@ -44,7 +44,7 @@ Other supported commands are:
 <term><userinput>genmove</userinput></term>
 <listitem>
 <simpara>
-Send a <userinput>genmove</userinput> command for the color which is
+Send a <userinput>genmove</userinput> command for the color that is
 to move to the program.
 </simpara>
 </listitem>

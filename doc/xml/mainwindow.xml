@@ -6,14 +6,14 @@
 <title>Go board</title>
 <para>
 Clicking on an empty field in the Go board plays a move there.
-In setup mode, score mode or after certain analyze commands
+In setup mode, score mode or after certain analyze commands,
 clicking on a field has a special meaning (see
-<xref linkend="setupmode"/>, <xref linkend="score"/> and
+<xref linkend="setupmode"/>, <xref linkend="score"/>, and
 <xref linkend="analyze"/>).
 </para>
 <para>
 If <guimenuitem>Show Cursor</guimenuitem> is enabled in the
-<guimenu>Settings</guimenu> menu, then fields can be selected using
+<guimenu>Settings</guimenu> menu, then fields can be selected with
 the keyboard by moving the cursor (the red square corners) with the cursor
 keys to the target field and pressing <keycap>Enter</keycap>.
 Holding <keycap>Shift</keycap> while pressing a cursor key moves the
@@ -27,11 +27,11 @@ of the board.
 <title>Info Panel</title>
 <para>
 The panel on the right side of the board shows information about the
-current position, e.g. the last move and the variation number.
+current position, for example the last move and the variation number.
 A text field exists for displaying and editing comment text for the current
 position.
 If you select text in the comment field, it will automatically parsed for
-valid points which will be marked on the board while the text is selected.
+valid points, which will be marked on the board while the text is selected.
 Selected text in the comment is also used as a default text for
 <guimenuitem>Find in Comments</guimenuitem>.
 </para>
@@ -54,9 +54,9 @@ format.
 Only a subset of the SGF definition is supported.
 Most notably removing stones and game collections are not supported.
 Setup stones are always translated to <userinput>play</userinput>
-commands for the Go program which differs from the SGF standard for setup
+commands for the Go program, which differs from the SGF standard for setup
 stones that would lead to illegal Go positions.
-Unknown SGF properties are preserved if the game is saved to a file again.
+Unknown SGF properties are preserved, if the game is saved to a file again.
 </simpara>
 </note>
 </para>
@@ -107,7 +107,7 @@ are also exported (string labels, marked and selected points).
 <term><guimenuitem>Print</guimenuitem></term>
 <listitem>
 <para>
-Print a screen shot of the current board position including all markups from
+Print a screen shot of the current board position, including all markups from
 analyze commands.
 </para>
 </listitem>
@@ -166,7 +166,7 @@ Edit the game information.
 Changes to the komi and rules are transmitted to the Go program.
 The only supported rules are "Chinese" and "Japanese".
 The program is informed about the komi and the rules
-with GTP commands if supported (see <xref linkend="compatibility"/>).
+with GTP commands, if supported (see <xref linkend="compatibility"/>).
 </para>
 </listitem>
 </varlistentry>
@@ -222,7 +222,7 @@ Make the computer play a move.
 <para>
 Interrupt the command that is currently running.
 This menu item is only active if a lengthy command (like move
-generation) is running and the Go program supports interrupting
+generation) is running and if the Go program supports interrupting
 (see <xref linkend="interrupt"/>).
 </para>
 </listitem>
@@ -300,7 +300,7 @@ A window will be opened containing score information.
 First the Go program will be asked what stones are dead with the
 <userinput>final_status_list dead</userinput> command.
 Dead stones are marked with a cross-hair.
-If the Go program does not support this command or you don't agree with it,
+If the Go program does not support this command, or you don't agree with it,
 you can change the status of stones by clicking on them.
 You leave score mode by closing the score window.
 </para>
@@ -442,17 +442,17 @@ Find next game node containing the last entered search pattern.
 <listitem>
 <para>
 Enter or leave setup mode.
-In setup mode you can place or remove stones of the current color
+In setup mode you can place or remove stones of the current color.
 The current color can be changed with the <guimenuitem>Black</guimenuitem>
 and <guimenuitem>White</guimenuitem> menu item from the
 <guimenu>Setup</guimenu> menu.
-It is also possible to place stones of the other than current color
-without switching the color by pressing a modifier key while placing a stone
+It is also possible to place stones of the other than current color,
+without switching the color, by pressing a modifier key while placing a stone
 (Ctrl, Alt or Meta).
 <note>
 <simpara>
 Setting up a position is not reversible.
-After leaving setup mode you are in a new game starting with the current
+After leaving setup mode, you are in a new game starting with the current
 position and the current color to move.
 </simpara>
 </note>
