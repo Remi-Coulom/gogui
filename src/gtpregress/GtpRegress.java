@@ -339,6 +339,11 @@ class GtpRegress
         line = line.trim();
         if (line.startsWith("#?"))
         {
+            if (m_lastFullResponse == null)
+            {
+                printOutLine("comment", line);
+                return;
+            }
             printOutLine("test", line);
             handleTest(line.substring(2).trim());
             m_lastFullResponse = null;
@@ -383,11 +388,12 @@ class GtpRegress
             {
                 m_lastResponse = m_gtp.sendCommand(line);
             }
-            catch (GtpError e)
+            catch (GtpError error)
             {
+                m_lastError = true;
+                m_lastResponse = error.getMessage();
                 if (m_gtp.isProgramDead())
                     throw new ProgramIsDeadException();
-                m_lastError = true;
             }
             m_lastFullResponse = m_gtp.getFullResponse();
         }
@@ -419,16 +425,14 @@ class GtpRegress
         }
         boolean fail = false;
         String response = "";
+        int index = m_lastFullResponse.indexOf(" ");
+        if (index >= 0)
+            response = m_lastFullResponse.substring(index).trim();
         if (m_lastError)
             fail = true;
         else
         {
             Pattern pattern = Pattern.compile(patternString);
-            int index = m_lastFullResponse.indexOf(" ");
-            if (index < 0)
-                response = "";
-            else
-                response = m_lastFullResponse.substring(index).trim();
             Matcher matcher = pattern.matcher(response);
             if ((! matcher.matches() && ! notPattern)
                 || (matcher.matches() && notPattern))
