@@ -132,10 +132,10 @@ saved after they are finished and a result text file in table format
 is created with some statistics.
 If the program(s) support the GTP command <userinput>cputime</userinput>,
 these statistics include CPU times.
-The errors of the statistics are calculated by the standard deviation of the
-results, divided by the square root of the number of unique games, which is
-correct only for a sufficiently large number of games (especially if
-the percentage of wins is close to 0% or 100%).
+The errors in the statistics are the standard errors; they are computed by
+the standard deviation of the results, divided by the square root of the
+number of unique games, which is correct only for a sufficiently large number
+of games (especially if the percentage of wins is close to 0% or 100%).
 </para>
 </refsection>
 
