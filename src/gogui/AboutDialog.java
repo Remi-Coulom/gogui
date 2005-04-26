@@ -97,8 +97,6 @@ public class AboutDialog
         editorPane.setBorder(GuiUtils.createEmptyBorder());        
         editorPane.setEditable(false);
         panel.add(editorPane);
-        JLabel dummyLabel = new JLabel();
-        editorPane.setBackground(dummyLabel.getBackground());
         EditorKit editorKit =
             JEditorPane.createEditorKitForContentType("text/html");
         editorPane.setEditorKit(editorKit);
