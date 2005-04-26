@@ -798,7 +798,7 @@ public class MenuBar
         m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
                                      "truncate");
         menu.addSeparator();
-        addMenuItem(menu, "Find in Comments", KeyEvent.VK_F, KeyEvent.VK_F,
+        addMenuItem(menu, "Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
                     m_shortcutKeyMask, "find-in-comments");
         m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_X,
                                      KeyEvent.VK_F3, 0, "find-next");
