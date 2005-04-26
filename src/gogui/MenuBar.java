@@ -620,7 +620,7 @@ public class MenuBar
     {
         JMenu menu = createMenu("Game", KeyEvent.VK_G);
         addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
-        addMenuItem(menu, "Info...", KeyEvent.VK_I, KeyEvent.VK_I,
+        addMenuItem(menu, "Info", KeyEvent.VK_I, KeyEvent.VK_I,
                     m_shortcutKeyMask, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createHandicapMenu());
