@@ -174,18 +174,19 @@ public class GameInfoDialog
         panel.add(m_panelLeft, BorderLayout.WEST);
         m_panelRight = new JPanel(new GridLayout(0, 1, 0, 0));
         panel.add(m_panelRight, BorderLayout.CENTER);
-        m_playerBlack = createEntry("Black player",
+        m_playerBlack = createEntry("Black player:",
                                     gameInformation.m_playerBlack);
-        m_rankBlack = createEntry("Black rank",
+        m_rankBlack = createEntry("Black rank:",
                                   gameInformation.m_blackRank);
-        m_playerWhite = createEntry("White player",
+        m_playerWhite = createEntry("White player:",
                                     gameInformation.m_playerWhite);
-        m_rankWhite = createEntry("White rank",
+        m_rankWhite = createEntry("White rank:",
                                   gameInformation.m_whiteRank);
-        m_date = createEntry("Date", gameInformation.m_date);
-        m_rules = createEntry("Rules", gameInformation.m_rules);
-        m_komi = createEntry("Komi", Double.toString(gameInformation.m_komi));
-        m_result = createEntry("Result", gameInformation.m_result);
+        m_date = createEntry("Date:", gameInformation.m_date);
+        m_rules = createEntry("Rules:", gameInformation.m_rules);
+        m_komi = createEntry("Komi:",
+                             Double.toString(gameInformation.m_komi));
+        m_result = createEntry("Result:", gameInformation.m_result);
         createTimeEntry(gameInformation.m_timeSettings);
         setMessage(panel);
         setOptionType(OK_CANCEL_OPTION);
@@ -203,7 +204,7 @@ public class GameInfoDialog
 
     private void createTimeEntry(TimeSettings timeSettings)
     {
-        JLabel label = new JLabel("Time");
+        JLabel label = new JLabel("Time:");
         label.setHorizontalAlignment(SwingConstants.LEFT);
         m_panelLeft.add(label);
         FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
