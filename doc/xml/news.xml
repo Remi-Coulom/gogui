@@ -11,6 +11,10 @@
 <itemizedlist>
 <listitem>
 <simpara>
+GtpRegress:
+include error response outputs in test summaries;
+fix NullPointerException, if test file contains response pattern without
+a command to test (simply ignore the pattern)
 </simpara>
 </listitem>
 </itemizedlist>
