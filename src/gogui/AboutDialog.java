@@ -96,6 +96,11 @@ public class AboutDialog
         JEditorPane editorPane = new JEditorPane();
         editorPane.setBorder(GuiUtils.createEmptyBorder());        
         editorPane.setEditable(false);
+        if (Platform.isMac())
+        {
+            JLabel dummyLabel = new JLabel();
+            editorPane.setBackground(dummyLabel.getBackground());
+        }
         panel.add(editorPane);
         EditorKit editorKit =
             JEditorPane.createEditorKitForContentType("text/html");
