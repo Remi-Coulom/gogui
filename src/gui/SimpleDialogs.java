@@ -8,6 +8,7 @@ package gui;
 import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.Window;
 import java.io.File;
 import java.io.FilenameFilter;
 import javax.swing.JFileChooser;
@@ -48,12 +49,12 @@ public class SimpleDialogs
                                       JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static File showOpen(Frame parent, String title)
+    public static File showOpen(Component parent, String title)
     {
         return showFileChooser(parent, FILE_OPEN, null, false, title);
     }
 
-    public static File showOpenSgf(Frame parent)
+    public static File showOpenSgf(Component parent)
     {
         return showFileChooser(parent, FILE_OPEN, null, true, null);
     }
@@ -68,13 +69,10 @@ public class SimpleDialogs
         return (r == 0);
     }
 
-    public static File showSaveSgf(Frame parent)
+    public static File showSaveSgf(Component parent)
     {
         File file = showFileChooser(parent, FILE_SAVE, m_lastFile, true,
                                     null);
-        if (Platform.isMac())
-            // Overwrite warning is already part of FileDialog
-            return file;
         while (file != null)
         {
             if (file.exists())
@@ -90,12 +88,9 @@ public class SimpleDialogs
     }
 
     /** File selection, unknown whether for load or save. */
-    public static File showSelectFile(Frame parent, String title)
+    public static File showSelectFile(Component parent, String title)
     {
-        /* We have to use JFileChooser here even on the Mac, because
-           awt.FileDialog is no good if we don't know if it's load or save */
-        return showFileChooserSwing(parent, FILE_SELECT, m_lastFile, false,
-                                    title);
+        return showFileChooser(parent, FILE_SELECT, m_lastFile, false, title);
     }
 
     public static void showWarning(Component parent, String message)
@@ -122,63 +117,9 @@ public class SimpleDialogs
         return new File(userDir);
     }
 
-    private static File showFileChooser(Frame parent, int type, File lastFile,
-                                        boolean setSgfFilter, String title)
-    {
-        if (Platform.isMac())
-            return showFileChooserAWT(parent, type, lastFile, setSgfFilter,
-                                      title);
-        return showFileChooserSwing(parent, type, lastFile, setSgfFilter,
-                                    title);
-    }
-
-    private static File showFileChooserAWT(Frame parent, int type,
-                                           File lastFile,
-                                           boolean setSgfFilter, String title)
-    {
-        if (m_lastFile == null)
-            m_lastFile = getUserDir();
-        FileDialog dialog = new FileDialog(parent);
-        if (title == null)
-        {
-            switch (type)
-            {
-            case FILE_OPEN:
-                title = "Open";
-                break;
-            case FILE_SAVE:
-                title = "Save";
-                break;
-            default:
-                title = "Select";
-            }
-        }
-        dialog.setTitle(title);
-        int mode = FileDialog.LOAD;
-        if (type == FILE_SAVE)
-            mode = FileDialog.SAVE;
-        dialog.setMode(mode);
-        /* Commented out, because there is no way to change the filter by the
-           user (at least not on Linux)
-        if (setSgfFilter)
-            dialog.setFilenameFilter(new FilenameFilter() {
-                    public boolean accept(File dir, String name)
-                    {
-                        return name.toLowerCase().endsWith("sgf");
-                    }
-                });
-        */
-        dialog.setLocationRelativeTo(parent);
-        dialog.setVisible(true);
-        if (dialog.getFile() == null)
-            return null;
-        return new File(dialog.getDirectory(), dialog.getFile());
-    }
-
-    private static File showFileChooserSwing(Component parent, int type,
-                                             File lastFile,
-                                             boolean setSgfFilter,
-                                             String title)
+    private static File showFileChooser(Component parent, int type,
+                                        File lastFile, boolean setSgfFilter,
+                                        String title)
     {
         if (m_lastFile == null)
             m_lastFile = getUserDir();

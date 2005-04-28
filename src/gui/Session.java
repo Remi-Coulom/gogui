@@ -85,10 +85,10 @@ public class Session
         }
     }
 
-    public static void saveLocation(JFrame window, Preferences prefs,
+    public static void saveLocation(Window window, Preferences prefs,
                                     String name, int boardSize)
     {
-        if (! GuiUtils.isNormalSizeMode(window))
+        if (isFrameSpecialMode(window))
             return;
         name = name + "-" + boardSize;
         java.awt.Point location = window.getLocation();
@@ -96,10 +96,10 @@ public class Session
         prefs.setString(name, value);
     }
 
-    public static void saveSize(JFrame window, Preferences prefs, String name,
+    public static void saveSize(Window window, Preferences prefs, String name,
                                 int boardSize)
     {
-        if (! GuiUtils.isNormalSizeMode(window))
+        if (isFrameSpecialMode(window))
             return;
         name = name + "-" + boardSize;
         java.awt.Point location = window.getLocation();
@@ -109,13 +109,20 @@ public class Session
         prefs.setString(name, value);
     }
 
-    public static void saveSizeAndVisible(JFrame window, Preferences prefs,
+    public static void saveSizeAndVisible(Window window, Preferences prefs,
                                           String name, int boardSize)
     {
         if (window != null)
             saveSize(window, prefs, "window-" + name, boardSize);
         boolean isVisible = (window != null && window.isVisible());
         prefs.setBool("show-" + name, isVisible);
+    }
+
+    private static boolean isFrameSpecialMode(Window window)
+    {
+        return (window instanceof JFrame
+                && ! GuiUtils.isNormalSizeMode((JFrame)window));
+        
     }
 }
 

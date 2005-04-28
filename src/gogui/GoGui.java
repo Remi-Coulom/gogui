@@ -32,6 +32,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -363,7 +364,7 @@ class GoGui
         if (m_analyzeDialog == null)
         {
             m_analyzeDialog =
-                new AnalyzeDialog(this, m_prefs,
+                new AnalyzeDialog(this, this, m_prefs,
                                   m_commandThread.getSupportedCommands(),
                                   m_commandThread);
             restoreSize(m_analyzeDialog, "window-analyze");
@@ -428,7 +429,8 @@ class GoGui
             disposeGameTree();
             return;
         }
-        m_gameTreeViewer = new GameTreeViewer(this, m_fastPaint, m_prefs);
+        m_gameTreeViewer =
+            new GameTreeViewer(this, this, m_fastPaint, m_prefs);
         restoreSize(m_gameTreeViewer, "window-gametree");
         updateGameTree(true);
         if (m_gameTreeViewer != null) // updateGameTree can close viewer
@@ -940,7 +942,7 @@ class GoGui
         if (program.equals(""))
             return false;
         m_program = program;
-        m_gtpShell = new GtpShell("GoGui", this, m_prefs);
+        m_gtpShell = new GtpShell(this, "GoGui", this, m_prefs);
         m_gtpShell.setProgramCommand(program);
         m_ignoreInvalidResponses = false;
         Gtp.InvalidResponseCallback invalidResponseCallback =
@@ -1350,7 +1352,7 @@ class GoGui
         }
         if (m_help == null)
         {
-            m_help = new Help(u);
+            m_help = new Help(this, u);
             restoreSize(m_help, "window-help");
         }
         m_help.toTop();
@@ -2590,14 +2592,14 @@ class GoGui
         }
     }
 
-    private void saveSize(JFrame window, String name)
+    private void saveSize(JDialog dialog, String name)
     {
-        Session.saveSize(window, m_prefs, name, m_boardSize);
+        Session.saveSize(dialog, m_prefs, name, m_boardSize);
     }
 
-    private void saveSizeAndVisible(JFrame window, String name)
+    private void saveSizeAndVisible(JDialog dialog, String name)
     {
-        Session.saveSizeAndVisible(window, m_prefs, name, m_boardSize);
+        Session.saveSizeAndVisible(dialog, m_prefs, name, m_boardSize);
     }
 
     private void sendGtpString(String commands)

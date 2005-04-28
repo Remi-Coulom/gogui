@@ -31,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -54,7 +55,7 @@ import utils.Preferences;
 //----------------------------------------------------------------------------
 
 public class AnalyzeDialog
-    extends JFrame
+    extends JDialog
     implements ActionListener, ListSelectionListener
 {
     public interface Callback
@@ -71,12 +72,11 @@ public class AnalyzeDialog
         void toTop();
     }
 
-    public AnalyzeDialog(Callback callback, Preferences prefs,
+    public AnalyzeDialog(Frame owner, Callback callback, Preferences prefs,
                          Vector supportedCommands,
                          CommandThread commandThread)
     {
-        super("Analyze - GoGui");
-        GuiUtils.setGoIcon(this);
+        super(owner, "Analyze - GoGui");
         m_prefs = prefs;
         m_commandThread = commandThread;
         setPrefsDefaults(prefs);
@@ -150,7 +150,6 @@ public class AnalyzeDialog
 
     public void toTop()
     {
-        setState(Frame.NORMAL);
         setVisible(true);
         toFront();
     }

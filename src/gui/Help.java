@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -54,13 +55,12 @@ class AntialiasingEditorPane
 //----------------------------------------------------------------------------
 
 public class Help
-    extends JFrame
+    extends JDialog
     implements ActionListener, HyperlinkListener
 {
-    public Help(URL contents)
+    public Help(Frame owner, URL contents)
     {
-        super("Help - GoGui");
-        GuiUtils.setGoIcon(this);
+        super(owner, "Help - GoGui");
         m_contents = contents;
         Container contentPane = getContentPane();
         createMenuBar();
@@ -116,7 +116,6 @@ public class Help
 
     public void toTop()
     {
-        setState(Frame.NORMAL);
         setVisible(true);
         toFront();
     }

@@ -34,11 +34,11 @@ import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -226,7 +226,7 @@ class GtpShellText
 //----------------------------------------------------------------------------
 
 public class GtpShell
-    extends JFrame
+    extends JDialog
     implements ActionListener, Gtp.IOCallback
 {
     public interface Callback
@@ -240,10 +240,10 @@ public class GtpShell
         void toTop();
     }
 
-    public GtpShell(String appName, Callback callback, Preferences prefs)
+    public GtpShell(Frame owner, String appName, Callback callback,
+                    Preferences prefs)
     {
-        super("GTP - " + appName);
-        GuiUtils.setGoIcon(this);
+        super(owner, "GTP - " + appName);
         m_callback = callback;
         m_prefs = prefs;
         setPrefsDefaults(prefs);
@@ -390,7 +390,6 @@ public class GtpShell
 
     public void toTop()
     {
-        setState(Frame.NORMAL);
         setVisible(true);
         toFront();
     }

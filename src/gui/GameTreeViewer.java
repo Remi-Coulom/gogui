@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -216,7 +217,7 @@ class GameTreePanel
     public static final java.awt.Color m_background =
         new java.awt.Color(192, 192, 192);
 
-    public GameTreePanel(JFrame owner, GameTreeViewer.Listener listener,
+    public GameTreePanel(JDialog owner, GameTreeViewer.Listener listener,
                          boolean fastPaint, int labelMode, int sizeMode)
     {
         super(new SpringLayout());
@@ -534,7 +535,7 @@ class GameTreePanel
 
     private GameTreeViewer.Listener m_listener;
 
-    private JFrame m_owner;
+    private JDialog m_owner;
 
     /** Used for focus workaround on Mac Java 1.4.2 if not null. */
     private JScrollPane m_scrollPane;
@@ -850,7 +851,7 @@ class GameTreePanel
 //----------------------------------------------------------------------------
 
 public class GameTreeViewer
-    extends JFrame
+    extends JDialog
     implements ActionListener
 {
     public interface Listener
@@ -866,15 +867,14 @@ public class GameTreeViewer
         void toTop();
     }
 
-    public GameTreeViewer(Listener listener, boolean fastPaint,
+    public GameTreeViewer(Frame owner, Listener listener, boolean fastPaint,
                           Preferences prefs)
     {
-        super("Game Tree");
+        super(owner, "Game Tree");
         m_prefs = prefs;
         setPrefsDefaults(prefs);
         int sizeMode = prefs.getInt("gametree-size");
         int labelMode = prefs.getInt("gametree-labels");
-        GuiUtils.setGoIcon(this);
         createMenuBar(labelMode, sizeMode);
         Container contentPane = getContentPane();
         m_listener = listener;
@@ -948,7 +948,6 @@ public class GameTreeViewer
 
     public void toTop()
     {
-        setState(Frame.NORMAL);
         setVisible(true);
         toFront();
     }
