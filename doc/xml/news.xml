@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+GoGui: use dialogs for all secondary windows; they are always on top of the
+main window now
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpRegress:
 include error response outputs in test summaries;
 fix NullPointerException, if test file contains response pattern without
