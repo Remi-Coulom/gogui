@@ -88,11 +88,6 @@ The following other commands are used by GoGui:
 </listitem>
 <listitem>
 <simpara>
-<command>quit</command>
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 <command>scoring_system</command>
 </simpara>
 </listitem>
