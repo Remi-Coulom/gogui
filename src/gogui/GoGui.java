@@ -1560,7 +1560,7 @@ class GoGui
     {
         if (m_commandThread == null)
         {
-            showInfo("No program attached\n" +
+            showInfo("No program is attached.\n" +
                      "Please mark dead groups manually.");
             initScore(null);
             return;
@@ -1579,7 +1579,7 @@ class GoGui
         }
         else
         {
-            showInfo(m_name + "does not support scoring\n" +
+            showInfo(m_name + " does not support scoring.\n" +
                      "Please mark dead groups manually.");
             initScore(null);
         }
