@@ -68,8 +68,8 @@ Read command line options and arguments from file.
 <term><option>-emuhandicap</option></term>
 <listitem>
 <para>
-Emulate the commands <userinput>set_free_handicap</userinput> and
-<userinput>place_free_handicap</userinput> by using standard fixed handicap
+Emulate the commands <command>set_free_handicap</command> and
+<command>place_free_handicap</command> by using standard fixed handicap
 locations (if existing) and sending the stones to the program using
 play commands.
 </para>
@@ -80,8 +80,8 @@ play commands.
 <term><option>-emuloadsgf</option></term>
 <listitem>
 <para>
-Emulate the command <userinput>loadsgf</userinput> by
-<userinput>play</userinput> commands.
+Emulate the command <command>loadsgf</command> by
+<command>play</command> commands.
 </para>
 </listitem>
 </varlistentry>
@@ -135,10 +135,10 @@ not the one from the adapter to the Go program).
 </term>
 <listitem>
 <para>
-Name used for answering the <userinput>name</userinput> command.
+Name used for answering the <command>name</command> command.
 If the name contains a colon, the part after the colon
 is interpreted as a version and used for answering the
-<userinput>version</userinput> command.
+<command>version</command> command.
 </para>
 </listitem>
 </varlistentry>
@@ -149,8 +149,8 @@ is interpreted as a version and used for answering the
 </term>
 <listitem>
 <para>
-Hide the <userinput>final_score</userinput> and
-<userinput>final_status_list</userinput> commands, even if the program supports
+Hide the <command>final_score</command> and
+<command>final_status_list</command> commands, even if the program supports
 them.
 </para>
 </listitem>
@@ -162,8 +162,8 @@ them.
 </term>
 <listitem>
 <para>
-Send an <userinput>estimate_score</userinput> to the program before
-each <userinput>genmove</userinput> command and resign, if the estimation
+Send an <command>estimate_score</command> to the program before
+each <command>genmove</command> command and resign, if the estimation
 is below the given score (to the disadvantage of the side to move).
 </para>
 </listitem>
@@ -203,7 +203,7 @@ Print version and exit.
 <listitem>
 <para>
 Sets, whether GtpAdapter reports protocol version 1 in response to the
-<userinput>protocol_version</userinput> command.
+<command>protocol_version</command> command.
 GtpAdapter can handle both versions of the commands for playing moves,
 generating moves, and starting a new game; it will translate them
 correctly to the GTP version of the Go program.
@@ -220,11 +220,11 @@ correctly to the GTP version of the Go program.
 <variablelist>
 
 <varlistentry>
-<term><userinput>gtpadapter_showboard</userinput></term>
+<term><command>gtpadapter_showboard</command></term>
 <listitem>
 <para>
 Show the internal Go board.
-This is different from the <userinput>showboard</userinput> command,
+This is different from the <command>showboard</command> command,
 which is forwarded to the Go program, if it supports it.
 </para>
 </listitem>

@@ -70,31 +70,31 @@ programs:
 
 <itemizedlist>
 <listitem>
-<simpara><userinput>boardsize</userinput></simpara>
+<simpara><command>boardsize</command></simpara>
 </listitem>
 <listitem>
-<simpara><userinput>black</userinput></simpara>
+<simpara><command>black</command></simpara>
 </listitem>
 <listitem>
-<simpara><userinput>komi</userinput> (if supported)</simpara>
+<simpara><command>komi</command> (if supported)</simpara>
 </listitem>
 <listitem>
-<simpara><userinput>loadsgf</userinput></simpara>
+<simpara><command>loadsgf</command></simpara>
 </listitem>
 <listitem>
-<simpara><userinput>quit</userinput></simpara>
+<simpara><command>quit</command></simpara>
 </listitem>
 <listitem>
-<simpara><userinput>scoring_system</userinput> (if supported)</simpara>
+<simpara><command>scoring_system</command> (if supported)</simpara>
 </listitem>
 <listitem>
-<simpara><userinput>time_settings</userinput> (if supported)</simpara>
+<simpara><command>time_settings</command> (if supported)</simpara>
 </listitem>
 <listitem>
-<simpara><userinput>undo</userinput></simpara>
+<simpara><command>undo</command></simpara>
 </listitem>
 <listitem>
-<simpara><userinput>white</userinput></simpara>
+<simpara><command>white</command></simpara>
 </listitem>
 </itemizedlist>
 
@@ -104,24 +104,24 @@ otherwise to first player program that implements them
 
 <itemizedlist>
 <listitem>
-<simpara><userinput>final_score</userinput></simpara>
+<simpara><command>final_score</command></simpara>
 </listitem>
 <listitem>
-<simpara><userinput>final_status</userinput></simpara>
+<simpara><command>final_status</command></simpara>
 </listitem>
 <listitem>
-<simpara><userinput>final_status_list</userinput></simpara>
+<simpara><command>final_status_list</command></simpara>
 </listitem>
 </itemizedlist>
 
-The commands <userinput>genmove_black</userinput> and
-<userinput>genmove_white</userinput> are forwarded only to the program of the
+The commands <command>genmove_black</command> and
+<command>genmove_white</command> are forwarded only to the program of the
 corresponding color, the other programs are informed about the
-move with a <userinput>black</userinput> or <userinput>white</userinput>
+move with a <command>black</command> or <command>white</command>
 command.
 GTP extension commands implemented by exactly one of the programs are
 forwarded to the program.
-The special comment line <userinput>#&#160;interrupt</userinput>, used by
+The special comment line <command>#&#160;interrupt</command>, used by
 <application>GoGui</application> to interrupt commands, is forwarded to all
 programs.
 </para>
@@ -130,7 +130,7 @@ programs.
 If the option <option>-sgffile</option> is used, the games are
 saved after they are finished and a result text file in table format
 is created with some statistics.
-If the program(s) support the GTP command <userinput>cputime</userinput>,
+If the program(s) support the GTP command <command>cputime</command>,
 these statistics include CPU times.
 The errors in the statistics are the standard errors; they are computed by
 the standard deviation of the results, divided by the square root of the
@@ -177,8 +177,8 @@ with a table row containing the most important summary statistics.
 Automatically play games.
 Use this option if you want to run <application>TwoGtp</application> as a
 standalone program, without a program like <application>GoGui</application>
-which controls the move generation with <userinput>genmove_black</userinput>
-and <userinput>genmove_white</userinput> commands.
+which controls the move generation with <command>genmove_black</command>
+and <command>genmove_white</command> commands.
 If a result file already exists (as specified with <option>-sgffile</option>),
 and contains less games than specified with <option>-games</option>,
 the remaining games will be played.
@@ -221,9 +221,9 @@ Read command line options and arguments from file.
 <term><option>-estimate-score</option></term>
 <listitem>
 <para>
-Send an <userinput>estimate_score</userinput> command to all programs
+Send an <command>estimate_score</command> command to all programs
 after each move; save them to a file after the game.
-The responses to <userinput>estimate_score</userinput> should begin with
+The responses to <command>estimate_score</command> should begin with
 a score in the form <userinput>B+</userinput> or <userinput>W+</userinput>.
 The file is a table with valid scores translated to floating point numbers
 (positive for program <option>-black</option>).
@@ -263,7 +263,7 @@ Display help and exit.
 <listitem>
 <para>
 Komi. If this option is not used, the komi can be set with
-the <userinput>komi</userinput> command, or a default komi of 6.5 will be
+the <command>komi</command> command, or a default komi of 6.5 will be
 used.
 </para>
 </listitem>
@@ -297,15 +297,15 @@ If option <option>-alternate</option> is set, each opening is played twice
 with colors exchanged.
 There are two ways how the opening moves can be sent to the programs.
 By default, all moves and setup stones are sent as alternating
-<userinput>play</userinput> commands, so instead of forwarding the first
-<userinput>genmove</userinput> commands to the program to play,
+<command>play</command> commands, so instead of forwarding the first
+<command>genmove</command> commands to the program to play,
 TwoGtp responds with moves from the opening and informs the programs with
-<userinput>play</userinput> commands.
+<command>play</command> commands.
 The advantage of this method is that it still works, if TwoGtp is used
 interactively with GoGui as a graphical frontend; however, it is very slow
 for opening files containing many moves or setup stones.
 Alternatively the option <option>-loadsgf</option> makes TwoGtp to use
-the <userinput>loadsgf</userinput> GTP command for setting up openings;
+the <command>loadsgf</command> GTP command for setting up openings;
 this works only with option <option>-auto</option>.
 Note that TwoGtp has no handicap option yet, but openings can be used
 to play handicap games by creating a directory with a single opening
@@ -343,7 +343,7 @@ The results are appended to the file
 <listitem>
 <para>
 Board size for games. If this option is not used, the size will
-be set with the <userinput>boardsize</userinput> command, or the
+be set with the <command>boardsize</command> command, or the
 default size 19 will be used when option <option>-auto</option> is set.
 </para>
 </listitem>
@@ -385,13 +385,13 @@ Command for white program.
 <variablelist>
 
 <varlistentry>
-<term><userinput>gogui_interrupt</userinput></term>
+<term><command>gogui_interrupt</command></term>
 <listitem>
 <para>
 Indicate interrupt ability for GoGui.
 <application>TwoGtp</application> will forward the interrupt to both
 programs, with the appropriate method, if they implement either
-<userinput>gogui_interrupt</userinput> or <userinput>gogui_sigint</userinput>.
+<command>gogui_interrupt</command> or <command>gogui_sigint</command>.
 See <xref linkend="interrupt"/> of the <application>GoGui</application>
 documentation.
 </para>
@@ -399,7 +399,7 @@ documentation.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>gogui_title</userinput></term>
+<term><command>gogui_title</command></term>
 <listitem>
 <para>
 Return a title for the current game, consisting of the game number (if option
@@ -410,7 +410,7 @@ Return a title for the current game, consisting of the game number (if option
 
 <varlistentry>
 <term>
-<userinput>twogtp_black <replaceable>command</replaceable></userinput>
+<command>twogtp_black <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -421,7 +421,7 @@ Send command to black player.
 
 <varlistentry>
 <term>
-<userinput>twogtp_observer <replaceable>command</replaceable></userinput>
+<command>twogtp_observer <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -432,7 +432,7 @@ Send command to observer program.
 
 <varlistentry>
 <term>
-<userinput>twogtp_referee <replaceable>command</replaceable></userinput>
+<command>twogtp_referee <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -443,7 +443,7 @@ Send command to referee program.
 
 <varlistentry>
 <term>
-<userinput>twogtp_white <replaceable>command</replaceable></userinput>
+<command>twogtp_white <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>

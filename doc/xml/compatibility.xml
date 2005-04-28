@@ -23,36 +23,36 @@ It is required that the Go program can handle the following commands:
 <itemizedlist>
 <listitem>
 <simpara>
-<userinput>boardsize</userinput>
-(<userinput>boardsize</userinput>, <userinput>clear_board</userinput>)
+<command>boardsize</command>
+(<command>boardsize</command>, <command>clear_board</command>)
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>black</userinput>, <userinput>white</userinput>
-(<userinput>play</userinput>)
+<command>black</command>, <command>white</command>
+(<command>play</command>)
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>genmove_black</userinput>,
-<userinput>genmove_white</userinput>
-(<userinput>genmove</userinput>)
+<command>genmove_black</command>,
+<command>genmove_white</command>
+(<command>genmove</command>)
 </simpara>
 </listitem>
 </itemizedlist>
     
 <para>
 The commands in braces are used if the program supports
-the <userinput>protocol_version</userinput> command and responds with 2.
+the <command>protocol_version</command> command and responds with 2.
 </para>
     
 <para>
 In particular the Go program is not required to support the
-<userinput>loadsgf</userinput> command.
+<command>loadsgf</command> command.
 GoGui translates all moves, setup and handicap stones into a series of
-<userinput>black</userinput>, <userinput>white</userinput>
-(<userinput>play</userinput>) commands.
+<command>black</command>, <command>white</command>
+(<command>play</command>) commands.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -67,53 +67,53 @@ The following other commands are used by GoGui:
 <itemizedlist>
 <listitem>
 <simpara>
-<userinput>name</userinput>
+<command>name</command>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>final_status_list dead</userinput>
+<command>final_status_list dead</command>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>help</userinput>
-(<userinput>list_commands</userinput>)
+<command>help</command>
+(<command>list_commands</command>)
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>komi</userinput>
+<command>komi</command>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>quit</userinput>
+<command>quit</command>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>scoring_system</userinput>
+<command>scoring_system</command>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>time_settings</userinput>
+<command>time_settings</command>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>undo</userinput>
+<command>undo</command>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>version</userinput>
+<command>version</command>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<userinput>quit</userinput>
+<command>quit</command>
 </simpara>
 </listitem>
 </itemizedlist>
@@ -126,7 +126,7 @@ games, but you cannot use all of the functionality of GoGui.
     
 <note>
 <simpara>
-The command <userinput>scoring_system area/territory</userinput>
+The command <command>scoring_system area/territory</command>
 (from an early draft of GTP version 2) is used for setting Chinese/Japanese
 rules, if the command is supported by the program.
 Otherwise the rule settings are quietly ignored.
@@ -140,7 +140,7 @@ the program:
 
 <variablelist>
 <varlistentry>
-<term><userinput>gogui_interrupt</userinput></term>
+<term><command>gogui_interrupt</command></term>
 <listitem>
 <para>
 See <xref linkend="interrupt"/>.
@@ -148,7 +148,7 @@ See <xref linkend="interrupt"/>.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>gogui_sigint</userinput></term>
+<term><command>gogui_sigint</command></term>
 <listitem>
 <para>
 See <xref linkend="interrupt"/>.
@@ -156,7 +156,7 @@ See <xref linkend="interrupt"/>.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>gogui_title</userinput></term>
+<term><command>gogui_title</command></term>
 <listitem>
 <para>
 For providing a window title, which may be game specific, or include

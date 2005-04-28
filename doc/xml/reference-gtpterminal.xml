@@ -36,21 +36,21 @@ Go Text Protocol.
 It keeps track of the board and prints it after each change on the board.
 If a move (coordinate on the board or pass) is entered, it is played
 on the board for the color which is to move, followed by a
-<userinput>genmove</userinput> command sent to the program.
+<command>genmove</command> command sent to the program.
 Other supported commands are:
 </para>
 <variablelist>
 <varlistentry>
-<term><userinput>genmove</userinput></term>
+<term><command>genmove</command></term>
 <listitem>
 <simpara>
-Send a <userinput>genmove</userinput> command for the color that is
+Send a <command>genmove</command> command for the color that is
 to move to the program.
 </simpara>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>help</userinput></term>
+<term><command>help</command></term>
 <listitem>
 <simpara>
 Print help.
@@ -58,25 +58,25 @@ Print help.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>list</userinput></term>
+<term><command>list</command></term>
 <listitem>
 <simpara>
-Send a <userinput>list_commands</userinput> command to the program.
+Send a <command>list_commands</command> command to the program.
 </simpara>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>load</userinput></term>
+<term><command>load</command></term>
 <listitem>
 <simpara>
 Load game from SGF file.
-Moves are translated into <userinput>play</userinput> commands
+Moves are translated into <command>play</command> commands
 for the program.
 </simpara>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>newgame [size]</userinput></term>
+<term><command>newgame [size]</command></term>
 <listitem>
 <simpara>
 Start a new game with a given board size.
@@ -84,7 +84,7 @@ Start a new game with a given board size.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>save</userinput></term>
+<term><command>save</command></term>
 <listitem>
 <simpara>
 Save game to file in SGF format.
@@ -92,15 +92,15 @@ Save game to file in SGF format.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>undo</userinput></term>
+<term><command>undo</command></term>
 <listitem>
 <simpara>
-Send a <userinput>undo</userinput> command to the program.
+Send a <command>undo</command> command to the program.
 </simpara>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><userinput>quit</userinput></term>
+<term><command>quit</command></term>
 <listitem>
 <simpara>
 Terminate program and exit.
@@ -110,12 +110,12 @@ Terminate program and exit.
 </variablelist>
 <para>
 The following commands are not allowed:
-<userinput>black</userinput>,
-<userinput>boardsize</userinput>,
-<userinput>clear_board</userinput>,
-<userinput>genmove_black</userinput>,
-<userinput>genmove_white</userinput>,
-<userinput>white</userinput>.
+<command>black</command>,
+<command>boardsize</command>,
+<command>clear_board</command>,
+<command>genmove_black</command>,
+<command>genmove_white</command>,
+<command>white</command>.
 All other commands are forwarded directly to the program as GTP commands.
 </para>
 </refsection>

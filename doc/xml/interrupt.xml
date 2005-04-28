@@ -21,15 +21,15 @@ There are two ways of sending the interrupt signal to the program:
 <para>
 The Go program reads the GTP input stream, while processing a command, and can
 interrupt the current command, if the special comment line
-<userinput>#&#160;interrupt</userinput> is received.
+<command>#&#160;interrupt</command> is received.
 The Go program indicates this ability by implementing the command
-<userinput>gogui_interrupt</userinput>.
+<command>gogui_interrupt</command>.
 </para>
 </listitem>
 <listitem>
 <para>
 The alternative way is that the program can handle INT signals.
-It indicates this by implementing the <userinput>gogui_sigint</userinput>
+It indicates this by implementing the <command>gogui_sigint</command>
 command and returning its process ID.
 GoGui will then send an INT signal to the process
 by invoking the shell command

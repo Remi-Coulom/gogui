@@ -16,8 +16,8 @@ You can change the size of the nodes and their labels from the
 </para>
 <para>
 When a node is clicked on, the shortest path from the current node to the
-target node is computed, and a series of <userinput>undo</userinput>
-and <userinput>play</userinput> commands is sent to the Go program
+target node is computed, and a series of <command>undo</command>
+and <command>play</command> commands is sent to the Go program
 to go there.
 </para>
 <para>

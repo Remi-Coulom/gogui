@@ -89,7 +89,7 @@ Print version and exit.
 <variablelist>
 
 <varlistentry>
-<term><userinput>dummy_bwboard</userinput></term>
+<term><command>dummy_bwboard</command></term>
 <listitem>
 <para>
 Output a board randomly filled with "B" and "W".
@@ -98,7 +98,7 @@ Output a board randomly filled with "B" and "W".
 </varlistentry>
 
 <varlistentry>
-<term><userinput>dummy_crash</userinput></term>
+<term><command>dummy_crash</command></term>
 <listitem>
 <para>
 Exit program with return code -1.
@@ -108,7 +108,7 @@ Exit program with return code -1.
 
 <varlistentry>
 <term>
-<userinput>dummy_delay</userinput> <replaceable>seconds</replaceable>
+<command>dummy_delay</command> <replaceable>seconds</replaceable>
 </term>
 <listitem>
 <para>
@@ -120,7 +120,7 @@ If no argument is given, the current delay value is returned.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>dummy_invalid</userinput></term>
+<term><command>dummy_invalid</command></term>
 <listitem>
 <para>
 Print an invalid GTP response which does not start with a status character.
@@ -130,7 +130,7 @@ Print an invalid GTP response which does not start with a status character.
 
 <varlistentry>
 <term>
-<userinput>dummy_long_response</userinput><replaceable>n</replaceable>
+<command>dummy_long_response</command><replaceable>n</replaceable>
 </term>
 <listitem>
 <para>
@@ -141,8 +141,8 @@ Print a GTP response with <replaceable>n</replaceable> lines.
 
 <varlistentry>
 <term>
-<userinput>dummy_next_failure <replaceable>response</replaceable>
-</userinput>
+<command>dummy_next_failure <replaceable>response</replaceable>
+</command>
 </term>
 <listitem>
 <para>
@@ -153,8 +153,8 @@ Let next command fail with <replaceable>response</replaceable>.
 
 <varlistentry>
 <term>
-<userinput>dummy_next_success <replaceable>response</replaceable>
-</userinput>
+<command>dummy_next_success <replaceable>response</replaceable>
+</command>
 </term>
 <listitem>
 <para>
@@ -165,8 +165,8 @@ Let next command succeed with <replaceable>response</replaceable>.
 
 <varlistentry>
 <term>
-<userinput>dummy_sleep <replaceable>seconds</replaceable>
-</userinput>
+<command>dummy_sleep <replaceable>seconds</replaceable>
+</command>
 </term>
 <listitem>
 <para>
@@ -177,7 +177,7 @@ This command can be interrupted.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>echo</userinput></term>
+<term><command>echo</command></term>
 <listitem>
 <para>
 Print argument as response.
@@ -186,7 +186,7 @@ Print argument as response.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>echo_err</userinput></term>
+<term><command>echo_err</command></term>
 <listitem>
 <para>
 Print argument to standard error.
@@ -195,7 +195,7 @@ Print argument to standard error.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>gogui_interrupt</userinput></term>
+<term><command>gogui_interrupt</command></term>
 <listitem>
 <para>
 Indicate interrupt ability for GoGui.

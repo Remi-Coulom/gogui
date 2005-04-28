@@ -67,14 +67,14 @@ A separate thread always listens to the serial device, acknowledges
 received GMP commands immediately, and puts them on an internal
 queue.
 GTP commands that need to receive a command from GMP
-(e.g. <userinput>genmove_black</userinput>) check, if such a command
+(e.g. <command>genmove_black</command>) check, if such a command
 is already on the queue, and wait for a new command otherwise.
 If an unexpected GMP command was received, the GTP command will return
 with an error; subsequently only a GTP command that corresponds
 to the GMP command will succeed.
 GTP commands that are waiting for a GMP command can be interrupted
 with the special comment line
-<userinput>#&#160;interrupt</userinput> used by
+<command>#&#160;interrupt</command> used by
 <application>GoGui</application> to interrupt commands.
 </para>
 </refsection>
@@ -230,7 +230,7 @@ Wait for other side to send the first newgame command.
 <variablelist>
 
 <varlistentry>
-<term><userinput>gogui_interrupt</userinput></term>
+<term><command>gogui_interrupt</command></term>
 <listitem>
 <para>
 Indicate interrupt ability for GoGui.
@@ -239,7 +239,7 @@ Indicate interrupt ability for GoGui.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>gogui_title</userinput></term>
+<term><command>gogui_title</command></term>
 <listitem>
 <para>
 Return a title for GoGui.
@@ -248,7 +248,7 @@ Return a title for GoGui.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>gmp_queue</userinput></term>
+<term><command>gmp_queue</command></term>
 <listitem>
 <para>
 Print received queued commands, which have already been
@@ -258,7 +258,7 @@ acknowledged.
 </varlistentry>
 
 <varlistentry>
-<term><userinput>gmp_text <replaceable>text</replaceable></userinput></term>
+<term><command>gmp_text <replaceable>text</replaceable></command></term>
 <listitem>
 <para>
 Send text as talk characters.
