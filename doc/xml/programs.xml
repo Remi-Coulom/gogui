@@ -8,6 +8,9 @@ The following Go programs can be used with GoGui:
   
 <section>
 <title>GNU Go</title>
+<indexterm>
+<primary>GNU Go</primary>
+</indexterm>
 <para>
 <ulink url="http://www.gnu.org/software/gnugo/gnugo.html">
 http://www.gnu.org/software/gnugo/gnugo.html</ulink>
@@ -23,6 +26,9 @@ Command: <userinput>gnugo --mode gtp</userinput>
   
 <section>
 <title>Aya</title>
+<indexterm>
+<primary>Aya</primary>
+</indexterm>
 <para>
 <ulink url="http://www32.ocn.ne.jp/~yss/">http://www32.ocn.ne.jp/~yss/</ulink>
 </para>
@@ -52,6 +58,9 @@ Command: <userinput>Aya.exe --mode gtp</userinput>
   
 <section>
 <title>INDIGO</title>
+<indexterm>
+<primary>INDIGO</primary>
+</indexterm>
 <para>
 <ulink url="http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html">
 http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html</ulink>
@@ -67,6 +76,9 @@ Command: <userinput>Indigo2004-Linux.exe -gtp</userinput>
   
 <section>
 <title>AmigoPlus</title>
+<indexterm>
+<primary>AmigoPlus</primary>
+</indexterm>
 <para>
 <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm">
 http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm</ulink>
@@ -89,6 +101,9 @@ Command: <userinput>amigoplus -gtp</userinput>
   
 <section>
 <title>BadukiPlus</title>
+<indexterm>
+<primary>BadukiPlus</primary>
+</indexterm>
 <para>
 <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm">
 http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm</ulink>
@@ -111,6 +126,9 @@ Command: <userinput>badukiplus -gtp</userinput>
   
 <section>
 <title>WallyPlus</title>
+<indexterm>
+<primary>WallyPlus</primary>
+</indexterm>
 <para>
 <ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm">
 http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm</ulink>

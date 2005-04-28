@@ -2,6 +2,11 @@
   
 <title>Invocation</title>
 
+<indexterm>
+<primary>invocation</primary>
+<secondary>GoGui</secondary>
+</indexterm>
+
 <para>
 <application>GoGui</application> can be invoked with the command:
 <programlisting>
@@ -24,24 +29,39 @@ options to <userinput>gogui</userinput>.
 <para>
 <note>
 <title><application>GoGui</application> on Unix systems</title>
+
 <para>
+<indexterm>
+<primary>invocation</primary>
+<secondary>Unix</secondary>
+</indexterm>
 For Unix systems, there are launcher scripts in the
 <filename class="directory">bin</filename> directory.
+<indexterm>
+<primary><envar>JAVA_HOME</envar></primary>
+</indexterm>
 The launcher scripts respect the environment variable
-<userinput>JAVA_HOME</userinput>, if defined, and look for the jar files
+<envar>JAVA_HOME</envar>, if defined, and look for the jar files
 in <filename class="directory">../lib</filename>
 relative to the <filename class="directory">bin</filename> directory.
 You can add the <filename>bin</filename> directory of GoGui to your
-<userinput>PATH</userinput> environment variable.
+<envar>PATH</envar> environment variable.
+<indexterm>
+<primary><envar>PATH</envar></primary>
+</indexterm>
 The invocation is then simply:
 <programlisting>
 <userinput>gogui [options] [file]</userinput></programlisting>
 To register <application>GoGui</application> as a handler
-for <ulink url="http://www.red-bean.com/sgf/">SGF</ulink> files,
-you can configure a new file association for type
+for <ulink url="http://www.red-bean.com/sgf/"><acronym>SGF</acronym></ulink>
+files, you can configure a new file association for type
 <userinput>application/x-go-sgf</userinput> and filename pattern
 <userinput>*.sgf</userinput> to execute
-<userinput>gogui</userinput>
+<userinput>gogui</userinput>.
+<indexterm>
+<primary>SGF</primary>
+<secondary>register GoGui as a handler</secondary>
+</indexterm>
 </para>
 </note>
 </para>

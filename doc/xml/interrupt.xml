@@ -1,6 +1,10 @@
 <chapter id="interrupt">
 <title>Interrupting Commands</title>
 
+<indexterm>
+<primary>interrupting commands</primary>
+</indexterm>
+
 <para>
 Commands can be interrupted, if the Go program supports it.
 This is useful, for example, if the move generation takes a long time, to give

@@ -3,7 +3,10 @@
 <title>Main Window</title>
 
 <section>
-<title>Go board</title>
+<title>Go Board</title>
+<indexterm>
+<primary>board</primary>
+</indexterm>
 <para>
 Clicking on an empty field in the Go board plays a move there.
 In setup mode, score mode or after certain analyze commands,
@@ -25,6 +28,9 @@ of the board.
 
 <section>
 <title>Info Panel</title>
+<indexterm>
+<primary>info panel</primary>
+</indexterm>
 <para>
 The panel on the right side of the board shows information about the
 current position, for example the last move and the variation number.
