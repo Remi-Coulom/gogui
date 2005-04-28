@@ -186,21 +186,6 @@ installation directory.
 <echo message="Running xsltproc"/>
 <exec executable="xsltproc">
 <arg line="--path ${docbook_xsl_home}/html"/>
-<arg line="--param admon.graphics 0"/>
-<arg line="--param chunk.quietly 1"/>
-<arg line="--param chunk.section.depth 0"/>
-<arg line="--stringparam chunker.output.encoding UTF-8"/>
-<arg line="--param footer.rule 0"/>
-<arg line="--param header.rule 0"/>
-<arg line="--param html.cleanup 1"/>
-<arg line="--stringparam html.stylesheet docbook.css"/>
-<arg line="--param make.valid.html 1"/>
-<arg line="--param navig.showtitles 1"/>
-<arg line="--param refentry.generate.name 0"/>
-<arg line="--param refentry.generate.title 1"/>
-<arg line="--param spacing.paras 0"/>
-<arg line="--param toc.section.depth 0"/>
-<arg line="--param use.id.as.filename 1"/>
 <arg line="-o doc/html/"/>
 <arg line="doc/xml/custom.xsl"/>
 <arg line="doc/xml/book.xml"/>
@@ -226,20 +211,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
  location="${docbook_xsl_home}/html/chunk.xsl"/>
 </xmlcatalog>
-<param name="admon.graphics" expression="0"/>
-<param name="chunk.quietly" expression="1"/>
-<param name="chunk.section.depth" expression="0"/>
-<param name="footer.rule" expression="0"/>
-<param name="header.rule" expression="0"/>
-<param name="html.cleanup" expression="1"/>
-<param name="html.stylesheet" expression="docbook.css"/>
-<param name="make.valid.html" expression="1"/>
-<param name="navig.showtitles" expression="0"/>
-<param name="refentry.generate.name" expression="0"/>
-<param name="refentry.generate.title" expression="1"/>
-<param name="spacing.paras" expression="0"/>
-<param name="toc.section.depth" expression="0"/>
-<param name="use.id.as.filename" expression="1"/>
 </style>
 <copy todir="doc/html">
 <fileset dir="src/images" includes="project-support.png"/>
