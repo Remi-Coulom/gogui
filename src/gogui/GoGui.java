@@ -985,9 +985,7 @@ class GoGui
         catch (GtpError e)
         {
         }
-        if (m_name != null)
-            m_name = StringUtils.capitalize(m_name);
-        else
+        if (m_name == null)
             m_name = "Unknown Program";
         try
         {
