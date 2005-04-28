@@ -271,7 +271,7 @@ default is the color which is to play.
 <varlistentry>
 <term><userinput>%f</userinput></term>
 <listitem>
-<simpara>
+<para>
 Will be replaced by a filename entered by the user.
 If the path to the file contains spaces, it will be quoted with double quotes.
 <warning>
@@ -281,7 +281,7 @@ in a way that does not allow the path to the file to contain spaces
 (e.g. <userinput>printsgf</userinput> in GNU Go 3.6).
 </simpara>
 </warning>
-</simpara>
+</para>
 </listitem>
 </varlistentry>
 
