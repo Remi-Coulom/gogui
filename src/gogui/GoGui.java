@@ -235,8 +235,6 @@ class GoGui
             cbAbout();
         else if (command.equals("analyze"))
             cbAnalyze();
-        else if (command.equals("all-to-front"))
-            cbAllToFront();
         else if (command.equals("attach-program"))
             cbAttachProgram();
         else if (command.equals("back-to-main-variation"))
@@ -371,19 +369,6 @@ class GoGui
             setTitle();
         }
         m_analyzeDialog.toTop();
-    }
-
-    public void cbAllToFront()
-    {        
-        if (m_help != null && m_help.isVisible())
-            m_help.toTop();
-        if (m_gtpShell != null && m_gtpShell.isVisible())
-            m_gtpShell.toTop();
-        if (m_analyzeDialog != null && m_analyzeDialog.isVisible())
-            m_analyzeDialog.toTop();
-        if (m_gameTreeViewer != null && m_gameTreeViewer.isVisible())
-            m_gameTreeViewer.toTop();
-        toTop();
     }
 
     public void cbAttachProgram()

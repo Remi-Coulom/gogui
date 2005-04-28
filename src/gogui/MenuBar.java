@@ -820,9 +820,6 @@ public class MenuBar
         m_itemGtpShell = addMenuItem(menu, "GTP Shell", KeyEvent.VK_G,
                                      KeyEvent.VK_F9, shortcutKeyMask,
                                      "gtp-shell");
-        menu.addSeparator();
-        addMenuItem(menu, "Bring All to Front", KeyEvent.VK_F,
-                    "all-to-front");
         return menu;
     }
 

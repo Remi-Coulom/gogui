@@ -590,15 +590,6 @@ Open the GTP shell window or bring it to front if already open.
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guimenuitem>Bring All to Front</guimenuitem></term>
-<listitem>
-<para>
-Bring all of the above windows that are already open to front.
-</para>
-</listitem>
-</varlistentry>
-
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
