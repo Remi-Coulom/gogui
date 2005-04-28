@@ -311,7 +311,7 @@ public class AnalyzeDialog
     private JPanel createColorPanel()
     {
         m_colorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        m_labelColor = new JLabel("Color");
+        m_labelColor = new JLabel("Color:");
         m_labelColor.setHorizontalAlignment(SwingConstants.LEFT);
         m_colorPanel.add(m_labelColor);
         String[] colors = {"Black", "White"};
@@ -363,10 +363,10 @@ public class AnalyzeDialog
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         lowerPanel.add(leftPanel);
-        m_autoRun = new JCheckBox("Auto Run");
-        m_autoRun.setToolTipText("Auto run after changes on board");
+        m_autoRun = new JCheckBox("Auto run");
+        m_autoRun.setToolTipText("Automatically run after changes on board");
         leftPanel.add(m_autoRun);
-        m_clearBoard = new JCheckBox("Clear Board");
+        m_clearBoard = new JCheckBox("Clear board");
         m_clearBoard.setToolTipText("Clear board before displaying result");
         leftPanel.add(m_clearBoard);
         m_clearBoard.setSelected(true);

@@ -28,14 +28,14 @@ public class GameInfo
     {
         super(new GridLayout(0, 2, GuiUtils.SMALL_PAD, 0));
         m_clock = clock;
-        m_move = addEntry("To Play");
-        m_number = addEntry("Moves");
-        m_last = addEntry("Last Move");
-        m_variation = addEntry("Variation");
-        m_captB = addEntry("Captured Black");
-        m_captW = addEntry("Captured White");
-        m_timeB = addEntry("Time Black");
-        m_timeW = addEntry("Time White");
+        m_move = addEntry("To play:");
+        m_number = addEntry("Moves:");
+        m_last = addEntry("Last move:");
+        m_variation = addEntry("Variation:");
+        m_captB = addEntry("Captured Black:");
+        m_captW = addEntry("Captured White:");
+        m_timeB = addEntry("Time Black:");
+        m_timeW = addEntry("Time White:");
         m_timeB.setText("00:00");
         m_timeW.setText("00:00");
         new javax.swing.Timer(1000, this).start();
