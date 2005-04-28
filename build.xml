@@ -223,7 +223,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 
 <target name="doc-check-uptodate">
 <uptodate property="doc-uptodate" targetfile="doc/html/index.html">
-<srcfiles dir= "doc/xml" includes="*.xml,*.xsl"/>
+<srcfiles dir= "doc/xml" includes="*.xml"/>
+<srcfiles dir= "doc/xml" includes="*.xsl"/>
 <srcfiles dir= "doc/html" includes="*.css"/>
 </uptodate>
 </target>
