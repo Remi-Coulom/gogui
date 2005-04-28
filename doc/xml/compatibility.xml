@@ -43,7 +43,7 @@ It is required that the Go program can handle the following commands:
 </itemizedlist>
     
 <para>
-The commands in braces are used if the program supports
+The commands in parentheses are used if the program supports
 the <command>protocol_version</command> command and responds with 2.
 </para>
     
