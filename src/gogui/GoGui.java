@@ -992,10 +992,6 @@ class GoGui
         {
         }
         restoreSize(m_gtpShell, "window-gtpshell");
-        if (m_prefs.getBool("show-gtpshell"))
-            m_gtpShell.toTop();
-        if (m_prefs.getBool("show-analyze"))
-            cbAnalyze();
         m_gtpShell.setProgramName(m_name);
         Vector supportedCommands =
             m_commandThread.getSupportedCommands();
@@ -2231,18 +2227,6 @@ class GoGui
             computerBlack();
         else
             computerWhite();
-        if (m_prefs.getBool("show-gametree"))
-            cbShowGameTree();
-        if (! m_initAnalyze.equals(""))
-        {
-            AnalyzeCommand analyzeCommand =
-                AnalyzeCommand.get(this, m_initAnalyze);
-            if (analyzeCommand == null)
-                showError("Unknown analyze command \"" + m_initAnalyze
-                          + "\"");
-            else
-                initAnalyzeCommand(analyzeCommand, true);
-        }
         updateGameInfo(true);
         registerSpecialMacHandler();
         if (! m_prefs.getBool("show-info-panel"))
@@ -2257,6 +2241,24 @@ class GoGui
         }
         restoreMainWindow();
         setVisible(true);
+        // Children dialogs should be set visible after main window, otherwise
+        // they get minimize window buttons and a taskbar entry (KDE 3.4)
+        if (m_prefs.getBool("show-gtpshell"))
+            m_gtpShell.toTop();
+        if (m_prefs.getBool("show-gametree"))
+            cbShowGameTree();
+        if (m_prefs.getBool("show-analyze"))
+            cbAnalyze();
+        if (! m_initAnalyze.equals(""))
+        {
+            AnalyzeCommand analyzeCommand =
+                AnalyzeCommand.get(this, m_initAnalyze);
+            if (analyzeCommand == null)
+                showError("Unknown analyze command \"" + m_initAnalyze
+                          + "\"");
+            else
+                initAnalyzeCommand(analyzeCommand, true);
+        }
         m_guiBoard.setFocus();
         setTitleFromProgram();
         checkComputerMove();
