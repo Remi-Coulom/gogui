@@ -409,14 +409,12 @@ class GoGui
 
     public void cbShowGameTree()
     {
-        if (m_gameTreeViewer != null)
+        if (m_gameTreeViewer == null)
         {
-            disposeGameTree();
-            return;
+            m_gameTreeViewer =
+                new GameTreeViewer(this, this, m_fastPaint, m_prefs);
+            restoreSize(m_gameTreeViewer, "window-gametree");
         }
-        m_gameTreeViewer =
-            new GameTreeViewer(this, this, m_fastPaint, m_prefs);
-        restoreSize(m_gameTreeViewer, "window-gametree");
         updateGameTree(true);
         if (m_gameTreeViewer != null) // updateGameTree can close viewer
             m_gameTreeViewer.toTop();
