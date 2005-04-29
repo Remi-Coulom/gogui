@@ -459,10 +459,13 @@ Send command to white player.
 <refsection>
 <title>Examples</title>
 
-<para>
+<example>
+<title>Play games</title>
+<simpara>
 Play 100 games between GNU Go, default level, and GNU Go, level 5,
 on a 9x9 board, with alternating colors;
 save games and results to files, beginning with gnugo-5:
+</simpara>
 <programlisting>
 <userinput>
 BLACK="gnugo --mode gtp"
@@ -471,22 +474,28 @@ twogtp -black "$BLACK" -white "$WHITE" -games 100 \
   -size 9 -alternate -sgffile gnugo5 -auto
 </userinput>
 </programlisting>
-</para>
+</example>
 
-<para>
+<example>
+<title>Analyze results</title>
+<simpara>
 Create a HTML formatted result page of the games played in the previous
 example:
+</simpara>
 <programlisting>
 <userinput>
 twogtp -analyze gnugo5.dat
 </userinput>
 </programlisting>
-</para>
+</example>
 
-<para>
+<example>
+<title>Play one game with graphical display</title>
+<simpara>
 Play one game between GNU Go, default level, and GNU Go, level 5, using GoGui
 as a graphical display
 (to start play, select Computer Color/Both from the Game menu in GoGui):
+</simpara>
 <programlisting>
 <userinput>
 BLACK="gnugo --mode gtp"
@@ -494,11 +503,14 @@ WHITE="gnugo --mode gtp --level 5"
 gogui -program "twogtp -black \"$BLACK\" -white \"$WHITE\""
 </userinput>
 </programlisting>
-</para>
+</example>
 
-<para>
+<example>
+<title>Play games with graphical display</title>
+<simpara>
 Play 100 games with same settings as in the first example, with GoGui
 as a graphical display (start games automatically):
+</simpara>
 <programlisting>
 <userinput>
 BLACK="gnugo --mode gtp"
@@ -508,7 +520,7 @@ TWOGTP="twogtp -black \"$BLACK\" -white \"$WHITE\" -games 100 \
 gogui -size 9 -program "$TWOGTP" -computer-both -auto
 </userinput>
 </programlisting>
-</para>
+</example>
 
 <para>
 <!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
