@@ -273,28 +273,37 @@ Send text as talk characters.
 <refsection>
 <title>Examples</title>
 
-<para>
+<refsection>
+<title>List serial ports</title>
+<simpara>
 Test, if GmpToGtp can see serial ports:
+</simpara>
+<para>
 <programlisting>
 <userinput>
 gmptogtp -list
 </userinput>
 </programlisting>
 </para>
+</refsection>
 
+<refsection>
+<title>Play game between a program and the serial line with graphical
+display</title>
+<simpara>
+Use a combination between GmpToGtp, TwoGtp and GoGui to play a game
+between a Go engine (GNU Go as black) on the first serial port with 2400 baud.
+Note that the colors are fixed by the command line options, they cannot be
+negotiated. Other options to gmptogtp that might be necessary are -flow and
+-simple.
+</simpara>
 <para>
-Use GoGui and TwoGtp to play a game between GNU Go as Black, and GMP as White,
-on the first serial port.
-Note that the colors and board size are fixed by the command line options;
-they cannot be negotiated.
-Other options, which might be necessary for gmptogtp, are -flow or -simple:
 <programlisting>
 <userinput>
-BLACK="gnugo --mode gtp"
-WHITE="gmptogtp -color white -size 19 -device /dev/ttyS0 \
-  -baud 2400 -verbose"
-TWOGTP="twogtp -black \"$BLACK\" -white \"WHITE\" -verbose"
-gogui -size 19 -program "$TWOGTP" -verbose -computer-both -auto
+GNUGO="gnugo --mode gtp"
+GMPTOGTP="gmptogtp -color white -device /dev/ttyS0 -baud 2400 -verbose"
+TWOGTP="twogtp -black \"$GNUGO\" -white \"$GMPTOGTP\" -verbose"
+gogui -auto -verbose -program "$TWOGTP"
 </userinput>
 </programlisting>
 </para>
@@ -302,6 +311,9 @@ gogui -size 19 -program "$TWOGTP" -verbose -computer-both -auto
 <para>
 <!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
 </para>
+
+</refsection>
+
 </refsection>
 
 </refentry>
