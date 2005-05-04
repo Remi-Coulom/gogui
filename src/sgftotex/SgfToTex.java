@@ -19,7 +19,7 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
-class SgfToTex
+public class SgfToTex
 {
     public static void main(String[] args)
     {

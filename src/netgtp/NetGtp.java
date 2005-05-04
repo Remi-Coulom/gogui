@@ -17,7 +17,7 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
-class NetGtp
+public class NetGtp
 {
     public NetGtp(String hostname, int port)
         throws Exception

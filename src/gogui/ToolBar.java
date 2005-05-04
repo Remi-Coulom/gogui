@@ -15,6 +15,7 @@ import game.NodeUtils;
 
 //----------------------------------------------------------------------------
 
+/** Tool bar for GoGui. */
 public class ToolBar
     extends JToolBar
 {

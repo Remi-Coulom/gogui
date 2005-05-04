@@ -22,7 +22,7 @@ import version.Version;
 //----------------------------------------------------------------------------
 
 /** Connects a Go program supporting GTP to a socket. */
-class GtpServer
+public class GtpServer
 {
     /** @param verbose Log everything sent and received to stderr
         @param loop Restart program and wait for new connection after

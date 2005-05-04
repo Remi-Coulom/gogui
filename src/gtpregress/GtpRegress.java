@@ -30,7 +30,7 @@ import utils.StringUtils;
 //----------------------------------------------------------------------------
 
 /** Runs GTP regression tests. */
-class GtpRegress
+public class GtpRegress
     implements Gtp.IOCallback
 {
     GtpRegress(String program, String[] tests, String output,
