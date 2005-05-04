@@ -21,16 +21,9 @@ import go.Point;
 
 //----------------------------------------------------------------------------
 
+/** Write a game or board position in PSGO style to a stream. */
 public class Writer
 {
-    public static class Error extends Exception
-    {
-        public Error(String s)
-        {
-            super(s);
-        }
-    }    
-
     public Writer(String title, OutputStream out, Board board,
                   boolean usePass, String[][] strings,
                   boolean[][] markups, boolean[][] selects)
