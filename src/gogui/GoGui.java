@@ -62,6 +62,7 @@ import gui.GameInfo;
 import gui.GameInfoDialog;
 import gui.GameTreeViewer;
 import gui.GtpShell;
+import gui.GuiUtils;
 import gui.Help;
 import gui.ParameterDialog;
 import gui.SelectProgram;
@@ -70,7 +71,6 @@ import gui.ScoreDialog;
 import gui.SimpleDialogs;
 import gui.TextViewer;
 import utils.FileUtils;
-import utils.GuiUtils;
 import utils.Platform;
 import utils.Preferences;
 import utils.ProgressShow;
@@ -119,7 +119,7 @@ class GoGui
         m_infoPanel = new JPanel(new BorderLayout());
         m_clock = new Clock();
         m_gameInfo = new GameInfo(m_clock);
-        m_gameInfo.setBorder(utils.GuiUtils.createSmallEmptyBorder());
+        m_gameInfo.setBorder(GuiUtils.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
 
         m_board = new go.Board(m_boardSize);

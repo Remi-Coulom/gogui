@@ -20,8 +20,8 @@ import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.EditorKit;
+import gui.GuiUtils;
 import gui.SimpleDialogs;
-import utils.GuiUtils;
 import utils.Platform;
 import version.Version;
 

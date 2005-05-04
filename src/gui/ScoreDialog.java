@@ -21,7 +21,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import go.Score;
-import utils.GuiUtils;
+import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 

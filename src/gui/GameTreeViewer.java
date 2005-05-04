@@ -49,7 +49,7 @@ import game.GameTree;
 import game.Node;
 import game.NodeUtils;
 import go.Move;
-import utils.GuiUtils;
+import gui.GuiUtils;
 import utils.Platform;
 import utils.Preferences;
 

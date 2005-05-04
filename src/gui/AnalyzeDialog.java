@@ -48,7 +48,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import gtp.GtpError;
-import utils.GuiUtils;
+import gui.GuiUtils;
 import utils.Platform;
 import utils.Preferences;
 

@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import gtp.GtpError;
-import utils.GuiUtils;
+import gui.GuiUtils;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------

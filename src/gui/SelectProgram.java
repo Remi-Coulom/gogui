@@ -34,7 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.Vector;
-import utils.GuiUtils;
+import gui.GuiUtils;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------

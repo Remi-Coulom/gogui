@@ -16,7 +16,7 @@ import javax.swing.SwingConstants;
 import game.Node;
 import game.NodeUtils;
 import go.Move;
-import utils.GuiUtils;
+import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 

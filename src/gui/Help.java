@@ -34,7 +34,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import utils.GuiUtils;
+import gui.GuiUtils;
 import utils.Platform;
 
 //----------------------------------------------------------------------------
