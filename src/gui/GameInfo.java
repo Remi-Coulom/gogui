@@ -20,6 +20,7 @@ import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 
+/** Panel displaying information about the current position. */
 public class GameInfo
     extends JPanel
     implements ActionListener

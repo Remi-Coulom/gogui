@@ -25,6 +25,7 @@ import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 
+/** Dialog for displaying the game score and result. */
 public class ScoreDialog
     extends JDialog
 {

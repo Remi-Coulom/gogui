@@ -15,8 +15,10 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** GtpAdapter main function. */
 public class Main
 {
+    /** GtpAdapter main function. */
     public static void main(String[] args)
     {
         try

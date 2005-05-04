@@ -17,6 +17,7 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** Simple message dialogs and file selectors. */
 public class SimpleDialogs
 {
     public static final int FILE_OPEN = 0;

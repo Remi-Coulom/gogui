@@ -54,6 +54,7 @@ class AntialiasingEditorPane
 
 //----------------------------------------------------------------------------
 
+/** Dialog for displaying help in HTML format. */
 public class Help
     extends JDialog
     implements ActionListener, HyperlinkListener

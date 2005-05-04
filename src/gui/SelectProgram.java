@@ -39,6 +39,7 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** Dialog for selecting a Go engine. */
 public class SelectProgram
     extends JDialog
     implements ActionListener

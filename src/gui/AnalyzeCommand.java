@@ -18,6 +18,9 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** Analyze command.
+    See GoGui documentation, chapter "Analyze Commands"
+*/
 public class AnalyzeCommand
 {
     public static final int BWBOARD = 0;

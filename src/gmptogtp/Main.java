@@ -22,8 +22,10 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** GmpToGtp main function. */
 public class Main
 {
+    /** GmpToGtp main function. */
     public static void main(String[] args)
     {
         int exitStatus = 0;

@@ -21,6 +21,7 @@ import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 
+/** Dialog for editing game settings and other information. */
 public class GameInfoDialog
     extends JOptionPane
 {

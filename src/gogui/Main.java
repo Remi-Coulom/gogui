@@ -14,8 +14,10 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** GoGui main function. */
 public class Main
 {
+    /** GoGui main function. */
     public static void main(String[] args)
     {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",

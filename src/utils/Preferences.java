@@ -15,6 +15,7 @@ import java.util.Properties;
 
 //----------------------------------------------------------------------------
 
+/** Load and save settings. */
 public class Preferences
 {
     public Preferences()

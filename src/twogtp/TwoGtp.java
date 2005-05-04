@@ -41,6 +41,7 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** GTP adapter for playing games between two Go programs. */
 public class TwoGtp
     extends GtpServer
 {

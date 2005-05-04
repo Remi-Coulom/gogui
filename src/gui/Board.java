@@ -65,10 +65,12 @@ class BoardLabel
 
 //----------------------------------------------------------------------------
 
+/** Graphical display of a Go board. */
 public class Board
     extends JPanel
     implements FocusListener, Printable
 {
+    /** Callback for clicks on a field. */
     public interface Listener
     {
         void fieldClicked(go.Point p, boolean modifiedSelect);

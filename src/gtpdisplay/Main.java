@@ -13,6 +13,7 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** GtpDisplay main function. */
 public class Main
 {
     public static void main(String[] args)

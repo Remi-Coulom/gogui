@@ -13,6 +13,7 @@ import utils.FileUtils;
 
 //----------------------------------------------------------------------------
 
+/** File filter for accepting LaTeX files. */
 public class Filter
     extends FileFilter
 {

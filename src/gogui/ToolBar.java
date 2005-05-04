@@ -18,6 +18,7 @@ import game.NodeUtils;
 public class ToolBar
     extends JToolBar
 {
+    /** Tool bar for GoGui. */
     public ToolBar(ActionListener listener)
     {
         m_listener = listener;

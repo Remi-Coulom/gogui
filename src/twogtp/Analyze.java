@@ -18,6 +18,7 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** Analyze the game results and produce a HTML formatted report. */
 public class Analyze
 {
     public Analyze(String filename, boolean force) throws Exception

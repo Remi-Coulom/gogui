@@ -24,6 +24,9 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** Dialog for editing parameters in response to an analyze command of type
+    <i>param</i>.
+*/
 public class ParameterDialog
 {
     public static void editParameters(String paramCommand, Frame owner,

@@ -11,6 +11,7 @@ import gtp.GtpUtils;
 
 //----------------------------------------------------------------------------
 
+/** Show response to an AnalyzeCommand in the GUI. */
 public class AnalyzeShow
 {
     public static void show(AnalyzeCommand command, gui.Board guiBoard,

@@ -31,6 +31,7 @@ import utils.Platform;
 
 //----------------------------------------------------------------------------
 
+/** Menu bar for GoGui. */
 public class MenuBar
     implements ActionListener
 {

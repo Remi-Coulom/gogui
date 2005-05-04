@@ -18,6 +18,7 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** Utility functions for parsing GTP responses. */
 public class GtpUtils
 {
     public static double[][] parseDoubleBoard(String response, String title,

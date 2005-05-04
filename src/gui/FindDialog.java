@@ -37,6 +37,7 @@ import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 
+/** Dialog for entering a search pattern. */
 public class FindDialog
     extends JDialog
     implements ActionListener

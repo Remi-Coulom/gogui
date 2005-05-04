@@ -36,6 +36,7 @@ import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
+/** GTP adapter showing the current board in a window. */
 public class GtpDisplay
     extends GtpServer
 {

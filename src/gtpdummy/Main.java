@@ -14,8 +14,10 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** GtpDummy main function. */
 public class Main
 {
+    /** GtpDummy main function. */
     public static void main(String[] args)
     {
         try

@@ -13,6 +13,7 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** GtpRegress main function. */
 class Main
 {
     public static void main(String[] args)
