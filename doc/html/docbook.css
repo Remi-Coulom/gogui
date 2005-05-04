@@ -161,7 +161,7 @@ h1, h2, h3, h4, h5, h6
 .arg, .parameter, .replaceable
 {
   background-color: rgb(255,255,255);
-  color: rgb(0,128,64);
+  color: black;
   font-style: italic;
 }
 
