@@ -5,6 +5,7 @@
 
 package gogui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.EditorKit;
@@ -98,8 +100,9 @@ public class AboutDialog
         editorPane.setEditable(false);
         if (Platform.isMac())
         {
-            JLabel dummyLabel = new JLabel();
-            editorPane.setBackground(dummyLabel.getBackground());
+            Color color = UIManager.getColor("Label.background");
+            if (color != null)
+                editorPane.setBackground(color);
         }
         panel.add(editorPane);
         EditorKit editorKit =
