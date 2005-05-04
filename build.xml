@@ -360,6 +360,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  gui/Board*.class
  gui/BoardLabel.class
  gui/Field*.class
+ gui/GuiUtils.class
  gui/SimpleDialogs.class
  gtp/*.class
  gtpdisplay/*.class
@@ -368,7 +369,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  latex/Filter.class
  sgf/Filter.class
  utils/ErrorMessage.class
- utils/GuiUtils.class
  utils/MessageQueue.class
  utils/Platform.class
  utils/Options.class

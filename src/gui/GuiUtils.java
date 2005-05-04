@@ -3,7 +3,7 @@
 // $Source$
 //----------------------------------------------------------------------------
 
-package utils;
+package gui;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
