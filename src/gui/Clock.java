@@ -167,6 +167,8 @@ public class Clock
     }
 
     /** Set time left.
+        @param color Color to set the time for.
+        @param time New value for time left.
         @param movesLeft -1, if not in byoyomi.
     */
     public void setTimeLeft(Color color, long time, int movesLeft)
