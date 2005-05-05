@@ -2258,6 +2258,7 @@ class GoGui
             else
                 initAnalyzeCommand(analyzeCommand, true);
         }
+        toTop();
         m_guiBoard.setFocus();
         setTitleFromProgram();
         checkComputerMove();
