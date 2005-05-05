@@ -105,7 +105,8 @@ public class Help
         if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
         {
             URL url = e.getURL();
-            if (url.getProtocol().equals("jar"))
+            String protocol = url.getProtocol();
+            if (protocol.equals("jar") || protocol.equals("file"))
             {
                 loadURL(url);
                 appendHistory(url);
