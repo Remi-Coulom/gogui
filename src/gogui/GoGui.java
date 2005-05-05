@@ -1698,6 +1698,7 @@ class GoGui
     private void checkComputerMove()
     {
         m_clock.startMove(m_board.getToMove());
+        updateMenuBar();
         if (m_commandThread == null || ! isCurrentNodeExecuted())
             return;
         boolean gameFinished = (m_board.bothPassed() || m_resigned);
