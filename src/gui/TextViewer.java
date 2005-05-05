@@ -8,6 +8,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -53,7 +54,74 @@ public class TextViewer
                       boolean highlight, Listener listener)
     {
         super(owner, title);
-        //setLocationRelativeTo(owner);
+        initialize(title, text, highlight, listener);
+    }
+
+    public TextViewer(Dialog owner, String title, String text,
+                      boolean highlight, Listener listener)
+    {
+        super(owner, title);
+        initialize(title, text, highlight, listener);
+    }
+
+    private JTextPane m_textPane;
+
+    private Listener m_listener;
+
+    private void doSyntaxHighlight()
+    {
+        StyledDocument doc = m_textPane.getStyledDocument();
+        StyleContext context = StyleContext.getDefaultStyleContext();
+        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
+        Style styleTitle = doc.addStyle("title", def);
+        StyleConstants.setBold(styleTitle, true);
+        Style stylePoint = doc.addStyle("point", def);
+        Color colorPoint = new Color(0.25f, 0.5f, 0.7f);
+        StyleConstants.setForeground(stylePoint, colorPoint);
+        Style styleNumber = doc.addStyle("number", def);
+        Color colorNumber = new Color(0f, 0.54f, 0f);
+        StyleConstants.setForeground(styleNumber, colorNumber);
+        Style styleConst = doc.addStyle("const", def);
+        Color colorConst = new Color(0.8f, 0f, 0f);
+        StyleConstants.setForeground(styleConst, colorConst);
+        Style styleColor = doc.addStyle("color", def);
+        Color colorColor = new Color(0.54f, 0f, 0.54f);
+        StyleConstants.setForeground(styleColor, colorColor);
+        m_textPane.setEditable(true);
+        highlight("number", "\\b-?\\d+\\.?\\d*([Ee][+-]\\d+)?\\b");
+        highlight("const", "\\b[A-Z_][A-Z_]+[A-Z]\\b");
+        highlight("color",
+                  "\\b([Bb][Ll][Aa][Cc][Kk]|[Ww][Hh][Ii][Tt][Ee])\\b");
+        highlight("point", "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1\\d|[1-9]))\\b");
+        highlight("title", "^\\S+:(\\s|$)");
+        m_textPane.setEditable(false);
+    }
+
+    private void highlight(String styleName, String regex)
+    {
+        StyledDocument doc = m_textPane.getStyledDocument();
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        try
+        {
+            CharSequence text = doc.getText(0, doc.getLength());
+            Matcher matcher = pattern.matcher(text);
+            while (matcher.find())
+            {
+                int start = matcher.start();
+                int end = matcher.end();
+                Style style = doc.getStyle(styleName);
+                doc.setCharacterAttributes(start, end - start, style, true);
+            }
+        }
+        catch (BadLocationException e)
+        {
+            assert(false);
+        }
+    }
+
+    private void initialize(String title, String text, boolean highlight,
+                            Listener listener)
+    {
         m_listener = listener;
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(GuiUtils.createSmallEmptyBorder());
@@ -128,61 +196,6 @@ public class TextViewer
             size.width = Math.min(size.width, maxWidth);
             size.height = Math.min(size.height, maxHeight);
             setSize(size);
-        }
-    }
-
-    private JTextPane m_textPane;
-
-    private Listener m_listener;
-
-    private void doSyntaxHighlight()
-    {
-        StyledDocument doc = m_textPane.getStyledDocument();
-        StyleContext context = StyleContext.getDefaultStyleContext();
-        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
-        Style styleTitle = doc.addStyle("title", def);
-        StyleConstants.setBold(styleTitle, true);
-        Style stylePoint = doc.addStyle("point", def);
-        Color colorPoint = new Color(0.25f, 0.5f, 0.7f);
-        StyleConstants.setForeground(stylePoint, colorPoint);
-        Style styleNumber = doc.addStyle("number", def);
-        Color colorNumber = new Color(0f, 0.54f, 0f);
-        StyleConstants.setForeground(styleNumber, colorNumber);
-        Style styleConst = doc.addStyle("const", def);
-        Color colorConst = new Color(0.8f, 0f, 0f);
-        StyleConstants.setForeground(styleConst, colorConst);
-        Style styleColor = doc.addStyle("color", def);
-        Color colorColor = new Color(0.54f, 0f, 0.54f);
-        StyleConstants.setForeground(styleColor, colorColor);
-        m_textPane.setEditable(true);
-        highlight("number", "\\b-?\\d+\\.?\\d*([Ee][+-]\\d+)?\\b");
-        highlight("const", "\\b[A-Z_][A-Z_]+[A-Z]\\b");
-        highlight("color",
-                  "\\b([Bb][Ll][Aa][Cc][Kk]|[Ww][Hh][Ii][Tt][Ee])\\b");
-        highlight("point", "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1\\d|[1-9]))\\b");
-        highlight("title", "^\\S+:(\\s|$)");
-        m_textPane.setEditable(false);
-    }
-
-    private void highlight(String styleName, String regex)
-    {
-        StyledDocument doc = m_textPane.getStyledDocument();
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        try
-        {
-            CharSequence text = doc.getText(0, doc.getLength());
-            Matcher matcher = pattern.matcher(text);
-            while (matcher.find())
-            {
-                int start = matcher.start();
-                int end = matcher.end();
-                Style style = doc.getStyle(styleName);
-                doc.setCharacterAttributes(start, end - start, style, true);
-            }
-        }
-        catch (BadLocationException e)
-        {
-            assert(false);
         }
     }
 }
