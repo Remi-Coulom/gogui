@@ -364,9 +364,9 @@ public class MenuBar
         m_itemKeepOnlyPosition.setEnabled(hasFather || hasChildren);
         m_itemClockHalt.setEnabled(clock.isRunning());
         m_itemClockResume.setEnabled(! clock.isRunning());
-        boolean canRestoreClock
-            = (canRestoreTime(node)
-               || (father != null && canRestoreTime(father)));
+        boolean canRestoreClock = clock.isInitialized()
+            && (canRestoreTime(node)
+                || (father != null && canRestoreTime(father)));
         m_itemClockRestore.setEnabled(canRestoreClock);
     }
 
