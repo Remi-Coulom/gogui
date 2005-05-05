@@ -721,7 +721,7 @@ class GameTreePanel
         String nodeInfo = NodeUtils.nodeInfo(node);
         String title = "Node Info";
         TextViewer textViewer =
-            new TextViewer(null, title, nodeInfo, true, null);
+            new TextViewer(m_owner, title, nodeInfo, true, null);
         textViewer.setLocation(location);
         textViewer.setVisible(true);
     }
@@ -842,7 +842,7 @@ class GameTreePanel
         String treeInfo = NodeUtils.treeInfo(node);
         String title = "Subtree Info";
         TextViewer textViewer =
-            new TextViewer(null, title, treeInfo, true, null);
+            new TextViewer(m_owner, title, treeInfo, true, null);
         textViewer.setLocation(location);
         textViewer.setVisible(true);
     }
