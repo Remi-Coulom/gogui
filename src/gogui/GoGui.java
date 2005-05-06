@@ -1910,16 +1910,18 @@ class GoGui
         {
             assert(! m_clock.isRunning());
             go.Color color = move.getColor();
+            // Round time to seconds
+            double timeLeft = m_clock.getTimeLeft(color) / 1000;
             if (color == go.Color.BLACK)
             {
-                node.setTimeLeftBlack(m_clock.getTimeLeft(color) / 1000);
+                node.setTimeLeftBlack(timeLeft);
                 if (m_clock.isInByoyomi(color))
                     node.setMovesLeftBlack(m_clock.getMovesLeft(color));
             }
             else
             {
                 assert(color == go.Color.WHITE);
-                node.setTimeLeftWhite(m_clock.getTimeLeft(color) / 1000);
+                node.setTimeLeftWhite(timeLeft);
                 if (m_clock.isInByoyomi(color))
                     node.setMovesLeftWhite(m_clock.getMovesLeft(color));
             }
