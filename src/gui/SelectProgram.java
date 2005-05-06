@@ -245,11 +245,9 @@ public class SelectProgram
 
     private void open()
     {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setMultiSelectionEnabled(false);
-        if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+        File file = SimpleDialogs.showOpen(this, "Select Go Program");
+        if (file == null)
             return;
-        File file = chooser.getSelectedFile();
         String text = file.toString();
         if (text.indexOf(' ') >= 0)
             text = "\"" + text + "\"";        
