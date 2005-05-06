@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Vector;
@@ -377,7 +378,7 @@ public class AnalyzeCommand
             in.close();
             out.close();
         }
-        catch (Exception e)
+        catch (IOException e)
         {
         }
     }
