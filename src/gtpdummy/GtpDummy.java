@@ -8,6 +8,7 @@ package gtpdummy;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Random;
 import go.Point;
 import gtp.GtpServer;
 import utils.StringUtils;
@@ -23,6 +24,7 @@ public class GtpDummy
         throws Exception
     {
         super(in, out, log);
+        m_random = new Random();
         initSize(19);
         m_thread = Thread.currentThread();
     }
@@ -133,6 +135,8 @@ public class GtpDummy
 
     private boolean[][] m_alreadyPlayed;
 
+    private Random m_random;
+
     private String m_nextResponse;
 
     private Thread m_thread;
@@ -143,7 +147,7 @@ public class GtpDummy
         for (int x = 0; x < m_size; ++x)
         {
             for (int y = 0; y < m_size; ++y)
-                response.append(Math.random() > 0.5 ? "B " : "W ");
+                response.append(m_random.nextBoolean() ? "B " : "W ");
             response.append("\n");
         }                    
     }
@@ -196,7 +200,7 @@ public class GtpDummy
         Point point = null;
         if (numberPossibleMoves > 0)
         {
-            int rand = (int)(Math.random() * numberPossibleMoves);
+            int rand = m_random.nextInt(numberPossibleMoves);
             int index = 0;
             for (int x = 0; x < m_size && point == null; ++x)
                 for (int y = 0; y < m_size && point == null; ++y)
