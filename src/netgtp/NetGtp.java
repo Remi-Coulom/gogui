@@ -17,6 +17,7 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** Connects to a remote Go program supporting GTP. */
 public class NetGtp
 {
     public NetGtp(String hostname, int port)

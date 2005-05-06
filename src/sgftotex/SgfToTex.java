@@ -19,6 +19,7 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
+/** SGF to LaTeX converter. */
 public class SgfToTex
 {
     public static void main(String[] args)
