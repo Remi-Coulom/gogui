@@ -45,29 +45,8 @@ public class AboutDialog
                         String command)
     {
         JTabbedPane tabbedPane = new JTabbedPane();
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL imageUrl = classLoader.getResource("images/project-support.png");
-        String projectUrl = "http://gogui.sourceforge.net";
-        String supportUrl =
-            "http://sourceforge.net/donate/index.php?group_id=59117";
-        JPanel goguiPanel =
-            createPanel("<p align=\"center\"><b>GoGui</b></p>" +
-                        "<p align=\"center\">" +
-                        "Version " + Version.get() + "</p>" +
-                        "<p align=\"center\">" +
-                        "Graphical interface to Go programs<br>" +
-                        "&copy; 2005 Markus Enzenberger" +
-                        "<br>" +
-                        "<tt><a href=\"" + projectUrl + "\">"
-                        + projectUrl + "</a></tt>" +
-                        "</p>" +
-                        "<p align=\"center\">" +
-                        "<a href=\"" + supportUrl + "\">"
-                        + "<img src=\"" + imageUrl + "\" border=\"0\"></a>" +
-                        "</p>");
-        tabbedPane.add("GoGui", goguiPanel);
-        tabbedPane.setMnemonicAt(0, KeyEvent.VK_G);
         boolean isProgramAvailable = (name != null && ! name.equals(""));
+        int tabIndex = 0;
         JPanel programPanel;
         if (isProgramAvailable)
         {
@@ -84,10 +63,17 @@ public class AboutDialog
                             + "<br>" +
                             "Command: " +
                             "<tt>" + command + "</tt></p>");
-            tabbedPane.add(name, programPanel);
-            tabbedPane.setMnemonicAt(1, KeyEvent.VK_P);
-            tabbedPane.setSelectedIndex(1);
+            tabbedPane.add("Program", programPanel);
+            tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_P);
+            tabbedPane.setSelectedIndex(tabIndex);
+            ++tabIndex;
         }
+        tabbedPane.add("GoGui", createPanelGoGui());
+        tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_G);
+        ++tabIndex;
+        tabbedPane.add("Java", createPanelJava());
+        tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_J);
+        ++tabIndex;
         setMessage(tabbedPane);
         setOptionType(DEFAULT_OPTION);
     }
@@ -125,6 +111,64 @@ public class AboutDialog
                 }
             });
         return panel;
+    }
+
+    private JPanel createPanelGoGui()
+    {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL imageUrl = classLoader.getResource("images/project-support.png");
+        String projectUrl = "http://gogui.sourceforge.net";
+        String supportUrl =
+            "http://sourceforge.net/donate/index.php?group_id=59117";
+        return createPanel("<p align=\"center\"><b>GoGui</b></p>" +
+                           "<p align=\"center\">" +
+                           "Version " + Version.get() + "</p>" +
+                           "<p align=\"center\">" +
+                           "Graphical interface to Go programs<br>" +
+                           "&copy; 2005 Markus Enzenberger" +
+                           "<br>" +
+                           "<tt><a href=\"" + projectUrl + "\">"
+                           + projectUrl + "</a></tt>" +
+                           "</p>" +
+                           "<p align=\"center\">" +
+                           "<a href=\"" + supportUrl + "\">"
+                           + "<img src=\"" + imageUrl
+                           + "\" border=\"0\"></a>" + "</p>");
+    }
+
+    private JPanel createPanelJava()
+    {
+        StringBuffer buffer = new StringBuffer(256);
+        String name = System.getProperty("java.vm.name");
+        if (name == null)
+            buffer.append("<p>Unknown Java VM</p>");
+        else
+        {
+            buffer.append("<p align=\"center\"><b>");
+            buffer.append(name);
+            buffer.append("</b></p>");
+            String version = System.getProperty("java.vm.version");
+            if (version != null)
+            {
+                buffer.append("<p align=\"center\">Version ");
+                buffer.append(version);
+                buffer.append("</p>");
+            }
+            buffer.append("<p align=\"center\">");
+            String vendor = System.getProperty("java.vm.vendor");
+            if (vendor != null)
+            {
+                buffer.append(vendor);
+            }
+            String info = System.getProperty("java.vm.info");
+            if (info != null)
+            {
+                buffer.append("<br>");
+                buffer.append(info);
+            }
+            buffer.append("</p>");
+        }
+        return createPanel(buffer.toString());
     }
 }
 
