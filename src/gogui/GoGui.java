@@ -1861,6 +1861,9 @@ class GoGui
             else
             {
                 go.Point point = GtpUtils.parsePoint(response, m_boardSize);
+                if (point != null
+                    && m_board.getColor(point) != go.Color.EMPTY)
+                    showWarning("Program played move on non-empty point");
                 Move move = new Move(point, toMove);
                 setNeedsSave(true);
                 m_board.play(move);
