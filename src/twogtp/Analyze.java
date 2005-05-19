@@ -15,6 +15,7 @@ import java.util.Vector;
 import utils.ErrorMessage;
 import utils.FileUtils;
 import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 
@@ -280,6 +281,8 @@ public class Analyze
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + m_black + " - " + m_white + "</title>\n" +
+                  "<meta name=\"generator\" content=\"TwoGtp "
+                  + Version.get() + "\">\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                   " vlink=\"#551a8b\">\n" +
