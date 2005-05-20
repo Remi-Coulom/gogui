@@ -26,6 +26,7 @@ import gtp.Gtp;
 import gtp.GtpError;
 import utils.FileUtils;
 import utils.StringUtils;
+import version.Version;
 
 //----------------------------------------------------------------------------
 
@@ -504,6 +505,8 @@ public class GtpRegress
         m_out.print("<html>\n" +
                     "<head>\n" +
                     "<title>Output: " + m_file + "</title>\n" +
+                    "<meta name=\"generator\" content=\"GtpRegress "
+                    + Version.get() + "\">\n" +
                     "<style type=\"text/css\">\n" +
                     "<!--\n" +
                     "span.comment { color:#999999; }\n" +
@@ -765,6 +768,8 @@ public class GtpRegress
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Regression Test Summary</title>\n" +
+                  "<meta name=\"generator\" content=\"GtpRegress "
+                  + Version.get() + "\">\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
@@ -886,6 +891,8 @@ public class GtpRegress
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>Summary: " + m_file + "</title>\n" +
+                  "<meta name=\"generator\" content=\"GtpRegress "
+                  + Version.get() + "\">\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
