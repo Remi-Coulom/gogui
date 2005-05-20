@@ -2669,7 +2669,7 @@ class GoGui
     {
         prefs.setBoolDefault("beep-after-move", true);
         prefs.setIntDefault("boardsize", 19);
-        prefs.setDoubleDefault("komi", 0);
+        prefs.setDoubleDefault("komi", 6.5);
         prefs.setStringDefault("rules", "Chinese");
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);
