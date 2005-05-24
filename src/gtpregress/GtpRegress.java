@@ -342,6 +342,9 @@ public class GtpRegress
         {
             if (m_lastFullResponse == null)
             {
+                System.err.println("Warning: " + m_file + ": Response pattern"
+                                   + " without preceding test command: "
+                                   + line);
                 printOutLine("comment", line);
                 return;
             }
