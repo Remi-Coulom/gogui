@@ -63,7 +63,7 @@ public class GtpRegress
 
     public void receivedInvalidResponse(String s)
     {
-        printOutLine("invalid", "Invalid response: " + s);
+        printOutLine("invalid", "Invalid response: " + s + " [...]");
     }
 
     public void receivedResponse(boolean error, String s)
