@@ -190,7 +190,7 @@ public class GtpRegress
 
     private static final String m_colorRed = "#ff5454";
 
-    private String m_prefix;
+    private String m_currentStyle;
 
     private String m_lastCommand;
 
@@ -207,6 +207,8 @@ public class GtpRegress
     private String m_outFileRelativeName;
 
     private String m_outPrefix;
+
+    private String m_prefix;
 
     private String m_program;
 
@@ -252,6 +254,8 @@ public class GtpRegress
 
     private void finishOutFile()
     {
+        if (m_currentStyle != null)
+            m_out.print("</span>");
         m_out.print("</pre>\n" +
                     "</body>\n");
         m_out.close();
@@ -504,6 +508,7 @@ public class GtpRegress
         File parent = file.getParentFile();
         if (parent != null && ! parent.exists())
             parent.mkdir();
+        m_currentStyle = null;
         m_out = new PrintStream(new FileOutputStream(file));
         m_out.print("<html>\n" +
                     "<head>\n" +
@@ -594,15 +599,18 @@ public class GtpRegress
                 line = stringBuffer.toString();
             }
         }
-        if (style != null)
+        if (style != m_currentStyle)
+        {
+            if (m_currentStyle != null)
+                m_out.print("</span>");
             m_out.print("<span class=\"" + style + "\">");
+            m_currentStyle = style;
+        }
         if (id >= 0)
             m_out.print("<a name=\"" + id + "\">");            
         m_out.print(line);
         if (id >= 0)
             m_out.print("</a>");            
-        if (style != null)
-            m_out.print("</span>");
     }
 
     private synchronized void printOutLine(String style, String line, int id)
