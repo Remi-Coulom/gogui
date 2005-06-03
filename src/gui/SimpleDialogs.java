@@ -120,13 +120,29 @@ public class SimpleDialogs
         return new File(userDir);
     }
 
+    /** Find first parent that is a Frame.
+        @return null If no such parent.
+    */
+    private static Frame findParentFrame(Component component)
+    {
+        while (component != null)
+            if (component instanceof Frame)
+                return (Frame)component;
+            else
+                component = component.getParent();
+        return null;
+    }
+
     private static File showFileChooser(Component parent, int type,
                                         File lastFile, boolean setSgfFilter,
                                         String title)
     {
-        if (Platform.isMac() && parent instanceof Frame)
-            return showFileChooserAWT((Frame)parent, type, lastFile,
-                                      setSgfFilter, title);
+        if (Platform.isMac())
+        {
+            Frame frame = findParentFrame(parent);
+            return showFileChooserAWT(frame, type, lastFile, setSgfFilter,
+                                      title);
+        }
         return showFileChooserSwing(parent, type, lastFile, setSgfFilter,
                                     title);
     }
