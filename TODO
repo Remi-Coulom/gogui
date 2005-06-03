@@ -1,5 +1,8 @@
 BUGS:
 
+GoGui: GTP shell and analyze window should open again if they were open
+when attaching a program (and detaching the old one first)
+
 GoGui: check if setup will capture anything and issue a warning, because setup
 stones are transmitted to the program by play commands
 
