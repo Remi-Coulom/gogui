@@ -54,6 +54,7 @@ import gtp.GtpUtils;
 import gui.AnalyzeCommand;
 import gui.AnalyzeDialog;
 import gui.AnalyzeShow;
+import gui.BoardSizeDialog;
 import gui.Clock;
 import gui.Comment;
 import gui.CommandThread;
@@ -1118,26 +1119,11 @@ class GoGui
 
     private void cbBoardSizeOther()
     {
+        int size = BoardSizeDialog.show(this, m_boardSize);
+        if (size < 1)
+            return;
         saveSession();
-        String value =
-            JOptionPane.showInputDialog(this, "Board size",
-                                        Integer.toString(m_boardSize));
-        if (value == null)
-            return;
-        int boardSize = -1;
-        try
-        {
-            boardSize = Integer.parseInt(value);
-        }
-        catch (NumberFormatException e)
-        {
-        }
-        if (boardSize <= 0)
-        {
-            showError("Invalid size");
-            return;
-        }
-        cbNewGame(boardSize);
+        cbNewGame(size);
     }
     
     private void cbClockHalt()
