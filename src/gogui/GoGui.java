@@ -379,10 +379,16 @@ class GoGui
         String program = SelectProgram.select(this);
         if (program == null)
             return;
-        if (attachProgram(program))
-            m_prefs.setString("program", m_program);
-        else
+        if (! attachProgram(program))
+        {
             m_prefs.setString("program", "");
+            return;
+        }
+        m_prefs.setString("program", m_program);
+        if (m_gtpShell != null && m_prefs.getBool("show-gtpshell"))
+            m_gtpShell.toTop();
+        if (m_prefs.getBool("show-analyze"))
+            cbAnalyze();
     }
 
     public boolean cbDetachProgram()
