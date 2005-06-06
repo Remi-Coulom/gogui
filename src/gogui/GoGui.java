@@ -847,11 +847,8 @@ class GoGui
 
     private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
     {
-        if (m_commandThread == null)
-            return;
-        if (m_analyzeCommand == null)
-            return;
-        if (m_analyzeCommand.isPointArgMissing())
+        if (m_commandThread == null || m_analyzeCommand == null
+            || m_analyzeCommand.isPointArgMissing())
             return;
         showStatus("Running " + m_analyzeCommand.getResultTitle() + " ...");
         go.Color toMove = m_board.getToMove();
@@ -1119,20 +1116,18 @@ class GoGui
     
     private void cbClockHalt()
     {
-        if (m_clock.isRunning())
-        {
-            m_clock.halt();
-            updateMenuBar();
-        }
+        if (! m_clock.isRunning())
+            return;
+        m_clock.halt();
+        updateMenuBar();
     }
 
     private void cbClockResume()
     {
-        if (! m_clock.isRunning())
-        {
-            m_clock.startMove(m_board.getToMove());
-            updateMenuBar();
-        }
+        if (m_clock.isRunning())
+            return;
+        m_clock.startMove(m_board.getToMove());
+        updateMenuBar();
     }
 
     private void cbClockRestore()
@@ -2035,11 +2030,10 @@ class GoGui
 
     private void fileModified()
     {
-        if (m_loadedFile != null)
-        {
-            m_loadedFile = null;
-            setTitle();
-        }
+        if (m_loadedFile == null)
+            return;
+        m_loadedFile = null;
+        setTitle();
     }
 
     private void forward(int n)
