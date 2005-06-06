@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.Vector;
+import java.util.regex.Pattern;
 import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
@@ -77,12 +78,16 @@ public class FindDialog
         }
     }
 
-    public static String run(Frame owner, String initialValue)
+    public static Pattern run(Frame owner, String initialValue)
     {
         FindDialog dialog = new FindDialog(owner, initialValue);
         dialog.setLocationRelativeTo(owner);
         dialog.setVisible(true);
-        return dialog.m_pattern;
+        String regex = dialog.m_pattern;
+        if (regex == null || regex.trim().equals(""))
+            return null;
+        int flags = Pattern.MULTILINE | Pattern.CASE_INSENSITIVE;
+        return Pattern.compile(regex, flags);
     }
 
     private JComboBox m_comboBox;

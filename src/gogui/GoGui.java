@@ -1191,12 +1191,10 @@ class GoGui
 
     private void cbFindInComments()
     {
-        String regex = FindDialog.run(this, m_comment.getSelectedText());
-        if (regex == null || regex.trim().equals(""))
+        Pattern pattern = FindDialog.run(this, m_comment.getSelectedText());
+        if (pattern == null)
             return;
-        m_pattern = Pattern.compile(regex,
-                                    Pattern.MULTILINE
-                                    | Pattern.CASE_INSENSITIVE);
+        m_pattern = pattern;
         m_menuBar.enableFindNext(true);
         if (NodeUtils.commentContains(m_currentNode, m_pattern))
             m_comment.markAll(m_pattern);
