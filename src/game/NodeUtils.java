@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 import java.util.regex.Pattern;
+import go.Board;
 import go.Color;
 import go.Move;
 import go.Point;
@@ -343,6 +344,26 @@ public class NodeUtils
             node.getFather().makeMainVariation(node);
             node = node.getFather();
         }
+    }
+
+    /** Create a game tree with the current board position as setup stones. */
+    public static GameTree makeTreeFromPosition(GameInformation info,
+                                                Board board)
+    {
+        GameTree tree = new GameTree(board.getSize(), info.m_komi, null,
+                                     info.m_rules, info.m_timeSettings);
+        Node root = tree.getRoot();
+        for (int i = 0; i < board.getNumberPoints(); ++i)
+        {
+            go.Point point = board.getPoint(i);
+            go.Color color = board.getColor(point);
+            if (color == go.Color.BLACK)
+                root.addBlack(point);
+            else if (color == go.Color.WHITE)
+                root.addWhite(point);
+        }
+        root.setPlayer(board.getToMove());
+        return tree;
     }
 
     /** Get next node for iteration in complete tree. */

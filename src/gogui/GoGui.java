@@ -1389,21 +1389,8 @@ class GoGui
     {
         if (! showQuestion("Delete all moves?"))
             return;
-        GameInformation gameInformation = m_gameTree.getGameInformation();
-        m_gameTree = new GameTree(m_boardSize, gameInformation.m_komi, null,
-                                  gameInformation.m_rules,
-                                  gameInformation.m_timeSettings);
-        Node root = m_gameTree.getRoot();
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            go.Point point = m_board.getPoint(i);
-            go.Color color = m_board.getColor(point);
-            if (color == go.Color.BLACK)
-                root.addBlack(point);
-            else if (color == go.Color.WHITE)
-                root.addWhite(point);
-        }
-        root.setPlayer(m_board.getToMove());
+        GameInformation info = m_gameTree.getGameInformation();
+        m_gameTree = NodeUtils.makeTreeFromPosition(info, m_board);
         m_board.initSize(m_boardSize);
         executeRoot();
         setNeedsSave(true);
