@@ -1267,28 +1267,11 @@ class GoGui
 
     private void cbGoto()
     {
-        int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
-        String value =
-            JOptionPane.showInputDialog(this, "Move Number",
-                                        Integer.toString(moveNumber));
-        if (value == null || value.equals(""))
+        Node node = MoveNumberDialog.show(this, m_currentNode);
+        if (node == null)
             return;
-        try
-        {
-            moveNumber = Integer.parseInt(value);
-            Node node = NodeUtils.findByMoveNumber(m_currentNode, moveNumber);
-            if (node == null)
-            {
-                showError("Invalid move number");
-                return;
-            }
-            gotoNode(node);
-            boardChangedBegin(false, false);
-        }
-        catch (NumberFormatException e)
-        {
-            showError("Invalid move number");
-        }
+        gotoNode(node);
+        boardChangedBegin(false, false);
     }
 
     private void cbGotoVariation()
