@@ -891,16 +891,7 @@ class GoGui
                                                title, response,
                                                m_commandThread);
             boolean statusContainsResponse = false;
-            if (type == AnalyzeCommand.STRING
-                || type == AnalyzeCommand.HSTRING
-                || type == AnalyzeCommand.HPSTRING
-                || type == AnalyzeCommand.PSTRING
-                || type == AnalyzeCommand.VAR
-                || type == AnalyzeCommand.VARC
-                || type == AnalyzeCommand.VARW
-                || type == AnalyzeCommand.VARB
-                || type == AnalyzeCommand.VARP
-                || type == AnalyzeCommand.VARPO)
+            if (AnalyzeCommand.isTextType(type))
             {
                 if (response.indexOf("\n") < 0)
                 {

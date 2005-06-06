@@ -215,6 +215,25 @@ public class AnalyzeCommand
         return false;
     }
 
+    /** Should the response be shown as text.
+        Returns true for types that should be shown (not necessarily only)
+        as text to the user.
+        That is string and variation commands.
+    */
+    public static boolean isTextType(int type)
+    {
+        return type == STRING
+            || type == HSTRING
+            || type == HPSTRING
+            || type == PSTRING
+            || type == VAR
+            || type == VARC
+            || type == VARW
+            || type == VARB
+            || type == VARP
+            || type == VARPO;
+    }
+
     public boolean needsColorArg()
     {
         return needsColorArg(m_command);
