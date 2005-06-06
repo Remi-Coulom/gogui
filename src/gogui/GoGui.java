@@ -1531,8 +1531,7 @@ class GoGui
         try
         {
             savePosition(file);
-            if (m_currentNode.getFather() == null
-                && m_currentNode.getChild() == null)
+            if (NodeUtils.isRootWithoutChildren(m_currentNode))
                 setNeedsSave(false);
             m_loadedFile = file;
             setTitle();

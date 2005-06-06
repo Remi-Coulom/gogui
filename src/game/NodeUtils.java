@@ -331,6 +331,11 @@ public class NodeUtils
         return true;
     }
 
+    public static boolean isRootWithoutChildren(Node node)
+    {
+        return (node.getFather() == null && node.getChild() == null);
+    }
+
     public static void makeMainVariation(Node node)
     {
         while (node.getFather() != null)
