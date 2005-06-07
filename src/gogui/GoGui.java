@@ -484,15 +484,16 @@ class GoGui
             return;
         if (m_setupMode)
         {
+            go.Color toMove = m_board.getToMove();
             go.Color color;
             if (modifiedSelect)
-                color = m_setupColor.otherColor();
-            else if (m_board.getColor(p) == m_setupColor)
+                color = toMove.otherColor();
+            else if (m_board.getColor(p) == toMove)
                 color = go.Color.EMPTY;
             else
-                color = m_setupColor;
+                color = toMove;
             m_board.play(new Move(p, color));
-            m_board.setToMove(m_setupColor);
+            m_board.setToMove(toMove);
             updateGameInfo(true);
             m_guiBoard.updateFromGoBoard();
             // Paint point immediately to pretend better responsiveness
@@ -773,8 +774,6 @@ class GoGui
     private int m_move;
 
     private go.Board m_board;
-
-    private go.Color m_setupColor;
 
     private gui.Board m_guiBoard;
 
@@ -1536,7 +1535,7 @@ class GoGui
             m_setupMode = true;
             m_toolBar.enableAll(false, null);
             showStatus("Setup Black");
-            m_setupColor = go.Color.BLACK;
+            m_board.setToMove(go.Color.BLACK);
         }
         else
             setupDone();
@@ -1545,16 +1544,14 @@ class GoGui
     private void cbSetupBlack()
     {
         showStatus("Setup Black");
-        m_setupColor = go.Color.BLACK;
-        m_board.setToMove(m_setupColor);
+        m_board.setToMove(go.Color.BLACK);
         updateGameInfo(false);
     }
 
     private void cbSetupWhite()
     {
         showStatus("Setup White");
-        m_setupColor = go.Color.WHITE;
-        m_board.setToMove(m_setupColor);
+        m_board.setToMove(go.Color.WHITE);
         updateGameInfo(false);
     }
 
