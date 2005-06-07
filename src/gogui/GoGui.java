@@ -1245,17 +1245,9 @@ class GoGui
 
     private void cbGotoVariation()
     {
-        String variation = NodeUtils.getVariationString(m_currentNode);
-        variation = JOptionPane.showInputDialog(this, "Variation", variation);
-        if (variation == null || variation.equals(""))
-            return;
-        Node root = m_gameTree.getRoot();
-        Node node = NodeUtils.findByVariation(root, variation);
+        Node node = GotoVariationDialog.show(this, m_gameTree, m_currentNode);
         if (node == null)
-        {
-            showError("Invalid variation");
             return;
-        }
         gotoNode(node);
         boardChangedBegin(false, false);
     }
