@@ -5,6 +5,7 @@
 
 package gogui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -31,12 +32,7 @@ public class SplashScreen
         System.setProperty("apple.awt.brushMetalLook", "true");
         m_splash = new SplashScreen();
         m_splash.setUndecorated(true);
-        int width = 400;
-        int height = 300;
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        m_splash.setBounds((size.width - width) / 2,
-                           (size.height - height) / 2,
-                           width, height);
+        center(m_splash, 0, 0);
         m_splash.setVisible(true);         
         m_timeMillis = System.currentTimeMillis();
         ImageLoader loader = new ImageLoader(m_splash);
@@ -121,6 +117,7 @@ public class SplashScreen
                 return;
             }
             m_loaded = true;
+            center(m_splash, 400, 300);
             m_splash.repaint();
         }
 
@@ -138,6 +135,14 @@ public class SplashScreen
     private static Image m_image;
 
     private static SplashScreen m_splash;
+
+    private static void center(Component component, int width, int height)
+    {
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        component.setBounds((size.width - width) / 2,
+                            (size.height - height) / 2,
+                            width, height);
+    }
 
     private static void fatalError(Exception e)
     {
