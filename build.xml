@@ -13,8 +13,26 @@ $Source$
 <property file="build.properties"/>
 
 <property environment="env"/>
+
 <property name="docbook_xsl_home" value="${env.DOCBOOK_XSL_HOME}"/>
-<available property="xsl-available" file="${docbook_xsl_home}/html/chunk.xsl"/>
+
+<property name="scripts" value="
+ gogui
+ gtpdisplay
+ gtpregress
+ gtpterminal
+ sgftotex
+ gmptogtp
+ gtpadapter
+ gtpdummy
+ gtpserver
+ netgtp
+ twogtp
+"/>
+
+<available property="xsl-available"
+ file="${docbook_xsl_home}/html/chunk.xsl"/>
+
 <available property="comm-available" classname="javax.comm.SerialPort"/>
 
 <target name="all" depends="
@@ -262,6 +280,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <property name="appdir" value="build/GoGui.app"/>
 <mkdir dir="${appdir}"/>
 <mkdir dir="${appdir}/Contents"/>
+<mkdir dir="${appdir}/Contents/bin"/>
 <mkdir dir="${appdir}/Contents/MacOS"/>
 <mkdir dir="${appdir}/Contents/Resources"/>
 <mkdir dir="${appdir}/Contents/Resources/Java"/>
@@ -285,6 +304,12 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <copy todir="${appdir}/Contents/Resources/Java" overwrite="true">
 <fileset dir="lib" includes="*.jar"/>
 </copy>
+<copy todir="${appdir}/Contents/bin" overwrite="true">
+<fileset dir="bin" includes="${scripts}"/>
+</copy>
+<replace dir="${appdir}/Contents/bin" includes="${scripts}"
+ token="/../lib" value="/../Resources/Java"/>
+<chmod dir="${appdir}/Contents/bin" includes="${scripts}" perm="755"/>
 <exec executable="/Developer/Tools/SetFile">
 <arg line="-a B ${appdir}"/>
 </exec>
