@@ -18,7 +18,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -1442,20 +1441,7 @@ class GoGui
 
     private void cbPrint()
     {
-        PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPrintable(m_guiBoard);
-        if (job.printDialog())
-        {
-            try
-            {
-                job.print();
-            }
-            catch (Exception e)
-            {
-                showError("Printing failed", e);
-            }
-            showInfo("Printing done");
-        }
+        Print.run(this, m_guiBoard);
     }
 
     private void cbSave()
