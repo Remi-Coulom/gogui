@@ -2755,12 +2755,7 @@ class GoGui
 
     private void showError(GtpError error)
     {        
-        String message = error.getMessage().trim();
-        if (message.length() == 0)
-            message = "Command failed";
-        else
-            message = StringUtils.capitalize(message);
-        SimpleDialogs.showError(this, message);
+        Utils.showError(this, error);
     }
 
     private void showError(String message)

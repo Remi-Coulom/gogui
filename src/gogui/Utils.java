@@ -5,11 +5,14 @@
 
 package gogui;
 
+import java.awt.Component;
 import game.Node;
 import go.Move;
 import gtp.GtpError;
 import gui.Clock;
 import gui.CommandThread;
+import gui.SimpleDialogs;
+import utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
@@ -68,6 +71,16 @@ public class Utils
         catch (GtpError e)
         {
         }
+    }
+
+    public static void showError(Component parent, GtpError error)
+    {        
+        String message = error.getMessage().trim();
+        if (message.length() == 0)
+            message = "Command failed";
+        else
+            message = StringUtils.capitalize(message);
+        SimpleDialogs.showError(parent, message);
     }
 }
 
