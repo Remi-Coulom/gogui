@@ -23,6 +23,9 @@ public class SplashScreen
 {
     public static final void main(String [] args)
     {
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+                           "GoGui");
+        System.setProperty("apple.awt.brushMetalLook", "true");
         m_splash = new SplashScreen();
         m_splash.setUndecorated(true);
         m_splash.center(0, 0);
