@@ -50,10 +50,31 @@ public class Utils
         return node;
     }
 
+    /** Set komi.
+        Sends the komi command if the CommandThread is not null and
+        it supports the command.
+        Errors are shown to the user.
+    */
+    public static void sendKomi(Component parent, double komi,
+                                CommandThread thread)
+    {
+        if (thread == null)
+            return;
+        try
+        {
+            if (thread.isCommandSupported("komi"))
+                thread.sendCommand("komi " + komi);
+        }
+        catch (GtpError e)
+        {
+            showError(parent, e);
+        }
+    }
+
     /** Set rules using the scoring_system command.
         Sends the scoring_system command if rules are not
         go.Board.RULES_UNKNOWN, the CommandThread is not null and
-        it supports the commands.
+        it supports the command.
         Errors are ignored.
     */
     public static void sendRules(int rules, CommandThread thread)

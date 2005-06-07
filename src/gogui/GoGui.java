@@ -2512,17 +2512,7 @@ class GoGui
 
     private void setKomi(double komi)
     {
-        if (m_commandThread == null)
-            return;
-        try
-        {
-            if (m_commandThread.isCommandSupported("komi"))
-                m_commandThread.sendCommand("komi " + komi);
-        }
-        catch (GtpError e)
-        {
-            showError(e);
-        }
+        Utils.sendKomi(this, komi, m_commandThread);
     }
 
     private void setNeedsSave(boolean needsSave)
