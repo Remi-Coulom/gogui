@@ -34,7 +34,6 @@ public class SplashScreen
         m_splash.setUndecorated(true);
         center(m_splash, 0, 0);
         m_splash.setVisible(true);         
-        m_timeMillis = System.currentTimeMillis();
         ImageLoader loader = new ImageLoader(m_splash);
         try
         {
@@ -57,21 +56,7 @@ public class SplashScreen
     public static void close()
     {
         if (m_splash != null)
-        {
-            long timeShown = (System.currentTimeMillis() - m_timeMillis);
-            long minShowTime = 1500;
-            if (timeShown > 0 && minShowTime > 0 && timeShown < minShowTime)
-            {
-                try
-                {
-                    Thread.currentThread().sleep(minShowTime - timeShown);
-                }
-                catch (InterruptedException e)
-                {
-                }
-            }
             m_splash.setVisible(false);
-        }
         m_splash = null;
     }
 
@@ -128,9 +113,6 @@ public class SplashScreen
      
     /** Image was loaded. */
     private static boolean m_loaded = false;
-
-    /** Start time. */
-    private static long m_timeMillis;
 
     private static Image m_image;
 
