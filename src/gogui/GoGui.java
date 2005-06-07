@@ -2128,8 +2128,8 @@ class GoGui
             showToolbar();
         }
         restoreMainWindow();
-        setVisible(true);
         SplashScreen.close();
+        setVisible(true);
         // Children dialogs should be set visible after main window, otherwise
         // they get minimize window buttons and a taskbar entry (KDE 3.4)
         if (m_gtpShell != null && m_prefs.getBool("show-gtpshell"))
