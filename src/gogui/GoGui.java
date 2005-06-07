@@ -1301,21 +1301,8 @@ class GoGui
             }
             return;
         }
-        if (! m_commandThread.isInterruptSupported())
-        {
-            Object[] options = { "Kill Program", "Cancel" };
-            Object message = "Program does not support interrupt";
-            int n = JOptionPane.showOptionDialog(this, message, "Question",
-                                                 JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.WARNING_MESSAGE,
-                                                 null, options, options[1]);
-            if (n == 0)
-                m_commandThread.destroyGtp();
-            return;
-        }
-        if (! showQuestion("Interrupt command?"))
-            return;
-        sendInterrupt();
+        if (Interrupt.run(this, m_commandThread))
+            showStatus("Interrupting ...");
     }
 
     private void cbKeepOnlyMainVariation()
@@ -2520,21 +2507,6 @@ class GoGui
     {        
         commands = commands.replaceAll("\\\\n", "\n");
         m_gtpShell.sendGtp(new StringReader(commands));
-    }
-
-    private void sendInterrupt()
-    {
-        if (! isCommandInProgress())
-            return;
-        showStatus("Interrupting ...");
-        try
-        {
-            m_commandThread.sendInterrupt();
-        }
-        catch (GtpError e)
-        {
-            showError(e);
-        }
     }
 
     private void setBoardCursor(int type)
