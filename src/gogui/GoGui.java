@@ -1818,29 +1818,7 @@ class GoGui
 
     private Node createNode(Move move)
     {
-        Node node = new Node(move);
-        if (m_clock.isInitialized())
-        {
-            assert(! m_clock.isRunning());
-            go.Color color = move.getColor();
-            // Round time to seconds
-            double timeLeft = m_clock.getTimeLeft(color) / 1000;
-            if (color == go.Color.BLACK)
-            {
-                node.setTimeLeftBlack(timeLeft);
-                if (m_clock.isInByoyomi(color))
-                    node.setMovesLeftBlack(m_clock.getMovesLeft(color));
-            }
-            else
-            {
-                assert(color == go.Color.WHITE);
-                node.setTimeLeftWhite(timeLeft);
-                if (m_clock.isInByoyomi(color))
-                    node.setMovesLeftWhite(m_clock.getMovesLeft(color));
-            }
-        }
-        m_currentNode.append(node);
-        return node;
+        return Utils.createNode(m_currentNode, move, m_clock);
     }
 
     private JComponent createStatusBar()
