@@ -7,7 +7,9 @@ package gogui;
 
 import game.Node;
 import go.Move;
+import gtp.GtpError;
 import gui.Clock;
+import gui.CommandThread;
 
 //----------------------------------------------------------------------------
 
@@ -43,6 +45,29 @@ public class Utils
         }
         currentNode.append(node);
         return node;
+    }
+
+    /** Set rules using the scoring_system command.
+        Sends the scoring_system command if rules are not
+        go.Board.RULES_UNKNOWN, the CommandThread is not null and
+        it supports the commands.
+        Errors are ignored.
+    */
+    public static void sendRules(int rules, CommandThread thread)
+    {
+        if (thread == null
+            || rules == go.Board.RULES_UNKNOWN
+            || ! thread.isCommandSupported("scoring_system"))
+            return;
+        try
+        {
+            String s =
+                (rules == go.Board.RULES_JAPANESE ? "territory" : "area");
+            thread.sendCommand("scoring_system " + s);
+        }
+        catch (GtpError e)
+        {
+        }
     }
 }
 

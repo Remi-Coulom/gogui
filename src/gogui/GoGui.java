@@ -2567,22 +2567,7 @@ class GoGui
 
     private void setRules()
     {
-        if (m_commandThread == null)
-            return;
-        int rules = getRules();
-        if (rules == go.Board.RULES_UNKNOWN)
-            return;
-        if (! m_commandThread.isCommandSupported("scoring_system"))
-            return;
-        try
-        {
-            String s =
-                (rules == go.Board.RULES_JAPANESE ? "territory" : "area");
-            m_commandThread.sendCommand("scoring_system " + s);
-        }
-        catch (GtpError e)
-        {
-        }
+        Utils.sendRules(getRules(), m_commandThread);
     }
 
     private void setTimeSettings()
