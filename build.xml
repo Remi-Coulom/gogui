@@ -301,7 +301,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar">
 <manifest>
-<attribute name="Main-Class" value="gogui.Main"/>
+<attribute name="Main-Class" value="gogui.SplashScreen"/>
 </manifest>
 <fileset dir="build" includes="
  config/analyze-commands
