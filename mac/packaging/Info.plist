@@ -72,8 +72,12 @@ Do not edit Info.plist
 <string>gogui.SplashScreen</string>
 <key>Properties</key>
 <dict>
+<key>apple.awt.brushMetalLook</key>
+<string>true</string>
 <key>apple.laf.useScreenMenuBar</key>
 <string>false</string>
+<key>com.apple.mrj.application.apple.menu.about.name</key>
+<string>GoGui</string>
 </dict>
 </dict>
 
