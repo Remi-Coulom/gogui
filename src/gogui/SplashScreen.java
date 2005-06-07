@@ -31,7 +31,12 @@ public class SplashScreen
         System.setProperty("apple.awt.brushMetalLook", "true");
         m_splash = new SplashScreen();
         m_splash.setUndecorated(true);
-        m_splash.center(0, 0);
+        int width = 400;
+        int height = 300;
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        m_splash.setBounds((size.width - width) / 2,
+                           (size.height - height) / 2,
+                           width, height);
         m_splash.setVisible(true);         
         m_timeMillis = System.currentTimeMillis();
         ImageLoader loader = new ImageLoader(m_splash);
@@ -116,7 +121,6 @@ public class SplashScreen
                 return;
             }
             m_loaded = true;
-            m_splash.center(m_image.getWidth(null), m_image.getHeight(null));
             m_splash.repaint();
         }
 
@@ -140,13 +144,6 @@ public class SplashScreen
         e.printStackTrace();
         System.exit(-1);
     }
-
-    private void center(int width, int height)
-    {
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((size.width - width) / 2, (size.height - height) / 2,
-                  width, height);
-    } 
 
     private static void fatalError(String message)
     {
