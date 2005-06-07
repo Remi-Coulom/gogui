@@ -122,7 +122,7 @@ installation directory.
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="all,test,man">
+<target name="dist" depends="all,docvalidate,test,man">
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
