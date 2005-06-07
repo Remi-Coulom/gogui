@@ -78,7 +78,7 @@ public class AnalyzeDialog
                          Vector supportedCommands,
                          CommandThread commandThread)
     {
-        super(owner, "Analyze - GoGui");
+        super(owner, "Analyze");
         m_prefs = prefs;
         m_commandThread = commandThread;
         setPrefsDefaults(prefs);
@@ -137,11 +137,6 @@ public class AnalyzeDialog
             return go.Color.WHITE;
         assert(selectedItem.equals("Black"));
         return go.Color.BLACK;
-    }
-
-    public void setAppName(String name)
-    {
-        setTitle("Analyze" + " - " + name);
     }
 
     public void setSelectedColor(go.Color color)

@@ -242,10 +242,9 @@ public class GtpShell
         void toTop();
     }
 
-    public GtpShell(Frame owner, String appName, Callback callback,
-                    Preferences prefs)
+    public GtpShell(Frame owner, Callback callback, Preferences prefs)
     {
-        super(owner, "GTP - " + appName);
+        super(owner, "GTP Shell");
         m_callback = callback;
         m_prefs = prefs;
         setPrefsDefaults(prefs);
@@ -470,11 +469,6 @@ public class GtpShell
         invokeAndWait(r);
     }
     
-    public void setAppName(String appName)
-    {
-        setTitle("GTP - " + appName);
-    }
-
     public void sendGtp(Reader reader)
     {
         java.io.BufferedReader in;

@@ -918,7 +918,7 @@ class GoGui
         if (program.equals(""))
             return false;
         m_program = program;
-        m_gtpShell = new GtpShell(this, "GoGui", this, m_prefs);
+        m_gtpShell = new GtpShell(this, this, m_prefs);
         m_gtpShell.setProgramCommand(program);
         m_ignoreInvalidResponses = false;
         Gtp.InvalidResponseCallback invalidResponseCallback =
@@ -2601,10 +2601,6 @@ class GoGui
         String appName = "GoGui";        
         if (m_commandThread != null)
             appName = m_name;
-        if (m_gtpShell != null)
-            m_gtpShell.setAppName(appName);
-        if (m_analyzeDialog != null)
-            m_analyzeDialog.setAppName(appName);
         String gameName = null;
         GameInformation gameInformation = m_gameTree.getGameInformation();
         String playerBlack = gameInformation.m_playerBlack;
