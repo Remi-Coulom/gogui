@@ -7,4 +7,9 @@ else
   JAVA=$JAVA_HOME/bin/java
 fi
 
-$JAVA -Dapple.awt.brushMetalLook=true -jar $GOGUI_LIB/gogui.jar "$@"
+MAC_DEFINES="\
+  -Dapple.awt.brushMetalLook=true \
+  -Dcom.apple.mrj.application.apple.menu.about.name=GoGui \
+"
+
+$JAVA $MAC_DEFINES -jar $GOGUI_LIB/gogui.jar "$@"
