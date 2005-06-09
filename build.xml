@@ -33,7 +33,8 @@ $Source$
 <available property="xsl-available"
  file="${docbook_xsl_home}/html/chunk.xsl"/>
 
-<available property="comm-available" file="javacomm/commapi/comm.jar"/>
+<available property="comm-available"
+ file="external/javacomm/commapi/comm.jar"/>
 
 <target name="all" depends="
  gmptogtp.jar,
@@ -117,7 +118,7 @@ installation directory.
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
  deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
- classpath="javacomm/commapi/comm.jar"/>
+ classpath="external/javacomm/commapi/comm.jar"/>
 <copy todir="build">
 <fileset dir="src" includes="images/*.png"/>
 </copy>
@@ -155,7 +156,8 @@ installation directory.
  doxygen/Doxyfile
  doxygen/footer.html
  doxygen/README
- javacomm/javacomm20-win32.zip
+ external/javacomm/javacomm20-win32.zip
+ external/javacomm/README
  lib/*.jar
  mac/packaging/GoGui.icns
  mac/packaging/Info.plist
@@ -247,7 +249,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </target>
 
 <target name="extract-comm.jar" unless="comm-available">
-<unzip src="javacomm/javacomm20-win32.zip" dest="javacomm">
+<unzip src="external/javacomm/javacomm20-win32.zip" dest="external/javacomm">
 <patternset>
 <include name="commapi/comm.jar"/>
 </patternset>
