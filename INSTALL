@@ -18,10 +18,7 @@ Compiling from the Sources
 
 * The HTML documentation is generated using Docbook.
   To re-generate the HTML files after changes in the XML files,
-  you need to install the Docbook XSL files (http://docbook.sourceforge.net)
-  and set the environment variable DOCBOOK_XSL_HOME to the installation
-  directory.
-  The XSL transformer "xsltproc" (http://xmlsoft.org/XSLT) has to be
+  the XSL transformer "xsltproc" (http://xmlsoft.org/XSLT) has to be
   installed.
   The built in ant target "Style" is no longer used, because it has problems
   with newer versions of Docbook XSL and also replaces some HTML entities in
@@ -29,4 +26,3 @@ Compiling from the Sources
 
 * If all requirements are met, simply type "ant" in the main directory
   of GoGui.
-

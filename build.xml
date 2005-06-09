@@ -14,7 +14,7 @@ $Source$
 
 <property environment="env"/>
 
-<property name="docbook_xsl_home" value="${env.DOCBOOK_XSL_HOME}"/>
+<property name="docbook_xsl" value="external/docbook/docbook-xsl-1.68.1"/>
 
 <property name="scripts" value="
  gogui
@@ -30,8 +30,7 @@ $Source$
  twogtp
 "/>
 
-<available property="xsl-available"
- file="${docbook_xsl_home}/html/chunk.xsl"/>
+<available property="xsl-available" file="${docbook_xsl}/html/chunk.xsl"/>
 
 <available property="comm-available"
  file="external/javacomm/commapi/comm.jar"/>
@@ -103,17 +102,6 @@ $Source$
 </delete>
 </target>
 
-<target name="check-xsl-available" unless="xsl-available">
-<fail>
-File "${docbook_xsl_home}/html/chunk.xsl" not found.
-Please install the DocBook XSL style sheets from
-http://sourceforge.net/projects/docbook/
-and set the environment variable DOCBOOK_XSL_HOME to the
-installation directory.
-
-</fail>
-</target>
-
 <target name="compile" depends="extract-comm.jar,depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
@@ -156,6 +144,7 @@ installation directory.
  doxygen/Doxyfile
  doxygen/footer.html
  doxygen/README
+ ${docbook_xsl}.zip
  external/javacomm/javacomm20-win32.zip
  external/javacomm/README
  lib/*.jar
@@ -194,12 +183,12 @@ installation directory.
 </zip>
 </target>
 
-<target name="doc" depends="doc-check-uptodate" unless="doc-uptodate"
+<target name="doc" depends="extract-docbook,doc-check-uptodate"
+ unless="doc-uptodate"
  description="Generate documentation using xsltproc">
-<antcall target="check-xsl-available"/>
 <echo message="Running xsltproc"/>
 <exec executable="xsltproc">
-<arg line="--path ${docbook_xsl_home}/html"/>
+<arg line="--path ${docbook_xsl}/html"/>
 <arg line="-o doc/html/"/>
 <arg line="doc/xml/custom.xsl"/>
 <arg line="doc/xml/book.xml"/>
@@ -212,18 +201,18 @@ installation directory.
 </copy>
 </target>
 
-<target name="doc-style" depends="doc-check-uptodate" unless="doc-uptodate"
+<target name="doc-style" depends="extract-docbook,doc-check-uptodate"
+ unless="doc-uptodate"
  description="
 Generate documentation using ant style target.
 Not used at present due to problems with mdash in output (not understood
 by JEditorPane, slow speed and errors with old versions of Xalan).">
-<antcall target="check-xsl-available"/>
 <style basedir="doc/xml" includes="book.xml" destdir="doc/html"
- style="${docbook_xsl_home}/html/chunk.xsl" force="true">
+ style="${docbook_xsl}/html/chunk.xsl" force="true">
 <xmlcatalog>
 <dtd
  publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
- location="${docbook_xsl_home}/html/chunk.xsl"/>
+ location="${docbook_xsl}/html/chunk.xsl"/>
 </xmlcatalog>
 </style>
 <copy todir="doc/html">
@@ -254,6 +243,10 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <include name="commapi/comm.jar"/>
 </patternset>
 </unzip>
+</target>
+
+<target name="extract-docbook" unless="xsl-available">
+<unzip src="${docbook_xsl}.zip" dest="external/docbook"/>
 </target>
 
 <target name="gmptogtp.jar" depends="compile">
@@ -526,12 +519,11 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </javadoc>
 </target>
 
-<target name="man">
-<antcall target="check-xsl-available"/>
+<target name="man" depends="extract-docbook">
 <exec executable="xsltproc">
 <arg line="--param chunk.quietly 1"/>
 <arg line="-o doc/man/"/>
-<arg line="${docbook_xsl_home}/manpages/docbook.xsl"/>
+<arg line="${docbook_xsl}/manpages/docbook.xsl"/>
 <arg line="doc/xml/reference-gmptogtp.xml"/>
 <arg line="doc/xml/reference-gogui.xml"/>
 <arg line="doc/xml/reference-gtpadapter.xml"/>
