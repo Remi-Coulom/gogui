@@ -1,5 +1,7 @@
-This directory contains Sun's implementation of the Java communications
+This directory contains Sun's implementation of the Java Communications
 API. Only the file commapi/comm.jar is needed for compiling GmpToGtp,
 but the Sun's license requires to distribute the whole software package,
 so comm.jar is extracted from build.xml.
 
+For actually running GmpToGtp you will need to install Communications
+API, see the GmpToGtp reference for more information.
