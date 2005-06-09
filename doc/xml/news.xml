@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Include Sun's implementation of the Java Communications API in the
+distribution to make compilation easier.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: use dialogs for all secondary windows; they are always on top of the
 main window now
 </simpara>
@@ -23,12 +29,13 @@ fix NullPointerException, if test file contains response pattern without
 a command to test (simply ignore the pattern)
 </simpara>
 </listitem>
+<listitem>
 </itemizedlist>
 </revdescription>
 </revision>
 
 <revision>
-<revnumber>0.7.0.x</revnumber>
+<revnumber>0.7.1</revnumber>
 <date></date>
 <authorinitials>enz</authorinitials>
 <revdescription>

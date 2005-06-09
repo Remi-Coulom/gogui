@@ -33,7 +33,7 @@ $Source$
 <available property="xsl-available"
  file="${docbook_xsl_home}/html/chunk.xsl"/>
 
-<available property="comm-available" classname="javax.comm.SerialPort"/>
+<available property="comm-available" file="javacomm/commapi/comm.jar"/>
 
 <target name="all" depends="
  gmptogtp.jar,
@@ -102,14 +102,6 @@ $Source$
 </delete>
 </target>
 
-<target name="check-comm-available" unless="comm-available">
-<fail>
-Class javax.comm.SerialPort not found in the class path.
-Please install the Java Communications API from
-http://java.sun.com/products/javacomm/
-</fail>
-</target>
-
 <target name="check-xsl-available" unless="xsl-available">
 <fail>
 File "${docbook_xsl_home}/html/chunk.xsl" not found.
@@ -121,10 +113,11 @@ installation directory.
 </fail>
 </target>
 
-<target name="compile" depends="check-comm-available,depend,version,doc">
+<target name="compile" depends="extract-comm.jar,depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
- deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"/>
+ deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
+ classpath="javacomm/commapi/comm.jar"/>
 <copy todir="build">
 <fileset dir="src" includes="images/*.png"/>
 </copy>
@@ -162,6 +155,7 @@ installation directory.
  doxygen/Doxyfile
  doxygen/footer.html
  doxygen/README
+ javacomm/javacomm20-win32.zip
  lib/*.jar
  mac/packaging/GoGui.icns
  mac/packaging/Info.plist
@@ -250,6 +244,14 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <target name="doxygen"
  description="Generate source code documentation using doxygen">
 <exec executable="doxygen" dir="doxygen"/>
+</target>
+
+<target name="extract-comm.jar" unless="comm-available">
+<unzip src="javacomm/javacomm20-win32.zip" dest="javacomm">
+<patternset>
+<include name="commapi/comm.jar"/>
+</patternset>
+</unzip>
 </target>
 
 <target name="gmptogtp.jar" depends="compile">
