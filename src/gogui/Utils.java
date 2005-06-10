@@ -31,17 +31,17 @@ public class Utils
             assert(! clock.isRunning());
             go.Color color = move.getColor();
             // Round time to seconds
-            double timeLeft = clock.getTimeLeft(color) / 1000;
+            long timeLeft = clock.getTimeLeft(color) / 1000L;
             if (color == go.Color.BLACK)
             {
-                node.setTimeLeftBlack(timeLeft);
+                node.setTimeLeftBlack((double)timeLeft);
                 if (clock.isInByoyomi(color))
                     node.setMovesLeftBlack(clock.getMovesLeft(color));
             }
             else
             {
                 assert(color == go.Color.WHITE);
-                node.setTimeLeftWhite(timeLeft);
+                node.setTimeLeftWhite((double)timeLeft);
                 if (clock.isInByoyomi(color))
                     node.setMovesLeftWhite(clock.getMovesLeft(color));
             }

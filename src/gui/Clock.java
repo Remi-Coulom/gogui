@@ -62,7 +62,9 @@ public class Clock
         {
             movesLeft = record.m_movesLeft;
         }
-        return getTimeString((double)(time / 1000L), movesLeft);
+        // Round time to seconds
+        time = time / 1000L;
+        return getTimeString((double)time, movesLeft);
     }
 
     /** If not in byoyomi movesLeft < 0. */
