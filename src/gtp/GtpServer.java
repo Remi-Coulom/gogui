@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Vector;
 import go.Color;
 import go.Point;
 import utils.StringUtils;
@@ -219,6 +220,12 @@ public abstract class GtpServer
         public Point m_point;
     }
 
+    /** Returned by parsePointListArgument. */
+    public static class PointListArgument
+    {
+        public Vector m_pointList = new Vector();
+    }
+
     public GtpServer(InputStream in, OutputStream out, PrintStream log)
     {
         m_out = new PrintStream(out);
@@ -297,7 +304,7 @@ public abstract class GtpServer
     {
         if (cmdArray.length != 3)
         {
-            response.append("Missing color and vertex argument");
+            response.append("Missing color and point argument");
             return null;
         }
         ColorPointArgument argument = new ColorPointArgument();
@@ -319,7 +326,7 @@ public abstract class GtpServer
         }
         catch (GtpError e)
         {
-            response.append("Invalid vertex argument");
+            response.append("Invalid point argument");
             return null;
         }
     }
@@ -393,7 +400,7 @@ public abstract class GtpServer
     {
         if (cmdArray.length != 2)
         {
-            response.append("Missing vertex argument");
+            response.append("Missing point argument");
             return null;
         }
         try
@@ -405,7 +412,37 @@ public abstract class GtpServer
         }
         catch (GtpError e)
         {
-            response.append("Invalid vertex argument");
+            response.append("Invalid point argument");
+            return null;
+        }
+    }
+
+    /** Utility function for parsing an point list argument.
+        @param cmdArray Command line split into words.
+        @param response Empty string buffer filled with GTP error message
+        if parsing fails.
+        @param boardSize Board size is needed for parsing the points
+        @return Point list argument or null if parsing fails.
+    */
+    public static PointListArgument
+        parsePointListArgument(String[] cmdArray, StringBuffer response,
+                               int boardSize)
+    {
+        int length = cmdArray.length;
+        assert(length >= 1);
+        try
+        {
+            PointListArgument argument = new PointListArgument();
+            for (int i = 1; i < length; ++i)
+            {
+                Point point = GtpUtils.parsePoint(cmdArray[i], boardSize);
+                argument.m_pointList.add(point);
+            }
+            return argument;
+        }
+        catch (GtpError e)
+        {
+            response.append("Invalid point list argument");
             return null;
         }
     }
