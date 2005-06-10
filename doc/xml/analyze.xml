@@ -72,6 +72,18 @@ The numbers are expected to be between -1 and 1.
 </varlistentry>
 
 <varlistentry>
+<term><userinput>eplist</userinput></term>
+<listitem>
+<simpara>
+The command is used to set and remember a list of points.
+The command needs the following syntax:
+the current point list is set, if the argument is a point list (or empty);
+the current point list is shown, if the argument is "show".
+</simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><userinput>hstring</userinput></term>
 <listitem>
 <simpara>

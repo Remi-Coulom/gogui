@@ -48,6 +48,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import gtp.GtpError;
+import gtp.GtpUtils;
 import gui.GuiUtils;
 import utils.Platform;
 import utils.Preferences;
@@ -139,6 +140,15 @@ public class AnalyzeDialog
         return go.Color.BLACK;
     }
 
+    /** Set board size.
+        Need for verifying responses to initial value for EPLIST commands.
+        Default is 19.
+    */
+    public void setBoardSize(int boardSize)
+    {
+        m_boardSize = boardSize;
+    }
+
     public void setSelectedColor(go.Color color)
     {
         m_selectedColor = color;
@@ -177,6 +187,8 @@ public class AnalyzeDialog
     private boolean m_sort;
 
     private boolean m_recentModified;
+
+    private int m_boardSize = 19;
 
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -569,6 +581,26 @@ public class AnalyzeDialog
                 if (optStringArg == null || optStringArg.equals(value))
                     return;
                 command.setOptStringArg(optStringArg);
+            }
+            catch (GtpError e)
+            {
+                SimpleDialogs.showError(this, e.getMessage());
+                return;
+            }
+        }
+        if (command.getType() == AnalyzeCommand.EPLIST)
+        {
+            try
+            {
+                command.setPointListArg(new Vector());
+                String commandWithoutArg =
+                    command.replaceWildCards(m_selectedColor,
+                                             m_selectedColor) + " show";
+                String response =
+                    m_commandThread.sendCommand(commandWithoutArg);
+                Vector pointList =
+                    GtpUtils.parsePointListVector(response, m_boardSize);
+                command.setPointListArg(pointList);
             }
             catch (GtpError e)
             {

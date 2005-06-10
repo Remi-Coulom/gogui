@@ -17,6 +17,11 @@ Docbook XSL files in the distribution to make compilation easier.
 </listitem>
 <listitem>
 <simpara>
+GoGui: New analyze command type eplist (editable point lists)
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: use dialogs for all secondary windows; they are always on top of the
 main window now
 </simpara>

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Vector;
+import go.Point;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -30,35 +31,37 @@ public class AnalyzeCommand
 
     public static final int DBOARD = 2;
 
-    public static final int HSTRING = 3;
+    public static final int EPLIST = 3;
 
-    public static final int HPSTRING = 4;
+    public static final int HSTRING = 4;
 
-    public static final int NONE = 5;
+    public static final int HPSTRING = 5;
 
-    public static final int PARAM = 6;
+    public static final int NONE = 6;
 
-    public static final int PLIST = 7;
+    public static final int PARAM = 7;
 
-    public static final int PSTRING = 8;
+    public static final int PLIST = 8;
 
-    public static final int PSPAIRS = 9;
+    public static final int PSTRING = 9;
 
-    public static final int STRING = 10;
+    public static final int PSPAIRS = 10;
 
-    public static final int SBOARD = 11;
+    public static final int STRING = 11;
 
-    public static final int VAR = 12;
+    public static final int SBOARD = 12;
 
-    public static final int VARB = 13;
+    public static final int VAR = 13;
 
-    public static final int VARC = 14;
+    public static final int VARB = 14;
 
-    public static final int VARP = 15;
+    public static final int VARC = 15;
 
-    public static final int VARPO = 16;
+    public static final int VARP = 16;
 
-    public static final int VARW = 17;
+    public static final int VARPO = 17;
+
+    public static final int VARW = 18;
 
     public AnalyzeCommand(String line)
     {
@@ -73,6 +76,8 @@ public class AnalyzeCommand
             m_type = AnalyzeCommand.CBOARD;
         else if (typeStr.equals("dboard"))
             m_type = AnalyzeCommand.DBOARD;
+        else if (typeStr.equals("eplist"))
+            m_type = AnalyzeCommand.EPLIST;
         else if (typeStr.equals("hstring"))
             m_type = AnalyzeCommand.HSTRING;
         else if (typeStr.equals("hpstring"))
@@ -256,7 +261,7 @@ public class AnalyzeCommand
 
     public boolean needsPointListArg()
     {
-        return (m_command.indexOf("%P") >= 0);
+        return (m_command.indexOf("%P") >= 0 || m_type == EPLIST);
     }
 
     public boolean needsStringArg()
@@ -295,15 +300,11 @@ public class AnalyzeCommand
             result = result.replaceAll("%p", m_pointArg.toString());
         if (needsPointListArg())
         {
-            StringBuffer listBuffer = new StringBuffer(128);
-            for (int i = 0; i < m_pointListArg.size(); ++i)
-            {
-                if (listBuffer.length() > 0)
-                    listBuffer.append(' ');
-                go.Point point = (go.Point)m_pointListArg.get(i);
-                listBuffer.append(point.toString());
-            }
-            result = result.replaceAll("%P", listBuffer.toString());
+            String pointList = Point.toString(m_pointListArg);
+            if (m_type == EPLIST && m_pointListArg.size() > 0)
+                result = result + ' ' + pointList;
+            else
+                result = result.replaceAll("%P", pointList);
         }
         if (needsFileArg())
         {
@@ -344,6 +345,11 @@ public class AnalyzeCommand
     public void setPointArg(go.Point point)
     {
         m_pointArg = point;
+    }
+
+    public void setPointListArg(Vector pointList)
+    {
+        m_pointListArg = pointList;
     }
 
     public void setStringArg(String value)

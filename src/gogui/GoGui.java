@@ -365,6 +365,7 @@ class GoGui
                 new AnalyzeDialog(this, this, m_prefs,
                                   m_commandThread.getSupportedCommands(),
                                   m_commandThread);
+            m_analyzeDialog.setBoardSize(m_board.getSize());
             restoreSize(m_analyzeDialog, "window-analyze");
             setTitle();
         }
@@ -653,6 +654,12 @@ class GoGui
             || m_analyzeCommand.needsPointListArg())
         {
             m_guiBoard.clearAllSelect();
+            if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
+            {
+                Vector pointList = m_analyzeCommand.getPointListArg();
+                for (int i = 0; i < pointList.size(); ++i)
+                    m_guiBoard.setSelect((go.Point)pointList.get(i), true);
+            }
             m_guiBoard.repaint();
             toTop();
         }
@@ -2073,7 +2080,10 @@ class GoGui
             if (m_gtpShell != null)
                 restoreSize(m_gtpShell, "window-gtpshell");
             if (m_analyzeDialog != null)
+            {
                 restoreSize(m_analyzeDialog, "window-analyze");
+                m_analyzeDialog.setBoardSize(size);
+            }
             if (m_gameTreeViewer != null)
                 restoreSize(m_gameTreeViewer, "window-gametree");
         }
