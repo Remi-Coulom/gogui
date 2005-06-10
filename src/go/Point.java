@@ -5,6 +5,8 @@
 
 package go;
 
+import java.util.Vector;
+
 //----------------------------------------------------------------------------
 
 /** Intersection on the Go board.
@@ -89,6 +91,21 @@ public final class Point
         if (point == null)
             return "PASS";
         return point.toString();
+    }
+    
+    public static String toString(Vector pointList)
+    {
+        if (pointList == null)
+            return "(null)";
+        int length = pointList.size();
+        StringBuffer buffer = new StringBuffer(length * 4);
+        for (int i = 0; i < length; ++i)
+        {
+            buffer.append(((Point)pointList.get(i)).toString());
+            if (i < length - 1)
+                buffer.append(' ');
+        }
+        return buffer.toString();
     }
     
     public void up(int max)
