@@ -120,6 +120,19 @@ If no argument is given, the current delay value is returned.
 </varlistentry>
 
 <varlistentry>
+<term>
+<command>dummy_eplist</command>
+</term>
+<listitem>
+<para>
+Command according to the eplist analyze command type in GoGui.
+The arguments can be a point list, which is remembered.
+If the argument is "show", the current point list is shown. 
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><command>dummy_invalid</command></term>
 <listitem>
 <para>

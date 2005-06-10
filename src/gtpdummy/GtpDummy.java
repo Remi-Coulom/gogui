@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Random;
+import java.util.Vector;
 import go.Point;
 import gtp.GtpServer;
 import utils.StringUtils;
@@ -16,7 +17,10 @@ import version.Version;
 
 //----------------------------------------------------------------------------
 
-/** Dummy Go program for testing GTP controlling programs. */
+/** Dummy Go program for testing GTP controlling programs.
+    See the GtpDummy documentation for information about the extension
+    commands.
+*/
 public class GtpDummy
     extends GtpServer
 {
@@ -50,6 +54,8 @@ public class GtpDummy
             bwBoard(response);
         else if (cmd.equals("dummy_delay"))
             status = cmdDelay(cmdArray, response);
+        else if (cmd.equals("dummy_eplist"))
+            status = cmdEPList(cmdArray, response);
         else if (cmd.equals("dummy_invalid"))
             cmdInvalid();
         else if (cmd.equals("dummy_long_response"))
@@ -82,6 +88,7 @@ public class GtpDummy
                             "dummy_bwboard\n" +
                             "dummy_crash\n" +
                             "dummy_delay\n" +
+                            "dummy_eplist\n" +
                             "dummy_invalid\n" +
                             "dummy_long_response\n" +
                             "dummy_next_success\n" +
@@ -141,6 +148,9 @@ public class GtpDummy
 
     private Thread m_thread;
 
+    /** Editable point list for dummy_eplist command. */
+    private Vector m_ePList = new Vector();
+
     private void bwBoard(StringBuffer response)
     {        
         response.append("\n");
@@ -187,6 +197,21 @@ public class GtpDummy
             return false;
         }
         m_delay = argument.m_integer;
+        return true;
+    }
+    
+    private boolean cmdEPList(String[] cmdArray, StringBuffer response)
+    {
+        if (cmdArray.length == 2 && cmdArray[1].equals("show"))
+        {
+            response.append(Point.toString(m_ePList));
+            return true;
+        }
+        PointListArgument argument =
+            parsePointListArgument(cmdArray, response, m_size);
+        if (argument == null)
+            return true;
+        m_ePList = argument.m_pointList;
         return true;
     }
 
