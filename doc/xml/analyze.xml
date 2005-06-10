@@ -75,10 +75,14 @@ The numbers are expected to be between -1 and 1.
 <term><userinput>eplist</userinput></term>
 <listitem>
 <simpara>
-The command is used to set and remember a list of points.
-The command needs the following syntax:
+Editable point list command.
+The command is used to set a list of points.
+It needs the following syntax:
 the current point list is set, if the argument is a point list (or empty);
 the current point list is shown, if the argument is "show".
+GoGui always queries the current point list first, selects the points on the
+board and allows the user to edit them, then it sends the command with the
+selected points as the argument.
 </simpara>
 </listitem>
 </varlistentry>
