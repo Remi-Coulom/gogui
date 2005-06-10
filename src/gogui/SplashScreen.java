@@ -34,7 +34,7 @@ public class SplashScreen
         m_splash.setUndecorated(true);
         center(m_splash, 0, 0);
         m_splash.setVisible(true);         
-        ImageLoader loader = new ImageLoader(m_splash);
+        new ImageLoader(m_splash);
         try
         {
             Class [] mainArgs = new Class[1];
