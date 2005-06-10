@@ -149,6 +149,11 @@ public class AnalyzeDialog
         m_boardSize = boardSize;
     }
 
+    public void setRunButtonEnabled(boolean enabled)
+    {
+        m_runButton.setEnabled(enabled);
+    }
+
     public void setSelectedColor(go.Color color)
     {
         m_selectedColor = color;

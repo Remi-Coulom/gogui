@@ -465,6 +465,7 @@ class GoGui
                       "in setup mode.");
             return;
         }
+        m_analyzeDialog.setRunButtonEnabled(true);
         m_analyzeCommand = null;
         setBoardCursorDefault();
         resetBoard();
@@ -509,6 +510,7 @@ class GoGui
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(p, true);
             m_guiBoard.repaint();
+            m_analyzeDialog.setRunButtonEnabled(true);
             analyzeBegin(false, false);
             return;
         }
@@ -654,6 +656,7 @@ class GoGui
             || m_analyzeCommand.needsPointListArg())
         {
             m_guiBoard.clearAllSelect();
+            m_analyzeDialog.setRunButtonEnabled(false);
             if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
             {
                 Vector pointList = m_analyzeCommand.getPointListArg();
