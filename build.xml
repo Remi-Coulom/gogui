@@ -35,6 +35,15 @@ $Source$
 <available property="comm-available"
  file="external/javacomm/commapi/comm.jar"/>
 
+<condition property="notDistSettings">
+<not>
+<and>
+<istrue value="${optimize}"/>
+<isfalse value="${debug}"/>
+</and>
+</not>
+</condition>
+
 <target name="all" depends="
  gmptogtp.jar,
  gogui.jar,
@@ -123,6 +132,7 @@ $Source$
 </target>
 
 <target name="dist" depends="all,docvalidate,test,man">
+<fail if="notDistSettings" message="Not dist settings in build.properties"/>
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
