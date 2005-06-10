@@ -67,15 +67,22 @@ public class GtpUtils
     public static Point[] parsePointList(String s, int boardSize)
         throws GtpError
     {
+        Vector vector = parsePointListVector(s, boardSize);
+        Point result[] = new Point[vector.size()];
+        for (int i = 0; i < result.length; ++i)
+            result[i] = (Point)vector.get(i);
+        return result;
+    }
+
+    public static Vector parsePointListVector(String s, int boardSize)
+        throws GtpError
+    {
         Vector vector = new Vector(32, 32);
         String p[] = StringUtils.tokenize(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
                 vector.add(parsePoint(p[i], boardSize));
-        Point result[] = new Point[vector.size()];
-        for (int i = 0; i < result.length; ++i)
-            result[i] = (Point)vector.get(i);
-        return result;
+        return vector;
     }
 
     /** Find all points contained in string. */
