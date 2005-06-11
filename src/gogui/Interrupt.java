@@ -48,6 +48,11 @@ public class Interrupt
         }
         return true;
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private Interrupt()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

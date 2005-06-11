@@ -227,6 +227,10 @@ public class GtpUtils
         return result;
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private GtpUtils()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

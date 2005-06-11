@@ -540,6 +540,11 @@ public class NodeUtils
             buffer.append(' ');
         buffer.append(' ');
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private NodeUtils()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

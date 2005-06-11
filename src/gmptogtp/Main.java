@@ -178,6 +178,11 @@ public class Main
         System.exit(exitStatus);
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private Main()
+    {
+    }
+
     private static void listDevices()
     {
         Enumeration portList = CommPortIdentifier.getPortIdentifiers();

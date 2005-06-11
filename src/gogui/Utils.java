@@ -103,6 +103,11 @@ public class Utils
             message = StringUtils.capitalize(message);
         SimpleDialogs.showError(parent, message);
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private Utils()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

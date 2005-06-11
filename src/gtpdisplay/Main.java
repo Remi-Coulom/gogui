@@ -62,6 +62,11 @@ public class Main
         }
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private Main()
+    {
+    }
+
     private static void printUsage(PrintStream out)
     {
         String helpText =

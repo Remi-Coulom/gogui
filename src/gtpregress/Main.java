@@ -65,6 +65,11 @@ class Main
         }
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private Main()
+    {
+    }
+
     private static void printUsage(PrintStream out)
     {
         out.print("Usage: java -jar regression.jar [options] program test.tst"

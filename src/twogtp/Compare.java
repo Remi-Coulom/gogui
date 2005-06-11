@@ -127,6 +127,11 @@ public class Compare
         moves = Move.fillPasses(moves, Color.BLACK);
         return moves;
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private Compare()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

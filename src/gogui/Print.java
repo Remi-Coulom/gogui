@@ -31,6 +31,11 @@ public class Print
         }
         SimpleDialogs.showInfo(parent, "Printing done");
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private Print()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

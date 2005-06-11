@@ -117,6 +117,11 @@ public class Session
         prefs.setBool("show-" + name, isVisible);
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private Session()
+    {
+    }
+
     private static boolean isFrameSpecialMode(Window window)
     {
         return (window instanceof JFrame

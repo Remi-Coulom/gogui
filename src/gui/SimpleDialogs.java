@@ -113,6 +113,11 @@ public class SimpleDialogs
 
     private static File m_lastFile;
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private SimpleDialogs()
+    {
+    }
+
     private static File getUserDir()
     {
         String userDir = System.getProperties().getProperty("user.home");

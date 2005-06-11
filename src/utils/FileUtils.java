@@ -98,6 +98,11 @@ public class FileUtils
         }
         return name + "." + newExtension;
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private FileUtils()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

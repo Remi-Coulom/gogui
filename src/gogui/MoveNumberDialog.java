@@ -40,6 +40,11 @@ public class MoveNumberDialog
             return null;
         }
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private MoveNumberDialog()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

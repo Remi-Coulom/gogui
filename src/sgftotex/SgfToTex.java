@@ -92,6 +92,11 @@ public class SgfToTex
         }
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private SgfToTex()
+    {
+    }
+
     private static void convert(InputStream in, String name, OutputStream out,
                                 String title, boolean usePass)
         throws sgf.Reader.SgfError

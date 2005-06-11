@@ -45,6 +45,11 @@ public class BoardUtils
         out.print(s);
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private BoardUtils()
+    {
+    }
+
     private static void printGameInfo(Board board, StringBuffer s, int yIndex)
     {
         int size = board.getSize();

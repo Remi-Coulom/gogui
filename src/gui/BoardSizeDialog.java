@@ -31,6 +31,11 @@ public class BoardSizeDialog
             return -1;
         }
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private BoardSizeDialog()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

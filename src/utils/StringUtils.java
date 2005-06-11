@@ -125,6 +125,11 @@ public class StringUtils
             result[i] = (String)vector.get(i);
         return result;
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private StringUtils()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

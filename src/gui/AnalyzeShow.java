@@ -126,6 +126,11 @@ public class AnalyzeShow
         }
     }
 
+    /** Make constructor unavailable; class is for namespace only. */
+    private AnalyzeShow()
+    {
+    }
+
     private static go.Color getColor(go.Board board, go.Point pointArg,
                                      Vector pointListArg)
     {

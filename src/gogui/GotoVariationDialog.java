@@ -30,6 +30,11 @@ public class GotoVariationDialog
             SimpleDialogs.showError(parent, "Invalid variation");
         return node;
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private GotoVariationDialog()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

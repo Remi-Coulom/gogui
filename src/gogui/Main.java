@@ -126,6 +126,11 @@ public class Main
             System.exit(-1);
         }
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private Main()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------
