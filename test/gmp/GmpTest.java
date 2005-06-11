@@ -11,22 +11,69 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import junit.framework.TestCase;
+import junit.framework.TestResult;
+
+//----------------------------------------------------------------------------
+
+final class GmpTestUtils
+{
+    public static byte[] clone(byte[] packet)
+    {
+        assert(packet.length == 4);
+        byte[] result = new byte[4];
+        for (int i = 0; i < 4; ++i)
+            result[i] = packet[i];
+        return result;
+    }
+
+    public static byte[] readPacket(InputStream in) throws IOException
+    {
+        byte[] packet = new byte[4];
+        int len = 0;
+        while (len < 4)
+        {
+            int n = in.read(packet, len, 4 - len);
+            if (n < 0)
+                return null;
+            len += n;
+        }
+        return packet;
+    }
+}
 
 //----------------------------------------------------------------------------
 
 public class GmpTest
     extends TestCase
 {
+    public static void main(String args[])
+    {
+        GmpTest test = new GmpTest();
+        test.testBasics();
+    }
+
     public void testBasics()
     {
         try
         {
             createGmp();
+
             send(false, true, NEWGAME, 0);
             receive(true, false, OK, 0);
-            StringBuffer message = new StringBuffer();
-            boolean result = m_gmp.waitNewGame(19, message);
-            assertTrue(message.toString(), result);
+            waitNewGame();
+
+            Thread thread = new Thread()
+                {
+                    public void run()
+                    {
+                        play(true, 4, 4);
+                    }
+                };
+            thread.start();
+            receive(true, true, MOVE, 0x200 & 62);
+            send(true, true, OK, 0);
+            waitThread(thread);
+
             closeGmp();
         }
         catch (IOException e)
@@ -35,9 +82,13 @@ public class GmpTest
         }
     }
 
+    private final boolean m_verbose = false;
+
     private final int OK = 0;
 
     private final int NEWGAME = 2;
+
+    private final int MOVE = 5;
 
     private Gmp m_gmp;
 
@@ -45,7 +96,7 @@ public class GmpTest
 
     private OutputStream m_out;
 
-    private byte checksum(byte[] packet)
+    private static byte checksum(byte[] packet)
     {
         int sum = (int)packet[0] + (int)packet[2] + (int)packet[3];
         return (byte)(sum & 0x7F);
@@ -70,11 +121,16 @@ public class GmpTest
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream gmpOutput = new PipedOutputStream(in);
         m_in = in;
-        m_gmp = new Gmp(gmpInput, gmpOutput, 19, 2, false, false);
+        final boolean simple = false;
+        m_gmp = new Gmp(gmpInput, gmpOutput, 19, 2, simple, m_verbose);
     }
 
-    private void send(boolean hisSeq, boolean mySeq, int cmd, int val)
-        throws IOException
+    private GmpTestResponder createResponder(byte[] answer)
+    {
+        return new GmpTestResponder(m_in, m_out, answer);
+    }
+
+    private byte[] getPacket(boolean hisSeq, boolean mySeq, int cmd, int val)
     {
         byte[] packet = new byte[4];
         packet[0] = (byte)0x00;
@@ -89,6 +145,20 @@ public class GmpTest
         packet[2] |= ((val >> 7) & 0x07);
         packet[3] |= (val & 0x7F);
         packet[1] |= checksum(packet);
+        return packet;
+    }
+
+    private void play(boolean isBlack, int x, int y)
+    {
+        StringBuffer message = new StringBuffer();
+        boolean result = m_gmp.play(isBlack, x, y, message);
+        assertTrue(message.toString(), result);
+    }
+
+    private void send(boolean hisSeq, boolean mySeq, int cmd, int val)
+        throws IOException
+    {
+        byte[] packet = getPacket(hisSeq, mySeq, cmd, val);
         m_out.write(packet);
         m_out.flush();
     }
@@ -96,14 +166,14 @@ public class GmpTest
     private void receive(boolean hisSeq, boolean mySeq, int cmd, int val)
         throws IOException
     {
-        byte[] packet = new byte[4];
-        int len = 0;
-        while (len < 4)
-        {
-            int n = m_in.read(packet, len, 4 - len);
-            assertTrue(n >= 0);
-            len += n;
-        }
+        byte[] packet = GmpTestUtils.readPacket(m_in);
+        verifyPacket(packet, hisSeq, mySeq, cmd, val);
+    }
+
+    private static void verifyPacket(byte[] packet, boolean hisSeq,
+                                     boolean mySeq, int cmd, int val)
+    {
+        assertTrue(packet.length == 4);
         assertTrue("Invalid start byte", (packet[0] & 0xFC) == 0);
         for (int i = 1; i < 4; ++i)
             assertTrue("Invalid packet byte", (packet[i] & 0x80) != 0);
@@ -115,6 +185,24 @@ public class GmpTest
         assertTrue("Wrong command", ((packet[2] >> 4) & 0x07) == cmd);
         int v = ((packet[2] & 0x07) << 7) & (packet[3] & 0x7F);
         assertTrue("Wrong value", v == val);
+    }
+
+    private void waitNewGame()
+    {
+        StringBuffer message = new StringBuffer();
+        boolean result = m_gmp.waitNewGame(19, message);
+        assertTrue(message.toString(), result);
+    }
+
+    private void waitThread(Thread thread)
+    {
+        try
+        {
+            thread.join();
+        }
+        catch (InterruptedException e)
+        {
+        }
     }
 }
 
