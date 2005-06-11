@@ -61,7 +61,7 @@ class MoveRecord
 //----------------------------------------------------------------------------
 
 /** Go board. */
-public class Board
+public final class Board
 {
     public static final int RULES_UNKNOWN = 0;
 

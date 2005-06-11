@@ -65,7 +65,7 @@ class BoardLabel
 //----------------------------------------------------------------------------
 
 /** Graphical display of a Go board. */
-public class Board
+public final class Board
     extends JPanel
     implements FocusListener, Printable
 {

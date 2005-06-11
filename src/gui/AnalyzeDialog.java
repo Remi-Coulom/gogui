@@ -55,7 +55,7 @@ import utils.Preferences;
 //----------------------------------------------------------------------------
 
 /** Dialog for selecting an AnalyzeCommand. */
-public class AnalyzeDialog
+public final class AnalyzeDialog
     extends JDialog
     implements ActionListener, ListSelectionListener
 {

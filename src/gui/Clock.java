@@ -14,7 +14,7 @@ import go.Color;
 /** Time control for a Go game.
     The time unit is milliseconds.
 */
-public class Clock
+public final class Clock
 {
     public Clock()
     {
