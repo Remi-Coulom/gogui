@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import gmp.Gmp;
 import go.Color;
 import go.Point;
-import gtp.GtpServer;
+import gtp.GtpEngine;
 import utils.StringUtils;
 import version.Version;
 
@@ -18,7 +18,7 @@ import version.Version;
 
 /** GTP to GMP adapter. */
 public class GmpToGtp
-    extends GtpServer
+    extends GtpEngine
 {
     public GmpToGtp(String title, InputStream in, OutputStream out,
                     boolean verbose, int size, int colorIndex, boolean wait,

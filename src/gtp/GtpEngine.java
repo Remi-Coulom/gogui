@@ -43,7 +43,7 @@ class Command
 class ReadThread
     extends Thread
 {
-    public ReadThread(GtpServer gtpServer, InputStream in, boolean log)
+    public ReadThread(GtpEngine gtpServer, InputStream in, boolean log)
     {
         m_in = new BufferedReader(new InputStreamReader(in));
         m_gtpServer = gtpServer;
@@ -136,7 +136,7 @@ class ReadThread
 
     private Command m_command;
 
-    private GtpServer m_gtpServer;
+    private GtpEngine m_gtpServer;
 
     private Command parseLine(String line)
     {
@@ -186,7 +186,7 @@ class ReadThread
 //----------------------------------------------------------------------------
 
 /** Base class for Go programs and tools implementing GTP. */
-public abstract class GtpServer
+public abstract class GtpEngine
 {
     /** Returned by parseColorArgument. */
     public static class ColorArgument
@@ -226,7 +226,7 @@ public abstract class GtpServer
         public Vector m_pointList = new Vector();
     }
 
-    public GtpServer(InputStream in, OutputStream out, PrintStream log)
+    public GtpEngine(InputStream in, OutputStream out, PrintStream log)
     {
         m_out = new PrintStream(out);
         m_in = in;

@@ -25,8 +25,8 @@ import go.Color;
 import go.Move;
 import go.Point;
 import gtp.Gtp;
+import gtp.GtpEngine;
 import gtp.GtpError;
-import gtp.GtpServer;
 import gtp.GtpUtils;
 import utils.StringUtils;
 
@@ -34,7 +34,7 @@ import utils.StringUtils;
 
 /** GTP adapter for logging or protocol translations. */
 public class GtpAdapter
-    extends GtpServer
+    extends GtpEngine
 {
     public GtpAdapter(InputStream in, OutputStream out, String program,
                       PrintStream log, boolean version1, int size,

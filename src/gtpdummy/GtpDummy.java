@@ -11,7 +11,7 @@ import java.io.PrintStream;
 import java.util.Random;
 import java.util.Vector;
 import go.Point;
-import gtp.GtpServer;
+import gtp.GtpEngine;
 import utils.StringUtils;
 import version.Version;
 
@@ -22,7 +22,7 @@ import version.Version;
     commands.
 */
 public class GtpDummy
-    extends GtpServer
+    extends GtpEngine
 {
     public GtpDummy(InputStream in, OutputStream out, PrintStream log)
         throws Exception

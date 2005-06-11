@@ -25,8 +25,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import go.Move;
 import gtp.Gtp;
+import gtp.GtpEngine;
 import gtp.GtpError;
-import gtp.GtpServer;
 import gtp.GtpUtils;
 import gui.GuiUtils;
 import gui.SimpleDialogs;
@@ -38,7 +38,7 @@ import utils.StringUtils;
 
 /** GTP adapter showing the current board in a window. */
 public class GtpDisplay
-    extends GtpServer
+    extends GtpEngine
 {
     public GtpDisplay(InputStream in, OutputStream out, String program,
                       boolean verbose, boolean fastPaint)

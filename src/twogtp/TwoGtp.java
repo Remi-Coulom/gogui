@@ -33,9 +33,9 @@ import go.Color;
 import go.Move;
 import go.Point;
 import gtp.Gtp;
+import gtp.GtpEngine;
 import gtp.GtpError;
 import gtp.GtpUtils;
-import gtp.GtpServer;
 import utils.StringUtils;
 import version.Version;
 
@@ -43,7 +43,7 @@ import version.Version;
 
 /** GTP adapter for playing games between two Go programs. */
 public class TwoGtp
-    extends GtpServer
+    extends GtpEngine
 {
     public TwoGtp(InputStream in, OutputStream out, String black,
                   String white, String referee, String observer, int size,
