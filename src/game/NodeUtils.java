@@ -116,7 +116,6 @@ public class NodeUtils
         Vector moves = new Vector();
         for (int i = 0; i < node.getNumberChildren(); ++i)
         {
-            Node child = node.getChild(i);
             Move childMove = node.getChild(i).getMove();
             if (childMove != null && childMove.getPoint() != null)
                 moves.add(childMove.getPoint());

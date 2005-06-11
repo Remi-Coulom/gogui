@@ -715,7 +715,6 @@ public class Board
 
     private void drawBackground(Graphics graphics)
     {
-        int size = m_board.getSize();
         int width = getSize().width;
         if (m_image != null && ! m_fastPaint)
             graphics.drawImage(m_image, 0, 0, width, width, null);

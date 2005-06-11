@@ -21,7 +21,6 @@ public class BoardSizeDialog
         value = JOptionPane.showInputDialog(parent, "Board size", value);
         if (value == null)
             return -1;
-        int boardSize = -1;
         try
         {
             return Integer.parseInt(value);
