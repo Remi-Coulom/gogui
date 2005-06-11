@@ -32,7 +32,8 @@ public class GmpTest
             receiveNewGame(false, true);
             sendMove(true, true, true, 4, 4);
             sendUndo(true, false);
-            receiveMove(false, false, true, -1, -1);
+            sendNewGame(true, true);
+            receiveMove(true, false, true, -1, -1);
             closeGmp();
         }
         catch (IOException e)
@@ -41,7 +42,7 @@ public class GmpTest
         }
     }
 
-    private final boolean m_verbose = true;
+    private final boolean m_verbose = false;
 
     private final int OK = 0;
 
@@ -187,6 +188,24 @@ public class GmpTest
                 };
             thread.start();
             receive(hisSeq, mySeq, MOVE, getMoveVal(isBlack, x, y));
+            send(mySeq, hisSeq, OK, 0);
+            waitThread(thread);
+    }
+
+    private void sendNewGame(boolean hisSeq, boolean mySeq)
+        throws IOException
+    {
+            Thread thread = new Thread()
+                {
+                    public void run()
+                    {
+                        StringBuffer message = new StringBuffer();
+                        boolean result = m_gmp.newGame(19, message);
+                        assertTrue(message.toString(), result);
+                    }
+                };
+            thread.start();
+            receive(hisSeq, mySeq, NEWGAME, 0);
             send(mySeq, hisSeq, OK, 0);
             waitThread(thread);
     }
