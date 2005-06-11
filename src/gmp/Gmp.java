@@ -33,10 +33,10 @@ class Util
         StringBuffer s = new StringBuffer(8);
         for (int k = 0; k < 8; ++k)
         {
-            if (i % 2 != 0)
-                s.append('1');
-            else
+            if (i % 2 == 0)
                 s.append('0');
+            else
+                s.append('1');
             i >>= 1;
         }
         s.reverse();
@@ -219,10 +219,10 @@ class Cmd
     public static String moveValToString(int val, int size)
     {
         StringBuffer result = new StringBuffer(16);
-        if ((val & MASK_MOVE_COLOR) != 0)
-            result.append("W ");
-        else
+        if ((val & MASK_MOVE_COLOR) == 0)
             result.append("B ");
+        else
+            result.append("W ");
         if (size == 0)
             result.append(val & MASK_MOVE_POINT);
         else

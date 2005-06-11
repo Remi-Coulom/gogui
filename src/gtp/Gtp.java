@@ -805,24 +805,7 @@ public final class Gtp
                     }
                 }
             }
-            if (! message.m_isError)
-            {
-                String line = message.m_text;
-                if (line == null)
-                {
-                    m_isProgramDead = true;
-                    while (! m_queue.isEmpty())
-                    {
-                        message = (ReadMessage)m_queue.waitFor();
-                        assert(message.m_isError);
-                        if (message.m_text != null)
-                            handleErrorStream(message.m_text);
-                    }
-                    throwProgramDied();
-                }
-                return line;
-            }
-            else
+            if (message.m_isError)
             {
                 StringBuffer buffer = new StringBuffer(2048);
                 while (message != null)
@@ -841,6 +824,23 @@ public final class Gtp
                     }
                 }
                 handleErrorStream(buffer.toString());
+            }
+            else
+            {
+                String line = message.m_text;
+                if (line == null)
+                {
+                    m_isProgramDead = true;
+                    while (! m_queue.isEmpty())
+                    {
+                        message = (ReadMessage)m_queue.waitFor();
+                        assert(message.m_isError);
+                        if (message.m_text != null)
+                            handleErrorStream(message.m_text);
+                    }
+                    throwProgramDied();
+                }
+                return line;
             }
         }
     }

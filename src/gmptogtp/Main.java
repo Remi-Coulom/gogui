@@ -113,14 +113,7 @@ public class Main
             }
             String title = "Go Modem ";
             String flow = opt.getString("flow", "rtscts");                
-            if (! device.equals(""))
-            {
-                port = openPort(device, baud, flow);
-                title = title + device;
-                in = port.getInputStream();
-                out = port.getOutputStream();
-            }
-            else
+            if (device.equals(""))
             {
                 Runtime runtime = Runtime.getRuntime();
                 process = runtime.exec(StringUtils.tokenize(program));
@@ -129,6 +122,13 @@ public class Main
                 title = title + program;
                 in = process.getInputStream();
                 out = process.getOutputStream();
+            }
+            else
+            {
+                port = openPort(device, baud, flow);
+                title = title + device;
+                in = port.getInputStream();
+                out = port.getOutputStream();
             }
             int colorIndex = 0;
             if (! color.equals(""))

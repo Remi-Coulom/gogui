@@ -65,16 +65,16 @@ public class GtpDisplay
                 }
             };
         m_frame.addWindowListener(windowAdapter);
-        if (m_gtp != null)
+        if (m_gtp == null)
+        {
+            m_name = null;
+            m_frame.setTitle("GtpDisplay");
+        }
+        else
         {
             m_name = m_gtp.queryName();
             String title = "GtpDisplay: " + m_name;
             m_frame.setTitle(title);
-        }
-        else
-        {
-            m_name = null;
-            m_frame.setTitle("GtpDisplay");
         }
         Container contentPane = m_frame.getContentPane();
         m_guiBoard = new gui.Board(m_board, fastPaint);

@@ -336,13 +336,13 @@ public class Reader
     private SgfError getError(String message)
     {
         int lineNumber = m_tokenizer.lineno();
-        if (m_name != null)
+        if (m_name == null)
+            return new SgfError(lineNumber + ": " + message);
+        else
         {
             String s = m_name + ":" + lineNumber + ": " + message;
             return new SgfError(s);
         }
-        else
-            return new SgfError(lineNumber + ": " + message);
     }
 
     private Move getMove(Point point, Color color)
@@ -595,10 +595,10 @@ public class Reader
             else if (p == "C")
             {
                 String comment;
-                if (node.getComment() != null)
-                    comment = node.getComment() + "\n" + v.trim();
-                else
+                if (node.getComment() == null)
                     comment = v.trim();
+                else
+                    comment = node.getComment() + "\n" + v.trim();
                 node.setComment(comment);
             }
             else if (p == "CA")

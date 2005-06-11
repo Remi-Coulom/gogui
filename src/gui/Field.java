@@ -149,10 +149,10 @@ public class Field
             drawLastMoveMarker();
         if (m_select)
             drawSelect();
-        if (! m_string.equals(""))
-            drawString();
-        else
+        if (m_string.equals(""))
             setToolTipText(null);
+        else
+            drawString();
         if (isFocusOwner() && m_board.getShowCursor())
             drawFocus();
         m_graphics = null;

@@ -97,7 +97,15 @@ public class GameInfoDialog
             = getTextFieldContent(gameInfoDialog.m_byoyomi);
         String byoyomiMovesContent
             = getTextFieldContent(gameInfoDialog.m_byoyomiMoves);
-        if (! preByoyomiContent.equals(""))
+        if (preByoyomiContent.equals(""))
+        {
+            if (gameInformation.m_timeSettings != null)
+            {
+                gameInformation.m_timeSettings = null;
+                changed = true;
+            }
+        }
+        else
         {            
             long preByoyomi = Integer.parseInt(preByoyomiContent) * 60000L;
             long byoyomi = -1;
@@ -128,14 +136,6 @@ public class GameInfoDialog
                         = new TimeSettings(preByoyomi);
                     changed = true;
                 }
-            }
-        }
-        else
-        {
-            if (gameInformation.m_timeSettings != null)
-            {
-                gameInformation.m_timeSettings = null;
-                changed = true;
             }
         }
         return changed;

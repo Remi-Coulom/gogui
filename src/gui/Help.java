@@ -240,10 +240,10 @@ public class Help
         button.addActionListener(this);
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         URL url = classLoader.getResource("images/" + icon);
-        if (url != null)
-            button.setIcon(new ImageIcon(url, command));
-        else
+        if (url == null)
             button.setText(command);
+        else
+            button.setIcon(new ImageIcon(url, command));
         button.setFocusable(false);
         return button;
     }

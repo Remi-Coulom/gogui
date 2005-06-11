@@ -412,25 +412,27 @@ public class GtpAdapter
                 for (int i = 0; i < moves.size(); ++i)
                 {
                     Move move = (Move)moves.get(i);
-                    if (! m_emuLoadsgf)
-                        m_board.play(move);
-                    else
+                    if (m_emuLoadsgf)
                     {
                         if (! play(move.getColor(), move.getPoint(),
                                    response))
                             return false;
                     }
+                    else
+                        m_board.play(move);
                 }
                 toMove = node.getToMove();
                 node = node.getChild();
             }
             if (toMove != Color.EMPTY && toMove != m_board.getToMove())
             {
-                if (! m_emuLoadsgf)
-                    m_board.setToMove(toMove);
-                else
+                if (m_emuLoadsgf)
+                {
                     if (! play(m_board.getToMove(), null, response))
                         return false;
+                }
+                else
+                    m_board.setToMove(toMove);
             }
         }
         catch (FileNotFoundException e)

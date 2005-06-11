@@ -1232,13 +1232,13 @@ class GoGui
             setRules();
         }
         TimeSettings timeSettings = gameInformation.m_timeSettings;
-        if (timeSettings != null)
+        if (timeSettings == null)
+            m_timeSettings = null;
+        else
         {
             m_timeSettings = new TimeSettings(timeSettings);
             setTimeSettings();
         }
-        else
-            m_timeSettings = null;
         setTitle();
     }
 
@@ -1525,29 +1525,29 @@ class GoGui
 
     private void cbSetup()
     {
-        if (! m_setupMode)
+        if (m_setupMode)
         {
-            if (m_needsSave && ! checkSaveGame())
-                return;
-            m_menuBar.setSetupMode();
-            if (m_gameTreeViewer != null)
-            {
-                // Create a dummy game tree, so that GameTreeDialog shows
-                // a setup node
-                m_gameTree = new GameTree(m_boardSize, 0, null, null, null);
-                m_currentNode = m_gameTree.getRoot();
-                m_currentNode.addBlack(m_board.getPoint(0, 0));
-                m_clock.reset();
-                updateGameInfo(true);
-            }
-            resetBoard();
-            m_setupMode = true;
-            m_toolBar.enableAll(false, null);
-            showStatus("Setup Black");
-            m_board.setToMove(go.Color.BLACK);
-        }
-        else
             setupDone();
+            return;
+        }
+        if (m_needsSave && ! checkSaveGame())
+            return;
+        m_menuBar.setSetupMode();
+        if (m_gameTreeViewer != null)
+        {
+            // Create a dummy game tree, so that GameTreeDialog shows
+            // a setup node
+            m_gameTree = new GameTree(m_boardSize, 0, null, null, null);
+            m_currentNode = m_gameTree.getRoot();
+            m_currentNode.addBlack(m_board.getPoint(0, 0));
+            m_clock.reset();
+            updateGameInfo(true);
+        }
+        resetBoard();
+        m_setupMode = true;
+        m_toolBar.enableAll(false, null);
+        showStatus("Setup Black");
+        m_board.setToMove(go.Color.BLACK);
     }
 
     private void cbSetupBlack()
@@ -2110,10 +2110,10 @@ class GoGui
 
     private void initialize()
     {
-        if (m_file != null)
-            newGameFile(m_boardSize, m_move);
-        else
+        if (m_file == null)
             newGame(m_boardSize);
+        else
+            newGameFile(m_boardSize, m_move);
         m_toolBar.enableAll(true, m_currentNode);
         if (m_program != null)
             attachProgram(m_program);
@@ -2645,18 +2645,18 @@ class GoGui
                 playerBlack = playerBlack + " [" + blackRank + "]";
             if (whiteRank != null && ! whiteRank.trim().equals(""))
                 playerWhite = playerWhite + " [" + whiteRank + "]";
-            if (filename != null)
+            if (filename == null)
+                gameName = playerBlack + " vs " + playerWhite;
+            else
                 gameName = filename + " - "
                     + playerBlack + " vs " + playerWhite;
-            else
-                gameName = playerBlack + " vs " + playerWhite;
         }
         else if (filename != null)
             gameName = filename;
-        if (gameName != null)
-            setTitle(gameName + " - " + appName);
-        else
+        if (gameName == null)
             setTitle(appName);        
+        else
+            setTitle(gameName + " - " + appName);
     }
 
     private void setTitleFromProgram()
@@ -2771,17 +2771,17 @@ class GoGui
             return;
         m_prefs.setBool("show-info-panel", showInfoPanel);
         m_showInfoPanel = showInfoPanel;
-        if (! showInfoPanel)
-        {
-            m_splitPane.remove(m_boardPanel);
-            m_innerPanel.remove(m_splitPane);
-            m_innerPanel.add(m_boardPanel);
-        }
-        else
+        if (showInfoPanel)
         {
             m_innerPanel.remove(m_boardPanel);
             m_splitPane.add(m_boardPanel);
             m_innerPanel.add(m_splitPane);
+        }
+        else
+        {
+            m_splitPane.remove(m_boardPanel);
+            m_innerPanel.remove(m_splitPane);
+            m_innerPanel.add(m_boardPanel);
         }
         m_splitPane.resetToPreferredSizes();
         pack();
@@ -2863,10 +2863,10 @@ class GoGui
             (m_commandThread == null || isCurrentNodeExecuted()))
         {
             Move move = m_currentNode.getMove();
-            if (move != null)
-                m_guiBoard.markLastMove(move.getPoint());
-            else
+            if (move == null)
                 m_guiBoard.markLastMove(null);
+            else
+                m_guiBoard.markLastMove(move.getPoint());
         }
         else
             m_guiBoard.markLastMove(null);

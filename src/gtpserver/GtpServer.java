@@ -49,14 +49,14 @@ public class GtpServer
             Thread stdErrThread = new ProcessUtils.StdErrThread(process);
             stdErrThread.start();
             Socket socket;
-            if (serverSocket != null)
+            if (serverSocket == null)
+                socket = connectToRemote(remoteHost, port, userFile);
+            else
             {
                 if (verbose)
                     System.err.println("Waiting for connection...");
                 socket = serverSocket.accept();
             }
-            else
-                socket = connectToRemote(remoteHost, port, userFile);
             if (verbose)
                 System.err.println("gtpserver: Connected with "
                                    + socket.getInetAddress());

@@ -229,7 +229,9 @@ public class Writer
             if (comment.length() > 0)
                 comment.append(" \\enspace\n");
             comment.append(getStoneInTextString(i + 1, color));
-            if (point != null)
+            if (point == null)
+                comment.append("~pass");
+            else
             {
                 int x = point.getX();
                 int y = point.getY();
@@ -240,8 +242,6 @@ public class Writer
                 comment.append(getStoneInTextString(firstMoveNumber,
                                                     firstMoveColor));
             }
-            else
-                comment.append("~pass");
         }
         return comment.toString();
     }
@@ -261,9 +261,7 @@ public class Writer
                 string = strings[x][y];
             boolean markup = (markups != null && markups[x][y]);
             boolean select = (selects != null && selects[x][y]);
-            if (color != Color.EMPTY)
-                printStone(color, point, string, markup, select);
-            else
+            if (color == Color.EMPTY)
             {
                 String markers = getMarkers(string, markup, select);
                 if (markers != null)
@@ -273,6 +271,8 @@ public class Writer
                     m_out.print("\n");
                 }
             }
+            else
+                printStone(color, point, string, markup, select);
         }
     }
 

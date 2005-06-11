@@ -242,11 +242,11 @@ public class CommandThread
         public boolean askContinue()
         {
             String message;
-            if (m_command != null)
+            if (m_command == null)
+                message = "Program did not terminate";
+            else
                 message = "Program did not respond to command"
                     + " '" + m_command + "'";
-            else
-                message = "Program did not terminate";
             message = message + "\nKill program?";
             String title = "Error";
             String options[] = { "Kill Program", "Wait" };

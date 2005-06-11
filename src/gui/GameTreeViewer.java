@@ -94,7 +94,9 @@ class GameNode
         if (m_node.getNumberChildren() > 1)
         {
             graphics.setColor(java.awt.Color.DARK_GRAY);
-            if (! m_gameTreePanel.isExpanded(m_node))
+            if (m_gameTreePanel.isExpanded(m_node))
+                graphics.drawLine(halfSize, width, halfSize, height);
+            else
             {
                 int d1 = width / 2;
                 int d2 = (height - width) / 2;
@@ -102,8 +104,6 @@ class GameNode
                 graphics.drawLine(halfSize, width + d2, halfSize + d1,
                                   width + d2);
             }
-            else
-                graphics.drawLine(halfSize, width, halfSize, height);
         }
         Move move = m_node.getMove();
         if (m_node.getNumberAddBlack() + m_node.getNumberAddWhite() > 0)

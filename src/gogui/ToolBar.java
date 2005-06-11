@@ -144,10 +144,10 @@ public class ToolBar
         button.addActionListener(m_listener);
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         URL url = classLoader.getResource("images/" + icon);
-        if (url != null)
-            button.setIcon(new ImageIcon(url, command));
-        else
+        if (url == null)
             button.setText(command);
+        else
+            button.setIcon(new ImageIcon(url, command));
         button.setEnabled(false);
         button.setFocusable(false);
         add(button);

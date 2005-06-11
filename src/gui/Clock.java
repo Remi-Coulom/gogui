@@ -38,10 +38,10 @@ public class Clock
         assert(isInitialized());
         TimeRecord record = getRecord(color);
         long time = record.m_time;
-        if (! getUseByoyomi())
-            return (getPreByoyomi() - time);
-        else
+        if (getUseByoyomi())
             return (getByoyomi() - time);
+        else
+            return (getPreByoyomi() - time);
     }
 
     public String getTimeString(Color color)
@@ -141,10 +141,10 @@ public class Clock
             return false;
         TimeRecord record = getRecord(color);
         long time = record.m_time;
-        if (! getUseByoyomi())
-            return (time > getPreByoyomi());
-        else
+        if (getUseByoyomi())
             return (record.m_byoyomiExceeded);
+        else
+            return (time > getPreByoyomi());
     }
 
     public void reset()
