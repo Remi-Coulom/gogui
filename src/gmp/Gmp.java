@@ -1015,11 +1015,23 @@ public final class Gmp
         m_mainThread.start();
     }
 
+    /** Interrupt waiting for a command or response.
+        This function can be called from other threads to interrupt the
+        blocking functions that wait for a command or response.
+        After calling this function the GMP connection cannot be used anymore
+        and all functions will return a broken connection error.
+    */
     public void interruptCommand()
     {
         m_mainThread.interruptCommand();
     }
 
+    /** Send a new game command and wait for acknowledge.
+        @param size Board size, must be the same as the one this Gmp was
+        constructed with.
+        @param response Will contain error message, if function fails.
+        @return true, if command was acknowledged.
+    */
     public boolean newGame(int size, StringBuffer response)
     {
         if (size != m_size)
@@ -1030,9 +1042,16 @@ public final class Gmp
         return m_mainThread.send(new Cmd(Cmd.NEWGAME, 0), response);
     }
 
+    /** Send a move command and wait for acknowledge.
+        @param isBlack true, if color is black.
+        @param x x-coordinate, starting with 1, 0 for pass move.
+        @param y y-coordinate, starting with 1, 0 for pass move.
+        @param response Will contain error message, if function fails.
+        @return true, if command was acknowledged.
+    */
     public boolean play(boolean isBlack, int x, int y, StringBuffer response)
     {
-        if (x >= m_size || y >= m_size)
+        if (x >= m_size || y >= m_size || x < 0 || y < 0)
         {
             response.append("Invalid coordinates");
             return false;
@@ -1043,21 +1062,38 @@ public final class Gmp
         return m_mainThread.send(new Cmd(Cmd.MOVE, val), response);
     }
 
+    /** Get a string showing queued commands.
+        The string contains one queued (and already acknowledged) command per
+        line.
+    */
     public boolean queue(StringBuffer response)
     {
         return m_mainThread.queue(response);
     }
 
+    /** Send talk text. */
     public boolean sendTalk(String text)
     {
         return m_mainThread.sendTalk(text);
     }
 
+    /** Send an undo command (one move) and wait for acknowledge.
+        @param response Will contain error message, if function fails.
+        @return true, if command was acknowledged.
+    */
     public boolean undo(StringBuffer response)
     {
         return m_mainThread.send(new Cmd(Cmd.UNDO, 1), response);
     }
 
+    /** Wait for a move command and acknowledge it.
+        Returns immediately, if a move was already received and
+        queued, or if a conflicting command is/was received.
+        @param isBlack true, if waiting for a black move; only move commands
+        with the correct color will be acknowledged.
+        @param response Will contain error message, if function fails.
+        @return true, if command was acknowledged.
+    */
     public Move waitMove(boolean isBlack, StringBuffer response)
     {
         MainThread.WaitResult result;
@@ -1071,6 +1107,14 @@ public final class Gmp
         return Cmd.parseMove(result.m_val, m_size);
     }
 
+    /** Wait for a new game command and acknowledge it.
+        Returns immediately, if a new game was already received and
+        queued, or if a conflicting command is/was received.
+        @param size The expected board size; only new game commands with
+        this size will be acknowledged.
+        @param response Will contain error message, if function fails.
+        @return true, if command was acknowledged.
+    */
     public boolean waitNewGame(int size, StringBuffer response)
     {
         if (size != m_size)
