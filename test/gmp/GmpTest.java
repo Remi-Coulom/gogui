@@ -29,9 +29,10 @@ public class GmpTest
         try
         {
             createGmp();            
-            sendNewGame(false, true);
-            receiveMove(true, true, true, 4, 4);
-            receiveUndo(true, false);
+            receiveNewGame(false, true);
+            sendMove(true, true, true, 4, 4);
+            sendUndo(true, false);
+            receiveMove(false, false, true, -1, -1);
             closeGmp();
         }
         catch (IOException e)
@@ -90,6 +91,17 @@ public class GmpTest
         return new GmpTestResponder(m_in, m_out, answer);
     }
 
+    private static int getMoveVal(boolean isBlack, int x, int y)
+    {
+        if (x == -1 && y == -1)
+            return 0;
+        assert(x >= 0 && y >= 0);
+        int val = y * 19 + x + 1;
+        if (! isBlack)
+            val |= 0x200;
+        return val;
+    }
+
     private byte[] getPacket(boolean hisSeq, boolean mySeq, int cmd, int val)
     {
         byte[] packet = new byte[4];
@@ -106,21 +118,6 @@ public class GmpTest
         packet[3] |= (val & 0x7F);
         packet[1] |= checksum(packet);
         return packet;
-    }
-
-    private void send(boolean hisSeq, boolean mySeq, int cmd, int val)
-        throws IOException
-    {
-        byte[] packet = getPacket(hisSeq, mySeq, cmd, val);
-        m_out.write(packet);
-        m_out.flush();
-    }
-
-    private void sendNewGame(boolean hisSeq, boolean mySeq) throws IOException
-    {
-        send(hisSeq, mySeq, NEWGAME, 0);
-        receive(mySeq, hisSeq, OK, 0);
-        waitNewGame();
     }
 
     private byte[] readPacket() throws IOException
@@ -144,8 +141,39 @@ public class GmpTest
         verifyPacket(packet, hisSeq, mySeq, cmd, val);
     }
 
-    private void receiveMove(boolean hisSeq, boolean mySeq,
-                             final boolean isBlack, final int x, final int y)
+    private void receiveNewGame(boolean hisSeq, boolean mySeq)
+        throws IOException
+    {
+        send(hisSeq, mySeq, NEWGAME, 0);
+        receive(mySeq, hisSeq, OK, 0);
+        StringBuffer message = new StringBuffer();
+        boolean result = m_gmp.waitNewGame(19, message);
+        assertTrue(message.toString(), result);
+    }
+
+    private void receiveMove(boolean hisSeq, boolean mySeq, boolean isBlack,
+                             int x, int y) throws IOException
+    {
+        send(hisSeq, mySeq, MOVE, getMoveVal(isBlack, x, y));
+        receive(mySeq, hisSeq, OK, 0);
+        StringBuffer message = new StringBuffer();
+        Gmp.Move move = m_gmp.waitMove(isBlack, message);
+        assertTrue(message.toString(), move != null);
+        assertTrue(move.m_isBlack);
+        assertTrue(move.m_x == x);
+        assertTrue(move.m_y == y);
+    }
+
+    private void send(boolean hisSeq, boolean mySeq, int cmd, int val)
+        throws IOException
+    {
+        byte[] packet = getPacket(hisSeq, mySeq, cmd, val);
+        m_out.write(packet);
+        m_out.flush();
+    }
+
+    private void sendMove(boolean hisSeq, boolean mySeq,
+                          final boolean isBlack, final int x, final int y)
         throws IOException
     {
             Thread thread = new Thread()
@@ -158,15 +186,12 @@ public class GmpTest
                     }
                 };
             thread.start();
-            int val = y * 19 + x + 1;
-            if (! isBlack)
-                val |= 0x200;
-            receive(hisSeq, mySeq, MOVE, val);
+            receive(hisSeq, mySeq, MOVE, getMoveVal(isBlack, x, y));
             send(mySeq, hisSeq, OK, 0);
             waitThread(thread);
     }
 
-    private void receiveUndo(boolean hisSeq, boolean mySeq) throws IOException
+    private void sendUndo(boolean hisSeq, boolean mySeq) throws IOException
     {
             Thread thread = new Thread()
                 {
@@ -199,13 +224,6 @@ public class GmpTest
         int v = (((packet[2] & 0x07) << 7) | (packet[3] & 0x7F));
         assertTrue("Wrong value: " + v + " (should be " + val + ")",
                    v == val);
-    }
-
-    private void waitNewGame()
-    {
-        StringBuffer message = new StringBuffer();
-        boolean result = m_gmp.waitNewGame(19, message);
-        assertTrue(message.toString(), result);
     }
 
     private void waitThread(Thread thread)
