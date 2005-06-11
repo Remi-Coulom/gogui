@@ -1044,14 +1044,14 @@ public final class Gmp
 
     /** Send a move command and wait for acknowledge.
         @param isBlack true, if color is black.
-        @param x x-coordinate, starting with 1, 0 for pass move.
-        @param y y-coordinate, starting with 1, 0 for pass move.
+        @param x x-coordinate, starting with 0, -1 for pass move.
+        @param y y-coordinate, starting with 0, -1 for pass move.
         @param response Will contain error message, if function fails.
         @return true, if command was acknowledged.
     */
     public boolean play(boolean isBlack, int x, int y, StringBuffer response)
     {
-        if (x >= m_size || y >= m_size || x < 0 || y < 0)
+        if (x >= m_size || y >= m_size || x < -1 || y < -1)
         {
             response.append("Invalid coordinates");
             return false;
