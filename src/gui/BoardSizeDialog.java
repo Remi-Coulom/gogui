@@ -7,7 +7,6 @@ package gui;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
-import gui.SimpleDialogs;
 
 //----------------------------------------------------------------------------
 

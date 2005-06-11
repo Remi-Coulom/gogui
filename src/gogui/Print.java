@@ -8,7 +8,6 @@ package gogui;
 import java.awt.Component;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
-import javax.swing.JOptionPane;
 import gui.SimpleDialogs;
 
 //----------------------------------------------------------------------------

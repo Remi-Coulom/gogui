@@ -27,14 +27,12 @@ import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.Vector;
-import gui.GuiUtils;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------

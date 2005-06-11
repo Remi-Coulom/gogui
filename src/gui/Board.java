@@ -32,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import go.Move;
-import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 

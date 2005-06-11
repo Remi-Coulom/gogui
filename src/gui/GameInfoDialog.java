@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import game.GameInformation;
 import game.TimeSettings;
-import gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 

@@ -31,7 +31,6 @@ import java.util.HashSet;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -49,7 +48,6 @@ import game.GameTree;
 import game.Node;
 import game.NodeUtils;
 import go.Move;
-import gui.GuiUtils;
 import utils.Platform;
 import utils.Preferences;
 

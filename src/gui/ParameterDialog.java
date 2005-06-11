@@ -16,10 +16,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import gtp.GtpError;
-import gui.GuiUtils;
 import utils.StringUtils;
 
 //----------------------------------------------------------------------------

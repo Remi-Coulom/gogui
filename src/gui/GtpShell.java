@@ -55,7 +55,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import gtp.Gtp;
 import gtp.GtpError;
-import gui.GuiUtils;
 import utils.Platform;
 import utils.Preferences;
 
