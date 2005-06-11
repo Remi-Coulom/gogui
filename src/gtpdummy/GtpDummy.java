@@ -142,11 +142,11 @@ public class GtpDummy
 
     private boolean[][] m_alreadyPlayed;
 
-    private Random m_random;
+    private final Random m_random;
 
     private String m_nextResponse;
 
-    private Thread m_thread;
+    private final Thread m_thread;
 
     /** Editable point list for dummy_eplist command. */
     private Vector m_ePList = new Vector();

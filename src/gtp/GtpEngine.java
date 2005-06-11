@@ -128,15 +128,15 @@ class ReadThread
 
     private boolean m_endOfFile;
 
-    private boolean m_log;
+    private final boolean m_log;
 
     private boolean m_waitCommand;
 
-    private BufferedReader m_in;
+    private final BufferedReader m_in;
 
     private Command m_command;
 
-    private GtpEngine m_gtpServer;
+    private final GtpEngine m_gtpServer;
 
     private Command parseLine(String line)
     {
@@ -478,11 +478,11 @@ public abstract class GtpEngine
             m_log.println(fullResponse);
     }
 
-    private InputStream m_in;
+    private final InputStream m_in;
 
-    private PrintStream m_log;
+    private final PrintStream m_log;
 
-    private PrintStream m_out;
+    private final PrintStream m_out;
 
     private void sendResponse(Command cmd)
     {

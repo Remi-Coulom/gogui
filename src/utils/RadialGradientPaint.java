@@ -65,13 +65,13 @@ public class RadialGradientPaint
 
     private RadialGradientContext m_cachedContext;    
 
-    private Point2D m_point;
+    private final Point2D m_point;
 
-    private Point2D m_radius;
+    private final Point2D m_radius;
 
-    private java.awt.Color m_backgroundColor;
+    private final java.awt.Color m_backgroundColor;
 
-    private java.awt.Color m_pointColor;
+    private final java.awt.Color m_pointColor;
 }
 
 //----------------------------------------------------------------------------

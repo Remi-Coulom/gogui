@@ -51,6 +51,8 @@ public class GtpDisplay
             m_gtp.queryProtocolVersion();
             m_gtp.querySupportedCommands();
         }
+        else
+            m_gtp = null;
         m_size = 19;
         m_board = new go.Board(m_size);
         m_frame = new JFrame();
@@ -70,7 +72,10 @@ public class GtpDisplay
             m_frame.setTitle(title);
         }
         else
+        {
+            m_name = null;
             m_frame.setTitle("GtpDisplay");
+        }
         Container contentPane = m_frame.getContentPane();
         m_guiBoard = new gui.Board(m_board, fastPaint);
         if (m_gtp != null)
@@ -193,15 +198,15 @@ public class GtpDisplay
     */
     private int m_size;
 
-    private go.Board m_board;
+    private final go.Board m_board;
 
     private go.Color m_color;
 
-    private gui.Board m_guiBoard;
+    private final gui.Board m_guiBoard;
 
     private go.Point m_fieldClicked;
 
-    private Gtp m_gtp;
+    private final Gtp m_gtp;
 
     private Move m_move;
 
@@ -209,9 +214,9 @@ public class GtpDisplay
 
     private JLabel m_statusLabel;
 
-    private String m_name;
+    private final String m_name;
 
-    private SquareLayout m_squareLayout;
+    private final SquareLayout m_squareLayout;
 
     private void cbFieldClicked(go.Point point, boolean modifiedSelect)
     {

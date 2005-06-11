@@ -93,17 +93,17 @@ public class GmpToGtp
 
     private boolean m_firstGame = true;
 
-    private boolean m_simple;
+    private final boolean m_simple;
 
-    private boolean m_wait;
+    private final boolean m_wait;
 
-    private int m_colorIndex;
+    private final int m_colorIndex;
 
-    private int m_size;
+    private final int m_size;
 
-    private String m_title;
+    private final String m_title;
 
-    private Gmp m_gmp;
+    private final Gmp m_gmp;
 
     private boolean cmdBoardsize(String[] cmdArray, StringBuffer response)
     {

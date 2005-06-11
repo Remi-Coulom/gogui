@@ -141,9 +141,9 @@ public class GameInfoDialog
         return changed;
     }
 
-    private JPanel m_panelLeft;
+    private final JPanel m_panelLeft;
 
-    private JPanel m_panelRight;
+    private final JPanel m_panelRight;
 
     private JTextField m_byoyomi;
 
@@ -159,9 +159,9 @@ public class GameInfoDialog
 
     private JTextField m_preByoyomi;
 
-    private JTextField m_rankBlack;
+    private final JTextField m_rankBlack;
 
-    private JTextField m_rankWhite;
+    private final JTextField m_rankWhite;
 
     private JTextField m_result;
 

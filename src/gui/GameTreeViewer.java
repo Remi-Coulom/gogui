@@ -155,14 +155,14 @@ class GameNode
         }
     }
 
-    private int m_moveNumber;
+    private final int m_moveNumber;
 
     private static final java.awt.Color m_colorLightBlue
         = new java.awt.Color(103, 122, 164);
 
-    private GameTreePanel m_gameTreePanel;
+    private final GameTreePanel m_gameTreePanel;
 
-    private Node m_node;
+    private final Node m_node;
 
     private void drawText(Graphics graphics)
     {
@@ -503,7 +503,7 @@ class GameTreePanel
             m_scrollPane.requestFocusInWindow();
     }
 
-    private boolean m_fastPaint;
+    private final boolean m_fastPaint;
 
     private int m_currentNodeX;
 
@@ -531,9 +531,9 @@ class GameTreePanel
 
     private GameTree m_gameTree;
 
-    private GameTreeViewer.Listener m_listener;
+    private final GameTreeViewer.Listener m_listener;
 
-    private JDialog m_owner;
+    private final JDialog m_owner;
 
     /** Used for focus workaround on Mac Java 1.4.2 if not null. */
     private JScrollPane m_scrollPane;
@@ -542,11 +542,11 @@ class GameTreePanel
 
     private Node m_popupNode;
 
-    private HashMap m_map = new HashMap(500, 0.8f);
+    private final HashMap m_map = new HashMap(500, 0.8f);
 
-    private HashSet m_expanded = new HashSet(200);
+    private final HashSet m_expanded = new HashSet(200);
 
-    private MouseListener m_mouseListener;
+    private final MouseListener m_mouseListener;
 
     private java.awt.Point m_popupLocation;
 
@@ -966,7 +966,7 @@ public class GameTreeViewer
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-    private GameTreePanel m_panel;
+    private final GameTreePanel m_panel;
 
     private JMenuItem m_itemLabelNumber;
 
@@ -982,11 +982,11 @@ public class GameTreeViewer
 
     private JMenuItem m_itemSizeTiny;
 
-    private JScrollPane m_scrollPane;
+    private final JScrollPane m_scrollPane;
 
-    private Listener m_listener;
+    private final Listener m_listener;
 
-    private Preferences m_prefs;
+    private final Preferences m_prefs;
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
                                   String command)

@@ -174,7 +174,7 @@ public class GtpRegress
 
     private PrintStream m_out;
 
-    private Set m_dataFiles = new TreeSet();
+    private final Set m_dataFiles = new TreeSet();
 
     private static final String m_colorError = "#ffa954";
 
@@ -216,9 +216,9 @@ public class GtpRegress
 
     private String m_version;
 
-    private Vector m_tests = new Vector();
+    private final Vector m_tests = new Vector();
 
-    private Vector m_testSummaries = new Vector();
+    private final Vector m_testSummaries = new Vector();
 
     private Gtp m_gtp;
 

@@ -64,9 +64,9 @@ public class Writer
         m_out.close();
     }
 
-    private boolean m_usePass;
+    private final boolean m_usePass;
 
-    private PrintStream m_out;
+    private final PrintStream m_out;
 
     /** Escape LaTeX special character in text. */
     private String escape(String text)

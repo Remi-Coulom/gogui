@@ -106,35 +106,35 @@ public class ToolBar
 
     private boolean m_computerButtonsEnabled = true;
 
-    private ActionListener m_listener;
+    private final ActionListener m_listener;
 
-    private JButton m_buttonBeginning;
+    private final JButton m_buttonBeginning;
 
-    private JButton m_buttonBackward;
+    private final JButton m_buttonBackward;
 
-    private JButton m_buttonBackward10;
+    private final JButton m_buttonBackward10;
 
-    private JButton m_buttonEnd;
+    private final JButton m_buttonEnd;
 
-    private JButton m_buttonEnter;
+    private final JButton m_buttonEnter;
 
-    private JButton m_buttonForward;
+    private final JButton m_buttonForward;
 
-    private JButton m_buttonForward10;
+    private final JButton m_buttonForward10;
 
-    private JButton m_buttonInterrupt;
+    private final JButton m_buttonInterrupt;
 
-    private JButton m_buttonNew;
+    private final JButton m_buttonNew;
 
-    private JButton m_buttonNextVariation;
+    private final JButton m_buttonNextVariation;
 
-    private JButton m_buttonOpen;
+    private final JButton m_buttonOpen;
 
-    private JButton m_buttonPass;
+    private final JButton m_buttonPass;
 
-    private JButton m_buttonPreviousVariation;
+    private final JButton m_buttonPreviousVariation;
 
-    private JButton m_buttonSave;
+    private final JButton m_buttonSave;
 
     private JButton addButton(String icon, String command, String toolTip)
     {

@@ -418,11 +418,11 @@ class WriteThread extends Thread
 
     private boolean m_sendInProgress;
 
-    private boolean m_verbose;
+    private final boolean m_verbose;
 
     private byte[] m_packet;
 
-    private OutputStream m_out;
+    private final OutputStream m_out;
 
     private void writePacket()
     {
@@ -667,13 +667,13 @@ class MainThread
 
     private static final int STATE_WAIT_ANSWER = 6;
 
-    private boolean m_verbose;
+    private final boolean m_verbose;
 
     private boolean m_hisLastSeq;
 
     private boolean m_myLastSeq;
 
-    private boolean m_simple;
+    private final boolean m_simple;
 
     private int m_lastQuery;
 
@@ -683,7 +683,7 @@ class MainThread
 
     private int m_pending;
 
-    private int m_size;
+    private final int m_size;
 
     private int m_queryCount;
 
@@ -695,13 +695,13 @@ class MainThread
 
     private int[] m_inBuffer = new int[4];
 
-    private InputStream m_in;
+    private final InputStream m_in;
 
-    private StringBuffer m_talkLine = new StringBuffer();
+    private final StringBuffer m_talkLine = new StringBuffer();
 
-    private Vector m_cmdQueue = new Vector(32, 32);
+    private final Vector m_cmdQueue = new Vector(32, 32);
 
-    private WriteThread m_writeThread;
+    private final WriteThread m_writeThread;
 
     private void answerQuery(int val)
     {
@@ -1083,9 +1083,9 @@ public final class Gmp
         return result.m_success;
     }
 
-    private int m_size;
+    private final int m_size;
 
-    private MainThread m_mainThread;
+    private final MainThread m_mainThread;
 }
 
 //----------------------------------------------------------------------------

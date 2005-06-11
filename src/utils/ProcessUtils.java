@@ -44,9 +44,9 @@ class ExitWaiter
 
     private boolean m_isFinished;
 
-    private Object m_monitor;
+    private final Object m_monitor;
 
-    private Process m_process;
+    private final Process m_process;
 };
 
 //----------------------------------------------------------------------------

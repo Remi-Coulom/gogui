@@ -47,15 +47,15 @@ class MoveRecord
         return m_suicide;
     }
 
-    private Color m_old;
+    private final Color m_old;
 
-    private Color m_oldToMove;
+    private final Color m_oldToMove;
 
-    private Move m_move;
+    private final Move m_move;
 
-    private Vector m_killed;
+    private final Vector m_killed;
 
-    private Vector m_suicide;
+    private final Vector m_suicide;
 }
 
 //----------------------------------------------------------------------------
@@ -564,11 +564,11 @@ public class Board
 
     private int m_setupNumber;
 
-    private Vector m_moves = new Vector(361, 361);
+    private final Vector m_moves = new Vector(361, 361);
 
-    private Vector m_setupStonesBlack = new Vector();
+    private final Vector m_setupStonesBlack = new Vector();
 
-    private Vector m_setupStonesWhite = new Vector();
+    private final Vector m_setupStonesWhite = new Vector();
 
     private Color m_color[][];
 

@@ -163,13 +163,13 @@ public class Comment
 
     private boolean m_duringSetText;
 
-    private JTextPane m_textPane;
+    private final JTextPane m_textPane;
 
-    private Listener m_listener;
+    private final Listener m_listener;
 
     private Node m_node;
 
-    private Style m_defaultStyle;
+    private final Style m_defaultStyle;
 
     private void copyContentToNode()
     {

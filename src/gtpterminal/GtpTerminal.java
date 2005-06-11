@@ -97,13 +97,13 @@ public class GtpTerminal
     {
     }
 
-    private boolean m_verbose;
+    private final boolean m_verbose;
 
     private Board m_board;
 
     private GameTree m_gameTree;
 
-    private Gtp m_gtp;
+    private final Gtp m_gtp;
 
     private Node m_currentNode;
 

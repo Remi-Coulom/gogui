@@ -96,23 +96,23 @@ public class GameInfo
         updateTime(go.Color.WHITE);
     }
 
-    private JTextField m_move;
+    private final JTextField m_move;
 
-    private JTextField m_number;
+    private final JTextField m_number;
 
-    private JTextField m_last;
+    private final JTextField m_last;
 
-    private JTextField m_captB;
+    private final JTextField m_captB;
 
-    private JTextField m_captW;
+    private final JTextField m_captW;
 
-    private JTextField m_timeB;
+    private final JTextField m_timeB;
 
-    private JTextField m_timeW;
+    private final JTextField m_timeW;
 
-    private JTextField m_variation;
+    private final JTextField m_variation;
 
-    private Clock m_clock;
+    private final Clock m_clock;
 
     private JTextField addEntry(String text)
     {

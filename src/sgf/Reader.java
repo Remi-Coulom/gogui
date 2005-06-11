@@ -71,7 +71,7 @@ class ByteCountInputStream
 
     private long m_byteCount;
 
-    private InputStream m_in;
+    private final InputStream m_in;
 }
 
 //----------------------------------------------------------------------------
@@ -201,16 +201,16 @@ public class Reader
 
     private Move[][] m_moveWhiteCache = new Move[CACHE_SIZE][CACHE_SIZE];
 
-    private Move m_passBlackCache = new Move(null, Color.BLACK);
+    private final Move m_passBlackCache = new Move(null, Color.BLACK);
 
-    private Move m_passWhiteCache = new Move(null, Color.WHITE);
+    private final Move m_passWhiteCache = new Move(null, Color.WHITE);
 
     private Point[][] m_pointCache = new Point[CACHE_SIZE][CACHE_SIZE];
 
     private ProgressShow m_progressShow;
 
     /** Contains strings with warnings. */
-    private TreeSet m_warnings = new TreeSet();
+    private final TreeSet m_warnings = new TreeSet();
 
     private StreamTokenizer m_tokenizer;
 
@@ -218,9 +218,9 @@ public class Reader
 
     private String m_newCharset;
 
-    private StringBuffer m_valueBuffer = new StringBuffer(512);
+    private final StringBuffer m_valueBuffer = new StringBuffer(512);
 
-    private Vector m_valueVector = new Vector();
+    private final Vector m_valueVector = new Vector();
 
     /** Apply some fixes for broken SGF files. */
     private void applyFixes()

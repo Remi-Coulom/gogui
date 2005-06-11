@@ -218,11 +218,11 @@ public class GuiUtils
 
         private int m_percent;
 
-        private Dialog m_dialog;
+        private final Dialog m_dialog;
 
-        private JProgressBar m_progressBar;
+        private final JProgressBar m_progressBar;
 
-        private ProgressRunnable m_runnable;
+        private final ProgressRunnable m_runnable;
 
         private Throwable m_throwable;
     }

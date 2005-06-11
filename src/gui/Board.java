@@ -83,6 +83,8 @@ public class Board
         URL url = getClass().getClassLoader().getResource("images/wood.png");
         if (url != null)
             m_image = new ImageIcon(url).getImage();
+        else
+            m_image = null;
         initSize(m_board.getSize());
         setFocusable(true);
         addFocusListener(this);
@@ -634,7 +636,7 @@ public class Board
         }
     }
 
-    private boolean m_fastPaint;
+    private final boolean m_fastPaint;
 
     private boolean m_needsReset;
 
@@ -648,7 +650,7 @@ public class Board
 
     private go.Point m_lastMove;
 
-    private go.Board m_board;
+    private final go.Board m_board;
 
     private static final AlphaComposite m_composite3
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
@@ -661,11 +663,11 @@ public class Board
 
     private Font m_cachedFont;
 
-    private Image m_image;
+    private final Image m_image;
 
     private Listener m_listener;
 
-    private Vector m_labels = new Vector(100, 100);
+    private final Vector m_labels = new Vector(100, 100);
 
     private void addColumnLabels(int size)
     {

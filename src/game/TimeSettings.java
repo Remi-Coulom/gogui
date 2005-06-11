@@ -99,11 +99,11 @@ public final class TimeSettings
             return new TimeSettings(preByoyomi, byoyomi, byoyomiMoves);
     }
 
-    private long m_preByoyomi;
+    private final long m_preByoyomi;
 
-    private long m_byoyomi;
+    private final long m_byoyomi;
 
-    private int m_byoyomiMoves;
+    private final int m_byoyomiMoves;
 }
 
 //----------------------------------------------------------------------------

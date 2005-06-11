@@ -97,11 +97,11 @@ public class ParameterDialog
 
         public abstract Component getComponent();
 
-        private String m_key;
+        private final String m_key;
 
-        private String m_label;
+        private final String m_label;
 
-        private String m_value;
+        private final String m_value;
     }
     
     private static class BoolParameter
@@ -143,9 +143,9 @@ public class ParameterDialog
 
         private boolean m_bool;
 
-        private JCheckBox m_checkBox;
+        private final JCheckBox m_checkBox;
 
-        private JPanel m_panel;
+        private final JPanel m_panel;
     }
 
     private static class StringParameter
@@ -175,9 +175,9 @@ public class ParameterDialog
             return m_panel;
         }
 
-        private JTextField m_textField;
+        private final JTextField m_textField;
 
-        private JPanel m_panel;
+        private final JPanel m_panel;
     }
 
     private static Vector parseResponse(String response)

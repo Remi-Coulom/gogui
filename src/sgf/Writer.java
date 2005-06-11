@@ -84,11 +84,11 @@ public class Writer
         m_out.close();
     }
 
-    private StringBuffer m_buffer = new StringBuffer(128);
+    private final StringBuffer m_buffer = new StringBuffer(128);
 
-    private int m_size;
+    private final int m_size;
 
-    private PrintStream m_out;
+    private final PrintStream m_out;
 
     private static String getDefaultEncoding()
     {

@@ -105,9 +105,9 @@ public class SplashScreen
             m_splash.repaint();
         }
 
-        private Thread m_thread;
+        private final Thread m_thread;
 
-        private SplashScreen m_splash; 
+        private final SplashScreen m_splash; 
     }
      
     /** Image was loaded. */

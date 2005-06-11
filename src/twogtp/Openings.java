@@ -84,7 +84,7 @@ public class Openings
 
     private int m_currentFile;
 
-    private File m_directory;
+    private final File m_directory;
 
     private File[] m_files;
 

@@ -617,9 +617,9 @@ public final class Gtp
             }
         }
 
-        private BufferedReader m_in;
+        private final BufferedReader m_in;
 
-        private MessageQueue m_queue;
+        private final MessageQueue m_queue;
 
         private void mainLoop() throws InterruptedException
         {
@@ -668,9 +668,9 @@ public final class Gtp
             }
         }
 
-        private Reader m_in;
+        private final Reader m_in;
 
-        private MessageQueue m_queue;
+        private final MessageQueue m_queue;
 
         private void mainLoop() throws InterruptedException
         {

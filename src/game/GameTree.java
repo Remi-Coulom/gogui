@@ -83,9 +83,9 @@ public class GameTree
         }
     }
 
-    private GameInformation m_gameInformation;
+    private final GameInformation m_gameInformation;
 
-    private Node m_root;
+    private final Node m_root;
 
     private void setDate()
     {

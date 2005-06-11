@@ -65,9 +65,6 @@ public class AnalyzeCommand
 
     public AnalyzeCommand(String line)
     {
-        m_scale = 1.0;
-        m_title = null;
-        m_type = AnalyzeCommand.NONE;
         String array[] = line.split("/");
         String typeStr = array[0];        
         if (typeStr.equals("bwboard"))
@@ -106,12 +103,18 @@ public class AnalyzeCommand
             m_type = AnalyzeCommand.VARPO;
         else if (typeStr.equals("varw"))
             m_type = AnalyzeCommand.VARW;
+        else
+            m_type = AnalyzeCommand.NONE;
         m_label = array[1];
         m_command = array[2];
         if (array.length > 3)
             m_title = array[3];
+        else
+            m_title = null;
         if (array.length > 4)
             m_scale = Double.parseDouble(array[4]);
+        else
+            m_scale = 1.0;
     }
 
     public AnalyzeCommand(int type, String label, String command,
@@ -364,21 +367,21 @@ public class AnalyzeCommand
         m_optStringArg = value;
     }
 
-    private int m_type;
+    private final int m_type;
 
-    private double m_scale;
+    private final double m_scale;
 
     private go.Color m_colorArg;
 
     private File m_fileArg;
 
-    private String m_label;
+    private final String m_label;
 
     private String m_optStringArg;
 
-    private String m_command;
+    private final String m_command;
 
-    private String m_title;
+    private final String m_title;
 
     private String m_stringArg;
 

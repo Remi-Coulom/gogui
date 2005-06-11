@@ -93,7 +93,7 @@ public class FindDialog
 
     private JTextField m_textField;
 
-    private String m_initialValue;
+    private final String m_initialValue;
 
     private String m_pattern;
 

@@ -690,9 +690,9 @@ class GoGui
             analyzeContinue(m_checkComputerMove, m_resetBoard);
         }
         
-        private boolean m_checkComputerMove;
+        private final boolean m_checkComputerMove;
 
-        private boolean m_resetBoard;
+        private final boolean m_resetBoard;
     }
 
     private class ShowInvalidResponse
@@ -708,7 +708,7 @@ class GoGui
             showError("Invalid response:\n" + m_line);
         }
         
-        private String m_line;
+        private final String m_line;
     }
 
     private static class LoadFileRunnable
@@ -731,9 +731,9 @@ class GoGui
                                       m_file.length());
         }
 
-        private File m_file;
+        private final File m_file;
 
-        private FileInputStream m_in;
+        private final FileInputStream m_in;
 
         private sgf.Reader m_reader;
     }

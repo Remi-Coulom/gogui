@@ -93,29 +93,29 @@ public class ScoreDialog
         m_result.setText(score.formatResult());
     }
 
-    private JButton m_cancelButton;
+    private final JButton m_cancelButton;
 
-    private JTextField m_territoryBlack;
+    private final JTextField m_territoryBlack;
 
-    private JTextField m_territoryWhite;
+    private final JTextField m_territoryWhite;
 
-    private JTextField m_areaBlack;
+    private final JTextField m_areaBlack;
 
-    private JTextField m_areaWhite;
+    private final JTextField m_areaWhite;
 
-    private JTextField m_capturedBlack;
+    private final JTextField m_capturedBlack;
 
-    private JTextField m_capturedWhite;
+    private final JTextField m_capturedWhite;
 
-    private JTextField m_komi;
+    private final JTextField m_komi;
 
-    private JTextField m_resultChinese;
+    private final JTextField m_resultChinese;
 
-    private JTextField m_resultJapanese;
+    private final JTextField m_resultJapanese;
 
-    private JTextField m_rules;
+    private final JTextField m_rules;
 
-    private JTextField m_result;
+    private final JTextField m_result;
 
     private void close()
     {

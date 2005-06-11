@@ -385,7 +385,7 @@ public class MenuBar
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-    private ActionListener m_listener;
+    private final ActionListener m_listener;
 
     private File[] m_recent = new File[m_maxRecent];
 
@@ -405,21 +405,21 @@ public class MenuBar
 
     private JMenu m_menuComputerColor;
 
-    private JMenu m_menuFile;
+    private final JMenu m_menuFile;
 
-    private JMenu m_menuGame;
+    private final JMenu m_menuGame;
 
-    private JMenu m_menuHelp;
+    private final JMenu m_menuHelp;
 
     private JMenu m_menuRecent;
 
-    private JMenu m_menuSettings;
+    private final JMenu m_menuSettings;
 
-    private JMenu m_menuSetup;
+    private final JMenu m_menuSetup;
 
-    private JMenu m_menuVariation;
+    private final JMenu m_menuVariation;
 
-    private JMenuBar m_menuBar;
+    private final JMenuBar m_menuBar;
 
     private JMenu m_menuWindow;
 

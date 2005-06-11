@@ -188,9 +188,9 @@ public class Options
         return opt;
     }
 
-    private Vector m_args = new Vector();
+    private final Vector m_args = new Vector();
 
-    private Map m_map = new TreeMap();
+    private final Map m_map = new TreeMap();
 
     private String getSpec(String option) throws ErrorMessage
     {

@@ -68,21 +68,21 @@ public class RadialGradientContext
         return m_raster;
     }
 
-    private int m_red1;
+    private final int m_red1;
 
-    private int m_redDiff;
+    private final int m_redDiff;
 
-    private int m_green1;
+    private final int m_green1;
 
-    private int m_greenDiff;
+    private final int m_greenDiff;
 
-    private int m_blue1;
+    private final int m_blue1;
 
-    private int m_blueDiff;
+    private final int m_blueDiff;
 
-    private int m_alpha1;
+    private final int m_alpha1;
 
-    private int m_alphaDiff;
+    private final int m_alphaDiff;
 
     private int m_x;
 
@@ -92,9 +92,9 @@ public class RadialGradientContext
 
     private int m_width;
 
-    private double m_radius;
+    private final double m_radius;
 
-    private Point2D m_point;
+    private final Point2D m_point;
 
     private WritableRaster m_raster;
 }

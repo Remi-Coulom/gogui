@@ -167,9 +167,9 @@ class GtpShellText
 
     private boolean m_highlight;
 
-    private int m_historyMin;
+    private final int m_historyMin;
 
-    private int m_historyMax;
+    private final int m_historyMax;
 
     private int m_lines;
 
@@ -567,7 +567,7 @@ public class GtpShell
             m_gtpShell.appendSentCommand(m_text);
         }
 
-        private String m_text;
+        private final String m_text;
 
         private GtpShell m_gtpShell;
     }
@@ -585,9 +585,9 @@ public class GtpShell
             m_gtpShell.appendInvalidResponse(m_text);
         }
 
-        private String m_text;
+        private final String m_text;
 
-        private GtpShell m_gtpShell;
+        private final GtpShell m_gtpShell;
     }
 
     private static class UpdateResponse implements Runnable
@@ -604,11 +604,11 @@ public class GtpShell
             m_gtpShell.appendResponse(m_error, m_text);
         }
 
-        private boolean m_error;
+        private final boolean m_error;
 
-        private String m_text;
+        private final String m_text;
 
-        private GtpShell m_gtpShell;
+        private final GtpShell m_gtpShell;
     }
 
     private static class UpdateStdErr implements Runnable
@@ -626,9 +626,9 @@ public class GtpShell
             m_gtpShell.setFinalSize();
         }
 
-        private String m_text;
+        private final String m_text;
 
-        private GtpShell m_gtpShell;
+        private final GtpShell m_gtpShell;
     }
 
     private boolean m_autoNumber;
@@ -676,9 +676,9 @@ public class GtpShell
 
     private java.awt.Point m_finalLocation;
 
-    private StringBuffer m_commands = new StringBuffer(4096);
+    private final StringBuffer m_commands = new StringBuffer(4096);
 
-    private Vector m_history = new Vector(128, 128);
+    private final Vector m_history = new Vector(128, 128);
 
     private String m_programCommand = "unknown";
 

@@ -157,7 +157,7 @@ public class Preferences
     /** Properties changed since last load? */
     private boolean m_changed;
 
-    private Properties m_properties = new Properties();
+    private final Properties m_properties = new Properties();
 
     private File getFilename()
     {

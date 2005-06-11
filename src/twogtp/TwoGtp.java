@@ -78,6 +78,8 @@ public class TwoGtp
             m_observer = new Gtp(observer, verbose, null);
             m_observer.setLogPrefix("O");
         }
+        else
+            m_observer = null;
         m_inconsistentState = false;
         m_black.queryProtocolVersion();
         m_white.queryProtocolVersion();
@@ -96,7 +98,12 @@ public class TwoGtp
             m_refereeVersion = getVersion(m_referee);        
             m_referee.querySupportedCommands();
             m_referee.queryInterruptSupport();
-        }        
+        }
+        else
+        {
+            m_refereeName = null;
+            m_refereeVersion = null;
+        }
         if (m_observer != null)
         {
             m_observer.queryProtocolVersion();
@@ -321,17 +328,17 @@ public class TwoGtp
         public double m_referee;
     }
 
-    private boolean m_alternate;
+    private final boolean m_alternate;
 
-    private boolean m_estimateScore;
+    private final boolean m_estimateScore;
 
     private boolean m_gameSaved;
 
     private boolean m_inconsistentState;
 
-    private boolean m_isKomiFixed;
+    private final boolean m_isKomiFixed;
 
-    private boolean m_loadsgf;
+    private final boolean m_loadsgf;
 
     private boolean m_observerIsDisabled;
 
@@ -339,15 +346,15 @@ public class TwoGtp
 
     private boolean m_resigned;
 
-    private boolean m_verbose;
+    private final boolean m_verbose;
 
     private int m_gameIndex;
 
-    private int m_numberGames;
+    private final int m_numberGames;
 
     private int m_openingMovesIndex;
 
-    private int m_size;
+    private final int m_size;
 
     private double m_komi;
 
@@ -363,35 +370,35 @@ public class TwoGtp
 
     private Node m_currentNode;
 
-    private Openings m_openings;
+    private final Openings m_openings;
 
-    private String m_blackName;
+    private final String m_blackName;
 
-    private String m_blackVersion;
+    private final String m_blackVersion;
 
     private String m_openingFile;
 
-    private String m_refereeCommand;
+    private final String m_refereeCommand;
 
-    private String m_refereeName;
+    private final String m_refereeName;
 
-    private String m_refereeVersion;
+    private final String m_refereeVersion;
 
-    private String m_sgfFile;
+    private final String m_sgfFile;
 
-    private String m_whiteName;
+    private final String m_whiteName;
 
-    private String m_whiteVersion;
+    private final String m_whiteVersion;
 
-    private HashMap m_scoreEstimates = new HashMap();
+    private final HashMap m_scoreEstimates = new HashMap();
 
-    private Vector m_games = new Vector(100, 100);;
+    private final Vector m_games = new Vector(100, 100);;
 
     private Vector m_openingMoves;
 
     private Gtp m_black;
 
-    private Gtp m_observer;
+    private final Gtp m_observer;
 
     private Gtp m_referee;
 

@@ -211,7 +211,7 @@ public class Field
 
     private boolean m_crossHair;
 
-    private boolean m_fastPaint;
+    private final boolean m_fastPaint;
 
     private boolean m_lastMoveMarker;
 
@@ -264,9 +264,9 @@ public class Field
 
     private go.Color m_color = go.Color.EMPTY;
 
-    private go.Point m_point;
+    private final go.Point m_point;
 
-    private gui.Board m_board;
+    private final gui.Board m_board;
 
     private Graphics m_graphics;
 

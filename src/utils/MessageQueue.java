@@ -80,7 +80,7 @@ public class MessageQueue
         return m_queue.remove(0);
     }
 
-    private Vector m_queue = new Vector();
+    private final Vector m_queue = new Vector();
 }
 
 //----------------------------------------------------------------------------

@@ -91,19 +91,20 @@ public class Analyze
 
     private String m_openings;
 
-    private Vector m_entries = new Vector(128, 128);
+    private final Vector m_entries = new Vector(128, 128);
 
-    private Statistics m_length = new Statistics();
+    private final Statistics m_length = new Statistics();
 
-    private ResultStatistics m_statisticsBlack = new ResultStatistics();
+    private final ResultStatistics m_statisticsBlack = new ResultStatistics();
 
-    private ResultStatistics m_statisticsReferee = new ResultStatistics();
+    private final ResultStatistics m_statisticsReferee
+        = new ResultStatistics();
 
-    private ResultStatistics m_statisticsWhite = new ResultStatistics();
+    private final ResultStatistics m_statisticsWhite = new ResultStatistics();
 
-    private Statistics m_cpuBlack = new Statistics();
+    private final Statistics m_cpuBlack = new Statistics();
 
-    private Statistics m_cpuWhite = new Statistics();
+    private final Statistics m_cpuWhite = new Statistics();
 
     private void calcStatistics()
     {
@@ -633,11 +634,11 @@ class Histogram
                   "</p>\n");
     }
 
-    private int m_size;
+    private final int m_size;
 
-    private double m_min;
+    private final double m_min;
 
-    private double m_step;
+    private final double m_step;
 
     private int[] m_array;
 }

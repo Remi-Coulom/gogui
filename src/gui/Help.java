@@ -131,7 +131,7 @@ public class Help
 
     private JButton m_buttonForward;
 
-    private JEditorPane m_editorPane;
+    private final JEditorPane m_editorPane;
 
     private java.util.List m_history = new ArrayList();
 
@@ -141,7 +141,7 @@ public class Help
 
     private JMenuItem m_itemForward;
 
-    private URL m_contents;
+    private final URL m_contents;
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
                                   String command)

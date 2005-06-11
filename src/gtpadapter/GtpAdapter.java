@@ -143,34 +143,34 @@ public class GtpAdapter
         interruptProgram(m_gtp);
     }
 
-    private boolean m_emuHandicap;
+    private final boolean m_emuHandicap;
 
-    private boolean m_emuLoadsgf;
+    private final boolean m_emuLoadsgf;
 
-    private boolean m_fillPasses;
+    private final boolean m_fillPasses;
 
-    private boolean m_noScore;
+    private final boolean m_noScore;
 
-    private boolean m_resign;
+    private final boolean m_resign;
 
-    private boolean m_version1;
+    private final boolean m_version1;
 
     /** Only accept this board size.
         A value of -1 means accept any size.
     */
-    private int m_size;
+    private final int m_size;
 
     private int m_boardSize;
 
-    private int m_resignScore;
+    private final int m_resignScore;
 
     private Board m_board;
 
-    private Gtp m_gtp;
+    private final Gtp m_gtp;
 
-    private Stack m_passInserted = new Stack();
+    private final Stack m_passInserted = new Stack();
 
-    private String m_name;
+    private final String m_name;
 
     private boolean checkResign(Color color, StringBuffer response)
     {

@@ -90,9 +90,9 @@ public final class Move
             return (m_color.toString() + " " + m_point.toString());
     }
 
-    private Color m_color;
+    private final Color m_color;
 
-    private Point m_point;
+    private final Point m_point;
 }
 
 //----------------------------------------------------------------------------

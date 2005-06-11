@@ -253,9 +253,9 @@ public class Clock
 
     private Color m_toMove = Color.EMPTY;
 
-    private TimeRecord m_timeRecordBlack = new TimeRecord();
+    private final TimeRecord m_timeRecordBlack = new TimeRecord();
 
-    private TimeRecord m_timeRecordWhite = new TimeRecord();
+    private final TimeRecord m_timeRecordWhite = new TimeRecord();
 
     private TimeSettings m_timeSettings;
 

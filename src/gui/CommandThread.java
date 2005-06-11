@@ -260,7 +260,7 @@ public class CommandThread
             return true;
         }
 
-        private String m_command;
+        private final String m_command;
     };
 
     private boolean m_commandInProgress;

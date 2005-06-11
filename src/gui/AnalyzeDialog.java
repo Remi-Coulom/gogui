@@ -199,7 +199,7 @@ public class AnalyzeDialog
 
     private go.Color m_selectedColor = go.Color.EMPTY;
 
-    private CommandThread m_commandThread;
+    private final CommandThread m_commandThread;
 
     private JButton m_clearButton;
 
@@ -223,15 +223,15 @@ public class AnalyzeDialog
 
     private JPanel m_colorPanel;
 
-    private Vector m_commands = new Vector(128, 64);
+    private final Vector m_commands = new Vector(128, 64);
 
-    private Vector m_supportedCommands;
+    private final Vector m_supportedCommands;
 
-    private Vector m_labels = new Vector(128, 64);
+    private final Vector m_labels = new Vector(128, 64);
 
-    private Callback m_callback;
+    private final Callback m_callback;
 
-    private Preferences m_prefs;
+    private final Preferences m_prefs;
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
                                   String command)
