@@ -288,6 +288,33 @@ gmptogtp -list
 </refsection>
 
 <refsection>
+<title>Test GNU Go's GMP mode</title>
+<simpara>
+GNU Go can communicate via GMP over standard input and output.
+It does not make much sense to use it with GmpToGtp that way, because GNU Go
+implements GTP directly, but it can be used to test GNU Go's GMP mode without
+needing a real serial port:
+</simpara>
+<para>
+<programlisting>
+<userinput>
+gmptogtp -color black -verbose "gnugo --mode gmp"
+</userinput>
+</programlisting>
+</para>
+<simpara>
+or with a graphical display:
+</simpara>
+<para>
+<programlisting>
+<userinput>
+gogui -program "gmptogtp -color black -verbose \"gnugo --mode gmp\""
+</userinput>
+</programlisting>
+</para>
+</refsection>
+
+<refsection>
 <title>Play game between a program and the serial line with graphical
 display</title>
 <simpara>
