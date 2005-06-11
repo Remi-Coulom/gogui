@@ -603,7 +603,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 
 <target name="test" depends="test-compile"
  description="Run JUnit tests" >
-<junit printsummary="true" fork="true" timeout="10000" haltonfailure="true">
+<junit printsummary="withOutAndErr" fork="true" timeout="10000"
+ haltonfailure="true">
 <classpath>
 <pathelement location="build"/>
 <pathelement location="build/test"/>
@@ -618,7 +619,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <target name="test-compile" depends="compile,test-depend">
 <mkdir dir="build/test"/>
 <javac srcdir="test" destdir="build/test" source="1.4" target="1.4"
- deprecation="true" listfiles="yes" classpath="build"/>
+ deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
+ classpath="build"/>
 <copy todir="build/test">
 <fileset dir="test" includes="sgf/*.sgf"/>
 </copy>
