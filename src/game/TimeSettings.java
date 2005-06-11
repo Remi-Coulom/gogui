@@ -93,10 +93,10 @@ public final class TimeSettings
             throw new Error("Byoyomi time must be positive");
         if (byoyomiMoves <= 0)
             throw new Error("Moves for byoyomi time must be positive");
-        if (! useByoyomi)
-            return new TimeSettings(preByoyomi);
-        else
+        if (useByoyomi)
             return new TimeSettings(preByoyomi, byoyomi, byoyomiMoves);
+        else
+            return new TimeSettings(preByoyomi);
     }
 
     private final long m_preByoyomi;
