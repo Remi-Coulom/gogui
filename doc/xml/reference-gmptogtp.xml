@@ -298,7 +298,7 @@ needing a real serial port:
 <para>
 <programlisting>
 <userinput>
-gmptogtp -color black -verbose "gnugo --mode gmp"
+gmptogtp -color white -verbose "gnugo --mode gmp"
 </userinput>
 </programlisting>
 </para>
@@ -308,7 +308,7 @@ or with a graphical display:
 <para>
 <programlisting>
 <userinput>
-gogui -program "gmptogtp -color black -verbose \"gnugo --mode gmp\""
+gogui -program "gmptogtp -color white -verbose \"gnugo --mode gmp\""
 </userinput>
 </programlisting>
 </para>
