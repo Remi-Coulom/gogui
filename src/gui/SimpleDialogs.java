@@ -139,15 +139,13 @@ public class SimpleDialogs
         if (Platform.isMac())
         {
             Frame frame = findParentFrame(parent);
-            return showFileChooserAWT(frame, type, lastFile, setSgfFilter,
-                                      title);
+            return showFileChooserAWT(frame, type, setSgfFilter, title);
         }
         return showFileChooserSwing(parent, type, lastFile, setSgfFilter,
                                     title);
     }
 
     private static File showFileChooserAWT(Frame parent, int type,
-                                           File lastFile,
                                            boolean setSgfFilter, String title)
     {
         if (m_lastFile == null)

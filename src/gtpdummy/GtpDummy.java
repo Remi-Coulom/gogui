@@ -49,7 +49,7 @@ public class GtpDummy
         else if (cmd.equals("boardsize"))
             status = cmdBoardsize(cmdArray, response);
         else if (cmd.equals("clear_board"))
-            status = cmdClearBoard(response);
+            status = cmdClearBoard();
         else if (cmd.equals("dummy_bwboard"))
             bwBoard(response);
         else if (cmd.equals("dummy_delay"))
@@ -176,7 +176,7 @@ public class GtpDummy
         return true;
     }
 
-    private boolean cmdClearBoard(StringBuffer response)
+    private boolean cmdClearBoard()
     {
         initSize(m_size);
         return true;
