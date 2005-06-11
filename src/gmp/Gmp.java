@@ -168,6 +168,8 @@ class Cmd
             if (val == 6)
                 return "STAR OF POLAND";
             break;
+        default:
+            break;
         }
         if (val == 0 && zeroMeansUnknown)
             return "UNKNOWN";
