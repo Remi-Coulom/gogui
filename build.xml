@@ -603,7 +603,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 
 <target name="test" depends="test-compile"
  description="Run JUnit tests" >
-<junit printsummary="true" fork="true" haltonfailure="true">
+<junit printsummary="true" fork="true" timeout="10000" haltonfailure="true">
 <classpath>
 <pathelement location="build"/>
 <pathelement location="build/test"/>
