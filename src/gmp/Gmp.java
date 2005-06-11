@@ -529,7 +529,7 @@ class MainThread
         {
             m_state = STATE_DISCONNECTED;
         }
-        Util.log("input stream was closed", true);
+        Util.log("input stream was closed", m_verbose);
         m_writeThread.interrupt();
     }
 
