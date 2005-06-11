@@ -366,7 +366,6 @@ public class Board
         m_cachedFont = font;
         m_cachedFontFieldSize = fieldSize;
         graphics.setFont(font);
-        return;
     }
 
     public void scoreBegin(go.Point[] isDeadStone)
