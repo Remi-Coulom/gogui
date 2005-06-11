@@ -239,6 +239,11 @@ public abstract class GtpEngine
     */
     public abstract void interruptCommand();
 
+    /** Handle command..
+        This method has to be implemented by the subclass.
+        It should return true for success, false for failure and
+        the response in the StringBuffer argument.
+    */
     public abstract boolean handleCommand(String command,
                                           StringBuffer response);
 
