@@ -22,10 +22,10 @@
 70 play black c3
 
 80 genmove white
-#? [[A-T]1*[1-9]]
+#? [[A-T]1?[0-9]]
 
 90 genmove b
-#? [[A-T]1*[1-9]]
+#? [[A-T]1?[0-9]]
 
 100 play w pass
 
