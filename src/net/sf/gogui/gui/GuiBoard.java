@@ -83,7 +83,8 @@ public final class GuiBoard
         m_board = board;
         m_fastPaint = fastPaint;
         setPreferredFieldSize();
-        URL url = getClass().getClassLoader().getResource("images/wood.png");
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL url = classLoader.getResource("net/sf/gogui/images/wood.png");
         if (url != null)
             m_image = new ImageIcon(url).getImage();
         else
