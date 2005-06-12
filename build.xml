@@ -83,6 +83,7 @@ $Source$
 <fileset dir="build/depcache"/>
 <fileset dir="build/depcache-test"/>
 <fileset dir="build/net"/>
+<fileset dir="build/test"/>
 <fileset dir="build/GoGui.app"/>
 <fileset dir="build" includes="GoGui*.dmg"/>
 </delete>
