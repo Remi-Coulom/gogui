@@ -543,6 +543,23 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </jar>
 </target>
 
+<target name="regress" depends="gmptogtp.jar,gtpdummy.jar,gtpregress.jar"
+ description="
+Run GTP regression tests for tools with GTP interface.
+Requires GNU Go 3.6 to be installed">
+<mkdir dir="regress/html"/>
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<arg value="-output"/><arg value="html/gtpdummy"/>
+<arg value="java -jar ../lib/gtpdummy.jar"/>
+<arg value="gtpdummy.tst"/>
+</java>
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<arg value="-output"/><arg value="html/gmptogtp"/>
+<arg value="java -jar ../lib/gmptogtp.jar -color black &quot;gnugo --mode gmp&quot;"/>
+<arg value="gmptogtp.tst"/>
+</java>
+</target>
+
 <target name="sgftotex.jar" depends="compile">
 <mkdir dir="lib"/>
 <jar destfile="lib/sgftotex.jar">
