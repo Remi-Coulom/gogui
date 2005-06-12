@@ -11,6 +11,13 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Move all classes to the namespace net.sf.gogui;
+avoid using class names that are already used basic java packages,
+like Color or Point.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Include Sun's implementation of the Java Communications API and the
 Docbook XSL files in the distribution to make compilation easier.
 </simpara>
