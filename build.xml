@@ -147,12 +147,12 @@ $Source$
  sgf/openings/9x9/*.sgf
  sgf/openings/19x19/README
  sgf/openings/19x19/*.sgf
- net/sf/gogui/src/net/sf/gogui/images/*.png
- net/sf/gogui/src/net/sf/gogui/overview.html
- net/sf/gogui/src/net/sf/gogui/*/package.html
- net/sf/gogui/src/net/sf/gogui/*/*.java
- net/sf/gogui/src/net/sf/gogui/*/*.java.in
- net/sf/gogui/test/net/sf/gogui/*/*.java
+ src/net/sf/gogui/images/*.png
+ src/net/sf/gogui/overview.html
+ src/net/sf/gogui/*/package.html
+ src/net/sf/gogui/*/*.java
+ src/net/sf/gogui/*/*.java.in
+ test/net/sf/gogui/*/*.java
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
