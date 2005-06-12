@@ -58,6 +58,10 @@ additional files with name
 <filename><replaceable>test</replaceable>.out.html</filename>
 are generated.
 </para>
+<para>
+The return value of <command>gtpregress</command> is 0, if all tests
+completed successfully with no unexpected fails, -1 otherwise.
+</para>
 </refsection>
 
 <refsection>
