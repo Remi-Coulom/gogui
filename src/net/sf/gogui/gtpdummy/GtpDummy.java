@@ -153,12 +153,16 @@ public class GtpDummy
 
     private void bwBoard(StringBuffer response)
     {        
-        response.append("\n");
+        response.append('\n');
         for (int x = 0; x < m_size; ++x)
         {
             for (int y = 0; y < m_size; ++y)
-                response.append(m_random.nextBoolean() ? "B " : "W ");
-            response.append("\n");
+            {
+                response.append(m_random.nextBoolean() ? 'B' : 'W');
+                if (y < m_size - 1)
+                    response.append(' ');
+            }
+            response.append('\n');
         }                    
     }
 
