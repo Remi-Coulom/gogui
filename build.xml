@@ -80,32 +80,9 @@ $Source$
 
 <target name="clean-build-dir">
 <delete failonerror="false" includeEmptyDirs="true">
-<fileset dir="build/config"/>
 <fileset dir="build/depcache"/>
 <fileset dir="build/depcache-test"/>
-<fileset dir="build/doc"/>
-<fileset dir="build/game"/>
-<fileset dir="build/gmp"/>
-<fileset dir="build/gmptogtp"/>
-<fileset dir="build/go"/>
-<fileset dir="build/gtp"/>
-<fileset dir="build/gtpadapter"/>
-<fileset dir="build/gtpdisplay"/>
-<fileset dir="build/gtpdummy"/>
-<fileset dir="build/gtpregress"/>
-<fileset dir="build/gtpserver"/>
-<fileset dir="build/gtpterminal"/>
-<fileset dir="build/gogui"/>
-<fileset dir="build/gui"/>
-<fileset dir="build/images"/>
-<fileset dir="build/latex"/>
-<fileset dir="build/netgtp"/>
-<fileset dir="build/sgf"/>
-<fileset dir="build/sgftotex"/>
-<fileset dir="build/test"/>
-<fileset dir="build/twogtp"/>
-<fileset dir="build/utils"/>
-<fileset dir="build/version"/>
+<fileset dir="build/net"/>
 <fileset dir="build/GoGui.app"/>
 <fileset dir="build" includes="GoGui*.dmg"/>
 </delete>
@@ -117,12 +94,12 @@ $Source$
  deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
  classpath="external/javacomm/commapi/comm.jar"/>
 <copy todir="build">
-<fileset dir="src" includes="images/*.png"/>
+<fileset dir="src" includes="net/sf/gogui/images/*.png"/>
 </copy>
-<copy todir="build/doc">
+<copy todir="build/net/sf/gogui/doc">
 <fileset dir="doc/html" includes="*.html *.css *.png"/>
 </copy>
-<copy todir="build/config">
+<copy todir="build/net/sf/gogui/config">
 <fileset dir="config" includes="analyze-commands"/>
 </copy>
 </target>
@@ -162,19 +139,19 @@ $Source$
  mac/packaging/Info.plist
  mac/packaging/Info.plist.in
  mac/packaging/PkgInfo
- mac/src/specialmac/RegisterSpecialMacHandler.java
- mac/src/specialmac/RegisterSpecialMacHandler.class
- mac/src/specialmac/Listener.class  
+ mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
+ mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.class
+ mac/src/net/sf/gogui/specialmac/Listener.class  
  sgf/openings/9x9/README
  sgf/openings/9x9/*.sgf
  sgf/openings/19x19/README
  sgf/openings/19x19/*.sgf
- src/images/*.png
- src/overview.html
- src/*/package.html
- src/*/*.java
- src/*/*.java.in
- test/*/*.java
+ net/sf/gogui/src/net/sf/gogui/images/*.png
+ net/sf/gogui/src/net/sf/gogui/overview.html
+ net/sf/gogui/src/net/sf/gogui/*/package.html
+ net/sf/gogui/src/net/sf/gogui/*/*.java
+ net/sf/gogui/src/net/sf/gogui/*/*.java.in
+ net/sf/gogui/test/net/sf/gogui/*/*.java
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
@@ -207,7 +184,7 @@ $Source$
 <replace dir="doc/html" includes="*.html" token="&lt;div&gt;&lt;/div&gt;"
  encoding="UTF-8"/>
 <copy todir="doc/html">
-<fileset dir="src/images" includes="project-support.png"/>
+<fileset dir="src/net/sf/gogui/images" includes="project-support.png"/>
 </copy>
 </target>
 
@@ -226,7 +203,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </xmlcatalog>
 </style>
 <copy todir="doc/html">
-<fileset dir="src/images" includes="project-support.png"/>
+<fileset dir="src/net/sf/gogui/images" includes="project-support.png"/>
 </copy>
 </target>
 
@@ -266,18 +243,18 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <attribute name="Main-Class" value="gmptogtp.Main"/>
 </manifest>
 <fileset dir="build" includes="
- gmp/*.class
- gmptogtp/*.class
- go/Color.class
- go/Point.class
- gtp/*.class
- gtp/ReadThread.class
- utils/ErrorMessage.class
- utils/Options.class
- utils/ProcessUtils*.class
- utils/StreamCopy.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/gmp/*.class
+ net/sf/gogui/gmptogtp/*.class
+ net/sf/gogui/go/Color.class
+ net/sf/gogui/go/Point.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gtp/ReadThread.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/ProcessUtils*.class
+ net/sf/gogui/utils/StreamCopy.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -333,26 +310,26 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar">
 <manifest>
-<attribute name="Main-Class" value="gogui.SplashScreen"/>
+<attribute name="Main-Class" value="net.sf.gogui.gogui.SplashScreen"/>
 </manifest>
 <fileset dir="build" includes="
- config/analyze-commands
- doc/*.html
- doc/*.png
- doc/*.css
- game/*.class
- go/*.class
- gtp/*.class
- gogui/*.class
- gui/*.class
- images/*.png
- latex/*.class
- sgf/*.class
- utils/*.class
- version/Version.class
+ net/sf/gogui/config/analyze-commands
+ net/sf/gogui/doc/*.html
+ net/sf/gogui/doc/*.png
+ net/sf/gogui/doc/*.css
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gogui/*.class
+ net/sf/gogui/gui/*.class
+ net/sf/gogui/images/*.png
+ net/sf/gogui/latex/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/utils/*.class
+ net/sf/gogui/version/Version.class
 "/>
 <fileset dir="mac/src" includes="
- specialmac/*.class
+ net/sf/gogui/specialmac/*.class
 "/>
 </jar>
 </target>
@@ -361,21 +338,21 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpadapter.jar">
 <manifest>
-<attribute name="Main-Class" value="gtpadapter.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.gtpadapter.Main"/>
 </manifest>
 <fileset dir="build" includes="
- game/*.class
- go/*.class
- gtp/*.class
- gtpadapter/*.class
- sgf/*.class
- utils/ErrorMessage.class
- utils/MessageQueue.class
- utils/Options.class
- utils/ProcessUtils*.class
- utils/ProgressShow*.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gtpadapter/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/MessageQueue.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/ProcessUtils*.class
+ net/sf/gogui/utils/ProgressShow*.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -384,30 +361,30 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpdisplay.jar">
 <manifest>
-<attribute name="Main-Class" value="gtpdisplay.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.gtpdisplay.Main"/>
 </manifest>
 <fileset dir="build" includes="
- game/*.class
- go/*.class
- gui/Board*.class
- gui/BoardLabel.class
- gui/Field*.class
- gui/GuiUtils.class
- gui/SimpleDialogs.class
- gtp/*.class
- gtpdisplay/*.class
- images/gogui*.png
- images/wood.png
- latex/Filter.class
- sgf/Filter.class
- utils/ErrorMessage.class
- utils/MessageQueue.class
- utils/Platform.class
- utils/Options.class
- utils/RadialGradient*.class
- utils/SquareLayout.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gui/Board*.class
+ net/sf/gogui/gui/BoardLabel.class
+ net/sf/gogui/gui/Field*.class
+ net/sf/gogui/gui/GuiUtils.class
+ net/sf/gogui/gui/SimpleDialogs.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gtpdisplay/*.class
+ net/sf/gogui/images/gogui*.png
+ net/sf/gogui/images/wood.png
+ net/sf/gogui/latex/Filter.class
+ net/sf/gogui/sgf/Filter.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/MessageQueue.class
+ net/sf/gogui/utils/Platform.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/RadialGradient*.class
+ net/sf/gogui/utils/SquareLayout.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -416,18 +393,18 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpdummy.jar">
 <manifest>
-<attribute name="Main-Class" value="gtpdummy.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.gtpdummy.Main"/>
 </manifest>
 <fileset dir="build" includes="
- go/Color.class
- go/Move.class
- go/Point.class
- gtp/*.class
- gtpdummy/*.class
- utils/ErrorMessage.class
- utils/Options.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/go/Color.class
+ net/sf/gogui/go/Move.class
+ net/sf/gogui/go/Point.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gtpdummy/*.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -436,21 +413,21 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpregress.jar">
 <manifest>
-<attribute name="Main-Class" value="gtpregress.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.gtpregress.Main"/>
 </manifest>
 <fileset dir="build" includes="
- go/Color.class
- go/Move.class
- go/Point.class
- gtp/*.class
- gtpregress/*.class
- utils/ErrorMessage.class
- utils/FileUtils.class
- utils/MessageQueue.class
- utils/Options.class
- utils/ProcessUtils*.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/go/Color.class
+ net/sf/gogui/go/Move.class
+ net/sf/gogui/go/Point.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gtpregress/*.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/FileUtils.class
+ net/sf/gogui/utils/MessageQueue.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/ProcessUtils*.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -459,16 +436,16 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpserver.jar">
 <manifest>
-<attribute name="Main-Class" value="gtpserver.GtpServer"/>
+<attribute name="Main-Class" value="net.sf.gogui.gtpserver.GtpServer"/>
 </manifest>
 <fileset dir="build" includes="
- gtpserver/*.class
- utils/ErrorMessage.class
- utils/Options.class
- utils/ProcessUtils*.class
- utils/StreamCopy.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/gtpserver/*.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/ProcessUtils*.class
+ net/sf/gogui/utils/StreamCopy.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -477,22 +454,22 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpterminal.jar">
 <manifest>
-<attribute name="Main-Class" value="gtpterminal.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.gtpterminal.Main"/>
 </manifest>
 <fileset dir="build" includes="
- game/*.class
- go/*.class
- gtp/*.class
- gtpterminal/*.class
- sgf/*.class
- utils/ErrorMessage.class
- utils/FileUtils.class
- utils/MessageQueue.class
- utils/Options.class
- utils/ProcessUtils*.class
- utils/ProgressShow*.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/gtpterminal/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/FileUtils.class
+ net/sf/gogui/utils/MessageQueue.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/ProcessUtils*.class
+ net/sf/gogui/utils/ProgressShow*.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -501,28 +478,28 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  description="Create Javadoc documentation for public parts of packages">
 <javadoc sourcepath="src" destdir="javadoc" source="1.4"
  windowtitle="GoGui Source Documentation"
- overview="src/overview.html"
+ overview="src/net/sf/gogui/overview.html"
  packagenames="
-  game.*,
-  gmp.*,
-  gmptogtp.*,
-  go.*,
-  gogui.*,
-  gtp.*,
-  gtpadapter.*,
-  gtpdisplay.*,
-  gtpdummy.*,
-  gtpregress.*,
-  gtpserver.*,
-  gtpterminal.*,
-  gui.*,
-  latex.*,
-  netgtp.*,
-  sgf.*,
-  sgftotex.*,
-  twogtp.*,
-  utils.*,
-  version.*
+  net/sf/gogui/game.*,
+  net/sf/gogui/gmp.*,
+  net/sf/gogui/gmptogtp.*,
+  net/sf/gogui/go.*,
+  net/sf/gogui/gogui.*,
+  net/sf/gogui/gtp.*,
+  net/sf/gogui/gtpadapter.*,
+  net/sf/gogui/gtpdisplay.*,
+  net/sf/gogui/gtpdummy.*,
+  net/sf/gogui/gtpregress.*,
+  net/sf/gogui/gtpserver.*,
+  net/sf/gogui/gtpterminal.*,
+  net/sf/gogui/gui.*,
+  net/sf/gogui/latex.*,
+  net/sf/gogui/netgtp.*,
+  net/sf/gogui/sgf.*,
+  net/sf/gogui/sgftotex.*,
+  net/sf/gogui/twogtp.*,
+  net/sf/gogui/utils.*,
+  net/sf/gogui/version.*
 ">
 <tag name="bug" scope="all" description="Bugs:"/>
 <tag name="todo" scope="all" description="To do:"/>
@@ -552,15 +529,15 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/netgtp.jar">
 <manifest>
-<attribute name="Main-Class" value="netgtp.NetGtp"/>
+<attribute name="Main-Class" value="net.sf.gogui.netgtp.NetGtp"/>
 </manifest>
 <fileset dir="build" includes="
- netgtp/*.class
- utils/ErrorMessage.class
- utils/Options.class
- utils/StreamCopy.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/netgtp/*.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/StreamCopy.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -569,20 +546,20 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/sgftotex.jar">
 <manifest>
-<attribute name="Main-Class" value="sgftotex.SgfToTex"/>
+<attribute name="Main-Class" value="net.sf.gogui.sgftotex.SgfToTex"/>
 </manifest>
 <fileset dir="build" includes="
- game/*.class
- go/*.class
- latex/*.class
- sgf/*.class
- sgftotex/*.class
- utils/ErrorMessage.class
- utils/FileUtils.class
- utils/Options.class
- utils/ProgressShow*.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/latex/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/sgftotex/*.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/FileUtils.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/ProgressShow*.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -622,7 +599,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
  classpath="build"/>
 <copy todir="build/test">
-<fileset dir="test" includes="sgf/*.sgf"/>
+<fileset dir="test" includes="net/sf/gogui/sgf/*.sgf"/>
 </copy>
 </target>
 
@@ -634,22 +611,22 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/twogtp.jar">
 <manifest>
-<attribute name="Main-Class" value="twogtp.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.twogtp.Main"/>
 </manifest>
 <fileset dir="build" includes="
- game/*.class
- go/*.class
- gtp/*.class
- sgf/*.class
- twogtp/*.class
- utils/ErrorMessage.class
- utils/FileUtils.class
- utils/MessageQueue.class
- utils/Options.class
- utils/ProcessUtils*.class
- utils/ProgressShow*.class
- utils/StringUtils.class
- version/Version.class
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gtp/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/twogtp/*.class
+ net/sf/gogui/utils/ErrorMessage.class
+ net/sf/gogui/utils/FileUtils.class
+ net/sf/gogui/utils/MessageQueue.class
+ net/sf/gogui/utils/Options.class
+ net/sf/gogui/utils/ProcessUtils*.class
+ net/sf/gogui/utils/ProgressShow*.class
+ net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/version/Version.class
 "/>
 </jar>
 </target>
@@ -657,9 +634,9 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <target name="version" depends="version-check-uptodate"
  unless="version-uptodate">
 <copy
-file="src/version/Version.java.in"
-tofile="src/version/Version.java" overwrite="true"/>
-<replace file="src/version/Version.java" token="@VERSION@"
+file="src/net/sf/gogui/version/Version.java.in"
+tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
+<replace file="src/net/sf/gogui/version/Version.java" token="@VERSION@"
  value="${version}"/>
 <copy
  file="doc/xml/version.xml.in"
@@ -673,7 +650,8 @@ tofile="src/version/Version.java" overwrite="true"/>
 </target>
 
 <target name="version-check-uptodate">
-<uptodate property="version-uptodate" targetfile="src/version/Version.java">
+<uptodate property="version-uptodate"
+ targetfile="src/net/sf/gogui/version/Version.java">
 <srcfiles dir="."
  includes="
   build.properties,
