@@ -46,8 +46,8 @@ public class GmpToGtp
             return cmdGenmove(cmdArray, response);
         else if (cmd.equals("gmp_queue"))
             return queue(response);
-        else if (cmd.equals("gmp_text"))
-            return sendTalk(cmdLine, response);
+        else if (cmd.equals("gmp_talk"))
+            return cmdTalk(cmdLine, response);
         else if (cmd.equals("gogui_interrupt"))
             ;
         else if (cmd.equals("gogui_title"))
@@ -56,7 +56,7 @@ public class GmpToGtp
             response.append("boardsize\n" +
                             "clear_board\n" +
                             "genmove\n" +
-                            "gmp_text\n" +
+                            "gmp_talk\n" +
                             "gmp_queue\n" +
                             "gogui_interrupt\n" +
                             "gogui_title\n" +
@@ -166,15 +166,10 @@ public class GmpToGtp
         return m_gmp.play(argument.m_color == GoColor.BLACK, x, y, response);
     }
 
-    private boolean queue(StringBuffer response)
-    {
-        return m_gmp.queue(response);
-    }
-
-    private boolean sendTalk(String command, StringBuffer response)
+    private boolean cmdTalk(String command, StringBuffer response)
     {
         int index = command.indexOf(' ');
-        if (index > 0)
+        if (index > 0 && ! command.substring(index + 1).trim().equals(""))
         {
             if (! m_gmp.sendTalk(command.substring(index + 1)))
             {
@@ -182,7 +177,18 @@ public class GmpToGtp
                 return false;
             }                
         }
+        else
+        {
+            String talk = m_gmp.getTalk();
+            talk = talk.replaceAll("\\n\\n", "\n \n");
+            response.append(talk);
+        }
         return true;
+    }
+
+    private boolean queue(StringBuffer response)
+    {
+        return m_gmp.queue(response);
     }
 
     private boolean undo(StringBuffer response)

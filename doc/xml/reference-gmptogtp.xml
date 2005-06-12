@@ -258,10 +258,12 @@ acknowledged.
 </varlistentry>
 
 <varlistentry>
-<term><command>gmp_text <replaceable>text</replaceable></command></term>
+<term><command>gmp_talk <replaceable>text</replaceable></command></term>
 <listitem>
 <para>
 Send text as talk characters.
+If no argument is given, all received talk is returned and the received talk
+buffer is cleared.
 </para>
 </listitem>
 </varlistentry>

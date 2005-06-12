@@ -477,6 +477,17 @@ class MainThread
         m_writeThread.start();
     }
 
+    /** Get all talk text received so far and clear talk buffer. */
+    public String getTalk()
+    {
+        synchronized (this)
+        {
+            String result = m_talkBuffer.toString();
+            m_talkBuffer.setLength(0);
+            return result;
+        }        
+    }
+
     public void interruptCommand()
     {
         synchronized (this)
@@ -699,6 +710,8 @@ class MainThread
 
     private final InputStream m_in;
 
+    private final StringBuffer m_talkBuffer = new StringBuffer();
+
     private final StringBuffer m_talkLine = new StringBuffer();
 
     private final Vector m_cmdQueue = new Vector(32, 32);
@@ -772,6 +785,7 @@ class MainThread
             }
             Util.log("talk '" + c + "'", m_verbose);
             m_talkLine.append(c);
+            m_talkBuffer.append(c);
             return;
         }
         // Start byte
@@ -1013,6 +1027,12 @@ public final class Gmp
         m_mainThread =
             new MainThread(input, output, size, colorIndex, simple, verbose);
         m_mainThread.start();
+    }
+
+    /** Get all talk text received so far and clear talk buffer. */
+    public String getTalk()
+    {
+        return m_mainThread.getTalk();
     }
 
     /** Interrupt waiting for a command or response.
