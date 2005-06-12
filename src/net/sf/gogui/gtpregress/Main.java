@@ -55,8 +55,10 @@ class Main
             String tests[] = new String[size - 1];
             for (int i = 0; i <  size - 1; ++i)
                 tests[i] = (String)arguments.get(i + 1);
-            new GtpRegress(program, tests, output, longOutput, verbose,
-                           fileComments);
+            GtpRegress gtpRegress =
+                new GtpRegress(program, tests, output, longOutput, verbose,
+                               fileComments);
+            System.exit(gtpRegress.getResult() ? 0 : -1);
         }
         catch (Throwable t)
         {

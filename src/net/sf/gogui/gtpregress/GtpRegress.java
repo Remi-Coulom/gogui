@@ -38,6 +38,7 @@ public class GtpRegress
                boolean longOutput, boolean verbose, boolean fileComments)
         throws Exception
     {
+        m_result = true;
         m_program = program;
         m_longOutput = longOutput;
         m_verbose = verbose;
@@ -59,6 +60,12 @@ public class GtpRegress
             runTest(tests[i]);
         }
         writeSummary();
+    }
+
+    /** Return true if tests completed with no unexpected failures. */
+    public boolean getResult()
+    {
+        return m_result;
     }
 
     public void receivedInvalidResponse(String s)
@@ -159,6 +166,8 @@ public class GtpRegress
     private boolean m_lastTestFailed;
 
     private boolean m_longOutput;
+
+    private boolean m_result;
 
     private boolean m_verbose;
 
@@ -446,6 +455,8 @@ public class GtpRegress
                 || (matcher.matches() && notPattern))
                 fail = true;
         }
+        if (fail  && ! expectedFail)
+            m_result = false;
         m_lastTestFailed = fail;
         String style = null;
         if (fail && ! expectedFail)
