@@ -179,7 +179,7 @@ public class SelectProgram
         m_comboBox.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
         JButton button =
-            new ImageButton("images/fileopen.png", "Browse",
+            new ImageButton("net/sf/gogui/images/fileopen.png", "Browse",
                             "Browse for Go program");
         button.setActionCommand("open");
         button.addActionListener(this);

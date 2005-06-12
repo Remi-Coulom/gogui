@@ -240,7 +240,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gmptogtp.jar">
 <manifest>
-<attribute name="Main-Class" value="gmptogtp.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.gmptogtp.Main"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/gmp/*.class
@@ -574,7 +574,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <target name="tags"
  description="Build a TAGS file for Emacs" >
 <exec executable="sh">
-<arg line="-c 'etags `find src -name &quot;*.java&quot;`'" />
+<arg line="-c 'etags `find src test -name &quot;*.java&quot;`'" />
 </exec>
 </target>
 

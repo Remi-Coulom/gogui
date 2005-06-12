@@ -6,7 +6,7 @@
 package specialmac;
 
 import com.apple.eawt.*;
-import utils.Platform;
+import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
 

@@ -151,7 +151,8 @@ public class GuiUtils
         // There are problems on most platforms with larger icons auto-scaled
         // down and transparency issues (Windows, Linux Sun Java 1.5.0)
         // Best solution for now is to take a 16x16 icon with no transparency
-        m_iconURL = loader.getResource("images/gogui-16x16-notrans.png");
+        m_iconURL =
+            loader.getResource("net/sf/gogui/images/gogui-16x16-notrans.png");
     }
 
     private static class ProgressThread

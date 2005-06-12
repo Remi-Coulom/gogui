@@ -69,7 +69,7 @@ Do not edit Info.plist
 <key>JVMVersion</key>
 <string>1.4+</string>
 <key>MainClass</key>
-<string>gogui.SplashScreen</string>
+<string>net.sf.gogui.gogui.SplashScreen</string>
 <key>Properties</key>
 <dict>
 <key>apple.awt.brushMetalLook</key>
