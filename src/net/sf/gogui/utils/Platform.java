@@ -120,8 +120,8 @@ public class Platform
         {
             Object[] args = { handler };
             Class[] arglist = { Platform.SpecialMacHandler.class };
-            Class registerClass =
-                Class.forName("specialmac.RegisterSpecialMacHandler");
+            String name = "net.sf.gogui.specialmac.RegisterSpecialMacHandler";
+            Class registerClass = Class.forName(name);
             Constructor constructor = registerClass.getConstructor(arglist);
             constructor.newInstance(args);
         }

@@ -569,7 +569,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  description="Compile special MAC classes depending on com.apple">
 <javac srcdir="mac/src" source="1.4" deprecation="true" classpath="build"
  optimize="true" listfiles="yes"
- includes="specialmac/RegisterSpecialMacHandler.java"/>
+ includes="net/sf/gogui/specialmac/RegisterSpecialMacHandler.java"/>
 </target>
 
 <target name="tags"
