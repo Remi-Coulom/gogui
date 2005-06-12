@@ -108,7 +108,7 @@ Exit program with return code -1.
 
 <varlistentry>
 <term>
-<command>dummy_delay</command> <replaceable>seconds</replaceable>
+<command>dummy_delay <replaceable>seconds</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -143,7 +143,7 @@ Print an invalid GTP response which does not start with a status character.
 
 <varlistentry>
 <term>
-<command>dummy_long_response</command><replaceable>n</replaceable>
+<command>dummy_long_response <replaceable>n</replaceable></command> 
 </term>
 <listitem>
 <para>
