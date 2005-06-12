@@ -1288,7 +1288,8 @@ class GoGui
 
     private void cbHelp()
     {
-        URL u = getClass().getClassLoader().getResource("doc/index.html");
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL u = classLoader.getResource("net/sf/gogui/doc/index.html");
         if (u == null)
         {
             showError("Help not found");

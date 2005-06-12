@@ -239,7 +239,7 @@ public class Help
         button.setToolTipText(toolTip);
         button.addActionListener(this);
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        URL url = classLoader.getResource("images/" + icon);
+        URL url = classLoader.getResource("net/sf/gogui/images/" + icon);
         if (url == null)
             button.setText(command);
         else

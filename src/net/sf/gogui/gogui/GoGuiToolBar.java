@@ -143,7 +143,7 @@ public class GoGuiToolBar
         button.setToolTipText(toolTip);
         button.addActionListener(m_listener);
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        URL url = classLoader.getResource("images/" + icon);
+        URL url = classLoader.getResource("net/sf/gogui/images/" + icon);
         if (url == null)
             button.setText(command);
         else
