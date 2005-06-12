@@ -29,6 +29,11 @@ GtpRegress: Return -1 if any unexpected fails occurred.
 </listitem>
 <listitem>
 <simpara>
+NetGtp: New option -timeout
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: New analyze command type eplist (editable point lists)
 </simpara>
 </listitem>

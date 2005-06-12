@@ -6,8 +6,10 @@
 package net.sf.gogui.netgtp;
 
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Vector;
 import net.sf.gogui.utils.Options;
@@ -20,10 +22,38 @@ import net.sf.gogui.version.Version;
 /** Connects to a remote Go program supporting GTP. */
 public class NetGtp
 {
-    public NetGtp(String hostname, int port)
+    private static Socket connect(String hostname, int port, int timeout)
+        throws IOException
+    {
+        int totalTime = 0;
+        while (true)
+        {
+            try
+            {
+                return new Socket(hostname, port);
+            }
+            catch (ConnectException connectException)
+            {
+                if (totalTime >= timeout)
+                    throw connectException;
+                String text ="netgtp: Connect failed; retrying in 5 sec...";
+                System.err.println(text);
+                try
+                {
+                    Thread.sleep(5000);
+                }
+                catch (InterruptedException interruptedException)
+                {
+                }
+                totalTime += 5;
+            }
+        }
+    }
+
+    public NetGtp(String hostname, int port, int timeout)
         throws Exception
     {
-        Socket socket = new Socket(hostname, port);
+        Socket socket = connect(hostname, port, timeout);
         StreamCopy fromNet = new StreamCopy(false, socket.getInputStream(),
                                             System.out, false);
         SocketOutputCopy toNet = new SocketOutputCopy(socket);
@@ -53,6 +83,7 @@ public class NetGtp
             String options[] = {
                 "config:",
                 "help",
+                "timeout:",
                 "version"
             };
             Options opt = Options.parse(args, options);
@@ -66,6 +97,7 @@ public class NetGtp
                 System.out.println("NetGtp " + Version.get());
                 System.exit(0);
             }
+            int timeout = opt.getInteger("timeout", 10, 0);
             Vector arguments = opt.getArguments();
             if (arguments.size() != 2)
             {
@@ -74,7 +106,7 @@ public class NetGtp
             }
             String hostname = (String)arguments.get(0);
             int port = Integer.parseInt((String)arguments.get(1));
-            new NetGtp(hostname, port);
+            new NetGtp(hostname, port, timeout);
         }
         catch (Throwable t)
         {
@@ -85,14 +117,19 @@ public class NetGtp
 
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar netgtp.jar [options] hostname port\n" +
-                  "\n" +
-                  "-config  config file\n" +
-                  "-help    display this help and exit\n" +
-                  "-version print version and exit\n");
+        String text =
+            "Usage: java -jar netgtp.jar [options] hostname port\n" +
+            "\n" +
+            "-config  config file\n" +
+            "-help    display this help and exit\n" +
+            "-timeout stop trying to connect after n seconds (default 10)\n" +
+            "-version print version and exit\n";
+        out.print(text);
     }
 }
     
+//----------------------------------------------------------------------------
+
 class SocketOutputCopy
     extends Thread
 {

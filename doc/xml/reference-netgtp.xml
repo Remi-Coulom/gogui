@@ -58,6 +58,18 @@ Display help and exit.
 </varlistentry>
 
 <varlistentry>
+<term><option>-timeout</option> <replaceable>seconds</replaceable></term>
+<listitem>
+<para>
+Timeout for stopping trying to connect.
+Connection is tried every 5 seconds after connection failures until the
+timeout is reached.
+Default is 10 seconds.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><option>-version</option></term>
 <listitem>
 <para>
