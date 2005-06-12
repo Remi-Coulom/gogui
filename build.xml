@@ -109,7 +109,7 @@ $Source$
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="all,docvalidate,test,man">
+<target name="dist" depends="all,docvalidate,test,regress,man">
 <fail if="notDistSettings" message="Not dist settings in build.properties"/>
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
