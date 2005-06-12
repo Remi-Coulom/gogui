@@ -21,7 +21,7 @@ import net.sf.gogui.gtp.GtpError;
     and potentially slow commands in a separate thread with a callback
     in the event thread after the command finished.
     Fast commands are ones that the Go engine is supposed to answer quickly
-    (like boardsize, play and undo), however they have a timeout (6 sec) to
+    (like boardsize, play and undo), however they have a timeout (8 sec) to
     prevent the GUI to hang, if the program does not respond.
     After the timeout a dialog is opened that allows to kill the program or
     continue to wait.
@@ -41,7 +41,7 @@ public class CommandThread
         {
             m_gtp.close();
             TimeoutCallback timeoutCallback = new TimeoutCallback(null);
-            m_gtp.waitForExit(6000, timeoutCallback);
+            m_gtp.waitForExit(8000, timeoutCallback);
         }
     }
 
@@ -211,7 +211,7 @@ public class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         TimeoutCallback timeoutCallback = new TimeoutCallback(command);
-        String response = m_gtp.sendCommand(command, 6000, timeoutCallback);
+        String response = m_gtp.sendCommand(command, 8000, timeoutCallback);
         return response;
     }
 
