@@ -549,21 +549,31 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 Run GTP regression tests for tools with GTP interface.
 Requires GNU Go 3.6 to be installed">
 <mkdir dir="regress/html"/>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
-<arg value="-output"/><arg value="html/gtpdummy"/>
-<arg value="java -jar ../lib/gtpdummy.jar"/>
-<arg value="gtpdummy.tst"/>
-</java>
+<echo>gmptogtp</echo>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
 <arg value="-output"/><arg value="html/gmptogtp"/>
 <arg value="java -jar ../lib/gmptogtp.jar -color black &quot;gnugo --mode gmp&quot;"/>
 <arg value="gmptogtp.tst"/>
 </java>
+<echo>gtpadapter</echo>
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<arg value="-output"/><arg value="html/gtpadapter"/>
+<arg value="java -jar ../lib/gtpdummy.jar"/>
+<arg value="gtpadapter.tst"/>
+</java>
+<echo>gtpdummy</echo>
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<arg value="-output"/><arg value="html/gtpdummy"/>
+<arg value="java -jar ../lib/gtpdummy.jar"/>
+<arg value="gtpdummy.tst"/>
+</java>
+<echo>twogtp</echo>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
 <arg value="-output"/><arg value="html/twogtp"/>
 <arg value="java -jar ../lib/twogtp.jar -black &quot;java -jar ../lib/gtpdummy.jar&quot; -white &quot;gnugo --mode gtp&quot;"/>
 <arg value="twogtp.tst"/>
 </java>
+<echo>OK</echo>
 </target>
 
 <target name="sgftotex.jar" depends="compile">
