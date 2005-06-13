@@ -127,6 +127,7 @@ $Source$
  config/gogui*.desktop
  config/gogui.omf
  config/gogui.xml
+ doc/README
  doc/javadoc/**/*.html
  doc/javadoc/**/*.gif
  doc/manual/html/*.html
