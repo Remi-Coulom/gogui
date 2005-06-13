@@ -243,6 +243,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/gmptogtp.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gmptogtp.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/gmp/*.class
@@ -313,6 +315,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/gogui.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gogui.SplashScreen"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/config/analyze-commands
@@ -341,6 +345,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/gtpadapter.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpadapter.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
@@ -364,6 +370,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/gtpdisplay.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpdisplay.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
@@ -396,6 +404,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/gtpdummy.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpdummy.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/go/GoColor.class
@@ -416,6 +426,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/gtpregress.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpregress.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/go/GoColor.class
@@ -439,6 +451,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/gtpserver.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpserver.GtpServer"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/gtpserver/*.class
@@ -457,6 +471,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/gtpterminal.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.gtpterminal.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
@@ -532,6 +548,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <jar destfile="lib/netgtp.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.netgtp.NetGtp"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/netgtp/*.class
@@ -591,6 +609,8 @@ Requires GNU Go 3.6 to be installed">
 <jar destfile="lib/sgftotex.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.sgftotex.SgfToTex"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
@@ -656,6 +676,8 @@ Requires GNU Go 3.6 to be installed">
 <jar destfile="lib/twogtp.jar">
 <manifest>
 <attribute name="Main-Class" value="net.sf.gogui.twogtp.Main"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
