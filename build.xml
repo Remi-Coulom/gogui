@@ -100,7 +100,7 @@ $Source$
 <fileset dir="src" includes="net/sf/gogui/images/*.png"/>
 </copy>
 <copy todir="build/net/sf/gogui/doc">
-<fileset dir="doc/html" includes="*.html *.css *.png"/>
+<fileset dir="doc/manual/html" includes="*.html *.css *.png"/>
 </copy>
 <copy todir="build/net/sf/gogui/config">
 <fileset dir="config" includes="analyze-commands"/>
@@ -124,13 +124,13 @@ $Source$
  config/gogui*.desktop
  config/gogui.omf
  config/gogui.xml
- doc/html/*.html
- doc/html/*.png
- doc/html/*.css
- doc/man/*.1
- doc/xml/*.xml
- doc/xml/*.xml.in
- doc/xml/*.xsl
+ doc/manual/html/*.html
+ doc/manual/html/*.png
+ doc/manual/html/*.css
+ doc/manual/man/*.1
+ doc/manual/xml/*.xml
+ doc/manual/xml/*.xml.in
+ doc/manual/xml/*.xsl
  doxygen/Doxyfile
  doxygen/footer.html
  doxygen/README
@@ -181,14 +181,14 @@ $Source$
 <echo message="Running xsltproc"/>
 <exec executable="xsltproc">
 <arg line="--path ${docbook_path}/html"/>
-<arg line="-o doc/html/"/>
-<arg line="doc/xml/custom.xsl"/>
-<arg line="doc/xml/book.xml"/>
+<arg line="-o doc/manual/html/"/>
+<arg line="doc/manual/xml/custom.xsl"/>
+<arg line="doc/manual/xml/book.xml"/>
 </exec>
 <!-- Remove empty div sections that create unwanted space in JEditorPane -->
-<replace dir="doc/html" includes="*.html" token="&lt;div&gt;&lt;/div&gt;"
- encoding="UTF-8"/>
-<copy todir="doc/html">
+<replace dir="doc/manual/html" includes="*.html"
+ token="&lt;div&gt;&lt;/div&gt;" encoding="UTF-8"/>
+<copy todir="doc/manual/html">
 <fileset dir="src/net/sf/gogui/images" includes="project-support.png"/>
 </copy>
 </target>
@@ -199,7 +199,7 @@ $Source$
 Generate documentation using ant style target.
 Not used at present due to problems with mdash in output (not understood
 by JEditorPane, slow speed and errors with old versions of Xalan).">
-<style basedir="doc/xml" includes="book.xml" destdir="doc/html"
+<style basedir="doc/manual/xml" includes="book.xml" destdir="doc/manual/html"
  style="${docbook_path}/html/chunk.xsl" force="true">
 <xmlcatalog>
 <dtd
@@ -207,20 +207,20 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  location="${docbook_path}/html/chunk.xsl"/>
 </xmlcatalog>
 </style>
-<copy todir="doc/html">
+<copy todir="doc/manual/html">
 <fileset dir="src/net/sf/gogui/images" includes="project-support.png"/>
 </copy>
 </target>
 
 <target name="docvalidate">
-<xmlvalidate file="doc/xml/book.xml"/>
+<xmlvalidate file="doc/manual/xml/book.xml"/>
 </target>
 
 <target name="doc-check-uptodate">
-<uptodate property="doc-uptodate" targetfile="doc/html/index.html">
-<srcfiles dir= "doc/xml" includes="*.xml"/>
-<srcfiles dir= "doc/xml" includes="*.xsl"/>
-<srcfiles dir= "doc/html" includes="*.css"/>
+<uptodate property="doc-uptodate" targetfile="doc/manual/html/index.html">
+<srcfiles dir= "doc/manual/xml" includes="*.xml"/>
+<srcfiles dir= "doc/manual/xml" includes="*.xsl"/>
+<srcfiles dir= "doc/manual/html" includes="*.css"/>
 </uptodate>
 </target>
 
@@ -295,7 +295,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <fileset dir="mac/packaging" includes="GoGui.icns"/>
 </copy>
 <copy todir="${appdir}/Contents/Resources/GoGui Help" overwrite="true">
-<fileset dir="doc/html" includes="*.html *.css *.png"/>
+<fileset dir="doc/manual/html" includes="*.html *.css *.png"/>
 </copy>
 <replace file="${appdir}/Contents/Resources/GoGui Help/index.html"
  token="&lt;head&gt;"
@@ -565,19 +565,19 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <target name="man" depends="extract-docbook">
 <exec executable="xsltproc">
 <arg line="--param chunk.quietly 1"/>
-<arg line="-o doc/man/"/>
+<arg line="-o doc/manual/man/"/>
 <arg line="${docbook_path}/manpages/docbook.xsl"/>
-<arg line="doc/xml/reference-gmptogtp.xml"/>
-<arg line="doc/xml/reference-gogui.xml"/>
-<arg line="doc/xml/reference-gtpadapter.xml"/>
-<arg line="doc/xml/reference-gtpdisplay.xml"/>
-<arg line="doc/xml/reference-gtpdummy.xml"/>
-<arg line="doc/xml/reference-gtpregress.xml"/>
-<arg line="doc/xml/reference-gtpserver.xml"/>
-<arg line="doc/xml/reference-gtpterminal.xml"/>
-<arg line="doc/xml/reference-netgtp.xml"/>
-<arg line="doc/xml/reference-sgftotex.xml"/>
-<arg line="doc/xml/reference-twogtp.xml"/>
+<arg line="doc/manual/xml/reference-gmptogtp.xml"/>
+<arg line="doc/manual/xml/reference-gogui.xml"/>
+<arg line="doc/manual/xml/reference-gtpadapter.xml"/>
+<arg line="doc/manual/xml/reference-gtpdisplay.xml"/>
+<arg line="doc/manual/xml/reference-gtpdummy.xml"/>
+<arg line="doc/manual/xml/reference-gtpregress.xml"/>
+<arg line="doc/manual/xml/reference-gtpserver.xml"/>
+<arg line="doc/manual/xml/reference-gtpterminal.xml"/>
+<arg line="doc/manual/xml/reference-netgtp.xml"/>
+<arg line="doc/manual/xml/reference-sgftotex.xml"/>
+<arg line="doc/manual/xml/reference-twogtp.xml"/>
 </exec>
 </target>
 
@@ -726,9 +726,10 @@ tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
 <replace file="src/net/sf/gogui/version/Version.java" token="@VERSION@"
  value="${version}"/>
 <copy
- file="doc/xml/version.xml.in"
- tofile="doc/xml/version.xml" overwrite="true"/>
-<replace file="doc/xml/version.xml" token="@VERSION@" value="${version}"/>
+ file="doc/manual/xml/version.xml.in"
+ tofile="doc/manual/xml/version.xml" overwrite="true"/>
+<replace file="doc/manual/xml/version.xml" token="@VERSION@"
+ value="${version}"/>
 <copy
  file="mac/packaging/Info.plist.in"
  tofile="mac/packaging/Info.plist" overwrite="true"/>
@@ -742,7 +743,7 @@ tofile="src/net/sf/gogui/version/Version.java" overwrite="true"/>
 <srcfiles dir="."
  includes="
   build.properties,
-  doc/xml/version.xml.in,
+  doc/manual/xml/version.xml.in,
   mac/packaging/Info.plist.in,
   src/version/Version.java.in,
 "/>
