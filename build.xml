@@ -136,9 +136,10 @@ $Source$
  doc/manual/xml/*.xml
  doc/manual/xml/*.xml.in
  doc/manual/xml/*.xsl
- doxygen/Doxyfile
- doxygen/footer.html
- doxygen/README
+ doc/doxygen/Doxyfile
+ doc/doxygen/footer.html
+ doc/doxygen/README
+ doc/doxygen/html/*
  ${docbook_path}.zip
  external/javacomm/javacomm20-win32.zip
  external/javacomm/README
@@ -231,7 +232,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 
 <target name="doxygen"
  description="Generate source code documentation using doxygen">
-<exec executable="doxygen" dir="doxygen"/>
+<exec executable="doxygen" dir="doc/doxygen"/>
 </target>
 
 <target name="extract-comm.jar" unless="comm-available">
