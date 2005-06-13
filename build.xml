@@ -60,6 +60,10 @@ $Source$
  twogtp.jar
 "/>
 
+<target name="checkDistSettings">
+<fail if="notDistSettings" message="Not dist settings in build.properties"/>
+</target>
+
 <target name="clean" depends="clean-build-dir">
 <delete failonerror="false" includeEmptyDirs="true">
 <fileset dir="lib"
@@ -111,8 +115,7 @@ $Source$
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="all,test,man">
-<fail if="notDistSettings" message="Not dist settings in build.properties"/>
+<target name="dist" depends="checkDistSettings,all,test,man,javadoc">
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
@@ -124,6 +127,8 @@ $Source$
  config/gogui*.desktop
  config/gogui.omf
  config/gogui.xml
+ doc/javadoc/**/*.html
+ doc/javadoc/**/*.gif
  doc/manual/html/*.html
  doc/manual/html/*.png
  doc/manual/html/*.css
@@ -505,9 +510,10 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 
 <target name="javadoc"
  description="Create Javadoc documentation for public parts of packages">
-<javadoc sourcepath="src" destdir="javadoc" source="1.4"
+<javadoc sourcepath="src" destdir="doc/javadoc" source="1.4"
  windowtitle="GoGui Source Documentation"
  overview="src/net/sf/gogui/overview.html"
+ classpath="external/javacomm/commapi/comm.jar"
  packagenames="
   net/sf/gogui/game.*,
   net/sf/gogui/gmp.*,
