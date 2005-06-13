@@ -152,7 +152,6 @@ $Source$
  mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.java
  mac/src/net/sf/gogui/specialmac/RegisterSpecialMacHandler.class
  mac/src/net/sf/gogui/specialmac/Listener.class  
- regress/*.tst
  sgf/openings/9x9/README
  sgf/openings/9x9/*.sgf
  sgf/openings/19x19/README
@@ -164,6 +163,7 @@ $Source$
  src/net/sf/gogui/*/*.java.in
  test/junit/src/net/sf/gogui/*/*.java
  test/junit/src/net/sf/gogui/*/*.sgf
+ test/regress/*.tst
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
