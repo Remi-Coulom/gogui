@@ -368,7 +368,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
- net/sf/gogui/gui/Board*.class
+ net/sf/gogui/gui/GuiBoard*.class
  net/sf/gogui/gui/BoardLabel.class
  net/sf/gogui/gui/Field*.class
  net/sf/gogui/gui/GuiUtils.class
