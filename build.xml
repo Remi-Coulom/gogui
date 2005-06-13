@@ -14,7 +14,9 @@ $Source$
 
 <property environment="env"/>
 
-<property name="docbook_xsl" value="external/docbook/docbook-xsl-1.68.1"/>
+<property name="docbook_xsl" value="docbook-xsl-1.68.1"/>
+
+<property name="docbook_path" value="external/docbook/${docbook_xsl}"/>
 
 <property name="scripts" value="
  gogui
@@ -30,7 +32,7 @@ $Source$
  twogtp
 "/>
 
-<available property="xsl-available" file="${docbook_xsl}/html/chunk.xsl"/>
+<available property="xsl-available" file="${docbook_path}/html/chunk.xsl"/>
 
 <available property="comm-available"
  file="external/javacomm/commapi/comm.jar"/>
@@ -132,7 +134,7 @@ $Source$
  doxygen/Doxyfile
  doxygen/footer.html
  doxygen/README
- ${docbook_xsl}.zip
+ ${docbook_path}.zip
  external/javacomm/javacomm20-win32.zip
  external/javacomm/README
  lib/*.jar
@@ -177,7 +179,7 @@ $Source$
  description="Generate documentation using xsltproc">
 <echo message="Running xsltproc"/>
 <exec executable="xsltproc">
-<arg line="--path ${docbook_xsl}/html"/>
+<arg line="--path ${docbook_path}/html"/>
 <arg line="-o doc/html/"/>
 <arg line="doc/xml/custom.xsl"/>
 <arg line="doc/xml/book.xml"/>
@@ -197,11 +199,11 @@ Generate documentation using ant style target.
 Not used at present due to problems with mdash in output (not understood
 by JEditorPane, slow speed and errors with old versions of Xalan).">
 <style basedir="doc/xml" includes="book.xml" destdir="doc/html"
- style="${docbook_xsl}/html/chunk.xsl" force="true">
+ style="${docbook_path}/html/chunk.xsl" force="true">
 <xmlcatalog>
 <dtd
  publicId="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
- location="${docbook_xsl}/html/chunk.xsl"/>
+ location="${docbook_path}/html/chunk.xsl"/>
 </xmlcatalog>
 </style>
 <copy todir="doc/html">
@@ -235,7 +237,15 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </target>
 
 <target name="extract-docbook" unless="xsl-available">
-<unzip src="${docbook_xsl}.zip" dest="external/docbook"/>
+<unzip src="${docbook_path}.zip" dest="external/docbook">
+<patternset>
+<include name="${docbook_xsl}/VERSION"/>
+<include name="${docbook_xsl}/common/*"/>
+<include name="${docbook_xsl}/html/*"/>
+<include name="${docbook_xsl}/lib/*"/>
+<include name="${docbook_xsl}/manpages/*"/>
+</patternset>
+</unzip>
 </target>
 
 <target name="gmptogtp.jar" depends="compile">
@@ -528,7 +538,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <exec executable="xsltproc">
 <arg line="--param chunk.quietly 1"/>
 <arg line="-o doc/man/"/>
-<arg line="${docbook_xsl}/manpages/docbook.xsl"/>
+<arg line="${docbook_path}/manpages/docbook.xsl"/>
 <arg line="doc/xml/reference-gmptogtp.xml"/>
 <arg line="doc/xml/reference-gogui.xml"/>
 <arg line="doc/xml/reference-gtpadapter.xml"/>
