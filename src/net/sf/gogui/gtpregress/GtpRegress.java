@@ -711,6 +711,8 @@ public class GtpRegress
         catch (GtpError e)
         {
             m_name = "";
+            if (m_gtp.isProgramDead())
+                throw e;
         }
         try
         {
