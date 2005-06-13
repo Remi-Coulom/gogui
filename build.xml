@@ -569,36 +569,41 @@ Requires GNU Go 3.6 to be installed">
 <mkdir dir="regress/html"/>
 <echo>gmptogtp</echo>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/gmptogtp"/>
-<arg value="java -jar ../lib/gmptogtp.jar -color black &quot;gnugo --mode gmp&quot;"/>
+<arg value="java -ea -jar ../lib/gmptogtp.jar -color black &quot;gnugo --mode gmp&quot;"/>
 <arg value="gmptogtp.tst"/>
 </java>
 <echo>gtpadapter</echo>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/gtpadapter"/>
-<arg value="java -jar ../lib/gtpdummy.jar"/>
+<arg value="java -ea -jar ../lib/gtpdummy.jar"/>
 <arg value="gtpadapter.tst"/>
 </java>
 <echo>gtpdummy</echo>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/gtpdummy"/>
-<arg value="java -jar ../lib/gtpdummy.jar"/>
+<arg value="java -ea -jar ../lib/gtpdummy.jar"/>
 <arg value="gtpdummy.tst"/>
 </java>
 <echo>netgtp</echo>
 <java jar="lib/gtpserver.jar" fork="true" spawn="true">
+<assertions><enable/></assertions>
 <arg value="-port"/><arg value="9696"/>
 <arg value="java -jar lib/gtpdummy.jar"/>
 </java>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
 <arg value="-output"/><arg value="html/netgtp"/>
-<arg value="java -jar ../lib/netgtp.jar localhost 9696"/>
+<arg value="java -ea -jar ../lib/netgtp.jar localhost 9696"/>
 <arg value="netgtp.tst"/>
 </java>
 <echo>twogtp</echo>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/twogtp"/>
-<arg value="java -jar ../lib/twogtp.jar -black &quot;java -jar ../lib/gtpdummy.jar&quot; -white &quot;gnugo --mode gtp&quot;"/>
+<arg value="java -ea -jar ../lib/twogtp.jar -black &quot;java -ea -jar ../lib/gtpdummy.jar&quot; -white &quot;gnugo --mode gtp&quot;"/>
 <arg value="twogtp.tst"/>
 </java>
 <echo>OK</echo>
@@ -646,6 +651,7 @@ Requires GNU Go 3.6 to be installed">
  description="Run JUnit tests" >
 <junit printsummary="withOutAndErr" fork="true" timeout="10000"
  haltonfailure="true">
+<assertions><enable/></assertions>
 <classpath>
 <pathelement location="build"/>
 <pathelement location="build/test"/>
