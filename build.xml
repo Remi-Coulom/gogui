@@ -111,7 +111,7 @@ $Source$
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="all,docvalidate,junit,regress,man">
+<target name="dist" depends="all,test,man">
 <fail if="notDistSettings" message="Not dist settings in build.properties"/>
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
@@ -535,6 +535,33 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </javadoc>
 </target>
 
+<target name="junit" depends="junit-compile"
+ description="Run JUnit tests" >
+<junit printsummary="withOutAndErr" fork="true" timeout="10000"
+ haltonfailure="true">
+<assertions><enable/></assertions>
+<classpath>
+<pathelement location="build"/>
+<pathelement location="build/test"/>
+</classpath>
+<formatter type="brief" usefile="false"/>
+<batchtest todir="build">
+<fileset dir="build/test" includes="**/*Test.class"/>
+</batchtest>
+</junit>
+</target>
+
+<target name="junit-compile" depends="compile,test-depend"
+ description="Compile JUnit tests">
+<mkdir dir="build/test"/>
+<javac srcdir="test/junit/src" destdir="build/test" source="1.4" target="1.4"
+ deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
+ classpath="build"/>
+<copy todir="build/test">
+<fileset dir="test/junit/src" includes="net/sf/gogui/sgf/*.sgf"/>
+</copy>
+</target>
+
 <target name="man" depends="extract-docbook">
 <exec executable="xsltproc">
 <arg line="--param chunk.quietly 1"/>
@@ -577,26 +604,26 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  description="
 Run GTP regression tests for tools with GTP interface.
 Requires GNU Go 3.6 to be installed">
-<mkdir dir="regress/html"/>
+<mkdir dir="test/regress/html"/>
 <echo>gmptogtp</echo>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="test/regress">
 <assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/gmptogtp"/>
-<arg value="java -ea -jar ../lib/gmptogtp.jar -color black &quot;gnugo --mode gmp&quot;"/>
+<arg value="java -ea -jar ../../lib/gmptogtp.jar -color black &quot;gnugo --mode gmp&quot;"/>
 <arg value="gmptogtp.tst"/>
 </java>
 <echo>gtpadapter</echo>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="test/regress">
 <assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/gtpadapter"/>
-<arg value="java -ea -jar ../lib/gtpdummy.jar"/>
+<arg value="java -ea -jar ../../lib/gtpdummy.jar"/>
 <arg value="gtpadapter.tst"/>
 </java>
 <echo>gtpdummy</echo>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="test/regress">
 <assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/gtpdummy"/>
-<arg value="java -ea -jar ../lib/gtpdummy.jar"/>
+<arg value="java -ea -jar ../../lib/gtpdummy.jar"/>
 <arg value="gtpdummy.tst"/>
 </java>
 <echo>netgtp</echo>
@@ -605,16 +632,16 @@ Requires GNU Go 3.6 to be installed">
 <arg value="-port"/><arg value="9696"/>
 <arg value="java -jar lib/gtpdummy.jar"/>
 </java>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="test/regress">
 <arg value="-output"/><arg value="html/netgtp"/>
-<arg value="java -ea -jar ../lib/netgtp.jar localhost 9696"/>
+<arg value="java -ea -jar ../../lib/netgtp.jar localhost 9696"/>
 <arg value="netgtp.tst"/>
 </java>
 <echo>twogtp</echo>
-<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="regress">
+<java jar="lib/gtpregress.jar" fork="true" failonerror="true" dir="test/regress">
 <assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/twogtp"/>
-<arg value="java -ea -jar ../lib/twogtp.jar -black &quot;java -ea -jar ../lib/gtpdummy.jar&quot; -white &quot;gnugo --mode gtp&quot;"/>
+<arg value="java -ea -jar ../../lib/twogtp.jar -black &quot;java -ea -jar ../../lib/gtpdummy.jar&quot; -white &quot;gnugo --mode gtp&quot;"/>
 <arg value="twogtp.tst"/>
 </java>
 <echo>OK</echo>
@@ -658,32 +685,8 @@ Requires GNU Go 3.6 to be installed">
 </exec>
 </target>
 
-<target name="junit" depends="junit-compile"
- description="Run JUnit tests" >
-<junit printsummary="withOutAndErr" fork="true" timeout="10000"
- haltonfailure="true">
-<assertions><enable/></assertions>
-<classpath>
-<pathelement location="build"/>
-<pathelement location="build/test"/>
-</classpath>
-<formatter type="brief" usefile="false"/>
-<batchtest todir="build">
-<fileset dir="build/test" includes="**/*Test.class"/>
-</batchtest>
-</junit>
-</target>
-
-<target name="junit-compile" depends="compile,test-depend"
- description="Compile JUnit tests">
-<mkdir dir="build/test"/>
-<javac srcdir="test/junit/src" destdir="build/test" source="1.4" target="1.4"
- deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
- classpath="build"/>
-<copy todir="build/test">
-<fileset dir="test/junit/src" includes="net/sf/gogui/sgf/*.sgf"/>
-</copy>
-</target>
+<target name="test" depends="docvalidate,junit,regress"
+ description="Run all tests"/>
 
 <target name="test-depend">
 <depend srcdir="test" destdir="build/test" cache="build/depcache-test"/>
