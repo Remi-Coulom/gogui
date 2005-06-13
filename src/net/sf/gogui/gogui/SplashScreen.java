@@ -5,6 +5,8 @@
 
 package net.sf.gogui.gogui;
 
+import net.sf.gogui.gogui.GoGuiSettings;
+import net.sf.gogui.utils.ErrorMessage;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -18,6 +20,10 @@ import java.net.URL;
 
 //----------------------------------------------------------------------------
  
+/** Wrapper for starting GoGui with a splash screen.
+    Loads the GoGui class with the reflection API to mimimize the time until
+    the splash screen is shown.
+*/
 public class SplashScreen
     extends Frame
 {
@@ -29,6 +35,18 @@ public class SplashScreen
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
                            "GoGui");
         System.setProperty("apple.awt.brushMetalLook", "true");
+        GoGuiSettings settings;
+        try
+        {
+            settings = new GoGuiSettings(args);
+            if (settings.m_noStartup)
+                return;
+        }
+        catch (ErrorMessage e)
+        {
+            System.err.println(e.getMessage());
+            return;
+        }
         m_splash = new SplashScreen();
         m_splash.setUndecorated(true);
         center(m_splash, 0, 0);
@@ -37,13 +55,13 @@ public class SplashScreen
         try
         {
             Class [] mainArgs = new Class[1];
-            mainArgs[0] = Class.forName("[Ljava.lang.String;");
+            mainArgs[0] = Class.forName("net.sf.gogui.gogui.GoGuiSettings");
             Class mainClass = Class.forName("net.sf.gogui.gogui.Main");
             Method mainMethod = mainClass.getMethod("main", mainArgs);
             assert((mainMethod.getModifiers() & Modifier.STATIC) != 0);
             assert(mainMethod.getReturnType() == void.class); 
             Object[] objArgs = new Object[1];
-            objArgs[0] = (Object)args;
+            objArgs[0] = settings;
             mainMethod.invoke(null, objArgs);
         }
         catch(Exception e)
