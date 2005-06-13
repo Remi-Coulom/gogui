@@ -24,7 +24,12 @@ Docbook XSL files in the distribution to make compilation easier.
 </listitem>
 <listitem>
 <simpara>
-GtpRegress: Return -1 if any unexpected fails occurred.
+GtpRegress: Return -1 if any unexpected fails occurred
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpTerminal: Fix exception if empty line is entered
 </simpara>
 </listitem>
 <listitem>

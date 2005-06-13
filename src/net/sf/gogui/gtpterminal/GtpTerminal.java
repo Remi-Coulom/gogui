@@ -69,6 +69,8 @@ public class GtpTerminal
                 if (line == null)
                     break;
                 line = line.trim();
+                if (line.equals(""))
+                    continue;
                 if (handleCommand(line))
                     break;
             }
