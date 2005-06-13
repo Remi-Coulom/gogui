@@ -111,7 +111,7 @@ $Source$
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="all,docvalidate,test,regress,man">
+<target name="dist" depends="all,docvalidate,junit,regress,man">
 <fail if="notDistSettings" message="Not dist settings in build.properties"/>
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
@@ -155,7 +155,8 @@ $Source$
  src/net/sf/gogui/*/package.html
  src/net/sf/gogui/*/*.java
  src/net/sf/gogui/*/*.java.in
- test/net/sf/gogui/*/*.java
+ test/junit/src/net/sf/gogui/*/*.java
+ test/junit/src/net/sf/gogui/*/*.sgf
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
  install.sh,
@@ -653,11 +654,11 @@ Requires GNU Go 3.6 to be installed">
 <target name="tags"
  description="Build a TAGS file for Emacs" >
 <exec executable="sh">
-<arg line="-c 'etags `find src test -name &quot;*.java&quot;`'" />
+<arg line="-c 'etags `find src test/junit/src -name &quot;*.java&quot;`'" />
 </exec>
 </target>
 
-<target name="test" depends="test-compile"
+<target name="junit" depends="junit-compile"
  description="Run JUnit tests" >
 <junit printsummary="withOutAndErr" fork="true" timeout="10000"
  haltonfailure="true">
@@ -673,13 +674,14 @@ Requires GNU Go 3.6 to be installed">
 </junit>
 </target>
 
-<target name="test-compile" depends="compile,test-depend">
+<target name="junit-compile" depends="compile,test-depend"
+ description="Compile JUnit tests">
 <mkdir dir="build/test"/>
-<javac srcdir="test" destdir="build/test" source="1.4" target="1.4"
+<javac srcdir="test/junit/src" destdir="build/test" source="1.4" target="1.4"
  deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
  classpath="build"/>
 <copy todir="build/test">
-<fileset dir="test" includes="net/sf/gogui/sgf/*.sgf"/>
+<fileset dir="test/junit/src" includes="net/sf/gogui/sgf/*.sgf"/>
 </copy>
 </target>
 
