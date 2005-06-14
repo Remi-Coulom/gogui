@@ -310,9 +310,6 @@ public class Options
                         throw new ErrorMessage("Option " + s
                                                + " needs value");
                     String value = args[n];
-                    if (isOptionKey(value))
-                        throw new ErrorMessage("Option " + s
-                                               + " needs value");
                     ++n;
                     m_map.put(spec, value);
                 }
