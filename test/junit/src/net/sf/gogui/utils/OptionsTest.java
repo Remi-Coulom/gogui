@@ -28,6 +28,16 @@ public class OptionsTest
         assertEquals(arguments.get(0), "arg1");
         assertEquals(arguments.get(1), "arg2");
     }
+
+    public void testStopParsing() throws ErrorMessage
+    {
+        String specs[] = { "flag1", "value1:", "value2:", "flag2" };
+        String args[] = { "-value1:", "foo", "--", "-arg1" };
+        Options opt = new Options(args, specs);
+        Vector arguments = opt.getArguments();
+        assertEquals(arguments.size(), 1);
+        assertEquals(arguments.get(0), "-arg1");
+    }
 }
 
 //----------------------------------------------------------------------------

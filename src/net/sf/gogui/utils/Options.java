@@ -27,6 +27,8 @@ public class Options
         @param args Command line args from main method
         @param specs Specification of allowed options. Contains option names
         (without '-'). Options that need an argument must have a ':' appended.
+        The special argument '--' stops option parsing, all following
+        arguments are treated as non-option arguments.
     */
     public Options(String[] args, String[] specs) throws ErrorMessage
     {
@@ -288,12 +290,18 @@ public class Options
 
     private void parseArgs(String args[]) throws ErrorMessage
     {
-        int n = 0;
+        boolean stopParse = false;
+        int n = 0;        
         while (n < args.length)
         {
             String s = args[n];
             ++n;
-            if (isOptionKey(s))
+            if (s.equals("--"))
+            {
+                stopParse = true;
+                continue;
+            }
+            if (isOptionKey(s) && ! stopParse)
             {
                 String spec = getSpec(s.substring(1));
                 if (needsValue(spec))
