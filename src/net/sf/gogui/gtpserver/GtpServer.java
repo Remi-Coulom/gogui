@@ -5,6 +5,11 @@
 
 package net.sf.gogui.gtpserver;
 
+import net.sf.gogui.utils.Options;
+import net.sf.gogui.utils.ProcessUtils;
+import net.sf.gogui.utils.StreamCopy;
+import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.version.Version;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -13,16 +18,11 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
-import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.ProcessUtils;
-import net.sf.gogui.utils.StreamCopy;
-import net.sf.gogui.utils.StringUtils;
-import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
 
 /** Connects a Go program supporting GTP to a socket. */
-public class GtpServer
+public final class GtpServer
 {
     /** @param verbose Log everything sent and received to stderr
         @param loop Restart program and wait for new connection after

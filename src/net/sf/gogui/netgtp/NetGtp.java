@@ -5,6 +5,10 @@
 
 package net.sf.gogui.netgtp;
 
+import net.sf.gogui.utils.Options;
+import net.sf.gogui.utils.StreamCopy;
+import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.version.Version;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,15 +16,11 @@ import java.io.PrintStream;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Vector;
-import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.StreamCopy;
-import net.sf.gogui.utils.StringUtils;
-import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
 
 /** Connects to a remote Go program supporting GTP. */
-public class NetGtp
+public final class NetGtp
 {
     private static Socket connect(String hostname, int port, int timeout)
         throws IOException
