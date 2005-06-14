@@ -17,6 +17,7 @@ Connects to a remote Go program supporting Go Text Protocol.
 <command>netgtp</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-help</option></arg>
+<arg><option>-timeout</option> <replaceable>sec</replaceable></arg>
 <arg><option>-version</option></arg>
 <arg choice="plain"><replaceable>hostname</replaceable></arg>
 <arg choice="plain"><replaceable>port</replaceable></arg>
