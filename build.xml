@@ -265,7 +265,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <target name="findbugs" depends="compile">
 <mkdir dir="test/findbugs"/>
 <findbugs home="${findbugs.home}" projectFile="test/findbugs/gogui.fb"
- output="xml" outputFile="test/findbugs/output.xml" failOnError="true" >
+ output="xml" outputFile="test/findbugs/output.xml" failOnError="true"
+ reportLevel="low" >
 </findbugs>
 </target>
 
