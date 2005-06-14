@@ -101,6 +101,9 @@ $Source$
 </delete>
 </target>
 
+<target name="check" depends="docvalidate,junit,regress"
+ description="Run all tests"/>
+
 <target name="compile" depends="extract-comm.jar,depend,version,doc">
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" source="1.4" target="1.4"
@@ -121,7 +124,7 @@ $Source$
 <depend srcdir="src" destdir="build" cache="build/depcache"/>
 </target>
 
-<target name="dist" depends="check-dist-settings,all,test,man,javadoc">
+<target name="dist" depends="check-dist-settings,all,check,man,javadoc">
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
@@ -720,9 +723,6 @@ Requires GNU Go 3.6 to be installed">
 <arg line="-c 'etags `find src test/junit/src -name &quot;*.java&quot;`'" />
 </exec>
 </target>
-
-<target name="test" depends="docvalidate,junit,regress"
- description="Run all tests"/>
 
 <target name="test-depend">
 <depend srcdir="test" destdir="build/test" cache="build/depcache-test"/>
