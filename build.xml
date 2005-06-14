@@ -16,6 +16,8 @@ $Source$
 
 <property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
 
+<property name="pmd.home" value="${env.PMD_HOME}"/>
+
 <property name="docbook.name" value="docbook-xsl-1.68.1"/>
 
 <property name="docbook.path" value="external/docbook/${docbook.name}"/>
@@ -631,6 +633,17 @@ Uses exec to avoid dependency on the FindBugs ant task.">
  net/sf/gogui/version/Version.class
 "/>
 </jar>
+</target>
+
+<target name="pmd" depends="compile"
+ description="Run PMD (pmd.sourceforge.net)">
+<mkdir dir="test/pmd"/>
+<exec executable="${pmd.home}/bin/pmd.sh"
+ output="test/pmd/output.txt">
+<arg line="src"/>
+<arg line="text"/>
+<arg line="basic,imports,unusedcode,design"/>
+</exec>
 </target>
 
 <target name="regress"
