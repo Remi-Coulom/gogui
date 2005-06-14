@@ -1,0 +1,3 @@
+Project file for FindBugs http://findbugs.sourceforge.net/
+The ant target "findbugs" generates output.xml in this directory.
+Currently, FindBugs 0.9.0 is used.
