@@ -8,9 +8,6 @@ $Source$
 
 <project name="GoGui" default="all">
 
-<taskdef name="findbugs"
- classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
-
 <tstamp/>
 
 <property file="build.properties"/>
@@ -262,12 +259,19 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </unzip>
 </target>
 
-<target name="findbugs" depends="compile">
+<target name="findbugs" depends="compile"
+ description="
+Invoke FindBugs.
+Uses exec to avoid dependency on the FindBugs ant task.">
 <mkdir dir="test/findbugs"/>
-<findbugs home="${findbugs.home}" projectFile="test/findbugs/gogui.fb"
- output="xml" outputFile="test/findbugs/output.xml" failOnError="true"
- reportLevel="low" >
-</findbugs>
+<exec executable="${findbugs.home}/bin/findbugs"
+ output="test/findbugs/output.xml">
+<arg line="-textui"/>
+<arg line="-project test/findbugs/gogui.fb"/>
+<arg line="-low"/>
+<arg line="-xml"/>
+<arg line="-auxclasspath external/javacomm/commapi/comm.jar"/>
+</exec>
 </target>
 
 <target name="gmptogtp.jar" depends="compile">
