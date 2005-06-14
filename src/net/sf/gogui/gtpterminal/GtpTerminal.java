@@ -284,8 +284,8 @@ public class GtpTerminal
                     if (! cmdPlay(GoColor.WHITE, node.getAddWhite(i)))
                         return;
                 Move move = node.getMove();
-                if (move != null)
-                    if (! cmdPlay(move.getColor(), move.getPoint()))
+                if (move != null
+                    && ! cmdPlay(move.getColor(), move.getPoint()))
                         return;
                 node = node.getChild();
             }

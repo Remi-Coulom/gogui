@@ -569,7 +569,7 @@ public class GtpShell
 
         private final String m_text;
 
-        private GtpShell m_gtpShell;
+        private final GtpShell m_gtpShell;
     }
 
     private static class UpdateInvalidResponse implements Runnable

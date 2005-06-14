@@ -713,12 +713,7 @@ public final class Board
         if (c == color.otherColor() && ! scoreGetDead(p))
             return false;
         if (c == color)
-        {
-            if (scoreGetDead(p))
-                return false;
-            else
-                return true;
-        }
+            return (! scoreGetDead(p));
         if (getMark(p))
             return true;
         setMark(p, true);

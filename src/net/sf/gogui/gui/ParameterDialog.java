@@ -110,14 +110,13 @@ public class ParameterDialog
         public BoolParameter(String key, String value)
         {
             super(key, value);
-            m_bool = false;
             try
             {
-                if (Integer.parseInt(value) != 0)
-                    m_bool = true;
+                m_bool = (Integer.parseInt(value) != 0);
             }
             catch (NumberFormatException e)
             {
+                m_bool = false;
             }
             m_panel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
             m_checkBox = new JCheckBox(getLabel(), m_bool);

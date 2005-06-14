@@ -5,12 +5,12 @@
 
 package net.sf.gogui.gui;
 
+import net.sf.gogui.utils.Preferences;
+import net.sf.gogui.utils.StringUtils;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
 import javax.swing.JFrame;
-import net.sf.gogui.utils.Preferences;
-import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 

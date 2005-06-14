@@ -5,7 +5,6 @@
 
 package net.sf.gogui.gogui;
 
-import net.sf.gogui.gogui.GoGuiSettings;
 import net.sf.gogui.utils.ErrorMessage;
 import java.awt.Component;
 import java.awt.Dimension;

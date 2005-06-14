@@ -23,6 +23,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Vector;
+import java.util.regex.Pattern;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,8 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import java.util.Vector;
-import java.util.regex.Pattern;
 
 //----------------------------------------------------------------------------
 
@@ -69,12 +69,9 @@ public class FindDialog
 
     public void keyPressed(KeyEvent e)
     {
-        int c = e.getKeyCode();        
-        if (c == KeyEvent.VK_ESCAPE)
-        {
-            if (! m_comboBox.isPopupVisible())
-                dispose();
-        }
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE
+            && ! m_comboBox.isPopupVisible())
+            dispose();
     }
 
     public static Pattern run(Frame owner, String initialValue)

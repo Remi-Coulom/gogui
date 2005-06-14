@@ -692,7 +692,7 @@ class MainThread
 
     private int m_state = STATE_IDLE;
 
-    private int m_colorIndex;
+    private final int m_colorIndex;
 
     private int m_pending;
 

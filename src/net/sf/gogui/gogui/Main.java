@@ -7,12 +7,8 @@ package net.sf.gogui.gogui;
 
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.SimpleDialogs;
-import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.Preferences;
 import net.sf.gogui.utils.StringUtils;
-import net.sf.gogui.version.Version;
-import java.util.Vector;
 
 //----------------------------------------------------------------------------
 

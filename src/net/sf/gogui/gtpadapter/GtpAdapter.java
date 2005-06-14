@@ -230,11 +230,8 @@ public class GtpAdapter
             return false;
         }
         String command = m_gtp.getCommandBoardsize(argument.m_integer);
-        if (command != null)
-        {
-            if (! send(command, response))
-                return false;
-        }
+        if (command != null && ! send(command, response))
+            return false;
         m_boardSize = argument.m_integer;
         m_board = new Board(m_boardSize);
         m_passInserted.clear();
@@ -327,9 +324,9 @@ public class GtpAdapter
                 continue;
             if (cmd.equals("loadsgf") && m_emuLoadsgf)
                 continue;
-            if (m_noScore)
-                if (cmd.equals("final_score")
-                    || (cmd.equals("final_status_list")))
+            if (m_noScore
+                && (cmd.equals("final_score")
+                    || (cmd.equals("final_status_list"))))
                     continue;
             response.append(cmd);
             response.append("\n");
@@ -386,8 +383,7 @@ public class GtpAdapter
                 return false;
             }
         }
-        if (! m_emuLoadsgf)
-            if (! send(command, response))
+        if (! m_emuLoadsgf && ! send(command, response))
                 return false;
         GoColor toMove = GoColor.EMPTY;
         try

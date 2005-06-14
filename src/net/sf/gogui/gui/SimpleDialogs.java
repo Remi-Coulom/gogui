@@ -5,16 +5,16 @@
 
 package net.sf.gogui.gui;
 
+import net.sf.gogui.sgf.SgfFilter;
+import net.sf.gogui.tex.TexFilter;
+import net.sf.gogui.utils.Platform;
+import net.sf.gogui.utils.StringUtils;
 import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import net.sf.gogui.sgf.SgfFilter;
-import net.sf.gogui.tex.TexFilter;
-import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
@@ -79,13 +79,12 @@ public class SimpleDialogs
             return file;
         while (file != null)
         {
-            if (file.exists())
-                if (! showQuestion(parent, "Overwrite " + file + "?"))
-                {
-                    file = showFileChooser(parent, FILE_SAVE, null, true,
-                                           null);
-                    continue;
-                }
+            if (file.exists()
+                && ! showQuestion(parent, "Overwrite " + file + "?"))
+            {
+                file = showFileChooser(parent, FILE_SAVE, null, true, null);
+                continue;
+            }
             break;
         }
         return file;

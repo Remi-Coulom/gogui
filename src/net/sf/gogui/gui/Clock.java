@@ -211,15 +211,13 @@ public final class Clock
         record.m_time += time;
         if (isInitialized() && getUseByoyomi())
         {
-            if (! record.m_isInByoyomi)
+            if (! record.m_isInByoyomi
+                && record.m_time > getPreByoyomi())
             {
-                if (record.m_time > getPreByoyomi())
-                {
-                    record.m_isInByoyomi = true;
-                    record.m_time -= getPreByoyomi();
-                    assert(getByoyomiMoves() > 0);
-                    record.m_movesLeft = getByoyomiMoves();
-                }
+                record.m_isInByoyomi = true;
+                record.m_time -= getPreByoyomi();
+                assert(getByoyomiMoves() > 0);
+                record.m_movesLeft = getByoyomiMoves();
             }
             if (record.m_isInByoyomi)
             {

@@ -123,10 +123,11 @@ public class AnalyzeShow
             {
                 GoColor c = getColor(board, pointArg, pointListArg);
                 if (c != GoColor.EMPTY)
-                if (c != GoColor.EMPTY)
                     showVariation(guiBoard, response, c.otherColor(), size);
             }
             break;
+        default:
+            assert(false);
         }
     }
 

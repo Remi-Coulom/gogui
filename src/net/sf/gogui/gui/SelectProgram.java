@@ -279,7 +279,6 @@ public class SelectProgram
         catch (FileNotFoundException e)
         {
         }
-
     }
 }
 

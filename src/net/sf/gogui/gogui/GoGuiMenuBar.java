@@ -422,7 +422,7 @@ public class GoGuiMenuBar
 
     private final JMenuBar m_menuBar;
 
-    private JMenu m_menuWindow;
+    private final JMenu m_menuWindow;
 
     private JMenuItem m_itemAbout;
 

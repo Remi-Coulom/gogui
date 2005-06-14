@@ -81,10 +81,7 @@ public class NodeUtils
     public static boolean commentContains(Node node, Pattern pattern)
     {
         String comment = node.getComment();
-        if (comment != null)
-            if (pattern.matcher(comment).find())
-                return true;
-        return false;
+        return (comment != null && pattern.matcher(comment).find());
     }
 
     public static Node findInComments(Node node, Pattern pattern)
