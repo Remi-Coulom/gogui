@@ -565,7 +565,7 @@ Uses exec to avoid dependency on the FindBugs ant task.">
 </javadoc>
 </target>
 
-<target name="junit" depends="junit-compile"
+<target name="junit" depends="compile,junit-compile"
  description="Run JUnit tests" >
 <junit printsummary="withOutAndErr" fork="true" timeout="10000"
  haltonfailure="true">
