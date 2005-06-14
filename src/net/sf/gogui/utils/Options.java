@@ -18,9 +18,16 @@ import java.util.Vector;
 
 //----------------------------------------------------------------------------
 
-/** Parser for command line options. */
+/** Parser for command line options.
+    Options begin with a single '-' character.
+*/
 public class Options
 {
+    /** Parse options.
+        @param args Command line args from main method
+        @param specs Specification of allowed options. Contains option names
+        (without '-'). Options that need an argument must have a ':' appended.
+    */
     public Options(String[] args, String[] specs) throws ErrorMessage
     {
         for (int i = 0; i < specs.length; ++i)
@@ -32,6 +39,7 @@ public class Options
         parseArgs(args);
     }
 
+    /** Check if option is present. */
     public boolean contains(String option)
     {
         return getValue(option) != null;
@@ -43,11 +51,17 @@ public class Options
         return m_args;
     }
 
+    /** Parse double option.
+        Returns 0, if option is not present.
+    */
     public double getDouble(String option) throws ErrorMessage
     {
         return getDouble(option, 0);
     }
 
+    /** Parse double option.
+        Returns defaultValue, if option is not present.
+    */
     public double getDouble(String option, double defaultValue)
         throws ErrorMessage
     {
@@ -65,11 +79,17 @@ public class Options
         }
     }
 
+    /** Parse integer option.
+        Returns 0, if option is not present.
+    */
     public int getInteger(String option) throws ErrorMessage
     {
         return getInteger(option, 0);
     }
 
+    /** Parse integer option.
+        Returns defaultValue, if option is not present.
+    */
     public int getInteger(String option, int defaultValue) throws ErrorMessage
     {
         String value = getString(option, Integer.toString(defaultValue));
@@ -86,6 +106,10 @@ public class Options
         }
     }
 
+    /** Parse integer option.
+        Returns defaultValue, if option is not present.
+        Throws error, if option value is less than min.
+    */
     public int getInteger(String option, int defaultValue, int min)
         throws ErrorMessage
     {
@@ -96,6 +120,10 @@ public class Options
         return value;
     }
 
+    /** Parse integer option.
+        Returns defaultValue, if option is not present.
+        Throws error, if option value is less than min or greater than max.
+    */
     public int getInteger(String option, int defaultValue, int min, int max)
         throws ErrorMessage
     {
@@ -106,11 +134,17 @@ public class Options
         return value;
     }
 
+    /** Parse long integer option.
+        Returns 0, if option is not present.
+    */
     public long getLong(String option) throws ErrorMessage
     {
         return getLong(option, 0L);
     }
 
+    /** Parse long integer  option.
+        Returns defaultValue, if option is not present.
+    */
     public long getLong(String option, long defaultValue) throws ErrorMessage
     {
         String value = getString(option, Long.toString(defaultValue));
@@ -127,11 +161,17 @@ public class Options
         }
     }
 
+    /** Return string option value.
+        Returns "", if option is not present.
+    */
     public String getString(String option) throws ErrorMessage
     {
         return getString(option, "");
     }
 
+    /** Return string option value.
+        Returns defaultValue, if option is not present.
+    */
     public String getString(String option, String defaultValue)
     {
         assert(isValidOption(option));
@@ -141,7 +181,7 @@ public class Options
         return value;
     }
 
-    /** Check if option is set. */
+    /** Check if option is present. */
     public boolean isSet(String option) throws ErrorMessage
     {
         String value = getString(option, null);
