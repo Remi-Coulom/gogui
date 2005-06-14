@@ -8,11 +8,16 @@ $Source$
 
 <project name="GoGui" default="all">
 
+<taskdef name="findbugs"
+ classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/>
+
 <tstamp/>
 
 <property file="build.properties"/>
 
 <property environment="env"/>
+
+<property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
 
 <property name="docbook_xsl" value="docbook-xsl-1.68.1"/>
 
@@ -161,6 +166,7 @@ $Source$
  src/net/sf/gogui/*/package.html
  src/net/sf/gogui/*/*.java
  src/net/sf/gogui/*/*.java.in
+ test/findbugs/gogui.fb
  test/junit/src/net/sf/gogui/*/*.java
  test/junit/src/net/sf/gogui/*/*.sgf
  test/regress/*.tst
@@ -254,6 +260,13 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <include name="${docbook_xsl}/manpages/*"/>
 </patternset>
 </unzip>
+</target>
+
+<target name="findbugs" depends="compile">
+<mkdir dir="test/findbugs"/>
+<findbugs home="${findbugs.home}" projectFile="test/findbugs/gogui.fb"
+ output="xml" outputFile="test/findbugs/output.xml" failOnError="true" >
+</findbugs>
 </target>
 
 <target name="gmptogtp.jar" depends="compile">

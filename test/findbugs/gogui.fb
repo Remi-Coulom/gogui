@@ -1,0 +1,8 @@
+[Jar files]
+../../build
+[Source dirs]
+../../src
+[Aux classpath entries]
+../../external/javacomm/commapi/comm.jar
+[Options]
+relative_paths=true
