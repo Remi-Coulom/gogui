@@ -20,13 +20,15 @@ public class OptionsTest
             "value1:",
             "value2:",
             "flag2",
-            "value3:"
+            "value3:",
+            "value4:"
         };
         String args[] = {
             "arg1",
-            "-value1:", "42",
+            "-value1", "42",
             "-flag2",
-            "-value3:", "-9223372036854775807",
+            "-value3", "-9223372036854775807",
+            "-value4", "-1",
             "arg2"
         };
         Options opt = new Options(args, specs);
@@ -47,7 +49,7 @@ public class OptionsTest
     public void testStopParsing() throws ErrorMessage
     {
         String specs[] = { "flag1", "value1:", "value2:", "flag2" };
-        String args[] = { "-value1:", "foo", "--", "-arg1" };
+        String args[] = { "-value1", "foo", "--", "-arg1" };
         Options opt = new Options(args, specs);
         Vector arguments = opt.getArguments();
         assertEquals(arguments.size(), 1);
