@@ -106,6 +106,27 @@ public class Options
         return value;
     }
 
+    public long getLong(String option) throws ErrorMessage
+    {
+        return getLong(option, 0L);
+    }
+
+    public long getLong(String option, long defaultValue) throws ErrorMessage
+    {
+        String value = getString(option, Long.toString(defaultValue));
+        if (value == null)
+            return defaultValue;
+        try
+        {
+            return Long.parseLong(value);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new ErrorMessage("Option -" + option
+                                   + " needs long integer value");
+        }
+    }
+
     public String getString(String option) throws ErrorMessage
     {
         return getString(option, "");
