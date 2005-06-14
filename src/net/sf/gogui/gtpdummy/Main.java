@@ -26,6 +26,7 @@ public class Main
                 "config:",
                 "help",
                 "log:",
+                "srand:",
                 "version"
             };
             Options opt = Options.parse(args, options);
@@ -34,10 +35,11 @@ public class Main
                 String helpText =
                     "Usage: java -jar gtpdummy.jar [options]\n" +
                     "\n" +
-                    "-config       config file\n" +
-                    "-help         display this help and exit\n" +
-                    "-log file     log GTP stream to file\n" +
-                    "-version      print version and exit\n";
+                    "-config    config file\n" +
+                    "-help      display this help and exit\n" +
+                    "-log file  log GTP stream to file\n" +
+                    "-srand n   random seed\n" +
+                    "-version   print version and exit\n";
                 System.out.print(helpText);
                 return;
             }
@@ -52,7 +54,15 @@ public class Main
                 File file = new File(opt.getString("log"));
                 log = new PrintStream(new FileOutputStream(file));
             }
-            GtpDummy gtpDummy = new GtpDummy(System.in, System.out, log);
+            long randomSeed = 0;
+            boolean useRandomSeed = false;
+            if (opt.isSet("srand"))
+            {
+                randomSeed = opt.getLong("srand");
+                useRandomSeed = true;
+            }
+            GtpDummy gtpDummy = new GtpDummy(System.in, System.out, log,
+                                             useRandomSeed, randomSeed);
             gtpDummy.mainLoop();
             if (log != null)
                 log.close();

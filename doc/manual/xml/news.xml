@@ -29,6 +29,11 @@ GtpRegress: Return -1 if any unexpected fails occurred
 </listitem>
 <listitem>
 <simpara>
+GtpDummy: New option -srand
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpTerminal: Fix exception if empty line is entered
 </simpara>
 </listitem>
