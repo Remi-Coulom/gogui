@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.IllegalComponentStateException;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
@@ -47,7 +48,14 @@ public class SplashScreen
             return;
         }
         m_splash = new SplashScreen();
-        m_splash.setUndecorated(true);
+        try
+        {
+            m_splash.setUndecorated(true);
+        }
+        catch (IllegalComponentStateException e)
+        {
+            // Thrown by GCJ on FC4
+        }
         center(m_splash, 0, 0);
         m_splash.setVisible(true);         
         new ImageLoader(m_splash);
