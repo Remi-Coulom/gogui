@@ -291,7 +291,8 @@ public final class GuiBoard
 
     public void paintComponent(Graphics graphics)
     {
-        Graphics2D graphics2D = (Graphics2D)graphics;
+        Graphics2D graphics2D =
+            graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
         if (graphics2D != null && ! m_fastPaint)
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -761,7 +762,8 @@ public final class GuiBoard
 
     private void drawShadows(Graphics graphics)
     {
-        Graphics2D graphics2D = (Graphics2D)graphics;
+        Graphics2D graphics2D =
+            graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
         if (graphics2D == null || m_fastPaint)
             return;
         graphics2D.setComposite(m_composite3);

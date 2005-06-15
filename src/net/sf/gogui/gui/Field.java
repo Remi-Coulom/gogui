@@ -128,10 +128,9 @@ public class Field
     public void paintComponent(Graphics graphics)
     {
         m_graphics = graphics;
-        if (m_fastPaint)
-            m_graphics2D = null;
-        else
-            m_graphics2D = (Graphics2D)graphics;
+        if (! m_fastPaint)
+            m_graphics2D =
+                graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
         m_size = getSize().width;
         if (m_fieldColor != null)
             drawFieldColor();
