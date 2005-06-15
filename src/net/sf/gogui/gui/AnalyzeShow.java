@@ -127,7 +127,7 @@ public class AnalyzeShow
             }
             break;
         default:
-            assert(false);
+            break;
         }
     }
 
