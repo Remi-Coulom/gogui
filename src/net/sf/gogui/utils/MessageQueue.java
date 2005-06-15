@@ -41,7 +41,7 @@ public class MessageQueue
     */
     public Object unsynchronizedPeek()
     {
-        assert(Thread.currentThread().holdsLock(this));
+        assert(Thread.holdsLock(this));
         if (m_queue.isEmpty())
             return null;
         return m_queue.get(0);
