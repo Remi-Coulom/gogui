@@ -45,6 +45,7 @@ class BoardLabel
     {
         super(text, JLabel.CENTER);
         setForeground(java.awt.Color.DARK_GRAY);
+        setOpaque(false);
     }
 
     public void setShow(boolean show)
