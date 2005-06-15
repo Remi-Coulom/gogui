@@ -48,6 +48,11 @@ class AntialiasingEditorPane
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         super.paintComponent(graphics);
     }
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 }
 
 //----------------------------------------------------------------------------
@@ -124,6 +129,11 @@ public class Help
 
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 
     private JButton m_buttonBack;
 

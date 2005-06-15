@@ -106,6 +106,11 @@ public class GoGuiToolBar
 
     private boolean m_computerButtonsEnabled = true;
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for use with serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private final ActionListener m_listener;
 
     private final JButton m_buttonBeginning;

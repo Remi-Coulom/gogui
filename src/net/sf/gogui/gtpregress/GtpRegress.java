@@ -94,6 +94,11 @@ public class GtpRegress
         {
             return "Program died";
         }
+
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
     }
 
     /** Information about one test and its result. */

@@ -789,6 +789,11 @@ class GoGui
 
     private int m_move;
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for use with serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private Board m_board;
 
     private GuiBoard m_guiBoard;
@@ -877,11 +882,14 @@ class GoGui
                                  boolean resetBoard)
     {
         endLengthyCommand();
+        if (resetBoard)
+            resetBoard();
+        // Program could have been detached during analyze command
+        if (m_commandThread == null)
+            return;
         String title = m_analyzeCommand.getResultTitle();
         try
         {
-            if (resetBoard)
-                resetBoard();
             GtpError e = m_commandThread.getException();
             if (e != null)
                 throw e;

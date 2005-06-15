@@ -158,6 +158,11 @@ class GameNode
 
     private final int m_moveNumber;
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private static final java.awt.Color m_colorLightBlue
         = new java.awt.Color(103, 122, 164);
 
@@ -525,6 +530,11 @@ class GameTreePanel
     private int m_maxY;
 
     private int m_nodeDist;
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 
     private Dimension m_preferredNodeSize;
 
@@ -966,6 +976,11 @@ public class GameTreeViewer
 
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 
     private final GameTreePanel m_panel;
 

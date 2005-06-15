@@ -163,6 +163,11 @@ public class Comment
 
     private boolean m_duringSetText;
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private final JTextPane m_textPane;
 
     private final Listener m_listener;

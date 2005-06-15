@@ -198,6 +198,11 @@ public final class AnalyzeDialog
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private GoColor m_selectedColor = GoColor.EMPTY;
 
     private final CommandThread m_commandThread;

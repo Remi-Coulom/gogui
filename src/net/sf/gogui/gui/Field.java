@@ -230,6 +230,11 @@ public class Field
 
     private double m_influence;
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private static final AlphaComposite m_composite5
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
 

@@ -175,6 +175,11 @@ class GtpShellText
 
     private int m_truncated;
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private void appendText(String text, String style)
     {
         assert(SwingUtilities.isEventDispatchThread());
@@ -651,6 +656,11 @@ public class GtpShell
 
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 
     private Callback m_callback;
 

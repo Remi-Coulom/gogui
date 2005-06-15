@@ -91,6 +91,11 @@ public class SgfReader
         {
             super(s);
         }
+
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
     }    
 
     /** Read SGF file from stream.
@@ -169,6 +174,10 @@ public class SgfReader
     private static class SgfCharsetChanged
         extends Exception
     {
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
     }
 
     private static final int CACHE_SIZE = 30;
