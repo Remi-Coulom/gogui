@@ -8,6 +8,16 @@ graphically on the board.
 </para>
   
 <para>
+Analyze commands can be run from the analyze dialog or (if they have a
+single point and an optional color argument) from the context menu of a field
+on the board.
+In the analyze dialog, you can also select, if the command should
+automatically run after each change on the board, and if the board should
+be cleared from results of previous commands before displaying the new
+result.
+</para>
+
+<para>
 Analyze commands are defined in the
 configuration file <userinput>~/.gogui/analyze-commands</userinput>.
 All files beginning with <userinput>~/.gogui/analyze-commands</userinput>
