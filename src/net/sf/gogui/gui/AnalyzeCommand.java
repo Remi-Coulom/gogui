@@ -128,6 +128,15 @@ public class AnalyzeCommand
         m_scale = scale;
     }
 
+    public AnalyzeCommand(AnalyzeCommand command)
+    {
+        m_type = command.m_type;
+        m_label = command.m_label;
+        m_command = command.m_command;
+        m_title = command.m_title;
+        m_scale = command.m_scale;
+    }
+
     public static AnalyzeCommand get(Frame owner, String label)
     {
         Vector commands = new Vector(128, 128);
@@ -256,6 +265,25 @@ public class AnalyzeCommand
     public boolean needsFileArg()
     {
         return (m_command.indexOf("%f") >= 0);
+    }
+
+    public boolean needsOnlyPointArg()
+    {
+        return (needsPointArg()
+                && ! needsColorArg()
+                && ! needsFileArg()
+                && ! needsPointListArg()
+                && ! needsStringArg()
+                && ! needsOptStringArg());
+    }
+
+    public boolean needsOnlyPointAndColorArg()
+    {
+        return (needsPointArg() && needsColorArg()
+                && ! needsFileArg()
+                && ! needsPointListArg()
+                && ! needsStringArg()
+                && ! needsOptStringArg());
     }
 
     public boolean needsPointArg()

@@ -60,12 +60,37 @@ public class Field
         addKeyListener(keyAdapter);
         MouseAdapter mouseAdapter = new MouseAdapter()
             {
-                public void mouseReleased(MouseEvent event)
+                public void mousePressed(MouseEvent event)
                 {
                     Point point = event.getPoint();
-                    if (! contains((int)point.getX(), (int)point.getY()))
+                    int x = (int)point.getX();
+                    int y = (int)point.getY();
+                    if (! contains(x, y))
                         return;
-                    if (event.getClickCount() == 2)
+                    if (event.isPopupTrigger())
+                    {
+                        m_board.contextMenu(m_point, Field.this);
+                        return;
+                    }
+                }
+
+                public void mouseReleased(MouseEvent event)
+                {                    
+                    Point point = event.getPoint();
+                    int x = (int)point.getX();
+                    int y = (int)point.getY();
+                    if (! contains(x, y))
+                        return;
+                    if (event.isPopupTrigger())
+                    {
+                        m_board.contextMenu(m_point, Field.this);
+                        return;
+                    }
+                    int button = event.getButton();
+                    int count = event.getClickCount();
+                    if (button != MouseEvent.BUTTON1)
+                        return;
+                    if (count == 2)
                         m_board.fieldClicked(m_point, true);
                     else
                     {            

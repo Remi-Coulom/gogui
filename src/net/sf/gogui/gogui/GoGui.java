@@ -60,6 +60,8 @@ import net.sf.gogui.gui.BoardSizeDialog;
 import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.Comment;
 import net.sf.gogui.gui.CommandThread;
+import net.sf.gogui.gui.ContextMenu;
+import net.sf.gogui.gui.Field;
 import net.sf.gogui.gui.FindDialog;
 import net.sf.gogui.gui.GameInfo;
 import net.sf.gogui.gui.GameInfoDialog;
@@ -479,6 +481,17 @@ class GoGui
         clearStatus();
     }
 
+    public void contextMenu(GoPoint point, Field field)
+    {
+        if (m_contextMenu == null || m_contextMenu.isEmpty())
+            return;
+        m_contextMenu.setPointArg(point);
+        Point location = m_guiBoard.getLocationOnScreen(point);
+        int x = field.getWidth() / 2;
+        int y = field.getHeight() / 2;
+        m_contextMenu.show(field, x, y);
+    }
+
     public void disposeGameTree()
     {
         if (m_gameTreeViewer == null)
@@ -659,8 +672,15 @@ class GoGui
             return;
         }
         initAnalyzeCommand(command, autoRun);
-        if (m_analyzeCommand.needsPointArg()
-            || m_analyzeCommand.needsPointListArg())
+        boolean needsPointArg = m_analyzeCommand.needsPointArg();
+        if (needsPointArg && ! m_analyzeCommand.isPointArgMissing())
+        {
+            m_guiBoard.clearAllSelect();
+            m_guiBoard.setSelect(m_analyzeCommand.getPointArg(), true);
+            m_guiBoard.repaint();
+            m_analyzeDialog.setRunButtonEnabled(true);
+        }
+        else if (needsPointArg || m_analyzeCommand.needsPointListArg())
         {
             m_guiBoard.clearAllSelect();
             m_analyzeDialog.setRunButtonEnabled(false);
@@ -672,9 +692,9 @@ class GoGui
             }
             m_guiBoard.repaint();
             toTop();
+            return;
         }
-        else
-            analyzeBegin(false, clearBoard);
+        analyzeBegin(false, clearBoard);
     }    
 
     public void toTop()
@@ -804,6 +824,8 @@ class GoGui
     private CommandThread m_commandThread;
 
     private Comment m_comment;
+
+    private ContextMenu m_contextMenu;
 
     private File m_loadedFile;
 
@@ -1012,6 +1034,14 @@ class GoGui
         Vector supportedCommands =
             m_commandThread.getSupportedCommands();
         m_gtpShell.setInitialCompletions(supportedCommands);
+        ContextMenu.Listener listener = new ContextMenu.Listener()
+            {
+                public void setAnalyzeCommand(AnalyzeCommand command)
+                {
+                    GoGui.this.setAnalyzeCommand(command, false, false);
+                }
+            };
+        m_contextMenu = new ContextMenu(supportedCommands, listener);
         if (! m_gtpFile.equals(""))
             m_gtpShell.sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))

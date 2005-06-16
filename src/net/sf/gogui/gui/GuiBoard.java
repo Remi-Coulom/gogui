@@ -83,7 +83,9 @@ public final class GuiBoard
     /** Callback for clicks on a field. */
     public interface Listener
     {
-        void fieldClicked(GoPoint p, boolean modifiedSelect);
+        void fieldClicked(GoPoint point, boolean modifiedSelect);
+
+        void contextMenu(GoPoint point, Field field);
     }
 
     public GuiBoard(Board board, boolean fastPaint)
@@ -157,6 +159,12 @@ public final class GuiBoard
     public void clearInfluence(GoPoint p)
     {
         getField(p).clearInfluence();
+    }
+
+    public void contextMenu(GoPoint point, Field field)
+    {
+        if (m_listener != null)
+            m_listener.contextMenu(point, field);
     }
 
     public void focusGained(FocusEvent event)
