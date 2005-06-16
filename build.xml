@@ -424,7 +424,11 @@ Uses exec to avoid dependency on the FindBugs ant task.">
  net/sf/gogui/gui/GuiBoard*.class
  net/sf/gogui/gui/BoardLabel.class
  net/sf/gogui/gui/Field*.class
- net/sf/gogui/gui/GuiUtils.class
+ net/sf/gogui/gui/GuiJTextArea.class
+ net/sf/gogui/gui/GuiJTextPane.class
+ net/sf/gogui/gui/GuiTextPane.class
+ net/sf/gogui/gui/GuiTextPaneFactory.class
+ net/sf/gogui/gui/GuiUtils*.class
  net/sf/gogui/gui/SimpleDialogs.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpdisplay/*.class
@@ -435,6 +439,7 @@ Uses exec to avoid dependency on the FindBugs ant task.">
  net/sf/gogui/utils/ErrorMessage.class
  net/sf/gogui/utils/MessageQueue.class
  net/sf/gogui/utils/Platform.class
+ net/sf/gogui/utils/ProgressShow.class
  net/sf/gogui/utils/Options.class
  net/sf/gogui/utils/RadialGradient*.class
  net/sf/gogui/utils/SquareLayout.class
