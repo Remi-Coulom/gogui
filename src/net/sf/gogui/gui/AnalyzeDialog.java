@@ -70,7 +70,7 @@ public final class AnalyzeDialog
         void clearAnalyzeCommand();
         
         void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
-                               boolean clearBoard);
+                               boolean clearBoard, boolean oneRunOnly);
         
         void toTop();
     }
@@ -630,7 +630,7 @@ public final class AnalyzeDialog
         if (clearBoard)
             m_callback.clearAnalyzeCommand();
         m_clearButton.setEnabled(true);
-        m_callback.setAnalyzeCommand(command, autoRun, false);
+        m_callback.setAnalyzeCommand(command, autoRun, false, false);
     }
 
     private static void setPrefsDefaults(Preferences prefs)

@@ -460,6 +460,11 @@ class GoGui
 
     public void clearAnalyzeCommand()
     {
+        clearAnalyzeCommand(true);
+    }
+
+    public void clearAnalyzeCommand(boolean resetBoard)
+    {
         if (m_analyzeCommand == null)
             return;
         if (isCommandInProgress())
@@ -477,8 +482,11 @@ class GoGui
         m_analyzeDialog.setRunButtonEnabled(true);
         m_analyzeCommand = null;
         setBoardCursorDefault();
-        resetBoard();
-        clearStatus();
+        if (resetBoard)
+        {
+            resetBoard();
+            clearStatus();
+        }
     }
 
     public void contextMenu(GoPoint point, Field field)
@@ -657,7 +665,7 @@ class GoGui
     }
 
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
-                                  boolean clearBoard)
+                                  boolean clearBoard, boolean oneRunOnly)
     {
         if (isCommandInProgress())
         {
@@ -672,6 +680,7 @@ class GoGui
             return;
         }
         initAnalyzeCommand(command, autoRun);
+        m_analyzeOneRunOnly = oneRunOnly;
         boolean needsPointArg = m_analyzeCommand.needsPointArg();
         if (needsPointArg && ! m_analyzeCommand.isPointArgMissing())
         {
@@ -767,6 +776,8 @@ class GoGui
     }
 
     private boolean m_analyzeAutoRun;
+
+    private boolean m_analyzeOneRunOnly;
 
     private boolean m_auto;
 
@@ -950,7 +961,11 @@ class GoGui
         {                
             showStatus(title);
             showError(e);
-            return;
+        }
+        finally
+        {
+            if (m_analyzeOneRunOnly)
+                clearAnalyzeCommand(false);
         }
     }
 
@@ -1036,7 +1051,7 @@ class GoGui
             {
                 public void setAnalyzeCommand(AnalyzeCommand command)
                 {
-                    GoGui.this.setAnalyzeCommand(command, false, false);
+                    GoGui.this.setAnalyzeCommand(command, false, true, true);
                 }
             };
         m_contextMenu = new ContextMenu(supportedCommands, listener);
