@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -61,7 +62,7 @@ public class Field
             {
                 public void mouseReleased(MouseEvent event)
                 {
-                    java.awt.Point point = event.getPoint();
+                    Point point = event.getPoint();
                     if (! contains((int)point.getX(), (int)point.getY()))
                         return;
                     if (event.getClickCount() == 2)

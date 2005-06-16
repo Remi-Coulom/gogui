@@ -14,6 +14,7 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
@@ -500,7 +501,7 @@ class GameTreePanel
         GameNode gameNode = getGameNode(m_currentNode);
         gameNode.repaint();
         gameNode = getGameNode(currentNode);
-        java.awt.Point location = gameNode.getLocation();
+        Point location = gameNode.getLocation();
         m_currentNodeX = location.x;
         m_currentNodeY = location.y;
         gameNode.repaint();
@@ -560,7 +561,7 @@ class GameTreePanel
 
     private final MouseListener m_mouseListener;
 
-    private java.awt.Point m_popupLocation;
+    private Point m_popupLocation;
 
     private void computeSizes(int sizeMode)
     {
@@ -726,7 +727,7 @@ class GameTreePanel
         }
     }
 
-    private void nodeInfo(java.awt.Point location, Node node)
+    private void nodeInfo(Point location, Node node)
     {
         String nodeInfo = NodeUtils.nodeInfo(node);
         String title = "Node Info";
@@ -847,7 +848,7 @@ class GameTreePanel
         }
     }
 
-    private void treeInfo(java.awt.Point location, Node node)
+    private void treeInfo(Point location, Node node)
     {
         String treeInfo = NodeUtils.treeInfo(node);
         String title = "Subtree Info";

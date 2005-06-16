@@ -531,7 +531,7 @@ public class GtpShell
         else
         {
             m_finalSize = new Dimension(width, height);
-            m_finalLocation = new java.awt.Point(x, y);
+            m_finalLocation = new Point(x, y);
         }
     }
 
@@ -684,7 +684,7 @@ public class GtpShell
 
     private GtpShellText m_gtpShellText;
 
-    private java.awt.Point m_finalLocation;
+    private Point m_finalLocation;
 
     private final StringBuffer m_commands = new StringBuffer(4096);
 

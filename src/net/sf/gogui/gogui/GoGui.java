@@ -12,6 +12,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -2753,8 +2754,7 @@ class GoGui
             new TextViewer(this, title, response, highlight, listener);
         if (pointArg != null)
         {
-            java.awt.Point location =
-                m_guiBoard.getLocationOnScreen(pointArg);
+            Point location = m_guiBoard.getLocationOnScreen(pointArg);
             textViewer.setLocation(location);
         }
         textViewer.setVisible(true);

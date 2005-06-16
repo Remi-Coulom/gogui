@@ -8,6 +8,7 @@ package net.sf.gogui.gui;
 import net.sf.gogui.utils.Preferences;
 import net.sf.gogui.utils.StringUtils;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import javax.swing.JFrame;
@@ -90,7 +91,7 @@ public class Session
         if (isFrameSpecialMode(window))
             return;
         name = name + "-" + boardSize;
-        java.awt.Point location = window.getLocation();
+        Point location = window.getLocation();
         String value = Integer.toString(location.x) + " " + location.y;
         prefs.setString(name, value);
     }
@@ -101,7 +102,7 @@ public class Session
         if (isFrameSpecialMode(window))
             return;
         name = name + "-" + boardSize;
-        java.awt.Point location = window.getLocation();
+        Point location = window.getLocation();
         Dimension size = window.getSize();
         String value = Integer.toString(location.x) + " " + location.y
             + " " + size.width + " " + size.height;

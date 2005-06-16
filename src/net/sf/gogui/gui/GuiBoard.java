@@ -14,6 +14,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -184,10 +185,10 @@ public final class GuiBoard
         return new Dimension(width, width);
     }
 
-    public java.awt.Point getLocationOnScreen(GoPoint point)
+    public Point getLocationOnScreen(GoPoint point)
     {
         Field field = getField(point);
-        java.awt.Point location = field.getLocationOnScreen();
+        Point location = field.getLocationOnScreen();
         Dimension size = field.getSize();
         location.x += size.width / 2;
         location.y += size.height / 2;
@@ -750,14 +751,14 @@ public final class GuiBoard
         graphics.setColor(Color.darkGray);
         for (int y = 0; y < size; ++y)
         {
-            java.awt.Point left = getScreenLocation(0, y);
-            java.awt.Point right = getScreenLocation(size - 1, y);
+            Point left = getScreenLocation(0, y);
+            Point right = getScreenLocation(size - 1, y);
             graphics.drawLine(left.x, left.y, right.x, right.y);
         }
         for (int x = 0; x < size; ++x)
         {
-            java.awt.Point top = getScreenLocation(x, 0);
-            java.awt.Point bottom = getScreenLocation(x, size - 1);
+            Point top = getScreenLocation(x, 0);
+            Point bottom = getScreenLocation(x, size - 1);
             graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
         }
         int r = width / (size + 2) / 10;
@@ -766,7 +767,7 @@ public final class GuiBoard
                 for (int y = 0; y < size; ++y)
                     if (m_board.isHandicapLine(y))
                     {
-                        java.awt.Point point = getScreenLocation(x, y);
+                        Point point = getScreenLocation(x, y);
                         graphics.fillOval(point.x - r, point.y - r,
                                           2 * r + 1, 2 * r + 1);
                     }
@@ -788,8 +789,7 @@ public final class GuiBoard
             GoPoint point = m_board.getPoint(i);
             if (getField(point).getColor() == GoColor.EMPTY)
                 continue;
-            java.awt.Point location = getScreenLocation(point.getX(),
-                                                        point.getY());
+            Point location = getScreenLocation(point.getX(), point.getY());
             graphics.setColor(Color.black);
             graphics.fillOval(location.x - size / 2 + offset,
                               location.y - size / 2 + offset,
@@ -817,7 +817,7 @@ public final class GuiBoard
         return size / 12;
     }
 
-    private java.awt.Point getScreenLocation(int x, int y)
+    private Point getScreenLocation(int x, int y)
     {
         int size = m_board.getSize();
         assert(x >= 0 && x < size);
@@ -826,7 +826,7 @@ public final class GuiBoard
         int offset = width / (size + 2) / 2;
         int screenX = ((x + 1) * width) / (size + 2) + offset;
         int screenY = ((size - y) * width) / (size + 2) + offset;
-        return new java.awt.Point(screenX, screenY);
+        return new Point(screenX, screenY);
     }
 
     private boolean isHandicapLineOrEdge(int line)
