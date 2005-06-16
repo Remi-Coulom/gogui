@@ -22,7 +22,26 @@ to facilitate debugging and reproducing errors.
 <para>
 GoGui requires Java 1.4.
 </para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+<para>
+<note>
+<title>Using GCJ</title>
+<para>
+The implementation of the javax.swing classes is incomplete in GCJ.
+The current status, tested with GCJ 4.0.0 on Fedora Core 4, is:
+everything compiles, the console based tools (like GtpDummy) seem to work,
+the graphical programs GoGui and GtpDisplay are not working.
+GtpDisplay seems to work mostly, but it does not make advantage of
+Graphics2D based features, like color gradient on stones. It also throws
+a GTK error, when trying to pop up dialog windows. GoGui is not usable yet,
+you can see, how far it works, by running it with:
+</para>
+<para>
+<userinput>
+java -Dgogui.no-jtextpane -jar lib/gogui.jar -program ""
+</userinput>
+</para>
+</note>
+</para>
 </section>
 
 <section>
