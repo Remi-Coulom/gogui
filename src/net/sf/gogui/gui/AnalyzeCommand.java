@@ -128,13 +128,17 @@ public class AnalyzeCommand
         m_scale = scale;
     }
 
-    public AnalyzeCommand(AnalyzeCommand command)
+    public AnalyzeCommand cloneCommand()
     {
-        m_type = command.m_type;
-        m_label = command.m_label;
-        m_command = command.m_command;
-        m_title = command.m_title;
-        m_scale = command.m_scale;
+        AnalyzeCommand command =
+            new AnalyzeCommand(m_type, m_label, m_command, m_title, m_scale);
+        command.m_colorArg = m_colorArg;
+        command.m_fileArg = m_fileArg;
+        command.m_optStringArg = m_optStringArg;
+        command.m_stringArg = m_stringArg;
+        command.m_pointArg = m_pointArg;
+        command.m_pointListArg = m_pointListArg;
+        return command;
     }
 
     public static AnalyzeCommand get(Frame owner, String label)
@@ -323,10 +327,8 @@ public class AnalyzeCommand
             readFile((File)files.get(i), commands, labels, supportedCommands);
     }
 
-    public String replaceWildCards(GoColor toMove, GoColor color)
+    public String replaceWildCards(GoColor toMove)
     {
-        if (needsColorArg())
-            setColorArg(color);
         String result = m_command.replaceAll("%m", toMove.toString());
         if (needsPointArg() && m_pointArg != null)
             result = result.replaceAll("%p", m_pointArg.toString());

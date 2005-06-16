@@ -119,7 +119,7 @@ public class ContextMenu
         command.setColorArg(GoColor.BLACK);
         JMenuItem item = createItem(command, "Black");
         menu.add(item);
-        command = new AnalyzeCommand(command);
+        command = command.cloneCommand();
         command.setColorArg(GoColor.WHITE);
         item = createItem(command, "White");
         menu.add(item);

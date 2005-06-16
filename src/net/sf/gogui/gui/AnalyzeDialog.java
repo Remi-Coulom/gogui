@@ -583,8 +583,7 @@ public final class AnalyzeDialog
             {
                 command.setOptStringArg("");
                 String commandWithoutArg =
-                    command.replaceWildCards(m_selectedColor,
-                                             m_selectedColor);
+                    command.replaceWildCards(m_selectedColor);
                 String value = m_commandThread.sendCommand(commandWithoutArg);
                 String optStringArg =
                     JOptionPane.showInputDialog(this, label, value);
@@ -604,8 +603,7 @@ public final class AnalyzeDialog
             {
                 command.setPointListArg(new Vector());
                 String commandWithoutArg =
-                    command.replaceWildCards(m_selectedColor,
-                                             m_selectedColor) + " show";
+                    command.replaceWildCards(m_selectedColor) + " show";
                 String response =
                     m_commandThread.sendCommand(commandWithoutArg);
                 Vector pointList =

@@ -894,9 +894,7 @@ class GoGui
             return;
         showStatus("Running " + m_analyzeCommand.getResultTitle() + " ...");
         GoColor toMove = m_board.getToMove();
-        GoColor color = m_analyzeDialog.getSelectedColor();
-        m_lastAnalyzeCommand
-            = m_analyzeCommand.replaceWildCards(toMove, color);
+        m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
         runLengthyCommand(m_lastAnalyzeCommand,
                           new AnalyzeContinue(checkComputerMove, resetBoard));
     }
