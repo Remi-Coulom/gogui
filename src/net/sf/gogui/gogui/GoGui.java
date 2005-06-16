@@ -1950,6 +1950,7 @@ class GoGui
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
+        m_contextMenu = null;
         resetBoard();
         clearStatus();
         setTitle();
