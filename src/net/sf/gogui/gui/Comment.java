@@ -7,14 +7,12 @@ package net.sf.gogui.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JScrollPane;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.gui.GuiTextPane;
 import net.sf.gogui.gui.GuiUtils;

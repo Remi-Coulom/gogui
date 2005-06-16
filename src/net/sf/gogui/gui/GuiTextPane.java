@@ -5,7 +5,6 @@
 
 package net.sf.gogui.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.KeyboardFocusManager;
 import java.util.HashSet;
