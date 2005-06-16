@@ -5,6 +5,7 @@
 
 package net.sf.gogui.utils;
 
+import java.awt.Color;
 import java.awt.PaintContext;
 import java.awt.geom.Point2D;
 import java.awt.image.ColorModel;
@@ -17,8 +18,8 @@ import java.awt.image.WritableRaster;
 public class RadialGradientContext
     implements PaintContext
 {
-    public RadialGradientContext(Point2D point, java.awt.Color color1,
-                                 Point2D radius, java.awt.Color color2)
+    public RadialGradientContext(Point2D point, Color color1,
+                                 Point2D radius, Color color2)
     {
         m_point = point;
         m_red1 = color1.getRed();

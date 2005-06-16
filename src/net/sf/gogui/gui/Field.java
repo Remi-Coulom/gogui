@@ -6,6 +6,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -159,7 +160,7 @@ public class Field
         m_graphics = null;
     }
 
-    public void setFieldBackground(java.awt.Color color)
+    public void setFieldBackground(Color color)
     {
         m_fieldColor = color;
     }
@@ -243,30 +244,26 @@ public class Field
 
     private String m_string = "";
 
-    private java.awt.Color m_fieldColor;
+    private Color m_fieldColor;
 
     private GoColor m_territory = GoColor.EMPTY;
 
-    private static final java.awt.Color m_influenceBlackColor
-        = java.awt.Color.gray;
+    private static final Color m_influenceBlackColor = Color.gray;
 
-    private static final java.awt.Color m_influenceWhiteColor
-        = java.awt.Color.white;
+    private static final Color m_influenceWhiteColor = Color.white;
 
-    private static final java.awt.Color m_lastMoveMarkerColor
-        = java.awt.Color.decode("#b61a17");
+    private static final Color m_lastMoveMarkerColor
+        = Color.decode("#b61a17");
 
-    private static final java.awt.Color m_colorBlackStone
-        = java.awt.Color.decode("#030303");
+    private static final Color m_colorBlackStone = Color.decode("#030303");
 
-    private static final java.awt.Color m_colorBlackStoneBright
-        = java.awt.Color.decode("#666666");
+    private static final Color m_colorBlackStoneBright
+        = Color.decode("#666666");
 
-    private static final java.awt.Color m_colorWhiteStone
-        = java.awt.Color.decode("#d7d0c9");
+    private static final Color m_colorWhiteStone = Color.decode("#d7d0c9");
 
-    private static final java.awt.Color m_colorWhiteStoneBright
-        = java.awt.Color.decode("#f6eee6");
+    private static final Color m_colorWhiteStoneBright
+        = Color.decode("#f6eee6");
 
     private GoColor m_color = GoColor.EMPTY;
 
@@ -282,7 +279,7 @@ public class Field
 
     private RadialGradientPaint m_paintWhite;
 
-    private void drawCircle(java.awt.Color color)
+    private void drawCircle(Color color)
     {
         m_graphics.setColor(color);
         int d = m_size * 36 / 100;
@@ -295,7 +292,7 @@ public class Field
         setComposite(m_composite7);
         int d = m_size / 5;
         int center = m_size / 2;
-        m_graphics.setColor(java.awt.Color.red);
+        m_graphics.setColor(Color.red);
         m_graphics.drawLine(d, center, m_size - d, center);
         m_graphics.drawLine(center, d, center, m_size - d);
         m_graphics.setPaintMode();
@@ -315,7 +312,7 @@ public class Field
         int d = m_size / 6;
         int w = m_size;
         int d2 = 2 * d;
-        m_graphics.setColor(java.awt.Color.red);
+        m_graphics.setColor(Color.red);
         m_graphics.drawLine(d, d, d2, d);
         m_graphics.drawLine(d, d, d, d2);
         m_graphics.drawLine(d, w - d2 - 1, d, w - d - 1);
@@ -354,7 +351,7 @@ public class Field
         setComposite(m_composite7);
         int d = m_size / 4;
         int width = m_size - 2 * d;
-        m_graphics.setColor(java.awt.Color.blue);
+        m_graphics.setColor(Color.blue);
         m_graphics.drawRect(d, d, width, width);
         m_graphics.drawRect(d + 1, d + 1, width - 2, width - 2);
         m_graphics.setPaintMode();
@@ -363,7 +360,7 @@ public class Field
     private void drawSelect()
     {
         setComposite(m_composite7);
-        drawCircle(java.awt.Color.blue);
+        drawCircle(Color.blue);
         m_graphics.setPaintMode();
     }
 
@@ -375,8 +372,7 @@ public class Field
             drawStone(m_colorWhiteStone, m_colorWhiteStoneBright);
     }
 
-    private void drawStone(java.awt.Color colorNormal,
-                           java.awt.Color colorBright)
+    private void drawStone(Color colorNormal, Color colorBright)
     {
         int margin = getStoneMargin(m_size);
         if (m_graphics2D != null && m_size >= 7)
@@ -402,9 +398,9 @@ public class Field
         int x = Math.max((m_size - stringWidth) / 2, 0);
         int y = stringHeight + (m_size - stringHeight) / 2;
         if (m_color == GoColor.WHITE)
-            m_graphics.setColor(java.awt.Color.black);
+            m_graphics.setColor(Color.black);
         else
-            m_graphics.setColor(java.awt.Color.white);
+            m_graphics.setColor(Color.white);
         Rectangle clip = null;
         setToolTipText(null);
         if (stringWidth > 0.95 * m_size)
@@ -422,11 +418,11 @@ public class Field
     private void drawTerritoryGraphics()
     {
         if (m_territory == GoColor.BLACK)
-            m_graphics.setColor(java.awt.Color.darkGray);
+            m_graphics.setColor(Color.darkGray);
         else
         {
             assert(m_territory == GoColor.WHITE);
-            m_graphics.setColor(java.awt.Color.lightGray);
+            m_graphics.setColor(Color.lightGray);
         }
         m_graphics.fillRect(0, 0, m_size, m_size);
     }
@@ -435,19 +431,19 @@ public class Field
     {
         setComposite(m_composite5);
         if (m_territory == GoColor.BLACK)
-            m_graphics2D.setColor(java.awt.Color.darkGray);
+            m_graphics2D.setColor(Color.darkGray);
         else
         {
             assert(m_territory == GoColor.WHITE);
-            m_graphics2D.setColor(java.awt.Color.white);
+            m_graphics2D.setColor(Color.white);
         }
         m_graphics2D.fillRect(0, 0, m_size, m_size);
         m_graphics2D.setPaintMode();
     }
 
     private RadialGradientPaint getPaint(GoColor color, int size,
-                                         java.awt.Color colorNormal,
-                                         java.awt.Color colorBright)
+                                         Color colorNormal,
+                                         Color colorBright)
     {
         RadialGradientPaint paint;
         int paintSize;

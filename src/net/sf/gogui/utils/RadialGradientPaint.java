@@ -5,6 +5,7 @@
 
 package net.sf.gogui.utils;
 
+import java.awt.Color;
 import java.awt.Paint;
 import java.awt.PaintContext;
 import java.awt.Rectangle;
@@ -20,8 +21,8 @@ import java.awt.image.ColorModel;
 public class RadialGradientPaint
     implements Paint
 {
-    public RadialGradientPaint(Point2D point, java.awt.Color pointColor,
-                               Point2D radius, java.awt.Color backgroundColor)
+    public RadialGradientPaint(Point2D point, Color pointColor,
+                               Point2D radius, Color backgroundColor)
     {
         assert(radius.distance(0, 0) > 0);
         m_point = point;
@@ -69,9 +70,9 @@ public class RadialGradientPaint
 
     private final Point2D m_radius;
 
-    private final java.awt.Color m_backgroundColor;
+    private final Color m_backgroundColor;
 
-    private final java.awt.Color m_pointColor;
+    private final Color m_pointColor;
 }
 
 //----------------------------------------------------------------------------

@@ -6,6 +6,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -96,7 +97,7 @@ class GameNode
         int halfSize = width / 2;
         if (m_node.getNumberChildren() > 1)
         {
-            graphics.setColor(java.awt.Color.DARK_GRAY);
+            graphics.setColor(Color.DARK_GRAY);
             if (m_gameTreePanel.isExpanded(m_node))
                 graphics.drawLine(halfSize, width, halfSize, height);
             else
@@ -111,10 +112,10 @@ class GameNode
         Move move = m_node.getMove();
         if (m_node.getNumberAddBlack() + m_node.getNumberAddWhite() > 0)
         {
-            graphics.setColor(java.awt.Color.black);
+            graphics.setColor(Color.black);
             graphics.fillOval(0, 0, halfSize, halfSize);
             graphics.fillOval(halfSize, halfSize, halfSize, halfSize);
-            graphics.setColor(java.awt.Color.white);
+            graphics.setColor(Color.white);
             graphics.fillOval(halfSize, 0, halfSize, halfSize);
             graphics.fillOval(0, halfSize, halfSize, halfSize);
         }
@@ -128,9 +129,9 @@ class GameNode
         else
         {
             if (move.getColor() == GoColor.BLACK)
-                graphics.setColor(java.awt.Color.black);
+                graphics.setColor(Color.black);
             else
-                graphics.setColor(java.awt.Color.white);
+                graphics.setColor(Color.white);
             graphics.fillOval(0, 0, width, width);
             drawText(graphics);
         }
@@ -144,7 +145,7 @@ class GameNode
         }
         if (m_gameTreePanel.isCurrent(m_node))
         {
-            graphics.setColor(java.awt.Color.red);
+            graphics.setColor(Color.red);
             int d = width / 6;
             int w = width;
             graphics.drawLine(d, d, 2 * d, d);
@@ -165,8 +166,7 @@ class GameNode
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private static final java.awt.Color m_colorLightBlue
-        = new java.awt.Color(103, 122, 164);
+    private static final Color m_colorLightBlue = new Color(103, 122, 164);
 
     private final GameTreePanel m_gameTreePanel;
 
@@ -193,9 +193,9 @@ class GameNode
         int xText = (width - textWidth) / 2;
         int yText = textHeight + (width - textHeight) / 2;
         if (move.getColor() == GoColor.BLACK)
-            graphics.setColor(java.awt.Color.white);
+            graphics.setColor(Color.white);
         else
-            graphics.setColor(java.awt.Color.black);
+            graphics.setColor(Color.black);
         graphics.drawString(text, xText, yText);
     }
 }
@@ -220,8 +220,7 @@ class GameTreePanel
 
     public static final int SIZE_TINY = 3;
 
-    public static final java.awt.Color m_background =
-        new java.awt.Color(192, 192, 192);
+    public static final Color m_background = new Color(192, 192, 192);
 
     public GameTreePanel(JDialog owner, GameTreeViewer.Listener listener,
                          boolean fastPaint, int labelMode, int sizeMode)
@@ -382,7 +381,7 @@ class GameTreePanel
         super.paintComponent(graphics);
         if (m_gameTree == null)
             return;
-        graphics.setColor(java.awt.Color.DARK_GRAY);
+        graphics.setColor(Color.DARK_GRAY);
         drawGrid(graphics, m_gameTree.getRoot(),
                  m_margin + m_nodeWidth / 2, m_margin + m_nodeWidth / 2);
     }

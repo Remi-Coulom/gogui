@@ -6,6 +6,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -44,7 +45,7 @@ class BoardLabel
     public BoardLabel(String text)
     {
         super(text, JLabel.CENTER);
-        setForeground(java.awt.Color.DARK_GRAY);
+        setForeground(Color.DARK_GRAY);
         setOpaque(false);
     }
 
@@ -442,7 +443,7 @@ public final class GuiBoard
         m_focusPoint.set(point.getX(), point.getY());
     }
 
-    public void setFieldBackground(GoPoint p, java.awt.Color color)
+    public void setFieldBackground(GoPoint p, Color color)
     {
         getField(p).setFieldBackground(color);
         m_needsReset = true;
@@ -546,27 +547,27 @@ public final class GuiBoard
         {
             GoPoint p = m_board.getPoint(i);
             String s = board[p.getX()][p.getY()];
-            java.awt.Color c = null;
+            Color c = null;
             if (s.equals("blue"))
-                c = java.awt.Color.blue;
+                c = Color.blue;
             else if (s.equals("cyan"))
-                c = java.awt.Color.cyan;
+                c = Color.cyan;
             else if (s.equals("green"))
-                c = java.awt.Color.green;
+                c = Color.green;
             else if (s.equals("gray"))
-                c = java.awt.Color.lightGray;
+                c = Color.lightGray;
             else if (s.equals("magenta"))
-                c = java.awt.Color.magenta;
+                c = Color.magenta;
             else if (s.equals("pink"))
-                c = java.awt.Color.pink;
+                c = Color.pink;
             else if (s.equals("red"))
-                c = java.awt.Color.red;
+                c = Color.red;
             else if (s.equals("yellow"))
-                c = java.awt.Color.yellow;
+                c = Color.yellow;
             else if (s.equals("black"))
-                c = java.awt.Color.black;
+                c = Color.black;
             else if (s.equals("white"))
-                c = java.awt.Color.white;
+                c = Color.white;
             setFieldBackground(p, c);
         }
     }
@@ -737,7 +738,7 @@ public final class GuiBoard
             graphics.drawImage(m_image, 0, 0, width, width, null);
         else
         {
-            graphics.setColor(new java.awt.Color(212, 167, 102));
+            graphics.setColor(new Color(212, 167, 102));
             graphics.fillRect(0, 0, width, width);
         }
     }
@@ -746,7 +747,7 @@ public final class GuiBoard
     {
         int size = m_board.getSize();
         int width = getSize().width;
-        graphics.setColor(java.awt.Color.darkGray);
+        graphics.setColor(Color.darkGray);
         for (int y = 0; y < size; ++y)
         {
             java.awt.Point left = getScreenLocation(0, y);
@@ -789,7 +790,7 @@ public final class GuiBoard
                 continue;
             java.awt.Point location = getScreenLocation(point.getX(),
                                                         point.getY());
-            graphics.setColor(java.awt.Color.black);
+            graphics.setColor(Color.black);
             graphics.fillOval(location.x - size / 2 + offset,
                               location.y - size / 2 + offset,
                               size, size);
