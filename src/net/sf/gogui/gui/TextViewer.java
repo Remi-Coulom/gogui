@@ -53,14 +53,14 @@ public class TextViewer
                       boolean highlight, Listener listener)
     {
         super(owner, title);
-        initialize(title, text, highlight, listener);
+        initialize(text, highlight, listener);
     }
 
     public TextViewer(Dialog owner, String title, String text,
                       boolean highlight, Listener listener)
     {
         super(owner, title);
-        initialize(title, text, highlight, listener);
+        initialize(text, highlight, listener);
     }
 
     /** Serial version to suppress compiler warning.
@@ -123,16 +123,13 @@ public class TextViewer
         }
     }
 
-    private void initialize(String title, String text, boolean highlight,
-                            Listener listener)
+    private void initialize(String text, boolean highlight, Listener listener)
     {
         m_listener = listener;
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(GuiUtils.createSmallEmptyBorder());
         Container contentPane = getContentPane();
         contentPane.add(panel, BorderLayout.CENTER);
-        JLabel label = new JLabel(title);
-        panel.add(label, BorderLayout.NORTH);
         m_textPane = new JTextPane();
         StyledDocument doc = m_textPane.getStyledDocument();
         try
