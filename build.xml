@@ -423,7 +423,7 @@ Uses exec to avoid dependency on the FindBugs ant task.">
  net/sf/gogui/go/*.class
  net/sf/gogui/gui/GuiBoard*.class
  net/sf/gogui/gui/BoardLabel.class
- net/sf/gogui/gui/Field*.class
+ net/sf/gogui/gui/GuiField*.class
  net/sf/gogui/gui/GuiJTextArea.class
  net/sf/gogui/gui/GuiJTextPane.class
  net/sf/gogui/gui/GuiTextPane.class

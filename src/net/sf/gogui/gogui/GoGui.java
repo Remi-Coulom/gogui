@@ -61,13 +61,13 @@ import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.Comment;
 import net.sf.gogui.gui.CommandThread;
 import net.sf.gogui.gui.ContextMenu;
-import net.sf.gogui.gui.Field;
 import net.sf.gogui.gui.FindDialog;
 import net.sf.gogui.gui.GameInfo;
 import net.sf.gogui.gui.GameInfoDialog;
 import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
 import net.sf.gogui.gui.GuiBoard;
+import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.ParameterDialog;
@@ -489,7 +489,7 @@ class GoGui
         }
     }
 
-    public void contextMenu(GoPoint point, Field field)
+    public void contextMenu(GoPoint point, GuiField field)
     {
         if (m_contextMenu == null || m_contextMenu.isEmpty())
             return;

@@ -31,8 +31,8 @@ import net.sf.gogui.gtp.Gtp;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
-import net.sf.gogui.gui.Field;
 import net.sf.gogui.gui.GuiBoard;
+import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.utils.Platform;
@@ -87,7 +87,7 @@ public class GtpDisplay
             m_guiBoard.setShowCursor(false);
         m_guiBoard.setListener(new GuiBoard.Listener()
             {
-                public void contextMenu(GoPoint point, Field field)
+                public void contextMenu(GoPoint point, GuiField field)
                 {
                 }
 

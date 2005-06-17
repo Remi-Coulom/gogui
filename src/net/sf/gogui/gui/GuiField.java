@@ -31,11 +31,11 @@ import net.sf.gogui.utils.RadialGradientPaint;
     The implementation assumes that the size of the component is a square,
     which is automatically guaranteed if the board uses SquareLayout.
 */
-public class Field
+public class GuiField
     extends JComponent
     implements FocusListener
 {
-    public Field(GuiBoard board, GoPoint point, boolean fastPaint)
+    public GuiField(GuiBoard board, GoPoint point, boolean fastPaint)
     {
         m_board = board;
         m_point = point;
@@ -69,7 +69,7 @@ public class Field
                         return;
                     if (event.isPopupTrigger())
                     {
-                        m_board.contextMenu(m_point, Field.this);
+                        m_board.contextMenu(m_point, GuiField.this);
                         return;
                     }
                 }
@@ -83,7 +83,7 @@ public class Field
                         return;
                     if (event.isPopupTrigger())
                     {
-                        m_board.contextMenu(m_point, Field.this);
+                        m_board.contextMenu(m_point, GuiField.this);
                         return;
                     }
                     int button = event.getButton();

@@ -85,7 +85,7 @@ public final class GuiBoard
     {
         void fieldClicked(GoPoint point, boolean modifiedSelect);
 
-        void contextMenu(GoPoint point, Field field);
+        void contextMenu(GoPoint point, GuiField field);
     }
 
     public GuiBoard(Board board, boolean fastPaint)
@@ -161,7 +161,7 @@ public final class GuiBoard
         getField(p).clearInfluence();
     }
 
-    public void contextMenu(GoPoint point, Field field)
+    public void contextMenu(GoPoint point, GuiField field)
     {
         if (m_listener != null)
             m_listener.contextMenu(point, field);
@@ -195,7 +195,7 @@ public final class GuiBoard
 
     public Point getLocationOnScreen(GoPoint point)
     {
-        Field field = getField(point);
+        GuiField field = getField(point);
         Point location = field.getLocationOnScreen();
         Dimension size = field.getSize();
         location.x += size.width / 2;
@@ -257,7 +257,7 @@ public final class GuiBoard
     public void initSize(int size)
     {
         m_board.initSize(size);
-        m_field = new Field[size][size];
+        m_field = new GuiField[size][size];
         removeAll();
         setOpaque(false);        
         setLayout(new GridLayout(size + 2, size + 2));
@@ -270,7 +270,7 @@ public final class GuiBoard
             for (int x = 0; x < size; ++x)
             {
                 GoPoint p = m_board.getPoint(x, y);
-                Field field = new Field(this, p, m_fastPaint);
+                GuiField field = new GuiField(this, p, m_fastPaint);
                 add(field);
                 m_field[x][y] = field;
                 KeyListener keyListener = new KeyAdapter()
@@ -297,7 +297,7 @@ public final class GuiBoard
         m_lastMove = point;
         if (m_lastMove != null)
         {
-            Field field = getField(m_lastMove);
+            GuiField field = getField(m_lastMove);
             field.setLastMoveMarker(true);
             field.repaint();
             m_lastMove = point;
@@ -323,7 +323,7 @@ public final class GuiBoard
 
     public void paintImmediately(GoPoint point)
     {
-        Field field = getField(point);
+        GuiField field = getField(point);
         Rectangle rect = field.getVisibleRect();
         int offset = getShadowOffset();
         rect.width += offset;
@@ -647,7 +647,7 @@ public final class GuiBoard
 
     public void updateFromGoBoard(GoPoint point)
     {
-        Field field = getField(point);
+        GuiField field = getField(point);
         GoColor color = m_board.getColor(point);
         GoColor oldColor = field.getColor();
         if (color != oldColor)
@@ -685,7 +685,7 @@ public final class GuiBoard
 
     private Dimension m_preferredFieldSize;
 
-    private Field m_field[][];
+    private GuiField m_field[][];
 
     private Font m_cachedFont;
 
@@ -733,7 +733,7 @@ public final class GuiBoard
     {
         if (m_lastMove != null)
         {
-            Field field = getField(m_lastMove);
+            GuiField field = getField(m_lastMove);
             field.setLastMoveMarker(false);
             field.repaint();
             m_lastMove = null;
@@ -790,7 +790,7 @@ public final class GuiBoard
         graphics2D.setComposite(m_composite3);
         Rectangle grid = getBounds();
         int width = grid.width / (m_board.getSize() + 2);
-        int size = width - 2 * Field.getStoneMargin(width);
+        int size = width - 2 * GuiField.getStoneMargin(width);
         int offset = getShadowOffset();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
@@ -806,7 +806,7 @@ public final class GuiBoard
         graphics.setPaintMode();
     }
 
-    private Field getField(GoPoint p)
+    private GuiField getField(GoPoint p)
     {
         assert(p != null);
         return m_field[p.getX()][p.getY()];
@@ -821,7 +821,7 @@ public final class GuiBoard
     {
         Rectangle grid = getBounds();
         int width = grid.width / (m_board.getSize() + 2);
-        int size = width - 2 * Field.getStoneMargin(width);
+        int size = width - 2 * GuiField.getStoneMargin(width);
         return size / 12;
     }
 
