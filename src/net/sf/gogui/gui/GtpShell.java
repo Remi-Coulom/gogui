@@ -210,9 +210,10 @@ class GtpShellText
             s = getStyle(style);
         try
         {
-            boolean caretVisible = isCaretVisible();
-            doc.insertString(doc.getLength(), text, s);
-            if (caretVisible)
+            int length = doc.getLength();
+            boolean visible = isVisible(length);
+            doc.insertString(length, text, s);
+            if (visible)
                 setPositionToEnd();
         }
         catch (BadLocationException e)
@@ -226,15 +227,13 @@ class GtpShellText
         }
     }
 
-    private boolean isCaretVisible()
+    private boolean isVisible(int pos)
     {
         try
         {
-            Rectangle caretRect = modelToView(getCaretPosition());
+            Rectangle rect = modelToView(pos);
             Rectangle visibleRect = getVisibleRect();
-            // contains(caretRect), leads to wrong results, because
-            // caretRect.width == 0
-            boolean result = visibleRect.contains(caretRect.x, caretRect.y);
+            boolean result = visibleRect.contains(rect.x, rect.y);
             return result;
         }
         catch (BadLocationException e)
@@ -841,12 +840,12 @@ public class GtpShell
 
     private void comboBoxEdited()
     {
-        m_gtpShellText.setPositionToEnd();
         String command = m_comboBox.getSelectedItem().toString();        
         if (command.trim().equals(""))
             return;
         sendCommand(command, null, false);
         appendToHistory(command);
+        m_gtpShellText.setPositionToEnd();
         m_comboBox.hidePopup();
         addAllCompletions(m_history);
         m_editor.setItem(null);
