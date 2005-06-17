@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,6 +50,7 @@ import javax.swing.KeyStroke;
 import javax.swing.Scrollable;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyleConstants;
@@ -84,6 +86,9 @@ class GtpShellText
         Style invalid = addStyle("invalid", def);
         StyleConstants.setForeground(invalid, Color.white);
         StyleConstants.setBackground(invalid, Color.red);
+        DefaultCaret caret = new DefaultCaret();
+        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        setCaret(caret);
         setEditable(false);
     }
 
@@ -162,7 +167,15 @@ class GtpShellText
 
     public void setPositionToEnd()
     {
-        setCaretPosition(getStyledDocument().getLength());
+        int length = getStyledDocument().getLength();
+        setCaretPosition(length);
+        try
+        {
+            scrollRectToVisible(modelToView(length));
+        }
+        catch (BadLocationException e)
+        {
+        }
     }
 
     private boolean m_highlight;
@@ -197,14 +210,37 @@ class GtpShellText
             s = getStyle(style);
         try
         {
+            boolean caretVisible = isCaretVisible();
             doc.insertString(doc.getLength(), text, s);
+            if (caretVisible)
+                setPositionToEnd();
         }
         catch (BadLocationException e)
         {
             assert(false);
         }
         if (m_lines > m_historyMax)
+        {
             truncateHistory();
+            setPositionToEnd();
+        }
+    }
+
+    private boolean isCaretVisible()
+    {
+        try
+        {
+            Rectangle caretRect = modelToView(getCaretPosition());
+            Rectangle visibleRect = getVisibleRect();
+            // contains(caretRect), leads to wrong results, because
+            // caretRect.width == 0
+            boolean result = visibleRect.contains(caretRect.x, caretRect.y);
+            return result;
+        }
+        catch (BadLocationException e)
+        {
+            return true;
+        }
     }
 
     private void truncateHistory()
