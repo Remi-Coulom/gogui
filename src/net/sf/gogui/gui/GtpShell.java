@@ -30,6 +30,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Vector;
 import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
@@ -86,9 +90,7 @@ class GtpShellText
         Style invalid = addStyle("invalid", def);
         StyleConstants.setForeground(invalid, Color.white);
         StyleConstants.setBackground(invalid, Color.red);
-        DefaultCaret caret = new DefaultCaret();
-        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-        setCaret(caret);
+        initCaret();
         setEditable(false);
     }
 
@@ -225,6 +227,75 @@ class GtpShellText
             truncateHistory();
             setPositionToEnd();
         }
+    }
+
+    /** Try to set the default caret with update policy NEVER_UPDATE.
+        Uses reflection API, because setUpdatePolicy(NEVER_UPDATE)
+        is not available on Java 1.4
+    */
+    private void initCaret()
+    {
+        DefaultCaret caret = new DefaultCaret();
+        Class classCaret;
+        try
+        {
+            classCaret = Class.forName("javax.swing.text.DefaultCaret");
+        }
+        catch (ClassNotFoundException e)
+        {
+            assert(false);
+            return;
+        }        
+        Field field;
+        try
+        {
+            field = classCaret.getField("NEVER_UPDATE");
+        }
+        catch (NoSuchFieldException e)
+        {
+            return;
+        }        
+        assert(Modifier.isStatic(field.getModifiers()));
+        int neverUpdate;
+        try
+        {
+            neverUpdate = field.getInt(caret);
+        }
+        catch (IllegalAccessException e)
+        {
+            assert(false);
+            return;
+        }
+        Class [] args = new Class[1];
+        args[0] = int.class;
+        Method method;
+        try
+        {
+            method = classCaret.getMethod("setUpdatePolicy", args);
+        }
+        catch (NoSuchMethodException e)
+        {
+            assert(false);
+            return;
+        }
+        assert(method.getReturnType() == void.class);
+        Object[] objArgs = new Object[1];
+        objArgs[0] = new Integer(neverUpdate);
+        try
+        {
+            method.invoke(caret, objArgs);
+        }
+        catch (InvocationTargetException e)
+        {
+            assert(false);
+            return;
+        }
+        catch (IllegalAccessException e)
+        {
+            assert(false);
+            return;
+        }
+        setCaret(caret);
     }
 
     private boolean isVisible(int pos)
