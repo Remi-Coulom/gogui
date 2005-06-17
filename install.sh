@@ -31,7 +31,7 @@ for FILE in bin/*; do
   if [ -f $FILE -a -x $FILE ]; then
     cat $FILE \
     | sed -e "s;GOGUI_LIB=.*;GOGUI_LIB=$PREFIX/share/gogui/lib;" \
-          -e "s;JAVA_DEFAULT=.*;JAVA_DEFAULT=$JAVA_HOME;" \
+          -e "s;JAVA_DEFAULT=.*;JAVA_DEFAULT=$JAVA_HOME/bin/java;" \
     > $PREFIX/$FILE
     chmod a+x $PREFIX/$FILE
   fi
