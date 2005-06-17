@@ -3,14 +3,16 @@
 # Default prefix should be /usr/local, but some desktop
 # environments have problems finding resources there
 PREFIX=/usr
+JAVA_HOME=java
 
 function usage() {
-  printf "Usage: %s [-p prefix]\n" $0
+  printf "Usage: %s [-p prefix][-j javahome]\n" $0
 }
 
-while getopts hp: OPTION; do
+while getopts hj:p: OPTION; do
   case $OPTION in
     h) usage; exit 0;;
+    j) JAVA_HOME="$OPTARG";;
     p) PREFIX="$OPTARG";;
     ?) usage; exit -1;;
   esac
@@ -28,7 +30,8 @@ install -d $PREFIX/bin
 for FILE in bin/*; do
   if [ -f $FILE -a -x $FILE ]; then
     cat $FILE \
-    | sed "s;GOGUI_LIB=.*;GOGUI_LIB=$PREFIX/share/gogui/lib;" \
+    | sed -e "s;GOGUI_LIB=.*;GOGUI_LIB=$PREFIX/share/gogui/lib;" \
+          -e "s;JAVA_DEFAULT=.*;JAVA_DEFAULT=$JAVA_HOME;" \
     > $PREFIX/$FILE
     chmod a+x $PREFIX/$FILE
   fi
