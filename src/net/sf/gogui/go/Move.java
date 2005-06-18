@@ -72,16 +72,6 @@ public final class Move
         return m_point;
     }
 
-    public int hashCode()
-    {
-        int code = 0;
-        if (m_point != null)
-            code = (m_point.getX() << 17) | (m_point.getY() << 1);
-        if (m_color == GoColor.BLACK)
-            code |= 1;
-        return code;
-    }
-
     public String toString()
     {
         if (m_point == null)

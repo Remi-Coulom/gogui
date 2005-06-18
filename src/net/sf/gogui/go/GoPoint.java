@@ -48,11 +48,6 @@ public final class GoPoint
         return m_y;
     }
 
-    public int hashCode()
-    {
-        return (m_x << 16) | m_y;
-    }
-
     public GoPoint left()
     {
         if (m_x > 0)
