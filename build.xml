@@ -269,12 +269,10 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </target>
 
 <target name="findbugs" depends="compile"
- description="
-Invoke FindBugs.
-Uses exec to avoid dependency on the FindBugs ant task.">
+ description="Invoke FindBugs (with exec)">
 <mkdir dir="test/findbugs"/>
 <exec executable="${findbugs.home}/bin/findbugs"
- output="test/findbugs/output.xml">
+ output="test/findbugs/output.xml" logError="true">
 <arg line="-textui"/>
 <arg line="-project test/findbugs/gogui.fb"/>
 <arg line="-low"/>
