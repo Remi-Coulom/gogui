@@ -458,7 +458,7 @@ public class TwoGtp
             response.append(e.getMessage());
             return false;
         }
-        Move move = new Move(point, color);
+        Move move = Move.create(point, color);
         if (m_openings != null)
         {
             if (! move.equals((Move)m_openingMoves.get(m_openingMovesIndex)))
@@ -1255,7 +1255,7 @@ public class TwoGtp
             if (m_observer != null && ! m_observerIsDisabled)
                 sendToObserver(m_observer.getCommandPlay(color) + " "
                               + response1);
-            play(new Move(point, color));
+            play(Move.create(point, color));
         }
         if (gameOver() && ! m_gameSaved)
         {

@@ -278,13 +278,13 @@ public class GtpAdapter
         {
             GoPoint point =
                 GtpUtils.parsePoint(response.toString(), m_boardSize);
-            m_board.play(new Move(point, color));
+            m_board.play(Move.create(point, color));
             return true;
         }
         catch (GtpError e)
         {
             response.append(" (program played illegal move)");
-            m_board.play(new Move(null, color));
+            m_board.play(Move.create(null, color));
             return false;
         }
     }
@@ -584,7 +584,7 @@ public class GtpAdapter
             command = command + point;
         if (send(command, response))
         {
-            m_board.play(new Move(point, color));
+            m_board.play(Move.create(point, color));
             return true;
         }
         return false;

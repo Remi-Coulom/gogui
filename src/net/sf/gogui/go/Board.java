@@ -285,7 +285,7 @@ public final class Board
     {
         if (getColor(point) != GoColor.EMPTY)
             return false;
-        play(new Move(point, toMove));
+        play(Move.create(point, toMove));
         MoveRecord moveRecord = (MoveRecord)m_moves.get(m_moveNumber - 1);
         boolean result = (moveRecord.getSuicide().size() > 0);
         undo();
@@ -710,9 +710,10 @@ public final class Board
         return true;
     }
 
-    private void setColor(GoPoint p, GoColor color)
+    private void setColor(GoPoint point, GoColor color)
     {
-        m_color[p.getX()][p.getY()] = color;
+        assert(point != null);
+        m_color[point.getX()][point.getY()] = color;
     }
 
     private void setMark(GoPoint p, boolean value)

@@ -522,7 +522,7 @@ class GoGui
                 color = GoColor.EMPTY;
             else
                 color = toMove;
-            m_board.play(new Move(p, color));
+            m_board.play(Move.create(p, color));
             m_board.setToMove(toMove);
             updateGameInfo(true);
             m_guiBoard.updateFromGoBoard();
@@ -575,7 +575,7 @@ class GoGui
             if (m_board.isSuicide(p, m_board.getToMove())
                 && ! showQuestion("Play suicide?"))
                 return;
-            Move move = new Move(p, m_board.getToMove());
+            Move move = Move.create(p, m_board.getToMove());
             humanMoved(move);
         }
     }
@@ -1452,7 +1452,7 @@ class GoGui
 
     private void cbPass()
     {
-        humanMoved(new Move(null, m_board.getToMove()));
+        humanMoved(Move.create(null, m_board.getToMove()));
     }
 
     private void cbPlay()
@@ -1840,7 +1840,7 @@ class GoGui
                 if (point != null
                     && m_board.getColor(point) != GoColor.EMPTY)
                     showWarning("Program played move on non-empty point");
-                Move move = new Move(point, toMove);
+                Move move = Move.create(point, toMove);
                 setNeedsSave(true);
                 m_board.play(move);
                 Node node = createNode(move);

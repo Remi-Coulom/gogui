@@ -370,7 +370,7 @@ public class GtpDisplay
                 return false;
             }
         }
-        m_move = new Move(point, color);
+        m_move = Move.create(point, color);
         if (! invokeAndWait(new Runnable()
             {
                 public void run()
@@ -578,7 +578,7 @@ public class GtpDisplay
             if (! send(command, response))
                 return false;
         }
-        m_move = new Move(point, color);
+        m_move = Move.create(point, color);
         if (! invokeAndWait(new Runnable()
             {
                 public void run()

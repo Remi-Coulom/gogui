@@ -129,7 +129,7 @@ public class GtpTerminal
             System.out.println(response);
             return false;
         }
-        play(new Move(point, color));
+        play(Move.create(point, color));
         return true;
     }
 
@@ -148,7 +148,7 @@ public class GtpTerminal
             GoPoint point =
                 GtpUtils.parsePoint(response.toString(), m_board.getSize());
             System.out.println("Computer move: " + GoPoint.toString(point));
-            play(new Move(point, toMove));
+            play(Move.create(point, toMove));
             printBoard();
         }
         catch (GtpError error)

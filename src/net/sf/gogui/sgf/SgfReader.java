@@ -206,14 +206,6 @@ public class SgfReader
 
     private GameTree m_gameTree;
 
-    private Move[][] m_moveBlackCache = new Move[CACHE_SIZE][CACHE_SIZE];
-
-    private Move[][] m_moveWhiteCache = new Move[CACHE_SIZE][CACHE_SIZE];
-
-    private final Move m_passBlackCache = new Move(null, GoColor.BLACK);
-
-    private final Move m_passWhiteCache = new Move(null, GoColor.WHITE);
-
     private ProgressShow m_progressShow;
 
     /** Contains strings with warnings. */
@@ -350,40 +342,6 @@ public class SgfReader
             String s = m_name + ":" + lineNumber + ": " + message;
             return new SgfError(s);
         }
-    }
-
-    private Move getMove(GoPoint point, GoColor color)
-    {
-        if (point == null)
-        {
-            if (color == GoColor.BLACK)
-                return m_passBlackCache;
-            else
-            {
-                assert(color == GoColor.WHITE);
-                return m_passWhiteCache;
-            }
-        }
-        int x = point.getX();
-        int y = point.getY();
-        if (x < CACHE_SIZE && y < CACHE_SIZE)
-        {
-            if (color == GoColor.BLACK)
-            {
-                if (m_moveBlackCache[x][y] == null)
-                    m_moveBlackCache[x][y] = new Move(point, color);
-                return m_moveBlackCache[x][y];
-            }
-            else
-            {
-                assert(color == GoColor.WHITE);
-                if (m_moveWhiteCache[x][y] == null)
-                    m_moveWhiteCache[x][y] = new Move(point, color);
-                return m_moveWhiteCache[x][y];
-            }
-        }
-        else
-            return new Move(point, color);
     }
 
     private GoColor parseColor(String s) throws SgfError
@@ -577,7 +535,7 @@ public class SgfReader
             }
             else if (p == "B")
             {
-                node.setMove(getMove(parsePoint(v), GoColor.BLACK));
+                node.setMove(Move.create(parsePoint(v), GoColor.BLACK));
                 m_sizeFixed = true;
             }
             else if (p == "BL")
@@ -758,7 +716,7 @@ public class SgfReader
             }
             else if (p == "W")
             {
-                node.setMove(getMove(parsePoint(v), GoColor.WHITE));
+                node.setMove(Move.create(parsePoint(v), GoColor.WHITE));
                 m_sizeFixed = true;
             }
             else if (p == "WL")

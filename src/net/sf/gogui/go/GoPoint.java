@@ -22,10 +22,12 @@ public final class GoPoint
         assert(y >= 0);
         assert(x < MAXSIZE);
         assert(y < MAXSIZE);
-        int max = Math.max(x, y) + 1;
-        if (max >= s_max)
-            grow(max);
-        return s_points[x][y];
+        int max = Math.max(x, y);
+        if (max >= s_size)
+            grow(max + 1);
+        GoPoint point = s_points[x][y];
+        assert(point != null);
+        return point;
     }
     
     public GoPoint down()
@@ -102,7 +104,7 @@ public final class GoPoint
             return this;
     }
 
-    private static int s_max;
+    private static int s_size;
 
     private static GoPoint[][] s_points;
 
@@ -116,21 +118,22 @@ public final class GoPoint
 
     static
     {
-        s_max = 0;
+        s_size = 0;
         grow(19);
     };
 
-    private static void grow(int max)
+    private static void grow(int size)
     {
-        assert(max > s_max);
-        GoPoint[][] points = new GoPoint[max][max];
-        for (int x = 0; x < s_max; ++x)
-            for (int y = 0; y < s_max; ++y)
-                points[x][y] = s_points[x][y];
-        for (int x = s_max; x < max; ++x)
-            for (int y = s_max; y < max; ++y)
-                points[x][y] = new GoPoint(x, y);
+        assert(size > s_size);
+        GoPoint[][] points = new GoPoint[size][size];
+        for (int x = 0; x < size; ++x)
+            for (int y = 0; y < size; ++y)
+                if (x < s_size && y < s_size)
+                    points[x][y] = s_points[x][y];
+                else
+                    points[x][y] = new GoPoint(x, y);
         s_points = points;
+        s_size = size;
     }
 
     private GoPoint(int x, int y)

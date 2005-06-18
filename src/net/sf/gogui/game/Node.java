@@ -130,9 +130,9 @@ public final class Node
         if (hasSetupInfo())
         {
             for (int i = 0; i < getNumberAddBlack(); ++i)
-                moves.add(new Move(getAddBlack(i), GoColor.BLACK));
+                moves.add(Move.create(getAddBlack(i), GoColor.BLACK));
             for (int i = 0; i < getNumberAddWhite(); ++i)
-                moves.add(new Move(getAddWhite(i), GoColor.WHITE));
+                moves.add(Move.create(getAddWhite(i), GoColor.WHITE));
         }
         if (m_move != null)
             moves.add(m_move);
@@ -143,7 +143,8 @@ public final class Node
                 toMove = GoColor.BLACK;
             Move lastMove = (Move)moves.get(moves.size() - 1);
             if (toMove != lastMove.getColor().otherColor())
-                moves.add(new Move(null, lastMove.getColor().otherColor()));
+                moves.add(Move.create(null,
+                                      lastMove.getColor().otherColor()));
         }
         return moves;
     }
