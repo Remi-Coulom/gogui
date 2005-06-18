@@ -239,7 +239,7 @@ public class GtpDummy
                     if (! m_alreadyPlayed[x][y])
                     {
                         if (index == rand)
-                            point = new GoPoint(x, y);
+                            point = GoPoint.create(x, y);
                         ++index;
                     }
         }

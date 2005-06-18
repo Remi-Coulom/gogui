@@ -269,7 +269,7 @@ public final class GuiBoard
             addRowLabel(text);
             for (int x = 0; x < size; ++x)
             {
-                GoPoint p = m_board.getPoint(x, y);
+                GoPoint p = GoPoint.create(x, y);
                 GuiField field = new GuiField(this, p, m_fastPaint);
                 add(field);
                 m_field[x][y] = field;
@@ -285,7 +285,7 @@ public final class GuiBoard
             addRowLabel(text);
         }
         addColumnLabels(size);
-        m_focusPoint = new GoPoint(size / 2, size / 2);
+        m_focusPoint = GoPoint.create(size / 2, size / 2);
         m_lastMove = null;
         revalidate();
         repaint();
@@ -440,7 +440,7 @@ public final class GuiBoard
         {
             int size = m_board.getSize();
             if (size > 0)
-                setFocusPoint(m_board.getPoint(size / 2, size / 2));
+                setFocusPoint(GoPoint.create(size / 2, size / 2));
         }
     }
 
@@ -449,7 +449,7 @@ public final class GuiBoard
         if (! m_board.contains(point))
             return;
         getField(point).requestFocusInWindow();
-        m_focusPoint.set(point.getX(), point.getY());
+        m_focusPoint = point;
     }
 
     public void setFieldBackground(GoPoint p, Color color)
@@ -852,31 +852,31 @@ public final class GuiBoard
         boolean shiftModifier = ((modifiers & ActionEvent.SHIFT_MASK) != 0);
         if (code == KeyEvent.VK_DOWN)
         {
-            m_focusPoint.down();
+            m_focusPoint = m_focusPoint.down();
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(m_focusPoint.getY()))
-                    m_focusPoint.down();
+                    m_focusPoint = m_focusPoint.down();
         }
         else if (code == KeyEvent.VK_UP)
         {
-            m_focusPoint.up(size);
+            m_focusPoint = m_focusPoint.up(size);
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(m_focusPoint.getY()))
-                    m_focusPoint.up(size);
+                    m_focusPoint = m_focusPoint.up(size);
         }
         else if (code == KeyEvent.VK_LEFT)
         {
-            m_focusPoint.left();
+            m_focusPoint = m_focusPoint.left();
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(m_focusPoint.getX()))
-                    m_focusPoint.left();
+                    m_focusPoint = m_focusPoint.left();
         }
         else if (code == KeyEvent.VK_RIGHT)
         {
-            m_focusPoint.right(size);
+            m_focusPoint = m_focusPoint.right(size);
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(m_focusPoint.getX()))
-                    m_focusPoint.right(size);
+                    m_focusPoint = m_focusPoint.right(size);
         }
         setFocusPoint(m_focusPoint);
     }

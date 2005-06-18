@@ -214,8 +214,6 @@ public class SgfReader
 
     private final Move m_passWhiteCache = new Move(null, GoColor.WHITE);
 
-    private GoPoint[][] m_pointCache = new GoPoint[CACHE_SIZE][CACHE_SIZE];
-
     private ProgressShow m_progressShow;
 
     /** Contains strings with warnings. */
@@ -500,14 +498,7 @@ public class SgfReader
             }
             throw getError("Invalid coordinates: " + s);
         }
-        if (x < CACHE_SIZE && y < CACHE_SIZE)
-        {
-            if (m_pointCache[x][y] == null)
-                m_pointCache[x][y] = new GoPoint(x, y);
-            return m_pointCache[x][y];
-        }
-        else
-            return new GoPoint(x, y);
+        return GoPoint.create(x, y);
     }
 
     private Node readNext(Node father, boolean isRoot)

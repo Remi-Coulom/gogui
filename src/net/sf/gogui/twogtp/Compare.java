@@ -68,8 +68,7 @@ public class Compare
                     GoPoint gamePoint =
                         board.rotate(rot, gameMove.getPoint());
                     GoColor gameColor = gameMove.getColor();
-                    if (! color.equals(gameColor)
-                        || ! GoPoint.equals(point, gamePoint))
+                    if (! color.equals(gameColor) || point != gamePoint)
                         ++numberDifferent;
                 }
                 if (numberDifferent == 0)

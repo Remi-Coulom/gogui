@@ -1599,7 +1599,7 @@ class GoGui
             // a setup node
             m_gameTree = new GameTree(m_boardSize, 0, null, null, null);
             m_currentNode = m_gameTree.getRoot();
-            m_currentNode.addBlack(m_board.getPoint(0, 0));
+            m_currentNode.addBlack(GoPoint.create(0, 0));
             m_clock.reset();
             updateGameInfo(true);
         }

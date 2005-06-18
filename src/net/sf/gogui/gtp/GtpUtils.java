@@ -61,7 +61,7 @@ public class GtpUtils
         }
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
             throw new GtpError("Invalid coordinates");
-        return new GoPoint(x, y);
+        return GoPoint.create(x, y);
     }
     
     public static GoPoint[] parsePointList(String s, int boardSize)

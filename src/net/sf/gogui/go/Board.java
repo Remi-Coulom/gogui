@@ -145,13 +145,13 @@ public final class Board
         int x = p.getX();
         int y = p.getY();
         if (x > 0)
-            result.add(m_point[x - 1][y]);
+            result.add(GoPoint.create(x - 1, y));
         if (x < m_size - 1)
-            result.add(m_point[x + 1][y]);
+            result.add(GoPoint.create(x + 1, y));
         if (y > 0)
-            result.add(m_point[x][y - 1]);
+            result.add(GoPoint.create(x, y - 1));
         if (y < m_size - 1)
-            result.add(m_point[x][y + 1]);
+            result.add(GoPoint.create(x, y + 1));
         return result;
     }
 
@@ -198,11 +198,6 @@ public final class Board
     public GoPoint getPoint(int i)
     {
         return m_allPoints[i];
-    }
-
-    public GoPoint getPoint(int x, int y)
-    {
-        return m_point[x][y];
     }
 
     public Move getInternalMove(int i)
@@ -255,7 +250,6 @@ public final class Board
         m_mark = new boolean[m_size][m_size];
         m_dead = new boolean[m_size][m_size];
         m_score = new GoColor[m_size][m_size];
-        m_point = new GoPoint[m_size][m_size];
         m_capturedB = 0;
         m_capturedW = 0;
         initAllPoints();
@@ -359,23 +353,23 @@ public final class Board
         switch (rotationIndex)
         {
         case 0:
-            return getPoint(x, y);
+            return GoPoint.create(x, y);
         case 1:
-            return getPoint(size - x - 1, y);
+            return GoPoint.create(size - x - 1, y);
         case 2:
-            return getPoint(x, size - y - 1);
+            return GoPoint.create(x, size - y - 1);
         case 3:
-            return getPoint(y, x);
+            return GoPoint.create(y, x);
         case 4:
-            return getPoint(size - y - 1, x);
+            return GoPoint.create(size - y - 1, x);
         case 5:
-            return getPoint(y, size - x - 1);
+            return GoPoint.create(y, size - x - 1);
         case 6:
-            return getPoint(size - x - 1, size - y - 1);
+            return GoPoint.create(size - x - 1, size - y - 1);
         case 7:
-            return getPoint(size - y - 1, size - x - 1);
+            return GoPoint.create(size - y - 1, size - x - 1);
         default:
-            return getPoint(x, y);
+            return GoPoint.create(x, y);
         }
     }
 
@@ -581,8 +575,6 @@ public final class Board
 
     private GoPoint m_allPoints[];
 
-    private GoPoint m_point[][];
-
     private void checkKill(GoPoint p, GoColor color, Vector killed)
     {
         assert(isMarkCleared());
@@ -625,41 +617,35 @@ public final class Board
         Vector result = new Vector(9);
         if (n == 0)
             return result;
-        if (constants.m_handicapLine1 < 0)
+        int line1 = constants.m_handicapLine1;
+        int line2 = constants.m_handicapLine2;
+        int line3 = constants.m_handicapLine3;
+        if (line1 < 0)
             return null;
-        if (n > 4 && constants.m_handicapLine2 < 0)
+        if (n > 4 && line2 < 0)
             return null;
         if (n >= 1)
-            result.add(new GoPoint(constants.m_handicapLine1,
-                                 constants.m_handicapLine1));
+            result.add(GoPoint.create(line1, line1));
         if (n >= 2)
-            result.add(new GoPoint(constants.m_handicapLine3,
-                                 constants.m_handicapLine3));
+            result.add(GoPoint.create(line3, line3));
         if (n >= 3)
-            result.add(new GoPoint(constants.m_handicapLine1,
-                                 constants.m_handicapLine3));
+            result.add(GoPoint.create(line1, line3));
         if (n >= 4)
-            result.add(new GoPoint(constants.m_handicapLine3,
-                                 constants.m_handicapLine1));
+            result.add(GoPoint.create(line3, line1));
         if (n >= 5)
             if (n % 2 != 0)
             {
-                result.add(new GoPoint(constants.m_handicapLine2,
-                                     constants.m_handicapLine2));
+                result.add(GoPoint.create(line2, line2));
                 --n;
             }
         if (n >= 5)
-            result.add(new GoPoint(constants.m_handicapLine1,
-                                 constants.m_handicapLine2));
+            result.add(GoPoint.create(line1, line2));
         if (n >= 6)
-            result.add(new GoPoint(constants.m_handicapLine3,
-                                 constants.m_handicapLine2));
+            result.add(GoPoint.create(line3, line2));
         if (n >= 7)
-            result.add(new GoPoint(constants.m_handicapLine2,
-                                 constants.m_handicapLine1));
+            result.add(GoPoint.create(line2, line1));
         if (n >= 8)
-            result.add(new GoPoint(constants.m_handicapLine2,
-                                 constants.m_handicapLine3));
+            result.add(GoPoint.create(line2, line3));
         return result;
     }
 
@@ -675,9 +661,8 @@ public final class Board
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
-                GoPoint p = new GoPoint(x, y);
-                m_allPoints[i++] = p;
-                m_point[x][y] = p;
+                GoPoint point = GoPoint.create(x, y);
+                m_allPoints[i++] = point;
             }
     }
 
