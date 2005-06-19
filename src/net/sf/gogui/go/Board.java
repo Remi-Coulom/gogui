@@ -145,13 +145,13 @@ public final class Board
         int x = p.getX();
         int y = p.getY();
         if (x > 0)
-            result.add(GoPoint.create(x - 1, y));
+            result.add(getPoint(x - 1, y));
         if (x < m_size - 1)
-            result.add(GoPoint.create(x + 1, y));
+            result.add(getPoint(x + 1, y));
         if (y > 0)
-            result.add(GoPoint.create(x, y - 1));
+            result.add(getPoint(x, y - 1));
         if (y < m_size - 1)
-            result.add(GoPoint.create(x, y + 1));
+            result.add(getPoint(x, y + 1));
         return result;
     }
 
@@ -182,12 +182,12 @@ public final class Board
 
     public Vector getHandicapStones(int n)
     {
-        return getHandicapStones(n, m_constants);
+        return m_constants.getHandicapStones(n);
     }
 
     public static Vector getHandicapStones(int size, int n)
     {
-        return getHandicapStones(n, new Constants(size));
+        return new Constants(size).getHandicapStones(n);
     }
 
     public Move getMove(int i)
@@ -353,23 +353,23 @@ public final class Board
         switch (rotationIndex)
         {
         case 0:
-            return GoPoint.create(x, y);
+            return getPoint(x, y);
         case 1:
-            return GoPoint.create(size - x - 1, y);
+            return getPoint(size - x - 1, y);
         case 2:
-            return GoPoint.create(x, size - y - 1);
+            return getPoint(x, size - y - 1);
         case 3:
-            return GoPoint.create(y, x);
+            return getPoint(y, x);
         case 4:
-            return GoPoint.create(size - y - 1, x);
+            return getPoint(size - y - 1, x);
         case 5:
-            return GoPoint.create(y, size - x - 1);
+            return getPoint(y, size - x - 1);
         case 6:
-            return GoPoint.create(size - x - 1, size - y - 1);
+            return getPoint(size - x - 1, size - y - 1);
         case 7:
-            return GoPoint.create(size - y - 1, size - x - 1);
+            return getPoint(size - y - 1, size - x - 1);
         default:
-            return GoPoint.create(x, y);
+            return getPoint(x, y);
         }
     }
 
@@ -521,6 +521,7 @@ public final class Board
     {
         public Constants(int size)
         {
+            m_size = size;
             m_handicapLine1 = -1;
             m_handicapLine2 = -1;
             m_handicapLine3 = -1;
@@ -538,11 +539,59 @@ public final class Board
                 m_handicapLine2 = size / 2;
         }
 
-        public int m_handicapLine1;
+        public Vector getHandicapStones(int n)
+        {
+            Vector result = new Vector(9);
+            if (n == 0)
+                return result;
+            int line1 = m_handicapLine1;
+            int line2 = m_handicapLine2;
+            int line3 = m_handicapLine3;
+            if (line1 < 0)
+                return null;
+            if (n > 4 && line2 < 0)
+                return null;
+            if (n >= 1)
+                result.add(getPoint(line1, line1));
+            if (n >= 2)
+                result.add(getPoint(line3, line3));
+            if (n >= 3)
+                result.add(getPoint(line1, line3));
+            if (n >= 4)
+                result.add(getPoint(line3, line1));
+            if (n >= 5)
+                if (n % 2 != 0)
+                {
+                    result.add(getPoint(line2, line2));
+                    --n;
+                }
+            if (n >= 5)
+                result.add(getPoint(line1, line2));
+            if (n >= 6)
+                result.add(getPoint(line3, line2));
+            if (n >= 7)
+                result.add(getPoint(line2, line1));
+            if (n >= 8)
+                result.add(getPoint(line2, line3));
+            return result;
+        }
 
-        public int m_handicapLine2;
+        private int m_size;
 
-        public int m_handicapLine3;
+        private int m_handicapLine1;
+
+        private int m_handicapLine2;
+
+        private int m_handicapLine3;
+
+        private GoPoint getPoint(int x, int y)
+        {
+            assert(x >= 0);
+            assert(x < m_size);
+            assert(y >= 0);
+            assert(y < m_size);
+            return GoPoint.create(x, y);
+        }
     }
     
     private boolean m_mark[][];
@@ -612,46 +661,14 @@ public final class Board
             findStones((GoPoint)(adj.get(i)), color, stones);
     }
 
-    private static Vector getHandicapStones(int n, Constants constants)
-    {
-        Vector result = new Vector(9);
-        if (n == 0)
-            return result;
-        int line1 = constants.m_handicapLine1;
-        int line2 = constants.m_handicapLine2;
-        int line3 = constants.m_handicapLine3;
-        if (line1 < 0)
-            return null;
-        if (n > 4 && line2 < 0)
-            return null;
-        if (n >= 1)
-            result.add(GoPoint.create(line1, line1));
-        if (n >= 2)
-            result.add(GoPoint.create(line3, line3));
-        if (n >= 3)
-            result.add(GoPoint.create(line1, line3));
-        if (n >= 4)
-            result.add(GoPoint.create(line3, line1));
-        if (n >= 5)
-            if (n % 2 != 0)
-            {
-                result.add(GoPoint.create(line2, line2));
-                --n;
-            }
-        if (n >= 5)
-            result.add(GoPoint.create(line1, line2));
-        if (n >= 6)
-            result.add(GoPoint.create(line3, line2));
-        if (n >= 7)
-            result.add(GoPoint.create(line2, line1));
-        if (n >= 8)
-            result.add(GoPoint.create(line2, line3));
-        return result;
-    }
-
     private boolean getMark(GoPoint p)
     {
         return m_mark[p.getX()][p.getY()];
+    }
+
+    private GoPoint getPoint(int x, int y)
+    {
+        return m_constants.getPoint(x, y);
     }
 
     private void initAllPoints()
@@ -661,7 +678,7 @@ public final class Board
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = getPoint(x, y);
                 m_allPoints[i++] = point;
             }
     }
