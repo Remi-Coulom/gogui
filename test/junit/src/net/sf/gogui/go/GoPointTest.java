@@ -45,6 +45,27 @@ public class GoPointTest
         assertEquals(GoPoint.toString(v), "A1 D5 A19");
     }
 
+    public void testParse()
+    {
+        try
+        {
+            checkPoint(GoPoint.parsePoint("A1", 19), 0, 0);
+            checkPoint(GoPoint.parsePoint(" T19 ", 19), 18, 18);
+            checkPoint(GoPoint.parsePoint("J3  ", 19), 8, 2);
+            checkPoint(GoPoint.parsePoint("b17", 19), 1, 16);
+            assertNull(GoPoint.parsePoint("PASS", 19));
+            assertNull(GoPoint.parsePoint("pass", 19));
+        }
+        catch (GoPoint.InvalidPoint e)
+        {
+            fail();
+        }
+        checkInvalid("11", 19);
+        checkInvalid("19Z", 19);
+        checkInvalid("A100", 25);
+        checkInvalid("C10", 9);
+    }
+
     public void testUnique()
     {
         checkPoint(getPoint(5, 5), 5, 5);
@@ -54,6 +75,18 @@ public class GoPointTest
     private GoPoint getPoint(int x, int y)
     {
         return GoPoint.create(x, y);
+    }
+
+    private void checkInvalid(String string, int boardSize)
+    {
+        try
+        {
+            GoPoint.parsePoint(string, boardSize);
+            fail();
+        }
+        catch (GoPoint.InvalidPoint e)
+        {
+        }
     }
 
     private void checkPoint(GoPoint point, int x, int y)

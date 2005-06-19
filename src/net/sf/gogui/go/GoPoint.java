@@ -18,6 +18,19 @@ import java.util.Vector;
 */
 public final class GoPoint
 {
+    public static class InvalidPoint extends Exception
+    {
+        public InvalidPoint()
+        {
+            super("Invalid point");
+        }
+        
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
+    }
+
     public static final int MAXSIZE = 25;
 
     public static GoPoint create(int x, int y)
@@ -64,6 +77,37 @@ public final class GoPoint
             return create(m_x - 1, m_y);
         else
             return this;
+    }
+
+    /** Parse point or null (pass).
+        Parsing is case-insensitive, leading and trailing whitespace is
+        ignored. "PASS" returns null, invalid strings throw a InvalidPoint
+        exception.
+    */
+    public static GoPoint parsePoint(String string, int boardSize)
+        throws InvalidPoint
+    {
+        string = string.trim().toUpperCase();
+        if (string.equals("PASS"))
+            return null;
+        if (string.length() < 2)
+            throw new InvalidPoint();
+        char xChar = string.charAt(0);
+        if (xChar >= 'J')
+            --xChar;
+        int x = xChar - 'A';
+        int y;
+        try
+        {
+            y = Integer.parseInt(string.substring(1)) - 1;
+        }
+        catch (NumberFormatException e)
+        {
+            throw new InvalidPoint();
+        }
+        if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
+            throw new InvalidPoint();
+        return GoPoint.create(x, y);
     }
 
     /** Return point right.

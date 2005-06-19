@@ -41,27 +41,14 @@ public class GtpUtils
 
     public static GoPoint parsePoint(String s, int boardSize) throws GtpError
     {
-        s = s.trim().toUpperCase();
-        if (s.equals("PASS"))
-            return null;
-        if (s.length() < 2)
-            throw new GtpError("Invalid point or move");
-        char xChar = s.charAt(0);
-        if (xChar >= 'J')
-            --xChar;
-        int x = xChar - 'A';
-        int y;
         try
         {
-            y = Integer.parseInt(s.substring(1)) - 1;
+            return GoPoint.parsePoint(s, boardSize);
         }
-        catch (NumberFormatException e)
+        catch (GoPoint.InvalidPoint e)
         {
             throw new GtpError("Invalid point or move");
         }
-        if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
-            throw new GtpError("Invalid coordinates");
-        return GoPoint.create(x, y);
     }
     
     public static GoPoint[] parsePointList(String s, int boardSize)
