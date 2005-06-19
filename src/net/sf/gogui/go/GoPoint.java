@@ -11,10 +11,14 @@ import java.util.Vector;
 
 /** Intersection on the Go board.
     This class is immutable and references to the same point are unique.
+    Point coordinates start with 0, the point (0,0) corresponds to "A1".
+    The maximum boardsize, GoPoint.MAXSIZE, is currently set, such that
+    all points can be converted to strings with one letter and a number,
+    i.e. the largest point is Z25.
 */
 public final class GoPoint
 {
-    public static final int MAXSIZE = 100;
+    public static final int MAXSIZE = 25;
 
     public static GoPoint create(int x, int y)
     {
@@ -30,6 +34,9 @@ public final class GoPoint
         return point;
     }
     
+    /** Return point below.
+        Returns the point below this point (x, y - 1)
+    */
     public GoPoint down()
     {
         if (m_y > 0)
@@ -48,6 +55,9 @@ public final class GoPoint
         return m_y;
     }
 
+    /** Return point left.
+        Returns the point below this point (x - 1, y)
+    */
     public GoPoint left()
     {
         if (m_x > 0)
@@ -56,6 +66,9 @@ public final class GoPoint
             return this;
     }
 
+    /** Return point right.
+        Returns the point below this point (x + 1, y)
+    */
     public GoPoint right(int max)
     {
         if (m_x < max - 1)
@@ -64,11 +77,15 @@ public final class GoPoint
             return this;
     }
 
+    /** Convert to a string. */
     public String toString()
     {
         return m_xString[m_x] + Integer.toString(m_y + 1);
     }
     
+    /** Convert a point or null point (pass) to a string.
+        If point is null, "PASS" is returned.
+    */
     public static String toString(GoPoint point)
     {
         if (point == null)
@@ -76,6 +93,10 @@ public final class GoPoint
         return point.toString();
     }
     
+    /** Convert a list of points to a string.
+        Points are separated by a single space.
+        If pointList is null, "(null)" is returned.
+    */
     public static String toString(Vector pointList)
     {
         if (pointList == null)
@@ -91,6 +112,9 @@ public final class GoPoint
         return buffer.toString();
     }
     
+    /** Return point abovebelow.
+        Returns the point below this point (x, y + 1)
+    */
     public GoPoint up(int max)
     {
         if (m_y < max - 1)
@@ -107,12 +131,15 @@ public final class GoPoint
 
     private int m_y;
 
-    private static String m_xString[] = {
-        "A", "B", "C", "D", "E", "F", "G", "H", "J", "K",
-        "L", "M", "N", "O", "P", "Q", "R", "S", "T" };
+    private static String m_xString[] =
+    {
+        "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O",
+        "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+    };
 
     static
     {
+        assert(m_xString.length == MAXSIZE);
         s_size = 0;
         grow(19);
     };
