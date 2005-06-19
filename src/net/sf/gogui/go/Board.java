@@ -252,8 +252,8 @@ public final class Board
         m_score = new GoColor[m_size][m_size];
         m_capturedB = 0;
         m_capturedW = 0;
-        initAllPoints();
         m_constants = new Constants(size);
+        initAllPoints();
         newGame();
     }
 

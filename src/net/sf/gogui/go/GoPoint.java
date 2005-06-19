@@ -119,6 +119,7 @@ public final class GoPoint
 
     private static void grow(int size)
     {
+        System.err.println("XXX GoPoint.grow " + size);
         assert(size > s_size);
         GoPoint[][] points = new GoPoint[size][size];
         for (int x = 0; x < size; ++x)
