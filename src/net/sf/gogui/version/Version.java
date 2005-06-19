@@ -14,6 +14,11 @@ public class Version
     {
         return "0.7.x";
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private Version()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------
