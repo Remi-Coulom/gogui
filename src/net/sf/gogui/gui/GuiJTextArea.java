@@ -11,7 +11,6 @@ import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import java.util.regex.Pattern;
 
 //----------------------------------------------------------------------------
 
