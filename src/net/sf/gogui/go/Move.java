@@ -30,7 +30,7 @@ public final class Move
         }
         int x = point.getX();
         int y = point.getY();
-        int max = Math.max(x, y) + 1;
+        int max = Math.max(x, y);
         if (max >= s_size)
             grow(max + 1);
         if (color == GoColor.BLACK)
