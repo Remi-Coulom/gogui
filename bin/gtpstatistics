@@ -1,0 +1,12 @@
+#!/bin/sh
+
+GOGUI_LIB=`dirname $0`/../lib
+JAVA_DEFAULT=java
+
+if test -z "$JAVA_HOME"; then
+  JAVA=$JAVA_DEFAULT
+else
+  JAVA=$JAVA_HOME/bin/java
+fi
+
+$JAVA -jar $GOGUI_LIB/gtpstatistics.jar "$@"
