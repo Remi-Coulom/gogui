@@ -74,7 +74,7 @@ class Main
 
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar regression.jar [options] program test.tst"
+        out.print("Usage: java -jar gtpregress.jar [options] program test.tst"
                   + " [...]\n" +
                   "\n" +
                   "-config       Config file\n" +
