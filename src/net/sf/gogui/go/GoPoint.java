@@ -21,9 +21,9 @@ public final class GoPoint
 {
     public static class InvalidPoint extends Exception
     {
-        public InvalidPoint()
+        public InvalidPoint(String text)
         {
-            super("Invalid point");
+            super("Invalid point: " + text);
         }
         
         /** Serial version to suppress compiler warning.
@@ -92,7 +92,7 @@ public final class GoPoint
         if (string.equals("PASS"))
             return null;
         if (string.length() < 2)
-            throw new InvalidPoint();
+            throw new InvalidPoint(string);
         char xChar = string.charAt(0);
         if (xChar >= 'J')
             --xChar;
@@ -104,10 +104,10 @@ public final class GoPoint
         }
         catch (NumberFormatException e)
         {
-            throw new InvalidPoint();
+            throw new InvalidPoint(string);
         }
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
-            throw new InvalidPoint();
+            throw new InvalidPoint(string);
         return GoPoint.create(x, y);
     }
 
