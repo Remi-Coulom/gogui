@@ -6,6 +6,7 @@
 package net.sf.gogui.go;
 
 import java.util.Vector;
+import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
@@ -108,6 +109,27 @@ public final class GoPoint
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
             throw new InvalidPoint();
         return GoPoint.create(x, y);
+    }
+
+    public static GoPoint[] parsePointList(String s, int boardSize)
+        throws InvalidPoint
+    {
+        Vector vector = parsePointListVector(s, boardSize);
+        GoPoint result[] = new GoPoint[vector.size()];
+        for (int i = 0; i < result.length; ++i)
+            result[i] = (GoPoint)vector.get(i);
+        return result;
+    }
+
+    public static Vector parsePointListVector(String s, int boardSize)
+        throws InvalidPoint
+    {
+        Vector vector = new Vector(32, 32);
+        String p[] = StringUtils.tokenize(s);
+        for (int i = 0; i < p.length; ++i)
+            if (! p[i].equals(""))
+                vector.add(parsePoint(p[i], boardSize));
+        return vector;
     }
 
     /** Return point right.

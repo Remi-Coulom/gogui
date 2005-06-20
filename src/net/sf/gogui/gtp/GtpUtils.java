@@ -54,22 +54,27 @@ public class GtpUtils
     public static GoPoint[] parsePointList(String s, int boardSize)
         throws GtpError
     {
-        Vector vector = parsePointListVector(s, boardSize);
-        GoPoint result[] = new GoPoint[vector.size()];
-        for (int i = 0; i < result.length; ++i)
-            result[i] = (GoPoint)vector.get(i);
-        return result;
+        try
+        {
+            return GoPoint.parsePointList(s, boardSize);
+        }
+        catch (GoPoint.InvalidPoint e)
+        {
+            throw new GtpError("Invalid point or move");
+        }
     }
 
     public static Vector parsePointListVector(String s, int boardSize)
         throws GtpError
     {
-        Vector vector = new Vector(32, 32);
-        String p[] = StringUtils.tokenize(s);
-        for (int i = 0; i < p.length; ++i)
-            if (! p[i].equals(""))
-                vector.add(parsePoint(p[i], boardSize));
-        return vector;
+        try
+        {
+            return GoPoint.parsePointListVector(s, boardSize);
+        }
+        catch (GoPoint.InvalidPoint e)
+        {
+            throw new GtpError("Invalid point or move");
+        }
     }
 
     /** Find all points contained in string. */

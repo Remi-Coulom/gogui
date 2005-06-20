@@ -45,25 +45,28 @@ public class GoPointTest
         assertEquals(GoPoint.toString(v), "A1 D5 A19");
     }
 
-    public void testParse()
+    public void testParse() throws GoPoint.InvalidPoint
     {
-        try
-        {
-            checkPoint(GoPoint.parsePoint("A1", 19), 0, 0);
-            checkPoint(GoPoint.parsePoint(" T19 ", 19), 18, 18);
-            checkPoint(GoPoint.parsePoint("J3  ", 19), 8, 2);
-            checkPoint(GoPoint.parsePoint("b17", 19), 1, 16);
-            assertNull(GoPoint.parsePoint("PASS", 19));
-            assertNull(GoPoint.parsePoint("pass", 19));
-        }
-        catch (GoPoint.InvalidPoint e)
-        {
-            fail();
-        }
+        checkPoint(GoPoint.parsePoint("A1", 19), 0, 0);
+        checkPoint(GoPoint.parsePoint(" T19 ", 19), 18, 18);
+        checkPoint(GoPoint.parsePoint("J3  ", 19), 8, 2);
+        checkPoint(GoPoint.parsePoint("b17", 19), 1, 16);
+        assertNull(GoPoint.parsePoint("PASS", 19));
+        assertNull(GoPoint.parsePoint("pass", 19));
         checkInvalid("11", 19);
         checkInvalid("19Z", 19);
         checkInvalid("A100", 25);
         checkInvalid("C10", 9);
+        Vector pointListVector
+            = GoPoint.parsePointListVector("  R15 PASS T19 ", 19);
+        assertEquals(pointListVector.size(), 3);
+        checkPoint((GoPoint)pointListVector.get(0), 16, 14);
+        assertNull((GoPoint)pointListVector.get(1));
+        checkPoint((GoPoint)pointListVector.get(2), 18, 18);
+        GoPoint[] pointList = GoPoint.parsePointList("PASS A1", 9);
+        assertEquals(pointList.length, 2);
+        assertNull(pointList[0]);
+        checkPoint(pointList[1], 0, 0);
     }
 
     public void testUnique()
