@@ -82,25 +82,29 @@ public class GtpStatistics
         m_gtp.sendCommandBoardsize(size);
         m_gtp.sendCommandClearBoard(size);
         Node root = tree.getRoot();
+        if (root.getMove() != null)
+            throw new ErrorMessage(name + " has move in root node");
+        int number = 0;
         for (Node node = root; node != null; node = node.getChild())
         {
             if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
-                throw new ErrorMessage("File " + name
-                                       + " contains setup stones");
+                throw new ErrorMessage(name + " contains setup stones");
             Move move = node.getMove();
-            if (node == root && move == null)
-                continue;
-            m_table.startRow();
-            m_table.set("File", name);
-            m_table.set("Move", NodeUtils.getMoveNumber(node));
-            handlePosition(move);
             if (move != null)
+            {
+                ++number;
+                handlePosition(name, move, number);
                 m_gtp.sendCommandPlay(move);
+            }
         }
     }
 
-    private void handlePosition(Move move) throws GtpError
+    private void handlePosition(String name, Move move, int number)
+        throws GtpError
     {
+        m_table.startRow();
+        m_table.set("File", name);
+        m_table.set("Move", number);
         if (m_runRegGenMove && move != null)
         {
             boolean result = runRegGenMove(move);
