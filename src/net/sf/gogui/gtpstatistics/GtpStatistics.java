@@ -27,15 +27,20 @@ import net.sf.gogui.utils.Table;
 
 public class GtpStatistics
 {
-    public GtpStatistics(String program, Vector sgfFiles, boolean verbose)
+    public GtpStatistics(String program, Vector sgfFiles, Vector commands,
+                         boolean verbose)
         throws Exception
     {
         m_result = false;
+        m_commands = commands;
         Vector columnHeaders = new Vector();
         columnHeaders.add("File");
         columnHeaders.add("Move");
         if (m_runRegGenMove)
             columnHeaders.add("reg_genmove");
+        if (commands != null)
+            for (int i = 0; i < commands.size(); ++i)
+                columnHeaders.add(getCommand(i));
         m_table = new Table(columnHeaders);
         m_gtp = new Gtp(program, verbose, null);
         for (int i = 0; i < sgfFiles.size(); ++i)
@@ -57,6 +62,13 @@ public class GtpStatistics
     private Gtp m_gtp;
 
     private Table m_table;
+
+    private Vector m_commands;
+
+    private String getCommand(int index)
+    {
+        return (String)m_commands.get(index);
+    }
 
     private void handleFile(String name)
         throws ErrorMessage, FileNotFoundException, GtpError,
@@ -93,6 +105,14 @@ public class GtpStatistics
         {
             boolean result = runRegGenMove(move);
             m_table.set("reg_genmove", result ? "1" : "0");
+        }
+        if (m_commands == null)
+            return;
+        for (int i = 0; i < m_commands.size(); ++i)
+        {
+            String command = getCommand(i);
+            String result = m_gtp.sendCommand(command);
+            m_table.set(command, result);
         }
     }
 

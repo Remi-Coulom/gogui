@@ -1,0 +1,117 @@
+<refentry id="reference-gtpstatistics">
+<refmeta>
+<refentrytitle>gtpstatistics</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>gtpstatistics</refname>
+<refpurpose>
+Runs GTP commands on all positions of game collections.
+</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtpstatistics</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-commands</option> <replaceable>commands</replaceable></arg>
+<arg><option>-program</option> <replaceable>program</replaceable></arg>
+<arg><option>-verbose</option></arg>
+<arg choice="plain" rep="repeat">
+<replaceable>file.sgf</replaceable>
+</arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gtpstatistics</command> <arg><option>-help</option></arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>gtpstatistics</command> <arg><option>-version</option></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Runs a a set of commands for a Go program supporting the Go Text Protocol
+on each position of Go game collections.
+The results are stored in a text file in table format.
+</para>
+<para>
+Games must not contain setup stones.
+On nodes containing a move, the <command>reg_genmove</command> is run
+and the generated move is compared to the actual move.
+The result is stored in the table, too.
+</para>
+<para>
+The return value of <command>gtpstatistics</command> is 0, if the run
+completed successfully, -1 otherwise.
+</para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-commands</option> <replaceable>commands</replaceable>
+</term>
+<listitem>
+<para>
+Comma separated list of GTP commands to run on each position.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-help</option>
+</term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print the GTP stream to the Go program to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-version</option>
+</term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</refsection>
+
+</refentry>

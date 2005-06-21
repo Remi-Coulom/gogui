@@ -85,6 +85,16 @@ The other tools are:
 <variablelist>
 
 <varlistentry>
+<term>GtpRegress</term>
+<listitem>
+<para>
+Runs GTP regression tests.
+See <xref linkend="reference-gtpregress"/> for a complete reference.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>GtpServer</term>
 <listitem>
 <para>
@@ -97,11 +107,11 @@ See <xref linkend="reference-gtpserver"/> for a complete reference.
 </varlistentry>
 
 <varlistentry>
-<term>GtpRegress</term>
+<term>GtpStatistics</term>
 <listitem>
 <para>
-Runs GTP regression tests.
-See <xref linkend="reference-gtpregress"/> for a complete reference.
+Runs GTP commands on all positions of game collections.
+See <xref linkend="reference-statistics"/> for a complete reference.
 </para>
 </listitem>
 </varlistentry>

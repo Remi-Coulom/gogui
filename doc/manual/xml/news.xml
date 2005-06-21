@@ -68,6 +68,11 @@ fix NullPointerException, if test file contains response pattern without
 a command to test (simply ignore the pattern)
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+New tool GtpStatistics
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

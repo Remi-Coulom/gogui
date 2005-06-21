@@ -21,6 +21,7 @@ class Main
         try
         {
             String options[] = {
+                "commands:",
                 "config:",
                 "help",
                 "program:",
@@ -45,6 +46,15 @@ class Main
             }
             String program = opt.getString("program");
             boolean verbose = opt.isSet("verbose");
+            Vector commands = null;
+            if (opt.isSet("commands"))
+            {
+                String commandString = opt.getString("commands");
+                String[] commandsArray = StringUtils.split(commandString, ',');
+                commands = new Vector(commandsArray.length);
+                for (int i = 0; i < commandsArray.length; ++i)
+                    commands.add(commandsArray[i]);
+            }
             Vector arguments = opt.getArguments();
             int size = arguments.size();
             if (size < 1)
@@ -53,7 +63,7 @@ class Main
                 System.exit(-1);
             }
             GtpStatistics gtpStatistics
-                = new GtpStatistics(program, arguments, verbose);
+                = new GtpStatistics(program, arguments, commands, verbose);
             System.exit(gtpStatistics.getResult() ? 0 : -1);
         }
         catch (Throwable t)
