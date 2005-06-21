@@ -53,7 +53,7 @@ class Main
                 String[] commandsArray = StringUtils.split(commandString, ',');
                 commands = new Vector(commandsArray.length);
                 for (int i = 0; i < commandsArray.length; ++i)
-                    commands.add(commandsArray[i]);
+                    commands.add(commandsArray[i].trim());
             }
             Vector arguments = opt.getArguments();
             int size = arguments.size();
