@@ -14,6 +14,8 @@ import java.text.NumberFormat;
 import java.util.Vector;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.Histogram;
+import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 

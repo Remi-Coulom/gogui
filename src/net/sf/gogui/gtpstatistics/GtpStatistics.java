@@ -29,6 +29,7 @@ import net.sf.gogui.gtp.Gtp;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.Table;
 import net.sf.gogui.version.Version;
 
@@ -182,8 +183,7 @@ public class GtpStatistics
         return (response.equals(GoPoint.toString(move.getPoint())));
     }
 
-    private void writeHtml()
-        throws FileNotFoundException
+    private void writeHtml() throws Exception
     {
         File file = new File("gtpstatistics.html");
         PrintStream out = new PrintStream(new FileOutputStream(file));
@@ -214,11 +214,70 @@ public class GtpStatistics
     }
 
     private void writeCommandResult(String command, PrintStream out)
+        throws Exception
     {
+        Statistics statistics = new Statistics();
+        final int intervalSize = 25;
+        int numberElements = 10;
+        Statistics[] statisticsAtMove =  new Statistics[numberElements + 1];
+        for (int i = 0; i < numberElements + 1; ++i)
+            statisticsAtMove[i] = new Statistics();
+        for (int i = 0; i < m_table.getNumberRows(); ++i)
+        {
+            String value = m_table.get(command, i);
+            if (value.equals("(null)"))
+                continue;
+            double doubleValue;
+            try
+            {
+                doubleValue = Double.parseDouble(value);
+                statistics.addValue(doubleValue);
+            }
+            catch (NumberFormatException e)
+            {
+                continue;
+            }
+            int interval
+                = Integer.parseInt(m_table.get("Move", i)) / intervalSize;
+            if (interval >= numberElements)
+                statisticsAtMove[numberElements].addValue(doubleValue);
+            else
+                statisticsAtMove[interval].addValue(doubleValue);
+        }
         out.print("<hr>\n" +
-                  "<h2>" + command + "</h2>\n" +
-                  "<p>\n" +
-                  "</p>\n");
+                  "<h2>" + command + "</h2>\n");
+        out.print("</table>\n" +
+                  "</p>\n" +
+                  "<table border=\"0\">\n" +
+                  "<thead><tr bgcolor=\"" + m_colorHeader + "\">"
+                  + "<th>Move</th><th>Number</th><th>Mean</th>"
+                  + "<th>Deviation</th></tr></thead>\n");
+        for (int i = 0; i < numberElements + 1; ++i)
+        {
+            out.print("<tr bgcolor=\"" + m_colorInfo + "\"><td>");
+            if (i >= numberElements)
+                out.print(">" + (i * intervalSize));
+            else
+                out.print((i * intervalSize) + "-"
+                          + ((i + 1) * intervalSize - 1));
+            Statistics stat = statisticsAtMove[i];
+            out.print("</td><td>" + stat.getCount() + "</td><td>"
+                      + stat.getMean() + "</td><td>"
+                      + stat.getDeviation() + "</td></tr>\n");
+        }
+        out.print("<tfoot><tr bgcolor=\"" + m_colorHeader + "\">"
+                  + "<td>All</td><td>" + statistics.getCount() + "</td>"
+                  + "<td>" + statistics.getMean() + "</td>"
+                  + "<td>" + statistics.getDeviation() + "</td>");
+                  
+        out.print("</table>\n");
+    }
+
+    private void writeHtmlRow(PrintStream out, String label,
+                              String value) throws Exception
+    {
+        out.print("<tr><th align=\"left\">" + label + ":</th>"
+                  + "<td align=\"left\">" + value + "</td></tr>\n");
     }
 
     private void writeInfo(PrintStream out)

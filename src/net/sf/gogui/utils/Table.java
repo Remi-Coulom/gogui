@@ -21,6 +21,17 @@ public class Table
         m_rows = new Vector();
     }
 
+    public String get(String columnTitle, int row)
+    {
+        int column = getColumnIndex(columnTitle);
+        return (String)getRow(row).get(column);
+    }
+
+    public int getNumberRows()
+    {
+        return m_rows.size();
+    }
+
     public void save(Writer out) throws IOException
     {
         for (int i = 0; i < m_numberColumns; ++i)
@@ -65,7 +76,7 @@ public class Table
 
     public void set(String column, String value)
     {
-        int index = getIndex(column);
+        int index = getColumnIndex(column);
         assert(m_lastRow.get(index) == null);
         m_lastRow.set(index, value);
     }
@@ -78,12 +89,7 @@ public class Table
 
     private Vector m_rows;
 
-    private String getTitle(int index)
-    {
-        return (String)m_columnTitles.get(index);
-    }
-
-    private int getIndex(String column)
+    private int getColumnIndex(String column)
     {
         for (int i = 0; i < m_numberColumns; ++i)
         {
@@ -93,6 +99,16 @@ public class Table
         }
         assert(false);
         return -1;
+    }
+
+    private Vector getRow(int index)
+    {
+        return (Vector)m_rows.get(index);
+    }
+
+    private String getTitle(int index)
+    {
+        return (String)m_columnTitles.get(index);
     }
 }
 

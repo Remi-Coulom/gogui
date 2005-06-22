@@ -536,9 +536,11 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  net/sf/gogui/sgf/*.class
  net/sf/gogui/utils/ErrorMessage.class
  net/sf/gogui/utils/FileUtils.class
+ net/sf/gogui/utils/Histogram.class
  net/sf/gogui/utils/MessageQueue.class
  net/sf/gogui/utils/Options.class
  net/sf/gogui/utils/ProcessUtils*.class
+ net/sf/gogui/utils/Statistics.class
  net/sf/gogui/utils/StringUtils.class
  net/sf/gogui/utils/Table.class
  net/sf/gogui/version/Version.class
