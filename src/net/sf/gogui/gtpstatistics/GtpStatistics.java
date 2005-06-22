@@ -251,8 +251,11 @@ public class GtpStatistics
                   "<table border=\"0\">\n" +
                   "<thead><tr bgcolor=\"" + m_colorHeader + "\">"
                   + "<th>Move</th><th>Number</th><th>Mean</th>"
-                  + "<th>Deviation</th></tr></thead>\n");
-        for (int i = 0; i < numberElements + 1; ++i)
+                  + "<th>Error</th></tr></thead>\n");
+        int max = numberElements;
+        while (statisticsAtMove[max].getCount() == 0 && max > 0)
+            --max;
+        for (int i = 0; i < max; ++i)
         {
             out.print("<tr bgcolor=\"" + m_colorInfo + "\"><td>");
             if (i >= numberElements)
@@ -263,12 +266,12 @@ public class GtpStatistics
             Statistics stat = statisticsAtMove[i];
             out.print("</td><td>" + stat.getCount() + "</td><td>"
                       + stat.getMean() + "</td><td>"
-                      + stat.getDeviation() + "</td></tr>\n");
+                      + stat.getErrorMean() + "</td></tr>\n");
         }
         out.print("<tfoot><tr bgcolor=\"" + m_colorHeader + "\">"
                   + "<td>All</td><td>" + statistics.getCount() + "</td>"
                   + "<td>" + statistics.getMean() + "</td>"
-                  + "<td>" + statistics.getDeviation() + "</td>");
+                  + "<td>" + statistics.getErrorMean() + "</td>");
                   
         out.print("</table>\n");
     }
