@@ -776,15 +776,15 @@ public class GtpRegress
                                                            DateFormat.FULL);
         Date date = Calendar.getInstance().getTime();
         if (withName)
-            out.print("<tr><th align=\"left\">Name</th><td>" + m_name
+            out.print("<tr><th align=\"left\">Name:</th><td>" + m_name
                       + "</td></tr>\n" +
-                      "<tr><th align=\"left\">Version</th><td>" + m_version
+                      "<tr><th align=\"left\">Version:</th><td>" + m_version
                       + "</td></tr>\n");
-        out.print("<tr><th align=\"left\">Date</th><td>" + format.format(date)
+        out.print("<tr><th align=\"left\">Date:</th><td>" + format.format(date)
                   + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Host</th><td>" + host
+                  "<tr><th align=\"left\">Host:</th><td>" + host
                   + "</td></tr>\n" +
-                  "<tr><th align=\"left\" valign=\"top\">Command</th>\n" +
+                  "<tr><th align=\"left\" valign=\"top\">Command:</th>\n" +
                   "<td valign=\"top\"><tt>" + m_program
                   + "</tt></td></tr>\n");
     }
@@ -934,7 +934,7 @@ public class GtpRegress
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
                   + "\">\n");
         writeInfo(out, true);
-        out.print("<tr><th align=\"left\">Output</th><td><a href=\""
+        out.print("<tr><th align=\"left\">Output:</th><td><a href=\""
                   + m_outFileRelativeName + "\">"
                   + m_outFileRelativeName + "</a></td></tr>\n" +
                   "</table>\n" +
