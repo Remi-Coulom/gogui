@@ -24,6 +24,7 @@ class Main
                 "commands:",
                 "config:",
                 "help",
+                "precision:",
                 "program:",
                 "verbose",
                 "version"
@@ -46,6 +47,7 @@ class Main
             }
             String program = opt.getString("program");
             boolean verbose = opt.isSet("verbose");
+            int precision = opt.getInteger("precision", 4, 0);
             Vector commands = null;
             if (opt.isSet("commands"))
             {
@@ -63,7 +65,8 @@ class Main
                 System.exit(-1);
             }
             GtpStatistics gtpStatistics
-                = new GtpStatistics(program, arguments, commands, verbose);
+                = new GtpStatistics(program, arguments, commands, verbose,
+                                    precision);
             System.exit(gtpStatistics.getResult() ? 0 : -1);
         }
         catch (Throwable t)

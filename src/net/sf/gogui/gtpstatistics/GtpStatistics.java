@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 import java.text.DateFormat;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -38,11 +38,12 @@ import net.sf.gogui.version.Version;
 public class GtpStatistics
 {
     public GtpStatistics(String program, Vector sgfFiles, Vector commands,
-                         boolean verbose)
+                         boolean verbose, int precision)
         throws Exception
     {
         m_result = false;
         m_commands = commands;
+        m_precision = precision;
         Vector columnHeaders = new Vector();
         columnHeaders.add("File");
         columnHeaders.add("Move");
@@ -92,6 +93,8 @@ public class GtpStatistics
     private int m_numberGames;
 
     private int m_numberPositions;
+
+    private int m_precision;
 
     private Gtp m_gtp;
 
@@ -222,6 +225,7 @@ public class GtpStatistics
         Statistics[] statisticsAtMove =  new Statistics[numberElements + 1];
         for (int i = 0; i < numberElements + 1; ++i)
             statisticsAtMove[i] = new Statistics();
+        int maxElement = 0;
         for (int i = 0; i < m_table.getNumberRows(); ++i)
         {
             String value = m_table.get(command, i);
@@ -239,10 +243,9 @@ public class GtpStatistics
             }
             int interval
                 = Integer.parseInt(m_table.get("Move", i)) / intervalSize;
-            if (interval >= numberElements)
-                statisticsAtMove[numberElements].addValue(doubleValue);
-            else
-                statisticsAtMove[interval].addValue(doubleValue);
+            int element = Math.min(interval, numberElements);
+            maxElement = Math.max(maxElement, element);
+            statisticsAtMove[element].addValue(doubleValue);
         }
         out.print("<hr>\n" +
                   "<h2>" + command + "</h2>\n");
@@ -252,10 +255,9 @@ public class GtpStatistics
                   "<thead><tr bgcolor=\"" + m_colorHeader + "\">"
                   + "<th>Move</th><th>Number</th><th>Mean</th>"
                   + "<th>Error</th></tr></thead>\n");
-        int max = numberElements;
-        while (statisticsAtMove[max].getCount() == 0 && max > 0)
-            --max;
-        for (int i = 0; i < max; ++i)
+        DecimalFormat format = new DecimalFormat();
+        format.setMaximumFractionDigits(m_precision);
+        for (int i = 0; i <= maxElement; ++i)
         {
             out.print("<tr bgcolor=\"" + m_colorInfo + "\"><td>");
             if (i >= numberElements)
@@ -265,13 +267,14 @@ public class GtpStatistics
                           + ((i + 1) * intervalSize - 1));
             Statistics stat = statisticsAtMove[i];
             out.print("</td><td>" + stat.getCount() + "</td><td>"
-                      + stat.getMean() + "</td><td>"
-                      + stat.getErrorMean() + "</td></tr>\n");
+                      + format.format(stat.getMean()) + "</td><td>"
+                      + format.format(stat.getErrorMean()) + "</td></tr>\n");
         }
         out.print("<tfoot><tr bgcolor=\"" + m_colorHeader + "\">"
                   + "<td>All</td><td>" + statistics.getCount() + "</td>"
-                  + "<td>" + statistics.getMean() + "</td>"
-                  + "<td>" + statistics.getErrorMean() + "</td>");
+                  + "<td>" + format.format(statistics.getMean()) + "</td>"
+                  + "<td>" + format.format(statistics.getErrorMean())
+                  + "</td>");
                   
         out.print("</table>\n");
     }

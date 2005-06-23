@@ -16,6 +16,7 @@ Runs GTP commands on all positions of game collections.
 <command>gtpstatistics</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-commands</option> <replaceable>commands</replaceable></arg>
+<arg><option>-precision</option> <replaceable>n</replaceable></arg>
 <arg><option>-program</option> <replaceable>program</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg choice="plain" rep="repeat">
@@ -82,6 +83,28 @@ Comma separated list of GTP commands to run on each position.
 <listitem>
 <para>
 Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-precision</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Maximum number of fraction digits for floating point numbers in output file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-program</option> <replaceable>command</replaceable>
+</term>
+<listitem>
+<para>
+Command line for running Go program.
 </para>
 </listitem>
 </varlistentry>
