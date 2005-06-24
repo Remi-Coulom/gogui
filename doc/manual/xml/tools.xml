@@ -111,7 +111,7 @@ See <xref linkend="reference-gtpserver"/> for a complete reference.
 <listitem>
 <para>
 Runs GTP commands on all positions of game collections.
-See <xref linkend="reference-statistics"/> for a complete reference.
+See <xref linkend="reference-gtpstatistics"/> for a complete reference.
 </para>
 </listitem>
 </varlistentry>

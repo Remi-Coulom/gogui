@@ -25,6 +25,7 @@ class Main
                 "commands:",
                 "config:",
                 "help",
+                "interval",
                 "precision:",
                 "program:",
                 "verbose",
@@ -54,6 +55,7 @@ class Main
             }
             boolean verbose = opt.isSet("verbose");
             int precision = opt.getInteger("precision", 4, 0);
+            int interval = opt.getInteger("interval", 20, 1);
             Vector commands = null;
             if (opt.isSet("commands"))
             {
@@ -68,7 +70,7 @@ class Main
             int size = arguments.size();
             if (analyze)
             {
-                new Analyze(opt.getString("analyze"), precision);
+                new Analyze(opt.getString("analyze"), precision, interval);
             }
             else
             {
@@ -100,8 +102,12 @@ class Main
         out.print("Usage: java -jar gtpstatistics.jar [options] file.sgf|dir"
                   + " [...]\n" +
                   "\n" +
+                  "-analyze      Create HTML file from result file\n" +
                   "-config       Config file\n" +
+                  "-commands     GTP commands to run (comma separated)\n" +
                   "-help         Display this help and exit\n" +
+                  "-interval     Move interval size for -analyze\n" +
+                  "-precision    Floating point precision for -analyze\n" +
                   "-verbose      Log GTP stream to stderr\n" +
                   "-version      Display this help and exit\n");
     }

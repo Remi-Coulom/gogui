@@ -22,6 +22,7 @@
 <!ENTITY reference-gtpdummy SYSTEM "reference-gtpdummy.xml">
 <!ENTITY reference-gtpregress SYSTEM "reference-gtpregress.xml">
 <!ENTITY reference-gtpserver SYSTEM "reference-gtpserver.xml">
+<!ENTITY reference-gtpstatistics SYSTEM "reference-gtpstatistics.xml">
 <!ENTITY reference-gtpterminal SYSTEM "reference-gtpterminal.xml">
 <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
 <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
@@ -64,6 +65,7 @@ GoGui is a graphical interface to programs that play the game of Go.
 &reference-gtpdummy;
 &reference-gtpregress;
 &reference-gtpserver;
+&reference-gtpstatistics;
 &reference-gtpterminal;
 &reference-netgtp;
 &reference-sgftotex;

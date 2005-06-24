@@ -42,7 +42,7 @@ Runs GTP commands on all positions of game collections.
 Runs a a set of commands for a Go program supporting the Go Text Protocol
 on each position of Go game collections.
 The results are stored in the text file "gtpstatistics.dat" in table format.
-If gtpstatistics is run with the option <option>-analyze<option>, a HTML
+If gtpstatistics is run with the option <option>-analyze</option>, a HTML
 file is produced, which contains summary statistics for this file.
 </para>
 <para>

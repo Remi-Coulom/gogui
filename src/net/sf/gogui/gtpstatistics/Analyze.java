@@ -25,7 +25,8 @@ import net.sf.gogui.version.Version;
 
 public class Analyze
 {
-    public Analyze(String fileName, int precision) throws Exception
+    public Analyze(String fileName, int precision, int interval)
+        throws Exception
     {
         m_table = new Table();
         m_table.read(new File(fileName));
@@ -37,34 +38,46 @@ public class Analyze
         for (int i = 2; i < m_table.getNumberColumns(); ++i)
             m_commands.add(m_table.getColumnTitle(i));
         m_precision = precision;
+        m_interval = interval;
         File file = new File(FileUtils.replaceExtension(new File(fileName),
                                                         "dat", "html"));
         m_out = new PrintStream(new FileOutputStream(file));
-        m_out.print("<html>\n" +
-                    "<head>\n" +
-                    "<title>Statistics</title>\n" +
-                    "<meta name=\"generator\" content=\"GtpStatistics "
-                    + Version.get() + "\">\n" +
-                    "</head>\n" +
-                    "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
-                    + " vlink=\"purple\" alink=\"red\">\n" +
-                    "<table border=\"0\" width=\"100%\" bgcolor=\""
-                    + m_colorHeader + "\">\n" +
-                    "<tr><td>\n" +
-                    "<h1>Statistics</h1>\n" +
-                    "</td></tr>\n" +
-                    "</table>\n" +
-                    "<table width=\"100%\" bgcolor=\"" + m_colorInfo
-                    + "\">\n");
+        startHtml(m_out, "GtpStatistics Summary");
         writeInfo();
         m_out.print("</table>\n");
-        writeCommandResult("reg_genmove");
         for (int i = 0; i < m_commands.size(); ++i)
             writeCommandResult(getCommand(i));
-        m_out.print("</body>\n" +
+        m_out.print("<hr>\n" +
+                    "<h2>Games</h2>\n" +
+                    "<table border=\"0\">\n" +
+                    "<thead><tr bgcolor=\"" + m_colorHeader + "\">"
+                    + "<th>Number</th><th>File</th></tr></thead>\n");
+        String lastGame = null;
+        int gameNumber = 1;
+        for (int i = 0; i < m_table.getNumberRows(); ++i)
+        {
+            String game = m_table.get("File", i);
+            if (lastGame != null && game.equals(lastGame))
+                continue;
+            String extension = gameNumber + ".html";
+            String gameFile = FileUtils.replaceExtension(new File(fileName),
+                                                         "dat", extension);
+            String name = new File(game).getName();
+            m_out.print("<tr bgcolor=\"" + m_colorInfo + "\">"
+                        + "<td align=\"right\"><a href=\"" + gameFile + "\">"
+                        + gameNumber + "</a></td><td>" + name
+                        + "</td></tr>\n");
+            writeGamePage(gameFile, game, name, gameNumber);
+            ++gameNumber;
+            lastGame = game;
+        }
+        m_out.print("</table>\n" +
+                    "</body>\n" +
                     "</html>\n");
         m_out.close();
     }
+
+    private int m_interval;
 
     private int m_numberGames;
 
@@ -95,12 +108,31 @@ public class Analyze
         return (String)m_commands.get(index);
     }
 
+    private void startHtml(PrintStream out, String title)
+    {
+        out.print("<html>\n" +
+                  "<head>\n" +
+                  "<title>Statistics</title>\n" +
+                  "<meta name=\"generator\" content=\"GtpStatistics "
+                  + Version.get() + "\">\n" +
+                  "</head>\n" +
+                  "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
+                  + " vlink=\"purple\" alink=\"red\">\n" +
+                  "<table border=\"0\" width=\"100%\" bgcolor=\""
+                  + m_colorHeader + "\">\n" +
+                  "<tr><td>\n" +
+                  "<h1>" + title + "</h1>\n" +
+                  "</td></tr>\n" +
+                  "</table>\n" +
+                  "<table width=\"100%\" bgcolor=\"" + m_colorInfo
+                  + "\">\n");
+    }
+
     private void writeCommandResult(String command)
         throws Exception
     {
         Statistics statistics = new Statistics();
-        final int intervalSize = 25;
-        int numberElements = 10;
+        int numberElements = 500 / m_interval;
         Statistics[] statisticsAtMove =  new Statistics[numberElements + 1];
         for (int i = 0; i < numberElements + 1; ++i)
             statisticsAtMove[i] = new Statistics();
@@ -121,7 +153,7 @@ public class Analyze
                 continue;
             }
             int interval
-                = Integer.parseInt(m_table.get("Move", i)) / intervalSize;
+                = Integer.parseInt(m_table.get("Move", i)) / m_interval;
             int element = Math.min(interval, numberElements);
             maxElement = Math.max(maxElement, element);
             statisticsAtMove[element].addValue(doubleValue);
@@ -140,10 +172,10 @@ public class Analyze
         {
             m_out.print("<tr bgcolor=\"" + m_colorInfo + "\"><td>");
             if (i >= numberElements)
-                m_out.print(">" + (i * intervalSize));
+                m_out.print(">" + (i * m_interval));
             else
-                m_out.print((i * intervalSize) + "-"
-                          + ((i + 1) * intervalSize - 1));
+                m_out.print((i * m_interval) + "-"
+                            + ((i + 1) * m_interval - 1));
             Statistics stat = statisticsAtMove[i];
             m_out.print("</td><td>" + stat.getCount() + "</td><td>"
                         + format.format(stat.getMean()) + "</td><td>"
@@ -159,28 +191,70 @@ public class Analyze
         m_out.print("</table>\n");
     }
 
-    private void writeHtmlRow(String label, String value) throws Exception
+    private void writeGamePage(String fileName, String gameFile, String name,
+                               int gameNumber)
+        throws Exception
     {
-        m_out.print("<tr><th align=\"left\">" + label + ":</th>"
-                    + "<td align=\"left\">" + value + "</td></tr>\n");
+        PrintStream out = new PrintStream(new FileOutputStream(fileName));
+        startHtml(out, name);
+        writeHtmlRow(out, "File", "<a href=\"" + gameFile + "\">" + gameFile
+                     + "</a>");
+        writeHtmlRow(out, "Number", gameNumber);
+        out.print("</table>\n" +
+                  "<p>\n" +
+                  "<table border=\"0\" cellpadding=\"0\">\n" +
+                  "<thead><tr bgcolor=\"" + m_colorHeader + "\">");
+        for (int i = 1; i < m_table.getNumberColumns(); ++i)
+            out.print("<th><small>" + m_table.getColumnTitle(i)
+                      + "</small></th>");
+        out.print("</tr></thead>\n");
+        for (int i = 0; i < m_table.getNumberRows(); ++i)
+        {
+            if (! m_table.get("File", i).equals(gameFile))
+                continue;
+            out.print("<tr bgcolor=\"" + m_colorInfo + "\">");
+            for (int j = 1; j < m_table.getNumberColumns(); ++j)
+            {
+                String columnTitle = m_table.getColumnTitle(j);
+                out.print("<td><small>" + m_table.get(columnTitle, i)
+                          + "</small></td>");
+            }
+            out.print("</tr></thead>\n");
+        }
+        out.print("</table>\n" +
+                  "</p>\n" +
+                  "</body>\n" +
+                  "</html>\n");
+        out.close();
     }
 
-    private void writeInfo()
+    private void writeHtmlRow(PrintStream out, String label,
+                              String value) throws Exception
     {
-        writeProperty("Name");
-        writeProperty("Version");
-        writeProperty("Date");
-        writeProperty("Host");
-        writeProperty("Program");
-        writeProperty("Games");
-        m_out.print("<tr><th align=\"left\">Positions:</th><td>"
-                    + m_table.getNumberRows() + "</td></tr>\n");
+        out.print("<tr><th align=\"left\">" + label + ":</th>"
+                  + "<td align=\"left\">" + value + "</td></tr>\n");
     }
 
-    private void writeProperty(String name)
+    private void writeHtmlRow(PrintStream out, String label,
+                              int value) throws Exception
     {
-        m_out.print("<tr><th align=\"left\">" + name + ":</th><td>"
-                    + m_table.getProperty(name, "?") + "</td></tr>\n");
+        writeHtmlRow(out, label, Integer.toString(value));
+    }
+
+    private void writeInfo() throws Exception
+    {
+        writeTableProperty("Name");
+        writeTableProperty("Version");
+        writeTableProperty("Date");
+        writeTableProperty("Host");
+        writeTableProperty("Program");
+        writeTableProperty("Games");
+        writeHtmlRow(m_out, "Positions", m_table.getNumberRows());
+    }
+
+    private void writeTableProperty(String key) throws Exception
+    {
+        writeHtmlRow(m_out, key, m_table.getProperty(key, "?"));
     }
 }
 
