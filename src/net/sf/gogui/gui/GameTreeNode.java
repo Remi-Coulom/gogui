@@ -8,13 +8,11 @@ package net.sf.gogui.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseListener;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
@@ -24,7 +22,8 @@ import net.sf.gogui.go.Move;
 class GameTreeNode
     extends JComponent
 {
-    public GameTreeNode(Node node, int moveNumber, GameTreePanel gameTreePanel,
+    public GameTreeNode(Node node, int moveNumber,
+                        GameTreePanel gameTreePanel,
                         MouseListener mouseListener, Font font)
     {
         m_gameTreePanel = gameTreePanel;

@@ -5,7 +5,6 @@
 
 package net.sf.gogui.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Vector;
