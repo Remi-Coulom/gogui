@@ -21,6 +21,7 @@ class Main
         try
         {
             String options[] = {
+                "analyze:",
                 "commands:",
                 "config:",
                 "help",
@@ -40,34 +41,47 @@ class Main
                 System.out.println("GtpStatistics " + Version.get());
                 return;
             }
-            if (! opt.isSet("program"))
+            boolean analyze = opt.isSet("analyze");
+            String program = "";
+            if (! analyze)
             {
-                System.out.println("Need option -program");
-                System.exit(-1);
+                if (! opt.isSet("program"))
+                {
+                    System.out.println("Need option -program");
+                    System.exit(-1);
+                }
+                program = opt.getString("program");
             }
-            String program = opt.getString("program");
             boolean verbose = opt.isSet("verbose");
             int precision = opt.getInteger("precision", 4, 0);
             Vector commands = null;
             if (opt.isSet("commands"))
             {
                 String commandString = opt.getString("commands");
-                String[] commandsArray = StringUtils.split(commandString, ',');
+                String[] commandsArray
+                    = StringUtils.split(commandString, ',');
                 commands = new Vector(commandsArray.length);
                 for (int i = 0; i < commandsArray.length; ++i)
                     commands.add(commandsArray[i].trim());
             }
             Vector arguments = opt.getArguments();
             int size = arguments.size();
-            if (size < 1)
+            if (analyze)
             {
-                printUsage(System.err);
-                System.exit(-1);
+                new Analyze(opt.getString("analyze"), precision);
             }
-            GtpStatistics gtpStatistics
-                = new GtpStatistics(program, arguments, commands, verbose,
-                                    precision);
-            System.exit(gtpStatistics.getResult() ? 0 : -1);
+            else
+            {
+                if (size < 1)
+                {
+                    printUsage(System.err);
+                    System.exit(-1);
+                }
+                GtpStatistics gtpStatistics
+                    = new GtpStatistics(program, arguments, commands,
+                                        verbose);
+                System.exit(gtpStatistics.getResult() ? 0 : -1);
+            }
         }
         catch (Throwable t)
         {

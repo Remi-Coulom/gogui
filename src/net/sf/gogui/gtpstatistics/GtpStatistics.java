@@ -22,7 +22,6 @@ import java.text.DecimalFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.Gtp;
@@ -38,12 +37,11 @@ import net.sf.gogui.version.Version;
 public class GtpStatistics
 {
     public GtpStatistics(String program, Vector sgfFiles, Vector commands,
-                         boolean verbose, int precision)
+                         boolean verbose)
         throws Exception
     {
         m_result = false;
         m_commands = commands;
-        m_precision = precision;
         Vector columnHeaders = new Vector();
         columnHeaders.add("File");
         columnHeaders.add("Move");
@@ -54,31 +52,45 @@ public class GtpStatistics
                 columnHeaders.add(getCommand(i));
         m_table = new Table(columnHeaders);
         m_gtp = new Gtp(program, verbose, null);
-        m_program = program;
+        m_table.setProperty("Program", program);
         try
         {
-            m_name = m_gtp.sendCommand("name");
+            m_table.setProperty("Name", m_gtp.sendCommand("name"));
         }
         catch (GtpError e)
         {
-            m_name = "";
+            m_table.setProperty("Name", "");
             if (m_gtp.isProgramDead())
                 throw e;
         }
         try
         {
-            m_version = m_gtp.sendCommand("version");
+            m_table.setProperty("Version", m_gtp.sendCommand("version"));
         }
         catch (GtpError e)
         {
-            m_version = "";
+            m_table.setProperty("Version", "");
         }
+        String host;
+        try
+        {
+            host = InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+            host = "?";
+        }
+        m_table.setProperty("Host", host);
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL);
+        Date date = Calendar.getInstance().getTime();
+        m_table.setProperty("Date", format.format(date));
         for (int i = 0; i < sgfFiles.size(); ++i)
             handleFile((String)sgfFiles.get(i));
+        m_table.setProperty("Games", Integer.toString(m_numberGames));
         FileWriter writer = new FileWriter("gtpstatistics.dat");
         m_table.save(writer);
         writer.close();
-        writeHtml();
     }
 
     public boolean getResult()
@@ -92,31 +104,7 @@ public class GtpStatistics
 
     private int m_numberGames;
 
-    private int m_numberPositions;
-
-    private int m_precision;
-
     private Gtp m_gtp;
-
-    private static final String m_colorError = "#ffa954";
-
-    private static final String m_colorHeader = "#91aee8";
-
-    private static final String m_colorInfo = "#e0e0e0";
-
-    private static final String m_colorLightBackground = "#e0e0e0";
-
-    private static final String m_colorGrayBackground = "#e0e0e0";
-
-    private static final String m_colorGreen = "#5eaf5e";
-
-    private static final String m_colorRed = "#ff5454";
-
-    private String m_name;
-
-    private String m_program;
-
-    private String m_version;
 
     private Table m_table;
 
@@ -131,6 +119,7 @@ public class GtpStatistics
         throws ErrorMessage, FileNotFoundException, GtpError,
                SgfReader.SgfError
     {
+        System.err.println(name);
         InputStream in = new FileInputStream(new File(name));
         SgfReader reader = new SgfReader(in, name, null, 0);
         ++m_numberGames;
@@ -160,7 +149,6 @@ public class GtpStatistics
     private void handlePosition(String name, Move move, int number)
         throws GtpError
     {
-        ++m_numberPositions;
         m_table.startRow();
         m_table.set("File", name);
         m_table.set("Move", number);
@@ -184,139 +172,6 @@ public class GtpStatistics
         String response = m_gtp.sendCommand("reg_genmove " + move.getColor());
         response = response.trim().toUpperCase();
         return (response.equals(GoPoint.toString(move.getPoint())));
-    }
-
-    private void writeHtml() throws Exception
-    {
-        File file = new File("gtpstatistics.html");
-        PrintStream out = new PrintStream(new FileOutputStream(file));
-        out.print("<html>\n" +
-                  "<head>\n" +
-                  "<title>Statistics</title>\n" +
-                  "<meta name=\"generator\" content=\"GtpStatistics "
-                  + Version.get() + "\">\n" +
-                  "</head>\n" +
-                  "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
-                  + " vlink=\"purple\" alink=\"red\">\n" +
-                  "<table border=\"0\" width=\"100%\" bgcolor=\""
-                  + m_colorHeader + "\">\n" +
-                  "<tr><td>\n" +
-                  "<h1>Statistics</h1>\n" +
-                  "</td></tr>\n" +
-                  "</table>\n" +
-                  "<table width=\"100%\" bgcolor=\"" + m_colorInfo
-                  + "\">\n");
-        writeInfo(out);
-        out.print("</table>\n");
-        writeCommandResult("reg_genmove", out);
-        for (int i = 0; i < m_commands.size(); ++i)
-            writeCommandResult(getCommand(i), out);
-        out.print("</body>\n" +
-                  "</html>\n");
-        out.close();
-    }
-
-    private void writeCommandResult(String command, PrintStream out)
-        throws Exception
-    {
-        Statistics statistics = new Statistics();
-        final int intervalSize = 25;
-        int numberElements = 10;
-        Statistics[] statisticsAtMove =  new Statistics[numberElements + 1];
-        for (int i = 0; i < numberElements + 1; ++i)
-            statisticsAtMove[i] = new Statistics();
-        int maxElement = 0;
-        for (int i = 0; i < m_table.getNumberRows(); ++i)
-        {
-            String value = m_table.get(command, i);
-            if (value.equals("(null)"))
-                continue;
-            double doubleValue;
-            try
-            {
-                doubleValue = Double.parseDouble(value);
-                statistics.addValue(doubleValue);
-            }
-            catch (NumberFormatException e)
-            {
-                continue;
-            }
-            int interval
-                = Integer.parseInt(m_table.get("Move", i)) / intervalSize;
-            int element = Math.min(interval, numberElements);
-            maxElement = Math.max(maxElement, element);
-            statisticsAtMove[element].addValue(doubleValue);
-        }
-        out.print("<hr>\n" +
-                  "<h2>" + command + "</h2>\n");
-        out.print("</table>\n" +
-                  "</p>\n" +
-                  "<table border=\"0\">\n" +
-                  "<thead><tr bgcolor=\"" + m_colorHeader + "\">"
-                  + "<th>Move</th><th>Number</th><th>Mean</th>"
-                  + "<th>Error</th></tr></thead>\n");
-        DecimalFormat format = new DecimalFormat();
-        format.setMaximumFractionDigits(m_precision);
-        for (int i = 0; i <= maxElement; ++i)
-        {
-            out.print("<tr bgcolor=\"" + m_colorInfo + "\"><td>");
-            if (i >= numberElements)
-                out.print(">" + (i * intervalSize));
-            else
-                out.print((i * intervalSize) + "-"
-                          + ((i + 1) * intervalSize - 1));
-            Statistics stat = statisticsAtMove[i];
-            out.print("</td><td>" + stat.getCount() + "</td><td>"
-                      + format.format(stat.getMean()) + "</td><td>"
-                      + format.format(stat.getErrorMean()) + "</td></tr>\n");
-        }
-        out.print("<tfoot><tr bgcolor=\"" + m_colorHeader + "\">"
-                  + "<td>All</td><td>" + statistics.getCount() + "</td>"
-                  + "<td>" + format.format(statistics.getMean()) + "</td>"
-                  + "<td>" + format.format(statistics.getErrorMean())
-                  + "</td>");
-                  
-        out.print("</table>\n");
-    }
-
-    private void writeHtmlRow(PrintStream out, String label,
-                              String value) throws Exception
-    {
-        out.print("<tr><th align=\"left\">" + label + ":</th>"
-                  + "<td align=\"left\">" + value + "</td></tr>\n");
-    }
-
-    private void writeInfo(PrintStream out)
-    {
-        String host;
-        try
-        {
-            host = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e)
-        {
-            host = "?";
-        }
-        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                                           DateFormat.FULL);
-        Date date = Calendar.getInstance().getTime();
-        out.print("<tr><th align=\"left\">Name:</th><td>" + m_name
-                  + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Version:</th><td>" + m_version
-                  + "</td></tr>\n");
-        out.print("<tr><th align=\"left\">Date:</th><td>" + format.format(date)
-                  + "</td></tr>\n" +
-                  "<tr><th align=\"left\">Host:</th><td>" + host
-                  + "</td></tr>\n" +
-                  "<tr><th align=\"left\" valign=\"top\">Command:</th>\n" +
-                  "<td valign=\"top\"><tt>" + m_program
-                  + "</tt></td></tr>\n" +
-                  "<tr><th align=\"left\" valign=\"top\">Games:</th>\n" +
-                  "<td valign=\"top\"><tt>" + m_numberGames
-                  + "</tt></td></tr>\n" +
-                  "<tr><th align=\"left\" valign=\"top\">Positions:</th>\n" +
-                  "<td valign=\"top\"><tt>" + m_numberPositions
-                  + "</tt></td></tr>\n");
     }
 }
     
