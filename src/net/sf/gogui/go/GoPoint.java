@@ -146,7 +146,7 @@ public final class GoPoint
     /** Convert to a string. */
     public String toString()
     {
-        return m_xString[m_x] + Integer.toString(m_y + 1);
+        return m_string;
     }
     
     /** Convert a point or null point (pass) to a string.
@@ -193,9 +193,11 @@ public final class GoPoint
 
     private static GoPoint[][] s_points;
 
-    private int m_x;
+    private final int m_x;
 
-    private int m_y;
+    private final int m_y;
+
+    private final String m_string;
 
     private static String m_xString[] =
     {
@@ -226,15 +228,9 @@ public final class GoPoint
 
     private GoPoint(int x, int y)
     {
-        set(x, y);
-    }
-
-    private void set(int x, int y)
-    {
-        assert(x >= 0);
-        assert(y >= 0);
         m_x = x;
         m_y = y;
+        m_string = m_xString[m_x] + Integer.toString(m_y + 1);
     }
 }
 

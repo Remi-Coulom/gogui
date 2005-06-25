@@ -74,10 +74,7 @@ public final class Move
 
     public String toString()
     {
-        if (m_point == null)
-            return (m_color.toString() + " pass");
-        else
-            return (m_color.toString() + " " + m_point.toString());
+        return m_string;
     }
 
     private static int s_size;
@@ -95,6 +92,8 @@ public final class Move
     private final GoColor m_color;
 
     private final GoPoint m_point;
+
+    private final String m_string;
 
     static
     {
@@ -130,6 +129,7 @@ public final class Move
     {
         m_point = point;
         m_color = color;
+        m_string = m_color.toString() + " " + GoPoint.toString(m_point);
     }
 }
 
