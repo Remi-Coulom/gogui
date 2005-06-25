@@ -5,6 +5,7 @@
 
 package net.sf.gogui.gtpstatistics;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -77,9 +78,22 @@ public class Analyze
         m_out.close();
     }
 
+    private static final int m_imgHeight = 135;
+
+    private static final int m_imgWidth = 700;
+
+    private static final Color[] m_plotColor = {
+        Color.decode("#ff5454"),
+        Color.decode("#738ab8"),
+        Color.decode("#5eaf5e"),
+        Color.decode("#ffa954")
+    };
+
     private int m_interval;
 
     private int m_numberGames;
+
+    private int m_plotColorIndex;
 
     private int m_precision;
 
@@ -95,10 +109,6 @@ public class Analyze
 
     private static final String m_colorGrayBackground = "#e0e0e0";
 
-    private static final String m_colorGreen = "#5eaf5e";
-
-    private static final String m_colorRed = "#ff5454";
-
     private Table m_table;
 
     private Vector m_commands;
@@ -106,6 +116,15 @@ public class Analyze
     private String getCommand(int index)
     {
         return (String)m_commands.get(index);
+    }
+
+    private void generatePlot(String columnTitle, String fileName,
+                              String gameFile) throws Exception
+    {
+        new Plot(new File(fileName), m_table, columnTitle, gameFile,
+                 m_imgWidth, m_imgHeight, m_plotColor[m_plotColorIndex]);
+        ++m_plotColorIndex;
+        m_plotColorIndex = m_plotColorIndex % m_plotColor.length;
     }
 
     private void startHtml(PrintStream out, String title)
@@ -201,6 +220,19 @@ public class Analyze
                      + "</a>");
         writeHtmlRow(out, "Number", gameNumber);
         out.print("</table>\n" +
+                  "<p>\n");
+        for (int i = 2; i < m_table.getNumberColumns(); ++i)
+        {
+            String title = m_table.getColumnTitle(i);
+            String extension = title + ".jpg";
+            String jpgFile = FileUtils.replaceExtension(new File(fileName),
+                                                        "html", extension);
+            generatePlot(title, jpgFile, gameFile);
+            out.print("<img src=\"" + jpgFile + "\" width=\"" + m_imgWidth
+                      + "\" height=\"" + m_imgHeight + "\"><br>\n");
+        }
+        out.print("</p>\n" +
+                  "<hr>\n" +
                   "<p>\n" +
                   "<table border=\"0\" cellpadding=\"0\">\n" +
                   "<thead><tr bgcolor=\"" + m_colorHeader + "\">");
