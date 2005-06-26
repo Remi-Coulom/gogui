@@ -25,7 +25,7 @@ class Main
                 "commands:",
                 "config:",
                 "help",
-                "interval",
+                "interval:",
                 "precision:",
                 "program:",
                 "size:",
@@ -72,6 +72,11 @@ class Main
             int size = arguments.size();
             if (analyze)
             {
+                if (size > 0)
+                {
+                    printUsage(System.err);
+                    System.exit(-1);
+                }
                 new Analyze(opt.getString("analyze"), precision, interval);
             }
             else

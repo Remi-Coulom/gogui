@@ -99,6 +99,12 @@ public class FileUtils
         return name + "." + newExtension;
     }
 
+    public static String replaceExtension(String file, String oldExtension,
+                                          String newExtension)
+    {
+        return replaceExtension(new File(file), oldExtension, newExtension);
+    }
+
     /** Make constructor unavailable; class is for namespace only. */
     private FileUtils()
     {

@@ -25,7 +25,7 @@ import net.sf.gogui.utils.Table;
 public class Plot
 {
     public Plot(File file, Table table, String columnTitle,
-                int imgWidth, int imgHeight, Color color)
+                String errorColumn, int imgWidth, int imgHeight, Color color)
         throws IOException
     {
         m_color = color;
@@ -47,7 +47,7 @@ public class Plot
         initScale(table, columnTitle);
         drawBackground(columnTitle);
         drawGrid();
-        drawData(table, columnTitle);
+        drawData(table, columnTitle, errorColumn);
         m_graphics2D.dispose();
         ImageIO.write(image, "png", file);
     }
@@ -118,7 +118,7 @@ public class Plot
         drawString(title, m_left + m_width / 2, m_top / 2);
     }
 
-    private void drawData(Table table, String columnTitle)
+    private void drawData(Table table, String columnTitle, String errorColumn)
     {
         m_graphics2D.setColor(m_color);
         Point last = null;
@@ -137,6 +137,14 @@ public class Plot
                 }
                 else if (last != null)
                     m_graphics2D.drawLine(last.x, last.y, point.x, point.y);
+                if (errorColumn != null)
+                {
+                    double err
+                        = Double.parseDouble(table.get(errorColumn, row));
+                    Point top = getPoint(x, y + err);
+                    Point bottom = getPoint(x, y - err);
+                    m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
+                }
                 m_graphics2D.fillRect(point.x - 2, point.y - 2, 5, 5);
                 last = point;
             }
