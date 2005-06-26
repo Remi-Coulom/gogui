@@ -20,6 +20,7 @@ import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.Table;
+import net.sf.gogui.utils.TableUtils;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -35,6 +36,15 @@ public class Analyze
             || ! m_table.getColumnTitle(0).equals("File")
             || ! m_table.getColumnTitle(1).equals("Move"))
             throw new ErrorMessage("Invalid table format");
+        int boardSize;
+        try
+        {
+            boardSize = Integer.parseInt(m_table.getProperty("Size", ""));
+        }
+        catch (NumberFormatException e)
+        {
+            boardSize = 19;
+        }
         m_commands = new Vector();
         for (int i = 2; i < m_table.getNumberColumns(); ++i)
             m_commands.add(m_table.getColumnTitle(i));
@@ -47,40 +57,13 @@ public class Analyze
         writeInfo();
         m_out.print("</table>\n");
         for (int i = 0; i < m_commands.size(); ++i)
-            writeCommandResult(getCommand(i));
-        m_out.print("<hr>\n" +
-                    "<h2>Games</h2>\n" +
-                    "<table border=\"0\">\n" +
-                    "<thead><tr bgcolor=\"" + m_colorHeader + "\">"
-                    + "<th>Number</th><th>File</th></tr></thead>\n");
-        String lastGame = null;
-        int gameNumber = 1;
-        for (int i = 0; i < m_table.getNumberRows(); ++i)
-        {
-            String game = m_table.get("File", i);
-            if (lastGame != null && game.equals(lastGame))
-                continue;
-            String extension = gameNumber + ".html";
-            String gameFile = FileUtils.replaceExtension(new File(fileName),
-                                                         "dat", extension);
-            String name = new File(game).getName();
-            m_out.print("<tr bgcolor=\"" + m_colorInfo + "\">"
-                        + "<td align=\"right\"><a href=\"" + gameFile + "\">"
-                        + gameNumber + "</a></td><td>" + name
-                        + "</td></tr>\n");
-            writeGamePage(gameFile, game, name, gameNumber);
-            ++gameNumber;
-            lastGame = game;
-        }
-        m_out.print("</table>\n" +
-                    "</body>\n" +
+            writeCommandResult(getCommand(i), fileName);
+        m_out.print("<hr>\n");
+        writeGameTable(fileName);
+        m_out.print("</body>\n" +
                     "</html>\n");
         m_out.close();
     }
-
-    private static final int m_imgHeight = 135;
-
-    private static final int m_imgWidth = 700;
 
     private static final Color[] m_plotColor = {
         Color.decode("#ff5454"),
@@ -92,8 +75,6 @@ public class Analyze
     private int m_interval;
 
     private int m_numberGames;
-
-    private int m_plotColorIndex;
 
     private int m_precision;
 
@@ -121,10 +102,23 @@ public class Analyze
     private void generatePlot(String columnTitle, String fileName,
                               String gameFile) throws Exception
     {
-        new Plot(new File(fileName), m_table, columnTitle, gameFile,
-                 m_imgWidth, m_imgHeight, m_plotColor[m_plotColorIndex]);
-        ++m_plotColorIndex;
-        m_plotColorIndex = m_plotColorIndex % m_plotColor.length;
+        Table table = TableUtils.select(m_table, "File", gameFile,
+                                        "Move", columnTitle);
+        int numberPositions = table.getNumberRows();
+        int width = Math.min(numberPositions * 9, 1150);
+        int height = 130;
+        new Plot(new File(fileName), table, columnTitle,
+                 width, height, getColor(columnTitle));
+    }
+
+    private Color getColor(String command)
+    {
+        int i = 0;
+        for (i = 2; i < m_table.getNumberColumns(); ++i)
+            if (m_table.getColumnTitle(i).equals(command))
+                break;
+        i = (i - 2) % m_plotColor.length;
+        return m_plotColor[i];
     }
 
     private void startHtml(PrintStream out, String title)
@@ -147,7 +141,7 @@ public class Analyze
                   + "\">\n");
     }
 
-    private void writeCommandResult(String command)
+    private void writeCommandResult(String command, String fileName)
         throws Exception
     {
         Statistics statistics = new Statistics();
@@ -187,19 +181,29 @@ public class Analyze
                     + "<th>Error</th></tr></thead>\n");
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(m_precision);
+        Vector columnTitles = new Vector();
+        columnTitles.add("Move");
+        columnTitles.add(command);
+        Table table = new Table(columnTitles);
         for (int i = 0; i <= maxElement; ++i)
         {
             m_out.print("<tr bgcolor=\"" + m_colorInfo + "\"><td>");
             if (i >= numberElements)
                 m_out.print(">" + (i * m_interval));
             else
-                m_out.print((i * m_interval) + "-"
-                            + ((i + 1) * m_interval - 1));
+            {
+                m_out.print(i * m_interval);
+                if (m_interval > 1)
+                    m_out.print("-" + ((i + 1) * m_interval - 1));
+            }
             Statistics stat = statisticsAtMove[i];
             m_out.print("</td><td>" + stat.getCount() + "</td><td>"
                         + format.format(stat.getMean()) + "</td><td>"
                         + format.format(stat.getErrorMean())
                         + "</td></tr>\n");
+            table.startRow();
+            table.set("Move", i * m_interval + m_interval / 2);
+            table.set(command, stat.getMean());
         }
         m_out.print("<tfoot><tr bgcolor=\"" + m_colorHeader + "\">"
                     + "<td>All</td><td>" + statistics.getCount() + "</td>"
@@ -208,6 +212,15 @@ public class Analyze
                     + "</td>");
         
         m_out.print("</table>\n");
+        String extension = command + ".png";
+        File file = new File(FileUtils.replaceExtension(new File(fileName),
+                                                        "dat", extension));
+        new Plot(file, table, command,
+                 1100, 130, getColor(command)); // XXX
+        m_out.print("<p>\n" +
+                    "Average interval " + m_interval + "\n" +
+                    "<img src=\"" + file + "\">\n" +
+                    "</p>\n");
     }
 
     private void writeGamePage(String fileName, String gameFile, String name,
@@ -220,7 +233,8 @@ public class Analyze
                      + "</a>");
         writeHtmlRow(out, "Number", gameNumber);
         out.print("</table>\n" +
-                  "<p>\n");
+                  "<p>\n" +
+                  "<table border=\"0\">\n");
         for (int i = 2; i < m_table.getNumberColumns(); ++i)
         {
             String title = m_table.getColumnTitle(i);
@@ -228,10 +242,10 @@ public class Analyze
             String jpgFile = FileUtils.replaceExtension(new File(fileName),
                                                         "html", extension);
             generatePlot(title, jpgFile, gameFile);
-            out.print("<img src=\"" + jpgFile + "\" width=\"" + m_imgWidth
-                      + "\" height=\"" + m_imgHeight + "\"><br>\n");
+            out.print("<tr><td><img src=\"" + jpgFile + "\"></td></tr>\n");
         }
-        out.print("</p>\n" +
+        out.print("</table>\n" +
+                  "</p>\n" +
                   "<hr>\n" +
                   "<p>\n" +
                   "<table border=\"0\" cellpadding=\"0\">\n" +
@@ -260,6 +274,34 @@ public class Analyze
         out.close();
     }
 
+    private void writeGameTable(String fileName) throws Exception
+    {
+        m_out.print("<h2>Games</h2>\n" +
+                    "<table border=\"0\">\n" +
+                    "<thead><tr bgcolor=\"" + m_colorHeader + "\">"
+                    + "<th>Number</th><th>File</th></tr></thead>\n");
+        String lastGame = null;
+        int gameNumber = 1;
+        for (int i = 0; i < m_table.getNumberRows(); ++i)
+        {
+            String game = m_table.get("File", i);
+            if (lastGame != null && game.equals(lastGame))
+                continue;
+            String extension = gameNumber + ".html";
+            String gameFile = FileUtils.replaceExtension(new File(fileName),
+                                                         "dat", extension);
+            String name = new File(game).getName();
+            m_out.print("<tr bgcolor=\"" + m_colorInfo + "\">"
+                        + "<td align=\"right\"><a href=\"" + gameFile + "\">"
+                        + gameNumber + "</a></td><td><a href=\"" + gameFile
+                        + "\">" + name + "</a></td></tr>\n");
+            writeGamePage(gameFile, game, name, gameNumber);
+            ++gameNumber;
+            lastGame = game;
+        }
+        m_out.print("</table>\n");
+    }
+
     private void writeHtmlRow(PrintStream out, String label,
                               String value) throws Exception
     {
@@ -280,6 +322,7 @@ public class Analyze
         writeTableProperty("Date");
         writeTableProperty("Host");
         writeTableProperty("Program");
+        writeTableProperty("Size");
         writeTableProperty("Games");
         writeHtmlRow(m_out, "Positions", m_table.getNumberRows());
     }

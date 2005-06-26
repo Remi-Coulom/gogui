@@ -36,10 +36,11 @@ import net.sf.gogui.version.Version;
 
 public class GtpStatistics
 {
-    public GtpStatistics(String program, Vector sgfFiles, Vector commands,
-                         boolean verbose)
+    public GtpStatistics(String program, Vector sgfFiles, int size,
+                         Vector commands, boolean verbose)
         throws Exception
     {
+        m_size = size;
         m_result = false;
         m_commands = commands;
         Vector columnHeaders = new Vector();
@@ -51,6 +52,7 @@ public class GtpStatistics
             for (int i = 0; i < commands.size(); ++i)
                 columnHeaders.add(getCommand(i));
         m_table = new Table(columnHeaders);
+        m_table.setProperty("Size", Integer.toString(size));
         m_gtp = new Gtp(program, verbose, null);
         m_table.setProperty("Program", program);
         try
@@ -104,6 +106,8 @@ public class GtpStatistics
 
     private int m_numberGames;
 
+    private int m_size;
+
     private Gtp m_gtp;
 
     private Table m_table;
@@ -126,6 +130,8 @@ public class GtpStatistics
         GameTree tree = reader.getGameTree();
         GameInformation info = tree.getGameInformation();
         int size = info.m_boardSize;
+        if (size != m_size)
+            throw new ErrorMessage(name + " has not size " + m_size);
         m_gtp.sendCommandBoardsize(size);
         m_gtp.sendCommandClearBoard(size);
         Node root = tree.getRoot();

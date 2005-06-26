@@ -110,6 +110,11 @@ public class Table
         set(column, Integer.toString(value));
     }
 
+    public void set(String column, double value)
+    {
+        set(column, Double.toString(value));
+    }
+
     public void set(String column, String value)
     {
         set(getColumnIndex(column), value);

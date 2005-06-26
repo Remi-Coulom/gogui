@@ -17,6 +17,7 @@ Runs GTP commands on all positions of game collections.
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-commands</option> <replaceable>commands</replaceable></arg>
 <arg><option>-program</option> <replaceable>program</replaceable></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg choice="plain" rep="repeat">
 <replaceable>file.sgf</replaceable>
@@ -126,6 +127,17 @@ Maximum number of fraction digits for floating point numbers in output file.
 <listitem>
 <para>
 Command line for running Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-size</option> <replaceable>n</replaceable>
+</term>
+<listitem>
+<para>
+Board size allowed for games (default 19).
 </para>
 </listitem>
 </varlistentry>

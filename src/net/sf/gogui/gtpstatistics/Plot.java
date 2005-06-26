@@ -9,6 +9,7 @@ import java.awt.Stroke;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -23,7 +24,7 @@ import net.sf.gogui.utils.Table;
 
 public class Plot
 {
-    public Plot(File file, Table table, String columnTitle, String gameFile,
+    public Plot(File file, Table table, String columnTitle,
                 int imgWidth, int imgHeight, Color color)
         throws IOException
     {
@@ -36,31 +37,24 @@ public class Plot
         m_graphics2D = image.createGraphics();
         m_graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                       RenderingHints.VALUE_ANTIALIAS_ON);
-        FontMetrics metrics = m_graphics2D.getFontMetrics();
-        m_left = 5 * metrics.getAscent();
-        m_top = (int)(metrics.getAscent() * 1.7);
+        m_metrics = m_graphics2D.getFontMetrics();
+        m_left = 4 * m_metrics.getAscent();
+        m_top = (int)(m_metrics.getAscent() * 1.7);
         m_right = m_imgWidth - 10;
         m_bottom = m_imgHeight - m_top;
         m_width = m_right - m_left;
         m_height = m_bottom - m_top;
-        initScale(table, columnTitle, gameFile);
+        initScale(table, columnTitle);
         drawBackground(columnTitle);
         drawGrid();
-        drawData(table, columnTitle, gameFile);
-        for (int row = 0; row < table.getNumberRows(); ++row)
-        {
-            if (! table.get("File", row).equals(gameFile))
-                continue;
-            double x = Double.parseDouble(table.get("Move", row));
-            double y = Double.parseDouble(table.get(columnTitle, row));
-        }
-
-
+        drawData(table, columnTitle);
         m_graphics2D.dispose();
         ImageIO.write(image, "png", file);
     }
 
     private boolean m_onlyBoolValues;
+
+    private boolean m_onlyIntValues;
 
     private int m_bottom;
 
@@ -100,6 +94,8 @@ public class Plot
 
     private Color m_color = Color.decode("#ff5454");
 
+    private FontMetrics m_metrics;
+
     private Graphics2D m_graphics2D;
 
     private void drawBackground(String title)
@@ -111,9 +107,8 @@ public class Plot
         m_graphics2D.setColor(Color.LIGHT_GRAY);
         m_graphics2D.drawRect(m_left, m_top, m_width, m_height);
         m_graphics2D.setColor(Color.BLACK);
-        FontMetrics metrics = m_graphics2D.getFontMetrics();
-        int width = metrics.stringWidth(title) + 10;
-        int height = (int)(metrics.getAscent() * 1.4);
+        int width = m_metrics.stringWidth(title) + 10;
+        int height = (int)(m_metrics.getAscent() * 1.4);
         int x = m_left + (m_width - width) / 2;
         int y = (m_top - height) / 2;
         m_graphics2D.setColor(Color.WHITE);
@@ -123,14 +118,12 @@ public class Plot
         drawString(title, m_left + m_width / 2, m_top / 2);
     }
 
-    private void drawData(Table table, String columnTitle, String gameFile)
+    private void drawData(Table table, String columnTitle)
     {
         m_graphics2D.setColor(m_color);
         Point last = null;
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
-            if (! table.get("File", row).equals(gameFile))
-                continue;
             try
             {
                 double x = Double.parseDouble(table.get("Move", row));
@@ -156,24 +149,33 @@ public class Plot
 
     private void drawGrid()
     {
-        m_graphics2D.setColor(Color.LIGHT_GRAY);
         Stroke oldStroke = m_graphics2D.getStroke();
-        m_graphics2D.setStroke(new BasicStroke(1f, 
-                                               BasicStroke.CAP_ROUND, 
-                                               BasicStroke.JOIN_ROUND, 
-                                               1f, 
-                                               new float[] {2f}, 
-                                               0f));
+        Stroke dottedStroke
+            = new BasicStroke(1f, BasicStroke.CAP_ROUND,
+                              BasicStroke.JOIN_ROUND, 1f, new float[] {2f},
+                              0f);
+        m_graphics2D.setStroke(dottedStroke);
         for (double x = m_xTicsMin; x < m_maxX; x += m_xTics)
         {
             Point bottom = getPoint(x, m_minY);
             Point top = getPoint(x, m_maxY);
+            m_graphics2D.setColor(Color.LIGHT_GRAY);
             m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
         }
+        m_graphics2D.setStroke(oldStroke);
+        for (double x = m_xTicsMin; x < m_maxX; x += 2 * m_xTics)
+        {
+            Point bottom = getPoint(x, m_minY);
+            Point top = getPoint(x, m_maxY);
+            m_graphics2D.setColor(Color.GRAY);
+            m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
+        }
+        m_graphics2D.setStroke(dottedStroke);
         for (double y = m_yTicsMin; y < m_maxY; y += m_yTics)
         {
             Point left = getPoint(m_minX, y);
             Point right = getPoint(m_maxX, y);
+            m_graphics2D.setColor(Color.LIGHT_GRAY);
             m_graphics2D.drawLine(left.x, left.y, right.x, right.y);
         }
         m_graphics2D.setStroke(oldStroke);
@@ -184,19 +186,25 @@ public class Plot
             Point right = getPoint(m_maxX, 0);
             m_graphics2D.drawLine(left.x, left.y, right.x, right.y);
         }
-        m_graphics2D.setColor(Color.DARK_GRAY);
+        m_graphics2D.setColor(Color.BLACK);
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(0);
-        for (double x = m_xTicsMin; x < m_maxX; x += m_xTics)
+        for (double x = m_xTicsMin; x < m_maxX; x += 2 * m_xTics)
         {
-            Point point = getPoint(x, m_minY);
-            drawString(format.format(x), point.x,
+            Point bottom = getPoint(x, m_minY);
+            Point top = getPoint(x, m_maxY);
+            drawString(format.format(x), bottom.x,
                        m_bottom + (m_imgHeight - m_bottom) / 2);
         }
         for (double y = m_yTicsMin; y < m_maxY; y += m_yTics)
         {
             Point point = getPoint(m_minX, y);
-            drawString(Double.toString(y), m_left / 2, point.y);
+            String label;
+            if (m_onlyIntValues)
+                label = format.format(y);
+            else
+                label = Double.toString(y);
+            drawStringRightAlign(label, m_left - 5, point.y);
         }
     }
 
@@ -206,6 +214,14 @@ public class Plot
         int width = metrics.stringWidth(string);
         int height = metrics.getAscent();
         m_graphics2D.drawString(string, x - width / 2, y + height / 2);
+    }
+
+    private void drawStringRightAlign(String string, int x, int y)
+    {
+        FontMetrics metrics = m_graphics2D.getFontMetrics();
+        int width = metrics.stringWidth(string);
+        int height = metrics.getAscent();
+        m_graphics2D.drawString(string, x - width, y + height / 2);
     }
 
     private Point getPoint(double x, double y)
@@ -244,22 +260,29 @@ public class Plot
         return result;
     }
 
-    private void initScale(Table table, String columnTitle, String gameFile)
+    private void initScale(Table table, String columnTitle)
     {
         m_minX = Double.MAX_VALUE;
         m_maxX = -Double.MAX_VALUE;
         m_minY = Double.MAX_VALUE;
         m_maxY = -Double.MAX_VALUE;
         m_onlyBoolValues = true;
+        m_onlyIntValues = true;
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
-            if (! table.get("File", row).equals(gameFile))
-                continue;
             String move = table.get("Move", row);
             String value = table.get(columnTitle, row);
             if (value != null && ! value.equals("(null)")
                 && ! (value.equals("0") || value.equals("1")))
                 m_onlyBoolValues = false;
+            try
+            {
+                Integer.parseInt(value);
+            }
+            catch (NumberFormatException e)
+            {
+                m_onlyIntValues = false;
+            }
             try
             {
                 double x = Double.parseDouble(move);
@@ -286,6 +309,12 @@ public class Plot
             m_maxX = m_maxX + 0.02 * m_xRange;
             m_xRange *= 1.04;
         }
+        if (m_onlyBoolValues)
+        {
+            m_minY = -0.1;
+            m_maxY = 1.1;
+            m_yRange = 2.2;
+        }
         if (m_minY == m_maxY)
         {
             m_minY -= 1;
@@ -304,10 +333,20 @@ public class Plot
             m_minY = 0;
             m_yRange = m_maxY - m_minY;
         }
-        m_xTics = getTics(m_xRange, 17);
-        m_yTics = getTics(m_yRange, 8);
-        m_xTicsMin = getTicsMin(m_xTics, m_minX);
-        m_yTicsMin = getTicsMin(m_yTics, m_minY);
+        m_xTics = 5;
+        m_xTicsMin = 0;
+        while (m_minX > m_xTicsMin)
+            m_xTicsMin += m_xTics;
+        if (m_onlyBoolValues)
+        {
+            m_yTics = 1;
+            m_yTicsMin = 0;
+        }
+        else
+        {
+            m_yTics = getTics(m_yRange, 8);
+            m_yTicsMin = getTicsMin(m_yTics, m_minY);
+        }
     }
 }
 

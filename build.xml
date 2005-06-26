@@ -543,6 +543,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  net/sf/gogui/utils/Statistics.class
  net/sf/gogui/utils/StringUtils.class
  net/sf/gogui/utils/Table.class
+ net/sf/gogui/utils/TableUtils.class
  net/sf/gogui/version/Version.class
 "/>
 </jar>

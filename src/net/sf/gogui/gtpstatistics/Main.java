@@ -28,6 +28,7 @@ class Main
                 "interval",
                 "precision:",
                 "program:",
+                "size:",
                 "verbose",
                 "version"
             };
@@ -56,6 +57,7 @@ class Main
             boolean verbose = opt.isSet("verbose");
             int precision = opt.getInteger("precision", 4, 0);
             int interval = opt.getInteger("interval", 20, 1);
+            int boardSize = opt.getInteger("size", 19, 1);
             Vector commands = null;
             if (opt.isSet("commands"))
             {
@@ -80,8 +82,8 @@ class Main
                     System.exit(-1);
                 }
                 GtpStatistics gtpStatistics
-                    = new GtpStatistics(program, arguments, commands,
-                                        verbose);
+                    = new GtpStatistics(program, arguments, boardSize,
+                                        commands, verbose);
                 System.exit(gtpStatistics.getResult() ? 0 : -1);
             }
         }
@@ -108,6 +110,7 @@ class Main
                   "-help         Display this help and exit\n" +
                   "-interval     Move interval size for -analyze\n" +
                   "-precision    Floating point precision for -analyze\n" +
+                  "-size         Board size of games\n" +
                   "-verbose      Log GTP stream to stderr\n" +
                   "-version      Display this help and exit\n");
     }
