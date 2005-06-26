@@ -10,34 +10,44 @@ package net.sf.gogui.go;
 /** State of a point on the board (black, white, empty). */
 public final class GoColor
 {
-    public static final GoColor BLACK = new GoColor();
+    public static final GoColor BLACK;
 
-    public static final GoColor WHITE = new GoColor();
+    public static final GoColor WHITE;
 
-    public static final GoColor EMPTY = new GoColor();
+    public static final GoColor EMPTY;
 
     public GoColor otherColor()
     {
-        if (this == BLACK)
-            return WHITE;
-        else if (this == WHITE)
-            return BLACK;
-        else
-            return EMPTY;
+        return m_otherColor;
     }
 
     public String toString()
     {
-        if (this == BLACK)
-            return "black";
-        else if (this == WHITE)
-            return "white";
-        else
-            return "empty";
+        return m_string;
     }
 
-    private GoColor()
+    private GoColor m_otherColor;
+
+    private final String m_string;
+
+    static
     {
+        BLACK = new GoColor("black");
+        WHITE = new GoColor("white");
+        EMPTY = new GoColor("empty");
+        BLACK.setOtherColor(WHITE);
+        WHITE.setOtherColor(BLACK);
+        EMPTY.setOtherColor(EMPTY);
+    }
+
+    private GoColor(String string)
+    {
+        m_string = string;
+    }
+
+    private void setOtherColor(GoColor color)
+    {
+        m_otherColor = color;
     }
 }
 
