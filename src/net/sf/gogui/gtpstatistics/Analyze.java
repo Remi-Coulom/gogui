@@ -9,12 +9,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Vector;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
@@ -311,6 +306,7 @@ public class Analyze
                      + "</a>");
         writeHtmlRow(out, "Number", gameNumber);
         out.print("</table>\n" +
+                  "<hr>\n" +
                   "<p>\n" +
                   "<table border=\"0\">\n");
         for (int i = 2; i < m_table.getNumberColumns(); ++i)

@@ -8,17 +8,14 @@ package net.sf.gogui.gtpstatistics;
 import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -28,9 +25,7 @@ import net.sf.gogui.gtp.Gtp;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.Table;
-import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
 
