@@ -55,7 +55,7 @@ class Main
                 program = opt.getString("program");
             }
             boolean verbose = opt.isSet("verbose");
-            int precision = opt.getInteger("precision", 4, 0);
+            int precision = opt.getInteger("precision", 3, 0);
             int interval = opt.getInteger("interval", 20, 1);
             int boardSize = opt.getInteger("size", 19, 1);
             Vector commands = null;

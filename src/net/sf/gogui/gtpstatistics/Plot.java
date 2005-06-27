@@ -23,18 +23,23 @@ import net.sf.gogui.utils.Table;
 
 public class Plot
 {
-    public Plot(File file, String title, Table table, String columnX,
-                String columnY, String errorColumn, int imgWidth,
-                int imgHeight, Color color, int precision, boolean withBars)
-        throws IOException
+    public Plot(int imgWidth, int imgHeight, Color color, int precision)
     {
         m_precision = precision;
         m_color = color;
         m_imgWidth = imgWidth;
         m_imgHeight = imgHeight;
+    }
+
+    public void plot(File file, Table table, String columnX, String columnY,
+                     String errorColumn)
+        throws IOException
+    {
+        if (m_title == null)
+            m_title = columnY;
+        int type = BufferedImage.TYPE_INT_RGB;
         BufferedImage image
-            = new BufferedImage(imgWidth, imgHeight,
-                                BufferedImage.TYPE_INT_RGB);
+            = new BufferedImage(m_imgWidth, m_imgHeight, type);
         m_graphics2D = image.createGraphics();
         m_graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                       RenderingHints.VALUE_ANTIALIAS_ON);
@@ -46,16 +51,44 @@ public class Plot
         m_width = m_right - m_left;
         m_height = m_bottom - m_top;
         initScale(table, columnX, columnY);
-        drawBackground(title);
+        drawBackground();
         drawGrid();
-        drawData(table, columnX, columnY, errorColumn, withBars);
+        drawData(table, columnX, columnY, errorColumn, m_withBars);
         m_graphics2D.dispose();
         ImageIO.write(image, "png", file);
     }
 
+    public void setPlotStyleBars()
+    {
+        m_withBars = true;
+    }
+
+    public void setSolidLineInterval(double solidLineInterval)
+    {
+        m_solidLineInterval = solidLineInterval;
+        m_useSolidLineInterval = true;
+    }
+
+    public void setXTics(double tics)
+    {
+        m_xTics = tics;
+        m_autoXTics = false;
+    }
+
+    public void setTitle(String title)
+    {
+        m_title = title;
+    }
+
+    private boolean m_autoXTics = true;
+
     private boolean m_onlyBoolValues;
 
     private boolean m_onlyIntValues;
+
+    private boolean m_useSolidLineInterval = false;
+
+    private boolean m_withBars;
 
     private int m_bottom;
 
@@ -83,6 +116,8 @@ public class Plot
 
     private double m_maxY;
 
+    private double m_solidLineInterval;
+
     private double m_xRange;
 
     private double m_xTics;
@@ -101,7 +136,9 @@ public class Plot
 
     private Graphics2D m_graphics2D;
 
-    private void drawBackground(String title)
+    private String m_title;
+
+    private void drawBackground()
     {
         m_graphics2D.setColor(Color.decode("#e0e0e0"));
         m_graphics2D.fillRect(0, 0, m_imgWidth, m_imgHeight);
@@ -110,7 +147,7 @@ public class Plot
         m_graphics2D.setColor(Color.LIGHT_GRAY);
         m_graphics2D.drawRect(m_left, m_top, m_width, m_height);
         m_graphics2D.setColor(Color.BLACK);
-        int width = m_metrics.stringWidth(title) + 10;
+        int width = m_metrics.stringWidth(m_title) + 10;
         int height = (int)(m_metrics.getAscent() * 1.4);
         int x = m_left + (m_width - width) / 2;
         int y = (m_top - height) / 2;
@@ -118,7 +155,7 @@ public class Plot
         m_graphics2D.fillRect(x, y, width, height);
         m_graphics2D.setColor(Color.DARK_GRAY);
         m_graphics2D.drawRect(x, y, width, height);
-        drawString(title, m_left + m_width / 2, m_top / 2);
+        drawString(m_title, m_left + m_width / 2, m_top / 2);
     }
 
     private void drawData(Table table, String columnX, String columnY,
@@ -175,12 +212,18 @@ public class Plot
             m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
         }
         m_graphics2D.setStroke(oldStroke);
-        for (double x = m_xTicsMin; x < m_maxX; x += 2 * m_xTics)
+        if (m_useSolidLineInterval)
         {
-            Point bottom = getPoint(x, m_minY);
-            Point top = getPoint(x, m_maxY);
-            m_graphics2D.setColor(Color.GRAY);
-            m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
+            double min =
+                (int)(m_xTicsMin / m_solidLineInterval + 1)
+                * m_solidLineInterval;
+            for (double x = min; x < m_maxX; x += m_solidLineInterval)
+            {
+                Point bottom = getPoint(x, m_minY);
+                Point top = getPoint(x, m_maxY);
+                m_graphics2D.setColor(Color.GRAY);
+                m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
+            }
         }
         m_graphics2D.setStroke(dottedStroke);
         for (double y = m_yTicsMin; y < m_maxY; y += m_yTics)
@@ -192,6 +235,12 @@ public class Plot
         }
         m_graphics2D.setStroke(oldStroke);
         m_graphics2D.setColor(Color.GRAY);
+        if (m_minX <= 0 && m_maxX >= 0)
+        {
+            Point top = getPoint(0, m_minY);
+            Point bottom = getPoint(0, m_maxY);
+            m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
+        }
         if (m_minY <= 0 && m_maxY >= 0)
         {
             Point left = getPoint(m_minX, 0);
@@ -283,10 +332,10 @@ public class Plot
 
     private void initScale(Table table, String columnX, String columnY)
     {
-        m_minX = Double.MAX_VALUE;
-        m_maxX = -Double.MAX_VALUE;
-        m_minY = Double.MAX_VALUE;
-        m_maxY = -Double.MAX_VALUE;
+        double minX = Double.MAX_VALUE;
+        double maxX = -Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = -Double.MAX_VALUE;
         m_onlyBoolValues = true;
         m_onlyIntValues = true;
         for (int row = 0; row < table.getNumberRows(); ++row)
@@ -308,33 +357,22 @@ public class Plot
             {
                 double x = Double.parseDouble(move);
                 double y = Double.parseDouble(value);
-                m_minX = Math.min(m_minX, x);
-                m_maxX = Math.max(m_maxX, x);
-                m_minY = Math.min(m_minY, y);
-                m_maxY = Math.max(m_maxY, y);
+                minX = Math.min(minX, x);
+                maxX = Math.max(maxX, x);
+                minY = Math.min(minY, y);
+                maxY = Math.max(maxY, y);
             }
             catch (NumberFormatException e)
             {
             }
         }
-        if (m_minX == m_maxX)
-        {
-            m_minX -= 1;
-            m_maxX += 1;
-            m_xRange = 2;
-        }
-        else
-        {
-            m_xRange = m_maxX - m_minX;
-            m_minX = m_minX - 0.02 * m_xRange;
-            m_maxX = m_maxX + 0.02 * m_xRange;
-            m_xRange *= 1.04;
-        }
+        initScaleX(minX, maxX);
+        m_minY = minY;
+        m_maxY = maxY;
         if (m_onlyBoolValues)
         {
             m_minY = -0.1;
             m_maxY = 1.1;
-            m_yRange = 2.2;
         }
         if (m_minY == m_maxY)
         {
@@ -345,19 +383,15 @@ public class Plot
         else
         {
             m_yRange = m_maxY - m_minY;
-            m_minY = m_minY - 0.05 * m_yRange;
-            m_maxY = m_maxY + 0.05 * m_yRange;
+            m_minY = m_minY - 0.05 * (m_maxY - m_minY);
+            m_maxY = m_maxY + 0.05 * (m_maxY - m_minY);
             m_yRange *= 1.1;
         }
         if (m_minY > 0 && m_minY < 0.3 * m_maxY)
         {
             m_minY = 0;
-            m_yRange = m_maxY - m_minY;
         }
-        m_xTics = 5;
-        m_xTicsMin = 0;
-        while (m_minX > m_xTicsMin)
-            m_xTicsMin += m_xTics;
+        m_yRange = m_maxY - m_minY;
         if (m_onlyBoolValues)
         {
             m_yTics = 1;
@@ -370,6 +404,24 @@ public class Plot
                 m_yTics = Math.max(1, m_yTics);
             m_yTicsMin = getTicsMin(m_yTics, m_minY);
         }
+    }
+
+    private void initScaleX(double min, double max)
+    {
+        if (min == max)
+        {
+            m_minX = min - 1;
+            m_maxX = min + 1;
+        }
+        else
+        {
+            m_minX = min - 0.02 * (max - min);
+            m_maxX = max + 0.02 * (max - min);
+        }
+        m_xRange = m_maxX - m_minX;
+        if (m_autoXTics)
+            m_xTics = getTics(m_xRange, 6);
+        m_xTicsMin = getTicsMin(m_xTics, m_minX);
     }
 }
 

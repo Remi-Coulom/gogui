@@ -79,9 +79,11 @@ public class Analyze
             = new File(FileUtils.replaceExtension(fileName, "dat",
                                                   extension));
         int numberMoves = table.getNumberRows() * (m_interval + 1);
-        new Plot(pngFile, "Count", table, "Move", "Count", null,
-                 getImgWidth(numberMoves), m_imgHeight,
-                 Color.DARK_GRAY, m_precision, false);
+        Plot plot = new Plot(getImgWidth(numberMoves), m_imgHeight,
+                             Color.DARK_GRAY, m_precision);
+        plot.setSolidLineInterval(10);
+        plot.setXTics(5);
+        plot.plot(pngFile, table, "Move", "Count", null);
         m_out.print("<p>\n" +
                     "<img src=\"" + pngFile.toString() + "\">\n" +
                     "</p>\n");
@@ -92,9 +94,11 @@ public class Analyze
             String command = getCommand(i);
             pngFile = new File(getAvgPlotFile(i));
             table = commandResult.m_table;
-            new Plot(pngFile, command, table, "Move", command, "Error",
-                     getImgWidth(numberMoves), m_imgHeight,
-                     getColor(command), m_precision, false);
+            plot = new Plot(getImgWidth(numberMoves), m_imgHeight,
+                            getColor(command), m_precision);
+            plot.setSolidLineInterval(10);
+            plot.setXTics(5);
+            plot.plot(pngFile, table, "Move", command, "Error");
             m_out.print("<p>\n" +
                         "<img src=\"" + pngFile.toString() + "\">\n" +
                         "</p>\n");
@@ -187,8 +191,11 @@ public class Analyze
                 }
             }
             Table histoTable = TableUtils.fromHistogram(m_histogram, command);
-            new Plot(new File(histoFile), command, histoTable, command,
-                     "Count", null, 250, 250, color, precision, true);
+            Plot plot = new Plot(250, 250, color, precision);
+            plot.setPlotStyleBars();
+            plot.setTitle(command);
+            plot.plot(new File(histoFile), histoTable, command, "Count",
+                      null);
             m_maxElement = maxElement;
             Vector columnTitles = new Vector();
             columnTitles.add("Move");
@@ -311,9 +318,11 @@ public class Analyze
                                         "Move", command);
         int numberPositions = table.getNumberRows();
         String fileName = getPlotFile(gameIndex, commandIndex);
-        new Plot(new File(fileName), command, table, "Move", command, null,
-                 getImgWidth(numberPositions), m_imgHeight,
-                 getColor(command), m_precision, false);
+        Plot plot = new Plot(getImgWidth(numberPositions),
+                             m_imgHeight, getColor(command), m_precision);
+        plot.setSolidLineInterval(10);
+        plot.setXTics(5);
+        plot.plot(new File(fileName), table, "Move", command, null);
     }
 
     private Color getColor(String command)
