@@ -193,6 +193,7 @@ public class Analyze
             Table histoTable = TableUtils.fromHistogram(m_histogram, command);
             Plot plot = new Plot(250, 250, color, precision);
             plot.setPlotStyleBars();
+            plot.setYMin(0);
             plot.setTitle(command);
             plot.plot(new File(histoFile), histoTable, command, "Count",
                       null);
@@ -216,7 +217,13 @@ public class Analyze
         Color.decode("#ff5454"),
         Color.decode("#738ab8"),
         Color.decode("#5eaf5e"),
-        Color.decode("#ffa954")
+        Color.decode("#ffa954"),
+        Color.decode("#ae3cae"),
+        Color.decode("#ff8c00"),
+        Color.decode("#647b3d"),
+        Color.decode("#9932cc"),
+        Color.decode("#79cdcd"),
+        Color.decode("#ff7ec3")
     };
 
     private int m_imgHeight = 130;
@@ -435,9 +442,10 @@ public class Analyze
         }
         out.print("<th>All</th>\n");
         out.print("</tr>\n");
+        int maxElement = commandResult.m_maxElement;
         out.print("<tr>\n");
         out.print("<th>Mean</th>");
-        for (int i = 0; i <= commandResult.m_maxElement; ++i)
+        for (int i = 0; i <= maxElement; ++i)
         {
             double mean = commandResult.m_statisticsAtMove[i].getMean();
             out.print("<td>" + formatFloat(mean) + "</td>");
@@ -445,8 +453,18 @@ public class Analyze
         out.print("<td>" + formatFloat(statistics.getMean()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
+        out.print("<th>Deviation</th>");
+        for (int i = 0; i <= maxElement; ++i)
+        {
+            double err = commandResult.m_statisticsAtMove[i].getDeviation();
+            out.print("<td>" + formatFloat(err) + "</td>");
+        }
+        out.print("<td>" + formatFloat(statistics.getErrorMean())
+                  + "</td>\n");
+        out.print("</tr>\n");
+        out.print("<tr>\n");
         out.print("<th>Error</th>");
-        for (int i = 0; i <= commandResult.m_maxElement; ++i)
+        for (int i = 0; i <= maxElement; ++i)
         {
             double err = commandResult.m_statisticsAtMove[i].getErrorMean();
             out.print("<td>" + formatFloat(err) + "</td>");
@@ -456,7 +474,7 @@ public class Analyze
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Min</th>");
-        for (int i = 0; i <= commandResult.m_maxElement; ++i)
+        for (int i = 0; i <= maxElement; ++i)
         {
             double min = commandResult.m_statisticsAtMove[i].getMin();
             out.print("<td>" + formatFloat(min) + "</td>");
@@ -465,7 +483,7 @@ public class Analyze
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Max</th>");
-        for (int i = 0; i <= commandResult.m_maxElement; ++i)
+        for (int i = 0; i <= maxElement; ++i)
         {
             double max = commandResult.m_statisticsAtMove[i].getMax();
             out.print("<td>" + formatFloat(max) + "</td>");
@@ -473,8 +491,17 @@ public class Analyze
         out.print("<td>" + formatFloat(statistics.getMax()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
+        out.print("<th>Sum</th>");
+        for (int i = 0; i <= maxElement; ++i)
+        {
+            double max = commandResult.m_statisticsAtMove[i].getSum();
+            out.print("<td>" + formatFloat(max) + "</td>");
+        }
+        out.print("<td>" + formatFloat(statistics.getMax()) + "</td>\n");
+        out.print("</tr>\n");
+        out.print("<tr>\n");
         out.print("<th>Count</th>");
-        for (int i = 0; i <= commandResult.m_maxElement; ++i)
+        for (int i = 0; i <= maxElement; ++i)
             out.print("<td>" + commandResult.m_statisticsAtMove[i].getCount()
                       + "</td>");
         out.print("<td>" + statistics.getCount() + "</td>\n");
@@ -490,9 +517,11 @@ public class Analyze
                     "<thead><tr>"
                     + "<th>Command</th>"
                     + "<th>Mean</th>"
+                    + "<th>Deviation</th>"
                     + "<th>Error</th>"
                     + "<th>Min</th>"
                     + "<th>Max</th>"
+                    + "<th>Sum</th>"
                     + "<th>Count</th>"
                     + "</tr></thead>\n");
         for (int i = 0; i < m_commands.size(); ++i)
@@ -505,9 +534,11 @@ public class Analyze
                         + "<td><a href=\"" + getCommandFile(i) + "\">"
                         + command + "</a></td>"
                         + "<td>" + formatFloat(stat.getMean()) + "</td>"
+                        + "<td>" + formatFloat(stat.getDeviation()) + "</td>"
                         + "<td>" + formatFloat(stat.getErrorMean()) + "</td>"
                         + "<td>" + formatFloat(stat.getMin()) + "</td>"
                         + "<td>" + formatFloat(stat.getMax()) + "</td>"
+                        + "<td>" + formatFloat(stat.getSum()) + "</td>"
                         + "<td>" + formatFloat(stat.getCount()) + "</td>"
                         + "</tr>\n");
         }

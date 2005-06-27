@@ -75,12 +75,20 @@ public class Plot
         m_autoXTics = false;
     }
 
+    public void setYMin(double min)
+    {
+        m_minY = min;
+        m_autoYMin = false;
+    }
+
     public void setTitle(String title)
     {
         m_title = title;
     }
 
     private boolean m_autoXTics = true;
+
+    private boolean m_autoYMin = true;
 
     private boolean m_onlyBoolValues;
 
@@ -367,43 +375,7 @@ public class Plot
             }
         }
         initScaleX(minX, maxX);
-        m_minY = minY;
-        m_maxY = maxY;
-        if (m_onlyBoolValues)
-        {
-            m_minY = -0.1;
-            m_maxY = 1.1;
-        }
-        if (m_minY == m_maxY)
-        {
-            m_minY -= 1;
-            m_maxY += 1;
-            m_yRange = 2;
-        }
-        else
-        {
-            m_yRange = m_maxY - m_minY;
-            m_minY = m_minY - 0.05 * (m_maxY - m_minY);
-            m_maxY = m_maxY + 0.05 * (m_maxY - m_minY);
-            m_yRange *= 1.1;
-        }
-        if (m_minY > 0 && m_minY < 0.3 * m_maxY)
-        {
-            m_minY = 0;
-        }
-        m_yRange = m_maxY - m_minY;
-        if (m_onlyBoolValues)
-        {
-            m_yTics = 1;
-            m_yTicsMin = 0;
-        }
-        else
-        {
-            m_yTics = getTics(m_yRange, 6);
-            if (m_onlyIntValues)
-                m_yTics = Math.max(1, m_yTics);
-            m_yTicsMin = getTicsMin(m_yTics, m_minY);
-        }
+        initScaleY(minY, maxY);
     }
 
     private void initScaleX(double min, double max)
@@ -422,6 +394,48 @@ public class Plot
         if (m_autoXTics)
             m_xTics = getTics(m_xRange, 6);
         m_xTicsMin = getTicsMin(m_xTics, m_minX);
+    }
+
+    private void initScaleY(double min, double max)
+    {
+        if (m_autoYMin)
+        {
+            if (m_onlyBoolValues)
+                m_minY = 0;
+            else
+                m_minY = min;
+        }
+        if (m_onlyBoolValues)
+            m_maxY = 1.1;
+        else
+            m_maxY = max + 0.05 * (max - m_minY);
+        // Try to inlude 0 in plot
+        if (m_minY > 0 && m_minY < 0.3 * m_maxY)
+            m_minY = 0;
+        // Avoid empty ranges
+        if (m_minY == m_maxY)
+        {
+            m_minY -= 1;
+            m_maxY += 1;
+        }
+        if (m_minX == m_maxX)
+        {
+            m_minX -= 1;
+            m_maxX += 1;
+        }
+        m_yRange = m_maxY - m_minY;
+        if (m_onlyBoolValues)
+        {
+            m_yTics = 1;
+            m_yTicsMin = 0;
+        }
+        else
+        {
+            m_yTics = getTics(m_yRange, 6);
+            if (m_onlyIntValues)
+                m_yTics = Math.max(1, m_yTics);
+            m_yTicsMin = getTicsMin(m_yTics, m_minY);
+        }
     }
 }
 

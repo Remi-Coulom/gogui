@@ -56,6 +56,11 @@ public class Statistics
         return m_min;
     }
 
+    public double getSum()
+    {
+        return m_sum;
+    }
+
     public double getVariance()
     {
         if (m_count == 0)
