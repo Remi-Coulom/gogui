@@ -11,6 +11,21 @@ import java.util.Vector;
 
 public class TableUtils
 {
+    public static Table fromHistogram(Histogram histogram, String name)
+    {
+        Vector columnTitles = new Vector(2);
+        columnTitles.add(name);
+        columnTitles.add("Count");
+        Table result = new Table(columnTitles);
+        for (int i = 0; i < histogram.getSize(); ++i)
+        {
+            result.startRow();
+            result.set(name, histogram.getValue(i));
+            result.set("Count", histogram.getCount(i));
+        }
+        return result;
+    }
+
     public static Table select(Table table, String compareColumn,
                                String compareValue, String selectColumn1,
                                String selectColumn2)

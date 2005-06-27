@@ -13,6 +13,7 @@ import java.util.Vector;
 import java.text.DecimalFormat;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.Table;
 import net.sf.gogui.utils.TableUtils;
@@ -78,9 +79,9 @@ public class Analyze
             = new File(FileUtils.replaceExtension(fileName, "dat",
                                                   extension));
         int numberMoves = table.getNumberRows() * (m_interval + 1);
-        new Plot(pngFile, table, "Count", null,
+        new Plot(pngFile, "Count", table, "Move", "Count", null,
                  getImgWidth(numberMoves), m_imgHeight,
-                 Color.DARK_GRAY, m_precision);
+                 Color.DARK_GRAY, m_precision, false);
         m_out.print("<p>\n" +
                     "<img src=\"" + pngFile.toString() + "\">\n" +
                     "</p>\n");
@@ -91,12 +92,18 @@ public class Analyze
             String command = getCommand(i);
             pngFile = new File(getAvgPlotFile(i));
             table = commandResult.m_table;
-            new Plot(pngFile, table, command, "Error",
+            new Plot(pngFile, command, table, "Move", command, "Error",
                      getImgWidth(numberMoves), m_imgHeight,
-                     getColor(command), m_precision);
+                     getColor(command), m_precision, false);
             m_out.print("<p>\n" +
                         "<img src=\"" + pngFile.toString() + "\">\n" +
                         "</p>\n");
+        }
+        m_out.print("<hr>\n");
+        m_out.print("<h2>Histograms</h2>\n");
+        for (int i = 0; i < m_commands.size(); ++i)
+        {
+            m_out.print("<img src=\"" + getHistoFile(i) + "\">\n");
         }
         m_out.print("<hr>\n");
         writeCommandsTable();
@@ -114,13 +121,17 @@ public class Analyze
 
         public final int m_numberElements;
 
+        public final Histogram m_histogram;
+
         public final Statistics m_statistics;
 
         public final Statistics[] m_statisticsAtMove;
 
         public final Table m_table;
 
-        public CommandResult(String command, Table table, int interval)
+        public CommandResult(String command, Table table, int interval,
+                             String histoFile, Color color, int precision)
+            throws Exception
         {
             m_statistics = new Statistics();
             m_numberElements = 500 / interval;
@@ -128,12 +139,19 @@ public class Analyze
             for (int i = 0; i < m_numberElements + 1; ++i)
                 m_statisticsAtMove[i] = new Statistics();
             int maxElement = 0;
+            boolean onlyIntValues = true;
             for (int i = 0; i < table.getNumberRows(); ++i)
             {
                 String value = table.get(command, i);
-                if (value.equals("(null)"))
-                    continue;
                 double doubleValue;
+                try
+                {
+                    Integer.parseInt(value);
+                }
+                catch (NumberFormatException e)
+                {
+                    onlyIntValues = false;
+                }
                 try
                 {
                     doubleValue = Double.parseDouble(value);
@@ -149,6 +167,28 @@ public class Analyze
                 maxElement = Math.max(maxElement, element);
                 m_statisticsAtMove[element].addValue(doubleValue);
             }
+            double min = m_statistics.getMin();
+            double max = m_statistics.getMax();
+            double diff = max - min;
+            if (onlyIntValues)
+                m_histogram = new Histogram(min, max, Math.max(1, diff / 35));
+            else
+                m_histogram = new Histogram(min, max, diff / 35);
+            for (int i = 0; i < table.getNumberRows(); ++i)
+            {
+                String value = table.get(command, i);
+                try
+                {
+                    m_histogram.addValue(Double.parseDouble(value));
+                }
+                catch (NumberFormatException e)
+                {
+                    continue;
+                }
+            }
+            Table histoTable = TableUtils.fromHistogram(m_histogram, command);
+            new Plot(new File(histoFile), command, histoTable, command,
+                     "Count", null, 250, 250, color, precision, true);
             m_maxElement = maxElement;
             Vector columnTitles = new Vector();
             columnTitles.add("Move");
@@ -236,6 +276,12 @@ public class Analyze
         return FileUtils.replaceExtension(m_fileName, "dat", extension);
     }
 
+    private String getHistoFile(int commandIndex)
+    {
+        String extension = "command-" + commandIndex + ".histo.png";
+        return FileUtils.replaceExtension(m_fileName, "dat", extension);
+    }
+
     private String getPlotFile(int gameIndex, int commandIndex)
     {
         String extension =
@@ -249,9 +295,12 @@ public class Analyze
         return FileUtils.replaceExtension(m_fileName, "dat", extension);
     }
 
-    private CommandResult computeCommandResult(int index)
+    private CommandResult computeCommandResult(int index) throws Exception
     {
-        return new CommandResult(getCommand(index), m_table, m_interval);
+        String command = getCommand(index);
+        return new CommandResult(command, m_table, m_interval,
+                                 getHistoFile(index),
+                                 getColor(command), m_precision);
     }
 
     private void generatePlot(int commandIndex, int gameIndex,
@@ -262,9 +311,9 @@ public class Analyze
                                         "Move", command);
         int numberPositions = table.getNumberRows();
         String fileName = getPlotFile(gameIndex, commandIndex);
-        new Plot(new File(fileName), table, command, null,
+        new Plot(new File(fileName), command, table, "Move", command, null,
                  getImgWidth(numberPositions), m_imgHeight,
-                 getColor(command), m_precision);
+                 getColor(command), m_precision, false);
     }
 
     private Color getColor(String command)
@@ -279,7 +328,7 @@ public class Analyze
 
     private int getImgWidth(int numberMoves)
     {
-        return Math.max(10, Math.min(numberMoves * 9, 1150));
+        return Math.max(10, Math.min(numberMoves * 9, 1000));
     }
 
     private void startHtml(PrintStream out, String title)
@@ -339,6 +388,10 @@ public class Analyze
                   "<p><img src=\"" + getAvgPlotFile(commandIndex)
                   + "\"></p>\n");
         writeCommandResult(out, commandIndex);
+        out.print("<hr>\n" +
+                  "<h2>Histogram</h2>\n");
+        out.print("<p><img src=\"" + getHistoFile(commandIndex)
+                  + "\"></p>\n");
         out.print("<hr>\n" +
                   "<h2>Games</h2>\n");
         writeGamePlots(out, commandIndex);

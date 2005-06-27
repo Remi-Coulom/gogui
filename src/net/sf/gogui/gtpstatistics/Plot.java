@@ -23,9 +23,9 @@ import net.sf.gogui.utils.Table;
 
 public class Plot
 {
-    public Plot(File file, Table table, String columnTitle,
-                String errorColumn, int imgWidth, int imgHeight, Color color,
-                int precision)
+    public Plot(File file, String title, Table table, String columnX,
+                String columnY, String errorColumn, int imgWidth,
+                int imgHeight, Color color, int precision, boolean withBars)
         throws IOException
     {
         m_precision = precision;
@@ -45,10 +45,10 @@ public class Plot
         m_bottom = m_imgHeight - m_top;
         m_width = m_right - m_left;
         m_height = m_bottom - m_top;
-        initScale(table, columnTitle);
-        drawBackground(columnTitle);
+        initScale(table, columnX, columnY);
+        drawBackground(title);
         drawGrid();
-        drawData(table, columnTitle, errorColumn);
+        drawData(table, columnX, columnY, errorColumn, withBars);
         m_graphics2D.dispose();
         ImageIO.write(image, "png", file);
     }
@@ -121,7 +121,8 @@ public class Plot
         drawString(title, m_left + m_width / 2, m_top / 2);
     }
 
-    private void drawData(Table table, String columnTitle, String errorColumn)
+    private void drawData(Table table, String columnX, String columnY,
+                          String errorColumn, boolean withBars)
     {
         m_graphics2D.setColor(m_color);
         Point last = null;
@@ -129,10 +130,10 @@ public class Plot
         {
             try
             {
-                double x = Double.parseDouble(table.get("Move", row));
-                double y = Double.parseDouble(table.get(columnTitle, row));
+                double x = Double.parseDouble(table.get(columnX, row));
+                double y = Double.parseDouble(table.get(columnY, row));
                 Point point = getPoint(x, y);
-                if (m_onlyBoolValues)
+                if (withBars || m_onlyBoolValues)
                 {
                     Point bottom = getPoint(x, 0);
                     m_graphics2D.drawLine(bottom.x, bottom.y,
@@ -200,6 +201,7 @@ public class Plot
         m_graphics2D.setColor(Color.BLACK);
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(0);
+        format.setGroupingUsed(false);
         for (double x = m_xTicsMin; x < m_maxX; x += 2 * m_xTics)
         {
             Point bottom = getPoint(x, m_minY);
@@ -209,6 +211,7 @@ public class Plot
         }
         DecimalFormat format2 = new DecimalFormat();
         format2.setMaximumFractionDigits(m_precision);
+        format2.setGroupingUsed(false);
         for (double y = m_yTicsMin; y < m_maxY; y += m_yTics)
         {
             Point point = getPoint(m_minX, y);
@@ -278,7 +281,7 @@ public class Plot
         return result;
     }
 
-    private void initScale(Table table, String columnTitle)
+    private void initScale(Table table, String columnX, String columnY)
     {
         m_minX = Double.MAX_VALUE;
         m_maxX = -Double.MAX_VALUE;
@@ -288,8 +291,8 @@ public class Plot
         m_onlyIntValues = true;
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
-            String move = table.get("Move", row);
-            String value = table.get(columnTitle, row);
+            String move = table.get(columnX, row);
+            String value = table.get(columnY, row);
             if (value != null && ! value.equals("(null)")
                 && ! (value.equals("0") || value.equals("1")))
                 m_onlyBoolValues = false;
@@ -363,6 +366,8 @@ public class Plot
         else
         {
             m_yTics = getTics(m_yRange, 6);
+            if (m_onlyIntValues)
+                m_yTics = Math.max(1, m_yTics);
             m_yTicsMin = getTicsMin(m_yTics, m_minY);
         }
     }
