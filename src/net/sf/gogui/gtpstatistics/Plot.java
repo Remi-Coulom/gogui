@@ -24,9 +24,11 @@ import net.sf.gogui.utils.Table;
 public class Plot
 {
     public Plot(File file, Table table, String columnTitle,
-                String errorColumn, int imgWidth, int imgHeight, Color color)
+                String errorColumn, int imgWidth, int imgHeight, Color color,
+                int precision)
         throws IOException
     {
+        m_precision = precision;
         m_color = color;
         m_imgWidth = imgWidth;
         m_imgHeight = imgHeight;
@@ -64,6 +66,8 @@ public class Plot
     private int m_imgWidth;
 
     private int m_left;
+
+    private int m_precision;
 
     private int m_right;
 
@@ -203,6 +207,8 @@ public class Plot
             drawString(format.format(x), bottom.x,
                        m_bottom + (m_imgHeight - m_bottom) / 2);
         }
+        DecimalFormat format2 = new DecimalFormat();
+        format2.setMaximumFractionDigits(m_precision);
         for (double y = m_yTicsMin; y < m_maxY; y += m_yTics)
         {
             Point point = getPoint(m_minX, y);
@@ -210,7 +216,7 @@ public class Plot
             if (m_onlyIntValues)
                 label = format.format(y);
             else
-                label = Double.toString(y);
+                label = format2.format(y);
             drawStringRightAlign(label, m_left - 5, point.y);
         }
     }
@@ -244,8 +250,13 @@ public class Plot
         if (tics < 0.5)
         {
             double result = 0.5;
-            while (result / 10 > tics)
-                result /= 10;
+            while (result / 5 > tics)
+            {
+                result /= 5;
+                if (result / 2 > tics)
+                    break;
+                result /= 2;
+            }
             return result;
         }
         double result = 0.5;
@@ -351,7 +362,7 @@ public class Plot
         }
         else
         {
-            m_yTics = getTics(m_yRange, 8);
+            m_yTics = getTics(m_yRange, 6);
             m_yTicsMin = getTicsMin(m_yTics, m_minY);
         }
     }
