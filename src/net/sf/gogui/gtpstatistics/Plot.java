@@ -44,8 +44,9 @@ public class Plot
         m_graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                       RenderingHints.VALUE_ANTIALIAS_ON);
         m_metrics = m_graphics2D.getFontMetrics();
-        m_left = 4 * m_metrics.getAscent();
-        m_top = (int)(m_metrics.getAscent() * 1.7);
+        m_ascent = m_metrics.getAscent();
+        m_left = 4 * m_ascent;
+        m_top = (int)(m_ascent * 1.7);
         m_right = m_imgWidth - 10;
         m_bottom = m_imgHeight - m_top;
         m_width = m_right - m_left;
@@ -67,6 +68,11 @@ public class Plot
     {
         m_solidLineInterval = solidLineInterval;
         m_useSolidLineInterval = true;
+    }
+
+    public void setXLabelPerTic(int xLabelPerTic)
+    {
+        m_xLabelPerTic = xLabelPerTic;
     }
 
     public void setXTics(double tics)
@@ -100,11 +106,15 @@ public class Plot
 
     private boolean m_onlyBoolValues;
 
-    private boolean m_onlyIntValues;
+    private boolean m_onlyIntValuesX;
+
+    private boolean m_onlyIntValuesY;
 
     private boolean m_useSolidLineInterval = false;
 
     private boolean m_withBars;
+
+    private int m_ascent;
 
     private int m_bottom;
 
@@ -123,6 +133,8 @@ public class Plot
     private int m_top;
 
     private int m_width;
+
+    private int m_xLabelPerTic = 1;
 
     private double m_minX;
 
@@ -162,7 +174,7 @@ public class Plot
         m_graphics2D.fillRect(m_left, m_top, m_width, m_height);
         m_graphics2D.setColor(Color.BLACK);
         int width = m_metrics.stringWidth(m_title) + 10;
-        int height = (int)(m_metrics.getAscent() * 1.4);
+        int height = (int)(m_ascent * 1.4);
         int x = m_left + (m_width - width) / 2;
         int y = (m_top - height) / 2;
         m_graphics2D.setColor(Color.decode("#ffffe1"));
@@ -235,8 +247,6 @@ public class Plot
                                                    m_right - top.x),
                                           bottom.y - top.y);
                 }
-                m_graphics2D.setColor(Color.GRAY);
-                m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
             }
         }
         m_graphics2D.setStroke(dottedStroke);
@@ -274,21 +284,26 @@ public class Plot
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(0);
         format.setGroupingUsed(false);
-        for (double x = m_xTicsMin; x < m_maxX; x += 2 * m_xTics)
-        {
-            Point bottom = getPoint(x, m_minY);
-            Point top = getPoint(x, m_maxY);
-            drawString(format.format(x), bottom.x,
-                       m_bottom + (m_imgHeight - m_bottom) / 2);
-        }
         DecimalFormat format2 = new DecimalFormat();
         format2.setMaximumFractionDigits(m_precision);
         format2.setGroupingUsed(false);
+        for (double x = m_xTicsMin; x < m_maxX; x += m_xLabelPerTic * m_xTics)
+        {
+            Point bottom = getPoint(x, m_minY);
+            Point top = getPoint(x, m_maxY);
+            String label;
+            if (m_onlyIntValuesX)
+                label = format.format(x);
+            else
+                label = format2.format(x);
+            drawString(label, bottom.x,
+                       m_bottom + (m_imgHeight - m_bottom) / 2);
+        }
         for (double y = m_yTicsMin; y < m_maxY; y += m_yTics)
         {
             Point point = getPoint(m_minX, y);
             String label;
-            if (m_onlyIntValues)
+            if (m_onlyIntValuesY)
                 label = format.format(y);
             else
                 label = format2.format(y);
@@ -303,7 +318,7 @@ public class Plot
     {
         FontMetrics metrics = m_graphics2D.getFontMetrics();
         int width = metrics.stringWidth(string);
-        int height = metrics.getAscent();
+        int height = m_ascent;
         m_graphics2D.drawString(string, x - width / 2, y + height / 2);
     }
 
@@ -311,7 +326,7 @@ public class Plot
     {
         FontMetrics metrics = m_graphics2D.getFontMetrics();
         int width = metrics.stringWidth(string);
-        int height = metrics.getAscent();
+        int height = m_ascent;
         m_graphics2D.drawString(string, x - width, y + height / 2);
     }
 
@@ -324,24 +339,25 @@ public class Plot
 
     private double getTics(double range, int numberTicsHint)
     {
+        numberTicsHint = Math.max(2, numberTicsHint);
         double tics = range / numberTicsHint;
         if (tics < 0.5)
         {
             double result = 0.5;
-            while (result / 5 > tics)
+            while (result > tics)
             {
                 result /= 5;
-                if (result / 2 > tics)
+                if (result <= tics)
                     break;
                 result /= 2;
             }
             return result;
         }
         double result = 0.5;
-        while (result < tics)
+        while (result * 2 < tics)
         {
             result *= 2;
-            if (result >= tics)
+            if (result * 5 >= tics)
                 break;
             result *= 5;
         }
@@ -363,26 +379,23 @@ public class Plot
         double minY = Double.MAX_VALUE;
         double maxY = -Double.MAX_VALUE;
         m_onlyBoolValues = true;
-        m_onlyIntValues = true;
+        m_onlyIntValuesX = true;
+        m_onlyIntValuesY = true;
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
-            String move = table.get(columnX, row);
-            String value = table.get(columnY, row);
-            if (value != null && ! value.equals("(null)")
-                && ! (value.equals("0") || value.equals("1")))
+            String xValue = table.get(columnX, row);
+            String yValue = table.get(columnY, row);
+            if (yValue != null && ! yValue.equals("(null)") &&
+                ! isBoolean(yValue))
                 m_onlyBoolValues = false;
+            if (! isInteger(xValue))
+                m_onlyIntValuesX = false;
+            if (! isInteger(yValue))
+                m_onlyIntValuesY = false;
             try
             {
-                Integer.parseInt(value);
-            }
-            catch (NumberFormatException e)
-            {
-                m_onlyIntValues = false;
-            }
-            try
-            {
-                double x = Double.parseDouble(move);
-                double y = Double.parseDouble(value);
+                double x = Double.parseDouble(xValue);
+                double y = Double.parseDouble(yValue);
                 minX = Math.min(minX, x);
                 maxX = Math.max(maxX, x);
                 minY = Math.min(minY, y);
@@ -414,7 +427,11 @@ public class Plot
         }
         m_xRange = m_maxX - m_minX;
         if (m_autoXTics)
-            m_xTics = getTics(m_xRange, 6);
+        {
+            m_xTics = getTics(m_xRange, m_imgWidth / m_ascent / 7);
+        }
+        if (m_onlyIntValuesX)
+            m_xTics = Math.max(1, m_xTics);
         m_xTicsMin = getTicsMin(m_xTics, m_minX);
     }
 
@@ -448,11 +465,29 @@ public class Plot
         }
         else
         {
-            m_yTics = getTics(m_yRange, 6);
-            if (m_onlyIntValues)
+            m_yTics = getTics(m_yRange, m_imgHeight / m_ascent / 6);
+            if (m_onlyIntValuesY)
                 m_yTics = Math.max(1, m_yTics);
             m_yTicsMin = getTicsMin(m_yTics, m_minY);
         }
+    }
+
+    private static boolean isBoolean(String string)
+    {
+        return (string.equals("0") || string.equals("1"));
+    }
+
+    private static boolean isInteger(String string)
+    {
+        try
+        {
+            Integer.parseInt(string);
+        }
+        catch (NumberFormatException e)
+        {
+            return false;
+        }
+        return true;
     }
 }
 
