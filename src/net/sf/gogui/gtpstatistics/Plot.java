@@ -280,7 +280,6 @@ public class Plot
             Point right = getPoint(m_maxX, 0);
             m_graphics2D.drawLine(left.x, left.y, right.x, right.y);
         }
-        m_graphics2D.setColor(Color.BLACK);
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(0);
         format.setGroupingUsed(false);
@@ -296,6 +295,9 @@ public class Plot
                 label = format.format(x);
             else
                 label = format2.format(x);
+            m_graphics2D.setColor(Color.GRAY);
+            m_graphics2D.drawLine(bottom.x, bottom.y, bottom.x, bottom.y + 3);
+            m_graphics2D.setColor(Color.BLACK);
             drawString(label, bottom.x,
                        m_bottom + (m_imgHeight - m_bottom) / 2);
         }
@@ -307,10 +309,16 @@ public class Plot
                 label = format.format(y);
             else
                 label = format2.format(y);
+            m_graphics2D.setColor(Color.GRAY);
+            m_graphics2D.drawLine(point.x, point.y, point.x - 3, point.y);
+            m_graphics2D.setColor(Color.BLACK);
             drawStringRightAlign(label, m_left - 5, point.y);
         }
         m_graphics2D.setColor(Color.LIGHT_GRAY);
         m_graphics2D.drawRect(m_left, m_top, m_width, m_height);
+        m_graphics2D.setColor(Color.GRAY);
+        m_graphics2D.drawLine(m_left, m_top, m_left, m_bottom);
+        m_graphics2D.drawLine(m_left, m_bottom, m_right, m_bottom);
         m_graphics2D.setStroke(oldStroke);
     }
 
