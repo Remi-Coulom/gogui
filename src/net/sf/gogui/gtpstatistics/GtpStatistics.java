@@ -35,6 +35,7 @@ public class GtpStatistics
                          Vector commands, boolean verbose)
         throws Exception
     {
+        new FileCheck(sgfFiles, size);
         m_size = size;
         m_result = false;
         m_commands = commands;
@@ -130,8 +131,6 @@ public class GtpStatistics
         m_gtp.sendCommandBoardsize(size);
         m_gtp.sendCommandClearBoard(size);
         Node root = tree.getRoot();
-        if (root.getMove() != null)
-            throw new ErrorMessage(name + " has move in root node");
         int number = 0;
         for (Node node = root; node != null; node = node.getChild())
         {
