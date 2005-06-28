@@ -75,6 +75,12 @@ public class Plot
         m_autoXTics = false;
     }
 
+    public void setXMin(double min)
+    {
+        m_minX = min;
+        m_autoXMin = false;
+    }
+
     public void setYMin(double min)
     {
         m_minY = min;
@@ -87,6 +93,8 @@ public class Plot
     }
 
     private boolean m_autoXTics = true;
+
+    private boolean m_autoXMin = true;
 
     private boolean m_autoYMin = true;
 
@@ -152,14 +160,12 @@ public class Plot
         m_graphics2D.fillRect(0, 0, m_imgWidth, m_imgHeight);
         m_graphics2D.setColor(Color.WHITE);
         m_graphics2D.fillRect(m_left, m_top, m_width, m_height);
-        m_graphics2D.setColor(Color.LIGHT_GRAY);
-        m_graphics2D.drawRect(m_left, m_top, m_width, m_height);
         m_graphics2D.setColor(Color.BLACK);
         int width = m_metrics.stringWidth(m_title) + 10;
         int height = (int)(m_metrics.getAscent() * 1.4);
         int x = m_left + (m_width - width) / 2;
         int y = (m_top - height) / 2;
-        m_graphics2D.setColor(Color.WHITE);
+        m_graphics2D.setColor(Color.decode("#ffffe1"));
         m_graphics2D.fillRect(x, y, width, height);
         m_graphics2D.setColor(Color.DARK_GRAY);
         m_graphics2D.drawRect(x, y, width, height);
@@ -211,6 +217,28 @@ public class Plot
             = new BasicStroke(1f, BasicStroke.CAP_ROUND,
                               BasicStroke.JOIN_ROUND, 1f, new float[] {2f},
                               0f);
+        if (m_useSolidLineInterval)
+        {
+            double min =
+                (int)(m_xTicsMin / m_solidLineInterval) * m_solidLineInterval;
+            int n = 0;
+            for (double x = min; x < m_maxX; x += m_solidLineInterval, ++n)
+            {
+                Point bottom = getPoint(x, m_minY);
+                Point top = getPoint(x, m_maxY);
+                if (n % 2 == 0)
+                {
+                    m_graphics2D.setColor(Color.decode("#f0f0f0"));
+                    Point right = getPoint(x + m_solidLineInterval, m_maxY);
+                    m_graphics2D.fillRect(top.x, top.y,
+                                          Math.min(right.x - top.x,
+                                                   m_right - top.x),
+                                          bottom.y - top.y);
+                }
+                m_graphics2D.setColor(Color.GRAY);
+                m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
+            }
+        }
         m_graphics2D.setStroke(dottedStroke);
         for (double x = m_xTicsMin; x < m_maxX; x += m_xTics)
         {
@@ -220,19 +248,6 @@ public class Plot
             m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
         }
         m_graphics2D.setStroke(oldStroke);
-        if (m_useSolidLineInterval)
-        {
-            double min =
-                (int)(m_xTicsMin / m_solidLineInterval + 1)
-                * m_solidLineInterval;
-            for (double x = min; x < m_maxX; x += m_solidLineInterval)
-            {
-                Point bottom = getPoint(x, m_minY);
-                Point top = getPoint(x, m_maxY);
-                m_graphics2D.setColor(Color.GRAY);
-                m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
-            }
-        }
         m_graphics2D.setStroke(dottedStroke);
         for (double y = m_yTicsMin; y < m_maxY; y += m_yTics)
         {
@@ -279,6 +294,9 @@ public class Plot
                 label = format2.format(y);
             drawStringRightAlign(label, m_left - 5, point.y);
         }
+        m_graphics2D.setColor(Color.LIGHT_GRAY);
+        m_graphics2D.drawRect(m_left, m_top, m_width, m_height);
+        m_graphics2D.setStroke(oldStroke);
     }
 
     private void drawString(String string, int x, int y)
@@ -380,15 +398,19 @@ public class Plot
 
     private void initScaleX(double min, double max)
     {
-        if (min == max)
+        if (m_autoXMin)
         {
-            m_minX = min - 1;
-            m_maxX = min + 1;
+            m_minX = min - 0.05 * (max - min);
         }
-        else
+        m_maxX = max + 0.05 * (max - min);
+        // Try to inlude 0 in plot
+        if (m_minX > 0 && m_minX < 0.3 * m_maxX)
+            m_minX = 0;
+        // Avoid empty ranges
+        if (m_minX == m_maxX)
         {
-            m_minX = min - 0.02 * (max - min);
-            m_maxX = max + 0.02 * (max - min);
+            m_minX -= 1.1;
+            m_maxX += 1.1;
         }
         m_xRange = m_maxX - m_minX;
         if (m_autoXTics)
@@ -415,13 +437,8 @@ public class Plot
         // Avoid empty ranges
         if (m_minY == m_maxY)
         {
-            m_minY -= 1;
-            m_maxY += 1;
-        }
-        if (m_minX == m_maxX)
-        {
-            m_minX -= 1;
-            m_maxX += 1;
+            m_minY -= 1.1;
+            m_maxY += 1.1;
         }
         m_yRange = m_maxY - m_minY;
         if (m_onlyBoolValues)

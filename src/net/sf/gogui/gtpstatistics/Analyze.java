@@ -82,6 +82,7 @@ public class Analyze
         Plot plot = new Plot(getImgWidth(numberMoves), m_imgHeight,
                              Color.DARK_GRAY, m_precision);
         plot.setSolidLineInterval(10);
+        plot.setXMin(0);
         plot.setXTics(5);
         plot.plot(pngFile, table, "Move", "Count", null);
         m_out.print("<p>\n" +
@@ -97,6 +98,7 @@ public class Analyze
             plot = new Plot(getImgWidth(numberMoves), m_imgHeight,
                             getColor(command), m_precision);
             plot.setSolidLineInterval(10);
+            plot.setXMin(0);
             plot.setXTics(5);
             plot.plot(pngFile, table, "Move", command, "Error");
             m_out.print("<p>\n" +
@@ -165,8 +167,10 @@ public class Analyze
                 {
                     continue;
                 }
-                int intervalIndex
-                    = Integer.parseInt(table.get("Move", i)) / interval;
+                int move = Integer.parseInt(table.get("Move", i));
+                if (move <= 0)
+                    throw new Exception("Invalid move in table row " + i);
+                int intervalIndex = (move - 1) / interval;
                 int element = Math.min(intervalIndex, m_numberElements);
                 maxElement = Math.max(maxElement, element);
                 m_statisticsAtMove[element].addValue(doubleValue);
@@ -328,6 +332,7 @@ public class Analyze
         Plot plot = new Plot(getImgWidth(numberPositions),
                              m_imgHeight, getColor(command), m_precision);
         plot.setSolidLineInterval(10);
+        plot.setXMin(0);
         plot.setXTics(5);
         plot.plot(new File(fileName), table, "Move", command, null);
     }
@@ -431,12 +436,12 @@ public class Analyze
         {
             out.print("<th>");
             if (i >= commandResult.m_numberElements)
-                out.print(">" + (i * m_interval));
+                out.print(">" + (i * m_interval + 1));
             else
             {
-                out.print(i * m_interval);
+                out.print(i * m_interval + 1);
                 if (m_interval > 1)
-                    out.print("-" + ((i + 1) * m_interval - 1));
+                    out.print("-" + ((i + 1) * m_interval));
             }
             out.print("</th>");
         }
