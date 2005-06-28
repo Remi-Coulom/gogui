@@ -36,6 +36,18 @@ public class Table
         return (String)getRow(row).get(column);
     }
 
+    public int getColumnIndex(String column)
+    {
+        for (int i = 0; i < m_numberColumns; ++i)
+        {
+            String title = getColumnTitle(i);
+            if (title.equals(column))
+                return i;
+        }
+        assert(false);
+        return -1;
+    }
+
     public String getColumnTitle(int index)
     {
         return (String)m_columnTitles.get(index);
@@ -152,18 +164,6 @@ public class Table
     {
         m_columnTitles.add(columnTitle);
         ++m_numberColumns;
-    }
-
-    private int getColumnIndex(String column)
-    {
-        for (int i = 0; i < m_numberColumns; ++i)
-        {
-            String title = getColumnTitle(i);
-            if (title.equals(column))
-                return i;
-        }
-        assert(false);
-        return -1;
     }
 
     private Vector getRow(int index)

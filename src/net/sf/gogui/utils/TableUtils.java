@@ -26,6 +26,37 @@ public class TableUtils
         return result;
     }
 
+    public static boolean isNumberValue(String string)
+    {
+        try
+        {
+            Double.parseDouble(string);
+        }
+        catch (NumberFormatException e)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isBoolValue(String string)
+    {
+        return (string.equals("0") || string.equals("1"));
+    }
+
+    public static boolean isIntValue(String string)
+    {
+        try
+        {
+            Integer.parseInt(string);
+        }
+        catch (NumberFormatException e)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public static Table select(Table table, String compareColumn,
                                String compareValue, String selectColumn1,
                                String selectColumn2)

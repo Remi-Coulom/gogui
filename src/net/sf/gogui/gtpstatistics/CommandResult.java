@@ -22,9 +22,15 @@ import net.sf.gogui.utils.TableUtils;
 
 public final class CommandResult
 {
+    public final boolean m_onlyBoolValues;
+
     public final int m_maxElement;
 
     public final int m_numberElements;
+
+    public final int m_numberNoResult;
+
+    public final int[] m_numberNoResultAtMove;
 
     public final Histogram m_histogram;
 
@@ -41,22 +47,29 @@ public final class CommandResult
         m_statistics = new Statistics();
         m_numberElements = 500 / interval;
         m_statisticsAtMove =  new Statistics[m_numberElements + 1];
+        m_numberNoResultAtMove = new int[m_numberElements + 1];
         for (int i = 0; i < m_numberElements + 1; ++i)
             m_statisticsAtMove[i] = new Statistics();
         int maxElement = 0;
         boolean onlyIntValues = true;
+        int numberNoResult = 0;
+        boolean onlyBoolValues = true;
         for (int i = 0; i < table.getNumberRows(); ++i)
         {
             String value = table.get(command, i);
             double doubleValue;
-            try
+            if (TableUtils.isNumberValue(value))
             {
-                Integer.parseInt(value);
+                if (! TableUtils.isIntValue(value))
+                    onlyIntValues = false;
+                if (! TableUtils.isBoolValue(value))
+                    onlyBoolValues = false;
             }
-            catch (NumberFormatException e)
-            {
-                onlyIntValues = false;
-            }
+            int move = Integer.parseInt(table.get("Move", i));
+            if (move <= 0)
+                throw new Exception("Invalid move in table row " + i);
+            int intervalIndex = (move - 1) / interval;
+            int element = Math.min(intervalIndex, m_numberElements);
             try
             {
                 doubleValue = Double.parseDouble(value);
@@ -64,16 +77,15 @@ public final class CommandResult
             }
             catch (NumberFormatException e)
             {
+                ++numberNoResult;
+                ++m_numberNoResultAtMove[element];
                 continue;
             }
-            int move = Integer.parseInt(table.get("Move", i));
-            if (move <= 0)
-                throw new Exception("Invalid move in table row " + i);
-            int intervalIndex = (move - 1) / interval;
-            int element = Math.min(intervalIndex, m_numberElements);
             maxElement = Math.max(maxElement, element);
             m_statisticsAtMove[element].addValue(doubleValue);
         }
+        m_onlyBoolValues = onlyBoolValues;
+        m_numberNoResult = numberNoResult;
         double min = m_statistics.getMin();
         double max = m_statistics.getMax();
         double diff = max - min;

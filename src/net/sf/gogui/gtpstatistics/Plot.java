@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 import net.sf.gogui.utils.Table;
+import net.sf.gogui.utils.TableUtils;
 
 //----------------------------------------------------------------------------
 
@@ -93,16 +94,32 @@ public class Plot
         m_autoYMin = false;
     }
 
+    public void setYMax(double max)
+    {
+        m_maxY = max;
+        m_autoYMax = false;
+    }
+
+    public void setYTics(double tics)
+    {
+        m_yTics = tics;
+        m_autoYTics = false;
+    }
+
     public void setTitle(String title)
     {
         m_title = title;
     }
 
-    private boolean m_autoXTics = true;
-
     private boolean m_autoXMin = true;
 
+    private boolean m_autoXTics = true;
+
     private boolean m_autoYMin = true;
+
+    private boolean m_autoYMax = true;
+
+    private boolean m_autoYTics = true;
 
     private boolean m_onlyBoolValues;
 
@@ -393,12 +410,13 @@ public class Plot
         {
             String xValue = table.get(columnX, row);
             String yValue = table.get(columnY, row);
-            if (yValue != null && ! yValue.equals("(null)") &&
-                ! isBoolean(yValue))
+            if (! TableUtils.isNumberValue(yValue))
+                continue;
+            if (! TableUtils.isBoolValue(yValue))
                 m_onlyBoolValues = false;
-            if (! isInteger(xValue))
+            if (! TableUtils.isIntValue(xValue))
                 m_onlyIntValuesX = false;
-            if (! isInteger(yValue))
+            if (! TableUtils.isIntValue(yValue))
                 m_onlyIntValuesY = false;
             try
             {
@@ -452,13 +470,17 @@ public class Plot
             else
                 m_minY = min;
         }
-        if (m_onlyBoolValues)
-            m_maxY = 1.1;
-        else
-            m_maxY = max + 0.05 * (max - m_minY);
+        if (m_autoYMax)
+        {
+            if (m_onlyBoolValues)
+                m_maxY = 1.1;
+            else
+                m_maxY = max + 0.05 * (max - m_minY);
+        }
         // Try to inlude 0 in plot
-        if (m_minY > 0 && m_minY < 0.3 * m_maxY)
-            m_minY = 0;
+        if (m_autoYMin)
+            if (m_minY > 0 && m_minY < 0.3 * m_maxY)
+                m_minY = 0;
         // Avoid empty ranges
         if (m_minY == m_maxY)
         {
@@ -466,36 +488,22 @@ public class Plot
             m_maxY += 1.1;
         }
         m_yRange = m_maxY - m_minY;
-        if (m_onlyBoolValues)
+        if (m_autoYTics)
         {
-            m_yTics = 1;
-            m_yTicsMin = 0;
+            if (m_onlyBoolValues)
+            {
+                m_yTics = 1;
+                m_yTicsMin = 0;
+            }
+            else
+            {
+                m_yTics = getTics(m_yRange, m_imgHeight / m_ascent / 6);
+                if (m_onlyIntValuesY)
+                    m_yTics = Math.max(1, m_yTics);
+            }
         }
-        else
-        {
-            m_yTics = getTics(m_yRange, m_imgHeight / m_ascent / 6);
-            if (m_onlyIntValuesY)
-                m_yTics = Math.max(1, m_yTics);
+        if (! m_onlyBoolValues)
             m_yTicsMin = getTicsMin(m_yTics, m_minY);
-        }
-    }
-
-    private static boolean isBoolean(String string)
-    {
-        return (string.equals("0") || string.equals("1"));
-    }
-
-    private static boolean isInteger(String string)
-    {
-        try
-        {
-            Integer.parseInt(string);
-        }
-        catch (NumberFormatException e)
-        {
-            return false;
-        }
-        return true;
     }
 }
 

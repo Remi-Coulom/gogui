@@ -8,6 +8,7 @@ package net.sf.gogui.gtpstatistics;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Vector;
 import java.text.DecimalFormat;
@@ -73,12 +74,8 @@ public class Analyze
             = new File(FileUtils.replaceExtension(fileName, "dat",
                                                   extension));
         int numberMoves = table.getNumberRows() * (m_interval + 1);
-        Plot plot = new Plot(getImgWidth(numberMoves), m_imgHeight,
-                             Color.DARK_GRAY, m_precision);
-        plot.setSolidLineInterval(10);
-        plot.setXMin(0);
-        plot.setXTics(5);
-        plot.setXLabelPerTic(2);
+        Plot plot = generatePlotMove(getImgWidth(numberMoves),
+                                     Color.DARK_GRAY);
         plot.plot(pngFile, table, "Move", "Count", null);
         m_out.print("<p>\n" +
                     "<img src=\"" + pngFile.toString() + "\">\n" +
@@ -88,14 +85,10 @@ public class Analyze
             commandResult = computeCommandResult(i);
             m_commandResults.add(commandResult);
             String command = getCommand(i);
-            pngFile = new File(getAvgPlotFile(i));
             table = commandResult.m_table;
-            plot = new Plot(getImgWidth(numberMoves), m_imgHeight,
-                            getColor(command), m_precision);
-            plot.setSolidLineInterval(10);
-            plot.setXMin(0);
-            plot.setXTics(5);
-            plot.setXLabelPerTic(2);
+            plot = generatePlotMove(getImgWidth(numberMoves),
+                                    getColor(command));
+            pngFile = new File(getAvgPlotFile(i));
             plot.plot(pngFile, table, "Move", command, "Error");
             m_out.print("<p>\n" +
                         "<img src=\"" + pngFile.toString() + "\">\n" +
@@ -123,7 +116,6 @@ public class Analyze
         Color.decode("#5eaf5e"),
         Color.decode("#ffa954"),
         Color.decode("#ae3cae"),
-        Color.decode("#ff8c00"),
         Color.decode("#647b3d"),
         Color.decode("#9932cc"),
         Color.decode("#79cdcd"),
@@ -221,6 +213,16 @@ public class Analyze
                                  getColor(command), m_precision);
     }
 
+    private Plot generatePlotMove(int width, Color color)
+    {
+        Plot plot = new Plot(width, m_imgHeight, color, m_precision);
+        plot.setSolidLineInterval(10);
+        plot.setXMin(0);
+        plot.setXTics(5);
+        plot.setXLabelPerTic(2);
+        return plot;
+    }
+
     private void generatePlot(int commandIndex, int gameIndex,
                               String gameFile) throws Exception
     {
@@ -229,23 +231,15 @@ public class Analyze
                                         "Move", command);
         int numberPositions = table.getNumberRows();
         String fileName = getPlotFile(gameIndex, commandIndex);
-        Plot plot = new Plot(getImgWidth(numberPositions),
-                             m_imgHeight, getColor(command), m_precision);
-        plot.setSolidLineInterval(10);
-        plot.setXMin(0);
-        plot.setXTics(5);
-        plot.setXLabelPerTic(2);
+        Plot plot = generatePlotMove(getImgWidth(numberPositions),
+                                     getColor(command));
         plot.plot(new File(fileName), table, "Move", command, null);
     }
 
     private Color getColor(String command)
     {
-        int i = 0;
-        for (i = 2; i < m_table.getNumberColumns(); ++i)
-            if (m_table.getColumnTitle(i).equals(command))
-                break;
-        i = (i - 2) % m_plotColor.length;
-        return m_plotColor[i];
+        int index = m_table.getColumnIndex(command);
+        return m_plotColor[(index - 2) % m_plotColor.length];
     }
 
     private int getImgWidth(int numberMoves)
@@ -412,6 +406,13 @@ public class Analyze
                       + "</td>");
         out.print("<td>" + statistics.getCount() + "</td>\n");
         out.print("</tr>\n");
+        out.print("<tr>\n");
+        out.print("<th>Unknown</th>");
+        for (int i = 0; i <= maxElement; ++i)
+            out.print("<td>" + commandResult.m_numberNoResultAtMove[i]
+                      + "</td>");
+        out.print("<td>" + commandResult.m_numberNoResult + "</td>\n");
+        out.print("</tr>\n");
         out.print("</tbody>\n");
         out.print("</table>\n");
     }
@@ -429,6 +430,7 @@ public class Analyze
                     + "<th>Max</th>"
                     + "<th>Sum</th>"
                     + "<th>Count</th>"
+                    + "<th>Unknown</th>"
                     + "</tr></thead>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
@@ -446,6 +448,7 @@ public class Analyze
                         + "<td>" + formatFloat(stat.getMax()) + "</td>"
                         + "<td>" + formatFloat(stat.getSum()) + "</td>"
                         + "<td>" + formatFloat(stat.getCount()) + "</td>"
+                        + "<td>" + commandResult.m_numberNoResult + "</td>"
                         + "</tr>\n");
         }
         m_out.print("</table>\n");
