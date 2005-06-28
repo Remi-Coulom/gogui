@@ -23,7 +23,8 @@ import net.sf.gogui.version.Version;
 
 public class Analyze
 {
-    public Analyze(String fileName, int precision, int interval)
+    public Analyze(String fileName, int precision, int interval,
+                   boolean force)
         throws Exception
     {
         m_precision = precision;
@@ -56,6 +57,8 @@ public class Analyze
         m_commandResults = new Vector(m_commands.size());
         File file = new File(FileUtils.replaceExtension(fileName,
                                                         "dat", "html"));
+        if (file.exists() && ! force)
+            throw new ErrorMessage("File " + file + " already exists");
         m_out = new PrintStream(new FileOutputStream(file));
         startHtml(m_out, "GtpStatistics Summary");
         startInfo(m_out, "GtpStatistics Summary");

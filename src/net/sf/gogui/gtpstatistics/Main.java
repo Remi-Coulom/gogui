@@ -24,6 +24,7 @@ class Main
                 "analyze:",
                 "commands:",
                 "config:",
+                "force",
                 "help",
                 "interval:",
                 "precision:",
@@ -55,6 +56,7 @@ class Main
                 program = opt.getString("program");
             }
             boolean verbose = opt.isSet("verbose");
+            boolean force = opt.isSet("force");
             int precision = opt.getInteger("precision", 3, 0);
             int interval = opt.getInteger("interval", 20, 1);
             int boardSize = opt.getInteger("size", 19, 1);
@@ -77,7 +79,8 @@ class Main
                     printUsage(System.err);
                     System.exit(-1);
                 }
-                new Analyze(opt.getString("analyze"), precision, interval);
+                new Analyze(opt.getString("analyze"), precision, interval,
+                            force);
             }
             else
             {
@@ -112,6 +115,7 @@ class Main
                   "-analyze      Create HTML file from result file\n" +
                   "-config       Config file\n" +
                   "-commands     GTP commands to run (comma separated)\n" +
+                  "-force        Overwrite existing HTML file\n" +
                   "-help         Display this help and exit\n" +
                   "-interval     Move interval size for -analyze\n" +
                   "-precision    Floating point precision for -analyze\n" +

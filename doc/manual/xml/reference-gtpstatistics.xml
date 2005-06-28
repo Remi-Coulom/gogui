@@ -33,6 +33,7 @@ Runs GTP commands on all positions of game collections.
 <command>gtpstatistics</command>
 <arg><option>-analyze</option> <replaceable>file</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-force</option></arg>
 <arg><option>-precision</option> <replaceable>n</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -94,6 +95,17 @@ Read command line options and arguments from file.
 <listitem>
 <para>
 Comma separated list of GTP commands to run on each position.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-force</option>
+</term>
+<listitem>
+<para>
+Overwrite existing HTML file generated with option <option>-analyze</option>.
 </para>
 </listitem>
 </varlistentry>
