@@ -9,6 +9,7 @@ import java.awt.Stroke;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -36,20 +37,27 @@ public class Plot
                      String errorColumn)
         throws IOException
     {
-        if (m_title == null)
-            m_title = columnY;
         int type = BufferedImage.TYPE_INT_RGB;
         BufferedImage image
             = new BufferedImage(m_imgWidth, m_imgHeight, type);
         m_graphics2D = image.createGraphics();
         m_graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                       RenderingHints.VALUE_ANTIALIAS_ON);
+        Font font = m_graphics2D.getFont();
+        if (font != null)
+        {
+            font = font.deriveFont((float)(font.getSize() * 0.8));
+            m_graphics2D.setFont(font);
+        }
         m_metrics = m_graphics2D.getFontMetrics();
         m_ascent = m_metrics.getAscent();
         m_left = 4 * m_ascent;
-        m_top = (int)(m_ascent * 1.7);
-        m_right = m_imgWidth - 10;
-        m_bottom = m_imgHeight - m_top;
+        if (m_title != null)
+            m_top = (int)(m_ascent * 1.7);
+        else
+            m_top = (int)(m_ascent * 0.5);
+        m_right = m_imgWidth - (int)(m_ascent * 0.5);
+        m_bottom = m_imgHeight - (int)(m_ascent * 1.5);;
         m_width = m_right - m_left;
         m_height = m_bottom - m_top;
         initScale(table, columnX, columnY);
@@ -190,15 +198,18 @@ public class Plot
         m_graphics2D.setColor(Color.WHITE);
         m_graphics2D.fillRect(m_left, m_top, m_width, m_height);
         m_graphics2D.setColor(Color.BLACK);
-        int width = m_metrics.stringWidth(m_title) + 10;
-        int height = (int)(m_ascent * 1.4);
-        int x = m_left + (m_width - width) / 2;
-        int y = (m_top - height) / 2;
-        m_graphics2D.setColor(Color.decode("#ffffe1"));
-        m_graphics2D.fillRect(x, y, width, height);
-        m_graphics2D.setColor(Color.DARK_GRAY);
-        m_graphics2D.drawRect(x, y, width, height);
-        drawString(m_title, m_left + m_width / 2, m_top / 2);
+        if (m_title != null)
+        {
+            int width = m_metrics.stringWidth(m_title) + 10;
+            int height = (int)(m_ascent * 1.4);
+            int x = m_left + (m_width - width) / 2;
+            int y = (m_top - height) / 2;
+            m_graphics2D.setColor(Color.decode("#ffffe1"));
+            m_graphics2D.fillRect(x, y, width, height);
+            m_graphics2D.setColor(Color.DARK_GRAY);
+            m_graphics2D.drawRect(x, y, width, height);
+            drawString(m_title, m_left + m_width / 2, m_top / 2);
+        }
     }
 
     private void drawData(Table table, String columnX, String columnY,

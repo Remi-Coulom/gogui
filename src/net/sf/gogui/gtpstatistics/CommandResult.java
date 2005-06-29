@@ -57,10 +57,9 @@ public final class CommandResult
         }
         Histogram histogram = m_statisticsAll.m_histogram;
         Table histoTable = TableUtils.fromHistogram(histogram, command);
-        Plot plot = new Plot(250, 250, color, precision);
+        Plot plot = new Plot(200, 200, color, precision);
         plot.setPlotStyleBars();
         plot.setYMin(0);
-        plot.setTitle(command);
         plot.plot(new File(histoFile), histoTable, command, "Count",
                   null);
     }
