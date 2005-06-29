@@ -88,6 +88,7 @@ public class Analyze
             plot = generatePlotMove(getImgWidth(numberMoves),
                                     getColor(command));
             pngFile = new File(getAvgPlotFile(i));
+            plot.setTitle(command);
             plot.plot(pngFile, table, "Move", "Mean", "Error");
             m_out.print("<p>\n" +
                         "<img src=\"" + pngFile.toString() + "\">\n" +
@@ -115,10 +116,8 @@ public class Analyze
         Color.decode("#5eaf5e"),
         Color.decode("#ffa954"),
         Color.decode("#ae3cae"),
-        Color.decode("#647b3d"),
-        Color.decode("#9932cc"),
-        Color.decode("#79cdcd"),
-        Color.decode("#ff7ec3")
+        Color.decode("#21C7CD"),
+        Color.decode("#FF7340")
     };
 
     private int m_imgHeight = 130;
@@ -321,13 +320,13 @@ public class Analyze
     {
         CommandResult commandResult = getCommandResult(commandIndex);
         String command = getCommand(commandIndex);
-        Statistics statistics = commandResult.m_statisticsAll.m_statistics;
+        PositionStatistics statistics = commandResult.m_statisticsAll;
         out.print("<table class=\"smalltable\">\n");
         out.print("<tbody>");
         out.print("<tr>");
         out.print("<th>Move</th>");
         int numberMoveIntervals = commandResult.getNumberMoveIntervals();
-        for (int i = 0; i <= numberMoveIntervals; ++i)
+        for (int i = 0; i < numberMoveIntervals; ++i)
         {
             out.print("<th>");
             out.print(i * m_interval + 1);
