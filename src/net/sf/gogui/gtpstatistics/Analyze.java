@@ -125,7 +125,7 @@ public class Analyze
         Color.decode("#738ab8"),
         Color.decode("#5eaf5e"),
         Color.decode("#ffa954"),
-        Color.decode("#ae3cae"),
+        Color.decode("#FF66FF"),
         Color.decode("#21C7CD"),
         Color.decode("#FF7340")
     };
@@ -636,22 +636,16 @@ public class Analyze
         out.print("<p>\n" +
                   "<table border=\"0\" cellpadding=\"0\""
                   + " cellspacing=\"0\">\n");
-        String lastGame = null;
-        int gameNumber = 1;
-        for (int i = 0; i < m_table.getNumberRows(); ++i)
+        for (int i = 0; i < m_gameInfo.size(); ++i)
         {
-            String game = m_table.get("File", i);
-            if (lastGame != null && game.equals(lastGame))
-                continue;
-            String plotFile = getPlotFile(gameNumber, commandIndex);
+            GameInfo info = (GameInfo)(m_gameInfo.get(i));
+            String plotFile = getPlotFile(i, commandIndex);
             out.print("<tr><td align=\"center\"><small><a href=\""
-                      + getGameFile(gameNumber)
-                      + "\">Game " + gameNumber + "</a> (<a href=\"" + game
-                      + "\">" + (new File(game)).getName()
+                      + getGameFile(i)
+                      + "\">Game " + (i + 1) + "</a> (<a href=\""
+                      + info.m_file + "\">" + info.m_name
                       + "</a>):</small><br>\n" +
                       "<img src=\"" + plotFile + "\"></td></tr>\n");
-            ++gameNumber;
-            lastGame = game;
         }
         out.print("</table>\n" +
                   "</p>\n");

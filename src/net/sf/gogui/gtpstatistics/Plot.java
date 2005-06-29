@@ -224,7 +224,7 @@ public class Plot
                 double x = Double.parseDouble(table.get(columnX, row));
                 double y = Double.parseDouble(table.get(columnY, row));
                 Point point = getPoint(x, y);
-                if (withBars || m_onlyBoolValues)
+                if (withBars)
                 {
                     Point bottom = getPoint(x, 0);
                     m_graphics2D.drawLine(bottom.x, bottom.y,
@@ -239,6 +239,9 @@ public class Plot
                     Point top = getPoint(x, y + err);
                     Point bottom = getPoint(x, y - err);
                     m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
+                    m_graphics2D.drawLine(top.x - 1, top.y, top.x + 1, top.y);
+                    m_graphics2D.drawLine(bottom.x - 1, bottom.y,
+                                          bottom.x + 1, bottom.y);
                 }
                 m_graphics2D.fillRect(point.x - 2, point.y - 2, 5, 5);
                 last = point;
