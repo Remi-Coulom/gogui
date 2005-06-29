@@ -20,7 +20,7 @@ import net.sf.gogui.utils.TableUtils;
 
 //----------------------------------------------------------------------------
 
-public final class CommandResult
+public final class CommandStatistics
 {
     public final PositionStatistics m_statisticsAll;
 
@@ -29,8 +29,8 @@ public final class CommandResult
 
     public final Table m_tableMoveIntervals;
 
-    public CommandResult(String command, Table table, int interval,
-                         String histoFile, Color color, int precision)
+    public CommandStatistics(String command, Table table, int interval,
+                             String histoFile, Color color, int precision)
         throws Exception
     {
         m_statisticsAll = new PositionStatistics(command, table);
