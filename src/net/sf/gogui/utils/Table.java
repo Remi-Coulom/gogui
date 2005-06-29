@@ -30,10 +30,14 @@ public class Table
         m_numberColumns = columnTitles.size();
     }
 
+    public String get(int column, int row)
+    {
+        return (String)getRow(row).get(column);
+    }
+
     public String get(String columnTitle, int row)
     {
-        int column = getColumnIndex(columnTitle);
-        return (String)getRow(row).get(column);
+        return get(getColumnIndex(columnTitle), row);
     }
 
     public int getColumnIndex(String column)
@@ -51,6 +55,11 @@ public class Table
     public String getColumnTitle(int index)
     {
         return (String)m_columnTitles.get(index);
+    }
+
+    public Vector getColumnTitles()
+    {
+        return (Vector)m_columnTitles.clone();
     }
 
     public int getNumberColumns()
@@ -117,6 +126,12 @@ public class Table
         }
     }
     
+    public void set(int column, String value)
+    {
+        assert(m_lastRow.get(column) == null);
+        m_lastRow.set(column, value);
+    }
+
     public void set(String column, int value)
     {
         set(column, Integer.toString(value));
@@ -215,12 +230,6 @@ public class Table
         startRow();
         for (int i = 0; i < array.length; ++i)
             set(i, array[i]);
-    }
-
-    private void set(int column, String value)
-    {
-        assert(m_lastRow.get(column) == null);
-        m_lastRow.set(column, value);
     }
 }
 

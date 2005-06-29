@@ -26,6 +26,24 @@ public class TableUtils
         return result;
     }
 
+    public static double getMax(Table table, String column)
+    {
+        double max = Double.NEGATIVE_INFINITY;
+        int col = table.getColumnIndex(column);
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            try
+            {
+                double value = Double.parseDouble(table.get(col, row));
+                max = Math.max(max, value);
+            }
+            catch (NumberFormatException e)
+            {
+            }
+        }
+        return max;
+    }
+
     public static boolean isNumberValue(String string)
     {
         try
@@ -73,6 +91,32 @@ public class TableUtils
             result.startRow();
             result.set(selectColumn1, table.get(selectColumn1, i));
             result.set(selectColumn2, table.get(selectColumn2, i));
+        }
+        return result;
+    }
+
+    public static Table selectIntRange(Table table, String compareColumn,
+                                       int min, int max)
+    {
+        Table result = new Table(table.getColumnTitles());
+        int numberColumns = table.getNumberColumns();
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            String value = table.get(compareColumn, row);
+            try
+            {
+                int intValue = Integer.parseInt(value);
+                if (intValue >= min && intValue <= max)
+                {
+                    result.startRow();
+                    for (int column = 0; column < numberColumns; ++column)
+                        result.set(column, table.get(column, row));
+                }
+
+            }
+            catch (NumberFormatException e)
+            {
+            }
         }
         return result;
     }

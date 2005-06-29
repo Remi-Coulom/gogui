@@ -62,12 +62,11 @@ public class Analyze
         columnTitles.add("Count");
         Table table = new Table(columnTitles);
         CommandResult commandResult = computeCommandResult(0);
-        for (int i = 0; i <= commandResult.m_maxElement; ++i)
+        for (int i = 0; i < commandResult.getNumberMoveIntervals(); ++i)
         {
             table.startRow();
             table.set("Move", i * interval + interval / 2);
-            table.set("Count",
-                      commandResult.m_statisticsAtMove[i].getCount());
+            table.set("Count", commandResult.getStatistics(i).getCount());
         }
         String extension = "count.png";
         File pngFile
@@ -85,11 +84,11 @@ public class Analyze
             commandResult = computeCommandResult(i);
             m_commandResults.add(commandResult);
             String command = getCommand(i);
-            table = commandResult.m_table;
+            table = commandResult.m_tableMoveIntervals;
             plot = generatePlotMove(getImgWidth(numberMoves),
                                     getColor(command));
             pngFile = new File(getAvgPlotFile(i));
-            plot.plot(pngFile, table, "Move", command, "Error");
+            plot.plot(pngFile, table, "Move", "Mean", "Error");
             m_out.print("<p>\n" +
                         "<img src=\"" + pngFile.toString() + "\">\n" +
                         "</p>\n");
@@ -322,41 +321,36 @@ public class Analyze
     {
         CommandResult commandResult = getCommandResult(commandIndex);
         String command = getCommand(commandIndex);
-        Statistics statistics = commandResult.m_statistics;
+        Statistics statistics = commandResult.m_statisticsAll.m_statistics;
         out.print("<table class=\"smalltable\">\n");
         out.print("<tbody>");
         out.print("<tr>");
         out.print("<th>Move</th>");
-        for (int i = 0; i <= commandResult.m_maxElement; ++i)
+        int numberMoveIntervals = commandResult.getNumberMoveIntervals();
+        for (int i = 0; i <= numberMoveIntervals; ++i)
         {
             out.print("<th>");
-            if (i >= commandResult.m_numberElements)
-                out.print(">" + (i * m_interval + 1));
-            else
-            {
-                out.print(i * m_interval + 1);
-                if (m_interval > 1)
-                    out.print("-" + ((i + 1) * m_interval));
-            }
+            out.print(i * m_interval + 1);
+            if (m_interval > 1)
+                out.print("-" + ((i + 1) * m_interval));
             out.print("</th>");
         }
         out.print("<th>All</th>\n");
         out.print("</tr>\n");
-        int maxElement = commandResult.m_maxElement;
         out.print("<tr>\n");
         out.print("<th>Mean</th>");
-        for (int i = 0; i <= maxElement; ++i)
+        for (int i = 0; i < numberMoveIntervals; ++i)
         {
-            double mean = commandResult.m_statisticsAtMove[i].getMean();
+            double mean = commandResult.getStatistics(i).getMean();
             out.print("<td>" + formatFloat(mean) + "</td>");
         }
         out.print("<td>" + formatFloat(statistics.getMean()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Deviation</th>");
-        for (int i = 0; i <= maxElement; ++i)
+        for (int i = 0; i < numberMoveIntervals; ++i)
         {
-            double err = commandResult.m_statisticsAtMove[i].getDeviation();
+            double err = commandResult.getStatistics(i).getDeviation();
             out.print("<td>" + formatFloat(err) + "</td>");
         }
         out.print("<td>" + formatFloat(statistics.getErrorMean())
@@ -364,9 +358,9 @@ public class Analyze
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Error</th>");
-        for (int i = 0; i <= maxElement; ++i)
+        for (int i = 0; i < numberMoveIntervals; ++i)
         {
-            double err = commandResult.m_statisticsAtMove[i].getErrorMean();
+            double err = commandResult.getStatistics(i).getErrorMean();
             out.print("<td>" + formatFloat(err) + "</td>");
         }
         out.print("<td>" + formatFloat(statistics.getErrorMean())
@@ -374,44 +368,46 @@ public class Analyze
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Min</th>");
-        for (int i = 0; i <= maxElement; ++i)
+        for (int i = 0; i < numberMoveIntervals; ++i)
         {
-            double min = commandResult.m_statisticsAtMove[i].getMin();
+            double min = commandResult.getStatistics(i).getMin();
             out.print("<td>" + formatFloat(min) + "</td>");
         }
         out.print("<td>" + formatFloat(statistics.getMin()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Max</th>");
-        for (int i = 0; i <= maxElement; ++i)
+        for (int i = 0; i < numberMoveIntervals; ++i)
         {
-            double max = commandResult.m_statisticsAtMove[i].getMax();
+            double max = commandResult.getStatistics(i).getMax();
             out.print("<td>" + formatFloat(max) + "</td>");
         }
         out.print("<td>" + formatFloat(statistics.getMax()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Sum</th>");
-        for (int i = 0; i <= maxElement; ++i)
+        for (int i = 0; i < numberMoveIntervals; ++i)
         {
-            double max = commandResult.m_statisticsAtMove[i].getSum();
+            double max = commandResult.getStatistics(i).getSum();
             out.print("<td>" + formatFloat(max) + "</td>");
         }
         out.print("<td>" + formatFloat(statistics.getMax()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Count</th>");
-        for (int i = 0; i <= maxElement; ++i)
-            out.print("<td>" + commandResult.m_statisticsAtMove[i].getCount()
+        for (int i = 0; i < numberMoveIntervals; ++i)
+            out.print("<td>" + commandResult.getStatistics(i).getCount()
                       + "</td>");
         out.print("<td>" + statistics.getCount() + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Unknown</th>");
-        for (int i = 0; i <= maxElement; ++i)
-            out.print("<td>" + commandResult.m_numberNoResultAtMove[i]
+        for (int i = 0; i < numberMoveIntervals; ++i)
+            out.print("<td>"
+                      + commandResult.getStatistics(i).m_numberNoResult
                       + "</td>");
-        out.print("<td>" + commandResult.m_numberNoResult + "</td>\n");
+        out.print("<td>" + commandResult.m_statisticsAll.m_numberNoResult
+                  + "</td>\n");
         out.print("</tr>\n");
         out.print("</tbody>\n");
         out.print("</table>\n");
@@ -436,7 +432,7 @@ public class Analyze
         {
             writeCommandPage(i);
             CommandResult commandResult = getCommandResult(i);
-            Statistics stat = commandResult.m_statistics;
+            Statistics stat = commandResult.m_statisticsAll.m_statistics;
             String command = getCommand(i);
             m_out.print("<tr>"
                         + "<td><a href=\"" + getCommandFile(i) + "\">"
@@ -448,7 +444,9 @@ public class Analyze
                         + "<td>" + formatFloat(stat.getMax()) + "</td>"
                         + "<td>" + formatFloat(stat.getSum()) + "</td>"
                         + "<td>" + formatFloat(stat.getCount()) + "</td>"
-                        + "<td>" + commandResult.m_numberNoResult + "</td>"
+                        + "<td>"
+                        + commandResult.m_statisticsAll.m_numberNoResult
+                        + "</td>"
                         + "</tr>\n");
         }
         m_out.print("</table>\n");
