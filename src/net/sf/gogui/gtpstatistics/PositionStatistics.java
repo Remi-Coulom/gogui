@@ -116,7 +116,7 @@ public final class PositionStatistics
 
     public double getMin()
     {
-        return m_statistics.getMax();
+        return m_statistics.getMin();
     }
 
     public double getSum()

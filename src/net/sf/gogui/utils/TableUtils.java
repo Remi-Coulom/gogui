@@ -11,6 +11,31 @@ import java.util.Vector;
 
 public class TableUtils
 {
+    public static void appendRow(Table to, Table from, int row)
+    {
+        assert(to.getNumberColumns() == from.getNumberColumns());
+        to.startRow();
+        for (int column = 0; column < to.getNumberColumns(); ++column)
+            to.set(column, from.get(column, row));
+    }
+
+    public static int findRow(Table table,
+                              String compareColumn1, String compareValue1,
+                              String compareColumn2, String compareValue2)
+    {
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            String value1 = table.get(compareColumn1, row);
+            if (value1 == null || ! value1.equals(compareValue1))
+                continue;
+            String value2 = table.get(compareColumn2, row);
+            if (value2 == null || ! value2.equals(compareValue2))
+                continue;
+            return row;
+        }
+        return -1;
+    }
+
     public static Table fromHistogram(Histogram histogram, String name)
     {
         Vector columnTitles = new Vector(2);

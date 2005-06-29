@@ -51,12 +51,13 @@ public class Analyze
                                                         "dat", "html"));
         if (file.exists() && ! force)
             throw new ErrorMessage("File " + file + " already exists");
-        m_out = new PrintStream(new FileOutputStream(file));
-        startHtml(m_out, "GtpStatistics Summary");
-        startInfo(m_out, "GtpStatistics Summary");
-        writeInfo();
-        endInfo(m_out);
-        m_out.print("<h2>Averages</h2>\n");
+        initGameInfo();
+        PrintStream out = new PrintStream(new FileOutputStream(file));
+        startHtml(out, "GtpStatistics Summary");
+        startInfo(out, "GtpStatistics Summary");
+        writeInfo(out);
+        endInfo(out);
+        out.print("<h2>Averages</h2>\n");
         Vector columnTitles = new Vector();
         columnTitles.add("Move");
         columnTitles.add("Count");
@@ -76,11 +77,11 @@ public class Analyze
         Plot plot = generatePlotMove(getImgWidth(numberMoves),
                                      Color.DARK_GRAY);
         plot.plot(pngFile, table, "Move", "Count", null);
-        m_out.print("<table border=\"0\">\n" +
-                    "<tr><td align=\"center\">\n" +
-                    "<small>Count</small><br>" +
-                    "<img src=\"" + pngFile.toString() + "\">\n" +
-                    "</td></tr>\n");
+        out.print("<table border=\"0\">\n" +
+                  "<tr><td align=\"center\">\n" +
+                  "<small>Count</small><br>" +
+                  "<img src=\"" + pngFile.toString() + "\">\n" +
+                  "</td></tr>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
             commandStatistics = computeCommandStatistics(i);
@@ -91,32 +92,32 @@ public class Analyze
                                     getColor(command));
             pngFile = new File(getAvgPlotFile(i));
             plot.plot(pngFile, table, "Move", "Mean", "Error");
-            m_out.print("<tr><td align=\"center\">\n" +
-                        getCommandLink(i) + "<br>" +
-                        "<img src=\"" + pngFile.toString() + "\">\n" +
-                        "</td></tr>\n");
+            out.print("<tr><td align=\"center\">\n" +
+                      getCommandLink(i) + "<br>" +
+                      "<img src=\"" + pngFile.toString() + "\">\n" +
+                      "</td></tr>\n");
         }
-        m_out.print("</table>\n" +
-                    "<hr>\n");
-        m_out.print("<h2>Histograms All Positions</h2>\n" +
-                    "<p>\n");
+        out.print("</table>\n" +
+                  "<hr>\n");
+        out.print("<h2>Histograms All Positions</h2>\n" +
+                  "<p>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
-            m_out.print("<table align=\"left\" border=\"0\">" +
-                        "<tr><td align=\"center\">" + getCommandLink(i)
-                        + "<br><img src=\"" + getHistoFile(i)
-                        + "\"></td></tr></table>\n");
+            out.print("<table align=\"left\" border=\"0\">" +
+                      "<tr><td align=\"center\">" + getCommandLink(i)
+                      + "<br><img src=\"" + getHistoFile(i)
+                      + "\"></td></tr></table>\n");
         }
-        m_out.print("<br clear=\"left\">\n" +
+        out.print("<br clear=\"left\">\n" +
                     "</p>\n" +
                     "<hr>\n");
-        writeCommandsTable();
-        m_out.print("<hr>\n");
-        writeGameTable(fileName);
-        m_out.print("<hr>\n");
-        m_out.print("</body>\n" +
-                    "</html>\n");
-        m_out.close();
+        writeCommandsTable(out);
+        out.print("<hr>\n");
+        writeGameTable(out, fileName);
+        out.print("<hr>\n");
+        out.print("</body>\n" +
+                  "</html>\n");
+        out.close();
     }
 
     private static final Color[] m_plotColor = {
@@ -129,6 +130,17 @@ public class Analyze
         Color.decode("#FF7340")
     };
 
+    private static class GameInfo
+    {
+        public String m_file;
+
+        public String m_name;
+
+        public int m_finalPosition;
+
+        public int m_numberPositions;
+    }
+
     private int m_imgHeight = 100;
 
     private int m_interval;
@@ -140,8 +152,6 @@ public class Analyze
     private DecimalFormat m_formatInt;
 
     private DecimalFormat m_formatFloat;
-
-    private PrintStream m_out;
 
     private static final String m_colorError = "#ffa954";
 
@@ -157,9 +167,14 @@ public class Analyze
 
     private Table m_table;
 
+    private Table m_tableFinal;
+
     private Vector m_commandStatistics;
 
     private Vector m_commands;
+
+    /** Vector<GameInfo> */
+    private Vector m_gameInfo;    
 
     private String formatFloat(double value)
     {
@@ -212,6 +227,12 @@ public class Analyze
         return FileUtils.replaceExtension(m_fileName, "dat", extension);
     }
 
+    private String getHistoFinalFile(int commandIndex)
+    {
+        String extension = "command-" + commandIndex + ".final.png";
+        return FileUtils.replaceExtension(m_fileName, "dat", extension);
+    }
+
     private String getPlotFile(int gameIndex, int commandIndex)
     {
         String extension =
@@ -229,8 +250,9 @@ public class Analyze
         throws Exception
     {
         String command = getCommand(index);
-        return new CommandStatistics(command, m_table, m_interval,
-                                     getHistoFile(index),
+        return new CommandStatistics(command, m_table, m_tableFinal,
+                                     m_interval, getHistoFile(index),
+                                     getHistoFinalFile(index),
                                      getColor(command), m_precision);
     }
 
@@ -268,11 +290,46 @@ public class Analyze
         return Math.max(10, Math.min(numberMoves * 9, 1000));
     }
 
+    private void initGameInfo()
+    {
+        m_gameInfo = new Vector();
+        String last = null;
+        GameInfo info = null;
+        int numberColumns = m_table.getNumberColumns();
+        for (int row = 0; row < m_table.getNumberRows(); ++row)
+        {
+            String file = m_table.get("File", row);
+            int move = Integer.parseInt(m_table.get("Move", row));
+            if (last == null || ! file.equals(last))
+            {
+                if (info != null)
+                    m_gameInfo.add(info);
+                info = new GameInfo();
+                info.m_file = file;
+                info.m_name = new File(file).getName();
+            }
+            ++info.m_numberPositions;
+            info.m_finalPosition = move;
+            last = file;
+        }
+        m_gameInfo.add(info);
+        m_tableFinal = new Table(m_table.getColumnTitles());
+        for (int i = 0; i < m_gameInfo.size(); ++i)
+        {
+            info = (GameInfo)(m_gameInfo.get(i));
+            String file = info.m_file;
+            String finalPosition = Integer.toString(info.m_finalPosition);
+            int row = TableUtils.findRow(m_table, "File", file, "Move",
+                                         finalPosition);
+            TableUtils.appendRow(m_tableFinal, m_table, row);
+        }
+    }
+
     private void startHtml(PrintStream out, String title)
     {
         out.print("<html>\n" +
                   "<head>\n" +
-                  "<title>Statistics</title>\n" +
+                  "<title>" + title + "</title>\n" +
                   "<meta name=\"generator\" content=\"GtpStatistics "
                   + Version.get() + "\">\n" +
                   "<style type=\"text/css\">\n" +
@@ -314,7 +371,8 @@ public class Analyze
         throws Exception
     {
         String command = getCommand(commandIndex);
-        CommandStatistics commandStatistics = getCommandStatistics(commandIndex);
+        CommandStatistics commandStatistics
+            = getCommandStatistics(commandIndex);
         String fileName = getCommandFile(commandIndex);
         PrintStream out = new PrintStream(new FileOutputStream(fileName));
         startHtml(out, command);
@@ -327,14 +385,22 @@ public class Analyze
         writeCommandStatistics(out, commandIndex);
         out.print("<hr>\n" +
                   "<h2>Histograms</h2>\n");
-        out.print("<table><tr><td align=\"center\">"
+        out.print("<table border=\"0\" cellspacing=\"0\""
+                  + " cellpadding=\"5\">\n");
+        out.print("<tr><td align=\"center\" valign=\"center\">"
                   + "<small>All Positions</small><br>"
                   + "<img src=\"" + getHistoFile(commandIndex)
-                  + "\"></td></tr></table>\n");
+                  + "\"></td>\n");
+        out.print("<td align=\"center\" valign=\"bottom\">"
+                  + "<small>Final Positions</small><br>"
+                  + "<img src=\"" + getHistoFinalFile(commandIndex)
+                  + "\"></td></tr>\n" +
+                  "</table>\n");
         out.print("<p>\n");
         for (int i = 0; i < commandStatistics.getNumberMoveIntervals(); ++i)
         {
-            Histogram histogram = commandStatistics.getStatistics(i).m_histogram;
+            Histogram histogram
+                = commandStatistics.getStatistics(i).m_histogram;
             Table histoTable = TableUtils.fromHistogram(histogram, command);
             String histoFile = getHistoFile(commandIndex, i);
             Color color = getColor(command);
@@ -367,7 +433,9 @@ public class Analyze
         CommandStatistics commandStatistics
             = getCommandStatistics(commandIndex);
         String command = getCommand(commandIndex);
-        PositionStatistics statistics = commandStatistics.m_statisticsAll;
+        PositionStatistics statisticsAll = commandStatistics.m_statisticsAll;
+        PositionStatistics finalStatistics
+            = commandStatistics.m_statisticsFinal;
         out.print("<table class=\"smalltable\">\n");
         out.print("<tbody>");
         out.print("<tr>");
@@ -379,6 +447,7 @@ public class Analyze
             out.print(i * m_interval + 1 + "-" + ((i + 1) * m_interval));
             out.print("</th>");
         }
+        out.print("<th>Final</th>\n");
         out.print("<th>All</th>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
@@ -388,7 +457,9 @@ public class Analyze
             double mean = commandStatistics.getStatistics(i).getMean();
             out.print("<td>" + formatFloat(mean) + "</td>");
         }
-        out.print("<td>" + formatFloat(statistics.getMean()) + "</td>\n");
+        out.print("<td>" + formatFloat(finalStatistics.getMean())
+                  + "</td>\n");
+        out.print("<td>" + formatFloat(statisticsAll.getMean()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Deviation</th>");
@@ -397,7 +468,9 @@ public class Analyze
             double err = commandStatistics.getStatistics(i).getDeviation();
             out.print("<td>" + formatFloat(err) + "</td>");
         }
-        out.print("<td>" + formatFloat(statistics.getErrorMean())
+        out.print("<td>" + formatFloat(finalStatistics.getDeviation())
+                  + "</td>\n");
+        out.print("<td>" + formatFloat(statisticsAll.getDeviation())
                   + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
@@ -407,7 +480,9 @@ public class Analyze
             double err = commandStatistics.getStatistics(i).getErrorMean();
             out.print("<td>" + formatFloat(err) + "</td>");
         }
-        out.print("<td>" + formatFloat(statistics.getErrorMean())
+        out.print("<td>" + formatFloat(finalStatistics.getErrorMean())
+                  + "</td>\n");
+        out.print("<td>" + formatFloat(statisticsAll.getErrorMean())
                   + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
@@ -417,7 +492,8 @@ public class Analyze
             double min = commandStatistics.getStatistics(i).getMin();
             out.print("<td>" + formatFloat(min) + "</td>");
         }
-        out.print("<td>" + formatFloat(statistics.getMin()) + "</td>\n");
+        out.print("<td>" + formatFloat(finalStatistics.getMin()) + "</td>\n");
+        out.print("<td>" + formatFloat(statisticsAll.getMin()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Max</th>");
@@ -426,7 +502,8 @@ public class Analyze
             double max = commandStatistics.getStatistics(i).getMax();
             out.print("<td>" + formatFloat(max) + "</td>");
         }
-        out.print("<td>" + formatFloat(statistics.getMax()) + "</td>\n");
+        out.print("<td>" + formatFloat(finalStatistics.getMax()) + "</td>\n");
+        out.print("<td>" + formatFloat(statisticsAll.getMax()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Sum</th>");
@@ -435,14 +512,16 @@ public class Analyze
             double max = commandStatistics.getStatistics(i).getSum();
             out.print("<td>" + formatFloat(max) + "</td>");
         }
-        out.print("<td>" + formatFloat(statistics.getMax()) + "</td>\n");
+        out.print("<td>" + formatFloat(finalStatistics.getSum()) + "</td>\n");
+        out.print("<td>" + formatFloat(statisticsAll.getSum()) + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Count</th>");
         for (int i = 0; i < numberMoveIntervals; ++i)
             out.print("<td>" + commandStatistics.getStatistics(i).getCount()
                       + "</td>");
-        out.print("<td>" + statistics.getCount() + "</td>\n");
+        out.print("<td>" + finalStatistics.getCount() + "</td>\n");
+        out.print("<td>" + statisticsAll.getCount() + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
         out.print("<th>Unknown</th>");
@@ -450,6 +529,9 @@ public class Analyze
             out.print("<td>"
                       + commandStatistics.getStatistics(i).m_numberNoResult
                       + "</td>");
+        out.print("<td>"
+                  + commandStatistics.m_statisticsFinal.m_numberNoResult
+                  + "</td>\n");
         out.print("<td>" + commandStatistics.m_statisticsAll.m_numberNoResult
                   + "</td>\n");
         out.print("</tr>\n");
@@ -457,43 +539,43 @@ public class Analyze
         out.print("</table>\n");
     }
 
-    private void writeCommandsTable() throws Exception
+    private void writeCommandsTable(PrintStream out) throws Exception
     {
-        m_out.print("<h2>Commands</h2>\n" +
-                    "<table class=\"smalltable\">\n" +
-                    "<thead><tr>"
-                    + "<th>Command</th>"
-                    + "<th>Mean</th>"
-                    + "<th>Deviation</th>"
-                    + "<th>Error</th>"
-                    + "<th>Min</th>"
-                    + "<th>Max</th>"
-                    + "<th>Sum</th>"
-                    + "<th>Count</th>"
-                    + "<th>Unknown</th>"
-                    + "</tr></thead>\n");
+        out.print("<h2>Commands</h2>\n" +
+                  "<table class=\"smalltable\">\n" +
+                  "<thead><tr>"
+                  + "<th>Command</th>"
+                  + "<th>Mean</th>"
+                  + "<th>Deviation</th>"
+                  + "<th>Error</th>"
+                  + "<th>Min</th>"
+                  + "<th>Max</th>"
+                  + "<th>Sum</th>"
+                  + "<th>Count</th>"
+                  + "<th>Unknown</th>"
+                  + "</tr></thead>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
             writeCommandPage(i);
             CommandStatistics commandStatistics = getCommandStatistics(i);
             Statistics stat = commandStatistics.m_statisticsAll.m_statistics;
             String command = getCommand(i);
-            m_out.print("<tr>"
-                        + "<td><a href=\"" + getCommandFile(i) + "\">"
-                        + command + "</a></td>"
-                        + "<td>" + formatFloat(stat.getMean()) + "</td>"
-                        + "<td>" + formatFloat(stat.getDeviation()) + "</td>"
-                        + "<td>" + formatFloat(stat.getErrorMean()) + "</td>"
-                        + "<td>" + formatFloat(stat.getMin()) + "</td>"
-                        + "<td>" + formatFloat(stat.getMax()) + "</td>"
-                        + "<td>" + formatFloat(stat.getSum()) + "</td>"
-                        + "<td>" + formatFloat(stat.getCount()) + "</td>"
-                        + "<td>"
-                        + commandStatistics.m_statisticsAll.m_numberNoResult
-                        + "</td>"
-                        + "</tr>\n");
+            out.print("<tr>"
+                      + "<td><a href=\"" + getCommandFile(i) + "\">"
+                      + command + "</a></td>"
+                      + "<td>" + formatFloat(stat.getMean()) + "</td>"
+                      + "<td>" + formatFloat(stat.getDeviation()) + "</td>"
+                      + "<td>" + formatFloat(stat.getErrorMean()) + "</td>"
+                      + "<td>" + formatFloat(stat.getMin()) + "</td>"
+                      + "<td>" + formatFloat(stat.getMax()) + "</td>"
+                      + "<td>" + formatFloat(stat.getSum()) + "</td>"
+                      + "<td>" + formatFloat(stat.getCount()) + "</td>"
+                      + "<td>"
+                      + commandStatistics.m_statisticsAll.m_numberNoResult
+                      + "</td>"
+                      + "</tr>\n");
         }
-        m_out.print("</table>\n");
+        out.print("</table>\n");
     }
 
     private void writeGamePage(String game, String name, int gameNumber)
@@ -575,28 +657,24 @@ public class Analyze
                   "</p>\n");
     }
 
-    private void writeGameTable(String fileName) throws Exception
+    private void writeGameTable(PrintStream out, String fileName)
+        throws Exception
     {
-        m_out.print("<h2>Games</h2>\n" +
-                    "<table class=\"smalltable\">\n" +
-                    "<thead><tr><th>Game</th><th>File</th></tr></thead>\n");
-        String lastGame = null;
-        int gameNumber = 1;
-        for (int i = 0; i < m_table.getNumberRows(); ++i)
+        out.print("<h2>Games</h2>\n" +
+                  "<table class=\"smalltable\">\n" +
+                  "<thead><tr><th>Game</th><th>File</th><th>Positions</th>"
+                  + "</tr></thead>\n");
+        for (int i = 0; i < m_gameInfo.size(); ++i)
         {
-            String game = m_table.get("File", i);
-            if (lastGame != null && game.equals(lastGame))
-                continue;
-            String file = getGameFile(gameNumber);
-            String name = new File(game).getName();
-            m_out.print("<tr><td align=\"right\"><a href=\"" + file
-                        + "\">Game " + gameNumber + "</a></td><td>" + name
-                        + "</td></tr>\n");
-            writeGamePage(game, name, gameNumber);
-            ++gameNumber;
-            lastGame = game;
+            GameInfo info = (GameInfo)(m_gameInfo.get(i));
+            String file = getGameFile(i);
+            out.print("<tr><td><a href=\"" + file
+                      + "\">Game " + (i + 1) + "</a></td><td>" + info.m_name
+                      + "</td><td>" + info.m_numberPositions
+                      + "</td></tr>\n");
+            writeGamePage(info.m_file, info.m_name, i);
         }
-        m_out.print("</table>\n");
+        out.print("</table>\n");
     }
 
     private void writeHtmlRow(PrintStream out, String label,
@@ -612,22 +690,23 @@ public class Analyze
         writeHtmlRow(out, label, Integer.toString(value));
     }
 
-    private void writeInfo() throws Exception
+    private void writeInfo(PrintStream out) throws Exception
     {
-        writeTableProperty("Name");
-        writeTableProperty("Version");
-        writeTableProperty("Date");
-        writeTableProperty("Host");
-        writeTableProperty("Program");
-        writeTableProperty("Size");
-        writeTableProperty("Games");
-        writeHtmlRow(m_out, "Positions", m_table.getNumberRows());
-        writeHtmlRow(m_out, "Interval", m_interval);
+        writeTableProperty(out, "Name");
+        writeTableProperty(out, "Version");
+        writeTableProperty(out, "Date");
+        writeTableProperty(out, "Host");
+        writeTableProperty(out, "Program");
+        writeTableProperty(out, "Size");
+        writeTableProperty(out, "Games");
+        writeHtmlRow(out, "Positions", m_table.getNumberRows());
+        writeHtmlRow(out, "Interval", m_interval);
     }
 
-    private void writeTableProperty(String key) throws Exception
+    private void writeTableProperty(PrintStream out, String key)
+        throws Exception
     {
-        writeHtmlRow(m_out, key, m_table.getProperty(key, "?"));
+        writeHtmlRow(out, key, m_table.getProperty(key, "?"));
     }
 }
 

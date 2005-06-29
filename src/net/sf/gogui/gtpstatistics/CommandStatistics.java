@@ -24,16 +24,21 @@ public final class CommandStatistics
 {
     public final PositionStatistics m_statisticsAll;
 
+    public final PositionStatistics m_statisticsFinal;
+
     /** Vector<PositionStatistics> */
     public final Vector m_statisticsAtMove;
 
     public final Table m_tableMoveIntervals;
 
-    public CommandStatistics(String command, Table table, int interval,
-                             String histoFile, Color color, int precision)
+    public CommandStatistics(String command, Table table, Table tableFinal,
+                             int interval, String histoFile,
+                             String histoFileFinal, Color color,
+                             int precision)
         throws Exception
     {
         m_statisticsAll = new PositionStatistics(command, table);
+        m_statisticsFinal = new PositionStatistics(command, tableFinal);
         m_statisticsAtMove = new Vector();
         Vector columnTitles = new Vector();
         columnTitles.add("Move");
@@ -61,6 +66,13 @@ public final class CommandStatistics
         plot.setPlotStyleBars();
         plot.setYMin(0);
         plot.plot(new File(histoFile), histoTable, command, "Count",
+                  null);
+        histogram = m_statisticsFinal.m_histogram;
+        histoTable = TableUtils.fromHistogram(histogram, command);
+        plot = new Plot(150, 150, color, precision);
+        plot.setPlotStyleBars();
+        plot.setYMin(0);
+        plot.plot(new File(histoFileFinal), histoTable, command, "Count",
                   null);
     }
 
