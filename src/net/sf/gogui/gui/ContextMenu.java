@@ -75,6 +75,7 @@ public class ContextMenu
                 }
             };
         m_label = new JMenuItem();
+        m_label.setEnabled(false);
         add(m_label);
         addSeparator();
         add(createItem("Mark Square", "mark-square"));
@@ -124,6 +125,9 @@ public class ContextMenu
 
     private GoPoint m_pointArg;
 
+    /** Use disabled menu item for title, because JPopupMenu.setLabel()
+        is not shown in all UIs.
+    */
     private JMenuItem m_label;
 
     private Listener m_listener;
