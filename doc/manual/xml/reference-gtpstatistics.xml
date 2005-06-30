@@ -16,6 +16,7 @@ Runs GTP commands on all positions of game collections.
 <command>gtpstatistics</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-commands</option> <replaceable>commands</replaceable></arg>
+<arg><option>-force</option></arg>
 <arg><option>-program</option> <replaceable>program</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
@@ -33,7 +34,6 @@ Runs GTP commands on all positions of game collections.
 <command>gtpstatistics</command>
 <arg><option>-analyze</option> <replaceable>file</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
-<arg><option>-force</option></arg>
 <arg><option>-precision</option> <replaceable>n</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -105,7 +105,7 @@ Comma separated list of GTP commands to run on each position.
 </term>
 <listitem>
 <para>
-Overwrite existing HTML file generated with option <option>-analyze</option>.
+Overwrite existing result file.
 </para>
 </listitem>
 </varlistentry>

@@ -44,9 +44,12 @@ public class TableUtils
         Table result = new Table(columnTitles);
         for (int i = 0; i < histogram.getSize(); ++i)
         {
+            int count = histogram.getCount(i);
+            if (count == 0)
+                continue;
             result.startRow();
             result.set(name, histogram.getValue(i));
-            result.set("Count", histogram.getCount(i));
+            result.set("Count", count);
         }
         return result;
     }

@@ -32,9 +32,12 @@ import net.sf.gogui.utils.Table;
 public class GtpStatistics
 {
     public GtpStatistics(String program, Vector sgfFiles, int size,
-                         Vector commands, boolean verbose)
+                         Vector commands, boolean verbose, boolean force)
         throws Exception
     {
+        File file = new File("gtpstatistics.dat");
+        if (file.exists() && ! force)
+            throw new ErrorMessage("File " + file + " already exists");
         new FileCheck(sgfFiles, size);
         m_size = size;
         m_result = false;
@@ -86,7 +89,7 @@ public class GtpStatistics
         for (int i = 0; i < sgfFiles.size(); ++i)
             handleFile((String)sgfFiles.get(i));
         m_table.setProperty("Games", Integer.toString(m_numberGames));
-        FileWriter writer = new FileWriter("gtpstatistics.dat");
+        FileWriter writer = new FileWriter(file);
         m_table.save(writer);
         writer.close();
     }

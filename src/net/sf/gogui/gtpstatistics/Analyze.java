@@ -28,8 +28,7 @@ import net.sf.gogui.version.Version;
 
 public class Analyze
 {
-    public Analyze(String fileName, int precision, int interval,
-                   boolean force)
+    public Analyze(String fileName, int precision, int interval)
         throws Exception
     {
         m_precision = precision;
@@ -53,8 +52,6 @@ public class Analyze
         m_commandStatistics = new Vector(m_commands.size());
         File file = new File(FileUtils.replaceExtension(fileName,
                                                         "dat", "html"));
-        if (file.exists() && ! force)
-            throw new ErrorMessage("File " + file + " already exists");
         initGameInfo();
         PrintStream out = new PrintStream(new FileOutputStream(file));
         startHtml(out, "GtpStatistics Summary");
@@ -397,11 +394,11 @@ public class Analyze
         out.print("<table border=\"0\" cellspacing=\"0\""
                   + " cellpadding=\"5\">\n");
         out.print("<tr><td align=\"center\" valign=\"center\">"
-                  + "<small>All Positions</small><br>"
+                  + "<small>All</small><br>"
                   + "<img src=\"" + getHistoFile(commandIndex)
                   + "\"></td>\n");
         out.print("<td align=\"center\" valign=\"bottom\">"
-                  + "<small>Final Positions</small><br>"
+                  + "<small>Final</small><br>"
                   + "<img src=\"" + getHistoFinalFile(commandIndex)
                   + "\"></td></tr>\n" +
                   "</table>\n");
@@ -420,7 +417,7 @@ public class Analyze
             plot.setXMax(commandStatistics.m_statisticsAll.getMax());
             plot.plot(new File(histoFile), histoTable, command, "Count",
                       null);
-            String label = "Move " + (i * m_interval + 1) + "-"
+            String label = (i * m_interval + 1) + "-"
                 + ((i + 1) * m_interval);
             out.print("<table align=\"left\" border=\"0\">" +
                       "<tr><td align=\"center\"><small>" + label

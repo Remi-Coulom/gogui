@@ -27,7 +27,9 @@ public final class PositionStatistics
 
     public final Table m_table;
 
-    public PositionStatistics(String command, Table table)
+    public PositionStatistics(String command, Table table,
+                              boolean noAutoScaleHisto,
+                              double histoMin, double histoMax)
         throws ErrorMessage
     {
         m_table = table;
@@ -70,11 +72,17 @@ public final class PositionStatistics
         m_numberNoResult = numberNoResult;
         double min = m_statistics.getMin();
         double max = m_statistics.getMax();
-        double diff = max - min;
+        if (! noAutoScaleHisto)
+        {
+            histoMin = min;
+            histoMax = max;
+        }
+        double diff = histoMax - histoMin;
         if (onlyIntValues)
-            m_histogram = new Histogram(min, max, Math.max(1, diff / 35));
+            m_histogram
+                = new Histogram(histoMin, histoMax, Math.max(1, diff / 35));
         else
-            m_histogram = new Histogram(min, max, diff / 35);
+            m_histogram = new Histogram(histoMin, histoMax, diff / 35);
         for (int i = 0; i < table.getNumberRows(); ++i)
         {
             String value = table.get(command, i);

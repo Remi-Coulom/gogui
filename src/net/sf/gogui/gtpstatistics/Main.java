@@ -79,8 +79,7 @@ class Main
                     printUsage(System.err);
                     System.exit(-1);
                 }
-                new Analyze(opt.getString("analyze"), precision, interval,
-                            force);
+                new Analyze(opt.getString("analyze"), precision, interval);
             }
             else
             {
@@ -91,7 +90,7 @@ class Main
                 }
                 GtpStatistics gtpStatistics
                     = new GtpStatistics(program, arguments, boardSize,
-                                        commands, verbose);
+                                        commands, verbose, force);
                 System.exit(gtpStatistics.getResult() ? 0 : -1);
             }
         }

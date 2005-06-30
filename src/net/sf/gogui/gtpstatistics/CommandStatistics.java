@@ -37,8 +37,11 @@ public final class CommandStatistics
                              int precision)
         throws Exception
     {
-        m_statisticsAll = new PositionStatistics(command, table);
-        m_statisticsFinal = new PositionStatistics(command, tableFinal);
+        m_statisticsAll = new PositionStatistics(command, table, false, 0, 0);
+        double min = m_statisticsAll.getMin();
+        double max = m_statisticsAll.getMax();
+        m_statisticsFinal
+            = new PositionStatistics(command, tableFinal, true, min, max);
         m_statisticsAtMove = new Vector();
         Vector columnTitles = new Vector();
         columnTitles.add("Move");
@@ -46,13 +49,14 @@ public final class CommandStatistics
         columnTitles.add("Error");
         m_tableMoveIntervals = new Table(columnTitles);
         Table tableAtMove;
-        int max = (int)(TableUtils.getMax(table, "Move") + 1);
-        for (int move = 1; move <= max; move += interval)
+        int maxMove = (int)(TableUtils.getMax(table, "Move") + 1);
+        for (int move = 1; move <= maxMove; move += interval)
         {
             tableAtMove = TableUtils.selectIntRange(table, "Move", move,
                                                     move + interval - 1);
             PositionStatistics statisticsAtMove
-                = new PositionStatistics(command, tableAtMove);
+                = new PositionStatistics(command, tableAtMove, true, min,
+                                         max);
             m_statisticsAtMove.add(statisticsAtMove);
             m_tableMoveIntervals.startRow();
             m_tableMoveIntervals.set("Move", move + ((interval - 1) / 2));
@@ -71,8 +75,8 @@ public final class CommandStatistics
         plot = new Plot(150, 150, color, precision);
         plot.setPlotStyleBars();
         plot.setYMin(0);
-        plot.setXMin(m_statisticsAll.getMin());
-        plot.setXMax(m_statisticsAll.getMax());
+        plot.setXMin(min);
+        plot.setXMax(max);
         plot.plot(new File(histoFileFinal), histoTable, command, "Count",
                   null);
     }
