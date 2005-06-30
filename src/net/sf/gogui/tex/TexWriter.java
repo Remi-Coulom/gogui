@@ -39,7 +39,7 @@ public class TexWriter
         m_out.println("\\\\");
         String toMove =
             (board.getToMove() == GoColor.BLACK ? "Black" : "White");
-        m_out.println(toMove + " to play.");
+        m_out.println(toMove + " to play");
         printEndDocument();
         m_out.close();
     }
@@ -68,7 +68,7 @@ public class TexWriter
 
     private final PrintStream m_out;
 
-    /** Escape LaTeX special character in text. */
+    /** Escape LaTeX special characters in text. */
     private String escape(String text)
     {
         text = text.replaceAll("\\#", "\\\\#");
