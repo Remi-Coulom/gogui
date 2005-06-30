@@ -5,12 +5,13 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
-import javax.swing.AbstractButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -73,6 +74,9 @@ public class ContextMenu
                     }
                 }
             };
+        m_label = new JMenuItem();
+        add(m_label);
+        addSeparator();
         add(createItem("Mark Square", "mark-square"));
         add(createItem("Unmark Square", "unmark-square"));
         addSeparator();
@@ -108,17 +112,7 @@ public class ContextMenu
     public void setPointArg(GoPoint point)
     {
         m_pointArg = point;
-        for (int i = 0; i < m_abstractButtons.size(); ++i)
-        {
-            AbstractButton item = (AbstractButton)m_abstractButtons.get(i);
-            String label = item.getText();
-            int index = label.lastIndexOf(' ');
-            if (index >= 0)
-            {
-                String base = label.substring(0, index + 1);
-                item.setText(base + point.toString());
-            }
-        }
+        m_label.setText("Point " + point.toString());
     }
 
     /** Serial version to suppress compiler warning.
@@ -130,18 +124,17 @@ public class ContextMenu
 
     private GoPoint m_pointArg;
 
+    private JMenuItem m_label;
+
     private Listener m_listener;
 
     /** Vector<AnalyzeCommand> */
     private Vector m_commands = new Vector();
 
-    /** Vector<AbstractButton> */
-    private Vector m_abstractButtons = new Vector();
-
     private void addColorCommand(AnalyzeCommand command)
     {
         String label = command.getLabel();
-        JMenu menu = new JMenu(label + " A1");
+        JMenu menu = new JMenu(label);
         command.setColorArg(GoColor.BLACK);
         JMenuItem item = createItem(command, "Black");
         menu.add(item);
@@ -150,14 +143,12 @@ public class ContextMenu
         item = createItem(command, "White");
         menu.add(item);
         add(menu);
-        m_abstractButtons.add(menu);
     }
 
     private void addCommand(AnalyzeCommand command)
     {        
-        JMenuItem item = createItem(command, command.getLabel() + " A1");
+        JMenuItem item = createItem(command, command.getLabel());
         add(item);
-        m_abstractButtons.add(item);
     }
 
     private JMenuItem createItem(AnalyzeCommand command, String label)
