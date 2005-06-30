@@ -54,6 +54,19 @@ public class TableUtils
         return result;
     }
 
+    public static Vector getColumnUnique(Table table, String column)
+    {
+        Vector result = new Vector();
+        int col = table.getColumnIndex(column);
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            String value = table.get(col, row);
+            if (! result.contains(value))
+                result.add(value);
+        }
+        return result;
+    }
+
     public static double getMax(Table table, String column)
     {
         double max = Double.NEGATIVE_INFINITY;
@@ -70,6 +83,24 @@ public class TableUtils
             }
         }
         return max;
+    }
+
+    public static Statistics getStatistics(Table table, String column)
+    {
+        Statistics statistics = new Statistics();
+        int col = table.getColumnIndex(column);
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            try
+            {
+                double value = Double.parseDouble(table.get(col, row));
+                statistics.add(value);
+            }
+            catch (NumberFormatException e)
+            {
+            }
+        }
+        return statistics;
     }
 
     public static boolean isNumberValue(String string)
@@ -101,6 +132,23 @@ public class TableUtils
             return false;
         }
         return true;
+    }
+
+    public static Table select(Table table, String compareColumn,
+                               String compareValue)
+    {
+        Table result = new Table(table.getColumnTitles());
+        int numberColumns = table.getNumberColumns();
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            String value = table.get(compareColumn, row);
+            if (value == null || ! value.equals(compareValue))
+                continue;
+            result.startRow();
+            for (int column = 0; column < numberColumns; ++column)
+                result.set(column, table.get(column, row));
+        }
+        return result;
     }
 
     public static Table select(Table table, String compareColumn,

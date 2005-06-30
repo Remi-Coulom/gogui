@@ -46,7 +46,8 @@ public final class CommandStatistics
         Vector columnTitles = new Vector();
         columnTitles.add("Move");
         columnTitles.add("Mean");
-        columnTitles.add("Error");
+        columnTitles.add("MinError");
+        columnTitles.add("MaxError");
         m_tableMoveIntervals = new Table(columnTitles);
         Table tableAtMove;
         int maxMove = (int)(TableUtils.getMax(table, "Move") + 1);
@@ -61,7 +62,9 @@ public final class CommandStatistics
             m_tableMoveIntervals.startRow();
             m_tableMoveIntervals.set("Move", move + ((interval - 1) / 2));
             m_tableMoveIntervals.set("Mean", statisticsAtMove.getMean());
-            m_tableMoveIntervals.set("Error", statisticsAtMove.getError());
+            m_tableMoveIntervals.set("MinError", statisticsAtMove.getError());
+            m_tableMoveIntervals.set("MaxError",
+                                     statisticsAtMove.getMaxError());
         }
         Histogram histogram = m_statisticsAll.m_histogram;
         Table histoTable = TableUtils.fromHistogram(histogram, command);

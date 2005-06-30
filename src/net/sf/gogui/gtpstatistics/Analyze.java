@@ -92,7 +92,7 @@ public class Analyze
             plot = generatePlotMove(getImgWidth(numberMoves),
                                     getColor(command));
             pngFile = new File(getAvgPlotFile(i));
-            plot.plot(pngFile, table, "Move", "Mean", "Error");
+            plot.plot(pngFile, table, "Move", "Mean", "MaxError");
             out.print("<tr><td align=\"center\">\n" +
                       getCommandLink(i) + "<br>" +
                       "<img src=\"" + pngFile.toString() + "\">\n" +
@@ -482,7 +482,7 @@ public class Analyze
                   + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
-        out.print("<th>Error</th>");
+        out.print("<th>MinError</th>");
         for (int i = 0; i < numberMoveIntervals; ++i)
         {
             double err = commandStatistics.getStatistics(i).getError();
@@ -491,6 +491,18 @@ public class Analyze
         out.print("<td>" + formatFloat(finalStatistics.getError())
                   + "</td>\n");
         out.print("<td>" + formatFloat(statisticsAll.getError())
+                  + "</td>\n");
+        out.print("</tr>\n");
+        out.print("<tr>\n");
+        out.print("<th>MaxError</th>");
+        for (int i = 0; i < numberMoveIntervals; ++i)
+        {
+            double err = commandStatistics.getStatistics(i).getMaxError();
+            out.print("<td>" + formatFloat(err) + "</td>");
+        }
+        out.print("<td>" + formatFloat(finalStatistics.getMaxError())
+                  + "</td>\n");
+        out.print("<td>" + formatFloat(statisticsAll.getMaxError())
                   + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
@@ -555,7 +567,8 @@ public class Analyze
                   + "<th>Command</th>"
                   + "<th>Mean</th>"
                   + "<th>Deviation</th>"
-                  + "<th>Error</th>"
+                  + "<th>MinError</th>"
+                  + "<th>MaxError</th>"
                   + "<th>Min</th>"
                   + "<th>Max</th>"
                   + "<th>Sum</th>"
@@ -566,7 +579,9 @@ public class Analyze
         {
             writeCommandPage(i);
             CommandStatistics commandStatistics = getCommandStatistics(i);
-            Statistics stat = commandStatistics.m_statisticsAll.m_statistics;
+            PositionStatistics statisticsAll
+                = commandStatistics.m_statisticsAll;
+            Statistics stat = statisticsAll.m_statistics;
             String command = getCommand(i);
             out.print("<tr>"
                       + "<td><a href=\"" + getCommandFile(i) + "\">"
@@ -574,6 +589,8 @@ public class Analyze
                       + "<td>" + formatFloat(stat.getMean()) + "</td>"
                       + "<td>" + formatFloat(stat.getDeviation()) + "</td>"
                       + "<td>" + formatFloat(stat.getError()) + "</td>"
+                      + "<td>" + formatFloat(statisticsAll.getMaxError())
+                      + "</td>"
                       + "<td>" + formatFloat(stat.getMin()) + "</td>"
                       + "<td>" + formatFloat(stat.getMax()) + "</td>"
                       + "<td>" + formatFloat(stat.getSum()) + "</td>"
