@@ -18,6 +18,8 @@ public final class PositionStatistics
 {
     public final boolean m_onlyBoolValues;
 
+    public final boolean m_onlyIntValues;
+
     public final int m_numberNoResult;
 
     public final Histogram m_histogram;
@@ -76,6 +78,7 @@ public final class PositionStatistics
             }
         }
         m_onlyBoolValues = onlyBoolValues;
+        m_onlyIntValues = onlyBoolValues;
         m_numberNoResult = numberNoResult;
         double min = m_statistics.getMin();
         double max = m_statistics.getMax();
@@ -87,9 +90,9 @@ public final class PositionStatistics
         double diff = histoMax - histoMin;
         if (onlyIntValues)
             m_histogram
-                = new Histogram(histoMin, histoMax, Math.max(1, diff / 35));
+                = new Histogram(histoMin, histoMax, Math.max(1, diff / 25));
         else
-            m_histogram = new Histogram(histoMin, histoMax, diff / 35);
+            m_histogram = new Histogram(histoMin, histoMax, diff / 25);
         for (int i = 0; i < table.getNumberRows(); ++i)
         {
             String value = table.get(command, i);

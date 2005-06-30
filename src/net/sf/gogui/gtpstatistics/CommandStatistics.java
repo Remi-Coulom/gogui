@@ -68,18 +68,14 @@ public final class CommandStatistics
         }
         Histogram histogram = m_statisticsAll.m_histogram;
         Table histoTable = TableUtils.fromHistogram(histogram, command);
-        Plot plot = new Plot(200, 200, color, precision);
-        plot.setPlotStyleBars();
-        plot.setYMin(0);
+        Plot plot = new Plot(150, 150, color, precision);
+        setHistogramProperties(plot);
         plot.plot(new File(histoFile), histoTable, command, "Count",
                   null);
         histogram = m_statisticsFinal.m_histogram;
         histoTable = TableUtils.fromHistogram(histogram, command);
         plot = new Plot(150, 150, color, precision);
-        plot.setPlotStyleBars();
-        plot.setYMin(0);
-        plot.setXMin(min);
-        plot.setXMax(max);
+        setHistogramProperties(plot);
         plot.plot(new File(histoFileFinal), histoTable, command, "Count",
                   null);
     }
@@ -92,6 +88,29 @@ public final class CommandStatistics
     public PositionStatistics getStatistics(int moveInterval)
     {
         return (PositionStatistics)m_statisticsAtMove.get(moveInterval);
+    }
+
+    public boolean onlyBoolValues()
+    {
+        return m_statisticsAll.m_onlyBoolValues;
+    }
+
+    public void setHistogramProperties(Plot plot)
+    {
+        Histogram histogram = m_statisticsAll.m_histogram;
+        double step = histogram.getStep();
+        plot.setPlotStyleBars(step);
+        plot.setYMin(0);
+        if (onlyBoolValues())
+        {
+            plot.setXMin(-5);
+            plot.setXMax(5);
+        }
+        else
+        {
+            plot.setXMin(histogram.getMin() - step / 2);
+            plot.setXMax(histogram.getMax() + step / 2);
+        }
     }
 }
 

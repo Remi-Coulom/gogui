@@ -411,10 +411,7 @@ public class Analyze
             String histoFile = getHistoFile(commandIndex, i);
             Color color = getColor(command);
             Plot plot = new Plot(150, 150, color, m_precision);
-            plot.setPlotStyleBars();
-            plot.setYMin(0);
-            plot.setXMin(commandStatistics.m_statisticsAll.getMin());
-            plot.setXMax(commandStatistics.m_statisticsAll.getMax());
+            commandStatistics.setHistogramProperties(plot);
             plot.plot(new File(histoFile), histoTable, command, "Count",
                       null);
             String label = (i * m_interval + 1) + "-"

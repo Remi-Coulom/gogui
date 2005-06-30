@@ -68,9 +68,10 @@ public class Plot
         ImageIO.write(image, "png", file);
     }
 
-    public void setPlotStyleBars()
+    public void setPlotStyleBars(double barWidth)
     {
         m_withBars = true;
+        m_barWidth = barWidth;
     }
 
     public void setSolidLineInterval(double solidLineInterval)
@@ -169,6 +170,8 @@ public class Plot
 
     private int m_xLabelPerTic = 1;
 
+    private double m_barWidth;
+
     private double m_minX;
 
     private double m_maxX;
@@ -225,6 +228,8 @@ public class Plot
     {
         m_graphics2D.setColor(m_color);
         Point last = null;
+        int barWidthPixels = getPoint(m_barWidth, 0).x
+            - getPoint(0, 0).x - 1;
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
             try
@@ -235,8 +240,10 @@ public class Plot
                 if (withBars)
                 {
                     Point bottom = getPoint(x, 0);
-                    m_graphics2D.drawLine(bottom.x, bottom.y,
-                                          point.x, point.y);
+                    m_graphics2D.fillRect(point.x - barWidthPixels / 2,
+                                          point.y,
+                                          barWidthPixels,
+                                          bottom.y - point.y);
                 }
                 else if (last != null)
                     m_graphics2D.drawLine(last.x, last.y, point.x, point.y);
@@ -251,7 +258,8 @@ public class Plot
                     m_graphics2D.drawLine(bottom.x - 1, bottom.y,
                                           bottom.x + 1, bottom.y);
                 }
-                m_graphics2D.fillRect(point.x - 2, point.y - 2, 5, 5);
+                if (! withBars)
+                    m_graphics2D.fillRect(point.x - 1, point.y - 1, 3, 3);
                 last = point;
             }
             catch (NumberFormatException e)

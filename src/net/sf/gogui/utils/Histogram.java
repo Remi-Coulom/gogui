@@ -37,6 +37,11 @@ public class Histogram
         return m_size;
     }
 
+    public double getStep()
+    {
+        return m_step;
+    }
+
     public double getValue(int i)
     {
         return m_min + i * m_step;
