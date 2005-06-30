@@ -20,9 +20,9 @@ public class Histogram
         m_array = new int[m_size];
     }
 
-    public void addValue(double value)
+    public void add(double value)
     {
-        super.addValue(value);
+        super.add(value);
         int i = (int)((value - m_min) / m_step);
         ++m_array[i];
     }

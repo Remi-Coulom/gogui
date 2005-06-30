@@ -59,7 +59,7 @@ public final class PositionStatistics
             double doubleValue;
             try
             {
-                m_statistics.addValue(Double.parseDouble(value));
+                m_statistics.add(Double.parseDouble(value));
             }
             catch (NumberFormatException e)
             {
@@ -80,7 +80,7 @@ public final class PositionStatistics
             String value = table.get(command, i);
             try
             {
-                m_histogram.addValue(Double.parseDouble(value));
+                m_histogram.add(Double.parseDouble(value));
             }
             catch (NumberFormatException e)
             {
@@ -95,9 +95,9 @@ public final class PositionStatistics
         return m_statistics.getCount();
     }
 
-    public double getErrorMean()
+    public double getError()
     {
-        return m_statistics.getErrorMean();
+        return m_statistics.getError();
     }
 
     public double getDeviation()

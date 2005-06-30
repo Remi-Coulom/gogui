@@ -57,8 +57,7 @@ public final class CommandStatistics
             m_tableMoveIntervals.startRow();
             m_tableMoveIntervals.set("Move", move + ((interval - 1) / 2));
             m_tableMoveIntervals.set("Mean", statisticsAtMove.getMean());
-            m_tableMoveIntervals.set("Error",
-                                     statisticsAtMove.getErrorMean());
+            m_tableMoveIntervals.set("Error", statisticsAtMove.getError());
         }
         Histogram histogram = m_statisticsAll.m_histogram;
         Table histoTable = TableUtils.fromHistogram(histogram, command);

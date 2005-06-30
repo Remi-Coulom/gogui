@@ -13,7 +13,8 @@ public class Statistics
     {
     }
 
-    public void addValue(double value)
+    /** Add value. */
+    public void add(double value)
     {
         m_min = Math.min(value, m_min);
         m_max = Math.max(value, m_max);
@@ -22,23 +23,27 @@ public class Statistics
         ++m_count;
     }
 
+    /** Get number of values added. */
     public int getCount()
     {
         return m_count;
     }
 
+    /** Get standard deviation. */
     public double getDeviation()
     {
         return Math.sqrt(getVariance());
     }
 
-    public double getErrorMean()
+    /** Get standard error. */
+    public double getError()
     {
         if (m_count == 0)
             return 0;
         return getDeviation() / Math.sqrt(m_count);
     }
 
+    /** Get mean value. */
     public double getMean()
     {
         if (m_count == 0)
@@ -46,21 +51,25 @@ public class Statistics
         return m_sum / m_count;
     }
 
+    /** Get maximum value. */
     public double getMax()
     {
         return m_max;
     }
 
+    /** Get minumum value. */
     public double getMin()
     {
         return m_min;
     }
 
+    /** Get sum of values. */
     public double getSum()
     {
         return m_sum;
     }
 
+    /** Get variance. */
     public double getVariance()
     {
         if (m_count == 0)

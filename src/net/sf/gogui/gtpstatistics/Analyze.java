@@ -484,12 +484,12 @@ public class Analyze
         out.print("<th>Error</th>");
         for (int i = 0; i < numberMoveIntervals; ++i)
         {
-            double err = commandStatistics.getStatistics(i).getErrorMean();
+            double err = commandStatistics.getStatistics(i).getError();
             out.print("<td>" + formatFloat(err) + "</td>");
         }
-        out.print("<td>" + formatFloat(finalStatistics.getErrorMean())
+        out.print("<td>" + formatFloat(finalStatistics.getError())
                   + "</td>\n");
-        out.print("<td>" + formatFloat(statisticsAll.getErrorMean())
+        out.print("<td>" + formatFloat(statisticsAll.getError())
                   + "</td>\n");
         out.print("</tr>\n");
         out.print("<tr>\n");
@@ -572,7 +572,7 @@ public class Analyze
                       + command + "</a></td>"
                       + "<td>" + formatFloat(stat.getMean()) + "</td>"
                       + "<td>" + formatFloat(stat.getDeviation()) + "</td>"
-                      + "<td>" + formatFloat(stat.getErrorMean()) + "</td>"
+                      + "<td>" + formatFloat(stat.getError()) + "</td>"
                       + "<td>" + formatFloat(stat.getMin()) + "</td>"
                       + "<td>" + formatFloat(stat.getMax()) + "</td>"
                       + "<td>" + formatFloat(stat.getSum()) + "</td>"

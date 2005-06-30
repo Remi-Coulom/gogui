@@ -128,9 +128,9 @@ public class Analyze
             parseResult(e.m_resultBlack, m_statisticsBlack);
             parseResult(e.m_resultWhite, m_statisticsWhite);
             parseResult(e.m_resultReferee, m_statisticsReferee);
-            m_cpuBlack.addValue(e.m_cpuBlack);
-            m_cpuWhite.addValue(e.m_cpuWhite);
-            m_length.addValue(e.m_length);
+            m_cpuBlack.add(e.m_cpuBlack);
+            m_cpuWhite.add(e.m_cpuWhite);
+            m_length.add(e.m_length);
         }
     }
 
@@ -245,12 +245,12 @@ public class Analyze
         catch (NumberFormatException e)
         {
         }
-        statistics.m_unknownResult.addValue(hasResult ? 0 : 1);
+        statistics.m_unknownResult.add(hasResult ? 0 : 1);
         if (hasResult)
-            statistics.m_win.addValue(win ? 1 : 0);
-        statistics.m_unknownScore.addValue(hasScore ? 0 : 1);
+            statistics.m_win.add(win ? 1 : 0);
+        statistics.m_unknownScore.add(hasScore ? 0 : 1);
         if (hasScore)
-            statistics.m_histo.addValue(score);
+            statistics.m_histo.add(score);
     }
 
     private void readFile(File file) throws Exception
@@ -415,7 +415,7 @@ public class Analyze
     {
         String value =
             format.format(statistics.getMean()) + " (&plusmn;"
-            + format.format(statistics.getErrorMean())
+            + format.format(statistics.getError())
             + ") <small>min=" + format.format(statistics.getMin())
             + " max=" + format.format(statistics.getMax())
             + " deviation=" + format.format(statistics.getDeviation())
@@ -430,7 +430,7 @@ public class Analyze
         out.print("<tr><th align=\"left\">" + label + ":</th>"
                   + "<td align=\"left\">"
                   + format.format(statistics.getMean() * 100) + "% (&plusmn;"
-                  + format.format(statistics.getErrorMean() * 100)
+                  + format.format(statistics.getError() * 100)
                   + ")</td></tr>\n");
     }
 
@@ -454,19 +454,19 @@ public class Analyze
                   m_games + "\t" + m_errors + "\t" + m_duplicates + "\t"
                   + m_gamesUsed
                   + "\t" + format1.format(histoBlack.getMean())
-                  + "\t" + format1.format(histoBlack.getErrorMean())
+                  + "\t" + format1.format(histoBlack.getError())
                   + "\t" + format2.format(winBlack.getMean())
-                  + "\t" + format2.format(winBlack.getErrorMean())
+                  + "\t" + format2.format(winBlack.getError())
                   + "\t" + format2.format(unknownBlack.getMean())
                   + "\t" + format1.format(histoWhite.getMean())
-                  + "\t" + format1.format(histoWhite.getErrorMean())
+                  + "\t" + format1.format(histoWhite.getError())
                   + "\t" + format2.format(winWhite.getMean())
-                  + "\t" + format2.format(winWhite.getErrorMean())
+                  + "\t" + format2.format(winWhite.getError())
                   + "\t" + format2.format(unknownWhite.getMean())
                   + "\t" + format1.format(histoReferee.getMean())
-                  + "\t" + format1.format(histoReferee.getErrorMean())
+                  + "\t" + format1.format(histoReferee.getError())
                   + "\t" + format2.format(winReferee.getMean())
-                  + "\t" + format2.format(winReferee.getErrorMean())
+                  + "\t" + format2.format(winReferee.getError())
                   + "\t" + format2.format(unknownReferee.getMean())
                   + "\n");
         out.close();
