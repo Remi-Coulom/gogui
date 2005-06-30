@@ -1894,7 +1894,8 @@ class GoGui
                     GoGui.this.setAnalyzeCommand(command, false, true, true);
                 }
             };
-        m_contextMenu = new ContextMenu(true, supportedCommands, listener);
+        m_contextMenu
+            = new ContextMenu(noProgram, supportedCommands, listener);
     }
 
     private JComponent createStatusBar()
