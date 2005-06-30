@@ -5,9 +5,11 @@
 
 package net.sf.gogui.gtpstatistics;
 
+import java.io.File;
 import java.io.PrintStream;
 import java.util.Vector;
 import net.sf.gogui.utils.Options;
+import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
@@ -30,6 +32,7 @@ class Main
                 "precision:",
                 "program:",
                 "size:",
+                "output:",
                 "verbose",
                 "version"
             };
@@ -79,7 +82,14 @@ class Main
                     printUsage(System.err);
                     System.exit(-1);
                 }
-                new Analyze(opt.getString("analyze"), precision, interval);
+                String fileName = opt.getString("analyze");
+                String output;
+                if (opt.isSet("output"))
+                    output = opt.getString("output");
+                else
+                    output = FileUtils.removeExtension(new File(fileName),
+                                                       "dat");
+                new Analyze(fileName, output, precision, interval);
             }
             else
             {
@@ -114,9 +124,10 @@ class Main
                   "-analyze      Create HTML file from result file\n" +
                   "-config       Config file\n" +
                   "-commands     GTP commands to run (comma separated)\n" +
-                  "-force        Overwrite existing HTML file\n" +
+                  "-force        Overwrite existing file\n" +
                   "-help         Display this help and exit\n" +
                   "-interval     Move interval size for -analyze\n" +
+                  "-output       Filename prefix for output files\n" +
                   "-precision    Floating point precision for -analyze\n" +
                   "-size         Board size of games\n" +
                   "-verbose      Log GTP stream to stderr\n" +

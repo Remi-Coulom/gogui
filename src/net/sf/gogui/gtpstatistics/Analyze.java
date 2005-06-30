@@ -28,11 +28,13 @@ import net.sf.gogui.version.Version;
 
 public class Analyze
 {
-    public Analyze(String fileName, int precision, int interval)
+    public Analyze(String fileName, String output, int precision,
+                   int interval)
         throws Exception
     {
+        m_output = output;
+        m_outputName = new File(output).getName();
         m_precision = precision;
-        m_fileName = fileName;
         m_formatInt = new DecimalFormat();
         m_formatInt.setMaximumFractionDigits(0);
         m_formatInt.setGroupingUsed(false);
@@ -50,15 +52,13 @@ public class Analyze
         for (int i = 2; i < m_table.getNumberColumns(); ++i)
             m_commands.add(m_table.getColumnTitle(i));
         m_commandStatistics = new Vector(m_commands.size());
-        File file = new File(FileUtils.replaceExtension(fileName,
-                                                        "dat", "html"));
+        File file = new File(m_output + ".html");
         initGameInfo();
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        startHtml(out, "GtpStatistics Summary");
-        startInfo(out, "GtpStatistics Summary");
+        startHtml(out, "Statistics Summary");
+        startInfo(out, "Statistics Summary");
         writeInfo(out);
         endInfo(out);
-        out.print("<h2>Averages</h2>\n");
         Vector columnTitles = new Vector();
         columnTitles.add("Move");
         columnTitles.add("Count");
@@ -70,10 +70,7 @@ public class Analyze
             table.set("Move", i * interval + interval / 2);
             table.set("Count", commandStatistics.getStatistics(i).getCount());
         }
-        String extension = "count.png";
-        File pngFile
-            = new File(FileUtils.replaceExtension(fileName, "dat",
-                                                  extension));
+        File pngFile = new File(m_output + ".count.png");
         int numberMoves = table.getNumberRows() * (m_interval + 1);
         Plot plot = generatePlotMove(getImgWidth(numberMoves),
                                      Color.DARK_GRAY);
@@ -81,7 +78,7 @@ public class Analyze
         out.print("<table border=\"0\">\n" +
                   "<tr><td align=\"center\">\n" +
                   "<small>Count</small><br>" +
-                  "<img src=\"" + pngFile.toString() + "\">\n" +
+                  "<img src=\"" + pngFile.getName() + "\">\n" +
                   "</td></tr>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
@@ -91,22 +88,21 @@ public class Analyze
             table = commandStatistics.m_tableMoveIntervals;
             plot = generatePlotMove(getImgWidth(numberMoves),
                                     getColor(command));
-            pngFile = new File(getAvgPlotFile(i));
+            pngFile = new File(getAvgPlotFile(i, m_output));
             plot.plot(pngFile, table, "Move", "Mean", "MaxError");
             out.print("<tr><td align=\"center\">\n" +
                       getCommandLink(i) + "<br>" +
-                      "<img src=\"" + pngFile.toString() + "\">\n" +
-                      "</td></tr>\n");
+                      "<img src=\"" + getAvgPlotFile(i, m_outputName)
+                      + "\">\n" + "</td></tr>\n");
         }
         out.print("</table>\n" +
                   "<hr>\n");
-        out.print("<h2>Histograms All Positions</h2>\n" +
-                  "<p>\n");
+        out.print("<p>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
             out.print("<table align=\"left\" border=\"0\">" +
                       "<tr><td align=\"center\">" + getCommandLink(i)
-                      + "<br><img src=\"" + getHistoFile(i)
+                      + "<br><img src=\"" + getHistoFile(i, m_outputName)
                       + "\"></td></tr></table>\n");
         }
         out.print("<br clear=\"left\">\n" +
@@ -114,7 +110,7 @@ public class Analyze
                     "<hr>\n");
         writeCommandsTable(out);
         out.print("<hr>\n");
-        writeGameTable(out, fileName);
+        writeGameTable(out);
         out.print("<hr>\n");
         out.print("</body>\n" +
                   "</html>\n");
@@ -166,7 +162,9 @@ public class Analyze
 
     private static final String m_colorGrayBackground = "#e0e0e0";
 
-    private final String m_fileName;
+    private final String m_output;
+
+    private final String m_outputName;
 
     private Table m_table;
 
@@ -189,10 +187,9 @@ public class Analyze
         return m_formatInt.format(value);
     }
 
-    private String getAvgPlotFile(int commandIndex)
+    private String getAvgPlotFile(int commandIndex, String base)
     {
-        String extension = "command-" + commandIndex + ".avg.png";
-        return FileUtils.replaceExtension(m_fileName, "dat", extension);
+        return base + ".command-" + commandIndex + ".avg.png";
     }
 
     private String getCommand(int index)
@@ -200,10 +197,9 @@ public class Analyze
         return (String)m_commands.get(index);
     }
 
-    private String getCommandFile(int commandIndex)
+    private String getCommandFile(int commandIndex, String base)
     {
-        String extension = "command-" + commandIndex + ".html";
-        return FileUtils.replaceExtension(m_fileName, "dat", extension);
+        return base + ".command-" + commandIndex + ".html";
     }
 
     private CommandStatistics getCommandStatistics(int commandIndex)
@@ -211,42 +207,38 @@ public class Analyze
         return (CommandStatistics)m_commandStatistics.get(commandIndex);
     }
 
-    private String getGameFile(int gameIndex)
+    private String getGameFile(int gameIndex, String base)
     {
-        String extension = "game-" + gameIndex + ".html";
-        return FileUtils.replaceExtension(m_fileName, "dat", extension);
+        return base + ".game-" + gameIndex + ".html";
     }
 
-    private String getHistoFile(int commandIndex)
+    private String getHistoFile(int commandIndex, String base)
     {
-        String extension = "command-" + commandIndex + ".histo.png";
-        return FileUtils.replaceExtension(m_fileName, "dat", extension);
+        return base + ".command-" + commandIndex + ".histo.png";
     }
 
-    private String getHistoFile(int commandIndex, int moveIntervalIndex)
+    private String getHistoFile(int commandIndex, int moveIntervalIndex,
+                                String base)
     {
-        String extension = "command-" + commandIndex + ".interval"
+        return base + ".command-" + commandIndex + ".interval-"
             + moveIntervalIndex + ".histo.png";
-        return FileUtils.replaceExtension(m_fileName, "dat", extension);
     }
 
-    private String getHistoFinalFile(int commandIndex)
+    private String getHistoFinalFile(int commandIndex, String base)
     {
-        String extension = "command-" + commandIndex + ".final.png";
-        return FileUtils.replaceExtension(m_fileName, "dat", extension);
+        return base + ".command-" + commandIndex + ".final.png";
     }
 
-    private String getPlotFile(int gameIndex, int commandIndex)
+    private String getPlotFile(int gameIndex, int commandIndex, String base)
     {
-        String extension =
-            "game-" + gameIndex + ".command-" + commandIndex + ".png";
-        return FileUtils.replaceExtension(m_fileName, "dat", extension);
+        return base + ".game-" + gameIndex + ".command-" + commandIndex
+            + ".png";
     }
 
     private String getCommandLink(int commandIndex)
     {
-        return "<a href=\"" + getCommandFile(commandIndex) + "\"><small>"
-            + getCommand(commandIndex) + "</small></a>";
+        return "<a href=\"" + getCommandFile(commandIndex, m_outputName)
+            + "\"><small>" + getCommand(commandIndex) + "</small></a>";
     }
 
     private CommandStatistics computeCommandStatistics(int index)
@@ -254,8 +246,9 @@ public class Analyze
     {
         String command = getCommand(index);
         return new CommandStatistics(command, m_table, m_tableFinal,
-                                     m_interval, getHistoFile(index),
-                                     getHistoFinalFile(index),
+                                     m_interval,
+                                     getHistoFile(index, m_output),
+                                     getHistoFinalFile(index, m_output),
                                      getColor(command), m_precision);
     }
 
@@ -277,7 +270,7 @@ public class Analyze
         Table table = TableUtils.select(m_table, "File", gameFile,
                                         "Move", command);
         int numberPositions = table.getNumberRows();
-        String fileName = getPlotFile(gameIndex, commandIndex);
+        String fileName = getPlotFile(gameIndex, commandIndex, m_output);
         Plot plot = generatePlotMove(getImgWidth(numberPositions),
                                      getColor(command));
         plot.plot(new File(fileName), table, "Move", command, null);
@@ -379,27 +372,27 @@ public class Analyze
         String command = getCommand(commandIndex);
         CommandStatistics commandStatistics
             = getCommandStatistics(commandIndex);
-        String fileName = getCommandFile(commandIndex);
+        String fileName = getCommandFile(commandIndex, m_output);
         PrintStream out = new PrintStream(new FileOutputStream(fileName));
         startHtml(out, command);
         startInfo(out, command);
         writeHtmlRow(out, "Index", commandIndex);
         endInfo(out);
-        out.print("<h2>Average</h2>\n" +                  
-                  "<p><img src=\"" + getAvgPlotFile(commandIndex)
+        out.print("<p><img src=\""
+                  + getAvgPlotFile(commandIndex, m_outputName)
                   + "\"></p>\n");
         writeCommandStatistics(out, commandIndex);
-        out.print("<hr>\n" +
-                  "<h2>Histograms</h2>\n");
+        out.print("<hr>\n");
         out.print("<table border=\"0\" cellspacing=\"0\""
                   + " cellpadding=\"5\">\n");
         out.print("<tr><td align=\"center\" valign=\"center\">"
                   + "<small>All</small><br>"
-                  + "<img src=\"" + getHistoFile(commandIndex)
+                  + "<img src=\"" + getHistoFile(commandIndex, m_outputName)
                   + "\"></td>\n");
         out.print("<td align=\"center\" valign=\"bottom\">"
                   + "<small>Final</small><br>"
-                  + "<img src=\"" + getHistoFinalFile(commandIndex)
+                  + "<img src=\""
+                  + getHistoFinalFile(commandIndex, m_outputName)
                   + "\"></td></tr>\n" +
                   "</table>\n");
         out.print("<p>\n");
@@ -408,7 +401,7 @@ public class Analyze
             Histogram histogram
                 = commandStatistics.getStatistics(i).m_histogram;
             Table histoTable = TableUtils.fromHistogram(histogram, command);
-            String histoFile = getHistoFile(commandIndex, i);
+            String histoFile = getHistoFile(commandIndex, i, m_output);
             Color color = getColor(command);
             Plot plot = new Plot(150, 150, color, m_precision);
             commandStatistics.setHistogramProperties(plot);
@@ -418,13 +411,13 @@ public class Analyze
                 + ((i + 1) * m_interval);
             out.print("<table align=\"left\" border=\"0\">" +
                       "<tr><td align=\"center\"><small>" + label
-                      + "</small><br><img src=\"" + histoFile
+                      + "</small><br><img src=\""
+                      + getHistoFile(commandIndex, i, m_outputName)
                       + "\"></td></tr></table>\n");
         }
         out.print("<br clear=\"left\">\n" +
                   "</p>\n" +
                   "<hr>\n");
-        out.print("<h2>Games</h2>\n");
         writeGamePlots(out, commandIndex);
         out.print("<hr>\n" +
                   "</body>\n" +
@@ -558,8 +551,7 @@ public class Analyze
 
     private void writeCommandsTable(PrintStream out) throws Exception
     {
-        out.print("<h2>Commands</h2>\n" +
-                  "<table class=\"smalltable\">\n" +
+        out.print("<table class=\"smalltable\">\n" +
                   "<thead><tr>"
                   + "<th>Command</th>"
                   + "<th>Mean</th>"
@@ -581,8 +573,8 @@ public class Analyze
             Statistics stat = statisticsAll.m_statistics;
             String command = getCommand(i);
             out.print("<tr>"
-                      + "<td><a href=\"" + getCommandFile(i) + "\">"
-                      + command + "</a></td>"
+                      + "<td><a href=\"" + getCommandFile(i, m_outputName)
+                      + "\">" + command + "</a></td>"
                       + "<td>" + formatFloat(stat.getMean()) + "</td>"
                       + "<td>" + formatFloat(stat.getDeviation()) + "</td>"
                       + "<td>" + formatFloat(stat.getError()) + "</td>"
@@ -603,7 +595,7 @@ public class Analyze
     private void writeGamePage(String game, String name, int gameNumber)
         throws Exception
     {
-        String file = getGameFile(gameNumber);
+        String file = getGameFile(gameNumber, m_output);
         PrintStream out = new PrintStream(new FileOutputStream(file));
         String title = "Game " + gameNumber + " (" + name + ")";
         startHtml(out, title);
@@ -641,7 +633,8 @@ public class Analyze
             String command = getCommand(i);
             generatePlot(i, gameNumber, game);
             out.print("<tr><td align=\"center\">" + getCommandLink(i)
-                      + "<br><img src=\"" + getPlotFile(gameNumber, i)
+                      + "<br><img src=\""
+                      + getPlotFile(gameNumber, i, m_outputName)
                       + "\"></td></tr>\n");
         }
         out.print("</table>\n" +
@@ -683,9 +676,9 @@ public class Analyze
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
             GameInfo info = (GameInfo)(m_gameInfo.get(i));
-            String plotFile = getPlotFile(i, commandIndex);
+            String plotFile = getPlotFile(i, commandIndex, m_outputName);
             out.print("<tr><td align=\"center\"><small><a href=\""
-                      + getGameFile(i)
+                      + getGameFile(i, m_outputName)
                       + "\">Game " + (i + 1) + "</a> (<a href=\""
                       + info.m_file + "\">" + info.m_name
                       + "</a>):</small><br>\n" +
@@ -695,17 +688,16 @@ public class Analyze
                   "</p>\n");
     }
 
-    private void writeGameTable(PrintStream out, String fileName)
+    private void writeGameTable(PrintStream out)
         throws Exception
     {
-        out.print("<h2>Games</h2>\n" +
-                  "<table class=\"smalltable\">\n" +
+        out.print("<table class=\"smalltable\">\n" +
                   "<thead><tr><th>Game</th><th>File</th><th>Positions</th>"
                   + "</tr></thead>\n");
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
             GameInfo info = (GameInfo)(m_gameInfo.get(i));
-            String file = getGameFile(i);
+            String file = getGameFile(i, m_outputName);
             out.print("<tr><td><a href=\"" + file
                       + "\">Game " + (i + 1) + "</a></td><td>" + info.m_name
                       + "</td><td>" + info.m_numberPositions

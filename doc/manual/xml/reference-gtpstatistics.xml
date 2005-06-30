@@ -34,6 +34,7 @@ Runs GTP commands on all positions of game collections.
 <command>gtpstatistics</command>
 <arg><option>-analyze</option> <replaceable>file</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
+<arg><option>-output</option> <replaceable>file</replaceable></arg>
 <arg><option>-precision</option> <replaceable>n</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -117,6 +118,17 @@ Overwrite existing result file.
 <listitem>
 <para>
 Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-output</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Filename prefix for output files.
 </para>
 </listitem>
 </varlistentry>

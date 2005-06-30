@@ -88,11 +88,14 @@ public final class PositionStatistics
             histoMax = max;
         }
         double diff = histoMax - histoMin;
+        int maxBins = 25;
         if (onlyIntValues)
-            m_histogram
-                = new Histogram(histoMin, histoMax, Math.max(1, diff / 25));
+        {
+            int step = Math.max(1, (int)(diff / maxBins + 1));
+            m_histogram = new Histogram(histoMin, histoMax, step);
+        }
         else
-            m_histogram = new Histogram(histoMin, histoMax, diff / 25);
+            m_histogram = new Histogram(histoMin, histoMax, diff / maxBins);
         for (int i = 0; i < table.getNumberRows(); ++i)
         {
             String value = table.get(command, i);
