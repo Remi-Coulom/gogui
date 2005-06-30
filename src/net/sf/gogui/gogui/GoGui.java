@@ -67,6 +67,7 @@ import net.sf.gogui.gui.GameInfoDialog;
 import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
 import net.sf.gogui.gui.GuiBoard;
+import net.sf.gogui.gui.GuiBoardUtils;
 import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
@@ -491,8 +492,6 @@ class GoGui
 
     public void contextMenu(GoPoint point, GuiField field)
     {
-        if (m_contextMenu == null || m_contextMenu.isEmpty())
-            return;
         m_contextMenu.setPointArg(point);
         Point location = m_guiBoard.getLocationOnScreen(point);
         int x = field.getWidth() / 2;
@@ -1047,14 +1046,7 @@ class GoGui
         Vector supportedCommands =
             m_commandThread.getSupportedCommands();
         m_gtpShell.setInitialCompletions(supportedCommands);
-        ContextMenu.Listener listener = new ContextMenu.Listener()
-            {
-                public void setAnalyzeCommand(AnalyzeCommand command)
-                {
-                    GoGui.this.setAnalyzeCommand(command, false, true, true);
-                }
-            };
-        m_contextMenu = new ContextMenu(supportedCommands, listener);
+        createContextMenu(false, supportedCommands);
         if (! m_gtpFile.equals(""))
             m_gtpShell.sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
@@ -1887,6 +1879,24 @@ class GoGui
         return Utils.createNode(m_currentNode, move, m_clock);
     }
 
+    private void createContextMenu(boolean noProgram,
+                                   Vector supportedCommands)
+    {
+        ContextMenu.Listener listener = new ContextMenu.Listener()
+            {
+                public void markSquare(GoPoint point, boolean markSquare)
+                {
+                    GoGui.this.markSquare(point, markSquare);
+                }
+
+                public void setAnalyzeCommand(AnalyzeCommand command)
+                {
+                    GoGui.this.setAnalyzeCommand(command, false, true, true);
+                }
+            };
+        m_contextMenu = new ContextMenu(true, supportedCommands, listener);
+    }
+
     private JComponent createStatusBar()
     {
         JPanel outerPanel = new JPanel(new BorderLayout());
@@ -1950,7 +1960,7 @@ class GoGui
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
-        m_contextMenu = null;
+        createContextMenu(true, null);
         resetBoard();
         clearStatus();
         setTitle();
@@ -2176,6 +2186,7 @@ class GoGui
         else
             newGameFile(m_boardSize, m_move);
         m_toolBar.enableAll(true, m_currentNode);
+        createContextMenu(true, null);
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
@@ -2320,6 +2331,17 @@ class GoGui
                 assert(false);
             }
         }
+    }
+
+    public void markSquare(GoPoint point, boolean markSquare)
+    {
+        if (markSquare)
+            m_currentNode.addMarkSquare(point);
+        else
+            m_currentNode.removeMarkSquare(point);
+        m_guiBoard.setMarkup(point, markSquare);
+        updateBoard();
+        m_guiBoard.repaint();
     }
 
     private void newGame(int size)
@@ -2930,6 +2952,7 @@ class GoGui
         }
         else
             m_guiBoard.markLastMove(null);
+        GuiBoardUtils.showMarkup(m_guiBoard, m_board, m_currentNode);
     }
 
     private void updateGameInfo(boolean gameTreeChanged)

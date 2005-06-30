@@ -22,6 +22,8 @@ class ExtraInfo
     public TimeInfo m_timeInfo;
 
     public TreeMap m_sgfProperties;
+
+    public Vector m_markSquare;
 }
 
 //----------------------------------------------------------------------------
@@ -92,6 +94,14 @@ public final class Node
     {
         assert(point != null);
         createSetupInfo().m_black.add(point);
+    }
+
+    public void addMarkSquare(GoPoint point)
+    {
+        assert(point != null);
+        Vector markSquare = createMarkSquare();
+        if (! markSquare.contains(point))
+            markSquare.add(point);
     }
 
     /** Add other unspecified SGF property.
@@ -189,6 +199,13 @@ public final class Node
     public Node getFather()
     {
         return m_father;
+    }
+
+    public Vector getMarkSquare()
+    {
+        if (m_extraInfo == null)
+            return null;
+        return m_extraInfo.m_markSquare;
     }
 
     public Move getMove()
@@ -307,6 +324,13 @@ public final class Node
         Vector vector = (Vector)m_children;
         vector.remove(child);
         vector.add(0, child);
+    }
+
+    public void removeMarkSquare(GoPoint point)
+    {
+        assert(point != null);
+        Vector markSquare = createMarkSquare();
+        markSquare.remove(point);
     }
 
     /** Remove all children but the first. */
@@ -439,10 +463,23 @@ public final class Node
     /** Node if one child only, Vector otherwise. */
     private Object m_children;
 
-    private SetupInfo createSetupInfo()
+    private Vector createMarkSquare()
+    {
+        createExtraInfo();
+        if (m_extraInfo.m_markSquare == null)
+            m_extraInfo.m_markSquare = new Vector();
+        return m_extraInfo.m_markSquare;
+    }
+
+    private void createExtraInfo()
     {
         if (m_extraInfo == null)
             m_extraInfo = new ExtraInfo();
+    }
+
+    private SetupInfo createSetupInfo()
+    {
+        createExtraInfo();
         if (m_extraInfo.m_setupInfo == null)
             m_extraInfo.m_setupInfo = new SetupInfo();
         return m_extraInfo.m_setupInfo;
@@ -450,8 +487,7 @@ public final class Node
 
     private Map createSgfProperties()
     {
-        if (m_extraInfo == null)
-            m_extraInfo = new ExtraInfo();
+        createExtraInfo();
         if (m_extraInfo.m_sgfProperties == null)
             m_extraInfo.m_sgfProperties = new TreeMap();
         return m_extraInfo.m_sgfProperties;
@@ -459,8 +495,7 @@ public final class Node
 
     private TimeInfo createTimeInfo()
     {
-        if (m_extraInfo == null)
-            m_extraInfo = new ExtraInfo();
+        createExtraInfo();
         if (m_extraInfo.m_timeInfo == null)
             m_extraInfo.m_timeInfo = new TimeInfo();
         return m_extraInfo.m_timeInfo;

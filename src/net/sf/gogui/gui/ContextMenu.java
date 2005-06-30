@@ -23,20 +23,26 @@ public class ContextMenu
 {
     public interface Listener
     {
+        void markSquare(GoPoint point, boolean markSquare);
+
         void setAnalyzeCommand(AnalyzeCommand command);
     }
 
-    public ContextMenu(Vector supportedCommands, Listener listener)
+    public ContextMenu(boolean noProgram, Vector supportedCommands,
+                       Listener listener)
     {
         m_listener = listener;
         Vector commands = new Vector();
         Vector labels = new Vector();
-        try
+        if (! noProgram)
         {
-            AnalyzeCommand.read(commands, labels, supportedCommands);
-        }
-        catch (Exception e)
-        {
+            try
+            {
+                AnalyzeCommand.read(commands, labels, supportedCommands);
+            }
+            catch (Exception e)
+            {
+            }
         }
         m_actionListener = new ActionListener()
             {
@@ -49,24 +55,40 @@ public class ContextMenu
                     if (actionCommand.equals("cancel"))
                     {
                         ContextMenu.this.setVisible(false);
-                        return;
                     }
-                    int index = Integer.parseInt(actionCommand);
-                    AnalyzeCommand command = getCommand(index);
-                    command.setPointArg(m_pointArg);
-                    listener.setAnalyzeCommand(command);
+                    else if (actionCommand.equals("mark-square"))
+                    {
+                        listener.markSquare(m_pointArg, true);
+                    }
+                    else if (actionCommand.equals("unmark-square"))
+                    {
+                        listener.markSquare(m_pointArg, false);
+                    }
+                    else
+                    {
+                        int index = Integer.parseInt(actionCommand);
+                        AnalyzeCommand command = getCommand(index);
+                        command.setPointArg(m_pointArg);
+                        listener.setAnalyzeCommand(command);
+                    }
                 }
             };
-        for (int i = 0; i < commands.size(); ++i)
-        {
-            String line = (String)commands.get(i);
-            AnalyzeCommand command = new AnalyzeCommand(line);
-            if (command.needsOnlyPointArg())
-                addCommand(command);
-            else if (command.needsOnlyPointAndColorArg())
-                addColorCommand(command);
-        }
+        add(createItem("Mark Square", "mark-square"));
+        add(createItem("Unmark Square", "unmark-square"));
         addSeparator();
+        if (! noProgram)
+        {
+            for (int i = 0; i < commands.size(); ++i)
+            {
+                String line = (String)commands.get(i);
+                AnalyzeCommand command = new AnalyzeCommand(line);
+                if (command.needsOnlyPointArg())
+                    addCommand(command);
+                else if (command.needsOnlyPointAndColorArg())
+                    addColorCommand(command);
+            }
+            addSeparator();
+        }
         JMenuItem item = new JMenuItem("Cancel");
         item.addActionListener(m_actionListener);
         item.setActionCommand("cancel");
@@ -142,9 +164,14 @@ public class ContextMenu
     {
         assert(! m_commands.contains(command));
         m_commands.add(command);
+        return createItem(label, Integer.toString(m_commands.size() - 1));
+    }
+
+    private JMenuItem createItem(String label, String actionCommand)
+    {
         JMenuItem item = new JMenuItem(label);
         item.addActionListener(m_actionListener);
-        item.setActionCommand(Integer.toString(m_commands.size() - 1));
+        item.setActionCommand(actionCommand);
         return item;
     }
 

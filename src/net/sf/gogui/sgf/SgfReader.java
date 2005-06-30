@@ -684,6 +684,10 @@ public class SgfReader
             {
                 m_gameInformation.m_rules = v;
             }
+            else if (p == "SQ")
+            {
+                node.addMarkSquare(parsePoint(v));
+            }
             else if (p == "SZ")
             {
                 if (! isRoot)

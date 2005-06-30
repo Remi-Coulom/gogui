@@ -296,6 +296,15 @@ public class SgfWriter
         }
         if (node.getPlayer() != GoColor.EMPTY)
             printToPlay(node.getPlayer());
+        Vector markSquare = node.getMarkSquare();
+        if (markSquare != null)
+        {
+            StringBuffer buffer = new StringBuffer(128);
+            buffer.append("SQ");
+            for (int i = 0; i < markSquare.size(); ++i)
+                buffer.append(getPoint((GoPoint)(markSquare.get(i))));
+            print(buffer.toString());
+        }
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)
         {
