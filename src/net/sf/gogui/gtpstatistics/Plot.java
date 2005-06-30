@@ -90,6 +90,12 @@ public class Plot
         m_autoXTics = false;
     }
 
+    public void setXMax(double max)
+    {
+        m_maxX = max;
+        m_autoXMax = false;
+    }
+
     public void setXMin(double min)
     {
         m_minX = min;
@@ -118,6 +124,8 @@ public class Plot
     {
         m_title = title;
     }
+
+    private boolean m_autoXMax = true;
 
     private boolean m_autoXMin = true;
 
@@ -455,7 +463,11 @@ public class Plot
         {
             m_minX = min - 0.05 * (max - min);
         }
-        m_maxX = max + 0.05 * (max - min);
+
+        if (m_autoXMax)
+        {
+            m_maxX = max + 0.05 * (max - m_minX);
+        }
         // Try to inlude 0 in plot
         if (m_minX > 0 && m_minX < 0.3 * m_maxX)
             m_minX = 0;

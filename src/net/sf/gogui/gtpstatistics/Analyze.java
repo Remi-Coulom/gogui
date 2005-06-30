@@ -145,6 +145,8 @@ public class Analyze
 
     private int m_interval;
 
+    private int m_maxMove;
+
     private int m_numberGames;
 
     private int m_precision;
@@ -261,6 +263,7 @@ public class Analyze
         Plot plot = new Plot(width, m_imgHeight, color, m_precision);
         plot.setSolidLineInterval(10);
         plot.setXMin(0);
+        plot.setXMax(m_maxMove + 1);
         plot.setXTics(5);
         plot.setXLabelPerTic(2);
         return plot;
@@ -295,11 +298,13 @@ public class Analyze
         m_gameInfo = new Vector();
         String last = null;
         GameInfo info = null;
+        m_maxMove = 0;
         int numberColumns = m_table.getNumberColumns();
         for (int row = 0; row < m_table.getNumberRows(); ++row)
         {
             String file = m_table.get("File", row);
             int move = Integer.parseInt(m_table.get("Move", row));
+            m_maxMove = Math.max(m_maxMove, move);
             if (last == null || ! file.equals(last))
             {
                 if (info != null)
