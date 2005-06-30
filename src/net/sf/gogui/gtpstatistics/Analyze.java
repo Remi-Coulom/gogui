@@ -7,11 +7,15 @@ package net.sf.gogui.gtpstatistics;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Vector;
 import java.text.DecimalFormat;
+import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Histogram;
@@ -382,7 +386,7 @@ public class Analyze
         PrintStream out = new PrintStream(new FileOutputStream(fileName));
         startHtml(out, command);
         startInfo(out, command);
-        writeHtmlRow(out, "Command Number", commandIndex);
+        writeHtmlRow(out, "Index", commandIndex);
         endInfo(out);
         out.print("<h2>Average</h2>\n" +                  
                   "<p><img src=\"" + getAvgPlotFile(commandIndex)
@@ -593,9 +597,31 @@ public class Analyze
         String title = "Game " + gameNumber + " (" + name + ")";
         startHtml(out, title);
         startInfo(out, title);
-        writeHtmlRow(out, "Game Number", gameNumber);
+        writeHtmlRow(out, "Index", gameNumber);
         writeHtmlRow(out, "File",
                      "<a href=\"" + game + "\">" + game + "</a>");
+        try
+        {
+            InputStream in = new FileInputStream(new File(game));
+            SgfReader reader = new SgfReader(in, game, null, 0);
+            GameInformation info = reader.getGameTree().getGameInformation();
+            String playerBlack = info.m_playerBlack;
+            if (playerBlack == null)
+                playerBlack = "?";
+            String playerWhite = info.m_playerWhite;
+            if (playerWhite == null)
+                playerWhite = "?";
+            String result = info.m_result;
+            if (result == null)
+                result = "?";
+            writeHtmlRow(out, "Black", playerBlack);
+            writeHtmlRow(out, "White", playerWhite);
+            writeHtmlRow(out, "Result", result);
+            in.close();
+        }
+        catch (SgfReader.SgfError e)
+        {
+        }
         endInfo(out);
         out.print("<p>\n" +
                   "<table border=\"0\">\n");
