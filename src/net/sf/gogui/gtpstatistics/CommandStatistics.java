@@ -72,6 +72,8 @@ public final class CommandStatistics
         plot = new Plot(150, 150, color, precision);
         plot.setPlotStyleBars();
         plot.setYMin(0);
+        plot.setXMin(m_statisticsAll.getMin());
+        plot.setXMax(m_statisticsAll.getMax());
         plot.plot(new File(histoFileFinal), histoTable, command, "Count",
                   null);
     }
