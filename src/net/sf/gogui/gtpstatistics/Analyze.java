@@ -256,7 +256,7 @@ public class Analyze
         Plot plot = new Plot(width, m_imgHeight, color, m_precision);
         plot.setSolidLineInterval(10);
         plot.setXMin(0);
-        plot.setXMax(m_maxMove + 1);
+        plot.setXMax((m_maxMove / m_interval + 1) * m_interval);
         plot.setXTics(5);
         plot.setXLabelPerTic(2);
         return plot;
