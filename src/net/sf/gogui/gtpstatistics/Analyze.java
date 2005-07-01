@@ -118,12 +118,12 @@ public class Analyze
     }
 
     private static final Color[] m_plotColor = {
-        Color.decode("#ff5454"), // red
-        Color.decode("#A842D3"), // violet
-        Color.decode("#738ab8"), // blue
-        Color.decode("#5eaf5e"), // green
-        Color.decode("#ffa954"), // yellow
-        Color.decode("#FF7340")  // orange
+        Color.decode("#ff0000"),
+        Color.decode("#ff9800"),
+        Color.decode("#009800"),
+        Color.decode("#00c0c0"),
+        Color.decode("#0000ff"),
+        Color.decode("#980098")
     };
 
     private static class GameInfo
