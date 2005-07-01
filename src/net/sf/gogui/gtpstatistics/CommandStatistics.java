@@ -32,8 +32,8 @@ public final class CommandStatistics
     public final Table m_tableMoveIntervals;
 
     public CommandStatistics(String command, Table table, Table tableFinal,
-                             int interval, String histoFile,
-                             String histoFileFinal, Color color,
+                             int interval, File histoFile,
+                             File histoFileFinal, Color color,
                              int precision)
         throws Exception
     {
@@ -70,14 +70,12 @@ public final class CommandStatistics
         Table histoTable = TableUtils.fromHistogram(histogram, command);
         Plot plot = new Plot(150, 150, color, precision);
         setHistogramProperties(plot);
-        plot.plot(new File(histoFile), histoTable, command, "Count",
-                  null);
+        plot.plot(histoFile, histoTable, command, "Count", null);
         histogram = m_statisticsFinal.m_histogram;
         histoTable = TableUtils.fromHistogram(histogram, command);
         plot = new Plot(150, 150, color, precision);
         setHistogramProperties(plot);
-        plot.plot(new File(histoFileFinal), histoTable, command, "Count",
-                  null);
+        plot.plot(histoFileFinal, histoTable, command, "Count", null);
     }
 
     public int getNumberMoveIntervals()
