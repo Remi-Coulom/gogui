@@ -344,6 +344,11 @@ public class SgfReader
         }
     }
 
+    private String getValue(int i)
+    {
+        return (String)m_valueVector.get(i);
+    }
+
     private GoColor parseColor(String s) throws SgfError
     {
         GoColor color;
@@ -515,12 +520,12 @@ public class SgfReader
                 m_valueVector.add(s);
             if (m_valueVector.size() == 0)
                 throw getError("Property '" + p + "' has no value");
-            String v = (String)m_valueVector.get(0);
+            String v = getValue(0);
             p = checkForObsoleteLongProps(p);
             if (p == "AB")
             {
                 for (int i = 0; i < m_valueVector.size(); ++i)
-                    node.addBlack(parsePoint((String)m_valueVector.get(i)));
+                    node.addBlack(parsePoint(getValue(i)));
                 m_sizeFixed = true;
             }
             else if (p == "AE")
@@ -530,7 +535,7 @@ public class SgfReader
             else if (p == "AW")
             {
                 for (int i = 0; i < m_valueVector.size(); ++i)
-                    node.addWhite(parsePoint((String)m_valueVector.get(i)));
+                    node.addWhite(parsePoint(getValue(i)));
                 m_sizeFixed = true;
             }
             else if (p == "B")
@@ -616,6 +621,20 @@ public class SgfReader
                     setWarning("Invalid value for komi");
                 }
             }
+            else if (p == "LB")
+            {
+                for (int i = 0; i < m_valueVector.size(); ++i)
+                {
+                    String value = getValue(i);
+                    int pos = value.indexOf(":");
+                    if (pos > 0)
+                    {
+                        GoPoint point = parsePoint(value.substring(0, pos));
+                        String text = value.substring(pos + 1);
+                        node.setLabel(point, text);
+                    }
+                }
+            }
             else if (p == "OB")
             {
                 try
@@ -686,7 +705,8 @@ public class SgfReader
             }
             else if (p == "SQ")
             {
-                node.addMarkSquare(parsePoint(v));
+                for (int i = 0; i < m_valueVector.size(); ++i)
+                    node.addMarkSquare(parsePoint(getValue(i)));
             }
             else if (p == "SZ")
             {

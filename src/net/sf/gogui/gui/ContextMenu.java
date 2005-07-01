@@ -26,6 +26,8 @@ public class ContextMenu
 {
     public interface Listener
     {
+        void editLabel(GoPoint point);
+
         void markSquare(GoPoint point, boolean markSquare);
 
         void setAnalyzeCommand(AnalyzeCommand command);
@@ -67,6 +69,10 @@ public class ContextMenu
                             = ContextMenu.this.m_markSquare.isSelected();
                         listener.markSquare(m_point, markSquare);
                     }
+                    else if (actionCommand.equals("edit-label"))
+                    {                        
+                        listener.editLabel(m_point);
+                    }
                     else
                     {
                         int index = Integer.parseInt(actionCommand);
@@ -76,13 +82,14 @@ public class ContextMenu
                     }
                 }
             };
-        m_label = new JLabel("Point " + point);
-        m_label.setBorder(GuiUtils.createSmallEmptyBorder());
-        add(m_label);
+        JLabel label = new JLabel("Point " + point);
+        label.setBorder(GuiUtils.createSmallEmptyBorder());
+        add(label);
         addSeparator();
         m_markSquare = createCheckBox("Mark Square", "mark-square");
         m_markSquare.setSelected(markSquare);
         add(m_markSquare);
+        add(createItem("Edit Label", "edit-label"));
         addSeparator();
         if (! noProgram && commands.size() > 0)
         {
@@ -124,7 +131,7 @@ public class ContextMenu
 
     private JCheckBoxMenuItem m_markSquare;
 
-    private JLabel m_label;
+    private JMenuItem m_editLabel;
 
     private Listener m_listener;
 

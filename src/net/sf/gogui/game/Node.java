@@ -24,6 +24,8 @@ class ExtraInfo
     public TreeMap m_sgfProperties;
 
     public Vector m_markSquare;
+
+    public TreeMap m_label;
 }
 
 //----------------------------------------------------------------------------
@@ -201,6 +203,21 @@ public final class Node
         return m_father;
     }
 
+    public String getLabel(GoPoint point)
+    {
+        Map map = getLabels();
+        if (map == null || ! map.containsKey(point))
+            return null;
+        return (String)map.get(point);
+    }
+
+    public Map getLabels()
+    {
+        if (m_extraInfo == null)
+            return null;
+        return m_extraInfo.m_label;
+    }
+
     public Vector getMarkSquare()
     {
         if (m_extraInfo == null)
@@ -364,6 +381,19 @@ public final class Node
         m_father = father;
     }
 
+    public void setLabel(GoPoint point, String label)
+    {
+        assert(point != null);
+        TreeMap tree = createLabel();
+        tree.remove(point);
+        if (label == null)
+            return;
+        label = label.trim();
+        if (label.equals(""))
+            return;
+        tree.put(point, label);
+    }
+
     public void setMove(Move move)
     {
         m_move = move;
@@ -463,18 +493,26 @@ public final class Node
     /** Node if one child only, Vector otherwise. */
     private Object m_children;
 
+    private void createExtraInfo()
+    {
+        if (m_extraInfo == null)
+            m_extraInfo = new ExtraInfo();
+    }
+
+    private TreeMap createLabel()
+    {
+        createExtraInfo();
+        if (m_extraInfo.m_label == null)
+            m_extraInfo.m_label = new TreeMap();
+        return m_extraInfo.m_label;
+    }
+
     private Vector createMarkSquare()
     {
         createExtraInfo();
         if (m_extraInfo.m_markSquare == null)
             m_extraInfo.m_markSquare = new Vector();
         return m_extraInfo.m_markSquare;
-    }
-
-    private void createExtraInfo()
-    {
-        if (m_extraInfo == null)
-            m_extraInfo = new ExtraInfo();
     }
 
     private SetupInfo createSetupInfo()

@@ -1880,6 +1880,11 @@ class GoGui
     {
         ContextMenu.Listener listener = new ContextMenu.Listener()
             {
+                public void editLabel(GoPoint point)
+                {
+                    GoGui.this.editLabel(point);
+                }
+
                 public void markSquare(GoPoint point, boolean markSquare)
                 {
                     GoGui.this.markSquare(point, markSquare);
@@ -1979,6 +1984,18 @@ class GoGui
                 assert(false);
             }
         }
+    }
+
+    public void editLabel(GoPoint point)
+    {
+        String value = m_currentNode.getLabel(point);
+        value = JOptionPane.showInputDialog(this, "Label " + point, value);
+        if (value == null)
+            return;
+        m_currentNode.setLabel(point, value);
+        m_guiBoard.setLabel(point, value);
+        updateBoard();
+        m_guiBoard.repaint();
     }
 
     private void endLengthyCommand()

@@ -193,6 +193,11 @@ public final class GuiBoard
         return new Dimension(width, width);
     }
 
+    public String getLabel(GoPoint point)
+    {
+        return getField(point).getString();
+    }
+
     public Point getLocationOnScreen(GoPoint point)
     {
         GuiField field = getField(point);
@@ -368,34 +373,6 @@ public final class GuiBoard
         m_needsReset = false;
     }
 
-    public void setFont(Graphics graphics, int fieldSize)
-    {
-        if (m_cachedFont != null && m_cachedFontFieldSize == fieldSize)
-        {
-            graphics.setFont(m_cachedFont);
-            return;
-        }
-        Font font = UIManager.getFont("Label.font");
-        if (font != null)
-        {
-            FontMetrics metrics = graphics.getFontMetrics(font);
-            double scale = (double)fieldSize / metrics.getAscent() / 2.3;
-            if (scale < 0.95)
-            {
-                int size = font.getSize();
-                Font derivedFont
-                    = font.deriveFont(Font.BOLD, (float)(size * scale));
-                if (derivedFont != null)
-                    font = derivedFont;
-            }
-            else
-                font = font.deriveFont(Font.BOLD);
-        }
-        m_cachedFont = font;
-        m_cachedFontFieldSize = fieldSize;
-        graphics.setFont(font);
-    }
-
     public void scoreBegin(GoPoint[] isDeadStone)
     {
         m_board.scoreBegin(isDeadStone);
@@ -422,13 +399,32 @@ public final class GuiBoard
         calcScore();
     }
 
-    public void setPreferredFieldSize(Dimension size)
+    public void setFont(Graphics graphics, int fieldSize)
     {
-        m_preferredFieldSize = size;
-        int boardSize = m_board.getSize();
-        for (int x = 0; x < boardSize; ++x)
-            for (int y = 0; y < boardSize; ++y)
-                m_field[x][y].setPreferredSize(m_preferredFieldSize);
+        if (m_cachedFont != null && m_cachedFontFieldSize == fieldSize)
+        {
+            graphics.setFont(m_cachedFont);
+            return;
+        }
+        Font font = UIManager.getFont("Label.font");
+        if (font != null)
+        {
+            FontMetrics metrics = graphics.getFontMetrics(font);
+            double scale = (double)fieldSize / metrics.getAscent() / 2.3;
+            if (scale < 0.95)
+            {
+                int size = font.getSize();
+                Font derivedFont
+                    = font.deriveFont(Font.BOLD, (float)(size * scale));
+                if (derivedFont != null)
+                    font = derivedFont;
+            }
+            else
+                font = font.deriveFont(Font.BOLD);
+        }
+        m_cachedFont = font;
+        m_cachedFontFieldSize = fieldSize;
+        graphics.setFont(font);
     }
 
     public void setFocus()
@@ -475,6 +471,12 @@ public final class GuiBoard
         m_needsReset = true;
     }
 
+    public void setLabel(GoPoint point, String label)
+    {
+        getField(point).setString(label);
+        m_needsReset = true;
+    }
+
     public void setListener(Listener l)
     {
         m_listener = l;
@@ -484,6 +486,15 @@ public final class GuiBoard
     {
         getField(p).setMarkup(markup);
         m_needsReset = true;
+    }
+
+    public void setPreferredFieldSize(Dimension size)
+    {
+        m_preferredFieldSize = size;
+        int boardSize = m_board.getSize();
+        for (int x = 0; x < boardSize; ++x)
+            for (int y = 0; y < boardSize; ++y)
+                m_field[x][y].setPreferredSize(m_preferredFieldSize);
     }
 
     public void setShowCursor(boolean showCursor)

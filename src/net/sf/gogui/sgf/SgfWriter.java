@@ -147,20 +147,25 @@ public class SgfWriter
         if (p == null)
         {
             if (m_size <= 19)
-                return "[tt]";
+                return "tt";
             else
-                return "[]";
+                return "";
         }
         int x = 'a' + p.getX();
         int y = 'a' + (m_size - p.getY() - 1);
-        return "[" + (char)x + (char)y + "]";
+        return "" + (char)x + (char)y;
+    }
+
+    private String getPointValue(GoPoint point)
+    {
+        return "[" + getPoint(point) + "]";
     }
 
     private String getPointList(Vector v)
     {
         StringBuffer buffer = new StringBuffer(128);
         for (int i = 0; i < v.size(); ++i)
-            buffer.append(getPoint((GoPoint)v.get(i)));
+            buffer.append(getPointValue((GoPoint)v.get(i)));
         return buffer.toString();
     }
     
@@ -236,6 +241,28 @@ public class SgfWriter
             print("RE[" + result + "]");
     }
 
+    private void printLabels(Node node)
+    {
+        Map labels = node.getLabels();
+        if (labels == null)
+            return;
+        StringBuffer buffer = new StringBuffer(128);
+        buffer.append("LB");
+        Iterator i = labels.entrySet().iterator();
+        while (i.hasNext())
+        {
+            Map.Entry entry = (Map.Entry)i.next();
+            GoPoint point = (GoPoint)entry.getKey();
+            String value = (String)entry.getValue();
+            buffer.append('[');
+            buffer.append(getPoint(point));
+            buffer.append(':');
+            buffer.append(value);
+            buffer.append(']');
+        }
+        print(buffer.toString());
+    }
+
     private void printNode(Node node, boolean isRoot)
     {
         Move move = node.getMove();
@@ -251,7 +278,7 @@ public class SgfWriter
         }
         if (move != null)
         {
-            String point = getPoint(move.getPoint());
+            String point = getPointValue(move.getPoint());
             if (move.getColor() == GoColor.BLACK)
                 print("B" + point);
             else
@@ -262,7 +289,7 @@ public class SgfWriter
             StringBuffer buffer = new StringBuffer(128);
             buffer.append("AB");
             for (int i = 0; i < node.getNumberAddBlack(); ++i)
-                buffer.append(getPoint(node.getAddBlack(i)));
+                buffer.append(getPointValue(node.getAddBlack(i)));
             print(buffer.toString());
         }
         if (node.getNumberAddWhite() > 0)
@@ -270,7 +297,7 @@ public class SgfWriter
             StringBuffer buffer = new StringBuffer(128);
             buffer.append("AW");
             for (int i = 0; i < node.getNumberAddWhite(); ++i)
-                buffer.append(getPoint(node.getAddWhite(i)));
+                buffer.append(getPointValue(node.getAddWhite(i)));
             print(buffer.toString());
         }
         String comment = node.getComment();
@@ -298,13 +325,8 @@ public class SgfWriter
             printToPlay(node.getPlayer());
         Vector markSquare = node.getMarkSquare();
         if (markSquare != null)
-        {
-            StringBuffer buffer = new StringBuffer(128);
-            buffer.append("SQ");
-            for (int i = 0; i < markSquare.size(); ++i)
-                buffer.append(getPoint((GoPoint)(markSquare.get(i))));
-            print(buffer.toString());
-        }
+            print("SQ" + getPointList(markSquare));
+        printLabels(node);
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)
         {

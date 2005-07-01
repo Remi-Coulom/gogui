@@ -18,6 +18,7 @@ import net.sf.gogui.utils.StringUtils;
     i.e. the largest point is Z25.
 */
 public final class GoPoint
+    implements Comparable
 {
     public static class InvalidPoint extends Exception
     {
@@ -33,6 +34,21 @@ public final class GoPoint
     }
 
     public static final int MAXSIZE = 25;
+
+    public int compareTo(Object object)
+    {
+        GoPoint point = (GoPoint)object;
+        if (m_y < point.m_y)
+            return -1;
+        if (m_y > point.m_y)
+            return 1;
+        assert(m_y == point.m_y);
+        if (m_x < point.m_x)
+            return -1;
+        if (m_x > point.m_x)
+            return 1;
+        return 0;
+    }
 
     public static GoPoint create(int x, int y)
     {
