@@ -118,13 +118,12 @@ public class Analyze
     }
 
     private static final Color[] m_plotColor = {
-        Color.decode("#ff5454"),
-        Color.decode("#738ab8"),
-        Color.decode("#5eaf5e"),
-        Color.decode("#ffa954"),
-        Color.decode("#FF66FF"),
-        Color.decode("#21C7CD"),
-        Color.decode("#FF7340")
+        Color.decode("#ff5454"), // red
+        Color.decode("#A842D3"), // violet
+        Color.decode("#738ab8"), // blue
+        Color.decode("#5eaf5e"), // green
+        Color.decode("#ffa954"), // yellow
+        Color.decode("#FF7340")  // orange
     };
 
     private static class GameInfo
@@ -622,7 +621,7 @@ public class Analyze
             writeHtmlRow(out, "Result", result);
             in.close();
         }
-        catch (SgfReader.SgfError e)
+        catch (Exception e)
         {
         }
         endInfo(out);
