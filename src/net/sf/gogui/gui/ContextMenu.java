@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -30,9 +31,11 @@ public class ContextMenu
         void setAnalyzeCommand(AnalyzeCommand command);
     }
 
-    public ContextMenu(boolean noProgram, Vector supportedCommands,
+    public ContextMenu(GoPoint point, boolean noProgram,
+                       Vector supportedCommands, boolean markSquare,
                        Listener listener)
     {
+        m_point = point;
         m_listener = listener;
         Vector commands = new Vector();
         Vector labels = new Vector();
@@ -59,28 +62,27 @@ public class ContextMenu
                         ContextMenu.this.setVisible(false);
                     }
                     else if (actionCommand.equals("mark-square"))
-                    {
-                        listener.markSquare(m_pointArg, true);
-                    }
-                    else if (actionCommand.equals("unmark-square"))
-                    {
-                        listener.markSquare(m_pointArg, false);
+                    {                        
+                        boolean markSquare
+                            = ContextMenu.this.m_markSquare.isSelected();
+                        listener.markSquare(m_point, markSquare);
                     }
                     else
                     {
                         int index = Integer.parseInt(actionCommand);
                         AnalyzeCommand command = getCommand(index);
-                        command.setPointArg(m_pointArg);
+                        command.setPointArg(m_point);
                         listener.setAnalyzeCommand(command);
                     }
                 }
             };
-        m_label = new JLabel();
+        m_label = new JLabel("Point " + point);
         m_label.setBorder(GuiUtils.createSmallEmptyBorder());
         add(m_label);
         addSeparator();
-        add(createItem("Mark Square", "mark-square"));
-        add(createItem("Unmark Square", "unmark-square"));
+        m_markSquare = createCheckBox("Mark Square", "mark-square");
+        m_markSquare.setSelected(markSquare);
+        add(m_markSquare);
         addSeparator();
         if (! noProgram && commands.size() > 0)
         {
@@ -103,18 +105,12 @@ public class ContextMenu
 
     public GoPoint getPointArg()
     {
-        return m_pointArg;
+        return m_point;
     }
 
     public boolean isEmpty()
     {
         return (m_commands.size() == 0);
-    }
-
-    public void setPointArg(GoPoint point)
-    {
-        m_pointArg = point;
-        m_label.setText("Point " + point.toString());
     }
 
     /** Serial version to suppress compiler warning.
@@ -124,7 +120,9 @@ public class ContextMenu
 
     private ActionListener m_actionListener;
 
-    private GoPoint m_pointArg;
+    private GoPoint m_point;
+
+    private JCheckBoxMenuItem m_markSquare;
 
     private JLabel m_label;
 
@@ -158,6 +156,15 @@ public class ContextMenu
         assert(! m_commands.contains(command));
         m_commands.add(command);
         return createItem(label, Integer.toString(m_commands.size() - 1));
+    }
+
+    private JCheckBoxMenuItem createCheckBox(String label,
+                                             String actionCommand)
+    {
+        JCheckBoxMenuItem item = new JCheckBoxMenuItem(label);
+        item.addActionListener(m_actionListener);
+        item.setActionCommand(actionCommand);
+        return item;
     }
 
     private JMenuItem createItem(String label, String actionCommand)

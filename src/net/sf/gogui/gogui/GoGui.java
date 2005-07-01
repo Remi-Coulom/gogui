@@ -492,11 +492,11 @@ class GoGui
 
     public void contextMenu(GoPoint point, GuiField field)
     {
-        m_contextMenu.setPointArg(point);
+        ContextMenu contextMenu = createContextMenu(point);
         Point location = m_guiBoard.getLocationOnScreen(point);
         int x = field.getWidth() / 2;
         int y = field.getHeight() / 2;
-        m_contextMenu.show(field, x, y);
+        contextMenu.show(field, x, y);
     }
 
     public void disposeGameTree()
@@ -835,8 +835,6 @@ class GoGui
 
     private Comment m_comment;
 
-    private ContextMenu m_contextMenu;
-
     private File m_loadedFile;
 
     private GameInfo m_gameInfo;    
@@ -1046,7 +1044,6 @@ class GoGui
         Vector supportedCommands =
             m_commandThread.getSupportedCommands();
         m_gtpShell.setInitialCompletions(supportedCommands);
-        createContextMenu(false, supportedCommands);
         if (! m_gtpFile.equals(""))
             m_gtpShell.sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
@@ -1879,8 +1876,7 @@ class GoGui
         return Utils.createNode(m_currentNode, move, m_clock);
     }
 
-    private void createContextMenu(boolean noProgram,
-                                   Vector supportedCommands)
+    private ContextMenu createContextMenu(GoPoint point)
     {
         ContextMenu.Listener listener = new ContextMenu.Listener()
             {
@@ -1894,8 +1890,12 @@ class GoGui
                     GoGui.this.setAnalyzeCommand(command, false, true, true);
                 }
             };
-        m_contextMenu
-            = new ContextMenu(noProgram, supportedCommands, listener);
+        Vector supportedCommands = null;
+        boolean noProgram = (m_commandThread == null);
+        if (! noProgram)
+            supportedCommands = m_commandThread.getSupportedCommands();
+        return new ContextMenu(point, noProgram, supportedCommands,
+                               m_guiBoard.getMarkup(point), listener);
     }
 
     private JComponent createStatusBar()
@@ -1961,7 +1961,6 @@ class GoGui
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
-        createContextMenu(true, null);
         resetBoard();
         clearStatus();
         setTitle();
@@ -2187,7 +2186,6 @@ class GoGui
         else
             newGameFile(m_boardSize, m_move);
         m_toolBar.enableAll(true, m_currentNode);
-        createContextMenu(true, null);
         if (m_program != null)
             attachProgram(m_program);
         setTitle();

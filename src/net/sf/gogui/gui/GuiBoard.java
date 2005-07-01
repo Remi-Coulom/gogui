@@ -203,6 +203,11 @@ public final class GuiBoard
         return location;
     }
 
+    public boolean getMarkup(GoPoint point)
+    {
+        return getField(point).getMarkup();
+    }
+
     public boolean[][] getMarkups()
     {
         int size = m_board.getSize();
