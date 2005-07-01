@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -74,14 +75,14 @@ public class ContextMenu
                     }
                 }
             };
-        m_label = new JMenuItem();
-        m_label.setEnabled(false);
+        m_label = new JLabel();
+        m_label.setBorder(GuiUtils.createSmallEmptyBorder());
         add(m_label);
         addSeparator();
         add(createItem("Mark Square", "mark-square"));
         add(createItem("Unmark Square", "unmark-square"));
         addSeparator();
-        if (! noProgram)
+        if (! noProgram && commands.size() > 0)
         {
             for (int i = 0; i < commands.size(); ++i)
             {
@@ -125,10 +126,7 @@ public class ContextMenu
 
     private GoPoint m_pointArg;
 
-    /** Use disabled menu item for title, because JPopupMenu.setLabel()
-        is not shown in all UIs.
-    */
-    private JMenuItem m_label;
+    private JLabel m_label;
 
     private Listener m_listener;
 
