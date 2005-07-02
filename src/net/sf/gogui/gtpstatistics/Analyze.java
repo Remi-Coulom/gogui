@@ -54,6 +54,7 @@ public class Analyze
         m_commandStatistics = new Vector(m_commands.size());
         File file = new File(m_output + ".html");
         initGameInfo();
+        findGameGlobalCommands();
         PrintStream out = new PrintStream(new FileOutputStream(file));
         startHtml(out, "Statistics Summary");
         startInfo(out, "Statistics Summary");
@@ -170,8 +171,47 @@ public class Analyze
 
     private Vector m_commands;
 
+    /** Vector<Vector<String>> */
+    private Vector m_gameGlobalResult;
+
+    /** Vector<String> */
+    private Vector m_gameGlobalCommands;
+
     /** Vector<GameInfo> */
     private Vector m_gameInfo;    
+
+    private void findGameGlobalCommands()
+    {
+        m_gameGlobalCommands = new Vector();
+        m_gameGlobalResult = new Vector();
+        for (int i = 0; i < m_commands.size(); ++i)
+        {
+            String command = getCommand(i);
+            boolean isGameGlobal = true;
+            Vector gameResult = new Vector();
+            for (int j = 0; j < m_gameInfo.size(); ++j)
+            {
+                GameInfo info = (GameInfo)(m_gameInfo.get(j));
+                Table table = TableUtils.select(m_table, "File", info.m_file,
+                                                command);
+                Vector unique = TableUtils.getColumnUnique(table, command);
+                if (unique.size() > 1)
+                {
+                    isGameGlobal = false;
+                    break;
+                }
+                else if (unique.size() == 1)
+                    gameResult.add(unique.get(0));
+                else
+                    gameResult.add("");
+            }
+            if (isGameGlobal)
+            {
+                m_gameGlobalCommands.add(command);
+                m_gameGlobalResult.add(gameResult);
+            }
+        }
+    }
 
     private String formatFloat(double value)
     {
@@ -206,6 +246,17 @@ public class Analyze
     private File getGameFile(int gameIndex)
     {
         return new File(m_output + ".game-" + gameIndex + ".html");
+    }
+
+    private String getGlobalCommand(int index)
+    {
+        return (String)m_gameGlobalCommands.get(index);
+    }
+
+    private String getGlobalCommandResult(int index, int gameNumber)
+    {
+        Vector vector = (Vector)m_gameGlobalResult.get(index);
+        return (String)vector.get(gameNumber);
     }
 
     private File getHistoFile(int commandIndex)
@@ -692,8 +743,10 @@ public class Analyze
         throws Exception
     {
         out.print("<table class=\"smalltable\">\n" +
-                  "<thead><tr><th>Game</th><th>File</th><th>Positions</th>"
-                  + "</tr></thead>\n");
+                  "<thead><tr><th>Game</th><th>File</th><th>Positions</th>");
+        for (int i = 0; i < m_gameGlobalCommands.size(); ++i)
+            out.print("<th>" + getGlobalCommand(i) + "</th>");
+        out.print("</tr></thead>\n");
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
             GameInfo info = (GameInfo)(m_gameInfo.get(i));
@@ -701,7 +754,10 @@ public class Analyze
             out.print("<tr><td><a href=\"" + file
                       + "\">Game " + (i + 1) + "</a></td><td>" + info.m_name
                       + "</td><td>" + info.m_numberPositions
-                      + "</td></tr>\n");
+                      + "</td>");
+            for (int j = 0; j < m_gameGlobalCommands.size(); ++j)
+                out.print("<td>" + getGlobalCommandResult(j, i) + "</td>");
+            out.print("</tr>\n");
             writeGamePage(info.m_file, info.m_name, i);
         }
         out.print("</table>\n");

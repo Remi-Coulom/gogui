@@ -61,7 +61,8 @@ public class TableUtils
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
             String value = table.get(col, row);
-            if (! result.contains(value))
+            if (value != null && ! value.equals("")
+                && ! result.contains(value))
                 result.add(value);
         }
         return result;
@@ -157,6 +158,23 @@ public class TableUtils
     }
 
     public static Table select(Table table, String compareColumn,
+                               String compareValue, String selectColumn)
+    {
+        Vector columnTitles = new Vector(1);
+        columnTitles.add(selectColumn);
+        Table result = new Table(columnTitles);
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            String value = table.get(compareColumn, row);
+            if (value == null || ! value.equals(compareValue))
+                continue;
+            result.startRow();
+            result.set(selectColumn, table.get(selectColumn, row));
+        }
+        return result;
+    }
+
+    public static Table select(Table table, String compareColumn,
                                String compareValue, String selectColumn1,
                                String selectColumn2)
     {
@@ -164,14 +182,14 @@ public class TableUtils
         columnTitles.add(selectColumn1);
         columnTitles.add(selectColumn2);
         Table result = new Table(columnTitles);
-        for (int i = 0; i < table.getNumberRows(); ++i)
+        for (int row = 0; row < table.getNumberRows(); ++row)
         {
-            String value = table.get(compareColumn, i);
+            String value = table.get(compareColumn, row);
             if (value == null || ! value.equals(compareValue))
                 continue;
             result.startRow();
-            result.set(selectColumn1, table.get(selectColumn1, i));
-            result.set(selectColumn2, table.get(selectColumn2, i));
+            result.set(selectColumn1, table.get(selectColumn1, row));
+            result.set(selectColumn2, table.get(selectColumn2, row));
         }
         return result;
     }
