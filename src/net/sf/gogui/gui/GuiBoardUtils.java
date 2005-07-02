@@ -16,12 +16,25 @@ import net.sf.gogui.go.GoPoint;
 
 public class GuiBoardUtils
 {
-    public static void showMarkup(GuiBoard guiBoard, Board board, Node node)
+    public static void showMarkup(GuiBoard guiBoard, Node node)
     {
-        Vector markSquare = node.getMarkSquare();
-        if (markSquare != null)
-            for (int i = 0; i < markSquare.size(); ++i)
-                guiBoard.setMarkup((GoPoint)(markSquare.get(i)), true);
+        Vector mark;
+        mark = node.getMarked(Node.MARKED);
+        if (mark != null)
+            for (int i = 0; i < mark.size(); ++i)
+                guiBoard.setMark((GoPoint)(mark.get(i)), true);
+        mark = node.getMarked(Node.MARKED_CIRCLE);
+        if (mark != null)
+            for (int i = 0; i < mark.size(); ++i)
+                guiBoard.setMarkCircle((GoPoint)(mark.get(i)), true);
+        mark = node.getMarked(Node.MARKED_SQUARE);
+        if (mark != null)
+            for (int i = 0; i < mark.size(); ++i)
+                guiBoard.setMarkSquare((GoPoint)(mark.get(i)), true);
+        mark = node.getMarked(Node.MARKED_TRIANGLE);
+        if (mark != null)
+            for (int i = 0; i < mark.size(); ++i)
+                guiBoard.setMarkTriangle((GoPoint)(mark.get(i)), true);
         Map labels = node.getLabels();
         if (labels != null)
         {

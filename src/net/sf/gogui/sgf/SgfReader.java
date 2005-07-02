@@ -462,6 +462,12 @@ public class SgfReader
         return GoPoint.create(x, y);
     }
 
+    private void readMarked(Node node, String type) throws SgfError
+    {
+        for (int i = 0; i < m_valueVector.size(); ++i)
+            node.addMarked(parsePoint(getValue(i)), type);
+    }
+
     private Node readNext(Node father, boolean isRoot)
         throws IOException, SgfError, SgfCharsetChanged
     {
@@ -571,10 +577,10 @@ public class SgfReader
                         throw new SgfCharsetChanged();
                 }
             }
+            else if (p == "CR")
+                readMarked(node, Node.MARKED_CIRCLE);
             else if (p == "DT")
-            {
                 m_gameInformation.m_date = v;
-            }
             else if (p == "FF")
             {
                 int format = -1;
@@ -633,6 +639,8 @@ public class SgfReader
                     }
                 }
             }
+            else if (p == "MA")
+                readMarked(node, Node.MARKED);
             else if (p == "OB")
             {
                 try
@@ -682,30 +690,17 @@ public class SgfReader
                 }
             }
             else if (p == "PB")
-            {
                 m_gameInformation.m_playerBlack = v;
-            }
             else if (p == "PW")
-            {
                 m_gameInformation.m_playerWhite = v;
-            }
             else if (p == "PL")
-            {
                 node.setPlayer(parseColor(v));
-            }
             else if (p == "RE")
-            {
                 m_gameInformation.m_result = v;
-            }
             else if (p == "RU")
-            {
                 m_gameInformation.m_rules = v;
-            }
             else if (p == "SQ")
-            {
-                for (int i = 0; i < m_valueVector.size(); ++i)
-                    node.addMarkSquare(parsePoint(getValue(i)));
-            }
+                readMarked(node, Node.MARKED_SQUARE);
             else if (p == "SZ")
             {
                 if (! isRoot)
@@ -736,6 +731,8 @@ public class SgfReader
                     m_ignoreTimeSettings = true;
                 }
             }
+            else if (p == "TR")
+                readMarked(node, Node.MARKED_TRIANGLE);
             else if (p == "W")
             {
                 node.setMove(Move.create(parsePoint(v), GoColor.WHITE));

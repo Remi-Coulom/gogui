@@ -257,6 +257,13 @@ public class SgfWriter
         print(buffer.toString());
     }
 
+    private void printMarked(Node node, String property, String type)
+    {
+        Vector marked = node.getMarked(type);
+        if (marked != null)
+            print(property + getPointList(marked));
+    }
+
     private void printNode(Node node, boolean isRoot)
     {
         Move move = node.getMove();
@@ -317,9 +324,10 @@ public class SgfWriter
         }
         if (node.getPlayer() != GoColor.EMPTY)
             printToPlay(node.getPlayer());
-        Vector markSquare = node.getMarkSquare();
-        if (markSquare != null)
-            print("SQ" + getPointList(markSquare));
+        printMarked(node, "MA", Node.MARKED);
+        printMarked(node, "CR", Node.MARKED_CIRCLE);
+        printMarked(node, "SQ", Node.MARKED_SQUARE);
+        printMarked(node, "TR", Node.MARKED_TRIANGLE);
         printLabels(node);
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)

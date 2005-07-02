@@ -28,14 +28,15 @@ public class ContextMenu
     {
         void editLabel(GoPoint point);
 
-        void markSquare(GoPoint point, boolean markSquare);
+        void mark(GoPoint point, String type, boolean mark);
 
         void setAnalyzeCommand(AnalyzeCommand command);
     }
 
     public ContextMenu(GoPoint point, boolean noProgram,
-                       Vector supportedCommands, boolean markSquare,
-                       Listener listener)
+                       Vector supportedCommands, boolean mark,
+                       boolean markCircle, boolean markSquare,
+                       boolean markTriangle, Listener listener)
     {
         m_point = point;
         m_listener = listener;
@@ -63,11 +64,29 @@ public class ContextMenu
                     {
                         ContextMenu.this.setVisible(false);
                     }
+                    else if (actionCommand.equals("mark"))
+                    {                        
+                        boolean mark
+                            = ContextMenu.this.m_mark.isSelected();
+                        listener.mark(m_point, "mark", mark);
+                    }
+                    else if (actionCommand.equals("mark-circle"))
+                    {                        
+                        boolean mark
+                            = ContextMenu.this.m_markCircle.isSelected();
+                        listener.mark(m_point, "circle", mark);
+                    }
                     else if (actionCommand.equals("mark-square"))
                     {                        
-                        boolean markSquare
+                        boolean mark
                             = ContextMenu.this.m_markSquare.isSelected();
-                        listener.markSquare(m_point, markSquare);
+                        listener.mark(m_point, "square", mark);
+                    }
+                    else if (actionCommand.equals("mark-triangle"))
+                    {                        
+                        boolean mark
+                            = ContextMenu.this.m_markTriangle.isSelected();
+                        listener.mark(m_point, "triangle", mark);
                     }
                     else if (actionCommand.equals("edit-label"))
                     {                        
@@ -86,9 +105,18 @@ public class ContextMenu
         label.setBorder(GuiUtils.createSmallEmptyBorder());
         add(label);
         addSeparator();
+        m_mark = createCheckBox("Mark", "mark");
+        m_mark.setSelected(mark);
+        add(m_mark);
+        m_markCircle = createCheckBox("Mark Circle", "mark-circle");
+        m_markCircle.setSelected(markCircle);
+        add(m_markCircle);
         m_markSquare = createCheckBox("Mark Square", "mark-square");
         m_markSquare.setSelected(markSquare);
         add(m_markSquare);
+        m_markTriangle = createCheckBox("Mark Triangle", "mark-triangle");
+        m_markTriangle.setSelected(markTriangle);
+        add(m_markTriangle);
         add(createItem("Edit Label", "edit-label"));
         addSeparator();
         if (! noProgram && commands.size() > 0)
@@ -129,7 +157,13 @@ public class ContextMenu
 
     private GoPoint m_point;
 
+    private JCheckBoxMenuItem m_mark;
+
+    private JCheckBoxMenuItem m_markCircle;
+
     private JCheckBoxMenuItem m_markSquare;
+
+    private JCheckBoxMenuItem m_markTriangle;
 
     private JMenuItem m_editLabel;
 

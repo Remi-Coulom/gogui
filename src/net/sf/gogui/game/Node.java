@@ -23,9 +23,10 @@ class ExtraInfo
 
     public TreeMap m_sgfProperties;
 
-    public Vector m_markSquare;
+    /** Map<String,Vector<GoPoint>> */
+    public Map m_marked;
 
-    public TreeMap m_label;
+    public Map m_label;
 }
 
 //----------------------------------------------------------------------------
@@ -61,6 +62,14 @@ class TimeInfo
 */
 public final class Node
 {
+    public static final String MARKED = "mark";
+
+    public static final String MARKED_CIRCLE = "circle";
+
+    public static final String MARKED_SQUARE = "square";
+
+    public static final String MARKED_TRIANGLE = "triangle";
+
     public Node()
     {
     }
@@ -98,12 +107,21 @@ public final class Node
         createSetupInfo().m_black.add(point);
     }
 
-    public void addMarkSquare(GoPoint point)
+    public void addMarked(GoPoint point, String type)
     {
         assert(point != null);
-        Vector markSquare = createMarkSquare();
-        if (! markSquare.contains(point))
-            markSquare.add(point);
+        assert(type == MARKED || type == MARKED_SQUARE
+               || type == MARKED_CIRCLE || type == MARKED_TRIANGLE);
+        Map marked = createMarked();
+        Vector pointList = (Vector)marked.get(type);
+        if (pointList == null)
+        {
+            pointList = new Vector(1);
+            pointList.add(point);
+            marked.put(type, pointList);
+        }
+        else if (! pointList.contains(point))
+            pointList.add(point);
     }
 
     /** Add other unspecified SGF property.
@@ -218,11 +236,11 @@ public final class Node
         return m_extraInfo.m_label;
     }
 
-    public Vector getMarkSquare()
+    public Vector getMarked(String type)
     {
         if (m_extraInfo == null)
             return null;
-        return m_extraInfo.m_markSquare;
+        return (Vector)m_extraInfo.m_marked.get(type);
     }
 
     public Move getMove()
@@ -343,11 +361,13 @@ public final class Node
         vector.add(0, child);
     }
 
-    public void removeMarkSquare(GoPoint point)
+    public void removeMarked(GoPoint point, String type)
     {
         assert(point != null);
-        Vector markSquare = createMarkSquare();
-        markSquare.remove(point);
+        Map marked = createMarked();
+        Vector pointList = (Vector)marked.get(type);
+        if (pointList != null)
+            pointList.remove(point);
     }
 
     /** Remove all children but the first. */
@@ -384,7 +404,7 @@ public final class Node
     public void setLabel(GoPoint point, String label)
     {
         assert(point != null);
-        TreeMap tree = createLabel();
+        Map tree = createLabel();
         tree.remove(point);
         if (label == null)
             return;
@@ -499,7 +519,7 @@ public final class Node
             m_extraInfo = new ExtraInfo();
     }
 
-    private TreeMap createLabel()
+    private Map createLabel()
     {
         createExtraInfo();
         if (m_extraInfo.m_label == null)
@@ -507,12 +527,12 @@ public final class Node
         return m_extraInfo.m_label;
     }
 
-    private Vector createMarkSquare()
+    private Map createMarked()
     {
         createExtraInfo();
-        if (m_extraInfo.m_markSquare == null)
-            m_extraInfo.m_markSquare = new Vector();
-        return m_extraInfo.m_markSquare;
+        if (m_extraInfo.m_marked == null)
+            m_extraInfo.m_marked = new TreeMap();
+        return m_extraInfo.m_marked;
     }
 
     private SetupInfo createSetupInfo()

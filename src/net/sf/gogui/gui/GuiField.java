@@ -6,12 +6,14 @@
 package net.sf.gogui.gui;
 
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -127,9 +129,24 @@ public class GuiField
         return m_color;
     }
 
-    public boolean getMarkup()
+    public boolean getMark()
     {
-        return m_markup;
+        return m_mark;
+    }
+
+    public boolean getMarkCircle()
+    {
+        return m_markCircle;
+    }
+
+    public boolean getMarkSquare()
+    {
+        return m_markSquare;
+    }
+
+    public boolean getMarkTriangle()
+    {
+        return m_markTriangle;
     }
 
     public boolean getSelect()
@@ -169,8 +186,7 @@ public class GuiField
             drawTerritoryGraphics2D();
         if (m_influenceSet)
             drawInfluence();
-        if (m_markup)
-            drawMarkup();
+        drawMarks();
         if (m_crossHair)
             drawCrossHair();
         if (m_lastMoveMarker)
@@ -216,9 +232,24 @@ public class GuiField
         m_lastMoveMarker = lastMoveMarker;
     }
 
-    public void setMarkup(boolean markup)
+    public void setMark(boolean mark)
     {
-        m_markup = markup;
+        m_mark = mark;
+    }
+
+    public void setMarkCircle(boolean mark)
+    {
+        m_markCircle = mark;
+    }
+
+    public void setMarkSquare(boolean mark)
+    {
+        m_markSquare = mark;
+    }
+
+    public void setMarkTriangle(boolean mark)
+    {
+        m_markTriangle = mark;
     }
 
     public void setSelect(boolean select)
@@ -243,7 +274,13 @@ public class GuiField
 
     private boolean m_lastMoveMarker;
 
-    private boolean m_markup;
+    private boolean m_mark;
+
+    private boolean m_markCircle;
+
+    private boolean m_markSquare;
+
+    private boolean m_markTriangle;
 
     private boolean m_influenceSet;
 
@@ -267,6 +304,9 @@ public class GuiField
 
     private static final AlphaComposite m_composite7
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
+
+    private static final Stroke m_thickStroke
+        = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 
     private String m_string = "";
 
@@ -372,14 +412,39 @@ public class GuiField
         m_graphics.setPaintMode();
     }
 
-    private void drawMarkup()
+    private void drawMarks()
     {
         setComposite(m_composite7);
         int d = m_size / 4;
         int width = m_size - 2 * d;
         m_graphics.setColor(Color.blue);
-        m_graphics.drawRect(d, d, width, width);
-        m_graphics.drawRect(d + 1, d + 1, width - 2, width - 2);
+        Stroke oldStroke = null;
+        if (m_graphics2D != null)
+        {
+            oldStroke = m_graphics2D.getStroke();
+            m_graphics2D.setStroke(m_thickStroke);
+        }
+        if (m_mark)
+        {
+            m_graphics.drawLine(d, d, d + width, d + width);
+            m_graphics.drawLine(d, d + width, d + width, d);
+        }
+        if (m_markCircle)
+            m_graphics.drawOval(d, d, width, width);
+        if (m_markSquare)
+            m_graphics.drawRect(d, d, width, width);
+        if (m_markTriangle)
+        {
+            int height = (int)(0.866 * width);
+            int top = (int)(0.866 * (width - height) / 2);
+            int bottom = top + height;
+            m_graphics.drawLine(d, d + bottom, d + width / 2, d + top);
+            m_graphics.drawLine(d + width / 2, d + top,
+                                d + width, d + bottom);
+            m_graphics.drawLine(d + width, d + bottom, d, d + bottom);
+        }
+        if (oldStroke != null)
+            m_graphics2D.setStroke(oldStroke);
         m_graphics.setPaintMode();
     }
 

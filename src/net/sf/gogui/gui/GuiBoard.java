@@ -135,7 +135,13 @@ public final class GuiBoard
     public void clearAllMarkup()
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            setMarkup(m_board.getPoint(i), false);
+        {
+            GoPoint point = m_board.getPoint(i);
+            setMark(point, false);
+            setMarkCircle(point, false);
+            setMarkSquare(point, false);
+            setMarkTriangle(point, false);
+        }
     }
 
     public void clearAllSelect()
@@ -208,19 +214,35 @@ public final class GuiBoard
         return location;
     }
 
-    public boolean getMarkup(GoPoint point)
+    public boolean getMark(GoPoint point)
     {
-        return getField(point).getMarkup();
+        return getField(point).getMark();
     }
 
-    public boolean[][] getMarkups()
+    public boolean getMarkCircle(GoPoint point)
+    {
+        return getField(point).getMarkCircle();
+    }
+
+    public boolean getMarkSquare(GoPoint point)
+    {
+        return getField(point).getMarkSquare();
+    }
+
+    public boolean getMarkTriangle(GoPoint point)
+    {
+        return getField(point).getMarkTriangle();
+    }
+
+    public boolean[][] getMarkSquare()
     {
         int size = m_board.getSize();
         boolean[][] result = new boolean[size][size];
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
             GoPoint point = m_board.getPoint(i);
-            result[point.getX()][point.getY()] = getField(point).getMarkup();
+            GuiField field = getField(point);
+            result[point.getX()][point.getY()] = field.getMarkSquare();
         }
         return result;
     }
@@ -482,9 +504,27 @@ public final class GuiBoard
         m_listener = l;
     }
 
-    public void setMarkup(GoPoint p, boolean markup)
+    public void setMark(GoPoint point, boolean mark)
     {
-        getField(p).setMarkup(markup);
+        getField(point).setMark(mark);
+        m_needsReset = true;
+    }
+
+    public void setMarkCircle(GoPoint point, boolean mark)
+    {
+        getField(point).setMarkCircle(mark);
+        m_needsReset = true;
+    }
+
+    public void setMarkSquare(GoPoint point, boolean mark)
+    {
+        getField(point).setMarkSquare(mark);
+        m_needsReset = true;
+    }
+
+    public void setMarkTriangle(GoPoint point, boolean mark)
+    {
+        getField(point).setMarkTriangle(mark);
         m_needsReset = true;
     }
 
@@ -614,7 +654,7 @@ public final class GuiBoard
         {
             GoPoint p = pointList[i];
             if (p != null)
-                setMarkup(p, true);
+                setMarkSquare(p, true);
         }
     }
 

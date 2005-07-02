@@ -62,6 +62,11 @@ main window now
 </listitem>
 <listitem>
 <simpara>
+GoGui: load and save SGF marks and labels; edit them from context menu
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpRegress:
 include error response outputs in test summaries;
 fix NullPointerException, if test file contains response pattern without

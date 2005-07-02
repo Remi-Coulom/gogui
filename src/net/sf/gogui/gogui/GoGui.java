@@ -1885,9 +1885,9 @@ class GoGui
                     GoGui.this.editLabel(point);
                 }
 
-                public void markSquare(GoPoint point, boolean markSquare)
+                public void mark(GoPoint point, String type, boolean mark)
                 {
-                    GoGui.this.markSquare(point, markSquare);
+                    GoGui.this.mark(point, type, mark);
                 }
 
                 public void setAnalyzeCommand(AnalyzeCommand command)
@@ -1900,7 +1900,11 @@ class GoGui
         if (! noProgram)
             supportedCommands = m_commandThread.getSupportedCommands();
         return new ContextMenu(point, noProgram, supportedCommands,
-                               m_guiBoard.getMarkup(point), listener);
+                               m_guiBoard.getMark(point),
+                               m_guiBoard.getMarkCircle(point),
+                               m_guiBoard.getMarkSquare(point),
+                               m_guiBoard.getMarkTriangle(point),
+                               listener);
     }
 
     private JComponent createStatusBar()
@@ -2349,13 +2353,20 @@ class GoGui
         }
     }
 
-    public void markSquare(GoPoint point, boolean markSquare)
+    public void mark(GoPoint point, String type, boolean mark)
     {
-        if (markSquare)
-            m_currentNode.addMarkSquare(point);
+        if (mark)
+            m_currentNode.addMarked(point, type);
         else
-            m_currentNode.removeMarkSquare(point);
-        m_guiBoard.setMarkup(point, markSquare);
+            m_currentNode.removeMarked(point, type);
+        if (type == Node.MARKED)
+            m_guiBoard.setMark(point, mark);
+        else if (type == Node.MARKED_CIRCLE)
+            m_guiBoard.setMarkCircle(point, mark);
+        else if (type == Node.MARKED_SQUARE)
+            m_guiBoard.setMarkSquare(point, mark);
+        else if (type == Node.MARKED_TRIANGLE)
+            m_guiBoard.setMarkTriangle(point, mark);        
         updateBoard();
         m_guiBoard.repaint();
     }
@@ -2542,8 +2553,9 @@ class GoGui
             String title = FileUtils.removeExtension(new File(file.getName()),
                                                      "tex");
             new TexWriter(title, out, m_board, false,
-                             m_guiBoard.getStrings(), m_guiBoard.getMarkups(),
-                             m_guiBoard.getSelects());
+                          m_guiBoard.getStrings(),
+                          m_guiBoard.getMarkSquare(),
+                          m_guiBoard.getSelects());
         }
         else
         {
@@ -2968,7 +2980,7 @@ class GoGui
         }
         else
             m_guiBoard.markLastMove(null);
-        GuiBoardUtils.showMarkup(m_guiBoard, m_board, m_currentNode);
+        GuiBoardUtils.showMarkup(m_guiBoard, m_currentNode);
     }
 
     private void updateGameInfo(boolean gameTreeChanged)
