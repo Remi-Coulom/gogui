@@ -121,6 +121,8 @@ public class ContextMenu
         addSeparator();
         if (! noProgram && commands.size() > 0)
         {
+            m_analyzeMenu = new JMenu("Analyze");
+            add(m_analyzeMenu);
             for (int i = 0; i < commands.size(); ++i)
             {
                 String line = (String)commands.get(i);
@@ -165,6 +167,8 @@ public class ContextMenu
 
     private JCheckBoxMenuItem m_markTriangle;
 
+    private JMenu m_analyzeMenu;
+
     private JMenuItem m_editLabel;
 
     private Listener m_listener;
@@ -183,13 +187,13 @@ public class ContextMenu
         command.setColorArg(GoColor.WHITE);
         item = createItem(command, "White");
         menu.add(item);
-        add(menu);
+        m_analyzeMenu.add(menu);
     }
 
     private void addCommand(AnalyzeCommand command)
     {        
         JMenuItem item = createItem(command, command.getLabel());
-        add(item);
+        m_analyzeMenu.add(item);
     }
 
     private JMenuItem createItem(AnalyzeCommand command, String label)
