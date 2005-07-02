@@ -61,10 +61,14 @@ public final class CommandStatistics
             m_statisticsAtMove.add(statisticsAtMove);
             m_tableMoveIntervals.startRow();
             m_tableMoveIntervals.set("Move", move + ((interval - 1) / 2));
-            m_tableMoveIntervals.set("Mean", statisticsAtMove.getMean());
-            m_tableMoveIntervals.set("MinError", statisticsAtMove.getError());
-            m_tableMoveIntervals.set("MaxError",
-                                     statisticsAtMove.getMaxError());
+            if (statisticsAtMove.getCount() > 0)
+            {
+                m_tableMoveIntervals.set("Mean", statisticsAtMove.getMean());
+                m_tableMoveIntervals.set("MinError",
+                                         statisticsAtMove.getError());
+                m_tableMoveIntervals.set("MaxError",
+                                         statisticsAtMove.getMaxError());
+            }
         }
         Histogram histogram = m_statisticsAll.m_histogram;
         Table histoTable = TableUtils.fromHistogram(histogram, command);

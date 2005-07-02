@@ -651,7 +651,10 @@ public class Analyze
             for (int j = 1; j < m_table.getNumberColumns(); ++j)
             {
                 String columnTitle = m_table.getColumnTitle(j);
-                out.print("<td>" + m_table.get(columnTitle, i) + "</td>");
+                String value = m_table.get(columnTitle, i);
+                if (value == null)
+                    value = "";
+                out.print("<td>" + value + "</td>");
             }
             out.print("</tr>\n");
         }
