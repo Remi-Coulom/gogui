@@ -8,6 +8,7 @@ package net.sf.gogui.gtpstatistics;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Vector;
+import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.StringUtils;
@@ -24,6 +25,7 @@ class Main
         {
             String options[] = {
                 "analyze:",
+                "begin:",
                 "commands:",
                 "config:",
                 "final:",
@@ -64,26 +66,9 @@ class Main
             int precision = opt.getInteger("precision", 3, 0);
             int interval = opt.getInteger("interval", 20, 1);
             int boardSize = opt.getInteger("size", 19, 1);
-            Vector commands = null;
-            Vector finalCommands = null;
-            if (opt.isSet("commands"))
-            {
-                String commandString = opt.getString("commands");
-                String[] commandsArray
-                    = StringUtils.split(commandString, ',');
-                commands = new Vector(commandsArray.length);
-                for (int i = 0; i < commandsArray.length; ++i)
-                    commands.add(commandsArray[i].trim());
-            }
-            if (opt.isSet("final"))
-            {
-                String commandString = opt.getString("final");
-                String[] commandsArray
-                    = StringUtils.split(commandString, ',');
-                finalCommands = new Vector(commandsArray.length);
-                for (int i = 0; i < commandsArray.length; ++i)
-                    finalCommands.add(commandsArray[i].trim());
-            }
+            Vector commands = parseCommands(opt, "commands");
+            Vector finalCommands = parseCommands(opt, "final");
+            Vector beginCommands = parseCommands(opt, "begin");
             Vector arguments = opt.getArguments();
             int size = arguments.size();
             if (analyze)
@@ -111,8 +96,8 @@ class Main
                 }
                 GtpStatistics gtpStatistics
                     = new GtpStatistics(program, arguments, boardSize,
-                                        commands, finalCommands, verbose,
-                                        force);
+                                        commands, beginCommands,
+                                        finalCommands, verbose, force);
                 System.exit(gtpStatistics.getResult() ? 0 : -1);
             }
         }
@@ -128,16 +113,31 @@ class Main
     {
     }
 
+    private static Vector parseCommands(Options opt, String option)
+        throws ErrorMessage
+    {
+        Vector result = null;
+        if (opt.isSet(option))
+        {
+            String string = opt.getString(option);
+            String[] array = StringUtils.split(string, ',');
+            result = new Vector(array.length);
+            for (int i = 0; i < array.length; ++i)
+                result.add(array[i].trim());
+        }
+        return result;
+    }
+
     private static void printUsage(PrintStream out)
     {
         out.print("Usage: java -jar gtpstatistics.jar [options] file.sgf|dir"
                   + " [...]\n" +
                   "\n" +
                   "-analyze      Create HTML file from result file\n" +
+                  "-begin        GTP commands to run on begin positions\n" +
                   "-config       Config file\n" +
                   "-commands     GTP commands to run (comma separated)\n" +
                   "-final        GTP commands to run on final positions\n" +
-                  "              (comma separated)\n" +
                   "-force        Overwrite existing file\n" +
                   "-help         Display this help and exit\n" +
                   "-interval     Move interval size for -analyze\n" +

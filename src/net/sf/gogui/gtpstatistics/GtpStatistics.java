@@ -32,8 +32,8 @@ import net.sf.gogui.utils.Table;
 public class GtpStatistics
 {
     public GtpStatistics(String program, Vector sgfFiles, int size,
-                         Vector commands, Vector finalCommands,
-                         boolean verbose, boolean force)
+                         Vector commands, Vector beginCommands,
+                         Vector finalCommands, boolean verbose, boolean force)
         throws Exception
     {
         File file = new File("gtpstatistics.dat");
@@ -43,12 +43,16 @@ public class GtpStatistics
         m_size = size;
         m_result = false;
         m_commands = commands;
+        m_beginCommands = beginCommands;
         m_finalCommands = finalCommands;
         Vector columnHeaders = new Vector();
         columnHeaders.add("File");
         columnHeaders.add("Move");
         if (m_runRegGenMove)
             columnHeaders.add("reg_genmove");
+        if (beginCommands != null)
+            for (int i = 0; i < beginCommands.size(); ++i)
+                columnHeaders.add(getBeginCommand(i));
         if (commands != null)
             for (int i = 0; i < commands.size(); ++i)
                 columnHeaders.add(getCommand(i));
@@ -116,9 +120,16 @@ public class GtpStatistics
 
     private Table m_table;
 
+    private Vector m_beginCommands;
+
     private Vector m_commands;
 
     private Vector m_finalCommands;
+
+    private String getBeginCommand(int index)
+    {
+        return (String)m_beginCommands.get(index);
+    }
 
     private String getCommand(int index)
     {
@@ -180,6 +191,13 @@ public class GtpStatistics
         m_table.startRow();
         m_table.set("File", name);
         m_table.set("Move", number);
+        if (number == 1)
+            for (int i = 0; i < m_beginCommands.size(); ++i)
+            {
+                String command = getBeginCommand(i);
+                String result = m_gtp.sendCommand(command);
+                m_table.set(command, result);
+            }
         if (m_runRegGenMove && move != null)
         {
             boolean result = runRegGenMove(move);
