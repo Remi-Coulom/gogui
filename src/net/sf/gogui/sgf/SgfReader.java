@@ -217,6 +217,8 @@ public class SgfReader
 
     private final StringBuffer m_valueBuffer = new StringBuffer(512);
 
+    private final Vector m_pointList = new Vector();
+
     private final Vector m_valueVector = new Vector();
 
     /** Apply some fixes for broken SGF files. */
@@ -342,6 +344,11 @@ public class SgfReader
         }
     }
 
+    private GoPoint getPointList(int i)
+    {
+        return (GoPoint)m_pointList.get(i);
+    }
+
     private String getValue(int i)
     {
         return (String)m_valueVector.get(i);
@@ -443,7 +450,7 @@ public class SgfReader
         s = s.trim().toLowerCase();
         if (s.equals(""))
             return null;
-        if (s.length() < 2)
+        if (s.length() != 2)
             throw getError("Invalid coordinates: " + s);
         int boardSize = m_gameInformation.m_boardSize;
         if (s.equals("tt") && boardSize <= 19)
@@ -462,10 +469,35 @@ public class SgfReader
         return GoPoint.create(x, y);
     }
 
+    private void parsePointList() throws SgfError
+    {
+        m_pointList.clear();
+        for (int i = 0; i < m_valueVector.size(); ++i)
+        {
+            String value = getValue(i);
+            int pos = value.indexOf(":");
+            if (pos < 0)
+                m_pointList.add(parsePoint(value));
+            else
+            {
+                GoPoint point1 = parsePoint(value.substring(0, pos));
+                GoPoint point2 = parsePoint(value.substring(pos + 1));
+                int xMin = Math.min(point1.getX(), point2.getX());
+                int xMax = Math.max(point1.getX(), point2.getX());
+                int yMin = Math.min(point1.getY(), point2.getY());
+                int yMax = Math.max(point1.getY(), point2.getY());
+                for (int x = xMin; x <= xMax; ++x)
+                    for (int y = yMin; y <= yMax; ++y)
+                        m_pointList.add(GoPoint.create(x, y));
+            }
+        }
+    }
+    
     private void readMarked(Node node, String type) throws SgfError
     {
-        for (int i = 0; i < m_valueVector.size(); ++i)
-            node.addMarked(parsePoint(getValue(i)), type);
+        parsePointList();
+        for (int i = 0; i < m_pointList.size(); ++i)
+            node.addMarked(getPointList(i), type);
     }
 
     private Node readNext(Node father, boolean isRoot)
@@ -508,7 +540,7 @@ public class SgfReader
         while (readProp(son, isRoot));
         return son;
     }
-    
+
     private boolean readProp(Node node, boolean isRoot)
         throws IOException, SgfError, SgfCharsetChanged
     {
@@ -528,8 +560,9 @@ public class SgfReader
             p = checkForObsoleteLongProps(p);
             if (p == "AB")
             {
-                for (int i = 0; i < m_valueVector.size(); ++i)
-                    node.addBlack(parsePoint(getValue(i)));
+                parsePointList();
+                for (int i = 0; i < m_pointList.size(); ++i)
+                    node.addBlack(getPointList(i));
                 m_sizeFixed = true;
             }
             else if (p == "AE")
@@ -538,8 +571,9 @@ public class SgfReader
             }
             else if (p == "AW")
             {
-                for (int i = 0; i < m_valueVector.size(); ++i)
-                    node.addWhite(parsePoint(getValue(i)));
+                parsePointList();
+                for (int i = 0; i < m_pointList.size(); ++i)
+                    node.addWhite(getPointList(i));
                 m_sizeFixed = true;
             }
             else if (p == "B")
