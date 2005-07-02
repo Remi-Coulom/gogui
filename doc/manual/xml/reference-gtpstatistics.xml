@@ -16,6 +16,7 @@ Runs GTP commands on all positions of game collections.
 <command>gtpstatistics</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-commands</option> <replaceable>commands</replaceable></arg>
+<arg><option>-final</option> <replaceable>commands</replaceable></arg>
 <arg><option>-force</option></arg>
 <arg><option>-program</option> <replaceable>program</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
@@ -95,7 +96,20 @@ Read command line options and arguments from file.
 </term>
 <listitem>
 <para>
-Comma separated list of GTP commands to run on each position.
+Comma separated list of GTP commands to run on each position
+(before each move).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-final</option> <replaceable>commands</replaceable>
+</term>
+<listitem>
+<para>
+Comma separated list of GTP commands to run only on final positions
+(after the last move).
 </para>
 </listitem>
 </varlistentry>

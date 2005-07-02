@@ -21,6 +21,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
@@ -89,13 +90,6 @@ public class SgfWriter
     private final int m_size;
 
     private final PrintStream m_out;
-
-    private static String getDefaultEncoding()
-    {
-        OutputStreamWriter out =
-            new OutputStreamWriter(new ByteArrayOutputStream());
-        return out.getEncoding();
-    }
 
     private String getEscaped(String text)
     {
@@ -198,7 +192,7 @@ public class SgfWriter
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
-        print(";FF[4]CA[" + getDefaultEncoding() + "]GM[1]GN["
+        print(";FF[4]CA[" + StringUtils.getDefaultEncoding() + "]GM[1]GN["
               + getName(file) + "]AP[" + appName + "]SZ[" + m_size + "]");
     }
 

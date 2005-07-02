@@ -20,6 +20,7 @@ import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Statistics;
+import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.utils.Table;
 import net.sf.gogui.utils.TableUtils;
 import net.sf.gogui.version.Version;
@@ -71,8 +72,7 @@ public class Analyze
         }
         File pngFile = new File(m_output + ".count.png");
         int numberMoves = table.getNumberRows() * (m_interval + 1);
-        Plot plot = generatePlotMove(getImgWidth(numberMoves),
-                                     Color.DARK_GRAY);
+        Plot plot = generatePlotMove(getImgWidth(m_maxMove), Color.DARK_GRAY);
         plot.plot(pngFile, table, "Move", "Count", null);
         out.print("<table border=\"0\">\n" +
                   "<tr><td align=\"center\">\n" +
@@ -85,7 +85,7 @@ public class Analyze
             m_commandStatistics.add(commandStatistics);
             String command = getCommand(i);
             table = commandStatistics.m_tableMoveIntervals;
-            plot = generatePlotMove(getImgWidth(numberMoves),
+            plot = generatePlotMove(getImgWidth(m_maxMove),
                                     getColor(command));
             pngFile = getAvgPlotFile(i);
             plot.plot(pngFile, table, "Move", "Mean", "MaxError");
@@ -266,7 +266,7 @@ public class Analyze
                                         "Move", command);
         int numberPositions = table.getNumberRows();
         File file = getPlotFile(gameIndex, commandIndex);
-        Plot plot = generatePlotMove(getImgWidth(numberPositions),
+        Plot plot = generatePlotMove(getImgWidth(m_maxMove),
                                      getColor(command));
         plot.plot(file, table, "Move", command, null);
     }
@@ -321,9 +321,12 @@ public class Analyze
 
     private void startHtml(PrintStream out, String title)
     {
+        String charset = StringUtils.getDefaultEncoding();
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + title + "</title>\n" +
+                  "<meta http-equiv=\"Content-Type\""
+                  + " content=\"text/html; charset=" + charset + "\">\n" +
                   "<meta name=\"generator\" content=\"GtpStatistics "
                   + Version.get() + "\">\n" +
                   "<style type=\"text/css\">\n" +
@@ -671,7 +674,7 @@ public class Analyze
         {
             GameInfo info = (GameInfo)(m_gameInfo.get(i));
             String plotFile = getPlotFile(i, commandIndex).getName();
-            out.print("<tr><td align=\"center\"><small><a href=\""
+            out.print("<tr><td align=\"left\"><small><a href=\""
                       + getGameFile(i).getName()
                       + "\">Game " + (i + 1) + "</a> (<a href=\""
                       + info.m_file + "\">" + info.m_name

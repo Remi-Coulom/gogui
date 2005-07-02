@@ -5,6 +5,8 @@
 
 package net.sf.gogui.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Vector;
@@ -25,6 +27,15 @@ public class StringUtils
         if (! Character.isUpperCase(first))
             buffer.setCharAt(0, Character.toUpperCase(first));
         return buffer.toString();
+    }
+
+    /** Get default encoding of OutputStreamWriter. */
+    public static String getDefaultEncoding()
+    {
+        // Haven't found another way than constructing one (Java 1.4)
+        OutputStreamWriter out =
+            new OutputStreamWriter(new ByteArrayOutputStream());
+        return out.getEncoding();
     }
 
     public static NumberFormat getNumberFormat(int maximumFractionDigits)

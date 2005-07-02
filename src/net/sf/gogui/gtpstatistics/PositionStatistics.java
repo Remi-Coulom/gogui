@@ -49,6 +49,11 @@ public final class PositionStatistics
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
             String value = table.get(command, row);
+            if (value == null)
+            {
+                ++numberNoResult;
+                continue;
+            }
             if (TableUtils.isNumberValue(value))
             {
                 if (! TableUtils.isIntValue(value))
@@ -99,6 +104,8 @@ public final class PositionStatistics
         for (int i = 0; i < table.getNumberRows(); ++i)
         {
             String value = table.get(command, i);
+            if (value == null)
+                continue;
             try
             {
                 m_histogram.add(Double.parseDouble(value));

@@ -114,9 +114,7 @@ public class Table
             for (int j = 0; j < m_numberColumns; ++j)
             {
                 String value = (String)row.get(j);
-                if (value == null)
-                    out.write("(null)");
-                else
+                if (value != null)
                     out.write(value);
                 if (j < m_numberColumns - 1)
                     out.write('\t');

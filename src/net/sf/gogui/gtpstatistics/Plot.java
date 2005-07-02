@@ -234,8 +234,15 @@ public class Plot
         {
             try
             {
-                double x = Double.parseDouble(table.get(columnX, row));
-                double y = Double.parseDouble(table.get(columnY, row));
+                String xValue = table.get(columnX, row);
+                String yValue = table.get(columnY, row);
+                if (xValue == null || yValue == null)
+                {
+                    last = null;
+                    continue;
+                }
+                double x = Double.parseDouble(xValue);
+                double y = Double.parseDouble(yValue);
                 Point point = getPoint(x, y);
                 if (withBars)
                 {
@@ -440,7 +447,8 @@ public class Plot
         {
             String xValue = table.get(columnX, row);
             String yValue = table.get(columnY, row);
-            if (! TableUtils.isNumberValue(yValue))
+            if (xValue == null || yValue == null
+                || ! TableUtils.isNumberValue(yValue))
                 continue;
             if (! TableUtils.isBoolValue(yValue))
                 m_onlyBoolValues = false;

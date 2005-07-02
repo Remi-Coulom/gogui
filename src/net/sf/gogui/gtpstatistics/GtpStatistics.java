@@ -32,7 +32,8 @@ import net.sf.gogui.utils.Table;
 public class GtpStatistics
 {
     public GtpStatistics(String program, Vector sgfFiles, int size,
-                         Vector commands, boolean verbose, boolean force)
+                         Vector commands, Vector finalCommands,
+                         boolean verbose, boolean force)
         throws Exception
     {
         File file = new File("gtpstatistics.dat");
@@ -42,6 +43,7 @@ public class GtpStatistics
         m_size = size;
         m_result = false;
         m_commands = commands;
+        m_finalCommands = finalCommands;
         Vector columnHeaders = new Vector();
         columnHeaders.add("File");
         columnHeaders.add("Move");
@@ -50,6 +52,9 @@ public class GtpStatistics
         if (commands != null)
             for (int i = 0; i < commands.size(); ++i)
                 columnHeaders.add(getCommand(i));
+        if (finalCommands != null)
+            for (int i = 0; i < finalCommands.size(); ++i)
+                columnHeaders.add(getFinalCommand(i));
         m_table = new Table(columnHeaders);
         m_table.setProperty("Size", Integer.toString(size));
         m_gtp = new Gtp(program, verbose, null);
@@ -113,9 +118,16 @@ public class GtpStatistics
 
     private Vector m_commands;
 
+    private Vector m_finalCommands;
+
     private String getCommand(int index)
     {
         return (String)m_commands.get(index);
+    }
+
+    private String getFinalCommand(int index)
+    {
+        return (String)m_finalCommands.get(index);
     }
 
     private void handleFile(String name)
@@ -147,6 +159,19 @@ public class GtpStatistics
                 m_gtp.sendCommandPlay(move);
             }
         }
+        if (m_finalCommands != null)
+        {
+            ++number;
+            m_table.startRow();
+            m_table.set("File", name);
+            m_table.set("Move", number);
+            for (int i = 0; i < m_finalCommands.size(); ++i)
+            {
+                String command = getFinalCommand(i);
+                String result = m_gtp.sendCommand(command);
+                m_table.set(command, result);
+            }
+        }
     }
 
     private void handlePosition(String name, Move move, int number)
@@ -160,13 +185,14 @@ public class GtpStatistics
             boolean result = runRegGenMove(move);
             m_table.set("reg_genmove", result ? "1" : "0");
         }
-        if (m_commands == null)
-            return;
-        for (int i = 0; i < m_commands.size(); ++i)
+        if (m_commands != null)
         {
-            String command = getCommand(i);
-            String result = m_gtp.sendCommand(command);
-            m_table.set(command, result);
+            for (int i = 0; i < m_commands.size(); ++i)
+            {
+                String command = getCommand(i);
+                String result = m_gtp.sendCommand(command);
+                m_table.set(command, result);
+            }
         }
     }
 

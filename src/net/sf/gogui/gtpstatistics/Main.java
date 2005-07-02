@@ -26,6 +26,7 @@ class Main
                 "analyze:",
                 "commands:",
                 "config:",
+                "final:",
                 "force",
                 "help",
                 "interval:",
@@ -64,6 +65,7 @@ class Main
             int interval = opt.getInteger("interval", 20, 1);
             int boardSize = opt.getInteger("size", 19, 1);
             Vector commands = null;
+            Vector finalCommands = null;
             if (opt.isSet("commands"))
             {
                 String commandString = opt.getString("commands");
@@ -72,6 +74,15 @@ class Main
                 commands = new Vector(commandsArray.length);
                 for (int i = 0; i < commandsArray.length; ++i)
                     commands.add(commandsArray[i].trim());
+            }
+            if (opt.isSet("final"))
+            {
+                String commandString = opt.getString("final");
+                String[] commandsArray
+                    = StringUtils.split(commandString, ',');
+                finalCommands = new Vector(commandsArray.length);
+                for (int i = 0; i < commandsArray.length; ++i)
+                    finalCommands.add(commandsArray[i].trim());
             }
             Vector arguments = opt.getArguments();
             int size = arguments.size();
@@ -100,7 +111,8 @@ class Main
                 }
                 GtpStatistics gtpStatistics
                     = new GtpStatistics(program, arguments, boardSize,
-                                        commands, verbose, force);
+                                        commands, finalCommands, verbose,
+                                        force);
                 System.exit(gtpStatistics.getResult() ? 0 : -1);
             }
         }
@@ -124,6 +136,8 @@ class Main
                   "-analyze      Create HTML file from result file\n" +
                   "-config       Config file\n" +
                   "-commands     GTP commands to run (comma separated)\n" +
+                  "-final        GTP commands to run on final positions\n" +
+                  "              (comma separated)\n" +
                   "-force        Overwrite existing file\n" +
                   "-help         Display this help and exit\n" +
                   "-interval     Move interval size for -analyze\n" +

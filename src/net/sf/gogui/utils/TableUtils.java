@@ -93,8 +93,11 @@ public class TableUtils
         {
             try
             {
-                double value = Double.parseDouble(table.get(col, row));
-                statistics.add(value);
+                String value = table.get(col, row);
+                if (value == null)
+                    continue;
+                double doubleValue = Double.parseDouble(value);
+                statistics.add(doubleValue);
             }
             catch (NumberFormatException e)
             {
@@ -105,6 +108,8 @@ public class TableUtils
 
     public static boolean isNumberValue(String string)
     {
+        if (string == null)
+            return false;
         try
         {
             Double.parseDouble(string);

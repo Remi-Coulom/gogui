@@ -16,7 +16,7 @@ public class Histogram
     {
         m_min = min;
         m_step = step;
-        m_size = (int)((max - min) / step) + 1;
+        m_size = Math.max(1, (int)((max - min) / step) + 1);
         m_array = new int[m_size];
     }
 
