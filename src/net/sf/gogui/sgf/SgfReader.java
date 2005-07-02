@@ -180,8 +180,6 @@ public class SgfReader
         private static final long serialVersionUID = 0L; // SUID
     }
 
-    private static final int CACHE_SIZE = 30;
-
     private boolean m_ignoreTimeSettings;
 
     private boolean m_isFile;
