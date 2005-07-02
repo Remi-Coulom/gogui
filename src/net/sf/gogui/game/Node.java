@@ -238,7 +238,7 @@ public final class Node
 
     public Vector getMarked(String type)
     {
-        if (m_extraInfo == null)
+        if (m_extraInfo == null || m_extraInfo.m_marked == null)
             return null;
         return (Vector)m_extraInfo.m_marked.get(type);
     }
