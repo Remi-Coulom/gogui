@@ -215,11 +215,24 @@ public class SgfReader
 
     private String m_newCharset;
 
-    private final StringBuffer m_valueBuffer = new StringBuffer(512);
+    /** Pre-allocated temporary buffer for use within functions. */
+    private final StringBuffer m_buffer = new StringBuffer(512);
 
     private final Vector m_pointList = new Vector();
 
     private final Vector m_valueVector = new Vector();
+
+    private void addSgfProperty(Node node, String property)
+    {
+        m_buffer.setLength(0);
+        for (int i = 0; i < m_valueVector.size(); ++i)
+        {
+            m_buffer.append('[');
+            m_buffer.append(getValue(i));
+            m_buffer.append(']');
+        }
+        node.addSgfProperty(property, m_buffer.toString());
+    }
 
     /** Apply some fixes for broken SGF files. */
     private void applyFixes()
@@ -800,7 +813,7 @@ public class SgfReader
             else if (p == "WR")
                 m_gameInformation.m_whiteRank = v;
             else if (p != "FF" && p != "GN" && p != "AP")
-                node.addSgfProperty(p, v);
+                addSgfProperty(node, p);
             return true;
         }
         if (ttype != '\n')
@@ -871,7 +884,7 @@ public class SgfReader
                 m_tokenizer.pushBack();
             return null;
         }
-        m_valueBuffer.setLength(0);
+        m_buffer.setLength(0);
         boolean quoted = false;
         while (true)
         {
@@ -884,18 +897,18 @@ public class SgfReader
                     break;
                 quoted = (c == '\\');
                 if (! quoted)
-                    m_valueBuffer.append((char)c);
+                    m_buffer.append((char)c);
             }
             else
             {
                 if (c != '\n' && c != '\r')
                 {
-                    m_valueBuffer.append((char)c);
+                    m_buffer.append((char)c);
                     quoted = false;
                 }
             }
         }
-        return m_valueBuffer.toString();
+        return m_buffer.toString();
     }
 
     private void setTimeSettings()

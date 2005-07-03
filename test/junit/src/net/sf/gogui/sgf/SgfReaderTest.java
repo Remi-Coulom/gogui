@@ -119,6 +119,13 @@ public class SgfReaderTest
         checkLabel(node, "N3", "123456");
         checkLabel(node, "N2", "1234567");
         checkLabel(node, "N1", "12345678");
+        node = node.getChild();
+        assertEquals(node.getNumberChildren(), 0);
+        checkSgfProperty(node, "AR",
+                         "[aa:sc][sa:ac][aa:sa][aa:ac][cd:cj][gd:md][fh:ij]"
+                         + "[kj:nh]");
+        checkSgfProperty(node, "DD", "[kq:os][dq:hs]");
+        checkSgfProperty(node, "LN", "[pj:pd][nf:ff][ih:fj][kh:nj]");
         node = root.getChild(3);
         assertEquals(node.getNumberChildren(), 6);
         assertEquals(node.getComment(),
@@ -147,6 +154,12 @@ public class SgfReaderTest
     {
         GoPoint point = GoPoint.parsePoint(pointString, 19);
         assertEquals(node.getLabel(point), label);
+    }
+
+    private void checkSgfProperty(Node node, String property, String value)
+        throws GoPoint.InvalidPoint
+    {
+        assertEquals(value, node.getSgfProperties().get(property));
     }
 
     private void checkSetup(Node node, int black, int white, int empty)

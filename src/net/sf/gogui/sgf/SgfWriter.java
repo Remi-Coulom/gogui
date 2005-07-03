@@ -349,7 +349,7 @@ public class SgfWriter
                 Map.Entry entry = (Map.Entry)it.next();
                 String label = (String)entry.getKey();
                 String value = (String)entry.getValue();
-                print(label + getEscaped(value));
+                print(label + value);
             }
         }
         int numberChildren = node.getNumberChildren();
