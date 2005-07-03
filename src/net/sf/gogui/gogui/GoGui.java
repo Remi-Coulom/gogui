@@ -2330,7 +2330,7 @@ class GoGui
             setTitle();
             String warnings = reader.getWarnings();
             if (warnings != null)
-                showWarning("Warnings while reading SGF file:\n" + warnings);
+                showWarning("File " + file.getName() + ":\n" + warnings);
             SimpleDialogs.setLastFile(file);
             computerNone();
             boardChangedBegin(false, true);
