@@ -478,6 +478,21 @@ public class NodeUtils
         return false;
     }
 
+    /** Number of nodes in subtree.
+        Does not include this node.
+    */
+    public static int subtreeSize(Node node)
+    {
+        int n = 0;
+        int depth = NodeUtils.getDepth(node);
+        while (node != null)
+        {
+            ++n;
+            node = nextNode(node, depth);
+        }
+        return n;
+    }
+
     public static String treeInfo(Node node)
     {
         int numberNodes = 0;
