@@ -744,6 +744,8 @@ public class SgfReader
                 m_gameInformation.m_rules = v;
             else if (p == "SQ")
                 readMarked(node, Node.MARKED_SQUARE);
+            else if (p == "SL")
+                readMarked(node, Node.MARKED_SELECT);
             else if (p == "SZ")
             {
                 if (! isRoot)
@@ -762,6 +764,8 @@ public class SgfReader
                 }
                 m_sizeFixed = true;
             }
+            else if (p == "TB")
+                readMarked(node, Node.MARKED_TERRITORY_BLACK);
             else if (p == "TM")
             {
                 try
@@ -781,6 +785,8 @@ public class SgfReader
                 node.setMove(Move.create(parsePoint(v), GoColor.WHITE));
                 m_sizeFixed = true;
             }
+            else if (p == "TW")
+                readMarked(node, Node.MARKED_TERRITORY_WHITE);
             else if (p == "WL")
             {
                 try

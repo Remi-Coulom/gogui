@@ -72,11 +72,20 @@ public final class Node
 
     public static final String MARKED_TRIANGLE = "triangle";
 
+    public static final String MARKED_SELECT = "select";
+
+    public static final String MARKED_TERRITORY_BLACK = "territory-black";
+
+    public static final String MARKED_TERRITORY_WHITE = "territory-white";
+
     public static final String[] MARK_TYPES = {
         MARKED,
         MARKED_CIRCLE,
         MARKED_SQUARE,
-        MARKED_TRIANGLE
+        MARKED_TRIANGLE,
+        MARKED_SELECT,
+        MARKED_TERRITORY_BLACK,
+        MARKED_TERRITORY_WHITE
     };
 
     public Node()
@@ -125,8 +134,7 @@ public final class Node
     public void addMarked(GoPoint point, String type)
     {
         assert(point != null);
-        assert(type == MARKED || type == MARKED_SQUARE
-               || type == MARKED_CIRCLE || type == MARKED_TRIANGLE);
+        assert(isMarkType(type));
         Map marked = createMarked();
         Vector pointList = (Vector)marked.get(type);
         if (pointList == null)
@@ -383,6 +391,14 @@ public final class Node
     {
         for (int i = 0; i < node.getNumberChildren(); ++i)
             if (node.getChild(i) == this)
+                return true;
+        return false;
+    }
+
+    public static boolean isMarkType(String type)
+    {
+        for (int i = 0; i < MARK_TYPES.length; ++i)
+            if (MARK_TYPES[i].equals(type))
                 return true;
         return false;
     }

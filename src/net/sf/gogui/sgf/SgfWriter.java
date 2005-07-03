@@ -336,6 +336,9 @@ public class SgfWriter
         printMarked(node, "CR", Node.MARKED_CIRCLE);
         printMarked(node, "SQ", Node.MARKED_SQUARE);
         printMarked(node, "TR", Node.MARKED_TRIANGLE);
+        printMarked(node, "SL", Node.MARKED_SELECT);
+        printMarked(node, "TB", Node.MARKED_TERRITORY_BLACK);
+        printMarked(node, "TW", Node.MARKED_TERRITORY_WHITE);
         printLabels(node);
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)

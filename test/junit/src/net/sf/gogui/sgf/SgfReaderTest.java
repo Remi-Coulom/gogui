@@ -56,6 +56,9 @@ public class SgfReaderTest
         assertEquals(node.getMarked(Node.MARKED_CIRCLE).size(), 9);
         assertEquals(node.getMarked(Node.MARKED_SQUARE).size(), 9);
         assertEquals(node.getMarked(Node.MARKED_TRIANGLE).size(), 9);
+        assertEquals(node.getMarked(Node.MARKED_SELECT).size(), 9);
+        assertEquals(node.getMarked(Node.MARKED_TERRITORY_BLACK).size(), 18);
+        assertEquals(node.getMarked(Node.MARKED_TERRITORY_WHITE).size(), 19);
         node = node.getChild();
         assertEquals(node.getNumberChildren(), 1);
         assertEquals(node.getLabels().size(), 22);

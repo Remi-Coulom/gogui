@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Vector;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
 //----------------------------------------------------------------------------
@@ -35,6 +36,18 @@ public class GuiBoardUtils
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkTriangle((GoPoint)(mark.get(i)), true);
+        mark = node.getMarked(Node.MARKED_SELECT);
+        if (mark != null)
+            for (int i = 0; i < mark.size(); ++i)
+                guiBoard.setSelect((GoPoint)(mark.get(i)), true);
+        mark = node.getMarked(Node.MARKED_TERRITORY_BLACK);
+        if (mark != null)
+            for (int i = 0; i < mark.size(); ++i)
+                guiBoard.setTerritory((GoPoint)(mark.get(i)), GoColor.BLACK);
+        mark = node.getMarked(Node.MARKED_TERRITORY_WHITE);
+        if (mark != null)
+            for (int i = 0; i < mark.size(); ++i)
+                guiBoard.setTerritory((GoPoint)(mark.get(i)), GoColor.WHITE);
         Map labels = node.getLabels();
         if (labels != null)
         {
