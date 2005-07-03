@@ -6,6 +6,10 @@
 package net.sf.gogui.sgf;
 
 import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import junit.framework.TestCase;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInformation;
@@ -14,6 +18,7 @@ import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
 
@@ -29,6 +34,36 @@ public class SgfReaderTest
     public void testFF4Example() throws Exception
     {
         SgfReader reader = getReader("ff4_ex.sgf");
+        checkFF4Example(reader);
+    }
+
+    /** Test FF4 example after writing and reading again.
+        This is actually a test for SgfWriter.
+    */
+    public void testWriter() throws Exception
+    {
+        SgfReader reader = getReader("ff4_ex.sgf");
+        File file = File.createTempFile("gogui", null);
+        OutputStream out = new FileOutputStream(file);
+        new SgfWriter(out, reader.getGameTree(), file, "GoGui",
+                      Version.get());
+        out.close();
+        reader = new SgfReader(new FileInputStream(file), null, null, 0);
+        checkFF4Example(reader);
+        file.delete();
+    }
+
+    private SgfReader getReader(String name)
+        throws SgfReader.SgfError, Exception
+    {
+        InputStream in = getClass().getResourceAsStream(name);
+        if (in == null)
+            throw new Exception("Resource " + name + " not found");
+        return new SgfReader(in, null, null, 0);
+    }    
+
+    public void checkFF4Example(SgfReader reader) throws Exception
+    {
         GameTree gameTree = reader.getGameTree();
         GameInformation gameInformation = gameTree.getGameInformation();
         Node root = gameTree.getRoot();
@@ -106,15 +141,6 @@ public class SgfReaderTest
         node = node.getChild();
         assertEquals(node.getNumberChildren(), 4);
     }
-
-    private SgfReader getReader(String name)
-        throws SgfReader.SgfError, Exception
-    {
-        InputStream in = getClass().getResourceAsStream(name);
-        if (in == null)
-            throw new Exception("Resource " + name + " not found");
-        return new SgfReader(in, null, null, 0);
-    }    
 
     private void checkLabel(Node node, String pointString, String label)
         throws GoPoint.InvalidPoint
