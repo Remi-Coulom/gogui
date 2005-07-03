@@ -872,11 +872,22 @@ public class SgfReader
             int c = m_reader.read();
             if (c < 0)
                 throw getError("Property value incomplete");
-            if (! quoted && c == ']')
-                break;
-            quoted = (c == '\\');
             if (! quoted)
-                m_valueBuffer.append((char)c);
+            {
+                if (c == ']')
+                    break;
+                quoted = (c == '\\');
+                if (! quoted)
+                    m_valueBuffer.append((char)c);
+            }
+            else
+            {
+                if (c != '\n' && c != '\r')
+                {
+                    m_valueBuffer.append((char)c);
+                    quoted = false;
+                }
+            }
         }
         return m_valueBuffer.toString();
     }
