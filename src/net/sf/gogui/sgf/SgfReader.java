@@ -268,6 +268,27 @@ public class SgfReader
         }
     }
 
+    private void checkEndOfFile() throws SgfError, IOException
+    {
+        while (true)
+        {
+            m_tokenizer.nextToken();
+            int t = m_tokenizer.ttype;
+            if (t == '(')
+            {
+                setWarning("Multiple SGF trees; only first one was read");
+                return;
+            }
+            else if (t == StreamTokenizer.TT_EOF)
+                return;
+            else if (t != ' ' && t != '\t' && t != '\n' && t != '\r')
+            {
+                setWarning("Extra text after SGF tree");
+                return;
+            }
+        }
+    }
+
     /** Check for obsolete long names for standard properties.
         @param property Property name (must have been retrieved with
         String.intern() because comparisons are done with ==
@@ -849,6 +870,7 @@ public class SgfReader
             Node node = readNext(root, true);
             while (node != null)
                 node = readNext(node, false);
+            checkEndOfFile();
             if (root.getNumberChildren() == 1)
             {
                 root = root.getChild();
