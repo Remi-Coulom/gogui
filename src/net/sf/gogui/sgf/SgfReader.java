@@ -585,7 +585,6 @@ public class SgfReader
             }
             else if (p == "AE")
             {
-                setWarning("File contains Add Empty property");
                 parsePointList();
                 for (int i = 0; i < m_pointList.size(); ++i)
                     node.addEmpty(getPointList(i));
