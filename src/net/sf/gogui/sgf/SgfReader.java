@@ -477,7 +477,12 @@ public class SgfReader
             String value = getValue(i);
             int pos = value.indexOf(":");
             if (pos < 0)
-                m_pointList.add(parsePoint(value));
+            {
+                GoPoint point = parsePoint(value);
+                if (point == null)
+                    throw new SgfError("Point list argument contains PASS");
+                m_pointList.add(point);
+            }
             else
             {
                 GoPoint point1 = parsePoint(value.substring(0, pos));
@@ -567,7 +572,11 @@ public class SgfReader
             }
             else if (p == "AE")
             {
-                throw getError("Add empty not supported");
+                setWarning("File contains Add Empty property");
+                parsePointList();
+                for (int i = 0; i < m_pointList.size(); ++i)
+                    node.addEmpty(getPointList(i));
+                m_sizeFixed = true;
             }
             else if (p == "AW")
             {

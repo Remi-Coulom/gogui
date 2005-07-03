@@ -78,6 +78,11 @@ a command to test (simply ignore the pattern)
 New tool GtpStatistics
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Other small fixes and improvements
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

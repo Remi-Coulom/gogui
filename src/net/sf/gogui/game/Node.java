@@ -38,6 +38,8 @@ class SetupInfo
     public Vector m_black = new Vector();
 
     public Vector m_white = new Vector();
+
+    public Vector m_empty = new Vector();
 }
 
 //----------------------------------------------------------------------------
@@ -114,6 +116,12 @@ public final class Node
         createSetupInfo().m_black.add(point);
     }
 
+    public void addEmpty(GoPoint point)
+    {
+        assert(point != null);
+        createSetupInfo().m_empty.add(point);
+    }
+
     public void addMarked(GoPoint point, String type)
     {
         assert(point != null);
@@ -152,14 +160,25 @@ public final class Node
         return (GoPoint)m_extraInfo.m_setupInfo.m_black.get(i);
     }
 
+    public GoPoint getAddEmpty(int i)
+    {
+        return (GoPoint)m_extraInfo.m_setupInfo.m_empty.get(i);
+    }
+
     public GoPoint getAddWhite(int i)
     {
         return (GoPoint)m_extraInfo.m_setupInfo.m_white.get(i);
     }
 
     /** Get stones added and moves all as moves.
-        Also might include a pass move at the end to make sure, that the
+        This function is for transmitting setup stones to Go engines
+        that support only play commands.
+        May include moves with color EMPTY for delete stones.
+        Also may include a pass move at the end to make sure, that the
         right color is to move after executing all returned moves.
+        No check is performed if the setup stones create a position
+        with no-liberty blocks, in which case a play command would
+        capture some stones.
     */
     public Vector getAllAsMoves()
     {
@@ -170,6 +189,8 @@ public final class Node
                 moves.add(Move.create(getAddBlack(i), GoColor.BLACK));
             for (int i = 0; i < getNumberAddWhite(); ++i)
                 moves.add(Move.create(getAddWhite(i), GoColor.WHITE));
+            for (int i = 0; i < getNumberAddEmpty(); ++i)
+                moves.add(Move.create(getAddEmpty(i), GoColor.EMPTY));
         }
         if (m_move != null)
             moves.add(m_move);
@@ -179,9 +200,9 @@ public final class Node
             if (toMove == GoColor.EMPTY)
                 toMove = GoColor.BLACK;
             Move lastMove = (Move)moves.get(moves.size() - 1);
-            if (toMove != lastMove.getColor().otherColor())
-                moves.add(Move.create(null,
-                                      lastMove.getColor().otherColor()));
+            GoColor otherColor = lastMove.getColor().otherColor();
+            if (toMove != otherColor && otherColor != GoColor.EMPTY)
+                moves.add(Move.create(null, otherColor));
         }
         return moves;
     }
@@ -283,6 +304,13 @@ public final class Node
         if (! hasSetupInfo())
             return -1;
         return m_extraInfo.m_setupInfo.m_black.size();
+    }
+
+    public int getNumberAddEmpty()
+    {
+        if (! hasSetupInfo())
+            return -1;
+        return m_extraInfo.m_setupInfo.m_empty.size();
     }
 
     public int getNumberAddWhite()

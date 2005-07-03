@@ -301,6 +301,14 @@ public class SgfWriter
                 buffer.append(getPointValue(node.getAddWhite(i)));
             print(buffer.toString());
         }
+        if (node.getNumberAddEmpty() > 0)
+        {
+            StringBuffer buffer = new StringBuffer(128);
+            buffer.append("AE");
+            for (int i = 0; i < node.getNumberAddEmpty(); ++i)
+                buffer.append(getPointValue(node.getAddEmpty(i)));
+            print(buffer.toString());
+        }
         String comment = node.getComment();
         if (comment != null && ! comment.trim().equals(""))
         {

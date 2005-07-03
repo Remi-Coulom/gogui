@@ -108,7 +108,7 @@ public final class Move
         assert(size > s_size);
         s_movesBlack = grow(size, GoColor.BLACK, s_movesBlack);
         s_movesWhite = grow(size, GoColor.WHITE, s_movesWhite);
-        s_movesEmpty = grow(size, GoColor.WHITE, s_movesEmpty);
+        s_movesEmpty = grow(size, GoColor.EMPTY, s_movesEmpty);
         s_size = size;
     }
 

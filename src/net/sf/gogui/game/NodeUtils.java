@@ -402,6 +402,11 @@ public class NodeUtils
             addWhite.add(node.getAddWhite(i));
         if (node.getNumberAddWhite() > 0)
             appendInfo(buffer, "AddWhite", addWhite);
+        Vector addEmpty = new Vector();
+        for (int i = 0; i < node.getNumberAddEmpty(); ++i)
+            addEmpty.add(node.getAddEmpty(i));
+        if (node.getNumberAddEmpty() > 0)
+            appendInfo(buffer, "AddEmpty", addEmpty);
         if (node.getPlayer() != GoColor.EMPTY)
             appendInfo(buffer, "Player", node.getPlayer().toString());
         if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK)))
@@ -416,12 +421,14 @@ public class NodeUtils
         if (node.getMovesLeft(GoColor.WHITE) >= 0)
             appendInfo(buffer, "MovesLeftWhite",
                        node.getMovesLeft(GoColor.WHITE));
+        appendInfoComment(buffer, node);
         for (int i = 0; i < Node.MARK_TYPES.length; ++i)
         {
             String type = Node.MARK_TYPES[i];
             Vector marked = node.getMarked(type);
             if (marked != null && marked.size() > 0)
-                appendInfo(buffer, "Marked " + type, marked);
+                appendInfo(buffer, "Marked" + StringUtils.capitalize(type),
+                           marked);
         }
         Map labels = node.getLabels();
         if (labels != null && labels.size() > 0)
@@ -552,6 +559,28 @@ public class NodeUtils
         appendInfoLabel(buffer, label);
         buffer.append(value);
         buffer.append('\n');
+    }
+
+    private static void appendInfoComment(StringBuffer buffer, Node node)
+    {
+        String comment = node.getComment();
+        if (comment == null)
+            return;
+        boolean trimmed = false;
+        int pos = comment.indexOf("\n");
+        if (pos >= 0)
+        {
+            comment = comment.substring(0, pos);
+            trimmed = true;
+        }
+        if (comment.length() > 30)
+        {
+            comment = comment.substring(0, 30);
+            trimmed = true;
+        }
+        if (trimmed)
+            comment = comment + "...";
+        appendInfo(buffer, "Comment", comment);
     }
 
     private static void appendInfoLabel(StringBuffer buffer, String label)
