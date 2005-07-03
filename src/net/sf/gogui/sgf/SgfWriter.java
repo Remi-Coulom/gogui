@@ -91,14 +91,19 @@ public class SgfWriter
 
     private final PrintStream m_out;
 
-    private String getEscaped(String text)
+    private String getEscaped(String text, boolean escapeColon)
     {
         StringBuffer result = new StringBuffer(2 * text.length());
         result.append('[');
         for (int i = 0; i < text.length(); ++i)
         {
             char c = text.charAt(i);
-            if ("]:\\".indexOf(c) >= 0)
+            String specialCharacters;
+            if (escapeColon)
+                specialCharacters = "]:\\";
+            else
+                specialCharacters = "]\\";
+            if (specialCharacters.indexOf(c) >= 0)
             {
                 result.append('\\');
                 result.append(c);
@@ -251,7 +256,7 @@ public class SgfWriter
             buffer.append('[');
             buffer.append(getPoint(point));
             buffer.append(':');
-            buffer.append(value);
+            buffer.append(getEscaped(value, true));
             buffer.append(']');
         }
         print(buffer.toString());
@@ -312,7 +317,7 @@ public class SgfWriter
         String comment = node.getComment();
         if (comment != null && ! comment.trim().equals(""))
         {
-            print("C" + getEscaped(comment));
+            print("C" + getEscaped(comment, false));
         }
         if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK)))
         {
