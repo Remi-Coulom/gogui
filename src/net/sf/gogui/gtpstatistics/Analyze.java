@@ -84,22 +84,28 @@ public class Analyze
         {
             commandStatistics = computeCommandStatistics(i);
             m_commandStatistics.add(commandStatistics);
-            String command = getCommand(i);
-            table = commandStatistics.m_tableMoveIntervals;
-            plot = generatePlotMove(getImgWidth(m_maxMove),
-                                    getColor(command));
-            pngFile = getAvgPlotFile(i);
-            plot.plot(pngFile, table, "Move", "Mean", "MaxError");
-            out.print("<tr><td align=\"center\">\n" +
-                      getCommandLink(i) + "<br>" +
-                      "<img src=\"" + pngFile.getName()
-                      + "\">\n" + "</td></tr>\n");
+            if (commandStatistics.getCount() > 0)
+            {
+                String command = getCommand(i);
+                table = commandStatistics.m_tableMoveIntervals;
+                plot = generatePlotMove(getImgWidth(m_maxMove),
+                                        getColor(command));
+                pngFile = getAvgPlotFile(i);
+                plot.plot(pngFile, table, "Move", "Mean", "MaxError");
+                out.print("<tr><td align=\"center\">\n" +
+                          getCommandLink(i) + "<br>" +
+                          "<img src=\"" + pngFile.getName()
+                          + "\">\n" + "</td></tr>\n");
+            }
         }
         out.print("</table>\n" +
                   "<hr>\n");
         out.print("<p>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
+            commandStatistics = getCommandStatistics(i);
+            if (commandStatistics.getCount() == 0)
+                continue;
             out.print("<table align=\"left\" border=\"0\">" +
                       "<tr><td align=\"center\">" + getCommandLink(i)
                       + "<br><img src=\"" + getHistoFile(i).getName()
@@ -283,8 +289,11 @@ public class Analyze
 
     private String getCommandLink(int commandIndex)
     {
+        String link = "<small>" + getCommand(commandIndex) + "</small>";
+        if (getCommandStatistics(commandIndex).getCount() == 0)
+            return link;
         return "<a href=\"" + getCommandFile(commandIndex).getName()
-            + "\"><small>" + getCommand(commandIndex) + "</small></a>";
+            + "\"><small>" + link + "</small></a>";
     }
 
     private CommandStatistics computeCommandStatistics(int index)
@@ -614,24 +623,39 @@ public class Analyze
                   + "</tr></thead>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
-            writeCommandPage(i);
             CommandStatistics commandStatistics = getCommandStatistics(i);
+            int count = commandStatistics.getCount();
+            if (count > 0)
+                writeCommandPage(i);
             PositionStatistics statisticsAll
                 = commandStatistics.m_statisticsAll;
             Statistics stat = statisticsAll.m_statistics;
             String command = getCommand(i);
             out.print("<tr>"
-                      + "<td><a href=\"" + getCommandFile(i).getName()
-                      + "\">" + command + "</a></td>"
-                      + "<td>" + formatFloat(stat.getMean()) + "</td>"
-                      + "<td>" + formatFloat(stat.getDeviation()) + "</td>"
-                      + "<td>" + formatFloat(stat.getError()) + "</td>"
-                      + "<td>" + formatFloat(statisticsAll.getMaxError())
-                      + "</td>"
-                      + "<td>" + formatFloat(stat.getMin()) + "</td>"
-                      + "<td>" + formatFloat(stat.getMax()) + "</td>"
-                      + "<td>" + formatFloat(stat.getSum()) + "</td>"
-                      + "<td>" + formatFloat(stat.getCount()) + "</td>"
+                      + "<td>" + getCommandLink(i) + "</td>"
+                      + "<td>");
+            if (count > 0)
+                out.print(formatFloat(stat.getMean()));
+            out.print("</td><td>");
+            if (count > 0)
+                out.print(formatFloat(stat.getDeviation()));
+            out.print("</td><td>");
+            if (count > 0)
+                out.print(formatFloat(stat.getError()));
+            out.print("</td><td>");
+            if (count > 0)
+                out.print(formatFloat(statisticsAll.getMaxError()));
+            out.print("</td><td>");
+            if (count > 0)
+                out.print(formatFloat(stat.getMin()));
+            out.print("</td><td>");
+            if (count > 0)
+                out.print(formatFloat(stat.getMax()));
+            out.print("</td><td>");
+            if (count > 0)
+                out.print(formatFloat(stat.getSum()));
+            out.print("</td>"
+                      + "<td>" + formatFloat(count) + "</td>"
                       + "<td>"
                       + commandStatistics.m_statisticsAll.m_numberNoResult
                       + "</td>"
@@ -678,12 +702,16 @@ public class Analyze
                   "<table border=\"0\">\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
-            String command = getCommand(i);
-            generatePlot(i, gameNumber, game);
-            out.print("<tr><td align=\"center\">" + getCommandLink(i)
-                      + "<br><img src=\""
-                      + getPlotFile(gameNumber, i).getName()
-                      + "\"></td></tr>\n");
+            CommandStatistics commandStatistics = getCommandStatistics(i);
+            if (commandStatistics.getCount() > 0)
+            {
+                String command = getCommand(i);
+                generatePlot(i, gameNumber, game);
+                out.print("<tr><td align=\"center\">" + getCommandLink(i)
+                          + "<br><img src=\""
+                          + getPlotFile(gameNumber, i).getName()
+                          + "\"></td></tr>\n");
+            }
         }
         out.print("</table>\n" +
                   "</p>\n" +

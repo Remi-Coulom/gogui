@@ -70,16 +70,24 @@ public final class CommandStatistics
                                          statisticsAtMove.getMaxError());
             }
         }
-        Histogram histogram = m_statisticsAll.m_histogram;
-        Table histoTable = TableUtils.fromHistogram(histogram, command);
-        Plot plot = new Plot(150, 150, color, precision);
-        setHistogramProperties(plot);
-        plot.plot(histoFile, histoTable, command, "Count", null);
-        histogram = m_statisticsFinal.m_histogram;
-        histoTable = TableUtils.fromHistogram(histogram, command);
-        plot = new Plot(150, 150, color, precision);
-        setHistogramProperties(plot);
-        plot.plot(histoFileFinal, histoTable, command, "Count", null);
+        if (getCount() > 0)
+        {
+            Histogram histogram = m_statisticsAll.m_histogram;
+            Table histoTable = TableUtils.fromHistogram(histogram, command);
+            Plot plot = new Plot(150, 150, color, precision);
+            setHistogramProperties(plot);
+            plot.plot(histoFile, histoTable, command, "Count", null);
+            histogram = m_statisticsFinal.m_histogram;
+            histoTable = TableUtils.fromHistogram(histogram, command);
+            plot = new Plot(150, 150, color, precision);
+            setHistogramProperties(plot);
+            plot.plot(histoFileFinal, histoTable, command, "Count", null);
+        }
+    }
+
+    public int getCount()
+    {
+        return m_statisticsAll.getCount();
     }
 
     public int getNumberMoveIntervals()
