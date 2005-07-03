@@ -416,6 +416,31 @@ public class NodeUtils
         if (node.getMovesLeft(GoColor.WHITE) >= 0)
             appendInfo(buffer, "MovesLeftWhite",
                        node.getMovesLeft(GoColor.WHITE));
+        for (int i = 0; i < Node.MARK_TYPES.length; ++i)
+        {
+            String type = Node.MARK_TYPES[i];
+            Vector marked = node.getMarked(type);
+            if (marked != null && marked.size() > 0)
+                appendInfo(buffer, "Marked " + type, marked);
+        }
+        Map labels = node.getLabels();
+        if (labels != null && labels.size() > 0)
+        {
+            StringBuffer labelsBuffer = new StringBuffer();
+            Iterator iter = labels.entrySet().iterator();
+            while (iter.hasNext())
+            {
+                Map.Entry entry = (Map.Entry)iter.next();
+                GoPoint point = (GoPoint)entry.getKey();
+                String value = (String)entry.getValue();
+                labelsBuffer.append(point);
+                labelsBuffer.append(':');
+                labelsBuffer.append(value);
+                if (iter.hasNext())
+                    labelsBuffer.append(' ');
+            }
+            appendInfo(buffer, "Labels", labelsBuffer.toString());
+        }
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)
         {

@@ -70,6 +70,13 @@ public final class Node
 
     public static final String MARKED_TRIANGLE = "triangle";
 
+    public static final String[] MARK_TYPES = {
+        MARKED,
+        MARKED_CIRCLE,
+        MARKED_SQUARE,
+        MARKED_TRIANGLE
+    };
+
     public Node()
     {
     }
