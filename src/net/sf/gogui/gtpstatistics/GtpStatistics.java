@@ -19,6 +19,7 @@ import java.text.DateFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
+import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.Gtp;
@@ -158,6 +159,7 @@ public class GtpStatistics
         m_gtp.sendCommandClearBoard(size);
         Node root = tree.getRoot();
         int number = 0;
+        GoColor toMove = GoColor.BLACK;
         for (Node node = root; node != null; node = node.getChild())
         {
             if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
@@ -165,17 +167,19 @@ public class GtpStatistics
             Move move = node.getMove();
             if (move != null)
             {
+                if (move.getColor() != toMove)
+                    throw new ErrorMessage(name
+                                           + "has non-alternating moves");
                 ++number;
-                handlePosition(name, move, number);
+                handlePosition(name, toMove, move, number);
                 m_gtp.sendCommandPlay(move);
+                toMove = toMove.otherColor();
             }
         }
         if (m_finalCommands != null)
         {
             ++number;
-            m_table.startRow();
-            m_table.set("File", name);
-            m_table.set("Move", number);
+            handlePosition(name, toMove, null, number);
             for (int i = 0; i < m_finalCommands.size(); ++i)
             {
                 String command = getFinalCommand(i);
@@ -185,7 +189,8 @@ public class GtpStatistics
         }
     }
 
-    private void handlePosition(String name, Move move, int number)
+    private void handlePosition(String name, GoColor toMove, Move move,
+                                int number)
         throws GtpError
     {
         m_table.startRow();
@@ -198,10 +203,15 @@ public class GtpStatistics
                 String result = m_gtp.sendCommand(command);
                 m_table.set(command, result);
             }
-        if (m_runRegGenMove && move != null)
-        {
-            boolean result = runRegGenMove(move);
-            m_table.set("reg_genmove", result ? "1" : "0");
+        if (m_runRegGenMove)
+        {            
+            Move genMove = runRegGenMove(toMove);
+            if (move != null)
+            {
+                assert(move.getColor() == toMove);
+                boolean result = (genMove == move);
+                m_table.set("reg_genmove", result ? "1" : "0");
+            }
         }
         if (m_commands != null)
         {
@@ -214,11 +224,18 @@ public class GtpStatistics
         }
     }
 
-    private boolean runRegGenMove(Move move) throws GtpError
+    private Move runRegGenMove(GoColor toMove) throws GtpError
     {
-        String response = m_gtp.sendCommand("reg_genmove " + move.getColor());
-        response = response.trim().toUpperCase();
-        return (response.equals(GoPoint.toString(move.getPoint())));
+        String response = m_gtp.sendCommand("reg_genmove " + toMove);
+        try
+        {
+            GoPoint point = GoPoint.parsePoint(response, m_size); 
+            return Move.create(point, toMove);
+        }
+        catch (GoPoint.InvalidPoint e)
+        {
+            throw new GtpError("Program sent invalid move: " + response);
+        }
     }
 }
     
