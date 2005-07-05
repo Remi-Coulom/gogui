@@ -144,6 +144,8 @@ public class Analyze
 
     private int m_maxMove;
 
+    private int m_movePrintInterval;
+
     private int m_numberGames;
 
     private int m_precision;
@@ -360,6 +362,14 @@ public class Analyze
             info.m_finalPosition = move;
             last = file;
         }
+        m_movePrintInterval = 1;
+        while (m_movePrintInterval < m_maxMove / 30)
+        {
+            m_movePrintInterval *= 5;
+            if (m_movePrintInterval >= m_maxMove / 30)
+                break;
+            m_movePrintInterval *= 2;
+        }
         m_gameInfo.add(info);
         m_tableFinal = new Table(m_table.getColumnTitles());
         for (int i = 0; i < m_gameInfo.size(); ++i)
@@ -451,7 +461,7 @@ public class Analyze
         out.print("</tr>\n" +
                   "</table>\n");
         out.print("<p>\n");
-        for (int i = 0; i < m_maxMove; ++i)
+        for (int i = 0; i < m_maxMove; i += m_movePrintInterval)
         {
             Histogram histogram
                 = commandStatistics.getStatistics(i).m_histogram;
@@ -494,7 +504,7 @@ public class Analyze
         out.print("<th>Move</th>");
         writeStatisticsTableHeader(out);
         out.print("</tr>");
-        for (int i = 0; i < m_maxMove; ++i)
+        for (int i = 0; i < m_maxMove; i += m_movePrintInterval)
         {
             PositionStatistics statisticsAtMove
                 = commandStatistics.getStatistics(i);
@@ -522,8 +532,7 @@ public class Analyze
                   "<thead><tr>"
                   + "<th>Command</th>");
         writeStatisticsTableHeader(out);
-        out.print("<th>Unknown</th>"
-                  + "</tr></thead>\n");
+        out.print("</tr></thead>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
             CommandStatistics commandStatistics = getCommandStatistics(i);
