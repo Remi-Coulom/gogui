@@ -338,6 +338,17 @@ public class Analyze
         return Math.max(10, Math.min(numberMoves * 9, 1000));
     }
 
+    private boolean globalCommandAllEmpty(int i)
+    {
+        for (int j = 0; j < m_gameInfo.size(); ++j)
+        {
+            String result = getGlobalCommandResult(i, j);
+            if (result != null && ! result.trim().equals(""))
+                return false;
+        }
+        return true;
+    }
+
     private void initGameInfo()
     {
         m_gameInfo = new Vector();
@@ -658,7 +669,8 @@ public class Analyze
         out.print("<table class=\"smalltable\">\n" +
                   "<thead><tr><th>Game</th><th>File</th><th>Positions</th>");
         for (int i = 0; i < m_gameGlobalCommands.size(); ++i)
-            out.print("<th>" + getGlobalCommand(i) + "</th>");
+            if (! globalCommandAllEmpty(i))
+                out.print("<th>" + getGlobalCommand(i) + "</th>");
         out.print("</tr></thead>\n");
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
@@ -669,7 +681,9 @@ public class Analyze
                       + "</td><td>" + info.m_numberPositions
                       + "</td>");
             for (int j = 0; j < m_gameGlobalCommands.size(); ++j)
-                out.print("<td>" + getGlobalCommandResult(j, i) + "</td>");
+                if (! globalCommandAllEmpty(j))
+                    out.print("<td>" + getGlobalCommandResult(j, i)
+                              + "</td>");
             out.print("</tr>\n");
             writeGamePage(info.m_file, info.m_name, i);
         }
