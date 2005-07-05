@@ -131,14 +131,19 @@ public class GtpStatistics
     private void checkCommandsUnique() throws ErrorMessage
     {
         Vector all = new Vector();
-        all.add(m_commands);
-        all.add(m_finalCommands);
-        all.add(m_beginCommands);
+        if (m_runRegGenMove)
+            all.add("reg_genmove");
+        if (m_commands != null)
+            all.addAll(m_commands);
+        if (m_beginCommands != null)
+            all.addAll(m_beginCommands);
+        if (m_finalCommands != null)
+            all.addAll(m_finalCommands);
         for (int i = 0; i < all.size() - 1; ++i)
-            for (int j = i; j < all.size(); ++j)
+            for (int j = i + 1; j < all.size(); ++j)
                 if (all.get(i).equals(all.get(j)))
                     throw new ErrorMessage("Non-unique commands not yet"
-                                           + " supported");
+                                           + " supported: " + all.get(i));
     }
 
     private String getBeginCommand(int index)
