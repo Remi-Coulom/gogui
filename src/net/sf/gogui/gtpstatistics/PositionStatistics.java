@@ -26,12 +26,6 @@ public final class PositionStatistics
 
     public final Statistics m_statistics;
 
-    /** Statistics assuming maximum correlation of positions of the same game.
-        Contains one value for each game, computed from the average of all
-        positions from this game.
-    */
-    public final Statistics m_statisticsMaxError;
-
     public final Table m_histoTable;
 
     public final Table m_table;
@@ -116,7 +110,6 @@ public final class PositionStatistics
             }
         }
         m_histoTable = TableUtils.fromHistogram(m_histogram, command);
-        m_statisticsMaxError = new Statistics();
         Vector files = TableUtils.getColumnUnique(table, "File");
         for (int i = 0; i < files.size(); ++i)
         {
@@ -124,7 +117,6 @@ public final class PositionStatistics
             Table tableFile = TableUtils.select(table, "File", file);
             Statistics statisticsFile
                 = TableUtils.getStatistics(tableFile, command);
-            m_statisticsMaxError.add(statisticsFile.getMean());
         }
     }
 
@@ -147,11 +139,6 @@ public final class PositionStatistics
     {
         return m_statistics.getMax();
     }
-    public double getMaxError()
-    {
-        return m_statisticsMaxError.getError();
-    }
-
     public double getMean()
     {
         return m_statistics.getMean();

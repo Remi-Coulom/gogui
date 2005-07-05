@@ -31,7 +31,6 @@ class Main
                 "final:",
                 "force",
                 "help",
-                "interval:",
                 "precision:",
                 "program:",
                 "size:",
@@ -64,7 +63,6 @@ class Main
             boolean verbose = opt.isSet("verbose");
             boolean force = opt.isSet("force");
             int precision = opt.getInteger("precision", 3, 0);
-            int interval = opt.getInteger("interval", 20, 1);
             int boardSize = opt.getInteger("size", 19, 1);
             Vector commands = parseCommands(opt, "commands");
             Vector finalCommands = parseCommands(opt, "final");
@@ -85,7 +83,7 @@ class Main
                 else
                     output = FileUtils.removeExtension(new File(fileName),
                                                        "dat");
-                new Analyze(fileName, output, precision, interval);
+                new Analyze(fileName, output, precision);
             }
             else
             {
@@ -140,7 +138,6 @@ class Main
                   "-final        GTP commands to run on final positions\n" +
                   "-force        Overwrite existing file\n" +
                   "-help         Display this help and exit\n" +
-                  "-interval     Move interval size for -analyze\n" +
                   "-output       Filename prefix for output files\n" +
                   "-precision    Floating point precision for -analyze\n" +
                   "-size         Board size of games\n" +

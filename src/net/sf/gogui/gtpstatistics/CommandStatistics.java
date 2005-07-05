@@ -29,12 +29,11 @@ public final class CommandStatistics
     /** Vector<PositionStatistics> */
     public final Vector m_statisticsAtMove;
 
-    public final Table m_tableMoveIntervals;
+    public final Table m_tableAtMove;
 
     public CommandStatistics(String command, Table table, Table tableFinal,
-                             int interval, File histoFile,
-                             File histoFileFinal, Color color,
-                             int precision)
+                             File histoFile, File histoFileFinal,
+                             Color color, int precision)
         throws Exception
     {
         m_statisticsAll = new PositionStatistics(command, table, false, 0, 0);
@@ -46,28 +45,24 @@ public final class CommandStatistics
         Vector columnTitles = new Vector();
         columnTitles.add("Move");
         columnTitles.add("Mean");
-        columnTitles.add("MinError");
-        columnTitles.add("MaxError");
-        m_tableMoveIntervals = new Table(columnTitles);
+        columnTitles.add("Error");
+        m_tableAtMove = new Table(columnTitles);
         Table tableAtMove;
         int maxMove = (int)(TableUtils.getMax(table, "Move") + 1);
-        for (int move = 1; move <= maxMove; move += interval)
+        for (int move = 1; move <= maxMove; ++move)
         {
             tableAtMove = TableUtils.selectIntRange(table, "Move", move,
-                                                    move + interval - 1);
+                                                    move);
             PositionStatistics statisticsAtMove
                 = new PositionStatistics(command, tableAtMove, true, min,
                                          max);
             m_statisticsAtMove.add(statisticsAtMove);
-            m_tableMoveIntervals.startRow();
-            m_tableMoveIntervals.set("Move", move + ((interval - 1) / 2));
+            m_tableAtMove.startRow();
+            m_tableAtMove.set("Move", move);
             if (statisticsAtMove.getCount() > 0)
             {
-                m_tableMoveIntervals.set("Mean", statisticsAtMove.getMean());
-                m_tableMoveIntervals.set("MinError",
-                                         statisticsAtMove.getError());
-                m_tableMoveIntervals.set("MaxError",
-                                         statisticsAtMove.getMaxError());
+                m_tableAtMove.set("Mean", statisticsAtMove.getMean());
+                m_tableAtMove.set("Error", statisticsAtMove.getError());
             }
         }
         if (getCount() > 0)
@@ -88,11 +83,6 @@ public final class CommandStatistics
     public int getCount()
     {
         return m_statisticsAll.getCount();
-    }
-
-    public int getNumberMoveIntervals()
-    {
-        return m_statisticsAtMove.size();
     }
 
     public PositionStatistics getStatistics(int moveInterval)

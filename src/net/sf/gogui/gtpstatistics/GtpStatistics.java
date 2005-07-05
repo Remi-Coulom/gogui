@@ -46,6 +46,7 @@ public class GtpStatistics
         m_commands = commands;
         m_beginCommands = beginCommands;
         m_finalCommands = finalCommands;
+        checkCommandsUnique();
         Vector columnHeaders = new Vector();
         columnHeaders.add("File");
         columnHeaders.add("Move");
@@ -126,6 +127,19 @@ public class GtpStatistics
     private Vector m_commands;
 
     private Vector m_finalCommands;
+
+    private void checkCommandsUnique() throws ErrorMessage
+    {
+        Vector all = new Vector();
+        all.add(m_commands);
+        all.add(m_finalCommands);
+        all.add(m_beginCommands);
+        for (int i = 0; i < all.size() - 1; ++i)
+            for (int j = i; j < all.size(); ++j)
+                if (all.get(i).equals(all.get(j)))
+                    throw new ErrorMessage("Non-unique commands not yet"
+                                           + " supported");
+    }
 
     private String getBeginCommand(int index)
     {
