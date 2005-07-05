@@ -73,10 +73,13 @@ public final class CommandStatistics
             setHistogramProperties(plot);
             plot.plot(histoFile, histoTable, command, "Count", null);
             histogram = m_statisticsFinal.m_histogram;
-            histoTable = TableUtils.fromHistogram(histogram, command);
-            plot = new Plot(150, 150, color, precision);
-            setHistogramProperties(plot);
-            plot.plot(histoFileFinal, histoTable, command, "Count", null);
+            if (m_statisticsFinal.getCount() > 0)
+            {
+                histoTable = TableUtils.fromHistogram(histogram, command);
+                plot = new Plot(150, 150, color, precision);
+                setHistogramProperties(plot);
+                plot.plot(histoFileFinal, histoTable, command, "Count", null);
+            }
         }
     }
 

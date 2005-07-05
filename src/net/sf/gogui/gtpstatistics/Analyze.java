@@ -441,17 +441,22 @@ public class Analyze
                   + "<small>All</small><br>"
                   + "<img src=\"" + getHistoFile(commandIndex).getName()
                   + "\"></td>\n");
-        out.print("<td align=\"center\" valign=\"bottom\">"
-                  + "<small>Final</small><br>"
-                  + "<img src=\""
-                  + getHistoFinalFile(commandIndex).getName()
-                  + "\"></td></tr>\n" +
+        
+        if (commandStatistics.m_statisticsFinal.getCount() > 0)
+            out.print("<td align=\"center\" valign=\"bottom\">"
+                      + "<small>Final</small><br>"
+                      + "<img src=\""
+                      + getHistoFinalFile(commandIndex).getName()
+                      + "\"></td>");
+        out.print("</tr>\n" +
                   "</table>\n");
         out.print("<p>\n");
         for (int i = 0; i < m_maxMove; ++i)
         {
             Histogram histogram
                 = commandStatistics.getStatistics(i).m_histogram;
+            if (commandStatistics.getStatistics(i).getCount() == 0)
+                continue;
             Table histoTable = TableUtils.fromHistogram(histogram, command);
             File histoFile = getHistoFile(commandIndex, i);
             Color color = getColor(command);
@@ -487,100 +492,26 @@ public class Analyze
         out.print("<tbody>");
         out.print("<tr>");
         out.print("<th>Move</th>");
+        writeStatisticsTableHeader(out);
+        out.print("</tr>");
         for (int i = 0; i < m_maxMove; ++i)
         {
-            out.print("<th>");
-            out.print(i);
-            out.print("</th>");
+            PositionStatistics statisticsAtMove
+                = commandStatistics.getStatistics(i);
+            out.print("<tr>" +
+                      "<td>" + i + "</td>");
+            writeStatisticsTableData(out, statisticsAtMove);
+            out.print("</tr>");
         }
-        out.print("<th>Final</th>\n");
-        out.print("<th>All</th>\n");
-        out.print("</tr>\n");
-        out.print("<tr>\n");
-        out.print("<th>Mean</th>");
-        for (int i = 0; i < m_maxMove; ++i)
-        {
-            double mean = commandStatistics.getStatistics(i).getMean();
-            out.print("<td>" + formatFloat(mean) + "</td>");
-        }
-        out.print("<td>" + formatFloat(finalStatistics.getMean())
-                  + "</td>\n");
-        out.print("<td>" + formatFloat(statisticsAll.getMean()) + "</td>\n");
-        out.print("</tr>\n");
-        out.print("<tr>\n");
-        out.print("<th>Deviation</th>");
-        for (int i = 0; i < m_maxMove; ++i)
-        {
-            double err = commandStatistics.getStatistics(i).getDeviation();
-            out.print("<td>" + formatFloat(err) + "</td>");
-        }
-        out.print("<td>" + formatFloat(finalStatistics.getDeviation())
-                  + "</td>\n");
-        out.print("<td>" + formatFloat(statisticsAll.getDeviation())
-                  + "</td>\n");
-        out.print("</tr>\n");
-        out.print("<tr>\n");
-        out.print("<th>Error</th>");
-        for (int i = 0; i < m_maxMove; ++i)
-        {
-            double err = commandStatistics.getStatistics(i).getError();
-            out.print("<td>" + formatFloat(err) + "</td>");
-        }
-        out.print("<td>" + formatFloat(finalStatistics.getError())
-                  + "</td>\n");
-        out.print("<td>" + formatFloat(statisticsAll.getError())
-                  + "</td>\n");
-        out.print("</tr>\n");
-        out.print("<tr>\n");
-        out.print("<th>Min</th>");
-        for (int i = 0; i < m_maxMove; ++i)
-        {
-            double min = commandStatistics.getStatistics(i).getMin();
-            out.print("<td>" + formatFloat(min) + "</td>");
-        }
-        out.print("<td>" + formatFloat(finalStatistics.getMin()) + "</td>\n");
-        out.print("<td>" + formatFloat(statisticsAll.getMin()) + "</td>\n");
-        out.print("</tr>\n");
-        out.print("<tr>\n");
-        out.print("<th>Max</th>");
-        for (int i = 0; i < m_maxMove; ++i)
-        {
-            double max = commandStatistics.getStatistics(i).getMax();
-            out.print("<td>" + formatFloat(max) + "</td>");
-        }
-        out.print("<td>" + formatFloat(finalStatistics.getMax()) + "</td>\n");
-        out.print("<td>" + formatFloat(statisticsAll.getMax()) + "</td>\n");
-        out.print("</tr>\n");
-        out.print("<tr>\n");
-        out.print("<th>Sum</th>");
-        for (int i = 0; i < m_maxMove; ++i)
-        {
-            double max = commandStatistics.getStatistics(i).getSum();
-            out.print("<td>" + formatFloat(max) + "</td>");
-        }
-        out.print("<td>" + formatFloat(finalStatistics.getSum()) + "</td>\n");
-        out.print("<td>" + formatFloat(statisticsAll.getSum()) + "</td>\n");
-        out.print("</tr>\n");
-        out.print("<tr>\n");
-        out.print("<th>Count</th>");
-        for (int i = 0; i < m_maxMove; ++i)
-            out.print("<td>" + commandStatistics.getStatistics(i).getCount()
-                      + "</td>");
-        out.print("<td>" + finalStatistics.getCount() + "</td>\n");
-        out.print("<td>" + statisticsAll.getCount() + "</td>\n");
-        out.print("</tr>\n");
-        out.print("<tr>\n");
-        out.print("<th>Unknown</th>");
-        for (int i = 0; i < m_maxMove; ++i)
-            out.print("<td>"
-                      + commandStatistics.getStatistics(i).m_numberNoResult
-                      + "</td>");
-        out.print("<td>"
-                  + commandStatistics.m_statisticsFinal.m_numberNoResult
-                  + "</td>\n");
-        out.print("<td>" + commandStatistics.m_statisticsAll.m_numberNoResult
-                  + "</td>\n");
-        out.print("</tr>\n");
+        out.print("<tr>" +
+                  "<td>Final</td>");
+        writeStatisticsTableData(out, finalStatistics);
+        out.print("</tr>");
+        out.print("<tr>" +
+                  "<td>All</td>");
+        writeStatisticsTableData(out, statisticsAll);
+        out.print("</tr>");
+        out.print("</table>\n");
         out.print("</tbody>\n");
         out.print("</table>\n");
     }
@@ -589,15 +520,9 @@ public class Analyze
     {
         out.print("<table class=\"smalltable\">\n" +
                   "<thead><tr>"
-                  + "<th>Command</th>"
-                  + "<th>Mean</th>"
-                  + "<th>Deviation</th>"
-                  + "<th>Error</th>"
-                  + "<th>Min</th>"
-                  + "<th>Max</th>"
-                  + "<th>Sum</th>"
-                  + "<th>Count</th>"
-                  + "<th>Unknown</th>"
+                  + "<th>Command</th>");
+        writeStatisticsTableHeader(out);
+        out.print("<th>Unknown</th>"
                   + "</tr></thead>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
@@ -607,34 +532,10 @@ public class Analyze
                 writeCommandPage(i);
             PositionStatistics statisticsAll
                 = commandStatistics.m_statisticsAll;
-            Statistics stat = statisticsAll.m_statistics;
-            String command = getCommand(i);
             out.print("<tr>"
-                      + "<td>" + getCommandLink(i) + "</td>"
-                      + "<td>");
-            if (count > 0)
-                out.print(formatFloat(stat.getMean()));
-            out.print("</td><td>");
-            if (count > 0)
-                out.print(formatFloat(stat.getDeviation()));
-            out.print("</td><td>");
-            if (count > 0)
-                out.print(formatFloat(stat.getError()));
-            out.print("</td><td>");
-            if (count > 0)
-                out.print(formatFloat(stat.getMin()));
-            out.print("</td><td>");
-            if (count > 0)
-                out.print(formatFloat(stat.getMax()));
-            out.print("</td><td>");
-            if (count > 0)
-                out.print(formatFloat(stat.getSum()));
-            out.print("</td>"
-                      + "<td>" + formatFloat(count) + "</td>"
-                      + "<td>"
-                      + commandStatistics.m_statisticsAll.m_numberNoResult
-                      + "</td>"
-                      + "</tr>\n");
+                      + "<td>" + getCommandLink(i) + "</td>");
+            writeStatisticsTableData(out, statisticsAll);
+            out.print("</tr>\n");
         }
         out.print("</table>\n");
     }
@@ -789,6 +690,47 @@ public class Analyze
         writeTableProperty(out, "Size");
         writeTableProperty(out, "Games");
         writeHtmlRow(out, "Positions", m_table.getNumberRows());
+    }
+
+    private void writeStatisticsTableData(PrintStream out,
+                                          PositionStatistics statistics)
+    {
+        boolean notEmpty = (statistics.getCount() > 0);
+        out.print("<td>");
+        if (notEmpty)
+            out.print(formatFloat(statistics.getMean()));
+        out.print("</td><td>");
+        if (notEmpty)
+            out.print(formatFloat(statistics.getDeviation()));
+        out.print("</td><td>");
+        if (notEmpty)
+            out.print(formatFloat(statistics.getError()));
+        out.print("</td><td>");
+        if (notEmpty)
+            out.print(formatFloat(statistics.getMin()));
+        out.print("</td><td>");
+        if (notEmpty)
+            out.print(formatFloat(statistics.getMax()));
+        out.print("</td><td>");
+        if (notEmpty)
+            out.print(formatFloat(statistics.getSum()));
+        out.print("</td><td>");
+        out.print(statistics.getCount());
+        out.print("</td><td>");
+        out.print(statistics.m_numberNoResult);
+        out.print("</td>");
+    }
+
+    private void writeStatisticsTableHeader(PrintStream out)
+    {
+        out.print("<th>Mean</th>"
+                  + "<th>Deviation</th>"
+                  + "<th>Error</th>"
+                  + "<th>Min</th>"
+                  + "<th>Max</th>"
+                  + "<th>Sum</th>"
+                  + "<th>Count</th>"
+                  + "<th>Unknown</th>");
     }
 
     private void writeTableProperty(PrintStream out, String key)
