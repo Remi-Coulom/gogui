@@ -63,7 +63,7 @@ public class Plot
         initScale(table, columnX, columnY);
         drawBackground();
         drawGrid();
-        drawData(table, columnX, columnY, errorColumn, m_withBars);
+        drawData(table, columnX, columnY, errorColumn, false, m_withBars);
         m_graphics2D.dispose();
         ImageIO.write(image, "png", file);
     }
@@ -224,7 +224,8 @@ public class Plot
     }
 
     private void drawData(Table table, String columnX, String columnY,
-                          String errorColumn, boolean withBars)
+                          String errorColumn, boolean withLines,
+                          boolean withBars)
     {
         m_graphics2D.setColor(m_color);
         Point last = null;
@@ -261,9 +262,6 @@ public class Plot
                     Point top = getPoint(x, y + err);
                     Point bottom = getPoint(x, y - err);
                     m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
-                    m_graphics2D.drawLine(top.x - 1, top.y, top.x + 1, top.y);
-                    m_graphics2D.drawLine(bottom.x - 1, bottom.y,
-                                          bottom.x + 1, bottom.y);
                 }
                 if (! withBars)
                     m_graphics2D.fillRect(point.x - 1, point.y - 1, 3, 3);
