@@ -87,7 +87,7 @@ public final class PositionStatistics
             histoMax = max;
         }
         double diff = histoMax - histoMin;
-        int maxBins = 25;
+        int maxBins = 20;
         if (onlyIntValues)
         {
             int step = Math.max(1, (int)(diff / maxBins + 1));
