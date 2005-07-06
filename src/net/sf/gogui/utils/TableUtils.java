@@ -11,6 +11,17 @@ import java.util.Vector;
 
 public class TableUtils
 {
+    public static boolean allEmpty(Table table, String column)
+    {
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            String value = table.get(column, row);
+            if (value != null && ! value.trim().equals(""))
+                return false;
+        }
+        return true;
+    }
+
     public static void appendRow(Table to, Table from, int row)
     {
         assert(to.getNumberColumns() == from.getNumberColumns());
