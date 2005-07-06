@@ -165,7 +165,6 @@ public class GtpStatistics
         throws ErrorMessage, FileNotFoundException, GtpError,
                SgfReader.SgfError
     {
-        System.err.println(name);
         InputStream in = new FileInputStream(new File(name));
         SgfReader reader = new SgfReader(in, name, null, 0);
         ++m_numberGames;
@@ -212,6 +211,7 @@ public class GtpStatistics
                                 int number)
         throws GtpError
     {
+        System.err.println(name + ":" + number);
         m_table.startRow();
         m_table.set("File", name);
         m_table.set("Move", number);
