@@ -129,6 +129,51 @@ public class Analyze
         Color.decode("#980098")
     };
 
+    /** Command having at most one result per game. */
+    private static class GameGlobalCommand
+    {
+        public GameGlobalCommand(String name, Vector results)
+        {
+            m_name = name;
+            m_results = results;
+            initAllEmpty();
+        }
+
+        public boolean allEmpty()
+        {
+            return m_allEmpty;
+        }
+
+        public String getName()
+        {
+            return m_name;
+        }
+
+        public String getResult(int game)
+        {
+            return (String)m_results.get(game);
+        }
+
+        private boolean m_allEmpty;
+
+        private String m_name;
+
+        /** Results per game. */
+        private Vector m_results;
+
+        private void initAllEmpty()
+        {
+            m_allEmpty = false;
+            for (int game = 0; game < m_results.size(); ++game)
+            {
+                String result = getResult(game);
+                if (result != null && ! result.trim().equals(""))
+                    return;
+            }
+            m_allEmpty = true;
+        }
+    }
+
     private static class GameInfo
     {
         public String m_file;
@@ -174,10 +219,7 @@ public class Analyze
 
     private Vector m_commands;
 
-    /** Vector<Vector<String>> */
-    private Vector m_gameGlobalResult;
-
-    /** Vector<String> */
+    /** Vector<GameGlobalCommand> */
     private Vector m_gameGlobalCommands;
 
     /** Vector<GameInfo> */
@@ -186,7 +228,6 @@ public class Analyze
     private void findGameGlobalCommands()
     {
         m_gameGlobalCommands = new Vector();
-        m_gameGlobalResult = new Vector();
         for (int i = 0; i < m_commands.size(); ++i)
         {
             String command = getCommand(i);
@@ -210,8 +251,9 @@ public class Analyze
             }
             if (isGameGlobal)
             {
-                m_gameGlobalCommands.add(command);
-                m_gameGlobalResult.add(gameResult);
+                GameGlobalCommand gameGlobalCommand
+                    = new GameGlobalCommand(command, gameResult);
+                m_gameGlobalCommands.add(gameGlobalCommand);
             }
         }
     }
@@ -251,15 +293,14 @@ public class Analyze
         return new File(m_output + ".game-" + gameIndex + ".html");
     }
 
-    private String getGlobalCommand(int index)
+    private GameGlobalCommand getGameGlobalCommand(int index)
     {
-        return (String)m_gameGlobalCommands.get(index);
+        return (GameGlobalCommand)m_gameGlobalCommands.get(index);
     }
 
-    private String getGlobalCommandResult(int index, int gameNumber)
+    private String getGameGlobalCommandResult(int index, int gameNumber)
     {
-        Vector vector = (Vector)m_gameGlobalResult.get(index);
-        return (String)vector.get(gameNumber);
+        return getGameGlobalCommand(index).getResult(gameNumber);
     }
 
     private File getHistoFile(int commandIndex)
@@ -336,17 +377,6 @@ public class Analyze
     private int getImgWidth(int numberMoves)
     {
         return Math.max(10, Math.min(numberMoves * 9, 1000));
-    }
-
-    private boolean globalCommandAllEmpty(int i)
-    {
-        for (int j = 0; j < m_gameInfo.size(); ++j)
-        {
-            String result = getGlobalCommandResult(i, j);
-            if (result != null && ! result.trim().equals(""))
-                return false;
-        }
-        return true;
     }
 
     private void initGameInfo()
@@ -669,8 +699,8 @@ public class Analyze
         out.print("<table class=\"smalltable\">\n" +
                   "<thead><tr><th>Game</th><th>File</th><th>Positions</th>");
         for (int i = 0; i < m_gameGlobalCommands.size(); ++i)
-            if (! globalCommandAllEmpty(i))
-                out.print("<th>" + getGlobalCommand(i) + "</th>");
+            if (! getGameGlobalCommand(i).allEmpty())
+                out.print("<th>" + getGameGlobalCommand(i).m_name + "</th>");
         out.print("</tr></thead>\n");
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
@@ -681,8 +711,8 @@ public class Analyze
                       + "</td><td>" + info.m_numberPositions
                       + "</td>");
             for (int j = 0; j < m_gameGlobalCommands.size(); ++j)
-                if (! globalCommandAllEmpty(j))
-                    out.print("<td>" + getGlobalCommandResult(j, i)
+                if (! getGameGlobalCommand(j).allEmpty())
+                    out.print("<td>" + getGameGlobalCommand(j).getResult(i)
                               + "</td>");
             out.print("</tr>\n");
             writeGamePage(info.m_file, info.m_name, i);
@@ -718,25 +748,36 @@ public class Analyze
     private void writeStatisticsTableData(PrintStream out,
                                           PositionStatistics statistics)
     {
-        boolean notEmpty = (statistics.getCount() > 0);
+        boolean empty = (statistics.getCount() == 0);
+        boolean greaterOne = (statistics.getCount() > 1);
         out.print("<td>");
-        if (notEmpty)
+        if (! empty)
             out.print(formatFloat(statistics.getMean()));
         out.print("</td><td>");
-        if (notEmpty)
+        if (greaterOne)
             out.print(formatFloat(statistics.getDeviation()));
+        else if (! empty)
+            out.print("n/a");
         out.print("</td><td>");
-        if (notEmpty)
+        if (greaterOne)
             out.print(formatFloat(statistics.getError()));
+        else if (! empty)
+            out.print("n/a");
         out.print("</td><td>");
-        if (notEmpty)
+        if (greaterOne)
             out.print(formatFloat(statistics.getMin()));
+        else if (! empty)
+            out.print("n/a");
         out.print("</td><td>");
-        if (notEmpty)
+        if (greaterOne)
             out.print(formatFloat(statistics.getMax()));
+        else if (! empty)
+            out.print("n/a");
         out.print("</td><td>");
-        if (notEmpty)
+        if (greaterOne)
             out.print(formatFloat(statistics.getSum()));
+        else if (! empty)
+            out.print("n/a");
         out.print("</td><td>");
         out.print(statistics.getCount());
         out.print("</td><td>");
