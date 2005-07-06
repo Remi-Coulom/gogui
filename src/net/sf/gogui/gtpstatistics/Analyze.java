@@ -641,22 +641,27 @@ public class Analyze
         }
         out.print("</table>\n" +
                   "</p>\n" +
-                  "<hr>\n" +
-                  "<p>\n" +
+                  "<hr>\n");
+        Table table = TableUtils.select(m_table, "File", game);
+        out.print("<p>\n" +
                   "<table class=\"smalltable\">\n" +
                   "<thead><tr>");
-        for (int i = 1; i < m_table.getNumberColumns(); ++i)
-            out.print("<th>" + m_table.getColumnTitle(i) + "</th>");
-        out.print("</tr></thead>\n");
-        for (int i = 0; i < m_table.getNumberRows(); ++i)
+        for (int i = 1; i < table.getNumberColumns(); ++i)
         {
-            if (! m_table.get("File", i).equals(game))
-                continue;
+            String command = table.getColumnTitle(i);
+            if (! TableUtils.allEmpty(table, command))
+                out.print("<th>" + command + "</th>");
+        }
+        out.print("</tr></thead>\n");
+        for (int i = 0; i < table.getNumberRows(); ++i)
+        {
             out.print("<tr>");
-            for (int j = 1; j < m_table.getNumberColumns(); ++j)
+            for (int j = 1; j < table.getNumberColumns(); ++j)
             {
-                String columnTitle = m_table.getColumnTitle(j);
-                String value = m_table.get(columnTitle, i);
+                String command = table.getColumnTitle(j);
+                if (TableUtils.allEmpty(table, command))
+                    continue;
+                String value = table.get(command, i);
                 if (value == null)
                     value = "";
                 out.print("<td>" + value + "</td>");
