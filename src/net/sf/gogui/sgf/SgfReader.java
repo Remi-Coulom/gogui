@@ -800,17 +800,7 @@ public class SgfReader
             else if (p == "TB")
                 readMarked(node, Node.MARKED_TERRITORY_BLACK);
             else if (p == "TM")
-            {
-                try
-                {
-                    m_preByoyomi = (long)(Double.parseDouble(v) * 1000);
-                }
-                catch (NumberFormatException e)
-                {
-                    setWarning("Invalid value for time");
-                    m_ignoreTimeSettings = true;
-                }
-            }
+                readTime(v);
             else if (p == "TR")
                 readMarked(node, Node.MARKED_TRIANGLE);
             else if (p == "W")
@@ -930,6 +920,51 @@ public class SgfReader
             }
         }
         return m_buffer.toString();
+    }
+
+    private void readTime(String value)
+    {
+        try
+        {
+            m_preByoyomi = (long)(Double.parseDouble(value) * 1000);
+            return;
+        }
+        catch (NumberFormatException e)
+        {
+        }
+        try
+        {
+            Pattern pattern;
+            Matcher matcher;
+            // Pattern as written by CGoban 1.9.12
+            pattern = Pattern.compile("(\\d{1,2}+):(\\d\\d)");
+            matcher = pattern.matcher(value.trim());
+            if (matcher.matches())
+            {
+                assert(matcher.groupCount() == 2);
+                m_preByoyomi =
+                    (Integer.parseInt(matcher.group(1)) * 60 
+                     + Integer.parseInt(matcher.group(2))) * 1000;
+                return;
+            }
+            pattern = Pattern.compile("(\\d+):(\\d\\d):(\\d\\d)");
+            matcher = pattern.matcher(value.trim());
+            if (matcher.matches())
+            {
+                assert(matcher.groupCount() == 3);
+                m_preByoyomi =
+                    (Integer.parseInt(matcher.group(1)) * 3600 
+                     + Integer.parseInt(matcher.group(2)) * 60
+                     + Integer.parseInt(matcher.group(3))) * 1000;
+                return;
+            }
+        }
+        catch (NumberFormatException e)
+        {
+            assert(false);
+        }
+        setWarning("Invalid value for time");
+        m_ignoreTimeSettings = true;
     }
 
     private void setTimeSettings()
