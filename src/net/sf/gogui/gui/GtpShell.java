@@ -35,6 +35,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Vector;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JComboBox;
@@ -376,6 +377,9 @@ public class GtpShell
         m_historyMin = prefs.getInt("gtpshell-history-min");
         m_historyMax = prefs.getInt("gtpshell-history-max");
         Container contentPane = getContentPane();
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        getContentPane().add(panel, BorderLayout.CENTER);
         m_gtpShellText
             = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp);
         m_scrollPane =
@@ -384,9 +388,8 @@ public class GtpShell
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         m_fontSize = m_gtpShellText.getFont().getSize();
         m_finalSize = new Dimension(m_fontSize * 40, m_fontSize * 30);
-        contentPane.add(GuiUtils.createSmallFiller(), BorderLayout.NORTH);
-        contentPane.add(m_scrollPane, BorderLayout.CENTER);
-        contentPane.add(createCommandInput(), BorderLayout.SOUTH);
+        panel.add(m_scrollPane, BorderLayout.CENTER);
+        panel.add(createCommandInput(), BorderLayout.SOUTH);
         pack();
     }
     
