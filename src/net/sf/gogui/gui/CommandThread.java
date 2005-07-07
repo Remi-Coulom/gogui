@@ -50,6 +50,11 @@ public class CommandThread
         m_gtp.destroyProcess();
     }
     
+    public void setAutoNumber(boolean enable)
+    {
+        m_gtp.setAutoNumber(enable);
+    }
+
     /** Get response to asynchronous command.
         You must call getException() first.
     */

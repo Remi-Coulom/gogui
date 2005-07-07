@@ -91,15 +91,15 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** Graphical user interface to a Go program. */
-class GoGui
+public class GoGui
     extends JFrame
     implements ActionListener, AnalyzeDialog.Callback, GuiBoard.Listener,
                GameTreeViewer.Listener, GtpShell.Callback
 {
-    GoGui(String program, Preferences prefs, String file, int move,
-          String time, boolean verbose, boolean computerBlack,
-          boolean computerWhite, boolean auto, String gtpFile,
-          String gtpCommand, String initAnalyze, boolean fastPaint)
+    public GoGui(String program, Preferences prefs, String file, int move,
+                 String time, boolean verbose, boolean computerBlack,
+                 boolean computerWhite, boolean auto, String gtpFile,
+                 String gtpCommand, String initAnalyze, boolean fastPaint)
         throws GtpError
     {
         m_fastPaint = fastPaint;
@@ -400,6 +400,12 @@ class GoGui
             m_gtpShell.toTop();
         if (m_prefs.getBool("show-analyze"))
             cbAnalyze();
+    }
+
+    public void cbAutoNumber(boolean enable)
+    {
+        if (m_commandThread != null)
+            m_commandThread.setAutoNumber(enable);
     }
 
     public boolean cbDetachProgram()
@@ -998,7 +1004,7 @@ class GoGui
             Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             if (m_gtpShell.getAutoNumber())
-                gtp.enableAutoNumber();
+                gtp.setAutoNumber(true);
             m_commandThread = new CommandThread(gtp, this);
             m_commandThread.start();
         }

@@ -430,11 +430,9 @@ public final class Gtp
         m_response = "";
         if (m_isProgramDead)
             throwProgramDied();
+        ++m_commandNumber;
         if (m_autoNumber)
-        {
-            ++m_commandNumber;
             command = Integer.toString(m_commandNumber) + " " + command;
-        }
         log(">> " + command);
         m_out.println(command);
         m_out.flush();
@@ -531,9 +529,9 @@ public final class Gtp
         Every command will be prepended by an integer as defined in the GTP
         standard, the integer is incremented after each command.
     */
-    public void enableAutoNumber()
+    public void setAutoNumber(boolean enable)
     {
-        m_autoNumber = true;
+        m_autoNumber = enable;
     }
 
     /** Set the callback for invalid responses.

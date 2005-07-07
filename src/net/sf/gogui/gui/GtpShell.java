@@ -367,6 +367,8 @@ public class GtpShell
     {
         void cbAnalyze();
 
+        void cbAutoNumber(boolean enable);
+
         void cbShowGameTree();
 
         boolean sendGtpCommand(String command, boolean sync) throws GtpError;
@@ -940,8 +942,7 @@ public class GtpShell
     {
         m_autoNumber = m_itemAutoNumber.isSelected();        
         m_prefs.setBool("gtpshell-autonumber", m_autoNumber);
-        SimpleDialogs.showInfo(this,
-                               "Setting will take effect on next start");
+        m_callback.cbAutoNumber(m_autoNumber);
     }
 
     private void timeStamp()
