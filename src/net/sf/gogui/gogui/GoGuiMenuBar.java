@@ -50,6 +50,8 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuSetup);
         m_menuSettings = createSettingsMenu();
         m_menuBar.add(m_menuSettings);
+        m_menuGtpShell = createGtpShellMenu();
+        m_menuBar.add(m_menuGtpShell);
         m_menuWindow = createWindowMenu();
         m_menuBar.add(m_menuWindow);
         m_menuHelp = createHelpMenu();
@@ -115,6 +117,26 @@ public class GoGuiMenuBar
     {
         m_findNextEnabled = enable;
         m_itemFindNext.setEnabled(enable);
+    }
+
+    public boolean getAutoNumber()
+    {
+        return m_itemAutoNumber.isSelected();        
+    }
+
+    public boolean getHighlight()
+    {
+        return m_itemHighlight.isSelected();        
+    }
+
+    public boolean getTimeStamp()
+    {
+        return m_itemTimeStamp.isSelected();        
+    }
+
+    public boolean getCommandCompletion()
+    {
+        return m_itemCommandCompletion.isSelected();
     }
 
     public boolean getBeepAfterMove()
@@ -195,6 +217,7 @@ public class GoGuiMenuBar
     {
         m_isComputerDisabled = ! enabled;
         m_menuComputerColor.setEnabled(enabled);
+        m_menuGtpShell.setEnabled(enabled);
         m_itemComputerPlay.setEnabled(enabled);
         m_itemBeepAfterMove.setEnabled(enabled);
         m_itemDetachProgram.setEnabled(enabled);
@@ -251,6 +274,26 @@ public class GoGuiMenuBar
         m_itemShowVariations.setEnabled(true);
         m_menuWindow.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
+    }
+
+    public void setAutoNumber(boolean enable)
+    {
+        m_itemAutoNumber.setSelected(enable);        
+    }
+
+    public void setCommandCompletion(boolean enable)
+    {
+        m_itemCommandCompletion.setSelected(enable);
+    }
+
+    public void setHighlight(boolean enable)
+    {
+        m_itemHighlight.setSelected(enable);        
+    }
+
+    public void setTimeStamp(boolean enable)
+    {
+        m_itemTimeStamp.setSelected(enable);        
     }
 
     public void setNormalMode()
@@ -392,7 +435,13 @@ public class GoGuiMenuBar
 
     private File m_selectedRecent;
 
+    private JCheckBoxMenuItem m_itemAutoNumber;
+
     private JCheckBoxMenuItem m_itemBeepAfterMove;
+
+    private JCheckBoxMenuItem m_itemCommandCompletion;
+
+    private JCheckBoxMenuItem m_itemHighlight;
 
     private JCheckBoxMenuItem m_itemShowCursor;
 
@@ -404,11 +453,15 @@ public class GoGuiMenuBar
 
     private JCheckBoxMenuItem m_itemSetup;
 
+    private JCheckBoxMenuItem m_itemTimeStamp;
+
     private JMenu m_menuComputerColor;
 
     private final JMenu m_menuFile;
 
     private final JMenu m_menuGame;
+
+    private final JMenu m_menuGtpShell;
 
     private final JMenu m_menuHelp;
 
@@ -670,6 +723,19 @@ public class GoGuiMenuBar
         return menu;
     }
 
+    private JMenu createGtpShellMenu()
+    {
+        JMenu menu = createMenu("GTP Shell", KeyEvent.VK_T);
+        addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
+                    m_shortcutKeyMask, "gtpshell-save");
+        addMenuItem(menu, "Save Commands...", KeyEvent.VK_M,
+                    "gtpshell-save-commands");
+        menu.addSeparator();
+        addMenuItem(menu, "Send File...", KeyEvent.VK_G,
+                    "gtpshell-send-file");
+        return menu;
+    }
+
     private JMenu createHandicapMenu()
     {
         JMenu menu = createMenu("Handicap", KeyEvent.VK_H);
@@ -741,6 +807,23 @@ public class GoGuiMenuBar
         m_itemShowVariations.setSelected(true);
         addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,
                     "show-variations");
+        menu.addSeparator();
+        menu.add(createSettingsGtpShell());
+        return menu;
+    }
+
+    private JMenu createSettingsGtpShell()
+    {
+        JMenu menu = createMenu("GTP Shell", KeyEvent.VK_T);
+        m_itemHighlight = new JCheckBoxMenuItem("Highlight");
+        addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
+        m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
+        addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_C,
+                    "command-completion");
+        m_itemAutoNumber = new JCheckBoxMenuItem("Auto Number");
+        addMenuItem(menu, m_itemAutoNumber, KeyEvent.VK_A, "auto-number");
+        m_itemTimeStamp = new JCheckBoxMenuItem("Timestamp");
+        addMenuItem(menu, m_itemTimeStamp, KeyEvent.VK_T, "timestamp");
         return menu;
     }
 

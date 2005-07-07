@@ -37,13 +37,10 @@ import java.lang.reflect.Modifier;
 import java.util.Vector;
 import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -367,13 +364,7 @@ public class GtpShell
     {
         void cbAnalyze();
 
-        void cbAutoNumber(boolean enable);
-
-        void cbShowGameTree();
-
         boolean sendGtpCommand(String command, boolean sync) throws GtpError;
-
-        void toTop();
     }
 
     public GtpShell(Frame owner, Callback callback, Preferences prefs)
@@ -384,21 +375,16 @@ public class GtpShell
         setPrefsDefaults(prefs);
         m_historyMin = prefs.getInt("gtpshell-history-min");
         m_historyMax = prefs.getInt("gtpshell-history-max");
-        m_disableCompletions = prefs.getBool("gtpshell-disable-completions");
-        m_autoNumber = prefs.getBool("gtpshell-autonumber");
-        m_timeStamp = prefs.getBool("gtpshell-timestamp");
-        boolean highlight = prefs.getBool("gtpshell-highlight");
-        createMenuBar(highlight);
         Container contentPane = getContentPane();
         m_gtpShellText
             = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp);
-        m_gtpShellText.setHighlight(highlight);
         m_scrollPane =
             new JScrollPane(m_gtpShellText,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         m_fontSize = m_gtpShellText.getFont().getSize();
         m_finalSize = new Dimension(m_fontSize * 40, m_fontSize * 30);
+        contentPane.add(GuiUtils.createSmallFiller(), BorderLayout.NORTH);
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         contentPane.add(createCommandInput(), BorderLayout.SOUTH);
         pack();
@@ -409,40 +395,12 @@ public class GtpShell
         String command = event.getActionCommand();
         if (command.equals("analyze"))
             m_callback.cbAnalyze();
-        else if (command.equals("auto-number"))
-            autoNumber();
         else if (command.equals("comboBoxEdited"))
             comboBoxEdited();
-        else if (command.equals("command-completion"))
-            commandCompletion();
-        else if (command.equals("show-gametree"))
-            m_callback.cbShowGameTree();
-        else if (command.equals("timestamp"))
-            timeStamp();
-        else if (command.equals("gogui"))
-            m_callback.toTop();
-        else if (command.equals("highlight"))
-            highlight();
-        else if (command.equals("save-log"))
-            saveLog();
-        else if (command.equals("save-commands"))
-            saveCommands();
-        else if (command.equals("send-file"))
-            sendFile();
         else if (command.equals("close"))
             setVisible(false);
     }
     
-    public boolean getAutoNumber()
-    {
-        return m_autoNumber;
-    }
-
-    public boolean getTimeStamp()
-    {
-        return m_timeStamp;
-    }
-
     public void loadHistory()
     {
         File file = getHistoryFile();
@@ -501,6 +459,17 @@ public class GtpShell
         invokeAndWait(r);
     }
 
+    public void saveLog(JFrame parent)
+    {
+        save(parent, m_gtpShellText.getLog(),
+             m_gtpShellText.getLinesTruncated());
+    }
+
+    public void saveCommands(JFrame parent)
+    {
+        save(parent, m_commands.toString(), m_linesTruncated);
+    }
+
     public void saveHistory()
     {
         File file = getHistoryFile();
@@ -524,12 +493,26 @@ public class GtpShell
     public void setCommandInProgess(boolean commandInProgess)
     {
         m_comboBox.setEnabled(! commandInProgess);
-        m_sendGtpFile.setEnabled(! commandInProgess);
         if (! commandInProgess)
         {
             m_comboBox.requestFocusInWindow();
             m_textField.requestFocusInWindow();
         }
+    }
+
+    public void setCommandCompletion(boolean commandCompletion)
+    {
+        m_disableCompletions = ! commandCompletion;
+    }
+
+    public void setHighlight(boolean highlight)
+    {
+        m_gtpShellText.setHighlight(highlight);
+    }
+
+    public void setTimeStamp(boolean enable)
+    {
+        m_gtpShellText.setTimeStamp(enable);
     }
 
     public void toTop()
@@ -612,57 +595,6 @@ public class GtpShell
         invokeAndWait(r);
     }
     
-    public void sendGtp(Reader reader)
-    {
-        java.io.BufferedReader in;
-        in = new BufferedReader(reader);
-        try
-        {
-            while (true)
-            {
-                try
-                {
-                    String line = in.readLine();
-                    if (line == null)
-                    {
-                        in.close();
-                        break;
-                    }
-                    if (! sendCommand(line, this, true))
-                        break;
-                }
-                catch (IOException e)
-                {
-                    SimpleDialogs.showError(this, "Sending commands aborted",
-                                            e);
-                    break;
-                }
-            }
-        }
-        finally
-        {
-            try
-            {
-                in.close();
-            }
-            catch (IOException e)
-            {
-            }
-        }
-    }
-
-    public void sendGtpFile(File file)
-    {
-        try
-        {
-            sendGtp(new FileReader(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            SimpleDialogs.showError(this, "Could not send commands.", e);
-        }
-    }
-
     public void setFinalSize(int x, int y, int width, int height)
     {
         if (m_isFinalSizeSet)
@@ -775,8 +707,6 @@ public class GtpShell
         private final GtpShell m_gtpShell;
     }
 
-    private boolean m_autoNumber;
-
     private boolean m_timeStamp;
 
     private boolean m_disableCompletions;
@@ -795,9 +725,6 @@ public class GtpShell
 
     private int m_numberCommands;
 
-    private static final int m_shortcutKeyMask =
-        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
@@ -812,16 +739,6 @@ public class GtpShell
     private JTextField m_textField;
 
     private JComboBox m_comboBox;
-
-    private JCheckBoxMenuItem m_itemAutoNumber;
-
-    private JCheckBoxMenuItem m_itemTimeStamp;
-
-    private JCheckBoxMenuItem m_itemCommandCompletion;
-
-    private JCheckBoxMenuItem m_itemHighlight;
-
-    private JMenuItem m_sendGtpFile;
 
     private JScrollPane m_scrollPane;
 
@@ -859,32 +776,6 @@ public class GtpShell
         m_comboBox.setSelectedIndex(-1);
         m_textField.setText(oldText);
         m_textField.setCaretPosition(oldCaretPosition);
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
-                                  String command)
-    {
-        item.addActionListener(this);
-        item.setActionCommand(command);
-        item.setMnemonic(mnemonic);
-        menu.add(item);
-        return item;
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  String command)
-    {
-        JMenuItem item = new JMenuItem(label);
-        return addMenuItem(menu, item, mnemonic, command);        
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  int accel, int modifier, String command)
-    {
-        JMenuItem item = new JMenuItem(label);
-        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
-        item.setAccelerator(k);
-        return addMenuItem(menu, item, mnemonic, command);
     }
 
     private void appendInvalidResponse(String response)
@@ -938,20 +829,6 @@ public class GtpShell
         m_history.add(command);
     }
 
-    private void autoNumber()
-    {
-        m_autoNumber = m_itemAutoNumber.isSelected();        
-        m_prefs.setBool("gtpshell-autonumber", m_autoNumber);
-        m_callback.cbAutoNumber(m_autoNumber);
-    }
-
-    private void timeStamp()
-    {
-        m_timeStamp = m_itemTimeStamp.isSelected();        
-        m_prefs.setBool("gtpshell-timestamp", m_timeStamp);
-        m_gtpShellText.setTimeStamp(m_timeStamp);
-    }
-
     private void comboBoxEdited()
     {
         String command = m_comboBox.getSelectedItem().toString();        
@@ -965,12 +842,6 @@ public class GtpShell
         m_editor.setItem(null);
         m_comboBox.requestFocusInWindow();
         m_textField.requestFocusInWindow();
-    }
-
-    private void commandCompletion()
-    {
-        m_disableCompletions = ! m_itemCommandCompletion.isSelected();
-        m_prefs.setBool("gtpshell-disable-completions", m_disableCompletions);
     }
 
     private JPanel createCommandInput()
@@ -1030,73 +901,6 @@ public class GtpShell
         return panel;
     }
 
-    private void createMenuBar(boolean highlight)
-    {
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createMenuWindows());
-        menuBar.add(createMenuFile());
-        menuBar.add(createMenuSettings(highlight));
-        setJMenuBar(menuBar);
-    }
-
-    private JMenu createMenu(String name, int mnemonic)
-    {
-        JMenu menu = new JMenu(name);
-        menu.setMnemonic(mnemonic);
-        return menu;
-    }
-
-    private JMenu createMenuFile()
-    {
-        JMenu menu = createMenu("File", KeyEvent.VK_F);
-        addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
-                    m_shortcutKeyMask, "save-log");
-        addMenuItem(menu, "Save Commands...", KeyEvent.VK_M, "save-commands");
-        menu.addSeparator();
-        m_sendGtpFile =
-            addMenuItem(menu, "Send GTP File...", KeyEvent.VK_G, "send-file");
-        return menu;
-    }
-
-    private JMenu createMenuSettings(boolean highlight)
-    {
-        JMenu menu = createMenu("Settings", KeyEvent.VK_S);
-        m_itemHighlight = new JCheckBoxMenuItem("Highlight");
-        m_itemHighlight.setSelected(highlight);
-        addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
-        m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
-        m_itemCommandCompletion.setSelected(! m_disableCompletions);
-        addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_C,
-                    "command-completion");
-        m_itemAutoNumber = new JCheckBoxMenuItem("Auto Number");
-        m_itemAutoNumber.setSelected(m_autoNumber);
-        addMenuItem(menu, m_itemAutoNumber, KeyEvent.VK_A,
-                    "auto-number");
-        m_itemTimeStamp = new JCheckBoxMenuItem("Timestamp");
-        m_itemTimeStamp.setSelected(m_timeStamp);
-        addMenuItem(menu, m_itemTimeStamp, KeyEvent.VK_T,
-                    "timestamp");
-        return menu;
-    }
-
-    private JMenu createMenuWindows()
-    {
-        int shortcutKeyMask = 0;
-        if (Platform.isMac())
-            shortcutKeyMask = m_shortcutKeyMask;
-        JMenu menu = createMenu("Window", KeyEvent.VK_W);
-        addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6,
-                    shortcutKeyMask, "gogui");
-        addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7,
-                    shortcutKeyMask, "show-gametree");
-        addMenuItem(menu, "Analyze", KeyEvent.VK_A, KeyEvent.VK_F8,
-                    shortcutKeyMask, "analyze");
-        menu.addSeparator();
-        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    m_shortcutKeyMask, "close");
-        return menu;
-    }
-
     private void findBestCompletion()
     {
         String text = m_textField.getText().trim();
@@ -1140,13 +944,6 @@ public class GtpShell
         if (! dir.exists())
             dir.mkdir();
         return new File(dir, "gtpshell-history");
-    }
-
-    private void highlight()
-    {
-        boolean highlight = m_itemHighlight.isSelected();
-        m_gtpShellText.setHighlight(highlight);
-        m_prefs.setBool("gtpshell-highlight", highlight);
     }
 
     private void invokeAndWait(Runnable runnable)
@@ -1196,7 +993,7 @@ public class GtpShell
         return null;
     }
 
-    private void save(String s, int linesTruncated)
+    private void save(JFrame parent, String s, int linesTruncated)
     {
         File file = queryFile();
         if (file == null)
@@ -1213,27 +1010,10 @@ public class GtpShell
         }
         catch (FileNotFoundException e)
         {
-            JOptionPane.showMessageDialog(this, "Could not save to file.",
+            JOptionPane.showMessageDialog(parent, "Could not save to file.",
                                           "GoGui: Error",
                                           JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private void saveLog()
-    {
-        save(m_gtpShellText.getLog(), m_gtpShellText.getLinesTruncated());
-    }
-
-    private void saveCommands()
-    {
-        save(m_commands.toString(), m_linesTruncated);
-    }
-
-    private void sendFile()
-    {
-        File file = SimpleDialogs.showOpen(this, "Choose GTP file.");
-        if (file != null)
-            sendGtpFile(file);
     }
 
     private void scrollPage(boolean up)

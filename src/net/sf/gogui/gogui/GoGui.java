@@ -18,11 +18,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Vector;
@@ -183,6 +187,12 @@ public class GoGui
 
         m_menuBar = new GoGuiMenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
+        m_menuBar.setHighlight(m_prefs.getBool("gtpshell-highlight"));
+        m_menuBar.setAutoNumber(m_prefs.getBool("gtpshell-autonumber"));
+        boolean completion
+            = ! m_prefs.getBool("gtpshell-disable-completions");
+        m_menuBar.setCommandCompletion(completion);
+        m_menuBar.setTimeStamp(m_prefs.getBool("gtpshell-timestamp"));
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setShowInfoPanel(m_showInfoPanel);
         m_menuBar.setShowToolbar(m_showToolbar);
@@ -247,6 +257,8 @@ public class GoGui
             cbAnalyze();
         else if (command.equals("attach-program"))
             cbAttachProgram();
+        else if (command.equals("auto-number"))
+            cbAutoNumber();
         else if (command.equals("back-to-main-variation"))
             cbBackToMainVar();
         else if (command.equals("backward"))
@@ -267,6 +279,8 @@ public class GoGui
             cbClockResume();
         else if (command.equals("clock-restore"))
             cbClockRestore();
+        else if (command.equals("command-completion"))
+            cbCommandCompletion();
         else if (command.equals("computer-black"))
             computerBlack();
         else if (command.equals("computer-both"))
@@ -297,8 +311,16 @@ public class GoGui
             cbGotoVariation();
         else if (command.equals("gtp-shell"))
             cbGtpShell();
+        else if (command.equals("gtpshell-save"))
+            cbGtpShellSave();
+        else if (command.equals("gtpshell-save-commands"))
+            cbGtpShellSaveCommands();
+        else if (command.equals("gtpshell-send-file"))
+            cbGtpShellSendFile();
         else if (command.startsWith("handicap-"))
             cbHandicap(command.substring("handicap-".length()));
+        else if (command.equals("highlight"))
+            cbHighlight();
         else if (command.equals("help"))
             cbHelp();
         else if (command.equals("interrupt"))
@@ -359,6 +381,8 @@ public class GoGui
             cbShowToolbar();
         else if (command.equals("show-variations"))
             cbShowVariations();
+        else if (command.equals("timestamp"))
+            cbTimeStamp();
         else if (command.equals("truncate"))
             cbTruncate();
         else
@@ -408,6 +432,15 @@ public class GoGui
             m_commandThread.setAutoNumber(enable);
     }
 
+    public void cbCommandCompletion()
+    {
+        if (m_gtpShell == null)
+            return;
+        boolean commandCompletion = m_menuBar.getCommandCompletion();
+        m_gtpShell.setCommandCompletion(commandCompletion);
+        m_prefs.setBool("gtpshell-disable-completions", ! commandCompletion);
+    }
+
     public boolean cbDetachProgram()
     {        
         if (m_commandThread == null)
@@ -426,8 +459,32 @@ public class GoGui
 
     public void cbGtpShell()
     {
-        if (m_gtpShell != null)
-            m_gtpShell.toTop();
+        if (m_gtpShell == null)
+            return;
+        m_gtpShell.toTop();
+    }
+
+    public void cbGtpShellSave()
+    {
+        if (m_gtpShell == null)
+            return;
+        m_gtpShell.saveLog(this);
+    }
+
+    public void cbGtpShellSaveCommands()
+    {
+        if (m_gtpShell == null)
+            return;
+        m_gtpShell.saveCommands(this);
+    }
+
+    public void cbGtpShellSendFile()
+    {
+        if (m_gtpShell == null)
+            return;
+        File file = SimpleDialogs.showOpen(this, "Choose GTP file.");
+        if (file != null)
+            sendGtpFile(file);
     }
 
     public void cbShowGameTree()
@@ -983,6 +1040,8 @@ public class GoGui
         m_program = program;
         m_gtpShell = new GtpShell(this, this, m_prefs);
         m_gtpShell.setProgramCommand(program);
+        m_gtpShell.setHighlight(m_menuBar.getHighlight());
+        m_gtpShell.setTimeStamp(m_menuBar.getTimeStamp());
         m_ignoreInvalidResponses = false;
         Gtp.InvalidResponseCallback invalidResponseCallback =
             new Gtp.InvalidResponseCallback()
@@ -1003,8 +1062,7 @@ public class GoGui
         {
             Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
-            if (m_gtpShell.getAutoNumber())
-                gtp.setAutoNumber(true);
+            gtp.setAutoNumber(m_menuBar.getAutoNumber());
             m_commandThread = new CommandThread(gtp, this);
             m_commandThread.start();
         }
@@ -1051,7 +1109,7 @@ public class GoGui
             m_commandThread.getSupportedCommands();
         m_gtpShell.setInitialCompletions(supportedCommands);
         if (! m_gtpFile.equals(""))
-            m_gtpShell.sendGtpFile(new File(m_gtpFile));
+            sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
         Node oldCurrentNode = m_currentNode;
@@ -1127,6 +1185,15 @@ public class GoGui
             command = m_commandThread.getProgramCommand();
         }
         AboutDialog.show(this, m_name, m_version, protocolVersion, command);
+    }
+
+    private void cbAutoNumber()
+    {
+        if (m_commandThread == null)
+            return;
+        boolean enable = m_menuBar.getAutoNumber();
+        m_commandThread.setAutoNumber(enable);
+        m_prefs.setBool("auto-number", enable);
     }
 
     private void cbBeepAfterMove()
@@ -1348,6 +1415,15 @@ public class GoGui
             restoreSize(m_help, "window-help");
         }
         m_help.toTop();
+    }
+
+    private void cbHighlight()
+    {
+        if (m_gtpShell == null)
+            return;
+        boolean highlight = m_menuBar.getHighlight();
+        m_gtpShell.setHighlight(highlight);
+        m_prefs.setBool("gtpshell-highlight", highlight);
     }
 
     private void cbInterrupt()
@@ -1648,6 +1724,15 @@ public class GoGui
         m_prefs.setBool("show-variations", m_showVariations);
         resetBoard();
         updateGameInfo(false);
+    }
+
+    private void cbTimeStamp()
+    {
+        if (m_gtpShell == null)
+            return;
+        boolean enable = m_menuBar.getTimeStamp();
+        m_gtpShell.setTimeStamp(enable);
+        m_prefs.setBool("gtpshell-timestamp", enable);
     }
 
     private void cbTruncate()
@@ -2608,10 +2693,66 @@ public class GoGui
         Session.saveSizeAndVisible(dialog, m_prefs, name, m_boardSize);
     }
 
+    private void sendGtp(Reader reader)
+    {
+        if (m_commandThread == null)
+            return;
+        java.io.BufferedReader in;
+        in = new BufferedReader(reader);
+        try
+        {
+            while (true)
+            {
+                try
+                {
+                    String line = in.readLine();
+                    if (line == null)
+                        break;
+                    line = line.trim();
+                    if (line.equals("") || line.startsWith("#"))
+                        continue;
+                    m_commandThread.sendCommand(line);
+                }
+                catch (GtpError e)
+                {
+                    showError(e);
+                    break;
+                }
+                catch (IOException e)
+                {
+                    showError("Error reading file");
+                    break;
+                }
+            }
+        }
+        finally
+        {
+            try
+            {
+                in.close();
+            }
+            catch (IOException e)
+            {
+            }
+        }
+    }
+
+    private void sendGtpFile(File file)
+    {
+        try
+        {
+            sendGtp(new FileReader(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("File not found: " + e.getMessage());
+        }
+    }
+
     private void sendGtpString(String commands)
     {        
         commands = commands.replaceAll("\\\\n", "\n");
-        m_gtpShell.sendGtp(new StringReader(commands));
+        sendGtp(new StringReader(commands));
     }
 
     private void setBoardCursor(int type)
