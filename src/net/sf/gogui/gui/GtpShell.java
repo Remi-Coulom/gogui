@@ -70,8 +70,10 @@ class GtpShellText
     extends JTextPane
     implements Scrollable
 {
-    public GtpShellText(int historyMin, int historyMax)
+    public GtpShellText(int historyMin, int historyMax, boolean timeStamp)
     {
+        m_startTime = System.currentTimeMillis();
+        m_timeStamp = timeStamp;
         m_historyMin = historyMin;
         m_historyMax = historyMax;
         m_highlight = true;
@@ -106,6 +108,7 @@ class GtpShellText
 
     public void appendInput(String text)
     {
+        appendTimeStamp();
         appendText(text, null);
     }
 
@@ -121,6 +124,7 @@ class GtpShellText
 
     public void appendOutput(String text)
     {
+        appendTimeStamp();
         appendText(text, "output");
     }
 
@@ -180,7 +184,14 @@ class GtpShellText
         }
     }
 
+    public void setTimeStamp(boolean enable)
+    {
+        m_timeStamp = enable;
+    }
+
     private boolean m_highlight;
+
+    private boolean m_timeStamp;
 
     private final int m_historyMin;
 
@@ -189,6 +200,8 @@ class GtpShellText
     private int m_lines;
 
     private int m_truncated;
+
+    private long m_startTime;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
@@ -227,6 +240,15 @@ class GtpShellText
             truncateHistory();
             setPositionToEnd();
         }
+    }
+
+    private void appendTimeStamp()
+    {
+        if (! m_timeStamp)
+            return;
+        long timeMillis = System.currentTimeMillis();
+        double diff = (timeMillis - m_startTime) / 1000;
+        appendText(Clock.getTimeString(diff, -1) + " ", "log");
     }
 
     /** Try to set the default caret with update policy NEVER_UPDATE.
@@ -362,10 +384,12 @@ public class GtpShell
         m_historyMax = prefs.getInt("gtpshell-history-max");
         m_disableCompletions = prefs.getBool("gtpshell-disable-completions");
         m_autoNumber = prefs.getBool("gtpshell-autonumber");
+        m_timeStamp = prefs.getBool("gtpshell-timestamp");
         boolean highlight = prefs.getBool("gtpshell-highlight");
         createMenuBar(highlight);
         Container contentPane = getContentPane();
-        m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax);
+        m_gtpShellText
+            = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp);
         m_gtpShellText.setHighlight(highlight);
         m_scrollPane =
             new JScrollPane(m_gtpShellText,
@@ -391,6 +415,8 @@ public class GtpShell
             commandCompletion();
         else if (command.equals("show-gametree"))
             m_callback.cbShowGameTree();
+        else if (command.equals("timestamp"))
+            timeStamp();
         else if (command.equals("gogui"))
             m_callback.toTop();
         else if (command.equals("highlight"))
@@ -408,6 +434,11 @@ public class GtpShell
     public boolean getAutoNumber()
     {
         return m_autoNumber;
+    }
+
+    public boolean getTimeStamp()
+    {
+        return m_timeStamp;
     }
 
     public void loadHistory()
@@ -744,6 +775,8 @@ public class GtpShell
 
     private boolean m_autoNumber;
 
+    private boolean m_timeStamp;
+
     private boolean m_disableCompletions;
 
     private boolean m_isFinalSizeSet;
@@ -779,6 +812,8 @@ public class GtpShell
     private JComboBox m_comboBox;
 
     private JCheckBoxMenuItem m_itemAutoNumber;
+
+    private JCheckBoxMenuItem m_itemTimeStamp;
 
     private JCheckBoxMenuItem m_itemCommandCompletion;
 
@@ -909,6 +944,13 @@ public class GtpShell
                                "Setting will take effect on next start");
     }
 
+    private void timeStamp()
+    {
+        m_timeStamp = m_itemTimeStamp.isSelected();        
+        m_prefs.setBool("gtpshell-timestamp", m_timeStamp);
+        m_gtpShellText.setTimeStamp(m_timeStamp);
+    }
+
     private void comboBoxEdited()
     {
         String command = m_comboBox.getSelectedItem().toString();        
@@ -1029,6 +1071,10 @@ public class GtpShell
         m_itemAutoNumber.setSelected(m_autoNumber);
         addMenuItem(menu, m_itemAutoNumber, KeyEvent.VK_A,
                     "auto-number");
+        m_itemTimeStamp = new JCheckBoxMenuItem("Timestamp");
+        m_itemTimeStamp.setSelected(m_timeStamp);
+        addMenuItem(menu, m_itemTimeStamp, KeyEvent.VK_T,
+                    "timestamp");
         return menu;
     }
 
@@ -1235,6 +1281,7 @@ public class GtpShell
     private static void setPrefsDefaults(Preferences prefs)
     {
         prefs.setBoolDefault("gtpshell-autonumber", false);
+        prefs.setBoolDefault("gtpshell-timestamp", false);
         // JComboBox has problems on the Mac, see section Bugs in
         // documentation
         prefs.setBoolDefault("gtpshell-disable-completions",

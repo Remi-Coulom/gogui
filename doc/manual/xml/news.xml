@@ -67,6 +67,11 @@ GoGui: load and save SGF marks and labels; edit them from context menu
 </listitem>
 <listitem>
 <simpara>
+GoGui: new option Timestamp in GTP shell settings menu
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpRegress:
 include error response outputs in test summaries;
 fix NullPointerException, if test file contains response pattern without
