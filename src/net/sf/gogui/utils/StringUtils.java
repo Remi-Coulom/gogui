@@ -7,7 +7,10 @@ package net.sf.gogui.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -27,6 +30,14 @@ public class StringUtils
         if (! Character.isUpperCase(first))
             buffer.setCharAt(0, Character.toUpperCase(first));
         return buffer.toString();
+    }
+
+    public static String getDate()
+    {
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
+                                                           DateFormat.FULL);
+        Date date = Calendar.getInstance().getTime();
+        return format.format(date);
     }
 
     /** Get default encoding of OutputStreamWriter. */

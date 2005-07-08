@@ -13,9 +13,7 @@ import java.io.FileReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
@@ -772,15 +770,13 @@ public class GtpRegress
         {
             host = "?";
         }
-        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                                           DateFormat.FULL);
-        Date date = Calendar.getInstance().getTime();
         if (withName)
             out.print("<tr><th align=\"left\">Name:</th><td>" + m_name
                       + "</td></tr>\n" +
                       "<tr><th align=\"left\">Version:</th><td>" + m_version
                       + "</td></tr>\n");
-        out.print("<tr><th align=\"left\">Date:</th><td>" + format.format(date)
+        out.print("<tr><th align=\"left\">Date:</th><td>"
+                  + StringUtils.getDate()
                   + "</td></tr>\n" +
                   "<tr><th align=\"left\">Host:</th><td>" + host
                   + "</td></tr>\n" +

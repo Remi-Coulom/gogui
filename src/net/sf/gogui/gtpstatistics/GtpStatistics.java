@@ -13,9 +13,7 @@ import java.io.FileWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Vector;
-import java.text.DateFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -26,6 +24,7 @@ import net.sf.gogui.gtp.Gtp;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.utils.Table;
 
 //----------------------------------------------------------------------------
@@ -93,10 +92,7 @@ public class GtpStatistics
             host = "?";
         }
         m_table.setProperty("Host", host);
-        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                                           DateFormat.FULL);
-        Date date = Calendar.getInstance().getTime();
-        m_table.setProperty("Date", format.format(date));
+        m_table.setProperty("Date", StringUtils.getDate());
         for (int i = 0; i < sgfFiles.size(); ++i)
             handleFile((String)sgfFiles.get(i));
         m_table.setProperty("Games", Integer.toString(m_numberGames));

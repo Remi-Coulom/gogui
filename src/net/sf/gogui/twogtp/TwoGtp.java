@@ -18,9 +18,7 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
@@ -993,11 +991,9 @@ public class TwoGtp
             gameComment = gameComment +
                 "\nReferee: " + m_refereeCommand +
                 "\nResult[Referee]: " + resultReferee;
-        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                                           DateFormat.FULL);
         gameComment = gameComment +
             "\nHost: " + host +
-            "\nDate: " + format.format(Calendar.getInstance().getTime());
+            "\nDate: " + StringUtils.getDate();
         m_gameTree.getRoot().setComment(gameComment);
         File file = getFile(m_gameIndex);
         if (m_verbose)
@@ -1029,10 +1025,6 @@ public class TwoGtp
             String refereeName = "-";
             if (m_referee != null)
                 refereeName = m_refereeName + ":" + m_refereeVersion;
-            DateFormat format =
-                DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                               DateFormat.FULL);
-            Date date = Calendar.getInstance().getTime();
             out.println("# Black: " + blackName);
             out.println("# White: " + whiteName);
             out.println("# Referee: " + refereeName);
@@ -1044,7 +1036,7 @@ public class TwoGtp
             if (m_openings != null)
                 out.println("# Openings: " + m_openings.getDirectory()
                             + " (" + m_openings.getNumber() + " files)");
-            out.println("# Date: " + format.format(date));
+            out.println("# Date: " + StringUtils.getDate());
             out.println("# Host: " + getHost());
             out.println("#GAME\tRES_B\tRES_W\tRES_R\tALT\tDUP\tLEN\tCPU_B\t"
                         + "CPU_W\tERR\tERR_MSG");
