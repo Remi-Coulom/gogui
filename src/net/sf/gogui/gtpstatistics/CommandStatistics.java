@@ -22,6 +22,10 @@ import net.sf.gogui.utils.TableUtils;
 
 public final class CommandStatistics
 {
+    public final int m_countZeroAtMove;
+
+    public final int m_maxMove;
+    
     public final PositionStatistics m_statisticsAll;
 
     public final PositionStatistics m_statisticsFinal;
@@ -48,8 +52,9 @@ public final class CommandStatistics
         columnTitles.add("Error");
         m_tableAtMove = new Table(columnTitles);
         Table tableAtMove;
-        int maxMove = (int)(TableUtils.getMax(table, "Move") + 1);
-        for (int move = 1; move <= maxMove; ++move)
+        m_maxMove = (int)(TableUtils.getMax(table, "Move") + 1);
+        int countZeroAtMove = 0;
+        for (int move = 1; move <= m_maxMove; ++move)
         {
             tableAtMove = TableUtils.selectIntRange(table, "Move", move,
                                                     move);
@@ -57,14 +62,22 @@ public final class CommandStatistics
                 = new PositionStatistics(command, tableAtMove, true, min,
                                          max);
             m_statisticsAtMove.add(statisticsAtMove);
-            m_tableAtMove.startRow();
-            m_tableAtMove.set("Move", move);
-            if (statisticsAtMove.getCount() > 0)
+            int count = statisticsAtMove.getCount();
+            if (count < 10)
+                // Insert empty row, so that Plot does not connect points
+                // with low statistics
+                m_tableAtMove.startRow();                
+            if (count > 0)
             {
+                m_tableAtMove.startRow();
+                m_tableAtMove.set("Move", move);
                 m_tableAtMove.set("Mean", statisticsAtMove.getMean());
                 m_tableAtMove.set("Error", statisticsAtMove.getError());
             }
+            else
+                ++countZeroAtMove;
         }
+        m_countZeroAtMove = countZeroAtMove;
         if (getCount() > 0)
         {
             Histogram histogram = m_statisticsAll.m_histogram;
@@ -81,6 +94,11 @@ public final class CommandStatistics
                 plot.plot(histoFileFinal, histoTable, command, "Count", null);
             }
         }
+    }
+
+    public boolean mostCountsZero()
+    {
+        return m_countZeroAtMove > 0.2 * m_maxMove;
     }
 
     public int getCount()

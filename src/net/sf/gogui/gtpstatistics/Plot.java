@@ -74,6 +74,11 @@ public class Plot
         m_barWidth = barWidth;
     }
 
+    public void setPlotStyleNoLines()
+    {
+        m_noLines = true;
+    }
+
     public void setSolidLineInterval(double solidLineInterval)
     {
         m_solidLineInterval = solidLineInterval;
@@ -137,6 +142,8 @@ public class Plot
     private boolean m_autoYMax = true;
 
     private boolean m_autoYTics = true;
+
+    private boolean m_noLines = false;
 
     private boolean m_onlyBoolValues;
 
@@ -253,7 +260,7 @@ public class Plot
                                           barWidthPixels,
                                           bottom.y - point.y);
                 }
-                else if (last != null)
+                else if (last != null && ! m_noLines)
                     m_graphics2D.drawLine(last.x, last.y, point.x, point.y);
                 if (errorColumn != null)
                 {

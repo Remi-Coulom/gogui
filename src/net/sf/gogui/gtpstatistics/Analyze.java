@@ -87,7 +87,9 @@ public class Analyze
                 table = commandStatistics.m_tableAtMove;
                 plot = generatePlotMove(getImgWidth(m_maxMove),
                                         getColor(command));
-                pngFile = getAvgPlotFile(i);
+                if (commandStatistics.mostCountsZero())
+                    plot.setPlotStyleNoLines();
+                pngFile = getAvgPlotFile(i);                
                 plot.plot(pngFile, table, "Move", "Mean", "Error");
                 out.print("<tr><td align=\"center\">\n" +
                           getCommandLink(i) + "<br>" +
@@ -338,6 +340,7 @@ public class Analyze
         throws Exception
     {
         String command = getCommand(index);
+        boolean plotLines = true;
         return new CommandStatistics(command, m_table, m_tableFinal,
                                      getHistoFile(index),
                                      getHistoFinalFile(index),
