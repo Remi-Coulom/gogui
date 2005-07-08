@@ -985,20 +985,9 @@ public class GtpShell
                 m_comboBox.showPopup();
     }
 
-    private File queryFile()
-    {
-        String dir = System.getProperties().getProperty("user.dir");
-        JFileChooser chooser = new JFileChooser(dir);
-        chooser.setMultiSelectionEnabled(false);
-        int ret = chooser.showSaveDialog(this);
-        if (ret == JFileChooser.APPROVE_OPTION)
-            return chooser.getSelectedFile();
-        return null;
-    }
-
     private void save(JFrame parent, String s, int linesTruncated)
     {
-        File file = queryFile();
+        File file = SimpleDialogs.showSave(parent, null);
         if (file == null)
             return;
         try

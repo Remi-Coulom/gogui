@@ -70,6 +70,11 @@ public class SimpleDialogs
         return (r == 0);
     }
 
+    public static File showSave(Component parent, String title)
+    {
+        return showFileChooser(parent, FILE_SAVE, null, false, title);
+    }
+
     public static File showSaveSgf(Frame parent)
     {
         File file = showFileChooser(parent, FILE_SAVE, m_lastFile, true,
