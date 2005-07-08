@@ -726,7 +726,7 @@ public class GoGuiMenuBar
     private JMenu createGtpShellMenu()
     {
         JMenu menu = createMenu("GTP Shell", KeyEvent.VK_T);
-        addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
+        addMenuItem(menu, "Save Log...", KeyEvent.VK_S, KeyEvent.VK_S,
                     m_shortcutKeyMask, "gtpshell-save");
         addMenuItem(menu, "Save Commands...", KeyEvent.VK_M,
                     "gtpshell-save-commands");
