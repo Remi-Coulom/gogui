@@ -397,27 +397,27 @@ public class Plot
         return new Point(intX, intY);
     }
 
-    private double getTics(double range, int numberTicsHint)
+    private double getTics(double range, int maxNumberTics)
     {
-        numberTicsHint = Math.max(2, numberTicsHint);
-        double tics = range / numberTicsHint;
+        maxNumberTics = Math.max(2, maxNumberTics);
+        double tics = range / maxNumberTics;
         if (tics < 0.5)
         {
             double result = 0.5;
-            while (result > tics)
+            while (result / 5 > tics)
             {
                 result /= 5;
-                if (result <= tics)
+                if (result / 2 <= tics)
                     break;
                 result /= 2;
             }
             return result;
         }
         double result = 0.5;
-        while (result * 2 < tics)
+        while (result < tics)
         {
             result *= 2;
-            if (result * 5 >= tics)
+            if (result >= tics)
                 break;
             result *= 5;
         }
@@ -494,7 +494,12 @@ public class Plot
         m_xRange = m_maxX - m_minX;
         if (m_autoXTics)
         {
-            m_xTics = getTics(m_xRange, m_imgWidth / m_ascent / 7);
+            double absMax = Math.max(Math.abs(m_minX), Math.abs(m_maxX));
+            final double log10 = Math.log(10);
+            int maxLength = (int)(Math.log(absMax) / log10) + m_precision + 3;
+            // m_ascent > max character width
+            int numberTics = m_imgWidth / (maxLength * m_ascent);
+            m_xTics = getTics(m_xRange, numberTics);
         }
         if (m_onlyIntValuesX)
             m_xTics = Math.max(1, m_xTics);
@@ -537,7 +542,8 @@ public class Plot
             }
             else
             {
-                m_yTics = getTics(m_yRange, m_imgHeight / m_ascent / 6);
+                int maxNumberTics = (int)(m_imgHeight / (3 * m_ascent));
+                m_yTics = getTics(m_yRange, maxNumberTics);
                 if (m_onlyIntValuesY)
                     m_yTics = Math.max(1, m_yTics);
             }
