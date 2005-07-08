@@ -72,27 +72,12 @@ public class SimpleDialogs
 
     public static File showSave(Component parent, String title)
     {
-        return showFileChooser(parent, FILE_SAVE, null, false, title);
+        return showFileChooserSave(parent, null, false, title);
     }
 
     public static File showSaveSgf(Frame parent)
     {
-        File file = showFileChooser(parent, FILE_SAVE, m_lastFile, true,
-                                    null);
-        if (Platform.isMac())
-            // Overwrite warning is already part of FileDialog
-            return file;
-        while (file != null)
-        {
-            if (file.exists()
-                && ! showQuestion(parent, "Overwrite " + file + "?"))
-            {
-                file = showFileChooser(parent, FILE_SAVE, null, true, null);
-                continue;
-            }
-            break;
-        }
-        return file;
+        return showFileChooserSave(parent, m_lastFile, true, null);
     }
 
     /** File selection, unknown whether for load or save. */
@@ -154,6 +139,30 @@ public class SimpleDialogs
         }
         return showFileChooserSwing(parent, type, lastFile, setSgfFilter,
                                     title);
+    }
+
+    private static File showFileChooserSave(Component parent,
+                                            File lastFile,
+                                            boolean setSgfFilter,
+                                            String title)
+    {
+        File file = showFileChooser(parent, FILE_SAVE, lastFile, setSgfFilter,
+                                    title);
+        if (Platform.isMac())
+            // Overwrite warning is already part of FileDialog
+            return file;
+        while (file != null)
+        {
+            if (file.exists()
+                && ! showQuestion(parent, "Overwrite " + file + "?"))
+            {
+                file = showFileChooser(parent, FILE_SAVE, lastFile,
+                                       setSgfFilter, title);
+                continue;
+            }
+            break;
+        }
+        return file;
     }
 
     private static File showFileChooserAWT(Frame parent, int type,
