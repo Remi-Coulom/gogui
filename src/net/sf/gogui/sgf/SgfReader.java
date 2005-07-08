@@ -532,6 +532,20 @@ public class SgfReader
         }
     }
     
+    private void readKomi(String value) throws SgfError
+    {
+        if (value.trim().equals(""))
+            return;
+        try
+        {
+            m_gameInformation.m_komi = Double.parseDouble(value);
+        }
+        catch (NumberFormatException e)
+        {
+            setWarning("Invalid value for komi");
+        }
+    }
+
     private void readMarked(Node node, String type) throws SgfError
     {
         parsePointList();
@@ -691,16 +705,7 @@ public class SgfReader
                 }
             }
             else if (p == "KM")
-            {
-                try
-                {
-                    m_gameInformation.m_komi = Double.parseDouble(v);
-                }
-                catch (NumberFormatException e)
-                {
-                    setWarning("Invalid value for komi");
-                }
-            }
+                readKomi(v);
             else if (p == "LB")
             {
                 for (int i = 0; i < m_valueVector.size(); ++i)
@@ -924,6 +929,8 @@ public class SgfReader
 
     private void readTime(String value)
     {
+        if (value.trim().equals(""))
+            return;
         try
         {
             m_preByoyomi = (long)(Double.parseDouble(value) * 1000);
