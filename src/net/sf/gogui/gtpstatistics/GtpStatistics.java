@@ -211,7 +211,7 @@ public class GtpStatistics
         m_table.startRow();
         m_table.set("File", name);
         m_table.set("Move", number);
-        if (number == 1)
+        if (number == 1 && m_beginCommands != null)
             for (int i = 0; i < m_beginCommands.size(); ++i)
             {
                 String command = getBeginCommand(i);
