@@ -19,7 +19,6 @@ import java.io.Reader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.NumberFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 import net.sf.gogui.game.GameInformation;

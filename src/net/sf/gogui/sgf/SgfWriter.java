@@ -5,10 +5,8 @@
 
 package net.sf.gogui.sgf;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.util.Map;
 import java.util.Iterator;

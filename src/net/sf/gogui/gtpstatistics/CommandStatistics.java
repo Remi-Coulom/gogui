@@ -7,14 +7,8 @@ package net.sf.gogui.gtpstatistics;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.Vector;
-import java.text.DecimalFormat;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Histogram;
-import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.Table;
 import net.sf.gogui.utils.TableUtils;
 

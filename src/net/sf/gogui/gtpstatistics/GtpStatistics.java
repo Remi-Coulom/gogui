@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Calendar;
 import java.util.Vector;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
