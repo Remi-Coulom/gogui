@@ -2837,10 +2837,7 @@ public class GoGui
         if (timeSettings == null)
             return;
         if (! m_commandThread.isCommandSupported("time_settings"))
-        {
-            showError("Command time_settings not supported");
             return;
-        }
         long preByoyomi = timeSettings.getPreByoyomi() / 1000;
         long byoyomi = 0;
         long byoyomiMoves = 0;
