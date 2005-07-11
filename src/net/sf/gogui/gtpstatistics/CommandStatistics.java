@@ -57,10 +57,6 @@ public final class CommandStatistics
                                          max);
             m_statisticsAtMove.add(statisticsAtMove);
             int count = statisticsAtMove.getCount();
-            if (count < 10)
-                // Insert empty row, so that Plot does not connect points
-                // with low statistics
-                m_tableAtMove.startRow();                
             if (count > 0)
             {
                 m_tableAtMove.startRow();

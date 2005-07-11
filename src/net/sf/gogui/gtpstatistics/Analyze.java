@@ -87,6 +87,7 @@ public class Analyze
                 if (commandStatistics.mostCountsZero())
                     plot.setPlotStyleNoLines();
                 pngFile = getAvgPlotFile(i);                
+                plot.setPlotStyleNoLines();
                 plot.plot(pngFile, table, "Move", "Mean", "Error");
                 out.print("<tr><td align=\"center\">\n" +
                           getCommandLink(i) + "<br>" +
