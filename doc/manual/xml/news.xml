@@ -23,9 +23,23 @@ Docbook XSL files in the distribution to make compilation easier.
 </simpara>
 </listitem>
 <listitem>
+<para>
+GtpRegress:
+<itemizedlist>
+<listitem>
 <simpara>
-GtpRegress: Return -1 if any unexpected fails occurred
+Return -1 if any unexpected fails occurred
 </simpara>
+</listitem>
+<listitem>
+<simpara>
+Include error response outputs in test summaries;
+fix NullPointerException, if test file contains response pattern without
+a command to test (simply ignore the pattern)
+</simpara>
+</listitem>
+</itemizedlist>
+</para>
 </listitem>
 <listitem>
 <simpara>
@@ -43,40 +57,39 @@ NetGtp: New option -timeout
 </simpara>
 </listitem>
 <listitem>
+<para>
+GoGui:
+<itemizedlist>
+<listitem>
 <simpara>
-GoGui: New analyze command type eplist (editable point lists)
+New analyze command type eplist (editable point lists)
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GoGui: New board context menu for quickly running analyze commands that need
+New board context menu for quickly running analyze commands that need
 one point and optionally one color argument.
 argument
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GoGui: use dialogs for all secondary windows; they are always on top of the
+use dialogs for all secondary windows; they are always on top of the
 main window now
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GoGui: load and save SGF marks and labels; edit them from context menu
+load and save SGF marks and labels; edit them from context menu
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GoGui: new option Timestamp in GTP shell settings menu
+new option Timestamp in GTP shell settings menu
 </simpara>
 </listitem>
-<listitem>
-<simpara>
-GtpRegress:
-include error response outputs in test summaries;
-fix NullPointerException, if test file contains response pattern without
-a command to test (simply ignore the pattern)
-</simpara>
+</itemizedlist>
+</para>
 </listitem>
 <listitem>
 <simpara>
