@@ -97,7 +97,6 @@ public class Analyze
         }
         out.print("</table>\n" +
                   "<hr>\n");
-        out.print("<p>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
             commandStatistics = getCommandStatistics(i);
@@ -109,8 +108,7 @@ public class Analyze
                       + "\"></td></tr></table>\n");
         }
         out.print("<br clear=\"left\">\n" +
-                    "</p>\n" +
-                    "<hr>\n");
+                  "<hr>\n");
         writeCommandsTable(out);
         out.print("<hr>\n");
         writeGameTable(out);
@@ -465,7 +463,7 @@ public class Analyze
 
     private void endInfo(PrintStream out)
     {
-        out.print("</td></tr></table>\n" +
+        out.print("</table></td></tr>\n" +
                   "</table>\n" +
                   "<hr>\n");
     }
@@ -489,20 +487,19 @@ public class Analyze
         out.print("<hr>\n");
         out.print("<table border=\"0\" cellspacing=\"0\""
                   + " cellpadding=\"5\">\n");
-        out.print("<tr><td align=\"center\" valign=\"center\">"
+        out.print("<tr><td>"
                   + "<small>All</small><br>"
                   + "<img src=\"" + getHistoFile(commandIndex).getName()
                   + "\"></td>\n");
         
         if (commandStatistics.m_statisticsFinal.getCount() > 0)
-            out.print("<td align=\"center\" valign=\"bottom\">"
+            out.print("<td>"
                       + "<small>Final</small><br>"
                       + "<img src=\""
                       + getHistoFinalFile(commandIndex).getName()
                       + "\"></td>");
         out.print("</tr>\n" +
                   "</table>\n");
-        out.print("<p>\n");
         for (int i = 0; i < m_maxMove; i += m_movePrintInterval)
         {
             Histogram histogram
@@ -522,7 +519,6 @@ public class Analyze
                       + "\"></td></tr></table>\n");
         }
         out.print("<br clear=\"left\">\n" +
-                  "</p>\n" +
                   "<hr>\n");
         writeGamePlots(out, commandIndex);
         out.print("<hr>\n" +
@@ -541,11 +537,10 @@ public class Analyze
         PositionStatistics finalStatistics
             = commandStatistics.m_statisticsFinal;
         out.print("<table class=\"smalltable\">\n");
-        out.print("<tbody>");
         out.print("<tr>");
         out.print("<th>Move</th>");
         writeStatisticsTableHeader(out);
-        out.print("</tr>");
+        out.print("</tr>\n");
         for (int i = 0; i < m_maxMove; i += m_movePrintInterval)
         {
             PositionStatistics statisticsAtMove
@@ -553,18 +548,16 @@ public class Analyze
             out.print("<tr>" +
                       "<td>" + i + "</td>");
             writeStatisticsTableData(out, statisticsAtMove);
-            out.print("</tr>");
+            out.print("</tr>\n");
         }
         out.print("<tr>" +
                   "<td>Final</td>");
         writeStatisticsTableData(out, finalStatistics);
-        out.print("</tr>");
+        out.print("</tr>\n");
         out.print("<tr>" +
                   "<td>All</td>");
         writeStatisticsTableData(out, statisticsAll);
-        out.print("</tr>");
-        out.print("</table>\n");
-        out.print("</tbody>\n");
+        out.print("</tr>\n");
         out.print("</table>\n");
     }
 
@@ -625,8 +618,7 @@ public class Analyze
         {
         }
         endInfo(out);
-        out.print("<p>\n" +
-                  "<table border=\"0\">\n");
+        out.print("<table border=\"0\">\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
             CommandStatistics commandStatistics = getCommandStatistics(i);
@@ -641,11 +633,9 @@ public class Analyze
             }
         }
         out.print("</table>\n" +
-                  "</p>\n" +
                   "<hr>\n");
         Table table = TableUtils.select(m_table, "File", game);
-        out.print("<p>\n" +
-                  "<table class=\"smalltable\">\n" +
+        out.print("<table class=\"smalltable\">\n" +
                   "<thead><tr>");
         for (int i = 1; i < table.getNumberColumns(); ++i)
         {
@@ -670,7 +660,6 @@ public class Analyze
             out.print("</tr>\n");
         }
         out.print("</table>\n" +
-                  "</p>\n" +
                   "<hr>\n" +
                   "</body>\n" +
                   "</html>\n");
@@ -681,8 +670,7 @@ public class Analyze
         throws Exception
     {
         String command = getCommand(commandIndex);
-        out.print("<p>\n" +
-                  "<table border=\"0\" cellpadding=\"0\""
+        out.print("<table border=\"0\" cellpadding=\"0\""
                   + " cellspacing=\"0\">\n");
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
@@ -695,8 +683,7 @@ public class Analyze
                       + "</a>):</small><br>\n" +
                       "<img src=\"" + plotFile + "\"></td></tr>\n");
         }
-        out.print("</table>\n" +
-                  "</p>\n");
+        out.print("</table>\n");
     }
 
     private void writeGameTable(PrintStream out)
