@@ -451,7 +451,9 @@ public class GtpRegress
             fail = true;
         else
         {
-            Pattern pattern = Pattern.compile(patternString);
+            Pattern pattern
+                = Pattern.compile(patternString,
+                                  Pattern.MULTILINE | Pattern.DOTALL);
             Matcher matcher = pattern.matcher(response);
             if ((! matcher.matches() && ! notPattern)
                 || (matcher.matches() && notPattern))
