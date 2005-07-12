@@ -31,8 +31,9 @@ import net.sf.gogui.version.Version;
 public class GtpRegress
     implements Gtp.IOCallback
 {
-    GtpRegress(String program, String[] tests, String output,
-               boolean longOutput, boolean verbose, boolean fileComments)
+    public GtpRegress(String program, String[] tests, String output,
+                      boolean longOutput, boolean verbose,
+                      boolean fileComments)
         throws Exception
     {
         m_result = true;
@@ -590,7 +591,7 @@ public class GtpRegress
 
     private synchronized void printOut(String style, String line, int id)
     {
-        if (line == null)
+        if (line == null || line.length() == 0)
             return;
         line = line.replaceAll("&", "&amp;");
         line = line.replaceAll(">", "&gt;");
@@ -618,7 +619,8 @@ public class GtpRegress
         {
             if (m_currentStyle != null)
                 m_out.print("</span>");
-            m_out.print("<span class=\"" + style + "\">");
+            if (style != null)
+                m_out.print("<span class=\"" + style + "\">");
             m_currentStyle = style;
         }
         if (id >= 0)
@@ -639,7 +641,11 @@ public class GtpRegress
 
     private synchronized void printOutSeparator()
     {
-        m_out.println("<hr>");
+        if (m_currentStyle != null)
+            m_out.print("</span>");
+        m_out.println("</pre>\n" +
+                      "<hr>\n" +
+                      "<pre>");
     }
 
     private synchronized void printOutLine(String style, String line)
@@ -809,7 +815,6 @@ public class GtpRegress
                   + "\">\n");
         writeInfo(out, true);
         out.print("</table>\n" +
-                  "<p>\n" +
                   "<table width=\"100%\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"20%\">\n" +
@@ -842,7 +847,6 @@ public class GtpRegress
         }
         writeSummaryRow(out, getTotalSummary(), true, true);
         out.print("</table>\n" +
-                  "</p>\n" +
                   "</body>\n" +
                   "</html>\n");
         out.close();
@@ -935,7 +939,6 @@ public class GtpRegress
                   + m_outFileRelativeName + "\">"
                   + m_outFileRelativeName + "</a></td></tr>\n" +
                   "</table>\n" +
-                  "<p>\n" +
                   "<table width=\"100%\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"12%\">\n" +
@@ -961,8 +964,6 @@ public class GtpRegress
                   "</thead>\n");
         writeSummaryRow(out, summary, false, false);
         out.print("</table>\n" +
-                  "</p>\n" +
-                  "<p>\n" +
                   "<table width=\"100%\">\n" +
                   "<thead>\n" +
                   "<tr bgcolor=\"" + m_colorHeader + "\">\n" +
@@ -1023,7 +1024,6 @@ public class GtpRegress
                       "</tr>\n");
         }
         out.print("</table>\n" +
-                  "</p>\n" +
                   "</body>\n" +
                   "</html>\n");
         out.close();
