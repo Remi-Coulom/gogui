@@ -2868,6 +2868,10 @@ public class GoGui
         prefs.setIntDefault("boardsize", 19);
         prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
         prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
+        prefs.setBoolDefault("gtpshell-highlight", true);
+        prefs.setBoolDefault("gtpshell-autonumber", false);
+        prefs.setBoolDefault("gtpshell-disable-completions", false);
+        prefs.setBoolDefault("gtpshell-timestamp", false);
         prefs.setDoubleDefault("komi", 6.5);
         prefs.setStringDefault("rules", "Chinese");
         prefs.setBoolDefault("show-analyze", false);
