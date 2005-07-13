@@ -68,6 +68,7 @@ import net.sf.gogui.gui.ContextMenu;
 import net.sf.gogui.gui.FindDialog;
 import net.sf.gogui.gui.GameInfo;
 import net.sf.gogui.gui.GameInfoDialog;
+import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
 import net.sf.gogui.gui.GuiBoard;
@@ -187,6 +188,8 @@ public class GoGui
 
         m_menuBar = new GoGuiMenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
+        m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels"));
+        m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size"));
         m_menuBar.setHighlight(m_prefs.getBool("gtpshell-highlight"));
         m_menuBar.setAutoNumber(m_prefs.getBool("gtpshell-autonumber"));
         boolean completion
@@ -311,6 +314,20 @@ public class GoGui
             cbGotoVariation();
         else if (command.equals("gtp-shell"))
             cbGtpShell();
+        else if (command.equals("gametree-move"))
+            cbGameTreeLabels(GameTreePanel.LABEL_MOVE);
+        else if (command.equals("gametree-number"))
+            cbGameTreeLabels(GameTreePanel.LABEL_NUMBER);
+        else if (command.equals("gametree-none"))
+            cbGameTreeLabels(GameTreePanel.LABEL_NONE);
+        else if (command.equals("gametree-large"))
+            cbGameTreeSize(GameTreePanel.SIZE_LARGE);
+        else if (command.equals("gametree-normal"))
+            cbGameTreeSize(GameTreePanel.SIZE_NORMAL);
+        else if (command.equals("gametree-small"))
+            cbGameTreeSize(GameTreePanel.SIZE_SMALL);
+        else if (command.equals("gametree-tiny"))
+            cbGameTreeSize(GameTreePanel.SIZE_TINY);
         else if (command.equals("gtpshell-save"))
             cbGtpShellSave();
         else if (command.equals("gtpshell-save-commands"))
@@ -491,8 +508,9 @@ public class GoGui
     {
         if (m_gameTreeViewer == null)
         {
-            m_gameTreeViewer =
-                new GameTreeViewer(this, this, m_fastPaint, m_prefs);
+            m_gameTreeViewer = new GameTreeViewer(this, this, m_fastPaint);
+            m_gameTreeViewer.setLabelMode(m_menuBar.getGameTreeLabels());
+            m_gameTreeViewer.setSizeMode(m_menuBar.getGameTreeSize());
             restoreSize(m_gameTreeViewer, "window-gametree");
         }
         updateGameTree(true);
@@ -1361,6 +1379,20 @@ public class GoGui
             setTimeSettings();
         }
         setTitle();
+    }
+
+    private void cbGameTreeLabels(int mode)
+    {
+        m_prefs.setInt("gametree-labels", mode);
+        if (m_gameTreeViewer != null)
+            m_gameTreeViewer.setLabelMode(mode);
+    }
+
+    private void cbGameTreeSize(int mode)
+    {
+        m_prefs.setInt("gametree-size", mode);
+        if (m_gameTreeViewer != null)
+            m_gameTreeViewer.setSizeMode(mode);
     }
 
     private void cbGoto()
@@ -2799,6 +2831,8 @@ public class GoGui
     {
         prefs.setBoolDefault("beep-after-move", true);
         prefs.setIntDefault("boardsize", 19);
+        prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
+        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
         prefs.setDoubleDefault("komi", 6.5);
         prefs.setStringDefault("rules", "Chinese");
         prefs.setBoolDefault("show-analyze", false);

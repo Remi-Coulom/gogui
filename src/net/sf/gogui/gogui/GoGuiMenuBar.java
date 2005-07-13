@@ -28,6 +28,7 @@ import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.Clock;
+import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
@@ -142,6 +143,26 @@ public class GoGuiMenuBar
     public boolean getBeepAfterMove()
     {
         return m_itemBeepAfterMove.isSelected();
+    }
+
+    public int getGameTreeLabels()
+    {
+        if (m_itemGameTreeNumber.isSelected())
+            return GameTreePanel.LABEL_NUMBER;
+        if (m_itemGameTreeMove.isSelected())
+            return GameTreePanel.LABEL_MOVE;
+        return GameTreePanel.LABEL_NONE;
+    }
+
+    public int getGameTreeSize()
+    {
+        if (m_itemGameTreeLarge.isSelected())
+            return GameTreePanel.SIZE_LARGE;
+        if (m_itemGameTreeSmall.isSelected())
+            return GameTreePanel.SIZE_SMALL;
+        if (m_itemGameTreeTiny.isSelected())
+            return GameTreePanel.SIZE_TINY;
+        return GameTreePanel.SIZE_NORMAL;
     }
 
     public JMenuBar getMenuBar()
@@ -284,6 +305,45 @@ public class GoGuiMenuBar
     public void setCommandCompletion(boolean enable)
     {
         m_itemCommandCompletion.setSelected(enable);
+    }
+
+    public void setGameTreeLabels(int mode)
+    {
+        switch (mode)
+        {
+        case GameTreePanel.LABEL_NUMBER:
+            m_itemGameTreeNumber.setSelected(true);
+            break;
+        case GameTreePanel.LABEL_MOVE:
+            m_itemGameTreeMove.setSelected(true);
+            break;
+        case GameTreePanel.LABEL_NONE:
+            m_itemGameTreeNone.setSelected(true);
+            break;
+        default:
+            break;
+        }
+    }
+
+    public void setGameTreeSize(int mode)
+    {
+        switch (mode)
+        {
+        case GameTreePanel.SIZE_LARGE:
+            m_itemGameTreeLarge.setSelected(true);
+            break;
+        case GameTreePanel.SIZE_NORMAL:
+            m_itemGameTreeNormal.setSelected(true);
+            break;
+        case GameTreePanel.SIZE_SMALL:
+            m_itemGameTreeSmall.setSelected(true);
+            break;
+        case GameTreePanel.SIZE_TINY:
+            m_itemGameTreeTiny.setSelected(true);
+            break;
+        default:
+            break;
+        }
     }
 
     public void setHighlight(boolean enable)
@@ -520,6 +580,20 @@ public class GoGuiMenuBar
     private JMenuItem m_itemForward;
 
     private JMenuItem m_itemForward10;
+
+    private JMenuItem m_itemGameTreeLarge;
+
+    private JMenuItem m_itemGameTreeMove;
+
+    private JMenuItem m_itemGameTreeNormal;
+
+    private JMenuItem m_itemGameTreeNone;
+
+    private JMenuItem m_itemGameTreeNumber;
+
+    private JMenuItem m_itemGameTreeSmall;
+
+    private JMenuItem m_itemGameTreeTiny;
 
     private JMenuItem m_itemGoto;
 
@@ -808,13 +882,43 @@ public class GoGuiMenuBar
         addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,
                     "show-variations");
         menu.addSeparator();
+        menu.add(createSettingsGameTree());
         menu.add(createSettingsGtpShell());
+        return menu;
+    }
+
+    private JMenu createSettingsGameTree()
+    {
+        JMenu menu = createMenu("Game Tree", KeyEvent.VK_T);
+        JMenu menuLabel = createMenu("Labels", KeyEvent.VK_L);
+        ButtonGroup group = new ButtonGroup();
+        m_itemGameTreeNumber
+            = addRadioItem(menuLabel, group, "Move Number",
+                           KeyEvent.VK_N, "gametree-number");
+        m_itemGameTreeMove
+            = addRadioItem(menuLabel, group, "Move", KeyEvent.VK_M,
+                           "gametree-move");
+        m_itemGameTreeNone
+            = addRadioItem(menuLabel, group, "None", KeyEvent.VK_O,
+                           "gametree-none");
+        menu.add(menuLabel);
+        JMenu menuSize = createMenu("Size", KeyEvent.VK_S);
+        group = new ButtonGroup();
+        m_itemGameTreeLarge = addRadioItem(menuSize, group, "Large",
+                                        KeyEvent.VK_L, "gametree-large");
+        m_itemGameTreeNormal = addRadioItem(menuSize, group, "Normal",
+                                        KeyEvent.VK_N, "gametree-normal");
+        m_itemGameTreeSmall = addRadioItem(menuSize, group, "Small",
+                                        KeyEvent.VK_S, "gametree-small");
+        m_itemGameTreeTiny = addRadioItem(menuSize, group, "Tiny",
+                                      KeyEvent.VK_T, "gametree-tiny");
+        menu.add(menuSize);
         return menu;
     }
 
     private JMenu createSettingsGtpShell()
     {
-        JMenu menu = createMenu("GTP Shell", KeyEvent.VK_T);
+        JMenu menu = createMenu("GTP Shell", KeyEvent.VK_S);
         m_itemHighlight = new JCheckBoxMenuItem("Highlight");
         addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
         m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
