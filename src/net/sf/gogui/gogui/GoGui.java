@@ -185,9 +185,12 @@ public class GoGui
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtils.setGoIcon(this);
-
         m_menuBar = new GoGuiMenuBar(this);
         m_menuBar.selectBoardSizeItem(m_boardSize);
+        boolean onlySupported
+            = m_prefs.getBool("analyze-only-supported-commands");
+        m_menuBar.setAnalyzeOnlySupported(onlySupported);
+        m_menuBar.setAnalyzeSort(m_prefs.getBool("analyze-sort"));
         m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels"));
         m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size"));
         m_menuBar.setHighlight(m_prefs.getBool("gtpshell-highlight"));
@@ -258,6 +261,12 @@ public class GoGui
             cbAbout();
         else if (command.equals("analyze"))
             cbAnalyze();
+        else if (command.equals("analyze-only-supported"))
+            cbAnalyzeOnlySupported();
+        else if (command.equals("analyze-reload"))
+            cbAnalyzeReload();
+        else if (command.equals("analyze-sort"))
+            cbAnalyzeSort();
         else if (command.equals("attach-program"))
             cbAttachProgram();
         else if (command.equals("auto-number"))
@@ -412,8 +421,10 @@ public class GoGui
             return;
         if (m_analyzeDialog == null)
         {
+            boolean onlySupported = m_menuBar.getAnalyzeOnlySupported();
+            boolean sort = m_menuBar.getAnalyzeSort();
             m_analyzeDialog =
-                new AnalyzeDialog(this, this, m_prefs,
+                new AnalyzeDialog(this, this, onlySupported, sort,
                                   m_commandThread.getSupportedCommands(),
                                   m_commandThread);
             m_analyzeDialog.setBoardSize(m_board.getSize());
@@ -421,6 +432,28 @@ public class GoGui
             setTitle();
         }
         m_analyzeDialog.toTop();
+    }
+
+    public void cbAnalyzeOnlySupported()
+    {
+        boolean onlySupported = m_menuBar.getAnalyzeOnlySupported();
+        m_prefs.setBool("analyze-only-supported-commands", onlySupported);
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.setOnlySupported(onlySupported);
+    }
+
+    public void cbAnalyzeReload()
+    {
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.reload();
+    }
+
+    public void cbAnalyzeSort()
+    {
+        boolean sort = m_menuBar.getAnalyzeSort();
+        m_prefs.setBool("analyze-sort", sort);
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.setSort(sort);
     }
 
     public void cbAttachProgram()
@@ -2829,6 +2862,8 @@ public class GoGui
     
     private static void setPrefsDefaults(Preferences prefs)
     {
+        prefs.setBoolDefault("analyze-only-supported-commands", true);
+        prefs.setBoolDefault("analyze-sort", true);
         prefs.setBoolDefault("beep-after-move", true);
         prefs.setIntDefault("boardsize", 19);
         prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);

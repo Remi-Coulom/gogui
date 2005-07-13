@@ -120,6 +120,16 @@ public class GoGuiMenuBar
         m_itemFindNext.setEnabled(enable);
     }
 
+    public boolean getAnalyzeOnlySupported()
+    {
+        return m_itemAnalyzeOnlySupported.isSelected();
+    }
+
+    public boolean getAnalyzeSort()
+    {
+        return m_itemAnalyzeSort.isSelected();
+    }
+
     public boolean getAutoNumber()
     {
         return m_itemAutoNumber.isSelected();        
@@ -224,6 +234,21 @@ public class GoGuiMenuBar
         out.close();
     }
 
+    public void setAnalyzeOnlySupported(boolean enable)
+    {
+        m_itemAnalyzeOnlySupported.setSelected(enable);        
+    }
+
+    public void setAnalyzeSort(boolean enable)
+    {
+        m_itemAnalyzeSort.setSelected(enable);        
+    }
+
+    public void setAutoNumber(boolean enable)
+    {
+        m_itemAutoNumber.setSelected(enable);        
+    }
+
     public void setComputerBlack()
     {
         m_itemComputerBlack.setSelected(true);
@@ -295,11 +320,6 @@ public class GoGuiMenuBar
         m_itemShowVariations.setEnabled(true);
         m_menuWindow.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
-    }
-
-    public void setAutoNumber(boolean enable)
-    {
-        m_itemAutoNumber.setSelected(enable);        
     }
 
     public void setCommandCompletion(boolean enable)
@@ -540,6 +560,10 @@ public class GoGuiMenuBar
     private JMenuItem m_itemAbout;
 
     private JMenuItem m_itemAnalyze;
+
+    private JMenuItem m_itemAnalyzeOnlySupported;
+
+    private JMenuItem m_itemAnalyzeSort;
 
     private JMenuItem m_itemBackToMainVar;
 
@@ -884,6 +908,22 @@ public class GoGuiMenuBar
         menu.addSeparator();
         menu.add(createSettingsGameTree());
         menu.add(createSettingsGtpShell());
+        menu.add(createSettingsAnalyze());
+        return menu;
+    }
+
+    private JMenu createSettingsAnalyze()
+    {
+        JMenu menu = createMenu("Analyze", KeyEvent.VK_S);
+        m_itemAnalyzeOnlySupported =
+            new JCheckBoxMenuItem("Only Supported Commands");
+        addMenuItem(menu, m_itemAnalyzeOnlySupported, KeyEvent.VK_O,
+                    "analyze-only-supported");
+        m_itemAnalyzeSort = new JCheckBoxMenuItem("Sort Alphabetically");
+        addMenuItem(menu, m_itemAnalyzeSort, KeyEvent.VK_S, "analyze-sort");
+        menu.addSeparator();
+        addMenuItem(menu, "Reload Configuration", KeyEvent.VK_R,
+                    "analyze-reload");
         return menu;
     }
 

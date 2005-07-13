@@ -29,14 +29,10 @@ import java.util.Vector;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -51,7 +47,6 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.Preferences;
 
 //----------------------------------------------------------------------------
 
@@ -75,17 +70,15 @@ public final class AnalyzeDialog
         void toTop();
     }
 
-    public AnalyzeDialog(Frame owner, Callback callback, Preferences prefs,
+    public AnalyzeDialog(Frame owner, Callback callback,
+                         boolean onlySupported, boolean sort,
                          Vector supportedCommands,
                          CommandThread commandThread)
     {
         super(owner, "Analyze");
-        m_prefs = prefs;
         m_commandThread = commandThread;
-        setPrefsDefaults(prefs);
-        m_onlySupportedCommands =
-            prefs.getBool("analyze-only-supported-commands");
-        m_sort = prefs.getBool("analyze-sort");
+        m_onlySupportedCommands = onlySupported;
+        m_sort = sort;
         m_supportedCommands = supportedCommands;
         m_callback = callback;
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -100,7 +93,6 @@ public final class AnalyzeDialog
         Container contentPane = getContentPane();
         contentPane.add(createButtons(), BorderLayout.SOUTH);
         contentPane.add(createCommandPanel(), BorderLayout.CENTER);
-        createMenuBar();
         comboBoxChanged();
         pack();
         m_list.requestFocusInWindow();
@@ -115,20 +107,10 @@ public final class AnalyzeDialog
             close();
         else if (command.equals("comboBoxChanged"))
             comboBoxChanged();
-        else if (command.equals("gogui"))
-            m_callback.toTop();
-        else if (command.equals("gtp-shell"))
-            m_callback.cbGtpShell();
-        else if (command.equals("only-supported"))
-            onlySupported();
-        else if (command.equals("reload"))
-            reload();
         else if (command.equals("run"))
             setCommand();
-        else if (command.equals("show-gametree"))
-            m_callback.cbShowGameTree();
-        else if (command.equals("sort"))
-            sort();
+        else
+            assert(false);
     }
 
     public GoColor getSelectedColor()
@@ -140,6 +122,51 @@ public final class AnalyzeDialog
         return GoColor.BLACK;
     }
 
+    public void reload()
+    {
+        try
+        {
+            Vector supportedCommands = null;
+            if (m_onlySupportedCommands)
+                supportedCommands = m_supportedCommands;
+            AnalyzeCommand.read(m_commands, m_labels, supportedCommands);
+            if (m_sort)
+                sortLists();
+            m_list.setListData(m_labels);
+            if (m_labels.size() > 0)
+                // Avoid focus problem with Sun JDK 1.4.2 if focus was at an
+                // index greater than the new list length
+                m_list.setSelectedIndex(0);
+            comboBoxChanged();
+        }
+        catch (Exception e)
+        {            
+            SimpleDialogs.showError(this, e.getMessage());
+        }
+    }
+
+    public void saveRecent()
+    {
+        if (! m_recentModified)
+            return;
+        File file = getRecentFile();
+        PrintStream out;
+        try
+        {
+            out = new PrintStream(new FileOutputStream(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            System.err.println("FileNotFoundException in"
+                               + " AnalyzeDialog.saveRecent");
+            return;
+        }
+        int max = 20;
+        for (int i = 0; i < m_comboBoxHistory.getItemCount() && i < max; ++i)
+            out.println(m_comboBoxHistory.getItemAt(i));
+        out.close();
+    }
+
     /** Set board size.
         Need for verifying responses to initial value for EPLIST commands.
         Default is 19.
@@ -147,6 +174,12 @@ public final class AnalyzeDialog
     public void setBoardSize(int boardSize)
     {
         m_boardSize = boardSize;
+    }
+
+    public void setOnlySupported(boolean onlySupported)
+    {
+        m_onlySupportedCommands = onlySupported;
+        reload();
     }
 
     public void setRunButtonEnabled(boolean enabled)
@@ -158,6 +191,12 @@ public final class AnalyzeDialog
     {
         m_selectedColor = color;
         selectColor();
+    }
+
+    public void setSort(boolean sort)
+    {
+        m_sort = sort;
+        reload();
     }
 
     public void toTop()
@@ -223,10 +262,6 @@ public final class AnalyzeDialog
 
     private JList m_list;
 
-    private JMenuItem m_itemOnlySupported;
-
-    private JMenuItem m_itemSort;
-
     private JPanel m_colorPanel;
 
     private final Vector m_commands = new Vector(128, 64);
@@ -236,42 +271,6 @@ public final class AnalyzeDialog
     private final Vector m_labels = new Vector(128, 64);
 
     private final Callback m_callback;
-
-    private final Preferences m_prefs;
-
-    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
-                                  String command)
-    {
-        item.addActionListener(this);
-        item.setActionCommand(command);
-        item.setMnemonic(mnemonic);
-        menu.add(item);
-        return item;
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  String command)
-    {
-        JMenuItem item = new JMenuItem(label);
-        return addMenuItem(menu, item, mnemonic, command);        
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  String command, String toolTip)
-    {
-        JMenuItem item = addMenuItem(menu, label, mnemonic, command);
-        item.setToolTipText(toolTip);
-        return item;
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  int accel, int modifier, String command)
-    {
-        JMenuItem item = new JMenuItem(label);
-        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
-        item.setAccelerator(k);
-        return addMenuItem(menu, item, mnemonic, command);
-    }
 
     private void clearCommand()
     {
@@ -395,68 +394,10 @@ public final class AnalyzeDialog
         return panel;
     }
 
-    private JMenu createMenu(String name, int mnemonic)
-    {
-        JMenu menu = new JMenu(name);
-        menu.setMnemonic(mnemonic);
-        return menu;
-    }
-
-    private void createMenuBar()
-    {
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createMenuWindows());
-        menuBar.add(createMenuSettings());
-        setJMenuBar(menuBar);
-    }
-
-    private JMenu createMenuSettings()
-    {
-        JMenu menu = createMenu("Settings", KeyEvent.VK_S);
-        m_itemOnlySupported =
-            new JCheckBoxMenuItem("Only Supported Commands");
-        m_itemOnlySupported.setSelected(m_onlySupportedCommands);
-        addMenuItem(menu, m_itemOnlySupported, KeyEvent.VK_O,
-                    "only-supported");
-        m_itemSort = new JCheckBoxMenuItem("Sort Alphabetically");
-        m_itemSort.setSelected(m_sort);
-        addMenuItem(menu, m_itemSort, KeyEvent.VK_S, "sort");
-        menu.addSeparator();
-        addMenuItem(menu, "Reload Configuration File", KeyEvent.VK_R,
-                    "reload", "Reload commands from configuration files");
-        return menu;
-    }
-
-    private JMenu createMenuWindows()
-    {
-        int shortcutKeyMask = 0;
-        if (Platform.isMac())
-            shortcutKeyMask = m_shortcutKeyMask;
-        JMenu menu = createMenu("Window", KeyEvent.VK_W);
-        addMenuItem(menu, "Board", KeyEvent.VK_B, KeyEvent.VK_F6,
-                    shortcutKeyMask, "gogui");
-        addMenuItem(menu, "Game Tree", KeyEvent.VK_T, KeyEvent.VK_F7,
-                    shortcutKeyMask, "show-gametree");
-        addMenuItem(menu, "GTP Shell", KeyEvent.VK_G, KeyEvent.VK_F9,
-                    shortcutKeyMask, "gtp-shell");
-        menu.addSeparator();
-        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    m_shortcutKeyMask, "close");
-        return menu;
-    }
-
     private File getRecentFile()
     {
         String home = System.getProperty("user.home");
         return new File(new File(home, ".gogui"), "recent-analyze");
-    }
-
-    private void onlySupported()
-    {
-        m_onlySupportedCommands = m_itemOnlySupported.isSelected();
-        m_prefs.setBool("analyze-only-supported-commands",
-                        m_onlySupportedCommands);
-        reload();
     }
 
     private void loadRecent()
@@ -485,51 +426,6 @@ public final class AnalyzeDialog
         {
             System.err.println("IOException in AnalyzeDialog.loadRecent");
         }
-    }
-
-    private void reload()
-    {
-        try
-        {
-            Vector supportedCommands = null;
-            if (m_onlySupportedCommands)
-                supportedCommands = m_supportedCommands;
-            AnalyzeCommand.read(m_commands, m_labels, supportedCommands);
-            if (m_sort)
-                sortLists();
-            m_list.setListData(m_labels);
-            if (m_labels.size() > 0)
-                // Avoid focus problem with Sun JDK 1.4.2 if focus was at an
-                // index greater than the new list length
-                m_list.setSelectedIndex(0);
-            comboBoxChanged();
-        }
-        catch (Exception e)
-        {            
-            SimpleDialogs.showError(this, e.getMessage());
-        }
-    }
-
-    public void saveRecent()
-    {
-        if (! m_recentModified)
-            return;
-        File file = getRecentFile();
-        PrintStream out;
-        try
-        {
-            out = new PrintStream(new FileOutputStream(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            System.err.println("FileNotFoundException in"
-                               + " AnalyzeDialog.saveRecent");
-            return;
-        }
-        int max = 20;
-        for (int i = 0; i < m_comboBoxHistory.getItemCount() && i < max; ++i)
-            out.println(m_comboBoxHistory.getItemAt(i));
-        out.close();
     }
 
     private void selectCommand(int index)
@@ -631,19 +527,6 @@ public final class AnalyzeDialog
             m_callback.clearAnalyzeCommand();
         m_clearButton.setEnabled(true);
         m_callback.setAnalyzeCommand(command, autoRun, false, false);
-    }
-
-    private static void setPrefsDefaults(Preferences prefs)
-    {
-        prefs.setBoolDefault("analyze-only-supported-commands", true);
-        prefs.setBoolDefault("analyze-sort", true);
-    }
-
-    private void sort()
-    {
-        m_sort = m_itemSort.isSelected();
-        m_prefs.setBool("analyze-sort", m_sort);
-        reload();
     }
 
     private void sortLists()
