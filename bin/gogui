@@ -11,6 +11,7 @@ fi
 
 MAC_DEFINES="\
   -Dapple.awt.brushMetalLook=true \
+  -Dapple.laf.useScreenMenuBar=true \
   -Dcom.apple.mrj.application.apple.menu.about.name=GoGui \
 "
 
