@@ -329,7 +329,7 @@ public class Analyze
         if (getCommandStatistics(commandIndex).getCount() == 0)
             return link;
         return "<a href=\"" + getCommandFile(commandIndex).getName()
-            + "\"><small>" + link + "</small></a>";
+            + "\">" + link + "</a>";
     }
 
     private CommandStatistics computeCommandStatistics(int index)
