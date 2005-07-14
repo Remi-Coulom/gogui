@@ -49,12 +49,42 @@ on each position of Go game collections.
 The results are stored in the text file "gtpstatistics.dat" in table format.
 If gtpstatistics is run with the option <option>-analyze</option>, a HTML
 file is produced, which contains summary statistics for this file.
+Games must not contain setup stones.
 </para>
 <para>
-Games must not contain setup stones.
-On positions containing a move, the command <command>reg_genmove</command>
-is run first for the color of the move, and the generated move is compared to
-the actual move. This result is stored in the table, too.
+For the following standard and commonly used commands, an automatic conversion
+of the result is done:
+<variablelist>
+<varlistentry>
+<term><command>cputime</command></term>
+<listitem>
+<para>
+The result is the difference to the last invocation of cputime.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>estimate_score</command></term>
+<listitem>
+<para>
+The result is parsed for a score string as the first word
+(like GNU Go's response)
+The score string is converted into a score number, Black counting
+positive, White negative.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>reg_genmove</command></term>
+<listitem>
+<para>
+The color of the move in the game is appended.
+The result is "1", if the result is the same move as played in the game,
+"0" otherwise.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
 </para>
 <para>
 The return value of <command>gtpstatistics</command> is 0, if the run
@@ -214,10 +244,40 @@ Print version and exit.
 </varlistentry>
 
 </variablelist>
+</refsection>
+
+<refsection>
+<title>Examples</title>
+
+<refsection>
+<title>Run GtpStatistics</title>
+<para>
+<programlisting>
+<userinput>
+gtpstatistics -program "gnugo --mode gtp" \
+  -commands "reg_genmove,estimate_score,cputime" \
+  regression/games/olympiad2004/19x19/*.sgf
+</userinput>
+</programlisting>
+</para>
+
+</refsection>
+<refsection>
+<title>Generate HTML Reports</title>
+<para>
+<programlisting>
+<userinput>
+gtpstatistics -analyze gtpstatistics.dat \
+  -output statistics/olympiad2004
+</userinput>
+</programlisting>
+</para>
 
 <para>
 <!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
 </para>
+
+</refsection>
 
 </refsection>
 

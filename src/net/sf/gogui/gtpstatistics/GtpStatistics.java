@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.NumberFormat;
 import java.util.Vector;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
@@ -44,12 +45,10 @@ public class GtpStatistics
         m_commands = commands;
         m_beginCommands = beginCommands;
         m_finalCommands = finalCommands;
-        checkCommandsUnique();
+        checkCommands();
         Vector columnHeaders = new Vector();
         columnHeaders.add("File");
         columnHeaders.add("Move");
-        if (m_runRegGenMove)
-            columnHeaders.add("reg_genmove");
         if (beginCommands != null)
             for (int i = 0; i < beginCommands.size(); ++i)
                 columnHeaders.add(getBeginCommand(i));
@@ -107,13 +106,17 @@ public class GtpStatistics
 
     private boolean m_result;
 
-    private boolean m_runRegGenMove = true;
-
     private int m_numberGames;
 
     private int m_size;
 
+    private double m_lastCpuTime = 0;
+
     private Gtp m_gtp;
+
+    private NumberFormat m_format1 = StringUtils.getNumberFormat(1);
+
+    private NumberFormat m_format2 = StringUtils.getNumberFormat(2);
 
     private Table m_table;
 
@@ -123,21 +126,21 @@ public class GtpStatistics
 
     private Vector m_finalCommands;
 
-    private void checkCommandsUnique() throws ErrorMessage
+    private void checkCommands() throws ErrorMessage
     {
         Vector all = new Vector();
-        if (m_runRegGenMove)
-            all.add("reg_genmove");
         if (m_commands != null)
             all.addAll(m_commands);
         if (m_beginCommands != null)
             all.addAll(m_beginCommands);
         if (m_finalCommands != null)
             all.addAll(m_finalCommands);
+        if (all.size() == 0)
+            throw new ErrorMessage("No commands defined");
         for (int i = 0; i < all.size() - 1; ++i)
             for (int j = i + 1; j < all.size(); ++j)
                 if (all.get(i).equals(all.get(j)))
-                    throw new ErrorMessage("Non-unique commands not yet"
+                    throw new ErrorMessage("Non-unique commands not"
                                            + " supported: " + all.get(i));
     }
 
@@ -184,7 +187,7 @@ public class GtpStatistics
                     throw new ErrorMessage(name
                                            + "has non-alternating moves");
                 ++number;
-                handlePosition(name, toMove, move, number);
+                handlePosition(name, toMove, move, number, false);
                 m_gtp.sendCommandPlay(move);
                 toMove = toMove.otherColor();
             }
@@ -192,7 +195,7 @@ public class GtpStatistics
         if (m_finalCommands != null)
         {
             ++number;
-            handlePosition(name, toMove, null, number);
+            handlePosition(name, toMove, null, number, true);
             for (int i = 0; i < m_finalCommands.size(); ++i)
             {
                 String command = getFinalCommand(i);
@@ -203,7 +206,7 @@ public class GtpStatistics
     }
 
     private void handlePosition(String name, GoColor toMove, Move move,
-                                int number)
+                                int number, boolean isFinal)
         throws GtpError
     {
         System.err.println(name + ":" + number);
@@ -217,38 +220,88 @@ public class GtpStatistics
                 String result = m_gtp.sendCommand(command);
                 m_table.set(command, result);
             }
-        if (m_runRegGenMove)
-        {            
-            Move genMove = runRegGenMove(toMove);
-            if (move != null)
-            {
-                assert(move.getColor() == toMove);
-                boolean result = (genMove == move);
-                m_table.set("reg_genmove", result ? "1" : "0");
-            }
-        }
         if (m_commands != null)
         {
             for (int i = 0; i < m_commands.size(); ++i)
             {
                 String command = getCommand(i);
-                String result = m_gtp.sendCommand(command);
-                m_table.set(command, result);
+                command = convertCommand(command, toMove);
+                String response = m_gtp.sendCommand(command);
+                response = convertResponse(getCommand(i), response, toMove,
+                                           move, isFinal);
+                m_table.set(getCommand(i), response);
             }
         }
     }
 
-    private Move runRegGenMove(GoColor toMove) throws GtpError
+    private String convertCommand(String command, GoColor toMove)
     {
-        String response = m_gtp.sendCommand("reg_genmove " + toMove);
+        if (command.equals("reg_genmove"))
+            return command + ' ' + toMove;
+        return command;
+    }
+
+    private String convertResponse(String command, String response,
+                                   GoColor toMove, Move move,
+                                   boolean isFinal) throws GtpError
+    {
+        if (command.equals("cputime"))
+        {
+            try
+            {
+                double cpuTime = Double.parseDouble(response);
+                double diff = cpuTime - m_lastCpuTime;
+                m_lastCpuTime = cpuTime;
+                return m_format2.format(diff);
+            }
+            catch (NumberFormatException e)
+            {
+                return response;
+            }
+        }
+        if (command.equals("estimate_score"))
+        {
+            String arg[] = StringUtils.tokenize(response);
+            if (arg.length == 0)
+                return response;
+            return convertScore(arg[0]);
+        }
+        if (command.equals("reg_genmove"))
+        {
+            try
+            {
+                GoPoint point = GoPoint.parsePoint(response, m_size); 
+                return Move.create(point, toMove) == move ? "1" : "0";
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+                throw new GtpError("Program sent invalid move: " + response);
+            }
+        }
+        return response;
+    }
+
+    /** Tries to convert score into number.
+        @return Score string or original string, if conversion fails.
+    */
+    private String convertScore(String string)
+    {
+        String score = string;
+        double sign = 1;
+        if (score.startsWith("W+"))
+        {
+            score = score.substring(2);
+            sign = -1;
+        }
+        else if (score.startsWith("B+"))
+            score = score.substring(2);
         try
         {
-            GoPoint point = GoPoint.parsePoint(response, m_size); 
-            return Move.create(point, toMove);
+            return m_format1.format(sign * Double.parseDouble(score));
         }
-        catch (GoPoint.InvalidPoint e)
+        catch (NumberFormatException e)
         {
-            throw new GtpError("Program sent invalid move: " + response);
+            return string;
         }
     }
 }
