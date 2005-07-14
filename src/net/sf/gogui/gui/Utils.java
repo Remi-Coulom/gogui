@@ -3,7 +3,7 @@
 // $Source$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gogui;
+package net.sf.gogui.gui;
 
 import java.awt.Component;
 import net.sf.gogui.game.Node;
@@ -11,9 +11,6 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gui.Clock;
-import net.sf.gogui.gui.CommandThread;
-import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------

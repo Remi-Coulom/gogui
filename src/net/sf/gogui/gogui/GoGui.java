@@ -82,6 +82,7 @@ import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.TextViewer;
+import net.sf.gogui.gui.Utils;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
@@ -2773,15 +2774,8 @@ public class GoGui
                     String line = in.readLine();
                     if (line == null)
                         break;
-                    line = line.trim();
-                    if (line.equals("") || line.startsWith("#"))
-                        continue;
-                    m_commandThread.sendCommand(line);
-                }
-                catch (GtpError e)
-                {
-                    showError(e);
-                    break;
+                    if (! m_gtpShell.sendCommand(line, this, true))
+                        break;
                 }
                 catch (IOException e)
                 {

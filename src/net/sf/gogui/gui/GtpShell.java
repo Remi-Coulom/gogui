@@ -552,9 +552,10 @@ public class GtpShell
 
                 Object[] options = { "Ok", "Cancel" };
                 String message = 
-                    "This command will modify the board state and\n" +
-                    "will cause the graphical board to be out of sync.\n" +
-                    "You must start a new game before using\n" +
+                    "The command '" + command + "'\n" +
+                    "will modify the board state and\n" +
+                    "cause the graphical board to be out of sync.\n" +
+                    "You should start a new game before using\n" +
                     "the graphical board again.";
                 int n =
                     JOptionPane.showOptionDialog(this, message, "Warning",
@@ -575,7 +576,7 @@ public class GtpShell
             }
             catch (GtpError e)
             {
-                SimpleDialogs.showError(owner, e.getMessage());
+                Utils.showError(owner, e);
                 if (askContinue)
                     return ! SimpleDialogs.showQuestion(owner, "Abort?");
             }
