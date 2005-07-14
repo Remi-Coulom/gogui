@@ -61,7 +61,6 @@ They will be displayed as background colors for the fields.
 Valid color names are black, blue, cyan, green, gray, magenta,
 pink, red, white, and yellow or #rrggbb.
 Unknown names or the special string "" are ignored.
-Note that this return type is deprecated, use the new type "gfx" instead.
 </simpara>
 </listitem>
 </varlistentry>
@@ -105,8 +104,8 @@ selected points as the argument.
 General graphical display commands.
 The reponse contains one command and its arguments per line.
 Commands are: LABEL, COLOR, SQUARE, CIRCLE, TRIANGLE, MARK, WHITE, BLACK.
-LABEL arguments are point text pairs, COLOR arguments are a color
-and a point list, all other commands take a point list.
+LABEL arguments are point text pairs, COLOR arguments are a color (like
+in cboard) and a point list, all other commands take a point list.
 </simpara>
 </listitem>
 </varlistentry>
