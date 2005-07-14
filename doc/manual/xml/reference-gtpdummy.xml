@@ -133,6 +133,17 @@ If the argument is "show", the current point list is shown.
 </varlistentry>
 
 <varlistentry>
+<term>
+<command>dummy_gfx</command>
+</term>
+<listitem>
+<para>
+Command for testing the gfx analyze return type of GoGui.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><command>dummy_invalid</command></term>
 <listitem>
 <para>

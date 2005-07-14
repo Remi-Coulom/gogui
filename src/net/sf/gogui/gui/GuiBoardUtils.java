@@ -5,10 +5,12 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.Color;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 import net.sf.gogui.game.Node;
+import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
@@ -16,6 +18,50 @@ import net.sf.gogui.go.GoPoint;
 
 public class GuiBoardUtils
 {
+    public static Color getColor(String string)
+    {
+        if (string.equals("blue"))
+            return Color.blue;
+        if (string.equals("cyan"))
+            return Color.cyan;
+        if (string.equals("green"))
+            return Color.green;
+        if (string.equals("gray"))
+            return Color.lightGray;
+        if (string.equals("magenta"))
+            return Color.magenta;
+        if (string.equals("pink"))
+            return Color.pink;
+        if (string.equals("red"))
+            return Color.red;
+        if (string.equals("yellow"))
+            return Color.yellow;
+        if (string.equals("black"))
+            return Color.black;
+        if (string.equals("white"))
+            return Color.white;
+        try
+        {
+            return Color.decode(string);
+        }
+        catch (NumberFormatException e)
+        {
+            return null;
+        }
+    }
+
+    public static void showColorBoard(GuiBoard guiBoard, String[][] colors,
+                                      Board board)
+    {
+        for (int i = 0; i < board.getNumberPoints(); ++i)
+        {
+            GoPoint point = board.getPoint(i);
+            int x = point.getX();
+            int y = point.getY();
+            guiBoard.setFieldBackground(point, getColor(colors[x][y]));
+        }
+    }
+
     public static void showMarkup(GuiBoard guiBoard, Node node)
     {
         Vector mark;

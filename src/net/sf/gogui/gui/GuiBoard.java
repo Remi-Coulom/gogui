@@ -606,37 +606,6 @@ public final class GuiBoard
         }
     }
 
-    public void showColorBoard(String[][] board)
-    {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint p = m_board.getPoint(i);
-            String s = board[p.getX()][p.getY()];
-            Color c = null;
-            if (s.equals("blue"))
-                c = Color.blue;
-            else if (s.equals("cyan"))
-                c = Color.cyan;
-            else if (s.equals("green"))
-                c = Color.green;
-            else if (s.equals("gray"))
-                c = Color.lightGray;
-            else if (s.equals("magenta"))
-                c = Color.magenta;
-            else if (s.equals("pink"))
-                c = Color.pink;
-            else if (s.equals("red"))
-                c = Color.red;
-            else if (s.equals("yellow"))
-                c = Color.yellow;
-            else if (s.equals("black"))
-                c = Color.black;
-            else if (s.equals("white"))
-                c = Color.white;
-            setFieldBackground(p, c);
-        }
-    }
-
     public void showDoubleBoard(double[][] board, double scale)
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)

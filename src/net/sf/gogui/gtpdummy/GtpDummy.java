@@ -59,6 +59,8 @@ public class GtpDummy
             status = cmdDelay(cmdArray, response);
         else if (cmd.equals("dummy_eplist"))
             status = cmdEPList(cmdArray, response);
+        else if (cmd.equals("dummy_gfx"))
+            status = cmdGfx(cmdArray, response);
         else if (cmd.equals("dummy_invalid"))
             cmdInvalid();
         else if (cmd.equals("dummy_long_response"))
@@ -92,6 +94,7 @@ public class GtpDummy
                             "dummy_crash\n" +
                             "dummy_delay\n" +
                             "dummy_eplist\n" +
+                            "dummy_gfx\n" +
                             "dummy_invalid\n" +
                             "dummy_long_response\n" +
                             "dummy_next_success\n" +
@@ -219,6 +222,20 @@ public class GtpDummy
         if (argument == null)
             return true;
         m_ePList = argument.m_pointList;
+        return true;
+    }
+
+    private boolean cmdGfx(String[] cmdArray, StringBuffer response)
+    {
+        response.append("LABEL A4 test\n" +
+                        "COLOR green A5 A7 B9\n" +
+                        "COLOR #980098 B7 B8\n" +
+                        "SQUARE B5 C9\n" +
+                        "MARK A6 B6\n" +
+                        "TRIANGLE A9\n" +
+                        "WHITE A1\n" +
+                        "BLACK B1\n" +
+                        "CIRCLE c8\n");
         return true;
     }
 

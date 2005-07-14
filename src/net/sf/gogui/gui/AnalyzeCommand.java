@@ -34,35 +34,37 @@ public class AnalyzeCommand
 
     public static final int EPLIST = 3;
 
-    public static final int HSTRING = 4;
+    public static final int GFX = 4;
 
-    public static final int HPSTRING = 5;
+    public static final int HSTRING = 5;
 
-    public static final int NONE = 6;
+    public static final int HPSTRING = 6;
 
-    public static final int PARAM = 7;
+    public static final int NONE = 7;
 
-    public static final int PLIST = 8;
+    public static final int PARAM = 8;
 
-    public static final int PSTRING = 9;
+    public static final int PLIST = 9;
 
-    public static final int PSPAIRS = 10;
+    public static final int PSTRING = 10;
 
-    public static final int STRING = 11;
+    public static final int PSPAIRS = 11;
 
-    public static final int SBOARD = 12;
+    public static final int STRING = 12;
 
-    public static final int VAR = 13;
+    public static final int SBOARD = 13;
 
-    public static final int VARB = 14;
+    public static final int VAR = 14;
 
-    public static final int VARC = 15;
+    public static final int VARB = 15;
 
-    public static final int VARP = 16;
+    public static final int VARC = 16;
 
-    public static final int VARPO = 17;
+    public static final int VARP = 17;
 
-    public static final int VARW = 18;
+    public static final int VARPO = 18;
+
+    public static final int VARW = 19;
 
     public AnalyzeCommand(String line)
     {
@@ -76,6 +78,8 @@ public class AnalyzeCommand
             m_type = AnalyzeCommand.DBOARD;
         else if (typeStr.equals("eplist"))
             m_type = AnalyzeCommand.EPLIST;
+        else if (typeStr.equals("gfx"))
+            m_type = AnalyzeCommand.GFX;
         else if (typeStr.equals("hstring"))
             m_type = AnalyzeCommand.HSTRING;
         else if (typeStr.equals("hpstring"))

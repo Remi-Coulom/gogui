@@ -62,7 +62,8 @@ GoGui:
 <itemizedlist>
 <listitem>
 <simpara>
-New analyze command type eplist (editable point lists)
+New analyze command types eplist (editable point lists) and gfx (graphics),
+command type cboard is deprecated now.
 </simpara>
 </listitem>
 <listitem>

@@ -140,6 +140,7 @@ bwboard/Dummy BWBoard/dummy_bwboard
 none/Dummy Crash/dummy_crash
 none/Dummy Delay/dummy_delay %o
 eplist/Dummy EPList/dummy_eplist
+gfx/Dummy Gfx/dummy_gfx
 none/Dummy Invalid/dummy_invalid
 string/Dummy Long Response/dummy_long_response %s
 none/Dummy Next Failure/dummy_next_failure %s
