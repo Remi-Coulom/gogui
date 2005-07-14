@@ -50,14 +50,14 @@ public class Plot
             m_graphics2D.setFont(font);
         }
         m_metrics = m_graphics2D.getFontMetrics();
-        m_ascent = m_metrics.getAscent();
-        m_left = 4 * m_ascent;
+        m_fontHeight = m_metrics.getHeight();
+        m_left = 4 * m_fontHeight;
         if (m_title != null)
-            m_top = (int)(m_ascent * 1.7);
+            m_top = (int)(m_fontHeight * 1.7);
         else
-            m_top = (int)(m_ascent * 0.5);
-        m_right = m_imgWidth - (int)(m_ascent * 0.5);
-        m_bottom = m_imgHeight - (int)(m_ascent * 1.5);;
+            m_top = (int)(m_fontHeight * 0.5);
+        m_right = m_imgWidth - (int)(m_fontHeight * 0.5);
+        m_bottom = m_imgHeight - (int)(m_fontHeight * 1.5);;
         m_width = m_right - m_left;
         m_height = m_bottom - m_top;
         initScale(table, columnX, columnY);
@@ -155,7 +155,7 @@ public class Plot
 
     private boolean m_withBars;
 
-    private int m_ascent;
+    private int m_fontHeight;
 
     private int m_bottom;
 
@@ -219,7 +219,7 @@ public class Plot
         if (m_title != null)
         {
             int width = m_metrics.stringWidth(m_title) + 10;
-            int height = (int)(m_ascent * 1.4);
+            int height = (int)(m_fontHeight * 1.4);
             int x = m_left + (m_width - width) / 2;
             int y = (m_top - height) / 2;
             m_graphics2D.setColor(Color.decode("#ffffe1"));
@@ -385,7 +385,7 @@ public class Plot
     {
         FontMetrics metrics = m_graphics2D.getFontMetrics();
         int width = metrics.stringWidth(string);
-        int height = m_ascent;
+        int height = m_fontHeight;
         m_graphics2D.drawString(string, x - width / 2, y + height / 2);
     }
 
@@ -393,7 +393,7 @@ public class Plot
     {
         FontMetrics metrics = m_graphics2D.getFontMetrics();
         int width = metrics.stringWidth(string);
-        int height = m_ascent;
+        int height = m_fontHeight;
         m_graphics2D.drawString(string, x - width, y + height / 2);
     }
 
@@ -412,10 +412,12 @@ public class Plot
         if (range / maxNumberTics < 0.5)
         {
             tics = 0.5;
-            while (tics / 5 > range / maxNumberTics)
+            while (range / (tics / 5) < maxNumberTics
+                   || range / (tics / 5) < minNumberTics)
             {
                 tics /= 5;
-                if (tics / 2 <= range / maxNumberTics)
+                if (range / (tics / 2) > maxNumberTics
+                    && range / (tics / 2) >= minNumberTics)
                     break;
                 tics /= 2;
             }
@@ -423,12 +425,12 @@ public class Plot
         else
         {
             tics = 0.5;
-            while (tics < range / maxNumberTics
+            while (range / (tics * 2) > maxNumberTics
                    && range / (tics * 2) > minNumberTics)
             {
                 tics *= 2;
-                if (tics >= range / maxNumberTics
-                   || range / (tics * 2) <= minNumberTics)
+                if (range / (tics * 5) <= maxNumberTics
+                    || range / (tics * 5) < minNumberTics)
                     break;
                 tics *= 5;
             }
@@ -504,7 +506,7 @@ public class Plot
             double absMax = Math.max(Math.abs(m_minX), Math.abs(m_maxX));
             final double log10 = Math.log(10);
             int maxLength = (int)(Math.log(absMax) / log10) + m_precision + 2;
-            int maxPixels = (int)(maxLength * (0.7 * m_ascent));
+            int maxPixels = (int)(maxLength * (0.7 * m_fontHeight));
             int numberTics = m_imgWidth / maxPixels;
             m_xTics = getTics(m_xRange, numberTics);
         }
@@ -549,7 +551,7 @@ public class Plot
             }
             else
             {
-                int maxNumberTics = (int)(m_imgHeight / (3 * m_ascent));
+                int maxNumberTics = (int)(m_imgHeight / (3 * m_fontHeight));
                 m_yTics = getTics(m_yRange, maxNumberTics);
                 if (m_onlyIntValuesY)
                     m_yTics = Math.max(1, m_yTics);
