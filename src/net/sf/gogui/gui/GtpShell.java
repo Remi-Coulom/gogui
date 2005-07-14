@@ -361,6 +361,7 @@ public class GtpShell
     {
         void cbAnalyze();
 
+        /** @see GtpShell.sendCommand */
         boolean sendGtpCommand(String command, boolean sync) throws GtpError;
     }
 
@@ -564,9 +565,8 @@ public class GtpShell
                                                  null, options, options[1]);
                 if (n != 0)
                     return true;
-                message = 
-                    "Would you like to disable the warnings about\n" +
-                    "commands modifying the board state?";
+                message
+                    = "Disable warnings for commands modifying the state?";
                 m_showModifyWarning =
                     ! SimpleDialogs.showQuestion(this, message);
             }
