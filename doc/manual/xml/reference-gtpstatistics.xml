@@ -266,6 +266,7 @@ Print version and exit.
 <userinput>
 gtpstatistics -program "gnugo --mode gtp" \
   -commands "reg_genmove,estimate_score,cputime" \
+  -final "final_score" \
   regression/games/olympiad2004/19x19/*.sgf
 </userinput>
 </programlisting>
