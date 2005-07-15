@@ -33,7 +33,8 @@ import net.sf.gogui.utils.Platform;
 public class GoGuiMenuBar
 {
     public GoGuiMenuBar(ActionListener listener,
-                        RecentFileMenu.Callback recentCallback)
+                        RecentFileMenu.Callback recentCallback,
+                        RecentFileMenu.Callback recentGtpCallback)
     {
         m_listener = listener;
         m_menuBar = new JMenuBar();
@@ -47,7 +48,7 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuSetup);
         m_menuSettings = createSettingsMenu();
         m_menuBar.add(m_menuSettings);
-        m_menuGtpShell = createGtpShellMenu();
+        m_menuGtpShell = createGtpShellMenu(recentGtpCallback);
         m_menuBar.add(m_menuGtpShell);
         m_menuWindow = createWindowMenu();
         m_menuBar.add(m_menuWindow);
@@ -67,6 +68,20 @@ public class GoGuiMenuBar
         {
         }
         m_recent.add(file);
+    }
+
+    public void addRecentGtp(File file)
+    {
+        try
+        {
+            File canonicalFile = file.getCanonicalFile();
+            if (canonicalFile.exists())
+                file = canonicalFile;
+        }
+        catch (IOException e)
+        {
+        }
+        m_recentGtp.add(file);
     }
 
     public void enableFindNext(boolean enable)
@@ -576,6 +591,8 @@ public class GoGuiMenuBar
 
     private RecentFileMenu m_recent;
 
+    private RecentFileMenu m_recentGtp;
+
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {
         item.addActionListener(m_listener);
@@ -744,7 +761,7 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createGtpShellMenu()
+    private JMenu createGtpShellMenu(RecentFileMenu.Callback callback)
     {
         JMenu menu = createMenu("GTP Shell", KeyEvent.VK_T);
         addMenuItem(menu, "Save Log...", KeyEvent.VK_S, KeyEvent.VK_S,
@@ -754,6 +771,10 @@ public class GoGuiMenuBar
         menu.addSeparator();
         addMenuItem(menu, "Send File...", KeyEvent.VK_G,
                     "gtpshell-send-file");
+        String home = System.getProperty("user.home");
+        File file = new File(new File(home, ".gogui"), "recent-gtpfiles");
+        m_recentGtp = new RecentFileMenu("Send Recent", file, callback);
+        menu.add(m_recentGtp.getMenu());
         return menu;
     }
 

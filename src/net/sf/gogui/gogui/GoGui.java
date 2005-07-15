@@ -197,7 +197,17 @@ public class GoGui
                     loadFile(file, -1);
                 }
             };
-        m_menuBar = new GoGuiMenuBar(this, recentCallback);
+        RecentFileMenu.Callback recentGtp = new RecentFileMenu.Callback()
+            {
+                public void fileSelected(String label, File file)
+                {
+                    if (m_gtpShell == null)
+                        return;
+                    sendGtpFile(file);
+                    m_menuBar.addRecentGtp(file);
+                }
+            };
+        m_menuBar = new GoGuiMenuBar(this, recentCallback, recentGtp);
         m_menuBar.selectBoardSizeItem(m_boardSize);
         boolean onlySupported
             = m_prefs.getBool("analyze-only-supported-commands");
@@ -543,8 +553,10 @@ public class GoGui
         if (m_gtpShell == null)
             return;
         File file = SimpleDialogs.showOpen(this, "Choose GTP file.");
-        if (file != null)
-            sendGtpFile(file);
+        if (file == null)
+            return;
+        sendGtpFile(file);
+        m_menuBar.addRecentGtp(file);
     }
 
     public void cbShowGameTree()
