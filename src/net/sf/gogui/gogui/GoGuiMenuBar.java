@@ -29,19 +29,20 @@ import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.GameTreePanel;
+import net.sf.gogui.gui.RecentMenu;
 import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
 
 /** Menu bar for GoGui. */
 public class GoGuiMenuBar
-    implements ActionListener
 {
-    public GoGuiMenuBar(ActionListener listener)
+    public GoGuiMenuBar(ActionListener listener,
+                        RecentMenu.Callback recentCallback)
     {
         m_listener = listener;
         m_menuBar = new JMenuBar();
-        m_menuFile = createFileMenu();
+        m_menuFile = createFileMenu(recentCallback);
         m_menuBar.add(m_menuFile);
         m_menuGame = createGameMenu();
         m_menuBar.add(m_menuGame);
@@ -59,31 +60,6 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuHelp);
     }
 
-    public void actionPerformed(ActionEvent event)
-    {
-        String command = event.getActionCommand();
-        if (command.startsWith("open-recent-"))
-        {
-            try
-            {
-                String indexString =
-                    command.substring("open-recent-".length());
-                int index = Integer.parseInt(indexString);
-                m_selectedRecent = m_recent[index];
-                assert(m_selectedRecent != null);
-                m_listener.actionPerformed(new ActionEvent(this, 0,
-                                                           "open-recent"));
-            }
-            catch (NumberFormatException e)
-            {
-                assert(false);
-                return;
-            }
-        }
-        else
-            assert(false);
-    }
-
     public void addRecent(File file)
     {
         try
@@ -95,23 +71,7 @@ public class GoGuiMenuBar
         catch (IOException e)
         {
         }
-        for (int i = 0; i < m_maxRecent; ++i)
-        {
-            if (m_recent[i] == null)
-                break;
-            if (m_recent[i].equals(file))
-            {
-                for (int j = i; j > 0; --j)
-                    m_recent[j] = m_recent[j - 1];
-                m_recent[0] = file;
-                updateRecentMenu();
-                return;
-            }
-        }
-        for (int i = m_maxRecent - 1; i > 0; --i)
-            m_recent[i] = m_recent[i - 1];
-        m_recent[0] = file;
-        updateRecentMenu();
+        m_recent.add(file.getName(), file.toString());
     }
 
     public void enableFindNext(boolean enable)
@@ -180,11 +140,6 @@ public class GoGuiMenuBar
         return m_menuBar;
     }
 
-    public File getSelectedRecent()
-    {
-        return m_selectedRecent;
-    }
-
     public boolean getShowCursor()
     {
         return m_itemShowCursor.isSelected();
@@ -213,25 +168,6 @@ public class GoGuiMenuBar
     public boolean getShowVariations()
     {
         return m_itemShowVariations.isSelected();
-    }
-
-    public void saveRecent()
-    {
-        File file = getRecentFile();
-        PrintStream out;
-        try
-        {
-            out = new PrintStream(new FileOutputStream(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            System.err.println("Could not save " + file.toString());
-            return;
-        }
-        for (int i = 0; i < m_maxRecent; ++i)
-            if (m_recent[i] != null)
-                out.println(m_recent[i].toString());
-        out.close();
     }
 
     public void setAnalyzeOnlySupported(boolean enable)
@@ -498,10 +434,6 @@ public class GoGuiMenuBar
 
     private boolean m_isComputerDisabled;
 
-    private static final int m_maxRecent = 20;
-
-    private int m_numberRecent;
-
     private static int m_possibleBoardSizes[] = { 9, 11, 13, 15, 17, 19 };
 
     private static int m_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -510,10 +442,6 @@ public class GoGuiMenuBar
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     private final ActionListener m_listener;
-
-    private File[] m_recent = new File[m_maxRecent];
-
-    private File m_selectedRecent;
 
     private JCheckBoxMenuItem m_itemAutoNumber;
 
@@ -544,8 +472,6 @@ public class GoGuiMenuBar
     private final JMenu m_menuGtpShell;
 
     private final JMenu m_menuHelp;
-
-    private JMenu m_menuRecent;
 
     private final JMenu m_menuSettings;
 
@@ -653,6 +579,8 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemTruncate;
 
+    private RecentMenu m_recent;
+
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {
         item.addActionListener(m_listener);
@@ -746,12 +674,12 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createFileMenu()
+    private JMenu createFileMenu(RecentMenu.Callback callback)
     {
         JMenu menu = createMenu("File", KeyEvent.VK_F);
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     m_shortcutKeyMask, "open");
-        menu.add(createRecentMenu());
+        menu.add(createRecentMenu(callback));
         addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
                     m_shortcutKeyMask, "save");
         addMenuItem(menu, "Save Position...", KeyEvent.VK_T, "save-position");
@@ -871,12 +799,14 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createRecentMenu()
+    private JMenu createRecentMenu(RecentMenu.Callback callback)
     {
-        m_menuRecent = createMenu("Open Recent", KeyEvent.VK_R);
-        loadRecent();
-        updateRecentMenu();
-        return m_menuRecent;
+        String home = System.getProperty("user.home");
+        File file = new File(new File(home, ".gogui"), "recent-files");
+        m_recent = new RecentMenu("Open Recent", file, callback);
+        JMenu menu = m_recent.getMenu();
+        menu.setMnemonic(KeyEvent.VK_R);
+        return menu;
     }
 
     private JMenu createSettingsMenu()
@@ -1083,13 +1013,6 @@ public class GoGuiMenuBar
                         menu.getItem(j).setEnabled(true);
             }
         }
-        m_menuRecent.setEnabled(m_numberRecent > 0);
-    }
-
-    private File getRecentFile()
-    {
-        String home = System.getProperty("user.home");
-        return new File(new File(home, ".gogui"), "recent-files");
     }
 
     private boolean canRestoreTime(Node node)
@@ -1097,63 +1020,6 @@ public class GoGuiMenuBar
         return ! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
             || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE))
             || node.getFather() == null;
-    }
-
-    private void loadRecent()
-    {
-        m_numberRecent = 0;
-        File file = getRecentFile();
-        BufferedReader reader;
-        try
-        {
-            reader = new BufferedReader(new FileReader(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            return;
-        }
-        String line;
-        try
-        {
-            while ((line = reader.readLine()) != null)
-            {
-                if (m_numberRecent >= m_maxRecent - 1)
-                    break;
-                File recent = new File(line);
-                if (! recent.exists())
-                    continue;
-                m_recent[m_numberRecent] = recent;
-                ++m_numberRecent;
-            }
-        }
-        catch (IOException e)
-        {
-        }
-        try
-        {
-            reader.close();
-        }
-        catch (IOException e)
-        {
-        }
-    }
-
-    private void updateRecentMenu()
-    {
-        m_menuRecent.removeAll();
-        m_numberRecent = 0;
-        for (int i = 0; i < m_maxRecent; ++i)
-        {
-            File file = m_recent[i];
-            if (file == null)
-                break;
-            ++m_numberRecent;
-            JMenuItem item = new JMenuItem(file.getName());
-            item.addActionListener(this);
-            item.setActionCommand("open-recent-" + i);
-            m_menuRecent.add(item);
-        }
-        m_menuRecent.setEnabled(m_numberRecent > 0);
     }
 }
 

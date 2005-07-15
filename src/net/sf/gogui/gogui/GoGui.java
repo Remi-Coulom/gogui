@@ -77,6 +77,7 @@ import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.ParameterDialog;
+import net.sf.gogui.gui.RecentMenu;
 import net.sf.gogui.gui.SelectProgram;
 import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
@@ -186,7 +187,18 @@ public class GoGui
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtils.setGoIcon(this);
-        m_menuBar = new GoGuiMenuBar(this);
+        RecentMenu.Callback recentCallback = new RecentMenu.Callback()
+            {
+                public void itemSelected(String label, String value)
+                {
+                    if (m_needsSave && ! checkSaveGame())
+                        return;
+                    File file = new File(value);
+                    m_menuBar.addRecent(file);
+                    loadFile(file, -1);
+                }
+            };
+        m_menuBar = new GoGuiMenuBar(this, recentCallback);
         m_menuBar.selectBoardSizeItem(m_boardSize);
         boolean onlySupported
             = m_prefs.getBool("analyze-only-supported-commands");
@@ -366,8 +378,6 @@ public class GoGui
             cbNewGame(m_boardSize);
         else if (command.equals("open"))
             cbOpen();
-        else if (command.equals("open-recent"))
-            cbOpenRecent();
         else if (command.equals("pass"))
             cbPass();
         else if (command.equals("play"))
@@ -1573,17 +1583,6 @@ public class GoGui
         if (file == null)
             return;
         m_menuBar.addRecent(file);
-        m_menuBar.saveRecent();
-        loadFile(file, -1);
-    }
-
-    private void cbOpenRecent()
-    {
-        if (m_needsSave && ! checkSaveGame())
-            return;
-        File file = m_menuBar.getSelectedRecent();
-        m_menuBar.addRecent(file);
-        m_menuBar.saveRecent();
         loadFile(file, -1);
     }
 
@@ -2678,7 +2677,6 @@ public class GoGui
         {
             new SgfWriter(out, m_gameTree, file, "GoGui", Version.get());
             m_menuBar.addRecent(file);
-            m_menuBar.saveRecent();
         }
     }
 
@@ -2718,7 +2716,6 @@ public class GoGui
         {
             new SgfWriter(out, m_board, file, "GoGui", Version.get());
             m_menuBar.addRecent(file);
-            m_menuBar.saveRecent();
         }
     }
 
@@ -2726,7 +2723,6 @@ public class GoGui
     {
         if (m_gtpShell != null)
             m_gtpShell.saveHistory();
-        m_menuBar.saveRecent();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
         Session.saveLocation(this, m_prefs, "window-gogui", m_boardSize);
