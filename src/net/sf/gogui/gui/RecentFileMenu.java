@@ -38,32 +38,38 @@ public class RecentFileMenu
     public void add(File file)
     {
         String name = file.getName();
-        m_menu.add(name, file.toString());
+        m_menu.add(name, file.toString(), false);
         m_sameName.clear();
         for (int i = 0; i < getCount(); ++i)
             if (getName(i).equals(name))
                 m_sameName.add(getValue(i));
-        int n = 0;
-        while (true)
+        if (m_sameName.size() > 1)
         {
-            boolean samePrefix = true;
-            char c = file.toString().charAt(n);
-            for (int i = 0; i < m_sameName.size(); ++i)
+            int n = 0;
+            while (true)
             {
-                String sameName = (String)m_sameName.get(i);
-                if (sameName.length() < n || sameName.charAt(n) != c)
-                {
-                    samePrefix = false;
+                boolean samePrefix = true;
+                if (file.toString().length() <= n)
                     break;
+                char c = file.toString().charAt(n);
+                for (int i = 0; i < m_sameName.size(); ++i)
+                {
+                    String sameName = (String)m_sameName.get(i);
+                    if (sameName.length() <= n || sameName.charAt(n) != c)
+                    {
+                        samePrefix = false;
+                        break;
+                    }
                 }
+                if (! samePrefix)
+                    break;
+                ++n;
             }
-            if (! samePrefix)
-                break;
-            ++n;
+            for (int i = 0; i < getCount(); ++i)
+                if (getName(i).equals(name))
+                    m_menu.setLabel(i, getValue(i).substring(n));
         }
-        for (int i = 0; i < getCount(); ++i)
-            if (getName(i).equals(name))
-                m_menu.setLabel(i, getValue(i).substring(n));
+        m_menu.save();
     }
 
     /** Don't modify the items in this menu! */

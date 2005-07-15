@@ -39,6 +39,12 @@ class RecentMenuItem
         return m_value;
     }
 
+    public void setRecentMenuLabel(String label)
+    {
+        setText(label);
+        m_label = label;
+    }
+
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
@@ -81,7 +87,7 @@ public class RecentMenu
         load();
     }
 
-    public void add(String label, String value)
+    public void add(String label, String value, boolean save)
     {
         for (int i = 0; i < getCount(); ++i)
             if (getValue(i).equals(value))
@@ -90,7 +96,8 @@ public class RecentMenu
         m_menu.add(item, 0);
         while (getCount() > m_maxItems)
             m_menu.remove(getCount() - 1);
-        save();
+        if (save)
+            save();
     }
 
     public int getCount()
@@ -109,9 +116,26 @@ public class RecentMenu
         return getItem(i).getRecentMenuValue();
     }
 
+    public void save()
+    {
+        Properties props = new Properties();
+        for (int i = 0; i < getCount(); ++i)
+        {
+            props.setProperty("label_" + i, getLabel(i));
+            props.setProperty("value_" + i, getValue(i));
+        }
+        try
+        {
+            props.store(new FileOutputStream(m_file), null);
+        }
+        catch (IOException e)
+        {
+        }
+    }
+
     public void setLabel(int i, String label)
     {
-        getItem(i).setText(label);
+        getItem(i).setRecentMenuLabel(label);
     }
 
     private final int m_maxItems = 20;
@@ -152,24 +176,7 @@ public class RecentMenu
             String value = props.getProperty("value_" + i);
             if (label == null || value == null)
                 continue;
-            add(label, value);
-        }
-    }
-
-    private void save()
-    {
-        Properties props = new Properties();
-        for (int i = 0; i < getCount(); ++i)
-        {
-            props.setProperty("label_" + i, getLabel(i));
-            props.setProperty("value_" + i, getValue(i));
-        }
-        try
-        {
-            props.store(new FileOutputStream(m_file), null);
-        }
-        catch (IOException e)
-        {
+            add(label, value, false);
         }
     }
 }
