@@ -24,7 +24,7 @@ import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.GameTreePanel;
-import net.sf.gogui.gui.RecentMenu;
+import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
@@ -33,7 +33,7 @@ import net.sf.gogui.utils.Platform;
 public class GoGuiMenuBar
 {
     public GoGuiMenuBar(ActionListener listener,
-                        RecentMenu.Callback recentCallback)
+                        RecentFileMenu.Callback recentCallback)
     {
         m_listener = listener;
         m_menuBar = new JMenuBar();
@@ -66,7 +66,7 @@ public class GoGuiMenuBar
         catch (IOException e)
         {
         }
-        m_recent.add(file.getName(), file.toString());
+        m_recent.add(file);
     }
 
     public void enableFindNext(boolean enable)
@@ -574,7 +574,7 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemTruncate;
 
-    private RecentMenu m_recent;
+    private RecentFileMenu m_recent;
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {
@@ -669,7 +669,7 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createFileMenu(RecentMenu.Callback callback)
+    private JMenu createFileMenu(RecentFileMenu.Callback callback)
     {
         JMenu menu = createMenu("File", KeyEvent.VK_F);
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
@@ -794,11 +794,11 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createRecentMenu(RecentMenu.Callback callback)
+    private JMenu createRecentMenu(RecentFileMenu.Callback callback)
     {
         String home = System.getProperty("user.home");
         File file = new File(new File(home, ".gogui"), "recent-files");
-        m_recent = new RecentMenu("Open Recent", file, callback);
+        m_recent = new RecentFileMenu("Open Recent", file, callback);
         JMenu menu = m_recent.getMenu();
         menu.setMnemonic(KeyEvent.VK_R);
         return menu;

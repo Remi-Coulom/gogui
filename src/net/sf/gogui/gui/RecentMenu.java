@@ -93,10 +93,25 @@ public class RecentMenu
         save();
     }
 
+    public int getCount()
+    {
+        return m_menu.getItemCount();
+    }
+
     /** Don't modify the items in this menu! */
     public JMenu getMenu()
     {
         return m_menu;
+    }
+
+    public String getValue(int i)
+    {
+        return getItem(i).getRecentMenuValue();
+    }
+
+    public void setLabel(int i, String label)
+    {
+        getItem(i).setText(label);
     }
 
     private final int m_maxItems = 20;
@@ -109,11 +124,6 @@ public class RecentMenu
 
     private JMenu m_menu;
 
-    private int getCount()
-    {
-        return m_menu.getItemCount();
-    }
-
     private RecentMenuItem getItem(int i)
     {
         return (RecentMenuItem)m_menu.getItem(i);
@@ -122,11 +132,6 @@ public class RecentMenu
     private String getLabel(int i)
     {
         return getItem(i).getRecentMenuLabel();
-    }
-
-    private String getValue(int i)
-    {
-        return getItem(i).getRecentMenuValue();
     }
 
     private void load()

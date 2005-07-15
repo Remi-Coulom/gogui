@@ -77,7 +77,7 @@ import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.ParameterDialog;
-import net.sf.gogui.gui.RecentMenu;
+import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.gui.SelectProgram;
 import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
@@ -187,13 +187,12 @@ public class GoGui
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtils.setGoIcon(this);
-        RecentMenu.Callback recentCallback = new RecentMenu.Callback()
+        RecentFileMenu.Callback recentCallback = new RecentFileMenu.Callback()
             {
-                public void itemSelected(String label, String value)
+                public void fileSelected(String label, File file)
                 {
                     if (m_needsSave && ! checkSaveGame())
                         return;
-                    File file = new File(value);
                     m_menuBar.addRecent(file);
                     loadFile(file, -1);
                 }
