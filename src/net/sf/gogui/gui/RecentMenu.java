@@ -86,7 +86,6 @@ public class RecentMenu
         m_menu.add(item, 0);
         while (getCount() > m_maxItems)
             m_menu.remove(getCount() - 1);
-        m_menu.setEnabled(true);
         save();
     }
 
@@ -145,7 +144,6 @@ public class RecentMenu
             return;
         }
         m_menu.removeAll();
-        m_menu.setEnabled(false);
         for (int i = 0; i < m_maxItems; ++i)
         {
             String label = props.getProperty("label_" + i);
