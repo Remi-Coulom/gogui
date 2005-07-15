@@ -3058,6 +3058,8 @@ public class GoGui
             Point location = m_guiBoard.getLocationOnScreen(pointArg);
             textViewer.setLocation(location);
         }
+        else
+            textViewer.setLocationRelativeTo(this);
         textViewer.setVisible(true);
     }
 
