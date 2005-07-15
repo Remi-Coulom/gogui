@@ -75,6 +75,16 @@ positive, White negative.
 </listitem>
 </varlistentry>
 <varlistentry>
+<term><command>final_score</command></term>
+<listitem>
+<para>
+The result is parsed for a score string.
+The score string is converted into a score number, Black counting
+positive, White negative.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
 <term><command>reg_genmove</command></term>
 <listitem>
 <para>

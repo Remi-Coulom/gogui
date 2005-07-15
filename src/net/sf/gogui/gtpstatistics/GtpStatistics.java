@@ -199,8 +199,11 @@ public class GtpStatistics
             for (int i = 0; i < m_finalCommands.size(); ++i)
             {
                 String command = getFinalCommand(i);
-                String result = m_gtp.sendCommand(command);
-                m_table.set(command, result);
+                String response
+                    = convertResponse(getFinalCommand(i),
+                                      m_gtp.sendCommand(command), toMove,
+                                      null, true);
+                m_table.set(command, response);
             }
         }
     }
@@ -259,15 +262,21 @@ public class GtpStatistics
                 return response;
             }
         }
-        if (command.equals("estimate_score"))
+        else if (command.equals("estimate_score"))
         {
             String arg[] = StringUtils.tokenize(response);
             if (arg.length == 0)
                 return response;
             return convertScore(arg[0]);
         }
-        if (command.equals("reg_genmove"))
+        else if (command.equals("final_score"))
         {
+            return convertScore(response);
+        }
+        else if (command.equals("reg_genmove"))
+        {
+            if (move == null)
+                return "";
             try
             {
                 GoPoint point = GoPoint.parsePoint(response, m_size); 
@@ -286,7 +295,7 @@ public class GtpStatistics
     */
     private String convertScore(String string)
     {
-        String score = string;
+        String score = string.trim();
         double sign = 1;
         if (score.startsWith("W+"))
         {
