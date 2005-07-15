@@ -39,6 +39,11 @@ class RecentMenuItem
         return m_value;
     }
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private String m_label;
 
     private String m_value;
@@ -136,7 +141,7 @@ public class RecentMenu
         Properties props = new Properties();
         try
         {
-            props.loadFromXML(new FileInputStream(m_file));
+            props.load(new FileInputStream(m_file));
         }
         catch (IOException e)
         {
@@ -163,7 +168,7 @@ public class RecentMenu
         }
         try
         {
-            props.storeToXML(new FileOutputStream(m_file), null);
+            props.store(new FileOutputStream(m_file), null);
         }
         catch (IOException e)
         {
