@@ -99,13 +99,6 @@ public class RecentMenu
         return m_menu;
     }
 
-    private static class Item
-    {
-        public String m_label;
-
-        public String m_value;
-    }
-
     private final int m_maxItems = 20;
 
     private ActionListener m_listener;
