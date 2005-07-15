@@ -36,7 +36,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -46,7 +45,6 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.gui.GuiUtils;
-import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
 
