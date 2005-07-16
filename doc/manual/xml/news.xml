@@ -62,6 +62,11 @@ GoGui:
 <itemizedlist>
 <listitem>
 <simpara>
+Re-organize menu bar.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New analyze command types eplist (editable point lists) and gfx (graphics).
 </simpara>
 </listitem>
