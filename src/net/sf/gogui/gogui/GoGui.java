@@ -1203,9 +1203,11 @@ public class GoGui
             {
                 int total = 0;
                 Node node = m_currentNode;
-                for (int i = 0; i < n && node != null; ++i)
+                for (int i = 0; i < n; ++i)
                 {
                     total += node.getAllAsMoves().size();
+                    if (node.getFather() == null)
+                        break;
                     node = node.getFather();
                 }
                 m_commandThread.sendCommand("gg-undo " + total);
