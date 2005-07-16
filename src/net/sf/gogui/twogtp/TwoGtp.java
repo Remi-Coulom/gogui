@@ -1167,26 +1167,24 @@ public class TwoGtp
         String prefix1;
         String prefix2;
         String command;
-        String command2;
-        boolean alternate = isAlternated();
-        if ((color == GoColor.BLACK && ! alternate)
-            || (color == GoColor.WHITE && alternate))
-        {
-            gtp1 = m_black;
-            gtp2 = m_white;
-            prefix1 = "B";
-            prefix2 = "W";
-            command = m_black.getCommandGenmove(color);
-            command2 = m_white.getCommandPlay(color);
-        }
-        else
+        boolean exchangeColors =
+            (color == GoColor.BLACK && isAlternated())
+            || (color == GoColor.WHITE && ! isAlternated());
+        if (exchangeColors)
         {
             gtp1 = m_white;
             gtp2 = m_black;
             prefix1 = "W";
             prefix2 = "B";
             command = m_white.getCommandGenmove(color);
-            command2 = m_black.getCommandPlay(color);
+        }
+        else
+        {
+            gtp1 = m_black;
+            gtp2 = m_white;
+            prefix1 = "B";
+            prefix2 = "W";
+            command = m_black.getCommandGenmove(color);
         }
         String response1 = null;
         String response2 = null;
@@ -1219,7 +1217,8 @@ public class TwoGtp
                 m_inconsistentState = true;
                 return false;
             }
-            command2 = command2 + " " + response1;
+            Move move = Move.create(point, color);
+            String command2 = gtp2.getCommandPlay(move);
             try
             {
                 gtp2.sendCommand(command2);
@@ -1241,12 +1240,10 @@ public class TwoGtp
             }
             response.append(response1);
             if (m_referee != null && ! m_refereeIsDisabled)
-                sendToReferee(m_referee.getCommandPlay(color) + " "
-                              + response1);
+                sendToReferee(m_referee.getCommandPlay(move));
             if (m_observer != null && ! m_observerIsDisabled)
-                sendToObserver(m_observer.getCommandPlay(color) + " "
-                              + response1);
-            play(Move.create(point, color));
+                sendToObserver(m_observer.getCommandPlay(move));
+            play(move);
         }
         if (gameOver() && ! m_gameSaved)
         {

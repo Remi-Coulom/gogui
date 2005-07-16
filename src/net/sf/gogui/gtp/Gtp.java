@@ -194,21 +194,6 @@ public final class Gtp
             return "genmove w";
     }
 
-    /** Get command for playing a move without the point argument.
-        Note: call queryProtocolVersion first
-        @deprecated Use getCommandPlay(Move)
-        @return The right command depending on the GTP version.
-    */
-    public String getCommandPlay(GoColor color)
-    {
-        
-        String command = "";
-        if (m_protocolVersion == 2)
-            command = "play ";
-        command = command + color.toString();
-        return command;
-    }
-
     /** Get command for playing a move.
         Note: call queryProtocolVersion first
         @param Move. Any color, including GoColor.EMPTY, this is
