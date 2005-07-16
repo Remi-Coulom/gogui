@@ -1193,18 +1193,38 @@ public class GoGui
         return true;
     }    
 
+    /** Go backward a number of nodes in the tree. */
     private boolean backward(int n)
     {
         try
         {
-            for (int i = 0; i < n; ++i)
+            if (m_commandThread != null && n > 1
+                && m_commandThread.isCommandSupported("gg-undo"))
             {
-                if (m_currentNode.getFather() == null)
-                    return false;
-                undoCurrentNode();
-                m_currentNode = m_currentNode.getFather();
+                int total = 0;
+                Node node = m_currentNode;
+                for (int i = 0; i < n && node != null; ++i)
+                {
+                    total += node.getAllAsMoves().size();
+                    node = node.getFather();
+                }
+                m_commandThread.sendCommand("gg-undo " + total);
+                m_board.undo(total);
+                m_currentNode = node;
                 m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
-                m_gameInfo.fastUpdateMoveNumber(m_currentNode);
+            }
+            else
+            {
+                for (int i = 0; i < n; ++i)
+                {
+                    if (m_currentNode.getFather() == null)
+                        return false;
+                    undoCurrentNode();
+                    m_currentNode = m_currentNode.getFather();
+                    m_currentNodeExecuted
+                        = m_currentNode.getAllAsMoves().size();
+                    m_gameInfo.fastUpdateMoveNumber(m_currentNode);
+                }
             }
             computerNone();
         }

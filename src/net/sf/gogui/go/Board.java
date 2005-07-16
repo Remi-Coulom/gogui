@@ -516,6 +516,18 @@ public final class Board
         m_toMove = r.getOldToMove();
     }
 
+    /** Undo a number of moves.
+        @param n Number of moves to undo. Must be between 0
+        and getMoveNumber().
+    */
+    public void undo(int n)
+    {
+        assert(n >= 0);
+        assert(n <= getMoveNumber());
+        for (int i = 0; i < n; ++i)
+            undo();
+    }
+
     /** Some values that are constant for a given board size. */
     private static class Constants
     {
