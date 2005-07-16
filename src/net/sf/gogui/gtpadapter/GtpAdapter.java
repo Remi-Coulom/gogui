@@ -563,7 +563,7 @@ public class GtpAdapter
             m_passInserted.push(Boolean.FALSE);
             return true;
         }
-        String command = m_gtp.getCommandPlay(toMove) + " PASS";
+        String command = m_gtp.getCommandPlay(Move.create(null, toMove));
         if (send(command, response))
         {
             m_passInserted.push(Boolean.TRUE);
@@ -577,11 +577,7 @@ public class GtpAdapter
     {
         if (! fillPass(color, response))
             return false;
-        String command = m_gtp.getCommandPlay(color) + " ";
-        if (point == null)
-            command = command + "PASS";
-        else
-            command = command + point;
+        String command = m_gtp.getCommandPlay(Move.create(point, color));
         if (send(command, response))
         {
             m_board.play(Move.create(point, color));

@@ -121,8 +121,7 @@ public class GtpTerminal
 
     private boolean cmdPlay(GoColor color, GoPoint point)
     {
-        String command = m_gtp.getCommandPlay(color);
-        command = command + " " + GoPoint.toString(point);
+        String command = m_gtp.getCommandPlay(Move.create(point, color));
         StringBuffer response = new StringBuffer();
         if (! send(command, response))
         {

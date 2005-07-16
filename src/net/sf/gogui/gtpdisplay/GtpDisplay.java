@@ -570,11 +570,7 @@ public class GtpDisplay
     {
         if (m_gtp != null)
         {
-            String command = m_gtp.getCommandPlay(color) + " ";
-            if (point == null)
-                command = command + "PASS";
-            else
-                command = command + point;
+            String command = m_gtp.getCommandPlay(Move.create(point, color));
             if (! send(command, response))
                 return false;
         }
