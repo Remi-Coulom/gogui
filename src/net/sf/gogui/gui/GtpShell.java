@@ -83,6 +83,8 @@ class GtpShellText
         StyleConstants.setBold(output, true);
         Style log = addStyle("log", def);
         StyleConstants.setForeground(log, new Color(0.5f, 0.5f, 0.5f));
+        Style time = addStyle("time", def);
+        StyleConstants.setForeground(time, Color.decode("#91aee8"));
         Style invalid = addStyle("invalid", def);
         StyleConstants.setForeground(invalid, Color.white);
         StyleConstants.setBackground(invalid, Color.red);
@@ -242,7 +244,7 @@ class GtpShellText
             return;
         long timeMillis = System.currentTimeMillis();
         double diff = (timeMillis - m_startTime) / 1000;
-        appendText(Clock.getTimeString(diff, -1) + " ", "log");
+        appendText(Clock.getTimeString(diff, -1) + " ", "time");
     }
 
     /** Try to set the default caret with update policy NEVER_UPDATE.
