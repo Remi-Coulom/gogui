@@ -95,6 +95,8 @@ public class GtpAdapter
             status = cmdGenmove(GoColor.BLACK, response);
         else if (cmd.equals("genmove_white"))
             status = cmdGenmove(GoColor.WHITE, response);
+        else if (cmd.equals("gg-undo"))
+            status = cmdGGUndo(cmdArray, response);
         else if (cmd.equals("gtpadapter_showboard"))
             status = cmdGtpAdapterShowBoard(response);
         else if (cmd.equals("help"))
@@ -287,6 +289,60 @@ public class GtpAdapter
             m_board.play(Move.create(null, color));
             return false;
         }
+    }
+
+    private boolean cmdGGUndo(String cmdArray[], StringBuffer response)
+    {
+        if (cmdArray.length > 2)
+        {
+            
+            response.append("Too many arguments");
+            return false;
+        }
+        int n = 1;
+        if (cmdArray.length == 2)
+        {
+            try
+            {
+                n = Integer.parseInt(cmdArray[1]);
+                if (n <= 0)
+                {                    
+                    response.append("Argument must be positive");
+                    return false;
+                }
+                if (n > m_board.getMoveNumber())
+                {                    
+                    response.append("Not enough moves");
+                    return false;
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                response.append("Invalid argument");
+                return false;
+            }
+        }        
+        int total = 0;
+        Stack stack = new Stack();
+        for (int i = 0; i < n; ++i)
+        {
+            ++total;
+            if (m_fillPasses)
+            {
+                Boolean passInserted = (Boolean)m_passInserted.pop();
+                stack.push(passInserted);
+                if (passInserted.booleanValue())
+                    ++total;
+            }
+        }
+        if (! send("gg-undo " + total, response))
+        {
+            while (! stack.empty())
+                m_passInserted.push(stack.pop());
+            return false;
+        }
+        m_board.undo(total);
+        return true;
     }
 
     private boolean cmdGtpAdapterShowBoard(StringBuffer response)
