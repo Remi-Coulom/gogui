@@ -175,19 +175,28 @@ public final class Gtp
 
     /** Get command for generating a move.
         Note: call queryProtocolVersion first
+        @param color GoColor::BLACK or GoColor::WHITE
         @return The right command depending on the GTP version.
     */
     public String getCommandGenmove(GoColor color)
     {
-        String c = color.toString();
+        assert(color == GoColor.BLACK || color == GoColor.WHITE);
         if (m_protocolVersion == 1)
-            return "genmove_" + c;
+        {
+            if (color == GoColor.BLACK)
+                return "genmove_black";
+            else
+                return "genmove_white";
+        }
+        if (color == GoColor.BLACK)
+            return "genmove b";
         else
-            return "genmove " + c;
+            return "genmove w";
     }
 
     /** Get command for playing a move without the point argument.
         Note: call queryProtocolVersion first
+        @deprecated Use getCommandPlay(Move)
         @return The right command depending on the GTP version.
     */
     public String getCommandPlay(GoColor color)
@@ -202,18 +211,31 @@ public final class Gtp
 
     /** Get command for playing a move.
         Note: call queryProtocolVersion first
+        @param Move. Any color, including GoColor.EMPTY, this is
+        non-standard GTP, but GoGui tries to transmit empty setup
+        points this way, even if it is only to produce an error with the
+        Go engine.
         @return The right command depending on the GTP version.
     */
     public String getCommandPlay(Move move)
     {
-        
-        String command = getCommandPlay(move.getColor());
-        GoPoint p = move.getPoint();
-        if (p == null)
-            command = command + " pass";
-        else
-            command = command + " " + p.toString();
-        return command;
+        String point = GoPoint.toString(move.getPoint());
+        GoColor color = move.getColor();
+        if (m_protocolVersion == 1)
+        {
+            if (color == GoColor.BLACK)
+                return "black " + point;
+            if (color == GoColor.WHITE)
+                return "white " + point;
+            assert(color == GoColor.EMPTY);
+            return "empty " + point;
+        }
+        if (color == GoColor.BLACK)
+            return "play b " + point;
+        if (color == GoColor.WHITE)
+            return "play w " + point;
+        assert(color == GoColor.EMPTY);
+        return "play empty " + point;
     }
 
     /** Send command cputime and convert the result to double.
