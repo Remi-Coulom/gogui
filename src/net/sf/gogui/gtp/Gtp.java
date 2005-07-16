@@ -231,9 +231,9 @@ public final class Gtp
             return "empty " + point;
         }
         if (color == GoColor.BLACK)
-            return "play b " + point;
+            return "play B " + point;
         if (color == GoColor.WHITE)
-            return "play w " + point;
+            return "play W " + point;
         assert(color == GoColor.EMPTY);
         return "play empty " + point;
     }
