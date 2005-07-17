@@ -2111,7 +2111,7 @@ public class GoGui
                 new Box.Filler(dimension, dimension, dimension);
             outerPanel.add(filler, BorderLayout.EAST);
         }
-        JLabel label = GuiUtils.createInfoLabel();
+        JLabel label = new JLabel();
         label.setBorder(BorderFactory.createLoweredBevelBorder());
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
