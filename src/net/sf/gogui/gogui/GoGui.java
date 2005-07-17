@@ -3179,9 +3179,15 @@ public class GoGui
 
     private void showToMove()
     {
-        if (m_board.getToMove() == GoColor.WHITE)
+        if (m_showInfoPanel)
+        {
+            clearStatus();
+            return;
+        }
+        GoColor toMove = m_board.getToMove();
+        if (toMove == GoColor.WHITE)
             showStatus("White to play");
-        else
+        else if (toMove == GoColor.BLACK)
             showStatus("Black to play");
     }
 
