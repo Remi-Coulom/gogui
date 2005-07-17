@@ -257,12 +257,15 @@ public class NodeUtils
         return node;
     }
 
-    /** Get nodes in shortest path between start and target node.
-        The shortest path goes backward from the start node (exclusive) until
-        the last common moves of the variations of both nodes and then forward
+    /** Get shortest path between start and target node.
+        The shortest path goes backward from the start node (inclusive) until
+        the last common moves of both variations (exclusive) and then forward
         to the target node (inclusive).
+        @param nodes Nodes to execute after undoing the number of nodes
+        returned
+        @return Number if moves to undo
     */
-    public static Vector getShortestPath(Node start, Node target)
+    public static int getShortestPath(Node start, Node target, Vector nodes)
     {
         Vector rootToStart = getPathFromRoot(start);
         Vector rootToTarget = getPathFromRoot(target);
@@ -272,12 +275,10 @@ public class NodeUtils
             rootToStart.remove(0);
             rootToTarget.remove(0);
         }
-        Vector result = new Vector();
-        for (int i = rootToStart.size() - 1; i >= 0; --i)
-            result.add(rootToStart.get(i));
+        nodes.clear();
         for (int i = 0; i < rootToTarget.size(); ++i)
-            result.add(rootToTarget.get(i));
-        return result;
+            nodes.add(rootToTarget.get(i));
+        return rootToStart.size();
     }
 
     /** Get a text representation of the variation to a certain node.

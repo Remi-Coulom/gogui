@@ -721,17 +721,14 @@ public class GoGui
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        Vector shortestPath = NodeUtils.getShortestPath(m_currentNode, node);
-        for (int i = 0; i < shortestPath.size(); ++i)
+        Vector nodes = new Vector();
+        int numberUndo
+            = NodeUtils.getShortestPath(m_currentNode, node, nodes);
+        if (backward(numberUndo))
         {
-            Node nextNode = (Node)shortestPath.get(i);
-            if (nextNode == m_currentNode)
+            for (int i = 0; i < nodes.size(); ++i)
             {
-                if (! backward(1))
-                    break;
-            }
-            else
-            {
+                Node nextNode = (Node)nodes.get(i);
                 if (! checkCurrentNodeExecuted())
                     break;
                 assert(nextNode.isChildOf(m_currentNode));
