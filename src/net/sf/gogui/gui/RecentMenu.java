@@ -119,10 +119,11 @@ public class RecentMenu
     public void save()
     {
         Properties props = new Properties();
-        for (int i = 0; i < getCount(); ++i)
+        int count = getCount();
+        for (int i = 0; i < count; ++i)
         {
-            props.setProperty("label_" + i, getLabel(i));
-            props.setProperty("value_" + i, getValue(i));
+            props.setProperty("label_" + (count - i - 1), getLabel(i));
+            props.setProperty("value_" + (count - i - 1), getValue(i));
         }
         try
         {
