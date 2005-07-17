@@ -404,9 +404,13 @@ public class Plot
         return new Point(intX, intY);
     }
 
+    /** Find tics interval.
+        Tries to respect maxNumberTics, as long as there are at least two
+        tics.
+    */
     private double getTics(double range, int maxNumberTics)
     {
-        final int minNumberTics = 3;
+        final int minNumberTics = 2;
         maxNumberTics = Math.max(maxNumberTics, minNumberTics);
         double tics;
         if (range / maxNumberTics < 0.5)
@@ -425,11 +429,11 @@ public class Plot
         else
         {
             tics = 0.5;
-            while (range / (tics * 2) > maxNumberTics
-                   && range / (tics * 2) > minNumberTics)
+            while (range / tics > maxNumberTics
+                   && range / (tics * 2) >= minNumberTics)
             {
                 tics *= 2;
-                if (range / (tics * 5) <= maxNumberTics
+                if (range / tics <= maxNumberTics
                     || range / (tics * 5) < minNumberTics)
                     break;
                 tics *= 5;
@@ -551,7 +555,7 @@ public class Plot
             }
             else
             {
-                int maxNumberTics = (int)(m_imgHeight / (3 * m_fontHeight));
+                int maxNumberTics = (int)(m_imgHeight / (1.5 * m_fontHeight));
                 m_yTics = getTics(m_yRange, maxNumberTics);
                 if (m_onlyIntValuesY)
                     m_yTics = Math.max(1, m_yTics);
