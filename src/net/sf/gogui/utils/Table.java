@@ -93,20 +93,28 @@ public class Table
 
     public void save(Writer out) throws IOException
     {
-        Enumeration propertyNames = m_properties.propertyNames();
-        for (Enumeration e = propertyNames; e.hasMoreElements(); )
+        save(out, true);
+    }
+
+    public void save(Writer out, boolean withHeader) throws IOException
+    {
+        if (withHeader)
         {
-            String key = (String)e.nextElement();
-            out.write("# " + key + ": " + m_properties.get(key) + "\n");
-        }
-        out.write("#\n#");
-        for (int i = 0; i < m_numberColumns; ++i)
-        {
-            out.write(getColumnTitle(i));
-            if (i < m_numberColumns - 1)
-                out.write('\t');
-            else
-                out.write('\n');
+            Enumeration propertyNames = m_properties.propertyNames();
+            for (Enumeration e = propertyNames; e.hasMoreElements(); )
+            {
+                String key = (String)e.nextElement();
+                out.write("# " + key + ": " + m_properties.get(key) + "\n");
+            }
+            out.write("#\n#");
+            for (int i = 0; i < m_numberColumns; ++i)
+            {
+                out.write(getColumnTitle(i));
+                if (i < m_numberColumns - 1)
+                    out.write('\t');
+                else
+                    out.write('\n');
+            }
         }
         for (int i = 0; i < m_rows.size(); ++i)
         {

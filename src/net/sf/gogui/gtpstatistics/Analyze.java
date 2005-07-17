@@ -9,7 +9,9 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Vector;
 import java.text.DecimalFormat;
@@ -55,59 +57,54 @@ public class Analyze
         startInfo(out, "Statistics Summary");
         writeInfo(out);
         endInfo(out);
-        Vector columnTitles = new Vector();
-        columnTitles.add("Move");
-        columnTitles.add("Count");
-        Table table = new Table(columnTitles);
-        CommandStatistics commandStatistics = computeCommandStatistics(0);
-        for (int i = 0; i < m_maxMove; ++i)
-        {
-            table.startRow();
-            table.set("Move", i);
-            table.set("Count", commandStatistics.getStatistics(i).getCount());
-        }
-        File pngFile = new File(m_output + ".count.png");
-        Plot plot = generatePlotMove(getImgWidth(m_maxMove), Color.DARK_GRAY);
-        plot.plot(pngFile, table, "Move", "Count", null);
         out.print("<table border=\"0\">\n" +
-                  "<tr><td align=\"center\">\n" +
-                  "<small>Count</small><br>" +
-                  "<img src=\"" + pngFile.getName() + "\">\n" +
-                  "</td></tr>\n");
+                  "<tr><td>\n");
+        writePlot(out, "<small>number positions</small>",
+                  getCountFile().getName(), "");
+        out.print("</td></tr>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
-            commandStatistics = computeCommandStatistics(i);
+            CommandStatistics commandStatistics = computeCommandStatistics(i);
             m_commandStatistics.add(commandStatistics);
             if (commandStatistics.getCount() > 0)
             {
                 String command = getCommand(i);
-                table = commandStatistics.m_tableAtMove;
-                plot = generatePlotMove(getImgWidth(m_maxMove),
-                                        getColor(command));
+                Table table = commandStatistics.m_tableAtMove;
+                Plot plot = generatePlotMove(getImgWidth(m_maxMove),
+                                             getColor(command));
                 if (commandStatistics.mostCountsZero())
                     plot.setPlotStyleNoLines();
-                pngFile = getAvgPlotFile(i);                
+                File pngFile = getAvgPlotFile(i);
+                File dataFile = getAvgDataFile(i);
                 plot.setPlotStyleNoLines();
                 plot.plot(pngFile, table, "Move", "Mean", "Error");
-                out.print("<tr><td align=\"center\">\n" +
-                          getCommandLink(i) + "<br>" +
-                          "<img src=\"" + pngFile.getName()
-                          + "\">\n" + "</td></tr>\n");
+                table.save(new FileWriter(dataFile), false);
+                out.print("<tr><td>\n");
+                writePlot(out, getCommandLink(i), pngFile.getName(),
+                          "<a href=\"" + dataFile.getName()
+                          + "\"><small>Data</small></a>");
+                out.print("</td></tr>\n");
             }
         }
         out.print("</table>\n" +
-                  "<hr>\n");
+                  "<hr>\n" +
+                  "<table border=\"0\">\n" +
+                  "<tr>\n");
+        int n = 0;
         for (int i = 0; i < m_commands.size(); ++i)
         {
-            commandStatistics = getCommandStatistics(i);
+            CommandStatistics commandStatistics = getCommandStatistics(i);
             if (commandStatistics.getCount() == 0)
                 continue;
-            out.print("<table align=\"left\" border=\"0\">" +
-                      "<tr><td align=\"center\">" + getCommandLink(i)
-                      + "<br><img src=\"" + getHistoFile(i).getName()
-                      + "\"></td></tr></table>\n");
+            out.print("<td>\n");
+            writePlot(out, getCommandLink(i), getHistoFile(i).getName(), "");
+            out.print("</td>\n");
+            ++n;
+            if (n % 6 == 0)
+                out.print("</tr><tr>\n");
         }
-        out.print("<br clear=\"left\">\n" +
+        out.print("</tr>\n" +
+                  "</table>\n" +
                   "<hr>\n");
         writeCommandsTable(out);
         out.print("<hr>\n");
@@ -199,7 +196,7 @@ public class Analyze
 
     private static final String m_colorError = "#ffa954";
 
-    private static final String m_colorHeader = "#91aee8";
+    private static final String m_colorHeader = "#b5c8f0";
 
     private static final String m_colorInfo = "#e0e0e0";
 
@@ -266,6 +263,11 @@ public class Analyze
         return m_formatInt.format(value);
     }
 
+    private File getAvgDataFile(int commandIndex)
+    {
+        return new File(m_output + ".command-" + commandIndex + ".avg.dat");
+    }
+
     private File getAvgPlotFile(int commandIndex)
     {
         return new File(m_output + ".command-" + commandIndex + ".avg.png");
@@ -284,6 +286,11 @@ public class Analyze
     private CommandStatistics getCommandStatistics(int commandIndex)
     {
         return (CommandStatistics)m_commandStatistics.get(commandIndex);
+    }
+
+    private File getCountFile()
+    {
+        return new File(m_output + ".count.png");
     }
 
     private File getGameFile(int gameIndex)
@@ -378,17 +385,26 @@ public class Analyze
         return Math.max(10, Math.min(numberMoves * 9, 1000));
     }
 
-    private void initGameInfo()
+    private void initGameInfo() throws IOException
     {
         m_gameInfo = new Vector();
         String last = null;
         GameInfo info = null;
         m_maxMove = 0;
         int numberColumns = m_table.getNumberColumns();
+        int[] count = new int[0];
         for (int row = 0; row < m_table.getNumberRows(); ++row)
         {
             String file = m_table.get("File", row);
             int move = Integer.parseInt(m_table.get("Move", row));
+            if (move >= count.length)
+            {
+                int[] newCount = new int[move + 1];
+                for (int i = 0; i < count.length; ++i)
+                    newCount[i] = count[i];
+                count = newCount;
+            }
+            ++count[move];
             m_maxMove = Math.max(m_maxMove, move);
             if (last == null || ! file.equals(last))
             {
@@ -421,6 +437,20 @@ public class Analyze
                                          finalPosition);
             TableUtils.appendRow(m_tableFinal, m_table, row);
         }
+        Vector columnTitles = new Vector();
+        columnTitles.add("Move");
+        columnTitles.add("Count");
+        Table table = new Table(columnTitles);
+        for (int i = 0; i < count.length; ++i)
+        {
+            if (count[i] == 0)
+                continue;
+            table.startRow();
+            table.set("Move", i);
+            table.set("Count", count[i]);
+        }
+        Plot plot = generatePlotMove(getImgWidth(m_maxMove), Color.DARK_GRAY);
+        plot.plot(getCountFile(), table, "Move", "Count", null);
     }
 
     private void startHtml(PrintStream out, String title)
@@ -435,7 +465,9 @@ public class Analyze
                   + Version.get() + "\">\n" +
                   "<style type=\"text/css\">\n" +
                   "<!--\n" +
-                  ".smalltable { font-size:80%; } " +
+                  "a:link { color:#0000ee }\n" +
+                  "a:visited { color:#551a8b }\n" +
+                  ".smalltable { font-size:80%; }\n" +
                   ".smalltable td { background-color:" + m_colorInfo
                   + "; text-align:center;}\n" +
                   ".smalltable th { background-color:" + m_colorHeader
@@ -444,8 +476,7 @@ public class Analyze
                   "-->\n" +
                   "</style>\n" +
                   "</head>\n" +
-                  "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
-                  + " vlink=\"purple\" alink=\"red\">\n");
+                  "<body bgcolor=\"white\" text=\"black\">\n");
     }
 
     private void startInfo(PrintStream out, String title)
@@ -457,8 +488,9 @@ public class Analyze
                   "</td></tr>\n" +
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
-                  + "\">\n" +
-                  "<tr><td><table>\n");
+                  + "\" >\n" +
+                  "<tr><td><table style=\"font-size:80%\""
+                  +" cellpadding=\"0\" cellspacing=\"0\">\n");
     }
 
     private void endInfo(PrintStream out)
@@ -738,6 +770,22 @@ public class Analyze
         writeHtmlRow(out, "Positions", m_table.getNumberRows());
     }
 
+    private void writePlot(PrintStream out, String title, String file,
+                           String info)
+    {
+        out.print("<table cellspacing=\"0\" cellpadding=\"0\">\n" +
+                  "<tr><td><table width=\"100%\" border=\"0\""
+                  + " cellpadding=\"0\" bgcolor=\"" + m_colorHeader
+                  + "\">\n" +
+                  "<tr><td width=\"90%\" align=\"center\">"
+                  + title + "</td>" +
+                  "<td align=\"right\">" + info + "</td></tr>\n" +
+                  "</table></td></tr>\n" +
+                  "<tr><td bgcolor=\"" + m_colorInfo
+                  + "\"><img src=\"" + file + "\"></td></tr>\n" +
+                  "</table>\n");
+    }
+
     private void writeStatisticsTableData(PrintStream out,
                                           PositionStatistics statistics)
     {
@@ -750,27 +798,27 @@ public class Analyze
         if (greaterOne)
             out.print(formatFloat(statistics.getDeviation()));
         else if (! empty)
-            out.print("n/a");
+            out.print("");
         out.print("</td><td>");
         if (greaterOne)
             out.print(formatFloat(statistics.getError()));
         else if (! empty)
-            out.print("n/a");
+            out.print("");
         out.print("</td><td>");
         if (greaterOne)
             out.print(formatFloat(statistics.getMin()));
         else if (! empty)
-            out.print("n/a");
+            out.print("");
         out.print("</td><td>");
         if (greaterOne)
             out.print(formatFloat(statistics.getMax()));
         else if (! empty)
-            out.print("n/a");
+            out.print("");
         out.print("</td><td>");
         if (greaterOne)
             out.print(formatFloat(statistics.getSum()));
         else if (! empty)
-            out.print("n/a");
+            out.print("");
         out.print("</td><td>");
         out.print(statistics.getCount());
         out.print("</td><td>");
