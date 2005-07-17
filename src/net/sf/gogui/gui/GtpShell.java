@@ -377,7 +377,7 @@ public class GtpShell
         m_historyMax = prefs.getInt("gtpshell-history-max");
         Container contentPane = getContentPane();
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEtchedBorder());
+        //panel.setBorder(BorderFactory.createEtchedBorder());
         getContentPane().add(panel, BorderLayout.CENTER);
         m_gtpShellText
             = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp);
