@@ -406,22 +406,20 @@ public class Plot
 
     /** Find tics interval.
         Tries to respect maxNumberTics, as long as there are at least two
-        tics.
+        visible tics.
     */
     private double getTics(double range, int maxNumberTics)
     {
-        final int minNumberTics = 2;
-        maxNumberTics = Math.max(maxNumberTics, minNumberTics);
+        maxNumberTics = Math.max(maxNumberTics, 2);
+        double maxTics = range / 1.1; // Make sure 2 tics are visible
         double tics;
         if (range / maxNumberTics < 0.5)
         {
             tics = 0.5;
-            while (range / (tics / 5) < maxNumberTics
-                   || range / (tics / 5) < minNumberTics)
+            while (range / (tics / 5) < maxNumberTics || tics > maxTics)
             {
                 tics /= 5;
-                if (range / (tics / 2) > maxNumberTics
-                    && range / (tics / 2) >= minNumberTics)
+                if (range / (tics / 2) > maxNumberTics && tics < maxTics)
                     break;
                 tics /= 2;
             }
@@ -429,14 +427,15 @@ public class Plot
         else
         {
             tics = 0.5;
-            while (range / tics > maxNumberTics
-                   && range / (tics * 2) >= minNumberTics)
+            while (range / tics > maxNumberTics && tics * 2 < maxTics)
             {
                 tics *= 2;
-                if (range / tics <= maxNumberTics
-                    || range / (tics * 5) < minNumberTics)
+                if (range / tics <= maxNumberTics || tics * 2 > maxTics)
                     break;
-                tics *= 5;
+                tics *= 2;
+                if (range / tics <= maxNumberTics || tics * 2.5 > maxTics)
+                    break;
+                tics *= 2.5;
             }
         }
         return tics;
@@ -509,9 +508,9 @@ public class Plot
         {
             double absMax = Math.max(Math.abs(m_minX), Math.abs(m_maxX));
             final double log10 = Math.log(10);
-            int maxLength = (int)(Math.log(absMax) / log10) + m_precision + 2;
+            int maxLength = (int)(Math.log(absMax) / log10) + m_precision + 3;
             int maxPixels = (int)(maxLength * (0.7 * m_fontHeight));
-            int numberTics = m_imgWidth / maxPixels;
+            int numberTics = m_width / maxPixels;
             m_xTics = getTics(m_xRange, numberTics);
         }
         if (m_onlyIntValuesX)
@@ -555,7 +554,7 @@ public class Plot
             }
             else
             {
-                int maxNumberTics = (int)(m_imgHeight / (1.5 * m_fontHeight));
+                int maxNumberTics = (int)(m_height / (1.5 * m_fontHeight));
                 m_yTics = getTics(m_yRange, maxNumberTics);
                 if (m_onlyIntValuesY)
                     m_yTics = Math.max(1, m_yTics);
