@@ -40,12 +40,14 @@ public class GoGuiMenuBar
         m_menuBar = new JMenuBar();
         m_menuFile = createFileMenu(recentCallback);
         m_menuBar.add(m_menuFile);
-        m_menuGame = createGameMenu();
-        m_menuBar.add(m_menuGame);
+        m_menuEdit = createEditMenu();
+        m_menuBar.add(m_menuEdit);
         m_menuView = createViewMenu();
         m_menuBar.add(m_menuView);
         m_menuVariation = createVariationMenu();
         m_menuBar.add(m_menuVariation);
+        m_menuPlay = createPlayMenu();
+        m_menuBar.add(m_menuPlay);
         m_menuSetup = createSetupMenu();
         m_menuBar.add(m_menuSetup);
         m_menuGameTree = createGameTreeMenu();
@@ -252,7 +254,6 @@ public class GoGuiMenuBar
         m_menuFile.setEnabled(true);
         m_itemDetachProgram.setEnabled(true);
         m_itemExit.setEnabled(true);
-        m_menuGame.setEnabled(true);
         m_itemInterrupt.setEnabled(true);
         m_menuComputerColor.setEnabled(true);
         m_menuHelp.setEnabled(true);
@@ -481,13 +482,15 @@ public class GoGuiMenuBar
 
     private final JMenu m_menuFile;
 
-    private final JMenu m_menuGame;
+    private final JMenu m_menuEdit;
 
     private final JMenu m_menuGameTree;
 
     private final JMenu m_menuGtpShell;
 
     private final JMenu m_menuHelp;
+
+    private final JMenu m_menuPlay;
 
     private final JMenu m_menuSetup;
 
@@ -709,9 +712,43 @@ public class GoGuiMenuBar
         return menu;
     }
 
+    private JMenu createEditMenu()
+    {
+        JMenu menu = createMenu("Edit", KeyEvent.VK_E);
+        addMenuItem(menu, "Info", KeyEvent.VK_I, KeyEvent.VK_I,
+                    m_shortcutKeyMask, "game-info");
+        menu.add(createBoardSizeMenu());
+        menu.add(createHandicapMenu());
+        m_menuComputerColor = createComputerColorMenu();
+        menu.add(m_menuComputerColor);
+        menu.add(createClockMenu());
+        menu.addSeparator();
+        m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
+                                        KeyEvent.VK_M, "make-main-variation");
+        m_itemKeepOnlyMainVar = addMenuItem(menu,
+                                            "Delete Side Variations",
+                                            KeyEvent.VK_D,
+                                            "keep-only-main-variation");
+        m_itemKeepOnlyPosition = addMenuItem(menu,
+                                             "Keep Only Position",
+                                             KeyEvent.VK_K,
+                                             "keep-only-position");
+        m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
+                                     "truncate");
+        menu.addSeparator();
+        addMenuItem(menu, "Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
+                    m_shortcutKeyMask, "find-in-comments");
+        m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_X,
+                                     KeyEvent.VK_F3, 0, "find-next");
+        m_itemFindNext.setEnabled(false);
+        return menu;
+    }
+
     private JMenu createFileMenu(RecentFileMenu.Callback callback)
     {
         JMenu menu = createMenu("File", KeyEvent.VK_F);
+        addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
+        menu.addSeparator();
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     m_shortcutKeyMask, "open");
         menu.add(createRecentMenu(callback));
@@ -729,58 +766,6 @@ public class GoGuiMenuBar
         menu.addSeparator();
         m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
                                  m_shortcutKeyMask, "exit");
-        return menu;
-    }
-
-    private JMenu createGameMenu()
-    {
-        JMenu menu = createMenu("Game", KeyEvent.VK_G);
-        addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
-        addMenuItem(menu, "Info", KeyEvent.VK_I, KeyEvent.VK_I,
-                    m_shortcutKeyMask, "game-info");
-        menu.add(createBoardSizeMenu());
-        menu.add(createHandicapMenu());
-        m_menuComputerColor = createComputerColorMenu();
-        menu.add(m_menuComputerColor);
-        menu.add(createClockMenu());
-        menu.addSeparator();
-        int shortcutKeyMask = 0;
-        if (Platform.isMac())
-            shortcutKeyMask = m_shortcutKeyMask;
-        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
-                    shortcutKeyMask, "pass");
-        m_itemComputerPlay = addMenuItem(menu, "Computer Play", KeyEvent.VK_L,
-                                         KeyEvent.VK_F5, shortcutKeyMask,
-                                         "play");
-        m_itemInterrupt =
-            addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
-                        0, "interrupt");
-        menu.addSeparator();
-        m_itemBeginning =
-            addMenuItem(menu, "Beginning", KeyEvent.VK_N, KeyEvent.VK_HOME,
-                        m_shortcutKeyMask, "beginning");
-        m_itemBackward10 =
-            addMenuItem(menu, "Backward 10", KeyEvent.VK_D, KeyEvent.VK_LEFT,
-                        m_shortcutKeyMask | ActionEvent.SHIFT_MASK,
-                        "backward-10");
-        m_itemBackward =
-            addMenuItem(menu, "Backward", KeyEvent.VK_B, KeyEvent.VK_LEFT,
-                        m_shortcutKeyMask, "backward");
-        m_itemForward =
-            addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
-                        m_shortcutKeyMask, "forward");
-        m_itemForward10 =
-            addMenuItem(menu, "Forward 10", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
-                        m_shortcutKeyMask | ActionEvent.SHIFT_MASK,
-                        "forward-10");
-        m_itemEnd =
-            addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
-                        m_shortcutKeyMask, "end");
-        m_itemGoto =
-            addMenuItem(menu, "Go To...", KeyEvent.VK_G, KeyEvent.VK_G,
-                        m_shortcutKeyMask, "goto");
-        menu.addSeparator();
-        addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
     }
 
@@ -818,7 +803,7 @@ public class GoGuiMenuBar
 
     private JMenu createGtpShellMenu(RecentFileMenu.Callback callback)
     {
-        JMenu menu = createMenu("Shell", KeyEvent.VK_T);
+        JMenu menu = createMenu("Shell", KeyEvent.VK_L);
         m_itemGtpShell = addMenuItem(menu, "Show", KeyEvent.VK_G,
                                      KeyEvent.VK_F9, m_shortcutKeyMask,
                                      "gtp-shell");
@@ -876,6 +861,22 @@ public class GoGuiMenuBar
         return menu;
     }
 
+    private JMenu createPlayMenu()
+    {
+        JMenu menu = createMenu("Play", KeyEvent.VK_P);
+        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
+                    m_shortcutKeyMask, "pass");
+        m_itemComputerPlay = addMenuItem(menu, "Computer Play", KeyEvent.VK_L,
+                                         KeyEvent.VK_F5, m_shortcutKeyMask,
+                                         "play");
+        m_itemInterrupt =
+            addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
+                        0, "interrupt");
+        menu.addSeparator();
+        addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
+        return menu;
+    }
+
     private JMenu createMenu(String name, int mnemonic)
     {
         JMenu menu = new JMenu(name);
@@ -895,7 +896,7 @@ public class GoGuiMenuBar
 
     private JMenu createSetupMenu()
     {
-        JMenu menu = createMenu("Setup", KeyEvent.VK_E);
+        JMenu menu = createMenu("Setup", KeyEvent.VK_S);
         m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
         addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
         menu.addSeparator();
@@ -911,7 +912,31 @@ public class GoGuiMenuBar
     private JMenu createVariationMenu()
     {
         int shiftMask = java.awt.event.InputEvent.SHIFT_MASK;
-        JMenu menu = createMenu("Variation", KeyEvent.VK_A);
+        JMenu menu = createMenu("Go", KeyEvent.VK_G);
+        m_itemBeginning =
+            addMenuItem(menu, "Beginning", KeyEvent.VK_N, KeyEvent.VK_HOME,
+                        m_shortcutKeyMask, "beginning");
+        m_itemBackward10 =
+            addMenuItem(menu, "Backward 10", KeyEvent.VK_D, KeyEvent.VK_LEFT,
+                        m_shortcutKeyMask | ActionEvent.SHIFT_MASK,
+                        "backward-10");
+        m_itemBackward =
+            addMenuItem(menu, "Backward", KeyEvent.VK_B, KeyEvent.VK_LEFT,
+                        m_shortcutKeyMask, "backward");
+        m_itemForward =
+            addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
+                        m_shortcutKeyMask, "forward");
+        m_itemForward10 =
+            addMenuItem(menu, "Forward 10", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
+                        m_shortcutKeyMask | ActionEvent.SHIFT_MASK,
+                        "forward-10");
+        m_itemEnd =
+            addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
+                        m_shortcutKeyMask, "end");
+        m_itemGoto =
+            addMenuItem(menu, "Go to Move...", KeyEvent.VK_G, KeyEvent.VK_G,
+                        m_shortcutKeyMask, "goto");
+        menu.addSeparator();
         m_itemNextVariation =
             addMenuItem(menu, "Next Variation", KeyEvent.VK_N,
                         KeyEvent.VK_DOWN, m_shortcutKeyMask,
@@ -935,25 +960,6 @@ public class GoGuiMenuBar
         m_itemGotoVar =
             addMenuItem(menu, "Go to Variation...",
                         KeyEvent.VK_V, "goto-variation");
-        menu.addSeparator();
-        m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
-                                        KeyEvent.VK_M, "make-main-variation");
-        m_itemKeepOnlyMainVar = addMenuItem(menu,
-                                            "Delete Side Variations",
-                                            KeyEvent.VK_D,
-                                            "keep-only-main-variation");
-        m_itemKeepOnlyPosition = addMenuItem(menu,
-                                             "Keep Only Position",
-                                             KeyEvent.VK_K,
-                                             "keep-only-position");
-        m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
-                                     "truncate");
-        menu.addSeparator();
-        addMenuItem(menu, "Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
-                    m_shortcutKeyMask, "find-in-comments");
-        m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_X,
-                                     KeyEvent.VK_F3, 0, "find-next");
-        m_itemFindNext.setEnabled(false);
         return menu;
     }
 
