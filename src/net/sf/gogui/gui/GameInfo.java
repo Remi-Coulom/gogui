@@ -5,6 +5,7 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -124,7 +125,8 @@ public class GameInfo
 
     private JTextField addEntry(String text)
     {
-        JLabel label = new JLabel(text);
+        JLabel label = GuiUtils.createInfoLabel();
+        label.setText(text);
         label.setHorizontalAlignment(SwingConstants.LEFT);
         add(label);
         JTextField entry = new JTextField(" ");

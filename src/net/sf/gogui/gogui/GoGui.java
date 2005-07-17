@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -2110,7 +2111,7 @@ public class GoGui
                 new Box.Filler(dimension, dimension, dimension);
             outerPanel.add(filler, BorderLayout.EAST);
         }
-        JLabel label = new JLabel();
+        JLabel label = GuiUtils.createInfoLabel();
         label.setBorder(BorderFactory.createLoweredBevelBorder());
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);

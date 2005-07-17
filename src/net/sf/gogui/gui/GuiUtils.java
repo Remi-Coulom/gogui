@@ -14,6 +14,7 @@ import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -61,6 +62,26 @@ public class GuiUtils
     {
         return new Box.Filler(m_fillerDimension, m_fillerDimension,
                               m_fillerDimension);
+    }
+
+    /** Create a JLabel for info labels.
+        Uses JTextField font for label, because label font looks so ugly
+        on Linux
+    */
+    public static JLabel createInfoLabel()
+    {
+        JLabel label = new JLabel();
+        if (m_textFieldFont != null)
+            label.setFont(m_textFieldFont);
+        return label;
+    }
+
+    /** @see createInfoLabel() */
+    public static JLabel createInfoLabel(String text)
+    {
+        JLabel label = createInfoLabel();
+        label.setText(text);
+        return label;
     }
 
     /** Create empty border with small padding.
@@ -230,10 +251,14 @@ public class GuiUtils
 
     static
     {
+        Font textAreaFont = UIManager.getFont("TextArea.font");
+        Font textFieldFont = UIManager.getFont("TextField.font");
         // That is not correct, since Font.getSize does not return pixels
         // Should query some default Graphics device
         m_defaultMonoFontSize =
-            getTextAreaFont() == null ? 10 : getTextAreaFont().getSize();
+            textAreaFont == null ? 10 : textAreaFont.getSize();
+        m_textAreaFont = textAreaFont;
+        m_textFieldFont = textFieldFont;
     }
 
     private static final int m_defaultMonoFontSize;
@@ -253,10 +278,9 @@ public class GuiUtils
 
     private static URL m_iconURL;
 
-    private static Font getTextAreaFont()
-    {
-        return UIManager.getFont("TextArea.font");
-    }
+    private static Font m_textFieldFont;
+
+    private static Font m_textAreaFont;
 }
 
 //----------------------------------------------------------------------------

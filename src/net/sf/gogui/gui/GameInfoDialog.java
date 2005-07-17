@@ -199,7 +199,7 @@ public class GameInfoDialog
 
     private JTextField createEntry(String labelText, String text)
     {
-        JLabel label = new JLabel(labelText);
+        JLabel label = GuiUtils.createInfoLabel(labelText);
         label.setHorizontalAlignment(SwingConstants.LEFT);
         m_panelLeft.add(label);
         JTextField textField = new JTextField(text);
@@ -209,7 +209,7 @@ public class GameInfoDialog
 
     private void createTimeEntry(TimeSettings timeSettings)
     {
-        JLabel label = new JLabel("Time:");
+        JLabel label = GuiUtils.createInfoLabel("Time:");
         label.setHorizontalAlignment(SwingConstants.LEFT);
         m_panelLeft.add(label);
         FlowLayout layout = new FlowLayout(FlowLayout.LEFT, 0, 0);
@@ -222,7 +222,7 @@ public class GameInfoDialog
             m_preByoyomi.setText(Integer.toString(preByoyomi));
         }
         panel.add(m_preByoyomi);
-        panel.add(new JLabel("min +"));
+        panel.add(GuiUtils.createInfoLabel("min +"));
         m_byoyomi = new JTextField(2);
         m_byoyomi.setHorizontalAlignment(JTextField.RIGHT);
         if (timeSettings != null && timeSettings.getUseByoyomi())
@@ -231,7 +231,7 @@ public class GameInfoDialog
             m_byoyomi.setText(Integer.toString(byoyomi));
         }
         panel.add(m_byoyomi);
-        panel.add(new JLabel("min /"));
+        panel.add(GuiUtils.createInfoLabel("min /"));
         m_byoyomiMoves = new JTextField(2);
         m_byoyomiMoves.setHorizontalAlignment(JTextField.RIGHT);
         if (timeSettings != null && timeSettings.getUseByoyomi())
@@ -240,7 +240,7 @@ public class GameInfoDialog
             m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));
         }
         panel.add(m_byoyomiMoves);
-        panel.add(new JLabel("moves"));
+        panel.add(GuiUtils.createInfoLabel("moves"));
         m_panelRight.add(panel);
     }
 

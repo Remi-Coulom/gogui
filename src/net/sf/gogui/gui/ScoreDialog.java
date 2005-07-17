@@ -131,7 +131,7 @@ public class ScoreDialog
 
     private JTextField createEntry(JPanel panel, String text)
     {
-        JLabel label = new JLabel(text);
+        JLabel label = GuiUtils.createInfoLabel(text);
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
         JTextField entry = new JTextField("        ");
