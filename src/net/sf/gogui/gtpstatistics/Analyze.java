@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.utils.Table;
@@ -380,6 +381,23 @@ public class Analyze
         return m_plotColor[(index - 2) % m_plotColor.length];
     }
 
+    private String getGameLink(File fromFile, int gameNumber)
+    {
+        GameInfo info = (GameInfo)(m_gameInfo.get(gameNumber));
+        File gameFile = new File(info.m_file);
+        try
+        {
+            String path
+                = FileUtils.getRelativePath(fromFile, gameFile)
+                + gameFile.getName();
+            return "<a href=\"" + path + "\">" + path + "</a>";
+        }
+        catch (IOException e)
+        {
+            return info.m_file;
+        }
+    }
+
     private int getImgWidth(int numberMoves)
     {
         return Math.max(10, Math.min(numberMoves * 9, 1040));
@@ -626,8 +644,7 @@ public class Analyze
         startHtml(out, title);
         startInfo(out, title);
         writeHtmlRow(out, "Index", gameNumber);
-        writeHtmlRow(out, "File",
-                     "<a href=\"" + game + "\">" + game + "</a>");
+        writeHtmlRow(out, "File", getGameLink(file, gameNumber));
         try
         {
             InputStream in = new FileInputStream(new File(game));
