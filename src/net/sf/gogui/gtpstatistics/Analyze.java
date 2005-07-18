@@ -111,9 +111,7 @@ public class Analyze
         writeCommandsTable(out);
         out.print("<hr>\n");
         writeGameTable(out);
-        out.print("<hr>\n");
-        out.print("</body>\n" +
-                  "</html>\n");
+        finishHtml(out);
         out.close();
     }
 
@@ -263,6 +261,17 @@ public class Analyze
     private String formatInt(double value)
     {
         return m_formatInt.format(value);
+    }
+
+    private void finishHtml(PrintStream out)
+    {
+        out.print("<hr>\n" +
+                  "<address><small>Generated on " + StringUtils.getDateShort()
+                  + " by GtpStatistics "
+                  + Version.get() + " <a href=\"http://gogui.sf.net\">"
+                  + "http://gogui.sf.net</a></small></address>\n" +
+                  "</body>\n" +
+                  "</html>\n");
     }
 
     private File getAvgDataFile(int commandIndex)
@@ -573,9 +582,7 @@ public class Analyze
         out.print("<br clear=\"left\">\n" +
                   "<hr>\n");
         writeGamePlots(out, commandIndex);
-        out.print("<hr>\n" +
-                  "</body>\n" +
-                  "</html>\n");
+        finishHtml(out);
         out.close();
     }
 
@@ -710,10 +717,8 @@ public class Analyze
             }
             out.print("</tr>\n");
         }
-        out.print("</table>\n" +
-                  "<hr>\n" +
-                  "</body>\n" +
-                  "</html>\n");
+        out.print("</table>\n");
+        finishHtml(out);
         out.close();
     }
 

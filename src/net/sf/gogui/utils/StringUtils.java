@@ -40,6 +40,14 @@ public class StringUtils
         return format.format(date);
     }
 
+    public static String getDateShort()
+    {
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+                                                           DateFormat.SHORT);
+        Date date = Calendar.getInstance().getTime();
+        return format.format(date);
+    }
+
     /** Get default encoding of OutputStreamWriter. */
     public static String getDefaultEncoding()
     {
