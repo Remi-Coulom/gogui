@@ -1598,6 +1598,7 @@ public class GoGui
         m_prefs.setInt("boardsize", size);
         fileModified();
         newGame(size);
+        m_clock.startMove(GoColor.BLACK);
     }
 
     private void cbNextVariation()
@@ -1857,8 +1858,6 @@ public class GoGui
 
     private void checkComputerMove()
     {
-        m_clock.startMove(m_board.getToMove());
-        updateMenuBar();
         if (m_commandThread == null || ! isCurrentNodeExecuted())
             return;
         boolean gameFinished = (m_board.bothPassed() || m_resigned);
@@ -1893,7 +1892,6 @@ public class GoGui
                 generateMove();
             }
         }
-        m_clock.startMove(m_board.getToMove());
     }
 
     private boolean checkCurrentNodeExecuted()
@@ -2035,6 +2033,8 @@ public class GoGui
                 fileModified();
                 m_resigned = false;
             }
+            m_clock.startMove(m_board.getToMove());
+            updateMenuBar();
             boardChangedBegin(true, true);
         }
         catch (GtpError e)
@@ -2297,6 +2297,7 @@ public class GoGui
         showStatus(m_name + " is thinking ...");
         GoColor toMove = m_board.getToMove();
         String command = m_commandThread.getCommandGenmove(toMove);
+        m_clock.startMove(toMove);
         Runnable callback = new Runnable()
             {
                 public void run()
@@ -2378,8 +2379,8 @@ public class GoGui
         }
         Vector handicap = m_board.getHandicapStones(m_handicap);
         if (handicap == null)
-            showWarning("Handicap stone locations are not\n" +
-                        "defined for this board size.");
+            showWarning("Handicap stone locations not\n" +
+                        "defined for this board size");
         m_gameTree = new GameTree(size, m_prefs.getDouble("komi"), handicap,
                                   m_prefs.getString("rules"), m_timeSettings);
         m_board.newGame();        
@@ -2388,7 +2389,6 @@ public class GoGui
         m_guiBoard.updateFromGoBoard();
         resetBoard();
         m_clock.reset();
-        m_clock.startMove(GoColor.BLACK);
         m_lostOnTimeShown = false;
         setNeedsSave(false);
         m_resigned = false;
@@ -2584,7 +2584,7 @@ public class GoGui
     {
         initGame(size);
         loadFile(m_file, move);
-        m_clock.halt();
+        m_clock.reset();
         updateGameInfo(true);
         m_guiBoard.updateFromGoBoard();
         m_toolBar.update(m_currentNode);
