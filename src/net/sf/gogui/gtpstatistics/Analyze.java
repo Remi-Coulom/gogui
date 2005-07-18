@@ -81,7 +81,9 @@ public class Analyze
                 File dataFile = getAvgDataFile(i);
                 plot.setPlotStyleNoLines();
                 plot.plot(pngFile, table, "Move", "Mean", "Error");
-                table.save(new FileWriter(dataFile), false);
+                FileWriter writer = new FileWriter(dataFile);
+                table.save(writer, false);
+                writer.close();
                 out.print("<tr><td>\n");
                 writePlot(out, getCommandLink(i), pngFile.getName(),
                           "<a href=\"" + dataFile.getName()
@@ -270,8 +272,8 @@ public class Analyze
         out.print("<hr>\n" +
                   "<address><small>Generated on " + StringUtils.getDateShort()
                   + " by GtpStatistics "
-                  + Version.get() + " <a href=\"http://gogui.sf.net\">"
-                  + "http://gogui.sf.net</a></small></address>\n" +
+                  + Version.get() + " (<a href=\"http://gogui.sf.net\">"
+                  + "http://gogui.sf.net</a>)</small></address>\n" +
                   "</body>\n" +
                   "</html>\n");
     }
@@ -487,7 +489,9 @@ public class Analyze
         Plot plot = generatePlotMove(getImgWidth(m_maxMove), Color.DARK_GRAY);
         plot.setNoPlotYZero();
         plot.plot(getCountFile(), table, "Move", "Count", null);
-        table.save(new FileWriter(getCountDataFile()), false);
+        FileWriter writer = new FileWriter(getCountDataFile());
+        table.save(writer, false);
+        writer.close();
     }
 
     private void startHtml(PrintStream out, String title)
