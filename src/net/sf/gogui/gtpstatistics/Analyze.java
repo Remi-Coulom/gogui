@@ -97,7 +97,7 @@ public class Analyze
             CommandStatistics commandStatistics = getCommandStatistics(i);
             if (commandStatistics.getCount() == 0)
                 continue;
-            out.print("<td>\n");
+            out.print("<td valign=\"bottom\">\n");
             writePlot(out, getCommandLink(i), getHistoFile(i).getName(), "");
             out.print("</td>\n");
             ++n;
@@ -560,7 +560,7 @@ public class Analyze
             Table histoTable = TableUtils.fromHistogram(histogram, command);
             File histoFile = getHistoFile(commandIndex, i);
             Color color = getColor(command);
-            Plot plot = new Plot(200, 150, color, m_precision);
+            Plot plot = new Plot(180, 135, color, m_precision);
             commandStatistics.setHistogramProperties(plot);
             plot.plot(histoFile, histoTable, command, "Count", null);
             out.print("<table align=\"left\" border=\"0\">" +
@@ -795,12 +795,14 @@ public class Analyze
                   "<tr><td><table width=\"100%\" border=\"0\""
                   + " cellpadding=\"0\" bgcolor=\"" + m_colorHeader
                   + "\">\n" +
-                  "<tr><td width=\"90%\" align=\"center\">"
-                  + title + "</td>" +
-                  "<td align=\"right\">" + info + "</td></tr>\n" +
-                  "</table></td></tr>\n" +
+                  "<tr><td width=\"90%\" align=\"center\">\n" +
+                  title + "\n" + 
+                  "</td><td align=\"right\">\n" +
+                  info + "\n" +
+                  "</td></tr></table></td></tr>\n" +
                   "<tr><td bgcolor=\"" + m_colorInfo
-                  + "\"><img src=\"" + file + "\"></td></tr>\n" +
+                  + "\">\n" +
+                  "<img src=\"" + file + "\"></td></tr>\n" +
                   "</table>\n");
     }
 
