@@ -1196,6 +1196,8 @@ public class GoGui
     /** Go backward a number of nodes in the tree. */
     private boolean backward(int n)
     {
+        if (n == 0)
+            return true;
         try
         {
             if (m_commandThread != null && n > 1
