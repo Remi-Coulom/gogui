@@ -79,6 +79,11 @@ public class Plot
         m_noLines = true;
     }
 
+    public void setNoPlotYZero()
+    {
+        m_plotYZero = false;
+    }
+
     public void setSolidLineInterval(double solidLineInterval)
     {
         m_solidLineInterval = solidLineInterval;
@@ -88,6 +93,15 @@ public class Plot
     public void setXLabelPerTic(int xLabelPerTic)
     {
         m_xLabelPerTic = xLabelPerTic;
+    }
+
+    /** Plot only x labels for 0 and 1. */
+    public void setXLabelsBool()
+    {
+        m_xLabelsBool = true;
+        setXMin(-5);
+        setXMax(5);
+        setXTics(1);
     }
 
     public void setXTics(double tics)
@@ -151,9 +165,13 @@ public class Plot
 
     private boolean m_onlyIntValuesY;
 
+    private boolean m_plotYZero = true;
+
     private boolean m_useSolidLineInterval = false;
 
     private boolean m_withBars;
+
+    private boolean m_xLabelsBool;
 
     private int m_fontHeight;
 
@@ -347,11 +365,13 @@ public class Plot
         format2.setGroupingUsed(false);
         for (double x = m_xTicsMin; x < m_maxX; x += m_xLabelPerTic * m_xTics)
         {
+            if (m_xLabelsBool && Math.round(x) != 0 && Math.round(x) != 1)
+                continue;
             Point bottom = getPoint(x, m_minY);
             Point top = getPoint(x, m_maxY);
             String label;
             if (m_onlyIntValuesX)
-                label = format.format(x);
+                label = format.format(Math.round(x));
             else
                 label = format2.format(x);
             m_graphics2D.setColor(Color.GRAY);
@@ -362,10 +382,12 @@ public class Plot
         }
         for (double y = m_yTicsMin; y < m_maxY; y += m_yTics)
         {
+            if (! m_plotYZero && Math.round(y) == 0)
+                continue;
             Point point = getPoint(m_minX, y);
             String label;
             if (m_onlyIntValuesY)
-                label = format.format(y);
+                label = format.format(Math.round(y));
             else
                 label = format2.format(y);
             m_graphics2D.setColor(Color.GRAY);
@@ -411,31 +433,32 @@ public class Plot
     private double getTics(double range, int maxNumberTics)
     {
         maxNumberTics = Math.max(maxNumberTics, 2);
-        double maxTics = range / 1.1; // Make sure 2 tics are visible
-        double tics;
-        if (range / maxNumberTics < 0.5)
+        double maxTics = range / 2.1; // Make sure 2 tics are visible
+        double tics = 1;
+        if (range / maxNumberTics < 1)
         {
-            tics = 0.5;
-            while (range / (tics / 5) < maxNumberTics || tics > maxTics)
+            while (range / (tics / 2) < maxNumberTics || tics > maxTics)
             {
-                tics /= 5;
+                tics /= 2;
                 if (range / (tics / 2) > maxNumberTics && tics < maxTics)
                     break;
                 tics /= 2;
+                if (range / (tics / 2.5) > maxNumberTics && tics < maxTics)
+                    break;
+                tics /= 2.5;
             }
         }
         else
         {
-            tics = 0.5;
             while (range / tics > maxNumberTics && tics * 2 < maxTics)
             {
-                tics *= 2;
-                if (range / tics <= maxNumberTics || tics * 2 > maxTics)
-                    break;
                 tics *= 2;
                 if (range / tics <= maxNumberTics || tics * 2.5 > maxTics)
                     break;
                 tics *= 2.5;
+                if (range / tics <= maxNumberTics || tics * 2 > maxTics)
+                    break;
+                tics *= 2;
             }
         }
         return tics;

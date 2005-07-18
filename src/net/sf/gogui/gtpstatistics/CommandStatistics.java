@@ -72,14 +72,14 @@ public final class CommandStatistics
         {
             Histogram histogram = m_statisticsAll.m_histogram;
             Table histoTable = TableUtils.fromHistogram(histogram, command);
-            Plot plot = new Plot(150, 150, color, precision);
+            Plot plot = new Plot(200, 150, color, precision);
             setHistogramProperties(plot);
             plot.plot(histoFile, histoTable, command, "Count", null);
             histogram = m_statisticsFinal.m_histogram;
             if (m_statisticsFinal.getCount() > 0)
             {
                 histoTable = TableUtils.fromHistogram(histogram, command);
-                plot = new Plot(150, 150, color, precision);
+                plot = new Plot(200, 150, color, precision);
                 setHistogramProperties(plot);
                 plot.plot(histoFileFinal, histoTable, command, "Count", null);
             }
@@ -112,10 +112,10 @@ public final class CommandStatistics
         double step = histogram.getStep();
         plot.setPlotStyleBars(step);
         plot.setYMin(0);
+        plot.setNoPlotYZero();
         if (onlyBoolValues())
         {
-            plot.setXMin(-5);
-            plot.setXMax(5);
+            plot.setXLabelsBool();
         }
         else
         {

@@ -100,7 +100,7 @@ public class Analyze
             writePlot(out, getCommandLink(i), getHistoFile(i).getName(), "");
             out.print("</td>\n");
             ++n;
-            if (n % 6 == 0)
+            if (n % 5 == 0)
                 out.print("</tr><tr>\n");
         }
         out.print("</tr>\n" +
@@ -382,7 +382,7 @@ public class Analyze
 
     private int getImgWidth(int numberMoves)
     {
-        return Math.max(10, Math.min(numberMoves * 9, 1000));
+        return Math.max(10, Math.min(numberMoves * 9, 1040));
     }
 
     private void initGameInfo() throws IOException
@@ -450,6 +450,7 @@ public class Analyze
             table.set("Count", count[i]);
         }
         Plot plot = generatePlotMove(getImgWidth(m_maxMove), Color.DARK_GRAY);
+        plot.setNoPlotYZero();
         plot.plot(getCountFile(), table, "Move", "Count", null);
     }
 
@@ -490,7 +491,7 @@ public class Analyze
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
                   + "\" >\n" +
                   "<tr><td><table style=\"font-size:80%\""
-                  +" cellpadding=\"0\" cellspacing=\"0\">\n");
+                  +" cellpadding=\"0\">\n");
     }
 
     private void endInfo(PrintStream out)
@@ -541,7 +542,7 @@ public class Analyze
             Table histoTable = TableUtils.fromHistogram(histogram, command);
             File histoFile = getHistoFile(commandIndex, i);
             Color color = getColor(command);
-            Plot plot = new Plot(150, 150, color, m_precision);
+            Plot plot = new Plot(200, 150, color, m_precision);
             commandStatistics.setHistogramProperties(plot);
             plot.plot(histoFile, histoTable, command, "Count", null);
             out.print("<table align=\"left\" border=\"0\">" +
@@ -582,11 +583,11 @@ public class Analyze
             writeStatisticsTableData(out, statisticsAtMove);
             out.print("</tr>\n");
         }
-        out.print("<tr>" +
+        out.print("<tr style=\"font-weight:bold\">" +
                   "<td>Final</td>");
         writeStatisticsTableData(out, finalStatistics);
         out.print("</tr>\n");
-        out.print("<tr>" +
+        out.print("<tr style=\"font-weight:bold\">" +
                   "<td>All</td>");
         writeStatisticsTableData(out, statisticsAll);
         out.print("</tr>\n");
@@ -608,8 +609,8 @@ public class Analyze
                 writeCommandPage(i);
             PositionStatistics statisticsAll
                 = commandStatistics.m_statisticsAll;
-            out.print("<tr>"
-                      + "<td>" + getCommandLink(i) + "</td>");
+            out.print("<tr><td style=\"background-color:" + m_colorHeader
+                      + "\">" + getCommandLink(i) + "</td>");
             writeStatisticsTableData(out, statisticsAll);
             out.print("</tr>\n");
         }
@@ -731,10 +732,10 @@ public class Analyze
         {
             GameInfo info = (GameInfo)(m_gameInfo.get(i));
             String file = getGameFile(i).getName();
-            out.print("<tr><td><a href=\"" + file
-                      + "\">Game " + (i + 1) + "</a></td><td>" + info.m_name
-                      + "</td><td>" + info.m_numberPositions
-                      + "</td>");
+            out.print("<tr><td style=\"background-color:" + m_colorHeader
+                      + "\"><a href=\"" + file + "\">Game " + (i + 1)
+                      + "</a></td><td>" + info.m_name
+                      + "</td><td>" + info.m_numberPositions + "</td>");
             for (int j = 0; j < m_gameGlobalCommands.size(); ++j)
                 if (! getGameGlobalCommand(j).allEmpty())
                     out.print("<td>" + getGameGlobalCommand(j).getResult(i)
