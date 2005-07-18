@@ -38,6 +38,15 @@ public class GameInformation
     public String m_whiteRank;
 
     public TimeSettings m_timeSettings;
+
+    /** Get komi as string rounded to 0.5 points. */
+    public static String roundKomi(double komi)
+    {
+        long intKomi = Math.round(komi * 2);
+        if (intKomi % 2 == 0)
+            return Long.toString(intKomi / 2);
+        return Long.toString(intKomi / 2) + ".5";
+    }
 }
 
 //----------------------------------------------------------------------------

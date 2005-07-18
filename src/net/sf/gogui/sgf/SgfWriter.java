@@ -207,7 +207,7 @@ public class SgfWriter
         if (handicap > 0)
             print("HA[" + handicap + "]");
         else
-            print("KM[" + komi + "]");
+            print("KM[" + GameInformation.roundKomi(komi) + "]");
         if (rules != null && ! rules.equals(""))
             print("RU[" + rules + "]");
         if (timeSettings != null)

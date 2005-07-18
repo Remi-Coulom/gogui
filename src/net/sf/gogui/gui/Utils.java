@@ -6,6 +6,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
+import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
@@ -62,7 +63,7 @@ public class Utils
         try
         {
             if (thread.isCommandSupported("komi"))
-                thread.sendCommand("komi " + komi);
+                thread.sendCommand("komi " + GameInformation.roundKomi(komi));
         }
         catch (GtpError e)
         {
