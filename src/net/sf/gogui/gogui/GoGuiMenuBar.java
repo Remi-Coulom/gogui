@@ -717,7 +717,7 @@ public class GoGuiMenuBar
     private JMenu createMenuAnalyze()
     {
         JMenu menu = createMenu("Analyze", KeyEvent.VK_Z);
-        m_itemAnalyze = addMenuItem(menu, "Show", KeyEvent.VK_S,
+        m_itemAnalyze = addMenuItem(menu, "Show Analyze", KeyEvent.VK_S,
                                     KeyEvent.VK_F8, m_shortcutKeyMask,
                                     "analyze");
         menu.addSeparator();
@@ -893,7 +893,7 @@ public class GoGuiMenuBar
     private JMenu createMenuShell(RecentFileMenu.Callback callback)
     {
         JMenu menu = createMenu("Shell", KeyEvent.VK_L);
-        m_itemGtpShell = addMenuItem(menu, "Show", KeyEvent.VK_G,
+        m_itemGtpShell = addMenuItem(menu, "Show Shell", KeyEvent.VK_G,
                                      KeyEvent.VK_F9, m_shortcutKeyMask,
                                      "gtp-shell");
         menu.addSeparator();
@@ -923,7 +923,7 @@ public class GoGuiMenuBar
     private JMenu createMenuTree()
     {
         JMenu menu = createMenu("Tree", KeyEvent.VK_R);
-        addMenuItem(menu, "Show", KeyEvent.VK_S, KeyEvent.VK_F7,
+        addMenuItem(menu, "Show Tree", KeyEvent.VK_S, KeyEvent.VK_F7,
                     m_shortcutKeyMask, "show-gametree");
         menu.addSeparator();
         JMenu menuLabel = createMenu("Labels", KeyEvent.VK_L);

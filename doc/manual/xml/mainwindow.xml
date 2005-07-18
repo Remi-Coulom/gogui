@@ -49,6 +49,15 @@ Selected text in the comment is also used as a default text for
 <variablelist>
 
 <varlistentry>
+<term><guimenuitem>New Game</guimenuitem></term>
+<listitem>
+<para>
+Start a new game.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Open</guimenuitem></term>
 <listitem>
 <para>
@@ -161,20 +170,11 @@ Quit GoGui.
 </section>
 
 <section>
-<title>Game Menu</title>
+<title>Edit Menu</title>
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>New Game</guimenuitem></term>
-<listitem>
-<para>
-Start a new game.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Info</guimenuitem></term>
+<term><guimenuitem>Game Info</guimenuitem></term>
 <listitem>
 <para>
 Edit the game information.
@@ -209,177 +209,6 @@ Set the number of handicap stones.
 <listitem>
 <para>
 Choose what side the Go program plays.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Pass</guimenuitem></term>
-<listitem>
-<para>
-Make a pass move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Computer Play</guimenuitem></term>
-<listitem>
-<para>
-Make the computer play a move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Interrupt</guimenuitem></term>
-<listitem>
-<para>
-Interrupt the command that is currently running.
-This menu item is only active if a lengthy command (like move
-generation) is running and if the Go program supports interrupting
-(see <xref linkend="interrupt"/>).
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Beginning</guimenuitem></term>
-<listitem>
-<para>
-Retract all moves.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Backward 10</guimenuitem></term>
-<listitem>
-<para>
-Retract 10 moves.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Backward</guimenuitem></term>
-<listitem>
-<para>
-Retract one move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Forward</guimenuitem></term>
-<listitem>
-<para>
-Replay one move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Forward 10</guimenuitem></term>
-<listitem>
-<para>
-Replay 10 moves.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>End</guimenuitem></term>
-<listitem>
-<para>
-Replay all moves.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Go To</guimenuitem></term>
-<listitem>
-<para>
-Go to a certain move number.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry id="score">
-<term><guimenuitem>Score</guimenuitem></term>
-<listitem>
-<para>
-Score the current game.
-A window will be opened containing score information.
-First the Go program will be asked what stones are dead with the
-<command>final_status_list dead</command> command.
-Dead stones are marked with a cross-hair.
-If the Go program does not support this command, or you don't agree with it,
-you can change the status of stones by clicking on them.
-You leave score mode by closing the score window.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Variation Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Next Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the next variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Previous Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the previous variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Next Earlier Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the next variation earlier in the game tree.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Previous Earlier Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the previous variation earlier in the game tree.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Back to Main Variation</guimenuitem></term>
-<listitem>
-<para>
-Go back to the main variation.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Go to Variation</guimenuitem></term>
-<listitem>
-<para>
-Go to the start node of a certain variation.
 </para>
 </listitem>
 </varlistentry>
@@ -449,58 +278,7 @@ Find next game node containing the last entered search pattern.
 </section>
 
 <section>
-<title>Setup Menu</title>
-<variablelist>
-
-<varlistentry id="setupmode">
-<term><guimenuitem>Setup Mode</guimenuitem></term>
-<listitem>
-<para>
-Enter or leave setup mode.
-In setup mode you can place or remove stones of the current color.
-The current color can be changed with the <guimenuitem>Black</guimenuitem>
-and <guimenuitem>White</guimenuitem> menu item from the
-<guimenu>Setup</guimenu> menu.
-It is also possible to place stones of the other than current color,
-without switching the color, by pressing a modifier key while placing a stone
-(Ctrl, Alt or Meta).
-<note>
-<simpara>
-Setting up a position is not reversible.
-After leaving setup mode, you are in a new game starting with the current
-position and the current color to move.
-</simpara>
-</note>
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Black</guimenuitem></term>
-<listitem>
-<para>
-Set the current color for setting up stones and the color to move
-to Black.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>White</guimenuitem></term>
-<listitem>
-<para>
-Set the current color for setting up stones and the color to move
-to White.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Settings Menu</title>
+<title>View Menu</title>
 <variablelist>
 
 <varlistentry>
@@ -575,11 +353,253 @@ If multiple variations start with the same move, a '.' is appended.
 </section>
 
 <section>
-<title>Window Menu</title>
+<title>Go Menu</title>
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>Game Tree</guimenuitem></term>
+<term><guimenuitem>Beginning</guimenuitem></term>
+<listitem>
+<para>
+Retract all moves.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Backward 10</guimenuitem></term>
+<listitem>
+<para>
+Retract 10 moves.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Backward</guimenuitem></term>
+<listitem>
+<para>
+Retract one move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Forward</guimenuitem></term>
+<listitem>
+<para>
+Replay one move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Forward 10</guimenuitem></term>
+<listitem>
+<para>
+Replay 10 moves.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>End</guimenuitem></term>
+<listitem>
+<para>
+Replay all moves.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Go to Move</guimenuitem></term>
+<listitem>
+<para>
+Go to a certain move number.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Next Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the next variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Previous Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the previous variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Next Earlier Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the next variation earlier in the game tree.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Previous Earlier Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the previous variation earlier in the game tree.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Back to Main Variation</guimenuitem></term>
+<listitem>
+<para>
+Go back to the main variation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Go to Variation</guimenuitem></term>
+<listitem>
+<para>
+Go to the start node of a certain variation.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Play Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Pass</guimenuitem></term>
+<listitem>
+<para>
+Make a pass move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Computer Play</guimenuitem></term>
+<listitem>
+<para>
+Make the computer play a move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Clock</guimenuitem></term>
+<listitem>
+<para>
+Halt or resume the clock.
+If time settings were used, the remaining time for the players
+is stored in the tree nodes and can be restored with the Restore
+item.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Interrupt</guimenuitem></term>
+<listitem>
+<para>
+Interrupt the command that is currently running.
+This menu item is only active if a lengthy command (like move
+generation) is running and if the Go program supports interrupting
+(see <xref linkend="interrupt"/>).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="score">
+<term><guimenuitem>Score</guimenuitem></term>
+<listitem>
+<para>
+Score the current game.
+A window will be opened containing score information.
+First the Go program will be asked what stones are dead with the
+<command>final_status_list dead</command> command.
+Dead stones are marked with a cross-hair.
+If the Go program does not support this command, or you don't agree with it,
+you can change the status of stones by clicking on them.
+You leave score mode by closing the score window.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Setup Menu</title>
+<variablelist>
+
+<varlistentry id="setupmode">
+<term><guimenuitem>Setup Mode</guimenuitem></term>
+<listitem>
+<para>
+Enter or leave setup mode.
+In setup mode you can place or remove stones of the current color.
+The current color can be changed with the <guimenuitem>Black</guimenuitem>
+and <guimenuitem>White</guimenuitem> menu item from the
+<guimenu>Setup</guimenu> menu.
+It is also possible to place stones of the other than current color,
+without switching the color, by pressing a modifier key while placing a stone
+(Ctrl, Alt or Meta).
+<note>
+<simpara>
+Setting up a position is not reversible.
+After leaving setup mode, you are in a new game starting with the current
+position and the current color to move.
+</simpara>
+</note>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Black</guimenuitem></term>
+<listitem>
+<para>
+Set the current color for setting up stones and the color to move
+to Black.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>White</guimenuitem></term>
+<listitem>
+<para>
+Set the current color for setting up stones and the color to move
+to White.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Tree Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Show Tree</guimenuitem></term>
 <listitem>
 <para>
 Show the game tree window or bring it to front if already open.
@@ -588,19 +608,163 @@ Show the game tree window or bring it to front if already open.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Analyze</guimenuitem></term>
+<term><guimenuitem>Labels</guimenuitem></term>
 <listitem>
 <para>
-Open the Analyze dialog or bring it to front if already open.
+Configure the labels on the tree nodes.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>GTP Shell</guimenuitem></term>
+<term><guimenuitem>Size</guimenuitem></term>
 <listitem>
 <para>
-Open the GTP shell window or bring it to front if already open.
+Configure the size of the tree nodes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Scroll to Current</guimenuitem></term>
+<listitem>
+<para>
+Scroll tree window so that current node is visible.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Shell Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Show Shell</guimenuitem></term>
+<listitem>
+<para>
+Show the GTP shell window or bring it to front if already open.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save Log</guimenuitem></term>
+<listitem>
+<para>
+Save the GTP streams to a log file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save Commands</guimenuitem></term>
+<listitem>
+<para>
+Save the sent GTP commands to a file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Send File</guimenuitem></term>
+<listitem>
+<para>
+Send GTP commands from a file to the engine.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Send Recent</guimenuitem></term>
+<listitem>
+<para>
+Send GTP commands from a recently opened file to the engine.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Highlight</guimenuitem></term>
+<listitem>
+<para>
+Use syntax highlighting in the GTP shell window.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Popup Completions</guimenuitem></term>
+<listitem>
+<para>
+Popup a window with command completions while entering a command.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Auto Number</guimenuitem></term>
+<listitem>
+<para>
+Automatically number commands.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Timestamp</guimenuitem></term>
+<listitem>
+<para>
+Prepend each sent or received line with a time stamp.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Analyze Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Show Analyze</guimenuitem></term>
+<listitem>
+<para>
+Show the Analyze window or bring it to front if already open.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Only Supported Commands</guimenuitem></term>
+<listitem>
+<para>
+Only show commands supported by the current Go engine.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Sort Alphabetically</guimenuitem></term>
+<listitem>
+<para>
+Sort command labels alphabetically.
+Otherwise the analyze command list has the same order as in the configuration
+files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Reload Configuration</guimenuitem></term>
+<listitem>
+<para>
+Reload configuration files defining the commands after they were edited.
 </para>
 </listitem>
 </varlistentry>
