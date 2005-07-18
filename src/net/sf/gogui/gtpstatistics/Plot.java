@@ -255,7 +255,7 @@ public class Plot
         m_graphics2D.setColor(m_color);
         Point last = null;
         int barWidthPixels = getPoint(m_barWidth, 0).x
-            - getPoint(0, 0).x - 1;
+            - getPoint(0, 0).x - 2;
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
             try
@@ -273,7 +273,7 @@ public class Plot
                 if (withBars)
                 {
                     Point bottom = getPoint(x, 0);
-                    m_graphics2D.fillRect(point.x - barWidthPixels / 2,
+                    m_graphics2D.fillRect(point.x - barWidthPixels / 2 + 1,
                                           point.y,
                                           barWidthPixels,
                                           bottom.y - point.y);
