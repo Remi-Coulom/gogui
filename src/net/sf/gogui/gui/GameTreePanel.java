@@ -598,8 +598,6 @@ public class GameTreePanel
                     String command = event.getActionCommand();
                     if (command.equals("goto"))
                         gotoNode(m_popupNode);
-                    else if (command.equals("scroll"))
-                        scrollToCurrent();
                     else if (command.equals("show-variations"))
                         showVariations(m_popupNode);
                     else if (command.equals("show-subtree"))
@@ -652,11 +650,6 @@ public class GameTreePanel
         popup.add(item);
         item = new JMenuItem("Subtree Statistics");
         item.setActionCommand("tree-info");
-        item.addActionListener(listener);
-        popup.add(item);
-        popup.addSeparator();
-        item = new JMenuItem("Scroll To Current");
-        item.setActionCommand("scroll");
         item.addActionListener(listener);
         popup.add(item);
         popup.show(gameNode, x, y);

@@ -369,7 +369,7 @@ public class GtpShell
 
     public GtpShell(Frame owner, Callback callback, Preferences prefs)
     {
-        super(owner, "GTP Shell");
+        super(owner, "Shell");
         m_callback = callback;
         m_prefs = prefs;
         setPrefsDefaults(prefs);

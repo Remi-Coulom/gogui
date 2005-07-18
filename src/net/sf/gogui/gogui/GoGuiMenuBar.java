@@ -736,13 +736,12 @@ public class GoGuiMenuBar
     private JMenu createMenuEdit()
     {
         JMenu menu = createMenu("Edit", KeyEvent.VK_E);
-        addMenuItem(menu, "Info", KeyEvent.VK_I, KeyEvent.VK_I,
+        addMenuItem(menu, "Game Info", KeyEvent.VK_I, KeyEvent.VK_I,
                     m_shortcutKeyMask, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createHandicapMenu());
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
-        menu.add(createClockMenu());
         menu.addSeparator();
         m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
                                         KeyEvent.VK_M, "make-main-variation");
@@ -868,10 +867,10 @@ public class GoGuiMenuBar
         m_itemComputerPlay = addMenuItem(menu, "Computer Play", KeyEvent.VK_L,
                                          KeyEvent.VK_F5, m_shortcutKeyMask,
                                          "play");
+        menu.add(createClockMenu());
         m_itemInterrupt =
             addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
                         0, "interrupt");
-        menu.addSeparator();
         addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
     }
@@ -950,6 +949,9 @@ public class GoGuiMenuBar
         m_itemGameTreeTiny = addRadioItem(menuSize, group, "Tiny",
                                       KeyEvent.VK_T, "gametree-tiny");
         menu.add(menuSize);
+        menu.addSeparator();
+        addMenuItem(menu, "Scroll To Current", KeyEvent.VK_C,
+                    "gametree-scroll");
         return menu;
     }
 

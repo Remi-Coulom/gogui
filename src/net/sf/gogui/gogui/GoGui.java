@@ -356,6 +356,8 @@ public class GoGui
             cbGameTreeSize(GameTreePanel.SIZE_LARGE);
         else if (command.equals("gametree-normal"))
             cbGameTreeSize(GameTreePanel.SIZE_NORMAL);
+        else if (command.equals("gametree-scroll"))
+            cbGameTreeScroll();
         else if (command.equals("gametree-small"))
             cbGameTreeSize(GameTreePanel.SIZE_SMALL);
         else if (command.equals("gametree-tiny"))
@@ -1461,6 +1463,12 @@ public class GoGui
         m_prefs.setInt("gametree-labels", mode);
         if (m_gameTreeViewer != null)
             m_gameTreeViewer.setLabelMode(mode);
+    }
+
+    private void cbGameTreeScroll()
+    {
+        if (m_gameTreeViewer != null)
+            m_gameTreeViewer.scrollToCurrent();
     }
 
     private void cbGameTreeSize(int mode)

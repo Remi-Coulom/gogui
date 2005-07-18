@@ -34,7 +34,7 @@ public class GameTreeViewer
 
     public GameTreeViewer(Frame owner, Listener listener, boolean fastPaint)
     {
-        super(owner, "Game Tree");
+        super(owner, "Tree");
         Container contentPane = getContentPane();
         m_listener = listener;
         m_panel = new GameTreePanel(this, listener, fastPaint,
@@ -73,6 +73,11 @@ public class GameTreeViewer
     public void redrawCurrentNode()
     {
         m_panel.redrawCurrentNode();
+    }
+
+    public void scrollToCurrent()
+    {
+        m_panel.scrollToCurrent();
     }
 
     public void setLabelMode(int mode)
