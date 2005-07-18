@@ -92,7 +92,6 @@ public class SgfWriter
     private String getEscaped(String text, boolean escapeColon)
     {
         StringBuffer result = new StringBuffer(2 * text.length());
-        result.append('[');
         for (int i = 0; i < text.length(); ++i)
         {
             char c = text.charAt(i);
@@ -111,7 +110,6 @@ public class SgfWriter
             else
                 result.append(c);
         }
-        result.append(']');
         return result.toString();
     }
 
@@ -315,7 +313,7 @@ public class SgfWriter
         String comment = node.getComment();
         if (comment != null && ! comment.trim().equals(""))
         {
-            print("C" + getEscaped(comment, false));
+            print("C[" + getEscaped(comment, false) + "]");
         }
         if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK)))
         {
