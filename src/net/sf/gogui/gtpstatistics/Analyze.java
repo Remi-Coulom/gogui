@@ -89,7 +89,7 @@ public class Analyze
         }
         out.print("</table>\n" +
                   "<hr>\n" +
-                  "<table border=\"0\">\n" +
+                  "<table border=\"0\" cellpadding=\"0\">\n" +
                   "<tr>\n");
         int n = 0;
         for (int i = 0; i < m_commands.size(); ++i)
@@ -97,7 +97,8 @@ public class Analyze
             CommandStatistics commandStatistics = getCommandStatistics(i);
             if (commandStatistics.getCount() == 0)
                 continue;
-            out.print("<td valign=\"bottom\">\n");
+            out.print("<td valign=\"bottom\" bgcolor=\"" + m_colorHeader
+                      + "\">\n");
             writePlot(out, getCommandLink(i), getHistoFile(i).getName(), "");
             out.print("</td>\n");
             ++n;
