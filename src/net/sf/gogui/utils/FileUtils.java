@@ -26,7 +26,10 @@ public class FileUtils
         return ext;
     }
 
-    /** Relative path from file1 to file2. */
+    /** Relative path from file1 to file2.
+        If file2 is a file, it only returns the path, not including
+        file2.getName().
+    */
     public static String getRelativePath(File file1, File file2)
         throws IOException
     {
@@ -50,7 +53,7 @@ public class FileUtils
         }
         for (int j = i; j < dir2.length; ++j)
         {
-            result.append(dir2[i]);
+            result.append(dir2[j]);
             result.append(sep);
         }
         return result.toString();
