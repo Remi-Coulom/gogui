@@ -61,7 +61,9 @@ public class Analyze
         out.print("<table border=\"0\">\n" +
                   "<tr><td>\n");
         writePlot(out, "<small>positions</small>",
-                  getCountFile().getName(), "");
+                  getCountFile().getName(),
+                  "<a href=\"" + getCountDataFile().getName()
+                  + "\"><small>data</small></a>");
         out.print("</td></tr>\n");
         for (int i = 0; i < m_commands.size(); ++i)
         {
@@ -83,7 +85,7 @@ public class Analyze
                 out.print("<tr><td>\n");
                 writePlot(out, getCommandLink(i), pngFile.getName(),
                           "<a href=\"" + dataFile.getName()
-                          + "\"><small>Data</small></a>");
+                          + "\"><small>data</small></a>");
                 out.print("</td></tr>\n");
             }
         }
@@ -304,6 +306,11 @@ public class Analyze
         return new File(m_output + ".count.png");
     }
 
+    private File getCountDataFile()
+    {
+        return new File(m_output + ".count.dat");
+    }
+
     private File getGameFile(int gameIndex)
     {
         return new File(m_output + ".game-" + gameIndex + ".html");
@@ -480,6 +487,7 @@ public class Analyze
         Plot plot = generatePlotMove(getImgWidth(m_maxMove), Color.DARK_GRAY);
         plot.setNoPlotYZero();
         plot.plot(getCountFile(), table, "Move", "Count", null);
+        table.save(new FileWriter(getCountDataFile()), false);
     }
 
     private void startHtml(PrintStream out, String title)
