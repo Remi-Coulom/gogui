@@ -60,7 +60,7 @@ public class Analyze
         endInfo(out);
         out.print("<table border=\"0\">\n" +
                   "<tr><td>\n");
-        writePlot(out, "<small>number positions</small>",
+        writePlot(out, "<small>positions</small>",
                   getCountFile().getName(), "");
         out.print("</td></tr>\n");
         for (int i = 0; i < m_commands.size(); ++i)
@@ -791,15 +791,20 @@ public class Analyze
     private void writePlot(PrintStream out, String title, String file,
                            String info)
     {
-        out.print("<table cellspacing=\"0\" cellpadding=\"0\">\n" +
+        out.print("<table width=\"100%\" cellspacing=\"0\""
+                  + " cellpadding=\"0\">\n" +
                   "<tr><td><table width=\"100%\" border=\"0\""
                   + " cellpadding=\"0\" bgcolor=\"" + m_colorHeader
                   + "\">\n" +
-                  "<tr><td width=\"90%\" align=\"center\">\n" +
+                  "<tr><td");
+        if (! info.equals(""))
+            out.print(" width=\"90%\"");
+        out.print(" align=\"center\">\n" +
                   title + "\n" + 
-                  "</td><td align=\"right\">\n" +
-                  info + "\n" +
-                  "</td></tr></table></td></tr>\n" +
+                  "</td>");
+        if (! info.equals(""))
+            out.print("<td align=\"right\">\n" + info + "\n</td>");
+        out.print("</tr></table></td></tr>\n" +
                   "<tr><td bgcolor=\"" + m_colorInfo
                   + "\">\n" +
                   "<img src=\"" + file + "\"></td></tr>\n" +
