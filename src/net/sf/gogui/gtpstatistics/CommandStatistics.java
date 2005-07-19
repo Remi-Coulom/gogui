@@ -16,8 +16,6 @@ import net.sf.gogui.utils.TableUtils;
 
 public final class CommandStatistics
 {
-    public final int m_countZeroAtMove;
-
     public final int m_maxMove;
     
     public final PositionStatistics m_statisticsAll;
@@ -47,7 +45,6 @@ public final class CommandStatistics
         m_tableAtMove = new Table(columnTitles);
         Table tableAtMove;
         m_maxMove = (int)(TableUtils.getMax(table, "Move") + 1);
-        int countZeroAtMove = 0;
         for (int move = 1; move <= m_maxMove; ++move)
         {
             tableAtMove = TableUtils.selectIntRange(table, "Move", move,
@@ -64,10 +61,7 @@ public final class CommandStatistics
                 m_tableAtMove.set("Mean", statisticsAtMove.getMean());
                 m_tableAtMove.set("Error", statisticsAtMove.getError());
             }
-            else
-                ++countZeroAtMove;
         }
-        m_countZeroAtMove = countZeroAtMove;
         if (getCount() > 0)
         {
             Histogram histogram = m_statisticsAll.m_histogram;
@@ -84,11 +78,6 @@ public final class CommandStatistics
                 plot.plot(histoFileFinal, histoTable, command, "Count", null);
             }
         }
-    }
-
-    public boolean mostCountsZero()
-    {
-        return m_countZeroAtMove > 0.2 * m_maxMove;
     }
 
     public int getCount()

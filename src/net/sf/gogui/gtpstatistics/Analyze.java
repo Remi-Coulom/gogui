@@ -75,8 +75,6 @@ public class Analyze
                 Table table = commandStatistics.m_tableAtMove;
                 Plot plot = generatePlotMove(getImgWidth(m_maxMove),
                                              getColor(command));
-                if (commandStatistics.mostCountsZero())
-                    plot.setPlotStyleNoLines();
                 File pngFile = getAvgPlotFile(i);
                 File dataFile = getAvgDataFile(i);
                 plot.setPlotStyleNoLines();
