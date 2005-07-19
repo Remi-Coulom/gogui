@@ -282,16 +282,6 @@ Find next game node containing the last entered search pattern.
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>Beep After Move</guimenuitem></term>
-<listitem>
-<para>
-Beep after each computer move.
-With most versions of Java the PC speaker is used for the beep.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>Show Cursor</guimenuitem></term>
 <listitem>
 <para>
@@ -344,6 +334,16 @@ Show toolbar.
 Mark the moves of all variations from this position with letters
 starting with 'A' ('+' will be used after 'Z').
 If multiple variations start with the same move, a '.' is appended.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Beep After Move</guimenuitem></term>
+<listitem>
+<para>
+Beep after each computer move.
+With most versions of Java the PC speaker is used for the beep.
 </para>
 </listitem>
 </varlistentry>
@@ -478,7 +478,7 @@ Go to the start node of a certain variation.
 </section>
 
 <section>
-<title>Play Menu</title>
+<title>Game Menu</title>
 <variablelist>
 
 <varlistentry>

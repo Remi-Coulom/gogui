@@ -46,8 +46,8 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuView);
         m_menuGo = createMenuGo();
         m_menuBar.add(m_menuGo);
-        m_menuPlay = createMenuPlay();
-        m_menuBar.add(m_menuPlay);
+        m_menuGame = createMenuGame();
+        m_menuBar.add(m_menuGame);
         m_menuSetup = createMenuSetup();
         m_menuBar.add(m_menuSetup);
         m_menuTree = createMenuTree();
@@ -484,11 +484,11 @@ public class GoGuiMenuBar
 
     private final JMenu m_menuEdit;
 
+    private final JMenu m_menuGame;
+
     private final JMenu m_menuGo;
 
     private final JMenu m_menuHelp;
-
-    private final JMenu m_menuPlay;
 
     private final JMenu m_menuShell;
 
@@ -859,9 +859,9 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createMenuPlay()
+    private JMenu createMenuGame()
     {
-        JMenu menu = createMenu("Play", KeyEvent.VK_P);
+        JMenu menu = createMenu("Game", KeyEvent.VK_M);
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
                     m_shortcutKeyMask, "pass");
         m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,
@@ -922,7 +922,7 @@ public class GoGuiMenuBar
 
     private JMenu createMenuTree()
     {
-        JMenu menu = createMenu("Tree", KeyEvent.VK_R);
+        JMenu menu = createMenu("Tree", KeyEvent.VK_T);
         addMenuItem(menu, "Show Tree", KeyEvent.VK_S, KeyEvent.VK_F7,
                     m_shortcutKeyMask, "show-gametree");
         menu.addSeparator();
@@ -958,9 +958,6 @@ public class GoGuiMenuBar
     private JMenu createMenuView()
     {
         JMenu menu = createMenu("View", KeyEvent.VK_V);
-        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
-        addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
-                    "beep-after-move");
         m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
         m_itemShowCursor.setSelected(true);
         addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_C, "show-cursor");
@@ -981,6 +978,9 @@ public class GoGuiMenuBar
         m_itemShowVariations.setSelected(true);
         addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,
                     "show-variations");
+        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
+        addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
+                    "beep-after-move");
         return menu;
     }
 
