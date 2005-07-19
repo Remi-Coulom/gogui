@@ -122,7 +122,7 @@ public class AboutDialog
         ClassLoader classLoader = getClass().getClassLoader();
         String imageName = "net/sf/gogui/images/project-support.png";
         URL imageUrl = classLoader.getResource(imageName);
-        String projectUrl = "http://gogui.sourceforge.net";
+        String projectUrl = "http://gogui.sf.net";
         String supportUrl =
             "http://sourceforge.net/donate/index.php?group_id=59117";
         return createPanel("<p align=\"center\"><b>GoGui</b></p>" +
