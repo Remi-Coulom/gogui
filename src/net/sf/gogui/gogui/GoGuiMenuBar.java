@@ -864,7 +864,7 @@ public class GoGuiMenuBar
         JMenu menu = createMenu("Play", KeyEvent.VK_P);
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
                     m_shortcutKeyMask, "pass");
-        m_itemComputerPlay = addMenuItem(menu, "Computer Play", KeyEvent.VK_L,
+        m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,
                                          KeyEvent.VK_F5, m_shortcutKeyMask,
                                          "play");
         menu.add(createClockMenu());

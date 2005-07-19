@@ -491,7 +491,7 @@ Make a pass move.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Computer Play</guimenuitem></term>
+<term><guimenuitem>Play</guimenuitem></term>
 <listitem>
 <para>
 Make the computer play a move.

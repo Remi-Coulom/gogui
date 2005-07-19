@@ -41,7 +41,7 @@ public class GoGuiToolBar
         m_buttonPreviousVariation =
             addButton("up.png", "previous-variation", "Previous Variation");
         m_buttonPass = addButton("pass.png", "pass", "Pass");
-        m_buttonEnter = addButton("next.png", "play", "Computer Play");
+        m_buttonEnter = addButton("next.png", "play", "Play");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         setFloatable(false);
     }
