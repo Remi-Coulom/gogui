@@ -789,12 +789,12 @@ public class GoGui
         m_analyzeAutoRun = autoRun;
         if (command.needsPointArg())
         {
-            setBoardCursor(Cursor.CROSSHAIR_CURSOR);
+            setBoardCursor(Cursor.HAND_CURSOR);
             showStatusSelectTarget();
         }
         else if (command.needsPointListArg())
         {
-            setBoardCursor(Cursor.CROSSHAIR_CURSOR);
+            setBoardCursor(Cursor.HAND_CURSOR);
             showStatusSelectPointList();
         }
     }
@@ -2209,7 +2209,7 @@ public class GoGui
         if (m_analyzeCommand != null
             && (m_analyzeCommand.needsPointArg()
                 || m_analyzeCommand.needsPointListArg()))
-            setBoardCursor(Cursor.CROSSHAIR_CURSOR);
+            setBoardCursor(Cursor.HAND_CURSOR);
         else
             setBoardCursorDefault();
     }
