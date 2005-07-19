@@ -57,6 +57,17 @@ public class Statistics
         return m_max;
     }
 
+    /** Get maximum error.
+        Returns the error assuming that every n values are 100 per cent
+        correlated.
+    */
+    public double getMaxError(int n)
+    {
+        if (m_count == 0)
+            return 0;
+        return getDeviation() / Math.sqrt((double)m_count / n);
+    }
+
     /** Get minumum value. */
     public double getMin()
     {

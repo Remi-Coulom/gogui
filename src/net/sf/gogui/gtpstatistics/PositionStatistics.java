@@ -139,6 +139,12 @@ public final class PositionStatistics
     {
         return m_statistics.getMax();
     }
+
+    public double getMaxError(int n)
+    {
+        return m_statistics.getMaxError(n);
+    }
+
     public double getMean()
     {
         return m_statistics.getMean();

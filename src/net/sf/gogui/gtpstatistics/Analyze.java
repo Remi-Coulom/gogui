@@ -188,8 +188,6 @@ public class Analyze
 
     private int m_movePrintInterval;
 
-    private int m_numberGames;
-
     private int m_precision;
 
     private DecimalFormat m_formatInt;
@@ -624,17 +622,17 @@ public class Analyze
                 = commandStatistics.getStatistics(i);
             out.print("<tr>" +
                       "<td>" + i + "</td>");
-            writeStatisticsTableData(out, statisticsAtMove, true);
+            writeStatisticsTableData(out, statisticsAtMove, false);
             out.print("</tr>\n");
         }
         out.print("<tr style=\"font-weight:bold\">" +
                   "<td>Final</td>");
-        writeStatisticsTableData(out, finalStatistics, true);
+        writeStatisticsTableData(out, finalStatistics, false);
         out.print("</tr>\n");
         out.print("<tr style=\"font-weight:bold\">" +
                   "<td>All</td>");
         writeStatisticsTableData(out, statisticsAll,
-                                 isGameGlobalCommand(command));
+                                 ! isGameGlobalCommand(command));
         out.print("</tr>\n");
         out.print("</table>\n");
     }
@@ -657,7 +655,7 @@ public class Analyze
             out.print("<tr><td style=\"background-color:" + m_colorHeader
                       + "\">" + getCommandLink(i) + "</td>");
             writeStatisticsTableData(out, statisticsAll,
-                                     isGameGlobalCommand(getCommand(i)));
+                                     ! isGameGlobalCommand(getCommand(i)));
             out.print("</tr>\n");
         }
         out.print("</table>\n");
@@ -839,7 +837,7 @@ public class Analyze
 
     private void writeStatisticsTableData(PrintStream out,
                                           PositionStatistics statistics,
-                                          boolean withError)
+                                          boolean withMaxError)
     {
         boolean empty = (statistics.getCount() == 0);
         boolean greaterOne = (statistics.getCount() > 1);
@@ -852,8 +850,16 @@ public class Analyze
         else if (! empty)
             out.print("");
         out.print("</td><td>");
-        if (greaterOne && withError)
+        if (greaterOne)
             out.print(formatFloat(statistics.getError()));
+        else if (! empty)
+            out.print("");
+        out.print("</td><td>");
+        if (greaterOne && withMaxError)
+        {
+            int movesPerGame = m_table.getNumberRows() / m_gameInfo.size();
+            out.print(formatFloat(statistics.getMaxError(movesPerGame)));
+        }
         else if (! empty)
             out.print("");
         out.print("</td><td>");
@@ -883,6 +889,7 @@ public class Analyze
         out.print("<th>Mean</th>"
                   + "<th>Deviation</th>"
                   + "<th>Error</th>"
+                  + "<th>MaxError</th>"
                   + "<th>Min</th>"
                   + "<th>Max</th>"
                   + "<th>Sum</th>"
