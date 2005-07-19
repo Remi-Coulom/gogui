@@ -42,22 +42,12 @@ public class GtpStatistics
         new FileCheck(sgfFiles, size);
         m_size = size;
         m_result = false;
-        m_commands = commands;
-        m_beginCommands = beginCommands;
-        m_finalCommands = finalCommands;
-        checkCommands();
+        initCommands(commands, beginCommands, finalCommands);
         Vector columnHeaders = new Vector();
         columnHeaders.add("File");
         columnHeaders.add("Move");
-        if (beginCommands != null)
-            for (int i = 0; i < beginCommands.size(); ++i)
-                columnHeaders.add(getBeginCommand(i));
-        if (commands != null)
-            for (int i = 0; i < commands.size(); ++i)
-                columnHeaders.add(getCommand(i));
-        if (finalCommands != null)
-            for (int i = 0; i < finalCommands.size(); ++i)
-                columnHeaders.add(getFinalCommand(i));
+        for (int i = 0; i < m_commands.size(); ++i)
+            columnHeaders.add(getCommand(i).m_columnTitle);
         m_table = new Table(columnHeaders);
         m_table.setProperty("Size", Integer.toString(size));
         m_gtp = new Gtp(program, verbose, null);
@@ -104,6 +94,17 @@ public class GtpStatistics
         return m_result;
     }
 
+    private static class Command
+    {
+        public boolean m_begin;
+
+        public boolean m_final;
+
+        public String m_command;
+
+        public String m_columnTitle;
+    }
+
     private boolean m_result;
 
     private int m_numberGames;
@@ -120,43 +121,55 @@ public class GtpStatistics
 
     private Table m_table;
 
-    private Vector m_beginCommands;
-
+    /** Vector<Command> */
     private Vector m_commands;
 
-    private Vector m_finalCommands;
-
-    private void checkCommands() throws ErrorMessage
+    private void addCommand(String commandLine, boolean isBegin,
+                            boolean isFinal) throws ErrorMessage
     {
-        Vector all = new Vector();
-        if (m_commands != null)
-            all.addAll(m_commands);
-        if (m_beginCommands != null)
-            all.addAll(m_beginCommands);
-        if (m_finalCommands != null)
-            all.addAll(m_finalCommands);
-        if (all.size() == 0)
+        commandLine = commandLine.trim();
+        if (commandLine.equals(""))
+            throw new ErrorMessage("Empty command not allowed");
+        Command command = new Command();
+        command.m_command = commandLine;
+        command.m_begin = isBegin;
+        command.m_final = isFinal;
+        int numberSame = 0;
+        for (int i = 0; i < m_commands.size(); ++i)
+            if (getCommand(i).m_command.equals(commandLine))
+                ++numberSame;
+        if (numberSame == 0)
+            command.m_columnTitle = commandLine;
+        else
+            command.m_columnTitle = commandLine + " ("
+                + (numberSame + 1) + ")";
+        m_commands.add(command);
+    }
+
+    private void addCommands(Vector commands, boolean isBegin,
+                             boolean isFinal) throws ErrorMessage
+    {
+        for (int i = 0; i < commands.size(); ++i)
+            addCommand((String)commands.get(i), isBegin, isFinal);
+    }
+
+    private void initCommands(Vector commands, Vector beginCommands,
+                              Vector finalCommands) throws ErrorMessage
+    {
+        m_commands = new Vector();
+        if (beginCommands != null)
+            addCommands(beginCommands, true, false);
+        if (commands != null)
+            addCommands(commands, false, false);
+        if (finalCommands != null)
+            addCommands(finalCommands, false, true);
+        if (m_commands.size() == 0)
             throw new ErrorMessage("No commands defined");
-        for (int i = 0; i < all.size() - 1; ++i)
-            for (int j = i + 1; j < all.size(); ++j)
-                if (all.get(i).equals(all.get(j)))
-                    throw new ErrorMessage("Non-unique commands not"
-                                           + " supported: " + all.get(i));
     }
 
-    private String getBeginCommand(int index)
+    private Command getCommand(int index)
     {
-        return (String)m_beginCommands.get(index);
-    }
-
-    private String getCommand(int index)
-    {
-        return (String)m_commands.get(index);
-    }
-
-    private String getFinalCommand(int index)
-    {
-        return (String)m_finalCommands.get(index);
+        return (Command)m_commands.get(index);
     }
 
     private void handleFile(String name)
@@ -187,53 +200,48 @@ public class GtpStatistics
                     throw new ErrorMessage(name
                                            + "has non-alternating moves");
                 ++number;
-                handlePosition(name, toMove, move, number, false);
+                handlePosition(name, toMove, move, number);
                 m_gtp.sendCommandPlay(move);
                 toMove = toMove.otherColor();
             }
         }
-        if (m_finalCommands != null)
+        ++number;
+        handlePosition(name, toMove, null, number);
+        for (int i = 0; i < m_commands.size(); ++i)
         {
-            ++number;
-            handlePosition(name, toMove, null, number, true);
-            for (int i = 0; i < m_finalCommands.size(); ++i)
-            {
-                String command = getFinalCommand(i);
-                String response
-                    = convertResponse(getFinalCommand(i),
-                                      m_gtp.sendCommand(command), toMove,
-                                      null, true);
-                m_table.set(command, response);
-            }
+            Command command = getCommand(i);
+            if (! command.m_final)
+                continue;
+            String response = sendCommand(command.m_command, toMove, null);
+            m_table.set(command.m_columnTitle, response);
         }
     }
 
     private void handlePosition(String name, GoColor toMove, Move move,
-                                int number, boolean isFinal)
+                                int number)
         throws GtpError
     {
         System.err.println(name + ":" + number);
         m_table.startRow();
         m_table.set("File", name);
         m_table.set("Move", number);
-        if (number == 1 && m_beginCommands != null)
-            for (int i = 0; i < m_beginCommands.size(); ++i)
-            {
-                String command = getBeginCommand(i);
-                String result = m_gtp.sendCommand(command);
-                m_table.set(command, result);
-            }
-        if (m_commands != null)
-        {
+        if (number == 1)
             for (int i = 0; i < m_commands.size(); ++i)
             {
-                String command = getCommand(i);
-                command = convertCommand(command, toMove);
-                String response = m_gtp.sendCommand(command);
-                response = convertResponse(getCommand(i), response, toMove,
-                                           move, isFinal);
-                m_table.set(getCommand(i), response);
+                Command command = getCommand(i);
+                if (! command.m_begin)
+                    continue;
+                String response
+                    = sendCommand(command.m_command, toMove, move);
+                m_table.set(command.m_columnTitle, response);
             }
+        for (int i = 0; i < m_commands.size(); ++i)
+        {
+            Command command = getCommand(i);
+            if (command.m_begin || command.m_final)
+                continue;
+            String response = sendCommand(command.m_command, toMove, move);
+            m_table.set(command.m_columnTitle, response);
         }
     }
 
@@ -245,8 +253,7 @@ public class GtpStatistics
     }
 
     private String convertResponse(String command, String response,
-                                   GoColor toMove, Move move,
-                                   boolean isFinal) throws GtpError
+                                   GoColor toMove, Move move) throws GtpError
     {
         if (command.equals("cputime"))
         {
@@ -312,6 +319,14 @@ public class GtpStatistics
         {
             return string;
         }
+    }
+
+    private String sendCommand(String command, GoColor toMove, Move move)
+        throws GtpError
+    {
+        command = convertCommand(command, toMove);
+        String response = m_gtp.sendCommand(command);
+        return convertResponse(command, response, toMove, move);
     }
 }
     
