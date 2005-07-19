@@ -222,6 +222,13 @@ public class Analyze
     /** Vector<GameInfo> */
     private Vector m_gameInfo;    
 
+    private void endInfo(PrintStream out)
+    {
+        out.print("</table></td></tr>\n" +
+                  "</table>\n" +
+                  "<hr>\n");
+    }
+
     private void findGameGlobalCommands()
     {
         m_gameGlobalCommands = new Vector();
@@ -492,6 +499,14 @@ public class Analyze
         writer.close();
     }
 
+    private boolean isGameGlobalCommand(String command)
+    {
+        for (int i = 0; i < m_gameGlobalCommands.size(); ++i)
+            if (getGameGlobalCommand(i).getName().equals(command))
+                return true;
+        return false;
+    }
+
     private void startHtml(PrintStream out, String title)
     {
         String charset = StringUtils.getDefaultEncoding();
@@ -530,13 +545,6 @@ public class Analyze
                   + "\" >\n" +
                   "<tr><td><table style=\"font-size:80%\""
                   +" cellpadding=\"0\">\n");
-    }
-
-    private void endInfo(PrintStream out)
-    {
-        out.print("</table></td></tr>\n" +
-                  "</table>\n" +
-                  "<hr>\n");
     }
 
     private void writeCommandPage(int commandIndex)
@@ -616,16 +624,17 @@ public class Analyze
                 = commandStatistics.getStatistics(i);
             out.print("<tr>" +
                       "<td>" + i + "</td>");
-            writeStatisticsTableData(out, statisticsAtMove);
+            writeStatisticsTableData(out, statisticsAtMove, true);
             out.print("</tr>\n");
         }
         out.print("<tr style=\"font-weight:bold\">" +
                   "<td>Final</td>");
-        writeStatisticsTableData(out, finalStatistics);
+        writeStatisticsTableData(out, finalStatistics, true);
         out.print("</tr>\n");
         out.print("<tr style=\"font-weight:bold\">" +
                   "<td>All</td>");
-        writeStatisticsTableData(out, statisticsAll);
+        writeStatisticsTableData(out, statisticsAll,
+                                 isGameGlobalCommand(command));
         out.print("</tr>\n");
         out.print("</table>\n");
     }
@@ -647,7 +656,8 @@ public class Analyze
                 = commandStatistics.m_statisticsAll;
             out.print("<tr><td style=\"background-color:" + m_colorHeader
                       + "\">" + getCommandLink(i) + "</td>");
-            writeStatisticsTableData(out, statisticsAll);
+            writeStatisticsTableData(out, statisticsAll,
+                                     isGameGlobalCommand(getCommand(i)));
             out.print("</tr>\n");
         }
         out.print("</table>\n");
@@ -828,7 +838,8 @@ public class Analyze
     }
 
     private void writeStatisticsTableData(PrintStream out,
-                                          PositionStatistics statistics)
+                                          PositionStatistics statistics,
+                                          boolean withError)
     {
         boolean empty = (statistics.getCount() == 0);
         boolean greaterOne = (statistics.getCount() > 1);
@@ -841,7 +852,7 @@ public class Analyze
         else if (! empty)
             out.print("");
         out.print("</td><td>");
-        if (greaterOne)
+        if (greaterOne && withError)
             out.print(formatFloat(statistics.getError()));
         else if (! empty)
             out.print("");
