@@ -5,12 +5,13 @@
 
 package net.sf.gogui.gogui;
 
-import java.io.File;
-import java.io.IOException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.Vector;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -22,6 +23,7 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.RecentFileMenu;
@@ -46,6 +48,8 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuView);
         m_menuGo = createMenuGo();
         m_menuBar.add(m_menuGo);
+        m_menuBookmarks = createMenuBookMarks();
+        m_menuBar.add(m_menuBookmarks);
         m_menuGame = createMenuGame();
         m_menuBar.add(m_menuGame);
         m_menuSetup = createMenuSetup();
@@ -197,6 +201,19 @@ public class GoGuiMenuBar
     public void setAutoNumber(boolean enable)
     {
         m_itemAutoNumber.setSelected(enable);        
+    }
+
+    public void setBookmarks(Vector bookmarks)
+    {
+        for (int i = 0; i < m_bookmarkItems.size(); ++i)
+            m_menuBookmarks.remove((JMenuItem)m_bookmarkItems.get(i));
+        for (int i = 0; i < bookmarks.size(); ++i)
+        {
+            Bookmark bookmark = (Bookmark)bookmarks.get(i);
+            JMenuItem item = new JMenuItem(bookmark.m_name);
+            addMenuItem(m_menuBookmarks, item, "bookmark-" + i);
+            m_bookmarkItems.add(item);
+        }
     }
 
     public void setComputerBlack()
@@ -480,6 +497,8 @@ public class GoGuiMenuBar
 
     private JMenu m_menuComputerColor;
 
+    private final JMenu m_menuBookmarks;
+
     private final JMenu m_menuFile;
 
     private final JMenu m_menuEdit;
@@ -600,6 +619,8 @@ public class GoGuiMenuBar
 
     private RecentFileMenu m_recentGtp;
 
+    private Vector m_bookmarkItems = new Vector();
+
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {
         item.addActionListener(m_listener);
@@ -716,7 +737,7 @@ public class GoGuiMenuBar
 
     private JMenu createMenuAnalyze()
     {
-        JMenu menu = createMenu("Analyze", KeyEvent.VK_Z);
+        JMenu menu = createMenu("Analyze", KeyEvent.VK_N);
         m_itemAnalyze = addMenuItem(menu, "Show Analyze", KeyEvent.VK_S,
                                     KeyEvent.VK_F8, m_shortcutKeyMask,
                                     "analyze");
@@ -730,6 +751,15 @@ public class GoGuiMenuBar
         menu.addSeparator();
         addMenuItem(menu, "Reload Configuration", KeyEvent.VK_R,
                     "analyze-reload");
+        return menu;
+    }
+
+    private JMenu createMenuBookMarks()
+    {
+        JMenu menu = createMenu("Bookmarks", KeyEvent.VK_B);
+        addMenuItem(menu, "Add Bookmark", KeyEvent.VK_A, "add-bookmark");
+        addMenuItem(menu, "Edit Bookmarks", KeyEvent.VK_E, "edit-bookmarks");
+        menu.addSeparator();
         return menu;
     }
 
@@ -861,7 +891,7 @@ public class GoGuiMenuBar
 
     private JMenu createMenuGame()
     {
-        JMenu menu = createMenu("Game", KeyEvent.VK_M);
+        JMenu menu = createMenu("Game", KeyEvent.VK_A);
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
                     m_shortcutKeyMask, "pass");
         m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,

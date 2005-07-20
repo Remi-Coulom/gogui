@@ -62,9 +62,12 @@ import net.sf.gogui.gui.AnalyzeDialog;
 import net.sf.gogui.gui.AnalyzeShow;
 import net.sf.gogui.gui.BoardSizeDialog;
 import net.sf.gogui.gui.Clock;
+import net.sf.gogui.gui.Bookmark;
+import net.sf.gogui.gui.BookmarkDialog;
 import net.sf.gogui.gui.Comment;
 import net.sf.gogui.gui.CommandThread;
 import net.sf.gogui.gui.ContextMenu;
+import net.sf.gogui.gui.EditBookmarksDialog;
 import net.sf.gogui.gui.FindDialog;
 import net.sf.gogui.gui.GameInfo;
 import net.sf.gogui.gui.GameInfoDialog;
@@ -232,6 +235,8 @@ public class GoGui
         m_menuBar.setShowGrid(m_prefs.getBool("show-grid"));
         m_guiBoard.setShowCursor(m_prefs.getBool("show-cursor"));
         m_guiBoard.setShowGrid(m_prefs.getBool("show-grid"));
+        m_bookmarks = Bookmark.load(getGoGuiFile("bookmarks"));
+        m_menuBar.setBookmarks(m_bookmarks);
         setJMenuBar(m_menuBar.getMenuBar());
         if (program != null)
             m_program = program;
@@ -281,6 +286,10 @@ public class GoGui
             return;
         if (command.equals("about"))
             cbAbout();
+        else if (command.equals("add-bookmark"))
+            cbAddBookmark();
+        else if (command.equals("edit-bookmarks"))
+            cbEditBookmarks();
         else if (command.equals("analyze"))
             cbAnalyze();
         else if (command.equals("analyze-only-supported"))
@@ -307,6 +316,8 @@ public class GoGui
             cbBoardSizeOther();
         else if (command.startsWith("board-size-"))
             cbBoardSize(command.substring("board-size-".length()));
+        else if (command.startsWith("bookmark-"))
+            cbBookmark(command.substring("bookmark-".length()));
         else if (command.equals("clock-halt"))
             cbClockHalt();
         else if (command.equals("clock-resume"))
@@ -970,6 +981,9 @@ public class GoGui
 
     private Comment m_comment;
 
+    /** Last loaded or saved file.
+        If file was modified, the value is null.
+    */
     private File m_loadedFile;
 
     private GameInfo m_gameInfo;    
@@ -1029,6 +1043,8 @@ public class GoGui
     private TimeSettings m_timeSettings;
 
     private GoGuiToolBar m_toolBar;
+
+    private Vector m_bookmarks;
 
     private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
     {
@@ -1283,6 +1299,24 @@ public class GoGui
         AboutDialog.show(this, m_name, m_version, protocolVersion, command);
     }
 
+    private void cbAddBookmark()
+    {
+        String variation = NodeUtils.getVariationString(m_currentNode);
+        int move = NodeUtils.getMoveNumber(m_currentNode);
+        Bookmark bookmark = new Bookmark(m_loadedFile, move, variation);
+        if (! BookmarkDialog.show(this, "Add Bookmark", bookmark))
+            return;
+        m_bookmarks.add(bookmark);
+        m_menuBar.setBookmarks(m_bookmarks);
+    }
+
+    private void cbEditBookmarks()
+    {
+        if (! EditBookmarksDialog.show(this, m_bookmarks))
+            return;
+        m_menuBar.setBookmarks(m_bookmarks);
+    }
+
     private void cbAutoNumber()
     {
         if (m_commandThread == null)
@@ -1338,6 +1372,47 @@ public class GoGui
         cbNewGame(size);
     }
     
+    private void cbBookmark(String number)
+    {
+        if (m_needsSave && ! checkSaveGame())
+            return;
+        try
+        {
+            int n = Integer.parseInt(number);
+            if (n < 0 || n >= m_bookmarks.size())
+            {
+                assert(false);
+                return;
+            }
+            Bookmark bookmark = (Bookmark)m_bookmarks.get(n);
+            File file = bookmark.m_file;
+            if (m_loadedFile == null || ! file.equals(m_loadedFile))
+                loadFile(file, 0);
+            String variation = bookmark.m_variation;
+            Node node = m_gameTree.getRoot();
+            if (! variation.equals(""))
+            {
+                node = NodeUtils.findByVariation(node, variation);
+                if (node == null)
+                {
+                    showError("Invalid variation");
+                    return;
+                }
+            }
+            node = NodeUtils.findByMoveNumber(node, bookmark.m_move);
+            if (node == null)
+            {
+                showError("Invalid move number");
+                return;
+            }
+            gotoNode(node);
+        }
+        catch (NumberFormatException e)
+        {
+            assert(false);
+        }
+    }
+
     private void cbClockHalt()
     {
         if (! m_clock.isRunning())
@@ -2309,6 +2384,15 @@ public class GoGui
         runLengthyCommand(command, callback);
     }
 
+    private File getGoGuiFile(String name)
+    {
+        String home = System.getProperty("user.home", "");
+        File dir = new File(home, ".gogui");
+        if (! dir.exists())
+            dir.mkdir();
+        return new File(dir, name);
+    }
+
     private int getRules()
     {
         int result = Board.RULES_UNKNOWN;
@@ -2761,6 +2845,7 @@ public class GoGui
 
     private void saveSession()
     {
+        Bookmark.save(m_bookmarks, getGoGuiFile("bookmarks"));
         if (m_gtpShell != null)
             m_gtpShell.saveHistory();
         if (m_analyzeDialog != null)

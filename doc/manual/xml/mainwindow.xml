@@ -478,6 +478,32 @@ Go to the start node of a certain variation.
 </section>
 
 <section>
+<title>Bookmarks Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Add Bookmark</guimenuitem></term>
+<listitem>
+<para>
+Add a new bookmark.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Edit Bookmarks</guimenuitem></term>
+<listitem>
+<para>
+Edit bookmarks.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
 <title>Game Menu</title>
 <variablelist>
 

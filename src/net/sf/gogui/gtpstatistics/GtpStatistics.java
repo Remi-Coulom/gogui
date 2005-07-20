@@ -135,14 +135,22 @@ public class GtpStatistics
         command.m_begin = isBegin;
         command.m_final = isFinal;
         int numberSame = 0;
+        Command firstSame = null;
         for (int i = 0; i < m_commands.size(); ++i)
             if (getCommand(i).m_command.equals(commandLine))
+            {
+                firstSame = getCommand(i);
                 ++numberSame;
+            }
         if (numberSame == 0)
             command.m_columnTitle = commandLine;
         else
+        {
+            if (numberSame == 1)
+                firstSame.m_columnTitle = firstSame.m_columnTitle + " (1)";
             command.m_columnTitle = commandLine + " ("
                 + (numberSame + 1) + ")";
+        }
         m_commands.add(command);
     }
 
