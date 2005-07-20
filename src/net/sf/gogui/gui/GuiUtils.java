@@ -66,7 +66,8 @@ public class GuiUtils
 
     /** Create a JLabel for info labels.
         Uses JTextField font for label, because label font looks so ugly
-        on Linux
+        on Linux.
+        Should only be used for labels for informational (non-editable) data.
     */
     public static JLabel createInfoLabel()
     {
