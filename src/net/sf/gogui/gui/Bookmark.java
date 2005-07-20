@@ -92,7 +92,9 @@ public class Bookmark
         }
         try
         {
-            props.store(new FileOutputStream(file), null);
+            FileOutputStream out = new FileOutputStream(file);
+            props.store(out, null);
+            out.close();
         }
         catch (IOException e)
         {

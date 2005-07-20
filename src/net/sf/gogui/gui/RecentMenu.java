@@ -127,7 +127,9 @@ public class RecentMenu
         }
         try
         {
-            props.store(new FileOutputStream(m_file), null);
+            FileOutputStream out = new FileOutputStream(m_file);
+            props.store(out, null);
+            out.close();
         }
         catch (IOException e)
         {
