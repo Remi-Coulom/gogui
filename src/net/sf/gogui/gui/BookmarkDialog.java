@@ -114,6 +114,12 @@ public class BookmarkDialog
             SimpleDialogs.showError(parent, "Invalid move number");
             return false;
         }
+        File file = new File(m_file.getText().trim());
+        if (! file.exists())
+        {
+            SimpleDialogs.showError(parent, "File does not exist");
+            return false;
+        }
         return true;
     }
 }

@@ -1310,13 +1310,6 @@ public class GoGui
         m_menuBar.setBookmarks(m_bookmarks);
     }
 
-    private void cbEditBookmarks()
-    {
-        if (! EditBookmarksDialog.show(this, m_bookmarks))
-            return;
-        m_menuBar.setBookmarks(m_bookmarks);
-    }
-
     private void cbAutoNumber()
     {
         if (m_commandThread == null)
@@ -1387,7 +1380,8 @@ public class GoGui
             Bookmark bookmark = (Bookmark)m_bookmarks.get(n);
             File file = bookmark.m_file;
             if (m_loadedFile == null || ! file.equals(m_loadedFile))
-                loadFile(file, 0);
+                if (! loadFile(file, 0))
+                    return;
             String variation = bookmark.m_variation;
             Node node = m_gameTree.getRoot();
             if (! variation.equals(""))
@@ -1395,14 +1389,14 @@ public class GoGui
                 node = NodeUtils.findByVariation(node, variation);
                 if (node == null)
                 {
-                    showError("Invalid variation");
+                    showError("Bookmark has invalid variation");
                     return;
                 }
             }
             node = NodeUtils.findByMoveNumber(node, bookmark.m_move);
             if (node == null)
             {
-                showError("Invalid move number");
+                showError("Bookmark has invalid move number");
                 return;
             }
             gotoNode(node);
@@ -1452,6 +1446,13 @@ public class GoGui
         computerBoth();
         if (! isCommandInProgress())
             checkComputerMove();
+    }
+
+    private void cbEditBookmarks()
+    {
+        if (! EditBookmarksDialog.show(this, m_bookmarks))
+            return;
+        m_menuBar.setBookmarks(m_bookmarks);
     }
 
     private void cbEnd()
@@ -2585,7 +2586,7 @@ public class GoGui
         return m_commandThread.isCommandInProgress();
     }
     
-    private void loadFile(File file, int move)
+    private boolean loadFile(File file, int move)
     {
         try
         {
@@ -2630,7 +2631,9 @@ public class GoGui
                 t.printStackTrace();
                 assert(false);
             }
+            return false;
         }
+        return true;
     }
 
     public void mark(GoPoint point, String type, boolean mark)
