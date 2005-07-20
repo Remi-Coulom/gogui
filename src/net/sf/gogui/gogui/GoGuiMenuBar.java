@@ -208,15 +208,13 @@ public class GoGuiMenuBar
     {
         for (int i = 0; i < m_bookmarkItems.size(); ++i)
             m_menuBookmarks.remove((JMenuItem)m_bookmarkItems.get(i));
-        if (bookmarks.size() == 0)
+        if (m_bookmarksSeparator != null)
         {
-            if (m_bookmarksSeparator != null)
-            {
-                m_menuBookmarks.remove(m_bookmarksSeparator);
-                m_bookmarksSeparator = null;
-            }
-            return;
+            m_menuBookmarks.remove(m_bookmarksSeparator);
+            m_bookmarksSeparator = null;
         }
+        if (bookmarks.size() == 0)
+            return;
         m_bookmarksSeparator = new JSeparator();
         m_menuBookmarks.add(m_bookmarksSeparator);
         for (int i = 0; i < bookmarks.size(); ++i)
