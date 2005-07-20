@@ -649,7 +649,7 @@ public class GoGuiMenuBar
 
     private JMenu createBoardSizeMenu()
     {
-        JMenu menu = createMenu("Size", KeyEvent.VK_S);
+        JMenu menu = createMenu("Board Size", KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
         int n = m_possibleBoardSizes.length;
         m_itemBoardSize = new JMenuItem[n];
