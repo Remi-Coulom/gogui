@@ -1304,7 +1304,7 @@ public class GoGui
         String variation = NodeUtils.getVariationString(m_currentNode);
         int move = NodeUtils.getMoveNumber(m_currentNode);
         Bookmark bookmark = new Bookmark(m_loadedFile, move, variation);
-        if (! BookmarkDialog.show(this, "Add Bookmark", bookmark))
+        if (! BookmarkDialog.show(this, "Add Bookmark", bookmark, true))
             return;
         m_bookmarks.add(bookmark);
         m_menuBar.setBookmarks(m_bookmarks);

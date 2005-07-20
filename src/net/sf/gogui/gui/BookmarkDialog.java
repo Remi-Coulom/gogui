@@ -22,13 +22,15 @@ public class BookmarkDialog
     extends JOptionPane
 {
     public static boolean show(Component parent, String title,
-                               Bookmark bookmark)
+                               Bookmark bookmark, boolean selectName)
     {
         BookmarkDialog bookmarkDialog = new BookmarkDialog(bookmark);
         JDialog dialog = bookmarkDialog.createDialog(parent, title);
         boolean done = false;
         while (! done)
         {
+            if (selectName)
+                bookmarkDialog.m_name.selectAll();
             dialog.setVisible(true);
             Object value = bookmarkDialog.getValue();
             if (! (value instanceof Integer)
@@ -83,6 +85,7 @@ public class BookmarkDialog
         label.setHorizontalAlignment(SwingConstants.LEFT);
         m_panelLeft.add(label);
         JTextField textField = new JTextField(text);
+        textField.setColumns(25);
         m_panelRight.add(textField);
         return textField;
     }

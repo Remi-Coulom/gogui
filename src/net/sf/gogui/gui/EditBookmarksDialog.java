@@ -118,7 +118,7 @@ public class EditBookmarksDialog
             return;
         int selectedIndex = m_list.getSelectedIndex();
         Bookmark tempBookmark = new Bookmark(bookmark);
-        if (! BookmarkDialog.show(this, "Edit Bookmark", tempBookmark))
+        if (! BookmarkDialog.show(this, "Edit Bookmark", tempBookmark, false))
             return;
         bookmark.copyFrom(tempBookmark);
         updateList(selectedIndex);
