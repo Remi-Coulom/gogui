@@ -140,11 +140,14 @@ public class EditBookmarksDialog
         Bookmark bookmark = getSelected();
         if (bookmark == null)
             return;
+        int selectedIndex = m_list.getSelectedIndex();
         String name = bookmark.m_name;
         if (! SimpleDialogs.showQuestion(this, "Remove '" + name + "'?"))
             return;
         m_bookmarks.remove(bookmark);
-        updateList(-1);
+        if (selectedIndex >= m_bookmarks.size())
+            selectedIndex = -1;
+        updateList(selectedIndex);
     }
 
     private static void copyBookmarks(Vector from, Vector to)
