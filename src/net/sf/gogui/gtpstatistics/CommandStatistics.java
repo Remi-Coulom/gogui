@@ -16,6 +16,8 @@ import net.sf.gogui.utils.TableUtils;
 
 public final class CommandStatistics
 {
+    public final boolean m_isBeginCommand;
+
     public final int m_maxMove;
     
     public final PositionStatistics m_statisticsAll;
@@ -45,6 +47,7 @@ public final class CommandStatistics
         m_tableAtMove = new Table(columnTitles);
         Table tableAtMove;
         m_maxMove = (int)(TableUtils.getMax(table, "Move") + 1);
+        boolean isBeginCommand = true;
         for (int move = 1; move <= m_maxMove; ++move)
         {
             tableAtMove = TableUtils.selectIntRange(table, "Move", move,
@@ -56,12 +59,15 @@ public final class CommandStatistics
             int count = statisticsAtMove.getCount();
             if (count > 0)
             {
+                if (move > 1)
+                    isBeginCommand = false;
                 m_tableAtMove.startRow();
                 m_tableAtMove.set("Move", move);
                 m_tableAtMove.set("Mean", statisticsAtMove.getMean());
                 m_tableAtMove.set("Error", statisticsAtMove.getError());
             }
         }
+        m_isBeginCommand = isBeginCommand;
         if (getCount() > 0)
         {
             Histogram histogram = m_statisticsAll.m_histogram;

@@ -69,7 +69,8 @@ public class Analyze
         {
             CommandStatistics commandStatistics = computeCommandStatistics(i);
             m_commandStatistics.add(commandStatistics);
-            if (commandStatistics.getCount() > 0)
+            if (commandStatistics.getCount() > 0
+                && ! commandStatistics.m_isBeginCommand)
             {
                 String command = getCommand(i);
                 Table table = commandStatistics.m_tableAtMove;
@@ -559,9 +560,10 @@ public class Analyze
         startInfo(out, command);
         writeHtmlRow(out, "Index", commandIndex);
         endInfo(out);
-        out.print("<p><img src=\""
-                  + getAvgPlotFile(commandIndex).getName()
-                  + "\"></p>\n");
+        if (! commandStatistics.m_isBeginCommand)
+            out.print("<p><img src=\""
+                      + getAvgPlotFile(commandIndex).getName()
+                      + "\"></p>\n");
         writeCommandStatistics(out, commandIndex);
         out.print("<hr>\n");
         out.print("<table border=\"0\" cellspacing=\"0\""
