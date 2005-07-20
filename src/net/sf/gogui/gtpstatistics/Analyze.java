@@ -403,7 +403,8 @@ public class Analyze
         return m_plotColor[(index - 2) % m_plotColor.length];
     }
 
-    private String getGameLink(File fromFile, int gameNumber)
+    private String getGameLink(File fromFile, int gameNumber,
+                               boolean shortName)
     {
         GameInfo info = (GameInfo)(m_gameInfo.get(gameNumber));
         File gameFile = new File(info.m_file);
@@ -412,7 +413,8 @@ public class Analyze
             String path
                 = FileUtils.getRelativePath(fromFile, gameFile)
                 + gameFile.getName();
-            return "<a href=\"" + path + "\">" + path + "</a>";
+            return "<a href=\"" + path + "\">"
+                + (shortName ? gameFile.getName(): path)+ "</a>";
         }
         catch (IOException e)
         {
@@ -666,11 +668,11 @@ public class Analyze
     {
         File file = getGameFile(gameNumber);
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        String title = "Game " + gameNumber + " (" + name + ")";
+        String title = "Game " + (gameNumber + 1) + " (" + name + ")";
         startHtml(out, title);
         startInfo(out, title);
         writeHtmlRow(out, "Index", gameNumber);
-        writeHtmlRow(out, "File", getGameLink(file, gameNumber));
+        writeHtmlRow(out, "File", getGameLink(file, gameNumber, false));
         try
         {
             InputStream in = new FileInputStream(new File(game));
@@ -750,11 +752,11 @@ public class Analyze
         {
             GameInfo info = (GameInfo)(m_gameInfo.get(i));
             String plotFile = getPlotFile(i, commandIndex).getName();
+            File file = getGameFile(i);
             out.print("<tr><td align=\"left\"><small><a href=\""
-                      + getGameFile(i).getName()
-                      + "\">Game " + (i + 1) + "</a> (<a href=\""
-                      + info.m_file + "\">" + info.m_name
-                      + "</a>):</small><br>\n" +
+                      + file.getName() + "\">Game " + (i + 1) + "</a> ("
+                      + getGameLink(file, i, true)
+                      + "):</small><br>\n" +
                       "<img src=\"" + plotFile + "\"></td></tr>\n");
         }
         out.print("</table>\n");
