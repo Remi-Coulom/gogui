@@ -18,6 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -207,6 +208,17 @@ public class GoGuiMenuBar
     {
         for (int i = 0; i < m_bookmarkItems.size(); ++i)
             m_menuBookmarks.remove((JMenuItem)m_bookmarkItems.get(i));
+        if (bookmarks.size() == 0)
+        {
+            if (m_bookmarksSeparator != null)
+            {
+                m_menuBookmarks.remove(m_bookmarksSeparator);
+                m_bookmarksSeparator = null;
+            }
+            return;
+        }
+        m_bookmarksSeparator = new JSeparator();
+        m_menuBookmarks.add(m_bookmarksSeparator);
         for (int i = 0; i < bookmarks.size(); ++i)
         {
             Bookmark bookmark = (Bookmark)bookmarks.get(i);
@@ -615,6 +627,8 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemTruncate;
 
+    private JSeparator m_bookmarksSeparator;
+
     private RecentFileMenu m_recent;
 
     private RecentFileMenu m_recentGtp;
@@ -759,7 +773,6 @@ public class GoGuiMenuBar
         JMenu menu = createMenu("Bookmarks", KeyEvent.VK_B);
         addMenuItem(menu, "Add Bookmark", KeyEvent.VK_A, "add-bookmark");
         addMenuItem(menu, "Edit Bookmarks", KeyEvent.VK_E, "edit-bookmarks");
-        menu.addSeparator();
         return menu;
     }
 
