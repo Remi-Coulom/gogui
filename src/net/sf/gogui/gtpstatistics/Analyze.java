@@ -524,9 +524,9 @@ public class Analyze
                   "a:visited { color:#551a8b }\n" +
                   ".smalltable { font-size:80%; }\n" +
                   ".smalltable td { background-color:" + m_colorInfo
-                  + "; text-align:center;}\n" +
+                  + "; text-align:center; }\n" +
                   ".smalltable th { background-color:" + m_colorHeader
-                  + "; }\n" +
+                  + ";  vertical-align:top; }\n" +
                   ".smalltable table { border:0; cellpadding:0; }\n" +
                   "-->\n" +
                   "</style>\n" +
