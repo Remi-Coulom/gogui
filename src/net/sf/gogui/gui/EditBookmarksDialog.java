@@ -78,12 +78,12 @@ public class EditBookmarksDialog
                 }
             });
         m_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        updateList(-1);
         JScrollPane scrollPane = new JScrollPane(m_list);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.EAST);
         setMessage(panel);
         setOptionType(OK_CANCEL_OPTION);
+        updateList(m_bookmarks.size() == 0 ? -1 : 0);
     }
 
     private ActionListener m_actionListener;
