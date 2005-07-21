@@ -332,8 +332,8 @@ public class GtpStatistics
     private String sendCommand(String command, GoColor toMove, Move move)
         throws GtpError
     {
-        command = convertCommand(command, toMove);
-        String response = m_gtp.sendCommand(command);
+        String cmd = convertCommand(command, toMove);
+        String response = m_gtp.sendCommand(cmd);
         return convertResponse(command, response, toMove, move);
     }
 }
