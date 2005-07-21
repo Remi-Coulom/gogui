@@ -170,14 +170,14 @@ public class EditBookmarksDialog
     {
         JPanel buttonPanel
             = new JPanel(new GridLayout(0, 1, GuiUtils.PAD, GuiUtils.PAD));
-        m_edit = createButton("Edit", "edit");
-        buttonPanel.add(m_edit);
-        m_remove = createButton("Remove", "remove");
-        buttonPanel.add(m_remove);
         m_moveUp = createButton("Move Up", "move-up");
         buttonPanel.add(m_moveUp);
         m_moveDown = createButton("Move Down", "move-down");
         buttonPanel.add(m_moveDown);
+        m_edit = createButton("Edit", "edit");
+        buttonPanel.add(m_edit);
+        m_remove = createButton("Remove", "remove");
+        buttonPanel.add(m_remove);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(buttonPanel, BorderLayout.NORTH);
         return panel;
