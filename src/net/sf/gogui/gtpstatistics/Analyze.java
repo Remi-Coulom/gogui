@@ -357,7 +357,8 @@ public class Analyze
     private String getCommandLink(int commandIndex)
     {
         String link = "<small>" + getCommand(commandIndex) + "</small>";
-        if (getCommandStatistics(commandIndex).getCount() == 0)
+        CommandStatistics statistics = getCommandStatistics(commandIndex);
+        if (statistics.getCount() == 0 || statistics.m_isBeginCommand)
             return link;
         return "<a href=\"" + getCommandFile(commandIndex).getName()
             + "\">" + link + "</a>";
@@ -587,7 +588,8 @@ public class Analyze
                 = commandStatistics.getStatistics(i).m_histogram;
             if (commandStatistics.getStatistics(i).getCount() == 0)
                 continue;
-            Table histoTable = TableUtils.fromHistogram(histogram, command);
+            Table histoTable
+                = TableUtils.fromHistogram(histogram, command);
             File histoFile = getHistoFile(commandIndex, i);
             Color color = getColor(command);
             Plot plot = new Plot(180, 135, color, m_precision);
@@ -652,7 +654,7 @@ public class Analyze
         {
             CommandStatistics commandStatistics = getCommandStatistics(i);
             int count = commandStatistics.getCount();
-            if (count > 0)
+            if (count > 0 && ! commandStatistics.m_isBeginCommand)
                 writeCommandPage(i);
             PositionStatistics statisticsAll
                 = commandStatistics.m_statisticsAll;
@@ -702,7 +704,8 @@ public class Analyze
         for (int i = 0; i < m_commands.size(); ++i)
         {
             CommandStatistics commandStatistics = getCommandStatistics(i);
-            if (commandStatistics.getCount() > 0)
+            if (commandStatistics.getCount() > 0
+                && ! commandStatistics.m_isBeginCommand)
             {
                 String command = getCommand(i);
                 generatePlot(i, gameNumber, game);
