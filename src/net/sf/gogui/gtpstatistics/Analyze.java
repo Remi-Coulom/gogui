@@ -541,7 +541,8 @@ public class Analyze
         PrintStream out = new PrintStream(new FileOutputStream(file));
         startHtml(out, command);
         startInfo(out, command);
-        writeHtmlRow(out, "Index", commandIndex);
+        writeInfoBasics(out);
+        writeHtmlRow(out, "Command Index", commandIndex);
         endInfo(out);
         if (! commandStatistics.m_isBeginCommand)
             out.print("<p><img src=\""
@@ -659,7 +660,8 @@ public class Analyze
         String title = "Game " + (gameNumber + 1) + " (" + name + ")";
         startHtml(out, title);
         startInfo(out, title);
-        writeHtmlRow(out, "Index", gameNumber);
+        writeInfoBasics(out);
+        writeHtmlRow(out, "Game Index", gameNumber);
         writeHtmlRow(out, "File", getGameLink(file, gameNumber, false));
         try
         {
@@ -791,13 +793,18 @@ public class Analyze
         writeHtmlRow(out, label, Integer.toString(value));
     }
 
-    private void writeInfo(PrintStream out) throws Exception
+    private void writeInfoBasics(PrintStream out) throws Exception
     {
         writeTableProperty(out, "Name");
         writeTableProperty(out, "Version");
         writeTableProperty(out, "Date");
         writeTableProperty(out, "Host");
         writeTableProperty(out, "Program");
+    }
+
+    private void writeInfo(PrintStream out) throws Exception
+    {
+        writeInfoBasics(out);
         writeTableProperty(out, "Size");
         writeTableProperty(out, "Games");
         writeHtmlRow(out, "Positions", m_table.getNumberRows());
