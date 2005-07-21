@@ -34,6 +34,20 @@ public class Bookmark
         {
             File fileNoExt = new File(FileUtils.removeExtension(file, "sgf"));
             name = fileNoExt.getName();
+            boolean hasVariation = ! variation.trim().equals("");
+            if (move > 0 || hasVariation)
+            {
+                name = name + " (";
+                if (hasVariation)
+                {
+                    name = name + variation;
+                    if (move > 0)
+                        name = name + "/";
+                }
+                if (move > 0)
+                    name = name + move;
+                name = name + ")";
+            }
         }
         init(name, file, move, variation);
     }
