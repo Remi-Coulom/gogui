@@ -34,12 +34,6 @@ public class Analyze
     {
         m_output = output;
         m_precision = precision;
-        m_formatInt = new DecimalFormat();
-        m_formatInt.setMaximumFractionDigits(0);
-        m_formatInt.setGroupingUsed(false);
-        m_formatFloat = new DecimalFormat();
-        m_formatFloat.setMaximumFractionDigits(precision);
-        m_formatFloat.setGroupingUsed(false);
         m_table = new Table();
         m_table.read(new File(fileName));
         if (m_table.getNumberColumns() < 2
@@ -76,6 +70,7 @@ public class Analyze
                 Table table = commandStatistics.m_tableAtMove;
                 Plot plot = generatePlotMove(getImgWidth(m_maxMove),
                                              getColor(command));
+                plot.setFormatY(commandStatistics.m_format);
                 File pngFile = getAvgPlotFile(i);
                 File dataFile = getAvgDataFile(i);
                 plot.setPlotStyleNoLines();
@@ -191,10 +186,6 @@ public class Analyze
 
     private int m_precision;
 
-    private DecimalFormat m_formatInt;
-
-    private DecimalFormat m_formatFloat;
-
     private static final String m_colorError = "#ffa954";
 
     private static final String m_colorHeader = "#b5c8f0";
@@ -259,16 +250,6 @@ public class Analyze
                 m_gameGlobalCommands.add(gameGlobalCommand);
             }
         }
-    }
-
-    private String formatFloat(double value)
-    {
-        return m_formatFloat.format(value);
-    }
-
-    private String formatInt(double value)
-    {
-        return m_formatInt.format(value);
     }
 
     private void finishHtml(PrintStream out)
@@ -386,8 +367,8 @@ public class Analyze
         return plot;
     }
 
-    private void generatePlot(int commandIndex, int gameIndex,
-                              String gameFile) throws Exception
+    private void generatePlot(int commandIndex, DecimalFormat format,
+                              int gameIndex, String gameFile) throws Exception
     {
         String command = getCommand(commandIndex);
         Table table = TableUtils.select(m_table, "File", gameFile,
@@ -396,6 +377,7 @@ public class Analyze
         File file = getPlotFile(gameIndex, commandIndex);
         Plot plot = generatePlotMove(getImgWidth(m_maxMove),
                                      getColor(command));
+        plot.setFormatY(format);
         plot.plot(file, table, "Move", command, null);
     }
 
@@ -622,22 +604,23 @@ public class Analyze
         out.print("<th>Move</th>");
         writeStatisticsTableHeader(out);
         out.print("</tr>\n");
+        DecimalFormat format = commandStatistics.m_format;
         for (int i = 0; i < m_maxMove; i += m_movePrintInterval)
         {
             PositionStatistics statisticsAtMove
                 = commandStatistics.getStatistics(i);
             out.print("<tr>" +
                       "<td>" + i + "</td>");
-            writeStatisticsTableData(out, statisticsAtMove, false);
+            writeStatisticsTableData(out, statisticsAtMove, format, false);
             out.print("</tr>\n");
         }
         out.print("<tr style=\"font-weight:bold\">" +
                   "<td>Final</td>");
-        writeStatisticsTableData(out, finalStatistics, false);
+        writeStatisticsTableData(out, finalStatistics, format, false);
         out.print("</tr>\n");
         out.print("<tr style=\"font-weight:bold\">" +
                   "<td>All</td>");
-        writeStatisticsTableData(out, statisticsAll,
+        writeStatisticsTableData(out, statisticsAll, format,
                                  ! isGameGlobalCommand(command));
         out.print("</tr>\n");
         out.print("</table>\n");
@@ -661,6 +644,7 @@ public class Analyze
             out.print("<tr><td style=\"background-color:" + m_colorHeader
                       + "\">" + getCommandLink(i) + "</td>");
             writeStatisticsTableData(out, statisticsAll,
+                                     commandStatistics.m_format,
                                      ! isGameGlobalCommand(getCommand(i)));
             out.print("</tr>\n");
         }
@@ -708,7 +692,7 @@ public class Analyze
                 && ! commandStatistics.m_isBeginCommand)
             {
                 String command = getCommand(i);
-                generatePlot(i, gameNumber, game);
+                generatePlot(i, commandStatistics.m_format, gameNumber, game);
                 out.print("<tr><td align=\"center\">" + getCommandLink(i)
                           + "<br><img src=\""
                           + getPlotFile(gameNumber, i).getName()
@@ -844,44 +828,45 @@ public class Analyze
 
     private void writeStatisticsTableData(PrintStream out,
                                           PositionStatistics statistics,
+                                          DecimalFormat format,
                                           boolean withMaxError)
     {
         boolean empty = (statistics.getCount() == 0);
         boolean greaterOne = (statistics.getCount() > 1);
         out.print("<td>");
         if (! empty)
-            out.print(formatFloat(statistics.getMean()));
+            out.print(format.format(statistics.getMean()));
         out.print("</td><td>");
         if (greaterOne)
-            out.print(formatFloat(statistics.getDeviation()));
+            out.print(format.format(statistics.getDeviation()));
         else if (! empty)
             out.print("");
         out.print("</td><td>");
         if (greaterOne)
-            out.print(formatFloat(statistics.getError()));
+            out.print(format.format(statistics.getError()));
         else if (! empty)
             out.print("");
         out.print("</td><td>");
         if (greaterOne && withMaxError)
         {
             int movesPerGame = m_table.getNumberRows() / m_gameInfo.size();
-            out.print(formatFloat(statistics.getMaxError(movesPerGame)));
+            out.print(format.format(statistics.getMaxError(movesPerGame)));
         }
         else if (! empty)
             out.print("");
         out.print("</td><td>");
         if (greaterOne)
-            out.print(formatFloat(statistics.getMin()));
+            out.print(format.format(statistics.getMin()));
         else if (! empty)
             out.print("");
         out.print("</td><td>");
         if (greaterOne)
-            out.print(formatFloat(statistics.getMax()));
+            out.print(format.format(statistics.getMax()));
         else if (! empty)
             out.print("");
         out.print("</td><td>");
         if (greaterOne)
-            out.print(formatFloat(statistics.getSum()));
+            out.print(format.format(statistics.getSum()));
         else if (! empty)
             out.print("");
         out.print("</td><td>");

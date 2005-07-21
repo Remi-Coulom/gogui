@@ -7,6 +7,7 @@ package net.sf.gogui.gtpstatistics;
 
 import java.awt.Color;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Vector;
 import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Table;
@@ -19,6 +20,8 @@ public final class CommandStatistics
     public final boolean m_isBeginCommand;
 
     public final int m_maxMove;
+
+    public final DecimalFormat m_format;
     
     public final PositionStatistics m_statisticsAll;
 
@@ -68,6 +71,7 @@ public final class CommandStatistics
             }
         }
         m_isBeginCommand = isBeginCommand;
+        m_format = getFormat(precision, min, max);
         if (getCount() > 0)
         {
             Histogram histogram = m_statisticsAll.m_histogram;
@@ -116,7 +120,27 @@ public final class CommandStatistics
         {
             plot.setXMin(histogram.getMin() - step / 2);
             plot.setXMax(histogram.getMax() + step / 2);
+            plot.setFormatX(m_format);
         }
+    }
+
+    private static DecimalFormat getFormat(int precision, double min,
+                                           double max)
+    {
+        DecimalFormat format = new DecimalFormat();
+        double absMax= Math.max(Math.abs(min), Math.abs(max));
+        if (absMax < 10000)
+        {
+            format.setMaximumFractionDigits(precision);
+            format.setGroupingUsed(false);
+            return format;
+        }
+        String pattern = "0.";
+        for (int i = 0; i < precision; ++i)
+            pattern = pattern + "#";
+        pattern = pattern + "E0";
+        format.applyPattern(pattern);
+        return format;
     }
 }
 

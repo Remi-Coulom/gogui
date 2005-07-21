@@ -68,6 +68,16 @@ public class Plot
         ImageIO.write(image, "png", file);
     }
 
+    public void setFormatX(DecimalFormat format)
+    {
+        m_formatX = format;
+    }
+
+    public void setFormatY(DecimalFormat format)
+    {
+        m_formatY = format;
+    }
+
     public void setPlotStyleBars(double barWidth)
     {
         m_withBars = true;
@@ -221,6 +231,10 @@ public class Plot
 
     private Color m_color = Color.decode("#ff5454");
 
+    private DecimalFormat m_formatX;
+
+    private DecimalFormat m_formatY;
+
     private FontMetrics m_metrics;
 
     private Graphics2D m_graphics2D;
@@ -357,12 +371,10 @@ public class Plot
             Point right = getPoint(m_maxX, 0);
             m_graphics2D.drawLine(left.x, left.y, right.x, right.y);
         }
-        DecimalFormat format = new DecimalFormat();
-        format.setMaximumFractionDigits(0);
-        format.setGroupingUsed(false);
-        DecimalFormat format2 = new DecimalFormat();
-        format2.setMaximumFractionDigits(m_precision);
-        format2.setGroupingUsed(false);
+        if (m_formatX == null)
+            m_formatX = getFormat(m_onlyIntValuesX);
+        if (m_formatY == null)
+            m_formatY = getFormat(m_onlyIntValuesY);
         for (double x = m_xTicsMin; x < m_maxX; x += m_xLabelPerTic * m_xTics)
         {
             if (m_xLabelsBool && Math.round(x) != 0 && Math.round(x) != 1)
@@ -370,10 +382,7 @@ public class Plot
             Point bottom = getPoint(x, m_minY);
             Point top = getPoint(x, m_maxY);
             String label;
-            if (m_onlyIntValuesX)
-                label = format.format(Math.round(x));
-            else
-                label = format2.format(x);
+            label = m_formatX.format(x);
             m_graphics2D.setColor(Color.GRAY);
             m_graphics2D.drawLine(bottom.x, bottom.y, bottom.x, bottom.y + 3);
             m_graphics2D.setColor(Color.BLACK);
@@ -386,10 +395,7 @@ public class Plot
                 continue;
             Point point = getPoint(m_minX, y);
             String label;
-            if (m_onlyIntValuesY)
-                label = format.format(Math.round(y));
-            else
-                label = format2.format(y);
+            label = m_formatY.format(y);
             m_graphics2D.setColor(Color.GRAY);
             m_graphics2D.drawLine(point.x, point.y, point.x - 3, point.y);
             m_graphics2D.setColor(Color.BLACK);
@@ -417,6 +423,17 @@ public class Plot
         int width = metrics.stringWidth(string);
         int height = m_fontHeight;
         m_graphics2D.drawString(string, x - width, y + height / 2);
+    }
+
+    private DecimalFormat getFormat(boolean onlyIntValues)
+    {
+        DecimalFormat format = new DecimalFormat();
+        format.setGroupingUsed(false);
+        if (onlyIntValues)
+            format.setMaximumFractionDigits(0);
+        else
+            format.setMaximumFractionDigits(m_precision);
+        return format;
     }
 
     private Point getPoint(double x, double y)
