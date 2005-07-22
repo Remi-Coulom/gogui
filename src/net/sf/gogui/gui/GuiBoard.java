@@ -46,6 +46,7 @@ class BoardLabel
     public BoardLabel(String text)
     {
         super(text, JLabel.CENTER);
+        setFont(GuiUtils.getTextFieldFont());
         setForeground(Color.DARK_GRAY);
         setOpaque(false);
     }

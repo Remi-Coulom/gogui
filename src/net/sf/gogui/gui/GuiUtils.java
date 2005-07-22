@@ -111,6 +111,11 @@ public class GuiUtils
         return m_defaultMonoFontSize;
     }
 
+    public static Font getTextFieldFont()
+    {
+        return m_textFieldFont;
+    }
+
     /** Check window for normal state.
         Checks if window is not maximized (in either or both directions) and
         not iconified.
