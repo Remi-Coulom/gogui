@@ -40,6 +40,12 @@ public class GameInformation
     public TimeSettings m_timeSettings;
 
     /** Get komi as string rounded to 0.5 points. */
+    public String roundKomi()
+    {
+        return roundKomi(m_komi);
+    }
+
+    /** Get komi as string rounded to 0.5 points. */
     public static String roundKomi(double komi)
     {
         long intKomi = Math.round(komi * 2);

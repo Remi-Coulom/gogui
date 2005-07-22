@@ -189,8 +189,7 @@ public class GameInfoDialog
                                   gameInformation.m_whiteRank);
         m_date = createEntry("Date:", gameInformation.m_date);
         m_rules = createEntry("Rules:", gameInformation.m_rules);
-        m_komi = createEntry("Komi:",
-                             Double.toString(gameInformation.m_komi));
+        m_komi = createEntry("Komi:", gameInformation.roundKomi());
         m_result = createEntry("Result:", gameInformation.m_result);
         createTimeEntry(gameInformation.m_timeSettings);
         setMessage(panel);
