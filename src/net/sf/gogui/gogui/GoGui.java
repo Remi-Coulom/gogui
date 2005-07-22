@@ -2112,7 +2112,7 @@ public class GoGui
                 m_currentNode = node;
                 m_currentNodeExecuted = 1;
                 if (point == null && ! (m_computerBlack && m_computerWhite))
-                    showInfo(m_name + " passed");
+                    showInfo(m_name + " passes");
                 fileModified();
                 m_resigned = false;
             }
