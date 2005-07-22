@@ -1349,6 +1349,9 @@ public class GoGui
         {
             saveSession();
             cbNewGame(Integer.parseInt(size));
+            m_clock.reset();
+            m_clock.halt();
+            m_gameInfo.updateTime();
         }
         catch (NumberFormatException e)
         {
@@ -1363,6 +1366,9 @@ public class GoGui
             return;
         saveSession();
         cbNewGame(size);
+        m_clock.reset();
+        m_clock.halt();
+        m_gameInfo.updateTime();
     }
     
     private void cbBookmark(String number)
