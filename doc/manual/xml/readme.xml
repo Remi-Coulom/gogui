@@ -29,16 +29,8 @@ GoGui requires Java 1.4.
 The implementation of the javax.swing classes is incomplete in GCJ.
 The current status (tested with GCJ 4.0.0) is:
 everything compiles, the console based tools (e.g. GtpRegress, GtpDummy) seem
-to work, the graphical programs GoGui and GtpDisplay don't work.
-GtpDisplay seems to work mostly, but it does not make advantage of
-Graphics2D based features (color gradient on stones).
-It also throws a GTK error, when trying to pop up dialog windows.
-GoGui is not usable yet, you can see, how far it works, by running it with:
-</para>
-<para>
-<userinput>
-java -Dgogui.no-jtextpane -jar lib/gogui.jar -program ""
-</userinput>
+to work, the graphical programs GoGui, GtpDisplay and GtpStatistics (which
+uses AWT classes for drawing plots) don't work.
 </para>
 </note>
 </para>

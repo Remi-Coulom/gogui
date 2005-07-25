@@ -162,6 +162,8 @@ public class GoGui
 
                 public void textSelected(String text)
                 {
+                    if (text == null)
+                        text = "";
                     GoPoint list[] =
                         GtpUtils.parsePointString(text, m_boardSize);
                     m_guiBoard.showPointList(list);

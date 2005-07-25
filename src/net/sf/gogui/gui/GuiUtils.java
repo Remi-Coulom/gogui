@@ -5,6 +5,7 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,10 +19,15 @@ import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.Border;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 import net.sf.gogui.utils.ProgressShow;
 
 //----------------------------------------------------------------------------
@@ -46,6 +52,17 @@ public class GuiUtils
 
     /** Constant used for small padding in dialogs. */
     public static final int SMALL_PAD = 2;
+
+    public static void addStyle(JTextPane pane, String name, Color foreground,
+                                Color background)
+    {
+        StyledDocument doc = pane.getStyledDocument();
+        StyleContext context = StyleContext.getDefaultStyleContext();
+        Style defaultStyle = context.getStyle(StyleContext.DEFAULT_STYLE);
+        Style style = doc.addStyle(name, defaultStyle);
+        StyleConstants.setForeground(style, foreground);
+        StyleConstants.setBackground(style, background);
+    }
 
     /** Create empty border with normal padding.
         @see #PAD
