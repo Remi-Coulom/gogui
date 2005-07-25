@@ -781,8 +781,6 @@ public class GoGuiMenuBar
                     m_shortcutKeyMask, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createHandicapMenu());
-        m_menuComputerColor = createComputerColorMenu();
-        menu.add(m_menuComputerColor);
         menu.addSeparator();
         m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
                                         KeyEvent.VK_M, "make-main-variation");
@@ -903,15 +901,17 @@ public class GoGuiMenuBar
     private JMenu createMenuGame()
     {
         JMenu menu = createMenu("Game", KeyEvent.VK_A);
-        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
-                    m_shortcutKeyMask, "pass");
+        m_menuComputerColor = createComputerColorMenu();
+        menu.add(m_menuComputerColor);
         m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,
                                          KeyEvent.VK_F5, m_shortcutKeyMask,
                                          "play");
-        menu.add(createClockMenu());
         m_itemInterrupt =
             addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
                         0, "interrupt");
+        menu.add(createClockMenu());
+        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
+                    m_shortcutKeyMask, "pass");
         addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
     }

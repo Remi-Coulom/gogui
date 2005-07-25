@@ -205,15 +205,6 @@ Set the number of handicap stones.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Computer Color</guisubmenu></term>
-<listitem>
-<para>
-Choose what side the Go program plays.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>Make Main Variation</guimenuitem></term>
 <listitem>
 <para>
@@ -508,10 +499,10 @@ Edit bookmarks.
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>Pass</guimenuitem></term>
+<term><guisubmenu>Computer Color</guisubmenu></term>
 <listitem>
 <para>
-Make a pass move.
+Choose what side the Go program plays.
 </para>
 </listitem>
 </varlistentry>
@@ -521,6 +512,18 @@ Make a pass move.
 <listitem>
 <para>
 Make the computer play a move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Interrupt</guimenuitem></term>
+<listitem>
+<para>
+Interrupt the command that is currently running.
+This menu item is only active if a lengthy command (like move
+generation) is running and if the Go program supports interrupting
+(see <xref linkend="interrupt"/>).
 </para>
 </listitem>
 </varlistentry>
@@ -538,13 +541,10 @@ item.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Interrupt</guimenuitem></term>
+<term><guimenuitem>Pass</guimenuitem></term>
 <listitem>
 <para>
-Interrupt the command that is currently running.
-This menu item is only active if a lengthy command (like move
-generation) is running and if the Go program supports interrupting
-(see <xref linkend="interrupt"/>).
+Make a pass move.
 </para>
 </listitem>
 </varlistentry>
