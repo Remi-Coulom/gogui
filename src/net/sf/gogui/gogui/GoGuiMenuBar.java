@@ -295,7 +295,14 @@ public class GoGuiMenuBar
         m_itemShowToolbar.setEnabled(true);
         m_itemShowVariations.setEnabled(true);
         m_menuAnalyze.setEnabled(true);
+        m_menuShell.setEnabled(true);
         m_itemGtpShell.setEnabled(true);
+        m_itemSaveLog.setEnabled(true);
+        m_itemSaveCommands.setEnabled(true);
+        m_itemHighlight.setEnabled(true);
+        m_itemCommandCompletion.setEnabled(true);
+        m_itemAutoNumber.setEnabled(true);
+        m_itemTimeStamp.setEnabled(true);
     }
 
     public void setCommandCompletion(boolean enable)
@@ -623,6 +630,10 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemShowToolbar;
 
+    private JMenuItem m_itemSaveCommands;
+
+    private JMenuItem m_itemSaveLog;
+
     private JMenuItem m_itemTruncate;
 
     private JSeparator m_bookmarksSeparator;
@@ -943,10 +954,12 @@ public class GoGuiMenuBar
                                      KeyEvent.VK_F9, getFunctionKeyShortcut(),
                                      "gtp-shell");
         menu.addSeparator();
-        addMenuItem(menu, "Save Log...", KeyEvent.VK_S, KeyEvent.VK_S,
-                    m_shortcutKeyMask, "gtpshell-save");
-        addMenuItem(menu, "Save Commands...", KeyEvent.VK_M,
-                    "gtpshell-save-commands");
+        m_itemSaveLog = addMenuItem(menu, "Save Log...",
+                                    KeyEvent.VK_S, KeyEvent.VK_S,
+                                    m_shortcutKeyMask, "gtpshell-save");
+        m_itemSaveCommands = addMenuItem(menu, "Save Commands...",
+                                         KeyEvent.VK_M,
+                                         "gtpshell-save-commands");
         addMenuItem(menu, "Send File...", KeyEvent.VK_G,
                     "gtpshell-send-file");
         String home = System.getProperty("user.home");
@@ -1052,7 +1065,6 @@ public class GoGuiMenuBar
 
     private void disableMenu(JMenu menu)
     {
-        menu.setEnabled(false);
         for (int i = 0; i < menu.getItemCount(); ++i)
             if (menu.getItem(i) != null)
                 menu.getItem(i).setEnabled(false);
