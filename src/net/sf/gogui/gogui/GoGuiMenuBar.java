@@ -680,6 +680,13 @@ public class GoGuiMenuBar
         return addMenuItem(menu, item, mnemonic, command);
     }
 
+    private boolean canRestoreTime(Node node)
+    {
+        return ! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
+            || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE))
+            || node.getFather() == null;
+    }
+
     private JMenu createBoardSizeMenu()
     {
         JMenu menu = createMenu("Board Size", KeyEvent.VK_S);
@@ -751,7 +758,7 @@ public class GoGuiMenuBar
     {
         JMenu menu = createMenu("Analyze", KeyEvent.VK_N);
         m_itemAnalyze = addMenuItem(menu, "Show Analyze", KeyEvent.VK_S,
-                                    KeyEvent.VK_F8, m_shortcutKeyMask,
+                                    KeyEvent.VK_F8, getFunctionKeyShortcut(),
                                     "analyze");
         menu.addSeparator();
         m_itemAnalyzeOnlySupported =
@@ -798,7 +805,8 @@ public class GoGuiMenuBar
         addMenuItem(menu, "Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
                     m_shortcutKeyMask, "find-in-comments");
         m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_X,
-                                     KeyEvent.VK_F3, 0, "find-next");
+                                     KeyEvent.VK_F3, getFunctionKeyShortcut(),
+                                     "find-next");
         m_itemFindNext.setEnabled(false);
         return menu;
     }
@@ -884,13 +892,10 @@ public class GoGuiMenuBar
 
     private JMenu createMenuHelp()
     {
-        int shortcutKeyMask = 0;
-        if (Platform.isMac())
-            shortcutKeyMask = m_shortcutKeyMask;
         JMenu menu = createMenu("Help", KeyEvent.VK_H);
         JMenuItem itemHelp =
             addMenuItem(menu, "GoGui Documentation", KeyEvent.VK_C,
-                        KeyEvent.VK_F1, shortcutKeyMask, "help");
+                        KeyEvent.VK_F1, getFunctionKeyShortcut(), "help");
         JMenuItem itemAbout = addMenuItem(menu, "About", KeyEvent.VK_A,
                                           "about");
         m_itemHelp = itemHelp;
@@ -904,14 +909,14 @@ public class GoGuiMenuBar
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
         m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,
-                                         KeyEvent.VK_F5, m_shortcutKeyMask,
-                                         "play");
+                                         KeyEvent.VK_F5,
+                                         getFunctionKeyShortcut(), "play");
         m_itemInterrupt =
             addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
                         0, "interrupt");
         menu.add(createClockMenu());
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
-                    m_shortcutKeyMask, "pass");
+                    getFunctionKeyShortcut(), "pass");
         addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
     }
@@ -935,7 +940,7 @@ public class GoGuiMenuBar
     {
         JMenu menu = createMenu("Shell", KeyEvent.VK_L);
         m_itemGtpShell = addMenuItem(menu, "Show Shell", KeyEvent.VK_G,
-                                     KeyEvent.VK_F9, m_shortcutKeyMask,
+                                     KeyEvent.VK_F9, getFunctionKeyShortcut(),
                                      "gtp-shell");
         menu.addSeparator();
         addMenuItem(menu, "Save Log...", KeyEvent.VK_S, KeyEvent.VK_S,
@@ -965,7 +970,7 @@ public class GoGuiMenuBar
     {
         JMenu menu = createMenu("Tree", KeyEvent.VK_T);
         addMenuItem(menu, "Show Tree", KeyEvent.VK_S, KeyEvent.VK_F7,
-                    m_shortcutKeyMask, "show-gametree");
+                    getFunctionKeyShortcut(), "show-gametree");
         menu.addSeparator();
         JMenu menuLabel = createMenu("Labels", KeyEvent.VK_L);
         ButtonGroup group = new ButtonGroup();
@@ -1068,11 +1073,14 @@ public class GoGuiMenuBar
         }
     }
 
-    private boolean canRestoreTime(Node node)
+    /** Get shortcut modifier for function keys.
+        Returns 0, unless platform is Mac.
+    */
+    private static int getFunctionKeyShortcut()
     {
-        return ! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
-            || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE))
-            || node.getFather() == null;
+        if (Platform.isMac())
+            return m_shortcutKeyMask;
+        return 0;
     }
 }
 
