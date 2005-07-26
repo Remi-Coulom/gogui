@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.Score;
 import net.sf.gogui.gui.GuiUtils;
@@ -86,7 +87,7 @@ public class ScoreDialog
         m_areaWhite.setText(Integer.toString(score.m_areaWhite));
         m_capturedBlack.setText(Integer.toString(score.m_capturedBlack));
         m_capturedWhite.setText(Integer.toString(score.m_capturedWhite));
-        m_komi.setText(Double.toString(score.m_komi));
+        m_komi.setText(GameInformation.roundKomi(score.m_komi));
         m_resultChinese.setText(Score.formatResult(score.m_resultChinese));
         m_resultJapanese.setText(Score.formatResult(score.m_resultJapanese));
         m_rules.setText(score.m_rules == Board.RULES_JAPANESE ? "Japanese"
