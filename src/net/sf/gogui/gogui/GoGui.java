@@ -90,6 +90,7 @@ import net.sf.gogui.gui.Utils;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
+import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.Preferences;
@@ -110,7 +111,7 @@ public class GoGui
                  String time, boolean verbose, boolean computerBlack,
                  boolean computerWhite, boolean auto, String gtpFile,
                  String gtpCommand, String initAnalyze, boolean fastPaint)
-        throws GtpError
+        throws GtpError, ErrorMessage
     {
         m_fastPaint = fastPaint;
         m_prefs = prefs;

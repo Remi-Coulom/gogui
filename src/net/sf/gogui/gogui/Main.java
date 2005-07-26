@@ -63,7 +63,7 @@ public class Main
     }
 
     private static void startGoGui(GoGuiSettings settings)
-        throws GtpError
+        throws GtpError, ErrorMessage
     {
         assert(! settings.m_noStartup);
         new GoGui(settings.m_program, settings.m_preferences, settings.m_file,

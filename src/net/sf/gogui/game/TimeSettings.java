@@ -5,6 +5,8 @@
 
 package net.sf.gogui.game;
 
+import net.sf.gogui.utils.ErrorMessage;
+
 //----------------------------------------------------------------------------
 
 /** Time settings.
@@ -59,7 +61,7 @@ public final class TimeSettings
         return (m_byoyomiMoves > 0);
     }
 
-    public static TimeSettings parse(String s) throws Error
+    public static TimeSettings parse(String s) throws ErrorMessage
     {
         boolean useByoyomi = false;
         long preByoyomi = 0;
@@ -78,23 +80,25 @@ public final class TimeSettings
                 preByoyomi = Long.parseLong(s.substring(0, idx)) * 60000L;
                 int idx2 = s.indexOf('/');
                 if (idx2 <= idx)
-                    throw new Error("Invalid time specification");
+                    throw new ErrorMessage("Invalid time specification");
                 byoyomi = Long.parseLong(s.substring(idx + 1, idx2)) * 60000L;
                 byoyomiMoves = Integer.parseInt(s.substring(idx2 + 1));
             }
         }
         catch (NumberFormatException e)
         {
-            throw new Error("Invalid time specification");
+            throw new ErrorMessage("Invalid time specification");
         }
         if (preByoyomi <= 0)
-            throw new Error("Pre byoyomi time must be positive");
-        if (byoyomi <= 0)
-            throw new Error("Byoyomi time must be positive");
-        if (byoyomiMoves <= 0)
-            throw new Error("Moves for byoyomi time must be positive");
+            throw new ErrorMessage("Pre-byoyomi time must be positive");
         if (useByoyomi)
+        {
+            if (byoyomi <= 0)
+                throw new ErrorMessage("Byoyomi time must be positive");
+            if (byoyomiMoves <= 0)
+                throw new ErrorMessage("Byoyomi moves must be positive");
             return new TimeSettings(preByoyomi, byoyomi, byoyomiMoves);
+        }
         else
             return new TimeSettings(preByoyomi);
     }
