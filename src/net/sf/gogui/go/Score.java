@@ -43,9 +43,15 @@ public class Score
 
     public static String formatResult(double result)
     {
-        if (result > 0)
-            return "B+" + result;
-        else if (result < 0)
+        long intResult = Math.round(result * 2);
+        String strResult;
+        if (intResult % 2 == 0)
+            strResult = Long.toString(intResult / 2);
+        else
+            strResult = Long.toString(intResult / 2) + ".5";
+        if (intResult > 0)
+            return "B+" + strResult;
+        else if (intResult < 0)
             return "W+" + (-result);
         else
             return "0";
