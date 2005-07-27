@@ -79,11 +79,9 @@ class Main
                 String fileName = opt.getString("analyze");
                 String output;
                 if (opt.isSet("output"))
-                    output = opt.getString("output");
-                else
-                    output = FileUtils.removeExtension(new File(fileName),
-                                                       "dat");
-                new Analyze(fileName, output, precision);
+                    throw new ErrorMessage("Option output not allowed with"
+                                           + " option analyze");
+                new Analyze(fileName, precision);
             }
             else
             {
@@ -92,8 +90,13 @@ class Main
                     printUsage(System.err);
                     System.exit(-1);
                 }
+                File output;
+                if (opt.isSet("output"))
+                    output = new File(opt.getString("output"));
+                else
+                    output = new File("gtpstatistics.dat");
                 GtpStatistics gtpStatistics
-                    = new GtpStatistics(program, arguments, boardSize,
+                    = new GtpStatistics(program, arguments, output, boardSize,
                                         commands, beginCommands,
                                         finalCommands, verbose, force);
                 System.exit(gtpStatistics.getResult() ? 0 : -1);

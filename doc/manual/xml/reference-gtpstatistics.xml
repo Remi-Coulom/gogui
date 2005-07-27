@@ -112,10 +112,12 @@ completed successfully, -1 otherwise.
 </term>
 <listitem>
 <para>
-Analyze the result file
+Analyze the result table
 <filename><replaceable>file.dat</replaceable></filename>.
-Creates a HTML file <filename><replaceable>file.html</replaceable></filename>
-with summary statistics.
+Creates a HTML report files.
+The files will be placed in the same directory as
+<filename><replaceable>file.dat</replaceable></filename> and use
+<filename><replaceable>file</replaceable></filename> as a filename prefix.
 </para>
 </listitem>
 </varlistentry>
@@ -173,7 +175,7 @@ Comma separated list of GTP commands to run only on final positions
 </term>
 <listitem>
 <para>
-Overwrite existing result file.
+Overwrite existing result table.
 </para>
 </listitem>
 </varlistentry>
@@ -195,7 +197,8 @@ Display help and exit.
 </term>
 <listitem>
 <para>
-Filename prefix for output files.
+Filename for result table.
+Default is <filename>gtpstatistics.dat</filename>.
 </para>
 </listitem>
 </varlistentry>

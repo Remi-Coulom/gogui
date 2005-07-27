@@ -29,10 +29,10 @@ import net.sf.gogui.version.Version;
 
 public class Analyze
 {
-    public Analyze(String fileName, String output, int precision)
+    public Analyze(String fileName, int precision)
         throws Exception
     {
-        m_output = output;
+        m_output = FileUtils.removeExtension(new File(fileName), "dat");
         m_precision = precision;
         m_table = new Table();
         m_table.read(new File(fileName));
