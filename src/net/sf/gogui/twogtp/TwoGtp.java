@@ -459,7 +459,8 @@ public class TwoGtp
         Move move = Move.create(point, color);
         if (m_openings != null)
         {
-            if (! move.equals((Move)m_openingMoves.get(m_openingMovesIndex)))
+            if (m_openingMovesIndex < m_openingMoves.size()
+                && ! move.equals(getOpeningMove(m_openingMovesIndex)))
             {
                 response.append("Move not allowed if openings are used");
                 return false;
@@ -593,6 +594,11 @@ public class TwoGtp
         {
         }
         return "Unknown";
+    }
+
+    private Move getOpeningMove(int i)
+    {
+        return (Move)m_openingMoves.get(i);
     }
 
     private static String getVersion(Gtp gtp)
@@ -1152,7 +1158,7 @@ public class TwoGtp
         if (m_openings != null && m_openingMovesIndex < m_openingMoves.size()
             && ! m_loadsgf)
         {
-            Move move = (Move)m_openingMoves.get(m_openingMovesIndex);
+            Move move = getOpeningMove(m_openingMovesIndex);
             if (move.getColor() != color)
             {
                 response.append("Not allowed if openings are used");
