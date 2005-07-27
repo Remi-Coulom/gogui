@@ -35,6 +35,7 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
+import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
@@ -54,9 +55,9 @@ public class TwoGtp
     {
         super(in, out, null);
         if (black.equals(""))
-            throw new Exception("No black program set.");
+            throw new ErrorMessage("No black program set");
         if (white.equals(""))
-            throw new Exception("No white program set.");
+            throw new ErrorMessage("No white program set");
         m_sgfFile = sgfFile;
         if (force)
             getResultFile().delete();
@@ -146,9 +147,9 @@ public class TwoGtp
             if (error)
                 handleEndOfGame(true, response.toString());
             if (m_black.isProgramDead())
-                throw new Exception("Black program died");
+                throw new ErrorMessage("Black program died");
             if (m_white.isProgramDead())
-                throw new Exception("White program died");
+                throw new ErrorMessage("White program died");
         }
         m_black.sendCommand("quit");
         m_white.sendCommand("quit");
@@ -745,7 +746,7 @@ public class TwoGtp
             if (m_verbose)
                 System.err.println("Loaded opening " + m_openingFile);
             if (m_openings.getGameInformation().m_boardSize != size)
-                throw new Exception("Wrong board size: " + m_openingFile);
+                throw new ErrorMessage("Wrong board size: " + m_openingFile);
             m_gameTree = m_openings.getGameTree();
             m_openingMoves = Compare.getAllAsMoves(m_gameTree.getRoot());
             m_openingMovesIndex = 0;
@@ -757,8 +758,8 @@ public class TwoGtp
                 StringBuffer response = new StringBuffer(64);
                 if (! send(m_black, m_white, command, command, command,
                            command, response, true, false))
-                    throw new Exception("Loadsgf command failed: "
-                                        + response);
+                    throw new ErrorMessage("Loadsgf command failed: "
+                                           + response);
                 m_openingMovesIndex = m_openingMoves.size();
             }
         }
