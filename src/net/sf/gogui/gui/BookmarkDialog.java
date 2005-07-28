@@ -67,6 +67,11 @@ public class BookmarkDialog
         setOptionType(OK_CANCEL_OPTION);
     }
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private JPanel m_panelLeft;
 
     private JPanel m_panelRight;
