@@ -233,6 +233,8 @@ public class Table
             return;
         }
         String[] array = line.split("\\t");
+        if (array.length >= getNumberColumns())
+            throw new ErrorMessage("Invalid table format");
         startRow();
         for (int i = 0; i < array.length; ++i)
             set(i, array[i]);
