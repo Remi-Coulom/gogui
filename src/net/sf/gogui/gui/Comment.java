@@ -17,7 +17,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import net.sf.gogui.game.Node;
@@ -167,3 +166,5 @@ public class Comment
         }
     }
 }
+
+//----------------------------------------------------------------------------
