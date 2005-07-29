@@ -337,7 +337,7 @@ public class Analyze
             out.print("<th>Result [" + m_referee + "]</th>\n");
         out.print("<th>Result [" + m_black + "]</th>\n" +
                   "<th>Result [" + m_white + "]</th>\n");
-        out.print("<th>Colors exchanged</th>\n" +
+        out.print("<th>Colors Exchanged</th>\n" +
                   "<th>Duplicate</th>\n" +
                   "<th>Length</th>\n" +
                   "<th>CpuTime Black</th>\n" +
