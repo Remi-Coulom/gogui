@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.util.Vector;
 import net.sf.gogui.game.GameInformation;
@@ -24,6 +22,7 @@ import net.sf.gogui.gtp.Gtp;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.utils.Table;
 
@@ -69,15 +68,7 @@ public class GtpStatistics
         {
             m_table.setProperty("Version", "");
         }
-        String host;
-        try
-        {
-            host = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e)
-        {
-            host = "?";
-        }
+        String host = Platform.getHostInfo();
         m_table.setProperty("Host", host);
         m_table.setProperty("Date", StringUtils.getDate());
         for (int i = 0; i < sgfFiles.size(); ++i)

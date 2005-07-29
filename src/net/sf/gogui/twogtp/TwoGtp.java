@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Vector;
@@ -36,6 +34,7 @@ import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
@@ -569,19 +568,6 @@ public class TwoGtp
         return new File(m_sgfFile + "-" + gameIndex + ".sgf");
     }
 
-    private static String getHost()
-    {
-        String host = "?";
-        try
-        {
-            host = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e)
-        {
-        }
-        return host;
-    }
-
     private static String getName(Gtp gtp)
     {
         try
@@ -983,7 +969,7 @@ public class TwoGtp
             gameInformation.m_result = resultReferee;
         else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
             gameInformation.m_result = resultBlack;
-        String host = getHost();
+        String host = Platform.getHostInfo();
         String gameComment =
             "Black: " + blackCommand +
             "\nWhite: " + whiteCommand;
@@ -1043,7 +1029,7 @@ public class TwoGtp
                 out.println("# Openings: " + m_openings.getDirectory()
                             + " (" + m_openings.getNumber() + " files)");
             out.println("# Date: " + StringUtils.getDate());
-            out.println("# Host: " + getHost());
+            out.println("# Host: " + Platform.getHostInfo());
             out.println("#GAME\tRES_B\tRES_W\tRES_R\tALT\tDUP\tLEN\tCPU_B\t"
                         + "CPU_W\tERR\tERR_MSG");
             out.close();

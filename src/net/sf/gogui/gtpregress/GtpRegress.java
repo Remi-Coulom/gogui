@@ -11,8 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.util.Set;
 import java.util.TreeSet;
@@ -22,6 +20,7 @@ import java.util.regex.Pattern;
 import net.sf.gogui.gtp.Gtp;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
@@ -768,15 +767,7 @@ public class GtpRegress
 
     private void writeInfo(PrintStream out, boolean withName)
     {
-        String host;
-        try
-        {
-            host = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e)
-        {
-            host = "?";
-        }
+        String host = Platform.getHostInfo();
         if (withName)
             out.print("<tr><th align=\"left\">Name:</th><td>" + m_name
                       + "</td></tr>\n" +

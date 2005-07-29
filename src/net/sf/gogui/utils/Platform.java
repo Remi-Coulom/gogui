@@ -7,6 +7,8 @@ package net.sf.gogui.utils;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.net.URL;
 
 //----------------------------------------------------------------------------
@@ -35,6 +37,35 @@ public class Platform
             should be aborted.
         */
         boolean handleQuit();
+    }
+
+    /** Return information on this computer.
+        Returns host name and cpu information (if /proc/cpuinfo exists).
+    */
+    public static String getHostInfo()
+    {
+        String info;
+        try
+        {
+            info = InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+            info = "?";
+        }
+        try
+        {
+            String[] cmdArray = { "/bin/sh", "-c",
+                                  "cat /proc/cpuinfo|grep '^model name'" };
+            String result = ProcessUtils.runCommand(cmdArray);
+            int pos = result.indexOf(":");
+            if (pos >= 0)
+                info = info + " (" + result.substring(pos + 1).trim() + ")";
+        }
+        catch (IOException e)
+        {
+        }
+        return info;
     }
 
     /** Check if the platform is Mac OS X. */

@@ -5,7 +5,10 @@
 
 package net.sf.gogui.utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 //----------------------------------------------------------------------------
 
@@ -63,6 +66,32 @@ public class ProcessUtils
         {
             super(false, process.getErrorStream(), System.err, false);
         }        
+    }
+
+    /** Run a process and return its standard output as a string. */
+    public static String runCommand(String[] cmdArray) throws IOException
+    {
+        Runtime runtime = Runtime.getRuntime();
+        Process process = runtime.exec(cmdArray);
+        Thread copyErr = new StreamCopy(false, process.getErrorStream(),
+                                        System.err, false);
+        copyErr.start();
+        InputStream in = process.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        String result = "";
+        String line;
+        while ((line = reader.readLine()) != null)
+            result = result + line + "\n";
+        try
+        {
+            if (process.waitFor() != 0)
+                throw new IOException("Process returned error status");
+        }
+        catch (InterruptedException e)
+        {
+            throw new IOException("InterruptedException");
+        }
+        return result;
     }
 
     /** Run a process.
