@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -79,16 +80,21 @@ public class Table
 
     public void read(File file) throws Exception
     {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+        read(new FileReader(file));
+    }
+
+    public void read(Reader reader) throws Exception
+    {
+        BufferedReader bufferedReader = new BufferedReader(reader);
         m_lineNumber = 0;
         m_propertiesRead = false;
         String line = null;
-        while ((line = reader.readLine()) != null)
+        while ((line = bufferedReader.readLine()) != null)
         {
             ++m_lineNumber;
             handleLine(line);
         }
-        reader.close();
+        bufferedReader.close();
     }
 
     public void save(Writer out) throws IOException
