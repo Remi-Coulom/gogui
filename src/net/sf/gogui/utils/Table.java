@@ -216,7 +216,8 @@ public class Table
         int pos = comment.indexOf(':');
         if (pos < 0)
         {
-            System.err.println("Invalid line: " + comment);
+            System.err.println("Invalid line " + m_lineNumber + ": "
+                               + comment);
             return;
         }
         String key = comment.substring(0, pos).trim();
@@ -233,8 +234,9 @@ public class Table
             return;
         }
         String[] array = line.split("\\t");
-        if (array.length >= getNumberColumns())
-            throw new ErrorMessage("Invalid table format");
+        if (array.length > getNumberColumns())
+            throw new ErrorMessage("Invalid line " + m_lineNumber
+                                   + ": " + line);
         startRow();
         for (int i = 0; i < array.length; ++i)
             set(i, array[i]);
