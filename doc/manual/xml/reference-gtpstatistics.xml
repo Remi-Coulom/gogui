@@ -199,6 +199,8 @@ Display help and exit.
 <para>
 Filename for result table.
 Default is <filename>gtpstatistics.dat</filename>.
+If option <option>-analyze</option> is used, the output is a directory
+or directory and file name prefix for the generated report files.
 </para>
 </listitem>
 </varlistentry>

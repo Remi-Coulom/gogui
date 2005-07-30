@@ -77,11 +77,8 @@ class Main
                     System.exit(-1);
                 }
                 String fileName = opt.getString("analyze");
-                String output;
-                if (opt.isSet("output"))
-                    throw new ErrorMessage("Option output not allowed with"
-                                           + " option analyze");
-                new Analyze(fileName, precision);
+                String output = opt.getString("output");
+                new Analyze(fileName, output, precision);
             }
             else
             {
