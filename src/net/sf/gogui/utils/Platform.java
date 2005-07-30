@@ -56,11 +56,19 @@ public class Platform
         try
         {
             String[] cmdArray = { "/bin/sh", "-c",
-                                  "cat /proc/cpuinfo|grep '^model name'" };
+                                  "grep '^model name' /proc/cpuinfo" };
             String result = ProcessUtils.runCommand(cmdArray);
-            int pos = result.indexOf(":");
-            if (pos >= 0)
-                info = info + " (" + result.substring(pos + 1).trim() + ")";
+            int start = result.indexOf(":");
+            if (start >= 0)
+            {
+                info = info + " (";
+                int end = result.indexOf("\n");
+                if (end >= 0)
+                    info = info + result.substring(start + 1, end).trim();
+                else
+                    info = info + result.substring(start + 1).trim();
+                info = info + ")";
+            }
         }
         catch (IOException e)
         {
