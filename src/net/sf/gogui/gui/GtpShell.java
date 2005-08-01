@@ -44,7 +44,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JViewport;
-import javax.swing.Scrollable;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
@@ -61,7 +60,6 @@ import net.sf.gogui.utils.Preferences;
 
 class GtpShellText
     extends JTextPane
-    implements Scrollable
 {
     public GtpShellText(int historyMin, int historyMax, boolean timeStamp)
     {
