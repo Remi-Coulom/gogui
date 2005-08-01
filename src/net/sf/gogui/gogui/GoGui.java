@@ -1365,6 +1365,7 @@ public class GoGui
             m_clock.reset();
             m_clock.halt();
             m_gameInfo.updateTime();
+            updateMenuBar();
         }
         catch (NumberFormatException e)
         {
@@ -1695,6 +1696,7 @@ public class GoGui
         fileModified();
         newGame(size);
         m_clock.startMove(GoColor.BLACK);
+        updateMenuBar();
     }
 
     private void cbNextVariation()
