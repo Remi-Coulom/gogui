@@ -26,7 +26,10 @@ public final class Move
             else if (color == GoColor.WHITE)
                 return s_passWhite;
             else if (color == GoColor.EMPTY)
+            {
                 assert(false);
+                return s_passBlack;
+            }
         }
         int x = point.getX();
         int y = point.getY();
