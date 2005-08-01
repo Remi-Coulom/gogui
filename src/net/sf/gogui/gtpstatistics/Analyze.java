@@ -317,11 +317,6 @@ public class Analyze
         return (GameGlobalCommand)m_gameGlobalCommands.get(index);
     }
 
-    private String getGameGlobalCommandResult(int index, int gameNumber)
-    {
-        return getGameGlobalCommand(index).getResult(gameNumber);
-    }
-
     private File getHistoFile(int commandIndex)
     {
         return new File(m_output + ".command-" + commandIndex + ".histo.png");

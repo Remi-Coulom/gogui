@@ -198,12 +198,6 @@ public class Table
         return (Vector)m_rows.get(index);
     }
 
-    private static String getCommentValue(String comment, String key)
-    {
-        assert(comment.startsWith(key));
-        return comment.substring(key.length()).trim();
-    }
-
     private void handleComment(String comment)
     {
         comment = comment.trim();
