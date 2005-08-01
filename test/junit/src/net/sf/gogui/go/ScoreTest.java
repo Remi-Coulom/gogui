@@ -5,13 +5,21 @@
 
 package net.sf.gogui.go;
 
-import junit.framework.TestCase;
-
 //----------------------------------------------------------------------------
 
 public class ScoreTest
-    extends TestCase
+    extends junit.framework.TestCase
 {
+    public static void main(String args[])
+    {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static junit.framework.Test suite()
+    {
+        return new junit.framework.TestSuite(ScoreTest.class);
+    }
+
     public void testFormat()
     {
         assertEquals(Score.formatResult(15.01), "B+15");

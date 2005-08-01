@@ -6,13 +6,22 @@
 package net.sf.gogui.go;
 
 import java.util.Vector;
-import junit.framework.TestCase;
 
 //----------------------------------------------------------------------------
 
 public class GoPointTest
-    extends TestCase
+    extends junit.framework.TestCase
 {
+    public static void main(String args[])
+    {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static junit.framework.Test suite()
+    {
+        return new junit.framework.TestSuite(GoPointTest.class);
+    }
+
     public void testDirection()
     {
         checkPoint(getPoint(5, 5).up(11), 5, 6);

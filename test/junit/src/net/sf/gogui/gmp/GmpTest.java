@@ -10,35 +10,31 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import junit.framework.TestCase;
 
 //----------------------------------------------------------------------------
 
 public class GmpTest
-    extends TestCase
+    extends junit.framework.TestCase
 {
     public static void main(String args[])
     {
-        GmpTest test = new GmpTest();
-        test.testBasics();
+        junit.textui.TestRunner.run(suite());
     }
 
-    public void testBasics()
+    public static junit.framework.Test suite()
     {
-        try
-        {
-            createGmp();            
-            receiveNewGame(false, true);
-            sendMove(true, true, true, 4, 4);
-            sendUndo(true, false);
-            sendNewGame(true, true);
-            receiveMove(true, false, true, -1, -1);
-            closeGmp();
-        }
-        catch (IOException e)
-        {
-            fail("IOException");
-        }
+        return new junit.framework.TestSuite(GmpTest.class);
+    }
+
+    public void testBasics() throws IOException
+    {
+        createGmp();            
+        receiveNewGame(false, true);
+        sendMove(true, true, true, 4, 4);
+        sendUndo(true, false);
+        sendNewGame(true, true);
+        receiveMove(true, false, true, -1, -1);
+        closeGmp();
     }
 
     private final boolean m_verbose = false;

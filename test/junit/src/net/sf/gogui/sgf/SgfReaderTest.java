@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import junit.framework.TestCase;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.Node;
@@ -23,8 +22,18 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 public class SgfReaderTest
-    extends TestCase
+    extends junit.framework.TestCase
 {
+    public static void main(String args[])
+    {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static junit.framework.Test suite()
+    {
+        return new junit.framework.TestSuite(SgfReaderTest.class);
+    }
+
     public void testRead() throws Exception
     {
         readSgfFile("verbose-property-names.sgf", false, true);

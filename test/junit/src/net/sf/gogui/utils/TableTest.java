@@ -6,13 +6,22 @@
 package net.sf.gogui.utils;
 
 import java.io.StringReader;
-import junit.framework.TestCase;
 
 //----------------------------------------------------------------------------
 
 public class TableTest
-    extends TestCase
+    extends junit.framework.TestCase
 {
+    public static void main(String args[])
+    {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static junit.framework.Test suite()
+    {
+        return new junit.framework.TestSuite(TableTest.class);
+    }
+
     public void testBasic() throws Exception
     {
         Table table = get("#\n" +

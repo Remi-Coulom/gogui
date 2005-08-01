@@ -5,14 +5,23 @@
 
 package net.sf.gogui.game;
 
-import junit.framework.TestCase;
 import net.sf.gogui.utils.ErrorMessage;
 
 //----------------------------------------------------------------------------
 
 public class TimeSettingsTest
-    extends TestCase
+    extends junit.framework.TestCase
 {
+    public static void main(String args[])
+    {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static junit.framework.Test suite()
+    {
+        return new junit.framework.TestSuite(TimeSettingsTest.class);
+    }
+
     public void testParse()
     {
         TimeSettings settings = parse("30");
