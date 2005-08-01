@@ -280,7 +280,6 @@ public class GuiUtils
         // Should query some default Graphics device
         m_defaultMonoFontSize =
             textAreaFont == null ? 10 : textAreaFont.getSize();
-        m_textAreaFont = textAreaFont;
         m_textFieldFont = textFieldFont;
     }
 
@@ -302,8 +301,6 @@ public class GuiUtils
     private static URL m_iconURL;
 
     private static Font m_textFieldFont;
-
-    private static Font m_textAreaFont;
 }
 
 //----------------------------------------------------------------------------
