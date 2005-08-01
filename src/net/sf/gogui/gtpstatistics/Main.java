@@ -10,7 +10,6 @@ import java.io.PrintStream;
 import java.util.Vector;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
