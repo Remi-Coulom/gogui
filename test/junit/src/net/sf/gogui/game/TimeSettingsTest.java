@@ -5,7 +5,6 @@
 
 package net.sf.gogui.game;
 
-import java.util.Vector;
 import junit.framework.TestCase;
 import net.sf.gogui.utils.ErrorMessage;
 
