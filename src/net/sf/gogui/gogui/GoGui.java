@@ -1199,10 +1199,11 @@ public class GoGui
         }
         catch (GtpError e)
         {
-        }
-        if (m_commandThread.isCommandSupported("kgs-genmove_cleanup")
-            || m_commandThread.isCommandSupported("genmove_cleanup"))
-            m_menuBar.enableCleanup(true);
+        }        
+        boolean cleanupSupported
+            = m_commandThread.isCommandSupported("kgs-genmove_cleanup")
+            || m_commandThread.isCommandSupported("genmove_cleanup");
+        m_menuBar.enableCleanup(cleanupSupported);
         restoreSize(m_gtpShell, "window-gtpshell");
         m_gtpShell.setProgramName(m_name);
         Vector supportedCommands =
