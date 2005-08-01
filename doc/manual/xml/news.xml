@@ -72,6 +72,11 @@ Use gg-undo, if avaliable
 </listitem>
 <listitem>
 <simpara>
+New menu item Game/Cleanup
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New analyze command types eplist (editable point lists) and gfx (graphics).
 </simpara>
 </listitem>
@@ -108,7 +113,7 @@ New tool GtpStatistics
 </listitem>
 <listitem>
 <simpara>
-Other small fixes and improvements
+Numerous other fixes and improvements
 </simpara>
 </listitem>
 </itemizedlist>

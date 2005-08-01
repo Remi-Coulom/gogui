@@ -1200,6 +1200,9 @@ public class GoGui
         catch (GtpError e)
         {
         }
+        if (m_commandThread.isCommandSupported("kgs-genmove_cleanup")
+            || m_commandThread.isCommandSupported("genmove_cleanup"))
+            m_menuBar.enableCleanup(true);
         restoreSize(m_gtpShell, "window-gtpshell");
         m_gtpShell.setProgramName(m_name);
         Vector supportedCommands =
@@ -1952,6 +1955,8 @@ public class GoGui
     {
         if (m_commandThread == null || ! isCurrentNodeExecuted())
             return;
+        if (m_board.bothPassed())
+            m_menuBar.setCleanup(true);
         boolean gameFinished = (m_board.bothPassed() || m_resigned);
         if (m_computerBlack && m_computerWhite)
         {
@@ -2388,8 +2393,27 @@ public class GoGui
     {
         showStatus(m_name + " is thinking ...");
         GoColor toMove = m_board.getToMove();
-        String command = m_commandThread.getCommandGenmove(toMove);
-        m_clock.startMove(toMove);
+        String command;
+        if (m_menuBar.getCleanup()
+            && (m_commandThread.isCommandSupported("kgs-genmove_cleanup")
+                || m_commandThread.isCommandSupported("genmove_cleanup")))
+        {
+            if (m_commandThread.isCommandSupported("genmove_cleanup"))
+                command = "genmove_cleanup";
+            else
+                command = "kgs-genmove_cleanup";
+            if (toMove == GoColor.BLACK)
+                command += " b";
+            else if (toMove == GoColor.WHITE)
+                command += " w";
+            else
+                assert(false);
+        }
+        else
+        {
+            command = m_commandThread.getCommandGenmove(toMove);
+            m_clock.startMove(toMove);
+        }
         Runnable callback = new Runnable()
             {
                 public void run()

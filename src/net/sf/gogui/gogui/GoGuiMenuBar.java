@@ -93,6 +93,11 @@ public class GoGuiMenuBar
         m_recentGtp.add(file);
     }
 
+    public void enableCleanup(boolean enable)
+    {
+        m_itemCleanup.setEnabled(enable);
+    }
+
     public void enableFindNext(boolean enable)
     {
         m_findNextEnabled = enable;
@@ -122,6 +127,11 @@ public class GoGuiMenuBar
     public boolean getTimeStamp()
     {
         return m_itemTimeStamp.isSelected();        
+    }
+
+    public boolean getCleanup()
+    {
+        return m_itemCleanup.isSelected();
     }
 
     public boolean getCommandCompletion()
@@ -246,6 +256,8 @@ public class GoGuiMenuBar
         m_itemDetachProgram.setEnabled(enabled);
         m_itemGtpShell.setEnabled(enabled);
         m_itemAnalyze.setEnabled(enabled);
+        if (! enabled)
+            enableCleanup(false);
     }
 
     public void setComputerNone()
@@ -303,6 +315,11 @@ public class GoGuiMenuBar
         m_itemCommandCompletion.setEnabled(true);
         m_itemAutoNumber.setEnabled(true);
         m_itemTimeStamp.setEnabled(true);
+    }
+
+    public void setCleanup(boolean enable)
+    {
+        m_itemCleanup.setSelected(enable);
     }
 
     public void setCommandCompletion(boolean enable)
@@ -475,6 +492,8 @@ public class GoGuiMenuBar
             && (canRestoreTime(node)
                 || (father != null && canRestoreTime(father)));
         m_itemClockRestore.setEnabled(canRestoreClock);
+        if (! NodeUtils.isInCleanup(node))
+            setCleanup(false);
     }
 
     private boolean m_findNextEnabled;
@@ -493,6 +512,8 @@ public class GoGuiMenuBar
     private JCheckBoxMenuItem m_itemAutoNumber;
 
     private JCheckBoxMenuItem m_itemBeepAfterMove;
+
+    private JCheckBoxMenuItem m_itemCleanup;
 
     private JCheckBoxMenuItem m_itemCommandCompletion;
 
@@ -928,6 +949,10 @@ public class GoGuiMenuBar
         menu.add(createClockMenu());
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
                     getFunctionKeyShortcut(), "pass");
+        menu.addSeparator();
+        m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
+        m_itemCleanup.setMnemonic(KeyEvent.VK_C);
+        menu.add(m_itemCleanup);
         addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
     }

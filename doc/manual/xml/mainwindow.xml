@@ -549,6 +549,19 @@ Make a pass move.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guimenuitem>Cleanup</guimenuitem></term>
+<listitem>
+<para>
+Generate cleanup moves.
+This item is only enabled, if the program supports the
+<command>kgs-genmove_cleanup</command> or <command>genmove_cleanup</command>
+command.
+It will be automatically set after two pass moves have been played.
+</para>
+</listitem>
+</varlistentry>
+
 <varlistentry id="score">
 <term><guimenuitem>Score</guimenuitem></term>
 <listitem>
