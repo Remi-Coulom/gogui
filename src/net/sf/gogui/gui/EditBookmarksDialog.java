@@ -100,6 +100,8 @@ public class EditBookmarksDialog
 
     private JList m_list;
 
+    private OptionalWarning m_removeWarning;
+
     private Vector m_bookmarks;
 
     private void cbMoveDown()
@@ -144,7 +146,9 @@ public class EditBookmarksDialog
             return;
         int selectedIndex = m_list.getSelectedIndex();
         String name = bookmark.m_name;
-        if (! SimpleDialogs.showQuestion(this, "Remove '" + name + "'?"))
+        if (m_removeWarning == null)
+            m_removeWarning = new OptionalWarning(this);
+        if (! m_removeWarning.show("Really remove '" + name + "'?"))
             return;
         m_bookmarks.remove(bookmark);
         if (selectedIndex >= m_bookmarks.size())

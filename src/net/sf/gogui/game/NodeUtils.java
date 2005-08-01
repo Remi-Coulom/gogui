@@ -318,6 +318,31 @@ public class NodeUtils
         return (node != null);
     }
 
+    /** Check if game is in cleanup stage.
+        Cleanup stage is after two consecutive pass moves have been played.
+    */
+    public static boolean isInCleanup(Node node)
+    {
+        boolean lastPass = false;
+        while (node != null)
+        {
+            Move move = node.getMove();
+            if (move != null)
+            {
+                if (move.getPoint() == null)
+                {
+                    if (lastPass)
+                        return true;
+                    lastPass = true;
+                }
+                else
+                    lastPass = false;
+            }
+            node = node.getFather();
+        }
+        return false;
+    }
+
     public static boolean isInMainVariation(Node node)
     {
         while (node.getFather() != null)

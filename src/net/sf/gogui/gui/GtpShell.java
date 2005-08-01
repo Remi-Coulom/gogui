@@ -539,39 +539,29 @@ public class GtpShell
         }
         else
         {
-            if (m_showModifyWarning
-                && (c.startsWith("boardsize ")
-                    || c.startsWith("black ")
-                    || c.startsWith("clear_board ")
-                    || c.startsWith("genmove ")
-                    || c.startsWith("genmove_black ")
-                    || c.startsWith("genmove_cleanup ")
-                    || c.startsWith("genmove_white ")
-                    || c.startsWith("kgs-genmove_cleanup ")
-                    || c.startsWith("loadsgf ")
-                    || c.startsWith("play ")
-                    || c.startsWith("white ")
-                    || c.startsWith("quit")))
+            if (c.startsWith("boardsize ")
+                || c.startsWith("black ")
+                || c.startsWith("clear_board ")
+                || c.startsWith("genmove ")
+                || c.startsWith("genmove_black ")
+                || c.startsWith("genmove_cleanup ")
+                || c.startsWith("genmove_white ")
+                || c.startsWith("kgs-genmove_cleanup ")
+                || c.startsWith("loadsgf ")
+                || c.startsWith("play ")
+                || c.startsWith("white ")
+                || c.startsWith("quit"))
             {
-
-                Object[] options = { "Ok", "Cancel" };
+                if (m_modifyWarning == null)
+                    m_modifyWarning = new OptionalWarning(this);
                 String message = 
-                    "The command '" + command + "'\n" +
-                    "will modify the board state and\n" +
-                    "cause the graphical board to be out of sync.\n" +
-                    "You should start a new game before using\n" +
+                    "The command '" + command + "' " +
+                    "will modify the board state " +
+                    "and cause the graphical board to be out of sync. " +
+                    "You should start a new game before using " +
                     "the graphical board again.";
-                int n =
-                    JOptionPane.showOptionDialog(this, message, "Warning",
-                                                 JOptionPane.OK_CANCEL_OPTION,
-                                                 JOptionPane.WARNING_MESSAGE,
-                                                 null, options, options[1]);
-                if (n != 0)
+                if (! m_modifyWarning.show(message))
                     return true;
-                message
-                    = "Disable warnings for commands modifying the state?";
-                m_showModifyWarning =
-                    ! SimpleDialogs.showQuestion(this, message);
             }
             try
             {
@@ -716,8 +706,6 @@ public class GtpShell
 
     private boolean m_isFinalSizeSet;
 
-    private boolean m_showModifyWarning = true;
-
     private int m_fontSize;
 
     private int m_historyMax;
@@ -746,6 +734,8 @@ public class GtpShell
     private JScrollPane m_scrollPane;
 
     private GtpShellText m_gtpShellText;
+
+    private OptionalWarning m_modifyWarning;
 
     private Point m_finalLocation;
 
