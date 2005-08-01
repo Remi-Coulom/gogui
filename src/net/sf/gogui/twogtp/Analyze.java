@@ -281,9 +281,12 @@ public class Analyze
         }
         PrintStream out = new PrintStream(new FileOutputStream(file));
         NumberFormat format = StringUtils.getNumberFormat(1);
+        String charset = StringUtils.getDefaultEncoding();
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + m_black + " - " + m_white + "</title>\n" +
+                  "<meta http-equiv=\"Content-Type\""
+                  + " content=\"text/html; charset=" + charset + "\">\n" +
                   "<meta name=\"generator\" content=\"TwoGtp "
                   + Version.get() + "\">\n" +
                   "</head>\n" +
