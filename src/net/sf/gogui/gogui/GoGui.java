@@ -453,6 +453,8 @@ public class GoGui
             cbTimeStamp();
         else if (command.equals("truncate"))
             cbTruncate();
+        else if (command.equals("truncate-children"))
+            cbTruncateChildren();
         else
             assert(false);
     }
@@ -1941,15 +1943,30 @@ public class GoGui
     private void cbTruncate()
     {
         if (m_currentNode.getFather() == null)
-        {
-            showError("Cannot truncate root node.");
             return;
-        }
         if (! showQuestion("Truncate current?"))
             return;
         Node oldCurrentNode = m_currentNode;
         backward(1);
         m_currentNode.removeChild(oldCurrentNode);
+        setNeedsSave(true);
+        boardChangedBegin(false, true);
+    }
+
+    private void cbTruncateChildren()
+    {
+        int numberChildren = m_currentNode.getNumberChildren();
+        if (numberChildren == 0)
+            return;
+        if (! showQuestion("Truncate children?"))
+            return;
+        while (true)
+        {
+            Node child = m_currentNode.getChild();
+            if (child == null)
+                break;
+            m_currentNode.removeChild(child);
+        }
         setNeedsSave(true);
         boardChangedBegin(false, true);
     }

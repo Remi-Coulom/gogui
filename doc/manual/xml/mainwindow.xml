@@ -236,8 +236,16 @@ position as setup stones.
 <term><guimenuitem>Truncate</guimenuitem></term>
 <listitem>
 <para>
-Truncate the current variation beginning at and including the current
-node.
+Truncate the current variation beginning at and including the current node.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Truncate Children</guimenuitem></term>
+<listitem>
+<para>
+Truncate all children variations of the current node.
 </para>
 </listitem>
 </varlistentry>

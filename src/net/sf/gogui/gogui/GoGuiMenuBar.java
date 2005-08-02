@@ -483,6 +483,7 @@ public class GoGuiMenuBar
         m_itemPreviousEarlierBackward.setEnabled(hasPrevEarlierVariation);
         m_itemBackToMainVar.setEnabled(! isInMain);
         m_itemTruncate.setEnabled(hasFather);
+        m_itemTruncateChildren.setEnabled(hasChildren);
         m_itemMakeMainVar.setEnabled(! isInMain);
         m_itemKeepOnlyMainVar.setEnabled(isInMain && treeHasVariations);
         m_itemKeepOnlyPosition.setEnabled(hasFather || hasChildren);
@@ -657,6 +658,8 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemTruncate;
 
+    private JMenuItem m_itemTruncateChildren;
+
     private JSeparator m_bookmarksSeparator;
 
     private RecentFileMenu m_recent;
@@ -816,7 +819,7 @@ public class GoGuiMenuBar
     private JMenu createMenuEdit()
     {
         JMenu menu = createMenu("Edit", KeyEvent.VK_E);
-        addMenuItem(menu, "Game Info", KeyEvent.VK_I, KeyEvent.VK_I,
+        addMenuItem(menu, "Game Info", KeyEvent.VK_G, KeyEvent.VK_I,
                     m_shortcutKeyMask, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createHandicapMenu());
@@ -833,10 +836,13 @@ public class GoGuiMenuBar
                                              "keep-only-position");
         m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
                                      "truncate");
+        m_itemTruncateChildren
+            = addMenuItem(menu, "Truncate Children", KeyEvent.VK_C,
+                          "truncate-children");
         menu.addSeparator();
         addMenuItem(menu, "Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
                     m_shortcutKeyMask, "find-in-comments");
-        m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_X,
+        m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_N,
                                      KeyEvent.VK_F3, getFunctionKeyShortcut(),
                                      "find-next");
         m_itemFindNext.setEnabled(false);
