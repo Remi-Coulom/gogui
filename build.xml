@@ -289,9 +289,9 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <mkdir dir="lib"/>
 <jar destfile="lib/gmptogtp.jar">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gmptogtp.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+<attribute name="Main-Class" value="net.sf.gogui.gmptogtp.Main"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/gmp/*.class
@@ -681,7 +681,7 @@ Requires GNU Go 3.6 to be installed">
  dir="test/regress">
 <assertions><enable/></assertions>
 <arg value="-output"/><arg value="html/gmptogtp"/>
-<arg value="java -ea -jar ../../lib/gmptogtp.jar -color black &quot;gnugo --mode gmp&quot;"/>
+<arg value="java -ea -cp ../../lib/gmptogtp.jar:../../external/javacomm/commapi/comm.jar net.sf.gogui.gmptogtp/Main -color black &quot;gnugo --mode gmp&quot;"/>
 <arg value="gmptogtp.tst"/>
 </java>
 <echo>gtpadapter</echo>
