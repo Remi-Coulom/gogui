@@ -222,15 +222,15 @@ public class SgfWriter
                 print("OT[" + timeSettings.getByoyomiMoves() + " moves / "
                       + timeSettings.getByoyomi() / 1000 + " sec]");
         }
-        if (playerBlack != null)
+        if (playerBlack != null && ! playerBlack.equals(""))
             print("PB[" + playerBlack + "]");
-        if (playerWhite != null)
+        if (playerWhite != null && ! playerWhite.equals(""))
             print("PW[" + playerWhite + "]");
-        if (rankBlack != null)
+        if (rankBlack != null && ! rankBlack.equals(""))
             print("BR[" + rankBlack + "]");
-        if (rankWhite != null)
+        if (rankWhite != null && ! rankWhite.equals(""))
             print("WR[" + rankWhite + "]");
-        if (date != null)
+        if (date != null && ! date.equals(""))
             print("DT[" + date + "]");
         if (result != null && ! result.equals(""))
             print("RE[" + result + "]");
