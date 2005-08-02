@@ -3128,7 +3128,7 @@ public class GoGui
             String fileNoExt = FileUtils.removeExtension(m_loadedFile, "sgf");
             filename = new File(fileNoExt).getName();
             if (m_needsSave)
-                filename = filename + " (modified)";
+                filename = filename + " [modified]";
         }
         boolean playerBlackKnown =
             (playerBlack != null && ! playerBlack.trim().equals(""));
