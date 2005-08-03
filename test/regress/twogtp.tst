@@ -11,11 +11,11 @@
 #? [TwoGtp]
 
 20 protocol_version
-#? [1]
+#? [2]
 
 30 version
 
-40 help
+40 list_commands
 
 50 gogui_interrupt
 
@@ -28,8 +28,9 @@
 80 twogtp_white name
 #? [GNU Go]
 
-90 black c3
+90 play b c3
 
-100 genmove_white
+100 genmove w
 #? [[A-T]1?[0-9]]
 
+110 play b pass

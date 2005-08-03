@@ -184,7 +184,11 @@ public class TwoGtp
         String[] cmdArray = StringUtils.tokenize(cmdLine);
         String cmd = cmdArray[0];
         boolean status = true;
-        if (cmd.equals("final_score"))
+        if (cmd.equals("boardsize"))
+            status = cmdBoardSize(cmdArray, response);
+        else if (cmd.equals("clear_board"))
+            status = cmdClearBoard(cmdArray, response);
+        else if (cmd.equals("final_score"))
             return finalStatusCommand(cmdLine, response);
         else if (cmd.equals("final_status"))
             return finalStatusCommand(cmdLine, response);
@@ -206,18 +210,12 @@ public class TwoGtp
             status = twogtpObserver(cmdLine, response);
         else if (cmd.equals("quit"))
             status = sendBoth(cmdLine, response, false, false);
-        else if (cmd.equals("black"))
-            status = cmdPlay(GoColor.BLACK, cmdArray, response);
-        else if (cmd.equals("white"))
-            status = cmdPlay(GoColor.WHITE, cmdArray, response);
+        else if (cmd.equals("play"))
+            status = cmdPlay(cmdArray, response);
         else if (cmd.equals("undo"))
             status = undo(response);
-        else if (cmd.equals("genmove_black"))
-            status = sendGenmove(GoColor.BLACK, response);
-        else if (cmd.equals("genmove_white"))
-            status = sendGenmove(GoColor.WHITE, response);
-        else if (cmd.equals("boardsize"))
-            status = boardsize(cmdArray, response);
+        else if (cmd.equals("genmove"))
+            status = cmdGenmove(cmdArray, response);
         else if (cmd.equals("komi"))
             komi(cmdArray, response);
         else if (cmd.equals("scoring_system"))
@@ -227,21 +225,21 @@ public class TwoGtp
         else if (cmd.equals("version"))
             response.append(Version.get());
         else if (cmd.equals("protocol_version"))
-            response.append("1");
-        else if (cmd.equals("help"))
+            response.append("2");
+        else if (cmd.equals("list_commands"))
             response.append("boardsize\n" +
-                            "black\n" +
+                            "clear_board\n" +
                             "final_score\n" +
                             "final_status\n" +
                             "final_status_list\n" +
-                            "genmove_black\n" +
-                            "genmove_white\n" +
+                            "genmove\n" +
                             "gogui_interrupt\n" +
                             "gogui_title\n" +
-                            "help\n" +
                             "komi\n" +
+                            "list_commands\n" +
                             "loadsgf\n" +
                             "name\n" +
+                            "play\n" +
                             "quit\n" +
                             "scoring_system\n" +
                             "time_settings\n" +
@@ -250,11 +248,15 @@ public class TwoGtp
                             "twogtp_referee\n" +
                             "twogtp_white\n" +
                             "undo\n" +
-                            "version\n" +
-                            "white\n");
-        else if (cmd.equals("genmove"))
+                            "version\n");
+        else if (cmd.equals("genmove_black")
+                 || cmd.equals("genmove_white")
+                 || cmd.equals("black")
+                 || cmd.equals("white")
+                 || cmd.equals("kgs-genmove_cleanup")
+                 || cmd.equals("genmove_cleanup"))
         {
-            response.append("command not supported in protocol version 1");
+            response.append("unknown command");
             status = false;
         }
         else if (cmd.equals("time_settings"))
@@ -391,7 +393,7 @@ public class TwoGtp
 
     private final HashMap m_scoreEstimates = new HashMap();
 
-    private final Vector m_games = new Vector(100, 100);;
+    private final Vector m_games = new Vector(100, 100);
 
     private Vector m_openingMoves;
 
@@ -403,14 +405,15 @@ public class TwoGtp
 
     private Gtp m_white;
 
-    private boolean boardsize(String[] cmdArray, StringBuffer response)
+    private boolean checkInconsistentState(StringBuffer response)
     {
-        if (gamesLeft() == 0)
-        {
-            response.append("Maximum number of " + m_numberGames +
-                            " games reached");
-            return false;
-        }
+        if (m_inconsistentState)
+            response.append("Inconsistent state");
+        return m_inconsistentState;
+    }
+
+    private boolean cmdBoardSize(String[] cmdArray, StringBuffer response)
+    {
         IntegerArgument argument = parseIntegerArgument(cmdArray, response);
         if (argument == null)
             return false;
@@ -425,37 +428,37 @@ public class TwoGtp
             response.append(m_size);
             return false;
         }
-        return newGame(argument.m_integer, response);
+        return true;
     }
 
-    private boolean checkInconsistentState(StringBuffer response)
+    private boolean cmdClearBoard(String[] cmdArray, StringBuffer response)
     {
-        if (m_inconsistentState)
-            response.append("Inconsistent state");
-        return m_inconsistentState;
+        if (gamesLeft() == 0)
+        {
+            response.append("Maximum number of " + m_numberGames +
+                            " games reached");
+            return false;
+        }
+        return newGame(m_size, response);
     }
 
-    private boolean cmdPlay(GoColor color, String[] cmdArray,
-                            StringBuffer response)
+    private boolean cmdGenmove(String[] cmdArray, StringBuffer response)
+    {
+        ColorArgument argument = parseColorArgument(cmdArray, response);
+        if (argument == null)
+            return false;
+        return sendGenmove(argument.m_color, response);
+    }
+
+    private boolean cmdPlay(String[] cmdArray, StringBuffer response)
     {
         if (checkInconsistentState(response))
             return false;
-        if (cmdArray.length < 2)
-        {
-            response.append("Missing argument");
+        ColorPointArgument argument
+            = parseColorPointArgument(cmdArray, response, m_board.getSize());
+        if (argument == null)
             return false;
-        }
-        GoPoint point = null;
-        try
-        {
-            point = GtpUtils.parsePoint(cmdArray[1], m_board.getSize());
-        }
-        catch (GtpError e)
-        {
-            response.append(e.getMessage());
-            return false;
-        }
-        Move move = Move.create(point, color);
+        Move move = Move.create(argument.m_point, argument.m_color);
         if (m_openings != null)
         {
             if (m_openingMovesIndex < m_openingMoves.size()
