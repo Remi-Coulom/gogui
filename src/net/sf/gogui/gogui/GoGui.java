@@ -1062,7 +1062,7 @@ public class GoGui
         if (m_commandThread == null || m_analyzeCommand == null
             || m_analyzeCommand.isPointArgMissing())
             return;
-        showStatus("Running " + m_analyzeCommand.getResultTitle() + " ...");
+        showStatus("Running " + m_analyzeCommand.getResultTitle() + "...");
         GoColor toMove = m_board.getToMove();
         m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
         runLengthyCommand(m_lastAnalyzeCommand,
@@ -1650,12 +1650,12 @@ public class GoGui
             if (showQuestion("Stop computer play?"))
             {
                 computerNone();
-                showStatus("Waiting for current move to finish ...");
+                showStatus("Waiting for current move to finish...");
             }
             return;
         }
         if (Interrupt.run(this, m_commandThread))
-            showStatus("Interrupting ...");
+            showStatus("Interrupting...");
     }
 
     private void cbKeepOnlyMainVariation()
@@ -1809,7 +1809,7 @@ public class GoGui
                         cbScoreContinue();
                     }
                 };
-            showStatus("Scoring ...");
+            showStatus("Scoring...");
             runLengthyCommand("final_status_list dead", callback);
         }
         else
@@ -2411,7 +2411,7 @@ public class GoGui
 
     private void generateMove()
     {
-        showStatus(m_name + " is thinking ...");
+        showStatus(m_name + " is thinking...");
         GoColor toMove = m_board.getToMove();
         String command;
         if (m_menuBar.getCleanup()
@@ -2654,7 +2654,7 @@ public class GoGui
             if (file.length() > 500000)
             {
                 newGame(m_boardSize); // Frees space if already large tree
-                GuiUtils.runProgress(this, "Loading ...", runnable);
+                GuiUtils.runProgress(this, "Loading...", runnable);
             }
             else
                 runnable.run(null);

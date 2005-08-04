@@ -650,7 +650,7 @@ class MainThread
             }
             try
             {
-                Util.log("Waiting for " + Cmd.cmdToString(cmd) + " ...",
+                Util.log("Waiting for " + Cmd.cmdToString(cmd) + "...",
                          m_verbose);
                 wait();
                 if (m_state == STATE_INTERRUPTED)
