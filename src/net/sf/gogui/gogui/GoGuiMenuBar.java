@@ -250,12 +250,11 @@ public class GoGuiMenuBar
     {
         m_isComputerDisabled = ! enabled;
         m_menuComputerColor.setEnabled(enabled);
-        m_menuShell.setEnabled(enabled);
         m_itemComputerPlay.setEnabled(enabled);
         m_itemBeepAfterMove.setEnabled(enabled);
         m_itemDetachProgram.setEnabled(enabled);
-        m_itemGtpShell.setEnabled(enabled);
-        m_itemAnalyze.setEnabled(enabled);
+        enableAll(m_menuShell, enabled);
+        enableAll(m_menuAnalyze, enabled);
         if (! enabled)
             enableCleanup(false);
     }
@@ -384,15 +383,7 @@ public class GoGuiMenuBar
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
         m_itemFindNext.setEnabled(m_findNextEnabled);
-        if (m_isComputerDisabled)
-        {
-            m_menuComputerColor.setEnabled(false);
-            m_itemComputerPlay.setEnabled(false);
-            m_itemBeepAfterMove.setEnabled(false);
-            m_itemDetachProgram.setEnabled(false);
-            m_itemGtpShell.setEnabled(false);
-            m_itemAnalyze.setEnabled(false);
-        }
+        setComputerEnabled(! m_isComputerDisabled);
     }
 
     public void setSetupMode()
@@ -1090,15 +1081,8 @@ public class GoGuiMenuBar
         {
             JMenu menu = m_menuBar.getMenu(i);
             if (menu != null)
-                disableMenu(menu);
+                enableAll(menu, false);
         }
-    }
-
-    private void disableMenu(JMenu menu)
-    {
-        for (int i = 0; i < menu.getItemCount(); ++i)
-            if (menu.getItem(i) != null)
-                menu.getItem(i).setEnabled(false);
     }
 
     private void enableAll()
@@ -1114,6 +1098,13 @@ public class GoGuiMenuBar
                         menu.getItem(j).setEnabled(true);
             }
         }
+    }
+
+    private void enableAll(JMenu menu, boolean enabled)
+    {
+        for (int i = 0; i < menu.getItemCount(); ++i)
+            if (menu.getItem(i) != null)
+                menu.getItem(i).setEnabled(enabled);
     }
 
     /** Get shortcut modifier for function keys.
