@@ -7,6 +7,7 @@ package net.sf.gogui.gui;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
+import net.sf.gogui.go.GoPoint;
 
 //----------------------------------------------------------------------------
 
@@ -21,15 +22,19 @@ public class BoardSizeDialog
         value = JOptionPane.showInputDialog(parent, "Board size", value);
         if (value == null)
             return -1;
+        size = -1;
         try
         {
-            return Integer.parseInt(value);
+            size = Integer.parseInt(value);
+            if (size < 1 || size > GoPoint.MAXSIZE)
+                size = -1;
         }
         catch (NumberFormatException e)
         {
-            SimpleDialogs.showError(parent, "Invalid size");
-            return -1;
         }
+        if (size == -1)
+            SimpleDialogs.showError(parent, "Invalid size");
+        return size;
     }
 
     /** Make constructor unavailable; class is for namespace only. */

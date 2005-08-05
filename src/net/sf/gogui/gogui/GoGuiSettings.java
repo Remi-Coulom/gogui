@@ -5,6 +5,7 @@
 
 package net.sf.gogui.gogui;
 
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.Preferences;
@@ -122,6 +123,7 @@ public final class GoGuiSettings
             m_file = (String)arguments.get(0);
         else if (arguments.size() > 1)
             throw new ErrorMessage("Only one argument allowed.");
+        validate();
     }
 
     private void printHelp()
@@ -151,6 +153,13 @@ public final class GoGuiSettings
             "-version        print version and exit\n";
         System.out.print(helpText);
     }   
+
+    private void validate() throws ErrorMessage
+    {
+        int size = m_preferences.getInt("boardsize");
+        if (size < 1 || size > GoPoint.MAXSIZE)
+            throw new ErrorMessage("Invalid board size: " + size);
+    }
 }
 
 //----------------------------------------------------------------------------

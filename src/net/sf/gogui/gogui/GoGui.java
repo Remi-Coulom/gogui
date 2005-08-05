@@ -1378,7 +1378,7 @@ public class GoGui
     private void cbBoardSizeOther()
     {
         int size = BoardSizeDialog.show(this, m_boardSize);
-        if (size < 1)
+        if (size < 1 || size > GoPoint.MAXSIZE)
             return;
         saveSession();
         cbNewGame(size);
