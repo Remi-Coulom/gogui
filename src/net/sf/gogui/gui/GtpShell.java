@@ -567,7 +567,7 @@ public class GtpShell
             }
             catch (GtpError e)
             {
-                Utils.showError(owner, e);
+                Utils.showError(owner, m_programName, e);
                 if (askContinue)
                     return ! SimpleDialogs.showQuestion(owner, "Abort?");
             }

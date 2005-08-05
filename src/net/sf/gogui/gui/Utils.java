@@ -56,7 +56,7 @@ public class Utils
         Errors are shown to the user.
     */
     public static void sendKomi(Component parent, double komi,
-                                CommandThread thread)
+                                String name, CommandThread thread)
     {
         if (thread == null)
             return;
@@ -67,7 +67,7 @@ public class Utils
         }
         catch (GtpError e)
         {
-            showError(parent, e);
+            showError(parent, name, e);
         }
     }
 
@@ -94,14 +94,15 @@ public class Utils
         }
     }
 
-    public static void showError(Component parent, GtpError error)
+    public static void showError(Component parent, String name,
+                                 GtpError error)
     {        
         String message = error.getMessage().trim();
         if (message.length() == 0)
             message = "Command failed";
         else
             message = StringUtils.capitalize(message);
-        SimpleDialogs.showError(parent, message);
+        SimpleDialogs.showError(parent, name + ": " + message);
     }
 
     /** Make constructor unavailable; class is for namespace only. */

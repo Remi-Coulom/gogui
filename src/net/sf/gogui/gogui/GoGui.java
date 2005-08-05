@@ -3022,7 +3022,7 @@ public class GoGui
 
     private void setKomi(double komi)
     {
-        Utils.sendKomi(this, komi, m_commandThread);
+        Utils.sendKomi(this, komi, m_name, m_commandThread);
     }
 
     private void setNeedsSave(boolean needsSave)
@@ -3257,7 +3257,7 @@ public class GoGui
 
     private void showError(GtpError error)
     {        
-        Utils.showError(this, error);
+        Utils.showError(this, m_name, error);
     }
 
     private void showError(String message)
