@@ -13,9 +13,6 @@ import net.sf.gogui.utils.StringUtils;
 /** Intersection on the Go board.
     This class is immutable and references to the same point are unique.
     Point coordinates start with 0, the point (0,0) corresponds to "A1".
-    The maximum boardsize, GoPoint.MAXSIZE, is currently set, such that
-    all points can be converted to strings with one letter and a number,
-    i.e. the largest point is Z25.
 */
 public final class GoPoint
     implements Comparable
@@ -33,6 +30,10 @@ public final class GoPoint
         private static final long serialVersionUID = 0L; // SUID
     }
 
+    /** Maximum board size.
+        Set such that all points can be converted to strings with one letter
+        and a number, i.e. the largest point is Z25.
+    */
     public static final int MAXSIZE = 25;
 
     public int compareTo(Object object)
