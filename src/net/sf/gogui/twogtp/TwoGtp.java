@@ -48,8 +48,7 @@ public class TwoGtp
                   String white, String referee, String observer, int size,
                   double komi, boolean isKomiFixed, int numberGames,
                   boolean alternate, String sgfFile, boolean force,
-                  boolean verbose, boolean estimateScore, Openings openings,
-                  boolean loadsgf)
+                  boolean verbose, Openings openings, boolean loadsgf)
         throws Exception
     {
         super(in, out, null);
@@ -113,7 +112,6 @@ public class TwoGtp
         m_komi = komi;
         m_isKomiFixed = isKomiFixed;
         m_alternate = alternate;
-        m_estimateScore = estimateScore;
         m_numberGames = numberGames;
         m_openings = openings;
         m_verbose = verbose;
@@ -307,18 +305,7 @@ public class TwoGtp
             interruptProgram(m_observer);
     }
 
-    private static final class ScoreEstimate
-    {
-        public double m_black;
-
-        public double m_white;
-
-        public double m_referee;
-    }
-
     private final boolean m_alternate;
-
-    private final boolean m_estimateScore;
 
     private boolean m_gameSaved;
 
@@ -377,8 +364,6 @@ public class TwoGtp
     private final String m_whiteName;
 
     private final String m_whiteVersion;
-
-    private final HashMap m_scoreEstimates = new HashMap();
 
     private final Vector m_games = new Vector(100, 100);
 
@@ -455,39 +440,6 @@ public class TwoGtp
             if (m_openingMovesIndex < 0)
                 m_openingMovesIndex = 0;
         }
-    }
-
-    private void estimateScore()
-    {
-        if (! m_estimateScore)
-            return;
-        ScoreEstimate estimate = new ScoreEstimate();
-        estimate.m_black = estimateScore(m_black);
-        estimate.m_white = estimateScore(m_white);
-        if (m_referee != null && ! m_refereeIsDisabled)
-            estimate.m_referee = estimateScore(m_referee);
-        m_scoreEstimates.put(m_currentNode, estimate);
-    }
-
-    private double estimateScore(Gtp gtp)
-    {
-        if (! gtp.isCommandSupported("estimate_score"))
-            return 0.0;
-        StringBuffer response = new StringBuffer();
-        if (! sendSingle(gtp, "estimate_score", response))
-            return 0.0;
-        String score = StringUtils.tokenize(response.toString())[0];
-        try
-        {
-            if (score.indexOf("B+") >= 0)
-                return Double.parseDouble(score.substring(2));
-            else if (score.indexOf("W+") >= 0)
-                return Double.parseDouble("-" + score.substring(2));
-        }
-        catch (NumberFormatException e)
-        {            
-        }
-        return 0.0;
     }
 
     private boolean finalStatusCommand(String cmdLine, StringBuffer response)
@@ -698,7 +650,6 @@ public class TwoGtp
                        isAlternated(), duplicate, moves.size(), error,
                        errorMessage, cpuTimeBlack, cpuTimeWhite);
             saveGame(resultBlack, resultWhite, resultReferee);
-            saveScoreEstimates();
             ++m_gameIndex;
             m_games.add(moves);
         }
@@ -713,7 +664,6 @@ public class TwoGtp
         m_board = new Board(size);
         m_gameTree = new GameTree(size, m_komi, null, null, null);
         m_currentNode = m_gameTree.getRoot();
-        m_scoreEstimates.clear();
         m_resigned = false;
         if (m_openings != null)
         {
@@ -864,7 +814,6 @@ public class TwoGtp
             Node node = new Node(move);
             m_currentNode.append(node);
             m_currentNode = node;
-            estimateScore();
         }
     }
 
@@ -1011,30 +960,6 @@ public class TwoGtp
                     + numberMoves + "\t" + format.format(cpuTimeBlack) + "\t"
                     + format.format(cpuTimeWhite) + "\t" +
                     (error ? "1" : "0") + "\t" + errorMessage);
-        out.close();
-    }
-
-    private void saveScoreEstimates()
-        throws FileNotFoundException
-    {
-        if (! m_estimateScore)
-            return;
-        File file = new File(m_sgfFile + "-" + m_gameIndex + "-score.dat");
-        OutputStream fileOutputStream = new FileOutputStream(file);
-        PrintStream out = new PrintStream(fileOutputStream);
-        out.println("#MOVE\tBLACK\tWHITE\tREFEREE");
-        for (Node node = m_gameTree.getRoot(); node != null;
-             node = node.getChild())
-        {
-            ScoreEstimate estimate =
-                (ScoreEstimate)m_scoreEstimates.get(node);
-            if (estimate == null)
-                continue;
-            out.println(NodeUtils.getMoveNumber(node) + "\t"
-                        + estimate.m_black + "\t"
-                        + estimate.m_white  + "\t"
-                        + estimate.m_referee);
-        }
         out.close();
     }
 

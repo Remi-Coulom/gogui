@@ -22,7 +22,6 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-alternate</option></arg>
 <arg><option>-auto</option></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
-<arg><option>-estimate-score</option></arg>
 <arg><option>-force</option></arg>
 <arg><option>-games</option> <replaceable>n</replaceable></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
@@ -213,20 +212,6 @@ Works only with SGF files with alternating moves and without setup stones.
 <listitem>
 <para>
 Read command line options and arguments from file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><option>-estimate-score</option></term>
-<listitem>
-<para>
-Send an <command>estimate_score</command> command to all programs
-after each move; save them to a file after the game.
-The responses to <command>estimate_score</command> should begin with
-a score in the form <userinput>B+</userinput> or <userinput>W+</userinput>.
-The file is a table with valid scores translated to floating point numbers
-(positive for program <option>-black</option>).
 </para>
 </listitem>
 </varlistentry>

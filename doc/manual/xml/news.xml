@@ -113,6 +113,12 @@ New tool GtpStatistics
 </listitem>
 <listitem>
 <simpara>
+TwoGtp: remove option -estimate-score; use the new tool GtpStatistics
+instead
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Numerous other fixes and improvements
 </simpara>
 </listitem>

@@ -28,7 +28,6 @@ public class Main
                 "black:",
                 "compare",
                 "config:",
-                "estimate-score",
                 "force",
                 "games:",
                 "help",
@@ -55,7 +54,6 @@ public class Main
                     "-black          command for black program\n" +
                     "-compare        compare list of sgf files\n" +
                     "-config         config file\n" +
-                    "-estimate-score send estimate_score to programs\n" +
                     "-force          overwrite existing files\n" +
                     "-games          number of games (0=unlimited)\n" +
                     "-help           display this help and exit\n" +
@@ -91,7 +89,6 @@ public class Main
                 return;
             }                
             boolean alternate = opt.isSet("alternate");
-            boolean estimateScore = opt.isSet("estimate-score");
             boolean auto = opt.isSet("auto");
             boolean verbose = opt.isSet("verbose");
             String black = opt.getString("black", "");
@@ -120,8 +117,8 @@ public class Main
             TwoGtp twoGtp =
                 new TwoGtp(System.in, System.out, black, white, referee,
                            observer, size, komi, isKomiFixed, games,
-                           alternate, sgfFile, force, verbose, estimateScore,
-                           openings, loadsgf);
+                           alternate, sgfFile, force, verbose, openings,
+                           loadsgf);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)
