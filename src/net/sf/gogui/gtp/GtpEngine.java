@@ -18,23 +18,6 @@ import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
-/** GTP command. */
-class Command
-{
-    public boolean m_hasId;
-    
-    public int m_id;
-    
-    public String m_command;
-
-    public boolean isQuit()
-    {
-        return m_command.trim().toLowerCase().equals("quit");
-    }
-}
-
-//----------------------------------------------------------------------------
-
 /** Thread reading the command stream.
     Reading is done in a seperate thread to allow the notification
     of GtpServer about an asynchronous interrupt received using
@@ -55,7 +38,7 @@ class ReadThread
         return m_endOfFile;
     }
 
-    public Command getCommand()
+    public GtpCommand getCommand()
     {
         synchronized (this)
         {
@@ -71,7 +54,7 @@ class ReadThread
                 System.err.println("Interrupted");
             }
             assert(m_endOfFile || ! m_waitCommand);
-            Command result = m_command;
+            GtpCommand result = m_command;
             m_command = null;
             return result;
         }
@@ -134,11 +117,11 @@ class ReadThread
 
     private final BufferedReader m_in;
 
-    private Command m_command;
+    private GtpCommand m_command;
 
     private final GtpEngine m_gtpServer;
 
-    private Command parseLine(String line)
+    private GtpCommand parseLine(String line)
     {
         assert(! line.trim().equals(""));
         int len = line.length();
@@ -166,7 +149,7 @@ class ReadThread
         String[] array = StringUtils.tokenize(buffer.toString());
         assert(array.length > 0);
         String command = buffer.toString();
-        Command result = new Command();
+        GtpCommand result = new GtpCommand();
         result.m_hasId = false;
         result.m_command = command;
         try
@@ -233,7 +216,7 @@ public abstract class GtpEngine
         readThread.start();
         while (true)
         {
-            Command command = readThread.getCommand();
+            GtpCommand command = readThread.getCommand();
             if (command == null)
                 return;
             sendResponse(command);
@@ -389,7 +372,7 @@ public abstract class GtpEngine
 
     private final PrintStream m_out;
 
-    private void sendResponse(Command cmd)
+    private void sendResponse(GtpCommand cmd)
     {
         StringBuffer response = new StringBuffer();
         boolean status = true;
