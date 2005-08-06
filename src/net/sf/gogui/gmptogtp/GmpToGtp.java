@@ -11,6 +11,7 @@ import net.sf.gogui.gmp.Gmp;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpEngine;
+import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
@@ -33,21 +34,21 @@ public class GmpToGtp
         m_size = size;
     }
 
-    public boolean handleCommand(String cmdLine, StringBuffer response)
+    public void handleCommand(String cmdLine, StringBuffer response)
+        throws GtpError
     {
         String[] cmdArray = StringUtils.tokenize(cmdLine);
         String cmd = cmdArray[0];
-        boolean status = true;
         if (cmd.equals("boardsize"))
-            return cmdBoardsize(cmdArray, response);
+            cmdBoardsize(cmdArray, response);
         else if (cmd.equals("clear_board"))
-            return cmdClearBoard(response);
+            cmdClearBoard(response);
         else if (cmd.equals("genmove"))
-            return cmdGenmove(cmdArray, response);
+            cmdGenmove(cmdArray, response);
         else if (cmd.equals("gmp_queue"))
-            return queue(response);
+            cmdQueue(response);
         else if (cmd.equals("gmp_talk"))
-            return cmdTalk(cmdLine, response);
+            cmdTalk(cmdLine, response);
         else if (cmd.equals("gogui_interrupt"))
             ;
         else if (cmd.equals("gogui_title"))
@@ -69,21 +70,17 @@ public class GmpToGtp
         else if (cmd.equals("name"))
             response.append("GmpToGtp");
         else if (cmd.equals("play"))
-            return cmdPlay(cmdArray, response);
+            cmdPlay(cmdArray, response);
         else if (cmd.equals("protocol_version"))
             response.append("2");
         else if (cmd.equals("quit"))
-            return true;
+            ;
         else if (cmd.equals("undo"))
-            return undo(response);
+            cmdUndo(response);
         else if (cmd.equals("version"))
             response.append(Version.get());
         else
-        {
-            response.append("unknown command");
-            status = false;
-        }
-        return status;
+            throw new GtpError("unknown command");
     }
 
     public void interruptCommand()
@@ -105,55 +102,50 @@ public class GmpToGtp
 
     private final Gmp m_gmp;
 
-    private boolean cmdBoardsize(String[] cmdArray, StringBuffer response)
+    private void cmdBoardsize(String[] cmdArray, StringBuffer response)
+        throws GtpError
     {
-        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
-        if (argument == null)
-            return false;
-        if (argument.m_integer != m_size)
-        {
-            response.append("size must be " + m_size);
-            return false;
-        }
-        return true;
+        if (parseIntegerArgument(cmdArray) != m_size)
+            throw new GtpError("size must be " + m_size);
     }
 
-    private boolean cmdClearBoard(StringBuffer response)
+    private void cmdClearBoard(StringBuffer response) throws GtpError
     {
         if (! (m_wait && m_firstGame) && ! (m_simple && m_colorIndex == 1))
-            return m_gmp.newGame(m_size, response);
+        {
+            if (! m_gmp.newGame(m_size, response))
+                throw new GtpError(response.toString());
+            return;
+        }
         m_firstGame = false;
-        return m_gmp.waitNewGame(m_size, response);
+        if (! m_gmp.waitNewGame(m_size, response))
+            throw new GtpError(response.toString());
     }
 
-    private boolean cmdGenmove(String[] cmdArray, StringBuffer response)
+    private void cmdGenmove(String[] cmdArray, StringBuffer response)
+        throws GtpError
     {
-        ColorArgument argument = parseColorArgument(cmdArray, response);
-        if (argument == null)
-            return false;
-        boolean isBlack = (argument.m_color == GoColor.BLACK);
+        boolean isBlack = (parseColorArgument(cmdArray) == GoColor.BLACK);
         Gmp.Move move = m_gmp.waitMove(isBlack, response);
         if (move == null)
-            return false;
+            throw new GtpError(response.toString());
         if (move.m_x < 0)
         {
             response.append("PASS");
-            return true;
+            return;
         }
         int x = 'A' + move.m_x;
         if (x >= 'I')
             ++x;
         response.append((char)(x));
         response.append(move.m_y + 1);
-        return true;
     }
 
-    private boolean cmdPlay(String[] cmdArray, StringBuffer response)
+    private void cmdPlay(String[] cmdArray, StringBuffer response)
+        throws GtpError
     {
-        ColorPointArgument argument =
-            parseColorPointArgument(cmdArray, response, m_size);
-        if (argument == null)
-            return false;
+        ColorPointArgument argument
+            = parseColorPointArgument(cmdArray, m_size);
         int x = -1;
         int y = -1;
         GoPoint point = argument.m_point;
@@ -163,37 +155,33 @@ public class GmpToGtp
             y = point.getY();
             
         }
-        return m_gmp.play(argument.m_color == GoColor.BLACK, x, y, response);
+        if (! m_gmp.play(argument.m_color == GoColor.BLACK, x, y, response))
+            throw new GtpError(response.toString());
     }
 
-    private boolean cmdTalk(String command, StringBuffer response)
+    private void cmdQueue(StringBuffer response) throws GtpError
+    {
+        if (! m_gmp.queue(response))
+            throw new GtpError(response.toString());
+    }
+
+    private void cmdTalk(String command, StringBuffer response)
+        throws GtpError
     {
         int index = command.indexOf(' ');
         if (index > 0 && ! command.substring(index + 1).trim().equals(""))
         {
             if (! m_gmp.sendTalk(command.substring(index + 1)))
-            {
-                response.append("Write error");
-                return false;
-            }                
+                throw new GtpError("Write error");
         }
         else
-        {
-            String talk = m_gmp.getTalk();
-            talk = talk.replaceAll("\\n\\n", "\n \n");
-            response.append(talk);
-        }
-        return true;
+            response.append(m_gmp.getTalk());
     }
 
-    private boolean queue(StringBuffer response)
+    private void cmdUndo(StringBuffer response) throws GtpError
     {
-        return m_gmp.queue(response);
-    }
-
-    private boolean undo(StringBuffer response)
-    {
-        return m_gmp.undo(response);
+        if (! m_gmp.undo(response))
+            throw new GtpError(response.toString());
     }
 }
 

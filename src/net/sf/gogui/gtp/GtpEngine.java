@@ -188,42 +188,12 @@ class ReadThread
 /** Base class for Go programs and tools implementing GTP. */
 public abstract class GtpEngine
 {
-    /** Returned by parseColorArgument. */
-    public static class ColorArgument
-    {
-        public GoColor m_color;
-    }
-
     /** Returned by parseColorPointArgument. */
     public static class ColorPointArgument
     {
         public GoColor m_color;
 
         public GoPoint m_point;
-    }
-
-    /** Returned by parseDoubleArgument. */
-    public static class DoubleArgument
-    {
-        public double m_double;
-    }
-
-    /** Returned by parseIntegerArgument. */
-    public static class IntegerArgument
-    {
-        public int m_integer;
-    }
-
-    /** Returned by parsePointArgument. */
-    public static class PointArgument
-    {
-        public GoPoint m_point;
-    }
-
-    /** Returned by parsePointListArgument. */
-    public static class PointListArgument
-    {
-        public Vector m_pointList = new Vector();
     }
 
     public GtpEngine(InputStream in, OutputStream out, PrintStream log)
@@ -239,13 +209,17 @@ public abstract class GtpEngine
     */
     public abstract void interruptCommand();
 
-    /** Handle command..
+    /** Handle command.
         This method has to be implemented by the subclass.
-        It should return true for success, false for failure and
-        the response in the StringBuffer argument.
+        It should throw a GtpError for creating a failure response,
+        and write the response into the StringBuffer parameter for a success
+        response.
+        The responses are allowed to contain consecutive new lines.
+        They will be replaced by lines containing a single space to form a
+        valid GTP response.
     */
-    public abstract boolean handleCommand(String command,
-                                          StringBuffer response);
+    public abstract void handleCommand(String command,
+                                       StringBuffer response) throws GtpError;
 
     public synchronized void log(String line)
     {
@@ -270,48 +244,32 @@ public abstract class GtpEngine
 
     /** Utility function for parsing a color argument.
         @param cmdArray Command line split into words.
-        @param response Empty string buffer filled with GTP error message
-        if parsing fails.
-        @return Color argument or null if parsing fails.
+        @return Color argument
     */
-    public static ColorArgument parseColorArgument(String[] cmdArray,
-                                                   StringBuffer response)
+    public static GoColor parseColorArgument(String[] cmdArray)
+        throws GtpError
     {
         if (cmdArray.length != 2)
-        {
-            response.append("Missing color argument");
-            return null;
-        }
-        ColorArgument argument = new ColorArgument();
+            throw new GtpError("Missing color argument");
         String arg1 = cmdArray[1].toLowerCase();
         if (arg1.equals("w") || arg1.equals("white"))
-            argument.m_color = GoColor.WHITE;
-        else if (arg1.equals("b") || arg1.equals("black"))
-            argument.m_color = GoColor.BLACK;
-        else
-        {
-            response.append("Invalid color argument");
-            return null;
-        }
-        return argument;
+            return GoColor.WHITE;
+        if (arg1.equals("b") || arg1.equals("black"))
+            return GoColor.BLACK;
+        throw new GtpError("Invalid color argument");
     }
 
     /** Utility function for parsing a color and point argument.
         @param cmdArray Command line split into words.
-        @param response Empty string buffer filled with GTP error message
-        if parsing fails.
         @param boardSize Board size is needed for parsing the point
-        @return ColorPoint argument or null if parsing fails.
+        @return ColorPoint argument
     */
     public static ColorPointArgument
-        parseColorPointArgument(String[] cmdArray, StringBuffer response,
-                                int boardSize)
+        parseColorPointArgument(String[] cmdArray, int boardSize)
+        throws GtpError
     {
         if (cmdArray.length != 3)
-        {
-            response.append("Missing color and point argument");
-            return null;
-        }
+            throw new GtpError("Missing color and point argument");
         ColorPointArgument argument = new ColorPointArgument();
         String arg1 = cmdArray[1].toLowerCase();
         if (arg1.equals("w") || arg1.equals("white"))
@@ -319,137 +277,79 @@ public abstract class GtpEngine
         else if (arg1.equals("b") || arg1.equals("black"))
             argument.m_color = GoColor.BLACK;
         else
-        {
-            response.append("Invalid color argument");
-            return null;
-        }
+            throw new GtpError("Invalid color argument");
+        argument.m_point = GtpUtils.parsePoint(cmdArray[2], boardSize);
+        return argument;
+    }
+
+    /** Utility function for parsing an integer argument.
+        @param cmdArray Command line split into words.
+        @return Double argument
+    */
+    public static double parseDoubleArgument(String[] cmdArray)
+        throws GtpError
+    {
+        if (cmdArray.length != 2)
+            throw new GtpError("Missing float argument");
         try
         {
-            GoPoint point = GtpUtils.parsePoint(cmdArray[2], boardSize);
-            argument.m_point = point;
-            return argument;
+            return Double.parseDouble(cmdArray[1]);
         }
-        catch (GtpError e)
+        catch (NumberFormatException e)
         {
-            response.append("Invalid point argument");
-            return null;
+            throw new GtpError("Invalid float argument");
         }
     }
 
     /** Utility function for parsing an integer argument.
         @param cmdArray Command line split into words.
-        @param response Empty string buffer filled with GTP error message
-        if parsing fails.
-        @return Double argument or null if parsing fails.
+        @return Integer argument
     */
-    public static DoubleArgument parseDoubleArgument(String[] cmdArray,
-                                                     StringBuffer response)
+    public static int parseIntegerArgument(String[] cmdArray) throws GtpError
     {
         if (cmdArray.length != 2)
-        {
-            response.append("Missing float argument");
-            return null;
-        }
+            throw new GtpError("Missing integer argument");
         try
         {
-            double f = Double.parseDouble(cmdArray[1]);
-            DoubleArgument doubleArgument = new DoubleArgument();
-            doubleArgument.m_double = f;
-            return doubleArgument;
+            return Integer.parseInt(cmdArray[1]);
         }
         catch (NumberFormatException e)
         {
-            response.append("Invalid float argument");
-            return null;
-        }
-    }
-
-    /** Utility function for parsing an integer argument.
-        @param cmdArray Command line split into words.
-        @param response Empty string buffer filled with GTP error message
-        if parsing fails.
-        @return Integer argument or null if parsing fails.
-    */
-    public static IntegerArgument parseIntegerArgument(String[] cmdArray,
-                                                       StringBuffer response)
-    {
-        if (cmdArray.length != 2)
-        {
-            response.append("Missing integer argument");
-            return null;
-        }
-        try
-        {
-            int integer = Integer.parseInt(cmdArray[1]);
-            IntegerArgument integerArgument = new IntegerArgument();
-            integerArgument.m_integer = integer;
-            return integerArgument;
-        }
-        catch (NumberFormatException e)
-        {
-            response.append("Invalid integer argument");
-            return null;
+            throw new GtpError("Invalid integer argument");
         }
     }
 
     /** Utility function for parsing an point argument.
         @param cmdArray Command line split into words.
-        @param response Empty string buffer filled with GTP error message
-        if parsing fails.
         @param boardSize Board size is needed for parsing the point
-        @return GoPoint argument or null if parsing fails.
+        @return GoPoint argument
     */
-    public static PointArgument parsePointArgument(String[] cmdArray,
-                                                   StringBuffer response,
-                                                   int boardSize)
+    public static GoPoint parsePointArgument(String[] cmdArray, int boardSize)
+        throws GtpError
     {
         if (cmdArray.length != 2)
-        {
-            response.append("Missing point argument");
-            return null;
-        }
-        try
-        {
-            GoPoint point = GtpUtils.parsePoint(cmdArray[1], boardSize);
-            PointArgument argument = new PointArgument();
-            argument.m_point = point;
-            return argument;
-        }
-        catch (GtpError e)
-        {
-            response.append("Invalid point argument");
-            return null;
-        }
+            throw new GtpError("Missing point argument");
+        return GtpUtils.parsePoint(cmdArray[1], boardSize);
     }
 
     /** Utility function for parsing an point list argument.
         @param cmdArray Command line split into words.
-        @param response Empty string buffer filled with GTP error message
-        if parsing fails.
         @param boardSize Board size is needed for parsing the points
-        @return Point list argument or null if parsing fails.
+        @return Point list argument
     */
-    public static PointListArgument
-        parsePointListArgument(String[] cmdArray, StringBuffer response,
-                               int boardSize)
+    public static Vector parsePointListArgument(String[] cmdArray,
+                                                int boardSize)
+        throws GtpError
     {
         int length = cmdArray.length;
         assert(length >= 1);
-        try
+        Vector pointList = new Vector();
+        for (int i = 1; i < length; ++i)
         {
-            PointListArgument argument = new PointListArgument();
-            for (int i = 1; i < length; ++i)
-            {
-                GoPoint point = GtpUtils.parsePoint(cmdArray[i], boardSize);
-                argument.m_pointList.add(point);
-            }
-            return argument;
+            GoPoint point = GtpUtils.parsePoint(cmdArray[i], boardSize);
+            pointList.add(point);
         }
-        catch (GtpError e)
-        {
-            response.append("Invalid point list argument");
-            return null;
-        }
+        return pointList;
     }
 
     /** Print invalid response directly to output stream.
@@ -492,8 +392,20 @@ public abstract class GtpEngine
     private void sendResponse(Command cmd)
     {
         StringBuffer response = new StringBuffer();
-        boolean status = handleCommand(cmd.m_command.trim(), response);
-        respond(status, cmd.m_hasId, cmd.m_id, response.toString());
+        boolean status = true;
+        try
+        {
+            handleCommand(cmd.m_command.trim(), response);
+        }
+        catch (GtpError e)
+        {
+            response.setLength(0);
+            response.append(e.getMessage());
+            status = false;
+        }
+        String sanitizedResponse
+            = response.toString().replaceAll("\\n\\n", "\n \n");
+        respond(status, cmd.m_hasId, cmd.m_id, sanitizedResponse);
     }
 }
 

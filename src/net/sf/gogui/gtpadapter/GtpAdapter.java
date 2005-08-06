@@ -74,58 +74,57 @@ public class GtpAdapter
         m_gtp.waitForExit();
     }
 
-    public boolean handleCommand(String cmdLine, StringBuffer response)
+    public void handleCommand(String cmdLine, StringBuffer response)
+        throws GtpError
     {
         String[] cmdArray = StringUtils.tokenize(cmdLine);
         String cmd = cmdArray[0];
-        boolean status = true;
         if (cmd.equals("black"))
-            status = cmdPlay(GoColor.BLACK, cmdArray, response);
+            cmdPlay(GoColor.BLACK, cmdArray);
         else if (cmd.equals("boardsize"))
-            status = cmdBoardsize(cmdArray, response);
+            cmdBoardsize(cmdArray);
         else if (cmd.equals("clear_board"))
-            status = cmdClearBoard(response);
+            cmdClearBoard();
         else if (cmd.equals("final_score") && m_noScore)
-            status = cmdUnknown(response);
+            cmdUnknown();
         else if (cmd.equals("final_status_list") && m_noScore)
-            status = cmdUnknown(response);
+            cmdUnknown();
         else if (cmd.equals("genmove"))
-            status = cmdGenmove(cmdArray, response);
+            cmdGenmove(cmdArray, response);
         else if (cmd.equals("genmove_black"))
-            status = cmdGenmove(GoColor.BLACK, response);
+            cmdGenmove(GoColor.BLACK, response);
         else if (cmd.equals("genmove_white"))
-            status = cmdGenmove(GoColor.WHITE, response);
+            cmdGenmove(GoColor.WHITE, response);
         else if (cmd.equals("gg-undo"))
-            status = cmdGGUndo(cmdArray, response);
+            cmdGGUndo(cmdArray);
         else if (cmd.equals("gtpadapter_showboard"))
-            status = cmdGtpAdapterShowBoard(response);
+            cmdGtpAdapterShowBoard(response);
         else if (cmd.equals("help"))
-            status = cmdListCommands(response);
+            cmdListCommands(response);
         else if (cmd.equals("list_commands"))
-            status = cmdListCommands(response);
+            cmdListCommands(response);
         else if (cmd.equals("loadsgf"))
-            status = cmdLoadsgf(cmdArray, response);
+            cmdLoadsgf(cmdArray, response);
         else if (cmd.equals("name") && m_name != null)
-            status = cmdName(response);
+            cmdName(response);
         else if (cmd.equals("place_free_handicap") && m_emuHandicap)
-            status = cmdPlaceFreeHandicap(cmdArray, response);
+            cmdPlaceFreeHandicap(cmdArray, response);
         else if (cmd.equals("play"))
-            status = cmdPlay(cmdArray, response);
+            cmdPlay(cmdArray);
         else if (cmd.equals("protocol_version"))
             response.append(m_version1 ? "1" : "2");
         else if (cmd.equals("quit"))
-            status = cmdQuit(response);
+            cmdQuit();
         else if (cmd.equals("set_free_handicap") && m_emuHandicap)
-            status = cmdSetFreeHandicap(cmdArray, response);
+            cmdSetFreeHandicap(cmdArray);
         else if (cmd.equals("version") && m_name != null)
-            status = cmdVersion(response);
+            cmdVersion(response);
         else if (cmd.equals("undo"))
-            status = cmdUndo(cmdArray, response);
+            cmdUndo(cmdArray);
         else if (cmd.equals("white"))
-            status = cmdPlay(GoColor.WHITE, cmdArray, response);
+            cmdPlay(GoColor.WHITE, cmdArray);
         else
-            status = send(cmdLine, response);
-        return status;
+            send(cmdLine, response);
     }
 
     public void interruptProgram(Gtp gtp)
@@ -180,8 +179,14 @@ public class GtpAdapter
         if (! m_resign)
             return false;
         StringBuffer programResponse = new StringBuffer();
-        if (! send("estimate_score", programResponse))
+        try
+        {
+            send("estimate_score", programResponse);
+        }
+        catch (GtpError e)
+        {
             return false;
+        }
         boolean isValid = false;
         double score = 0;
         String[] tokens = StringUtils.tokenize(programResponse.toString());
@@ -216,89 +221,63 @@ public class GtpAdapter
         return false;
     }
 
-    private boolean cmdBoardsize(String cmdArray[], StringBuffer response)
+    private void cmdBoardsize(String cmdArray[]) throws GtpError
     {
-        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
-        if (argument == null)
-            return false;
-        if (argument.m_integer < 1)
-        {
-            response.append("Invalid board size");
-            return false;
-        }
-        if (m_size > 0 && argument.m_integer != m_size)
-        {
-            response.append("Boardsize must be " + m_size);
-            return false;
-        }
-        String command = m_gtp.getCommandBoardsize(argument.m_integer);
-        if (command != null && ! send(command, response))
-            return false;
-        m_boardSize = argument.m_integer;
+        int size = parseIntegerArgument(cmdArray);
+        if (size < 1)
+            throw new GtpError("Invalid board size");
+        if (m_size > 0 && size != m_size)
+            throw new GtpError("Boardsize must be " + m_size);
+        String command = m_gtp.getCommandBoardsize(size);
+        if (command != null)
+            send(command);
+        m_boardSize = size;
         m_board = new Board(m_boardSize);
         m_passInserted.clear();
         command = m_gtp.getCommandClearBoard(m_boardSize);
-        if (! send(command, response))
-            return false;
-        return true;
+        send(command);
     }
 
-    private boolean cmdClearBoard(StringBuffer response)
+    private void cmdClearBoard() throws GtpError
     {
-        String command = m_gtp.getCommandClearBoard(m_boardSize);
-        if (! send(command, response))
-            return false;
+        send(m_gtp.getCommandClearBoard(m_boardSize));
         m_board = new Board(m_boardSize);
         m_passInserted.clear();
-        return true;
     }
 
-    private boolean cmdGenmove(String cmdArray[], StringBuffer response)
+    private void cmdGenmove(String cmdArray[], StringBuffer response)
+        throws GtpError
     {
-        ColorArgument argument = parseColorArgument(cmdArray, response);
-        if (argument == null)
-            return false;
-        return cmdGenmove(argument.m_color, response);
+        cmdGenmove(parseColorArgument(cmdArray), response);
     }
 
-    private boolean cmdGenmove(GoColor color, StringBuffer response)
+    private void cmdGenmove(GoColor color, StringBuffer response)
+        throws GtpError
     {
         if (checkResign(color, response))
-            return true;
+            return;
         String command = m_gtp.getCommandGenmove(color);
-        if (! fillPass(color, response))
-            return false;
-        if (! send(command, response))
-        {
-            StringBuffer undoResponse = new StringBuffer();
-            undoFillPass(undoResponse);
-            return false;
-        }
-        if (response.toString().trim().equals("resign"))
-            return true;
+        fillPass(color);
         try
         {
-            GoPoint point =
-                GtpUtils.parsePoint(response.toString(), m_boardSize);
-            m_board.play(Move.create(point, color));
-            return true;
+            send(command);
         }
         catch (GtpError e)
         {
-            response.append(" (program played illegal move)");
-            m_board.play(Move.create(null, color));
-            return false;
+            undoFillPass();
+            throw e;
         }
+        if (response.toString().trim().equals("resign"))
+            return;
+        GoPoint point = GtpUtils.parsePoint(response.toString(), m_boardSize);
+        m_board.play(Move.create(point, color));
     }
 
-    private boolean cmdGGUndo(String cmdArray[], StringBuffer response)
+    private void cmdGGUndo(String cmdArray[])
+        throws GtpError
     {
         if (cmdArray.length > 2)
-        {
-            
-            response.append("Too many arguments");
-            return false;
-        }
+            throw new GtpError("Too many arguments");
         int n = 1;
         if (cmdArray.length == 2)
         {
@@ -306,20 +285,13 @@ public class GtpAdapter
             {
                 n = Integer.parseInt(cmdArray[1]);
                 if (n <= 0)
-                {                    
-                    response.append("Argument must be positive");
-                    return false;
-                }
+                    throw new GtpError("Argument must be positive");
                 if (n > m_board.getMoveNumber())
-                {                    
-                    response.append("Not enough moves");
-                    return false;
-                }
+                    throw new GtpError("Not enough moves");
             }
             catch (NumberFormatException e)
             {
-                response.append("Invalid argument");
-                return false;
+                throw new GtpError("Invalid argument");
             }
         }        
         int total = 0;
@@ -335,27 +307,31 @@ public class GtpAdapter
                     ++total;
             }
         }
-        if (! send("gg-undo " + total, response))
+        try
+        {
+            send("gg-undo " + total);
+        }
+        catch (GtpError e)
         {
             while (! stack.empty())
                 m_passInserted.push(stack.pop());
-            return false;
+            return;
         }
         m_board.undo(total);
-        return true;
     }
 
-    private boolean cmdGtpAdapterShowBoard(StringBuffer response)
+    private void cmdGtpAdapterShowBoard(StringBuffer response)
+        throws GtpError
     {
         OutputStream outputStream = new ByteArrayOutputStream(2048);
         PrintStream printStream = new PrintStream(outputStream);
         BoardUtils.print(m_board, printStream);
         response.append("\n");
         response.append(outputStream.toString());
-        return true;
     }
 
-    private boolean cmdListCommands(StringBuffer response)
+    private void cmdListCommands(StringBuffer response)
+        throws GtpError
     {
         Vector commands = m_gtp.getSupportedCommands();
         for (int i = 0; i < commands.size(); ++i)
@@ -413,16 +389,13 @@ public class GtpAdapter
         if (m_emuLoadsgf)
             response.append("loadsgf\n");
         response.append("gtpadapter_showboard\n");
-        return true;
     }
 
-    private boolean cmdLoadsgf(String[] cmdArray, StringBuffer response)
+    private void cmdLoadsgf(String[] cmdArray, StringBuffer response)
+        throws GtpError
     {
         if (cmdArray.length < 2)
-        {
-            response.append("Need filename argument");
-            return false;
-        }
+            throw new GtpError("Need filename argument");
         String filename = cmdArray[1];
         String command = "loadsgf " + filename;
         int maxMove = -1;
@@ -435,12 +408,11 @@ public class GtpAdapter
             }
             catch (NumberFormatException e)
             {
-                response.append("Invalid move number argument");
-                return false;
+                throw new GtpError("Invalid move number argument");
             }
         }
-        if (! m_emuLoadsgf && ! send(command, response))
-                return false;
+        if (! m_emuLoadsgf)
+            send(command);
         GoColor toMove = GoColor.EMPTY;
         try
         {
@@ -466,11 +438,7 @@ public class GtpAdapter
                 {
                     Move move = (Move)moves.get(i);
                     if (m_emuLoadsgf)
-                    {
-                        if (! play(move.getColor(), move.getPoint(),
-                                   response))
-                            return false;
-                    }
+                        play(move.getColor(), move.getPoint());
                     else
                         m_board.play(move);
                 }
@@ -480,28 +448,22 @@ public class GtpAdapter
             if (toMove != GoColor.EMPTY && toMove != m_board.getToMove())
             {
                 if (m_emuLoadsgf)
-                {
-                    if (! play(m_board.getToMove(), null, response))
-                        return false;
-                }
+                    play(m_board.getToMove(), null);
                 else
                     m_board.setToMove(toMove);
             }
         }
         catch (FileNotFoundException e)
         {
-            response.append("File not found");
-            return false;
+            throw new GtpError("File not found");
         }
         catch (SgfReader.SgfError e)
         {
-            response.append("Could not read file");
-            return false;
+            throw new GtpError("Could not read file");
         }
-        return true;
     }
 
-    private boolean cmdName(StringBuffer response)
+    private void cmdName(StringBuffer response) throws GtpError
     {
         assert(m_name != null);
         int index = m_name.indexOf(':');
@@ -509,151 +471,114 @@ public class GtpAdapter
             response.append(m_name);
         else
             response.append(m_name.substring(0, index));
-        return true;
     }
 
-    private boolean cmdPlaceFreeHandicap(String cmdArray[],
-                                         StringBuffer response)
+    private void cmdPlaceFreeHandicap(String cmdArray[],
+                                      StringBuffer response) throws GtpError
     {
-        IntegerArgument argument = parseIntegerArgument(cmdArray, response);
-        if (argument == null)
-            return false;
-        Vector stones =
-            Board.getHandicapStones(m_boardSize, argument.m_integer);
+        int n = parseIntegerArgument(cmdArray);
+        Vector stones = Board.getHandicapStones(m_boardSize, n);
         if  (stones == null)
-        {
-            response.append("Invalid number of handicap stones");
-            return false;
-        }
+            throw new GtpError("Invalid number of handicap stones");
         StringBuffer pointList = new StringBuffer(128);
         for (int i = 0; i < stones.size(); ++i)
         {
             GoPoint point = (GoPoint)stones.get(i);
-            if (! play(GoColor.BLACK, point, response))
-                break;
+            play(GoColor.BLACK, point);
             if (pointList.length() > 0)
                 pointList.append(" ");
             pointList.append(point);
         }
         response.append(pointList);
-        return true;
     }
 
-    private boolean cmdPlay(String cmdArray[], StringBuffer response)
+    private void cmdPlay(String cmdArray[]) throws GtpError
     {
-        ColorPointArgument argument =
-            parseColorPointArgument(cmdArray, response, m_boardSize);
-        if (argument == null)
-            return false;
-        return play(argument.m_color, argument.m_point, response);
+        ColorPointArgument argument
+            = parseColorPointArgument(cmdArray, m_boardSize);
+        play(argument.m_color, argument.m_point);
     }
 
-    private boolean cmdPlay(GoColor color, String cmdArray[],
-                            StringBuffer response)
+    private void cmdPlay(GoColor color, String cmdArray[]) throws GtpError
     {
-        PointArgument argument =
-            parsePointArgument(cmdArray, response, m_boardSize);
-        if (argument == null)
-            return false;
-        return play(color, argument.m_point, response);
+        GoPoint point = parsePointArgument(cmdArray, m_boardSize);
+        play(color, point);
     }
 
-    private boolean cmdQuit(StringBuffer response)
+    private void cmdQuit() throws GtpError
     {
-        return send("quit", response);
+        send("quit");
     }
 
-    private boolean cmdSetFreeHandicap(String cmdArray[],
-                                       StringBuffer response)
+    private void cmdSetFreeHandicap(String cmdArray[]) throws GtpError
     {
         for (int i = 1; i < cmdArray.length; ++i)
         {
-            GoPoint point;
-            try
-            {
-                point = GtpUtils.parsePoint(cmdArray[i], m_boardSize);
-            }
-            catch (GtpError e)
-            {
-                response.append("Invalid vertex");
-                return false;
-            }
-            if (! play(GoColor.BLACK, point, response))
-                return false;
+            GoPoint point = GtpUtils.parsePoint(cmdArray[i], m_boardSize);
+            play(GoColor.BLACK, point);
         }
-        return true;
     }
 
-    private boolean cmdUndo(String cmdArray[], StringBuffer response)
+    private void cmdUndo(String cmdArray[]) throws GtpError
     {
         if (cmdArray.length != 1)
-        {
-            response.append("No arguments allowed");
-            return false;
-        }
-        return undo(response);
+            throw new GtpError("No arguments allowed");
+        undo();
     }
 
-    private boolean cmdUnknown(StringBuffer response)
+    private void cmdUnknown() throws GtpError
     {
-        response.append("Unknown command");
-        return false;
+        throw new GtpError("Unknown command");
     }
 
-    private boolean cmdVersion(StringBuffer response)
+    private void cmdVersion(StringBuffer response) throws GtpError
     {
         assert(m_name != null);
         int index = m_name.indexOf(':');
         if (index >= 0)
             response.append(m_name.substring(index + 1));
-        return true;
     }
 
-    private boolean fillPass(GoColor color, StringBuffer response)
+    private void fillPass(GoColor color) throws GtpError
     {
         if (! m_fillPasses)
-            return true;
+            return;
         GoColor toMove = m_board.getToMove();
         if (color == toMove)
         {
             m_passInserted.push(Boolean.FALSE);
-            return true;
+            return;
         }
         String command = m_gtp.getCommandPlay(Move.create(null, toMove));
-        if (send(command, response))
-        {
-            m_passInserted.push(Boolean.TRUE);
-            return true;
-        }
-        m_passInserted.push(Boolean.FALSE);
-        return false;
-    }
-
-    private boolean play(GoColor color, GoPoint point, StringBuffer response)
-    {
-        if (! fillPass(color, response))
-            return false;
-        String command = m_gtp.getCommandPlay(Move.create(point, color));
-        if (send(command, response))
-        {
-            m_board.play(Move.create(point, color));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean send(String cmd, StringBuffer response)
-    {
         try
         {
-            response.append(m_gtp.sendCommand(cmd));
-            return true;
+            send(command);
+            m_passInserted.push(Boolean.TRUE);
         }
-        catch (GtpError error)
+        catch (GtpError e)
         {
-            response.append(error.getMessage());
-            return false;
+            m_passInserted.push(Boolean.FALSE);
+            throw e;
         }
+    }
+
+    private void play(GoColor color, GoPoint point) throws GtpError
+    {
+        fillPass(color);
+        Move move = Move.create(point, color);
+        String command = m_gtp.getCommandPlay(move);
+        send(command);
+        m_board.play(move);
+    }
+
+    private void send(String cmd) throws GtpError
+    {
+        m_gtp.sendCommand(cmd);
+    }
+
+    private void send(String cmd, StringBuffer response) throws GtpError
+    {
+        response.append(m_gtp.sendCommand(cmd));
     }
 
     private void sendGtpFile(String filename)
@@ -685,11 +610,14 @@ public class GtpAdapter
                     line = line.trim();
                     if (line.equals("") || line.startsWith("#"))
                         continue;
-                    StringBuffer response = new StringBuffer();
-                    if (! send(line, response))
+                    try
+                    {
+                        send(line);
+                    }
+                    catch (GtpError e)
                     {
                         System.err.println("Sending commands aborted:"
-                                           + response);
+                                           + e.getMessage());
                         break;
                     }
                 }
@@ -713,24 +641,20 @@ public class GtpAdapter
         }
     }
 
-    private boolean undo(StringBuffer response)
+    private void undo() throws GtpError
     {
-        if (send("undo", response))
-        {
-            m_board.undo();
-            return undoFillPass(response);
-        }
-        return false;
+        send("undo");
+        m_board.undo();
+        undoFillPass();
     }
 
-    private boolean undoFillPass(StringBuffer response)
+    private void undoFillPass() throws GtpError
     {
         if (! m_fillPasses)
-            return true;
+            return;
         Boolean passInserted = (Boolean)m_passInserted.pop();
         if (passInserted.booleanValue())
-            return send("undo", response);
-        return true;
+            send("undo");
     }
 }
 
