@@ -95,7 +95,7 @@ class ReadThread
                     if (line == null)
                         m_command = null;
                     else
-                        m_command = parseLine(line);
+                        m_command = new GtpCommand(line);
                     notifyAll();
                     m_waitCommand = false;
                     if (m_command == null || m_command.isQuit())
@@ -120,50 +120,6 @@ class ReadThread
     private GtpCommand m_command;
 
     private final GtpEngine m_gtpServer;
-
-    private GtpCommand parseLine(String line)
-    {
-        assert(! line.trim().equals(""));
-        int len = line.length();
-        StringBuffer buffer = new StringBuffer(len);
-        boolean wasLastSpace = false;
-        for (int i = 0; i < len; ++i)
-        {
-            char c = line.charAt(i);
-            if (Character.isISOControl(c))
-                continue;
-            if (Character.isWhitespace(c))
-            {
-                if (! wasLastSpace)
-                {
-                    buffer.append(' ');
-                    wasLastSpace = true;
-                }
-            }
-            else
-            {
-                buffer.append(c);
-                wasLastSpace = false;
-            }
-        }
-        String[] array = StringUtils.tokenize(buffer.toString());
-        assert(array.length > 0);
-        String command = buffer.toString();
-        GtpCommand result = new GtpCommand();
-        result.m_hasId = false;
-        result.m_command = command;
-        try
-        {
-            result.m_hasId = true;
-            result.m_id = Integer.parseInt(array[0]);
-            result.m_command = buffer.substring(array[0].length());
-        }
-        catch (NumberFormatException e)
-        {
-            result.m_hasId = false;
-        }
-        return result;
-    }
 }
 
 //----------------------------------------------------------------------------
@@ -378,7 +334,7 @@ public abstract class GtpEngine
         boolean status = true;
         try
         {
-            handleCommand(cmd.m_command.trim(), response);
+            handleCommand(cmd.getCommand(), response);
         }
         catch (GtpError e)
         {
@@ -388,7 +344,7 @@ public abstract class GtpEngine
         }
         String sanitizedResponse
             = response.toString().replaceAll("\\n\\n", "\n \n");
-        respond(status, cmd.m_hasId, cmd.m_id, sanitizedResponse);
+        respond(status, cmd.hasId(), cmd.id(), sanitizedResponse);
     }
 }
 
