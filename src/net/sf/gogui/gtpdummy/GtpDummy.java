@@ -10,7 +10,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Random;
 import java.util.Vector;
+import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.utils.StringUtils;
@@ -37,60 +39,57 @@ public class GtpDummy
         m_thread = Thread.currentThread();
     }
 
-    public void handleCommand(String cmdLine, StringBuffer response)
-        throws GtpError
+    public void handleCommand(GtpCommand cmd) throws GtpError
     {
-        String[] cmdArray = StringUtils.tokenize(cmdLine);
-        String cmd = cmdArray[0];
         if (m_nextResponseFixed
-            && ! (cmd.equals("dummy_next_failure")
-                  || cmd.equals("dummy_next_success")))
+            && ! (cmd.getCommand().equals("dummy_next_failure")
+                  || cmd.getCommand().equals("dummy_next_success")))
         {
             m_nextResponseFixed = false;
             if (! m_nextStatus)
                 throw new GtpError(m_nextResponse);
-            response.append(m_nextResponse);
+            cmd.setResponse(m_nextResponse);
         }
-        else if (cmd.equals("boardsize"))
-            cmdBoardsize(cmdArray);
-        else if (cmd.equals("clear_board"))
+        else if (cmd.getCommand().equals("boardsize"))
+            cmdBoardsize(cmd);
+        else if (cmd.getCommand().equals("clear_board"))
             cmdClearBoard();
-        else if (cmd.equals("dummy_bwboard"))
-            bwBoard(response);
-        else if (cmd.equals("dummy_delay"))
-            cmdDelay(cmdArray, response);
-        else if (cmd.equals("dummy_eplist"))
-            cmdEPList(cmdArray, response);
-        else if (cmd.equals("dummy_gfx"))
-            cmdGfx(cmdArray, response);
-        else if (cmd.equals("dummy_invalid"))
+        else if (cmd.getCommand().equals("dummy_bwboard"))
+            cmdBWBoard(cmd);
+        else if (cmd.getCommand().equals("dummy_delay"))
+            cmdDelay(cmd);
+        else if (cmd.getCommand().equals("dummy_eplist"))
+            cmdEPList(cmd);
+        else if (cmd.getCommand().equals("dummy_gfx"))
+            cmdGfx(cmd);
+        else if (cmd.getCommand().equals("dummy_invalid"))
             cmdInvalid();
-        else if (cmd.equals("dummy_long_response"))
-            cmdLongResponse(cmdArray, response);
-        else if (cmd.equals("dummy_crash"))
-            crash();
-        else if (cmd.equals("dummy_next_failure"))
-            nextResponseFixed(cmd, cmdLine, false);
-        else if (cmd.equals("dummy_next_success"))
-            nextResponseFixed(cmd, cmdLine, true);
-        else if (cmd.equals("dummy_sleep"))
-            sleep(cmdArray, response);
-        else if (cmd.equals("echo"))
-            echo(cmdLine, response);
-        else if (cmd.equals("echo_err"))
-            echoErr(cmdLine);
-        else if (cmd.equals("genmove"))
-            cmdGenmove(response);
-        else if (cmd.equals("gogui_interrupt"))
+        else if (cmd.getCommand().equals("dummy_long_response"))
+            cmdLongResponse(cmd);
+        else if (cmd.getCommand().equals("dummy_crash"))
+            cmdCrash();
+        else if (cmd.getCommand().equals("dummy_next_failure"))
+            nextResponseFixed(cmd, false);
+        else if (cmd.getCommand().equals("dummy_next_success"))
+            nextResponseFixed(cmd, true);
+        else if (cmd.getCommand().equals("dummy_sleep"))
+            cmdSleep(cmd);
+        else if (cmd.getCommand().equals("echo"))
+            cmdEcho(cmd);
+        else if (cmd.getCommand().equals("echo_err"))
+            cmdEchoErr(cmd);
+        else if (cmd.getCommand().equals("genmove"))
+            cmdGenmove(cmd);
+        else if (cmd.getCommand().equals("gogui_interrupt"))
             ;
-        else if (cmd.equals("name"))
-            response.append("GtpDummy");
-        else if (cmd.equals("play"))
-            cmdPlay(cmdArray, response);
-        else if (cmd.equals("protocol_version"))
-            response.append("2");
-        else if (cmd.equals("list_commands"))
-            response.append("boardsize\n" +
+        else if (cmd.getCommand().equals("name"))
+            cmd.setResponse("GtpDummy");
+        else if (cmd.getCommand().equals("play"))
+            cmdPlay(cmd);
+        else if (cmd.getCommand().equals("protocol_version"))
+            cmd.setResponse("2");
+        else if (cmd.getCommand().equals("list_commands"))
+            cmd.setResponse("boardsize\n" +
                             "clear_board\n" +
                             "dummy_bwboard\n" +
                             "dummy_crash\n" +
@@ -112,13 +111,13 @@ public class GtpDummy
                             "protocol_version\n" +
                             "quit\n" +
                             "version\n");
-        else if (cmd.equals("version"))
-            response.append(Version.get());
-        else if (cmd.equals("quit"))
+        else if (cmd.getCommand().equals("version"))
+            cmd.setResponse(Version.get());
+        else if (cmd.getCommand().equals("quit"))
             ;
         else
             throw new GtpError("unknown command");
-        if (m_delay > 0 && ! cmd.equals("dummy_delay"))
+        if (m_delay > 0 && ! cmd.getCommand().equals("dummy_delay"))
         {
             try
             {
@@ -155,27 +154,32 @@ public class GtpDummy
     /** Editable point list for dummy_eplist command. */
     private Vector m_ePList = new Vector();
 
-    private void bwBoard(StringBuffer response)
+    private void cmdBWBoard(GtpCommand cmd)
     {        
-        response.append('\n');
+        cmd.getResponse().append('\n');
         for (int x = 0; x < m_size; ++x)
         {
             for (int y = 0; y < m_size; ++y)
             {
-                response.append(m_random.nextBoolean() ? 'B' : 'W');
+                cmd.getResponse().append(m_random.nextBoolean() ? 'B' : 'W');
                 if (y < m_size - 1)
-                    response.append(' ');
+                    cmd.getResponse().append(' ');
             }
-            response.append('\n');
+            cmd.getResponse().append('\n');
         }                    
     }
 
-    private void cmdBoardsize(String[] cmdArray) throws GtpError
+    private void cmdBoardsize(GtpCommand cmd) throws GtpError
     {
-        int size = parseIntegerArgument(cmdArray);
-        if (size < 1 || size > 1000)
-            throw new GtpError("Invalid size");
+        cmd.checkNuArg(1);
+        int size = cmd.getIntArg(0, 1, GoPoint.MAXSIZE);
         initSize(size);
+    }
+
+    private void cmdCrash()
+    {        
+        System.err.println("Aborting GtpDummy");
+        System.exit(-1);
     }
 
     private void cmdClearBoard() throws GtpError
@@ -183,39 +187,36 @@ public class GtpDummy
         initSize(m_size);
     }
 
-    private void cmdDelay(String[] cmdArray, StringBuffer response)
-        throws GtpError
+    private void cmdEcho(GtpCommand cmd)
     {
-        int n;
-        try
-        {
-            n = parseIntegerArgument(cmdArray);
-        }
-        catch (GtpError e)
-        {
-            response.delete(0, response.length());
-            response.append(m_delay);
-            return;
-        }
-        if (n < 0)
-            throw new GtpError("Argument must be positive");
-        m_delay = n;
-    }
-    
-    private void cmdEPList(String[] cmdArray, StringBuffer response)
-        throws GtpError
-    {
-        if (cmdArray.length == 2 && cmdArray[1].equals("show"))
-        {
-            response.append(GoPoint.toString(m_ePList));
-            return;
-        }
-        m_ePList = parsePointListArgument(cmdArray, m_size);
+        cmd.setResponse(cmd.getArgLine());
     }
 
-    private void cmdGfx(String[] cmdArray, StringBuffer response)
+    private void cmdEchoErr(GtpCommand cmd)
     {
-        response.append("LABEL A4 test\n" +
+        System.err.println(cmd.getArgLine());
+    }
+
+    private void cmdDelay(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkNuArgLessEqual(1);
+        if (cmd.getNuArg() == 1)
+            m_delay = cmd.getIntArg(0, 0, Integer.MAX_VALUE);
+        else
+            cmd.getResponse().append(m_delay);
+    }
+    
+    private void cmdEPList(GtpCommand cmd) throws GtpError
+    {
+        if (cmd.getNuArg() == 1 && cmd.getArg(0).equals("show"))
+            cmd.setResponse(GoPoint.toString(m_ePList));
+        else
+            m_ePList = cmd.getPointListArg(m_size);
+    }
+
+    private void cmdGfx(GtpCommand cmd)
+    {
+        cmd.setResponse("LABEL A4 test\n" +
                         "COLOR green A5 A7 B9\n" +
                         "COLOR #980098 B7 B8\n" +
                         "SQUARE B5 C9\n" +
@@ -226,7 +227,7 @@ public class GtpDummy
                         "CIRCLE c8\n");
     }
 
-    private void cmdGenmove(StringBuffer response)
+    private void cmdGenmove(GtpCommand cmd)
     {
         int numberPossibleMoves = 0;
         for (int x = 0; x < m_size; ++x)
@@ -247,7 +248,7 @@ public class GtpDummy
                         ++index;
                     }
         }
-        response.append(GoPoint.toString(point));
+        cmd.setResponse(GoPoint.toString(point));
         if (point != null)
             m_alreadyPlayed[point.getX()][point.getY()] = true;
     }
@@ -258,47 +259,40 @@ public class GtpDummy
                              "It does not start with a status character.\n");
     }
 
-    private void cmdLongResponse(String[] cmdArray, StringBuffer response)
-        throws GtpError
+    private void cmdLongResponse(GtpCommand cmd) throws GtpError
     {        
-        int n = parseIntegerArgument(cmdArray);
+        cmd.checkNuArg(1);
+        int n = cmd.getIntArg(0, 1, Integer.MAX_VALUE);
         for (int i = 1; i <= n; ++i)
         {
-            response.append(i);
-            response.append("\n");
+            cmd.getResponse().append(i);
+            cmd.getResponse().append("\n");
         }
     }
 
-    private void cmdPlay(String[] cmdArray, StringBuffer response)
-        throws GtpError
+    private void cmdPlay(GtpCommand cmd) throws GtpError
     {
-        ColorPointArgument argument
-            = parseColorPointArgument(cmdArray, m_size);
-        GoPoint point = argument.m_point;
+        cmd.checkNuArg(2);
+        GoColor color = cmd.getColorArg(0);
+        GoPoint point = cmd.getPointArg(1, m_size);
         if (point != null)
             m_alreadyPlayed[point.getX()][point.getY()] = true;
     }
 
-    private void crash()
-    {        
-        System.err.println("Aborting GtpDummy");
-        System.exit(-1);
-    }
-
-    private void echo(String cmdLine, StringBuffer response)
+    private void cmdSleep(GtpCommand cmd) throws GtpError
     {
-        int index = cmdLine.indexOf(" ");
-        if (index < 0)
-            return;
-        response.append(cmdLine.substring(index + 1));
-    }
-
-    private void echoErr(String cmdLine)
-    {
-        int index = cmdLine.indexOf(" ");
-        if (index < 0)
-            return;
-        System.err.println(cmdLine.substring(index + 1));
+        cmd.checkNuArgLessEqual(1);        
+        long millis = 20000;
+        if (cmd.getNuArg() == 1)
+            millis = (long)(cmd.getDoubleArg(0) * 1000.0);
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch (InterruptedException e)
+        {
+            throw new GtpError("interrupted");
+        }
     }
 
     private void initSize(int size)
@@ -307,39 +301,11 @@ public class GtpDummy
         m_size = size;
     }
 
-    private void nextResponseFixed(String cmd, String cmdLine,
-                                   boolean nextStatus)
+    private void nextResponseFixed(GtpCommand cmd, boolean nextStatus)
     {
         m_nextResponseFixed = true;
         m_nextStatus = nextStatus;
-        m_nextResponse = cmdLine.substring(cmd.length()).trim();
-    }
-
-    private boolean sleep(String[] cmdArray, StringBuffer response)
-    {
-        long millis = 20000;
-        if (cmdArray.length > 1)
-        {
-            try
-            {
-                millis = (long)(Double.parseDouble(cmdArray[1]) * 1000.0);
-            }
-            catch (NumberFormatException e)
-            {
-                response.append("Invalid argument");
-                return false;
-            }
-        }
-        try
-        {
-            Thread.sleep(millis);
-        }
-        catch (InterruptedException e)
-        {
-            response.append("Interrupted");
-            return false;
-        }
-        return true;
+        m_nextResponse = cmd.getArgLine();
     }
 }
 

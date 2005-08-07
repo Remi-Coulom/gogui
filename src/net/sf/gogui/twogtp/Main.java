@@ -6,6 +6,7 @@
 package net.sf.gogui.twogtp;
 
 import java.io.File;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
@@ -95,7 +96,7 @@ public class Main
             String white = opt.getString("white", "");
             String referee = opt.getString("referee", "");
             String observer = opt.getString("observer", "");
-            int size = opt.getInteger("size", 0, 0);
+            int size = opt.getInteger("size", 19, 1, GoPoint.MAXSIZE);
             double komi = 6.5;
             boolean isKomiFixed = opt.isSet("komi");
             if (isKomiFixed)

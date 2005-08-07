@@ -28,6 +28,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
@@ -52,6 +53,8 @@ public class TwoGtp
         throws Exception
     {
         super(in, out, null);
+        assert(size > 0);
+        assert(size <= GoPoint.MAXSIZE);
         if (black.equals(""))
             throw new ErrorMessage("No black program set");
         if (white.equals(""))
@@ -116,7 +119,7 @@ public class TwoGtp
         m_openings = openings;
         m_verbose = verbose;
         m_loadsgf = loadsgf;
-        initGame(size < 1 ? 19 : size);
+        initGame(size);
     }
 
     public void autoPlay() throws Exception
@@ -127,7 +130,7 @@ public class TwoGtp
         {
             try
             {
-                newGame(m_size > 0 ? m_size : 19);
+                newGame(m_size);
                 while (! gameOver())
                 {
                     response.setLength(0);
@@ -172,55 +175,53 @@ public class TwoGtp
         return m_numberGames - m_gameIndex;
     }
 
-    public void handleCommand(String cmdLine, StringBuffer response)
-        throws GtpError
+    public void handleCommand(GtpCommand cmd) throws GtpError
     {
-        String[] cmdArray = StringUtils.tokenize(cmdLine);
-        String cmd = cmdArray[0];
-        if (cmd.equals("boardsize"))
-            cmdBoardSize(cmdArray, response);
-        else if (cmd.equals("clear_board"))
-            cmdClearBoard(cmdArray);
-        else if (cmd.equals("final_score"))
-            finalStatusCommand(cmdLine, response);
-        else if (cmd.equals("final_status"))
-            finalStatusCommand(cmdLine, response);
-        else if (cmd.equals("final_status_list"))
-            finalStatusCommand(cmdLine, response);
-        else if (cmd.equals("gogui_interrupt"))
+        String command = cmd.getCommand();
+        if (command.equals("boardsize"))
+            cmdBoardSize(cmd);
+        else if (command.equals("clear_board"))
+            cmdClearBoard(cmd);
+        else if (command.equals("final_score"))
+            finalStatusCommand(cmd);
+        else if (command.equals("final_status"))
+            finalStatusCommand(cmd);
+        else if (command.equals("final_status_list"))
+            finalStatusCommand(cmd);
+        else if (command.equals("gogui_interrupt"))
             ;
-        else if (cmd.equals("gogui_title"))
-            response.append(getTitle());
-        else if (cmd.equals("loadsgf"))
-            sendBoth(cmdLine, true);
-        else if (cmd.equals("twogtp_black"))
-            twogtpColor(m_black, cmdLine, response);
-        else if (cmd.equals("twogtp_white"))
-            twogtpColor(m_white, cmdLine, response);
-        else if (cmd.equals("twogtp_referee"))
-            twogtpReferee(cmdLine, response);
-        else if (cmd.equals("twogtp_observer"))
-            twogtpObserver(cmdLine, response);
-        else if (cmd.equals("quit"))
-            sendBoth(cmdLine, false);
-        else if (cmd.equals("play"))
-            cmdPlay(cmdArray, response);
-        else if (cmd.equals("undo"))
-            cmdUndo();
-        else if (cmd.equals("genmove"))
-            cmdGenmove(cmdArray, response);
-        else if (cmd.equals("komi"))
-            komi(cmdArray);
-        else if (cmd.equals("scoring_system"))
-            sendIfSupported(cmd, cmdLine);
-        else if (cmd.equals("name"))
-            response.append("TwoGtp");
-        else if (cmd.equals("version"))
-            response.append(Version.get());
-        else if (cmd.equals("protocol_version"))
-            response.append("2");
-        else if (cmd.equals("list_commands"))
-            response.append("boardsize\n" +
+        else if (command.equals("gogui_title"))
+            cmd.setResponse(getTitle());
+        else if (command.equals("loadsgf"))
+            sendBoth(cmd.getLine(), true);
+        else if (command.equals("twogtp_black"))
+            twogtpColor(m_black, cmd);
+        else if (command.equals("twogtp_white"))
+            twogtpColor(m_white, cmd);
+        else if (command.equals("twogtp_referee"))
+            twogtpReferee(cmd);
+        else if (command.equals("twogtp_observer"))
+            twogtpObserver(cmd);
+        else if (command.equals("quit"))
+            sendBoth("quit", false);
+        else if (command.equals("play"))
+            cmdPlay(cmd);
+        else if (command.equals("undo"))
+            cmdUndo(cmd);
+        else if (command.equals("genmove"))
+            cmdGenmove(cmd);
+        else if (command.equals("komi"))
+            komi(cmd);
+        else if (command.equals("scoring_system"))
+            sendIfSupported(command, cmd.getLine());
+        else if (command.equals("name"))
+            cmd.setResponse("TwoGtp");
+        else if (command.equals("version"))
+            cmd.setResponse(Version.get());
+        else if (command.equals("protocol_version"))
+            cmd.setResponse("2");
+        else if (command.equals("list_commands"))
+            cmd.setResponse("boardsize\n" +
                             "clear_board\n" +
                             "final_score\n" +
                             "final_status\n" +
@@ -242,37 +243,37 @@ public class TwoGtp
                             "twogtp_white\n" +
                             "undo\n" +
                             "version\n");
-        else if (cmd.equals("genmove_black")
-                 || cmd.equals("genmove_white")
-                 || cmd.equals("black")
-                 || cmd.equals("white")
-                 || cmd.equals("kgs-genmove_cleanup")
-                 || cmd.equals("genmove_cleanup"))
+        else if (command.equals("genmove_black")
+                 || command.equals("genmove_white")
+                 || command.equals("black")
+                 || command.equals("white")
+                 || command.equals("kgs-genmove_cleanup")
+                 || command.equals("genmove_cleanup"))
             throw new GtpError("unknown command");
-        else if (cmd.equals("time_settings"))
-            sendIfSupported(cmd, cmdLine);
+        else if (command.equals("time_settings"))
+            sendIfSupported(command, cmd.getLine());
         else
         {
-            boolean isExtCommandBlack = m_black.isCommandSupported(cmd);
-            boolean isExtCommandWhite = m_white.isCommandSupported(cmd);
+            boolean isExtCommandBlack = m_black.isCommandSupported(command);
+            boolean isExtCommandWhite = m_white.isCommandSupported(command);
             boolean isExtCommandReferee = false;
             if (m_referee != null && ! m_refereeIsDisabled)
-                isExtCommandReferee = m_referee.isCommandSupported(cmd);
+                isExtCommandReferee = m_referee.isCommandSupported(command);
             boolean isExtCommandObserver = false;
             if (m_observer != null && ! m_observerIsDisabled)
-                isExtCommandObserver = m_observer.isCommandSupported(cmd);
+                isExtCommandObserver = m_observer.isCommandSupported(command);
             if (isExtCommandBlack && ! isExtCommandObserver
                 && ! isExtCommandWhite && ! isExtCommandReferee)
-                sendSingle(m_black, cmdLine, response);
+                forward(m_black, cmd);
             if (isExtCommandWhite && ! isExtCommandObserver
                 && ! isExtCommandBlack && ! isExtCommandReferee)
-                sendSingle(m_white, cmdLine, response);
+                forward(m_white, cmd);
             if (isExtCommandReferee && ! isExtCommandObserver
                 && ! isExtCommandBlack && ! isExtCommandWhite)
-                sendSingle(m_referee, cmdLine, response);
+                forward(m_referee, cmd);
             if (isExtCommandObserver && ! isExtCommandReferee
                 && ! isExtCommandBlack && ! isExtCommandWhite)
-                sendSingle(m_observer, cmdLine, response);
+                forward(m_observer, cmd);
             if (! isExtCommandReferee
                 && ! isExtCommandBlack
                 && ! isExtCommandObserver
@@ -383,18 +384,15 @@ public class TwoGtp
             throw new GtpError("Inconsistent state");
     }
 
-    private void cmdBoardSize(String[] cmdArray, StringBuffer response)
-        throws GtpError
+    private void cmdBoardSize(GtpCommand cmd) throws GtpError
     {
-        int size = parseIntegerArgument(cmdArray);
-        if (size < 1)
-            throw new GtpError("Invalid argument");
-        if (m_size > 0 && size != m_size)
+        cmd.checkNuArg(1);
+        int size = cmd.getIntArg(0, 1, GoPoint.MAXSIZE);
+        if (size != m_size)
             throw new GtpError("Size must be " + m_size);
     }
 
-    private void cmdClearBoard(String[] cmdArray)
-        throws GtpError
+    private void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
         if (gamesLeft() == 0)
             throw new GtpError("Maximum number of " + m_numberGames +
@@ -402,20 +400,18 @@ public class TwoGtp
         newGame(m_size);
     }
 
-    private void cmdGenmove(String[] cmdArray, StringBuffer response)
-        throws GtpError
+    private void cmdGenmove(GtpCommand cmd) throws GtpError
     {
-        GoColor color = parseColorArgument(cmdArray);
-        sendGenmove(color, response);
+        sendGenmove(cmd.getColorArg(), cmd.getResponse());
     }
 
-    private void cmdPlay(String[] cmdArray, StringBuffer response)
-        throws GtpError
+    private void cmdPlay(GtpCommand cmd) throws GtpError
     {
+        cmd.checkNuArg(2);
         checkInconsistentState();
-        ColorPointArgument argument
-            = parseColorPointArgument(cmdArray, m_board.getSize());
-        Move move = Move.create(argument.m_point, argument.m_color);
+        GoColor color = cmd.getColorArg(0);
+        GoPoint point = cmd.getPointArg(1, m_size);
+        Move move = Move.create(point, color);
         if (m_openings != null)
         {
             if (m_openingMovesIndex < m_openingMoves.size()
@@ -425,8 +421,9 @@ public class TwoGtp
         sendMove(move);
     }
 
-    private void cmdUndo() throws GtpError
+    private void cmdUndo(GtpCommand cmd) throws GtpError
     {
+        cmd.checkArgNone();
         checkInconsistentState();
         sendBoth("undo", true);
         m_board.undo();
@@ -442,16 +439,16 @@ public class TwoGtp
         }
     }
 
-    private boolean finalStatusCommand(String cmdLine, StringBuffer response)
+    private void finalStatusCommand(GtpCommand cmd) throws GtpError
     {
         if (m_referee != null && ! m_refereeIsDisabled)
-            return sendSingle(m_referee, cmdLine, response);
-        if (m_black.isCommandSupported("final_status"))
-            return sendSingle(m_black, cmdLine, response);
-        if (m_white.isCommandSupported("final_status"))
-            return sendSingle(m_white, cmdLine, response);
-        response.append("Neither player supports final_status command");
-        return false;
+            forward(m_referee, cmd);
+        else if (m_black.isCommandSupported("final_status"))
+            forward(m_black, cmd);
+        else if (m_white.isCommandSupported("final_status"))
+            forward(m_white, cmd);
+        else
+            throw new GtpError("neither player supports final_status");
     }
 
     private void findInitialGameIndex()
@@ -483,6 +480,11 @@ public class TwoGtp
         catch (IOException e)
         {
         }
+    }
+
+    private void forward(Gtp gtp, GtpCommand cmd) throws GtpError
+    {
+        cmd.setResponse(gtp.sendCommand(cmd.getLine()));
     }
 
     private boolean gameOver()
@@ -715,12 +717,12 @@ public class TwoGtp
         return (m_alternate && m_gameIndex % 2 != 0);
     }
 
-    private void komi(String[] cmdArray) throws GtpError
+    private void komi(GtpCommand cmd) throws GtpError
     {
         if (m_isKomiFixed)
             throw new GtpError("Komi " + m_komi
                                + " is fixed by command line option");
-        double komi = parseDoubleArgument(cmdArray);
+        double komi = cmd.getDoubleArg();
         m_komi = komi;
         m_gameTree.getGameInformation().m_komi = m_komi;
         sendIfSupported("komi", "komi " + m_komi);
@@ -1111,10 +1113,14 @@ public class TwoGtp
 
     private void sendIfSupported(Gtp gtp, String cmd, String cmdLine)
     {
-        if (gtp.isCommandSupported(cmd))
+        if (! gtp.isCommandSupported(cmd))
+            return;
+        try
         {
-            StringBuffer response = new StringBuffer();
-            sendSingle(gtp, cmdLine, response);
+            gtp.sendCommand(cmdLine);
+        }
+        catch (GtpError e)
+        {
         }
     }
 
@@ -1131,20 +1137,6 @@ public class TwoGtp
         send(m_black, m_white, cmdBlack, cmdWhite, cmdReferee, cmdObserver,
              true);
         play(move);
-    }
-
-    private boolean sendSingle(Gtp gtp, String command, StringBuffer response)
-    {
-        try
-        {
-            response.append(gtp.sendCommand(command));
-        }
-        catch (GtpError e)
-        {
-            response.append(e.getMessage());
-            return false;
-        }        
-        return true;
     }
 
     private void sendToObserver(String command)
@@ -1181,47 +1173,27 @@ public class TwoGtp
         }        
     }
 
-    private boolean twogtpColor(Gtp gtp, String command,
-                                StringBuffer response)
+    private void twogtpColor(Gtp gtp, GtpCommand cmd) throws GtpError
     {
-        int index = command.indexOf(' ');
-        if (index < 0)
-        {
-            response.append("Missing argument");
-            return false;
-        }
-        command = command.substring(index).trim();
-        return sendSingle(gtp, command, response);
+        cmd.setResponse(gtp.sendCommand(cmd.getArgLine()));
     }
 
-    private boolean twogtpObserver(String command, StringBuffer response)
+    private void twogtpObserver(GtpCommand cmd) throws GtpError
     {
         if (m_observer == null)
-        {
-            response.append("No observer enabled");
-            return false;
-        }
+            throw new GtpError("No observer enabled");
         if (m_observerIsDisabled)
-        {
-            response.append("Observer disabled for this game");
-            return false;
-        }
-        return twogtpColor(m_observer, command, response);
+            throw new GtpError("Observer disabled for this game");
+        twogtpColor(m_observer, cmd);
     }
 
-    private boolean twogtpReferee(String command, StringBuffer response)
+    private void twogtpReferee(GtpCommand cmd) throws GtpError
     {
         if (m_referee == null)
-        {
-            response.append("No referee enabled");
-            return false;
-        }
+            throw new GtpError("No referee enabled");
         if (m_refereeIsDisabled)
-        {
-            response.append("Referee disabled for this game");
-            return false;
-        }
-        return twogtpColor(m_referee, command, response);
+            throw new GtpError("Referee disabled for this game");
+        twogtpColor(m_referee, cmd);
     }
 }
 

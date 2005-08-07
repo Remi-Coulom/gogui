@@ -25,6 +25,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
@@ -74,57 +75,56 @@ public class GtpAdapter
         m_gtp.waitForExit();
     }
 
-    public void handleCommand(String cmdLine, StringBuffer response)
-        throws GtpError
+    public void handleCommand(GtpCommand cmd) throws GtpError
     {
-        String[] cmdArray = StringUtils.tokenize(cmdLine);
-        String cmd = cmdArray[0];
-        if (cmd.equals("black"))
-            cmdPlay(GoColor.BLACK, cmdArray);
-        else if (cmd.equals("boardsize"))
-            cmdBoardsize(cmdArray);
-        else if (cmd.equals("clear_board"))
+        if (cmd.getCommand().equals("black"))
+            cmdPlay(GoColor.BLACK, cmd);
+        else if (cmd.getCommand().equals("boardsize"))
+            cmdBoardsize(cmd);
+        else if (cmd.getCommand().equals("clear_board"))
             cmdClearBoard();
-        else if (cmd.equals("final_score") && m_noScore)
+        else if (cmd.getCommand().equals("final_score") && m_noScore)
             cmdUnknown();
-        else if (cmd.equals("final_status_list") && m_noScore)
+        else if (cmd.getCommand().equals("final_status_list") && m_noScore)
             cmdUnknown();
-        else if (cmd.equals("genmove"))
-            cmdGenmove(cmdArray, response);
-        else if (cmd.equals("genmove_black"))
-            cmdGenmove(GoColor.BLACK, response);
-        else if (cmd.equals("genmove_white"))
-            cmdGenmove(GoColor.WHITE, response);
-        else if (cmd.equals("gg-undo"))
-            cmdGGUndo(cmdArray);
-        else if (cmd.equals("gtpadapter_showboard"))
-            cmdGtpAdapterShowBoard(response);
-        else if (cmd.equals("help"))
-            cmdListCommands(response);
-        else if (cmd.equals("list_commands"))
-            cmdListCommands(response);
-        else if (cmd.equals("loadsgf"))
-            cmdLoadsgf(cmdArray, response);
-        else if (cmd.equals("name") && m_name != null)
-            cmdName(response);
-        else if (cmd.equals("place_free_handicap") && m_emuHandicap)
-            cmdPlaceFreeHandicap(cmdArray, response);
-        else if (cmd.equals("play"))
-            cmdPlay(cmdArray);
-        else if (cmd.equals("protocol_version"))
-            response.append(m_version1 ? "1" : "2");
-        else if (cmd.equals("quit"))
+        else if (cmd.getCommand().equals("genmove"))
+            cmdGenmove(cmd);
+        else if (cmd.getCommand().equals("genmove_black"))
+            cmdGenmove(GoColor.BLACK, cmd);
+        else if (cmd.getCommand().equals("genmove_white"))
+            cmdGenmove(GoColor.WHITE, cmd);
+        else if (cmd.getCommand().equals("gg-undo"))
+            cmdGGUndo(cmd);
+        else if (cmd.getCommand().equals("gtpadapter_showboard"))
+            cmdGtpAdapterShowBoard(cmd);
+        else if (cmd.getCommand().equals("help"))
+            cmdListCommands(cmd);
+        else if (cmd.getCommand().equals("list_commands"))
+            cmdListCommands(cmd);
+        else if (cmd.getCommand().equals("loadsgf"))
+            cmdLoadsgf(cmd);
+        else if (cmd.getCommand().equals("name") && m_name != null)
+            cmdName(cmd);
+        else if (cmd.getCommand().equals("place_free_handicap")
+                 && m_emuHandicap)
+            cmdPlaceFreeHandicap(cmd);
+        else if (cmd.getCommand().equals("play"))
+            cmdPlay(cmd);
+        else if (cmd.getCommand().equals("protocol_version"))
+            cmd.getResponse().append(m_version1 ? "1" : "2");
+        else if (cmd.getCommand().equals("quit"))
             cmdQuit();
-        else if (cmd.equals("set_free_handicap") && m_emuHandicap)
-            cmdSetFreeHandicap(cmdArray);
-        else if (cmd.equals("version") && m_name != null)
-            cmdVersion(response);
-        else if (cmd.equals("undo"))
-            cmdUndo(cmdArray);
-        else if (cmd.equals("white"))
-            cmdPlay(GoColor.WHITE, cmdArray);
+        else if (cmd.getCommand().equals("set_free_handicap")
+                 && m_emuHandicap)
+            cmdSetFreeHandicap(cmd);
+        else if (cmd.getCommand().equals("version") && m_name != null)
+            cmdVersion(cmd);
+        else if (cmd.getCommand().equals("undo"))
+            cmdUndo(cmd);
+        else if (cmd.getCommand().equals("white"))
+            cmdPlay(GoColor.WHITE, cmd);
         else
-            send(cmdLine, response);
+            send(cmd.getLine(), cmd.getResponse());
     }
 
     public void interruptProgram(Gtp gtp)
@@ -221,9 +221,9 @@ public class GtpAdapter
         return false;
     }
 
-    private void cmdBoardsize(String cmdArray[]) throws GtpError
+    private void cmdBoardsize(GtpCommand cmd) throws GtpError
     {
-        int size = parseIntegerArgument(cmdArray);
+        int size = cmd.getIntArg();
         if (size < 1)
             throw new GtpError("Invalid board size");
         if (m_size > 0 && size != m_size)
@@ -245,16 +245,14 @@ public class GtpAdapter
         m_passInserted.clear();
     }
 
-    private void cmdGenmove(String cmdArray[], StringBuffer response)
-        throws GtpError
+    private void cmdGenmove(GtpCommand cmd) throws GtpError
     {
-        cmdGenmove(parseColorArgument(cmdArray), response);
+        cmdGenmove(cmd.getColorArg(), cmd);
     }
 
-    private void cmdGenmove(GoColor color, StringBuffer response)
-        throws GtpError
+    private void cmdGenmove(GoColor color, GtpCommand cmd) throws GtpError
     {
-        if (checkResign(color, response))
+        if (checkResign(color, cmd.getResponse()))
             return;
         String command = m_gtp.getCommandGenmove(color);
         fillPass(color);
@@ -267,33 +265,19 @@ public class GtpAdapter
             undoFillPass();
             throw e;
         }
-        if (response.toString().trim().equals("resign"))
+        if (cmd.getResponse().toString().trim().equals("resign"))
             return;
-        GoPoint point = GtpUtils.parsePoint(response.toString(), m_boardSize);
+        GoPoint point
+            = GtpUtils.parsePoint(cmd.getResponse().toString(), m_boardSize);
         m_board.play(Move.create(point, color));
     }
 
-    private void cmdGGUndo(String cmdArray[])
-        throws GtpError
+    private void cmdGGUndo(GtpCommand cmd) throws GtpError
     {
-        if (cmdArray.length > 2)
-            throw new GtpError("Too many arguments");
+        cmd.checkNuArgLessEqual(1);
         int n = 1;
-        if (cmdArray.length == 2)
-        {
-            try
-            {
-                n = Integer.parseInt(cmdArray[1]);
-                if (n <= 0)
-                    throw new GtpError("Argument must be positive");
-                if (n > m_board.getMoveNumber())
-                    throw new GtpError("Not enough moves");
-            }
-            catch (NumberFormatException e)
-            {
-                throw new GtpError("Invalid argument");
-            }
-        }        
+        if (cmd.getNuArg() == 1)
+            n = cmd.getIntArg(0, 1, m_board.getMoveNumber());
         int total = 0;
         Stack stack = new Stack();
         for (int i = 0; i < n; ++i)
@@ -320,97 +304,83 @@ public class GtpAdapter
         m_board.undo(total);
     }
 
-    private void cmdGtpAdapterShowBoard(StringBuffer response)
-        throws GtpError
+    private void cmdGtpAdapterShowBoard(GtpCommand cmd) throws GtpError
     {
         OutputStream outputStream = new ByteArrayOutputStream(2048);
         PrintStream printStream = new PrintStream(outputStream);
         BoardUtils.print(m_board, printStream);
-        response.append("\n");
-        response.append(outputStream.toString());
+        cmd.getResponse().append("\n");
+        cmd.getResponse().append(outputStream.toString());
     }
 
-    private void cmdListCommands(StringBuffer response)
-        throws GtpError
+    private void cmdListCommands(GtpCommand cmd) throws GtpError
     {
         Vector commands = m_gtp.getSupportedCommands();
         for (int i = 0; i < commands.size(); ++i)
         {
-            String cmd = (String)commands.get(i);
-            if (cmd.equals("boardsize")
-                || cmd.equals("black")
-                || cmd.equals("clear_board")
-                || cmd.equals("genmove")
-                || cmd.equals("genmove_black")
-                || cmd.equals("genmove_white")
-                || cmd.equals("help")
-                || cmd.equals("list_commands")
-                || cmd.equals("play")
-                || cmd.equals("protocol_version")
-                || cmd.equals("quit")
-                || cmd.equals("white"))
+            String c = (String)commands.get(i);
+            if (c.equals("boardsize")
+                || c.equals("black")
+                || c.equals("clear_board")
+                || c.equals("genmove")
+                || c.equals("genmove_black")
+                || c.equals("genmove_white")
+                || c.equals("help")
+                || c.equals("list_commands")
+                || c.equals("play")
+                || c.equals("protocol_version")
+                || c.equals("quit")
+                || c.equals("white"))
                 continue;
-            if ((cmd.equals("set_free_handicap")
-                 || cmd.equals("get_free_handicap"))
+            if ((c.equals("set_free_handicap")
+                 || c.equals("get_free_handicap"))
                 && m_emuHandicap)
                 continue;
-            if (cmd.equals("loadsgf") && m_emuLoadsgf)
+            if (c.equals("loadsgf") && m_emuLoadsgf)
                 continue;
             if (m_noScore
-                && (cmd.equals("final_score")
-                    || (cmd.equals("final_status_list"))))
+                && (c.equals("final_score")
+                    || (c.equals("final_status_list"))))
                     continue;
-            response.append(cmd);
-            response.append("\n");
+            cmd.getResponse().append(cmd);
+            cmd.getResponse().append("\n");
         }
-        response.append("boardsize\n");
-        response.append("protocol_version\n");
-        response.append("quit\n");
+        cmd.getResponse().append("boardsize\n");
+        cmd.getResponse().append("protocol_version\n");
+        cmd.getResponse().append("quit\n");
         if (m_version1)
         {
-            response.append("black\n");
-            response.append("help\n");
-            response.append("genmove_white\n");
-            response.append("genmove_black\n");
-            response.append("white\n");
+            cmd.getResponse().append("black\n");
+            cmd.getResponse().append("help\n");
+            cmd.getResponse().append("genmove_white\n");
+            cmd.getResponse().append("genmove_black\n");
+            cmd.getResponse().append("white\n");
         }
         else
         {
-            response.append("clear_board\n");        
-            response.append("genmove\n");
-            response.append("list_commands\n");
-            response.append("play\n");
+            cmd.getResponse().append("clear_board\n");        
+            cmd.getResponse().append("genmove\n");
+            cmd.getResponse().append("list_commands\n");
+            cmd.getResponse().append("play\n");
         }
         if (m_emuHandicap)
         {
-            response.append("set_free_handicap\n");
-            response.append("get_free_handicap\n");
+            cmd.getResponse().append("set_free_handicap\n");
+            cmd.getResponse().append("get_free_handicap\n");
         }
         if (m_emuLoadsgf)
-            response.append("loadsgf\n");
-        response.append("gtpadapter_showboard\n");
+            cmd.getResponse().append("loadsgf\n");
+        cmd.getResponse().append("gtpadapter_showboard\n");
     }
 
-    private void cmdLoadsgf(String[] cmdArray, StringBuffer response)
-        throws GtpError
+    private void cmdLoadsgf(GtpCommand cmd) throws GtpError
     {
-        if (cmdArray.length < 2)
-            throw new GtpError("Need filename argument");
-        String filename = cmdArray[1];
+        cmd.checkNuArgLessEqual(2);
+        String filename = cmd.getArg(0);
         String command = "loadsgf " + filename;
         int maxMove = -1;
-        if (cmdArray.length > 2)
-        {
-            try
-            {
-                maxMove = Integer.parseInt(cmdArray[2]);
-                command = command + " " + maxMove;
-            }
-            catch (NumberFormatException e)
-            {
-                throw new GtpError("Invalid move number argument");
-            }
-        }
+        if (cmd.getNuArg() == 1)
+            maxMove = cmd.getIntArg(1);
         if (! m_emuLoadsgf)
             send(command);
         GoColor toMove = GoColor.EMPTY;
@@ -463,20 +433,19 @@ public class GtpAdapter
         }
     }
 
-    private void cmdName(StringBuffer response) throws GtpError
+    private void cmdName(GtpCommand cmd) throws GtpError
     {
         assert(m_name != null);
         int index = m_name.indexOf(':');
         if (index < 0)
-            response.append(m_name);
+            cmd.setResponse(m_name);
         else
-            response.append(m_name.substring(0, index));
+            cmd.setResponse(m_name.substring(0, index));
     }
 
-    private void cmdPlaceFreeHandicap(String cmdArray[],
-                                      StringBuffer response) throws GtpError
+    private void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
-        int n = parseIntegerArgument(cmdArray);
+        int n = cmd.getIntArg();
         Vector stones = Board.getHandicapStones(m_boardSize, n);
         if  (stones == null)
             throw new GtpError("Invalid number of handicap stones");
@@ -489,20 +458,21 @@ public class GtpAdapter
                 pointList.append(" ");
             pointList.append(point);
         }
-        response.append(pointList);
+        cmd.setResponse(pointList.toString());
     }
 
-    private void cmdPlay(String cmdArray[]) throws GtpError
+    private void cmdPlay(GtpCommand cmd) throws GtpError
     {
-        ColorPointArgument argument
-            = parseColorPointArgument(cmdArray, m_boardSize);
-        play(argument.m_color, argument.m_point);
-    }
-
-    private void cmdPlay(GoColor color, String cmdArray[]) throws GtpError
-    {
-        GoPoint point = parsePointArgument(cmdArray, m_boardSize);
+        cmd.checkNuArg(2);
+        GoColor color = cmd.getColorArg(0);
+        GoPoint point = cmd.getPointArg(1, m_boardSize);
         play(color, point);
+    }
+
+    private void cmdPlay(GoColor color, GtpCommand cmd) throws GtpError
+    {
+        cmd.checkNuArg(1);
+        play(color, cmd.getPointArg(0, m_boardSize));
     }
 
     private void cmdQuit() throws GtpError
@@ -510,19 +480,15 @@ public class GtpAdapter
         send("quit");
     }
 
-    private void cmdSetFreeHandicap(String cmdArray[]) throws GtpError
+    private void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
     {
-        for (int i = 1; i < cmdArray.length; ++i)
-        {
-            GoPoint point = GtpUtils.parsePoint(cmdArray[i], m_boardSize);
-            play(GoColor.BLACK, point);
-        }
+        for (int i = 0; i < cmd.getNuArg(); ++i)
+            play(GoColor.BLACK, cmd.getPointArg(i, m_boardSize));
     }
 
-    private void cmdUndo(String cmdArray[]) throws GtpError
+    private void cmdUndo(GtpCommand cmd) throws GtpError
     {
-        if (cmdArray.length != 1)
-            throw new GtpError("No arguments allowed");
+        cmd.checkArgNone();
         undo();
     }
 
@@ -531,12 +497,12 @@ public class GtpAdapter
         throw new GtpError("Unknown command");
     }
 
-    private void cmdVersion(StringBuffer response) throws GtpError
+    private void cmdVersion(GtpCommand cmd) throws GtpError
     {
         assert(m_name != null);
         int index = m_name.indexOf(':');
         if (index >= 0)
-            response.append(m_name.substring(index + 1));
+            cmd.setResponse(m_name.substring(index + 1));
     }
 
     private void fillPass(GoColor color) throws GtpError

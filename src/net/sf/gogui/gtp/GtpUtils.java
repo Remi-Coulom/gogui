@@ -47,7 +47,8 @@ public class GtpUtils
         }
         catch (GoPoint.InvalidPoint e)
         {
-            throw new GtpError("Invalid point or move");
+            throw new GtpError("Invalid point " + s + " (size "
+                               + boardSize + ")");
         }
     }
     

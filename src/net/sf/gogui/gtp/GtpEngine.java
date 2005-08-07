@@ -127,14 +127,6 @@ class ReadThread
 /** Base class for Go programs and tools implementing GTP. */
 public abstract class GtpEngine
 {
-    /** Returned by parseColorPointArgument. */
-    public static class ColorPointArgument
-    {
-        public GoColor m_color;
-
-        public GoPoint m_point;
-    }
-
     public GtpEngine(InputStream in, OutputStream out, PrintStream log)
     {
         m_out = new PrintStream(out);
@@ -157,8 +149,7 @@ public abstract class GtpEngine
         They will be replaced by lines containing a single space to form a
         valid GTP response.
     */
-    public abstract void handleCommand(String command,
-                                       StringBuffer response) throws GtpError;
+    public abstract void handleCommand(GtpCommand cmd) throws GtpError;
 
     public synchronized void log(String line)
     {
@@ -178,83 +169,6 @@ public abstract class GtpEngine
             sendResponse(command);
             if (command.isQuit())
                 return;
-        }
-    }
-
-    /** Utility function for parsing a color argument.
-        @param cmdArray Command line split into words.
-        @return Color argument
-    */
-    public static GoColor parseColorArgument(String[] cmdArray)
-        throws GtpError
-    {
-        if (cmdArray.length != 2)
-            throw new GtpError("Missing color argument");
-        String arg1 = cmdArray[1].toLowerCase();
-        if (arg1.equals("w") || arg1.equals("white"))
-            return GoColor.WHITE;
-        if (arg1.equals("b") || arg1.equals("black"))
-            return GoColor.BLACK;
-        throw new GtpError("Invalid color argument");
-    }
-
-    /** Utility function for parsing a color and point argument.
-        @param cmdArray Command line split into words.
-        @param boardSize Board size is needed for parsing the point
-        @return ColorPoint argument
-    */
-    public static ColorPointArgument
-        parseColorPointArgument(String[] cmdArray, int boardSize)
-        throws GtpError
-    {
-        if (cmdArray.length != 3)
-            throw new GtpError("Missing color and point argument");
-        ColorPointArgument argument = new ColorPointArgument();
-        String arg1 = cmdArray[1].toLowerCase();
-        if (arg1.equals("w") || arg1.equals("white"))
-            argument.m_color = GoColor.WHITE;
-        else if (arg1.equals("b") || arg1.equals("black"))
-            argument.m_color = GoColor.BLACK;
-        else
-            throw new GtpError("Invalid color argument");
-        argument.m_point = GtpUtils.parsePoint(cmdArray[2], boardSize);
-        return argument;
-    }
-
-    /** Utility function for parsing an integer argument.
-        @param cmdArray Command line split into words.
-        @return Double argument
-    */
-    public static double parseDoubleArgument(String[] cmdArray)
-        throws GtpError
-    {
-        if (cmdArray.length != 2)
-            throw new GtpError("Missing float argument");
-        try
-        {
-            return Double.parseDouble(cmdArray[1]);
-        }
-        catch (NumberFormatException e)
-        {
-            throw new GtpError("Invalid float argument");
-        }
-    }
-
-    /** Utility function for parsing an integer argument.
-        @param cmdArray Command line split into words.
-        @return Integer argument
-    */
-    public static int parseIntegerArgument(String[] cmdArray) throws GtpError
-    {
-        if (cmdArray.length != 2)
-            throw new GtpError("Missing integer argument");
-        try
-        {
-            return Integer.parseInt(cmdArray[1]);
-        }
-        catch (NumberFormatException e)
-        {
-            throw new GtpError("Invalid integer argument");
         }
     }
 
@@ -330,21 +244,21 @@ public abstract class GtpEngine
 
     private void sendResponse(GtpCommand cmd)
     {
-        StringBuffer response = new StringBuffer();
         boolean status = true;
+        String response;
         try
         {
-            handleCommand(cmd.getCommand(), response);
+            handleCommand(cmd);
+            response = cmd.getResponse().toString();
         }
         catch (GtpError e)
         {
-            response.setLength(0);
-            response.append(e.getMessage());
+            response = e.getMessage();
             status = false;
         }
         String sanitizedResponse
             = response.toString().replaceAll("\\n\\n", "\n \n");
-        respond(status, cmd.hasId(), cmd.id(), sanitizedResponse);
+        respond(status, cmd.hasId(), cmd.getId(), sanitizedResponse);
     }
 }
 
