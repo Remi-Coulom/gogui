@@ -26,6 +26,8 @@ public class GtpCommandTest
     public void testBasic() throws GtpError
     {
         GtpCommand cmd = new GtpCommand("10 boardsize 9");
+        assertEquals(cmd.getLine(), "boardsize 9");
+        assertEquals(cmd.getArgLine(), "9");
         assertTrue(cmd.hasId());
         assertEquals(cmd.getId(), 10);
         assertEquals(cmd.getCommand(), "boardsize");
@@ -33,6 +35,8 @@ public class GtpCommandTest
         assertEquals(cmd.getArg(0), "9");
         assertEquals(cmd.getIntArg(0), 9);
         cmd = new GtpCommand("play w C1");
+        assertEquals(cmd.getLine(), "play w C1");
+        assertEquals(cmd.getArgLine(), "w C1");
         assertFalse(cmd.hasId());
         assertEquals(cmd.getCommand(), "play");
         assertEquals(cmd.getNuArg(), 2);
