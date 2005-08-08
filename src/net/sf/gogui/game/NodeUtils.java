@@ -46,8 +46,18 @@ public class NodeUtils
         return node;
     }
 
+    /** Return first node of a given variation.
+        Returns the root node node if variation string is empty,
+        otherwise it returns the node that can be reached from the root node
+        by taking the children defined by the integers in the variation string
+        for nodes with more than one child.
+        Returns null, if the variation string is invalid or does not specify
+        a node in the given tree.
+    */
     public static Node findByVariation(Node root, String variation)
     {
+        if (variation.trim().equals(""))
+            return root;
         String[] tokens = StringUtils.split(variation, '.');
         int[] n = new int[tokens.length];
         for (int i = 0; i < tokens.length; ++i)
