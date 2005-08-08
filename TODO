@@ -9,6 +9,8 @@ stones are transmitted to the program by play commands
 
 IMPROVEMENTS:
 
+Consider using java.util.prefs for preferences
+
 SquareLayout should be used in gui.Board
 
 GtpRegress: change into gtp test file directory, optional?
