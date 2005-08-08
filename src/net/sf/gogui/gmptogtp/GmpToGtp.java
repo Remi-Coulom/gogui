@@ -13,7 +13,6 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

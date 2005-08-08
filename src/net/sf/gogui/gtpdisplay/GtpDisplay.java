@@ -38,7 +38,6 @@ import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.SquareLayout;
-import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 

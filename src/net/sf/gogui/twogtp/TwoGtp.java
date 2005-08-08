@@ -17,7 +17,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.text.NumberFormat;
-import java.util.HashMap;
 import java.util.Vector;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
