@@ -21,16 +21,19 @@ to facilitate debugging and reproducing errors.
 <title>Requirements</title>
 <para>
 GoGui requires Java 1.4.
+It is mainly tested with Sun's JDK on Linux and on Mac OS/X.
 </para>
 <para>
 <note>
 <title>Notes on using GCJ</title>
 <para>
-The implementation of the javax.swing classes is incomplete in GCJ.
-The current status (tested with GCJ 4.0.0) is:
+The current status (tested with GCJ 4.0.1) is:
 everything compiles, the console based tools (e.g. GtpRegress, GtpDummy) seem
 to work, the graphical programs GoGui, GtpDisplay and GtpStatistics (which
-uses AWT classes for drawing plots) don't work.
+uses AWT classes for drawing plots) don't work yet.
+However, the implementation of the Java Swing classes in the Classpath
+library, which is used by GCJ, has been making tremendous progress recently,
+so future versions will probably be able to run GoGui.
 </para>
 </note>
 </para>
