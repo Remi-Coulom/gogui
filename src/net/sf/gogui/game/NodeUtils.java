@@ -21,8 +21,8 @@ import net.sf.gogui.utils.StringUtils;
 /** Utility functions operating on a tree of nodes. */
 public class NodeUtils
 {
-    /** Find node with a certain move number in main variation containing
-        a given node.
+    /** Find first node with a certain move number in main variation
+        containing a given node.
         @return null if no such node exists.
     */
     public static Node findByMoveNumber(Node node, int moveNumber)
@@ -30,10 +30,11 @@ public class NodeUtils
         int maxMoveNumber = getMoveNumber(node) + getMovesLeft(node);
         if (moveNumber < 0 || moveNumber >  maxMoveNumber)
             return null;
-        if (moveNumber < getMoveNumber(node))
+        if (moveNumber <= getMoveNumber(node))
         {
             while (node.getFather() != null
-                   && getMoveNumber(node) > moveNumber)
+                   && (getMoveNumber(node) > moveNumber
+                       || node.getMove() == null))
                 node = node.getFather();
         }
         else
