@@ -9,7 +9,7 @@ Also, it allows to enter any command and send it to the Go program.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 <warning>
-<title>Commands altering the board state</title>
+<title>Commands Altering the Board State</title>
 <para>
 It is not advisable to send GTP commands that alter the board state
 directly to the Go program, since it will cause
@@ -21,7 +21,7 @@ show a warning.
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 
 <section>
-<title>Saving the history</title>
+<title>Saving the History</title>
 <para>
 From the menu of the GTP shell window, it is possible to save
 the GTP commands and responses, or only the commands to a file.
@@ -34,7 +34,7 @@ file <filename>~/.gogui/config</filename>.
 </section>
 
 <section>
-<title>Special keys</title>
+<title>Special Keys</title>
 <variablelist>
 <varlistentry>
 <term><keycap>Tab</keycap></term>

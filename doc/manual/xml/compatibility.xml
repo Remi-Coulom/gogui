@@ -14,7 +14,7 @@ of version 1 or 2 of the
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
   
 <section>
-<title>Required commands</title>
+<title>Required Commands</title>
 
 <para>
 It is required that the Go program can handle the following commands:
@@ -58,7 +58,7 @@ GoGui translates all moves, setup and handicap stones into a series of
 </section>
   
 <section>
-<title>Optional commands</title>
+<title>Optional Commands</title>
     
 <para>
 The following other commands are used by GoGui:

@@ -4,7 +4,8 @@
 <section>
 <title>Description</title>
 <para>
-GoGui is a graphical interface to programs that play the game of Go and use the
+GoGui is a graphical interface to programs that play the game of Go and use
+the
 <ulink url="http://www.lysator.liu.se/~gunnar/gtp/">Go Text Protocol</ulink>.
 </para>
 
@@ -25,7 +26,7 @@ It is mainly tested with Sun's JDK on Linux and on Mac OS/X.
 </para>
 <para>
 <note>
-<title>Notes on using GCJ</title>
+<title>Using GCJ</title>
 <para>
 The current status (tested with GCJ 4.0.1) is:
 everything compiles, the console based tools (e.g. GtpRegress, GtpDummy) seem
@@ -40,17 +41,17 @@ so future versions will probably be able to run GoGui.
 </section>
 
 <section>
-<title>Project websites</title>
+<title>Project Websites</title>
 <itemizedlist>
 <listitem>
 <simpara>
-<ulink url="http://gogui.sourceforge.net">GoGui home page</ulink>
+<ulink url="http://gogui.sf.net">GoGui home page</ulink>
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<ulink url="http://sourceforge.net/projects/gogui/">GoGui project page
-at SourceForge</ulink>
+<ulink url="http://sf.net/projects/gogui/">
+GoGui project page at SourceForge</ulink>
 </simpara>
 </listitem>
 </itemizedlist>
