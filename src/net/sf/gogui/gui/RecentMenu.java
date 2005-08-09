@@ -60,7 +60,7 @@ class RecentMenuItem
 /** Menu for recent item.
     Handles removing duplicates and storing the items between sessions.
 */
-public class RecentMenu
+public final class RecentMenu
 {
     public interface Callback
     {

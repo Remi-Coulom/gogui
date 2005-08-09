@@ -15,7 +15,7 @@ import net.sf.gogui.utils.FileUtils;
 
 //----------------------------------------------------------------------------
 
-public class Bookmark
+public final class Bookmark
 {
     public Bookmark(Bookmark bookmark)
     {
