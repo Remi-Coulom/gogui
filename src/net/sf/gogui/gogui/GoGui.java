@@ -653,7 +653,6 @@ public class GoGui
     public void contextMenu(GoPoint point, GuiField field)
     {
         ContextMenu contextMenu = createContextMenu(point);
-        Point location = m_guiBoard.getLocationOnScreen(point);
         int x = field.getWidth() / 2;
         int y = field.getHeight() / 2;
         contextMenu.show(field, x, y);

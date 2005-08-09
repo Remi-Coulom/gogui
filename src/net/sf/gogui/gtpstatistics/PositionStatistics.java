@@ -66,7 +66,6 @@ public final class PositionStatistics
             }
             if (move <= 0)
                 throw new ErrorMessage("Invalid move in table");
-            double doubleValue;
             try
             {
                 m_statistics.add(Double.parseDouble(value));

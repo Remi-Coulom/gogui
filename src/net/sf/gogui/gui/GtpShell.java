@@ -8,7 +8,6 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -372,9 +371,7 @@ public class GtpShell
         setPrefsDefaults(prefs);
         m_historyMin = prefs.getInt("gtpshell-history-min");
         m_historyMax = prefs.getInt("gtpshell-history-max");
-        Container contentPane = getContentPane();
         JPanel panel = new JPanel(new BorderLayout());
-        //panel.setBorder(BorderFactory.createEtchedBorder());
         getContentPane().add(panel, BorderLayout.CENTER);
         m_gtpShellText
             = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp);

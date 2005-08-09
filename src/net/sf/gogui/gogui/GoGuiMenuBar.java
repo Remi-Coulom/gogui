@@ -551,8 +551,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemAbout;
 
-    private JMenuItem m_itemAnalyze;
-
     private JMenuItem m_itemAnalyzeOnlySupported;
 
     private JMenuItem m_itemAnalyzeSort;
@@ -783,9 +781,8 @@ public class GoGuiMenuBar
     private JMenu createMenuAnalyze()
     {
         JMenu menu = createMenu("Analyze", KeyEvent.VK_N);
-        m_itemAnalyze = addMenuItem(menu, "Show Analyze", KeyEvent.VK_S,
-                                    KeyEvent.VK_F8, getFunctionKeyShortcut(),
-                                    "analyze");
+        addMenuItem(menu, "Show Analyze", KeyEvent.VK_S, KeyEvent.VK_F8,
+                    getFunctionKeyShortcut(), "analyze");
         menu.addSeparator();
         m_itemAnalyzeOnlySupported =
             new JCheckBoxMenuItem("Only Supported Commands");

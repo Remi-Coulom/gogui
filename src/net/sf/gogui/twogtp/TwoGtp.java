@@ -974,8 +974,6 @@ public class TwoGtp
                || (gtp1 == m_white && gtp2 == m_black));
         if (changesState)
             checkInconsistentState();
-        String prefix1 = (gtp1 == m_black ? "B" : "W");
-        String prefix2 = (gtp2 == m_black ? "B" : "W");
         String response1 = null;
         String response2 = null;
         try

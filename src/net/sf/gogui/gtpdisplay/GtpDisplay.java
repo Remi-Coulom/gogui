@@ -115,7 +115,6 @@ public class GtpDisplay
             m_gtp.close();
             m_gtp.waitForExit();
         }
-        StringBuffer error = new StringBuffer();
         try
         {
             invokeAndWait(new Runnable()

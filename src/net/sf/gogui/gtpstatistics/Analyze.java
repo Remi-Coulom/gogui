@@ -195,15 +195,9 @@ public class Analyze
 
     private int m_precision;
 
-    private static final String m_colorError = "#ffa954";
-
     private static final String m_colorHeader = "#b5c8f0";
 
     private static final String m_colorInfo = "#e0e0e0";
-
-    private static final String m_colorLightBackground = "#e0e0e0";
-
-    private static final String m_colorGrayBackground = "#e0e0e0";
 
     private final String m_output;
 
@@ -353,7 +347,6 @@ public class Analyze
         throws Exception
     {
         String command = getCommand(index);
-        boolean plotLines = true;
         return new CommandStatistics(command, m_table, m_tableFinal,
                                      getHistoFile(index),
                                      getHistoFinalFile(index),
@@ -377,7 +370,6 @@ public class Analyze
         String command = getCommand(commandIndex);
         Table table = TableUtils.select(m_table, "File", gameFile,
                                         "Move", command);
-        int numberPositions = table.getNumberRows();
         File file = getPlotFile(gameIndex, commandIndex);
         Plot plot = generatePlotMove(getImgWidth(m_maxMove),
                                      getColor(command));
@@ -421,7 +413,6 @@ public class Analyze
         String last = null;
         GameInfo info = null;
         m_maxMove = 0;
-        int numberColumns = m_table.getNumberColumns();
         int[] count = new int[0];
         for (int row = 0; row < m_table.getNumberRows(); ++row)
         {
@@ -697,7 +688,6 @@ public class Analyze
             if (commandStatistics.getCount() > 0
                 && ! commandStatistics.m_isBeginCommand)
             {
-                String command = getCommand(i);
                 generatePlot(i, commandStatistics.m_format, gameNumber, game);
                 out.print("<tr><td align=\"center\">" + getCommandLink(i)
                           + "<br><img src=\""
@@ -740,12 +730,10 @@ public class Analyze
     private void writeGamePlots(PrintStream out, int commandIndex)
         throws Exception
     {
-        String command = getCommand(commandIndex);
         out.print("<table border=\"0\" cellpadding=\"0\""
                   + " cellspacing=\"0\">\n");
         for (int i = 0; i < m_gameInfo.size(); ++i)
         {
-            GameInfo info = (GameInfo)(m_gameInfo.get(i));
             String plotFile = getPlotFile(i, commandIndex).getName();
             File file = getGameFile(i);
             out.print("<tr><td align=\"left\"><small><a href=\""
