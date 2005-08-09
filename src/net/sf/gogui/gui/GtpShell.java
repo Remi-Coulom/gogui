@@ -194,7 +194,7 @@ class GtpShellText
 
     private int m_truncated;
 
-    private long m_startTime;
+    private final long m_startTime;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net

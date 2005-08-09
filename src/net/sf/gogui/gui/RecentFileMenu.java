@@ -78,12 +78,12 @@ public class RecentFileMenu
         return m_menu.getMenu();
     }
 
-    private Callback m_callback;
+    private final Callback m_callback;
 
-    private RecentMenu m_menu;
+    private final RecentMenu m_menu;
 
     /** Vector<String> */
-    private Vector m_sameName = new Vector();
+    private final Vector m_sameName = new Vector();
 
     private int getCount()
     {

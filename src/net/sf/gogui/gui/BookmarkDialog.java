@@ -72,9 +72,9 @@ public class BookmarkDialog
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private JPanel m_panelLeft;
+    private final JPanel m_panelLeft;
 
-    private JPanel m_panelRight;
+    private final JPanel m_panelRight;
 
     private JTextField m_name;
 

@@ -73,6 +73,8 @@ public class TwoGtp
             m_referee = new Gtp(referee, verbose, null);
             m_referee.setLogPrefix("R");
         }
+        else
+            m_referee = null;
         if (! observer.equals(""))
         {
             m_observer = new Gtp(observer, verbose, null);
@@ -369,13 +371,13 @@ public class TwoGtp
 
     private Vector m_openingMoves;
 
-    private Gtp m_black;
+    private final Gtp m_black;
 
     private final Gtp m_observer;
 
-    private Gtp m_referee;
+    private final Gtp m_referee;
 
-    private Gtp m_white;
+    private final Gtp m_white;
 
     private void checkInconsistentState() throws GtpError
     {

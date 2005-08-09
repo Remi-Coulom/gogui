@@ -145,7 +145,7 @@ public class Comment
 
     private Node m_node;
 
-    private Style m_defaultStyle;
+    private final Style m_defaultStyle;
 
     private void copyContentToNode()
     {

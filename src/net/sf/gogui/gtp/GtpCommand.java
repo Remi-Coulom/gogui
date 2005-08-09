@@ -42,19 +42,19 @@ public class GtpCommand
         }
         String[] array = StringUtils.tokenize(buffer.toString());
         assert(array.length > 0);
-        m_line = buffer.toString();
-        m_hasId = false;
         int commandIndex = 0;
         try
         {
-            m_hasId = true;
             m_id = Integer.parseInt(array[0]);
+            m_hasId = true;
             m_line = buffer.substring(array[0].length()).trim();
             commandIndex = 1;
         }
         catch (NumberFormatException e)
         {
             m_hasId = false;
+            m_id = -1;
+            m_line = buffer.toString();
         }
         if (commandIndex >= array.length)
             return;

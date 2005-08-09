@@ -153,26 +153,26 @@ public class ContextMenu
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private ActionListener m_actionListener;
+    private final ActionListener m_actionListener;
 
-    private GoPoint m_point;
+    private final GoPoint m_point;
 
-    private JCheckBoxMenuItem m_mark;
+    private final JCheckBoxMenuItem m_mark;
 
-    private JCheckBoxMenuItem m_markCircle;
+    private final JCheckBoxMenuItem m_markCircle;
 
-    private JCheckBoxMenuItem m_markSquare;
+    private final JCheckBoxMenuItem m_markSquare;
 
-    private JCheckBoxMenuItem m_markTriangle;
+    private final JCheckBoxMenuItem m_markTriangle;
 
     private JMenu m_analyzeMenu;
 
     private JMenuItem m_editLabel;
 
-    private Listener m_listener;
+    private final Listener m_listener;
 
     /** Vector<AnalyzeCommand> */
-    private Vector m_commands = new Vector();
+    private final Vector m_commands = new Vector();
 
     private void addColorCommand(AnalyzeCommand command)
     {

@@ -657,7 +657,7 @@ public class GoGuiMenuBar
 
     private RecentFileMenu m_recentGtp;
 
-    private Vector m_bookmarkItems = new Vector();
+    private final Vector m_bookmarkItems = new Vector();
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {

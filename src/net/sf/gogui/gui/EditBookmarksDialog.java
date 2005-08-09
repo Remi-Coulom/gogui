@@ -88,7 +88,7 @@ public class EditBookmarksDialog
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private ActionListener m_actionListener;
+    private final ActionListener m_actionListener;
 
     private JButton m_edit;
 
@@ -98,11 +98,11 @@ public class EditBookmarksDialog
 
     private JButton m_remove;
 
-    private JList m_list;
+    private final JList m_list;
 
     private OptionalWarning m_removeWarning;
 
-    private Vector m_bookmarks;
+    private final Vector m_bookmarks;
 
     private void cbMoveDown()
     {

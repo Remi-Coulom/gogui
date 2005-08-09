@@ -52,7 +52,7 @@ class RecentMenuItem
 
     private String m_label;
 
-    private String m_value;
+    private final String m_value;
 }
 
 //----------------------------------------------------------------------------
@@ -143,13 +143,13 @@ public class RecentMenu
 
     private final int m_maxItems = 20;
 
-    private ActionListener m_listener;
+    private final ActionListener m_listener;
 
-    private Callback m_callback;
+    private final Callback m_callback;
 
-    private File m_file;
+    private final File m_file;
 
-    private JMenu m_menu;
+    private final JMenu m_menu;
 
     private RecentMenuItem getItem(int i)
     {

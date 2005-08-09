@@ -189,13 +189,13 @@ public class Plot
 
     private int m_height;
 
-    private int m_imgHeight;
+    private final int m_imgHeight;
 
-    private int m_imgWidth;
+    private final int m_imgWidth;
 
     private int m_left;
 
-    private int m_precision;
+    private final int m_precision;
 
     private int m_right;
 
@@ -229,7 +229,7 @@ public class Plot
 
     private double m_yTicsMin;
 
-    private Color m_color = Color.decode("#ff5454");
+    private final Color m_color;
 
     private DecimalFormat m_formatX;
 

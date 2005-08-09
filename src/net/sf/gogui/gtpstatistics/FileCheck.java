@@ -32,7 +32,7 @@ public class FileCheck
         }
     }
 
-    private int m_size;
+    private final int m_size;
 
     private String m_name;
 

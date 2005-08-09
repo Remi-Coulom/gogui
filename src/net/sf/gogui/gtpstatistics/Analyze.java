@@ -158,10 +158,10 @@ public class Analyze
 
         private boolean m_allEmpty;
 
-        private String m_name;
+        private final String m_name;
 
         /** Results per game. */
-        private Vector m_results;
+        private final Vector m_results;
 
         private void initAllEmpty()
         {
@@ -187,7 +187,7 @@ public class Analyze
         public int m_numberPositions;
     }
 
-    private int m_imgHeight = 100;
+    private final int m_imgHeight = 100;
 
     private int m_maxMove;
 

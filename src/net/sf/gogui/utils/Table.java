@@ -179,13 +179,13 @@ public class Table
 
     private int m_numberColumns;
 
-    private Properties m_properties = new Properties();
+    private final Properties m_properties = new Properties();
 
-    private Vector m_columnTitles;
+    private final Vector m_columnTitles;
 
     private Vector m_lastRow;
 
-    private Vector m_rows = new Vector();
+    private final Vector m_rows = new Vector();
 
     private void addColumnTitle(String columnTitle)
     {

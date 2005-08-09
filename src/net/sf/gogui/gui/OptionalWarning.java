@@ -65,7 +65,7 @@ public class OptionalWarning
         return result;
     }
 
-    private Component m_parent;
+    private final Component m_parent;
 
     private boolean m_disabled;
 }

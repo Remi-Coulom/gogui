@@ -99,15 +99,15 @@ public class GtpStatistics
 
     private int m_numberGames;
 
-    private int m_size;
+    private final int m_size;
 
     private double m_lastCpuTime = 0;
 
     private Gtp m_gtp;
 
-    private NumberFormat m_format1 = StringUtils.getNumberFormat(1);
+    private final NumberFormat m_format1 = StringUtils.getNumberFormat(1);
 
-    private NumberFormat m_format2 = StringUtils.getNumberFormat(2);
+    private final NumberFormat m_format2 = StringUtils.getNumberFormat(2);
 
     private Table m_table;
 
