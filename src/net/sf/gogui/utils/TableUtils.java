@@ -230,6 +230,11 @@ public class TableUtils
         }
         return result;
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private TableUtils()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------

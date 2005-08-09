@@ -106,6 +106,11 @@ public class GuiBoardUtils
             }
         }
     }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private GuiBoardUtils()
+    {
+    }
 }
 
 //----------------------------------------------------------------------------
