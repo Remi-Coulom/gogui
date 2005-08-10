@@ -9,8 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
-import java.util.Vector;
 import net.sf.gogui.utils.FileUtils;
 
 //----------------------------------------------------------------------------
@@ -58,9 +58,9 @@ public final class Bookmark
              bookmark.m_variation);
     }
 
-    public static Vector load(File file)
+    public static ArrayList load(File file)
     {
-        Vector bookmarks = new Vector();
+        ArrayList bookmarks = new ArrayList();
         Properties props = new Properties();
         try
         {
@@ -93,7 +93,7 @@ public final class Bookmark
         return bookmarks;
     }
 
-    public static void save(Vector bookmarks, File file)
+    public static void save(ArrayList bookmarks, File file)
     {
         Properties props = new Properties();
         for (int i = 0; i < bookmarks.size(); ++i)

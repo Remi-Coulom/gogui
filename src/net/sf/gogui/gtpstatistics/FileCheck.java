@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -22,7 +22,7 @@ import net.sf.gogui.utils.ErrorMessage;
 
 public class FileCheck
 {
-    public FileCheck(Vector sgfFiles, int size) throws ErrorMessage
+    public FileCheck(ArrayList sgfFiles, int size) throws ErrorMessage
     {
         m_size = size;
         for (int i = 0; i < sgfFiles.size(); ++i)

@@ -31,7 +31,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JComboBox;
@@ -594,7 +594,7 @@ public class GtpShell
         }
     }
 
-    public void setInitialCompletions(Vector completions)
+    public void setInitialCompletions(ArrayList completions)
     {
         for (int i = completions.size() - 1; i >= 0; --i)
             appendToHistory(completions.get(i).toString());
@@ -736,7 +736,7 @@ public class GtpShell
 
     private final StringBuffer m_commands = new StringBuffer(4096);
 
-    private final Vector m_history = new Vector(128, 128);
+    private final ArrayList m_history = new ArrayList(128);
 
     private String m_programCommand = "unknown";
 
@@ -746,7 +746,7 @@ public class GtpShell
 
     private Preferences m_prefs;
 
-    private void addAllCompletions(Vector completions)
+    private void addAllCompletions(ArrayList completions)
     {
         // On Windows JDK 1.4 changing the popup automatically
         // selects all text in the text field, so we remember and
@@ -954,7 +954,7 @@ public class GtpShell
     {
         String text = m_textField.getText();
         text = text.replaceAll("^ *", "");
-        Vector completions = new Vector(128, 128);
+        ArrayList completions = new ArrayList(128);
         for (int i = 0; i < m_history.size(); ++i)
         {
             String c = (String)m_history.get(i);

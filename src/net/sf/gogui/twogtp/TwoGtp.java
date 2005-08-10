@@ -17,7 +17,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.text.NumberFormat;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -367,9 +367,9 @@ public class TwoGtp
 
     private final String m_whiteVersion;
 
-    private final Vector m_games = new Vector(100, 100);
+    private final ArrayList m_games = new ArrayList(100);
 
-    private Vector m_openingMoves;
+    private ArrayList m_openingMoves;
 
     private final Gtp m_black;
 
@@ -631,7 +631,7 @@ public class TwoGtp
                 resultWhite = inverseResult(resultWhite);
                 resultReferee = inverseResult(resultReferee);
             }
-            Vector moves = Compare.getAllAsMoves(m_gameTree.getRoot());
+            ArrayList moves = Compare.getAllAsMoves(m_gameTree.getRoot());
             String duplicate =
                 Compare.checkDuplicate(m_board, moves, m_games, m_alternate,
                                        isAlternated());

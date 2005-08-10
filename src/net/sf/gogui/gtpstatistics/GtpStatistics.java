@@ -11,7 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.text.NumberFormat;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -30,9 +30,10 @@ import net.sf.gogui.utils.Table;
 
 public class GtpStatistics
 {
-    public GtpStatistics(String program, Vector sgfFiles, File output,
-                         int size, Vector commands, Vector beginCommands,
-                         Vector finalCommands, boolean verbose, boolean force)
+    public GtpStatistics(String program, ArrayList sgfFiles, File output,
+                         int size, ArrayList commands, ArrayList beginCommands,
+                         ArrayList finalCommands, boolean verbose,
+                         boolean force)
         throws Exception
     {
         if (output.exists() && ! force)
@@ -41,7 +42,7 @@ public class GtpStatistics
         m_size = size;
         m_result = false;
         initCommands(commands, beginCommands, finalCommands);
-        Vector columnHeaders = new Vector();
+        ArrayList columnHeaders = new ArrayList();
         columnHeaders.add("File");
         columnHeaders.add("Move");
         for (int i = 0; i < m_commands.size(); ++i)
@@ -111,8 +112,8 @@ public class GtpStatistics
 
     private Table m_table;
 
-    /** Vector<Command> */
-    private Vector m_commands;
+    /** ArrayList<Command> */
+    private ArrayList m_commands;
 
     private void addCommand(String commandLine, boolean isBegin,
                             boolean isFinal) throws ErrorMessage
@@ -144,17 +145,17 @@ public class GtpStatistics
         m_commands.add(command);
     }
 
-    private void addCommands(Vector commands, boolean isBegin,
+    private void addCommands(ArrayList commands, boolean isBegin,
                              boolean isFinal) throws ErrorMessage
     {
         for (int i = 0; i < commands.size(); ++i)
             addCommand((String)commands.get(i), isBegin, isFinal);
     }
 
-    private void initCommands(Vector commands, Vector beginCommands,
-                              Vector finalCommands) throws ErrorMessage
+    private void initCommands(ArrayList commands, ArrayList beginCommands,
+                              ArrayList finalCommands) throws ErrorMessage
     {
-        m_commands = new Vector();
+        m_commands = new ArrayList();
         if (beginCommands != null)
             addCommands(beginCommands, true, false);
         if (commands != null)

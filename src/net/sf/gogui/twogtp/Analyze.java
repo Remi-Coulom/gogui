@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintStream;
 import java.text.NumberFormat;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Histogram;
@@ -93,7 +93,7 @@ public class Analyze
 
     private String m_openings;
 
-    private final Vector m_entries = new Vector(128, 128);
+    private final ArrayList m_entries = new ArrayList(128);
 
     private final Statistics m_length = new Statistics();
 

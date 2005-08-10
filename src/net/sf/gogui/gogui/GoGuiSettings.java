@@ -5,12 +5,12 @@
 
 package net.sf.gogui.gogui;
 
+import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.Preferences;
 import net.sf.gogui.version.Version;
-import java.util.Vector;
 
 //----------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ public final class GoGuiSettings
         m_preferences.setString("rules", m_rules);
         m_time = opt.getString("time", null);
         m_verbose = opt.isSet("verbose");
-        Vector arguments = opt.getArguments();
+        ArrayList arguments = opt.getArguments();
         m_file = null;
         if (arguments.size() == 1)
             m_file = (String)arguments.get(0);

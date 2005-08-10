@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ public class SelectProgram
             {
             }
         }
-        Vector history = loadHistory();
+        ArrayList history = loadHistory();
         history.add(0, program);
         saveHistory(history);
     }
@@ -157,7 +157,7 @@ public class SelectProgram
     {
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new BorderLayout());
-        m_comboBox = new JComboBox(loadHistory());
+        m_comboBox = new JComboBox(loadHistory().toArray());
         StringBuffer prototype = new StringBuffer(70);
         for (int i = 0; i < 70; ++i)
             prototype.append('-');
@@ -193,9 +193,9 @@ public class SelectProgram
         return outerPanel;
     }
 
-    private Vector getHistory()
+    private ArrayList getHistory()
     {
-        Vector result = new Vector(32, 32);
+        ArrayList result = new ArrayList(32);
         int maxHistory = 20;
         int itemCount = m_comboBox.getItemCount();
         int n = itemCount;
@@ -215,9 +215,9 @@ public class SelectProgram
         return new File(dir, "program-history");
     }
 
-    private static Vector loadHistory()
+    private static ArrayList loadHistory()
     {
-        Vector result = new Vector(32, 32);
+        ArrayList result = new ArrayList(32);
         File file = getHistoryFile();
         try
         {
@@ -266,7 +266,7 @@ public class SelectProgram
         m_textField.requestFocusInWindow();
     }
 
-    private static void saveHistory(Vector history)
+    private static void saveHistory(ArrayList history)
     {
         File file = getHistoryFile();
         try

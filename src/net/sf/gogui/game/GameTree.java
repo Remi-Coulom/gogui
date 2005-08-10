@@ -6,8 +6,8 @@
 package net.sf.gogui.game;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Vector;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
@@ -23,8 +23,8 @@ public class GameTree
         m_root = new Node();
     }
 
-    public GameTree(int boardSize, double komi, Vector handicap, String rules,
-                    TimeSettings timeSettings)
+    public GameTree(int boardSize, double komi, ArrayList handicap,
+                    String rules, TimeSettings timeSettings)
     {
         m_gameInformation = new GameInformation(boardSize);
         setDate();

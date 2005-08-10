@@ -5,7 +5,7 @@
 
 package net.sf.gogui.gtp;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.StringUtils;
@@ -188,9 +188,9 @@ public class GtpCommand
         return GtpUtils.parsePoint(getArg(i), boardSize);
     }
 
-    public Vector getPointListArg(int boardSize) throws GtpError
+    public ArrayList getPointListArg(int boardSize) throws GtpError
     {
-        Vector pointList = new Vector();
+        ArrayList pointList = new ArrayList();
         for (int i = 0; i < getNuArg(); ++i)
             pointList.add(getPointArg(i, boardSize));
         return pointList;

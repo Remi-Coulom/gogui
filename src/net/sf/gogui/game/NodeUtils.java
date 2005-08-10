@@ -6,9 +6,9 @@
 package net.sf.gogui.game;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
 import java.util.regex.Pattern;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
@@ -116,12 +116,12 @@ public class NodeUtils
     }
 
     /** Get all children moves.
-        @return Vector contaning the move points, not including passes
+        @return ArrayList contaning the move points, not including passes
         and independent of color.
     */
-    public static Vector getChildrenMoves(Node node)
+    public static ArrayList getChildrenMoves(Node node)
     {
-        Vector moves = new Vector();
+        ArrayList moves = new ArrayList();
         for (int i = 0; i < node.getNumberChildren(); ++i)
         {
             Move childMove = node.getChild(i).getMove();
@@ -228,9 +228,9 @@ public class NodeUtils
     }
 
     /** Get nodes in path from root to a given node. */
-    public static Vector getPathFromRoot(Node node)
+    public static ArrayList getPathFromRoot(Node node)
     {
-        Vector result = new Vector();
+        ArrayList result = new ArrayList();
         while (node != null)
         {
             result.add(0, node);
@@ -276,10 +276,10 @@ public class NodeUtils
         returned
         @return Number if moves to undo
     */
-    public static int getShortestPath(Node start, Node target, Vector nodes)
+    public static int getShortestPath(Node start, Node target, ArrayList nodes)
     {
-        Vector rootToStart = getPathFromRoot(start);
-        Vector rootToTarget = getPathFromRoot(target);
+        ArrayList rootToStart = getPathFromRoot(start);
+        ArrayList rootToTarget = getPathFromRoot(target);
         while (rootToStart.size() > 0 && rootToTarget.size() > 0
                && rootToStart.get(0) == rootToTarget.get(0))
         {
@@ -300,22 +300,22 @@ public class NodeUtils
     */
     public static String getVariationString(Node node)
     {
-        Vector vector = new Vector();
+        ArrayList list = new ArrayList();
         while (node != null)
         {
             Node father = node.getFather();
             if (father != null && father.getNumberChildren() > 1)
             {
                 int index = father.getChildIndex(node) + 1;
-                vector.insertElementAt(Integer.toString(index), 0);
+                list.add(0, Integer.toString(index));
             }
             node = father;
         }
-        StringBuffer result = new StringBuffer(vector.size() * 3);
-        for (int i = 0; i < vector.size(); ++i)
+        StringBuffer result = new StringBuffer(list.size() * 3);
+        for (int i = 0; i < list.size(); ++i)
         {
-            result.append((String)vector.get(i));
-            if (i < vector.size() - 1)
+            result.append((String)list.get(i));
+            if (i < list.size() - 1)
                 result.append('.');
         }
         return result.toString();
@@ -429,17 +429,17 @@ public class NodeUtils
             appendInfo(buffer, "MoveNumber", getMoveNumber(node));
         }
         appendInfo(buffer, "Variation", getVariationString(node));
-        Vector addBlack = new Vector();
+        ArrayList addBlack = new ArrayList();
         for (int i = 0; i < node.getNumberAddBlack(); ++i)
             addBlack.add(node.getAddBlack(i));
         if (node.getNumberAddBlack() > 0)
             appendInfo(buffer, "AddBlack", addBlack);
-        Vector addWhite = new Vector();
+        ArrayList addWhite = new ArrayList();
         for (int i = 0; i < node.getNumberAddWhite(); ++i)
             addWhite.add(node.getAddWhite(i));
         if (node.getNumberAddWhite() > 0)
             appendInfo(buffer, "AddWhite", addWhite);
-        Vector addEmpty = new Vector();
+        ArrayList addEmpty = new ArrayList();
         for (int i = 0; i < node.getNumberAddEmpty(); ++i)
             addEmpty.add(node.getAddEmpty(i));
         if (node.getNumberAddEmpty() > 0)
@@ -462,7 +462,7 @@ public class NodeUtils
         for (int i = 0; i < Node.MARK_TYPES.length; ++i)
         {
             String type = Node.MARK_TYPES[i];
-            Vector marked = node.getMarked(type);
+            ArrayList marked = node.getMarked(type);
             if (marked != null && marked.size() > 0)
                 appendInfo(buffer, "Marked" + StringUtils.capitalize(type),
                            marked);
@@ -589,7 +589,7 @@ public class NodeUtils
     }
 
     private static void appendInfo(StringBuffer buffer, String label,
-                                   Vector points)
+                                   ArrayList points)
     {
         appendInfoLabel(buffer, label);
         for (int i = 0; i < points.size(); ++i)

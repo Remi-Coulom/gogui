@@ -5,7 +5,7 @@
 
 package net.sf.gogui.utils;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ public class MessageQueue
         return m_queue.remove(0);
     }
 
-    private final Vector m_queue = new Vector();
+    private final ArrayList m_queue = new ArrayList();
 }
 
 //----------------------------------------------------------------------------

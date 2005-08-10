@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -266,9 +266,9 @@ public final class Gtp
         Note: call querySupportedCommands() first.
         @return A vector of strings with the supported commands.
     */
-    public Vector getSupportedCommands()
+    public ArrayList getSupportedCommands()
     {
-        Vector result = new Vector(128, 128);
+        ArrayList result = new ArrayList(128);
         if (m_supportedCommands != null)
             for (int i = 0; i < m_supportedCommands.length; ++i)
                 result.add(m_supportedCommands[i]);

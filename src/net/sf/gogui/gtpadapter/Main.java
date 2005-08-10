@@ -8,7 +8,7 @@ package net.sf.gogui.gtpadapter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
@@ -61,7 +61,7 @@ public class Main
             int size = opt.getInteger("size", -1);
             boolean resign = opt.isSet("resign");
             int resignScore = opt.getInteger("resign");            
-            Vector arguments = opt.getArguments();
+            ArrayList arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
                 printUsage(System.err);

@@ -10,7 +10,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
@@ -26,9 +26,9 @@ import javax.swing.event.ListSelectionListener;
 public class EditBookmarksDialog
     extends JOptionPane
 {
-    public static boolean show(Component parent, Vector bookmarks)
+    public static boolean show(Component parent, ArrayList bookmarks)
     {
-        Vector tempBookmarks = new Vector();
+        ArrayList tempBookmarks = new ArrayList();
         copyBookmarks(bookmarks, tempBookmarks);
         EditBookmarksDialog editDialog
             = new EditBookmarksDialog(tempBookmarks);
@@ -45,7 +45,7 @@ public class EditBookmarksDialog
         return result;
     }
 
-    public EditBookmarksDialog(Vector bookmarks)
+    public EditBookmarksDialog(ArrayList bookmarks)
     {
         m_bookmarks = bookmarks;
         m_actionListener = new ActionListener()
@@ -102,7 +102,7 @@ public class EditBookmarksDialog
 
     private OptionalWarning m_removeWarning;
 
-    private final Vector m_bookmarks;
+    private final ArrayList m_bookmarks;
 
     private void cbMoveDown()
     {
@@ -156,7 +156,7 @@ public class EditBookmarksDialog
         updateList(selectedIndex);
     }
 
-    private static void copyBookmarks(Vector from, Vector to)
+    private static void copyBookmarks(ArrayList from, ArrayList to)
     {
         to.clear();
         for (int i = 0; i < from.size(); ++i)
@@ -213,13 +213,13 @@ public class EditBookmarksDialog
 
     private void updateList(int selectedIndex)
     {
-        Vector data = new Vector();
+        ArrayList data = new ArrayList();
         for (int i = 0; i < m_bookmarks.size(); ++i)
         {
             String name = getBookmark(i).m_name;
             data.add(name);
         }
-        m_list.setListData(data);
+        m_list.setListData(data.toArray());
         m_list.setSelectedIndex(selectedIndex);
     }
 }

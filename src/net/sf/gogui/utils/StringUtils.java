@@ -12,7 +12,7 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ public class StringUtils
     public static String[] tokenize(String string)
     {
         assert(string != null);
-        Vector vector = new Vector();
+        ArrayList vector = new ArrayList();
         boolean escape = false;
         boolean inString = false;
         StringBuffer token = new StringBuffer();

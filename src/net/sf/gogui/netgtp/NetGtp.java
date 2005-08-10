@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ public final class NetGtp
                 System.exit(0);
             }
             int timeout = opt.getInteger("timeout", 10, 0);
-            Vector arguments = opt.getArguments();
+            ArrayList arguments = opt.getArguments();
             if (arguments.size() != 2)
             {
                 printUsage(System.err);

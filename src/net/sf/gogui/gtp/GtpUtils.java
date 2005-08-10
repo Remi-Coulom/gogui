@@ -8,7 +8,7 @@ package net.sf.gogui.gtp;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.go.GoColor;
@@ -65,12 +65,12 @@ public class GtpUtils
         }
     }
 
-    public static Vector parsePointListVector(String s, int boardSize)
+    public static ArrayList parsePointArrayList(String s, int boardSize)
         throws GtpError
     {
         try
         {
-            return GoPoint.parsePointListVector(s, boardSize);
+            return GoPoint.parsePointListArrayList(s, boardSize);
         }
         catch (GoPoint.InvalidPoint e)
         {
@@ -84,7 +84,7 @@ public class GtpUtils
         String regex = "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1\\d|[1-9]))\\b";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(text);
-        Vector vector = new Vector(32, 32);
+        ArrayList list = new ArrayList(32);
         while (matcher.find())
         {
             int start = matcher.start();
@@ -99,16 +99,16 @@ public class GtpUtils
                 assert(false);
                 continue;
             }
-            vector.add(point);
+            list.add(point);
         }
-        GoPoint result[] = new GoPoint[vector.size()];
+        GoPoint result[] = new GoPoint[list.size()];
         for (int i = 0; i < result.length; ++i)
-            result[i] = (GoPoint)vector.get(i);
+            result[i] = (GoPoint)list.get(i);
         return result;
     }
 
-    public static void parsePointStringList(String s, Vector pointList,
-                                            Vector stringList,
+    public static void parsePointStringList(String s, ArrayList pointList,
+                                            ArrayList stringList,
                                             int boardsize) throws GtpError
     {
         pointList.clear();
@@ -182,7 +182,7 @@ public class GtpUtils
     public static Move[] parseVariation(String s, GoColor toMove,
                                         int boardSize)
     {
-        Vector vector = new Vector(32, 32);
+        ArrayList list = new ArrayList(32);
         String token[] = StringUtils.tokenize(s);
         boolean isColorSet = true;
         for (int i = 0; i < token.length; ++i)
@@ -211,13 +211,13 @@ public class GtpUtils
                 }
                 if (! isColorSet)
                     toMove = toMove.otherColor();
-                vector.add(Move.create(point, toMove));
+                list.add(Move.create(point, toMove));
                 isColorSet = false;
             }
         }
-        Move result[] = new Move[vector.size()];
+        Move result[] = new Move[list.size()];
         for (int i = 0; i < result.length; ++i)
-            result[i] = (Move)vector.get(i);
+            result[i] = (Move)list.get(i);
         return result;
     }
 

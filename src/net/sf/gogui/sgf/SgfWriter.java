@@ -8,9 +8,9 @@ package net.sf.gogui.sgf;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Iterator;
-import java.util.Vector;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -156,7 +156,7 @@ public class SgfWriter
         return "[" + getPoint(point) + "]";
     }
 
-    private String getPointList(Vector v)
+    private String getPointList(ArrayList v)
     {
         StringBuffer buffer = new StringBuffer(128);
         for (int i = 0; i < v.size(); ++i)
@@ -260,7 +260,7 @@ public class SgfWriter
 
     private void printMarked(Node node, String property, String type)
     {
-        Vector marked = node.getMarked(type);
+        ArrayList marked = node.getMarked(type);
         if (marked != null)
             print(property + getPointList(marked));
     }
@@ -373,8 +373,8 @@ public class SgfWriter
     private void printPosition(Board board)
     {
         int numberPoints = board.getNumberPoints();
-        Vector black = new Vector(numberPoints);
-        Vector white = new Vector(numberPoints);
+        ArrayList black = new ArrayList(numberPoints);
+        ArrayList white = new ArrayList(numberPoints);
         for (int i = 0; i < numberPoints; ++i)
         {
             GoPoint p = board.getPoint(i);
@@ -389,7 +389,7 @@ public class SgfWriter
         printToPlay(board.getToMove());
     }
 
-    private void printSetup(Vector black, Vector white)
+    private void printSetup(ArrayList black, ArrayList white)
     {
         if (black.size() > 0 || white.size() > 0)
         {

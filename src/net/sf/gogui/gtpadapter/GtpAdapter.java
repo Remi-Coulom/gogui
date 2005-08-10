@@ -15,8 +15,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Stack;
-import java.util.Vector;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
@@ -315,7 +315,7 @@ public class GtpAdapter
 
     private void cmdListCommands(GtpCommand cmd) throws GtpError
     {
-        Vector commands = m_gtp.getSupportedCommands();
+        ArrayList commands = m_gtp.getSupportedCommands();
         for (int i = 0; i < commands.size(); ++i)
         {
             String c = (String)commands.get(i);
@@ -403,7 +403,7 @@ public class GtpAdapter
                     if (maxMove >= 0 && moveNumber >= maxMove)
                         break;
                 }
-                Vector moves = node.getAllAsMoves();
+                ArrayList moves = node.getAllAsMoves();
                 for (int i = 0; i < moves.size(); ++i)
                 {
                     Move move = (Move)moves.get(i);
@@ -446,7 +446,7 @@ public class GtpAdapter
     private void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
         int n = cmd.getIntArg();
-        Vector stones = Board.getHandicapStones(m_boardSize, n);
+        ArrayList stones = Board.getHandicapStones(m_boardSize, n);
         if  (stones == null)
             throw new GtpError("Invalid number of handicap stones");
         StringBuffer pointList = new StringBuffer(128);

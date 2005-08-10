@@ -29,7 +29,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -703,7 +703,7 @@ public class GoGui
         else if (m_analyzeCommand != null
                  && m_analyzeCommand.needsPointListArg())
         {
-            Vector pointListArg = m_analyzeCommand.getPointListArg();
+            ArrayList pointListArg = m_analyzeCommand.getPointListArg();
             if (pointListArg.contains(p))
             {
                 pointListArg.remove(p);
@@ -743,7 +743,7 @@ public class GoGui
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        Vector nodes = new Vector();
+        ArrayList nodes = new ArrayList();
         int numberUndo
             = NodeUtils.getShortestPath(m_currentNode, node, nodes);
         if (backward(numberUndo))
@@ -850,7 +850,7 @@ public class GoGui
             m_analyzeDialog.setRunButtonEnabled(false);
             if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
             {
-                Vector pointList = m_analyzeCommand.getPointListArg();
+                ArrayList pointList = m_analyzeCommand.getPointListArg();
                 for (int i = 0; i < pointList.size(); ++i)
                     m_guiBoard.setSelect((GoPoint)pointList.get(i), true);
             }
@@ -1054,7 +1054,7 @@ public class GoGui
 
     private GoGuiToolBar m_toolBar;
 
-    private Vector m_bookmarks;
+    private ArrayList m_bookmarks;
 
     private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
     {
@@ -1091,9 +1091,9 @@ public class GoGui
                 pointArg = m_analyzeCommand.getPointArg();
             else if (m_analyzeCommand.needsPointListArg())
             {
-                Vector vector = m_analyzeCommand.getPointListArg();
-                if (vector.size() > 0)
-                    pointArg = (GoPoint)vector.get(vector.size() - 1);
+                ArrayList list = m_analyzeCommand.getPointListArg();
+                if (list.size() > 0)
+                    pointArg = (GoPoint)list.get(list.size() - 1);
             }
             if (type == AnalyzeCommand.PARAM)
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
@@ -1207,7 +1207,7 @@ public class GoGui
         m_menuBar.enableCleanup(cleanupSupported);
         restoreSize(m_gtpShell, "window-gtpshell");
         m_gtpShell.setProgramName(m_name);
-        Vector supportedCommands =
+        ArrayList supportedCommands =
             m_commandThread.getSupportedCommands();
         m_gtpShell.setInitialCompletions(supportedCommands);
         if (! m_gtpFile.equals(""))
@@ -2206,7 +2206,7 @@ public class GoGui
                     GoGui.this.setAnalyzeCommand(command, false, true, true);
                 }
             };
-        Vector supportedCommands = null;
+        ArrayList supportedCommands = null;
         boolean noProgram = (m_commandThread == null);
         if (! noProgram)
             supportedCommands = m_commandThread.getSupportedCommands();
@@ -2331,7 +2331,7 @@ public class GoGui
     private void executeCurrentNode() throws GtpError
     {
         m_currentNodeExecuted = 0;
-        Vector moves = m_currentNode.getAllAsMoves();
+        ArrayList moves = m_currentNode.getAllAsMoves();
         for (int i = 0; i < moves.size(); ++i)
         {
             Move move = (Move)moves.get(i);
@@ -2521,7 +2521,7 @@ public class GoGui
             if (m_gameTreeViewer != null)
                 restoreSize(m_gameTreeViewer, "window-gametree");
         }
-        Vector handicap = m_board.getHandicapStones(m_handicap);
+        ArrayList handicap = m_board.getHandicapStones(m_handicap);
         if (handicap == null)
             showWarning("Handicap stone locations not\n" +
                         "defined for this board size");
@@ -3367,7 +3367,8 @@ public class GoGui
     {
         if (m_showVariations)
         {
-            Vector childrenMoves = NodeUtils.getChildrenMoves(m_currentNode);
+            ArrayList childrenMoves
+                = NodeUtils.getChildrenMoves(m_currentNode);
             m_guiBoard.showChildrenMoves(childrenMoves);
         }
         if (m_showLastMove &&

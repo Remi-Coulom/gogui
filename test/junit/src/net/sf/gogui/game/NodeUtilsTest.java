@@ -5,7 +5,7 @@
 
 package net.sf.gogui.game;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -58,7 +58,7 @@ public class NodeUtilsTest
 
     public void testGetChildrenMoves()
     {
-        Vector moves = NodeUtils.getChildrenMoves(m_node7);
+        ArrayList moves = NodeUtils.getChildrenMoves(m_node7);
         assertEquals(moves.size(), 3);
         assertTrue(moves.get(0) == GoPoint.create(0, 0));
         assertTrue(moves.get(1) == GoPoint.create(0, 0));

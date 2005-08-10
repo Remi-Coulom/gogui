@@ -5,15 +5,15 @@
 
 package net.sf.gogui.go;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
 /** Information necessary to undo a move. */
 class MoveRecord
 {
-    public MoveRecord(GoColor oldToMove, Move m, GoColor old, Vector killed,
-                      Vector suicide)
+    public MoveRecord(GoColor oldToMove, Move m, GoColor old, ArrayList killed,
+                      ArrayList suicide)
     {
         m_old = old;
         m_oldToMove = oldToMove;
@@ -37,12 +37,12 @@ class MoveRecord
         return m_oldToMove;
     }
 
-    public Vector getKilled()
+    public ArrayList getKilled()
     {
         return m_killed;
     }
 
-    public Vector getSuicide()
+    public ArrayList getSuicide()
     {
         return m_suicide;
     }
@@ -53,9 +53,9 @@ class MoveRecord
 
     private final Move m_move;
 
-    private final Vector m_killed;
+    private final ArrayList m_killed;
 
-    private final Vector m_suicide;
+    private final ArrayList m_suicide;
 }
 
 //----------------------------------------------------------------------------
@@ -102,7 +102,7 @@ public final class Board
         }
         if (allEmpty)
             return;
-        Vector territory = new Vector(getNumberPoints());
+        ArrayList territory = new ArrayList(getNumberPoints());
         for (int i = 0; i < m_allPoints.length; ++i)
         {
             GoPoint p = m_allPoints[i];
@@ -139,9 +139,9 @@ public final class Board
         return (point.getX() < size && point.getY() < size);
     }
 
-    public Vector getAdjacentPoints(GoPoint p)
+    public ArrayList getAdjacentPoints(GoPoint p)
     {
-        Vector result = new Vector(4);
+        ArrayList result = new ArrayList(4);
         int x = p.getX();
         int y = p.getY();
         if (x > 0)
@@ -180,12 +180,12 @@ public final class Board
         return m_color[p.getX()][p.getY()];
     }
 
-    public Vector getHandicapStones(int n)
+    public ArrayList getHandicapStones(int n)
     {
         return m_constants.getHandicapStones(n);
     }
 
-    public static Vector getHandicapStones(int size, int n)
+    public static ArrayList getHandicapStones(int size, int n)
     {
         return new Constants(size).getHandicapStones(n);
     }
@@ -220,17 +220,17 @@ public final class Board
         return m_allPoints.length;
     }
 
-    public Vector getSetupStonesBlack()
+    public ArrayList getSetupStonesBlack()
     {
         return m_setupStonesBlack;
     }
 
-    public Vector getSetupStonesWhite()
+    public ArrayList getSetupStonesWhite()
     {
         return m_setupStonesWhite;
     }
 
-    public void getStones(GoPoint p, GoColor color, Vector stones)
+    public void getStones(GoPoint p, GoColor color, ArrayList stones)
     {
         assert(isMarkCleared());
         findStones(p, color, stones);
@@ -311,8 +311,8 @@ public final class Board
         GoPoint p = m.getPoint();
         GoColor color = m.getColor();
         GoColor otherColor = color.otherColor();
-        Vector killed = new Vector();
-        Vector suicide = new Vector();
+        ArrayList killed = new ArrayList();
+        ArrayList suicide = new ArrayList();
         GoColor old = GoColor.EMPTY;
         if (p != null)
         {
@@ -320,7 +320,7 @@ public final class Board
             setColor(p, color);
             if (color != GoColor.EMPTY)
             {
-                Vector adj = getAdjacentPoints(p);
+                ArrayList adj = getAdjacentPoints(p);
                 for (int i = 0; i < adj.size(); ++i)
                     checkKill((GoPoint)(adj.get(i)), otherColor, killed);
                 checkKill(p, color, suicide);
@@ -336,7 +336,7 @@ public final class Board
                 }
             }
         }
-        m_moves.setSize(m_moveNumber);
+        assert(m_moves.size() == m_moveNumber);
         m_moves.add(new MoveRecord(m_toMove, m, old, killed, suicide));
         ++m_moveNumber;
         m_toMove = otherColor;        
@@ -482,21 +482,21 @@ public final class Board
             return;
         --m_moveNumber;
         MoveRecord r = (MoveRecord)m_moves.get(m_moveNumber);
-        m_moves.setSize(m_moveNumber);
+        m_moves.remove(m_moveNumber);
         Move m = r.getMove();
         GoColor c = m.getColor();
         GoColor otherColor = c.otherColor();
         GoPoint p = m.getPoint();
         if (p != null)
         {
-            Vector suicide = r.getSuicide();
+            ArrayList suicide = r.getSuicide();
             for (int i = 0; i < suicide.size(); ++i)
             {
                 GoPoint stone = (GoPoint)suicide.get(i);
                 setColor(stone, c);
             }
             setColor(p, r.getOldColor());
-            Vector killed = r.getKilled();
+            ArrayList killed = r.getKilled();
             for (int i = 0; i < killed.size(); ++i)
             {
                 GoPoint stone = (GoPoint)killed.get(i);
@@ -551,9 +551,9 @@ public final class Board
                 m_handicapLine2 = size / 2;
         }
 
-        public Vector getHandicapStones(int n)
+        public ArrayList getHandicapStones(int n)
         {
-            Vector result = new Vector(9);
+            ArrayList result = new ArrayList(9);
             if (n == 0)
                 return result;
             int line1 = m_handicapLine1;
@@ -620,11 +620,11 @@ public final class Board
 
     private int m_setupNumber;
 
-    private final Vector m_moves = new Vector(361, 361);
+    private final ArrayList m_moves = new ArrayList(361);
 
-    private final Vector m_setupStonesBlack = new Vector();
+    private final ArrayList m_setupStonesBlack = new ArrayList();
 
-    private final Vector m_setupStonesWhite = new Vector();
+    private final ArrayList m_setupStonesWhite = new ArrayList();
 
     private GoColor m_color[][];
 
@@ -636,10 +636,10 @@ public final class Board
 
     private GoPoint m_allPoints[];
 
-    private void checkKill(GoPoint p, GoColor color, Vector killed)
+    private void checkKill(GoPoint p, GoColor color, ArrayList killed)
     {
         assert(isMarkCleared());
-        Vector stones = new Vector();
+        ArrayList stones = new ArrayList();
         if (isDead(p, color, stones))
         {
             killed.addAll(stones);
@@ -659,7 +659,7 @@ public final class Board
         }
     }
 
-    private void findStones(GoPoint p, GoColor color, Vector stones)
+    private void findStones(GoPoint p, GoColor color, ArrayList stones)
     {
         GoColor c = getColor(p);
         if (c != color)
@@ -668,7 +668,7 @@ public final class Board
             return;
         setMark(p, true);
         stones.add(p);
-        Vector adj = getAdjacentPoints(p);
+        ArrayList adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
             findStones((GoPoint)(adj.get(i)), color, stones);
     }
@@ -695,7 +695,7 @@ public final class Board
             }
     }
 
-    private boolean isDead(GoPoint p, GoColor color, Vector stones)
+    private boolean isDead(GoPoint p, GoColor color, ArrayList stones)
     {
         GoColor c = getColor(p);
         if (c == GoColor.EMPTY)
@@ -706,7 +706,7 @@ public final class Board
             return true;
         setMark(p, true);
         stones.add(p);
-        Vector adj = getAdjacentPoints(p);
+        ArrayList adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
             if (! isDead((GoPoint)(adj.get(i)), color, stones))
                 return false;
@@ -721,7 +721,7 @@ public final class Board
         return true;
     }    
 
-    private boolean isTerritory(GoPoint p, Vector territory, GoColor color)
+    private boolean isTerritory(GoPoint p, ArrayList territory, GoColor color)
     {
         GoColor c = getColor(p);
         if (c == color.otherColor() && ! scoreGetDead(p))
@@ -732,7 +732,7 @@ public final class Board
             return true;
         setMark(p, true);
         territory.add(p);
-        Vector adj = getAdjacentPoints(p);
+        ArrayList adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
             if (! isTerritory((GoPoint)(adj.get(i)), territory, color))
                 return false;
@@ -750,7 +750,7 @@ public final class Board
         m_mark[p.getX()][p.getY()] = value;
     }
 
-    private void setMark(Vector points, boolean value)
+    private void setMark(ArrayList points, boolean value)
     {
         int size = points.size();
         for (int i = 0; i < size; ++i)

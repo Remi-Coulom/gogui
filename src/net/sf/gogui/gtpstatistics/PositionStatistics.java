@@ -5,7 +5,7 @@
 
 package net.sf.gogui.gtpstatistics;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.ErrorMessage;
@@ -109,7 +109,7 @@ public final class PositionStatistics
             }
         }
         m_histoTable = TableUtils.fromHistogram(m_histogram, command);
-        Vector files = TableUtils.getColumnUnique(table, "File");
+        ArrayList files = TableUtils.getColumnUnique(table, "File");
         for (int i = 0; i < files.size(); ++i)
         {
             String file = (String)(files.get(i));

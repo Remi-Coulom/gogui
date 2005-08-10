@@ -7,7 +7,7 @@ package net.sf.gogui.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -32,14 +32,14 @@ public class ContextMenu
     }
 
     public ContextMenu(GoPoint point, boolean noProgram,
-                       Vector supportedCommands, boolean mark,
+                       ArrayList supportedCommands, boolean mark,
                        boolean markCircle, boolean markSquare,
                        boolean markTriangle, Listener listener)
     {
         m_point = point;
         m_listener = listener;
-        Vector commands = new Vector();
-        Vector labels = new Vector();
+        ArrayList commands = new ArrayList();
+        ArrayList labels = new ArrayList();
         if (! noProgram)
         {
             try
@@ -171,8 +171,8 @@ public class ContextMenu
 
     private final Listener m_listener;
 
-    /** Vector<AnalyzeCommand> */
-    private final Vector m_commands = new Vector();
+    /** ArrayList<AnalyzeCommand> */
+    private final ArrayList m_commands = new ArrayList();
 
     private void addColorCommand(AnalyzeCommand command)
     {

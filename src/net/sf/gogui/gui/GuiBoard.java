@@ -27,7 +27,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.net.URL;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -410,7 +410,7 @@ public final class GuiBoard
         GoColor c = m_board.getColor(p);
         if (c == GoColor.EMPTY)
             return;
-        Vector stones = new Vector(m_board.getNumberPoints());
+        ArrayList stones = new ArrayList(m_board.getNumberPoints());
         m_board.getStones(p, c, stones);
         boolean dead = ! m_board.scoreGetDead((GoPoint)(stones.get(0)));
         for (int i = 0; i < stones.size(); ++i)
@@ -582,7 +582,7 @@ public final class GuiBoard
         }
     }
 
-    public void showChildrenMoves(Vector childrenMoves)
+    public void showChildrenMoves(ArrayList childrenMoves)
     {
         clearAllStrings();
         int numberMarked = 0;
@@ -628,7 +628,7 @@ public final class GuiBoard
         }
     }
 
-    public void showPointStringList(Vector pointList, Vector stringList)
+    public void showPointStringList(ArrayList pointList, ArrayList stringList)
     {
         clearAllStrings();
         for (int i = 0; i < pointList.size(); ++i)
@@ -719,7 +719,7 @@ public final class GuiBoard
 
     private Listener m_listener;
 
-    private final Vector m_labels = new Vector(100, 100);
+    private final ArrayList m_labels = new ArrayList(100);
 
     private void addColumnLabels(int size)
     {

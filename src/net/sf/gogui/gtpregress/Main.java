@@ -6,7 +6,7 @@
 package net.sf.gogui.gtpregress;
 
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
@@ -44,7 +44,7 @@ class Main
             boolean longOutput = opt.isSet("long");
             boolean fileComments = opt.isSet("filecomments");
             String output = opt.getString("output", "");
-            Vector arguments = opt.getArguments();
+            ArrayList arguments = opt.getArguments();
             int size = arguments.size();
             if (size < 2)
             {

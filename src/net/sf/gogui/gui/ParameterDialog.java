@@ -11,7 +11,7 @@ import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,7 +31,7 @@ public class ParameterDialog
                                       String title, String response,
                                       CommandThread commandThread)
     {
-        Vector parameters = parseResponse(response);
+        ArrayList parameters = parseResponse(response);
         int numberParameters = parameters.size();
         int cols = Math.max(1, numberParameters / 25);
         JPanel panel = new JPanel(new GridLayout(0, cols));
@@ -179,9 +179,9 @@ public class ParameterDialog
         private final JPanel m_panel;
     }
 
-    private static Vector parseResponse(String response)
+    private static ArrayList parseResponse(String response)
     {
-        Vector parameters = new Vector();
+        ArrayList parameters = new ArrayList();
         BufferedReader reader =
             new BufferedReader(new StringReader(response));
         while (true)

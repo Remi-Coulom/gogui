@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.StringUtils;
@@ -147,8 +147,8 @@ public class AnalyzeCommand
 
     public static AnalyzeCommand get(Frame owner, String label)
     {
-        Vector commands = new Vector(128, 128);
-        Vector labels = new Vector(128, 128);
+        ArrayList commands = new ArrayList(128);
+        ArrayList labels = new ArrayList(128);
         try
         {
             read(commands, labels, null);
@@ -178,7 +178,7 @@ public class AnalyzeCommand
         return m_pointArg;
     }
 
-    public Vector getPointListArg()
+    public ArrayList getPointListArg()
     {
         return m_pointListArg;
     }
@@ -314,13 +314,13 @@ public class AnalyzeCommand
         return (m_command.indexOf("%o") >= 0);
     }
 
-    public static void read(Vector commands, Vector labels,
-                            Vector supportedCommands)
+    public static void read(ArrayList commands, ArrayList labels,
+                            ArrayList supportedCommands)
         throws Exception
     {
         commands.clear();
         labels.clear();
-        Vector files = getFiles();
+        ArrayList files = getFiles();
         File file = new File(getDir(), "analyze-commands");
         if (! files.contains(file))
         {
@@ -385,7 +385,7 @@ public class AnalyzeCommand
         m_pointArg = point;
     }
 
-    public void setPointListArg(Vector pointList)
+    public void setPointListArg(ArrayList pointList)
     {
         m_pointListArg = pointList;
     }
@@ -422,7 +422,7 @@ public class AnalyzeCommand
 
     private GoPoint m_pointArg;
 
-    private Vector m_pointListArg = new Vector();
+    private ArrayList m_pointListArg = new ArrayList();
 
     private static void copyDefaults(File file)
     {
@@ -452,9 +452,9 @@ public class AnalyzeCommand
         return new File(home, ".gogui");
     }
 
-    private static Vector getFiles()
+    private static ArrayList getFiles()
     {
-        Vector result = new Vector();
+        ArrayList result = new ArrayList();
         File[] files = getDir().listFiles();
         if (files == null)
             return result;
@@ -468,8 +468,9 @@ public class AnalyzeCommand
         return result;
     }
 
-    private static void readFile(File file, Vector commands, Vector labels,
-                                 Vector supportedCommands)
+    private static void readFile(File file, ArrayList commands,
+                                 ArrayList labels,
+                                 ArrayList supportedCommands)
         throws Exception
     {
         BufferedReader in = new BufferedReader(new FileReader(file));

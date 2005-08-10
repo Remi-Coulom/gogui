@@ -7,7 +7,7 @@ package net.sf.gogui.twogtp;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -28,7 +28,7 @@ public class Compare
         @param board Board with the correct size (only used for
         Board.rotate).
         @param moves Moves of game to check.
-        @param games Vector containing games (vector of moves) in collection.
+        @param games ArrayList containing games (vector of moves) in collection.
         @param useAlternate If true, assume that players are exchanged every
         second game. Only check games where player played the same color.
         @param isAlternated If useAlternate, indicate if game to check
@@ -38,8 +38,8 @@ public class Compare
         game is found (<= 20% identical moves comparing moves by number),
         the game number is returned with a question mark appended.
     */
-    public static String checkDuplicate(Board board, Vector moves,
-                                        Vector games, boolean useAlternate,
+    public static String checkDuplicate(Board board, ArrayList moves,
+                                        ArrayList games, boolean useAlternate,
                                         boolean isAlternated)
     {
         String result = "-";
@@ -47,7 +47,7 @@ public class Compare
         {
             if (useAlternate && ((numberGame % 2 != 0) != isAlternated))
                 continue;
-            Vector gameMoves = (Vector)games.get(numberGame);
+            ArrayList gameMoves = (ArrayList)games.get(numberGame);
             for (int rot = 0; rot < Board.NUMBER_ROTATIONS; ++rot)
             {
                 int numberDifferent = 0;
@@ -85,10 +85,10 @@ public class Compare
         with the filename and the duplicate information as returned by
         Compare.checkDuplicate.
     */
-    public static void compare(Vector filenames) throws Exception
+    public static void compare(ArrayList filenames) throws Exception
     {
         Board board = null;
-        Vector games = new Vector();
+        ArrayList games = new ArrayList();
         for (int gameNumber = 0; gameNumber < filenames.size(); ++gameNumber)
         {
             String filename = (String)filenames.get(gameNumber);
@@ -104,7 +104,7 @@ public class Compare
             else if (size != board.getSize())
                 throw new Exception("Board size in " + filename +
                                     " does not match other games");
-            Vector moves = getAllAsMoves(gameTree.getRoot());
+            ArrayList moves = getAllAsMoves(gameTree.getRoot());
             String duplicate =
                 checkDuplicate(board, moves, games, false, false);
             System.out.println(Integer.toString(gameNumber) + " " +
@@ -117,9 +117,9 @@ public class Compare
         All setup stones are translated to moves and passes are filled in
         to ensure that moves are alternating beginning with black.
     */
-    public static Vector getAllAsMoves(Node node)
+    public static ArrayList getAllAsMoves(Node node)
     {
-        Vector moves = new Vector(128, 128);
+        ArrayList moves = new ArrayList(128);
         while (node != null)
         {
             moves.addAll(node.getAllAsMoves());

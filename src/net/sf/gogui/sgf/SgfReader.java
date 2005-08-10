@@ -17,7 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.TreeSet;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.game.GameInformation;
@@ -218,14 +218,14 @@ public class SgfReader
     /** Pre-allocated temporary buffer for use within functions. */
     private final StringBuffer m_buffer = new StringBuffer(512);
 
-    private final Vector m_pointList = new Vector();
+    private final ArrayList m_pointList = new ArrayList();
 
-    private final Vector m_valueVector = new Vector();
+    private final ArrayList m_values = new ArrayList();
 
     private void addSgfProperty(Node node, String property)
     {
         m_buffer.setLength(0);
-        for (int i = 0; i < m_valueVector.size(); ++i)
+        for (int i = 0; i < m_values.size(); ++i)
         {
             m_buffer.append('[');
             m_buffer.append(getValue(i));
@@ -385,7 +385,7 @@ public class SgfReader
 
     private String getValue(int i)
     {
-        return (String)m_valueVector.get(i);
+        return (String)m_values.get(i);
     }
 
     private GoColor parseColor(String s) throws SgfError
@@ -506,7 +506,7 @@ public class SgfReader
     private void parsePointList() throws SgfError
     {
         m_pointList.clear();
-        for (int i = 0; i < m_valueVector.size(); ++i)
+        for (int i = 0; i < m_values.size(); ++i)
         {
             String value = getValue(i);
             int pos = value.indexOf(":");
@@ -603,11 +603,11 @@ public class SgfReader
         {
             // Use intern() to allow fast comparsion with ==
             String p = m_tokenizer.sval.toUpperCase().intern();
-            m_valueVector.clear();
+            m_values.clear();
             String s;
             while ((s = readValue()) != null)
-                m_valueVector.add(s);
-            if (m_valueVector.size() == 0)
+                m_values.add(s);
+            if (m_values.size() == 0)
                 throw getError("Property '" + p + "' has no value");
             String v = getValue(0);
             p = checkForObsoleteLongProps(p);
@@ -708,7 +708,7 @@ public class SgfReader
                 readKomi(v);
             else if (p == "LB")
             {
-                for (int i = 0; i < m_valueVector.size(); ++i)
+                for (int i = 0; i < m_values.size(); ++i)
                 {
                     String value = getValue(i);
                     int pos = value.indexOf(":");

@@ -5,7 +5,7 @@
 
 package net.sf.gogui.go;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -43,8 +43,8 @@ public class GoPointTest
         assertEquals(getPoint(18, 18).toString(), "T19");
         assertEquals(getPoint(9, 20).toString(), "K21");
         assertEquals(getPoint(9, 20).toString(), "K21");
-        assertEquals(GoPoint.toString((Vector)null), "(null)");
-        Vector v = new Vector();
+        assertEquals(GoPoint.toString((ArrayList)null), "(null)");
+        ArrayList v = new ArrayList();
         assertEquals(GoPoint.toString(v), "");
         v.add(getPoint(0, 0));
         assertEquals(GoPoint.toString(v), "A1");
@@ -66,12 +66,12 @@ public class GoPointTest
         checkInvalid("19Z", 19);
         checkInvalid("A100", 25);
         checkInvalid("C10", 9);
-        Vector pointListVector
-            = GoPoint.parsePointListVector("  R15 PASS T19 ", 19);
-        assertEquals(pointListVector.size(), 3);
-        checkPoint((GoPoint)pointListVector.get(0), 16, 14);
-        assertNull((GoPoint)pointListVector.get(1));
-        checkPoint((GoPoint)pointListVector.get(2), 18, 18);
+        ArrayList pointListArrayList
+            = GoPoint.parsePointListArrayList("  R15 PASS T19 ", 19);
+        assertEquals(pointListArrayList.size(), 3);
+        checkPoint((GoPoint)pointListArrayList.get(0), 16, 14);
+        assertNull((GoPoint)pointListArrayList.get(1));
+        checkPoint((GoPoint)pointListArrayList.get(2), 18, 18);
         GoPoint[] pointList = GoPoint.parsePointList("PASS A1", 9);
         assertEquals(pointList.length, 2);
         assertNull(pointList[0]);

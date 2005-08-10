@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -214,7 +214,7 @@ public class GoGuiMenuBar
         m_itemAutoNumber.setSelected(enable);        
     }
 
-    public void setBookmarks(Vector bookmarks)
+    public void setBookmarks(ArrayList bookmarks)
     {
         for (int i = 0; i < m_bookmarkItems.size(); ++i)
             m_menuBookmarks.remove((JMenuItem)m_bookmarkItems.get(i));
@@ -655,7 +655,7 @@ public class GoGuiMenuBar
 
     private RecentFileMenu m_recentGtp;
 
-    private final Vector m_bookmarkItems = new Vector();
+    private final ArrayList m_bookmarkItems = new ArrayList();
 
     private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
     {

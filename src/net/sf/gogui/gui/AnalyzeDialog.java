@@ -25,7 +25,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -70,7 +70,7 @@ public final class AnalyzeDialog
 
     public AnalyzeDialog(Frame owner, Callback callback,
                          boolean onlySupported, boolean sort,
-                         Vector supportedCommands,
+                         ArrayList supportedCommands,
                          CommandThread commandThread)
     {
         super(owner, "Analyze");
@@ -124,13 +124,13 @@ public final class AnalyzeDialog
     {
         try
         {
-            Vector supportedCommands = null;
+            ArrayList supportedCommands = null;
             if (m_onlySupportedCommands)
                 supportedCommands = m_supportedCommands;
             AnalyzeCommand.read(m_commands, m_labels, supportedCommands);
             if (m_sort)
                 sortLists();
-            m_list.setListData(m_labels);
+            m_list.setListData(m_labels.toArray());
             if (m_labels.size() > 0)
                 // Avoid focus problem with Sun JDK 1.4.2 if focus was at an
                 // index greater than the new list length
@@ -262,11 +262,11 @@ public final class AnalyzeDialog
 
     private JPanel m_colorPanel;
 
-    private final Vector m_commands = new Vector(128, 64);
+    private final ArrayList m_commands = new ArrayList(128);
 
-    private final Vector m_supportedCommands;
+    private final ArrayList m_supportedCommands;
 
-    private final Vector m_labels = new Vector(128, 64);
+    private final ArrayList m_labels = new ArrayList(128);
 
     private final Callback m_callback;
 
@@ -495,13 +495,13 @@ public final class AnalyzeDialog
         {
             try
             {
-                command.setPointListArg(new Vector());
+                command.setPointListArg(new ArrayList());
                 String commandWithoutArg =
                     command.replaceWildCards(m_selectedColor) + " show";
                 String response =
                     m_commandThread.sendCommand(commandWithoutArg);
-                Vector pointList =
-                    GtpUtils.parsePointListVector(response, m_boardSize);
+                ArrayList pointList =
+                    GtpUtils.parsePointArrayList(response, m_boardSize);
                 command.setPointListArg(pointList);
             }
             catch (GtpError e)

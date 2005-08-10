@@ -23,7 +23,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
@@ -134,7 +134,7 @@ public class FindDialog
     {
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new BorderLayout());
-        m_comboBox = new JComboBox(loadHistory());
+        m_comboBox = new JComboBox(loadHistory().toArray());
         StringBuffer prototype = new StringBuffer(70);
         for (int i = 0; i < 40; ++i)
             prototype.append('-');
@@ -164,9 +164,9 @@ public class FindDialog
         return outerPanel;
     }
 
-    private Vector getHistory()
+    private ArrayList getHistory()
     {
-        Vector result = new Vector(32, 32);
+        ArrayList result = new ArrayList(32);
         int maxHistory = 20;
         int itemCount = m_comboBox.getItemCount();
         int n = itemCount;
@@ -186,9 +186,9 @@ public class FindDialog
         return new File(dir, "find-history");
     }
 
-    private Vector loadHistory()
+    private ArrayList loadHistory()
     {
-        Vector result = new Vector(32, 32);
+        ArrayList result = new ArrayList(32);
         if (m_initialValue != null)
             result.add(m_initialValue);
         File file = getHistoryFile();
@@ -217,7 +217,7 @@ public class FindDialog
         return result;
     }
 
-    private static void saveHistory(Vector history)
+    private static void saveHistory(ArrayList history)
     {
         File file = getHistoryFile();
         try

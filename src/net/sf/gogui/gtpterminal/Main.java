@@ -6,7 +6,7 @@
 package net.sf.gogui.gtpterminal;
 
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
@@ -41,7 +41,7 @@ public class Main
             }
             int size = opt.getInteger("size", 19, 1);
             boolean verbose = opt.isSet("verbose");
-            Vector arguments = opt.getArguments();
+            ArrayList arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
                 printUsage(System.err);

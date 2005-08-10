@@ -8,8 +8,8 @@ package net.sf.gogui.gtpdummy;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpCommand;
@@ -151,7 +151,7 @@ public class GtpDummy
     private final Thread m_thread;
 
     /** Editable point list for dummy_eplist command. */
-    private Vector m_ePList = new Vector();
+    private ArrayList m_ePList = new ArrayList();
 
     private void cmdBWBoard(GtpCommand cmd)
     {        

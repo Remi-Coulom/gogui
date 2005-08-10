@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ public class Options
     }
 
     /** Get remaining arguments that are not options. */
-    public Vector getArguments()
+    public ArrayList getArguments()
     {
         return m_args;
     }
@@ -251,7 +251,7 @@ public class Options
         return opt;
     }
 
-    private final Vector m_args = new Vector();
+    private final ArrayList m_args = new ArrayList();
 
     private final Map m_map = new TreeMap();
 

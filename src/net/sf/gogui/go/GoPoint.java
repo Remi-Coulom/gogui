@@ -5,7 +5,7 @@
 
 package net.sf.gogui.go;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -131,22 +131,22 @@ public final class GoPoint
     public static GoPoint[] parsePointList(String s, int boardSize)
         throws InvalidPoint
     {
-        Vector vector = parsePointListVector(s, boardSize);
-        GoPoint result[] = new GoPoint[vector.size()];
+        ArrayList list = parsePointListArrayList(s, boardSize);
+        GoPoint result[] = new GoPoint[list.size()];
         for (int i = 0; i < result.length; ++i)
-            result[i] = (GoPoint)vector.get(i);
+            result[i] = (GoPoint)list.get(i);
         return result;
     }
 
-    public static Vector parsePointListVector(String s, int boardSize)
+    public static ArrayList parsePointListArrayList(String s, int boardSize)
         throws InvalidPoint
     {
-        Vector vector = new Vector(32, 32);
+        ArrayList list = new ArrayList(32);
         String p[] = StringUtils.tokenize(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
-                vector.add(parsePoint(p[i], boardSize));
-        return vector;
+                list.add(parsePoint(p[i], boardSize));
+        return list;
     }
 
     /** Return point right.
@@ -180,7 +180,7 @@ public final class GoPoint
         Points are separated by a single space.
         If pointList is null, "(null)" is returned.
     */
-    public static String toString(Vector pointList)
+    public static String toString(ArrayList pointList)
     {
         if (pointList == null)
             return "(null)";

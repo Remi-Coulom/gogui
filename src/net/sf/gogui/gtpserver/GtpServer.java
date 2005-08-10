@@ -17,7 +17,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ public final class GtpServer
                 System.err.println("Option -user only valid with -remote");
                 System.exit(-1);
             }
-            Vector arguments = opt.getArguments();
+            ArrayList arguments = opt.getArguments();
             if (arguments.size() != 1)
             {
                 printUsage(System.err);

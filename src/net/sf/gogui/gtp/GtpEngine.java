@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.StringUtils;
 
@@ -189,13 +189,13 @@ public abstract class GtpEngine
         @param boardSize Board size is needed for parsing the points
         @return Point list argument
     */
-    public static Vector parsePointListArgument(String[] cmdArray,
-                                                int boardSize)
+    public static ArrayList parsePointListArgument(String[] cmdArray,
+                                                   int boardSize)
         throws GtpError
     {
         int length = cmdArray.length;
         assert(length >= 1);
-        Vector pointList = new Vector();
+        ArrayList pointList = new ArrayList();
         for (int i = 1; i < length; ++i)
         {
             GoPoint point = GtpUtils.parsePoint(cmdArray[i], boardSize);

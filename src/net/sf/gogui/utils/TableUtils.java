@@ -5,7 +5,7 @@
 
 package net.sf.gogui.utils;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ public class TableUtils
 
     public static Table fromHistogram(Histogram histogram, String name)
     {
-        Vector columnTitles = new Vector(2);
+        ArrayList columnTitles = new ArrayList(2);
         columnTitles.add(name);
         columnTitles.add("Count");
         Table result = new Table(columnTitles);
@@ -65,9 +65,9 @@ public class TableUtils
         return result;
     }
 
-    public static Vector getColumnUnique(Table table, String column)
+    public static ArrayList getColumnUnique(Table table, String column)
     {
-        Vector result = new Vector();
+        ArrayList result = new ArrayList();
         int col = table.getColumnIndex(column);
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
@@ -171,7 +171,7 @@ public class TableUtils
     public static Table select(Table table, String compareColumn,
                                String compareValue, String selectColumn)
     {
-        Vector columnTitles = new Vector(1);
+        ArrayList columnTitles = new ArrayList(1);
         columnTitles.add(selectColumn);
         Table result = new Table(columnTitles);
         for (int row = 0; row < table.getNumberRows(); ++row)
@@ -189,7 +189,7 @@ public class TableUtils
                                String compareValue, String selectColumn1,
                                String selectColumn2)
     {
-        Vector columnTitles = new Vector(2);
+        ArrayList columnTitles = new ArrayList(2);
         columnTitles.add(selectColumn1);
         columnTitles.add(selectColumn2);
         Table result = new Table(columnTitles);

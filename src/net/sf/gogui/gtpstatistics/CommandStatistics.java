@@ -8,7 +8,7 @@ package net.sf.gogui.gtpstatistics;
 import java.awt.Color;
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Table;
 import net.sf.gogui.utils.TableUtils;
@@ -27,8 +27,8 @@ public final class CommandStatistics
 
     public final PositionStatistics m_statisticsFinal;
 
-    /** Vector<PositionStatistics> */
-    public final Vector m_statisticsAtMove;
+    /** ArrayList<PositionStatistics> */
+    public final ArrayList m_statisticsAtMove;
 
     public final Table m_tableAtMove;
 
@@ -42,8 +42,8 @@ public final class CommandStatistics
         double max = m_statisticsAll.getMax();
         m_statisticsFinal
             = new PositionStatistics(command, tableFinal, true, min, max);
-        m_statisticsAtMove = new Vector();
-        Vector columnTitles = new Vector();
+        m_statisticsAtMove = new ArrayList();
+        ArrayList columnTitles = new ArrayList();
         columnTitles.add("Move");
         columnTitles.add("Mean");
         columnTitles.add("Error");

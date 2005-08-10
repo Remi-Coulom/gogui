@@ -7,7 +7,7 @@ package net.sf.gogui.gtpstatistics;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
@@ -63,10 +63,10 @@ class Main
             boolean force = opt.isSet("force");
             int precision = opt.getInteger("precision", 3, 0);
             int boardSize = opt.getInteger("size", 19, 1);
-            Vector commands = parseCommands(opt, "commands");
-            Vector finalCommands = parseCommands(opt, "final");
-            Vector beginCommands = parseCommands(opt, "begin");
-            Vector arguments = opt.getArguments();
+            ArrayList commands = parseCommands(opt, "commands");
+            ArrayList finalCommands = parseCommands(opt, "final");
+            ArrayList beginCommands = parseCommands(opt, "begin");
+            ArrayList arguments = opt.getArguments();
             int size = arguments.size();
             if (analyze)
             {
@@ -110,15 +110,15 @@ class Main
     {
     }
 
-    private static Vector parseCommands(Options opt, String option)
+    private static ArrayList parseCommands(Options opt, String option)
         throws ErrorMessage
     {
-        Vector result = null;
+        ArrayList result = null;
         if (opt.isSet(option))
         {
             String string = opt.getString(option);
             String[] array = StringUtils.split(string, ',');
-            result = new Vector(array.length);
+            result = new ArrayList(array.length);
             for (int i = 0; i < array.length; ++i)
                 result.add(array[i].trim());
         }

@@ -9,7 +9,7 @@ package net.sf.gogui.tex;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -158,7 +158,7 @@ public class TexWriter
         StringBuffer comment = new StringBuffer();
         int size = gameInformation.m_boardSize;
         Node firstMoveAtPoint[][] = new Node[size][size];
-        Vector needsComment = new Vector();
+        ArrayList needsComment = new ArrayList();
         boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
         Node node = gameTree.getRoot();

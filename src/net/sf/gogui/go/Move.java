@@ -5,7 +5,7 @@
 
 package net.sf.gogui.go;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -49,9 +49,9 @@ public final class Move
         in the same order, but ensure it starts with a move of color toMove
         and have no subsequent moves of the same color.
     */
-    public static Vector fillPasses(Vector moves, GoColor toMove)
+    public static ArrayList fillPasses(ArrayList moves, GoColor toMove)
     {
-        Vector result = new Vector(moves.size() * 2);
+        ArrayList result = new ArrayList(moves.size() * 2);
         if (moves.size() == 0)
             return result;
         for (int i = 0; i < moves.size(); ++i)

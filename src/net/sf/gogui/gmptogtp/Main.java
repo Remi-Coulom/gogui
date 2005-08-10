@@ -8,8 +8,8 @@ package net.sf.gogui.gmptogtp;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
 import javax.comm.CommPortIdentifier;
 import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
@@ -98,7 +98,7 @@ public class Main
             boolean simple = opt.isSet("simple");
             boolean wait = opt.isSet("wait");
             String program = null;
-            Vector arguments = opt.getArguments();
+            ArrayList arguments = opt.getArguments();
             if (arguments.size() == 1)
                 program = (String)arguments.get(0);
             else if (arguments.size() > 1)

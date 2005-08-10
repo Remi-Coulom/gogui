@@ -12,9 +12,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintStream;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.gtp.Gtp;
@@ -227,9 +227,9 @@ public class GtpRegress
 
     private String m_version;
 
-    private final Vector m_tests = new Vector();
+    private final ArrayList m_tests = new ArrayList();
 
-    private final Vector m_testSummaries = new Vector();
+    private final ArrayList m_testSummaries = new ArrayList();
 
     private Gtp m_gtp;
 

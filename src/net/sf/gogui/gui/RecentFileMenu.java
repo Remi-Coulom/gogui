@@ -6,7 +6,7 @@
 package net.sf.gogui.gui;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JMenu;
 
 //----------------------------------------------------------------------------
@@ -82,8 +82,8 @@ public class RecentFileMenu
 
     private final RecentMenu m_menu;
 
-    /** Vector<String> */
-    private final Vector m_sameName = new Vector();
+    /** ArrayList<String> */
+    private final ArrayList m_sameName = new ArrayList();
 
     private int getCount()
     {

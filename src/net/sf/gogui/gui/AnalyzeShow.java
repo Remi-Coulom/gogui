@@ -9,7 +9,7 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -27,7 +27,7 @@ public class AnalyzeShow
                             Board board, String response) throws GtpError
     {
         GoPoint pointArg = command.getPointArg();
-        Vector pointListArg = command.getPointListArg();
+        ArrayList pointListArg = command.getPointListArg();
         guiBoard.clearAllSelect();
         for (int i = 0; i < pointListArg.size(); ++i)
             guiBoard.setSelect((GoPoint)pointListArg.get(i), true);
@@ -86,8 +86,8 @@ public class AnalyzeShow
             break;
         case AnalyzeCommand.PSPAIRS:
             {
-                Vector pointList = new Vector(32, 32);
-                Vector stringList = new Vector(32, 32);
+                ArrayList pointList = new ArrayList(32);
+                ArrayList stringList = new ArrayList(32);
                 GtpUtils.parsePointStringList(response, pointList, stringList,
                                               size);
                 guiBoard.showPointStringList(pointList, stringList);
@@ -148,7 +148,7 @@ public class AnalyzeShow
     }
 
     private static GoColor getColor(Board board, GoPoint pointArg,
-                                    Vector pointListArg)
+                                    ArrayList pointListArg)
     {
         GoColor color = GoColor.EMPTY;
         if (pointArg != null)

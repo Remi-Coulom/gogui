@@ -13,7 +13,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.Vector;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -21,11 +21,11 @@ public class Table
 {
     public Table()
     {
-        m_columnTitles = new Vector();
+        m_columnTitles = new ArrayList();
         m_numberColumns = 0;
     }
 
-    public Table(Vector columnTitles)
+    public Table(ArrayList columnTitles)
     {        
         m_columnTitles = columnTitles;
         m_numberColumns = columnTitles.size();
@@ -58,9 +58,9 @@ public class Table
         return (String)m_columnTitles.get(index);
     }
 
-    public Vector getColumnTitles()
+    public ArrayList getColumnTitles()
     {
-        return (Vector)m_columnTitles.clone();
+        return (ArrayList)m_columnTitles.clone();
     }
 
     public int getNumberColumns()
@@ -124,7 +124,7 @@ public class Table
         }
         for (int i = 0; i < m_rows.size(); ++i)
         {
-            Vector row = (Vector)m_rows.get(i);
+            ArrayList row = (ArrayList)m_rows.get(i);
             for (int j = 0; j < m_numberColumns; ++j)
             {
                 String value = (String)row.get(j);
@@ -166,7 +166,7 @@ public class Table
 
     public void startRow()
     {
-        Vector row = new Vector(m_numberColumns);
+        ArrayList row = new ArrayList(m_numberColumns);
         for (int i = 0; i < m_numberColumns; ++i)
             row.add(null);
         m_rows.add(row);
@@ -181,11 +181,11 @@ public class Table
 
     private final Properties m_properties = new Properties();
 
-    private final Vector m_columnTitles;
+    private final ArrayList m_columnTitles;
 
-    private Vector m_lastRow;
+    private ArrayList m_lastRow;
 
-    private final Vector m_rows = new Vector();
+    private final ArrayList m_rows = new ArrayList();
 
     private void addColumnTitle(String columnTitle)
     {
@@ -193,9 +193,9 @@ public class Table
         ++m_numberColumns;
     }
 
-    private Vector getRow(int index)
+    private ArrayList getRow(int index)
     {
-        return (Vector)m_rows.get(index);
+        return (ArrayList)m_rows.get(index);
     }
 
     private void handleComment(String comment)

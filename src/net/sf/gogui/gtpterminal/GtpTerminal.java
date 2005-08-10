@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -242,7 +242,7 @@ public class GtpTerminal
             System.out.println(error.getMessage());
             return;
         }
-        Vector commands = m_gtp.getSupportedCommands();
+        ArrayList commands = m_gtp.getSupportedCommands();
         for (int i = 0; i < commands.size(); ++i)
             System.out.println((String)commands.get(i));
     }

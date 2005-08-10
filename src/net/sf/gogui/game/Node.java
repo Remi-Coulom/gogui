@@ -6,9 +6,9 @@
 package net.sf.gogui.game;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
@@ -23,7 +23,7 @@ class ExtraInfo
 
     public TreeMap m_sgfProperties;
 
-    /** Map<String,Vector<GoPoint>> */
+    /** Map<String,ArrayList<GoPoint>> */
     public Map m_marked;
 
     public Map m_label;
@@ -35,11 +35,11 @@ class SetupInfo
 {
     public GoColor m_player = GoColor.EMPTY;
 
-    public Vector m_black = new Vector();
+    public ArrayList m_black = new ArrayList();
 
-    public Vector m_white = new Vector();
+    public ArrayList m_white = new ArrayList();
 
-    public Vector m_empty = new Vector();
+    public ArrayList m_empty = new ArrayList();
 }
 
 //----------------------------------------------------------------------------
@@ -108,13 +108,13 @@ public final class Node
         {
             if (m_children instanceof Node)
             {
-                Vector vector = new Vector(2);
-                vector.add(m_children);
-                vector.add(node);
-                m_children = vector;
+                ArrayList list = new ArrayList(2);
+                list.add(m_children);
+                list.add(node);
+                m_children = list;
             }
             else
-                ((Vector)m_children).add(node);
+                ((ArrayList)m_children).add(node);
         }
         node.m_father = this;
     }
@@ -136,10 +136,10 @@ public final class Node
         assert(point != null);
         assert(isMarkType(type));
         Map marked = createMarked();
-        Vector pointList = (Vector)marked.get(type);
+        ArrayList pointList = (ArrayList)marked.get(type);
         if (pointList == null)
         {
-            pointList = new Vector(1);
+            pointList = new ArrayList(1);
             pointList.add(point);
             marked.put(type, pointList);
         }
@@ -188,9 +188,9 @@ public final class Node
         with no-liberty blocks, in which case a play command would
         capture some stones.
     */
-    public Vector getAllAsMoves()
+    public ArrayList getAllAsMoves()
     {
-        Vector moves = new Vector();
+        ArrayList moves = new ArrayList();
         if (hasSetupInfo())
         {
             for (int i = 0; i < getNumberAddBlack(); ++i)
@@ -227,7 +227,7 @@ public final class Node
     {
         if (getNumberChildren() == 1)
             return (Node)m_children;
-        return (Node)((Vector)m_children).get(i);
+        return (Node)((ArrayList)m_children).get(i);
     }
 
     public int getChildIndex(Node child)
@@ -272,11 +272,11 @@ public final class Node
         return m_extraInfo.m_label;
     }
 
-    public Vector getMarked(String type)
+    public ArrayList getMarked(String type)
     {
         if (m_extraInfo == null || m_extraInfo.m_marked == null)
             return null;
-        return (Vector)m_extraInfo.m_marked.get(type);
+        return (ArrayList)m_extraInfo.m_marked.get(type);
     }
 
     public Move getMove()
@@ -334,7 +334,7 @@ public final class Node
             return 0;
         if (m_children instanceof Node)
             return 1;
-        return ((Vector)m_children).size();
+        return ((ArrayList)m_children).size();
     }
 
     /** Color to play if explicitely set.
@@ -407,16 +407,16 @@ public final class Node
     {
         if (getNumberChildren() <= 1)
             return;
-        Vector vector = (Vector)m_children;
-        vector.remove(child);
-        vector.add(0, child);
+        ArrayList list = (ArrayList)m_children;
+        list.remove(child);
+        list.add(0, child);
     }
 
     public void removeMarked(GoPoint point, String type)
     {
         assert(point != null);
         Map marked = createMarked();
-        Vector pointList = (Vector)marked.get(type);
+        ArrayList pointList = (ArrayList)marked.get(type);
         if (pointList != null)
             pointList.remove(point);
     }
@@ -508,16 +508,16 @@ public final class Node
         }
         else if (numberChildren == 2)
         {
-            Vector vector = (Vector)m_children;
-            assert(vector.contains(child));
+            ArrayList list = (ArrayList)m_children;
+            assert(list.contains(child));
             m_children = child;
             return;
         }
         else if (numberChildren > 2)
         {
-            Vector vector = (Vector)m_children;
-            assert(vector.contains(child));
-            vector.remove(child);
+            ArrayList list = (ArrayList)m_children;
+            assert(list.contains(child));
+            list.remove(child);
         }
     }
 
@@ -561,7 +561,7 @@ public final class Node
 
     private Node m_father;
 
-    /** Node if one child only, Vector otherwise. */
+    /** Node if one child only, ArrayList otherwise. */
     private Object m_children;
 
     private void createExtraInfo()

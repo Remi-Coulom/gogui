@@ -6,7 +6,7 @@
 package net.sf.gogui.gtpdisplay;
 
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
@@ -40,7 +40,7 @@ public class Main
             }
             boolean verbose = opt.isSet("verbose");
             boolean fastPaint = opt.isSet("fast");
-            Vector arguments = opt.getArguments();
+            ArrayList arguments = opt.getArguments();
             if (arguments.size() > 1)
             {
                 printUsage(System.err);

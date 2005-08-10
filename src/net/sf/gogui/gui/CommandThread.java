@@ -6,7 +6,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import net.sf.gogui.go.GoColor;
@@ -103,7 +103,7 @@ public class CommandThread
         return m_gtp.getProtocolVersion();
     }
 
-    public Vector getSupportedCommands()
+    public ArrayList getSupportedCommands()
     {
         assert(SwingUtilities.isEventDispatchThread());
         return m_gtp.getSupportedCommands();

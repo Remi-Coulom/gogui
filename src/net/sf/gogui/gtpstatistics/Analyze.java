@@ -13,7 +13,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.text.DecimalFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.sgf.SgfReader;
@@ -49,10 +49,10 @@ public class Analyze
             || ! m_table.getColumnTitle(0).equals("File")
             || ! m_table.getColumnTitle(1).equals("Move"))
             throw new ErrorMessage("Invalid table format");
-        m_commands = new Vector();
+        m_commands = new ArrayList();
         for (int i = 2; i < m_table.getNumberColumns(); ++i)
             m_commands.add(m_table.getColumnTitle(i));
-        m_commandStatistics = new Vector(m_commands.size());
+        m_commandStatistics = new ArrayList(m_commands.size());
         File file = new File(m_output + ".html");
         initGameInfo();
         findGameGlobalCommands();
@@ -134,7 +134,7 @@ public class Analyze
     /** Command having at most one result per game. */
     private static class GameGlobalCommand
     {
-        public GameGlobalCommand(String name, Vector results)
+        public GameGlobalCommand(String name, ArrayList results)
         {
             m_name = name;
             m_results = results;
@@ -161,7 +161,7 @@ public class Analyze
         private final String m_name;
 
         /** Results per game. */
-        private final Vector m_results;
+        private final ArrayList m_results;
 
         private void initAllEmpty()
         {
@@ -205,15 +205,15 @@ public class Analyze
 
     private Table m_tableFinal;
 
-    private Vector m_commandStatistics;
+    private ArrayList m_commandStatistics;
 
-    private Vector m_commands;
+    private ArrayList m_commands;
 
-    /** Vector<GameGlobalCommand> */
-    private Vector m_gameGlobalCommands;
+    /** ArrayList<GameGlobalCommand> */
+    private ArrayList m_gameGlobalCommands;
 
-    /** Vector<GameInfo> */
-    private Vector m_gameInfo;    
+    /** ArrayList<GameInfo> */
+    private ArrayList m_gameInfo;    
 
     private void endInfo(PrintStream out)
     {
@@ -224,18 +224,18 @@ public class Analyze
 
     private void findGameGlobalCommands()
     {
-        m_gameGlobalCommands = new Vector();
+        m_gameGlobalCommands = new ArrayList();
         for (int i = 0; i < m_commands.size(); ++i)
         {
             String command = getCommand(i);
             boolean isGameGlobal = true;
-            Vector gameResult = new Vector();
+            ArrayList gameResult = new ArrayList();
             for (int j = 0; j < m_gameInfo.size(); ++j)
             {
                 GameInfo info = (GameInfo)(m_gameInfo.get(j));
                 Table table = TableUtils.select(m_table, "File", info.m_file,
                                                 command);
-                Vector unique = TableUtils.getColumnUnique(table, command);
+                ArrayList unique = TableUtils.getColumnUnique(table, command);
                 if (unique.size() > 1)
                 {
                     isGameGlobal = false;
@@ -409,7 +409,7 @@ public class Analyze
 
     private void initGameInfo() throws IOException
     {
-        m_gameInfo = new Vector();
+        m_gameInfo = new ArrayList();
         String last = null;
         GameInfo info = null;
         m_maxMove = 0;
@@ -458,7 +458,7 @@ public class Analyze
                                          finalPosition);
             TableUtils.appendRow(m_tableFinal, m_table, row);
         }
-        Vector columnTitles = new Vector();
+        ArrayList columnTitles = new ArrayList();
         columnTitles.add("Move");
         columnTitles.add("Count");
         Table table = new Table(columnTitles);

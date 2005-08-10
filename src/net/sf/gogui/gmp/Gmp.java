@@ -19,8 +19,8 @@ package net.sf.gogui.gmp;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -714,7 +714,7 @@ class MainThread
 
     private final StringBuffer m_talkLine = new StringBuffer();
 
-    private final Vector m_cmdQueue = new Vector(32, 32);
+    private final ArrayList m_cmdQueue = new ArrayList(32);
 
     private final WriteThread m_writeThread;
 

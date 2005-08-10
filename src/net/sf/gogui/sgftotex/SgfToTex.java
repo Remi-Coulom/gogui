@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.tex.TexWriter;
 import net.sf.gogui.utils.FileUtils;
@@ -50,7 +50,7 @@ public class SgfToTex
             boolean usePass = opt.isSet("pass");
             boolean force = opt.isSet("force");
             String title = opt.getString("title", "");
-            Vector arguments = opt.getArguments();
+            ArrayList arguments = opt.getArguments();
             InputStream in;
             OutputStream out;
             if (arguments.size() > 2)

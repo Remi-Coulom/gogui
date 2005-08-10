@@ -13,7 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
@@ -355,7 +355,7 @@ public class GtpDisplay
     {
         if (m_gtp != null)
         {
-            Vector commands = m_gtp.getSupportedCommands();
+            ArrayList commands = m_gtp.getSupportedCommands();
             for (int i = 0; i < commands.size(); ++i)
             {
                 String c = (String)commands.get(i);
@@ -396,7 +396,7 @@ public class GtpDisplay
     private void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
         int n = cmd.getIntArg();
-        Vector stones = Board.getHandicapStones(m_size, n);
+        ArrayList stones = Board.getHandicapStones(m_size, n);
         if  (stones == null)
             throw new GtpError("Invalid number of handicap stones");
         StringBuffer pointList = new StringBuffer(128);

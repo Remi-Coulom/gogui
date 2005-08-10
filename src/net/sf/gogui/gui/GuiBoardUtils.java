@@ -8,7 +8,7 @@ package net.sf.gogui.gui;
 import java.awt.Color;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
@@ -64,7 +64,7 @@ public class GuiBoardUtils
 
     public static void showMarkup(GuiBoard guiBoard, Node node)
     {
-        Vector mark;
+        ArrayList mark;
         mark = node.getMarked(Node.MARKED);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
