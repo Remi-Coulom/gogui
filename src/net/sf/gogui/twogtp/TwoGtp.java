@@ -617,13 +617,13 @@ public class TwoGtp
                 if (m_referee != null && ! m_refereeIsDisabled)
                     resultReferee = getResult(m_referee);
             }
-            double cpuTimeBlack = getCpuTime(m_black) - m_cpuTimeBlack;
-            if (cpuTimeBlack < 0)
-                cpuTimeBlack = 0;
+            double cpuTimeBlack = getCpuTime(m_black);
+            double cpuTimeGameBlack
+                = Math.max(0, cpuTimeBlack - m_cpuTimeBlack);
             m_cpuTimeBlack = cpuTimeBlack;
-            double cpuTimeWhite = getCpuTime(m_white) - m_cpuTimeWhite;
-            if (cpuTimeWhite < 0)
-                cpuTimeWhite = 0;
+            double cpuTimeWhite = getCpuTime(m_white);
+            double cpuTimeGameWhite
+                = Math.max(0, cpuTimeWhite - m_cpuTimeWhite);
             m_cpuTimeWhite = cpuTimeWhite;
             if (isAlternated())
             {
@@ -652,7 +652,7 @@ public class TwoGtp
             int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moveNumber, error,
-                       errorMessage, cpuTimeBlack, cpuTimeWhite);
+                       errorMessage, cpuTimeGameBlack, cpuTimeGameWhite);
             saveGame(resultBlack, resultWhite, resultReferee);
             ++m_gameIndex;
             m_games.add(moves);

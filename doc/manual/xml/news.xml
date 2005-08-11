@@ -107,14 +107,25 @@ new option Timestamp in GTP shell settings menu
 </para>
 </listitem>
 <listitem>
+<para>
+TwoGtp:
+<itemizedlist>
+<listitem>
 <simpara>
-New tool GtpStatistics
+Remove option -estimate-score; use the new tool GtpStatistics instead
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-TwoGtp: remove option -estimate-score; use the new tool GtpStatistics
-instead
+Fix wrong cputimes
+</simpara>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<simpara>
+New tool GtpStatistics
 </simpara>
 </listitem>
 <listitem>

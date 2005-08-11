@@ -666,7 +666,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  output="test/pmd/output.txt">
 <arg line="src"/>
 <arg line="text"/>
-<arg line="basic,imports,unusedcode,design"/>
+<arg line="test/pmd/ruleset.xml"/>
 </exec>
 </target>
 
