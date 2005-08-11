@@ -89,6 +89,11 @@ public class SgfWriter
 
     private final PrintStream m_out;
 
+    private String getEscaped(String text)
+    {
+        return getEscaped(text, false);
+    }
+
     private String getEscaped(String text, boolean escapeColon)
     {
         StringBuffer result = new StringBuffer(2 * text.length());
@@ -193,8 +198,9 @@ public class SgfWriter
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
-        print(";FF[4]CA[" + StringUtils.getDefaultEncoding() + "]GM[1]GN["
-              + getName(file) + "]AP[" + appName + "]SZ[" + m_size + "]");
+        print(";FF[4]CA[" + getEscaped(StringUtils.getDefaultEncoding())
+              + "]GM[1]GN[" + getEscaped(getName(file)) + "]AP["
+              + getEscaped(appName) + "]SZ[" + m_size + "]");
     }
 
     private void printHeader(File file, String application, String version,
@@ -209,7 +215,7 @@ public class SgfWriter
         else
             print("KM[" + GameInformation.roundKomi(komi) + "]");
         if (rules != null && ! rules.equals(""))
-            print("RU[" + rules + "]");
+            print("RU[" + getEscaped(rules) + "]");
         if (timeSettings != null)
         {
             print("TM[" + timeSettings.getPreByoyomi() / 1000 + "]");
@@ -223,15 +229,15 @@ public class SgfWriter
                       + timeSettings.getByoyomi() / 1000 + " sec]");
         }
         if (playerBlack != null && ! playerBlack.equals(""))
-            print("PB[" + playerBlack + "]");
+            print("PB[" + getEscaped(playerBlack) + "]");
         if (playerWhite != null && ! playerWhite.equals(""))
-            print("PW[" + playerWhite + "]");
+            print("PW[" + getEscaped(playerWhite) + "]");
         if (rankBlack != null && ! rankBlack.equals(""))
-            print("BR[" + rankBlack + "]");
+            print("BR[" + getEscaped(rankBlack) + "]");
         if (rankWhite != null && ! rankWhite.equals(""))
-            print("WR[" + rankWhite + "]");
+            print("WR[" + getEscaped(rankWhite) + "]");
         if (date != null && ! date.equals(""))
-            print("DT[" + date + "]");
+            print("DT[" + getEscaped(date) + "]");
         if (result != null && ! result.equals(""))
             print("RE[" + result + "]");
     }
@@ -313,7 +319,7 @@ public class SgfWriter
         String comment = node.getComment();
         if (comment != null && ! comment.trim().equals(""))
         {
-            print("C[" + getEscaped(comment, false) + "]");
+            print("C[" + getEscaped(comment) + "]");
         }
         if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK)))
         {
