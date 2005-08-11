@@ -649,8 +649,9 @@ public class TwoGtp
                     assert(false);
                 }
             }
+            int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
             saveResult(resultBlack, resultWhite, resultReferee,
-                       isAlternated(), duplicate, moves.size(), error,
+                       isAlternated(), duplicate, moveNumber, error,
                        errorMessage, cpuTimeBlack, cpuTimeWhite);
             saveGame(resultBlack, resultWhite, resultReferee);
             ++m_gameIndex;
