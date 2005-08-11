@@ -2,6 +2,7 @@
 ../../build
 [Source dirs]
 ../../src
+../../test/junit/src
 [Aux classpath entries]
 ../../external/javacomm/commapi/comm.jar
 [Options]
