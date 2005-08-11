@@ -43,20 +43,16 @@ public class GoGuiMenuBar
         m_menuBar = new JMenuBar();
         m_menuFile = createMenuFile(recentCallback);
         m_menuBar.add(m_menuFile);
-        m_menuEdit = createMenuEdit();
-        m_menuBar.add(m_menuEdit);
+        m_menuBar.add(createMenuEdit());
         m_menuView = createMenuView();
         m_menuBar.add(m_menuView);
-        m_menuGo = createMenuGo();
-        m_menuBar.add(m_menuGo);
+        m_menuBar.add(createMenuGo());
         m_menuBookmarks = createMenuBookMarks();
         m_menuBar.add(m_menuBookmarks);
-        m_menuGame = createMenuGame();
-        m_menuBar.add(m_menuGame);
+        m_menuBar.add(createMenuGame());
         m_menuSetup = createMenuSetup();
         m_menuBar.add(m_menuSetup);
-        m_menuTree = createMenuTree();
-        m_menuBar.add(m_menuTree);
+        m_menuBar.add(createMenuTree());
         m_menuShell = createMenuShell(recentGtpCallback);
         m_menuBar.add(m_menuShell);
         m_menuAnalyze = createMenuAnalyze();
@@ -531,17 +527,9 @@ public class GoGuiMenuBar
 
     private final JMenu m_menuFile;
 
-    private final JMenu m_menuEdit;
-
-    private final JMenu m_menuGame;
-
-    private final JMenu m_menuGo;
-
     private final JMenu m_menuHelp;
 
     private final JMenu m_menuShell;
-
-    private final JMenu m_menuTree;
 
     private final JMenu m_menuSetup;
 
