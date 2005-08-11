@@ -65,7 +65,7 @@ public class FileUtils
         String ext = getExtension(f);
         if (ext == null)
             return false;
-        return (ext.toLowerCase().equals(extension.toLowerCase()));
+        return ext.toLowerCase().equals(extension.toLowerCase());
     }
 
     /** Remove extension in file name.

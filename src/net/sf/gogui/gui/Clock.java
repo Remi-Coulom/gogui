@@ -142,7 +142,7 @@ public final class Clock
         TimeRecord record = getRecord(color);
         long time = record.m_time;
         if (getUseByoyomi())
-            return (record.m_byoyomiExceeded);
+            return record.m_byoyomiExceeded;
         else
             return (time > getPreByoyomi());
     }
