@@ -3046,7 +3046,9 @@ public class GoGui
         prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
         prefs.setBoolDefault("gtpshell-highlight", true);
         prefs.setBoolDefault("gtpshell-autonumber", false);
-        prefs.setBoolDefault("gtpshell-disable-completions", false);
+        // JComboBox has problems on the Mac, see section Bugs in
+        // documentation
+        prefs.setBoolDefault("gtpshell-disable-completions", Platform.isMac());
         prefs.setBoolDefault("gtpshell-timestamp", false);
         prefs.setDoubleDefault("komi", 6.5);
         prefs.setStringDefault("rules", "Chinese");

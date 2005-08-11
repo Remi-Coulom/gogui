@@ -20,7 +20,6 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 

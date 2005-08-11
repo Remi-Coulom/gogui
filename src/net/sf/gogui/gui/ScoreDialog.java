@@ -23,7 +23,6 @@ import javax.swing.SwingConstants;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.Score;
-import net.sf.gogui.gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 

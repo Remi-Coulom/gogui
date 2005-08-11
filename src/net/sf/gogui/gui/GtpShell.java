@@ -367,8 +367,6 @@ public class GtpShell
     {
         super(owner, "Shell");
         m_callback = callback;
-        m_prefs = prefs;
-        setPrefsDefaults(prefs);
         m_historyMin = prefs.getInt("gtpshell-history-min");
         m_historyMax = prefs.getInt("gtpshell-history-max");
         JPanel panel = new JPanel(new BorderLayout());
@@ -744,8 +742,6 @@ public class GtpShell
 
     private String m_programVersion = "unknown";
 
-    private Preferences m_prefs;
-
     private void addAllCompletions(ArrayList completions)
     {
         // On Windows JDK 1.4 changing the popup automatically
@@ -1034,19 +1030,6 @@ public class GtpShell
         if (m_finalLocation != null)
             setLocation(m_finalLocation);
         m_isFinalSizeSet = true;
-    }
-
-    private static void setPrefsDefaults(Preferences prefs)
-    {
-        prefs.setBoolDefault("gtpshell-autonumber", false);
-        prefs.setBoolDefault("gtpshell-timestamp", false);
-        // JComboBox has problems on the Mac, see section Bugs in
-        // documentation
-        prefs.setBoolDefault("gtpshell-disable-completions",
-                             Platform.isMac());
-        prefs.setBoolDefault("gtpshell-highlight", true);
-        prefs.setIntDefault("gtpshell-history-max", 3000);
-        prefs.setIntDefault("gtpshell-history-min", 2000);
     }
 
     /** Create wrapper object for addItem.

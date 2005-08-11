@@ -167,8 +167,6 @@ public class ContextMenu
 
     private JMenu m_analyzeMenu;
 
-    private JMenuItem m_editLabel;
-
     private final Listener m_listener;
 
     /** ArrayList<AnalyzeCommand> */

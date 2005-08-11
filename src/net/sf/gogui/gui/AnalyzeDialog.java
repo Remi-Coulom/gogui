@@ -44,7 +44,6 @@ import javax.swing.event.ListSelectionListener;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
-import net.sf.gogui.gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 
@@ -231,9 +230,6 @@ public final class AnalyzeDialog
     private boolean m_recentModified;
 
     private int m_boardSize = 19;
-
-    private static final int m_shortcutKeyMask =
-        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
