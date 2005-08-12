@@ -74,7 +74,8 @@ public class SgfReaderTest
     public void checkFF4Example(SgfReader reader) throws Exception
     {
         GameTree gameTree = reader.getGameTree();
-        GameInformation gameInformation = gameTree.getGameInformation();
+        GameInformation info = gameTree.getGameInformation();
+        assertEquals(info.m_boardSize, 19);
         Node root = gameTree.getRoot();
         assertEquals(NodeUtils.subtreeSize(root), 54);
         assertEquals(root.getNumberChildren(), 5);
