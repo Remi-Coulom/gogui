@@ -239,7 +239,7 @@ class GtpShellText
         if (! m_timeStamp)
             return;
         long timeMillis = System.currentTimeMillis();
-        double diff = (timeMillis - m_startTime) / 1000;
+        double diff = (float)(timeMillis - m_startTime) / 1000;
         appendText(Clock.getTimeString(diff, -1) + " ", "time");
     }
 
