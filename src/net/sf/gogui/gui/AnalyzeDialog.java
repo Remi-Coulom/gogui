@@ -210,7 +210,6 @@ public final class AnalyzeDialog
                 AnalyzeCommand.needsColorArg((String)m_commands.get(index));
             m_labelColor.setEnabled(needsColorArg);
             m_comboBoxColor.setEnabled(needsColorArg);
-            selectColor();
             m_runButton.setEnabled(true);
             m_list.ensureIndexIsVisible(index);
         }
