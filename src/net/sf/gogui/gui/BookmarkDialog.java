@@ -30,7 +30,11 @@ public class BookmarkDialog
         while (! done)
         {
             if (selectName)
+            {
                 bookmarkDialog.m_name.selectAll();
+                // Doesn't work on Sun's Linux Java 1.5
+                bookmarkDialog.m_name.requestFocusInWindow();
+            }
             dialog.setVisible(true);
             Object value = bookmarkDialog.getValue();
             if (! (value instanceof Integer)
