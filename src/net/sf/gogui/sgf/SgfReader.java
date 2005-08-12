@@ -81,7 +81,7 @@ class ByteCountInputStream
     problems in StreamTokenizer.lineno(). The implementation should be
     replaced not using StreamTokenizer, because this class is a legacy class.
 */
-public class SgfReader
+public final class SgfReader
 {
     /** SGF read error. */
     public static class SgfError
