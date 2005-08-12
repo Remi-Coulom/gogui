@@ -972,11 +972,9 @@ public class TwoGtp
                || (gtp1 == m_white && gtp2 == m_black));
         if (changesState)
             checkInconsistentState();
-        String response1 = null;
-        String response2 = null;
         try
         {
-            response1 = gtp1.sendCommand(command1);
+            gtp1.sendCommand(command1);
         }
         catch (GtpError e)
         {
@@ -985,7 +983,7 @@ public class TwoGtp
         }
         try
         {
-            response2 = gtp2.sendCommand(command2);
+            gtp2.sendCommand(command2);
         }
         catch (GtpError e)
         {
