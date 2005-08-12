@@ -82,6 +82,7 @@ public class ProcessUtils
         String line;
         while ((line = reader.readLine()) != null)
             result = result + line + "\n";
+        reader.close();
         try
         {
             if (process.waitFor() != 0)
