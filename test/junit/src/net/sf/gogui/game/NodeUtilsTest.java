@@ -122,8 +122,9 @@ public class NodeUtilsTest
                      \ n11(Bpass)
         </pre>
     */
-    protected void setUp()
+    protected void setUp() throws Exception
     {
+        super.setUp();
         m_node0 = new Node();
         m_node1 = new Node();
         m_node0.append(m_node1);
