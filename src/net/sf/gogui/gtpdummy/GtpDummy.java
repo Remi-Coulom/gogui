@@ -272,7 +272,7 @@ public class GtpDummy
     private void cmdPlay(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(2);
-        GoColor color = cmd.getColorArg(0);
+        cmd.getColorArg(0);
         GoPoint point = cmd.getPointArg(1, m_size);
         if (point != null)
             m_alreadyPlayed[point.getX()][point.getY()] = true;
