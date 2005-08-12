@@ -255,8 +255,7 @@ public abstract class GtpEngine
             response = e.getMessage();
             status = false;
         }
-        String sanitizedResponse
-            = response.toString().replaceAll("\\n\\n", "\n \n");
+        String sanitizedResponse = response.replaceAll("\\n\\n", "\n \n");
         respond(status, cmd.hasId(), cmd.getId(), sanitizedResponse);
     }
 }
