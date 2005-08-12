@@ -39,13 +39,13 @@ public class GmpTest
 
     private final boolean m_verbose = false;
 
-    private final int OK = 0;
+    private static final int OK = 0;
 
-    private final int NEWGAME = 2;
+    private static final int NEWGAME = 2;
 
-    private final int MOVE = 5;
+    private static final int MOVE = 5;
 
-    private final int UNDO = 6;
+    private static final int UNDO = 6;
 
     private Gmp m_gmp;
 
