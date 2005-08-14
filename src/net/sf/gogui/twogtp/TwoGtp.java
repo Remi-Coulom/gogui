@@ -26,7 +26,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
@@ -62,21 +62,21 @@ public class TwoGtp
             getResultFile().delete();
         findInitialGameIndex();
         readGames();
-        m_black = new Gtp(black, verbose, null);
+        m_black = new GtpClient(black, verbose, null);
         m_black.setLogPrefix("B");
-        m_white = new Gtp(white, verbose, null);
+        m_white = new GtpClient(white, verbose, null);
         m_white.setLogPrefix("W");
         m_refereeCommand = referee;
         if (! referee.equals(""))
         {
-            m_referee = new Gtp(referee, verbose, null);
+            m_referee = new GtpClient(referee, verbose, null);
             m_referee.setLogPrefix("R");
         }
         else
             m_referee = null;
         if (! observer.equals(""))
         {
-            m_observer = new Gtp(observer, verbose, null);
+            m_observer = new GtpClient(observer, verbose, null);
             m_observer.setLogPrefix("O");
         }
         else
@@ -283,7 +283,7 @@ public class TwoGtp
         }
     }
 
-    public void interruptProgram(Gtp gtp)
+    public void interruptProgram(GtpClient gtp)
     {
         try
         {
@@ -370,13 +370,13 @@ public class TwoGtp
 
     private ArrayList m_openingMoves;
 
-    private final Gtp m_black;
+    private final GtpClient m_black;
 
-    private final Gtp m_observer;
+    private final GtpClient m_observer;
 
-    private final Gtp m_referee;
+    private final GtpClient m_referee;
 
-    private final Gtp m_white;
+    private final GtpClient m_white;
 
     private void checkInconsistentState() throws GtpError
     {
@@ -482,7 +482,7 @@ public class TwoGtp
         }
     }
 
-    private void forward(Gtp gtp, GtpCommand cmd) throws GtpError
+    private void forward(GtpClient gtp, GtpCommand cmd) throws GtpError
     {
         cmd.setResponse(gtp.sendCommand(cmd.getLine()));
     }
@@ -492,7 +492,7 @@ public class TwoGtp
         return (m_board.bothPassed() || m_resigned);
     }
 
-    private double getCpuTime(Gtp gtp)
+    private double getCpuTime(GtpClient gtp)
     {
         double result = 0;
         try
@@ -511,7 +511,7 @@ public class TwoGtp
         return new File(m_sgfFile + "-" + gameIndex + ".sgf");
     }
 
-    private static String getName(Gtp gtp)
+    private static String getName(GtpClient gtp)
     {
         try
         {
@@ -530,7 +530,7 @@ public class TwoGtp
         return (Move)m_openingMoves.get(i);
     }
 
-    private static String getVersion(Gtp gtp)
+    private static String getVersion(GtpClient gtp)
     {
         try
         {
@@ -544,7 +544,7 @@ public class TwoGtp
         return "";
     }
 
-    private static String getResult(Gtp gtp)
+    private static String getResult(GtpClient gtp)
     {
         try
         {
@@ -963,9 +963,10 @@ public class TwoGtp
         out.close();
     }
 
-    private void send(Gtp gtp1, Gtp gtp2, String command1, String command2,
-                      String commandReferee, String commandObserver,
-                      boolean changesState) throws GtpError
+    private void send(GtpClient gtp1, GtpClient gtp2, String command1,
+                      String command2, String commandReferee,
+                      String commandObserver, boolean changesState)
+        throws GtpError
     {
         assert((gtp1 == m_black && gtp2 == m_white)
                || (gtp1 == m_white && gtp2 == m_black));
@@ -1015,8 +1016,8 @@ public class TwoGtp
             response.append(GoPoint.toString(move.getPoint()));
             return;
         }
-        Gtp gtp1;
-        Gtp gtp2;
+        GtpClient gtp1;
+        GtpClient gtp2;
         String prefix1;
         String prefix2;
         String command;
@@ -1105,7 +1106,7 @@ public class TwoGtp
             sendIfSupported(m_observer, cmd, cmdLine);
     }
 
-    private void sendIfSupported(Gtp gtp, String cmd, String cmdLine)
+    private void sendIfSupported(GtpClient gtp, String cmd, String cmdLine)
     {
         if (! gtp.isCommandSupported(cmd))
             return;
@@ -1167,7 +1168,7 @@ public class TwoGtp
         }        
     }
 
-    private void twogtpColor(Gtp gtp, GtpCommand cmd) throws GtpError
+    private void twogtpColor(GtpClient gtp, GtpCommand cmd) throws GtpError
     {
         cmd.setResponse(gtp.sendCommand(cmd.getArgLine()));
     }

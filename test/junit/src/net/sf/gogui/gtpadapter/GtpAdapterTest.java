@@ -6,7 +6,7 @@
 package net.sf.gogui.gtpadapter;
 
 import java.io.IOException;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpEngineConnection;
 import net.sf.gogui.gtp.GtpExpectEngine;
@@ -34,11 +34,11 @@ public class GtpAdapterTest
         expect.expect("protocol_version", "2");
         expect.expect("list_commands", "");
         GtpAdapter adapter
-            = new GtpAdapter(expectConnection.getGtp(), null, false);
+            = new GtpAdapter(expectConnection.getGtpClient(), null, false);
         adapter.setEmuLoadSgf();
         GtpEngineConnection adapterConnection
             = new GtpEngineConnection(adapter);
-        Gtp gtp = adapterConnection.getGtp();
+        GtpClient gtp = adapterConnection.getGtpClient();
         expect.expect("boardsize 19", "");
         expect.expect("clear_board", "");
         expect.expect("play B D4", "");

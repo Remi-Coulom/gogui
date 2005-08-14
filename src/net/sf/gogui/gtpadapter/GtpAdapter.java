@@ -24,7 +24,7 @@ import net.sf.gogui.go.BoardUtils;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
@@ -45,13 +45,13 @@ public class GtpAdapter
         super(log);
         if (program.equals(""))
             throw new Exception("No program set.");
-        m_gtp = new Gtp(program, verbose, null);
+        m_gtp = new GtpClient(program, verbose, null);
         if (gtpFile != null)
             sendGtpFile(gtpFile);
         init();
     }
 
-    public GtpAdapter(Gtp gtp, PrintStream log, boolean verbose)
+    public GtpAdapter(GtpClient gtp, PrintStream log, boolean verbose)
         throws GtpError
     {
         super(log);
@@ -117,7 +117,7 @@ public class GtpAdapter
             send(cmd.getLine(), cmd.getResponse());
     }
 
-    public void interruptProgram(Gtp gtp)
+    public void interruptProgram(GtpClient gtp)
     {
         try
         {
@@ -227,7 +227,7 @@ public class GtpAdapter
 
     private Board m_board;
 
-    private final Gtp m_gtp;
+    private final GtpClient m_gtp;
 
     private final Stack m_passInserted = new Stack();
 

@@ -37,10 +37,10 @@ public class GtpEngineConnection
                 }
             };
         thread.start();
-        m_gtp = new Gtp(gtpInput, gtpOutput, false, null);
+        m_gtp = new GtpClient(gtpInput, gtpOutput, false, null);
     }
 
-    public Gtp getGtp()
+    public GtpClient getGtpClient()
     {
         return m_gtp;
     }
@@ -54,7 +54,7 @@ public class GtpEngineConnection
         throw new GtpError("unknown command");
     }
 
-    private Gtp m_gtp;
+    private GtpClient m_gtp;
 
     private GtpEngine m_engine;
 }

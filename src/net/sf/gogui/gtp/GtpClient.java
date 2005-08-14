@@ -43,7 +43,7 @@ import net.sf.gogui.utils.ProcessUtils;
     class Process are not SelectableChannels (Java 1.5.0).
     </p>
 */
-public final class Gtp
+public final class GtpClient
 {
     /** Callback if a timeout occured. */
     public interface TimeoutCallback
@@ -93,7 +93,7 @@ public final class Gtp
         @param log Log input, output and error stream to standard error.
         @param callback Callback for external display of the streams.
     */
-    public Gtp(String program, boolean log, IOCallback callback)
+    public GtpClient(String program, boolean log, IOCallback callback)
         throws GtpError
     {
         m_log = log;
@@ -125,8 +125,8 @@ public final class Gtp
     }
     
     /** Constructor for given input and output streams. */
-    public Gtp(InputStream in, OutputStream out, boolean log,
-               IOCallback callback)
+    public GtpClient(InputStream in, OutputStream out, boolean log,
+                     IOCallback callback)
         throws GtpError
     {
         m_log = log;

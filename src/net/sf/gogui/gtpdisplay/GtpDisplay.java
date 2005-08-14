@@ -27,7 +27,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
@@ -51,7 +51,7 @@ public class GtpDisplay
         super(null);
         if (! (program == null || program.equals("")))
         {
-            m_gtp = new Gtp(program, verbose, null);
+            m_gtp = new GtpClient(program, verbose, null);
             m_gtp.queryProtocolVersion();
             m_gtp.querySupportedCommands();
         }
@@ -211,7 +211,7 @@ public class GtpDisplay
 
     private GoPoint m_fieldClicked;
 
-    private final Gtp m_gtp;
+    private final GtpClient m_gtp;
 
     private Move m_move;
 

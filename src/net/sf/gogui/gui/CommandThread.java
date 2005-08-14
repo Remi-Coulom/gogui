@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 
 //----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ import net.sf.gogui.gtp.GtpError;
 public class CommandThread
     extends Thread
 {
-    public CommandThread(Gtp gtp, Component owner)
+    public CommandThread(GtpClient gtp, Component owner)
     {
         m_gtp = gtp;
         m_owner = owner;
@@ -238,7 +238,7 @@ public class CommandThread
     }
 
     private class TimeoutCallback
-        implements Gtp.TimeoutCallback
+        implements GtpClient.TimeoutCallback
     {
         TimeoutCallback(String command)
         {
@@ -271,7 +271,7 @@ public class CommandThread
 
     private boolean m_commandInProgress;
 
-    private Gtp m_gtp;
+    private GtpClient m_gtp;
 
     private GtpError m_exception;    
 

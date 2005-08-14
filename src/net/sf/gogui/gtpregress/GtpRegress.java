@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Platform;
@@ -28,7 +28,7 @@ import net.sf.gogui.version.Version;
 
 /** Runs GTP regression tests. */
 public class GtpRegress
-    implements Gtp.IOCallback
+    implements GtpClient.IOCallback
 {
     public GtpRegress(String program, String[] tests, String output,
                       boolean longOutput, boolean verbose,
@@ -231,7 +231,7 @@ public class GtpRegress
 
     private final ArrayList m_testSummaries = new ArrayList();
 
-    private Gtp m_gtp;
+    private GtpClient m_gtp;
 
     private void checkLastSgf(String line)
     {
@@ -711,7 +711,7 @@ public class GtpRegress
         FileReader fileReader = new FileReader(m_file);
         BufferedReader reader = new BufferedReader(fileReader);
         initOutFile();
-        m_gtp = new Gtp(m_program, m_verbose, this);
+        m_gtp = new GtpClient(m_program, m_verbose, this);
         m_lastSgf = null;
         try
         {

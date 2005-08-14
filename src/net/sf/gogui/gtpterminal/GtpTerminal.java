@@ -22,7 +22,7 @@ import net.sf.gogui.go.BoardUtils;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.sgf.SgfReader;
@@ -34,7 +34,7 @@ import net.sf.gogui.version.Version;
 
 /** Simple text based interface to Go programs supporting GTP. */
 public class GtpTerminal
-    implements Gtp.IOCallback
+    implements GtpClient.IOCallback
 {
     public GtpTerminal(String program, int size, boolean verbose)
         throws Exception
@@ -42,7 +42,7 @@ public class GtpTerminal
         if (program.equals(""))
             throw new Exception("No program set.");
         m_verbose = verbose;
-        m_gtp = new Gtp(program, verbose, this);
+        m_gtp = new GtpClient(program, verbose, this);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
         initGame(size);
@@ -107,7 +107,7 @@ public class GtpTerminal
 
     private GameTree m_gameTree;
 
-    private final Gtp m_gtp;
+    private final GtpClient m_gtp;
 
     private Node m_currentNode;
 

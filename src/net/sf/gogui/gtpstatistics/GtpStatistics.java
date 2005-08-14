@@ -18,7 +18,7 @@ import net.sf.gogui.game.Node;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
@@ -49,7 +49,7 @@ public class GtpStatistics
             columnHeaders.add(getCommand(i).m_columnTitle);
         m_table = new Table(columnHeaders);
         m_table.setProperty("Size", Integer.toString(size));
-        m_gtp = new Gtp(program, verbose, null);
+        m_gtp = new GtpClient(program, verbose, null);
         m_table.setProperty("Program", program);
         try
         {
@@ -104,7 +104,7 @@ public class GtpStatistics
 
     private double m_lastCpuTime = 0;
 
-    private Gtp m_gtp;
+    private GtpClient m_gtp;
 
     private final NumberFormat m_format1 = StringUtils.getNumberFormat(1);
 

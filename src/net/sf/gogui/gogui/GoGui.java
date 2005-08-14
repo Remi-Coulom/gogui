@@ -54,7 +54,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.gtp.Gtp;
+import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.gui.AnalyzeCommand;
@@ -1141,8 +1141,8 @@ public class GoGui
         m_gtpShell.setHighlight(m_menuBar.getHighlight());
         m_gtpShell.setTimeStamp(m_menuBar.getTimeStamp());
         m_ignoreInvalidResponses = false;
-        Gtp.InvalidResponseCallback invalidResponseCallback =
-            new Gtp.InvalidResponseCallback()
+        GtpClient.InvalidResponseCallback invalidResponseCallback =
+            new GtpClient.InvalidResponseCallback()
             {
                 public void show(String line)
                 {
@@ -1158,7 +1158,7 @@ public class GoGui
             };
         try
         {
-            Gtp gtp = new Gtp(m_program, m_verbose, m_gtpShell);
+            GtpClient gtp = new GtpClient(m_program, m_verbose, m_gtpShell);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             gtp.setAutoNumber(m_menuBar.getAutoNumber());
             m_commandThread = new CommandThread(gtp, this);
