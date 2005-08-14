@@ -24,40 +24,6 @@ Docbook XSL files in the distribution to make compilation easier.
 </listitem>
 <listitem>
 <para>
-GtpRegress:
-<itemizedlist>
-<listitem>
-<simpara>
-Return -1 if any unexpected fails occurred
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-Include error response outputs in test summaries;
-fix NullPointerException, if test file contains response pattern without
-a command to test (simply ignore the pattern)
-</simpara>
-</listitem>
-</itemizedlist>
-</para>
-</listitem>
-<listitem>
-<simpara>
-GtpDummy: New option -srand
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-GtpTerminal: Fix exception if empty line is entered
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-NetGtp: New option -timeout
-</simpara>
-</listitem>
-<listitem>
-<para>
 GoGui:
 <itemizedlist>
 <listitem>
@@ -105,6 +71,45 @@ new option Timestamp in GTP shell settings menu
 </listitem>
 </itemizedlist>
 </para>
+</listitem>
+<listitem>
+<para>
+GtpRegress:
+<itemizedlist>
+<listitem>
+<simpara>
+Return -1 if any unexpected fails occurred
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Include error response outputs in test summaries;
+fix NullPointerException, if test file contains response pattern without
+a command to test (simply ignore the pattern)
+</simpara>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
+<simpara>
+GtpAdapter: Fix missing clear_board commands if -emuloadsgf is used
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpDummy: New option -srand
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpTerminal: Fix exception if empty line is entered
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+NetGtp: New option -timeout
+</simpara>
 </listitem>
 <listitem>
 <para>

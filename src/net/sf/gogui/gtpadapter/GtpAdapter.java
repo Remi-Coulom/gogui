@@ -393,6 +393,11 @@ public class GtpAdapter
             m_boardSize = gameTree.getGameInformation().m_boardSize;
             m_board = new Board(m_boardSize);
             m_passInserted.clear();
+            if (m_emuLoadsgf)
+            {
+                m_gtp.sendCommandBoardsize(m_boardSize);
+                m_gtp.sendCommandClearBoard(m_boardSize);
+            }
             Node node = gameTree.getRoot();
             int moveNumber = 0;
             while (node != null)
