@@ -140,7 +140,7 @@ public class Main
             }
             GmpToGtp gmpToGtp = new GmpToGtp(title, in, out, verbose, size,
                                              colorIndex, wait, simple);
-            gmpToGtp.mainLoop();
+            gmpToGtp.mainLoop(System.in, System.out);
         }
         catch (Throwable t)
         {

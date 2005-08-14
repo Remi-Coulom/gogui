@@ -126,10 +126,8 @@ class ReadThread
 /** Base class for Go programs and tools implementing GTP. */
 public abstract class GtpEngine
 {
-    public GtpEngine(InputStream in, OutputStream out, PrintStream log)
+    public GtpEngine(PrintStream log)
     {
-        m_out = new PrintStream(out);
-        m_in = in;
         m_log = log;
     }
 
@@ -156,8 +154,10 @@ public abstract class GtpEngine
         m_log.println(line);
     }
 
-    public void mainLoop() throws IOException
+    public void mainLoop(InputStream in, OutputStream out) throws IOException
     {
+        m_out = new PrintStream(out);
+        m_in = in;
         ReadThread readThread = new ReadThread(this, m_in, m_log != null);
         readThread.start();
         while (true)
@@ -235,11 +235,11 @@ public abstract class GtpEngine
             m_log.println(fullResponse);
     }
 
-    private final InputStream m_in;
+    private InputStream m_in;
 
     private final PrintStream m_log;
 
-    private final PrintStream m_out;
+    private PrintStream m_out;
 
     private void sendResponse(GtpCommand cmd)
     {

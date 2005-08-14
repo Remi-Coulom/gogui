@@ -26,11 +26,10 @@ import net.sf.gogui.version.Version;
 public class GtpDummy
     extends GtpEngine
 {
-    public GtpDummy(InputStream in, OutputStream out, PrintStream log,
-                    boolean useRandomSeed, long randomSeed)
+    public GtpDummy(PrintStream log, boolean useRandomSeed, long randomSeed)
         throws Exception
     {
-        super(in, out, log);
+        super(log);
         m_random = new Random();
         if (useRandomSeed)
             m_random.setSeed(randomSeed);

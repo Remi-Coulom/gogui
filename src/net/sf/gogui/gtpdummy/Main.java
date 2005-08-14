@@ -61,9 +61,8 @@ public class Main
                 randomSeed = opt.getLong("srand");
                 useRandomSeed = true;
             }
-            GtpDummy gtpDummy = new GtpDummy(System.in, System.out, log,
-                                             useRandomSeed, randomSeed);
-            gtpDummy.mainLoop();
+            GtpDummy gtpDummy = new GtpDummy(log, useRandomSeed, randomSeed);
+            gtpDummy.mainLoop(System.in, System.out);
             if (log != null)
                 log.close();
         }

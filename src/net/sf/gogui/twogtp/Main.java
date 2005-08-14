@@ -115,11 +115,10 @@ public class Main
             if (loadsgf && ! auto)
                 throw new ErrorMessage("Option -loadsgf can only be used with"
                                        + " -auto");
-            TwoGtp twoGtp =
-                new TwoGtp(System.in, System.out, black, white, referee,
-                           observer, size, komi, isKomiFixed, games,
-                           alternate, sgfFile, force, verbose, openings,
-                           loadsgf);
+            TwoGtp twoGtp
+                = new TwoGtp(black, white, referee, observer, size, komi,
+                             isKomiFixed, games, alternate, sgfFile, force,
+                             verbose, openings, loadsgf);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)
@@ -127,7 +126,7 @@ public class Main
                 twoGtp.autoPlay();
             }
             else
-                twoGtp.mainLoop();
+                twoGtp.mainLoop(System.in, System.out);
             twoGtp.close();
         }
         catch (Throwable t)

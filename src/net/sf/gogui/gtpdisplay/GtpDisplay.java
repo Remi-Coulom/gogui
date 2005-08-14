@@ -45,11 +45,10 @@ import net.sf.gogui.utils.SquareLayout;
 public class GtpDisplay
     extends GtpEngine
 {
-    public GtpDisplay(InputStream in, OutputStream out, String program,
-                      boolean verbose, boolean fastPaint)
+    public GtpDisplay(String program, boolean verbose, boolean fastPaint)
         throws Exception
     {
-        super(in, out, null);
+        super(null);
         if (! (program == null || program.equals("")))
         {
             m_gtp = new Gtp(program, verbose, null);

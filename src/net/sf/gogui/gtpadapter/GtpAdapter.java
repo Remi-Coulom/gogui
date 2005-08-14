@@ -38,24 +38,25 @@ import net.sf.gogui.utils.StringUtils;
 public class GtpAdapter
     extends GtpEngine
 {
-    public GtpAdapter(InputStream in, OutputStream out, String program,
-                      PrintStream log, String gtpFile, boolean verbose)
+    public GtpAdapter(String program, PrintStream log, String gtpFile,
+                      boolean verbose)
         throws Exception
     {
-        super(in, out, log);
+        super(log);
         if (program.equals(""))
             throw new Exception("No program set.");
         m_gtp = new Gtp(program, verbose, null);
         if (gtpFile != null)
             sendGtpFile(gtpFile);
-        m_gtp.queryProtocolVersion();
-        m_gtp.querySupportedCommands();
-        m_boardSize = 19;
-        m_board = new Board(m_boardSize);
-        m_size = -1;
-        m_name = null;
-        m_resign = false;
-        m_fillPasses = false;
+        init();
+    }
+
+    public GtpAdapter(Gtp gtp, PrintStream log, boolean verbose)
+        throws GtpError
+    {
+        super(log);
+        m_gtp = gtp;
+        init();
     }
 
     public void close()
@@ -589,6 +590,18 @@ public class GtpAdapter
             m_passInserted.push(Boolean.FALSE);
             throw e;
         }
+    }
+
+    private void init() throws GtpError
+    {
+        m_gtp.queryProtocolVersion();
+        m_gtp.querySupportedCommands();
+        m_boardSize = 19;
+        m_board = new Board(m_boardSize);
+        m_size = -1;
+        m_name = null;
+        m_resign = false;
+        m_fillPasses = false;
     }
 
     private void play(GoColor color, GoPoint point) throws GtpError

@@ -44,14 +44,13 @@ import net.sf.gogui.version.Version;
 public class TwoGtp
     extends GtpEngine
 {
-    public TwoGtp(InputStream in, OutputStream out, String black,
-                  String white, String referee, String observer, int size,
-                  double komi, boolean isKomiFixed, int numberGames,
+    public TwoGtp(String black, String white, String referee, String observer,
+                  int size, double komi, boolean isKomiFixed, int numberGames,
                   boolean alternate, String sgfFile, boolean force,
                   boolean verbose, Openings openings, boolean loadsgf)
         throws Exception
     {
-        super(in, out, null);
+        super(null);
         assert(size > 0);
         assert(size <= GoPoint.MAXSIZE);
         if (black.equals(""))

@@ -76,8 +76,7 @@ public class Main
             }
             String program = (String)arguments.get(0);
             GtpAdapter adapter
-                = new GtpAdapter(System.in, System.out, program, log, gtpFile,
-                                 verbose);
+                = new GtpAdapter(program, log, gtpFile, verbose);
             if (emuLoadsgf)
                 adapter.setEmuLoadSgf();
             if (emuHandicap)
@@ -92,7 +91,7 @@ public class Main
                 adapter.setResign(resignScore);
             if (size > 0)
                 adapter.setFixedSize(size);
-            adapter.mainLoop();
+            adapter.mainLoop(System.in, System.out);
             adapter.close();
             if (log != null)
                 log.close();

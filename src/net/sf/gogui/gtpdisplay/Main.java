@@ -49,10 +49,9 @@ public class Main
             String program = null;
             if (arguments.size() == 1)
                 program = (String)arguments.get(0);
-            GtpDisplay gtpDisplay =
-                new GtpDisplay(System.in, System.out, program, verbose,
-                               fastPaint);
-            gtpDisplay.mainLoop();
+            GtpDisplay gtpDisplay
+                = new GtpDisplay(program, verbose, fastPaint);
+            gtpDisplay.mainLoop(System.in, System.out);
             gtpDisplay.close();
         }
         catch (Throwable t)

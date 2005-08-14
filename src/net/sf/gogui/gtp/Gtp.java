@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -96,8 +97,8 @@ public final class Gtp
         throws GtpError
     {
         m_log = log;
-        m_program = program;
         m_callback = callback;
+        m_program = program;
         if (m_program.indexOf("%SRAND") >= 0)
         {
             // RAND_MAX in stdlib.h ist at least 32767
@@ -119,16 +120,22 @@ public final class Gtp
             throw new GtpError("Could not execute " + program + ":\n" +
                                 e.getMessage());
         }
-        m_out = new PrintWriter(m_process.getOutputStream());
-        m_isProgramDead = false;
-        
-        m_queue = new MessageQueue();
-        m_inputThread = new InputThread(m_process.getInputStream(), m_queue);
-        m_errorThread = new ErrorThread(m_process.getErrorStream(), m_queue);
-        m_inputThread.start();
-        m_errorThread.start();
+        init(m_process.getInputStream(), m_process.getOutputStream(),
+             m_process.getErrorStream());
     }
     
+    /** Constructor for given input and output streams. */
+    public Gtp(InputStream in, OutputStream out, boolean log,
+               IOCallback callback)
+        throws GtpError
+    {
+        m_log = log;
+        m_callback = callback;
+        m_program = "-";
+        m_process = null;
+        init(in, out, null);
+    }
+
     /** Close the output stream to the program. */
     public void close()
     {
@@ -138,7 +145,8 @@ public final class Gtp
     /** Kill the Go program. */
     public void destroyProcess()
     {
-        m_process.destroy();
+        if (m_process != null)
+            m_process.destroy();
     }
 
     /** Get response to last command sent. */
@@ -563,6 +571,8 @@ public final class Gtp
     /** Wait until the process of the program exits. */
     public void waitForExit()
     {
+        if (m_process == null)
+            return;
         try
         {
             m_process.waitFor();
@@ -577,6 +587,8 @@ public final class Gtp
     public void waitForExit(int timeout, TimeoutCallback timeoutCallback)
     {
         setExitInProcess(true);
+        if (m_process == null)
+            return;
         while (true)
         {
             if (ProcessUtils.waitForExit(m_process, timeout))
@@ -761,6 +773,20 @@ public final class Gtp
             return;
         if (m_callback != null)
             m_callback.receivedStdErr(text);
+    }
+
+    private void init(InputStream in, OutputStream out, InputStream err)
+    {
+        m_out = new PrintWriter(out);
+        m_isProgramDead = false;        
+        m_queue = new MessageQueue();
+        m_inputThread = new InputThread(in, m_queue);
+        if (err != null)
+        {
+            m_errorThread = new ErrorThread(err, m_queue);
+            m_errorThread.start();
+        }
+        m_inputThread.start();
     }
 
     private static boolean isResponseLine(String line)
