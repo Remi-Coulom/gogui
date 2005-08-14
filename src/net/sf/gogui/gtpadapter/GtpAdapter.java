@@ -39,10 +39,7 @@ public class GtpAdapter
     extends GtpEngine
 {
     public GtpAdapter(InputStream in, OutputStream out, String program,
-                      PrintStream log, boolean version1, int size,
-                      String name, boolean noScore, boolean emuHandicap,
-                      boolean emuLoadsgf, boolean resign, int resignScore,
-                      String gtpFile, boolean verbose, boolean fillPasses)
+                      PrintStream log, String gtpFile, boolean verbose)
         throws Exception
     {
         super(in, out, log);
@@ -53,20 +50,12 @@ public class GtpAdapter
             sendGtpFile(gtpFile);
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
-        if (size > 0)
-            m_boardSize = size;
-        else
-            m_boardSize = 19;
+        m_boardSize = 19;
         m_board = new Board(m_boardSize);
-        m_version1 = version1;
-        m_noScore = noScore;
-        m_emuHandicap = emuHandicap;
-        m_emuLoadsgf = emuLoadsgf;
-        m_size = size;
-        m_name = name;
-        m_resign = resign;
-        m_resignScore = Math.abs(resignScore);
-        m_fillPasses = fillPasses;
+        m_size = -1;
+        m_name = null;
+        m_resign = false;
+        m_fillPasses = false;
     }
 
     public void close()
@@ -145,26 +134,95 @@ public class GtpAdapter
         interruptProgram(m_gtp);
     }
 
-    private final boolean m_emuHandicap;
+    /** Emulate loadsgf command.
+        Should be set before handling any commands.
+    */
+    public void setEmuLoadSgf()
+    {
+        m_emuLoadsgf = true;
+    }
 
-    private final boolean m_emuLoadsgf;
+    /** Emulate handicap commands.
+        Should be set before handling any commands.
+    */
+    public void setEmuHandicap()
+    {
+        m_emuHandicap = true;
+    }
 
-    private final boolean m_fillPasses;
+    /** Fill moves of non-alternating colors with pass moves.
+        Should be set before handling any commands.
+    */
+    public void setFillPasses()
+    {
+        m_fillPasses = true;
+    }
 
-    private final boolean m_noScore;
+    /** Accept only a fixed board size.
+        Should be set before handling any commands.
+    */
+    public void setFixedSize(int size)
+    {
+        assert(size > 0);
+        assert(size <= GoPoint.MAXSIZE);
+        m_size = size;
+        m_boardSize = size;
+        m_board = new Board(m_boardSize);
+    }
 
-    private final boolean m_resign;
+    /** Set response for name command.
+        Should be set before handling any commands.
+    */
+    public void setName(String name)
+    {
+        m_name = name;
+    }
 
-    private final boolean m_version1;
+    /** Hide final_score and final_status commands.
+        Should be set before handling any commands.
+    */
+    public void setNoScore()
+    {
+        m_noScore = true;
+    }
+
+    /** Check estimate_score and resign, if score too bad.
+        Should be set before handling any commands.
+    */
+    public void setResign(int resignScore)
+    {
+        m_resign = true;
+        m_resignScore = Math.abs(resignScore);
+    }
+
+    /** Answer protocol_version command with 1.
+        Should be set before handling any commands.
+    */
+    public void setVersion1()
+    {
+        m_version1 = true;
+    }
+
+    private boolean m_emuHandicap;
+
+    private boolean m_emuLoadsgf;
+
+    private boolean m_fillPasses;
+
+    private boolean m_noScore;
+
+    private boolean m_resign;
+
+    private boolean m_version1;
 
     /** Only accept this board size.
         A value of -1 means accept any size.
     */
-    private final int m_size;
+    private int m_size;
 
     private int m_boardSize;
 
-    private final int m_resignScore;
+    private int m_resignScore;
 
     private Board m_board;
 
@@ -172,7 +230,7 @@ public class GtpAdapter
 
     private final Stack m_passInserted = new Stack();
 
-    private final String m_name;
+    private String m_name;
 
     private boolean checkResign(GoColor color, StringBuffer response)
     {

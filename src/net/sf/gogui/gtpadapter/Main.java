@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
@@ -58,7 +59,7 @@ public class Main
             boolean fillPasses = opt.isSet("fillpasses");
             String name = opt.getString("name", null);
             String gtpFile = opt.getString("gtpfile", null);
-            int size = opt.getInteger("size", -1);
+            int size = opt.getInteger("size", -1, 1, GoPoint.MAXSIZE);
             boolean resign = opt.isSet("resign");
             int resignScore = opt.getInteger("resign");            
             ArrayList arguments = opt.getArguments();
@@ -74,13 +75,25 @@ public class Main
                 log = new PrintStream(new FileOutputStream(file));
             }
             String program = (String)arguments.get(0);
-            GtpAdapter gtpAdapter =
-                new GtpAdapter(System.in, System.out, program, log, version1,
-                               size, name, noScore, emuHandicap, emuLoadsgf,
-                               resign, resignScore, gtpFile, verbose,
-                               fillPasses);
-            gtpAdapter.mainLoop();
-            gtpAdapter.close();
+            GtpAdapter adapter
+                = new GtpAdapter(System.in, System.out, program, log, gtpFile,
+                                 verbose);
+            if (emuLoadsgf)
+                adapter.setEmuLoadSgf();
+            if (emuHandicap)
+                adapter.setEmuHandicap();
+            if (noScore)
+                adapter.setNoScore();
+            if (version1)
+                adapter.setVersion1();
+            if (fillPasses)
+                adapter.setFillPasses();
+            if (resign)
+                adapter.setResign(resignScore);
+            if (size > 0)
+                adapter.setFixedSize(size);
+            adapter.mainLoop();
+            adapter.close();
             if (log != null)
                 log.close();
         }
