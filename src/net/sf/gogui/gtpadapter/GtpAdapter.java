@@ -379,7 +379,7 @@ public class GtpAdapter
         String filename = cmd.getArg(0);
         String command = "loadsgf " + filename;
         int maxMove = -1;
-        if (cmd.getNuArg() == 1)
+        if (cmd.getNuArg() == 2)
             maxMove = cmd.getIntArg(1);
         if (! m_emuLoadsgf)
             send(command);
