@@ -59,7 +59,6 @@ public class Main
             boolean fillPasses = opt.isSet("fillpasses");
             String name = opt.getString("name", null);
             String gtpFile = opt.getString("gtpfile", null);
-            int size = opt.getInteger("size", -1, 1, GoPoint.MAXSIZE);
             boolean resign = opt.isSet("resign");
             int resignScore = opt.getInteger("resign");            
             ArrayList arguments = opt.getArguments();
@@ -89,8 +88,11 @@ public class Main
                 adapter.setFillPasses();
             if (resign)
                 adapter.setResign(resignScore);
-            if (size > 0)
+            if (opt.isSet("size"))
+            {
+                int size = opt.getInteger("size", 0, 1, GoPoint.MAXSIZE);
                 adapter.setFixedSize(size);
+            }
             adapter.mainLoop(System.in, System.out);
             adapter.close();
             if (log != null)
