@@ -65,6 +65,20 @@ public class TableUtils
         return result;
     }
 
+    /** Get elements of a column without null and whitespace-only elements. */
+    public static ArrayList getColumnNotEmpty(Table table, String column)
+    {
+        ArrayList result = new ArrayList();
+        int col = table.getColumnIndex(column);
+        for (int row = 0; row < table.getNumberRows(); ++row)
+        {
+            String value = table.get(col, row);
+            if (value != null && ! value.trim().equals(""))
+                result.add(value);
+        }
+        return result;
+    }
+
     public static ArrayList getColumnUnique(Table table, String column)
     {
         ArrayList result = new ArrayList();
