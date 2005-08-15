@@ -235,14 +235,15 @@ public class Analyze
                 GameInfo info = (GameInfo)(m_gameInfo.get(j));
                 Table table = TableUtils.select(m_table, "File", info.m_file,
                                                 command);
-                ArrayList unique = TableUtils.getColumnUnique(table, command);
-                if (unique.size() > 1)
+                ArrayList notEmpty
+                    = TableUtils.getColumnNotEmpty(table, command);
+                if (notEmpty.size() > 1)
                 {
                     isGameGlobal = false;
                     break;
                 }
-                else if (unique.size() == 1)
-                    gameResult.add(unique.get(0));
+                else if (notEmpty.size() == 1)
+                    gameResult.add(notEmpty.get(0));
                 else
                     gameResult.add("");
             }
