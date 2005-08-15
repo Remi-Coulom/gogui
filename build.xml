@@ -617,7 +617,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
  deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
  classpath="build"/>
 <copy todir="build/test">
-<fileset dir="test/junit/src" includes="net/sf/gogui/sgf/*.sgf"/>
+<fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>
 </copy>
 </target>
 
