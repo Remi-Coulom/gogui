@@ -224,9 +224,9 @@ public final class GtpClient
             return "empty " + point;
         }
         if (color == GoColor.BLACK)
-            return "play B " + point;
+            return "play b " + point;
         if (color == GoColor.WHITE)
-            return "play W " + point;
+            return "play w " + point;
         assert(color == GoColor.EMPTY);
         return "play empty " + point;
     }
