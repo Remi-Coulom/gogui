@@ -16,7 +16,7 @@ public class Histogram
     {
         m_min = min;
         m_step = step;
-        m_size = Math.max(1, (int)((max - min) / step) + 1);
+        m_size = Math.max(1, (int)Math.ceil((max - min) / step));
         m_array = new int[m_size];
     }
 
@@ -32,6 +32,7 @@ public class Histogram
         return m_array[i];
     }
 
+    /** Return number of intervals. */
     public int getSize()
     {
         return m_size;
