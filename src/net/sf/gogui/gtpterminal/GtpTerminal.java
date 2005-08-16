@@ -383,7 +383,7 @@ public class GtpTerminal
     {
         try
         {
-            response.append(m_gtp.sendCommand(cmd));
+            response.append(m_gtp.send(cmd));
             return true;
         }
         catch (GtpError error)

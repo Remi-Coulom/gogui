@@ -512,12 +512,12 @@ public class GtpDisplay
 
     private void send(String cmd, StringBuffer response) throws GtpError
     {
-        response.append(m_gtp.sendCommand(cmd));
+        response.append(m_gtp.send(cmd));
     }
 
     private void send(String cmd) throws GtpError
     {
-        m_gtp.sendCommand(cmd);
+        m_gtp.send(cmd);
     }
 
     private void showStatus(String text)

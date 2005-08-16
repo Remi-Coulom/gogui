@@ -48,7 +48,7 @@ public class GtpAdapterTest
         expect.expect("clear_board", "");
         expect.expect("play b D4", "");
         expect.expect("play w Q16", "");
-        gtp.sendCommand("loadsgf " + getTmpFile("test.sgf").toString());
+        gtp.send("loadsgf " + getTmpFile("test.sgf").toString());
         assertTrue(expect.isExpectQueueEmpty());
     }
 

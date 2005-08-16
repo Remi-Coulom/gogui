@@ -405,7 +405,7 @@ public class GtpRegress
             assert(m_lastFullResponse == null);
             try
             {
-                m_lastResponse = m_gtp.sendCommand(line);
+                m_lastResponse = m_gtp.send(line);
             }
             catch (GtpError error)
             {
@@ -652,12 +652,12 @@ public class GtpRegress
         printOutLine(style, line, -1);
     }
 
-    private String sendCommand(String command) throws GtpError
+    private String send(String command) throws GtpError
     {
         printOutLine(null, command);
         try
         {
-            return m_gtp.sendCommand(command);
+            return m_gtp.send(command);
         }
         finally
         {
@@ -669,7 +669,7 @@ public class GtpRegress
     {
         try
         {
-            return Double.parseDouble(sendCommand("cputime"));
+            return Double.parseDouble(send("cputime"));
         }
         catch (GtpError e)
         {
@@ -715,7 +715,7 @@ public class GtpRegress
         m_lastSgf = null;
         try
         {
-            m_name = sendCommand("name");
+            m_name = send("name");
         }
         catch (GtpError e)
         {
@@ -725,7 +725,7 @@ public class GtpRegress
         }
         try
         {
-            m_version = sendCommand("version");
+            m_version = send("version");
         }
         catch (GtpError e)
         {
@@ -748,7 +748,7 @@ public class GtpRegress
         if (m_lastFullResponse != null)
             handleLastResponse();
         if (! m_gtp.isProgramDead())
-            sendCommand("quit");
+            send("quit");
         m_gtp.waitForExit();
         reader.close();
         finishOutFile();

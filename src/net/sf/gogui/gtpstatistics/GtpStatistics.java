@@ -53,7 +53,7 @@ public class GtpStatistics
         m_table.setProperty("Program", program);
         try
         {
-            m_table.setProperty("Name", m_gtp.sendCommand("name"));
+            m_table.setProperty("Name", m_gtp.send("name"));
         }
         catch (GtpError e)
         {
@@ -63,7 +63,7 @@ public class GtpStatistics
         }
         try
         {
-            m_table.setProperty("Version", m_gtp.sendCommand("version"));
+            m_table.setProperty("Version", m_gtp.send("version"));
         }
         catch (GtpError e)
         {
@@ -183,8 +183,8 @@ public class GtpStatistics
         int size = info.m_boardSize;
         if (size != m_size)
             throw new ErrorMessage(name + " has not size " + m_size);
-        m_gtp.sendCommandBoardsize(size);
-        m_gtp.sendCommandClearBoard(size);
+        m_gtp.sendBoardsize(size);
+        m_gtp.sendClearBoard(size);
         Node root = tree.getRoot();
         int number = 0;
         GoColor toMove = GoColor.BLACK;
@@ -200,7 +200,7 @@ public class GtpStatistics
                                            + "has non-alternating moves");
                 ++number;
                 handlePosition(name, toMove, move, number);
-                m_gtp.sendCommandPlay(move);
+                m_gtp.sendPlay(move);
                 toMove = toMove.otherColor();
             }
         }
@@ -211,7 +211,7 @@ public class GtpStatistics
             Command command = getCommand(i);
             if (! command.m_final)
                 continue;
-            String response = sendCommand(command.m_command, toMove, null);
+            String response = send(command.m_command, toMove, null);
             m_table.set(command.m_columnTitle, response);
         }
     }
@@ -230,8 +230,7 @@ public class GtpStatistics
                 Command command = getCommand(i);
                 if (! command.m_begin)
                     continue;
-                String response
-                    = sendCommand(command.m_command, toMove, move);
+                String response = send(command.m_command, toMove, move);
                 m_table.set(command.m_columnTitle, response);
             }
         for (int i = 0; i < m_commands.size(); ++i)
@@ -239,7 +238,7 @@ public class GtpStatistics
             Command command = getCommand(i);
             if (command.m_begin || command.m_final)
                 continue;
-            String response = sendCommand(command.m_command, toMove, move);
+            String response = send(command.m_command, toMove, move);
             m_table.set(command.m_columnTitle, response);
         }
     }
@@ -320,11 +319,11 @@ public class GtpStatistics
         }
     }
 
-    private String sendCommand(String command, GoColor toMove, Move move)
+    private String send(String command, GoColor toMove, Move move)
         throws GtpError
     {
         String cmd = convertCommand(command, toMove);
-        String response = m_gtp.sendCommand(cmd);
+        String response = m_gtp.send(cmd);
         return convertResponse(command, response, toMove, move);
     }
 }

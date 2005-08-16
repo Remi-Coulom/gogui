@@ -55,7 +55,7 @@ public class ParameterDialog
                 + parameter.getNewValue();
             try
             {
-                commandThread.sendCommand(command);
+                commandThread.send(command);
             }
             catch (GtpError e)
             {

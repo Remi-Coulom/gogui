@@ -777,7 +777,7 @@ public class GoGui
             return false;
         if (sync)
         {
-            m_commandThread.sendCommand(command);
+            m_commandThread.send(command);
             return true;
         }
         Runnable callback = new Runnable()
@@ -788,7 +788,7 @@ public class GoGui
                 }
             };
         beginLengthyCommand();
-        m_commandThread.sendCommand(command, callback);
+        m_commandThread.send(command, callback);
         return true;
     }
 
@@ -1177,7 +1177,7 @@ public class GoGui
         m_titleFromProgram = null;
         try
         {
-            m_name = m_commandThread.sendCommand("name").trim();
+            m_name = m_commandThread.send("name").trim();
         }
         catch (GtpError e)
         {
@@ -1241,7 +1241,7 @@ public class GoGui
                         break;
                     node = node.getFather();
                 }
-                m_commandThread.sendCommand("gg-undo " + total);
+                m_commandThread.send("gg-undo " + total);
                 m_board.undo(total);
                 m_currentNode = node;
                 m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
@@ -2257,7 +2257,7 @@ public class GoGui
                 try
                 {
                     if (m_commandThread.isCommandSupported("quit"))
-                        m_commandThread.sendCommand("quit");
+                        m_commandThread.send("quit");
                 }
                 catch (GtpError e)
                 {
@@ -2336,7 +2336,7 @@ public class GoGui
         {
             Move move = (Move)moves.get(i);
             if (m_commandThread != null)
-                m_commandThread.sendCommandPlay(move);
+                m_commandThread.sendPlay(move);
             m_board.play(move);
             ++m_currentNodeExecuted;
         }
@@ -2354,8 +2354,8 @@ public class GoGui
         {
             try
             {
-                m_commandThread.sendCommandBoardsize(m_boardSize);
-                m_commandThread.sendCommandClearBoard(m_boardSize);
+                m_commandThread.sendBoardsize(m_boardSize);
+                m_commandThread.sendClearBoard(m_boardSize);
             }
             catch (GtpError error)
             {
@@ -2846,7 +2846,7 @@ public class GoGui
     {
         assert(m_commandThread != null);
         beginLengthyCommand();
-        m_commandThread.sendCommand(cmd, callback);
+        m_commandThread.send(cmd, callback);
     }
 
     private void save(File file) throws FileNotFoundException
@@ -2956,7 +2956,7 @@ public class GoGui
                     String line = in.readLine();
                     if (line == null)
                         break;
-                    if (! m_gtpShell.sendCommand(line, this, true))
+                    if (! m_gtpShell.send(line, this, true))
                         break;
                 }
                 catch (IOException e)
@@ -3100,8 +3100,8 @@ public class GoGui
         try
         {
             m_clock.setTimeSettings(m_timeSettings);
-            m_commandThread.sendCommand("time_settings " + preByoyomi + " "
-                                        + byoyomi + " " + byoyomiMoves);
+            m_commandThread.send("time_settings " + preByoyomi + " "
+                                 + byoyomi + " " + byoyomiMoves);
         }
         catch (GtpError e)
         {
@@ -3174,8 +3174,7 @@ public class GoGui
         {
             try
             {
-                m_titleFromProgram =
-                    m_commandThread.sendCommand("gogui_title");
+                m_titleFromProgram = m_commandThread.send("gogui_title");
                 setTitle(m_titleFromProgram);
             }
             catch (GtpError e)
@@ -3359,7 +3358,7 @@ public class GoGui
         for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
         {
             if (m_commandThread != null)
-                m_commandThread.sendCommand("undo");
+                m_commandThread.send("undo");
             m_board.undo();
         }
         m_guiBoard.updateFromGoBoard();

@@ -184,7 +184,7 @@ public class CommandThread
                 m_exception = null;
                 try
                 {
-                    m_response = m_gtp.sendCommand(m_command);
+                    m_response = m_gtp.send(m_command);
                 }
                 catch (GtpError e)
                 {
@@ -196,7 +196,7 @@ public class CommandThread
     }
 
     /** Send asynchronous command. */
-    public void sendCommand(String command, Runnable callback)
+    public void send(String command, Runnable callback)
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
@@ -210,31 +210,30 @@ public class CommandThread
     }
     
     /** Send command in event dispatch thread. */
-    public String sendCommand(String command)
-        throws GtpError
+    public String send(String command) throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         TimeoutCallback timeoutCallback = new TimeoutCallback(command);
-        String response = m_gtp.sendCommand(command, 8000, timeoutCallback);
+        String response = m_gtp.send(command, 8000, timeoutCallback);
         return response;
     }
 
-    public void sendCommandBoardsize(int size) throws GtpError
+    public void sendBoardsize(int size) throws GtpError
     {
-        m_gtp.sendCommandBoardsize(size);
+        m_gtp.sendBoardsize(size);
     }
 
-    public void sendCommandClearBoard(int size) throws GtpError
+    public void sendClearBoard(int size) throws GtpError
     {
-        m_gtp.sendCommandClearBoard(size);
+        m_gtp.sendClearBoard(size);
     }
 
-    public void sendCommandPlay(Move move) throws GtpError
+    public void sendPlay(Move move) throws GtpError
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        m_gtp.sendCommandPlay(move);
+        m_gtp.sendPlay(move);
     }
 
     private class TimeoutCallback

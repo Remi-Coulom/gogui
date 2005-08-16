@@ -472,7 +472,7 @@ public final class AnalyzeDialog
                 command.setOptStringArg("");
                 String commandWithoutArg =
                     command.replaceWildCards(m_selectedColor);
-                String value = m_commandThread.sendCommand(commandWithoutArg);
+                String value = m_commandThread.send(commandWithoutArg);
                 String optStringArg =
                     JOptionPane.showInputDialog(this, label, value);
                 if (optStringArg == null || optStringArg.equals(value))
@@ -493,7 +493,7 @@ public final class AnalyzeDialog
                 String commandWithoutArg =
                     command.replaceWildCards(m_selectedColor) + " show";
                 String response =
-                    m_commandThread.sendCommand(commandWithoutArg);
+                    m_commandThread.send(commandWithoutArg);
                 ArrayList pointList =
                     GtpUtils.parsePointArrayList(response, m_boardSize);
                 command.setPointListArg(pointList);

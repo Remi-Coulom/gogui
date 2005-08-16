@@ -146,8 +146,8 @@ public class TwoGtp
             if (m_white.isProgramDead())
                 throw new ErrorMessage("White program died");
         }
-        m_black.sendCommand("quit");
-        m_white.sendCommand("quit");
+        m_black.send("quit");
+        m_white.send("quit");
         close();
     }
 
@@ -484,7 +484,7 @@ public class TwoGtp
 
     private void forward(GtpClient gtp, GtpCommand cmd) throws GtpError
     {
-        cmd.setResponse(gtp.sendCommand(cmd.getLine()));
+        cmd.setResponse(gtp.send(cmd.getLine()));
     }
 
     private boolean gameOver()
@@ -515,7 +515,7 @@ public class TwoGtp
     {
         try
         {
-            String name = gtp.sendCommand("name");
+            String name = gtp.send("name");
             if (! name.trim().equals(""))
                 return name;
         }
@@ -534,7 +534,7 @@ public class TwoGtp
     {
         try
         {
-            String version = gtp.sendCommand("version");
+            String version = gtp.send("version");
             if (! version.trim().equals(""))
                 return version;
         }
@@ -548,7 +548,7 @@ public class TwoGtp
     {
         try
         {
-            return gtp.sendCommand("final_score");
+            return gtp.send("final_score");
         }
         catch (GtpError e)
         {
@@ -769,12 +769,12 @@ public class TwoGtp
     {
         m_cpuTimeBlack = getCpuTime(m_black);
         m_cpuTimeWhite = getCpuTime(m_white);
-        m_black.sendCommandBoardsize(size);
-        m_black.sendCommandClearBoard(size);
+        m_black.sendBoardsize(size);
+        m_black.sendClearBoard(size);
         try
         {
-            m_white.sendCommandBoardsize(size);
-            m_white.sendCommandClearBoard(size);
+            m_white.sendBoardsize(size);
+            m_white.sendClearBoard(size);
         }
         catch (GtpError e)
         {
@@ -974,7 +974,7 @@ public class TwoGtp
             checkInconsistentState();
         try
         {
-            gtp1.sendCommand(command1);
+            gtp1.send(command1);
         }
         catch (GtpError e)
         {
@@ -983,7 +983,7 @@ public class TwoGtp
         }
         try
         {
-            gtp2.sendCommand(command2);
+            gtp2.send(command2);
         }
         catch (GtpError e)
         {
@@ -1042,7 +1042,7 @@ public class TwoGtp
         }
         String response1 = null;
         String response2 = null;
-        response1 = gtp1.sendCommand(command);
+        response1 = gtp1.send(command);
         if (response1.toLowerCase().equals("resign"))
         {
             response.append("resign");
@@ -1065,14 +1065,14 @@ public class TwoGtp
             String command2 = gtp2.getCommandPlay(move);
             try
             {
-                gtp2.sendCommand(command2);
+                gtp2.send(command2);
             }
             catch (GtpError e)
             {
                 response2 = e.getMessage();
                 try
                 {
-                    gtp1.sendCommand("undo");
+                    gtp1.send("undo");
                 }
                 catch (GtpError errorUndo)
                 {
@@ -1112,7 +1112,7 @@ public class TwoGtp
             return;
         try
         {
-            gtp.sendCommand(cmdLine);
+            gtp.send(cmdLine);
         }
         catch (GtpError e)
         {
@@ -1140,7 +1140,7 @@ public class TwoGtp
             return;
         try
         {
-            m_observer.sendCommand(command);
+            m_observer.send(command);
         }
         catch (GtpError e)
         {
@@ -1157,7 +1157,7 @@ public class TwoGtp
             return;
         try
         {
-            m_referee.sendCommand(command);
+            m_referee.send(command);
         }
         catch (GtpError e)
         {
@@ -1170,7 +1170,7 @@ public class TwoGtp
 
     private void twogtpColor(GtpClient gtp, GtpCommand cmd) throws GtpError
     {
-        cmd.setResponse(gtp.sendCommand(cmd.getArgLine()));
+        cmd.setResponse(gtp.send(cmd.getArgLine()));
     }
 
     private void twogtpObserver(GtpCommand cmd) throws GtpError

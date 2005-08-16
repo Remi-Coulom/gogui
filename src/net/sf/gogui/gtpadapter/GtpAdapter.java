@@ -455,8 +455,8 @@ public class GtpAdapter
             m_passInserted.clear();
             if (m_emuLoadsgf)
             {
-                m_gtp.sendCommandBoardsize(m_boardSize);
-                m_gtp.sendCommandClearBoard(m_boardSize);
+                m_gtp.sendBoardsize(m_boardSize);
+                m_gtp.sendClearBoard(m_boardSize);
             }
             Node node = gameTree.getRoot();
             int moveNumber = 0;
@@ -616,12 +616,12 @@ public class GtpAdapter
 
     private void send(String cmd) throws GtpError
     {
-        m_gtp.sendCommand(cmd);
+        m_gtp.send(cmd);
     }
 
     private void send(String cmd, StringBuffer response) throws GtpError
     {
-        response.append(m_gtp.sendCommand(cmd));
+        response.append(m_gtp.send(cmd));
     }
 
     private void sendGtpFile(String filename)

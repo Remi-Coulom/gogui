@@ -63,7 +63,7 @@ public class Utils
         try
         {
             if (thread.isCommandSupported("komi"))
-                thread.sendCommand("komi " + GameInformation.roundKomi(komi));
+                thread.send("komi " + GameInformation.roundKomi(komi));
         }
         catch (GtpError e)
         {
@@ -87,7 +87,7 @@ public class Utils
         {
             String s =
                 (rules == Board.RULES_JAPANESE ? "territory" : "area");
-            thread.sendCommand("scoring_system " + s);
+            thread.send("scoring_system " + s);
         }
         catch (GtpError e)
         {

@@ -359,7 +359,7 @@ public class GtpShell
     {
         void cbAnalyze();
 
-        /** @see GtpShell.sendCommand */
+        /** @see GtpShell.send */
         boolean sendGtpCommand(String command, boolean sync) throws GtpError;
     }
 
@@ -519,8 +519,7 @@ public class GtpShell
         If owner != null, send synchronously and display error dialog on
         owner, otherwise send asynchronously.
     */
-    public boolean sendCommand(String command, Component owner,
-                               boolean askContinue)
+    public boolean send(String command, Component owner, boolean askContinue)
     {
         assert(SwingUtilities.isEventDispatchThread());
         String c = command.trim();
@@ -818,7 +817,7 @@ public class GtpShell
         String command = m_comboBox.getSelectedItem().toString();        
         if (command.trim().equals(""))
             return;
-        sendCommand(command, null, false);
+        send(command, null, false);
         appendToHistory(command);
         m_gtpShellText.setPositionToEnd();
         m_comboBox.hidePopup();

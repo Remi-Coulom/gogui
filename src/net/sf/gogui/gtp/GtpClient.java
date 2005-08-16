@@ -29,11 +29,11 @@ import net.sf.gogui.utils.ProcessUtils;
     be called after the thread is started.
     </p>
     <p>
-    GTP commands are sent with the sendCommand functions.
+    GTP commands are sent with the send functions.
     Callbacks can be registered to monitor the input, output and error stream
     and to handle timeout and invalid responses.
-    All callbacks are only called in the sendCommand functions and from
-    the caller's thread.
+    All callbacks are only called in the send functions and from the caller's
+    thread.
     </p>
     <p>
     Internally the class reads the output and error streams from different
@@ -49,16 +49,15 @@ public final class GtpClient
     public interface TimeoutCallback
     {
         /** Ask for continuation.
-            If this function returns true, Gtp.sendCommand will wait for
-            another timeout period, if it returns false, the program will be
-            killed.
+            If this function returns true, Gtp.send will wait for another
+            timeout period, if it returns false, the program will be killed.
         */
         boolean askContinue();
     }
 
     /** Callback if an invalid response occured.
         Can be used to display invalid responses (without a status character)
-        immediately, because sendCommand will not abort on an invalid response
+        immediately, because send will not abort on an invalid response
         but continue to wait for a valid response line.
         This is necessary for some Go programs with broken GTP implementation
         which write debug data to standard output (e.g. Wallyplus 0.1.2).
@@ -231,7 +230,7 @@ public final class GtpClient
         return "play empty " + point;
     }
 
-    /** Send command cputime and convert the result to double.
+    /** Send cputime command and convert the result to double.
         @throws GtpError if command fails or does not return a floating point
         number.
     */
@@ -239,7 +238,7 @@ public final class GtpClient
     {
         try
         {
-            return Double.parseDouble(sendCommand("cputime"));
+            return Double.parseDouble(send("cputime"));
         }
         catch (NumberFormatException e)
         {
@@ -330,11 +329,11 @@ public final class GtpClient
         {
             if (isCommandSupported("gogui_interrupt"))
             {
-                sendCommand("gogui_interrupt");
+                send("gogui_interrupt");
                 m_isInterruptCommentSupported = true;
             }
             else if (isCommandSupported("gogui_sigint"))
-                m_pid = sendCommand("gogui_sigint").trim();
+                m_pid = send("gogui_sigint").trim();
         }
         catch (GtpError e)
         {
@@ -348,7 +347,7 @@ public final class GtpClient
     {
         try
         {
-            return sendCommand("name");
+            return send("name");
         }
         catch (GtpError e)
         {
@@ -369,7 +368,7 @@ public final class GtpClient
             String response;
             try
             {
-                response = sendCommand("protocol_version");
+                response = send("protocol_version");
             }
             catch (GtpError e)
             {
@@ -394,7 +393,7 @@ public final class GtpClient
     public void querySupportedCommands() throws GtpError
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
-        String response = sendCommand(command);
+        String response = send(command);
         m_supportedCommands = StringUtils.splitArguments(response);
         for (int i = 0; i < m_supportedCommands.length; ++i)
             m_supportedCommands[i] = m_supportedCommands[i].trim();
@@ -407,7 +406,7 @@ public final class GtpClient
     {
         try
         {
-            return sendCommand("version");
+            return send("version");
         }
         catch (GtpError e)
         {
@@ -420,9 +419,9 @@ public final class GtpClient
         the status character.
         @throws GtpError containing the response if the command fails.
     */
-    public String sendCommand(String command) throws GtpError
+    public String send(String command) throws GtpError
     {
-        return sendCommand(command, -1, null);
+        return send(command, -1, null);
     }
 
     /** Send a command with timeout.
@@ -434,9 +433,8 @@ public final class GtpClient
         @throws GtpError containing the response if the command fails.
         @see TimeoutCallback
     */
-    public String sendCommand(String command, long timeout,
-                              TimeoutCallback timeoutCallback)
-        throws GtpError
+    public String send(String command, long timeout,
+                       TimeoutCallback timeoutCallback) throws GtpError
     {
         assert(! command.trim().equals(""));
         assert(! command.trim().startsWith("#"));
@@ -467,28 +465,28 @@ public final class GtpClient
         Note: call queryProtocolVersion first
         @see Gtp#getCommandBoardsize
     */
-    public void sendCommandBoardsize(int size) throws GtpError
+    public void sendBoardsize(int size) throws GtpError
     {
         String command = getCommandBoardsize(size);
         if (command != null)
-            sendCommand(command);
+            send(command);
     }
 
     /** Send command for staring a new game.
         Note: call queryProtocolVersion first
         @see Gtp#getCommandClearBoard
     */
-    public void sendCommandClearBoard(int size) throws GtpError
+    public void sendClearBoard(int size) throws GtpError
     {
-        sendCommand(getCommandClearBoard(size));
+        send(getCommandClearBoard(size));
     }
 
     /** Send command for playing a move.
         Note: call queryProtocolVersion first
     */
-    public void sendCommandPlay(Move move) throws GtpError
+    public void sendPlay(Move move) throws GtpError
     {
-        sendCommand(getCommandPlay(move));
+        send(getCommandPlay(move));
     }
 
     /** Send comment.
@@ -505,7 +503,7 @@ public final class GtpClient
     }
 
     /** Interrupt current command.
-        Can be called from a different thread during a sendCommand.
+        Can be called from a different thread during a send.
         Note: call queryInterruptSupport first
         @see Gtp#isInterruptSupported
         @throws GtpError if interrupting commands is not supported.
