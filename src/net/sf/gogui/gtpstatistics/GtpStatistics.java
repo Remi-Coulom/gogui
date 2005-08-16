@@ -270,7 +270,7 @@ public class GtpStatistics
         }
         else if (command.equals("estimate_score"))
         {
-            String arg[] = StringUtils.tokenize(response);
+            String arg[] = StringUtils.splitArguments(response);
             if (arg.length == 0)
                 return response;
             return convertScore(arg[0]);

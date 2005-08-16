@@ -221,7 +221,7 @@ public class Options
                 buffer.append(line);
                 buffer.append(' ');
             }
-            parseArgs(StringUtils.tokenize(buffer.toString()));
+            parseArgs(StringUtils.splitArguments(buffer.toString()));
         }
         catch (IOException e)
         {

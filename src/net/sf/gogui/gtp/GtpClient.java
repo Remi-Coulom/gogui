@@ -110,10 +110,10 @@ public final class GtpClient
         Runtime runtime = Runtime.getRuntime();
         try
         {
-            // Create command array with StringUtils::tokenize
+            // Create command array with StringUtils::splitArguments
             // because Runtime.exec(String) uses a default StringTokenizer
             // which does not respect ".
-            m_process = runtime.exec(StringUtils.tokenize(program));
+            m_process = runtime.exec(StringUtils.splitArguments(program));
         }
         catch (IOException e)
         {
@@ -395,7 +395,7 @@ public final class GtpClient
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
         String response = sendCommand(command);
-        m_supportedCommands = StringUtils.tokenize(response);
+        m_supportedCommands = StringUtils.splitArguments(response);
         for (int i = 0; i < m_supportedCommands.length; ++i)
             m_supportedCommands[i] = m_supportedCommands[i].trim();
     }

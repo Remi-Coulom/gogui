@@ -2823,10 +2823,10 @@ public class GoGui
             name = "commentsize-" + m_boardSize;
             if (m_prefs.contains(name))
             {
-                String[] tokens
-                    = StringUtils.tokenize(m_prefs.getString(name));
-                int width = Integer.parseInt(tokens[0]);                
-                int height = Integer.parseInt(tokens[1]);
+                String[] args
+                    = StringUtils.splitArguments(m_prefs.getString(name));
+                int width = Integer.parseInt(args[0]);                
+                int height = Integer.parseInt(args[1]);
                 m_comment.setPreferredSize(new Dimension(width, height));
             }
         }

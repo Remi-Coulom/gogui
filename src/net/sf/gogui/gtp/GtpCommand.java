@@ -40,7 +40,7 @@ public class GtpCommand
                 wasLastSpace = false;
             }
         }
-        String[] array = StringUtils.tokenize(buffer.toString());
+        String[] array = StringUtils.splitArguments(buffer.toString());
         assert(array.length > 0);
         int commandIndex = 0;
         try

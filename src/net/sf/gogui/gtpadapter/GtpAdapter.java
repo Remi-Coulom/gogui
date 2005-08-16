@@ -248,10 +248,11 @@ public class GtpAdapter
         }
         boolean isValid = false;
         double score = 0;
-        String[] tokens = StringUtils.tokenize(programResponse.toString());
-        if (tokens.length > 0)
+        String[] args
+            = StringUtils.splitArguments(programResponse.toString());
+        if (args.length > 0)
         {
-            String s = tokens[0];
+            String s = args[0];
             try
             {
                 if (! s.equals("?"))

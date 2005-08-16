@@ -184,7 +184,7 @@ public class AnalyzeShow
             }
             if (line == null)
                 break;
-            String[] arg = StringUtils.tokenize(line);
+            String[] arg = StringUtils.splitArguments(line);
             if (arg.length == 0)
                 continue;
             String cmd = arg[0].toUpperCase();

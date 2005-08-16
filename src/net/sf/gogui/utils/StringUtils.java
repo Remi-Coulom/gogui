@@ -113,10 +113,10 @@ public class StringUtils
         return result;
     }
 
-    /** Split string into words.
+    /** Split command line into arguments.
         Allows " for words containing whitespaces.
     */
-    public static String[] tokenize(String string)
+    public static String[] splitArguments(String string)
     {
         assert(string != null);
         ArrayList vector = new ArrayList();

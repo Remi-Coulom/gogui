@@ -161,7 +161,7 @@ public class GtpTerminal
     */
     private boolean handleCommand(String cmdLine)
     {
-        String[] cmdArray = StringUtils.tokenize(cmdLine);
+        String[] cmdArray = StringUtils.splitArguments(cmdLine);
         String cmd = cmdArray[0];
         if (cmd.equals("quit"))
         {

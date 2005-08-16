@@ -73,16 +73,16 @@ public class SelectProgram
         program = program.trim();
         if (program.equals(""))
             return;
-        String[] tokens = StringUtils.tokenize(program);
-        if (tokens.length > 0)
+        String[] args = StringUtils.splitArguments(program);
+        if (args.length > 0)
         {
             try
             {
-                File file = new File(tokens[0]);
+                File file = new File(args[0]);
                 file = file.getCanonicalFile();
                 if (file.exists())
                     program = file.toString()
-                        + program.substring(tokens[0].length());
+                        + program.substring(args[0].length());
             }
             catch (IOException e)
             {

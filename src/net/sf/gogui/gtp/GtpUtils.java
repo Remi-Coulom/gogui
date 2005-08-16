@@ -113,7 +113,7 @@ public class GtpUtils
     {
         pointList.clear();
         stringList.clear();
-        String array[] = StringUtils.tokenize(s);
+        String array[] = StringUtils.splitArguments(s);
         boolean nextIsPoint = true;
         GoPoint point = null;
         for (int i = 0; i < array.length; ++i)
@@ -164,11 +164,11 @@ public class GtpUtils
                     ++y;
                     continue;
                 }
-                String[] tokens = StringUtils.tokenize(line);
-                if (tokens.length < boardSize)
+                String[] args = StringUtils.splitArguments(line);
+                if (args.length < boardSize)
                     throw new GtpError("Incomplete string board");
                 for (int x = 0; x < boardSize; ++x)
-                    result[x][y] = tokens[x];
+                    result[x][y] = args[x];
             }
         }
         catch (IOException e)
@@ -183,7 +183,7 @@ public class GtpUtils
                                         int boardSize)
     {
         ArrayList list = new ArrayList(32);
-        String token[] = StringUtils.tokenize(s);
+        String token[] = StringUtils.splitArguments(s);
         boolean isColorSet = true;
         for (int i = 0; i < token.length; ++i)
         {

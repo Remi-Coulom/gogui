@@ -142,7 +142,7 @@ public final class GoPoint
         throws InvalidPoint
     {
         ArrayList list = new ArrayList(32);
-        String p[] = StringUtils.tokenize(s);
+        String p[] = StringUtils.splitArguments(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
                 list.add(parsePoint(p[i], boardSize));

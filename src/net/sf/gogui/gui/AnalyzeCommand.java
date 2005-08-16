@@ -489,7 +489,7 @@ public class AnalyzeCommand
                 if (supportedCommands != null)
                 {
                     String[] cmdArray
-                        = StringUtils.tokenize(array[2].trim());
+                        = StringUtils.splitArguments(array[2].trim());
                     if (cmdArray.length == 0
                         || ! supportedCommands.contains(cmdArray[0]))
                         continue;

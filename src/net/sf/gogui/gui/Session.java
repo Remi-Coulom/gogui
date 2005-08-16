@@ -27,17 +27,17 @@ public class Session
         name = name + "-" + boardSize;
         if (! prefs.contains(name))
             return;
-        String[] tokens = StringUtils.tokenize(prefs.getString(name));
-        if (tokens.length < 2)
+        String[] args = StringUtils.splitArguments(prefs.getString(name));
+        if (args.length < 2)
             return;
         try
         {
             Dimension screenSize =
                 Toolkit.getDefaultToolkit().getScreenSize();
-            int x = Math.max(0, Integer.parseInt(tokens[0]));
+            int x = Math.max(0, Integer.parseInt(args[0]));
             if (x > screenSize.width)
                 x = 0;
-            int y = Math.max(0, Integer.parseInt(tokens[1]));
+            int y = Math.max(0, Integer.parseInt(args[1]));
             if (y > screenSize.height)
                 y = 0;
             window.setLocation(x, y);
@@ -53,24 +53,24 @@ public class Session
         name = name + "-" + boardSize;
         if (! prefs.contains(name))
             return;
-        String[] tokens = StringUtils.tokenize(prefs.getString(name));
-        if (tokens.length < 4)
+        String[] args = StringUtils.splitArguments(prefs.getString(name));
+        if (args.length < 4)
             return;
         try
         {
             Dimension screenSize =
                 Toolkit.getDefaultToolkit().getScreenSize();
-            int x = Math.max(0, Integer.parseInt(tokens[0]));
+            int x = Math.max(0, Integer.parseInt(args[0]));
             if (x > screenSize.width)
                 x = 0;
-            int y = Math.max(0, Integer.parseInt(tokens[1]));
+            int y = Math.max(0, Integer.parseInt(args[1]));
             if (y > screenSize.height)
                 y = 0;
             int width;
             int height;
-            width = Integer.parseInt(tokens[2]);
+            width = Integer.parseInt(args[2]);
             width = Math.min(width, screenSize.width);
-            height = Integer.parseInt(tokens[3]);
+            height = Integer.parseInt(args[3]);
             height = Math.min(height, screenSize.height);
             if (window instanceof GtpShell)
                 ((GtpShell)window).setFinalSize(x, y, width, height);

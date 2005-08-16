@@ -116,7 +116,7 @@ public class Main
             if (device.equals(""))
             {
                 Runtime runtime = Runtime.getRuntime();
-                process = runtime.exec(StringUtils.tokenize(program));
+                process = runtime.exec(StringUtils.splitArguments(program));
                 Thread stdErrThread = new ProcessUtils.StdErrThread(process);
                 stdErrThread.start();
                 title = title + program;

@@ -45,7 +45,8 @@ public final class GtpServer
             serverSocket = new ServerSocket(port, 1);
         while (true)
         {
-            Process process = runtime.exec(StringUtils.tokenize(program));
+            Process process
+                = runtime.exec(StringUtils.splitArguments(program));
             Thread stdErrThread = new ProcessUtils.StdErrThread(process);
             stdErrThread.start();
             Socket socket;
