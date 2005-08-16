@@ -596,7 +596,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 
 <target name="junit" depends="compile,junit-compile"
  description="Run JUnit tests" >
-<junit printsummary="withOutAndErr" fork="true" timeout="10000"
+<junit printsummary="withOutAndErr" fork="true" timeout="60000"
  haltonfailure="true">
 <assertions><enable/></assertions>
 <classpath>
