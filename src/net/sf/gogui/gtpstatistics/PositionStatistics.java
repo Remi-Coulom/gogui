@@ -76,7 +76,7 @@ public final class PositionStatistics
             }
         }
         m_onlyBoolValues = onlyBoolValues;
-        m_onlyIntValues = onlyBoolValues;
+        m_onlyIntValues = onlyIntValues;
         m_numberNoResult = numberNoResult;
         double min = m_statistics.getMin();
         double max = m_statistics.getMax();
