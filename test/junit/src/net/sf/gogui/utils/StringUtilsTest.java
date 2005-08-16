@@ -29,6 +29,25 @@ public class StringUtilsTest
         assertEquals(s[2], "23");
         assertEquals(s[3], " ");
     }
+
+    public void testSplitArguments1()
+    {
+        String[] s
+            = StringUtils.splitArguments("one two \"three four\"");
+        assertEquals(3, s.length);
+        assertEquals("one", s[0]);
+        assertEquals("two", s[1]);
+        assertEquals("three four", s[2]);
+    }
+
+    public void testSplitArguments2()
+    {
+        String[] s
+            = StringUtils.splitArguments("one \"two \\\"three four\\\"\"");
+        assertEquals(2, s.length);
+        assertEquals("one", s[0]);
+        assertEquals("two \\\"three four\\\"", s[1]);
+    }
 }
 
 //----------------------------------------------------------------------------
