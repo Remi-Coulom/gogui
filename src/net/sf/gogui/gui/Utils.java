@@ -102,7 +102,9 @@ public class Utils
             message = "Command failed";
         else
             message = StringUtils.capitalize(message);
-        SimpleDialogs.showError(parent, name + ": " + message);
+        if (name != null)
+            message = name + ": " + message;
+        SimpleDialogs.showError(parent, message);
     }
 
     /** Make constructor unavailable; class is for namespace only. */
