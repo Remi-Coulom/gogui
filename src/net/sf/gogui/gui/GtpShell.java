@@ -359,7 +359,7 @@ public class GtpShell
     {
         void cbAnalyze();
 
-        /** @see GtpShell.send */
+        /** @see GtpShell#send */
         boolean sendGtpCommand(String command, boolean sync) throws GtpError;
     }
 

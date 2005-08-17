@@ -94,7 +94,7 @@ public class GuiUtils
         return label;
     }
 
-    /** @see createInfoLabel() */
+    /** @see #createInfoLabel() */
     public static JLabel createInfoLabel(String text)
     {
         JLabel label = createInfoLabel();

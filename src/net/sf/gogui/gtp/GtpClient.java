@@ -203,7 +203,7 @@ public final class GtpClient
 
     /** Get command for playing a move.
         Note: call queryProtocolVersion first
-        @param Move. Any color, including GoColor.EMPTY, this is
+        @param move. Any color, including GoColor.EMPTY, this is
         non-standard GTP, but GoGui tries to transmit empty setup
         points this way, even if it is only to produce an error with the
         Go engine.
@@ -321,7 +321,7 @@ public final class GtpClient
     }
 
     /** Query if interrupting is supported.
-        @see Gtp#isInterruptSupported
+        @see GtpClient#isInterruptSupported
     */
     public void queryInterruptSupport()
     {
@@ -358,7 +358,7 @@ public final class GtpClient
     /** Query the protocol version.
         Sets the protocol version to the response or to 1 protocol_version
         command fails.
-        @see Gtp#getProtocolVersion
+        @see GtpClient#getProtocolVersion
         @throws GtpError if the response to protocol_version is not 1 or 2.
     */
     public void queryProtocolVersion() throws GtpError
@@ -387,8 +387,8 @@ public final class GtpClient
     }
 
     /** Query the supported commands.
-        @see Gtp#getSupportedCommands
-        @see Gtp#isCommandSupported
+        @see GtpClient#getSupportedCommands
+        @see GtpClient#isCommandSupported
     */
     public void querySupportedCommands() throws GtpError
     {
@@ -463,7 +463,7 @@ public final class GtpClient
     /** Send command for setting the board size.
         Send the command if it exists in the GTP protocol version.
         Note: call queryProtocolVersion first
-        @see Gtp#getCommandBoardsize
+        @see GtpClient#getCommandBoardsize
     */
     public void sendBoardsize(int size) throws GtpError
     {
@@ -474,7 +474,7 @@ public final class GtpClient
 
     /** Send command for staring a new game.
         Note: call queryProtocolVersion first
-        @see Gtp#getCommandClearBoard
+        @see GtpClient#getCommandClearBoard
     */
     public void sendClearBoard(int size) throws GtpError
     {
@@ -505,7 +505,7 @@ public final class GtpClient
     /** Interrupt current command.
         Can be called from a different thread during a send.
         Note: call queryInterruptSupport first
-        @see Gtp#isInterruptSupported
+        @see GtpClient#isInterruptSupported
         @throws GtpError if interrupting commands is not supported.
     */
     public void sendInterrupt() throws GtpError
