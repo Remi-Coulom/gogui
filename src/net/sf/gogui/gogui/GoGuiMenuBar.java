@@ -769,7 +769,7 @@ public class GoGuiMenuBar
     private JMenu createMenuAnalyze()
     {
         JMenu menu = createMenu("Analyze", KeyEvent.VK_N);
-        addMenuItem(menu, "Show Analyze", KeyEvent.VK_S, KeyEvent.VK_F8,
+        addMenuItem(menu, "Show Analyze", KeyEvent.VK_S, KeyEvent.VK_F9,
                     getFunctionKeyShortcut(), "analyze");
         menu.addSeparator();
         m_itemAnalyzeOnlySupported =
@@ -908,7 +908,7 @@ public class GoGuiMenuBar
     {
         JMenu menu = createMenu("Help", KeyEvent.VK_H);
         JMenuItem itemHelp =
-            addMenuItem(menu, "GoGui Documentation", KeyEvent.VK_C,
+            addMenuItem(menu, "GoGui Documentation", KeyEvent.VK_G,
                         KeyEvent.VK_F1, getFunctionKeyShortcut(), "help");
         JMenuItem itemAbout = addMenuItem(menu, "About", KeyEvent.VK_A,
                                           "about");
@@ -957,27 +957,27 @@ public class GoGuiMenuBar
     private JMenu createMenuShell(RecentFileMenu.Callback callback)
     {
         JMenu menu = createMenu("Shell", KeyEvent.VK_L);
-        m_itemGtpShell = addMenuItem(menu, "Show Shell", KeyEvent.VK_G,
-                                     KeyEvent.VK_F9, getFunctionKeyShortcut(),
+        m_itemGtpShell = addMenuItem(menu, "Show Shell", KeyEvent.VK_S,
+                                     KeyEvent.VK_F8, getFunctionKeyShortcut(),
                                      "gtp-shell");
         menu.addSeparator();
-        m_itemSaveLog = addMenuItem(menu, "Save Log...",
-                                    KeyEvent.VK_S, KeyEvent.VK_S,
-                                    m_shortcutKeyMask, "gtpshell-save");
+        m_itemSaveLog = addMenuItem(menu, "Save Log...", KeyEvent.VK_L,
+                                    "gtpshell-save");
         m_itemSaveCommands = addMenuItem(menu, "Save Commands...",
-                                         KeyEvent.VK_M,
+                                         KeyEvent.VK_C,
                                          "gtpshell-save-commands");
-        addMenuItem(menu, "Send File...", KeyEvent.VK_G,
+        addMenuItem(menu, "Send File...", KeyEvent.VK_F,
                     "gtpshell-send-file");
         String home = System.getProperty("user.home");
         File file = new File(new File(home, ".gogui"), "recent-gtpfiles");
         m_recentGtp = new RecentFileMenu("Send Recent", file, callback);
+        m_recentGtp.getMenu().setMnemonic(KeyEvent.VK_R);
         menu.add(m_recentGtp.getMenu());
         menu.addSeparator();
         m_itemHighlight = new JCheckBoxMenuItem("Highlight");
         addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
         m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
-        addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_C,
+        addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_P,
                     "command-completion");
         m_itemAutoNumber = new JCheckBoxMenuItem("Auto Number");
         addMenuItem(menu, m_itemAutoNumber, KeyEvent.VK_A, "auto-number");
