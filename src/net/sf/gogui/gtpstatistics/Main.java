@@ -16,7 +16,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** GtpStatistics main function. */
-class Main
+public class Main
 {
     public static void main(String[] args)
     {
