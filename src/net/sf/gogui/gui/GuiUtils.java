@@ -89,8 +89,8 @@ public class GuiUtils
     public static JLabel createInfoLabel()
     {
         JLabel label = new JLabel();
-        if (m_textFieldFont != null)
-            label.setFont(m_textFieldFont);
+        if (s_textFieldFont != null)
+            label.setFont(s_textFieldFont);
         return label;
     }
 
@@ -130,7 +130,7 @@ public class GuiUtils
 
     public static Font getTextFieldFont()
     {
-        return m_textFieldFont;
+        return s_textFieldFont;
     }
 
     /** Check window for normal state.
@@ -184,7 +184,7 @@ public class GuiUtils
     /** Set Go icon on frame. */
     public static void setGoIcon(Frame frame)
     {
-        URL url = m_iconURL;
+        URL url = s_iconURL;
         if (url != null)
             frame.setIconImage(new ImageIcon(url).getImage());
     }
@@ -195,7 +195,7 @@ public class GuiUtils
         // There are problems on most platforms with larger icons auto-scaled
         // down and transparency issues (Windows, Linux Sun Java 1.5.0)
         // Best solution for now is to take a 16x16 icon with no transparency
-        m_iconURL =
+        s_iconURL =
             loader.getResource("net/sf/gogui/images/gogui-16x16-notrans.png");
     }
 
@@ -280,7 +280,7 @@ public class GuiUtils
         // Should query some default Graphics device
         m_defaultMonoFontSize =
             textAreaFont == null ? 10 : textAreaFont.getSize();
-        m_textFieldFont = textFieldFont;
+        s_textFieldFont = textFieldFont;
     }
 
     private static final int m_defaultMonoFontSize;
@@ -298,9 +298,9 @@ public class GuiUtils
     private static final Dimension m_smallFillerDimension =
         new Dimension(SMALL_PAD, SMALL_PAD);
 
-    private static URL m_iconURL;
+    private static URL s_iconURL;
 
-    private static Font m_textFieldFont;
+    private static Font s_textFieldFont;
 }
 
 //----------------------------------------------------------------------------

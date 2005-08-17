@@ -267,8 +267,8 @@ public class GoGuiMenuBar
 
     public void selectBoardSizeItem(int size)
     {
-        for (int i = 0; i < m_possibleBoardSizes.length; ++i)
-            if (m_possibleBoardSizes[i] == size)
+        for (int i = 0; i < s_possibleBoardSizes.length; ++i)
+            if (s_possibleBoardSizes[i] == size)
             {
                 m_itemBoardSize[i].setSelected(true);
                 return;
@@ -488,9 +488,9 @@ public class GoGuiMenuBar
 
     private boolean m_isComputerDisabled;
 
-    private static int m_possibleBoardSizes[] = { 9, 11, 13, 15, 17, 19 };
+    private static int s_possibleBoardSizes[] = { 9, 11, 13, 15, 17, 19 };
 
-    private static int m_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
+    private static int s_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     private static final int m_shortcutKeyMask =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -703,11 +703,11 @@ public class GoGuiMenuBar
     {
         JMenu menu = createMenu("Board Size", KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
-        int n = m_possibleBoardSizes.length;
+        int n = s_possibleBoardSizes.length;
         m_itemBoardSize = new JMenuItem[n];
         for (int i = 0; i < n; ++i)
         {
-            String s = Integer.toString(m_possibleBoardSizes[i]);
+            String s = Integer.toString(s_possibleBoardSizes[i]);
             JMenuItem item = addRadioItem(menu, group, s, "board-size-" + s);
             m_itemBoardSize[i] = item;
         }
@@ -749,11 +749,11 @@ public class GoGuiMenuBar
     {
         JMenu menu = createMenu("Handicap", KeyEvent.VK_H);
         ButtonGroup group = new ButtonGroup();
-        for (int i = 0; i < m_possibleHandicaps.length; ++i)
+        for (int i = 0; i < s_possibleHandicaps.length; ++i)
         {
-            String s = Integer.toString(m_possibleHandicaps[i]);
+            String s = Integer.toString(s_possibleHandicaps[i]);
             JMenuItem item = addRadioItem(menu, group, s, "handicap-" + s);
-            if (m_possibleHandicaps[i] == 0)
+            if (s_possibleHandicaps[i] == 0)
                 item.setSelected(true);
         }
         return menu;

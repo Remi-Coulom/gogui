@@ -47,18 +47,18 @@ public class SplashScreen
             System.err.println(e.getMessage());
             return;
         }
-        m_splash = new SplashScreen();
+        s_splash = new SplashScreen();
         try
         {
-            m_splash.setUndecorated(true);
+            s_splash.setUndecorated(true);
         }
         catch (IllegalComponentStateException e)
         {
             // Thrown by GCJ on FC4
         }
-        center(m_splash, 0, 0);
-        m_splash.setVisible(true);         
-        new ImageLoader(m_splash);
+        center(s_splash, 0, 0);
+        s_splash.setVisible(true);         
+        new ImageLoader(s_splash);
         try
         {
             Class [] mainArgs = new Class[1];
@@ -79,15 +79,15 @@ public class SplashScreen
 
     public static void close()
     {
-        if (m_splash != null)
-            m_splash.setVisible(false);
-        m_splash = null;
+        if (s_splash != null)
+            s_splash.setVisible(false);
+        s_splash = null;
     }
 
     public void paint(Graphics graphics)
     {
-        if (m_loaded)
-            graphics.drawImage(m_image, 0, 0, null);
+        if (s_loaded)
+            graphics.drawImage(s_image, 0, 0, null);
     }
  
     public void update(Graphics graphics)
@@ -110,9 +110,9 @@ public class SplashScreen
             ClassLoader classLoader = getClass().getClassLoader();
             URL url =
                 classLoader.getResource("net/sf/gogui/images/splash.png");
-            m_image = Toolkit.getDefaultToolkit().createImage(url);
+            s_image = Toolkit.getDefaultToolkit().createImage(url);
             MediaTracker tracker = new MediaTracker(m_splash);
-            tracker.addImage(m_image, 0);
+            tracker.addImage(s_image, 0);
             try
             {
                 tracker.waitForID(0);
@@ -126,7 +126,7 @@ public class SplashScreen
                 printError("Error loading image");
                 return;
             }
-            m_loaded = true;
+            s_loaded = true;
             center(m_splash, 400, 300);
             m_splash.repaint();
         }
@@ -137,16 +137,16 @@ public class SplashScreen
     }
      
     /** Image was loaded. */
-    private static boolean m_loaded = false;
+    private static boolean s_loaded = false;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for use with serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private static Image m_image;
+    private static Image s_image;
 
-    private static SplashScreen m_splash;
+    private static SplashScreen s_splash;
 
     private static void center(Component component, int width, int height)
     {

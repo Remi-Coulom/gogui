@@ -700,7 +700,7 @@ class MainThread
 
     private int m_queryCount;
 
-    private final static int m_queries[] =
+    private final static int s_queries[] =
     {
         Cmd.QUERY_COLOR,
         Cmd.QUERY_HANDICAP
@@ -826,10 +826,10 @@ class MainThread
             answerQuery(cmd.m_val);
         else if (cmd.m_cmd == Cmd.ANSWER)
         {
-            if (m_queryCount < m_queries.length - 1)
+            if (m_queryCount < s_queries.length - 1)
             {
                 ++m_queryCount;
-                int val = m_queries[m_queryCount];
+                int val = s_queries[m_queryCount];
                 m_lastQuery = val;
                 sendCmd(Cmd.QUERY, val);
             }
@@ -844,7 +844,7 @@ class MainThread
         {
             m_cmdQueue.add(cmd);
             m_queryCount = 0;
-            int val = m_queries[m_queryCount];
+            int val = s_queries[m_queryCount];
             m_lastQuery = val;
             sendCmd(Cmd.QUERY, val);
             notifyAll();

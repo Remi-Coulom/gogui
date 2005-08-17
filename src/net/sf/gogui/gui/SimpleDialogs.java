@@ -77,13 +77,13 @@ public final class SimpleDialogs
 
     public static File showSaveSgf(Frame parent)
     {
-        return showFileChooserSave(parent, m_lastFile, true, null);
+        return showFileChooserSave(parent, s_lastFile, true, null);
     }
 
     /** File selection, unknown whether for load or save. */
     public static File showSelectFile(Component parent, String title)
     {
-        return showFileChooser(parent, FILE_SELECT, m_lastFile, false, title);
+        return showFileChooser(parent, FILE_SELECT, s_lastFile, false, title);
     }
 
     public static void showWarning(Component parent, String message)
@@ -97,12 +97,12 @@ public final class SimpleDialogs
 
     public static void setLastFile(File file)
     {
-        m_lastFile = file;
+        s_lastFile = file;
     }
 
     private static final String m_appName = "GoGui";
 
-    private static File m_lastFile;
+    private static File s_lastFile;
 
     /** Make constructor unavailable; class is for namespace only. */
     private SimpleDialogs()
@@ -168,8 +168,8 @@ public final class SimpleDialogs
     private static File showFileChooserAWT(Frame parent, int type,
                                            boolean setSgfFilter, String title)
     {
-        if (m_lastFile == null)
-            m_lastFile = getUserDir();
+        if (s_lastFile == null)
+            s_lastFile = getUserDir();
         FileDialog dialog = new FileDialog(parent);
         if (title == null)
         {
@@ -212,9 +212,9 @@ public final class SimpleDialogs
                                              boolean setSgfFilter,
                                              String title)
     {
-        if (m_lastFile == null)
-            m_lastFile = getUserDir();
-        JFileChooser chooser = new JFileChooser(m_lastFile);
+        if (s_lastFile == null)
+            s_lastFile = getUserDir();
+        JFileChooser chooser = new JFileChooser(s_lastFile);
         chooser.setMultiSelectionEnabled(false);
         javax.swing.filechooser.FileFilter sgfFilter = new SgfFilter();
         chooser.addChoosableFileFilter(sgfFilter);
@@ -246,7 +246,7 @@ public final class SimpleDialogs
         if (ret != JFileChooser.APPROVE_OPTION)
             return null;
         File file = chooser.getSelectedFile();
-        m_lastFile = file;
+        s_lastFile = file;
         return file;
     }
 }
