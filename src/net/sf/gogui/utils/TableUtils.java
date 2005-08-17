@@ -10,7 +10,7 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------
 
 /** Utility functions for class Table. */
-public class TableUtils
+public final class TableUtils
 {
     public static boolean allEmpty(Table table, String column)
     {

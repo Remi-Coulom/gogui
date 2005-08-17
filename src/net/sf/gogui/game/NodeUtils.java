@@ -19,7 +19,7 @@ import net.sf.gogui.utils.StringUtils;
 //----------------------------------------------------------------------------
 
 /** Utility functions operating on a tree of nodes. */
-public class NodeUtils
+public final class NodeUtils
 {
     /** Find first node with a certain move number in main variation
         containing a given node.

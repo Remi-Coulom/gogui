@@ -15,7 +15,7 @@ import net.sf.gogui.gui.SimpleDialogs;
 //----------------------------------------------------------------------------
 
 /** Ask for a variation. */
-public class GotoVariationDialog
+public final class GotoVariationDialog
 {
     public static Node show(Component parent, GameTree tree, Node currentNode)
     {

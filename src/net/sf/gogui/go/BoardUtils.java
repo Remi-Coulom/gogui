@@ -10,7 +10,7 @@ import java.io.PrintStream;
 //----------------------------------------------------------------------------
 
 /** Static utility functions related to class Board. */
-public class BoardUtils
+public final class BoardUtils
 {
     public static void print(Board board, PrintStream out)
     {

@@ -21,7 +21,7 @@ import net.sf.gogui.game.TimeSettings;
 //----------------------------------------------------------------------------
 
 /** Dialog for editing game settings and other information. */
-public class GameInfoDialog
+public final class GameInfoDialog
     extends JOptionPane
 {
     /** Returns false if nothing was changed. */

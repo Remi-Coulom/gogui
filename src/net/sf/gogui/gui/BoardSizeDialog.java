@@ -12,7 +12,7 @@ import net.sf.gogui.go.GoPoint;
 //----------------------------------------------------------------------------
 
 /** Dialog for entering a board size. */
-public class BoardSizeDialog
+public final class BoardSizeDialog
 {
     /** Run dialog.
         @return Board size or -1 if aborted. */

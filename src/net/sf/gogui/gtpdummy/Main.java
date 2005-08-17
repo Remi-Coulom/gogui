@@ -15,7 +15,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** GtpDummy main function. */
-public class Main
+public final class Main
 {
     /** GtpDummy main function. */
     public static void main(String[] args)

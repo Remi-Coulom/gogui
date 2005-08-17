@@ -17,7 +17,7 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------
 
 /** Static utility functions related to strings. */
-public class StringUtils
+public final class StringUtils
 {
     /** Capitalize the first word and trim whitespaces. */
     public static String capitalize(String message)

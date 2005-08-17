@@ -24,7 +24,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** GmpToGtp main function. */
-public class Main
+public final class Main
 {
     /** GmpToGtp main function. */
     public static void main(String[] args)

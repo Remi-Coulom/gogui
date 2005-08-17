@@ -17,7 +17,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** GtpAdapter main function. */
-public class Main
+public final class Main
 {
     /** GtpAdapter main function. */
     public static void main(String[] args)

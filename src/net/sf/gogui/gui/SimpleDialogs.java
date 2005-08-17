@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 //----------------------------------------------------------------------------
 
 /** Simple message dialogs and file selectors. */
-public class SimpleDialogs
+public final class SimpleDialogs
 {
     public static final int FILE_OPEN = 0;
 

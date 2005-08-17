@@ -14,7 +14,7 @@ import net.sf.gogui.gui.SimpleDialogs;
 //----------------------------------------------------------------------------
 
 /** Ask for a move number in a variation given by a node. */
-public class MoveNumberDialog
+public final class MoveNumberDialog
 {
     public static Node show(Component parent, Node node)
     {

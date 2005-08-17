@@ -15,7 +15,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** GtpTerminal main function. */
-public class Main
+public final class Main
 {
     /** GtpTerminal main function. */
     public static void main(String[] args)

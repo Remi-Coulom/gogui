@@ -22,7 +22,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** SGF to LaTeX converter. */
-public class SgfToTex
+public final class SgfToTex
 {
     public static void main(String[] args)
     {

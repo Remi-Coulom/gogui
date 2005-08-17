@@ -18,7 +18,7 @@ import net.sf.gogui.utils.StringUtils;
 //----------------------------------------------------------------------------
 
 /** Static utility functions. */
-public class Utils
+public final class Utils
 {
     /** Create a new node with a move and append it to current node.
         Also adds time information from clock, if not null and initialized.

@@ -20,7 +20,7 @@ import net.sf.gogui.sgf.SgfReader;
 //----------------------------------------------------------------------------
 
 /** Find duplicates in games. */
-public class Compare
+public final class Compare
 {
     /** Check if game already exists in game collection.
         All games must have the same board size.

@@ -27,7 +27,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** About dialog for GoGui. */
-public class AboutDialog
+public final class AboutDialog
     extends JOptionPane
 {
     public static void show(Component parent, String name, String version,

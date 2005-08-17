@@ -19,7 +19,7 @@ import net.sf.gogui.utils.StringUtils;
 //----------------------------------------------------------------------------
 
 /** Utility functions for parsing GTP responses. */
-public class GtpUtils
+public final class GtpUtils
 {
     public static double[][] parseDoubleBoard(String response, String title,
                                               int boardSize) throws GtpError

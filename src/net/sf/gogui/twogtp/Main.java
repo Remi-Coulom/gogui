@@ -15,7 +15,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** TwoGtp main function. */
-public class Main
+public final class Main
 {
     /** TwoGtp main function. */
     public static void main(String[] args)

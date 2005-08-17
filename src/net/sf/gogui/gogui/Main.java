@@ -13,7 +13,7 @@ import net.sf.gogui.utils.StringUtils;
 //----------------------------------------------------------------------------
 
 /** GoGui main function. */
-public class Main
+public final class Main
 {
     /** GoGui main function. */
     public static void main(String[] args)

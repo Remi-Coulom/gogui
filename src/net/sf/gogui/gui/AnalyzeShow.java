@@ -21,7 +21,7 @@ import net.sf.gogui.utils.StringUtils;
 //----------------------------------------------------------------------------
 
 /** Show response to an AnalyzeCommand in the GUI. */
-public class AnalyzeShow
+public final class AnalyzeShow
 {
     public static void show(AnalyzeCommand command, GuiBoard guiBoard,
                             Board board, String response) throws GtpError

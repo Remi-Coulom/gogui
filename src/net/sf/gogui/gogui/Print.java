@@ -13,7 +13,7 @@ import net.sf.gogui.gui.SimpleDialogs;
 //----------------------------------------------------------------------------
 
 /** Print a printable. */
-public class Print
+public final class Print
 {
     public static void run(Component parent, Printable printable)
     {

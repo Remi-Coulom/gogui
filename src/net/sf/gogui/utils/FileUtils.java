@@ -11,7 +11,7 @@ import java.io.IOException;
 //----------------------------------------------------------------------------
 
 /** Static file utility functions. */
-public class FileUtils
+public final class FileUtils
 {
     /** Return the file extension of a file name.
         @return File extension or null if file name has no extension.

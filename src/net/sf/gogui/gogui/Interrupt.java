@@ -14,7 +14,7 @@ import net.sf.gogui.gui.SimpleDialogs;
 //----------------------------------------------------------------------------
 
 /** Interrupt command. */
-public class Interrupt
+public final class Interrupt
 {
     /** Interrupt command.
         Confirm interrupt by user and send interrupt comment line if

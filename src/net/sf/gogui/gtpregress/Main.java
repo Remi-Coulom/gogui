@@ -14,7 +14,7 @@ import net.sf.gogui.version.Version;
 //----------------------------------------------------------------------------
 
 /** GtpRegress main function. */
-public class Main
+public final class Main
 {
     public static void main(String[] args)
     {

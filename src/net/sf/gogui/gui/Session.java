@@ -19,7 +19,7 @@ import javax.swing.JFrame;
     Window sizes and locations are saved separatly for different Go board
     sizes.
 */
-public class Session
+public final class Session
 {
     public static void restoreLocation(Window window, Preferences prefs,
                                        String name, int boardSize)
