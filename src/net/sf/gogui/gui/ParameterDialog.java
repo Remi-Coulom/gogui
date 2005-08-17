@@ -197,8 +197,8 @@ public class ParameterDialog
             if (line == null)
                 break;
             line = line.trim();
-            int STRING = 0;
-            int BOOL = 1;
+            final int STRING = 0;
+            final int BOOL = 1;
             int type = STRING;
             if (line.startsWith("[") && line.endsWith("]"))
             {
