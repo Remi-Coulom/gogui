@@ -36,7 +36,7 @@ public final class NetGtp
             {
                 if (totalTime >= timeout)
                     throw connectException;
-                String text ="netgtp: Connect failed; retrying in 5 sec...";
+                String text = "netgtp: Connect failed; retrying in 5 sec...";
                 System.err.println(text);
                 try
                 {

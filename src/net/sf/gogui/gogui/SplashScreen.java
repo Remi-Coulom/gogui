@@ -71,7 +71,7 @@ public class SplashScreen
             objArgs[0] = settings;
             mainMethod.invoke(null, objArgs);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             fatalError(e.getClass().getName() + ": " + e.getMessage());
         }

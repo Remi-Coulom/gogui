@@ -394,7 +394,7 @@ public class Analyze
                 = FileUtils.getRelativePath(fromFile, gameFile)
                 + gameFile.getName();
             return "<a href=\"" + path + "\">"
-                + (shortName ? gameFile.getName(): path)+ "</a>";
+                + (shortName ? gameFile.getName() : path) + "</a>";
         }
         catch (IOException e)
         {
@@ -523,7 +523,7 @@ public class Analyze
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
                   + "\" >\n" +
                   "<tr><td><table style=\"font-size:80%\""
-                  +" cellpadding=\"0\">\n");
+                  + " cellpadding=\"0\">\n");
     }
 
     private void writeCommandPage(int commandIndex)

@@ -128,7 +128,7 @@ public final class CommandStatistics
                                            double max)
     {
         DecimalFormat format = new DecimalFormat();
-        double absMax= Math.max(Math.abs(min), Math.abs(max));
+        double absMax = Math.max(Math.abs(min), Math.abs(max));
         if (absMax < 10000)
         {
             format.setMaximumFractionDigits(precision);
