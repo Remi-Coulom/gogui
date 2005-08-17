@@ -24,9 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -64,10 +61,9 @@ public class Help
 {
     public Help(Frame owner, URL contents)
     {
-        super(owner, "Help - GoGui");
+        super(owner, "Documentation - GoGui");
         m_contents = contents;
         Container contentPane = getContentPane();
-        createMenuBar();
         JPanel panel = new JPanel(new BorderLayout());
         contentPane.add(panel);
         panel.add(createButtons(), BorderLayout.NORTH);
@@ -137,40 +133,13 @@ public class Help
 
     private JButton m_buttonBack;
 
-    private JButton m_buttonContents;
-
     private JButton m_buttonForward;
 
     private final JEditorPane m_editorPane;
 
     private java.util.List m_history = new ArrayList();
 
-    private JMenuItem m_itemBack;
-
-    private JMenuItem m_itemContents;
-
-    private JMenuItem m_itemForward;
-
     private final URL m_contents;
-
-    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
-                                  String command)
-    {
-        item.addActionListener(this);
-        item.setActionCommand(command);
-        item.setMnemonic(mnemonic);
-        menu.add(item);
-        return item;
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  int accel, int modifier, String command)
-    {
-        JMenuItem item = new JMenuItem(label);
-        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
-        item.setAccelerator(k);
-        return addMenuItem(menu, item, mnemonic, command);
-    }
 
     private void appendHistory(URL url)
     {
@@ -199,44 +168,16 @@ public class Help
         historyChanged();
     }
 
-    private JMenu createMenu(String name, int mnemonic)
-    {
-        JMenu menu = new JMenu(name);
-        menu.setMnemonic(mnemonic);
-        return menu;
-    }
-
-    private void createMenuBar()
-    {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = createMenu("File", KeyEvent.VK_F);
-        addMenuItem(menu, "Close", KeyEvent.VK_C, KeyEvent.VK_W,
-                    m_shortcutKeyMask, "close");
-        menuBar.add(menu);
-        menu = createMenu("Go", KeyEvent.VK_G);
-        m_itemBack = addMenuItem(menu, "Back", KeyEvent.VK_B, KeyEvent.VK_B,
-                                 m_shortcutKeyMask, "back");
-        m_itemForward = addMenuItem(menu, "Forward", KeyEvent.VK_F,
-                                    KeyEvent.VK_F, m_shortcutKeyMask,
-                                    "forward");
-        m_itemContents = addMenuItem(menu, "Contents", KeyEvent.VK_C,
-                                     KeyEvent.VK_E, m_shortcutKeyMask,
-                                     "contents");
-        menuBar.add(menu);
-        setJMenuBar(menuBar);
-    }
-
     private JComponent createButtons()
     {
         JToolBar toolBar = new JToolBar();
+        toolBar.add(createToolBarButton("gohome.png", "contents",
+                                        "Table of Contents"));
         m_buttonBack = createToolBarButton("back.png", "back", "Back");
         toolBar.add(m_buttonBack);
         m_buttonForward = createToolBarButton("forward.png", "forward",
                                               "Forward");
         toolBar.add(m_buttonForward);
-        m_buttonContents = createToolBarButton("gohome.png", "contents",
-                                               "Contents");
-        toolBar.add(m_buttonContents);
         toolBar.setFloatable(false);
         return toolBar;
     }
@@ -276,13 +217,8 @@ public class Help
         URL currentUrl = getHistory(m_historyIndex);
         boolean backPossible = (m_historyIndex > 0);
         boolean forwardPossible = (m_historyIndex < m_history.size() - 1);
-        boolean contentsPossible = (! currentUrl.equals(m_contents));
         m_buttonBack.setEnabled(backPossible);
         m_buttonForward.setEnabled(forwardPossible);
-        m_buttonContents.setEnabled(contentsPossible);
-        m_itemBack.setEnabled(backPossible);
-        m_itemForward.setEnabled(forwardPossible);
-        m_itemContents.setEnabled(contentsPossible);
     }
 
     private void loadURL(URL url)
