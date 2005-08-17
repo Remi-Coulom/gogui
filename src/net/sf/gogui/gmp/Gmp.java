@@ -700,7 +700,7 @@ class MainThread
 
     private int m_queryCount;
 
-    private final static int s_queries[] =
+    private static final int s_queries[] =
     {
         Cmd.QUERY_COLOR,
         Cmd.QUERY_HANDICAP
