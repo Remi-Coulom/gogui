@@ -167,19 +167,19 @@ public class GmpTest
                           final boolean isBlack, final int x, final int y)
         throws IOException
     {
-            Thread thread = new Thread()
+        Thread thread = new Thread()
+            {
+                public void run()
                 {
-                    public void run()
-                    {
-                        StringBuffer message = new StringBuffer();
-                        boolean result = m_gmp.play(isBlack, x, y, message);
-                        assertTrue(message.toString(), result);
-                    }
-                };
-            thread.start();
-            receive(hisSeq, mySeq, MOVE, getMoveVal(isBlack, x, y));
-            send(mySeq, hisSeq, OK, 0);
-            waitThread(thread);
+                    StringBuffer message = new StringBuffer();
+                    boolean result = m_gmp.play(isBlack, x, y, message);
+                    assertTrue(message.toString(), result);
+                }
+            };
+        thread.start();
+        receive(hisSeq, mySeq, MOVE, getMoveVal(isBlack, x, y));
+        send(mySeq, hisSeq, OK, 0);
+        waitThread(thread);
     }
 
     private void sendNewGame(boolean hisSeq, boolean mySeq)
