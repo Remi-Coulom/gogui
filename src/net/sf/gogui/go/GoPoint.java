@@ -17,6 +17,7 @@ import net.sf.gogui.utils.StringUtils;
 public final class GoPoint
     implements Comparable
 {
+    /** Thrown if parsing a string representation of a GoPoint fails. */
     public static class InvalidPoint extends Exception
     {
         public InvalidPoint(String text)
@@ -54,6 +55,11 @@ public final class GoPoint
         return 0;
     }
 
+    /** Factory method for creating a point.
+        @param x x-coordinate [0...GoPoint.MAXSIZE - 1]
+        @param y y-coordinate [0...GoPoint.MAXSIZE - 1]
+        @return Unique reference to a point with these coordinates.
+    */
     public static GoPoint create(int x, int y)
     {
         assert(x >= 0);
@@ -69,7 +75,7 @@ public final class GoPoint
     }
     
     /** Return point below.
-        Returns the point below this point (x, y - 1)
+        @return The point below this point (x, y - 1).
     */
     public GoPoint down()
     {
@@ -79,18 +85,20 @@ public final class GoPoint
             return this;
     }
 
+    /** X-Coordinate. */
     public int getX()
     {
         return m_x;
     }
 
+    /** Y-Coordinate. */
     public int getY()
     {
         return m_y;
     }
 
     /** Return point left.
-        Returns the point below this point (x - 1, y)
+        @return the point below this point (x - 1, y)
     */
     public GoPoint left()
     {
@@ -100,7 +108,7 @@ public final class GoPoint
             return this;
     }
 
-    /** Parse point or null (pass).
+    /** Parse point or null (PASS).
         Parsing is case-insensitive, leading and trailing whitespace is
         ignored. "PASS" returns null, invalid strings throw a InvalidPoint
         exception.
@@ -153,7 +161,9 @@ public final class GoPoint
     }
 
     /** Return point right.
-        Returns the point below this point (x + 1, y)
+        @param max Current board size.
+        @return The point to the right of this point (x, y + 1)
+        or this point if no such point exists.
     */
     public GoPoint right(int max)
     {
@@ -163,14 +173,17 @@ public final class GoPoint
             return this;
     }
 
-    /** Convert to a string. */
+    /** Convert to a string.
+        @return String representation of this point.
+    */
     public String toString()
     {
         return m_string;
     }
     
     /** Convert a point or null point (pass) to a string.
-        If point is null, "PASS" is returned.
+        @param point Point or null for pass moves
+        @return point.toString() or "PASS" if point is null
     */
     public static String toString(GoPoint point)
     {
@@ -198,8 +211,10 @@ public final class GoPoint
         return buffer.toString();
     }
     
-    /** Return point abovebelow.
-        Returns the point below this point (x, y + 1)
+    /** Return point above.
+        @param max Current board size.
+        @return The point below this point (x, y + 1) or this point if no such
+        point exists.
     */
     public GoPoint up(int max)
     {
