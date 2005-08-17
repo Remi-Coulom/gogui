@@ -27,7 +27,6 @@ public final class CommandStatistics
 
     public final PositionStatistics m_statisticsFinal;
 
-    /** ArrayList<PositionStatistics> */
     public final ArrayList m_statisticsAtMove;
 
     public final Table m_tableAtMove;

@@ -23,7 +23,6 @@ class ExtraInfo
 
     public TreeMap m_sgfProperties;
 
-    /** Map<String,ArrayList<GoPoint>> */
     public Map m_marked;
 
     public Map m_label;

@@ -112,7 +112,6 @@ public class GtpStatistics
 
     private Table m_table;
 
-    /** ArrayList<Command> */
     private ArrayList m_commands;
 
     private void addCommand(String commandLine, boolean isBegin,

@@ -169,7 +169,6 @@ public class ContextMenu
 
     private final Listener m_listener;
 
-    /** ArrayList<AnalyzeCommand> */
     private final ArrayList m_commands = new ArrayList();
 
     private void addColorCommand(AnalyzeCommand command)

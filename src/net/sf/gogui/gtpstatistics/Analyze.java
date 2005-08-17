@@ -209,10 +209,8 @@ public class Analyze
 
     private ArrayList m_commands;
 
-    /** ArrayList<GameGlobalCommand> */
     private ArrayList m_gameGlobalCommands;
 
-    /** ArrayList<GameInfo> */
     private ArrayList m_gameInfo;    
 
     private void endInfo(PrintStream out)

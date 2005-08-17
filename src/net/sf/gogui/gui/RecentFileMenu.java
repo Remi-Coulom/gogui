@@ -82,7 +82,6 @@ public class RecentFileMenu
 
     private final RecentMenu m_menu;
 
-    /** ArrayList<String> */
     private final ArrayList m_sameName = new ArrayList();
 
     private int getCount()
