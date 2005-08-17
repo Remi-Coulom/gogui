@@ -203,7 +203,7 @@ public final class GtpClient
 
     /** Get command for playing a move.
         Note: call queryProtocolVersion first
-        @param move. Any color, including GoColor.EMPTY, this is
+        @param move Any color, including GoColor.EMPTY, this is
         non-standard GTP, but GoGui tries to transmit empty setup
         points this way, even if it is only to produce an error with the
         Go engine.
