@@ -23,6 +23,7 @@ import net.sf.gogui.utils.TableUtils;
 
 //----------------------------------------------------------------------------
 
+/** Produce a PNG plot from table data. */
 public class Plot
 {
     public Plot(int imgWidth, int imgHeight, Color color, int precision)

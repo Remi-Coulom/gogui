@@ -28,12 +28,13 @@ import net.sf.gogui.utils.Table;
 
 //----------------------------------------------------------------------------
 
+/** Run commands of a GTP engine on all positions in a game collection. */
 public class GtpStatistics
 {
     public GtpStatistics(String program, ArrayList sgfFiles, File output,
-                         int size, ArrayList commands, ArrayList beginCommands,
-                         ArrayList finalCommands, boolean verbose,
-                         boolean force)
+                         int size, ArrayList commands,
+                         ArrayList beginCommands, ArrayList finalCommands,
+                         boolean verbose, boolean force)
         throws Exception
     {
         if (output.exists() && ! force)

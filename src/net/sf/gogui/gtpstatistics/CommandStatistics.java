@@ -15,6 +15,7 @@ import net.sf.gogui.utils.TableUtils;
 
 //----------------------------------------------------------------------------
 
+/** Collect GTP response statistics for a command. */
 public final class CommandStatistics
 {
     public final boolean m_isBeginCommand;

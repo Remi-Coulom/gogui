@@ -14,6 +14,7 @@ import net.sf.gogui.utils.TableUtils;
 
 //----------------------------------------------------------------------------
 
+/** Collect GTP response statistics for a set of positions. */
 public final class PositionStatistics
 {
     public final boolean m_onlyBoolValues;

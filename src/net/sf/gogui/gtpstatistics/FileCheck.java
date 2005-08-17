@@ -20,6 +20,7 @@ import net.sf.gogui.utils.ErrorMessage;
 
 //----------------------------------------------------------------------------
 
+/** Check that SGF files meet the requirements for a GtpStatistics run. */
 public class FileCheck
 {
     public FileCheck(ArrayList sgfFiles, int size) throws ErrorMessage
