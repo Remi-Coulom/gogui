@@ -6,6 +6,7 @@
 package net.sf.gogui.gui;
 
 import java.awt.Component;
+import javax.swing.JOptionPane;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
@@ -102,9 +103,11 @@ public class Utils
             message = "Command failed";
         else
             message = StringUtils.capitalize(message);
+        String title = "Error";
         if (name != null)
-            message = name + ": " + message;
-        SimpleDialogs.showError(parent, message);
+            title = title + " - " + name;
+        JOptionPane.showMessageDialog(parent, message, title,
+                                      JOptionPane.ERROR_MESSAGE);
     }
 
     /** Make constructor unavailable; class is for namespace only. */
