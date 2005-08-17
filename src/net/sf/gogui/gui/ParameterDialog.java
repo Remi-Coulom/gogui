@@ -67,7 +67,7 @@ public class ParameterDialog
         }
     }
 
-    private static abstract class Parameter
+    private abstract static class Parameter
     {
         public Parameter(String key, String value)
         {
