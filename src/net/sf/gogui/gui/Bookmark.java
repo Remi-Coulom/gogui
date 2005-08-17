@@ -15,6 +15,7 @@ import net.sf.gogui.utils.FileUtils;
 
 //----------------------------------------------------------------------------
 
+/** Link to a position in a game file. */
 public final class Bookmark
 {
     public Bookmark(Bookmark bookmark)

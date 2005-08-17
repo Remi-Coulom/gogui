@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionListener;
 
 //----------------------------------------------------------------------------
 
+/** Dialog for displaying and editing a list of bookmarks. */
 public class EditBookmarksDialog
     extends JOptionPane
 {

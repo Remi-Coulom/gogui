@@ -7,6 +7,7 @@ package net.sf.gogui.utils;
 
 //----------------------------------------------------------------------------
 
+/** Collects statistical features of sample values. */
 public class Statistics
 {
     public Statistics()

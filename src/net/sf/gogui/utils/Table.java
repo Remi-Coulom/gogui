@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
+/** Table of string elements. */
 public class Table
 {
     public Table()

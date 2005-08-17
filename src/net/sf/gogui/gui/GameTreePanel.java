@@ -36,6 +36,7 @@ import net.sf.gogui.game.NodeUtils;
 
 //----------------------------------------------------------------------------
 
+/** Panel displaying a game tree. */
 public class GameTreePanel
     extends JPanel
     implements Scrollable

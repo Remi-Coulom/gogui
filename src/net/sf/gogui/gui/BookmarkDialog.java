@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 
 //----------------------------------------------------------------------------
 
+/** Dialog for displaying and editing a bookmark. */
 public class BookmarkDialog
     extends JOptionPane
 {

@@ -9,6 +9,7 @@ import java.io.PrintStream;
 
 //----------------------------------------------------------------------------
 
+/** Histogram for data samples. */
 public class Histogram
     extends Statistics
 {

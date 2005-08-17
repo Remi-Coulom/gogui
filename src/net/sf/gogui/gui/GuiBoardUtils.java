@@ -16,6 +16,7 @@ import net.sf.gogui.go.GoPoint;
 
 //----------------------------------------------------------------------------
 
+/** Utility functions for class GuiBoard. */
 public class GuiBoardUtils
 {
     public static Color getColor(String string)
