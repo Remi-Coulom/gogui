@@ -18,7 +18,7 @@ public class GameTree
 {
     public GameTree()
     {
-        m_gameInformation = new GameInformation(19);
+        m_gameInformation = new GameInformation(GoPoint.DEFAULT_SIZE);
         setDate();
         m_root = new Node();
     }

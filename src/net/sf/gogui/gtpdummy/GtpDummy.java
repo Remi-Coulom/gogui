@@ -33,7 +33,7 @@ public class GtpDummy
         m_random = new Random();
         if (useRandomSeed)
             m_random.setSeed(randomSeed);
-        initSize(19);
+        initSize(GoPoint.DEFAULT_SIZE);
         m_thread = Thread.currentThread();
     }
 

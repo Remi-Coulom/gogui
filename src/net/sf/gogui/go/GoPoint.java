@@ -36,6 +36,9 @@ public final class GoPoint
     */
     public static final int MAXSIZE = 25;
 
+    /** Default board size. */
+    public static final int DEFAULT_SIZE = 19;
+
     public int compareTo(Object object)
     {
         GoPoint point = (GoPoint)object;
@@ -141,7 +144,7 @@ public final class GoPoint
     public static ArrayList parsePointListArrayList(String s, int boardSize)
         throws InvalidPoint
     {
-        ArrayList list = new ArrayList(32);
+        ArrayList list = new ArrayList();
         String p[] = StringUtils.splitArguments(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
@@ -226,7 +229,7 @@ public final class GoPoint
     {
         assert(m_xString.length == MAXSIZE);
         s_size = 0;
-        grow(19);
+        grow(GoPoint.DEFAULT_SIZE);
     };
 
     private static void grow(int size)

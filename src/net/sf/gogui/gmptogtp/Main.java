@@ -15,6 +15,7 @@ import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
 import javax.comm.SerialPort;
 import javax.comm.UnsupportedCommOperationException;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.ProcessUtils;
 import net.sf.gogui.utils.StringUtils;
@@ -88,7 +89,7 @@ public class Main
                     throw new Exception("invalid color");
             }
             String device = opt.getString("device", "");
-            int size = opt.getInteger("size", 19);
+            int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE);
             if (size < 1 || size > 22)
                 throw new Exception("invalid size");
             int baud = opt.getInteger("baud", 2400);

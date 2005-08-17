@@ -98,7 +98,7 @@ public final class Move
         s_passBlack = new Move(null, GoColor.BLACK);
         s_passWhite = new Move(null, GoColor.WHITE);
         s_size = 0;
-        grow(19);
+        grow(GoPoint.DEFAULT_SIZE);
     };
 
     private static void grow(int size)

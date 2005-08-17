@@ -72,16 +72,19 @@ public final class TimeSettings
             int idx = s.indexOf('+');
             if (idx < 0)
             {
-                preByoyomi = Long.parseLong(s) * 60000L;
+                preByoyomi = Long.parseLong(s) * MSEC_PER_MIN;
             }
             else
             {
                 useByoyomi = true;
-                preByoyomi = Long.parseLong(s.substring(0, idx)) * 60000L;
+                preByoyomi
+                    = Long.parseLong(s.substring(0, idx)) * MSEC_PER_MIN;
                 int idx2 = s.indexOf('/');
                 if (idx2 <= idx)
                     throw new ErrorMessage("Invalid time specification");
-                byoyomi = Long.parseLong(s.substring(idx + 1, idx2)) * 60000L;
+                byoyomi
+                    = Long.parseLong(s.substring(idx + 1, idx2))
+                    * MSEC_PER_MIN;
                 byoyomiMoves = Integer.parseInt(s.substring(idx2 + 1));
             }
         }
@@ -102,6 +105,8 @@ public final class TimeSettings
         else
             return new TimeSettings(preByoyomi);
     }
+
+    private static final long MSEC_PER_MIN = 60000L;
 
     private final long m_preByoyomi;
 

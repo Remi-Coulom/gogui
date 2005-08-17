@@ -419,7 +419,7 @@ public class NodeUtils
 
     public static String nodeInfo(Node node)
     {
-        StringBuffer buffer = new StringBuffer(512);
+        StringBuffer buffer = new StringBuffer();
         buffer.append("NodeProperties:\n");
         appendInfo(buffer, "Depth", getDepth(node));
         appendInfo(buffer, "Children", node.getNumberChildren());
@@ -563,7 +563,7 @@ public class NodeUtils
         averageChildren /= numberNodes;
         averageChildrenInner /= Math.max(numberInner, 1);
         NumberFormat format = StringUtils.getNumberFormat(3);
-        StringBuffer buffer = new StringBuffer(512);
+        StringBuffer buffer = new StringBuffer();
         appendInfo(buffer, "Nodes", numberNodes);
         appendInfo(buffer, "Terminal", numberTerminal);
         appendInfo(buffer, "Inner", numberInner);
@@ -625,9 +625,10 @@ public class NodeUtils
             comment = comment.substring(0, pos);
             trimmed = true;
         }
-        if (comment.length() > 30)
+        final int maxCharDisplayed = 30;
+        if (comment.length() > maxCharDisplayed)
         {
-            comment = comment.substring(0, 30);
+            comment = comment.substring(0, maxCharDisplayed);
             trimmed = true;
         }
         if (trimmed)

@@ -8,6 +8,7 @@ package net.sf.gogui.gtpstatistics;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
@@ -62,7 +63,8 @@ public class Main
             boolean verbose = opt.isSet("verbose");
             boolean force = opt.isSet("force");
             int precision = opt.getInteger("precision", 3, 0);
-            int boardSize = opt.getInteger("size", 19, 1);
+            int boardSize = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
+                                           GoPoint.MAXSIZE);
             ArrayList commands = parseCommands(opt, "commands");
             ArrayList finalCommands = parseCommands(opt, "final");
             ArrayList beginCommands = parseCommands(opt, "begin");

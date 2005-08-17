@@ -141,7 +141,8 @@ public final class Board
 
     public ArrayList getAdjacentPoints(GoPoint p)
     {
-        ArrayList result = new ArrayList(4);
+        final int maxAdjacent = 4;
+        ArrayList result = new ArrayList(maxAdjacent);
         int x = p.getX();
         int y = p.getY();
         if (x > 0)

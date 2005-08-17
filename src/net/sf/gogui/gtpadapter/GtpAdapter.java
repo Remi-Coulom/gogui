@@ -597,7 +597,7 @@ public class GtpAdapter
     {
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
-        m_boardSize = 19;
+        m_boardSize = GoPoint.DEFAULT_SIZE;
         m_board = new Board(m_boardSize);
         m_size = -1;
         m_name = null;

@@ -842,7 +842,7 @@ public final class SgfReader
     {
         try
         {
-            m_gameInformation = new GameInformation(19);
+            m_gameInformation = new GameInformation(GoPoint.DEFAULT_SIZE);
             m_sizeFixed = false;
             if (m_progressShow != null)
             {

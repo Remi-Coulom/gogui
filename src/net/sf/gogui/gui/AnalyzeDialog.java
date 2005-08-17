@@ -41,6 +41,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
 
@@ -227,7 +228,7 @@ public final class AnalyzeDialog
 
     private boolean m_recentModified;
 
-    private int m_boardSize = 19;
+    private int m_boardSize = GoPoint.DEFAULT_SIZE;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net

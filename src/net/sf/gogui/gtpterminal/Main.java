@@ -7,6 +7,7 @@ package net.sf.gogui.gtpterminal;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
@@ -39,7 +40,8 @@ public class Main
                 System.out.println("GtpTerminal " + Version.get());
                 return;
             }
-            int size = opt.getInteger("size", 19, 1);
+            int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
+                                      GoPoint.MAXSIZE);
             boolean verbose = opt.isSet("verbose");
             ArrayList arguments = opt.getArguments();
             if (arguments.size() != 1)

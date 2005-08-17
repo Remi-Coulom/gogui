@@ -96,7 +96,8 @@ public class Main
             String white = opt.getString("white", "");
             String referee = opt.getString("referee", "");
             String observer = opt.getString("observer", "");
-            int size = opt.getInteger("size", 19, 1, GoPoint.MAXSIZE);
+            int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
+                                      GoPoint.MAXSIZE);
             double komi = 6.5;
             boolean isKomiFixed = opt.isSet("komi");
             if (isKomiFixed)

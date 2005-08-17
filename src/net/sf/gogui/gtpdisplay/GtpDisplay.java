@@ -57,7 +57,7 @@ public class GtpDisplay
         }
         else
             m_gtp = null;
-        m_size = 19;
+        m_size = GoPoint.DEFAULT_SIZE;
         m_board = new Board(m_size);
         m_frame = new JFrame();
         m_frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
