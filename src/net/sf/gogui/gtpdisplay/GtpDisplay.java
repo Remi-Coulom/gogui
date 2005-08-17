@@ -11,8 +11,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;

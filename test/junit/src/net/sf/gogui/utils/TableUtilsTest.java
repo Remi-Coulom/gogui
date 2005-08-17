@@ -5,8 +5,6 @@
 
 package net.sf.gogui.utils;
 
-import java.io.StringReader;
-
 //----------------------------------------------------------------------------
 
 public class TableUtilsTest

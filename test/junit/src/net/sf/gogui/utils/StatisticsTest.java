@@ -5,8 +5,6 @@
 
 package net.sf.gogui.utils;
 
-import java.util.ArrayList;
-
 //----------------------------------------------------------------------------
 
 public class StatisticsTest
