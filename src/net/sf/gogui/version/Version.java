@@ -12,7 +12,7 @@ public class Version
 {
     public static String get()
     {
-        return "0.8pre1";
+        return "0.8pre1.x";
     }
 
     /** Make constructor unavailable; class is for namespace only. */
