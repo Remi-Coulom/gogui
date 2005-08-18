@@ -65,7 +65,9 @@ public final class AboutDialog
                     + "</p>";
             int width = GuiUtils.getDefaultMonoFontSize() * 25;
             programPanel =
-                createPanel("<p align=\"center\"><b>" + name + "</b></p>" +
+                createPanel("<p align=\"center\"><img src=\""
+                            + getImage("program.png") + "\"></p>" +
+                            "<p align=\"center\"><b>" + name + "</b></p>" +
                             versionInfo +
                             "<p align=\"center\" width=\"" + width + "\">" +
                             "GTP protocol version " + protocolVersion
@@ -128,7 +130,9 @@ public final class AboutDialog
         String projectUrl = "http://gogui.sf.net";
         String supportUrl =
             "http://sourceforge.net/donate/index.php?group_id=59117";
-        return createPanel("<p align=\"center\"><b>GoGui</b></p>" +
+        return createPanel("<p align=\"center\"><img src=\""
+                           + getImage("gogui.png") + "\"></p>" +
+                           "<p align=\"center\"><b>GoGui</b></p>" +
                            "<p align=\"center\">" +
                            "Version " + Version.get() + "</p>" +
                            "<p align=\"center\">" +
