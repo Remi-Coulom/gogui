@@ -51,7 +51,7 @@ public class HistogramTest
         h.add(1.0);
         final double epsilon = 1e-7;
         assertEquals(2, h.getCount());
-        assertEquals(1, h.getCount(0));
+        assertEquals(2, h.getCount(0));
         assertEquals(1, h.getSize());
         assertEquals(1.0, h.getStep(), epsilon);
         assertEquals(0.0, h.getValue(0), epsilon);

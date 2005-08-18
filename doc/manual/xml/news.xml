@@ -4,6 +4,21 @@
 <revhistory>
 
 <revision>
+<revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GtpStatistics: fix some bugs
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>0.8pre1</revnumber>
 <date>17 Aug 2005</date>
 <authorinitials>enz</authorinitials>

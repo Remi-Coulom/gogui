@@ -16,6 +16,7 @@ public class Histogram
     public Histogram(double min, double max, double step)
     {
         m_min = min;
+        m_max = max;
         m_step = step;
         m_size = Math.max(1, (int)Math.ceil((max - min) / step));
         m_array = new int[m_size];
@@ -24,7 +25,11 @@ public class Histogram
     public void add(double value)
     {
         super.add(value);
-        int i = (int)((value - m_min) / m_step);
+        int i;
+        if (value == m_max)
+            i = m_size - 1;
+        else
+            i = (int)((value - m_min) / m_step);
         ++m_array[i];
     }
 
@@ -80,6 +85,8 @@ public class Histogram
     }
 
     private final int m_size;
+
+    private final double m_max;
 
     private final double m_min;
 
