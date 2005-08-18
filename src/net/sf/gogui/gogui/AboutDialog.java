@@ -36,6 +36,9 @@ public final class AboutDialog
         AboutDialog aboutDialog =
             new AboutDialog(name, version, protocolVersion, command);
         JDialog dialog = aboutDialog.createDialog(parent, "About");
+        // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
+        aboutDialog.m_tabbedPane.invalidate();
+        dialog.pack();
         dialog.setVisible(true);
         dialog.dispose();
     }
@@ -45,10 +48,12 @@ public final class AboutDialog
     */
     private static final long serialVersionUID = 0L; // SUID
 
+    private JTabbedPane m_tabbedPane;
+
     private AboutDialog(String name, String version, String protocolVersion,
                         String command)
     {
-        JTabbedPane tabbedPane = new JTabbedPane();
+        m_tabbedPane = new JTabbedPane();
         boolean isProgramAvailable = (name != null && ! name.equals(""));
         int tabIndex = 0;
         JPanel programPanel;
@@ -67,18 +72,18 @@ public final class AboutDialog
                             + "<br>" +
                             "Command: " +
                             "<tt>" + command + "</tt></p>");
-            tabbedPane.add("Program", programPanel);
-            tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_P);
-            tabbedPane.setSelectedIndex(tabIndex);
+            m_tabbedPane.add("Program", programPanel);
+            m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_P);
+            m_tabbedPane.setSelectedIndex(tabIndex);
             ++tabIndex;
         }
-        tabbedPane.add("GoGui", createPanelGoGui());
-        tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_G);
+        m_tabbedPane.add("GoGui", createPanelGoGui());
+        m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_G);
         ++tabIndex;
-        tabbedPane.add("Java", createPanelJava());
-        tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_J);
+        m_tabbedPane.add("Java", createPanelJava());
+        m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_J);
         ++tabIndex;
-        setMessage(tabbedPane);
+        setMessage(m_tabbedPane);
         setOptionType(DEFAULT_OPTION);
     }
 
