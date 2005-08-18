@@ -42,6 +42,20 @@ public class HistogramTest
         assertEquals(6.0, h.getValue(3), epsilon);
         assertEquals(8.0, h.getValue(4), epsilon);
     }
+
+    /** Test adding values that are equal to min and max. */
+    public void testBorderValues() throws ErrorMessage
+    {
+        Histogram h = new Histogram(0.0, 1.0, 1.0);
+        h.add(0.0);
+        h.add(1.0);
+        final double epsilon = 1e-7;
+        assertEquals(2, h.getCount());
+        assertEquals(1, h.getCount(0));
+        assertEquals(1, h.getSize());
+        assertEquals(1.0, h.getStep(), epsilon);
+        assertEquals(0.0, h.getValue(0), epsilon);
+    }
 }
 
 //----------------------------------------------------------------------------
