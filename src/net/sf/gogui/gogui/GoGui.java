@@ -115,7 +115,6 @@ public class GoGui
     {
         m_fastPaint = fastPaint;
         m_prefs = prefs;
-        setPrefsDefaults(m_prefs);
         m_boardSize = prefs.getInt("boardsize");
         m_beepAfterMove = prefs.getBool("beep-after-move");
         if (file != null)
@@ -3036,33 +3035,6 @@ public class GoGui
         setTitle();
     }
     
-    private static void setPrefsDefaults(Preferences prefs)
-    {
-        prefs.setBoolDefault("analyze-only-supported-commands", true);
-        prefs.setBoolDefault("analyze-sort", true);
-        prefs.setBoolDefault("beep-after-move", true);
-        prefs.setIntDefault("boardsize", GoPoint.DEFAULT_SIZE);
-        prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
-        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
-        prefs.setBoolDefault("gtpshell-highlight", true);
-        prefs.setBoolDefault("gtpshell-autonumber", false);
-        // JComboBox has problems on the Mac, see section Bugs in
-        // documentation
-        prefs.setBoolDefault("gtpshell-disable-completions", Platform.isMac());
-        prefs.setBoolDefault("gtpshell-timestamp", false);
-        prefs.setDoubleDefault("komi", 6.5);
-        prefs.setStringDefault("rules", "Chinese");
-        prefs.setBoolDefault("show-analyze", false);
-        prefs.setBoolDefault("show-gtpshell", false);
-        prefs.setBoolDefault("show-gametree", false);
-        prefs.setBoolDefault("show-cursor", true);
-        prefs.setBoolDefault("show-grid", true);
-        prefs.setBoolDefault("show-info-panel", true);
-        prefs.setBoolDefault("show-last-move", false);
-        prefs.setBoolDefault("show-toolbar", true);
-        prefs.setBoolDefault("show-variations", false);
-    }
-
     private void setResult(String result)
     {
         String oldResult = m_gameTree.getGameInformation().m_result;

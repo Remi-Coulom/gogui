@@ -7,8 +7,10 @@ package net.sf.gogui.gogui;
 
 import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
+import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.Preferences;
 import net.sf.gogui.version.Version;
 
@@ -91,6 +93,7 @@ public final class GoGuiSettings
             return;
         }
         m_preferences = new Preferences();
+        setDefaults(m_preferences);
         m_initAnalyze = opt.getString("analyze");
         m_fastPaint = opt.isSet("fast");
         m_auto = opt.isSet("auto");
@@ -153,6 +156,36 @@ public final class GoGuiSettings
             "-version        print version and exit\n";
         System.out.print(helpText);
     }   
+
+    private static void setDefaults(Preferences prefs)
+    {
+        prefs.setBoolDefault("analyze-only-supported-commands", true);
+        prefs.setBoolDefault("analyze-sort", true);
+        prefs.setBoolDefault("beep-after-move", true);
+        prefs.setIntDefault("boardsize", GoPoint.DEFAULT_SIZE);
+        prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
+        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
+        prefs.setBoolDefault("gtpshell-highlight", true);
+        prefs.setBoolDefault("gtpshell-autonumber", false);
+        // JComboBox has problems on the Mac, see section Bugs in
+        // documentation
+        prefs.setBoolDefault("gtpshell-disable-completions",
+                             Platform.isMac());
+        prefs.setIntDefault("gtpshell-history-max", 3000);
+        prefs.setIntDefault("gtpshell-history-min", 2000);
+        prefs.setBoolDefault("gtpshell-timestamp", false);
+        prefs.setDoubleDefault("komi", 6.5);
+        prefs.setStringDefault("rules", "Chinese");
+        prefs.setBoolDefault("show-analyze", false);
+        prefs.setBoolDefault("show-gtpshell", false);
+        prefs.setBoolDefault("show-gametree", false);
+        prefs.setBoolDefault("show-cursor", true);
+        prefs.setBoolDefault("show-grid", true);
+        prefs.setBoolDefault("show-info-panel", true);
+        prefs.setBoolDefault("show-last-move", false);
+        prefs.setBoolDefault("show-toolbar", true);
+        prefs.setBoolDefault("show-variations", false);
+    }
 
     private void validate() throws ErrorMessage
     {
