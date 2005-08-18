@@ -119,9 +119,7 @@ public final class AboutDialog
 
     private JPanel createPanelGoGui()
     {
-        ClassLoader classLoader = getClass().getClassLoader();
-        String imageName = "net/sf/gogui/images/project-support.png";
-        URL imageUrl = classLoader.getResource(imageName);
+        URL imageUrl = getImage("project-support.png");
         String projectUrl = "http://gogui.sf.net";
         String supportUrl =
             "http://sourceforge.net/donate/index.php?group_id=59117";
@@ -145,6 +143,8 @@ public final class AboutDialog
     {
         StringBuffer buffer = new StringBuffer(256);
         String name = System.getProperty("java.vm.name");
+        buffer.append("<p align=\"center\"><img src=\""
+                      + getImage("java.png") + "\"></p>");
         if (name == null)
             buffer.append("<p>Unknown Java VM</p>");
         else
@@ -174,6 +174,12 @@ public final class AboutDialog
             buffer.append("</p>");
         }
         return createPanel(buffer.toString());
+    }
+
+    private URL getImage(String name)
+    {
+        ClassLoader loader = getClass().getClassLoader();
+        return loader.getResource("net/sf/gogui/images/" + name);
     }
 }
 
