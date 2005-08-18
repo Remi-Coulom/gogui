@@ -8,11 +8,11 @@ package net.sf.gogui.version;
 //----------------------------------------------------------------------------
 
 /** Version information for all packages. */
-public final class Version
+public class Version
 {
     public static String get()
     {
-        return "0.7.x";
+        return "0.8pre1";
     }
 
     /** Make constructor unavailable; class is for namespace only. */

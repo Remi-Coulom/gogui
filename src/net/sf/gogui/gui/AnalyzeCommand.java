@@ -426,7 +426,7 @@ public class AnalyzeCommand
 
     private static void copyDefaults(File file)
     {
-        String resource = "config/analyze-commands";
+        String resource = "net/sf/gogui/config/analyze-commands";
         URL url = ClassLoader.getSystemClassLoader().getResource(resource);
         if (url == null)
             return;

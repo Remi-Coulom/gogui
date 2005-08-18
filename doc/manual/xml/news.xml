@@ -4,8 +4,8 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>0.8pre1</revnumber>
+<date>17 Aug 2005</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -144,7 +144,7 @@ Numerous other fixes and improvements
 
 <revision>
 <revnumber>0.7.1</revnumber>
-<date></date>
+<date>7 Apr 2005</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
