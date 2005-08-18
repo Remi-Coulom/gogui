@@ -634,6 +634,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <arg line="doc/manual/xml/reference-gtpdummy.xml"/>
 <arg line="doc/manual/xml/reference-gtpregress.xml"/>
 <arg line="doc/manual/xml/reference-gtpserver.xml"/>
+<arg line="doc/manual/xml/reference-gtpstatistics.xml"/>
 <arg line="doc/manual/xml/reference-gtpterminal.xml"/>
 <arg line="doc/manual/xml/reference-netgtp.xml"/>
 <arg line="doc/manual/xml/reference-sgftotex.xml"/>
