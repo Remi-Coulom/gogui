@@ -151,6 +151,8 @@ public class GtpDisplay
             cmdUnknown();
         else if (cmd.getCommand().equals("help"))
             cmdListCommands(cmd);
+        else if (cmd.getCommand().equals("komi"))
+            cmdKomi(cmd);
         else if (cmd.getCommand().equals("list_commands"))
             cmdListCommands(cmd);
         else if (cmd.getCommand().equals("loadsgf"))
@@ -348,6 +350,13 @@ public class GtpDisplay
             });
     }
 
+    private void cmdKomi(GtpCommand cmd) throws GtpError
+    {
+        if (m_gtp == null)
+            return;
+        send(cmd.getLine(), cmd.getResponse());
+    }
+
     private void cmdListCommands(GtpCommand cmd) throws GtpError
     {
         if (m_gtp != null)
@@ -363,6 +372,7 @@ public class GtpDisplay
                     || c.equals("genmove_black")
                     || c.equals("genmove_white")
                     || c.equals("help")
+                    || c.equals("komi")
                     || c.equals("list_commands")
                     || c.equals("play")
                     || c.equals("protocol_version")
@@ -376,6 +386,7 @@ public class GtpDisplay
         cmd.getResponse().append("boardsize\n");
         cmd.getResponse().append("clear_board\n");        
         cmd.getResponse().append("genmove\n");
+        cmd.getResponse().append("komi\n");
         cmd.getResponse().append("list_commands\n");
         cmd.getResponse().append("play\n");
         cmd.getResponse().append("protocol_version\n");
