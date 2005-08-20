@@ -76,11 +76,11 @@ public final class AboutDialog
                             "<tt>" + command + "</tt></p>");
             m_tabbedPane.add("Program", programPanel);
             m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_P);
-            m_tabbedPane.setSelectedIndex(tabIndex);
             ++tabIndex;
         }
         m_tabbedPane.add("GoGui", createPanelGoGui());
         m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_G);
+        m_tabbedPane.setSelectedIndex(tabIndex);
         ++tabIndex;
         m_tabbedPane.add("Java", createPanelJava());
         m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_J);
