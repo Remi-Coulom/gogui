@@ -44,7 +44,7 @@ public class OptionalWarning
         panel.add(textArea);
         panel.add(GuiUtils.createFiller());
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
-        JCheckBox disabled = new JCheckBox("Disable this warning");
+        JCheckBox disabled = new JCheckBox("Do not show this warning again");
         disabled.setSelected(m_disabled);
         checkBoxPanel.add(disabled, BorderLayout.WEST);
         panel.add(checkBoxPanel);
