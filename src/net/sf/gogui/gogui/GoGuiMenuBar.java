@@ -43,13 +43,11 @@ public class GoGuiMenuBar
         m_menuBar = new JMenuBar();
         m_menuFile = createMenuFile(recentCallback);
         m_menuBar.add(m_menuFile);
+        m_menuBar.add(createMenuGame());
         m_menuBar.add(createMenuEdit());
         m_menuView = createMenuView();
         m_menuBar.add(m_menuView);
         m_menuBar.add(createMenuGo());
-        m_menuBookmarks = createMenuBookMarks();
-        m_menuBar.add(m_menuBookmarks);
-        m_menuBar.add(createMenuGame());
         m_menuSetup = createMenuSetup();
         m_menuBar.add(m_menuSetup);
         m_menuBar.add(createMenuTree());
@@ -57,6 +55,8 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuShell);
         m_menuAnalyze = createMenuAnalyze();
         m_menuBar.add(m_menuAnalyze);
+        m_menuBookmarks = createMenuBookMarks();
+        m_menuBar.add(m_menuBookmarks);
         m_menuHelp = createMenuHelp();
         m_menuBar.add(m_menuHelp);
     }
@@ -787,8 +787,10 @@ public class GoGuiMenuBar
     private JMenu createMenuBookMarks()
     {
         JMenu menu = createMenu("Bookmarks", KeyEvent.VK_B);
-        addMenuItem(menu, "Add Bookmark", KeyEvent.VK_A, "add-bookmark");
-        addMenuItem(menu, "Edit Bookmarks", KeyEvent.VK_E, "edit-bookmarks");
+        addMenuItem(menu, "Add Bookmark", KeyEvent.VK_A, KeyEvent.VK_B,
+                    m_shortcutKeyMask, "add-bookmark");
+        addMenuItem(menu, "Edit Bookmarks...", KeyEvent.VK_E,
+                    "edit-bookmarks");
         return menu;
     }
 
@@ -828,8 +830,6 @@ public class GoGuiMenuBar
     private JMenu createMenuFile(RecentFileMenu.Callback callback)
     {
         JMenu menu = createMenu("File", KeyEvent.VK_F);
-        addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
-        menu.addSeparator();
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     m_shortcutKeyMask, "open");
         menu.add(createRecentMenu(callback));
@@ -920,6 +920,8 @@ public class GoGuiMenuBar
     private JMenu createMenuGame()
     {
         JMenu menu = createMenu("Game", KeyEvent.VK_A);
+        addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
+        menu.addSeparator();
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
         m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,

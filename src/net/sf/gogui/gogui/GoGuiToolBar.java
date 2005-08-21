@@ -23,9 +23,13 @@ public class GoGuiToolBar
     public GoGuiToolBar(ActionListener listener)
     {
         m_listener = listener;
-        m_buttonNew = addButton("filenew.png", "new-game", "New Game");
         m_buttonOpen = addButton("fileopen.png", "open", "Open");
         m_buttonSave = addButton("filesave2.png", "save", "Save");
+        addSeparator();
+        m_buttonNew = addButton("filenew.png", "new-game", "New Game");
+        m_buttonPass = addButton("pass.png", "pass", "Pass");
+        m_buttonEnter = addButton("next.png", "play", "Play");
+        m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         addSeparator();
         m_buttonBeginning = addButton("beginning.png", "beginning",
                                       "Beginning");
@@ -41,10 +45,6 @@ public class GoGuiToolBar
             addButton("down.png", "next-variation", "Next Variation");
         m_buttonPreviousVariation =
             addButton("up.png", "previous-variation", "Previous Variation");
-        addSeparator();
-        m_buttonPass = addButton("pass.png", "pass", "Pass");
-        m_buttonEnter = addButton("next.png", "play", "Play");
-        m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         setFloatable(false);
     }
 
