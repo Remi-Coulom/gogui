@@ -328,7 +328,7 @@ public class GtpAdapter
             return;
         GoPoint point
             = GtpUtils.parsePoint(cmd.getResponse().toString(), m_boardSize);
-        m_board.play(Move.create(point, color));
+        m_board.play(point, color);
     }
 
     private void cmdGGUndo(GtpCommand cmd) throws GtpError

@@ -679,7 +679,7 @@ public class GoGui
                 color = GoColor.EMPTY;
             else
                 color = toMove;
-            m_board.play(Move.create(p, color));
+            m_board.play(p, color);
             m_board.setToMove(toMove);
             updateGameInfo(true);
             m_guiBoard.updateFromGoBoard();

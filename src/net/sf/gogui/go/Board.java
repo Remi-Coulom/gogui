@@ -12,8 +12,8 @@ import java.util.ArrayList;
 /** Information necessary to undo a move. */
 class MoveRecord
 {
-    public MoveRecord(GoColor oldToMove, Move m, GoColor old, ArrayList killed,
-                      ArrayList suicide)
+    public MoveRecord(GoColor oldToMove, Move m, GoColor old,
+                      ArrayList killed, ArrayList suicide)
     {
         m_old = old;
         m_oldToMove = oldToMove;
@@ -286,7 +286,7 @@ public final class Board
     {
         if (getColor(point) != GoColor.EMPTY)
             return false;
-        play(Move.create(point, toMove));
+        play(point, toMove);
         MoveRecord moveRecord = (MoveRecord)m_moves.get(m_moveNumber - 1);
         boolean result = (moveRecord.getSuicide().size() > 0);
         undo();
@@ -305,6 +305,11 @@ public final class Board
         m_toMove = GoColor.BLACK;
         m_setupStonesBlack.clear();
         m_setupStonesWhite.clear();
+    }
+
+    public void play(GoPoint point, GoColor color)
+    {
+        play(Move.create(point, color));
     }
 
     public void play(Move m)
