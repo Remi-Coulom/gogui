@@ -49,15 +49,6 @@ Selected text in the comment is also used as a default text for
 <variablelist>
 
 <varlistentry>
-<term><guimenuitem>New Game</guimenuitem></term>
-<listitem>
-<para>
-Start a new game.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guimenuitem>Open</guimenuitem></term>
 <listitem>
 <para>
@@ -170,6 +161,109 @@ Quit GoGui.
 </section>
 
 <section>
+<title>Game Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>New Game</guimenuitem></term>
+<listitem>
+<para>
+Start a new game.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Computer Color</guisubmenu></term>
+<listitem>
+<para>
+Choose what side the Go program plays.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Play</guimenuitem></term>
+<listitem>
+<para>
+Make the computer play a move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Interrupt</guimenuitem></term>
+<listitem>
+<para>
+Interrupt the command that is currently running.
+This menu item is only active if a lengthy command (like move
+generation) is running and if the Go program supports interrupting
+(see <xref linkend="interrupt"/>).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Clock</guimenuitem></term>
+<listitem>
+<para>
+Halt or resume the clock.
+If time settings were used, the remaining time for the players
+is stored in the tree nodes and can be restored with the Restore
+item.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Pass</guimenuitem></term>
+<listitem>
+<para>
+Make a pass move.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="cleanup">
+<term><guimenuitem>Cleanup</guimenuitem></term>
+<listitem>
+<para>
+Generate cleanup moves.
+<indexterm>
+<primary>Cleanup Moves</primary>
+</indexterm>
+Cleanup moves are moves played after the game has ended with two passes
+in a row.
+They should not pass before all dead stones are captured.
+This item is only enabled, if the program supports the
+<command>kgs-genmove_cleanup</command> or <command>genmove_cleanup</command>
+command.
+It will be automatically set after two pass moves have been played.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry id="score">
+<term><guimenuitem>Score</guimenuitem></term>
+<listitem>
+<para>
+Score the current game.
+A window will be opened containing score information.
+First the Go program will be asked what stones are dead with the
+<command>final_status_list dead</command> command.
+Dead stones are marked with a cross-hair.
+If the Go program does not support this command, or you don't agree with it,
+you can change the status of stones by clicking on them.
+You leave score mode by closing the score window.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
 <title>Edit Menu</title>
 <variablelist>
 
@@ -268,81 +362,6 @@ class, similar to Perl syntax.
 <listitem>
 <para>
 Find next game node containing the last entered search pattern.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>View Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Show Cursor</guimenuitem></term>
-<listitem>
-<para>
-Show cursor on board for allowing to click on fields with the
-<keycap>Enter</keycap> key.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Grid</guimenuitem></term>
-<listitem>
-<para>
-Show grid.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Info Panel</guimenuitem></term>
-<listitem>
-<para>
-Show panel on the right side of the board containing game information.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Last Move</guimenuitem></term>
-<listitem>
-<para>
-Mark the last move with a red circle.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Toolbar</guimenuitem></term>
-<listitem>
-<para>
-Show toolbar.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Show Variations</guimenuitem></term>
-<listitem>
-<para>
-Mark the moves of all variations from this position with letters
-starting with 'A' ('+' will be used after 'Z').
-If multiple variations start with the same move, a '.' is appended.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Beep After Move</guimenuitem></term>
-<listitem>
-<para>
-Beep after each computer move.
-With most versions of Java the PC speaker is used for the beep.
 </para>
 </listitem>
 </varlistentry>
@@ -468,126 +487,6 @@ Go back to the main variation.
 <listitem>
 <para>
 Go to the start node of a certain variation.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Bookmarks Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Add Bookmark</guimenuitem></term>
-<listitem>
-<para>
-Add a new bookmark.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Edit Bookmarks</guimenuitem></term>
-<listitem>
-<para>
-Edit bookmarks.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Game Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guisubmenu>Computer Color</guisubmenu></term>
-<listitem>
-<para>
-Choose what side the Go program plays.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Play</guimenuitem></term>
-<listitem>
-<para>
-Make the computer play a move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Interrupt</guimenuitem></term>
-<listitem>
-<para>
-Interrupt the command that is currently running.
-This menu item is only active if a lengthy command (like move
-generation) is running and if the Go program supports interrupting
-(see <xref linkend="interrupt"/>).
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Clock</guimenuitem></term>
-<listitem>
-<para>
-Halt or resume the clock.
-If time settings were used, the remaining time for the players
-is stored in the tree nodes and can be restored with the Restore
-item.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Pass</guimenuitem></term>
-<listitem>
-<para>
-Make a pass move.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry id="cleanup">
-<term><guimenuitem>Cleanup</guimenuitem></term>
-<listitem>
-<para>
-Generate cleanup moves.
-<indexterm>
-<primary>Cleanup Moves</primary>
-</indexterm>
-Cleanup moves are moves played after the game has ended with two passes
-in a row.
-They should not pass before all dead stones are captured.
-This item is only enabled, if the program supports the
-<command>kgs-genmove_cleanup</command> or <command>genmove_cleanup</command>
-command.
-It will be automatically set after two pass moves have been played.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry id="score">
-<term><guimenuitem>Score</guimenuitem></term>
-<listitem>
-<para>
-Score the current game.
-A window will be opened containing score information.
-First the Go program will be asked what stones are dead with the
-<command>final_status_list dead</command> command.
-Dead stones are marked with a cross-hair.
-If the Go program does not support this command, or you don't agree with it,
-you can change the status of stones by clicking on them.
-You leave score mode by closing the score window.
 </para>
 </listitem>
 </varlistentry>
@@ -818,6 +717,107 @@ files.
 <listitem>
 <para>
 Reload configuration files defining the commands after they were edited.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Bookmarks Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Add Bookmark</guimenuitem></term>
+<listitem>
+<para>
+Add a new bookmark.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Edit Bookmarks</guimenuitem></term>
+<listitem>
+<para>
+Edit bookmarks.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
+<title>Settings Menu</title>
+<variablelist>
+
+<varlistentry>
+<term><guimenuitem>Show Toolbar</guimenuitem></term>
+<listitem>
+<para>
+Show toolbar.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Info Panel</guimenuitem></term>
+<listitem>
+<para>
+Show panel on the right side of the board containing game information.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Cursor</guimenuitem></term>
+<listitem>
+<para>
+Show cursor on board for allowing to click on fields with the
+<keycap>Enter</keycap> key.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Grid</guimenuitem></term>
+<listitem>
+<para>
+Show grid.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Last Move</guimenuitem></term>
+<listitem>
+<para>
+Mark the last move with a red circle.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Variations</guimenuitem></term>
+<listitem>
+<para>
+Mark the moves of all variations from this position with letters
+starting with 'A' ('+' will be used after 'Z').
+If multiple variations start with the same move, a '.' is appended.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Beep After Move</guimenuitem></term>
+<listitem>
+<para>
+Beep after each computer move.
+With most versions of Java the PC speaker is used for the beep.
 </para>
 </listitem>
 </varlistentry>

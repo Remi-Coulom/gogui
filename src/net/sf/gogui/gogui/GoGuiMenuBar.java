@@ -45,8 +45,6 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuFile);
         m_menuBar.add(createMenuGame());
         m_menuBar.add(createMenuEdit());
-        m_menuView = createMenuView();
-        m_menuBar.add(m_menuView);
         m_menuBar.add(createMenuGo());
         m_menuSetup = createMenuSetup();
         m_menuBar.add(m_menuSetup);
@@ -57,6 +55,8 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuAnalyze);
         m_menuBookmarks = createMenuBookMarks();
         m_menuBar.add(m_menuBookmarks);
+        m_menuSettings = createMenuSettings();
+        m_menuBar.add(m_menuSettings);
         m_menuHelp = createMenuHelp();
         m_menuBar.add(m_menuHelp);
     }
@@ -293,7 +293,7 @@ public class GoGuiMenuBar
         m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);
         m_itemHelp.setEnabled(true);
-        m_menuView.setEnabled(true);
+        m_menuSettings.setEnabled(true);
         m_itemBeepAfterMove.setEnabled(true);
         m_itemShowCursor.setEnabled(true);
         m_itemShowGrid.setEnabled(true);
@@ -533,7 +533,7 @@ public class GoGuiMenuBar
 
     private final JMenu m_menuSetup;
 
-    private final JMenu m_menuView;
+    private final JMenu m_menuSettings;
 
     private final JMenuBar m_menuBar;
 
@@ -1023,29 +1023,31 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createMenuView()
+    private JMenu createMenuSettings()
     {
-        JMenu menu = createMenu("View", KeyEvent.VK_V);
+        JMenu menu = createMenu("Settings", KeyEvent.VK_S);
+        m_itemShowToolbar = new JCheckBoxMenuItem("Show Toolbar");
+        addMenuItem(menu, m_itemShowToolbar, KeyEvent.VK_T,
+                    "show-toolbar");
+        m_itemShowInfoPanel = new JCheckBoxMenuItem("Show Info Panel");
+        addMenuItem(menu, m_itemShowInfoPanel, KeyEvent.VK_I,
+                    "show-info-panel");
+        menu.addSeparator();
         m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
         m_itemShowCursor.setSelected(true);
         addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_C, "show-cursor");
         m_itemShowGrid = new JCheckBoxMenuItem("Show Grid");
         m_itemShowGrid.setSelected(true);
         addMenuItem(menu, m_itemShowGrid, KeyEvent.VK_G, "show-grid");
-        m_itemShowInfoPanel = new JCheckBoxMenuItem("Show Info Panel");
-        addMenuItem(menu, m_itemShowInfoPanel, KeyEvent.VK_I,
-                    "show-info-panel");
         m_itemShowLastMove = new JCheckBoxMenuItem("Show Last Move");
         m_itemShowLastMove.setSelected(true);
         addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
                     "show-last-move");
-        m_itemShowToolbar = new JCheckBoxMenuItem("Show Toolbar");
-        addMenuItem(menu, m_itemShowToolbar, KeyEvent.VK_T,
-                    "show-toolbar");
         m_itemShowVariations = new JCheckBoxMenuItem("Show Variations");
         m_itemShowVariations.setSelected(true);
         addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,
                     "show-variations");
+        menu.addSeparator();
         m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
         addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
                     "beep-after-move");
