@@ -17,6 +17,11 @@ import java.util.ArrayList;
 */
 public final class Move
 {
+    public static Move create(int x, int y, GoColor color)
+    {
+        return create(GoPoint.create(x, y), color);
+    }
+
     public static Move create(GoPoint point, GoColor color)
     {
         if (point == null)

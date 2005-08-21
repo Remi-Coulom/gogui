@@ -68,11 +68,12 @@ public class NodeUtilsTest
     public void testGetChildWithMove()
     {
         assertTrue(NodeUtils.getChildWithMove(m_node7,
-                                              createMove(0, 0, GoColor.BLACK))
+                                              Move.create(0, 0,
+                                                          GoColor.BLACK))
                    == m_node8);
         assertNull(NodeUtils.getChildWithMove(m_node7,
-                                              createMove(2, 3,
-                                                         GoColor.BLACK)));
+                                              Move.create(2, 3,
+                                                          GoColor.BLACK)));
     }
 
     public void testGetDepth()
@@ -128,23 +129,23 @@ public class NodeUtilsTest
         m_node0 = new Node();
         m_node1 = new Node();
         m_node0.append(m_node1);
-        m_node2 = new Node(createMove(2, 2, GoColor.BLACK));
+        m_node2 = new Node(Move.create(2, 2, GoColor.BLACK));
         m_node1.append(m_node2);
-        m_node3 = new Node(createMove(5, 3, GoColor.WHITE));
+        m_node3 = new Node(Move.create(5, 3, GoColor.WHITE));
         m_node2.append(m_node3);
         m_node4 = new Node();
         m_node3.append(m_node4);
-        m_node5 = new Node(createMove(6, 3, GoColor.BLACK));
+        m_node5 = new Node(Move.create(6, 3, GoColor.BLACK));
         m_node4.append(m_node5);
         m_node6 = new Node();
         m_node5.append(m_node6);
         m_node7 = new Node();
         m_node1.append(m_node7);
-        m_node8 = new Node(createMove(0, 0, GoColor.BLACK));
+        m_node8 = new Node(Move.create(0, 0, GoColor.BLACK));
         m_node7.append(m_node8);
-        m_node9 = new Node(createMove(0, 0, GoColor.BLACK));
+        m_node9 = new Node(Move.create(0, 0, GoColor.BLACK));
         m_node7.append(m_node9);
-        m_node10 = new Node(createMove(0, 1, GoColor.WHITE));
+        m_node10 = new Node(Move.create(0, 1, GoColor.WHITE));
         m_node7.append(m_node10);
         m_node11 = new Node(Move.create(null, GoColor.BLACK));
         m_node7.append(m_node11);
@@ -173,11 +174,6 @@ public class NodeUtilsTest
     private Node m_node10;
 
     private Node m_node11;
-
-    private static Move createMove(int x, int y, GoColor color)
-    {
-        return Move.create(GoPoint.create(x, y), color);
-    }
 }
 
 //----------------------------------------------------------------------------
