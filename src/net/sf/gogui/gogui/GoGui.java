@@ -651,6 +651,13 @@ public class GoGui
 
     public void contextMenu(GoPoint point, GuiField field)
     {
+        if (isCommandInProgress())
+            return;
+        if (m_setupMode)
+        {
+            fieldClicked(point, true);
+            return;
+        }
         ContextMenu contextMenu = createContextMenu(point);
         int x = field.getWidth() / 2;
         int y = field.getHeight() / 2;
