@@ -65,7 +65,6 @@ New analyze command types eplist (editable point lists) and gfx (graphics).
 <simpara>
 New board context menu for quickly running analyze commands that need
 one point and optionally one color argument.
-argument
 </simpara>
 </listitem>
 <listitem>
