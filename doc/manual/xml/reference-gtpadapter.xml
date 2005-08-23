@@ -21,6 +21,7 @@ Go Text Protocol adapter for logging or protocol translations.
 <arg><option>-fillpasses</option></arg>
 <arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
+<arg><option>-lowercase</option></arg>
 <arg><option>-name</option> <replaceable>name</replaceable></arg>
 <arg><option>-noscore</option></arg>
 <arg><option>-resign</option> <replaceable>score</replaceable></arg>
@@ -87,6 +88,16 @@ Emulate the command <command>loadsgf</command> by
 </varlistentry>
 
 <varlistentry>
+<term><option>-fillpasses</option></term>
+<listitem>
+<para>
+Fill non-alternating moves with pass moves (for programs that
+can only handle move sequences with alternating color).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <option>-gtpfile</option> <replaceable>file</replaceable>
 </term>
@@ -107,16 +118,6 @@ Display help and exit.
 </varlistentry>
 
 <varlistentry>
-<term><option>-fillpasses</option></term>
-<listitem>
-<para>
-Fill non-alternating moves with pass moves (for programs that
-can only handle move sequences with alternating color).
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term>
 <option>-log</option> <replaceable>file</replaceable>
 </term>
@@ -125,6 +126,17 @@ can only handle move sequences with alternating color).
 Log the GTP stream to a file
 (the stream of the adapter program,
 not the one from the adapter to the Go program).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-lowercase</option></term>
+<listitem>
+<para>
+Translate move commands to lower-case.
+The GTP standards requires case-insensitive parsing of moves,
+but some programs can handle only lower-case.
 </para>
 </listitem>
 </varlistentry>

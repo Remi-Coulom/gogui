@@ -32,6 +32,7 @@ public final class Main
                 "gtpfile:",
                 "help",
                 "log:",
+                "lowercase",
                 "noscore",
                 "name:",
                 "resign:",
@@ -88,6 +89,8 @@ public final class Main
                 adapter.setFillPasses();
             if (resign)
                 adapter.setResign(resignScore);
+            if (opt.isSet("lowercase"))
+                adapter.setLowerCase();
             if (opt.isSet("size"))
             {
                 int size = opt.getInteger("size", 0, 1, GoPoint.MAXSIZE);
@@ -122,6 +125,7 @@ public final class Main
             "-gtpfile      file with GTP commands to send at startup\n" +
             "-help         print help and exit\n" +
             "-log file     log GTP stream to file\n" +
+            "-lowercase    translate move commands to lowercase\n" +
             "-noscore      hide score commands\n" +
             "-resign score resign if estimated score is below threshold\n" +
             "-size         accept only this board size\n" +

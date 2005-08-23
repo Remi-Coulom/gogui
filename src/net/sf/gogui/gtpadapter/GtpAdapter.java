@@ -170,6 +170,14 @@ public class GtpAdapter
         m_board = new Board(m_boardSize);
     }
 
+    /** Translate move commands to lower case.
+        Should be set before handling any commands.
+    */
+    public void setLowerCase()
+    {
+        m_lowerCase = true;
+    }
+
     /** Set response for name command.
         Should be set before handling any commands.
     */
@@ -208,6 +216,8 @@ public class GtpAdapter
     private boolean m_emuLoadsgf;
 
     private boolean m_fillPasses;
+
+    private boolean m_lowerCase;
 
     private boolean m_noScore;
 
@@ -609,6 +619,8 @@ public class GtpAdapter
         fillPass(color);
         Move move = Move.create(point, color);
         String command = m_gtp.getCommandPlay(move);
+        if (m_lowerCase)
+            command = command.toLowerCase();
         send(command);
         m_board.play(move);
     }

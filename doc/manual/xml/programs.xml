@@ -66,10 +66,18 @@ Command: <userinput>Aya.exe --mode gtp</userinput>
 http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html</ulink>
 </para>
 <para>
+<note>
+<para>
+The 2004 version of INDIGO does not handle uppercase pass moves.
+You can use GtpAdapter to translate moves to lowercase.
+</para>
+</note>
+</para>
+<para>
 Operating systems: Linux, Windows
 </para>
 <para>
-Command: <userinput>Indigo2004-Linux.exe -gtp</userinput>
+Command: <userinput>gtpadapter -lowercase &quot;Indigo2004-Linux.exe -gtp&quot;</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
