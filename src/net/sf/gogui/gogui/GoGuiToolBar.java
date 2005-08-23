@@ -27,8 +27,9 @@ public class GoGuiToolBar
         m_buttonSave = addButton("filesave2.png", "save", "Save");
         addSeparator();
         m_buttonNew = addButton("filenew.png", "new-game", "New Game");
-        m_buttonPass = addButton("pass.png", "pass", "Pass");
+        addSeparator();
         m_buttonEnter = addButton("next.png", "play", "Play");
+        m_buttonPass = addButton("pass.png", "pass", "Pass");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         addSeparator();
         m_buttonBeginning = addButton("beginning.png", "beginning",
@@ -41,6 +42,7 @@ public class GoGuiToolBar
         m_buttonForward10 = addButton("forward10.png", "forward-10",
                                       "Forward 10");
         m_buttonEnd = addButton("end.png", "end", "End");
+        addSeparator();
         m_buttonNextVariation =
             addButton("down.png", "next-variation", "Next Variation");
         m_buttonPreviousVariation =

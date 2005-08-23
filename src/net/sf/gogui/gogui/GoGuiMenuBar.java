@@ -912,6 +912,30 @@ public class GoGuiMenuBar
         return menu;
     }
 
+    private JMenu createMenuGame()
+    {
+        JMenu menu = createMenu("Game", KeyEvent.VK_A);
+        addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
+        menu.addSeparator();
+        m_menuComputerColor = createComputerColorMenu();
+        menu.add(m_menuComputerColor);
+        m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,
+                                         KeyEvent.VK_F5,
+                                         getFunctionKeyShortcut(), "play");
+        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
+                    getFunctionKeyShortcut(), "pass");
+        m_itemInterrupt =
+            addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
+                        0, "interrupt");
+        menu.add(createClockMenu());
+        menu.addSeparator();
+        m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
+        m_itemCleanup.setMnemonic(KeyEvent.VK_C);
+        menu.add(m_itemCleanup);
+        addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
+        return menu;
+    }
+
     private JMenu createMenuGo()
     {
         int shiftMask = java.awt.event.InputEvent.SHIFT_MASK;
@@ -976,30 +1000,6 @@ public class GoGuiMenuBar
                                           "about");
         m_itemHelp = itemHelp;
         m_itemAbout = itemAbout;
-        return menu;
-    }
-
-    private JMenu createMenuGame()
-    {
-        JMenu menu = createMenu("Game", KeyEvent.VK_A);
-        addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
-        menu.addSeparator();
-        m_menuComputerColor = createComputerColorMenu();
-        menu.add(m_menuComputerColor);
-        m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,
-                                         KeyEvent.VK_F5,
-                                         getFunctionKeyShortcut(), "play");
-        m_itemInterrupt =
-            addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
-                        0, "interrupt");
-        menu.add(createClockMenu());
-        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
-                    getFunctionKeyShortcut(), "pass");
-        menu.addSeparator();
-        m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
-        m_itemCleanup.setMnemonic(KeyEvent.VK_C);
-        menu.add(m_itemCleanup);
-        addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
         return menu;
     }
 
