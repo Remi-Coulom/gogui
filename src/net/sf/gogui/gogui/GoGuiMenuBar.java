@@ -46,13 +46,8 @@ public class GoGuiMenuBar
         m_menuBar.add(createMenuGame());
         m_menuBar.add(createMenuEdit());
         m_menuBar.add(createMenuGo());
-        m_menuSetup = createMenuSetup();
-        m_menuBar.add(m_menuSetup);
-        m_menuBar.add(createMenuTree());
         m_menuShell = createMenuShell(recentGtpCallback);
         m_menuBar.add(m_menuShell);
-        m_menuAnalyze = createMenuAnalyze();
-        m_menuBar.add(m_menuAnalyze);
         m_menuBookmarks = createMenuBookMarks();
         m_menuBar.add(m_menuBookmarks);
         m_menuSettings = createMenuSettings();
@@ -250,7 +245,8 @@ public class GoGuiMenuBar
         m_itemBeepAfterMove.setEnabled(enabled);
         m_itemDetachProgram.setEnabled(enabled);
         enableAll(m_menuShell, enabled);
-        enableAll(m_menuAnalyze, enabled);
+        m_itemShowAnalyze.setEnabled(enabled);
+        m_itemShowShell.setEnabled(enabled);
         if (! enabled)
             enableCleanup(false);
     }
@@ -287,7 +283,7 @@ public class GoGuiMenuBar
         disableAll();
         m_menuFile.setEnabled(true);
         m_itemDetachProgram.setEnabled(true);
-        m_itemExit.setEnabled(true);
+        m_itemQuit.setEnabled(true);
         m_itemInterrupt.setEnabled(true);
         m_menuComputerColor.setEnabled(true);
         m_menuHelp.setEnabled(true);
@@ -301,9 +297,8 @@ public class GoGuiMenuBar
         m_itemShowLastMove.setEnabled(true);
         m_itemShowToolbar.setEnabled(true);
         m_itemShowVariations.setEnabled(true);
-        m_menuAnalyze.setEnabled(true);
-        m_menuShell.setEnabled(true);
-        m_itemGtpShell.setEnabled(true);
+        m_itemShowAnalyze.setEnabled(true);
+        m_itemShowShell.setEnabled(true);
         m_itemSaveLog.setEnabled(true);
         m_itemSaveCommands.setEnabled(true);
         m_itemHighlight.setEnabled(true);
@@ -385,30 +380,21 @@ public class GoGuiMenuBar
     public void setSetupMode()
     {
         disableAll();
-        m_menuSetup.setEnabled(true);
         m_itemSetup.setEnabled(true);
         m_itemSetupBlack.setEnabled(true);
         m_itemSetupWhite.setEnabled(true);
         m_itemSetupBlack.setSelected(true);
-        m_menuFile.setEnabled(true);
-        m_menuAnalyze.setEnabled(true);
-        m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);
-        m_itemExit.setEnabled(true);
-        m_itemGtpShell.setEnabled(true);
+        m_itemQuit.setEnabled(true);
         m_itemHelp.setEnabled(true);
     }
 
     public void setScoreMode()
     {
         disableAll();
-        m_menuFile.setEnabled(true);
-        m_menuAnalyze.setEnabled(true);
-        m_menuHelp.setEnabled(true);
-        m_itemAbout.setEnabled(true);
-        m_itemExit.setEnabled(true);
-        m_itemGtpShell.setEnabled(true);
         m_itemHelp.setEnabled(true);
+        m_itemAbout.setEnabled(true);
+        m_itemQuit.setEnabled(true);
     }
 
     public void setShowCursor(boolean enable)
@@ -519,7 +505,9 @@ public class GoGuiMenuBar
 
     private JCheckBoxMenuItem m_itemTimeStamp;
 
-    private final JMenu m_menuAnalyze;
+    private JMenu m_menuConfigureAnalyze;
+
+    private JMenu m_menuConfigureShell;
 
     private JMenu m_menuComputerColor;
 
@@ -530,8 +518,6 @@ public class GoGuiMenuBar
     private final JMenu m_menuHelp;
 
     private final JMenu m_menuShell;
-
-    private final JMenu m_menuSetup;
 
     private final JMenu m_menuSettings;
 
@@ -575,8 +561,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemEnd;
 
-    private JMenuItem m_itemExit;
-
     private JMenuItem m_itemFindNext;
 
     private JMenuItem m_itemForward;
@@ -601,7 +585,9 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemGotoVar;
 
-    private JMenuItem m_itemGtpShell;
+    private JMenuItem m_itemShowAnalyze;
+
+    private JMenuItem m_itemShowShell;
 
     private JMenuItem m_itemHelp;
 
@@ -620,6 +606,8 @@ public class GoGuiMenuBar
     private JMenuItem m_itemPreviousVariation;
 
     private JMenuItem m_itemPreviousEarlierBackward;
+
+    private JMenuItem m_itemQuit;
 
     private JMenuItem m_itemSetupBlack;
 
@@ -766,12 +754,19 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createMenuAnalyze()
+    private JMenu createMenuBookMarks()
     {
-        JMenu menu = createMenu("Analyze", KeyEvent.VK_N);
-        addMenuItem(menu, "Show Analyze", KeyEvent.VK_S, KeyEvent.VK_F9,
-                    getFunctionKeyShortcut(), "analyze");
-        menu.addSeparator();
+        JMenu menu = createMenu("Bookmarks", KeyEvent.VK_B);
+        addMenuItem(menu, "Add Bookmark", KeyEvent.VK_A, KeyEvent.VK_B,
+                    m_shortcutKeyMask, "add-bookmark");
+        addMenuItem(menu, "Edit Bookmarks...", KeyEvent.VK_E,
+                    "edit-bookmarks");
+        return menu;
+    }
+
+    private JMenu createMenuConfigureAnalyze()
+    {
+        JMenu menu = new JMenu("Configure Analyze");
         m_itemAnalyzeOnlySupported =
             new JCheckBoxMenuItem("Only Supported Commands");
         addMenuItem(menu, m_itemAnalyzeOnlySupported, KeyEvent.VK_O,
@@ -784,13 +779,71 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createMenuBookMarks()
+    private JMenu createMenuConfigureBoard()
     {
-        JMenu menu = createMenu("Bookmarks", KeyEvent.VK_B);
-        addMenuItem(menu, "Add Bookmark", KeyEvent.VK_A, KeyEvent.VK_B,
-                    m_shortcutKeyMask, "add-bookmark");
-        addMenuItem(menu, "Edit Bookmarks...", KeyEvent.VK_E,
-                    "edit-bookmarks");
+        JMenu menu = new JMenu("Configure Board");
+        m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
+        m_itemShowCursor.setSelected(true);
+        addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_C,
+                    "show-cursor");
+        m_itemShowGrid = new JCheckBoxMenuItem("Show Grid");
+        m_itemShowGrid.setSelected(true);
+        addMenuItem(menu, m_itemShowGrid, KeyEvent.VK_G, "show-grid");
+        m_itemShowLastMove = new JCheckBoxMenuItem("Show Last Move");
+        m_itemShowLastMove.setSelected(true);
+        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
+                    "show-last-move");
+        m_itemShowVariations = new JCheckBoxMenuItem("Show Variations");
+        m_itemShowVariations.setSelected(true);
+        addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,
+                    "show-variations");
+        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
+        addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
+                    "beep-after-move");
+        return menu;
+    }
+
+    private JMenu createMenuConfigureShell()
+    {
+        JMenu menu = new JMenu("Configure Shell");
+        m_itemHighlight = new JCheckBoxMenuItem("Highlight");
+        addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
+        m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
+        addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_P,
+                    "command-completion");
+        m_itemAutoNumber = new JCheckBoxMenuItem("Auto Number");
+        addMenuItem(menu, m_itemAutoNumber, KeyEvent.VK_A, "auto-number");
+        m_itemTimeStamp = new JCheckBoxMenuItem("Timestamp");
+        addMenuItem(menu, m_itemTimeStamp, KeyEvent.VK_T, "timestamp");
+        return menu;
+    }
+
+    private JMenu createMenuConfigureTree()
+    {
+        JMenu menu = new JMenu("Configure Tree");
+        JMenu menuLabel = createMenu("Labels", KeyEvent.VK_L);
+        ButtonGroup group = new ButtonGroup();
+        m_itemGameTreeNumber
+            = addRadioItem(menuLabel, group, "Move Number",
+                           KeyEvent.VK_N, "gametree-number");
+        m_itemGameTreeMove
+            = addRadioItem(menuLabel, group, "Move", KeyEvent.VK_M,
+                           "gametree-move");
+        m_itemGameTreeNone
+            = addRadioItem(menuLabel, group, "None", KeyEvent.VK_O,
+                           "gametree-none");
+        menu.add(menuLabel);
+        JMenu menuSize = createMenu("Size", KeyEvent.VK_S);
+        group = new ButtonGroup();
+        m_itemGameTreeLarge = addRadioItem(menuSize, group, "Large",
+                                        KeyEvent.VK_L, "gametree-large");
+        m_itemGameTreeNormal = addRadioItem(menuSize, group, "Normal",
+                                        KeyEvent.VK_N, "gametree-normal");
+        m_itemGameTreeSmall = addRadioItem(menuSize, group, "Small",
+                                        KeyEvent.VK_S, "gametree-small");
+        m_itemGameTreeTiny = addRadioItem(menuSize, group, "Tiny",
+                                      KeyEvent.VK_T, "gametree-tiny");
+        menu.add(menuSize);
         return menu;
     }
 
@@ -824,6 +877,15 @@ public class GoGuiMenuBar
                                      KeyEvent.VK_F3, getFunctionKeyShortcut(),
                                      "find-next");
         m_itemFindNext.setEnabled(false);
+        menu.addSeparator();
+        m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
+        addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
+        ButtonGroup group = new ButtonGroup();
+        m_itemSetupBlack = addRadioItem(menu, group, "Setup Black",
+                                        KeyEvent.VK_B, "setup-black");
+        m_itemSetupBlack.setSelected(true);
+        m_itemSetupWhite = addRadioItem(menu, group, "Setup White",
+                                        KeyEvent.VK_W, "setup-white");
         return menu;
     }
 
@@ -845,7 +907,7 @@ public class GoGuiMenuBar
         m_itemDetachProgram = addMenuItem(menu, "Detach Program",
                                           KeyEvent.VK_D, "detach-program");
         menu.addSeparator();
-        m_itemExit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
+        m_itemQuit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
                                  m_shortcutKeyMask, "exit");
         return menu;
     }
@@ -941,33 +1003,15 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createMenuSetup()
-    {
-        JMenu menu = createMenu("Setup", KeyEvent.VK_S);
-        m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
-        addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
-        menu.addSeparator();
-        ButtonGroup group = new ButtonGroup();
-        m_itemSetupBlack =
-            addRadioItem(menu, group, "Black", KeyEvent.VK_B, "setup-black");
-        m_itemSetupBlack.setSelected(true);
-        m_itemSetupWhite =
-            addRadioItem(menu, group, "White", KeyEvent.VK_W, "setup-white");
-        return menu;
-    }
-
     private JMenu createMenuShell(RecentFileMenu.Callback callback)
     {
         JMenu menu = createMenu("Shell", KeyEvent.VK_L);
-        m_itemGtpShell = addMenuItem(menu, "Show Shell", KeyEvent.VK_S,
-                                     KeyEvent.VK_F8, getFunctionKeyShortcut(),
-                                     "gtp-shell");
-        menu.addSeparator();
         m_itemSaveLog = addMenuItem(menu, "Save Log...", KeyEvent.VK_L,
                                     "gtpshell-save");
         m_itemSaveCommands = addMenuItem(menu, "Save Commands...",
                                          KeyEvent.VK_C,
                                          "gtpshell-save-commands");
+        menu.addSeparator();
         addMenuItem(menu, "Send File...", KeyEvent.VK_F,
                     "gtpshell-send-file");
         String home = System.getProperty("user.home");
@@ -975,51 +1019,6 @@ public class GoGuiMenuBar
         m_recentGtp = new RecentFileMenu("Send Recent", file, callback);
         m_recentGtp.getMenu().setMnemonic(KeyEvent.VK_R);
         menu.add(m_recentGtp.getMenu());
-        menu.addSeparator();
-        m_itemHighlight = new JCheckBoxMenuItem("Highlight");
-        addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
-        m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
-        addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_P,
-                    "command-completion");
-        m_itemAutoNumber = new JCheckBoxMenuItem("Auto Number");
-        addMenuItem(menu, m_itemAutoNumber, KeyEvent.VK_A, "auto-number");
-        m_itemTimeStamp = new JCheckBoxMenuItem("Timestamp");
-        addMenuItem(menu, m_itemTimeStamp, KeyEvent.VK_T, "timestamp");
-        return menu;
-    }
-
-    private JMenu createMenuTree()
-    {
-        JMenu menu = createMenu("Tree", KeyEvent.VK_T);
-        addMenuItem(menu, "Show Tree", KeyEvent.VK_S, KeyEvent.VK_F7,
-                    getFunctionKeyShortcut(), "show-gametree");
-        menu.addSeparator();
-        JMenu menuLabel = createMenu("Labels", KeyEvent.VK_L);
-        ButtonGroup group = new ButtonGroup();
-        m_itemGameTreeNumber
-            = addRadioItem(menuLabel, group, "Move Number",
-                           KeyEvent.VK_N, "gametree-number");
-        m_itemGameTreeMove
-            = addRadioItem(menuLabel, group, "Move", KeyEvent.VK_M,
-                           "gametree-move");
-        m_itemGameTreeNone
-            = addRadioItem(menuLabel, group, "None", KeyEvent.VK_O,
-                           "gametree-none");
-        menu.add(menuLabel);
-        JMenu menuSize = createMenu("Size", KeyEvent.VK_S);
-        group = new ButtonGroup();
-        m_itemGameTreeLarge = addRadioItem(menuSize, group, "Large",
-                                        KeyEvent.VK_L, "gametree-large");
-        m_itemGameTreeNormal = addRadioItem(menuSize, group, "Normal",
-                                        KeyEvent.VK_N, "gametree-normal");
-        m_itemGameTreeSmall = addRadioItem(menuSize, group, "Small",
-                                        KeyEvent.VK_S, "gametree-small");
-        m_itemGameTreeTiny = addRadioItem(menuSize, group, "Tiny",
-                                      KeyEvent.VK_T, "gametree-tiny");
-        menu.add(menuSize);
-        menu.addSeparator();
-        addMenuItem(menu, "Scroll To Current", KeyEvent.VK_C,
-                    "gametree-scroll");
         return menu;
     }
 
@@ -1033,24 +1032,21 @@ public class GoGuiMenuBar
         addMenuItem(menu, m_itemShowInfoPanel, KeyEvent.VK_I,
                     "show-info-panel");
         menu.addSeparator();
-        m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
-        m_itemShowCursor.setSelected(true);
-        addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_C, "show-cursor");
-        m_itemShowGrid = new JCheckBoxMenuItem("Show Grid");
-        m_itemShowGrid.setSelected(true);
-        addMenuItem(menu, m_itemShowGrid, KeyEvent.VK_G, "show-grid");
-        m_itemShowLastMove = new JCheckBoxMenuItem("Show Last Move");
-        m_itemShowLastMove.setSelected(true);
-        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
-                    "show-last-move");
-        m_itemShowVariations = new JCheckBoxMenuItem("Show Variations");
-        m_itemShowVariations.setSelected(true);
-        addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,
-                    "show-variations");
+        addMenuItem(menu, "Show Tree", KeyEvent.VK_S, KeyEvent.VK_F7,
+                    getFunctionKeyShortcut(), "show-gametree");
+        m_itemShowShell
+            = addMenuItem(menu, "Show Shell", KeyEvent.VK_S, KeyEvent.VK_F8,
+                          getFunctionKeyShortcut(), "gtp-shell");
+        m_itemShowAnalyze
+            = addMenuItem(menu, "Show Analyze", KeyEvent.VK_S, KeyEvent.VK_F9,
+                          getFunctionKeyShortcut(), "analyze");
         menu.addSeparator();
-        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
-        addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
-                    "beep-after-move");
+        menu.add(createMenuConfigureBoard());
+        menu.add(createMenuConfigureTree());
+        m_menuConfigureShell = createMenuConfigureShell();
+        menu.add(m_menuConfigureShell);
+        m_menuConfigureAnalyze = createMenuConfigureAnalyze();
+        menu.add(m_menuConfigureAnalyze);
         return menu;
     }
 

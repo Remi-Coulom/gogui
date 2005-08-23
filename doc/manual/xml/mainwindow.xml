@@ -366,6 +366,49 @@ Find next game node containing the last entered search pattern.
 </listitem>
 </varlistentry>
 
+<varlistentry id="setupmode">
+<term><guimenuitem>Setup Mode</guimenuitem></term>
+<listitem>
+<para>
+Enter or leave setup mode.
+In setup mode you can place or remove stones of the current color.
+The current color can be changed with the <guimenuitem>Black</guimenuitem>
+and <guimenuitem>White</guimenuitem> menu item from the
+<guimenu>Setup</guimenu> menu.
+It is also possible to place stones of the other than current color,
+without switching the color, by pressing a modifier key while placing a stone
+(Ctrl, Alt or Meta).
+<note>
+<simpara>
+Setting up a position is not reversible.
+After leaving setup mode, you are in a new game starting with the current
+position and the current color to move.
+</simpara>
+</note>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Setup Black</guimenuitem></term>
+<listitem>
+<para>
+Set the current color for setting up stones and the color to move
+to Black.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Setup White</guimenuitem></term>
+<listitem>
+<para>
+Set the current color for setting up stones and the color to move
+to White.
+</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -496,112 +539,8 @@ Go to the start node of a certain variation.
 </section>
 
 <section>
-<title>Setup Menu</title>
-<variablelist>
-
-<varlistentry id="setupmode">
-<term><guimenuitem>Setup Mode</guimenuitem></term>
-<listitem>
-<para>
-Enter or leave setup mode.
-In setup mode you can place or remove stones of the current color.
-The current color can be changed with the <guimenuitem>Black</guimenuitem>
-and <guimenuitem>White</guimenuitem> menu item from the
-<guimenu>Setup</guimenu> menu.
-It is also possible to place stones of the other than current color,
-without switching the color, by pressing a modifier key while placing a stone
-(Ctrl, Alt or Meta).
-<note>
-<simpara>
-Setting up a position is not reversible.
-After leaving setup mode, you are in a new game starting with the current
-position and the current color to move.
-</simpara>
-</note>
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Black</guimenuitem></term>
-<listitem>
-<para>
-Set the current color for setting up stones and the color to move
-to Black.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>White</guimenuitem></term>
-<listitem>
-<para>
-Set the current color for setting up stones and the color to move
-to White.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Tree Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Show Tree</guimenuitem></term>
-<listitem>
-<para>
-Show the game tree window or bring it to front if already open.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Labels</guimenuitem></term>
-<listitem>
-<para>
-Configure the labels on the tree nodes.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Size</guimenuitem></term>
-<listitem>
-<para>
-Configure the size of the tree nodes.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Scroll to Current</guimenuitem></term>
-<listitem>
-<para>
-Scroll tree window so that current node is visible.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
 <title>Shell Menu</title>
 <variablelist>
-
-<varlistentry>
-<term><guimenuitem>Show Shell</guimenuitem></term>
-<listitem>
-<para>
-Show the GTP shell window or bring it to front if already open.
-</para>
-</listitem>
-</varlistentry>
 
 <varlistentry>
 <term><guimenuitem>Save Log</guimenuitem></term>
@@ -635,88 +574,6 @@ Send GTP commands from a file to the engine.
 <listitem>
 <para>
 Send GTP commands from a recently opened file to the engine.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Highlight</guimenuitem></term>
-<listitem>
-<para>
-Use syntax highlighting in the GTP shell window.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Popup Completions</guimenuitem></term>
-<listitem>
-<para>
-Popup a window with command completions while entering a command.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Auto Number</guimenuitem></term>
-<listitem>
-<para>
-Automatically number commands.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Timestamp</guimenuitem></term>
-<listitem>
-<para>
-Prepend each sent or received line with a time stamp.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Analyze Menu</title>
-<variablelist>
-
-<varlistentry>
-<term><guimenuitem>Show Analyze</guimenuitem></term>
-<listitem>
-<para>
-Show the Analyze window or bring it to front if already open.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Only Supported Commands</guimenuitem></term>
-<listitem>
-<para>
-Only show commands supported by the current Go engine.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Sort Alphabetically</guimenuitem></term>
-<listitem>
-<para>
-Sort command labels alphabetically.
-Otherwise the analyze command list has the same order as in the configuration
-files.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Reload Configuration</guimenuitem></term>
-<listitem>
-<para>
-Reload configuration files defining the commands after they were edited.
 </para>
 </listitem>
 </varlistentry>
@@ -774,17 +631,44 @@ Show panel on the right side of the board containing game information.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Show Cursor</guimenuitem></term>
+<term><guimenuitem>Show Tree</guimenuitem></term>
 <listitem>
 <para>
-Show cursor on board for allowing to click on fields with the
-<keycap>Enter</keycap> key.
+Show the game tree window or bring it to front if already open.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Show Grid</guimenuitem></term>
+<term><guimenuitem>Show Shell</guimenuitem></term>
+<listitem>
+<para>
+Show the GTP shell window or bring it to front if already open.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Analyze</guimenuitem></term>
+<listitem>
+<para>
+Show the Analyze window or bring it to front if already open.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Show Cursor</guimenuitem></term>
+<listitem>
+<para>
+Show cursor on board for keyboard navigation.
+Fields can be selected on with the <keycap>Enter</keycap> key.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Show Grid</guimenuitem></term>
 <listitem>
 <para>
 Show grid.
@@ -793,7 +677,7 @@ Show grid.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Show Last Move</guimenuitem></term>
+<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Show Last Move</guimenuitem></term>
 <listitem>
 <para>
 Mark the last move with a red circle.
@@ -802,7 +686,7 @@ Mark the last move with a red circle.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Show Variations</guimenuitem></term>
+<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Show Variations</guimenuitem></term>
 <listitem>
 <para>
 Mark the moves of all variations from this position with letters
@@ -813,11 +697,95 @@ If multiple variations start with the same move, a '.' is appended.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Beep After Move</guimenuitem></term>
+<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Beep After Move</guimenuitem></term>
 <listitem>
 <para>
 Beep after each computer move.
 With most versions of Java the PC speaker is used for the beep.
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guisubmenu>Configure Tree</guisubmenu> / <guimenuitem>Labels</guimenuitem></term>
+<listitem>
+<para>
+Configure the labels on the tree nodes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Tree</guisubmenu> / <guimenuitem>Size</guimenuitem></term>
+<listitem>
+<para>
+Configure the size of the tree nodes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Highlight</guimenuitem></term>
+<listitem>
+<para>
+Use syntax highlighting in the GTP shell window.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Popup Completions</guimenuitem></term>
+<listitem>
+<para>
+Popup a window with command completions while entering a command.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Auto Number</guimenuitem></term>
+<listitem>
+<para>
+Automatically number commands.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Timestamp</guimenuitem></term>
+<listitem>
+<para>
+Prepend each sent or received line with a time stamp.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Analyze</guisubmenu> / <guimenuitem>Only Supported Commands</guimenuitem></term>
+<listitem>
+<para>
+Only show commands supported by the current Go engine.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Analyze</guisubmenu> / <guimenuitem>Sort Alphabetically</guimenuitem></term>
+<listitem>
+<para>
+Sort command labels alphabetically.
+Otherwise the analyze command list has the same order as in the configuration
+files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Configure Analyze</guisubmenu> / <guimenuitem>Reload Configuration</guimenuitem></term>
+<listitem>
+<para>
+Reload configuration files defining the commands after they were edited.
 </para>
 </listitem>
 </varlistentry>

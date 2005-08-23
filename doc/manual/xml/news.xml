@@ -10,6 +10,18 @@
 <revdescription>
 <itemizedlist>
 <listitem>
+<para>
+GoGui:
+<itemizedlist>
+<listitem>
+<simpara>
+More reorganization of the menu bar
+</simpara>
+</listitem>
+</itemizedlist>
+</para>
+</listitem>
+<listitem>
 <simpara>
 GtpStatistics: fix some bugs
 </simpara>
