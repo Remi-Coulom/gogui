@@ -889,15 +889,30 @@ public class GoGuiMenuBar
         return menu;
     }
 
+    private JMenu createMenuExport()
+    {
+        JMenu menu = new JMenu("Export");
+        menu.setMnemonic(KeyEvent.VK_E);
+        addMenuItem(menu, "SGF Position...", KeyEvent.VK_S,
+                    "export-sgf-position");        
+        addMenuItem(menu, "LaTeX Main Variation...", KeyEvent.VK_L,
+                    "export-latex");        
+        addMenuItem(menu, "LaTeX Position...", KeyEvent.VK_P,
+                    "export-latex-position");
+        return menu;
+    }
+
     private JMenu createMenuFile(RecentFileMenu.Callback callback)
     {
         JMenu menu = createMenu("File", KeyEvent.VK_F);
         addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
                     m_shortcutKeyMask, "open");
         menu.add(createRecentMenu(callback));
-        addMenuItem(menu, "Save...", KeyEvent.VK_S, KeyEvent.VK_S,
+        addMenuItem(menu, "Save", KeyEvent.VK_S, KeyEvent.VK_S,
                     m_shortcutKeyMask, "save");
-        addMenuItem(menu, "Save Position...", KeyEvent.VK_T, "save-position");
+        addMenuItem(menu, "Save As...", KeyEvent.VK_A, "save-as");
+        menu.addSeparator();
+        menu.add(createMenuExport());
         menu.addSeparator();
         addMenuItem(menu, "Print...", KeyEvent.VK_P, KeyEvent.VK_P,
                     m_shortcutKeyMask, "print");

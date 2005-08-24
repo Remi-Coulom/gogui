@@ -90,6 +90,17 @@ Open a game from a list of recently used files.
 <term><guimenuitem>Save</guimenuitem></term>
 <listitem>
 <para>
+Save the current game to the associated filename.
+If the game has no filename, this menu item acts like
+<guimenuitem>Save As</guimenuitem>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Save As</guimenuitem></term>
+<listitem>
+<para>
 Save the current game to a file.
 If the file name ending is <filename>sgf</filename>, the game is saved
 in SGF format.
@@ -102,18 +113,36 @@ PSGO</ulink> style.
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Save Position</guimenuitem></term>
+<term><guisubmenu>Export</guisubmenu> / <guimenuitem>SGF Position</guimenuitem></term>
 <listitem>
 <para>
-Save the current position to a file.
-If the file name ending is <filename>sgf</filename>, the game is saved
-in SGF format.
-If the file name ending is <filename>tex</filename>, the game is exported
-to <ulink url="http://www.latex-project.org/">LaTeX</ulink> using
+Export the current position to a file in SGF format.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Export</guisubmenu> / <guimenuitem>LaTeX Main Variation</guimenuitem></term>
+<listitem>
+<para>
+Export the main variation of the current game to a
+<ulink url="http://www.latex-project.org/">LaTeX</ulink> file using
 <ulink url="http://www.ctan.org/tex-archive/graphics/pstricks/contrib/psgo/">
 PSGO</ulink> style.
-When exporting to LaTeX, some board markups from analyze commands
-are also exported (string labels, marked and selected points).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Export</guisubmenu> / <guimenuitem>LaTeX Position</guimenuitem></term>
+<listitem>
+<para>
+Export the current position to a
+<ulink url="http://www.latex-project.org/">LaTeX</ulink> file using
+<ulink url="http://www.ctan.org/tex-archive/graphics/pstricks/contrib/psgo/">
+PSGO</ulink> style.
+Some board markups are also exported
+(string labels, marked and selected points).
 </para>
 </listitem>
 </varlistentry>

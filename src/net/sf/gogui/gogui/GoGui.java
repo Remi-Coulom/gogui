@@ -348,6 +348,12 @@ public class GoGui
             cbEnd();
         else if (command.equals("exit"))
             close();
+        else if (command.equals("export-latex"))
+            cbExportLatex();
+        else if (command.equals("export-latex-position"))
+            cbExportLatexPosition();
+        else if (command.equals("export-sgf-position"))
+            cbExportSgfPosition();
         else if (command.equals("find-in-comments"))
             cbFindInComments();
         else if (command.equals("find-next"))
@@ -418,8 +424,8 @@ public class GoGui
             cbPrint();
         else if (command.equals("save"))
             cbSave();
-        else if (command.equals("save-position"))
-            cbSavePosition();
+        else if (command.equals("save-as"))
+            cbSaveAs();
         else if (command.equals("score"))
             cbScore();
         else if (command.equals("score-cancel"))
@@ -1486,6 +1492,60 @@ public class GoGui
         boardChangedBegin(false, false);
     }
 
+    private void cbExportSgfPosition()
+    {
+        File file = SimpleDialogs.showSaveSgf(this);
+        if (file == null)
+            return;
+        try
+        {
+            savePosition(file);
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Could not save position", e);
+        }
+    }
+
+    private void cbExportLatex()
+    {
+        File file = SimpleDialogs.showSave(this, "Export LaTeX");
+        if (file == null)
+            return;
+        try
+        {
+            OutputStream out = new FileOutputStream(file);
+            String title = FileUtils.removeExtension(new File(file.getName()),
+                                                     "tex");
+            new TexWriter(title, out, m_gameTree, false);
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Export failed", e);
+        }
+    }
+
+    private void cbExportLatexPosition()
+    {
+        File file = SimpleDialogs.showSave(this, "Export LaTeX Position");
+        if (file == null)
+            return;
+        try
+        {
+            OutputStream out = new FileOutputStream(file);
+            String title = FileUtils.removeExtension(new File(file.getName()),
+                                                     "tex");
+            new TexWriter(title, out, m_board, false,
+                          m_guiBoard.getStrings(),
+                          m_guiBoard.getMarkSquare(),
+                          m_guiBoard.getSelects());
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Export failed", e);
+        }
+    }
+
     private void cbFindInComments()
     {
         Pattern pattern = FindDialog.run(this, m_comment.getSelectedText());
@@ -1766,26 +1826,15 @@ public class GoGui
 
     private void cbSave()
     {
-        saveDialog();
+        if (m_loadedFile != null)
+            save(m_loadedFile);
+        else
+            saveDialog();
     }
 
-    private void cbSavePosition()
+    private void cbSaveAs()
     {
-        File file = SimpleDialogs.showSaveSgf(this);
-        if (file == null)
-            return;
-        try
-        {
-            savePosition(file);
-            if (NodeUtils.isRootWithoutChildren(m_currentNode))
-                setNeedsSave(false);
-            m_loadedFile = file;
-            setTitle();
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Could not save position.", e);
-        }
+        saveDialog();
     }
 
     private void cbScore()
@@ -2029,6 +2078,10 @@ public class GoGui
         return true;
     }
 
+    /** Ask for saving file if it was modified.
+        @return true If file was not modified, user chose not to save it
+        or file was saved successfully
+    */
     private boolean checkSaveGame()
     {
         int result =
@@ -2038,7 +2091,10 @@ public class GoGui
         switch (result)
         {
         case 0:
-            return saveDialog();
+            if (m_loadedFile != null)
+                return save(m_loadedFile);
+            else
+                return saveDialog();
         case 1:
             setNeedsSave(false);
             return true;
@@ -2847,59 +2903,45 @@ public class GoGui
         m_commandThread.send(cmd, callback);
     }
 
-    private void save(File file) throws FileNotFoundException
+    /** Save game to file.
+        @return true If successfully saved.
+        @bug TexWriter and SgfWriter do not return an error if saving fails.
+    */
+    private boolean save(File file)
     {
-        OutputStream out = new FileOutputStream(file);
-        if (FileUtils.hasExtension(file, "tex"))
+        OutputStream out;
+        try
         {
-            String title = FileUtils.removeExtension(new File(file.getName()),
-                                                     "tex");
-            new TexWriter(title, out, m_gameTree, false);
+            out = new FileOutputStream(file);
         }
-        else
+        catch (FileNotFoundException e)
         {
-            new SgfWriter(out, m_gameTree, file, "GoGui", Version.get());
-            m_menuBar.addRecent(file);
+            showError("Saving file failed", e);
+            return false;
         }
+        new SgfWriter(out, m_gameTree, file, "GoGui", Version.get());
+        m_menuBar.addRecent(file);
+        return true;
     }
 
     private boolean saveDialog()
     {
-        try
-        {
-            File file = SimpleDialogs.showSaveSgf(this);
-            if (file == null)
-                return false;
-            save(file);
-            m_loadedFile = file;
-            setTitle();
-            setNeedsSave(false);
-            return true;
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Could not save game.", e);
+        File file = SimpleDialogs.showSaveSgf(this);
+        if (file == null)
             return false;
-        }
+        if (! save(file))
+            return false;
+        m_loadedFile = file;
+        setTitle();
+        setNeedsSave(false);
+        return true;
     }
 
     private void savePosition(File file) throws FileNotFoundException
     {
         OutputStream out = new FileOutputStream(file);
-        if (FileUtils.hasExtension(file, "tex"))
-        {
-            String title = FileUtils.removeExtension(new File(file.getName()),
-                                                     "tex");
-            new TexWriter(title, out, m_board, false,
-                          m_guiBoard.getStrings(),
-                          m_guiBoard.getMarkSquare(),
-                          m_guiBoard.getSelects());
-        }
-        else
-        {
-            new SgfWriter(out, m_board, file, "GoGui", Version.get());
-            m_menuBar.addRecent(file);
-        }
+        new SgfWriter(out, m_board, file, "GoGui", Version.get());
+        m_menuBar.addRecent(file);
     }
 
     private void saveSession()
