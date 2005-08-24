@@ -325,20 +325,21 @@ public class GtpAdapter
             return;
         String command = m_gtp.getCommandGenmove(color);
         fillPass(color);
+        String response;
         try
         {
-            send(command);
+            response = send(command);
         }
         catch (GtpError e)
         {
             undoFillPass();
             throw e;
         }
-        if (cmd.getResponse().toString().trim().equals("resign"))
+        if (response.toLowerCase().trim().equals("resign"))
             return;
-        GoPoint point
-            = GtpUtils.parsePoint(cmd.getResponse().toString(), m_boardSize);
+        GoPoint point = GtpUtils.parsePoint(response, m_boardSize);
         m_board.play(point, color);
+        cmd.setResponse(response);
     }
 
     private void cmdGGUndo(GtpCommand cmd) throws GtpError
@@ -625,9 +626,9 @@ public class GtpAdapter
         m_board.play(move);
     }
 
-    private void send(String cmd) throws GtpError
+    private String send(String cmd) throws GtpError
     {
-        m_gtp.send(cmd);
+        return m_gtp.send(cmd);
     }
 
     private void send(String cmd, StringBuffer response) throws GtpError

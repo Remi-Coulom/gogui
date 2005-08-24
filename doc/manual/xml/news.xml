@@ -27,9 +27,21 @@ GtpStatistics: fix some bugs
 </simpara>
 </listitem>
 <listitem>
+<para>
+GtpAdapter:
+<itemizedlist>
+<listitem>
 <simpara>
-GtpAdapter: new option -lowercase
+New option -lowercase
 </simpara>
+</listitem>
+<listitem>
+<simpara>
+Fix bug in genmove command
+</simpara>
+</listitem>
+</itemizedlist>
+</para>
 </listitem>
 </itemizedlist>
 </revdescription>
