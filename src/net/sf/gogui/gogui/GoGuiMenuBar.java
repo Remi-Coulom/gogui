@@ -1011,7 +1011,6 @@ public class GoGuiMenuBar
         m_itemSaveCommands = addMenuItem(menu, "Save Commands...",
                                          KeyEvent.VK_C,
                                          "gtpshell-save-commands");
-        menu.addSeparator();
         addMenuItem(menu, "Send File...", KeyEvent.VK_F,
                     "gtpshell-send-file");
         String home = System.getProperty("user.home");
