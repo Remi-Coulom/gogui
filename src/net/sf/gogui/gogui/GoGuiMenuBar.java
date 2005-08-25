@@ -850,6 +850,13 @@ public class GoGuiMenuBar
     private JMenu createMenuEdit()
     {
         JMenu menu = createMenu("Edit", KeyEvent.VK_E);
+        addMenuItem(menu, "Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
+                    m_shortcutKeyMask, "find-in-comments");
+        m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_N,
+                                     KeyEvent.VK_F3, getFunctionKeyShortcut(),
+                                     "find-next");
+        m_itemFindNext.setEnabled(false);
+        menu.addSeparator();
         addMenuItem(menu, "Game Info", KeyEvent.VK_G, KeyEvent.VK_I,
                     m_shortcutKeyMask, "game-info");
         menu.add(createBoardSizeMenu());
@@ -870,13 +877,6 @@ public class GoGuiMenuBar
         m_itemTruncateChildren
             = addMenuItem(menu, "Truncate Children", KeyEvent.VK_C,
                           "truncate-children");
-        menu.addSeparator();
-        addMenuItem(menu, "Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
-                    m_shortcutKeyMask, "find-in-comments");
-        m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_N,
-                                     KeyEvent.VK_F3, getFunctionKeyShortcut(),
-                                     "find-next");
-        m_itemFindNext.setEnabled(false);
         menu.addSeparator();
         m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
         addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
