@@ -200,7 +200,9 @@ public class SgfWriter
             appName = appName + ":" + version;
         print(";FF[4]CA[" + getEscaped(StringUtils.getDefaultEncoding())
               + "]GN[" + getEscaped(getName(file)) + "]AP["
-              + getEscaped(appName) + "]SZ[" + m_size + "]");
+              + getEscaped(appName) + "]");
+        if (m_size != 19)
+            print("SZ[" + m_size + "]");
     }
 
     private void printHeader(File file, String application, String version,
