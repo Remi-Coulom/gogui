@@ -56,6 +56,10 @@ public final class AboutDialog
         m_tabbedPane = new JTabbedPane();
         boolean isProgramAvailable = (name != null && ! name.equals(""));
         int tabIndex = 0;
+        m_tabbedPane.add("GoGui", createPanelGoGui());
+        m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_G);
+        m_tabbedPane.setSelectedIndex(tabIndex);
+        ++tabIndex;
         JPanel programPanel;
         if (isProgramAvailable)
         {
@@ -74,13 +78,12 @@ public final class AboutDialog
                             + "<br>" +
                             "Command: " +
                             "<tt>" + command + "</tt></p>");
-            m_tabbedPane.add("Program", programPanel);
-            m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_P);
-            ++tabIndex;
         }
-        m_tabbedPane.add("GoGui", createPanelGoGui());
-        m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_G);
-        m_tabbedPane.setSelectedIndex(tabIndex);
+        else
+            programPanel = new JPanel();
+        m_tabbedPane.add("Program", programPanel);
+        m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_P);
+        m_tabbedPane.setEnabledAt(tabIndex, isProgramAvailable);
         ++tabIndex;
         m_tabbedPane.add("Java", createPanelJava());
         m_tabbedPane.setMnemonicAt(tabIndex, KeyEvent.VK_J);
