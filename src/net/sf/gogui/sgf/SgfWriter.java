@@ -199,7 +199,7 @@ public class SgfWriter
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
         print(";FF[4]CA[" + getEscaped(StringUtils.getDefaultEncoding())
-              + "]GM[1]GN[" + getEscaped(getName(file)) + "]AP["
+              + "]GN[" + getEscaped(getName(file)) + "]AP["
               + getEscaped(appName) + "]SZ[" + m_size + "]");
     }
 
