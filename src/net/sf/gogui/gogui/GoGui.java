@@ -79,6 +79,7 @@ import net.sf.gogui.gui.GuiBoardUtils;
 import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
+import net.sf.gogui.gui.OptionalWarning;
 import net.sf.gogui.gui.ParameterDialog;
 import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.gui.SelectProgram;
@@ -1030,6 +1031,8 @@ public class GoGui
 
     private Node m_currentNode;
 
+    private OptionalWarning m_overwriteWarning;
+
     private Pattern m_pattern;
 
     private AnalyzeCommand m_analyzeCommand;
@@ -1827,7 +1830,17 @@ public class GoGui
     private void cbSave()
     {
         if (m_loadedFile != null)
+        {
+            if (m_loadedFile.exists())
+            {
+                if (m_overwriteWarning == null)
+                    m_overwriteWarning = new OptionalWarning(this);
+                String message = "Overwrite " + m_loadedFile + "?";
+                if (! m_overwriteWarning.show(message))
+                    return;
+            }
             save(m_loadedFile);
+        }
         else
             saveDialog();
     }
