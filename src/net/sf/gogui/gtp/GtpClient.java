@@ -450,10 +450,7 @@ public final class GtpClient
         m_out.println(command);
         m_out.flush();
         if (m_out.checkError())
-        {
-            m_isProgramDead = true;
             throwProgramDied();
-        }
         if (m_callback != null)
             m_callback.sentCommand(command);
         readResponse(timeout);
@@ -931,6 +928,7 @@ public final class GtpClient
 
     private void throwProgramDied() throws GtpError
     {
+        m_isProgramDead = true;
         throw new GtpError("Go program died");
     }
 }
