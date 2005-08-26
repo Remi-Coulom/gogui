@@ -59,7 +59,6 @@ public class Comment
             };
         m_textPane.addCaretListener(caretListener);
         setViewportView(m_textPane);
-        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
