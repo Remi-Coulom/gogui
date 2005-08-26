@@ -299,6 +299,7 @@ public class GoGuiMenuBar
         m_itemShowVariations.setEnabled(true);
         m_itemShowAnalyze.setEnabled(true);
         m_itemShowShell.setEnabled(true);
+        m_itemShowTree.setEnabled(true);
         m_itemSaveLog.setEnabled(true);
         m_itemSaveCommands.setEnabled(true);
         m_itemHighlight.setEnabled(true);
@@ -588,6 +589,8 @@ public class GoGuiMenuBar
     private JMenuItem m_itemShowAnalyze;
 
     private JMenuItem m_itemShowShell;
+
+    private JMenuItem m_itemShowTree;
 
     private JMenuItem m_itemHelp;
 
@@ -1046,8 +1049,9 @@ public class GoGuiMenuBar
         addMenuItem(menu, m_itemShowInfoPanel, KeyEvent.VK_I,
                     "show-info-panel");
         menu.addSeparator();
-        addMenuItem(menu, "Show Tree", KeyEvent.VK_S, KeyEvent.VK_F7,
-                    getFunctionKeyShortcut(), "show-gametree");
+        m_itemShowTree
+            = addMenuItem(menu, "Show Tree", KeyEvent.VK_S, KeyEvent.VK_F7,
+                          getFunctionKeyShortcut(), "show-gametree");
         m_itemShowShell
             = addMenuItem(menu, "Show Shell", KeyEvent.VK_S, KeyEvent.VK_F8,
                           getFunctionKeyShortcut(), "gtp-shell");
