@@ -29,24 +29,23 @@ public class SplashScreen
 {
     public static final void main(String [] args)
     {
-        // Setting these Mac system properties here worked with older versions
-        // of Mac Java, for newer ones, they have to be set when starting the
-        // VM (see options in scripts and mac/Info.plist)
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-                           "GoGui");
-        System.setProperty("apple.awt.brushMetalLook", "true");
         GoGuiSettings settings;
         try
         {
             settings = new GoGuiSettings(args);
             if (settings.m_noStartup)
                 return;
+            main(settings);
         }
         catch (ErrorMessage e)
         {
             System.err.println(e.getMessage());
             return;
         }
+    }
+
+    public static final void main(GoGuiSettings settings)
+    {
         s_splash = new SplashScreen();
         try
         {
