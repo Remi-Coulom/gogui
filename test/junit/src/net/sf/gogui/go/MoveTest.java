@@ -5,8 +5,6 @@
 
 package net.sf.gogui.go;
 
-import java.util.ArrayList;
-
 //----------------------------------------------------------------------------
 
 public class MoveTest
