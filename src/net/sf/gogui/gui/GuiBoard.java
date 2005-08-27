@@ -727,7 +727,7 @@ public final class GuiBoard
         char c = 'A';
         for (int x = 0; x < size; ++x)
         {
-            BoardLabel label = new BoardLabel(new Character(c).toString());
+            BoardLabel label = new BoardLabel(Character.toString(c));
             m_labels.add(label);
             add(label);
             ++c;
