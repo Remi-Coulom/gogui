@@ -663,7 +663,7 @@ Show panel on the right side of the board containing game information.
 <term><guimenuitem>Show Tree</guimenuitem></term>
 <listitem>
 <para>
-Show the game tree window or bring it to front if already open.
+Show the game tree window.
 </para>
 </listitem>
 </varlistentry>
@@ -672,7 +672,7 @@ Show the game tree window or bring it to front if already open.
 <term><guimenuitem>Show Shell</guimenuitem></term>
 <listitem>
 <para>
-Show the GTP shell window or bring it to front if already open.
+Show the GTP shell window.
 </para>
 </listitem>
 </varlistentry>
@@ -681,7 +681,7 @@ Show the GTP shell window or bring it to front if already open.
 <term><guimenuitem>Show Analyze</guimenuitem></term>
 <listitem>
 <para>
-Show the Analyze window or bring it to front if already open.
+Show the Analyze window.
 </para>
 </listitem>
 </varlistentry>

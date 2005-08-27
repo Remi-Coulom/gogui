@@ -160,6 +160,11 @@ public class GoGuiMenuBar
         return m_menuBar;
     }
 
+    public boolean getShowAnalyze()
+    {
+        return m_itemShowAnalyze.isSelected();
+    }
+
     public boolean getShowCursor()
     {
         return m_itemShowCursor.isSelected();
@@ -180,9 +185,19 @@ public class GoGuiMenuBar
         return m_itemShowLastMove.isSelected();
     }
 
+    public boolean getShowShell()
+    {
+        return m_itemShowShell.isSelected();
+    }
+
     public boolean getShowToolbar()
     {
         return m_itemShowToolbar.isSelected();
+    }
+
+    public boolean getShowTree()
+    {
+        return m_itemShowTree.isSelected();
     }
 
     public boolean getShowVariations()
@@ -398,6 +413,11 @@ public class GoGuiMenuBar
         m_itemQuit.setEnabled(true);
     }
 
+    public void setShowAnalyze(boolean enable)
+    {
+        m_itemShowAnalyze.setSelected(enable);
+    }
+
     public void setShowCursor(boolean enable)
     {
         m_itemShowCursor.setSelected(enable);
@@ -418,9 +438,19 @@ public class GoGuiMenuBar
         m_itemShowLastMove.setSelected(enable);
     }
 
+    public void setShowShell(boolean enable)
+    {
+        m_itemShowShell.setSelected(enable);
+    }
+
     public void setShowToolbar(boolean enable)
     {
         m_itemShowToolbar.setSelected(enable);
+    }
+
+    public void setShowTree(boolean enable)
+    {
+        m_itemShowTree.setSelected(enable);
     }
 
     public void setShowVariations(boolean enable)
@@ -494,11 +524,17 @@ public class GoGuiMenuBar
 
     private JCheckBoxMenuItem m_itemHighlight;
 
+    private JCheckBoxMenuItem m_itemShowAnalyze;
+
     private JCheckBoxMenuItem m_itemShowCursor;
 
     private JCheckBoxMenuItem m_itemShowGrid;
 
     private JCheckBoxMenuItem m_itemShowLastMove;
+
+    private JCheckBoxMenuItem m_itemShowShell;
+
+    private JCheckBoxMenuItem m_itemShowTree;
 
     private JCheckBoxMenuItem m_itemShowVariations;
 
@@ -586,12 +622,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemGotoVar;
 
-    private JMenuItem m_itemShowAnalyze;
-
-    private JMenuItem m_itemShowShell;
-
-    private JMenuItem m_itemShowTree;
-
     private JMenuItem m_itemHelp;
 
     private JMenuItem m_itemInterrupt;
@@ -658,13 +688,19 @@ public class GoGuiMenuBar
         return addMenuItem(menu, item, mnemonic, command);        
     }
 
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
                                   int accel, int modifier, String command)
     {
-        JMenuItem item = new JMenuItem(label);
         KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
         item.setAccelerator(k);
         return addMenuItem(menu, item, mnemonic, command);
+    }
+
+    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
+                                  int accel, int modifier, String command)
+    {
+        return addMenuItem(menu, new JMenuItem(label), mnemonic, accel,
+                           modifier, command);
     }
 
     private JMenuItem addRadioItem(JMenu menu, ButtonGroup group,
@@ -1049,15 +1085,15 @@ public class GoGuiMenuBar
         addMenuItem(menu, m_itemShowInfoPanel, KeyEvent.VK_I,
                     "show-info-panel");
         menu.addSeparator();
-        m_itemShowTree
-            = addMenuItem(menu, "Show Tree", KeyEvent.VK_S, KeyEvent.VK_F7,
-                          getFunctionKeyShortcut(), "show-gametree");
-        m_itemShowShell
-            = addMenuItem(menu, "Show Shell", KeyEvent.VK_S, KeyEvent.VK_F8,
-                          getFunctionKeyShortcut(), "gtp-shell");
-        m_itemShowAnalyze
-            = addMenuItem(menu, "Show Analyze", KeyEvent.VK_S, KeyEvent.VK_F9,
-                          getFunctionKeyShortcut(), "analyze");
+        m_itemShowTree = new JCheckBoxMenuItem("Show Tree");
+        addMenuItem(menu, m_itemShowTree, KeyEvent.VK_S, KeyEvent.VK_F7,
+                    getFunctionKeyShortcut(), "show-tree");
+        m_itemShowShell = new JCheckBoxMenuItem("Show Shell");
+        addMenuItem(menu, m_itemShowShell, KeyEvent.VK_S, KeyEvent.VK_F8,
+                    getFunctionKeyShortcut(), "show-shell");
+        m_itemShowAnalyze = new JCheckBoxMenuItem("Show Analyze");
+        addMenuItem(menu, m_itemShowAnalyze, KeyEvent.VK_S, KeyEvent.VK_F9,
+                    getFunctionKeyShortcut(), "analyze");
         menu.addSeparator();
         menu.add(createMenuConfigureBoard());
         menu.add(createMenuConfigureTree());

@@ -278,7 +278,6 @@ public class GoGui
             && ! command.equals("computer-none")
             && ! command.equals("computer-white")
             && ! command.equals("detach-program")
-            && ! command.equals("gtp-shell")
             && ! command.equals("gtpshell-save")
             && ! command.equals("gtpshell-save-commands")
             && ! command.equals("highlight")
@@ -288,7 +287,9 @@ public class GoGui
             && ! command.equals("help")
             && ! command.equals("interrupt")
             && ! command.equals("show-grid")
+            && ! command.equals("show-shell")
             && ! command.equals("show-toolbar")
+            && ! command.equals("show-tree")
             && ! command.equals("show-info-panel")
             && ! command.equals("show-last-move")
             && ! command.equals("exit"))
@@ -369,8 +370,6 @@ public class GoGui
             cbGoto();
         else if (command.equals("goto-variation"))
             cbGotoVariation();
-        else if (command.equals("gtp-shell"))
-            cbGtpShell();
         else if (command.equals("gametree-move"))
             cbGameTreeLabels(GameTreePanel.LABEL_MOVE);
         else if (command.equals("gametree-number"))
@@ -443,14 +442,16 @@ public class GoGui
             cbShowCursor();
         else if (command.equals("show-grid"))
             cbShowGrid();
-        else if (command.equals("show-gametree"))
-            cbShowGameTree();
         else if (command.equals("show-info-panel"))
             cbShowInfoPanel();
         else if (command.equals("show-last-move"))
             cbShowLastMove();
+        else if (command.equals("show-shell"))
+            cbShowShell();
         else if (command.equals("show-toolbar"))
             cbShowToolbar();
+        else if (command.equals("show-tree"))
+            cbShowTree();
         else if (command.equals("show-variations"))
             cbShowVariations();
         else if (command.equals("timestamp"))
@@ -467,19 +468,35 @@ public class GoGui
     {        
         if (m_commandThread == null)
             return;
-        if (m_analyzeDialog == null)
+        if (m_menuBar.getShowAnalyze())
         {
-            boolean onlySupported = m_menuBar.getAnalyzeOnlySupported();
-            boolean sort = m_menuBar.getAnalyzeSort();
-            m_analyzeDialog =
-                new AnalyzeDialog(this, this, onlySupported, sort,
-                                  m_commandThread.getSupportedCommands(),
-                                  m_commandThread);
-            m_analyzeDialog.setBoardSize(m_board.getSize());
-            restoreSize(m_analyzeDialog, "window-analyze");
-            setTitle();
+            if (m_analyzeDialog == null)
+            {
+                boolean onlySupported = m_menuBar.getAnalyzeOnlySupported();
+                boolean sort = m_menuBar.getAnalyzeSort();
+                m_analyzeDialog =
+                    new AnalyzeDialog(this, this, onlySupported, sort,
+                                      m_commandThread.getSupportedCommands(),
+                                      m_commandThread);
+                m_analyzeDialog.addWindowListener(new WindowAdapter()
+                    {
+                        public void windowClosing(WindowEvent e)
+                        {
+                            m_menuBar.setShowAnalyze(false);
+                        }
+                    });
+                m_analyzeDialog.setBoardSize(m_board.getSize());
+                restoreSize(m_analyzeDialog, "window-analyze");
+                setTitle();
+            }
+            m_analyzeDialog.setVisible(true);
         }
-        m_analyzeDialog.toTop();
+        else
+        {
+            if (m_analyzeDialog != null)
+                m_analyzeDialog.close();
+            m_analyzeDialog = null;
+        }
     }
 
     public void cbAnalyzeOnlySupported()
@@ -519,9 +536,15 @@ public class GoGui
         }
         m_prefs.setString("program", m_program);
         if (m_gtpShell != null && m_prefs.getBool("show-gtpshell"))
-            m_gtpShell.toTop();
+        {
+            m_menuBar.setShowShell(true);
+            cbShowShell();
+        }
         if (m_prefs.getBool("show-analyze"))
+        {
+            m_menuBar.setShowAnalyze(true);
             cbAnalyze();
+        }
     }
 
     public void cbAutoNumber(boolean enable)
@@ -555,13 +578,6 @@ public class GoGui
         return true;
     }
 
-    public void cbGtpShell()
-    {
-        if (m_gtpShell == null)
-            return;
-        m_gtpShell.toTop();
-    }
-
     public void cbGtpShellSave()
     {
         if (m_gtpShell == null)
@@ -587,18 +603,11 @@ public class GoGui
         m_menuBar.addRecentGtp(file);
     }
 
-    public void cbShowGameTree()
+    public void cbShowShell()
     {
-        if (m_gameTreeViewer == null)
-        {
-            m_gameTreeViewer = new GameTreeViewer(this, this, m_fastPaint);
-            m_gameTreeViewer.setLabelMode(m_menuBar.getGameTreeLabels());
-            m_gameTreeViewer.setSizeMode(m_menuBar.getGameTreeSize());
-            restoreSize(m_gameTreeViewer, "window-gametree");
-        }
-        updateGameTree(true);
-        if (m_gameTreeViewer != null) // updateGameTree can close viewer
-            m_gameTreeViewer.toTop();
+        if (m_gtpShell == null)
+            return;
+        m_gtpShell.setVisible(m_menuBar.getShowShell());
     }
 
     public void cbShowInfoPanel()
@@ -621,6 +630,27 @@ public class GoGui
             m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
         }
         showToolbar();
+    }
+
+    public void cbShowTree()
+    {
+        if (m_menuBar.getShowTree())
+        {
+            if (m_gameTreeViewer == null)
+            {
+                m_gameTreeViewer
+                    = new GameTreeViewer(this, this, m_fastPaint);
+                m_gameTreeViewer.setLabelMode(m_menuBar.getGameTreeLabels());
+                m_gameTreeViewer.setSizeMode(m_menuBar.getGameTreeSize());
+                restoreSize(m_gameTreeViewer, "window-gametree");
+            }
+            updateGameTree(true);
+            if (m_gameTreeViewer != null) // updateGameTree can close viewer
+                m_gameTreeViewer.setVisible(true);
+            return;
+        }
+        else
+            disposeGameTree();
     }
 
     public void clearAnalyzeCommand()
@@ -675,6 +705,7 @@ public class GoGui
             return;
         m_gameTreeViewer.dispose();
         m_gameTreeViewer = null;
+        m_menuBar.setShowTree(false);
     }
 
     public void fieldClicked(GoPoint p, boolean modifiedSelect)
@@ -1150,6 +1181,13 @@ public class GoGui
             return false;
         m_program = program;
         m_gtpShell = new GtpShell(this, this, m_prefs);
+        m_gtpShell.addWindowListener(new WindowAdapter()
+            {
+                public void windowClosing(WindowEvent e)
+                {
+                    m_menuBar.setShowShell(false);
+                }
+            });
         m_gtpShell.setProgramCommand(program);
         m_gtpShell.setHighlight(m_menuBar.getHighlight());
         m_gtpShell.setTimeStamp(m_menuBar.getTimeStamp());
@@ -2643,11 +2681,20 @@ public class GoGui
         // Children dialogs should be set visible after main window, otherwise
         // they get minimize window buttons and a taskbar entry (KDE 3.4)
         if (m_gtpShell != null && m_prefs.getBool("show-gtpshell"))
-            m_gtpShell.toTop();
+        {
+            m_menuBar.setShowShell(true);
+            cbShowShell();
+        }
         if (m_prefs.getBool("show-gametree"))
-            cbShowGameTree();
+        {
+            m_menuBar.setShowTree(true);
+            cbShowTree();
+        }
         if (m_prefs.getBool("show-analyze"))
+        {
+            m_menuBar.setShowAnalyze(true);
             cbAnalyze();
+        }
         if (! m_initAnalyze.equals(""))
         {
             AnalyzeCommand analyzeCommand =

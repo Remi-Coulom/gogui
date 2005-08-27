@@ -28,8 +28,6 @@ public class GameTreeViewer
         void gotoNode(Node node);
 
         void disposeGameTree();
-
-        void toTop();
     }
 
     public GameTreeViewer(Frame owner, Listener listener, boolean fastPaint)
@@ -88,12 +86,6 @@ public class GameTreeViewer
     public void setSizeMode(int mode)
     {
         m_panel.setSizeMode(mode);
-    }
-
-    public void toTop()
-    {
-        setVisible(true);
-        toFront();
     }
 
     public void update(GameTree gameTree, Node currentNode)

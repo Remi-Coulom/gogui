@@ -59,8 +59,6 @@ public final class AnalyzeDialog
         
         void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                boolean clearBoard, boolean oneRunOnly);
-        
-        void toTop();
     }
 
     public AnalyzeDialog(Frame owner, Callback callback,
@@ -104,6 +102,14 @@ public final class AnalyzeDialog
             setCommand();
         else
             assert(false);
+    }
+
+    public void close()
+    {
+        if (! m_autoRun.isSelected())
+            clearCommand();
+        saveRecent();
+        setVisible(false);
     }
 
     public GoColor getSelectedColor()
@@ -192,12 +198,6 @@ public final class AnalyzeDialog
         reload();
     }
 
-    public void toTop()
-    {
-        setVisible(true);
-        toFront();
-    }
-
     public void valueChanged(ListSelectionEvent e)
     {
         int index = m_list.getSelectedIndex();
@@ -268,14 +268,6 @@ public final class AnalyzeDialog
         m_clearButton.setEnabled(false);
         if (m_clearButton.hasFocus())
             m_list.requestFocusInWindow();
-    }
-
-    private void close()
-    {
-        if (! m_autoRun.isSelected())
-            clearCommand();
-        saveRecent();
-        setVisible(false);
     }
 
     private void comboBoxChanged()

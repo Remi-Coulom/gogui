@@ -509,12 +509,6 @@ public class GtpShell
         m_gtpShellText.setTimeStamp(enable);
     }
 
-    public void toTop()
-    {
-        setVisible(true);
-        toFront();
-    }
-
     /** Send Gtp command to callback.
         If owner != null, send synchronously and display error dialog on
         owner, otherwise send asynchronously.
