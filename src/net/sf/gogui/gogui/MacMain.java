@@ -54,12 +54,6 @@ public class MacMain
         }
     }
 
-    private static void fatalError(Exception e)
-    {
-        e.printStackTrace();
-        System.exit(-1);
-    }
-
     private static void fatalError(String message)
     {
         printError(message);
