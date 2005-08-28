@@ -5,6 +5,46 @@ body
   background-color: white;
   font-family: sans-serif;
   color: black;
+  padding: 0;
+  margin: 0; 
+}
+
+.legalnotice, .copyright {
+  padding: 0;
+  margin: 0; 
+}
+
+.abstract {
+  font-weight: bolder;
+  padding-right: 1em; 
+}
+
+.toc, .list-of-tables {
+  padding-left: 1em;
+}
+
+.sect1, .chapter, .synopsis, .appendix, .preface, .article, .refsect1, .index, .glossary, .section, .refentry {
+  padding: 1em;
+}
+
+.author {
+  color: rgb(82,80,82);
+  font-weight: bolder;
+  padding: 0;
+  margin: 0;
+}
+
+.othercredit {
+  line-height: 1em;
+}
+
+.chapter .sect1, .chapter .titlepage, .sect1 .titlepage, .article .titlepage {
+  padding: 0em;
+}
+
+.titlepage {
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 a
