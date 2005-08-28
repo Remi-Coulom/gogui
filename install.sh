@@ -3,6 +3,7 @@
 # Default prefix should be /usr/local, but some desktop
 # environments have problems finding resources there
 PREFIX=/usr
+JAVA_HOME=
 
 function usage() {
   printf "Usage: %s [-p prefix][-j javahome]\n" $0
