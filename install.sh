@@ -3,7 +3,6 @@
 # Default prefix should be /usr/local, but some desktop
 # environments have problems finding resources there
 PREFIX=/usr
-JAVA_HOME=java
 
 function usage() {
   printf "Usage: %s [-p prefix][-j javahome]\n" $0
@@ -21,6 +20,16 @@ shift `expr $OPTIND - 1`
 if  [ ! -z "$*" ]; then
   usage
   exit -1;
+fi
+
+if [ -z "$JAVA_HOME" ]; then
+  echo "Use option -j to specify the installation directory of a Java 1.4 compatible" >&2
+  echo "virtual machine" >&2
+  exit -1
+fi
+if [ ! -x "$JAVA_HOME/bin/java" ]; then
+  echo "$JAVA_HOME/bin/java does not exist or is not executable" >&2
+  exit -1
 fi
 
 install -d $PREFIX/share/gogui/lib
