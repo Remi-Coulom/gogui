@@ -55,6 +55,10 @@ install doc/manual/man/*.1 $PREFIX/share/man/man1
 install -d $PREFIX/share/icons/hicolor/48x48/apps
 install src/net/sf/gogui/images/gogui.png \
   $PREFIX/share/icons/hicolor/48x48/apps
+# hicolor is the standard according to freedesktop.org, but for compatibility
+# we also install the icon to pixmaps
+install -d $PREFIX/share/pixmaps
+install src/net/sf/gogui/images/gogui.png $PREFIX/share/pixmaps
 
 install -d $PREFIX/share/applications
 install config/gogui.desktop $PREFIX/share/applications
