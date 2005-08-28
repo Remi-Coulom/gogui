@@ -70,6 +70,10 @@ echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
 install -d $PREFIX/share/mime/packages
 install config/gogui.xml $PREFIX/share/mime/packages
 
+install -d $PREFIX/share/icons/hicolor/48x48/mimetypes
+install config/gogui-application-x-go-sgf.png \
+  $PREFIX/share/icons/hicolor/48x48/mimetypes
+
 # Could create a conflict with other packages.
 # Remove when KDE supports the standard shared MIME database
 install -d $PREFIX/share/mimelnk/application
