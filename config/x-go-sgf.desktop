@@ -1,0 +1,10 @@
+# MIME type definition for KDE 3.4, which does not support the standard
+# shared MIME database yet.
+# Has to be installed into KDEDIR/share/mimelnk/application, which can
+# create a conflict with other packages
+[Desktop Entry]
+Type=MimeType
+MimeType=application/x-go-sgf
+Patterns=*.sgf;
+DefaultApp=gogui
+Comment=Go game

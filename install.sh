@@ -70,6 +70,11 @@ echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
 install -d $PREFIX/share/mime/packages
 install config/gogui.xml $PREFIX/share/mime/packages
 
+# Could create a conflict with other packages.
+# Remove when KDE supports the standard shared MIME database
+install -d $PREFIX/share/mimelnk/application
+install config/x-go-sgf.desktop $PREFIX/share/mimelnk/application
+
 install -d $PREFIX/share/omf/gogui
 cat config/gogui.omf \
 | sed "s;file:/usr/;file:$PREFIX/;" \
