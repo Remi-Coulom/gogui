@@ -53,10 +53,14 @@ install -d $PREFIX/share/man/man1
 install doc/manual/man/*.1 $PREFIX/share/man/man1
 
 install -d $PREFIX/share/icons/hicolor/48x48/apps
-install src/net/sf/gogui/images/gogui.png $PREFIX/share/icons/hicolor/48x48/apps
+install src/net/sf/gogui/images/gogui.png \
+  $PREFIX/share/icons/hicolor/48x48/apps
 
 install -d $PREFIX/share/applications
 install config/gogui.desktop $PREFIX/share/applications
+# Add DocPath entry used by KDE 3.4
+echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
+  >> $PREFIX/share/applications/gogui.desktop
 
 install -d $PREFIX/share/mime/packages
 install config/gogui.xml $PREFIX/share/mime/packages

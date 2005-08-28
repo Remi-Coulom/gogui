@@ -8,4 +8,4 @@ Terminal=false
 Type=Application
 Categories=Application;Game;BoardGame
 MimeType=application/x-go-sgf
-
+# DocPath will be added by install.sh
