@@ -6,6 +6,7 @@
 Type=MimeType
 MimeType=application/x-go-sgf
 Icon=gogui-application-x-go-sgf
-Patterns=*.sgf;
+Patterns=*.sgf;*.SGF
 DefaultApp=gogui
-Comment=Go game
+Comment=Go Game
+Comment[de]=Go Partie
