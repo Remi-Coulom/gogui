@@ -38,10 +38,10 @@ options to <userinput>gogui</userinput>.
 For Unix systems, there are launcher scripts in the
 <filename class="directory">bin</filename> directory.
 <indexterm>
-<primary><envar>JAVA_HOME</envar></primary>
+<primary><envar>GOGUI_JAVA_HOME</envar></primary>
 </indexterm>
 The launcher scripts respect the environment variable
-<envar>JAVA_HOME</envar>, if defined, and look for the jar files
+<envar>GOGUI_JAVA_HOME</envar>, if defined, and look for the jar files
 in <filename class="directory">../lib</filename>
 relative to the <filename class="directory">bin</filename> directory.
 You can add the <filename>bin</filename> directory of GoGui to your
