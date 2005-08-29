@@ -6,7 +6,6 @@
 package net.sf.gogui.gui;
 
 import net.sf.gogui.sgf.SgfFilter;
-import net.sf.gogui.tex.TexFilter;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.StringUtils;
 import java.awt.Component;
@@ -220,7 +219,6 @@ public final class SimpleDialogs
         chooser.addChoosableFileFilter(sgfFilter);
         if (type == FILE_SAVE)
         {
-            chooser.addChoosableFileFilter(new TexFilter());
             if (lastFile != null && lastFile.isFile() && lastFile.exists())
                 chooser.setSelectedFile(lastFile);
         }
