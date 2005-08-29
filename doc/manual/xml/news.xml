@@ -18,6 +18,11 @@ GoGui:
 More reorganization of the menu bar
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+Bugfixes in Truncate and Truncate Children
+</simpara>
+</listitem>
 </itemizedlist>
 </para>
 </listitem>

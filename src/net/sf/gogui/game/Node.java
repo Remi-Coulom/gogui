@@ -87,15 +87,22 @@ public final class Node
         MARKED_TERRITORY_WHITE
     };
 
+    /** Construct empty node. */
     public Node()
     {
     }
 
+    /** Construct node containing a move.
+        @param move The move to store in this node.
+    */
     public Node(Move move)
     {
         m_move = move;
     }
 
+    /** Append this node as a child to another node.
+        @param node The node to append to.
+    */
     public void append(Node node)
     {
         assert(node.m_father == null);
@@ -118,18 +125,28 @@ public final class Node
         node.m_father = this;
     }
 
+    /** Add a black setup stone.
+        @param point The location of the setup stone.
+    */
     public void addBlack(GoPoint point)
     {
         assert(point != null);
         createSetupInfo().m_black.add(point);
     }
 
+    /** Add an empty setup point.
+        @param point The location that should be set to empty.
+    */
     public void addEmpty(GoPoint point)
     {
         assert(point != null);
         createSetupInfo().m_empty.add(point);
     }
 
+    /** Add a markup.
+        @param point The location that should be marked.
+        @param type The type of the markup from Node.MARK_TYPES.
+    */
     public void addMarked(GoPoint point, String type)
     {
         assert(point != null);
@@ -156,22 +173,37 @@ public final class Node
         createSgfProperties().put(label, value);
     }
 
+    /** Add a white setup stone.
+        @param point The location of the setup stone.
+    */
     public void addWhite(GoPoint point)
     {
         assert(point != null);
         createSetupInfo().m_white.add(point);
     }
 
+    /** Get black setup stone.
+        @param i The index of the setup stone
+        in [0...getNumberAddBlack() - 1]
+    */
     public GoPoint getAddBlack(int i)
     {
         return (GoPoint)m_extraInfo.m_setupInfo.m_black.get(i);
     }
 
+    /** Get empty setup point.
+        @param i The index of the setup point
+        in [0...getNumberAddEmpty() - 1]
+    */
     public GoPoint getAddEmpty(int i)
     {
         return (GoPoint)m_extraInfo.m_setupInfo.m_empty.get(i);
     }
 
+    /** Get white setup stone.
+        @param i The index of the setup stone
+        in [0...getNumberAddWhite() - 1]
+    */
     public GoPoint getAddWhite(int i)
     {
         return (GoPoint)m_extraInfo.m_setupInfo.m_white.get(i);
@@ -214,7 +246,9 @@ public final class Node
         return moves;
     }
 
-    /** Child of main variation or null if no child. */
+    /** Child of main variation or null if no child.
+        @return Node with index 0 or null, if no children.
+    */
     public Node getChild()
     {
         if (getNumberChildren() == 0)
@@ -222,6 +256,10 @@ public final class Node
         return getChild(0);
     }
 
+    /** Get child node.
+        @param i Index of the child
+        in [0...getNumberChildren() - 1]
+    */
     public Node getChild(int i)
     {
         if (getNumberChildren() == 1)
@@ -229,6 +267,10 @@ public final class Node
         return (Node)((ArrayList)m_children).get(i);
     }
 
+    /** Get index of child node.
+        @param node The child.
+        @return Index of child or -1, if node is not a child of this node.
+    */  
     public int getChildIndex(Node child)
     {
         for (int i = 0; i < getNumberChildren(); ++i)
@@ -237,6 +279,10 @@ public final class Node
         return -1;
     }
 
+    /** Get comment.
+        @return Comment stored in this node or null, if node contains no
+        comment.
+    */
     public String getComment()
     {
         if (m_comment == null)
@@ -251,11 +297,18 @@ public final class Node
         }
     }
 
+    /** Get father node.
+        @return Father node of this node or null, if no father.
+    */
     public Node getFather()
     {
         return m_father;
     }
 
+    /** Get label for a location on the board.
+        @param point The location.
+        @return Label at location or null, if no label.
+    */
     public String getLabel(GoPoint point)
     {
         Map map = getLabels();
@@ -264,6 +317,9 @@ public final class Node
         return (String)map.get(point);
     }
 
+    /** Get all labels on the board.
+        @return Map containing (Point,String) pairs.
+    */
     public Map getLabels()
     {
         if (m_extraInfo == null)
@@ -271,6 +327,10 @@ public final class Node
         return m_extraInfo.m_label;
     }
 
+    /** Get all markups of a type.
+        @param type Markup type from Node.MARK_TYPES.
+        @return Map containing (Point,String) pairs.
+    */
     public ArrayList getMarked(String type)
     {
         if (m_extraInfo == null || m_extraInfo.m_marked == null)
@@ -278,6 +338,9 @@ public final class Node
         return (ArrayList)m_extraInfo.m_marked.get(type);
     }
 
+    /** Get move contained in this node.
+        @return Move or null, if no move.
+    */
     public Move getMove()
     {
         return m_move;
@@ -306,27 +369,39 @@ public final class Node
         return m_extraInfo.m_timeInfo.m_movesLeftWhite;
     }
 
+    /** Get number of black setup stones.
+        @return Number of setup stones.
+    */
     public int getNumberAddBlack()
     {
         if (! hasSetupInfo())
-            return -1;
+            return 0;
         return m_extraInfo.m_setupInfo.m_black.size();
     }
 
+    /** Get number of empty setup points.
+        @return Number of setup points.
+    */
     public int getNumberAddEmpty()
     {
         if (! hasSetupInfo())
-            return -1;
+            return 0;
         return m_extraInfo.m_setupInfo.m_empty.size();
     }
 
+    /** Get number of white setup stones.
+        @return Number of setup stones.
+    */
     public int getNumberAddWhite()
     {
         if (! hasSetupInfo())
-            return -1;
+            return 0;
         return m_extraInfo.m_setupInfo.m_white.size();
     }
 
+    /** Get number of children.
+        @return Number of children.
+    */
     public int getNumberChildren()
     {
         if (m_children == null)
@@ -386,14 +461,19 @@ public final class Node
         return GoColor.EMPTY;
     }
 
+    /** Check if node is child of this node.
+        @param node The node to check.
+        @return true, if node is child node.
+    */
     public boolean isChildOf(Node node)
     {
-        for (int i = 0; i < node.getNumberChildren(); ++i)
-            if (node.getChild(i) == this)
-                return true;
-        return false;
+        return (node.getChildIndex(this) != -1);
     }
 
+    /** Check if string is a valid markup type.
+        @param type The string to check.
+        @return true, if type is from Node.MARK_TYPES.
+    */
     public static boolean isMarkType(String type)
     {
         for (int i = 0; i < MARK_TYPES.length; ++i)
@@ -402,8 +482,12 @@ public final class Node
         return false;
     }
 
+    /** Make child the first child of this node.
+        @param child One of the child nodes of this node.
+    */
     public void makeMainVariation(Node child)
     {
+        assert(child.isChildOf(this));
         if (getNumberChildren() <= 1)
             return;
         ArrayList list = (ArrayList)m_children;
@@ -411,6 +495,31 @@ public final class Node
         list.add(0, child);
     }
 
+    /** Remove child of this node.
+        @param child Child to remove.
+    */
+    public void removeChild(Node child)
+    {
+        assert(child.isChildOf(this));
+        int numberChildren = getNumberChildren();
+        if (numberChildren == 1)
+            m_children = null;
+        else if (numberChildren >= 2)
+        {
+            ArrayList list = (ArrayList)m_children;
+            list.remove(child);
+            if (numberChildren == 2)
+                m_children = list.get(0);
+        }
+        else
+            assert(false);
+        child.m_father = null;
+    }
+
+    /** Remove markup.
+        @param point Location of the markup.
+        @param type Type of the markup from Node.MARK_TYPES.
+    */
     public void removeMarked(GoPoint point, String type)
     {
         assert(point != null);
@@ -429,6 +538,9 @@ public final class Node
         m_children = child;
     }
 
+    /** Store comment in this node.
+        @param comment The comment or null to delete comment.
+    */
     public void setComment(String comment)
     {
         if (comment == null)
@@ -446,11 +558,22 @@ public final class Node
         }
     }
 
+    /** Set father of this node.
+        Usually you don't need this function and it may become deprecated
+        in the future. Use Node.append() to construct trees.
+        @param father The new father.
+    */
     public void setFather(Node father)
     {
         m_father = father;
     }
 
+    /** Add label at a location on the board.
+        Whitespaces will be trimmed.
+        @param point The location.
+        @param label The text of the label; empty string or null to delete
+        the label.
+    */
     public void setLabel(GoPoint point, String label)
     {
         assert(point != null);
@@ -464,60 +587,53 @@ public final class Node
         tree.put(point, label);
     }
 
+    /** Set move stored in this node.
+        @param move The move or null, if no move.
+    */
     public void setMove(Move move)
     {
         m_move = move;
     }
 
+    /** Set byoyomi moves left for black.
+        @param moves Number of moves left.
+    */
     public void setMovesLeftBlack(int moves)
     {
         createTimeInfo().m_movesLeftBlack = moves;
     }
 
+    /** Set byoyomi moves left for white.
+        @param moves Number of moves left.
+    */
     public void setMovesLeftWhite(int moves)
     {
         createTimeInfo().m_movesLeftWhite = moves;
     }
 
+    /** Set byoyomi time left for black.
+        @param timeLeft Time left in seconds.
+    */
     public void setTimeLeftBlack(double timeLeft)
     {
         createTimeInfo().m_timeLeftBlack = timeLeft;
     }
 
+    /** Set byoyomi time left for white.
+        @param timeLeft Time left in seconds.
+    */
     public void setTimeLeftWhite(double timeLeft)
     {
         createTimeInfo().m_timeLeftWhite = timeLeft;
     }
 
+    /** Explicitely set color to play.
+        @param color Color to play.
+    */
     public void setPlayer(GoColor color)
     {
         assert(color == GoColor.BLACK || color == GoColor.WHITE);
         createSetupInfo().m_player = color;
-    }
-
-    public void removeChild(Node child)
-    {
-        int numberChildren = getNumberChildren();
-        assert(numberChildren > 0);
-        if (numberChildren == 1)
-        {
-            assert(m_children == child);
-            m_children = null;
-            return;
-        }
-        else if (numberChildren == 2)
-        {
-            ArrayList list = (ArrayList)m_children;
-            assert(list.contains(child));
-            m_children = child;
-            return;
-        }
-        else if (numberChildren > 2)
-        {
-            ArrayList list = (ArrayList)m_children;
-            assert(list.contains(child));
-            list.remove(child);
-        }
     }
 
     public Node variationAfter(Node child)
