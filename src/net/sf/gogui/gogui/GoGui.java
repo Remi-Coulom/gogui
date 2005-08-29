@@ -1381,7 +1381,7 @@ public class GoGui
             return;
         boolean enable = m_menuBar.getAutoNumber();
         m_commandThread.setAutoNumber(enable);
-        m_prefs.setBool("auto-number", enable);
+        m_prefs.setBool("gtpshell-autonumber", enable);
     }
 
     private void cbBeepAfterMove()
