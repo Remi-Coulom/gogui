@@ -268,7 +268,7 @@ public final class Node
     }
 
     /** Get index of child node.
-        @param node The child.
+        @param child The child.
         @return Index of child or -1, if node is not a child of this node.
     */  
     public int getChildIndex(Node child)
