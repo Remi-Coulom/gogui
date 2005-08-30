@@ -15,16 +15,21 @@ import net.sf.gogui.utils.FileUtils;
 public class SgfFilter
     extends FileFilter
 {
-    public boolean accept(File f)
+    /** Accept function.
+        @param file The file to check.
+        @return true if file has extension .sgf or .SGF or is a directory
+    */
+    public boolean accept(File file)
     {
-        if (f.isDirectory())
+        if (file.isDirectory())
             return true;
-        return FileUtils.hasExtension(f, "sgf");
+        return FileUtils.hasExtension(file, "sgf")
+            || FileUtils.hasExtension(file, "SGF");
     }
 
     public String getDescription()
     {
-        return "Go games (*.sgf)";
+        return "Go Games (*.sgf,*.SGF)";
     }
 }
 
