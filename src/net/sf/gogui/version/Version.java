@@ -8,7 +8,7 @@ package net.sf.gogui.version;
 //----------------------------------------------------------------------------
 
 /** Version information for all packages. */
-public class Version
+public final class Version
 {
     public static String get()
     {
