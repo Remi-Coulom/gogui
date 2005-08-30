@@ -176,8 +176,10 @@ $Source$
  src/net/sf/gogui/*/*.java
  src/net/sf/gogui/*/*.java.in
  test/findbugs/gogui.fb
+ test/checkstyle/checkstyle_checks.xml
  test/junit/src/net/sf/gogui/*/*.java
  test/junit/src/net/sf/gogui/*/*.sgf
+ test/pmd/ruleset.xml
  test/regress/*.tst
 " />
 <zipfileset prefix="gogui-${version}" dir="." filemode="755" includes="
