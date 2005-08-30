@@ -29,14 +29,11 @@ public final class PositionStatistics
 
     public final Table m_histoTable;
 
-    public final Table m_table;
-
     public PositionStatistics(String command, Table table,
                               boolean noAutoScaleHisto,
                               double histoMin, double histoMax)
         throws ErrorMessage
     {
-        m_table = table;
         m_statistics = new Statistics();
         boolean onlyIntValues = true;
         int numberNoResult = 0;
