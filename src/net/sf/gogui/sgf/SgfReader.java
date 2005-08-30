@@ -87,9 +87,12 @@ public final class SgfReader
     public static class SgfError
         extends ErrorMessage
     {
-        public SgfError(String s)
+        /** Constructor.
+            @param message Error message.
+        */
+        public SgfError(String message)
         {
-            super(s);
+            super(message);
         }
 
         /** Serial version to suppress compiler warning.
@@ -147,7 +150,9 @@ public final class SgfReader
         }
     }
 
-    /** Get game tree of loaded SGF file. */
+    /** Get game tree of loaded SGF file.
+        @return The game tree.
+    */
     public GameTree getGameTree()
     {
         return m_gameTree;
