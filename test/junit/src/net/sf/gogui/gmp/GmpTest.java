@@ -185,36 +185,36 @@ public class GmpTest
     private void sendNewGame(boolean hisSeq, boolean mySeq)
         throws IOException
     {
-            Thread thread = new Thread()
+        Thread thread = new Thread()
+            {
+                public void run()
                 {
-                    public void run()
-                    {
-                        StringBuffer message = new StringBuffer();
-                        boolean result = m_gmp.newGame(19, message);
-                        assertTrue(message.toString(), result);
-                    }
-                };
-            thread.start();
-            receive(hisSeq, mySeq, NEWGAME, 0);
-            send(mySeq, hisSeq, OK, 0);
-            waitThread(thread);
+                    StringBuffer message = new StringBuffer();
+                    boolean result = m_gmp.newGame(19, message);
+                    assertTrue(message.toString(), result);
+                }
+            };
+        thread.start();
+        receive(hisSeq, mySeq, NEWGAME, 0);
+        send(mySeq, hisSeq, OK, 0);
+        waitThread(thread);
     }
 
     private void sendUndo(boolean hisSeq, boolean mySeq) throws IOException
     {
-            Thread thread = new Thread()
+        Thread thread = new Thread()
+            {
+                public void run()
                 {
-                    public void run()
-                    {
-                        StringBuffer message = new StringBuffer();
-                        boolean result = m_gmp.undo(message);
-                        assertTrue(message.toString(), result);
-                    }
-                };
-            thread.start();
-            receive(hisSeq, mySeq, UNDO, 1);
-            send(mySeq, hisSeq, OK, 0);
-            waitThread(thread);
+                    StringBuffer message = new StringBuffer();
+                    boolean result = m_gmp.undo(message);
+                    assertTrue(message.toString(), result);
+                }
+            };
+        thread.start();
+        receive(hisSeq, mySeq, UNDO, 1);
+        send(mySeq, hisSeq, OK, 0);
+        waitThread(thread);
     }
 
     private static void verifyPacket(byte[] packet, boolean hisSeq,

@@ -282,7 +282,7 @@ public class TexWriter
         m_out.print("\\stone");
         String markers = getMarkers(string, markup, select);
         if (markers != null)
-        m_out.print("[" + markers + "]");
+            m_out.print("[" + markers + "]");
         printColor(color);
         printCoordinates(point);
         m_out.print("\n");
