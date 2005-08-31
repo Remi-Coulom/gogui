@@ -48,6 +48,7 @@ import net.sf.gogui.version.Version;
     the standard.
     @todo Image creation using the GUI components is cumbersome and
     inefficient.
+    @todo Save to temp file and rename as required by the standard.
 */
 public final class Thumbnail
 {
