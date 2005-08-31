@@ -588,6 +588,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
   net/sf/gogui/sgf.*,
   net/sf/gogui/sgftotex.*,
   net/sf/gogui/tex.*,
+  net/sf/gogui/thumbnail.*,
   net/sf/gogui/twogtp.*,
   net/sf/gogui/utils.*,
   net/sf/gogui/version.*
