@@ -22,7 +22,7 @@ to facilitate debugging and reproducing errors.
 <title>Requirements</title>
 <para>
 GoGui requires Java 1.4.
-It is mainly tested with Sun's JDK on Linux and on Mac OS/X.
+It is mainly tested with Sun's JDK on GNU/Linux and on Mac OS/X.
 </para>
 <para>
 <note>

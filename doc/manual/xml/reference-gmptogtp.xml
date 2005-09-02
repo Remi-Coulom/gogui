@@ -59,7 +59,7 @@ For using a serial device, an implementation of the
 <ulink url="http://java.sun.com/products/javacomm/">
 Java Communications API</ulink> should be installed
 (<ulink url="http://www.rxtx.org/">rxtx</ulink>
-is a version supporting Linux).
+is a version supporting Unix).
 Note that GMP is an asynchronous protocol, commands can be sent
 by both sides at any time, while GTP is synchronous.
 This problem is resolved in the following way:

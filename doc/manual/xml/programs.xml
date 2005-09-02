@@ -74,7 +74,7 @@ You can use GtpAdapter to translate moves to lowercase.
 </note>
 </para>
 <para>
-Operating systems: Linux, Windows
+Operating systems: GNU/Linux, Windows
 </para>
 <para>
 Command: <userinput>gtpadapter -lowercase &quot;Indigo2004-Linux.exe -gtp&quot;</userinput>
