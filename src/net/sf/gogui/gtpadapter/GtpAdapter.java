@@ -412,7 +412,7 @@ public class GtpAdapter
                 && (c.equals("final_score")
                     || (c.equals("final_status_list"))))
                     continue;
-            cmd.getResponse().append(cmd);
+            cmd.getResponse().append(c);
             cmd.getResponse().append("\n");
         }
         cmd.getResponse().append("boardsize\n");
