@@ -2,6 +2,19 @@
 <title>Trouble Shooting</title>
 
 <section>
+<title>Why does GoGui become very slow sometimes?</title>
+<para>
+This has been experienced on GNU/Linux with Sun's Java 1.5 when other
+processes running in the background create some load on the computer.
+It's probably an inefficient thread implementation in Sun's Java VM.
+GoGui needs to create multiple threads for the connection to the Go
+program.
+Try not to run CPU intensive background processes while you use GoGui.
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+
+<section>
 <title>Rendering errors in the GTP shell</title>
 <para>
 Rendering errors in the GTP shell window occur, which disappear after manually
