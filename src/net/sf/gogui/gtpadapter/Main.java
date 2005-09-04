@@ -49,6 +49,8 @@ public final class Main
             }
             if (opt.isSet("version"))
             {
+                if (opt.getArguments().size() > 0)
+                    fail("No arguments allowed with option -version");
                 System.out.println("GtpAdapter " + Version.get());
                 return;
             }
@@ -66,7 +68,7 @@ public final class Main
             if (arguments.size() != 1)
             {
                 printUsage(System.err);
-                System.exit(-1);
+                fail();
             }
             PrintStream log = null;
             if (opt.isSet("log"))
@@ -104,13 +106,24 @@ public final class Main
         catch (Throwable t)
         {
             StringUtils.printException(t);
-            System.exit(-1);
+            fail();
         }
     }
 
     /** Make constructor unavailable; class is for namespace only. */
     private Main()
     {
+    }
+
+    private static void fail()
+    {
+        System.exit(-1);
+    }
+
+    private static void fail(String message)
+    {
+        System.err.println(message);
+        fail();
     }
 
     private static void printUsage(PrintStream out)
