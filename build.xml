@@ -111,8 +111,9 @@ $Source$
 
 <target name="compile" depends="extract-comm.jar,depend,version,doc">
 <mkdir dir="build"/>
-<javac srcdir="src" destdir="build" source="1.4" target="1.4"
- deprecation="true" optimize="${optimize}" debug="${debug}" listfiles="yes"
+<javac srcdir="src" excludes="net/sf/gogui/thumbnail/*.java" destdir="build"
+ source="1.4" target="1.4" deprecation="true" optimize="${optimize}"
+ debug="${debug}" listfiles="yes"
  classpath="external/javacomm/commapi/comm.jar"/>
 <copy todir="build">
 <fileset dir="src" includes="net/sf/gogui/images/*.png"/>
