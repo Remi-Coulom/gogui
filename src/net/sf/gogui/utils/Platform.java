@@ -5,6 +5,7 @@
 
 package net.sf.gogui.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
@@ -55,19 +56,22 @@ public class Platform
         }
         try
         {
-            String[] cmdArray = { "/bin/sh", "-c",
-                                  "grep '^model name' /proc/cpuinfo" };
-            String result = ProcessUtils.runCommand(cmdArray);
-            int start = result.indexOf(":");
-            if (start >= 0)
+            if (new File("/proc/cpuinfo").exists())
             {
-                info = info + " (";
-                int end = result.indexOf("\n");
-                if (end >= 0)
-                    info = info + result.substring(start + 1, end).trim();
-                else
-                    info = info + result.substring(start + 1).trim();
-                info = info + ")";
+                String[] cmdArray = { "/bin/sh", "-c",
+                                      "grep '^model name' /proc/cpuinfo" };
+                String result = ProcessUtils.runCommand(cmdArray);
+                int start = result.indexOf(":");
+                if (start >= 0)
+                {
+                    info = info + " (";
+                    int end = result.indexOf("\n");
+                    if (end >= 0)
+                        info = info + result.substring(start + 1, end).trim();
+                    else
+                        info = info + result.substring(start + 1).trim();
+                    info = info + ")";
+                }
             }
         }
         catch (IOException e)
