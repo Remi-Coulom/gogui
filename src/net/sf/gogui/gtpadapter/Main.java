@@ -89,6 +89,8 @@ public final class Main
                 adapter.setVersion1();
             if (fillPasses)
                 adapter.setFillPasses();
+            if (name != null)
+                adapter.setName(name);
             if (resign)
                 adapter.setResign(resignScore);
             if (opt.isSet("lowercase"))
