@@ -52,6 +52,40 @@ public class GtpAdapterTest
         assertTrue(expect.isExpectQueueEmpty());
     }
 
+    public void testName() throws ErrorMessage, IOException, GtpError
+    {
+        GtpExpectEngine expect = new GtpExpectEngine(null);
+        GtpEngineConnection expectConnection
+            = new GtpEngineConnection(expect);
+        expect.expect("protocol_version", "2");
+        expect.expect("list_commands", "");
+        GtpAdapter adapter
+            = new GtpAdapter(expectConnection.getGtpClient(), null, false);
+        GtpEngineConnection adapterConnection
+            = new GtpEngineConnection(adapter);
+        GtpClient gtp = adapterConnection.getGtpClient();
+        expect.expect("name", "Foo");
+        assertEquals("Foo", gtp.send("name"));
+        assertTrue(expect.isExpectQueueEmpty());
+    }
+
+    public void testName2() throws ErrorMessage, IOException, GtpError
+    {
+        GtpExpectEngine expect = new GtpExpectEngine(null);
+        GtpEngineConnection expectConnection
+            = new GtpEngineConnection(expect);
+        expect.expect("protocol_version", "2");
+        expect.expect("list_commands", "");
+        GtpAdapter adapter
+            = new GtpAdapter(expectConnection.getGtpClient(), null, false);
+        adapter.setName("Bar");
+        GtpEngineConnection adapterConnection
+            = new GtpEngineConnection(adapter);
+        GtpClient gtp = adapterConnection.getGtpClient();
+        assertEquals("Bar", gtp.send("name"));
+        assertTrue(expect.isExpectQueueEmpty());
+    }
+
     private File getTmpFile(String name) throws ErrorMessage, IOException
     {
         InputStream in = getClass().getResourceAsStream(name);
