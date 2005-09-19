@@ -596,7 +596,7 @@ public final class GuiBoard
                 if (! s.endsWith("."))
                     setString(point, s + ".");
                 continue;
-            };
+            }
             if (numberMarked >= 26)
                 setString(point, "+");
             else

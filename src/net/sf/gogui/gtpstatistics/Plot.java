@@ -58,7 +58,7 @@ public class Plot
         else
             m_top = (int)(m_fontHeight * 0.5);
         m_right = m_imgWidth - (int)(m_fontHeight * 0.5);
-        m_bottom = m_imgHeight - (int)(m_fontHeight * 1.5);;
+        m_bottom = m_imgHeight - (int)(m_fontHeight * 1.5);
         m_width = m_right - m_left;
         m_height = m_bottom - m_top;
         initScale(table, columnX, columnY);
