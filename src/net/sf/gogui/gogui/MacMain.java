@@ -15,7 +15,7 @@ import java.lang.reflect.Modifier;
     Loads the SplashScreen class with the reflection API to set Mac AWT
     properties before any AWT class is loaded.
 */
-public class MacMain
+public final class MacMain
 {
     public static final void main(String [] args)
     {
@@ -52,6 +52,11 @@ public class MacMain
         {
             fatalError(e.getClass().getName() + ": " + e.getMessage());
         }
+    }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private MacMain()
+    {
     }
 
     private static void fatalError(String message)
