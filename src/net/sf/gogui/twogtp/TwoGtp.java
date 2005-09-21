@@ -824,7 +824,7 @@ public class TwoGtp
             File file = getFile(n);
             if (! file.exists())
             {
-                System.err.println("Game " + file + " not found.");
+                System.err.println("Game " + file + " not found");
                 continue;
             }
             if (! file.exists())

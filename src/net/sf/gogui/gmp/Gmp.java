@@ -588,14 +588,14 @@ class MainThread
             }
             catch (InterruptedException e)
             {
-                System.err.println("Interrupted.");
+                System.err.println("Interrupted");
             }
             switch (m_state)
             {
             case STATE_IDLE:
                 return true;
             case STATE_DENY:
-                response.append("Command denied.");
+                response.append("Command denied");
                 m_state = STATE_IDLE;
                 return false;
             case STATE_WAIT_OK:
@@ -607,7 +607,7 @@ class MainThread
                 m_state = STATE_DISCONNECTED;
                 return false;
             case STATE_DISCONNECTED:
-                response.append("GMP connection broken.");
+                response.append("GMP connection broken");
                 return false;
             default:
                 return false;
@@ -661,7 +661,7 @@ class MainThread
             }
             catch (InterruptedException e)
             {
-                System.err.println("Interrupted.");
+                System.err.println("Interrupted");
             }
         }
     }

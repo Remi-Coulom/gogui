@@ -57,7 +57,7 @@ public final class BoardUtils
         {
             s.append("  ");
             s.append(board.getToMove() == GoColor.BLACK ? "Black" : "White");
-            s.append(" to move.");
+            s.append(" to move");
         }
         else if (yIndex == size - 2)
         {

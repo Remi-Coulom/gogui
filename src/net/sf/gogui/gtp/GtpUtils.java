@@ -132,7 +132,7 @@ public final class GtpUtils
                 }
             }
         if (! nextIsPoint)
-            throw new GtpError("Missing string.");
+            throw new GtpError("Missing string");
     }
 
     public static String[][] parseStringBoard(String s, String title,
@@ -149,7 +149,7 @@ public final class GtpUtils
                 {
                     String line = reader.readLine();
                     if (line == null)
-                        throw new GtpError(title + " not found.");
+                        throw new GtpError(title + " not found");
                     if (line.trim().equals(pattern))
                         break;
                 }

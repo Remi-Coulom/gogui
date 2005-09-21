@@ -106,13 +106,13 @@ public final class Main
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
             if (opt.isSet("games") && sgfFile.equals(""))
-                throw new ErrorMessage("Use option -sgffile with -games.");
+                throw new ErrorMessage("Use option -sgffile with -games");
             Openings openings = null;
             if (opt.isSet("openings"))
                 openings = new Openings(new File(opt.getString("openings")));
             boolean loadsgf = opt.isSet("loadsgf");
             if (loadsgf && openings == null)
-                throw new ErrorMessage("Use option -loadsgf with -openings.");
+                throw new ErrorMessage("Use option -loadsgf with -openings");
             if (loadsgf && ! auto)
                 throw new ErrorMessage("Option -loadsgf can only be used with"
                                        + " -auto");
@@ -123,7 +123,7 @@ public final class Main
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)
-                    System.err.println("Already " + games + " games played.");
+                    System.err.println("Already " + games + " games played");
                 twoGtp.autoPlay();
             }
             else

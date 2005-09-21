@@ -43,7 +43,7 @@ public class GtpAdapter
     {
         super(log);
         if (program.equals(""))
-            throw new Exception("No program set.");
+            throw new Exception("No program set");
         m_gtp = new GtpClient(program, verbose, null);
         if (gtpFile != null)
             sendGtpFile(gtpFile);

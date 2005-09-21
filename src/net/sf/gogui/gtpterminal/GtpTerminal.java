@@ -40,7 +40,7 @@ public class GtpTerminal
         throws Exception
     {
         if (program.equals(""))
-            throw new Exception("No program set.");
+            throw new Exception("No program set");
         m_verbose = verbose;
         m_gtp = new GtpClient(program, verbose, this);
         m_gtp.queryProtocolVersion();
@@ -251,7 +251,7 @@ public class GtpTerminal
     {
         if (cmdArray.length < 2)
         {
-            System.out.println("Need filename argument.");
+            System.out.println("Need filename argument");
             return;
         }
         File file = new File(cmdArray[1]);
@@ -267,7 +267,7 @@ public class GtpTerminal
             GameInformation gameInformation = gameTree.getGameInformation();
             if (gameInformation.m_handicap > 0)
             {
-                System.out.println("Handicap games not supported.");
+                System.out.println("Handicap games not supported");
                 return;
             }
             if (! newGame(gameInformation.m_boardSize))
@@ -355,7 +355,7 @@ public class GtpTerminal
     {
         if (cmdArray.length < 2)
         {
-            System.out.println("Need filename argument.");
+            System.out.println("Need filename argument");
             return;
         }
         File file = new File(cmdArray[1]);
@@ -367,7 +367,7 @@ public class GtpTerminal
         }
         catch (FileNotFoundException e) 
         {
-            System.out.println("Write error.");
+            System.out.println("Write error");
             return;
         }
     }

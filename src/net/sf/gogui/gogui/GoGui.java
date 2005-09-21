@@ -596,7 +596,7 @@ public class GoGui
     {
         if (m_gtpShell == null)
             return;
-        File file = SimpleDialogs.showOpen(this, "Choose GTP file.");
+        File file = SimpleDialogs.showOpen(this, "Choose GTP file");
         if (file == null)
             return;
         sendGtpFile(file);
@@ -665,13 +665,13 @@ public class GoGui
         if (isCommandInProgress())
         {
             showError("Cannot clear analyze command\n" +
-                      "while command in progress.");
+                      "while command in progress");
             return;
         }
         if (m_setupMode)
         {
             showError("Cannot clear analyze command\n" +
-                      "in setup mode.");
+                      "in setup mode");
             return;
         }
         m_analyzeDialog.setRunButtonEnabled(true);
@@ -867,13 +867,13 @@ public class GoGui
         if (isCommandInProgress())
         {
             showError("Cannot run analyze command\n" +
-                      "while command in progress.");
+                      "while command in progress");
             return;
         }
         if (m_setupMode)
         {
             showError("Cannot run analyze command\n" +
-                      "in setup mode.");
+                      "in setup mode");
             return;
         }
         initAnalyzeCommand(command, autoRun);

@@ -125,7 +125,7 @@ public final class GoGuiSettings
         if (arguments.size() == 1)
             m_file = (String)arguments.get(0);
         else if (arguments.size() > 1)
-            throw new ErrorMessage("Only one argument allowed.");
+            throw new ErrorMessage("Only one argument allowed");
         validate();
     }
 

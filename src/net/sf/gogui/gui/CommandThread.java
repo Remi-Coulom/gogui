@@ -177,7 +177,7 @@ public class CommandThread
                 }
                 catch (InterruptedException e)
                 {
-                    System.err.println("Interrupted.");
+                    System.err.println("Interrupted");
                 }
                 firstWait = false;
                 m_response = null;

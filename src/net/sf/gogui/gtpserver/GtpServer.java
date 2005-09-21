@@ -163,7 +163,7 @@ public final class GtpServer
             }
             inputStream.close();
         }
-        System.err.println("Connected.");
+        System.err.println("Connected");
         return socket;
     }
 

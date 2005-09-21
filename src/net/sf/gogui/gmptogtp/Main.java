@@ -104,12 +104,12 @@ public final class Main
                 program = (String)arguments.get(0);
             else if (arguments.size() > 1)
             {
-                System.err.println("Only one program argument allowed.");
+                System.err.println("Only one program argument allowed");
                 System.exit(-1);
             }
             else if (device.equals(""))
             {
-                System.err.println("Missing program argument.");
+                System.err.println("Missing program argument");
                 System.exit(-1);
             }
             String title = "Go Modem ";
