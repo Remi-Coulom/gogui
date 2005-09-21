@@ -38,7 +38,7 @@ body
   line-height: 1em;
 }
 
-.chapter .sect1, .chapter .titlepage, .sect1 .titlepage, .article .titlepage {
+.chapter .sect1, .chapter .titlepage, .sect1 .titlepage, .article .titlepage, .appendix .titlepage, .index .titlepage {
   padding: 0em;
 }
 
