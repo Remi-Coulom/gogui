@@ -773,15 +773,15 @@ Popup a window with command completions while entering a command.
 </varlistentry>
 
 <varlistentry>
+<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Auto Number</guimenuitem></term>
+<listitem>
+<para>
 <indexterm>
 <primary>Auto Number</primary>
 </indexterm>
 <indexterm>
 <primary>Unknown command</primary>
 </indexterm>
-<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Auto Number</guimenuitem></term>
-<listitem>
-<para>
 Automatically number GTP commands.
 Note that some Go programs don't comply to the GTP standard by not supporting
 GTP commands with a numerical ID.
