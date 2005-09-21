@@ -151,8 +151,6 @@ $Source$
  config/gogui.omf
  config/gogui.xml
  doc/README
- doc/javadoc/**/*.html
- doc/javadoc/**/*.gif
  doc/manual/html/*.html
  doc/manual/html/*.png
  doc/manual/html/*.css
@@ -163,7 +161,6 @@ $Source$
  doc/doxygen/Doxyfile
  doc/doxygen/footer.html
  doc/doxygen/README
- doc/doxygen/html/*
  ${docbook.path}.zip
  external/javacomm/javacomm20-win32.zip
  external/javacomm/README
