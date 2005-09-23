@@ -148,8 +148,10 @@ $Source$
  build.xml
  config/analyze-commands*
  config/gogui*.desktop
+ config/gogui-application-x-go-sgf.png
  config/gogui.omf
  config/gogui.xml
+ config/x-go-sgf.desktop
  doc/README
  doc/manual/html/*.html
  doc/manual/html/*.png
