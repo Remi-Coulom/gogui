@@ -7,19 +7,26 @@ The following Go programs can be used with GoGui:
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
   
 <section>
-<title>GNU Go</title>
+<title>AmigoPlus</title>
 <indexterm>
-<primary>GNU Go</primary>
+<primary>AmigoPlus</primary>
 </indexterm>
 <para>
-<ulink url="http://www.gnu.org/software/gnugo/gnugo.html">
-http://www.gnu.org/software/gnugo/gnugo.html</ulink>
+<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm">
+http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm</ulink>
 </para>
 <para>
-Operating systems: Unix, Windows, Macintosh
+<note>
+<simpara>
+AmigoPlus 0.1.2 has several bugs in its GTP implementation.
+</simpara>
+</note>
 </para>
 <para>
-Command: <userinput>gnugo --mode gtp</userinput>
+Operating systems: Unix
+</para>
+<para>
+Command: <userinput>amigoplus -gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -40,7 +47,7 @@ GTP mode, however, this window can simply be ignored and minimized.
 </para>
 <para>
 Aya also works on Unix in the <ulink url="http://www.winehq.com">Wine</ulink>
-Windows emulator, the command would then be:
+Windows emulator, the command would be then:
 </para>
 <para>
 <userinput>wine Aya.exe --mode gtp</userinput>
@@ -52,6 +59,79 @@ Operating systems: Windows
 </para>
 <para>
 Command: <userinput>Aya.exe --mode gtp</userinput>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+  
+<section>
+<title>BadukiPlus</title>
+<indexterm>
+<primary>BadukiPlus</primary>
+</indexterm>
+<para>
+<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm">
+http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm</ulink>
+</para>
+<para>
+<note>
+<simpara>
+BadukiPlus 0.1.2 has several bugs in its GTP implementation.
+</simpara>
+</note>
+</para>
+<para>
+Operating systems: Unix
+</para>
+<para>
+Command: <userinput>badukiplus -gtp</userinput>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+  
+<section>
+<title>Crazy Stone</title>
+<indexterm>
+<primary>Crazy Stone</primary>
+</indexterm>
+<para>
+<ulink url="http://remi.coulom.free.fr/CrazyStone/">
+http://remi.coulom.free.fr/CrazyStone/</ulink>
+</para>
+<para>
+<note>
+<para>
+Crazy Stone also works on Unix in the
+<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator, the command
+would be then:
+</para>
+<para>
+<userinput>wine CrazyStone-0001.exe</userinput>
+</para>
+</note>
+</para>
+<para>
+Operating systems: Windows
+</para>
+<para>
+Command: <userinput>CrazyStone-0001.exe</userinput>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+</section>
+  
+<section>
+<title>GNU Go</title>
+<indexterm>
+<primary>GNU Go</primary>
+</indexterm>
+<para>
+<ulink url="http://www.gnu.org/software/gnugo/gnugo.html">
+http://www.gnu.org/software/gnugo/gnugo.html</ulink>
+</para>
+<para>
+Operating systems: Unix, Windows, Macintosh
+</para>
+<para>
+Command: <userinput>gnugo --mode gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -78,56 +158,6 @@ Operating systems: GNU/Linux, Windows
 </para>
 <para>
 Command: <userinput>gtpadapter -lowercase &quot;Indigo2004-Linux.exe -gtp&quot;</userinput>
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-  
-<section>
-<title>AmigoPlus</title>
-<indexterm>
-<primary>AmigoPlus</primary>
-</indexterm>
-<para>
-<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm">
-http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm</ulink>
-</para>
-<para>
-<note>
-<simpara>
-AmigoPlus 0.1.2 has several bugs in its GTP implementation.
-</simpara>
-</note>
-</para>
-<para>
-Operating systems: Unix
-</para>
-<para>
-Command: <userinput>amigoplus -gtp</userinput>
-</para>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-  
-<section>
-<title>BadukiPlus</title>
-<indexterm>
-<primary>BadukiPlus</primary>
-</indexterm>
-<para>
-<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm">
-http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm</ulink>
-</para>
-<para>
-<note>
-<simpara>
-BadukiPlus 0.1.2 has several bugs in its GTP implementation.
-</simpara>
-</note>
-</para>
-<para>
-Operating systems: Unix
-</para>
-<para>
-Command: <userinput>badukiplus -gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
