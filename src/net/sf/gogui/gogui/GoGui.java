@@ -2074,9 +2074,11 @@ public class GoGui
     {
         if (m_commandThread == null || ! isCurrentNodeExecuted())
             return;
-        if (m_board.bothPassed())
+        int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
+        boolean bothPassed = (moveNumber >= 2 && m_board.bothPassed());
+        if (bothPassed)
             m_menuBar.setCleanup(true);
-        boolean gameFinished = (m_board.bothPassed() || m_resigned);
+        boolean gameFinished = (bothPassed || m_resigned);
         if (m_computerBlack && m_computerWhite)
         {
             if (gameFinished)
