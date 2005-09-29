@@ -135,11 +135,12 @@ public final class CommandStatistics
             format.setGroupingUsed(false);
             return format;
         }
-        String pattern = "0.";
+        StringBuffer pattern = new StringBuffer();
+        pattern.append("0.");
         for (int i = 0; i < precision; ++i)
-            pattern = pattern + "#";
-        pattern = pattern + "E0";
-        format.applyPattern(pattern);
+            pattern.append("#");
+        pattern.append("E0");
+        format.applyPattern(pattern.toString());
         return format;
     }
 }

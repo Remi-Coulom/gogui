@@ -78,10 +78,13 @@ public class ProcessUtils
         copyErr.start();
         InputStream in = process.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        String result = "";
+        StringBuffer result = new StringBuffer();
         String line;
         while ((line = reader.readLine()) != null)
-            result = result + line + "\n";
+        {
+            result.append(line);
+            result.append("\n");
+        }
         reader.close();
         try
         {
@@ -92,7 +95,7 @@ public class ProcessUtils
         {
             throw new IOException("InterruptedException");
         }
-        return result;
+        return result.toString();
     }
 
     /** Run a process.
