@@ -45,7 +45,8 @@ public class StatisticsTest
         assertEquals(min, s.getMin(), epsilon);
         assertEquals(max, s.getMax(), epsilon);
         assertEquals(sum, s.getSum(), epsilon);
-        assertEquals(Math.sqrt(count / 2) * error, s.getMaxError(2), epsilon);
+        assertEquals(Math.sqrt((double)count / 2) * error, s.getMaxError(2),
+                     epsilon);
     }
 }
 
