@@ -107,14 +107,6 @@ public final class PositionStatistics
             }
         }
         m_histoTable = TableUtils.fromHistogram(m_histogram, command);
-        ArrayList files = TableUtils.getColumnUnique(table, "File");
-        for (int i = 0; i < files.size(); ++i)
-        {
-            String file = (String)(files.get(i));
-            Table tableFile = TableUtils.select(table, "File", file);
-            Statistics statisticsFile
-                = TableUtils.getStatistics(tableFile, command);
-        }
     }
 
     public int getCount()
