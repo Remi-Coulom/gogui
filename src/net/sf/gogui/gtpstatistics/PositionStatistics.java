@@ -5,7 +5,6 @@
 
 package net.sf.gogui.gtpstatistics;
 
-import java.util.ArrayList;
 import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.ErrorMessage;
