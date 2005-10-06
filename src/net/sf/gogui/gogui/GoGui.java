@@ -674,7 +674,8 @@ public class GoGui
                       "in setup mode");
             return;
         }
-        m_analyzeDialog.setRunButtonEnabled(true);
+        if (m_analyzeDialog != null)
+            m_analyzeDialog.setRunButtonEnabled(true);
         m_analyzeCommand = null;
         setBoardCursorDefault();
         if (resetBoard)
