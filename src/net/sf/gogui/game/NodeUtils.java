@@ -272,11 +272,14 @@ public final class NodeUtils
         The shortest path goes backward from the start node (inclusive) until
         the last common moves of both variations (exclusive) and then forward
         to the target node (inclusive).
+        @param start Start node
+        @param target Target node
         @param nodes Nodes to execute after undoing the number of nodes
         returned
         @return Number if moves to undo
     */
-    public static int getShortestPath(Node start, Node target, ArrayList nodes)
+    public static int getShortestPath(Node start, Node target,
+                                      ArrayList nodes)
     {
         ArrayList rootToStart = getPathFromRoot(start);
         ArrayList rootToTarget = getPathFromRoot(target);

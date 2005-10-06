@@ -399,7 +399,7 @@ public final class GtpClient
             m_supportedCommands[i] = m_supportedCommands[i].trim();
     }
 
-    /** Queries the program version..
+    /** Queries the program version.
         @return The version or an empty string if the version command fails.
     */
     public String queryVersion()
