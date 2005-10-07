@@ -32,6 +32,18 @@ public class GameTreeTest
         assertTrue(tree.hasVariations());
     }
 
+    public void testKeepOnlyMainVariation()
+    {
+        GameTree tree = new GameTree();
+        Node root = tree.getRoot();
+        Node node1 = appendNewNode(root);
+        Node node2 = appendNewNode(node1);
+        Node node3 = appendNewNode(node2);
+        Node node4 = appendNewNode(node1);
+        tree.keepOnlyMainVariation();
+        assertFalse(tree.hasVariations());
+    }
+
     private static Node appendNewNode(Node father)
     {
         Node child = new Node();
