@@ -100,8 +100,8 @@ public final class Node
         m_move = move;
     }
 
-    /** Append this node as a child to another node.
-        @param node The node to append to.
+    /** Append a node as a child to this node.
+        @param node The node to append.
     */
     public void append(Node node)
     {
