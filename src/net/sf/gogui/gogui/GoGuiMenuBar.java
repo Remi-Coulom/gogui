@@ -938,6 +938,8 @@ public class GoGuiMenuBar
                     "export-latex");        
         addMenuItem(menu, "LaTeX Position...", KeyEvent.VK_P,
                     "export-latex-position");
+        addMenuItem(menu, "Text Position...", KeyEvent.VK_T,
+                    "export-ascii");
         return menu;
     }
 

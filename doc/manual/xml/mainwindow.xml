@@ -148,6 +148,15 @@ Some board markups are also exported
 </varlistentry>
 
 <varlistentry>
+<term><guisubmenu>Export</guisubmenu> / <guimenuitem>Text Position</guimenuitem></term>
+<listitem>
+<para>
+Export the current position to a text file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guimenuitem>Print</guimenuitem></term>
 <listitem>
 <para>

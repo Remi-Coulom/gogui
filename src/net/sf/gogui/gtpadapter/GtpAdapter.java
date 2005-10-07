@@ -378,7 +378,7 @@ public class GtpAdapter
     {
         OutputStream outputStream = new ByteArrayOutputStream(2048);
         PrintStream printStream = new PrintStream(outputStream);
-        BoardUtils.print(m_board, printStream);
+        BoardUtils.print(m_board, printStream, true);
         cmd.getResponse().append("\n");
         cmd.getResponse().append(outputStream.toString());
     }

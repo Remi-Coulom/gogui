@@ -12,7 +12,13 @@ import java.io.PrintStream;
 /** Static utility functions related to class Board. */
 public final class BoardUtils
 {
-    public static void print(Board board, PrintStream out)
+    /** Print board position in text format.
+        @param board The board to print.
+        @param out The stream to print to.
+        @param withGameInfo Print game information (prisoners, recent moves)
+    */
+    public static void print(Board board, PrintStream out,
+                             boolean withGameInfo)
     {
         StringBuffer s = new StringBuffer(1024);
         int size = board.getSize();
@@ -38,10 +44,16 @@ public final class BoardUtils
                 }
             }
             printYCoord(y, s);
-            printGameInfo(board, s, y);
+            if (withGameInfo)
+                printGameInfo(board, s, y);
             s.append("\n");
         }
         printXCoords(size, s);
+        if (! withGameInfo)
+        {
+            printToMove(board, s);
+            s.append("\n");
+        }
         out.print(s);
     }
 
@@ -56,8 +68,7 @@ public final class BoardUtils
         if (yIndex == size - 1)
         {
             s.append("  ");
-            s.append(board.getToMove() == GoColor.BLACK ? "Black" : "White");
-            s.append(" to move");
+            printToMove(board, s);
         }
         else if (yIndex == size - 2)
         {
@@ -79,6 +90,12 @@ public final class BoardUtils
                 s.append(GoPoint.toString(move.getPoint()));
             }
         }
+    }
+
+    private static void printToMove(Board board, StringBuffer buffer)
+    {
+        buffer.append(board.getToMove() == GoColor.BLACK ? "Black" : "White");
+        buffer.append(" to move");
     }
 
     private static void printXCoords(int size, StringBuffer s)

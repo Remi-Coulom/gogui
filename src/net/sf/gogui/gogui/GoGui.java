@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
@@ -51,6 +52,7 @@ import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.BoardUtils;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -350,6 +352,8 @@ public class GoGui
             cbEnd();
         else if (command.equals("exit"))
             close();
+        else if (command.equals("export-ascii"))
+            cbExportAscii();
         else if (command.equals("export-latex"))
             cbExportLatex();
         else if (command.equals("export-latex-position"))
@@ -1534,6 +1538,22 @@ public class GoGui
     {
         forward(NodeUtils.getNodesLeft(m_currentNode));
         boardChangedBegin(false, false);
+    }
+
+    private void cbExportAscii()
+    {
+        File file = SimpleDialogs.showSave(this, "Export Text Diagram");
+        if (file == null)
+            return;
+        try
+        {
+            OutputStream out = new FileOutputStream(file);
+            BoardUtils.print(m_board, new PrintStream(out), false);
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Export failed", e);
+        }
     }
 
     private void cbExportSgfPosition()
