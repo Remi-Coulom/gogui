@@ -620,6 +620,7 @@ public class TwoGtp
                 = Math.max(0, getCpuTime(m_black) - m_cpuTimeBlack);
             double cpuTimeWhite
                 = Math.max(0, getCpuTime(m_white) - m_cpuTimeWhite);
+            m_cpuTimeBlack = cpuTimeBlack;
             m_cpuTimeWhite = cpuTimeWhite;
             if (isAlternated())
             {

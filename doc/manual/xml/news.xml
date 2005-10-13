@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <para>
+TwoGtp: Fix game CPU time measurement
+</para>
+</listitem>
+<listitem>
+<para>
 New menu item Export/Text Position
 </para>
 </listitem>
