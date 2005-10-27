@@ -822,6 +822,11 @@ public class GoGui
     {
         if (isCommandInProgress() || m_commandThread == null)
             return false;
+        if (m_setupMode)
+        {
+            showError("Cannot send command in setup mode");
+            return false;
+        }
         if (sync)
         {
             m_commandThread.send(command);
