@@ -388,18 +388,9 @@ public class Analyze
     {
         GameInfo info = (GameInfo)(m_gameInfo.get(gameNumber));
         File gameFile = new File(info.m_file);
-        try
-        {
-            String path
-                = FileUtils.getRelativePath(fromFile, gameFile)
-                + gameFile.getName();
-            return "<a href=\"" + path + "\">"
-                + (shortName ? gameFile.getName() : path) + "</a>";
-        }
-        catch (IOException e)
-        {
-            return info.m_file;
-        }
+        String path = FileUtils.getRelativeURI(fromFile, gameFile);
+        return "<a href=\"" + path + "\">"
+            + (shortName ? gameFile.getName() : path) + "</a>";
     }
 
     private int getImgWidth(int numberMoves)

@@ -7,6 +7,7 @@ package net.sf.gogui.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
@@ -26,35 +27,36 @@ public final class FileUtils
         return ext;
     }
 
-    /** Relative path from file1 to file2.
-        If file2 is a file, it only returns the path, not including
-        file2.getName().
+    /** Returns relative URI between to files.
+        Can be used instead of URI.relativize(), which  does not compute
+        relative URI's correctly, if toFile is not a subdirectory of fromFile
+        (Sun's Java 1.5.0).
+        @todo Handle special charcters and file names containing slashes.
+        @param fromFile File to compute the URI relative to.
+        @param toFile Target file or directory.
+        @return Relative URI.
     */
-    public static String getRelativePath(File file1, File file2)
-        throws IOException
+    public static String getRelativeURI(File fromFile, File toFile)
     {
-        file1 = file1.getCanonicalFile();
-        file2 = file2.getCanonicalFile();
-        if (file1.isFile())
-            file1 = file1.getParentFile();
-        if (file2.isFile())
-            file2 = file2.getParentFile();
-        char sep = File.separatorChar;
-        String[] dir1 = StringUtils.split(file1.toString(), sep);
-        String[] dir2 = StringUtils.split(file2.toString(), sep);
+        assert(! fromFile.exists() || ! fromFile.isDirectory());
+        fromFile = fromFile.getAbsoluteFile().getParentFile();
+        assert(fromFile != null);
+        ArrayList fromList = splitFile(fromFile);
+        ArrayList toList = splitFile(toFile);
+        int fromSize = fromList.size();
+        int toSize = toList.size();
         int i = 0;
-        while (i < dir1.length && i < dir2.length && dir1[i].equals(dir2[i]))
+        while (i < fromSize && i < toSize
+               && fromList.get(i).equals(toList.get(i)))
             ++i;
         StringBuffer result = new StringBuffer();
-        for (int j = i; j < dir1.length; ++j)
+        for (int j = i; j < fromSize; ++j)
+            result.append("../");
+        for (int j = i; j < toSize; ++j)
         {
-            result.append("..");
-            result.append(sep);
-        }
-        for (int j = i; j < dir2.length; ++j)
-        {
-            result.append(dir2[j]);
-            result.append(sep);
+            result.append((String)(toList.get(j)));
+            if (j < toSize - 1)
+                result.append('/');
         }
         return result.toString();
     }
@@ -111,6 +113,25 @@ public final class FileUtils
     /** Make constructor unavailable; class is for namespace only. */
     private FileUtils()
     {
+    }
+
+    private static ArrayList splitFile(File file)
+    {
+        ArrayList list = new ArrayList();
+        file = file.getAbsoluteFile();
+        try
+        {
+            file = file.getCanonicalFile();
+        }
+        catch (IOException e)
+        {
+        }
+        while (file != null)
+        {
+            list.add(0, file.getName());
+            file = file.getParentFile();
+        }
+        return list;
     }
 }
 

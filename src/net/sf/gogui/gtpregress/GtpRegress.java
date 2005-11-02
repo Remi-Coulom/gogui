@@ -181,7 +181,7 @@ public class GtpRegress
 
     private int m_otherErrors;
 
-    private File m_file;
+    private File m_testFile;
 
     private PrintStream m_out;
 
@@ -291,7 +291,7 @@ public class GtpRegress
     private TestSummary getTestSummary(long timeMillis, double cpuTime)
     {
         TestSummary summary = new TestSummary();
-        summary.m_file = m_file;
+        summary.m_file = m_testFile;
         summary.m_timeMillis = timeMillis;
         summary.m_cpuTime = cpuTime;
         summary.m_otherErrors = m_otherErrors;
@@ -357,7 +357,8 @@ public class GtpRegress
         {
             if (m_lastFullResponse == null)
             {
-                System.err.println("Warning: " + m_file + ": Response pattern"
+                System.err.println("Warning: " + m_testFile
+                                   + ": Response pattern"
                                    + " without preceding test command: "
                                    + line);
                 printOutLine("comment", line);
@@ -517,7 +518,7 @@ public class GtpRegress
         throws Exception
     {
         m_outFileRelativeName =
-            FileUtils.replaceExtension(m_file, "tst", "out.html");
+            FileUtils.replaceExtension(m_testFile, "tst", "out.html");
         m_outFileName = m_prefix + m_outFileRelativeName;        
         File file = new File(m_outFileName);
         File parent = file.getParentFile();
@@ -527,7 +528,7 @@ public class GtpRegress
         m_out = new PrintStream(new FileOutputStream(file));
         m_out.print("<html>\n" +
                     "<head>\n" +
-                    "<title>Output: " + m_file + "</title>\n" +
+                    "<title>Output: " + m_testFile + "</title>\n" +
                     "<meta name=\"generator\" content=\"GtpRegress "
                     + Version.get() + "\">\n" +
                     "<style type=\"text/css\">\n" +
@@ -550,7 +551,7 @@ public class GtpRegress
                     "<table border=\"0\" width=\"100%\" bgcolor=\""
                     + m_colorHeader + "\">\n" +
                     "<tr><td>\n" +
-                    "<h1>Output: " + m_file + "</h1>\n" +
+                    "<h1>Output: " + m_testFile + "</h1>\n" +
                     "</td></tr>\n" +
                     "</table>\n" +
                     "<table width=\"100%\" bgcolor=\"" + m_colorInfo
@@ -566,7 +567,7 @@ public class GtpRegress
         {
             if (filename.equals(""))
                 filename = m_prefix
-                    + FileUtils.replaceExtension(m_file, "tst", "dat");
+                    + FileUtils.replaceExtension(m_testFile, "tst", "dat");
             else
                 filename = m_prefix + filename;
             File file = new File(filename);
@@ -705,12 +706,13 @@ public class GtpRegress
         m_tests.clear();
         m_dataFiles.clear();
         m_otherErrors = 0;
-        m_file = new File(test);
-        m_relativePath =
-            FileUtils.getRelativePath(new File(m_prefix), m_file);
-        FileReader fileReader = new FileReader(m_file);
-        BufferedReader reader = new BufferedReader(fileReader);
+        m_testFile = new File(test);
         initOutFile();
+        File outFile = new File(m_outFileName);
+        File testFileDir = m_testFile.getAbsoluteFile().getParentFile();
+        m_relativePath = FileUtils.getRelativeURI(outFile, testFileDir);
+        FileReader fileReader = new FileReader(m_testFile);
+        BufferedReader reader = new BufferedReader(fileReader);
         m_gtp = new GtpClient(m_program, m_verbose, this);
         m_lastSgf = null;
         try
@@ -907,11 +909,11 @@ public class GtpRegress
         }
         File file =
             new File(m_prefix
-                     + FileUtils.replaceExtension(m_file, "tst", "html"));
+                     + FileUtils.replaceExtension(m_testFile, "tst", "html"));
         PrintStream out = new PrintStream(new FileOutputStream(file));
         out.print("<html>\n" +
                   "<head>\n" +
-                  "<title>Summary: " + m_file + "</title>\n" +
+                  "<title>Summary: " + m_testFile + "</title>\n" +
                   "<meta name=\"generator\" content=\"GtpRegress "
                   + Version.get() + "\">\n" +
                   "</head>\n" +
@@ -920,7 +922,7 @@ public class GtpRegress
                   "<table border=\"0\" width=\"100%\" bgcolor=\""
                   + m_colorHeader + "\">\n" +
                   "<tr><td>\n" +
-                  "<h1>Summary: " + m_file + "</h1>\n" +
+                  "<h1>Summary: " + m_testFile + "</h1>\n" +
                   "</td></tr>\n" +
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + m_colorInfo
