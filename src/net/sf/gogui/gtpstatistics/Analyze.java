@@ -388,6 +388,8 @@ public class Analyze
     {
         GameInfo info = (GameInfo)(m_gameInfo.get(gameNumber));
         File gameFile = new File(info.m_file);
+        if (! gameFile.exists())
+            return (shortName ? gameFile.getName() : gameFile.toString());
         String path = FileUtils.getRelativeURI(fromFile, gameFile);
         return "<a href=\"" + path + "\">"
             + (shortName ? gameFile.getName() : path) + "</a>";
