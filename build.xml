@@ -607,7 +607,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 </target>
 
 <target name="junit" depends="compile,junit-compile"
- description="Run JUnit tests" >
+ description="Run JUnit tests (define property testcase for a single test)" >
 <junit printsummary="withOutAndErr" fork="true" timeout="60000"
  haltonfailure="true">
 <assertions><enable/></assertions>
@@ -616,7 +616,8 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 <pathelement location="build/test"/>
 </classpath>
 <formatter type="brief" usefile="false"/>
-<batchtest todir="build">
+<test name="${testcase}" todir="build" if="testcase"/>
+<batchtest todir="build" unless="testcase">
 <fileset dir="build/test" includes="**/*Test.class"/>
 </batchtest>
 </junit>
