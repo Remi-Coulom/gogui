@@ -50,6 +50,19 @@ public class BoardTest
         assertEquals(2, board.getCapturedB());
         assertEquals(0, board.getCapturedW());
     }
+
+    public void testContains()
+    {
+        Board board = new Board(19);
+        assertTrue(board.contains(GoPoint.create(0, 0)));
+        assertTrue(board.contains(GoPoint.create(0, 18)));
+        assertTrue(board.contains(GoPoint.create(18, 0)));
+        assertTrue(board.contains(GoPoint.create(18, 18)));
+        assertFalse(board.contains(GoPoint.create(0, 19)));
+        assertFalse(board.contains(GoPoint.create(19, 0)));
+        assertFalse(board.contains(GoPoint.create(19, 19)));
+        assertFalse(board.contains(GoPoint.create(20, 20)));
+    }
 }
 
 //----------------------------------------------------------------------------
