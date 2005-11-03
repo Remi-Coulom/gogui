@@ -20,6 +20,20 @@ public class BoardTest
         return new junit.framework.TestSuite(BoardTest.class);
     }
 
+    public void testBothPassed()
+    {
+        Board board = new Board(19);
+        assertFalse(board.bothPassed());
+        board.play(GoPoint.create(0, 0), GoColor.BLACK);
+        assertFalse(board.bothPassed());
+        board.play(null, GoColor.WHITE);
+        assertFalse(board.bothPassed());
+        board.play(null, GoColor.BLACK);
+        assertTrue(board.bothPassed());
+        board.play(null, GoColor.WHITE);
+        assertTrue(board.bothPassed());
+    }
+
     public void testCapture()
     {
         Board board = new Board(19);
