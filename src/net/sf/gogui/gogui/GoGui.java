@@ -1192,6 +1192,11 @@ public class GoGui
         if (program.equals(""))
             return false;
         m_program = program;
+        if (m_gtpShell != null)
+        {
+            m_gtpShell.dispose();
+            m_gtpShell = null;
+        }
         m_gtpShell = new GtpShell(this, this, m_prefs);
         m_gtpShell.addWindowListener(new WindowAdapter()
             {
