@@ -16,11 +16,17 @@ public final class GoColor
 
     public static final GoColor EMPTY;
 
+    /** Return other color.
+        @return BLACK for WHITE, WHITE for BLACK, EMPTY for EMPTY.
+    */
     public GoColor otherColor()
     {
         return m_otherColor;
     }
 
+    /** Return string representation.
+        @return "black", "white" or "empty"
+    */
     public String toString()
     {
         return m_string;
