@@ -63,6 +63,22 @@ public class BoardTest
         assertFalse(board.contains(GoPoint.create(19, 19)));
         assertFalse(board.contains(GoPoint.create(20, 20)));
     }
+
+    public void testIsSuicide()
+    {
+        Board board = new Board(19);
+        assertFalse(board.isSuicide(GoPoint.create(0, 0), GoColor.WHITE));
+        board.play(GoPoint.create(0, 1), GoColor.BLACK);
+        assertFalse(board.isSuicide(GoPoint.create(0, 0), GoColor.WHITE));
+        board.play(GoPoint.create(1, 1), GoColor.BLACK);
+        assertFalse(board.isSuicide(GoPoint.create(0, 0), GoColor.WHITE));
+        board.play(GoPoint.create(2, 0), GoColor.BLACK);
+        assertFalse(board.isSuicide(GoPoint.create(0, 0), GoColor.WHITE));
+        board.play(GoPoint.create(1, 0), GoColor.WHITE);
+        assertTrue(board.isSuicide(GoPoint.create(0, 0), GoColor.WHITE));
+        board.play(GoPoint.create(0, 0), GoColor.BLACK);
+        assertTrue(board.isSuicide(GoPoint.create(1, 0), GoColor.WHITE));
+    }
 }
 
 //----------------------------------------------------------------------------
