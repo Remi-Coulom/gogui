@@ -26,9 +26,9 @@ public class GameTreeTest
         Node root = tree.getRoot();
         Node node1 = appendNewNode(root);
         Node node2 = appendNewNode(node1);
-        Node node3 = appendNewNode(node2);
+        appendNewNode(node2);
         assertFalse(tree.hasVariations());
-        Node node4 = appendNewNode(node1);
+        appendNewNode(node1);
         assertTrue(tree.hasVariations());
     }
 
@@ -38,8 +38,8 @@ public class GameTreeTest
         Node root = tree.getRoot();
         Node node1 = appendNewNode(root);
         Node node2 = appendNewNode(node1);
-        Node node3 = appendNewNode(node2);
-        Node node4 = appendNewNode(node1);
+        appendNewNode(node2);
+        appendNewNode(node1);
         tree.keepOnlyMainVariation();
         assertFalse(tree.hasVariations());
     }
