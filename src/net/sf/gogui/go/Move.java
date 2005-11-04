@@ -44,6 +44,11 @@ public final class Move
             return s_movesEmpty[x][y];
     }
     
+    public static Move createPass(GoColor color)
+    {
+        return create(null, color);
+    }
+
     public GoColor getColor()
     {
         return m_color;

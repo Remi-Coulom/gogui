@@ -241,7 +241,7 @@ public final class Node
             Move lastMove = (Move)moves.get(moves.size() - 1);
             GoColor otherColor = lastMove.getColor().otherColor();
             if (toMove != otherColor && otherColor != GoColor.EMPTY)
-                moves.add(Move.create(null, otherColor));
+                moves.add(Move.createPass(otherColor));
         }
         return moves;
     }

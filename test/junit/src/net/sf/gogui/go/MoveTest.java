@@ -23,8 +23,7 @@ public class MoveTest
     public void testToString()
     {
         assertEquals("black A1", Move.create(0, 0, GoColor.BLACK).toString());
-        assertEquals("white PASS",
-                     Move.create(null, GoColor.WHITE).toString());
+        assertEquals("white PASS", Move.createPass(GoColor.WHITE).toString());
     }
 }
 

@@ -147,7 +147,7 @@ public class NodeUtilsTest
         m_node7.append(m_node9);
         m_node10 = new Node(Move.create(0, 1, GoColor.WHITE));
         m_node7.append(m_node10);
-        m_node11 = new Node(Move.create(null, GoColor.BLACK));
+        m_node11 = new Node(Move.createPass(GoColor.BLACK));
         m_node7.append(m_node11);
     }
 

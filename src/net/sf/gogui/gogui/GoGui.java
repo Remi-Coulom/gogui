@@ -1861,7 +1861,7 @@ public class GoGui
     {
         if (! showQuestion("Really pass?"))
             return;
-        humanMoved(Move.create(null, m_board.getToMove()));
+        humanMoved(Move.createPass(m_board.getToMove()));
     }
 
     private void cbPlay()

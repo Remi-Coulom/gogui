@@ -590,7 +590,7 @@ public class GtpAdapter
             m_passInserted.push(Boolean.FALSE);
             return;
         }
-        String command = m_gtp.getCommandPlay(Move.create(null, toMove));
+        String command = m_gtp.getCommandPlay(Move.createPass(toMove));
         try
         {
             send(command);
