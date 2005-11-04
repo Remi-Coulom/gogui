@@ -14,6 +14,7 @@ import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.MoveUtils;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.sgf.SgfReader;
 
@@ -125,7 +126,7 @@ public final class Compare
             moves.addAll(node.getAllAsMoves());
             node = node.getChild();
         }
-        moves = Move.fillPasses(moves, GoColor.BLACK);
+        moves = MoveUtils.fillPasses(moves, GoColor.BLACK);
         return moves;
     }
 

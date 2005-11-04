@@ -44,27 +44,6 @@ public final class Move
             return s_movesEmpty[x][y];
     }
     
-    /** Fill a list of moves with pass moves.
-        The resulting list will contain all moves of the original list
-        in the same order, but ensure it starts with a move of color toMove
-        and have no subsequent moves of the same color.
-    */
-    public static ArrayList fillPasses(ArrayList moves, GoColor toMove)
-    {
-        ArrayList result = new ArrayList(moves.size() * 2);
-        if (moves.size() == 0)
-            return result;
-        for (int i = 0; i < moves.size(); ++i)
-        {
-            Move move = (Move)moves.get(i);
-            if (move.getColor() != toMove)
-                result.add(new Move(null, toMove));
-            result.add(move);
-            toMove = move.getColor().otherColor();
-        }
-        return result;
-    }
-
     public GoColor getColor()
     {
         return m_color;
