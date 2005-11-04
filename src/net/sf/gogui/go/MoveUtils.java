@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
+/** Static utility functions related to class Move. */
 public class MoveUtils
 {
     /** Fill a list of moves with pass moves.
