@@ -26,7 +26,7 @@ public class MoveUtils
         {
             Move move = (Move)moves.get(i);
             if (move.getColor() != toMove)
-                result.add(Move.create(null, toMove));
+                result.add(Move.createPass(toMove));
             result.add(move);
             toMove = move.getColor().otherColor();
         }
