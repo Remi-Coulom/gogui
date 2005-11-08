@@ -68,7 +68,7 @@ public final class Thumbnail
                 log("Could not get last modification time: " + file);
                 return false;
             }
-            URI uri = getURI(file);
+            URI uri = FileUtils.getURI(file);
             log("URI: " + uri);
             String md5 = getMD5(uri.toString());
             if (m_verbose)
@@ -221,14 +221,6 @@ public final class Thumbnail
         return buffer.toString();
     }
 
-    /** Return URI for file.
-        Replacement for File.toURI() with defined (empty) authority.
-    */
-    private static URI getURI(File file) throws URISyntaxException
-    {
-        return new URI("file", "", file.getAbsolutePath(), null, null);
-    }
-        
     private void log(String line)
     {
         if (! m_verbose)

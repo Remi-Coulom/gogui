@@ -7,6 +7,8 @@ package net.sf.gogui.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
@@ -61,6 +63,21 @@ public final class FileUtils
         return result.toString();
     }
 
+    /** Return URI for file.
+        Replacement for File.toURI() with defined (empty) authority.
+    */
+    public static URI getURI(File file)
+    {
+        try
+        {
+            return new URI("file", "", file.getAbsolutePath(), null, null);
+        }
+        catch (URISyntaxException e)
+        {
+            return null;
+        }
+    }
+        
     /** Check for extension (case-insensitive). */
     public static boolean hasExtension(File f, String extension)
     {
