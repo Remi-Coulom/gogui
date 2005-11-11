@@ -107,6 +107,68 @@ public final class NodeUtils
         return null;
     }
 
+    /** Get stones added and moves all as moves.
+        This function is for transmitting setup stones to Go engines
+        that support only play commands.
+        May include moves with color EMPTY for delete stones.
+        Also may include a pass move at the end to make sure, that the
+        right color is to move after executing all returned moves.
+        No check is performed if the setup stones create a position
+        with no-liberty blocks, in which case a play command would
+        capture some stones.
+        The order of the moves is: setup stones black, setup stones white,
+        setup stones empty, node move, optional pass.
+        However, if the node contains setup stones of both colors and has a
+        player set, the order of black and white setup stones is switched, if
+        that avoids the pass move at the end.
+    */
+    public static ArrayList getAllAsMoves(Node node)
+    {
+        ArrayList moves = new ArrayList();
+        Move move = node.getMove();
+        if (node.hasSetup())
+        {
+            int numberAddBlack = node.getNumberAddBlack();
+            int numberAddWhite = node.getNumberAddWhite();
+            boolean switchSetup = (move == null
+                                   && node.getPlayer() == GoColor.WHITE
+                                   && numberAddBlack > 0
+                                   && numberAddWhite > 0);
+            if (switchSetup)
+            {
+                for (int i = 0; i < numberAddWhite; ++i)
+                    moves.add(Move.create(node.getAddWhite(i),
+                                          GoColor.WHITE));
+                for (int i = 0; i < numberAddBlack; ++i)
+                    moves.add(Move.create(node.getAddBlack(i),
+                                          GoColor.BLACK));
+            }
+            else
+            {
+                for (int i = 0; i < numberAddBlack; ++i)
+                    moves.add(Move.create(node.getAddBlack(i),
+                                          GoColor.BLACK));
+                for (int i = 0; i < numberAddWhite; ++i)
+                    moves.add(Move.create(node.getAddWhite(i),
+                                          GoColor.WHITE));
+            }
+            for (int i = 0; i < node.getNumberAddEmpty(); ++i)
+                moves.add(Move.create(node.getAddEmpty(i), GoColor.EMPTY));
+        }
+        if (move != null)
+            moves.add(move);
+        if (moves.size() > 0)
+        {
+            GoColor toMove = node.getToMove();
+            Move lastMove = (Move)moves.get(moves.size() - 1);
+            GoColor otherColor = lastMove.getColor().otherColor();
+            if (toMove != GoColor.EMPTY && toMove != otherColor
+                && otherColor != GoColor.EMPTY)
+                moves.add(Move.createPass(otherColor));
+        }
+        return moves;
+    }
+
     /** Find the last node that was still in the main variation. */
     public static Node getBackToMainVariation(Node node)
     {

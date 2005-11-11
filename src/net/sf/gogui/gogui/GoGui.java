@@ -1304,7 +1304,7 @@ public class GoGui
                 Node node = m_currentNode;
                 for (int i = 0; i < n; ++i)
                 {
-                    total += node.getAllAsMoves().size();
+                    total += NodeUtils.getAllAsMoves(node).size();
                     if (node.getFather() == null)
                         break;
                     node = node.getFather();
@@ -1312,7 +1312,8 @@ public class GoGui
                 m_commandThread.send("gg-undo " + total);
                 m_board.undo(total);
                 m_currentNode = node;
-                m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
+                m_currentNodeExecuted
+                    = NodeUtils.getAllAsMoves(m_currentNode).size();
             }
             else
             {
@@ -1323,7 +1324,7 @@ public class GoGui
                     undoCurrentNode();
                     m_currentNode = m_currentNode.getFather();
                     m_currentNodeExecuted
-                        = m_currentNode.getAllAsMoves().size();
+                        = NodeUtils.getAllAsMoves(m_currentNode).size();
                     m_gameInfo.fastUpdateMoveNumber(m_currentNode);
                 }
             }
@@ -2473,7 +2474,7 @@ public class GoGui
     private void executeCurrentNode() throws GtpError
     {
         m_currentNodeExecuted = 0;
-        ArrayList moves = m_currentNode.getAllAsMoves();
+        ArrayList moves = NodeUtils.getAllAsMoves(m_currentNode);
         for (int i = 0; i < moves.size(); ++i)
         {
             Move move = (Move)moves.get(i);
@@ -2781,7 +2782,8 @@ public class GoGui
 
     private boolean isCurrentNodeExecuted()
     {
-        int numberAddStonesAndMoves = m_currentNode.getAllAsMoves().size();
+        int numberAddStonesAndMoves
+            = NodeUtils.getAllAsMoves(m_currentNode).size();
         if (! m_isRootExecuted
             || m_currentNodeExecuted != numberAddStonesAndMoves)
             return false;
@@ -2910,7 +2912,8 @@ public class GoGui
         {
             m_currentNode = node.getFather();
             m_currentNode.removeChild(node);
-            m_currentNodeExecuted = m_currentNode.getAllAsMoves().size();
+            m_currentNodeExecuted
+                = NodeUtils.getAllAsMoves(m_currentNode).size();
             throw error;
         }
         return result;

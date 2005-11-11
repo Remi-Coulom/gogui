@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
+import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
@@ -29,7 +30,8 @@ public final class Compare
         @param board Board with the correct size (only used for
         Board.rotate).
         @param moves Moves of game to check.
-        @param games ArrayList containing games (vector of moves) in collection.
+        @param games ArrayList containing games (ArrayList of moves) in
+        collection.
         @param useAlternate If true, assume that players are exchanged every
         second game. Only check games where player played the same color.
         @param isAlternated If useAlternate, indicate if game to check
@@ -123,7 +125,7 @@ public final class Compare
         ArrayList moves = new ArrayList(128);
         while (node != null)
         {
-            moves.addAll(node.getAllAsMoves());
+            moves.addAll(NodeUtils.getAllAsMoves(node));
             node = node.getChild();
         }
         moves = MoveUtils.fillPasses(moves, GoColor.BLACK);

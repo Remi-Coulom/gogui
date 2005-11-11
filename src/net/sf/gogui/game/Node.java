@@ -209,43 +209,6 @@ public final class Node
         return (GoPoint)m_extraInfo.m_setupInfo.m_white.get(i);
     }
 
-    /** Get stones added and moves all as moves.
-        This function is for transmitting setup stones to Go engines
-        that support only play commands.
-        May include moves with color EMPTY for delete stones.
-        Also may include a pass move at the end to make sure, that the
-        right color is to move after executing all returned moves.
-        No check is performed if the setup stones create a position
-        with no-liberty blocks, in which case a play command would
-        capture some stones.
-    */
-    public ArrayList getAllAsMoves()
-    {
-        ArrayList moves = new ArrayList();
-        if (hasSetupInfo())
-        {
-            for (int i = 0; i < getNumberAddBlack(); ++i)
-                moves.add(Move.create(getAddBlack(i), GoColor.BLACK));
-            for (int i = 0; i < getNumberAddWhite(); ++i)
-                moves.add(Move.create(getAddWhite(i), GoColor.WHITE));
-            for (int i = 0; i < getNumberAddEmpty(); ++i)
-                moves.add(Move.create(getAddEmpty(i), GoColor.EMPTY));
-        }
-        if (m_move != null)
-            moves.add(m_move);
-        if (moves.size() > 0)
-        {
-            GoColor toMove = getToMove();
-            if (toMove == GoColor.EMPTY)
-                toMove = GoColor.BLACK;
-            Move lastMove = (Move)moves.get(moves.size() - 1);
-            GoColor otherColor = lastMove.getColor().otherColor();
-            if (toMove != otherColor && otherColor != GoColor.EMPTY)
-                moves.add(Move.createPass(otherColor));
-        }
-        return moves;
-    }
-
     /** Child of main variation or null if no child.
         @return Node with index 0 or null, if no children.
     */
@@ -459,6 +422,15 @@ public final class Node
         if (m_move != null)
             return m_move.getColor().otherColor();
         return GoColor.EMPTY;
+    }
+
+    /** Check if node has setup or delete stones.
+        @return true, if node has setup or delete stones.
+    */
+    public boolean hasSetup()
+    {
+        return getNumberAddBlack() > 0 || getNumberAddWhite() > 0
+            || getNumberAddEmpty() > 0;
     }
 
     /** Check if node is child of this node.

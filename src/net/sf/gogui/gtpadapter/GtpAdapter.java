@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
+import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtils;
 import net.sf.gogui.go.GoColor;
@@ -478,7 +479,7 @@ public class GtpAdapter
                     if (maxMove >= 0 && moveNumber >= maxMove)
                         break;
                 }
-                ArrayList moves = node.getAllAsMoves();
+                ArrayList moves = NodeUtils.getAllAsMoves(node);
                 for (int i = 0; i < moves.size(); ++i)
                 {
                     Move move = (Move)moves.get(i);
