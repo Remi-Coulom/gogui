@@ -11,7 +11,8 @@
 <itemizedlist>
 <listitem>
 <para>
-TwoGtp: Fix game CPU time measurement
+TwoGtp: Fix game CPU time measurement and locale-dependent formatting of
+cpu times in output table.
 </para>
 </listitem>
 <listitem>

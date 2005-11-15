@@ -5,6 +5,9 @@
 
 package net.sf.gogui.utils;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 //----------------------------------------------------------------------------
 
 public class StringUtilsTest
@@ -18,6 +21,21 @@ public class StringUtilsTest
     public static junit.framework.Test suite()
     {
         return new junit.framework.TestSuite(StringUtilsTest.class);
+    }
+
+    public void testGetNumberFormatLocale()
+    {
+        Locale oldDefault = Locale.getDefault();
+        try
+        {
+            Locale.setDefault(Locale.FRENCH);
+            NumberFormat format = StringUtils.getNumberFormat(1);
+            assertEquals("3.1", format.format(3.1));
+        }
+        finally
+        {
+            Locale.setDefault(oldDefault);
+        }
     }
 
     public void testSplit()

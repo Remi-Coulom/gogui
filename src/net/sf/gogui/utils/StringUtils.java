@@ -57,9 +57,12 @@ public final class StringUtils
         return out.getEncoding();
     }
 
+    /** Return a number formatter with maximum fraction digits,
+        no grouping, locale ENGLISH.
+    */
     public static NumberFormat getNumberFormat(int maximumFractionDigits)
     {
-        NumberFormat format = NumberFormat.getInstance(new Locale("C"));
+        NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
         format.setMaximumFractionDigits(maximumFractionDigits);
         format.setGroupingUsed(false);
         return format;
