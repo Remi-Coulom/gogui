@@ -11,8 +11,13 @@
 <itemizedlist>
 <listitem>
 <para>
-TwoGtp: Fix game CPU time measurement and locale-dependent formatting of
-cpu times in output table.
+TwoGtp: Fix game CPU time measurement
+</para>
+</listitem>
+<listitem>
+<para>
+TwoGtp, GtpRegress: Avoid locale-dependent formatting of some numbers in
+output files which broke the HTML report generation.
 </para>
 </listitem>
 <listitem>
