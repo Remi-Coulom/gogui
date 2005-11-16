@@ -226,12 +226,13 @@ $Source$
 </copy>
 </target>
 
-<target name="doc-style" depends="extract-docbook,doc-check-uptodate"
- unless="doc-uptodate"
- description="
+<!--
 Generate documentation using ant style target.
 Not used at present due to problems with mdash in output (not understood
-by JEditorPane, slow speed and errors with old versions of Xalan).">
+by JEditorPane, slow speed and errors with old versions of Xalan)
+-->
+<target name="doc-style" depends="extract-docbook,doc-check-uptodate"
+ unless="doc-uptodate">
 <style basedir="doc/manual/xml" includes="book.xml" destdir="doc/manual/html"
  style="${docbook.path}/html/chunk.xsl" force="true">
 <xmlcatalog>
@@ -686,9 +687,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan).">
 
 <target name="regress"
  depends="gmptogtp.jar,gtpdummy.jar,gtpregress.jar,gtpserver.jar,netgtp.jar,twogtp.jar"
- description="
-Run GTP regression tests for tools with GTP interface.
-Requires GNU Go 3.6 to be installed">
+ description="Run GTP regression tests (requires GNU Go 3.6)">
 <mkdir dir="test/regress/html"/>
 <echo>gmptogtp</echo>
 <java jar="lib/gtpregress.jar" fork="true" failonerror="true"
