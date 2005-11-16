@@ -121,9 +121,6 @@ public class Help
 
     private int m_historyIndex = -1;
 
-    private static final int m_shortcutKeyMask =
-        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
