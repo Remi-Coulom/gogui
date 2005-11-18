@@ -12,6 +12,9 @@ import net.sf.gogui.go.GoColor;
 //----------------------------------------------------------------------------
 
 /** Time control for a Go game.
+    If the clock is not initialized with Clock.setTimeSettings, the clock
+    will count upwards, otherwise the time settings with main and/or
+    byoyomi time are used.
     The time unit is milliseconds.
 */
 public final class Clock
@@ -194,6 +197,10 @@ public final class Clock
             startMove(m_toMove);
     }
 
+    /** Start time for a move.
+        If the clock was already running for the same color, the passed time
+        for this color and the current move is discarded.
+    */
     public void startMove(GoColor color)
     {
         if  (m_toMove != GoColor.EMPTY)
@@ -202,6 +209,11 @@ public final class Clock
         m_startMoveTime = new Date().getTime();
     }
 
+    /** Stop time for a move.
+        If the clock was running, the time for the move is added to the
+        total time for the color the clock was running for; otherwise
+        this function does nothing.
+    */
     public void stopMove()
     {
         if (m_toMove == GoColor.EMPTY)
