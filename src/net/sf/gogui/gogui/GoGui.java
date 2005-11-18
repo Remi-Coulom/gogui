@@ -2140,9 +2140,7 @@ public class GoGui
                 return;
             }
             else if (computerToMove())
-            {
                 generateMove();
-            }
         }
     }
 
@@ -2619,6 +2617,8 @@ public class GoGui
                 return;
             m_clock.stopMove();
             boolean newNodeCreated = play(move);
+            if (newNodeCreated)
+                m_clock.startMove(m_board.getToMove());
             setNeedsSave(newNodeCreated);
             if (point != null)
             {
