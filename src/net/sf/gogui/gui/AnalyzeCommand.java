@@ -8,6 +8,7 @@ package net.sf.gogui.gui;
 import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -17,6 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -316,7 +318,7 @@ public class AnalyzeCommand
 
     public static void read(ArrayList commands, ArrayList labels,
                             ArrayList supportedCommands)
-        throws Exception
+        throws ErrorMessage
     {
         commands.clear();
         labels.clear();
@@ -471,37 +473,62 @@ public class AnalyzeCommand
     private static void readFile(File file, ArrayList commands,
                                  ArrayList labels,
                                  ArrayList supportedCommands)
-        throws Exception
+        throws ErrorMessage
     {
-        BufferedReader in = new BufferedReader(new FileReader(file));
-        String line;
-        int lineNumber = 0;
-        while ((line = in.readLine()) != null)
+        BufferedReader in;
+        try
         {
-            ++lineNumber;
-            line = line.trim();
-            if (line.length() > 0 && line.charAt(0) != '#')
-            {
-                String array[] = line.split("/");
-                if (array.length < 3 || array.length > 5)
-                    throw new Exception("Error in " + file + " line "
-                                        + lineNumber);
-                if (supportedCommands != null)
-                {
-                    String[] cmdArray
-                        = StringUtils.splitArguments(array[2].trim());
-                    if (cmdArray.length == 0
-                        || ! supportedCommands.contains(cmdArray[0]))
-                        continue;
-                }
-                String label = array[1];
-                if (labels.contains(label))
-                    continue;
-                labels.add(label);
-                commands.add(line);
-            }                
+            in = new BufferedReader(new FileReader(file));
         }
-        in.close();
+        catch (FileNotFoundException e)
+        {
+            throw new ErrorMessage("File " + file + " not found");
+        }
+        try
+        {
+            String line;
+            int lineNumber = 0;
+            while ((line = in.readLine()) != null)
+            {
+                ++lineNumber;
+                line = line.trim();
+                if (line.length() > 0 && line.charAt(0) != '#')
+                {
+                    String array[] = line.split("/");
+                    if (array.length < 3 || array.length > 5)
+                        throw new ErrorMessage("Error in " + file + " line "
+                                               + lineNumber);
+                    if (supportedCommands != null)
+                    {
+                        String[] cmdArray
+                            = StringUtils.splitArguments(array[2].trim());
+                        if (cmdArray.length == 0
+                            || ! supportedCommands.contains(cmdArray[0]))
+                            continue;
+                    }
+                    String label = array[1];
+                    if (labels.contains(label))
+                        continue;
+                    labels.add(label);
+                    commands.add(line);
+                }                
+            }
+        }
+        catch (IOException e)
+        {
+            throw new ErrorMessage("File " + file + " not found");
+        }
+        finally
+        {
+            try
+            {
+                in.close();
+            }
+            catch (IOException e)
+            {
+                throw new ErrorMessage("File " + file + " not found");
+            }
+        }
     }
 }
 

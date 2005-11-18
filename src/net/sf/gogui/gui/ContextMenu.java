@@ -15,6 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.utils.ErrorMessage;
 
 //----------------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ public class ContextMenu
             {
                 AnalyzeCommand.read(commands, labels, supportedCommands);
             }
-            catch (Exception e)
+            catch (ErrorMessage e)
             {
             }
         }
