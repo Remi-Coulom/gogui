@@ -125,7 +125,7 @@ public final class RecentFileStorage
         //add(FileUtils.getURI(new File("foobar")), "application/x-go-sgf");
     }
 
-    private static long m_timestamp;
+    //private static long m_timestamp;
 
     /** Content of the recent files file. */
     private static Document m_document;
@@ -161,7 +161,7 @@ public final class RecentFileStorage
             return;
         if (m_builder == null)
             return;
-        m_timestamp = System.currentTimeMillis();
+        //m_timestamp = System.currentTimeMillis();
         if (! m_file.exists())
         {
             createEmptyDocument();
