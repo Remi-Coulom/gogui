@@ -4,8 +4,8 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>0.8</revnumber>
+<date>26 Nov 2005</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
@@ -23,6 +23,11 @@ output files which broke the HTML report generation.
 <listitem>
 <para>
 New menu item Export/Text Position
+</para>
+</listitem>
+<listitem>
+<para>
+Other small bug fixes
 </para>
 </listitem>
 </itemizedlist>
