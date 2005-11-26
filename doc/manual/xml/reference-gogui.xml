@@ -33,7 +33,7 @@
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
-<arg><replaceable>file</replaceable></arg>
+<arg><replaceable>file.sgf</replaceable></arg>
 </cmdsynopsis>
 
 <cmdsynopsis>
@@ -52,7 +52,6 @@
 <para>
 GoGui is a graphical interface to programs that play the game of Go
 and use GTP (Go Text Protocol).
-Can take an optional SGF file argument.
 </para>
 </refsection>
 
