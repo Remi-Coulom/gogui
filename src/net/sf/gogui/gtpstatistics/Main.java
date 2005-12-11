@@ -31,10 +31,10 @@ public final class Main
                 "final:",
                 "force",
                 "help",
+                "output:",
                 "precision:",
                 "program:",
                 "size:",
-                "output:",
                 "verbose",
                 "version"
             };
@@ -129,13 +129,13 @@ public final class Main
 
     private static void printUsage(PrintStream out)
     {
-        out.print("Usage: java -jar gtpstatistics.jar [options] file.sgf|dir"
-                  + " [...]\n" +
+        out.print("Usage: java -jar gtpstatistics.jar -program program"
+                  + " [options] file.sgf|dir [...]\n" +
                   "\n" +
                   "-analyze      Create HTML file from result file\n" +
                   "-begin        GTP commands to run on begin positions\n" +
-                  "-config       Config file\n" +
                   "-commands     GTP commands to run (comma separated)\n" +
+                  "-config       Config file\n" +
                   "-final        GTP commands to run on final positions\n" +
                   "-force        Overwrite existing file\n" +
                   "-help         Display this help and exit\n" +
