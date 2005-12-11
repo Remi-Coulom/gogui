@@ -262,7 +262,7 @@ public final class GtpClient
 
     /** Get protocol version.
         You have to call queryProtocolVersion() first, otherwise this method
-        will always return 1.
+        will always return 2.
     */
     public int getProtocolVersion()
     {
@@ -356,7 +356,7 @@ public final class GtpClient
     }
 
     /** Query the protocol version.
-        Sets the protocol version to the response or to 1 protocol_version
+        Sets the protocol version to the response or to 2 if protocol_version
         command fails.
         @see GtpClient#getProtocolVersion
         @throws GtpError if the response to protocol_version is not 1 or 2.
@@ -372,7 +372,7 @@ public final class GtpClient
             }
             catch (GtpError e)
             {
-                m_protocolVersion = 1;
+                m_protocolVersion = 2;
                 return;
             }
             int v = Integer.parseInt(response);
@@ -727,7 +727,7 @@ public final class GtpClient
 
     private boolean m_log;
 
-    private int m_protocolVersion = 1;
+    private int m_protocolVersion = 2;
 
     private int m_commandNumber;
 
