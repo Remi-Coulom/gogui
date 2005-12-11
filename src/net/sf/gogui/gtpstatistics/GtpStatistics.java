@@ -51,6 +51,7 @@ public class GtpStatistics
         m_table = new Table(columnHeaders);
         m_table.setProperty("Size", Integer.toString(size));
         m_gtp = new GtpClient(program, verbose, null);
+        m_gtp.queryProtocolVersion();
         m_table.setProperty("Program", program);
         try
         {

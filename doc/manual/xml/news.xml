@@ -8,6 +8,13 @@
 <date></date>
 <authorinitials>enz</authorinitials>
 <revdescription>
+<itemizedlist>
+<listitem>
+<para>
+GtpStatistics: Make it work with protocol version 2 programs
+</para>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
 
