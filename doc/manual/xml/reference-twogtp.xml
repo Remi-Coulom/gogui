@@ -449,7 +449,7 @@ Send command to white player.
 <simpara>
 Play 100 games between GNU Go, default level, and GNU Go, level 5,
 on a 9x9 board, with alternating colors;
-save games and results to files, beginning with gnugo-5:
+save games and results to files with filename prefix gnugo5:
 </simpara>
 <para>
 <programlisting>
