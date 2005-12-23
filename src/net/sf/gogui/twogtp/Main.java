@@ -6,6 +6,7 @@
 package net.sf.gogui.twogtp;
 
 import java.io.File;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
@@ -39,6 +40,7 @@ public final class Main
                 "referee:",
                 "sgffile:",
                 "size:",
+                "time:",
                 "verbose",
                 "version",
                 "white:"
@@ -65,6 +67,7 @@ public final class Main
                     "-referee        command for referee program\n" +
                     "-sgffile        filename prefix\n" +
                     "-size           board size for autoplay (default 19)\n" +
+                    "-time spec      set time limits (min[+min/moves])\n" +
                     "-verbose        log GTP streams to stderr\n" +
                     "-version        print version and exit\n" +
                     "-white          command for white program\n";
@@ -102,6 +105,9 @@ public final class Main
             boolean isKomiFixed = opt.isSet("komi");
             if (isKomiFixed)
                 komi = opt.getDouble("komi");
+            TimeSettings timeSettings = null;
+            if (opt.isSet("time"))
+                timeSettings = TimeSettings.parse(opt.getString("time"));
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
             String sgfFile = opt.getString("sgffile", "");
@@ -119,7 +125,7 @@ public final class Main
             TwoGtp twoGtp
                 = new TwoGtp(black, white, referee, observer, size, komi,
                              isKomiFixed, games, alternate, sgfFile, force,
-                             verbose, openings, loadsgf);
+                             verbose, openings, loadsgf, timeSettings);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)

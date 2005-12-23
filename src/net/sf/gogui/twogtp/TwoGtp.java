@@ -22,6 +22,7 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
@@ -47,7 +48,8 @@ public class TwoGtp
     public TwoGtp(String black, String white, String referee, String observer,
                   int size, double komi, boolean isKomiFixed, int numberGames,
                   boolean alternate, String sgfFile, boolean force,
-                  boolean verbose, Openings openings, boolean loadsgf)
+                  boolean verbose, Openings openings, boolean loadsgf,
+                  TimeSettings timeSettings)
         throws Exception
     {
         super(null);
@@ -119,6 +121,7 @@ public class TwoGtp
         m_openings = openings;
         m_verbose = verbose;
         m_loadsgf = loadsgf;
+        m_timeSettings = timeSettings;
         initGame(size);
     }
 
@@ -377,6 +380,8 @@ public class TwoGtp
     private final GtpClient m_referee;
 
     private final GtpClient m_white;
+
+    private final TimeSettings m_timeSettings;
 
     private void checkInconsistentState() throws GtpError
     {
@@ -802,6 +807,9 @@ public class TwoGtp
         initGame(size);
         m_gameSaved = false;
         sendIfSupported("komi", "komi " + m_komi);
+        if (m_timeSettings != null)
+            sendIfSupported("time_settings",
+                            GtpUtils.getTimeSettingsCommand(m_timeSettings));
     }
 
     private void play(Move move)

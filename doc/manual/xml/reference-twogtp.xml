@@ -31,6 +31,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-referee</option> <replaceable>command</replaceable></arg>
 <arg><option>-sgffile</option> <replaceable>prefix</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
+<arg><option>-time</option> <replaceable>timespec</replaceable></arg>
 <arg><option>-verbose</option></arg>
 </cmdsynopsis>
 <cmdsynopsis>
@@ -330,6 +331,17 @@ The results are appended to the file
 Board size for games. If this option is not used, the size will
 be set with the <command>boardsize</command> command, or the
 default size 19 will be used when option <option>-auto</option> is set.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-time</option> <replaceable>timespec</replaceable>
+</term>
+<listitem>
+<para>
+Set time limits (min[+min/moves]).
 </para>
 </listitem>
 </varlistentry>

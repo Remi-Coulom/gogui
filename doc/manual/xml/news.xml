@@ -14,6 +14,11 @@
 GtpStatistics: Make it work with protocol version 2 programs
 </para>
 </listitem>
+<listitem>
+<para>
+TwoGtp: new option -time
+</para>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
