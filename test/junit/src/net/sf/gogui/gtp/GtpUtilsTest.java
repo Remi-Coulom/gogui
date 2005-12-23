@@ -5,6 +5,7 @@
 
 package net.sf.gogui.gtp;
 
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
@@ -33,6 +34,19 @@ public class GtpUtilsTest
         assertSame(GoPoint.create(2, 2), points[2]);
         assertSame(null, points[3]);
         assertSame(null, points[4]);
+    }
+
+    public void getTimeSettingsCommand()
+    {
+        TimeSettings settings = new TimeSettings(60000);
+        assertEquals(GtpUtils.getTimeSettingsCommand(settings),
+                     "time_settings 60 0 0");
+        settings = new TimeSettings(0, 60000, 10);
+        assertEquals(GtpUtils.getTimeSettingsCommand(settings),
+                     "time_settings 0 60 10");
+        settings = new TimeSettings(30000, 60000, 10);
+        assertEquals(GtpUtils.getTimeSettingsCommand(settings),
+                     "time_settings 30 60 10");
     }
 }
 

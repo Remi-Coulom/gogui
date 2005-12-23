@@ -3202,19 +3202,11 @@ public class GoGui
             return;
         if (! m_commandThread.isCommandSupported("time_settings"))
             return;
-        long preByoyomi = timeSettings.getPreByoyomi() / 1000;
-        long byoyomi = 0;
-        long byoyomiMoves = 0;
-        if (timeSettings.getUseByoyomi())
-        {
-            byoyomi = timeSettings.getByoyomi() / 1000;
-            byoyomiMoves = timeSettings.getByoyomiMoves();
-        }
+        m_clock.setTimeSettings(m_timeSettings);
+        String command = GtpUtils.getTimeSettingsCommand(m_timeSettings);
         try
         {
-            m_clock.setTimeSettings(m_timeSettings);
-            m_commandThread.send("time_settings " + preByoyomi + " "
-                                 + byoyomi + " " + byoyomiMoves);
+            m_commandThread.send(command);
         }
         catch (GtpError e)
         {

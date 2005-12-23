@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -219,6 +220,20 @@ public final class GtpUtils
         for (int i = 0; i < result.length; ++i)
             result[i] = (Move)list.get(i);
         return result;
+    }
+
+    public static String getTimeSettingsCommand(TimeSettings settings)
+    {
+        long preByoyomi = settings.getPreByoyomi() / 1000;
+        long byoyomi = 0;
+        long byoyomiMoves = 0;
+        if (settings.getUseByoyomi())
+        {
+            byoyomi = settings.getByoyomi() / 1000;
+            byoyomiMoves = settings.getByoyomiMoves();
+        }
+        return "time_settings " + preByoyomi + " " + byoyomi + " "
+            + byoyomiMoves;
     }
 
     /** Make constructor unavailable; class is for namespace only. */
