@@ -119,7 +119,7 @@ $Source$
 <fileset dir="src" includes="net/sf/gogui/images/*.png"/>
 </copy>
 <copy todir="build/net/sf/gogui/doc">
-<fileset dir="doc/manual/html" includes="*.html *.css *.png"/>
+<fileset dir="doc/manual/html" includes="*.html *.png"/>
 </copy>
 <copy todir="build/net/sf/gogui/config">
 <fileset dir="config" includes="analyze-commands"/>
@@ -155,7 +155,6 @@ $Source$
  doc/README
  doc/manual/html/*.html
  doc/manual/html/*.png
- doc/manual/html/*.css
  doc/manual/man/*.1
  doc/manual/xml/*.xml
  doc/manual/xml/*.xml.in
@@ -254,7 +253,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <uptodate property="doc-uptodate" targetfile="doc/manual/html/index.html">
 <srcfiles dir= "doc/manual/xml" includes="*.xml"/>
 <srcfiles dir= "doc/manual/xml" includes="*.xsl"/>
-<srcfiles dir= "doc/manual/html" includes="*.css"/>
 </uptodate>
 </target>
 
@@ -342,7 +340,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <fileset dir="mac/packaging" includes="GoGui.icns"/>
 </copy>
 <copy todir="${appdir}/Contents/Resources/GoGui Help" overwrite="true">
-<fileset dir="doc/manual/html" includes="*.html *.css *.png"/>
+<fileset dir="doc/manual/html" includes="*.html *.png"/>
 </copy>
 <replace file="${appdir}/Contents/Resources/GoGui Help/index.html"
  token="&lt;head&gt;"
@@ -380,7 +378,6 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/config/analyze-commands
  net/sf/gogui/doc/*.html
  net/sf/gogui/doc/*.png
- net/sf/gogui/doc/*.css
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
