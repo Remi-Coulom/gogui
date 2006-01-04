@@ -11,7 +11,8 @@
 <itemizedlist>
 <listitem>
 <para>
-GtpStatistics: Make it work with protocol version 2 programs
+GtpStatistics: Make it work with protocol version 2 programs; new option
+-setup
 </para>
 </listitem>
 <listitem>

@@ -23,15 +23,19 @@ import net.sf.gogui.utils.ErrorMessage;
 /** Check that SGF files meet the requirements for a GtpStatistics run. */
 public class FileCheck
 {
-    public FileCheck(ArrayList sgfFiles, int size) throws ErrorMessage
+    public FileCheck(ArrayList sgfFiles, int size, boolean allowSetup)
+        throws ErrorMessage
     {
         m_size = size;
+        m_allowSetup = allowSetup;
         for (int i = 0; i < sgfFiles.size(); ++i)
         {
             m_name = (String)sgfFiles.get(i);
             checkFile();
         }
     }
+
+    private final boolean m_allowSetup;
 
     private final int m_size;
 
@@ -58,7 +62,15 @@ public class FileCheck
         for (Node node = root; node != null; node = node.getChild())
         {
             if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
-                throwError("contains setup stones");
+            {
+                if (m_allowSetup)
+                {
+                    if (node != root)
+                        throwError("contains setup stones in non-root");
+                }
+                else
+                    throwError("contains setup stones");
+            }
             Move move = node.getMove();
             if (move != null)
             {

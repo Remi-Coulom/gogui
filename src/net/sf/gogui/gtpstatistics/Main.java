@@ -34,6 +34,7 @@ public final class Main
                 "output:",
                 "precision:",
                 "program:",
+                "setup",
                 "size:",
                 "verbose",
                 "version"
@@ -50,6 +51,7 @@ public final class Main
                 return;
             }
             boolean analyze = opt.isSet("analyze");
+            boolean allowSetup = opt.isSet("setup");
             String program = "";
             if (! analyze)
             {
@@ -96,7 +98,8 @@ public final class Main
                 GtpStatistics gtpStatistics
                     = new GtpStatistics(program, arguments, output, boardSize,
                                         commands, beginCommands,
-                                        finalCommands, verbose, force);
+                                        finalCommands, verbose, force,
+                                        allowSetup);
                 System.exit(gtpStatistics.getResult() ? 0 : -1);
             }
         }
@@ -141,6 +144,7 @@ public final class Main
                   "-help         Display this help and exit\n" +
                   "-output       Filename prefix for output files\n" +
                   "-precision    Floating point precision for -analyze\n" +
+                  "-setup        Allow setup stones in root position\n" +
                   "-size         Board size of games\n" +
                   "-verbose      Log GTP stream to stderr\n" +
                   "-version      Display this help and exit\n");

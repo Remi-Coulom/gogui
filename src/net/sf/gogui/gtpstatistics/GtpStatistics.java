@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
+import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -34,14 +35,15 @@ public class GtpStatistics
     public GtpStatistics(String program, ArrayList sgfFiles, File output,
                          int size, ArrayList commands,
                          ArrayList beginCommands, ArrayList finalCommands,
-                         boolean verbose, boolean force)
+                         boolean verbose, boolean force, boolean allowSetup)
         throws Exception
     {
         if (output.exists() && ! force)
             throw new ErrorMessage("File " + output + " already exists");
-        new FileCheck(sgfFiles, size);
+        new FileCheck(sgfFiles, size, allowSetup);
         m_size = size;
         m_result = false;
+        m_allowSetup = allowSetup;
         initCommands(commands, beginCommands, finalCommands);
         ArrayList columnHeaders = new ArrayList();
         columnHeaders.add("File");
@@ -97,6 +99,8 @@ public class GtpStatistics
 
         public String m_columnTitle;
     }
+
+    private boolean m_allowSetup;
 
     private boolean m_result;
 
@@ -192,7 +196,18 @@ public class GtpStatistics
         for (Node node = root; node != null; node = node.getChild())
         {
             if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
-                throw new ErrorMessage(name + " contains setup stones");
+            {
+                if (m_allowSetup)
+                {
+                    if (node == root)
+                        toMove = sendSetup(node);
+                    else
+                        throw new ErrorMessage(name + " contains setup stones"
+                                               + " in non-root position");
+                }
+                else
+                    throw new ErrorMessage(name + " contains setup stones");
+            }
             Move move = node.getMove();
             if (move != null)
             {
@@ -326,6 +341,23 @@ public class GtpStatistics
         String cmd = convertCommand(command, toMove);
         String response = m_gtp.send(cmd);
         return convertResponse(command, response, toMove, move);
+    }
+
+    /** Send setup stones as moves.
+        @return New color to move.
+     */
+    private GoColor sendSetup(Node node) throws GtpError
+    {
+        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        assert(moves.size() > 0);
+        GoColor toMove = null;
+        for (int i = 0; i < moves.size(); ++i)
+        {
+            Move move = (Move)moves.get(i);
+            m_gtp.sendPlay(move);
+            toMove = move.getColor().otherColor();
+        }
+        return toMove;
     }
 }
     

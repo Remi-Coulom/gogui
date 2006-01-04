@@ -20,6 +20,7 @@ Runs GTP commands on all positions of game collections.
 <arg><option>-final</option> <replaceable>commands</replaceable></arg>
 <arg><option>-force</option></arg>
 <arg><option>-program</option> <replaceable>program</replaceable></arg>
+<arg><option>-setup</option> <replaceable>n</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg choice="plain" rep="repeat">
@@ -223,6 +224,17 @@ Maximum number of fraction digits for floating point numbers in output file.
 <listitem>
 <para>
 Command line for running Go program.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-setup</option>
+</term>
+<listitem>
+<para>
+Allow setup stones in the root position.
 </para>
 </listitem>
 </varlistentry>
