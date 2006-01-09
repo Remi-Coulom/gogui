@@ -3202,8 +3202,8 @@ public class GoGui
             return;
         if (! m_commandThread.isCommandSupported("time_settings"))
             return;
-        m_clock.setTimeSettings(m_timeSettings);
-        String command = GtpUtils.getTimeSettingsCommand(m_timeSettings);
+        m_clock.setTimeSettings(timeSettings);
+        String command = GtpUtils.getTimeSettingsCommand(timeSettings);
         try
         {
             m_commandThread.send(command);
