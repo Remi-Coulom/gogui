@@ -664,24 +664,25 @@ public class GoGui
 
     public void clearAnalyzeCommand(boolean resetBoard)
     {
-        if (m_analyzeCommand == null)
-            return;
-        if (isCommandInProgress())
+        if (m_analyzeCommand != null)
         {
-            showError("Cannot clear analyze command\n" +
-                      "while command in progress");
-            return;
+            if (isCommandInProgress())
+            {
+                showError("Cannot clear analyze command\n" +
+                          "while command in progress");
+                return;
+            }
+            if (m_setupMode)
+            {
+                showError("Cannot clear analyze command\n" +
+                          "in setup mode");
+                return;
+            }
+            if (m_analyzeDialog != null)
+                m_analyzeDialog.setRunButtonEnabled(true);
+            m_analyzeCommand = null;
+            setBoardCursorDefault();
         }
-        if (m_setupMode)
-        {
-            showError("Cannot clear analyze command\n" +
-                      "in setup mode");
-            return;
-        }
-        if (m_analyzeDialog != null)
-            m_analyzeDialog.setRunButtonEnabled(true);
-        m_analyzeCommand = null;
-        setBoardCursorDefault();
         if (resetBoard)
         {
             resetBoard();

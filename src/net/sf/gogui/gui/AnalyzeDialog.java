@@ -265,9 +265,6 @@ public final class AnalyzeDialog
     {
         m_callback.clearAnalyzeCommand();
         m_autoRun.setSelected(false);
-        m_clearButton.setEnabled(false);
-        if (m_clearButton.hasFocus())
-            m_list.requestFocusInWindow();
     }
 
     private void comboBoxChanged()
@@ -299,7 +296,6 @@ public final class AnalyzeDialog
         m_clearButton.setActionCommand("clear");
         m_clearButton.addActionListener(this);
         m_clearButton.setMnemonic(KeyEvent.VK_C);
-        m_clearButton.setEnabled(false);
         innerPanel.add(m_clearButton);
         JPanel outerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         outerPanel.add(innerPanel);
@@ -506,7 +502,6 @@ public final class AnalyzeDialog
         boolean clearBoard = m_clearBoard.isSelected();
         if (clearBoard)
             m_callback.clearAnalyzeCommand();
-        m_clearButton.setEnabled(true);
         m_callback.setAnalyzeCommand(command, autoRun, false, false);
     }
 
