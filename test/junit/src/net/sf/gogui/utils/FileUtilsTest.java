@@ -41,6 +41,14 @@ public class FileUtilsTest
         to = new File("dir2" + sep + "file2");
         assertEquals("../dir2/file2", FileUtils.getRelativeURI(from, to));
     }
+
+    public void testHasExtension()
+    {
+        assertTrue(FileUtils.hasExtension(new File("foo.bar"), "bar"));
+        assertTrue(FileUtils.hasExtension(new File("foo.BAR"), "bar"));
+        assertTrue(FileUtils.hasExtension(new File("foo.bar"), "BAR"));
+        assertFalse(FileUtils.hasExtension(new File("bar.foo"), "bar"));
+    }
 }
 
 //----------------------------------------------------------------------------
