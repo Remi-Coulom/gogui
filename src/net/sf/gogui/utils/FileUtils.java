@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 //----------------------------------------------------------------------------
 
@@ -84,7 +85,8 @@ public final class FileUtils
         String ext = getExtension(f);
         if (ext == null)
             return false;
-        return ext.toLowerCase().equals(extension.toLowerCase());
+        Locale locale = Locale.getDefault();
+        return ext.toLowerCase(locale).equals(extension.toLowerCase(locale));
     }
 
     /** Remove extension in file name.
