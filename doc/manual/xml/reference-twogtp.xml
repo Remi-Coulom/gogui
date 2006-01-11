@@ -66,20 +66,23 @@ supporting GTP (Go Text Protocol).
 Optional observer and referee GTP Go programs can be used for observing the
 game and answering commands related to the final game score.
 <application>TwoGtp</application> forwards the following commands to all
-programs:
+programs (command translation is done for protocol version 1 programs):
 
 <itemizedlist>
 <listitem>
 <simpara><command>boardsize</command></simpara>
 </listitem>
 <listitem>
-<simpara><command>black</command></simpara>
+<simpara><command>clear_board</command></simpara>
 </listitem>
 <listitem>
 <simpara><command>komi</command> (if supported)</simpara>
 </listitem>
 <listitem>
 <simpara><command>loadsgf</command></simpara>
+</listitem>
+<listitem>
+<simpara><command>play</command></simpara>
 </listitem>
 <listitem>
 <simpara><command>quit</command></simpara>
@@ -92,9 +95,6 @@ programs:
 </listitem>
 <listitem>
 <simpara><command>undo</command></simpara>
-</listitem>
-<listitem>
-<simpara><command>white</command></simpara>
 </listitem>
 </itemizedlist>
 
@@ -114,11 +114,9 @@ otherwise to first player program that implements them
 </listitem>
 </itemizedlist>
 
-The commands <command>genmove_black</command> and
-<command>genmove_white</command> are forwarded only to the program of the
+The command <command>genmove</command> is forwarded only to the program of the
 corresponding color, the other programs are informed about the
-move with a <command>black</command> or <command>white</command>
-command.
+move with a <command>play</command> command.
 GTP extension commands implemented by exactly one of the programs are
 forwarded to the program.
 The special comment line <command>#&#160;interrupt</command>, used by
