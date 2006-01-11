@@ -6,7 +6,6 @@
 package net.sf.gogui.gtp;
 
 import net.sf.gogui.game.TimeSettings;
-import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
 //----------------------------------------------------------------------------
