@@ -224,7 +224,17 @@ Choose what side the Go program plays.
 <term><guimenuitem>Play</guimenuitem></term>
 <listitem>
 <para>
-Make the computer play a move.
+Change the computer color to the color to move and make the computer
+start playing.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Play Single Move</guimenuitem></term>
+<listitem>
+<para>
+Make the computer play a move, but do not change the computer color.
 </para>
 </listitem>
 </varlistentry>

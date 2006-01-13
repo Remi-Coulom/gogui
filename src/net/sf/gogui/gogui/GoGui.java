@@ -419,7 +419,9 @@ public class GoGui
         else if (command.equals("pass"))
             cbPass();
         else if (command.equals("play"))
-            cbPlay();
+            cbPlay(false);
+        else if (command.equals("play-single"))
+            cbPlay(true);
         else if (command.equals("previous-variation"))
             cbPreviousVariation();
         else if (command.equals("previous-earlier-variation"))
@@ -1001,7 +1003,13 @@ public class GoGui
 
     private boolean m_ignoreInvalidResponses;
 
+    /** State variable used between cbInterrupt and computerMoved. */
+    private boolean m_interruptComputerBoth;
+
     private boolean m_isRootExecuted;
+
+    /** State variable used between generateMove and computerMoved. */
+    private boolean m_isSingleMove;
 
     private boolean m_lostOnTimeShown;
 
@@ -1778,11 +1786,11 @@ public class GoGui
         if (! isCommandInProgress() || m_commandThread == null
             || m_commandThread.isProgramDead())
             return;
-        if (m_computerBlack && m_computerWhite)
+        if (isComputerBoth())
         {
             if (showQuestion("Stop computer play?"))
             {
-                computerNone();
+                m_interruptComputerBoth = true;
                 showStatus("Waiting for current move to finish...");
             }
             return;
@@ -1866,17 +1874,21 @@ public class GoGui
         humanMoved(Move.createPass(m_board.getToMove()));
     }
 
-    private void cbPlay()
+    private void cbPlay(boolean isSingleMove)
     {
         if (m_commandThread == null)
             return;
         if (! checkCurrentNodeExecuted())
             return;
-        if (m_board.getToMove() == GoColor.BLACK)
-            computerBlack();
-        else
-            computerWhite();
-        generateMove();
+        if (! isSingleMove && ! isComputerBoth())
+        {
+            if (m_board.getToMove() == GoColor.BLACK)
+                computerBlack();
+            else
+                computerWhite();
+        }
+        m_interruptComputerBoth = false;
+        generateMove(isSingleMove);
         if (m_currentNode == m_gameTree.getRoot()
             && m_currentNode.getNumberChildren() == 0)
             m_clock.reset();
@@ -2114,7 +2126,7 @@ public class GoGui
         if (bothPassed)
             m_menuBar.setCleanup(true);
         boolean gameFinished = (bothPassed || m_resigned);
-        if (m_computerBlack && m_computerWhite)
+        if (isComputerBoth())
         {
             if (gameFinished)
             {
@@ -2129,7 +2141,7 @@ public class GoGui
                 computerNone();
                 return;
             }
-            generateMove();            
+            generateMove(false);            
         }
         else
         {
@@ -2141,7 +2153,7 @@ public class GoGui
                 return;
             }
             else if (computerToMove())
-                generateMove();
+                generateMove(false);
         }
     }
 
@@ -2269,7 +2281,7 @@ public class GoGui
             GoColor toMove = m_board.getToMove();
             if (response.toLowerCase().equals("resign"))
             {
-                if (! (m_computerBlack && m_computerWhite))
+                if (! isComputerBoth())
                     showInfo(m_name + " resigns");
                 m_resigned = true;
                 setResult((toMove == GoColor.BLACK ? "W" : "B") + "+Resign");
@@ -2286,14 +2298,17 @@ public class GoGui
                 Node node = createNode(move);
                 m_currentNode = node;
                 m_currentNodeExecuted = 1;
-                if (point == null && ! (m_computerBlack && m_computerWhite))
+                if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
                 fileModified();
                 m_resigned = false;
             }
             m_clock.startMove(m_board.getToMove());
             updateMenuBar();
-            boardChangedBegin(true, true);
+            boolean doCheckComputerMove
+                = (! m_isSingleMove
+                   && ! (isComputerBoth() && m_interruptComputerBoth));
+            boardChangedBegin(doCheckComputerMove, true);
         }
         catch (GtpError e)
         {
@@ -2550,7 +2565,7 @@ public class GoGui
         }
     }
 
-    private void generateMove()
+    private void generateMove(boolean isSingleMove)
     {
         showStatus(m_name + " is thinking...");
         GoColor toMove = m_board.getToMove();
@@ -2575,6 +2590,7 @@ public class GoGui
             command = m_commandThread.getCommandGenmove(toMove);
             m_clock.startMove(toMove);
         }
+        m_isSingleMove = isSingleMove;
         Runnable callback = new Runnable()
             {
                 public void run()
@@ -2696,7 +2712,7 @@ public class GoGui
         if (m_commandThread == null
             || (! m_computerBlack && ! m_computerWhite))
             computerNone();
-        else if (m_computerBlack && m_computerWhite)
+        else if (isComputerBoth())
             computerBoth();
         else  if (m_computerBlack)
             computerBlack();
@@ -2781,6 +2797,18 @@ public class GoGui
         }
     }
 
+    private boolean isComputerBoth()
+    {
+        return (m_computerBlack && m_computerWhite);
+    }
+
+    private boolean isCommandInProgress()
+    {
+        if (m_commandThread == null)
+            return false;
+        return m_commandThread.isCommandInProgress();
+    }
+    
     private boolean isCurrentNodeExecuted()
     {
         int numberAddStonesAndMoves
@@ -2791,13 +2819,6 @@ public class GoGui
         return true;
     }
 
-    private boolean isCommandInProgress()
-    {
-        if (m_commandThread == null)
-            return false;
-        return m_commandThread.isCommandInProgress();
-    }
-    
     private boolean loadFile(File file, int move)
     {
         try

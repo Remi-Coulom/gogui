@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <para>
+GoGui: new menu item "Play Single Move"
+</para>
+</listitem>
+<listitem>
+<para>
 GtpStatistics: Make it work with protocol version 2 programs; new option
 -setup
 </para>

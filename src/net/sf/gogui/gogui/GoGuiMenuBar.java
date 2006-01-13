@@ -257,6 +257,7 @@ public class GoGuiMenuBar
         m_isComputerDisabled = ! enabled;
         m_menuComputerColor.setEnabled(enabled);
         m_itemComputerPlay.setEnabled(enabled);
+        m_itemComputerPlaySingle.setEnabled(enabled);
         m_itemBeepAfterMove.setEnabled(enabled);
         m_itemDetachProgram.setEnabled(enabled);
         enableAll(m_menuShell, enabled);
@@ -591,6 +592,8 @@ public class GoGuiMenuBar
     private JMenuItem m_itemComputerNone;
 
     private JMenuItem m_itemComputerPlay;
+
+    private JMenuItem m_itemComputerPlaySingle;
 
     private JMenuItem m_itemComputerWhite;
 
@@ -978,6 +981,11 @@ public class GoGuiMenuBar
         m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,
                                          KeyEvent.VK_F5,
                                          getFunctionKeyShortcut(), "play");
+        m_itemComputerPlaySingle
+            = addMenuItem(menu, "Play Single Move", KeyEvent.VK_S,
+                          KeyEvent.VK_F5,
+                          getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK,
+                          "play-single");
         addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
                     getFunctionKeyShortcut(), "pass");
         m_itemInterrupt =
@@ -986,9 +994,9 @@ public class GoGuiMenuBar
         menu.add(createClockMenu());
         menu.addSeparator();
         m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
-        m_itemCleanup.setMnemonic(KeyEvent.VK_C);
+        m_itemCleanup.setMnemonic(KeyEvent.VK_E);
         menu.add(m_itemCleanup);
-        addMenuItem(menu, "Score", KeyEvent.VK_R, "score");
+        addMenuItem(menu, "Score", KeyEvent.VK_O, "score");
         return menu;
     }
 
