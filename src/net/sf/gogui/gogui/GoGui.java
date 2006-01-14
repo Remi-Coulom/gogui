@@ -2106,13 +2106,7 @@ public class GoGui
             return;
         if (! showQuestion("Truncate children?"))
             return;
-        while (true)
-        {
-            Node child = m_currentNode.getChild();
-            if (child == null)
-                break;
-            m_currentNode.removeChild(child);
-        }
+        NodeUtils.truncateChildren(m_currentNode);
         setNeedsSave(true);
         boardChangedBegin(false, true);
     }

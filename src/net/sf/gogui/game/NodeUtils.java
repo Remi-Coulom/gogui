@@ -641,6 +641,18 @@ public final class NodeUtils
         return buffer.toString();
     }
 
+    /** Remove all children. */
+    public static void truncateChildren(Node node)
+    {
+        while (true)
+        {
+            Node child = node.getChild();
+            if (child == null)
+                break;
+            node.removeChild(child);
+        }
+    }
+
     private static void appendInfo(StringBuffer buffer, String label,
                                    int value)
     {

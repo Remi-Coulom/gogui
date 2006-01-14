@@ -245,6 +245,18 @@ public class NodeUtilsTest
         assertEquals(NodeUtils.getMovesLeft(m_node7), 1);
     }
 
+    public void testTruncateChildren()
+    {
+        Node node = new Node();
+        assertEquals(node.getNumberChildren(), 0);
+        NodeUtils.truncateChildren(node);
+        node.append(new Node());
+        node.append(new Node());
+        assertEquals(node.getNumberChildren(), 2);
+        NodeUtils.truncateChildren(node);
+        assertEquals(node.getNumberChildren(), 0);
+    }
+
     /** Create a small test tree.
         <pre>
         n0 - n1 - n2(Bc3) - n3(Wf4) - n4 - n5(Bg4) - n6
