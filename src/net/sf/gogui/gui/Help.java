@@ -36,10 +36,12 @@ class AntialiasingEditorPane
 {
     public void paintComponent(Graphics graphics)
     {
-        Graphics2D graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null)
+        if (graphics instanceof Graphics2D)
+        {
+            Graphics2D graphics2D = (Graphics2D)graphics;
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
+        }
         super.paintComponent(graphics);
     }
 
