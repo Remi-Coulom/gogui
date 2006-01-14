@@ -7,18 +7,11 @@ package net.sf.gogui.gtpdisplay;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.go.Board;
@@ -35,7 +28,6 @@ import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
-import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.SquareLayout;
 
 //----------------------------------------------------------------------------
