@@ -53,6 +53,11 @@ public class StatusBar
         m_label.repaint();
     }
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for use with serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private JLabel m_label;
 }
 
