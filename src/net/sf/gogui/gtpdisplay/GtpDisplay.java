@@ -34,6 +34,7 @@ import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.SquareLayout;
 
@@ -99,7 +100,8 @@ public class GtpDisplay
         JPanel panel = new JPanel(m_squareLayout);
         panel.add(m_guiBoard);
         contentPane.add(panel);
-        contentPane.add(createStatusBar(), BorderLayout.SOUTH);
+        m_statusBar = new StatusBar();
+        contentPane.add(m_statusBar, BorderLayout.SOUTH);
         GuiUtils.setGoIcon(m_frame);
         m_frame.pack();
         m_frame.setVisible(true);
@@ -217,7 +219,7 @@ public class GtpDisplay
 
     private JFrame m_frame;
 
-    private JLabel m_statusLabel;
+    private StatusBar m_statusBar;
 
     private final String m_name;
 
@@ -240,7 +242,7 @@ public class GtpDisplay
 
     private void clearStatus()
     {
-        showStatus(" ");
+        m_statusBar.clear();
     }
 
     private void closeFrame()
@@ -461,28 +463,6 @@ public class GtpDisplay
     {
     }
 
-    private JComponent createStatusBar()
-    {
-        JPanel outerPanel = new JPanel(new BorderLayout());
-        JPanel panel = new JPanel(new GridLayout(1, 0));
-        outerPanel.add(panel, BorderLayout.CENTER);
-        // Workaround for Java 1.4.1 on Mac OS X: add some empty space
-        // so that status bar does not overlap the window resize widget
-        if (Platform.isMac())
-        {
-            Dimension dimension = new Dimension(20, 1);
-            Box.Filler filler =
-                new Box.Filler(dimension, dimension, dimension);
-            outerPanel.add(filler, BorderLayout.EAST);
-        }
-        JLabel label = new JLabel(" ");
-        label.setBorder(BorderFactory.createLoweredBevelBorder());
-        label.setHorizontalAlignment(SwingConstants.LEFT);
-        panel.add(label);
-        m_statusLabel = label;
-        return outerPanel;
-    }
-
     private void invokeAndWait(Runnable runnable) throws GtpError
     {
         try
@@ -532,8 +512,7 @@ public class GtpDisplay
     private void showStatus(String text)
     {
         assert(SwingUtilities.isEventDispatchThread());
-        m_statusLabel.setText(text);
-        m_statusLabel.repaint();
+        m_statusBar.setText(text);
     }
 
     private void undo() throws GtpError

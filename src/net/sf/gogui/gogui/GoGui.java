@@ -88,6 +88,7 @@ import net.sf.gogui.gui.SelectProgram;
 import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.SimpleDialogs;
+import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.gui.TextViewer;
 import net.sf.gogui.gui.Utils;
 import net.sf.gogui.sgf.SgfReader;
@@ -149,7 +150,8 @@ public class GoGui
 
         m_guiBoard = new GuiBoard(m_board, fastPaint);
         m_guiBoard.setListener(this);
-        m_innerPanel.add(createStatusBar(), BorderLayout.SOUTH);
+        m_statusBar = new StatusBar();
+        m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
 
         m_squareLayout = new SquareLayout();
         m_squareLayout.setPreferMultipleOf(m_boardSize + 2);
@@ -1069,8 +1071,6 @@ public class GoGui
 
     private Help m_help;
 
-    private JLabel m_statusLabel;
-
     private JPanel m_boardPanel;
 
     private JPanel m_infoPanel;
@@ -1090,6 +1090,8 @@ public class GoGui
     private AnalyzeCommand m_analyzeCommand;
 
     private File m_file;
+
+    private StatusBar m_statusBar;
 
     private String m_gtpCommand;
 
@@ -2203,7 +2205,7 @@ public class GoGui
     
     private void clearStatus()
     {
-        showStatus(" ");
+        m_statusBar.clear();
     }
 
     private void clockRestore(Node node, GoColor color)
@@ -2367,29 +2369,6 @@ public class GoGui
                                m_guiBoard.getMarkSquare(point),
                                m_guiBoard.getMarkTriangle(point),
                                listener);
-    }
-
-    private JComponent createStatusBar()
-    {
-        JPanel outerPanel = new JPanel(new BorderLayout());
-        JPanel panel = new JPanel(new GridLayout(1, 0));
-        outerPanel.add(panel, BorderLayout.CENTER);
-        // Workaround for Java 1.4.1 on Mac OS X: add some empty space
-        // so that status bar does not overlap the window resize widget
-        if (Platform.isMac())
-        {
-            Dimension dimension = new Dimension(20, 1);
-            Box.Filler filler =
-                new Box.Filler(dimension, dimension, dimension);
-            outerPanel.add(filler, BorderLayout.EAST);
-        }
-        JLabel label = new JLabel();
-        label.setBorder(BorderFactory.createLoweredBevelBorder());
-        label.setHorizontalAlignment(SwingConstants.LEFT);
-        panel.add(label);
-        m_statusLabel = label;
-        clearStatus();
-        return outerPanel;
     }
 
     private void detachProgram()
@@ -3421,8 +3400,7 @@ public class GoGui
 
     private void showStatus(String text)
     {
-        m_statusLabel.setText(text);
-        m_statusLabel.repaint();
+        m_statusBar.setText(text);
     }
 
     private void showStatusSelectPointList()

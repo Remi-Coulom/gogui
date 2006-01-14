@@ -440,6 +440,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/gui/GuiTextPaneFactory.class
  net/sf/gogui/gui/GuiUtils*.class
  net/sf/gogui/gui/SimpleDialogs.class
+ net/sf/gogui/gui/StatusBar.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpdisplay/*.class
  net/sf/gogui/images/gogui*.png
