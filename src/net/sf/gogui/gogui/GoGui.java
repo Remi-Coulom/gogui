@@ -3214,43 +3214,18 @@ public class GoGui
         String appName = "GoGui";        
         if (m_commandThread != null)
             appName = m_name;
-        String gameName = null;
-        GameInformation gameInformation = m_gameTree.getGameInformation();
-        String playerBlack = gameInformation.m_playerBlack;
-        String playerWhite = gameInformation.m_playerWhite;
         String filename = null;
         if (m_loadedFile != null)
         {
-            String fileNoExt = FileUtils.removeExtension(m_loadedFile, "sgf");
-            filename = new File(fileNoExt).getName();
+            filename = m_loadedFile.getName();
             if (m_needsSave)
                 filename = filename + " [modified]";
         }
-        boolean playerBlackKnown =
-            (playerBlack != null && ! playerBlack.trim().equals(""));
-        boolean playerWhiteKnown =
-            (playerWhite != null && ! playerWhite.trim().equals(""));
-        if (playerBlackKnown || playerWhiteKnown)
+        String gameName = m_gameTree.getGameInformation().suggestGameName();
+        if (gameName != null)
         {
-            if (playerBlackKnown)
-                playerBlack = StringUtils.capitalize(playerBlack);
-            else
-                playerBlack = "Unknown";
-            if (playerWhiteKnown)
-                playerWhite = StringUtils.capitalize(playerWhite);
-            else
-                playerWhite = "Unknown";
-            String blackRank = gameInformation.m_blackRank;
-            String whiteRank = gameInformation.m_whiteRank;
-            if (blackRank != null && ! blackRank.trim().equals(""))
-                playerBlack = playerBlack + " [" + blackRank + "]";
-            if (whiteRank != null && ! whiteRank.trim().equals(""))
-                playerWhite = playerWhite + " [" + whiteRank + "]";
-            if (filename == null)
-                gameName = playerBlack + " vs " + playerWhite;
-            else
-                gameName = filename + " - "
-                    + playerBlack + " vs " + playerWhite;
+            if (filename != null)
+                gameName = filename + " - " + gameName;
         }
         else if (filename != null)
             gameName = filename;
