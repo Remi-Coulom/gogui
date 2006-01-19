@@ -2814,21 +2814,20 @@ public class GoGui
             computerNone();
             boardChangedBegin(false, true);
         }
+        catch (FileNotFoundException e)
+        {
+            showError("File not found:\n" + file);
+            return false;
+        }
+        catch (SgfReader.SgfError e)
+        {
+            showError("Could not read file:", e);
+            return false;
+        }
         catch (Throwable t)
         {
-            if (t instanceof FileNotFoundException)
-            {
-                showError("File not found:\n" + file);
-            }
-            else if (t instanceof SgfReader.SgfError)
-            {
-                showError("Could not read file:", (SgfReader.SgfError)t);
-            }
-            else
-            {
-                t.printStackTrace();
-                assert(false);
-            }
+            t.printStackTrace();
+            assert(false);
             return false;
         }
         return true;
