@@ -51,6 +51,15 @@ public final class GuiBoardUtils
         }
     }
 
+    public static void setSelect(GuiBoard guiBoard, ArrayList pointList,
+                                 boolean select)
+    {
+        if (pointList == null)
+            return;
+        for (int i = 0; i < pointList.size(); ++i)
+            guiBoard.setSelect((GoPoint)pointList.get(i), select);
+    }
+
     public static void showColorBoard(GuiBoard guiBoard, String[][] colors,
                                       Board board)
     {
@@ -82,10 +91,8 @@ public final class GuiBoardUtils
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkTriangle((GoPoint)(mark.get(i)), true);
-        mark = node.getMarked(Node.MARKED_SELECT);
-        if (mark != null)
-            for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setSelect((GoPoint)(mark.get(i)), true);
+        GuiBoardUtils.setSelect(guiBoard, node.getMarked(Node.MARKED_SELECT),
+                                true);
         mark = node.getMarked(Node.MARKED_TERRITORY_BLACK);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)

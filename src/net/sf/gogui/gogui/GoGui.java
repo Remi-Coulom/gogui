@@ -760,8 +760,7 @@ public class GoGui
             else
                 pointListArg.add(p);
             m_guiBoard.clearAllSelect();
-            for (int i = 0; i < pointListArg.size(); ++i)
-                m_guiBoard.setSelect((GoPoint)pointListArg.get(i), true);
+            GuiBoardUtils.setSelect(m_guiBoard, pointListArg, true);
             m_guiBoard.repaint();
             if (modifiedSelect && pointListArg.size() > 0)
                 analyzeBegin(false, false);
@@ -903,11 +902,9 @@ public class GoGui
             if (m_analyzeDialog != null)
                 m_analyzeDialog.setRunButtonEnabled(false);
             if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
-            {
-                ArrayList pointList = m_analyzeCommand.getPointListArg();
-                for (int i = 0; i < pointList.size(); ++i)
-                    m_guiBoard.setSelect((GoPoint)pointList.get(i), true);
-            }
+                GuiBoardUtils.setSelect(m_guiBoard,
+                                        m_analyzeCommand.getPointListArg(),
+                                        true);
             m_guiBoard.repaint();
             toTop();
             return;

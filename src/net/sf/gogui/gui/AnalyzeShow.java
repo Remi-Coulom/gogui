@@ -29,8 +29,7 @@ public final class AnalyzeShow
         GoPoint pointArg = command.getPointArg();
         ArrayList pointListArg = command.getPointListArg();
         guiBoard.clearAllSelect();
-        for (int i = 0; i < pointListArg.size(); ++i)
-            guiBoard.setSelect((GoPoint)pointListArg.get(i), true);
+        GuiBoardUtils.setSelect(guiBoard, pointListArg, true);
         if (pointArg != null)
             guiBoard.setSelect(pointArg, true);
         int type = command.getType();
