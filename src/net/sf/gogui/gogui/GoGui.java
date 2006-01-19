@@ -2609,7 +2609,7 @@ public class GoGui
             {
                 m_guiBoard.updateFromGoBoard(point);
                 if (m_showLastMove)
-                    m_guiBoard.markLastMove(move.getPoint());
+                    m_guiBoard.markLastMove(move);
                 // Paint point immediately to pretend better responsiveness
                 m_guiBoard.paintImmediately(point);
             }
@@ -3443,13 +3443,7 @@ public class GoGui
         }
         if (m_showLastMove &&
             (m_commandThread == null || isCurrentNodeExecuted()))
-        {
-            Move move = m_currentNode.getMove();
-            if (move == null)
-                m_guiBoard.markLastMove(null);
-            else
-                m_guiBoard.markLastMove(move.getPoint());
-        }
+            m_guiBoard.markLastMove(m_currentNode.getMove());
         else
             m_guiBoard.markLastMove(null);
         GuiBoardUtils.showMarkup(m_guiBoard, m_currentNode);

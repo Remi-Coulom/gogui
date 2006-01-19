@@ -338,7 +338,7 @@ public class GtpDisplay
                 {                    
                     m_board.play(m_move);
                     m_guiBoard.updateFromGoBoard();
-                    m_guiBoard.markLastMove(m_move.getPoint());
+                    m_guiBoard.markLastMove(m_move);
                     clearStatus();
                 }
             });
@@ -485,7 +485,7 @@ public class GtpDisplay
                 public void run()
                 {
                     m_board.play(m_move);
-                    m_guiBoard.markLastMove(m_move.getPoint());
+                    m_guiBoard.markLastMove(m_move);
                     m_guiBoard.updateFromGoBoard();
                 }
             });

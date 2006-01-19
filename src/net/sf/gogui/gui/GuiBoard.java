@@ -324,8 +324,15 @@ public final class GuiBoard
         repaint();
     }
 
-    public void markLastMove(GoPoint point)
+    /** Mark point of last move on the board.
+        The last move marker will be removed, if the move parameter is null
+        or a pass move.
+    */
+    public void markLastMove(Move move)
     {
+        GoPoint point = null;
+        if (move != null)
+            point = move.getPoint();
         clearLastMove();
         m_lastMove = point;
         if (m_lastMove != null)
