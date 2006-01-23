@@ -678,7 +678,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <exec executable="${pmd.home}/bin/pmd.sh"
  output="test/pmd/output.txt">
 <arg line="src"/>
-<arg line="text"/>
+<arg line="emacs"/>
 <arg line="test/pmd/ruleset.xml"/>
 </exec>
 </target>
