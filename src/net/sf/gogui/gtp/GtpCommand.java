@@ -56,14 +56,18 @@ public class GtpCommand
             m_id = -1;
             m_line = buffer.toString();
         }
+        m_response = new StringBuffer();
         if (commandIndex >= array.length)
+        {
+            m_command = "";
+            m_arg = null;
             return;
+        }
         m_command = array[commandIndex];
         int nuArg = array.length - commandIndex - 1;
         m_arg = new String[nuArg];
         for (int i = 0; i < nuArg; ++i)
             m_arg[i] = array[commandIndex + i + 1];
-        m_response = new StringBuffer();
     }
 
     public void checkArgNone() throws GtpError
@@ -234,11 +238,11 @@ public class GtpCommand
     
     private String m_line;
 
-    private String m_command;
+    private final String m_command;
 
-    private String[] m_arg;
+    private final String[] m_arg;
 
-    private StringBuffer m_response;
+    private final StringBuffer m_response;
 }
 
 //----------------------------------------------------------------------------
