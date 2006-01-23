@@ -108,6 +108,7 @@ public class GmpToGtp
 
     private void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
+        cmd.checkArgNone();
         StringBuffer message = new StringBuffer();
         if (! (m_wait && m_firstGame) && ! (m_simple && m_colorIndex == 1))
         {
@@ -158,6 +159,7 @@ public class GmpToGtp
 
     private void cmdQueue(GtpCommand cmd) throws GtpError
     {
+        cmd.checkArgNone();
         StringBuffer message = new StringBuffer();
         if (! m_gmp.queue(message))
             throw new GtpError(message.toString());
@@ -178,6 +180,7 @@ public class GmpToGtp
 
     private void cmdUndo(GtpCommand cmd) throws GtpError
     {
+        cmd.checkArgNone();
         StringBuffer message = new StringBuffer();
         if (! m_gmp.undo(message))
             throw new GtpError(message.toString());

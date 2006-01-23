@@ -280,6 +280,7 @@ public class GtpDisplay
 
     private void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
+        cmd.checkArgNone();
         if (m_gtp != null)
         {
             String command = m_gtp.getCommandClearBoard(m_size);

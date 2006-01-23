@@ -399,6 +399,7 @@ public class TwoGtp
 
     private void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
+        cmd.checkArgNone();
         if (gamesLeft() == 0)
             throw new GtpError("Maximum number of " + m_numberGames +
                                " games reached");
