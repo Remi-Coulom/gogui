@@ -17,7 +17,7 @@ import java.lang.reflect.Modifier;
 */
 public final class MacMain
 {
-    public static final void main(String [] args)
+    public static void main(String [] args)
     {
         System.setProperty("apple.awt.brushMetalLook", "true");
         System.setProperty("apple.laf.useScreenMenuBar", "false");
