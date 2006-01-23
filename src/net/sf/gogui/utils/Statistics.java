@@ -10,11 +10,6 @@ package net.sf.gogui.utils;
 /** Collects statistical features of sample values. */
 public class Statistics
 {
-    /** Constructor. */
-    public Statistics()
-    {
-    }
-
     /** Add value.
         @param value The value to add.
     */
