@@ -1,24 +1,30 @@
 <?xml version="1.0"?>
 <ruleset name="gogui">
-<description>
-PMD ruleset used for GoGui.
-</description>
+<description>PMD ruleset used for GoGui</description>
 
 <rule ref="rulesets/basic.xml">
 <exclude name="EmptyCatchBlock"/>
 </rule>
 
+<rule ref="rulesets/controversial.xml/DefaultPackage"/>
 <rule ref="rulesets/controversial.xml/DontImportSun"/>
 <rule ref="rulesets/controversial.xml/SingularField"/>
+<rule ref="rulesets/controversial.xml/SuspiciousOctalEscape"/>
+<rule ref="rulesets/controversial.xml/UnnecessaryConstructor"/>
 <rule ref="rulesets/controversial.xml/UnnecessaryParentheses"/>
 <rule ref="rulesets/controversial.xml/UnusedModifier"/>
 
 <rule ref="rulesets/imports.xml"/>
 
+<rule ref="rulesets/strings.xml"/>
+
 <rule ref="rulesets/unusedcode.xml"/>
 
 <rule ref="rulesets/design.xml">
 <exclude name="AvoidReassigningParameters"/>
+<exclude name="PositionLiteralsFirstInComparisons"/>
+<exclude name="UncommentedEmptyConstructor"/>
+<exclude name="UncommentedEmptyMethod"/>
 </rule>
 
 </ruleset>
