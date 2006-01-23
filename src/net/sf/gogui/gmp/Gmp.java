@@ -742,8 +742,7 @@ class MainThread
 
     private int getChecksum(int b0, int b2, int b3)
     {
-        int checksum = ((b0 + b2 + b3) | 0x80) & 0xff;
-        return checksum;
+        return ((b0 + b2 + b3) | 0x80) & 0xff;
     }
 
     private boolean getAck()
