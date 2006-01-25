@@ -7,10 +7,12 @@ package net.sf.gogui.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
@@ -114,6 +116,18 @@ public class Comment
     public void removeUpdate(DocumentEvent e)
     {
         copyContentToNode();
+    }
+
+    /** Enable/disable fixed size font. */
+    public void setFontFixed(boolean fixed)
+    {
+        if (fixed)
+        {
+            int fontSize = GuiUtils.getDefaultMonoFontSize();
+            m_textPane.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
+        }
+        else
+            m_textPane.setFont(UIManager.getFont("TextArea.font"));
     }
 
     public void setNode(Node node)

@@ -163,6 +163,7 @@ public final class GoGuiSettings
         prefs.setBoolDefault("analyze-sort", true);
         prefs.setBoolDefault("beep-after-move", true);
         prefs.setIntDefault("boardsize", GoPoint.DEFAULT_SIZE);
+        prefs.setBoolDefault("comment-font-fixed", false);
         prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
         prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
         prefs.setBoolDefault("gtpshell-highlight", true);

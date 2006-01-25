@@ -171,6 +171,7 @@ public class GoGui
                 }
             };
         m_comment = new Comment(commentListener);
+        m_comment.setFontFixed(m_prefs.getBool("comment-font-fixed"));
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_boardPanel, m_infoPanel);
@@ -225,6 +226,7 @@ public class GoGui
         boolean completion
             = ! m_prefs.getBool("gtpshell-disable-completions");
         m_menuBar.setCommandCompletion(completion);
+        m_menuBar.setCommentFontFixed(m_prefs.getBool("comment-font-fixed"));
         m_menuBar.setTimeStamp(m_prefs.getBool("gtpshell-timestamp"));
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setShowInfoPanel(m_showInfoPanel);
@@ -272,6 +274,7 @@ public class GoGui
         if (isCommandInProgress()
             && ! command.equals("about")
             && ! command.equals("beep-after-move")
+            && ! command.equals("comment-font-fixed")
             && ! command.equals("computer-black")
             && ! command.equals("computer-both")
             && ! command.equals("computer-none")
@@ -335,6 +338,8 @@ public class GoGui
             cbClockRestore();
         else if (command.equals("command-completion"))
             cbCommandCompletion();
+        else if (command.equals("comment-font-fixed"))
+            cbCommentFontFixed();
         else if (command.equals("computer-black"))
             computerBlack();
         else if (command.equals("computer-both"))
@@ -1532,6 +1537,13 @@ public class GoGui
         setNeedsSave(true);
         if (m_gameTreeViewer != null)
             m_gameTreeViewer.redrawCurrentNode();
+    }
+
+    private void cbCommentFontFixed()
+    {
+        boolean fixed = m_menuBar.getCommentFontFixed();
+        m_comment.setFontFixed(fixed);
+        m_prefs.setBool("comment-font-fixed", fixed);
     }
 
     private void cbComputerBoth()

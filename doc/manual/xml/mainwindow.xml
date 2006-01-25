@@ -754,6 +754,14 @@ With most versions of Java the PC speaker is used for the beep.
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guisubmenu>Configure Board</guisubmenu> / <guimenuitem>Fixed Size Comment Font</guimenuitem></term>
+<listitem>
+<para>
+Use fixed-width font for comment.
+</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><guisubmenu>Configure Tree</guisubmenu> / <guimenuitem>Labels</guimenuitem></term>

@@ -130,6 +130,11 @@ public class GoGuiMenuBar
         return m_itemCommandCompletion.isSelected();
     }
 
+    public boolean getCommentFontFixed()
+    {
+        return m_itemCommentFontFixed.isSelected();
+    }
+
     public boolean getBeepAfterMove()
     {
         return m_itemBeepAfterMove.isSelected();
@@ -293,6 +298,11 @@ public class GoGuiMenuBar
         m_itemBeepAfterMove.setSelected(enable);
     }
 
+    public void setCleanup(boolean enable)
+    {
+        m_itemCleanup.setSelected(enable);
+    }
+
     public void setCommandInProgress()
     {
         assert(! m_isComputerDisabled);
@@ -324,14 +334,13 @@ public class GoGuiMenuBar
         m_itemTimeStamp.setEnabled(true);
     }
 
-    public void setCleanup(boolean enable)
-    {
-        m_itemCleanup.setSelected(enable);
-    }
-
     public void setCommandCompletion(boolean enable)
     {
         m_itemCommandCompletion.setSelected(enable);
+    }
+    public void setCommentFontFixed(boolean enable)
+    {
+        m_itemCommentFontFixed.setSelected(enable);
     }
 
     public void setGameTreeLabels(int mode)
@@ -584,6 +593,8 @@ public class GoGuiMenuBar
     private JMenuItem m_itemClockRestore;
 
     private JMenuItem m_itemClockResume;
+
+    private JMenuItem m_itemCommentFontFixed;
 
     private JMenuItem m_itemComputerBlack;
 
@@ -842,6 +853,10 @@ public class GoGuiMenuBar
         m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
         addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
                     "beep-after-move");
+        m_itemCommentFontFixed =
+            new JCheckBoxMenuItem("Fixed Size Comment Font");
+        addMenuItem(menu, m_itemCommentFontFixed, KeyEvent.VK_F,
+                    "comment-font-fixed");
         return menu;
     }
 
