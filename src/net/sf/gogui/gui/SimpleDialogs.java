@@ -131,7 +131,7 @@ public final class SimpleDialogs
                                         File lastFile, boolean setSgfFilter,
                                         String title)
     {
-        if (Platform.isMac())
+        if (Platform.isMac() && type != FILE_SELECT)
         {
             Frame frame = findParentFrame(parent);
             return showFileChooserAWT(frame, type, setSgfFilter, title);
@@ -181,7 +181,7 @@ public final class SimpleDialogs
                 title = "Save";
                 break;
             default:
-                title = "Select";
+                assert(false);
             }
         }
         dialog.setTitle(title);
