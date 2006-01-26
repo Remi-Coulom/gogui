@@ -20,10 +20,16 @@ import javax.swing.JOptionPane;
 /** Simple message dialogs and file selectors. */
 public final class SimpleDialogs
 {
+    /** Dialog type for opening a file. */
     public static final int FILE_OPEN = 0;
 
+    /** Dialog type for saving to a file. */
     public static final int FILE_SAVE = 1;
 
+    /** Dialog type for selecting a file.
+        Use this type, if a file name should be selected, but it is not known
+        what the file name is used for and if the file already exists.
+    */
     public static final int FILE_SELECT = 2;
 
     public static void showError(Component frame, String message)
