@@ -11,8 +11,19 @@
 <itemizedlist>
 <listitem>
 <para>
-GoGui: new menu items "Play Single Move",
-"Configure Board/Fixed Size Comment Font"
+GoGui:
+<itemizedlist>
+<listitem>
+<simpara>
+New menu items "Play Single Move", "Configure Board/Fixed Size Comment Font"
+</simpara>
+<simpara>
+Use Swing file dialog on Mac for file name parameters of analyze commands
+again (native file dialogs need to know, if the file name is used
+for load or save)
+</simpara>
+</listitem>
+</itemizedlist>
 </para>
 </listitem>
 <listitem>
