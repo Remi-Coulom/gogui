@@ -172,6 +172,10 @@ public class Platform
         {
             StringUtils.printException(e);
         }
+        catch (NoClassDefFoundError e)
+        {
+            StringUtils.printException(e);
+        }
     }
 
     private static boolean runProcess(String[] cmd)
