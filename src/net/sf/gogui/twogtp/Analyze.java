@@ -370,8 +370,12 @@ public class Analyze
                       "</tr>\n");
         }
         out.print("</table>\n" +
-                  "<hr>\n");
-        out.print("</body>\n" +
+                  "<hr>\n" +
+                  "<address><small>Generated on " + StringUtils.getDateShort()
+                  + " by TwoGtp " + Version.get()
+                  + " (<a href=\"http://gogui.sf.net\">"
+                  + "http://gogui.sf.net</a>)</small></address>\n" +
+                  "</body>\n" +
                   "</html>\n");
         out.close();
     }
