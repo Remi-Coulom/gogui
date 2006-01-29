@@ -34,8 +34,8 @@ public final class StringUtils
 
     public static String getDate()
     {
-        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL,
-                                                           DateFormat.FULL);
+        DateFormat format = DateFormat.getDateTimeInstance(DateFormat.LONG,
+                                                           DateFormat.LONG);
         Date date = Calendar.getInstance().getTime();
         return format.format(date);
     }
