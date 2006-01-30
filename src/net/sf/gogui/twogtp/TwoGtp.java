@@ -587,9 +587,10 @@ public class TwoGtp
         }
         blackName = StringUtils.capitalize(blackName);
         whiteName = StringUtils.capitalize(whiteName);
-        buffer.append(blackName);
-        buffer.append(" vs ");
         buffer.append(whiteName);
+        buffer.append(" vs ");
+        buffer.append(blackName);
+        buffer.append(" (B)");
         if (! m_sgfFile.equals(""))
         {
             buffer.append(" (");
