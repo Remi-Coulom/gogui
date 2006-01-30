@@ -8,6 +8,9 @@ stones are transmitted to the program by play commands
 
 IMPROVEMENTS:
 
+Implement stream selector class similar to ANSI C select to replace
+MessageQueue used in GtpClient
+
 Consider using java.util.prefs for preferences
 
 SquareLayout should be used in gui.Board
