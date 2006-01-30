@@ -365,7 +365,12 @@ public class AnalyzeCommand
         }
         if (needsColorArg())
         {
-            result = result.replaceAll("%c", m_colorArg.toString());
+            String colorString = "empty";
+            if (m_colorArg == GoColor.BLACK)
+                colorString = "b";
+            else if (m_colorArg == GoColor.WHITE)
+                colorString = "w";
+            result = result.replaceAll("%c", colorString);
         }
         return result;
     }
