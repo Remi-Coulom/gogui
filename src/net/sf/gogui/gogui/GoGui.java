@@ -1082,6 +1082,8 @@ public class GoGui
 
     private OptionalWarning m_overwriteWarning;
 
+    private OptionalWarning m_passWarning;
+
     private Pattern m_pattern;
 
     private AnalyzeCommand m_analyzeCommand;
@@ -1875,7 +1877,9 @@ public class GoGui
 
     private void cbPass()
     {
-        if (! showQuestion("Really pass?"))
+        if (m_passWarning == null)
+            m_passWarning = new OptionalWarning(this);
+        if (! m_passWarning.show("Really pass?"))
             return;
         humanMoved(Move.createPass(m_board.getToMove()));
     }
