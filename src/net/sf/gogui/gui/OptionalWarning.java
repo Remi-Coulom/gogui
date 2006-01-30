@@ -29,6 +29,11 @@ public class OptionalWarning
     
     public boolean show(String message)
     {
+        return show(message, false);
+    }
+
+    public boolean show(String message, boolean isQuestion)
+    {
         if (m_disabled)
             return true;
         JPanel panel = new JPanel();
@@ -44,13 +49,25 @@ public class OptionalWarning
         panel.add(textArea);
         panel.add(GuiUtils.createFiller());
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
-        JCheckBox disabled = new JCheckBox("Do not show this warning again");
+        JCheckBox disabled;
+        int messageType;
+        int optionType;
+        if (isQuestion)
+        {
+            messageType = JOptionPane.QUESTION_MESSAGE;
+            disabled = new JCheckBox("Do not ask again");
+        }
+        else
+        {
+            messageType = JOptionPane.WARNING_MESSAGE;
+            disabled = new JCheckBox("Do not show this warning again");
+        }
         disabled.setSelected(m_disabled);
         checkBoxPanel.add(disabled, BorderLayout.WEST);
         panel.add(checkBoxPanel);
         Object options[] = { "Ok", "Cancel" };
         JOptionPane optionPane
-            = new JOptionPane(panel, JOptionPane.WARNING_MESSAGE,
+            = new JOptionPane(panel, messageType,
                               JOptionPane.OK_CANCEL_OPTION, null, options,
                               options[1]);
         JDialog dialog = optionPane.createDialog(m_parent, "Warning");

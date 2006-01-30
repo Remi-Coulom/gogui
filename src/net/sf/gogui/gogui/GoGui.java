@@ -1879,7 +1879,7 @@ public class GoGui
     {
         if (m_passWarning == null)
             m_passWarning = new OptionalWarning(this);
-        if (! m_passWarning.show("Really pass?"))
+        if (! m_passWarning.show("Really pass?", true))
             return;
         humanMoved(Move.createPass(m_board.getToMove()));
     }
