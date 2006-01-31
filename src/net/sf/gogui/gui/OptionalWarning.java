@@ -51,15 +51,18 @@ public class OptionalWarning
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
         JCheckBox disabled;
         int messageType;
+        String title;
         if (isQuestion)
         {
             messageType = JOptionPane.QUESTION_MESSAGE;
             disabled = new JCheckBox("Do not ask again");
+            title = "Question";
         }
         else
         {
             messageType = JOptionPane.WARNING_MESSAGE;
             disabled = new JCheckBox("Do not show this warning again");
+            title = "Warning";
         }
         disabled.setSelected(m_disabled);
         checkBoxPanel.add(disabled, BorderLayout.WEST);
@@ -69,7 +72,7 @@ public class OptionalWarning
             = new JOptionPane(panel, messageType,
                               JOptionPane.OK_CANCEL_OPTION, null, options,
                               options[1]);
-        JDialog dialog = optionPane.createDialog(m_parent, "Warning");
+        JDialog dialog = optionPane.createDialog(m_parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
         panel.invalidate();
         dialog.pack();
