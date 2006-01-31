@@ -51,7 +51,6 @@ public class OptionalWarning
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
         JCheckBox disabled;
         int messageType;
-        int optionType;
         if (isQuestion)
         {
             messageType = JOptionPane.QUESTION_MESSAGE;
