@@ -140,7 +140,7 @@ public final class AboutDialog
                            "Version " + Version.get() + "</p>" +
                            "<p align=\"center\">" +
                            "Graphical interface to Go programs<br>" +
-                           "&copy; 2005 Markus Enzenberger" +
+                           "&copy; 2006 Markus Enzenberger" +
                            "<br>" +
                            "<tt><a href=\"" + projectUrl + "\">"
                            + projectUrl + "</a></tt>" +
