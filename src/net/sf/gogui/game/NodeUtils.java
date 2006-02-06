@@ -107,6 +107,22 @@ public final class NodeUtils
         return null;
     }
 
+    /** Get stones added and moves all as moves for a list of nodes.
+        Calls NodeUtils.getAllAsMoves(Node node) for all nodes in a
+        sequence of subsequent nodes.
+    */
+    public static ArrayList getAllAsMoves(ArrayList nodes)
+    {
+        ArrayList moves = new ArrayList();
+        for (int i = 0; i < nodes.size(); ++i)
+        {
+            Node node = (Node)nodes.get(i);
+            moves.addAll(getAllAsMoves(node));
+            assert(i == 0 || node.isChildOf((Node)nodes.get(i - 1)));
+        }
+        return moves;
+    }
+
     /** Get stones added and moves all as moves.
         This function is for transmitting setup stones to Go engines
         that support only play commands.

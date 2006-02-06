@@ -15,6 +15,11 @@ GoGui:
 <itemizedlist>
 <listitem>
 <simpara>
+New extension command play_sequence is used if supported by the Go program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New menu items "Play Single Move", "Configure Board/Fixed Size Comment Font"
 </simpara>
 </listitem>

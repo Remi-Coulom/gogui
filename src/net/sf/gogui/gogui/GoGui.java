@@ -799,24 +799,47 @@ public class GoGui
             = NodeUtils.getShortestPath(m_currentNode, node, nodes);
         if (backward(numberUndo))
         {
-            for (int i = 0; i < nodes.size(); ++i)
+            ArrayList moves = NodeUtils.getAllAsMoves(nodes);
+            if (checkCurrentNodeExecuted()
+                && nodes.size() > 0
+                && moves.size() > 0
+                && m_commandThread != null
+                && m_commandThread.isCommandSupported("play_sequence"))
             {
-                Node nextNode = (Node)nodes.get(i);
-                if (! checkCurrentNodeExecuted())
-                    break;
-                assert(nextNode.isChildOf(m_currentNode));
-                m_currentNode = nextNode;
                 try
                 {
-                    executeCurrentNode();
+                    String cmd = GtpUtils.getPlaySequenceCommand(moves);
+                    m_commandThread.send(cmd.toString());
+                    for (int i = 0; i < moves.size(); ++i)
+                        m_board.play((Move)moves.get(i));
+                    m_currentNode = (Node)nodes.get(nodes.size() - 1);
+                    m_currentNodeExecuted =
+                        NodeUtils.getAllAsMoves(m_currentNode).size();
                 }
                 catch (GtpError e)
                 {
                     showError(e);
-                    break;
                 }
-                m_gameInfo.fastUpdateMoveNumber(m_currentNode);
             }
+            else
+                for (int i = 0; i < nodes.size(); ++i)
+                {
+                    Node nextNode = (Node)nodes.get(i);
+                    if (! checkCurrentNodeExecuted())
+                        break;
+                    assert(nextNode.isChildOf(m_currentNode));
+                    m_currentNode = nextNode;
+                    try
+                    {
+                        executeCurrentNode();
+                    }
+                    catch (GtpError e)
+                    {
+                        showError(e);
+                        break;
+                    }
+                    m_gameInfo.fastUpdateMoveNumber(m_currentNode);
+                }
         }
         boardChangedBegin(false, false);
     }
@@ -2528,22 +2551,18 @@ public class GoGui
 
     private void forward(int n)
     {
+        assert(n >= 0);
         if (! checkCurrentNodeExecuted())
             return;
-        try
+        Node node = m_currentNode;
+        for (int i = 0; i < n; ++i)
         {
-            for (int i = 0; i < n && m_currentNode.getNumberChildren() > 0;
-                 ++i)
-            {
-                m_currentNode = m_currentNode.getChild();
-                executeCurrentNode();
-                m_gameInfo.fastUpdateMoveNumber(m_currentNode);
-            }
+            Node child = node.getChild();
+            if (child == null)
+                break;
+            node = child;
         }
-        catch (GtpError e)
-        {
-            showError(e);
-        }
+        gotoNode(node);
     }
 
     private void generateMove(boolean isSingleMove)

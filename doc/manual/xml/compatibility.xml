@@ -175,6 +175,22 @@ The title is queried and set after a new game is started.
 </para>
 </listitem>
 </varlistentry>
+<varlistentry>
+<term><command>play_sequence</command></term>
+<listitem>
+<para>
+This is an extension to the standard <command>play</command> command which
+can take a sequence of moves.
+If the Go program supports it (together with GNU Go's
+<command>gg-undo</command> for multiple undo), then navigating in games
+will be much faster, because only a single command is used instead of a
+large number of <command>play</command> and <command>undo</command> commands).
+Note that the command line length can become large for this command.
+The Go program is expected to return a failure and not to change its current
+board state if it cannot execute all of the moves in the sequence.
+</para>
+</listitem>
+</varlistentry>
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>

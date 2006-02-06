@@ -222,6 +222,26 @@ public final class GtpUtils
         return result;
     }
 
+    /** Construct a gogui-play_sequence command from a list of moves. */
+    public static String getPlaySequenceCommand(ArrayList moves)
+    {
+        StringBuffer cmd = new StringBuffer();
+        cmd.append("play_sequence");
+        for (int i = 0; i < moves.size(); ++i)
+        {
+            Move move = (Move)moves.get(i);
+            GoColor color = move.getColor();
+            if (color == GoColor.BLACK)
+                cmd.append(" b ");
+            else if (color == GoColor.WHITE)
+                cmd.append(" w ");
+            else
+                cmd.append(" empty ");
+            cmd.append(GoPoint.toString(move.getPoint()));
+        }
+        return cmd.toString();
+    }
+
     public static String getTimeSettingsCommand(TimeSettings settings)
     {
         long preByoyomi = settings.getPreByoyomi() / 1000;
