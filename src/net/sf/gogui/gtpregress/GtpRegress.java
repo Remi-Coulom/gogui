@@ -57,6 +57,7 @@ public class GtpRegress
             runTest(tests[i]);
         }
         writeSummary();
+        writeData();
     }
 
     /** Return true if tests completed with no unexpected failures. */
@@ -138,8 +139,6 @@ public class GtpRegress
         public File m_file;
 
         public int m_numberTests;
-
-        public int m_programDied;
 
         public int m_otherErrors;
 
@@ -783,6 +782,27 @@ public class GtpRegress
                   "<tr><th align=\"left\" valign=\"top\">Command:</th>\n" +
                   "<td valign=\"top\"><tt>" + m_program
                   + "</tt></td></tr>\n");
+    }
+
+    /** Write text based data file with summary information. */
+    private void writeData() throws FileNotFoundException
+    {
+        File file = new File(m_prefix + "summary.dat");
+        PrintStream out = new PrintStream(new FileOutputStream(file));
+        NumberFormat format1 = StringUtils.getNumberFormat(1);
+        TestSummary s = getTotalSummary();
+        double time = ((double)s.m_timeMillis) / 1000F;
+        out.print("#Tests\tFAIL\tfail\tPASS\tpass\tError\tTime\tCpuTime\n" +
+                  + s.m_numberTests + "\t"
+                  + s.m_unexpectedFails + "\t"
+                  + s.m_expectedFails + "\t"
+                  + s.m_unexpectedPasses + "\t"
+                  + s.m_expectedPasses + "\t"
+                  + s.m_otherErrors + "\t"
+                  + format1.format(time) + "\t"
+                  + format1.format(s.m_cpuTime) + "\t"
+                  + "\n");
+        out.close();
     }
 
     private void writeSummary()

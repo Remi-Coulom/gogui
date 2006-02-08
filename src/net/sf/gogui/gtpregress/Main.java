@@ -58,12 +58,12 @@ public final class Main
             GtpRegress gtpRegress =
                 new GtpRegress(program, tests, output, longOutput, verbose,
                                fileComments);
-            System.exit(gtpRegress.getResult() ? 0 : -1);
+            System.exit(gtpRegress.getResult() ? 0 : 1);
         }
         catch (Throwable t)
         {
             StringUtils.printException(t);
-            System.exit(-1);
+            System.exit(2);
         }
     }
 
