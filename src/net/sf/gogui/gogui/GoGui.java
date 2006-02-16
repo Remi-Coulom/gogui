@@ -1055,6 +1055,12 @@ public class GoGui
 
     private int m_boardSize;
 
+    /** Counter for successfully executed moves/setup stones in current node.
+        If the current node contains several moves/setup stones, it is
+        necessary to count, how many were successfully executed, because if
+        one of them fails, the program might not support undo, so we have to
+        detect, that the current node was only partially executed.
+    */
     private int m_currentNodeExecuted;
 
     private int m_handicap;
@@ -2493,13 +2499,25 @@ public class GoGui
     {
         m_currentNodeExecuted = 0;
         ArrayList moves = NodeUtils.getAllAsMoves(m_currentNode);
-        for (int i = 0; i < moves.size(); ++i)
+        if (moves.size() > 0 && m_commandThread != null
+            && m_commandThread.isCommandSupported("play_sequence"))
         {
-            Move move = (Move)moves.get(i);
-            if (m_commandThread != null)
-                m_commandThread.sendPlay(move);
-            m_board.play(move);
-            ++m_currentNodeExecuted;
+            String cmd = GtpUtils.getPlaySequenceCommand(moves);
+            m_commandThread.send(cmd.toString());
+            for (int i = 0; i < moves.size(); ++i)
+                m_board.play((Move)moves.get(i));
+            m_currentNodeExecuted = moves.size();
+        }
+        else
+        {
+            for (int i = 0; i < moves.size(); ++i)
+            {
+                Move move = (Move)moves.get(i);
+                if (m_commandThread != null)
+                    m_commandThread.sendPlay(move);
+                m_board.play(move);
+                ++m_currentNodeExecuted;
+            }
         }
         GoColor toMove = m_currentNode.getToMove();
         if (toMove != GoColor.EMPTY)
