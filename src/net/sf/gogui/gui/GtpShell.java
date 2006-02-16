@@ -535,6 +535,7 @@ public class GtpShell
                 || c.startsWith("kgs-genmove_cleanup ")
                 || c.startsWith("loadsgf ")
                 || c.startsWith("play ")
+                || c.startsWith("play_sequence ")
                 || c.startsWith("white ")
                 || c.startsWith("quit"))
             {
