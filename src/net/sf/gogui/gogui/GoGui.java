@@ -1330,7 +1330,7 @@ public class GoGui
             return true;
         try
         {
-            if (m_commandThread != null && n > 1
+            if (m_commandThread != null && m_currentNodeExecuted > 1
                 && m_commandThread.isCommandSupported("gg-undo"))
             {
                 int total = 0;
