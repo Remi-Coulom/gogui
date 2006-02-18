@@ -185,7 +185,8 @@ If the Go program supports it (together with GNU Go's
 <command>gg-undo</command> for multiple undo), then navigating in games
 will be much faster, because only a single command is used instead of a
 large number of <command>play</command> and <command>undo</command> commands).
-Note that the command line length can become large for this command.
+Note that the command line length can become large for this command; the Go
+program should not use a limit for the command length.
 The Go program is expected to return a failure and not to change its current
 board state if it cannot execute all of the moves in the sequence.
 </para>
