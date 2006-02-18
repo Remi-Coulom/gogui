@@ -1335,11 +1335,9 @@ public class GoGui
             return true;
         int total = 0;
         Node node = m_currentNode;
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < n && node != m_gameTree.getRoot(); ++i)
         {
             total += NodeUtils.getAllAsMoves(node).size();
-            if (node.getFather() == null)
-                break;
             node = node.getFather();
         }
         try
