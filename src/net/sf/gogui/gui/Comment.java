@@ -140,6 +140,7 @@ public class Comment
         // we don't want to notify the listener about that yet.
         m_duringSetText = true;
         m_textPane.setText(text);
+        m_textPane.setCaretPosition(0);
         m_duringSetText = false;
         copyContentToNode();
     }
