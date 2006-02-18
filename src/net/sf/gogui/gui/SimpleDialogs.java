@@ -211,7 +211,15 @@ public final class SimpleDialogs
     {
         JFileChooser chooser;
         if (s_lastFile == null)
-            chooser = new JFileChooser(System.getProperty("user.dir"));
+        {
+            if (Platform.isMac())
+                // user.dir is application directory on Mac, which is bad
+                // I have not found a way to set it to user home in Info.plist
+                // so I use null here, which sets is to the user home
+                chooser = new JFileChooser((String)null);
+            else
+                chooser = new JFileChooser(System.getProperty("user.dir"));
+        }
         else
             chooser = new JFileChooser(s_lastFile);
         chooser.setMultiSelectionEnabled(false);
