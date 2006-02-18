@@ -117,6 +117,11 @@ public final class RecentMenu
         return getItem(i).getRecentMenuValue();
     }
 
+    public void remove(int i)
+    {
+        m_menu.remove(getItem(i));
+    }
+
     public void save()
     {
         Properties props = new Properties();

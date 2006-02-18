@@ -34,6 +34,9 @@ public class RecentFileMenu
             }
         };
         m_menu = new RecentMenu(label, file, recentCallback);
+        for (int i = 0; i < m_menu.getCount(); ++i)
+            if (! getFile(i).exists())
+                m_menu.remove(i);
     }
 
     public void add(File file)
