@@ -29,12 +29,11 @@ public class SgfWriter
     /** Write game tree in SGF format.
         @param out Output stream.
         @param gameTree Game tree to write.
-        @param file File name for GN property.
         @param application Application name for AP property.
         @param version If not null, version appended to application name in
         AP property.
     */
-    public SgfWriter(OutputStream out, GameTree gameTree, File file,
+    public SgfWriter(OutputStream out, GameTree gameTree,
                      String application, String version)
     {        
         m_out = new PrintStream(out);
@@ -51,7 +50,7 @@ public class SgfWriter
         int handicap = gameInformation.m_handicap;
         double komi = gameInformation.m_komi;
         TimeSettings timeSettings = gameInformation.m_timeSettings;
-        printHeader(file, application, version, handicap, date, playerBlack,
+        printHeader(application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, result, komi, rules,
                     timeSettings);
         printNewLine();
@@ -64,18 +63,17 @@ public class SgfWriter
     /** Write position in SGF format.
         @param out Output stream.
         @param board Position to write.
-        @param file File name for GN property.
         @param application Application name for AP property.
         @param version If not null, version appended to application name in
         AP property.
     */
-    public SgfWriter(OutputStream out, Board board, File file,
-                     String application, String version)
+    public SgfWriter(OutputStream out, Board board, String application,
+                     String version)
     {        
         m_size = board.getSize();
         m_out = new PrintStream(out);
         print("(");
-        printHeader(file, application, version);
+        printHeader(application, version);
         printNewLine();
         printPosition(board);
         print(")");
@@ -193,25 +191,24 @@ public class SgfWriter
         }
     }
 
-    private void printHeader(File file, String application, String version)
+    private void printHeader(String application, String version)
     {
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
         print(";FF[4]CA[" + getEscaped(StringUtils.getDefaultEncoding())
-              + "]GN[" + getEscaped(getName(file)) + "]AP["
-              + getEscaped(appName) + "]");
+              + "]AP[" + getEscaped(appName) + "]");
         if (m_size != 19)
             print("SZ[" + m_size + "]");
     }
 
-    private void printHeader(File file, String application, String version,
-                             int handicap, String date, String playerBlack,
+    private void printHeader(String application, String version, int handicap,
+                             String date, String playerBlack,
                              String playerWhite, String rankBlack,
                              String rankWhite, String result, double komi,
                              String rules, TimeSettings timeSettings)
     {
-        printHeader(file, application, version);
+        printHeader(application, version);
         if (handicap > 0)
             print("HA[" + handicap + "]");
         else

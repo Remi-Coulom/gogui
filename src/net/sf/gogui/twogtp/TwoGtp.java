@@ -919,7 +919,7 @@ public class TwoGtp
         if (m_verbose)
             System.err.println("Saving " + file);
         OutputStream out = new FileOutputStream(file);
-        new SgfWriter(out, m_gameTree, file, "TwoGtp", Version.get());
+        new SgfWriter(out, m_gameTree, "TwoGtp", Version.get());
     }
 
     private void saveResult(String resultBlack, String resultWhite,

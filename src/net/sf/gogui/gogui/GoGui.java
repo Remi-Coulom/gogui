@@ -3055,7 +3055,7 @@ public class GoGui
             showError("Saving file failed", e);
             return false;
         }
-        new SgfWriter(out, m_gameTree, file, "GoGui", Version.get());
+        new SgfWriter(out, m_gameTree, "GoGui", Version.get());
         m_menuBar.addRecent(file);
         return true;
     }
@@ -3076,7 +3076,7 @@ public class GoGui
     private void savePosition(File file) throws FileNotFoundException
     {
         OutputStream out = new FileOutputStream(file);
-        new SgfWriter(out, m_board, file, "GoGui", Version.get());
+        new SgfWriter(out, m_board, "GoGui", Version.get());
         m_menuBar.addRecent(file);
     }
 

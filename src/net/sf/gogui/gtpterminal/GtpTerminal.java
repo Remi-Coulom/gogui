@@ -362,8 +362,7 @@ public class GtpTerminal
         try
         {
             OutputStream out = new FileOutputStream(file);
-            new SgfWriter(out, m_gameTree, file, "GtpTerminal",
-                           Version.get());
+            new SgfWriter(out, m_gameTree, "GtpTerminal", Version.get());
         }
         catch (FileNotFoundException e) 
         {
