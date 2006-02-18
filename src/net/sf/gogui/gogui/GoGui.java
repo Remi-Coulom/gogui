@@ -199,7 +199,6 @@ public class GoGui
                 {
                     if (m_needsSave && ! checkSaveGame())
                         return;
-                    m_menuBar.addRecent(file);
                     loadFile(file, -1);
                 }
             };
@@ -2851,6 +2850,7 @@ public class GoGui
             GameInformation gameInformation =
                 reader.getGameTree().getGameInformation();
             initGame(gameInformation.m_boardSize);
+            m_menuBar.addRecent(file);
             m_gameTree = reader.getGameTree();
             if (executeRoot())
                 if (move > 0)
