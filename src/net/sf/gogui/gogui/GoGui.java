@@ -801,8 +801,7 @@ public class GoGui
         {
             ArrayList moves = NodeUtils.getAllAsMoves(nodes);
             if (checkCurrentNodeExecuted()
-                && nodes.size() > 0
-                && moves.size() > 0
+                && moves.size() > 1
                 && m_commandThread != null
                 && m_commandThread.isCommandSupported("play_sequence"))
             {
@@ -1334,20 +1333,20 @@ public class GoGui
     {
         if (n == 0)
             return true;
+        int total = 0;
+        Node node = m_currentNode;
+        for (int i = 0; i < n; ++i)
+        {
+            total += NodeUtils.getAllAsMoves(node).size();
+            if (node.getFather() == null)
+                break;
+            node = node.getFather();
+        }
         try
         {
-            if (m_commandThread != null && m_currentNodeExecuted > 1
+            if (m_commandThread != null && total > 1
                 && m_commandThread.isCommandSupported("gg-undo"))
             {
-                int total = 0;
-                Node node = m_currentNode;
-                for (int i = 0; i < n; ++i)
-                {
-                    total += NodeUtils.getAllAsMoves(node).size();
-                    if (node.getFather() == null)
-                        break;
-                    node = node.getFather();
-                }
                 m_commandThread.send("gg-undo " + total);
                 m_board.undo(total);
                 m_currentNode = node;
@@ -2499,7 +2498,7 @@ public class GoGui
     {
         m_currentNodeExecuted = 0;
         ArrayList moves = NodeUtils.getAllAsMoves(m_currentNode);
-        if (moves.size() > 0 && m_commandThread != null
+        if (moves.size() > 1 && m_commandThread != null
             && m_commandThread.isCommandSupported("play_sequence"))
         {
             String cmd = GtpUtils.getPlaySequenceCommand(moves);
