@@ -114,12 +114,6 @@ public final class SimpleDialogs
     {
     }
 
-    private static File getUserDir()
-    {
-        String userDir = System.getProperties().getProperty("user.home");
-        return new File(userDir);
-    }
-
     /** Find first parent that is a Frame.
         @return null If no such parent.
     */
@@ -173,8 +167,6 @@ public final class SimpleDialogs
     private static File showFileChooserAWT(Frame parent, int type,
                                            boolean setSgfFilter, String title)
     {
-        if (s_lastFile == null)
-            s_lastFile = getUserDir();
         FileDialog dialog = new FileDialog(parent);
         if (title == null)
         {
@@ -217,9 +209,11 @@ public final class SimpleDialogs
                                              boolean setSgfFilter,
                                              String title)
     {
+        JFileChooser chooser;
         if (s_lastFile == null)
-            s_lastFile = getUserDir();
-        JFileChooser chooser = new JFileChooser(s_lastFile);
+            chooser = new JFileChooser(System.getProperty("user.dir"));
+        else
+            chooser = new JFileChooser(s_lastFile);
         chooser.setMultiSelectionEnabled(false);
         javax.swing.filechooser.FileFilter sgfFilter = new SgfFilter();
         chooser.addChoosableFileFilter(sgfFilter);
