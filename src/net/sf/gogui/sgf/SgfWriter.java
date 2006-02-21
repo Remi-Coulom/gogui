@@ -5,7 +5,6 @@
 
 package net.sf.gogui.sgf;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -128,16 +127,6 @@ public class SgfWriter
                 break;
         }
         return moveNumber;
-    }
-
-    private static String getName(File file)
-    {
-        String result = file.getName();
-        int len = result.length();
-        if (len >= 4
-            && result.substring(len - 4).toLowerCase().equals(".sgf"))
-            result = result.substring(0, len - 4);
-        return result;
     }
 
     private String getPoint(GoPoint p)
