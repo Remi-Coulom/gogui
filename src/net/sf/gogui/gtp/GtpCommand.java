@@ -15,31 +15,11 @@ import net.sf.gogui.utils.StringUtils;
 /** GTP command. */
 public class GtpCommand
 {
+    /** Construct command from command line. */
     public GtpCommand(String line)
     {
+        StringBuffer buffer = preprocessLine(line);
         assert(! line.trim().equals(""));
-        int len = line.length();
-        StringBuffer buffer = new StringBuffer(len);
-        boolean wasLastSpace = false;
-        for (int i = 0; i < len; ++i)
-        {
-            char c = line.charAt(i);
-            if (Character.isISOControl(c))
-                continue;
-            if (Character.isWhitespace(c))
-            {
-                if (! wasLastSpace)
-                {
-                    buffer.append(' ');
-                    wasLastSpace = true;
-                }
-            }
-            else
-            {
-                buffer.append(c);
-                wasLastSpace = false;
-            }
-        }
         String[] array = StringUtils.splitArguments(buffer.toString());
         assert(array.length > 0);
         int commandIndex = 0;
@@ -243,6 +223,39 @@ public class GtpCommand
     private final String[] m_arg;
 
     private final StringBuffer m_response;
+
+    /** Preprocess command line.
+        Replaces control characters by spaces, removes redundant spaces
+        and appended comment.
+    */
+    private static StringBuffer preprocessLine(String line)
+    {
+        int len = line.length();
+        StringBuffer buffer = new StringBuffer(len);
+        boolean wasLastSpace = false;
+        for (int i = 0; i < len; ++i)
+        {
+            char c = line.charAt(i);
+            if (c == '#')
+                break;
+            if (Character.isISOControl(c))
+                continue;
+            if (Character.isWhitespace(c))
+            {
+                if (! wasLastSpace)
+                {
+                    buffer.append(' ');
+                    wasLastSpace = true;
+                }
+            }
+            else
+            {
+                buffer.append(c);
+                wasLastSpace = false;
+            }
+        }
+        return buffer;
+    }
 }
 
 //----------------------------------------------------------------------------
