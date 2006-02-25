@@ -54,8 +54,7 @@ public class SgfReaderTest
         SgfReader reader = getReader("ff4_ex.sgf");
         File file = File.createTempFile("gogui", null);
         OutputStream out = new FileOutputStream(file);
-        new SgfWriter(out, reader.getGameTree(), file, "GoGui",
-                      Version.get());
+        new SgfWriter(out, reader.getGameTree(), "GoGui", Version.get());
         out.close();
         reader = new SgfReader(new FileInputStream(file), null, null, 0);
         checkFF4Example(reader);
