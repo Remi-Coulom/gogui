@@ -808,7 +808,7 @@ public class GoGui
                 try
                 {
                     String cmd = GtpUtils.getPlaySequenceCommand(moves);
-                    m_commandThread.send(cmd.toString());
+                    m_commandThread.send(cmd);
                     for (int i = 0; i < moves.size(); ++i)
                         m_board.play((Move)moves.get(i));
                     m_currentNode = (Node)nodes.get(nodes.size() - 1);
@@ -2504,7 +2504,7 @@ public class GoGui
             && m_commandThread.isCommandSupported("play_sequence"))
         {
             String cmd = GtpUtils.getPlaySequenceCommand(moves);
-            m_commandThread.send(cmd.toString());
+            m_commandThread.send(cmd);
             for (int i = 0; i < moves.size(); ++i)
                 m_board.play((Move)moves.get(i));
             m_currentNodeExecuted = moves.size();
