@@ -581,7 +581,7 @@ public final class GtpClient
     /** More sophisticated version of waitFor with timeout. */
     public void waitForExit(int timeout, TimeoutCallback timeoutCallback)
     {
-        setExitInProcess(true);
+        setExitInProgress(true);
         if (m_process == null)
             return;
         while (true)
@@ -654,7 +654,7 @@ public final class GtpClient
                 log("<< " + line);
                 // Avoid programs flooding stderr or stdout after trying
                 // to exit
-                if (getExitInProcess())
+                if (getExitInProgress())
                     Thread.sleep(m_queue.getSize() / 10);
             }
         }
@@ -709,7 +709,7 @@ public final class GtpClient
                 logError(text);
                 // Avoid programs flooding stderr or stdout after trying
                 // to exit
-                if (getExitInProcess())
+                if (getExitInProgress())
                     Thread.sleep(m_queue.getSize() / 10);
             }
         }
@@ -719,7 +719,7 @@ public final class GtpClient
 
     private InvalidResponseCallback m_invalidResponseCallback;
 
-    private boolean m_exitInProcess;
+    private boolean m_exitInProgress;
 
     private boolean m_isInterruptCommentSupported;
 
@@ -757,9 +757,9 @@ public final class GtpClient
 
     private TimeoutCallback m_timeoutCallback;
 
-    private synchronized boolean getExitInProcess()
+    private synchronized boolean getExitInProgress()
     {
-        return m_exitInProcess;
+        return m_exitInProgress;
     }
 
     private void handleErrorStream(String text)
@@ -921,9 +921,9 @@ public final class GtpClient
         }
     }
 
-    private synchronized void setExitInProcess(boolean exitInProcess)
+    private synchronized void setExitInProgress(boolean exitInProgress)
     {
-        m_exitInProcess = exitInProcess;
+        m_exitInProgress = exitInProgress;
     }
 
     private void throwProgramDied() throws GtpError
