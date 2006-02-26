@@ -12,27 +12,39 @@ import java.util.ArrayList;
 /** Message queue for synchronized passing of messages between threads. */
 public class MessageQueue
 {
-    public synchronized boolean isEmpty()
+    public boolean isEmpty()
     {
-        return m_queue.isEmpty();
+        synchronized (m_mutex)
+        {
+            return m_queue.isEmpty();
+        }
     }
 
-    public synchronized Object getIfAvaliable()
+    public Object getIfAvaliable()
     {
-        if (m_queue.isEmpty())
-            return null;
-        return m_queue.remove(0);
+        synchronized (m_mutex)
+        {
+            if (m_queue.isEmpty())
+                return null;
+            return m_queue.remove(0);
+        }
     }
 
-    public synchronized int getSize()
+    public int getSize()
     {
-        return m_queue.size();
+        synchronized (m_mutex)
+        {
+            return m_queue.size();
+        }
     }
 
-    public synchronized void put(Object object)
+    public void put(Object object)
     {
-        m_queue.add(object);
-        notifyAll();
+        synchronized (m_mutex)
+        {
+            m_queue.add(object);
+            m_mutex.notifyAll();
+        }
     }
 
     /** Unsynchronized peek at next object.
@@ -41,46 +53,54 @@ public class MessageQueue
     */
     public Object unsynchronizedPeek()
     {
-        assert(Thread.holdsLock(this));
+        assert(Thread.holdsLock(m_mutex));
         if (m_queue.isEmpty())
             return null;
         return m_queue.get(0);
     }
 
-    public synchronized Object waitFor()
+    public Object waitFor()
     {
-        if (m_queue.isEmpty())
+        synchronized (m_mutex)
         {
-            try
+            if (m_queue.isEmpty())
             {
-                wait();
+                try
+                {
+                    m_mutex.wait();
+                }
+                catch (InterruptedException e)
+                {
+                }
             }
-            catch (InterruptedException e)
-            {
-            }
+            assert(! m_queue.isEmpty());
+            return m_queue.remove(0);
         }
-        assert(! m_queue.isEmpty());
-        return m_queue.remove(0);
     }
 
-    public synchronized Object waitFor(long timeout)
+    public Object waitFor(long timeout)
     {
-        if (m_queue.isEmpty())
+        synchronized (m_mutex)
         {
-            try
+            if (m_queue.isEmpty())
             {
-                wait(timeout);
+                try
+                {
+                    m_mutex.wait(timeout);
+                }
+                catch (InterruptedException e)
+                {
+                }
             }
-            catch (InterruptedException e)
-            {
-            }
+            if (m_queue.isEmpty())
+                return null;
+            return m_queue.remove(0);
         }
-        if (m_queue.isEmpty())
-            return null;
-        return m_queue.remove(0);
     }
 
     private final ArrayList m_queue = new ArrayList();
+
+    private final Object m_mutex = new Object();
 }
 
 //----------------------------------------------------------------------------

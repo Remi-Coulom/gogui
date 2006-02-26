@@ -209,6 +209,8 @@ public class GtpDisplay
 
     private Move m_move;
 
+    private final Object m_mutex = new Object();
+
     private JFrame m_frame;
 
     private StatusBar m_statusBar;
@@ -222,13 +224,13 @@ public class GtpDisplay
         assert(SwingUtilities.isEventDispatchThread());
         if (m_board.getColor(point) != GoColor.EMPTY)
             return;
-        synchronized (this)
+        synchronized (m_mutex)
         {
             if (modifiedSelect)
                 m_fieldClicked = null;
             else
                 m_fieldClicked = point;
-            notifyAll();
+            m_mutex.notifyAll();
         }
     }
 
@@ -312,11 +314,11 @@ public class GtpDisplay
                                    + " (right click for pass)");
                     }
                 });
-            synchronized (this)
+            synchronized (m_mutex)
             {
                 try
                 {
-                    wait();
+                    m_mutex.wait();
                 }
                 catch (InterruptedException e)
                 {

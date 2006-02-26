@@ -58,11 +58,14 @@ public class CommandThread
     /** Get response to asynchronous command.
         You must call getException() first.
     */
-    public synchronized String getResponse()
+    public String getResponse()
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(! m_commandInProgress);
-        return m_response;
+        synchronized (m_mutex)
+        {
+            assert(SwingUtilities.isEventDispatchThread());
+            assert(! m_commandInProgress);
+            return m_response;
+        }
     }
     
     public String getCommandClearBoard(int size)
@@ -83,12 +86,15 @@ public class CommandThread
     /** Get exception of asynchronous command.
         You must call this before you are allowed to send new a command.
     */
-    public synchronized GtpError getException()
+    public GtpError getException()
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        assert(m_commandInProgress);
-        m_commandInProgress = false;
-        return m_exception;
+        synchronized (m_mutex)
+        {
+            assert(SwingUtilities.isEventDispatchThread());
+            assert(m_commandInProgress);
+            m_commandInProgress = false;
+            return m_exception;
+        }
     }
     
     public String getProgramCommand()
@@ -165,7 +171,7 @@ public class CommandThread
 
     public void run()
     {
-        synchronized (this)
+        synchronized (m_mutex)
         {
             boolean firstWait = true;
             while (true)
@@ -173,7 +179,7 @@ public class CommandThread
                 try
                 {
                     if (m_command == null || ! firstWait)
-                        wait();
+                        m_mutex.wait();
                 }
                 catch (InterruptedException e)
                 {
@@ -200,12 +206,12 @@ public class CommandThread
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        synchronized (this)
+        synchronized (m_mutex)
         {
             m_command = command;
             m_callback = callback;
             m_commandInProgress = true;
-            notifyAll();
+            m_mutex.notifyAll();
         }
     }
     
@@ -275,6 +281,8 @@ public class CommandThread
     private GtpError m_exception;    
 
     private Component m_owner;
+
+    private final Object m_mutex = new Object();
 
     private Runnable m_callback;
 
