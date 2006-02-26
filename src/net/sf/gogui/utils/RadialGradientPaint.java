@@ -29,6 +29,12 @@ public class RadialGradientPaint
         m_radius = radius;
         m_pointColor = pointColor;
         m_backgroundColor = backgroundColor;
+        int alphaPoint = pointColor.getAlpha();
+        int alphaBackground = backgroundColor.getAlpha();
+        if ((alphaPoint & alphaBackground) == 0xff)
+            m_transparency = OPAQUE;
+        else
+            m_transparency = TRANSLUCENT;
     }
     
     public PaintContext createContext(ColorModel colorModel,
@@ -53,12 +59,10 @@ public class RadialGradientPaint
 
     public int getTransparency()
     {
-        int alphaPoint = m_pointColor.getAlpha();
-        int alphaBackground = m_backgroundColor.getAlpha();
-        if ((alphaPoint & alphaBackground) == 0xff)
-            return OPAQUE;
-        return TRANSLUCENT;
+        return m_transparency;
     }
+
+    private final int m_transparency;
 
     private Point2D m_transformedPoint;
 
