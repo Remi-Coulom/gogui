@@ -18,7 +18,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import javax.swing.JDialog;
@@ -71,15 +70,7 @@ public class GameTreePanel
         setFocusTraversalKeysEnabled(false);
         setOpaque(true);
         setAutoscrolls(true);
-        MouseMotionListener doScrollRectToVisible = new MouseMotionAdapter()
-            {
-                public void mouseDragged(MouseEvent e)
-                {
-                    Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
-                    ((JPanel)e.getSource()).scrollRectToVisible(r);
-                }
-            };
-        addMouseMotionListener(doScrollRectToVisible);
+        addMouseMotionListener(new GameTreePanel.MouseMotionListener());
         m_listener = listener;
         m_mouseListener = new MouseAdapter()
             {
@@ -347,6 +338,19 @@ public class GameTreePanel
         scrollToCurrent();
         if (m_scrollPane != null)
             m_scrollPane.requestFocusInWindow();
+    }
+
+    private static class MouseMotionListener
+        extends MouseMotionAdapter
+    {
+        public void mouseDragged(MouseEvent event)
+        {
+            int x = event.getX();
+            int y = event.getY();
+            JPanel panel = (JPanel)event.getSource();
+            Rectangle rectangle = new Rectangle(x, y, 1, 1);
+            panel.scrollRectToVisible(rectangle);
+        }
     }
 
     private final boolean m_fastPaint;
