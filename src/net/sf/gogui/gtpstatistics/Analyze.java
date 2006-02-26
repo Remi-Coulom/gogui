@@ -188,7 +188,7 @@ public class Analyze
         public int m_numberPositions;
     }
 
-    private final int m_imgHeight = 100;
+    private static final int m_imgHeight = 100;
 
     private int m_maxMove;
 

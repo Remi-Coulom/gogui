@@ -147,7 +147,7 @@ public final class RecentMenu
         getItem(i).setRecentMenuLabel(label);
     }
 
-    private final int m_maxItems = 20;
+    private static final int m_maxItems = 20;
 
     private final ActionListener m_listener;
 
