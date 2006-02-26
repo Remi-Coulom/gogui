@@ -150,6 +150,14 @@ the program:
 
 <variablelist>
 <varlistentry>
+<term><command>gogui_analyze_commands</command></term>
+<listitem>
+<para>
+See <xref linkend="analyze"/>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
 <term><command>gogui_interrupt</command></term>
 <listitem>
 <para>

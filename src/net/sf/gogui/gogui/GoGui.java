@@ -484,6 +484,7 @@ public class GoGui
                 m_analyzeDialog =
                     new AnalyzeDialog(this, this, onlySupported, sort,
                                       m_commandThread.getSupportedCommands(),
+                                      m_programAnalyzeCommands,
                                       m_commandThread);
                 m_analyzeDialog.addWindowListener(new WindowAdapter()
                     {
@@ -1143,6 +1144,8 @@ public class GoGui
 
     private SquareLayout m_squareLayout;
 
+    private String m_programAnalyzeCommands;
+
     private TimeSettings m_timeSettings;
 
     private GoGuiToolBar m_toolBar;
@@ -1310,6 +1313,7 @@ public class GoGui
             = m_commandThread.isCommandSupported("kgs-genmove_cleanup")
             || m_commandThread.isCommandSupported("genmove_cleanup");
         m_menuBar.enableCleanup(cleanupSupported);
+        initProgramAnalyzeCommands();
         restoreSize(m_gtpShell, "window-gtpshell");
         m_gtpShell.setProgramName(m_name);
         ArrayList supportedCommands =
@@ -2397,6 +2401,7 @@ public class GoGui
         if (! noProgram)
             supportedCommands = m_commandThread.getSupportedCommands();
         return new ContextMenu(point, noProgram, supportedCommands,
+                               m_programAnalyzeCommands,
                                m_guiBoard.getMark(point),
                                m_guiBoard.getMarkCircle(point),
                                m_guiBoard.getMarkSquare(point),
@@ -2464,7 +2469,7 @@ public class GoGui
         }
     }
 
-    public void editLabel(GoPoint point)
+    private void editLabel(GoPoint point)
     {
         String value = m_currentNode.getLabel(point);
         value = JOptionPane.showInputDialog(this, "Label " + point, value);
@@ -2778,6 +2783,22 @@ public class GoGui
         m_guiBoard.setFocus();
         setTitleFromProgram();
         checkComputerMove();
+    }
+
+    private void initProgramAnalyzeCommands()
+    {
+        m_programAnalyzeCommands = null;
+        if (m_commandThread.isCommandSupported("gogui_analyze_commands"))
+        {
+            try
+            {
+                m_programAnalyzeCommands
+                    = m_commandThread.send("gogui_analyze_commands");
+            }
+            catch (GtpError e)
+            {
+            }    
+        }
     }
 
     private void initScore(GoPoint[] isDeadStone)

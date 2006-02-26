@@ -23,6 +23,13 @@ configuration file <userinput>~/.gogui/analyze-commands</userinput>.
 All files beginning with <userinput>~/.gogui/analyze-commands</userinput>
 are loaded.
 If none exists, a default file is created.
+The Go program can also implement the GTP extension command
+<command>gogui_analyze_commands</command>, which allows GoGui to query
+program specific analyze commands from the program when a new program is
+attached.
+</para>
+
+<para>
 There is one line per command in the format:
 </para>
   

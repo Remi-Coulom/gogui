@@ -75,6 +75,8 @@ public class GtpDummy
             cmdEchoErr(cmd);
         else if (cmd.getCommand().equals("genmove"))
             cmdGenmove(cmd);
+        else if (cmd.getCommand().equals("gogui_analyze_commands"))
+            cmdGoGuiAnalyzeCommands(cmd);
         else if (cmd.getCommand().equals("gogui_interrupt"))
             ;
         else if (cmd.getCommand().equals("name"))
@@ -99,6 +101,7 @@ public class GtpDummy
                             "echo\n" +
                             "echo_err\n" +
                             "genmove\n" +
+                            "gogui_analyze_commands\n" +
                             "gogui_interrupt\n" +
                             "list_commands\n" +
                             "name\n" +
@@ -220,6 +223,24 @@ public class GtpDummy
                         "WHITE A1\n" +
                         "BLACK B1\n" +
                         "CIRCLE c8\n");
+    }
+
+    private void cmdGoGuiAnalyzeCommands(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        String response =
+            "bwboard/Dummy BWBoard/dummy_bwboard\n" +
+            "none/Dummy Crash/dummy_crash\n" +
+            "none/Dummy Delay/dummy_delay %o\n" +
+            "eplist/Dummy EPList/dummy_eplist\n" +
+            "gfx/Dummy Gfx/dummy_gfx\n" +
+            "none/Dummy Invalid/dummy_invalid\n" +
+            "string/Dummy Long Response/dummy_long_response %s\n" +
+            "none/Dummy Next Failure/dummy_next_failure %s\n" +
+            "none/Dummy Next Success/dummy_next_success %s\n" +
+            "none/Dummy Sleep/dummy_sleep %s\n" +
+            "none/Dummy Sleep 20s/dummy_sleep\n";
+        cmd.setResponse(response);
     }
 
     private void cmdGenmove(GtpCommand cmd)

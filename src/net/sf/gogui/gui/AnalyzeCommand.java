@@ -13,7 +13,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
@@ -153,7 +155,7 @@ public class AnalyzeCommand
         ArrayList labels = new ArrayList(128);
         try
         {
-            read(commands, labels, null);
+            read(commands, labels, null, null);
         }
         catch (Exception e)
         {            
@@ -317,20 +319,42 @@ public class AnalyzeCommand
     }
 
     public static void read(ArrayList commands, ArrayList labels,
-                            ArrayList supportedCommands)
+                            ArrayList supportedCommands,
+                            String programAnalyzeCommands)
         throws ErrorMessage
     {
         commands.clear();
         labels.clear();
         ArrayList files = getFiles();
-        File file = new File(getDir(), "analyze-commands");
-        if (! files.contains(file))
+        File defaultFile = new File(getDir(), "analyze-commands");
+        if (! files.contains(defaultFile))
         {
-            copyDefaults(file);
+            copyDefaults(defaultFile);
             files = getFiles();
         }
         for (int i = 0; i < files.size(); ++i)
-            readFile((File)files.get(i), commands, labels, supportedCommands);
+        {
+            File file = (File)files.get(i);
+            try
+            {
+                FileReader fileReader = new FileReader(file);
+                BufferedReader reader = new BufferedReader(fileReader);
+                readConfig(reader, file.getName(), commands, labels,
+                           supportedCommands);
+            }
+            catch (FileNotFoundException e)
+            {
+                throw new ErrorMessage("File " + file + " not found");
+            }
+        }
+        if (programAnalyzeCommands != null)
+        {
+            StringReader stringReader
+                = new StringReader(programAnalyzeCommands);
+            BufferedReader reader = new BufferedReader(stringReader);
+            readConfig(reader, "program response to gogui_analyze_commands",
+                       commands, labels, supportedCommands);
+        }
     }
 
     public String replaceWildCards(GoColor toMove)
@@ -475,25 +499,16 @@ public class AnalyzeCommand
         return result;
     }
 
-    private static void readFile(File file, ArrayList commands,
-                                 ArrayList labels,
-                                 ArrayList supportedCommands)
+    private static void readConfig(BufferedReader reader, String name,
+                                   ArrayList commands, ArrayList labels,
+                                   ArrayList supportedCommands)
         throws ErrorMessage
     {
-        BufferedReader in;
-        try
-        {
-            in = new BufferedReader(new FileReader(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            throw new ErrorMessage("File " + file + " not found");
-        }
         try
         {
             String line;
             int lineNumber = 0;
-            while ((line = in.readLine()) != null)
+            while ((line = reader.readLine()) != null)
             {
                 ++lineNumber;
                 line = line.trim();
@@ -501,7 +516,7 @@ public class AnalyzeCommand
                 {
                     String array[] = line.split("/");
                     if (array.length < 3 || array.length > 5)
-                        throw new ErrorMessage("Error in " + file + " line "
+                        throw new ErrorMessage("Error in " + name + " line "
                                                + lineNumber);
                     if (supportedCommands != null)
                     {
@@ -521,17 +536,17 @@ public class AnalyzeCommand
         }
         catch (IOException e)
         {
-            throw new ErrorMessage("File " + file + " not found");
+            throw new ErrorMessage("Error reading " + name);
         }
         finally
         {
             try
             {
-                in.close();
+                reader.close();
             }
             catch (IOException e)
             {
-                throw new ErrorMessage("File " + file + " not found");
+                throw new ErrorMessage("Error reading " + name);
             }
         }
     }

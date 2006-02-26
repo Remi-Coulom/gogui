@@ -25,6 +25,12 @@ New menu items "Play Single Move", "Configure Board/Fixed Size Comment Font"
 </listitem>
 <listitem>
 <simpara>
+New extension command gogui_analyze_commands to query analyze commands
+from the program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Use Swing file dialog on Mac for file name parameters of analyze commands
 again (native file dialogs need to know, if the file name is used
 for load or save)

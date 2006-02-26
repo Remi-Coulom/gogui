@@ -64,6 +64,7 @@ public final class AnalyzeDialog
     public AnalyzeDialog(Frame owner, Callback callback,
                          boolean onlySupported, boolean sort,
                          ArrayList supportedCommands,
+                         String programAnalyzeCommands,
                          CommandThread commandThread)
     {
         super(owner, "Analyze");
@@ -71,6 +72,7 @@ public final class AnalyzeDialog
         m_onlySupportedCommands = onlySupported;
         m_sort = sort;
         m_supportedCommands = supportedCommands;
+        m_programAnalyzeCommands = programAnalyzeCommands;
         m_callback = callback;
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         WindowAdapter windowAdapter = new WindowAdapter()
@@ -128,7 +130,8 @@ public final class AnalyzeDialog
             ArrayList supportedCommands = null;
             if (m_onlySupportedCommands)
                 supportedCommands = m_supportedCommands;
-            AnalyzeCommand.read(m_commands, m_labels, supportedCommands);
+            AnalyzeCommand.read(m_commands, m_labels, supportedCommands,
+                                m_programAnalyzeCommands);
             if (m_sort)
                 sortLists();
             m_list.setListData(m_labels.toArray());
@@ -260,6 +263,8 @@ public final class AnalyzeDialog
     private final ArrayList m_labels = new ArrayList(128);
 
     private final Callback m_callback;
+
+    private String m_programAnalyzeCommands;
 
     private void clearCommand()
     {

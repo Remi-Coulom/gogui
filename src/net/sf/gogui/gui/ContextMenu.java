@@ -34,7 +34,8 @@ public class ContextMenu
     }
 
     public ContextMenu(GoPoint point, boolean noProgram,
-                       ArrayList supportedCommands, boolean mark,
+                       ArrayList supportedCommands,
+                       String programAnalyzeCommands, boolean mark,
                        boolean markCircle, boolean markSquare,
                        boolean markTriangle, Listener listener)
     {
@@ -46,7 +47,8 @@ public class ContextMenu
         {
             try
             {
-                AnalyzeCommand.read(commands, labels, supportedCommands);
+                AnalyzeCommand.read(commands, labels, supportedCommands,
+                                    programAnalyzeCommands);
             }
             catch (ErrorMessage e)
             {
