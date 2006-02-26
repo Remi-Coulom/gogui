@@ -1,11 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=GoGui
-Comment=Graphical user interface to Go programs
+GenericName=Go Game GUI
+Comment=Graphical user interface for the board game Go
 Exec=gogui %f
 Icon=gogui.png
 Terminal=false
 Type=Application
-Categories=Application;Game;BoardGame
+Categories=Application;Java;Game;BoardGame
 MimeType=application/x-go-sgf
 # DocPath will be added by install.sh
