@@ -176,6 +176,8 @@ public class Help
         toolBar.add(m_buttonForward);
         toolBar.setRollover(true);
         toolBar.setFloatable(false);
+        // For com.jgoodies.looks.plastic.PlasticLookAndFeel
+        toolBar.putClientProperty("Plastic.is3D", Boolean.TRUE);
         return toolBar;
     }
 

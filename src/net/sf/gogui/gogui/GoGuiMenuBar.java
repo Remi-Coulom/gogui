@@ -54,6 +54,8 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuSettings);
         m_menuHelp = createMenuHelp();
         m_menuBar.add(m_menuHelp);
+        // For com.jgoodies.looks.plastic.PlasticLookAndFeel
+        m_menuBar.putClientProperty("Plastic.is3D", Boolean.TRUE);
     }
 
     public void addRecent(File file)

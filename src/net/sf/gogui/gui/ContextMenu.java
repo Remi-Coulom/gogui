@@ -124,6 +124,8 @@ public class ContextMenu
         if (! noProgram && commands.size() > 0)
         {
             m_analyzeMenu = new JMenu("Analyze");
+            // For com.jgoodies.looks
+            m_analyzeMenu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
             add(m_analyzeMenu);
             for (int i = 0; i < commands.size(); ++i)
             {
@@ -140,6 +142,8 @@ public class ContextMenu
         item.addActionListener(m_actionListener);
         item.setActionCommand("cancel");
         add(item);
+        // For com.jgoodies.looks
+        putClientProperty("jgoodies.noIcons", Boolean.TRUE);
     }
 
     public GoPoint getPointArg()
@@ -179,6 +183,8 @@ public class ContextMenu
     {
         String label = command.getLabel();
         JMenu menu = new JMenu(label);
+        // For com.jgoodies.looks
+        menu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
         command.setColorArg(GoColor.BLACK);
         JMenuItem item = createItem(command, "Black");
         menu.add(item);

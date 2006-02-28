@@ -664,6 +664,8 @@ public class GameTreePanel
         item.setActionCommand("scroll-to-current");
         item.addActionListener(listener);
         popup.add(item);
+        // For com.jgoodies.looks
+        popup.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
         popup.show(gameNode, x, y);
         m_popupLocation = popup.getLocationOnScreen();
     }
