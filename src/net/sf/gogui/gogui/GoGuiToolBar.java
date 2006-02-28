@@ -54,7 +54,7 @@ public class GoGuiToolBar
     public void setComputerEnabled(boolean enabled)
     {
         m_computerButtonsEnabled = enabled;
-        m_buttonEnter.setEnabled(enabled);
+        setEnabled(m_buttonEnter, enabled);
     }
 
     /** Enable/disable buttons according to current position. */
@@ -66,32 +66,32 @@ public class GoGuiToolBar
         boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
         boolean hasPreviousVariation =
             (NodeUtils.getPreviousVariation(node) != null);
-        m_buttonBeginning.setEnabled(hasFather);
-        m_buttonBackward.setEnabled(hasFather);
-        m_buttonBackward10.setEnabled(hasFather);
-        m_buttonForward.setEnabled(hasChildren);
-        m_buttonForward10.setEnabled(hasChildren);
-        m_buttonEnd.setEnabled(hasChildren);
-        m_buttonNextVariation.setEnabled(hasNextVariation);
-        m_buttonPreviousVariation.setEnabled(hasPreviousVariation);
+        setEnabled(m_buttonBeginning, hasFather);
+        setEnabled(m_buttonBackward, hasFather);
+        setEnabled(m_buttonBackward10, hasFather);
+        setEnabled(m_buttonForward, hasChildren);
+        setEnabled(m_buttonForward10, hasChildren);
+        setEnabled(m_buttonEnd, hasChildren);
+        setEnabled(m_buttonNextVariation, hasNextVariation);
+        setEnabled(m_buttonPreviousVariation, hasPreviousVariation);
     }
 
     public void enableAll(boolean enable, Node node)
     {
-        m_buttonBeginning.setEnabled(enable);
-        m_buttonBackward.setEnabled(enable);
-        m_buttonBackward10.setEnabled(enable);
-        m_buttonEnd.setEnabled(enable);
-        m_buttonEnter.setEnabled(enable);
-        m_buttonForward.setEnabled(enable);
-        m_buttonForward10.setEnabled(enable);
-        m_buttonInterrupt.setEnabled(false);
-        m_buttonNew.setEnabled(enable);
-        m_buttonNextVariation.setEnabled(enable);
-        m_buttonOpen.setEnabled(enable);
-        m_buttonPass.setEnabled(enable);
-        m_buttonPreviousVariation.setEnabled(enable);
-        m_buttonSave.setEnabled(enable);
+        setEnabled(m_buttonBeginning, enable);
+        setEnabled(m_buttonBackward, enable);
+        setEnabled(m_buttonBackward10, enable);
+        setEnabled(m_buttonEnd, enable);
+        setEnabled(m_buttonEnter, enable);
+        setEnabled(m_buttonForward, enable);
+        setEnabled(m_buttonForward10, enable);
+        setEnabled(m_buttonInterrupt, false);
+        setEnabled(m_buttonNew, enable);
+        setEnabled(m_buttonNextVariation, enable);
+        setEnabled(m_buttonOpen, enable);
+        setEnabled(m_buttonPass, enable);
+        setEnabled(m_buttonPreviousVariation, enable);
+        setEnabled(m_buttonSave, enable);
         if (enable)
         {
             if (! m_computerButtonsEnabled)
@@ -103,7 +103,7 @@ public class GoGuiToolBar
     public void setCommandInProgress()
     {
         enableAll(false, null);
-        m_buttonInterrupt.setEnabled(true);
+        setEnabled(m_buttonInterrupt, true);
     }
 
     private boolean m_computerButtonsEnabled = true;
@@ -163,6 +163,12 @@ public class GoGuiToolBar
         button.setFocusable(false);
         add(button);
         return button;
+    }
+
+    private static void setEnabled(JButton button, boolean enabled)
+    {
+        button.setEnabled(enabled);
+        button.paintImmediately(button.getVisibleRect());
     }
 }
 
