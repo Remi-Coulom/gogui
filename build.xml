@@ -142,6 +142,7 @@ $Source$
 <zip destfile="gogui-${version}.zip">
 <zipfileset prefix="gogui-${version}" dir="." includes="
  README
+ COPYING
  INSTALL
  TODO
  build.properties
