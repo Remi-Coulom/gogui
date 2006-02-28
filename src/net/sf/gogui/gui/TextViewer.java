@@ -126,7 +126,6 @@ public class TextViewer
     {
         m_listener = listener;
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(GuiUtils.createSmallEmptyBorder());
         Container contentPane = getContentPane();
         contentPane.add(panel, BorderLayout.CENTER);
         m_textPane = new JTextPane();
