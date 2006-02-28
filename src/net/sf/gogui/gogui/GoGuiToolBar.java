@@ -47,6 +47,7 @@ public class GoGuiToolBar
             addButton("down.png", "next-variation", "Next Variation");
         m_buttonPreviousVariation =
             addButton("up.png", "previous-variation", "Previous Variation");
+        setRollover(true);
         setFloatable(false);
     }
 

@@ -174,6 +174,7 @@ public class Help
         m_buttonForward = createToolBarButton("forward.png", "forward",
                                               "Forward");
         toolBar.add(m_buttonForward);
+        toolBar.setRollover(true);
         toolBar.setFloatable(false);
         return toolBar;
     }
