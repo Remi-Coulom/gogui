@@ -154,7 +154,11 @@ public class GoGuiToolBar
         if (url == null)
             button.setText(command);
         else
-            button.setIcon(new ImageIcon(url, command));
+        {
+            ImageIcon imageIcon = new ImageIcon(url, command);
+            button.setIcon(imageIcon);
+            button.setDisabledIcon(imageIcon);
+        }
         button.setEnabled(false);
         button.setFocusable(false);
         add(button);
