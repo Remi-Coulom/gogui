@@ -1,14 +1,28 @@
-Basic Installation
-==================
+Basics
+======
 
 This package requires at least Java version 1.4.
 It comes with precompiled Java jar files for GoGui and the GTP tools
 and in the lib directory.
-
+GoGui does not necessarily need to be installed on the system, it can
+be run from the directory, where the distribution file was extracted to.
 For Unix systems there are launcher scripts in the bin directory.
-The launcher scripts respect the environment variable JAVA_HOME, if defined,
-and look for the jar files relative to the bin directory.
+The launcher scripts respect the environment variable GOGUI_JAVA_HOME, if
+defined, and look for the jar files relative to the bin directory.
 
+Installation on Linux
+=====================
+
+For Linux, there is an installation script install.sh, which installs
+GoGui into the system directories and integrates it into the desktop
+environment. This script needs to be run as root and requires the option -j
+with the location of a Java 1.4 compatible virtual machine.
+
+Installation on Mac OS
+======================
+
+A Mac application bundle can be created by compiling GoGui from the sources
+(see below) and running "ant gogui.app".
 
 Compiling from the Sources
 ==========================
