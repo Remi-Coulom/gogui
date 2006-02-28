@@ -358,6 +358,7 @@ public final class AnalyzeDialog
         m_comboBoxHistory.addActionListener(this);
         panel.add(m_comboBoxHistory);
         JPanel lowerPanel = new JPanel(new GridLayout(0, 2, GuiUtils.PAD, 0));
+        lowerPanel.setBorder(GuiUtils.createEmptyBorder());
         panel.add(lowerPanel);
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
