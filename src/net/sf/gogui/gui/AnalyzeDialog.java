@@ -84,7 +84,6 @@ public final class AnalyzeDialog
             };
         addWindowListener(windowAdapter);
         Container contentPane = getContentPane();
-        contentPane.add(createButtons(), BorderLayout.SOUTH);
         contentPane.add(createCommandPanel(), BorderLayout.CENTER);
         comboBoxChanged();
         pack();
@@ -288,7 +287,6 @@ public final class AnalyzeDialog
     private JPanel createButtons()
     {
         JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
-        innerPanel.setBorder(GuiUtils.createEmptyBorder());
         m_runButton = new JButton("Run");
         m_runButton.setToolTipText("Run command");
         m_runButton.setActionCommand("run");
@@ -357,12 +355,16 @@ public final class AnalyzeDialog
         m_comboBoxHistory = new JComboBox();
         m_comboBoxHistory.addActionListener(this);
         panel.add(m_comboBoxHistory);
-        JPanel lowerPanel = new JPanel(new GridLayout(0, 2, GuiUtils.PAD, 0));
+        JPanel lowerPanel = new JPanel();
+        lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
         lowerPanel.setBorder(GuiUtils.createEmptyBorder());
         panel.add(lowerPanel);
+        JPanel optionsPanel
+            = new JPanel(new GridLayout(0, 2, GuiUtils.PAD, 0));
+        lowerPanel.add(optionsPanel);
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        lowerPanel.add(leftPanel);
+        optionsPanel.add(leftPanel);
         m_autoRun = new JCheckBox("Auto run");
         m_autoRun.setToolTipText("Automatically run after changes on board");
         leftPanel.add(m_autoRun);
@@ -372,7 +374,8 @@ public final class AnalyzeDialog
         m_clearBoard.setSelected(true);
         JPanel rightPanel = new JPanel();
         rightPanel.add(createColorPanel());
-        lowerPanel.add(rightPanel);
+        optionsPanel.add(rightPanel);
+        lowerPanel.add(createButtons());
         loadRecent();
         return panel;
     }
