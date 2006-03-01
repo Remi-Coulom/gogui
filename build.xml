@@ -302,6 +302,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 <attribute name="Main-Class" value="net.sf.gogui.gmptogtp.Main"/>
+<attribute name="Class-Path" value="comm.jar"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/gmp/*.class
@@ -374,6 +375,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MacMain"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+<attribute name="Class-Path" value="looks-2.0-rc.jar"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/config/analyze-commands
