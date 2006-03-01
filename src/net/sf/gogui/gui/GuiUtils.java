@@ -35,7 +35,7 @@ import net.sf.gogui.utils.ProgressShow;
 /** GUI utility classes and static functions. */
 public class GuiUtils
 {
-    /** Runnable for running protected my modal progress dialog.
+    /** Runnable for running protected by modal progress dialog.
         @see #runProgress
     */
     public interface ProgressRunnable
@@ -146,6 +146,8 @@ public class GuiUtils
     }
 
     /** Run in separate thread protected by a modal progress dialog.
+        Replacement for javax.swing.ProgressMonitor, which does not create
+        a modal dialog.
         Ensures that the GUI gets repaint events while the runnable is
         running, but cannot get other events and displays a progress bar
         as a user feedback.
@@ -157,7 +159,7 @@ public class GuiUtils
         you have to use instanceof to check for specific exception classes.
     */
     public static void runProgress(Frame owner, String message,
-                                  ProgressRunnable runnable)
+                                   ProgressRunnable runnable)
         throws Throwable
     {
         assert(SwingUtilities.isEventDispatchThread());
