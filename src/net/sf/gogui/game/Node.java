@@ -15,15 +15,34 @@ import net.sf.gogui.go.GoPoint;
 
 //----------------------------------------------------------------------------
 
+/** Extended info.
+    Contains markups and value, because these are used in the large SGF
+    search traces of Explorer.
+*/
 class ExtraInfo
+{
+    public Map m_marked;
+
+    /** Node value.
+        Float instead of double for space efficiency.
+    */
+    public float m_value = Float.NaN;
+
+    public MoreExtraInfo m_moreExtraInfo;
+}
+
+//----------------------------------------------------------------------------
+
+/** More extended info.
+    Contains all the information typically not in large SGF traces.
+*/
+class MoreExtraInfo
 {
     public SetupInfo m_setupInfo;
 
     public TimeInfo m_timeInfo;
 
     public TreeMap m_sgfProperties;
-
-    public Map m_marked;
 
     public Map m_label;
 }
@@ -164,7 +183,8 @@ public final class Node
     */
     public GoPoint getAddBlack(int i)
     {
-        return (GoPoint)m_extraInfo.m_setupInfo.m_black.get(i);
+        SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
+        return (GoPoint)setupInfo.m_black.get(i);
     }
 
     /** Get empty setup point.
@@ -173,7 +193,8 @@ public final class Node
     */
     public GoPoint getAddEmpty(int i)
     {
-        return (GoPoint)m_extraInfo.m_setupInfo.m_empty.get(i);
+        SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
+        return (GoPoint)setupInfo.m_empty.get(i);
     }
 
     /** Get white setup stone.
@@ -182,7 +203,8 @@ public final class Node
     */
     public GoPoint getAddWhite(int i)
     {
-        return (GoPoint)m_extraInfo.m_setupInfo.m_white.get(i);
+        SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
+        return (GoPoint)setupInfo.m_white.get(i);
     }
 
     /** Child of main variation or null if no child.
@@ -261,9 +283,9 @@ public final class Node
     */
     public Map getLabels()
     {
-        if (m_extraInfo == null)
+        if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
             return null;
-        return m_extraInfo.m_label;
+        return m_extraInfo.m_moreExtraInfo.m_label;
     }
 
     /** Get all markups of a type.
@@ -290,12 +312,13 @@ public final class Node
     */
     public int getMovesLeft(GoColor color)
     {
-        if (! hasTimeInfo())
+        TimeInfo timeInfo = getTimeInfo();
+        if (timeInfo == null)
             return -1;
         if (color == GoColor.BLACK)
-            return m_extraInfo.m_timeInfo.m_movesLeftBlack;
+            return timeInfo.m_movesLeftBlack;
         assert(color == GoColor.WHITE);
-        return m_extraInfo.m_timeInfo.m_movesLeftWhite;
+        return timeInfo.m_movesLeftWhite;
     }
 
     /** Moves left in byoyomi for white.
@@ -303,9 +326,10 @@ public final class Node
     */
     public int getMovesLeftWhite()
     {
-        if (! hasTimeInfo())
+        TimeInfo timeInfo = getTimeInfo();
+        if (timeInfo == null)
             return -1;
-        return m_extraInfo.m_timeInfo.m_movesLeftWhite;
+        return timeInfo.m_movesLeftWhite;
     }
 
     /** Get number of black setup stones.
@@ -313,9 +337,10 @@ public final class Node
     */
     public int getNumberAddBlack()
     {
-        if (! hasSetupInfo())
+        SetupInfo setupInfo = getSetupInfo();
+        if (setupInfo == null)
             return 0;
-        return m_extraInfo.m_setupInfo.m_black.size();
+        return setupInfo.m_black.size();
     }
 
     /** Get number of empty setup points.
@@ -323,9 +348,10 @@ public final class Node
     */
     public int getNumberAddEmpty()
     {
-        if (! hasSetupInfo())
+        SetupInfo setupInfo = getSetupInfo();
+        if (setupInfo == null)
             return 0;
-        return m_extraInfo.m_setupInfo.m_empty.size();
+        return setupInfo.m_empty.size();
     }
 
     /** Get number of white setup stones.
@@ -333,9 +359,10 @@ public final class Node
     */
     public int getNumberAddWhite()
     {
-        if (! hasSetupInfo())
+        SetupInfo setupInfo = getSetupInfo();
+        if (setupInfo == null)
             return 0;
-        return m_extraInfo.m_setupInfo.m_white.size();
+        return setupInfo.m_white.size();
     }
 
     /** Get number of children.
@@ -357,9 +384,10 @@ public final class Node
     */
     public GoColor getPlayer()
     {
-        if (! hasSetupInfo())
+        SetupInfo setupInfo = getSetupInfo();
+        if (setupInfo == null)
             return GoColor.EMPTY;
-        return m_extraInfo.m_setupInfo.m_player;
+        return setupInfo.m_player;
     }
 
     /** Get other unspecified SGF properties.
@@ -367,9 +395,9 @@ public final class Node
     */
     public Map getSgfProperties()
     {
-        if (! hasSgfProperties())
+        if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
             return null;
-        return m_extraInfo.m_sgfProperties;
+        return m_extraInfo.m_moreExtraInfo.m_sgfProperties;
     }
 
     /** Time left for color after move was made.
@@ -377,12 +405,13 @@ public final class Node
     */
     public double getTimeLeft(GoColor color)
     {
-        if (! hasTimeInfo())
+        TimeInfo timeInfo = getTimeInfo();
+        if (timeInfo == null)
             return Double.NaN;
         if (color == GoColor.BLACK)
-            return m_extraInfo.m_timeInfo.m_timeLeftBlack;
+            return timeInfo.m_timeLeftBlack;
         assert(color == GoColor.WHITE);
-        return m_extraInfo.m_timeInfo.m_timeLeftWhite;
+        return timeInfo.m_timeLeftWhite;
     }
 
     /** Get color to move.
@@ -398,6 +427,13 @@ public final class Node
         if (m_move != null)
             return m_move.getColor().otherColor();
         return GoColor.EMPTY;
+    }
+
+    public float getValue()
+    {
+        if (m_extraInfo == null)
+            return Float.NaN;
+        return m_extraInfo.m_value;
     }
 
     /** Check if node has setup or delete stones.
@@ -572,6 +608,12 @@ public final class Node
         createSetupInfo().m_player = color;
     }
 
+    public void setValue(float value)
+    {
+        createExtraInfo();
+        m_extraInfo.m_value = value;
+    }
+
     public Node variationAfter(Node child)
     {
         int numberChildren = getNumberChildren();
@@ -621,12 +663,20 @@ public final class Node
             m_extraInfo = new ExtraInfo();
     }
 
-    private Map createLabel()
+    private MoreExtraInfo createMoreExtraInfo()
     {
         createExtraInfo();
-        if (m_extraInfo.m_label == null)
-            m_extraInfo.m_label = new TreeMap();
-        return m_extraInfo.m_label;
+        if (m_extraInfo.m_moreExtraInfo == null)
+            m_extraInfo.m_moreExtraInfo = new MoreExtraInfo();
+        return m_extraInfo.m_moreExtraInfo;
+    }
+
+    private Map createLabel()
+    {
+        MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
+        if (moreExtraInfo.m_label == null)
+            moreExtraInfo.m_label = new TreeMap();
+        return moreExtraInfo.m_label;
     }
 
     private Map createMarked()
@@ -639,41 +689,40 @@ public final class Node
 
     private SetupInfo createSetupInfo()
     {
-        createExtraInfo();
-        if (m_extraInfo.m_setupInfo == null)
-            m_extraInfo.m_setupInfo = new SetupInfo();
-        return m_extraInfo.m_setupInfo;
+        MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
+        if (moreExtraInfo.m_setupInfo == null)
+            moreExtraInfo.m_setupInfo = new SetupInfo();
+        return moreExtraInfo.m_setupInfo;
     }
 
     private Map createSgfProperties()
     {
-        createExtraInfo();
-        if (m_extraInfo.m_sgfProperties == null)
-            m_extraInfo.m_sgfProperties = new TreeMap();
-        return m_extraInfo.m_sgfProperties;
+        MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
+        if (moreExtraInfo.m_sgfProperties == null)
+            moreExtraInfo.m_sgfProperties = new TreeMap();
+        return moreExtraInfo.m_sgfProperties;
     }
 
     private TimeInfo createTimeInfo()
     {
-        createExtraInfo();
-        if (m_extraInfo.m_timeInfo == null)
-            m_extraInfo.m_timeInfo = new TimeInfo();
-        return m_extraInfo.m_timeInfo;
+        MoreExtraInfo moreExtraInfo = createMoreExtraInfo();
+        if (moreExtraInfo.m_timeInfo == null)
+            moreExtraInfo.m_timeInfo = new TimeInfo();
+        return moreExtraInfo.m_timeInfo;
     }
 
-    private boolean hasSetupInfo()
+    private SetupInfo getSetupInfo()
     {
-        return (m_extraInfo != null && m_extraInfo.m_setupInfo != null);
+        if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
+            return null;
+        return m_extraInfo.m_moreExtraInfo.m_setupInfo;
     }
 
-    private boolean hasSgfProperties()
+    private TimeInfo getTimeInfo()
     {
-        return (m_extraInfo != null && m_extraInfo.m_sgfProperties != null);
-    }
-
-    private boolean hasTimeInfo()
-    {
-        return (m_extraInfo != null && m_extraInfo.m_timeInfo != null);
+        if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
+            return null;
+        return m_extraInfo.m_moreExtraInfo.m_timeInfo;
     }
 }
 

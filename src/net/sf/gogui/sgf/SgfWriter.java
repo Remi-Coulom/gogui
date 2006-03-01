@@ -336,6 +336,10 @@ public class SgfWriter
         printMarked(node, "TB", MarkType.TERRITORY_BLACK);
         printMarked(node, "TW", MarkType.TERRITORY_WHITE);
         printLabels(node);
+        if (! Double.isNaN(node.getValue()))
+        {
+            print("V[" + node.getValue() + "]");
+        }
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)
         {

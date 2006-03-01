@@ -821,6 +821,16 @@ public final class SgfReader
             }
             else if (p == "TW")
                 readMarked(node, MarkType.TERRITORY_WHITE);
+            else if (p == "V")
+            {
+                try
+                {
+                    node.setValue(Float.parseFloat(v));
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
             else if (p == "WL")
             {
                 try
