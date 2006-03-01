@@ -54,6 +54,8 @@ public final class AboutDialog
                         String command)
     {
         m_tabbedPane = new JTabbedPane();
+        m_tabbedPane.putClientProperty("jgoodies.noContentBorder",
+                                       Boolean.TRUE);
         boolean isProgramAvailable = (name != null && ! name.equals(""));
         int tabIndex = 0;
         m_tabbedPane.add("GoGui", createPanelGoGui());
