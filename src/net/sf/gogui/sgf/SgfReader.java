@@ -519,7 +519,7 @@ public final class SgfReader
             {
                 GoPoint point = parsePoint(value);
                 if (point == null)
-                    throw new SgfError("Point list argument contains PASS");
+                    setWarning("Point list argument contains PASS");
                 m_pointList.add(point);
             }
             else
