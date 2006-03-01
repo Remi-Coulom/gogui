@@ -10,34 +10,29 @@
 <revdescription>
 <itemizedlist>
 <listitem>
-<para>
-GoGui:
-<itemizedlist>
-<listitem>
 <simpara>
-New extension command play_sequence is used if supported by the Go program
+GoGui: new extension command play_sequence is used if supported by the Go
+program
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New menu items "Play Single Move", "Configure Board/Fixed Size Comment Font"
+GoGui: new menu items "Play Single Move",
+"Configure Board/Fixed Size Comment Font"
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New extension command gogui_analyze_commands to query analyze commands
+GoGui: new extension command gogui_analyze_commands to query analyze commands
 from the program
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Use Swing file dialog on Mac for file name parameters of analyze commands
-again (native file dialogs need to know, if the file name is used
+GoGui: use Swing file dialog on Mac for file name parameters of analyze
+commands again (native file dialogs need to know, if the file name is used
 for load or save)
 </simpara>
-</listitem>
-</itemizedlist>
-</para>
 </listitem>
 <listitem>
 <para>
@@ -92,21 +87,14 @@ Other small bug fixes
 <revdescription>
 <itemizedlist>
 <listitem>
-<para>
-GoGui:
-<itemizedlist>
-<listitem>
 <simpara>
-More reorganization of the menu bar
+GoGui: more reorganization of the menu bar
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Bugfixes in Truncate and Truncate Children
+GoGui: bugfixes in Truncate and Truncate Children
 </simpara>
-</listitem>
-</itemizedlist>
-</para>
 </listitem>
 <listitem>
 <simpara>
@@ -114,21 +102,14 @@ GtpStatistics: fix some bugs
 </simpara>
 </listitem>
 <listitem>
-<para>
-GtpAdapter:
-<itemizedlist>
-<listitem>
 <simpara>
-New option -lowercase
+GtpAdapter: new option -lowercase
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Fix bug in genmove command
+GtpAdapter: fix bug in genmove command
 </simpara>
-</listitem>
-</itemizedlist>
-</para>
 </listitem>
 <listitem>
 <simpara>
@@ -159,72 +140,59 @@ Docbook XSL files in the distribution to make compilation easier.
 </simpara>
 </listitem>
 <listitem>
-<para>
-GoGui:
-<itemizedlist>
-<listitem>
 <simpara>
-Re-organize menu bar. New menu Bookmarks.
+GoGui: re-organize menu bar. New menu Bookmarks.
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Use gg-undo, if avaliable
+GoGui: use gg-undo, if avaliable
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New menu item Game/Cleanup
+GoGui: new menu item Game/Cleanup
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New analyze command types eplist (editable point lists) and gfx (graphics).
+GoGui: new analyze command types eplist (editable point lists) and gfx
+(graphics).
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-New board context menu for quickly running analyze commands that need
+GoGui: new board context menu for quickly running analyze commands that need
 one point and optionally one color argument.
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-use dialogs for all secondary windows; they are always on top of the
+GoGui: use dialogs for all secondary windows; they are always on top of the
 main window now
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-load and save SGF marks and labels; edit them from context menu
+GoGui: load and save SGF marks and labels; edit them from context menu
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-new option Timestamp in GTP shell settings menu
-</simpara>
-</listitem>
-</itemizedlist>
-</para>
-</listitem>
-<listitem>
-<para>
-GtpRegress:
-<itemizedlist>
-<listitem>
-<simpara>
-Return -1 if any unexpected fails occurred
+GoGui: new option Timestamp in GTP shell settings menu
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Include error response outputs in test summaries;
+GtpRegress: return -1 if any unexpected fails occurred
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpRegress: include error response outputs in test summaries;
 fix NullPointerException, if test file contains response pattern without
 a command to test (simply ignore the pattern)
 </simpara>
-</listitem>
-</itemizedlist>
-</para>
 </listitem>
 <listitem>
 <simpara>

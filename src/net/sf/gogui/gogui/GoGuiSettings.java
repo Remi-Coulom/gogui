@@ -124,6 +124,8 @@ public final class GoGuiSettings
         else if (m_lookAndFeel.equals("windows"))
             m_lookAndFeel =
                 "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+        else if (m_lookAndFeel.equals("plasticxp"))
+            m_lookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
         m_move = opt.getInteger("move", -1);
         if (opt.contains("size"))
             m_preferences.setInt("boardsize", opt.getInteger("size"));

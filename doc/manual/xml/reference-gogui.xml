@@ -218,6 +218,14 @@ com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 </simpara>
 </listitem>
 </varlistentry>
+<varlistentry>
+<term>plasticxp (needs looks-2.0-rc.jar in same directory)</term>
+<listitem>
+<simpara>
+com.jgoodies.looks.plastic.PlasticXPLookAndFeel
+</simpara>
+</listitem>
+</varlistentry>
 </variablelist>
 </para>
 </listitem>
