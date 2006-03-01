@@ -329,7 +329,8 @@ public final class AnalyzeDialog
                     if (event.getClickCount() == 2
                         || ((modifiers & mask) != 0))
                     {
-                        int index = m_list.locationToIndex(event.getPoint());
+                        //int index =
+                        //   m_list.locationToIndex(event.getPoint());
                         runCommand();
                     }
                 }
