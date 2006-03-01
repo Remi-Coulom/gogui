@@ -688,7 +688,11 @@ public class GameTreePanel
         if (changed)
         {
             update(m_gameTree, m_currentNode);
-            scrollTo(root);
+            // Game node could have disappeared, because after out of memory
+            // error all nodes are hidden but main variation
+            boolean isGameNodeVisible = (getGameTreeNode(root) != null);
+            if (isGameNodeVisible)
+                scrollTo(root);
         }
     }
 
