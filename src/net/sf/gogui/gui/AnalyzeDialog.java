@@ -100,7 +100,7 @@ public final class AnalyzeDialog
         else if (command.equals("comboBoxChanged"))
             comboBoxChanged();
         else if (command.equals("run"))
-            setCommand();
+            runCommand();
         else
             assert(false);
     }
@@ -134,10 +134,6 @@ public final class AnalyzeDialog
             if (m_sort)
                 sortLists();
             m_list.setListData(m_labels.toArray());
-            if (m_labels.size() > 0)
-                // Avoid focus problem with Sun JDK 1.4.2 if focus was at an
-                // index greater than the new list length
-                m_list.setSelectedIndex(0);
             comboBoxChanged();
         }
         catch (Exception e)
@@ -162,9 +158,10 @@ public final class AnalyzeDialog
                                + " AnalyzeDialog.saveRecent");
             return;
         }
-        int max = 20;
-        for (int i = 0; i < m_comboBoxHistory.getItemCount() && i < max; ++i)
-            out.println(m_comboBoxHistory.getItemAt(i));
+        int start = (m_firstIsTemp ? 1 : 0);
+        int max = Math.min(m_comboBoxHistory.getItemCount(), 20);
+        for (int i = start; i < max; ++i)
+            out.println(getComboBoxItem(i));
         out.close();
     }
 
@@ -204,14 +201,7 @@ public final class AnalyzeDialog
     {
         int index = m_list.getSelectedIndex();
         if (index >= 0)
-        {
-            boolean needsColorArg =
-                AnalyzeCommand.needsColorArg((String)m_commands.get(index));
-            m_labelColor.setEnabled(needsColorArg);
-            m_comboBoxColor.setEnabled(needsColorArg);
-            m_runButton.setEnabled(true);
-            m_list.ensureIndexIsVisible(index);
-        }
+            selectCommand(index);
         else
         {
             if (m_runButton.hasFocus())
@@ -225,6 +215,12 @@ public final class AnalyzeDialog
     private boolean m_sort;
 
     private boolean m_recentModified;
+
+    /** Is the first item in the history combo box a temporary item?
+        Avoids that the first item in the history combo box is treated
+        as a real history command, if it was not run.
+    */
+    private boolean m_firstIsTemp;
 
     private int m_boardSize = GoPoint.DEFAULT_SIZE;
 
@@ -281,7 +277,7 @@ public final class AnalyzeDialog
         }
         String selectedValue = (String)m_list.getSelectedValue();
         if (selectedValue == null || ! selectedValue.equals(label))
-            m_list.setSelectedValue(label, true);
+            m_list.setSelectedValue(label, false);
     }
 
     private JPanel createButtons()
@@ -334,8 +330,7 @@ public final class AnalyzeDialog
                         || ((modifiers & mask) != 0))
                     {
                         int index = m_list.locationToIndex(event.getPoint());
-                        selectCommand(index);
-                        setCommand();
+                        runCommand();
                     }
                 }
             };
@@ -353,7 +348,6 @@ public final class AnalyzeDialog
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         m_comboBoxHistory = new JComboBox();
-        m_comboBoxHistory.addActionListener(this);
         panel.add(m_comboBoxHistory);
         JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
@@ -376,8 +370,14 @@ public final class AnalyzeDialog
         rightPanel.add(createColorPanel());
         optionsPanel.add(rightPanel);
         lowerPanel.add(createButtons());
+        m_comboBoxHistory.addActionListener(this);
         loadRecent();
         return panel;
+    }
+
+    private String getComboBoxItem(int i)
+    {
+        return (String)m_comboBoxHistory.getItemAt(i);
     }
 
     private File getRecentFile()
@@ -412,31 +412,10 @@ public final class AnalyzeDialog
         {
             System.err.println("IOException in AnalyzeDialog.loadRecent");
         }
+        m_firstIsTemp = false;
     }
 
-    private void selectCommand(int index)
-    {
-        String label = (String)m_labels.get(index);
-        m_comboBoxHistory.insertItemAt(label, 0);
-        for (int i = 1; i < m_comboBoxHistory.getItemCount(); ++i)
-            if (((String)m_comboBoxHistory.getItemAt(i)).equals(label))
-            {
-                m_comboBoxHistory.removeItemAt(i);
-                break;
-            }
-        m_comboBoxHistory.setSelectedIndex(0);
-        m_recentModified = true;
-    }
-
-    private void selectColor()
-    {
-        if (m_selectedColor == GoColor.BLACK)
-            m_comboBoxColor.setSelectedItem("Black");
-        else if (m_selectedColor == GoColor.WHITE)
-            m_comboBoxColor.setSelectedItem("White");
-    }
-
-    private void setCommand()
+    private void runCommand()
     {
         if (m_commandThread.isCommandInProgress())
         {
@@ -446,7 +425,7 @@ public final class AnalyzeDialog
         int index = m_list.getSelectedIndex();        
         if (index < 0)
             return;
-        selectCommand(index);
+        updateRecent(index);
         String analyzeCommand = (String)m_commands.get(index);
         AnalyzeCommand command = new AnalyzeCommand(analyzeCommand);
         if (command.needsColorArg())
@@ -514,6 +493,31 @@ public final class AnalyzeDialog
         m_callback.setAnalyzeCommand(command, autoRun, false, false);
     }
 
+    private void selectCommand(int index)
+    {
+        boolean needsColorArg =
+            AnalyzeCommand.needsColorArg((String)m_commands.get(index));
+        m_labelColor.setEnabled(needsColorArg);
+        m_comboBoxColor.setEnabled(needsColorArg);
+        m_runButton.setEnabled(true);
+        String label = (String)m_labels.get(index);
+        m_comboBoxHistory.removeActionListener(this);
+        if (m_firstIsTemp && m_comboBoxHistory.getItemCount() > 0)
+            m_comboBoxHistory.removeItemAt(0);
+        m_comboBoxHistory.insertItemAt(label, 0);
+        m_firstIsTemp = true;
+        m_comboBoxHistory.setSelectedIndex(0);
+        m_comboBoxHistory.addActionListener(this);
+    }
+
+    private void selectColor()
+    {
+        if (m_selectedColor == GoColor.BLACK)
+            m_comboBoxColor.setSelectedItem("Black");
+        else if (m_selectedColor == GoColor.WHITE)
+            m_comboBoxColor.setSelectedItem("White");
+    }
+
     private void sortLists()
     {
         for (int i = 0; i < m_labels.size() - 1; ++i)
@@ -531,6 +535,22 @@ public final class AnalyzeDialog
                     m_commands.set(j, cmdI);
                 }
             }
+    }
+
+    private void updateRecent(int index)
+    {
+        m_comboBoxHistory.removeActionListener(this);
+        String label = (String)m_labels.get(index);
+        if (m_comboBoxHistory.getItemCount() == 0
+            || ! getComboBoxItem(0).equals(label))
+            m_comboBoxHistory.insertItemAt(label, 0);
+        for (int i = 1; i < m_comboBoxHistory.getItemCount(); ++i)
+            if (getComboBoxItem(i).equals(label))
+                m_comboBoxHistory.removeItemAt(i);
+        m_comboBoxHistory.setSelectedIndex(0);
+        m_firstIsTemp = false;        
+        m_recentModified = true;
+        m_comboBoxHistory.addActionListener(this);
     }
 }
 
