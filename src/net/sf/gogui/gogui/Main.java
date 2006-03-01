@@ -5,6 +5,7 @@
 
 package net.sf.gogui.gogui;
 
+import javax.swing.UIManager;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.utils.ErrorMessage;
@@ -66,6 +67,20 @@ public final class Main
         throws GtpError, ErrorMessage
     {
         assert(! settings.m_noStartup);
+        String lookAndFeel = settings.m_lookAndFeel;
+        if (! lookAndFeel.equals(""))
+        {
+            try
+            {
+                UIManager.setLookAndFeel(lookAndFeel);
+            }
+            catch (Exception e)
+            {
+                SimpleDialogs.showWarning(null,
+                                          "Look and feel not found:\n" +
+                                          lookAndFeel);
+            }
+        }
         new GoGui(settings.m_program, settings.m_preferences, settings.m_file,
                   settings.m_move, settings.m_time, settings.m_verbose,
                   settings.m_computerBlack, settings.m_computerWhite,

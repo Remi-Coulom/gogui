@@ -25,6 +25,7 @@
 <arg><option>-fast</option></arg>
 <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
 <arg><option>-komi</option> <replaceable>value</replaceable></arg>
+<arg><option>-look</option> <replaceable>name</replaceable></arg>
 <arg><option>-move</option> <replaceable>n</replaceable></arg>
 <arg><option>-program</option> <replaceable>command</replaceable></arg>
 <arg><option>-rules</option> <group choice="plain">
@@ -180,6 +181,44 @@ Display help and exit.
 <listitem>
 <para>
 Set the komi value.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-look</option> <replaceable>name</replaceable>
+</term>
+<listitem>
+<para>
+Set Swing look and feel.
+The name can be a full class name or one of the following shortcuts:
+<variablelist>
+<varlistentry>
+<term>motif</term>
+<listitem>
+<simpara>
+com.sun.java.swing.plaf.motif.MotifLookAndFeel
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>gtk</term>
+<listitem>
+<simpara>
+com.sun.java.swing.plaf.gtk.GTKLookAndFeel
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>windows (only on Windows)</term>
+<listitem>
+<simpara>
+com.sun.java.swing.plaf.windows.WindowsLookAndFeel
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
 </para>
 </listitem>
 </varlistentry>

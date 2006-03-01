@@ -51,6 +51,8 @@ public final class GoGuiSettings
 
     public String m_initAnalyze;
 
+    public String m_lookAndFeel;
+
     public String m_program;
 
     public String m_rules;
@@ -71,6 +73,7 @@ public final class GoGuiSettings
             "fast",
             "help",
             "komi:",
+            "look:",
             "move:",
             "program:",
             "rules:",
@@ -112,7 +115,15 @@ public final class GoGuiSettings
         m_gtpFile = opt.getString("gtpfile", "");
         m_gtpCommand = opt.getString("command", "");
         if (opt.contains("komi"))
-            m_preferences.setDouble("komi", opt.getDouble("komi"));
+            m_preferences.setDouble("komi", opt.getDouble("komi"));        
+        m_lookAndFeel = opt.getString("look", "");
+        if (m_lookAndFeel.equals("gtk"))
+            m_lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+        else if (m_lookAndFeel.equals("motif"))
+            m_lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+        else if (m_lookAndFeel.equals("windows"))
+            m_lookAndFeel =
+                "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
         m_move = opt.getInteger("move", -1);
         if (opt.contains("size"))
             m_preferences.setInt("boardsize", opt.getInteger("size"));
@@ -136,24 +147,25 @@ public final class GoGuiSettings
             "Graphical user interface for Go programs\n" +
             "using the Go Text Protocol.\n" +
             "\n" +
-            "-analyze name   initialize analyze command\n" +
-            "-auto           auto play games (if computer both)\n" +
-            "-command cmd    send GTP command at startup\n" +
-            "-computer-both  computer plays both sides\n" +
-            "-computer-black computer plays black\n" +
-            "-computer-none  computer plays no side\n" +
-            "-config         config file\n" +
-            "-fast           fast and simple graphics\n" +
-            "-gtpfile file   send GTP file at startup\n" +
-            "-help           display this help and exit\n" +
-            "-komi value     set komi\n" +
-            "-move n         load SGF file until move number\n" +
+            "-analyze name   Initialize analyze command\n" +
+            "-auto           Auto play games (if computer both)\n" +
+            "-command cmd    Send GTP command at startup\n" +
+            "-computer-both  Computer plays both sides\n" +
+            "-computer-black Computer plays black\n" +
+            "-computer-none  Computer plays no side\n" +
+            "-config         Config file\n" +
+            "-fast           Fast and simple graphics\n" +
+            "-gtpfile file   Send GTP file at startup\n" +
+            "-help           Display this help and exit\n" +
+            "-komi value     Set komi\n" +
+            "-look name      Set Swing look and feel\n" +
+            "-move n         Load SGF file until move number\n" +
             "-program cmd    Go program to attach\n" +
-            "-rules name     use rules (chinese|japanese)\n" +
-            "-size n         set board size\n" +
-            "-time spec      set time limits (min[+min/moves])\n" +
-            "-verbose        print debugging messages\n" +
-            "-version        print version and exit\n";
+            "-rules name     Use rules (chinese|japanese)\n" +
+            "-size n         Set board size\n" +
+            "-time spec      Set time limits (min[+min/moves])\n" +
+            "-verbose        Print debugging messages\n" +
+            "-version        Print version and exit\n";
         System.out.print(helpText);
     }   
 
