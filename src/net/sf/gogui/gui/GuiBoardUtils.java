@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ArrayList;
+import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
@@ -75,29 +76,29 @@ public final class GuiBoardUtils
     public static void showMarkup(GuiBoard guiBoard, Node node)
     {
         ArrayList mark;
-        mark = node.getMarked(Node.MARKED);
+        mark = node.getMarked(MarkType.MARK);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMark((GoPoint)(mark.get(i)), true);
-        mark = node.getMarked(Node.MARKED_CIRCLE);
+        mark = node.getMarked(MarkType.CIRCLE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkCircle((GoPoint)(mark.get(i)), true);
-        mark = node.getMarked(Node.MARKED_SQUARE);
+        mark = node.getMarked(MarkType.SQUARE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkSquare((GoPoint)(mark.get(i)), true);
-        mark = node.getMarked(Node.MARKED_TRIANGLE);
+        mark = node.getMarked(MarkType.TRIANGLE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkTriangle((GoPoint)(mark.get(i)), true);
-        GuiBoardUtils.setSelect(guiBoard, node.getMarked(Node.MARKED_SELECT),
+        GuiBoardUtils.setSelect(guiBoard, node.getMarked(MarkType.SELECT),
                                 true);
-        mark = node.getMarked(Node.MARKED_TERRITORY_BLACK);
+        mark = node.getMarked(MarkType.TERRITORY_BLACK);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setTerritory((GoPoint)(mark.get(i)), GoColor.BLACK);
-        mark = node.getMarked(Node.MARKED_TERRITORY_WHITE);
+        mark = node.getMarked(MarkType.TERRITORY_WHITE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setTerritory((GoPoint)(mark.get(i)), GoColor.WHITE);

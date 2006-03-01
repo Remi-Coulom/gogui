@@ -540,13 +540,13 @@ public final class NodeUtils
             appendInfo(buffer, "MovesLeftWhite",
                        node.getMovesLeft(GoColor.WHITE));
         appendInfoComment(buffer, node);
-        for (int i = 0; i < Node.MARK_TYPES.length; ++i)
+        for (int i = 0; i < MarkType.ALL.length; ++i)
         {
-            String type = Node.MARK_TYPES[i];
+            MarkType type = MarkType.ALL[i];
             ArrayList marked = node.getMarked(type);
             if (marked != null && marked.size() > 0)
-                appendInfo(buffer, "Marked" + StringUtils.capitalize(type),
-                           marked);
+                appendInfo(buffer, "Marked " +
+                           StringUtils.capitalize(type.toString()), marked);
         }
         Map labels = node.getLabels();
         if (labels != null && labels.size() > 0)

@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
@@ -551,7 +552,7 @@ public final class SgfReader
         }
     }
 
-    private void readMarked(Node node, String type) throws SgfError
+    private void readMarked(Node node, MarkType type) throws SgfError
     {
         parsePointList();
         for (int i = 0; i < m_pointList.size(); ++i)
@@ -673,7 +674,7 @@ public final class SgfReader
                 }
             }
             else if (p == "CR")
-                readMarked(node, Node.MARKED_CIRCLE);
+                readMarked(node, MarkType.CIRCLE);
             else if (p == "DT")
                 m_gameInformation.m_date = v;
             else if (p == "FF")
@@ -726,7 +727,7 @@ public final class SgfReader
                 }
             }
             else if (p == "MA")
-                readMarked(node, Node.MARKED);
+                readMarked(node, MarkType.MARK);
             else if (p == "OB")
             {
                 try
@@ -786,9 +787,9 @@ public final class SgfReader
             else if (p == "RU")
                 m_gameInformation.m_rules = v;
             else if (p == "SQ")
-                readMarked(node, Node.MARKED_SQUARE);
+                readMarked(node, MarkType.SQUARE);
             else if (p == "SL")
-                readMarked(node, Node.MARKED_SELECT);
+                readMarked(node, MarkType.SELECT);
             else if (p == "SZ")
             {
                 if (! isRoot)
@@ -808,18 +809,18 @@ public final class SgfReader
                 m_sizeFixed = true;
             }
             else if (p == "TB")
-                readMarked(node, Node.MARKED_TERRITORY_BLACK);
+                readMarked(node, MarkType.TERRITORY_BLACK);
             else if (p == "TM")
                 readTime(v);
             else if (p == "TR")
-                readMarked(node, Node.MARKED_TRIANGLE);
+                readMarked(node, MarkType.TRIANGLE);
             else if (p == "W")
             {
                 node.setMove(Move.create(parsePoint(v), GoColor.WHITE));
                 m_sizeFixed = true;
             }
             else if (p == "TW")
-                readMarked(node, Node.MARKED_TERRITORY_WHITE);
+                readMarked(node, MarkType.TERRITORY_WHITE);
             else if (p == "WL")
             {
                 try

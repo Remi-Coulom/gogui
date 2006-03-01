@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Iterator;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
@@ -252,7 +253,7 @@ public class SgfWriter
         print(buffer.toString());
     }
 
-    private void printMarked(Node node, String property, String type)
+    private void printMarked(Node node, String property, MarkType type)
     {
         ArrayList marked = node.getMarked(type);
         if (marked != null)
@@ -327,13 +328,13 @@ public class SgfWriter
         }
         if (node.getPlayer() != GoColor.EMPTY)
             printToPlay(node.getPlayer());
-        printMarked(node, "MA", Node.MARKED);
-        printMarked(node, "CR", Node.MARKED_CIRCLE);
-        printMarked(node, "SQ", Node.MARKED_SQUARE);
-        printMarked(node, "TR", Node.MARKED_TRIANGLE);
-        printMarked(node, "SL", Node.MARKED_SELECT);
-        printMarked(node, "TB", Node.MARKED_TERRITORY_BLACK);
-        printMarked(node, "TW", Node.MARKED_TERRITORY_WHITE);
+        printMarked(node, "MA", MarkType.MARK);
+        printMarked(node, "CR", MarkType.CIRCLE);
+        printMarked(node, "SQ", MarkType.SQUARE);
+        printMarked(node, "TR", MarkType.TRIANGLE);
+        printMarked(node, "SL", MarkType.SELECT);
+        printMarked(node, "TB", MarkType.TERRITORY_BLACK);
+        printMarked(node, "TW", MarkType.TERRITORY_WHITE);
         printLabels(node);
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)

@@ -43,6 +43,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.game.TimeSettings;
@@ -2386,7 +2387,8 @@ public class GoGui
                     GoGui.this.editLabel(point);
                 }
 
-                public void mark(GoPoint point, String type, boolean mark)
+                public void mark(GoPoint point, MarkType type,
+                                 boolean mark)
                 {
                     GoGui.this.mark(point, type, mark);
                 }
@@ -2904,19 +2906,19 @@ public class GoGui
         return true;
     }
 
-    public void mark(GoPoint point, String type, boolean mark)
+    public void mark(GoPoint point, MarkType type, boolean mark)
     {
         if (mark)
             m_currentNode.addMarked(point, type);
         else
             m_currentNode.removeMarked(point, type);
-        if (type == Node.MARKED)
+        if (type == MarkType.MARK)
             m_guiBoard.setMark(point, mark);
-        else if (type == Node.MARKED_CIRCLE)
+        else if (type == MarkType.CIRCLE)
             m_guiBoard.setMarkCircle(point, mark);
-        else if (type == Node.MARKED_SQUARE)
+        else if (type == MarkType.SQUARE)
             m_guiBoard.setMarkSquare(point, mark);
-        else if (type == Node.MARKED_TRIANGLE)
+        else if (type == MarkType.TRIANGLE)
             m_guiBoard.setMarkTriangle(point, mark);        
         updateBoard();
         m_guiBoard.repaint();

@@ -64,30 +64,6 @@ class TimeInfo
 */
 public final class Node
 {
-    public static final String MARKED = "mark";
-
-    public static final String MARKED_CIRCLE = "circle";
-
-    public static final String MARKED_SQUARE = "square";
-
-    public static final String MARKED_TRIANGLE = "triangle";
-
-    public static final String MARKED_SELECT = "select";
-
-    public static final String MARKED_TERRITORY_BLACK = "territory-black";
-
-    public static final String MARKED_TERRITORY_WHITE = "territory-white";
-
-    public static final String[] MARK_TYPES = {
-        MARKED,
-        MARKED_CIRCLE,
-        MARKED_SQUARE,
-        MARKED_TRIANGLE,
-        MARKED_SELECT,
-        MARKED_TERRITORY_BLACK,
-        MARKED_TERRITORY_WHITE
-    };
-
     /** Construct empty node. */
     public Node()
     {
@@ -148,10 +124,9 @@ public final class Node
         @param point The location that should be marked.
         @param type The type of the markup from Node.MARK_TYPES.
     */
-    public void addMarked(GoPoint point, String type)
+    public void addMarked(GoPoint point, MarkType type)
     {
         assert(point != null);
-        assert(isMarkType(type));
         Map marked = createMarked();
         ArrayList pointList = (ArrayList)marked.get(type);
         if (pointList == null)
@@ -295,7 +270,7 @@ public final class Node
         @param type Markup type from Node.MARK_TYPES.
         @return Map containing (Point,String) pairs.
     */
-    public ArrayList getMarked(String type)
+    public ArrayList getMarked(MarkType type)
     {
         if (m_extraInfo == null || m_extraInfo.m_marked == null)
             return null;
@@ -443,18 +418,6 @@ public final class Node
         return (node.getChildIndex(this) != -1);
     }
 
-    /** Check if string is a valid markup type.
-        @param type The string to check.
-        @return true, if type is from Node.MARK_TYPES.
-    */
-    public static boolean isMarkType(String type)
-    {
-        for (int i = 0; i < MARK_TYPES.length; ++i)
-            if (MARK_TYPES[i].equals(type))
-                return true;
-        return false;
-    }
-
     /** Make child the first child of this node.
         @param child One of the child nodes of this node.
     */
@@ -493,7 +456,7 @@ public final class Node
         @param point Location of the markup.
         @param type Type of the markup from Node.MARK_TYPES.
     */
-    public void removeMarked(GoPoint point, String type)
+    public void removeMarked(GoPoint point, MarkType type)
     {
         assert(point != null);
         Map marked = createMarked();

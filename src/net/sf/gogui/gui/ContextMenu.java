@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import net.sf.gogui.game.MarkType;
+import net.sf.gogui.game.Node;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.ErrorMessage;
@@ -28,7 +30,7 @@ public class ContextMenu
     {
         void editLabel(GoPoint point);
 
-        void mark(GoPoint point, String type, boolean mark);
+        void mark(GoPoint point, MarkType type, boolean mark);
 
         void setAnalyzeCommand(AnalyzeCommand command);
     }
@@ -70,25 +72,25 @@ public class ContextMenu
                     {                        
                         boolean mark
                             = ContextMenu.this.m_mark.isSelected();
-                        listener.mark(m_point, "mark", mark);
+                        listener.mark(m_point, MarkType.MARK, mark);
                     }
                     else if (actionCommand.equals("mark-circle"))
                     {                        
                         boolean mark
                             = ContextMenu.this.m_markCircle.isSelected();
-                        listener.mark(m_point, "circle", mark);
+                        listener.mark(m_point, MarkType.CIRCLE, mark);
                     }
                     else if (actionCommand.equals("mark-square"))
                     {                        
                         boolean mark
                             = ContextMenu.this.m_markSquare.isSelected();
-                        listener.mark(m_point, "square", mark);
+                        listener.mark(m_point, MarkType.SQUARE, mark);
                     }
                     else if (actionCommand.equals("mark-triangle"))
                     {                        
                         boolean mark
                             = ContextMenu.this.m_markTriangle.isSelected();
-                        listener.mark(m_point, "triangle", mark);
+                        listener.mark(m_point, MarkType.TRIANGLE, mark);
                     }
                     else if (actionCommand.equals("edit-label"))
                     {                        
