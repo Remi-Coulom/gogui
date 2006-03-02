@@ -138,14 +138,14 @@ public class GameTreePanel
         return m_labelMode;
     }
     
-    public int getNodeHeight()
+    public int getNodeFullSize()
     {
-        return m_nodeHeight;
+        return m_nodeFullSize;
     }
     
-    public int getNodeWidth()
+    public int getNodeSize()
     {
-        return m_nodeWidth;
+        return m_nodeSize;
     }
     
     public Dimension getPreferredNodeSize()
@@ -155,7 +155,7 @@ public class GameTreePanel
 
     public Dimension getPreferredScrollableViewportSize()
     {
-        return new Dimension(m_nodeDist * 10, m_nodeDist * 3);
+        return new Dimension(m_nodeFullSize * 10, m_nodeFullSize * 3);
     }
 
     public int getScrollableBlockIncrement(Rectangle visibleRect,
@@ -166,7 +166,7 @@ public class GameTreePanel
             result = visibleRect.height;
         else
             result = visibleRect.width;
-        result = (result / m_nodeDist) * m_nodeDist;
+        result = (result / m_nodeFullSize) * m_nodeFullSize;
         return result;
     }
 
@@ -183,7 +183,7 @@ public class GameTreePanel
     public int getScrollableUnitIncrement(Rectangle visibleRect,
                                           int orientation, int direction)
     {
-        return m_nodeDist;
+        return m_nodeFullSize;
     }
 
     public boolean getShowSubtreeSizes()
@@ -231,9 +231,9 @@ public class GameTreePanel
 
     public void scrollToCurrent()
     {
-        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeWidth,
-                                          m_currentNodeY,
-                                          5 * m_nodeWidth, 3 * m_nodeWidth));
+        scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeSize,
+                                          m_currentNodeY, 5 * m_nodeSize,
+                                          3 * m_nodeSize));
     }
 
     public void setLabelMode(int mode)
@@ -327,8 +327,8 @@ public class GameTreePanel
                                     "Out of memory");
             update(gameTree, currentNode);
         }
-        setPreferredSize(new Dimension(m_maxX + m_nodeDist + m_margin,
-                                       m_maxY + m_nodeDist + m_margin));
+        setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + m_margin,
+                                       m_maxY + m_nodeFullSize + m_margin));
         revalidate();
         scrollToCurrent();
         if (m_scrollPane != null)
@@ -381,17 +381,15 @@ public class GameTreePanel
 
     private int m_sizeMode;
 
-    private int m_nodeWidth;
+    private int m_nodeSize;
 
-    private int m_nodeHeight;
+    private int m_nodeFullSize;
 
     private static final int m_margin = 15;
 
     private int m_maxX;
 
     private int m_maxY;
-
-    private int m_nodeDist;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
@@ -444,8 +442,8 @@ public class GameTreePanel
             fontScale = 0.7;
             assert(false);
         }
-        m_nodeWidth = 25;
-        m_nodeDist = 35;
+        m_nodeSize = 25;
+        m_nodeFullSize = 35;
         Font font = UIManager.getFont("Label.font");
         if (font != null)
         {
@@ -456,15 +454,15 @@ public class GameTreePanel
         }
         if (font != null)
         {
-            m_nodeWidth = font.getSize() * 2;
-            if (m_nodeWidth % 2 == 0)
-                ++m_nodeWidth;
-            m_nodeDist = font.getSize() * 3;
-            if (m_nodeDist % 2 == 0)
-                ++m_nodeDist;
+            m_nodeSize = font.getSize() * 2;
+            if (m_nodeSize % 2 == 0)
+                ++m_nodeSize;
+            m_nodeFullSize = font.getSize() * 3;
+            if (m_nodeFullSize % 2 == 0)
+                ++m_nodeFullSize;
         }
         m_font = font;
-        m_preferredNodeSize = new Dimension(m_nodeWidth, m_nodeDist);
+        m_preferredNodeSize = new Dimension(m_nodeFullSize, m_nodeFullSize);
     }
 
     private int createNodes(Component father, Node node, int x, int y,
@@ -474,14 +472,13 @@ public class GameTreePanel
         m_maxY = Math.max(y, m_maxY);
         if (node.getMove() != null)
             ++moveNumber;
-        m_nodeHeight = m_nodeDist;
         GameTreeNode gameNode =
             new GameTreeNode(node, moveNumber, this, m_mouseListener, m_font);
         m_map.put(node, gameNode);
         add(gameNode);
         putConstraint(father, gameNode, dx, dy);
         int numberChildren = node.getNumberChildren();
-        dx = m_nodeDist;
+        dx = m_nodeFullSize;
         dy = 0;
         int maxChildren = numberChildren;
         boolean notExpanded =
@@ -494,12 +491,12 @@ public class GameTreePanel
             {
                 maxChildren = 0;
                 String text = Integer.toString(NodeUtils.subtreeSize(node));
-                int estimatedWidth = text.length() * m_nodeDist / 3;
+                int estimatedWidth = text.length() * m_nodeFullSize / 3;
                 m_maxX = Math.max(x + estimatedWidth, m_maxX);
                 JLabel label = new JLabel(text);
                 label.setFont(m_font);
                 add(label);
-                putConstraint(gameNode, label, dx, m_nodeDist / 2);
+                putConstraint(gameNode, label, dx, m_nodeFullSize / 2);
             }
         }
         if (maxChildren > 0)
@@ -511,14 +508,14 @@ public class GameTreePanel
                 dy += createNodes(gameNode, node.getChild(i),
                                   x + dx, y + dy, dx, dy, moveNumber);
                 if (! notExpanded && i < numberChildren - 1)
-                    dy += m_nodeDist;
+                    dy += m_nodeFullSize;
             }
             if (maxChildren > 1)
             {
                 GameTreeJunction junction =
                     new GameTreeJunction(childrenDy, this);
                 add(junction);
-                putConstraint(gameNode, junction, 0, m_nodeDist);
+                putConstraint(gameNode, junction, 0, m_nodeFullSize);
             }
         }
         if (node == m_currentNode)
@@ -613,8 +610,8 @@ public class GameTreePanel
         Rectangle rectangle = new Rectangle();
         rectangle.x = gameNode.getLocation().x;
         rectangle.y = gameNode.getLocation().y;
-        rectangle.width = m_nodeWidth;
-        rectangle.height = m_nodeDist;
+        rectangle.width = m_nodeSize;
+        rectangle.height = m_nodeFullSize;
         scrollRectToVisible(rectangle);
     }
 

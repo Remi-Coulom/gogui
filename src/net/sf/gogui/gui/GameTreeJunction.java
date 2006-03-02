@@ -27,26 +27,27 @@ class GameTreeJunction
         setOpaque(true);
         setFocusable(false);
         setFocusTraversalKeysEnabled(false);
-        int nodeWidth = m_gameTreePanel.getNodeWidth();
+        int fullSize = m_gameTreePanel.getNodeFullSize();
         int lastDy = childrenDy[childrenDy.length - 1];
-        setPreferredSize(new Dimension(nodeWidth, lastDy));
+        setPreferredSize(new Dimension(fullSize, lastDy));
     }
 
     public void paintComponent(Graphics graphics)
     {
-        int width = m_gameTreePanel.getNodeWidth();
-        int height = m_gameTreePanel.getNodeHeight();
+        int size = m_gameTreePanel.getNodeSize();
+        int fullSize = m_gameTreePanel.getNodeFullSize();
         graphics.setColor(GameTreePanel.m_background);
-        graphics.fillRect(0, 0, width, height);
-        int halfSize = width / 2;
-        int halfHeight = height / 2;
+        graphics.fillRect(0, 0, size, fullSize);
+        int halfSize = size / 2;
+        int halfFullSize = fullSize / 2;
         graphics.setColor(Color.DARK_GRAY);
         int lastDy = m_childrenDy[m_childrenDy.length - 1];
-        graphics.drawLine(halfSize, 0, halfSize, lastDy - height);
+        graphics.drawLine(halfSize, 0, halfSize, lastDy - fullSize);
         for (int i = 1; i < m_childrenDy.length; ++i)
         {
-            int y = m_childrenDy[i] - height;
-            graphics.drawLine(halfSize, y, width, y + halfSize);
+            int y = m_childrenDy[i] - fullSize;
+            graphics.drawLine(halfSize, y, size, y + halfSize);
+            graphics.drawLine(size, y + halfSize, fullSize, y + halfSize);
         }
     }
 

@@ -47,28 +47,26 @@ class GameTreeNode
 
     public void paintComponent(Graphics graphics)
     {
-        int width = m_gameTreePanel.getNodeWidth();
-        int height = m_gameTreePanel.getNodeHeight();
+        int size = m_gameTreePanel.getNodeSize();
+        int fullSize = m_gameTreePanel.getNodeFullSize();
         graphics.setColor(GameTreePanel.m_background);
-        graphics.fillRect(0, 0, width, height);
-        int halfSize = width / 2;
+        graphics.fillRect(0, 0, fullSize, fullSize);
+        int halfSize = size / 2;
         int numberChildren = m_node.getNumberChildren();
         boolean isExpanded = m_gameTreePanel.isExpanded(m_node);
         graphics.setColor(Color.DARK_GRAY);
-        if (numberChildren > 0 &&
-            (isExpanded || ! m_gameTreePanel.getShowSubtreeSizes()))
-            graphics.drawLine(halfSize, halfSize, width, halfSize);
+        if ((numberChildren > 1 &&
+             (isExpanded || ! m_gameTreePanel.getShowSubtreeSizes()))
+            || numberChildren == 1)
+            graphics.drawLine(halfSize, halfSize, fullSize, halfSize);
         if (numberChildren > 1)
         {
             if (isExpanded)
-                graphics.drawLine(halfSize, width, halfSize, height);
+                graphics.drawLine(halfSize, size, halfSize, fullSize);
             else
             {
-                int d1 = width / 2;
-                int d2 = (height - width) / 2;
-                graphics.drawLine(halfSize, width, halfSize, width + d2);
-                graphics.drawLine(halfSize, width + d2, halfSize + d1,
-                                  width + d2);
+                graphics.drawLine(halfSize, halfSize, size, size);
+                graphics.drawLine(size, size, fullSize - size / 5, size);
             }
         }
         Move move = m_node.getMove();
@@ -84,8 +82,8 @@ class GameTreeNode
         else if (move == null)
         {
             graphics.setColor(m_colorLightBlue);
-            int[] xPoints = { halfSize, width, halfSize, 0 };
-            int[] yPoints = { 0, halfSize, width, halfSize };
+            int[] xPoints = { halfSize, size, halfSize, 0 };
+            int[] yPoints = { 0, halfSize, size, halfSize };
             graphics.fillPolygon(xPoints, yPoints, 4);
         }        
         else
@@ -94,22 +92,22 @@ class GameTreeNode
                 graphics.setColor(Color.black);
             else
                 graphics.setColor(Color.white);
-            graphics.fillOval(0, 0, width, width);
+            graphics.fillOval(0, 0, size, size);
             drawText(graphics);
         }
         if (m_node.getComment() != null
             && ! m_node.getComment().trim().equals(""))
         {
             graphics.setColor(m_colorLightBlue);
-            int y = width + (height - width) / 4;
-            int d = width / 5;
-            graphics.drawLine(d, y, width - d, y);
+            int y = size + (fullSize - size) / 4;
+            int d = size / 5;
+            graphics.drawLine(d, y, size - d, y);
         }
         if (m_gameTreePanel.isCurrent(m_node))
         {
             graphics.setColor(Color.red);
-            int d = width / 6;
-            int w = width;
+            int d = size / 6;
+            int w = size;
             graphics.drawLine(d, d, 2 * d, d);
             graphics.drawLine(d, d, d, 2 * d);
             graphics.drawLine(d, w - 2 * d - 1, d, w - d - 1);
@@ -140,7 +138,7 @@ class GameTreeNode
         if (labelMode == GameTreePanel.LABEL_NONE)
             return;
         Move move = m_node.getMove();
-        int width = m_gameTreePanel.getNodeWidth();
+        int size = m_gameTreePanel.getNodeSize();
         String text;
         if (labelMode == GameTreePanel.LABEL_MOVE)
         {
@@ -152,8 +150,8 @@ class GameTreeNode
             text = Integer.toString(m_moveNumber);
         int textWidth = graphics.getFontMetrics().stringWidth(text);
         int textHeight = graphics.getFont().getSize();
-        int xText = (width - textWidth) / 2;
-        int yText = textHeight + (width - textHeight) / 2;
+        int xText = (size - textWidth) / 2;
+        int yText = textHeight + (size - textHeight) / 2;
         if (move.getColor() == GoColor.BLACK)
             graphics.setColor(Color.white);
         else
