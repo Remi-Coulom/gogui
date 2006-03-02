@@ -521,12 +521,18 @@ public final class SgfReader
                 GoPoint point = parsePoint(value);
                 if (point == null)
                     setWarning("Point list argument contains PASS");
-                m_pointList.add(point);
+                else
+                    m_pointList.add(point);
             }
             else
             {
                 GoPoint point1 = parsePoint(value.substring(0, pos));
                 GoPoint point2 = parsePoint(value.substring(pos + 1));
+                if (point1 == null || point2 == null)
+                {
+                    setWarning("Compressed point list contains PASS");
+                    continue;
+                }
                 int xMin = Math.min(point1.getX(), point2.getX());
                 int xMax = Math.max(point1.getX(), point2.getX());
                 int yMin = Math.min(point1.getY(), point2.getY());
