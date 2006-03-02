@@ -610,8 +610,9 @@ public class GameTreePanel
         Rectangle rectangle = new Rectangle();
         rectangle.x = gameNode.getLocation().x;
         rectangle.y = gameNode.getLocation().y;
-        rectangle.width = m_nodeSize;
-        rectangle.height = m_nodeFullSize;
+        // Make rectangle large so that children are visible
+        rectangle.width = 3 * m_nodeFullSize;
+        rectangle.height = 3 * m_nodeFullSize;
         scrollRectToVisible(rectangle);
     }
 
