@@ -197,6 +197,11 @@ public class GoGuiMenuBar
         return m_itemShowShell.isSelected();
     }
 
+    public boolean getShowSubtreeSizes()
+    {
+        return m_itemShowSubtreeSizes.isSelected();
+    }
+
     public boolean getShowToolbar()
     {
         return m_itemShowToolbar.isSelected();
@@ -455,6 +460,11 @@ public class GoGuiMenuBar
         m_itemShowShell.setSelected(enable);
     }
 
+    public void setShowSubtreeSizes(boolean enable)
+    {
+        m_itemShowSubtreeSizes.setSelected(enable);
+    }
+
     public void setShowToolbar(boolean enable)
     {
         m_itemShowToolbar.setSelected(enable);
@@ -545,6 +555,8 @@ public class GoGuiMenuBar
     private JCheckBoxMenuItem m_itemShowLastMove;
 
     private JCheckBoxMenuItem m_itemShowShell;
+
+    private JCheckBoxMenuItem m_itemShowSubtreeSizes;
 
     private JCheckBoxMenuItem m_itemShowTree;
 
@@ -895,14 +907,17 @@ public class GoGuiMenuBar
         JMenu menuSize = createMenu("Size", KeyEvent.VK_S);
         group = new ButtonGroup();
         m_itemGameTreeLarge = addRadioItem(menuSize, group, "Large",
-                                        KeyEvent.VK_L, "gametree-large");
+                                           KeyEvent.VK_L, "gametree-large");
         m_itemGameTreeNormal = addRadioItem(menuSize, group, "Normal",
-                                        KeyEvent.VK_N, "gametree-normal");
+                                            KeyEvent.VK_N, "gametree-normal");
         m_itemGameTreeSmall = addRadioItem(menuSize, group, "Small",
-                                        KeyEvent.VK_S, "gametree-small");
+                                           KeyEvent.VK_S, "gametree-small");
         m_itemGameTreeTiny = addRadioItem(menuSize, group, "Tiny",
-                                      KeyEvent.VK_T, "gametree-tiny");
+                                          KeyEvent.VK_T, "gametree-tiny");
         menu.add(menuSize);
+        m_itemShowSubtreeSizes = new JCheckBoxMenuItem("Show Subtree Sizes");
+        addMenuItem(menu, m_itemShowSubtreeSizes, KeyEvent.VK_S,
+                    "gametree-show-subtree-sizes");
         return menu;
     }
 

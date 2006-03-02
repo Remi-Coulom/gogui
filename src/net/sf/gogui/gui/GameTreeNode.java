@@ -9,8 +9,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 import net.sf.gogui.game.Node;
@@ -49,12 +47,6 @@ class GameTreeNode
 
     public void paintComponent(Graphics graphics)
     {
-        Graphics2D graphics2D = null;
-        if (graphics instanceof Graphics2D)
-            graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null && ! m_gameTreePanel.getFastPaint())
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                        RenderingHints.VALUE_ANTIALIAS_ON);
         int width = m_gameTreePanel.getNodeWidth();
         int height = m_gameTreePanel.getNodeHeight();
         graphics.setColor(GameTreePanel.m_background);

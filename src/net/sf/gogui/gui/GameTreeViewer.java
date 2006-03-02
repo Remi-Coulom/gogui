@@ -88,6 +88,11 @@ public class GameTreeViewer
         m_panel.setSizeMode(mode);
     }
 
+    public void setShowSubtreeSizes(boolean enable)
+    {
+        m_panel.setShowSubtreeSizes(enable);
+    }
+
     public void update(GameTree gameTree, Node currentNode)
     {
         m_panel.update(gameTree, currentNode);

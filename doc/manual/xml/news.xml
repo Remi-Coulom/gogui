@@ -18,7 +18,8 @@ program
 <listitem>
 <simpara>
 GoGui: new menu items "Play Single Move",
-"Configure Board/Fixed Size Comment Font"
+"Configure Board/Fixed Size Comment Font",
+"Configure Tree/Show Subtree Sizes"
 </simpara>
 </listitem>
 <listitem>

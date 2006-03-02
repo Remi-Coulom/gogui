@@ -10,8 +10,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -21,6 +23,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.HashMap;
 import java.util.HashSet;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -183,6 +186,11 @@ public class GameTreePanel
         return m_nodeDist;
     }
 
+    public boolean getShowSubtreeSizes()
+    {
+        return m_showSubtreeSizes;
+    }
+
     public int getSizeMode()
     {
         return m_sizeMode;
@@ -206,6 +214,12 @@ public class GameTreePanel
 
     public void paintComponent(Graphics graphics)
     {
+        Graphics2D graphics2D = null;
+        if (graphics instanceof Graphics2D)
+            graphics2D = (Graphics2D)graphics;
+        if (graphics2D != null && ! getFastPaint())
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON);
         super.paintComponent(graphics);
         if (m_gameTree == null)
             return;
@@ -254,6 +268,13 @@ public class GameTreePanel
     public void setScrollPane(JScrollPane scrollPane)
     {
         m_scrollPane = scrollPane;
+    }
+
+    public void setShowSubtreeSizes(boolean showSubtreeSizes)
+    {
+        m_showSubtreeSizes = showSubtreeSizes;
+        if (m_currentNode != null)
+            update(m_gameTree, m_currentNode);
     }
 
     public void setSizeMode(int mode)
@@ -354,6 +375,8 @@ public class GameTreePanel
     }
 
     private final boolean m_fastPaint;
+
+    private boolean m_showSubtreeSizes;
 
     private int m_currentNodeX;
 
@@ -473,7 +496,25 @@ public class GameTreePanel
         boolean notExpanded =
             (numberChildren > 1 && ! m_expanded.contains(node));
         if (notExpanded)
-            maxChildren = Math.min(numberChildren, 1);
+        {
+            if (! m_showSubtreeSizes)
+                maxChildren = Math.min(numberChildren, 1);
+            else
+            {
+                maxChildren = 0;
+                String text = Integer.toString(NodeUtils.subtreeSize(node));
+                int estimatedWidth = text.length() * m_nodeDist / 3;
+                m_maxX = Math.max(x + estimatedWidth, m_maxX);
+                JLabel label = new JLabel(text);
+                label.setFont(m_font);
+                add(label);
+                layout.putConstraint(SpringLayout.WEST, label, dx,
+                                     SpringLayout.WEST, gameNode);
+                layout.putConstraint(SpringLayout.NORTH, label,
+                                     m_nodeDist / 2, SpringLayout.NORTH,
+                                     gameNode);
+            }
+        }
         for (int i = 0; i < maxChildren; ++i)
         {
             dy += createNodes(gameNode, node.getChild(i),
@@ -499,7 +540,12 @@ public class GameTreePanel
             (numberChildren > 1 && ! m_expanded.contains(node));
         int maxChildren = numberChildren;
         if (notExpanded)
-            maxChildren = Math.min(numberChildren, 1);
+        {
+            if (m_showSubtreeSizes)
+                maxChildren = 0;
+            else
+                maxChildren = Math.min(numberChildren, 1);
+        }
         for (int i = 0; i < maxChildren; ++i)
         {
             if (i > 0)

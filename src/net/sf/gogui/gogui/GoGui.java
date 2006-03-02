@@ -221,6 +221,9 @@ public class GoGui
         m_menuBar.setAnalyzeSort(m_prefs.getBool("analyze-sort"));
         m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels"));
         m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size"));
+        boolean showSubtreeSizes =
+            m_prefs.getBool("gametree-show-subtree-sizes");
+        m_menuBar.setShowSubtreeSizes(showSubtreeSizes);
         m_menuBar.setHighlight(m_prefs.getBool("gtpshell-highlight"));
         m_menuBar.setAutoNumber(m_prefs.getBool("gtpshell-autonumber"));
         boolean completion
@@ -390,6 +393,8 @@ public class GoGui
             cbGameTreeSize(GameTreePanel.SIZE_SMALL);
         else if (command.equals("gametree-tiny"))
             cbGameTreeSize(GameTreePanel.SIZE_TINY);
+        else if (command.equals("gametree-show-subtree-sizes"))
+            cbGameTreeShowSubtreeSizes();
         else if (command.equals("gtpshell-save"))
             cbGtpShellSave();
         else if (command.equals("gtpshell-save-commands"))
@@ -651,6 +656,8 @@ public class GoGui
                     = new GameTreeViewer(this, this, m_fastPaint);
                 m_gameTreeViewer.setLabelMode(m_menuBar.getGameTreeLabels());
                 m_gameTreeViewer.setSizeMode(m_menuBar.getGameTreeSize());
+                boolean showSubtreeSizes = m_menuBar.getShowSubtreeSizes();
+                m_gameTreeViewer.setShowSubtreeSizes(showSubtreeSizes);
                 restoreSize(m_gameTreeViewer, "window-gametree");
             }
             updateGameTree(true);
@@ -1754,6 +1761,14 @@ public class GoGui
         m_prefs.setInt("gametree-size", mode);
         if (m_gameTreeViewer != null)
             m_gameTreeViewer.setSizeMode(mode);
+    }
+
+    private void cbGameTreeShowSubtreeSizes()
+    {
+        boolean enable = m_menuBar.getShowSubtreeSizes();
+        m_prefs.setBool("gametree-show-subtree-sizes", enable);
+        if (m_gameTreeViewer != null)
+            m_gameTreeViewer.setShowSubtreeSizes(enable);
     }
 
     private void cbGoto()

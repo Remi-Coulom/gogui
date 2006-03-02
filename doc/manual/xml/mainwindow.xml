@@ -782,6 +782,15 @@ Configure the size of the tree nodes.
 </varlistentry>
 
 <varlistentry>
+<term><guisubmenu>Configure Tree</guisubmenu> / <guimenuitem>Show Subtree Sizes</guimenuitem></term>
+<listitem>
+<para>
+Show the number of nodes in the subtree for nodes that are not expanded.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Highlight</guimenuitem></term>
 <listitem>
 <para>
