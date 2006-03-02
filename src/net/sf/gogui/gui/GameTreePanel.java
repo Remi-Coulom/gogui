@@ -221,11 +221,6 @@ public class GameTreePanel
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                         RenderingHints.VALUE_ANTIALIAS_ON);
         super.paintComponent(graphics);
-        if (m_gameTree == null)
-            return;
-        graphics.setColor(Color.DARK_GRAY);
-        drawGrid(graphics, m_gameTree.getRoot(),
-                 m_margin + m_nodeWidth / 2, m_margin + m_nodeWidth / 2);
     }
 
     public void redrawCurrentNode()
@@ -484,11 +479,7 @@ public class GameTreePanel
             new GameTreeNode(node, moveNumber, this, m_mouseListener, m_font);
         m_map.put(node, gameNode);
         add(gameNode);
-        SpringLayout layout = (SpringLayout)getLayout();
-        layout.putConstraint(SpringLayout.WEST, gameNode, dx,
-                             SpringLayout.WEST, father);
-        layout.putConstraint(SpringLayout.NORTH, gameNode, dy,
-                             SpringLayout.NORTH, father);
+        putConstraint(father, gameNode, dx, dy);
         int numberChildren = node.getNumberChildren();
         dx = m_nodeDist;
         dy = 0;
@@ -508,19 +499,27 @@ public class GameTreePanel
                 JLabel label = new JLabel(text);
                 label.setFont(m_font);
                 add(label);
-                layout.putConstraint(SpringLayout.WEST, label, dx,
-                                     SpringLayout.WEST, gameNode);
-                layout.putConstraint(SpringLayout.NORTH, label,
-                                     m_nodeDist / 2, SpringLayout.NORTH,
-                                     gameNode);
+                putConstraint(gameNode, label, dx, m_nodeDist / 2);
             }
         }
-        for (int i = 0; i < maxChildren; ++i)
+        if (maxChildren > 0)
         {
-            dy += createNodes(gameNode, node.getChild(i),
-                              x + dx, y + dy, dx, dy, moveNumber);
-            if (! notExpanded && i < numberChildren - 1)
-                dy += m_nodeDist;
+            int[] childrenDy = new int[maxChildren];
+            for (int i = 0; i < maxChildren; ++i)
+            {
+                childrenDy[i] = dy;
+                dy += createNodes(gameNode, node.getChild(i),
+                                  x + dx, y + dy, dx, dy, moveNumber);
+                if (! notExpanded && i < numberChildren - 1)
+                    dy += m_nodeDist;
+            }
+            if (maxChildren > 1)
+            {
+                GameTreeJunction junction =
+                    new GameTreeJunction(childrenDy, this);
+                add(junction);
+                putConstraint(gameNode, junction, 0, m_nodeDist);
+            }
         }
         if (node == m_currentNode)
         {
@@ -528,35 +527,6 @@ public class GameTreePanel
             m_currentNodeY = y;
         }
         return dy;
-    }
-
-    private int drawGrid(Graphics graphics, Node node, int x, int y)
-    {
-        int numberChildren = node.getNumberChildren();
-        int xChild = x + m_nodeDist;
-        int yChild = y;
-        int lastY = y + m_nodeWidth;
-        boolean notExpanded =
-            (numberChildren > 1 && ! m_expanded.contains(node));
-        int maxChildren = numberChildren;
-        if (notExpanded)
-        {
-            if (m_showSubtreeSizes)
-                maxChildren = 0;
-            else
-                maxChildren = Math.min(numberChildren, 1);
-        }
-        for (int i = 0; i < maxChildren; ++i)
-        {
-            if (i > 0)
-                graphics.drawLine(x, lastY, x, yChild);
-            graphics.drawLine(x, yChild, xChild, yChild);
-            lastY = yChild;
-            yChild = drawGrid(graphics, node.getChild(i), xChild, yChild);
-            if (! notExpanded && i < numberChildren - 1)
-                yChild += m_nodeDist;
-        }
-        return yChild;
     }
 
     private GameTreeNode getGameTreeNode(Node node)
@@ -623,6 +593,16 @@ public class GameTreePanel
             new TextViewer(m_owner, title, nodeInfo, true, null);
         textViewer.setLocation(location);
         textViewer.setVisible(true);
+    }
+
+    private void putConstraint(Component father, Component son,
+                               int west, int north)
+    {
+        SpringLayout layout = (SpringLayout)getLayout();
+        layout.putConstraint(SpringLayout.WEST, son, west,
+                             SpringLayout.WEST, father);
+        layout.putConstraint(SpringLayout.NORTH, son, north,
+                             SpringLayout.NORTH, father);
     }
 
     private void scrollTo(Node node)

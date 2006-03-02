@@ -52,10 +52,15 @@ class GameTreeNode
         graphics.setColor(GameTreePanel.m_background);
         graphics.fillRect(0, 0, width, height);
         int halfSize = width / 2;
-        if (m_node.getNumberChildren() > 1)
+        int numberChildren = m_node.getNumberChildren();
+        boolean isExpanded = m_gameTreePanel.isExpanded(m_node);
+        graphics.setColor(Color.DARK_GRAY);
+        if (numberChildren > 0 &&
+            (isExpanded || ! m_gameTreePanel.getShowSubtreeSizes()))
+            graphics.drawLine(halfSize, halfSize, width, halfSize);
+        if (numberChildren > 1)
         {
-            graphics.setColor(Color.DARK_GRAY);
-            if (m_gameTreePanel.isExpanded(m_node))
+            if (isExpanded)
                 graphics.drawLine(halfSize, width, halfSize, height);
             else
             {
