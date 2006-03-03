@@ -6,6 +6,7 @@
 package net.sf.gogui.gogui;
 
 import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.utils.Platform;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -39,7 +40,12 @@ public final class MacMain
         {
             Class [] mainArgs = new Class[1];
             mainArgs[0] = Class.forName("net.sf.gogui.gogui.GoGuiSettings");
-            Class mainClass = Class.forName("net.sf.gogui.gogui.Main");
+            Class mainClass;
+            if (Platform.isMac())
+                // Java 1.4 on Mac has slow startup time
+                mainClass = Class.forName("net.sf.gogui.gogui.SplashScreen");
+            else
+                mainClass = Class.forName("net.sf.gogui.gogui.Main");
             Method mainMethod = mainClass.getMethod("main", mainArgs);
             assert((mainMethod.getModifiers() & Modifier.STATIC) != 0);
             assert(mainMethod.getReturnType() == void.class); 
