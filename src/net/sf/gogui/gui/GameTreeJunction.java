@@ -24,7 +24,7 @@ class GameTreeJunction
     {
         m_gameTreePanel = gameTreePanel;
         m_childrenDy = childrenDy;
-        setOpaque(true);
+        setOpaque(false);
         setFocusable(false);
         setFocusTraversalKeysEnabled(false);
         int fullSize = m_gameTreePanel.getNodeFullSize();
@@ -36,8 +36,6 @@ class GameTreeJunction
     {
         int size = m_gameTreePanel.getNodeSize();
         int fullSize = m_gameTreePanel.getNodeFullSize();
-        graphics.setColor(GameTreePanel.m_background);
-        graphics.fillRect(0, 0, size, fullSize);
         int halfSize = size / 2;
         int halfFullSize = fullSize / 2;
         graphics.setColor(Color.DARK_GRAY);

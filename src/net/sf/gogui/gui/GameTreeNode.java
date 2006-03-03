@@ -28,7 +28,7 @@ class GameTreeNode
         m_node = node;
         m_moveNumber = moveNumber;
         addMouseListener(mouseListener);
-        setOpaque(true);
+        setOpaque(false);
         setFocusable(false);
         setFocusTraversalKeysEnabled(false);
         if (font != null)
@@ -49,8 +49,6 @@ class GameTreeNode
     {
         int size = m_gameTreePanel.getNodeSize();
         int fullSize = m_gameTreePanel.getNodeFullSize();
-        graphics.setColor(GameTreePanel.m_background);
-        graphics.fillRect(0, 0, fullSize, fullSize);
         int halfSize = size / 2;
         int numberChildren = m_node.getNumberChildren();
         boolean isExpanded = m_gameTreePanel.isExpanded(m_node);
