@@ -19,7 +19,7 @@ import net.sf.gogui.go.GoPoint;
     Contains markups and value, because these are used in the large SGF
     search traces of Explorer.
 */
-class ExtraInfo
+final class ExtraInfo
 {
     public Map m_marked;
 
@@ -36,7 +36,7 @@ class ExtraInfo
 /** More extended info.
     Contains all the information typically not in large SGF traces.
 */
-class MoreExtraInfo
+final class MoreExtraInfo
 {
     public SetupInfo m_setupInfo;
 
@@ -49,7 +49,7 @@ class MoreExtraInfo
 
 //----------------------------------------------------------------------------
 
-class SetupInfo
+final class SetupInfo
 {
     public GoColor m_player = GoColor.EMPTY;
 
@@ -62,7 +62,7 @@ class SetupInfo
 
 //----------------------------------------------------------------------------
 
-class TimeInfo
+final class TimeInfo
 {
     public int m_movesLeftBlack = -1;
 
