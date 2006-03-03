@@ -615,6 +615,7 @@ public final class NodeUtils
     {
         int numberNodes = 0;
         int numberTerminal = 0;
+        int moreThanOneChild = 0;
         int maxDepth = 0;
         int maxChildren = 0;
         double averageDepth = 0;
@@ -635,6 +636,8 @@ public final class NodeUtils
                 ++numberTerminal;
             else
                 averageChildrenInner += numberChildren;
+            if (numberChildren > 1)
+                ++moreThanOneChild;
             averageDepth += depth;
             averageChildren += numberChildren;
             node = nextNode(node, rootDepth);
@@ -654,6 +657,7 @@ public final class NodeUtils
         appendInfo(buffer, "AvgChildrenInner",
                    format.format(averageChildrenInner));
         appendInfo(buffer, "MaxChildren", maxChildren);
+        appendInfo(buffer, "MoreThanOneChild", moreThanOneChild);
         return buffer.toString();
     }
 
