@@ -56,14 +56,15 @@ class GameTreeNode
         if ((numberChildren > 1 &&
              (isExpanded || ! m_gameTreePanel.getShowSubtreeSizes()))
             || numberChildren == 1)
-            graphics.drawLine(halfSize, halfSize, fullSize, halfSize);
+            graphics.drawLine(size, halfSize, fullSize, halfSize);
         if (numberChildren > 1)
         {
             if (isExpanded)
                 graphics.drawLine(halfSize, size, halfSize, fullSize);
             else
             {
-                graphics.drawLine(halfSize, halfSize, size, size);
+                int d = size * 7 / 10;
+                graphics.drawLine(d, d, size, size);
                 graphics.drawLine(size, size, fullSize - size / 5, size);
             }
         }
