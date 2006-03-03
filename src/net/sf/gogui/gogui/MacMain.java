@@ -12,7 +12,7 @@ import java.lang.reflect.Modifier;
 //----------------------------------------------------------------------------
  
 /** Wrapper for starting GoGui.
-    Loads the SplashScreen class with the reflection API to set Mac AWT
+    Loads the main class with the reflection API to set Mac AWT
     properties before any AWT class is loaded.
 */
 public final class MacMain
@@ -39,8 +39,7 @@ public final class MacMain
         {
             Class [] mainArgs = new Class[1];
             mainArgs[0] = Class.forName("net.sf.gogui.gogui.GoGuiSettings");
-            Class mainClass
-                = Class.forName("net.sf.gogui.gogui.SplashScreen");
+            Class mainClass = Class.forName("net.sf.gogui.gogui.Main");
             Method mainMethod = mainClass.getMethod("main", mainArgs);
             assert((mainMethod.getModifiers() & Modifier.STATIC) != 0);
             assert(mainMethod.getReturnType() == void.class); 

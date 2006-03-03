@@ -20,12 +20,6 @@ public final class Main
     /** GoGui main function. */
     public static void main(String[] args)
     {
-        // Setting these Mac system properties here worked with older versions
-        // of Mac Java, for newer ones, they have to be set when starting the
-        // VM (see options in scripts and mac/Info.plist)
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-                           "GoGui");
-        System.setProperty("apple.awt.brushMetalLook", "true");
         GoGuiSettings settings;
         try
         {
