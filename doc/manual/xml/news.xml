@@ -216,21 +216,14 @@ NetGtp: New option -timeout
 </simpara>
 </listitem>
 <listitem>
-<para>
-TwoGtp:
-<itemizedlist>
-<listitem>
 <simpara>
-Remove option -estimate-score; use the new tool GtpStatistics instead
+TwoGtp: remove option -estimate-score; use the new tool GtpStatistics instead
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-Fix wrong cputimes
+TwoGtp: fix wrong cputimes
 </simpara>
-</listitem>
-</itemizedlist>
-</para>
 </listitem>
 <listitem>
 <simpara>
