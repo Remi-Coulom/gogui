@@ -93,8 +93,7 @@ class GameTreeNode
             graphics.fillOval(0, 0, size, size);
             drawText(graphics);
         }
-        if (m_node.getComment() != null
-            && ! m_node.getComment().trim().equals(""))
+        if (m_node.hasComment())
         {
             graphics.setColor(m_colorLightBlue);
             int y = size + (fullSize - size) / 4;

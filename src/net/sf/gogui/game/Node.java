@@ -436,6 +436,11 @@ public final class Node
         return m_extraInfo.m_value;
     }
 
+    public boolean hasComment()
+    {
+        return (m_comment != null);
+    }
+
     /** Check if node has setup or delete stones.
         @return true, if node has setup or delete stones.
     */
@@ -511,11 +516,13 @@ public final class Node
     }
 
     /** Store comment in this node.
-        @param comment The comment or null to delete comment.
+        @param comment The comment. If the parameter is null, empty or
+        contains only whitespaces, then the comment will be deleted from this
+        node.
     */
     public void setComment(String comment)
     {
-        if (comment == null)
+        if (comment == null || comment.trim().equals(""))
         {
             m_comment = null;
             return;
