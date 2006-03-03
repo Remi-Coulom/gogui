@@ -116,15 +116,15 @@ public final class GoGuiSettings
         m_gtpCommand = opt.getString("command", "");
         if (opt.contains("komi"))
             m_preferences.setDouble("komi", opt.getDouble("komi"));        
-        m_lookAndFeel = opt.getString("laf", "");
-        if (m_lookAndFeel.equals("gtk"))
+        m_lookAndFeel = opt.getString("laf", null);
+        if ("gtk".equals(m_lookAndFeel))
             m_lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-        else if (m_lookAndFeel.equals("motif"))
+        else if ("motif".equals(m_lookAndFeel))
             m_lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-        else if (m_lookAndFeel.equals("windows"))
+        else if ("windows".equals(m_lookAndFeel))
             m_lookAndFeel =
                 "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-        else if (m_lookAndFeel.equals("plasticxp"))
+        else if ("plasticxp".equals(m_lookAndFeel))
             m_lookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
         m_move = opt.getInteger("move", -1);
         if (opt.contains("size"))

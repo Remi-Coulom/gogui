@@ -20,7 +20,7 @@
 50 gogui_interrupt
 
 60 gogui_title
-#? [GtpDummy vs GNU Go]
+#? [GNU Go vs GtpDummy \(B\)]
 
 70 twogtp_black name
 #? [GtpDummy]

@@ -68,7 +68,19 @@ public final class Main
     {
         assert(! settings.m_noStartup);
         String lookAndFeel = settings.m_lookAndFeel;
-        if (! lookAndFeel.equals(""))
+        if (lookAndFeel == null)
+        {
+            try
+            {
+                lookAndFeel =
+                    "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
+                UIManager.setLookAndFeel(lookAndFeel);
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        else if (! lookAndFeel.equals(""))
         {
             try
             {

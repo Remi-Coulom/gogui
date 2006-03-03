@@ -192,7 +192,10 @@ Set the komi value.
 <listitem>
 <para>
 Set Swing look and feel.
-The name can be a full class name or one of the following shortcuts:
+The default is plasticxp, if com.jgoodies.looks.plastic.PlasticXPLookAndFeel
+is found in the classpath, otherwise the default look and feel.
+The name can be an empty string (for the default look and feel), a full class
+name, or one of the following shortcuts:
 <variablelist>
 <varlistentry>
 <term>motif</term>
@@ -219,7 +222,7 @@ com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 </listitem>
 </varlistentry>
 <varlistentry>
-<term>plasticxp (needs looks-2.0-rc.jar in same directory)</term>
+<term>plasticxp</term>
 <listitem>
 <simpara>
 com.jgoodies.looks.plastic.PlasticXPLookAndFeel
