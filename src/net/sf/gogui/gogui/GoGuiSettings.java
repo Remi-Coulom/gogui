@@ -73,7 +73,7 @@ public final class GoGuiSettings
             "fast",
             "help",
             "komi:",
-            "look:",
+            "laf:",
             "move:",
             "program:",
             "rules:",
@@ -116,7 +116,7 @@ public final class GoGuiSettings
         m_gtpCommand = opt.getString("command", "");
         if (opt.contains("komi"))
             m_preferences.setDouble("komi", opt.getDouble("komi"));        
-        m_lookAndFeel = opt.getString("look", "");
+        m_lookAndFeel = opt.getString("laf", "");
         if (m_lookAndFeel.equals("gtk"))
             m_lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
         else if (m_lookAndFeel.equals("motif"))
@@ -160,7 +160,7 @@ public final class GoGuiSettings
             "-gtpfile file   Send GTP file at startup\n" +
             "-help           Display this help and exit\n" +
             "-komi value     Set komi\n" +
-            "-look name      Set Swing look and feel\n" +
+            "-laf name       Set Swing look and feel\n" +
             "-move n         Load SGF file until move number\n" +
             "-program cmd    Go program to attach\n" +
             "-rules name     Use rules (chinese|japanese)\n" +
