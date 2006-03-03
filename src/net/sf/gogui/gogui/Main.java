@@ -9,6 +9,7 @@ import javax.swing.UIManager;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -68,7 +69,7 @@ public final class Main
     {
         assert(! settings.m_noStartup);
         String lookAndFeel = settings.m_lookAndFeel;
-        if (lookAndFeel == null)
+        if (lookAndFeel == null && ! Platform.isMac())
         {
             try
             {
