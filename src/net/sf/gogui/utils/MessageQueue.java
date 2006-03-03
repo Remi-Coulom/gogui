@@ -30,6 +30,14 @@ public class MessageQueue
         }
     }
 
+    /** Get mutex for locking from outside.
+        Locking from outside is necessary if unsynchronizedPeek is used.
+    */
+    public Object getMutex()
+    {
+        return m_mutex;
+    }
+
     public int getSize()
     {
         synchronized (m_mutex)

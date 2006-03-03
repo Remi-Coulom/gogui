@@ -839,7 +839,7 @@ public final class GtpClient
                 {
                     if (message.m_text != null)
                         buffer.append(message.m_text);
-                    synchronized (m_queue)
+                    synchronized (m_queue.getMutex())
                     {
                         message = (ReadMessage)m_queue.unsynchronizedPeek();
                         if (message != null && ! message.m_isError)
