@@ -29,7 +29,7 @@ public class GameInfo
 {
     public GameInfo(Clock clock)
     {
-        super(new GridLayout(0, 2, GuiUtils.SMALL_PAD, 0));
+        super(new GridLayout(0, 2, GuiUtils.SMALL_PAD, GuiUtils.SMALL_PAD));
         m_clock = clock;
         m_move = addEntry("To play:");
         m_number = addEntry("Moves:");
@@ -129,7 +129,6 @@ public class GameInfo
         add(label);
         JTextField entry = new JTextField(" ");
         entry.setHorizontalAlignment(SwingConstants.LEFT);
-        entry.setBorder(BorderFactory.createLoweredBevelBorder());
         entry.setEditable(false);
         add(entry);
         return entry;

@@ -43,7 +43,8 @@ public class ScoreDialog
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setResizable(false);
-        JPanel panelDetails = new JPanel(new GridLayout(0, 2, 0, 0));
+        JPanel panelDetails =
+            new JPanel(new GridLayout(0, 2, 0, GuiUtils.SMALL_PAD));
         m_territoryBlack = createEntry(panelDetails, "Territory Black:");
         m_territoryWhite = createEntry(panelDetails, "Territory White:");
         m_areaBlack = createEntry(panelDetails, "Area Black:");
@@ -137,7 +138,6 @@ public class ScoreDialog
         JTextField entry = new JTextField("        ");
         entry.setEditable(false);
         entry.setHorizontalAlignment(SwingConstants.LEFT);
-        entry.setBorder(BorderFactory.createLoweredBevelBorder());
         panel.add(entry);
         return entry;
     }
