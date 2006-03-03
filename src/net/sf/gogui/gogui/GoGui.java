@@ -258,7 +258,6 @@ public class GoGui
         }
         m_menuBar.setNormalMode();
         m_guiBoard.requestFocusInWindow();
-        setTitle("GoGui");
         if (time != null)
             m_timeSettings = TimeSettings.parse(time);
         Runnable callback = new Runnable()
