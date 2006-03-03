@@ -185,10 +185,10 @@ public final class AboutDialog
                 buffer.append("<br>");
                 buffer.append(info);
             }
-            buffer.append("</p>");
+            buffer.append("<br>");
         }
         Runtime runtime = Runtime.getRuntime();
-        buffer.append("<p><table align=\"center\" cellpadding=\"0\">" +
+        buffer.append("<table align=\"center\" cellpadding=\"0\">" +
                       "<tr><td>Total memory:</td><td align=\"right\">"
                       + runtime.totalMemory() + "</td></tr>" +
                       "<tr><td>Max memory:</td><td align=\"right\">"
