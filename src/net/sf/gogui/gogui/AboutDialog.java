@@ -160,7 +160,7 @@ public final class AboutDialog
         buffer.append("<p align=\"center\"><img src=\""
                       + getImage("java.png") + "\"></p>");
         if (name == null)
-            buffer.append("<p>Unknown Java VM</p>");
+            buffer.append("<p align=\"center\">Unknown Java VM</p>");
         else
         {
             buffer.append("<p align=\"center\"><b>");
@@ -187,6 +187,15 @@ public final class AboutDialog
             }
             buffer.append("</p>");
         }
+        Runtime runtime = Runtime.getRuntime();
+        buffer.append("<p><table align=\"center\" cellpadding=\"0\">" +
+                      "<tr><td>Total memory:</td><td align=\"right\">"
+                      + runtime.totalMemory() + "</td></tr>" +
+                      "<tr><td>Max memory:</td><td align=\"right\">"
+                      + runtime.maxMemory() + "</td></tr>" +
+                      "<tr><td>Free memory:</td><td align=\"right\">"
+                      + runtime.freeMemory() + "</td></tr>" +
+                      "</table></p>");
         return createPanel(buffer.toString());
     }
 
