@@ -130,6 +130,8 @@ public class TextViewer
         contentPane.add(panel, BorderLayout.CENTER);
         m_textPane = new JTextPane();
         StyledDocument doc = m_textPane.getStyledDocument();
+        while (text.charAt(text.length() - 1) == '\n')
+            text = text.substring(0, text.length() - 1);
         try
         {
             doc.insertString(0, text, null);
