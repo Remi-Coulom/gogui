@@ -737,6 +737,10 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <echo>OK</echo>
 </target>
 
+<target name="run" depends="gogui.jar" description="Run GoGui">
+<java jar="lib/gogui.jar" fork="true"/>
+</target>
+
 <target name="sgftotex.jar" depends="compile">
 <mkdir dir="lib"/>
 <jar destfile="lib/sgftotex.jar">
