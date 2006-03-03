@@ -81,27 +81,6 @@ public class GuiUtils
                               m_fillerDimension);
     }
 
-    /** Create a JLabel for info labels.
-        Uses JTextField font for label, because label font looks so ugly
-        on Linux.
-        Should only be used for labels for informational (non-editable) data.
-    */
-    public static JLabel createInfoLabel()
-    {
-        JLabel label = new JLabel();
-        if (s_textFieldFont != null)
-            label.setFont(s_textFieldFont);
-        return label;
-    }
-
-    /** @see #createInfoLabel() */
-    public static JLabel createInfoLabel(String text)
-    {
-        JLabel label = createInfoLabel();
-        label.setText(text);
-        return label;
-    }
-
     /** Create empty border with small padding.
         @see #SMALL_PAD
     */
@@ -126,11 +105,6 @@ public class GuiUtils
     public static int getDefaultMonoFontSize()
     {
         return m_defaultMonoFontSize;
-    }
-
-    public static Font getTextFieldFont()
-    {
-        return s_textFieldFont;
     }
 
     /** Check window for normal state.
@@ -277,12 +251,10 @@ public class GuiUtils
     static
     {
         Font textAreaFont = UIManager.getFont("TextArea.font");
-        Font textFieldFont = UIManager.getFont("TextField.font");
         // That is not correct, since Font.getSize does not return pixels
         // Should query some default Graphics device
         m_defaultMonoFontSize =
             textAreaFont == null ? 10 : textAreaFont.getSize();
-        s_textFieldFont = textFieldFont;
     }
 
     private static final int m_defaultMonoFontSize;
@@ -301,8 +273,6 @@ public class GuiUtils
         new Dimension(SMALL_PAD, SMALL_PAD);
 
     private static URL s_iconURL;
-
-    private static Font s_textFieldFont;
 }
 
 //----------------------------------------------------------------------------

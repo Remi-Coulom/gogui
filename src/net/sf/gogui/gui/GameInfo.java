@@ -124,8 +124,7 @@ public class GameInfo
 
     private JTextField addEntry(String text)
     {
-        JLabel label = GuiUtils.createInfoLabel();
-        label.setText(text);
+        JLabel label = new JLabel(text);
         label.setHorizontalAlignment(SwingConstants.LEFT);
         add(label);
         JTextField entry = new JTextField(" ");
