@@ -2741,8 +2741,17 @@ public class GoGui
         else
             newGameFile(m_boardSize, m_move);
         m_toolBar.enableAll(true, m_currentNode);
+        restoreMainWindow();
+        SplashScreen.close();
+        setVisible(true);
         if (m_program != null)
+        {
+            // Attaching a program can take some time, so we want to make
+            // the window visible, but not draw the window content yet
+            getLayeredPane().setVisible(false);
             attachProgram(m_program);
+            getLayeredPane().setVisible(true);
+        }
         setTitle();
         if (m_commandThread == null
             || (! m_computerBlack && ! m_computerWhite))
@@ -2765,9 +2774,6 @@ public class GoGui
             m_menuBar.setShowToolbar(false);
             showToolbar();
         }
-        restoreMainWindow();
-        SplashScreen.close();
-        setVisible(true);
         // Children dialogs should be set visible after main window, otherwise
         // they get minimize window buttons and a taskbar entry (KDE 3.4)
         if (m_gtpShell != null && m_prefs.getBool("show-gtpshell"))
