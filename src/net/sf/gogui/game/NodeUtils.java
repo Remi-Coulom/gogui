@@ -647,6 +647,7 @@ public final class NodeUtils
         averageChildren /= numberNodes;
         averageChildrenInner /= Math.max(numberInner, 1);
         NumberFormat format = StringUtils.getNumberFormat(3);
+        format.setMinimumFractionDigits(3);
         StringBuffer buffer = new StringBuffer();
         appendInfo(buffer, "Nodes", numberNodes);
         appendInfo(buffer, "Terminal", numberTerminal);
