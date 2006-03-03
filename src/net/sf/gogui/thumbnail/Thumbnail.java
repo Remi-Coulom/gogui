@@ -32,11 +32,13 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtils;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.sgf.SgfReader;
+import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -128,11 +130,6 @@ public final class Thumbnail
             log("No MD5 message digest found");
             return false;
         }
-        catch (URISyntaxException e)
-        {
-            log(e.getMessage());
-            return false;
-        }
         catch (SgfReader.SgfError e)
         {
             log("SGF error: " + file);
@@ -186,7 +183,7 @@ public final class Thumbnail
         net.sf.gogui.game.Node node = tree.getRoot();
         while (node != null)
         {
-            moves.addAll(node.getAllAsMoves());
+            moves.addAll(NodeUtils.getAllAsMoves(node));
             node = node.getChild();
         }
         //if (m_verbose)
