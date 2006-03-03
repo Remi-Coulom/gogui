@@ -63,6 +63,7 @@ public final class Main
     {
         assert(! settings.m_noStartup);
         String lookAndFeel = settings.m_lookAndFeel;
+        UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
         if (lookAndFeel == null && ! Platform.isMac())
         {
             try
