@@ -11,6 +11,17 @@
 <itemizedlist>
 <listitem>
 <simpara>
+GoGui: new default look and feel PlasticXP from jgoodies.com on Linux
+and Windows
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: performance improvements in communication with the Go program
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GoGui: new extension command play_sequence is used if supported by the Go
 program
 </simpara>
@@ -37,7 +48,7 @@ for load or save)
 </listitem>
 <listitem>
 <para>
-GtpStatistics: Make it work with protocol version 2 programs; new option
+GtpStatistics: make it work with protocol version 2 programs; new option
 -setup
 </para>
 </listitem>
@@ -58,12 +69,12 @@ TwoGtp: new option -time
 <itemizedlist>
 <listitem>
 <para>
-TwoGtp: Fix game CPU time measurement
+TwoGtp: fix game CPU time measurement
 </para>
 </listitem>
 <listitem>
 <para>
-TwoGtp, GtpRegress: Avoid locale-dependent formatting of some numbers in
+TwoGtp, GtpRegress: avoid locale-dependent formatting of some numbers in
 output files which broke the HTML report generation.
 </para>
 </listitem>
@@ -197,22 +208,22 @@ a command to test (simply ignore the pattern)
 </listitem>
 <listitem>
 <simpara>
-GtpAdapter: Fix missing clear_board commands if -emuloadsgf is used
+GtpAdapter: fix missing clear_board commands if -emuloadsgf is used
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GtpDummy: New option -srand
+GtpDummy: new option -srand
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GtpTerminal: Fix exception if empty line is entered
+GtpTerminal: fix exception if empty line is entered
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-NetGtp: New option -timeout
+NetGtp: new option -timeout
 </simpara>
 </listitem>
 <listitem>
@@ -551,12 +562,12 @@ Lots of bugfixes
 <itemizedlist>
 <listitem>
 <simpara>
-TwoGtp: Fix NullPointerException if no komi option was used
+TwoGtp: fix NullPointerException if no komi option was used
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-GoGui: Fix NullPointerException after leaving setup mode
+GoGui: fix NullPointerException after leaving setup mode
 </simpara>
 </listitem>
 <listitem>
