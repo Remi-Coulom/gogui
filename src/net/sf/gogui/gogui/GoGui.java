@@ -183,7 +183,6 @@ public class GoGui
         splitPaneInputMap.put(KeyStroke.getKeyStroke("F8"), new Object());
         m_splitPane.setResizeWeight(0.85);
         m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
-        
         WindowAdapter windowAdapter = new WindowAdapter()
             {
                 public void windowClosing(WindowEvent event)
@@ -3043,13 +3042,15 @@ public class GoGui
     private void restoreMainWindow()
     {
         Session.restoreLocation(this, m_prefs, "window-gogui", m_boardSize);
+        Dimension preferredCommentSize = null;
+        int fieldSize = -1;
         try
         {
             String name = "fieldsize-" + m_boardSize;
             if (m_prefs.contains(name))
             {
                 String value = m_prefs.getString(name);
-                int fieldSize = Integer.parseInt(value);
+                fieldSize = Integer.parseInt(value);
                 m_guiBoard.setPreferredFieldSize(new Dimension(fieldSize,
                                                                fieldSize));
             }
@@ -3060,7 +3061,8 @@ public class GoGui
                     = StringUtils.splitArguments(m_prefs.getString(name));
                 int width = Integer.parseInt(args[0]);                
                 int height = Integer.parseInt(args[1]);
-                m_comment.setPreferredSize(new Dimension(width, height));
+                preferredCommentSize = new Dimension(width, height);
+                m_comment.setPreferredSize(preferredCommentSize);
             }
         }
         catch (NumberFormatException e)
@@ -3068,6 +3070,17 @@ public class GoGui
         }
         m_splitPane.resetToPreferredSizes();
         pack();
+        // To avoid smallish empty borders (less than one field size) on top
+        // and bottom borders of the board we adjust the comment size slightly
+        // if necessary
+        if (m_infoPanel.getHeight() - m_guiBoard.getHeight() < 2 * fieldSize
+            && preferredCommentSize != null && fieldSize > 0)
+        {
+            preferredCommentSize.height -= 2 * fieldSize;
+            m_comment.setPreferredSize(preferredCommentSize);
+            m_splitPane.resetToPreferredSizes();
+            pack();
+        }
     }
 
     private void restoreSize(Window window, String name)
