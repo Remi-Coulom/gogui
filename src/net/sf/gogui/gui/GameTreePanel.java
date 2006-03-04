@@ -534,10 +534,12 @@ public class GameTreePanel
     private boolean ensureVisible(Node node)
     {
         boolean changed = false;
+        boolean showSubtreeSizes = getShowSubtreeSizes();
         while (node != null)
         {
             Node father = node.getFather();
-            if (father != null && father.getChild() != node)
+            if (father != null
+                && (father.getChild() != node || showSubtreeSizes))
                 if (m_expanded.add(father))
                     changed = true;
             node = father;
