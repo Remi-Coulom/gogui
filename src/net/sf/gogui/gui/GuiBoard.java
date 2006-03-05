@@ -193,6 +193,15 @@ public final class GuiBoard
         return m_board;
     }
 
+    /** If the JComponent is needed.
+        @todo Should be fixed, GuiField is not for public access.
+    */
+    public GuiField getField(GoPoint p)
+    {
+        assert(p != null);
+        return m_field[p.getX()][p.getY()];
+    }
+
     public Dimension getFieldSize()
     {
         int width = m_field[0][0].getWidth();
@@ -836,12 +845,6 @@ public final class GuiBoard
                               size, size);
         }
         graphics.setPaintMode();
-    }
-
-    private GuiField getField(GoPoint p)
-    {
-        assert(p != null);
-        return m_field[p.getX()][p.getY()];
     }
 
     private void setColor(GoPoint p, GoColor color)

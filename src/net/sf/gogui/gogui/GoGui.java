@@ -787,7 +787,9 @@ public class GoGui
             m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
             return;
         }
-        else if (! modifiedSelect)
+        else if (modifiedSelect)
+            contextMenu(p, m_guiBoard.getField(p));
+        else
         {
             if (m_board.isSuicide(p, m_board.getToMove())
                 && ! showQuestion("Play suicide?"))
