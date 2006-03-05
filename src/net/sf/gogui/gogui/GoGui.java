@@ -704,7 +704,9 @@ public class GoGui
     {
         if (isCommandInProgress())
             return;
-        if (m_setupMode)
+        if (m_setupMode
+            || (m_analyzeCommand != null
+                && m_analyzeCommand.needsPointListArg()))
         {
             fieldClicked(point, true);
             return;
@@ -3478,7 +3480,7 @@ public class GoGui
     private void showStatusSelectPointList()
     {
         showStatus("Select points for " + m_analyzeCommand.getLabel()
-                   + " (last point with right button or Ctrl key down)");
+                   + " (last point with right button or modifier key down)");
     }
 
     private void showStatusSelectTarget()
