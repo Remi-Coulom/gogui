@@ -104,7 +104,7 @@ public class GuiUtils
     */
     public static int getDefaultMonoFontSize()
     {
-        return m_defaultMonoFontSize;
+        return m_monospacedFont.getSize();
     }
 
     /** Check window for normal state.
@@ -167,9 +167,8 @@ public class GuiUtils
 
     public static void setMonospacedFont(JComponent component)
     {
-        Font font = Font.decode("Monospaced-12");
-        if (font != null)
-            component.setFont(font);
+        if (m_monospacedFont != null)
+            component.setFont(m_monospacedFont);
     }
 
     static
@@ -258,13 +257,19 @@ public class GuiUtils
     static
     {
         Font textAreaFont = UIManager.getFont("TextArea.font");
-        // That is not correct, since Font.getSize does not return pixels
-        // Should query some default Graphics device
-        m_defaultMonoFontSize =
-            textAreaFont == null ? 10 : textAreaFont.getSize();
+        if (textAreaFont == null)
+        {
+            m_monospacedFont = Font.decode("Monospaced");
+        }
+        else
+        {
+            int size = Math.max(11, textAreaFont.getSize());
+            m_monospacedFont =
+                new Font("Monospaced", Font.PLAIN, size);
+        }
     }
 
-    private static final int m_defaultMonoFontSize;
+    private static final Font m_monospacedFont;
 
     private static final Border m_emptyBorder =
         BorderFactory.createEmptyBorder(PAD, PAD, PAD, PAD);
