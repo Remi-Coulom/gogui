@@ -148,11 +148,6 @@ public class GameTreePanel
         return m_nodeSize;
     }
     
-    public Dimension getPreferredNodeSize()
-    {
-        return m_preferredNodeSize;
-    }
-
     public Dimension getPreferredScrollableViewportSize()
     {
         return new Dimension(m_nodeFullSize * 10, m_nodeFullSize * 3);
@@ -473,7 +468,8 @@ public class GameTreePanel
         if (node.getMove() != null)
             ++moveNumber;
         GameTreeNode gameNode =
-            new GameTreeNode(node, moveNumber, this, m_mouseListener, m_font);
+            new GameTreeNode(node, moveNumber, this, m_mouseListener, m_font,
+                             m_preferredNodeSize);
         m_map.put(node, gameNode);
         add(gameNode);
         putConstraint(father, gameNode, dx, dy);
@@ -539,7 +535,8 @@ public class GameTreePanel
         {
             Node father = node.getFather();
             if (father != null
-                && (father.getChild() != node || showSubtreeSizes))
+                && (father.getChild() != node
+                    || (showSubtreeSizes && father.getNumberChildren() > 1)))
                 if (m_expanded.add(father))
                     changed = true;
             node = father;

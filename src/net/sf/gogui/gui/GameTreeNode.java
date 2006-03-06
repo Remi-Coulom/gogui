@@ -22,7 +22,8 @@ class GameTreeNode
 {
     public GameTreeNode(Node node, int moveNumber,
                         GameTreePanel gameTreePanel,
-                        MouseListener mouseListener, Font font)
+                        MouseListener mouseListener, Font font,
+                        Dimension size)
     {
         m_gameTreePanel = gameTreePanel;
         m_node = node;
@@ -33,16 +34,12 @@ class GameTreeNode
         setFocusTraversalKeysEnabled(false);
         if (font != null)
             setFont(font);
+        setPreferredSize(size);
     }
 
     public Node getNode()
     {
         return m_node;
-    }
-
-    public Dimension getPreferredSize()
-    {
-        return m_gameTreePanel.getPreferredNodeSize();
     }
 
     public void paintComponent(Graphics graphics)
