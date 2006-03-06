@@ -31,9 +31,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -84,7 +87,6 @@ class GtpShellText
         Style invalid = addStyle("invalid", def);
         StyleConstants.setForeground(invalid, Color.white);
         StyleConstants.setBackground(invalid, Color.red);
-        initCaret();
         setEditable(false);
     }
 
@@ -167,13 +169,6 @@ class GtpShellText
     {
         int length = getStyledDocument().getLength();
         setCaretPosition(length);
-        try
-        {
-            scrollRectToVisible(modelToView(length));
-        }
-        catch (BadLocationException e)
-        {
-        }
     }
 
     public void setTimeStamp(boolean enable)
@@ -218,10 +213,8 @@ class GtpShellText
         try
         {
             int length = doc.getLength();
-            boolean visible = isVisible(length);
             doc.insertString(length, text, s);
-            if (visible)
-                setPositionToEnd();
+            setPositionToEnd();
         }
         catch (BadLocationException e)
         {
@@ -241,90 +234,6 @@ class GtpShellText
         long timeMillis = System.currentTimeMillis();
         double diff = (float)(timeMillis - m_startTime) / 1000;
         appendText(Clock.getTimeString(diff, -1) + " ", "time");
-    }
-
-    /** Try to set the default caret with update policy NEVER_UPDATE.
-        Uses reflection API, because setUpdatePolicy(NEVER_UPDATE)
-        is not available on Java 1.4
-    */
-    private void initCaret()
-    {
-        DefaultCaret caret = new DefaultCaret();
-        Class classCaret;
-        try
-        {
-            classCaret = Class.forName("javax.swing.text.DefaultCaret");
-        }
-        catch (ClassNotFoundException e)
-        {
-            assert(false);
-            return;
-        }        
-        Field field;
-        try
-        {
-            field = classCaret.getField("NEVER_UPDATE");
-        }
-        catch (NoSuchFieldException e)
-        {
-            return;
-        }        
-        assert(Modifier.isStatic(field.getModifiers()));
-        int neverUpdate;
-        try
-        {
-            neverUpdate = field.getInt(caret);
-        }
-        catch (IllegalAccessException e)
-        {
-            assert(false);
-            return;
-        }
-        Class [] args = new Class[1];
-        args[0] = int.class;
-        Method method;
-        try
-        {
-            method = classCaret.getMethod("setUpdatePolicy", args);
-        }
-        catch (NoSuchMethodException e)
-        {
-            assert(false);
-            return;
-        }
-        assert(method.getReturnType() == void.class);
-        Object[] objArgs = new Object[1];
-        objArgs[0] = new Integer(neverUpdate);
-        try
-        {
-            method.invoke(caret, objArgs);
-        }
-        catch (InvocationTargetException e)
-        {
-            assert(false);
-            return;
-        }
-        catch (IllegalAccessException e)
-        {
-            assert(false);
-            return;
-        }
-        setCaret(caret);
-    }
-
-    private boolean isVisible(int pos)
-    {
-        try
-        {
-            Rectangle rect = modelToView(pos);
-            Rectangle visibleRect = getVisibleRect();
-            boolean result = visibleRect.contains(rect.x, rect.y);
-            return result;
-        }
-        catch (BadLocationException e)
-        {
-            return true;
-        }
     }
 
     private void truncateHistory()
@@ -390,6 +299,8 @@ public class GtpShell
         if (command.equals("analyze"))
             m_callback.cbAnalyze();
         else if (command.equals("comboBoxEdited"))
+            comboBoxEdited();
+        else if (command.equals("run"))
             comboBoxEdited();
         else if (command.equals("close"))
             setVisible(false);
@@ -527,7 +438,7 @@ public class GtpShell
         {
             if (c.startsWith("boardsize ")
                 || c.startsWith("black ")
-                || c.startsWith("clear_board ")
+                || c.equals("clear_board")
                 || c.startsWith("genmove ")
                 || c.startsWith("genmove_black ")
                 || c.startsWith("genmove_cleanup ")
@@ -734,6 +645,8 @@ public class GtpShell
 
     private Dimension m_finalSize;
 
+    private JButton m_runButton;
+
     private JTextField m_textField;
 
     private JComboBox m_comboBox;
@@ -829,7 +742,10 @@ public class GtpShell
 
     private void comboBoxEdited()
     {
-        String command = m_comboBox.getSelectedItem().toString();        
+        Object selectedItem = m_comboBox.getSelectedItem();
+        if (selectedItem == null)
+            return;
+        String command = selectedItem.toString();        
         if (command.trim().equals(""))
             return;
         send(command, null, false);
@@ -845,6 +761,8 @@ public class GtpShell
     private JPanel createCommandInput()
     {
         JPanel panel = new JPanel(new BorderLayout());
+        JPanel innerPanel = new JPanel(new BorderLayout());
+        panel.add(innerPanel);
         m_comboBox = new JComboBox();
         m_editor = m_comboBox.getEditor();
         m_textField = (JTextField)m_editor.getEditorComponent();
@@ -886,7 +804,22 @@ public class GtpShell
                     m_textField.requestFocusInWindow();
                 }
             });
-        panel.add(m_comboBox);
+        innerPanel.add(m_comboBox);
+        m_runButton = new JButton();
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        URL url =
+            classLoader.getResource("net/sf/gogui/images/key_enter.png");
+        if (url == null)
+            m_runButton.setText("Run");
+        else
+        {
+            ImageIcon imageIcon = new ImageIcon(url, "Run");
+            m_runButton.setIcon(imageIcon);
+        }
+        m_runButton.setBorder(GuiUtils.createSmallEmptyBorder());
+        m_runButton.setActionCommand("run");
+        m_runButton.addActionListener(this);
+        innerPanel.add(m_runButton, BorderLayout.EAST);
         // Workaround for Java 1.4.1 on Mac OS X add some empty space
         // so that combobox does not overlap the window resize widget
         if (Platform.isMac())
