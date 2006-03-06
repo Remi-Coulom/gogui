@@ -288,6 +288,30 @@ public class GameTreePanel
         }
     }
 
+    /** Faster than update if a new node was added as the first child. */
+    public void addNewSingleChild(Node node)
+    {
+        assert(node.getNumberChildren() == 0);
+        Node father = node.getFather();
+        assert(father != null);
+        assert(father.getNumberChildren() == 1);
+        GameTreeNode fatherGameNode = getGameTreeNode(father);
+        assert(! isExpanded(father));
+        int moveNumber = NodeUtils.getMoveNumber(node);
+        GameTreeNode gameNode =
+            new GameTreeNode(node, moveNumber, this, m_mouseListener, m_font,
+                             m_preferredNodeSize);
+        m_map.put(node, gameNode);
+        add(gameNode);
+        putConstraint(fatherGameNode, gameNode, m_nodeFullSize, 0);
+        gameNode.setLocation(fatherGameNode.getX() + m_nodeFullSize,
+                             fatherGameNode.getY());
+        gameNode.setSize(m_nodeFullSize, m_nodeFullSize);
+        m_maxX = Math.max(fatherGameNode.getX() + 2 * m_nodeFullSize, m_maxX);
+        setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + m_margin,
+                                       m_maxY + m_nodeFullSize + m_margin));
+    }
+
     public void update(GameTree gameTree, Node currentNode)
     {
         assert(currentNode != null);

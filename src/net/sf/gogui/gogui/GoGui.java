@@ -2358,7 +2358,14 @@ public class GoGui
             boolean doCheckComputerMove
                 = (! m_isSingleMove
                    && ! (isComputerBoth() && m_interruptComputerBoth));
-            boardChangedBegin(doCheckComputerMove, true);
+            boolean gameTreeChanged = true;
+            if (m_currentNode.getFather().getNumberChildren() == 1)
+            {
+                if (m_gameTreeViewer != null)
+                    m_gameTreeViewer.addNewSingleChild(m_currentNode);
+                gameTreeChanged = false;
+            }
+            boardChangedBegin(doCheckComputerMove, gameTreeChanged);
         }
         catch (GtpError e)
         {
@@ -2692,7 +2699,15 @@ public class GoGui
                 m_lostOnTimeShown = true;
             }
             m_resigned = false;
-            boardChangedBegin(true, newNodeCreated);
+            boolean gameTreeChanged = newNodeCreated;
+            if (newNodeCreated
+                && m_currentNode.getFather().getNumberChildren() == 1)
+            {
+                if (m_gameTreeViewer != null)
+                    m_gameTreeViewer.addNewSingleChild(m_currentNode);
+                gameTreeChanged = false;
+            }
+            boardChangedBegin(true, gameTreeChanged);
         }
         catch (GtpError e)
         {

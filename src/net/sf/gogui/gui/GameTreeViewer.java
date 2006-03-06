@@ -68,6 +68,11 @@ public class GameTreeViewer
         pack();
     }
 
+    public void addNewSingleChild(Node node)
+    {
+        m_panel.addNewSingleChild(node);
+    }
+
     public void redrawCurrentNode()
     {
         m_panel.redrawCurrentNode();
