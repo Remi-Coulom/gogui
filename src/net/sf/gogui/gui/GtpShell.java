@@ -397,6 +397,7 @@ public class GtpShell
     public void setCommandInProgess(boolean commandInProgess)
     {
         m_comboBox.setEnabled(! commandInProgess);
+        m_runButton.setEnabled(! commandInProgess);
         if (! commandInProgess)
         {
             m_comboBox.requestFocusInWindow();
