@@ -87,7 +87,14 @@ public final class Clock
         long seconds = time;
         if (hours > 0)
         {
-            buffer.append(hours);
+            if (hours > 9999)
+                // Extremely large numbers are like a problem in
+                // Date.getTime(), as it can happen when running in the
+                // netbeans profiler, and we don't want extremly long time
+                // strings to change the layout of the time label
+                buffer.append(">9999");
+            else
+                buffer.append(hours);
             buffer.append(":");
         }
         if (minutes >= 10)
