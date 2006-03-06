@@ -222,7 +222,7 @@ public final class GameInfoDialog
             m_preByoyomi.setText(Integer.toString(preByoyomi));
         }
         panel.add(m_preByoyomi);
-        panel.add(new JLabel("min +"));
+        panel.add(new JLabel(" min + "));
         m_byoyomi = new JTextField(2);
         m_byoyomi.setHorizontalAlignment(JTextField.RIGHT);
         if (timeSettings != null && timeSettings.getUseByoyomi())
@@ -231,7 +231,7 @@ public final class GameInfoDialog
             m_byoyomi.setText(Integer.toString(byoyomi));
         }
         panel.add(m_byoyomi);
-        panel.add(new JLabel("min / "));
+        panel.add(new JLabel(" min / "));
         m_byoyomiMoves = new JTextField(2);
         m_byoyomiMoves.setHorizontalAlignment(JTextField.RIGHT);
         if (timeSettings != null && timeSettings.getUseByoyomi())
@@ -240,7 +240,7 @@ public final class GameInfoDialog
             m_byoyomiMoves.setText(Integer.toString(byoyomiMoves));
         }
         panel.add(m_byoyomiMoves);
-        panel.add(new JLabel("moves"));
+        panel.add(new JLabel(" moves"));
         m_panelRight.add(panel);
     }
 
