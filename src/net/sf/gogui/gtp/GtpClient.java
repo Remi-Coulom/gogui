@@ -892,19 +892,17 @@ public final class GtpClient
             line = readLine(timeout);
         }
         boolean error = (line.charAt(0) != '=');
-        if (m_callback != null)
-            m_callback.receivedResponse(error, response.toString());
         boolean done = false;
         while (! done)
         {
             line = readLine(timeout);
-            done = line.equals("");
+            done =line.equals("");
             response.append(line);
             response.append("\n");
-            if (m_callback != null)
-                m_callback.receivedResponse(error, line + "\n");
         }
         m_fullResponse = response.toString();
+        if (m_callback != null)
+            m_callback.receivedResponse(error, m_fullResponse);
         assert(response.length() >= 3);            
         int index = response.indexOf(" ");
         if (index < 0)
