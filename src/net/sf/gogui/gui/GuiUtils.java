@@ -167,7 +167,7 @@ public class GuiUtils
 
     public static void setMonospacedFont(JComponent component)
     {
-        Font font = Font.getFont("Monospaced");
+        Font font = Font.decode("Monospaced-12");
         if (font != null)
             component.setFont(font);
     }
