@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
@@ -761,8 +762,9 @@ public class GtpShell
     private JPanel createCommandInput()
     {
         JPanel panel = new JPanel(new BorderLayout());
-        JPanel innerPanel = new JPanel(new BorderLayout());
-        panel.add(innerPanel);
+        JPanel buttonPanel =
+            new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        panel.add(buttonPanel, BorderLayout.EAST);
         m_comboBox = new JComboBox();
         m_editor = m_comboBox.getEditor();
         m_textField = (JTextField)m_editor.getEditorComponent();
@@ -804,11 +806,11 @@ public class GtpShell
                     m_textField.requestFocusInWindow();
                 }
             });
-        innerPanel.add(m_comboBox);
+        panel.add(m_comboBox);
         m_runButton = new JButton();
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         URL url =
-            classLoader.getResource("net/sf/gogui/images/key_enter.png");
+            classLoader.getResource("net/sf/gogui/images/exec.png");
         if (url == null)
             m_runButton.setText("Run");
         else
@@ -816,10 +818,10 @@ public class GtpShell
             ImageIcon imageIcon = new ImageIcon(url, "Run");
             m_runButton.setIcon(imageIcon);
         }
-        m_runButton.setBorder(GuiUtils.createSmallEmptyBorder());
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
-        innerPanel.add(m_runButton, BorderLayout.EAST);
+        buttonPanel.add(GuiUtils.createFiller());
+        buttonPanel.add(m_runButton);
         // Workaround for Java 1.4.1 on Mac OS X add some empty space
         // so that combobox does not overlap the window resize widget
         if (Platform.isMac())
@@ -827,7 +829,7 @@ public class GtpShell
             Dimension dimension = new Dimension(20, 1);
             Box.Filler filler =
                 new Box.Filler(dimension, dimension, dimension);
-            panel.add(filler, BorderLayout.EAST);
+            buttonPanel.add(filler);
         }
         return panel;
     }
