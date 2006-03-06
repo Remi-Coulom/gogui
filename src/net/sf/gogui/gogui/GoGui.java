@@ -1891,7 +1891,7 @@ public class GoGui
         if (m_needsSave && ! checkSaveGame())
             return;
         m_prefs.setInt("boardsize", size);
-        fileModified();
+        fileInvalid();
         newGame(size);
         m_clock.startMove(GoColor.BLACK);
         updateMenuBar();
@@ -2351,7 +2351,6 @@ public class GoGui
                 m_currentNodeExecuted = 1;
                 if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
-                fileModified();
                 m_resigned = false;
             }
             m_clock.startMove(m_board.getToMove());
@@ -2496,6 +2495,7 @@ public class GoGui
             return;
         m_currentNode.setLabel(point, value);
         m_guiBoard.setLabel(point, value);
+        setNeedsSave(true);
         updateBoard();
         m_guiBoard.repaint();
     }
@@ -2579,7 +2579,7 @@ public class GoGui
         return true;
     }
 
-    private void fileModified()
+    private void fileInvalid()
     {
         if (m_loadedFile == null)
             return;
@@ -2943,6 +2943,7 @@ public class GoGui
             m_guiBoard.setMarkSquare(point, mark);
         else if (type == MarkType.TRIANGLE)
             m_guiBoard.setMarkTriangle(point, mark);        
+        setNeedsSave(true);
         updateBoard();
         m_guiBoard.repaint();
     }
@@ -3390,7 +3391,7 @@ public class GoGui
         }
         m_currentNode.setPlayer(toMove);
         executeRoot();
-        fileModified();
+        fileInvalid();
         updateGameInfo(true);
         boardChangedBegin(false, false);
     }
