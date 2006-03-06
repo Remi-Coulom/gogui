@@ -122,10 +122,7 @@ public class Comment
     public void setFontFixed(boolean fixed)
     {
         if (fixed)
-        {
-            int fontSize = GuiUtils.getDefaultMonoFontSize();
-            m_textPane.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
-        }
+            GuiUtils.setMonospacedFont(m_textPane);
         else
             m_textPane.setFont(UIManager.getFont("TextArea.font"));
     }

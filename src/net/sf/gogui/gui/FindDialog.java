@@ -157,8 +157,7 @@ public class FindDialog
                 }
             };
         m_textField.addKeyListener(keyListener);
-        int fontSize = GuiUtils.getDefaultMonoFontSize();
-        m_comboBox.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
+        GuiUtils.setMonospacedFont(m_comboBox);
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
         outerPanel.add(innerPanel, BorderLayout.NORTH);
         return outerPanel;

@@ -14,6 +14,7 @@ import java.net.URL;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -162,6 +163,13 @@ public class GuiUtils
         URL url = s_iconURL;
         if (url != null)
             frame.setIconImage(new ImageIcon(url).getImage());
+    }
+
+    public static void setMonospacedFont(JComponent component)
+    {
+        Font font = Font.getFont("Monospaced");
+        if (font != null)
+            component.setFont(font);
     }
 
     static

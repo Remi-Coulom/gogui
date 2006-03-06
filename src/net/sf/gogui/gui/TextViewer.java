@@ -140,8 +140,7 @@ public class TextViewer
         {
             assert(false);
         }
-        int fontSize = GuiUtils.getDefaultMonoFontSize();
-        m_textPane.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
+        GuiUtils.setMonospacedFont(m_textPane);
         JScrollPane scrollPane = new JScrollPane(m_textPane);
         panel.add(scrollPane, BorderLayout.CENTER);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

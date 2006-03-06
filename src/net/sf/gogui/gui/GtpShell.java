@@ -71,9 +71,7 @@ class GtpShellText
         m_historyMin = historyMin;
         m_historyMax = historyMax;
         m_highlight = true;
-        int fontSize = GuiUtils.getDefaultMonoFontSize();
-        Font font = new Font("Monospaced", Font.PLAIN, fontSize);
-        setFont(font);
+        GuiUtils.setMonospacedFont(this);
         StyleContext context = StyleContext.getDefaultStyleContext();
         Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
         StyleConstants.setLineSpacing(def, 0f);

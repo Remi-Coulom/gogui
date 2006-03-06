@@ -180,8 +180,7 @@ public class SelectProgram
                 }
             };
         m_textField.addKeyListener(keyListener);
-        int fontSize = GuiUtils.getDefaultMonoFontSize();
-        m_comboBox.setFont(new Font("Monospaced", Font.PLAIN, fontSize));
+        GuiUtils.setMonospacedFont(m_comboBox);
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
         JButton button =
             new ImageButton("net/sf/gogui/images/fileopen.png", "Browse",
