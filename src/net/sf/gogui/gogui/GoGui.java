@@ -1646,9 +1646,9 @@ public class GoGui
             String title = FileUtils.removeExtension(new File(file.getName()),
                                                      "tex");
             new TexWriter(title, out, m_board, false,
-                          m_guiBoard.getStrings(),
-                          m_guiBoard.getMarkSquare(),
-                          m_guiBoard.getSelects());
+                          GuiBoardUtils.getLabels(m_guiBoard),
+                          GuiBoardUtils.getMarkSquare(m_guiBoard),
+                          GuiBoardUtils.getSelects(m_guiBoard));
         }
         catch (FileNotFoundException e)
         {
@@ -2697,6 +2697,7 @@ public class GoGui
         if (size != m_boardSize)
         {
             m_boardSize = size;
+            m_board.initSize(size);
             m_guiBoard.initSize(size);
             m_guiBoard.setShowGrid(m_menuBar.getShowGrid());
             restoreMainWindow();

@@ -67,6 +67,7 @@ public final class GuiBoard
         initSize(m_board.getSize());
     }
 
+    /** Clear everything but stones. */
     public void clearAll()
     {
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
@@ -147,15 +148,15 @@ public final class GuiBoard
             m_listener.fieldClicked(p, modifiedSelect);
     }
 
-    public Board getBoard()
+    public int getBoardSize()
     {
-        return m_board;
+        return m_size;
     }
 
     /** If the JComponent is needed.
         @todo Should be fixed, GuiField is not for public access.
     */
-    public GuiField getField(GoPoint p)
+    private GuiField getField(GoPoint p)
     {
         assert(p != null);
         return m_field[p.getX()][p.getY()];
@@ -201,19 +202,6 @@ public final class GuiBoard
         return getField(point).getMarkTriangle();
     }
 
-    public boolean[][] getMarkSquare()
-    {
-        int size = m_board.getSize();
-        boolean[][] result = new boolean[size][size];
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint point = m_board.getPoint(i);
-            GuiField field = getField(point);
-            result[point.getX()][point.getY()] = field.getMarkSquare();
-        }
-        return result;
-    }
-
     public Dimension getMinimumFieldSize()
     {
         return m_minimumFieldSize;
@@ -224,33 +212,14 @@ public final class GuiBoard
         return m_preferredFieldSize;
     }
 
-    public boolean[][] getSelects()
+    public boolean getSelect(GoPoint point)
     {
-        int size = m_board.getSize();
-        boolean[][] result = new boolean[size][size];
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint point = m_board.getPoint(i);
-            result[point.getX()][point.getY()] = getField(point).getSelect();
-        }
-        return result;
+        return getField(point).getSelect();
     }
 
     public boolean getShowCursor()
     {
         return m_showCursor;
-    }
-
-    public String[][] getStrings()
-    {
-        int size = m_board.getSize();
-        String[][] result = new String[size][size];
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint point = m_board.getPoint(i);
-            result[point.getX()][point.getY()] = getField(point).getString();
-        }
-        return result;
     }
 
     public void initFocus()
@@ -265,19 +234,96 @@ public final class GuiBoard
         }
         else if (m_board.getInternalNumberMoves() == 0)
         {
-            int size = m_board.getSize();
-            if (size > 0)
+            if (m_size > 0)
             {
                 m_focusPoint = null;
-                setFocusPoint(GoPoint.create(size / 2, size / 2));
+                setFocusPoint(GoPoint.create(m_size / 2, m_size / 2));
             }
         }
     }
 
     public void initSize(int size)
     {
-        m_board.initSize(size);
-        init();
+        m_size = size;
+        m_field = new GuiField[size][size];
+        removeAll();
+        setLayout(new SquareLayout());
+        m_panel = new BoardPanel();
+        add(m_panel);
+        m_panel.requestFocusInWindow();
+        KeyAdapter keyAdapter = new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent event)
+                {
+                    GuiBoard.this.keyPressed(event);
+                }
+            };
+        m_panel.addKeyListener(keyAdapter);
+        MouseAdapter mouseAdapter = new MouseAdapter()
+            {
+                public void mousePressed(MouseEvent event)
+                {
+                    GoPoint point = m_panel.getPoint(event);
+                    m_pointPressed = point;
+                    if (point == null)
+                        return;
+                    // mousePressed and mouseReleased (platform dependency)
+                    if (event.isPopupTrigger())
+                    {
+                        contextMenu(point);
+                        m_pointPressed = null;
+                        return;
+                    }
+                }
+
+                public void mouseReleased(MouseEvent event)
+                {                    
+                    GoPoint point = m_panel.getPoint(event);
+                    if (point == null || point != m_pointPressed)
+                    {
+                        m_pointPressed = null;
+                        return;
+                    }
+                    m_pointPressed = null;
+                    if (event.isPopupTrigger())
+                    {
+                        contextMenu(point);
+                        return;
+                    }
+                    int button = event.getButton();
+                    int count = event.getClickCount();
+                    if (button != MouseEvent.BUTTON1)
+                        return;
+                    if (count == 2)
+                        fieldClicked(point, true);
+                    else
+                    {            
+                        int modifiers = event.getModifiers();
+                        int mask = (ActionEvent.CTRL_MASK
+                                    | ActionEvent.ALT_MASK
+                                    | ActionEvent.META_MASK);
+                        boolean modifiedSelect = ((modifiers & mask) != 0);
+                        fieldClicked(point, modifiedSelect);
+                    }
+                }
+
+                private GoPoint m_pointPressed;
+            };
+        m_panel.addMouseListener(mouseAdapter);
+        m_panel.setOpaque(false);
+        for (int y = size - 1; y >= 0; --y)
+        {
+            for (int x = 0; x < size; ++x)
+            {
+                GoPoint p = GoPoint.create(x, y);
+                GuiField field = new GuiField(this, m_fastPaint);
+                m_field[x][y] = field;
+            }
+        }
+        m_lastMove = null;
+        initFocus();
+        updateFromGoBoard();
+        revalidate();
     }
 
     /** Mark point of last move on the board.
@@ -515,7 +561,7 @@ public final class GuiBoard
         if (showGrid != m_showGrid)
         {
             m_showGrid = showGrid;
-            init();
+            initSize(m_size);
         }
     }
 
@@ -558,20 +604,19 @@ public final class GuiBoard
     {
         public BoardPanel()
         {
-            m_boardSize = m_board.getSize();
             int preferredFieldSize = getPreferredFieldSize().width;
             int preferredSize;
             int minimumSize;
             if (m_showGrid)
             {
-                preferredSize = preferredFieldSize * (m_boardSize + 2);
-                minimumSize = 4 * (m_boardSize + 2);
+                preferredSize = preferredFieldSize * (m_size + 2);
+                minimumSize = 4 * (m_size + 2);
             }
             else
             {
                 preferredSize =
-                    preferredFieldSize * m_boardSize + preferredFieldSize / 2;
-                minimumSize = 4 * m_boardSize + 2;
+                    preferredFieldSize * m_size + preferredFieldSize / 2;
+                minimumSize = 4 * m_size + 2;
             }
             setPreferredSize(new Dimension(preferredSize, preferredSize));
             setMinimumSize(new Dimension(minimumSize, minimumSize));
@@ -598,8 +643,8 @@ public final class GuiBoard
             int eventY = (int)event.getPoint().getY();
             int x = (eventX - m_fieldOffset) / m_fieldSize;
             int y = (eventY - m_fieldOffset) / m_fieldSize;
-            y = m_boardSize - y - 1;
-            if (x >= 0 && x < m_boardSize && y >= 0 && y < m_boardSize)
+            y = m_size - y - 1;
+            if (x >= 0 && x < m_size && y >= 0 && y < m_size)
                 return GoPoint.create(x, y);
             return null;
         }
@@ -619,16 +664,16 @@ public final class GuiBoard
             assert(width == getHeight());
             if (m_showGrid)
             {
-                m_fieldSize = width / (m_boardSize + 2);
+                m_fieldSize = width / (m_size + 2);
                 m_fieldOffset =
-                    (width - (m_boardSize + 2) * m_fieldSize) / 2
+                    (width - (m_size + 2) * m_fieldSize) / 2
                     + m_fieldSize;
             }
             else
             {
                 // Minimum border 1/5 field size
-                m_fieldSize = (5 * width) / (5 * m_boardSize + 2);
-                m_fieldOffset = (width - m_boardSize * m_fieldSize) / 2;
+                m_fieldSize = (5 * width) / (5 * m_size + 2);
+                m_fieldOffset = (width - m_size * m_fieldSize) / 2;
             }
             drawBackground(graphics);
             drawGrid(graphics);
@@ -673,16 +718,14 @@ public final class GuiBoard
             repaint(dirty);
         }
 
-        private int m_boardSize;
-
         private int m_fieldSize;
 
         private int m_fieldOffset;
 
         private void drawFields(Graphics graphics)
         {
-            for (int x = 0; x < m_boardSize; ++x)
-                for (int y = 0; y < m_boardSize; ++y)
+            for (int x = 0; x < m_size; ++x)
+                for (int y = 0; y < m_size; ++y)
                 {
                     Point location = getLocation(x, y);
                     Graphics newGraphics =
@@ -709,22 +752,22 @@ public final class GuiBoard
             if (m_fieldSize < 2)
                 return;
             graphics.setColor(Color.darkGray);
-            for (int y = 0; y < m_boardSize; ++y)
+            for (int y = 0; y < m_size; ++y)
             {
                 Point left = getCenter(0, y);
-                Point right = getCenter(m_boardSize - 1, y);
+                Point right = getCenter(m_size - 1, y);
                 graphics.drawLine(left.x, left.y, right.x, right.y);
             }
-            for (int x = 0; x < m_boardSize; ++x)
+            for (int x = 0; x < m_size; ++x)
             {
                 Point top = getCenter(x, 0);
-                Point bottom = getCenter(x, m_boardSize - 1);
+                Point bottom = getCenter(x, m_size - 1);
                 graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
             }
             int r = m_fieldSize / 10;
-            for (int x = 0; x < m_boardSize; ++x)
+            for (int x = 0; x < m_size; ++x)
                 if (m_board.isHandicapLine(x))
-                    for (int y = 0; y < m_boardSize; ++y)
+                    for (int y = 0; y < m_size; ++y)
                         if (m_board.isHandicapLine(y))
                         {
                             Point point = getCenter(x, y);
@@ -741,20 +784,20 @@ public final class GuiBoard
             if (m_fieldSize < stringWidth)
                 return;
             char c = 'A';
-            for (int x = 0; x < m_boardSize; ++x)
+            for (int x = 0; x < m_size; ++x)
             {
                 String string = Character.toString(c);
                 drawLabel(graphics, getLocation(x, -1), string);
-                drawLabel(graphics, getLocation(x, m_boardSize), string);
+                drawLabel(graphics, getLocation(x, m_size), string);
                     ++c;
                 if (c == 'I')
                     ++c;
             }
-            for (int y = 0; y < m_boardSize; ++y)
+            for (int y = 0; y < m_size; ++y)
             {
                 String string = Integer.toString(y + 1);
                 drawLabel(graphics, getLocation(-1, y), string);
-                drawLabel(graphics, getLocation(m_boardSize, y), string);
+                drawLabel(graphics, getLocation(m_size, y), string);
             }
         }
 
@@ -806,7 +849,7 @@ public final class GuiBoard
         {            
             Point point = new Point();
             point.x = m_fieldOffset + x * m_fieldSize;
-            point.y = m_fieldOffset + (m_boardSize - y - 1) * m_fieldSize;
+            point.y = m_fieldOffset + (m_size - y - 1) * m_fieldSize;
             return point;
         }
     }
@@ -820,6 +863,8 @@ public final class GuiBoard
     private boolean m_showGrid = true;
 
     private int m_cachedFontFieldSize;
+
+    private int m_size;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
@@ -874,93 +919,9 @@ public final class GuiBoard
     private int getShadowOffset()
     {
         Rectangle grid = getBounds();
-        int width = grid.width / (m_board.getSize() + 2);
+        int width = grid.width / (m_size + 2);
         int size = width - 2 * GuiField.getStoneMargin(width);
         return size / 12;
-    }
-
-    private void init()
-    {
-        int size = m_board.getSize();        
-        m_field = new GuiField[size][size];
-        removeAll();
-        setLayout(new SquareLayout());
-        m_panel = new BoardPanel();
-        add(m_panel);
-        m_panel.requestFocusInWindow();
-        KeyAdapter keyAdapter = new KeyAdapter()
-            {
-                public void keyPressed(KeyEvent event)
-                {
-                    GuiBoard.this.keyPressed(event);
-                }
-            };
-        m_panel.addKeyListener(keyAdapter);
-        MouseAdapter mouseAdapter = new MouseAdapter()
-            {
-                public void mousePressed(MouseEvent event)
-                {
-                    GoPoint point = m_panel.getPoint(event);
-                    m_pointPressed = point;
-                    if (point == null)
-                        return;
-                    // mousePressed and mouseReleased (platform dependency)
-                    if (event.isPopupTrigger())
-                    {
-                        contextMenu(point);
-                        m_pointPressed = null;
-                        return;
-                    }
-                }
-
-                public void mouseReleased(MouseEvent event)
-                {                    
-                    GoPoint point = m_panel.getPoint(event);
-                    if (point == null || point != m_pointPressed)
-                    {
-                        m_pointPressed = null;
-                        return;
-                    }
-                    m_pointPressed = null;
-                    if (event.isPopupTrigger())
-                    {
-                        contextMenu(point);
-                        return;
-                    }
-                    int button = event.getButton();
-                    int count = event.getClickCount();
-                    if (button != MouseEvent.BUTTON1)
-                        return;
-                    if (count == 2)
-                        fieldClicked(point, true);
-                    else
-                    {            
-                        int modifiers = event.getModifiers();
-                        int mask = (ActionEvent.CTRL_MASK
-                                    | ActionEvent.ALT_MASK
-                                    | ActionEvent.META_MASK);
-                        boolean modifiedSelect = ((modifiers & mask) != 0);
-                        fieldClicked(point, modifiedSelect);
-                    }
-                }
-
-                private GoPoint m_pointPressed;
-            };
-        m_panel.addMouseListener(mouseAdapter);
-        m_panel.setOpaque(false);
-        for (int y = size - 1; y >= 0; --y)
-        {
-            for (int x = 0; x < size; ++x)
-            {
-                GoPoint p = GoPoint.create(x, y);
-                GuiField field = new GuiField(this, m_fastPaint);
-                m_field[x][y] = field;
-            }
-        }
-        m_lastMove = null;
-        initFocus();
-        updateFromGoBoard();
-        revalidate();
     }
 
     private boolean isHandicapLineOrEdge(int line)
@@ -985,7 +946,6 @@ public final class GuiBoard
         if ((modifiers & ActionEvent.CTRL_MASK) != 0
             || ! getShowCursor() || m_focusPoint == null)
             return;
-        int size = m_board.getSize();
         boolean shiftModifier = ((modifiers & ActionEvent.SHIFT_MASK) != 0);
         GoPoint point = m_focusPoint;
         if (code == KeyEvent.VK_DOWN)
@@ -997,10 +957,10 @@ public final class GuiBoard
         }
         else if (code == KeyEvent.VK_UP)
         {
-            point = point.up(size);
+            point = point.up(m_size);
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getY()))
-                    point = point.up(size);
+                    point = point.up(m_size);
         }
         else if (code == KeyEvent.VK_LEFT)
         {
@@ -1011,10 +971,10 @@ public final class GuiBoard
         }
         else if (code == KeyEvent.VK_RIGHT)
         {
-            point = point.right(size);
+            point = point.right(m_size);
             if (shiftModifier)
                 while (! isHandicapLineOrEdge(point.getX()))
-                    point = point.right(size);
+                    point = point.right(m_size);
         }
         setFocusPoint(point);
     }

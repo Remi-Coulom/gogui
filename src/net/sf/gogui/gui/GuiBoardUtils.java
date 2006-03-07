@@ -53,6 +53,45 @@ public final class GuiBoardUtils
         }
     }
 
+    public static boolean[][] getMarkSquare(GuiBoard guiBoard)
+    {
+        int size = guiBoard.getBoardSize();
+        boolean[][] result = new boolean[size][size];
+        for (int x = 0; x < size; ++x)
+            for (int y = 0; y < size; ++y)
+            {
+                GoPoint point = GoPoint.create(x, y);
+                result[x][y] = guiBoard.getMarkSquare(point);
+            }
+        return result;
+    }
+
+    public static String[][] getLabels(GuiBoard guiBoard)
+    {
+        int size = guiBoard.getBoardSize();
+        String[][] result = new String[size][size];
+        for (int x = 0; x < size; ++x)
+            for (int y = 0; y < size; ++y)
+            {
+                GoPoint point = GoPoint.create(x, y);
+                result[x][y] = guiBoard.getLabel(point);
+            }
+        return result;
+    }
+
+    public static boolean[][] getSelects(GuiBoard guiBoard)
+    {
+        int size = guiBoard.getBoardSize();
+        boolean[][] result = new boolean[size][size];
+        for (int x = 0; x < size; ++x)
+            for (int y = 0; y < size; ++y)
+            {
+                GoPoint point = GoPoint.create(x, y);
+                result[x][y] = guiBoard.getSelect(point);
+            }
+        return result;
+    }
+
     public static void setSelect(GuiBoard guiBoard, ArrayList pointList,
                                  boolean select)
     {
