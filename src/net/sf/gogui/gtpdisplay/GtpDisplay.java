@@ -11,7 +11,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.go.Board;
@@ -28,7 +27,6 @@ import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
-import net.sf.gogui.utils.SquareLayout;
 
 //----------------------------------------------------------------------------
 
@@ -87,11 +85,7 @@ public class GtpDisplay
                     cbFieldClicked(point, modifiedSelect);
                 }
             });
-        m_squareLayout = new SquareLayout();
-        m_squareLayout.setPreferMultipleOf(m_size + 2);
-        JPanel panel = new JPanel(m_squareLayout);
-        panel.add(m_guiBoard);
-        contentPane.add(panel);
+        contentPane.add(m_guiBoard);
         m_statusBar = new StatusBar();
         contentPane.add(m_statusBar, BorderLayout.SOUTH);
         GuiUtils.setGoIcon(m_frame);
@@ -217,8 +211,6 @@ public class GtpDisplay
 
     private final String m_name;
 
-    private final SquareLayout m_squareLayout;
-
     private void cbFieldClicked(GoPoint point, boolean modifiedSelect)
     {
         assert(SwingUtilities.isEventDispatchThread());
@@ -272,7 +264,6 @@ public class GtpDisplay
                 {
                     m_board.initSize(m_size);
                     m_guiBoard.initSize(m_size);
-                    m_squareLayout.setPreferMultipleOf(m_size + 2);
                     m_frame.pack();
                     m_guiBoard.updateFromGoBoard();
                     m_guiBoard.markLastMove(null);

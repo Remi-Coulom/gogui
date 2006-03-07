@@ -7,13 +7,15 @@ package net.sf.gogui.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -37,6 +39,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.utils.SquareLayout;
 
 //----------------------------------------------------------------------------
 
@@ -50,27 +53,116 @@ class BoardLabel
         setOpaque(false);
     }
 
-    public void setShow(boolean show)
-    {
-        m_show = show;
-    }
-
     public void paintComponent(Graphics graphics)
     {
-        if (! m_show)
-            return;
         int stringWidth = graphics.getFontMetrics().stringWidth("XX");
         if (getSize().width < stringWidth)
             return;
         super.paintComponent(graphics);
     }
 
-    private boolean m_show = true;
-
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
+}
+
+//----------------------------------------------------------------------------
+
+class BoardLayout
+    implements LayoutManager
+{
+    public BoardLayout(int boardSize, boolean showGrid)
+    {
+        m_boardSize = boardSize;
+        m_showGrid = showGrid;
+    }
+
+    public void addLayoutComponent(String name, Component comp)
+    {
+    }
+    
+    public void layoutContainer(Container parent)
+    {
+        assert(checkComponentCount(parent));
+        Dimension size = parent.getSize();
+        if (m_showGrid)
+        {
+            int width = size.width / (m_boardSize + 2);
+            int height = size.height / (m_boardSize + 2);
+            int i = 0;
+            for (int y = 0; y < m_boardSize + 2; ++y)
+                for (int x = 0; x < m_boardSize + 2; ++x)
+                {
+                    Component component = parent.getComponent(i);
+                    component.setBounds(x * width, y * height, width, height);
+                    ++i;
+                }
+        }
+        else
+        {
+            int width = 2 * size.width / (2 * m_boardSize + 1);
+            int i = 0;
+            for (int y = 0; y < m_boardSize; ++y)
+                for (int x = 0; x < m_boardSize; ++x)
+                {
+                    Component component = parent.getComponent(i);
+                    component.setBounds(x * width + width / 4,
+                                        y * width + width / 4,
+                                        width, width);
+                    ++i;
+                }
+        }
+    }
+    
+    public Dimension minimumLayoutSize(Container parent)
+    {
+        assert(checkComponentCount(parent));
+        int width = getFirstField(parent).getMinimumSize().width;
+        if (m_showGrid)
+            return new Dimension(width * (m_boardSize + 2),
+                                 width * (m_boardSize + 2));
+        else
+            return new Dimension(width * m_boardSize + width / 2,
+                                 width * m_boardSize + width / 2);
+    }
+    
+    public Dimension preferredLayoutSize(Container parent)
+    {
+        assert(checkComponentCount(parent));
+        int width = getFirstField(parent).getPreferredSize().width;
+        if (m_showGrid)
+            return new Dimension(width * (m_boardSize + 2),
+                                 width * (m_boardSize + 2));
+        else
+            return new Dimension(width * m_boardSize + width / 2,
+                                 width * m_boardSize + width / 2);
+    }
+    
+    public void removeLayoutComponent(Component comp)
+    {
+    }
+
+    private boolean m_showGrid;
+
+    private int m_boardSize;
+
+    private boolean checkComponentCount(Container parent)
+    {
+        int count = parent.getComponentCount();
+        if (m_showGrid)
+            return count == (m_boardSize + 2) * (m_boardSize + 2);
+        else
+            return count == m_boardSize * m_boardSize;
+    }
+
+    private GuiField getFirstField(Container parent)
+    {
+        if (m_showGrid)
+            return (GuiField)parent.getComponent(m_boardSize + 3);
+        else
+            return (GuiField)parent.getComponent(0);
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -298,38 +390,7 @@ public final class GuiBoard
     public void initSize(int size)
     {
         m_board.initSize(size);
-        m_field = new GuiField[size][size];
-        removeAll();
-        setOpaque(false);        
-        setLayout(new GridLayout(size + 2, size + 2));
-        m_labels.clear();
-        addColumnLabels(size);
-        for (int y = size - 1; y >= 0; --y)
-        {
-            String text = Integer.toString(y + 1);
-            addRowLabel(text);
-            for (int x = 0; x < size; ++x)
-            {
-                GoPoint p = GoPoint.create(x, y);
-                GuiField field = new GuiField(this, p, m_fastPaint);
-                add(field);
-                m_field[x][y] = field;
-                KeyListener keyListener = new KeyAdapter()
-                    {
-                        public void keyPressed(KeyEvent event)
-                        {
-                            GuiBoard.this.keyPressed(event);
-                        }
-                    };
-                field.addKeyListener(keyListener);
-            }
-            addRowLabel(text);
-        }
-        addColumnLabels(size);
-        m_focusPoint = GoPoint.create(size / 2, size / 2);
-        m_lastMove = null;
-        revalidate();
-        repaint();
+        init();
     }
 
     /** Mark point of last move on the board.
@@ -560,8 +621,11 @@ public final class GuiBoard
 
     public void setShowGrid(boolean showGrid)
     {
-        for (int i = 0; i < m_labels.size(); ++i)
-            ((BoardLabel)m_labels.get(i)).setShow(showGrid);
+        if (showGrid != m_showGrid)
+        {
+            m_showGrid = showGrid;
+            init();
+        }
     }
 
     public void setSelect(GoPoint p, boolean select)
@@ -704,6 +768,8 @@ public final class GuiBoard
 
     private boolean m_showCursor = true;
 
+    private boolean m_showGrid = true;
+
     private boolean m_variationShown;
 
     private int m_cachedFontFieldSize;
@@ -732,31 +798,29 @@ public final class GuiBoard
 
     private final Image m_image;
 
-    private Listener m_listener;
+    private JPanel m_panel;
 
-    private final ArrayList m_labels = new ArrayList(100);
+    private Listener m_listener;
 
     private void addColumnLabels(int size)
     {
-        add(Box.createHorizontalGlue());
+        m_panel.add(Box.createHorizontalGlue());
         char c = 'A';
         for (int x = 0; x < size; ++x)
         {
             BoardLabel label = new BoardLabel(Character.toString(c));
-            m_labels.add(label);
-            add(label);
+            m_panel.add(label);
             ++c;
             if (c == 'I')
                 ++c;
         }
-        add(Box.createHorizontalGlue());
+        m_panel.add(Box.createHorizontalGlue());
     }
 
     private void addRowLabel(String text)
     {
         BoardLabel label = new BoardLabel(text);
-        add(label);
-        m_labels.add(label);
+        m_panel.add(label);
     }
 
     private void calcScore()
@@ -800,14 +864,14 @@ public final class GuiBoard
         graphics.setColor(Color.darkGray);
         for (int y = 0; y < size; ++y)
         {
-            Point left = getScreenLocation(0, y);
-            Point right = getScreenLocation(size - 1, y);
+            Point left = getFieldLocation(0, y);
+            Point right = getFieldLocation(size - 1, y);
             graphics.drawLine(left.x, left.y, right.x, right.y);
         }
         for (int x = 0; x < size; ++x)
         {
-            Point top = getScreenLocation(x, 0);
-            Point bottom = getScreenLocation(x, size - 1);
+            Point top = getFieldLocation(x, 0);
+            Point bottom = getFieldLocation(x, size - 1);
             graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
         }
         int r = width / (size + 2) / 10;
@@ -816,7 +880,7 @@ public final class GuiBoard
                 for (int y = 0; y < size; ++y)
                     if (m_board.isHandicapLine(y))
                     {
-                        Point point = getScreenLocation(x, y);
+                        Point point = getFieldLocation(x, y);
                         graphics.fillOval(point.x - r, point.y - r,
                                           2 * r + 1, 2 * r + 1);
                     }
@@ -838,7 +902,7 @@ public final class GuiBoard
             GoPoint point = m_board.getPoint(i);
             if (getField(point).getColor() == GoColor.EMPTY)
                 continue;
-            Point location = getScreenLocation(point.getX(), point.getY());
+            Point location = getFieldLocation(point.getX(), point.getY());
             graphics.setColor(Color.black);
             graphics.fillOval(location.x - size / 2 + offset,
                               location.y - size / 2 + offset,
@@ -860,16 +924,70 @@ public final class GuiBoard
         return size / 12;
     }
 
-    private Point getScreenLocation(int x, int y)
+    private Point getFieldLocation(int x, int y)
     {
         int size = m_board.getSize();
         assert(x >= 0 && x < size);
         assert(y >= 0 && y < size);
-        int width = getSize().width;
-        int offset = width / (size + 2) / 2;
-        int screenX = ((x + 1) * width) / (size + 2) + offset;
-        int screenY = ((size - y) * width) / (size + 2) + offset;
-        return new Point(screenX, screenY);
+        if (m_showGrid)
+        {
+            int width = getSize().width / (size + 2);
+            int offset = 3 * width / 2;
+            int fieldX = offset + x * width;
+            int fieldY = offset + (size - y - 1) * width;
+            return new Point(fieldX, fieldY);
+        }
+        else
+        {
+            int width = 2 * getSize().width / (2 * size + 1);
+            int offset = 3 * width / 4;
+            int fieldX = offset + x * width;
+            int fieldY = offset + (size - y - 1) * width;
+            return new Point(fieldX, fieldY);
+        }
+    }
+
+    private void init()
+    {
+        int size = m_board.getSize();        
+        m_field = new GuiField[size][size];
+        removeAll();
+        m_panel = new JPanel(new SquareLayout());
+        add(m_panel);
+        m_panel.setOpaque(false);
+        m_panel.setLayout(new BoardLayout(size, m_showGrid));
+        if (m_showGrid)
+            addColumnLabels(size);
+        for (int y = size - 1; y >= 0; --y)
+        {
+            String text = Integer.toString(y + 1);
+            if (m_showGrid)
+                addRowLabel(text);
+            for (int x = 0; x < size; ++x)
+            {
+                GoPoint p = GoPoint.create(x, y);
+                GuiField field = new GuiField(this, p, m_fastPaint);
+                m_panel.add(field);
+                m_field[x][y] = field;
+                KeyListener keyListener = new KeyAdapter()
+                    {
+                        public void keyPressed(KeyEvent event)
+                        {
+                            GuiBoard.this.keyPressed(event);
+                        }
+                    };
+                field.addKeyListener(keyListener);
+            }
+            if (m_showGrid)
+                addRowLabel(text);
+        }
+        if (m_showGrid)
+            addColumnLabels(size);
+        m_focusPoint = GoPoint.create(size / 2, size / 2);
+        m_lastMove = null;
+        updateFromGoBoard();
+        revalidate();
+        repaint();
     }
 
     private boolean isHandicapLineOrEdge(int line)

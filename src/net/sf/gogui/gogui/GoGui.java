@@ -95,7 +95,6 @@ import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.Preferences;
 import net.sf.gogui.utils.ProgressShow;
-import net.sf.gogui.utils.SquareLayout;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
@@ -149,11 +148,6 @@ public class GoGui
         m_statusBar = new StatusBar();
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
 
-        m_squareLayout = new SquareLayout();
-        m_squareLayout.setPreferMultipleOf(m_boardSize + 2);
-        m_boardPanel = new JPanel(m_squareLayout);
-        m_boardPanel.add(m_guiBoard);
-
         Comment.Listener commentListener = new Comment.Listener()
             {
                 public void changed()
@@ -175,7 +169,7 @@ public class GoGui
         m_comment.setFontFixed(m_prefs.getBool("comment-font-fixed"));
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                                     m_boardPanel, m_infoPanel);
+                                     m_guiBoard, m_infoPanel);
         int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
         InputMap splitPaneInputMap = m_splitPane.getInputMap(condition);
         // According to the docs, null should remove the action, but it does
@@ -1106,8 +1100,6 @@ public class GoGui
 
     private Help m_help;
 
-    private JPanel m_boardPanel;
-
     private JPanel m_infoPanel;
 
     private JPanel m_innerPanel;
@@ -1151,8 +1143,6 @@ public class GoGui
     private Preferences m_prefs;
 
     private ScoreDialog m_scoreDialog;
-
-    private SquareLayout m_squareLayout;
 
     private String m_programAnalyzeCommands;
 
@@ -2722,7 +2712,6 @@ public class GoGui
             m_boardSize = size;
             m_guiBoard.initSize(size);
             m_guiBoard.setShowGrid(m_menuBar.getShowGrid());
-            m_squareLayout.setPreferMultipleOf(size + 2);
             restoreMainWindow();
             if (m_gtpShell != null)
                 restoreSize(m_gtpShell, "window-gtpshell");
@@ -3250,13 +3239,13 @@ public class GoGui
 
     private void setBoardCursor(int type)
     {
-        setCursor(m_boardPanel, type);
+        setCursor(m_guiBoard, type);
         setCursor(m_infoPanel, type);
     }
 
     private void setBoardCursorDefault()
     {
-        setCursorDefault(m_boardPanel);
+        setCursorDefault(m_guiBoard);
         setCursorDefault(m_infoPanel);
     }
 
@@ -3471,15 +3460,15 @@ public class GoGui
         m_showInfoPanel = showInfoPanel;
         if (showInfoPanel)
         {
-            m_innerPanel.remove(m_boardPanel);
-            m_splitPane.add(m_boardPanel);
+            m_innerPanel.remove(m_guiBoard);
+            m_splitPane.add(m_guiBoard);
             m_innerPanel.add(m_splitPane);
         }
         else
         {
-            m_splitPane.remove(m_boardPanel);
+            m_splitPane.remove(m_guiBoard);
             m_innerPanel.remove(m_splitPane);
-            m_innerPanel.add(m_boardPanel);
+            m_innerPanel.add(m_guiBoard);
         }
         m_splitPane.resetToPreferredSizes();
         pack();
