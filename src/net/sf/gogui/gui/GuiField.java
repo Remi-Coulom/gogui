@@ -62,7 +62,7 @@ class GuiField
         if (m_select)
             drawSelect();
         else
-            drawString();
+            drawLabel();
         if (m_focus && m_board.getShowCursor())
             drawFocus();
         m_graphics = null;
@@ -120,7 +120,7 @@ class GuiField
 
     public String getLabel()
     {
-        return m_string;
+        return m_label;
     }
 
     public GoColor getTerritory()
@@ -199,7 +199,7 @@ class GuiField
 
     public void setLabel(String s)
     {
-        m_string = s;
+        m_label = s;
     }
 
     public void setTerritory(GoColor color)
@@ -250,7 +250,7 @@ class GuiField
     private static final Stroke m_thickStroke
         = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 
-    private String m_string = "";
+    private String m_label = "";
 
     private Color m_fieldColor;
 
@@ -345,6 +345,30 @@ class GuiField
         m_graphics.fillRect(dd / 2, dd / 2, width, width);
     }
 
+    private void drawLabel()
+    {
+        m_board.setFont(m_graphics, m_size);
+        FontMetrics metrics = m_graphics.getFontMetrics();
+        int stringWidth = metrics.stringWidth(m_label);
+        int stringHeight = metrics.getAscent();
+        int x = Math.max((m_size - stringWidth) / 2, 0);
+        int y = stringHeight + (m_size - stringHeight) / 2;
+        if (m_color == GoColor.WHITE)
+            m_graphics.setColor(Color.black);
+        else
+            m_graphics.setColor(Color.white);
+        Rectangle clip = null;
+        if (stringWidth > 0.95 * m_size)
+        {
+            clip = m_graphics.getClipBounds();
+            m_graphics.setClip(clip.x, clip.y,
+                               (int)(0.95 * clip.width), clip.height);
+        }
+        m_graphics.drawString(m_label, x, y);
+        if (clip != null)
+            m_graphics.setClip(clip.x, clip.y, clip.width, clip.height);
+    }
+
     private void drawLastMoveMarker()
     {
         setComposite(m_composite7);
@@ -418,30 +442,6 @@ class GuiField
         }
         m_graphics.fillOval(margin, margin,
                             m_size - 2 * margin, m_size - 2 * margin);
-    }
-
-    private void drawString()
-    {
-        m_board.setFont(m_graphics, m_size);
-        FontMetrics metrics = m_graphics.getFontMetrics();
-        int stringWidth = metrics.stringWidth(m_string);
-        int stringHeight = metrics.getAscent();
-        int x = Math.max((m_size - stringWidth) / 2, 0);
-        int y = stringHeight + (m_size - stringHeight) / 2;
-        if (m_color == GoColor.WHITE)
-            m_graphics.setColor(Color.black);
-        else
-            m_graphics.setColor(Color.white);
-        Rectangle clip = null;
-        if (stringWidth > 0.95 * m_size)
-        {
-            clip = m_graphics.getClipBounds();
-            m_graphics.setClip(clip.x, clip.y,
-                               (int)(0.95 * clip.width), clip.height);
-        }
-        m_graphics.drawString(m_string, x, y);
-        if (clip != null)
-            m_graphics.setClip(clip.x, clip.y, clip.width, clip.height);
     }
 
     private void drawTerritoryGraphics()
