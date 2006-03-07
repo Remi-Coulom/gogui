@@ -441,6 +441,9 @@ public final class GuiBoard
         m_panel.requestFocusInWindow();
     }
 
+    /** Internally used in this package by GuiField.
+        @todo Make obsolete
+    */
     public void setFont(Graphics graphics, int fieldSize)
     {
         if (m_cachedFont != null && m_cachedFontFieldSize == fieldSize)
