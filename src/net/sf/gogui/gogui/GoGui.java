@@ -3025,7 +3025,7 @@ public class GoGui
     private void resetBoard()
     {
         clearStatus();
-        m_guiBoard.resetBoard();
+        m_guiBoard.clearAll();
         updateFromGoBoard();
         updateBoard();
     }

@@ -407,14 +407,6 @@ public final class GuiBoard
         return Printable.PAGE_EXISTS;
     }
 
-    public void resetBoard()
-    {
-        if (! m_needsReset)
-            return;
-        clearAll();
-        m_needsReset = false;
-    }
-
     public void setColor(GoPoint point, GoColor color)
     {
         GuiField field = getField(point);
@@ -477,7 +469,6 @@ public final class GuiBoard
                 && ! field.getFieldBackground().equals(color)))
         {
             field.setFieldBackground(color);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -488,7 +479,6 @@ public final class GuiBoard
         if (field.getCrossHair() != crossHair)
         {
             field.setCrossHair(crossHair);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -496,7 +486,6 @@ public final class GuiBoard
     public void setInfluence(GoPoint point, double value)
     {
         getField(point).setInfluence(value);
-        m_needsReset = true;
         repaint(point);
     }
 
@@ -508,7 +497,6 @@ public final class GuiBoard
                 && ! field.getLabel().equals(label)))
         {
             field.setLabel(label);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -524,7 +512,6 @@ public final class GuiBoard
         if (field.getMark() != mark)
         {
             getField(point).setMark(mark);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -535,7 +522,6 @@ public final class GuiBoard
         if (field.getMarkCircle() != mark)
         {
             getField(point).setMarkCircle(mark);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -546,7 +532,6 @@ public final class GuiBoard
         if (field.getMarkSquare() != mark)
         {
             getField(point).setMarkSquare(mark);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -557,7 +542,6 @@ public final class GuiBoard
         if (field.getMarkTriangle() != mark)
         {
             getField(point).setMarkTriangle(mark);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -592,7 +576,6 @@ public final class GuiBoard
         if (field.getSelect() != select)
         {
             getField(point).setSelect(select);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -603,7 +586,6 @@ public final class GuiBoard
         if (field.getTerritory() != color)
         {
             field.setTerritory(color);
-            m_needsReset = true;
             repaint(point);
         }
     }
@@ -868,8 +850,6 @@ public final class GuiBoard
     }
 
     private final boolean m_fastPaint;
-
-    private boolean m_needsReset;
 
     private boolean m_showCursor = true;
 
