@@ -38,7 +38,10 @@ import net.sf.gogui.gui.GuiUtils;
 
 //----------------------------------------------------------------------------
 
-/** Graphical display of a Go board. */
+/** Graphical display of a Go board.
+    This class does not use go.Board, so it can be used with other board
+    implementations.
+*/
 public final class GuiBoard
     extends JPanel
     implements Printable
@@ -46,11 +49,32 @@ public final class GuiBoard
     /** Callback for clicks on a field. */
     public interface Listener
     {
+        /** Callback for click on a field.
+            This callback is triggered with mouse clicks or the enter key
+            if the cursor is shown.
+            @param point The point clicked.
+            @param modifiedSelect Modified select. True if the click was a
+            double click or with the right mouse button or if a modifier key
+            (Ctrl, Alt, Meta) was pressed while clicking, as long as it was
+            not a (platform-dependent) popup menu trigger.
+        */
         void fieldClicked(GoPoint point, boolean modifiedSelect);
 
+        /** Callback for context menu.
+            This callback is triggered with mouse clicks that trigger
+            popup menus (platform-dependent).
+            @param point The point clicked.
+            @param invoker The awt.Component that was clocked on.
+            @param x The x coordinate on the invoker component.
+            @param y The y coordinate on the invoker component.
+        */
         void contextMenu(GoPoint point, Component invoker, int x, int y);
     }
 
+    /** Constructor.
+        @param size The board size.
+        @param fastPaint Don't use Graphics2D capabilities.
+    */
     public GuiBoard(int size, boolean fastPaint)
     {
         m_fastPaint = fastPaint;
@@ -64,7 +88,7 @@ public final class GuiBoard
         initSize(size);
     }
 
-    /** Clear everything but stones. */
+    /** Clear every kind of markup but stones. */
     public void clearAll()
     {
         for (int x = 0; x < m_size; ++x)
@@ -78,6 +102,7 @@ public final class GuiBoard
         clearLastMove();
     }
 
+    /** Clear all crosshairs. */
     public void clearAllCrossHair()
     {
         for (int x = 0; x < m_size; ++x)
@@ -85,6 +110,9 @@ public final class GuiBoard
                 m_field[x][y].setCrossHair(false);
     }
 
+    /** Clear all markup.
+        Clears mark, circle, square, triangle on all points.
+    */
     public void clearAllMarkup()
     {
         for (int x = 0; x < m_size; ++x)
@@ -98,6 +126,7 @@ public final class GuiBoard
             }
     }
 
+    /** Clear all selected points. */
     public void clearAllSelect()
     {
         for (int x = 0; x < m_size; ++x)
@@ -105,6 +134,7 @@ public final class GuiBoard
                 m_field[x][y].setSelect(false);
     }
 
+    /** Clear all labels. */
     public void clearAllLabels()
     {
         for (int x = 0; x < m_size; ++x)
@@ -112,6 +142,7 @@ public final class GuiBoard
                 m_field[x][y].setLabel("");
     }
 
+    /** Clear all territory. */
     public void clearAllTerritory()
     {
         for (int x = 0; x < m_size; ++x)
@@ -119,16 +150,19 @@ public final class GuiBoard
                 m_field[x][y].setTerritory(GoColor.EMPTY);
     }
 
+    /** Clear all influence. */
     public void clearInfluence(GoPoint p)
     {
         getField(p).clearInfluence();
     }
 
+    /** Trigger the context menu callback at the listener. */
     public void contextMenu(GoPoint point)
     {
         m_panel.contextMenu(point);
     }
 
+    /** Get current board size. */
     public int getBoardSize()
     {
         return m_size;
@@ -140,11 +174,19 @@ public final class GuiBoard
         return new Dimension(size, size);
     }
 
+    /** Get label.
+        @param point The point.
+        @return Label or null if point has no label.
+    */
     public String getLabel(GoPoint point)
     {
         return getField(point).getLabel();
     }
 
+    /** Get location on screen for a point.
+        @param point The point.
+        @return Location on screen of center of point.
+    */
     public Point getLocationOnScreen(GoPoint point)
     {
         Point center = m_panel.getCenter(point.getX(), point.getY());
@@ -154,21 +196,38 @@ public final class GuiBoard
         return location;
     }
 
+    /** Check if point is marked.
+        This unspecified mark uses a diagonal cross.
+        @param point The point.
+        @return true, if point is marked.
+    */
     public boolean getMark(GoPoint point)
     {
         return getField(point).getMark();
     }
 
+    /** Check if point is marked with a circle.
+        @param point The point.
+        @return true, if point is marked with a circle.
+    */
     public boolean getMarkCircle(GoPoint point)
     {
         return getField(point).getMarkCircle();
     }
 
+    /** Check if point is marked with a square.
+        @param point The point.
+        @return true, if point is marked with a square.
+    */
     public boolean getMarkSquare(GoPoint point)
     {
         return getField(point).getMarkSquare();
     }
 
+    /** Check if point is marked with a triangle.
+        @param point The point.
+        @return true, if point is marked with a triangle.
+    */
     public boolean getMarkTriangle(GoPoint point)
     {
         return getField(point).getMarkTriangle();
@@ -184,18 +243,29 @@ public final class GuiBoard
         return m_preferredFieldSize;
     }
 
+    /** Check if point is selected.
+        @param point The point.
+        @return true, if point is selected.
+    */
     public boolean getSelect(GoPoint point)
     {
         return getField(point).getSelect();
     }
 
+    /** Check if cursor is shown.
+        @return true, if cursor is shown.
+    */
     public boolean getShowCursor()
     {
         return m_showCursor;
     }
 
+    /** Change the board size
+        @param size The new board size.
+    */
     public void initSize(int size)
     {
+        assert(size > 0 && size <= GoPoint.MAXSIZE);
         m_size = size;
         m_constants = new BoardConstants(size);
         m_field = new GuiField[size][size];
