@@ -132,7 +132,7 @@ public final class GuiBoard
         m_panel.contextMenu(point);
     }
 
-    public void fieldClicked(GoPoint p, boolean modifiedSelect)
+    private void fieldClicked(GoPoint p, boolean modifiedSelect)
     {
         if (m_listener != null)
             m_listener.fieldClicked(p, modifiedSelect);
