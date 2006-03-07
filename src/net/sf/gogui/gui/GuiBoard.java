@@ -40,7 +40,7 @@ import net.sf.gogui.gui.GuiUtils;
 
 /** Graphical display of a Go board.
     This class does not use go.Board, so it can be used with other board
-    implementations.
+    implementations. It uses go.GoPoint for coordinates.
 */
 public final class GuiBoard
     extends JPanel
@@ -363,7 +363,7 @@ public final class GuiBoard
     }
 
     /** Mark point of last move on the board.
-        The last move marker will be removed, if the move parameter is null.
+        The last move marker will be removed, if the parameter is null.
     */
     public void markLastMove(GoPoint point)
     {
