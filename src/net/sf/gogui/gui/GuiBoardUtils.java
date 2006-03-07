@@ -302,11 +302,11 @@ public final class GuiBoardUtils
         }
         guiBoard.markLastMove(point);
         if (point != null)
-            guiBoard.setFocusPoint(point);
+            guiBoard.setCursor(point);
         else
         {
             int size = guiBoard.getBoardSize();
-            guiBoard.setFocusPoint(GoPoint.create(size / 2, size / 2));
+            guiBoard.setCursor(GoPoint.create(size / 2, size / 2));
         }
     }
 

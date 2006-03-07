@@ -358,7 +358,7 @@ public final class GuiBoard
             }
         }
         m_lastMove = null;
-        setFocusPoint(GoPoint.create(m_size / 2, m_size / 2));
+        setCursor(GoPoint.create(m_size / 2, m_size / 2));
         revalidate();
     }
 
@@ -407,6 +407,11 @@ public final class GuiBoard
         return Printable.PAGE_EXISTS;
     }
 
+    /** Set or remove stone.
+        @param point The point.
+        @param color The stone color or GoColor.EMPTY to remove a stone,
+        if existing.
+    */
     public void setColor(GoPoint point, GoColor color)
     {
         GuiField field = getField(point);
@@ -417,7 +422,10 @@ public final class GuiBoard
         }
     }
 
-    public void setFocusPoint(GoPoint point)
+    /** Set the cursor.
+        @param point New location of the cursor.
+    */
+    public void setCursor(GoPoint point)
     {
         if (point != null && ! point.isOnBoard(m_size))
             point = null;
@@ -461,6 +469,10 @@ public final class GuiBoard
         graphics.setFont(font);
     }
 
+    /** Set the field background color.
+        @param point The location of the field.
+        @param color The color.
+    */
     public void setFieldBackground(GoPoint point, Color color)
     {
         GuiField field = getField(point);
@@ -473,6 +485,10 @@ public final class GuiBoard
         }
     }
 
+    /** Set crosshair.
+        @param point The point.
+        @param crossHair True to set, false to remove crosshair.
+    */
     public void setCrossHair(GoPoint point, boolean crossHair)
     {
         GuiField field = getField(point);
@@ -483,12 +499,21 @@ public final class GuiBoard
         }
     }
 
+    /** Set influence value.
+        @param point The point.
+        @param value The influence value between -1 and 1.
+    */
     public void setInfluence(GoPoint point, double value)
     {
         getField(point).setInfluence(value);
         repaint(point);
     }
 
+    /** Set label.
+        @param point The point.
+        @param label The label. Should not be longer than 3 characters to
+        avoid clipping. null to remove label.
+    */
     public void setLabel(GoPoint point, String label)
     {
         GuiField field = getField(point);
@@ -501,11 +526,19 @@ public final class GuiBoard
         }
     }
 
-    public void setListener(Listener l)
+    /** Set the listener.
+        @param listener The new listener; null to set no listener.
+    */
+    public void setListener(Listener listener)
     {
-        m_listener = l;
+        m_listener = listener;
     }
 
+    /** Set markup.
+        This unspecified markup uses a diagonal cross.
+        @param point The point.
+        @param mark True to set, false to remove.
+    */
     public void setMark(GoPoint point, boolean mark)
     {
         GuiField field = getField(point);
@@ -516,6 +549,10 @@ public final class GuiBoard
         }
     }
 
+    /** Set circle markup.
+        @param point The point.
+        @param mark True to set, false to remove.
+    */
     public void setMarkCircle(GoPoint point, boolean mark)
     {
         GuiField field = getField(point);
@@ -526,6 +563,10 @@ public final class GuiBoard
         }
     }
 
+    /** Set square markup.
+        @param point The point.
+        @param mark True to set, false to remove.
+    */
     public void setMarkSquare(GoPoint point, boolean mark)
     {
         GuiField field = getField(point);
@@ -536,6 +577,10 @@ public final class GuiBoard
         }
     }
 
+    /** Set triangle markup.
+        @param point The point.
+        @param mark True to set, false to remove.
+    */
     public void setMarkTriangle(GoPoint point, boolean mark)
     {
         GuiField field = getField(point);
@@ -551,6 +596,9 @@ public final class GuiBoard
         m_preferredFieldSize = size;
     }
 
+    /** Enable or disable cursor.
+        @param showCursor true to enable cursor.
+    */
     public void setShowCursor(boolean showCursor)
     {
         if (m_showCursor)
@@ -561,6 +609,9 @@ public final class GuiBoard
         m_panel.requestFocusInWindow();
     }
 
+    /** Enable or disable grid coordinates.
+        @param showGrid true to enable grid coordinates.
+    */
     public void setShowGrid(boolean showGrid)
     {
         if (showGrid != m_showGrid)
@@ -570,6 +621,10 @@ public final class GuiBoard
         }
     }
 
+    /** Set point selection markup.
+        @param point The point.
+        @param mark True to set, false to remove.
+    */
     public void setSelect(GoPoint point, boolean select)
     {
         GuiField field = getField(point);
@@ -580,6 +635,11 @@ public final class GuiBoard
         }
     }
 
+    /** Set territory.
+        @param point The point.
+        @param color The territory color for this point; GoColor.EMPTY for
+        no territory.
+    */
     public void setTerritory(GoPoint point, GoColor color)
     {
         GuiField field = getField(point);
@@ -971,7 +1031,7 @@ public final class GuiBoard
                 while (! isHandicapLineOrEdge(point.getX()))
                     point = point.right(m_size);
         }
-        setFocusPoint(point);
+        setCursor(point);
     }
 
     private void repaint(GoPoint point)
