@@ -29,6 +29,7 @@ public final class AnalyzeShow
         GoPoint pointArg = command.getPointArg();
         ArrayList pointListArg = command.getPointListArg();
         guiBoard.clearAllSelect();
+        guiBoard.updateFromGoBoard();
         GuiBoardUtils.setSelect(guiBoard, pointListArg, true);
         if (pointArg != null)
             guiBoard.setSelect(pointArg, true);
@@ -41,46 +42,41 @@ public final class AnalyzeShow
             {
                 String b[][] =
                     GtpUtils.parseStringBoard(response, title, size);
-                guiBoard.showBWBoard(b);
-                guiBoard.repaint();
+                GuiBoardUtils.showBWBoard(guiBoard, b);
             }
             break;
         case AnalyzeCommand.CBOARD:
             {
                 String colors[][] =
                     GtpUtils.parseStringBoard(response, title, size);
-                GuiBoardUtils.showColorBoard(guiBoard, colors, board);
-                guiBoard.repaint();
+                GuiBoardUtils.showColorBoard(guiBoard, colors);
             }
             break;
         case AnalyzeCommand.DBOARD:
             {
                 double b[][] =
                     GtpUtils.parseDoubleBoard(response, title, size);
-                guiBoard.showDoubleBoard(b, command.getScale());
-                guiBoard.repaint();
+                GuiBoardUtils.showDoubleBoard(guiBoard, b,
+                                              command.getScale());
             }
             break;
         case AnalyzeCommand.GFX:
             {
                 showGfx(response, guiBoard, board.getSize());
-                guiBoard.repaint();
             }
             break;
         case AnalyzeCommand.PLIST:
             {
                 GoPoint list[] =
                     GtpUtils.parsePointList(response, size);
-                guiBoard.showPointList(list);
-                guiBoard.repaint();
+                GuiBoardUtils.showPointList(guiBoard, list);
             }
             break;
         case AnalyzeCommand.HPSTRING:
         case AnalyzeCommand.PSTRING:
             {
                 GoPoint list[] = GtpUtils.parsePointString(response, size);
-                guiBoard.showPointList(list);
-                guiBoard.repaint();
+                GuiBoardUtils.showPointList(guiBoard, list);
             }
             break;
         case AnalyzeCommand.PSPAIRS:
@@ -89,16 +85,15 @@ public final class AnalyzeShow
                 ArrayList stringList = new ArrayList(32);
                 GtpUtils.parsePointStringList(response, pointList, stringList,
                                               size);
-                guiBoard.showPointStringList(pointList, stringList);
-                guiBoard.repaint();
+                GuiBoardUtils.showPointStringList(guiBoard, pointList,
+                                                  stringList);
             }
             break;
         case AnalyzeCommand.SBOARD:
             {
                 String b[][] =
                     GtpUtils.parseStringBoard(response, title, size);
-                guiBoard.showStringBoard(b);
-                guiBoard.repaint();
+                GuiBoardUtils.showStringBoard(guiBoard, b);
             }
             break;
         case AnalyzeCommand.VAR:
@@ -327,8 +322,7 @@ public final class AnalyzeShow
                                       GoColor color, int size)
     {
         Move moves[] = GtpUtils.parseVariation(response, color, size);
-        guiBoard.showVariation(moves);
-        guiBoard.repaint();
+        GuiBoardUtils.showVariation(guiBoard, moves);
     }
 }
 

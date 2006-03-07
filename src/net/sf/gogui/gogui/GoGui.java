@@ -160,7 +160,7 @@ public class GoGui
                         text = "";
                     GoPoint list[] =
                         GtpUtils.parsePointString(text, m_boardSize);
-                    m_guiBoard.showPointList(list);
+                    GuiBoardUtils.showPointList(m_guiBoard, list);
                     m_guiBoard.repaint();
                 }
             };
@@ -3398,7 +3398,7 @@ public class GoGui
                     {
                         GoPoint list[] =
                             GtpUtils.parsePointString(text, m_boardSize);
-                        m_guiBoard.showPointList(list);
+                        GuiBoardUtils.showPointList(m_guiBoard, list);
                     }
                 };
         }
@@ -3533,7 +3533,7 @@ public class GoGui
         {
             ArrayList childrenMoves
                 = NodeUtils.getChildrenMoves(m_currentNode);
-            m_guiBoard.showChildrenMoves(childrenMoves);
+            GuiBoardUtils.showChildrenMoves(m_guiBoard, childrenMoves);
         }
         if (m_showLastMove &&
             (m_commandThread == null || isCurrentNodeExecuted()))

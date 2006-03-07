@@ -14,6 +14,7 @@ import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Move;
 
 //----------------------------------------------------------------------------
 
@@ -61,16 +62,79 @@ public final class GuiBoardUtils
             guiBoard.setSelect((GoPoint)pointList.get(i), select);
     }
 
-    public static void showColorBoard(GuiBoard guiBoard, String[][] colors,
-                                      Board board)
+    public static void showBWBoard(GuiBoard guiBoard, String[][] board)
     {
-        for (int i = 0; i < board.getNumberPoints(); ++i)
+        for (int x = 0; x < board.length; ++x)
+            for (int y = 0; y < board[x].length; ++y)
+            {
+                GoPoint point = GoPoint.create(x, y);
+                String s = board[x][y].toLowerCase();
+                if (s.equals("b") || s.equals("black"))
+                    guiBoard.setTerritory(point, GoColor.BLACK);
+                else if (s.equals("w") || s.equals("white"))
+                    guiBoard.setTerritory(point, GoColor.WHITE);
+                else
+                    guiBoard.setTerritory(point, GoColor.EMPTY);
+            }
+    }
+
+    public static void showChildrenMoves(GuiBoard guiBoard,
+                                         ArrayList childrenMoves)
+    {
+        guiBoard.clearAllLabels();
+        int numberMarked = 0;
+        char label = 'A';
+        for (int i = 0; i < childrenMoves.size(); ++i)
         {
-            GoPoint point = board.getPoint(i);
-            int x = point.getX();
-            int y = point.getY();
-            guiBoard.setFieldBackground(point, getColor(colors[x][y]));
+            GoPoint point = (GoPoint)childrenMoves.get(i);
+            String s = guiBoard.getLabel(point);
+            if (! s.equals(""))
+            {
+                if (! s.endsWith("."))
+                    guiBoard.setLabel(point, s + ".");
+                continue;
+            }
+            if (numberMarked >= 26)
+                guiBoard.setLabel(point, "+");
+            else
+                guiBoard.setLabel(point, Character.toString(label));
+            if (numberMarked < 26)
+                ++label;
+            ++numberMarked;            
         }
+    }
+
+    public static void showColorBoard(GuiBoard guiBoard, String[][] colors)
+    {
+        for (int x = 0; x < colors.length; ++x)
+            for (int y = 0; y < colors[x].length; ++y)
+            {
+                GoPoint point = GoPoint.create(x, y);
+                guiBoard.setFieldBackground(point, getColor(colors[x][y]));
+            }
+    }
+
+    public static void showDoubleBoard(GuiBoard guiBoard, double[][] board,
+                                       double scale)
+    {
+        for (int x = 0; x < board.length; ++x)
+            for (int y = 0; y < board[x].length; ++y)
+            {
+                GoPoint point = GoPoint.create(x, y);
+                double d = board[x][y] * scale;
+                guiBoard.setInfluence(point, d);
+            }
+    }
+
+    public static void showStringBoard(GuiBoard guiBoard,
+                                       String[][] board)
+    {
+        for (int x = 0; x < board.length; ++x)
+            for (int y = 0; y < board[x].length; ++y)
+            {
+                GoPoint point = GoPoint.create(x, y);
+                guiBoard.setLabel(point, board[x][y]);
+            }
     }
 
     public static void showMarkup(GuiBoard guiBoard, Node node)
@@ -112,6 +176,45 @@ public final class GuiBoardUtils
                 GoPoint point = (GoPoint)entry.getKey();
                 String value = (String)entry.getValue();
                 guiBoard.setLabel(point, value);
+            }
+        }
+    }
+
+    public static void showPointList(GuiBoard guiBoard, GoPoint pointList[])
+    {
+        guiBoard.clearAllMarkup();
+        for (int i = 0; i < pointList.length; ++i)
+        {
+            GoPoint p = pointList[i];
+            if (p != null)
+                guiBoard.setMarkSquare(p, true);
+        }
+    }
+
+    public static void showPointStringList(GuiBoard guiBoard,
+                                           ArrayList pointList,
+                                           ArrayList stringList)
+    {
+        guiBoard.clearAllLabels();
+        for (int i = 0; i < pointList.size(); ++i)
+        {
+            GoPoint point = (GoPoint)pointList.get(i);
+            String string = (String)stringList.get(i);
+            if (point != null)
+                guiBoard.setLabel(point, string);
+        }
+    }
+
+    public static void showVariation(GuiBoard guiBoard, Move[] variation)
+    {
+        guiBoard.clearAllLabels();
+        for (int i = 0; i < variation.length; ++i)
+        {
+            Move move = variation[i];
+            if (move.getPoint() != null)
+            {
+                guiBoard.setColor(move.getPoint(), move.getColor());
+                guiBoard.setLabel(move.getPoint(), Integer.toString(i + 1));
             }
         }
     }

@@ -81,11 +81,6 @@ public final class GuiBoard
         clearAllLabels();
         clearAllTerritory();
         clearLastMove();
-        if (m_variationShown)
-        {
-            updateFromGoBoard();
-            m_variationShown = false;
-        }
     }
 
     public void clearAllCrossHair()
@@ -369,6 +364,16 @@ public final class GuiBoard
         calcScore();
     }
 
+    public void setColor(GoPoint point, GoColor color)
+    {
+        GuiField field = getField(point);
+        if (field.getColor() != color)
+        {
+            field.setColor(color);
+            m_panel.repaintWithShadow(point);
+        }
+    }
+
     public void setFont(Graphics graphics, int fieldSize)
     {
         if (m_cachedFont != null && m_cachedFontFieldSize == fieldSize)
@@ -534,104 +539,6 @@ public final class GuiBoard
             m_needsReset = true;
             repaint(point);
         }
-    }
-
-    public void showBWBoard(String[][] board)
-    {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint p = m_board.getPoint(i);
-            String s = board[p.getX()][p.getY()].toLowerCase();
-            if (s.equals("b") || s.equals("black"))
-                setTerritory(p, GoColor.BLACK);
-            else if (s.equals("w") || s.equals("white"))
-                setTerritory(p, GoColor.WHITE);
-            else
-                setTerritory(p, GoColor.EMPTY);
-        }
-    }
-
-    public void showChildrenMoves(ArrayList childrenMoves)
-    {
-        clearAllLabels();
-        int numberMarked = 0;
-        char label = 'A';
-        for (int i = 0; i < childrenMoves.size(); ++i)
-        {
-            GoPoint point = (GoPoint)childrenMoves.get(i);
-            String s = getField(point).getString();
-            if (! s.equals(""))
-            {
-                if (! s.endsWith("."))
-                    setLabel(point, s + ".");
-                continue;
-            }
-            if (numberMarked >= 26)
-                setLabel(point, "+");
-            else
-                setLabel(point, Character.toString(label));
-            if (numberMarked < 26)
-                ++label;
-            ++numberMarked;            
-        }
-    }
-
-    public void showDoubleBoard(double[][] board, double scale)
-    {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint p = m_board.getPoint(i);
-            double d = board[p.getX()][p.getY()] * scale;
-            setInfluence(p, d);
-        }
-    }
-
-    public void showPointList(GoPoint pointList[])
-    {
-        clearAllMarkup();
-        for (int i = 0; i < pointList.length; ++i)
-        {
-            GoPoint p = pointList[i];
-            if (p != null)
-                setMarkSquare(p, true);
-        }
-    }
-
-    public void showPointStringList(ArrayList pointList, ArrayList stringList)
-    {
-        clearAllLabels();
-        for (int i = 0; i < pointList.size(); ++i)
-        {
-            GoPoint point = (GoPoint)pointList.get(i);
-            String string = (String)stringList.get(i);
-            if (point != null)
-                setLabel(point, string);
-        }
-    }
-
-    public void showStringBoard(String[][] board)
-    {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint p = m_board.getPoint(i);
-            setLabel(p, board[p.getX()][p.getY()]);
-        }
-    }
-
-    public void showVariation(Move[] variation)
-    {
-        clearAllLabels();
-        updateFromGoBoard();
-        for (int i = 0; i < variation.length; ++i)
-        {
-            Move move = variation[i];
-            if (move.getPoint() != null)
-            {
-                setColor(move.getPoint(), move.getColor());
-                setLabel(move.getPoint(), Integer.toString(i + 1));
-            }
-        }
-        m_variationShown = true;
     }
 
     public void updateFromGoBoard()
@@ -912,8 +819,6 @@ public final class GuiBoard
 
     private boolean m_showGrid = true;
 
-    private boolean m_variationShown;
-
     private int m_cachedFontFieldSize;
 
     /** Serial version to suppress compiler warning.
@@ -1117,16 +1022,6 @@ public final class GuiBoard
     private void repaint(GoPoint point)
     {
         m_panel.repaint(point);
-    }
-
-    private void setColor(GoPoint point, GoColor color)
-    {
-        GuiField field = getField(point);
-        if (field.getColor() != color)
-        {
-            field.setColor(color);
-            m_panel.repaintWithShadow(point);
-        }
     }
 
     private void setFocus(GoPoint point, boolean focus)
