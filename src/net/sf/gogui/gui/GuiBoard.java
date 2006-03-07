@@ -272,7 +272,10 @@ public final class GuiBoard
         {
             int size = m_board.getSize();
             if (size > 0)
+            {
+                m_focusPoint = null;
                 setFocusPoint(GoPoint.create(size / 2, size / 2));
+            }
         }
     }
 
