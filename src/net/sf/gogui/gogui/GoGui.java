@@ -174,7 +174,7 @@ public class GoGui
         // According to the docs, null should remove the action, but it does
         // not seem to work with Sun Java 1.4.2, new Object() works
         splitPaneInputMap.put(KeyStroke.getKeyStroke("F8"), new Object());
-        m_splitPane.setResizeWeight(0.85);
+        m_splitPane.setResizeWeight(1);
         m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
         WindowAdapter windowAdapter = new WindowAdapter()
             {
