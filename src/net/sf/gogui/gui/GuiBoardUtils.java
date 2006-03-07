@@ -101,6 +101,33 @@ public final class GuiBoardUtils
             guiBoard.setSelect((GoPoint)pointList.get(i), select);
     }
 
+    public static void scoreBegin(GuiBoard guiBoard, Board board,
+                                  GoPoint[] isDeadStone)
+    {
+        board.scoreBegin(isDeadStone);
+        if (isDeadStone != null)
+            for (int i = 0; i < isDeadStone.length; ++i)
+                guiBoard.setCrossHair(isDeadStone[i], true);
+        calcScore(guiBoard, board);
+    }
+
+    public static void scoreSetDead(GuiBoard guiBoard, Board board, GoPoint p)
+    {
+        GoColor c = board.getColor(p);
+        if (c == GoColor.EMPTY)
+            return;
+        ArrayList stones = new ArrayList(board.getNumberPoints());
+        board.getStones(p, c, stones);
+        boolean dead = ! board.scoreGetDead((GoPoint)(stones.get(0)));
+        for (int i = 0; i < stones.size(); ++i)
+        {
+            GoPoint stone = (GoPoint)stones.get(i);
+            board.scoreSetDead(stone, dead);
+            guiBoard.setCrossHair(stone, dead);
+        }
+        calcScore(guiBoard, board);
+    }
+
     public static void showBWBoard(GuiBoard guiBoard, String[][] board)
     {
         for (int x = 0; x < board.length; ++x)
@@ -286,6 +313,17 @@ public final class GuiBoardUtils
     /** Make constructor unavailable; class is for namespace only. */
     private GuiBoardUtils()
     {
+    }
+
+    private static void calcScore(GuiBoard guiBoard, Board board)
+    {
+        board.calcScore();
+        for (int i = 0; i < board.getNumberPoints(); ++i)
+        {
+            GoPoint p = board.getPoint(i);
+            GoColor c = board.getScore(p);
+            guiBoard.setTerritory(p, c);
+        }
     }
 }
 

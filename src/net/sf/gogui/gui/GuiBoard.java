@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -130,12 +129,6 @@ public final class GuiBoard
     public void contextMenu(GoPoint point)
     {
         m_panel.contextMenu(point);
-    }
-
-    private void fieldClicked(GoPoint p, boolean modifiedSelect)
-    {
-        if (m_listener != null)
-            m_listener.fieldClicked(p, modifiedSelect);
     }
 
     public int getBoardSize()
@@ -353,33 +346,6 @@ public final class GuiBoard
             return;
         clearAll();
         m_needsReset = false;
-    }
-
-    public void scoreBegin(Board board, GoPoint[] isDeadStone)
-    {
-        m_scoreBoard = board;
-        m_scoreBoard.scoreBegin(isDeadStone);
-        if (isDeadStone != null)
-            for (int i = 0; i < isDeadStone.length; ++i)
-                setCrossHair(isDeadStone[i], true);
-        calcScore();
-    }
-
-    public void scoreSetDead(GoPoint p)
-    {
-        GoColor c = m_scoreBoard.getColor(p);
-        if (c == GoColor.EMPTY)
-            return;
-        ArrayList stones = new ArrayList(m_scoreBoard.getNumberPoints());
-        m_scoreBoard.getStones(p, c, stones);
-        boolean dead = ! m_scoreBoard.scoreGetDead((GoPoint)(stones.get(0)));
-        for (int i = 0; i < stones.size(); ++i)
-        {
-            GoPoint stone = (GoPoint)stones.get(i);
-            m_scoreBoard.scoreSetDead(stone, dead);
-            setCrossHair(stone, dead);
-        }
-        calcScore();
     }
 
     public void setColor(GoPoint point, GoColor color)
@@ -850,9 +816,6 @@ public final class GuiBoard
 
     private GoPoint m_lastMove;
 
-    /** Go board used during scoring. */
-    private Board m_scoreBoard;
-
     private BoardConstants m_constants;
 
     private static final AlphaComposite m_composite3
@@ -872,17 +835,6 @@ public final class GuiBoard
 
     private Listener m_listener;
 
-    private void calcScore()
-    {
-        m_scoreBoard.calcScore();
-        for (int i = 0; i < m_scoreBoard.getNumberPoints(); ++i)
-        {
-            GoPoint p = m_scoreBoard.getPoint(i);
-            GoColor c = m_scoreBoard.getScore(p);
-            setTerritory(p, c);
-        }
-    }
-
     private void clearLastMove()
     {
         if (m_lastMove != null)
@@ -892,6 +844,12 @@ public final class GuiBoard
             repaint(m_lastMove);
             m_lastMove = null;
         }
+    }
+
+    private void fieldClicked(GoPoint p, boolean modifiedSelect)
+    {
+        if (m_listener != null)
+            m_listener.fieldClicked(p, modifiedSelect);
     }
 
     private GuiField getField(GoPoint p)

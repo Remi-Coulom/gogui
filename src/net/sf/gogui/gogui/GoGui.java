@@ -767,7 +767,7 @@ public class GoGui
         }
         else if (m_scoreMode && ! modifiedSelect)
         {
-            m_guiBoard.scoreSetDead(p);
+            GuiBoardUtils.scoreSetDead(m_guiBoard, m_board, p);
             double komi = m_gameTree.getGameInformation().m_komi;
             m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
             return;
@@ -2818,7 +2818,7 @@ public class GoGui
     private void initScore(GoPoint[] isDeadStone)
     {
         resetBoard();
-        m_guiBoard.scoreBegin(m_board, isDeadStone);
+        GuiBoardUtils.scoreBegin(m_guiBoard, m_board, isDeadStone);
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
