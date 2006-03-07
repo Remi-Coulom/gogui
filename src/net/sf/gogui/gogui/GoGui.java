@@ -142,7 +142,7 @@ public class GoGui
 
         m_board = new Board(m_boardSize);
 
-        m_guiBoard = new GuiBoard(m_board, fastPaint);
+        m_guiBoard = new GuiBoard(m_boardSize, fastPaint);
         m_guiBoard.setListener(this);
         m_statusBar = new StatusBar();
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
@@ -734,7 +734,7 @@ public class GoGui
             m_board.play(p, color);
             m_board.setToMove(toMove);
             updateGameInfo(true);
-            m_guiBoard.updateFromGoBoard();
+            updateFromGoBoard();
             setNeedsSave(true);
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
@@ -1377,7 +1377,7 @@ public class GoGui
     private void boardChangedBegin(boolean doCheckComputerMove,
                                    boolean gameTreeChanged)
     {
-        m_guiBoard.updateFromGoBoard();
+        updateFromGoBoard();
         updateGameInfo(gameTreeChanged);
         m_toolBar.update(m_currentNode);
         updateMenuBar();
@@ -2461,7 +2461,7 @@ public class GoGui
             {
                 undoCurrentNode();
                 executeCurrentNode();
-                m_guiBoard.updateFromGoBoard();
+                updateFromGoBoard();
             }
             catch (GtpError e)
             {
@@ -2659,9 +2659,7 @@ public class GoGui
             setNeedsSave(newNodeCreated);
             if (point != null)
             {
-                m_guiBoard.updateFromGoBoard(point);
-                if (m_showLastMove)
-                    m_guiBoard.markLastMove(move);
+                updateFromGoBoard();
                 // Paint point immediately to pretend better responsiveness
                 // because updating game tree or response to GTP play command
                 // can be slow
@@ -2720,7 +2718,7 @@ public class GoGui
         m_board.newGame();        
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
-        m_guiBoard.updateFromGoBoard();
+        updateFromGoBoard();
         resetBoard();
         m_clock.reset();
         m_lostOnTimeShown = false;
@@ -2797,7 +2795,6 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, true);
         }
         toTop();
-        m_guiBoard.initFocus();
         setTitleFromProgram();
         checkComputerMove();
     }
@@ -2821,7 +2818,7 @@ public class GoGui
     private void initScore(GoPoint[] isDeadStone)
     {
         resetBoard();
-        m_guiBoard.scoreBegin(isDeadStone);
+        m_guiBoard.scoreBegin(m_board, isDeadStone);
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
@@ -2943,7 +2940,7 @@ public class GoGui
         initGame(size);
         executeRoot();
         updateGameInfo(true);
-        m_guiBoard.updateFromGoBoard();
+        updateFromGoBoard();
         m_toolBar.update(m_currentNode);
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
@@ -2958,7 +2955,7 @@ public class GoGui
         loadFile(m_file, move);
         m_clock.reset();
         updateGameInfo(true);
-        m_guiBoard.updateFromGoBoard();
+        updateFromGoBoard();
         m_toolBar.update(m_currentNode);
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
@@ -3029,7 +3026,7 @@ public class GoGui
     {
         clearStatus();
         m_guiBoard.resetBoard();
-        m_guiBoard.updateFromGoBoard();
+        updateFromGoBoard();
         updateBoard();
     }
     
@@ -3525,7 +3522,7 @@ public class GoGui
                 m_commandThread.send("undo");
             m_board.undo();
         }
-        m_guiBoard.updateFromGoBoard();
+        updateFromGoBoard();
     }
 
     private void updateBoard()
@@ -3536,12 +3533,12 @@ public class GoGui
                 = NodeUtils.getChildrenMoves(m_currentNode);
             GuiBoardUtils.showChildrenMoves(m_guiBoard, childrenMoves);
         }
-        if (m_showLastMove &&
-            (m_commandThread == null || isCurrentNodeExecuted()))
-            m_guiBoard.markLastMove(m_currentNode.getMove());
-        else
-            m_guiBoard.markLastMove(null);
         GuiBoardUtils.showMarkup(m_guiBoard, m_currentNode);
+    }
+
+    private void updateFromGoBoard()
+    {
+        GuiBoardUtils.updateFromGoBoard(m_guiBoard, m_board, m_showLastMove);
     }
 
     private void updateGameInfo(boolean gameTreeChanged)

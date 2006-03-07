@@ -24,6 +24,7 @@ import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.gui.GuiBoard;
+import net.sf.gogui.gui.GuiBoardUtils;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
@@ -70,7 +71,7 @@ public class GtpDisplay
             m_frame.setTitle(title);
         }
         Container contentPane = m_frame.getContentPane();
-        m_guiBoard = new GuiBoard(m_board, fastPaint);
+        m_guiBoard = new GuiBoard(m_size, fastPaint);
         if (m_gtp != null)
             m_guiBoard.setShowCursor(false);
         m_guiBoard.setListener(new GuiBoard.Listener()
@@ -266,8 +267,7 @@ public class GtpDisplay
                     m_board.initSize(m_size);
                     m_guiBoard.initSize(m_size);
                     m_frame.pack();
-                    m_guiBoard.updateFromGoBoard();
-                    m_guiBoard.markLastMove(null);
+                    updateFromGoBoard();
                 }
             });
     }
@@ -285,8 +285,7 @@ public class GtpDisplay
                 public void run()
                 {
                     m_board.newGame();
-                    m_guiBoard.updateFromGoBoard();
-                    m_guiBoard.markLastMove(null);
+                    updateFromGoBoard();
                 }
             });
     }
@@ -332,8 +331,7 @@ public class GtpDisplay
                 public void run()
                 {                    
                     m_board.play(m_move);
-                    m_guiBoard.updateFromGoBoard();
-                    m_guiBoard.markLastMove(m_move);
+                    updateFromGoBoard();
                     clearStatus();
                 }
             });
@@ -480,8 +478,7 @@ public class GtpDisplay
                 public void run()
                 {
                     m_board.play(m_move);
-                    m_guiBoard.markLastMove(m_move);
-                    m_guiBoard.updateFromGoBoard();
+                    updateFromGoBoard();
                 }
             });
     }
@@ -511,10 +508,14 @@ public class GtpDisplay
                 public void run()
                 {
                     m_board.undo();
-                    m_guiBoard.updateFromGoBoard();
-                    m_guiBoard.markLastMove(null);
+                    updateFromGoBoard();
                 }
             });
+    }
+
+    private void updateFromGoBoard()
+    {
+        GuiBoardUtils.updateFromGoBoard(m_guiBoard, m_board, true);
     }
 }
 

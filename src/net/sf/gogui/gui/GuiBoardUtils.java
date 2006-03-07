@@ -258,6 +258,31 @@ public final class GuiBoardUtils
         }
     }
 
+    public static void updateFromGoBoard(GuiBoard guiBoard, Board board,
+                                         boolean markLastMove)
+    {
+        for (int i = 0; i < board.getNumberPoints(); ++i)
+        {
+            GoPoint point = board.getPoint(i);
+            guiBoard.setColor(point, board.getColor(point));
+        }
+        GoPoint point = null;
+        if (markLastMove)
+        {
+            int moveNumber = board.getMoveNumber();
+            if (moveNumber > 0)
+                point = board.getMove(moveNumber - 1).getPoint();
+        }
+        guiBoard.markLastMove(point);
+        if (point != null)
+            guiBoard.setFocusPoint(point);
+        else
+        {
+            int size = guiBoard.getBoardSize();
+            guiBoard.setFocusPoint(GoPoint.create(size / 2, size / 2));
+        }
+    }
+
     /** Make constructor unavailable; class is for namespace only. */
     private GuiBoardUtils()
     {

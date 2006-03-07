@@ -73,6 +73,11 @@ public final class GoPoint
         assert(point != null);
         return point;
     }
+
+    public boolean isOnBoard(int boardSize)
+    {
+        return m_x < boardSize && m_y < boardSize;
+    }
     
     /** Return point below.
         @return The point below this point (x, y - 1).

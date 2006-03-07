@@ -32,6 +32,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -43,7 +44,7 @@ import net.sf.gogui.gui.GuiUtils;
 /** Graphical display of a Go board. */
 public final class GuiBoard
     extends JPanel
-    implements FocusListener, Printable
+    implements Printable
 {
     /** Callback for clicks on a field. */
     public interface Listener
@@ -53,9 +54,8 @@ public final class GuiBoard
         void contextMenu(GoPoint point, Component invoker, int x, int y);
     }
 
-    public GuiBoard(Board board, boolean fastPaint)
+    public GuiBoard(int size, boolean fastPaint)
     {
-        m_board = board;
         m_fastPaint = fastPaint;
         setPreferredFieldSize();
         ClassLoader classLoader = getClass().getClassLoader();
@@ -64,18 +64,15 @@ public final class GuiBoard
             m_image = new ImageIcon(url).getImage();
         else
             m_image = null;
-        initSize(m_board.getSize());
+        initSize(size);
     }
 
     /** Clear everything but stones. */
     public void clearAll()
     {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint p = m_board.getPoint(i);
-            clearInfluence(p);
-            setFieldBackground(p, null);
-        }
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                m_field[x][y].setFieldBackground(null);
         clearAllCrossHair();
         clearAllMarkup();
         clearAllSelect();
@@ -86,38 +83,43 @@ public final class GuiBoard
 
     public void clearAllCrossHair()
     {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            setCrossHair(m_board.getPoint(i), false);
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                m_field[x][y].setCrossHair(false);
     }
 
     public void clearAllMarkup()
     {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint point = m_board.getPoint(i);
-            setMark(point, false);
-            setMarkCircle(point, false);
-            setMarkSquare(point, false);
-            setMarkTriangle(point, false);
-        }
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+            {
+                GuiField field = m_field[x][y];
+                field.setMark(false);
+                field.setMarkCircle(false);
+                field.setMarkSquare(false);
+                field.setMarkTriangle(false);
+            }
     }
 
     public void clearAllSelect()
     {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            setSelect(m_board.getPoint(i), false);
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                m_field[x][y].setSelect(false);
     }
 
     public void clearAllLabels()
     {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            setLabel(m_board.getPoint(i), "");
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                m_field[x][y].setLabel("");
     }
 
     public void clearAllTerritory()
     {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            setTerritory(m_board.getPoint(i), GoColor.EMPTY);
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                m_field[x][y].setTerritory(GoColor.EMPTY);
     }
 
     public void clearInfluence(GoPoint p)
@@ -128,18 +130,6 @@ public final class GuiBoard
     public void contextMenu(GoPoint point)
     {
         m_panel.contextMenu(point);
-    }
-
-    public void focusGained(FocusEvent event)
-    {
-        if (getShowCursor())
-            setFocus(m_focusPoint, true);
-    }
-
-    public void focusLost(FocusEvent event)
-    {
-        if (getShowCursor())
-            setFocus(m_focusPoint, false);
     }
 
     public void fieldClicked(GoPoint p, boolean modifiedSelect)
@@ -153,15 +143,6 @@ public final class GuiBoard
         return m_size;
     }
 
-    /** If the JComponent is needed.
-        @todo Should be fixed, GuiField is not for public access.
-    */
-    private GuiField getField(GoPoint p)
-    {
-        assert(p != null);
-        return m_field[p.getX()][p.getY()];
-    }
-
     public Dimension getFieldSize()
     {
         int size = m_panel.getFieldSize();
@@ -170,7 +151,7 @@ public final class GuiBoard
 
     public String getLabel(GoPoint point)
     {
-        return getField(point).getString();
+        return getField(point).getLabel();
     }
 
     public Point getLocationOnScreen(GoPoint point)
@@ -222,33 +203,29 @@ public final class GuiBoard
         return m_showCursor;
     }
 
-    public void initFocus()
-    {
-        int moveNumber = m_board.getMoveNumber();
-        if (moveNumber > 0)
-        {
-            Move m = m_board.getMove(moveNumber - 1);
-            GoPoint lastMove = m.getPoint();
-            if (lastMove != null && m.getColor() != GoColor.EMPTY)
-                setFocusPoint(lastMove);
-        }
-        else if (m_board.getInternalNumberMoves() == 0)
-        {
-            if (m_size > 0)
-            {
-                m_focusPoint = null;
-                setFocusPoint(GoPoint.create(m_size / 2, m_size / 2));
-            }
-        }
-    }
-
     public void initSize(int size)
     {
         m_size = size;
+        m_constants = new BoardConstants(size);
         m_field = new GuiField[size][size];
         removeAll();
         setLayout(new SquareLayout());
         m_panel = new BoardPanel();
+        FocusListener focusListener = new FocusListener()
+            {
+                public void focusGained(FocusEvent event)
+                {
+                    if (getShowCursor())
+                        setFocus(m_focusPoint, true);
+                }
+            
+                public void focusLost(FocusEvent event)
+                {
+                    if (getShowCursor())
+                        setFocus(m_focusPoint, false);
+                }
+            };
+        m_panel.addFocusListener(focusListener);
         add(m_panel);
         m_panel.requestFocusInWindow();
         KeyAdapter keyAdapter = new KeyAdapter()
@@ -321,20 +298,15 @@ public final class GuiBoard
             }
         }
         m_lastMove = null;
-        initFocus();
-        updateFromGoBoard();
+        setFocusPoint(GoPoint.create(m_size / 2, m_size / 2));
         revalidate();
     }
 
     /** Mark point of last move on the board.
-        The last move marker will be removed, if the move parameter is null
-        or a pass move.
+        The last move marker will be removed, if the move parameter is null.
     */
-    public void markLastMove(Move move)
+    public void markLastMove(GoPoint point)
     {
-        GoPoint point = null;
-        if (move != null)
-            point = move.getPoint();
         clearLastMove();
         m_lastMove = point;
         if (m_lastMove != null)
@@ -344,7 +316,6 @@ public final class GuiBoard
             repaint(point);
             m_lastMove = point;
         }
-        initFocus();
     }
 
     public void paintImmediately(GoPoint point)
@@ -384,9 +355,10 @@ public final class GuiBoard
         m_needsReset = false;
     }
 
-    public void scoreBegin(GoPoint[] isDeadStone)
+    public void scoreBegin(Board board, GoPoint[] isDeadStone)
     {
-        m_board.scoreBegin(isDeadStone);
+        m_scoreBoard = board;
+        m_scoreBoard.scoreBegin(isDeadStone);
         if (isDeadStone != null)
             for (int i = 0; i < isDeadStone.length; ++i)
                 setCrossHair(isDeadStone[i], true);
@@ -395,16 +367,16 @@ public final class GuiBoard
 
     public void scoreSetDead(GoPoint p)
     {
-        GoColor c = m_board.getColor(p);
+        GoColor c = m_scoreBoard.getColor(p);
         if (c == GoColor.EMPTY)
             return;
-        ArrayList stones = new ArrayList(m_board.getNumberPoints());
-        m_board.getStones(p, c, stones);
-        boolean dead = ! m_board.scoreGetDead((GoPoint)(stones.get(0)));
+        ArrayList stones = new ArrayList(m_scoreBoard.getNumberPoints());
+        m_scoreBoard.getStones(p, c, stones);
+        boolean dead = ! m_scoreBoard.scoreGetDead((GoPoint)(stones.get(0)));
         for (int i = 0; i < stones.size(); ++i)
         {
             GoPoint stone = (GoPoint)stones.get(i);
-            m_board.scoreSetDead(stone, dead);
+            m_scoreBoard.scoreSetDead(stone, dead);
             setCrossHair(stone, dead);
         }
         calcScore();
@@ -418,6 +390,22 @@ public final class GuiBoard
             field.setColor(color);
             m_panel.repaintWithShadow(point);
         }
+    }
+
+    public void setFocusPoint(GoPoint point)
+    {
+        if (point != null && ! point.isOnBoard(m_size))
+            point = null;
+        if (m_focusPoint != point)
+        {
+            if (getShowCursor())
+            {
+                setFocus(m_focusPoint, false);            
+                setFocus(point, true);
+            }
+            m_focusPoint = point;
+        }
+        m_panel.requestFocusInWindow();
     }
 
     public void setFont(Graphics graphics, int fieldSize)
@@ -482,11 +470,11 @@ public final class GuiBoard
     public void setLabel(GoPoint point, String label)
     {
         GuiField field = getField(point);
-        if ((field.getString() == null && label != null)
-            || (field.getString() != null
-                && ! field.getString().equals(label)))
+        if ((field.getLabel() == null && label != null)
+            || (field.getLabel() != null
+                && ! field.getLabel().equals(label)))
         {
-            field.setString(label);
+            field.setLabel(label);
             m_needsReset = true;
             repaint(point);
         }
@@ -587,18 +575,6 @@ public final class GuiBoard
         }
     }
 
-    public void updateFromGoBoard()
-    {
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            updateFromGoBoard(m_board.getPoint(i));
-    }
-
-    public void updateFromGoBoard(GoPoint point)
-    {
-        GoColor color = m_board.getColor(point);
-        setColor(point, color);
-    }
-
     private class BoardPanel
         extends JPanel
     {
@@ -621,7 +597,6 @@ public final class GuiBoard
             setPreferredSize(new Dimension(preferredSize, preferredSize));
             setMinimumSize(new Dimension(minimumSize, minimumSize));
             setFocusable(true);
-            addFocusListener(GuiBoard.this);
         }
 
         public void contextMenu(GoPoint point)
@@ -766,9 +741,9 @@ public final class GuiBoard
             }
             int r = m_fieldSize / 10;
             for (int x = 0; x < m_size; ++x)
-                if (m_board.isHandicapLine(x))
+                if (m_constants.isHandicapLine(x))
                     for (int y = 0; y < m_size; ++y)
-                        if (m_board.isHandicapLine(y))
+                        if (m_constants.isHandicapLine(y))
                         {
                             Point point = getCenter(x, y);
                             graphics.fillOval(point.x - r, point.y - r,
@@ -812,17 +787,17 @@ public final class GuiBoard
             graphics2D.setComposite(m_composite3);
             int size = m_fieldSize - 2 * GuiField.getStoneMargin(m_fieldSize);
             int offset = getShadowOffset();
-            for (int i = 0; i < m_board.getNumberPoints(); ++i)
-            {
-                GoPoint point = m_board.getPoint(i);
-                if (getField(point).getColor() == GoColor.EMPTY)
-                    continue;
-                Point location = getCenter(point.getX(), point.getY());
-                graphics.setColor(Color.black);
-                graphics.fillOval(location.x - size / 2 + offset,
-                                  location.y - size / 2 + offset,
-                                  size, size);
-            }
+            for (int x = 0; x < m_size; ++x)
+                for (int y = 0; y < m_size; ++y)
+                {
+                    if (m_field[x][y].getColor() == GoColor.EMPTY)
+                        continue;
+                    Point location = getCenter(x, y);
+                    graphics.setColor(Color.black);
+                    graphics.fillOval(location.x - size / 2 + offset,
+                                      location.y - size / 2 + offset,
+                                      size, size);
+                }
             graphics.setPaintMode();
         }
 
@@ -875,7 +850,10 @@ public final class GuiBoard
 
     private GoPoint m_lastMove;
 
-    private final Board m_board;
+    /** Go board used during scoring. */
+    private Board m_scoreBoard;
+
+    private BoardConstants m_constants;
 
     private static final AlphaComposite m_composite3
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
@@ -896,11 +874,11 @@ public final class GuiBoard
 
     private void calcScore()
     {
-        m_board.calcScore();
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        m_scoreBoard.calcScore();
+        for (int i = 0; i < m_scoreBoard.getNumberPoints(); ++i)
         {
-            GoPoint p = m_board.getPoint(i);
-            GoColor c = m_board.getScore(p);
+            GoPoint p = m_scoreBoard.getPoint(i);
+            GoColor c = m_scoreBoard.getScore(p);
             setTerritory(p, c);
         }
     }
@@ -916,6 +894,12 @@ public final class GuiBoard
         }
     }
 
+    private GuiField getField(GoPoint p)
+    {
+        assert(p != null);
+        return m_field[p.getX()][p.getY()];
+    }
+
     private int getShadowOffset()
     {
         Rectangle grid = getBounds();
@@ -926,7 +910,8 @@ public final class GuiBoard
 
     private boolean isHandicapLineOrEdge(int line)
     {
-        return m_board.isHandicapLine(line) || m_board.isEdgeLine(line);
+        return m_constants.isHandicapLine(line)
+            || m_constants.isEdgeLine(line);
     }
 
     private void keyPressed(KeyEvent event)
@@ -994,22 +979,6 @@ public final class GuiBoard
             field.setFocus(focus);
             repaint(point);
         }
-    }
-
-    private void setFocusPoint(GoPoint point)
-    {
-        if (point != null && ! m_board.contains(point))
-            point = null;
-        if (m_focusPoint != point)
-        {
-            if (getShowCursor())
-            {
-                setFocus(m_focusPoint, false);            
-                setFocus(point, true);
-            }
-            m_focusPoint = point;
-        }
-        m_panel.requestFocusInWindow();
     }
 
     private void setPreferredFieldSize()

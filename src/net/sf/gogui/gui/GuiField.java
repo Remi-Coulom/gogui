@@ -119,7 +119,7 @@ class GuiField
         return size / 17;
     }
 
-    public String getString()
+    public String getLabel()
     {
         return m_string;
     }
@@ -198,7 +198,7 @@ class GuiField
         m_select = select;
     }
 
-    public void setString(String s)
+    public void setLabel(String s)
     {
         m_string = s;
     }

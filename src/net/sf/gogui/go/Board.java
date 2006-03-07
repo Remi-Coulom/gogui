@@ -9,57 +9,6 @@ import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
-/** Information necessary to undo a move. */
-class MoveRecord
-{
-    public MoveRecord(GoColor oldToMove, Move m, GoColor old,
-                      ArrayList killed, ArrayList suicide)
-    {
-        m_old = old;
-        m_oldToMove = oldToMove;
-        m_move = m;
-        m_killed = killed;
-        m_suicide = suicide;
-    }
-
-    public Move getMove()
-    {
-        return m_move;
-    }
-
-    public GoColor getOldColor()
-    {
-        return m_old;
-    }
-
-    public GoColor getOldToMove()
-    {
-        return m_oldToMove;
-    }
-
-    public ArrayList getKilled()
-    {
-        return m_killed;
-    }
-
-    public ArrayList getSuicide()
-    {
-        return m_suicide;
-    }
-
-    private final GoColor m_old;
-
-    private final GoColor m_oldToMove;
-
-    private final Move m_move;
-
-    private final ArrayList m_killed;
-
-    private final ArrayList m_suicide;
-}
-
-//----------------------------------------------------------------------------
-
 /** Go board. */
 public final class Board
 {
@@ -139,20 +88,20 @@ public final class Board
         return (point.getX() < size && point.getY() < size);
     }
 
-    public ArrayList getAdjacentPoints(GoPoint p)
+    public ArrayList getAdjacentPoints(GoPoint point)
     {
         final int maxAdjacent = 4;
         ArrayList result = new ArrayList(maxAdjacent);
-        int x = p.getX();
-        int y = p.getY();
+        int x = point.getX();
+        int y = point.getY();
         if (x > 0)
-            result.add(getPoint(x - 1, y));
+            result.add(GoPoint.create(x - 1, y));
         if (x < m_size - 1)
-            result.add(getPoint(x + 1, y));
+            result.add(GoPoint.create(x + 1, y));
         if (y > 0)
-            result.add(getPoint(x, y - 1));
+            result.add(GoPoint.create(x, y - 1));
         if (y < m_size - 1)
-            result.add(getPoint(x, y + 1));
+            result.add(GoPoint.create(x, y + 1));
         return result;
     }
 
@@ -188,7 +137,7 @@ public final class Board
 
     public static ArrayList getHandicapStones(int size, int n)
     {
-        return new Constants(size).getHandicapStones(n);
+        return new BoardConstants(size).getHandicapStones(n);
     }
 
     public Move getMove(int i)
@@ -253,28 +202,14 @@ public final class Board
         m_score = new GoColor[m_size][m_size];
         m_capturedB = 0;
         m_capturedW = 0;
-        m_constants = new Constants(size);
+        m_constants = new BoardConstants(size);
         initAllPoints();
         newGame();
     }
 
-    public boolean isEdgeLine(int i)
+    public boolean isHandicap(GoPoint point)
     {
-        return (i == 0 || i == m_size - 1);
-    }
-
-    public boolean isHandicapLine(int i)
-    {
-        return (i == m_constants.m_handicapLine1
-                || i == m_constants.m_handicapLine2
-                || i == m_constants.m_handicapLine3);
-    }
-
-    public boolean isHandicap(GoPoint p)
-    {
-        int x = p.getX();
-        int y = p.getY();
-        return (isHandicapLine(x) && isHandicapLine(y));
+        return m_constants.isHandicap(point);
     }
 
     public boolean isModified()
@@ -359,23 +294,23 @@ public final class Board
         switch (rotationIndex)
         {
         case 0:
-            return getPoint(x, y);
+            return GoPoint.create(x, y);
         case 1:
-            return getPoint(size - x - 1, y);
+            return GoPoint.create(size - x - 1, y);
         case 2:
-            return getPoint(x, size - y - 1);
+            return GoPoint.create(x, size - y - 1);
         case 3:
-            return getPoint(y, x);
+            return GoPoint.create(y, x);
         case 4:
-            return getPoint(size - y - 1, x);
+            return GoPoint.create(size - y - 1, x);
         case 5:
-            return getPoint(y, size - x - 1);
+            return GoPoint.create(y, size - x - 1);
         case 6:
-            return getPoint(size - x - 1, size - y - 1);
+            return GoPoint.create(size - x - 1, size - y - 1);
         case 7:
-            return getPoint(size - y - 1, size - x - 1);
+            return GoPoint.create(size - y - 1, size - x - 1);
         default:
-            return getPoint(x, y);
+            return GoPoint.create(x, y);
         }
     }
 
@@ -534,84 +469,55 @@ public final class Board
             undo();
     }
 
-    /** Some values that are constant for a given board size. */
-    private static class Constants
+    /** Information necessary to undo a move. */
+    private static class MoveRecord
     {
-        public Constants(int size)
+        public MoveRecord(GoColor oldToMove, Move m, GoColor old,
+                          ArrayList killed, ArrayList suicide)
         {
-            m_size = size;
-            m_handicapLine1 = -1;
-            m_handicapLine2 = -1;
-            m_handicapLine3 = -1;
-            if (size >= 13)
-            {
-                m_handicapLine1 = 3;
-                m_handicapLine3 = size - 4;
-            }
-            else if (size >= 8)
-            {
-                m_handicapLine1 = 2;
-                m_handicapLine3 = size - 3;
-            }
-            if (size >= 11 && size % 2 != 0)
-                m_handicapLine2 = size / 2;
+            m_old = old;
+            m_oldToMove = oldToMove;
+            m_move = m;
+            m_killed = killed;
+            m_suicide = suicide;
         }
 
-        public ArrayList getHandicapStones(int n)
+        public Move getMove()
         {
-            ArrayList result = new ArrayList(9);
-            if (n == 0)
-                return result;
-            int line1 = m_handicapLine1;
-            int line2 = m_handicapLine2;
-            int line3 = m_handicapLine3;
-            if (line1 < 0)
-                return null;
-            if (n > 4 && line2 < 0)
-                return null;
-            if (n >= 1)
-                result.add(getPoint(line1, line1));
-            if (n >= 2)
-                result.add(getPoint(line3, line3));
-            if (n >= 3)
-                result.add(getPoint(line1, line3));
-            if (n >= 4)
-                result.add(getPoint(line3, line1));
-            if (n >= 5)
-                if (n % 2 != 0)
-                {
-                    result.add(getPoint(line2, line2));
-                    --n;
-                }
-            if (n >= 5)
-                result.add(getPoint(line1, line2));
-            if (n >= 6)
-                result.add(getPoint(line3, line2));
-            if (n >= 7)
-                result.add(getPoint(line2, line1));
-            if (n >= 8)
-                result.add(getPoint(line2, line3));
-            return result;
+            return m_move;
         }
 
-        private int m_size;
-
-        private int m_handicapLine1;
-
-        private int m_handicapLine2;
-
-        private int m_handicapLine3;
-
-        private GoPoint getPoint(int x, int y)
+        public GoColor getOldColor()
         {
-            assert(x >= 0);
-            assert(x < m_size);
-            assert(y >= 0);
-            assert(y < m_size);
-            return GoPoint.create(x, y);
+            return m_old;
         }
+
+        public GoColor getOldToMove()
+        {
+            return m_oldToMove;
+        }
+
+        public ArrayList getKilled()
+        {
+            return m_killed;
+        }
+
+        public ArrayList getSuicide()
+        {
+            return m_suicide;
+        }
+
+        private final GoColor m_old;
+
+        private final GoColor m_oldToMove;
+
+        private final Move m_move;
+
+        private final ArrayList m_killed;
+
+        private final ArrayList m_suicide;
     }
-    
+
     private boolean m_mark[][];
 
     private boolean m_dead[][];
@@ -638,7 +544,7 @@ public final class Board
 
     private GoColor m_toMove;
 
-    private Constants m_constants;
+    private BoardConstants m_constants;
 
     private GoPoint m_allPoints[];
 
@@ -684,11 +590,6 @@ public final class Board
         return m_mark[p.getX()][p.getY()];
     }
 
-    private GoPoint getPoint(int x, int y)
-    {
-        return m_constants.getPoint(x, y);
-    }
-
     private void initAllPoints()
     {
         m_allPoints = new GoPoint[m_size * m_size];
@@ -696,7 +597,7 @@ public final class Board
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
-                GoPoint point = getPoint(x, y);
+                GoPoint point = GoPoint.create(x, y);
                 m_allPoints[i++] = point;
             }
     }
