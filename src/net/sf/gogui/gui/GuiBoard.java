@@ -27,14 +27,12 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.net.URL;
-import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.go.Move;
 import net.sf.gogui.utils.SquareLayout;
 import net.sf.gogui.gui.GuiUtils;
 
@@ -285,7 +283,6 @@ public final class GuiBoard
         {
             for (int x = 0; x < size; ++x)
             {
-                GoPoint p = GoPoint.create(x, y);
                 GuiField field = new GuiField(this, m_fastPaint);
                 m_field[x][y] = field;
             }
@@ -658,6 +655,11 @@ public final class GuiBoard
             dirty.height = m_fieldSize + offset;
             repaint(dirty);
         }
+
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
 
         private int m_fieldSize;
 
