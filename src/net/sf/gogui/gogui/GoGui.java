@@ -74,7 +74,6 @@ import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtils;
-import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.OptionalWarning;
@@ -694,7 +693,7 @@ public class GoGui
         }
     }
 
-    public void contextMenu(GoPoint point, GuiField field)
+    public void contextMenu(GoPoint point, Component invoker, int x, int y)
     {
         if (isCommandInProgress())
             return;
@@ -706,9 +705,7 @@ public class GoGui
             return;
         }
         ContextMenu contextMenu = createContextMenu(point);
-        int x = field.getWidth() / 2;
-        int y = field.getHeight() / 2;
-        contextMenu.show(field, x, y);
+        contextMenu.show(invoker, x, y);
     }
 
     public void disposeGameTree()
@@ -738,9 +735,6 @@ public class GoGui
             m_board.setToMove(toMove);
             updateGameInfo(true);
             m_guiBoard.updateFromGoBoard();
-            // Paint point immediately to pretend better responsiveness
-            m_guiBoard.paintImmediately(p);
-            m_guiBoard.repaint();
             setNeedsSave(true);
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
@@ -749,7 +743,6 @@ public class GoGui
             m_analyzeCommand.setPointArg(p);
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(p, true);
-            m_guiBoard.repaint();
             m_analyzeDialog.setRunButtonEnabled(true);
             analyzeBegin(false, false);
             return;
@@ -768,7 +761,6 @@ public class GoGui
                 pointListArg.add(p);
             m_guiBoard.clearAllSelect();
             GuiBoardUtils.setSelect(m_guiBoard, pointListArg, true);
-            m_guiBoard.repaint();
             if (modifiedSelect && pointListArg.size() > 0)
                 analyzeBegin(false, false);
             return;
@@ -776,13 +768,12 @@ public class GoGui
         else if (m_scoreMode && ! modifiedSelect)
         {
             m_guiBoard.scoreSetDead(p);
-            m_guiBoard.repaint();
             double komi = m_gameTree.getGameInformation().m_komi;
             m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
             return;
         }
         else if (modifiedSelect)
-            contextMenu(p, m_guiBoard.getField(p));
+            m_guiBoard.contextMenu(p);
         else
         {
             if (m_board.isSuicide(p, m_board.getToMove())
@@ -923,7 +914,6 @@ public class GoGui
         {
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(m_analyzeCommand.getPointArg(), true);
-            m_guiBoard.repaint();
             if (m_analyzeDialog != null)
                 m_analyzeDialog.setRunButtonEnabled(true);
         }
@@ -936,7 +926,6 @@ public class GoGui
                 GuiBoardUtils.setSelect(m_guiBoard,
                                         m_analyzeCommand.getPointListArg(),
                                         true);
-            m_guiBoard.repaint();
             toTop();
             return;
         }
@@ -2046,7 +2035,6 @@ public class GoGui
         }
         clearStatus();
         m_guiBoard.clearAll();
-        m_guiBoard.repaint();
         m_scoreMode = false;
         m_toolBar.enableAll(true, m_currentNode);
         m_menuBar.setNormalMode();
@@ -2098,7 +2086,6 @@ public class GoGui
         boolean showCursor = m_menuBar.getShowCursor();
         m_guiBoard.setShowCursor(showCursor);
         m_prefs.setBool("show-cursor", showCursor);
-        m_guiBoard.repaint();
     }
 
     private void cbShowGrid()
@@ -2106,7 +2093,6 @@ public class GoGui
         boolean showGrid = m_menuBar.getShowGrid();
         m_guiBoard.setShowGrid(showGrid);
         m_prefs.setBool("show-grid", showGrid);
-        m_guiBoard.repaint();
     }
 
     private void cbShowLastMove()
@@ -2494,7 +2480,6 @@ public class GoGui
         m_guiBoard.setLabel(point, value);
         setNeedsSave(true);
         updateBoard();
-        m_guiBoard.repaint();
     }
 
     private void endLengthyCommand()
@@ -2678,6 +2663,8 @@ public class GoGui
                 if (m_showLastMove)
                     m_guiBoard.markLastMove(move);
                 // Paint point immediately to pretend better responsiveness
+                // because updating game tree or response to GTP play command
+                // can be slow
                 m_guiBoard.paintImmediately(point);
             }
             GoColor color = move.getColor();
@@ -2809,7 +2796,7 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, true);
         }
         toTop();
-        m_guiBoard.setFocus();
+        m_guiBoard.initFocus();
         setTitleFromProgram();
         checkComputerMove();
     }
@@ -2834,7 +2821,6 @@ public class GoGui
     {
         resetBoard();
         m_guiBoard.scoreBegin(isDeadStone);
-        m_guiBoard.repaint();
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
@@ -2949,7 +2935,6 @@ public class GoGui
             m_guiBoard.setMarkTriangle(point, mark);        
         setNeedsSave(true);
         updateBoard();
-        m_guiBoard.repaint();
     }
 
     private void newGame(int size)
@@ -3045,7 +3030,6 @@ public class GoGui
         m_guiBoard.resetBoard();
         m_guiBoard.updateFromGoBoard();
         updateBoard();
-        m_guiBoard.repaint();
     }
     
     private void restoreMainWindow()
@@ -3415,7 +3399,6 @@ public class GoGui
                         GoPoint list[] =
                             GtpUtils.parsePointString(text, m_boardSize);
                         m_guiBoard.showPointList(list);
-                        m_guiBoard.repaint();
                     }
                 };
         }
@@ -3566,7 +3549,6 @@ public class GoGui
         updateGameTree(gameTreeChanged);
         m_comment.setNode(m_currentNode);
         updateBoard();
-        m_guiBoard.repaint();
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSelectedColor(m_board.getToMove());
     }

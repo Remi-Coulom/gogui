@@ -11,18 +11,9 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import javax.swing.JComponent;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.RadialGradientPaint;
@@ -33,79 +24,12 @@ import net.sf.gogui.utils.RadialGradientPaint;
     The implementation assumes that the size of the component is a square,
     which is automatically guaranteed if the board uses SquareLayout.
 */
-public class GuiField
-    extends JComponent
-    implements FocusListener
+class GuiField
 {
-    public GuiField(GuiBoard board, GoPoint point, boolean fastPaint)
+    public GuiField(GuiBoard board, boolean fastPaint)
     {
         m_board = board;
-        m_point = point;
         m_fastPaint = fastPaint;
-        setPreferredSize(m_board.getPreferredFieldSize());
-        setMinimumSize(m_board.getMinimumFieldSize());
-        addFocusListener(this);
-        KeyAdapter keyAdapter = new KeyAdapter()
-            {
-                public void keyPressed(KeyEvent event)
-                {
-                    int code = event.getKeyCode();
-                    int modifiers = event.getModifiers();
-                    int mask = (ActionEvent.CTRL_MASK
-                                | ActionEvent.ALT_MASK
-                                | ActionEvent.META_MASK);
-                    boolean modifiedSelect = ((modifiers & mask) != 0);
-                    if (code == KeyEvent.VK_ENTER && m_board.getShowCursor())
-                        m_board.fieldClicked(m_point, modifiedSelect);
-                }
-            };
-        addKeyListener(keyAdapter);
-        MouseAdapter mouseAdapter = new MouseAdapter()
-            {
-                public void mousePressed(MouseEvent event)
-                {
-                    Point point = event.getPoint();
-                    int x = (int)point.getX();
-                    int y = (int)point.getY();
-                    if (! contains(x, y))
-                        return;
-                    if (event.isPopupTrigger())
-                    {
-                        m_board.contextMenu(m_point, GuiField.this);
-                        return;
-                    }
-                }
-
-                public void mouseReleased(MouseEvent event)
-                {                    
-                    Point point = event.getPoint();
-                    int x = (int)point.getX();
-                    int y = (int)point.getY();
-                    if (! contains(x, y))
-                        return;
-                    if (event.isPopupTrigger())
-                    {
-                        m_board.contextMenu(m_point, GuiField.this);
-                        return;
-                    }
-                    int button = event.getButton();
-                    int count = event.getClickCount();
-                    if (button != MouseEvent.BUTTON1)
-                        return;
-                    if (count == 2)
-                        m_board.fieldClicked(m_point, true);
-                    else
-                    {            
-                        int modifiers = event.getModifiers();
-                        int mask = (ActionEvent.CTRL_MASK
-                                    | ActionEvent.ALT_MASK
-                                    | ActionEvent.META_MASK);
-                        boolean modifiedSelect = ((modifiers & mask) != 0);
-                        m_board.fieldClicked(m_point, modifiedSelect);
-                    }
-                }
-            };
-        addMouseListener(mouseAdapter);
     }
 
     public void clearInfluence()
@@ -114,19 +38,55 @@ public class GuiField
         m_influence = 0;
     }
 
-    public void focusGained(FocusEvent event)
+    public void draw(Graphics graphics, int size)
     {
-        repaint();
-    }
-
-    public void focusLost(FocusEvent event)
-    {
-        repaint();
+        m_graphics = graphics;
+        if (! m_fastPaint)
+            m_graphics2D =
+                graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
+        m_size = size;
+        if (m_fieldColor != null)
+            drawFieldColor();
+        if (m_territory != GoColor.EMPTY && m_graphics2D == null)
+            drawTerritoryGraphics();
+        if (m_color != GoColor.EMPTY)
+            drawStone();
+        if (m_territory != GoColor.EMPTY && m_graphics2D != null)
+            drawTerritoryGraphics2D();
+        if (m_influenceSet)
+            drawInfluence();
+        drawMarks();
+        if (m_crossHair)
+            drawCrossHair();
+        if (m_lastMoveMarker)
+            drawLastMoveMarker();
+        if (m_select)
+            drawSelect();
+        else
+            drawString();
+        if (m_focus && m_board.getShowCursor())
+            drawFocus();
+        m_graphics = null;
     }
 
     public GoColor getColor()
     {
         return m_color;
+    }
+
+    public boolean getCrossHair()
+    {
+        return m_crossHair;
+    }
+
+    public Color getFieldBackground()
+    {
+        return m_fieldColor;
+    }
+
+    public boolean getFocus()
+    {
+        return m_focus;
     }
 
     public boolean getMark()
@@ -169,37 +129,13 @@ public class GuiField
         return m_territory;
     }
 
+    public boolean isInfluenceSet()
+    {
+        return m_influenceSet;
+    }
+
     public void paintComponent(Graphics graphics)
     {
-        m_graphics = graphics;
-        if (! m_fastPaint)
-            m_graphics2D =
-                graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
-        m_size = getSize().width;
-        if (m_fieldColor != null)
-            drawFieldColor();
-        if (m_territory != GoColor.EMPTY && m_graphics2D == null)
-            drawTerritoryGraphics();
-        if (m_color != GoColor.EMPTY)
-            drawStone();
-        if (m_territory != GoColor.EMPTY && m_graphics2D != null)
-            drawTerritoryGraphics2D();
-        if (m_influenceSet)
-            drawInfluence();
-        drawMarks();
-        if (m_crossHair)
-            drawCrossHair();
-        if (m_lastMoveMarker)
-            drawLastMoveMarker();
-        if (m_select)
-            drawSelect();
-        if (m_string.equals(""))
-            setToolTipText(null);
-        else
-            drawString();
-        if (isFocusOwner() && m_board.getShowCursor())
-            drawFocus();
-        m_graphics = null;
     }
 
     public void setFieldBackground(Color color)
@@ -215,6 +151,11 @@ public class GuiField
     public void setCrossHair(boolean crossHair)
     {
         m_crossHair = crossHair;
+    }
+
+    public void setFocus(boolean focus)
+    {
+        m_focus = focus;
     }
 
     public void setInfluence(double value)
@@ -271,6 +212,8 @@ public class GuiField
     private boolean m_crossHair;
 
     private final boolean m_fastPaint;
+
+    private boolean m_focus;
 
     private boolean m_lastMoveMarker;
 
@@ -332,8 +275,6 @@ public class GuiField
         = Color.decode("#f6eee6");
 
     private GoColor m_color = GoColor.EMPTY;
-
-    private final GoPoint m_point;
 
     private final GuiBoard m_board;
 
@@ -493,10 +434,8 @@ public class GuiField
         else
             m_graphics.setColor(Color.white);
         Rectangle clip = null;
-        setToolTipText(null);
         if (stringWidth > 0.95 * m_size)
         {
-            setToolTipText(m_string);
             clip = m_graphics.getClipBounds();
             m_graphics.setClip(clip.x, clip.y,
                                (int)(0.95 * clip.width), clip.height);

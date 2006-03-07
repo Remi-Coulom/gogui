@@ -10,6 +10,9 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.net.URL;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
@@ -155,6 +158,17 @@ public class GuiUtils
         dialog.setVisible(true);
         if (thread.getThrowable() != null)
             throw thread.getThrowable();
+    }
+
+    /** Set antialias rendering hint if graphics is instance of Graphics2D */
+    public static void setAntiAlias(Graphics graphics)
+    {
+        if (graphics instanceof Graphics2D)
+        {
+            Graphics2D graphics2D = (Graphics2D)graphics;
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON);
+        }
     }
 
     /** Set Go icon on frame. */

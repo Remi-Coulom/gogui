@@ -6,6 +6,7 @@
 package net.sf.gogui.gtpdisplay;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,7 +24,6 @@ import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.gui.GuiBoard;
-import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
@@ -75,7 +75,8 @@ public class GtpDisplay
             m_guiBoard.setShowCursor(false);
         m_guiBoard.setListener(new GuiBoard.Listener()
             {
-                public void contextMenu(GoPoint point, GuiField field)
+                public void contextMenu(GoPoint point, Component invoker,
+                                        int x, int y)
                 {
                 }
 
