@@ -27,10 +27,11 @@ public final class Board
 
     public boolean bothPassed()
     {
-        if (m_moveNumber < 2)
+        int moveNumber = getMoveNumber();
+        if (moveNumber < 2)
             return false;
-        return (getInternalMove(m_moveNumber - 1).getPoint() == null
-                && getInternalMove(m_moveNumber - 2).getPoint() == null);
+        return (getMove(moveNumber - 1).getPoint() == null
+                && getMove(moveNumber - 2).getPoint() == null);
     }
 
     public void calcScore()
@@ -142,7 +143,7 @@ public final class Board
 
     public Move getMove(int i)
     {
-        return ((MoveRecord)m_moves.get(i + m_setupNumber)).getMove();
+        return ((MoveRecord)m_moves.get(i)).getMove();
     }
 
     public GoPoint getPoint(int i)
@@ -150,34 +151,14 @@ public final class Board
         return m_allPoints[i];
     }
 
-    public Move getInternalMove(int i)
-    {
-        return ((MoveRecord)m_moves.get(i)).getMove();
-    }
-
-    public int getInternalNumberMoves()
-    {
-        return m_setupNumber;
-    }
-
     public int getMoveNumber()
     {
-        return m_moveNumber - m_setupNumber;
+        return m_moves.size();
     }
 
     public int getNumberPoints()
     {
         return m_allPoints.length;
-    }
-
-    public ArrayList getSetupStonesBlack()
-    {
-        return m_setupStonesBlack;
-    }
-
-    public ArrayList getSetupStonesWhite()
-    {
-        return m_setupStonesWhite;
     }
 
     public void getStones(GoPoint p, GoColor color, ArrayList stones)
@@ -214,7 +195,7 @@ public final class Board
 
     public boolean isModified()
     {
-        return (m_moves.size() > 0 || m_setupNumber > 0);
+        return (m_moves.size() > 0);
     }
 
     public boolean isSuicide(GoPoint point, GoColor toMove)
@@ -222,7 +203,8 @@ public final class Board
         if (getColor(point) != GoColor.EMPTY)
             return false;
         play(point, toMove);
-        MoveRecord moveRecord = (MoveRecord)m_moves.get(m_moveNumber - 1);
+        int moveNumber = getMoveNumber();
+        MoveRecord moveRecord = (MoveRecord)m_moves.get(moveNumber - 1);
         boolean result = (moveRecord.getSuicide().size() > 0);
         undo();
         return result;
@@ -233,13 +215,9 @@ public final class Board
         for (int i = 0; i < m_allPoints.length; ++i)
             setColor(m_allPoints[i], GoColor.EMPTY);
         m_moves.clear();
-        m_moveNumber = 0;
-        m_setupNumber = 0;
         m_capturedB = 0;
         m_capturedW = 0;
         m_toMove = GoColor.BLACK;
-        m_setupStonesBlack.clear();
-        m_setupStonesWhite.clear();
     }
 
     public void play(GoPoint point, GoColor color)
@@ -277,9 +255,7 @@ public final class Board
                 }
             }
         }
-        assert(m_moves.size() == m_moveNumber);
         m_moves.add(new MoveRecord(m_toMove, m, old, killed, suicide));
-        ++m_moveNumber;
         m_toMove = otherColor;        
     }
 
@@ -400,30 +376,13 @@ public final class Board
         m_toMove = toMove;
     }
 
-    /** Set a stone on the board.
-        Will remove dead stones.
-        Requires: getMoveNumber() == 0
-    */
-    public void setup(Move m)
-    {
-        assert(getMoveNumber() == 0);
-        play(m);
-        if (m.getColor() == GoColor.BLACK)
-            m_setupStonesBlack.add(m.getPoint());
-        else if (m.getColor() == GoColor.WHITE)
-            m_setupStonesWhite.add(m.getPoint());
-        else
-            assert(false);
-        ++m_setupNumber;
-    }
-
     public void undo()
     {
         if (getMoveNumber() == 0)
             return;
-        --m_moveNumber;
-        MoveRecord r = (MoveRecord)m_moves.get(m_moveNumber);
-        m_moves.remove(m_moveNumber);
+        int index = getMoveNumber() - 1;
+        MoveRecord r = (MoveRecord)m_moves.get(index);
+        m_moves.remove(index);
         Move m = r.getMove();
         GoColor c = m.getColor();
         GoColor otherColor = c.otherColor();
@@ -528,15 +487,7 @@ public final class Board
 
     private int m_capturedW;
 
-    private int m_moveNumber;
-
-    private int m_setupNumber;
-
     private final ArrayList m_moves = new ArrayList(361);
-
-    private final ArrayList m_setupStonesBlack = new ArrayList();
-
-    private final ArrayList m_setupStonesWhite = new ArrayList();
 
     private GoColor m_color[][];
 
