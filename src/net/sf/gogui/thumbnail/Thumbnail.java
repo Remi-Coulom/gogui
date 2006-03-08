@@ -37,6 +37,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtils;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gui.GuiBoard;
+import net.sf.gogui.gui.GuiBoardUtils;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.version.Version;
@@ -87,11 +88,11 @@ public final class Thumbnail
             File normalDir = new File(dir, "normal");
             ArrayList moves = new ArrayList();
             Board board = getBoard(file, moves);
-            GuiBoard guiBoard = new GuiBoard(board, false);
+            GuiBoard guiBoard = new GuiBoard(board.getSize(), false);
             guiBoard.setShowGrid(false);
             for (int i = 0; i < moves.size(); ++i)
                 board.play((Move)moves.get(i));
-            guiBoard.updateFromGoBoard();
+            GuiBoardUtils.updateFromGoBoard(guiBoard, board, false);
             int largeSize
                 = 256 / (board.getSize() + 2) * (board.getSize() + 2);
             guiBoard.setSize(largeSize, largeSize);
