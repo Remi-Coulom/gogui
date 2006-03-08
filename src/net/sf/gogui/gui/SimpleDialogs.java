@@ -5,15 +5,28 @@
 
 package net.sf.gogui.gui;
 
-import net.sf.gogui.sgf.SgfFilter;
-import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtils;
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import net.sf.gogui.sgf.SgfFilter;
+import net.sf.gogui.thumbnail.Thumbnail;
+import net.sf.gogui.utils.Platform;
+import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
@@ -231,7 +244,15 @@ public final class SimpleDialogs
                 chooser.setSelectedFile(lastFile);
         }
         if (setSgfFilter)
+        {
             chooser.setFileFilter(sgfFilter);
+            if (Thumbnail.checkThumbnailSupport())
+            {
+                SgfPreview preview = new SgfPreview();
+                chooser.setAccessory(preview);
+                chooser.addPropertyChangeListener(preview);
+            }
+        }
         else
             chooser.setFileFilter(chooser.getAcceptAllFileFilter());
         int ret;
@@ -254,6 +275,111 @@ public final class SimpleDialogs
         File file = chooser.getSelectedFile();
         s_lastFile = file;
         return file;
+    }
+}
+
+//----------------------------------------------------------------------------
+
+class SgfPreview
+    extends JPanel
+    implements PropertyChangeListener
+{    
+    public SgfPreview()
+    {
+        setLayout(new BorderLayout());
+        m_imagePanel = new ImagePanel();
+        add(m_imagePanel);
+        JPanel buttonPanel = new JPanel();
+        add(buttonPanel, BorderLayout.SOUTH);
+        m_auto = new JCheckBox("Automatic preview");
+        buttonPanel.add(m_auto);
+        m_preview = new JButton("Preview");
+        m_preview.setActionCommand("preview");
+        ActionListener listener = new ActionListener()
+            {
+                public void actionPerformed(ActionEvent event)
+                {
+                    if (event.getActionCommand().equals("preview"))
+                        preview();
+                }
+            };
+        m_preview.addActionListener(listener);
+        m_preview.setEnabled(false);
+        buttonPanel.add(m_preview);
+    }
+    
+    public void propertyChange(PropertyChangeEvent event)
+    {
+        String propertyName = event.getPropertyName();
+        if (propertyName.equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY))
+        {
+            m_file = null;
+            m_preview.setEnabled(false);
+            File file = (File)event.getNewValue();
+            if (file != null)
+            {
+                String name = file.getAbsolutePath();
+                if (name == null || ! name.toLowerCase().endsWith(".sgf"))
+                    file = null;
+            }
+            if (file != null)
+            {
+                m_file = file;
+                m_preview.setEnabled(true);
+                if (m_auto.isSelected())
+                    preview();
+            }
+        }
+    }
+
+    private class ImagePanel
+        extends JPanel
+    {
+        public ImagePanel()
+        {
+            setPreferredSize(new Dimension(128 + 10, 128 + 10));
+        }
+
+        public void paintComponent(Graphics graphics)
+        {
+            graphics.setColor(getBackground());
+            graphics.fillRect(0, 0, getWidth(), getHeight());
+            if (m_image != null)
+            {
+                int x = (getWidth() - 128) / 2;
+                int y = (getHeight() - 128) / 2;
+                graphics.drawImage(m_image, x, y, 128, 128, null);
+            }
+        }
+    }
+
+    private File m_file;
+
+    private JButton m_preview;
+
+    private JCheckBox m_auto;
+    
+    private Image m_image;
+
+    private ImagePanel m_imagePanel;
+
+    private Thumbnail m_thumbnail = new Thumbnail(false);
+
+    public void preview()
+    {
+        if (m_file == null)
+            return;
+        m_thumbnail.create(m_file);
+        File thumbnail = m_thumbnail.getLastNormalThumbnail();
+        if (thumbnail != null)
+        {
+            ImageIcon icon = new ImageIcon(thumbnail.toString());
+            m_image = icon.getImage();
+        }
+        else
+            m_image = null;
+        m_imagePanel.repaint();
+        m_preview.setEnabled(false);
     }
 }
 

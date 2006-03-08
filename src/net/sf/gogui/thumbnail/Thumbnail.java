@@ -56,14 +56,26 @@ public final class Thumbnail
         m_drawer = new GuiBoardDrawer(false);
     }
 
+    public static boolean checkThumbnailSupport()
+    {
+        return getNormalDir().exists();
+    }
+
     /** Create thumbnail.
         Creates a small thumbnail; only if .thumbnails/normal directory
         already exists in home directory.
     */
     public boolean create(File file)
     {
+        m_lastNormalThumbnail = null;
         try
         {
+            if (! checkThumbnailSupport())
+            {
+                // We cannot create it with the right permissions from Java
+                log("Thumbnail directory does not exist: " + file);
+                return false;
+            }
             log("File: " + file);
             long lastModified = file.lastModified() / 1000L;
             if (lastModified == 0L)
@@ -76,10 +88,6 @@ public final class Thumbnail
             String md5 = getMD5(uri.toString());
             if (m_verbose)
                 log("MD5: " + md5);
-            String home = System.getProperty("user.home", "");
-            File dir = new File(home, ".thumbnails");
-            File largeDir = new File(dir, "large");
-            File normalDir = new File(dir, "normal");
             ArrayList moves = new ArrayList();
             Board board = getBoard(file, moves);
             for (int i = 0; i < moves.size(); ++i)
@@ -96,13 +104,6 @@ public final class Thumbnail
             BufferedImage image = getImage(field, 256, 256);
 
             /* Don't write the large image yet, takes too much space
-            if (! largeDir.exists())
-            {
-                // We cannot create it with the right permissions from Java
-                log("Thumbnail large directory does not exist: " + file);
-                return false;
-            }
-            else
                 writeImage(image, new File(largeDir, md5 + ".png"), uri,
                            lastModified);
             */
@@ -112,15 +113,8 @@ public final class Thumbnail
             Image scaledInstance
                 = image.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
             graphics.drawImage(scaledInstance, 0, 0, null);
-            if (! normalDir.exists())
-            {
-                // We cannot create it with the right permissions from Java
-                log("Thumbnail normal directory does not exist: " + file);
-                return false;
-            }
-
-            writeImage(normalImage, new File(normalDir, md5 + ".png"), uri,
-                       lastModified);
+            writeImage(normalImage, new File(getNormalDir(), md5 + ".png"),
+                       uri, lastModified);
 
             return true;
         }
@@ -146,6 +140,17 @@ public final class Thumbnail
         }
     }
 
+    public static File getNormalDir()
+    {
+        String home = System.getProperty("user.home", "");
+        return new File(new File(home, ".thumbnails"), "normal");
+    }
+
+    public File getLastNormalThumbnail()
+    {
+        return m_lastNormalThumbnail;
+    }
+
     public static void main(String[] arg)
     {
         Thumbnail thumbnail = new Thumbnail(true);
@@ -154,6 +159,8 @@ public final class Thumbnail
     }
 
     private final boolean m_verbose;
+
+    private File m_lastNormalThumbnail;
 
     private final GuiBoardDrawer m_drawer;
 
@@ -259,6 +266,7 @@ public final class Thumbnail
         ImageOutputStream ios = ImageIO.createImageOutputStream(file);
         writer.setOutput(ios);
         writer.write(null, new IIOImage(image, null, meta), null);
+        m_lastNormalThumbnail = file;
     }
 }
 
