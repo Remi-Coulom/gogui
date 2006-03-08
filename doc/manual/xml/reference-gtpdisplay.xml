@@ -17,6 +17,7 @@ Go Text Protocol adapter showing the current board in a window.
 <command>gtpdisplay</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-fast</option></arg>
+<arg><option>-laf</option> <replaceable>name</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><replaceable>program</replaceable></arg>
 </cmdsynopsis>
@@ -72,6 +73,18 @@ Use simple and fast graphics for board.
 <listitem>
 <para>
 Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-laf</option> <replaceable>name</replaceable>
+</term>
+<listitem>
+<para>
+Set Swing look and feel.
+See <xref linkend="reference-gogui"/> for allowed arguments.
 </para>
 </listitem>
 </varlistentry>

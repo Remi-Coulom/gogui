@@ -430,21 +430,12 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <attribute name="Main-Class" value="net.sf.gogui.gtpdisplay.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+<attribute name="Class-Path" value="looks-2.0.jar"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
- net/sf/gogui/gui/GuiBoard*.class
- net/sf/gogui/gui/BoardLabel.class
- net/sf/gogui/gui/BoardLayout.class
- net/sf/gogui/gui/GuiField*.class
- net/sf/gogui/gui/GuiJTextArea.class
- net/sf/gogui/gui/GuiJTextPane.class
- net/sf/gogui/gui/GuiTextPane.class
- net/sf/gogui/gui/GuiTextPaneFactory.class
- net/sf/gogui/gui/GuiUtils*.class
- net/sf/gogui/gui/SimpleDialogs.class
- net/sf/gogui/gui/StatusBar.class
+ net/sf/gogui/gui/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpdisplay/*.class
  net/sf/gogui/images/gogui*.png

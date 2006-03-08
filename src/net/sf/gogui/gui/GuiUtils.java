@@ -31,6 +31,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.ProgressShow;
 
 //----------------------------------------------------------------------------
@@ -108,6 +109,36 @@ public class GuiUtils
     public static int getDefaultMonoFontSize()
     {
         return m_monospacedFont.getSize();
+    }
+
+    public static void initLookAndFeel(String lookAndFeel)
+    {
+        UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
+        if (lookAndFeel == null && ! Platform.isMac())
+        {
+            try
+            {
+                lookAndFeel =
+                    "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
+                UIManager.setLookAndFeel(lookAndFeel);
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        else if (! lookAndFeel.equals(""))
+        {
+            try
+            {
+                UIManager.setLookAndFeel(lookAndFeel);
+            }
+            catch (Exception e)
+            {
+                SimpleDialogs.showWarning(null,
+                                          "Look and feel not found:\n" +
+                                          lookAndFeel);
+            }
+        }
     }
 
     /** Check window for normal state.

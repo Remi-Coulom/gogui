@@ -7,6 +7,7 @@ package net.sf.gogui.gtpdisplay;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
@@ -24,6 +25,7 @@ public final class Main
                 "config:",
                 "fast",
                 "help",
+                "laf:",
                 "verbose",
                 "version"
             };
@@ -40,6 +42,7 @@ public final class Main
             }
             boolean verbose = opt.isSet("verbose");
             boolean fastPaint = opt.isSet("fast");
+            String lookAndFeel = opt.getString("laf", null);
             ArrayList arguments = opt.getArguments();
             if (arguments.size() > 1)
             {
@@ -49,6 +52,7 @@ public final class Main
             String program = null;
             if (arguments.size() == 1)
                 program = (String)arguments.get(0);
+            GuiUtils.initLookAndFeel(lookAndFeel);
             GtpDisplay gtpDisplay
                 = new GtpDisplay(program, verbose, fastPaint);
             gtpDisplay.mainLoop(System.in, System.out);
@@ -71,11 +75,12 @@ public final class Main
         String helpText =
             "Usage: java -jar gtpdisplay.jar program\n" +
             "\n" +
-            "-config       config file\n" +
-            "-fast         fast and simple graphics\n" +
-            "-help         print help and exit\n" +
-            "-verbose      log GTP stream to stderr\n" +
-            "-version      print version and exit\n";
+            "-config       Config file\n" +
+            "-fast         Fast and simple graphics\n" +
+            "-help         Print help and exit\n" +
+            "-laf          Set Swing look and feel\n" +
+            "-verbose      Log GTP stream to stderr\n" +
+            "-version      Print version and exit\n";
         out.print(helpText);
     }
 }
