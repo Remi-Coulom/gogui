@@ -441,8 +441,6 @@ public final class GtpClient
         m_timeoutCallback = timeoutCallback;
         m_fullResponse = "";
         m_response = "";
-        if (m_isProgramDead)
-            throwProgramDied();
         ++m_commandNumber;
         if (m_autoNumber)
             command = Integer.toString(m_commandNumber) + " " + command;
@@ -450,7 +448,10 @@ public final class GtpClient
         m_out.println(command);
         m_out.flush();
         if (m_out.checkError())
+        {
+            readRemainingErrorMessages();
             throwProgramDied();
+        }
         if (m_callback != null)
             m_callback.sentCommand(command);
         readResponse(timeout);
@@ -858,17 +859,23 @@ public final class GtpClient
                 if (line == null)
                 {
                     m_isProgramDead = true;
-                    while (! m_queue.isEmpty())
-                    {
-                        message = (ReadMessage)m_queue.waitFor();
-                        assert(message.m_isError);
-                        if (message.m_text != null)
-                            handleErrorStream(message.m_text);
-                    }
+                    readRemainingErrorMessages();
                     throwProgramDied();
                 }
                 return line;
             }
+        }
+    }
+
+    private void readRemainingErrorMessages()
+    {
+        ReadMessage message;
+        while (! m_queue.isEmpty())
+        {
+            message = (ReadMessage)m_queue.waitFor();
+            assert(message.m_isError);
+            if (message.m_text != null)
+                handleErrorStream(message.m_text);
         }
     }
 
