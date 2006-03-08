@@ -556,6 +556,7 @@ public final class GuiBoard
     public void setPreferredFieldSize(Dimension size)
     {
         m_preferredFieldSize = size;
+        m_panel.setPreferredFieldSize();
     }
 
     /** Enable or disable cursor.
@@ -617,22 +618,7 @@ public final class GuiBoard
     {
         public BoardPanel()
         {
-            int preferredFieldSize = getPreferredFieldSize().width;
-            int preferredSize;
-            int minimumSize;
-            if (m_showGrid)
-            {
-                preferredSize = preferredFieldSize * (m_size + 2);
-                minimumSize = 4 * (m_size + 2);
-            }
-            else
-            {
-                preferredSize =
-                    preferredFieldSize * m_size + preferredFieldSize / 2;
-                minimumSize = 4 * m_size + 2;
-            }
-            setPreferredSize(new Dimension(preferredSize, preferredSize));
-            setMinimumSize(new Dimension(minimumSize, minimumSize));
+            setPreferredFieldSize();
             setFocusable(true);
         }
 
@@ -695,6 +681,26 @@ public final class GuiBoard
             dirty.width = m_drawer.getFieldSize() + offset;
             dirty.height = m_drawer.getFieldSize() + offset;
             repaint(dirty);
+        }
+
+        public void setPreferredFieldSize()
+        {
+            int preferredFieldSize = getPreferredFieldSize().width;
+            int preferredSize;
+            int minimumSize;
+            if (m_showGrid)
+            {
+                preferredSize = preferredFieldSize * (m_size + 2);
+                minimumSize = 4 * (m_size + 2);
+            }
+            else
+            {
+                preferredSize =
+                    preferredFieldSize * m_size + preferredFieldSize / 2;
+                minimumSize = 4 * m_size + 2;
+            }
+            setPreferredSize(new Dimension(preferredSize, preferredSize));
+            setMinimumSize(new Dimension(minimumSize, minimumSize));
         }
 
         /** Serial version to suppress compiler warning.
