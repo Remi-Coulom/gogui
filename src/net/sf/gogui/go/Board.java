@@ -143,7 +143,7 @@ public final class Board
 
     public Move getMove(int i)
     {
-        return ((MoveRecord)m_moves.get(i)).getMove();
+        return ((MoveRecord)m_moves.get(i)).m_move;
     }
 
     public GoPoint getPoint(int i)
@@ -181,8 +181,6 @@ public final class Board
         m_mark = new boolean[m_size][m_size];
         m_dead = new boolean[m_size][m_size];
         m_score = new GoColor[m_size][m_size];
-        m_capturedB = 0;
-        m_capturedW = 0;
         m_constants = new BoardConstants(size);
         initAllPoints();
         newGame();
@@ -191,6 +189,14 @@ public final class Board
     public boolean isHandicap(GoPoint point)
     {
         return m_constants.isHandicap(point);
+    }
+
+    /** Check if move would violate the simple Ko rule.
+        Assumes other color to move than the color of the last move.
+    */
+    public boolean isKo(GoPoint point)
+    {
+        return point == m_koPoint;
     }
 
     public boolean isModified()
@@ -205,7 +211,7 @@ public final class Board
         play(point, toMove);
         int moveNumber = getMoveNumber();
         MoveRecord moveRecord = (MoveRecord)m_moves.get(moveNumber - 1);
-        boolean result = (moveRecord.getSuicide().size() > 0);
+        boolean result = (moveRecord.m_suicide.size() > 0);
         undo();
         return result;
     }
@@ -214,10 +220,11 @@ public final class Board
     {
         for (int i = 0; i < m_allPoints.length; ++i)
             setColor(m_allPoints[i], GoColor.EMPTY);
-        m_moves.clear();
+        m_moves.clear();        
         m_capturedB = 0;
         m_capturedW = 0;
         m_toMove = GoColor.BLACK;
+        m_koPoint = null;
     }
 
     public void play(GoPoint point, GoColor color)
@@ -233,6 +240,8 @@ public final class Board
         ArrayList killed = new ArrayList();
         ArrayList suicide = new ArrayList();
         GoColor old = GoColor.EMPTY;
+        GoPoint oldKoPoint = m_koPoint;
+        m_koPoint = null;
         if (p != null)
         {
             old = getColor(p);
@@ -241,8 +250,15 @@ public final class Board
             {
                 ArrayList adj = getAdjacentPoints(p);
                 for (int i = 0; i < adj.size(); ++i)
+                {
+                    int killedSize = killed.size();
                     checkKill((GoPoint)(adj.get(i)), otherColor, killed);
+                    if (killed.size() == killedSize + 1)
+                        m_koPoint = (GoPoint)killed.get(killedSize);
+                }
                 checkKill(p, color, suicide);
+                if (m_koPoint != null && ! isSingleStoneSingleLib(p, color))
+                    m_koPoint = null;
                 if (color == GoColor.BLACK)
                 {
                     m_capturedB += suicide.size();
@@ -255,7 +271,8 @@ public final class Board
                 }
             }
         }
-        m_moves.add(new MoveRecord(m_toMove, m, old, killed, suicide));
+        m_moves.add(new MoveRecord(m_toMove, m, old, killed, suicide,
+                                   oldKoPoint));
         m_toMove = otherColor;        
     }
 
@@ -383,20 +400,20 @@ public final class Board
         int index = getMoveNumber() - 1;
         MoveRecord r = (MoveRecord)m_moves.get(index);
         m_moves.remove(index);
-        Move m = r.getMove();
+        Move m = r.m_move;
         GoColor c = m.getColor();
         GoColor otherColor = c.otherColor();
         GoPoint p = m.getPoint();
         if (p != null)
         {
-            ArrayList suicide = r.getSuicide();
+            ArrayList suicide = r.m_suicide;
             for (int i = 0; i < suicide.size(); ++i)
             {
                 GoPoint stone = (GoPoint)suicide.get(i);
                 setColor(stone, c);
             }
-            setColor(p, r.getOldColor());
-            ArrayList killed = r.getKilled();
+            setColor(p, r.m_oldColor);
+            ArrayList killed = r.m_killed;
             for (int i = 0; i < killed.size(); ++i)
             {
                 GoPoint stone = (GoPoint)killed.get(i);
@@ -413,7 +430,8 @@ public final class Board
                 m_capturedB -= killed.size();
             }
         }
-        m_toMove = r.getOldToMove();
+        m_toMove = r.m_oldToMove;
+        m_koPoint = r.m_oldKoPoint;
     }
 
     /** Undo a number of moves.
@@ -431,42 +449,24 @@ public final class Board
     /** Information necessary to undo a move. */
     private static class MoveRecord
     {
-        public MoveRecord(GoColor oldToMove, Move m, GoColor old,
-                          ArrayList killed, ArrayList suicide)
+        public MoveRecord(GoColor oldToMove, Move m, GoColor oldColor,
+                          ArrayList killed, ArrayList suicide,
+                          GoPoint oldKoPoint)
         {
-            m_old = old;
+            m_oldColor = oldColor;
             m_oldToMove = oldToMove;
             m_move = m;
             m_killed = killed;
             m_suicide = suicide;
+            m_oldKoPoint = oldKoPoint;
         }
 
-        public Move getMove()
-        {
-            return m_move;
-        }
+        private final GoPoint m_oldKoPoint;
 
-        public GoColor getOldColor()
-        {
-            return m_old;
-        }
-
-        public GoColor getOldToMove()
-        {
-            return m_oldToMove;
-        }
-
-        public ArrayList getKilled()
-        {
-            return m_killed;
-        }
-
-        public ArrayList getSuicide()
-        {
-            return m_suicide;
-        }
-
-        private final GoColor m_old;
+        /** Old stone color of field.
+            Needed in case move was played on a non-empty point.
+        */
+        private final GoColor m_oldColor;
 
         private final GoColor m_oldToMove;
 
@@ -497,7 +497,30 @@ public final class Board
 
     private BoardConstants m_constants;
 
+    private GoPoint m_koPoint;
+
     private GoPoint m_allPoints[];
+
+    private boolean isSingleStoneSingleLib(GoPoint point, GoColor color)
+    {
+        if (getColor(point) != color)
+            return false;
+        ArrayList adj = getAdjacentPoints(point);
+        int lib = 0;
+        for (int i = 0; i < adj.size(); ++i)
+        {
+            GoColor adjColor = getColor((GoPoint)adj.get(i));
+            if (adjColor == GoColor.EMPTY)
+            {
+                ++lib;
+                if (lib > 1)
+                    return false;
+            }
+            else if (adjColor == color)
+                return false;
+        }
+        return true;
+    }
 
     private void checkKill(GoPoint p, GoColor color, ArrayList killed)
     {

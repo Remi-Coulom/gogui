@@ -79,6 +79,14 @@ public class BoardTest
         board.play(GoPoint.create(0, 0), GoColor.BLACK);
         assertTrue(board.isSuicide(GoPoint.create(1, 0), GoColor.WHITE));
     }
+
+    public void testUndo()
+    {
+        Board board = new Board(19);
+        board.play(GoPoint.create(0, 0), GoColor.BLACK);
+        board.undo();
+        assertEquals(GoColor.EMPTY, board.getColor(GoPoint.create(0, 0)));
+    }
 }
 
 //----------------------------------------------------------------------------

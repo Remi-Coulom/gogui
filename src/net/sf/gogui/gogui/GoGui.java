@@ -780,6 +780,9 @@ public class GoGui
             if (m_board.isSuicide(p, m_board.getToMove())
                 && ! showQuestion("Play suicide?"))
                 return;
+            else if (m_board.isKo(p)
+                && ! showQuestion("Play illegal Ko move?"))
+                return;
             Move move = Move.create(p, m_board.getToMove());
             humanMoved(move);
         }
@@ -2676,7 +2679,7 @@ public class GoGui
                 m_guiBoard.paintImmediately(point);
             }
             GoColor color = move.getColor();
-            if (m_board.getMoveNumber() > 0
+            if (NodeUtils.getMoveNumber(m_currentNode) > 0
                 && m_clock.lostOnTime(color)
                 && ! m_lostOnTimeShown)
             {
