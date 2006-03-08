@@ -28,12 +28,13 @@ $Source$
  gtpregress
  gtpstatistics
  gtpterminal
- sgftotex
  gmptogtp
  gtpadapter
  gtpdummy
  gtpserver
  netgtp
+ sgftotex
+ sgfthumbnail
  twogtp
 "/>
 
@@ -69,6 +70,7 @@ $Source$
   gtpterminal.jar,
   netgtp.jar,
   sgftotex.jar,
+  sgfthumbnail.jar,
   twogtp.jar
 "/>
 
@@ -92,6 +94,7 @@ $Source$
    gtpterminal.jar,
    netgtp.jar,
    sgftotex.jar,
+   sgfthumbnail.jar,
    twogtp.jar
   "
 />
@@ -114,8 +117,8 @@ $Source$
 
 <target name="compile" depends="extract-comm.jar,depend,version,doc">
 <mkdir dir="build"/>
-<javac srcdir="src" excludes="net/sf/gogui/thumbnail/*.java" destdir="build"
- source="1.4" target="1.4" deprecation="true" optimize="${optimize}"
+<javac srcdir="src" destdir="build" source="1.4" target="1.4"
+ deprecation="true" optimize="${optimize}"
  debug="${debug}" listfiles="yes"
  classpath="external/javacomm/commapi/comm.jar"/>
 <copy todir="build">
@@ -127,14 +130,6 @@ $Source$
 <copy todir="build/net/sf/gogui/config">
 <fileset dir="config" includes="analyze-commands"/>
 </copy>
-</target>
-
-<target name="compile-thumbnail" depends="depend,version"
- description="Compile thumbnail package (does not compile with GCJ yet)">
-<mkdir dir="build"/>
-<javac srcdir="src" includes="net/sf/gogui/thumbnail/*.java" destdir="build"
- source="1.4" target="1.4" deprecation="true" optimize="${optimize}"
- debug="${debug}" listfiles="yes"/>
 </target>
 
 <target name="depend">
@@ -207,6 +202,7 @@ $Source$
  bin/gtpterminal,
  bin/netgtp,
  bin/sgftotex,
+ bin/sgfthumbnail,
  bin/twogtp,
 " />
 </zip>
@@ -396,6 +392,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/images/*.png
  net/sf/gogui/sgf/*.class
  net/sf/gogui/tex/*.class
+ net/sf/gogui/thumbnail/*.class
  net/sf/gogui/utils/*.class
  net/sf/gogui/version/Version.class
 "/>
@@ -653,6 +650,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <arg line="doc/manual/xml/reference-gtpterminal.xml"/>
 <arg line="doc/manual/xml/reference-netgtp.xml"/>
 <arg line="doc/manual/xml/reference-sgftotex.xml"/>
+<arg line="doc/manual/xml/reference-sgfthumbnail.xml"/>
 <arg line="doc/manual/xml/reference-twogtp.xml"/>
 </exec>
 </target>
@@ -756,12 +754,28 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/sgf/*.class
  net/sf/gogui/sgftotex/*.class
  net/sf/gogui/tex/*.class
- net/sf/gogui/utils/ErrorMessage.class
- net/sf/gogui/utils/FileUtils.class
- net/sf/gogui/utils/Options.class
- net/sf/gogui/utils/ProgressShow*.class
- net/sf/gogui/utils/StringUtils.class
- net/sf/gogui/version/Version.class
+ net/sf/gogui/utils/*.class
+ net/sf/gogui/version/*.class
+"/>
+</jar>
+</target>
+
+<target name="sgfthumbnail.jar" depends="compile">
+<mkdir dir="lib"/>
+<jar destfile="lib/sgfthumbnail.jar">
+<manifest>
+<attribute name="Main-Class" value="net.sf.gogui.thumbnail.Thumbnail"/>
+<attribute name="Built-By" value="${user.name}"/>
+<attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
+</manifest>
+<fileset dir="build" includes="
+ net/sf/gogui/game/*.class
+ net/sf/gogui/go/*.class
+ net/sf/gogui/gui/*.class
+ net/sf/gogui/sgf/*.class
+ net/sf/gogui/thumbnail/*.class
+ net/sf/gogui/utils/*.class
+ net/sf/gogui/version/*.class
 "/>
 </jar>
 </target>

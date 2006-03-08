@@ -127,6 +127,16 @@ See <xref linkend="reference-gtpterminal"/> for a complete reference.
 </varlistentry>
 
 <varlistentry>
+<term>SgfThumbnail</term>
+<listitem>
+<para>
+Create thumbnails for SGF files.
+See <xref linkend="reference-sgfthumbnail"/> for a complete reference.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>SgfToTex</term>
 <listitem>
 <para>

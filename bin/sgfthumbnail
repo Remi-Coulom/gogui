@@ -1,0 +1,11 @@
+#!/bin/sh
+
+GOGUI_LIB=`dirname $0`/../lib
+JAVA_DEFAULT=java
+if test -z "$GOGUI_JAVA_HOME"; then
+  JAVA=$JAVA_DEFAULT
+else
+  JAVA=$GOGUI_JAVA_HOME/bin/java
+fi
+
+$JAVA -jar $GOGUI_LIB/sgfthumbnail.jar "$@"

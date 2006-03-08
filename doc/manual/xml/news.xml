@@ -57,6 +57,11 @@ GtpStatistics: make it work with protocol version 2 programs; new option
 TwoGtp: new option -time
 </para>
 </listitem>
+<listitem>
+<para>
+New tool sgfthumbnail; make GoGui create thumbnails for opened or saved files
+</para>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

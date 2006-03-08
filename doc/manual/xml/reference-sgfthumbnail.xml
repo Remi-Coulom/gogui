@@ -1,0 +1,42 @@
+<refentry id="reference-sgfthumbnail">
+
+<refmeta>
+<refentrytitle>sgfthumbnail</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>sgfthumbnail</refname>
+<refpurpose>
+Create thumbnails for SGF files.
+</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>sgfthumbnail</command>
+<arg choice="plain" rep="repeat">
+<replaceable>file.sgf</replaceable>
+</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection>
+<title>Description</title>
+<para>
+Create SGF thumbnails according to the
+<ulink url="http://jens.triq.net/thumbnail-spec/index.html">
+Thumbnail Managing Standard</ulink> from <ulink url="http://freedesktop.org">
+freedesktop.org</ulink>.
+This allows previewing the SGF files in filemanagers that support this
+standard, like <ulink url="http://www.gnome.org/projects/nautilus/">
+Nautilus</ulink>.
+The thumbnails will only be created, if the directory
+<userinput>.thumbnails/normal</userinput> already exists in the user home
+directory.
+</para>
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+</refsection>
+
+</refentry>

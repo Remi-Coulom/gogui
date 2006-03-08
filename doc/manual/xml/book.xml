@@ -14,7 +14,6 @@
 <!ENTITY news SYSTEM "news.xml">
 <!ENTITY programs SYSTEM "programs.xml">
 <!ENTITY readme SYSTEM "readme.xml">
-<!ENTITY reference-sgftotex SYSTEM "reference-sgftotex.xml">
 <!ENTITY reference-gmptogtp SYSTEM "reference-gmptogtp.xml">
 <!ENTITY reference-gogui SYSTEM "reference-gogui.xml">
 <!ENTITY reference-gtpadapter SYSTEM "reference-gtpadapter.xml">
@@ -25,6 +24,8 @@
 <!ENTITY reference-gtpstatistics SYSTEM "reference-gtpstatistics.xml">
 <!ENTITY reference-gtpterminal SYSTEM "reference-gtpterminal.xml">
 <!ENTITY reference-netgtp SYSTEM "reference-netgtp.xml">
+<!ENTITY reference-sgftotex SYSTEM "reference-sgftotex.xml">
+<!ENTITY reference-sgfthumbnail SYSTEM "reference-sgfthumbnail.xml">
 <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
 <!ENTITY tools SYSTEM "tools.xml">
 <!ENTITY version SYSTEM "version.xml">
@@ -69,6 +70,7 @@ GoGui is a graphical interface to programs that play the game of Go.
 &reference-gtpterminal;
 &reference-netgtp;
 &reference-sgftotex;
+&reference-sgfthumbnail;
 &reference-twogtp;
 </appendix>
 &news;

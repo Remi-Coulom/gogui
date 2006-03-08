@@ -1,0 +1,249 @@
+//----------------------------------------------------------------------------
+// $Id$
+// $Source$
+//----------------------------------------------------------------------------
+
+package net.sf.gogui.gui;
+
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.FontMetrics;
+import java.net.URL;
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.BoardConstants;
+
+//----------------------------------------------------------------------------
+
+/** Draws a board. */
+public class GuiBoardDrawer
+{
+    public GuiBoardDrawer(boolean fastPaint)
+    {
+        m_fastPaint = fastPaint;
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL url = classLoader.getResource("net/sf/gogui/images/wood.png");
+        if (url != null)
+            m_image = new ImageIcon(url).getImage();
+        else
+            m_image = null;
+    }
+
+    /** Draw a board into graphics object.
+        @param graphics The graphics object.
+        @param field The fields.
+        @param width The width/height of the image.
+        @param showGrid Show grid coordinates.
+    */
+    public void draw(Graphics graphics, GuiField[][] field, int width,
+                     boolean showGrid, boolean showCursor)
+    {
+        m_showGrid = showGrid;
+        if (! m_fastPaint)
+            GuiUtils.setAntiAlias(graphics);
+        m_width = width;
+        m_size = field.length;
+        if (m_constants == null || m_constants.getSize() != m_size)
+            m_constants = new BoardConstants(m_size);
+        assert(m_size <= GoPoint.MAXSIZE);
+        if (m_showGrid)
+        {
+            m_fieldSize = width / (m_size + 2);
+            m_fieldOffset =
+                (width - (m_size + 2) * m_fieldSize) / 2
+                + m_fieldSize;
+        }
+        else
+        {
+            // Minimum border 1/5 field size
+            m_fieldSize = (5 * width) / (5 * m_size + 2);
+            m_fieldOffset = (width - m_size * m_fieldSize) / 2;
+        }
+        drawBackground(graphics);
+        drawGrid(graphics);
+        if (m_showGrid)
+            drawLabels(graphics);
+        drawShadows(graphics, field);
+        drawFields(graphics, field, showCursor);
+    }
+
+    public Point getCenter(int x, int y)
+    {            
+        Point point = getLocation(x, y);
+        point.x += m_fieldSize / 2;
+        point.y += m_fieldSize / 2;
+        return point;
+    }
+
+    public int getFieldSize()
+    {
+        return m_fieldSize;
+    }
+
+    public Point getLocation(int x, int y)
+    {            
+        Point point = new Point();
+        point.x = m_fieldOffset + x * m_fieldSize;
+        point.y = m_fieldOffset + (m_size - y - 1) * m_fieldSize;
+        return point;
+    }
+
+    public GoPoint getPoint(Point point)
+    {
+        int x = ((int)point.getX() - m_fieldOffset) / m_fieldSize;
+        int y = ((int)point.getY() - m_fieldOffset) / m_fieldSize;
+        y = m_size - y - 1;
+        if (x >= 0 && x < m_size && y >= 0 && y < m_size)
+            return GoPoint.create(x, y);
+        return null;
+    }
+
+    public int getShadowOffset()
+    {
+        return (m_fieldSize  - 2 * GuiField.getStoneMargin(m_fieldSize)) / 12;
+    }
+
+    private final boolean m_fastPaint;
+
+    private boolean m_showGrid;
+
+    private int m_fieldSize;
+
+    private int m_fieldOffset;
+
+    private int m_size;
+
+    private int m_width;
+
+    private static final AlphaComposite m_composite3
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
+
+    private BoardConstants m_constants;
+
+    private final Image m_image;
+
+    private void drawFields(Graphics graphics, GuiField field[][],
+                            boolean showCursor)
+    {
+        assert(field.length == m_size);
+        for (int x = 0; x < m_size; ++x)
+        {
+            assert(field[x].length == m_size);
+            for (int y = 0; y < m_size; ++y)
+            {
+                Point location = getLocation(x, y);
+                field[x][y].draw(graphics, m_fieldSize, location.x,
+                                 location.y, m_fastPaint, showCursor);
+            }
+        }
+    }
+
+    private void drawBackground(Graphics graphics)
+    {
+        if (m_image != null && ! m_fastPaint)
+            graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
+        else
+        {
+            graphics.setColor(new Color(212, 167, 102));
+            graphics.fillRect(0, 0, m_width, m_width);
+        }
+    }
+
+    private void drawGrid(Graphics graphics)
+    {
+        if (m_fieldSize < 2)
+            return;
+        graphics.setColor(Color.darkGray);
+        for (int y = 0; y < m_size; ++y)
+        {
+            Point left = getCenter(0, y);
+            Point right = getCenter(m_size - 1, y);
+            graphics.drawLine(left.x, left.y, right.x, right.y);
+        }
+        for (int x = 0; x < m_size; ++x)
+        {
+            Point top = getCenter(x, 0);
+            Point bottom = getCenter(x, m_size - 1);
+            graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
+        }
+        int r = m_fieldSize / 10;
+        for (int x = 0; x < m_size; ++x)
+            if (m_constants.isHandicapLine(x))
+                for (int y = 0; y < m_size; ++y)
+                    if (m_constants.isHandicapLine(y))
+                    {
+                        Point point = getCenter(x, y);
+                        graphics.fillOval(point.x - r, point.y - r,
+                                          2 * r + 1, 2 * r + 1);
+                    }
+    }
+
+    private void drawLabels(Graphics graphics)
+    {
+        graphics.setColor(Color.darkGray);
+        graphics.setFont(UIManager.getFont("Label.font"));
+        int stringWidth = graphics.getFontMetrics().stringWidth("XX");
+        if (m_fieldSize < stringWidth)
+            return;
+        char c = 'A';
+        for (int x = 0; x < m_size; ++x)
+        {
+            String string = Character.toString(c);
+            drawLabel(graphics, getLocation(x, -1), string);
+            drawLabel(graphics, getLocation(x, m_size), string);
+            ++c;
+            if (c == 'I')
+                ++c;
+        }
+        for (int y = 0; y < m_size; ++y)
+        {
+            String string = Integer.toString(y + 1);
+            drawLabel(graphics, getLocation(-1, y), string);
+            drawLabel(graphics, getLocation(m_size, y), string);
+        }
+    }
+
+    private void drawShadows(Graphics graphics, GuiField[][] field)
+    {
+        if (m_fieldSize <= 5)
+            return;
+        Graphics2D graphics2D =
+            graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
+        if (graphics2D == null || m_fastPaint)
+            return;
+        graphics2D.setComposite(m_composite3);
+        int size = m_fieldSize - 2 * GuiField.getStoneMargin(m_fieldSize);
+        int offset = getShadowOffset();
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+            {
+                if (field[x][y].getColor() == GoColor.EMPTY)
+                    continue;
+                Point location = getCenter(x, y);
+                graphics.setColor(Color.black);
+                graphics.fillOval(location.x - size / 2 + offset,
+                                  location.y - size / 2 + offset,
+                                  size, size);
+            }
+        graphics.setPaintMode();
+    }
+
+    private void drawLabel(Graphics graphics, Point location,
+                           String string)
+    {
+        FontMetrics metrics = graphics.getFontMetrics();
+        int stringWidth = metrics.stringWidth(string);
+        int stringHeight = metrics.getAscent();
+        int x = Math.max((m_fieldSize - stringWidth) / 2, 0);
+        int y = stringHeight + (m_fieldSize - stringHeight) / 2;
+        graphics.drawString(string, location.x + x, location.y + y);
+    }
+}
+
+//----------------------------------------------------------------------------

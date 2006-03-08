@@ -28,16 +28,16 @@ import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtils;
+import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.gui.GuiBoard;
-import net.sf.gogui.gui.GuiBoardUtils;
+import net.sf.gogui.gui.GuiField;
+import net.sf.gogui.gui.GuiBoardDrawer;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.version.Version;
@@ -46,11 +46,6 @@ import net.sf.gogui.version.Version;
 
 /** Thumbnail creator.
     Creates thumbnails according to the freedesktop.org standard.
-    NOTE:  This class is not used and tested yet.<br>
-    It should be used in GoGui once the major file browsers support
-    the standard.
-    @todo Image creation using the GUI components is cumbersome and
-    inefficient.
     @todo Save to temp file and rename as required by the standard.
 */
 public final class Thumbnail
@@ -58,8 +53,13 @@ public final class Thumbnail
     public Thumbnail(boolean verbose)
     {
         m_verbose = verbose;
+        m_drawer = new GuiBoardDrawer(false);
     }
 
+    /** Create thumbnail.
+        Creates a small thumbnail; only if .thumbnails/normal directory
+        already exists in home directory.
+    */
     public boolean create(File file)
     {
         try
@@ -78,38 +78,46 @@ public final class Thumbnail
                 log("MD5: " + md5);
             String home = System.getProperty("user.home", "");
             File dir = new File(home, ".thumbnails");
-            if (! dir.exists())
-            {
-                // We cannot create it with the right permissions from Java
-                log("Thumbnail directory does not exist: " + file);
-                return false;
-            }
             File largeDir = new File(dir, "large");
             File normalDir = new File(dir, "normal");
             ArrayList moves = new ArrayList();
             Board board = getBoard(file, moves);
-            GuiBoard guiBoard = new GuiBoard(board.getSize(), false);
-            guiBoard.setShowGrid(false);
             for (int i = 0; i < moves.size(); ++i)
                 board.play((Move)moves.get(i));
-            GuiBoardUtils.updateFromGoBoard(guiBoard, board, false);
-            int largeSize
-                = 256 / (board.getSize() + 2) * (board.getSize() + 2);
-            guiBoard.setSize(largeSize, largeSize);
-            guiBoard.doLayout();
-            //System.err.println("Field: " + guiBoard.getFieldSize());
-            BufferedImage image = getImage(guiBoard, largeSize, largeSize);
+            int size = board.getSize();
+            GuiField[][] field = new GuiField[size][size];
+            for (int x = 0; x < size; ++x)
+                for (int y = 0; y < size; ++y)
+                {
+                    field[x][y] = new GuiField();
+                    GoColor color = board.getColor(GoPoint.create(x, y));
+                    field[x][y].setColor(color);
+                }
+            BufferedImage image = getImage(field, 256, 256);
 
-            //writeImage(image, new File(largeDir, md5 + ".png"), uri,
-            //           lastModified);
+            /* Don't write the large image yet, takes too much space
+            if (! largeDir.exists())
+            {
+                // We cannot create it with the right permissions from Java
+                log("Thumbnail large directory does not exist: " + file);
+                return false;
+            }
+            else
+                writeImage(image, new File(largeDir, md5 + ".png"), uri,
+                           lastModified);
+            */
 
-            int normalSize
-                = 128 / (board.getSize() + 2) * (board.getSize() + 2);
-            BufferedImage normalImage = createImage(normalSize, normalSize);
+            BufferedImage normalImage = createImage(128, 128);
             Graphics2D graphics = normalImage.createGraphics();
             Image scaledInstance
                 = image.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
             graphics.drawImage(scaledInstance, 0, 0, null);
+            if (! normalDir.exists())
+            {
+                // We cannot create it with the right permissions from Java
+                log("Thumbnail normal directory does not exist: " + file);
+                return false;
+            }
 
             writeImage(normalImage, new File(normalDir, md5 + ".png"), uri,
                        lastModified);
@@ -146,6 +154,8 @@ public final class Thumbnail
     }
 
     private final boolean m_verbose;
+
+    private final GuiBoardDrawer m_drawer;
 
     private BufferedImage createImage(int width, int height)
     {
@@ -192,15 +202,13 @@ public final class Thumbnail
         return board;
     }
 
-    private BufferedImage getImage(JComponent component, int width,
-                                   int height)
+    private BufferedImage getImage(GuiField[][] field, int width, int height)
     {
         BufferedImage image = createImage(width, height);
         Graphics2D graphics = image.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                   RenderingHints.VALUE_ANTIALIAS_ON);
-        // Use printAll (why does paintAll not work?)
-        component.printAll(graphics);
+        m_drawer.draw(graphics, field, width, false, false);
         graphics.dispose();
         return image;
     }

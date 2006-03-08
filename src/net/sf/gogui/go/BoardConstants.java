@@ -69,6 +69,11 @@ public final class BoardConstants
         return result;
     }
 
+    public int getSize()
+    {
+        return m_size;
+    }
+
     public boolean isEdgeLine(int i)
     {
         return (i == 0 || i == m_size - 1);

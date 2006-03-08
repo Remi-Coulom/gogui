@@ -5,7 +5,6 @@
 
 package net.sf.gogui.gui;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,7 +12,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -26,8 +24,6 @@ import java.awt.event.MouseEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.net.URL;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.sf.gogui.go.BoardConstants;
@@ -77,14 +73,8 @@ public final class GuiBoard
     */
     public GuiBoard(int size, boolean fastPaint)
     {
-        m_fastPaint = fastPaint;
+        m_drawer = new GuiBoardDrawer(fastPaint);
         setPreferredFieldSize();
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL url = classLoader.getResource("net/sf/gogui/images/wood.png");
-        if (url != null)
-            m_image = new ImageIcon(url).getImage();
-        else
-            m_image = null;
         initSize(size);
     }
 
@@ -170,7 +160,7 @@ public final class GuiBoard
 
     public Dimension getFieldSize()
     {
-        int size = m_panel.getFieldSize();
+        int size = m_drawer.getFieldSize();
         return new Dimension(size, size);
     }
 
@@ -189,7 +179,7 @@ public final class GuiBoard
     */
     public Point getLocationOnScreen(GoPoint point)
     {
-        Point center = m_panel.getCenter(point.getX(), point.getY());
+        Point center = m_drawer.getCenter(point.getX(), point.getY());
         Point location = m_panel.getLocationOnScreen();
         location.x += center.x;
         location.y += center.y;
@@ -353,7 +343,7 @@ public final class GuiBoard
         {
             for (int x = 0; x < size; ++x)
             {
-                GuiField field = new GuiField(this, m_fastPaint);
+                GuiField field = new GuiField();
                 m_field[x][y] = field;
             }
         }
@@ -439,37 +429,6 @@ public final class GuiBoard
             m_focusPoint = point;
         }
         m_panel.requestFocusInWindow();
-    }
-
-    /** Internally used in this package by GuiField.
-        @todo Make obsolete
-    */
-    public void setFont(Graphics graphics, int fieldSize)
-    {
-        if (m_cachedFont != null && m_cachedFontFieldSize == fieldSize)
-        {
-            graphics.setFont(m_cachedFont);
-            return;
-        }
-        Font font = UIManager.getFont("Label.font");
-        if (font != null)
-        {
-            FontMetrics metrics = graphics.getFontMetrics(font);
-            double scale = (double)fieldSize / metrics.getAscent() / 2.3;
-            if (scale < 0.95)
-            {
-                int size = font.getSize();
-                Font derivedFont
-                    = font.deriveFont(Font.BOLD, (float)(size * scale));
-                if (derivedFont != null)
-                    font = derivedFont;
-            }
-            else
-                font = font.deriveFont(Font.BOLD);
-        }
-        m_cachedFont = font;
-        m_cachedFontFieldSize = fieldSize;
-        graphics.setFont(font);
     }
 
     /** Set the field background color.
@@ -681,25 +640,13 @@ public final class GuiBoard
         {
             if (m_listener == null)
                 return;
-            Point center = getCenter(point.getX(), point.getY());
+            Point center = m_drawer.getCenter(point.getX(), point.getY());
             m_listener.contextMenu(point, this, center.x, center.y);
-        }
-
-        public int getFieldSize()
-        {
-            return m_fieldSize;
         }
 
         public GoPoint getPoint(MouseEvent event)
         {
-            int eventX = (int)event.getPoint().getX();
-            int eventY = (int)event.getPoint().getY();
-            int x = (eventX - m_fieldOffset) / m_fieldSize;
-            int y = (eventY - m_fieldOffset) / m_fieldSize;
-            y = m_size - y - 1;
-            if (x >= 0 && x < m_size && y >= 0 && y < m_size)
-                return GoPoint.create(x, y);
-            return null;
+            return m_drawer.getPoint(event.getPoint());
         }
 
         public void paintComponent(Graphics graphics)
@@ -711,63 +658,42 @@ public final class GuiBoard
                                + " w=" + graphics.getClipBounds().width
                                + " h=" + graphics.getClipBounds().height);
             */
-            if (! m_fastPaint)
-                GuiUtils.setAntiAlias(graphics);
-            int width = getWidth();
-            assert(width == getHeight());
-            if (m_showGrid)
-            {
-                m_fieldSize = width / (m_size + 2);
-                m_fieldOffset =
-                    (width - (m_size + 2) * m_fieldSize) / 2
-                    + m_fieldSize;
-            }
-            else
-            {
-                // Minimum border 1/5 field size
-                m_fieldSize = (5 * width) / (5 * m_size + 2);
-                m_fieldOffset = (width - m_size * m_fieldSize) / 2;
-            }
-            drawBackground(graphics);
-            drawGrid(graphics);
-            if (m_showGrid)
-                drawLabels(graphics);
-            drawShadows(graphics);
-            drawFields(graphics);
+            m_drawer.draw(graphics, m_field, getWidth(), m_showGrid,
+                          getShowCursor());
         }
 
         public void paintImmediately(GoPoint point)
         {
-            Point location = getLocation(point.getX(), point.getY());
+            Point location = m_drawer.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
-            dirty.width = m_fieldSize;
-            dirty.height = m_fieldSize;
+            dirty.width = m_drawer.getFieldSize();
+            dirty.height = m_drawer.getFieldSize();
             paintImmediately(dirty);
         }
 
         public void repaint(GoPoint point)
         {
-            Point location = getLocation(point.getX(), point.getY());
+            Point location = m_drawer.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
-            dirty.width = m_fieldSize;
-            dirty.height = m_fieldSize;
+            dirty.width = m_drawer.getFieldSize();
+            dirty.height = m_drawer.getFieldSize();
             repaint(dirty);
         }
 
         public void repaintWithShadow(GoPoint point)
         {
-            Point location = getLocation(point.getX(), point.getY());
+            Point location = m_drawer.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
-            int offset = getShadowOffset()
-                - GuiField.getStoneMargin(m_fieldSize);
-            dirty.width = m_fieldSize + offset;
-            dirty.height = m_fieldSize + offset;
+            int offset = m_drawer.getShadowOffset()
+                - GuiField.getStoneMargin(m_drawer.getFieldSize());
+            dirty.width = m_drawer.getFieldSize() + offset;
+            dirty.height = m_drawer.getFieldSize() + offset;
             repaint(dirty);
         }
 
@@ -775,150 +701,11 @@ public final class GuiBoard
             Contains a marker comment for serialver.sourceforge.net
         */
         private static final long serialVersionUID = 0L; // SUID
-
-        private int m_fieldSize;
-
-        private int m_fieldOffset;
-
-        private void drawFields(Graphics graphics)
-        {
-            for (int x = 0; x < m_size; ++x)
-                for (int y = 0; y < m_size; ++y)
-                {
-                    Point location = getLocation(x, y);
-                    Graphics newGraphics =
-                        graphics.create(location.x, location.y,
-                                        m_fieldSize, m_fieldSize);
-                    m_field[x][y].draw(newGraphics, m_fieldSize);
-                }
-        }
-
-        private void drawBackground(Graphics graphics)
-        {
-            int width = getWidth();
-            if (m_image != null && ! m_fastPaint)
-                graphics.drawImage(m_image, 0, 0, width, width, null);
-            else
-            {
-                graphics.setColor(new Color(212, 167, 102));
-                graphics.fillRect(0, 0, width, width);
-            }
-        }
-
-        private void drawGrid(Graphics graphics)
-        {
-            if (m_fieldSize < 2)
-                return;
-            graphics.setColor(Color.darkGray);
-            for (int y = 0; y < m_size; ++y)
-            {
-                Point left = getCenter(0, y);
-                Point right = getCenter(m_size - 1, y);
-                graphics.drawLine(left.x, left.y, right.x, right.y);
-            }
-            for (int x = 0; x < m_size; ++x)
-            {
-                Point top = getCenter(x, 0);
-                Point bottom = getCenter(x, m_size - 1);
-                graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
-            }
-            int r = m_fieldSize / 10;
-            for (int x = 0; x < m_size; ++x)
-                if (m_constants.isHandicapLine(x))
-                    for (int y = 0; y < m_size; ++y)
-                        if (m_constants.isHandicapLine(y))
-                        {
-                            Point point = getCenter(x, y);
-                            graphics.fillOval(point.x - r, point.y - r,
-                                              2 * r + 1, 2 * r + 1);
-                        }
-        }
-
-        private void drawLabels(Graphics graphics)
-        {
-            graphics.setColor(Color.darkGray);
-            graphics.setFont(UIManager.getFont("Label.font"));
-            int stringWidth = graphics.getFontMetrics().stringWidth("XX");
-            if (m_fieldSize < stringWidth)
-                return;
-            char c = 'A';
-            for (int x = 0; x < m_size; ++x)
-            {
-                String string = Character.toString(c);
-                drawLabel(graphics, getLocation(x, -1), string);
-                drawLabel(graphics, getLocation(x, m_size), string);
-                    ++c;
-                if (c == 'I')
-                    ++c;
-            }
-            for (int y = 0; y < m_size; ++y)
-            {
-                String string = Integer.toString(y + 1);
-                drawLabel(graphics, getLocation(-1, y), string);
-                drawLabel(graphics, getLocation(m_size, y), string);
-            }
-        }
-
-        private void drawShadows(Graphics graphics)
-        {
-            if (m_fieldSize <= 5)
-                return;
-            Graphics2D graphics2D =
-                graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
-            if (graphics2D == null || m_fastPaint)
-                return;
-            graphics2D.setComposite(m_composite3);
-            int size = m_fieldSize - 2 * GuiField.getStoneMargin(m_fieldSize);
-            int offset = getShadowOffset();
-            for (int x = 0; x < m_size; ++x)
-                for (int y = 0; y < m_size; ++y)
-                {
-                    if (m_field[x][y].getColor() == GoColor.EMPTY)
-                        continue;
-                    Point location = getCenter(x, y);
-                    graphics.setColor(Color.black);
-                    graphics.fillOval(location.x - size / 2 + offset,
-                                      location.y - size / 2 + offset,
-                                      size, size);
-                }
-            graphics.setPaintMode();
-        }
-
-        private void drawLabel(Graphics graphics, Point location,
-                               String string)
-        {
-            FontMetrics metrics = graphics.getFontMetrics();
-            int stringWidth = metrics.stringWidth(string);
-            int stringHeight = metrics.getAscent();
-            int x = Math.max((m_fieldSize - stringWidth) / 2, 0);
-            int y = stringHeight + (m_fieldSize - stringHeight) / 2;
-            graphics.drawString(string, location.x + x, location.y + y);
-        }
-
-        private Point getCenter(int x, int y)
-        {            
-            Point point = getLocation(x, y);
-            point.x += m_fieldSize / 2;
-            point.y += m_fieldSize / 2;
-            return point;
-        }
-
-        private Point getLocation(int x, int y)
-        {            
-            Point point = new Point();
-            point.x = m_fieldOffset + x * m_fieldSize;
-            point.y = m_fieldOffset + (m_size - y - 1) * m_fieldSize;
-            return point;
-        }
     }
-
-    private final boolean m_fastPaint;
 
     private boolean m_showCursor = true;
 
     private boolean m_showGrid = true;
-
-    private int m_cachedFontFieldSize;
 
     private int m_size;
 
@@ -933,18 +720,13 @@ public final class GuiBoard
 
     private BoardConstants m_constants;
 
-    private static final AlphaComposite m_composite3
-        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
-
     private Dimension m_minimumFieldSize;
 
     private Dimension m_preferredFieldSize;
 
     private GuiField m_field[][];
 
-    private Font m_cachedFont;
-
-    private final Image m_image;
+    private GuiBoardDrawer m_drawer;
 
     private BoardPanel m_panel;
 
@@ -971,14 +753,6 @@ public final class GuiBoard
     {
         assert(p != null);
         return m_field[p.getX()][p.getY()];
-    }
-
-    private int getShadowOffset()
-    {
-        Rectangle grid = getBounds();
-        int width = grid.width / (m_size + 2);
-        int size = width - 2 * GuiField.getStoneMargin(width);
-        return size / 12;
     }
 
     private boolean isHandicapLineOrEdge(int line)

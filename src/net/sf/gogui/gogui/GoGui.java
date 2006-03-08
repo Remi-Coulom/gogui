@@ -89,6 +89,7 @@ import net.sf.gogui.gui.Utils;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
+import net.sf.gogui.thumbnail.Thumbnail;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Platform;
@@ -1134,6 +1135,8 @@ public class GoGui
     private ScoreDialog m_scoreDialog;
 
     private String m_programAnalyzeCommands;
+
+    private Thumbnail m_thumbnail = new Thumbnail(false);
 
     private TimeSettings m_timeSettings;
 
@@ -2410,6 +2413,15 @@ public class GoGui
                                listener);
     }
 
+    private void createThumbnail(File file)
+    {
+        String path = file.getAbsolutePath();
+        // Create thumbnail only on Unix filesystems, if not temporary file
+        if (path.startsWith("/") && ! path.startsWith("/tmp")
+            && ! path.startsWith("/var/tmp"))
+            m_thumbnail.create(file);
+    }
+
     private void detachProgram()
     {
         if (isCommandInProgress())
@@ -2896,6 +2908,7 @@ public class GoGui
                 showWarning("File " + file.getName() + ":\n" + warnings);
             SimpleDialogs.setLastFile(file);
             computerNone();
+            createThumbnail(file);
             boardChangedBegin(false, true);
         }
         catch (FileNotFoundException e)
@@ -3104,6 +3117,7 @@ public class GoGui
         }
         new SgfWriter(out, m_gameTree, "GoGui", Version.get());
         m_menuBar.addRecent(file);
+        createThumbnail(file);
         return true;
     }
 

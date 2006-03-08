@@ -8,12 +8,14 @@ package net.sf.gogui.gui;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
+import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.utils.RadialGradientPaint;
  
@@ -23,12 +25,10 @@ import net.sf.gogui.utils.RadialGradientPaint;
     The implementation assumes that the size of the component is a square,
     which is automatically guaranteed if the board uses SquareLayout.
 */
-class GuiField
+public class GuiField
 {
-    public GuiField(GuiBoard board, boolean fastPaint)
+    public GuiField()
     {
-        m_board = board;
-        m_fastPaint = fastPaint;
     }
 
     public void clearInfluence()
@@ -37,12 +37,15 @@ class GuiField
         m_influence = 0;
     }
 
-    public void draw(Graphics graphics, int size)
+    public void draw(Graphics graphics, int size, int x, int y,
+                     boolean fastPaint, boolean showCursor)
     {
-        m_graphics = graphics;
-        if (! m_fastPaint)
-            m_graphics2D =
-                graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
+        m_fastPaint = fastPaint;
+        m_graphics = graphics.create(x, y, size, size);
+        if (! m_fastPaint && m_graphics instanceof Graphics2D)
+            m_graphics2D = (Graphics2D)m_graphics;
+        else
+            m_graphics2D = null;
         m_size = size;
         if (m_fieldColor != null)
             drawFieldColor();
@@ -63,7 +66,7 @@ class GuiField
             drawSelect();
         else
             drawLabel();
-        if (m_focus && m_board.getShowCursor())
+        if (m_focus && showCursor)
             drawFocus();
         m_graphics = null;
     }
@@ -210,7 +213,7 @@ class GuiField
 
     private boolean m_crossHair;
 
-    private final boolean m_fastPaint;
+    private boolean m_fastPaint;
 
     private boolean m_focus;
 
@@ -227,6 +230,8 @@ class GuiField
     private boolean m_influenceSet;
 
     private boolean m_select;
+
+    private static int m_cachedFontFieldSize;
 
     private int m_paintSizeBlack;
 
@@ -273,9 +278,9 @@ class GuiField
     private static final Color m_colorWhiteStoneBright
         = Color.decode("#f6eee6");
 
-    private GoColor m_color = GoColor.EMPTY;
+    private static Font m_cachedFont;
 
-    private final GuiBoard m_board;
+    private GoColor m_color = GoColor.EMPTY;
 
     private Graphics m_graphics;
 
@@ -347,7 +352,7 @@ class GuiField
 
     private void drawLabel()
     {
-        m_board.setFont(m_graphics, m_size);
+        setFont(m_graphics, m_size);
         FontMetrics metrics = m_graphics.getFontMetrics();
         int stringWidth = metrics.stringWidth(m_label);
         int stringHeight = metrics.getAscent();
@@ -514,6 +519,34 @@ class GuiField
     {
         if (m_graphics2D != null)
             m_graphics2D.setComposite(composite);
+    }
+
+    private static void setFont(Graphics graphics, int fieldSize)
+    {
+        if (m_cachedFont != null && m_cachedFontFieldSize == fieldSize)
+        {
+            graphics.setFont(m_cachedFont);
+            return;
+        }
+        Font font = UIManager.getFont("Label.font");
+        if (font != null)
+        {
+            FontMetrics metrics = graphics.getFontMetrics(font);
+            double scale = (double)fieldSize / metrics.getAscent() / 2.3;
+            if (scale < 0.95)
+            {
+                int size = font.getSize();
+                Font derivedFont
+                    = font.deriveFont(Font.BOLD, (float)(size * scale));
+                if (derivedFont != null)
+                    font = derivedFont;
+            }
+            else
+                font = font.deriveFont(Font.BOLD);
+        }
+        m_cachedFont = font;
+        m_cachedFontFieldSize = fieldSize;
+        graphics.setFont(font);
     }
 }
 
