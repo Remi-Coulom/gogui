@@ -5,8 +5,13 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.AWTKeyStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JScrollPane;
@@ -42,6 +47,7 @@ public class Comment
     {
         m_listener = listener;
         m_textPane = new JTextPane();
+        setFocusTraversalKeys(m_textPane);
         GuiUtils.addStyle(m_textPane, "marked", Color.white,
                           Color.decode("#38d878"));
         StyleContext context = StyleContext.getDefaultStyleContext();
@@ -173,6 +179,14 @@ public class Comment
             m_node.setComment(text);
             m_listener.changed();
         }
+    }
+
+    private static void setFocusTraversalKeys(JTextPane textPane)
+    {
+        int id = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
+        Set keystrokes = new TreeSet();
+        keystrokes.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
+        textPane.setFocusTraversalKeys(id, keystrokes);
     }
 }
 
