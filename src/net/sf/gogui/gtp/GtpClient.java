@@ -826,7 +826,6 @@ public final class GtpClient
 
     private String readLine(long timeout) throws GtpError
     {
-        System.err.println("XXX read " + timeout);
         while (true)
         {            
             ReadMessage message;
