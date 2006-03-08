@@ -3,7 +3,7 @@ Basics
 
 This package requires at least Java version 1.4.
 It comes with precompiled Java jar files for GoGui and the GTP tools
-and in the lib directory.
+in the lib directory.
 GoGui does not necessarily need to be installed on the system, it can
 be run from the directory, where the distribution file was extracted to.
 For Unix systems there are launcher scripts in the bin directory.
