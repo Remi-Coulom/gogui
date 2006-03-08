@@ -13,11 +13,13 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.utils.StringUtils;
-import net.sf.gogui.utils.MessageQueue;
 import net.sf.gogui.utils.ProcessUtils;
 
 //----------------------------------------------------------------------------
@@ -613,7 +615,7 @@ public final class GtpClient
     private class InputThread
         extends Thread
     {
-        InputThread(InputStream in, MessageQueue queue)
+        InputThread(InputStream in, BlockingQueue queue)
         {
             m_in = new BufferedReader(new InputStreamReader(in));
             m_queue = queue;
@@ -633,7 +635,7 @@ public final class GtpClient
 
         private final BufferedReader m_in;
 
-        private final MessageQueue m_queue;
+        private final BlockingQueue m_queue;
 
         private void mainLoop() throws InterruptedException
         {
@@ -653,10 +655,6 @@ public final class GtpClient
                 if (line == null)
                     return;
                 log("<< " + line);
-                // Avoid programs flooding stderr or stdout after trying
-                // to exit
-                if (getExitInProgress())
-                    Thread.sleep(m_queue.getSize() / 10);
             }
         }
     }
@@ -664,7 +662,7 @@ public final class GtpClient
     private class ErrorThread
         extends Thread
     {
-        public ErrorThread(InputStream in, MessageQueue queue)
+        public ErrorThread(InputStream in, BlockingQueue queue)
         {
             m_in = new InputStreamReader(in);
             m_queue = queue;
@@ -684,7 +682,7 @@ public final class GtpClient
 
         private final Reader m_in;
 
-        private final MessageQueue m_queue;
+        private final BlockingQueue m_queue;
 
         private void mainLoop() throws InterruptedException
         {
@@ -708,13 +706,11 @@ public final class GtpClient
                 if (text == null)
                     return;
                 logError(text);
-                // Avoid programs flooding stderr or stdout after trying
-                // to exit
-                if (getExitInProgress())
-                    Thread.sleep(m_queue.getSize() / 10);
             }
         }
     }
+
+    private final TimeUnit TIMEUNIT = TimeUnit.MILLISECONDS;
 
     private boolean m_autoNumber;
 
@@ -754,7 +750,7 @@ public final class GtpClient
 
     private InputThread m_inputThread;
 
-    private MessageQueue m_queue;
+    private BlockingQueue m_queue;
 
     private TimeoutCallback m_timeoutCallback;
 
@@ -775,7 +771,7 @@ public final class GtpClient
     {
         m_out = new PrintWriter(out);
         m_isProgramDead = false;        
-        m_queue = new MessageQueue();
+        m_queue = new ArrayBlockingQueue(1024);
         m_inputThread = new InputThread(in, m_queue);
         if (err != null)
         {
@@ -809,19 +805,33 @@ public final class GtpClient
             System.err.print(text);
     }
 
+    private ReadMessage pollMessage(long timeout)
+    {
+        try
+        {
+            return (ReadMessage)m_queue.poll(timeout, TIMEUNIT);
+        }
+        catch (InterruptedException e)
+        {
+            assert(false);
+            return null;
+        }
+    }
+
     private String readLine(long timeout) throws GtpError
     {
+        System.err.println("XXX read " + timeout);
         while (true)
         {            
             ReadMessage message;
             if (timeout < 0)
-                message = (ReadMessage)m_queue.waitFor();
+                message = takeMessage();
             else
             {
                 message = null;
                 while (message == null)
                 {
-                    message = (ReadMessage)m_queue.waitFor(timeout);
+                    message = pollMessage(timeout);
                     if (message == null)
                     {
                         assert(m_timeoutCallback != null);
@@ -840,16 +850,11 @@ public final class GtpClient
                 {
                     if (message.m_text != null)
                         buffer.append(message.m_text);
-                    synchronized (m_queue.getMutex())
-                    {
-                        message = (ReadMessage)m_queue.unsynchronizedPeek();
-                        if (message != null && ! message.m_isError)
-                            message = null;
-                    }
+                    message = (ReadMessage)m_queue.peek();
+                    if (message != null && ! message.m_isError)
+                        message = null;
                     if (message != null)
-                    {
-                        message = (ReadMessage)m_queue.getIfAvaliable();
-                    }
+                        message = takeMessage();
                 }
                 handleErrorStream(buffer.toString());
             }
@@ -872,7 +877,7 @@ public final class GtpClient
         ReadMessage message;
         while (! m_queue.isEmpty())
         {
-            message = (ReadMessage)m_queue.waitFor();
+            message = takeMessage();
             if (message.m_isError && message.m_text != null)
                 handleErrorStream(message.m_text);
         }
@@ -928,6 +933,19 @@ public final class GtpClient
     private synchronized void setExitInProgress(boolean exitInProgress)
     {
         m_exitInProgress = exitInProgress;
+    }
+
+    private ReadMessage takeMessage()
+    {
+        try
+        {
+            return (ReadMessage)m_queue.take();
+        }
+        catch (InterruptedException e)
+        {
+            assert(false);
+            return null;
+        }
     }
 
     private void throwProgramDied() throws GtpError
