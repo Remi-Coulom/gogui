@@ -3333,7 +3333,7 @@ public class GoGui
         if (gameName != null)
         {
             if (filename != null)
-                gameName = filename + " - " + gameName;
+                gameName = filename + " " + gameName;
         }
         else if (filename != null)
             gameName = filename;
