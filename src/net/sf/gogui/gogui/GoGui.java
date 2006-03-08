@@ -1418,6 +1418,22 @@ public class GoGui
 
     private void cbAddBookmark()
     {
+        if (m_loadedFile == null)
+        {
+            showError("Cannot set bookmark if no file loaded");
+            return;
+        }
+        if (m_needsSave)
+        {
+            showError("Cannot set bookmark if file modified");
+            return;
+        }
+        if (m_currentNode.getFather() != null
+            && m_currentNode.getMove() == null)
+        {
+            showError("Cannot set bookmark at non-root node without move");
+            return;
+        }
         String variation = NodeUtils.getVariationString(m_currentNode);
         int move = NodeUtils.getMoveNumber(m_currentNode);
         Bookmark bookmark = new Bookmark(m_loadedFile, move, variation);
