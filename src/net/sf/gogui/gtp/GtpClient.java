@@ -489,6 +489,12 @@ public final class GtpClient
         send(getCommandPlay(move));
     }
 
+    public void sendPlay(Move move, long timeout,
+                         TimeoutCallback timeoutCallback) throws GtpError
+    {
+        send(getCommandPlay(move), timeout, timeoutCallback);
+    }
+
     /** Send comment.
         @param comment comment line (must start with '#').
     */

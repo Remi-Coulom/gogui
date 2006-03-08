@@ -41,7 +41,7 @@ public class CommandThread
         {
             m_gtp.close();
             TimeoutCallback timeoutCallback = new TimeoutCallback(null);
-            m_gtp.waitForExit(8000, timeoutCallback);
+            m_gtp.waitForExit(TIMEOUT, timeoutCallback);
         }
     }
 
@@ -221,7 +221,7 @@ public class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         TimeoutCallback timeoutCallback = new TimeoutCallback(command);
-        String response = m_gtp.send(command, 8000, timeoutCallback);
+        String response = m_gtp.send(command, TIMEOUT, timeoutCallback);
         return response;
     }
 
@@ -239,7 +239,8 @@ public class CommandThread
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        m_gtp.sendPlay(move);
+        TimeoutCallback timeoutCallback = new TimeoutCallback("play");
+        m_gtp.sendPlay(move, TIMEOUT, timeoutCallback);
     }
 
     private class TimeoutCallback
@@ -273,6 +274,8 @@ public class CommandThread
 
         private final String m_command;
     };
+
+    private static final int TIMEOUT = 8000;
 
     private boolean m_commandInProgress;
 
