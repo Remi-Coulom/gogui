@@ -129,6 +129,7 @@ public class GameInfo
         JTextField entry = new JTextField(" ");
         entry.setHorizontalAlignment(SwingConstants.LEFT);
         entry.setEditable(false);
+        entry.setFocusable(false);
         add(entry);
         return entry;
     }
