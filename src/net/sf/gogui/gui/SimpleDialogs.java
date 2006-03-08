@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -290,15 +292,18 @@ class SgfPreview
     public SgfPreview()
     {
         setLayout(new BorderLayout());
+        JPanel previewPanel = new JPanel();
+        previewPanel.setLayout(new BoxLayout(previewPanel, BoxLayout.Y_AXIS));
+        previewPanel.add(Box.createVerticalGlue());
+        add(previewPanel);
         m_imagePanel = new ImagePanel();
-        add(m_imagePanel);
-        JPanel lowerPanel = new JPanel(new GridLayout(0, 1, GuiUtils.PAD, 0));
-        add(lowerPanel, BorderLayout.SOUTH);
-        m_description = new JLabel();
-        m_description.setHorizontalAlignment(SwingConstants.CENTER);
-        lowerPanel.add(m_description);
+        previewPanel.add(m_imagePanel);
+        m_description = new JLabel(" ");
+        m_description.setAlignmentX(Component.CENTER_ALIGNMENT);
+        previewPanel.add(m_description);
+        previewPanel.add(Box.createVerticalGlue());
         JPanel buttonPanel = new JPanel();
-        lowerPanel.add(buttonPanel);
+        add(buttonPanel, BorderLayout.SOUTH);
         m_auto = new JCheckBox("Automatic preview");
         buttonPanel.add(m_auto);
         m_preview = new JButton("Preview");
@@ -345,7 +350,9 @@ class SgfPreview
     {
         public ImagePanel()
         {
-            setPreferredSize(new Dimension(128 + 10, 128 + 10));
+            Dimension dimension = new Dimension(128 + 10, 128 + 10);
+            setPreferredSize(dimension);
+            setMaximumSize(dimension);
         }
 
         public void paintComponent(Graphics graphics)
