@@ -322,6 +322,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/version/*.class
 "/>
 </jar>
+<copy file="external/javacomm/commapi/comm.jar" todir="lib"/>
 </target>
 
 <target name="gogui.app" depends="gogui.jar"
@@ -423,7 +424,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </jar>
 </target>
 
-<target name="gtpdisplay.jar" depends="compile">
+<target name="gtpdisplay.jar" depends="compile,extract-looks">
 <mkdir dir="lib"/>
 <jar destfile="lib/gtpdisplay.jar">
 <manifest>
@@ -453,6 +454,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/version/Version.class
 "/>
 </jar>
+<copy file="external/jgoodies/looks-2.0/looks-2.0.jar" todir="lib"/>
 </target>
 
 <target name="gtpdummy.jar" depends="compile">
