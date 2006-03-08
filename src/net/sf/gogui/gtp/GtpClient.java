@@ -873,8 +873,7 @@ public final class GtpClient
         while (! m_queue.isEmpty())
         {
             message = (ReadMessage)m_queue.waitFor();
-            assert(message.m_isError);
-            if (message.m_text != null)
+            if (message.m_isError && message.m_text != null)
                 handleErrorStream(message.m_text);
         }
     }
