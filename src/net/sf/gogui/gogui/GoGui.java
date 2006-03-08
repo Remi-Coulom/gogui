@@ -2416,9 +2416,7 @@ public class GoGui
     private void createThumbnail(File file)
     {
         String path = file.getAbsolutePath();
-        // Create thumbnail only on Unix filesystems, if not temporary file
-        if (path.startsWith("/") && ! path.startsWith("/tmp")
-            && ! path.startsWith("/var/tmp"))
+        if (! path.startsWith("/tmp") && ! path.startsWith("/var/tmp"))
             m_thumbnail.create(file);
     }
 
