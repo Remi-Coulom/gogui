@@ -89,7 +89,8 @@ public final class Thumbnail
             if (m_verbose)
                 log("MD5: " + md5);
             ArrayList moves = new ArrayList();
-            Board board = getBoard(file, moves);
+            m_description = "";
+            Board board = readFile(file, moves);
             for (int i = 0; i < moves.size(); ++i)
                 board.play((Move)moves.get(i));
             int size = board.getSize();
@@ -146,6 +147,11 @@ public final class Thumbnail
         return new File(new File(home, ".thumbnails"), "normal");
     }
 
+    public String getLastDescription()
+    {
+        return m_description;
+    }
+
     public File getLastNormalThumbnail()
     {
         return m_lastNormalThumbnail;
@@ -159,6 +165,8 @@ public final class Thumbnail
     }
 
     private final boolean m_verbose;
+
+    private String m_description;
 
     private File m_lastNormalThumbnail;
 
@@ -182,7 +190,7 @@ public final class Thumbnail
         node.appendChild(text);
     }
 
-    private Board getBoard(File file, ArrayList moves)
+    private Board readFile(File file, ArrayList moves)
         throws FileNotFoundException, SgfReader.SgfError
     {
         FileInputStream in = new FileInputStream(file);
@@ -196,7 +204,14 @@ public final class Thumbnail
             log(e.getMessage());
         }
         GameTree tree = reader.getGameTree();
-        int size = tree.getGameInformation().m_boardSize;
+        GameInformation gameInformation = tree.getGameInformation();
+        int size = gameInformation.m_boardSize;
+        m_description = gameInformation.suggestGameName();
+        if (m_description == null)
+            m_description = "";
+        String date = gameInformation.m_date;
+        if (date != null && ! date.trim().equals(""))
+            m_description = m_description + " " + date;
         Board board = new Board(size);
         net.sf.gogui.game.Node node = tree.getRoot();
         while (node != null)
@@ -242,7 +257,8 @@ public final class Thumbnail
     }
 
     private void writeImage(BufferedImage image, File file, URI uri,
-                            long lastModified) throws IOException
+                            long lastModified)
+        throws IOException
     {
         Iterator iter = ImageIO.getImageWritersBySuffix("png");
         ImageWriter writer = (ImageWriter)iter.next();
@@ -253,6 +269,8 @@ public final class Thumbnail
         addMeta(node, "Thumb::URI", uri.toString());
         addMeta(node, "Thumb::MTime", Long.toString(lastModified));
         addMeta(node, "Thumb::Mimetype", "application/x-go-sgf");
+        if (! m_description.equals(""))
+            addMeta(node, "Description", m_description);
         addMeta(node, "Software", "GoGui " + Version.get());
         try
         {

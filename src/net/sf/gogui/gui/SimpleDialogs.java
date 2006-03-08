@@ -378,6 +378,9 @@ class SgfPreview
         }
         else
             m_image = null;
+        String description = m_thumbnail.getLastDescription();
+        if (! description.equals(""))
+            setToolTipText(description);
         m_imagePanel.repaint();
         m_preview.setEnabled(false);
     }
