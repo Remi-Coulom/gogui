@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -21,8 +22,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import net.sf.gogui.sgf.SgfFilter;
 import net.sf.gogui.thumbnail.Thumbnail;
 import net.sf.gogui.utils.Platform;
@@ -289,8 +292,13 @@ class SgfPreview
         setLayout(new BorderLayout());
         m_imagePanel = new ImagePanel();
         add(m_imagePanel);
+        JPanel lowerPanel = new JPanel(new GridLayout(0, 1, GuiUtils.PAD, 0));
+        add(lowerPanel, BorderLayout.SOUTH);
+        m_description = new JLabel();
+        m_description.setHorizontalAlignment(SwingConstants.CENTER);
+        lowerPanel.add(m_description);
         JPanel buttonPanel = new JPanel();
-        add(buttonPanel, BorderLayout.SOUTH);
+        lowerPanel.add(buttonPanel);
         m_auto = new JCheckBox("Automatic preview");
         buttonPanel.add(m_auto);
         m_preview = new JButton("Preview");
@@ -358,6 +366,8 @@ class SgfPreview
     private JButton m_preview;
 
     private JCheckBox m_auto;
+
+    private JLabel m_description;
     
     private Image m_image;
 
@@ -380,7 +390,9 @@ class SgfPreview
             m_image = null;
         String description = m_thumbnail.getLastDescription();
         if (! description.equals(""))
-            setToolTipText(description);
+            m_description.setText(description);
+        else
+            m_description.setText("");
         m_imagePanel.repaint();
         m_preview.setEnabled(false);
     }

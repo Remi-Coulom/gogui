@@ -209,9 +209,6 @@ public final class Thumbnail
         m_description = gameInformation.suggestGameName();
         if (m_description == null)
             m_description = "";
-        String date = gameInformation.m_date;
-        if (date != null && ! date.trim().equals(""))
-            m_description = m_description + " " + date;
         Board board = new Board(size);
         net.sf.gogui.game.Node node = tree.getRoot();
         while (node != null)
