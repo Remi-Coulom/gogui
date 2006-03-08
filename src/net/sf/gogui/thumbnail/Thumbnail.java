@@ -40,6 +40,7 @@ import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiBoardDrawer;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -225,8 +226,7 @@ public final class Thumbnail
     {
         BufferedImage image = createImage(width, height);
         Graphics2D graphics = image.createGraphics();
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                  RenderingHints.VALUE_ANTIALIAS_ON);
+        GuiUtils.setAntiAlias(graphics);
         m_drawer.draw(graphics, field, width, false, false);
         graphics.dispose();
         return image;

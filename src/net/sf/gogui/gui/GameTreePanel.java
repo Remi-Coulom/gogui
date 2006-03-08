@@ -209,12 +209,8 @@ public class GameTreePanel
 
     public void paintComponent(Graphics graphics)
     {
-        Graphics2D graphics2D = null;
-        if (graphics instanceof Graphics2D)
-            graphics2D = (Graphics2D)graphics;
-        if (graphics2D != null && ! getFastPaint())
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                        RenderingHints.VALUE_ANTIALIAS_ON);
+        if (! getFastPaint())
+            GuiUtils.setAntiAlias(graphics);
         super.paintComponent(graphics);
     }
 

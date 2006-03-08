@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
+import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.utils.Table;
 import net.sf.gogui.utils.TableUtils;
 
@@ -42,8 +43,7 @@ public class Plot
         BufferedImage image
             = new BufferedImage(m_imgWidth, m_imgHeight, type);
         m_graphics2D = image.createGraphics();
-        m_graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                      RenderingHints.VALUE_ANTIALIAS_ON);
+        GuiUtils.setAntiAlias(m_graphics2D);
         Font font = m_graphics2D.getFont();
         if (font != null)
         {
