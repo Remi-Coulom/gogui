@@ -260,6 +260,7 @@ public final class GuiBoard
         m_constants = new BoardConstants(size);
         m_field = new GuiField[size][size];
         removeAll();
+        m_focusPoint = null;
         setLayout(new SquareLayout());
         m_panel = new BoardPanel();
         FocusListener focusListener = new FocusListener()
