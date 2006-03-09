@@ -10,9 +10,9 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------
 
 /** Message queue for synchronized passing of messages between threads.
-    Could be replaced by java.util.concurrent.BlockingQueue (not available
-    in GNU classpath yet)
- */
+    @bug Queue has no limit on capacity; replace with
+    java.util.concurrent.BlockingQueue once it is available in GNU classpath
+*/
 public class MessageQueue
 {
     public boolean isEmpty()
