@@ -2682,18 +2682,19 @@ public class GoGui
             if (point != null && m_board.getColor(point) != GoColor.EMPTY)
                 return;
             m_clock.stopMove();
+            if (point != null)
+            {
+                // Paint point immediately to pretend better responsiveness
+                // because updating game tree or response to GTP play command
+                // can be slow
+                m_guiBoard.setColor(point, move.getColor());
+                m_guiBoard.markLastMove(point);
+                m_guiBoard.paintImmediately(point);
+            }
             boolean newNodeCreated = play(move);
             if (newNodeCreated)
                 m_clock.startMove(m_board.getToMove());
             setNeedsSave(newNodeCreated);
-            if (point != null)
-            {
-                updateFromGoBoard();
-                // Paint point immediately to pretend better responsiveness
-                // because updating game tree or response to GTP play command
-                // can be slow
-                m_guiBoard.paintImmediately(point);
-            }
             GoColor color = move.getColor();
             if (NodeUtils.getMoveNumber(m_currentNode) > 0
                 && m_clock.lostOnTime(color)
