@@ -71,7 +71,6 @@ public class GameTreePanel
         computeSizes(sizeMode);
         setFocusable(false);
         setFocusTraversalKeysEnabled(false);
-        setOpaque(true);
         setAutoscrolls(true);
         addMouseMotionListener(new GameTreePanel.MouseMotionListener());
         m_listener = listener;
