@@ -2751,6 +2751,16 @@ public class GoGui
         else
             newGameFile(m_boardSize, m_move);
         m_toolBar.enableAll(true, m_currentNode);
+        if (! m_prefs.getBool("show-info-panel"))
+        {
+            m_menuBar.setShowInfoPanel(false);
+            showInfoPanel();
+        }
+        if (! m_prefs.getBool("show-toolbar"))
+        {
+            m_menuBar.setShowToolbar(false);
+            showToolbar();
+        }
         restoreMainWindow();
         SplashScreen.close();
         setVisible(true);
@@ -2774,16 +2784,6 @@ public class GoGui
             computerWhite();
         updateGameInfo(true);
         registerSpecialMacHandler();
-        if (! m_prefs.getBool("show-info-panel"))
-        {
-            m_menuBar.setShowInfoPanel(false);
-            showInfoPanel();
-        }
-        if (! m_prefs.getBool("show-toolbar"))
-        {
-            m_menuBar.setShowToolbar(false);
-            showToolbar();
-        }
         // Children dialogs should be set visible after main window, otherwise
         // they get minimize window buttons and a taskbar entry (KDE 3.4)
         if (m_gtpShell != null && m_prefs.getBool("show-gtpshell"))
