@@ -2,14 +2,17 @@
 <title>Trouble Shooting</title>
 
 <section>
-<title>Why does GoGui become very slow sometimes?</title>
+<title>Why does GoGui become slow sometimes?</title>
 <para>
-This has been experienced on GNU/Linux with Sun's Java 1.5 when other
-processes running in the background create some load on the computer.
-It's probably an inefficient thread implementation in Sun's Java VM.
-GoGui needs to create multiple threads for the connection to the Go
-program.
-Try not to run CPU intensive background processes while you use GoGui.
+This has been experienced while going forward or backward for a large number
+of moves in a game.
+GoGui needs to use thread synchronization to read the output and error
+stream of the Go program, while preserving the correct order of the received
+output in the GTP shell and detecting timeouts.
+The synchronizationcan becomes slow if there are other CPU intensive
+background processes running on the computer.
+This problem can be avoided if the Go engine implements the gg-undo
+and play_sequence commands (see <xref linkend="compatibility"/>).
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
