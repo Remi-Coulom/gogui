@@ -106,7 +106,7 @@ public class Platform
         Tries /usr/bin/open if Platform.isMac(),
         rundll32 url.dll,FileProtocolHandler if Platform.isWindows(),
         and if isUnix() in this order:
-        - kfmclient
+        - kfmclient (if KDE is running)
         - firefox
         - mozilla
         - opera
@@ -130,6 +130,7 @@ public class Platform
         }
         else if (isUnix())
         {
+            if (checkKDERunning())
             {
                 String[] cmd = { "kfmclient", "openURL", url.toString() };
                 if (runProcess(cmd))
@@ -175,6 +176,20 @@ public class Platform
         catch (NoClassDefFoundError e)
         {
             StringUtils.printException(e);
+        }
+    }
+
+    private static boolean checkKDERunning()
+    {
+        try
+        {
+            String[] cmdArray = { "dcop" };
+            String result = ProcessUtils.runCommand(cmdArray);
+            return (result.indexOf("kicker") > 0);
+        }
+        catch (IOException e)
+        {
+            return false;
         }
     }
 
