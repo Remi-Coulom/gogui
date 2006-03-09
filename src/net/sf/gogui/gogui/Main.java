@@ -5,12 +5,10 @@
 
 package net.sf.gogui.gogui;
 
-import javax.swing.UIManager;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
