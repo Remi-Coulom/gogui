@@ -2702,6 +2702,7 @@ public class GoGui
         }
         catch (GtpError e)
         {
+            updateFromGoBoard();
             showError(e);
         }
     }
