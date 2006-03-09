@@ -181,7 +181,6 @@ public final class GoGuiSettings
         prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
         prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
         prefs.setBoolDefault("gametree-show-subtree-sizes", false);
-        prefs.setBoolDefault("gtpshell-highlight", true);
         prefs.setBoolDefault("gtpshell-autonumber", false);
         // JComboBox has problems on the Mac, see section Bugs in
         // documentation

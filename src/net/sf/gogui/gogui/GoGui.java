@@ -217,7 +217,6 @@ public class GoGui
         boolean showSubtreeSizes =
             m_prefs.getBool("gametree-show-subtree-sizes");
         m_menuBar.setShowSubtreeSizes(showSubtreeSizes);
-        m_menuBar.setHighlight(m_prefs.getBool("gtpshell-highlight"));
         m_menuBar.setAutoNumber(m_prefs.getBool("gtpshell-autonumber"));
         boolean completion
             = ! m_prefs.getBool("gtpshell-disable-completions");
@@ -277,7 +276,6 @@ public class GoGui
             && ! command.equals("detach-program")
             && ! command.equals("gtpshell-save")
             && ! command.equals("gtpshell-save-commands")
-            && ! command.equals("highlight")
             && ! command.equals("command-completion")
             && ! command.equals("auto-number")
             && ! command.equals("timestamp")
@@ -395,8 +393,6 @@ public class GoGui
             cbGtpShellSendFile();
         else if (command.startsWith("handicap-"))
             cbHandicap(command.substring("handicap-".length()));
-        else if (command.equals("highlight"))
-            cbHighlight();
         else if (command.equals("help"))
             cbHelp();
         else if (command.equals("interrupt"))
@@ -1241,7 +1237,6 @@ public class GoGui
                 }
             });
         m_gtpShell.setProgramCommand(program);
-        m_gtpShell.setHighlight(m_menuBar.getHighlight());
         m_gtpShell.setTimeStamp(m_menuBar.getTimeStamp());
         m_ignoreInvalidResponses = false;
         GtpClient.InvalidResponseCallback invalidResponseCallback =
@@ -1826,15 +1821,6 @@ public class GoGui
             restoreSize(m_help, "window-help");
         }
         m_help.toTop();
-    }
-
-    private void cbHighlight()
-    {
-        if (m_gtpShell == null)
-            return;
-        boolean highlight = m_menuBar.getHighlight();
-        m_gtpShell.setHighlight(highlight);
-        m_prefs.setBool("gtpshell-highlight", highlight);
     }
 
     private void cbInterrupt()

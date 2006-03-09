@@ -63,7 +63,6 @@ class GtpShellText
         m_timeStamp = timeStamp;
         m_historyMin = historyMin;
         m_historyMax = historyMax;
-        m_highlight = true;
         GuiUtils.setMonospacedFont(this);
         StyleContext context = StyleContext.getDefaultStyleContext();
         Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
@@ -128,11 +127,6 @@ class GtpShellText
         return -1;
     }
 
-    public boolean getHighlight()
-    {
-        return m_highlight;
-    }
-
     public int getLinesTruncated()
     {
         return m_truncated;
@@ -152,11 +146,6 @@ class GtpShellText
         }
     }
 
-    public void setHighlight(boolean highlight)
-    {
-        m_highlight = highlight;
-    }
-
     public void setPositionToEnd()
     {
         int length = getStyledDocument().getLength();
@@ -167,8 +156,6 @@ class GtpShellText
     {
         m_timeStamp = enable;
     }
-
-    private boolean m_highlight;
 
     private boolean m_timeStamp;
 
@@ -200,7 +187,7 @@ class GtpShellText
         }
         StyledDocument doc = getStyledDocument();
         Style s = null;
-        if (style != null && m_highlight)
+        if (style != null)
             s = getStyle(style);
         try
         {
@@ -401,11 +388,6 @@ public class GtpShell
     public void setCommandCompletion(boolean commandCompletion)
     {
         m_disableCompletions = ! commandCompletion;
-    }
-
-    public void setHighlight(boolean highlight)
-    {
-        m_gtpShellText.setHighlight(highlight);
     }
 
     public void setTimeStamp(boolean enable)

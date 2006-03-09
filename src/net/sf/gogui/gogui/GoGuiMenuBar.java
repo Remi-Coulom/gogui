@@ -112,11 +112,6 @@ public class GoGuiMenuBar
         return m_itemAutoNumber.isSelected();        
     }
 
-    public boolean getHighlight()
-    {
-        return m_itemHighlight.isSelected();        
-    }
-
     public boolean getTimeStamp()
     {
         return m_itemTimeStamp.isSelected();        
@@ -335,7 +330,6 @@ public class GoGuiMenuBar
         m_itemShowTree.setEnabled(true);
         m_itemSaveLog.setEnabled(true);
         m_itemSaveCommands.setEnabled(true);
-        m_itemHighlight.setEnabled(true);
         m_itemCommandCompletion.setEnabled(true);
         m_itemAutoNumber.setEnabled(true);
         m_itemTimeStamp.setEnabled(true);
@@ -387,11 +381,6 @@ public class GoGuiMenuBar
         default:
             break;
         }
-    }
-
-    public void setHighlight(boolean enable)
-    {
-        m_itemHighlight.setSelected(enable);        
     }
 
     public void setTimeStamp(boolean enable)
@@ -543,8 +532,6 @@ public class GoGuiMenuBar
     private JCheckBoxMenuItem m_itemCleanup;
 
     private JCheckBoxMenuItem m_itemCommandCompletion;
-
-    private JCheckBoxMenuItem m_itemHighlight;
 
     private JCheckBoxMenuItem m_itemShowAnalyze;
 
@@ -877,8 +864,6 @@ public class GoGuiMenuBar
     private JMenu createMenuConfigureShell()
     {
         JMenu menu = new JMenu("Configure Shell");
-        m_itemHighlight = new JCheckBoxMenuItem("Highlight");
-        addMenuItem(menu, m_itemHighlight, KeyEvent.VK_H, "highlight");
         m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
         addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_P,
                     "command-completion");

@@ -791,15 +791,6 @@ Show the number of nodes in the subtree for nodes that are not expanded.
 </varlistentry>
 
 <varlistentry>
-<term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Highlight</guimenuitem></term>
-<listitem>
-<para>
-Use syntax highlighting in the GTP shell window.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><guisubmenu>Configure Shell</guisubmenu> / <guimenuitem>Popup Completions</guimenuitem></term>
 <listitem>
 <para>
