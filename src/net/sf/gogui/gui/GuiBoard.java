@@ -655,8 +655,10 @@ public final class GuiBoard
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
-            dirty.width = m_drawer.getFieldSize();
-            dirty.height = m_drawer.getFieldSize();
+            int offset = m_drawer.getShadowOffset()
+                - GuiField.getStoneMargin(m_drawer.getFieldSize());
+            dirty.width = m_drawer.getFieldSize() + offset;
+            dirty.height = m_drawer.getFieldSize() + offset;
             paintImmediately(dirty);
         }
 
