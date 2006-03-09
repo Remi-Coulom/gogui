@@ -50,6 +50,7 @@ public final class Bookmark
                 name = name + ")";
             }
         }
+        file = file.getAbsoluteFile();
         init(name, file, move, variation);
     }
 
