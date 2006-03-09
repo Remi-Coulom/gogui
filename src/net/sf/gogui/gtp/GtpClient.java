@@ -603,15 +603,22 @@ public final class GtpClient
         }
     }
 
-    private static class ReadMessage
+    private static final class Message
     {
-        public ReadMessage(boolean isError, String text)
+        public Message(int type, String text)
         {
-            m_isError = isError;
+            assert(type == RESPONSE || type == INVALID || type == ERROR);
+            m_type = type;
             m_text = text;
         }
 
-        public boolean m_isError;
+        public static final int RESPONSE = 0;
+
+        public static final int INVALID = 1;
+
+        public static final int ERROR = 2;
+
+        public int m_type;
 
         public String m_text;
     }
@@ -641,28 +648,73 @@ public final class GtpClient
 
         private final MessageQueue m_queue;
 
+        private final StringBuffer m_buffer = new StringBuffer(1024);
+
+        private void appendBuffer(String line)
+        {
+            m_buffer.append(line);
+            m_buffer.append('\n');
+        }
+
+        private boolean isResponseStart(String line)
+        {
+            if (line.length() < 1)
+                return false;
+            char c = line.charAt(0);
+            return (c == '=' || c == '?');
+        }
+
         private void mainLoop() throws InterruptedException
         {
             while (true)
             {
-                String line;
-                try
-                {
-                    line = m_in.readLine();
-                }
-                catch (IOException e)
-                {
-                    line = null;
-                }
-                Thread.yield(); // Give ErrorThread a chance to read first
-                m_queue.put(new ReadMessage(false, line));
+                String line = readLine();
                 if (line == null)
+                {
+                    putMessage(Message.RESPONSE, null);
                     return;
-                log("<< " + line);
+                }
+                if (isResponseStart(line))
+                {
+                    if (m_buffer.length() > 0 )
+                        putMessage(Message.INVALID);
+                }
+                appendBuffer(line);
+                if (line.equals(""))
+                {
+                    Thread.yield(); // Give ErrorThread a chance to read first
+                    putMessage(Message.RESPONSE);
+                }
                 // Avoid programs flooding stderr or stdout after trying
-                // to exit
+                // to exit (see unlimited MessageQueue capacity bug)
                 if (getExitInProgress())
                     Thread.sleep(m_queue.getSize() / 10);
+            }
+        }
+
+        private void putMessage(int type)
+        {
+            putMessage(type, m_buffer.toString());
+            m_buffer.setLength(0);
+        }
+
+        private void putMessage(int type, String text)
+        {
+            m_queue.put(new Message(type, text));
+        }
+
+        private String readLine()
+        {
+            try
+            {
+                String line = m_in.readLine();
+                if (line != null)
+                    log("<< " + line);
+                return line;
+            }
+            catch (IOException e)
+            {
+                return null;
             }
         }
     }
@@ -710,12 +762,12 @@ public final class GtpClient
                 String text = null;
                 if (n > 0)
                     text = new String(buffer, 0, n);
-                m_queue.put(new ReadMessage(true, text));
+                m_queue.put(new Message(Message.ERROR, text));
                 if (text == null)
                     return;
                 logError(text);
                 // Avoid programs flooding stderr or stdout after trying
-                // to exit
+                // to exit (see unlimited MessageQueue capacity bug)
                 if (getExitInProgress())
                     Thread.sleep(m_queue.getSize() / 10);
             }
@@ -791,14 +843,6 @@ public final class GtpClient
         m_inputThread.start();
     }
 
-    private static boolean isResponseLine(String line)
-    {
-        if (line.length() < 1)
-            return false;
-        char c = line.charAt(0);
-        return (c == '=' || c == '?');
-    }
-
     private synchronized void log(String msg)
     {
         if (m_log)
@@ -815,119 +859,84 @@ public final class GtpClient
             System.err.print(text);
     }
 
-    private String readLine(long timeout) throws GtpError
+    private void mergeErrorMessages(Message message)
+    {
+        assert(message.m_type == Message.ERROR);
+        StringBuffer buffer = new StringBuffer(2048);
+        while (message != null)
+        {
+            if (message.m_text != null)
+                buffer.append(message.m_text);
+            synchronized (m_queue.getMutex())
+            {
+                message = (Message)m_queue.unsynchronizedPeek();
+                if (message != null && message.m_type != Message.ERROR)
+                    message = null;
+            }
+            if (message != null)
+            {
+                message = (Message)m_queue.getIfAvaliable();
+            }
+        }
+        handleErrorStream(buffer.toString());
+    }
+
+    private void readRemainingErrorMessages()
+    {
+        Message message;
+        while (! m_queue.isEmpty())
+        {
+            message = (Message)m_queue.waitFor();
+            if (message.m_type == Message.ERROR && message.m_text != null)
+                handleErrorStream(message.m_text);
+        }
+    }
+
+    private String readResponse(long timeout) throws GtpError
     {
         while (true)
         {            
-            ReadMessage message;
-            if (timeout < 0)
-                message = (ReadMessage)m_queue.waitFor();
-            else
+            Message message = waitForMessage(timeout);
+            if (message.m_type == Message.ERROR)
+                mergeErrorMessages(message);
+            else if (message.m_type == Message.INVALID)
             {
-                message = null;
-                while (message == null)
-                {
-                    message = (ReadMessage)m_queue.waitFor(timeout);
-                    if (message == null)
-                    {
-                        assert(m_timeoutCallback != null);
-                        if (! m_timeoutCallback.askContinue())
-                        {
-                            destroyProcess();
-                            throwProgramDied();
-                        }
-                    }
-                }
-            }
-            if (message.m_isError)
-            {
-                StringBuffer buffer = new StringBuffer(2048);
-                while (message != null)
-                {
-                    if (message.m_text != null)
-                        buffer.append(message.m_text);
-                    synchronized (m_queue.getMutex())
-                    {
-                        message = (ReadMessage)m_queue.unsynchronizedPeek();
-                        if (message != null && ! message.m_isError)
-                            message = null;
-                    }
-                    if (message != null)
-                    {
-                        message = (ReadMessage)m_queue.getIfAvaliable();
-                    }
-                }
-                handleErrorStream(buffer.toString());
+                m_fullResponse = message.m_text;
+                if (m_callback != null)
+                    m_callback.receivedInvalidResponse(m_fullResponse);
+                if (m_invalidResponseCallback != null)
+                    m_invalidResponseCallback.show(m_fullResponse);
             }
             else
             {
-                String line = message.m_text;
-                if (line == null)
+                assert(message.m_type == Message.RESPONSE);
+                String response = message.m_text;
+                if (response == null)
                 {
                     m_isProgramDead = true;
                     readRemainingErrorMessages();
                     throwProgramDied();
                 }
-                return line;
+                boolean error = (response.charAt(0) != '=');
+                m_fullResponse = response;
+                if (m_callback != null)
+                    m_callback.receivedResponse(error, m_fullResponse);
+                assert(response.length() >= 3);            
+                int index = response.indexOf(" ");
+                int length = response.length();
+                if (index < 0)
+                    m_response = response.substring(1, length - 2);
+                else
+                    m_response = response.substring(index + 1, length - 2);
+                if (error)
+                {
+                    if (m_response.trim().equals(""))
+                        throw new GtpError("GTP command failed");
+                    else
+                        throw new GtpError(m_response);
+                }
+                return m_response;
             }
-        }
-    }
-
-    private void readRemainingErrorMessages()
-    {
-        ReadMessage message;
-        while (! m_queue.isEmpty())
-        {
-            message = (ReadMessage)m_queue.waitFor();
-            if (message.m_isError && message.m_text != null)
-                handleErrorStream(message.m_text);
-        }
-    }
-
-    private void readResponse(long timeout) throws GtpError
-    {
-        String line = "";
-        while (line.trim().equals(""))
-            line = readLine(timeout);
-        StringBuffer response;
-        while (true)
-        {
-            response = new StringBuffer(line);
-            response.append("\n");
-            if (isResponseLine(line))
-                break;
-            m_fullResponse = response.toString();
-            if (m_callback != null)
-                m_callback.receivedInvalidResponse(response.toString());
-            if (m_invalidResponseCallback != null)
-                m_invalidResponseCallback.show(line);       
-            line = readLine(timeout);
-        }
-        boolean error = (line.charAt(0) != '=');
-        boolean done = false;
-        while (! done)
-        {
-            line = readLine(timeout);
-            done =line.equals("");
-            response.append(line);
-            response.append("\n");
-        }
-        m_fullResponse = response.toString();
-        if (m_callback != null)
-            m_callback.receivedResponse(error, m_fullResponse);
-        assert(response.length() >= 3);            
-        int index = response.indexOf(" ");
-        if (index < 0)
-            m_response = response.substring(1, response.length() - 2);
-        else
-            m_response =
-                response.substring(index + 1, response.length() - 2);
-        if (error)
-        {
-            String message = m_response.trim();
-            if (message.equals(""))
-                message = "GTP command failed";
-            throw new GtpError(message);
         }
     }
 
@@ -940,6 +949,31 @@ public final class GtpClient
     {
         m_isProgramDead = true;
         throw new GtpError("Go program died");
+    }
+
+    private Message waitForMessage(long timeout) throws GtpError
+    {
+        Message message;
+        if (timeout < 0)
+            message = (Message)m_queue.waitFor();
+        else
+        {
+            message = null;
+            while (message == null)
+            {
+                message = (Message)m_queue.waitFor(timeout);
+                if (message == null)
+                {
+                    assert(m_timeoutCallback != null);
+                    if (! m_timeoutCallback.askContinue())
+                    {
+                        destroyProcess();
+                        throwProgramDied();
+                    }
+                }
+            }
+        }
+        return message;
     }
 }
 
