@@ -130,6 +130,7 @@ public class Comment
             GuiUtils.setMonospacedFont(m_textPane);
         else
             m_textPane.setFont(UIManager.getFont("TextArea.font"));
+        m_textPane.repaint();
     }
 
     public void setNode(Node node)
