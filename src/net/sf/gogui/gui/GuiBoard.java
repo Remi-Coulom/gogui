@@ -339,7 +339,6 @@ public final class GuiBoard
                 private GoPoint m_pointPressed;
             };
         m_panel.addMouseListener(mouseAdapter);
-        m_panel.setOpaque(false);
         for (int y = size - 1; y >= 0; --y)
         {
             for (int x = 0; x < size; ++x)
@@ -621,6 +620,7 @@ public final class GuiBoard
         {
             setPreferredFieldSize();
             setFocusable(true);
+            setOpaque(true);
         }
 
         public void contextMenu(GoPoint point)
