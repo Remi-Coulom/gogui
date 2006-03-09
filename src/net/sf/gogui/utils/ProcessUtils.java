@@ -73,9 +73,8 @@ public class ProcessUtils
     {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(cmdArray);
-        Thread copyErr = new StreamCopy(false, process.getErrorStream(),
-                                        System.err, false);
-        copyErr.start();
+        Thread discardErr = new StreamDiscard(process.getErrorStream());
+        discardErr.start();
         InputStream in = process.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         StringBuffer result = new StringBuffer();
