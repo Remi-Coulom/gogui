@@ -2805,9 +2805,9 @@ public class GoGui
             m_menuBar.setShowInfoPanel(false);
             showInfoPanel();
         }
-        if (! m_prefs.getBool("show-toolbar"))
+        if (m_prefs.getBool("show-toolbar"))
         {
-            m_menuBar.setShowToolbar(false);
+            m_menuBar.setShowToolbar(true);
             showToolbar();
         }
         restoreMainWindow();
