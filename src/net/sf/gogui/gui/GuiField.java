@@ -399,14 +399,14 @@ public class GuiField
             m_graphics.drawLine(d, d + width, d + width, d);
         }
         if (m_markCircle)
-            m_graphics.drawOval(d, d, width, width);
+            m_graphics.drawOval(d, d, width - 1, width - 1);
         if (m_markSquare)
-            m_graphics.drawRect(d, d, width, width);
+            m_graphics.drawRect(d, d, width - 1, width - 1);
         if (m_markTriangle)
         {
             int height = (int)(0.866 * width);
             int top = (int)(0.866 * (width - height) / 2);
-            int bottom = top + height;
+            int bottom = top + height - 1;
             m_graphics.drawLine(d, d + bottom, d + width / 2, d + top);
             m_graphics.drawLine(d + width / 2, d + top,
                                 d + width, d + bottom);
