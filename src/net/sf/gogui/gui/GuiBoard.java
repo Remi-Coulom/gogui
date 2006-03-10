@@ -292,27 +292,9 @@ public final class GuiBoard
                 public void mousePressed(MouseEvent event)
                 {
                     GoPoint point = m_panel.getPoint(event);
-                    m_pointPressed = point;
                     if (point == null)
                         return;
                     // mousePressed and mouseReleased (platform dependency)
-                    if (event.isPopupTrigger())
-                    {
-                        contextMenu(point);
-                        m_pointPressed = null;
-                        return;
-                    }
-                }
-
-                public void mouseReleased(MouseEvent event)
-                {                    
-                    GoPoint point = m_panel.getPoint(event);
-                    if (point == null || point != m_pointPressed)
-                    {
-                        m_pointPressed = null;
-                        return;
-                    }
-                    m_pointPressed = null;
                     if (event.isPopupTrigger())
                     {
                         contextMenu(point);
@@ -335,7 +317,17 @@ public final class GuiBoard
                     }
                 }
 
-                private GoPoint m_pointPressed;
+                public void mouseReleased(MouseEvent event)
+                {                    
+                    GoPoint point = m_panel.getPoint(event);
+                    if (point == null)
+                        return;
+                    if (event.isPopupTrigger())
+                    {
+                        contextMenu(point);
+                        return;
+                    }
+                }
             };
         m_panel.addMouseListener(mouseAdapter);
         for (int y = size - 1; y >= 0; --y)
