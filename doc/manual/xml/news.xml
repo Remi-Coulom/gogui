@@ -12,7 +12,8 @@
 <listitem>
 <simpara>
 GoGui: new default look and feel PlasticXP from jgoodies.com on Linux
-and Windows
+and Windows; speed up board repaint; don't use DirectDraw on Windows anymore
+to avoid screen flicker
 </simpara>
 </listitem>
 <listitem>
