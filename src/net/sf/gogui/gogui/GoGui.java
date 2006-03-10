@@ -128,13 +128,12 @@ public class GoGui
         m_verbose = verbose;
         m_initAnalyze = initAnalyze;
         m_showInfoPanel = true;
-        m_showToolbar = true;
+        m_showToolbar = false;
 
         Container contentPane = getContentPane();        
         m_innerPanel = new JPanel(new BorderLayout());
         contentPane.add(m_innerPanel, BorderLayout.CENTER);
         m_toolBar = new GoGuiToolBar(this);
-        contentPane.add(m_toolBar, BorderLayout.NORTH);
 
         m_infoPanel = new JPanel(new BorderLayout());
         m_clock = new Clock();
@@ -3555,9 +3554,15 @@ public class GoGui
         m_prefs.setBool("show-toolbar", showToolbar);
         m_showToolbar = showToolbar;
         if (showToolbar)
+        {
             getContentPane().add(m_toolBar, BorderLayout.NORTH);
+            m_menuBar.setHeaderStyleSingle(false);
+        }
         else
+        {
             getContentPane().remove(m_toolBar);
+            m_menuBar.setHeaderStyleSingle(true);
+        }
         m_splitPane.resetToPreferredSizes();
         pack();
     }

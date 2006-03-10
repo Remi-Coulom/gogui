@@ -49,8 +49,8 @@ public class GoGuiToolBar
             addButton("up.png", "previous-variation", "Previous Variation");
         setRollover(true);
         setFloatable(false);
-        // For com.jgoodies.looks.plastic.PlasticLookAndFeel
-        putClientProperty("Plastic.is3D", Boolean.TRUE);
+        // For com.jgoodies.looks
+        putClientProperty("jgoodies.headerStyle", "Both");
     }
 
     public void setComputerEnabled(boolean enabled)

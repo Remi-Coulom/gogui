@@ -54,8 +54,7 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuSettings);
         m_menuHelp = createMenuHelp();
         m_menuBar.add(m_menuHelp);
-        // For com.jgoodies.looks.plastic.PlasticLookAndFeel
-        m_menuBar.putClientProperty("Plastic.is3D", Boolean.TRUE);
+        setHeaderStyleSingle(true);
     }
 
     public void addRecent(File file)
@@ -381,6 +380,14 @@ public class GoGuiMenuBar
         default:
             break;
         }
+    }
+
+    /** Is it a single menu bar or does a tool bar exist? */
+    public void setHeaderStyleSingle(boolean isSingle)
+    {
+        // For com.jgoodies.looks
+        getMenuBar().putClientProperty("jgoodies.headerStyle",
+                                       isSingle ? "Single" : "Both");
     }
 
     public void setTimeStamp(boolean enable)
