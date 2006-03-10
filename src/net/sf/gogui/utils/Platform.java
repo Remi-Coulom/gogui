@@ -80,6 +80,11 @@ public class Platform
         return info;
     }
 
+    public static boolean isGnuClasspath()
+    {
+        return (System.getProperty("gnu.classpath.version") != null);
+    }
+
     /** Check if the platform is Mac OS X. */
     public static boolean isMac()
     {

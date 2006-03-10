@@ -27,8 +27,9 @@ import javax.swing.JPanel;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.SquareLayout;
 import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.utils.Platform;
+import net.sf.gogui.utils.SquareLayout;
 
 //----------------------------------------------------------------------------
 
@@ -616,7 +617,11 @@ public final class GuiBoard
             setPreferredFieldSize();
             setFocusable(true);
             setOpaque(true);
-            setDoubleBuffered(false);
+            // Don't need double buffering, because we keep our own buffer
+            // but witching double buffering off doesn't work with GNU
+            // classpath 0.90 yet
+            if (! Platform.isGnuClasspath())
+                setDoubleBuffered(false);
         }
 
         public void contextMenu(GoPoint point)
