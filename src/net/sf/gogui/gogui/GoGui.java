@@ -2464,6 +2464,9 @@ public class GoGui
 
     private void createThumbnail(File file)
     {
+        // Thumbnail creation does not work on GNU classpath 0.90 yet
+        if (Platform.isGnuClasspath())
+            return;
         String path = file.getAbsolutePath();
         if (! path.startsWith("/tmp") && ! path.startsWith("/var/tmp"))
             m_thumbnail.create(file);

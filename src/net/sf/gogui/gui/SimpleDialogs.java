@@ -249,7 +249,9 @@ public final class SimpleDialogs
         if (setSgfFilter)
         {
             chooser.setFileFilter(sgfFilter);
-            if (Thumbnail.checkThumbnailSupport())
+            // Thumbnail creation does not work on GNU classpath 0.90 yet
+            if (Thumbnail.checkThumbnailSupport()
+                && ! Platform.isGnuClasspath())
             {
                 SgfPreview preview = new SgfPreview();
                 chooser.setAccessory(preview);
