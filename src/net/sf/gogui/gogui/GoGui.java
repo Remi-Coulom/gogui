@@ -28,6 +28,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -1809,15 +1810,58 @@ public class GoGui
     private void cbHelp()
     {
         ClassLoader classLoader = getClass().getClassLoader();
-        URL u = classLoader.getResource("net/sf/gogui/doc/index.html");
-        if (u == null)
+        URL url = classLoader.getResource("net/sf/gogui/doc/index.html");
+        if (url == null)
         {
             showError("Help not found");
             return;
         }
+        if (Platform.isGnuClasspath())
+        {
+            // JEditorPane does not display HTML in GNU classpath 0.90 yet,
+            // so we invoke a browser. Cannot use internal files from JAR
+            // though
+            File file = null;
+            String s = url.toString();
+            int pos = s.indexOf("lib/gogui.jar!/");
+            if (pos >= 0 && s.startsWith("jar:file:"))
+            {
+                String path = s.substring(9, pos);
+                File file1 = new File(path, "doc/manual/html/index.html");
+                File file2 = new File(path, "../doc/gogui/index.html");
+                if (file1.exists())
+                    file = file1;
+                else if (file2.exists())
+                    file = file2;
+                else
+                {
+                    showError("Documentation not found in:\n"
+                              + file1.toString() + "\n"
+                              + file2.toString());
+                    return;
+                }
+                
+            }
+            else
+            {
+                showError("Cannot show documentation " +
+                          " (must run from gogui.jar)");
+                return;
+            }
+            try
+            {
+                if (! Platform.openInExternalBrowser(file.toURL()))
+                    showError("Could not open browser");
+            }
+            catch (MalformedURLException e)
+            {
+                assert(false);
+            }
+            return;
+        }
         if (m_help == null)
         {
-            m_help = new Help(this, u);
+            m_help = new Help(this, url);
             restoreSize(m_help, "window-help");
         }
         m_help.toTop();
