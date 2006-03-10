@@ -126,6 +126,7 @@ It will be displayed in a window using syntax highlighting.
 Lines beginning with a word followed by a colon are displayed in bold,
 points and moves in blue, the strings "black" and "white" in purple,
 numbers in green, and words that are completely uppercase in red.
+Syntax highlighting is disabled, if GoGui is started with option -fast.
 </simpara>
 </listitem>
 </varlistentry>

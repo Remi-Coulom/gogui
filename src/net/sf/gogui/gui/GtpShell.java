@@ -43,6 +43,7 @@ import javax.swing.JTextPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyleConstants;
@@ -55,29 +56,23 @@ import net.sf.gogui.utils.Preferences;
 //----------------------------------------------------------------------------
 
 class GtpShellText
-    extends JTextPane
+    extends GuiTextPane
 {
-    public GtpShellText(int historyMin, int historyMax, boolean timeStamp)
+    public GtpShellText(int historyMin, int historyMax, boolean timeStamp,
+                        boolean fast)
     {
+        super(fast);
+        setMonospacedFont();
         m_startTime = System.currentTimeMillis();
         m_timeStamp = timeStamp;
         m_historyMin = historyMin;
         m_historyMax = historyMax;
-        GuiUtils.setMonospacedFont(this);
-        StyleContext context = StyleContext.getDefaultStyleContext();
-        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
-        StyleConstants.setLineSpacing(def, 0f);
-        Style error = addStyle("error", def);
-        StyleConstants.setForeground(error, Color.red);
-        Style output = addStyle("output", def);
-        StyleConstants.setBold(output, true);
-        Style log = addStyle("log", def);
-        StyleConstants.setForeground(log, new Color(0.5f, 0.5f, 0.5f));
-        Style time = addStyle("time", def);
-        StyleConstants.setForeground(time, Color.decode("#91aee8"));
-        Style invalid = addStyle("invalid", def);
-        StyleConstants.setForeground(invalid, Color.white);
-        StyleConstants.setBackground(invalid, Color.red);
+        setNoLineSpacing();
+        addStyle("error", Color.red);
+        addStyle("output", null, null, true);
+        addStyle("log", new Color(0.5f, 0.5f, 0.5f));
+        addStyle("time", Color.decode("#91aee8"));
+        addStyle("invalid", Color.white, Color.red, false);
         setEditable(false);
     }
 
@@ -134,7 +129,7 @@ class GtpShellText
 
     public String getLog()
     {
-        StyledDocument doc = getStyledDocument();
+        Document doc = getDocument();
         try
         {
             return doc.getText(0, doc.getLength());
@@ -148,7 +143,7 @@ class GtpShellText
 
     public void setPositionToEnd()
     {
-        int length = getStyledDocument().getLength();
+        int length = getDocument().getLength();
         setCaretPosition(length);
     }
 
@@ -185,7 +180,7 @@ class GtpShellText
             ++m_lines;
             ++indexNewLine;
         }
-        StyledDocument doc = getStyledDocument();
+        Document doc = getDocument();
         Style s = null;
         if (style != null)
             s = getStyle(style);
@@ -218,7 +213,7 @@ class GtpShellText
     private void truncateHistory()
     {
         int truncateLines = m_lines - m_historyMin;
-        StyledDocument doc = getStyledDocument();
+        Document doc = getDocument();
         try
         {
             String text = doc.getText(0, doc.getLength());
@@ -251,7 +246,8 @@ public class GtpShell
         boolean sendGtpCommand(String command, boolean sync) throws GtpError;
     }
 
-    public GtpShell(Frame owner, Callback callback, Preferences prefs)
+    public GtpShell(Frame owner, Callback callback, Preferences prefs,
+                    boolean fast)
     {
         super(owner, "Shell");
         m_callback = callback;
@@ -260,7 +256,7 @@ public class GtpShell
         JPanel panel = new JPanel(new BorderLayout());
         getContentPane().add(panel, BorderLayout.CENTER);
         m_gtpShellText
-            = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp);
+            = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp, fast);
         m_scrollPane =
             new JScrollPane(m_gtpShellText,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

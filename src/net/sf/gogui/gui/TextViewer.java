@@ -24,10 +24,7 @@ import javax.swing.JTextPane;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
+import javax.swing.text.Document;
 
 //----------------------------------------------------------------------------
 
@@ -48,17 +45,17 @@ public class TextViewer
     }
 
     public TextViewer(Frame owner, String title, String text,
-                      boolean highlight, Listener listener)
+                      boolean highlight, Listener listener, boolean fastPaint)
     {
         super(owner, title);
-        initialize(text, highlight, listener);
+        initialize(text, highlight, listener, fastPaint);
     }
 
     public TextViewer(Dialog owner, String title, String text,
-                      boolean highlight, Listener listener)
+                      boolean highlight, Listener listener, boolean fastPaint)
     {
         super(owner, title);
-        initialize(text, highlight, listener);
+        initialize(text, highlight, listener, fastPaint);
     }
 
     /** Serial version to suppress compiler warning.
@@ -66,29 +63,17 @@ public class TextViewer
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private JTextPane m_textPane;
+    private GuiTextPane m_textPane;
 
     private Listener m_listener;
 
     private void doSyntaxHighlight()
     {
-        StyledDocument doc = m_textPane.getStyledDocument();
-        StyleContext context = StyleContext.getDefaultStyleContext();
-        Style def = context.getStyle(StyleContext.DEFAULT_STYLE);
-        Style styleTitle = doc.addStyle("title", def);
-        StyleConstants.setBold(styleTitle, true);
-        Style stylePoint = doc.addStyle("point", def);
-        Color colorPoint = new Color(0.25f, 0.5f, 0.7f);
-        StyleConstants.setForeground(stylePoint, colorPoint);
-        Style styleNumber = doc.addStyle("number", def);
-        Color colorNumber = new Color(0f, 0.54f, 0f);
-        StyleConstants.setForeground(styleNumber, colorNumber);
-        Style styleConst = doc.addStyle("const", def);
-        Color colorConst = new Color(0.8f, 0f, 0f);
-        StyleConstants.setForeground(styleConst, colorConst);
-        Style styleColor = doc.addStyle("color", def);
-        Color colorColor = new Color(0.54f, 0f, 0.54f);
-        StyleConstants.setForeground(styleColor, colorColor);
+        m_textPane.addStyle("title", null, null, true);
+        m_textPane.addStyle("point", new Color(0.25f, 0.5f, 0.7f));
+        m_textPane.addStyle("number", new Color(0f, 0.54f, 0f));
+        m_textPane.addStyle("const", new Color(0.8f, 0f, 0f));
+        m_textPane.addStyle("color", new Color(0.54f, 0f, 0.54f));
         m_textPane.setEditable(true);
         highlight("number", "\\b-?\\d+\\.?\\d*([Ee][+-]\\d+)?\\b");
         highlight("const", "\\b[A-Z_][A-Z_]+[A-Z]\\b");
@@ -101,7 +86,7 @@ public class TextViewer
 
     private void highlight(String styleName, String regex)
     {
-        StyledDocument doc = m_textPane.getStyledDocument();
+        Document doc = m_textPane.getDocument();
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         try
         {
@@ -111,8 +96,7 @@ public class TextViewer
             {
                 int start = matcher.start();
                 int end = matcher.end();
-                Style style = doc.getStyle(styleName);
-                doc.setCharacterAttributes(start, end - start, style, true);
+                m_textPane.setStyle(start, end - start, styleName);
             }
         }
         catch (BadLocationException e)
@@ -121,14 +105,16 @@ public class TextViewer
         }
     }
 
-    private void initialize(String text, boolean highlight, Listener listener)
+    private void initialize(String text, boolean highlight, Listener listener,
+                            boolean fastPaint)
     {
         m_listener = listener;
         JPanel panel = new JPanel(new BorderLayout());
         Container contentPane = getContentPane();
         contentPane.add(panel, BorderLayout.CENTER);
-        m_textPane = new JTextPane();
-        StyledDocument doc = m_textPane.getStyledDocument();
+        m_textPane = new GuiTextPane(fastPaint);
+        m_textPane.setMonospacedFont();
+        Document doc = m_textPane.getDocument();
         while (text.charAt(text.length() - 1) == '\n')
             text = text.substring(0, text.length() - 1);
         try
@@ -139,7 +125,6 @@ public class TextViewer
         {
             assert(false);
         }
-        GuiUtils.setMonospacedFont(m_textPane);
         JScrollPane scrollPane = new JScrollPane(m_textPane);
         panel.add(scrollPane, BorderLayout.CENTER);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -161,7 +146,7 @@ public class TextViewer
                         return;
                     int start = m_textPane.getSelectionStart();
                     int end = m_textPane.getSelectionEnd();
-                    StyledDocument doc = m_textPane.getStyledDocument();
+                    Document doc = m_textPane.getDocument();
                     try
                     {
                         if (start == end)

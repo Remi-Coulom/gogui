@@ -1229,7 +1229,7 @@ public class GoGui
             m_gtpShell.dispose();
             m_gtpShell = null;
         }
-        m_gtpShell = new GtpShell(this, this, m_prefs);
+        m_gtpShell = new GtpShell(this, this, m_prefs, m_fastPaint);
         m_gtpShell.addWindowListener(new WindowAdapter()
             {
                 public void windowClosing(WindowEvent e)
@@ -3471,8 +3471,9 @@ public class GoGui
                     }
                 };
         }
-        TextViewer textViewer =
-            new TextViewer(this, title, response, highlight, listener);
+        TextViewer textViewer = new TextViewer(this, title, response,
+                                               highlight, listener,
+                                               m_fastPaint);
         if (pointArg != null)
         {
             Point location = m_guiBoard.getLocationOnScreen(pointArg);
