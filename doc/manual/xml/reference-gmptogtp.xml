@@ -67,7 +67,7 @@ A separate thread always listens to the serial device, acknowledges
 received GMP commands immediately, and puts them on an internal
 queue.
 GTP commands that need to receive a command from GMP
-(e.g. <command>genmove_black</command>) check, if such a command
+(e.g. <command>genmove</command>) check, if such a command
 is already on the queue, and wait for a new command otherwise.
 If an unexpected GMP command was received, the GTP command will return
 with an error; subsequently only a GTP command that corresponds
