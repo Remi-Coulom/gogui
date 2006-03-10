@@ -266,7 +266,7 @@ public class GuiField
     private static final Color m_influenceWhiteColor = Color.white;
 
     private static final Color m_lastMoveMarkerColor
-        = Color.decode("#b61a17");
+        = Color.decode("#c34543");
 
     private static final Color m_colorBlackStone = Color.decode("#030303");
 
