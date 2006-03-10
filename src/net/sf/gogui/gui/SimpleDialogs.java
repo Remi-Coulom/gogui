@@ -366,6 +366,11 @@ class SgfPreview
                 graphics.drawImage(m_image, x, y, 128, 128, null);
             }
         }
+
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
     }
 
     /** Serial version to suppress compiler warning.
