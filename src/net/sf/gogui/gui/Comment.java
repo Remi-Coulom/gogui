@@ -22,6 +22,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
@@ -43,15 +44,13 @@ public class Comment
         void textSelected(String text);
     }
 
-    public Comment(Listener listener)
+    public Comment(Listener listener, boolean fastPaint)
     {
         m_listener = listener;
-        m_textPane = new JTextPane();
+        m_textPane = new GuiTextPane(fastPaint);
         setFocusTraversalKeys(m_textPane);
-        GuiUtils.addStyle(m_textPane, "marked", Color.white,
-                          Color.decode("#38d878"));
-        StyleContext context = StyleContext.getDefaultStyleContext();
-        m_defaultStyle = context.getStyle(StyleContext.DEFAULT_STYLE);
+        m_textPane.addStyle("marked", Color.white, Color.decode("#38d878"),
+                            false);
         int fontSize = GuiUtils.getDefaultMonoFontSize();
         setPreferredSize(new Dimension(20 * fontSize, 10 * fontSize));
         m_textPane.getDocument().addDocumentListener(this);
@@ -91,7 +90,7 @@ public class Comment
 
     public void markAll(Pattern pattern)
     {        
-        StyledDocument doc = m_textPane.getStyledDocument();
+        Document doc = m_textPane.getDocument();
         try
         {
             CharSequence text = doc.getText(0, doc.getLength());
@@ -101,15 +100,14 @@ public class Comment
             {
                 int start = matcher.start();
                 int end = matcher.end();
-                Style style = doc.getStyle("marked");
+                Style style = m_textPane.getStyle("marked");
                 if (firstMatch)
                 {
-                    doc.setCharacterAttributes(0, doc.getLength(),
-                                               m_defaultStyle, true);
+                    m_textPane.setStyle(0, doc.getLength(), null);
                     m_textPane.setCaretPosition(start);
                     firstMatch = false;
                 }
-                doc.setCharacterAttributes(start, end - start, style, true);
+                m_textPane.setStyle(start, end - start, "marked");
             }
         }
         catch (BadLocationException e)
@@ -155,13 +153,11 @@ public class Comment
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final JTextPane m_textPane;
+    private final GuiTextPane m_textPane;
 
     private final Listener m_listener;
 
     private Node m_node;
-
-    private final Style m_defaultStyle;
 
     private void copyContentToNode()
     {
@@ -182,7 +178,7 @@ public class Comment
         }
     }
 
-    private static void setFocusTraversalKeys(JTextPane textPane)
+    private static void setFocusTraversalKeys(GuiTextPane textPane)
     {
         int id = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
         Set keystrokes = new TreeSet();

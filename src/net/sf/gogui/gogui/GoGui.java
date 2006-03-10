@@ -166,7 +166,7 @@ public class GoGui
                     m_guiBoard.repaint();
                 }
             };
-        m_comment = new Comment(commentListener);
+        m_comment = new Comment(commentListener, m_fastPaint);
         m_comment.setFontFixed(m_prefs.getBool("comment-font-fixed"));
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,

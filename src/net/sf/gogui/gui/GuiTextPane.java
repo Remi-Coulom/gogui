@@ -8,6 +8,7 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.KeyListener;
+import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -37,6 +38,8 @@ public class GuiTextPane
         {
             m_textArea = new JTextArea();
             m_textComponent = m_textArea;
+            m_textArea.setLineWrap(true);
+            m_textArea.setWrapStyleWord(true);
         }
         else
         {
@@ -84,6 +87,11 @@ public class GuiTextPane
         return m_textComponent.getDocument();
     }
 
+    public String getSelectedText()
+    {
+        return m_textComponent.getSelectedText();
+    }
+
     public int getSelectionEnd()
     {
         return m_textComponent.getSelectionEnd();
@@ -101,6 +109,11 @@ public class GuiTextPane
         return m_textPane.getStyledDocument().getStyle(name);
     }
 
+    public String getText()
+    {
+        return m_textComponent.getText();
+    }
+
     public void setCaretPosition(int position)
     {
         m_textComponent.setCaretPosition(position);
@@ -109,6 +122,10 @@ public class GuiTextPane
     public void setEditable(boolean editable)
     {
         m_textComponent.setEditable(editable);
+    }
+    public void setFocusTraversalKeys(int id, Set keystrokes)
+    {
+        m_textComponent.setFocusTraversalKeys(id, keystrokes);
     }
 
     public void setMonospacedFont()
@@ -126,8 +143,20 @@ public class GuiTextPane
         if (m_textPane == null)
             return;
         StyledDocument doc = m_textPane.getStyledDocument();
-        Style style = doc.getStyle(name);
+        Style style;
+        if (name == null)
+        {
+            StyleContext context = StyleContext.getDefaultStyleContext();
+            style = context.getStyle(StyleContext.DEFAULT_STYLE);
+        }
+        else
+            style = doc.getStyle(name);
         doc.setCharacterAttributes(start, length, style, true);
+    }
+
+    public void setText(String text)
+    {
+        m_textComponent.setText(text);
     }
 
     private boolean m_noLineSpacing;
