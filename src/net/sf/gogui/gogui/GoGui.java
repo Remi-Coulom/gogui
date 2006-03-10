@@ -2433,6 +2433,11 @@ public class GoGui
     {
         ContextMenu.Listener listener = new ContextMenu.Listener()
             {
+                public void clearAnalyze()
+                {
+                    GoGui.this.clearAnalyzeCommand();
+                }
+
                 public void editLabel(GoPoint point)
                 {
                     GoGui.this.editLabel(point);
