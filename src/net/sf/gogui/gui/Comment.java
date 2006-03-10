@@ -49,7 +49,7 @@ public class Comment
         m_listener = listener;
         m_textPane = new GuiTextPane(fastPaint);
         setFocusTraversalKeys(m_textPane);
-        m_textPane.addStyle("marked", Color.white, Color.decode("#38d878"),
+        m_textPane.addStyle("marked", Color.decode("#38d878"), Color.white,
                             false);
         int fontSize = GuiUtils.getDefaultMonoFontSize();
         setPreferredSize(new Dimension(20 * fontSize, 10 * fontSize));
