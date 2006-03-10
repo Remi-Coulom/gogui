@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.event.CaretListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Style;
@@ -38,8 +39,12 @@ public class GuiTextPane
         {
             m_textArea = new JTextArea();
             m_textComponent = m_textArea;
-            m_textArea.setLineWrap(true);
-            m_textArea.setWrapStyleWord(true);
+            // Crashes with GNU classpath 0.90
+            if (! Platform.isGnuClasspath())
+            {
+                m_textArea.setLineWrap(true);
+                m_textArea.setWrapStyleWord(true);
+            }
         }
         else
         {
