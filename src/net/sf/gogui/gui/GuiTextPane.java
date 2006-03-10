@@ -81,7 +81,7 @@ public class GuiTextPane
         if (foreground != null)
             StyleConstants.setForeground(style, foreground);
         if (background != null)
-            StyleConstants.setForeground(style, background);
+            StyleConstants.setBackground(style, background);
         StyleConstants.setBold(style, bold);
         if (m_noLineSpacing)
             StyleConstants.setLineSpacing(style, 0f);
