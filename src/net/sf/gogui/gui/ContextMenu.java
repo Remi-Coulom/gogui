@@ -143,8 +143,6 @@ public class ContextMenu
         item.addActionListener(m_actionListener);
         item.setActionCommand("cancel");
         add(item);
-        // For com.jgoodies.looks
-        putClientProperty("jgoodies.noIcons", Boolean.TRUE);
     }
 
     public GoPoint getPointArg()
