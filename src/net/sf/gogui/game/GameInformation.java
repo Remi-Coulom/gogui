@@ -57,8 +57,8 @@ public class GameInformation
     }
 
     /** Suggest a game name from the player names.
-        @return A game name built from the player names and ranks or null,
-        if not at least one player name is known.
+        @return A game name built from the player names or null, if not at
+        least one player name is known.
     */
     public String suggestGameName()
     {
@@ -78,10 +78,6 @@ public class GameInformation
             playerWhite = StringUtils.capitalize(playerWhite);
         else
             playerWhite = "Unknown";
-        if (m_blackRank != null && ! m_blackRank.trim().equals(""))
-            playerBlack = playerBlack + " [" + m_blackRank + "]";
-        if (m_whiteRank != null && ! m_whiteRank.trim().equals(""))
-            playerWhite = playerWhite + " [" + m_whiteRank + "]";
         return playerWhite + " vs " + playerBlack + " (B)";
     }
 }
