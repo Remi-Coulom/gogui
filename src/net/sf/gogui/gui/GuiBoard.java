@@ -340,6 +340,8 @@ public final class GuiBoard
         m_lastMove = null;
         setCursor(GoPoint.create(m_size / 2, m_size / 2));
         revalidate();
+        m_dirty = new Rectangle(0, 0, getWidth(), getHeight());
+        repaint();
     }
 
     /** Mark point of last move on the board.
@@ -567,7 +569,8 @@ public final class GuiBoard
         if (showGrid != m_showGrid)
         {
             m_showGrid = showGrid;
-            initSize(m_size);
+            m_dirty = new Rectangle(0, 0, getWidth(), getHeight());
+            repaint();
         }
     }
 
