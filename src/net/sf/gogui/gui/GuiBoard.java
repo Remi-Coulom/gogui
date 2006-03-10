@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -257,7 +258,7 @@ public final class GuiBoard
         m_constants = new BoardConstants(size);
         m_field = new GuiField[size][size];
         removeAll();
-        m_focusPoint = null;
+        m_cursor = null;
         setLayout(new SquareLayout());
         m_panel = new BoardPanel();
         FocusListener focusListener = new FocusListener()
@@ -265,13 +266,13 @@ public final class GuiBoard
                 public void focusGained(FocusEvent event)
                 {
                     if (getShowCursor())
-                        setFocus(m_focusPoint, true);
+                        setCursor(m_cursor, true);
                 }
             
                 public void focusLost(FocusEvent event)
                 {
                     if (getShowCursor())
-                        setFocus(m_focusPoint, false);
+                        setCursor(m_cursor, false);
                 }
             };
         m_panel.addFocusListener(focusListener);
@@ -416,14 +417,12 @@ public final class GuiBoard
     {
         if (point != null && ! point.isOnBoard(m_size))
             point = null;
-        if (m_focusPoint != point)
+        if (m_cursor != point)
         {
+            setCursor(m_cursor, false);            
             if (getShowCursor())
-            {
-                setFocus(m_focusPoint, false);            
-                setFocus(point, true);
-            }
-            m_focusPoint = point;
+                setCursor(point, true);
+            m_cursor = point;
         }
         m_panel.requestFocusInWindow();
     }
@@ -561,11 +560,10 @@ public final class GuiBoard
     */
     public void setShowCursor(boolean showCursor)
     {
-        if (m_showCursor)
-            setFocus(m_focusPoint, false);
+        setCursor(m_cursor, false);
         m_showCursor = showCursor;
         if (m_showCursor)
-            setFocus(m_focusPoint, true);
+            setCursor(m_cursor, true);
         m_panel.requestFocusInWindow();
     }
 
@@ -618,6 +616,7 @@ public final class GuiBoard
             setPreferredFieldSize();
             setFocusable(true);
             setOpaque(true);
+            setDoubleBuffered(false);
         }
 
         public void contextMenu(GoPoint point)
@@ -635,19 +634,32 @@ public final class GuiBoard
 
         public void paintComponent(Graphics graphics)
         {
-            /*
-            System.err.println("BoardPanel.paintComponent"
-                               + " x=" + graphics.getClipBounds().x
-                               + " y=" + graphics.getClipBounds().y
-                               + " w=" + graphics.getClipBounds().width
-                               + " h=" + graphics.getClipBounds().height);
-            */
-            m_drawer.draw(graphics, m_field, getWidth(), m_showGrid,
-                          getShowCursor());
+            if (DEBUG_REPAINT)
+                System.err.println("BoardPanel.paintComponent "
+                                   + graphics.getClipBounds().x + " "
+                                   + graphics.getClipBounds().y + " "
+                                   + graphics.getClipBounds().width + " "
+                                   + graphics.getClipBounds().height);
+            int width = getWidth();
+            int height = getHeight();
+            if (m_image == null || width != m_imageWidth
+                || height != m_imageHeight)
+            {
+                if (DEBUG_REPAINT)
+                    System.err.println("createImage " + width + " " + height);
+                m_image = createImage(width, height);
+                m_imageWidth = width;
+                m_imageHeight = height;
+                m_dirty = new Rectangle(0, 0, width, height);
+            }
+            drawImage();
+            graphics.drawImage(m_image, 0, 0, null);
         }
 
         public void paintImmediately(GoPoint point)
         {
+            if (DEBUG_REPAINT)
+                System.err.println("paintImmediately " + point);
             Point location = m_drawer.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
@@ -656,22 +668,31 @@ public final class GuiBoard
                 - GuiField.getStoneMargin(m_drawer.getFieldSize());
             dirty.width = m_drawer.getFieldSize() + offset;
             dirty.height = m_drawer.getFieldSize() + offset;
+            addDirty(dirty);
+            Rectangle oldDirty = m_dirty;
+            m_dirty = dirty;
             paintImmediately(dirty);
+            m_dirty = oldDirty;
         }
 
         public void repaint(GoPoint point)
         {
+            if (DEBUG_REPAINT)
+                System.err.println("repaint " + point);
             Point location = m_drawer.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
             dirty.y = location.y;
             dirty.width = m_drawer.getFieldSize();
             dirty.height = m_drawer.getFieldSize();
+            addDirty(dirty);
             repaint(dirty);
         }
 
         public void repaintWithShadow(GoPoint point)
         {
+            if (DEBUG_REPAINT)
+                System.err.println("repaintWithShadow " + point);
             Point location = m_drawer.getLocation(point.getX(), point.getY());
             Rectangle dirty = new Rectangle();
             dirty.x = location.x;
@@ -680,6 +701,7 @@ public final class GuiBoard
                 - GuiField.getStoneMargin(m_drawer.getFieldSize());
             dirty.width = m_drawer.getFieldSize() + offset;
             dirty.height = m_drawer.getFieldSize() + offset;
+            addDirty(dirty);
             repaint(dirty);
         }
 
@@ -709,9 +731,15 @@ public final class GuiBoard
         private static final long serialVersionUID = 0L; // SUID
     }
 
+    private static final boolean DEBUG_REPAINT = false;
+
     private boolean m_showCursor = true;
 
     private boolean m_showGrid = true;
+
+    private int m_imageHeight;
+
+    private int m_imageWidth;
 
     private int m_size;
 
@@ -720,23 +748,35 @@ public final class GuiBoard
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private GoPoint m_focusPoint;
-
-    private GoPoint m_lastMove;
-
     private BoardConstants m_constants;
+
+    private BoardPanel m_panel;
 
     private Dimension m_minimumFieldSize;
 
     private Dimension m_preferredFieldSize;
 
-    private GuiField m_field[][];
+    private GoPoint m_cursor;
+
+    private GoPoint m_lastMove;
 
     private GuiBoardDrawer m_drawer;
 
-    private BoardPanel m_panel;
+    private GuiField m_field[][];
+
+    private Image m_image;
 
     private Listener m_listener;
+
+    private Rectangle m_dirty = new Rectangle();
+
+    private void addDirty(Rectangle rectangle)
+    {
+        if (m_dirty == null)
+            m_dirty = rectangle;
+        else
+            m_dirty.add(rectangle);
+    }
 
     private void clearLastMove()
     {
@@ -747,6 +787,21 @@ public final class GuiBoard
             repaint(m_lastMove);
             m_lastMove = null;
         }
+    }
+
+    private void drawImage()
+    {
+        if (m_image == null || m_dirty == null)
+            return;
+        if (DEBUG_REPAINT)
+            System.err.println("BoardPanel.drawImage " + m_dirty.x + " "
+                               + m_dirty.y + " " + m_dirty.width + " "
+                               + m_dirty.height);
+        Graphics graphics = m_image.getGraphics();
+        graphics.setClip(m_dirty);
+        m_drawer.draw(m_image.getGraphics(), m_field, m_imageWidth,
+                      m_showGrid, getShowCursor());
+        m_dirty = null;
     }
 
     private void fieldClicked(GoPoint p, boolean modifiedSelect)
@@ -777,15 +832,15 @@ public final class GuiBoard
                         | ActionEvent.ALT_MASK
                         | ActionEvent.META_MASK);
             boolean modifiedSelect = ((modifiers & mask) != 0);
-            if (getShowCursor() && m_focusPoint != null)
-                fieldClicked(m_focusPoint, modifiedSelect);
+            if (getShowCursor() && m_cursor != null)
+                fieldClicked(m_cursor, modifiedSelect);
             return;
         }        
         if ((modifiers & ActionEvent.CTRL_MASK) != 0
-            || ! getShowCursor() || m_focusPoint == null)
+            || ! getShowCursor() || m_cursor == null)
             return;
         boolean shiftModifier = ((modifiers & ActionEvent.SHIFT_MASK) != 0);
-        GoPoint point = m_focusPoint;
+        GoPoint point = m_cursor;
         if (code == KeyEvent.VK_DOWN)
         {
             point = point.down();
@@ -822,14 +877,14 @@ public final class GuiBoard
         m_panel.repaint(point);
     }
 
-    private void setFocus(GoPoint point, boolean focus)
+    private void setCursor(GoPoint point, boolean cursor)
     {
         if (point == null)
             return;
         GuiField field = getField(point);
-        if (field.getFocus() != focus)
+        if (field.getCursor() != cursor)
         {
-            field.setFocus(focus);
+            field.setCursor(cursor);
             repaint(point);
         }
     }

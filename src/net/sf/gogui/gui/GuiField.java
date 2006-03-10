@@ -38,7 +38,7 @@ public class GuiField
     }
 
     public void draw(Graphics graphics, int size, int x, int y,
-                     boolean fastPaint, boolean showCursor)
+                     boolean fastPaint)
     {
         m_fastPaint = fastPaint;
         m_graphics = graphics.create(x, y, size, size);
@@ -66,14 +66,19 @@ public class GuiField
             drawSelect();
         else
             drawLabel();
-        if (m_focus && showCursor)
-            drawFocus();
+        if (m_cursor)
+            drawCursor();
         m_graphics = null;
     }
 
     public GoColor getColor()
     {
         return m_color;
+    }
+
+    public boolean getCursor()
+    {
+        return m_cursor;
     }
 
     public boolean getCrossHair()
@@ -84,11 +89,6 @@ public class GuiField
     public Color getFieldBackground()
     {
         return m_fieldColor;
-    }
-
-    public boolean getFocus()
-    {
-        return m_focus;
     }
 
     public boolean getMark()
@@ -155,9 +155,9 @@ public class GuiField
         m_crossHair = crossHair;
     }
 
-    public void setFocus(boolean focus)
+    public void setCursor(boolean cursor)
     {
-        m_focus = focus;
+        m_cursor = cursor;
     }
 
     public void setInfluence(double value)
@@ -215,7 +215,7 @@ public class GuiField
 
     private boolean m_fastPaint;
 
-    private boolean m_focus;
+    private boolean m_cursor;
 
     private boolean m_lastMoveMarker;
 
@@ -309,15 +309,7 @@ public class GuiField
         m_graphics.setPaintMode();
     }
 
-    private void drawFieldColor()
-    {
-        setComposite(m_composite5);
-        m_graphics.setColor(m_fieldColor);
-        m_graphics.fillRect(0, 0, m_size, m_size);
-        m_graphics.setPaintMode();
-    }
-
-    private void drawFocus()
+    private void drawCursor()
     {
         setComposite(m_composite5);
         int d = m_size / 6;
@@ -332,6 +324,14 @@ public class GuiField
         m_graphics.drawLine(w - d - 1, d, w - d - 1, d2);
         m_graphics.drawLine(w - d - 1, w - d - 1, w - d - 1, w - d2 - 1);
         m_graphics.drawLine(w - d - 1, w - d - 1, w - d2 - 1, w - d - 1);
+        m_graphics.setPaintMode();
+    }
+
+    private void drawFieldColor()
+    {
+        setComposite(m_composite5);
+        m_graphics.setColor(m_fieldColor);
+        m_graphics.fillRect(0, 0, m_size, m_size);
         m_graphics.setPaintMode();
     }
 

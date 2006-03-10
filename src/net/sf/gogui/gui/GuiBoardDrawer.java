@@ -139,7 +139,7 @@ public class GuiBoardDrawer
             {
                 Point location = getLocation(x, y);
                 field[x][y].draw(graphics, m_fieldSize, location.x,
-                                 location.y, m_fastPaint, showCursor);
+                                 location.y, m_fastPaint);
             }
         }
     }
