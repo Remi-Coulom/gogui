@@ -609,11 +609,6 @@ public final class GuiBoard
             setPreferredFieldSize();
             setFocusable(true);
             setOpaque(true);
-            // Don't need double buffering, because we keep our own buffer
-            // but witching double buffering off doesn't work with GNU
-            // classpath 0.90 yet
-            if (! Platform.isGnuClasspath())
-                setDoubleBuffered(false);
         }
 
         public void contextMenu(GoPoint point)
