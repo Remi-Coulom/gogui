@@ -1691,28 +1691,26 @@ public class GoGui
     {
         if (m_pattern == null)
             return;
+        Node root = m_gameTree.getRoot();
         Node node = NodeUtils.findInComments(m_currentNode, m_pattern);
         if (node == null)
+            if (m_currentNode != root)
+                if (showQuestion("End of tree reached. Continue from start?"))
+                {
+                    node = root;
+                    if (! NodeUtils.commentContains(node, m_pattern))
+                        node = NodeUtils.findInComments(node, m_pattern);
+                }
+        if (node == null)
         {
-            Node root = m_gameTree.getRoot();
-            if (m_currentNode == root)
-            {
-                showInfo("Not found");
-                m_menuBar.enableFindNext(false);
-                return;
-            }
-            if (! showQuestion("End of tree reached. Continue from start?"))
-                return;
-            node = NodeUtils.findInComments(root, m_pattern);
-            if (node == null)
-            {
-                showInfo("Not found");
-                m_menuBar.enableFindNext(false);
-                return;
-            }
+            showInfo("Not found");
+            m_menuBar.enableFindNext(false);
         }
-        gotoNode(node);
-        m_comment.markAll(m_pattern);
+        else
+        {
+            gotoNode(node);
+            m_comment.markAll(m_pattern);
+        }
     }
 
     private void cbForward(int n)
