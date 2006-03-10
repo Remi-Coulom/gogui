@@ -388,7 +388,7 @@ public class GuiField
         int width = m_size - 2 * d;
         m_graphics.setColor(Color.blue);
         Stroke oldStroke = null;
-        if (m_graphics2D != null)
+        if (m_graphics2D != null && m_size > 10)
         {
             oldStroke = m_graphics2D.getStroke();
             m_graphics2D.setStroke(m_thickStroke);
