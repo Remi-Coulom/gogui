@@ -368,6 +368,11 @@ class SgfPreview
         }
     }
 
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
     private File m_file;
 
     private JButton m_preview;
