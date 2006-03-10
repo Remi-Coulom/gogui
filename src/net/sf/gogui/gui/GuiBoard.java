@@ -791,8 +791,8 @@ public final class GuiBoard
                                + m_dirty.height);
         Graphics graphics = m_image.getGraphics();
         graphics.setClip(m_dirty);
-        m_drawer.draw(m_image.getGraphics(), m_field, m_imageWidth,
-                      m_showGrid, getShowCursor());
+        m_drawer.draw(graphics, m_field, m_imageWidth, m_showGrid,
+                      getShowCursor());
         m_dirty = null;
     }
 
