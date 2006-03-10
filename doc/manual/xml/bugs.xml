@@ -2,17 +2,19 @@
 <title>Trouble Shooting</title>
 
 <section>
-<title>Why does GoGui become slow sometimes?</title>
+<title>Slow navigation to end or beginning of game</title>
 <para>
-This has been experienced while going forward or backward for a large number
-of moves in a game.
-GoGui needs to use thread synchronization to read the output and error
-stream of the Go program, while preserving the correct order of the received
-output in the GTP shell and detecting timeouts.
-The synchronizationcan becomes slow if there are other CPU intensive
+This happens while going forward or backward for a large number of moves in a
+game.
+Since Java offers no stream selectors for file streams, GoGui needs to use
+thread synchronization to read the output and error stream of the Go program
+for preserving the correct order of the received output in the GTP shell and
+for detecting timeouts.
+This synchronizationcan becomes slow if there are other CPU intensive
 background processes running on the computer.
-This problem can be avoided if the Go engine implements the gg-undo
-and play_sequence commands (see <xref linkend="compatibility"/>).
+The problem can be avoided if the Go engine implements the gg-undo
+and play_sequence commands (see <xref linkend="compatibility"/>),
+then a single command can replace up to several hundred play or undo commands.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
