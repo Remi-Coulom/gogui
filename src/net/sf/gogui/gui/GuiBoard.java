@@ -81,7 +81,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                m_field[x][y].setFieldBackground(null);
+                setFieldBackground(GoPoint.create(x, y), null);
         clearAllCrossHair();
         clearAllMarkup();
         clearAllSelect();
@@ -95,7 +95,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                m_field[x][y].setCrossHair(false);
+                setCrossHair(GoPoint.create(x, y), false);
     }
 
     /** Clear all markup.
@@ -106,11 +106,11 @@ public final class GuiBoard
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
-                GuiField field = m_field[x][y];
-                field.setMark(false);
-                field.setMarkCircle(false);
-                field.setMarkSquare(false);
-                field.setMarkTriangle(false);
+                GoPoint point = GoPoint.create(x, y);
+                setMark(point, false);
+                setMarkCircle(point, false);
+                setMarkSquare(point, false);
+                setMarkTriangle(point, false);
             }
     }
 
@@ -119,7 +119,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                m_field[x][y].setSelect(false);
+                setSelect(GoPoint.create(x, y), false);
     }
 
     /** Clear all labels. */
@@ -127,7 +127,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                m_field[x][y].setLabel("");
+                setLabel(GoPoint.create(x, y), "");
     }
 
     /** Clear all territory. */
@@ -135,13 +135,13 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                m_field[x][y].setTerritory(GoColor.EMPTY);
+                setTerritory(GoPoint.create(x, y), GoColor.EMPTY);
     }
 
     /** Clear all influence. */
     public void clearInfluence(GoPoint p)
     {
-        getField(p).clearInfluence();
+        clearInfluence(p);
     }
 
     /** Trigger the context menu callback at the listener. */
