@@ -62,7 +62,7 @@ class GtpShellText
                         boolean fast)
     {
         super(fast);
-        setMonospacedFont();
+        GuiUtils.setMonospacedFont(get());
         m_startTime = System.currentTimeMillis();
         m_timeStamp = timeStamp;
         m_historyMin = historyMin;
@@ -73,7 +73,7 @@ class GtpShellText
         addStyle("log", new Color(0.5f, 0.5f, 0.5f));
         addStyle("time", Color.decode("#91aee8"));
         addStyle("invalid", Color.white, Color.red, false);
-        setEditable(false);
+        get().setEditable(false);
     }
 
     public void appendComment(String text)
@@ -144,7 +144,7 @@ class GtpShellText
     public void setPositionToEnd()
     {
         int length = getDocument().getLength();
-        setCaretPosition(length);
+        get().setCaretPosition(length);
     }
 
     public void setTimeStamp(boolean enable)
@@ -258,10 +258,10 @@ public class GtpShell
         m_gtpShellText
             = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp, fast);
         m_scrollPane =
-            new JScrollPane(m_gtpShellText,
+            new JScrollPane(m_gtpShellText.get(),
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        m_fontSize = m_gtpShellText.getFont().getSize();
+        m_fontSize = m_gtpShellText.get().getFont().getSize();
         m_finalSize = new Dimension(m_fontSize * 40, m_fontSize * 30);
         panel.add(m_scrollPane, BorderLayout.CENTER);
         panel.add(createCommandInput(), BorderLayout.SOUTH);
@@ -764,7 +764,7 @@ public class GtpShell
             };
         m_textField.addKeyListener(keyAdapter);
         m_comboBox.setEditable(true);
-        m_comboBox.setFont(m_gtpShellText.getFont());
+        m_comboBox.setFont(m_gtpShellText.get().getFont());
         m_comboBox.addActionListener(this);
         // Necessary for Mac Java 1.4.2, otherwise combobox will not have
         // focus after window is re-activated
@@ -913,7 +913,7 @@ public class GtpShell
         JViewport viewport = m_scrollPane.getViewport();
         Point position = viewport.getViewPosition();
         int delta = m_scrollPane.getSize().height
-            - m_gtpShellText.getFont().getSize();
+            - m_gtpShellText.get().getFont().getSize();
         if (up)
         {
             position.y -= delta;

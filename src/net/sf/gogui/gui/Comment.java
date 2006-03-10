@@ -23,6 +23,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
@@ -60,11 +61,12 @@ public class Comment
                 {
                     if (m_listener == null)
                         return;
-                    m_listener.textSelected(m_textPane.getSelectedText());
+                    JTextComponent textComponent = m_textPane.get();
+                    m_listener.textSelected(textComponent.getSelectedText());
                 }
             };
-        m_textPane.addCaretListener(caretListener);
-        setViewportView(m_textPane);
+        m_textPane.get().addCaretListener(caretListener);
+        setViewportView(m_textPane.get());
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
@@ -80,7 +82,7 @@ public class Comment
 
     public String getSelectedText()
     {
-        return m_textPane.getSelectedText();
+        return m_textPane.get().getSelectedText();
     }
 
     public void insertUpdate(DocumentEvent e)
@@ -104,7 +106,7 @@ public class Comment
                 if (firstMatch)
                 {
                     m_textPane.setStyle(0, doc.getLength(), null);
-                    m_textPane.setCaretPosition(start);
+                    m_textPane.get().setCaretPosition(start);
                     firstMatch = false;
                 }
                 m_textPane.setStyle(start, end - start, "marked");
@@ -125,10 +127,10 @@ public class Comment
     public void setFontFixed(boolean fixed)
     {
         if (fixed)
-            GuiUtils.setMonospacedFont(m_textPane);
+            GuiUtils.setMonospacedFont(m_textPane.get());
         else
-            m_textPane.setFont(UIManager.getFont("TextArea.font"));
-        m_textPane.repaint();
+            m_textPane.get().setFont(UIManager.getFont("TextArea.font"));
+        m_textPane.get().repaint();
     }
 
     public void setNode(Node node)
@@ -140,8 +142,8 @@ public class Comment
         // setText() generates a remove and insert event, and
         // we don't want to notify the listener about that yet.
         m_duringSetText = true;
-        m_textPane.setText(text);
-        m_textPane.setCaretPosition(0);
+        m_textPane.get().setText(text);
+        m_textPane.get().setCaretPosition(0);
         m_duringSetText = false;
         copyContentToNode();
     }
@@ -163,7 +165,7 @@ public class Comment
     {
         if (m_duringSetText)
             return;
-        String text = m_textPane.getText().trim();
+        String text = m_textPane.get().getText().trim();
         if (m_node == null)
             return;
         String comment = m_node.getComment();
@@ -183,7 +185,7 @@ public class Comment
         int id = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
         Set keystrokes = new TreeSet();
         keystrokes.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
-        textPane.setFocusTraversalKeys(id, keystrokes);
+        textPane.get().setFocusTraversalKeys(id, keystrokes);
     }
 }
 
