@@ -35,7 +35,7 @@ There is one line per command in the format:
   
 <programlisting>
 <userinput>
-type/label/command[/section[/scale]]
+type/label/command
 </userinput>
 </programlisting>
   
@@ -391,43 +391,9 @@ Will be replaced by an argument entered by the user.
 
 </variablelist>
 </para>
-</section>
-
-<section>
-<title>Section</title>
-<para>
-The response to the command is searched first, until a single line
-containing the section name followed by a colon is found.
-The text following from the next line on is parsed as the actual response.
-</para>
-<warning>
-<simpara>
-Using section headers is deprecated; it will not be supported in the future.
-It is recommended that Go engines output only one of the response types
-described above.
-</simpara>
-</warning>
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-</section>
-
-<section>
-<title>Scale</title>
-<para>
-If the type is <userinput>dboard</userinput>, the numbers are scaled by
-this factor.
-</para>
-<warning>
-<simpara>
-Using scaling factors is deprecated; it will not be supported in the future.
-It is recommended that Go engines scale influence data as described for the
-type <userinput>dboard</userinput> above.
-</simpara>
-</warning>
-
 <para>
 <!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
 </para>
-
 </section>
 
 </chapter>

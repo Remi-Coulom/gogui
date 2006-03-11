@@ -22,13 +22,13 @@ import net.sf.gogui.utils.StringUtils;
 /** Utility functions for parsing GTP responses. */
 public final class GtpUtils
 {
-    public static double[][] parseDoubleBoard(String response, String title,
-                                              int boardSize) throws GtpError
+    public static double[][] parseDoubleBoard(String response, int boardSize)
+        throws GtpError
     {
         try
         {
             double result[][] = new double[boardSize][boardSize];
-            String s[][] = parseStringBoard(response, title, boardSize);
+            String s[][] = parseStringBoard(response, boardSize);
             for (int x = 0; x < boardSize; ++x)
                 for (int y = 0; y < boardSize; ++y)
                     result[x][y] = Double.parseDouble(s[x][y]);
@@ -136,25 +136,13 @@ public final class GtpUtils
             throw new GtpError("Missing string");
     }
 
-    public static String[][] parseStringBoard(String s, String title,
-                                              int boardSize) throws GtpError
+    public static String[][] parseStringBoard(String s, int boardSize)
+        throws GtpError
     {
         String result[][] = new String[boardSize][boardSize];
         try
         {
             BufferedReader reader = new BufferedReader(new StringReader(s));
-            if (title != null && ! title.trim().equals(""))
-            {
-                String pattern = title + ":";
-                while (true)
-                {
-                    String line = reader.readLine();
-                    if (line == null)
-                        throw new GtpError(title + " not found");
-                    if (line.trim().equals(pattern))
-                        break;
-                }
-            }
             for (int y = boardSize - 1; y >= 0; --y)
             {
                 String line = reader.readLine();

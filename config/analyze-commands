@@ -79,20 +79,6 @@ string/Get Owl Node Counter/get_owl_node_counter
 string/Get Reading Node Counter/get_reading_node_counter
 string/Get TryMove Counter/get_trymove_counter
 hpstring/Half Eye Data/half_eye_data %p
-sboard/Initital Influence Black Attenuation/initial_influence %c black_attenuation
-dboard/Initital Influence Black Influence/initial_influence %c black_influence//0.01
-dboard/Initital Influence Black Permeability/initial_influence %c black_permeability
-dboard/Initital Influence Black Strength/initial_influence %c black_strength//0.01
-dboard/Initital Influence Territory/initial_influence %c territory_value//-1
-sboard/Initital Influence Regions/initial_influence %c influence_regions//0.01
-sboard/Initital Influence Non Territory/initial_influence %c non_territory//0.01
-sboard/Initital Influence White Attenuation/initial_influence %c white_attenuation
-dboard/Initital Influence White Influence/initial_influence %c white_influence//-0.01
-dboard/Initital Influence White Permeability/initial_influence %c white_permeability//-1
-dboard/Initital Influence White Strength/initial_influence %c white_strength//-0.01
-dboard/Influence Black/influence %c/black/0.01
-dboard/Influence White/influence %c/white/-0.01
-sboard/Influence Regions/influence %c/regions
 pstring/Last Move/last_move
 none/Limit Search/limit_search %s
 plist/List Stones/list_stones %c

@@ -180,16 +180,11 @@ public final class GuiBoardUtils
             }
     }
 
-    public static void showDoubleBoard(GuiBoard guiBoard, double[][] board,
-                                       double scale)
+    public static void showDoubleBoard(GuiBoard guiBoard, double[][] board)
     {
         for (int x = 0; x < board.length; ++x)
             for (int y = 0; y < board[x].length; ++y)
-            {
-                GoPoint point = GoPoint.create(x, y);
-                double d = board[x][y] * scale;
-                guiBoard.setInfluence(point, d);
-            }
+                guiBoard.setInfluence(GoPoint.create(x, y), board[x][y]);
     }
 
     public static void showStringBoard(GuiBoard guiBoard,

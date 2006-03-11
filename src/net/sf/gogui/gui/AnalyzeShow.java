@@ -34,30 +34,25 @@ public final class AnalyzeShow
         if (pointArg != null)
             guiBoard.setSelect(pointArg, true);
         int type = command.getType();
-        String title = command.getTitle();
         int size = board.getSize();
         switch (type)
         {
         case AnalyzeCommand.BWBOARD:
             {
-                String b[][] =
-                    GtpUtils.parseStringBoard(response, title, size);
+                String b[][] = GtpUtils.parseStringBoard(response, size);
                 GuiBoardUtils.showBWBoard(guiBoard, b);
             }
             break;
         case AnalyzeCommand.CBOARD:
             {
-                String colors[][] =
-                    GtpUtils.parseStringBoard(response, title, size);
+                String colors[][] = GtpUtils.parseStringBoard(response, size);
                 GuiBoardUtils.showColorBoard(guiBoard, colors);
             }
             break;
         case AnalyzeCommand.DBOARD:
             {
-                double b[][] =
-                    GtpUtils.parseDoubleBoard(response, title, size);
-                GuiBoardUtils.showDoubleBoard(guiBoard, b,
-                                              command.getScale());
+                double b[][] = GtpUtils.parseDoubleBoard(response, size);
+                GuiBoardUtils.showDoubleBoard(guiBoard, b);
             }
             break;
         case AnalyzeCommand.GFX:
@@ -67,8 +62,7 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.PLIST:
             {
-                GoPoint list[] =
-                    GtpUtils.parsePointList(response, size);
+                GoPoint list[] = GtpUtils.parsePointList(response, size);
                 GuiBoardUtils.showPointList(guiBoard, list);
             }
             break;
@@ -91,8 +85,7 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.SBOARD:
             {
-                String b[][] =
-                    GtpUtils.parseStringBoard(response, title, size);
+                String b[][] = GtpUtils.parseStringBoard(response, size);
                 GuiBoardUtils.showStringBoard(guiBoard, b);
             }
             break;

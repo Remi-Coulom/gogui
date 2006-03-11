@@ -48,6 +48,11 @@ for load or save)
 </simpara>
 </listitem>
 <listitem>
+<simpara>
+GoGui: remove support for section and scale parameters of analyze commands
+</simpara>
+</listitem>
+<listitem>
 <para>
 GtpStatistics: make it work with protocol version 2 programs; new option
 -setup

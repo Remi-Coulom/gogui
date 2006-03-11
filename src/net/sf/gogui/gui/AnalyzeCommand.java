@@ -115,30 +115,19 @@ public class AnalyzeCommand
             m_type = AnalyzeCommand.NONE;
         m_label = array[1];
         m_command = array[2];
-        if (array.length > 3)
-            m_title = array[3];
-        else
-            m_title = null;
-        if (array.length > 4)
-            m_scale = Double.parseDouble(array[4]);
-        else
-            m_scale = 1.0;
     }
 
-    public AnalyzeCommand(int type, String label, String command,
-                          String title, double scale)
+    public AnalyzeCommand(int type, String label, String command)
     {
         m_type = type;
         m_label = label;
         m_command = command;
-        m_title = title;
-        m_scale = scale;
     }
 
     public AnalyzeCommand cloneCommand()
     {
         AnalyzeCommand command =
-            new AnalyzeCommand(m_type, m_label, m_command, m_title, m_scale);
+            new AnalyzeCommand(m_type, m_label, m_command);
         command.m_colorArg = m_colorArg;
         command.m_fileArg = m_fileArg;
         command.m_optStringArg = m_optStringArg;
@@ -184,16 +173,6 @@ public class AnalyzeCommand
     public ArrayList getPointListArg()
     {
         return m_pointListArg;
-    }
-
-    public double getScale()
-    {
-        return m_scale;
-    }
-
-    public String getTitle()
-    {
-        return m_title;
     }
 
     public int getType()
@@ -434,8 +413,6 @@ public class AnalyzeCommand
 
     private final int m_type;
 
-    private final double m_scale;
-
     private GoColor m_colorArg;
 
     private File m_fileArg;
@@ -445,8 +422,6 @@ public class AnalyzeCommand
     private String m_optStringArg;
 
     private final String m_command;
-
-    private final String m_title;
 
     private String m_stringArg;
 
