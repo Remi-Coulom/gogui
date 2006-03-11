@@ -2148,6 +2148,7 @@ public class GoGui
     {
         m_showLastMove = m_menuBar.getShowLastMove();
         m_prefs.setBool("show-last-move", m_showLastMove);
+        updateFromGoBoard();
         updateGameInfo(false);
     }
 
@@ -2723,7 +2724,8 @@ public class GoGui
                 // because updating game tree or response to GTP play command
                 // can be slow
                 m_guiBoard.setColor(point, move.getColor());
-                m_guiBoard.markLastMove(point);
+                if (m_showLastMove)
+                    m_guiBoard.markLastMove(point);
                 m_guiBoard.paintImmediately(point);
             }
             boolean newNodeCreated = play(move);
