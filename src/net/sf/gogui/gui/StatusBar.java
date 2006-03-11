@@ -10,8 +10,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.sf.gogui.utils.Platform;
 
@@ -35,10 +35,9 @@ public class StatusBar
                 new Box.Filler(dimension, dimension, dimension);
             add(filler, BorderLayout.EAST);
         }
-        m_label = new JLabel();
-        m_label.setBorder(BorderFactory.createLoweredBevelBorder());
-        m_label.setHorizontalAlignment(SwingConstants.LEFT);
-        panel.add(m_label);
+        m_textField = new JTextField();
+        m_textField.setEditable(false);
+        panel.add(m_textField);
         clear();
     }
 
@@ -49,8 +48,8 @@ public class StatusBar
 
     public void setText(String text)
     {
-        m_label.setText(text);
-        m_label.repaint();
+        m_textField.setText(text);
+        m_textField.repaint();
     }
 
     /** Serial version to suppress compiler warning.
@@ -58,7 +57,7 @@ public class StatusBar
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private JLabel m_label;
+    private JTextField m_textField;
 }
 
 //----------------------------------------------------------------------------
