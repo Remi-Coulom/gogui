@@ -61,10 +61,16 @@ public class GameInfo
             m_move.setText("Black");
         else
             m_move.setText("White");
-        String capturedB = Integer.toString(board.getCapturedB());
-        m_captB.setText(capturedB);
-        String capturedW = Integer.toString(board.getCapturedW());
-        m_captW.setText(capturedW);
+        int capturedB = board.getCapturedB();
+        if (capturedB == 0)
+            m_captB.setText("");
+        else
+            m_captB.setText(Integer.toString(capturedB));
+        int capturedW = board.getCapturedW();
+        if (capturedW == 0)
+            m_captW.setText("");
+        else
+            m_captW.setText(Integer.toString(capturedB));
         updateMoveNumber(node);
         String lastMove = "";
         Move move = node.getMove();
@@ -137,11 +143,16 @@ public class GameInfo
     private void updateMoveNumber(Node node)
     {
         int moveNumber = NodeUtils.getMoveNumber(node);
-        String numberString = Integer.toString(moveNumber);
         int movesLeft = NodeUtils.getMovesLeft(node);
-        if (movesLeft > 0)
-            numberString += "/" + (moveNumber + movesLeft);
-        m_number.setText(numberString);
+        if (moveNumber == 0 && movesLeft == 0)
+            m_number.setText("");
+        else
+        {
+            String numberString = Integer.toString(moveNumber);
+            if (movesLeft > 0)
+                numberString += "/" + (moveNumber + movesLeft);
+            m_number.setText(numberString);
+        }
     }
 
     private void updateTime(GoColor color)
