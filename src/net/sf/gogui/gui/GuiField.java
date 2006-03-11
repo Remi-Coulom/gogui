@@ -40,6 +40,8 @@ public class GuiField
     public void draw(Graphics graphics, int size, int x, int y,
                      boolean fastPaint)
     {
+        if (! graphics.hitClip(x, y, size, size))
+            return;
         m_fastPaint = fastPaint;
         m_graphics = graphics.create(x, y, size, size);
         if (! m_fastPaint && m_graphics instanceof Graphics2D)
