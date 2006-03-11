@@ -29,7 +29,7 @@ public class GoGuiToolBar
         addSeparator();
         m_buttonNew = addButton("filenew.png", "new-game", "New Game");
         addSeparator();
-        m_buttonEnter = addButton("next.png", "play", "Play");
+        m_buttonPlay = addButton("next.png", "play", "Play");
         m_buttonPass = addButton("pass.png", "pass", "Pass");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         addSeparator();
@@ -61,7 +61,7 @@ public class GoGuiToolBar
     public void setComputerEnabled(boolean enabled)
     {
         m_computerButtonsEnabled = enabled;
-        setEnabled(m_buttonEnter, enabled);
+        setEnabled(m_buttonPlay, enabled);
     }
 
     /** Enable/disable buttons according to current position. */
@@ -90,7 +90,8 @@ public class GoGuiToolBar
         setEnabled(m_buttonBackward, enable);
         setEnabled(m_buttonBackward10, enable);
         setEnabled(m_buttonEnd, enable);
-        setEnabled(m_buttonEnter, enable);
+        // Play button always enabled, see setCommandInProgress()
+        //setEnabled(m_buttonPlay, enable);
         setEnabled(m_buttonForward, enable);
         setEnabled(m_buttonForward10, enable);
         setEnabled(m_buttonInterrupt, false);
@@ -111,6 +112,9 @@ public class GoGuiToolBar
     public void setCommandInProgress()
     {
         enableAll(false, null);
+        // Enable play to avoid wrong rendering of rollover effect, if mouse
+        // stays over button. Need to discard the event in GoGui.cbPlay
+        setEnabled(m_buttonPlay, true);
         setEnabled(m_buttonInterrupt, true);
     }
 
@@ -131,7 +135,7 @@ public class GoGuiToolBar
 
     private final NavigationButton m_buttonEnd;
 
-    private final JButton m_buttonEnter;
+    private final JButton m_buttonPlay;
 
     private final NavigationButton m_buttonForward;
 

@@ -1952,7 +1952,7 @@ public class GoGui
 
     private void cbPlay(boolean isSingleMove)
     {
-        if (m_commandThread == null)
+        if (m_commandThread == null || isCommandInProgress())
             return;
         if (! checkCurrentNodeExecuted())
             return;
