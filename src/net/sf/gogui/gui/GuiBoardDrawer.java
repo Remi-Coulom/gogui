@@ -68,7 +68,7 @@ public class GuiBoardDrawer
         drawBackground(graphics);
         drawGrid(graphics);
         if (m_showGrid)
-            drawLabels(graphics);
+            drawGridLabels(graphics);
         drawShadows(graphics, field);
         drawFields(graphics, field, showCursor);
     }
@@ -184,7 +184,7 @@ public class GuiBoardDrawer
                     }
     }
 
-    private void drawLabels(Graphics graphics)
+    private void drawGridLabels(Graphics graphics)
     {
         graphics.setColor(Color.darkGray);
         graphics.setFont(UIManager.getFont("Label.font"));
