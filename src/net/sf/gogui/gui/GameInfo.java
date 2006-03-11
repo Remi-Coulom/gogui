@@ -70,7 +70,7 @@ public class GameInfo
         if (capturedW == 0)
             m_captW.setText("");
         else
-            m_captW.setText(Integer.toString(capturedB));
+            m_captW.setText(Integer.toString(capturedW));
         updateMoveNumber(node);
         String lastMove = "";
         Move move = node.getMove();
