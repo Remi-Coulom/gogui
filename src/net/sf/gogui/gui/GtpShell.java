@@ -790,7 +790,7 @@ public class GtpShell
         }
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
-        buttonPanel.add(GuiUtils.createFiller());
+        buttonPanel.add(GuiUtils.createSmallFiller());
         buttonPanel.add(m_runButton);
         // Workaround for Java 1.4.1 on Mac OS X add some empty space
         // so that combobox does not overlap the window resize widget
