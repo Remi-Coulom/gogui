@@ -1869,15 +1869,6 @@ public class GoGui
         if (! isCommandInProgress() || m_commandThread == null
             || m_commandThread.isProgramDead())
             return;
-        if (isComputerBoth())
-        {
-            if (showQuestion("Stop computer play?"))
-            {
-                m_interruptComputerBoth = true;
-                showStatus("Waiting for current move to finish...");
-            }
-            return;
-        }
         if (Interrupt.run(this, m_commandThread))
             showStatus("Interrupting...");
     }
