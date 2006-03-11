@@ -2090,6 +2090,7 @@ public class GoGui
         if (m_needsSave && ! checkSaveGame())
             return;
         m_menuBar.setSetupMode();
+        m_showLastMove = false;
         if (m_gameTreeViewer != null)
         {
             // Create a dummy game tree, so that GameTreeDialog shows
@@ -3410,6 +3411,7 @@ public class GoGui
     private void setupDone()
     {
         m_setupMode = false;
+        m_showLastMove = m_menuBar.getShowLastMove();
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, m_currentNode);
         int size = m_board.getSize();
@@ -3607,6 +3609,8 @@ public class GoGui
     private void updateFromGoBoard()
     {
         GuiBoardUtils.updateFromGoBoard(m_guiBoard, m_board, m_showLastMove);
+        if (m_currentNode.getMove() == null)
+            m_guiBoard.markLastMove(null);
     }
 
     private void updateGameInfo(boolean gameTreeChanged)
