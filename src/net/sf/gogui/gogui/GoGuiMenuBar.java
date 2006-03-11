@@ -243,7 +243,7 @@ public class GoGuiMenuBar
         {
             Bookmark bookmark = (Bookmark)bookmarks.get(i);
             JMenuItem item = new JMenuItem(bookmark.m_name);
-            addMenuItem(m_menuBookmarks, item, "bookmark-" + i);
+            m_menuBookmarks.addItem(item, "bookmark-" + i);
             m_bookmarkItems.add(item);
         }
     }
@@ -527,7 +527,7 @@ public class GoGuiMenuBar
 
     private static int s_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    private static final int m_shortcutKeyMask =
+    private static final int m_shortcut =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     private final ActionListener m_listener;
@@ -560,21 +560,21 @@ public class GoGuiMenuBar
 
     private JCheckBoxMenuItem m_itemTimeStamp;
 
-    private JMenu m_menuConfigureAnalyze;
+    private JMenuChecked m_menuConfigureAnalyze;
 
-    private JMenu m_menuConfigureShell;
+    private JMenuChecked m_menuConfigureShell;
 
-    private JMenu m_menuComputerColor;
+    private JMenuChecked m_menuComputerColor;
 
-    private final JMenu m_menuBookmarks;
+    private final JMenuChecked m_menuBookmarks;
 
-    private final JMenu m_menuFile;
+    private final JMenuChecked m_menuFile;
 
-    private final JMenu m_menuHelp;
+    private final JMenuChecked m_menuHelp;
 
-    private final JMenu m_menuShell;
+    private final JMenuChecked m_menuShell;
 
-    private final JMenu m_menuSettings;
+    private final JMenuChecked m_menuSettings;
 
     private final JMenuBar m_menuBar;
 
@@ -688,59 +688,6 @@ public class GoGuiMenuBar
 
     private final ArrayList m_bookmarkItems = new ArrayList();
 
-    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, String command)
-    {
-        item.addActionListener(m_listener);
-        item.setActionCommand(command);
-        menu.add(item);
-        return item;
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
-                                  String command)
-    {
-        item.setMnemonic(mnemonic);
-        return addMenuItem(menu, item, command);
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  String command)
-    {
-        JMenuItem item = new JMenuItem(label);
-        return addMenuItem(menu, item, mnemonic, command);        
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, JMenuItem item, int mnemonic,
-                                  int accel, int modifier, String command)
-    {
-        KeyStroke k = KeyStroke.getKeyStroke(accel, modifier); 
-        item.setAccelerator(k);
-        return addMenuItem(menu, item, mnemonic, command);
-    }
-
-    private JMenuItem addMenuItem(JMenu menu, String label, int mnemonic,
-                                  int accel, int modifier, String command)
-    {
-        return addMenuItem(menu, new JMenuItem(label), mnemonic, accel,
-                           modifier, command);
-    }
-
-    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group,
-                                   String label, String command)
-    {
-        JMenuItem item = new JRadioButtonMenuItem(label);
-        group.add(item);
-        return addMenuItem(menu, item, command);
-    }
-
-    private JMenuItem addRadioItem(JMenu menu, ButtonGroup group,
-                                   String label, int mnemonic, String command)
-    {
-        JMenuItem item = new JRadioButtonMenuItem(label);
-        group.add(item);
-        return addMenuItem(menu, item, mnemonic, command);
-    }
-
     private boolean canRestoreTime(Node node)
     {
         return ! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
@@ -748,359 +695,358 @@ public class GoGuiMenuBar
             || node.getFather() == null;
     }
 
-    private JMenu createBoardSizeMenu()
+    private JMenuChecked createBoardSizeMenu()
     {
-        JMenu menu = createMenu("Board Size", KeyEvent.VK_S);
+        JMenuChecked menu = createMenu("Board Size", KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
         int n = s_possibleBoardSizes.length;
         m_itemBoardSize = new JMenuItem[n];
         for (int i = 0; i < n; ++i)
         {
             String s = Integer.toString(s_possibleBoardSizes[i]);
-            JMenuItem item = addRadioItem(menu, group, s, "board-size-" + s);
+            JMenuItem item = menu.addRadioItem(group, s, "board-size-" + s);
             m_itemBoardSize[i] = item;
         }
         menu.addSeparator();
-        JMenuItem item = addRadioItem(menu, group, "Other",
-                                      "board-size-other");
+        JMenuItem item =
+            menu.addRadioItem(group, "Other", "board-size-other");
         m_itemBoardSizeOther = item;
         return menu;
     }
 
-    private JMenu createClockMenu()
+    private JMenuChecked createClockMenu()
     {
-        JMenu menu = createMenu("Clock", KeyEvent.VK_K);
-        m_itemClockHalt =
-            addMenuItem(menu, "Halt", KeyEvent.VK_H, "clock-halt");
-        m_itemClockResume =
-            addMenuItem(menu, "Resume", KeyEvent.VK_R, "clock-resume");
-        m_itemClockRestore =
-            addMenuItem(menu, "Restore", KeyEvent.VK_S, "clock-restore");
+        JMenuChecked menu = createMenu("Clock", KeyEvent.VK_K);
+        m_itemClockHalt = menu.addItem("Halt", KeyEvent.VK_H, "clock-halt");
+        m_itemClockResume = menu.addItem("Resume", KeyEvent.VK_R,
+                                         "clock-resume");
+        m_itemClockRestore = menu.addItem("Restore", KeyEvent.VK_S,
+                                          "clock-restore");
         return menu;
     }
 
-    private JMenu createComputerColorMenu()
+    private JMenuChecked createComputerColorMenu()
     {
         ButtonGroup group = new ButtonGroup();
-        JMenu menu = createMenu("Computer Color", KeyEvent.VK_C);
-        m_itemComputerBlack = addRadioItem(menu, group, "Black",
-                                           KeyEvent.VK_B, "computer-black");
-        m_itemComputerWhite = addRadioItem(menu, group, "White",
-                                           KeyEvent.VK_W, "computer-white");
-        m_itemComputerBoth = addRadioItem(menu, group, "Both", KeyEvent.VK_T,
-                                          "computer-both");
-        m_itemComputerNone = addRadioItem(menu, group, "None", KeyEvent.VK_N,
-                                          "computer-none");
+        JMenuChecked menu = createMenu("Computer Color", KeyEvent.VK_C);
+        m_itemComputerBlack = menu.addRadioItem(group, "Black", KeyEvent.VK_B,
+                                                "computer-black");
+        m_itemComputerWhite = menu.addRadioItem(group, "White", KeyEvent.VK_W,
+                                                "computer-white");
+        m_itemComputerBoth = menu.addRadioItem(group, "Both", KeyEvent.VK_T,
+                                               "computer-both");
+        m_itemComputerNone = menu.addRadioItem(group, "None", KeyEvent.VK_N,
+                                               "computer-none");
         return menu;
     }
 
-    private JMenu createHandicapMenu()
+    private JMenuChecked createHandicapMenu()
     {
-        JMenu menu = createMenu("Handicap", KeyEvent.VK_H);
+        JMenuChecked menu = createMenu("Handicap", KeyEvent.VK_H);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < s_possibleHandicaps.length; ++i)
         {
             String s = Integer.toString(s_possibleHandicaps[i]);
-            JMenuItem item = addRadioItem(menu, group, s, "handicap-" + s);
+            JMenuItem item = menu.addRadioItem(group, s, "handicap-" + s);
             if (s_possibleHandicaps[i] == 0)
                 item.setSelected(true);
         }
         return menu;
     }
 
-    private JMenu createMenu(String name, int mnemonic)
+    private JMenuChecked createMenu(String name, int mnemonic)
     {
-        JMenu menu = new JMenu(name);
+        JMenuChecked menu = new JMenuChecked(name, m_listener);
         menu.setMnemonic(mnemonic);
         return menu;
     }
 
-    private JMenu createMenuBookMarks()
+    private JMenuChecked createMenuBookMarks()
     {
-        JMenu menu = createMenu("Bookmarks", KeyEvent.VK_B);
-        addMenuItem(menu, "Add Bookmark", KeyEvent.VK_A, KeyEvent.VK_B,
-                    m_shortcutKeyMask, "add-bookmark");
-        addMenuItem(menu, "Edit Bookmarks...", KeyEvent.VK_E,
-                    "edit-bookmarks");
+        JMenuChecked menu = createMenu("Bookmarks", KeyEvent.VK_B);
+        menu.addItem("Add Bookmark", KeyEvent.VK_A, KeyEvent.VK_B,
+                     m_shortcut, "add-bookmark");
+        menu.addItem("Edit Bookmarks...", KeyEvent.VK_E,
+                     "edit-bookmarks");
         return menu;
     }
 
-    private JMenu createMenuConfigureAnalyze()
+    private JMenuChecked createMenuConfigureAnalyze()
     {
-        JMenu menu = new JMenu("Configure Analyze");
+        JMenuChecked menu = new JMenuChecked("Configure Analyze", m_listener);
+        menu.setMnemonic(KeyEvent.VK_N);
         m_itemAnalyzeOnlySupported =
             new JCheckBoxMenuItem("Only Supported Commands");
-        addMenuItem(menu, m_itemAnalyzeOnlySupported, KeyEvent.VK_O,
-                    "analyze-only-supported");
+        menu.addItem(m_itemAnalyzeOnlySupported, KeyEvent.VK_O,
+                     "analyze-only-supported");
         m_itemAnalyzeSort = new JCheckBoxMenuItem("Sort Alphabetically");
-        addMenuItem(menu, m_itemAnalyzeSort, KeyEvent.VK_S, "analyze-sort");
+        menu.addItem(m_itemAnalyzeSort, KeyEvent.VK_S, "analyze-sort");
         menu.addSeparator();
-        addMenuItem(menu, "Reload Configuration", KeyEvent.VK_R,
-                    "analyze-reload");
+        menu.addItem("Reload Configuration", KeyEvent.VK_R, "analyze-reload");
         return menu;
     }
 
-    private JMenu createMenuConfigureBoard()
+    private JMenuChecked createMenuConfigureBoard()
     {
-        JMenu menu = new JMenu("Configure Board");
+        JMenuChecked menu = new JMenuChecked("Configure Board", m_listener);
+        menu.setMnemonic(KeyEvent.VK_B);
         m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
         m_itemShowCursor.setSelected(true);
-        addMenuItem(menu, m_itemShowCursor, KeyEvent.VK_C,
-                    "show-cursor");
+        menu.addItem(m_itemShowCursor, KeyEvent.VK_C,
+                     "show-cursor");
         m_itemShowGrid = new JCheckBoxMenuItem("Show Grid");
         m_itemShowGrid.setSelected(true);
-        addMenuItem(menu, m_itemShowGrid, KeyEvent.VK_G, "show-grid");
+        menu.addItem(m_itemShowGrid, KeyEvent.VK_G, "show-grid");
         m_itemShowLastMove = new JCheckBoxMenuItem("Show Last Move");
         m_itemShowLastMove.setSelected(true);
-        addMenuItem(menu, m_itemShowLastMove, KeyEvent.VK_L,
-                    "show-last-move");
+        menu.addItem(m_itemShowLastMove, KeyEvent.VK_L, "show-last-move");
         m_itemShowVariations = new JCheckBoxMenuItem("Show Variations");
         m_itemShowVariations.setSelected(true);
-        addMenuItem(menu, m_itemShowVariations, KeyEvent.VK_V,
-                    "show-variations");
+        menu.addItem(m_itemShowVariations, KeyEvent.VK_V, "show-variations");
         m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
-        addMenuItem(menu, m_itemBeepAfterMove, KeyEvent.VK_B,
-                    "beep-after-move");
+        menu.addItem(m_itemBeepAfterMove, KeyEvent.VK_B, "beep-after-move");
         m_itemCommentFontFixed =
             new JCheckBoxMenuItem("Fixed Size Comment Font");
-        addMenuItem(menu, m_itemCommentFontFixed, KeyEvent.VK_F,
-                    "comment-font-fixed");
+        menu.addItem(m_itemCommentFontFixed, KeyEvent.VK_F,
+                     "comment-font-fixed");
         return menu;
     }
 
-    private JMenu createMenuConfigureShell()
+    private JMenuChecked createMenuConfigureShell()
     {
-        JMenu menu = new JMenu("Configure Shell");
+        JMenuChecked menu = new JMenuChecked("Configure Shell", m_listener);
+        menu.setMnemonic(KeyEvent.VK_H);
         m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
-        addMenuItem(menu, m_itemCommandCompletion, KeyEvent.VK_P,
-                    "command-completion");
+        menu.addItem(m_itemCommandCompletion, KeyEvent.VK_P,
+                     "command-completion");
         m_itemAutoNumber = new JCheckBoxMenuItem("Auto Number");
-        addMenuItem(menu, m_itemAutoNumber, KeyEvent.VK_A, "auto-number");
+        menu.addItem(m_itemAutoNumber, KeyEvent.VK_A, "auto-number");
         m_itemTimeStamp = new JCheckBoxMenuItem("Timestamp");
-        addMenuItem(menu, m_itemTimeStamp, KeyEvent.VK_T, "timestamp");
+        menu.addItem(m_itemTimeStamp, KeyEvent.VK_T, "timestamp");
         return menu;
     }
 
-    private JMenu createMenuConfigureTree()
+    private JMenuChecked createMenuConfigureTree()
     {
-        JMenu menu = new JMenu("Configure Tree");
-        JMenu menuLabel = createMenu("Labels", KeyEvent.VK_L);
+        JMenuChecked menu = new JMenuChecked("Configure Tree", m_listener);
+        menu.setMnemonic(KeyEvent.VK_E);
+        JMenuChecked menuLabel = createMenu("Labels", KeyEvent.VK_L);
         ButtonGroup group = new ButtonGroup();
-        m_itemGameTreeNumber
-            = addRadioItem(menuLabel, group, "Move Number",
-                           KeyEvent.VK_N, "gametree-number");
-        m_itemGameTreeMove
-            = addRadioItem(menuLabel, group, "Move", KeyEvent.VK_M,
-                           "gametree-move");
-        m_itemGameTreeNone
-            = addRadioItem(menuLabel, group, "None", KeyEvent.VK_O,
-                           "gametree-none");
+        m_itemGameTreeNumber =
+            menuLabel.addRadioItem(group, "Move Number", KeyEvent.VK_N,
+                                   "gametree-number");
+        m_itemGameTreeMove =
+            menuLabel.addRadioItem(group, "Move", KeyEvent.VK_M,
+                                   "gametree-move");
+        m_itemGameTreeNone =
+            menuLabel.addRadioItem(group, "None", KeyEvent.VK_O,
+                                   "gametree-none");
         menu.add(menuLabel);
-        JMenu menuSize = createMenu("Size", KeyEvent.VK_S);
+        JMenuChecked menuSize = createMenu("Size", KeyEvent.VK_S);
         group = new ButtonGroup();
-        m_itemGameTreeLarge = addRadioItem(menuSize, group, "Large",
-                                           KeyEvent.VK_L, "gametree-large");
-        m_itemGameTreeNormal = addRadioItem(menuSize, group, "Normal",
-                                            KeyEvent.VK_N, "gametree-normal");
-        m_itemGameTreeSmall = addRadioItem(menuSize, group, "Small",
-                                           KeyEvent.VK_S, "gametree-small");
-        m_itemGameTreeTiny = addRadioItem(menuSize, group, "Tiny",
-                                          KeyEvent.VK_T, "gametree-tiny");
+        m_itemGameTreeLarge =
+            menuSize.addRadioItem(group, "Large", KeyEvent.VK_L,
+                                  "gametree-large");
+        m_itemGameTreeNormal =
+            menuSize.addRadioItem(group, "Normal", KeyEvent.VK_N,
+                                  "gametree-normal");
+        m_itemGameTreeSmall =
+            menuSize.addRadioItem(group, "Small", KeyEvent.VK_S,
+                                  "gametree-small");
+        m_itemGameTreeTiny =
+            menuSize.addRadioItem(group, "Tiny", KeyEvent.VK_T,
+                                  "gametree-tiny");
         menu.add(menuSize);
         m_itemShowSubtreeSizes = new JCheckBoxMenuItem("Show Subtree Sizes");
-        addMenuItem(menu, m_itemShowSubtreeSizes, KeyEvent.VK_S,
-                    "gametree-show-subtree-sizes");
+        menu.addItem(m_itemShowSubtreeSizes, KeyEvent.VK_S,
+                     "gametree-show-subtree-sizes");
         return menu;
     }
 
-    private JMenu createMenuEdit()
+    private JMenuChecked createMenuEdit()
     {
-        JMenu menu = createMenu("Edit", KeyEvent.VK_E);
-        addMenuItem(menu, "Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
-                    m_shortcutKeyMask, "find-in-comments");
-        m_itemFindNext = addMenuItem(menu, "Find Next", KeyEvent.VK_N,
-                                     KeyEvent.VK_F3, getFunctionKeyShortcut(),
-                                     "find-next");
+        JMenuChecked menu = createMenu("Edit", KeyEvent.VK_E);
+        menu.addItem("Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
+                     m_shortcut, "find-in-comments");
+        m_itemFindNext =
+            menu.addItem("Find Next", KeyEvent.VK_N, KeyEvent.VK_F3,
+                         getFunctionKeyShortcut(), "find-next");
         m_itemFindNext.setEnabled(false);
         menu.addSeparator();
-        addMenuItem(menu, "Game Info", KeyEvent.VK_G, KeyEvent.VK_I,
-                    m_shortcutKeyMask, "game-info");
+        menu.addItem("Game Info", KeyEvent.VK_G, KeyEvent.VK_I,
+                     m_shortcut, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createHandicapMenu());
         menu.addSeparator();
-        m_itemMakeMainVar = addMenuItem(menu, "Make Main Variation",
-                                        KeyEvent.VK_M, "make-main-variation");
-        m_itemKeepOnlyMainVar = addMenuItem(menu,
-                                            "Delete Side Variations",
-                                            KeyEvent.VK_D,
-                                            "keep-only-main-variation");
-        m_itemKeepOnlyPosition = addMenuItem(menu,
-                                             "Keep Only Position",
-                                             KeyEvent.VK_K,
-                                             "keep-only-position");
-        m_itemTruncate = addMenuItem(menu, "Truncate", KeyEvent.VK_T,
-                                     "truncate");
+        m_itemMakeMainVar =
+            menu.addItem("Make Main Variation", KeyEvent.VK_M,
+                         "make-main-variation");
+        m_itemKeepOnlyMainVar =
+            menu.addItem("Delete Side Variations", KeyEvent.VK_D,
+                         "keep-only-main-variation");
+        m_itemKeepOnlyPosition =
+            menu.addItem("Keep Only Position", KeyEvent.VK_K,
+                         "keep-only-position");
+        m_itemTruncate = menu.addItem("Truncate", KeyEvent.VK_T, "truncate");
         m_itemTruncateChildren
-            = addMenuItem(menu, "Truncate Children", KeyEvent.VK_C,
-                          "truncate-children");
+            = menu.addItem("Truncate Children", KeyEvent.VK_C,
+                           "truncate-children");
         menu.addSeparator();
         m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
-        addMenuItem(menu, m_itemSetup, KeyEvent.VK_S, "setup");
+        menu.addItem(m_itemSetup, KeyEvent.VK_S, "setup");
         ButtonGroup group = new ButtonGroup();
-        m_itemSetupBlack = addRadioItem(menu, group, "Setup Black",
-                                        KeyEvent.VK_B, "setup-black");
+        m_itemSetupBlack = menu.addRadioItem(group, "Setup Black",
+                                             KeyEvent.VK_B, "setup-black");
         m_itemSetupBlack.setSelected(true);
-        m_itemSetupWhite = addRadioItem(menu, group, "Setup White",
-                                        KeyEvent.VK_W, "setup-white");
+        m_itemSetupWhite = menu.addRadioItem(group, "Setup White",
+                                             KeyEvent.VK_W, "setup-white");
         return menu;
     }
 
-    private JMenu createMenuExport()
+    private JMenuChecked createMenuExport()
     {
-        JMenu menu = new JMenu("Export");
+        JMenuChecked menu = new JMenuChecked("Export", m_listener);
         menu.setMnemonic(KeyEvent.VK_E);
-        addMenuItem(menu, "SGF Position...", KeyEvent.VK_S,
-                    "export-sgf-position");        
-        addMenuItem(menu, "LaTeX Main Variation...", KeyEvent.VK_L,
-                    "export-latex");        
-        addMenuItem(menu, "LaTeX Position...", KeyEvent.VK_P,
-                    "export-latex-position");
-        addMenuItem(menu, "Text Position...", KeyEvent.VK_T,
-                    "export-ascii");
+        menu.addItem("SGF Position...", KeyEvent.VK_S, "export-sgf-position");
+        menu.addItem("LaTeX Main Variation...", KeyEvent.VK_L,
+                     "export-latex");
+        menu.addItem("LaTeX Position...", KeyEvent.VK_P,
+                     "export-latex-position");
+        menu.addItem("Text Position...", KeyEvent.VK_T, "export-ascii");
         return menu;
     }
 
-    private JMenu createMenuFile(RecentFileMenu.Callback callback)
+    private JMenuChecked createMenuFile(RecentFileMenu.Callback callback)
     {
-        JMenu menu = createMenu("File", KeyEvent.VK_F);
-        addMenuItem(menu, "Open...", KeyEvent.VK_O, KeyEvent.VK_O,
-                    m_shortcutKeyMask, "open");
+        JMenuChecked menu = createMenu("File", KeyEvent.VK_F);
+        menu.addItem("Open...", KeyEvent.VK_O, KeyEvent.VK_O,
+                     m_shortcut, "open");
         menu.add(createRecentMenu(callback));
-        addMenuItem(menu, "Save", KeyEvent.VK_S, KeyEvent.VK_S,
-                    m_shortcutKeyMask, "save");
-        addMenuItem(menu, "Save As...", KeyEvent.VK_A, "save-as");
+        menu.addItem("Save", KeyEvent.VK_S, KeyEvent.VK_S,
+                     m_shortcut, "save");
+        menu.addItem("Save As...", KeyEvent.VK_A, "save-as");
         menu.addSeparator();
         menu.add(createMenuExport());
         menu.addSeparator();
-        addMenuItem(menu, "Print...", KeyEvent.VK_P, KeyEvent.VK_P,
-                    m_shortcutKeyMask, "print");
+        menu.addItem("Print...", KeyEvent.VK_P, KeyEvent.VK_P,
+                     m_shortcut, "print");
         menu.addSeparator();
-        addMenuItem(menu, "Attach Program...", KeyEvent.VK_A,
-                    "attach-program");
-        m_itemDetachProgram = addMenuItem(menu, "Detach Program",
-                                          KeyEvent.VK_D, "detach-program");
+        menu.addItem("Attach Program...", KeyEvent.VK_T,
+                     "attach-program");
+        m_itemDetachProgram = menu.addItem("Detach Program",
+                                           KeyEvent.VK_D, "detach-program");
         menu.addSeparator();
-        m_itemQuit = addMenuItem(menu, "Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
-                                 m_shortcutKeyMask, "exit");
+        m_itemQuit = menu.addItem("Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
+                                  m_shortcut, "exit");
         return menu;
     }
 
-    private JMenu createMenuGame()
+    private JMenuChecked createMenuGame()
     {
-        JMenu menu = createMenu("Game", KeyEvent.VK_A);
-        addMenuItem(menu, "New Game", KeyEvent.VK_N, "new-game");
+        JMenuChecked menu = createMenu("Game", KeyEvent.VK_A);
+        menu.addItem("New Game", KeyEvent.VK_N, "new-game");
         menu.addSeparator();
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
-        m_itemComputerPlay = addMenuItem(menu, "Play", KeyEvent.VK_L,
-                                         KeyEvent.VK_F5,
-                                         getFunctionKeyShortcut(), "play");
+        m_itemComputerPlay = menu.addItem("Play", KeyEvent.VK_L,
+                                          KeyEvent.VK_F5,
+                                          getFunctionKeyShortcut(), "play");
         m_itemComputerPlaySingle
-            = addMenuItem(menu, "Play Single Move", KeyEvent.VK_S,
-                          KeyEvent.VK_F5,
-                          getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK,
-                          "play-single");
-        addMenuItem(menu, "Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
-                    getFunctionKeyShortcut(), "pass");
+            = menu.addItem("Play Single Move", KeyEvent.VK_S,
+                           KeyEvent.VK_F5,
+                           getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK,
+                           "play-single");
+        menu.addItem("Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
+                     getFunctionKeyShortcut(), "pass");
         m_itemInterrupt =
-            addMenuItem(menu, "Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
-                        0, "interrupt");
+            menu.addItem("Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
+                         0, "interrupt");
         menu.add(createClockMenu());
         menu.addSeparator();
         m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
         m_itemCleanup.setMnemonic(KeyEvent.VK_E);
         menu.add(m_itemCleanup);
-        addMenuItem(menu, "Score", KeyEvent.VK_O, "score");
+        menu.addItem("Score", KeyEvent.VK_O, "score");
         return menu;
     }
 
-    private JMenu createMenuGo()
+    private JMenuChecked createMenuGo()
     {
         int shiftMask = java.awt.event.InputEvent.SHIFT_MASK;
-        JMenu menu = createMenu("Go", KeyEvent.VK_G);
+        JMenuChecked menu = createMenu("Go", KeyEvent.VK_G);
         m_itemBeginning =
-            addMenuItem(menu, "Beginning", KeyEvent.VK_N, KeyEvent.VK_HOME,
-                        m_shortcutKeyMask, "beginning");
+            menu.addItem("Beginning", KeyEvent.VK_B, KeyEvent.VK_HOME,
+                         m_shortcut, "beginning");
         m_itemBackward10 =
-            addMenuItem(menu, "Backward 10", KeyEvent.VK_D, KeyEvent.VK_LEFT,
-                        m_shortcutKeyMask | ActionEvent.SHIFT_MASK,
-                        "backward-10");
+            menu.addItem("Backward 10", KeyEvent.VK_W, KeyEvent.VK_LEFT,
+                         m_shortcut | ActionEvent.SHIFT_MASK,
+                         "backward-10");
         m_itemBackward =
-            addMenuItem(menu, "Backward", KeyEvent.VK_B, KeyEvent.VK_LEFT,
-                        m_shortcutKeyMask, "backward");
+            menu.addItem("Backward", KeyEvent.VK_K, KeyEvent.VK_LEFT,
+                         m_shortcut, "backward");
         m_itemForward =
-            addMenuItem(menu, "Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
-                        m_shortcutKeyMask, "forward");
+            menu.addItem("Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
+                         m_shortcut, "forward");
         m_itemForward10 =
-            addMenuItem(menu, "Forward 10", KeyEvent.VK_O, KeyEvent.VK_RIGHT,
-                        m_shortcutKeyMask | ActionEvent.SHIFT_MASK,
-                        "forward-10");
+            menu.addItem("Forward 10", KeyEvent.VK_R, KeyEvent.VK_RIGHT,
+                         m_shortcut | ActionEvent.SHIFT_MASK,
+                         "forward-10");
         m_itemEnd =
-            addMenuItem(menu, "End", KeyEvent.VK_E, KeyEvent.VK_END,
-                        m_shortcutKeyMask, "end");
+            menu.addItem("End", KeyEvent.VK_E, KeyEvent.VK_END,
+                         m_shortcut, "end");
         m_itemGoto =
-            addMenuItem(menu, "Go to Move...", KeyEvent.VK_G, KeyEvent.VK_G,
-                        m_shortcutKeyMask, "goto");
+            menu.addItem("Go to Move...", KeyEvent.VK_O, KeyEvent.VK_G,
+                         m_shortcut, "goto");
         menu.addSeparator();
         m_itemNextVariation =
-            addMenuItem(menu, "Next Variation", KeyEvent.VK_N,
-                        KeyEvent.VK_DOWN, m_shortcutKeyMask,
-                        "next-variation");
+            menu.addItem("Next Variation", KeyEvent.VK_N,
+                         KeyEvent.VK_DOWN, m_shortcut,
+                         "next-variation");
         m_itemPreviousVariation =
-            addMenuItem(menu, "Previous Variation", KeyEvent.VK_P,
-                        KeyEvent.VK_UP, m_shortcutKeyMask,
-                        "previous-variation");
+            menu.addItem("Previous Variation", KeyEvent.VK_P,
+                         KeyEvent.VK_UP, m_shortcut,
+                         "previous-variation");
         m_itemNextEarlierVariation =
-            addMenuItem(menu, "Next Earlier Variation", KeyEvent.VK_E,
-                        KeyEvent.VK_DOWN, m_shortcutKeyMask | shiftMask,
-                        "next-earlier-variation");
+            menu.addItem("Next Earlier Variation", KeyEvent.VK_X,
+                         KeyEvent.VK_DOWN, m_shortcut | shiftMask,
+                         "next-earlier-variation");
         m_itemPreviousEarlierBackward =
-            addMenuItem(menu, "Previous Earlier Variation", KeyEvent.VK_R,
-                        KeyEvent.VK_UP, m_shortcutKeyMask | shiftMask,
-                        "previous-earlier-variation");
+            menu.addItem("Previous Earlier Variation", KeyEvent.VK_L,
+                         KeyEvent.VK_UP, m_shortcut | shiftMask,
+                         "previous-earlier-variation");
         m_itemBackToMainVar =
-            addMenuItem(menu, "Back to Main Variation", KeyEvent.VK_B,
-                        KeyEvent.VK_M, m_shortcutKeyMask,
-                        "back-to-main-variation");
+            menu.addItem("Back to Main Variation", KeyEvent.VK_M,
+                         KeyEvent.VK_M, m_shortcut,
+                         "back-to-main-variation");
         m_itemGotoVar =
-            addMenuItem(menu, "Go to Variation...",
-                        KeyEvent.VK_V, "goto-variation");
+            menu.addItem("Go to Variation...",
+                         KeyEvent.VK_V, "goto-variation");
         return menu;
     }
 
-    private JMenu createMenuHelp()
+    private JMenuChecked createMenuHelp()
     {
-        JMenu menu = createMenu("Help", KeyEvent.VK_H);
+        JMenuChecked menu = createMenu("Help", KeyEvent.VK_H);
         JMenuItem itemHelp =
-            addMenuItem(menu, "GoGui Documentation", KeyEvent.VK_G,
-                        KeyEvent.VK_F1, getFunctionKeyShortcut(), "help");
-        JMenuItem itemAbout = addMenuItem(menu, "About", KeyEvent.VK_A,
-                                          "about");
+            menu.addItem("GoGui Documentation", KeyEvent.VK_G,
+                         KeyEvent.VK_F1, getFunctionKeyShortcut(), "help");
+        JMenuItem itemAbout = menu.addItem("About", KeyEvent.VK_A,
+                                           "about");
         m_itemHelp = itemHelp;
         m_itemAbout = itemAbout;
         return menu;
     }
 
-    private JMenu createMenuShell(RecentFileMenu.Callback callback)
+    private JMenuChecked createMenuShell(RecentFileMenu.Callback callback)
     {
-        JMenu menu = createMenu("Shell", KeyEvent.VK_L);
-        m_itemSaveLog = addMenuItem(menu, "Save Log...", KeyEvent.VK_L,
-                                    "gtpshell-save");
-        m_itemSaveCommands = addMenuItem(menu, "Save Commands...",
-                                         KeyEvent.VK_C,
-                                         "gtpshell-save-commands");
-        addMenuItem(menu, "Send File...", KeyEvent.VK_F,
-                    "gtpshell-send-file");
+        JMenuChecked menu = createMenu("Shell", KeyEvent.VK_L);
+        m_itemSaveLog = menu.addItem("Save Log...", KeyEvent.VK_L,
+                                     "gtpshell-save");
+        m_itemSaveCommands = menu.addItem("Save Commands...",
+                                          KeyEvent.VK_C,
+                                          "gtpshell-save-commands");
+        menu.addItem("Send File...", KeyEvent.VK_F,
+                     "gtpshell-send-file");
         String home = System.getProperty("user.home");
         File file = new File(new File(home, ".gogui"), "recent-gtpfiles");
         m_recentGtp = new RecentFileMenu("Send Recent", file, callback);
@@ -1109,25 +1055,25 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createMenuSettings()
+    private JMenuChecked createMenuSettings()
     {
-        JMenu menu = createMenu("Settings", KeyEvent.VK_S);
+        JMenuChecked menu = createMenu("Settings", KeyEvent.VK_S);
         m_itemShowToolbar = new JCheckBoxMenuItem("Show Toolbar");
-        addMenuItem(menu, m_itemShowToolbar, KeyEvent.VK_T,
-                    "show-toolbar");
+        menu.addItem(m_itemShowToolbar, KeyEvent.VK_T,
+                     "show-toolbar");
         m_itemShowInfoPanel = new JCheckBoxMenuItem("Show Info Panel");
-        addMenuItem(menu, m_itemShowInfoPanel, KeyEvent.VK_I,
-                    "show-info-panel");
+        menu.addItem(m_itemShowInfoPanel, KeyEvent.VK_I,
+                     "show-info-panel");
         menu.addSeparator();
         m_itemShowTree = new JCheckBoxMenuItem("Show Tree");
-        addMenuItem(menu, m_itemShowTree, KeyEvent.VK_S, KeyEvent.VK_F7,
-                    getFunctionKeyShortcut(), "show-tree");
+        menu.addItem(m_itemShowTree, KeyEvent.VK_R, KeyEvent.VK_F7,
+                     getFunctionKeyShortcut(), "show-tree");
         m_itemShowShell = new JCheckBoxMenuItem("Show Shell");
-        addMenuItem(menu, m_itemShowShell, KeyEvent.VK_S, KeyEvent.VK_F8,
-                    getFunctionKeyShortcut(), "show-shell");
+        menu.addItem(m_itemShowShell, KeyEvent.VK_S, KeyEvent.VK_F8,
+                     getFunctionKeyShortcut(), "show-shell");
         m_itemShowAnalyze = new JCheckBoxMenuItem("Show Analyze");
-        addMenuItem(menu, m_itemShowAnalyze, KeyEvent.VK_S, KeyEvent.VK_F9,
-                    getFunctionKeyShortcut(), "analyze");
+        menu.addItem(m_itemShowAnalyze, KeyEvent.VK_A, KeyEvent.VK_F9,
+                     getFunctionKeyShortcut(), "analyze");
         menu.addSeparator();
         menu.add(createMenuConfigureBoard());
         menu.add(createMenuConfigureTree());
@@ -1186,9 +1132,89 @@ public class GoGuiMenuBar
     private static int getFunctionKeyShortcut()
     {
         if (Platform.isMac())
-            return m_shortcutKeyMask;
+            return m_shortcut;
         return 0;
     }
+}
+
+//----------------------------------------------------------------------------
+
+/** Menu with assertions for unique mnemonics and accelerators. */
+class JMenuChecked
+    extends JMenu
+{
+    public JMenuChecked(String text, ActionListener listener)
+    {
+        super(text);
+        m_listener = listener;
+    }
+
+    public JMenuItem addItem(JMenuItem item, String command)
+    {
+        item.addActionListener(m_listener);
+        item.setActionCommand(command);
+        add(item);
+        return item;
+    }
+
+    public JMenuItem addItem(JMenuItem item, int mnemonic, String command)
+    {
+        item.setMnemonic(mnemonic);
+        Integer integer = new Integer(mnemonic);
+        if (m_mnemonics.contains(integer))
+        {
+            System.err.println("Warning: duplicate mnemonic item "
+                               + item.getText());
+            assert(false);
+        }
+        m_mnemonics.add(integer);
+        return addItem(item, command);
+    }
+
+    public JMenuItem addItem(String label, int mnemonic, String command)
+    {
+        JMenuItem item = new JMenuItem(label);
+        return addItem(item, mnemonic, command);        
+    }
+
+    public JMenuItem addItem(JMenuItem item, int mnemonic, int accel,
+                             int modifier, String command)
+    {
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(accel, modifier); 
+        assert(! m_accelerators.contains(keyStroke));
+        m_accelerators.add(keyStroke);
+        item.setAccelerator(keyStroke);
+        return addItem(item, mnemonic, command);
+    }
+
+    public JMenuItem addItem(String label, int mnemonic, int accel,
+                             int modifier, String command)
+    {
+        return addItem(new JMenuItem(label), mnemonic, accel, modifier,
+                       command);
+    }
+
+    public JMenuItem addRadioItem(ButtonGroup group, String label,
+                                  String command)
+    {
+        JMenuItem item = new JRadioButtonMenuItem(label);
+        group.add(item);
+        return addItem(item, command);
+    }
+
+    public JMenuItem addRadioItem(ButtonGroup group, String label,
+                                  int mnemonic, String command)
+    {
+        JMenuItem item = new JRadioButtonMenuItem(label);
+        group.add(item);
+        return addItem(item, mnemonic, command);
+    }
+
+    private final ActionListener m_listener;
+
+    private final ArrayList m_mnemonics = new ArrayList();
+
+    private static final ArrayList m_accelerators = new ArrayList();
 }
 
 //----------------------------------------------------------------------------
