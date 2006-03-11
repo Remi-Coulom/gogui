@@ -506,7 +506,7 @@ public final class SgfReader
             }
             throw getError("Invalid coordinates: " + s);
         }
-        return GoPoint.create(x, y);
+        return GoPoint.get(x, y);
     }
 
     private void parsePointList() throws SgfError
@@ -539,7 +539,7 @@ public final class SgfReader
                 int yMax = Math.max(point1.getY(), point2.getY());
                 for (int x = xMin; x <= xMax; ++x)
                     for (int y = yMin; y <= yMax; ++y)
-                        m_pointList.add(GoPoint.create(x, y));
+                        m_pointList.add(GoPoint.get(x, y));
             }
         }
     }
@@ -646,7 +646,7 @@ public final class SgfReader
             }
             else if (p == "B")
             {
-                node.setMove(Move.create(parsePoint(v), GoColor.BLACK));
+                node.setMove(Move.get(parsePoint(v), GoColor.BLACK));
                 m_sizeFixed = true;
             }
             else if (p == "BL")
@@ -822,7 +822,7 @@ public final class SgfReader
                 readMarked(node, MarkType.TRIANGLE);
             else if (p == "W")
             {
-                node.setMove(Move.create(parsePoint(v), GoColor.WHITE));
+                node.setMove(Move.get(parsePoint(v), GoColor.WHITE));
                 m_sizeFixed = true;
             }
             else if (p == "TW")

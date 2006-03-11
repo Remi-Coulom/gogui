@@ -100,7 +100,7 @@ public class GuiBoardDrawer
         int y = ((int)point.getY() - m_fieldOffset) / m_fieldSize;
         y = m_size - y - 1;
         if (x >= 0 && x < m_size && y >= 0 && y < m_size)
-            return GoPoint.create(x, y);
+            return GoPoint.get(x, y);
         return null;
     }
 

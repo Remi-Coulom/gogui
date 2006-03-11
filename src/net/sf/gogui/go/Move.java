@@ -15,12 +15,12 @@ package net.sf.gogui.go;
 */
 public final class Move
 {
-    public static Move create(int x, int y, GoColor color)
+    public static Move get(int x, int y, GoColor color)
     {
-        return create(GoPoint.create(x, y), color);
+        return get(GoPoint.get(x, y), color);
     }
 
-    public static Move create(GoPoint point, GoColor color)
+    public static Move get(GoPoint point, GoColor color)
     {
         if (point == null)
         {
@@ -42,9 +42,9 @@ public final class Move
             return s_movesEmpty[x][y];
     }
     
-    public static Move createPass(GoColor color)
+    public static Move getPass(GoColor color)
     {
-        return create(null, color);
+        return get(null, color);
     }
 
     public GoColor getColor()
@@ -106,7 +106,7 @@ public final class Move
                 if (x < s_size && y < s_size)
                     result[x][y] = moves[x][y];
                 else
-                    result[x][y] = new Move(GoPoint.create(x, y), color);
+                    result[x][y] = new Move(GoPoint.get(x, y), color);
         return result;
     }
 

@@ -96,13 +96,13 @@ public final class Board
         int x = point.getX();
         int y = point.getY();
         if (x > 0)
-            result.add(GoPoint.create(x - 1, y));
+            result.add(GoPoint.get(x - 1, y));
         if (x < m_size - 1)
-            result.add(GoPoint.create(x + 1, y));
+            result.add(GoPoint.get(x + 1, y));
         if (y > 0)
-            result.add(GoPoint.create(x, y - 1));
+            result.add(GoPoint.get(x, y - 1));
         if (y < m_size - 1)
-            result.add(GoPoint.create(x, y + 1));
+            result.add(GoPoint.get(x, y + 1));
         return result;
     }
 
@@ -229,7 +229,7 @@ public final class Board
 
     public void play(GoPoint point, GoColor color)
     {
-        play(Move.create(point, color));
+        play(Move.get(point, color));
     }
 
     public void play(Move m)
@@ -287,23 +287,23 @@ public final class Board
         switch (rotationIndex)
         {
         case 0:
-            return GoPoint.create(x, y);
+            return GoPoint.get(x, y);
         case 1:
-            return GoPoint.create(size - x - 1, y);
+            return GoPoint.get(size - x - 1, y);
         case 2:
-            return GoPoint.create(x, size - y - 1);
+            return GoPoint.get(x, size - y - 1);
         case 3:
-            return GoPoint.create(y, x);
+            return GoPoint.get(y, x);
         case 4:
-            return GoPoint.create(size - y - 1, x);
+            return GoPoint.get(size - y - 1, x);
         case 5:
-            return GoPoint.create(y, size - x - 1);
+            return GoPoint.get(y, size - x - 1);
         case 6:
-            return GoPoint.create(size - x - 1, size - y - 1);
+            return GoPoint.get(size - x - 1, size - y - 1);
         case 7:
-            return GoPoint.create(size - y - 1, size - x - 1);
+            return GoPoint.get(size - y - 1, size - x - 1);
         default:
-            return GoPoint.create(x, y);
+            return GoPoint.get(x, y);
         }
     }
 
@@ -571,7 +571,7 @@ public final class Board
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 m_allPoints[i++] = point;
             }
     }

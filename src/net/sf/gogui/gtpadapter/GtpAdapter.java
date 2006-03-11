@@ -591,7 +591,7 @@ public class GtpAdapter
             m_passInserted.push(Boolean.FALSE);
             return;
         }
-        String command = m_gtp.getCommandPlay(Move.createPass(toMove));
+        String command = m_gtp.getCommandPlay(Move.getPass(toMove));
         try
         {
             send(command);
@@ -619,7 +619,7 @@ public class GtpAdapter
     private void play(GoColor color, GoPoint point) throws GtpError
     {
         fillPass(color);
-        Move move = Move.create(point, color);
+        Move move = Move.get(point, color);
         String command = m_gtp.getCommandPlay(move);
         if (m_lowerCase)
             command = command.toLowerCase();

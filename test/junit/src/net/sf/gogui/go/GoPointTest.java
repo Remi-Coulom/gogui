@@ -86,7 +86,7 @@ public class GoPointTest
 
     private GoPoint getPoint(int x, int y)
     {
-        return GoPoint.create(x, y);
+        return GoPoint.get(x, y);
     }
 
     private void checkInvalid(String string, int boardSize)
@@ -103,7 +103,7 @@ public class GoPointTest
 
     private void checkPoint(GoPoint point, int x, int y)
     {
-        assertSame(point, GoPoint.create(x, y));
+        assertSame(point, GoPoint.get(x, y));
         assertEquals(point.getX(), x);
         assertEquals(point.getY(), y);
     }

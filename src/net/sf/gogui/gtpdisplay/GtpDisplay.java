@@ -325,7 +325,7 @@ public class GtpDisplay
             send(command, cmd.getResponse());
             point = GtpUtils.parsePoint(cmd.getResponse().toString(), m_size);
         }
-        m_move = Move.create(point, color);
+        m_move = Move.get(point, color);
         invokeAndWait(new Runnable()
             {
                 public void run()
@@ -469,10 +469,10 @@ public class GtpDisplay
     {
         if (m_gtp != null)
         {
-            String command = m_gtp.getCommandPlay(Move.create(point, color));
+            String command = m_gtp.getCommandPlay(Move.get(point, color));
             send(command);
         }
-        m_move = Move.create(point, color);
+        m_move = Move.get(point, color);
         invokeAndWait(new Runnable()
             {
                 public void run()

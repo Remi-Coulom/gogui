@@ -779,7 +779,7 @@ public class GoGui
             else if (m_board.isKo(p)
                 && ! showQuestion("Play illegal Ko move?"))
                 return;
-            Move move = Move.create(p, m_board.getToMove());
+            Move move = Move.get(p, m_board.getToMove());
             humanMoved(move);
         }
     }
@@ -1947,7 +1947,7 @@ public class GoGui
             m_passWarning = new OptionalWarning(this);
         if (! m_passWarning.show("Really pass?", true))
             return;
-        humanMoved(Move.createPass(m_board.getToMove()));
+        humanMoved(Move.getPass(m_board.getToMove()));
     }
 
     private void cbPlay(boolean isSingleMove)
@@ -2097,7 +2097,7 @@ public class GoGui
             // a setup node
             m_gameTree = new GameTree(m_boardSize, 0, null, null, null);
             m_currentNode = m_gameTree.getRoot();
-            m_currentNode.addBlack(GoPoint.create(0, 0));
+            m_currentNode.addBlack(GoPoint.get(0, 0));
             m_clock.reset();
             updateGameInfo(true);
         }
@@ -2361,7 +2361,7 @@ public class GoGui
                 if (point != null
                     && m_board.getColor(point) != GoColor.EMPTY)
                     showWarning("Program played move on non-empty point");
-                Move move = Move.create(point, toMove);
+                Move move = Move.get(point, toMove);
                 setNeedsSave(true);
                 m_board.play(move);
                 Node node = createNode(move);

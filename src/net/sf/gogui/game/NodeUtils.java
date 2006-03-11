@@ -153,23 +153,19 @@ public final class NodeUtils
             if (switchSetup)
             {
                 for (int i = 0; i < numberAddWhite; ++i)
-                    moves.add(Move.create(node.getAddWhite(i),
-                                          GoColor.WHITE));
+                    moves.add(Move.get(node.getAddWhite(i), GoColor.WHITE));
                 for (int i = 0; i < numberAddBlack; ++i)
-                    moves.add(Move.create(node.getAddBlack(i),
-                                          GoColor.BLACK));
+                    moves.add(Move.get(node.getAddBlack(i), GoColor.BLACK));
             }
             else
             {
                 for (int i = 0; i < numberAddBlack; ++i)
-                    moves.add(Move.create(node.getAddBlack(i),
-                                          GoColor.BLACK));
+                    moves.add(Move.get(node.getAddBlack(i), GoColor.BLACK));
                 for (int i = 0; i < numberAddWhite; ++i)
-                    moves.add(Move.create(node.getAddWhite(i),
-                                          GoColor.WHITE));
+                    moves.add(Move.get(node.getAddWhite(i), GoColor.WHITE));
             }
             for (int i = 0; i < node.getNumberAddEmpty(); ++i)
-                moves.add(Move.create(node.getAddEmpty(i), GoColor.EMPTY));
+                moves.add(Move.get(node.getAddEmpty(i), GoColor.EMPTY));
         }
         if (move != null)
             moves.add(move);
@@ -180,7 +176,7 @@ public final class NodeUtils
             GoColor otherColor = lastMove.getColor().otherColor();
             if (toMove != GoColor.EMPTY && toMove != otherColor
                 && otherColor != GoColor.EMPTY)
-                moves.add(Move.createPass(otherColor));
+                moves.add(Move.getPass(otherColor));
         }
         return moves;
     }

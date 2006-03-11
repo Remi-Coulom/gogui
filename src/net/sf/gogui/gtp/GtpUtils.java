@@ -200,7 +200,7 @@ public final class GtpUtils
                 }
                 if (! isColorSet)
                     toMove = toMove.otherColor();
-                list.add(Move.create(point, toMove));
+                list.add(Move.get(point, toMove));
                 isColorSet = false;
             }
         }

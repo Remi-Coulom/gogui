@@ -29,7 +29,7 @@ public final class BoardUtils
             s.append(" ");
             for (int x = 0; x < size; ++x)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 GoColor color = board.getColor(point);
                 if (color == GoColor.BLACK)
                     s.append("@ ");

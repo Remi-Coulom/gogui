@@ -121,14 +121,14 @@ public class GtpTerminal
 
     private boolean cmdPlay(GoColor color, GoPoint point)
     {
-        String command = m_gtp.getCommandPlay(Move.create(point, color));
+        String command = m_gtp.getCommandPlay(Move.get(point, color));
         StringBuffer response = new StringBuffer();
         if (! send(command, response))
         {
             System.out.println(response);
             return false;
         }
-        play(Move.create(point, color));
+        play(Move.get(point, color));
         return true;
     }
 
@@ -147,7 +147,7 @@ public class GtpTerminal
             GoPoint point =
                 GtpUtils.parsePoint(response.toString(), m_board.getSize());
             System.out.println("Computer move: " + GoPoint.toString(point));
-            play(Move.create(point, toMove));
+            play(Move.get(point, toMove));
             printBoard();
         }
         catch (GtpError error)

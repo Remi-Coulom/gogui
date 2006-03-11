@@ -45,27 +45,27 @@ public final class BoardConstants
         if (n > 4 && line2 < 0)
             return null;
         if (n >= 1)
-            result.add(GoPoint.create(line1, line1));
+            result.add(GoPoint.get(line1, line1));
         if (n >= 2)
-            result.add(GoPoint.create(line3, line3));
+            result.add(GoPoint.get(line3, line3));
         if (n >= 3)
-            result.add(GoPoint.create(line1, line3));
+            result.add(GoPoint.get(line1, line3));
         if (n >= 4)
-            result.add(GoPoint.create(line3, line1));
+            result.add(GoPoint.get(line3, line1));
         if (n >= 5)
             if (n % 2 != 0)
             {
-                result.add(GoPoint.create(line2, line2));
+                result.add(GoPoint.get(line2, line2));
                 --n;
             }
         if (n >= 5)
-            result.add(GoPoint.create(line1, line2));
+            result.add(GoPoint.get(line1, line2));
         if (n >= 6)
-            result.add(GoPoint.create(line3, line2));
+            result.add(GoPoint.get(line3, line2));
         if (n >= 7)
-            result.add(GoPoint.create(line2, line1));
+            result.add(GoPoint.get(line2, line1));
         if (n >= 8)
-            result.add(GoPoint.create(line2, line3));
+            result.add(GoPoint.get(line2, line3));
         return result;
     }
 

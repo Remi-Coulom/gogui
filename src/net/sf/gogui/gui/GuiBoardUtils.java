@@ -60,7 +60,7 @@ public final class GuiBoardUtils
         for (int x = 0; x < size; ++x)
             for (int y = 0; y < size; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 result[x][y] = guiBoard.getMarkSquare(point);
             }
         return result;
@@ -73,7 +73,7 @@ public final class GuiBoardUtils
         for (int x = 0; x < size; ++x)
             for (int y = 0; y < size; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 result[x][y] = guiBoard.getLabel(point);
             }
         return result;
@@ -86,7 +86,7 @@ public final class GuiBoardUtils
         for (int x = 0; x < size; ++x)
             for (int y = 0; y < size; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 result[x][y] = guiBoard.getSelect(point);
             }
         return result;
@@ -133,7 +133,7 @@ public final class GuiBoardUtils
         for (int x = 0; x < board.length; ++x)
             for (int y = 0; y < board[x].length; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 String s = board[x][y].toLowerCase();
                 if (s.equals("b") || s.equals("black"))
                     guiBoard.setTerritory(point, GoColor.BLACK);
@@ -175,7 +175,7 @@ public final class GuiBoardUtils
         for (int x = 0; x < colors.length; ++x)
             for (int y = 0; y < colors[x].length; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 guiBoard.setFieldBackground(point, getColor(colors[x][y]));
             }
     }
@@ -184,7 +184,7 @@ public final class GuiBoardUtils
     {
         for (int x = 0; x < board.length; ++x)
             for (int y = 0; y < board[x].length; ++y)
-                guiBoard.setInfluence(GoPoint.create(x, y), board[x][y]);
+                guiBoard.setInfluence(GoPoint.get(x, y), board[x][y]);
     }
 
     public static void showStringBoard(GuiBoard guiBoard,
@@ -193,7 +193,7 @@ public final class GuiBoardUtils
         for (int x = 0; x < board.length; ++x)
             for (int y = 0; y < board[x].length; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 guiBoard.setLabel(point, board[x][y]);
             }
     }
@@ -301,7 +301,7 @@ public final class GuiBoardUtils
         else
         {
             int size = guiBoard.getBoardSize();
-            guiBoard.setCursor(GoPoint.create(size / 2, size / 2));
+            guiBoard.setCursor(GoPoint.get(size / 2, size / 2));
         }
     }
 

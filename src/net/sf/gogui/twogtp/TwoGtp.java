@@ -417,7 +417,7 @@ public class TwoGtp
         checkInconsistentState();
         GoColor color = cmd.getColorArg(0);
         GoPoint point = cmd.getPointArg(1, m_size);
-        Move move = Move.create(point, color);
+        Move move = Move.get(point, color);
         if (m_openings != null)
         {
             if (m_openingMovesIndex < m_openingMoves.size()
@@ -1072,7 +1072,7 @@ public class TwoGtp
                 m_inconsistentState = true;
                 throw new GtpError(prefix1 + " played invalid move");
             }
-            Move move = Move.create(point, color);
+            Move move = Move.get(point, color);
             String command2 = gtp2.getCommandPlay(move);
             try
             {

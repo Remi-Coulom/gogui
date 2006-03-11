@@ -12,7 +12,7 @@ import net.sf.gogui.utils.StringUtils;
 
 /** Intersection on the Go board.
     This class is immutable and references to the same point are unique.
-    Instances can be created with GoPoint.create().
+    Instances can be created with GoPoint.get().
     Point coordinates start with 0, the point (0,0) corresponds to "A1".
 */
 public final class GoPoint
@@ -61,7 +61,7 @@ public final class GoPoint
         @param y y-coordinate [0...GoPoint.MAXSIZE - 1]
         @return Unique reference to a point with these coordinates.
     */
-    public static GoPoint create(int x, int y)
+    public static GoPoint get(int x, int y)
     {
         assert(x >= 0);
         assert(y >= 0);
@@ -86,7 +86,7 @@ public final class GoPoint
     public GoPoint down()
     {
         if (m_y > 0)
-            return create(m_x, m_y - 1);
+            return get(m_x, m_y - 1);
         else
             return this;
     }
@@ -109,7 +109,7 @@ public final class GoPoint
     public GoPoint left()
     {
         if (m_x > 0)
-            return create(m_x - 1, m_y);
+            return get(m_x - 1, m_y);
         else
             return this;
     }
@@ -142,7 +142,7 @@ public final class GoPoint
         }
         if (x < 0 || x >= boardSize || y < 0 || y >= boardSize)
             throw new InvalidPoint(string);
-        return GoPoint.create(x, y);
+        return GoPoint.get(x, y);
     }
 
     public static GoPoint[] parsePointList(String s, int boardSize)
@@ -174,7 +174,7 @@ public final class GoPoint
     public GoPoint right(int max)
     {
         if (m_x < max - 1)
-            return create(m_x + 1, m_y);
+            return get(m_x + 1, m_y);
         else
             return this;
     }
@@ -225,7 +225,7 @@ public final class GoPoint
     public GoPoint up(int max)
     {
         if (m_y < max - 1)
-            return create(m_x, m_y + 1);
+            return get(m_x, m_y + 1);
         else
             return this;
     }

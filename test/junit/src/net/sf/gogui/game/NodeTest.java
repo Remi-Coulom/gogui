@@ -105,7 +105,7 @@ public class NodeTest
         assertEquals(0, node.getNumberAddBlack());
         assertEquals(0, node.getNumberAddEmpty());
         assertEquals(0, node.getNumberAddWhite());
-        GoPoint point = GoPoint.create(0, 0);
+        GoPoint point = GoPoint.get(0, 0);
         node.addBlack(point);
         assertEquals(1, node.getNumberAddBlack());
         assertEquals(point, node.getAddBlack(0));
@@ -123,7 +123,7 @@ public class NodeTest
         assertEquals(point, node.getAddEmpty(0));
         assertEquals(0, node.getNumberAddBlack());
         assertEquals(0, node.getNumberAddWhite());
-        GoPoint point2 = GoPoint.create(1, 0);
+        GoPoint point2 = GoPoint.get(1, 0);
         node.addEmpty(point2);
         assertEquals(2, node.getNumberAddEmpty());
         assertEquals(point, node.getAddEmpty(0));

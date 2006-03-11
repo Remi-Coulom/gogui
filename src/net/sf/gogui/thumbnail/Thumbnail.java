@@ -100,7 +100,7 @@ public final class Thumbnail
                 for (int y = 0; y < size; ++y)
                 {
                     field[x][y] = new GuiField();
-                    GoColor color = board.getColor(GoPoint.create(x, y));
+                    GoColor color = board.getColor(GoPoint.get(x, y));
                     field[x][y].setColor(color);
                 }
             BufferedImage image = getImage(field, 256, 256);

@@ -81,7 +81,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                setFieldBackground(GoPoint.create(x, y), null);
+                setFieldBackground(GoPoint.get(x, y), null);
         clearAllCrossHair();
         clearAllMarkup();
         clearAllSelect();
@@ -95,7 +95,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                setCrossHair(GoPoint.create(x, y), false);
+                setCrossHair(GoPoint.get(x, y), false);
     }
 
     /** Clear all markup.
@@ -106,7 +106,7 @@ public final class GuiBoard
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
-                GoPoint point = GoPoint.create(x, y);
+                GoPoint point = GoPoint.get(x, y);
                 setMark(point, false);
                 setMarkCircle(point, false);
                 setMarkSquare(point, false);
@@ -119,7 +119,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                setSelect(GoPoint.create(x, y), false);
+                setSelect(GoPoint.get(x, y), false);
     }
 
     /** Clear all labels. */
@@ -127,7 +127,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                setLabel(GoPoint.create(x, y), "");
+                setLabel(GoPoint.get(x, y), "");
     }
 
     /** Clear all territory. */
@@ -135,7 +135,7 @@ public final class GuiBoard
     {
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
-                setTerritory(GoPoint.create(x, y), GoColor.EMPTY);
+                setTerritory(GoPoint.get(x, y), GoColor.EMPTY);
     }
 
     /** Clear all influence. */
@@ -338,7 +338,7 @@ public final class GuiBoard
             }
         }
         m_lastMove = null;
-        setCursor(GoPoint.create(m_size / 2, m_size / 2));
+        setCursor(GoPoint.get(m_size / 2, m_size / 2));
         revalidate();
         m_dirty = new Rectangle(0, 0, getWidth(), getHeight());
         repaint();
