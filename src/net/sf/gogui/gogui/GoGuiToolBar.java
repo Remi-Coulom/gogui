@@ -7,6 +7,7 @@ package net.sf.gogui.gogui;
 
 import java.awt.event.ActionListener;
 import java.net.URL;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
@@ -32,21 +33,25 @@ public class GoGuiToolBar
         m_buttonPass = addButton("pass.png", "pass", "Pass");
         m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
         addSeparator();
-        m_buttonBeginning = addButton("beginning.png", "beginning",
-                                      "Beginning");
-        m_buttonBackward10 = addButton("backward10.png", "backward-10",
-                                       "Backward 10");
-        m_buttonBackward = addButton("back.png", "backward", "Backward");
-        m_buttonForward = addButton("forward.png", "forward",
-                                    "Forward");
-        m_buttonForward10 = addButton("forward10.png", "forward-10",
-                                      "Forward 10");
-        m_buttonEnd = addButton("end.png", "end", "End");
+        m_buttonBeginning =
+            addNavigationButton("beginning.png", "beginning", "Beginning");
+        m_buttonBackward10 =
+            addNavigationButton("backward10.png", "backward-10",
+                                "Backward 10");
+        m_buttonBackward =
+            addNavigationButton("back.png", "backward", "Backward");
+        m_buttonForward
+            = addNavigationButton("forward.png", "forward", "Forward");
+        m_buttonForward10 =
+            addNavigationButton("forward10.png", "forward-10", "Forward 10");
+        m_buttonEnd = addNavigationButton("end.png", "end", "End");
         addSeparator();
         m_buttonNextVariation =
-            addButton("down.png", "next-variation", "Next Variation");
+            addNavigationButton("down.png", "next-variation",
+                                "Next Variation");
         m_buttonPreviousVariation =
-            addButton("up.png", "previous-variation", "Previous Variation");
+            addNavigationButton("up.png", "previous-variation",
+                                "Previous Variation");
         setRollover(true);
         setFloatable(false);
         // For com.jgoodies.looks
@@ -68,14 +73,14 @@ public class GoGuiToolBar
         boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
         boolean hasPreviousVariation =
             (NodeUtils.getPreviousVariation(node) != null);
-        setEnabled(m_buttonBeginning, hasFather);
-        setEnabled(m_buttonBackward, hasFather);
-        setEnabled(m_buttonBackward10, hasFather);
-        setEnabled(m_buttonForward, hasChildren);
-        setEnabled(m_buttonForward10, hasChildren);
-        setEnabled(m_buttonEnd, hasChildren);
-        setEnabled(m_buttonNextVariation, hasNextVariation);
-        setEnabled(m_buttonPreviousVariation, hasPreviousVariation);
+        setCanNavigate(m_buttonBeginning, hasFather);
+        setCanNavigate(m_buttonBackward, hasFather);
+        setCanNavigate(m_buttonBackward10, hasFather);
+        setCanNavigate(m_buttonForward, hasChildren);
+        setCanNavigate(m_buttonForward10, hasChildren);
+        setCanNavigate(m_buttonEnd, hasChildren);
+        setCanNavigate(m_buttonNextVariation, hasNextVariation);
+        setCanNavigate(m_buttonPreviousVariation, hasPreviousVariation);
         paintImmediately(getVisibleRect());
     }
 
@@ -118,60 +123,107 @@ public class GoGuiToolBar
 
     private final ActionListener m_listener;
 
-    private final JButton m_buttonBeginning;
+    private final NavigationButton m_buttonBeginning;
 
-    private final JButton m_buttonBackward;
+    private final NavigationButton m_buttonBackward;
 
-    private final JButton m_buttonBackward10;
+    private final NavigationButton m_buttonBackward10;
 
-    private final JButton m_buttonEnd;
+    private final NavigationButton m_buttonEnd;
 
     private final JButton m_buttonEnter;
 
-    private final JButton m_buttonForward;
+    private final NavigationButton m_buttonForward;
 
-    private final JButton m_buttonForward10;
+    private final NavigationButton m_buttonForward10;
 
     private final JButton m_buttonInterrupt;
 
     private final JButton m_buttonNew;
 
-    private final JButton m_buttonNextVariation;
+    private final NavigationButton m_buttonNextVariation;
 
     private final JButton m_buttonOpen;
 
     private final JButton m_buttonPass;
 
-    private final JButton m_buttonPreviousVariation;
+    private final NavigationButton m_buttonPreviousVariation;
 
     private final JButton m_buttonSave;
 
     private JButton addButton(String icon, String command, String toolTip)
     {
         JButton button = new JButton();
+        Icon imageIcon = getIcon(icon, command);
+        button.setIcon(imageIcon);
+        button.setDisabledIcon(imageIcon);
+        addButton(button, command, toolTip);
+        return button;
+    }
+
+    private JButton addButton(JButton button, String command, String toolTip)
+    {
         button.setActionCommand(command);
         button.setToolTipText(toolTip);
         button.addActionListener(m_listener);
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        URL url = classLoader.getResource("net/sf/gogui/images/" + icon);
-        if (url == null)
-            button.setText(command);
-        else
-        {
-            ImageIcon imageIcon = new ImageIcon(url, command);
-            button.setIcon(imageIcon);
-            button.setDisabledIcon(imageIcon);
-        }
         button.setEnabled(false);
         button.setFocusable(false);
         add(button);
         return button;
     }
 
+    private NavigationButton addNavigationButton(String icon, String command,
+                                                 String toolTip)
+    {
+        Icon imageIcon = getIcon(icon, command);
+        NavigationButton button = new NavigationButton(imageIcon);
+        addButton(button, command, toolTip);
+        return button;
+    }
+
+    private Icon getIcon(String name, String command)
+    {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        URL url = classLoader.getResource("net/sf/gogui/images/" + name);
+        return new ImageIcon(url, command);
+    }
+
+    private static void setCanNavigate(NavigationButton button,
+                                       boolean canNavigate)
+    {
+        button.setCanNavigate(canNavigate);
+    }
+
     private static void setEnabled(JButton button, boolean enabled)
     {
         button.setEnabled(enabled);
     }
+}
+
+//----------------------------------------------------------------------------
+
+class NavigationButton
+    extends JButton
+{
+    public NavigationButton(Icon icon)
+    {
+        setIcon(icon);
+        m_icon = icon;
+        m_disabledIcon = getDisabledIcon();
+    }
+
+    public void setCanNavigate(boolean canNavigate)
+    {
+        if (canNavigate)
+            setDisabledIcon(m_icon);
+        else
+            setDisabledIcon(m_disabledIcon);
+        setEnabled(canNavigate);
+    }
+
+    private Icon m_icon;
+
+    private Icon m_disabledIcon;
 }
 
 //----------------------------------------------------------------------------
