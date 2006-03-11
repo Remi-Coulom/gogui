@@ -189,7 +189,6 @@ public class Help
         {
             ImageIcon imageIcon = new ImageIcon(url, command);
             button.setIcon(imageIcon);
-            button.setDisabledIcon(imageIcon);
         }
         button.setFocusable(false);
         return button;
