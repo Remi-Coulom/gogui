@@ -60,7 +60,6 @@ public class ScoreDialog
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(panelDetails);
         panel.add(GuiUtils.createFiller());
-        panel.add(new JSeparator(SwingConstants.HORIZONTAL));
         panel.add(GuiUtils.createFiller());
         panel.add(panelResult);
         JButton okButton = new JButton("Ok");
