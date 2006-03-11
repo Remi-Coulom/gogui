@@ -139,6 +139,8 @@ string/GtpAdapter ShowBoard/gtpadapter_showboard
 bwboard/Dummy BWBoard/dummy_bwboard
 none/Dummy Crash/dummy_crash
 none/Dummy Delay/dummy_delay %o
+none/Dummy Delay 0s/dummy_delay 0
+none/Dummy Delay 20s/dummy_delay 20
 eplist/Dummy EPList/dummy_eplist
 gfx/Dummy Gfx/dummy_gfx
 none/Dummy Invalid/dummy_invalid
