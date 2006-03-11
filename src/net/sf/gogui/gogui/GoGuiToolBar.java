@@ -76,6 +76,7 @@ public class GoGuiToolBar
         setEnabled(m_buttonEnd, hasChildren);
         setEnabled(m_buttonNextVariation, hasNextVariation);
         setEnabled(m_buttonPreviousVariation, hasPreviousVariation);
+        paintImmediately(getVisibleRect());
     }
 
     public void enableAll(boolean enable, Node node)
@@ -170,7 +171,6 @@ public class GoGuiToolBar
     private static void setEnabled(JButton button, boolean enabled)
     {
         button.setEnabled(enabled);
-        button.paintImmediately(button.getVisibleRect());
     }
 }
 
