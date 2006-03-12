@@ -29,29 +29,28 @@ public class GoGuiToolBar
         addSeparator();
         m_buttonNew = addButton("filenew.png", "new-game", "New Game");
         addSeparator();
-        m_buttonPlay = addButton("next.png", "play", "Play");
+        m_buttonPlay = addOptionalButton("next.png", "play", "Play");
         m_buttonPass = addButton("pass.png", "pass", "Pass");
-        m_buttonInterrupt = addButton("stop.png", "interrupt", "Interrupt");
+        m_buttonInterrupt =
+            addOptionalButton("stop.png", "interrupt", "Interrupt");
         addSeparator();
         m_buttonBeginning =
-            addNavigationButton("beginning.png", "beginning", "Beginning");
+            addOptionalButton("beginning.png", "beginning", "Beginning");
         m_buttonBackward10 =
-            addNavigationButton("backward10.png", "backward-10",
-                                "Backward 10");
+            addOptionalButton("backward10.png", "backward-10", "Backward 10");
         m_buttonBackward =
-            addNavigationButton("back.png", "backward", "Backward");
+            addOptionalButton("back.png", "backward", "Backward");
         m_buttonForward
-            = addNavigationButton("forward.png", "forward", "Forward");
+            = addOptionalButton("forward.png", "forward", "Forward");
         m_buttonForward10 =
-            addNavigationButton("forward10.png", "forward-10", "Forward 10");
-        m_buttonEnd = addNavigationButton("end.png", "end", "End");
+            addOptionalButton("forward10.png", "forward-10", "Forward 10");
+        m_buttonEnd = addOptionalButton("end.png", "end", "End");
         addSeparator();
         m_buttonNextVariation =
-            addNavigationButton("down.png", "next-variation",
-                                "Next Variation");
+            addOptionalButton("down.png", "next-variation", "Next Variation");
         m_buttonPreviousVariation =
-            addNavigationButton("up.png", "previous-variation",
-                                "Previous Variation");
+            addOptionalButton("up.png", "previous-variation",
+                              "Previous Variation");
         setRollover(true);
         setFloatable(false);
         // For com.jgoodies.looks
@@ -61,7 +60,8 @@ public class GoGuiToolBar
     public void setComputerEnabled(boolean enabled)
     {
         m_computerButtonsEnabled = enabled;
-        setEnabled(m_buttonPlay, enabled);
+        m_buttonPlay.setSameDisabledIcon(enabled);
+        m_buttonInterrupt.setSameDisabledIcon(enabled);
     }
 
     /** Enable/disable buttons according to current position. */
@@ -73,14 +73,14 @@ public class GoGuiToolBar
         boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
         boolean hasPreviousVariation =
             (NodeUtils.getPreviousVariation(node) != null);
-        setCanNavigate(m_buttonBeginning, hasFather);
-        setCanNavigate(m_buttonBackward, hasFather);
-        setCanNavigate(m_buttonBackward10, hasFather);
-        setCanNavigate(m_buttonForward, hasChildren);
-        setCanNavigate(m_buttonForward10, hasChildren);
-        setCanNavigate(m_buttonEnd, hasChildren);
-        setCanNavigate(m_buttonNextVariation, hasNextVariation);
-        setCanNavigate(m_buttonPreviousVariation, hasPreviousVariation);
+        m_buttonBeginning.setSameDisabledIcon(hasFather);
+        m_buttonBackward.setSameDisabledIcon(hasFather);
+        m_buttonBackward10.setSameDisabledIcon(hasFather);
+        m_buttonForward.setSameDisabledIcon(hasChildren);
+        m_buttonForward10.setSameDisabledIcon(hasChildren);
+        m_buttonEnd.setSameDisabledIcon(hasChildren);
+        m_buttonNextVariation.setSameDisabledIcon(hasNextVariation);
+        m_buttonPreviousVariation.setSameDisabledIcon(hasPreviousVariation);
         paintImmediately(getVisibleRect());
     }
 
@@ -130,31 +130,31 @@ public class GoGuiToolBar
 
     private final ActionListener m_listener;
 
-    private final NavigationButton m_buttonBeginning;
+    private final OptionalButton m_buttonBeginning;
 
-    private final NavigationButton m_buttonBackward;
+    private final OptionalButton m_buttonBackward;
 
-    private final NavigationButton m_buttonBackward10;
+    private final OptionalButton m_buttonBackward10;
 
-    private final NavigationButton m_buttonEnd;
+    private final OptionalButton m_buttonEnd;
 
-    private final JButton m_buttonPlay;
+    private final OptionalButton m_buttonPlay;
 
-    private final NavigationButton m_buttonForward;
+    private final OptionalButton m_buttonForward;
 
-    private final NavigationButton m_buttonForward10;
+    private final OptionalButton m_buttonForward10;
 
-    private final JButton m_buttonInterrupt;
+    private final OptionalButton m_buttonInterrupt;
 
     private final JButton m_buttonNew;
 
-    private final NavigationButton m_buttonNextVariation;
+    private final OptionalButton m_buttonNextVariation;
 
     private final JButton m_buttonOpen;
 
     private final JButton m_buttonPass;
 
-    private final NavigationButton m_buttonPreviousVariation;
+    private final OptionalButton m_buttonPreviousVariation;
 
     private final JButton m_buttonSave;
 
@@ -178,11 +178,11 @@ public class GoGuiToolBar
         return button;
     }
 
-    private NavigationButton addNavigationButton(String icon, String command,
+    private OptionalButton addOptionalButton(String icon, String command,
                                                  String toolTip)
     {
         Icon imageIcon = getIcon(icon, command);
-        NavigationButton button = new NavigationButton(imageIcon);
+        OptionalButton button = new OptionalButton(imageIcon);
         addButton(button, command, toolTip);
         return button;
     }
@@ -194,10 +194,10 @@ public class GoGuiToolBar
         return new ImageIcon(url, command);
     }
 
-    private static void setCanNavigate(NavigationButton button,
-                                       boolean canNavigate)
+    private static void setSameDisabledIcon(OptionalButton button,
+                                            boolean sameDisabledIcon)
     {
-        button.setCanNavigate(canNavigate);
+        button.setSameDisabledIcon(sameDisabledIcon);
     }
 
     private static void setEnabled(JButton button, boolean enabled)
@@ -208,23 +208,27 @@ public class GoGuiToolBar
 
 //----------------------------------------------------------------------------
 
-class NavigationButton
+/** Toolbar button with optional same disabled icon.
+    Can use the same icon in disabled state to avoid too much toolbar
+    flickering if button is disabled during command in progress.
+*/  
+class OptionalButton
     extends JButton
 {
-    public NavigationButton(Icon icon)
+    public OptionalButton(Icon icon)
     {
         setIcon(icon);
         m_icon = icon;
         m_disabledIcon = getDisabledIcon();
     }
 
-    public void setCanNavigate(boolean canNavigate)
+    public void setSameDisabledIcon(boolean sameDisabledIcon)
     {
-        if (canNavigate)
+        if (sameDisabledIcon)
             setDisabledIcon(m_icon);
         else
             setDisabledIcon(m_disabledIcon);
-        setEnabled(canNavigate);
+        setEnabled(sameDisabledIcon);
     }
 
     private Icon m_icon;
