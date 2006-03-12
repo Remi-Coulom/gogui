@@ -1943,6 +1943,8 @@ public class GoGui
 
     private void cbPass()
     {
+        if (isCommandInProgress())
+            return;
         if (m_passWarning == null)
             m_passWarning = new OptionalWarning(this);
         if (! m_passWarning.show("Really pass?", true))

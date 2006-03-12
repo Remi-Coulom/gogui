@@ -90,17 +90,18 @@ public class GoGuiToolBar
         setEnabled(m_buttonBackward, enable);
         setEnabled(m_buttonBackward10, enable);
         setEnabled(m_buttonEnd, enable);
-        // Play button always enabled, see setCommandInProgress()
-        //setEnabled(m_buttonPlay, enable);
         setEnabled(m_buttonForward, enable);
         setEnabled(m_buttonForward10, enable);
         setEnabled(m_buttonInterrupt, false);
         setEnabled(m_buttonNew, enable);
         setEnabled(m_buttonNextVariation, enable);
         setEnabled(m_buttonOpen, enable);
-        setEnabled(m_buttonPass, enable);
         setEnabled(m_buttonPreviousVariation, enable);
         setEnabled(m_buttonSave, enable);
+        // Play and pass buttons are always enabled, see
+        //setCommandInProgress()
+        //setEnabled(m_buttonPlay, enable);
+        //setEnabled(m_buttonPass, enable);
         if (enable)
         {
             if (! m_computerButtonsEnabled)
@@ -112,9 +113,11 @@ public class GoGuiToolBar
     public void setCommandInProgress()
     {
         enableAll(false, null);
-        // Enable play to avoid wrong rendering of rollover effect, if mouse
-        // stays over button. Need to discard the event in GoGui.cbPlay
+        // Enable play and pass to avoid wrong rendering of rollover effect,
+        // if mouse stays over button. Need to discard the events in
+        // GoGui.cbPlay
         setEnabled(m_buttonPlay, true);
+        setEnabled(m_buttonPass, true);
         setEnabled(m_buttonInterrupt, true);
     }
 
@@ -170,7 +173,6 @@ public class GoGuiToolBar
         button.setActionCommand(command);
         button.setToolTipText(toolTip);
         button.addActionListener(m_listener);
-        button.setEnabled(false);
         button.setFocusable(false);
         add(button);
         return button;
