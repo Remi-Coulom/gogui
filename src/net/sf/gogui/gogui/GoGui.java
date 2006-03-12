@@ -2861,7 +2861,6 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, true);
         }
         setTitleFromProgram();
-        toTop();
         requestFocusLater();
         checkComputerMove();
     }
@@ -3097,6 +3096,7 @@ public class GoGui
         SwingUtilities.invokeLater(new Runnable() {
                 public void run()
                 {
+                    toFront();
                     requestFocus();
                 }
             });
