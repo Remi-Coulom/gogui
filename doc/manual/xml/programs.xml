@@ -16,17 +16,17 @@ The following Go programs can be used with GoGui:
 http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm</ulink>
 </para>
 <para>
+Operating systems: Unix
+</para>
+<para>
+Command: <userinput>amigoplus -gtp</userinput>
+</para>
+<para>
 <note>
 <simpara>
 AmigoPlus 0.1.2 has several bugs in its GTP implementation.
 </simpara>
 </note>
-</para>
-<para>
-Operating systems: Unix
-</para>
-<para>
-Command: <userinput>amigoplus -gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -38,6 +38,12 @@ Command: <userinput>amigoplus -gtp</userinput>
 </indexterm>
 <para>
 <ulink url="http://www32.ocn.ne.jp/~yss/">http://www32.ocn.ne.jp/~yss/</ulink>
+</para>
+<para>
+Operating systems: Windows
+</para>
+<para>
+Command: <userinput>Aya.exe --mode gtp</userinput>
 </para>
 <para>
 <note>
@@ -54,12 +60,6 @@ Windows emulator, the command would be then:
 </para>
 </note>
 </para>
-<para>
-Operating systems: Windows
-</para>
-<para>
-Command: <userinput>Aya.exe --mode gtp</userinput>
-</para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
@@ -73,17 +73,17 @@ Command: <userinput>Aya.exe --mode gtp</userinput>
 http://www.ibiblio.org/pub/Linux/games/strategy/badukiplus.lsm</ulink>
 </para>
 <para>
+Operating systems: Unix
+</para>
+<para>
+Command: <userinput>badukiplus -gtp</userinput>
+</para>
+<para>
 <note>
 <simpara>
 BadukiPlus 0.1.2 has several bugs in its GTP implementation.
 </simpara>
 </note>
-</para>
-<para>
-Operating systems: Unix
-</para>
-<para>
-Command: <userinput>badukiplus -gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -98,6 +98,12 @@ Command: <userinput>badukiplus -gtp</userinput>
 http://remi.coulom.free.fr/CrazyStone/</ulink>
 </para>
 <para>
+Operating systems: Windows
+</para>
+<para>
+Command: <userinput>CrazyStone-0001.exe</userinput>
+</para>
+<para>
 <note>
 <para>
 Crazy Stone also works on Unix in the
@@ -108,12 +114,6 @@ would be then:
 <userinput>wine CrazyStone-0001.exe</userinput>
 </para>
 </note>
-</para>
-<para>
-Operating systems: Windows
-</para>
-<para>
-Command: <userinput>CrazyStone-0001.exe</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -146,6 +146,12 @@ Command: <userinput>gnugo --mode gtp</userinput>
 http://www.cis.hut.fi/praiko/go169/</ulink>
 </para>
 <para>
+Operating systems: Windows
+</para>
+<para>
+Command: <userinput>Go169.exe</userinput>
+</para>
+<para>
 <note>
 <para>
 Go169 also works on Unix in the
@@ -156,12 +162,6 @@ would be then:
 <userinput>wine Go169.exe</userinput>
 </para>
 </note>
-</para>
-<para>
-Operating systems: Windows
-</para>
-<para>
-Command: <userinput>Go169.exe</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -176,18 +176,18 @@ Command: <userinput>Go169.exe</userinput>
 http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html</ulink>
 </para>
 <para>
+Operating systems: GNU/Linux, Windows
+</para>
+<para>
+Command: <userinput>gtpadapter -lowercase &quot;Indigo2004-Linux.exe -gtp&quot;</userinput>
+</para>
+<para>
 <note>
 <para>
 The 2004 version of INDIGO does not handle uppercase pass moves.
 You can use GtpAdapter to translate moves to lowercase.
 </para>
 </note>
-</para>
-<para>
-Operating systems: GNU/Linux, Windows
-</para>
-<para>
-Command: <userinput>gtpadapter -lowercase &quot;Indigo2004-Linux.exe -gtp&quot;</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -202,17 +202,17 @@ Command: <userinput>gtpadapter -lowercase &quot;Indigo2004-Linux.exe -gtp&quot;<
 http://www.ibiblio.org/pub/Linux/games/strategy/wallyplus.lsm</ulink>
 </para>
 <para>
+Operating systems: Unix
+</para>
+<para>
+Command: <userinput>wallyplus -gtp</userinput>
+</para>
+<para>
 <note>
 <simpara>
 WallyPlus 0.1.2 has several bugs in its GTP implementation.
 </simpara>
 </note>
-</para>
-<para>
-Operating systems: Unix
-</para>
-<para>
-Command: <userinput>wallyplus -gtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
