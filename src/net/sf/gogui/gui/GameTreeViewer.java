@@ -72,12 +72,12 @@ public class GameTreeViewer
                     {
                         if (c == KeyEvent.VK_HOME)
                             scrollToCurrent();
-                        else if (c == KeyEvent.VK_ENTER)
-                            m_panel.showPopup();
                         return;
                     }
                     boolean shift = ((mod & ActionEvent.SHIFT_MASK) != 0);
-                    if (c == KeyEvent.VK_LEFT && ! shift)
+                    if (c == KeyEvent.VK_ENTER && ! shift)
+                        m_panel.showPopup();
+                    else if (c == KeyEvent.VK_LEFT && ! shift)
                         m_listener.cbBackward(1);
                     else if (c == KeyEvent.VK_LEFT && shift)
                         m_listener.cbBackward(10);

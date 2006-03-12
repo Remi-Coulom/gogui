@@ -675,11 +675,18 @@ public class GameTreePanel
             };
         JPopupMenu popup = new JPopupMenu();
         JMenuItem item;
-        item = new JMenuItem("Go To");
-        item.setActionCommand("goto");
-        item.addActionListener(listener);
-        popup.add(item);
-        popup.addSeparator();
+        if (node != m_currentNode)
+        {
+            item = new JMenuItem("Go To");
+            item.setActionCommand("goto");
+            item.addActionListener(listener);
+            popup.add(item);
+            item = new JMenuItem("Scroll to Current");
+            item.setActionCommand("scroll-to-current");
+            item.addActionListener(listener);
+            popup.add(item);
+            popup.addSeparator();
+        }
         item = new JMenuItem("Hide Variations");
         if (node.getNumberChildren() == 0)
             item.setEnabled(false);
@@ -709,11 +716,6 @@ public class GameTreePanel
         popup.add(item);
         item = new JMenuItem("Subtree Statistics");
         item.setActionCommand("tree-info");
-        item.addActionListener(listener);
-        popup.add(item);
-        popup.addSeparator();
-        item = new JMenuItem("Scroll to Current");
-        item.setActionCommand("scroll-to-current");
         item.addActionListener(listener);
         popup.add(item);
         // For com.jgoodies.looks
