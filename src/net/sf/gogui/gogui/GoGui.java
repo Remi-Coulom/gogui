@@ -3091,7 +3091,6 @@ public class GoGui
 
     private void requestFocusLater()
     {
-        m_guiBoard.requestFocusInWindow();
         // Calling requestFocus() directly does not give the focus to this
         // frame, if dialogs are open
         SwingUtilities.invokeLater(new Runnable() {
