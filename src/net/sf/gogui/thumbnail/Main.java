@@ -50,7 +50,8 @@ public final class Main
             if (arguments.size() == 2)
                 output = new File((String)arguments.get(1));
             Thumbnail thumbnail = new Thumbnail(verbose);
-            thumbnail.create(input, output);
+            if (! thumbnail.create(input, output))
+                System.exit(-1);
         }
         catch (Throwable t)
         {
