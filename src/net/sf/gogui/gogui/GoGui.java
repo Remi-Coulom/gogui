@@ -556,6 +556,18 @@ public class GoGui
             m_commandThread.setAutoNumber(enable);
     }
 
+    public void cbBackward(int n)
+    {
+        backward(n);
+        boardChangedBegin(false, false);
+    }
+
+    public void cbBeginning()
+    {
+        backward(NodeUtils.getDepth(m_currentNode));
+        boardChangedBegin(false, false);
+    }
+
     public void cbCommandCompletion()
     {
         if (m_gtpShell == null)
@@ -579,6 +591,18 @@ public class GoGui
         detachProgram();
         m_prefs.setString("program", "");
         return true;
+    }
+
+    public void cbEnd()
+    {
+        forward(NodeUtils.getNodesLeft(m_currentNode));
+        boardChangedBegin(false, false);
+    }
+
+    public void cbForward(int n)
+    {
+        forward(n);
+        boardChangedBegin(false, false);
     }
 
     public void cbGtpShellSave()
@@ -606,6 +630,33 @@ public class GoGui
         m_menuBar.addRecentGtp(file);
     }
 
+    public void cbNextVariation()
+    {
+        Node node = NodeUtils.getNextVariation(m_currentNode);
+        if (node != null)
+            gotoNode(node);
+    }
+
+    public void cbNextEarlierVariation()
+    {
+        Node node = NodeUtils.getNextEarlierVariation(m_currentNode);
+        if (node != null)
+            gotoNode(node);
+    }
+
+    public void cbPreviousVariation()
+    {
+        Node node = NodeUtils.getPreviousVariation(m_currentNode);
+        if (node != null)
+            gotoNode(node);
+    }
+
+    public void cbPreviousEarlierVariation()
+    {
+        Node node = NodeUtils.getPreviousEarlierVariation(m_currentNode);
+        if (node != null)
+            gotoNode(node);
+    }
     public void cbShowShell()
     {
         if (m_gtpShell == null)
@@ -1457,22 +1508,10 @@ public class GoGui
         m_prefs.setBool("beep-after-move", m_beepAfterMove);
     }
 
-    private void cbBeginning()
-    {
-        backward(NodeUtils.getDepth(m_currentNode));
-        boardChangedBegin(false, false);
-    }
-
     private void cbBackToMainVar()
     {
         Node node = NodeUtils.getBackToMainVariation(m_currentNode);
         gotoNode(node);
-    }
-
-    private void cbBackward(int n)
-    {
-        backward(n);
-        boardChangedBegin(false, false);
     }
 
     private void cbBoardSize(String size)
@@ -1601,12 +1640,6 @@ public class GoGui
         m_menuBar.setBookmarks(m_bookmarks);
     }
 
-    private void cbEnd()
-    {
-        forward(NodeUtils.getNodesLeft(m_currentNode));
-        boardChangedBegin(false, false);
-    }
-
     private void cbExportAscii()
     {
         File file = SimpleDialogs.showSave(this, "Export Text Diagram");
@@ -1714,12 +1747,6 @@ public class GoGui
             gotoNode(node);
             m_comment.markAll(m_pattern);
         }
-    }
-
-    private void cbForward(int n)
-    {
-        forward(n);
-        boardChangedBegin(false, false);
     }
 
     private void cbGameInfo()
@@ -1920,20 +1947,6 @@ public class GoGui
         updateMenuBar();
     }
 
-    private void cbNextVariation()
-    {
-        Node node = NodeUtils.getNextVariation(m_currentNode);
-        if (node != null)
-            gotoNode(node);
-    }
-
-    private void cbNextEarlierVariation()
-    {
-        Node node = NodeUtils.getNextEarlierVariation(m_currentNode);
-        if (node != null)
-            gotoNode(node);
-    }
-
     private void cbOpen()
     {
         if (m_needsSave && ! checkSaveGame())
@@ -1977,19 +1990,6 @@ public class GoGui
         m_clock.startMove(m_board.getToMove());
     }
 
-    private void cbPreviousVariation()
-    {
-        Node node = NodeUtils.getPreviousVariation(m_currentNode);
-        if (node != null)
-            gotoNode(node);
-    }
-
-    private void cbPreviousEarlierVariation()
-    {
-        Node node = NodeUtils.getPreviousEarlierVariation(m_currentNode);
-        if (node != null)
-            gotoNode(node);
-    }
 
     private void cbPrint()
     {

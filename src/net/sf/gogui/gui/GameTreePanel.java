@@ -305,6 +305,17 @@ public class GameTreePanel
                                        m_maxY + m_nodeFullSize + m_margin));
     }
 
+    public void showPopup()
+    {
+        if (m_currentNode == null)
+            return;
+        scrollToCurrent();
+        GameTreeNode gameNode = getGameTreeNode(m_currentNode);        
+        if (gameNode == null)
+            return;
+        showPopup(gameNode.getX(), gameNode.getY(), gameNode);
+    }
+
     public void update(GameTree gameTree, Node currentNode)
     {
         assert(currentNode != null);
