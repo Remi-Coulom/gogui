@@ -107,12 +107,6 @@ public class Help
         }
     }
 
-    public void toTop()
-    {
-        setVisible(true);
-        toFront();
-    }
-
     private int m_historyIndex = -1;
 
     /** Serial version to suppress compiler warning.

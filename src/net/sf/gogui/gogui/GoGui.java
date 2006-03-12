@@ -541,7 +541,7 @@ public class GoGui
             m_menuBar.setShowAnalyze(true);
             cbAnalyze();
         }
-        requestFocusLater();
+        toFrontLater();
     }
 
     public void cbAutoNumber(boolean enable)
@@ -972,17 +972,11 @@ public class GoGui
                 GuiBoardUtils.setSelect(m_guiBoard,
                                         m_analyzeCommand.getPointListArg(),
                                         true);
-            toTop();
+            toFront();
             return;
         }
         analyzeBegin(false, clearBoard);
     }    
-
-    public void toTop()
-    {
-        setState(Frame.NORMAL);
-        toFront();
-    }
 
     private class AnalyzeContinue
         implements Runnable
@@ -1895,7 +1889,8 @@ public class GoGui
             m_help = new Help(this, url);
             restoreSize(m_help, "window-help");
         }
-        m_help.toTop();
+        m_help.setVisible(true);
+        m_help.toFront();
     }
 
     private void cbInterrupt()
@@ -2864,7 +2859,7 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, true);
         }
         setTitleFromProgram();
-        requestFocusLater();
+        toFrontLater();
         checkComputerMove();
     }
 
@@ -3092,19 +3087,6 @@ public class GoGui
         Platform.registerSpecialMacHandler(handler);
     }
 
-    private void requestFocusLater()
-    {
-        // Calling requestFocus() directly does not give the focus to this
-        // frame, if dialogs are open
-        SwingUtilities.invokeLater(new Runnable() {
-                public void run()
-                {
-                    toFront();
-                    requestFocus();
-                }
-            });
-    }
-
     private void resetBoard()
     {
         clearStatus();
@@ -3115,6 +3097,7 @@ public class GoGui
     
     private void restoreMainWindow()
     {
+        setState(Frame.NORMAL);
         Session.restoreLocation(this, m_prefs, "window-gogui", m_boardSize);
         Dimension preferredCommentSize = null;
         int fieldSize = -1;
@@ -3601,6 +3584,18 @@ public class GoGui
     private void showWarning(String message)
     {
         SimpleDialogs.showWarning(this, message);
+    }
+
+    private void toFrontLater()
+    {
+        // Calling toFront() directly does not give the focus to this
+        // frame, if dialogs are open
+        SwingUtilities.invokeLater(new Runnable() {
+                public void run()
+                {
+                    toFront();
+                }
+            });
     }
 
     private void undoCurrentNode() throws GtpError
