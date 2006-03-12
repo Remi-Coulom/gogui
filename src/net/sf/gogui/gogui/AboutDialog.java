@@ -188,14 +188,11 @@ public final class AboutDialog
             buffer.append("<br>");
         }
         Runtime runtime = Runtime.getRuntime();
-        buffer.append("<table align=\"center\" cellpadding=\"0\">" +
-                      "<tr><td>Total memory:</td><td align=\"right\">"
-                      + runtime.totalMemory() + "</td></tr>" +
-                      "<tr><td>Max memory:</td><td align=\"right\">"
-                      + runtime.maxMemory() + "</td></tr>" +
-                      "<tr><td>Free memory:</td><td align=\"right\">"
-                      + runtime.freeMemory() + "</td></tr>" +
-                      "</table></p>");
+        long max = runtime.maxMemory();
+        String maxString =
+            (max == Long.MAX_VALUE ? "unlimited" : Long.toString(max));
+        buffer.append("Memory: " + maxString + "<br>(" + runtime.totalMemory()
+                      + " total, " + runtime.freeMemory() + " free)");
         return createPanel(buffer.toString());
     }
 
