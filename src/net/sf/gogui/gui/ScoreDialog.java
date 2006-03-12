@@ -135,6 +135,7 @@ public class ScoreDialog
         panel.add(label);
         JTextField entry = new JTextField("        ");
         entry.setEditable(false);
+        entry.setFocusable(false);
         entry.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(entry);
         return entry;
