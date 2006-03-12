@@ -1780,14 +1780,20 @@ public class GoGui
     {
         m_prefs.setInt("gametree-labels", mode);
         if (m_gameTreeViewer != null)
+        {
             m_gameTreeViewer.setLabelMode(mode);
+            updateGameTree(true);
+        }
     }
 
     private void cbGameTreeSize(int mode)
     {
         m_prefs.setInt("gametree-size", mode);
         if (m_gameTreeViewer != null)
+        {
             m_gameTreeViewer.setSizeMode(mode);
+            updateGameTree(true);
+        }
     }
 
     private void cbGameTreeShowSubtreeSizes()
@@ -1795,7 +1801,10 @@ public class GoGui
         boolean enable = m_menuBar.getShowSubtreeSizes();
         m_prefs.setBool("gametree-show-subtree-sizes", enable);
         if (m_gameTreeViewer != null)
+        {
             m_gameTreeViewer.setShowSubtreeSizes(enable);
+            updateGameTree(true);
+        }
     }
 
     private void cbGoto()

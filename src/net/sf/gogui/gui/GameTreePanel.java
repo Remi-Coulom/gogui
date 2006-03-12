@@ -231,14 +231,10 @@ public class GameTreePanel
         case LABEL_NUMBER:
         case LABEL_MOVE:
         case LABEL_NONE:
-            if (mode != m_labelMode)
-            {
-                m_labelMode = mode;
-                if (m_currentNode != null)
-                    update(m_gameTree, m_currentNode);
-            }
+            m_labelMode = mode;
             break;
         default:
+            assert(false);
             break;
         }
     }
@@ -256,8 +252,6 @@ public class GameTreePanel
     public void setShowSubtreeSizes(boolean showSubtreeSizes)
     {
         m_showSubtreeSizes = showSubtreeSizes;
-        if (m_currentNode != null)
-            update(m_gameTree, m_currentNode);
     }
 
     public void setSizeMode(int mode)
@@ -272,11 +266,10 @@ public class GameTreePanel
             {
                 m_sizeMode = mode;
                 computeSizes(m_sizeMode);
-                if (m_currentNode != null)
-                    update(m_gameTree, m_currentNode);
             }
             break;
         default:
+            assert(false);
             break;
         }
     }
@@ -317,9 +310,12 @@ public class GameTreePanel
                   gameNode);
     }
 
-    public void update(GameTree gameTree, Node currentNode)
+    public void update(GameTree gameTree, Node currentNode, int minWidth,
+                       int minHeight)
     {
         assert(currentNode != null);
+        m_minWidth = minWidth;
+        m_minHeight = minHeight;
         boolean gameTreeChanged = (gameTree != m_gameTree);
         if (gameTreeChanged)
             m_expanded.clear();
@@ -328,8 +324,8 @@ public class GameTreePanel
         m_currentNode = currentNode;
         removeAll();
         m_map.clear();
-        m_maxX = 0;
-        m_maxY = 0;
+        m_maxX = minWidth;
+        m_maxY = minHeight;
         try
         {
             Node root = m_gameTree.getRoot();
@@ -349,7 +345,7 @@ public class GameTreePanel
             SimpleDialogs.showError(m_owner,
                                     "Could not show game tree\n" + 
                                     "Out of memory");
-            update(gameTree, currentNode);
+            update(gameTree, currentNode, minWidth, minHeight);
         }
         setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + m_margin,
                                        m_maxY + m_nodeFullSize + m_margin));
@@ -359,12 +355,12 @@ public class GameTreePanel
             m_scrollPane.requestFocusInWindow();
     }
 
-    public void update(Node currentNode)
+    public void update(Node currentNode, int minWidth, int minHeight)
     {
         assert(currentNode != null);
         if (ensureVisible(currentNode))
         {
-            update(m_gameTree, currentNode);
+            update(m_gameTree, currentNode, minWidth, minHeight);
             return;
         }
         GameTreeNode gameNode = getGameTreeNode(m_currentNode);
@@ -402,6 +398,10 @@ public class GameTreePanel
     private int m_currentNodeY;
 
     private int m_labelMode;
+
+    private int m_minHeight;
+
+    private int m_minWidth;
 
     private int m_sizeMode;
 
@@ -577,7 +577,7 @@ public class GameTreePanel
     {
         m_expanded.clear();
         ensureVisible(node);
-        update(m_gameTree, m_currentNode);
+        update(m_gameTree, m_currentNode, getWidth(), getHeight());
     }
 
     private void hideSubtree(Node root)
@@ -605,7 +605,7 @@ public class GameTreePanel
         }
         if (changed)
         {
-            update(m_gameTree, m_currentNode);
+            update(m_gameTree, m_currentNode, m_minWidth, m_minHeight);
             scrollTo(root);
         }
     }
@@ -741,13 +741,13 @@ public class GameTreePanel
         }
         if (changed)
         {
-            update(m_gameTree, m_currentNode);
+            update(m_gameTree, m_currentNode, m_minWidth, m_minHeight);
             // Game node could have disappeared, because after out of memory
             // error all nodes are hidden but main variation
             if (getGameTreeNode(root) == null)
             {
                 ensureVisible(root);
-                update(m_gameTree, m_currentNode);
+                update(m_gameTree, m_currentNode, m_minWidth, m_minHeight);
             }
             scrollTo(root);
         }
@@ -757,7 +757,7 @@ public class GameTreePanel
     {
         if (node.getNumberChildren() > 1 && m_expanded.add(node))
         {
-            update(m_gameTree, m_currentNode);
+            update(m_gameTree, m_currentNode, m_minWidth, m_minHeight);
             scrollTo(node);
         }
     }

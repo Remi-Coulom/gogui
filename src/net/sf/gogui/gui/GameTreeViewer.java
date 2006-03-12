@@ -7,6 +7,7 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -158,13 +159,15 @@ public class GameTreeViewer
 
     public void update(GameTree gameTree, Node currentNode)
     {
-        m_panel.update(gameTree, currentNode);
+        Dimension size = m_scrollPane.getViewport().getSize();
+        m_panel.update(gameTree, currentNode, size.width, size.height);
         repaint();
     }
 
     public void update(Node currentNode)
     {
-        m_panel.update(currentNode);
+        Dimension size = m_scrollPane.getViewport().getSize();
+        m_panel.update(currentNode, size.width, size.height);
     }
 
     /** Serial version to suppress compiler warning.
@@ -177,7 +180,6 @@ public class GameTreeViewer
     private final JScrollPane m_scrollPane;
 
     private final Listener m_listener;
-
 }
 
 //----------------------------------------------------------------------------
