@@ -38,6 +38,39 @@ menu.
 </note>
 </para>
 
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+<section>
+<title>Special Keys</title>
+
+The cursor keys, <keycap>Home</keycap>, and <keycap>End</keycap>
+together with the <keycap>Ctrl</keycap> and <keycap>Shift</keycap> keys
+have the same meaning as the global accelerators in the <guimenu>Go</guimenu>
+menu of the main window.
+The arrow keys can be used to scroll the view.
+In addition the following keys are defined:
+
+<variablelist>
+<varlistentry>
+<term><keycap>Home</keycap></term>
+<listitem>
+<simpara>
+Scroll to current node.
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><keycombo><keycap>Ctrl</keycap><keycap>Enter</keycap></keycombo></term>
+<listitem>
+<simpara>
+Open popup menu on current node.
+</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+<!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
+</para>
+
+</section>
     
 </chapter>
