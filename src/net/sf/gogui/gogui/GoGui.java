@@ -968,7 +968,10 @@ public class GoGui
 
         public void run()
         {
-            showError("Invalid response:\n" + m_line);
+            if (m_line.trim().equals(""))
+                showWarning("Invalid empty response line");
+            else
+                showWarning("Invalid response:\n" + m_line);
         }
         
         private final String m_line;
