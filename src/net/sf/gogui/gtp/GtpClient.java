@@ -674,16 +674,23 @@ public final class GtpClient
                     putMessage(Message.RESPONSE, null);
                     return;
                 }
-                if (isResponseStart(line))
-                {
-                    if (m_buffer.length() > 0 )
-                        putMessage(Message.INVALID);
-                }
                 appendBuffer(line);
-                if (line.equals(""))
+                if (! isResponseStart(line))
                 {
-                    Thread.yield(); // Give ErrorThread a chance to read first
-                    putMessage(Message.RESPONSE);
+                    putMessage(Message.INVALID);
+                    continue;
+                }
+                while (true)
+                {
+                    line = readLine();
+                    appendBuffer(line);
+                    if (line.equals(""))
+                    {
+                        // Give ErrorThread a chance to read first
+                        Thread.yield();
+                        putMessage(Message.RESPONSE);
+                        break;
+                    }
                 }
                 // Avoid programs flooding stderr or stdout after trying
                 // to exit (see unlimited MessageQueue capacity bug)
