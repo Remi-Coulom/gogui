@@ -37,6 +37,7 @@ public class StatusBar
         }
         m_textField = new JTextField();
         m_textField.setEditable(false);
+        m_textField.setFocusable(false);
         panel.add(m_textField);
         clear();
     }
