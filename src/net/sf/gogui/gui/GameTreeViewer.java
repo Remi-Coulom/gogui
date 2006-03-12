@@ -63,6 +63,7 @@ public class GameTreeViewer
             new JScrollPane(m_panel,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        GuiUtils.removeKeyBinding(m_scrollPane, "control END");
         KeyAdapter keyAdapter = new KeyAdapter()
             {
                 public void keyReleased(KeyEvent e) 

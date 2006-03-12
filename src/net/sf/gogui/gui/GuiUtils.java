@@ -17,12 +17,14 @@ import java.net.URL;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -151,6 +153,15 @@ public class GuiUtils
         int mask = Frame.MAXIMIZED_BOTH | Frame.MAXIMIZED_VERT
             | Frame.MAXIMIZED_HORIZ | Frame.ICONIFIED;
         return ((state & mask) == 0);
+    }
+
+    public static void removeKeyBinding(JComponent component, String key)
+    {
+        int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
+        InputMap inputMap = component.getInputMap(condition);
+        // According to the docs, null should remove the action, but it does
+        // not seem to work with Sun Java 1.4.2, new Object() works
+        inputMap.put(KeyStroke.getKeyStroke(key), new Object());
     }
 
     /** Run in separate thread protected by a modal progress dialog.

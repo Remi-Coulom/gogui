@@ -32,14 +32,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.GameInformation;
@@ -170,11 +168,7 @@ public class GoGui
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_guiBoard, m_infoPanel);
-        int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT;
-        InputMap splitPaneInputMap = m_splitPane.getInputMap(condition);
-        // According to the docs, null should remove the action, but it does
-        // not seem to work with Sun Java 1.4.2, new Object() works
-        splitPaneInputMap.put(KeyStroke.getKeyStroke("F8"), new Object());
+        GuiUtils.removeKeyBinding(m_splitPane, "F8");
         m_splitPane.setResizeWeight(1);
         m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
         WindowAdapter windowAdapter = new WindowAdapter()
