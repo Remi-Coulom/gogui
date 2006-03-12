@@ -469,7 +469,7 @@ to White.
 <term><guimenuitem>Beginning</guimenuitem></term>
 <listitem>
 <para>
-Retract all moves.
+Go to beginning of game.
 </para>
 </listitem>
 </varlistentry>
@@ -478,7 +478,7 @@ Retract all moves.
 <term><guimenuitem>Backward 10</guimenuitem></term>
 <listitem>
 <para>
-Retract 10 moves.
+Go backward 10 moves.
 </para>
 </listitem>
 </varlistentry>
@@ -487,7 +487,7 @@ Retract 10 moves.
 <term><guimenuitem>Backward</guimenuitem></term>
 <listitem>
 <para>
-Retract one move.
+Go backward one move.
 </para>
 </listitem>
 </varlistentry>
@@ -496,7 +496,7 @@ Retract one move.
 <term><guimenuitem>Forward</guimenuitem></term>
 <listitem>
 <para>
-Replay one move.
+Go forward one move.
 </para>
 </listitem>
 </varlistentry>
@@ -505,7 +505,7 @@ Replay one move.
 <term><guimenuitem>Forward 10</guimenuitem></term>
 <listitem>
 <para>
-Replay 10 moves.
+Go forward 10 moves.
 </para>
 </listitem>
 </varlistentry>
@@ -514,7 +514,7 @@ Replay 10 moves.
 <term><guimenuitem>End</guimenuitem></term>
 <listitem>
 <para>
-Replay all moves.
+Go to end of the current variation.
 </para>
 </listitem>
 </varlistentry>
@@ -523,7 +523,7 @@ Replay all moves.
 <term><guimenuitem>Go to Move</guimenuitem></term>
 <listitem>
 <para>
-Go to a certain move number.
+Go to a certain move number in the current variation.
 </para>
 </listitem>
 </varlistentry>
