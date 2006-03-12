@@ -14,9 +14,21 @@ Create thumbnails for SGF files.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>sgfthumbnail</command>
-<arg choice="plain" rep="repeat">
-<replaceable>file.sgf</replaceable>
+<arg><option>-verbose</option></arg>
+<arg choice="plain">
+<replaceable>input.sgf</replaceable>
 </arg>
+<arg><replaceable>output.png</replaceable></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>sgfthumbnail</command>
+<arg choice="plain"><option>-help</option></arg>
+</cmdsynopsis>
+
+<cmdsynopsis>
+<command>sgfthumbnail</command>
+<arg choice="plain"><option>-version</option></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -30,10 +42,45 @@ freedesktop.org</ulink>.
 This allows previewing the SGF files in filemanagers that support this
 standard, like <ulink url="http://www.gnome.org/projects/nautilus/">
 Nautilus</ulink>.
-The thumbnails will only be created, if the directory
-<userinput>.thumbnails/normal</userinput> already exists in the user home
-directory.
+If no output filename is given, the thumbnails will be created in the
+directory <userinput>.thumbnails/normal</userinput> in the user home
+directory, but only if it already exists.
 </para>
+</refsection>
+
+<refsection>
+<title>Options</title>
+<variablelist>
+
+<varlistentry>
+<term><option>-help</option></term>
+<listitem>
+<para>
+Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-verbose</option></term>
+<listitem>
+<para>
+Print logging messages to standard error.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-version</option></term>
+<listitem>
+<para>
+Print version and exit.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
 <para>
 <!-- Empty paragraph to enforce some space in JEditorPane (Java 1.5.0) -->
 </para>

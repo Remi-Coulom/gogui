@@ -396,8 +396,8 @@ class SgfPreview
     {
         if (m_file == null)
             return;
-        m_thumbnail.create(m_file);
-        File thumbnail = m_thumbnail.getLastNormalThumbnail();
+        m_thumbnail.create(m_file, null);
+        File thumbnail = m_thumbnail.getLastThumbnail();
         if (thumbnail != null)
         {
             ImageIcon icon = new ImageIcon(thumbnail.toString());

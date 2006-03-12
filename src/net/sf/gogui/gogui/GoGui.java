@@ -2468,7 +2468,7 @@ public class GoGui
             return;
         String path = file.getAbsolutePath();
         if (! path.startsWith("/tmp") && ! path.startsWith("/var/tmp"))
-            m_thumbnail.create(file);
+            m_thumbnail.create(file, null);
     }
 
     private void detachProgram()

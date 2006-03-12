@@ -65,33 +65,36 @@ public final class Thumbnail
     /** Create thumbnail.
         Creates a small thumbnail; only if .thumbnails/normal directory
         already exists in home directory.
+        @param file input The SGF file
+        @param output The output thumbnail. Null for standard filename
+        in ~/.thumbnails/normal
     */
-    public boolean create(File file)
+    public boolean create(File input, File output)
     {
-        m_lastNormalThumbnail = null;
+        m_lastThumbnail = null;
         try
         {
             if (! checkThumbnailSupport())
             {
                 // We cannot create it with the right permissions from Java
-                log("Thumbnail directory does not exist: " + file);
+                log("Thumbnail directory does not exist: " + input);
                 return false;
             }
-            log("File: " + file);
-            long lastModified = file.lastModified() / 1000L;
+            log("File: " + input);
+            long lastModified = input.lastModified() / 1000L;
             if (lastModified == 0L)
             {
-                log("Could not get last modification time: " + file);
+                log("Could not get last modification time: " + input);
                 return false;
             }
-            URI uri = FileUtils.getURI(file);
+            URI uri = FileUtils.getURI(input);
             log("URI: " + uri);
             String md5 = getMD5(uri.toString());
             if (m_verbose)
                 log("MD5: " + md5);
             ArrayList moves = new ArrayList();
             m_description = "";
-            Board board = readFile(file, moves);
+            Board board = readFile(input, moves);
             for (int i = 0; i < moves.size(); ++i)
                 board.play((Move)moves.get(i));
             int size = board.getSize();
@@ -103,26 +106,26 @@ public final class Thumbnail
                     GoColor color = board.getColor(GoPoint.get(x, y));
                     field[x][y].setColor(color);
                 }
+            // Create large image and scale down, looks better than creating
+            // small image
             BufferedImage image = getImage(field, 256, 256);
-
-            /* Don't write the large image yet, takes too much space
-                writeImage(image, new File(largeDir, md5 + ".png"), uri,
-                           lastModified);
-            */
 
             BufferedImage normalImage = createImage(128, 128);
             Graphics2D graphics = normalImage.createGraphics();
             Image scaledInstance
                 = image.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
             graphics.drawImage(scaledInstance, 0, 0, null);
-            writeImage(normalImage, new File(getNormalDir(), md5 + ".png"),
-                       uri, lastModified);
+
+            if (output == null)
+                output = new File(getNormalDir(), md5 + ".png");
+
+            writeImage(normalImage, output, uri, lastModified);
 
             return true;
         }
         catch (FileNotFoundException e)
         {
-            log("File not found: " + file);
+            log("File not found: " + input);
             return false;
         }
         catch (IOException e)
@@ -137,15 +140,9 @@ public final class Thumbnail
         }
         catch (SgfReader.SgfError e)
         {
-            log("SGF error: " + file);
+            log("SGF error: " + input);
             return false;
         }
-    }
-
-    public static File getNormalDir()
-    {
-        String home = System.getProperty("user.home", "");
-        return new File(new File(home, ".thumbnails"), "normal");
     }
 
     public String getLastDescription()
@@ -153,23 +150,16 @@ public final class Thumbnail
         return m_description;
     }
 
-    public File getLastNormalThumbnail()
+    public File getLastThumbnail()
     {
-        return m_lastNormalThumbnail;
-    }
-
-    public static void main(String[] arg)
-    {
-        Thumbnail thumbnail = new Thumbnail(true);
-        for (int i = 0; i < arg.length; ++i)
-            thumbnail.create(new File(arg[i]));
+        return m_lastThumbnail;
     }
 
     private final boolean m_verbose;
 
     private String m_description;
 
-    private File m_lastNormalThumbnail;
+    private File m_lastThumbnail;
 
     private final GuiBoardDrawer m_drawer;
 
@@ -253,6 +243,12 @@ public final class Thumbnail
         System.err.println(line);
     }
 
+    private static File getNormalDir()
+    {
+        String home = System.getProperty("user.home", "");
+        return new File(new File(home, ".thumbnails"), "normal");
+    }
+
     private void writeImage(BufferedImage image, File file, URI uri,
                             long lastModified)
         throws IOException
@@ -281,7 +277,7 @@ public final class Thumbnail
         ImageOutputStream ios = ImageIO.createImageOutputStream(file);
         writer.setOutput(ios);
         writer.write(null, new IIOImage(image, null, meta), null);
-        m_lastNormalThumbnail = file;
+        m_lastThumbnail = file;
     }
 }
 

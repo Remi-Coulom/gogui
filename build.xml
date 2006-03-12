@@ -757,7 +757,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <mkdir dir="lib"/>
 <jar destfile="lib/sgfthumbnail.jar">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.thumbnail.Thumbnail"/>
+<attribute name="Main-Class" value="net.sf.gogui.thumbnail.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
