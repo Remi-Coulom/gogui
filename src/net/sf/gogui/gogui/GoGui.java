@@ -547,6 +547,7 @@ public class GoGui
             m_menuBar.setShowAnalyze(true);
             cbAnalyze();
         }
+        requestFocusLater();
     }
 
     public void cbAutoNumber(boolean enable)
@@ -2861,14 +2862,7 @@ public class GoGui
         }
         setTitleFromProgram();
         toTop();
-        // Calling requestFocus() directly does not give the focus to this
-        // frame, if dialogs are open
-        SwingUtilities.invokeLater(new Runnable() {
-                public void run()
-                {
-                    requestFocus();
-                }
-            });
+        requestFocusLater();
         checkComputerMove();
     }
 
@@ -3094,6 +3088,18 @@ public class GoGui
                 }
             };
         Platform.registerSpecialMacHandler(handler);
+    }
+
+    private void requestFocusLater()
+    {
+        // Calling requestFocus() directly does not give the focus to this
+        // frame, if dialogs are open
+        SwingUtilities.invokeLater(new Runnable() {
+                public void run()
+                {
+                    requestFocus();
+                }
+            });
     }
 
     private void resetBoard()
