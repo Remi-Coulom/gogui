@@ -2,12 +2,15 @@
 
 # Default prefix should be /usr/local, but some desktop
 # environments have problems finding resources there
+
 PREFIX=/usr
 JAVA_HOME=
 
 function usage() {
   printf "Usage: %s [-p prefix][-j javahome]\n" $0
 }
+
+# Parse options
 
 while getopts hj:p: OPTION; do
   case $OPTION in
@@ -33,8 +36,12 @@ if [ ! -x "$JAVA_HOME/bin/java" ]; then
   exit -1
 fi
 
+# Install files to $PREFIX/share/gogui/lib
+
 install -d $PREFIX/share/gogui/lib
 install lib/*.jar $PREFIX/share/gogui/lib
+
+# Install files to $PREFIX/bin
 
 install -d $PREFIX/bin
 for FILE in bin/*; do
@@ -47,11 +54,17 @@ for FILE in bin/*; do
   fi
 done
 
+# Install files to $PREFIX/share/doc/gogui
+
 install -d $PREFIX/share/doc/gogui
 install doc/manual/html/*.{html,png} $PREFIX/share/doc/gogui
 
+# Install files to $PREFIX/share/man
+
 install -d $PREFIX/share/man/man1
 install doc/manual/man/*.1 $PREFIX/share/man/man1
+
+# Install icons
 
 install -d $PREFIX/share/icons/hicolor/48x48/apps
 install src/net/sf/gogui/images/gogui.png \
@@ -61,23 +74,33 @@ install src/net/sf/gogui/images/gogui.png \
 install -d $PREFIX/share/pixmaps
 install src/net/sf/gogui/images/gogui.png $PREFIX/share/pixmaps
 
+# Install desktop entry
+
 install -d $PREFIX/share/applications
 install config/gogui.desktop $PREFIX/share/applications
 # Add DocPath entry used by KDE 3.4
 echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
   >> $PREFIX/share/applications/gogui.desktop
 
+# Install shared mime info
+
 install -d $PREFIX/share/mime/packages
 install config/gogui.xml $PREFIX/share/mime/packages
+
+# Install mime icon
 
 install -d $PREFIX/share/icons/hicolor/48x48/mimetypes
 install config/gogui-application-x-go-sgf.png \
   $PREFIX/share/icons/hicolor/48x48/mimetypes
 
+# Install KDE mime entry
 # Could create a conflict with other packages.
 # Remove when KDE supports the standard shared MIME database
+
 install -d $PREFIX/share/mimelnk/application
 install config/x-go-sgf.desktop $PREFIX/share/mimelnk/application
+
+# Install scrollkeeper entry
 
 install -d $PREFIX/share/omf/gogui
 cat config/gogui.omf \
@@ -87,6 +110,7 @@ cat config/gogui.omf \
 # Update shared mime/desktop databases and scrollkeeper.
 # Fail quietly on error, because they might not be installed
 # and are optional.
+
 update-mime-database $PREFIX/share/mime >/dev/null 2>&1
 update-desktop-database $PREFIX/share/applications >/dev/null 2>&1
 scrollkeeper-update >/dev/null 2>&1
