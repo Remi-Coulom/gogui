@@ -313,7 +313,8 @@ public class GameTreePanel
         GameTreeNode gameNode = getGameTreeNode(m_currentNode);        
         if (gameNode == null)
             return;
-        showPopup(gameNode.getX(), gameNode.getY(), gameNode);
+        showPopup(gameNode.getWidth() / 2, gameNode.getHeight() / 2,
+                  gameNode);
     }
 
     public void update(GameTree gameTree, Node currentNode)
