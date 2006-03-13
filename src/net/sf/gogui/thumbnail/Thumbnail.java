@@ -74,19 +74,7 @@ public final class Thumbnail
         m_lastThumbnail = null;
         try
         {
-            if (! checkThumbnailSupport())
-            {
-                // We cannot create it with the right permissions from Java
-                log("Thumbnail directory does not exist: " + input);
-                return false;
-            }
             log("File: " + input);
-            long lastModified = input.lastModified() / 1000L;
-            if (lastModified == 0L)
-            {
-                log("Could not get last modification time: " + input);
-                return false;
-            }
             URI uri = FileUtils.getURI(input);
             log("URI: " + uri);
             String md5 = getMD5(uri.toString());
@@ -119,30 +107,34 @@ public final class Thumbnail
             if (output == null)
                 output = new File(getNormalDir(), md5 + ".png");
 
+            long lastModified = input.lastModified() / 1000L;
+            if (lastModified == 0L)
+            {
+                System.err.println("Could not get last modification time: "
+                                   + input);
+                return false;
+            }
             writeImage(normalImage, output, uri, lastModified);
 
             return true;
         }
         catch (FileNotFoundException e)
         {
-            log("File not found: " + input);
-            return false;
+            System.err.println("File not found: " + input);
         }
         catch (IOException e)
         {
-            log(e.getMessage());
-            return false;
+            System.err.println(e.getMessage());
         }
         catch (NoSuchAlgorithmException e)
         {
-            log("No MD5 message digest found");
-            return false;
+            System.err.println("No MD5 message digest found");
         }
         catch (SgfReader.SgfError e)
         {
-            log("SGF error: " + input);
-            return false;
+            System.err.println("SGF error: " + input);
         }
+        return false;
     }
 
     public String getLastDescription()
