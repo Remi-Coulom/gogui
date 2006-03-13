@@ -190,7 +190,7 @@ public class Platform
         {
             String[] cmdArray = { "dcop" };
             String result = ProcessUtils.runCommand(cmdArray);
-            return (result.indexOf("kicker") > 0);
+            return (result.indexOf("kicker") >= 0);
         }
         catch (IOException e)
         {
