@@ -129,7 +129,7 @@ public class GuiUtils
             {
             }
         }
-        else if (! lookAndFeel.equals(""))
+        else if (lookAndFeel != null && ! lookAndFeel.equals(""))
         {
             try
             {

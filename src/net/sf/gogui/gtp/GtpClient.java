@@ -684,6 +684,11 @@ public final class GtpClient
                 {
                     line = readLine();
                     appendBuffer(line);
+                    if (line == null)
+                    {
+                        putMessage(Message.RESPONSE, null);
+                        return;
+                    }
                     if (line.equals(""))
                     {
                         // Give ErrorThread a chance to read first

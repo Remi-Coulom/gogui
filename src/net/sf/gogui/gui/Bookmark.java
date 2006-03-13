@@ -49,8 +49,8 @@ public final class Bookmark
                     name = name + move;
                 name = name + ")";
             }
+            file = file.getAbsoluteFile();
         }
-        file = file.getAbsoluteFile();
         init(name, file, move, variation);
     }
 
