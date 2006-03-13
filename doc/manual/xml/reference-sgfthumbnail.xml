@@ -43,9 +43,11 @@ freedesktop.org</ulink>.
 This allows previewing the SGF files in filemanagers that support this
 standard, like <ulink url="http://www.gnome.org/projects/nautilus/">
 Nautilus</ulink>.
+The thumbnail will show the final position of the main variation or the first
+position that contains both black and white setup stones.
 If no output filename is given, the thumbnails will be created in the
 directory <userinput>.thumbnails/normal</userinput> in the user home
-directory, but only if it already exists.
+directory, but if it already exists.
 </para>
 </refsection>
 

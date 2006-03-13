@@ -217,6 +217,8 @@ public final class Thumbnail
         while (node != null)
         {
             moves.addAll(NodeUtils.getAllAsMoves(node));
+            if (node.getNumberAddBlack() > 0 && node.getNumberAddWhite() > 0)
+                break;
             node = node.getChild();
         }
         //if (m_verbose)
