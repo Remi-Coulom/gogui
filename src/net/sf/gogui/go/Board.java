@@ -232,6 +232,11 @@ public final class Board
         play(Move.get(point, color));
     }
 
+    /** Play a move.
+        Never fails, even if ko rule is violated, suicide or play on occupied
+        points. For example, when loading an SGF file with illegal moves,
+        we still want to be able to load and execute the moves.
+    */
     public void play(Move m)
     {
         GoPoint p = m.getPoint();
