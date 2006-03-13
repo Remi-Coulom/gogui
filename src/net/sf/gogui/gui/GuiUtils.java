@@ -116,6 +116,7 @@ public class GuiUtils
     public static void initLookAndFeel(String lookAndFeel)
     {
         UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
+        UIManager.put("ScrollBar.maxBumpsWidth", new Integer(22));
         if (lookAndFeel == null && ! Platform.isMac())
         {
             try
