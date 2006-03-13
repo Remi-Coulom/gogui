@@ -194,12 +194,6 @@ public class GoGuiToolBar
         return new ImageIcon(url, command);
     }
 
-    private static void setSameDisabledIcon(OptionalButton button,
-                                            boolean sameDisabledIcon)
-    {
-        button.setSameDisabledIcon(sameDisabledIcon);
-    }
-
     private static void setEnabled(JButton button, boolean enabled)
     {
         button.setEnabled(enabled);
@@ -230,6 +224,11 @@ class OptionalButton
             setDisabledIcon(m_disabledIcon);
         setEnabled(sameDisabledIcon);
     }
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for use with serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 
     private Icon m_icon;
 

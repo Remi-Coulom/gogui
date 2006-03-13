@@ -5,15 +5,9 @@
 
 package net.sf.gogui.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.KeyListener;
-import java.util.Set;
-import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
-import javax.swing.event.CaretListener;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Style;

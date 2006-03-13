@@ -15,7 +15,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -24,9 +23,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.Style;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
 import net.sf.gogui.game.Node;
 
 //----------------------------------------------------------------------------
@@ -102,7 +98,6 @@ public class Comment
             {
                 int start = matcher.start();
                 int end = matcher.end();
-                Style style = m_textPane.getStyle("marked");
                 if (firstMatch)
                 {
                     m_textPane.setStyle(0, doc.getLength(), null);

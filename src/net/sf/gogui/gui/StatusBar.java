@@ -8,11 +8,9 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
