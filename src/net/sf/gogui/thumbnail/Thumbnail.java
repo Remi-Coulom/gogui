@@ -62,15 +62,24 @@ public final class Thumbnail
         return getNormalDir().exists();
     }
 
+    public boolean create(File input)
+    {
+        return create(input, null, 128, true);
+    }
+
     /** Create thumbnail.
-        Creates a small thumbnail; only if .thumbnails/normal directory
-        already exists in home directory.
         @param file input The SGF file
-        @param output The output thumbnail. Null for standard filename
+        @param output The output thumbnail. Null for standard filename in
+        .thumbnails/normal
+        @param thumbnailSize The image size of the thumbnail.
+        @param scale If true thumbnailSize will be scaled down for boards
+        smaller than 19.
         in ~/.thumbnails/normal
     */
-    public boolean create(File input, File output)
+    public boolean create(File input, File output, int thumbnailSize,
+                          boolean scale)
     {
+        assert(thumbnailSize > 0);
         m_lastThumbnail = null;
         try
         {
@@ -94,15 +103,26 @@ public final class Thumbnail
                     GoColor color = board.getColor(GoPoint.get(x, y));
                     field[x][y].setColor(color);
                 }
-            // Create large image and scale down, looks better than creating
-            // small image
-            BufferedImage image = getImage(field, 256, 256);
-
-            BufferedImage normalImage = createImage(128, 128);
-            Graphics2D graphics = normalImage.createGraphics();
-            Image scaledInstance
-                = image.getScaledInstance(128, 128, Image.SCALE_SMOOTH);
-            graphics.drawImage(scaledInstance, 0, 0, null);
+            int imageSize = thumbnailSize;
+            if (scale)
+                imageSize = Math.min(thumbnailSize * size / 19,
+                                     thumbnailSize);
+            BufferedImage image;
+            if (imageSize < 256)
+            {
+                // Create large image and scale down, looks better than
+                // creating small image            
+                image = getImage(field, 2 * imageSize, 2 * imageSize);
+                BufferedImage newImage = createImage(imageSize, imageSize);
+                Graphics2D graphics = newImage.createGraphics();
+                Image scaledInstance
+                    = image.getScaledInstance(imageSize, imageSize,
+                                              Image.SCALE_SMOOTH);
+                graphics.drawImage(scaledInstance, 0, 0, null);
+                image = newImage;
+            }
+            else
+                image = getImage(field, imageSize, imageSize);
 
             if (output == null)
                 output = new File(getNormalDir(), md5 + ".png");
@@ -114,7 +134,7 @@ public final class Thumbnail
                                    + input);
                 return false;
             }
-            writeImage(normalImage, output, uri, lastModified);
+            writeImage(image, output, uri, lastModified);
 
             return true;
         }

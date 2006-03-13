@@ -361,9 +361,12 @@ class SgfPreview
             graphics.fillRect(0, 0, getWidth(), getHeight());
             if (m_image != null)
             {
-                int x = (getWidth() - 128) / 2;
-                int y = (getHeight() - 128) / 2;
-                graphics.drawImage(m_image, x, y, 128, 128, null);
+                int imageWidth = m_image.getWidth(null);
+                int imageHeight = m_image.getHeight(null);
+                int x = (getWidth() - imageWidth) / 2;
+                int y = (getHeight() - imageHeight) / 2;
+                graphics.drawImage(m_image, x, y, imageWidth, imageHeight,
+                                   null);
             }
         }
 
@@ -396,7 +399,7 @@ class SgfPreview
     {
         if (m_file == null)
             return;
-        m_thumbnail.create(m_file, null);
+        m_thumbnail.create(m_file);
         File thumbnail = m_thumbnail.getLastThumbnail();
         if (thumbnail != null)
         {

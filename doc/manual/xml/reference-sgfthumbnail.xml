@@ -15,6 +15,7 @@ Create thumbnails for SGF files.
 <cmdsynopsis>
 <command>sgfthumbnail</command>
 <arg><option>-verbose</option></arg>
+<arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg choice="plain">
 <replaceable>input.sgf</replaceable>
 </arg>
@@ -57,6 +58,17 @@ directory, but only if it already exists.
 <listitem>
 <para>
 Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-size</option> <replaceable>n</replaceable></term>
+<listitem>
+<para>
+This option sets the maximum Thumbnail size.
+Board sizes smaller than 19 will use a proportional fraction of this size.
+Default is 128.
 </para>
 </listitem>
 </varlistentry>

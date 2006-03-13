@@ -18,7 +18,7 @@
 <applyto>/desktop/gnome/thumbnailers/application@x-go-sgf/command</applyto>
 <owner>gogui</owner>
 <type>string</type>
-<default>/usr/bin/sgfthumbnail %i %o</default>
+<default>/usr/bin/sgfthumbnail -size %s %i %o</default>
 <locale name="C">
 <short>Thumbnail command for Go games.</short>
 <long>Valid command plus arguments for SGF thumbnailer.</long>

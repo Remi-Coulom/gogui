@@ -24,6 +24,7 @@ public final class Main
         {
             String options[] = {
                 "help",
+                "size:",
                 "verbose",
                 "version",
             };
@@ -49,8 +50,9 @@ public final class Main
             File output = null;
             if (arguments.size() == 2)
                 output = new File((String)arguments.get(1));
+            int size = opt.getInteger("size", 128, 1);
             Thumbnail thumbnail = new Thumbnail(verbose);
-            if (! thumbnail.create(input, output))
+            if (! thumbnail.create(input, output, size, true))
                 System.exit(-1);
         }
         catch (Throwable t)
