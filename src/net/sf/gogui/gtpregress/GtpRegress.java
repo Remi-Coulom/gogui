@@ -606,7 +606,8 @@ public class GtpRegress
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append(line.substring(0, matcher.start()));
                 stringBuffer.append("<a href=\"");
-                stringBuffer.append(m_relativePath + sgf);
+                stringBuffer.append(m_relativePath);
+                stringBuffer.append(sgf);
                 stringBuffer.append("\">");
                 stringBuffer.append(sgf);
                 stringBuffer.append("</a>");

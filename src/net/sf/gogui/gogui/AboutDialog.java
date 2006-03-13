@@ -191,8 +191,13 @@ public final class AboutDialog
         long max = runtime.maxMemory();
         String maxString =
             (max == Long.MAX_VALUE ? "unlimited" : Long.toString(max));
-        buffer.append("Memory: " + maxString + "<br>(" + runtime.totalMemory()
-                      + " total, " + runtime.freeMemory() + " free)");
+        buffer.append("Memory: ");
+        buffer.append(maxString);
+        buffer.append("<br>(");
+        buffer.append(runtime.totalMemory());
+        buffer.append(" total, ");
+        buffer.append(runtime.freeMemory());
+        buffer.append(" free)");
         return createPanel(buffer.toString());
     }
 

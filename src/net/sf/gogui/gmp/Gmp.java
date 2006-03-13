@@ -572,8 +572,8 @@ class MainThread
             Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
             if (! stackCmd.equals(cmd))
             {
-                response.append("Received " +
-                                stackCmd.toString(m_size, m_lastQuery));
+                response.append("Received ");
+                response.append(stackCmd.toString(m_size, m_lastQuery));
                 return false;
             }
             m_cmdQueue.remove(0);
@@ -1055,7 +1055,8 @@ public final class Gmp
     {
         if (size != m_size)
         {
-            response.append("Board size must be " + m_size);
+            response.append("Board size must be ");
+            response.append(m_size);
             return false;
         }
         return m_mainThread.send(new Cmd(Cmd.NEWGAME, 0), response);
@@ -1138,7 +1139,8 @@ public final class Gmp
     {
         if (size != m_size)
         {
-            response.append("Board size must be " + m_size);
+            response.append("Board size must be ");
+            response.append(m_size);
             return false;
         }
         MainThread.WaitResult result;
