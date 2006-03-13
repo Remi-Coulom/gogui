@@ -23,10 +23,6 @@
 
 <rule ref="rulesets/imports.xml"/>
 
-<rule ref="rulesets/junit.xml"/>
-
-<rule ref="rulesets/optimizations.xml"/>
-
 <rule ref="rulesets/strings.xml"/>
 
 <rule ref="rulesets/unusedcode.xml"/>
