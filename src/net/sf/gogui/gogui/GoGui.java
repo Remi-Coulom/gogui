@@ -2463,6 +2463,8 @@ public class GoGui
 
     private void createThumbnail(File file)
     {
+        if (! Thumbnail.checkThumbnailSupport())
+            return;
         // Thumbnail creation does not work on GNU classpath 0.90 yet
         if (Platform.isGnuClasspath())
             return;
