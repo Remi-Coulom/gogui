@@ -6,7 +6,7 @@
 package net.sf.gogui.thumbnail;
 
 import java.io.File;
-import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StringUtils;
@@ -65,7 +65,7 @@ public final class Main
     {
     }
 
-    private static void printUsage(OutputStream out)
+    private static void printUsage(PrintStream out)
     {
         String helpText =
             "Usage: java -jar sgfthumbnail.jar [options] input [output]\n" +
@@ -73,7 +73,7 @@ public final class Main
             "-help         Print help and exit\n" +
             "-verbose      Print logging messages to stderr\n" +
             "-version      Print version and exit\n";
-        System.out.print(out);
+        out.print(helpText);
     }
 }
 
