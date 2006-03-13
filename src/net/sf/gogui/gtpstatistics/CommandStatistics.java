@@ -138,7 +138,7 @@ public final class CommandStatistics
         StringBuffer pattern = new StringBuffer();
         pattern.append("0.");
         for (int i = 0; i < precision; ++i)
-            pattern.append("#");
+            pattern.append('#');
         pattern.append("E0");
         format.applyPattern(pattern.toString());
         return format;

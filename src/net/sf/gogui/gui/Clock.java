@@ -95,7 +95,7 @@ public final class Clock
                 buffer.append(">9999");
             else
                 buffer.append(hours);
-            buffer.append(":");
+            buffer.append(':');
         }
         if (minutes >= 10)
             buffer.append(minutes);
@@ -104,7 +104,7 @@ public final class Clock
             buffer.append('0');
             buffer.append(minutes);
         }
-        buffer.append(":");
+        buffer.append(':');
         if (seconds >= 10)
             buffer.append(seconds);
         else

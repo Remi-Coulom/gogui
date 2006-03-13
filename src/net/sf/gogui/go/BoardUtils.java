@@ -26,7 +26,7 @@ public final class BoardUtils
         for (int y = size - 1; y >= 0; --y)
         {
             printYCoord(y, s);
-            s.append(" ");
+            s.append(' ');
             for (int x = 0; x < size; ++x)
             {
                 GoPoint point = GoPoint.get(x, y);
@@ -52,7 +52,7 @@ public final class BoardUtils
         if (! withGameInfo)
         {
             printToMove(board, s);
-            s.append("\n");
+            s.append('\n');
         }
         out.print(s);
     }
@@ -85,7 +85,7 @@ public final class BoardUtils
                 Move move = board.getMove(n);
                 s.append("  ");
                 s.append(n + 1);
-                s.append(" ");
+                s.append(' ');
                 s.append(move.getColor() == GoColor.BLACK ? "B " : "W ");
                 s.append(GoPoint.toString(move.getPoint()));
             }
@@ -108,9 +108,9 @@ public final class BoardUtils
             if (c == 'I')
                 ++c;
             s.append(c);
-            s.append(" ");
+            s.append(' ');
         }
-        s.append("\n");
+        s.append('\n');
     }
 
     private static void printYCoord(int y, StringBuffer s)
@@ -118,7 +118,7 @@ public final class BoardUtils
         String string = Integer.toString(y + 1);
         s.append(string);
         if (string.length() == 1)
-            s.append(" ");
+            s.append(' ');
     }
 }
 

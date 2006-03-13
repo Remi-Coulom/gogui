@@ -400,7 +400,7 @@ public class GtpDisplay
             GoPoint point = (GoPoint)stones.get(i);
             play(GoColor.BLACK, point);
             if (pointList.length() > 0)
-                pointList.append(" ");
+                pointList.append(' ');
             pointList.append(point);
         }
         cmd.setResponse(pointList.toString());

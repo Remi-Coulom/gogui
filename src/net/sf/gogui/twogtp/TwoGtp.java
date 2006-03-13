@@ -595,7 +595,7 @@ public class TwoGtp
         {
             buffer.append(" (");
             buffer.append(m_gameIndex + 1);
-            buffer.append(")");
+            buffer.append(')');
         }
         return buffer.toString();
     }
@@ -710,9 +710,9 @@ public class TwoGtp
 
     private String inverseResult(String result)
     {
-        if (result.indexOf("B") >= 0)
+        if (result.indexOf('B') >= 0)
             return result.replaceAll("B", "W");
-        else if (result.indexOf("W") >= 0)
+        else if (result.indexOf('W') >= 0)
             return result.replaceAll("W", "B");
         else
             return result;
