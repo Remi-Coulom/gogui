@@ -80,6 +80,20 @@ public class BoardTest
         assertTrue(board.isSuicide(GoPoint.get(1, 0), GoColor.WHITE));
     }
 
+    /** Test that playing on a occupied field does not fail.
+        Board.play spciefies that a play never fails.
+        Also tests that the old stone is correctly restored.
+    */
+    public void testPlayOnOccupied()
+    {
+        Board board = new Board(19);
+        GoPoint point = GoPoint.get(0, 0);
+        board.play(point, GoColor.WHITE);
+        board.play(point, GoColor.BLACK);
+        board.undo();
+        assertEquals(GoColor.WHITE, board.getColor(point));
+    }
+
     public void testUndo()
     {
         Board board = new Board(19);
