@@ -1,12 +1,15 @@
 <chapter id="gametree">
 <title>Game Tree Window</title>
 
+<section>
+<title>General</title>
+
 <para>
-The game tree window shows the variations of the current game as a graph
+The game tree window shows the variations of the current game as a tree
 of nodes.
 </para>
 <para>
-Nodes are displayed as a black or white stone.
+Nodes are displayed as black or white stones.
 A symbol containing four small stones is used for nodes
 containing setup stones and a blue diamond for other nodes.
 Nodes containing a comment have a small blue line below the node.
@@ -37,16 +40,19 @@ menu.
 </simpara>
 </note>
 </para>
+</section>
 
 <section>
 <title>Special Keys</title>
 
+<para>
 The cursor keys, <keycap>Home</keycap>, and <keycap>End</keycap>
 together with the <keycap>Ctrl</keycap> and <keycap>Shift</keycap> keys
 have the same meaning as the global accelerators in the <guimenu>Go</guimenu>
 menu of the main window.
 The arrow keys can be used to scroll the view.
 In addition the following keys are defined:
+</para>
 
 <variablelist>
 <varlistentry>
