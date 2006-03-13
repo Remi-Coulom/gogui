@@ -4,13 +4,16 @@
 # environments have problems finding resources there
 
 PREFIX=/usr
+SYSCONFDIR=/etc
 JAVA_HOME=
 
 function usage() {
   printf "Usage: %s [-p prefix][-j javahome]\n" $0
 }
 
+#-----------------------------------------------------------------------------
 # Parse options
+#-----------------------------------------------------------------------------
 
 while getopts hj:p: OPTION; do
   case $OPTION in
@@ -35,6 +38,10 @@ if [ ! -x "$JAVA_HOME/bin/java" ]; then
   echo "$JAVA_HOME/bin/java does not exist or is not executable" >&2
   exit -1
 fi
+
+#-----------------------------------------------------------------------------
+# Install files
+#-----------------------------------------------------------------------------
 
 # Install files to $PREFIX/share/gogui/lib
 
@@ -100,6 +107,13 @@ install config/gogui-application-x-go-sgf.png \
 install -d $PREFIX/share/mimelnk/application
 install config/x-go-sgf.desktop $PREFIX/share/mimelnk/application
 
+# Install Gnome thumbnailer
+
+install -d $SYSCONFDIR/gconf/schemas
+cat config/gogui.schemas \
+| sed "s;/usr/bin/sgfthumbnail;$PREFIX/bin/sgfthumbnail;" \
+> $SYSCONFDIR/gconf/schemas/gogui.schemas
+
 # Install scrollkeeper entry
 
 install -d $PREFIX/share/omf/gogui
@@ -107,11 +121,19 @@ cat config/gogui.omf \
 | sed "s;file:/usr/;file:$PREFIX/;" \
 > $PREFIX/share/omf/gogui/gogui.omf
 
+#-----------------------------------------------------------------------------
+# Post installation
+# Fail quietly on error, some programs might not be available
+#-----------------------------------------------------------------------------
+
 # Update shared mime/desktop databases and scrollkeeper.
-# Fail quietly on error, because they might not be installed
-# and are optional.
 
 update-mime-database $PREFIX/share/mime >/dev/null 2>&1
 update-desktop-database $PREFIX/share/applications >/dev/null 2>&1
 scrollkeeper-update >/dev/null 2>&1
 
+# Gnome thumbnailer
+
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+gconftool-2 --makefile-install-rule \
+  /$SYSCONFDIR/gconf/schemas/gogui.schemas >/dev/null 2>&1
