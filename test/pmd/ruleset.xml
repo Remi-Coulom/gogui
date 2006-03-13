@@ -14,17 +14,21 @@
 <rule ref="rulesets/controversial.xml/UnnecessaryParentheses"/>
 <rule ref="rulesets/controversial.xml/UnusedModifier"/>
 
-<rule ref="rulesets/imports.xml"/>
-
-<rule ref="rulesets/strings.xml"/>
-
-<rule ref="rulesets/unusedcode.xml"/>
-
 <rule ref="rulesets/design.xml">
 <exclude name="AvoidReassigningParameters"/>
 <exclude name="PositionLiteralsFirstInComparisons"/>
 <exclude name="UncommentedEmptyConstructor"/>
 <exclude name="UncommentedEmptyMethod"/>
 </rule>
+
+<rule ref="rulesets/imports.xml"/>
+
+<rule ref="rulesets/junit.xml"/>
+
+<rule ref="rulesets/optimizations.xml"/>
+
+<rule ref="rulesets/strings.xml"/>
+
+<rule ref="rulesets/unusedcode.xml"/>
 
 </ruleset>
