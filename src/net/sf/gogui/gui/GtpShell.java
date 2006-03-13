@@ -582,7 +582,7 @@ public class GtpShell
             return m_item;
         }
 
-        private String m_item;
+        private final String m_item;
     }
 
     private boolean m_timeStamp;

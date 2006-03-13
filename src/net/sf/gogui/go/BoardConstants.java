@@ -92,7 +92,7 @@ public final class BoardConstants
         return (isHandicapLine(x) && isHandicapLine(y));
     }
 
-    private int m_size;
+    private final int m_size;
 
     private int m_handicapLine1;
 

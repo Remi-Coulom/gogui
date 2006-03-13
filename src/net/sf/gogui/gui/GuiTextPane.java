@@ -28,14 +28,15 @@ public class GuiTextPane
     {
         if (fast || Platform.isGnuClasspath())
         {
-            m_textArea = new JTextArea();
-            m_textComponent = m_textArea;
+            JTextArea textArea = new JTextArea();
+            m_textComponent = textArea;
             // Crashes with GNU classpath 0.90
             if (! Platform.isGnuClasspath())
             {
-                m_textArea.setLineWrap(true);
-                m_textArea.setWrapStyleWord(true);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
             }
+            m_textPane = null;
         }
         else
         {
@@ -107,11 +108,9 @@ public class GuiTextPane
 
     private boolean m_noLineSpacing;
 
-    private JTextArea m_textArea;
+    private final JTextComponent m_textComponent;
 
-    private JTextComponent m_textComponent;
-
-    private JTextPane m_textPane;
+    private final JTextPane m_textPane;
 }
 
 //----------------------------------------------------------------------------
