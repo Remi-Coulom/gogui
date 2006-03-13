@@ -85,6 +85,7 @@ public final class GuiBoard
         clearAllCrossHair();
         clearAllMarkup();
         clearAllSelect();
+        clearAllInfluence();
         clearAllLabels();
         clearAllTerritory();
         clearLastMove();
@@ -96,6 +97,13 @@ public final class GuiBoard
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
                 setCrossHair(GoPoint.get(x, y), false);
+    }
+
+    public void clearAllInfluence()
+    {
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                clearInfluence(GoPoint.get(x, y));
     }
 
     /** Clear all markup.
@@ -138,10 +146,10 @@ public final class GuiBoard
                 setTerritory(GoPoint.get(x, y), GoColor.EMPTY);
     }
 
-    /** Clear all influence. */
+    /** Clear influence. */
     public void clearInfluence(GoPoint p)
     {
-        clearInfluence(p);
+        getField(p).clearInfluence();
     }
 
     /** Trigger the context menu callback at the listener. */
