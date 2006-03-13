@@ -18,6 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.imageio.IIOImage;
@@ -186,7 +187,7 @@ public final class Thumbnail
         IIOMetadataNode textEntry = new IIOMetadataNode("TextEntry");
         textEntry.setAttribute("value", value);
         textEntry.setAttribute("keyword", keyword);
-        textEntry.setAttribute("encoding", "ISO-8859-1");
+        textEntry.setAttribute("encoding", Locale.getDefault().toString());
         textEntry.setAttribute("language", "en");
         textEntry.setAttribute("compression", "none");
         text.appendChild(textEntry);
