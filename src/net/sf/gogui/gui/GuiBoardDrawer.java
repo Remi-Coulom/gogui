@@ -44,7 +44,6 @@ public class GuiBoardDrawer
     public void draw(Graphics graphics, GuiField[][] field, int width,
                      boolean showGrid, boolean showCursor)
     {
-        m_showGrid = showGrid;
         if (! m_fastPaint)
             GuiUtils.setAntiAlias(graphics);
         m_width = width;
@@ -52,7 +51,7 @@ public class GuiBoardDrawer
         if (m_constants == null || m_constants.getSize() != m_size)
             m_constants = new BoardConstants(m_size);
         assert(m_size <= GoPoint.MAXSIZE);
-        if (m_showGrid)
+        if (showGrid)
         {
             m_fieldSize = width / (m_size + 2);
             m_fieldOffset =
@@ -67,7 +66,7 @@ public class GuiBoardDrawer
         }
         drawBackground(graphics);
         drawGrid(graphics);
-        if (m_showGrid)
+        if (showGrid)
             drawGridLabels(graphics);
         drawShadows(graphics, field);
         drawFields(graphics, field, showCursor);
@@ -110,8 +109,6 @@ public class GuiBoardDrawer
     }
 
     private final boolean m_fastPaint;
-
-    private boolean m_showGrid;
 
     private int m_fieldSize;
 

@@ -257,8 +257,8 @@ public class GtpShell
             new JScrollPane(m_gtpShellText.get(),
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        m_fontSize = m_gtpShellText.get().getFont().getSize();
-        m_finalSize = new Dimension(m_fontSize * 40, m_fontSize * 30);
+        int fontSize = m_gtpShellText.get().getFont().getSize();
+        m_finalSize = new Dimension(fontSize * 40, fontSize * 30);
         panel.add(m_scrollPane, BorderLayout.CENTER);
         panel.add(createCommandInput(), BorderLayout.SOUTH);
         pack();
@@ -590,8 +590,6 @@ public class GtpShell
     private boolean m_disableCompletions;
 
     private boolean m_isFinalSizeSet;
-
-    private int m_fontSize;
 
     private int m_historyMax;
 
