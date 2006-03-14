@@ -1278,6 +1278,7 @@ public class GoGui
             });
         m_gtpShell.setProgramCommand(program);
         m_gtpShell.setTimeStamp(m_menuBar.getTimeStamp());
+        m_gtpShell.setCommandCompletion(m_menuBar.getCommandCompletion());
         m_ignoreInvalidResponses = false;
         GtpClient.InvalidResponseCallback invalidResponseCallback =
             new GtpClient.InvalidResponseCallback()
