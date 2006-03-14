@@ -560,10 +560,6 @@ public class GoGuiMenuBar
 
     private JCheckBoxMenuItem m_itemTimeStamp;
 
-    private JMenuChecked m_menuConfigureAnalyze;
-
-    private JMenuChecked m_menuConfigureShell;
-
     private JMenuChecked m_menuComputerColor;
 
     private final JMenuChecked m_menuBookmarks;
@@ -1077,10 +1073,8 @@ public class GoGuiMenuBar
         menu.addSeparator();
         menu.add(createMenuConfigureBoard());
         menu.add(createMenuConfigureTree());
-        m_menuConfigureShell = createMenuConfigureShell();
-        menu.add(m_menuConfigureShell);
-        m_menuConfigureAnalyze = createMenuConfigureAnalyze();
-        menu.add(m_menuConfigureAnalyze);
+        menu.add(createMenuConfigureShell());
+        menu.add(createMenuConfigureAnalyze());
         return menu;
     }
 
