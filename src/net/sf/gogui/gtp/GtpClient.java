@@ -930,7 +930,7 @@ public final class GtpClient
                 if (m_callback != null)
                     m_callback.receivedResponse(error, m_fullResponse);
                 assert(response.length() >= 3);            
-                int index = response.indexOf(" ");
+                int index = response.indexOf(' ');
                 int length = response.length();
                 if (index < 0)
                     m_response = response.substring(1, length - 2);

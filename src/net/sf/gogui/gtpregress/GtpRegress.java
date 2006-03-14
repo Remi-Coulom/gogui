@@ -274,7 +274,7 @@ public class GtpRegress
     private int getId(String line)
     {
         line = line.replaceAll("\\t", "\n");
-        int index = line.indexOf(" ");
+        int index = line.indexOf(' ');
         if (index < 0)
             return -1;
         try
@@ -394,7 +394,7 @@ public class GtpRegress
                 m_lastCommand = line;
             else
             {
-                int index = line.indexOf(" ");
+                int index = line.indexOf(' ');
                 m_lastCommand = line.substring(index + 1);
                 m_lastId = m_lastCommandId;
             }
@@ -444,7 +444,7 @@ public class GtpRegress
         }
         boolean fail = false;
         String response = "";
-        int index = m_lastFullResponse.indexOf(" ");
+        int index = m_lastFullResponse.indexOf(' ');
         if (index >= 0)
             response = m_lastFullResponse.substring(index).trim();
         if (m_lastError)
