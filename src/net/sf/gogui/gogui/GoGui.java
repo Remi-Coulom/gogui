@@ -2810,7 +2810,6 @@ public class GoGui
             showToolbar();
         }
         restoreMainWindow();
-        SplashScreen.close();
         setVisible(true);
         if (m_program != null)
         {
