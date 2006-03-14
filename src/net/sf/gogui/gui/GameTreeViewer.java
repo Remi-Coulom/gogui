@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -69,7 +70,7 @@ public class GameTreeViewer
                 {
                     int c = e.getKeyCode();        
                     int mod = e.getModifiers();
-                    if ((mod & ActionEvent.CTRL_MASK) == 0)
+                    if ((mod & m_shortcut) == 0)
                     {
                         if (c == KeyEvent.VK_HOME)
                             scrollToCurrent();
@@ -99,6 +100,9 @@ public class GameTreeViewer
                     else if (c == KeyEvent.VK_END && ! shift)
                         m_listener.cbEnd();
                 }
+
+                private final int m_shortcut
+                    = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
             };
         m_scrollPane.addKeyListener(keyAdapter);
         m_panel.setScrollPane(m_scrollPane);
