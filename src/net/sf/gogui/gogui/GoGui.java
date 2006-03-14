@@ -227,8 +227,6 @@ public class GoGui
         m_menuBar.setShowGrid(m_prefs.getBool("show-grid"));
         m_guiBoard.setShowCursor(m_prefs.getBool("show-cursor"));
         m_guiBoard.setShowGrid(m_prefs.getBool("show-grid"));
-        m_bookmarks = Bookmark.load(getGoGuiFile("bookmarks"));
-        m_menuBar.setBookmarks(m_bookmarks);
         setJMenuBar(m_menuBar.getMenuBar());
         if (program != null)
             m_program = program;
@@ -2813,6 +2811,8 @@ public class GoGui
         // the window visible, but not draw the window content yet
         getLayeredPane().setVisible(false);
         setVisible(true);
+        m_bookmarks = Bookmark.load(getGoGuiFile("bookmarks"));
+        m_menuBar.setBookmarks(m_bookmarks);
         m_toolBar.enableAll(true, m_currentNode);
         if (m_program != null)
             attachProgram(m_program);
