@@ -425,7 +425,6 @@ public final class GuiBoard
                 setCursor(point, true);
             m_cursor = point;
         }
-        m_panel.requestFocusInWindow();
     }
 
     /** Set the field background color.
