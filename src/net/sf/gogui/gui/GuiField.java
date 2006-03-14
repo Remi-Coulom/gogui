@@ -42,9 +42,8 @@ public class GuiField
     {
         if (! graphics.hitClip(x, y, size, size))
             return;
-        m_fastPaint = fastPaint;
         m_graphics = graphics.create(x, y, size, size);
-        if (! m_fastPaint && m_graphics instanceof Graphics2D)
+        if (! fastPaint && m_graphics instanceof Graphics2D)
             m_graphics2D = (Graphics2D)m_graphics;
         else
             m_graphics2D = null;
@@ -214,8 +213,6 @@ public class GuiField
     }
 
     private boolean m_crossHair;
-
-    private boolean m_fastPaint;
 
     private boolean m_cursor;
 
