@@ -724,8 +724,7 @@ public class GtpShell
     private JPanel createCommandInput()
     {
         JPanel panel = new JPanel(new BorderLayout());
-        JPanel buttonPanel =
-            new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel buttonPanel = new JPanel(new BorderLayout());
         panel.add(buttonPanel, BorderLayout.EAST);
         m_comboBox = new JComboBox();
         m_editor = m_comboBox.getEditor();
@@ -782,8 +781,8 @@ public class GtpShell
         }
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
-        buttonPanel.add(GuiUtils.createSmallFiller());
-        buttonPanel.add(m_runButton);
+        buttonPanel.add(GuiUtils.createSmallFiller(), BorderLayout.WEST);
+        buttonPanel.add(m_runButton, BorderLayout.CENTER);
         // Workaround for Java 1.4.1 on Mac OS X add some empty space
         // so that combobox does not overlap the window resize widget
         if (Platform.isMac())
@@ -791,7 +790,7 @@ public class GtpShell
             Dimension dimension = new Dimension(20, 1);
             Box.Filler filler =
                 new Box.Filler(dimension, dimension, dimension);
-            buttonPanel.add(filler);
+            buttonPanel.add(filler, BorderLayout.EAST);
         }
         return panel;
     }
