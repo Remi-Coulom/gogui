@@ -466,20 +466,20 @@ public final class Board
             m_oldKoPoint = oldKoPoint;
         }
 
-        private final GoPoint m_oldKoPoint;
+        public final GoPoint m_oldKoPoint;
 
         /** Old stone color of field.
             Needed in case move was played on a non-empty point.
         */
-        private final GoColor m_oldColor;
+        public final GoColor m_oldColor;
 
-        private final GoColor m_oldToMove;
+        public final GoColor m_oldToMove;
 
-        private final Move m_move;
+        public final Move m_move;
 
-        private final ArrayList m_killed;
+        public final ArrayList m_killed;
 
-        private final ArrayList m_suicide;
+        public final ArrayList m_suicide;
     }
 
     private boolean m_mark[][];
