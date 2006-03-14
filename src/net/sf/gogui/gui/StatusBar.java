@@ -56,7 +56,7 @@ public class StatusBar
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private JTextField m_textField;
+    private final JTextField m_textField;
 }
 
 //----------------------------------------------------------------------------
