@@ -515,7 +515,7 @@ public final class SgfReader
         for (int i = 0; i < m_values.size(); ++i)
         {
             String value = getValue(i);
-            int pos = value.indexOf(":");
+            int pos = value.indexOf(':');
             if (pos < 0)
             {
                 GoPoint point = parsePoint(value);
@@ -723,7 +723,7 @@ public final class SgfReader
                 for (int i = 0; i < m_values.size(); ++i)
                 {
                     String value = getValue(i);
-                    int pos = value.indexOf(":");
+                    int pos = value.indexOf(':');
                     if (pos > 0)
                     {
                         GoPoint point = parsePoint(value.substring(0, pos));

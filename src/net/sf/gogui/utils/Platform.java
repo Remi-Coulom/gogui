@@ -61,7 +61,7 @@ public class Platform
                 String[] cmdArray = { "/bin/sh", "-c",
                                       "grep '^model name' /proc/cpuinfo" };
                 String result = ProcessUtils.runCommand(cmdArray);
-                int start = result.indexOf(":");
+                int start = result.indexOf(':');
                 if (start >= 0)
                 {
                     info = info + " (";
