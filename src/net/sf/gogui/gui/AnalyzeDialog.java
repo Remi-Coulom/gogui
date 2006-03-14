@@ -259,7 +259,7 @@ public final class AnalyzeDialog
 
     private final Callback m_callback;
 
-    private String m_programAnalyzeCommands;
+    private final String m_programAnalyzeCommands;
 
     private void clearCommand()
     {
