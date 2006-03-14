@@ -820,10 +820,6 @@ public final class GtpClient
 
     private String[] m_supportedCommands;
 
-    private ErrorThread m_errorThread;
-
-    private InputThread m_inputThread;
-
     private MessageQueue m_queue;
 
     private TimeoutCallback m_timeoutCallback;
@@ -846,13 +842,13 @@ public final class GtpClient
         m_out = new PrintWriter(out);
         m_isProgramDead = false;        
         m_queue = new MessageQueue();
-        m_inputThread = new InputThread(in, m_queue);
+        InputThread inputThread = new InputThread(in, m_queue);
         if (err != null)
         {
-            m_errorThread = new ErrorThread(err, m_queue);
-            m_errorThread.start();
+            ErrorThread errorThread = new ErrorThread(err, m_queue);
+            errorThread.start();
         }
-        m_inputThread.start();
+        inputThread.start();
     }
 
     private synchronized void log(String msg)
