@@ -39,15 +39,13 @@ public class SquareLayout
     public Dimension minimumLayoutSize(Container parent)
     {
         assert(parent.getComponentCount() == 1);
-        Component c = parent.getComponent(0);
-        return c.getMinimumSize();
+        return parent.getComponent(0).getMinimumSize();
     }
     
     public Dimension preferredLayoutSize(Container parent)
     {
         assert(parent.getComponentCount() == 1);
-        Component c = parent.getComponent(0);
-        return c.getPreferredSize();
+        return parent.getComponent(0).getPreferredSize();
     }
     
     public void removeLayoutComponent(Component comp)
