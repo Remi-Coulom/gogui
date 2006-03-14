@@ -2798,7 +2798,6 @@ public class GoGui
             newGame(m_boardSize);
         else
             newGameFile(m_boardSize, m_move);
-        m_toolBar.enableAll(true, m_currentNode);
         if (! m_prefs.getBool("show-info-panel"))
         {
             m_menuBar.setShowInfoPanel(false);
@@ -2810,15 +2809,13 @@ public class GoGui
             showToolbar();
         }
         restoreMainWindow();
+        // Attaching a program can take some time, so we want to make
+        // the window visible, but not draw the window content yet
+        getLayeredPane().setVisible(false);
         setVisible(true);
+        m_toolBar.enableAll(true, m_currentNode);
         if (m_program != null)
-        {
-            // Attaching a program can take some time, so we want to make
-            // the window visible, but not draw the window content yet
-            getLayeredPane().setVisible(false);
             attachProgram(m_program);
-            getLayeredPane().setVisible(true);
-        }
         setTitle();
         if (m_commandThread == null
             || (! m_computerBlack && ! m_computerWhite))
@@ -2859,6 +2856,7 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, true);
         }
         setTitleFromProgram();
+        getLayeredPane().setVisible(true);
         toFrontLater();
         checkComputerMove();
     }
