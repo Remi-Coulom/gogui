@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
 
@@ -98,10 +99,12 @@ public class GoGuiToolBar
         setEnabled(m_buttonOpen, enable);
         setEnabled(m_buttonPreviousVariation, enable);
         setEnabled(m_buttonSave, enable);
-        // Play and pass buttons are always enabled, see
-        //setCommandInProgress()
-        //setEnabled(m_buttonPlay, enable);
-        //setEnabled(m_buttonPass, enable);
+        if (Platform.isMac())
+        {
+            // See setCommandInProgress()
+            setEnabled(m_buttonPlay, enable);
+            setEnabled(m_buttonPass, enable);
+        }
         if (enable)
         {
             if (! m_computerButtonsEnabled)
@@ -113,11 +116,14 @@ public class GoGuiToolBar
     public void setCommandInProgress()
     {
         enableAll(false, null);
-        // Enable play and pass to avoid wrong rendering of rollover effect,
-        // if mouse stays over button. Need to discard the events in
-        // GoGui.cbPlay
-        setEnabled(m_buttonPlay, true);
-        setEnabled(m_buttonPass, true);
+        if (! Platform.isMac())
+        {
+            // Enable play and pass to avoid wrong rendering of rollover
+            // effect on Linux and Windows, if mouse stays over button.
+            // Need to discard the events in GoGui.cbPlay
+            setEnabled(m_buttonPlay, true);
+            setEnabled(m_buttonPass, true);
+        }
         setEnabled(m_buttonInterrupt, true);
     }
 
