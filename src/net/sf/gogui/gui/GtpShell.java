@@ -719,8 +719,6 @@ public class GtpShell
         m_comboBox.hidePopup();
         addAllCompletions(m_history);
         m_editor.setItem(null);
-        m_comboBox.requestFocusInWindow();
-        m_textField.requestFocusInWindow();
     }
 
     private JPanel createCommandInput()
