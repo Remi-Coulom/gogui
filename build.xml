@@ -376,7 +376,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <mkdir dir="lib"/>
 <jar destfile="lib/gogui.jar">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.gogui.MacMain"/>
+<attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 <attribute name="Class-Path" value="looks-2.0.jar"/>

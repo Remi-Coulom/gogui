@@ -16,7 +16,7 @@ import java.lang.reflect.Modifier;
     Loads the main class with the reflection API to set Mac AWT
     properties before any AWT class is loaded.
 */
-public final class MacMain
+public final class MainWrapper
 {
     public static void main(String [] args)
     {
@@ -43,12 +43,7 @@ public final class MacMain
         {
             Class [] mainArgs = new Class[1];
             mainArgs[0] = Class.forName("net.sf.gogui.gogui.GoGuiSettings");
-            Class mainClass;
-            if (Platform.isMac())
-                // Java 1.4 on Mac has slow startup time
-                mainClass = Class.forName("net.sf.gogui.gogui.SplashScreen");
-            else
-                mainClass = Class.forName("net.sf.gogui.gogui.Main");
+            Class mainClass = Class.forName("net.sf.gogui.gogui.Main");
             Method mainMethod = mainClass.getMethod("main", mainArgs);
             assert((mainMethod.getModifiers() & Modifier.STATIC) != 0);
             assert(mainMethod.getReturnType() == void.class); 
@@ -63,7 +58,7 @@ public final class MacMain
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private MacMain()
+    private MainWrapper()
     {
     }
 

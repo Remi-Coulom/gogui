@@ -69,16 +69,7 @@ Do not edit Info.plist
 <key>JVMVersion</key>
 <string>1.4+</string>
 <key>MainClass</key>
-<string>net.sf.gogui.gogui.SplashScreen</string>
-<key>Properties</key>
-<dict>
-<key>apple.awt.brushMetalLook</key>
-<string>true</string>
-<key>apple.laf.useScreenMenuBar</key>
-<string>false</string>
-<key>com.apple.mrj.application.apple.menu.about.name</key>
-<string>GoGui</string>
-</dict>
+<string>net.sf.gogui.gogui.MainWrapper</string>
 </dict>
 
 </dict>
