@@ -42,7 +42,7 @@ public class GuiBoardDrawer
         @param showGrid Show grid coordinates.
     */
     public void draw(Graphics graphics, GuiField[][] field, int width,
-                     boolean showGrid, boolean showCursor)
+                     boolean showGrid)
     {
         if (! m_fastPaint)
             GuiUtils.setAntiAlias(graphics);
@@ -69,7 +69,7 @@ public class GuiBoardDrawer
         if (showGrid)
             drawGridLabels(graphics);
         drawShadows(graphics, field);
-        drawFields(graphics, field, showCursor);
+        drawFields(graphics, field);
     }
 
     public Point getCenter(int x, int y)
@@ -125,8 +125,7 @@ public class GuiBoardDrawer
 
     private final Image m_image;
 
-    private void drawFields(Graphics graphics, GuiField field[][],
-                            boolean showCursor)
+    private void drawFields(Graphics graphics, GuiField field[][])
     {
         assert(field.length == m_size);
         for (int x = 0; x < m_size; ++x)

@@ -232,7 +232,7 @@ public final class Thumbnail
         BufferedImage image = createImage(width, height);
         Graphics2D graphics = image.createGraphics();
         GuiUtils.setAntiAlias(graphics);
-        m_drawer.draw(graphics, field, width, false, false);
+        m_drawer.draw(graphics, field, width, false);
         graphics.dispose();
         return image;
     }
