@@ -230,9 +230,9 @@ class OptionalButton
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private Icon m_icon;
+    private final Icon m_icon;
 
-    private Icon m_disabledIcon;
+    private final Icon m_disabledIcon;
 }
 
 //----------------------------------------------------------------------------
