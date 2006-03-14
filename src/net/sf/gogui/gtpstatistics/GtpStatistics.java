@@ -100,7 +100,7 @@ public class GtpStatistics
         public String m_columnTitle;
     }
 
-    private boolean m_allowSetup;
+    private final boolean m_allowSetup;
 
     private boolean m_result;
 

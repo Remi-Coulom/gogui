@@ -209,7 +209,7 @@ public class GtpDisplay
 
     private JFrame m_frame;
 
-    private StatusBar m_statusBar;
+    private final StatusBar m_statusBar;
 
     private final String m_name;
 
