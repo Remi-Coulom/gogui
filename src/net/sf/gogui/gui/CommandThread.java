@@ -221,8 +221,7 @@ public class CommandThread
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
         TimeoutCallback timeoutCallback = new TimeoutCallback(command);
-        String response = m_gtp.send(command, TIMEOUT, timeoutCallback);
-        return response;
+        return m_gtp.send(command, TIMEOUT, timeoutCallback);
     }
 
     public void sendBoardsize(int size) throws GtpError
