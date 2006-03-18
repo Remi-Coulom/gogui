@@ -21,9 +21,12 @@ class ExitWaiter
         m_process = process;
     }
 
-    public synchronized boolean isFinished()
+    public boolean isFinished()
     {
-        return m_isFinished;
+        synchronized (m_mutex)
+        {
+            return m_isFinished;
+        }
     }
 
     public void run()
@@ -35,7 +38,7 @@ class ExitWaiter
         catch (InterruptedException e)
         {
         }
-        synchronized (this)
+        synchronized (m_mutex)
         {
             m_isFinished = true;
         }
@@ -48,6 +51,8 @@ class ExitWaiter
     private boolean m_isFinished;
 
     private final Object m_monitor;
+
+    private final Object m_mutex = new Object();
 
     private final Process m_process;
 };
