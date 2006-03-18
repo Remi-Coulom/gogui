@@ -192,13 +192,20 @@ Set the komi value.
 <listitem>
 <para>
 Set Swing look and feel.
-If this option is not used, GoGui tries to use
-jwindows on Windows and plasticxp on other platforms, but shows no error,
+If this option is not used, GoGui tries to use plasticxp, but shows no error,
 if the look and feel is not found.
 If the option is used, the name can be an empty string for the default look
 and feel of the Java implementation, a full class name, or one of the
 following shortcuts:
 <variablelist>
+<varlistentry>
+<term>cross</term>
+<listitem>
+<simpara>
+UIManager.getCrossPlatformLookAndFeelClassName()
+</simpara>
+</listitem>
+</varlistentry>
 <varlistentry>
 <term>motif</term>
 <listitem>
@@ -216,18 +223,10 @@ com.sun.java.swing.plaf.gtk.GTKLookAndFeel
 </listitem>
 </varlistentry>
 <varlistentry>
-<term>jwindows (only on Windows)</term>
+<term>jwindows</term>
 <listitem>
 <simpara>
 com.jgoodies.looks.windows.WindowsLookAndFeel
-</simpara>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term>windows (only on Windows)</term>
-<listitem>
-<simpara>
-com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 </simpara>
 </listitem>
 </varlistentry>
@@ -236,6 +235,22 @@ com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 <listitem>
 <simpara>
 com.jgoodies.looks.plastic.PlasticXPLookAndFeel
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>system</term>
+<listitem>
+<simpara>
+UIManager.getSystemLookAndFeelClassName()
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>windows</term>
+<listitem>
+<simpara>
+com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 </simpara>
 </listitem>
 </varlistentry>

@@ -115,9 +115,8 @@ public class GuiUtils
 
     /** Init look and feel.
         If parameter is empty string, no initialization will be done.
-        If parameter is null, try to use default values for look and feel
-        (JGoodies WindowsLookAndFeel on Windows, PlasticXPLookAndFeel on
-        other platforms), but don't show an error message, if it fails.
+        If parameter is null, try to use PlasticXPLookAndFeel, but don't show
+        an error message, if it fails.
         Otherwise use parameter as class name or shortcut as decoumented
         in the GoGui reference, and show message on failure.
     */
@@ -129,16 +128,16 @@ public class GuiUtils
         if (lookAndFeel == null)
         {
             showError = false;
-            if (Platform.isWindows())
-                lookAndFeel = "jwindows";
-            else if (! Platform.isMac())
+            if (! Platform.isMac())
                 lookAndFeel = "plasticxp";
             else
                 return;
         }
         UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
         UIManager.put("ScrollBar.maxBumpsWidth", new Integer(22));
-        if ("gtk".equals(lookAndFeel))
+        if ("cross".equals(lookAndFeel))
+            lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
+        else if ("gtk".equals(lookAndFeel))
             lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
         else if ("motif".equals(lookAndFeel))
             lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
@@ -146,6 +145,8 @@ public class GuiUtils
             lookAndFeel = "com.jgoodies.looks.windows.WindowsLookAndFeel";
         else if ("plasticxp".equals(lookAndFeel))
             lookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
+        else if ("system".equals(lookAndFeel))
+            lookAndFeel = UIManager.getSystemLookAndFeelClassName();
         else if ("windows".equals(lookAndFeel))
             lookAndFeel =
                 "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
