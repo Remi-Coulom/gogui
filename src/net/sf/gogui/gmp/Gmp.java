@@ -345,7 +345,7 @@ class WriteThread extends Thread
     {
         try
         {
-            synchronized (this)
+            synchronized (m_mutex)
             {
                 Random random = new Random();
                 while (true)
@@ -354,10 +354,10 @@ class WriteThread extends Thread
                     {
                         long timeout =
                             20000 + (long)(random.nextDouble() * 10000);
-                        wait(timeout);
+                        m_mutex.wait(timeout);
                     }
                     else
-                        wait();
+                        m_mutex.wait();
                     if (m_sendInProgress)
                         writePacket();
                 }
@@ -373,49 +373,61 @@ class WriteThread extends Thread
         }
     }
 
-    public synchronized void resend()
+    public void resend()
     {
-        notifyAll();
+        synchronized (m_mutex)
+        {
+            m_mutex.notifyAll();
+        }
     }
 
-    public synchronized void sendPacket(byte[] packet, boolean onlyOnce)
+    public void sendPacket(byte[] packet, boolean onlyOnce)
     {
-        m_packet = packet;
-        if (onlyOnce)
+        synchronized (m_mutex)
         {
-            writePacket();
-            return;
+            m_packet = packet;
+            if (onlyOnce)
+            {
+                writePacket();
+                return;
+            }
+            m_sendInProgress = true;
+            m_mutex.notifyAll();
         }
-        m_sendInProgress = true;
-        notifyAll();
     }
 
-    public synchronized boolean sendTalk(String talk)
+    public boolean sendTalk(String talk)
     {
-        int size = talk.length();
-        byte buffer[] = new byte[size + 1];
-        for (int i = 0; i < size; ++i)
+        synchronized (m_mutex)
         {
-            byte b = (byte)talk.charAt(i);
-            buffer[i] = ((b > 3 && b < 127) ? b : (byte)'?');            
-        }
-        buffer[size] = (byte)'\n';
-        try
-        {
-            m_out.write(buffer);
-            m_out.flush();
-        }
-        catch (IOException e)
-        {
+            int size = talk.length();
+            byte buffer[] = new byte[size + 1];
+            for (int i = 0; i < size; ++i)
+            {
+                byte b = (byte)talk.charAt(i);
+                buffer[i] = ((b > 3 && b < 127) ? b : (byte)'?');            
+            }
+            buffer[size] = (byte)'\n';
+            try
+            {
+                m_out.write(buffer);
+                m_out.flush();
+            }
+            catch (IOException e)
+            {
+                return false;
+            }
             return false;
         }
-        return false;
     }
 
-    public synchronized void stopSend()
+    public void stopSend()
     {
-        m_sendInProgress = false;
-        notifyAll();
+        synchronized (m_mutex)
+        {
+            m_sendInProgress = false;
+            m_mutex.notifyAll();
+        }
     }
 
     private boolean m_sendInProgress;
@@ -423,6 +435,8 @@ class WriteThread extends Thread
     private final boolean m_verbose;
 
     private byte[] m_packet;
+
+    private Object m_mutex = new Object();
 
     private final OutputStream m_out;
 
@@ -480,7 +494,7 @@ class MainThread
     /** Get all talk text received so far and clear talk buffer. */
     public String getTalk()
     {
-        synchronized (this)
+        synchronized (m_mutex)
         {
             String result = m_talkBuffer.toString();
             m_talkBuffer.setLength(0);
@@ -490,23 +504,26 @@ class MainThread
 
     public void interruptCommand()
     {
-        synchronized (this)
+        synchronized (m_mutex)
         {
             m_state = STATE_INTERRUPTED;
-            notifyAll();
+            m_mutex.notifyAll();
         }
     }
 
-    public synchronized boolean queue(StringBuffer response)
+    public boolean queue(StringBuffer response)
     {
-        int size = m_cmdQueue.size();
-        for (int i = 0; i < size; ++i)
+        synchronized (m_mutex)
         {
-            Cmd cmd = (Cmd)m_cmdQueue.get(i);
-            response.append(cmd.toString(m_size, m_lastQuery));
-            response.append('\n');
+            int size = m_cmdQueue.size();
+            for (int i = 0; i < size; ++i)
+            {
+                Cmd cmd = (Cmd)m_cmdQueue.get(i);
+                response.append(cmd.toString(m_size, m_lastQuery));
+                response.append('\n');
+            }
+            return true;
         }
-        return true;
     }
 
     public void run()
@@ -517,7 +534,7 @@ class MainThread
             while (true)
             {
                 int n = m_in.read(buffer);
-                synchronized (this)
+                synchronized (m_mutex)
                 {
                     if (n < 0)
                         break;
@@ -536,7 +553,7 @@ class MainThread
         {
             StringUtils.printException(e);
         }
-        synchronized (this)
+        synchronized (m_mutex)
         {
             m_state = STATE_DISCONNECTED;
         }
@@ -544,73 +561,76 @@ class MainThread
         m_writeThread.interrupt();
     }
 
-    public synchronized boolean send(Cmd cmd, StringBuffer response)
+    public boolean send(Cmd cmd, StringBuffer response)
     {
-        while (m_state == STATE_WAIT_ANSWER_OK
-               || m_state == STATE_WAIT_ANSWER)
+        synchronized (m_mutex)
         {
-            try
+            while (m_state == STATE_WAIT_ANSWER_OK
+                   || m_state == STATE_WAIT_ANSWER)
             {
-                sleep(1000);
+                try
+                {
+                    sleep(1000);
+                }
+                catch (InterruptedException ignored)
+                {
+                }
             }
-            catch (InterruptedException ignored)
+            if (m_state == STATE_WAIT_OK)
             {
-            }
-        }
-        if (m_state == STATE_WAIT_OK)
-        {
-            response.append("Command in progress");
-            return false;
-        }
-        if (m_state == STATE_DISCONNECTED)
-        {
-            response.append("GMP connection broken");
-            return false;
-        }
-        if (m_cmdQueue.size() > 0)
-        {
-            Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
-            if (! stackCmd.equals(cmd))
-            {
-                response.append("Received ");
-                response.append(stackCmd.toString(m_size, m_lastQuery));
+                response.append("Command in progress");
                 return false;
             }
-            m_cmdQueue.remove(0);
-            return true;
-        }
-        sendCmd(cmd.m_cmd, cmd.m_val);
-        while (true)
-        {
-            try
+            if (m_state == STATE_DISCONNECTED)
             {
-                wait();
-            }
-            catch (InterruptedException e)
-            {
-                System.err.println("Interrupted");
-            }
-            switch (m_state)
-            {
-            case STATE_IDLE:
-                return true;
-            case STATE_DENY:
-                response.append("Command denied");
-                m_state = STATE_IDLE;
-                return false;
-            case STATE_WAIT_OK:
-                continue;
-            case STATE_INTERRUPTED:
-                // GMP connection cannot be used anymore after sending
-                // was interrupted
-                response.append("GMP connection closed");
-                m_state = STATE_DISCONNECTED;
-                return false;
-            case STATE_DISCONNECTED:
                 response.append("GMP connection broken");
                 return false;
-            default:
-                return false;
+            }
+            if (m_cmdQueue.size() > 0)
+            {
+                Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
+                if (! stackCmd.equals(cmd))
+                {
+                    response.append("Received ");
+                    response.append(stackCmd.toString(m_size, m_lastQuery));
+                    return false;
+                }
+                m_cmdQueue.remove(0);
+                return true;
+            }
+            sendCmd(cmd.m_cmd, cmd.m_val);
+            while (true)
+            {
+                try
+                {
+                    m_mutex.wait();
+                }
+                catch (InterruptedException e)
+                {
+                    System.err.println("Interrupted");
+                }
+                switch (m_state)
+                {
+                case STATE_IDLE:
+                    return true;
+                case STATE_DENY:
+                    response.append("Command denied");
+                    m_state = STATE_IDLE;
+                    return false;
+                case STATE_WAIT_OK:
+                    continue;
+                case STATE_INTERRUPTED:
+                    // GMP connection cannot be used anymore after sending
+                    // was interrupted
+                    response.append("GMP connection closed");
+                    m_state = STATE_DISCONNECTED;
+                    return false;
+                case STATE_DISCONNECTED:
+                    response.append("GMP connection broken");
+                    return false;
+                default:
+                    return false;
+                }
             }
         }
     }
@@ -620,48 +640,50 @@ class MainThread
         return m_writeThread.sendTalk(text);
     }
 
-    public synchronized WaitResult waitCmd(int cmd, int valMask,
-                                           int valCondition)
+    public WaitResult waitCmd(int cmd, int valMask, int valCondition)
     {
-        WaitResult result = new WaitResult();
-        result.m_success = false;
-        while (true)
+        synchronized (m_mutex)
         {
-            if (m_cmdQueue.size() > 0)
+            WaitResult result = new WaitResult();
+            result.m_success = false;
+            while (true)
             {
-                Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
-                if (stackCmd.m_cmd != cmd
-                    || ((stackCmd.m_val & valMask) != valCondition))
+                if (m_cmdQueue.size() > 0)
                 {
-                    result.m_response =
-                        ("Received " +
-                         stackCmd.toString(m_size, m_lastQuery));
+                    Cmd stackCmd = (Cmd)m_cmdQueue.get(0);
+                    if (stackCmd.m_cmd != cmd
+                        || ((stackCmd.m_val & valMask) != valCondition))
+                    {
+                        result.m_response =
+                            ("Received " +
+                             stackCmd.toString(m_size, m_lastQuery));
+                        return result;
+                    }
+                    result.m_success = true;
+                    result.m_val = stackCmd.m_val;
+                    m_cmdQueue.remove(0);
                     return result;
                 }
-                result.m_success = true;
-                result.m_val = stackCmd.m_val;
-                m_cmdQueue.remove(0);
-                return result;
-            }
-            if (m_state == STATE_DISCONNECTED)
-            {
-                result.m_response = "GMP connection broken";
-                return result;
-            }
-            try
-            {
-                Util.log("Waiting for " + Cmd.cmdToString(cmd) + "...",
-                         m_verbose);
-                wait();
-                if (m_state == STATE_INTERRUPTED)
+                if (m_state == STATE_DISCONNECTED)
                 {
-                    result.m_response = "Interrupted";
+                    result.m_response = "GMP connection broken";
                     return result;
                 }
-            }
-            catch (InterruptedException e)
-            {
-                System.err.println("Interrupted");
+                try
+                {
+                    Util.log("Waiting for " + Cmd.cmdToString(cmd) + "...",
+                             m_verbose);
+                    m_mutex.wait();
+                    if (m_state == STATE_INTERRUPTED)
+                    {
+                        result.m_response = "Interrupted";
+                        return result;
+                    }
+                }
+                catch (InterruptedException e)
+                {
+                    System.err.println("Interrupted");
+                }
             }
         }
     }
@@ -709,6 +731,8 @@ class MainThread
     private int[] m_inBuffer = new int[4];
 
     private final InputStream m_in;
+
+    private Object m_mutex = new Object();
 
     private final StringBuffer m_talkBuffer = new StringBuffer();
 
@@ -836,7 +860,7 @@ class MainThread
             {
                 sendOk();
                 m_state = STATE_IDLE;
-                notifyAll();
+                m_mutex.notifyAll();
             }
         }
         else if (cmd.m_cmd == Cmd.NEWGAME && m_simple)
@@ -846,7 +870,7 @@ class MainThread
             int val = s_queries[m_queryCount];
             m_lastQuery = val;
             sendCmd(Cmd.QUERY, val);
-            notifyAll();
+            m_mutex.notifyAll();
         }
         else
         {
@@ -858,14 +882,14 @@ class MainThread
                 else
                 {
                     m_state = STATE_DENY;
-                    notifyAll();
+                    m_mutex.notifyAll();
                 }
             }
             else
             {
                 m_cmdQueue.add(cmd);
                 m_state = STATE_IDLE;
-                notifyAll();
+                m_mutex.notifyAll();
             }
         }
     }
@@ -889,7 +913,7 @@ class MainThread
                 Util.log("received OK", m_verbose);
                 m_state = STATE_IDLE;
                 m_writeThread.stopSend();
-                notifyAll();
+                m_mutex.notifyAll();
                 return;
             }
             if (seq == m_hisLastSeq)
