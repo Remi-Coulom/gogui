@@ -115,8 +115,8 @@ public class GuiUtils
 
     /** Init look and feel.
         If parameter is empty string, no initialization will be done.
-        If parameter is null, try to use PlasticXPLookAndFeel, but don't show
-        an error message, if it fails.
+        If parameter is null, try to use plasticxp (jwindows on Windows), but
+        don't show an error message, if it fails.
         Otherwise use parameter as class name or shortcut as decoumented
         in the GoGui reference, and show message on failure.
     */
@@ -128,7 +128,9 @@ public class GuiUtils
         if (lookAndFeel == null)
         {
             showError = false;
-            if (! Platform.isMac())
+            if (Platform.isWindows())
+                lookAndFeel = "jwindows";
+            else if (! Platform.isMac())
                 lookAndFeel = "plasticxp";
             else
                 return;

@@ -14,6 +14,11 @@
 GoGui: fix clearing influence analyze command
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GoGui: use JGoodies WindowsLookAndFeel as default on Windows
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
