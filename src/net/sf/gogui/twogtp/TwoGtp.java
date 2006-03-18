@@ -1054,7 +1054,7 @@ public class TwoGtp
         String response1 = null;
         String response2 = null;
         response1 = gtp1.send(command);
-        if (response1.toLowerCase().equals("resign"))
+        if (response1.equalsIgnoreCase("resign"))
         {
             response.append("resign");
             m_resigned = true;

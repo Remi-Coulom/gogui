@@ -85,8 +85,7 @@ public final class FileUtils
         String ext = getExtension(f);
         if (ext == null)
             return false;
-        Locale locale = Locale.getDefault();
-        return ext.toLowerCase(locale).equals(extension.toLowerCase(locale));
+        return ext.equalsIgnoreCase(extension);
     }
 
     /** Remove extension in file name.

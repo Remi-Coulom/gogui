@@ -2350,7 +2350,7 @@ public class GoGui
             m_clock.stopMove();
             String response = m_commandThread.getResponse();
             GoColor toMove = m_board.getToMove();
-            if (response.toLowerCase().equals("resign"))
+            if (response.equalsIgnoreCase("resign"))
             {
                 if (! isComputerBoth())
                     showInfo(m_name + " resigns");
