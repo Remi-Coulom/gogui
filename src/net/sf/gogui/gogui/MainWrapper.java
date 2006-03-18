@@ -6,7 +6,6 @@
 package net.sf.gogui.gogui;
 
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.Platform;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
