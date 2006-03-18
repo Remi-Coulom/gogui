@@ -117,15 +117,6 @@ public final class GoGuiSettings
         if (opt.contains("komi"))
             m_preferences.setDouble("komi", opt.getDouble("komi"));        
         m_lookAndFeel = opt.getString("laf", null);
-        if ("gtk".equals(m_lookAndFeel))
-            m_lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-        else if ("motif".equals(m_lookAndFeel))
-            m_lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-        else if ("windows".equals(m_lookAndFeel))
-            m_lookAndFeel =
-                "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-        else if ("plasticxp".equals(m_lookAndFeel))
-            m_lookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
         m_move = opt.getInteger("move", -1);
         if (opt.contains("size"))
             m_preferences.setInt("boardsize", opt.getInteger("size"));
