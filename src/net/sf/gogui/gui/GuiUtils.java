@@ -117,30 +117,29 @@ public class GuiUtils
     {
         UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
         UIManager.put("ScrollBar.maxBumpsWidth", new Integer(22));
-        if (lookAndFeel == null && ! Platform.isMac())
+        boolean showError = true;
+        if (lookAndFeel == null)
         {
-            try
-            {
+            showError = false;
+            if (Platform.isWindows())
+                lookAndFeel =
+                    "com.jgoodies.looks.windows.WindowsLookAndFeel";
+            else if (! Platform.isMac())
                 lookAndFeel =
                     "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
-                UIManager.setLookAndFeel(lookAndFeel);
-            }
-            catch (Exception e)
-            {
-            }
+            else
+                return;
         }
-        else if (lookAndFeel != null && ! lookAndFeel.equals(""))
+        try
         {
-            try
-            {
-                UIManager.setLookAndFeel(lookAndFeel);
-            }
-            catch (Exception e)
-            {
+            UIManager.setLookAndFeel(lookAndFeel);
+        }
+        catch (Exception e)
+        {
+            if (showError)
                 SimpleDialogs.showWarning(null,
                                           "Look and feel not found:\n" +
                                           lookAndFeel);
-            }
         }
     }
 

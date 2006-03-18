@@ -45,7 +45,7 @@ $Source$
  file="external/javacomm/commapi/comm.jar"/>
 
 <available property="looks.available"
- file="external/jgoodies/looks-2.0/looks-2.0.jar"/>
+ file="external/jgoodies/looks-2.0.1/looks-2.0.1.jar"/>
 
 <condition property="build.notdist">
 <not>
@@ -83,6 +83,7 @@ $Source$
 <delete failonerror="false" includeEmptyDirs="true">
 <fileset dir="lib"
  includes="
+   comm.jar,
    gmptogtp.jar,
    gogui.jar,
    gtpadapter.jar,
@@ -92,6 +93,7 @@ $Source$
    gtpserver.jar,
    gtpstatistics.jar,
    gtpterminal.jar,
+   looks-2.0.1.jar,
    netgtp.jar,
    sgftotex.jar,
    sgfthumbnail.jar,
@@ -164,7 +166,7 @@ $Source$
  ${docbook.path}.zip
  external/javacomm/javacomm20-win32.zip
  external/javacomm/README
- external/jgoodies/looks-2_0.zip
+ external/jgoodies/looks-2_0_1.zip
  lib/*.jar
  mac/packaging/GoGui.icns
  mac/packaging/Info.plist
@@ -283,9 +285,9 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </target>
 
 <target name="extract-looks" unless="looks.available">
-<unzip src="external/jgoodies/looks-2_0.zip" dest="external/jgoodies">
+<unzip src="external/jgoodies/looks-2_0_1.zip" dest="external/jgoodies">
 <patternset>
-<include name="looks-2.0/looks-2.0.jar"/>
+<include name="looks-2.0.1/looks-2.0.1.jar"/>
 </patternset>
 </unzip>
 </target>
@@ -379,7 +381,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <attribute name="Main-Class" value="net.sf.gogui.gogui.MainWrapper"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="looks-2.0.jar"/>
+<attribute name="Class-Path" value="looks-2.0.1.jar"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/config/analyze-commands
@@ -401,7 +403,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/specialmac/*.class
 "/>
 </jar>
-<copy file="external/jgoodies/looks-2.0/looks-2.0.jar" todir="lib"/>
+<copy file="external/jgoodies/looks-2.0.1/looks-2.0.1.jar" todir="lib"/>
 </target>
 
 <target name="gtpadapter.jar" depends="compile">
@@ -431,7 +433,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <attribute name="Main-Class" value="net.sf.gogui.gtpdisplay.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
-<attribute name="Class-Path" value="looks-2.0.jar"/>
+<attribute name="Class-Path" value="looks-2.0.1.jar"/>
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
@@ -454,7 +456,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/version/Version.class
 "/>
 </jar>
-<copy file="external/jgoodies/looks-2.0/looks-2.0.jar" todir="lib"/>
+<copy file="external/jgoodies/looks-2.0.1/looks-2.0.1.jar" todir="lib"/>
 </target>
 
 <target name="gtpdummy.jar" depends="compile">

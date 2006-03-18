@@ -146,9 +146,10 @@ public final class GuiBoard
     }
 
     /** Clear influence. */
-    public void clearInfluence(GoPoint p)
+    public void clearInfluence(GoPoint point)
     {
-        getField(p).clearInfluence();
+        getField(point).clearInfluence();
+        repaint(point);
     }
 
     /** Trigger the context menu callback at the listener. */

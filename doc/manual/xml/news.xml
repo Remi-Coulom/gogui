@@ -8,6 +8,19 @@
 <date></date>
 <authorinitials>enz</authorinitials>
 <revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+GoGui: fix clearing influence analyze command
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GoGui: use com.jgoodies.looks.windows.WindowsLookAndFeel as a default on
+Windows if option -laf is not used
+</simpara>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
 
