@@ -125,30 +125,30 @@ public class GuiUtils
     {
         if ("".equals(lookAndFeel))
             return;
-        if ("gtk".equals(lookAndFeel))
-            lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-        else if ("motif".equals(lookAndFeel))
-            lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-        else if ("windows".equals(lookAndFeel))
-            lookAndFeel =
-                "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-        else if ("plasticxp".equals(lookAndFeel))
-            lookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
-        UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
-        UIManager.put("ScrollBar.maxBumpsWidth", new Integer(22));
         boolean showError = true;
         if (lookAndFeel == null)
         {
             showError = false;
             if (Platform.isWindows())
-                lookAndFeel =
-                    "com.jgoodies.looks.windows.WindowsLookAndFeel";
+                lookAndFeel = "jwindows";
             else if (! Platform.isMac())
-                lookAndFeel =
-                    "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
+                lookAndFeel = "plasticxp";
             else
                 return;
         }
+        UIManager.put("jgoodies.useNarrowButtons", Boolean.FALSE);
+        UIManager.put("ScrollBar.maxBumpsWidth", new Integer(22));
+        if ("gtk".equals(lookAndFeel))
+            lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+        else if ("motif".equals(lookAndFeel))
+            lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+        else if ("jwindows".equals(lookAndFeel))
+            lookAndFeel = "com.jgoodies.looks.windows.WindowsLookAndFeel";
+        else if ("plasticxp".equals(lookAndFeel))
+            lookAndFeel = "com.jgoodies.looks.plastic.PlasticXPLookAndFeel";
+        else if ("windows".equals(lookAndFeel))
+            lookAndFeel =
+                "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
         try
         {
             UIManager.setLookAndFeel(lookAndFeel);

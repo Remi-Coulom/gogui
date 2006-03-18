@@ -193,8 +193,8 @@ Set the komi value.
 <para>
 Set Swing look and feel.
 If this option is not used, GoGui tries to use
-com.jgoodies.looks.windows.WindowsLookAndFeel on Windows and plasticxp on
-other platforms, but shows no error, if the look and feel is not found.
+jwindows on Windows and plasticxp on other platforms, but shows no error,
+if the look and feel is not found.
 If the option is used, the name can be an empty string for the default look
 and feel of the Java implementation, a full class name, or one of the
 following shortcuts:
@@ -212,6 +212,14 @@ com.sun.java.swing.plaf.motif.MotifLookAndFeel
 <listitem>
 <simpara>
 com.sun.java.swing.plaf.gtk.GTKLookAndFeel
+</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>jwindows (only on Windows)</term>
+<listitem>
+<simpara>
+com.jgoodies.looks.windows.WindowsLookAndFeel
 </simpara>
 </listitem>
 </varlistentry>
