@@ -84,8 +84,8 @@ public final class Main
             String color = opt.getString("color", "");
             if (! color.equals(""))
             {
-                color = color.toLowerCase();
-                if (! color.equals("black") && ! color.equals("white"))
+                if (! color.equalsIgnoreCase("black")
+                    && ! color.equalsIgnoreCase("white"))
                     throw new Exception("invalid color");
             }
             String device = opt.getString("device", "");
@@ -134,9 +134,9 @@ public final class Main
             int colorIndex = 0;
             if (! color.equals(""))
             {
-                if (color.equals("black"))
+                if (color.equalsIgnoreCase("black"))
                     colorIndex =  1;
-                else if (color.equals("white"))
+                else if (color.equalsIgnoreCase("white"))
                     colorIndex =  2;
             }
             GmpToGtp gmpToGtp = new GmpToGtp(title, in, out, verbose, size,
