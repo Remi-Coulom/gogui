@@ -15,11 +15,22 @@ package net.sf.gogui.go;
 */
 public final class Move
 {
+    /** Factory method for constructing a move.
+        @param x Column in [0..GoPoint.MAXSIZE - 1]
+        @param y Row in [0..GoPoint.MAXSIZE - 1]
+        @param color The color of the move (empty for stone removal)
+        @return Reference to this move
+    */
     public static Move get(int x, int y, GoColor color)
     {
         return get(GoPoint.get(x, y), color);
     }
 
+    /** Factory method for constructing a move.
+        @param point Location of the move (null for pass move)
+        @param color The color of the move (empty for stone removal)
+        @return Reference to this move
+    */
     public static Move get(GoPoint point, GoColor color)
     {
         if (point == null)
@@ -42,21 +53,34 @@ public final class Move
             return s_movesEmpty[x][y];
     }
     
+    /** Factory method for constructing a pass move.
+        @param color The color of the move (empty for stone removal)
+        @return Reference to this move
+    */
     public static Move getPass(GoColor color)
     {
         return get(null, color);
     }
 
+    /** Get color of move.
+        @return Color of move
+    */
     public GoColor getColor()
     {
         return m_color;
     }
 
+    /** Get stone location of move.
+        @return Location of move; null for pass move
+    */
     public GoPoint getPoint()
     {
         return m_point;
     }
 
+    /** Get string representation of move.
+        @return String representation, e.g. black C3, white PASS, empty A1
+    */
     public String toString()
     {
         return m_string;
