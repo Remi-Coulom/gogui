@@ -583,7 +583,7 @@ public final class GuiBoard
 
     /** Set point selection markup.
         @param point The point.
-        @param mark True to set, false to remove.
+        @param select True to set, false to remove.
     */
     public void setSelect(GoPoint point, boolean select)
     {

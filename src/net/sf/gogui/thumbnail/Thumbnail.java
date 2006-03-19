@@ -66,7 +66,7 @@ public final class Thumbnail
     }
 
     /** Create thumbnail.
-        @param file input The SGF file
+        @param input The SGF file
         @param output The output thumbnail. Null for standard filename in
         .thumbnails/normal
         @param thumbnailSize The image size of the thumbnail.
