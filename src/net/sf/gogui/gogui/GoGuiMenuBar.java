@@ -527,7 +527,7 @@ public class GoGuiMenuBar
 
     private static int s_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    private static final int m_shortcut =
+    private static final int SHORTCUT =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     private final ActionListener m_listener;
@@ -761,7 +761,7 @@ public class GoGuiMenuBar
     {
         JMenuChecked menu = createMenu("Bookmarks", KeyEvent.VK_B);
         menu.addItem("Add Bookmark", KeyEvent.VK_A, KeyEvent.VK_B,
-                     m_shortcut, "add-bookmark");
+                     SHORTCUT, "add-bookmark");
         menu.addItem("Edit Bookmarks...", KeyEvent.VK_E,
                      "edit-bookmarks");
         return menu;
@@ -863,14 +863,14 @@ public class GoGuiMenuBar
     {
         JMenuChecked menu = createMenu("Edit", KeyEvent.VK_E);
         menu.addItem("Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
-                     m_shortcut, "find-in-comments");
+                     SHORTCUT, "find-in-comments");
         m_itemFindNext =
             menu.addItem("Find Next", KeyEvent.VK_N, KeyEvent.VK_F3,
                          getFunctionKeyShortcut(), "find-next");
         m_itemFindNext.setEnabled(false);
         menu.addSeparator();
         menu.addItem("Game Info", KeyEvent.VK_G, KeyEvent.VK_I,
-                     m_shortcut, "game-info");
+                     SHORTCUT, "game-info");
         menu.add(createBoardSizeMenu());
         menu.add(createHandicapMenu());
         menu.addSeparator();
@@ -916,16 +916,16 @@ public class GoGuiMenuBar
     {
         JMenuChecked menu = createMenu("File", KeyEvent.VK_F);
         menu.addItem("Open...", KeyEvent.VK_O, KeyEvent.VK_O,
-                     m_shortcut, "open");
+                     SHORTCUT, "open");
         menu.add(createRecentMenu(callback));
         menu.addItem("Save", KeyEvent.VK_S, KeyEvent.VK_S,
-                     m_shortcut, "save");
+                     SHORTCUT, "save");
         menu.addItem("Save As...", KeyEvent.VK_A, "save-as");
         menu.addSeparator();
         menu.add(createMenuExport());
         menu.addSeparator();
         menu.addItem("Print...", KeyEvent.VK_P, KeyEvent.VK_P,
-                     m_shortcut, "print");
+                     SHORTCUT, "print");
         menu.addSeparator();
         menu.addItem("Attach Program...", KeyEvent.VK_T,
                      "attach-program");
@@ -933,7 +933,7 @@ public class GoGuiMenuBar
                                            KeyEvent.VK_D, "detach-program");
         menu.addSeparator();
         m_itemQuit = menu.addItem("Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
-                                  m_shortcut, "exit");
+                                  SHORTCUT, "exit");
         return menu;
     }
 
@@ -972,47 +972,47 @@ public class GoGuiMenuBar
         JMenuChecked menu = createMenu("Go", KeyEvent.VK_G);
         m_itemBeginning =
             menu.addItem("Beginning", KeyEvent.VK_B, KeyEvent.VK_HOME,
-                         m_shortcut, "beginning");
+                         SHORTCUT, "beginning");
         m_itemBackward10 =
             menu.addItem("Backward 10", KeyEvent.VK_W, KeyEvent.VK_LEFT,
-                         m_shortcut | ActionEvent.SHIFT_MASK,
+                         SHORTCUT | ActionEvent.SHIFT_MASK,
                          "backward-10");
         m_itemBackward =
             menu.addItem("Backward", KeyEvent.VK_K, KeyEvent.VK_LEFT,
-                         m_shortcut, "backward");
+                         SHORTCUT, "backward");
         m_itemForward =
             menu.addItem("Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
-                         m_shortcut, "forward");
+                         SHORTCUT, "forward");
         m_itemForward10 =
             menu.addItem("Forward 10", KeyEvent.VK_R, KeyEvent.VK_RIGHT,
-                         m_shortcut | ActionEvent.SHIFT_MASK,
+                         SHORTCUT | ActionEvent.SHIFT_MASK,
                          "forward-10");
         m_itemEnd =
             menu.addItem("End", KeyEvent.VK_E, KeyEvent.VK_END,
-                         m_shortcut, "end");
+                         SHORTCUT, "end");
         m_itemGoto =
             menu.addItem("Go to Move...", KeyEvent.VK_O, KeyEvent.VK_G,
-                         m_shortcut, "goto");
+                         SHORTCUT, "goto");
         menu.addSeparator();
         m_itemNextVariation =
             menu.addItem("Next Variation", KeyEvent.VK_N,
-                         KeyEvent.VK_DOWN, m_shortcut,
+                         KeyEvent.VK_DOWN, SHORTCUT,
                          "next-variation");
         m_itemPreviousVariation =
             menu.addItem("Previous Variation", KeyEvent.VK_P,
-                         KeyEvent.VK_UP, m_shortcut,
+                         KeyEvent.VK_UP, SHORTCUT,
                          "previous-variation");
         m_itemNextEarlierVariation =
             menu.addItem("Next Earlier Variation", KeyEvent.VK_X,
-                         KeyEvent.VK_DOWN, m_shortcut | shiftMask,
+                         KeyEvent.VK_DOWN, SHORTCUT | shiftMask,
                          "next-earlier-variation");
         m_itemPreviousEarlierBackward =
             menu.addItem("Previous Earlier Variation", KeyEvent.VK_L,
-                         KeyEvent.VK_UP, m_shortcut | shiftMask,
+                         KeyEvent.VK_UP, SHORTCUT | shiftMask,
                          "previous-earlier-variation");
         m_itemBackToMainVar =
             menu.addItem("Back to Main Variation", KeyEvent.VK_M,
-                         KeyEvent.VK_M, m_shortcut,
+                         KeyEvent.VK_M, SHORTCUT,
                          "back-to-main-variation");
         m_itemGotoVar =
             menu.addItem("Go to Variation...",
@@ -1126,7 +1126,7 @@ public class GoGuiMenuBar
     private static int getFunctionKeyShortcut()
     {
         if (Platform.isMac())
-            return m_shortcut;
+            return SHORTCUT;
         return 0;
     }
 }
@@ -1175,8 +1175,8 @@ class JMenuChecked
                              int modifier, String command)
     {
         KeyStroke keyStroke = KeyStroke.getKeyStroke(accel, modifier); 
-        assert(! m_accelerators.contains(keyStroke));
-        m_accelerators.add(keyStroke);
+        assert(! s_accelerators.contains(keyStroke));
+        s_accelerators.add(keyStroke);
         item.setAccelerator(keyStroke);
         return addItem(item, mnemonic, command);
     }
@@ -1213,7 +1213,7 @@ class JMenuChecked
 
     private final ArrayList m_mnemonics = new ArrayList();
 
-    private static final ArrayList m_accelerators = new ArrayList();
+    private static ArrayList s_accelerators = new ArrayList();
 }
 
 //----------------------------------------------------------------------------

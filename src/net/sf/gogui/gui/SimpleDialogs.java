@@ -52,7 +52,7 @@ public final class SimpleDialogs
     {
         String title = "Error";
         if (frame == null)
-            title = title + " - " + m_appName;
+            title = title + " - " + APP_NAME;
         JOptionPane.showMessageDialog(frame, message, title,
                                       JOptionPane.ERROR_MESSAGE);
     }
@@ -66,7 +66,7 @@ public final class SimpleDialogs
     {
         String title = "Info";
         if (frame == null)
-            title = title + " - " + m_appName;
+            title = title + " - " + APP_NAME;
         JOptionPane.showMessageDialog(frame, message, title,
                                       JOptionPane.INFORMATION_MESSAGE);
     }
@@ -85,7 +85,7 @@ public final class SimpleDialogs
     {
         String title = "Question";
         if (frame == null)
-            title = title + " - " + m_appName;
+            title = title + " - " + APP_NAME;
         int r = JOptionPane.showConfirmDialog(frame, message, title,
                                               JOptionPane.YES_NO_OPTION);
         return (r == 0);
@@ -111,7 +111,7 @@ public final class SimpleDialogs
     {
         String title = "Warning";
         if (parent == null)
-            title = title + " - " + m_appName;
+            title = title + " - " + APP_NAME;
         JOptionPane.showMessageDialog(parent, message, title,
                                       JOptionPane.WARNING_MESSAGE);
     }
@@ -121,7 +121,7 @@ public final class SimpleDialogs
         s_lastFile = file;
     }
 
-    private static final String m_appName = "GoGui";
+    private static final String APP_NAME = "GoGui";
 
     private static File s_lastFile;
 

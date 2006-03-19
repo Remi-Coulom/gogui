@@ -230,7 +230,7 @@ public class GuiField
 
     private boolean m_select;
 
-    private static int m_cachedFontFieldSize;
+    private static int s_cachedFontFieldSize;
 
     private int m_paintSizeBlack;
 
@@ -245,13 +245,13 @@ public class GuiField
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private static final AlphaComposite m_composite5
+    private static final AlphaComposite COMPOSITE_5
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
 
-    private static final AlphaComposite m_composite7
+    private static final AlphaComposite COMPOSITE_7
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
 
-    private static final Stroke m_thickStroke
+    private static final Stroke THICK_STROKE
         = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 
     private String m_label = "";
@@ -260,24 +260,24 @@ public class GuiField
 
     private GoColor m_territory = GoColor.EMPTY;
 
-    private static final Color m_influenceBlackColor = Color.gray;
+    private static final Color COLOR_INFLUENCE_BLACK = Color.gray;
 
-    private static final Color m_influenceWhiteColor = Color.white;
+    private static final Color COLOR_INFLUENCE_WHITE = Color.white;
 
-    private static final Color m_lastMoveMarkerColor
+    private static final Color COLOR_LAST_MOVE
         = Color.decode("#c34543");
 
-    private static final Color m_colorBlackStone = Color.decode("#030303");
+    private static final Color COLOR_STONE_BLACK = Color.decode("#030303");
 
-    private static final Color m_colorBlackStoneBright
+    private static final Color COLOR_STONE_BLACK_BRIGHT
         = Color.decode("#666666");
 
-    private static final Color m_colorWhiteStone = Color.decode("#d7d0c9");
+    private static final Color COLOR_STONE_WHITE = Color.decode("#d7d0c9");
 
-    private static final Color m_colorWhiteStoneBright
+    private static final Color COLOR_STONE_WHITE_BRIGHT
         = Color.decode("#f6eee6");
 
-    private static Font m_cachedFont;
+    private static Font s_cachedFont;
 
     private GoColor m_color = GoColor.EMPTY;
 
@@ -299,7 +299,7 @@ public class GuiField
 
     private void drawCrossHair()
     {
-        setComposite(m_composite7);
+        setComposite(COMPOSITE_7);
         int d = m_size / 5;
         int center = m_size / 2;
         m_graphics.setColor(Color.red);
@@ -310,7 +310,7 @@ public class GuiField
 
     private void drawCursor()
     {
-        setComposite(m_composite5);
+        setComposite(COMPOSITE_5);
         int d = m_size / 6;
         int w = m_size;
         int d2 = 2 * d;
@@ -328,7 +328,7 @@ public class GuiField
 
     private void drawFieldColor()
     {
-        setComposite(m_composite5);
+        setComposite(COMPOSITE_5);
         m_graphics.setColor(m_fieldColor);
         m_graphics.fillRect(0, 0, m_size, m_size);
         m_graphics.setPaintMode();
@@ -339,11 +339,11 @@ public class GuiField
         double d = Math.abs(m_influence);
         if (d < 0.01)
             return;
-        setComposite(m_composite7);
+        setComposite(COMPOSITE_7);
         if (m_influence > 0)
-            m_graphics.setColor(m_influenceBlackColor);
+            m_graphics.setColor(COLOR_INFLUENCE_BLACK);
         else
-            m_graphics.setColor(m_influenceWhiteColor);
+            m_graphics.setColor(COLOR_INFLUENCE_WHITE);
         int dd = (int)(m_size * (0.38 + (1 - d) * 0.62));
         int width = m_size - dd;
         m_graphics.fillRect(dd / 2, dd / 2, width, width);
@@ -375,14 +375,14 @@ public class GuiField
 
     private void drawLastMoveMarker()
     {
-        setComposite(m_composite7);
-        drawCircle(m_lastMoveMarkerColor);
+        setComposite(COMPOSITE_7);
+        drawCircle(COLOR_LAST_MOVE);
         m_graphics.setPaintMode();
     }
 
     private void drawMarks()
     {
-        setComposite(m_composite7);
+        setComposite(COMPOSITE_7);
         int d = m_size / 4;
         int width = m_size - 2 * d;
         m_graphics.setColor(Color.blue);
@@ -390,7 +390,7 @@ public class GuiField
         if (m_graphics2D != null && m_size > 10)
         {
             oldStroke = m_graphics2D.getStroke();
-            m_graphics2D.setStroke(m_thickStroke);
+            m_graphics2D.setStroke(THICK_STROKE);
         }
         if (m_mark)
         {
@@ -418,7 +418,7 @@ public class GuiField
 
     private void drawSelect()
     {
-        setComposite(m_composite7);
+        setComposite(COMPOSITE_7);
         drawCircle(Color.blue);
         m_graphics.setPaintMode();
     }
@@ -426,9 +426,9 @@ public class GuiField
     private void drawStone()
     {
         if (m_color == GoColor.BLACK)
-            drawStone(m_colorBlackStone, m_colorBlackStoneBright);
+            drawStone(COLOR_STONE_BLACK, COLOR_STONE_BLACK_BRIGHT);
         else if (m_color == GoColor.WHITE)
-            drawStone(m_colorWhiteStone, m_colorWhiteStoneBright);
+            drawStone(COLOR_STONE_WHITE, COLOR_STONE_WHITE_BRIGHT);
     }
 
     private void drawStone(Color colorNormal, Color colorBright)
@@ -462,7 +462,7 @@ public class GuiField
 
     private void drawTerritoryGraphics2D()
     {
-        setComposite(m_composite5);
+        setComposite(COMPOSITE_5);
         if (m_territory == GoColor.BLACK)
             m_graphics2D.setColor(Color.darkGray);
         else
@@ -522,9 +522,9 @@ public class GuiField
 
     private static void setFont(Graphics graphics, int fieldSize)
     {
-        if (m_cachedFont != null && m_cachedFontFieldSize == fieldSize)
+        if (s_cachedFont != null && s_cachedFontFieldSize == fieldSize)
         {
-            graphics.setFont(m_cachedFont);
+            graphics.setFont(s_cachedFont);
             return;
         }
         Font font = UIManager.getFont("Label.font");
@@ -543,8 +543,8 @@ public class GuiField
             else
                 font = font.deriveFont(Font.BOLD);
         }
-        m_cachedFont = font;
-        m_cachedFontFieldSize = fieldSize;
+        s_cachedFont = font;
+        s_cachedFontFieldSize = fieldSize;
         graphics.setFont(font);
     }
 }

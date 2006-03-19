@@ -50,7 +50,7 @@ public final class RecentFileStorage
                            boolean isPrivate)
     {
         updateFromFile();
-        NodeList list = m_document.getElementsByTagName("RecentFiles");
+        NodeList list = s_document.getElementsByTagName("RecentFiles");
         int length = list.getLength();
         if (length == 0)
         {
@@ -60,17 +60,15 @@ public final class RecentFileStorage
         if (length > 1)
             System.err.println("warning: multiple tags RecentFiles");
         Node recentFiles = list.item(0);
-
-        Element recentItem = m_document.createElement("RecentItem");
+        Element recentItem = s_document.createElement("RecentItem");
         recentFiles.appendChild(recentItem);
-        Element uriElement = m_document.createElement("URI");
-        uriElement.appendChild(m_document.createTextNode(uri.toString()));
+        Element uriElement = s_document.createElement("URI");
+        uriElement.appendChild(s_document.createTextNode(uri.toString()));
         recentItem.appendChild(uriElement);
-        Element timestampElement = m_document.createElement("Timestamp");
+        Element timestampElement = s_document.createElement("Timestamp");
         String timestamp = Long.toString(System.currentTimeMillis() / 1000);
-        timestampElement.appendChild(m_document.createTextNode(timestamp));
+        timestampElement.appendChild(s_document.createTextNode(timestamp));
         recentItem.appendChild(timestampElement);
-        
         writeFile();
     }
 
@@ -78,7 +76,7 @@ public final class RecentFileStorage
     {
         updateFromFile();
         ArrayList result = new ArrayList();
-        NodeList nodeList = m_document.getElementsByTagName("RecentItem");
+        NodeList nodeList = s_document.getElementsByTagName("RecentItem");
         for (int i = 0; i < nodeList.getLength(); ++i)
         {
             Node element = nodeList.item(i);
@@ -106,12 +104,12 @@ public final class RecentFileStorage
     */
     public static boolean wasChanged()
     {
-        if (m_document == null)
+        if (s_document == null)
             return true;
-        if (! m_file.exists())
+        if (! s_file.exists())
             return true;
         long currentTime = System.currentTimeMillis();
-        return m_file.lastModified() > currentTime;
+        return s_file.lastModified() > currentTime;
     }
 
     /** For temporary testing.
@@ -128,11 +126,11 @@ public final class RecentFileStorage
     //private static long m_timestamp;
 
     /** Content of the recent files file. */
-    private static Document m_document;
+    private static Document s_document;
 
-    private static DocumentBuilder m_builder;
+    private static DocumentBuilder s_builder;
 
-    private static File m_file
+    private static File s_file
         = new File(System.getProperties().getProperty("user.home"),
                    ".recently-used");
 
@@ -140,7 +138,7 @@ public final class RecentFileStorage
     {
         try
         {
-            m_builder
+            s_builder
                 = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         }
         catch (ParserConfigurationException e)
@@ -159,17 +157,17 @@ public final class RecentFileStorage
     {        
         if (! wasChanged())
             return;
-        if (m_builder == null)
+        if (s_builder == null)
             return;
         //m_timestamp = System.currentTimeMillis();
-        if (! m_file.exists())
+        if (! s_file.exists())
         {
             createEmptyDocument();
             return;
         }
         try
         {
-            m_document = m_builder.parse(m_file);
+            s_document = s_builder.parse(s_file);
             return;
         }
         catch (SAXException saxe)
@@ -189,19 +187,19 @@ public final class RecentFileStorage
 
     private static void createEmptyDocument()
     {
-        assert(m_builder != null);
-        m_document = m_builder.newDocument();
-        Element recentFiles = m_document.createElement("RecentFiles");
-        m_document.appendChild(recentFiles);
+        assert(s_builder != null);
+        s_document = s_builder.newDocument();
+        Element recentFiles = s_document.createElement("RecentFiles");
+        s_document.appendChild(recentFiles);
     }
 
     private static void writeFile()
     {
         try
         {
-            m_document.normalize();
-            Source source = new DOMSource(m_document);
-            Result result = new StreamResult(m_file);
+            s_document.normalize();
+            Source source = new DOMSource(s_document);
+            Result result = new StreamResult(s_file);
             Transformer transformer
                 = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");

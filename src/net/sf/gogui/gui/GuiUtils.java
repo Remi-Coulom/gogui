@@ -75,7 +75,7 @@ public class GuiUtils
     */
     public static Border createEmptyBorder()
     {
-        return m_emptyBorder;
+        return EMPTY_BORDER;
     }
 
     /** Create empty box with size of normal padding.
@@ -83,8 +83,8 @@ public class GuiUtils
     */
     public static Box.Filler createFiller()
     {
-        return new Box.Filler(m_fillerDimension, m_fillerDimension,
-                              m_fillerDimension);
+        return new Box.Filler(FILLER_DIMENSION, FILLER_DIMENSION,
+                              FILLER_DIMENSION);
     }
 
     /** Create empty border with small padding.
@@ -92,7 +92,7 @@ public class GuiUtils
     */
     public static Border createSmallEmptyBorder()
     {
-        return m_smallEmptyBorder;
+        return SMALL_EMPTY_BORDER;
     }
 
     /** Create empty box with size of small padding.
@@ -100,8 +100,8 @@ public class GuiUtils
     */
     public static Box.Filler createSmallFiller()
     {
-        return new Box.Filler(m_smallFillerDimension, m_smallFillerDimension,
-                              m_smallFillerDimension);
+        return new Box.Filler(SMALL_FILLER_DIMENSION, SMALL_FILLER_DIMENSION,
+                              SMALL_FILLER_DIMENSION);
     }
 
     /** Get size of default monspaced font.
@@ -110,7 +110,7 @@ public class GuiUtils
     */
     public static int getDefaultMonoFontSize()
     {
-        return m_monospacedFont.getSize();
+        return MONOSPACED_FONT.getSize();
     }
 
     /** Init look and feel.
@@ -245,8 +245,8 @@ public class GuiUtils
 
     public static void setMonospacedFont(JComponent component)
     {
-        if (m_monospacedFont != null)
-            component.setFont(m_monospacedFont);
+        if (MONOSPACED_FONT != null)
+            component.setFont(MONOSPACED_FONT);
     }
 
     static
@@ -337,29 +337,28 @@ public class GuiUtils
         Font textAreaFont = UIManager.getFont("TextArea.font");
         if (textAreaFont == null)
         {
-            m_monospacedFont = Font.decode("Monospaced");
+            MONOSPACED_FONT = Font.decode("Monospaced");
         }
         else
         {
             int size = Math.max(11, textAreaFont.getSize());
-            m_monospacedFont =
-                new Font("Monospaced", Font.PLAIN, size);
+            MONOSPACED_FONT = new Font("Monospaced", Font.PLAIN, size);
         }
     }
 
-    private static final Font m_monospacedFont;
+    private static final Font MONOSPACED_FONT;
 
-    private static final Border m_emptyBorder =
+    private static final Border EMPTY_BORDER =
         BorderFactory.createEmptyBorder(PAD, PAD, PAD, PAD);
 
-    private static final Border m_smallEmptyBorder =
+    private static final Border SMALL_EMPTY_BORDER =
         BorderFactory.createEmptyBorder(SMALL_PAD, SMALL_PAD,
                                         SMALL_PAD, SMALL_PAD);
 
-    private static final Dimension m_fillerDimension =
+    private static final Dimension FILLER_DIMENSION =
         new Dimension(PAD, PAD);
 
-    private static final Dimension m_smallFillerDimension =
+    private static final Dimension SMALL_FILLER_DIMENSION =
         new Dimension(SMALL_PAD, SMALL_PAD);
 
     private static URL s_iconURL;

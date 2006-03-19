@@ -197,9 +197,9 @@ public class ParameterDialog
             if (line == null)
                 break;
             line = line.trim();
-            final int STRING = 0;
-            final int BOOL = 1;
-            int type = STRING;
+            final int string = 0;
+            final int bool = 1;
+            int type = string;
             if (line.startsWith("[") && line.endsWith("]"))
             {
                 // Might be used as label for grouping parameters on tabbing
@@ -208,12 +208,12 @@ public class ParameterDialog
             }
             if (line.startsWith("[bool]"))
             {
-                type = BOOL;
+                type = bool;
                 line = line.replaceFirst("\\[bool\\]", "").trim();
             }
             else if (line.startsWith("[string]"))
             {
-                type = STRING;
+                type = string;
                 line = line.replaceFirst("\\[string\\]", "").trim();
             }
             int pos = line.indexOf(' ');
@@ -221,7 +221,7 @@ public class ParameterDialog
                 continue;
             String key = line.substring(0, pos).trim();
             String value = line.substring(pos + 1).trim();
-            if (type == BOOL)
+            if (type == bool)
                 parameters.add(new BoolParameter(key, value));
             else
                 parameters.add(new StringParameter(key, value));

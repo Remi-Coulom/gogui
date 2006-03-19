@@ -69,9 +69,9 @@ public class Analyze
 
     private String m_black = "Black";
 
-    private static final String m_colorHeader = "#91aee8";
+    private static final String COLOR_HEADER = "#91aee8";
 
-    private static final String m_colorInfo = "#e0e0e0";
+    private static final String COLOR_INFO = "#e0e0e0";
 
     private String m_white = "White";
 
@@ -293,12 +293,12 @@ public class Analyze
                   "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                   " vlink=\"#551a8b\">\n" +
                   "<table border=\"0\" width=\"100%\" bgcolor=\""
-                  + m_colorHeader + "\">\n" +
+                  + COLOR_HEADER + "\">\n" +
                   "<tr><td>\n" +
                   "<h1>" + m_black + " - " + m_white + "</h1>\n" +
                   "</td></tr>\n" +
                   "</table>\n" +
-                  "<table width=\"100%\" bgcolor=\"" + m_colorInfo
+                  "<table width=\"100%\" bgcolor=\"" + COLOR_INFO
                   + "\">\n");
         writeHtmlRow(out, "Black", m_black);
         writeHtmlRow(out, "White", m_white);
@@ -334,7 +334,7 @@ public class Analyze
         out.println("<hr>");
         out.print("<table border=\"0\">\n" +
                   "<thead>\n" +
-                  "<tr bgcolor=\"" + m_colorHeader + "\">\n" +
+                  "<tr bgcolor=\"" + COLOR_HEADER + "\">\n" +
                   "<th>Game</th>\n");
         if (m_hasReferee)
             out.print("<th>Result [" + m_referee + "]</th>\n");
@@ -353,7 +353,7 @@ public class Analyze
         {
             Entry e = (Entry)m_entries.get(i);
             String name = gamePrefix + "-" + e.m_gameIndex + ".sgf";
-            out.print("<tr align=\"center\" bgcolor=\"" + m_colorInfo
+            out.print("<tr align=\"center\" bgcolor=\"" + COLOR_INFO
                       + "\"><td><a href=\"" + name + "\">" + name
                       + "</a></td>\n");
             if (m_hasReferee)

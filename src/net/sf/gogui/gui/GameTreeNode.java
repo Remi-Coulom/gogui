@@ -77,7 +77,7 @@ class GameTreeNode
         }
         else if (move == null)
         {
-            graphics.setColor(m_colorLightBlue);
+            graphics.setColor(COLOR_LIGHT_BLUE);
             int[] xPoints = { halfSize, size, halfSize, 0 };
             int[] yPoints = { 0, halfSize, size, halfSize };
             graphics.fillPolygon(xPoints, yPoints, 4);
@@ -93,7 +93,7 @@ class GameTreeNode
         }
         if (m_node.hasComment())
         {
-            graphics.setColor(m_colorLightBlue);
+            graphics.setColor(COLOR_LIGHT_BLUE);
             int y = size + (fullSize - size) / 4;
             int d = size / 5;
             graphics.drawLine(d, y, size - d, y);
@@ -121,7 +121,7 @@ class GameTreeNode
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private static final Color m_colorLightBlue = new Color(103, 122, 164);
+    private static final Color COLOR_LIGHT_BLUE = new Color(103, 122, 164);
 
     private final GameTreePanel m_gameTreePanel;
 

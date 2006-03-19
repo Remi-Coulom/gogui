@@ -55,7 +55,7 @@ public class GameTreePanel
 
     public static final int SIZE_TINY = 3;
 
-    public static final Color m_background = new Color(192, 192, 192);
+    public static final Color BACKGROUND = new Color(192, 192, 192);
 
     public GameTreePanel(JDialog owner, GameTreeViewer.Listener listener,
                          boolean fastPaint, int labelMode, int sizeMode)
@@ -63,7 +63,7 @@ public class GameTreePanel
         super(new SpringLayout());
         m_owner = owner;
         m_fastPaint = fastPaint;
-        setBackground(m_background);
+        setBackground(BACKGROUND);
         m_labelMode = labelMode;
         m_sizeMode = sizeMode;
         computeSizes(sizeMode);
@@ -294,8 +294,8 @@ public class GameTreePanel
                              fatherGameNode.getY());
         gameNode.setSize(m_nodeFullSize, m_nodeFullSize);
         m_maxX = Math.max(fatherGameNode.getX() + 2 * m_nodeFullSize, m_maxX);
-        setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + m_margin,
-                                       m_maxY + m_nodeFullSize + m_margin));
+        setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + MARGIN,
+                                       m_maxY + m_nodeFullSize + MARGIN));
     }
 
     public void showPopup()
@@ -329,7 +329,7 @@ public class GameTreePanel
         try
         {
             Node root = m_gameTree.getRoot();
-            createNodes(this, root, 0, 0, m_margin, m_margin, 0);
+            createNodes(this, root, 0, 0, MARGIN, MARGIN, 0);
             if (gameTreeChanged)
             {
                 if (NodeUtils.subtreeGreaterThan(root, 10000))
@@ -347,8 +347,8 @@ public class GameTreePanel
                                     "Out of memory");
             update(gameTree, currentNode, minWidth, minHeight);
         }
-        setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + m_margin,
-                                       m_maxY + m_nodeFullSize + m_margin));
+        setPreferredSize(new Dimension(m_maxX + m_nodeFullSize + MARGIN,
+                                       m_maxY + m_nodeFullSize + MARGIN));
         revalidate();
         scrollToCurrent();
         if (m_scrollPane != null)
@@ -409,7 +409,7 @@ public class GameTreePanel
 
     private int m_nodeFullSize;
 
-    private static final int m_margin = 15;
+    private static final int MARGIN = 15;
 
     private int m_maxX;
 

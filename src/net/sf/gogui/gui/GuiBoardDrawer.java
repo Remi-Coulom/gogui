@@ -118,7 +118,7 @@ public class GuiBoardDrawer
 
     private int m_width;
 
-    private static final AlphaComposite m_composite3
+    private static final AlphaComposite COMPOSITE_3
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
 
     private BoardConstants m_constants;
@@ -213,7 +213,7 @@ public class GuiBoardDrawer
             graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
         if (graphics2D == null || m_fastPaint)
             return;
-        graphics2D.setComposite(m_composite3);
+        graphics2D.setComposite(COMPOSITE_3);
         int size = m_fieldSize - 2 * GuiField.getStoneMargin(m_fieldSize);
         int offset = getShadowOffset();
         for (int x = 0; x < m_size; ++x)

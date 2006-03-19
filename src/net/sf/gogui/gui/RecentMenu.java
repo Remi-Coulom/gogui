@@ -95,7 +95,7 @@ public final class RecentMenu
                 m_menu.remove(i);
         JMenuItem item = new RecentMenuItem(label, value, m_listener);
         m_menu.add(item, 0);
-        while (getCount() > m_maxItems)
+        while (getCount() > MAX_ITEMS)
             m_menu.remove(getCount() - 1);
         if (save)
             save();
@@ -147,7 +147,7 @@ public final class RecentMenu
         getItem(i).setRecentMenuLabel(label);
     }
 
-    private static final int m_maxItems = 20;
+    private static final int MAX_ITEMS = 20;
 
     private final ActionListener m_listener;
 
@@ -179,7 +179,7 @@ public final class RecentMenu
             return;
         }
         m_menu.removeAll();
-        for (int i = 0; i < m_maxItems; ++i)
+        for (int i = 0; i < MAX_ITEMS; ++i)
         {
             String label = props.getProperty("label_" + i);
             String value = props.getProperty("value_" + i);

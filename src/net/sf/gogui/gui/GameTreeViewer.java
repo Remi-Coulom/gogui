@@ -109,7 +109,7 @@ public class GameTreeViewer
         m_scrollPane.setFocusable(true);
         m_scrollPane.setFocusTraversalKeysEnabled(false);
         JViewport viewport = m_scrollPane.getViewport();
-        viewport.setBackground(GameTreePanel.m_background);
+        viewport.setBackground(GameTreePanel.BACKGROUND);
         contentPane.add(m_scrollPane, BorderLayout.CENTER);
         viewport.setFocusTraversalKeysEnabled(false);
         setFocusTraversalKeysEnabled(false);

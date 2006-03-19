@@ -105,7 +105,7 @@ public class Analyze
             CommandStatistics commandStatistics = getCommandStatistics(i);
             if (commandStatistics.getCount() == 0)
                 continue;
-            out.print("<td valign=\"bottom\" bgcolor=\"" + m_colorHeader
+            out.print("<td valign=\"bottom\" bgcolor=\"" + COLOR_HEADER
                       + "\">\n");
             writePlot(out, getCommandLink(i), getHistoFile(i).getName(), "");
             out.print("</td>\n");
@@ -123,7 +123,7 @@ public class Analyze
         out.close();
     }
 
-    private static final Color[] m_plotColor = {
+    private static final Color[] PLOT_COLOR = {
         Color.decode("#ff0000"),
         Color.decode("#ff9800"),
         Color.decode("#009800"),
@@ -196,9 +196,9 @@ public class Analyze
 
     private int m_precision;
 
-    private static final String m_colorHeader = "#b5c8f0";
+    private static final String COLOR_HEADER = "#b5c8f0";
 
-    private static final String m_colorInfo = "#e0e0e0";
+    private static final String COLOR_INFO = "#e0e0e0";
 
     private final String m_output;
 
@@ -380,7 +380,7 @@ public class Analyze
     private Color getColor(String command)
     {
         int index = m_table.getColumnIndex(command);
-        return m_plotColor[(index - 2) % m_plotColor.length];
+        return PLOT_COLOR[(index - 2) % PLOT_COLOR.length];
     }
 
     private String getGameLink(File fromFile, int gameNumber,
@@ -494,9 +494,9 @@ public class Analyze
                   "a:link { color:#0000ee }\n" +
                   "a:visited { color:#551a8b }\n" +
                   ".smalltable { font-size:80%; }\n" +
-                  ".smalltable td { background-color:" + m_colorInfo
+                  ".smalltable td { background-color:" + COLOR_INFO
                   + "; text-align:center; }\n" +
-                  ".smalltable th { background-color:" + m_colorHeader
+                  ".smalltable th { background-color:" + COLOR_HEADER
                   + ";  vertical-align:top; }\n" +
                   ".smalltable table { border:0; cellpadding:0; }\n" +
                   "-->\n" +
@@ -508,12 +508,12 @@ public class Analyze
     private void startInfo(PrintStream out, String title)
     {
         out.print("<table border=\"0\" width=\"100%\" bgcolor=\""
-                  + m_colorHeader + "\">\n" +
+                  + COLOR_HEADER + "\">\n" +
                   "<tr><td>\n" +
                   "<h1>" + title + "</h1>\n" +
                   "</td></tr>\n" +
                   "</table>\n" +
-                  "<table width=\"100%\" bgcolor=\"" + m_colorInfo
+                  "<table width=\"100%\" bgcolor=\"" + COLOR_INFO
                   + "\" >\n" +
                   "<tr><td><table style=\"font-size:80%\""
                   + " cellpadding=\"0\">\n");
@@ -630,7 +630,7 @@ public class Analyze
                 writeCommandPage(i);
             PositionStatistics statisticsAll
                 = commandStatistics.m_statisticsAll;
-            out.print("<tr><td style=\"background-color:" + m_colorHeader
+            out.print("<tr><td style=\"background-color:" + COLOR_HEADER
                       + "\">" + getCommandLink(i) + "</td>");
             writeStatisticsTableData(out, statisticsAll,
                                      commandStatistics.m_format,
@@ -751,7 +751,7 @@ public class Analyze
         {
             GameInfo info = (GameInfo)(m_gameInfo.get(i));
             String file = getGameFile(i).getName();
-            out.print("<tr><td style=\"background-color:" + m_colorHeader
+            out.print("<tr><td style=\"background-color:" + COLOR_HEADER
                       + "\"><a href=\"" + file + "\">Game " + (i + 1)
                       + "</a></td><td>" + info.m_name
                       + "</td><td>" + info.m_numberPositions + "</td>");
@@ -801,7 +801,7 @@ public class Analyze
         out.print("<table width=\"100%\" cellspacing=\"0\""
                   + " cellpadding=\"0\">\n" +
                   "<tr><td><table width=\"100%\" border=\"0\""
-                  + " cellpadding=\"0\" bgcolor=\"" + m_colorHeader
+                  + " cellpadding=\"0\" bgcolor=\"" + COLOR_HEADER
                   + "\">\n" +
                   "<tr><td");
         if (! info.equals(""))
@@ -812,7 +812,7 @@ public class Analyze
         if (! info.equals(""))
             out.print("<td align=\"right\">\n" + info + "\n</td>");
         out.print("</tr></table></td></tr>\n" +
-                  "<tr><td bgcolor=\"" + m_colorInfo
+                  "<tr><td bgcolor=\"" + COLOR_INFO
                   + "\">\n" +
                   "<img src=\"" + file + "\"></td></tr>\n" +
                   "</table>\n");

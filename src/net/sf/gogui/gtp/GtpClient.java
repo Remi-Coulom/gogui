@@ -101,8 +101,8 @@ public final class GtpClient
         if (m_program.indexOf("%SRAND") >= 0)
         {
             // RAND_MAX in stdlib.h ist at least 32767
-            int RAND_MAX = 32767;
-            int rand = (int)(Math.random() * (RAND_MAX + 1));
+            int randMax = 32767;
+            int rand = (int)(Math.random() * (randMax + 1));
             m_program =
                 m_program.replaceAll("%SRAND", Integer.toString(rand));
         }
