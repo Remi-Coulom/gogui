@@ -11,6 +11,5 @@
       <match type="string" offset="0:256" value="FF[1]"/>
     </magic>
     <glob pattern="*.sgf"/>
-    <glob pattern="*.SGF"/>
   </mime-type>
 </mime-info>
