@@ -7,6 +7,7 @@ package net.sf.gogui.game;
 
 //----------------------------------------------------------------------------
 
+/** Markup types for points in nodes of a game tree. */
 public final class MarkType
     implements Comparable
 {

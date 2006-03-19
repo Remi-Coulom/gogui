@@ -76,7 +76,7 @@ final class TimeInfo
 
 //----------------------------------------------------------------------------
 
-/** Node in a GameTree.
+/** Node in a game tree.
     The memory requirement is optimized for nodes containing only a move and
     comment property (e.g. for GNU Go's large SGF traces).
     The optimization also expects that most nodes have only one child.
