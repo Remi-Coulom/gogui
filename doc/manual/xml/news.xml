@@ -11,7 +11,7 @@
 <itemizedlist>
 <listitem>
 <simpara>
-GoGui: fix clearing influence analyze command
+GoGui: fix clearing influence analyze command and analyze auto-run bug
 </simpara>
 </listitem>
 <listitem>

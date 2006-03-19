@@ -38,6 +38,8 @@ public class GameTreeViewer
 
         void cbForward(int n);
 
+        void cbGotoNode(Node node);
+
         void cbNextEarlierVariation();
 
         void cbNextVariation();
@@ -45,8 +47,6 @@ public class GameTreeViewer
         void cbPreviousEarlierVariation();
 
         void cbPreviousVariation();
-
-        void gotoNode(Node node);
 
         void disposeGameTree();
     }

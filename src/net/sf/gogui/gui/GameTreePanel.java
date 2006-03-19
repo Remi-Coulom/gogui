@@ -191,7 +191,7 @@ public class GameTreePanel
     public void gotoNode(Node node)
     {
         if (m_listener != null)
-            m_listener.gotoNode(node);
+            m_listener.cbGotoNode(node);
     }
 
     public boolean isCurrent(Node node)

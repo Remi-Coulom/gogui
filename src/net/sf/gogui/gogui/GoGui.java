@@ -596,6 +596,12 @@ public class GoGui
         boardChangedBegin(false, false);
     }
 
+    public void cbGotoNode(Node node)
+    {
+        gotoNode(node);
+        boardChangedBegin(false, false);
+    }
+
     public void cbGtpShellSave()
     {
         if (m_gtpShell == null)
@@ -625,28 +631,28 @@ public class GoGui
     {
         Node node = NodeUtils.getNextVariation(m_currentNode);
         if (node != null)
-            gotoNode(node);
+            cbGotoNode(node);
     }
 
     public void cbNextEarlierVariation()
     {
         Node node = NodeUtils.getNextEarlierVariation(m_currentNode);
         if (node != null)
-            gotoNode(node);
+            cbGotoNode(node);
     }
 
     public void cbPreviousVariation()
     {
         Node node = NodeUtils.getPreviousVariation(m_currentNode);
         if (node != null)
-            gotoNode(node);
+            cbGotoNode(node);
     }
 
     public void cbPreviousEarlierVariation()
     {
         Node node = NodeUtils.getPreviousEarlierVariation(m_currentNode);
         if (node != null)
-            gotoNode(node);
+            cbGotoNode(node);
     }
     public void cbShowShell()
     {
@@ -827,60 +833,6 @@ public class GoGui
         }
     }
 
-    public void gotoNode(Node node)
-    {
-        // GameTreeViewer is not disabled in score mode
-        if (m_scoreMode)
-            return;
-        ArrayList nodes = new ArrayList();
-        int numberUndo
-            = NodeUtils.getShortestPath(m_currentNode, node, nodes);
-        if (backward(numberUndo))
-        {
-            ArrayList moves = NodeUtils.getAllAsMoves(nodes);
-            if (checkCurrentNodeExecuted()
-                && moves.size() > 1
-                && m_commandThread != null
-                && m_commandThread.isCommandSupported("play_sequence"))
-            {
-                try
-                {
-                    String cmd = GtpUtils.getPlaySequenceCommand(moves);
-                    m_commandThread.send(cmd);
-                    for (int i = 0; i < moves.size(); ++i)
-                        m_board.play((Move)moves.get(i));
-                    m_currentNode = (Node)nodes.get(nodes.size() - 1);
-                    m_currentNodeExecuted =
-                        NodeUtils.getAllAsMoves(m_currentNode).size();
-                }
-                catch (GtpError e)
-                {
-                    showError(e);
-                }
-            }
-            else
-                for (int i = 0; i < nodes.size(); ++i)
-                {
-                    Node nextNode = (Node)nodes.get(i);
-                    if (! checkCurrentNodeExecuted())
-                        break;
-                    assert(nextNode.isChildOf(m_currentNode));
-                    m_currentNode = nextNode;
-                    try
-                    {
-                        executeCurrentNode();
-                    }
-                    catch (GtpError e)
-                    {
-                        showError(e);
-                        break;
-                    }
-                    m_gameInfo.fastUpdateMoveNumber(m_currentNode);
-                }
-        }
-        boardChangedBegin(false, false);
-    }
-
     public boolean sendGtpCommand(String command, boolean sync)
         throws GtpError
     {
@@ -911,10 +863,6 @@ public class GoGui
     public void sendGtpCommandContinue()
     {
         endLengthyCommand();
-        // Program could have been killed in cbInterrupt
-        if (m_commandThread == null)
-            return;
-        m_commandThread.getException();
     }
 
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun)
@@ -1198,18 +1146,13 @@ public class GoGui
     private void analyzeContinue(boolean checkComputerMove,
                                  boolean resetBoard)
     {
-        endLengthyCommand();
         if (resetBoard)
             resetBoard();
-        // Program could have been detached during analyze command
-        if (m_commandThread == null)
+        if (! endLengthyCommand())
             return;
         String title = m_analyzeCommand.getResultTitle();
         try
         {
-            GtpError e = m_commandThread.getException();
-            if (e != null)
-                throw e;
             String response = m_commandThread.getResponse();
             AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_board, response);
             int type = m_analyzeCommand.getType();
@@ -1497,7 +1440,7 @@ public class GoGui
     private void cbBackToMainVar()
     {
         Node node = NodeUtils.getBackToMainVariation(m_currentNode);
-        gotoNode(node);
+        cbGotoNode(node);
     }
 
     private void cbBoardSize(String size)
@@ -1563,7 +1506,7 @@ public class GoGui
                 showError("Bookmark has invalid move number");
                 return;
             }
-            gotoNode(node);
+            cbGotoNode(node);
         }
         catch (NumberFormatException e)
         {
@@ -1730,8 +1673,8 @@ public class GoGui
         }
         else
         {
-            gotoNode(node);
             m_comment.markAll(m_pattern);
+            cbGotoNode(node);
         }
     }
 
@@ -1798,8 +1741,7 @@ public class GoGui
         Node node = MoveNumberDialog.show(this, m_currentNode);
         if (node == null)
             return;
-        gotoNode(node);
-        boardChangedBegin(false, false);
+        cbGotoNode(node);
     }
 
     private void cbGotoVariation()
@@ -1807,8 +1749,7 @@ public class GoGui
         Node node = GotoVariationDialog.show(this, m_gameTree, m_currentNode);
         if (node == null)
             return;
-        gotoNode(node);
-        boardChangedBegin(false, false);
+        cbGotoNode(node);
     }
 
     private void cbHandicap(String handicap)
@@ -2046,23 +1987,20 @@ public class GoGui
 
     private void cbScoreContinue()
     {
-        endLengthyCommand();
+        boolean success = endLengthyCommand();
         clearStatus();
-        // Program could have been detached whil running final_score
-        if (m_commandThread == null)
-            return;
         GoPoint[] isDeadStone = null;
-        try
+        if (success)
         {
-            GtpError e = m_commandThread.getException();
-            if (e != null)
-                throw e;
             String response = m_commandThread.getResponse();
-            isDeadStone = GtpUtils.parsePointList(response, m_boardSize);
-        }
-        catch (GtpError e)
-        {
-            showError(e);
+            try
+            {
+                isDeadStone = GtpUtils.parsePointList(response, m_boardSize);
+            }
+            catch (GtpError error)
+            {
+                showError(error);
+            }
         }
         initScore(isDeadStone);
     }    
@@ -2336,17 +2274,12 @@ public class GoGui
 
     private void computerMoved()
     {
-        endLengthyCommand();
-        // Program could have been killed in cbInterrupt
-        if (m_commandThread == null)
+        if (! endLengthyCommand())
             return;
         if (m_beepAfterMove)
             java.awt.Toolkit.getDefaultToolkit().beep();
         try
         {
-            GtpError e = m_commandThread.getException();
-            if (e != null)
-                throw e;
             m_clock.stopMove();
             String response = m_commandThread.getResponse();
             GoColor toMove = m_board.getToMove();
@@ -2543,7 +2476,7 @@ public class GoGui
         updateBoard();
     }
 
-    private void endLengthyCommand()
+    private boolean endLengthyCommand()
     {
         clearStatus();
         m_menuBar.setNormalMode();
@@ -2556,6 +2489,16 @@ public class GoGui
             setBoardCursor(Cursor.HAND_CURSOR);
         else
             setBoardCursorDefault();
+        // Program could have been killed in cbInterrupt
+        if (m_commandThread == null)
+            return false;
+        GtpError error = m_commandThread.getException();
+        if (error != null)
+        {
+            showError(error);
+            return false;
+        }
+        return true;
     }
 
     private void executeCurrentNode() throws GtpError
@@ -2704,6 +2647,59 @@ public class GoGui
                 result = Board.RULES_CHINESE;
         }
         return result;
+    }
+
+    private void gotoNode(Node node)
+    {
+        // GameTreeViewer is not disabled in score mode
+        if (m_scoreMode)
+            return;
+        ArrayList nodes = new ArrayList();
+        int numberUndo
+            = NodeUtils.getShortestPath(m_currentNode, node, nodes);
+        if (backward(numberUndo))
+        {
+            ArrayList moves = NodeUtils.getAllAsMoves(nodes);
+            if (checkCurrentNodeExecuted()
+                && moves.size() > 1
+                && m_commandThread != null
+                && m_commandThread.isCommandSupported("play_sequence"))
+            {
+                try
+                {
+                    String cmd = GtpUtils.getPlaySequenceCommand(moves);
+                    m_commandThread.send(cmd);
+                    for (int i = 0; i < moves.size(); ++i)
+                        m_board.play((Move)moves.get(i));
+                    m_currentNode = (Node)nodes.get(nodes.size() - 1);
+                    m_currentNodeExecuted =
+                        NodeUtils.getAllAsMoves(m_currentNode).size();
+                }
+                catch (GtpError e)
+                {
+                    showError(e);
+                }
+            }
+            else
+                for (int i = 0; i < nodes.size(); ++i)
+                {
+                    Node nextNode = (Node)nodes.get(i);
+                    if (! checkCurrentNodeExecuted())
+                        break;
+                    assert(nextNode.isChildOf(m_currentNode));
+                    m_currentNode = nextNode;
+                    try
+                    {
+                        executeCurrentNode();
+                    }
+                    catch (GtpError e)
+                    {
+                        showError(e);
+                        break;
+                    }
+                    m_gameInfo.fastUpdateMoveNumber(m_currentNode);
+                }
+        }
     }
 
     private void humanMoved(Move move)
