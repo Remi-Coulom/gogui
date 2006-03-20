@@ -171,163 +171,168 @@ public final class AnalyzeShow
             }
             if (line == null)
                 break;
-            String[] arg = StringUtils.splitArguments(line);
-            if (arg.length == 0)
-                continue;
-            String cmd = arg[0].toUpperCase();
-            if (cmd.equals("BLACK"))
+            showGfxLine(line, guiBoard, size);
+        }
+    }
+
+    public static void showGfxLine(String line, GuiBoard guiBoard, int size)
+    {
+        String[] arg = StringUtils.splitArguments(line);
+        if (arg.length == 0)
+            return;
+        String cmd = arg[0].toUpperCase();
+        if (cmd.equals("BLACK"))
+        {
+            for (int i = 1; i < arg.length; ++i)
             {
-                for (int i = 1; i < arg.length; ++i)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (point == null)
-                            continue;
-                        guiBoard.setTerritory(point, GoColor.BLACK);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (point == null)
+                        continue;
+                    guiBoard.setTerritory(point, GoColor.BLACK);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
                 }
             }
-            else if (cmd.equals("CIRCLE"))
+        }
+        else if (cmd.equals("CIRCLE"))
+        {
+            for (int i = 1; i < arg.length; ++i)
             {
-                for (int i = 1; i < arg.length; ++i)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (point == null)
-                            continue;
-                        guiBoard.setMarkCircle(point, true);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (point == null)
+                        continue;
+                    guiBoard.setMarkCircle(point, true);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
                 }
             }
-            else if (cmd.equals("COLOR"))
+        }
+        else if (cmd.equals("COLOR"))
+        {
+            if (arg.length < 2)
+                return;
+            Color color = GuiBoardUtils.getColor(arg[1]);
+            for (int i = 2; i < arg.length; ++i)
             {
-                if (arg.length < 2)
-                    continue;
-                Color color = GuiBoardUtils.getColor(arg[1]);
-                for (int i = 2; i < arg.length; ++i)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (point == null)
-                            continue;
-                        guiBoard.setFieldBackground(point, color);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (point == null)
+                        continue;
+                    guiBoard.setFieldBackground(point, color);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
                 }
             }
-            else if (cmd.equals("INFLUENCE"))
+        }
+        else if (cmd.equals("INFLUENCE"))
+        {
+            for (int i = 1; i < arg.length; i += 2)
             {
-                for (int i = 1; i < arg.length; i += 2)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (i + 1 >= arg.length)
-                            break;
-                        if (point == null)
-                            continue;
-                        double value = Double.parseDouble(arg[i + 1]);
-                        guiBoard.setInfluence(point, value);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
-                    catch (NumberFormatException e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (i + 1 >= arg.length)
+                        break;
+                    if (point == null)
+                        continue;
+                    double value = Double.parseDouble(arg[i + 1]);
+                    guiBoard.setInfluence(point, value);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
+                }
+                catch (NumberFormatException e)
+                {
                 }
             }
-            else if (cmd.equals("LABEL"))
+        }
+        else if (cmd.equals("LABEL"))
+        {
+            for (int i = 1; i < arg.length; i += 2)
             {
-                for (int i = 1; i < arg.length; i += 2)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (i + 1 >= arg.length)
-                            break;
-                        if (point == null)
-                            continue;
-                        guiBoard.setLabel(point, arg[i + 1]);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (i + 1 >= arg.length)
+                        break;
+                    if (point == null)
+                        continue;
+                    guiBoard.setLabel(point, arg[i + 1]);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
                 }
             }
-            else if (cmd.equals("MARK"))
+        }
+        else if (cmd.equals("MARK"))
+        {
+            for (int i = 1; i < arg.length; ++i)
             {
-                for (int i = 1; i < arg.length; ++i)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (point == null)
-                            continue;
-                        guiBoard.setMark(point, true);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (point == null)
+                        continue;
+                    guiBoard.setMark(point, true);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
                 }
             }
-            else if (cmd.equals("SQUARE"))
+        }
+        else if (cmd.equals("SQUARE"))
+        {
+            for (int i = 1; i < arg.length; ++i)
             {
-                for (int i = 1; i < arg.length; ++i)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (point == null)
-                            continue;
-                        guiBoard.setMarkSquare(point, true);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (point == null)
+                        continue;
+                    guiBoard.setMarkSquare(point, true);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
                 }
             }
-            else if (cmd.equals("TRIANGLE"))
+        }
+        else if (cmd.equals("TRIANGLE"))
+        {
+            for (int i = 1; i < arg.length; ++i)
             {
-                for (int i = 1; i < arg.length; ++i)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (point == null)
-                            continue;
-                        guiBoard.setMarkTriangle(point, true);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (point == null)
+                        continue;
+                    guiBoard.setMarkTriangle(point, true);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
                 }
             }
-            else if (cmd.equals("WHITE"))
+        }
+        else if (cmd.equals("WHITE"))
+        {
+            for (int i = 1; i < arg.length; ++i)
             {
-                for (int i = 1; i < arg.length; ++i)
+                try
                 {
-                    try
-                    {
-                        GoPoint point = GoPoint.parsePoint(arg[i], size);
-                        if (point == null)
-                            continue;
-                        guiBoard.setTerritory(point, GoColor.WHITE);
-                    }
-                    catch (GoPoint.InvalidPoint e)
-                    {
-                    }
+                    GoPoint point = GoPoint.parsePoint(arg[i], size);
+                    if (point == null)
+                        continue;
+                    guiBoard.setTerritory(point, GoColor.WHITE);
+                }
+                catch (GoPoint.InvalidPoint e)
+                {
                 }
             }
         }
