@@ -9,8 +9,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.Box;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
@@ -33,10 +35,21 @@ public class StatusBar
                 new Box.Filler(dimension, dimension, dimension);
             add(filler, BorderLayout.EAST);
         }
-        m_textField = new JTextField();
-        m_textField.setEditable(false);
-        m_textField.setFocusable(false);
-        panel.add(m_textField);
+        if (Platform.isMac())
+        {
+            m_label = new JLabel();
+            m_label.setBorder(GuiUtils.createSmallEmptyBorder());
+            panel.add(m_label);
+            m_textField = null;
+        }
+        else
+        {
+            m_textField = new JTextField();
+            m_textField.setEditable(false);
+            m_textField.setFocusable(false);
+            panel.add(m_textField);
+            m_label = null;
+        }
         clear();
     }
 
@@ -47,14 +60,19 @@ public class StatusBar
 
     public void setText(String text)
     {
-        m_textField.setText(text);
-        m_textField.repaint();
+        if (Platform.isMac())
+            m_label.setText(text);
+        else
+            m_textField.setText(text);
+        //m_textField.repaint();
     }
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for use with serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
+
+    private final JLabel m_label;
 
     private final JTextField m_textField;
 }
