@@ -226,6 +226,28 @@ public final class AnalyzeShow
                     }
                 }
             }
+            else if (cmd.equals("INFLUENCE"))
+            {
+                for (int i = 1; i < arg.length; i += 2)
+                {
+                    try
+                    {
+                        GoPoint point = GoPoint.parsePoint(arg[i], size);
+                        if (i + 1 >= arg.length)
+                            break;
+                        if (point == null)
+                            continue;
+                        double value = Double.parseDouble(arg[i + 1]);
+                        guiBoard.setInfluence(point, value);
+                    }
+                    catch (GoPoint.InvalidPoint e)
+                    {
+                    }
+                    catch (NumberFormatException e)
+                    {
+                    }
+                }
+            }
             else if (cmd.equals("LABEL"))
             {
                 for (int i = 1; i < arg.length; i += 2)

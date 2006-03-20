@@ -222,7 +222,9 @@ public class GtpDummy
                         "TRIANGLE A9\n" +
                         "WHITE A1\n" +
                         "BLACK B1\n" +
-                        "CIRCLE c8\n");
+                        "CIRCLE c8\n" +
+                        "INFLUENCE a7 -1 b7 -0.75 c7 -0.5 d7 -0.25 e7 0"
+                        + " f7 0.25 g7 0.5 h7 0.75 j7 1\n");
     }
 
     private void cmdGoGuiAnalyzeCommands(GtpCommand cmd) throws GtpError
