@@ -12,7 +12,6 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
