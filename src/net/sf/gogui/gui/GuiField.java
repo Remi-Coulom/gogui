@@ -251,6 +251,9 @@ public class GuiField
     private static final AlphaComposite COMPOSITE_7
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
 
+    private static final AlphaComposite COMPOSITE_95
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.95f); 
+
     private static final Stroke THICK_STROKE
         = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 
@@ -384,6 +387,7 @@ public class GuiField
 
     private void drawMarks()
     {
+        setComposite(COMPOSITE_95);
         int d = m_size / 4;
         int width = m_size - 2 * d;
         m_graphics.setColor(COLOR_MARK);
@@ -414,11 +418,14 @@ public class GuiField
         }
         if (oldStroke != null)
             m_graphics2D.setStroke(oldStroke);
+        m_graphics.setPaintMode();
     }
 
     private void drawSelect()
     {
+        setComposite(COMPOSITE_95);
         drawCircle(COLOR_MARK);
+        m_graphics.setPaintMode();
     }
 
     private void drawStone()
