@@ -384,6 +384,8 @@ public final class Node
     }
 
     /** Get other unspecified SGF properties.
+        @return The map with other SGF properties mapping String label
+        to String value
         @see #addSgfProperty
     */
     public Map getSgfProperties()
@@ -394,7 +396,8 @@ public final class Node
     }
 
     /** Time left for color after move was made.
-        Returns Double.NaN if unknown.
+        @param color The color
+        @return Time left in seconds for this color or Double.NaN if unknown
     */
     public double getTimeLeft(GoColor color)
     {
@@ -408,9 +411,10 @@ public final class Node
     }
 
     /** Get color to move.
-        Determining the color to move takes into consideration an explicitely
-        set player color and moves contained in this node.
-        If nothing is known about the color to move, it returns GoColor.EMPTY.
+        If a player is explicitely set, it is returned, otherwise if the
+        node contains a move, the color of the move is returned.
+        @return The color to move or GoColor.EMPTY if nothing is known about
+        the color to move
     */
     public GoColor getToMove()
     {
@@ -422,6 +426,10 @@ public final class Node
         return GoColor.EMPTY;
     }
 
+    /** Return a value for the node.
+        The meaning of a value is according to the SGF property V[]
+        @return The value, or Float.NaN, if node contains no value
+    */
     public float getValue()
     {
         if (m_extraInfo == null)
@@ -429,6 +437,11 @@ public final class Node
         return m_extraInfo.m_value;
     }
 
+    /** Check if node contains a comment.
+        More efficient than #getComment(), because getComment decodes the
+        comment into a String, if it exists.
+        @return true if node contains a comment
+    */
     public boolean hasComment()
     {
         return (m_comment != null);
@@ -608,12 +621,20 @@ public final class Node
         createSetupInfo().m_player = color;
     }
 
+    /** Set value for this node.
+        @see #getValue()
+        @param value The value
+    */
     public void setValue(float value)
     {
         createExtraInfo();
         m_extraInfo.m_value = value;
     }
 
+    /** Return next child after a given child.
+        @param child The child
+        @return The next child or null, if there is no next child
+    */
     public Node variationAfter(Node child)
     {
         int numberChildren = getNumberChildren();
@@ -628,6 +649,10 @@ public final class Node
         return getChild(i + 1);
     }
 
+    /** Return previous child before a given child.
+        @param child The child
+        @return The previous child or null, if there is no previous child
+    */
     public Node variationBefore(Node child)
     {
         int numberChildren = getNumberChildren();
