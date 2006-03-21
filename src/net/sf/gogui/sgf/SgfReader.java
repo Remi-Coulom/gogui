@@ -732,7 +732,7 @@ public final class SgfReader
                     }
                 }
             }
-            else if (p == "MA")
+            else if (p == "MA" || p == "M")
                 readMarked(node, MarkType.MARK);
             else if (p == "OB")
             {
