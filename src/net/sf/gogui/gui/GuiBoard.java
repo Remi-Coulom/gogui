@@ -256,7 +256,7 @@ public final class GuiBoard
         return m_showCursor;
     }
 
-    /** Change the board size
+    /** Change the board size.
         @param size The new board size.
     */
     public void initSize(int size)

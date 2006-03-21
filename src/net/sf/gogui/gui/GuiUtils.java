@@ -224,7 +224,7 @@ public class GuiUtils
             throw thread.getThrowable();
     }
 
-    /** Set antialias rendering hint if graphics is instance of Graphics2D */
+    /** Set antialias rendering hint if graphics is instance of Graphics2D. */
     public static void setAntiAlias(Graphics graphics)
     {
         if (graphics instanceof Graphics2D)

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------
 
 /** Static utility functions related to class Move. */
-public class MoveUtils
+public final class MoveUtils
 {
     /** Fill a list of moves with pass moves.
         The resulting list will contain all moves of the original list
