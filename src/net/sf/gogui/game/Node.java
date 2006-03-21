@@ -162,6 +162,8 @@ public final class Node
         Do not add SGF properties that can be set with other member functions.
         This is for preserving unknown SGF properties that are not used
         by this program.
+        @param label The name of the property
+        @param value The value of the property, including the brackets
     */
     public void addSgfProperty(String label, String value)
     {
@@ -178,8 +180,8 @@ public final class Node
     }
 
     /** Get black setup stone.
-        @param i The index of the setup stone
-        in [0...getNumberAddBlack() - 1]
+        @param i The index of the setup stone in [0...getNumberAddBlack() - 1]
+        @return The black setup stone
     */
     public GoPoint getAddBlack(int i)
     {
@@ -188,8 +190,8 @@ public final class Node
     }
 
     /** Get empty setup point.
-        @param i The index of the setup point
-        in [0...getNumberAddEmpty() - 1]
+        @param i The index of the setup point in [0...getNumberAddEmpty() - 1]
+        @return The empty setup point
     */
     public GoPoint getAddEmpty(int i)
     {
@@ -198,8 +200,8 @@ public final class Node
     }
 
     /** Get white setup stone.
-        @param i The index of the setup stone
-        in [0...getNumberAddWhite() - 1]
+        @param i The index of the setup stone in [0...getNumberAddWhite() - 1]
+        @return The white setup stone
     */
     public GoPoint getAddWhite(int i)
     {
@@ -218,8 +220,8 @@ public final class Node
     }
 
     /** Get child node.
-        @param i Index of the child
-        in [0...getNumberChildren() - 1]
+        @param i Index of the child in [0...getNumberChildren() - 1]
+        @return The child node
     */
     public Node getChild(int i)
     {
@@ -307,8 +309,10 @@ public final class Node
         return m_move;
     }
 
-    /** Moves left in byoyomi for color.
-        -1 if not in byyomi or unknown.
+    /** Moves left in byoyomi.
+        @param color The color.
+        @return Moves left in byoyomi for that color or -1 if not in byyomi or
+        unknown.
     */
     public int getMovesLeft(GoColor color)
     {
@@ -318,17 +322,6 @@ public final class Node
         if (color == GoColor.BLACK)
             return timeInfo.m_movesLeftBlack;
         assert(color == GoColor.WHITE);
-        return timeInfo.m_movesLeftWhite;
-    }
-
-    /** Moves left in byoyomi for white.
-        -1 if not in byyomi or unknown.
-    */
-    public int getMovesLeftWhite()
-    {
-        TimeInfo timeInfo = getTimeInfo();
-        if (timeInfo == null)
-            return -1;
         return timeInfo.m_movesLeftWhite;
     }
 
