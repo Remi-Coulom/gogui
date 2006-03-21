@@ -65,7 +65,7 @@ public class GuiField
             drawLastMoveMarker();
         if (m_select)
             drawSelect();
-        else
+        if (m_label != null && ! m_label.equals(""))
             drawLabel();
         if (m_cursor)
             drawCursor();
@@ -418,9 +418,7 @@ public class GuiField
 
     private void drawSelect()
     {
-        setComposite(COMPOSITE_7);
-        drawCircle(Color.blue);
-        m_graphics.setPaintMode();
+        drawCircle(COLOR_MARK);
     }
 
     private void drawStone()
