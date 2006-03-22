@@ -159,7 +159,6 @@ public class GoGui
                     GoPoint list[] =
                         GtpUtils.parsePointString(text, m_boardSize);
                     GuiBoardUtils.showPointList(m_guiBoard, list);
-                    m_guiBoard.repaint();
                 }
             };
         m_comment = new Comment(commentListener, m_fastPaint);
