@@ -70,7 +70,7 @@ public final class FileUtils
     {
         try
         {
-            return new URI("file", "", file.getAbsolutePath(), null, null);
+            return new URI("file", "", file.toURI().getPath(), null, null);
         }
         catch (URISyntaxException e)
         {
