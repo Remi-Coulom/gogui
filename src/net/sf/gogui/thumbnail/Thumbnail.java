@@ -36,9 +36,10 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiBoardDrawer;
+import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.FileUtils;
-import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.utils.Platform;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -57,7 +58,12 @@ public final class Thumbnail
 
     public static boolean checkThumbnailSupport()
     {
-        return getNormalDir().exists();
+        File dir = getNormalDir();
+        // On Windows we try to create the directory, not in other platforms,
+        // because we cannot create it with the right permissions from Java
+        if (! dir.exists() && Platform.isWindows())
+            dir.mkdirs();
+        return dir.exists();
     }
 
     public boolean create(File input)
