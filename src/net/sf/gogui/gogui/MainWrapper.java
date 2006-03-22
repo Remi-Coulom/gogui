@@ -23,7 +23,7 @@ public final class MainWrapper
         System.setProperty("apple.laf.useScreenMenuBar", "false");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
                            "GoGui");
-        // On Windows, use GDI instead of DirectDraw to avois screen flicker
+        // On Windows, use GDI instead of DirectDraw to avoid screen flicker
         // see http://mindprod.com/jgloss/flicker.html
         System.setProperty("sun.java2d.noddraw", "true");
         GoGuiSettings settings;
@@ -52,7 +52,8 @@ public final class MainWrapper
         }
         catch (Exception e)
         {
-            fatalError(e.getClass().getName() + ": " + e.getMessage());
+            System.err.println(e.getMessage());
+            System.exit(-1);
         }
     }
 
@@ -60,18 +61,6 @@ public final class MainWrapper
     private MainWrapper()
     {
     }
-
-    private static void fatalError(String message)
-    {
-        printError(message);
-        System.exit(-1);
-    }
- 
-    private static void printError(String message)
-    {
-        System.err.println("SplashScreen: " + message);
-    }
- 
 }
 
 //----------------------------------------------------------------------------
