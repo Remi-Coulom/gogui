@@ -16,7 +16,7 @@ public final class Version
     */
     public static String get()
     {
-        return "0.9pre2";
+        return "0.9pre2.x";
     }
 
     /** Make constructor unavailable; class is for namespace only. */
