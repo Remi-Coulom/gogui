@@ -79,6 +79,7 @@ public final class Thumbnail
     {
         assert(thumbnailSize > 0);
         m_lastThumbnail = null;
+        m_lastError = "";
         try
         {
             log("File: " + input);
@@ -138,19 +139,23 @@ public final class Thumbnail
         }
         catch (FileNotFoundException e)
         {
-            System.err.println("File not found: " + input);
+            m_lastError = "File not found: " + input;
+            log(m_lastError);
         }
         catch (IOException e)
         {
-            System.err.println(e.getMessage());
+            m_lastError = e.getMessage();
+            log(m_lastError);
         }
         catch (NoSuchAlgorithmException e)
         {
-            System.err.println("No MD5 message digest found");
+            m_lastError = "No MD5 message digest found";
+            log(m_lastError);
         }
         catch (SgfReader.SgfError e)
         {
-            System.err.println("SGF error: " + input);
+            m_lastError = e.getMessage();
+            log(m_lastError);
         }
         return false;
     }
@@ -158,6 +163,11 @@ public final class Thumbnail
     public String getLastDescription()
     {
         return m_description;
+    }
+
+    public String getLastError()
+    {
+        return m_lastError;
     }
 
     public File getLastThumbnail()
@@ -168,6 +178,8 @@ public final class Thumbnail
     private final boolean m_verbose;
 
     private String m_description;
+
+    private String m_lastError;
 
     private File m_lastThumbnail;
 

@@ -407,7 +407,11 @@ class SgfPreview
             m_image = icon.getImage();
         }
         else
+        {
+            SimpleDialogs.showError(this, "Preview generation failed:\n" +
+                                    m_thumbnail.getLastError());
             m_image = null;
+        }
         String description = m_thumbnail.getLastDescription();
         if (! description.equals(""))
             m_description.setText(description);

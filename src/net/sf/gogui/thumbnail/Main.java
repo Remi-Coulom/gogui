@@ -53,7 +53,10 @@ public final class Main
             int size = opt.getInteger("size", 128, 1);
             Thumbnail thumbnail = new Thumbnail(verbose);
             if (! thumbnail.create(input, output, size, true))
+            {
+                System.err.println(thumbnail.getLastError());
                 System.exit(-1);
+            }
         }
         catch (Throwable t)
         {
