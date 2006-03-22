@@ -84,6 +84,11 @@ public final class Thumbnail
         {
             log("File: " + input);
             URI uri = FileUtils.getURI(input);
+            if (uri == null)
+            {
+                m_lastError = "Invalid file name";
+                return false;
+            }
             log("URI: " + uri);
             String md5 = getMD5(uri.toString());
             if (m_verbose)
