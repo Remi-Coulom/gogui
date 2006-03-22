@@ -19,6 +19,11 @@ GoGui: fix clearing influence analyze command and analyze auto-run bug
 GoGui: use JGoodies WindowsLookAndFeel as default on Windows
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GoGui: enable preview in file dialog on Windows
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
