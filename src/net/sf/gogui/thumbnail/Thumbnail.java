@@ -78,7 +78,6 @@ public final class Thumbnail
         @param thumbnailSize The image size of the thumbnail.
         @param scale If true thumbnailSize will be scaled down for boards
         smaller than 19.
-        in ~/.thumbnails/normal
     */
     public boolean create(File input, File output, int thumbnailSize,
                           boolean scale)

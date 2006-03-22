@@ -125,7 +125,7 @@ public class GuiUtils
         // Disables renaming mode in Sun Java 1.5, which makes using the
         // JFileChooser a pain and is also enabled for open dialogs
         // for no good reason. Unfortunately that sacrifices the new directory
-        // button, which is usefule for save dialogs
+        // button, which is useful for save dialogs
         UIManager.put("FileChooser.readOnly", Boolean.TRUE);
         if ("".equals(lookAndFeel))
             return;
