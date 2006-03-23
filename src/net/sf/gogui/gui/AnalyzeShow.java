@@ -175,6 +175,87 @@ public final class AnalyzeShow
         }
     }
 
+    public static void showGfxCircle(String[] arg, GuiBoard guiBoard,
+                                     int size)
+    {
+        for (int i = 1; i < arg.length; ++i)
+        {
+            try
+            {
+                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                if (point == null)
+                    continue;
+                guiBoard.setMarkCircle(point, true);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+            }
+        }
+    }
+
+    public static void showGfxColor(String[] arg, GuiBoard guiBoard, int size)
+    {
+        if (arg.length < 2)
+            return;
+        Color color = GuiBoardUtils.getColor(arg[1]);
+        for (int i = 2; i < arg.length; ++i)
+        {
+            try
+            {
+                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                if (point == null)
+                    continue;
+                guiBoard.setFieldBackground(point, color);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+            }
+        }
+    }
+
+    public static void showGfxInfluence(String[] arg, GuiBoard guiBoard,
+                                        int size)
+    {
+        for (int i = 1; i < arg.length; i += 2)
+        {
+            try
+            {
+                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                if (i + 1 >= arg.length)
+                    break;
+                if (point == null)
+                    continue;
+                double value = Double.parseDouble(arg[i + 1]);
+                guiBoard.setInfluence(point, value);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+            }
+            catch (NumberFormatException e)
+            {
+            }
+        }
+    }
+
+    public static void showGfxLabel(String[] arg, GuiBoard guiBoard, int size)
+    {
+        for (int i = 1; i < arg.length; i += 2)
+        {
+            try
+            {
+                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                if (i + 1 >= arg.length)
+                    break;
+                if (point == null)
+                    continue;
+                guiBoard.setLabel(point, arg[i + 1]);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+            }
+        }
+    }
+    
     public static void showGfxLine(String line, GuiBoard guiBoard, int size)
     {
         String[] arg = StringUtils.splitArguments(line);
@@ -182,158 +263,92 @@ public final class AnalyzeShow
             return;
         String cmd = arg[0].toUpperCase();
         if (cmd.equals("BLACK"))
-        {
-            for (int i = 1; i < arg.length; ++i)
-            {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (point == null)
-                        continue;
-                    guiBoard.setTerritory(point, GoColor.BLACK);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
-            }
-        }
+            showGfxTerritory(arg, GoColor.BLACK, guiBoard, size);
         else if (cmd.equals("CIRCLE"))
-        {
-            for (int i = 1; i < arg.length; ++i)
-            {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (point == null)
-                        continue;
-                    guiBoard.setMarkCircle(point, true);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
-            }
-        }
+            showGfxCircle(arg, guiBoard, size);
         else if (cmd.equals("COLOR"))
-        {
-            if (arg.length < 2)
-                return;
-            Color color = GuiBoardUtils.getColor(arg[1]);
-            for (int i = 2; i < arg.length; ++i)
-            {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (point == null)
-                        continue;
-                    guiBoard.setFieldBackground(point, color);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
-            }
-        }
+            showGfxColor(arg, guiBoard, size);
         else if (cmd.equals("INFLUENCE"))
-        {
-            for (int i = 1; i < arg.length; i += 2)
-            {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (i + 1 >= arg.length)
-                        break;
-                    if (point == null)
-                        continue;
-                    double value = Double.parseDouble(arg[i + 1]);
-                    guiBoard.setInfluence(point, value);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
-                catch (NumberFormatException e)
-                {
-                }
-            }
-        }
+            showGfxInfluence(arg, guiBoard, size);
         else if (cmd.equals("LABEL"))
-        {
-            for (int i = 1; i < arg.length; i += 2)
-            {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (i + 1 >= arg.length)
-                        break;
-                    if (point == null)
-                        continue;
-                    guiBoard.setLabel(point, arg[i + 1]);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
-            }
-        }
+            showGfxLabel(arg, guiBoard, size);
         else if (cmd.equals("MARK"))
-        {
-            for (int i = 1; i < arg.length; ++i)
-            {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (point == null)
-                        continue;
-                    guiBoard.setMark(point, true);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
-            }
-        }
+            showGfxMark(arg, guiBoard, size);
         else if (cmd.equals("SQUARE"))
-        {
-            for (int i = 1; i < arg.length; ++i)
-            {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (point == null)
-                        continue;
-                    guiBoard.setMarkSquare(point, true);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
-            }
-        }
+            showGfxSquare(arg, guiBoard, size);
         else if (cmd.equals("TRIANGLE"))
+            showGfxTriangle(arg, guiBoard, size);
+        else if (cmd.equals("WHITE"))
+            showGfxTerritory(arg, GoColor.WHITE, guiBoard, size);
+    }
+
+    public static void showGfxMark(String[] arg, GuiBoard guiBoard, int size)
+    {
+        for (int i = 1; i < arg.length; ++i)
         {
-            for (int i = 1; i < arg.length; ++i)
+            try
             {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (point == null)
-                        continue;
-                    guiBoard.setMarkTriangle(point, true);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
+                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                if (point == null)
+                    continue;
+                guiBoard.setMark(point, true);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
             }
         }
-        else if (cmd.equals("WHITE"))
+    }
+
+    public static void showGfxSquare(String[] arg, GuiBoard guiBoard,
+                                     int size)
+    {
+        for (int i = 1; i < arg.length; ++i)
         {
-            for (int i = 1; i < arg.length; ++i)
+            try
             {
-                try
-                {
-                    GoPoint point = GoPoint.parsePoint(arg[i], size);
-                    if (point == null)
-                        continue;
-                    guiBoard.setTerritory(point, GoColor.WHITE);
-                }
-                catch (GoPoint.InvalidPoint e)
-                {
-                }
+                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                if (point == null)
+                    continue;
+                guiBoard.setMarkSquare(point, true);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+            }
+        }
+    }
+
+    public static void showGfxTriangle(String[] arg, GuiBoard guiBoard,
+                                       int size)
+    {
+        for (int i = 1; i < arg.length; ++i)
+        {
+            try
+            {
+                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                if (point == null)
+                    continue;
+                guiBoard.setMarkTriangle(point, true);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+            }
+        }
+    }
+
+    public static void showGfxTerritory(String[] arg, GoColor color,
+                                        GuiBoard guiBoard, int size)
+    {
+        for (int i = 1; i < arg.length; ++i)
+        {
+            try
+            {
+                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                if (point == null)
+                    continue;
+                guiBoard.setTerritory(point, color);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
             }
         }
     }
