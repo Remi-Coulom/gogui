@@ -18,8 +18,6 @@ public final class Board
 
     public static final int RULES_JAPANESE = 2;
 
-    public static final int NUMBER_ROTATIONS = 8;
-
     public Board(int boardSize)
     {
         initSize(boardSize);
@@ -279,37 +277,6 @@ public final class Board
         m_moves.add(new MoveRecord(m_toMove, m, old, killed, suicide,
                                    oldKoPoint));
         m_toMove = otherColor;        
-    }
-
-    public GoPoint rotate(int rotationIndex, GoPoint point)
-    {
-        assert(rotationIndex < NUMBER_ROTATIONS);
-        if (point == null)
-            return null;
-        int x = point.getX();
-        int y = point.getY();
-        int size = getSize();
-        switch (rotationIndex)
-        {
-        case 0:
-            return GoPoint.get(x, y);
-        case 1:
-            return GoPoint.get(size - x - 1, y);
-        case 2:
-            return GoPoint.get(x, size - y - 1);
-        case 3:
-            return GoPoint.get(y, x);
-        case 4:
-            return GoPoint.get(size - y - 1, x);
-        case 5:
-            return GoPoint.get(y, size - x - 1);
-        case 6:
-            return GoPoint.get(size - x - 1, size - y - 1);
-        case 7:
-            return GoPoint.get(size - y - 1, size - x - 1);
-        default:
-            return GoPoint.get(x, y);
-        }
     }
 
     public void scoreBegin(GoPoint[] isDeadStone)

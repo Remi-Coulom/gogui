@@ -13,6 +13,7 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtils;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.BoardUtils;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.MoveUtils;
@@ -51,7 +52,7 @@ public final class Compare
             if (useAlternate && ((numberGame % 2 != 0) != isAlternated))
                 continue;
             ArrayList gameMoves = (ArrayList)games.get(numberGame);
-            for (int rot = 0; rot < Board.NUMBER_ROTATIONS; ++rot)
+            for (int rot = 0; rot < BoardUtils.NUMBER_ROTATIONS; ++rot)
             {
                 int numberDifferent = 0;
                 int moveNumber = moves.size();
@@ -68,8 +69,9 @@ public final class Compare
                     GoPoint point = move.getPoint();
                     GoColor color = move.getColor();
                     Move gameMove = (Move)gameMoves.get(i);
-                    GoPoint gamePoint =
-                        board.rotate(rot, gameMove.getPoint());
+                    GoPoint gamePoint = BoardUtils.rotate(rot,
+                                                          gameMove.getPoint(),
+                                                          board.getSize());
                     GoColor gameColor = gameMove.getColor();
                     if (! color.equals(gameColor) || point != gamePoint)
                         ++numberDifferent;
