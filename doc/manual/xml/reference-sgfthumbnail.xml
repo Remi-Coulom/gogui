@@ -43,8 +43,11 @@ freedesktop.org</ulink>.
 This allows previewing the SGF files in filemanagers that support this
 standard, like <ulink url="http://www.gnome.org/projects/nautilus/">
 Nautilus</ulink>.
-The thumbnail will show the final position of the main variation or the first
-position that contains both black and white setup stones.
+The installation script <filename>install.sh</filename> in the GoGui package
+will install SgfThumbnail as a thumbnailer for the
+<ulink url="http://www.gnome.org">GNOME</ulink> desktop environment.
+The thumbnails will show the final position of the main variation, or the
+first position that contains both black and white setup stones.
 If no output filename is given, the thumbnails will be created in the
 directory <userinput>.thumbnails/normal</userinput> in the user home
 directory, but if it already exists.
