@@ -278,6 +278,8 @@ public final class AnalyzeShow
             showGfxSquare(arg, guiBoard, size);
         else if (cmd.equals("TRIANGLE"))
             showGfxTriangle(arg, guiBoard, size);
+        else if (cmd.equals("VAR"))
+            showGfxVariation(arg, guiBoard, size);
         else if (cmd.equals("WHITE"))
             showGfxTerritory(arg, GoColor.WHITE, guiBoard, size);
     }
@@ -346,6 +348,37 @@ public final class AnalyzeShow
                 if (point == null)
                     continue;
                 guiBoard.setTerritory(point, color);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+            }
+        }
+    }
+
+    public static void showGfxVariation(String[] arg, GuiBoard guiBoard,
+                                        int size)
+    {
+        int n = 0;
+        for (int i = 1; i < arg.length; i += 2)
+        {
+            try
+            {
+                GoColor color;
+                if (arg[i].equalsIgnoreCase("b"))
+                    color = GoColor.BLACK;
+                else if (arg[i].equalsIgnoreCase("w"))
+                    color = GoColor.WHITE;
+                else
+                    break;
+                if (i + 1 >= arg.length)
+                    break;
+                GoPoint point = GoPoint.parsePoint(arg[i + 1], size);
+                ++n;
+                if (point != null)
+                {
+                    guiBoard.setColor(point, color);
+                    guiBoard.setLabel(point, Integer.toString(n));
+                }
             }
             catch (GoPoint.InvalidPoint e)
             {

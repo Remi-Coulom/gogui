@@ -224,7 +224,8 @@ public class GtpDummy
                         "BLACK B1\n" +
                         "CIRCLE c8\n" +
                         "INFLUENCE a7 -1 b7 -0.75 c7 -0.5 d7 -0.25 e7 0"
-                        + " f7 0.25 g7 0.5 h7 0.75 j7 1\n");
+                        + " f7 0.25 g7 0.5 h7 0.75 j7 1\n" +
+                        "VAR b c1 w c2 b c3 b c4 w pass b c5\n");
     }
 
     private void cmdGoGuiAnalyzeCommands(GtpCommand cmd) throws GtpError
