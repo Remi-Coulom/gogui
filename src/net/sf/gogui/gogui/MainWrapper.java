@@ -8,6 +8,7 @@ package net.sf.gogui.gogui;
 import net.sf.gogui.utils.ErrorMessage;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Locale;
 
 //----------------------------------------------------------------------------
  
@@ -19,6 +20,9 @@ public final class MainWrapper
 {
     public static void main(String [] args)
     {
+        // GoGui is not localized, avoid a mix between English and local
+        // language in Swing dialogs
+        Locale.setDefault(Locale.ENGLISH);
         System.setProperty("apple.awt.brushMetalLook", "true");
         System.setProperty("apple.laf.useScreenMenuBar", "false");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
