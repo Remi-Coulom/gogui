@@ -146,6 +146,8 @@ public final class Main
                   "-final        GTP commands to run on final positions\n" +
                   "-force        Overwrite existing file\n" +
                   "-help         Display this help and exit\n" +
+                  "-max          Only positions with maximum move number\n" +
+                  "-min          Only positions with minimum move number\n" +
                   "-output       Filename prefix for output files\n" +
                   "-precision    Floating point precision for -analyze\n" +
                   "-setup        Allow setup stones in root position\n" +
