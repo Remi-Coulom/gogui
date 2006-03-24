@@ -19,6 +19,8 @@ Runs GTP commands on all positions of game collections.
 <arg><option>-commands</option> <replaceable>commands</replaceable></arg>
 <arg><option>-final</option> <replaceable>commands</replaceable></arg>
 <arg><option>-force</option></arg>
+<arg><option>-min</option> <replaceable>n</replaceable></arg>
+<arg><option>-max</option> <replaceable>n</replaceable></arg>
 <arg><option>-program</option> <replaceable>program</replaceable></arg>
 <arg><option>-setup</option> <replaceable>n</replaceable></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
@@ -188,6 +190,28 @@ Overwrite existing result table.
 <listitem>
 <para>
 Display help and exit.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-max</option>
+</term>
+<listitem>
+<para>
+Only run commands on positions at less or equal this move number.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<option>-min</option>
+</term>
+<listitem>
+<para>
+Only run commands on positions at greater or equal this move number.
 </para>
 </listitem>
 </varlistentry>

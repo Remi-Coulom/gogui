@@ -31,6 +31,8 @@ public final class Main
                 "final:",
                 "force",
                 "help",
+                "max:",
+                "min:",
                 "output:",
                 "precision:",
                 "program:",
@@ -64,6 +66,8 @@ public final class Main
             }
             boolean verbose = opt.isSet("verbose");
             boolean force = opt.isSet("force");
+            int min = opt.getInteger("min", 0, 0);
+            int max = opt.getInteger("max", Integer.MAX_VALUE, 0);
             int precision = opt.getInteger("precision", 3, 0);
             int boardSize = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
                                            GoPoint.MAXSIZE);
@@ -99,7 +103,7 @@ public final class Main
                     = new GtpStatistics(program, arguments, output, boardSize,
                                         commands, beginCommands,
                                         finalCommands, verbose, force,
-                                        allowSetup);
+                                        allowSetup, min, max);
                 System.exit(gtpStatistics.getResult() ? 0 : -1);
             }
         }

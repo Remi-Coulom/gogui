@@ -35,7 +35,8 @@ public class GtpStatistics
     public GtpStatistics(String program, ArrayList sgfFiles, File output,
                          int size, ArrayList commands,
                          ArrayList beginCommands, ArrayList finalCommands,
-                         boolean verbose, boolean force, boolean allowSetup)
+                         boolean verbose, boolean force, boolean allowSetup,
+                         int min, int max)
         throws Exception
     {
         if (output.exists() && ! force)
@@ -44,6 +45,8 @@ public class GtpStatistics
         m_size = size;
         m_result = false;
         m_allowSetup = allowSetup;
+        m_min = min;
+        m_max = max;
         initCommands(commands, beginCommands, finalCommands);
         ArrayList columnHeaders = new ArrayList();
         columnHeaders.add("File");
@@ -103,6 +106,10 @@ public class GtpStatistics
     private final boolean m_allowSetup;
 
     private boolean m_result;
+
+    private int m_max;
+
+    private int m_min;
 
     private int m_numberGames;
 
@@ -215,7 +222,8 @@ public class GtpStatistics
                     throw new ErrorMessage(name
                                            + "has non-alternating moves");
                 ++number;
-                handlePosition(name, toMove, move, number);
+                if (number == 1 || (number >= m_min && number <= m_max))
+                    handlePosition(name, toMove, move, number);
                 m_gtp.sendPlay(move);
                 toMove = toMove.otherColor();
             }
@@ -249,6 +257,8 @@ public class GtpStatistics
                 String response = send(command.m_command, toMove, move);
                 m_table.set(command.m_columnTitle, response);
             }
+        if (number < m_min || number > m_max)
+            return;
         for (int i = 0; i < m_commands.size(); ++i)
         {
             Command command = getCommand(i);

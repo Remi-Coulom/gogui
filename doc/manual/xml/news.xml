@@ -9,6 +9,12 @@
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
+<listitem>
+<simpara>
+GtpStatistics: add missing class files to gtpstatistics.jar; new options
+-min and -max
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>
