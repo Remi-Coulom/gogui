@@ -528,14 +528,13 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/game/*.class
- net/sf/gogui/go/GoColor.class
- net/sf/gogui/go/Move.class
- net/sf/gogui/go/GoPoint*.class
+ net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
+ net/sf/gogui/gui/*.class
  net/sf/gogui/gtpstatistics/*.class
  net/sf/gogui/sgf/*.class
  net/sf/gogui/utils/*.class
- net/sf/gogui/version/Version.class
+ net/sf/gogui/version/*.class
 "/>
 </jar>
 </target>
