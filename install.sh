@@ -46,7 +46,7 @@ fi
 # Install files to $PREFIX/share/gogui/lib
 
 install -d $PREFIX/share/gogui/lib
-install lib/*.jar $PREFIX/share/gogui/lib
+install -m 644 lib/*.jar $PREFIX/share/gogui/lib
 
 # Install files to $PREFIX/bin
 
@@ -64,27 +64,27 @@ done
 # Install files to $PREFIX/share/doc/gogui
 
 install -d $PREFIX/share/doc/gogui
-install doc/manual/html/*.{html,png} $PREFIX/share/doc/gogui
+install -m 644 doc/manual/html/*.{html,png} $PREFIX/share/doc/gogui
 
 # Install files to $PREFIX/share/man
 
 install -d $PREFIX/share/man/man1
-install doc/manual/man/*.1 $PREFIX/share/man/man1
+install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 # Install icons
 
 install -d $PREFIX/share/icons/hicolor/48x48/apps
-install src/net/sf/gogui/images/gogui.png \
+install -m 644 src/net/sf/gogui/images/gogui.png \
   $PREFIX/share/icons/hicolor/48x48/apps
 # hicolor is the standard according to freedesktop.org, but for compatibility
 # we also install the icon to pixmaps
 install -d $PREFIX/share/pixmaps
-install src/net/sf/gogui/images/gogui.png $PREFIX/share/pixmaps
+install -m 644 src/net/sf/gogui/images/gogui.png $PREFIX/share/pixmaps
 
 # Install desktop entry
 
 install -d $PREFIX/share/applications
-install config/gogui.desktop $PREFIX/share/applications
+install -m 644 config/gogui.desktop $PREFIX/share/applications
 # Add DocPath entry used by KDE 3.4
 echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
   >> $PREFIX/share/applications/gogui.desktop
@@ -92,12 +92,12 @@ echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
 # Install shared mime info
 
 install -d $PREFIX/share/mime/packages
-install config/gogui.xml $PREFIX/share/mime/packages
+install -m 644 config/gogui.xml $PREFIX/share/mime/packages
 
 # Install mime icon
 
 install -d $PREFIX/share/icons/hicolor/48x48/mimetypes
-install config/gogui-application-x-go-sgf.png \
+install -m 644 config/gogui-application-x-go-sgf.png \
   $PREFIX/share/icons/hicolor/48x48/mimetypes
 
 # Install KDE mime entry
@@ -105,7 +105,7 @@ install config/gogui-application-x-go-sgf.png \
 # Remove when KDE supports the standard shared MIME database
 
 install -d $PREFIX/share/mimelnk/application
-install config/x-go-sgf.desktop $PREFIX/share/mimelnk/application
+install -m 644 config/x-go-sgf.desktop $PREFIX/share/mimelnk/application
 
 # Install Gnome thumbnailer
 
