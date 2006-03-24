@@ -295,6 +295,8 @@ class SgfPreview
         JPanel previewPanel = new JPanel();
         previewPanel.setLayout(new BoxLayout(previewPanel, BoxLayout.Y_AXIS));
         previewPanel.add(Box.createVerticalGlue());
+        Dimension dimension = new Dimension(128 + 10, 224 + 10);
+        previewPanel.setPreferredSize(dimension);
         add(previewPanel);
         m_imagePanel = new ImagePanel();
         previewPanel.add(m_imagePanel);
