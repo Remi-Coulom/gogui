@@ -417,7 +417,7 @@ public class GtpShell
                 || c.startsWith("quit"))
             {
                 if (m_modifyWarning == null)
-                    m_modifyWarning = new OptionalWarning(this);
+                    m_modifyWarning = new OptionalMessage(this);
                 String message = 
                     "The command '" + command + "' " +
                     "will modify the board state " +
@@ -619,7 +619,7 @@ public class GtpShell
 
     private GtpShellText m_gtpShellText;
 
-    private OptionalWarning m_modifyWarning;
+    private OptionalMessage m_modifyWarning;
 
     private Point m_finalLocation;
 

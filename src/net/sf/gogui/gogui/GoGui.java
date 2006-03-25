@@ -74,7 +74,7 @@ import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtils;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
-import net.sf.gogui.gui.OptionalWarning;
+import net.sf.gogui.gui.OptionalMessage;
 import net.sf.gogui.gui.ParameterDialog;
 import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.gui.SelectProgram;
@@ -1084,11 +1084,11 @@ public class GoGui
 
     private Node m_currentNode;
 
-    private OptionalWarning m_gameFinishedMessage;
+    private OptionalMessage m_gameFinishedMessage;
 
-    private OptionalWarning m_overwriteWarning;
+    private OptionalMessage m_overwriteWarning;
 
-    private OptionalWarning m_passWarning;
+    private OptionalMessage m_passWarning;
 
     private Pattern m_pattern;
 
@@ -1900,7 +1900,7 @@ public class GoGui
         if (isCommandInProgress())
             return;
         if (m_passWarning == null)
-            m_passWarning = new OptionalWarning(this);
+            m_passWarning = new OptionalMessage(this);
         if (! m_passWarning.show("Really pass?",
                                  JOptionPane.QUESTION_MESSAGE))
             return;
@@ -1941,7 +1941,7 @@ public class GoGui
             if (m_loadedFile.exists())
             {
                 if (m_overwriteWarning == null)
-                    m_overwriteWarning = new OptionalWarning(this);
+                    m_overwriteWarning = new OptionalMessage(this);
                 String message = "Overwrite " + m_loadedFile + "?";
                 if (! m_overwriteWarning.show(message))
                     return;
@@ -3493,7 +3493,7 @@ public class GoGui
     private void showGameFinished()
     {
         if (m_gameFinishedMessage == null)
-            m_gameFinishedMessage = new OptionalWarning(this);
+            m_gameFinishedMessage = new OptionalMessage(this);
         m_gameFinishedMessage.show("Game finished",
                                    JOptionPane.INFORMATION_MESSAGE);
     }

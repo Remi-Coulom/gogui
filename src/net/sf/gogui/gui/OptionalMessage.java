@@ -20,9 +20,9 @@ import javax.swing.UIManager;
 /** Message which can be disabled.
     Also provides multi-line word-wrapped text.
 */
-public class OptionalWarning
+public class OptionalMessage
 {
-    public OptionalWarning(Component parent)
+    public OptionalMessage(Component parent)
     {
         m_parent = parent;
     }

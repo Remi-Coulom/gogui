@@ -101,7 +101,7 @@ public class EditBookmarksDialog
 
     private final JList m_list;
 
-    private OptionalWarning m_removeWarning;
+    private OptionalMessage m_removeWarning;
 
     private final ArrayList m_bookmarks;
 
@@ -148,7 +148,7 @@ public class EditBookmarksDialog
         int selectedIndex = m_list.getSelectedIndex();
         String name = bookmark.m_name;
         if (m_removeWarning == null)
-            m_removeWarning = new OptionalWarning(this);
+            m_removeWarning = new OptionalMessage(this);
         if (! m_removeWarning.show("Really remove '" + name + "'?"))
             return;
         m_bookmarks.remove(bookmark);
