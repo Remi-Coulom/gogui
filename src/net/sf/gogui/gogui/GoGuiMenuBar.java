@@ -927,8 +927,8 @@ public class GoGuiMenuBar
         menu.addItem("Print...", KeyEvent.VK_P, KeyEvent.VK_P,
                      SHORTCUT, "print");
         menu.addSeparator();
-        menu.addItem("Attach Program...", KeyEvent.VK_T,
-                     "attach-program");
+        menu.addItem("Attach Program...", KeyEvent.VK_T, KeyEvent.VK_A,
+                     SHORTCUT, "attach-program");
         m_itemDetachProgram = menu.addItem("Detach Program",
                                            KeyEvent.VK_D, "detach-program");
         menu.addSeparator();
