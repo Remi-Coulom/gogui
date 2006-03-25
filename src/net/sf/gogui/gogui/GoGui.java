@@ -1338,7 +1338,6 @@ public class GoGui
                     m_gameInfo.fastUpdateMoveNumber(m_currentNode);
                 }
             }
-            computerNone();
         }
         catch (GtpError e)
         {
@@ -2144,7 +2143,6 @@ public class GoGui
                 }
                 m_clock.halt();
                 showInfo("Game finished");
-                computerNone();
                 return;
             }
             generateMove(false);            
@@ -2155,7 +2153,6 @@ public class GoGui
             {
                 m_clock.halt();
                 showInfo("Game finished");
-                computerNone();
                 return;
             }
             else if (computerToMove())
