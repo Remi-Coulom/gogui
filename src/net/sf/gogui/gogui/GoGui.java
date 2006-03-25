@@ -515,12 +515,12 @@ public class GoGui
 
     public void cbAttachProgram()
     {        
-        if (m_commandThread != null)
-            if (! cbDetachProgram())
-                return;
         String program = SelectProgram.select(this);
         if (program == null)
             return;
+        if (m_commandThread != null)
+            if (! cbDetachProgram())
+                return;
         if (! attachProgram(program))
         {
             m_prefs.setString("program", "");
@@ -576,8 +576,6 @@ public class GoGui
             if (! showQuestion("Kill program?"))
                 return false;
         }
-        else if (! showQuestion("Detach " + m_name + "?"))
-            return false;
         detachProgram();
         m_prefs.setString("program", "");
         return true;
