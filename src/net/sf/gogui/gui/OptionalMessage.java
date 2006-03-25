@@ -108,6 +108,7 @@ public class OptionalMessage
         textArea.setWrapStyleWord(true);
         panel.add(textArea);
         panel.add(GuiUtils.createFiller());
+        panel.add(GuiUtils.createFiller());
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
         String title;
         Object defaultOption;
