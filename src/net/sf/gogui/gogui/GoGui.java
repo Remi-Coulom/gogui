@@ -1084,6 +1084,8 @@ public class GoGui
 
     private Node m_currentNode;
 
+    private OptionalWarning m_gameFinishedMessage;
+
     private OptionalWarning m_overwriteWarning;
 
     private OptionalWarning m_passWarning;
@@ -1899,7 +1901,8 @@ public class GoGui
             return;
         if (m_passWarning == null)
             m_passWarning = new OptionalWarning(this);
-        if (! m_passWarning.show("Really pass?", true))
+        if (! m_passWarning.show("Really pass?",
+                                 JOptionPane.QUESTION_MESSAGE))
             return;
         humanMoved(Move.getPass(m_board.getToMove()));
     }
@@ -2144,7 +2147,7 @@ public class GoGui
                     return;
                 }
                 m_clock.halt();
-                showInfo("Game finished");
+                showGameFinished();
                 return;
             }
             generateMove(false);            
@@ -2154,7 +2157,7 @@ public class GoGui
             if (gameFinished)
             {
                 m_clock.halt();
-                showInfo("Game finished");
+                showGameFinished();
                 return;
             }
             else if (computerToMove())
@@ -3485,6 +3488,14 @@ public class GoGui
     private void showError(String message)
     {
         SimpleDialogs.showError(this, message);
+    }
+
+    private void showGameFinished()
+    {
+        if (m_gameFinishedMessage == null)
+            m_gameFinishedMessage = new OptionalWarning(this);
+        m_gameFinishedMessage.show("Game finished",
+                                   JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void showInfo(String message)

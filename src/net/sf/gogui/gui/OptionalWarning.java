@@ -17,7 +17,7 @@ import javax.swing.UIManager;
 
 //----------------------------------------------------------------------------
 
-/** Warning which can be disabled.
+/** Message which can be disabled.
     Also provides multi-line word-wrapped text.
 */
 public class OptionalWarning
@@ -29,10 +29,17 @@ public class OptionalWarning
     
     public boolean show(String message)
     {
-        return show(message, false);
+        return show(message, JOptionPane.WARNING_MESSAGE);
     }
 
-    public boolean show(String message, boolean isQuestion)
+
+    /** Show message dialog if it was not disabled.
+        @param message The message text
+        @param type The message type (JOptionPane.QUESTION_MESSAGE,
+        JOptionPane.WARNING_MESSAGE or JOptionPane.INFORMATION_MESSAGE)
+        @return true, if message was not shown or confirmed
+    */
+    public boolean show(String message, int type)
     {
         if (m_disabled)
             return true;
@@ -50,28 +57,45 @@ public class OptionalWarning
         panel.add(GuiUtils.createFiller());
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
         JCheckBox disabled;
-        int messageType;
         String title;
-        if (isQuestion)
+        Object[] options;
+        Object defaultOption;
+        int optionType;
+        if (type == JOptionPane.QUESTION_MESSAGE)
         {
-            messageType = JOptionPane.QUESTION_MESSAGE;
             disabled = new JCheckBox("Do not ask again");
             title = "Question";
+            options = new Object[2];
+            options[1] = "Ok";
+            options[2] = "Cancel";
+            defaultOption = options[1];
+            optionType = JOptionPane.OK_CANCEL_OPTION;
+        }
+        else if (type == JOptionPane.WARNING_MESSAGE)
+        {
+            disabled = new JCheckBox("Do not show this warning again");
+            title = "Warning";
+            options = new Object[2];
+            options[1] = "Ok";
+            options[2] = "Cancel";
+            defaultOption = options[1];
+            optionType = JOptionPane.OK_CANCEL_OPTION;
         }
         else
         {
-            messageType = JOptionPane.WARNING_MESSAGE;
-            disabled = new JCheckBox("Do not show this warning again");
-            title = "Warning";
+            disabled = new JCheckBox("Do not show this message again");
+            title = "Information";
+            options = new Object[1];
+            options[0] = "Ok";
+            defaultOption = options[0];
+            optionType = JOptionPane.OK_OPTION;
         }
         disabled.setSelected(m_disabled);
         checkBoxPanel.add(disabled, BorderLayout.WEST);
         panel.add(checkBoxPanel);
-        Object options[] = { "Ok", "Cancel" };
         JOptionPane optionPane
-            = new JOptionPane(panel, messageType,
-                              JOptionPane.OK_CANCEL_OPTION, null, options,
-                              options[1]);
+            = new JOptionPane(panel, type, optionType, null, options,
+                              defaultOption);
         JDialog dialog = optionPane.createDialog(m_parent, title);
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
         panel.invalidate();
