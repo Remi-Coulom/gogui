@@ -101,6 +101,7 @@ public class OptionalMessage
         int columns = Math.min(30, message.length());
         JTextArea textArea = new JTextArea(message, 0, columns);
         textArea.setEditable(false);
+        textArea.setFocusable(false);
         textArea.setForeground(UIManager.getColor("Label.foreground"));
         textArea.setBackground(UIManager.getColor("Label.background"));
         textArea.setFont(UIManager.getFont("Label.font"));
