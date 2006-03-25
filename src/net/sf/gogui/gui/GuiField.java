@@ -297,7 +297,7 @@ public class GuiField
     private void drawCircle(Color color)
     {
         m_graphics.setColor(color);
-        int d = m_size * 36 / 100;
+        int d = m_size * 4 / 10;
         int w = m_size - 2 * d;
         m_graphics.fillOval(d, d, w, w);
     }
