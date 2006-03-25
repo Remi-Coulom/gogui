@@ -12,7 +12,9 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -164,6 +166,19 @@ public class SelectProgram
         m_textField = (JTextField)editor.getEditorComponent();
         m_textField.setColumns(40);
         m_textField.selectAll();
+        KeyListener keyListener = new KeyAdapter()
+            {
+                public void keyPressed(KeyEvent e)
+                {
+                    int c = e.getKeyCode();
+                    if (c == KeyEvent.VK_ESCAPE)
+                    {
+                        if (! m_comboBox.isPopupVisible())
+                            dispose();
+                    }
+                }
+            };
+        m_textField.addKeyListener(keyListener);
         GuiUtils.setMonospacedFont(m_comboBox);
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
         JButton button =
