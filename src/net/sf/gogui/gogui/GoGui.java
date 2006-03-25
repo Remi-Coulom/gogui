@@ -1465,6 +1465,7 @@ public class GoGui
         cbNewGame(size);
         m_clock.reset();
         m_clock.halt();
+            updateMenuBar();
         m_gameInfo.updateTime();
     }
     
@@ -1878,6 +1879,7 @@ public class GoGui
         newGame(size);
         m_clock.startMove(GoColor.BLACK);
         updateMenuBar();
+        boardChangedBegin(true, true);
     }
 
     private void cbOpen()
