@@ -268,7 +268,7 @@ public class GuiField
     private static final Color COLOR_INFLUENCE_WHITE = Color.white;
 
     private static final Color COLOR_LAST_MOVE
-        = Color.decode("#c34543");
+        = Color.decode("#888888");
 
     private static final Color COLOR_MARK = Color.decode("#4040ff");
 
@@ -315,11 +315,11 @@ public class GuiField
 
     private void drawCursor()
     {
-        setComposite(COMPOSITE_5);
+        setComposite(COMPOSITE_95);
         int d = m_size / 6;
         int w = m_size;
         int d2 = 2 * d;
-        m_graphics.setColor(Color.red);
+        m_graphics.setColor(COLOR_LAST_MOVE);
         m_graphics.drawLine(d, d, d2, d);
         m_graphics.drawLine(d, d, d, d2);
         m_graphics.drawLine(d, w - d2 - 1, d, w - d - 1);
@@ -380,7 +380,7 @@ public class GuiField
 
     private void drawLastMoveMarker()
     {
-        setComposite(COMPOSITE_7);
+        setComposite(COMPOSITE_95);
         drawCircle(COLOR_LAST_MOVE);
         m_graphics.setPaintMode();
     }
