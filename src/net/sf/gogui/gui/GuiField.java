@@ -315,7 +315,7 @@ public class GuiField
 
     private void drawCursor()
     {
-        setComposite(COMPOSITE_95);
+        setComposite(COMPOSITE_7);
         int d = m_size / 6;
         int w = m_size;
         int d2 = 2 * d;
@@ -380,7 +380,7 @@ public class GuiField
 
     private void drawLastMoveMarker()
     {
-        setComposite(COMPOSITE_95);
+        setComposite(COMPOSITE_7);
         drawCircle(COLOR_LAST_MOVE);
         m_graphics.setPaintMode();
     }
