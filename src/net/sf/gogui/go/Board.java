@@ -23,6 +23,9 @@ public final class Board
         initSize(boardSize);
     }
 
+    /** Check for two consecutive passes.
+        @return true, if the last two moves were pass moves
+    */
     public boolean bothPassed()
     {
         int moveNumber = getMoveNumber();
@@ -81,6 +84,10 @@ public final class Board
         clearMark();
     }
 
+    /** Check if board contains a point.
+        @param The point to check
+        @return true, if the point is on the board
+    */
     public boolean contains(GoPoint point)
     {
         int size = getSize();
@@ -191,6 +198,8 @@ public final class Board
 
     /** Check if move would violate the simple Ko rule.
         Assumes other color to move than the color of the last move.
+        @param point The point to check
+        @return true, if a move at this point would violate the simple ko rule
     */
     public boolean isKo(GoPoint point)
     {
