@@ -424,7 +424,7 @@ public class GtpShell
                     "and cause the graphical board to be out of sync. " +
                     "You should start a new game before using " +
                     "the graphical board again.";
-                if (! m_modifyWarning.show(message))
+                if (! m_modifyWarning.showWarning(message))
                     return true;
             }
             try

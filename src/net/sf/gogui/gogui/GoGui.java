@@ -1090,6 +1090,8 @@ public class GoGui
 
     private OptionalMessage m_passWarning;
 
+    private OptionalMessage m_saveQuestion;
+
     private Pattern m_pattern;
 
     private AnalyzeCommand m_analyzeCommand;
@@ -1901,8 +1903,7 @@ public class GoGui
             return;
         if (m_passWarning == null)
             m_passWarning = new OptionalMessage(this);
-        if (! m_passWarning.show("Really pass?",
-                                 JOptionPane.QUESTION_MESSAGE))
+        if (! m_passWarning.showQuestion("Really pass?"))
             return;
         humanMoved(Move.getPass(m_board.getToMove()));
     }
@@ -1943,7 +1944,7 @@ public class GoGui
                 if (m_overwriteWarning == null)
                     m_overwriteWarning = new OptionalMessage(this);
                 String message = "Overwrite " + m_loadedFile + "?";
-                if (! m_overwriteWarning.show(message))
+                if (! m_overwriteWarning.showWarning(message))
                     return;
             }
             save(m_loadedFile);
@@ -2192,10 +2193,10 @@ public class GoGui
     */
     private boolean checkSaveGame()
     {
+        if (m_saveQuestion == null)
+            m_saveQuestion = new OptionalMessage(this);
         int result =
-            JOptionPane.showConfirmDialog(this, "Save current game?",
-                                          "Question",
-                                          JOptionPane.YES_NO_CANCEL_OPTION);
+            m_saveQuestion.showYesNoCancelQuestion("Save current game?");
         switch (result)
         {
         case 0:
@@ -2206,7 +2207,6 @@ public class GoGui
         case 1:
             setNeedsSave(false);
             return true;
-        case -1:
         case 2:
             return false;
         default:
@@ -3494,8 +3494,7 @@ public class GoGui
     {
         if (m_gameFinishedMessage == null)
             m_gameFinishedMessage = new OptionalMessage(this);
-        m_gameFinishedMessage.show("Game finished",
-                                   JOptionPane.INFORMATION_MESSAGE);
+        m_gameFinishedMessage.showMessage("Game finished");
     }
 
     private void showInfo(String message)
