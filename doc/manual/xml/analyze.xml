@@ -110,10 +110,12 @@ selected points as the argument.
 <simpara>
 General graphical display commands.
 The reponse contains one command and its arguments per line.
-Commands are: BLACK, CIRCLE, COLOR, INFLUENCE, LABEL, MARK, SQUARE, TRIANGLE,
-VAR, WHITE.
-LABEL arguments are point text pairs; INFLUENCE arguments are point double
-pairs; COLOR arguments are a color (like in cboard) and a point list;
+Commands are: BLACK, CIRCLE, COLOR, INFLUENCE, LABEL, MARK, SQUARE, TEXT,
+TRIANGLE, VAR, WHITE.
+TEXT is followed by a text displayed on the status bar;
+LABEL arguments are point text pairs;
+INFLUENCE arguments are point double pairs;
+COLOR arguments are a color (like in cboard) and a point list;
 VAR arguments are moves (b/w point/PASS);
 all other commands take a point list.
 See the <userinput>dummy_gfx</userinput> command in GtpDummy for an example.

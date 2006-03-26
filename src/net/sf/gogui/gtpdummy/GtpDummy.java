@@ -283,6 +283,7 @@ public class GtpDummy
 
     private void cmdLiveGfx(GtpCommand cmd)
     {
+        System.err.println("gogui-gfx: TEXT Live Graphics Demo");
         System.err.println("gogui-gfx: LABEL A4 test");
         sleep(1000);
         System.err.println("gogui-gfx: COLOR green A5 A7 B9");

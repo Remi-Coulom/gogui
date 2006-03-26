@@ -1156,7 +1156,8 @@ public class GoGui
         try
         {
             String response = m_commandThread.getResponse();
-            AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_board, response);
+            AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_statusBar,
+                             m_board, response);
             int type = m_analyzeCommand.getType();
             GoPoint pointArg = null;
             if (m_analyzeCommand.needsPointArg())
@@ -1263,7 +1264,8 @@ public class GoGui
                     m_gtpShell.sentCommand(s);
                 }
 
-                private LiveGfx m_liveGfx = new LiveGfx(m_guiBoard);
+                private LiveGfx m_liveGfx =
+                    new LiveGfx(m_guiBoard, m_statusBar);
             };
         try
         {

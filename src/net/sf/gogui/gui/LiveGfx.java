@@ -12,9 +12,10 @@ import javax.swing.SwingUtilities;
 /** Parse standard error for GoGui live graphics commands. */
 public class LiveGfx
 {
-    public LiveGfx(GuiBoard guiBoard)
+    public LiveGfx(GuiBoard guiBoard, StatusBar statusBar)
     {
         m_guiBoard = guiBoard;
+        m_statusBar = statusBar;
     }
 
     public void receivedStdErr(String s)
@@ -37,13 +38,16 @@ public class LiveGfx
 
     private GuiBoard m_guiBoard;
 
+    private StatusBar m_statusBar;
+
     private void handleLine(String s)
     {
         s = s.trim();
         if (s.equals("") || ! s.startsWith("gogui-gfx:"))
             return;
         int pos = s.indexOf(':');
-        AnalyzeShow.showGfxLine(s.substring(pos + 1), m_guiBoard);
+        AnalyzeShow.showGfxLine(s.substring(pos + 1), m_guiBoard,
+                                m_statusBar);
     }
 }
 

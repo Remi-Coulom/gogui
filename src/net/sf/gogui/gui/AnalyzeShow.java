@@ -24,7 +24,8 @@ import net.sf.gogui.utils.StringUtils;
 public final class AnalyzeShow
 {
     public static void show(AnalyzeCommand command, GuiBoard guiBoard,
-                            Board board, String response) throws GtpError
+                            StatusBar statusBar, Board board,
+                            String response) throws GtpError
     {
         GoPoint pointArg = command.getPointArg();
         ArrayList pointListArg = command.getPointListArg();
@@ -57,7 +58,7 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.GFX:
             {
-                showGfx(response, guiBoard);
+                showGfx(response, guiBoard, statusBar);
             }
             break;
         case AnalyzeCommand.PLIST:
@@ -151,7 +152,8 @@ public final class AnalyzeShow
         return color;
     }
 
-    public static void showGfx(String response, GuiBoard guiBoard)
+    public static void showGfx(String response, GuiBoard guiBoard,
+                               StatusBar statusBar)
     {
         BufferedReader reader
             = new BufferedReader(new StringReader(response));
@@ -169,7 +171,7 @@ public final class AnalyzeShow
             }
             if (line == null)
                 break;
-            showGfxLine(line, guiBoard);
+            showGfxLine(line, guiBoard, statusBar);
         }
     }
 
@@ -256,7 +258,8 @@ public final class AnalyzeShow
         }
     }
     
-    public static void showGfxLine(String line, GuiBoard guiBoard)
+    public static void showGfxLine(String line, GuiBoard guiBoard,
+                                   StatusBar statusBar)
     {
         String[] arg = StringUtils.splitArguments(line);
         if (arg.length == 0)
@@ -278,6 +281,8 @@ public final class AnalyzeShow
             showGfxMark(arg, guiBoard);
         else if (cmd.equals("SQUARE"))
             showGfxSquare(arg, guiBoard);
+        else if (cmd.equals("TEXT"))
+            showGfxText(line, statusBar);
         else if (cmd.equals("TRIANGLE"))
             showGfxTriangle(arg, guiBoard);
         else if (cmd.equals("VAR"))
@@ -320,6 +325,24 @@ public final class AnalyzeShow
             {
             }
         }
+    }
+
+    public static void showGfxText(String line, StatusBar statusBar)
+    {
+        line = line.trim();
+        int pos = line.indexOf(' ');
+        if (pos < 0)
+        {
+            statusBar.clear();
+            return;
+        }
+        line = line.substring(pos + 1).trim();
+        if (pos < 0)
+        {
+            statusBar.clear();
+            return;
+        }
+        statusBar.setText(line);
     }
 
     public static void showGfxTriangle(String[] arg, GuiBoard guiBoard)
