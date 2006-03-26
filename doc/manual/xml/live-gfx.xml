@@ -1,0 +1,24 @@
+<chapter id="live-gfx">
+<title>Live Graphics</title>
+
+<indexterm>
+<primary>Live Graphics</primary>
+</indexterm>
+<indexterm>
+<primary>gogui-gfx</primary>
+</indexterm>
+
+<para>
+The Go engine can display graphical data on the Go board while a command
+is in progress by writing draw commands to the standard error stream.
+Every line that starts with <userinput>gogui-gfx:</userinput> is interpreted
+by GoGui as a draw command using the same syntax as in the
+<userinput>gfx</userinput> Analyze command type.
+The additional command CLEAR can be used for clearing all markup.
+See the <userinput>dummy_live_gfx</userinput> command in
+<xref linkend="reference-gtpdummy"/> for an example.
+</para>
+
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+
+</chapter>

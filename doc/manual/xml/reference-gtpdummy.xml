@@ -154,6 +154,17 @@ Print an invalid GTP response which does not start with a status character.
 
 <varlistentry>
 <term>
+<command>dummy_live_gfx</command>
+</term>
+<listitem>
+<para>
+Command for testing live graphics in GoGui.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
 <command>dummy_long_response <replaceable>n</replaceable></command> 
 </term>
 <listitem>

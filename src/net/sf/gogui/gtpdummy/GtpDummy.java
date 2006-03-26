@@ -59,6 +59,8 @@ public class GtpDummy
             cmdGfx(cmd);
         else if (cmd.getCommand().equals("dummy_invalid"))
             cmdInvalid();
+        else if (cmd.getCommand().equals("dummy_live_gfx"))
+            cmdLiveGfx(cmd);
         else if (cmd.getCommand().equals("dummy_long_response"))
             cmdLongResponse(cmd);
         else if (cmd.getCommand().equals("dummy_crash"))
@@ -94,6 +96,7 @@ public class GtpDummy
                             "dummy_eplist\n" +
                             "dummy_gfx\n" +
                             "dummy_invalid\n" +
+                            "dummy_live_gfx\n" +
                             "dummy_long_response\n" +
                             "dummy_next_success\n" +
                             "dummy_next_failure\n" +
@@ -278,6 +281,36 @@ public class GtpDummy
                              "It does not start with a status character.\n");
     }
 
+    private void cmdLiveGfx(GtpCommand cmd)
+    {
+        System.err.println("gogui-gfx: LABEL A4 test");
+        sleep(1000);
+        System.err.println("gogui-gfx: COLOR green A5 A7 B9");
+        sleep(1000);
+        System.err.println("gogui-gfx: COLOR #980098 B7 B8");
+        sleep(1000);
+        System.err.println("gogui-gfx: SQUARE B5 C9");
+        sleep(1000);
+        System.err.println("gogui-gfx: MARK A6 B6");
+        sleep(1000);
+        System.err.println("gogui-gfx: TRIANGLE A9");
+        sleep(1000);
+        System.err.println("gogui-gfx: WHITE A1");
+        sleep(1000);
+        System.err.println("gogui-gfx: BLACK B1");
+        sleep(1000);
+        System.err.println("gogui-gfx: CIRCLE c8");
+        sleep(1000);
+        System.err.println("gogui-gfx: INFLUENCE a7 -1 b7 -0.75 c7 "
+                           + "-0.5 d7 -0.25 e7 0 f7 0.25 g7 0.5 h7 0.75 "
+                           + "j7 1");
+        sleep(1000);
+        System.err.println("gogui-gfx: VAR b c1 w c2 b c3 b c4 w pass "
+                           + "b c5");
+        sleep(1000);
+        System.err.println("gogui-gfx: CLEAR");
+    }
+
     private void cmdLongResponse(GtpCommand cmd) throws GtpError
     {        
         cmd.checkNuArg(1);
@@ -304,14 +337,7 @@ public class GtpDummy
         long millis = 20000;
         if (cmd.getNuArg() == 1)
             millis = (long)(cmd.getDoubleArg(0) * 1000.0);
-        try
-        {
-            Thread.sleep(millis);
-        }
-        catch (InterruptedException e)
-        {
-            throw new GtpError("interrupted");
-        }
+        sleep(millis);
     }
 
     private void initSize(int size)
@@ -325,6 +351,17 @@ public class GtpDummy
         m_nextResponseFixed = true;
         m_nextStatus = nextStatus;
         m_nextResponse = cmd.getArgLine();
+    }
+
+    private void sleep(long millis)
+    {
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch (InterruptedException e)
+        {
+        }
     }
 }
 

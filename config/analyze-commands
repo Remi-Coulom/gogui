@@ -130,6 +130,7 @@ none/Dummy Delay 20s/dummy_delay 20
 eplist/Dummy EPList/dummy_eplist
 gfx/Dummy Gfx/dummy_gfx
 none/Dummy Invalid/dummy_invalid
+none/Dummy Live Gfx/dummy_live_gfx
 string/Dummy Long Response/dummy_long_response %s
 none/Dummy Next Failure/dummy_next_failure %s
 none/Dummy Next Success/dummy_next_success %s

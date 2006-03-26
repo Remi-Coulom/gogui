@@ -57,7 +57,7 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.GFX:
             {
-                showGfx(response, guiBoard, board.getSize());
+                showGfx(response, guiBoard);
             }
             break;
         case AnalyzeCommand.PLIST:
@@ -91,37 +91,36 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.VAR:
             {                    
-                showVariation(guiBoard, response, board.getToMove(), size);
+                showVariation(guiBoard, response, board.getToMove());
             }
             break;
         case AnalyzeCommand.VARB:
             {
-                showVariation(guiBoard, response, GoColor.BLACK, size);
+                showVariation(guiBoard, response, GoColor.BLACK);
             }
             break;
         case AnalyzeCommand.VARC:
             {
-                showVariation(guiBoard, response, command.getColorArg(),
-                              size);
+                showVariation(guiBoard, response, command.getColorArg());
             }
             break;
         case AnalyzeCommand.VARW:
             {
-                showVariation(guiBoard, response, GoColor.WHITE, size);
+                showVariation(guiBoard, response, GoColor.WHITE);
             }
             break;
         case AnalyzeCommand.VARP:
             {
                 GoColor c = getColor(board, pointArg, pointListArg);
                 if (c != GoColor.EMPTY)
-                    showVariation(guiBoard, response, c, size);
+                    showVariation(guiBoard, response, c);
             }
             break;
         case AnalyzeCommand.VARPO:
             {
                 GoColor c = getColor(board, pointArg, pointListArg);
                 if (c != GoColor.EMPTY)
-                    showVariation(guiBoard, response, c.otherColor(), size);
+                    showVariation(guiBoard, response, c.otherColor());
             }
             break;
         default:
@@ -152,8 +151,7 @@ public final class AnalyzeShow
         return color;
     }
 
-    public static void showGfx(String response, GuiBoard guiBoard, int size)
-        throws GtpError
+    public static void showGfx(String response, GuiBoard guiBoard)
     {
         BufferedReader reader
             = new BufferedReader(new StringReader(response));
@@ -171,13 +169,13 @@ public final class AnalyzeShow
             }
             if (line == null)
                 break;
-            showGfxLine(line, guiBoard, size);
+            showGfxLine(line, guiBoard);
         }
     }
 
-    public static void showGfxCircle(String[] arg, GuiBoard guiBoard,
-                                     int size)
+    public static void showGfxCircle(String[] arg, GuiBoard guiBoard)
     {
+        int size = guiBoard.getBoardSize();
         for (int i = 1; i < arg.length; ++i)
         {
             try
@@ -193,10 +191,11 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxColor(String[] arg, GuiBoard guiBoard, int size)
+    public static void showGfxColor(String[] arg, GuiBoard guiBoard)
     {
         if (arg.length < 2)
             return;
+        int size = guiBoard.getBoardSize();
         Color color = GuiBoardUtils.getColor(arg[1]);
         for (int i = 2; i < arg.length; ++i)
         {
@@ -213,9 +212,9 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxInfluence(String[] arg, GuiBoard guiBoard,
-                                        int size)
+    public static void showGfxInfluence(String[] arg, GuiBoard guiBoard)
     {
+        int size = guiBoard.getBoardSize();
         for (int i = 1; i < arg.length; i += 2)
         {
             try
@@ -237,8 +236,9 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxLabel(String[] arg, GuiBoard guiBoard, int size)
+    public static void showGfxLabel(String[] arg, GuiBoard guiBoard)
     {
+        int size = guiBoard.getBoardSize();
         for (int i = 1; i < arg.length; i += 2)
         {
             try
@@ -256,36 +256,39 @@ public final class AnalyzeShow
         }
     }
     
-    public static void showGfxLine(String line, GuiBoard guiBoard, int size)
+    public static void showGfxLine(String line, GuiBoard guiBoard)
     {
         String[] arg = StringUtils.splitArguments(line);
         if (arg.length == 0)
             return;
         String cmd = arg[0].toUpperCase();
         if (cmd.equals("BLACK"))
-            showGfxTerritory(arg, GoColor.BLACK, guiBoard, size);
+            showGfxTerritory(arg, GoColor.BLACK, guiBoard);
         else if (cmd.equals("CIRCLE"))
-            showGfxCircle(arg, guiBoard, size);
+            showGfxCircle(arg, guiBoard);
+        else if (cmd.equals("CLEAR"))
+            guiBoard.clearAll();
         else if (cmd.equals("COLOR"))
-            showGfxColor(arg, guiBoard, size);
+            showGfxColor(arg, guiBoard);
         else if (cmd.equals("INFLUENCE"))
-            showGfxInfluence(arg, guiBoard, size);
+            showGfxInfluence(arg, guiBoard);
         else if (cmd.equals("LABEL"))
-            showGfxLabel(arg, guiBoard, size);
+            showGfxLabel(arg, guiBoard);
         else if (cmd.equals("MARK"))
-            showGfxMark(arg, guiBoard, size);
+            showGfxMark(arg, guiBoard);
         else if (cmd.equals("SQUARE"))
-            showGfxSquare(arg, guiBoard, size);
+            showGfxSquare(arg, guiBoard);
         else if (cmd.equals("TRIANGLE"))
-            showGfxTriangle(arg, guiBoard, size);
+            showGfxTriangle(arg, guiBoard);
         else if (cmd.equals("VAR"))
-            showGfxVariation(arg, guiBoard, size);
+            showGfxVariation(arg, guiBoard);
         else if (cmd.equals("WHITE"))
-            showGfxTerritory(arg, GoColor.WHITE, guiBoard, size);
+            showGfxTerritory(arg, GoColor.WHITE, guiBoard);
     }
 
-    public static void showGfxMark(String[] arg, GuiBoard guiBoard, int size)
+    public static void showGfxMark(String[] arg, GuiBoard guiBoard)
     {
+        int size = guiBoard.getBoardSize();
         for (int i = 1; i < arg.length; ++i)
         {
             try
@@ -301,9 +304,9 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxSquare(String[] arg, GuiBoard guiBoard,
-                                     int size)
+    public static void showGfxSquare(String[] arg, GuiBoard guiBoard)
     {
+        int size = guiBoard.getBoardSize();
         for (int i = 1; i < arg.length; ++i)
         {
             try
@@ -319,9 +322,9 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxTriangle(String[] arg, GuiBoard guiBoard,
-                                       int size)
+    public static void showGfxTriangle(String[] arg, GuiBoard guiBoard)
     {
+        int size = guiBoard.getBoardSize();
         for (int i = 1; i < arg.length; ++i)
         {
             try
@@ -338,8 +341,9 @@ public final class AnalyzeShow
     }
 
     public static void showGfxTerritory(String[] arg, GoColor color,
-                                        GuiBoard guiBoard, int size)
+                                        GuiBoard guiBoard)
     {
+        int size = guiBoard.getBoardSize();
         for (int i = 1; i < arg.length; ++i)
         {
             try
@@ -355,9 +359,9 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxVariation(String[] arg, GuiBoard guiBoard,
-                                        int size)
+    public static void showGfxVariation(String[] arg, GuiBoard guiBoard)
     {
+        int size = guiBoard.getBoardSize();
         int n = 0;
         for (int i = 1; i < arg.length; i += 2)
         {
@@ -387,8 +391,9 @@ public final class AnalyzeShow
     }
 
     private static void showVariation(GuiBoard guiBoard, String response,
-                                      GoColor color, int size)
+                                      GoColor color)
     {
+        int size = guiBoard.getBoardSize();
         Move moves[] = GtpUtils.parseVariation(response, color, size);
         GuiBoardUtils.showVariation(guiBoard, moves);
     }

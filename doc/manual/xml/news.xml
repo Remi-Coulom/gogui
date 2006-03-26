@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+GoGui: allow to display graphical data while a command is in progress;
+see section Live Graphics in the documentation
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpStatistics: add missing class files to gtpstatistics.jar; new options
 -min and -max
 </simpara>

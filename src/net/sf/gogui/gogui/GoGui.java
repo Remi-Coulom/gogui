@@ -74,6 +74,7 @@ import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtils;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
+import net.sf.gogui.gui.LiveGfx;
 import net.sf.gogui.gui.OptionalMessage;
 import net.sf.gogui.gui.ParameterDialog;
 import net.sf.gogui.gui.RecentFileMenu;
@@ -1239,9 +1240,34 @@ public class GoGui
                         invokeAndWait(runnable);
                 }
             };
+        GtpClient.IOCallback ioCallback = new GtpClient.IOCallback()
+            {
+                public void receivedInvalidResponse(String s)
+                {
+                    m_gtpShell.receivedInvalidResponse(s);
+                }
+
+                public void receivedResponse(boolean error, String s)
+                {
+                    m_gtpShell.receivedResponse(error, s);
+                }
+
+                public void receivedStdErr(String s)
+                {
+                    m_gtpShell.receivedStdErr(s);
+                    m_liveGfx.receivedStdErr(s);
+                }
+
+                public void sentCommand(String s)
+                {
+                    m_gtpShell.sentCommand(s);
+                }
+
+                private LiveGfx m_liveGfx = new LiveGfx(m_guiBoard);
+            };
         try
         {
-            GtpClient gtp = new GtpClient(m_program, m_verbose, m_gtpShell);
+            GtpClient gtp = new GtpClient(m_program, m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             gtp.setAutoNumber(m_menuBar.getAutoNumber());
             m_commandThread = new CommandThread(gtp, this);
