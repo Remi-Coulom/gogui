@@ -20,13 +20,21 @@ public class LiveGfx
 
     public void receivedStdErr(String s)
     {
-        assert(SwingUtilities.isEventDispatchThread());
         for (int i = 0; i < s.length(); ++i)
         {
             char c = s.charAt(i);
             if (c == '\r' || c == '\n')
             {
-                handleLine(m_buffer.toString());
+                if (SwingUtilities.isEventDispatchThread())
+                    handleLine(m_buffer.toString());
+                else
+                    invokeAndWait(new Runnable()
+                        {
+                            public void run()
+                            {
+                                handleLine(m_buffer.toString());
+                            }
+                        });
                 m_buffer.setLength(0);
             }
             else
@@ -48,6 +56,22 @@ public class LiveGfx
         int pos = s.indexOf(':');
         AnalyzeShow.showGfxLine(s.substring(pos + 1), m_guiBoard,
                                 m_statusBar);
+    }
+
+    private void invokeAndWait(Runnable runnable)
+    {
+        try
+        {
+            SwingUtilities.invokeAndWait(runnable);
+        }
+        catch (InterruptedException e)
+        {
+            System.err.println("Thread interrupted");
+        }
+        catch (java.lang.reflect.InvocationTargetException e)
+        {
+            System.err.println("InvocationTargetException");
+        }
     }
 }
 
