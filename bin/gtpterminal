@@ -1,11 +1,14 @@
 #!/bin/sh
 
-GOGUI_LIB=`dirname $0`/../lib
 JAVA_DEFAULT=java
-if test -z "$GOGUI_JAVA_HOME"; then
-  JAVA=$JAVA_DEFAULT
+GOGUI_LIB=`dirname "$0"`/../lib
+if [[ $OSTYPE == "cygwin" ]]; then
+    GOGUI_LIB=`cygpath -w "$GOGUI_LIB"`
+fi
+if [ -z "$GOGUI_JAVA_HOME" ]; then
+    JAVA="$JAVA_DEFAULT"
 else
-  JAVA=$GOGUI_JAVA_HOME/bin/java
+    JAVA="$GOGUI_JAVA_HOME/bin/java"
 fi
 
-$JAVA -jar $GOGUI_LIB/gtpterminal.jar "$@"
+"$JAVA" -jar "$GOGUI_LIB/gtpterminal.jar" "$@"
