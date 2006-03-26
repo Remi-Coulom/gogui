@@ -8,35 +8,36 @@ SYSCONFDIR=/etc
 JAVA_HOME=
 
 function usage() {
-  printf "Usage: %s [-p prefix][-j javahome]\n" $0
+    printf "Usage: %s [-p prefix] [-j javahome]\n" $0
 }
 
 #-----------------------------------------------------------------------------
 # Parse options
 #-----------------------------------------------------------------------------
 
-while getopts hj:p: OPTION; do
-  case $OPTION in
-    h) usage; exit 0;;
-    j) JAVA_HOME="$OPTARG";;
-    p) PREFIX="$OPTARG";;
-    ?) usage; exit -1;;
-  esac
+while getopts dhj:p: OPTION; do
+    case $OPTION in
+        d) DEBUG=1;;
+        h) usage; exit 0;;
+        j) JAVA_HOME="$OPTARG";;
+        p) PREFIX="$OPTARG";;
+        ?) usage; exit -1;;
+    esac
 done
 shift `expr $OPTIND - 1`
 if  [ ! -z "$*" ]; then
-  usage
-  exit -1;
+    usage
+    exit -1;
 fi
 
 if [ -z "$JAVA_HOME" ]; then
-  echo "Use option -j to specify the installation directory of a Java 1.4 compatible" >&2
-  echo "virtual machine" >&2
-  exit -1
+    echo "Use option -j to specify the installation directory of a" >&2
+    echo "Java 1.4 compatible virtual machine" >&2
+    exit -1
 fi
 if [ ! -x "$JAVA_HOME/bin/java" ]; then
-  echo "$JAVA_HOME/bin/java does not exist or is not executable" >&2
-  exit -1
+    echo "$JAVA_HOME/bin/java does not exist or is not executable" >&2
+    exit -1
 fi
 
 #-----------------------------------------------------------------------------
@@ -50,15 +51,19 @@ install -m 644 lib/*.jar $PREFIX/share/gogui/lib
 
 # Install files to $PREFIX/bin
 
+JAVA_DEFAULT="$JAVA_HOME/bin/java"
+if [ ! -z "$DEBUG" ]; then
+    JAVA_DEFAULT="$JAVA_DEFAULT -enableassertions"
+fi
 install -d $PREFIX/bin
 for FILE in bin/*; do
-  if [ -f $FILE -a -x $FILE ]; then
-    cat $FILE \
-    | sed -e "s;GOGUI_LIB=.*;GOGUI_LIB=$PREFIX/share/gogui/lib;" \
-          -e "s;JAVA_DEFAULT=.*;JAVA_DEFAULT=$JAVA_HOME/bin/java;" \
-    > $PREFIX/$FILE
-    chmod a+x $PREFIX/$FILE
-  fi
+    if [ -f $FILE -a -x $FILE ]; then
+        cat $FILE \
+        | sed -e "s;^GOGUI_LIB=.*;GOGUI_LIB=\"$PREFIX/share/gogui/lib\";" \
+              -e "s;^JAVA_DEFAULT=.*;JAVA_DEFAULT=\"$JAVA_DEFAULT\";" \
+        > $PREFIX/$FILE
+        chmod a+x $PREFIX/$FILE
+    fi
 done
 
 # Install files to $PREFIX/share/doc/gogui
@@ -75,7 +80,7 @@ install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 install -d $PREFIX/share/icons/hicolor/48x48/apps
 install -m 644 src/net/sf/gogui/images/gogui.png \
-  $PREFIX/share/icons/hicolor/48x48/apps
+    $PREFIX/share/icons/hicolor/48x48/apps
 # hicolor is the standard according to freedesktop.org, but for compatibility
 # we also install the icon to pixmaps
 install -d $PREFIX/share/pixmaps
@@ -87,7 +92,7 @@ install -d $PREFIX/share/applications
 install -m 644 config/gogui.desktop $PREFIX/share/applications
 # Add DocPath entry used by KDE 3.4
 echo "DocPath=file:$PREFIX/share/doc/gogui/index.html" \
-  >> $PREFIX/share/applications/gogui.desktop
+    >> $PREFIX/share/applications/gogui.desktop
 
 # Install shared mime info
 
@@ -136,4 +141,4 @@ scrollkeeper-update >/dev/null 2>&1
 
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule \
-  /$SYSCONFDIR/gconf/schemas/gogui.schemas >/dev/null 2>&1
+    /$SYSCONFDIR/gconf/schemas/gogui.schemas >/dev/null 2>&1
