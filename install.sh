@@ -15,9 +15,8 @@ function usage() {
 # Parse options
 #-----------------------------------------------------------------------------
 
-while getopts dhj:p: OPTION; do
+while getopts hj:p: OPTION; do
     case $OPTION in
-        d) DEBUG=1;;
         h) usage; exit 0;;
         j) JAVA_HOME="$OPTARG";;
         p) PREFIX="$OPTARG";;
@@ -52,9 +51,6 @@ install -m 644 lib/*.jar $PREFIX/share/gogui/lib
 # Install files to $PREFIX/bin
 
 JAVA_DEFAULT="$JAVA_HOME/bin/java"
-if [ ! -z "$DEBUG" ]; then
-    JAVA_DEFAULT="$JAVA_DEFAULT -enableassertions"
-fi
 install -d $PREFIX/bin
 for FILE in bin/*; do
     if [ -f $FILE -a -x $FILE ]; then
