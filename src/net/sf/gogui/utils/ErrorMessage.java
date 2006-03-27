@@ -14,9 +14,12 @@ package net.sf.gogui.utils;
 public class ErrorMessage
     extends Exception
 {
-    public ErrorMessage(String s)
+    /** Constructor.
+        @param message The error message text.
+    */
+    public ErrorMessage(String message)
     {
-        super(s);
+        super(message);
     }
 
     /** Serial version to suppress compiler warning.
