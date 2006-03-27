@@ -133,12 +133,7 @@ public class SgfWriter
     private String getPoint(GoPoint p)
     {
         if (p == null)
-        {
-            if (m_size <= 19)
-                return "tt";
-            else
                 return "";
-        }
         int x = 'a' + p.getX();
         int y = 'a' + (m_size - p.getY() - 1);
         return "" + (char)x + (char)y;
