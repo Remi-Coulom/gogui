@@ -18,7 +18,7 @@ see section Live Graphics in the documentation
 <listitem>
 <simpara>
 GtpStatistics: add missing class files to gtpstatistics.jar; new options
--min and -max
+-min, -max, -backward
 </simpara>
 </listitem>
 </itemizedlist>

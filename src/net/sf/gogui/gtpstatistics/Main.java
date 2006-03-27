@@ -25,6 +25,7 @@ public final class Main
         {
             String options[] = {
                 "analyze:",
+                "backward",
                 "begin:",
                 "commands:",
                 "config:",
@@ -54,6 +55,7 @@ public final class Main
             }
             boolean analyze = opt.isSet("analyze");
             boolean allowSetup = opt.isSet("setup");
+            boolean backward = opt.isSet("backward");
             String program = "";
             if (! analyze)
             {
@@ -103,7 +105,7 @@ public final class Main
                     = new GtpStatistics(program, arguments, output, boardSize,
                                         commands, beginCommands,
                                         finalCommands, verbose, force,
-                                        allowSetup, min, max);
+                                        allowSetup, min, max, backward);
                 System.exit(gtpStatistics.getResult() ? 0 : -1);
             }
         }
@@ -141,6 +143,7 @@ public final class Main
                   "\n" +
                   "-analyze      Create HTML file from result file\n" +
                   "-begin        GTP commands to run on begin positions\n" +
+                  "-backward     Iterate backward from end position\n" +
                   "-commands     GTP commands to run (comma separated)\n" +
                   "-config       Config file\n" +
                   "-final        GTP commands to run on final positions\n" +

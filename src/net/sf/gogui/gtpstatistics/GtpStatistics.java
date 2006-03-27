@@ -36,7 +36,7 @@ public class GtpStatistics
                          int size, ArrayList commands,
                          ArrayList beginCommands, ArrayList finalCommands,
                          boolean verbose, boolean force, boolean allowSetup,
-                         int min, int max)
+                         int min, int max, boolean backward)
         throws Exception
     {
         if (output.exists() && ! force)
@@ -47,6 +47,7 @@ public class GtpStatistics
         m_allowSetup = allowSetup;
         m_min = min;
         m_max = max;
+        m_backward = backward;
         initCommands(commands, beginCommands, finalCommands);
         ArrayList columnHeaders = new ArrayList();
         columnHeaders.add("File");
@@ -82,6 +83,7 @@ public class GtpStatistics
         for (int i = 0; i < sgfFiles.size(); ++i)
             handleFile((String)sgfFiles.get(i));
         m_table.setProperty("Games", Integer.toString(m_numberGames));
+        m_table.setProperty("Backward", backward ? "no" : "yes");
         FileWriter writer = new FileWriter(output);
         m_table.save(writer);
         writer.close();
@@ -104,6 +106,8 @@ public class GtpStatistics
     }
 
     private final boolean m_allowSetup;
+
+    private final boolean m_backward;
 
     private boolean m_result;
 
@@ -164,41 +168,13 @@ public class GtpStatistics
             addCommand((String)commands.get(i), isBegin, isFinal);
     }
 
-    private void initCommands(ArrayList commands, ArrayList beginCommands,
-                              ArrayList finalCommands) throws ErrorMessage
+    private void checkGame(GameTree tree, String name) throws ErrorMessage
     {
-        m_commands = new ArrayList();
-        if (beginCommands != null)
-            addCommands(beginCommands, true, false);
-        if (commands != null)
-            addCommands(commands, false, false);
-        if (finalCommands != null)
-            addCommands(finalCommands, false, true);
-        if (m_commands.size() == 0)
-            throw new ErrorMessage("No commands defined");
-    }
-
-    private Command getCommand(int index)
-    {
-        return (Command)m_commands.get(index);
-    }
-
-    private void handleFile(String name)
-        throws ErrorMessage, FileNotFoundException, GtpError,
-               SgfReader.SgfError
-    {
-        InputStream in = new FileInputStream(new File(name));
-        SgfReader reader = new SgfReader(in, name, null, 0);
-        ++m_numberGames;
-        GameTree tree = reader.getGameTree();
         GameInformation info = tree.getGameInformation();
         int size = info.m_boardSize;
         if (size != m_size)
             throw new ErrorMessage(name + " has not size " + m_size);
-        m_gtp.sendBoardsize(size);
-        m_gtp.sendClearBoard(size);
         Node root = tree.getRoot();
-        int number = 0;
         GoColor toMove = GoColor.BLACK;
         for (Node node = root; node != null; node = node.getChild())
         {
@@ -207,7 +183,7 @@ public class GtpStatistics
                 if (m_allowSetup)
                 {
                     if (node == root)
-                        toMove = sendSetup(node);
+                        toMove = GoColor.EMPTY;
                     else
                         throw new ErrorMessage(name + " contains setup stones"
                                                + " in non-root position");
@@ -218,54 +194,13 @@ public class GtpStatistics
             Move move = node.getMove();
             if (move != null)
             {
+                if (toMove == GoColor.EMPTY)
+                    toMove = move.getColor();
                 if (move.getColor() != toMove)
                     throw new ErrorMessage(name
                                            + "has non-alternating moves");
-                ++number;
-                if (number == 1 || (number >= m_min && number <= m_max))
-                    handlePosition(name, toMove, move, number);
-                m_gtp.sendPlay(move);
                 toMove = toMove.otherColor();
             }
-        }
-        ++number;
-        handlePosition(name, toMove, null, number);
-        for (int i = 0; i < m_commands.size(); ++i)
-        {
-            Command command = getCommand(i);
-            if (! command.m_final)
-                continue;
-            String response = send(command.m_command, toMove, null);
-            m_table.set(command.m_columnTitle, response);
-        }
-    }
-
-    private void handlePosition(String name, GoColor toMove, Move move,
-                                int number)
-        throws GtpError
-    {
-        System.err.println(name + ":" + number);
-        m_table.startRow();
-        m_table.set("File", name);
-        m_table.set("Move", number);
-        if (number == 1)
-            for (int i = 0; i < m_commands.size(); ++i)
-            {
-                Command command = getCommand(i);
-                if (! command.m_begin)
-                    continue;
-                String response = send(command.m_command, toMove, move);
-                m_table.set(command.m_columnTitle, response);
-            }
-        if (number < m_min || number > m_max)
-            return;
-        for (int i = 0; i < m_commands.size(); ++i)
-        {
-            Command command = getCommand(i);
-            if (command.m_begin || command.m_final)
-                continue;
-            String response = send(command.m_command, toMove, move);
-            m_table.set(command.m_columnTitle, response);
         }
     }
 
@@ -342,6 +277,163 @@ public class GtpStatistics
         catch (NumberFormatException e)
         {
             return string;
+        }
+    }
+
+    private void initCommands(ArrayList commands, ArrayList beginCommands,
+                              ArrayList finalCommands) throws ErrorMessage
+    {
+        m_commands = new ArrayList();
+        if (beginCommands != null)
+            addCommands(beginCommands, true, false);
+        if (commands != null)
+            addCommands(commands, false, false);
+        if (finalCommands != null)
+            addCommands(finalCommands, false, true);
+        if (m_commands.size() == 0)
+            throw new ErrorMessage("No commands defined");
+    }
+
+    private Command getCommand(int index)
+    {
+        return (Command)m_commands.get(index);
+    }
+
+    private void handleFile(String name)
+        throws ErrorMessage, FileNotFoundException, GtpError,
+               SgfReader.SgfError
+    {
+        InputStream in = new FileInputStream(new File(name));
+        SgfReader reader = new SgfReader(in, name, null, 0);
+        ++m_numberGames;
+        GameTree tree = reader.getGameTree();
+        checkGame(tree, name);
+        GameInformation info = tree.getGameInformation();
+        int size = info.m_boardSize;
+        m_gtp.sendBoardsize(size);
+        m_gtp.sendClearBoard(size);
+        Node root = tree.getRoot();
+        if (m_backward)
+            iteratePositionsBackward(root, name);
+        else
+            iteratePositions(root, name);
+    }
+
+    private void handlePosition(String name, GoColor toMove, Move move,
+                                int number, boolean beginCommands,
+                                boolean regularCommands,
+                                boolean finalCommands)
+        throws GtpError
+    {
+        System.err.println(name + ":" + number);
+        m_table.startRow();
+        m_table.set("File", name);
+        m_table.set("Move", number);
+        for (int i = 0; i < m_commands.size(); ++i)
+        {
+            Command command = getCommand(i);
+            if (command.m_begin && beginCommands)
+            {
+                String response = send(command.m_command, toMove, move);
+                m_table.set(command.m_columnTitle, response);
+            }
+        }
+        for (int i = 0; i < m_commands.size(); ++i)
+        {
+            Command command = getCommand(i);
+            if (! command.m_begin && ! command.m_final && regularCommands)
+            {
+                String response = send(command.m_command, toMove, move);
+                m_table.set(command.m_columnTitle, response);
+            }
+        }
+        for (int i = 0; i < m_commands.size(); ++i)
+        {
+            Command command = getCommand(i);
+            if (command.m_final && finalCommands)
+            {
+                String response = send(command.m_command, toMove, move);
+                m_table.set(command.m_columnTitle, response);
+            }
+        }
+    }
+
+    private void iteratePositions(Node root, String name) throws GtpError
+    {
+        int number = 0;
+        GoColor toMove = GoColor.BLACK;
+        for (Node node = root; node != null; node = node.getChild())
+        {
+            if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
+            {
+                assert(m_allowSetup && node != root); // checked in checkGame
+                toMove = sendSetup(node);
+            }
+            Move move = node.getMove();
+            if (move != null)
+            {
+                ++number;
+                boolean beginCommands = (number == 1);
+                boolean regularCommands =
+                    (number >= m_min && number <= m_max);
+                if (beginCommands || regularCommands)
+                    handlePosition(name, toMove, move, number, beginCommands,
+                                   regularCommands, false);
+                m_gtp.sendPlay(move);
+                toMove = toMove.otherColor();
+            }
+        }
+        ++number;
+        boolean beginCommands = (number == 1);
+        boolean regularCommands = (number >= m_min && number <= m_max);
+        handlePosition(name, toMove, null, number, beginCommands,
+                       regularCommands, true);
+    }
+
+    private void iteratePositionsBackward(Node root, String name)
+        throws GtpError
+    {
+        Node node = root;
+        GoColor toMove = GoColor.BLACK;
+        while (true)
+        {
+            if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
+            {
+                assert(m_allowSetup && node != root); // checked in checkGame
+                toMove = sendSetup(node);
+            }
+            Move move = node.getMove();
+            if (move != null)
+            {
+                m_gtp.sendPlay(move);
+                toMove = toMove.otherColor();
+            }
+            Node child = node.getChild();
+            if (child == null)
+                break;
+            node = child;
+        }
+        int number = 1;
+        boolean finalCommands = (node == root);
+        boolean regularCommands = (number >= m_min && number <= m_max);
+        handlePosition(name, toMove, null, number, true, regularCommands,
+                       finalCommands);
+        for ( ; node != root; node = node.getFather())
+        {
+            // checked in checkGame
+            assert(node.getNumberAddWhite() + node.getNumberAddBlack() == 0);
+            Move move = node.getMove();
+            if (move != null)
+            {
+                m_gtp.send("undo");
+                ++number;
+                finalCommands = (node.getFather() == root);
+                regularCommands = (number >= m_min && number <= m_max);
+                if (finalCommands || regularCommands)
+                    handlePosition(name, toMove, move, number, false,
+                                   regularCommands, finalCommands);
+                toMove = toMove.otherColor();
+            }
         }
     }
 
