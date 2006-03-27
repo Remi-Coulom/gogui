@@ -16,6 +16,16 @@ public final class GoColor
 
     public static final GoColor EMPTY;
 
+    public boolean equals(Object object)
+    {
+        return super.equals(object);
+    }
+
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
+
     /** Return other color.
         @return BLACK for WHITE, WHITE for BLACK, EMPTY for EMPTY.
     */

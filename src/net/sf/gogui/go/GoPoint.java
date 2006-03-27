@@ -56,6 +56,11 @@ public final class GoPoint
         return 0;
     }
 
+    public boolean equals(Object object)
+    {
+        return super.equals(object);
+    }
+
     /** Factory method for creating a point.
         @param x x-coordinate [0...GoPoint.MAXSIZE - 1]
         @param y y-coordinate [0...GoPoint.MAXSIZE - 1]
@@ -73,6 +78,11 @@ public final class GoPoint
         GoPoint point = s_points[x][y];
         assert(point != null);
         return point;
+    }
+
+    public int hashCode()
+    {
+        return super.hashCode();
     }
 
     public boolean isOnBoard(int boardSize)
