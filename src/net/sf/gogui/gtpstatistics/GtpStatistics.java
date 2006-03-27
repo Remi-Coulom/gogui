@@ -83,7 +83,7 @@ public class GtpStatistics
         for (int i = 0; i < sgfFiles.size(); ++i)
             handleFile((String)sgfFiles.get(i));
         m_table.setProperty("Games", Integer.toString(m_numberGames));
-        m_table.setProperty("Backward", backward ? "no" : "yes");
+        m_table.setProperty("Backward", backward ? "yes" : "no");
         FileWriter writer = new FileWriter(output);
         m_table.save(writer);
         writer.close();
