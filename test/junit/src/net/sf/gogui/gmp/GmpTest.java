@@ -37,7 +37,7 @@ public class GmpTest
         closeGmp();
     }
 
-    private final boolean m_verbose = false;
+    private static final boolean VERBOSE = false;
 
     private static final int OK = 0;
 
@@ -79,7 +79,7 @@ public class GmpTest
         PipedOutputStream gmpOutput = new PipedOutputStream(in);
         m_in = in;
         final boolean simple = false;
-        m_gmp = new Gmp(gmpInput, gmpOutput, 19, 2, simple, m_verbose);
+        m_gmp = new Gmp(gmpInput, gmpOutput, 19, 2, simple, VERBOSE);
     }
 
     private static int getMoveVal(boolean isBlack, int x, int y)
