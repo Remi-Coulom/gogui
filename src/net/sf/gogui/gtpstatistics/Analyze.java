@@ -793,6 +793,7 @@ public class Analyze
         writeTableProperty(out, "Size");
         writeTableProperty(out, "Games");
         writeHtmlRow(out, "Positions", m_table.getNumberRows());
+        writeTableProperty(out, "Backward");
     }
 
     private void writePlot(PrintStream out, String title, String file,
