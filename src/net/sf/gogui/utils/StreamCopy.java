@@ -12,7 +12,7 @@ import java.io.OutputStream;
 
 /** Thread copying the output of one stream to another stream. */
 public class StreamCopy
-    extends Thread
+    implements Runnable
 {
     /** @param verbose Also copy everything to stderr
         @param src Source stream
@@ -48,7 +48,7 @@ public class StreamCopy
                 if (n == 0)
                 {
                     // Not sure if this is necessary.
-                    sleep(100);
+                    Thread.currentThread().sleep(100);
                     continue;
                 }
                 if (m_verbose)

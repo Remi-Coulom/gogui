@@ -61,12 +61,12 @@ public final class GtpServer
             if (verbose)
                 System.err.println("gtpserver: Connected with "
                                    + socket.getInetAddress());
-            StreamCopy fromNet =
-                new StreamCopy(verbose, socket.getInputStream(),
-                               process.getOutputStream(), true);
-            StreamCopy toNet =
-                new StreamCopy(verbose, process.getInputStream(),
-                               socket.getOutputStream(), false);
+            Thread fromNet =
+                new Thread(new StreamCopy(verbose, socket.getInputStream(),
+                                          process.getOutputStream(), true));
+            Thread toNet =
+                new Thread(new StreamCopy(verbose, process.getInputStream(),
+                                          socket.getOutputStream(), false));
             fromNet.start();
             toNet.start();
             toNet.join();

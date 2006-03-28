@@ -54,8 +54,9 @@ public final class NetGtp
         throws Exception
     {
         Socket socket = connect(hostname, port, timeout);
-        StreamCopy fromNet = new StreamCopy(false, socket.getInputStream(),
-                                            System.out, false);
+        Thread fromNet =
+            new Thread(new StreamCopy(false, socket.getInputStream(),
+                                      System.out, false));
         SocketOutputCopy toNet = new SocketOutputCopy(socket);
         fromNet.start();
         toNet.start();

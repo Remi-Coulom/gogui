@@ -65,11 +65,12 @@ public class ProcessUtils
 {
     /** Copies standard error of a process to System.err. */
     public static class StdErrThread
-        extends StreamCopy
+        extends Thread
     {
         public StdErrThread(Process process)
         {
-            super(false, process.getErrorStream(), System.err, false);
+            super(new StreamCopy(false, process.getErrorStream(), System.err,
+                                 false));
         }        
     }
 
@@ -110,11 +111,13 @@ public class ProcessUtils
     {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(cmdArray);
-        Thread copyOut = new StreamCopy(false, process.getInputStream(),
-                                        System.err, false);
+        Thread copyOut =
+            new Thread(new StreamCopy(false, process.getInputStream(),
+                                      System.err, false));
         copyOut.start();
-        Thread copyErr = new StreamCopy(false, process.getErrorStream(),
-                                        System.err, false);
+        Thread copyErr =
+            new Thread(new StreamCopy(false, process.getErrorStream(),
+                                      System.err, false));
         copyErr.start();
     }
 
