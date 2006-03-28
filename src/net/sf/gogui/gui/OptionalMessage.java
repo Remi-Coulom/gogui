@@ -108,6 +108,7 @@ public class OptionalMessage
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         panel.add(GuiUtils.createFiller());
+        panel.add(GuiUtils.createFiller());
         panel.add(textArea);
         panel.add(GuiUtils.createFiller());
         panel.add(GuiUtils.createFiller());
