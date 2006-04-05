@@ -48,7 +48,7 @@ public class StreamCopy
                 if (n == 0)
                 {
                     // Not sure if this is necessary.
-                    Thread.currentThread().sleep(100);
+                    Thread.sleep(100);
                     continue;
                 }
                 if (m_verbose)
