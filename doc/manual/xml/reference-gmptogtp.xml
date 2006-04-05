@@ -1,7 +1,11 @@
 <refentry id="reference-gmptogtp">
 
 <refmeta>
-<refentrytitle>gmptogtp</refentrytitle> <manvolnum>1</manvolnum>
+<refentrytitle>gmptogtp</refentrytitle>
+<manvolnum>1</manvolnum>
+<refmiscinfo class="source-name">GoGui</refmiscinfo>
+<refmiscinfo class="version">GoGui &version;</refmiscinfo>
+<refmiscinfo class="manual">GoGui Reference</refmiscinfo>
 </refmeta>
 
 <refnamediv>

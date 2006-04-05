@@ -634,19 +634,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 <arg line="--param chunk.quietly 1"/>
 <arg line="-o doc/manual/man/"/>
 <arg line="${docbook.path}/manpages/docbook.xsl"/>
-<arg line="doc/manual/xml/reference-gmptogtp.xml"/>
-<arg line="doc/manual/xml/reference-gogui.xml"/>
-<arg line="doc/manual/xml/reference-gtpadapter.xml"/>
-<arg line="doc/manual/xml/reference-gtpdisplay.xml"/>
-<arg line="doc/manual/xml/reference-gtpdummy.xml"/>
-<arg line="doc/manual/xml/reference-gtpregress.xml"/>
-<arg line="doc/manual/xml/reference-gtpserver.xml"/>
-<arg line="doc/manual/xml/reference-gtpstatistics.xml"/>
-<arg line="doc/manual/xml/reference-gtpterminal.xml"/>
-<arg line="doc/manual/xml/reference-netgtp.xml"/>
-<arg line="doc/manual/xml/reference-sgftotex.xml"/>
-<arg line="doc/manual/xml/reference-sgfthumbnail.xml"/>
-<arg line="doc/manual/xml/reference-twogtp.xml"/>
+<arg line="doc/manual/xml/manpages.xml"/>
 </exec>
 </target>
 
