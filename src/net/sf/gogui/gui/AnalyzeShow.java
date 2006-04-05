@@ -23,19 +23,21 @@ import net.sf.gogui.utils.StringUtils;
 /** Show response to an AnalyzeCommand in the GUI. */
 public final class AnalyzeShow
 {
-    public static void show(AnalyzeCommand command, GuiBoard guiBoard,
-                            StatusBar statusBar, Board board,
-                            String response) throws GtpError
+    /** Parse analyze command response and display it on the board.
+        @return Text for status bar (from gfx TEXT) or null
+    */
+    public static String show(AnalyzeCommand command, GuiBoard guiBoard,
+                              Board board, String response) throws GtpError
     {
         GoPoint pointArg = command.getPointArg();
         ArrayList pointListArg = command.getPointListArg();
         guiBoard.clearAllSelect();
-        GuiBoardUtils.updateFromGoBoard(guiBoard, board, false);
         GuiBoardUtils.setSelect(guiBoard, pointListArg, true);
         if (pointArg != null)
             guiBoard.setSelect(pointArg, true);
         int type = command.getType();
         int size = board.getSize();
+        String statusText = null;
         switch (type)
         {
         case AnalyzeCommand.BWBOARD:
@@ -58,7 +60,7 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.GFX:
             {
-                showGfx(response, guiBoard, statusBar);
+                statusText = showGfx(response, guiBoard);
             }
             break;
         case AnalyzeCommand.PLIST:
@@ -127,36 +129,17 @@ public final class AnalyzeShow
         default:
             break;
         }
+        return statusText;
     }
 
-    /** Make constructor unavailable; class is for namespace only. */
-    private AnalyzeShow()
-    {
-    }
-
-    private static GoColor getColor(Board board, GoPoint pointArg,
-                                    ArrayList pointListArg)
-    {
-        GoColor color = GoColor.EMPTY;
-        if (pointArg != null)
-            color = board.getColor(pointArg);
-        if (color != GoColor.EMPTY)
-            return color;
-        for (int i = 0; i < pointListArg.size(); ++i)
-        {
-            GoPoint point = (GoPoint)pointListArg.get(i);
-            color = board.getColor(point);
-            if (color != GoColor.EMPTY)
-                break;
-        }
-        return color;
-    }
-
-    public static void showGfx(String response, GuiBoard guiBoard,
-                               StatusBar statusBar)
+    /** Parse gfx analyze command response and display it on the board.
+        @return Text for status bar (from gfx TEXT) or null
+    */
+    public static String showGfx(String response, GuiBoard guiBoard)
     {
         BufferedReader reader
             = new BufferedReader(new StringReader(response));
+        String statusText = null;
         while (true)
         {
             String line;
@@ -171,8 +154,11 @@ public final class AnalyzeShow
             }
             if (line == null)
                 break;
-            showGfxLine(line, guiBoard, statusBar);
+            String text = showGfxLine(line, guiBoard);
+            if (text != null)
+                statusText = text;
         }
+        return statusText;
     }
 
     public static void showGfxCircle(String[] arg, GuiBoard guiBoard)
@@ -258,12 +244,15 @@ public final class AnalyzeShow
         }
     }
     
-    public static void showGfxLine(String line, GuiBoard guiBoard,
-                                   StatusBar statusBar)
+    /** Parse gfx analyze command response line and display it on the board.
+        @return Text for status bar (from gfx TEXT) or null
+    */
+    public static String showGfxLine(String line, GuiBoard guiBoard)
     {
         String[] arg = StringUtils.splitArguments(line);
         if (arg.length == 0)
-            return;
+            return null;
+        String statusText = null;
         String cmd = arg[0].toUpperCase();
         if (cmd.equals("BLACK"))
             showGfxTerritory(arg, GoColor.BLACK, guiBoard);
@@ -282,13 +271,19 @@ public final class AnalyzeShow
         else if (cmd.equals("SQUARE"))
             showGfxSquare(arg, guiBoard);
         else if (cmd.equals("TEXT"))
-            showGfxText(line, statusBar);
+        {
+            line = line.trim();
+            int pos = line.indexOf(' ');
+            if (pos > 0)
+                statusText = line.substring(pos + 1);
+        }
         else if (cmd.equals("TRIANGLE"))
             showGfxTriangle(arg, guiBoard);
         else if (cmd.equals("VAR"))
             showGfxVariation(arg, guiBoard);
         else if (cmd.equals("WHITE"))
             showGfxTerritory(arg, GoColor.WHITE, guiBoard);
+        return statusText;
     }
 
     public static void showGfxMark(String[] arg, GuiBoard guiBoard)
@@ -325,24 +320,6 @@ public final class AnalyzeShow
             {
             }
         }
-    }
-
-    public static void showGfxText(String line, StatusBar statusBar)
-    {
-        line = line.trim();
-        int pos = line.indexOf(' ');
-        if (pos < 0)
-        {
-            statusBar.clear();
-            return;
-        }
-        line = line.substring(pos + 1).trim();
-        if (pos < 0)
-        {
-            statusBar.clear();
-            return;
-        }
-        statusBar.setText(line);
     }
 
     public static void showGfxTriangle(String[] arg, GuiBoard guiBoard)
@@ -411,6 +388,29 @@ public final class AnalyzeShow
             {
             }
         }
+    }
+
+    /** Make constructor unavailable; class is for namespace only. */
+    private AnalyzeShow()
+    {
+    }
+
+    private static GoColor getColor(Board board, GoPoint pointArg,
+                                    ArrayList pointListArg)
+    {
+        GoColor color = GoColor.EMPTY;
+        if (pointArg != null)
+            color = board.getColor(pointArg);
+        if (color != GoColor.EMPTY)
+            return color;
+        for (int i = 0; i < pointListArg.size(); ++i)
+        {
+            GoPoint point = (GoPoint)pointListArg.get(i);
+            color = board.getColor(point);
+            if (color != GoColor.EMPTY)
+                break;
+        }
+        return color;
     }
 
     private static void showVariation(GuiBoard guiBoard, String response,

@@ -54,16 +54,20 @@ public class StatusBar
 
     public void clear()
     {
-        setText(" ");
+        setText("");
     }
 
     public void setText(String text)
     {
         if (Platform.isMac())
+        {
+            if (text.trim().equals(""))
+                // Avoid new layout, if no text in JLabel
+                text = " ";
             m_label.setText(text);
+        }
         else
             m_textField.setText(text);
-        //m_textField.repaint();
     }
 
     /** Serial version to suppress compiler warning.

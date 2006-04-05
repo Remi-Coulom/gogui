@@ -228,7 +228,8 @@ public class GtpDummy
                         "CIRCLE c8\n" +
                         "INFLUENCE a7 -1 b7 -0.75 c7 -0.5 d7 -0.25 e7 0"
                         + " f7 0.25 g7 0.5 h7 0.75 j7 1\n" +
-                        "VAR b c1 w c2 b c3 b c4 w pass b c5\n");
+                        "VAR b c1 w c2 b c3 b c4 w pass b c5\n" +
+                        "TEXT Graphics Demo\n");
     }
 
     private void cmdGoGuiAnalyzeCommands(GtpCommand cmd) throws GtpError
@@ -241,6 +242,7 @@ public class GtpDummy
             "eplist/Dummy EPList/dummy_eplist\n" +
             "gfx/Dummy Gfx/dummy_gfx\n" +
             "none/Dummy Invalid/dummy_invalid\n" +
+            "none/Dummy Live Gfx/dummy_live_gfx\n" +
             "string/Dummy Long Response/dummy_long_response %s\n" +
             "none/Dummy Next Failure/dummy_next_failure %s\n" +
             "none/Dummy Next Success/dummy_next_success %s\n" +
@@ -290,11 +292,11 @@ public class GtpDummy
         sleep(1000);
         System.err.println("gogui-gfx: COLOR #980098 B7 B8");
         sleep(1000);
-        System.err.println("gogui-gfx: SQUARE B5 C9");
-        sleep(1000);
-        System.err.println("gogui-gfx: MARK A6 B6");
-        sleep(1000);
-        System.err.println("gogui-gfx: TRIANGLE A9");
+        System.err.println("gogui-gfx:\n" +
+                           "CLEAR\n" +
+                           "SQUARE B5 C9\n" +
+                           "MARK A6 B6\n" +
+                           "TRIANGLE A9\n");
         sleep(1000);
         System.err.println("gogui-gfx: WHITE A1");
         sleep(1000);
@@ -309,7 +311,6 @@ public class GtpDummy
         System.err.println("gogui-gfx: VAR b c1 w c2 b c3 b c4 w pass "
                            + "b c5");
         sleep(1000);
-        System.err.println("gogui-gfx: CLEAR");
     }
 
     private void cmdLongResponse(GtpCommand cmd) throws GtpError

@@ -1155,9 +1155,15 @@ public class GoGui
         String title = m_analyzeCommand.getResultTitle();
         try
         {
+            boolean statusContainsResponse = false;
             String response = m_commandThread.getResponse();
-            AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_statusBar,
-                             m_board, response);
+            String statusText = AnalyzeShow.show(m_analyzeCommand, m_guiBoard,
+                                                 m_board, response);
+            if (statusText != null)
+            {
+                m_statusBar.setText(statusText);
+                statusContainsResponse = true;
+            }
             int type = m_analyzeCommand.getType();
             GoPoint pointArg = null;
             if (m_analyzeCommand.needsPointArg())
@@ -1172,7 +1178,6 @@ public class GoGui
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
                                                title, response,
                                                m_commandThread);
-            boolean statusContainsResponse = false;
             if (AnalyzeCommand.isTextType(type))
             {
                 if (response.indexOf("\n") < 0)
