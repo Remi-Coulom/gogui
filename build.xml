@@ -151,6 +151,7 @@ $Source$
  config/gogui*.desktop
  config/gogui-application-x-go-sgf.png
  config/gogui.omf
+ config/gogui.schemas
  config/gogui.xml
  config/x-go-sgf.desktop
  doc/README

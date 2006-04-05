@@ -17,6 +17,12 @@ see section Live Graphics in the documentation
 </listitem>
 <listitem>
 <simpara>
+SgfThumbnail: add missing configuration file to install as a GNOME
+thumbnailer
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpStatistics: add missing class files to gtpstatistics.jar; new options
 -min, -max, -backward
 </simpara>
