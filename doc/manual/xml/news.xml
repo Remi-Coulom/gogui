@@ -27,6 +27,11 @@ GtpStatistics: add missing class files to gtpstatistics.jar; new options
 -min, -max, -backward
 </simpara>
 </listitem>
+<listitem>
+<simpara>
+GtpRegress: remove option -filecomments; use new tool GtpStatistics instead
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

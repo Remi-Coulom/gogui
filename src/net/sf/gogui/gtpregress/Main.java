@@ -22,7 +22,6 @@ public final class Main
         {
             String options[] = {
                 "config:",
-                "filecomments",
                 "help",
                 "long",
                 "output:",
@@ -42,7 +41,6 @@ public final class Main
             }
             boolean verbose = opt.isSet("verbose");
             boolean longOutput = opt.isSet("long");
-            boolean fileComments = opt.isSet("filecomments");
             String output = opt.getString("output", "");
             ArrayList arguments = opt.getArguments();
             int size = arguments.size();
@@ -56,8 +54,7 @@ public final class Main
             for (int i = 0; i <  size - 1; ++i)
                 tests[i] = (String)arguments.get(i + 1);
             GtpRegress gtpRegress =
-                new GtpRegress(program, tests, output, longOutput, verbose,
-                               fileComments);
+                new GtpRegress(program, tests, output, longOutput, verbose);
             System.exit(gtpRegress.getResult() ? 0 : 1);
         }
         catch (Throwable t)

@@ -31,15 +31,13 @@ public class GtpRegress
     implements GtpClient.IOCallback
 {
     public GtpRegress(String program, String[] tests, String output,
-                      boolean longOutput, boolean verbose,
-                      boolean fileComments)
+                      boolean longOutput, boolean verbose)
         throws Exception
     {
         m_result = true;
         m_program = program;
         m_longOutput = longOutput;
         m_verbose = verbose;
-        m_fileComments = fileComments;
         m_prefix = "";
         if (! output.equals(""))
         {
@@ -159,8 +157,6 @@ public class GtpRegress
             return m_expectedPasses + m_unexpectedPasses;
         }
     }
-
-    private boolean m_fileComments;
 
     private boolean m_lastError;
 
@@ -365,15 +361,6 @@ public class GtpRegress
             }
             printOutLine("test", line);
             handleTest(line.substring(2).trim());
-            m_lastFullResponse = null;
-            return;
-        }
-        if (line.startsWith("#>") && m_fileComments)
-        {
-            printOutLine(null, line);
-            if (m_lastFullResponse != null)
-                handleLastResponse();
-            printDataFile(line.substring(2).trim());
             m_lastFullResponse = null;
             return;
         }
