@@ -745,10 +745,18 @@ public class GtpRegress
             handleLine(line);
         }
         timeMillis = System.currentTimeMillis() - timeMillis;
+        if (m_lastFullResponse != null)
+        {
+            handleLastResponse();
+            m_lastFullResponse = null;
+        }
         printOutSeparator();
         cpuTime = getCpuTime() - cpuTime;
         if (m_lastFullResponse != null)
+        {
             handleLastResponse();
+            m_lastFullResponse = null;
+        }
         if (! m_gtp.isProgramDead())
             send("quit");
         m_gtp.waitForExit();
