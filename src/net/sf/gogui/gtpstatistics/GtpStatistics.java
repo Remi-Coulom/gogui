@@ -399,7 +399,7 @@ public class GtpStatistics
         {
             if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
             {
-                assert(m_allowSetup && node != root); // checked in checkGame
+                assert(m_allowSetup && node == root); // checked in checkGame
                 toMove = sendSetup(node);
             }
             Move move = node.getMove();

@@ -65,15 +65,20 @@ public class FileCheck
             {
                 if (m_allowSetup)
                 {
-                    if (node != root)
-                        throwError("contains setup stones in non-root");
+                    if (node == root)
+                        toMove = GoColor.EMPTY;
+                    else
+                        throw new ErrorMessage("setup stones"
+                                               + " in non-root position");
                 }
                 else
-                    throwError("contains setup stones");
+                    throw new ErrorMessage("contains setup stones");
             }
             Move move = node.getMove();
             if (move != null)
             {
+                if (toMove == GoColor.EMPTY)
+                    toMove = move.getColor();
                 if (move.getColor() != toMove)
                     throwError("non-alternating moves");
                 toMove = toMove.otherColor();
