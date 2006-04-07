@@ -34,22 +34,10 @@ public class StatusBar
                 new Box.Filler(dimension, dimension, dimension);
             add(filler, BorderLayout.EAST);
         }
-        if (Platform.isMac())
-        {
-            m_label = new JLabel();
-            m_label.setBorder(GuiUtils.createSmallEmptyBorder());
-            panel.add(m_label);
-            m_textField = null;
-        }
-        else
-        {
-            m_textField = new JTextField();
-            m_textField.setEditable(false);
-            m_textField.setFocusable(false);
-            panel.add(m_textField);
-            m_label = null;
-        }
-        clear();
+        m_textField = new JTextField();
+        m_textField.setEditable(false);
+        m_textField.setFocusable(false);
+        panel.add(m_textField);
     }
 
     public void clear()
@@ -59,23 +47,13 @@ public class StatusBar
 
     public void setText(String text)
     {
-        if (Platform.isMac())
-        {
-            if (text.trim().equals(""))
-                // Avoid new layout, if no text in JLabel
-                text = " ";
-            m_label.setText(text);
-        }
-        else
-            m_textField.setText(text);
+        m_textField.setText(text);
     }
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for use with serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-
-    private final JLabel m_label;
 
     private final JTextField m_textField;
 }
