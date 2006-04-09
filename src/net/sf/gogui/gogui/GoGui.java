@@ -184,7 +184,7 @@ public class GoGui
             {
                 public void fileSelected(String label, File file)
                 {
-                    if (m_needsSave && ! checkSaveGame())
+                    if (! checkSaveGame())
                         return;
                     loadFile(file, -1);
                 }
@@ -1508,7 +1508,7 @@ public class GoGui
     
     private void cbBookmark(String number)
     {
-        if (m_needsSave && ! checkSaveGame())
+        if (! checkSaveGame())
             return;
         try
         {
@@ -1909,7 +1909,7 @@ public class GoGui
 
     private void cbNewGame(int size)
     {
-        if (m_needsSave && ! checkSaveGame())
+        if (! checkSaveGame())
             return;
         m_prefs.setInt("boardsize", size);
         fileInvalid();
@@ -1921,7 +1921,7 @@ public class GoGui
 
     private void cbOpen()
     {
-        if (m_needsSave && ! checkSaveGame())
+        if (! checkSaveGame())
             return;
         File file = SimpleDialogs.showOpenSgf(this);
         if (file == null)
@@ -2062,7 +2062,7 @@ public class GoGui
             setupDone();
             return;
         }
-        if (m_needsSave && ! checkSaveGame())
+        if (! checkSaveGame())
             return;
         m_menuBar.setSetupMode();
         m_showLastMove = false;
@@ -2226,6 +2226,8 @@ public class GoGui
     */
     private boolean checkSaveGame()
     {
+        if (! m_needsSave)
+            return true;
         if (m_saveQuestion == null)
             m_saveQuestion = new OptionalMessage(this);
         int result =
@@ -2277,7 +2279,7 @@ public class GoGui
                 return;
         if (m_setupMode)
             setupDone();
-        if (m_needsSave && ! checkSaveGame())
+        if (! checkSaveGame())
             return;
         saveSession();        
         if (m_commandThread != null)
@@ -3097,7 +3099,7 @@ public class GoGui
                 public boolean handleOpenFile(String filename)
                 {
                     assert(SwingUtilities.isEventDispatchThread());
-                    if (m_needsSave && ! checkSaveGame())
+                    if (! checkSaveGame())
                         return true;
                     loadFile(new File(filename), -1);
                     return true;
