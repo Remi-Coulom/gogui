@@ -289,13 +289,13 @@ public final class GuiBoardUtils
             guiBoard.setColor(point, board.getColor(point));
         }
         GoPoint point = null;
+        int moveNumber = board.getMoveNumber();
+        if (moveNumber > 0)
+            point = board.getMove(moveNumber - 1).getPoint();
         if (markLastMove)
-        {
-            int moveNumber = board.getMoveNumber();
-            if (moveNumber > 0)
-                point = board.getMove(moveNumber - 1).getPoint();
-        }
-        guiBoard.markLastMove(point);
+            guiBoard.markLastMove(point);
+        else
+            guiBoard.markLastMove(null);
         if (point != null)
             guiBoard.setCursor(point);
         else
