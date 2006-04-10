@@ -70,7 +70,6 @@ public class LiveGfx
             return;
         }
         s = s.trim();
-        boolean isEmpty = s.equals("");
         if (s.startsWith("gogui-gfx:"))
         {
             int pos = s.indexOf(':');
