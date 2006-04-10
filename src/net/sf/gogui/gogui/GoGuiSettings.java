@@ -185,7 +185,7 @@ public final class GoGuiSettings
         prefs.setBoolDefault("show-analyze", false);
         prefs.setBoolDefault("show-gtpshell", false);
         prefs.setBoolDefault("show-gametree", false);
-        prefs.setBoolDefault("show-cursor", true);
+        prefs.setBoolDefault("show-cursor", false);
         prefs.setBoolDefault("show-grid", true);
         prefs.setBoolDefault("show-info-panel", true);
         prefs.setBoolDefault("show-last-move", false);
