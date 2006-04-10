@@ -547,34 +547,6 @@ public class GtpRegress
                     "<pre>\n");
     }
 
-    private void printDataFile(String filename)
-    {
-        try
-        {
-            if (filename.equals(""))
-                filename = m_prefix
-                    + FileUtils.replaceExtension(m_testFile, "tst", "dat");
-            else
-                filename = m_prefix + filename;
-            File file = new File(filename);
-            if (! m_dataFiles.contains(file))
-            {
-                if (file.exists())
-                    file.delete();
-                m_dataFiles.add(file);
-            }
-            FileOutputStream outputStream = new FileOutputStream(file, true);
-            PrintStream out = new PrintStream(outputStream);
-            out.println(m_lastId + " " +  (m_lastTestFailed ? "1" : "0")
-                        + " " + m_lastResponse);
-            out.close();
-        }
-        catch (FileNotFoundException e)
-        {
-            System.err.println("Could not open file '" + filename + "'");
-        }
-    }
-
     private synchronized void printOut(String style, String line, int id)
     {
         if (line == null || line.length() == 0)
