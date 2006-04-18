@@ -269,7 +269,7 @@ public final class GuiBoardUtils
     public static void showVariation(GuiBoard guiBoard, Move[] variation)
     {
         guiBoard.clearAllLabels();
-        for (int i = 0; i < variation.length; ++i)
+        for (int i = variation.length - 1; i >= 0; --i)
         {
             Move move = variation[i];
             if (move.getPoint() != null)
