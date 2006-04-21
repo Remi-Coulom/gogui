@@ -68,38 +68,60 @@ public class Plot
         ImageIO.write(image, "png", file);
     }
 
+    /** Set number format for x-axis.
+        @param format The format.
+    */
     public void setFormatX(DecimalFormat format)
     {
         m_formatX = format;
     }
 
+    /** Set number format for y-axis.
+        @param format The format.
+    */
     public void setFormatY(DecimalFormat format)
     {
         m_formatY = format;
     }
 
+    /** Set plot style to bars.
+        Default is plotting points connected by lines.
+        @param barWidth The width of each bar.
+    */
     public void setPlotStyleBars(double barWidth)
     {
         m_withBars = true;
         m_barWidth = barWidth;
     }
 
+    /** Don't connect plotted points with lines. */
     public void setPlotStyleNoLines()
     {
         m_noLines = true;
     }
 
+    /** Disable drawing the zero axis for the y-coordinates. */
     public void setNoPlotYZero()
     {
         m_plotYZero = false;
     }
 
+    /** Enable drawing of solid lines at certain x-intervals.
+        @note The new implementation does no longer use solid lines, but
+        changes white and gray background color at the solid line interval.
+        @param solidLineInterval The interval for the solid lines.
+    */
     public void setSolidLineInterval(double solidLineInterval)
     {
         m_solidLineInterval = solidLineInterval;
         m_useSolidLineInterval = true;
     }
 
+    /** Set x-label intervals.
+        By default, every x-tic (grid line) gets an x-label.
+        @note Misleading name, should be tics per x-label.
+        @param xLabelPerTic The number of tics per x-label.
+    */
     public void setXLabelPerTic(int xLabelPerTic)
     {
         m_xLabelPerTic = xLabelPerTic;
@@ -114,42 +136,65 @@ public class Plot
         setXTics(1);
     }
 
-    public void setXTics(double tics)
-    {
-        m_xTics = tics;
-        m_autoXTics = false;
-    }
-
+    /** Set maximum x value.
+        @param max The maximum.
+    */
     public void setXMax(double max)
     {
         m_maxX = max;
         m_autoXMax = false;
     }
 
+    /** Set minimum x value.
+        @param max The minimum.
+    */
     public void setXMin(double min)
     {
         m_minX = min;
         m_autoXMin = false;
     }
 
-    public void setYMin(double min)
+    /** Set x-tics.
+        Sets the grid line distance for the x-axis.
+        @param tics The distance.
+    */
+    public void setXTics(double tics)
     {
-        m_minY = min;
-        m_autoYMin = false;
+        m_xTics = tics;
+        m_autoXTics = false;
     }
 
+    /** Set maximum y value.
+        @param max The maximum.
+    */
     public void setYMax(double max)
     {
         m_maxY = max;
         m_autoYMax = false;
     }
 
+    /** Set minimum x value.
+        @param max The minimum.
+    */
+    public void setYMin(double min)
+    {
+        m_minY = min;
+        m_autoYMin = false;
+    }
+
+    /** Set y-tics.
+        Sets the grid line distance for the y-axis.
+        @param tics The distance.
+    */
     public void setYTics(double tics)
     {
         m_yTics = tics;
         m_autoYTics = false;
     }
 
+    /** Set plot title.
+        @param title The title.
+    */
     public void setTitle(String title)
     {
         m_title = title;
