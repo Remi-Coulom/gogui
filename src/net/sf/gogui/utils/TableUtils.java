@@ -12,6 +12,12 @@ import java.util.ArrayList;
 /** Utility functions for class Table. */
 public final class TableUtils
 {
+    /** Check if all elements in a column are empty.
+        @param table The table.
+        @param column The column title.
+        @return True, if all elements in this column are null or strings
+        containing only whitespaces.
+    */
     public static boolean allEmpty(Table table, String column)
     {
         for (int row = 0; row < table.getNumberRows(); ++row)
@@ -23,6 +29,12 @@ public final class TableUtils
         return true;
     }
 
+    /** Append row from other table.
+        The tables need to have the same number of columns.
+        @param to The table to append to.
+        @param from The table to take the row from.
+        @param row The index of the row in table from.
+    */
     public static void appendRow(Table to, Table from, int row)
     {
         assert(to.getNumberColumns() == from.getNumberColumns());
@@ -31,6 +43,15 @@ public final class TableUtils
             to.set(column, from.get(column, row));
     }
 
+    /** Find row with required values for two columns.
+        @param table The table.
+        @param compareColumn1 The first column title.
+        @param compareValue1 The required value for the first column.
+        @param compareColumn2 The second column title.
+        @param compareValue2 The required value for the second column.
+        @return The row with matching values for both columns or -1,
+        if no such row exists.
+    */
     public static int findRow(Table table,
                               String compareColumn1, String compareValue1,
                               String compareColumn2, String compareValue2)
