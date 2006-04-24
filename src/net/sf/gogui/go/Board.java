@@ -12,12 +12,24 @@ import java.util.ArrayList;
 /** Go board. */
 public final class Board
 {
+    /** Constant for unknown rules. */
     public static final int RULES_UNKNOWN = 0;
 
+    /** Constant for Chinese rules.
+        Indicates that area counting (stones and territory) is used for the
+        score.
+    */
     public static final int RULES_CHINESE = 1;
 
+    /** Constant for Japanese rules.
+        Indicates that territory counting (territory and prisoners) is used
+        for the score.
+    */
     public static final int RULES_JAPANESE = 2;
 
+    /** Constructor.
+        @param boardSize The board size (number of points per row / column).
+    */
     public Board(int boardSize)
     {
         initSize(boardSize);
@@ -116,6 +128,9 @@ public final class Board
         return m_score[p.getX()][p.getY()];
     }
 
+    /** Get board size.
+        @return The board size.
+    */
     public int getSize()
     {
         return m_size;
