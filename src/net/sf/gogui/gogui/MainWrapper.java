@@ -5,10 +5,11 @@
 
 package net.sf.gogui.gogui;
 
-import net.sf.gogui.utils.ErrorMessage;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Locale;
+import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
  
@@ -56,7 +57,7 @@ public final class MainWrapper
         }
         catch (Exception e)
         {
-            System.err.println(e.getMessage());
+            System.err.println(StringUtils.printException(e));
             System.exit(-1);
         }
     }
