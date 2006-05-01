@@ -75,7 +75,6 @@ public final class Main
                   + " [...]\n" +
                   "\n" +
                   "-config       Config file\n" +
-                  "-filecomments Use special comment #>\n" +
                   "-help         Display this help and exit\n" +
                   "-long         Longer output to standard out\n" +
                   "-output       Output directory\n" +
