@@ -160,8 +160,6 @@ public class GtpRegress
 
     private boolean m_lastError;
 
-    private boolean m_lastTestFailed;
-
     private boolean m_longOutput;
 
     private boolean m_result;
@@ -169,8 +167,6 @@ public class GtpRegress
     private boolean m_verbose;
 
     private int m_lastCommandId;
-
-    private int m_lastId;
 
     private int m_lastSgfMove;
 
@@ -330,7 +326,6 @@ public class GtpRegress
             m_tests.add(new Test(m_lastCommandId, m_lastCommand, fail, false,
                                  "", m_lastResponse, m_lastSgf,
                                  m_lastSgfMove));
-            m_lastTestFailed = fail;
         }
         else
         {
@@ -383,7 +378,6 @@ public class GtpRegress
             {
                 int index = line.indexOf(' ');
                 m_lastCommand = line.substring(index + 1);
-                m_lastId = m_lastCommandId;
             }
             printOutLine(m_lastCommandId >= 0 ? "test" : "command", line,
                          m_lastCommandId);
@@ -448,7 +442,6 @@ public class GtpRegress
         }
         if (fail  && ! expectedFail)
             m_result = false;
-        m_lastTestFailed = fail;
         String style = null;
         if (fail && ! expectedFail)
             style = "fail";
