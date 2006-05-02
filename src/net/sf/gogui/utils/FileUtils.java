@@ -96,7 +96,7 @@ public final class FileUtils
         String name = file.toString();
         if (hasExtension(file, oldExtension))
         {
-            int index = name.lastIndexOf(".");
+            int index = name.lastIndexOf('.');
             assert(index >= 0);
             return name.substring(0, index);
         }
@@ -114,7 +114,7 @@ public final class FileUtils
         String name = file.toString();
         if (hasExtension(file, oldExtension))
         {
-            int index = name.lastIndexOf(".");
+            int index = name.lastIndexOf('.');
             assert(index >= 0);
             return name.substring(0, index) + "." + newExtension;
         }
