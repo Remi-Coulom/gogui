@@ -213,7 +213,7 @@ public final class GtpUtils
     /** Construct a gogui-play_sequence command from a list of moves. */
     public static String getPlaySequenceCommand(ArrayList moves)
     {
-        StringBuffer cmd = new StringBuffer();
+        StringBuffer cmd = new StringBuffer(2048);
         cmd.append("play_sequence");
         for (int i = 0; i < moves.size(); ++i)
         {
