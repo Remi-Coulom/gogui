@@ -45,13 +45,13 @@ public class LiveGfx
 
     private boolean m_duringMultiLineResponse;
 
-    private StringBuffer m_buffer = new StringBuffer(1024);    
+    private final StringBuffer m_buffer = new StringBuffer(1024);    
 
-    private StringBuffer m_response = new StringBuffer(1024);    
+    private final StringBuffer m_response = new StringBuffer(1024);    
 
-    private GuiBoard m_guiBoard;
+    private final GuiBoard m_guiBoard;
 
-    private StatusBar m_statusBar;
+    private final StatusBar m_statusBar;
 
     private void handleLine(String s)
     {
