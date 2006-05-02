@@ -436,7 +436,7 @@ class WriteThread extends Thread
 
     private byte[] m_packet;
 
-    private Object m_mutex = new Object();
+    private final Object m_mutex = new Object();
 
     private final OutputStream m_out;
 
@@ -732,7 +732,7 @@ class MainThread
 
     private final InputStream m_in;
 
-    private Object m_mutex = new Object();
+    private final Object m_mutex = new Object();
 
     private final StringBuffer m_talkBuffer = new StringBuffer();
 
