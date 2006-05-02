@@ -756,7 +756,7 @@ public class TwoGtp
             if (! empty2)
             {
                 if (isMultiLine)
-                    response.append("\n");
+                    response.append('\n');
                 else
                     response.append("  ");
             }
