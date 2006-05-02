@@ -88,7 +88,7 @@ public class ProcessUtils
         while ((line = reader.readLine()) != null)
         {
             result.append(line);
-            result.append("\n");
+            result.append('\n');
         }
         reader.close();
         try
