@@ -51,7 +51,7 @@ public class GtpAdapter
         init();
     }
 
-    public GtpAdapter(GtpClient gtp, PrintStream log, boolean verbose)
+    public GtpAdapter(GtpClient gtp, PrintStream log)
         throws GtpError
     {
         super(log);

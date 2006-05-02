@@ -39,7 +39,7 @@ public class GtpAdapterTest
         expect.expect("protocol_version", "2");
         expect.expect("list_commands", "");
         GtpAdapter adapter
-            = new GtpAdapter(expectConnection.getGtpClient(), null, false);
+            = new GtpAdapter(expectConnection.getGtpClient(), null);
         adapter.setEmuLoadSgf();
         GtpEngineConnection adapterConnection
             = new GtpEngineConnection(adapter);
@@ -60,7 +60,7 @@ public class GtpAdapterTest
         expect.expect("protocol_version", "2");
         expect.expect("list_commands", "");
         GtpAdapter adapter
-            = new GtpAdapter(expectConnection.getGtpClient(), null, false);
+            = new GtpAdapter(expectConnection.getGtpClient(), null);
         GtpEngineConnection adapterConnection
             = new GtpEngineConnection(adapter);
         GtpClient gtp = adapterConnection.getGtpClient();
@@ -77,7 +77,7 @@ public class GtpAdapterTest
         expect.expect("protocol_version", "2");
         expect.expect("list_commands", "");
         GtpAdapter adapter
-            = new GtpAdapter(expectConnection.getGtpClient(), null, false);
+            = new GtpAdapter(expectConnection.getGtpClient(), null);
         adapter.setName("Bar");
         GtpEngineConnection adapterConnection
             = new GtpEngineConnection(adapter);
