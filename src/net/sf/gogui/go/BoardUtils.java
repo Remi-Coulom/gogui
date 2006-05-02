@@ -49,7 +49,7 @@ public final class BoardUtils
             printYCoord(y, s);
             if (withGameInfo)
                 printGameInfo(board, s, y);
-            s.append("\n");
+            s.append('\n');
         }
         printXCoords(size, s);
         if (! withGameInfo)
