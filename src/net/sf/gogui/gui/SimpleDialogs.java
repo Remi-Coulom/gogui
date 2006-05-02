@@ -150,7 +150,7 @@ public final class SimpleDialogs
         if (Platform.isMac() && type != FILE_SELECT)
         {
             Frame frame = findParentFrame(parent);
-            return showFileChooserAWT(frame, type, setSgfFilter, title);
+            return showFileChooserAWT(frame, type, title);
         }
         return showFileChooserSwing(parent, type, lastFile, setSgfFilter,
                                     title);
@@ -181,7 +181,7 @@ public final class SimpleDialogs
     }
 
     private static File showFileChooserAWT(Frame parent, int type,
-                                           boolean setSgfFilter, String title)
+                                           String title)
     {
         FileDialog dialog = new FileDialog(parent);
         if (title == null)
