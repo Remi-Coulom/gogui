@@ -111,6 +111,7 @@ public class Platform
         Tries /usr/bin/open if Platform.isMac(),
         rundll32 url.dll,FileProtocolHandler if Platform.isWindows(),
         and if isUnix() in this order:
+        - xdg-open
         - kfmclient (if KDE is running)
         - firefox
         - mozilla
@@ -135,6 +136,11 @@ public class Platform
         }
         else if (isUnix())
         {
+            {
+                String[] cmd = { "xdg-open", url.toString() };
+                if (runProcess(cmd))
+                    return true;
+            }
             if (checkKDERunning())
             {
                 String[] cmd = { "kfmclient", "openURL", url.toString() };
