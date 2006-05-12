@@ -97,7 +97,7 @@ public final class Board
     }
 
     /** Check if board contains a point.
-        @param The point to check
+        @param point The point to check
         @return true, if the point is on the board
     */
     public boolean contains(GoPoint point)
