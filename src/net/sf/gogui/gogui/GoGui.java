@@ -1848,7 +1848,7 @@ public class GoGui
             }
             try
             {
-                if (! Platform.openInExternalBrowser(file.toURL()))
+                if (! Platform.openInExternalBrowser(file.toURI().toURL()))
                     showError("Could not open browser");
             }
             catch (MalformedURLException e)
