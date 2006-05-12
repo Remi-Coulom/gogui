@@ -672,6 +672,7 @@ public class Analyze
         }
         catch (Exception e)
         {
+            StringUtils.printException(e);
         }
         endInfo(out);
         out.print("<table border=\"0\">\n");
