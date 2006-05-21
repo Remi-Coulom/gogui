@@ -19,6 +19,21 @@ Minor fixes
 </revision>
 
 <revision>
+<revnumber>0.9</revnumber>
+<date>15 May 2006</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Minor fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
 <revnumber>0.9pre3</revnumber>
 <date>07 Apr 2006</date>
 <authorinitials>enz</authorinitials>
