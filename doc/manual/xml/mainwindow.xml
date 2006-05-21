@@ -425,7 +425,7 @@ and <guimenuitem>White</guimenuitem> menu item from the
 <guimenu>Setup</guimenu> menu.
 It is also possible to place stones of the other than current color,
 without switching the color, by pressing a modifier key while placing a stone
-(Ctrl, Alt or Meta).
+(Ctrl, Alt or Meta) or using the right mouse button.
 <note>
 <simpara>
 Setting up a position is not reversible.
