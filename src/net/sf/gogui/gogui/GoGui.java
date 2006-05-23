@@ -771,10 +771,10 @@ public class GoGui
             GoColor color;
             if (modifiedSelect)
                 color = toMove.otherColor();
-            else if (m_board.getColor(p) == toMove)
-                color = GoColor.EMPTY;
             else
                 color = toMove;
+            if (m_board.getColor(p) == color)
+                color = GoColor.EMPTY;
             m_board.play(p, color);
             m_board.setToMove(toMove);
             updateGameInfo(true);
