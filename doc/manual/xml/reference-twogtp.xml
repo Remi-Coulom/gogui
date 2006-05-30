@@ -480,7 +480,7 @@ twogtp -black "$BLACK" -white "$WHITE" -games 100 \
 <title>Analyze results</title>
 <simpara>
 Create a HTML formatted result page of the games played in the previous
-refsection:
+section:
 </simpara>
 <para>
 <programlisting>
