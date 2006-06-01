@@ -170,7 +170,11 @@ public class TextViewer
         m_textPane.get().setEditable(false);
         pack();
         // Workaround for problems with oversized windows on some platforms
+        // Also increase width by 10%, because automatic computation of
+        // JTextPane/JTextArea width according to content text does not
+        // work (maybe related to Sun Bug 4829215)
         Dimension size = getSize();
+        size.width *= 1.1;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int maxHeight = (int)(0.9 * screenSize.height);
         int maxWidth = (int)(0.9 * screenSize.width);
@@ -178,8 +182,8 @@ public class TextViewer
         {
             size.width = Math.min(size.width, maxWidth);
             size.height = Math.min(size.height, maxHeight);
-            setSize(size);
         }
+        setSize(size);
     }
 }
 
