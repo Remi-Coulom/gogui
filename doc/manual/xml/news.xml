@@ -11,7 +11,13 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Minor fixes
+Fix bug when loading a bookmarked file while auto-run analyze command is
+enabled
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other minor fixes
 </simpara>
 </listitem>
 </itemizedlist>
