@@ -187,6 +187,7 @@ public class GoGui
                     if (! checkSaveGame())
                         return;
                     loadFile(file, -1);
+                    boardChangedBegin(false, true);
                 }
             };
         RecentFileMenu.Callback recentGtp = new RecentFileMenu.Callback()
@@ -1521,7 +1522,7 @@ public class GoGui
             Bookmark bookmark = (Bookmark)m_bookmarks.get(n);
             File file = bookmark.m_file;
             if (m_loadedFile == null || ! file.equals(m_loadedFile))
-                if (! loadFile(file, 0))
+                if (! loadFile(file, -1))
                     return;
             String variation = bookmark.m_variation;
             Node node = m_gameTree.getRoot();
@@ -1928,6 +1929,7 @@ public class GoGui
             return;
         m_menuBar.addRecent(file);
         loadFile(file, -1);
+        boardChangedBegin(false, true);
     }
 
     private void cbPass()
@@ -2990,7 +2992,6 @@ public class GoGui
             SimpleDialogs.setLastFile(file);
             computerNone();
             createThumbnail(file);
-            boardChangedBegin(false, true);
         }
         catch (FileNotFoundException e)
         {
@@ -3102,6 +3103,7 @@ public class GoGui
                     if (! checkSaveGame())
                         return true;
                     loadFile(new File(filename), -1);
+                    boardChangedBegin(false, true);
                     return true;
                 }
                 
