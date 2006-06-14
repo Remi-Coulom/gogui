@@ -1915,6 +1915,7 @@ public class GoGui
         m_prefs.setInt("boardsize", size);
         fileInvalid();
         newGame(size);
+        computerWhite();
         m_clock.startMove(GoColor.BLACK);
         updateMenuBar();
         boardChangedBegin(true, true);
