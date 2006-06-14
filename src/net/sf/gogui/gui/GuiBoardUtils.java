@@ -266,18 +266,36 @@ public final class GuiBoardUtils
         }
     }
 
+    /** Shows moves in variation as stones with move number labels on board.
+        If there are several moves on the same point then the only first move
+        is shown for short variations (less/equal ten moves); and only the
+        last move for long variations.
+    */
     public static void showVariation(GuiBoard guiBoard, Move[] variation)
     {
-        guiBoard.clearAllLabels();
-        for (int i = variation.length - 1; i >= 0; --i)
-        {
-            Move move = variation[i];
-            if (move.getPoint() != null)
+        guiBoard.clearAllLabels();        
+        if (variation.length > 10)
+            for (int i = 0; i < variation.length; ++i)
             {
-                guiBoard.setColor(move.getPoint(), move.getColor());
-                guiBoard.setLabel(move.getPoint(), Integer.toString(i + 1));
+                Move move = variation[i];
+                if (move.getPoint() != null)
+                {
+                    String label = Integer.toString(i + 1);
+                    guiBoard.setColor(move.getPoint(), move.getColor());
+                    guiBoard.setLabel(move.getPoint(), label);
+                }
             }
-        }
+        else
+            for (int i = variation.length - 1; i >= 0; --i)
+            {
+                Move move = variation[i];
+                if (move.getPoint() != null)
+                {
+                    String label = Integer.toString(i + 1);
+                    guiBoard.setColor(move.getPoint(), move.getColor());
+                    guiBoard.setLabel(move.getPoint(), label);
+                }
+            }
     }
 
     public static void updateFromGoBoard(GuiBoard guiBoard, Board board,
