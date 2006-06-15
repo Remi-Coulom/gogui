@@ -1271,7 +1271,7 @@ public class GoGui
                 }
 
                 private LiveGfx m_liveGfx =
-                    new LiveGfx(m_guiBoard, m_statusBar);
+                    new LiveGfx(m_board, m_guiBoard, m_statusBar);
             };
         try
         {

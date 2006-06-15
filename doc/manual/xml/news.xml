@@ -11,7 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Minor fixes
+Automatically clear board before drawing live graphics commands
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Several minor fixes
 </simpara>
 </listitem>
 </itemizedlist>
