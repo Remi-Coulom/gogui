@@ -293,7 +293,6 @@ public class GtpDummy
         System.err.println("gogui-gfx: COLOR #980098 B7 B8");
         sleep(1000);
         System.err.println("gogui-gfx:\n" +
-                           "CLEAR\n" +
                            "SQUARE B5 C9\n" +
                            "MARK A6 B6\n" +
                            "TRIANGLE A9\n");
@@ -311,6 +310,7 @@ public class GtpDummy
         System.err.println("gogui-gfx: VAR b c1 w c2 b c3 b c4 w pass "
                            + "b c5");
         sleep(1000);
+        System.err.println("gogui-gfx: CLEAR");
     }
 
     private void cmdLongResponse(GtpCommand cmd) throws GtpError
