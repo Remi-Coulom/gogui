@@ -22,7 +22,9 @@ public final class Main
         GoGuiSettings settings;
         try
         {
-            settings = new GoGuiSettings(args);
+            settings =
+                new GoGuiSettings(args,
+                                  Class.forName("net.sf.gogui.gogui.GoGui"));
             if (settings.m_noStartup)
                 return;
             startGoGui(settings);
@@ -62,8 +64,8 @@ public final class Main
     {
         assert(! settings.m_noStartup);
         GuiUtils.initLookAndFeel(settings.m_lookAndFeel);
-        new GoGui(settings.m_program, settings.m_preferences, settings.m_file,
-                  settings.m_move, settings.m_time, settings.m_verbose,
+        new GoGui(settings.m_program, settings.m_file, settings.m_move,
+                  settings.m_time, settings.m_verbose,
                   settings.m_computerBlack, settings.m_computerWhite,
                   settings.m_auto, settings.m_gtpFile, settings.m_gtpCommand,
                   settings.m_initAnalyze, settings.m_fastPaint);

@@ -34,11 +34,18 @@ public final class MainWrapper
         GoGuiSettings settings;
         try
         {
-            settings = new GoGuiSettings(args);
+            settings =
+                new GoGuiSettings(args,
+                                  Class.forName("net.sf.gogui.gogui.GoGui"));
             if (settings.m_noStartup)
                 return;
         }
         catch (ErrorMessage e)
+        {
+            System.err.println(e.getMessage());
+            return;
+        }
+        catch (ClassNotFoundException e)
         {
             System.err.println(e.getMessage());
             return;

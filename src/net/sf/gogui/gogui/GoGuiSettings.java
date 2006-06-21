@@ -6,12 +6,12 @@
 package net.sf.gogui.gogui;
 
 import java.util.ArrayList;
+import java.util.prefs.Preferences;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.Preferences;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -41,8 +41,6 @@ public final class GoGuiSettings
 
     public int m_move;
 
-    public Preferences m_preferences;
-
     public String m_file;
 
     public String m_gtpCommand;
@@ -59,7 +57,7 @@ public final class GoGuiSettings
 
     public String m_time;
 
-    public GoGuiSettings(String args[]) throws ErrorMessage
+    public GoGuiSettings(String args[], Class c) throws ErrorMessage
     {
         String options[] = {
             "analyze:",
@@ -95,8 +93,7 @@ public final class GoGuiSettings
             System.out.println("GoGui " + Version.get());
             return;
         }
-        m_preferences = new Preferences();
-        setDefaults(m_preferences);
+        m_prefs = Preferences.userNodeForPackage(c);
         m_initAnalyze = opt.getString("analyze");
         m_fastPaint = opt.isSet("fast");
         m_auto = opt.isSet("auto");
@@ -115,13 +112,13 @@ public final class GoGuiSettings
         m_gtpFile = opt.getString("gtpfile", "");
         m_gtpCommand = opt.getString("command", "");
         if (opt.contains("komi"))
-            m_preferences.setDouble("komi", opt.getDouble("komi"));        
+            m_prefs.putDouble("komi", opt.getDouble("komi"));        
         m_lookAndFeel = opt.getString("laf", null);
         m_move = opt.getInteger("move", -1);
         if (opt.contains("size"))
-            m_preferences.setInt("boardsize", opt.getInteger("size"));
+            m_prefs.putInt("boardsize", opt.getInteger("size"));
         m_rules = opt.getString("rules", "");
-        m_preferences.setString("rules", m_rules);
+        m_prefs.put("rules", m_rules);
         m_time = opt.getString("time", null);
         m_verbose = opt.isSet("verbose");
         ArrayList arguments = opt.getArguments();
@@ -132,6 +129,8 @@ public final class GoGuiSettings
             throw new ErrorMessage("Only one argument allowed");
         validate();
     }
+
+    private Preferences m_prefs;
 
     private void printHelp()
     {
@@ -162,35 +161,9 @@ public final class GoGuiSettings
         System.out.print(helpText);
     }   
 
-    private static void setDefaults(Preferences prefs)
-    {
-        prefs.setBoolDefault("analyze-only-supported-commands", true);
-        prefs.setBoolDefault("analyze-sort", true);
-        prefs.setBoolDefault("beep-after-move", true);
-        prefs.setIntDefault("boardsize", GoPoint.DEFAULT_SIZE);
-        prefs.setBoolDefault("comment-font-fixed", false);
-        prefs.setIntDefault("gametree-labels", GameTreePanel.LABEL_NUMBER);
-        prefs.setIntDefault("gametree-size", GameTreePanel.SIZE_NORMAL);
-        prefs.setBoolDefault("gametree-show-subtree-sizes", false);
-        prefs.setBoolDefault("gtpshell-autonumber", false);
-        // JComboBox has problems on the Mac, see section Bugs in
-        // documentation
-        prefs.setBoolDefault("gtpshell-disable-completions",
-                             Platform.isMac());
-        prefs.setBoolDefault("gtpshell-timestamp", false);
-        prefs.setDoubleDefault("komi", 6.5);
-        prefs.setStringDefault("rules", "Chinese");
-        prefs.setBoolDefault("show-cursor", false);
-        prefs.setBoolDefault("show-grid", true);
-        prefs.setBoolDefault("show-info-panel", true);
-        prefs.setBoolDefault("show-last-move", false);
-        prefs.setBoolDefault("show-toolbar", true);
-        prefs.setBoolDefault("show-variations", false);
-    }
-
     private void validate() throws ErrorMessage
     {
-        int size = m_preferences.getInt("boardsize");
+        int size = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         if (size < 1 || size > GoPoint.MAXSIZE)
             throw new ErrorMessage("Invalid board size: " + size);
     }

@@ -31,6 +31,7 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -92,7 +93,6 @@ import net.sf.gogui.thumbnail.Thumbnail;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.Preferences;
 import net.sf.gogui.utils.ProgressShow;
 import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
@@ -105,16 +105,15 @@ public class GoGui
     implements ActionListener, AnalyzeDialog.Callback, GuiBoard.Listener,
                GameTreeViewer.Listener, GtpShell.Callback
 {
-    public GoGui(String program, Preferences prefs, String file, int move,
-                 String time, boolean verbose, boolean computerBlack,
+    public GoGui(String program, String file, int move, String time,
+                 boolean verbose, boolean computerBlack,
                  boolean computerWhite, boolean auto, String gtpFile,
                  String gtpCommand, String initAnalyze, boolean fastPaint)
         throws GtpError, ErrorMessage
     {
         m_fastPaint = fastPaint;
-        m_prefs = prefs;
-        m_boardSize = prefs.getInt("boardsize");
-        m_beepAfterMove = prefs.getBool("beep-after-move");
+        m_boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
+        m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
         if (file != null)
             m_file = new File(file);
         m_gtpFile = gtpFile;
@@ -163,7 +162,8 @@ public class GoGui
                 }
             };
         m_comment = new Comment(commentListener, m_fastPaint);
-        m_comment.setFontFixed(m_prefs.getBool("comment-font-fixed"));
+        boolean fontFixed = m_prefs.getBoolean("comment-font-fixed", false);
+        m_comment.setFontFixed(fontFixed);
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_guiBoard, m_infoPanel);
@@ -203,36 +203,45 @@ public class GoGui
         m_menuBar = new GoGuiMenuBar(this, recentCallback, recentGtp);
         m_menuBar.selectBoardSizeItem(m_boardSize);
         boolean onlySupported
-            = m_prefs.getBool("analyze-only-supported-commands");
+            = m_prefs.getBoolean("analyze-only-supported-commands", true);
         m_menuBar.setAnalyzeOnlySupported(onlySupported);
-        m_menuBar.setAnalyzeSort(m_prefs.getBool("analyze-sort"));
-        m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels"));
-        m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size"));
+        m_menuBar.setAnalyzeSort(m_prefs.getBoolean("analyze-sort", true));
+        m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels",
+                                                   GameTreePanel.LABEL_NUMBER));
+        m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size",
+                                                 GameTreePanel.SIZE_NORMAL));
         boolean showSubtreeSizes =
-            m_prefs.getBool("gametree-show-subtree-sizes");
+            m_prefs.getBoolean("gametree-show-subtree-sizes", false);
         m_menuBar.setShowSubtreeSizes(showSubtreeSizes);
-        m_menuBar.setAutoNumber(m_prefs.getBool("gtpshell-autonumber"));
+        m_menuBar.setAutoNumber(m_prefs.getBoolean("gtpshell-autonumber",
+                                                   false));
+        // JComboBox has problems on the Mac, see section Bugs in
+        // documentation
         boolean completion
-            = ! m_prefs.getBool("gtpshell-disable-completions");
+            = ! m_prefs.getBoolean("gtpshell-disable-completions",
+                                Platform.isMac());
         m_menuBar.setCommandCompletion(completion);
-        m_menuBar.setCommentFontFixed(m_prefs.getBool("comment-font-fixed"));
-        m_menuBar.setTimeStamp(m_prefs.getBool("gtpshell-timestamp"));
+        m_menuBar.setCommentFontFixed(fontFixed);
+        m_menuBar.setTimeStamp(m_prefs.getBoolean("gtpshell-timestamp",
+                                                  false));
         m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_menuBar.setShowInfoPanel(m_showInfoPanel);
         m_menuBar.setShowToolbar(m_showToolbar);
-        m_menuBar.setShowLastMove(m_prefs.getBool("show-last-move"));
-        m_menuBar.setShowVariations(m_prefs.getBool("show-variations"));
-        m_showLastMove = m_prefs.getBool("show-last-move");
-        m_showVariations = m_prefs.getBool("show-variations");
-        m_menuBar.setShowCursor(m_prefs.getBool("show-cursor"));
-        m_menuBar.setShowGrid(m_prefs.getBool("show-grid"));
-        m_guiBoard.setShowCursor(m_prefs.getBool("show-cursor"));
-        m_guiBoard.setShowGrid(m_prefs.getBool("show-grid"));
+        m_showLastMove = m_prefs.getBoolean("show-last-move", true);        
+        m_menuBar.setShowLastMove(m_showLastMove);
+        m_showVariations = m_prefs.getBoolean("show-variations", false);
+        m_menuBar.setShowVariations(m_showVariations);
+        boolean showCursor = m_prefs.getBoolean("show-cursor", false);
+        m_menuBar.setShowCursor(showCursor);
+        boolean showGrid = m_prefs.getBoolean("show-grid", true);
+        m_menuBar.setShowGrid(showGrid);
+        m_guiBoard.setShowCursor(showCursor);
+        m_guiBoard.setShowGrid(showGrid);
         setJMenuBar(m_menuBar.getMenuBar());
         if (program != null)
             m_program = program;
-        else if (m_prefs.contains("program"))
-            m_program = m_prefs.getString("program");
+        else
+            m_program = m_prefs.get("program", null);
         if (m_program != null && m_program.trim().equals(""))
             m_program = null;
         if (m_program == null)
@@ -496,7 +505,7 @@ public class GoGui
     public void cbAnalyzeOnlySupported()
     {
         boolean onlySupported = m_menuBar.getAnalyzeOnlySupported();
-        m_prefs.setBool("analyze-only-supported-commands", onlySupported);
+        m_prefs.putBoolean("analyze-only-supported-commands", onlySupported);
         if (m_analyzeDialog != null)
             m_analyzeDialog.setOnlySupported(onlySupported);
     }
@@ -510,7 +519,7 @@ public class GoGui
     public void cbAnalyzeSort()
     {
         boolean sort = m_menuBar.getAnalyzeSort();
-        m_prefs.setBool("analyze-sort", sort);
+        m_prefs.putBoolean("analyze-sort", sort);
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSort(sort);
     }
@@ -525,10 +534,10 @@ public class GoGui
                 return;
         if (! attachProgram(program))
         {
-            m_prefs.setString("program", "");
+            m_prefs.put("program", "");
             return;
         }
-        m_prefs.setString("program", m_program);
+        m_prefs.put("program", m_program);
         if (m_gtpShell != null && m_session.isVisible("shell"))
         {
             m_menuBar.setShowShell(true);
@@ -566,7 +575,7 @@ public class GoGui
             return;
         boolean commandCompletion = m_menuBar.getCommandCompletion();
         m_gtpShell.setCommandCompletion(commandCompletion);
-        m_prefs.setBool("gtpshell-disable-completions", ! commandCompletion);
+        m_prefs.putBoolean("gtpshell-disable-completions", ! commandCompletion);
     }
 
     public boolean cbDetachProgram()
@@ -579,7 +588,7 @@ public class GoGui
                 return false;
         }
         detachProgram();
-        m_prefs.setString("program", "");
+        m_prefs.put("program", "");
         return true;
     }
 
@@ -1122,7 +1131,7 @@ public class GoGui
 
     private AnalyzeDialog m_analyzeDialog;    
 
-    private Preferences m_prefs;
+    private Preferences m_prefs = Preferences.userNodeForPackage(getClass());
 
     private ScoreDialog m_scoreDialog;
 
@@ -1464,13 +1473,13 @@ public class GoGui
             return;
         boolean enable = m_menuBar.getAutoNumber();
         m_commandThread.setAutoNumber(enable);
-        m_prefs.setBool("gtpshell-autonumber", enable);
+        m_prefs.putBoolean("gtpshell-autonumber", enable);
     }
 
     private void cbBeepAfterMove()
     {
         m_beepAfterMove = m_menuBar.getBeepAfterMove();
-        m_prefs.setBool("beep-after-move", m_beepAfterMove);
+        m_prefs.putBoolean("beep-after-move", m_beepAfterMove);
     }
 
     private void cbBackToMainVar()
@@ -1589,7 +1598,7 @@ public class GoGui
     {
         boolean fixed = m_menuBar.getCommentFontFixed();
         m_comment.setFontFixed(fixed);
-        m_prefs.setBool("comment-font-fixed", fixed);
+        m_prefs.putBoolean("comment-font-fixed", fixed);
     }
 
     private void cbComputerBoth()
@@ -1720,15 +1729,15 @@ public class GoGui
         GameInformation gameInformation = m_gameTree.getGameInformation();
         if (! GameInfoDialog.show(this, gameInformation))
             return;
-        if (gameInformation.m_komi != m_prefs.getDouble("komi"))
+        if (gameInformation.m_komi != m_prefs.getDouble("komi", 6.5))
         {
-            m_prefs.setDouble("komi", gameInformation.m_komi);
+            m_prefs.putDouble("komi", gameInformation.m_komi);
             setKomi(gameInformation.m_komi);
         }
         if (gameInformation.m_rules != null
-            && ! gameInformation.m_rules.equals(m_prefs.getString("rules")))
+            && ! gameInformation.m_rules.equals(m_prefs.get("rules", "")))
         {
-            m_prefs.setString("rules", gameInformation.m_rules);
+            m_prefs.put("rules", gameInformation.m_rules);
             setRules();
         }
         TimeSettings timeSettings = gameInformation.m_timeSettings;
@@ -1744,7 +1753,7 @@ public class GoGui
 
     private void cbGameTreeLabels(int mode)
     {
-        m_prefs.setInt("gametree-labels", mode);
+        m_prefs.putInt("gametree-labels", mode);
         if (m_gameTreeViewer != null)
         {
             m_gameTreeViewer.setLabelMode(mode);
@@ -1754,7 +1763,7 @@ public class GoGui
 
     private void cbGameTreeSize(int mode)
     {
-        m_prefs.setInt("gametree-size", mode);
+        m_prefs.putInt("gametree-size", mode);
         if (m_gameTreeViewer != null)
         {
             m_gameTreeViewer.setSizeMode(mode);
@@ -1765,7 +1774,7 @@ public class GoGui
     private void cbGameTreeShowSubtreeSizes()
     {
         boolean enable = m_menuBar.getShowSubtreeSizes();
-        m_prefs.setBool("gametree-show-subtree-sizes", enable);
+        m_prefs.putBoolean("gametree-show-subtree-sizes", enable);
         if (m_gameTreeViewer != null)
         {
             m_gameTreeViewer.setShowSubtreeSizes(enable);
@@ -1914,7 +1923,7 @@ public class GoGui
     {
         if (! checkSaveGame())
             return;
-        m_prefs.setInt("boardsize", size);
+        m_prefs.putInt("boardsize", size);
         fileInvalid();
         newGame(size);
         computerWhite();
@@ -2106,20 +2115,20 @@ public class GoGui
     {
         boolean showCursor = m_menuBar.getShowCursor();
         m_guiBoard.setShowCursor(showCursor);
-        m_prefs.setBool("show-cursor", showCursor);
+        m_prefs.putBoolean("show-cursor", showCursor);
     }
 
     private void cbShowGrid()
     {
         boolean showGrid = m_menuBar.getShowGrid();
         m_guiBoard.setShowGrid(showGrid);
-        m_prefs.setBool("show-grid", showGrid);
+        m_prefs.putBoolean("show-grid", showGrid);
     }
 
     private void cbShowLastMove()
     {
         m_showLastMove = m_menuBar.getShowLastMove();
-        m_prefs.setBool("show-last-move", m_showLastMove);
+        m_prefs.putBoolean("show-last-move", m_showLastMove);
         updateFromGoBoard();
         updateGameInfo(false);
     }
@@ -2127,7 +2136,7 @@ public class GoGui
     private void cbShowVariations()
     {
         m_showVariations = m_menuBar.getShowVariations();
-        m_prefs.setBool("show-variations", m_showVariations);
+        m_prefs.putBoolean("show-variations", m_showVariations);
         resetBoard();
         updateGameInfo(false);
     }
@@ -2138,7 +2147,7 @@ public class GoGui
             return;
         boolean enable = m_menuBar.getTimeStamp();
         m_gtpShell.setTimeStamp(enable);
-        m_prefs.setBool("gtpshell-timestamp", enable);
+        m_prefs.putBoolean("gtpshell-timestamp", enable);
     }
 
     private void cbTruncate()
@@ -2293,7 +2302,6 @@ public class GoGui
             detachProgram();
         }
         dispose();
-        m_prefs.save();
         System.exit(0);
     }
 
@@ -2812,8 +2820,9 @@ public class GoGui
         if (handicap == null)
             showWarning("Handicap stone locations not\n" +
                         "defined for this board size");
-        m_gameTree = new GameTree(size, m_prefs.getDouble("komi"), handicap,
-                                  m_prefs.getString("rules"), m_timeSettings);
+        m_gameTree = new GameTree(size, m_prefs.getDouble("komi", 6.5),
+                                  handicap, m_prefs.get("rules", ""),
+                                  m_timeSettings);
         m_board.newGame();        
         m_currentNode = m_gameTree.getRoot();
         m_currentNodeExecuted = 0;
@@ -2832,12 +2841,12 @@ public class GoGui
             newGame(m_boardSize);
         else
             newGameFile(m_boardSize, m_move);
-        if (! m_prefs.getBool("show-info-panel"))
+        if (! m_prefs.getBoolean("show-info-panel", true))
         {
             m_menuBar.setShowInfoPanel(false);
             showInfoPanel();
         }
-        if (m_prefs.getBool("show-toolbar"))
+        if (m_prefs.getBoolean("show-toolbar", true))
         {
             m_menuBar.setShowToolbar(true);
             showToolbar();
@@ -3134,30 +3143,18 @@ public class GoGui
         setState(Frame.NORMAL);
         m_session.restoreLocation(this, "main", m_boardSize);
         Dimension preferredCommentSize = null;
-        int fieldSize = -1;
-        try
+        String path = "windows/main/size-" + m_boardSize + "/fieldsize";
+        int fieldSize = m_prefs.getInt(path, -1);
+        if (fieldSize > 0)
+            m_guiBoard.setPreferredFieldSize(new Dimension(fieldSize,
+                                                           fieldSize));
+        path = "windows/main/size-" + m_boardSize + "/comment";
+        int width = m_prefs.getInt(path + "/width", -1);
+        int height = m_prefs.getInt(path + "/height", -1);
+        if (width > 0 && height > 0)
         {
-            String name = "fieldsize-" + m_boardSize;
-            if (m_prefs.contains(name))
-            {
-                String value = m_prefs.getString(name);
-                fieldSize = Integer.parseInt(value);
-                m_guiBoard.setPreferredFieldSize(new Dimension(fieldSize,
-                                                               fieldSize));
-            }
-            name = "commentsize-" + m_boardSize;
-            if (m_prefs.contains(name))
-            {
-                String[] args
-                    = StringUtils.splitArguments(m_prefs.getString(name));
-                int width = Integer.parseInt(args[0]);                
-                int height = Integer.parseInt(args[1]);
-                preferredCommentSize = new Dimension(width, height);
-                m_comment.setPreferredSize(preferredCommentSize);
-            }
-        }
-        catch (NumberFormatException e)
-        {
+            preferredCommentSize = new Dimension(width, height);
+            m_comment.setPreferredSize(preferredCommentSize);
         }
         m_splitPane.resetToPreferredSizes();
         pack();
@@ -3247,11 +3244,11 @@ public class GoGui
         if (GuiUtils.isNormalSizeMode(this))
         {            
             String name = "fieldsize-" + m_boardSize;
-            m_prefs.setInt(name, m_guiBoard.getFieldSize().width);
+            m_prefs.putInt(name, m_guiBoard.getFieldSize().width);
             name = "commentsize-" + m_boardSize;
             String value = Integer.toString(m_comment.getWidth()) + " "
                 + Integer.toString(m_comment.getHeight());
-            m_prefs.setString(name, value);
+            m_prefs.put(name, value);
         }
     }
 
@@ -3463,8 +3460,8 @@ public class GoGui
         GoColor toMove = m_board.getToMove();
         m_boardSize = size;
         m_board.newGame();        
-        m_gameTree = new GameTree(size, m_prefs.getDouble("komi"), null,
-                                  m_prefs.getString("rules"), null);
+        m_gameTree = new GameTree(size, m_prefs.getDouble("komi", 6.5), null,
+                                  m_prefs.get("rules", ""), null);
         m_currentNode = m_gameTree.getRoot();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
@@ -3547,7 +3544,7 @@ public class GoGui
         boolean showInfoPanel = m_menuBar.getShowInfoPanel();
         if (showInfoPanel == m_showInfoPanel)
             return;
-        m_prefs.setBool("show-info-panel", showInfoPanel);
+        m_prefs.putBoolean("show-info-panel", showInfoPanel);
         m_showInfoPanel = showInfoPanel;
         if (showInfoPanel)
         {
@@ -3592,7 +3589,7 @@ public class GoGui
         boolean showToolbar = m_menuBar.getShowToolbar();
         if (showToolbar == m_showToolbar)
             return;
-        m_prefs.setBool("show-toolbar", showToolbar);
+        m_prefs.putBoolean("show-toolbar", showToolbar);
         m_showToolbar = showToolbar;
         if (showToolbar)
         {

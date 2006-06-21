@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Use platform specific storage of preferences; don't use .gogui/config
+anymore
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Automatically clear board before drawing live graphics commands
 </simpara>
 </listitem>
