@@ -5,12 +5,13 @@
 
 package net.sf.gogui.gui;
 
-import net.sf.gogui.utils.Preferences;
 import net.sf.gogui.utils.StringUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
 import javax.swing.JFrame;
 
 //----------------------------------------------------------------------------
@@ -21,23 +22,36 @@ import javax.swing.JFrame;
 */
 public final class Session
 {
-    public static void restoreLocation(Window window, Preferences prefs,
-                                       String name, int boardSize)
+    public Session(Class c)
     {
-        name = name + "-" + boardSize;
-        if (! prefs.contains(name))
+        m_class = c;
+    }
+
+    public boolean isVisible(String name)
+    {
+        Preferences prefs = getNode(name);
+        if (prefs == null)
+            return false;
+        return prefs.getBoolean("show", false);
+    }
+
+    public void restoreLocation(Window window, String name, int boardSize)
+    {
+        Preferences prefs = getNode(name, boardSize);
+        if (prefs == null)
             return;
-        String[] args = StringUtils.splitArguments(prefs.getString(name));
-        if (args.length < 2)
+        int x = prefs.getInt("x", -1);
+        int y = prefs.getInt("y", -1);
+        if (x == -1 || y == -1)
             return;
         try
         {
             Dimension screenSize =
                 Toolkit.getDefaultToolkit().getScreenSize();
-            int x = Math.max(0, Integer.parseInt(args[0]));
+            x = Math.max(0, x);
             if (x > screenSize.width)
                 x = 0;
-            int y = Math.max(0, Integer.parseInt(args[1]));
+            y = Math.max(0, y);
             if (y > screenSize.height)
                 y = 0;
             window.setLocation(x, y);
@@ -47,32 +61,31 @@ public final class Session
         }
     }
 
-    public static void restoreSize(Window window, Preferences prefs,
-                                   String name, int boardSize)
+    public void restoreSize(Window window, String name, int boardSize)
     {
-        name = name + "-" + boardSize;
-        if (! prefs.contains(name))
+        Preferences prefs = getNode(name, boardSize);
+        if (prefs == null)
             return;
-        String[] args = StringUtils.splitArguments(prefs.getString(name));
-        if (args.length < 4)
+        int x = prefs.getInt("x", -1);
+        int y = prefs.getInt("y", -1);
+        int width = prefs.getInt("width", -1);
+        int height = prefs.getInt("height", -1);
+        if (x == -1 || y == -1 || width == -1 || height == -1)
             return;
         try
         {
             Dimension screenSize =
                 Toolkit.getDefaultToolkit().getScreenSize();
-            int x = Math.max(0, Integer.parseInt(args[0]));
+            x = Math.max(0, x);
             if (x > screenSize.width)
                 x = 0;
-            int y = Math.max(0, Integer.parseInt(args[1]));
+            y = Math.max(0, y);
             if (y > screenSize.height)
                 y = 0;
-            int width;
-            int height;
-            width = Integer.parseInt(args[2]);
             width = Math.min(width, screenSize.width);
-            height = Integer.parseInt(args[3]);
             height = Math.min(height, screenSize.height);
             if (window instanceof GtpShell)
+                // Hack
                 ((GtpShell)window).setFinalSize(x, y, width, height);
             else
             {
@@ -85,49 +98,88 @@ public final class Session
         }
     }
 
-    public static void saveLocation(Window window, Preferences prefs,
-                                    String name, int boardSize)
+    public void saveLocation(Window window, String name, int boardSize)
     {
         if (isFrameSpecialMode(window))
             return;
-        name = name + "-" + boardSize;
+        Preferences prefs = getNode(name, boardSize);
+        if (prefs == null)
+            return;
         Point location = window.getLocation();
-        String value = Integer.toString(location.x) + " " + location.y;
-        prefs.setString(name, value);
+        prefs.putInt("x", location.x);
+        prefs.putInt("y", location.y);
     }
 
-    public static void saveSize(Window window, Preferences prefs, String name,
+    public void saveSize(Window window, String name,
                                 int boardSize)
     {
         if (isFrameSpecialMode(window))
             return;
-        name = name + "-" + boardSize;
+        Preferences prefs = getNode(name, boardSize);
+        if (prefs == null)
+            return;
         Point location = window.getLocation();
+        prefs.putInt("x", location.x);
+        prefs.putInt("y", location.y);
         Dimension size = window.getSize();
-        String value = Integer.toString(location.x) + " " + location.y
-            + " " + size.width + " " + size.height;
-        prefs.setString(name, value);
+        prefs.putInt("width", size.width);
+        prefs.putInt("height", size.height);
     }
 
-    public static void saveSizeAndVisible(Window window, Preferences prefs,
-                                          String name, int boardSize)
+    public void saveSizeAndVisible(Window window, String name, int boardSize)
     {
         if (window != null)
-            saveSize(window, prefs, "window-" + name, boardSize);
-        boolean isVisible = (window != null && window.isVisible());
-        prefs.setBool("show-" + name, isVisible);
+            saveSize(window, name, boardSize);
+        saveVisible(window, name);
     }
 
-    /** Make constructor unavailable; class is for namespace only. */
-    private Session()
+    public void saveVisible(Window window, String name)
     {
+        boolean isVisible = (window != null && window.isVisible());
+        Preferences prefs = getNode(name);
+        if (prefs == null)
+            return;
+        prefs.putBoolean("show", isVisible);
+    }
+
+    private Class m_class;
+
+    private Preferences getNode(String name, int boardSize)
+    {
+        Preferences prefs = Preferences.userNodeForPackage(m_class);
+        String path = "/windows/" + name + "/size-" + boardSize;
+        try
+        {
+            if (! prefs.nodeExists(path))
+                return null;
+        }
+        catch (BackingStoreException e)
+        {
+            return null;
+        }
+        return prefs.node(path);
+    }
+
+    private Preferences getNode(String name)
+    {
+        Preferences prefs = Preferences.userNodeForPackage(m_class);
+        String path = "/windows/" + name;
+        try
+        {
+            if (! prefs.nodeExists(path))
+                return null;
+        }
+        catch (BackingStoreException e)
+        {
+            return null;
+        }
+        return prefs.node(path);
     }
 
     private static boolean isFrameSpecialMode(Window window)
     {
         return (window instanceof JFrame
                 && ! GuiUtils.isNormalSizeMode((JFrame)window));
-        
     }
 }
 

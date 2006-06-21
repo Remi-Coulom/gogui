@@ -248,7 +248,6 @@ public class GtpShell
         Preferences prefs = Preferences.userNodeForPackage(getClass());
         m_historyMin = prefs.getInt("history-min", 2000);
         m_historyMax = prefs.getInt("history-max", 3000);
-prefs.putInt("history-max", 3001);
         JPanel panel = new JPanel(new BorderLayout());
         getContentPane().add(panel, BorderLayout.CENTER);
         m_gtpShellText

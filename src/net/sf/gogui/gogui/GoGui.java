@@ -480,7 +480,7 @@ public class GoGui
                         }
                     });
                 m_analyzeDialog.setBoardSize(m_board.getSize());
-                restoreSize(m_analyzeDialog, "window-analyze");
+                restoreSize(m_analyzeDialog, "analyze");
                 setTitle();
             }
             m_analyzeDialog.setVisible(true);
@@ -529,12 +529,12 @@ public class GoGui
             return;
         }
         m_prefs.setString("program", m_program);
-        if (m_gtpShell != null && m_prefs.getBool("show-gtpshell"))
+        if (m_gtpShell != null && m_session.isVisible("shell"))
         {
             m_menuBar.setShowShell(true);
             cbShowShell();
         }
-        if (m_prefs.getBool("show-analyze"))
+        if (m_session.isVisible("analyze"))
         {
             m_menuBar.setShowAnalyze(true);
             cbAnalyze();
@@ -694,7 +694,7 @@ public class GoGui
                 m_gameTreeViewer.setSizeMode(m_menuBar.getGameTreeSize());
                 boolean showSubtreeSizes = m_menuBar.getShowSubtreeSizes();
                 m_gameTreeViewer.setShowSubtreeSizes(showSubtreeSizes);
-                restoreSize(m_gameTreeViewer, "window-gametree");
+                restoreSize(m_gameTreeViewer, "tree");
             }
             updateGameTree(true);
             if (m_gameTreeViewer != null) // updateGameTree can close viewer
@@ -1100,6 +1100,8 @@ public class GoGui
 
     private File m_file;
 
+    private Session m_session = new Session(getClass());
+
     private StatusBar m_statusBar;
 
     private String m_gtpCommand;
@@ -1323,7 +1325,7 @@ public class GoGui
             || m_commandThread.isCommandSupported("genmove_cleanup");
         m_menuBar.enableCleanup(cleanupSupported);
         initProgramAnalyzeCommands();
-        restoreSize(m_gtpShell, "window-gtpshell");
+        restoreSize(m_gtpShell, "shell");
         m_gtpShell.setProgramName(m_name);
         ArrayList supportedCommands =
             m_commandThread.getSupportedCommands();
@@ -1861,7 +1863,7 @@ public class GoGui
         if (m_help == null)
         {
             m_help = new Help(this, url);
-            restoreSize(m_help, "window-help");
+            restoreSize(m_help, "help");
         }
         m_help.setVisible(true);
         m_help.toFront();
@@ -2797,14 +2799,14 @@ public class GoGui
             m_guiBoard.setShowGrid(m_menuBar.getShowGrid());
             restoreMainWindow();
             if (m_gtpShell != null)
-                restoreSize(m_gtpShell, "window-gtpshell");
+                restoreSize(m_gtpShell, "shell");
             if (m_analyzeDialog != null)
             {
-                restoreSize(m_analyzeDialog, "window-analyze");
+                restoreSize(m_analyzeDialog, "analyze");
                 m_analyzeDialog.setBoardSize(size);
             }
             if (m_gameTreeViewer != null)
-                restoreSize(m_gameTreeViewer, "window-gametree");
+                restoreSize(m_gameTreeViewer, "tree");
         }
         ArrayList handicap = m_board.getHandicapStones(m_handicap);
         if (handicap == null)
@@ -2864,17 +2866,17 @@ public class GoGui
         registerSpecialMacHandler();
         // Children dialogs should be set visible after main window, otherwise
         // they get minimize window buttons and a taskbar entry (KDE 3.4)
-        if (m_gtpShell != null && m_prefs.getBool("show-gtpshell"))
+        if (m_gtpShell != null && m_session.isVisible("shell"))
         {
             m_menuBar.setShowShell(true);
             cbShowShell();
         }
-        if (m_prefs.getBool("show-gametree"))
+        if (m_session.isVisible("tree"))
         {
             m_menuBar.setShowTree(true);
             cbShowTree();
         }
-        if (m_prefs.getBool("show-analyze"))
+        if (m_session.isVisible("analyze"))
         {
             m_menuBar.setShowAnalyze(true);
             cbAnalyze();
@@ -3130,7 +3132,7 @@ public class GoGui
     private void restoreMainWindow()
     {
         setState(Frame.NORMAL);
-        Session.restoreLocation(this, m_prefs, "window-gogui", m_boardSize);
+        m_session.restoreLocation(this, "main", m_boardSize);
         Dimension preferredCommentSize = null;
         int fieldSize = -1;
         try
@@ -3174,7 +3176,7 @@ public class GoGui
 
     private void restoreSize(Window window, String name)
     {
-        Session.restoreSize(window, m_prefs, name, m_boardSize);
+        m_session.restoreSize(window, name, m_boardSize);
     }
 
     private void runLengthyCommand(String cmd, Runnable callback)
@@ -3233,9 +3235,9 @@ public class GoGui
             m_gtpShell.saveHistory();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        Session.saveLocation(this, m_prefs, "window-gogui", m_boardSize);
+        m_session.saveLocation(this, "main", m_boardSize);
         if (m_help != null)
-            saveSize(m_help, "window-help");
+            saveSize(m_help, "help");
         saveSizeAndVisible(m_gameTreeViewer, "gametree");
         if (m_commandThread != null)
         {
@@ -3255,12 +3257,12 @@ public class GoGui
 
     private void saveSize(JDialog dialog, String name)
     {
-        Session.saveSize(dialog, m_prefs, name, m_boardSize);
+        m_session.saveSize(dialog, name, m_boardSize);
     }
 
     private void saveSizeAndVisible(JDialog dialog, String name)
     {
-        Session.saveSizeAndVisible(dialog, m_prefs, name, m_boardSize);
+        m_session.saveSizeAndVisible(dialog, name, m_boardSize);
     }
 
     private void sendGtp(Reader reader)

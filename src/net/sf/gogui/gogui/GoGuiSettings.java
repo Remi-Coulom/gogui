@@ -180,9 +180,6 @@ public final class GoGuiSettings
         prefs.setBoolDefault("gtpshell-timestamp", false);
         prefs.setDoubleDefault("komi", 6.5);
         prefs.setStringDefault("rules", "Chinese");
-        prefs.setBoolDefault("show-analyze", false);
-        prefs.setBoolDefault("show-gtpshell", false);
-        prefs.setBoolDefault("show-gametree", false);
         prefs.setBoolDefault("show-cursor", false);
         prefs.setBoolDefault("show-grid", true);
         prefs.setBoolDefault("show-info-panel", true);
