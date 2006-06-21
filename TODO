@@ -8,15 +8,21 @@ GoGui: check if setup will capture anything and issue a warning, because setup
 stones are transmitted to the program by play commands
 
 
-IMPROVEMENTS:
+TODO:
+
+Finish transition to java.util.prefs; make net.sf.gogui.utils.Preferences
+obsolete
+
+
+MAYBE LATER:
 
 Implement stream selector class similar to ANSI C select to replace
 MessageQueue used in GtpClient
-
-Consider using java.util.prefs for preferences
 
 GtpRegress: change into gtp test file directory, optional?
 
 GtpRegress: improve documentation (in/out file locations, relative paths)
 
 latex export current variation, not main
+
+latex export using igo.sty (optional)

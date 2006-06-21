@@ -177,8 +177,6 @@ public final class GoGuiSettings
         // documentation
         prefs.setBoolDefault("gtpshell-disable-completions",
                              Platform.isMac());
-        prefs.setIntDefault("gtpshell-history-max", 3000);
-        prefs.setIntDefault("gtpshell-history-min", 2000);
         prefs.setBoolDefault("gtpshell-timestamp", false);
         prefs.setDoubleDefault("komi", 6.5);
         prefs.setStringDefault("rules", "Chinese");

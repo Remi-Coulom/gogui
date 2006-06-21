@@ -15,7 +15,9 @@ import java.util.Properties;
 
 //----------------------------------------------------------------------------
 
-/** Load and save settings. */
+/** Load and save settings.
+    DEPRECATED: Use java.util.prefs
+*/
 public final class Preferences
 {
     public Preferences()

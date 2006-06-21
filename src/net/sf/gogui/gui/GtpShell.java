@@ -27,6 +27,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
 import javax.swing.ImageIcon;
@@ -46,7 +47,6 @@ import javax.swing.text.Style;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.Preferences;
 
 //----------------------------------------------------------------------------
 
@@ -241,13 +241,14 @@ public class GtpShell
         boolean sendGtpCommand(String command, boolean sync) throws GtpError;
     }
 
-    public GtpShell(Frame owner, Callback callback, Preferences prefs,
-                    boolean fast)
+    public GtpShell(Frame owner, Callback callback, boolean fast)
     {
         super(owner, "Shell");
         m_callback = callback;
-        m_historyMin = prefs.getInt("gtpshell-history-min");
-        m_historyMax = prefs.getInt("gtpshell-history-max");
+        Preferences prefs = Preferences.userNodeForPackage(getClass());
+        m_historyMin = prefs.getInt("history-min", 2000);
+        m_historyMax = prefs.getInt("history-max", 3000);
+prefs.putInt("history-max", 3001);
         JPanel panel = new JPanel(new BorderLayout());
         getContentPane().add(panel, BorderLayout.CENTER);
         m_gtpShellText

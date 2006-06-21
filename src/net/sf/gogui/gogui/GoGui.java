@@ -1220,7 +1220,7 @@ public class GoGui
             m_gtpShell.dispose();
             m_gtpShell = null;
         }
-        m_gtpShell = new GtpShell(this, this, m_prefs, m_fastPaint);
+        m_gtpShell = new GtpShell(this, this, m_fastPaint);
         m_gtpShell.addWindowListener(new WindowAdapter()
             {
                 public void windowClosing(WindowEvent e)
