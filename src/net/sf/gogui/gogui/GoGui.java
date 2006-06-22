@@ -3243,12 +3243,12 @@ public class GoGui
         }
         if (GuiUtils.isNormalSizeMode(this))
         {            
-            String name = "fieldsize-" + m_boardSize;
+            String name = "windows/main/size-" + m_boardSize + "/fieldsize";
             m_prefs.putInt(name, m_guiBoard.getFieldSize().width);
-            name = "commentsize-" + m_boardSize;
-            String value = Integer.toString(m_comment.getWidth()) + " "
-                + Integer.toString(m_comment.getHeight());
-            m_prefs.put(name, value);
+            name = "windows/main/size-" + m_boardSize + "/comment/width";
+            m_prefs.putInt(name, m_comment.getWidth());
+            name = "windows/main/size-" + m_boardSize + "/comment/height";
+            m_prefs.putInt(name, m_comment.getHeight());
         }
     }
 
