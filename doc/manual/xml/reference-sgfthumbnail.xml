@@ -17,6 +17,7 @@ Create thumbnails for SGF files.
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>sgfthumbnail</command>
+<arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-verbose</option></arg>
 <arg><option>-size</option> <replaceable>n</replaceable></arg>
 <arg choice="plain">
@@ -60,6 +61,17 @@ user home directory.
 <refsection>
 <title>Options</title>
 <variablelist>
+
+<varlistentry>
+<term>
+<option>-config</option> <replaceable>file</replaceable>
+</term>
+<listitem>
+<para>
+Read command line options and arguments from file.
+</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><option>-help</option></term>

@@ -23,6 +23,7 @@ public final class Main
         try
         {
             String options[] = {
+                "config:",
                 "help",
                 "size:",
                 "verbose",
@@ -75,6 +76,7 @@ public final class Main
         String helpText =
             "Usage: java -jar sgfthumbnail.jar [options] input [output]\n" +
             "Options:\n" +
+            "-config    config file\n" +
             "-help         Print help and exit\n" +
             "-verbose      Print logging messages to stderr\n" +
             "-version      Print version and exit\n";
