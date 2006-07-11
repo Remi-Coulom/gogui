@@ -23,6 +23,7 @@ public final class Main
         try
         {
             String options[] = {
+                "config:",
                 "help",
                 "size:",
                 "verbose",
