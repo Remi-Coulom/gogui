@@ -29,7 +29,7 @@ public final class Session
 
     public boolean isVisible(String name)
     {
-        Preferences prefs = getNode(name);
+        Preferences prefs = getNode(name, false);
         if (prefs == null)
             return false;
         return prefs.getBoolean("show", false);
@@ -37,7 +37,7 @@ public final class Session
 
     public void restoreLocation(Window window, String name, int boardSize)
     {
-        Preferences prefs = getNode(name, boardSize);
+        Preferences prefs = getNode(name, boardSize, false);
         if (prefs == null)
             return;
         int x = prefs.getInt("x", -1);
@@ -63,7 +63,7 @@ public final class Session
 
     public void restoreSize(Window window, String name, int boardSize)
     {
-        Preferences prefs = getNode(name, boardSize);
+        Preferences prefs = getNode(name, boardSize, false);
         if (prefs == null)
             return;
         int x = prefs.getInt("x", -1);
@@ -102,7 +102,7 @@ public final class Session
     {
         if (isFrameSpecialMode(window))
             return;
-        Preferences prefs = getNode(name, boardSize);
+        Preferences prefs = getNode(name, boardSize, true);
         if (prefs == null)
             return;
         Point location = window.getLocation();
@@ -110,12 +110,11 @@ public final class Session
         prefs.putInt("y", location.y);
     }
 
-    public void saveSize(Window window, String name,
-                                int boardSize)
+    public void saveSize(Window window, String name, int boardSize)
     {
         if (isFrameSpecialMode(window))
             return;
-        Preferences prefs = getNode(name, boardSize);
+        Preferences prefs = getNode(name, boardSize, true);
         if (prefs == null)
             return;
         Point location = window.getLocation();
@@ -136,7 +135,7 @@ public final class Session
     public void saveVisible(Window window, String name)
     {
         boolean isVisible = (window != null && window.isVisible());
-        Preferences prefs = getNode(name);
+        Preferences prefs = getNode(name, true);
         if (prefs == null)
             return;
         prefs.putBoolean("show", isVisible);
@@ -144,34 +143,40 @@ public final class Session
 
     private Class m_class;
 
-    private Preferences getNode(String name, int boardSize)
+    private Preferences getNode(String name, int boardSize, boolean create)
     {
         Preferences prefs = Preferences.userNodeForPackage(m_class);
         String path = "/windows/" + name + "/size-" + boardSize;
-        try
+        if (! create)
         {
-            if (! prefs.nodeExists(path))
+            try
+            {
+                if (! prefs.nodeExists(path))
+                    return null;
+            }
+            catch (BackingStoreException e)
+            {
                 return null;
-        }
-        catch (BackingStoreException e)
-        {
-            return null;
+            }
         }
         return prefs.node(path);
     }
 
-    private Preferences getNode(String name)
+    private Preferences getNode(String name, boolean create)
     {
         Preferences prefs = Preferences.userNodeForPackage(m_class);
         String path = "/windows/" + name;
-        try
+        if (! create)
         {
-            if (! prefs.nodeExists(path))
+            try
+            {
+                if (! prefs.nodeExists(path))
+                    return null;
+            }
+            catch (BackingStoreException e)
+            {
                 return null;
-        }
-        catch (BackingStoreException e)
-        {
-            return null;
+            }
         }
         return prefs.node(path);
     }
