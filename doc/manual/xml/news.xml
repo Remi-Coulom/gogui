@@ -27,6 +27,11 @@ GtpDummy: new option -resign
 </listitem>
 <listitem>
 <simpara>
+GtpDisplay: support resign
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Several minor fixes
 </simpara>
 </listitem>
