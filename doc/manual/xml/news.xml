@@ -17,6 +17,11 @@ enabled
 </listitem>
 <listitem>
 <simpara>
+GtpDisplay: support resign
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other minor fixes
 </simpara>
 </listitem>
