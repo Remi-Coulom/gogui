@@ -663,6 +663,8 @@ public class GtpRegress
         File outFile = new File(m_outFileName);
         File testFileDir = m_testFile.getAbsoluteFile().getParentFile();
         m_relativePath = FileUtils.getRelativeURI(outFile, testFileDir);
+        if (! m_relativePath.equals("") && ! m_relativePath.endsWith("/"))
+            m_relativePath = m_relativePath + "/";
         FileReader fileReader = new FileReader(m_testFile);
         BufferedReader reader = new BufferedReader(fileReader);
         m_gtp = new GtpClient(m_program, m_verbose, this);
