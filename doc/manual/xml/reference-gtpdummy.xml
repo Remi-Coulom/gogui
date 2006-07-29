@@ -20,6 +20,8 @@ Dummy Go program for testing GTP controlling programs.
 <command>gtpdummy</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
+<arg><option>-resign</option> <replaceable>n</replaceable></arg>
+<arg><option>-srand</option> <replaceable>seed</replaceable></arg>
 </cmdsynopsis>
 <cmdsynopsis>
 <command>gtpdummy</command><arg choice="plain"><option>-help</option></arg>
@@ -70,6 +72,24 @@ Print help and exit.
 <listitem>
 <para>
 Log GTP stream to file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-resign</option> <replaceable>n</replaceable></term>
+<listitem>
+<para>
+Resign at the n'th genmove command after the game started.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-srand</option> <replaceable>seed</replaceable></term>
+<listitem>
+<para>
+Set random seed for random move generation. 
 </para>
 </listitem>
 </varlistentry>

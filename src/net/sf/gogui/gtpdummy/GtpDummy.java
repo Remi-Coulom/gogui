@@ -23,11 +23,13 @@ import net.sf.gogui.version.Version;
 public class GtpDummy
     extends GtpEngine
 {
-    public GtpDummy(PrintStream log, boolean useRandomSeed, long randomSeed)
+    public GtpDummy(PrintStream log, boolean useRandomSeed, long randomSeed,
+                    int resign)
         throws Exception
     {
         super(log);
         m_random = new Random();
+        m_resign = resign;
         if (useRandomSeed)
             m_random.setSeed(randomSeed);
         initSize(GoPoint.DEFAULT_SIZE);
@@ -142,6 +144,10 @@ public class GtpDummy
     /** Delay every command (seconds) */
     private int m_delay;
 
+    private int m_numberGenmove;
+
+    private int m_resign;
+
     private int m_size;
 
     private boolean[][] m_alreadyPlayed;
@@ -253,6 +259,12 @@ public class GtpDummy
 
     private void cmdGenmove(GtpCommand cmd)
     {
+        ++m_numberGenmove;
+        if (m_numberGenmove == m_resign)
+        {
+            cmd.setResponse("resign");
+            return;
+        }
         int numberPossibleMoves = 0;
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
@@ -346,6 +358,7 @@ public class GtpDummy
     {
         m_alreadyPlayed = new boolean[size][size];
         m_size = size;
+        m_numberGenmove = 0;
     }
 
     private void nextResponseFixed(GtpCommand cmd, boolean nextStatus)
