@@ -5,6 +5,20 @@
 
 <revision>
 <revnumber>&version;</revnumber>
+<date></date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.9.1</revnumber>
 <date>16 Aug 2006</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
