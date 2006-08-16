@@ -5,10 +5,41 @@
 
 <revision>
 <revnumber>&version;</revnumber>
-<date></date>
+<date>16 Aug 2006</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
+<listitem>
+<simpara>
+Fix bug when loading a bookmarked file while auto-run analyze command is
+enabled
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+GtpDisplay: support resign
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Other minor fixes
+</simpara>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>0.9</revnumber>
+<date>15 May 2006</date>
+<authorinitials>enz</authorinitials>
+<revdescription>
+<itemizedlist>
+<listitem>
+<simpara>
+Minor fixes
+</simpara>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

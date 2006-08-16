@@ -146,7 +146,7 @@ public final class Main
             "-size         accept only this board size\n" +
             "-verbose      log GTP stream to stderr\n" +
             "-version      print version and exit\n" +
-            "-version2     translate GTP version 2 for version 1 programs\n";
+            "-version1     report GTP version 1 in protocol_version";
         out.print(helpText);
     }
 }

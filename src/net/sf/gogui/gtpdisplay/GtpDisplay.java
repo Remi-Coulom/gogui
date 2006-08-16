@@ -322,8 +322,11 @@ public class GtpDisplay
         else
         {
             String command = m_gtp.getCommandGenmove(color);
-            send(command, cmd.getResponse());
-            point = GtpUtils.parsePoint(cmd.getResponse().toString(), m_size);
+            StringBuffer response = cmd.getResponse();
+            send(command, response);
+            if (response.toString().trim().equalsIgnoreCase("resign"))
+                return;
+            point = GtpUtils.parsePoint(response.toString(), m_size);
         }
         m_move = Move.get(point, color);
         invokeAndWait(new Runnable()

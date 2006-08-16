@@ -16,6 +16,10 @@ GNU General Public License for more details.
 A full copy of the GNU General Public License is included in
 the GoGui documentation.
 
+NOTE! This copyright does *not* cover Go engines that use GoGui
+services by the GTP protocol - this is merely considered normal use
+of GoGui, and does *not* fall under the heading of "derived work".
+
 The files in the directory "external" are from third parties. They are not
 part of GoGui and have different licenses and copyright holders. They are
 included in the GoGui distribution only for convenience.
