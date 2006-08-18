@@ -694,6 +694,8 @@ public class TwoGtp
             if (m_openings.getGameInformation().m_boardSize != size)
                 throw new GtpError("Wrong board size: " + m_openingFile);
             m_gameTree = m_openings.getGameTree();
+            if (m_isKomiFixed)
+                m_gameTree.getGameInformation().m_komi = m_komi;
             m_openingMoves = Compare.getAllAsMoves(m_gameTree.getRoot());
             m_openingMovesIndex = 0;
             Node root = m_gameTree.getRoot();
