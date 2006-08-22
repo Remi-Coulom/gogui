@@ -951,7 +951,8 @@ public final class SgfReader
 
     private void readTime(String value)
     {
-        if (value.trim().equals(""))
+        value = value.trim();
+        if (value.equals("") || value.equals("-"))
             return;
         try
         {
