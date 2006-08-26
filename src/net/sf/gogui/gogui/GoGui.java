@@ -2320,6 +2320,7 @@ public class GoGui
             m_clock.stopMove();
             String response = m_commandThread.getResponse();
             GoColor toMove = m_board.getToMove();
+            boolean gameTreeChanged = false;
             if (response.equalsIgnoreCase("resign"))
             {
                 if (! isComputerBoth())
@@ -2342,19 +2343,19 @@ public class GoGui
                 if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
                 m_resigned = false;
+                gameTreeChanged = true;
+                if (m_currentNode.getFather().getNumberChildren() == 1)
+                {
+                    if (m_gameTreeViewer != null)
+                        m_gameTreeViewer.addNewSingleChild(m_currentNode);
+                    gameTreeChanged = false;
+                }
             }
             m_clock.startMove(m_board.getToMove());
             updateMenuBar();
             boolean doCheckComputerMove
                 = (! m_isSingleMove
                    && ! (isComputerBoth() && m_interruptComputerBoth));
-            boolean gameTreeChanged = true;
-            if (m_currentNode.getFather().getNumberChildren() == 1)
-            {
-                if (m_gameTreeViewer != null)
-                    m_gameTreeViewer.addNewSingleChild(m_currentNode);
-                gameTreeChanged = false;
-            }
             boardChangedBegin(doCheckComputerMove, gameTreeChanged);
         }
         catch (GtpError e)
