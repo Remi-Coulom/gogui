@@ -94,7 +94,6 @@ import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.FileUtils;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.ProgressShow;
-import net.sf.gogui.utils.StringUtils;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -2671,15 +2670,6 @@ public class GoGui
                 }
             };
         runLengthyCommand(command, callback);
-    }
-
-    private File getGoGuiFile(String name)
-    {
-        String home = System.getProperty("user.home", "");
-        File dir = new File(home, ".gogui");
-        if (! dir.exists())
-            dir.mkdir();
-        return new File(dir, name);
     }
 
     private int getRules()

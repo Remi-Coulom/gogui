@@ -15,13 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import javax.swing.ComboBoxEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -33,7 +27,6 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
 import net.sf.gogui.utils.PrefUtils;
-import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 

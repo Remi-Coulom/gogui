@@ -10,10 +10,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.prefs.Preferences;
-import java.util.prefs.BackingStoreException;
 import javax.swing.JFrame;
 import net.sf.gogui.utils.PrefUtils;
-import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
