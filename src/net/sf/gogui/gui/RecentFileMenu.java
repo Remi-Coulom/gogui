@@ -82,6 +82,12 @@ public class RecentFileMenu
         return m_menu.getMenu();
     }
 
+    /** Set menu enabled if not empty, disabled otherwise. */
+    public void updateEnabled()
+    {
+        m_menu.updateEnabled();
+    }
+
     private final Callback m_callback;
 
     private final RecentMenu m_menu;

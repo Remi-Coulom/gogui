@@ -69,6 +69,7 @@ public class GoGuiMenuBar
         {
         }
         m_recent.add(file);
+        m_recent.updateEnabled();
     }
 
     public void addRecentGtp(File file)
@@ -83,6 +84,7 @@ public class GoGuiMenuBar
         {
         }
         m_recentGtp.add(file);
+        m_recentGtp.updateEnabled();
     }
 
     public void enableCleanup(boolean enable)
@@ -267,6 +269,11 @@ public class GoGuiMenuBar
         m_itemBeepAfterMove.setEnabled(enabled);
         m_itemDetachProgram.setEnabled(enabled);
         enableAll(m_menuShell, enabled);
+        if (enabled)
+        {
+            m_recent.updateEnabled();
+            m_recentGtp.updateEnabled();
+        }
         m_itemShowAnalyze.setEnabled(enabled);
         m_itemShowShell.setEnabled(enabled);
         if (! enabled)
@@ -398,6 +405,8 @@ public class GoGuiMenuBar
     public void setNormalMode()
     {
         enableAll();
+        m_recent.updateEnabled();
+        m_recentGtp.updateEnabled();
         m_itemInterrupt.setEnabled(false);
         m_itemSetup.setSelected(false);
         m_itemSetupBlack.setEnabled(false);

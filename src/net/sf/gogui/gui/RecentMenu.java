@@ -147,6 +147,12 @@ public final class RecentMenu
         getItem(i).setRecentMenuLabel(label);
     }
 
+    /** Set menu enabled if not empty, disabled otherwise. */
+    public void updateEnabled()
+    {
+        m_menu.setEnabled(getCount() > 0);
+    }
+
     private static final int MAX_ITEMS = 20;
 
     private final ActionListener m_listener;
