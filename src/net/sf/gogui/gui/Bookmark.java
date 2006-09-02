@@ -71,7 +71,7 @@ public final class Bookmark
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtils.getNode(Bookmark.class, "bookmark" + "/" + i);
+            prefs = PrefUtils.getNode(Bookmark.class, "bookmark/" + i);
             if (prefs == null)
                 break;
             String name = prefs.get("name", null);
@@ -87,15 +87,15 @@ public final class Bookmark
         return bookmarks;
     }
 
-    public static void save(ArrayList bookmarks, Class c, String path)
+    public static void save(ArrayList bookmarks)
     {
-        Preferences prefs = PrefUtils.createNode(c, path);
+        Preferences prefs = PrefUtils.createNode(Bookmark.class, "bookmark");
         if (prefs == null)
             return;
         prefs.putInt("size", bookmarks.size());
         for (int i = 0; i < bookmarks.size(); ++i)
         {
-            prefs = PrefUtils.createNode(c, path + "/" + i);
+            prefs = PrefUtils.createNode(Bookmark.class, "bookmark/" + i);
             if (prefs == null)
                 break;
             Bookmark b = (Bookmark)bookmarks.get(i);

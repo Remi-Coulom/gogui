@@ -3228,7 +3228,7 @@ public class GoGui
 
     private void saveSession()
     {
-        Bookmark.save(m_bookmarks, getClass(), "bookmarks");
+        Bookmark.save(m_bookmarks);
         if (m_gtpShell != null)
             m_gtpShell.saveHistory();
         if (m_analyzeDialog != null)
