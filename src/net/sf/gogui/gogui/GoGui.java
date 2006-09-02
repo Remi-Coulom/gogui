@@ -3239,7 +3239,7 @@ public class GoGui
         saveSizeAndVisible(m_gameTreeViewer, "gametree");
         if (m_commandThread != null)
         {
-            saveSizeAndVisible(m_gtpShell, "gtpshell");
+            saveSizeAndVisible(m_gtpShell, "shell");
             saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
         if (GuiUtils.isNormalSizeMode(this))

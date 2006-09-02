@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 //----------------------------------------------------------------------------
 
 /** Utilities for saving and restoring windows between session.
-    Window sizes and locations are saved separatly for different Go board
+    Window sizes and locations are saved separately for different Go board
     sizes.
 */
 public final class Session
@@ -146,7 +146,7 @@ public final class Session
     private Preferences getNode(String name, int boardSize, boolean create)
     {
         Preferences prefs = Preferences.userNodeForPackage(m_class);
-        String path = "/windows/" + name + "/size-" + boardSize;
+        String path = "windows/" + name + "/size-" + boardSize;
         if (! create)
         {
             try
@@ -165,7 +165,7 @@ public final class Session
     private Preferences getNode(String name, boolean create)
     {
         Preferences prefs = Preferences.userNodeForPackage(m_class);
-        String path = "/windows/" + name;
+        String path = "windows/" + name;
         if (! create)
         {
             try
