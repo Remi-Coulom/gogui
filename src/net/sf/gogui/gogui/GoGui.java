@@ -1708,8 +1708,8 @@ public class GoGui
         }
         else
         {
-            m_comment.markAll(m_pattern);
             cbGotoNode(node);
+            m_comment.markAll(m_pattern);
         }
     }
 
