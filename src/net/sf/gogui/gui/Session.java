@@ -27,9 +27,10 @@ public final class Session
         @param c A class in the package for determining the path for saving
         the preferences.
     */
-    public Session(Class c)
+    public Session(Class c, String path)
     {
         m_class = c;
+        m_path = path;
     }
 
     public boolean isVisible(String name)
@@ -148,6 +149,8 @@ public final class Session
 
     private Class m_class;
 
+    private String m_path;
+
     private Preferences createNode(String name, int boardSize)
     {
         return PrefUtils.createNode(m_class, getPath(name, boardSize));
@@ -170,12 +173,12 @@ public final class Session
 
     private String getPath(String name, int boardSize)
     {
-        return "windows/" + name + "/size-" + boardSize;
+        return m_path + "/windows/" + name + "/size-" + boardSize;
     }
 
     private String getPath(String name)
     {
-        return "windows/" + name;
+        return m_path + "/windows/" + name;
     }
 
     private static boolean isFrameSpecialMode(Window window)

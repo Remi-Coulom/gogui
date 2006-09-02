@@ -1109,7 +1109,7 @@ public class GoGui
 
     private File m_file;
 
-    private Session m_session = new Session(getClass());
+    private Session m_session = new Session(getClass(), "gogui");
 
     private StatusBar m_statusBar;
 
@@ -2857,7 +2857,7 @@ public class GoGui
         // the window visible, but not draw the window content yet
         getLayeredPane().setVisible(false);
         setVisible(true);
-        m_bookmarks = Bookmark.load(getClass(), "bookmarks");
+        m_bookmarks = Bookmark.load();
         m_menuBar.setBookmarks(m_bookmarks);
         m_toolBar.enableAll(true, m_currentNode);
         if (m_program != null)

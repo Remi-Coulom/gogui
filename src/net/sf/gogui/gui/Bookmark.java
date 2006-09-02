@@ -62,16 +62,16 @@ public final class Bookmark
              bookmark.m_variation);
     }
 
-    public static ArrayList load(Class c, String path)
+    public static ArrayList load()
     {
         ArrayList bookmarks = new ArrayList();
-        Preferences prefs = PrefUtils.getNode(c, path);
+        Preferences prefs = PrefUtils.getNode(Bookmark.class, "bookmark");
         if (prefs == null)
             return bookmarks;
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtils.getNode(c, path + "/" + i);
+            prefs = PrefUtils.getNode(Bookmark.class, "bookmark" + "/" + i);
             if (prefs == null)
                 break;
             String name = prefs.get("name", null);
