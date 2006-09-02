@@ -61,7 +61,7 @@ public class SelectProgram
         {
             m_command = m_comboBox.getSelectedItem().toString();
             m_comboBox.insertItemAt(m_command, 0);
-            saveHistory(getHistory());
+            putHistory();
             dispose();
         }
         else if (command.equals("open"))
@@ -132,7 +132,7 @@ public class SelectProgram
     {
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new BorderLayout());
-        m_comboBox = new JComboBox(loadHistory().toArray());
+        m_comboBox = new JComboBox(getHistory().toArray());
         StringBuffer prototype = new StringBuffer(70);
         for (int i = 0; i < 70; ++i)
             prototype.append('-');
@@ -167,24 +167,7 @@ public class SelectProgram
         return outerPanel;
     }
 
-    private ArrayList getHistory()
-    {
-        ArrayList result = new ArrayList(32);
-        int maxHistory = 20;
-        int itemCount = m_comboBox.getItemCount();
-        int n = itemCount;
-        if (n > maxHistory)
-            n = maxHistory;
-        for (int i = 0; i < n; ++i)
-        {
-            String element = m_comboBox.getItemAt(i).toString().trim();
-            if (! result.contains(element))
-                result.add(element);
-        }
-        return result;
-    }
-
-    private static ArrayList loadHistory()
+    private static ArrayList getHistory()
     {
         ArrayList result =
             PrefUtils.getList(SelectProgram.class, "selectprogram");
@@ -213,8 +196,20 @@ public class SelectProgram
         m_textField.requestFocusInWindow();
     }
 
-    private static void saveHistory(ArrayList history)
+    private void putHistory()
     {
+        ArrayList history = new ArrayList(32);
+        int maxHistory = 20;
+        int itemCount = m_comboBox.getItemCount();
+        int n = itemCount;
+        if (n > maxHistory)
+            n = maxHistory;
+        for (int i = 0; i < n; ++i)
+        {
+            String element = m_comboBox.getItemAt(i).toString().trim();
+            if (! history.contains(element))
+                history.add(element);
+        }
         PrefUtils.putList(SelectProgram.class, "selectprogram", history);
     }
 }
