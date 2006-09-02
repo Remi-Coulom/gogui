@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
+import net.sf.gogui.utils.PrefUtils;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -65,31 +66,6 @@ public class SelectProgram
         }
         else if (command.equals("open"))
             open();
-    }
-
-    public static void addHistory(String program)
-    {
-        program = program.trim();
-        if (program.equals(""))
-            return;
-        String[] args = StringUtils.splitArguments(program);
-        if (args.length > 0)
-        {
-            try
-            {
-                File file = new File(args[0]);
-                file = file.getCanonicalFile();
-                if (file.exists())
-                    program = file.toString()
-                        + program.substring(args[0].length());
-            }
-            catch (IOException e)
-            {
-            }
-        }
-        ArrayList history = loadHistory();
-        history.add(0, program);
-        saveHistory(history);
     }
 
     public void keyPressed(KeyEvent e)
@@ -200,45 +176,18 @@ public class SelectProgram
         if (n > maxHistory)
             n = maxHistory;
         for (int i = 0; i < n; ++i)
-            result.add(m_comboBox.getItemAt(i).toString().trim());
+        {
+            String element = m_comboBox.getItemAt(i).toString().trim();
+            if (! result.contains(element))
+                result.add(element);
+        }
         return result;
-    }
-
-    private static File getHistoryFile()
-    {
-        String home = System.getProperty("user.home");
-        File dir = new File(home, ".gogui");
-        if (! dir.exists())
-            dir.mkdir();
-        return new File(dir, "program-history");
     }
 
     private static ArrayList loadHistory()
     {
-        ArrayList result = new ArrayList(32);
-        File file = getHistoryFile();
-        try
-        {
-            BufferedReader in = new BufferedReader(new FileReader(file));
-            try
-            {
-                String line = in.readLine();
-                while (line != null)
-                {
-                    line = line.trim();
-                    if (! result.contains(line))
-                        result.add(line);
-                    line = in.readLine();
-                }
-            }
-            finally
-            {
-                in.close();
-            }
-        }
-        catch (IOException e)
-        {
-        }
+        ArrayList result =
+            PrefUtils.getList(SelectProgram.class, "selectprogram");
         if (! result.contains("gnugo --mode gtp"))
             result.add("gnugo --mode gtp");
         return result;
@@ -266,22 +215,7 @@ public class SelectProgram
 
     private static void saveHistory(ArrayList history)
     {
-        File file = getHistoryFile();
-        try
-        {
-            PrintWriter out = new PrintWriter(new FileOutputStream(file));
-            int size = history.size();
-            for (int i = 0; i < size; ++i)
-            {
-                String s = (String)history.get(i);
-                if (! s.equals(""))
-                    out.println(s);
-            }
-            out.close();
-        }
-        catch (FileNotFoundException e)
-        {
-        }
+        PrefUtils.putList(SelectProgram.class, "selectprogram", history);
     }
 }
 
