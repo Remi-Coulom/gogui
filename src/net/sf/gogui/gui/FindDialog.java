@@ -15,13 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import javax.swing.ComboBoxEditor;
@@ -33,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import net.sf.gogui.utils.PrefUtils;
 
 //----------------------------------------------------------------------------
 
@@ -61,7 +55,7 @@ public class FindDialog
         {
             m_pattern = m_comboBox.getSelectedItem().toString();
             m_comboBox.insertItemAt(m_pattern, 0);
-            saveHistory(getHistory());
+            putHistory();
             dispose();
         }
     }
@@ -133,7 +127,7 @@ public class FindDialog
     {
         JPanel outerPanel = new JPanel(new BorderLayout());
         JPanel innerPanel = new JPanel(new BorderLayout());
-        m_comboBox = new JComboBox(loadHistory().toArray());
+        m_comboBox = new JComboBox(getHistory().toArray());
         StringBuffer prototype = new StringBuffer(70);
         for (int i = 0; i < 40; ++i)
             prototype.append('-');
@@ -162,78 +156,29 @@ public class FindDialog
         return outerPanel;
     }
 
-    private ArrayList getHistory()
+    private void putHistory()
     {
-        ArrayList result = new ArrayList(32);
+        ArrayList history = new ArrayList(32);
         int maxHistory = 20;
         int itemCount = m_comboBox.getItemCount();
         int n = itemCount;
         if (n > maxHistory)
             n = maxHistory;
         for (int i = 0; i < n; ++i)
-            result.add(m_comboBox.getItemAt(i).toString().trim());
-        return result;
+        {
+            String element = m_comboBox.getItemAt(i).toString().trim();
+            if (! history.contains(element))
+                history.add(element);
+        }
+        PrefUtils.putList(getClass(), "finddialog", history);
     }
 
-    private static File getHistoryFile()
+    private ArrayList getHistory()
     {
-        String home = System.getProperty("user.home");
-        File dir = new File(home, ".gogui");
-        if (! dir.exists())
-            dir.mkdir();
-        return new File(dir, "find-history");
-    }
-
-    private ArrayList loadHistory()
-    {
-        ArrayList result = new ArrayList(32);
+        ArrayList result = PrefUtils.getList(getClass(), "finddialog");;
         if (m_initialValue != null)
-            result.add(m_initialValue);
-        File file = getHistoryFile();
-        try
-        {
-            BufferedReader in = new BufferedReader(new FileReader(file));
-            try
-            {
-                String line = in.readLine();
-                while (line != null)
-                {
-                    line = line.trim();
-                    if (! result.contains(line))
-                        result.add(line);
-                    line = in.readLine();
-                }
-            }
-            finally
-            {
-                in.close();
-            }
-        }
-        catch (IOException e)
-        {
-        }
+            result.add(0, m_initialValue);
         return result;
-    }
-
-    private static void saveHistory(ArrayList history)
-    {
-        File file = getHistoryFile();
-        try
-        {
-            PrintWriter out = new PrintWriter(new FileOutputStream(file));
-            int size = history.size();
-            for (int i = 0; i < size; ++i)
-            {
-                String s = (String)history.get(i);
-                if (! s.equals(""))
-                    out.println(s);
-            }
-            out.close();
-        }
-        catch (FileNotFoundException e)
-        {
-        }
-
     }
 }
 
