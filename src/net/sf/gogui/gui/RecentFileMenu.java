@@ -22,7 +22,8 @@ public class RecentFileMenu
         void fileSelected(String label, File file);
     }
 
-    public RecentFileMenu(String label, File file, Callback callback)
+    public RecentFileMenu(String label, Class c, String path,
+                          Callback callback)
     {
         assert(callback != null);
         m_callback = callback;
@@ -33,7 +34,7 @@ public class RecentFileMenu
                 m_callback.fileSelected(label, new File(value));
             }
         };
-        m_menu = new RecentMenu(label, file, recentCallback);
+        m_menu = new RecentMenu(label, c, path, recentCallback);
         for (int i = 0; i < m_menu.getCount(); ++i)
             if (! getFile(i).exists())
                 m_menu.remove(i);
@@ -42,7 +43,7 @@ public class RecentFileMenu
     public void add(File file)
     {
         String name = file.getName();
-        m_menu.add(name, file.toString(), false);
+        m_menu.add(name, file.toString());
         m_sameName.clear();
         for (int i = 0; i < getCount(); ++i)
             if (getName(i).equals(name))
@@ -73,7 +74,6 @@ public class RecentFileMenu
                 if (getName(i).equals(name))
                     m_menu.setLabel(i, getValue(i).substring(n));
         }
-        m_menu.save();
     }
 
     /** Don't modify the items in this menu! */

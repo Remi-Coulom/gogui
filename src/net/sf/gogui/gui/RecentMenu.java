@@ -12,8 +12,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import net.sf.gogui.utils.PrefUtils;
 
 //----------------------------------------------------------------------------
 
@@ -68,11 +71,11 @@ public final class RecentMenu
         void itemSelected(String label, String value);
     }
 
-    public RecentMenu(String label, File file, Callback callback)
+    public RecentMenu(String label, Class c, String path, Callback callback)
     {
         assert(callback != null);
-        assert(file != null);
-        m_file = file;
+        m_class = c;
+        m_path = path;
         m_callback = callback;
         m_menu = new JMenu(label);
         m_listener = new ActionListener()
@@ -85,10 +88,10 @@ public final class RecentMenu
                     m_callback.itemSelected(label, value);
                 }
             };
-        load();
+        get();
     }
 
-    public void add(String label, String value, boolean save)
+    public void add(String label, String value)
     {
         for (int i = 0; i < getCount(); ++i)
             if (getValue(i).equals(value))
@@ -97,8 +100,7 @@ public final class RecentMenu
         m_menu.add(item, 0);
         while (getCount() > MAX_ITEMS)
             m_menu.remove(getCount() - 1);
-        if (save)
-            save();
+        put();
     }
 
     public int getCount()
@@ -122,29 +124,10 @@ public final class RecentMenu
         m_menu.remove(getItem(i));
     }
 
-    public void save()
-    {
-        Properties props = new Properties();
-        int count = getCount();
-        for (int i = 0; i < count; ++i)
-        {
-            props.setProperty("label_" + (count - i - 1), getLabel(i));
-            props.setProperty("value_" + (count - i - 1), getValue(i));
-        }
-        try
-        {
-            FileOutputStream out = new FileOutputStream(m_file);
-            props.store(out, null);
-            out.close();
-        }
-        catch (IOException e)
-        {
-        }
-    }
-
     public void setLabel(int i, String label)
     {
         getItem(i).setRecentMenuLabel(label);
+        put();
     }
 
     /** Set menu enabled if not empty, disabled otherwise. */
@@ -155,13 +138,37 @@ public final class RecentMenu
 
     private static final int MAX_ITEMS = 20;
 
+    private final Class m_class;
+
+    private final String m_path;
+
     private final ActionListener m_listener;
 
     private final Callback m_callback;
 
-    private final File m_file;
-
     private final JMenu m_menu;
+
+    private void get()
+    {
+        Preferences prefs = PrefUtils.getNode(m_class, m_path);
+        if (prefs == null)
+            return;
+        int size = prefs.getInt("size", 0);
+        if (size < 0)
+            size = 0;
+        m_menu.removeAll();
+        for (int i = 0; i < size; ++i)
+        {
+            prefs = PrefUtils.getNode(m_class, m_path + "/" + i);
+            if (prefs == null)
+                break;
+            String label = prefs.get("label", null);
+            String value = prefs.get("value", null);
+            if (label == null || value == null)
+                continue;
+            add(label, value);
+        }
+    }
 
     private RecentMenuItem getItem(int i)
     {
@@ -173,25 +180,20 @@ public final class RecentMenu
         return getItem(i).getRecentMenuLabel();
     }
 
-    private void load()
+    public void put()
     {
-        Properties props = new Properties();
-        try
-        {
-            props.load(new FileInputStream(m_file));
-        }
-        catch (IOException e)
-        {
+        Preferences prefs = PrefUtils.getNode(m_class, m_path);
+        if (prefs == null)
             return;
-        }
-        m_menu.removeAll();
-        for (int i = 0; i < MAX_ITEMS; ++i)
+        int size = getCount();
+        prefs.putInt("size", size);
+        for (int i = 0; i < size; ++i)
         {
-            String label = props.getProperty("label_" + i);
-            String value = props.getProperty("value_" + i);
-            if (label == null || value == null)
-                continue;
-            add(label, value, false);
+            prefs = PrefUtils.getNode(m_class, m_path + "/" + (size - i - 1));
+            if (prefs == null)
+                break;
+            prefs.put("label", getLabel(i));
+            prefs.put("value", getValue(i));
         }
     }
 }
