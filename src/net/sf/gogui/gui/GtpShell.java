@@ -17,14 +17,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
@@ -47,6 +43,7 @@ import javax.swing.text.Style;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.utils.Platform;
+import net.sf.gogui.utils.PrefUtils;
 
 //----------------------------------------------------------------------------
 
@@ -276,31 +273,6 @@ public class GtpShell
             setVisible(false);
     }
     
-    public void loadHistory()
-    {
-        File file = getHistoryFile();
-        try
-        {
-            BufferedReader in = new BufferedReader(new FileReader(file));
-            try
-            {
-                String line = in.readLine();
-                while (line != null)
-                {
-                    appendToHistory(line);
-                    line = in.readLine();
-                }
-            }
-            finally
-            {
-                in.close();
-            }
-        }
-        catch (IOException e)
-        {
-        }
-    }
-
     public void receivedInvalidResponse(String response)
     {
         if (SwingUtilities.isEventDispatchThread())
@@ -347,22 +319,14 @@ public class GtpShell
 
     public void saveHistory()
     {
-        File file = getHistoryFile();
-        try
-        {
-            PrintWriter out = new PrintWriter(new FileOutputStream(file));
-            int maxHistory = 100;
-            int n = m_history.size();
-            if (n > maxHistory)
-                n = maxHistory;
-            for (int i = m_history.size() - n; i < m_history.size(); ++i)
-                out.println(m_history.get(i));
-            out.close();
-        }
-        catch (FileNotFoundException e)
-        {
-        }
-
+        int maxHistory = 100;
+        int max = m_history.size();
+        if (max > maxHistory)
+            max = maxHistory;
+        ArrayList list = new ArrayList(max);
+        for (int i = m_history.size() - max; i < m_history.size(); ++i)
+            list.add(m_history.get(i));
+        PrefUtils.putList(getClass(), "gtpshell/recentcommands", list);
     }
 
     public void setCommandInProgess(boolean commandInProgess)
@@ -467,7 +431,10 @@ public class GtpShell
     {
         for (int i = completions.size() - 1; i >= 0; --i)
             appendToHistory(completions.get(i).toString());
-        loadHistory();
+        ArrayList list = PrefUtils.getList(getClass(),
+                                           "gtpshell/recentcommands");
+        for (int i = 0; i < list.size(); ++i)
+            appendToHistory((String)list.get(i));
         addAllCompletions(m_history);
     }
 
@@ -828,15 +795,6 @@ public class GtpShell
         }       
         if (bestCompletion != null)
             m_textField.setText(bestCompletion);
-    }
-
-    private File getHistoryFile()
-    {
-        String home = System.getProperty("user.home");
-        File dir = new File(home, ".gogui");
-        if (! dir.exists())
-            dir.mkdir();
-        return new File(dir, "gtpshell-history");
     }
 
     private void invokeAndWait(Runnable runnable)
