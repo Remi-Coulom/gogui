@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import java.util.prefs.BackingStoreException;
 import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.PrefUtils;
 
 //----------------------------------------------------------------------------
 
@@ -64,13 +65,13 @@ public final class Bookmark
     public static ArrayList load(Class c, String path)
     {
         ArrayList bookmarks = new ArrayList();
-        Preferences prefs = getNode(c, path, false);
+        Preferences prefs = PrefUtils.getNode(c, path);
         if (prefs == null)
             return bookmarks;
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {
-            prefs = getNode(c, path + "/" + i, true);
+            prefs = PrefUtils.getNode(c, path + "/" + i);
             if (prefs == null)
                 break;
             String name = prefs.get("name", null);
@@ -88,13 +89,13 @@ public final class Bookmark
 
     public static void save(ArrayList bookmarks, Class c, String path)
     {
-        Preferences prefs = getNode(c, path, true);
+        Preferences prefs = PrefUtils.createNode(c, path);
         if (prefs == null)
             return;
         prefs.putInt("size", bookmarks.size());
         for (int i = 0; i < bookmarks.size(); ++i)
         {
-            prefs = getNode(c, path + "/" + i, true);
+            prefs = PrefUtils.createNode(c, path + "/" + i);
             if (prefs == null)
                 break;
             Bookmark b = (Bookmark)bookmarks.get(i);
@@ -112,24 +113,6 @@ public final class Bookmark
     public String m_name;
 
     public String m_variation;
-
-    private static Preferences getNode(Class c, String path, boolean create)
-    {
-        Preferences prefs = Preferences.userNodeForPackage(c);
-        if (! create)
-        {
-            try
-            {
-                if (! prefs.nodeExists(path))
-                    return null;
-            }
-            catch (BackingStoreException e)
-            {
-                return null;
-            }
-        }
-        return prefs.node(path);
-    }
 
     private void init(String name, File file, int move, String variation)
     {

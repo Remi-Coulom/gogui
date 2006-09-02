@@ -5,7 +5,6 @@
 
 package net.sf.gogui.gui;
 
-import net.sf.gogui.utils.StringUtils;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -13,6 +12,8 @@ import java.awt.Window;
 import java.util.prefs.Preferences;
 import java.util.prefs.BackingStoreException;
 import javax.swing.JFrame;
+import net.sf.gogui.utils.PrefUtils;
+import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
@@ -22,6 +23,10 @@ import javax.swing.JFrame;
 */
 public final class Session
 {
+    /** Constructor.
+        @param c A class in the package for determining the path for saving
+        the preferences.
+    */
     public Session(Class c)
     {
         m_class = c;
@@ -29,7 +34,7 @@ public final class Session
 
     public boolean isVisible(String name)
     {
-        Preferences prefs = getNode(name, false);
+        Preferences prefs = getNode(name);
         if (prefs == null)
             return false;
         return prefs.getBoolean("show", false);
@@ -37,7 +42,7 @@ public final class Session
 
     public void restoreLocation(Window window, String name, int boardSize)
     {
-        Preferences prefs = getNode(name, boardSize, false);
+        Preferences prefs = getNode(name, boardSize);
         if (prefs == null)
             return;
         int x = prefs.getInt("x", -1);
@@ -63,7 +68,7 @@ public final class Session
 
     public void restoreSize(Window window, String name, int boardSize)
     {
-        Preferences prefs = getNode(name, boardSize, false);
+        Preferences prefs = getNode(name, boardSize);
         if (prefs == null)
             return;
         int x = prefs.getInt("x", -1);
@@ -102,7 +107,7 @@ public final class Session
     {
         if (isFrameSpecialMode(window))
             return;
-        Preferences prefs = getNode(name, boardSize, true);
+        Preferences prefs = createNode(name, boardSize);
         if (prefs == null)
             return;
         Point location = window.getLocation();
@@ -114,7 +119,7 @@ public final class Session
     {
         if (isFrameSpecialMode(window))
             return;
-        Preferences prefs = getNode(name, boardSize, true);
+        Preferences prefs = createNode(name, boardSize);
         if (prefs == null)
             return;
         Point location = window.getLocation();
@@ -135,7 +140,7 @@ public final class Session
     public void saveVisible(Window window, String name)
     {
         boolean isVisible = (window != null && window.isVisible());
-        Preferences prefs = getNode(name, true);
+        Preferences prefs = createNode(name);
         if (prefs == null)
             return;
         prefs.putBoolean("show", isVisible);
@@ -143,42 +148,34 @@ public final class Session
 
     private Class m_class;
 
-    private Preferences getNode(String name, int boardSize, boolean create)
+    private Preferences createNode(String name, int boardSize)
     {
-        Preferences prefs = Preferences.userNodeForPackage(m_class);
-        String path = "windows/" + name + "/size-" + boardSize;
-        if (! create)
-        {
-            try
-            {
-                if (! prefs.nodeExists(path))
-                    return null;
-            }
-            catch (BackingStoreException e)
-            {
-                return null;
-            }
-        }
-        return prefs.node(path);
+        return PrefUtils.createNode(m_class, getPath(name, boardSize));
     }
 
-    private Preferences getNode(String name, boolean create)
+    private Preferences createNode(String name)
     {
-        Preferences prefs = Preferences.userNodeForPackage(m_class);
-        String path = "windows/" + name;
-        if (! create)
-        {
-            try
-            {
-                if (! prefs.nodeExists(path))
-                    return null;
-            }
-            catch (BackingStoreException e)
-            {
-                return null;
-            }
-        }
-        return prefs.node(path);
+        return PrefUtils.createNode(m_class, getPath(name));
+    }
+
+    private Preferences getNode(String name, int boardSize)
+    {
+        return PrefUtils.getNode(m_class, getPath(name, boardSize));
+    }
+
+    private Preferences getNode(String name)
+    {
+        return PrefUtils.getNode(m_class, getPath(name));
+    }
+
+    private String getPath(String name, int boardSize)
+    {
+        return "windows/" + name + "/size-" + boardSize;
+    }
+
+    private String getPath(String name)
+    {
+        return "windows/" + name;
     }
 
     private static boolean isFrameSpecialMode(Window window)
