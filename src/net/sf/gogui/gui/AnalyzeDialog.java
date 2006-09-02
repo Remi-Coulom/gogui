@@ -17,13 +17,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -44,6 +38,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtils;
+import net.sf.gogui.utils.PrefUtils;
 
 //----------------------------------------------------------------------------
 
@@ -146,23 +141,12 @@ public final class AnalyzeDialog
     {
         if (! m_recentModified)
             return;
-        File file = getRecentFile();
-        PrintStream out;
-        try
-        {
-            out = new PrintStream(new FileOutputStream(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            System.err.println("FileNotFoundException in"
-                               + " AnalyzeDialog.saveRecent");
-            return;
-        }
         int start = (m_firstIsTemp ? 1 : 0);
         int max = Math.min(m_comboBoxHistory.getItemCount(), 20);
+        ArrayList list = new ArrayList(max);
         for (int i = start; i < max; ++i)
-            out.println(getComboBoxItem(i));
-        out.close();
+            list.add(getComboBoxItem(i));
+        PrefUtils.putList(getClass(), "analyzedialog/recentcommands", list);
     }
 
     /** Set board size.
@@ -381,38 +365,13 @@ public final class AnalyzeDialog
         return (String)m_comboBoxHistory.getItemAt(i);
     }
 
-    private File getRecentFile()
-    {
-        String home = System.getProperty("user.home");
-        return new File(new File(home, ".gogui"), "recent-analyze");
-    }
-
     private void loadRecent()
     {
         m_comboBoxHistory.removeAllItems();
-        File file = getRecentFile();
-        BufferedReader reader;
-        try
-        {
-            reader = new BufferedReader(new FileReader(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            return;
-        }
-        String line;
-        try
-        {
-            while ((line = reader.readLine()) != null)
-            {
-                m_comboBoxHistory.addItem(line);
-            }
-            reader.close();
-        }
-        catch (IOException e)
-        {
-            System.err.println("IOException in AnalyzeDialog.loadRecent");
-        }
+        ArrayList list = PrefUtils.getList(getClass(),
+                                           "analyzedialog/recentcommands");
+        for (int i = 0; i < list.size(); ++i)
+            m_comboBoxHistory.addItem((String)list.get(i));
         m_firstIsTemp = false;
     }
 
