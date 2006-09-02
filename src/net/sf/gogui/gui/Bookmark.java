@@ -10,7 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Properties;
+import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
 import net.sf.gogui.utils.FileUtils;
 
 //----------------------------------------------------------------------------
@@ -60,34 +61,24 @@ public final class Bookmark
              bookmark.m_variation);
     }
 
-    public static ArrayList load(File file)
+    public static ArrayList load(Class c, String path)
     {
         ArrayList bookmarks = new ArrayList();
-        Properties props = new Properties();
-        try
-        {
-            props.load(new FileInputStream(file));
-        }
-        catch (IOException e)
-        {
+        Preferences prefs = getNode(c, path, false);
+        if (prefs == null)
             return bookmarks;
-        }
-        for (int i = 0; ; ++i)
+        int size = prefs.getInt("size", 0);
+        for (int i = 0; i < size; ++i)
         {
-            String name = props.getProperty("name_" + i);
+            prefs = getNode(c, path + "/" + i, true);
+            if (prefs == null)
+                break;
+            String name = prefs.get("name", null);
             if (name == null)
                 break;
-            String fileName = props.getProperty("file_" + i, "");
-            int move;
-            try
-            {
-                move = Integer.parseInt(props.getProperty("move_" + i, ""));
-            }
-            catch (NumberFormatException e)
-            {
-                move = 0;
-            }
-            String variation = props.getProperty("variation_" + i, "");
+            String fileName = prefs.get("file", "");
+            int move = prefs.getInt("move", 0);
+            String variation = prefs.get("variation", "");
             Bookmark b = new Bookmark(name, new File(fileName), move,
                                       variation);
             bookmarks.add(b);
@@ -95,25 +86,22 @@ public final class Bookmark
         return bookmarks;
     }
 
-    public static void save(ArrayList bookmarks, File file)
+    public static void save(ArrayList bookmarks, Class c, String path)
     {
-        Properties props = new Properties();
+        Preferences prefs = getNode(c, path, true);
+        if (prefs == null)
+            return;
+        prefs.putInt("size", bookmarks.size());
         for (int i = 0; i < bookmarks.size(); ++i)
         {
+            prefs = getNode(c, path + "/" + i, true);
+            if (prefs == null)
+                break;
             Bookmark b = (Bookmark)bookmarks.get(i);
-            props.setProperty("name_" + i, b.m_name);
-            props.setProperty("file_" + i, b.m_file.toString());
-            props.setProperty("move_" + i, Integer.toString(b.m_move));
-            props.setProperty("variation_" + i , b.m_variation);
-        }
-        try
-        {
-            FileOutputStream out = new FileOutputStream(file);
-            props.store(out, null);
-            out.close();
-        }
-        catch (IOException e)
-        {
+            prefs.put("name", b.m_name);
+            prefs.put("file", b.m_file.toString());
+            prefs.put("move", Integer.toString(b.m_move));
+            prefs.put("variation" , b.m_variation);
         }
     }
 
@@ -124,6 +112,24 @@ public final class Bookmark
     public String m_name;
 
     public String m_variation;
+
+    private static Preferences getNode(Class c, String path, boolean create)
+    {
+        Preferences prefs = Preferences.userNodeForPackage(c);
+        if (! create)
+        {
+            try
+            {
+                if (! prefs.nodeExists(path))
+                    return null;
+            }
+            catch (BackingStoreException e)
+            {
+                return null;
+            }
+        }
+        return prefs.node(path);
+    }
 
     private void init(String name, File file, int move, String variation)
     {

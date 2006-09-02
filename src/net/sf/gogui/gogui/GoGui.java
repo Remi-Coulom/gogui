@@ -2857,7 +2857,7 @@ public class GoGui
         // the window visible, but not draw the window content yet
         getLayeredPane().setVisible(false);
         setVisible(true);
-        m_bookmarks = Bookmark.load(getGoGuiFile("bookmarks"));
+        m_bookmarks = Bookmark.load(getClass(), "bookmarks");
         m_menuBar.setBookmarks(m_bookmarks);
         m_toolBar.enableAll(true, m_currentNode);
         if (m_program != null)
@@ -3228,7 +3228,7 @@ public class GoGui
 
     private void saveSession()
     {
-        Bookmark.save(m_bookmarks, getGoGuiFile("bookmarks"));
+        Bookmark.save(m_bookmarks, getClass(), "bookmarks");
         if (m_gtpShell != null)
             m_gtpShell.saveHistory();
         if (m_analyzeDialog != null)
