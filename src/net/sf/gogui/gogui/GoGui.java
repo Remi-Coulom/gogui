@@ -1109,7 +1109,7 @@ public class GoGui
 
     private File m_file;
 
-    private Session m_session = new Session(getClass(), "gogui");
+    private Session m_session = new Session(getClass(), "");
 
     private StatusBar m_statusBar;
 

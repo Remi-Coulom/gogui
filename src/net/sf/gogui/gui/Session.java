@@ -173,12 +173,18 @@ public final class Session
 
     private String getPath(String name, int boardSize)
     {
-        return m_path + "/windows/" + name + "/size-" + boardSize;
+        if (m_path == "")
+            return "windows/" + name + "/size-" + boardSize;
+        else
+            return m_path + "/windows/" + name + "/size-" + boardSize;
     }
 
     private String getPath(String name)
     {
-        return m_path + "/windows/" + name;
+        if (m_path == "")
+            return "windows/" + name;
+        else
+            return m_path + "/windows/" + name;
     }
 
     private static boolean isFrameSpecialMode(Window window)
