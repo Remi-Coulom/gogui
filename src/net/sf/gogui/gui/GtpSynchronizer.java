@@ -14,7 +14,7 @@ import net.sf.gogui.gtp.GtpUtils;
 
 //----------------------------------------------------------------------------
 
-/** Synchronizes a GTP engine with a position in a game tree.
+/** Synchronizes a GTP engine with a Go board.
     The GTP engine is given in form of a CommandThread.
     If GtpSynchronizer is used, no position changing GTP commands (like
     clear_board, play, undo) should be sent to this engine outside this
