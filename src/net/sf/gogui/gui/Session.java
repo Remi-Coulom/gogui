@@ -25,9 +25,8 @@ public final class Session
         @param c A class in the package for determining the path for saving
         the preferences.
     */
-    public Session(Class c, String path)
+    public Session(String path)
     {
-        m_class = c;
         m_path = path;
     }
 
@@ -145,28 +144,26 @@ public final class Session
         prefs.putBoolean("show", isVisible);
     }
 
-    private Class m_class;
-
     private String m_path;
 
     private Preferences createNode(String name, int boardSize)
     {
-        return PrefUtils.createNode(m_class, getPath(name, boardSize));
+        return PrefUtils.createNode(getPath(name, boardSize));
     }
 
     private Preferences createNode(String name)
     {
-        return PrefUtils.createNode(m_class, getPath(name));
+        return PrefUtils.createNode(getPath(name));
     }
 
     private Preferences getNode(String name, int boardSize)
     {
-        return PrefUtils.getNode(m_class, getPath(name, boardSize));
+        return PrefUtils.getNode(getPath(name, boardSize));
     }
 
     private Preferences getNode(String name)
     {
-        return PrefUtils.getNode(m_class, getPath(name));
+        return PrefUtils.getNode(getPath(name));
     }
 
     private String getPath(String name, int boardSize)

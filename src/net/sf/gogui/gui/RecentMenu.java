@@ -65,10 +65,9 @@ public final class RecentMenu
         void itemSelected(String label, String value);
     }
 
-    public RecentMenu(String label, Class c, String path, Callback callback)
+    public RecentMenu(String label, String path, Callback callback)
     {
         assert(callback != null);
-        m_class = c;
         m_path = path;
         m_callback = callback;
         m_menu = new JMenu(label);
@@ -132,8 +131,6 @@ public final class RecentMenu
 
     private static final int MAX_ITEMS = 20;
 
-    private final Class m_class;
-
     private final String m_path;
 
     private final ActionListener m_listener;
@@ -144,7 +141,7 @@ public final class RecentMenu
 
     private void get()
     {
-        Preferences prefs = PrefUtils.getNode(m_class, m_path);
+        Preferences prefs = PrefUtils.getNode(m_path);
         if (prefs == null)
             return;
         int size = prefs.getInt("size", 0);
@@ -153,7 +150,7 @@ public final class RecentMenu
         m_menu.removeAll();
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtils.getNode(m_class, m_path + "/" + i);
+            prefs = PrefUtils.getNode(m_path + "/" + i);
             if (prefs == null)
                 break;
             String label = prefs.get("label", null);
@@ -176,14 +173,14 @@ public final class RecentMenu
 
     public void put()
     {
-        Preferences prefs = PrefUtils.getNode(m_class, m_path);
+        Preferences prefs = PrefUtils.getNode(m_path);
         if (prefs == null)
             return;
         int size = getCount();
         prefs.putInt("size", size);
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtils.getNode(m_class, m_path + "/" + (size - i - 1));
+            prefs = PrefUtils.getNode(m_path + "/" + (size - i - 1));
             if (prefs == null)
                 break;
             prefs.put("label", getLabel(i));

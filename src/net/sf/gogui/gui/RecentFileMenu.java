@@ -22,8 +22,7 @@ public class RecentFileMenu
         void fileSelected(String label, File file);
     }
 
-    public RecentFileMenu(String label, Class c, String path,
-                          Callback callback)
+    public RecentFileMenu(String label, String path, Callback callback)
     {
         assert(callback != null);
         m_callback = callback;
@@ -34,7 +33,7 @@ public class RecentFileMenu
                 m_callback.fileSelected(label, new File(value));
             }
         };
-        m_menu = new RecentMenu(label, c, path, recentCallback);
+        m_menu = new RecentMenu(label, path, recentCallback);
         for (int i = 0; i < m_menu.getCount(); ++i)
             if (! getFile(i).exists())
                 m_menu.remove(i);

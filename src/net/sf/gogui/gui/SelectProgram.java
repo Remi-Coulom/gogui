@@ -163,7 +163,7 @@ public class SelectProgram
     private static ArrayList getHistory()
     {
         ArrayList result =
-            PrefUtils.getList(SelectProgram.class, "selectprogram");
+            PrefUtils.getList("net/sf/gogui/gui/selectprogram");
         if (! result.contains("gnugo --mode gtp"))
             result.add("gnugo --mode gtp");
         return result;
@@ -203,7 +203,7 @@ public class SelectProgram
             if (! history.contains(element))
                 history.add(element);
         }
-        PrefUtils.putList(SelectProgram.class, "selectprogram", history);
+        PrefUtils.putList("net/sf/gogui/gui/selectprogram", history);
     }
 }
 

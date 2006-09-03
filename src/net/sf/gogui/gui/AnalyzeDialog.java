@@ -146,7 +146,8 @@ public final class AnalyzeDialog
         ArrayList list = new ArrayList(max);
         for (int i = start; i < max; ++i)
             list.add(getComboBoxItem(i));
-        PrefUtils.putList(getClass(), "analyzedialog/recentcommands", list);
+        PrefUtils.putList("net/sf/gogui/gui/analyzedialog/recentcommands",
+                          list);
     }
 
     /** Set board size.
@@ -368,8 +369,8 @@ public final class AnalyzeDialog
     private void loadRecent()
     {
         m_comboBoxHistory.removeAllItems();
-        ArrayList list = PrefUtils.getList(getClass(),
-                                           "analyzedialog/recentcommands");
+        ArrayList list =
+            PrefUtils.getList("net/sf/gogui/gui/analyzedialog/recentcommands");
         for (int i = 0; i < list.size(); ++i)
             m_comboBoxHistory.addItem((String)list.get(i));
         m_firstIsTemp = false;

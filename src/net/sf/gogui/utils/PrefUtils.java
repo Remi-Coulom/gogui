@@ -19,16 +19,16 @@ public class PrefUtils
         @param path The path name of the node relative to the package.
         @return The node 
     */
-    public static Preferences createNode(Class c, String path)
+    public static Preferences createNode(String path)
     {
-        Preferences prefs = Preferences.userNodeForPackage(c);
-        return prefs.node(path);
+        assert(! path.startsWith("/"));
+        return Preferences.userRoot().node(path);
     }
 
     /** Get a list of strings from preferences. */
-    public static ArrayList getList(Class c, String path)
+    public static ArrayList getList(String path)
     {
-        Preferences prefs = getNode(c, path);
+        Preferences prefs = getNode(path);
         if (prefs == null)
             return new ArrayList();
         int size = prefs.getInt("size", 0);
@@ -52,9 +52,10 @@ public class PrefUtils
         @return The node or null, if node does not exist or failure in the
         backing store.
     */
-    public static Preferences getNode(Class c, String path)
+    public static Preferences getNode(String path)
     {
-        Preferences prefs = Preferences.userNodeForPackage(c);
+        assert(! path.startsWith("/"));
+        Preferences prefs = Preferences.userRoot();
         try
         {
             if (! prefs.nodeExists(path))
@@ -68,9 +69,9 @@ public class PrefUtils
     }
 
     /** Put a list of strings to preferences. */
-    public static void putList(Class c, String path, ArrayList list)
+    public static void putList(String path, ArrayList list)
     {
-        Preferences prefs = createNode(c, path);
+        Preferences prefs = createNode(path);
         if (prefs == null)
             return;
         prefs.putInt("size", list.size());

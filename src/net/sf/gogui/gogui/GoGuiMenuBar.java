@@ -1052,8 +1052,9 @@ public class GoGuiMenuBar
                                           "gtpshell-save-commands");
         menu.addItem("Send File...", KeyEvent.VK_F,
                      "gtpshell-send-file");
-        m_recentGtp = new RecentFileMenu("Send Recent", getClass(),
-                                         "recentgtpfiles", callback);
+        m_recentGtp = new RecentFileMenu("Send Recent",
+                                         "net/sf/gogui/recentgtpfiles",
+                                         callback);
         m_recentGtp.getMenu().setMnemonic(KeyEvent.VK_R);
         menu.add(m_recentGtp.getMenu());
         return menu;
@@ -1088,7 +1089,8 @@ public class GoGuiMenuBar
 
     private JMenu createRecentMenu(RecentFileMenu.Callback callback)
     {
-        m_recent = new RecentFileMenu("Open Recent", getClass(), "recentfiles",
+        m_recent = new RecentFileMenu("Open Recent",
+                                      "net/sf/gogui/recentfiles",
                                       callback);
         JMenu menu = m_recent.getMenu();
         menu.setMnemonic(KeyEvent.VK_R);

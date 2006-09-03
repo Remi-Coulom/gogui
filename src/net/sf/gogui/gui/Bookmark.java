@@ -61,13 +61,13 @@ public final class Bookmark
     public static ArrayList load()
     {
         ArrayList bookmarks = new ArrayList();
-        Preferences prefs = PrefUtils.getNode(Bookmark.class, "bookmark");
+        Preferences prefs = PrefUtils.getNode("net/sf/gogui/gui/bookmark");
         if (prefs == null)
             return bookmarks;
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtils.getNode(Bookmark.class, "bookmark/" + i);
+            prefs = PrefUtils.getNode("net/sf/gogui/gui/bookmark/" + i);
             if (prefs == null)
                 break;
             String name = prefs.get("name", null);
@@ -85,13 +85,13 @@ public final class Bookmark
 
     public static void save(ArrayList bookmarks)
     {
-        Preferences prefs = PrefUtils.createNode(Bookmark.class, "bookmark");
+        Preferences prefs = PrefUtils.createNode("net/sf/gogui/gui/bookmark");
         if (prefs == null)
             return;
         prefs.putInt("size", bookmarks.size());
         for (int i = 0; i < bookmarks.size(); ++i)
         {
-            prefs = PrefUtils.createNode(Bookmark.class, "bookmark/" + i);
+            prefs = PrefUtils.createNode("net/sf/gogui/gui/bookmark/" + i);
             if (prefs == null)
                 break;
             Bookmark b = (Bookmark)bookmarks.get(i);

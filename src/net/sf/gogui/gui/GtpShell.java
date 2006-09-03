@@ -326,7 +326,7 @@ public class GtpShell
         ArrayList list = new ArrayList(max);
         for (int i = m_history.size() - max; i < m_history.size(); ++i)
             list.add(m_history.get(i));
-        PrefUtils.putList(getClass(), "gtpshell/recentcommands", list);
+        PrefUtils.putList("net/sf/gogui/gui/gtpshell/recentcommands", list);
     }
 
     public void setCommandInProgess(boolean commandInProgess)
@@ -431,8 +431,8 @@ public class GtpShell
     {
         for (int i = completions.size() - 1; i >= 0; --i)
             appendToHistory(completions.get(i).toString());
-        ArrayList list = PrefUtils.getList(getClass(),
-                                           "gtpshell/recentcommands");
+        ArrayList list =
+            PrefUtils.getList("net/sf/gogui/gui/gtpshell/recentcommands");
         for (int i = 0; i < list.size(); ++i)
             appendToHistory((String)list.get(i));
         addAllCompletions(m_history);
