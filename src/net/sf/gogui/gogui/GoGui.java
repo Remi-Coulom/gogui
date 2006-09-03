@@ -1026,8 +1026,6 @@ public class GoGui
     /** State variable used between cbInterrupt and computerMoved. */
     private boolean m_interruptComputerBoth;
 
-    private boolean m_isRootExecuted;
-
     /** State variable used between generateMove and computerMoved. */
     private boolean m_isSingleMove;
 
@@ -1399,7 +1397,7 @@ public class GoGui
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         if (m_commandThread != null
-            && isCurrentNodeExecuted()
+            && ! m_gtpSynchronizer.isOutOfSync()
             && m_analyzeCommand != null
             && m_analyzeAutoRun
             && ! m_analyzeCommand.isPointArgMissing())
@@ -2163,7 +2161,7 @@ public class GoGui
 
     private void checkComputerMove()
     {
-        if (m_commandThread == null || ! isCurrentNodeExecuted())
+        if (m_commandThread == null || m_gtpSynchronizer.isOutOfSync())
             return;
         int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
         boolean bothPassed = (moveNumber >= 2 && m_board.bothPassed());
@@ -2203,7 +2201,7 @@ public class GoGui
     {
         if (m_commandThread == null)
             return true;
-        if (! isCurrentNodeExecuted())
+        if (m_gtpSynchronizer.isOutOfSync())
         {
             Object[] options = { "Detach Program", "Cancel" };
             Object message =
@@ -2482,21 +2480,6 @@ public class GoGui
         resetBoard();
         clearStatus();
         setTitle();
-        // If this node was only partially executed due to a error of the Go
-        // program, we undo and execute it again
-        if (! isCurrentNodeExecuted())
-        {
-            try
-            {
-                undoCurrentNode();
-                executeCurrentNode();
-                updateFromGoBoard();
-            }
-            catch (GtpError e)
-            {
-                assert(false);
-            }
-        }
     }
 
     private void editLabel(GoPoint point)
@@ -2550,7 +2533,6 @@ public class GoGui
     private boolean executeRoot()
     {
         m_currentNode = m_gameTree.getRoot();
-        m_isRootExecuted = true;
         try
         {
             m_gtpSynchronizer.init(m_board);
@@ -2558,7 +2540,6 @@ public class GoGui
         catch (GtpError error)
         {
             showError(error);
-            m_isRootExecuted = false;
             return false;
         }
         GameInformation gameInformation = m_gameTree.getGameInformation();
@@ -2665,7 +2646,7 @@ public class GoGui
             ArrayList moves = NodeUtils.getAllAsMoves(nodes);
             for (int i = 0; i < moves.size(); ++i)
                 m_board.play((Move)moves.get(i));
-            m_currentNode = (Node)nodes.get(nodes.size() - 1);
+            m_currentNode = node;
             try
             {
                 m_gtpSynchronizer.synchronize(m_board);
@@ -2889,13 +2870,6 @@ public class GoGui
         if (m_commandThread == null)
             return false;
         return m_commandThread.isCommandInProgress();
-    }
-    
-    private boolean isCurrentNodeExecuted()
-    {
-        if (! m_isRootExecuted || m_gtpSynchronizer.isOutOfSync())
-            return false;
-        return true;
     }
 
     private boolean loadFile(File file, int move)
