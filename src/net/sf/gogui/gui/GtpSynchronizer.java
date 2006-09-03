@@ -6,7 +6,7 @@
 package net.sf.gogui.gui;
 
 import java.util.ArrayList;
-import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpError;
@@ -55,7 +55,7 @@ public class GtpSynchronizer
         m_engineMoves.clear();
     }
 
-    public void init(Board board) throws GtpError
+    public void init(ConstBoard board) throws GtpError
     {
         if (m_commandThread == null)
             return;
@@ -76,7 +76,7 @@ public class GtpSynchronizer
         execute(m_movesToExecute);
     }
 
-    public void synchronize(Board board) throws GtpError
+    public void synchronize(ConstBoard board) throws GtpError
     {
         if (m_commandThread == null)
             return;
@@ -96,7 +96,7 @@ public class GtpSynchronizer
         }
     }
 
-    public void updateAfterGenmove(Board board)
+    public void updateAfterGenmove(ConstBoard board)
     {
         if (m_commandThread == null)
             return;
@@ -125,7 +125,7 @@ public class GtpSynchronizer
     /** Compute number of moves to undo and moves to execute.
         @return Number of moves to undo.
     */
-    private int computeDifference(ArrayList movesToExecute, Board board)
+    private int computeDifference(ArrayList movesToExecute, ConstBoard board)
     {
         int numberCommonMoves = findNumberCommonMoves(board);
         int numberUndo = m_engineMoves.size() - numberCommonMoves;
@@ -159,7 +159,7 @@ public class GtpSynchronizer
         }
     }
 
-    private int findNumberCommonMoves(Board board)
+    private int findNumberCommonMoves(ConstBoard board)
     {
         int moveNumber = board.getMoveNumber();
         int numberEngineMoves = m_engineMoves.size();

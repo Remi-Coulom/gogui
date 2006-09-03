@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 /** Go board. */
 public final class Board
+    implements ConstBoard
 {
     /** Constant for unknown rules. */
     public static final int RULES_UNKNOWN = 0;
@@ -123,19 +124,6 @@ public final class Board
         return result;
     }
 
-    public GoColor getScore(GoPoint p)
-    {
-        return m_score[p.getX()][p.getY()];
-    }
-
-    /** Get board size.
-        @return The board size.
-    */
-    public int getSize()
-    {
-        return m_size;
-    }
-
     public int getCapturedB()
     {
         return m_capturedB;
@@ -179,6 +167,19 @@ public final class Board
     public int getNumberPoints()
     {
         return m_allPoints.length;
+    }
+
+    public GoColor getScore(GoPoint p)
+    {
+        return m_score[p.getX()][p.getY()];
+    }
+
+    /** Get board size.
+        @return The board size.
+    */
+    public int getSize()
+    {
+        return m_size;
     }
 
     public void getStones(GoPoint p, GoColor color, ArrayList stones)
