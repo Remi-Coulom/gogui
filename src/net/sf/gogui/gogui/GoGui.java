@@ -3523,15 +3523,6 @@ public class GoGui
             });
     }
 
-    private void undoCurrentNode() throws GtpError
-    {
-        int n = NodeUtils.getAllAsMoves(m_currentNode).size();
-        for (int i = 0; i < n; ++i)
-            m_board.undo();
-        updateFromGoBoard();
-        m_gtpSynchronizer.synchronize(m_board);
-    }
-
     private void updateBoard()
     {
         if (m_showVariations)
