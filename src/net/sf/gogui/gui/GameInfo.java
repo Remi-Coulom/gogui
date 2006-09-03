@@ -49,9 +49,9 @@ public class GameInfo
             updateTime();
     }
 
-    public void fastUpdateMoveNumber(Node node)
+    public void fastUpdateMoveNumber(String text)
     {
-        updateMoveNumber(node);
+        m_number.setText(text);
         m_number.paintImmediately(m_number.getVisibleRect());
     }
 

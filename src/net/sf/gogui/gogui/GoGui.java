@@ -71,6 +71,7 @@ import net.sf.gogui.gui.GameInfoDialog;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
+import net.sf.gogui.gui.GtpSynchronizer;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtils;
 import net.sf.gogui.gui.GuiUtils;
@@ -179,6 +180,15 @@ public class GoGui
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtils.setGoIcon(this);
+        GtpSynchronizer.Callback synchronizerCallback =
+            new GtpSynchronizer.Callback()
+            {
+                public void run(int moveNumber)
+                {
+                    m_gameInfo.fastUpdateMoveNumber("[" + moveNumber + "]");
+                }
+            };
+        m_gtpSynchronizer = new GtpSynchronizer(synchronizerCallback);
         RecentFileMenu.Callback recentCallback = new RecentFileMenu.Callback()
             {
                 public void fileSelected(String label, File file)
@@ -206,7 +216,7 @@ public class GoGui
         m_menuBar.setAnalyzeOnlySupported(onlySupported);
         m_menuBar.setAnalyzeSort(m_prefs.getBoolean("analyze-sort", true));
         m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels",
-                                                   GameTreePanel.LABEL_NUMBER));
+                                                 GameTreePanel.LABEL_NUMBER));
         m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size",
                                                  GameTreePanel.SIZE_NORMAL));
         boolean showSubtreeSizes =
@@ -574,7 +584,8 @@ public class GoGui
             return;
         boolean commandCompletion = m_menuBar.getCommandCompletion();
         m_gtpShell.setCommandCompletion(commandCompletion);
-        m_prefs.putBoolean("gtpshell-disable-completions", ! commandCompletion);
+        m_prefs.putBoolean("gtpshell-disable-completions",
+                           ! commandCompletion);
     }
 
     public boolean cbDetachProgram()
@@ -1042,14 +1053,6 @@ public class GoGui
 
     private int m_boardSize;
 
-    /** Counter for successfully executed moves/setup stones in current node.
-        If the current node contains several moves/setup stones, it is
-        necessary to count, how many were successfully executed, because if
-        one of them fails, the program might not support undo, so we have to
-        detect, that the current node was only partially executed.
-    */
-    private int m_currentNodeExecuted;
-
     private int m_handicap;
 
     private int m_move;
@@ -1077,6 +1080,8 @@ public class GoGui
     private GameInfo m_gameInfo;    
 
     private GtpShell m_gtpShell;
+
+    private GtpSynchronizer m_gtpSynchronizer;
 
     private GameTree m_gameTree;
 
@@ -1298,6 +1303,7 @@ public class GoGui
             m_menuBar.setComputerEnabled(false);
             return false;
         }
+        m_gtpSynchronizer.setCommandThread(m_commandThread);
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
         m_name = null;
@@ -1362,30 +1368,11 @@ public class GoGui
             total += NodeUtils.getAllAsMoves(node).size();
             node = node.getFather();
         }
+        m_board.undo(total);
+        m_currentNode = node;
         try
         {
-            if (m_commandThread != null && total > 1
-                && m_commandThread.isCommandSupported("gg-undo"))
-            {
-                m_commandThread.send("gg-undo " + total);
-                m_board.undo(total);
-                m_currentNode = node;
-                m_currentNodeExecuted
-                    = NodeUtils.getAllAsMoves(m_currentNode).size();
-            }
-            else
-            {
-                for (int i = 0; i < n; ++i)
-                {
-                    if (m_currentNode.getFather() == null)
-                        return false;
-                    undoCurrentNode();
-                    m_currentNode = m_currentNode.getFather();
-                    m_currentNodeExecuted
-                        = NodeUtils.getAllAsMoves(m_currentNode).size();
-                    m_gameInfo.fastUpdateMoveNumber(m_currentNode);
-                }
-            }
+            m_gtpSynchronizer.synchronize(m_board);
         }
         catch (GtpError e)
         {
@@ -2348,7 +2335,7 @@ public class GoGui
                 m_board.play(move);
                 Node node = createNode(move);
                 m_currentNode = node;
-                m_currentNodeExecuted = 1;
+                m_gtpSynchronizer.updateAfterGenmove(m_board);
                 if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
                 m_resigned = false;
@@ -2475,6 +2462,7 @@ public class GoGui
                 m_commandThread.close();
             }
         }
+        m_gtpSynchronizer.setCommandThread(null);
         saveSession();
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
@@ -2550,51 +2538,28 @@ public class GoGui
 
     private void executeCurrentNode() throws GtpError
     {
-        m_currentNodeExecuted = 0;
         ArrayList moves = NodeUtils.getAllAsMoves(m_currentNode);
-        if (moves.size() > 1 && m_commandThread != null
-            && m_commandThread.isCommandSupported("play_sequence"))
-        {
-            String cmd = GtpUtils.getPlaySequenceCommand(moves);
-            m_commandThread.send(cmd);
-            for (int i = 0; i < moves.size(); ++i)
-                m_board.play((Move)moves.get(i));
-            m_currentNodeExecuted = moves.size();
-        }
-        else
-        {
-            for (int i = 0; i < moves.size(); ++i)
-            {
-                Move move = (Move)moves.get(i);
-                if (m_commandThread != null)
-                    m_commandThread.sendPlay(move);
-                m_board.play(move);
-                ++m_currentNodeExecuted;
-            }
-        }
+        for (int i = 0; i < moves.size(); ++i)
+            m_board.play((Move)moves.get(i));
         GoColor toMove = m_currentNode.getToMove();
         if (toMove != GoColor.EMPTY)
             m_board.setToMove(toMove);
+        m_gtpSynchronizer.synchronize(m_board);
     }
 
     private boolean executeRoot()
     {
         m_currentNode = m_gameTree.getRoot();
-        m_currentNodeExecuted = 0;
         m_isRootExecuted = true;
-        if (m_commandThread != null)
+        try
         {
-            try
-            {
-                m_commandThread.sendBoardsize(m_boardSize);
-                m_commandThread.sendClearBoard(m_boardSize);
-            }
-            catch (GtpError error)
-            {
-                showError(error);
-                m_isRootExecuted = false;
-                return false;
-            }
+            m_gtpSynchronizer.init(m_board);
+        }
+        catch (GtpError error)
+        {
+            showError(error);
+            m_isRootExecuted = false;
+            return false;
         }
         GameInformation gameInformation = m_gameTree.getGameInformation();
         setKomi(gameInformation.m_komi);
@@ -2698,45 +2663,17 @@ public class GoGui
         if (backward(numberUndo))
         {
             ArrayList moves = NodeUtils.getAllAsMoves(nodes);
-            if (checkCurrentNodeExecuted()
-                && moves.size() > 1
-                && m_commandThread != null
-                && m_commandThread.isCommandSupported("play_sequence"))
+            for (int i = 0; i < moves.size(); ++i)
+                m_board.play((Move)moves.get(i));
+            m_currentNode = (Node)nodes.get(nodes.size() - 1);
+            try
             {
-                try
-                {
-                    String cmd = GtpUtils.getPlaySequenceCommand(moves);
-                    m_commandThread.send(cmd);
-                    for (int i = 0; i < moves.size(); ++i)
-                        m_board.play((Move)moves.get(i));
-                    m_currentNode = (Node)nodes.get(nodes.size() - 1);
-                    m_currentNodeExecuted =
-                        NodeUtils.getAllAsMoves(m_currentNode).size();
-                }
-                catch (GtpError e)
-                {
-                    showError(e);
-                }
+                m_gtpSynchronizer.synchronize(m_board);
             }
-            else
-                for (int i = 0; i < nodes.size(); ++i)
-                {
-                    Node nextNode = (Node)nodes.get(i);
-                    if (! checkCurrentNodeExecuted())
-                        break;
-                    assert(nextNode.isChildOf(m_currentNode));
-                    m_currentNode = nextNode;
-                    try
-                    {
-                        executeCurrentNode();
-                    }
-                    catch (GtpError e)
-                    {
-                        showError(e);
-                        break;
-                    }
-                    m_gameInfo.fastUpdateMoveNumber(m_currentNode);
-                }
+            catch (GtpError e)
+            {
+                showError(e);
+            }
         }
     }
 
@@ -2816,7 +2753,6 @@ public class GoGui
                                   m_timeSettings);
         m_board.newGame();        
         m_currentNode = m_gameTree.getRoot();
-        m_currentNodeExecuted = 0;
         updateFromGoBoard();
         resetBoard();
         m_clock.reset();
@@ -2957,10 +2893,7 @@ public class GoGui
     
     private boolean isCurrentNodeExecuted()
     {
-        int numberAddStonesAndMoves
-            = NodeUtils.getAllAsMoves(m_currentNode).size();
-        if (! m_isRootExecuted
-            || m_currentNodeExecuted != numberAddStonesAndMoves)
+        if (! m_isRootExecuted || m_gtpSynchronizer.isOutOfSync())
             return false;
         return true;
     }
@@ -3072,18 +3005,7 @@ public class GoGui
             node = createNode(move);
         }
         m_currentNode = node;
-        try
-        {
-            executeCurrentNode();
-        }
-        catch (GtpError error)
-        {
-            m_currentNode = node.getFather();
-            m_currentNode.removeChild(node);
-            m_currentNodeExecuted
-                = NodeUtils.getAllAsMoves(m_currentNode).size();
-            throw error;
-        }
+        executeCurrentNode();
         return result;
     }
 
@@ -3629,16 +3551,11 @@ public class GoGui
 
     private void undoCurrentNode() throws GtpError
     {
-        if (m_commandThread != null
-            && ! m_commandThread.isCommandSupported("undo"))
-            throw new GtpError("Program does not support undo");
-        for ( ; m_currentNodeExecuted > 0; --m_currentNodeExecuted)
-        {
-            if (m_commandThread != null)
-                m_commandThread.send("undo");
+        int n = NodeUtils.getAllAsMoves(m_currentNode).size();
+        for (int i = 0; i < n; ++i)
             m_board.undo();
-        }
         updateFromGoBoard();
+        m_gtpSynchronizer.synchronize(m_board);
     }
 
     private void updateBoard()
