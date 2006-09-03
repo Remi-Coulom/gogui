@@ -154,6 +154,10 @@ public abstract class GtpEngine
         m_log.println(line);
     }
 
+    /** Main command loop.
+        Reads commands and calls GtpEngine.handleCommand until the end of
+        the input stream or the quit command is reached.
+    */
     public void mainLoop(InputStream in, OutputStream out) throws IOException
     {
         m_out = new PrintStream(out);
@@ -162,11 +166,24 @@ public abstract class GtpEngine
         readThread.start();
         while (true)
         {
-            GtpCommand command = readThread.getCommand();
-            if (command == null)
+            GtpCommand cmd = readThread.getCommand();
+            if (cmd == null)
                 return;
-            sendResponse(command);
-            if (command.isQuit())
+            boolean status = true;
+            String response;
+            try
+            {
+                handleCommand(cmd);
+                response = cmd.getResponse().toString();
+            }
+            catch (GtpError e)
+            {
+                response = e.getMessage();
+                status = false;
+            }
+            String sanitizedResponse = response.replaceAll("\\n\\n", "\n \n");
+            respond(status, cmd.hasId(), cmd.getId(), sanitizedResponse);
+            if (cmd.isQuit())
                 return;
         }
     }
@@ -240,24 +257,6 @@ public abstract class GtpEngine
     private final PrintStream m_log;
 
     private PrintStream m_out;
-
-    private void sendResponse(GtpCommand cmd)
-    {
-        boolean status = true;
-        String response;
-        try
-        {
-            handleCommand(cmd);
-            response = cmd.getResponse().toString();
-        }
-        catch (GtpError e)
-        {
-            response = e.getMessage();
-            status = false;
-        }
-        String sanitizedResponse = response.replaceAll("\\n\\n", "\n \n");
-        respond(status, cmd.hasId(), cmd.getId(), sanitizedResponse);
-    }
 }
 
 //----------------------------------------------------------------------------
