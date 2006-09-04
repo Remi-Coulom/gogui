@@ -27,7 +27,7 @@ public class BoardUpdater
         assert(board.getSize() == size);
         m_nodes.clear();
         NodeUtils.getPathToRoot(node, m_nodes);
-        board.initSize(size);
+        board.init(size);
         for (int i = m_nodes.size() - 1; i >= 0; --i)
         {            
             NodeUtils.getAllAsMoves((Node)m_nodes.get(i), m_moves);

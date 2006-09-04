@@ -1350,7 +1350,7 @@ public class GoGui
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
         Node oldCurrentNode = m_currentNode;
-        m_board.initSize(m_boardSize);
+        m_board.init(m_boardSize);
         if (executeRoot())
             gotoNode(oldCurrentNode);
         setTitle();
@@ -1885,7 +1885,7 @@ public class GoGui
             return;
         GameInformation info = m_gameTree.getGameInformation();
         m_gameTree = NodeUtils.makeTreeFromPosition(info, m_board);
-        m_board.initSize(m_boardSize);
+        m_board.init(m_boardSize);
         executeRoot();
         setNeedsSave(true);
         boardChangedBegin(false, true);
@@ -2674,7 +2674,7 @@ public class GoGui
         if (size != m_boardSize)
         {
             m_boardSize = size;
-            m_board.initSize(size);
+            m_board.init(size);
             m_guiBoard.initSize(size);
             m_guiBoard.setShowGrid(m_menuBar.getShowGrid());
             restoreMainWindow();

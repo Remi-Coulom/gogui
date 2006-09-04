@@ -33,7 +33,7 @@ public final class Board
     */
     public Board(int boardSize)
     {
-        initSize(boardSize);
+        init(boardSize);
     }
 
     /** Check for two consecutive passes.
@@ -195,7 +195,7 @@ public final class Board
         return m_toMove;
     }
 
-    public void initSize(int size)
+    public void init(int size)
     {
         m_size = size;
         m_color = new GoColor[m_size][m_size];
