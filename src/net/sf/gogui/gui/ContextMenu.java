@@ -108,27 +108,24 @@ public class ContextMenu
                     }
                 }
             };
-        JLabel label = new JLabel("Point " + point);
-        label.setBorder(GuiUtils.createSmallEmptyBorder());
-        add(label);
-        addSeparator();
-        m_mark = createCheckBox("Mark", "mark");
+        m_mark = createCheckBox("Mark " + point, "mark");
         m_mark.setSelected(mark);
         add(m_mark);
-        m_markCircle = createCheckBox("Mark Circle", "mark-circle");
+        m_markCircle = createCheckBox("Mark Circle " + point, "mark-circle");
         m_markCircle.setSelected(markCircle);
         add(m_markCircle);
-        m_markSquare = createCheckBox("Mark Square", "mark-square");
+        m_markSquare = createCheckBox("Mark Square " + point, "mark-square");
         m_markSquare.setSelected(markSquare);
         add(m_markSquare);
-        m_markTriangle = createCheckBox("Mark Triangle", "mark-triangle");
+        m_markTriangle = createCheckBox("Mark Triangle " + point,
+                                        "mark-triangle");
         m_markTriangle.setSelected(markTriangle);
         add(m_markTriangle);
-        add(createItem("Edit Label", "edit-label"));
+        add(createItem("Edit Label " + point, "edit-label"));
         addSeparator();
         if (! noProgram && commands.size() > 0)
         {
-            m_analyzeMenu = new JMenu("Analyze");
+            m_analyzeMenu = new JMenu("Analyze " + point);
             // For com.jgoodies.looks
             m_analyzeMenu.putClientProperty("jgoodies.noIcons", Boolean.TRUE);
             add(m_analyzeMenu);
