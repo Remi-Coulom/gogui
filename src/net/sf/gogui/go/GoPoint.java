@@ -6,6 +6,7 @@
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -132,7 +133,7 @@ public final class GoPoint
     public static GoPoint parsePoint(String string, int boardSize)
         throws InvalidPoint
     {
-        string = string.trim().toUpperCase();
+        string = string.trim().toUpperCase(Locale.ENGLISH);
         if (string.equals("PASS"))
             return null;
         if (string.length() < 2)

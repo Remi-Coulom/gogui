@@ -31,6 +31,7 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.JDialog;
@@ -2624,7 +2625,7 @@ public class GoGui
         String rules = m_gameTree.getGameInformation().m_rules;
         if (rules != null)
         {
-            rules = rules.trim().toLowerCase();
+            rules = rules.trim().toLowerCase(Locale.ENGLISH);
             if (rules.equals("japanese"))
                 result = Board.RULES_JAPANESE;
             else if (rules.equals("chinese"))

@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
+import java.util.Locale;
 import net.sf.gogui.utils.PrefUtils;
 
 //----------------------------------------------------------------------------
@@ -177,7 +178,7 @@ public class SelectProgram
         String text = file.toString();
         if (text.indexOf(' ') >= 0)
             text = "\"" + text + "\"";        
-        if (file.getName().toLowerCase().startsWith("gnugo"))
+        if (file.getName().toLowerCase(Locale.ENGLISH).startsWith("gnugo"))
         {
             String message = "Append option '--mode gtp' for GNU Go?";
             if (SimpleDialogs.showQuestion(this, message))

@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Locale;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -253,7 +254,7 @@ public final class AnalyzeShow
         if (arg.length == 0)
             return null;
         String statusText = null;
-        String cmd = arg[0].toUpperCase();
+        String cmd = arg[0].toUpperCase(Locale.ENGLISH);
         if (cmd.equals("BLACK"))
             showGfxTerritory(arg, GoColor.BLACK, guiBoard);
         else if (cmd.equals("CIRCLE"))

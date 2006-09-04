@@ -10,6 +10,7 @@ package net.sf.gogui.tex;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Locale;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -137,8 +138,8 @@ public class TexWriter
     {
         assert(point != null);
         String s = point.toString();
-        m_out.print("{" + s.substring(0, 1).toLowerCase() + "}{" +
-                    s.substring(1) + "}");
+        m_out.print("{" + s.substring(0, 1).toLowerCase(Locale.ENGLISH) + "}{"
+                    + s.substring(1) + "}");
     }
 
     private void printEndDocument()

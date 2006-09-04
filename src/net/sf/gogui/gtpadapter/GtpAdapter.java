@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Stack;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -336,7 +337,7 @@ public class GtpAdapter
             undoFillPass();
             throw e;
         }
-        if (response.toLowerCase().trim().equals("resign"))
+        if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
             return;
         GoPoint point = GtpUtils.parsePoint(response, m_boardSize);
         m_board.play(point, color);
@@ -622,7 +623,7 @@ public class GtpAdapter
         Move move = Move.get(point, color);
         String command = m_gtp.getCommandPlay(move);
         if (m_lowerCase)
-            command = command.toLowerCase();
+            command = command.toLowerCase(Locale.ENGLISH);
         send(command);
         m_board.play(move);
     }

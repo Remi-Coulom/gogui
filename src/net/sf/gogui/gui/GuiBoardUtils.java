@@ -6,9 +6,10 @@
 package net.sf.gogui.gui;
 
 import java.awt.Color;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
@@ -134,7 +135,7 @@ public final class GuiBoardUtils
             for (int y = 0; y < board[x].length; ++y)
             {
                 GoPoint point = GoPoint.get(x, y);
-                String s = board[x][y].toLowerCase();
+                String s = board[x][y].toLowerCase(Locale.ENGLISH);
                 if (s.equals("b") || s.equals("black"))
                     guiBoard.setTerritory(point, GoColor.BLACK);
                 else if (s.equals("w") || s.equals("white"))

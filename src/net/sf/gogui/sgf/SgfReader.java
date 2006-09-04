@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.game.GameInformation;
@@ -397,7 +398,7 @@ public final class SgfReader
     private GoColor parseColor(String s) throws SgfError
     {
         GoColor color;
-        s = s.trim().toLowerCase();
+        s = s.trim().toLowerCase(Locale.ENGLISH);
         if (s.equals("b") || s.equals("1"))
             color = GoColor.BLACK;
         else if (s.equals("w") || s.equals("2"))
@@ -487,7 +488,7 @@ public final class SgfReader
 
     private GoPoint parsePoint(String s) throws SgfError
     {
-        s = s.trim().toLowerCase();
+        s = s.trim().toLowerCase(Locale.ENGLISH);
         if (s.equals(""))
             return null;
         if (s.length() != 2)
@@ -614,7 +615,7 @@ public final class SgfReader
         if (ttype == StreamTokenizer.TT_WORD)
         {
             // Use intern() to allow fast comparsion with ==
-            String p = m_tokenizer.sval.toUpperCase().intern();
+            String p = m_tokenizer.sval.toUpperCase(Locale.ENGLISH).intern();
             m_values.clear();
             String s;
             while ((s = readValue()) != null)

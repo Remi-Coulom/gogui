@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.game.TimeSettings;
@@ -176,7 +177,7 @@ public final class GtpUtils
         boolean isColorSet = true;
         for (int i = 0; i < token.length; ++i)
         {
-            String t = token[i].toLowerCase();
+            String t = token[i].toLowerCase(Locale.ENGLISH);
             if (t.equals("b") || t.equals("black"))
             {
                 toMove = GoColor.BLACK;

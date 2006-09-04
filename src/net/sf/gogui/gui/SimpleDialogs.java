@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.Locale;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -334,7 +335,8 @@ class SgfPreview
             if (file != null)
             {
                 String name = file.getAbsolutePath();
-                if (name == null || ! name.toLowerCase().endsWith(".sgf"))
+                if (name == null
+                    || ! name.toLowerCase(Locale.ENGLISH).endsWith(".sgf"))
                     file = null;
             }
             if (file != null)

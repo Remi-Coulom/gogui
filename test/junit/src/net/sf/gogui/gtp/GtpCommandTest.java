@@ -34,7 +34,6 @@ public class GtpCommandTest
         assertEquals(cmd.getArg(0), "w");
         assertTrue(cmd.getColorArg(0) == GoColor.WHITE);
         assertEquals(cmd.getArg(1), "C1");
-        assertEquals(cmd.getArgToLower(1), "c1");
         assertTrue(cmd.getPointArg(1, 19) == GoPoint.get(2, 0));
     }
 

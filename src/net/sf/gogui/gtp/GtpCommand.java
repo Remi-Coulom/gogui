@@ -6,6 +6,7 @@
 package net.sf.gogui.gtp;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.StringUtils;
@@ -91,11 +92,6 @@ public class GtpCommand
         return m_line.substring(pos).trim();
     }
 
-    public String getArgToLower(int i) throws GtpError
-    {
-        return getArg(i).toLowerCase();
-    }
-
     public GoColor getColorArg() throws GtpError
     {
         checkNuArg(1);
@@ -104,7 +100,7 @@ public class GtpCommand
 
     public GoColor getColorArg(int i) throws GtpError
     {
-        String arg = getArgToLower(i);
+        String arg = getArg(i).toLowerCase(Locale.ENGLISH);
         if (arg.equals("b") || arg.equals("black"))
             return GoColor.BLACK;
         if (arg.equals("w") || arg.equals("white"))
@@ -203,7 +199,7 @@ public class GtpCommand
 
     public boolean isQuit()
     {
-        return m_line.trim().toLowerCase().equals("quit");
+        return m_line.trim().toLowerCase(Locale.ENGLISH).equals("quit");
     }
 
     public void setResponse(String response)
