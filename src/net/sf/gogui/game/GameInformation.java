@@ -43,6 +43,12 @@ public class GameInformation
 
     public TimeSettings m_timeSettings;
 
+    /** Compare komi with a resultion of 0.5 points. */
+    public boolean komiEquals(double komi)
+    {
+        return Math.abs(m_komi - komi) < 0.25;
+    }
+
     /** Try to parse rules.
         @return Board.RULES_JAPANESE if rules string (to lowercase) is
         "japanese", Board.RULES_CHINESE if "chinese", Board.RULES_UNKNOWN

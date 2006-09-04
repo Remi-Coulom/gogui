@@ -86,7 +86,7 @@ public final class GameInfoDialog
         }
         double komi =
             Double.parseDouble(getTextFieldContent(gameInfoDialog.m_komi));
-        if (komi != gameInformation.m_komi)
+        if (! gameInformation.komiEquals(komi))
         {
             gameInformation.m_komi = komi;
             changed = true;

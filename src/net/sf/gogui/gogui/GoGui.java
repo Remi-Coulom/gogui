@@ -1713,7 +1713,7 @@ public class GoGui
         GameInformation gameInformation = m_gameTree.getGameInformation();
         if (! GameInfoDialog.show(this, gameInformation))
             return;
-        if (gameInformation.m_komi != m_prefs.getDouble("komi", 6.5))
+        if (! gameInformation.komiEquals(m_prefs.getDouble("komi", 6.5)))
         {
             m_prefs.putDouble("komi", gameInformation.m_komi);
             setKomi(gameInformation.m_komi);
