@@ -19,7 +19,7 @@ import net.sf.gogui.utils.StringUtils;
 */
 public final class MainWrapper
 {
-    public static void main(String [] args)
+    public static void main(String [] args) throws Exception
     {
         // GoGui is not localized, avoid a mix between English and local
         // language in Swing dialogs
@@ -50,23 +50,15 @@ public final class MainWrapper
             System.err.println(e.getMessage());
             return;
         }
-        try
-        {
-            Class [] mainArgs = new Class[1];
-            mainArgs[0] = Class.forName("net.sf.gogui.gogui.GoGuiSettings");
-            Class mainClass = Class.forName("net.sf.gogui.gogui.Main");
-            Method mainMethod = mainClass.getMethod("main", mainArgs);
-            assert((mainMethod.getModifiers() & Modifier.STATIC) != 0);
-            assert(mainMethod.getReturnType() == void.class); 
-            Object[] objArgs = new Object[1];
-            objArgs[0] = settings;
-            mainMethod.invoke(null, objArgs);
-        }
-        catch (Exception e)
-        {
-            System.err.println(StringUtils.printException(e));
-            System.exit(-1);
-        }
+        Class [] mainArgs = new Class[1];
+        mainArgs[0] = Class.forName("net.sf.gogui.gogui.GoGuiSettings");
+        Class mainClass = Class.forName("net.sf.gogui.gogui.Main");
+        Method mainMethod = mainClass.getMethod("main", mainArgs);
+        assert((mainMethod.getModifiers() & Modifier.STATIC) != 0);
+        assert(mainMethod.getReturnType() == void.class); 
+        Object[] objArgs = new Object[1];
+        objArgs[0] = settings;
+        mainMethod.invoke(null, objArgs);
     }
 
     /** Make constructor unavailable; class is for namespace only. */
