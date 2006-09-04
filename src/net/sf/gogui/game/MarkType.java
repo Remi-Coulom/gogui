@@ -52,15 +52,17 @@ public final class MarkType
         return m_string;
     }
 
-    private static ArrayList s_types = new ArrayList(7);
+    private static ArrayList s_types;
 
     /** Index if mark types are stored in a map. */
     private final int m_index;
     
     private final String m_string;
-    
+
     private MarkType(String string)
     {
+        if (s_types == null)
+            s_types = new ArrayList(7);
         m_string = string;
         m_index = s_types.size();
         s_types.add(this);
