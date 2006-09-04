@@ -387,17 +387,17 @@ class SgfPreview
 
     private File m_file;
 
-    private JButton m_preview;
+    private final JButton m_preview;
 
-    private JCheckBox m_auto;
+    private final JCheckBox m_auto;
 
-    private JLabel m_description;
+    private final JLabel m_description;
     
     private Image m_image;
 
-    private ImagePanel m_imagePanel;
+    private final ImagePanel m_imagePanel;
 
-    private Thumbnail m_thumbnail = new Thumbnail(false);
+    private final Thumbnail m_thumbnail = new Thumbnail(false);
 
     public void preview()
     {
@@ -405,22 +405,19 @@ class SgfPreview
             return;
         m_thumbnail.create(m_file);
         File thumbnail = m_thumbnail.getLastThumbnail();
-        if (thumbnail != null)
-        {
-            ImageIcon icon = new ImageIcon(thumbnail.toString());
-            m_image = icon.getImage();
-        }
-        else
+        if (thumbnail == null)
         {
             SimpleDialogs.showError(this, "Preview generation failed:\n" +
                                     m_thumbnail.getLastError());
             m_image = null;
         }
-        String description = m_thumbnail.getLastDescription();
-        if (! description.equals(""))
-            m_description.setText(description);
         else
-            m_description.setText("");
+        {
+            ImageIcon icon = new ImageIcon(thumbnail.toString());
+            m_image = icon.getImage();
+        }
+        String description = m_thumbnail.getLastDescription();
+        m_description.setText(description);
         m_imagePanel.repaint();
         m_preview.setEnabled(false);
     }

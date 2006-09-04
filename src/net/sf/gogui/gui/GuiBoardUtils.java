@@ -315,13 +315,13 @@ public final class GuiBoardUtils
             guiBoard.markLastMove(point);
         else
             guiBoard.markLastMove(null);
-        if (point != null)
-            guiBoard.setCursor(point);
-        else
+        if (point == null)
         {
             int size = guiBoard.getBoardSize();
             guiBoard.setCursor(GoPoint.get(size / 2, size / 2));
         }
+        else
+            guiBoard.setCursor(point);
     }
 
     /** Make constructor unavailable; class is for namespace only. */

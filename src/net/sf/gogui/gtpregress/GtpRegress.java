@@ -38,8 +38,9 @@ public class GtpRegress
         m_program = program;
         m_longOutput = longOutput;
         m_verbose = verbose;
-        m_prefix = "";
-        if (! output.equals(""))
+        if (output.equals(""))
+            m_prefix = "";
+        else
         {
             File file = new File(output);
             if (! file.exists())
@@ -160,11 +161,11 @@ public class GtpRegress
 
     private boolean m_lastError;
 
-    private boolean m_longOutput;
+    private final boolean m_longOutput;
 
     private boolean m_result;
 
-    private boolean m_verbose;
+    private final boolean m_verbose;
 
     private int m_lastCommandId;
 
@@ -210,9 +211,9 @@ public class GtpRegress
 
     private String m_outPrefix;
 
-    private String m_prefix;
+    private final String m_prefix;
 
-    private String m_program;
+    private final String m_program;
 
     private String m_relativePath;
 

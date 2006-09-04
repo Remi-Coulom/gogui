@@ -52,10 +52,10 @@ public class Plot
         m_metrics = m_graphics2D.getFontMetrics();
         m_fontHeight = m_metrics.getHeight();
         m_left = 4 * m_fontHeight;
-        if (m_title != null)
-            m_top = (int)(m_fontHeight * 1.7);
-        else
+        if (m_title == null)
             m_top = (int)(m_fontHeight * 0.5);
+        else
+            m_top = (int)(m_fontHeight * 1.7);
         m_right = m_imgWidth - (int)(m_fontHeight * 0.5);
         m_bottom = m_imgHeight - (int)(m_fontHeight * 1.5);
         m_width = m_right - m_left;
@@ -618,9 +618,8 @@ public class Plot
                 m_maxY = max + 0.05 * (max - m_minY);
         }
         // Try to inlude 0 in plot
-        if (m_autoYMin)
-            if (m_minY > 0 && m_minY < 0.3 * m_maxY)
-                m_minY = 0;
+        if (m_autoYMin && m_minY > 0 && m_minY < 0.3 * m_maxY)
+            m_minY = 0;
         // Avoid empty ranges
         if (m_minY == m_maxY)
         {

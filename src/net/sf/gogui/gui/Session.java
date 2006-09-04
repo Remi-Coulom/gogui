@@ -144,7 +144,7 @@ public final class Session
         prefs.putBoolean("show", isVisible);
     }
 
-    private String m_path;
+    private final String m_path;
 
     private Preferences createNode(String name, int boardSize)
     {

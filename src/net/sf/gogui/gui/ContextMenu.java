@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -141,6 +140,8 @@ public class ContextMenu
             add(createItem("Analyze Clear", "analyze-clear"));
             addSeparator();
         }
+        else
+            m_analyzeMenu = null;
         JMenuItem item = new JMenuItem("Cancel");
         item.addActionListener(m_actionListener);
         item.setActionCommand("cancel");
@@ -174,7 +175,7 @@ public class ContextMenu
 
     private final JCheckBoxMenuItem m_markTriangle;
 
-    private JMenu m_analyzeMenu;
+    private final JMenu m_analyzeMenu;
 
     private final Listener m_listener;
 

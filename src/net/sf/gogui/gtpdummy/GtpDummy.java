@@ -295,8 +295,9 @@ public class GtpDummy
                              "It does not start with a status character.\n");
     }
 
-    private void cmdLiveGfx(GtpCommand cmd)
+    private void cmdLiveGfx(GtpCommand cmd) throws GtpError
     {
+        cmd.checkArgNone();
         System.err.println("gogui-gfx: TEXT Live Graphics Demo");
         System.err.println("gogui-gfx: LABEL A4 test");
         sleep(1000);

@@ -97,15 +97,15 @@ public final class GtpClient
     {
         m_log = log;
         m_callback = callback;
-        m_program = program;
-        if (m_program.indexOf("%SRAND") >= 0)
+        if (program.indexOf("%SRAND") >= 0)
         {
             // RAND_MAX in stdlib.h ist at least 32767
             int randMax = 32767;
             int rand = (int)(Math.random() * (randMax + 1));
-            m_program =
-                m_program.replaceAll("%SRAND", Integer.toString(rand));
+            program =
+                program.replaceAll("%SRAND", Integer.toString(rand));
         }
+        m_program = program;
         Runtime runtime = Runtime.getRuntime();
         try
         {
@@ -796,13 +796,13 @@ public final class GtpClient
 
     private boolean m_isProgramDead;
 
-    private boolean m_log;
+    private final boolean m_log;
 
     private int m_protocolVersion = 2;
 
     private int m_commandNumber;
 
-    private IOCallback m_callback;
+    private final IOCallback m_callback;
 
     private PrintWriter m_out;
 
@@ -816,7 +816,7 @@ public final class GtpClient
 
     private String m_pid;
 
-    private String m_program;
+    private final String m_program;
 
     private String[] m_supportedCommands;
 

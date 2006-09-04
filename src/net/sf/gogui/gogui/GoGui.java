@@ -114,7 +114,9 @@ public class GoGui
         m_fastPaint = fastPaint;
         m_boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
-        if (file != null)
+        if (file == null)
+            m_file = null;
+        else
             m_file = new File(file);
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
@@ -247,10 +249,10 @@ public class GoGui
         m_guiBoard.setShowCursor(showCursor);
         m_guiBoard.setShowGrid(showGrid);
         setJMenuBar(m_menuBar.getMenuBar());
-        if (program != null)
-            m_program = program;
-        else
+        if (program == null)
             m_program = m_prefs.get("program", null);
+        else
+            m_program = program;
         if (m_program != null && m_program.trim().equals(""))
             m_program = null;
         if (m_program == null)
@@ -592,11 +594,8 @@ public class GoGui
     {        
         if (m_commandThread == null)
             return false;
-        if (isCommandInProgress())
-        {
-            if (! showQuestion("Kill program?"))
-                return false;
-        }
+        if (isCommandInProgress() && ! showQuestion("Kill program?"))
+            return false;
         detachProgram();
         m_prefs.put("program", "");
         return true;
@@ -1011,7 +1010,7 @@ public class GoGui
 
     private boolean m_analyzeOneRunOnly;
 
-    private boolean m_auto;
+    private final boolean m_auto;
 
     private boolean m_beepAfterMove;
 
@@ -1019,7 +1018,7 @@ public class GoGui
 
     private boolean m_computerWhite;
 
-    private boolean m_fastPaint;
+    private final boolean m_fastPaint;
 
     private boolean m_ignoreInvalidResponses;
 
@@ -1047,39 +1046,39 @@ public class GoGui
 
     private boolean m_showVariations;
 
-    private boolean m_verbose;
+    private final boolean m_verbose;
 
     private int m_boardSize;
 
     private int m_handicap;
 
-    private int m_move;
+    private final int m_move;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for use with serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private Board m_board;
+    private final Board m_board;
 
-    private GuiBoard m_guiBoard;
+    private final GuiBoard m_guiBoard;
 
-    private Clock m_clock;
+    private final Clock m_clock;
 
     private CommandThread m_commandThread;
 
-    private Comment m_comment;
+    private final Comment m_comment;
 
     /** Last loaded or saved file.
         If file was modified, the value is null.
     */
     private File m_loadedFile;
 
-    private GameInfo m_gameInfo;    
+    private final GameInfo m_gameInfo;    
 
     private GtpShell m_gtpShell;
 
-    private GtpSynchronizer m_gtpSynchronizer;
+    private final GtpSynchronizer m_gtpSynchronizer;
 
     private GameTree m_gameTree;
 
@@ -1087,13 +1086,13 @@ public class GoGui
 
     private Help m_help;
 
-    private JPanel m_infoPanel;
+    private final JPanel m_infoPanel;
 
-    private JPanel m_innerPanel;
+    private final JPanel m_innerPanel;
 
-    private JSplitPane m_splitPane;
+    private final JSplitPane m_splitPane;
 
-    private GoGuiMenuBar m_menuBar;
+    private final GoGuiMenuBar m_menuBar;
 
     private Node m_currentNode;
 
@@ -1109,17 +1108,17 @@ public class GoGui
 
     private AnalyzeCommand m_analyzeCommand;
 
-    private File m_file;
+    private final File m_file;
 
-    private Session m_session = new Session("");
+    private final Session m_session = new Session("");
 
-    private StatusBar m_statusBar;
+    private final StatusBar m_statusBar;
 
-    private String m_gtpCommand;
+    private final String m_gtpCommand;
 
-    private String m_gtpFile;
+    private final String m_gtpFile;
 
-    private String m_initAnalyze;
+    private final String m_initAnalyze;
 
     private String m_lastAnalyzeCommand;
 
@@ -1133,17 +1132,18 @@ public class GoGui
 
     private AnalyzeDialog m_analyzeDialog;    
 
-    private Preferences m_prefs = Preferences.userNodeForPackage(getClass());
+    private final Preferences m_prefs =
+        Preferences.userNodeForPackage(getClass());
 
     private ScoreDialog m_scoreDialog;
 
     private String m_programAnalyzeCommands;
 
-    private Thumbnail m_thumbnail = new Thumbnail(false);
+    private final Thumbnail m_thumbnail = new Thumbnail(false);
 
     private TimeSettings m_timeSettings;
 
-    private GoGuiToolBar m_toolBar;
+    private final GoGuiToolBar m_toolBar;
 
     private ArrayList m_bookmarks;
 
@@ -1968,7 +1968,9 @@ public class GoGui
 
     private void cbSave()
     {
-        if (m_loadedFile != null)
+        if (m_loadedFile == null)
+            saveDialog();
+        else
         {
             if (m_loadedFile.exists())
             {
@@ -1980,8 +1982,6 @@ public class GoGui
             }
             save(m_loadedFile);
         }
-        else
-            saveDialog();
     }
 
     private void cbSaveAs()
@@ -2233,10 +2233,10 @@ public class GoGui
         switch (result)
         {
         case 0:
-            if (m_loadedFile != null)
-                return save(m_loadedFile);
-            else
+            if (m_loadedFile == null)
                 return saveDialog();
+            else
+                return save(m_loadedFile);
         case 1:
             setNeedsSave(false);
             return true;
@@ -2272,8 +2272,7 @@ public class GoGui
 
     private void close()
     {
-        if (isCommandInProgress())
-            if (! showQuestion("Kill program?"))
+        if (isCommandInProgress() && ! showQuestion("Kill program?"))
                 return;
         if (m_setupMode)
             setupDone();
@@ -2881,9 +2880,8 @@ public class GoGui
             initGame(gameInformation.m_boardSize);
             m_menuBar.addRecent(file);
             m_gameTree = reader.getGameTree();
-            if (executeRoot())
-                if (move > 0)
-                    forward(move);            
+            if (executeRoot() && move > 0)
+                forward(move);            
             m_loadedFile = file;
             setTitle();
             String warnings = reader.getWarnings();
@@ -3379,13 +3377,13 @@ public class GoGui
         TextViewer textViewer = new TextViewer(this, title, response,
                                                highlight, listener,
                                                m_fastPaint);
-        if (pointArg != null)
+        if (pointArg == null)
+            textViewer.setLocationRelativeTo(this);
+        else
         {
             Point location = m_guiBoard.getLocationOnScreen(pointArg);
             textViewer.setLocation(location);
         }
-        else
-            textViewer.setLocationRelativeTo(this);
         textViewer.setVisible(true);
     }
 

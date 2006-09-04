@@ -496,7 +496,7 @@ public final class NodeUtils
 
     public static String nodeInfo(Node node)
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer(128);
         buffer.append("NodeProperties:\n");
         appendInfo(buffer, "Depth", getDepth(node));
         appendInfo(buffer, "Children", node.getNumberChildren());

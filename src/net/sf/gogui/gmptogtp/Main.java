@@ -82,12 +82,9 @@ public final class Main
                 return;
             }
             String color = opt.getString("color", "");
-            if (! color.equals(""))
-            {
-                if (! color.equalsIgnoreCase("black")
-                    && ! color.equalsIgnoreCase("white"))
-                    throw new Exception("invalid color");
-            }
+            if (! color.equals("") && ! color.equalsIgnoreCase("black")
+                && ! color.equalsIgnoreCase("white"))
+                throw new Exception("invalid color");
             String device = opt.getString("device", "");
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE);
             if (size < 1 || size > 22)

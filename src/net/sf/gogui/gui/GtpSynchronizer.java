@@ -81,16 +81,16 @@ public class GtpSynchronizer
             return;
         m_isOutOfSync = true;
         int size = board.getSize();
-        if (size != m_engineBoardSize)
-        {
-            init(board);
-            m_isOutOfSync = false;
-        }
-        else
+        if (size == m_engineBoardSize)
         {
             int numberUndo = computeDifference(m_movesToExecute, board);
             undo(numberUndo);
             execute(m_movesToExecute);
+            m_isOutOfSync = false;
+        }
+        else
+        {
+            init(board);
             m_isOutOfSync = false;
         }
     }
@@ -109,17 +109,17 @@ public class GtpSynchronizer
 
     private int m_engineBoardSize;
 
-    private Callback m_callback;
+    private final Callback m_callback;
 
     private CommandThread m_commandThread;
 
     /** Move successfully executed at engine. */
-    private ArrayList m_engineMoves;
+    private final ArrayList m_engineMoves;
 
     /** Local variable in some functions.
         This variable is a member for reusing between function calls.
     */
-    private ArrayList m_movesToExecute;
+    private final ArrayList m_movesToExecute;
 
     /** Compute number of moves to undo and moves to execute.
         @return Number of moves to undo.

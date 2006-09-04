@@ -29,10 +29,10 @@ public class GuiBoardDrawer
         m_fastPaint = fastPaint;
         ClassLoader classLoader = getClass().getClassLoader();
         URL url = classLoader.getResource("net/sf/gogui/images/wood.png");
-        if (url != null)
-            m_image = new ImageIcon(url).getImage();
-        else
+        if (url == null)
             m_image = null;
+        else
+            m_image = new ImageIcon(url).getImage();
     }
 
     /** Draw a board into graphics object.

@@ -557,9 +557,9 @@ public class GtpShell
 
     private boolean m_isFinalSizeSet;
 
-    private int m_historyMax;
+    private final int m_historyMax;
 
-    private int m_historyMin;
+    private final int m_historyMin;
 
     private int m_linesTruncated;
 
@@ -570,7 +570,7 @@ public class GtpShell
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private Callback m_callback;
+    private final Callback m_callback;
 
     private ComboBoxEditor m_editor;
 
@@ -582,9 +582,9 @@ public class GtpShell
 
     private JComboBox m_comboBox;
 
-    private JScrollPane m_scrollPane;
+    private final JScrollPane m_scrollPane;
 
-    private GtpShellText m_gtpShellText;
+    private final GtpShellText m_gtpShellText;
 
     private OptionalMessage m_modifyWarning;
 
@@ -646,7 +646,7 @@ public class GtpShell
     {
         assert(SwingUtilities.isEventDispatchThread());
         m_commands.append(command);
-        m_commands.append("\n");
+        m_commands.append('\n');
         ++m_numberCommands;
         if (m_numberCommands > m_historyMax)
         {

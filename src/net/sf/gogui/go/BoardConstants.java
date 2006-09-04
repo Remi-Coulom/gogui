@@ -52,12 +52,11 @@ public final class BoardConstants
             result.add(GoPoint.get(line1, line3));
         if (n >= 4)
             result.add(GoPoint.get(line3, line1));
-        if (n >= 5)
-            if (n % 2 != 0)
-            {
-                result.add(GoPoint.get(line2, line2));
-                --n;
-            }
+        if (n >= 5 && n % 2 != 0)
+        {
+            result.add(GoPoint.get(line2, line2));
+            --n;
+        }
         if (n >= 5)
             result.add(GoPoint.get(line1, line2));
         if (n >= 6)

@@ -189,7 +189,7 @@ public final class SgfReader
 
     private boolean m_ignoreTimeSettings;
 
-    private boolean m_isFile;
+    private final boolean m_isFile;
 
     private boolean m_sizeFixed;
 
@@ -211,14 +211,14 @@ public final class SgfReader
 
     private GameTree m_gameTree;
 
-    private ProgressShow m_progressShow;
+    private final ProgressShow m_progressShow;
 
     /** Contains strings with warnings. */
     private final TreeSet m_warnings = new TreeSet();
 
     private StreamTokenizer m_tokenizer;
 
-    private String m_name;
+    private final String m_name;
 
     private String m_newCharset;
 

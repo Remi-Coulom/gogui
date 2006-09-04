@@ -111,9 +111,9 @@ public class GtpStatistics
 
     private boolean m_result;
 
-    private int m_max;
+    private final int m_max;
 
-    private int m_min;
+    private final int m_min;
 
     private int m_numberGames;
 
@@ -121,13 +121,13 @@ public class GtpStatistics
 
     private double m_lastCpuTime = 0;
 
-    private GtpClient m_gtp;
+    private final GtpClient m_gtp;
 
     private final NumberFormat m_format1 = StringUtils.getNumberFormat(1);
 
     private final NumberFormat m_format2 = StringUtils.getNumberFormat(2);
 
-    private Table m_table;
+    private final Table m_table;
 
     private ArrayList m_commands;
 

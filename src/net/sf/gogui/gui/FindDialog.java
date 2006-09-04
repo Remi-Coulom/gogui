@@ -142,11 +142,9 @@ public class FindDialog
                 public void keyPressed(KeyEvent e)
                 {
                     int c = e.getKeyCode();        
-                    if (c == KeyEvent.VK_ESCAPE)
-                    {
-                        if (! m_comboBox.isPopupVisible())
-                            dispose();
-                    }
+                    if (c == KeyEvent.VK_ESCAPE
+                        && ! m_comboBox.isPopupVisible())
+                        dispose();
                 }
             };
         m_textField.addKeyListener(keyListener);
