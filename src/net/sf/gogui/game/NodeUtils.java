@@ -114,10 +114,13 @@ public final class NodeUtils
     public static ArrayList getAllAsMoves(ArrayList nodes)
     {
         ArrayList moves = new ArrayList();
+        ArrayList nodeMoves = new ArrayList();
         for (int i = 0; i < nodes.size(); ++i)
         {
             Node node = (Node)nodes.get(i);
-            moves.addAll(getAllAsMoves(node));
+            nodeMoves.clear();
+            getAllAsMoves(node, nodeMoves);
+            moves.addAll(nodeMoves);
             assert(i == 0 || node.isChildOf((Node)nodes.get(i - 1)));
         }
         return moves;
@@ -137,10 +140,12 @@ public final class NodeUtils
         However, if the node contains setup stones of both colors and has a
         player set, the order of black and white setup stones is switched, if
         that avoids the pass move at the end.
+        @param node the node
+        @param moves the resulting moves
     */
-    public static ArrayList getAllAsMoves(Node node)
+    public static void getAllAsMoves(Node node, ArrayList moves)
     {
-        ArrayList moves = new ArrayList();
+        moves.clear();
         Move move = node.getMove();
         if (node.hasSetup())
         {
@@ -178,7 +183,6 @@ public final class NodeUtils
                 && otherColor != GoColor.EMPTY)
                 moves.add(Move.getPass(otherColor));
         }
-        return moves;
     }
 
     /** Find the last node that was still in the main variation. */
@@ -301,16 +305,15 @@ public final class NodeUtils
         return nodesLeft;
     }
 
-    /** Get nodes in path from root to a given node. */
-    public static ArrayList getPathFromRoot(Node node)
+    /** Get nodes in path a given node to the root node. */
+    public static void getPathToRoot(Node node, ArrayList result)
     {
-        ArrayList result = new ArrayList();
+        result.clear();
         while (node != null)
         {
-            result.add(0, node);
+            result.add(node);
             node = node.getFather();
         }
-        return result;
     }
 
     /** Return previous variation of this node. */
@@ -340,33 +343,6 @@ public final class NodeUtils
         while (hasSubtree(node))
             node = node.getChild(node.getNumberChildren() - 1);
         return node;
-    }
-
-    /** Get shortest path between start and target node.
-        The shortest path goes backward from the start node (inclusive) until
-        the last common moves of both variations (exclusive) and then forward
-        to the target node (inclusive).
-        @param start Start node
-        @param target Target node
-        @param nodes Nodes to execute after undoing the number of nodes
-        returned
-        @return Number if moves to undo
-    */
-    public static int getShortestPath(Node start, Node target,
-                                      ArrayList nodes)
-    {
-        ArrayList rootToStart = getPathFromRoot(start);
-        ArrayList rootToTarget = getPathFromRoot(target);
-        while (rootToStart.size() > 0 && rootToTarget.size() > 0
-               && rootToStart.get(0) == rootToTarget.get(0))
-        {
-            rootToStart.remove(0);
-            rootToTarget.remove(0);
-        }
-        nodes.clear();
-        for (int i = 0; i < rootToTarget.size(); ++i)
-            nodes.add(rootToTarget.get(i));
-        return rootToStart.size();
     }
 
     /** Get a text representation of the variation to a certain node.

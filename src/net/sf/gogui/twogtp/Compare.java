@@ -125,9 +125,11 @@ public final class Compare
     public static ArrayList getAllAsMoves(Node node)
     {
         ArrayList moves = new ArrayList(128);
+        ArrayList nodeMoves = new ArrayList(128);
         while (node != null)
         {
-            moves.addAll(NodeUtils.getAllAsMoves(node));
+            NodeUtils.getAllAsMoves(node, nodeMoves);
+            moves.addAll(nodeMoves);
             node = node.getChild();
         }
         moves = MoveUtils.fillPasses(moves, GoColor.BLACK);

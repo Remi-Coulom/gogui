@@ -40,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
@@ -1061,6 +1062,8 @@ public class GoGui
 
     private final Board m_board;
 
+    private final BoardUpdater m_boardUpdater = new BoardUpdater();
+
     private final GuiBoard m_guiBoard;
 
     private final Clock m_clock;
@@ -1359,15 +1362,9 @@ public class GoGui
     {
         if (n == 0)
             return true;
-        int total = 0;
-        Node node = m_currentNode;
-        for (int i = 0; i < n && node != m_gameTree.getRoot(); ++i)
-        {
-            total += NodeUtils.getAllAsMoves(node).size();
-            node = node.getFather();
-        }
-        m_board.undo(total);
-        m_currentNode = node;
+        for (int i = 0; i < n && m_currentNode != m_gameTree.getRoot(); ++i)
+            m_currentNode = m_currentNode.getFather();
+        updateGoBoardToNode();
         try
         {
             m_gtpSynchronizer.synchronize(m_board);
@@ -2467,7 +2464,7 @@ public class GoGui
         m_currentNode.setLabel(point, value);
         m_guiBoard.setLabel(point, value);
         setNeedsSave(true);
-        updateBoard();
+        updateGuiBoard();
     }
 
     private boolean endLengthyCommand()
@@ -2497,12 +2494,7 @@ public class GoGui
 
     private void executeCurrentNode() throws GtpError
     {
-        ArrayList moves = NodeUtils.getAllAsMoves(m_currentNode);
-        for (int i = 0; i < moves.size(); ++i)
-            m_board.play((Move)moves.get(i));
-        GoColor toMove = m_currentNode.getToMove();
-        if (toMove != GoColor.EMPTY)
-            m_board.setToMove(toMove);
+        updateGoBoardToNode();
         m_gtpSynchronizer.synchronize(m_board);
     }
 
@@ -2602,23 +2594,15 @@ public class GoGui
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        ArrayList nodes = new ArrayList();
-        int numberUndo
-            = NodeUtils.getShortestPath(m_currentNode, node, nodes);
-        if (backward(numberUndo))
+        m_currentNode = node;
+        updateGoBoardToNode();
+        try
         {
-            ArrayList moves = NodeUtils.getAllAsMoves(nodes);
-            for (int i = 0; i < moves.size(); ++i)
-                m_board.play((Move)moves.get(i));
-            m_currentNode = node;
-            try
-            {
-                m_gtpSynchronizer.synchronize(m_board);
-            }
-            catch (GtpError e)
-            {
-                showError(e);
-            }
+            m_gtpSynchronizer.synchronize(m_board);
+        }
+        catch (GtpError e)
+        {
+            showError(e);
         }
     }
 
@@ -2915,7 +2899,7 @@ public class GoGui
         else if (type == MarkType.TRIANGLE)
             m_guiBoard.setMarkTriangle(point, mark);        
         setNeedsSave(true);
-        updateBoard();
+        updateGuiBoard();
     }
 
     private void newGame(int size)
@@ -2983,7 +2967,7 @@ public class GoGui
         clearStatus();
         m_guiBoard.clearAll();
         updateFromGoBoard();
-        updateBoard();
+        updateGuiBoard();
     }
     
     private void restoreMainWindow()
@@ -3484,17 +3468,6 @@ public class GoGui
             });
     }
 
-    private void updateBoard()
-    {
-        if (m_showVariations)
-        {
-            ArrayList childrenMoves
-                = NodeUtils.getChildrenMoves(m_currentNode);
-            GuiBoardUtils.showChildrenMoves(m_guiBoard, childrenMoves);
-        }
-        GuiBoardUtils.showMarkup(m_guiBoard, m_currentNode);
-    }
-
     private void updateFromGoBoard()
     {
         GuiBoardUtils.updateFromGoBoard(m_guiBoard, m_board, m_showLastMove);
@@ -3507,7 +3480,7 @@ public class GoGui
         m_gameInfo.update(m_currentNode, m_board);
         updateGameTree(gameTreeChanged);
         m_comment.setNode(m_currentNode);
-        updateBoard();
+        updateGuiBoard();
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSelectedColor(m_board.getToMove());
     }
@@ -3522,6 +3495,22 @@ public class GoGui
             return;
         }
         m_gameTreeViewer.update(m_gameTree, m_currentNode);
+    }
+
+    private void updateGoBoardToNode()
+    {
+        m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
+    }
+
+    private void updateGuiBoard()
+    {
+        if (m_showVariations)
+        {
+            ArrayList childrenMoves
+                = NodeUtils.getChildrenMoves(m_currentNode);
+            GuiBoardUtils.showChildrenMoves(m_guiBoard, childrenMoves);
+        }
+        GuiBoardUtils.showMarkup(m_guiBoard, m_currentNode);
     }
 
     private void updateMenuBar()

@@ -450,7 +450,8 @@ public class GtpStatistics
      */
     private GoColor sendSetup(Node node) throws GtpError
     {
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assert(moves.size() > 0);
         GoColor toMove = null;
         for (int i = 0; i < moves.size(); ++i)

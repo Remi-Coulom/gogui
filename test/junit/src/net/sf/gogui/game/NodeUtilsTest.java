@@ -51,7 +51,8 @@ public class NodeUtilsTest
     {
         Move move = Move.get(1, 1, GoColor.BLACK);
         Node node = new Node(move);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(move, moves.get(0));
     }
@@ -61,7 +62,8 @@ public class NodeUtilsTest
         Move move = Move.get(1, 1, GoColor.BLACK);
         Node node = new Node(move);
         node.setPlayer(GoColor.BLACK);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(move, moves.get(0));
         assertSame(Move.getPass(GoColor.WHITE), moves.get(1));
@@ -72,7 +74,8 @@ public class NodeUtilsTest
         Move move = Move.get(1, 1, GoColor.WHITE);
         Node node = new Node(move);
         node.setPlayer(GoColor.WHITE);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(move, moves.get(0));
         assertSame(Move.getPass(GoColor.BLACK), moves.get(1));
@@ -83,7 +86,8 @@ public class NodeUtilsTest
         Node node = new Node();
         GoPoint point = GoPoint.get(1, 1);
         node.addBlack(point);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(point, GoColor.BLACK), moves.get(0));
     }
@@ -94,7 +98,8 @@ public class NodeUtilsTest
         GoPoint point = GoPoint.get(1, 1);
         node.addBlack(point);
         node.setPlayer(GoColor.WHITE);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(point, GoColor.BLACK), moves.get(0));
     }
@@ -107,7 +112,8 @@ public class NodeUtilsTest
         GoPoint point2 = GoPoint.get(2, 2);
         node.addBlack(point1);
         node.addBlack(point2);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
         assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
         assertSame(Move.get(point2, GoColor.BLACK), moves.get(1));
@@ -121,7 +127,8 @@ public class NodeUtilsTest
         GoPoint point2 = GoPoint.get(2, 2);
         node.addBlack(point1);
         node.addWhite(point2);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
         assertSame(Move.get(point2, GoColor.WHITE), moves.get(1));
@@ -135,7 +142,8 @@ public class NodeUtilsTest
         GoPoint point2 = GoPoint.get(2, 2);
         node.addBlack(point1);
         node.addWhite(point2);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
         assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
         assertSame(Move.get(point2, GoColor.WHITE), moves.get(1));
@@ -150,7 +158,8 @@ public class NodeUtilsTest
         node.addBlack(point1);
         node.addWhite(point2);
         node.setPlayer(GoColor.WHITE);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(point2, GoColor.WHITE), moves.get(0));
         assertSame(Move.get(point1, GoColor.BLACK), moves.get(1));
@@ -162,7 +171,8 @@ public class NodeUtilsTest
         GoPoint point = GoPoint.get(1, 1);
         node.addWhite(point);
         node.setPlayer(GoColor.WHITE);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(point, GoColor.WHITE), moves.get(0));
         assertSame(Move.getPass(GoColor.BLACK), moves.get(1));
@@ -173,7 +183,8 @@ public class NodeUtilsTest
         Node node = new Node();
         GoPoint point = GoPoint.get(1, 1);
         node.addWhite(point);
-        ArrayList moves = NodeUtils.getAllAsMoves(node);
+        ArrayList moves = new ArrayList();
+        NodeUtils.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(point, GoColor.WHITE), moves.get(0));
     }

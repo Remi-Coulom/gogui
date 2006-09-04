@@ -234,9 +234,11 @@ public final class Thumbnail
             m_description = "";
         Board board = new Board(size);
         net.sf.gogui.game.Node node = tree.getRoot();
+        ArrayList nodeMoves = new ArrayList();
         while (node != null)
         {
-            moves.addAll(NodeUtils.getAllAsMoves(node));
+            NodeUtils.getAllAsMoves(node, nodeMoves);
+            moves.addAll(nodeMoves);
             if (node.getNumberAddBlack() > 0 && node.getNumberAddWhite() > 0)
                 break;
             node = node.getChild();

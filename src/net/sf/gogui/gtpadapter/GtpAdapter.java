@@ -480,7 +480,8 @@ public class GtpAdapter
                     if (maxMove >= 0 && moveNumber >= maxMove)
                         break;
                 }
-                ArrayList moves = NodeUtils.getAllAsMoves(node);
+                ArrayList moves = new ArrayList();
+                NodeUtils.getAllAsMoves(node, moves);
                 for (int i = 0; i < moves.size(); ++i)
                 {
                     Move move = (Move)moves.get(i);
