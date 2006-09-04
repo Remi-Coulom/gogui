@@ -1943,8 +1943,6 @@ public class GoGui
     {
         if (m_commandThread == null || isCommandInProgress())
             return;
-        if (! checkCurrentNodeExecuted())
-            return;
         if (! isSingleMove && ! isComputerBoth())
         {
             if (m_board.getToMove() == GoColor.BLACK)
@@ -2195,27 +2193,6 @@ public class GoGui
             else if (computerToMove())
                 generateMove(false);
         }
-    }
-
-    private boolean checkCurrentNodeExecuted()
-    {
-        if (m_commandThread == null)
-            return true;
-        if (m_gtpSynchronizer.isOutOfSync())
-        {
-            Object[] options = { "Detach Program", "Cancel" };
-            Object message =
-                "Could not synchronize current\n" +
-                "position with Go program";
-            int n = JOptionPane.showOptionDialog(this, message, "Error",
-                                                 JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.ERROR_MESSAGE,
-                                                 null, options, options[1]);
-            if (n == 0)
-                cbDetachProgram();
-            return false;
-        }
-        return true;
     }
 
     /** Ask for saving file if it was modified.
@@ -2568,8 +2545,6 @@ public class GoGui
     private void forward(int n)
     {
         assert(n >= 0);
-        if (! checkCurrentNodeExecuted())
-            return;
         Node node = m_currentNode;
         for (int i = 0; i < n; ++i)
         {
@@ -2957,8 +2932,6 @@ public class GoGui
     /** @return true, if new node was created. */
     private boolean play(Move move) throws GtpError
     {
-        if (! checkCurrentNodeExecuted())
-            return false;
         boolean result = false;
         Node node = NodeUtils.getChildWithMove(m_currentNode, move);
         if (node == null)
