@@ -15,6 +15,7 @@
 <rule ref="rulesets/design.xml">
 <exclude name="AvoidReassigningParameters"/>
 <exclude name="PositionLiteralsFirstInComparisons"/>
+<exclude name="PreserveStackTrace"/>
 <exclude name="UncommentedEmptyConstructor"/>
 <exclude name="UncommentedEmptyMethod"/>
 </rule>
