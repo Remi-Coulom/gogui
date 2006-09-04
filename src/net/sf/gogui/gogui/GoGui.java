@@ -1358,23 +1358,13 @@ public class GoGui
     }    
 
     /** Go backward a number of nodes in the tree. */
-    private boolean backward(int n)
+    private void backward(int n)
     {
         if (n == 0)
-            return true;
+            return;
         for (int i = 0; i < n && m_currentNode != m_gameTree.getRoot(); ++i)
             m_currentNode = m_currentNode.getFather();
-        updateGoBoardToNode();
-        try
-        {
-            m_gtpSynchronizer.synchronize(m_board);
-        }
-        catch (GtpError e)
-        {
-            showError(e);
-            return false;
-        }
-        return true;
+        currentNodeChanged();
     }
 
     private void beginLengthyCommand()
@@ -2409,6 +2399,31 @@ public class GoGui
             m_thumbnail.create(file);
     }
 
+    private void currentNodeChanged()
+    {
+        m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
+        if (m_gtpSynchronizer.isOutOfSync())
+        {
+            Object[] options = { "Detach Program", "Cancel" };
+            Object message = "Could not synchronize Go program with position";
+            int n = JOptionPane.showOptionDialog(this, message, "Error",
+                                                 JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.ERROR_MESSAGE,
+                                                 null, options, options[1]);
+            if (n == 0)
+                cbDetachProgram();
+            return;
+        }
+        try
+        {
+            m_gtpSynchronizer.synchronize(m_board);
+        }
+        catch (GtpError e)
+        {
+            showError(e);
+        }
+    }
+
     private void detachProgram()
     {
         if (isCommandInProgress())
@@ -2492,12 +2507,6 @@ public class GoGui
         return true;
     }
 
-    private void executeCurrentNode() throws GtpError
-    {
-        updateGoBoardToNode();
-        m_gtpSynchronizer.synchronize(m_board);
-    }
-
     private boolean executeRoot()
     {
         m_currentNode = m_gameTree.getRoot();
@@ -2514,16 +2523,8 @@ public class GoGui
         setKomi(gameInformation.m_komi);
         setRules();
         setTimeSettings();
-        try
-        {
-            executeCurrentNode();
-        }
-        catch (GtpError error)
-        {
-            showError(error);
-            return false;
-        }
-        return true;
+        currentNodeChanged();
+        return ! m_gtpSynchronizer.isOutOfSync();
     }
 
     private void fileInvalid()
@@ -2595,15 +2596,7 @@ public class GoGui
         if (m_scoreMode)
             return;
         m_currentNode = node;
-        updateGoBoardToNode();
-        try
-        {
-            m_gtpSynchronizer.synchronize(m_board);
-        }
-        catch (GtpError e)
-        {
-            showError(e);
-        }
+        currentNodeChanged();
     }
 
     private void humanMoved(Move move)
@@ -2630,18 +2623,13 @@ public class GoGui
             node = createNode(move);
         }
         m_currentNode = node;
-        try
+        boolean wasOutOfSync = m_gtpSynchronizer.isOutOfSync();
+        currentNodeChanged();
+        if (m_gtpSynchronizer.isOutOfSync() && ! wasOutOfSync
+            && newNodeCreated)
         {
-            executeCurrentNode();
-        }
-        catch (GtpError e)
-        {
-            showError(e);
-            if (newNodeCreated)
-            {
-                m_currentNode = node.getFather();
-                m_currentNode.removeChild(node);
-            }
+            m_currentNode = node.getFather();
+            m_currentNode.removeChild(node);
             m_board.undo();
             boardChangedBegin(false, false);
             return;
@@ -3495,11 +3483,6 @@ public class GoGui
             return;
         }
         m_gameTreeViewer.update(m_gameTree, m_currentNode);
-    }
-
-    private void updateGoBoardToNode()
-    {
-        m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
     }
 
     private void updateGuiBoard()
