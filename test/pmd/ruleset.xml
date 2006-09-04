@@ -10,7 +10,6 @@
 <rule ref="rulesets/controversial.xml/DontImportSun"/>
 <rule ref="rulesets/controversial.xml/SingularField"/>
 <rule ref="rulesets/controversial.xml/SuspiciousOctalEscape"/>
-<rule ref="rulesets/controversial.xml/UnnecessaryConstructor"/>
 <rule ref="rulesets/controversial.xml/UnnecessaryParentheses"/>
 <rule ref="rulesets/controversial.xml/UnusedModifier"/>
 
