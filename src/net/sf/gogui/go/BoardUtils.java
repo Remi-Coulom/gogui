@@ -64,10 +64,7 @@ public final class BoardUtils
         Rotates and/or mirrors a point on a given board according to a given
         rotation mode.
         <table border="1">
-        <thead align="center">
         <tr><th>Mode</th><th>x</th><th>y</th></tr>
-        </thead>
-        <tbody align="center">
         <tr><td>0</td><td>x</td><td>y</td></tr>
         <tr><td>1</td><td>size - x - 1</td><td>y</td></tr>
         <tr><td>2</td><td>x</td><td>size - y - 1</td></tr>
@@ -76,7 +73,6 @@ public final class BoardUtils
         <tr><td>5</td><td>y</td><td>size - x - 1</td></tr>
         <tr><td>6</td><td>size - x - 1</td><td>size - y - 1</td></tr>
         <tr><td>7</td><td>size - y - 1</td><td>size - x - 1</td></tr>
-        </tbody>
         </table>
         @param rotationMode The rotation mode in [0..NUMBER_ROTATIONS]
         @param point The point to be rotated

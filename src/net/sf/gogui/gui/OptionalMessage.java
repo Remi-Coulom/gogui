@@ -92,6 +92,8 @@ public class OptionalMessage
         @param message The message text
         @param type The message type (JOptionPane.QUESTION_MESSAGE,
         JOptionPane.WARNING_MESSAGE or JOptionPane.INFORMATION_MESSAGE)
+        @param isYesNoCancel true, if buttons should be "yes", "no", "cancel";
+        false if buttons should be "ok", "cancel"
         @return true, if message was not shown or confirmed
     */
     private void show(String message, int type, boolean isYesNoCancel)
