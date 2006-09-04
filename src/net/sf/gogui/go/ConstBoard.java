@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
-/** Const functions of go.Board */
+/** Const functions of go.Board. */
 public interface ConstBoard
 {
     boolean bothPassed();

@@ -13,10 +13,15 @@ import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
 
-/** GTP command. */
+/** GTP command.
+    Handles parsing the command line and storing the response to the command.
+    Arguments containing whitespaces can be quoted with double quotes (").
+*/
 public class GtpCommand
 {
-    /** Construct command from command line. */
+    /** Construct command from command line.
+        @param line The full command line including ID.
+    */
     public GtpCommand(String line)
     {
         StringBuffer buffer = preprocessLine(line);
@@ -51,11 +56,17 @@ public class GtpCommand
             m_arg[i] = array[commandIndex + i + 1];
     }
 
+    /** Check that command has no arguments.
+        @throws GtpError If command has any arguments.
+    */
     public void checkArgNone() throws GtpError
     {
         checkNuArg(0);
     }
 
+    /** Check that command has n arguments.
+        @throws GtpError If command has not n arguments.
+    */
     public void checkNuArg(int n) throws GtpError
     {
         if (getNuArg() != n)
@@ -68,17 +79,28 @@ public class GtpCommand
         }
     }
 
+    /** Check that command has not more than n arguments.
+        @throws GtpError If command has more than n arguments.
+    */
     public void checkNuArgLessEqual(int n) throws GtpError
     {
         if (getNuArg() > n)
             throw new GtpError("too many arguments");
     }
 
+    /** Check if command has an ID.
+        @return true, if command has an ID.
+    */
     public boolean hasId()
     {
         return m_hasId; 
     }
 
+    /** Get argument.
+        @param i The index of the argument (starting with zero).
+        @return The argument.
+        @throws GtpError If command has not enough arguments.
+    */
     public String getArg(int i) throws GtpError
     {
         if (i >= getNuArg())
@@ -86,18 +108,38 @@ public class GtpCommand
         return m_arg[i];
     }
 
+    /** Get argument line.
+        Get a string containing all arguments (the command line without
+        ID and command; leading and trailing whitespaces trimmed).
+        @return The argument line.
+    */
     public String getArgLine()
     {
         int pos = m_line.indexOf(m_command) + m_command.length();
         return m_line.substring(pos).trim();
     }
 
+    /** Get single color argument.
+        Valid color strings are "b", "w", "black", "white" and the
+        corresponding uppercase strings.
+        @return The color.
+        @throws GtpError If command has not exactly one argument or argument
+        is not a color.        
+    */
     public GoColor getColorArg() throws GtpError
     {
         checkNuArg(1);
         return getColorArg(0);
     }
 
+    /** Get color argument.
+        Valid color strings are "b", "w", "black", "white" and the
+        corresponding uppercase strings.
+        @param i The index of the argument (starting with zero).
+        @return The color.
+        @throws GtpError If command has not enough arguments or argument is
+        not a color.
+    */
     public GoColor getColorArg(int i) throws GtpError
     {
         String arg = getArg(i).toLowerCase(Locale.ENGLISH);
@@ -108,17 +150,32 @@ public class GtpCommand
         throw new GtpError("argument " + (i + 1) + " must be black or white");
     }
 
+    /** Get command.
+        @return The command string (command line without ID and arguments,
+        leading and trailing whitespaces trimmed).
+    */
     public String getCommand()
     {
         return m_command;
     }
 
+    /** Get single floating point number argument.
+        @return The color.
+        @throws GtpError If command has not exactly one argument or argument
+        is not a floating point number.
+    */
     public double getDoubleArg() throws GtpError
     {
         checkNuArg(1);
         return getDoubleArg(0);
     }
 
+    /** Get floating point number argument.
+        @param i The index of the argument (starting with zero).
+        @return The color.
+        @throws GtpError If command has not enough arguments or argument is
+        not a floating point number.
+    */
     public double getDoubleArg(int i) throws GtpError
     {
         String arg = getArg(i);
@@ -132,12 +189,23 @@ public class GtpCommand
         }
     }
 
+    /** Get single integer argument.
+        @return The color.
+        @throws GtpError If command has not exactly one argument or argument
+        is not an integer.
+    */
     public int getIntArg() throws GtpError
     {
         checkNuArg(1);
         return getIntArg(0);
     }
 
+    /** Get integer argument.
+        @param i The index of the argument (starting with zero).
+        @return The color.
+        @throws GtpError If command has not enough arguments or argument is
+        not an integer.
+    */
     public int getIntArg(int i) throws GtpError
     {
         String arg = getArg(i);
@@ -151,6 +219,14 @@ public class GtpCommand
         }
     }
 
+    /** Get integer argument in a range.
+        @param i The index of the argument (starting with zero).
+        @param min Minimum allowed value.
+        @param max Maximum allowed value.
+        @return The color.
+        @throws GtpError If command has not enough arguments or argument is
+        not an integer in the allowed range.
+    */
     public int getIntArg(int i, int min, int max) throws GtpError
     {
         int n = getIntArg(i);
@@ -163,11 +239,30 @@ public class GtpCommand
         return n;
     }
 
+    /** Get point argument.
+        Valid point strings are as in GtpUtils.parsePoint (uppercase or
+        lowercase coordinates, e.g. "A1", or "pass").
+        @param i The index of the argument (starting with zero).
+        @param boardSize The board size (points will be checked to be within
+        this board size).
+        @return The point.
+        @throws GtpError If command has not enough arguments or argument is
+        not a valid point.
+    */
     public GoPoint getPointArg(int i, int boardSize) throws GtpError
     {
         return GtpUtils.parsePoint(getArg(i), boardSize);
     }
 
+    /** Get point arguments.
+        Valid point strings are as in GtpUtils.parsePoint (uppercase or
+        lowercase coordinates, e.g. "A1", or "pass").
+        All arguments will be parsed as points.
+        @param boardSize The board size (points will be checked to be within
+        this board size).
+        @return ArrayList containg the points (GoPoint).
+        @throws GtpError If at least one argument is not a valid point.
+    */
     public ArrayList getPointListArg(int boardSize) throws GtpError
     {
         ArrayList pointList = new ArrayList();
@@ -176,32 +271,54 @@ public class GtpCommand
         return pointList;
     }
 
-    /** Full command line without ID. */
+    /** Full command line without ID.
+        @return The command line without ID.
+    */
     public String getLine()
     {
         return m_line;
     }
 
+    /** Get number of arguments.
+        @return The number of arguments.
+    */
     public int getNuArg()
     {
         return m_arg.length;
     }
 
+    /** Get string buffer for construction the response.
+        The response to the command can be constructed by appending to this
+        string buffer.
+    */
     public StringBuffer getResponse()
     {
         return m_response;
     }
 
+    /** Get command ID.
+        It is allowed to call this function if command has no ID, but the
+        returned value is undefined.
+        @return The command ID.
+    */
     public int getId()
     {
         return m_id;
     }
 
+    /** Check if command is quit command.
+        @return true, if command name (to lowercase) is "quit".
+    */
     public boolean isQuit()
     {
         return m_line.trim().toLowerCase(Locale.ENGLISH).equals("quit");
     }
 
+    /** Set the response.
+        Clears the string buffer containg the response and sets it to the
+        given string.
+        @param response The string containing the new response.
+    */
     public void setResponse(String response)
     {
         m_response.setLength(0);

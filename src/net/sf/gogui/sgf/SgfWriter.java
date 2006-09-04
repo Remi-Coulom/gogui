@@ -81,7 +81,9 @@ public class SgfWriter
         m_out.close();
     }
 
-    private final StringBuffer m_buffer = new StringBuffer(128);
+    private static final int STRINGBUF_CAPACITY = 128;
+
+    private final StringBuffer m_buffer = new StringBuffer(STRINGBUF_CAPACITY);
 
     private final int m_size;
 
@@ -146,7 +148,7 @@ public class SgfWriter
 
     private String getPointList(ArrayList v)
     {
-        StringBuffer buffer = new StringBuffer(128);
+        StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
         for (int i = 0; i < v.size(); ++i)
             buffer.append(getPointValue((GoPoint)v.get(i)));
         return buffer.toString();
@@ -161,7 +163,7 @@ public class SgfWriter
             printNewLine();
             return;
         }
-        int maxCharPerLine = 78;
+        final int maxCharPerLine = 78;
         if (m_buffer.length() + text.length() > maxCharPerLine)
             printNewLine();
         m_buffer.append(text);
@@ -231,7 +233,7 @@ public class SgfWriter
         Map labels = node.getLabels();
         if (labels == null)
             return;
-        StringBuffer buffer = new StringBuffer(128);
+        StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
         buffer.append("LB");
         Iterator i = labels.entrySet().iterator();
         while (i.hasNext())
@@ -278,7 +280,7 @@ public class SgfWriter
         }
         if (node.getNumberAddBlack() > 0)
         {
-            StringBuffer buffer = new StringBuffer(128);
+            StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
             buffer.append("AB");
             for (int i = 0; i < node.getNumberAddBlack(); ++i)
                 buffer.append(getPointValue(node.getAddBlack(i)));
@@ -286,7 +288,7 @@ public class SgfWriter
         }
         if (node.getNumberAddWhite() > 0)
         {
-            StringBuffer buffer = new StringBuffer(128);
+            StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
             buffer.append("AW");
             for (int i = 0; i < node.getNumberAddWhite(); ++i)
                 buffer.append(getPointValue(node.getAddWhite(i)));
@@ -294,7 +296,7 @@ public class SgfWriter
         }
         if (node.getNumberAddEmpty() > 0)
         {
-            StringBuffer buffer = new StringBuffer(128);
+            StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
             buffer.append("AE");
             for (int i = 0; i < node.getNumberAddEmpty(); ++i)
                 buffer.append(getPointValue(node.getAddEmpty(i)));

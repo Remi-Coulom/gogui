@@ -11,12 +11,11 @@ import java.util.prefs.BackingStoreException;
 
 //----------------------------------------------------------------------------
 
-/** Utils for using java.util.prefs */
-public class PrefUtils
+/** Utils for using java.util.prefs package. */
+public final class PrefUtils
 {
-    /** Get node for package and path, create if not already existing.
-        @param c A class in the package.
-        @param path The path name of the node relative to the package.
+    /** Get node path, create if not already existing.
+        @param path The absolute path name of the node.
         @return The node 
     */
     public static Preferences createNode(String path)
@@ -25,7 +24,12 @@ public class PrefUtils
         return Preferences.userRoot().node(path);
     }
 
-    /** Get a list of strings from preferences. */
+    /** Get a list of strings from preferences.
+        The list is stored as a size property end element_N properties with
+        N being the element index.
+        @param path The absolute path name of the node.
+        @return The list of strings.
+    */
     public static ArrayList getList(String path)
     {
         Preferences prefs = getNode(path);
@@ -68,7 +72,12 @@ public class PrefUtils
         return prefs.node(path);
     }
 
-    /** Put a list of strings to preferences. */
+    /** Put a list of strings to preferences.
+        The list is stored as a size property end element_N properties with
+        N being the element index.
+        @param path The absolute path name of the node.
+        @param list The list of strings.
+    */
     public static void putList(String path, ArrayList list)
     {
         Preferences prefs = createNode(path);

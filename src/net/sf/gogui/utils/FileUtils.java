@@ -17,12 +17,13 @@ import java.util.ArrayList;
 public final class FileUtils
 {
     /** Return the file extension of a file name.
+        @param file The file.
         @return File extension or null if file name has no extension.
     */
-    public static String getExtension(File f)
+    public static String getExtension(File file)
     {
         String ext = null;
-        String s = f.getName();
+        String s = file.getName();
         int i = s.lastIndexOf('.');       
         if (i > 0 &&  i < s.length() - 1)
             ext = s.substring(i + 1);

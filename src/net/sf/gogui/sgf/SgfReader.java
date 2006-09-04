@@ -114,7 +114,7 @@ public final class SgfReader
         change)
         @param progressShow Callback to show progress, can be null
         @param size Size of stream if progressShow != null
-        @throws SgfError If reading fails.
+        @throws SgfReader.SgfError If reading fails.
     */
     public SgfReader(InputStream in, String name, ProgressShow progressShow,
                      long size)

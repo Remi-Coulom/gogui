@@ -17,11 +17,11 @@ import net.sf.gogui.utils.FileUtils;
 public class TexFilter
     extends FileFilter
 {
-    public boolean accept(File f)
+    public boolean accept(File file)
     {
-        if (f.isDirectory())
+        if (file.isDirectory())
             return true;
-        return FileUtils.hasExtension(f, "tex");
+        return FileUtils.hasExtension(file, "tex");
     }
 
     public String getDescription()
