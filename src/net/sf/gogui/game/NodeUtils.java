@@ -536,9 +536,9 @@ public final class NodeUtils
             appendInfo(buffer, "MovesLeftWhite",
                        node.getMovesLeft(GoColor.WHITE));
         appendInfoComment(buffer, node);
-        for (int i = 0; i < MarkType.ALL.length; ++i)
+        for (int i = 0; i < MarkType.getNumberTypes(); ++i)
         {
-            MarkType type = MarkType.ALL[i];
+            MarkType type = MarkType.getType(i);
             ArrayList marked = node.getMarked(type);
             if (marked != null && marked.size() > 0)
                 appendInfo(buffer, "Marked " +

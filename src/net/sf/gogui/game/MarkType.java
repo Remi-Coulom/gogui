@@ -5,6 +5,8 @@
 
 package net.sf.gogui.game;
 
+import java.util.ArrayList;
+
 //----------------------------------------------------------------------------
 
 /** Markup types for points in nodes of a game tree. */
@@ -27,16 +29,6 @@ public final class MarkType
     public static final MarkType TERRITORY_WHITE =
         new MarkType("territory-w");
     
-    public static final MarkType[] ALL = {
-        MARK,
-        CIRCLE,
-        SQUARE,
-        TRIANGLE,
-        SELECT,
-        TERRITORY_BLACK,
-        TERRITORY_WHITE
-    };
-
     public int compareTo(Object object)
     {
         int index = ((MarkType)object).m_index;
@@ -45,12 +37,22 @@ public final class MarkType
         return m_index < index ? -1 : 1;
     }
 
+    public static int getNumberTypes()
+    {
+        return s_types.size();
+    }
+
+    public static MarkType getType(int i)
+    {
+        return (MarkType)s_types.get(i);
+    }
+
     public String toString()
     {
         return m_string;
     }
 
-    private static int s_numberTypes;
+    private static ArrayList s_types = new ArrayList(7);
 
     /** Index if mark types are stored in a map. */
     private final int m_index;
@@ -60,7 +62,8 @@ public final class MarkType
     private MarkType(String string)
     {
         m_string = string;
-        m_index = s_numberTypes++;
+        m_index = s_types.size();
+        s_types.add(this);
     }
 }
 
