@@ -31,7 +31,6 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import javax.swing.JDialog;
@@ -2621,17 +2620,7 @@ public class GoGui
 
     private int getRules()
     {
-        int result = Board.RULES_UNKNOWN;
-        String rules = m_gameTree.getGameInformation().m_rules;
-        if (rules != null)
-        {
-            rules = rules.trim().toLowerCase(Locale.ENGLISH);
-            if (rules.equals("japanese"))
-                result = Board.RULES_JAPANESE;
-            else if (rules.equals("chinese"))
-                result = Board.RULES_CHINESE;
-        }
-        return result;
+        return m_gameTree.getGameInformation().parseRules();
     }
 
     private void gotoNode(Node node)

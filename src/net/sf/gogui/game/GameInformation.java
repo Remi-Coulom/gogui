@@ -5,6 +5,8 @@
 
 package net.sf.gogui.game;
 
+import java.util.Locale;
+import net.sf.gogui.go.Board;
 import net.sf.gogui.utils.StringUtils;
 
 //----------------------------------------------------------------------------
@@ -40,6 +42,26 @@ public class GameInformation
     public String m_whiteRank;
 
     public TimeSettings m_timeSettings;
+
+    /** Try to parse rules.
+        @return Board.RULES_JAPANESE if rules string (to lowercase) is
+        "japanese", Board.RULES_CHINESE if "chinese", Board.RULES_UNKNOWN
+        otherwise.
+    */
+    public int parseRules()
+    {
+        int result = Board.RULES_UNKNOWN;
+        String rules = m_rules;
+        if (rules != null)
+        {
+            rules = rules.trim().toLowerCase(Locale.ENGLISH);
+            if (rules.equals("japanese"))
+                result = Board.RULES_JAPANESE;
+            else if (rules.equals("chinese"))
+                result = Board.RULES_CHINESE;
+        }
+        return result;
+    }
 
     /** Get komi as string rounded to 0.5 points. */
     public String roundKomi()
