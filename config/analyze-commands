@@ -54,6 +54,7 @@ pstring/AA Confirm Safety/aa_confirm_safety %c %p
 pstring/AA Confirm Safety MinSize/aa_confirm_safety %c %p %s
 plist/AccurateLib/accuratelib %c %p
 plist/Accurate ApproxLib/accurate_approxlib %c %p
+string/Advance Random Seed/advance_random_seed %s
 pstring/Analyze Semeai/analyze_semeai %P
 pstring/Analyze Semeai After Move/analyze_semeai_after_move %c %P
 pstring/Block Off/block_off %P
