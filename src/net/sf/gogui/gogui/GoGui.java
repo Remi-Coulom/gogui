@@ -2624,50 +2624,65 @@ public class GoGui
 
     private void humanMoved(Move move)
     {
+        GoPoint point = move.getPoint();
+        if (point != null && m_board.getColor(point) != GoColor.EMPTY)
+            return;
+        m_clock.stopMove();
+        if (point != null)
+        {
+            // Paint point immediately to pretend better responsiveness
+            // because updating game tree or response to GTP play command
+            // can be slow
+            m_guiBoard.setColor(point, move.getColor());
+            if (m_showLastMove)
+                m_guiBoard.markLastMove(point);
+            m_guiBoard.paintImmediately(point);
+        }
+        boolean newNodeCreated = false;
+        Node node = NodeUtils.getChildWithMove(m_currentNode, move);
+        if (node == null)
+        {
+            newNodeCreated = true;
+            node = createNode(move);
+        }
+        m_currentNode = node;
         try
         {
-            GoPoint point = move.getPoint();
-            if (point != null && m_board.getColor(point) != GoColor.EMPTY)
-                return;
-            m_clock.stopMove();
-            if (point != null)
-            {
-                // Paint point immediately to pretend better responsiveness
-                // because updating game tree or response to GTP play command
-                // can be slow
-                m_guiBoard.setColor(point, move.getColor());
-                if (m_showLastMove)
-                    m_guiBoard.markLastMove(point);
-                m_guiBoard.paintImmediately(point);
-            }
-            boolean newNodeCreated = play(move);
-            if (newNodeCreated)
-                m_clock.startMove(m_board.getToMove());
-            setNeedsSave(newNodeCreated);
-            GoColor color = move.getColor();
-            if (NodeUtils.getMoveNumber(m_currentNode) > 0
-                && m_clock.lostOnTime(color)
-                && ! m_lostOnTimeShown)
-            {
-                showInfo(color.toString() + " lost on time.");
-                m_lostOnTimeShown = true;
-            }
-            m_resigned = false;
-            boolean gameTreeChanged = newNodeCreated;
-            if (newNodeCreated
-                && m_currentNode.getFather().getNumberChildren() == 1)
-            {
-                if (m_gameTreeViewer != null)
-                    m_gameTreeViewer.addNewSingleChild(m_currentNode);
-                gameTreeChanged = false;
-            }
-            boardChangedBegin(true, gameTreeChanged);
+            executeCurrentNode();
         }
         catch (GtpError e)
         {
-            updateFromGoBoard();
             showError(e);
+            if (newNodeCreated)
+            {
+                m_currentNode = node.getFather();
+                m_currentNode.removeChild(node);
+            }
+            m_board.undo();
+            boardChangedBegin(false, false);
+            return;
         }
+        if (newNodeCreated)
+            m_clock.startMove(m_board.getToMove());
+        setNeedsSave(newNodeCreated);
+        GoColor color = move.getColor();
+        if (NodeUtils.getMoveNumber(m_currentNode) > 0
+            && m_clock.lostOnTime(color)
+            && ! m_lostOnTimeShown)
+        {
+            showInfo(color.toString() + " lost on time.");
+            m_lostOnTimeShown = true;
+        }
+        m_resigned = false;
+        boolean gameTreeChanged = newNodeCreated;
+        if (newNodeCreated
+            && m_currentNode.getFather().getNumberChildren() == 1)
+        {
+            if (m_gameTreeViewer != null)
+                m_gameTreeViewer.addNewSingleChild(m_currentNode);
+            gameTreeChanged = false;
+        }
+        boardChangedBegin(true, gameTreeChanged);
     }
 
     private void initGame(int size)
@@ -2927,21 +2942,6 @@ public class GoGui
         m_toolBar.update(m_currentNode);
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
-    }
-
-    /** @return true, if new node was created. */
-    private boolean play(Move move) throws GtpError
-    {
-        boolean result = false;
-        Node node = NodeUtils.getChildWithMove(m_currentNode, move);
-        if (node == null)
-        {
-            result = true;
-            node = createNode(move);
-        }
-        m_currentNode = node;
-        executeCurrentNode();
-        return result;
     }
 
     private void registerSpecialMacHandler()
