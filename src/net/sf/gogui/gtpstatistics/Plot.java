@@ -146,7 +146,7 @@ public class Plot
     }
 
     /** Set minimum x value.
-        @param max The minimum.
+        @param min The minimum.
     */
     public void setXMin(double min)
     {

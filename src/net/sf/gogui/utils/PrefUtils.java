@@ -51,8 +51,7 @@ public final class PrefUtils
     }
 
     /** Get node for package and path, return null if not already existing.
-        @param c A class in the package.
-        @param path The path name of the node relative to the package.
+        @param path The absolute path name of the node.
         @return The node or null, if node does not exist or failure in the
         backing store.
     */

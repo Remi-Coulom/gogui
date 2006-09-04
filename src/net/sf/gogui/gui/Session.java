@@ -22,8 +22,8 @@ import net.sf.gogui.utils.PrefUtils;
 public final class Session
 {
     /** Constructor.
-        @param c A class in the package for determining the path for saving
-        the preferences.
+        @param path Absolute path for saving the preferences using
+        java.util.prefs.
     */
     public Session(String path)
     {
