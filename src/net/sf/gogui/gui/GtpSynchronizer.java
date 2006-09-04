@@ -73,6 +73,7 @@ public class GtpSynchronizer
         for (int i = 0; i < moveNumber; ++i)
             m_movesToExecute.add(board.getMove(i));
         execute(m_movesToExecute);
+        m_isOutOfSync = false;
     }
 
     public void synchronize(ConstBoard board) throws GtpError
