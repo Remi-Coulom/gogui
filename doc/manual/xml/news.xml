@@ -17,6 +17,12 @@ anymore
 </listitem>
 <listitem>
 <simpara>
+Don't show error anymore for programs that don't support undo, automatically
+synchronize position from start instead
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Automatically clear board before drawing live graphics commands
 </simpara>
 </listitem>

@@ -73,7 +73,6 @@ public class GtpSynchronizer
         for (int i = 0; i < moveNumber; ++i)
             m_movesToExecute.add(board.getMove(i));
         execute(m_movesToExecute);
-        m_isOutOfSync = false;
     }
 
     public void synchronize(ConstBoard board) throws GtpError
@@ -82,9 +81,12 @@ public class GtpSynchronizer
             return;
         m_isOutOfSync = true;
         int size = board.getSize();
-        if (size == m_engineBoardSize)
+        int numberUndo = computeDifference(m_movesToExecute, board);
+        boolean undoSupported = 
+            (m_commandThread.isCommandSupported("undo")
+             || m_commandThread.isCommandSupported("gg-undo"));
+        if (size == m_engineBoardSize && (undoSupported || numberUndo == 0))
         {
-            int numberUndo = computeDifference(m_movesToExecute, board);
             undo(numberUndo);
             execute(m_movesToExecute);
             m_isOutOfSync = false;
@@ -196,7 +198,8 @@ public class GtpSynchronizer
         if (n == 0)
             return;
         assert(n > 0);
-        if (n > 1 && m_commandThread.isCommandSupported("gg-undo"))
+        if (m_commandThread.isCommandSupported("gg-undo")
+            && (n > 1 || ! m_commandThread.isCommandSupported("undo")))
         {
             m_commandThread.send("gg-undo " + n);
             for (int i = 0; i < n; ++i)                
