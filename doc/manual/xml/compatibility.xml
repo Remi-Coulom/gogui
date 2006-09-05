@@ -131,6 +131,9 @@ The following other commands are used by GoGui:
 <para>
 If the Go program does not understand them, you will still be able to play
 games, but you cannot use all of the functionality of GoGui.
+If the <command>undo</command> is not supported, the position will be
+synchronized with the Go program after an undo by sending the complete
+game from the beginning.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
     
