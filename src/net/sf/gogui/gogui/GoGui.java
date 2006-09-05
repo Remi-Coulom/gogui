@@ -86,7 +86,6 @@ import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
-import net.sf.gogui.gui.TextViewer;
 import net.sf.gogui.gui.Utils;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
@@ -1201,7 +1200,9 @@ public class GoGui
                     statusContainsResponse = true;
                 }
                 else
-                    showAnalyzeTextOutput(type, pointArg, title, response);
+                    GoGuiUtils.showAnalyzeTextOutput(this, m_guiBoard, type,
+                                                     pointArg, title,
+                                                     response, m_fastPaint);
             }
             if (! statusContainsResponse && type != AnalyzeCommand.PARAM)
                 showStatus(title);
@@ -3330,37 +3331,6 @@ public class GoGui
         fileInvalid();
         updateGameInfo(true);
         boardChangedBegin(false, false);
-    }
-
-    private void showAnalyzeTextOutput(int type, GoPoint pointArg,
-                                       String title, String response)
-    {
-        boolean highlight = (type == AnalyzeCommand.HSTRING
-                             || type == AnalyzeCommand.HPSTRING);
-        TextViewer.Listener listener = null;
-        if (type == AnalyzeCommand.PSTRING || type == AnalyzeCommand.HPSTRING)
-        {
-            listener = new TextViewer.Listener()
-                {
-                    public void textSelected(String text)
-                    {
-                        GoPoint list[] =
-                            GtpUtils.parsePointString(text, m_boardSize);
-                        GuiBoardUtils.showPointList(m_guiBoard, list);
-                    }
-                };
-        }
-        TextViewer textViewer = new TextViewer(this, title, response,
-                                               highlight, listener,
-                                               m_fastPaint);
-        if (pointArg == null)
-            textViewer.setLocationRelativeTo(this);
-        else
-        {
-            Point location = m_guiBoard.getLocationOnScreen(pointArg);
-            textViewer.setLocation(location);
-        }
-        textViewer.setVisible(true);
     }
 
     private void showError(String message, Exception e)

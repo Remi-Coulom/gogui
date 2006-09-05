@@ -248,7 +248,7 @@ public final class GuiBoardUtils
         for (int i = 0; i < pointList.length; ++i)
         {
             GoPoint p = pointList[i];
-            if (p != null)
+            if (p != null && p.isOnBoard(guiBoard.getBoardSize()))
                 guiBoard.setMarkSquare(p, true);
         }
     }

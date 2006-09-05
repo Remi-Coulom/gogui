@@ -81,6 +81,12 @@ public final class GtpUtils
     }
 
     /** Find all points contained in string. */
+    public static GoPoint[] parsePointString(String text)
+    {
+        return parsePointString(text, GoPoint.MAXSIZE);
+    }
+
+    /** Find all points contained in string. */
     public static GoPoint[] parsePointString(String text, int boardSize)
     {
         String regex = "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1\\d|[1-9]))\\b";

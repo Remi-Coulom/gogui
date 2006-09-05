@@ -103,8 +103,7 @@ public final class Board
     */
     public boolean contains(GoPoint point)
     {
-        int size = getSize();
-        return (point.getX() < size && point.getY() < size);
+        return point.isOnBoard(getSize());
     }
 
     public ArrayList getAdjacentPoints(GoPoint point)

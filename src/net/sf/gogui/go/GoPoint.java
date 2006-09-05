@@ -86,11 +86,6 @@ public final class GoPoint
         return super.hashCode();
     }
 
-    public boolean isOnBoard(int boardSize)
-    {
-        return m_x < boardSize && m_y < boardSize;
-    }
-    
     /** Return point below.
         @return The point below this point (x, y - 1).
     */
@@ -112,6 +107,13 @@ public final class GoPoint
     public int getY()
     {
         return m_y;
+    }
+
+    public boolean isOnBoard(int size)
+    {
+        assert(size > 0);
+        assert(size <= MAXSIZE);
+        return (m_x < size && m_y < size);
     }
 
     /** Return point left.
