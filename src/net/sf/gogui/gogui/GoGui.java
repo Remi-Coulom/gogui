@@ -3083,7 +3083,7 @@ public class GoGui
         m_session.saveLocation(this, "main", m_boardSize);
         if (m_help != null)
             saveSize(m_help, "help");
-        saveSizeAndVisible(m_gameTreeViewer, "gametree");
+        saveSizeAndVisible(m_gameTreeViewer, "tree");
         if (m_commandThread != null)
         {
             saveSizeAndVisible(m_gtpShell, "shell");
