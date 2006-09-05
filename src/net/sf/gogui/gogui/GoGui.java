@@ -54,6 +54,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtils;
 import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.AnalyzeDialog;
@@ -72,7 +73,6 @@ import net.sf.gogui.gui.GameInfoDialog;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
-import net.sf.gogui.gui.GtpSynchronizer;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtils;
 import net.sf.gogui.gui.GuiUtils;
@@ -183,15 +183,6 @@ public class GoGui
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtils.setGoIcon(this);
-        GtpSynchronizer.Callback synchronizerCallback =
-            new GtpSynchronizer.Callback()
-            {
-                public void run(int moveNumber)
-                {
-                    m_gameInfo.fastUpdateMoveNumber("[" + moveNumber + "]");
-                }
-            };
-        m_gtpSynchronizer = new GtpSynchronizer(synchronizerCallback);
         RecentFileMenu.Callback recentCallback = new RecentFileMenu.Callback()
             {
                 public void fileSelected(String label, File file)
@@ -1090,8 +1081,6 @@ public class GoGui
 
     private GtpShell m_gtpShell;
 
-    private final GtpSynchronizer m_gtpSynchronizer;
-
     private GameTree m_gameTree;
 
     private GameTreeViewer m_gameTreeViewer;
@@ -1298,12 +1287,21 @@ public class GoGui
                 private LiveGfx m_liveGfx =
                     new LiveGfx(m_board, m_guiBoard, m_statusBar);
             };
+        GtpSynchronizer.Callback synchronizerCallback =
+            new GtpSynchronizer.Callback()
+            {
+                public void run(int moveNumber)
+                {
+                    m_gameInfo.fastUpdateMoveNumber("[" + moveNumber + "]");
+                }
+            };
         try
         {
             GtpClient gtp = new GtpClient(m_program, m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             gtp.setAutoNumber(m_menuBar.getAutoNumber());
-            m_commandThread = new CommandThread(gtp, this);
+            m_commandThread =
+                new CommandThread(gtp, this, synchronizerCallback);
             m_commandThread.start();
         }
         catch (GtpError e)
@@ -1313,7 +1311,6 @@ public class GoGui
             m_menuBar.setComputerEnabled(false);
             return false;
         }
-        m_gtpSynchronizer.setCommandThread(m_commandThread);
         m_menuBar.setComputerEnabled(true);
         m_toolBar.setComputerEnabled(true);
         m_name = null;
@@ -1393,7 +1390,7 @@ public class GoGui
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         if (m_commandThread != null
-            && ! m_gtpSynchronizer.isOutOfSync()
+            && ! isOutOfSync()
             && m_analyzeCommand != null
             && m_analyzeAutoRun
             && ! m_analyzeCommand.isPointArgMissing())
@@ -2158,7 +2155,7 @@ public class GoGui
 
     private void checkComputerMove()
     {
-        if (m_commandThread == null || m_gtpSynchronizer.isOutOfSync())
+        if (m_commandThread == null || isOutOfSync())
             return;
         int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
         boolean bothPassed = (moveNumber >= 2 && m_board.bothPassed());
@@ -2196,9 +2193,7 @@ public class GoGui
 
     private boolean checkProgramInSync()
     {
-        if (m_commandThread == null)
-            return true;
-        if (m_gtpSynchronizer.isOutOfSync())
+        if (isOutOfSync())
         {
             Object[] options = { "Detach Program", "Cancel" };
             Object message =
@@ -2329,7 +2324,7 @@ public class GoGui
                 m_board.play(move);
                 Node node = createNode(move);
                 m_currentNode = node;
-                m_gtpSynchronizer.updateAfterGenmove(m_board);
+                m_commandThread.updateAfterGenmove(m_board);
                 if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
                 m_resigned = false;
@@ -2436,14 +2431,17 @@ public class GoGui
     {
         m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
         updateFromGoBoard();
-        try
+        if (m_commandThread != null)
         {
-            m_gtpSynchronizer.synchronize(m_board);
-        }
-        catch (GtpError e)
-        {
-            showError(e);
-            checkProgramInSync();
+            try
+            {
+                m_commandThread.synchronize(m_board);
+            }
+            catch (GtpError e)
+            {
+                showError(e);
+                checkProgramInSync();
+            }
         }
     }
 
@@ -2471,7 +2469,6 @@ public class GoGui
                 m_commandThread.close();
             }
         }
-        m_gtpSynchronizer.setCommandThread(null);
         saveSession();
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
@@ -2533,21 +2530,24 @@ public class GoGui
     private boolean executeRoot()
     {
         m_currentNode = m_gameTree.getRoot();
-        try
+        if (m_commandThread != null)
         {
-            m_gtpSynchronizer.init(m_board);
-        }
-        catch (GtpError error)
-        {
-            showError(error);
-            return false;
+            try
+            {
+                m_commandThread.initSynchronize(m_board);
+            }
+            catch (GtpError error)
+            {
+                showError(error);
+                return false;
+            }
         }
         GameInformation gameInformation = m_gameTree.getGameInformation();
         setKomi(gameInformation.m_komi);
         setRules();
         setTimeSettings();
         currentNodeChanged();
-        return ! m_gtpSynchronizer.isOutOfSync();
+        return ! isOutOfSync();
     }
 
     private void fileInvalid()
@@ -2638,11 +2638,11 @@ public class GoGui
                 m_guiBoard.markLastMove(point);
             m_guiBoard.paintImmediately(point);
         }
-        if (! m_gtpSynchronizer.isOutOfSync())
+        if (! isOutOfSync())
         {
             try
             {
-                m_gtpSynchronizer.updateHumanMove(m_board, move);
+                m_commandThread.updateHumanMove(m_board, move);
             }
             catch (GtpError e)
             {
@@ -2847,6 +2847,11 @@ public class GoGui
         if (m_commandThread == null)
             return false;
         return m_commandThread.isCommandInProgress();
+    }
+
+    private boolean isOutOfSync()
+    {
+        return (m_commandThread != null && m_commandThread.isOutOfSync());
     }
 
     private boolean loadFile(File file, int move)

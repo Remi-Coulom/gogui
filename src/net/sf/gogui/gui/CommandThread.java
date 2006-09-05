@@ -9,10 +9,12 @@ import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpSynchronizer;
 
 //----------------------------------------------------------------------------
 
@@ -29,10 +31,12 @@ import net.sf.gogui.gtp.GtpError;
 public class CommandThread
     extends Thread
 {
-    public CommandThread(GtpClient gtp, Component owner)
+    public CommandThread(GtpClient gtp, Component owner,
+                         GtpSynchronizer.Callback callback)
     {
         m_gtp = gtp;
         m_owner = owner;
+        m_gtpSynchronizer = new GtpSynchronizer(gtp, callback);
     }
 
     public void close()
@@ -120,6 +124,13 @@ public class CommandThread
         m_gtp.sendInterrupt();
     }
 
+    public void initSynchronize(ConstBoard board) throws GtpError
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtpSynchronizer.init(board);
+    }
+
     public boolean isCommandInProgress()
     {
         return m_commandInProgress;
@@ -135,6 +146,11 @@ public class CommandThread
     public boolean isInterruptSupported()
     {
         return m_gtp.isInterruptSupported();
+    }
+
+    public boolean isOutOfSync()
+    {
+        return m_gtpSynchronizer.isOutOfSync();
     }
 
     public boolean isProgramDead()
@@ -242,6 +258,27 @@ public class CommandThread
         m_gtp.sendPlay(move, TIMEOUT, timeoutCallback);
     }
 
+    public void synchronize(ConstBoard board) throws GtpError
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtpSynchronizer.synchronize(board);
+    }
+
+    public void updateAfterGenmove(ConstBoard board)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtpSynchronizer.updateAfterGenmove(board);
+    }
+
+    public void updateHumanMove(ConstBoard board, Move move) throws GtpError
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtpSynchronizer.updateHumanMove(board, move);
+    }
+
     private class TimeoutCallback
         implements GtpClient.TimeoutCallback
     {
@@ -281,6 +318,8 @@ public class CommandThread
     private GtpClient m_gtp;
 
     private GtpError m_exception;    
+
+    private GtpSynchronizer m_gtpSynchronizer;
 
     private Component m_owner;
 
