@@ -96,6 +96,22 @@ public class GtpSynchronizer
         }
     }
 
+    /** Send human move to engine.
+        The move is not played on the board yet.
+    */
+    public void updateHumanMove(ConstBoard board, Move move) throws GtpError
+    {
+        if (m_commandThread == null)
+            return;
+        int n = board.getMoveNumber();
+        assert(m_engineMoves.size() == n);
+        assert(findNumberCommonMoves(board) == n);
+        execute(move);
+    }
+
+    /** Update internal state after genmove.
+        The computer move is already played on the board.
+    */
     public void updateAfterGenmove(ConstBoard board)
     {
         if (m_commandThread == null)
@@ -150,13 +166,17 @@ public class GtpSynchronizer
         {
             for (int i = 0; i < moves.size(); ++i)
             {
-                Move move = (Move)moves.get(i);
-                m_commandThread.sendPlay(move);
-                m_engineMoves.add((Move)moves.get(i));
+                execute((Move)moves.get(i));
                 if (m_callback != null)
                     m_callback.run(m_engineMoves.size());
             }
         }
+    }
+
+    private void execute(Move move) throws GtpError
+    {
+        m_commandThread.sendPlay(move);
+        m_engineMoves.add(move);
     }
 
     private int findNumberCommonMoves(ConstBoard board)

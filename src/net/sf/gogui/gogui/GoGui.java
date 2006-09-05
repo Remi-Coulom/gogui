@@ -1930,6 +1930,8 @@ public class GoGui
     {
         if (m_commandThread == null || isCommandInProgress())
             return;
+        if (! checkProgramInSync())
+            return;
         if (! isSingleMove && ! isComputerBoth())
         {
             if (m_board.getToMove() == GoColor.BLACK)
@@ -2182,6 +2184,27 @@ public class GoGui
         }
     }
 
+    private boolean checkProgramInSync()
+    {
+        if (m_commandThread == null)
+            return true;
+        if (m_gtpSynchronizer.isOutOfSync())
+        {
+            Object[] options = { "Detach Program", "Cancel" };
+            Object message =
+                "Could not synchronize current\n" +
+                "position with Go program";
+            int n = JOptionPane.showOptionDialog(this, message, "Error",
+                                                 JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.ERROR_MESSAGE,
+                                                 null, options, options[1]);
+            if (n == 0)
+                cbDetachProgram();
+            return false;
+        }
+        return true;
+    }
+
     /** Ask for saving file if it was modified.
         @return true If file was not modified, user chose not to save it
         or file was saved successfully
@@ -2402,18 +2425,9 @@ public class GoGui
     private void currentNodeChanged()
     {
         m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
-        if (m_gtpSynchronizer.isOutOfSync())
-        {
-            Object[] options = { "Detach Program", "Cancel" };
-            Object message = "Could not synchronize Go program with position";
-            int n = JOptionPane.showOptionDialog(this, message, "Error",
-                                                 JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.ERROR_MESSAGE,
-                                                 null, options, options[1]);
-            if (n == 0)
-                cbDetachProgram();
+        updateFromGoBoard();
+        if (! checkProgramInSync())
             return;
-        }
         try
         {
             m_gtpSynchronizer.synchronize(m_board);
@@ -2615,6 +2629,19 @@ public class GoGui
                 m_guiBoard.markLastMove(point);
             m_guiBoard.paintImmediately(point);
         }
+        if (! m_gtpSynchronizer.isOutOfSync())
+        {
+            try
+            {
+                m_gtpSynchronizer.updateHumanMove(m_board, move);
+            }
+            catch (GtpError e)
+            {
+                showError(e);
+                boardChangedBegin(false, false);
+                return;
+            }
+        }
         boolean newNodeCreated = false;
         Node node = NodeUtils.getChildWithMove(m_currentNode, move);
         if (node == null)
@@ -2623,17 +2650,7 @@ public class GoGui
             node = createNode(move);
         }
         m_currentNode = node;
-        boolean wasOutOfSync = m_gtpSynchronizer.isOutOfSync();
-        currentNodeChanged();
-        if (m_gtpSynchronizer.isOutOfSync() && ! wasOutOfSync
-            && newNodeCreated)
-        {
-            m_currentNode = node.getFather();
-            m_currentNode.removeChild(node);
-            m_board.undo();
-            boardChangedBegin(false, false);
-            return;
-        }
+        m_board.play(move);
         if (newNodeCreated)
             m_clock.startMove(m_board.getToMove());
         setNeedsSave(newNodeCreated);
