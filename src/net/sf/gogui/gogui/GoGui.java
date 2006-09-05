@@ -482,6 +482,8 @@ public class GoGui
     {        
         if (m_commandThread == null)
             return;
+        if (! checkProgramInSync())
+            return;
         if (m_menuBar.getShowAnalyze())
         {
             if (m_analyzeDialog == null)
@@ -672,6 +674,7 @@ public class GoGui
         if (node != null)
             cbGotoNode(node);
     }
+
     public void cbShowShell()
     {
         if (m_gtpShell == null)
@@ -856,6 +859,8 @@ public class GoGui
     {
         if (isCommandInProgress() || m_commandThread == null)
             return false;
+        if (! checkProgramInSync())
+            return false;
         if (m_setupMode)
         {
             showError("Cannot send command in setup mode");
@@ -887,6 +892,8 @@ public class GoGui
     {
         if (m_commandThread == null)
             return;
+        if (! checkProgramInSync())
+            return;
         m_analyzeCommand = command;
         m_analyzeAutoRun = autoRun;
         if (command.needsPointArg())
@@ -910,6 +917,8 @@ public class GoGui
                       "while command in progress");
             return;
         }
+        if (! checkProgramInSync())
+            return;
         if (m_setupMode)
         {
             showError("Cannot run analyze command\n" +
@@ -2426,8 +2435,6 @@ public class GoGui
     {
         m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
         updateFromGoBoard();
-        if (! checkProgramInSync())
-            return;
         try
         {
             m_gtpSynchronizer.synchronize(m_board);
