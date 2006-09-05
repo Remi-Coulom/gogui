@@ -2435,6 +2435,8 @@ public class GoGui
     {
         m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
         updateFromGoBoard();
+        if (m_gtpSynchronizer.isOutOfSync())
+            return;
         try
         {
             m_gtpSynchronizer.synchronize(m_board);
