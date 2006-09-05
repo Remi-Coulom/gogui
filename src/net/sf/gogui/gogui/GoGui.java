@@ -2444,6 +2444,7 @@ public class GoGui
         catch (GtpError e)
         {
             showError(e);
+            checkProgramInSync();
         }
     }
 
