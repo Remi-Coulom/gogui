@@ -47,6 +47,11 @@ public class SgfReaderTest
         checkFF4Example(reader);
     }
 
+    public void testInvalidMove() throws Exception
+    {
+        readSgfFile("invalidmove.sgf", true, false);
+    }
+
     /** Test FF4 example after writing and reading again.
         This is actually a test for SgfWriter.
     */
