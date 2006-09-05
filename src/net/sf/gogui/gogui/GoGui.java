@@ -1532,7 +1532,8 @@ public class GoGui
                 showError("Bookmark has invalid move number");
                 return;
             }
-            cbGotoNode(node);
+            gotoNode(node);
+            boardChangedBegin(false, true);
         }
         catch (NumberFormatException e)
         {
