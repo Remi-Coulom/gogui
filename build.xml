@@ -322,7 +322,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/gmptogtp/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
 "/>
 </jar>
@@ -398,7 +398,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/sgf/*.class
  net/sf/gogui/tex/*.class
  net/sf/gogui/thumbnail/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
 "/>
 <fileset dir="mac/src" includes="
@@ -422,7 +422,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpadapter/*.class
  net/sf/gogui/sgf/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
 "/>
 </jar>
@@ -447,14 +447,14 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/images/wood.png
  net/sf/gogui/sgf/SgfFilter.class
  net/sf/gogui/tex/TexFilter.class
- net/sf/gogui/utils/ErrorMessage.class
- net/sf/gogui/utils/MessageQueue.class
- net/sf/gogui/utils/Platform.class
- net/sf/gogui/utils/ProgressShow.class
- net/sf/gogui/utils/Options.class
- net/sf/gogui/utils/RadialGradient*.class
- net/sf/gogui/utils/SquareLayout.class
- net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/MessageQueue.class
+ net/sf/gogui/util/Platform.class
+ net/sf/gogui/util/ProgressShow.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/RadialGradient*.class
+ net/sf/gogui/util/SquareLayout.class
+ net/sf/gogui/util/StringUtil.class
  net/sf/gogui/version/Version.class
 "/>
 </jar>
@@ -474,7 +474,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpdummy/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
 "/>
 </jar>
@@ -494,7 +494,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/go/GoPoint*.class
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpregress/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
 "/>
 </jar>
@@ -510,11 +510,11 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/gtpserver/*.class
- net/sf/gogui/utils/ErrorMessage.class
- net/sf/gogui/utils/Options.class
- net/sf/gogui/utils/ProcessUtils*.class
- net/sf/gogui/utils/StreamCopy.class
- net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/ProcessUtil*.class
+ net/sf/gogui/util/StreamCopy.class
+ net/sf/gogui/util/StringUtil.class
  net/sf/gogui/version/Version.class
 "/>
 </jar>
@@ -535,7 +535,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/gui/*.class
  net/sf/gogui/gtpstatistics/*.class
  net/sf/gogui/sgf/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
 "/>
 </jar>
@@ -555,13 +555,13 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/gtp/*.class
  net/sf/gogui/gtpterminal/*.class
  net/sf/gogui/sgf/*.class
- net/sf/gogui/utils/ErrorMessage.class
- net/sf/gogui/utils/FileUtils.class
- net/sf/gogui/utils/MessageQueue.class
- net/sf/gogui/utils/Options.class
- net/sf/gogui/utils/ProcessUtils*.class
- net/sf/gogui/utils/ProgressShow*.class
- net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/FileUtil.class
+ net/sf/gogui/util/MessageQueue.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/ProcessUtil*.class
+ net/sf/gogui/util/ProgressShow*.class
+ net/sf/gogui/util/StringUtil.class
  net/sf/gogui/version/Version.class
 "/>
 </jar>
@@ -594,7 +594,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
   net/sf/gogui/tex.*,
   net/sf/gogui/thumbnail.*,
   net/sf/gogui/twogtp.*,
-  net/sf/gogui/utils.*,
+  net/sf/gogui/util.*,
   net/sf/gogui/version.*
 ">
 <tag name="bug" scope="all" description="Bugs:"/>
@@ -649,10 +649,10 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
 </manifest>
 <fileset dir="build" includes="
  net/sf/gogui/netgtp/*.class
- net/sf/gogui/utils/ErrorMessage.class
- net/sf/gogui/utils/Options.class
- net/sf/gogui/utils/StreamCopy.class
- net/sf/gogui/utils/StringUtils.class
+ net/sf/gogui/util/ErrorMessage.class
+ net/sf/gogui/util/Options.class
+ net/sf/gogui/util/StreamCopy.class
+ net/sf/gogui/util/StringUtil.class
  net/sf/gogui/version/Version.class
 "/>
 </jar>
@@ -738,7 +738,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/sgf/*.class
  net/sf/gogui/sgftotex/*.class
  net/sf/gogui/tex/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
 "/>
 </jar>
@@ -758,7 +758,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/gui/*.class
  net/sf/gogui/sgf/*.class
  net/sf/gogui/thumbnail/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
 "/>
 </jar>
@@ -796,7 +796,7 @@ by JEditorPane, slow speed and errors with old versions of Xalan)
  net/sf/gogui/gtp/*.class
  net/sf/gogui/sgf/*.class
  net/sf/gogui/twogtp/*.class
- net/sf/gogui/utils/*.class
+ net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class
 "/>
 </jar>
