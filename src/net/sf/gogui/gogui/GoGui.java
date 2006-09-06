@@ -63,7 +63,6 @@ import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.BookmarkDialog;
 import net.sf.gogui.gui.Comment;
-import net.sf.gogui.gui.CommandThread;
 import net.sf.gogui.gui.ContextMenu;
 import net.sf.gogui.gui.EditBookmarksDialog;
 import net.sf.gogui.gui.FindDialog;
@@ -74,6 +73,7 @@ import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtils;
+import net.sf.gogui.gui.GuiGtpClient;
 import net.sf.gogui.gui.GuiUtils;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.LiveGfx;
@@ -469,7 +469,7 @@ public class GoGui
     
     public void cbAnalyze()
     {        
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return;
         if (! checkProgramInSync())
             return;
@@ -481,9 +481,9 @@ public class GoGui
                 boolean sort = m_menuBar.getAnalyzeSort();
                 m_analyzeDialog =
                     new AnalyzeDialog(this, this, onlySupported, sort,
-                                      m_commandThread.getSupportedCommands(),
+                                      m_gtp.getSupportedCommands(),
                                       m_programAnalyzeCommands,
-                                      m_commandThread);
+                                      m_gtp);
                 m_analyzeDialog.addWindowListener(new WindowAdapter()
                     {
                         public void windowClosing(WindowEvent e)
@@ -532,7 +532,7 @@ public class GoGui
         String program = SelectProgram.select(this);
         if (program == null)
             return;
-        if (m_commandThread != null)
+        if (m_gtp != null)
             if (! cbDetachProgram())
                 return;
         if (! attachProgram(program))
@@ -556,8 +556,8 @@ public class GoGui
 
     public void cbAutoNumber(boolean enable)
     {
-        if (m_commandThread != null)
-            m_commandThread.setAutoNumber(enable);
+        if (m_gtp != null)
+            m_gtp.setAutoNumber(enable);
     }
 
     public void cbBackward(int n)
@@ -584,7 +584,7 @@ public class GoGui
 
     public boolean cbDetachProgram()
     {        
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return false;
         if (isCommandInProgress() && ! showQuestion("Kill program?"))
             return false;
@@ -846,7 +846,7 @@ public class GoGui
     public boolean sendGtpCommand(String command, boolean sync)
         throws GtpError
     {
-        if (isCommandInProgress() || m_commandThread == null)
+        if (isCommandInProgress() || m_gtp == null)
             return false;
         if (! checkProgramInSync())
             return false;
@@ -857,7 +857,7 @@ public class GoGui
         }
         if (sync)
         {
-            m_commandThread.send(command);
+            m_gtp.send(command);
             return true;
         }
         Runnable callback = new Runnable()
@@ -868,7 +868,7 @@ public class GoGui
                 }
             };
         beginLengthyCommand();
-        m_commandThread.send(command, callback);
+        m_gtp.send(command, callback);
         return true;
     }
 
@@ -879,7 +879,7 @@ public class GoGui
 
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun)
     {
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return;
         if (! checkProgramInSync())
             return;
@@ -1066,7 +1066,7 @@ public class GoGui
 
     private final Clock m_clock;
 
-    private CommandThread m_commandThread;
+    private GuiGtpClient m_gtp;
 
     private final Comment m_comment;
 
@@ -1148,7 +1148,7 @@ public class GoGui
 
     private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
     {
-        if (m_commandThread == null || m_analyzeCommand == null
+        if (m_gtp == null || m_analyzeCommand == null
             || m_analyzeCommand.isPointArgMissing())
             return;
         showStatus("Running " + m_analyzeCommand.getResultTitle() + "...");
@@ -1169,7 +1169,7 @@ public class GoGui
         try
         {
             boolean statusContainsResponse = false;
-            String response = m_commandThread.getResponse();
+            String response = m_gtp.getResponse();
             String statusText = AnalyzeShow.show(m_analyzeCommand, m_guiBoard,
                                                  m_board, response);
             if (statusText != null)
@@ -1190,7 +1190,7 @@ public class GoGui
             if (type == AnalyzeCommand.PARAM)
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
                                                title, response,
-                                               m_commandThread);
+                                               m_gtp);
             if (AnalyzeCommand.isTextType(type))
             {
                 if (response.indexOf("\n") < 0)
@@ -1300,9 +1300,8 @@ public class GoGui
             GtpClient gtp = new GtpClient(m_program, m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
             gtp.setAutoNumber(m_menuBar.getAutoNumber());
-            m_commandThread =
-                new CommandThread(gtp, this, synchronizerCallback);
-            m_commandThread.start();
+            m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback);
+            m_gtp.start();
         }
         catch (GtpError e)
         {
@@ -1317,7 +1316,7 @@ public class GoGui
         m_titleFromProgram = null;
         try
         {
-            m_name = m_commandThread.send("name").trim();
+            m_name = m_gtp.send("name").trim();
         }
         catch (GtpError e)
         {
@@ -1326,30 +1325,30 @@ public class GoGui
             m_name = "Unknown Program";
         try
         {
-            m_commandThread.queryProtocolVersion();
+            m_gtp.queryProtocolVersion();
         }
         catch (GtpError e)
         {
         }
         try
         {
-            m_version = m_commandThread.queryVersion();
+            m_version = m_gtp.queryVersion();
             m_gtpShell.setProgramVersion(m_version);
-            m_commandThread.querySupportedCommands();
-            m_commandThread.queryInterruptSupport();
+            m_gtp.querySupportedCommands();
+            m_gtp.queryInterruptSupport();
         }
         catch (GtpError e)
         {
         }        
         boolean cleanupSupported
-            = m_commandThread.isCommandSupported("kgs-genmove_cleanup")
-            || m_commandThread.isCommandSupported("genmove_cleanup");
+            = m_gtp.isCommandSupported("kgs-genmove_cleanup")
+            || m_gtp.isCommandSupported("genmove_cleanup");
         m_menuBar.enableCleanup(cleanupSupported);
         initProgramAnalyzeCommands();
         restoreSize(m_gtpShell, "shell");
         m_gtpShell.setProgramName(m_name);
         ArrayList supportedCommands =
-            m_commandThread.getSupportedCommands();
+            m_gtp.getSupportedCommands();
         m_gtpShell.setInitialCompletions(supportedCommands);
         if (! m_gtpFile.equals(""))
             sendGtpFile(new File(m_gtpFile));
@@ -1389,7 +1388,7 @@ public class GoGui
         m_toolBar.update(m_currentNode);
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
-        if (m_commandThread != null
+        if (m_gtp != null
             && ! isOutOfSync()
             && m_analyzeCommand != null
             && m_analyzeAutoRun
@@ -1408,11 +1407,11 @@ public class GoGui
     {
         String protocolVersion = null;
         String command = null;
-        if (m_commandThread != null)
+        if (m_gtp != null)
         {
             protocolVersion =
-                Integer.toString(m_commandThread.getProtocolVersion());
-            command = m_commandThread.getProgramCommand();
+                Integer.toString(m_gtp.getProtocolVersion());
+            command = m_gtp.getProgramCommand();
         }
         AboutDialog.show(this, m_name, m_version, protocolVersion, command);
     }
@@ -1446,10 +1445,10 @@ public class GoGui
 
     private void cbAutoNumber()
     {
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return;
         boolean enable = m_menuBar.getAutoNumber();
-        m_commandThread.setAutoNumber(enable);
+        m_gtp.setAutoNumber(enable);
         m_prefs.putBoolean("gtpshell-autonumber", enable);
     }
 
@@ -1858,10 +1857,10 @@ public class GoGui
 
     private void cbInterrupt()
     {
-        if (! isCommandInProgress() || m_commandThread == null
-            || m_commandThread.isProgramDead())
+        if (! isCommandInProgress() || m_gtp == null
+            || m_gtp.isProgramDead())
             return;
-        if (Interrupt.run(this, m_commandThread))
+        if (Interrupt.run(this, m_gtp))
             showStatus("Interrupting...");
     }
 
@@ -1935,7 +1934,7 @@ public class GoGui
 
     private void cbPlay(boolean isSingleMove)
     {
-        if (m_commandThread == null || isCommandInProgress())
+        if (m_gtp == null || isCommandInProgress())
             return;
         if (! checkProgramInSync())
             return;
@@ -1985,14 +1984,14 @@ public class GoGui
 
     private void cbScore()
     {
-        if (m_commandThread == null)
+        if (m_gtp == null)
         {
             showInfo("No program is attached.\n" +
                      "Please mark dead groups manually.");
             initScore(null);
             return;
         }
-        if (m_commandThread.isCommandSupported("final_status_list"))
+        if (m_gtp.isCommandSupported("final_status_list"))
         {
             Runnable callback = new Runnable()
                 {
@@ -2019,7 +2018,7 @@ public class GoGui
         GoPoint[] isDeadStone = null;
         if (success)
         {
-            String response = m_commandThread.getResponse();
+            String response = m_gtp.getResponse();
             try
             {
                 isDeadStone = GtpUtils.parsePointList(response, m_boardSize);
@@ -2155,7 +2154,7 @@ public class GoGui
 
     private void checkComputerMove()
     {
-        if (m_commandThread == null || isOutOfSync())
+        if (m_gtp == null || isOutOfSync())
             return;
         int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
         boolean bothPassed = (moveNumber >= 2 && m_board.bothPassed());
@@ -2271,7 +2270,7 @@ public class GoGui
         if (! checkSaveGame())
             return;
         saveSession();        
-        if (m_commandThread != null)
+        if (m_gtp != null)
         {
             m_analyzeCommand = null;
             detachProgram();
@@ -2303,7 +2302,7 @@ public class GoGui
         try
         {
             m_clock.stopMove();
-            String response = m_commandThread.getResponse();
+            String response = m_gtp.getResponse();
             GoColor toMove = m_board.getToMove();
             boolean gameTreeChanged = false;
             if (response.equalsIgnoreCase("resign"))
@@ -2324,7 +2323,7 @@ public class GoGui
                 m_board.play(move);
                 Node node = createNode(move);
                 m_currentNode = node;
-                m_commandThread.updateAfterGenmove(m_board);
+                m_gtp.updateAfterGenmove(m_board);
                 if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
                 m_resigned = false;
@@ -2403,9 +2402,9 @@ public class GoGui
                 }
             };
         ArrayList supportedCommands = null;
-        boolean noProgram = (m_commandThread == null);
+        boolean noProgram = (m_gtp == null);
         if (! noProgram)
-            supportedCommands = m_commandThread.getSupportedCommands();
+            supportedCommands = m_gtp.getSupportedCommands();
         return new ContextMenu(point, noProgram, supportedCommands,
                                m_programAnalyzeCommands,
                                m_guiBoard.getMark(point),
@@ -2431,11 +2430,11 @@ public class GoGui
     {
         m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
         updateFromGoBoard();
-        if (m_commandThread != null)
+        if (m_gtp != null)
         {
             try
             {
-                m_commandThread.synchronize(m_board);
+                m_gtp.synchronize(m_board);
             }
             catch (GtpError e)
             {
@@ -2449,30 +2448,30 @@ public class GoGui
     {
         if (isCommandInProgress())
         {
-            m_commandThread.destroyGtp();
-            m_commandThread.close();
+            m_gtp.destroyGtp();
+            m_gtp.close();
         }
         else
         {
-            if (m_commandThread != null && ! m_commandThread.isProgramDead())
+            if (m_gtp != null && ! m_gtp.isProgramDead())
             {
                 // Some programs do not handle closing the GTP stream
                 // correctly, so we send a quit before
                 try
                 {
-                    if (m_commandThread.isCommandSupported("quit"))
-                        m_commandThread.send("quit");
+                    if (m_gtp.isCommandSupported("quit"))
+                        m_gtp.send("quit");
                 }
                 catch (GtpError e)
                 {
                 }
-                m_commandThread.close();
+                m_gtp.close();
             }
         }
         saveSession();
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
-        m_commandThread = null;
+        m_gtp = null;
         m_name = null;
         m_version = null;
         m_toolBar.setComputerEnabled(false);
@@ -2516,9 +2515,9 @@ public class GoGui
         else
             setBoardCursorDefault();
         // Program could have been killed in cbInterrupt
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return false;
-        GtpError error = m_commandThread.getException();
+        GtpError error = m_gtp.getException();
         if (error != null)
         {
             showError(error);
@@ -2530,11 +2529,11 @@ public class GoGui
     private boolean executeRoot()
     {
         m_currentNode = m_gameTree.getRoot();
-        if (m_commandThread != null)
+        if (m_gtp != null)
         {
             try
             {
-                m_commandThread.initSynchronize(m_board);
+                m_gtp.initSynchronize(m_board);
             }
             catch (GtpError error)
             {
@@ -2578,10 +2577,10 @@ public class GoGui
         GoColor toMove = m_board.getToMove();
         String command;
         if (m_menuBar.getCleanup()
-            && (m_commandThread.isCommandSupported("kgs-genmove_cleanup")
-                || m_commandThread.isCommandSupported("genmove_cleanup")))
+            && (m_gtp.isCommandSupported("kgs-genmove_cleanup")
+                || m_gtp.isCommandSupported("genmove_cleanup")))
         {
-            if (m_commandThread.isCommandSupported("genmove_cleanup"))
+            if (m_gtp.isCommandSupported("genmove_cleanup"))
                 command = "genmove_cleanup";
             else
                 command = "kgs-genmove_cleanup";
@@ -2594,7 +2593,7 @@ public class GoGui
         }
         else
         {
-            command = m_commandThread.getCommandGenmove(toMove);
+            command = m_gtp.getCommandGenmove(toMove);
             m_clock.startMove(toMove);
         }
         m_isSingleMove = isSingleMove;
@@ -2642,7 +2641,7 @@ public class GoGui
         {
             try
             {
-                m_commandThread.updateHumanMove(m_board, move);
+                m_gtp.updateHumanMove(m_board, move);
             }
             catch (GtpError e)
             {
@@ -2747,7 +2746,7 @@ public class GoGui
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
-        if (m_commandThread == null
+        if (m_gtp == null
             || (! m_computerBlack && ! m_computerWhite))
             computerNone();
         else if (isComputerBoth())
@@ -2794,12 +2793,12 @@ public class GoGui
     private void initProgramAnalyzeCommands()
     {
         m_programAnalyzeCommands = null;
-        if (m_commandThread.isCommandSupported("gogui_analyze_commands"))
+        if (m_gtp.isCommandSupported("gogui_analyze_commands"))
         {
             try
             {
                 m_programAnalyzeCommands
-                    = m_commandThread.send("gogui_analyze_commands");
+                    = m_gtp.send("gogui_analyze_commands");
             }
             catch (GtpError e)
             {
@@ -2844,14 +2843,14 @@ public class GoGui
 
     private boolean isCommandInProgress()
     {
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return false;
-        return m_commandThread.isCommandInProgress();
+        return m_gtp.isCommandInProgress();
     }
 
     private boolean isOutOfSync()
     {
-        return (m_commandThread != null && m_commandThread.isOutOfSync());
+        return (m_gtp != null && m_gtp.isOutOfSync());
     }
 
     private boolean loadFile(File file, int move)
@@ -3029,9 +3028,9 @@ public class GoGui
 
     private void runLengthyCommand(String cmd, Runnable callback)
     {
-        assert(m_commandThread != null);
+        assert(m_gtp != null);
         beginLengthyCommand();
-        m_commandThread.send(cmd, callback);
+        m_gtp.send(cmd, callback);
     }
 
     /** Save game to file.
@@ -3087,7 +3086,7 @@ public class GoGui
         if (m_help != null)
             saveSize(m_help, "help");
         saveSizeAndVisible(m_gameTreeViewer, "tree");
-        if (m_commandThread != null)
+        if (m_gtp != null)
         {
             saveSizeAndVisible(m_gtpShell, "shell");
             saveSizeAndVisible(m_analyzeDialog, "analyze");
@@ -3115,7 +3114,7 @@ public class GoGui
 
     private void sendGtp(Reader reader)
     {
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return;
         java.io.BufferedReader in;
         in = new BufferedReader(reader);
@@ -3193,7 +3192,7 @@ public class GoGui
 
     private void setKomi(double komi)
     {
-        Utils.sendKomi(this, komi, m_name, m_commandThread);
+        Utils.sendKomi(this, komi, m_name, m_gtp);
     }
 
     private void setNeedsSave(boolean needsSave)
@@ -3221,24 +3220,24 @@ public class GoGui
 
     private void setRules()
     {
-        Utils.sendRules(getRules(), m_commandThread);
+        Utils.sendRules(getRules(), m_gtp);
     }
 
     private void setTimeSettings()
     {
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return;
         TimeSettings timeSettings =
             m_gameTree.getGameInformation().m_timeSettings;
         if (timeSettings == null)
             return;
-        if (! m_commandThread.isCommandSupported("time_settings"))
+        if (! m_gtp.isCommandSupported("time_settings"))
             return;
         m_clock.setTimeSettings(timeSettings);
         String command = GtpUtils.getTimeSettingsCommand(timeSettings);
         try
         {
-            m_commandThread.send(command);
+            m_gtp.send(command);
         }
         catch (GtpError e)
         {
@@ -3254,7 +3253,7 @@ public class GoGui
             return;
         }
         String appName = "GoGui";        
-        if (m_commandThread != null)
+        if (m_gtp != null)
             appName = m_name;
         String filename = null;
         if (m_loadedFile != null)
@@ -3280,13 +3279,13 @@ public class GoGui
     private void setTitleFromProgram()
     {
         m_titleFromProgram = null;
-        if (m_commandThread == null)
+        if (m_gtp == null)
             return;
-        if (m_commandThread.isCommandSupported("gogui_title"))
+        if (m_gtp.isCommandSupported("gogui_title"))
         {
             try
             {
-                m_titleFromProgram = m_commandThread.send("gogui_title");
+                m_titleFromProgram = m_gtp.send("gogui_title");
                 setTitle(m_titleFromProgram);
             }
             catch (GtpError e)

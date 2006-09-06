@@ -57,14 +57,14 @@ public final class Utils
         Errors are shown to the user.
     */
     public static void sendKomi(Component parent, double komi,
-                                String name, CommandThread thread)
+                                String name, GuiGtpClient gtp)
     {
-        if (thread == null)
+        if (gtp == null)
             return;
         try
         {
-            if (thread.isCommandSupported("komi"))
-                thread.send("komi " + GameInformation.roundKomi(komi));
+            if (gtp.isCommandSupported("komi"))
+                gtp.send("komi " + GameInformation.roundKomi(komi));
         }
         catch (GtpError e)
         {
@@ -78,17 +78,17 @@ public final class Utils
         it supports the command.
         Errors are ignored.
     */
-    public static void sendRules(int rules, CommandThread thread)
+    public static void sendRules(int rules, GuiGtpClient gtp)
     {
-        if (thread == null
+        if (gtp == null
             || rules == Board.RULES_UNKNOWN
-            || ! thread.isCommandSupported("scoring_system"))
+            || ! gtp.isCommandSupported("scoring_system"))
             return;
         try
         {
             String s =
                 (rules == Board.RULES_JAPANESE ? "territory" : "area");
-            thread.send("scoring_system " + s);
+            gtp.send("scoring_system " + s);
         }
         catch (GtpError e)
         {

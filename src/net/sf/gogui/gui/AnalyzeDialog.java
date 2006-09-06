@@ -60,10 +60,10 @@ public final class AnalyzeDialog
                          boolean onlySupported, boolean sort,
                          ArrayList supportedCommands,
                          String programAnalyzeCommands,
-                         CommandThread commandThread)
+                         GuiGtpClient gtp)
     {
         super(owner, "Analyze");
-        m_commandThread = commandThread;
+        m_gtp = gtp;
         m_onlySupportedCommands = onlySupported;
         m_sort = sort;
         m_supportedCommands = supportedCommands;
@@ -216,7 +216,7 @@ public final class AnalyzeDialog
 
     private GoColor m_selectedColor = GoColor.EMPTY;
 
-    private final CommandThread m_commandThread;
+    private final GuiGtpClient m_gtp;
 
     private JButton m_clearButton;
 
@@ -378,7 +378,7 @@ public final class AnalyzeDialog
 
     private void runCommand()
     {
-        if (m_commandThread.isCommandInProgress())
+        if (m_gtp.isCommandInProgress())
         {
             SimpleDialogs.showError(this, "Command in progress");
             return;
@@ -406,7 +406,7 @@ public final class AnalyzeDialog
                 command.setOptStringArg("");
                 String commandWithoutArg =
                     command.replaceWildCards(m_selectedColor);
-                String value = m_commandThread.send(commandWithoutArg);
+                String value = m_gtp.send(commandWithoutArg);
                 String optStringArg =
                     JOptionPane.showInputDialog(this, label, value);
                 if (optStringArg == null || optStringArg.equals(value))
@@ -426,8 +426,7 @@ public final class AnalyzeDialog
                 command.setPointListArg(new ArrayList());
                 String commandWithoutArg =
                     command.replaceWildCards(m_selectedColor) + " show";
-                String response =
-                    m_commandThread.send(commandWithoutArg);
+                String response = m_gtp.send(commandWithoutArg);
                 ArrayList pointList =
                     GtpUtils.parsePointArrayList(response, m_boardSize);
                 command.setPointListArg(pointList);

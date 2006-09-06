@@ -29,7 +29,7 @@ public class ParameterDialog
 {
     public static void editParameters(String paramCommand, Frame owner,
                                       String title, String response,
-                                      CommandThread commandThread)
+                                      GuiGtpClient gtp)
     {
         ArrayList parameters = parseResponse(response);
         int numberParameters = parameters.size();
@@ -55,7 +55,7 @@ public class ParameterDialog
                 + parameter.getNewValue();
             try
             {
-                commandThread.send(command);
+                gtp.send(command);
             }
             catch (GtpError e)
             {

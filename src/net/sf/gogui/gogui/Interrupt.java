@@ -8,7 +8,7 @@ package net.sf.gogui.gogui;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gui.CommandThread;
+import net.sf.gogui.gui.GuiGtpClient;
 import net.sf.gogui.gui.SimpleDialogs;
 
 //----------------------------------------------------------------------------
@@ -21,9 +21,9 @@ public final class Interrupt
         supported by the program, otherwise kill the program.
         @return true if interrupt comment line was sent.
     */
-    public static boolean run(Component parent, CommandThread thread)
+    public static boolean run(Component parent, GuiGtpClient gtp)
     {
-        if (! thread.isInterruptSupported())
+        if (! gtp.isInterruptSupported())
         {
             Object[] options = { "Kill Program", "Cancel" };
             Object message = "Program does not support interrupt";
@@ -32,14 +32,14 @@ public final class Interrupt
                                                  JOptionPane.WARNING_MESSAGE,
                                                  null, options, options[1]);
             if (n == 0)
-                thread.destroyGtp();
+                gtp.destroyGtp();
             return false;
         }
         if (! SimpleDialogs.showQuestion(parent, "Interrupt command?"))
             return false;
         try
         {
-            thread.sendInterrupt();
+            gtp.sendInterrupt();
         }
         catch (GtpError e)
         {

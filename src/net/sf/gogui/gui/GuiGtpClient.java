@@ -18,7 +18,7 @@ import net.sf.gogui.gtp.GtpSynchronizer;
 
 //----------------------------------------------------------------------------
 
-/** Wrapper around gtp.Gtp to be used in a GUI environment.
+/** Wrapper around gtp.GtpClient to be used in a GUI environment.
     Allows to send fast commands immediately in the event dispatch thread
     and potentially slow commands in a separate thread with a callback
     in the event thread after the command finished.
@@ -28,11 +28,11 @@ import net.sf.gogui.gtp.GtpSynchronizer;
     After the timeout a dialog is opened that allows to kill the program or
     continue to wait.
 */
-public class CommandThread
+public class GuiGtpClient
     extends Thread
 {
-    public CommandThread(GtpClient gtp, Component owner,
-                         GtpSynchronizer.Callback callback)
+    public GuiGtpClient(GtpClient gtp, Component owner,
+                        GtpSynchronizer.Callback callback)
     {
         m_gtp = gtp;
         m_owner = owner;
