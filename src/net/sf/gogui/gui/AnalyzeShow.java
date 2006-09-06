@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Locale;
-import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -28,7 +28,8 @@ public final class AnalyzeShow
         @return Text for status bar (from gfx TEXT) or null
     */
     public static String show(AnalyzeCommand command, GuiBoard guiBoard,
-                              Board board, String response) throws GtpError
+                              ConstBoard board, String response)
+        throws GtpError
     {
         GoPoint pointArg = command.getPointArg();
         ArrayList pointListArg = command.getPointListArg();
@@ -396,7 +397,7 @@ public final class AnalyzeShow
     {
     }
 
-    private static GoColor getColor(Board board, GoPoint pointArg,
+    private static GoColor getColor(ConstBoard board, GoPoint pointArg,
                                     ArrayList pointListArg)
     {
         GoColor color = GoColor.EMPTY;

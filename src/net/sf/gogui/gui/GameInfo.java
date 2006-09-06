@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -55,7 +55,7 @@ public class GameInfo
         m_number.paintImmediately(m_number.getVisibleRect());
     }
 
-    public void update(Node node, Board board)
+    public void update(Node node, ConstBoard board)
     {
         if (board.getToMove() == GoColor.BLACK)
             m_move.setText("Black");

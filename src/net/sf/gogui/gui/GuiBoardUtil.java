@@ -13,6 +13,7 @@ import java.util.Map;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -299,7 +300,7 @@ public final class GuiBoardUtil
             }
     }
 
-    public static void updateFromGoBoard(GuiBoard guiBoard, Board board,
+    public static void updateFromGoBoard(GuiBoard guiBoard, ConstBoard board,
                                          boolean markLastMove)
     {
         for (int i = 0; i < board.getNumberPoints(); ++i)

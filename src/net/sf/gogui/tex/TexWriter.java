@@ -15,7 +15,7 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -25,7 +25,7 @@ import net.sf.gogui.go.Move;
 /** Write a game or board position in PSGO style to a stream. */
 public class TexWriter
 {
-    public TexWriter(String title, OutputStream out, Board board,
+    public TexWriter(String title, OutputStream out, ConstBoard board,
                      boolean usePass, String[][] strings,
                      boolean[][] markups, boolean[][] selects)
     {        
@@ -247,7 +247,7 @@ public class TexWriter
         return comment.toString();
     }
     
-    private void printPosition(Board board, String[][] strings,
+    private void printPosition(ConstBoard board, String[][] strings,
                                boolean[][] markups, boolean[][] selects)
     {
         int numberPoints = board.getNumberPoints();

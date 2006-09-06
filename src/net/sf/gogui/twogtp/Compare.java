@@ -13,6 +13,7 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
@@ -42,7 +43,7 @@ public final class Compare
         game is found (<= 20% identical moves comparing moves by number),
         the game number is returned with a question mark appended.
     */
-    public static String checkDuplicate(Board board, ArrayList moves,
+    public static String checkDuplicate(ConstBoard board, ArrayList moves,
                                         ArrayList games, boolean useAlternate,
                                         boolean isAlternated)
     {

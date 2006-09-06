@@ -6,14 +6,14 @@
 package net.sf.gogui.gui;
 
 import javax.swing.SwingUtilities;
-import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 
 //----------------------------------------------------------------------------
 
 /** Parse standard error for GoGui live graphics commands. */
 public class LiveGfx
 {
-    public LiveGfx(Board board, GuiBoard guiBoard, StatusBar statusBar)
+    public LiveGfx(ConstBoard board, GuiBoard guiBoard, StatusBar statusBar)
     {
         m_board = board;
         m_guiBoard = guiBoard;
@@ -51,7 +51,7 @@ public class LiveGfx
 
     private final StringBuffer m_response = new StringBuffer(1024);    
 
-    private final Board m_board;
+    private final ConstBoard m_board;
 
     private final GuiBoard m_guiBoard;
 

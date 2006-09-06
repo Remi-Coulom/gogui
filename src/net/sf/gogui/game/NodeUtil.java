@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
-import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
@@ -434,7 +434,7 @@ public final class NodeUtil
 
     /** Create a game tree with the current board position as setup stones. */
     public static GameTree makeTreeFromPosition(GameInformation info,
-                                                Board board)
+                                                ConstBoard board)
     {
         GameTree tree = new GameTree(board.getSize(), info.m_komi, null,
                                      info.m_rules, info.m_timeSettings);

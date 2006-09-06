@@ -15,8 +15,8 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
-import net.sf.gogui.go.Board;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;
@@ -67,7 +67,7 @@ public class SgfWriter
         @param version If not null, version appended to application name in
         AP property.
     */
-    public SgfWriter(OutputStream out, Board board, String application,
+    public SgfWriter(OutputStream out, ConstBoard board, String application,
                      String version)
     {        
         m_size = board.getSize();
@@ -366,7 +366,7 @@ public class SgfWriter
         }
     }
 
-    private void printPosition(Board board)
+    private void printPosition(ConstBoard board)
     {
         int numberPoints = board.getNumberPoints();
         ArrayList black = new ArrayList(numberPoints);
