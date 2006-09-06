@@ -20,7 +20,7 @@ public final class BoardUtil
         @param out The stream to print to.
         @param withGameInfo Print game information (prisoners, recent moves)
     */
-    public static void print(Board board, PrintStream out,
+    public static void print(ConstBoard board, PrintStream out,
                              boolean withGameInfo)
     {
         StringBuffer s = new StringBuffer(1024);
@@ -114,7 +114,8 @@ public final class BoardUtil
     {
     }
 
-    private static void printGameInfo(Board board, StringBuffer s, int yIndex)
+    private static void printGameInfo(ConstBoard board, StringBuffer s,
+                                      int yIndex)
     {
         int size = board.getSize();
         if (yIndex == size - 1)
@@ -144,7 +145,7 @@ public final class BoardUtil
         }
     }
 
-    private static void printToMove(Board board, StringBuffer buffer)
+    private static void printToMove(ConstBoard board, StringBuffer buffer)
     {
         buffer.append(board.getToMove() == GoColor.BLACK ? "Black" : "White");
         buffer.append(" to move");
