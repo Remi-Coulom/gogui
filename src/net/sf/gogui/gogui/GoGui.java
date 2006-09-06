@@ -11,7 +11,6 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
