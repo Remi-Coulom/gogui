@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

@@ -38,8 +38,8 @@ import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiBoardDrawer;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.utils.FileUtil;
-import net.sf.gogui.utils.Platform;
+import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.Platform;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

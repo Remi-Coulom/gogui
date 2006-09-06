@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import net.sf.gogui.utils.PrefUtil;
+import net.sf.gogui.util.PrefUtil;
 
 //----------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@ package net.sf.gogui.game;
 
 import java.util.Locale;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

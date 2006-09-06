@@ -8,8 +8,8 @@ package net.sf.gogui.gogui;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

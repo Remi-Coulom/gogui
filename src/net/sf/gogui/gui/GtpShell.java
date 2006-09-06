@@ -42,8 +42,8 @@ import javax.swing.text.Document;
 import javax.swing.text.Style;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.PrefUtil;
+import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.PrefUtil;
 
 //----------------------------------------------------------------------------
 

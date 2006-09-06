@@ -28,7 +28,7 @@ import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.RecentFileMenu;
-import net.sf.gogui.utils.Platform;
+import net.sf.gogui.util.Platform;
 
 //----------------------------------------------------------------------------
 

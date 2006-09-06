@@ -90,10 +90,10 @@ import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
 import net.sf.gogui.thumbnail.Thumbnail;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtil;
-import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.ProgressShow;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.ProgressShow;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

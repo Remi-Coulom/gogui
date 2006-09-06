@@ -8,7 +8,7 @@ package net.sf.gogui.gogui;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Locale;
-import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.util.ErrorMessage;
 
 //----------------------------------------------------------------------------
  

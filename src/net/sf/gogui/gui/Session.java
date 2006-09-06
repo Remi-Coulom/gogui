@@ -11,7 +11,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
-import net.sf.gogui.utils.PrefUtil;
+import net.sf.gogui.util.PrefUtil;
 
 //----------------------------------------------------------------------------
 

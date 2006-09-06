@@ -3,7 +3,7 @@
 // $Source$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.utils;
+package net.sf.gogui.util;
 
 import java.awt.Component;
 import java.awt.Container;

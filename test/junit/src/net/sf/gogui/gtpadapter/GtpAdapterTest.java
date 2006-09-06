@@ -13,8 +13,8 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpEngineConnection;
 import net.sf.gogui.gtp.GtpExpectEngine;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.StreamCopy;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.StreamCopy;
 
 //----------------------------------------------------------------------------
 

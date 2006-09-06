@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.prefs.Preferences;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import net.sf.gogui.utils.PrefUtil;
+import net.sf.gogui.util.PrefUtil;
 
 //----------------------------------------------------------------------------
 

@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.utils.Platform;
+import net.sf.gogui.util.Platform;
 
 //----------------------------------------------------------------------------
 

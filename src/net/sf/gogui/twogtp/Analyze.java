@@ -12,11 +12,11 @@ import java.io.FileReader;
 import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtil;
-import net.sf.gogui.utils.Histogram;
-import net.sf.gogui.utils.Statistics;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.Histogram;
+import net.sf.gogui.util.Statistics;
+import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

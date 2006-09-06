@@ -19,9 +19,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.utils.FileUtil;
-import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

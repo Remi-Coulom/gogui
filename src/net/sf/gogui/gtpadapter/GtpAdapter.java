@@ -31,7 +31,7 @@ import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
 import java.util.Locale;
-import net.sf.gogui.utils.PrefUtil;
+import net.sf.gogui.util.PrefUtil;
 
 //----------------------------------------------------------------------------
 

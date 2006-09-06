@@ -5,11 +5,11 @@
 
 package net.sf.gogui.gtpstatistics;
 
-import net.sf.gogui.utils.Histogram;
-import net.sf.gogui.utils.Statistics;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.Table;
-import net.sf.gogui.utils.TableUtil;
+import net.sf.gogui.util.Histogram;
+import net.sf.gogui.util.Statistics;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.Table;
+import net.sf.gogui.util.TableUtil;
 
 //----------------------------------------------------------------------------
 

@@ -19,8 +19,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

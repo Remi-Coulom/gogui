@@ -3,7 +3,7 @@
 // $Source$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.utils;
+package net.sf.gogui.util;
 
 import java.util.ArrayList;
 import java.util.prefs.Preferences;

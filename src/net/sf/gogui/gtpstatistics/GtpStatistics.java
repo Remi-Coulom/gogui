@@ -22,10 +22,10 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtil;
-import net.sf.gogui.utils.Table;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.StringUtil;
+import net.sf.gogui.util.Table;
 
 //----------------------------------------------------------------------------
 

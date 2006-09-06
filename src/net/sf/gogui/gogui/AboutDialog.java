@@ -21,7 +21,7 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.EditorKit;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
-import net.sf.gogui.utils.Platform;
+import net.sf.gogui.util.Platform;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

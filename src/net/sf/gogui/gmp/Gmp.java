@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

@@ -29,8 +29,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import net.sf.gogui.sgf.SgfFilter;
 import net.sf.gogui.thumbnail.Thumbnail;
-import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.Platform;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

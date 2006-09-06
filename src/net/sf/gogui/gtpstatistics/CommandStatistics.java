@@ -9,9 +9,9 @@ import java.awt.Color;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import net.sf.gogui.utils.Histogram;
-import net.sf.gogui.utils.Table;
-import net.sf.gogui.utils.TableUtil;
+import net.sf.gogui.util.Histogram;
+import net.sf.gogui.util.Table;
+import net.sf.gogui.util.TableUtil;
 
 //----------------------------------------------------------------------------
 

@@ -14,9 +14,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.tex.TexWriter;
-import net.sf.gogui.utils.FileUtil;
-import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.Options;
+import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

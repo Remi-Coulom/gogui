@@ -16,9 +16,9 @@ import javax.comm.PortInUseException;
 import javax.comm.SerialPort;
 import javax.comm.UnsupportedCommOperationException;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.ProcessUtil;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.Options;
+import net.sf.gogui.util.ProcessUtil;
+import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

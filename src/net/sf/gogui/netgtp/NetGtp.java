@@ -5,9 +5,9 @@
 
 package net.sf.gogui.netgtp;
 
-import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.StreamCopy;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.Options;
+import net.sf.gogui.util.StreamCopy;
+import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 import java.io.InputStream;
 import java.io.IOException;

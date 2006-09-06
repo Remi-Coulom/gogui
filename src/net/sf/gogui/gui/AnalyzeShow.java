@@ -17,7 +17,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

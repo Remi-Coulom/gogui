@@ -17,7 +17,7 @@ import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
-import net.sf.gogui.utils.RadialGradientPaint;
+import net.sf.gogui.util.RadialGradientPaint;
  
 //----------------------------------------------------------------------------
 

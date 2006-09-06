@@ -38,7 +38,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
-import net.sf.gogui.utils.PrefUtil;
+import net.sf.gogui.util.PrefUtil;
 
 //----------------------------------------------------------------------------
 

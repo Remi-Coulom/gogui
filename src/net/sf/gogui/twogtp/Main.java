@@ -8,9 +8,9 @@ package net.sf.gogui.twogtp;
 import java.io.File;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.Options;
+import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

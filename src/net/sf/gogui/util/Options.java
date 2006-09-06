@@ -3,7 +3,7 @@
 // $Source$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.utils;
+package net.sf.gogui.util;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

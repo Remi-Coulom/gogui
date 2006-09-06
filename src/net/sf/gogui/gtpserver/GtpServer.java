@@ -5,10 +5,10 @@
 
 package net.sf.gogui.gtpserver;
 
-import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.ProcessUtil;
-import net.sf.gogui.utils.StreamCopy;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.Options;
+import net.sf.gogui.util.ProcessUtil;
+import net.sf.gogui.util.StreamCopy;
+import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
 import java.io.File;
 import java.io.FileInputStream;

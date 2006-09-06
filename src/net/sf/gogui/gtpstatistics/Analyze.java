@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.text.DecimalFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtil;
-import net.sf.gogui.utils.Histogram;
-import net.sf.gogui.utils.StringUtil;
-import net.sf.gogui.utils.Table;
-import net.sf.gogui.utils.TableUtil;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.Histogram;
+import net.sf.gogui.util.StringUtil;
+import net.sf.gogui.util.Table;
+import net.sf.gogui.util.TableUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

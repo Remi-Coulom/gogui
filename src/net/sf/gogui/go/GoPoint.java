@@ -7,7 +7,7 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import net.sf.gogui.utils.StringUtil;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 

@@ -15,7 +15,7 @@ import javax.swing.JPopupMenu;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.util.ErrorMessage;
 
 //----------------------------------------------------------------------------
 

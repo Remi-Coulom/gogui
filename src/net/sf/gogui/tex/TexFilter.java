@@ -9,7 +9,7 @@ package net.sf.gogui.tex;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
-import net.sf.gogui.utils.FileUtil;
+import net.sf.gogui.util.FileUtil;
 
 //----------------------------------------------------------------------------
 

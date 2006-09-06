@@ -7,7 +7,7 @@ package net.sf.gogui.sgf;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
-import net.sf.gogui.utils.FileUtil;
+import net.sf.gogui.util.FileUtil;
 
 //----------------------------------------------------------------------------
 

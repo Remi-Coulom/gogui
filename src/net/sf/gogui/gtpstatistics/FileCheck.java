@@ -16,7 +16,7 @@ import net.sf.gogui.game.Node;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.util.ErrorMessage;
 
 //----------------------------------------------------------------------------
 

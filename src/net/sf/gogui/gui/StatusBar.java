@@ -11,7 +11,7 @@ import java.awt.GridLayout;
 import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import net.sf.gogui.utils.Platform;
+import net.sf.gogui.util.Platform;
 
 //----------------------------------------------------------------------------
 

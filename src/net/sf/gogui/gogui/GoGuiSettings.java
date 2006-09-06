@@ -8,8 +8,8 @@ package net.sf.gogui.gogui;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.Options;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.Options;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------

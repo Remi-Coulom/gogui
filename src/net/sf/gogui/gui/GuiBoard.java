@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.SquareLayout;
+import net.sf.gogui.util.SquareLayout;
 
 //----------------------------------------------------------------------------
 

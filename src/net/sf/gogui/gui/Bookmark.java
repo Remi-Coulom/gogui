@@ -8,8 +8,8 @@ package net.sf.gogui.gui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
-import net.sf.gogui.utils.FileUtil;
-import net.sf.gogui.utils.PrefUtil;
+import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.PrefUtil;
 
 //----------------------------------------------------------------------------
 

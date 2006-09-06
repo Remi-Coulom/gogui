@@ -11,8 +11,8 @@ import java.io.FileFilter;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtil;
+import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.FileUtil;
 
 //----------------------------------------------------------------------------
 

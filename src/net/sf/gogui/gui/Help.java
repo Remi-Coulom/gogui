@@ -25,7 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import net.sf.gogui.utils.Platform;
+import net.sf.gogui.util.Platform;
 
 //----------------------------------------------------------------------------
 

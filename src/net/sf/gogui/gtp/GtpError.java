@@ -5,7 +5,7 @@
 
 package net.sf.gogui.gtp;
 
-import net.sf.gogui.utils.ErrorMessage;
+import net.sf.gogui.util.ErrorMessage;
 
 //----------------------------------------------------------------------------
 
