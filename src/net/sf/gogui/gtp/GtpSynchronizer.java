@@ -8,9 +8,6 @@ package net.sf.gogui.gtp;
 import java.util.ArrayList;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.gtp.GtpClient;
-import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpUtils;
 
 //----------------------------------------------------------------------------
 
