@@ -16,6 +16,9 @@ import net.sf.gogui.util.StringUtil;
 /** GTP command.
     Handles parsing the command line and storing the response to the command.
     Arguments containing whitespaces can be quoted with double quotes (").
+    The responses are allowed to contain consecutive new lines.
+    They will be replaced in GtpEngine.mainLoop() by lines containing a single
+    space to form a valid GTP response.
 */
 public class GtpCommand
 {
@@ -307,11 +310,12 @@ public class GtpCommand
     }
 
     /** Check if command is quit command.
-        @return true, if command name (to lowercase) is "quit".
+        DEPRECATED: Fix GtpEngine to use only GtpEngine.m_quit
+        @return true, if command name is "quit".
     */
     public boolean isQuit()
     {
-        return m_line.trim().toLowerCase(Locale.ENGLISH).equals("quit");
+        return m_line.trim().equals("quit");
     }
 
     /** Set the response.

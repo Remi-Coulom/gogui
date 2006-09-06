@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;
 
@@ -129,6 +132,68 @@ public abstract class GtpEngine
     public GtpEngine(PrintStream log)
     {
         m_log = log;
+        register("known_command", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdKnownCommand(cmd); } });
+        register("list_commands", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdListCommands(cmd); } });
+        register("name", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdName(cmd); } });
+        register("protocol_version", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdProtocolVersion(cmd); } });
+        register("quit", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdQuit(cmd); } });
+        register("version", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdVersion(cmd); } });
+    }
+
+    public void cmdKnownCommand(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkNuArg(1);
+        String name = cmd.getCommand();
+        cmd.setResponse(m_commands.containsKey(name) ? "true" : "false");
+    }
+
+    public void cmdListCommands(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        StringBuffer response = cmd.getResponse();
+        Iterator it = m_commands.keySet().iterator();
+        while (it.hasNext())
+        {
+            response.append(it.next());
+            response.append('\n');
+        }
+    }
+
+    public void cmdName(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        cmd.setResponse(m_name);
+    }
+
+    public void cmdProtocolVersion(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        cmd.setResponse("2");
+    }
+
+    public void cmdQuit(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        setQuit();
+    }
+
+    public void cmdVersion(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        // The GTP standard says to return empty string, if no meaningful
+        // reponse is available.
     }
 
     /** Callback for interrupting commands.
@@ -138,15 +203,17 @@ public abstract class GtpEngine
     public abstract void interruptCommand();
 
     /** Handle command.
-        This method has to be implemented by the subclass.
-        It should throw a GtpError for creating a failure response,
-        and write the response into the StringBuffer parameter for a success
-        response.
-        The responses are allowed to contain consecutive new lines.
-        They will be replaced by lines containing a single space to form a
-        valid GTP response.
+        The default implementation looks up the command within the registered
+        commands and calls the registered callback.
     */
-    public abstract void handleCommand(GtpCommand cmd) throws GtpError;
+    public void handleCommand(GtpCommand cmd) throws GtpError
+    {
+        String name = cmd.getCommand();
+        GtpCallback callback = (GtpCallback)m_commands.get(name);
+        if (callback == null)
+            throw new GtpError("unknown command: " + name);
+        callback.run(cmd);
+    }
 
     public synchronized void log(String line)
     {
@@ -183,7 +250,9 @@ public abstract class GtpEngine
             }
             String sanitizedResponse = response.replaceAll("\\n\\n", "\n \n");
             respond(status, cmd.hasId(), cmd.getId(), sanitizedResponse);
-            if (cmd.isQuit())
+            // TODO: Use only quit flaf not GtpCommand.isQuit once all
+            // subclasses use the new registered quit command
+            if (m_quit || cmd.isQuit())
                 return;
         }
     }
@@ -232,6 +301,17 @@ public abstract class GtpEngine
         m_out.print(text);
     }
 
+    /** Register new command.
+        If a command was already registered with the same name,
+        it will be replaced by the new command.
+    */
+    public void register(String command, GtpCallback callback)
+    {
+        if (m_commands.containsKey(command))
+            m_commands.remove(command);
+        m_commands.put(command, callback);
+    }
+
     public void respond(boolean status, boolean hasId, int id,
                         String response)
     {
@@ -251,6 +331,25 @@ public abstract class GtpEngine
         if (m_log != null)
             m_log.println(fullResponse);
     }
+
+    /** Set quit flag for terminating command loop. */
+    public void setQuit()
+    {
+        m_quit = true;
+    }
+
+    /** Set name for name command. */
+    public void setName(String name)
+    {
+        m_name = name;
+    }
+
+    private boolean m_quit;
+
+    private String m_name = "Unknown";
+
+    /** Mapping from command (String) to GtpCallback. */
+    private final TreeMap m_commands = new TreeMap();
 
     private InputStream m_in;
 

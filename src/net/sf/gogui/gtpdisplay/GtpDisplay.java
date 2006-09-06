@@ -125,6 +125,56 @@ public class GtpDisplay
         }
     }
 
+    public void cmdListCommands(GtpCommand cmd)
+    {
+        if (m_gtp != null)
+        {
+            ArrayList commands = m_gtp.getSupportedCommands();
+            for (int i = 0; i < commands.size(); ++i)
+            {
+                String c = (String)commands.get(i);
+                if (c.equals("boardsize")
+                    || c.equals("black")
+                    || c.equals("clear_board")
+                    || c.equals("genmove")
+                    || c.equals("genmove_black")
+                    || c.equals("genmove_white")
+                    || c.equals("help")
+                    || c.equals("komi")
+                    || c.equals("list_commands")
+                    || c.equals("play")
+                    || c.equals("protocol_version")
+                    || c.equals("quit")
+                    || c.equals("white"))
+                    continue;
+                cmd.getResponse().append(c);
+                cmd.getResponse().append("\n");
+            }
+        }
+        cmd.getResponse().append("boardsize\n");
+        cmd.getResponse().append("clear_board\n");        
+        cmd.getResponse().append("genmove\n");
+        cmd.getResponse().append("komi\n");
+        cmd.getResponse().append("list_commands\n");
+        cmd.getResponse().append("play\n");
+        cmd.getResponse().append("protocol_version\n");
+        cmd.getResponse().append("quit\n");
+    }
+
+    public void cmdName(GtpCommand cmd)
+    {
+        if (m_gtp == null)
+            cmd.setResponse("GtpDisplay");
+        else            
+            cmd.setResponse(m_name);
+    }
+
+    public void cmdQuit(GtpCommand cmd) throws GtpError
+    {
+        if (m_gtp != null)
+            send("quit", cmd.getResponse());
+    }
+
     public void handleCommand(GtpCommand cmd) throws GtpError
     {
         if (cmd.getCommand().equals("black"))
@@ -347,50 +397,6 @@ public class GtpDisplay
         send(cmd.getLine(), cmd.getResponse());
     }
 
-    private void cmdListCommands(GtpCommand cmd) throws GtpError
-    {
-        if (m_gtp != null)
-        {
-            ArrayList commands = m_gtp.getSupportedCommands();
-            for (int i = 0; i < commands.size(); ++i)
-            {
-                String c = (String)commands.get(i);
-                if (c.equals("boardsize")
-                    || c.equals("black")
-                    || c.equals("clear_board")
-                    || c.equals("genmove")
-                    || c.equals("genmove_black")
-                    || c.equals("genmove_white")
-                    || c.equals("help")
-                    || c.equals("komi")
-                    || c.equals("list_commands")
-                    || c.equals("play")
-                    || c.equals("protocol_version")
-                    || c.equals("quit")
-                    || c.equals("white"))
-                    continue;
-                cmd.getResponse().append(c);
-                cmd.getResponse().append("\n");
-            }
-        }
-        cmd.getResponse().append("boardsize\n");
-        cmd.getResponse().append("clear_board\n");        
-        cmd.getResponse().append("genmove\n");
-        cmd.getResponse().append("komi\n");
-        cmd.getResponse().append("list_commands\n");
-        cmd.getResponse().append("play\n");
-        cmd.getResponse().append("protocol_version\n");
-        cmd.getResponse().append("quit\n");
-    }
-
-    private void cmdName(GtpCommand cmd)
-    {
-        if (m_gtp == null)
-            cmd.setResponse("GtpDisplay");
-        else            
-            cmd.setResponse(m_name);
-    }
-
     private void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
         int n = cmd.getIntArg();
@@ -422,12 +428,6 @@ public class GtpDisplay
         cmd.checkNuArg(1);
         GoPoint point = cmd.getPointArg(0, m_size);
         play(color, point);
-    }
-
-    private void cmdQuit(GtpCommand cmd) throws GtpError
-    {
-        if (m_gtp != null)
-            send("quit", cmd.getResponse());
     }
 
     private void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError

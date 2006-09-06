@@ -66,6 +66,84 @@ public class GtpAdapter
         m_gtp.waitForExit();
     }
 
+    public void cmdListCommands(GtpCommand cmd)
+    {
+        ArrayList commands = m_gtp.getSupportedCommands();
+        for (int i = 0; i < commands.size(); ++i)
+        {
+            String c = (String)commands.get(i);
+            if (c.equals("boardsize")
+                || c.equals("black")
+                || c.equals("clear_board")
+                || c.equals("genmove")
+                || c.equals("genmove_black")
+                || c.equals("genmove_white")
+                || c.equals("help")
+                || c.equals("list_commands")
+                || c.equals("play")
+                || c.equals("protocol_version")
+                || c.equals("quit")
+                || c.equals("white"))
+                continue;
+            if ((c.equals("set_free_handicap")
+                 || c.equals("get_free_handicap"))
+                && m_emuHandicap)
+                continue;
+            if (c.equals("loadsgf") && m_emuLoadsgf)
+                continue;
+            if (m_noScore
+                && (c.equals("final_score")
+                    || (c.equals("final_status_list"))))
+                    continue;
+            cmd.getResponse().append(c);
+            cmd.getResponse().append("\n");
+        }
+        cmd.getResponse().append("boardsize\n");
+        cmd.getResponse().append("protocol_version\n");
+        cmd.getResponse().append("quit\n");
+        if (m_version1)
+        {
+            cmd.getResponse().append("black\n");
+            cmd.getResponse().append("help\n");
+            cmd.getResponse().append("genmove_white\n");
+            cmd.getResponse().append("genmove_black\n");
+            cmd.getResponse().append("white\n");
+        }
+        else
+        {
+            cmd.getResponse().append("clear_board\n");        
+            cmd.getResponse().append("genmove\n");
+            cmd.getResponse().append("list_commands\n");
+            cmd.getResponse().append("play\n");
+        }
+        if (m_emuHandicap)
+        {
+            cmd.getResponse().append("set_free_handicap\n");
+            cmd.getResponse().append("get_free_handicap\n");
+        }
+        if (m_emuLoadsgf)
+            cmd.getResponse().append("loadsgf\n");
+        cmd.getResponse().append("gtpadapter_showboard\n");
+    }
+
+    public void cmdName(GtpCommand cmd) throws GtpError
+    {
+        assert(m_name != null);
+        int index = m_name.indexOf(':');
+        if (index < 0)
+            cmd.setResponse(m_name);
+        else
+            cmd.setResponse(m_name.substring(0, index));
+    }
+
+    public void cmdVersion(GtpCommand cmd) throws GtpError
+    {
+        assert(m_name != null);
+        int index = m_name.indexOf(':');
+        if (index >= 0)
+            cmd.setResponse(m_name.substring(index + 1));
+    }
+
     public void handleCommand(GtpCommand cmd) throws GtpError
     {
         if (cmd.getCommand().equals("black"))
@@ -385,66 +463,6 @@ public class GtpAdapter
         cmd.getResponse().append(outputStream.toString());
     }
 
-    private void cmdListCommands(GtpCommand cmd) throws GtpError
-    {
-        ArrayList commands = m_gtp.getSupportedCommands();
-        for (int i = 0; i < commands.size(); ++i)
-        {
-            String c = (String)commands.get(i);
-            if (c.equals("boardsize")
-                || c.equals("black")
-                || c.equals("clear_board")
-                || c.equals("genmove")
-                || c.equals("genmove_black")
-                || c.equals("genmove_white")
-                || c.equals("help")
-                || c.equals("list_commands")
-                || c.equals("play")
-                || c.equals("protocol_version")
-                || c.equals("quit")
-                || c.equals("white"))
-                continue;
-            if ((c.equals("set_free_handicap")
-                 || c.equals("get_free_handicap"))
-                && m_emuHandicap)
-                continue;
-            if (c.equals("loadsgf") && m_emuLoadsgf)
-                continue;
-            if (m_noScore
-                && (c.equals("final_score")
-                    || (c.equals("final_status_list"))))
-                    continue;
-            cmd.getResponse().append(c);
-            cmd.getResponse().append("\n");
-        }
-        cmd.getResponse().append("boardsize\n");
-        cmd.getResponse().append("protocol_version\n");
-        cmd.getResponse().append("quit\n");
-        if (m_version1)
-        {
-            cmd.getResponse().append("black\n");
-            cmd.getResponse().append("help\n");
-            cmd.getResponse().append("genmove_white\n");
-            cmd.getResponse().append("genmove_black\n");
-            cmd.getResponse().append("white\n");
-        }
-        else
-        {
-            cmd.getResponse().append("clear_board\n");        
-            cmd.getResponse().append("genmove\n");
-            cmd.getResponse().append("list_commands\n");
-            cmd.getResponse().append("play\n");
-        }
-        if (m_emuHandicap)
-        {
-            cmd.getResponse().append("set_free_handicap\n");
-            cmd.getResponse().append("get_free_handicap\n");
-        }
-        if (m_emuLoadsgf)
-            cmd.getResponse().append("loadsgf\n");
-        cmd.getResponse().append("gtpadapter_showboard\n");
-    }
-
     private void cmdLoadsgf(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArgLessEqual(2);
@@ -511,16 +529,6 @@ public class GtpAdapter
         }
     }
 
-    private void cmdName(GtpCommand cmd) throws GtpError
-    {
-        assert(m_name != null);
-        int index = m_name.indexOf(':');
-        if (index < 0)
-            cmd.setResponse(m_name);
-        else
-            cmd.setResponse(m_name.substring(0, index));
-    }
-
     private void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
         int n = cmd.getIntArg();
@@ -573,14 +581,6 @@ public class GtpAdapter
     private void cmdUnknown() throws GtpError
     {
         throw new GtpError("Unknown command");
-    }
-
-    private void cmdVersion(GtpCommand cmd) throws GtpError
-    {
-        assert(m_name != null);
-        int index = m_name.indexOf(':');
-        if (index >= 0)
-            cmd.setResponse(m_name.substring(index + 1));
     }
 
     private void fillPass(GoColor color) throws GtpError
