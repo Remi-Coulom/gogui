@@ -12,8 +12,8 @@ import java.util.Locale;
 import java.util.Map;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -103,31 +103,32 @@ public final class GuiBoardUtil
             guiBoard.setSelect((GoPoint)pointList.get(i), select);
     }
 
-    public static void scoreBegin(GuiBoard guiBoard, Board board,
-                                  GoPoint[] isDeadStone)
+    public static void scoreBegin(GuiBoard guiBoard, CountScore countScore,
+                                  ConstBoard board, GoPoint[] isDeadStone)
     {
-        board.scoreBegin(isDeadStone);
+        countScore.begin(board, isDeadStone);
         if (isDeadStone != null)
             for (int i = 0; i < isDeadStone.length; ++i)
                 guiBoard.setCrossHair(isDeadStone[i], true);
-        calcScore(guiBoard, board);
+        computeScore(guiBoard, countScore, board);
     }
 
-    public static void scoreSetDead(GuiBoard guiBoard, Board board, GoPoint p)
+    public static void scoreSetDead(GuiBoard guiBoard, CountScore countScore,
+                                    ConstBoard board, GoPoint p)
     {
         GoColor c = board.getColor(p);
         if (c == GoColor.EMPTY)
             return;
         ArrayList stones = new ArrayList(board.getNumberPoints());
         board.getStones(p, c, stones);
-        boolean dead = ! board.scoreGetDead((GoPoint)(stones.get(0)));
+        boolean dead = ! countScore.getDead((GoPoint)(stones.get(0)));
         for (int i = 0; i < stones.size(); ++i)
         {
             GoPoint stone = (GoPoint)stones.get(i);
-            board.scoreSetDead(stone, dead);
+            countScore.setDead(stone, dead);
             guiBoard.setCrossHair(stone, dead);
         }
-        calcScore(guiBoard, board);
+        computeScore(guiBoard, countScore, board);
     }
 
     public static void showBWBoard(GuiBoard guiBoard, String[][] board)
@@ -330,13 +331,15 @@ public final class GuiBoardUtil
     {
     }
 
-    private static void calcScore(GuiBoard guiBoard, Board board)
+    private static void computeScore(GuiBoard guiBoard,
+                                     CountScore countScore,
+                                     ConstBoard board)
     {
-        board.calcScore();
+        countScore.compute();
         for (int i = 0; i < board.getNumberPoints(); ++i)
         {
             GoPoint p = board.getPoint(i);
-            GoColor c = board.getScore(p);
+            GoColor c = countScore.getColor(p);
             guiBoard.setTerritory(p, c);
         }
     }

@@ -48,55 +48,6 @@ public final class Board
                 && getMove(moveNumber - 2).getPoint() == null);
     }
 
-    public void calcScore()
-    {
-        assert(isMarkCleared());
-        boolean allEmpty = true;
-        for (int i = 0; i < m_allPoints.length; ++i)
-        {
-            GoPoint p = m_allPoints[i]; 
-            GoColor c = getColor(p);
-            setScore(p, GoColor.EMPTY);
-            if (c != GoColor.EMPTY)
-            {
-                allEmpty = false;
-                if (! scoreGetDead(p))
-                    setScore(p, c);
-            }
-        }
-        if (allEmpty)
-            return;
-        ArrayList territory = new ArrayList(getNumberPoints());
-        for (int i = 0; i < m_allPoints.length; ++i)
-        {
-            GoPoint p = m_allPoints[i];
-            if (! getMark(p))
-            {
-                territory.clear();
-                if (isTerritory(p, territory, GoColor.BLACK))
-                {
-                    for (int j = 0; j < territory.size(); ++j)
-                        setScore((GoPoint)territory.get(j), GoColor.BLACK);
-                }
-                else
-                {
-                    setMark(territory, false);
-                    if (isTerritory(p, territory, GoColor.WHITE))
-                    {
-                        for (int j = 0; j < territory.size(); ++j)
-                            setScore((GoPoint)territory.get(j),
-                                     GoColor.WHITE);
-                    }
-                    else
-                    {
-                        setMark(territory, false);
-                    }
-                }
-            }
-        }
-        clearMark();
-    }
-
     /** Check if board contains a point.
         @param point The point to check
         @return true, if the point is on the board
@@ -168,11 +119,6 @@ public final class Board
         return m_allPoints.length;
     }
 
-    public GoColor getScore(GoPoint p)
-    {
-        return m_score[p.getX()][p.getY()];
-    }
-
     /** Get board size.
         @return The board size.
     */
@@ -183,10 +129,10 @@ public final class Board
 
     public void getStones(GoPoint p, GoColor color, ArrayList stones)
     {
-        assert(isMarkCleared());
+        assert(m_mark.isCleared());
         findStones(p, color, stones);
-        setMark(stones, false);
-        assert(isMarkCleared());
+        m_mark.set(stones, false);
+        assert(m_mark.isCleared());
     }
 
     public GoColor getToMove()
@@ -198,9 +144,7 @@ public final class Board
     {
         m_size = size;
         m_color = new GoColor[m_size][m_size];
-        m_mark = new boolean[m_size][m_size];
-        m_dead = new boolean[m_size][m_size];
-        m_score = new GoColor[m_size][m_size];
+        m_mark = new Marker(m_size);
         m_constants = new BoardConstants(size);
         initAllPoints();
         newGame();
@@ -303,87 +247,6 @@ public final class Board
         m_toMove = otherColor;        
     }
 
-    public void scoreBegin(GoPoint[] isDeadStone)
-    {
-        for (int i = 0; i < m_allPoints.length; ++i)
-            scoreSetDead(m_allPoints[i], false);
-        if (isDeadStone != null)
-            for (int i = 0; i < isDeadStone.length; ++i)
-                scoreSetDead(isDeadStone[i], true);
-        calcScore();
-    }
-
-    /** Mark point as dead for scoring. */
-    public void scoreSetDead(GoPoint p, boolean value)
-    {
-        m_dead[p.getX()][p.getY()] = value;
-    }
-
-    public Score scoreGet(double komi, int rules)
-    {
-        Score s = new Score();
-        s.m_rules = rules;
-        s.m_komi = komi;
-        s.m_capturedBlack = m_capturedB;
-        s.m_capturedWhite = m_capturedW;
-        int areaDiff = 0;
-        int territoryDiff = 0;
-        for (int i = 0; i < m_allPoints.length; ++i)
-        {
-            GoPoint p = m_allPoints[i];
-            GoColor c = getColor(p);
-            GoColor sc = getScore(p);
-            if (sc == GoColor.BLACK)
-            {
-                ++s.m_areaBlack;
-                ++areaDiff;
-            }
-            else if (sc == GoColor.WHITE)
-            {
-                ++s.m_areaWhite;
-                --areaDiff;
-            }
-            if (c == GoColor.EMPTY)
-            {
-                if (sc == GoColor.BLACK)
-                {
-                    ++s.m_territoryBlack;
-                    ++territoryDiff;
-                }
-                else if (sc == GoColor.WHITE)
-                {
-                    ++s.m_territoryWhite;
-                    --territoryDiff;
-                }
-            }
-            if (c == GoColor.BLACK && sc == GoColor.WHITE)
-            {
-                ++s.m_capturedBlack;
-                ++s.m_territoryWhite;
-                --territoryDiff;
-            }
-            if (c == GoColor.WHITE && sc == GoColor.BLACK)
-            {
-                ++s.m_capturedWhite;
-                ++s.m_territoryBlack;
-                ++territoryDiff;
-            }
-        }
-        s.m_resultChinese = areaDiff - komi;
-        s.m_resultJapanese =
-            s.m_capturedWhite - s.m_capturedBlack + territoryDiff - komi;
-        if (rules == RULES_JAPANESE)
-            s.m_result = s.m_resultJapanese;
-        else
-            s.m_result = s.m_resultChinese;
-        return s;
-    }
-
-    public boolean scoreGetDead(GoPoint p)
-    {
-        return m_dead[p.getX()][p.getY()];
-    }
-
     public void setToMove(GoColor toMove)
     {
         m_toMove = toMove;
@@ -473,9 +336,7 @@ public final class Board
         public final ArrayList m_suicide;
     }
 
-    private boolean m_mark[][];
-
-    private boolean m_dead[][];
+    private Marker m_mark;
 
     private int m_size;
 
@@ -486,8 +347,6 @@ public final class Board
     private final ArrayList m_moves = new ArrayList(361);
 
     private GoColor m_color[][];
-
-    private GoColor m_score[][];
 
     private GoColor m_toMove;
 
@@ -520,7 +379,7 @@ public final class Board
 
     private void checkKill(GoPoint p, GoColor color, ArrayList killed)
     {
-        assert(isMarkCleared());
+        assert(m_mark.isCleared());
         ArrayList stones = new ArrayList();
         if (isDead(p, color, stones))
         {
@@ -528,17 +387,8 @@ public final class Board
             for (int i = 0; i < stones.size(); ++i)
                 setColor((GoPoint)stones.get(i), GoColor.EMPTY);
         }
-        setMark(stones, false);
-        assert(isMarkCleared());
-    }
-
-    private void clearMark()
-    {
-        for (int i = 0; i < m_allPoints.length; ++i)
-        {
-            GoPoint p = m_allPoints[i];
-            setMark(p, false);
-        }
+        m_mark.set(stones, false);
+        assert(m_mark.isCleared());
     }
 
     private void findStones(GoPoint p, GoColor color, ArrayList stones)
@@ -546,18 +396,13 @@ public final class Board
         GoColor c = getColor(p);
         if (c != color)
             return;
-        if (getMark(p))
+        if (m_mark.get(p))
             return;
-        setMark(p, true);
+        m_mark.set(p, true);
         stones.add(p);
         ArrayList adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
             findStones((GoPoint)(adj.get(i)), color, stones);
-    }
-
-    private boolean getMark(GoPoint p)
-    {
-        return m_mark[p.getX()][p.getY()];
     }
 
     private void initAllPoints()
@@ -579,9 +424,9 @@ public final class Board
             return false;
         if (c != color)
             return true;
-        if (getMark(p))
+        if (m_mark.get(p))
             return true;
-        setMark(p, true);
+        m_mark.set(p, true);
         stones.add(p);
         ArrayList adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
@@ -590,54 +435,10 @@ public final class Board
         return true;
     }
 
-    private boolean isMarkCleared()
-    {
-        for (int i = 0; i < m_allPoints.length; ++i)
-            if (getMark(m_allPoints[i]))
-                 return false;
-        return true;
-    }    
-
-    private boolean isTerritory(GoPoint p, ArrayList territory, GoColor color)
-    {
-        GoColor c = getColor(p);
-        if (c == color.otherColor() && ! scoreGetDead(p))
-            return false;
-        if (c == color)
-            return (! scoreGetDead(p));
-        if (getMark(p))
-            return true;
-        setMark(p, true);
-        territory.add(p);
-        ArrayList adj = getAdjacentPoints(p);
-        for (int i = 0; i < adj.size(); ++i)
-            if (! isTerritory((GoPoint)(adj.get(i)), territory, color))
-                return false;
-        return true;
-    }
-
     private void setColor(GoPoint point, GoColor color)
     {
         assert(point != null);
         m_color[point.getX()][point.getY()] = color;
-    }
-
-    private void setMark(GoPoint p, boolean value)
-    {
-        m_mark[p.getX()][p.getY()] = value;
-    }
-
-    private void setMark(ArrayList points, boolean value)
-    {
-        int size = points.size();
-        for (int i = 0; i < size; ++i)
-            setMark((GoPoint)points.get(i), value);
-    }
-
-    private void setScore(GoPoint p, GoColor c)
-    {
-        assert(c != null);
-        m_score[p.getX()][p.getY()] = c;
     }
 }
 

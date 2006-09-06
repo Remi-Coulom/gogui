@@ -36,6 +36,8 @@ public interface ConstBoard
 
     int getSize();
 
+    void getStones(GoPoint p, GoColor color, ArrayList stones);
+
     GoColor getToMove();
 
     boolean isHandicap(GoPoint point);

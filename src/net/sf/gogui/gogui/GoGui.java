@@ -48,6 +48,7 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
+import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -823,9 +824,9 @@ public class GoGui
         }
         else if (m_scoreMode && ! modifiedSelect)
         {
-            GuiBoardUtil.scoreSetDead(m_guiBoard, m_board, p);
+            GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, m_board, p);
             double komi = m_gameTree.getGameInformation().m_komi;
-            m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
+            m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
             return;
         }
         else if (modifiedSelect)
@@ -1110,6 +1111,8 @@ public class GoGui
     private final File m_file;
 
     private final Session m_session = new Session("");
+
+    private final CountScore m_countScore = new CountScore();
 
     private final StatusBar m_statusBar;
 
@@ -2037,7 +2040,7 @@ public class GoGui
         if (accepted)
         {
             double komi = m_gameTree.getGameInformation().m_komi;
-            setResult(m_board.scoreGet(komi, getRules()).formatResult());
+            setResult(m_countScore.getScore(komi, getRules()).formatResult());
         }
         clearStatus();
         m_guiBoard.clearAll();
@@ -2809,12 +2812,13 @@ public class GoGui
     private void initScore(GoPoint[] isDeadStone)
     {
         resetBoard();
-        GuiBoardUtil.scoreBegin(m_guiBoard, m_board, isDeadStone);
+        GuiBoardUtil.scoreBegin(m_guiBoard, m_countScore, m_board,
+                                isDeadStone);
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
         double komi = m_gameTree.getGameInformation().m_komi;
-        m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
+        m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
         showStatus("Please mark dead groups");
