@@ -66,7 +66,7 @@ public class EditBookmarksDialog
                         assert(false);
                 }
             };
-        JPanel panel = new JPanel(new BorderLayout(GuiUtils.PAD, 0));
+        JPanel panel = new JPanel(new BorderLayout(GuiUtil.PAD, 0));
         m_list = new JList();
         m_list.addListSelectionListener(new ListSelectionListener()
             {
@@ -176,7 +176,7 @@ public class EditBookmarksDialog
     private JPanel createButtonPanel()
     {
         JPanel buttonPanel
-            = new JPanel(new GridLayout(0, 1, GuiUtils.PAD, GuiUtils.PAD));
+            = new JPanel(new GridLayout(0, 1, GuiUtil.PAD, GuiUtil.PAD));
         m_moveUp = createButton("Move Up", "move-up");
         buttonPanel.add(m_moveUp);
         m_moveDown = createButton("Move Down", "move-down");

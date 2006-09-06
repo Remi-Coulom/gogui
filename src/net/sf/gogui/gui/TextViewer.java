@@ -112,7 +112,7 @@ public class TextViewer
         Container contentPane = getContentPane();
         contentPane.add(panel, BorderLayout.CENTER);
         m_textPane = new GuiTextPane(fastPaint);
-        GuiUtils.setMonospacedFont(m_textPane.get());
+        GuiUtil.setMonospacedFont(m_textPane.get());
         Document doc = m_textPane.getDocument();
         while (text.charAt(text.length() - 1) == '\n')
             text = text.substring(0, text.length() - 1);

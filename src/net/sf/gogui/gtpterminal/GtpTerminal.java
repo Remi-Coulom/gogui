@@ -18,16 +18,16 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardUtils;
+import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpUtils;
+import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -145,7 +145,7 @@ public class GtpTerminal
         try
         {
             GoPoint point =
-                GtpUtils.parsePoint(response.toString(), m_board.getSize());
+                GtpUtil.parsePoint(response.toString(), m_board.getSize());
             System.out.println("Computer move: " + GoPoint.toString(point));
             play(Move.get(point, toMove));
             printBoard();
@@ -161,7 +161,7 @@ public class GtpTerminal
     */
     private boolean handleCommand(String cmdLine)
     {
-        String[] cmdArray = StringUtils.splitArguments(cmdLine);
+        String[] cmdArray = StringUtil.splitArguments(cmdLine);
         String cmd = cmdArray[0];
         if (cmd.equals("quit"))
         {
@@ -194,7 +194,7 @@ public class GtpTerminal
             try
             {
                 GoPoint point
-                    = GtpUtils.parsePoint(cmdLine, m_board.getSize());
+                    = GtpUtil.parsePoint(cmdLine, m_board.getSize());
                 cmdPlay(point);
             }
             catch (GtpError error)
@@ -348,7 +348,7 @@ public class GtpTerminal
 
     private void printBoard()
     {
-        BoardUtils.print(m_board, System.out, true);
+        BoardUtil.print(m_board, System.out, true);
     }
 
     private void save(String[] cmdArray)

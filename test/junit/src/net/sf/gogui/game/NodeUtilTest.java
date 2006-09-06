@@ -12,7 +12,7 @@ import net.sf.gogui.go.Move;
 
 //----------------------------------------------------------------------------
 
-public class NodeUtilsTest
+public class NodeUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])
@@ -22,29 +22,29 @@ public class NodeUtilsTest
 
     public static junit.framework.Test suite()
     {
-        return new junit.framework.TestSuite(NodeUtilsTest.class);
+        return new junit.framework.TestSuite(NodeUtilTest.class);
     }
 
     public void testFindByMoveNumber()
     {
-        assertTrue(NodeUtils.findByMoveNumber(m_node0, 1) == m_node2);
-        assertTrue(NodeUtils.findByMoveNumber(m_node0, 2) == m_node3);
-        assertTrue(NodeUtils.findByMoveNumber(m_node4, 2) == m_node3);
-        assertTrue(NodeUtils.findByMoveNumber(m_node0, 3) == m_node5);
-        assertNull(NodeUtils.findByMoveNumber(m_node0, 4));
-        assertTrue(NodeUtils.findByMoveNumber(m_node0, 0) == m_node0);
-        assertNull(NodeUtils.findByMoveNumber(m_node0, -1));
-        assertTrue(NodeUtils.findByMoveNumber(m_node7, 1) == m_node8);
+        assertTrue(NodeUtil.findByMoveNumber(m_node0, 1) == m_node2);
+        assertTrue(NodeUtil.findByMoveNumber(m_node0, 2) == m_node3);
+        assertTrue(NodeUtil.findByMoveNumber(m_node4, 2) == m_node3);
+        assertTrue(NodeUtil.findByMoveNumber(m_node0, 3) == m_node5);
+        assertNull(NodeUtil.findByMoveNumber(m_node0, 4));
+        assertTrue(NodeUtil.findByMoveNumber(m_node0, 0) == m_node0);
+        assertNull(NodeUtil.findByMoveNumber(m_node0, -1));
+        assertTrue(NodeUtil.findByMoveNumber(m_node7, 1) == m_node8);
     }
 
     public void testFindByVariation()
     {
-        assertTrue(NodeUtils.findByVariation(m_node0, "") == m_node0);
-        assertTrue(NodeUtils.findByVariation(m_node0, "1") == m_node2);
-        assertTrue(NodeUtils.findByVariation(m_node0, "2") == m_node7);
-        assertNull(NodeUtils.findByVariation(m_node0, "3"));
-        assertTrue(NodeUtils.findByVariation(m_node0, "2.1") == m_node8);
-        assertTrue(NodeUtils.findByVariation(m_node0, "2.2") == m_node9);
+        assertTrue(NodeUtil.findByVariation(m_node0, "") == m_node0);
+        assertTrue(NodeUtil.findByVariation(m_node0, "1") == m_node2);
+        assertTrue(NodeUtil.findByVariation(m_node0, "2") == m_node7);
+        assertNull(NodeUtil.findByVariation(m_node0, "3"));
+        assertTrue(NodeUtil.findByVariation(m_node0, "2.1") == m_node8);
+        assertTrue(NodeUtil.findByVariation(m_node0, "2.2") == m_node9);
     }
 
     public void testGetAllAsMovesMoveOnly()
@@ -52,7 +52,7 @@ public class NodeUtilsTest
         Move move = Move.get(1, 1, GoColor.BLACK);
         Node node = new Node(move);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(move, moves.get(0));
     }
@@ -63,7 +63,7 @@ public class NodeUtilsTest
         Node node = new Node(move);
         node.setPlayer(GoColor.BLACK);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(move, moves.get(0));
         assertSame(Move.getPass(GoColor.WHITE), moves.get(1));
@@ -75,7 +75,7 @@ public class NodeUtilsTest
         Node node = new Node(move);
         node.setPlayer(GoColor.WHITE);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(move, moves.get(0));
         assertSame(Move.getPass(GoColor.BLACK), moves.get(1));
@@ -87,7 +87,7 @@ public class NodeUtilsTest
         GoPoint point = GoPoint.get(1, 1);
         node.addBlack(point);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(point, GoColor.BLACK), moves.get(0));
     }
@@ -99,7 +99,7 @@ public class NodeUtilsTest
         node.addBlack(point);
         node.setPlayer(GoColor.WHITE);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(point, GoColor.BLACK), moves.get(0));
     }
@@ -113,7 +113,7 @@ public class NodeUtilsTest
         node.addBlack(point1);
         node.addBlack(point2);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
         assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
         assertSame(Move.get(point2, GoColor.BLACK), moves.get(1));
@@ -128,7 +128,7 @@ public class NodeUtilsTest
         node.addBlack(point1);
         node.addWhite(point2);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
         assertSame(Move.get(point2, GoColor.WHITE), moves.get(1));
@@ -143,7 +143,7 @@ public class NodeUtilsTest
         node.addBlack(point1);
         node.addWhite(point2);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(3, moves.size());
         assertSame(Move.get(point1, GoColor.BLACK), moves.get(0));
         assertSame(Move.get(point2, GoColor.WHITE), moves.get(1));
@@ -159,7 +159,7 @@ public class NodeUtilsTest
         node.addWhite(point2);
         node.setPlayer(GoColor.WHITE);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(point2, GoColor.WHITE), moves.get(0));
         assertSame(Move.get(point1, GoColor.BLACK), moves.get(1));
@@ -172,7 +172,7 @@ public class NodeUtilsTest
         node.addWhite(point);
         node.setPlayer(GoColor.WHITE);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(2, moves.size());
         assertSame(Move.get(point, GoColor.WHITE), moves.get(0));
         assertSame(Move.getPass(GoColor.BLACK), moves.get(1));
@@ -184,23 +184,23 @@ public class NodeUtilsTest
         GoPoint point = GoPoint.get(1, 1);
         node.addWhite(point);
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assertEquals(1, moves.size());
         assertSame(Move.get(point, GoColor.WHITE), moves.get(0));
     }
 
     public void testGetBackToMainVariation()
     {
-        assertTrue(NodeUtils.getBackToMainVariation(m_node1) == m_node1);
-        assertTrue(NodeUtils.getBackToMainVariation(m_node5) == m_node5);
-        assertTrue(NodeUtils.getBackToMainVariation(m_node7) == m_node1);
-        assertTrue(NodeUtils.getBackToMainVariation(m_node8) == m_node1);
-        assertTrue(NodeUtils.getBackToMainVariation(m_node9) == m_node1);
+        assertTrue(NodeUtil.getBackToMainVariation(m_node1) == m_node1);
+        assertTrue(NodeUtil.getBackToMainVariation(m_node5) == m_node5);
+        assertTrue(NodeUtil.getBackToMainVariation(m_node7) == m_node1);
+        assertTrue(NodeUtil.getBackToMainVariation(m_node8) == m_node1);
+        assertTrue(NodeUtil.getBackToMainVariation(m_node9) == m_node1);
     }
 
     public void testGetChildrenMoves()
     {
-        ArrayList moves = NodeUtils.getChildrenMoves(m_node7);
+        ArrayList moves = NodeUtil.getChildrenMoves(m_node7);
         assertEquals(moves.size(), 3);
         assertTrue(moves.get(0) == GoPoint.get(0, 0));
         assertTrue(moves.get(1) == GoPoint.get(0, 0));
@@ -209,62 +209,62 @@ public class NodeUtilsTest
 
     public void testGetChildWithMove()
     {
-        assertTrue(NodeUtils.getChildWithMove(m_node7,
+        assertTrue(NodeUtil.getChildWithMove(m_node7,
                                               Move.get(0, 0,
                                                           GoColor.BLACK))
                    == m_node8);
-        assertNull(NodeUtils.getChildWithMove(m_node7,
+        assertNull(NodeUtil.getChildWithMove(m_node7,
                                               Move.get(2, 3,
                                                           GoColor.BLACK)));
     }
 
     public void testGetDepth()
     {
-        assertEquals(NodeUtils.getDepth(m_node0), 0);
-        assertEquals(NodeUtils.getDepth(m_node2), 2);
-        assertEquals(NodeUtils.getDepth(m_node6), 6);
-        assertEquals(NodeUtils.getDepth(m_node8), 3);
+        assertEquals(NodeUtil.getDepth(m_node0), 0);
+        assertEquals(NodeUtil.getDepth(m_node2), 2);
+        assertEquals(NodeUtil.getDepth(m_node6), 6);
+        assertEquals(NodeUtil.getDepth(m_node8), 3);
     }
 
     public void testGetLast()
     {
-        assertTrue(NodeUtils.getLast(m_node1) == m_node6);
-        assertTrue(NodeUtils.getLast(m_node7) == m_node8);
-        assertTrue(NodeUtils.getLast(m_node10) == m_node10);
+        assertTrue(NodeUtil.getLast(m_node1) == m_node6);
+        assertTrue(NodeUtil.getLast(m_node7) == m_node8);
+        assertTrue(NodeUtil.getLast(m_node10) == m_node10);
     }
 
     public void testGetMoveNumber()
     {
-        assertEquals(NodeUtils.getMoveNumber(m_node0), 0);
-        assertEquals(NodeUtils.getMoveNumber(m_node1), 0);
-        assertEquals(NodeUtils.getMoveNumber(m_node2), 1);
-        assertEquals(NodeUtils.getMoveNumber(m_node3), 2);
-        assertEquals(NodeUtils.getMoveNumber(m_node4), 2);
-        assertEquals(NodeUtils.getMoveNumber(m_node5), 3);
-        assertEquals(NodeUtils.getMoveNumber(m_node6), 3);
+        assertEquals(NodeUtil.getMoveNumber(m_node0), 0);
+        assertEquals(NodeUtil.getMoveNumber(m_node1), 0);
+        assertEquals(NodeUtil.getMoveNumber(m_node2), 1);
+        assertEquals(NodeUtil.getMoveNumber(m_node3), 2);
+        assertEquals(NodeUtil.getMoveNumber(m_node4), 2);
+        assertEquals(NodeUtil.getMoveNumber(m_node5), 3);
+        assertEquals(NodeUtil.getMoveNumber(m_node6), 3);
     }
 
     public void testGetMovesLeft()
     {
-        assertEquals(NodeUtils.getMovesLeft(m_node0), 3);
-        assertEquals(NodeUtils.getMovesLeft(m_node1), 3);
-        assertEquals(NodeUtils.getMovesLeft(m_node2), 2);
-        assertEquals(NodeUtils.getMovesLeft(m_node3), 1);
-        assertEquals(NodeUtils.getMovesLeft(m_node4), 1);
-        assertEquals(NodeUtils.getMovesLeft(m_node5), 0);
-        assertEquals(NodeUtils.getMovesLeft(m_node6), 0);
-        assertEquals(NodeUtils.getMovesLeft(m_node7), 1);
+        assertEquals(NodeUtil.getMovesLeft(m_node0), 3);
+        assertEquals(NodeUtil.getMovesLeft(m_node1), 3);
+        assertEquals(NodeUtil.getMovesLeft(m_node2), 2);
+        assertEquals(NodeUtil.getMovesLeft(m_node3), 1);
+        assertEquals(NodeUtil.getMovesLeft(m_node4), 1);
+        assertEquals(NodeUtil.getMovesLeft(m_node5), 0);
+        assertEquals(NodeUtil.getMovesLeft(m_node6), 0);
+        assertEquals(NodeUtil.getMovesLeft(m_node7), 1);
     }
 
     public void testTruncateChildren()
     {
         Node node = new Node();
         assertEquals(node.getNumberChildren(), 0);
-        NodeUtils.truncateChildren(node);
+        NodeUtil.truncateChildren(node);
         node.append(new Node());
         node.append(new Node());
         assertEquals(node.getNumberChildren(), 2);
-        NodeUtils.truncateChildren(node);
+        NodeUtil.truncateChildren(node);
         assertEquals(node.getNumberChildren(), 0);
     }
 

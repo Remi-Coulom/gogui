@@ -10,7 +10,7 @@ import java.io.PrintStream;
 //----------------------------------------------------------------------------
 
 /** Static utility functions related to class Board. */
-public final class BoardUtils
+public final class BoardUtil
 {
     /** Number of rotation modes for #rotate(). */
     public static final int NUMBER_ROTATIONS = 8;
@@ -110,7 +110,7 @@ public final class BoardUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private BoardUtils()
+    private BoardUtil()
     {
     }
 

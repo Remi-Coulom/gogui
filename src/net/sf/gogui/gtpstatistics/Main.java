@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -111,7 +111,7 @@ public final class Main
         }
         catch (Throwable t)
         {
-            StringUtils.printException(t);
+            StringUtil.printException(t);
             System.exit(-1);
         }
     }
@@ -128,7 +128,7 @@ public final class Main
         if (opt.isSet(option))
         {
             String string = opt.getString(option);
-            String[] array = StringUtils.split(string, ',');
+            String[] array = StringUtil.split(string, ',');
             result = new ArrayList(array.length);
             for (int i = 0; i < array.length; ++i)
                 result.add(array[i].trim());

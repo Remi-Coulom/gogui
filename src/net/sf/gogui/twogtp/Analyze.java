@@ -13,10 +13,10 @@ import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Statistics;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -29,9 +29,9 @@ public class Analyze
         File file = new File(filename);
         readFile(file);
         File htmlFile =
-            new File(FileUtils.replaceExtension(file, "dat", "html"));
+            new File(FileUtil.replaceExtension(file, "dat", "html"));
         File dataFile =
-            new File(FileUtils.replaceExtension(file, "dat", "summary.dat"));
+            new File(FileUtil.replaceExtension(file, "dat", "summary.dat"));
         if (! force)
         {
             if (htmlFile.exists())
@@ -280,8 +280,8 @@ public class Analyze
             gamePrefix = name.substring(0, name.length() - 5);;
         }
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        NumberFormat format = StringUtils.getNumberFormat(1);
-        String charset = StringUtils.getDefaultEncoding();
+        NumberFormat format = StringUtil.getNumberFormat(1);
+        String charset = StringUtil.getDefaultEncoding();
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + m_black + " - " + m_white + "</title>\n" +
@@ -371,7 +371,7 @@ public class Analyze
         }
         out.print("</table>\n" +
                   "<hr>\n" +
-                  "<address><small>Generated on " + StringUtils.getDateShort()
+                  "<address><small>Generated on " + StringUtil.getDateShort()
                   + " by TwoGtp " + Version.get()
                   + " (<a href=\"http://gogui.sf.net\">"
                   + "http://gogui.sf.net</a>)</small></address>\n" +
@@ -384,7 +384,7 @@ public class Analyze
                                   ResultStatistics statistics)
         throws Exception
     {
-        NumberFormat format = StringUtils.getNumberFormat(1);
+        NumberFormat format = StringUtil.getNumberFormat(1);
         out.print("<h2>Result [" + name + "]</h2>\n" +
                   "<p>\n" +
                   "<table border=\"0\">\n");
@@ -444,8 +444,8 @@ public class Analyze
     private void writeData(File file) throws Exception
     {
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        NumberFormat format1 = StringUtils.getNumberFormat(1);
-        NumberFormat format2 = StringUtils.getNumberFormat(2);
+        NumberFormat format1 = StringUtil.getNumberFormat(1);
+        NumberFormat format2 = StringUtil.getNumberFormat(2);
         Histogram histoBlack = m_statisticsBlack.m_histo;
         Histogram histoWhite = m_statisticsWhite.m_histo;
         Histogram histoReferee = m_statisticsReferee.m_histo;

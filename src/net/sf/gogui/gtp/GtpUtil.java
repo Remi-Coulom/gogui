@@ -16,12 +16,12 @@ import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
 /** Utility functions for parsing GTP responses. */
-public final class GtpUtils
+public final class GtpUtil
 {
     public static double[][] parseDoubleBoard(String response, int boardSize)
         throws GtpError
@@ -121,7 +121,7 @@ public final class GtpUtils
     {
         pointList.clear();
         stringList.clear();
-        String array[] = StringUtils.splitArguments(s);
+        String array[] = StringUtil.splitArguments(s);
         boolean nextIsPoint = true;
         GoPoint point = null;
         for (int i = 0; i < array.length; ++i)
@@ -160,7 +160,7 @@ public final class GtpUtils
                     ++y;
                     continue;
                 }
-                String[] args = StringUtils.splitArguments(line);
+                String[] args = StringUtil.splitArguments(line);
                 if (args.length < boardSize)
                     throw new GtpError("Incomplete string board");
                 for (int x = 0; x < boardSize; ++x)
@@ -179,7 +179,7 @@ public final class GtpUtils
                                         int boardSize)
     {
         ArrayList list = new ArrayList(32);
-        String token[] = StringUtils.splitArguments(s);
+        String token[] = StringUtil.splitArguments(s);
         boolean isColorSet = true;
         for (int i = 0; i < token.length; ++i)
         {
@@ -252,7 +252,7 @@ public final class GtpUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private GtpUtils()
+    private GtpUtil()
     {
     }
 }

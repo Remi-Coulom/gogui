@@ -19,7 +19,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -183,7 +183,7 @@ public class SgfWriter
         String appName = application;
         if (version != null && ! version.equals(""))
             appName = appName + ":" + version;
-        print(";FF[4]CA[" + getEscaped(StringUtils.getDefaultEncoding())
+        print(";FF[4]CA[" + getEscaped(StringUtil.getDefaultEncoding())
               + "]AP[" + getEscaped(appName) + "]");
         if (m_size != 19)
             print("SZ[" + m_size + "]");

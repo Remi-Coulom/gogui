@@ -17,8 +17,8 @@ import javax.comm.SerialPort;
 import javax.comm.UnsupportedCommOperationException;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.ProcessUtils;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.ProcessUtil;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -114,8 +114,8 @@ public final class Main
             if (device.equals(""))
             {
                 Runtime runtime = Runtime.getRuntime();
-                process = runtime.exec(StringUtils.splitArguments(program));
-                Thread stdErrThread = new ProcessUtils.StdErrThread(process);
+                process = runtime.exec(StringUtil.splitArguments(program));
+                Thread stdErrThread = new ProcessUtil.StdErrThread(process);
                 stdErrThread.start();
                 title = title + program;
                 in = process.getInputStream();
@@ -142,7 +142,7 @@ public final class Main
         }
         catch (Throwable t)
         {
-            StringUtils.printException(t);
+            StringUtil.printException(t);
             exitStatus = -1;
         }
         finally
@@ -156,7 +156,7 @@ public final class Main
             }
             catch (IOException e)
             {
-                StringUtils.printException(e);
+                StringUtil.printException(e);
             }
             if (process != null)
             {

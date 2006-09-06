@@ -19,9 +19,9 @@ import java.util.Locale;
 import java.util.Stack;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardUtils;
+import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
@@ -29,9 +29,9 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpUtils;
+import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -260,7 +260,7 @@ public class GtpAdapter
         boolean isValid = false;
         double score = 0;
         String[] args
-            = StringUtils.splitArguments(programResponse.toString());
+            = StringUtil.splitArguments(programResponse.toString());
         if (args.length > 0)
         {
             String s = args[0];
@@ -339,7 +339,7 @@ public class GtpAdapter
         }
         if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
             return;
-        GoPoint point = GtpUtils.parsePoint(response, m_boardSize);
+        GoPoint point = GtpUtil.parsePoint(response, m_boardSize);
         m_board.play(point, color);
         cmd.setResponse(response);
     }
@@ -380,7 +380,7 @@ public class GtpAdapter
     {
         OutputStream outputStream = new ByteArrayOutputStream(2048);
         PrintStream printStream = new PrintStream(outputStream);
-        BoardUtils.print(m_board, printStream, true);
+        BoardUtil.print(m_board, printStream, true);
         cmd.getResponse().append("\n");
         cmd.getResponse().append(outputStream.toString());
     }
@@ -481,7 +481,7 @@ public class GtpAdapter
                         break;
                 }
                 ArrayList moves = new ArrayList();
-                NodeUtils.getAllAsMoves(node, moves);
+                NodeUtil.getAllAsMoves(node, moves);
                 for (int i = 0; i < moves.size(); ++i)
                 {
                     Move move = (Move)moves.get(i);

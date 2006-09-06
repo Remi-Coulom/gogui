@@ -20,7 +20,7 @@ import net.sf.gogui.go.Move;
 //----------------------------------------------------------------------------
 
 /** Utility functions for class GuiBoard. */
-public final class GuiBoardUtils
+public final class GuiBoardUtil
 {
     public static Color getColor(String string)
     {
@@ -218,7 +218,7 @@ public final class GuiBoardUtils
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkTriangle((GoPoint)(mark.get(i)), true);
-        GuiBoardUtils.setSelect(guiBoard, node.getMarked(MarkType.SELECT),
+        GuiBoardUtil.setSelect(guiBoard, node.getMarked(MarkType.SELECT),
                                 true);
         mark = node.getMarked(MarkType.TERRITORY_BLACK);
         if (mark != null)
@@ -325,7 +325,7 @@ public final class GuiBoardUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private GuiBoardUtils()
+    private GuiBoardUtil()
     {
     }
 

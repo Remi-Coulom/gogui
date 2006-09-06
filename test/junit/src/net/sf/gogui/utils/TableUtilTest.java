@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 //----------------------------------------------------------------------------
 
-public class TableUtilsTest
+public class TableUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])
@@ -19,7 +19,7 @@ public class TableUtilsTest
 
     public static junit.framework.Test suite()
     {
-        return new junit.framework.TestSuite(TableUtilsTest.class);
+        return new junit.framework.TestSuite(TableUtilTest.class);
     }
 
     public void testAllEmpty()
@@ -32,8 +32,8 @@ public class TableUtilsTest
         table.set("column2", "value");
         table.startRow();
         table.set("column1", " \t");
-        assertTrue(TableUtils.allEmpty(table, "column1"));
-        assertFalse(TableUtils.allEmpty(table, "column2"));
+        assertTrue(TableUtil.allEmpty(table, "column1"));
+        assertFalse(TableUtil.allEmpty(table, "column2"));
     }
 
     public void testAppendRow()
@@ -53,7 +53,7 @@ public class TableUtilsTest
         from.set("column2", "32");
         Table to = new Table(columnTitles);
         to.startRow();
-        TableUtils.appendRow(to, from, 1);
+        TableUtil.appendRow(to, from, 1);
         assertEquals(2, to.getNumberRows());
         assertEquals("21", to.get(0, 1));
         assertEquals(null, to.get(1, 1));
@@ -64,7 +64,7 @@ public class TableUtilsTest
     {
         Histogram histo = new Histogram(-1, 1, 1);
         histo.add(0);
-        Table table = TableUtils.fromHistogram(histo, "");
+        Table table = TableUtil.fromHistogram(histo, "");
         assertEquals(table.getNumberColumns(), 2);
         assertEquals(table.getNumberRows(), 1);
     }

@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Table;
-import net.sf.gogui.utils.TableUtils;
+import net.sf.gogui.utils.TableUtil;
 
 //----------------------------------------------------------------------------
 
@@ -49,11 +49,11 @@ public final class CommandStatistics
         columnTitles.add("Error");
         m_tableAtMove = new Table(columnTitles);
         Table tableAtMove;
-        m_maxMove = (int)(TableUtils.getMax(table, "Move") + 1);
+        m_maxMove = (int)(TableUtil.getMax(table, "Move") + 1);
         boolean isBeginCommand = true;
         for (int move = 1; move <= m_maxMove; ++move)
         {
-            tableAtMove = TableUtils.selectIntRange(table, "Move", move,
+            tableAtMove = TableUtil.selectIntRange(table, "Move", move,
                                                     move);
             PositionStatistics statisticsAtMove
                 = new PositionStatistics(command, tableAtMove, true, min,
@@ -75,14 +75,14 @@ public final class CommandStatistics
         if (getCount() > 0)
         {
             Histogram histogram = m_statisticsAll.m_histogram;
-            Table histoTable = TableUtils.fromHistogram(histogram, command);
+            Table histoTable = TableUtil.fromHistogram(histogram, command);
             Plot plot = new Plot(200, 150, color, precision);
             setHistogramProperties(plot);
             plot.plot(histoFile, histoTable, command, "Count", null);
             histogram = m_statisticsFinal.m_histogram;
             if (m_statisticsFinal.getCount() > 0)
             {
-                histoTable = TableUtils.fromHistogram(histogram, command);
+                histoTable = TableUtil.fromHistogram(histogram, command);
                 plot = new Plot(200, 150, color, precision);
                 setHistogramProperties(plot);
                 plot.plot(histoFileFinal, histoTable, command, "Count", null);

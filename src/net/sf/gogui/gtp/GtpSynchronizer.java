@@ -141,7 +141,7 @@ public class GtpSynchronizer
     {
         if (moves.size() > 1 && isCommandSupported("play_sequence"))
         {
-            String cmd = GtpUtils.getPlaySequenceCommand(moves);
+            String cmd = GtpUtil.getPlaySequenceCommand(moves);
             m_gtp.send(cmd);
             for (int i = 0; i < moves.size(); ++i)
                 m_engineMoves.add((Move)moves.get(i));

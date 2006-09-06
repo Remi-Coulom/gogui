@@ -30,7 +30,7 @@ import javax.swing.JPanel;
 import net.sf.gogui.sgf.SgfFilter;
 import net.sf.gogui.thumbnail.Thumbnail;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ public final class SimpleDialogs
 
     public static void showError(Component frame, String message, Exception e)
     {
-        showError(frame, message + "\n" + StringUtils.printException(e));
+        showError(frame, message + "\n" + StringUtil.printException(e));
     }
 
     public static void showInfo(Component frame, String message)

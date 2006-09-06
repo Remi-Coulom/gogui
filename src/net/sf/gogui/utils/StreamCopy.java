@@ -59,7 +59,7 @@ public class StreamCopy
         }
         catch (Throwable e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
     }
 

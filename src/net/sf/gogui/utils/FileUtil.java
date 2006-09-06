@@ -14,7 +14,7 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------
 
 /** Static file utility functions. */
-public final class FileUtils
+public final class FileUtil
 {
     /** Return the file extension of a file name.
         @param file The file.
@@ -129,7 +129,7 @@ public final class FileUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private FileUtils()
+    private FileUtil()
     {
     }
 

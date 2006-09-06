@@ -37,8 +37,8 @@ import javax.swing.event.ListSelectionListener;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpUtils;
-import net.sf.gogui.utils.PrefUtils;
+import net.sf.gogui.gtp.GtpUtil;
+import net.sf.gogui.utils.PrefUtil;
 
 //----------------------------------------------------------------------------
 
@@ -146,8 +146,8 @@ public final class AnalyzeDialog
         ArrayList list = new ArrayList(max);
         for (int i = start; i < max; ++i)
             list.add(getComboBoxItem(i));
-        PrefUtils.putList("net/sf/gogui/gui/analyzedialog/recentcommands",
-                          list);
+        PrefUtil.putList("net/sf/gogui/gui/analyzedialog/recentcommands",
+                         list);
     }
 
     /** Set board size.
@@ -267,7 +267,7 @@ public final class AnalyzeDialog
 
     private JPanel createButtons()
     {
-        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
+        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
         m_runButton = new JButton("Run");
         m_runButton.setToolTipText("Run command");
         m_runButton.setActionCommand("run");
@@ -337,10 +337,10 @@ public final class AnalyzeDialog
         panel.add(m_comboBoxHistory);
         JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
-        lowerPanel.setBorder(GuiUtils.createEmptyBorder());
+        lowerPanel.setBorder(GuiUtil.createEmptyBorder());
         panel.add(lowerPanel);
         JPanel optionsPanel
-            = new JPanel(new GridLayout(0, 2, GuiUtils.PAD, 0));
+            = new JPanel(new GridLayout(0, 2, GuiUtil.PAD, 0));
         lowerPanel.add(optionsPanel);
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -370,7 +370,7 @@ public final class AnalyzeDialog
     {
         m_comboBoxHistory.removeAllItems();
         ArrayList list =
-            PrefUtils.getList("net/sf/gogui/gui/analyzedialog/recentcommands");
+            PrefUtil.getList("net/sf/gogui/gui/analyzedialog/recentcommands");
         for (int i = 0; i < list.size(); ++i)
             m_comboBoxHistory.addItem((String)list.get(i));
         m_firstIsTemp = false;
@@ -428,7 +428,7 @@ public final class AnalyzeDialog
                     command.replaceWildCards(m_selectedColor) + " show";
                 String response = m_gtp.send(commandWithoutArg);
                 ArrayList pointList =
-                    GtpUtils.parsePointArrayList(response, m_boardSize);
+                    GtpUtil.parsePointArrayList(response, m_boardSize);
                 command.setPointListArg(pointList);
             }
             catch (GtpError e)

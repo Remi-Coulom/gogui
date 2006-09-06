@@ -14,12 +14,12 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
 /** Utility functions operating on a tree of nodes. */
-public final class NodeUtils
+public final class NodeUtil
 {
     /** Find first node with a certain move number in main variation
         containing a given node.
@@ -58,7 +58,7 @@ public final class NodeUtils
     {
         if (variation.trim().equals(""))
             return root;
-        String[] tokens = StringUtils.split(variation, '.');
+        String[] tokens = StringUtil.split(variation, '.');
         int[] n = new int[tokens.length];
         for (int i = 0; i < tokens.length; ++i)
         {
@@ -108,7 +108,7 @@ public final class NodeUtils
     }
 
     /** Get stones added and moves all as moves for a list of nodes.
-        Calls NodeUtils.getAllAsMoves(Node node) for all nodes in a
+        Calls NodeUtil.getAllAsMoves(Node node) for all nodes in a
         sequence of subsequent nodes.
     */
     public static ArrayList getAllAsMoves(ArrayList nodes)
@@ -465,7 +465,7 @@ public final class NodeUtils
     public static Node nextNode(Node node, int depth)
     {
         node = nextNode(node);
-        if (node == null || NodeUtils.getDepth(node) <= depth)
+        if (node == null || NodeUtil.getDepth(node) <= depth)
             return null;
         return node;
     }
@@ -518,7 +518,7 @@ public final class NodeUtils
             ArrayList marked = node.getMarked(type);
             if (marked != null && marked.size() > 0)
                 appendInfo(buffer, "Marked " +
-                           StringUtils.capitalize(type.toString()), marked);
+                           StringUtil.capitalize(type.toString()), marked);
         }
         Map labels = node.getLabels();
         if (labels != null && labels.size() > 0)
@@ -557,7 +557,7 @@ public final class NodeUtils
     public static boolean subtreeGreaterThan(Node node, int size)
     {
         int n = 0;
-        int depth = NodeUtils.getDepth(node);
+        int depth = NodeUtil.getDepth(node);
         while (node != null)
         {
             ++n;
@@ -574,7 +574,7 @@ public final class NodeUtils
     public static int subtreeSize(Node node)
     {
         int n = 0;
-        int depth = NodeUtils.getDepth(node);
+        int depth = NodeUtil.getDepth(node);
         while (node != null)
         {
             ++n;
@@ -618,7 +618,7 @@ public final class NodeUtils
         averageDepth /= numberNodes;
         averageChildren /= numberNodes;
         averageChildrenInner /= Math.max(numberInner, 1);
-        NumberFormat format = StringUtils.getNumberFormat(3);
+        NumberFormat format = StringUtil.getNumberFormat(3);
         format.setMinimumFractionDigits(3);
         StringBuffer buffer = new StringBuffer();
         appendInfo(buffer, "Nodes", numberNodes);
@@ -716,7 +716,7 @@ public final class NodeUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private NodeUtils()
+    private NodeUtil()
     {
     }
 }

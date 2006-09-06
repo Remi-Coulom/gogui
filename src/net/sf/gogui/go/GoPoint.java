@@ -7,7 +7,7 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -172,7 +172,7 @@ public final class GoPoint
         throws InvalidPoint
     {
         ArrayList list = new ArrayList();
-        String p[] = StringUtils.splitArguments(s);
+        String p[] = StringUtil.splitArguments(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
                 list.add(parsePoint(p[i], boardSize));

@@ -14,9 +14,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.tex.TexWriter;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ public final class SgfToTex
                 String outFileName;
                 if (arguments.size() == 1)
                     outFileName =
-                        FileUtils.replaceExtension(inFile, "sgf", "tex");
+                        FileUtil.replaceExtension(inFile, "sgf", "tex");
                 else
                     outFileName = (String)arguments.get(1);
                 File outFile = new File(outFileName);
@@ -82,14 +82,14 @@ public final class SgfToTex
                 out = new FileOutputStream(outFile);
                 if (title.equals(""))
                     title =
-                        FileUtils.removeExtension(new File(outFile.getName()),
+                        FileUtil.removeExtension(new File(outFile.getName()),
                                                   "tex");
             }
             convert(in, inFileName, out, title, usePass);
         }
         catch (Throwable t)
         {
-            StringUtils.printException(t);
+            StringUtil.printException(t);
             System.exit(-1);
         }
     }

@@ -255,11 +255,11 @@ public class Options
                 buffer.append(line);
                 buffer.append(' ');
             }
-            parseArgs(StringUtils.splitArguments(buffer.toString()));
+            parseArgs(StringUtil.splitArguments(buffer.toString()));
         }
         catch (IOException e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
         finally
         {
@@ -269,7 +269,7 @@ public class Options
             }
             catch (IOException e)
             {
-                StringUtils.printException(e);
+                StringUtil.printException(e);
             }
         }
     }

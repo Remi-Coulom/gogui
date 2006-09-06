@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -28,7 +28,7 @@ public class GameInfo
 {
     public GameInfo(Clock clock)
     {
-        super(new GridLayout(0, 2, GuiUtils.SMALL_PAD, GuiUtils.SMALL_PAD));
+        super(new GridLayout(0, 2, GuiUtil.SMALL_PAD, GuiUtil.SMALL_PAD));
         m_clock = clock;
         m_move = addEntry("To play:");
         m_number = addEntry("Moves:");
@@ -85,7 +85,7 @@ public class GameInfo
                 lastMove += p.toString();
         }
         m_last.setText(lastMove);
-        m_variation.setText(NodeUtils.getVariationString(node));
+        m_variation.setText(NodeUtil.getVariationString(node));
         double timeLeftBlack = node.getTimeLeft(GoColor.BLACK);
         int movesLeftBlack = node.getMovesLeft(GoColor.BLACK);
         if (! Double.isNaN(timeLeftBlack))
@@ -142,8 +142,8 @@ public class GameInfo
 
     private void updateMoveNumber(Node node)
     {
-        int moveNumber = NodeUtils.getMoveNumber(node);
-        int movesLeft = NodeUtils.getMovesLeft(node);
+        int moveNumber = NodeUtil.getMoveNumber(node);
+        int movesLeft = NodeUtil.getMovesLeft(node);
         if (moveNumber == 0 && movesLeft == 0)
             m_number.setText("");
         else

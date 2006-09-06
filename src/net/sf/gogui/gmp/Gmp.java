@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -369,7 +369,7 @@ class WriteThread extends Thread
         }
         catch (Throwable e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
     }
 
@@ -551,7 +551,7 @@ class MainThread
         }
         catch (Throwable e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
         synchronized (m_mutex)
         {

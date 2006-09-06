@@ -17,7 +17,7 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------
 
 /** Static utility functions related to strings. */
-public final class StringUtils
+public final class StringUtil
 {
     /** Capitalize the first word and trim whitespaces. */
     public static String capitalize(String message)
@@ -160,7 +160,7 @@ public final class StringUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private StringUtils()
+    private StringUtil()
     {
     }
 }

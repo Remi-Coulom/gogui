@@ -14,7 +14,7 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -82,7 +82,7 @@ public class SgfReaderTest
         GameInformation info = gameTree.getGameInformation();
         assertEquals(info.m_boardSize, 19);
         Node root = gameTree.getRoot();
-        assertEquals(NodeUtils.subtreeSize(root), 54);
+        assertEquals(NodeUtil.subtreeSize(root), 54);
         assertEquals(root.getNumberChildren(), 5);
         Node node;
         node = root.getChild(1);

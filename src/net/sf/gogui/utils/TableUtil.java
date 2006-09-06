@@ -10,7 +10,7 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------
 
 /** Utility functions for class Table. */
-public final class TableUtils
+public final class TableUtil
 {
     /** Check if all elements in a column are empty.
         @param table The table.
@@ -268,7 +268,7 @@ public final class TableUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private TableUtils()
+    private TableUtil()
     {
     }
 }

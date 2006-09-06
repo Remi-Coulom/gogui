@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ public class GtpCommand
     {
         StringBuffer buffer = preprocessLine(line);
         assert(! line.trim().equals(""));
-        String[] array = StringUtils.splitArguments(buffer.toString());
+        String[] array = StringUtil.splitArguments(buffer.toString());
         assert(array.length > 0);
         int commandIndex = 0;
         try
@@ -240,7 +240,7 @@ public class GtpCommand
     }
 
     /** Get point argument.
-        Valid point strings are as in GtpUtils.parsePoint (uppercase or
+        Valid point strings are as in GtpUtil.parsePoint (uppercase or
         lowercase coordinates, e.g. "A1", or "pass").
         @param i The index of the argument (starting with zero).
         @param boardSize The board size (points will be checked to be within
@@ -251,11 +251,11 @@ public class GtpCommand
     */
     public GoPoint getPointArg(int i, int boardSize) throws GtpError
     {
-        return GtpUtils.parsePoint(getArg(i), boardSize);
+        return GtpUtil.parsePoint(getArg(i), boardSize);
     }
 
     /** Get point arguments.
-        Valid point strings are as in GtpUtils.parsePoint (uppercase or
+        Valid point strings are as in GtpUtil.parsePoint (uppercase or
         lowercase coordinates, e.g. "A1", or "pass").
         All arguments will be parsed as points.
         @param boardSize The board size (points will be checked to be within

@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ public class ParameterDialog
             {
                 String message =
                     "Could not change parameter " + parameter.getKey()
-                    + ":\n" + StringUtils.capitalize(e.getMessage());
+                    + ":\n" + StringUtil.capitalize(e.getMessage());
                 SimpleDialogs.showError(owner, message);
             }
         }
@@ -118,7 +118,7 @@ public class ParameterDialog
             {
                 m_bool = false;
             }
-            m_panel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
+            m_panel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
             m_checkBox = new JCheckBox(getLabel(), m_bool);
             m_panel.add(m_checkBox);
         }
@@ -153,7 +153,7 @@ public class ParameterDialog
         public StringParameter(String key, String value)
         {
             super(key, value);
-            m_panel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
+            m_panel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
             m_panel.add(new JLabel(getLabel()));
             m_textField = new JTextField(value);
             m_panel.add(m_textField);

@@ -6,10 +6,10 @@
 package net.sf.gogui.gogui;
 
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ public final class Main
         }
         catch (Throwable t)
         {
-            SimpleDialogs.showError(null, StringUtils.printException(t));
+            SimpleDialogs.showError(null, StringUtil.printException(t));
             System.exit(-1);
         }
     }
@@ -49,7 +49,7 @@ public final class Main
         }
         catch (Throwable t)
         {
-            SimpleDialogs.showError(null, StringUtils.printException(t));
+            SimpleDialogs.showError(null, StringUtil.printException(t));
             System.exit(-1);
         }
     }
@@ -63,7 +63,7 @@ public final class Main
         throws GtpError, ErrorMessage
     {
         assert(! settings.m_noStartup);
-        GuiUtils.initLookAndFeel(settings.m_lookAndFeel);
+        GuiUtil.initLookAndFeel(settings.m_lookAndFeel);
         new GoGui(settings.m_program, settings.m_file, settings.m_move,
                   settings.m_time, settings.m_verbose,
                   settings.m_computerBlack, settings.m_computerWhite,

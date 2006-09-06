@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.utils.Platform;
 
 //----------------------------------------------------------------------------
@@ -71,9 +71,9 @@ public class GoGuiToolBar
         assert(node != null);
         boolean hasFather = (node.getFather() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
-        boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
+        boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
         boolean hasPreviousVariation =
-            (NodeUtils.getPreviousVariation(node) != null);
+            (NodeUtil.getPreviousVariation(node) != null);
         m_buttonBeginning.setSameDisabledIcon(hasFather);
         m_buttonBackward.setSameDisabledIcon(hasFather);
         m_buttonBackward10.setSameDisabledIcon(hasFather);

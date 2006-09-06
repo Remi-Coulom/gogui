@@ -17,9 +17,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
-import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.utils.Table;
-import net.sf.gogui.utils.TableUtils;
+import net.sf.gogui.utils.TableUtil;
 
 //----------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ public class Plot
         BufferedImage image
             = new BufferedImage(m_imgWidth, m_imgHeight, type);
         m_graphics2D = image.createGraphics();
-        GuiUtils.setAntiAlias(m_graphics2D);
+        GuiUtil.setAntiAlias(m_graphics2D);
         Font font = m_graphics2D.getFont();
         if (font != null)
         {
@@ -546,13 +546,13 @@ public class Plot
             String xValue = table.get(columnX, row);
             String yValue = table.get(columnY, row);
             if (xValue == null || yValue == null
-                || ! TableUtils.isNumberValue(yValue))
+                || ! TableUtil.isNumberValue(yValue))
                 continue;
-            if (! TableUtils.isBoolValue(yValue))
+            if (! TableUtil.isBoolValue(yValue))
                 m_onlyBoolValues = false;
-            if (! TableUtils.isIntValue(xValue))
+            if (! TableUtil.isIntValue(xValue))
                 m_onlyIntValuesX = false;
-            if (! TableUtils.isIntValue(yValue))
+            if (! TableUtil.isIntValue(yValue))
                 m_onlyIntValuesY = false;
             try
             {

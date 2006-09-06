@@ -13,12 +13,12 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
 /** Static utility functions. */
-public final class Utils
+public final class Util
 {
     /** Create a new node with a move and append it to current node.
         Also adds time information from clock, if not null and initialized.
@@ -102,7 +102,7 @@ public final class Utils
         if (message.length() == 0)
             message = "Command failed";
         else
-            message = StringUtils.capitalize(message);
+            message = StringUtil.capitalize(message);
         String title = "Error";
         if (name != null)
             title = title + " - " + name;
@@ -111,7 +111,7 @@ public final class Utils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private Utils()
+    private Util()
     {
     }
 }

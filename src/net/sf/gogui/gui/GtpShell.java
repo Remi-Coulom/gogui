@@ -43,7 +43,7 @@ import javax.swing.text.Style;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.PrefUtils;
+import net.sf.gogui.utils.PrefUtil;
 
 //----------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ class GtpShellText
                         boolean fast)
     {
         super(fast);
-        GuiUtils.setMonospacedFont(get());
+        GuiUtil.setMonospacedFont(get());
         m_startTime = System.currentTimeMillis();
         m_timeStamp = timeStamp;
         m_historyMin = historyMin;
@@ -326,7 +326,7 @@ public class GtpShell
         ArrayList list = new ArrayList(max);
         for (int i = m_history.size() - max; i < m_history.size(); ++i)
             list.add(m_history.get(i));
-        PrefUtils.putList("net/sf/gogui/gui/gtpshell/recentcommands", list);
+        PrefUtil.putList("net/sf/gogui/gui/gtpshell/recentcommands", list);
     }
 
     public void setCommandInProgess(boolean commandInProgess)
@@ -397,7 +397,7 @@ public class GtpShell
             }
             catch (GtpError e)
             {
-                Utils.showError(owner, m_programName, e);
+                Util.showError(owner, m_programName, e);
                 if (askContinue)
                     return ! SimpleDialogs.showQuestion(owner, "Abort?");
             }
@@ -432,7 +432,7 @@ public class GtpShell
         for (int i = completions.size() - 1; i >= 0; --i)
             appendToHistory(completions.get(i).toString());
         ArrayList list =
-            PrefUtils.getList("net/sf/gogui/gui/gtpshell/recentcommands");
+            PrefUtil.getList("net/sf/gogui/gui/gtpshell/recentcommands");
         for (int i = 0; i < list.size(); ++i)
             appendToHistory((String)list.get(i));
         addAllCompletions(m_history);
@@ -747,7 +747,7 @@ public class GtpShell
         }
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
-        buttonPanel.add(GuiUtils.createSmallFiller(), BorderLayout.WEST);
+        buttonPanel.add(GuiUtil.createSmallFiller(), BorderLayout.WEST);
         buttonPanel.add(m_runButton, BorderLayout.CENTER);
         // Workaround for Java 1.4.1 on Mac OS X add some empty space
         // so that combobox does not overlap the window resize widget

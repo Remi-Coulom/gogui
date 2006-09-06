@@ -9,7 +9,7 @@ import java.io.File;
 
 //----------------------------------------------------------------------------
 
-public class FileUtilsTest
+public class FileUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])
@@ -19,13 +19,13 @@ public class FileUtilsTest
 
     public static junit.framework.Test suite()
     {
-        return new junit.framework.TestSuite(FileUtilsTest.class);
+        return new junit.framework.TestSuite(FileUtilTest.class);
     }
 
     public void testGetExtension()
     {
-        assertEquals("bar", FileUtils.getExtension(new File("foo.bar")));
-        assertEquals(null, FileUtils.getExtension(new File("foo")));
+        assertEquals("bar", FileUtil.getExtension(new File("foo.bar")));
+        assertEquals(null, FileUtil.getExtension(new File("foo")));
     }
 
     public void testGetRelativeURI()
@@ -33,21 +33,21 @@ public class FileUtilsTest
         final char sep = File.separatorChar;
         File from = new File("file1");
         File to = new File("file2");
-        assertEquals("file2", FileUtils.getRelativeURI(from, to));
+        assertEquals("file2", FileUtil.getRelativeURI(from, to));
         from = new File("dir1" + sep + "file1");
         to = new File("dir1" + sep + "file2");
-        assertEquals("file2", FileUtils.getRelativeURI(from, to));
+        assertEquals("file2", FileUtil.getRelativeURI(from, to));
         from = new File("dir1" + sep + "file1");
         to = new File("dir2" + sep + "file2");
-        assertEquals("../dir2/file2", FileUtils.getRelativeURI(from, to));
+        assertEquals("../dir2/file2", FileUtil.getRelativeURI(from, to));
     }
 
     public void testHasExtension()
     {
-        assertTrue(FileUtils.hasExtension(new File("foo.bar"), "bar"));
-        assertTrue(FileUtils.hasExtension(new File("foo.BAR"), "bar"));
-        assertTrue(FileUtils.hasExtension(new File("foo.bar"), "BAR"));
-        assertFalse(FileUtils.hasExtension(new File("bar.foo"), "bar"));
+        assertTrue(FileUtil.hasExtension(new File("foo.bar"), "bar"));
+        assertTrue(FileUtil.hasExtension(new File("foo.BAR"), "bar"));
+        assertTrue(FileUtil.hasExtension(new File("foo.bar"), "BAR"));
+        assertFalse(FileUtil.hasExtension(new File("bar.foo"), "bar"));
     }
 }
 

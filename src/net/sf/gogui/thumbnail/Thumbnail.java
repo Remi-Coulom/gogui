@@ -29,16 +29,16 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gui.GuiField;
 import net.sf.gogui.gui.GuiBoardDrawer;
-import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.sgf.SgfReader;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.version.Version;
 
@@ -88,7 +88,7 @@ public final class Thumbnail
         try
         {
             log("File: " + input);
-            URI uri = FileUtils.getURI(input);
+            URI uri = FileUtil.getURI(input);
             if (uri == null)
             {
                 m_lastError = "Invalid file name";
@@ -237,14 +237,14 @@ public final class Thumbnail
         ArrayList nodeMoves = new ArrayList();
         while (node != null)
         {
-            NodeUtils.getAllAsMoves(node, nodeMoves);
+            NodeUtil.getAllAsMoves(node, nodeMoves);
             moves.addAll(nodeMoves);
             if (node.getNumberAddBlack() > 0 && node.getNumberAddWhite() > 0)
                 break;
             node = node.getChild();
         }
         //if (m_verbose)
-        //    BoardUtils.print(board, System.err);
+        //    BoardUtil.print(board, System.err);
         return board;
     }
 
@@ -252,7 +252,7 @@ public final class Thumbnail
     {
         BufferedImage image = createImage(width, height);
         Graphics2D graphics = image.createGraphics();
-        GuiUtils.setAntiAlias(graphics);
+        GuiUtil.setAntiAlias(graphics);
         m_drawer.draw(graphics, field, width, false);
         graphics.dispose();
         return image;

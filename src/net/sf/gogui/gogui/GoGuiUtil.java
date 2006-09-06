@@ -8,16 +8,16 @@ package net.sf.gogui.gogui;
 import java.awt.Frame;
 import java.awt.Point;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.gtp.GtpUtils;
+import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.GuiBoard;
-import net.sf.gogui.gui.GuiBoardUtils;
+import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.TextViewer;
 
 //----------------------------------------------------------------------------
 
 /** Utility functions for class GoGui. */
-public final class GoGuiUtils
+public final class GoGuiUtil
 {
     public static void showAnalyzeTextOutput(Frame owner, GuiBoard guiBoard,
                                              int type, GoPoint pointArg,
@@ -54,15 +54,15 @@ public final class GoGuiUtils
         {
             if (! m_guiBoard.isShowing())
                 return;
-            GoPoint list[] = GtpUtils.parsePointString(text);
-            GuiBoardUtils.showPointList(m_guiBoard, list);
+            GoPoint list[] = GtpUtil.parsePointString(text);
+            GuiBoardUtil.showPointList(m_guiBoard, list);
         }
 
         private GuiBoard m_guiBoard;
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private GoGuiUtils()
+    private GoGuiUtil()
     {
     }
 }

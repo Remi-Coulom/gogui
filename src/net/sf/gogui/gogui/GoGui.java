@@ -44,17 +44,17 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardUtils;
+import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
-import net.sf.gogui.gtp.GtpUtils;
+import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.AnalyzeDialog;
 import net.sf.gogui.gui.AnalyzeShow;
@@ -72,9 +72,9 @@ import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GameTreeViewer;
 import net.sf.gogui.gui.GtpShell;
 import net.sf.gogui.gui.GuiBoard;
-import net.sf.gogui.gui.GuiBoardUtils;
+import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiGtpClient;
-import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.LiveGfx;
 import net.sf.gogui.gui.OptionalMessage;
@@ -85,13 +85,13 @@ import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
-import net.sf.gogui.gui.Utils;
+import net.sf.gogui.gui.Util;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
 import net.sf.gogui.thumbnail.Thumbnail;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.utils.ProgressShow;
 import net.sf.gogui.version.Version;
@@ -136,7 +136,7 @@ public class GoGui
         m_infoPanel = new JPanel(new BorderLayout());
         m_clock = new Clock();
         m_gameInfo = new GameInfo(m_clock);
-        m_gameInfo.setBorder(GuiUtils.createSmallEmptyBorder());
+        m_gameInfo.setBorder(GuiUtil.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
 
         m_board = new Board(m_boardSize);
@@ -158,8 +158,8 @@ public class GoGui
                     if (text == null)
                         text = "";
                     GoPoint list[] =
-                        GtpUtils.parsePointString(text, m_boardSize);
-                    GuiBoardUtils.showPointList(m_guiBoard, list);
+                        GtpUtil.parsePointString(text, m_boardSize);
+                    GuiBoardUtil.showPointList(m_guiBoard, list);
                 }
             };
         m_comment = new Comment(commentListener, m_fastPaint);
@@ -168,7 +168,7 @@ public class GoGui
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_guiBoard, m_infoPanel);
-        GuiUtils.removeKeyBinding(m_splitPane, "F8");
+        GuiUtil.removeKeyBinding(m_splitPane, "F8");
         m_splitPane.setResizeWeight(1);
         m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
         WindowAdapter windowAdapter = new WindowAdapter()
@@ -180,7 +180,7 @@ public class GoGui
             };
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        GuiUtils.setGoIcon(this);
+        GuiUtil.setGoIcon(this);
         RecentFileMenu.Callback recentCallback = new RecentFileMenu.Callback()
             {
                 public void fileSelected(String label, File file)
@@ -568,7 +568,7 @@ public class GoGui
 
     public void cbBeginning()
     {
-        backward(NodeUtils.getDepth(m_currentNode));
+        backward(NodeUtil.getDepth(m_currentNode));
         boardChangedBegin(false, false);
     }
 
@@ -595,7 +595,7 @@ public class GoGui
 
     public void cbEnd()
     {
-        forward(NodeUtils.getNodesLeft(m_currentNode));
+        forward(NodeUtil.getNodesLeft(m_currentNode));
         boardChangedBegin(false, false);
     }
 
@@ -638,28 +638,28 @@ public class GoGui
 
     public void cbNextVariation()
     {
-        Node node = NodeUtils.getNextVariation(m_currentNode);
+        Node node = NodeUtil.getNextVariation(m_currentNode);
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbNextEarlierVariation()
     {
-        Node node = NodeUtils.getNextEarlierVariation(m_currentNode);
+        Node node = NodeUtil.getNextEarlierVariation(m_currentNode);
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbPreviousVariation()
     {
-        Node node = NodeUtils.getPreviousVariation(m_currentNode);
+        Node node = NodeUtil.getPreviousVariation(m_currentNode);
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbPreviousEarlierVariation()
     {
-        Node node = NodeUtils.getPreviousEarlierVariation(m_currentNode);
+        Node node = NodeUtil.getPreviousEarlierVariation(m_currentNode);
         if (node != null)
             cbGotoNode(node);
     }
@@ -673,7 +673,7 @@ public class GoGui
 
     public void cbShowInfoPanel()
     {
-        if (GuiUtils.isNormalSizeMode(this))
+        if (GuiUtil.isNormalSizeMode(this))
         {
             if (m_showInfoPanel)
                 m_comment.setPreferredSize(m_comment.getSize());
@@ -684,7 +684,7 @@ public class GoGui
 
     public void cbShowToolbar()
     {
-        if (GuiUtils.isNormalSizeMode(this))
+        if (GuiUtil.isNormalSizeMode(this))
         {
             if (m_showInfoPanel)
                 m_comment.setPreferredSize(m_comment.getSize());
@@ -816,14 +816,14 @@ public class GoGui
             else
                 pointListArg.add(p);
             m_guiBoard.clearAllSelect();
-            GuiBoardUtils.setSelect(m_guiBoard, pointListArg, true);
+            GuiBoardUtil.setSelect(m_guiBoard, pointListArg, true);
             if (modifiedSelect && pointListArg.size() > 0)
                 analyzeBegin(false, false);
             return;
         }
         else if (m_scoreMode && ! modifiedSelect)
         {
-            GuiBoardUtils.scoreSetDead(m_guiBoard, m_board, p);
+            GuiBoardUtil.scoreSetDead(m_guiBoard, m_board, p);
             double komi = m_gameTree.getGameInformation().m_komi;
             m_scoreDialog.showScore(m_board.scoreGet(komi, getRules()));
             return;
@@ -930,7 +930,7 @@ public class GoGui
             if (m_analyzeDialog != null)
                 m_analyzeDialog.setRunButtonEnabled(false);
             if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
-                GuiBoardUtils.setSelect(m_guiBoard,
+                GuiBoardUtil.setSelect(m_guiBoard,
                                         m_analyzeCommand.getPointListArg(),
                                         true);
             toFront();
@@ -979,7 +979,7 @@ public class GoGui
     }
 
     private static class LoadFileRunnable
-        implements GuiUtils.ProgressRunnable
+        implements GuiUtil.ProgressRunnable
     {
         LoadFileRunnable(FileInputStream in, File file)
         {
@@ -1199,7 +1199,7 @@ public class GoGui
                     statusContainsResponse = true;
                 }
                 else
-                    GoGuiUtils.showAnalyzeTextOutput(this, m_guiBoard, type,
+                    GoGuiUtil.showAnalyzeTextOutput(this, m_guiBoard, type,
                                                      pointArg, title,
                                                      response, m_fastPaint);
             }
@@ -1434,8 +1434,8 @@ public class GoGui
             showError("Cannot set bookmark at non-root node without move");
             return;
         }
-        String variation = NodeUtils.getVariationString(m_currentNode);
-        int move = NodeUtils.getMoveNumber(m_currentNode);
+        String variation = NodeUtil.getVariationString(m_currentNode);
+        int move = NodeUtil.getMoveNumber(m_currentNode);
         Bookmark bookmark = new Bookmark(m_loadedFile, move, variation);
         if (! BookmarkDialog.show(this, "Add Bookmark", bookmark, true))
             return;
@@ -1460,7 +1460,7 @@ public class GoGui
 
     private void cbBackToMainVar()
     {
-        Node node = NodeUtils.getBackToMainVariation(m_currentNode);
+        Node node = NodeUtil.getBackToMainVariation(m_currentNode);
         cbGotoNode(node);
     }
 
@@ -1515,14 +1515,14 @@ public class GoGui
             Node node = m_gameTree.getRoot();
             if (! variation.equals(""))
             {
-                node = NodeUtils.findByVariation(node, variation);
+                node = NodeUtil.findByVariation(node, variation);
                 if (node == null)
                 {
                     showError("Bookmark has invalid variation");
                     return;
                 }
             }
-            node = NodeUtils.findByMoveNumber(node, bookmark.m_move);
+            node = NodeUtil.findByMoveNumber(node, bookmark.m_move);
             if (node == null)
             {
                 showError("Bookmark has invalid move number");
@@ -1600,7 +1600,7 @@ public class GoGui
         try
         {
             OutputStream out = new FileOutputStream(file);
-            BoardUtils.print(m_board, new PrintStream(out), false);
+            BoardUtil.print(m_board, new PrintStream(out), false);
         }
         catch (FileNotFoundException e)
         {
@@ -1631,7 +1631,7 @@ public class GoGui
         try
         {
             OutputStream out = new FileOutputStream(file);
-            String title = FileUtils.removeExtension(new File(file.getName()),
+            String title = FileUtil.removeExtension(new File(file.getName()),
                                                      "tex");
             new TexWriter(title, out, m_gameTree, false);
         }
@@ -1649,12 +1649,12 @@ public class GoGui
         try
         {
             OutputStream out = new FileOutputStream(file);
-            String title = FileUtils.removeExtension(new File(file.getName()),
+            String title = FileUtil.removeExtension(new File(file.getName()),
                                                      "tex");
             new TexWriter(title, out, m_board, false,
-                          GuiBoardUtils.getLabels(m_guiBoard),
-                          GuiBoardUtils.getMarkSquare(m_guiBoard),
-                          GuiBoardUtils.getSelects(m_guiBoard));
+                          GuiBoardUtil.getLabels(m_guiBoard),
+                          GuiBoardUtil.getMarkSquare(m_guiBoard),
+                          GuiBoardUtil.getSelects(m_guiBoard));
         }
         catch (FileNotFoundException e)
         {
@@ -1669,7 +1669,7 @@ public class GoGui
             return;
         m_pattern = pattern;
         m_menuBar.enableFindNext(true);
-        if (NodeUtils.commentContains(m_currentNode, m_pattern))
+        if (NodeUtil.commentContains(m_currentNode, m_pattern))
             m_comment.markAll(m_pattern);
         else
             cbFindNext();
@@ -1680,14 +1680,14 @@ public class GoGui
         if (m_pattern == null)
             return;
         Node root = m_gameTree.getRoot();
-        Node node = NodeUtils.findInComments(m_currentNode, m_pattern);
+        Node node = NodeUtil.findInComments(m_currentNode, m_pattern);
         if (node == null)
             if (m_currentNode != root)
                 if (showQuestion("End of tree reached. Continue from start?"))
                 {
                     node = root;
-                    if (! NodeUtils.commentContains(node, m_pattern))
-                        node = NodeUtils.findInComments(node, m_pattern);
+                    if (! NodeUtil.commentContains(node, m_pattern))
+                        node = NodeUtil.findInComments(node, m_pattern);
                 }
         if (node == null)
         {
@@ -1866,7 +1866,7 @@ public class GoGui
 
     private void cbKeepOnlyMainVariation()
     {
-        if (! NodeUtils.isInMainVariation(m_currentNode))
+        if (! NodeUtil.isInMainVariation(m_currentNode))
             return;
         if (! showQuestion("Delete all variations but main?"))
             return;
@@ -1880,7 +1880,7 @@ public class GoGui
         if (! showQuestion("Delete all moves?"))
             return;
         GameInformation info = m_gameTree.getGameInformation();
-        m_gameTree = NodeUtils.makeTreeFromPosition(info, m_board);
+        m_gameTree = NodeUtil.makeTreeFromPosition(info, m_board);
         m_board.init(m_boardSize);
         executeRoot();
         setNeedsSave(true);
@@ -1891,7 +1891,7 @@ public class GoGui
     {
         if (! showQuestion("Make current to main variation?"))
             return;
-        NodeUtils.makeMainVariation(m_currentNode);
+        NodeUtil.makeMainVariation(m_currentNode);
         setNeedsSave(true);
         boardChangedBegin(false, true);
     }
@@ -2021,7 +2021,7 @@ public class GoGui
             String response = m_gtp.getResponse();
             try
             {
-                isDeadStone = GtpUtils.parsePointList(response, m_boardSize);
+                isDeadStone = GtpUtil.parsePointList(response, m_boardSize);
             }
             catch (GtpError error)
             {
@@ -2147,7 +2147,7 @@ public class GoGui
             return;
         if (! showQuestion("Truncate children?"))
             return;
-        NodeUtils.truncateChildren(m_currentNode);
+        NodeUtil.truncateChildren(m_currentNode);
         setNeedsSave(true);
         boardChangedBegin(false, true);
     }
@@ -2156,7 +2156,7 @@ public class GoGui
     {
         if (m_gtp == null || isOutOfSync())
             return;
-        int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
+        int moveNumber = NodeUtil.getMoveNumber(m_currentNode);
         boolean bothPassed = (moveNumber >= 2 && m_board.bothPassed());
         if (bothPassed)
             m_menuBar.setCleanup(true);
@@ -2314,7 +2314,7 @@ public class GoGui
             }
             else
             {
-                GoPoint point = GtpUtils.parsePoint(response, m_boardSize);
+                GoPoint point = GtpUtil.parsePoint(response, m_boardSize);
                 if (point != null
                     && m_board.getColor(point) != GoColor.EMPTY)
                     showWarning("Program played move on non-empty point");
@@ -2373,7 +2373,7 @@ public class GoGui
 
     private Node createNode(Move move)
     {
-        return Utils.createNode(m_currentNode, move, m_clock);
+        return Util.createNode(m_currentNode, move, m_clock);
     }
 
     private ContextMenu createContextMenu(GoPoint point)
@@ -2651,7 +2651,7 @@ public class GoGui
             }
         }
         boolean newNodeCreated = false;
-        Node node = NodeUtils.getChildWithMove(m_currentNode, move);
+        Node node = NodeUtil.getChildWithMove(m_currentNode, move);
         if (node == null)
         {
             newNodeCreated = true;
@@ -2663,7 +2663,7 @@ public class GoGui
             m_clock.startMove(m_board.getToMove());
         setNeedsSave(newNodeCreated);
         GoColor color = move.getColor();
-        if (NodeUtils.getMoveNumber(m_currentNode) > 0
+        if (NodeUtil.getMoveNumber(m_currentNode) > 0
             && m_clock.lostOnTime(color)
             && ! m_lostOnTimeShown)
         {
@@ -2809,7 +2809,7 @@ public class GoGui
     private void initScore(GoPoint[] isDeadStone)
     {
         resetBoard();
-        GuiBoardUtils.scoreBegin(m_guiBoard, m_board, isDeadStone);
+        GuiBoardUtil.scoreBegin(m_guiBoard, m_board, isDeadStone);
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
@@ -2862,7 +2862,7 @@ public class GoGui
             if (file.length() > 500000)
             {
                 newGame(m_boardSize); // Frees space if already large tree
-                GuiUtils.runProgress(this, "Loading...", runnable);
+                GuiUtil.runProgress(this, "Loading...", runnable);
             }
             else
                 runnable.run(null);
@@ -3091,7 +3091,7 @@ public class GoGui
             saveSizeAndVisible(m_gtpShell, "shell");
             saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
-        if (GuiUtils.isNormalSizeMode(this))
+        if (GuiUtil.isNormalSizeMode(this))
         {            
             String name = "windows/main/size-" + m_boardSize + "/fieldsize";
             m_prefs.putInt(name, m_guiBoard.getFieldSize().width);
@@ -3192,7 +3192,7 @@ public class GoGui
 
     private void setKomi(double komi)
     {
-        Utils.sendKomi(this, komi, m_name, m_gtp);
+        Util.sendKomi(this, komi, m_name, m_gtp);
     }
 
     private void setNeedsSave(boolean needsSave)
@@ -3220,7 +3220,7 @@ public class GoGui
 
     private void setRules()
     {
-        Utils.sendRules(getRules(), m_gtp);
+        Util.sendRules(getRules(), m_gtp);
     }
 
     private void setTimeSettings()
@@ -3234,7 +3234,7 @@ public class GoGui
         if (! m_gtp.isCommandSupported("time_settings"))
             return;
         m_clock.setTimeSettings(timeSettings);
-        String command = GtpUtils.getTimeSettingsCommand(timeSettings);
+        String command = GtpUtil.getTimeSettingsCommand(timeSettings);
         try
         {
             m_gtp.send(command);
@@ -3338,7 +3338,7 @@ public class GoGui
 
     private void showError(GtpError error)
     {        
-        Utils.showError(this, m_name, error);
+        Util.showError(this, m_name, error);
     }
 
     private void showError(String message)
@@ -3457,7 +3457,7 @@ public class GoGui
 
     private void updateFromGoBoard()
     {
-        GuiBoardUtils.updateFromGoBoard(m_guiBoard, m_board, m_showLastMove);
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, m_showLastMove);
         if (m_currentNode.getMove() == null)
             m_guiBoard.markLastMove(null);
     }
@@ -3489,10 +3489,10 @@ public class GoGui
         if (m_showVariations)
         {
             ArrayList childrenMoves
-                = NodeUtils.getChildrenMoves(m_currentNode);
-            GuiBoardUtils.showChildrenMoves(m_guiBoard, childrenMoves);
+                = NodeUtil.getChildrenMoves(m_currentNode);
+            GuiBoardUtil.showChildrenMoves(m_guiBoard, childrenMoves);
         }
-        GuiBoardUtils.showMarkup(m_guiBoard, m_currentNode);
+        GuiBoardUtil.showMarkup(m_guiBoard, m_currentNode);
     }
 
     private void updateMenuBar()

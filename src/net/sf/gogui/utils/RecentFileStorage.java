@@ -120,7 +120,7 @@ public final class RecentFileStorage
         ArrayList uriList = getAllMimeType("application/x-go-sgf");
         for (int i = 0; i < uriList.size(); ++i)
             System.err.println(uriList.get(i).toString());
-        //add(FileUtils.getURI(new File("foobar")), "application/x-go-sgf");
+        //add(FileUtil.getURI(new File("foobar")), "application/x-go-sgf");
     }
 
     //private static long m_timestamp;

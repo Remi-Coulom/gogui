@@ -107,7 +107,7 @@ public class LiveGfx
     private void showGfx(String text)
     {
         m_guiBoard.clearAll();
-        GuiBoardUtils.updateFromGoBoard(m_guiBoard, m_board, false);
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, false);
         String statusText = AnalyzeShow.showGfx(text, m_guiBoard);
         if (statusText != null)
             m_statusBar.setText(statusText);

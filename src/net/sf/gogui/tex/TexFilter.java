@@ -9,7 +9,7 @@ package net.sf.gogui.tex;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 
 //----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ public class TexFilter
     {
         if (file.isDirectory())
             return true;
-        return FileUtils.hasExtension(file, "tex");
+        return FileUtil.hasExtension(file, "tex");
     }
 
     public String getDescription()

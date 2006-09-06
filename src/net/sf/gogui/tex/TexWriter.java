@@ -14,7 +14,7 @@ import java.util.Locale;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -179,7 +179,7 @@ public class TexWriter
             }
             GoPoint point = move.getPoint();
             GoColor color = move.getColor();
-            int moveNumber = NodeUtils.getMoveNumber(node);
+            int moveNumber = NodeUtil.getMoveNumber(node);
             boolean isColorUnexpected =
                 (blackToMove && color != GoColor.BLACK)
                 || (! blackToMove && color != GoColor.WHITE);
@@ -239,7 +239,7 @@ public class TexWriter
                 comment.append("~at~");
                 Node first = firstMoveAtPoint[x][y];
                 GoColor firstMoveColor = first.getMove().getColor();
-                int firstMoveNumber = NodeUtils.getMoveNumber(first);
+                int firstMoveNumber = NodeUtil.getMoveNumber(first);
                 comment.append(getStoneInTextString(firstMoveNumber,
                                                     firstMoveColor));
             }

@@ -7,7 +7,7 @@ package net.sf.gogui.netgtp;
 
 import net.sf.gogui.utils.Options;
 import net.sf.gogui.utils.StreamCopy;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 import java.io.InputStream;
 import java.io.IOException;
@@ -111,7 +111,7 @@ public final class NetGtp
         }
         catch (Throwable t)
         {
-            StringUtils.printException(t);
+            StringUtil.printException(t);
             System.exit(-1);
         }
     }
@@ -160,7 +160,7 @@ class SocketOutputCopy
         }
         catch (Throwable e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
     }
 

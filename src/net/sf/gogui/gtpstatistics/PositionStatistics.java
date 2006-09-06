@@ -9,7 +9,7 @@ import net.sf.gogui.utils.Histogram;
 import net.sf.gogui.utils.Statistics;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Table;
-import net.sf.gogui.utils.TableUtils;
+import net.sf.gogui.utils.TableUtil;
 
 //----------------------------------------------------------------------------
 
@@ -45,11 +45,11 @@ public final class PositionStatistics
                 ++numberNoResult;
                 continue;
             }
-            if (TableUtils.isNumberValue(value))
+            if (TableUtil.isNumberValue(value))
             {
-                if (! TableUtils.isIntValue(value))
+                if (! TableUtil.isIntValue(value))
                     onlyIntValues = false;
-                if (! TableUtils.isBoolValue(value))
+                if (! TableUtil.isBoolValue(value))
                     onlyBoolValues = false;
             }
             int move;
@@ -105,7 +105,7 @@ public final class PositionStatistics
                 continue;
             }
         }
-        m_histoTable = TableUtils.fromHistogram(m_histogram, command);
+        m_histoTable = TableUtil.fromHistogram(m_histogram, command);
     }
 
     public int getCount()

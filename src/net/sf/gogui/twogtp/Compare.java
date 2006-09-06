@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.go.BoardUtils;
+import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.go.MoveUtils;
+import net.sf.gogui.go.MoveUtil;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.sgf.SgfReader;
 
@@ -52,7 +52,7 @@ public final class Compare
             if (useAlternate && ((numberGame % 2 != 0) != isAlternated))
                 continue;
             ArrayList gameMoves = (ArrayList)games.get(numberGame);
-            for (int rot = 0; rot < BoardUtils.NUMBER_ROTATIONS; ++rot)
+            for (int rot = 0; rot < BoardUtil.NUMBER_ROTATIONS; ++rot)
             {
                 int numberDifferent = 0;
                 int moveNumber = moves.size();
@@ -69,7 +69,7 @@ public final class Compare
                     GoPoint point = move.getPoint();
                     GoColor color = move.getColor();
                     Move gameMove = (Move)gameMoves.get(i);
-                    GoPoint gamePoint = BoardUtils.rotate(rot,
+                    GoPoint gamePoint = BoardUtil.rotate(rot,
                                                           gameMove.getPoint(),
                                                           board.getSize());
                     GoColor gameColor = gameMove.getColor();
@@ -128,11 +128,11 @@ public final class Compare
         ArrayList nodeMoves = new ArrayList(128);
         while (node != null)
         {
-            NodeUtils.getAllAsMoves(node, nodeMoves);
+            NodeUtil.getAllAsMoves(node, nodeMoves);
             moves.addAll(nodeMoves);
             node = node.getChild();
         }
-        moves = MoveUtils.fillPasses(moves, GoColor.BLACK);
+        moves = MoveUtil.fillPasses(moves, GoColor.BLACK);
         return moves;
     }
 

@@ -10,7 +10,7 @@ import java.util.Locale;
 
 //----------------------------------------------------------------------------
 
-public class StringUtilsTest
+public class StringUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])
@@ -20,7 +20,7 @@ public class StringUtilsTest
 
     public static junit.framework.Test suite()
     {
-        return new junit.framework.TestSuite(StringUtilsTest.class);
+        return new junit.framework.TestSuite(StringUtilTest.class);
     }
 
     public void testGetNumberFormatLocale()
@@ -29,7 +29,7 @@ public class StringUtilsTest
         try
         {
             Locale.setDefault(Locale.FRENCH);
-            NumberFormat format = StringUtils.getNumberFormat(1);
+            NumberFormat format = StringUtil.getNumberFormat(1);
             assertEquals("3.1", format.format(3.1));
         }
         finally
@@ -40,7 +40,7 @@ public class StringUtilsTest
 
     public void testSplit()
     {
-        String[] s = StringUtils.split("1//23/ ", '/');
+        String[] s = StringUtil.split("1//23/ ", '/');
         assertEquals(s.length, 4);
         assertEquals(s[0], "1");
         assertEquals(s[1], "");
@@ -51,7 +51,7 @@ public class StringUtilsTest
     public void testSplitArguments1()
     {
         String[] s
-            = StringUtils.splitArguments("one two \"three four\"");
+            = StringUtil.splitArguments("one two \"three four\"");
         assertEquals(3, s.length);
         assertEquals("one", s[0]);
         assertEquals("two", s[1]);
@@ -61,7 +61,7 @@ public class StringUtilsTest
     public void testSplitArguments2()
     {
         String[] s
-            = StringUtils.splitArguments("one \"two \\\"three four\\\"\"");
+            = StringUtil.splitArguments("one \"two \\\"three four\\\"\"");
         assertEquals(2, s.length);
         assertEquals("one", s[0]);
         assertEquals("two \\\"three four\\\"", s[1]);

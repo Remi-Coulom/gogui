@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
-import net.sf.gogui.utils.PrefUtils;
+import net.sf.gogui.utils.PrefUtil;
 
 //----------------------------------------------------------------------------
 
@@ -94,8 +94,8 @@ public class FindDialog
 
     private JPanel createButtons()
     {
-        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
-        innerPanel.setBorder(GuiUtils.createEmptyBorder());
+        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
+        innerPanel.setBorder(GuiUtil.createEmptyBorder());
         JButton findButton = new JButton("Find");
         findButton.setActionCommand("find");
         findButton.addActionListener(this);
@@ -115,7 +115,7 @@ public class FindDialog
     private JPanel createPanel()
     {
         JPanel panel = new JPanel(new GridLayout(0, 1));
-        panel.setBorder(GuiUtils.createEmptyBorder());
+        panel.setBorder(GuiUtil.createEmptyBorder());
         JLabel label = new JLabel("Search Pattern");
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
@@ -148,7 +148,7 @@ public class FindDialog
                 }
             };
         m_textField.addKeyListener(keyListener);
-        GuiUtils.setMonospacedFont(m_comboBox);
+        GuiUtil.setMonospacedFont(m_comboBox);
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
         outerPanel.add(innerPanel, BorderLayout.NORTH);
         return outerPanel;
@@ -168,12 +168,12 @@ public class FindDialog
             if (! history.contains(element))
                 history.add(element);
         }
-        PrefUtils.putList("net/sf/gogui/gui/finddialog", history);
+        PrefUtil.putList("net/sf/gogui/gui/finddialog", history);
     }
 
     private ArrayList getHistory()
     {
-        ArrayList result = PrefUtils.getList("net/sf/gogui/gui/finddialog");;
+        ArrayList result = PrefUtil.getList("net/sf/gogui/gui/finddialog");;
         if (m_initialValue != null)
             result.add(0, m_initialValue);
         return result;

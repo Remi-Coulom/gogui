@@ -11,7 +11,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
-import net.sf.gogui.utils.PrefUtils;
+import net.sf.gogui.utils.PrefUtil;
 
 //----------------------------------------------------------------------------
 
@@ -148,22 +148,22 @@ public final class Session
 
     private Preferences createNode(String name, int boardSize)
     {
-        return PrefUtils.createNode(getPath(name, boardSize));
+        return PrefUtil.createNode(getPath(name, boardSize));
     }
 
     private Preferences createNode(String name)
     {
-        return PrefUtils.createNode(getPath(name));
+        return PrefUtil.createNode(getPath(name));
     }
 
     private Preferences getNode(String name, int boardSize)
     {
-        return PrefUtils.getNode(getPath(name, boardSize));
+        return PrefUtil.getNode(getPath(name, boardSize));
     }
 
     private Preferences getNode(String name)
     {
-        return PrefUtils.getNode(getPath(name));
+        return PrefUtil.getNode(getPath(name));
     }
 
     private String getPath(String name, int boardSize)
@@ -185,7 +185,7 @@ public final class Session
     private static boolean isFrameSpecialMode(Window window)
     {
         return (window instanceof JFrame
-                && ! GuiUtils.isNormalSizeMode((JFrame)window));
+                && ! GuiUtil.isNormalSizeMode((JFrame)window));
     }
 }
 

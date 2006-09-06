@@ -19,9 +19,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -498,7 +498,7 @@ public class GtpRegress
         throws Exception
     {
         m_outFileRelativeName =
-            FileUtils.replaceExtension(m_testFile, "tst", "out.html");
+            FileUtil.replaceExtension(m_testFile, "tst", "out.html");
         m_outFileName = m_prefix + m_outFileRelativeName;        
         File file = new File(m_outFileName);
         File parent = file.getParentFile();
@@ -663,7 +663,7 @@ public class GtpRegress
         initOutFile();
         File outFile = new File(m_outFileName);
         File testFileDir = m_testFile.getAbsoluteFile().getParentFile();
-        m_relativePath = FileUtils.getRelativeURI(outFile, testFileDir);
+        m_relativePath = FileUtil.getRelativeURI(outFile, testFileDir);
         if (! m_relativePath.equals("") && ! m_relativePath.endsWith("/"))
             m_relativePath = m_relativePath + "/";
         FileReader fileReader = new FileReader(m_testFile);
@@ -739,7 +739,7 @@ public class GtpRegress
                       "<tr><th align=\"left\">Version:</th><td>" + m_version
                       + "</td></tr>\n");
         out.print("<tr><th align=\"left\">Date:</th><td>"
-                  + StringUtils.getDate()
+                  + StringUtil.getDate()
                   + "</td></tr>\n" +
                   "<tr><th align=\"left\">Host:</th><td>" + host
                   + "</td></tr>\n" +
@@ -753,7 +753,7 @@ public class GtpRegress
     {
         File file = new File(m_prefix + "summary.dat");
         PrintStream out = new PrintStream(new FileOutputStream(file));
-        NumberFormat format1 = StringUtils.getNumberFormat(1);
+        NumberFormat format1 = StringUtil.getNumberFormat(1);
         TestSummary s = getTotalSummary();
         double time = ((double)s.m_timeMillis) / 1000F;
         out.print("#Tests\tFAIL\tfail\tPASS\tpass\tError\tTime\tCpuTime\n" +
@@ -848,11 +848,11 @@ public class GtpRegress
                 out.print("<td><b>Total</b></td>");
             else
                 out.print("<td><a href=\""
-                          + FileUtils.replaceExtension(file, "tst", "html")
+                          + FileUtil.replaceExtension(file, "tst", "html")
                           + "\">" + file + "</a></td>");
         }
         double time = ((double)summary.m_timeMillis) / 1000F;
-        NumberFormat format = StringUtils.getNumberFormat(1);
+        NumberFormat format = StringUtil.getNumberFormat(1);
         String colorAttrUnexpectedFails = "";
         if (summary.m_unexpectedFails > 0)
             colorAttrUnexpectedFails = " bgcolor=\"" + COLOR_RED + "\"";
@@ -893,7 +893,7 @@ public class GtpRegress
         }
         File file =
             new File(m_prefix
-                     + FileUtils.replaceExtension(m_testFile, "tst", "html"));
+                     + FileUtil.replaceExtension(m_testFile, "tst", "html"));
         PrintStream out = new PrintStream(new FileOutputStream(file));
         out.print("<html>\n" +
                   "<head>\n" +

@@ -19,7 +19,7 @@ import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.EditorKit;
-import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.utils.Platform;
 import net.sf.gogui.version.Version;
@@ -69,7 +69,7 @@ public final class AboutDialog
             if (version != null && ! version.equals(""))
                 versionInfo = "<p align=\"center\">Version " + version
                     + "</p>";
-            int width = GuiUtils.getDefaultMonoFontSize() * 25;
+            int width = GuiUtil.getDefaultMonoFontSize() * 25;
             programPanel =
                 createPanel("<p align=\"center\"><img src=\""
                             + getImage("program.png") + "\"></p>" +
@@ -98,7 +98,7 @@ public final class AboutDialog
     {
         JPanel panel = new JPanel(new GridLayout(1, 1));
         JEditorPane editorPane = new JEditorPane();
-        editorPane.setBorder(GuiUtils.createEmptyBorder());        
+        editorPane.setBorder(GuiUtil.createEmptyBorder());        
         editorPane.setEditable(false);
         if (Platform.isMac())
         {

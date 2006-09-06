@@ -61,7 +61,7 @@ class ExitWaiter
 
 /** Static utility functions and classes related to processes.
 */
-public class ProcessUtils
+public class ProcessUtil
 {
     /** Copies standard error of a process to System.err. */
     public static class StdErrThread

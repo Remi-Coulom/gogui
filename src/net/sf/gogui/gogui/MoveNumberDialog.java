@@ -8,7 +8,7 @@ package net.sf.gogui.gogui;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 
 //----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ public final class MoveNumberDialog
 {
     public static Node show(Component parent, Node node)
     {
-        int number = NodeUtils.getMoveNumber(node);        
+        int number = NodeUtil.getMoveNumber(node);        
         String value = Integer.toString(number);
         value = JOptionPane.showInputDialog(parent, "Move Number", value);
         if (value == null || value.equals(""))
@@ -26,7 +26,7 @@ public final class MoveNumberDialog
         try
         {
             number = Integer.parseInt(value);
-            node = NodeUtils.findByMoveNumber(node, number);
+            node = NodeUtil.findByMoveNumber(node, number);
             if (node == null)
             {
                 SimpleDialogs.showError(parent, "No move with this number");

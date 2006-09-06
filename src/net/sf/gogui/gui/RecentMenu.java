@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.prefs.Preferences;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import net.sf.gogui.utils.PrefUtils;
+import net.sf.gogui.utils.PrefUtil;
 
 //----------------------------------------------------------------------------
 
@@ -141,7 +141,7 @@ public final class RecentMenu
 
     private void get()
     {
-        Preferences prefs = PrefUtils.getNode(m_path);
+        Preferences prefs = PrefUtil.getNode(m_path);
         if (prefs == null)
             return;
         int size = prefs.getInt("size", 0);
@@ -150,7 +150,7 @@ public final class RecentMenu
         m_menu.removeAll();
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtils.getNode(m_path + "/" + i);
+            prefs = PrefUtil.getNode(m_path + "/" + i);
             if (prefs == null)
                 break;
             String label = prefs.get("label", null);
@@ -173,14 +173,14 @@ public final class RecentMenu
 
     public void put()
     {
-        Preferences prefs = PrefUtils.getNode(m_path);
+        Preferences prefs = PrefUtil.getNode(m_path);
         if (prefs == null)
             return;
         int size = getCount();
         prefs.putInt("size", size);
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtils.getNode(m_path + "/" + (size - i - 1));
+            prefs = PrefUtil.getNode(m_path + "/" + (size - i - 1));
             if (prefs == null)
                 break;
             prefs.put("label", getLabel(i));

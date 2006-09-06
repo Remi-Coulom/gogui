@@ -174,11 +174,11 @@ public final class GameInfoDialog
 
     private GameInfoDialog(GameInformation gameInformation)
     {
-        JPanel panel = new JPanel(new BorderLayout(GuiUtils.PAD, 0));
-        m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtils.SMALL_PAD));
+        JPanel panel = new JPanel(new BorderLayout(GuiUtil.PAD, 0));
+        m_panelLeft = new JPanel(new GridLayout(0, 1, 0, GuiUtil.SMALL_PAD));
         panel.add(m_panelLeft, BorderLayout.WEST);
         m_panelRight =
-            new JPanel(new GridLayout(0, 1, 0, GuiUtils.SMALL_PAD));
+            new JPanel(new GridLayout(0, 1, 0, GuiUtil.SMALL_PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
         m_playerBlack = createEntry("Black player:",
                                     gameInformation.m_playerBlack);

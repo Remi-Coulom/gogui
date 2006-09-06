@@ -10,7 +10,7 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------
 
 /** Static utility functions related to class Move. */
-public final class MoveUtils
+public final class MoveUtil
 {
     /** Fill a list of moves with pass moves.
         The resulting list will contain all moves of the original list
@@ -34,7 +34,7 @@ public final class MoveUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private MoveUtils()
+    private MoveUtil()
     {
     }
 }

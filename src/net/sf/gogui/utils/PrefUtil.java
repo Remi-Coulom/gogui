@@ -12,7 +12,7 @@ import java.util.prefs.BackingStoreException;
 //----------------------------------------------------------------------------
 
 /** Utils for using java.util.prefs package. */
-public final class PrefUtils
+public final class PrefUtil
 {
     /** Get node path, create if not already existing.
         @param path The absolute path name of the node.
@@ -88,7 +88,7 @@ public final class PrefUtils
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private PrefUtils()
+    private PrefUtil()
     {
     }
 }

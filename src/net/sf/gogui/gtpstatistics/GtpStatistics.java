@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -24,7 +24,7 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.utils.Table;
 
 //----------------------------------------------------------------------------
@@ -79,7 +79,7 @@ public class GtpStatistics
         }
         String host = Platform.getHostInfo();
         m_table.setProperty("Host", host);
-        m_table.setProperty("Date", StringUtils.getDate());
+        m_table.setProperty("Date", StringUtil.getDate());
         for (int i = 0; i < sgfFiles.size(); ++i)
             handleFile((String)sgfFiles.get(i));
         m_table.setProperty("Games", Integer.toString(m_numberGames));
@@ -123,9 +123,9 @@ public class GtpStatistics
 
     private final GtpClient m_gtp;
 
-    private final NumberFormat m_format1 = StringUtils.getNumberFormat(1);
+    private final NumberFormat m_format1 = StringUtil.getNumberFormat(1);
 
-    private final NumberFormat m_format2 = StringUtils.getNumberFormat(2);
+    private final NumberFormat m_format2 = StringUtil.getNumberFormat(2);
 
     private final Table m_table;
 
@@ -230,7 +230,7 @@ public class GtpStatistics
         }
         else if (command.equals("estimate_score"))
         {
-            String arg[] = StringUtils.splitArguments(response);
+            String arg[] = StringUtil.splitArguments(response);
             if (arg.length == 0)
                 return response;
             return convertScore(arg[0]);
@@ -451,7 +451,7 @@ public class GtpStatistics
     private GoColor sendSetup(Node node) throws GtpError
     {
         ArrayList moves = new ArrayList();
-        NodeUtils.getAllAsMoves(node, moves);
+        NodeUtil.getAllAsMoves(node, moves);
         assert(moves.size() > 0);
         GoColor toMove = null;
         for (int i = 0; i < moves.size(); ++i)

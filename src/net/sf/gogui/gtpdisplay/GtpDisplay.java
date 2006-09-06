@@ -22,10 +22,10 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpUtils;
+import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.GuiBoard;
-import net.sf.gogui.gui.GuiBoardUtils;
-import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.gui.GuiBoardUtil;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
 
@@ -90,7 +90,7 @@ public class GtpDisplay
         contentPane.add(m_guiBoard);
         m_statusBar = new StatusBar();
         contentPane.add(m_statusBar, BorderLayout.SOUTH);
-        GuiUtils.setGoIcon(m_frame);
+        GuiUtil.setGoIcon(m_frame);
         m_frame.pack();
         m_frame.setVisible(true);
     }
@@ -326,7 +326,7 @@ public class GtpDisplay
             send(command, response);
             if (response.toString().trim().equalsIgnoreCase("resign"))
                 return;
-            point = GtpUtils.parsePoint(response.toString(), m_size);
+            point = GtpUtil.parsePoint(response.toString(), m_size);
         }
         m_move = Move.get(point, color);
         invokeAndWait(new Runnable()
@@ -518,7 +518,7 @@ public class GtpDisplay
 
     private void updateFromGoBoard()
     {
-        GuiBoardUtils.updateFromGoBoard(m_guiBoard, m_board, true);
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, true);
     }
 }
 

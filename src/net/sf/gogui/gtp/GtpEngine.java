@@ -13,7 +13,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -104,7 +104,7 @@ class ReadThread
         }
         catch (Throwable e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
     }
 
@@ -198,7 +198,7 @@ public abstract class GtpEngine
     {
         if (cmdArray.length != 2)
             throw new GtpError("Missing point argument");
-        return GtpUtils.parsePoint(cmdArray[1], boardSize);
+        return GtpUtil.parsePoint(cmdArray[1], boardSize);
     }
 
     /** Utility function for parsing an point list argument.
@@ -215,7 +215,7 @@ public abstract class GtpEngine
         ArrayList pointList = new ArrayList();
         for (int i = 1; i < length; ++i)
         {
-            GoPoint point = GtpUtils.parsePoint(cmdArray[i], boardSize);
+            GoPoint point = GtpUtil.parsePoint(cmdArray[i], boardSize);
             pointList.add(point);
         }
         return pointList;

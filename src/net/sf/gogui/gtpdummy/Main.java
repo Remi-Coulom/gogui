@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ public final class Main
         }
         catch (Throwable t)
         {
-            StringUtils.printException(t);
+            StringUtil.printException(t);
             System.exit(-1);
         }
     }

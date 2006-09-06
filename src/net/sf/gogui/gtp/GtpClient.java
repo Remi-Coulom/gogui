@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.utils.MessageQueue;
-import net.sf.gogui.utils.ProcessUtils;
+import net.sf.gogui.utils.ProcessUtil;
 
 //----------------------------------------------------------------------------
 
@@ -83,7 +83,7 @@ public final class GtpClient
 
     /** Constructor.
         @param program Command line for program.
-        Will be split into words with respect to " as in StringUtils.tokenize.
+        Will be split into words with respect to " as in StringUtil.tokenize.
         If the command line contains the string "%SRAND", it will be replaced
         by a random seed. This is useful if the random seed can be set by
         a command line option to produce deterministic randomness (the
@@ -109,10 +109,10 @@ public final class GtpClient
         Runtime runtime = Runtime.getRuntime();
         try
         {
-            // Create command array with StringUtils::splitArguments
+            // Create command array with StringUtil::splitArguments
             // because Runtime.exec(String) uses a default StringTokenizer
             // which does not respect ".
-            m_process = runtime.exec(StringUtils.splitArguments(program));
+            m_process = runtime.exec(StringUtil.splitArguments(program));
         }
         catch (IOException e)
         {
@@ -394,7 +394,7 @@ public final class GtpClient
     {
         String command = (m_protocolVersion == 1 ? "help" : "list_commands");
         String response = send(command);
-        m_supportedCommands = StringUtils.splitArguments(response);
+        m_supportedCommands = StringUtil.splitArguments(response);
         for (int i = 0; i < m_supportedCommands.length; ++i)
             m_supportedCommands[i] = m_supportedCommands[i].trim();
     }
@@ -593,7 +593,7 @@ public final class GtpClient
             return;
         while (true)
         {
-            if (ProcessUtils.waitForExit(m_process, timeout))
+            if (ProcessUtil.waitForExit(m_process, timeout))
                 break;
             if (! timeoutCallback.askContinue())
             {
@@ -640,7 +640,7 @@ public final class GtpClient
             }
             catch (Throwable t)
             {
-                StringUtils.printException(t);
+                StringUtil.printException(t);
             }
         }
 
@@ -748,7 +748,7 @@ public final class GtpClient
             }
             catch (Throwable t)
             {
-                StringUtils.printException(t);
+                StringUtil.printException(t);
             }
         }
 

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -495,7 +495,7 @@ public class AnalyzeCommand
                     if (supportedCommands != null)
                     {
                         String[] cmdArray
-                            = StringUtils.splitArguments(array[2].trim());
+                            = StringUtil.splitArguments(array[2].trim());
                         if (cmdArray.length == 0
                             || ! supportedCommands.contains(cmdArray[0]))
                             continue;

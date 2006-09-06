@@ -12,7 +12,7 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 
 //----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ class Filter
 {
     public boolean accept(File f)
     {
-        return FileUtils.hasExtension(f, "sgf");
+        return FileUtil.hasExtension(f, "sgf");
     }
 }
 

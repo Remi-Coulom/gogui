@@ -45,7 +45,7 @@ public class GuiBoardDrawer
                      boolean showGrid)
     {
         if (! m_fastPaint)
-            GuiUtils.setAntiAlias(graphics);
+            GuiUtil.setAntiAlias(graphics);
         m_width = width;
         m_size = field.length;
         if (m_constants == null || m_constants.getSize() != m_size)

@@ -6,9 +6,9 @@
 package net.sf.gogui.gtpserver;
 
 import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.ProcessUtils;
+import net.sf.gogui.utils.ProcessUtil;
 import net.sf.gogui.utils.StreamCopy;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,8 +46,8 @@ public final class GtpServer
         while (true)
         {
             Process process
-                = runtime.exec(StringUtils.splitArguments(program));
-            Thread stdErrThread = new ProcessUtils.StdErrThread(process);
+                = runtime.exec(StringUtil.splitArguments(program));
+            Thread stdErrThread = new ProcessUtil.StdErrThread(process);
             stdErrThread.start();
             Socket socket;
             if (serverSocket == null)
@@ -137,7 +137,7 @@ public final class GtpServer
         }
         catch (Throwable t)
         {
-            StringUtils.printException(t);
+            StringUtil.printException(t);
             System.exit(-1);
         }
     }

@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import java.util.ArrayList;
 import java.util.Locale;
-import net.sf.gogui.utils.PrefUtils;
+import net.sf.gogui.utils.PrefUtil;
 
 //----------------------------------------------------------------------------
 
@@ -93,8 +93,8 @@ public class SelectProgram
 
     private JPanel createButtons()
     {
-        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
-        innerPanel.setBorder(GuiUtils.createEmptyBorder());
+        JPanel innerPanel = new JPanel(new GridLayout(1, 0, GuiUtil.PAD, 0));
+        innerPanel.setBorder(GuiUtil.createEmptyBorder());
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("ok");
         okButton.addActionListener(this);
@@ -114,7 +114,7 @@ public class SelectProgram
     private JPanel createCommandPanel()
     {
         JPanel panel = new JPanel(new GridLayout(0, 1));
-        panel.setBorder(GuiUtils.createEmptyBorder());
+        panel.setBorder(GuiUtil.createEmptyBorder());
         JLabel label = new JLabel("Go Program Command");
         label.setHorizontalAlignment(SwingConstants.LEFT);
         panel.add(label);
@@ -147,7 +147,7 @@ public class SelectProgram
                 }
             };
         m_textField.addKeyListener(keyListener);
-        GuiUtils.setMonospacedFont(m_comboBox);
+        GuiUtil.setMonospacedFont(m_comboBox);
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
         JButton button =
             new ImageButton("net/sf/gogui/images/fileopen.png", "Browse",
@@ -162,7 +162,7 @@ public class SelectProgram
     private static ArrayList getHistory()
     {
         ArrayList result =
-            PrefUtils.getList("net/sf/gogui/gui/selectprogram");
+            PrefUtil.getList("net/sf/gogui/gui/selectprogram");
         if (! result.contains("gnugo --mode gtp"))
             result.add("gnugo --mode gtp");
         return result;
@@ -202,7 +202,7 @@ public class SelectProgram
             if (! history.contains(element))
                 history.add(element);
         }
-        PrefUtils.putList("net/sf/gogui/gui/selectprogram", history);
+        PrefUtil.putList("net/sf/gogui/gui/selectprogram", history);
     }
 }
 

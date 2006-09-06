@@ -41,7 +41,7 @@ public class StreamDiscard
         }
         catch (Throwable e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
     }
 

@@ -34,7 +34,7 @@ class AntialiasingEditorPane
 {
     public void paintComponent(Graphics graphics)
     {
-        GuiUtils.setAntiAlias(graphics);
+        GuiUtil.setAntiAlias(graphics);
         super.paintComponent(graphics);
     }
 
@@ -62,8 +62,8 @@ public class Help
         m_editorPane = new AntialiasingEditorPane();
         m_editorPane.setEditable(false);
         m_editorPane.addHyperlinkListener(this);
-        int width = GuiUtils.getDefaultMonoFontSize() * 50;
-        int height = GuiUtils.getDefaultMonoFontSize() * 60;
+        int width = GuiUtil.getDefaultMonoFontSize() * 50;
+        int height = GuiUtil.getDefaultMonoFontSize() * 60;
         JScrollPane scrollPane =
             new JScrollPane(m_editorPane,
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

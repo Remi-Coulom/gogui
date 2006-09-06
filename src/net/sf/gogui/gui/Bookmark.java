@@ -8,8 +8,8 @@ package net.sf.gogui.gui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
-import net.sf.gogui.utils.FileUtils;
-import net.sf.gogui.utils.PrefUtils;
+import net.sf.gogui.utils.FileUtil;
+import net.sf.gogui.utils.PrefUtil;
 
 //----------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ public final class Bookmark
         String name = "";
         if (file != null)            
         {
-            File fileNoExt = new File(FileUtils.removeExtension(file, "sgf"));
+            File fileNoExt = new File(FileUtil.removeExtension(file, "sgf"));
             name = fileNoExt.getName();
             boolean hasVariation = ! variation.trim().equals("");
             if (move > 0 || hasVariation)
@@ -61,13 +61,13 @@ public final class Bookmark
     public static ArrayList load()
     {
         ArrayList bookmarks = new ArrayList();
-        Preferences prefs = PrefUtils.getNode("net/sf/gogui/gui/bookmark");
+        Preferences prefs = PrefUtil.getNode("net/sf/gogui/gui/bookmark");
         if (prefs == null)
             return bookmarks;
         int size = prefs.getInt("size", 0);
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtils.getNode("net/sf/gogui/gui/bookmark/" + i);
+            prefs = PrefUtil.getNode("net/sf/gogui/gui/bookmark/" + i);
             if (prefs == null)
                 break;
             String name = prefs.get("name", null);
@@ -85,13 +85,13 @@ public final class Bookmark
 
     public static void save(ArrayList bookmarks)
     {
-        Preferences prefs = PrefUtils.createNode("net/sf/gogui/gui/bookmark");
+        Preferences prefs = PrefUtil.createNode("net/sf/gogui/gui/bookmark");
         if (prefs == null)
             return;
         prefs.putInt("size", bookmarks.size());
         for (int i = 0; i < bookmarks.size(); ++i)
         {
-            prefs = PrefUtils.createNode("net/sf/gogui/gui/bookmark/" + i);
+            prefs = PrefUtil.createNode("net/sf/gogui/gui/bookmark/" + i);
             if (prefs == null)
                 break;
             Bookmark b = (Bookmark)bookmarks.get(i);

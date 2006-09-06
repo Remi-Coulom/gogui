@@ -22,7 +22,7 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.Clock;
@@ -491,14 +491,14 @@ public class GoGuiMenuBar
         Node father = node.getFather();
         boolean hasFather = (father != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
-        boolean hasNextVariation = (NodeUtils.getNextVariation(node) != null);
+        boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
         boolean hasNextEarlierVariation =
-            (NodeUtils.getNextEarlierVariation(node) != null);
+            (NodeUtil.getNextEarlierVariation(node) != null);
         boolean hasPrevEarlierVariation =
-            (NodeUtils.getPreviousEarlierVariation(node) != null);
+            (NodeUtil.getPreviousEarlierVariation(node) != null);
         boolean hasPrevVariation =
-            (NodeUtils.getPreviousVariation(node) != null);
-        boolean isInMain = NodeUtils.isInMainVariation(node);
+            (NodeUtil.getPreviousVariation(node) != null);
+        boolean isInMain = NodeUtil.isInMainVariation(node);
         boolean treeHasVariations = gameTree.hasVariations();
         m_itemBeginning.setEnabled(hasFather);
         m_itemBackward.setEnabled(hasFather);
@@ -524,7 +524,7 @@ public class GoGuiMenuBar
             && (canRestoreTime(node)
                 || (father != null && canRestoreTime(father)));
         m_itemClockRestore.setEnabled(canRestoreClock);
-        if (! NodeUtils.isInCleanup(node))
+        if (! NodeUtil.isInCleanup(node))
             setCleanup(false);
     }
 

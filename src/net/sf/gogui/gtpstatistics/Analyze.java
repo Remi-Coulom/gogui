@@ -18,11 +18,11 @@ import java.text.DecimalFormat;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.utils.ErrorMessage;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 import net.sf.gogui.utils.Histogram;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.utils.Table;
-import net.sf.gogui.utils.TableUtils;
+import net.sf.gogui.utils.TableUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -34,12 +34,12 @@ public class Analyze
         throws Exception
     {
         if (output.equals(""))
-            m_output = FileUtils.removeExtension(new File(fileName), "dat");
+            m_output = FileUtil.removeExtension(new File(fileName), "dat");
         else if (new File(output).isDirectory())
         {
             File name = new File((new File(fileName)).getName());
             m_output = output + File.separator
-                + FileUtils.removeExtension(name, "dat");
+                + FileUtil.removeExtension(name, "dat");
         }
         else
             m_output = output;
@@ -232,10 +232,10 @@ public class Analyze
             for (int j = 0; j < m_gameInfo.size(); ++j)
             {
                 GameInfo info = (GameInfo)(m_gameInfo.get(j));
-                Table table = TableUtils.select(m_table, "File", info.m_file,
-                                                command);
+                Table table = TableUtil.select(m_table, "File", info.m_file,
+                                               command);
                 ArrayList notEmpty
-                    = TableUtils.getColumnNotEmpty(table, command);
+                    = TableUtil.getColumnNotEmpty(table, command);
                 if (notEmpty.size() > 1)
                 {
                     isGameGlobal = false;
@@ -258,7 +258,7 @@ public class Analyze
     private void finishHtml(PrintStream out)
     {
         out.print("<hr>\n" +
-                  "<address><small>Generated on " + StringUtils.getDateShort()
+                  "<address><small>Generated on " + StringUtil.getDateShort()
                   + " by GtpStatistics "
                   + Version.get() + " (<a href=\"http://gogui.sf.net\">"
                   + "http://gogui.sf.net</a>)</small></address>\n" +
@@ -368,8 +368,8 @@ public class Analyze
                               int gameIndex, String gameFile) throws Exception
     {
         String command = getCommand(commandIndex);
-        Table table = TableUtils.select(m_table, "File", gameFile,
-                                        "Move", command);
+        Table table = TableUtil.select(m_table, "File", gameFile,
+                                       "Move", command);
         File file = getPlotFile(gameIndex, commandIndex);
         Plot plot = generatePlotMove(getImgWidth(m_maxMove),
                                      getColor(command));
@@ -390,7 +390,7 @@ public class Analyze
         File gameFile = new File(info.m_file);
         if (! gameFile.exists())
             return (shortName ? gameFile.getName() : gameFile.toString());
-        String path = FileUtils.getRelativeURI(fromFile, gameFile);
+        String path = FileUtil.getRelativeURI(fromFile, gameFile);
         return "<a href=\"" + path + "\">"
             + (shortName ? gameFile.getName() : path) + "</a>";
     }
@@ -447,9 +447,9 @@ public class Analyze
             info = (GameInfo)(m_gameInfo.get(i));
             String file = info.m_file;
             String finalPosition = Integer.toString(info.m_finalPosition);
-            int row = TableUtils.findRow(m_table, "File", file, "Move",
-                                         finalPosition);
-            TableUtils.appendRow(m_tableFinal, m_table, row);
+            int row = TableUtil.findRow(m_table, "File", file, "Move",
+                                        finalPosition);
+            TableUtil.appendRow(m_tableFinal, m_table, row);
         }
         ArrayList columnTitles = new ArrayList();
         columnTitles.add("Move");
@@ -481,7 +481,7 @@ public class Analyze
 
     private void startHtml(PrintStream out, String title)
     {
-        String charset = StringUtils.getDefaultEncoding();
+        String charset = StringUtil.getDefaultEncoding();
         out.print("<html>\n" +
                   "<head>\n" +
                   "<title>" + title + "</title>\n" +
@@ -560,7 +560,7 @@ public class Analyze
             if (commandStatistics.getStatistics(i).getCount() == 0)
                 continue;
             Table histoTable
-                = TableUtils.fromHistogram(histogram, command);
+                = TableUtil.fromHistogram(histogram, command);
             File histoFile = getHistoFile(commandIndex, i);
             Color color = getColor(command);
             Plot plot = new Plot(180, 135, color, m_precision);
@@ -672,7 +672,7 @@ public class Analyze
         }
         catch (Exception e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
         endInfo(out);
         out.print("<table border=\"0\">\n");
@@ -691,13 +691,13 @@ public class Analyze
         }
         out.print("</table>\n" +
                   "<hr>\n");
-        Table table = TableUtils.select(m_table, "File", game);
+        Table table = TableUtil.select(m_table, "File", game);
         out.print("<table class=\"smalltable\">\n" +
                   "<thead><tr>");
         for (int i = 1; i < table.getNumberColumns(); ++i)
         {
             String command = table.getColumnTitle(i);
-            if (! TableUtils.allEmpty(table, command))
+            if (! TableUtil.allEmpty(table, command))
                 out.print("<th>" + command + "</th>");
         }
         out.print("</tr></thead>\n");
@@ -707,7 +707,7 @@ public class Analyze
             for (int j = 1; j < table.getNumberColumns(); ++j)
             {
                 String command = table.getColumnTitle(j);
-                if (TableUtils.allEmpty(table, command))
+                if (TableUtil.allEmpty(table, command))
                     continue;
                 String value = table.get(command, i);
                 if (value == null)

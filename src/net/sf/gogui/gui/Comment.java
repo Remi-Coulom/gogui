@@ -48,7 +48,7 @@ public class Comment
         setFocusTraversalKeys(m_textPane);
         m_textPane.addStyle("marked", Color.white, Color.decode("#38d878"), 
                             false);
-        int fontSize = GuiUtils.getDefaultMonoFontSize();
+        int fontSize = GuiUtil.getDefaultMonoFontSize();
         setPreferredSize(new Dimension(20 * fontSize, 10 * fontSize));
         m_textPane.getDocument().addDocumentListener(this);
         CaretListener caretListener = new CaretListener()
@@ -122,7 +122,7 @@ public class Comment
     public void setFontFixed(boolean fixed)
     {
         if (fixed)
-            GuiUtils.setMonospacedFont(m_textPane.get());
+            GuiUtil.setMonospacedFont(m_textPane.get());
         else
             m_textPane.get().setFont(UIManager.getFont("TextArea.font"));
         m_textPane.get().repaint();

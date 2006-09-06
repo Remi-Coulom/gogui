@@ -32,7 +32,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 
 //----------------------------------------------------------------------------
 
@@ -207,7 +207,7 @@ public class GameTreePanel
     public void paintComponent(Graphics graphics)
     {
         if (! getFastPaint())
-            GuiUtils.setAntiAlias(graphics);
+            GuiUtil.setAntiAlias(graphics);
         super.paintComponent(graphics);
     }
 
@@ -283,7 +283,7 @@ public class GameTreePanel
         assert(father.getNumberChildren() == 1);
         GameTreeNode fatherGameNode = getGameTreeNode(father);
         assert(! isExpanded(father));
-        int moveNumber = NodeUtils.getMoveNumber(node);
+        int moveNumber = NodeUtil.getMoveNumber(node);
         GameTreeNode gameNode =
             new GameTreeNode(node, moveNumber, this, m_mouseListener, m_font,
                              m_preferredNodeSize);
@@ -332,7 +332,7 @@ public class GameTreePanel
             createNodes(this, root, 0, 0, MARGIN, MARGIN, 0);
             if (gameTreeChanged)
             {
-                if (NodeUtils.subtreeGreaterThan(root, 10000))
+                if (NodeUtil.subtreeGreaterThan(root, 10000))
                     showVariations(root);
                 else
                     showSubtree(root);
@@ -515,7 +515,7 @@ public class GameTreePanel
             else
             {
                 maxChildren = 0;
-                String text = Integer.toString(NodeUtils.subtreeSize(node));
+                String text = Integer.toString(NodeUtil.subtreeSize(node));
                 int estimatedWidth = text.length() * m_nodeFullSize / 3;
                 m_maxX = Math.max(x + estimatedWidth, m_maxX);
                 JLabel label = new JLabel(text);
@@ -584,7 +584,7 @@ public class GameTreePanel
     {
         boolean changed = false;
         boolean currentChanged = false;
-        int depth = NodeUtils.getDepth(root);
+        int depth = NodeUtil.getDepth(root);
         Node node = root;
         while (node != null)
         {
@@ -596,7 +596,7 @@ public class GameTreePanel
             }
             if (m_expanded.remove(node))
                 changed = true;
-            node = NodeUtils.nextNode(node, depth);
+            node = NodeUtil.nextNode(node, depth);
         }
         if (currentChanged)
         {
@@ -612,7 +612,7 @@ public class GameTreePanel
 
     private void nodeInfo(Point location, Node node)
     {
-        String nodeInfo = NodeUtils.nodeInfo(node);
+        String nodeInfo = NodeUtil.nodeInfo(node);
         String title = "Node Info";
         TextViewer textViewer = new TextViewer(m_owner, title, nodeInfo, true,
                                                null, m_fastPaint);
@@ -726,18 +726,18 @@ public class GameTreePanel
 
     private void showSubtree(Node root)
     {
-        if (NodeUtils.subtreeGreaterThan(root, 10000)
+        if (NodeUtil.subtreeGreaterThan(root, 10000)
             && ! SimpleDialogs.showQuestion(m_owner,
                                             "Really expand large subtree?"))
             return;
         boolean changed = false;
         Node node = root;
-        int depth = NodeUtils.getDepth(node);
+        int depth = NodeUtil.getDepth(node);
         while (node != null)
         {
             if (node.getNumberChildren() > 1 && m_expanded.add(node))
                 changed = true;
-            node = NodeUtils.nextNode(node, depth);
+            node = NodeUtil.nextNode(node, depth);
         }
         if (changed)
         {
@@ -764,7 +764,7 @@ public class GameTreePanel
 
     private void treeInfo(Point location, Node node)
     {
-        String treeInfo = NodeUtils.treeInfo(node);
+        String treeInfo = NodeUtil.treeInfo(node);
         String title = "Subtree Info";
         TextViewer textViewer = new TextViewer(m_owner, title, treeInfo, true,
                                                null, m_fastPaint);

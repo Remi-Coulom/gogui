@@ -109,11 +109,11 @@ public class OptionalMessage
         textArea.setFont(UIManager.getFont("Label.font"));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        panel.add(GuiUtils.createFiller());
-        panel.add(GuiUtils.createFiller());
+        panel.add(GuiUtil.createFiller());
+        panel.add(GuiUtil.createFiller());
         panel.add(textArea);
-        panel.add(GuiUtils.createFiller());
-        panel.add(GuiUtils.createFiller());
+        panel.add(GuiUtil.createFiller());
+        panel.add(GuiUtil.createFiller());
         JPanel checkBoxPanel = new JPanel(new BorderLayout());
         String title;
         Object defaultOption;

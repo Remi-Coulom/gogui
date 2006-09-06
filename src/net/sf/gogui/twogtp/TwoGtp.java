@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-import net.sf.gogui.game.NodeUtils;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
@@ -31,12 +31,12 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpUtils;
+import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.utils.ErrorMessage;
 import net.sf.gogui.utils.Platform;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -585,8 +585,8 @@ public class TwoGtp
             blackName = whiteName;
             whiteName = tmpName;
         }
-        blackName = StringUtils.capitalize(blackName);
-        whiteName = StringUtils.capitalize(whiteName);
+        blackName = StringUtil.capitalize(blackName);
+        whiteName = StringUtil.capitalize(whiteName);
         buffer.append(whiteName);
         buffer.append(" vs ");
         buffer.append(blackName);
@@ -653,7 +653,7 @@ public class TwoGtp
                     assert(false);
                 }
             }
-            int moveNumber = NodeUtils.getMoveNumber(m_currentNode);
+            int moveNumber = NodeUtil.getMoveNumber(m_currentNode);
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moveNumber, error,
                        errorMessage, cpuTimeBlack, cpuTimeWhite);
@@ -699,7 +699,7 @@ public class TwoGtp
             m_openingMoves = Compare.getAllAsMoves(m_gameTree.getRoot());
             m_openingMovesIndex = 0;
             Node root = m_gameTree.getRoot();
-            m_currentNode = NodeUtils.getLast(root);
+            m_currentNode = NodeUtil.getLast(root);
             if (m_loadsgf)
             {
                 String command = "loadsgf " + m_openingFile;
@@ -813,7 +813,7 @@ public class TwoGtp
         sendIfSupported("komi", "komi " + m_komi);
         if (m_timeSettings != null)
             sendIfSupported("time_settings",
-                            GtpUtils.getTimeSettingsCommand(m_timeSettings));
+                            GtpUtil.getTimeSettingsCommand(m_timeSettings));
     }
 
     private void play(Move move)
@@ -915,7 +915,7 @@ public class TwoGtp
                 "\nResult[Referee]: " + resultReferee;
         gameComment = gameComment +
             "\nHost: " + host +
-            "\nDate: " + StringUtils.getDate();
+            "\nDate: " + StringUtil.getDate();
         m_gameTree.getRoot().setComment(gameComment);
         File file = getFile(m_gameIndex);
         if (m_verbose)
@@ -958,13 +958,13 @@ public class TwoGtp
             if (m_openings != null)
                 out.println("# Openings: " + m_openings.getDirectory()
                             + " (" + m_openings.getNumber() + " files)");
-            out.println("# Date: " + StringUtils.getDate());
+            out.println("# Date: " + StringUtil.getDate());
             out.println("# Host: " + Platform.getHostInfo());
             out.println("#GAME\tRES_B\tRES_W\tRES_R\tALT\tDUP\tLEN\tCPU_B\t"
                         + "CPU_W\tERR\tERR_MSG");
             out.close();
         }
-        NumberFormat format = StringUtils.getNumberFormat(1);
+        NumberFormat format = StringUtil.getNumberFormat(1);
         FileOutputStream fileOutputStream = new FileOutputStream(file, true);
         PrintStream out = new PrintStream(fileOutputStream);
         out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t"
@@ -1067,7 +1067,7 @@ public class TwoGtp
             GoPoint point = null;
             try
             {
-                point = GtpUtils.parsePoint(response1, m_board.getSize());
+                point = GtpUtil.parsePoint(response1, m_board.getSize());
             }
             catch (GtpError e)
             {

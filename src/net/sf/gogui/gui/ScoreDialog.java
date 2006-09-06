@@ -42,7 +42,7 @@ public class ScoreDialog
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         JPanel panelDetails =
-            new JPanel(new GridLayout(0, 2, 0, GuiUtils.SMALL_PAD));
+            new JPanel(new GridLayout(0, 2, 0, GuiUtil.SMALL_PAD));
         m_territoryBlack = createEntry(panelDetails, "Territory Black:");
         m_territoryWhite = createEntry(panelDetails, "Territory White:");
         m_areaBlack = createEntry(panelDetails, "Area Black:");
@@ -58,8 +58,8 @@ public class ScoreDialog
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(panelDetails);
-        panel.add(GuiUtils.createFiller());
-        panel.add(GuiUtils.createFiller());
+        panel.add(GuiUtil.createFiller());
+        panel.add(GuiUtil.createFiller());
         panel.add(panelResult);
         JButton okButton = new JButton("Ok");
         okButton.setActionCommand("score-done");

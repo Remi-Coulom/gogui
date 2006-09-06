@@ -39,7 +39,7 @@ import net.sf.gogui.utils.ProgressShow;
 //----------------------------------------------------------------------------
 
 /** GUI utility classes and static functions. */
-public class GuiUtils
+public class GuiUtil
 {
     /** Runnable for running protected by modal progress dialog.
         @see #runProgress

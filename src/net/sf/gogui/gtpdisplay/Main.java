@@ -7,9 +7,9 @@ package net.sf.gogui.gtpdisplay;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import net.sf.gogui.gui.GuiUtils;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.utils.Options;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ public final class Main
             String program = null;
             if (arguments.size() == 1)
                 program = (String)arguments.get(0);
-            GuiUtils.initLookAndFeel(lookAndFeel);
+            GuiUtil.initLookAndFeel(lookAndFeel);
             GtpDisplay gtpDisplay
                 = new GtpDisplay(program, verbose, fastPaint);
             gtpDisplay.mainLoop(System.in, System.out);
@@ -60,7 +60,7 @@ public final class Main
         }
         catch (Throwable t)
         {
-            StringUtils.printException(t);
+            StringUtil.printException(t);
             System.exit(-1);
         }
     }

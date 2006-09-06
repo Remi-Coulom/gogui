@@ -891,11 +891,11 @@ public final class GuiBoard
 
     private void setPreferredFieldSize()
     {
-        int size = (int)((double)GuiUtils.getDefaultMonoFontSize() * 2.2);
+        int size = (int)((double)GuiUtil.getDefaultMonoFontSize() * 2.2);
         if (size % 2 == 0)
             ++size;
         m_preferredFieldSize = new Dimension(size, size);
-        size = GuiUtils.getDefaultMonoFontSize();
+        size = GuiUtil.getDefaultMonoFontSize();
         if (size % 2 == 0)
             ++size;
         m_minimumFieldSize = new Dimension(size, size);

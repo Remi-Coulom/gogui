@@ -7,7 +7,7 @@ package net.sf.gogui.game;
 
 import java.util.Locale;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.utils.StringUtils;
+import net.sf.gogui.utils.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -99,11 +99,11 @@ public class GameInformation
         if (! playerBlackKnown && ! playerWhiteKnown)
             return null;
         if (playerBlackKnown)
-            playerBlack = StringUtils.capitalize(playerBlack);
+            playerBlack = StringUtil.capitalize(playerBlack);
         else
             playerBlack = "Unknown";
         if (playerWhiteKnown)
-            playerWhite = StringUtils.capitalize(playerWhite);
+            playerWhite = StringUtil.capitalize(playerWhite);
         else
             playerWhite = "Unknown";
         return playerWhite + " vs " + playerBlack + " (B)";

@@ -60,7 +60,7 @@ public class Platform
             {
                 String[] cmdArray = { "/bin/sh", "-c",
                                       "grep '^model name' /proc/cpuinfo" };
-                String result = ProcessUtils.runCommand(cmdArray);
+                String result = ProcessUtil.runCommand(cmdArray);
                 int start = result.indexOf(':');
                 if (start >= 0)
                 {
@@ -182,11 +182,11 @@ public class Platform
         }
         catch (Exception e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
         catch (NoClassDefFoundError e)
         {
-            StringUtils.printException(e);
+            StringUtil.printException(e);
         }
     }
 
@@ -195,7 +195,7 @@ public class Platform
         try
         {
             String[] cmdArray = { "dcop" };
-            String result = ProcessUtils.runCommand(cmdArray);
+            String result = ProcessUtil.runCommand(cmdArray);
             return (result.indexOf("kicker") >= 0);
         }
         catch (IOException e)
@@ -208,7 +208,7 @@ public class Platform
     {
         try
         {
-            ProcessUtils.runProcess(cmd);
+            ProcessUtil.runProcess(cmd);
             return true;
         }
         catch (IOException e)

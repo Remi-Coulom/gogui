@@ -7,7 +7,7 @@ package net.sf.gogui.sgf;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
-import net.sf.gogui.utils.FileUtils;
+import net.sf.gogui.utils.FileUtil;
 
 //----------------------------------------------------------------------------
 
@@ -23,8 +23,8 @@ public class SgfFilter
     {
         if (file.isDirectory())
             return true;
-        return FileUtils.hasExtension(file, "sgf")
-            || FileUtils.hasExtension(file, "SGF");
+        return FileUtil.hasExtension(file, "sgf")
+            || FileUtil.hasExtension(file, "SGF");
     }
 
     public String getDescription()
