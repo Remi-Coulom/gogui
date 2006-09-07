@@ -29,7 +29,6 @@ import net.sf.gogui.util.ProcessUtil;
     be called after the thread is started.
     </p>
     <p>
-    GTP commands are sent with the send functions.
     Callbacks can be registered to monitor the input, output and error stream
     and to handle timeout and invalid responses.
     All callbacks are only called in the send functions and from the caller's
@@ -44,6 +43,7 @@ import net.sf.gogui.util.ProcessUtil;
     </p>
 */
 public final class GtpClient
+    extends GtpClientBase
 {
     /** Callback if a timeout occured. */
     public interface TimeoutCallback
@@ -154,98 +154,6 @@ public final class GtpClient
         return m_response;
     }
 
-    /** Get command for setting the board size.
-        Note: call queryProtocolVersion first
-        @return The boardsize command for GTP version 2 programs,
-        otherwise null.
-    */
-    public String getCommandBoardsize(int size)
-    {
-        if (m_protocolVersion == 2)
-            return ("boardsize " + size);
-        else
-            return null;
-    }
-
-    /** Get command for starting a new game.
-        Note: call queryProtocolVersion first
-        @return The boardsize command for GTP version 1 programs,
-        otherwise the clear_board command.
-    */
-    public String getCommandClearBoard(int size)
-    {
-        if (m_protocolVersion == 1)
-            return "boardsize " + size;
-        else
-            return "clear_board";
-    }
-
-    /** Get command for generating a move.
-        Note: call queryProtocolVersion first
-        @param color GoColor::BLACK or GoColor::WHITE
-        @return The right command depending on the GTP version.
-    */
-    public String getCommandGenmove(GoColor color)
-    {
-        assert(color == GoColor.BLACK || color == GoColor.WHITE);
-        if (m_protocolVersion == 1)
-        {
-            if (color == GoColor.BLACK)
-                return "genmove_black";
-            else
-                return "genmove_white";
-        }
-        if (color == GoColor.BLACK)
-            return "genmove b";
-        else
-            return "genmove w";
-    }
-
-    /** Get command for playing a move.
-        Note: call queryProtocolVersion first
-        @param move Any color, including GoColor.EMPTY, this is
-        non-standard GTP, but GoGui tries to transmit empty setup
-        points this way, even if it is only to produce an error with the
-        Go engine.
-        @return The right command depending on the GTP version.
-    */
-    public String getCommandPlay(Move move)
-    {
-        String point = GoPoint.toString(move.getPoint());
-        GoColor color = move.getColor();
-        if (m_protocolVersion == 1)
-        {
-            if (color == GoColor.BLACK)
-                return "black " + point;
-            if (color == GoColor.WHITE)
-                return "white " + point;
-            assert(color == GoColor.EMPTY);
-            return "empty " + point;
-        }
-        if (color == GoColor.BLACK)
-            return "play b " + point;
-        if (color == GoColor.WHITE)
-            return "play w " + point;
-        assert(color == GoColor.EMPTY);
-        return "play empty " + point;
-    }
-
-    /** Send cputime command and convert the result to double.
-        @throws GtpError if command fails or does not return a floating point
-        number.
-    */
-    public double getCpuTime() throws GtpError
-    {
-        try
-        {
-            return Double.parseDouble(send("cputime"));
-        }
-        catch (NumberFormatException e)
-        {
-            throw new GtpError("Invalid response to cputime command");
-        }
-    }
-
     /** Get full response including status and ID and last command. */
     public String getFullResponse()
     {
@@ -258,49 +166,6 @@ public final class GtpClient
     public String getProgramCommand()
     {
         return m_program;
-    }
-
-    /** Get protocol version.
-        You have to call queryProtocolVersion() first, otherwise this method
-        will always return 2.
-    */
-    public int getProtocolVersion()
-    {
-        return m_protocolVersion;
-    }
-
-    /** Get the supported commands.
-        Note: call querySupportedCommands() first.
-        @return A vector of strings with the supported commands.
-    */
-    public ArrayList getSupportedCommands()
-    {
-        ArrayList result = new ArrayList(128);
-        if (m_supportedCommands != null)
-            for (int i = 0; i < m_supportedCommands.length; ++i)
-                result.add(m_supportedCommands[i]);
-        return result;
-    }
-
-    /** Check if a command is supported.
-        Note: call querySupportedCommands() first.
-    */
-    public boolean isCommandSupported(String command)
-    {
-        if (m_supportedCommands == null)
-            return false;
-        for (int i = 0; i < m_supportedCommands.length; ++i)
-            if (m_supportedCommands[i].equals(command))
-                return true;
-        return false;
-    }
-
-    /** Check if cputime command is supported.
-        Note: call querySupportedCommands() first.
-    */
-    public boolean isCpuTimeSupported()
-    {
-        return isCommandSupported("cputime");
     }
 
     /** Check if interrupting a command is supported.
@@ -337,80 +202,6 @@ public final class GtpClient
         }
         catch (GtpError e)
         {
-        }
-    }
-
-    /** Queries the name.
-        @return Name or "Unknown Program" if name command not supported
-    */
-    public String queryName()
-    {
-        try
-        {
-            return send("name");
-        }
-        catch (GtpError e)
-        {
-            return "Unknown Program";
-        }
-    }
-
-    /** Query the protocol version.
-        Sets the protocol version to the response or to 2 if protocol_version
-        command fails.
-        @see GtpClient#getProtocolVersion
-        @throws GtpError if the response to protocol_version is not 1 or 2.
-    */
-    public void queryProtocolVersion() throws GtpError
-    {
-        try
-        {            
-            String response;
-            try
-            {
-                response = send("protocol_version");
-            }
-            catch (GtpError e)
-            {
-                m_protocolVersion = 2;
-                return;
-            }
-            int v = Integer.parseInt(response);
-            if (v < 1 || v > 2)
-                throw new GtpError("Unknown protocol version: " + v);
-            m_protocolVersion = v;
-        }
-        catch (NumberFormatException e)
-        {
-            throw new GtpError("Invalid protocol version");
-        }
-    }
-
-    /** Query the supported commands.
-        @see GtpClient#getSupportedCommands
-        @see GtpClient#isCommandSupported
-    */
-    public void querySupportedCommands() throws GtpError
-    {
-        String command = (m_protocolVersion == 1 ? "help" : "list_commands");
-        String response = send(command);
-        m_supportedCommands = StringUtil.splitArguments(response);
-        for (int i = 0; i < m_supportedCommands.length; ++i)
-            m_supportedCommands[i] = m_supportedCommands[i].trim();
-    }
-
-    /** Queries the program version.
-        @return The version or an empty string if the version command fails.
-    */
-    public String queryVersion()
-    {
-        try
-        {
-            return send("version");
-        }
-        catch (GtpError e)
-        {
-            return "";
         }
     }
 
@@ -456,35 +247,6 @@ public final class GtpClient
             m_callback.sentCommand(command);
         readResponse(timeout);
         return m_response;
-    }
-
-    /** Send command for setting the board size.
-        Send the command if it exists in the GTP protocol version.
-        Note: call queryProtocolVersion first
-        @see GtpClient#getCommandBoardsize
-    */
-    public void sendBoardsize(int size) throws GtpError
-    {
-        String command = getCommandBoardsize(size);
-        if (command != null)
-            send(command);
-    }
-
-    /** Send command for staring a new game.
-        Note: call queryProtocolVersion first
-        @see GtpClient#getCommandClearBoard
-    */
-    public void sendClearBoard(int size) throws GtpError
-    {
-        send(getCommandClearBoard(size));
-    }
-
-    /** Send command for playing a move.
-        Note: call queryProtocolVersion first
-    */
-    public void sendPlay(Move move) throws GtpError
-    {
-        send(getCommandPlay(move));
     }
 
     public void sendPlay(Move move, long timeout,
@@ -786,9 +548,9 @@ public final class GtpClient
         }
     }
 
-    private boolean m_autoNumber;
-
     private InvalidResponseCallback m_invalidResponseCallback;
+
+    private boolean m_autoNumber;
 
     private boolean m_exitInProgress;
 
@@ -797,8 +559,6 @@ public final class GtpClient
     private boolean m_isProgramDead;
 
     private final boolean m_log;
-
-    private int m_protocolVersion = 2;
 
     private int m_commandNumber;
 
@@ -817,8 +577,6 @@ public final class GtpClient
     private String m_pid;
 
     private final String m_program;
-
-    private String[] m_supportedCommands;
 
     private MessageQueue m_queue;
 
