@@ -62,6 +62,12 @@ public final class GoPoint
         return super.equals(object);
     }
 
+    /** Compare, including the case that the points can be null. */
+    public static boolean equals(GoPoint point1, GoPoint point2)
+    {
+        return (point1 == point2);
+    }
+
     /** Factory method for creating a point.
         @param x x-coordinate [0...GoPoint.MAXSIZE - 1]
         @param y y-coordinate [0...GoPoint.MAXSIZE - 1]
