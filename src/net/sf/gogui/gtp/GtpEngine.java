@@ -20,112 +20,6 @@ import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 
-/** Thread reading the command stream.
-    Reading is done in a seperate thread to allow the notification
-    of GtpServer about an asynchronous interrupt received using
-    the special comment line '# interrupt'.
-*/
-class ReadThread
-    extends Thread
-{
-    public ReadThread(GtpEngine gtpServer, InputStream in, boolean log)
-    {
-        m_in = new BufferedReader(new InputStreamReader(in));
-        m_gtpServer = gtpServer;
-        m_log = log;
-    }
-
-    public synchronized boolean endOfFile()
-    {
-        return m_endOfFile;
-    }
-
-    public GtpCommand getCommand()
-    {
-        synchronized (this)
-        {
-            assert(! m_waitCommand);
-            m_waitCommand = true;
-            notifyAll();
-            try
-            {
-                wait();
-            }
-            catch (InterruptedException e)
-            {
-                System.err.println("Interrupted");
-            }
-            assert(m_endOfFile || ! m_waitCommand);
-            GtpCommand result = m_command;
-            m_command = null;
-            return result;
-        }
-    }
-
-    public void run()
-    {
-        try
-        {            
-            while (true)
-            {
-                String line = m_in.readLine();
-                if (line == null)
-                {
-                    synchronized (this)
-                    {
-                        m_endOfFile = true;
-                    }
-                }
-                else
-                {
-                    if (m_log)
-                        m_gtpServer.log(line);
-                    line = line.trim();
-                    if (line.equals("# interrupt"))
-                    {
-                        m_gtpServer.interruptCommand();
-                    }
-                    if (line.equals("") || line.charAt(0) == '#')
-                        continue;
-                }
-                synchronized (this)
-                {
-                    while (! m_waitCommand)
-                    {
-                        wait();
-                    }
-                    if (line == null)
-                        m_command = null;
-                    else
-                        m_command = new GtpCommand(line);
-                    notifyAll();
-                    m_waitCommand = false;
-                    if (m_command == null || m_command.isQuit())
-                        return;
-                }
-            }
-        }
-        catch (Throwable e)
-        {
-            StringUtil.printException(e);
-        }
-    }
-
-    private boolean m_endOfFile;
-
-    private final boolean m_log;
-
-    private boolean m_waitCommand;
-
-    private final BufferedReader m_in;
-
-    private GtpCommand m_command;
-
-    private final GtpEngine m_gtpServer;
-}
-
-//----------------------------------------------------------------------------
-
 /** Base class for Go programs and tools implementing GTP. */
 public abstract class GtpEngine
 {
@@ -356,6 +250,112 @@ public abstract class GtpEngine
     private final PrintStream m_log;
 
     private PrintStream m_out;
+}
+
+//----------------------------------------------------------------------------
+
+/** Thread reading the command stream.
+    Reading is done in a seperate thread to allow the notification
+    of GtpServer about an asynchronous interrupt received using
+    the special comment line '# interrupt'.
+*/
+class ReadThread
+    extends Thread
+{
+    public ReadThread(GtpEngine gtpServer, InputStream in, boolean log)
+    {
+        m_in = new BufferedReader(new InputStreamReader(in));
+        m_gtpServer = gtpServer;
+        m_log = log;
+    }
+
+    public synchronized boolean endOfFile()
+    {
+        return m_endOfFile;
+    }
+
+    public GtpCommand getCommand()
+    {
+        synchronized (this)
+        {
+            assert(! m_waitCommand);
+            m_waitCommand = true;
+            notifyAll();
+            try
+            {
+                wait();
+            }
+            catch (InterruptedException e)
+            {
+                System.err.println("Interrupted");
+            }
+            assert(m_endOfFile || ! m_waitCommand);
+            GtpCommand result = m_command;
+            m_command = null;
+            return result;
+        }
+    }
+
+    public void run()
+    {
+        try
+        {            
+            while (true)
+            {
+                String line = m_in.readLine();
+                if (line == null)
+                {
+                    synchronized (this)
+                    {
+                        m_endOfFile = true;
+                    }
+                }
+                else
+                {
+                    if (m_log)
+                        m_gtpServer.log(line);
+                    line = line.trim();
+                    if (line.equals("# interrupt"))
+                    {
+                        m_gtpServer.interruptCommand();
+                    }
+                    if (line.equals("") || line.charAt(0) == '#')
+                        continue;
+                }
+                synchronized (this)
+                {
+                    while (! m_waitCommand)
+                    {
+                        wait();
+                    }
+                    if (line == null)
+                        m_command = null;
+                    else
+                        m_command = new GtpCommand(line);
+                    notifyAll();
+                    m_waitCommand = false;
+                    if (m_command == null || m_command.isQuit())
+                        return;
+                }
+            }
+        }
+        catch (Throwable e)
+        {
+            StringUtil.printException(e);
+        }
+    }
+
+    private boolean m_endOfFile;
+
+    private final boolean m_log;
+
+    private boolean m_waitCommand;
+
+    private final BufferedReader m_in;
+
+    private GtpCommand m_command;
+
+    private final GtpEngine m_gtpServer;
 }
 
 //----------------------------------------------------------------------------
