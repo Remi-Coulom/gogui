@@ -41,11 +41,10 @@ public final class Board
     */
     public boolean bothPassed()
     {
-        int moveNumber = getMoveNumber();
-        if (moveNumber < 2)
-            return false;
-        return (getMove(moveNumber - 1).getPoint() == null
-                && getMove(moveNumber - 2).getPoint() == null);
+        int n = getNumberPlacements();
+        return (n >= 2
+                && getPlacement(n - 1).isPassMove()
+                && getPlacement(n - 2).isPassMove());
     }
 
     /** Check if board contains a point.
@@ -99,9 +98,9 @@ public final class Board
         return new BoardConstants(size).getHandicapStones(n);
     }
 
-    public Move getMove(int i)
+    public Placement getPlacement(int i)
     {
-        return ((MoveRecord)m_moves.get(i)).m_move;
+        return ((StackEntry)m_stack.get(i)).m_placement;
     }
 
     public GoPoint getPoint(int i)
@@ -109,9 +108,9 @@ public final class Board
         return m_allPoints[i];
     }
 
-    public int getMoveNumber()
+    public int getNumberPlacements()
     {
-        return m_moves.size();
+        return m_stack.size();
     }
 
     public int getNumberPoints()
@@ -167,7 +166,7 @@ public final class Board
 
     public boolean isModified()
     {
-        return (m_moves.size() > 0);
+        return (m_stack.size() > 0);
     }
 
     public boolean isSuicide(GoPoint point, GoColor toMove)
@@ -175,9 +174,9 @@ public final class Board
         if (getColor(point) != GoColor.EMPTY)
             return false;
         play(point, toMove);
-        int moveNumber = getMoveNumber();
-        MoveRecord moveRecord = (MoveRecord)m_moves.get(moveNumber - 1);
-        boolean result = (moveRecord.m_suicide.size() > 0);
+        int n = getNumberPlacements();
+        StackEntry entry = (StackEntry)m_stack.get(n - 1);
+        boolean result = (entry.m_suicide.size() > 0);
         undo();
         return result;
     }
@@ -186,7 +185,7 @@ public final class Board
     {
         for (int i = 0; i < m_allPoints.length; ++i)
             setColor(m_allPoints[i], GoColor.EMPTY);
-        m_moves.clear();        
+        m_stack.clear();        
         m_capturedB = 0;
         m_capturedW = 0;
         m_toMove = GoColor.BLACK;
@@ -203,48 +202,9 @@ public final class Board
         points. For example, when loading an SGF file with illegal moves,
         we still want to be able to load and execute the moves.
     */
-    public void play(Move m)
+    public void play(Move move)
     {
-        GoPoint p = m.getPoint();
-        GoColor color = m.getColor();
-        GoColor otherColor = color.otherColor();
-        ArrayList killed = new ArrayList();
-        ArrayList suicide = new ArrayList();
-        GoColor old = GoColor.EMPTY;
-        GoPoint oldKoPoint = m_koPoint;
-        m_koPoint = null;
-        if (p != null)
-        {
-            old = getColor(p);
-            setColor(p, color);
-            if (color != GoColor.EMPTY)
-            {
-                ArrayList adj = getAdjacentPoints(p);
-                for (int i = 0; i < adj.size(); ++i)
-                {
-                    int killedSize = killed.size();
-                    checkKill((GoPoint)(adj.get(i)), otherColor, killed);
-                    if (killed.size() == killedSize + 1)
-                        m_koPoint = (GoPoint)killed.get(killedSize);
-                }
-                checkKill(p, color, suicide);
-                if (m_koPoint != null && ! isSingleStoneSingleLib(p, color))
-                    m_koPoint = null;
-                if (color == GoColor.BLACK)
-                {
-                    m_capturedB += suicide.size();
-                    m_capturedW += killed.size();
-                }
-                else
-                {
-                    m_capturedW += suicide.size();
-                    m_capturedB += killed.size();
-                }
-            }
-        }
-        m_moves.add(new MoveRecord(m_toMove, m, old, killed, suicide,
-                                   oldKoPoint));
-        m_toMove = otherColor;        
+        doPlacement(new Placement(move.getPoint(), move.getColor(), false));
     }
 
     public void setToMove(GoColor toMove)
@@ -252,27 +212,38 @@ public final class Board
         m_toMove = toMove;
     }
 
+    /** Add a setup stone.
+        A setup stone differs from a move in that no stones are captured and
+        the color to move does not switched.
+        @param p the point
+        @param color the color; GoColor.EMPTY for removing a stone
+    */
+    public void setup(GoPoint p, GoColor color)
+    {
+        doPlacement(new Placement(p, color, true));
+    }
+
+    /** Undo last move or setup stone. */
     public void undo()
     {
-        if (getMoveNumber() == 0)
-            return;
-        int index = getMoveNumber() - 1;
-        MoveRecord r = (MoveRecord)m_moves.get(index);
-        m_moves.remove(index);
-        Move m = r.m_move;
-        GoColor c = m.getColor();
+        assert(getNumberPlacements() > 0);
+        int index = getNumberPlacements() - 1;
+        StackEntry entry = (StackEntry)m_stack.get(index);
+        m_stack.remove(index);
+        Placement placement = entry.m_placement;
+        GoColor c = placement.getColor();
         GoColor otherColor = c.otherColor();
-        GoPoint p = m.getPoint();
+        GoPoint p = placement.getPoint();
         if (p != null)
         {
-            ArrayList suicide = r.m_suicide;
+            ArrayList suicide = entry.m_suicide;
             for (int i = 0; i < suicide.size(); ++i)
             {
                 GoPoint stone = (GoPoint)suicide.get(i);
                 setColor(stone, c);
             }
-            setColor(p, r.m_oldColor);
-            ArrayList killed = r.m_killed;
+            setColor(p, entry.m_oldColor);
+            ArrayList killed = entry.m_killed;
             for (int i = 0; i < killed.size(); ++i)
             {
                 GoPoint stone = (GoPoint)killed.get(i);
@@ -289,32 +260,32 @@ public final class Board
                 m_capturedB -= killed.size();
             }
         }
-        m_toMove = r.m_oldToMove;
-        m_koPoint = r.m_oldKoPoint;
+        m_toMove = entry.m_oldToMove;
+        m_koPoint = entry.m_oldKoPoint;
     }
 
-    /** Undo a number of moves.
+    /** Undo a number of moves or setup stones.
         @param n Number of moves to undo. Must be between 0
-        and getMoveNumber().
+        and getNumberPlacements().
     */
     public void undo(int n)
     {
         assert(n >= 0);
-        assert(n <= getMoveNumber());
+        assert(n <= getNumberPlacements());
         for (int i = 0; i < n; ++i)
             undo();
     }
 
-    /** Information necessary to undo a move. */
-    private static class MoveRecord
+    /** Information necessary to undo a move or setup stone. */
+    private static class StackEntry
     {
-        public MoveRecord(GoColor oldToMove, Move m, GoColor oldColor,
-                          ArrayList killed, ArrayList suicide,
-                          GoPoint oldKoPoint)
+        public StackEntry(GoColor oldToMove, Placement placement,
+                          GoColor oldColor, ArrayList killed,
+                          ArrayList suicide, GoPoint oldKoPoint)
         {
             m_oldColor = oldColor;
             m_oldToMove = oldToMove;
-            m_move = m;
+            m_placement = placement;
             m_killed = killed;
             m_suicide = suicide;
             m_oldKoPoint = oldKoPoint;
@@ -329,7 +300,7 @@ public final class Board
 
         public final GoColor m_oldToMove;
 
-        public final Move m_move;
+        public final Placement m_placement;
 
         public final ArrayList m_killed;
 
@@ -344,7 +315,7 @@ public final class Board
 
     private int m_capturedW;
 
-    private final ArrayList m_moves = new ArrayList(361);
+    private final ArrayList m_stack = new ArrayList(361);
 
     private GoColor m_color[][];
 
@@ -389,6 +360,53 @@ public final class Board
         }
         m_mark.set(stones, false);
         assert(m_mark.isCleared());
+    }
+
+    public void doPlacement(Placement placement)
+    {
+        GoPoint p = placement.getPoint();
+        GoColor color = placement.getColor();
+        boolean isSetup = placement.isSetup();
+        GoColor otherColor = color.otherColor();
+        ArrayList killed = new ArrayList();
+        ArrayList suicide = new ArrayList();
+        GoColor old = GoColor.EMPTY;
+        GoPoint oldKoPoint = m_koPoint;
+        m_koPoint = null;
+        if (p != null)
+        {
+            old = getColor(p);
+            setColor(p, color);
+            if (! isSetup)
+            {
+                assert(color != GoColor.EMPTY);
+                ArrayList adj = getAdjacentPoints(p);
+                for (int i = 0; i < adj.size(); ++i)
+                {
+                    int killedSize = killed.size();
+                    checkKill((GoPoint)(adj.get(i)), otherColor, killed);
+                    if (killed.size() == killedSize + 1)
+                        m_koPoint = (GoPoint)killed.get(killedSize);
+                }
+                checkKill(p, color, suicide);
+                if (m_koPoint != null && ! isSingleStoneSingleLib(p, color))
+                    m_koPoint = null;
+                if (color == GoColor.BLACK)
+                {
+                    m_capturedB += suicide.size();
+                    m_capturedW += killed.size();
+                }
+                else
+                {
+                    m_capturedW += suicide.size();
+                    m_capturedB += killed.size();
+                }
+            }
+        }
+        m_stack.add(new StackEntry(m_toMove, placement, old, killed,
+                                   suicide, oldKoPoint));
+        if (! isSetup)
+            m_toMove = otherColor;        
     }
 
     private void findStones(GoPoint p, GoColor color, ArrayList stones)

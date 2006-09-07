@@ -26,9 +26,9 @@ public interface ConstBoard
 
     ArrayList getHandicapStones(int n);
 
-    Move getMove(int i);
+    Placement getPlacement(int i);
 
-    int getMoveNumber();
+    int getNumberPlacements();
 
     int getNumberPoints();
 

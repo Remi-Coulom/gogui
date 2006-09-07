@@ -130,19 +130,6 @@ public final class BoardUtil
             s.append("  W ");
             s.append(board.getCapturedW());
         }
-        else
-        {
-            int n = board.getMoveNumber() - yIndex - 1;
-            if (n >= 0)
-            {
-                Move move = board.getMove(n);
-                s.append("  ");
-                s.append(n + 1);
-                s.append(' ');
-                s.append(move.getColor() == GoColor.BLACK ? "B " : "W ");
-                s.append(GoPoint.toString(move.getPoint()));
-            }
-        }
     }
 
     private static void printToMove(ConstBoard board, StringBuffer buffer)

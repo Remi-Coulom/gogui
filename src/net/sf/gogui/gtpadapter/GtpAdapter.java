@@ -427,7 +427,7 @@ public class GtpAdapter
         cmd.checkNuArgLessEqual(1);
         int n = 1;
         if (cmd.getNuArg() == 1)
-            n = cmd.getIntArg(0, 1, m_board.getMoveNumber());
+            n = cmd.getIntArg(0, 1, m_board.getNumberPlacements());
         int total = 0;
         Stack stack = new Stack();
         for (int i = 0; i < n; ++i)

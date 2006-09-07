@@ -310,9 +310,9 @@ public final class GuiBoardUtil
             guiBoard.setColor(point, board.getColor(point));
         }
         GoPoint point = null;
-        int moveNumber = board.getMoveNumber();
-        if (moveNumber > 0)
-            point = board.getMove(moveNumber - 1).getPoint();
+        int numberPlacements = board.getNumberPlacements();
+        if (numberPlacements > 0)
+            point = board.getPlacement(numberPlacements - 1).getPoint();
         if (markLastMove)
             guiBoard.markLastMove(point);
         else

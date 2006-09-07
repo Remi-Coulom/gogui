@@ -8,6 +8,7 @@ package net.sf.gogui.gtp;
 import java.util.ArrayList;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.Placement;
 
 //----------------------------------------------------------------------------
 
@@ -59,9 +60,13 @@ public class GtpSynchronizer
         m_gtp.sendClearBoard(size);
         m_engineMoves.clear();
         m_movesToExecute.clear();
-        int moveNumber = board.getMoveNumber();
-        for (int i = 0; i < moveNumber; ++i)
-            m_movesToExecute.add(board.getMove(i));
+        for (int i = 0; i < board.getNumberPlacements(); ++i)
+        {
+            Placement placement = board.getPlacement(i);
+            // Treat setup stones as moves
+            Move move = Move.get(placement.getPoint(), placement.getColor());
+            m_movesToExecute.add(move);
+        }
         execute(m_movesToExecute);
     }
 
@@ -90,7 +95,7 @@ public class GtpSynchronizer
     */
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
-        int n = board.getMoveNumber();
+        int n = board.getNumberPlacements();
         assert(m_engineMoves.size() == n);
         assert(findNumberCommonMoves(board) == n);
         execute(move);
@@ -101,10 +106,13 @@ public class GtpSynchronizer
     */
     public void updateAfterGenmove(ConstBoard board)
     {
-        int n = board.getMoveNumber() - 1;
+        int n = board.getNumberPlacements() - 1;
         assert(m_engineMoves.size() == n);
         assert(findNumberCommonMoves(board) == n);
-        m_engineMoves.add(board.getMove(n));
+        Placement placement = board.getPlacement(n);
+        assert(! placement.isSetup());
+        Move move = Move.get(placement.getPoint(), placement.getColor());
+        m_engineMoves.add(move);
     }
 
     private boolean m_isOutOfSync;
@@ -130,10 +138,14 @@ public class GtpSynchronizer
     {
         int numberCommonMoves = findNumberCommonMoves(board);
         int numberUndo = m_engineMoves.size() - numberCommonMoves;
-        int moveNumber = board.getMoveNumber();
         movesToExecute.clear();
-        for (int i = numberCommonMoves; i < moveNumber; ++i)
-            movesToExecute.add(board.getMove(i));
+        for (int i = numberCommonMoves; i < board.getNumberPlacements(); ++i)
+        {
+            Placement placement = board.getPlacement(i);
+            // Treat setup stones as moves
+            Move move = Move.get(placement.getPoint(), placement.getColor());
+            m_movesToExecute.add(move);
+        }
         return numberUndo;
     }
 
@@ -165,13 +177,19 @@ public class GtpSynchronizer
 
     private int findNumberCommonMoves(ConstBoard board)
     {
-        int moveNumber = board.getMoveNumber();
+        int numberPlacements = board.getNumberPlacements();
         int numberEngineMoves = m_engineMoves.size();
         int i;
-        for (i = 0; i < moveNumber; ++i)
-            if (i >= numberEngineMoves
-                || board.getMove(i) != (Move)m_engineMoves.get(i))
+        for (i = 0; i < numberPlacements; ++i)
+        {
+            if (i >= numberEngineMoves)
                 break;
+            Placement placement = board.getPlacement(i);
+            // Treat setup stones as moves
+            Move move = Move.get(placement.getPoint(), placement.getColor());
+            if (move != (Move)m_engineMoves.get(i))
+                break;
+        }
         return i;
     }
 

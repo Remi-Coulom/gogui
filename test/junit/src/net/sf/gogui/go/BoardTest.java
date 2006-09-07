@@ -94,6 +94,37 @@ public class BoardTest
         assertEquals(GoColor.WHITE, board.getColor(point));
     }
 
+    /** Test that setup does not cause suicide. */
+    public void testSetupSuicide()
+    {
+        Board board = new Board(19);
+        board.play(GoPoint.get(1, 0), GoColor.BLACK);
+        board.play(GoPoint.get(0, 1), GoColor.BLACK);
+        board.setup(GoPoint.get(0, 0), GoColor.WHITE);
+        assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(0, 0)));
+    }
+
+    /** Test that setup does not capture anything. */
+    public void testSetupCapture()
+    {
+        Board board = new Board(19);
+        board.play(GoPoint.get(1, 0), GoColor.BLACK);
+        board.play(GoPoint.get(2, 0), GoColor.WHITE);
+        board.play(GoPoint.get(0, 1), GoColor.BLACK);
+        board.play(GoPoint.get(1, 1), GoColor.WHITE);
+        board.setup(GoPoint.get(0, 0), GoColor.WHITE);
+        assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(0, 0)));
+    }
+
+    /** Test that setup does not change color to move. */
+    public void testSetupToMove()
+    {
+        Board board = new Board(19);
+        assertEquals(GoColor.BLACK, board.getToMove());
+        board.setup(GoPoint.get(0, 0), GoColor.BLACK);
+        assertEquals(GoColor.BLACK, board.getToMove());
+    }
+
     public void testUndo()
     {
         Board board = new Board(19);
