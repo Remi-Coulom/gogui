@@ -21,22 +21,29 @@ public class BoardUpdater
         m_moves = new ArrayList(400);
     }
 
-    public void update(GameTree tree, Node node, Board board)
+    public void update(GameTree tree, Node currentNode, Board board)
     {
         int size = tree.getGameInformation().m_boardSize;
         assert(board.getSize() == size);
         m_nodes.clear();
-        NodeUtil.getPathToRoot(node, m_nodes);
+        NodeUtil.getPathToRoot(currentNode, m_nodes);
         board.init(size);
         for (int i = m_nodes.size() - 1; i >= 0; --i)
-        {            
-            NodeUtil.getAllAsMoves((Node)m_nodes.get(i), m_moves);
-            for (int j = 0; j < m_moves.size(); ++j)
-                board.play((Move)m_moves.get(j));
+        {
+            Node node = (Node)m_nodes.get(i);
+            for (int j = 0; j < node.getNumberAddBlack(); ++j)
+                board.setup(node.getAddBlack(i), GoColor.BLACK);
+            for (int j = 0; j < node.getNumberAddWhite(); ++j)
+                board.setup(node.getAddWhite(i), GoColor.WHITE);
+            for (int j = 0; j < node.getNumberAddEmpty(); ++j)
+                board.setup(node.getAddEmpty(i), GoColor.EMPTY);
+            Move move = node.getMove();
+            if (move != null)
+                board.play(move);
+            GoColor toMove = node.getToMove();
+            if (toMove != GoColor.EMPTY)
+                board.setToMove(toMove);
         }
-        GoColor toMove = node.getToMove();
-        if (toMove != GoColor.EMPTY)
-            board.setToMove(toMove);
     }
 
     /** Local variable used in update.
