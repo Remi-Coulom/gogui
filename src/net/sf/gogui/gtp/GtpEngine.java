@@ -86,8 +86,7 @@ public abstract class GtpEngine
     public void cmdVersion(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
-        // The GTP standard says to return empty string, if no meaningful
-        // reponse is available.
+        cmd.setResponse(m_version);
     }
 
     /** Callback for interrupting commands.
@@ -238,9 +237,21 @@ public abstract class GtpEngine
         m_name = name;
     }
 
+    /** Set version for version command. */
+    public void setVersion(String version)
+    {
+        m_version = version;
+    }
+
     private boolean m_quit;
 
     private String m_name = "Unknown";
+
+    /** Engine version.
+        The GTP standard says to return empty string, if no meaningful reponse
+        is available.
+    */
+    private String m_version;
 
     /** Mapping from command (String) to GtpCallback. */
     private final TreeMap m_commands = new TreeMap();
