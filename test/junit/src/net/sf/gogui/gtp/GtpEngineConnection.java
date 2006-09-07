@@ -23,6 +23,9 @@ public class GtpEngineConnection
 {
     public GtpEngineConnection(GtpEngine engine) throws IOException, GtpError
     {
+        // For unknown reasons, the PipedInputStream solution is
+        // unbelievably slow (Java 1.5, Linux), e.g. it slowed down
+        // GtpAdapterTest by a factor of 100!
         PipedInputStream gtpInput = new PipedInputStream();
         final OutputStream out = new PipedOutputStream(gtpInput);
         final PipedInputStream in = new PipedInputStream();
