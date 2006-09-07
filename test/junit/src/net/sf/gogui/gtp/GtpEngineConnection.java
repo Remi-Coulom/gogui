@@ -12,7 +12,13 @@ import java.io.PipedOutputStream;
 
 //----------------------------------------------------------------------------
 
-/** In-process GTP client connection to a GtpEngine. */
+/** In-process GTP client connection to a GtpEngine.
+    For accessing an in-process GtpEngine as a GtpClient for testing purposes.
+    Redirects the input and output streams of a GtpClient to the GtpEngine.
+    If it is not required for the test, that the interface to the GtpEngine
+    is on the streams level, use GtpEngineClient instead because of the
+    better performance.
+*/
 public class GtpEngineConnection
 {
     public GtpEngineConnection(GtpEngine engine) throws IOException, GtpError
