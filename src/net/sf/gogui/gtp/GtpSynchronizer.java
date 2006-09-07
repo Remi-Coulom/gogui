@@ -6,6 +6,7 @@
 package net.sf.gogui.gtp;
 
 import java.util.ArrayList;
+import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.Placement;
@@ -34,10 +35,6 @@ public class GtpSynchronizer
     {
         m_gtp = gtp;
         m_callback = callback;
-        m_engineBoardSize = -1;
-        int initialCapacity = 400;
-        m_engineMoves = new ArrayList(initialCapacity);
-        m_movesToExecute = new ArrayList(initialCapacity);
         m_isOutOfSync = true;
     }
 
@@ -49,16 +46,14 @@ public class GtpSynchronizer
 
     public void init(ConstBoard board) throws GtpError
     {
+        m_isOutOfSync = true;
         int size = board.getSize();
         m_gtp.sendBoardsize(size);
-        m_engineBoardSize = size;
-        // Not defined what the state between boardsize and clear_board in
-        // GTP version 2 is, but it could be that moves are kept on board
-        // (e.g. for keeping joseki moves while changing board size),
-        // so we set m_engineBoardSize now, but clear the engine moves after
-        // sendClearBoard()
+        if (m_board == null)
+            m_board = new Board(size);
+        else
+            m_board.init(size);
         m_gtp.sendClearBoard(size);
-        m_engineMoves.clear();
         m_movesToExecute.clear();
         for (int i = 0; i < board.getNumberPlacements(); ++i)
         {
@@ -68,26 +63,29 @@ public class GtpSynchronizer
             m_movesToExecute.add(move);
         }
         execute(m_movesToExecute);
+        m_isOutOfSync = false;
     }
 
     public void synchronize(ConstBoard board) throws GtpError
     {
-        m_isOutOfSync = true;
         int size = board.getSize();
+        if (m_board == null || size != m_board.getSize())
+        {
+            init(board);
+            return;
+        }
+        m_isOutOfSync = true;
         int numberUndo = computeDifference(m_movesToExecute, board);
         boolean undoSupported =
             (isCommandSupported("undo") || isCommandSupported("gg-undo"));
-        if (size == m_engineBoardSize && (undoSupported || numberUndo == 0))
+        if (undoSupported || numberUndo == 0)
         {
             undo(numberUndo);
             execute(m_movesToExecute);
             m_isOutOfSync = false;
         }
         else
-        {
             init(board);
-            m_isOutOfSync = false;
-        }
     }
 
     /** Send human move to engine.
@@ -96,7 +94,7 @@ public class GtpSynchronizer
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
         int n = board.getNumberPlacements();
-        assert(m_engineMoves.size() == n);
+        assert(m_board.getNumberPlacements() == n);
         assert(findNumberCommonMoves(board) == n);
         execute(move);
     }
@@ -107,29 +105,27 @@ public class GtpSynchronizer
     public void updateAfterGenmove(ConstBoard board)
     {
         int n = board.getNumberPlacements() - 1;
-        assert(m_engineMoves.size() == n);
+        assert(m_board.getNumberPlacements() == n);
         assert(findNumberCommonMoves(board) == n);
         Placement placement = board.getPlacement(n);
         assert(! placement.isSetup());
         Move move = Move.get(placement.getPoint(), placement.getColor());
-        m_engineMoves.add(move);
+        m_board.play(move);
     }
 
     private boolean m_isOutOfSync;
 
-    private int m_engineBoardSize;
+    /** Board representing the engine state. */
+    private Board m_board;
 
     private final Callback m_callback;
 
     private GtpClientBase m_gtp;
 
-    /** Move successfully executed at engine. */
-    private final ArrayList m_engineMoves;
-
     /** Local variable in some functions.
         This variable is a member for reusing between function calls.
     */
-    private final ArrayList m_movesToExecute;
+    private final ArrayList m_movesToExecute = new ArrayList(400);
 
     /** Compute number of moves to undo and moves to execute.
         @return Number of moves to undo.
@@ -137,7 +133,7 @@ public class GtpSynchronizer
     private int computeDifference(ArrayList movesToExecute, ConstBoard board)
     {
         int numberCommonMoves = findNumberCommonMoves(board);
-        int numberUndo = m_engineMoves.size() - numberCommonMoves;
+        int numberUndo = m_board.getNumberPlacements() - numberCommonMoves;
         movesToExecute.clear();
         for (int i = numberCommonMoves; i < board.getNumberPlacements(); ++i)
         {
@@ -156,7 +152,7 @@ public class GtpSynchronizer
             String cmd = GtpUtil.getPlaySequenceCommand(moves);
             m_gtp.send(cmd);
             for (int i = 0; i < moves.size(); ++i)
-                m_engineMoves.add((Move)moves.get(i));
+                m_board.play((Move)moves.get(i));
         }
         else
         {
@@ -164,7 +160,7 @@ public class GtpSynchronizer
             {
                 execute((Move)moves.get(i));
                 if (m_callback != null)
-                    m_callback.run(m_engineMoves.size());
+                    m_callback.run(m_board.getNumberPlacements());
             }
         }
     }
@@ -172,22 +168,19 @@ public class GtpSynchronizer
     private void execute(Move move) throws GtpError
     {
         m_gtp.sendPlay(move);
-        m_engineMoves.add(move);
+        m_board.play(move);
     }
 
     private int findNumberCommonMoves(ConstBoard board)
     {
         int numberPlacements = board.getNumberPlacements();
-        int numberEngineMoves = m_engineMoves.size();
+        int numberEngineMoves = m_board.getNumberPlacements();
         int i;
         for (i = 0; i < numberPlacements; ++i)
         {
             if (i >= numberEngineMoves)
                 break;
-            Placement placement = board.getPlacement(i);
-            // Treat setup stones as moves
-            Move move = Move.get(placement.getPoint(), placement.getColor());
-            if (move != (Move)m_engineMoves.get(i))
+            if (! board.getPlacement(i).equals(m_board.getPlacement(i)))
                 break;
         }
         return i;
@@ -207,8 +200,7 @@ public class GtpSynchronizer
             && (n > 1 || ! isCommandSupported("undo")))
         {
             m_gtp.send("gg-undo " + n);
-            for (int i = 0; i < n; ++i)                
-                m_engineMoves.remove(m_engineMoves.size() - 1);
+            m_board.undo(n);
         }
         else
         {
@@ -217,9 +209,9 @@ public class GtpSynchronizer
             for (int i = 0; i < n; ++i)
             {
                 m_gtp.send("undo");
-                m_engineMoves.remove(m_engineMoves.size() - 1);
+                m_board.undo();
                 if (m_callback != null)
-                    m_callback.run(m_engineMoves.size());
+                    m_callback.run(m_board.getNumberPlacements());
             }
         }
     }
