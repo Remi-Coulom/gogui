@@ -19,6 +19,14 @@ public final class Placement
         m_isSetup = isSetup;
     }
 
+    public boolean equals(Object object)
+    {
+        Placement placement = (Placement)object;
+        return (m_point == placement.m_point
+                && m_color == placement.m_color
+                && m_isSetup == placement.m_isSetup);
+    }
+
     public GoColor getColor()
     {
         return m_color;
