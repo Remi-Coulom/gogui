@@ -56,6 +56,54 @@ public final class Board
         return point.isOnBoard(getSize());
     }
 
+    /** Play move or setup stone. */
+    public void doPlacement(Placement placement)
+    {
+        GoPoint p = placement.getPoint();
+        GoColor color = placement.getColor();
+        boolean isSetup = placement.isSetup();
+        GoColor otherColor = color.otherColor();
+        ArrayList killed = new ArrayList();
+        ArrayList suicide = new ArrayList();
+        GoColor old = GoColor.EMPTY;
+        GoPoint oldKoPoint = m_koPoint;
+        m_koPoint = null;
+        if (p != null)
+        {
+            old = getColor(p);
+            setColor(p, color);
+            if (! isSetup)
+            {
+                assert(color != GoColor.EMPTY);
+                ArrayList adj = getAdjacentPoints(p);
+                for (int i = 0; i < adj.size(); ++i)
+                {
+                    int killedSize = killed.size();
+                    checkKill((GoPoint)(adj.get(i)), otherColor, killed);
+                    if (killed.size() == killedSize + 1)
+                        m_koPoint = (GoPoint)killed.get(killedSize);
+                }
+                checkKill(p, color, suicide);
+                if (m_koPoint != null && ! isSingleStoneSingleLib(p, color))
+                    m_koPoint = null;
+                if (color == GoColor.BLACK)
+                {
+                    m_capturedB += suicide.size();
+                    m_capturedW += killed.size();
+                }
+                else
+                {
+                    m_capturedW += suicide.size();
+                    m_capturedB += killed.size();
+                }
+            }
+        }
+        m_stack.add(new StackEntry(m_toMove, placement, old, killed,
+                                   suicide, oldKoPoint));
+        if (! isSetup)
+            m_toMove = otherColor;        
+    }
+
     public ArrayList getAdjacentPoints(GoPoint point)
     {
         final int maxAdjacent = 4;
@@ -360,53 +408,6 @@ public final class Board
         }
         m_mark.set(stones, false);
         assert(m_mark.isCleared());
-    }
-
-    public void doPlacement(Placement placement)
-    {
-        GoPoint p = placement.getPoint();
-        GoColor color = placement.getColor();
-        boolean isSetup = placement.isSetup();
-        GoColor otherColor = color.otherColor();
-        ArrayList killed = new ArrayList();
-        ArrayList suicide = new ArrayList();
-        GoColor old = GoColor.EMPTY;
-        GoPoint oldKoPoint = m_koPoint;
-        m_koPoint = null;
-        if (p != null)
-        {
-            old = getColor(p);
-            setColor(p, color);
-            if (! isSetup)
-            {
-                assert(color != GoColor.EMPTY);
-                ArrayList adj = getAdjacentPoints(p);
-                for (int i = 0; i < adj.size(); ++i)
-                {
-                    int killedSize = killed.size();
-                    checkKill((GoPoint)(adj.get(i)), otherColor, killed);
-                    if (killed.size() == killedSize + 1)
-                        m_koPoint = (GoPoint)killed.get(killedSize);
-                }
-                checkKill(p, color, suicide);
-                if (m_koPoint != null && ! isSingleStoneSingleLib(p, color))
-                    m_koPoint = null;
-                if (color == GoColor.BLACK)
-                {
-                    m_capturedB += suicide.size();
-                    m_capturedW += killed.size();
-                }
-                else
-                {
-                    m_capturedW += suicide.size();
-                    m_capturedB += killed.size();
-                }
-            }
-        }
-        m_stack.add(new StackEntry(m_toMove, placement, old, killed,
-                                   suicide, oldKoPoint));
-        if (! isSetup)
-            m_toMove = otherColor;        
     }
 
     private void findStones(GoPoint p, GoColor color, ArrayList stones)
