@@ -26,6 +26,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpClient;
+import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
@@ -52,7 +53,10 @@ public class GtpAdapter
         init();
     }
 
-    public GtpAdapter(GtpClient gtp, PrintStream log)
+    /** Construct with existing GtpClientBase.
+        For testing this class.
+    */
+    public GtpAdapter(GtpClientBase gtp, PrintStream log)
         throws GtpError
     {
         super(log);
@@ -196,7 +200,7 @@ public class GtpAdapter
             send(cmd.getLine(), cmd.getResponse());
     }
 
-    public void interruptProgram(GtpClient gtp)
+    public void interruptProgram(GtpClientBase gtp)
     {
         try
         {
@@ -316,7 +320,7 @@ public class GtpAdapter
 
     private Board m_board;
 
-    private final GtpClient m_gtp;
+    private final GtpClientBase m_gtp;
 
     private final Stack m_passInserted = new Stack();
 

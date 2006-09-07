@@ -30,6 +30,12 @@ import net.sf.gogui.util.ProcessUtil;
 */
 public abstract class GtpClientBase
 {
+    /** Close connection.
+        Should do nothing if the concrete class does communicate through
+        streams.
+    */
+    public abstract void close();
+
     /** Get command for setting the board size.
         Note: call queryProtocolVersion first
         @return The boardsize command for GTP version 2 programs,
@@ -165,6 +171,9 @@ public abstract class GtpClientBase
         return isCommandSupported("cputime");
     }
 
+    /** Check if interrupting a command is supported. */
+    public abstract boolean isInterruptSupported();
+
     /** Queries the name.
         @return Name or "Unknown Program" if name command not supported
     */
@@ -274,6 +283,17 @@ public abstract class GtpClientBase
     {
         send(getCommandPlay(move));
     }
+
+    /** Interrupt current command.
+        Can be called from a different thread during a send.
+        @throws GtpError if interrupting commands is not supported.
+    */
+    public abstract void sendInterrupt() throws GtpError;
+
+    /** Wait until the process of the program exits.
+        Should do nothing if the concrete class does not create a process.
+    */
+    public abstract void waitForExit();
 
     private int m_protocolVersion = 2;
 

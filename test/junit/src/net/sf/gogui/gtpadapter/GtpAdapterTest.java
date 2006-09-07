@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
-import net.sf.gogui.gtp.GtpEngineConnection;
+import net.sf.gogui.gtp.GtpEngineClient;
 import net.sf.gogui.gtp.GtpExpectEngine;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StreamCopy;
@@ -31,59 +31,54 @@ public class GtpAdapterTest
         return new junit.framework.TestSuite(GtpAdapterTest.class);
     }
 
+    public void setUp() throws GtpError
+    {
+        m_expect = new GtpExpectEngine(null);
+        expect("protocol_version", "2");
+        expect("list_commands", "");
+        m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null);
+        m_gtp = new GtpEngineClient(m_adapter);
+    }
+
     public void testLoadSgf() throws ErrorMessage, IOException, GtpError
     {
-        GtpExpectEngine expect = new GtpExpectEngine(null);
-        GtpEngineConnection expectConnection
-            = new GtpEngineConnection(expect);
-        expect.expect("protocol_version", "2");
-        expect.expect("list_commands", "");
-        GtpAdapter adapter
-            = new GtpAdapter(expectConnection.getGtpClient(), null);
-        adapter.setEmuLoadSgf();
-        GtpEngineConnection adapterConnection
-            = new GtpEngineConnection(adapter);
-        GtpClient gtp = adapterConnection.getGtpClient();
-        expect.expect("boardsize 19", "");
-        expect.expect("clear_board", "");
-        expect.expect("play b D4", "");
-        expect.expect("play w Q16", "");
-        gtp.send("loadsgf " + getTmpFile("test.sgf").toString());
-        assertTrue(expect.isExpectQueueEmpty());
+        m_adapter.setEmuLoadSgf();
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        expect("play b D4", "");
+        expect("play w Q16", "");
+        send("loadsgf " + getTmpFile("test.sgf").toString());
+        assertExpectQueueEmpty();
     }
 
     public void testName() throws ErrorMessage, IOException, GtpError
     {
-        GtpExpectEngine expect = new GtpExpectEngine(null);
-        GtpEngineConnection expectConnection
-            = new GtpEngineConnection(expect);
-        expect.expect("protocol_version", "2");
-        expect.expect("list_commands", "");
-        GtpAdapter adapter
-            = new GtpAdapter(expectConnection.getGtpClient(), null);
-        GtpEngineConnection adapterConnection
-            = new GtpEngineConnection(adapter);
-        GtpClient gtp = adapterConnection.getGtpClient();
-        expect.expect("name", "Foo");
-        assertEquals("Foo", gtp.send("name"));
-        assertTrue(expect.isExpectQueueEmpty());
+        expect("name", "Foo");
+        assertEquals("Foo", send("name"));
+        assertExpectQueueEmpty();
     }
 
     public void testName2() throws ErrorMessage, IOException, GtpError
     {
-        GtpExpectEngine expect = new GtpExpectEngine(null);
-        GtpEngineConnection expectConnection
-            = new GtpEngineConnection(expect);
-        expect.expect("protocol_version", "2");
-        expect.expect("list_commands", "");
-        GtpAdapter adapter
-            = new GtpAdapter(expectConnection.getGtpClient(), null);
-        adapter.setName("Bar");
-        GtpEngineConnection adapterConnection
-            = new GtpEngineConnection(adapter);
-        GtpClient gtp = adapterConnection.getGtpClient();
-        assertEquals("Bar", gtp.send("name"));
-        assertTrue(expect.isExpectQueueEmpty());
+        m_adapter.setName("Bar");
+        assertEquals("Bar", send("name"));
+        assertExpectQueueEmpty();
+    }
+
+    private GtpAdapter m_adapter;
+
+    private GtpExpectEngine m_expect;
+
+    private GtpEngineClient m_gtp;
+
+    private void assertExpectQueueEmpty()
+    {
+        assertTrue(m_expect.isExpectQueueEmpty());
+    }
+
+    private void expect(String command, String response)
+    {
+        m_expect.expect(command, response);
     }
 
     private File getTmpFile(String name) throws ErrorMessage, IOException
@@ -97,6 +92,11 @@ public class GtpAdapterTest
             = new StreamCopy(false, in, new FileOutputStream(file), true);
         copy.run();
         return file;
+    }
+
+    private String send(String command) throws GtpError
+    {
+        return m_gtp.send(command);
     }
 }
 

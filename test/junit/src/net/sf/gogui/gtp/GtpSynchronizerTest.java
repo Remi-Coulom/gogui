@@ -29,8 +29,7 @@ public class GtpSynchronizerTest
     public void setUp() throws IOException, GtpError
     {
         m_expect = new GtpExpectEngine(null);
-        m_connection = new GtpEngineConnection(m_expect);
-        m_gtp = m_connection.getGtpClient();
+        m_gtp = new GtpEngineClient(m_expect);
         m_board = new Board(19);
         m_synchronizer = new GtpSynchronizer(m_gtp, null);
     }
@@ -75,9 +74,7 @@ public class GtpSynchronizerTest
 
     private GtpExpectEngine m_expect;
 
-    private GtpEngineConnection m_connection;
-
-    private GtpClient m_gtp;
+    private GtpClientBase m_gtp;
 
     private GtpSynchronizer m_synchronizer;
 
