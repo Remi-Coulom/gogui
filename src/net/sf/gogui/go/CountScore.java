@@ -158,7 +158,7 @@ public class CountScore
         GoColor c = getColor(p);
         if (c == color.otherColor() && ! m_dead.get(p))
             return false;
-        if (c == color)
+        if (c.equals(color))
             return (! m_dead.get(p));
         if (mark.get(p))
             return true;

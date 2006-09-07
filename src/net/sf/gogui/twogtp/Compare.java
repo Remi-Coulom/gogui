@@ -74,7 +74,7 @@ public final class Compare
                                                           gameMove.getPoint(),
                                                           board.getSize());
                     GoColor gameColor = gameMove.getColor();
-                    if (! color.equals(gameColor) || point != gamePoint)
+                    if (! color.equals(gameColor) || ! point.equals(gamePoint))
                         ++numberDifferent;
                 }
                 if (numberDifferent == 0)

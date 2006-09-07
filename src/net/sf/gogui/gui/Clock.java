@@ -51,7 +51,7 @@ public final class Clock
     {
         TimeRecord record = getRecord(color);
         long time = record.m_time;
-        if (m_toMove == color)
+        if (m_toMove.equals(color))
             time += new Date().getTime() - m_startMoveTime;
         if (isInitialized())
         {

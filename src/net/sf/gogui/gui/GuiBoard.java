@@ -419,7 +419,7 @@ public final class GuiBoard
     {
         if (point != null && ! point.isOnBoard(m_size))
             point = null;
-        if (m_cursor != point)
+        if (! m_cursor.equals(point))
         {
             setCursor(m_cursor, false);            
             if (getShowCursor())

@@ -588,7 +588,7 @@ public class GtpAdapter
         if (! m_fillPasses)
             return;
         GoColor toMove = m_board.getToMove();
-        if (color == toMove)
+        if (color.equals(toMove))
         {
             m_passInserted.push(Boolean.FALSE);
             return;

@@ -342,7 +342,7 @@ public final class Board
                 if (lib > 1)
                     return false;
             }
-            else if (adjColor == color)
+            else if (adjColor.equals(color))
                 return false;
         }
         return true;
@@ -440,7 +440,7 @@ public final class Board
         GoColor c = getColor(p);
         if (c == GoColor.EMPTY)
             return false;
-        if (c != color)
+        if (! c.equals(color))
             return true;
         if (m_mark.get(p))
             return true;
