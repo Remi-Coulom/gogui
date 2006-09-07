@@ -30,7 +30,7 @@ public class GtpSynchronizer
         void run(int moveNumber);
     }
 
-    public GtpSynchronizer(GtpClient gtp, Callback callback)
+    public GtpSynchronizer(GtpClientBase gtp, Callback callback)
     {
         m_gtp = gtp;
         m_callback = callback;
@@ -121,7 +121,7 @@ public class GtpSynchronizer
 
     private final Callback m_callback;
 
-    private GtpClient m_gtp;
+    private GtpClientBase m_gtp;
 
     /** Move successfully executed at engine. */
     private final ArrayList m_engineMoves;
