@@ -32,11 +32,11 @@ public class BoardUpdater
         {
             Node node = (Node)m_nodes.get(i);
             for (int j = 0; j < node.getNumberAddBlack(); ++j)
-                board.setup(node.getAddBlack(i), GoColor.BLACK);
+                board.setup(node.getAddBlack(j), GoColor.BLACK);
             for (int j = 0; j < node.getNumberAddWhite(); ++j)
-                board.setup(node.getAddWhite(i), GoColor.WHITE);
+                board.setup(node.getAddWhite(j), GoColor.WHITE);
             for (int j = 0; j < node.getNumberAddEmpty(); ++j)
-                board.setup(node.getAddEmpty(i), GoColor.EMPTY);
+                board.setup(node.getAddEmpty(j), GoColor.EMPTY);
             Move move = node.getMove();
             if (move != null)
                 board.play(move);
