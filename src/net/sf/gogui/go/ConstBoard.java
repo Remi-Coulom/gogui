@@ -40,6 +40,8 @@ public interface ConstBoard
 
     GoColor getToMove();
 
+    boolean isCaptureOrSuicide(GoPoint point, GoColor toMove);
+
     boolean isHandicap(GoPoint point);
 
     boolean isKo(GoPoint point);

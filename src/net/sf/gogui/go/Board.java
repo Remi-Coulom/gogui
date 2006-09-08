@@ -197,6 +197,19 @@ public final class Board
         newGame();
     }
 
+    public boolean isCaptureOrSuicide(GoPoint point, GoColor toMove)
+    {
+        if (getColor(point) != GoColor.EMPTY)
+            return false;
+        play(point, toMove);
+        int n = getNumberPlacements();
+        StackEntry entry = (StackEntry)m_stack.get(n - 1);
+        boolean result = (entry.m_suicide.size() > 0
+                          || entry.m_killed.size() > 0);
+        undo();
+        return result;
+    }
+
     public boolean isHandicap(GoPoint point)
     {
         return m_constants.isHandicap(point);
