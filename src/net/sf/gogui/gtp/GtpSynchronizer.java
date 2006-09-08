@@ -92,7 +92,6 @@ public class GtpSynchronizer
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
         computeToExecuteAll(board, m_toExecuteAll);
-        int n = m_toExecuteAll.size();
         assert(m_board.getNumberPlacements() == m_toExecuteAll.size());
         assert(findNumberCommonMoves(m_toExecuteAll) == m_toExecuteAll.size());
         GoColor toMove = m_board.getToMove();
@@ -120,7 +119,6 @@ public class GtpSynchronizer
             // computeToExecuteAll should not throw (no new setup
             assert(false);
         }
-        int n = m_toExecuteAll.size();
         assert(m_board.getNumberPlacements() == m_toExecuteAll.size());
         assert(findNumberCommonMoves(m_toExecuteAll) == m_toExecuteAll.size());
     }

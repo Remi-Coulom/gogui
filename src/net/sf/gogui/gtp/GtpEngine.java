@@ -13,7 +13,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.TreeMap;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;

@@ -18,7 +18,6 @@ public class BoardUpdater
     public BoardUpdater()
     {
         m_nodes = new ArrayList(400);
-        m_moves = new ArrayList(400);
     }
 
     public void update(GameTree tree, Node currentNode, Board board)
@@ -45,11 +44,6 @@ public class BoardUpdater
                 board.setToMove(toMove);
         }
     }
-
-    /** Local variable used in update.
-        Member variable for avoiding frequent new memory allocations.
-    */
-    private ArrayList m_moves;
 
     /** Local variable used in update.
         Member variable for avoiding frequent new memory allocations.
