@@ -36,7 +36,7 @@ public class GuiGtpClient
     {
         m_gtp = gtp;
         m_owner = owner;
-        m_gtpSynchronizer = new GtpSynchronizer(gtp, callback);
+        m_gtpSynchronizer = new GtpSynchronizer(gtp, callback, false);
     }
 
     public void close()
