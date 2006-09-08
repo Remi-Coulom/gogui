@@ -47,6 +47,20 @@ public final class Placement
         return m_isSetup;
     }
 
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer(16);
+        if (m_isSetup)
+            buffer.append("setup");
+        else
+            buffer.append("play");
+        buffer.append(' ');
+        buffer.append(m_color.toString());
+        buffer.append(' ');
+        buffer.append(GoPoint.toString(m_point));
+        return buffer.toString();
+    }
+
     private boolean m_isSetup;
 
     private GoPoint m_point;
