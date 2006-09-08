@@ -31,6 +31,7 @@ public class GtpDummy
         super(log);
         registerCommands();
         setName("GtpDummy");
+        setVersion(Version.get());
         m_random = new Random();
         m_resign = resign;
         if (useRandomSeed)
