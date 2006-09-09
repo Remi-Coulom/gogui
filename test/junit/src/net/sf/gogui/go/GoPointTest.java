@@ -22,6 +22,15 @@ public class GoPointTest
         return new junit.framework.TestSuite(GoPointTest.class);
     }
 
+    public void testCompareTo()
+    {
+        assertEquals(0, getPoint(5, 5).compareTo(getPoint(5, 5)));
+        assertEquals(-1, getPoint(5, 5).compareTo(getPoint(6, 5)));
+        assertEquals(-1, getPoint(5, 5).compareTo(getPoint(5, 6)));
+        assertEquals(1, getPoint(5, 5).compareTo(getPoint(4, 5)));
+        assertEquals(1, getPoint(5, 5).compareTo(getPoint(5, 4)));
+    }
+
     public void testDirection()
     {
         checkPoint(getPoint(5, 5).up(11), 5, 6);
