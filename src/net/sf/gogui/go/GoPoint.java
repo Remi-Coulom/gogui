@@ -57,11 +57,6 @@ public final class GoPoint
         return 0;
     }
 
-    public boolean equals(Object object)
-    {
-        return super.equals(object);
-    }
-
     /** Compare, including the case that the points can be null. */
     public static boolean equals(GoPoint point1, GoPoint point2)
     {
@@ -85,11 +80,6 @@ public final class GoPoint
         GoPoint point = s_points[x][y];
         assert(point != null);
         return point;
-    }
-
-    public int hashCode()
-    {
-        return super.hashCode();
     }
 
     /** Return point below.

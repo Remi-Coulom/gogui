@@ -15,11 +15,6 @@ package net.sf.gogui.go;
 */
 public final class Move
 {
-    public boolean equals(Object object)
-    {
-        return super.equals(object);
-    }
-
     /** Factory method for constructing a move.
         @param x Column in [0..GoPoint.MAXSIZE - 1]
         @param y Row in [0..GoPoint.MAXSIZE - 1]
@@ -81,11 +76,6 @@ public final class Move
     public GoPoint getPoint()
     {
         return m_point;
-    }
-
-    public int hashCode()
-    {
-        return super.hashCode();
     }
 
     /** Get string representation of move.
