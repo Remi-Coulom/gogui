@@ -82,6 +82,11 @@ public abstract class GtpEngine
         setQuit();
     }
 
+    public void cmdUnknown(GtpCommand cmd) throws GtpError
+    {
+        throw new GtpError("unknown command: " + cmd.getCommand());
+    }
+
     public void cmdVersion(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
@@ -103,8 +108,14 @@ public abstract class GtpEngine
         String name = cmd.getCommand();
         GtpCallback callback = (GtpCallback)m_commands.get(name);
         if (callback == null)
-            throw new GtpError("unknown command: " + name);
-        callback.run(cmd);
+            cmdUnknown(cmd);
+        else
+            callback.run(cmd);
+    }
+
+    public boolean isRegistered(String command)
+    {
+        return m_commands.containsKey(command);
     }
 
     public synchronized void log(String line)

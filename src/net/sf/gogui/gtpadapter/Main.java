@@ -78,19 +78,12 @@ public final class Main
             }
             String program = (String)arguments.get(0);
             GtpAdapter adapter
-                = new GtpAdapter(program, log, gtpFile, verbose);
-            if (emuLoadsgf)
-                adapter.setEmuLoadSgf();
-            if (emuHandicap)
-                adapter.setEmuHandicap();
-            if (noScore)
-                adapter.setNoScore();
-            if (version1)
-                adapter.setVersion1();
-            if (fillPasses)
-                adapter.setFillPasses();
+                = new GtpAdapter(program, log, gtpFile, verbose, emuHandicap,
+                                 noScore, version1);
             if (name != null)
                 adapter.setName(name);
+            if (fillPasses)
+                adapter.setFillPasses();
             if (resign)
                 adapter.setResign(resignScore);
             if (opt.isSet("lowercase"))

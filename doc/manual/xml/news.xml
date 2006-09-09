@@ -28,6 +28,11 @@ Automatically clear board before drawing live graphics commands
 </listitem>
 <listitem>
 <simpara>
+GtpAdapter: always handle the loadsgf command in the adapter
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpDummy: new option -resign
 </simpara>
 </listitem>

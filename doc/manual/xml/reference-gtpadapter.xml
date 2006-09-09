@@ -20,7 +20,6 @@ Go Text Protocol adapter for logging or protocol translations.
 <command>gtpadapter</command>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
 <arg><option>-emuhandicap</option></arg>
-<arg><option>-emuloadsgf</option></arg>
 <arg><option>-fillpasses</option></arg>
 <arg><option>-gtpfile</option> <replaceable>file</replaceable></arg>
 <arg><option>-log</option> <replaceable>file</replaceable></arg>
@@ -51,6 +50,13 @@ Go Text Protocol adapter for logging or protocol translations.
 The argument <replaceable>program</replaceable> is a command line
 for the Go program .
 </para>
+<para>
+The commands for changing the board position (e.g. <command>play</command>,
+<command>clear_board</command>, <command>genmove</command>) are always
+translated according to the protocol version of the program (1 or 2).
+The command <command>loadsgf</command> is always handled by the adapter
+and translated into a sequence of play commands.
+</para>
 </refsection>
 
 <refsection>
@@ -76,16 +82,6 @@ Emulate the commands <command>set_free_handicap</command> and
 <command>place_free_handicap</command> by using standard fixed handicap
 locations (if existing) and sending the stones to the program using
 play commands.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><option>-emuloadsgf</option></term>
-<listitem>
-<para>
-Emulate the command <command>loadsgf</command> by
-<command>play</command> commands.
 </para>
 </listitem>
 </varlistentry>

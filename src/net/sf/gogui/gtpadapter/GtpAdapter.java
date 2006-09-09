@@ -25,6 +25,7 @@ import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.gtp.GtpCallback;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpCommand;
@@ -41,7 +42,8 @@ public class GtpAdapter
     extends GtpEngine
 {
     public GtpAdapter(String program, PrintStream log, String gtpFile,
-                      boolean verbose)
+                      boolean verbose, boolean emuHandicap, boolean noScore,
+                      boolean version1)
         throws Exception
     {
         super(log);
@@ -50,18 +52,19 @@ public class GtpAdapter
         m_gtp = new GtpClient(program, verbose, null);
         if (gtpFile != null)
             sendGtpFile(gtpFile);
-        init();
+        init(emuHandicap, noScore, version1);
     }
 
     /** Construct with existing GtpClientBase.
         For testing this class.
     */
-    public GtpAdapter(GtpClientBase gtp, PrintStream log)
+    public GtpAdapter(GtpClientBase gtp, PrintStream log, boolean emuHandicap,
+                      boolean noScore, boolean version1)
         throws GtpError
     {
         super(log);
         m_gtp = gtp;
-        init();
+        init(emuHandicap, noScore, version1);
     }
 
     public void close()
@@ -70,134 +73,212 @@ public class GtpAdapter
         m_gtp.waitForExit();
     }
 
-    public void cmdListCommands(GtpCommand cmd)
+    public void cmdBlack(GtpCommand cmd) throws GtpError
     {
-        ArrayList commands = m_gtp.getSupportedCommands();
-        for (int i = 0; i < commands.size(); ++i)
-        {
-            String c = (String)commands.get(i);
-            if (c.equals("boardsize")
-                || c.equals("black")
-                || c.equals("clear_board")
-                || c.equals("genmove")
-                || c.equals("genmove_black")
-                || c.equals("genmove_white")
-                || c.equals("help")
-                || c.equals("list_commands")
-                || c.equals("play")
-                || c.equals("protocol_version")
-                || c.equals("quit")
-                || c.equals("white"))
-                continue;
-            if ((c.equals("set_free_handicap")
-                 || c.equals("get_free_handicap"))
-                && m_emuHandicap)
-                continue;
-            if (c.equals("loadsgf") && m_emuLoadsgf)
-                continue;
-            if (m_noScore
-                && (c.equals("final_score")
-                    || (c.equals("final_status_list"))))
-                    continue;
-            cmd.getResponse().append(c);
-            cmd.getResponse().append("\n");
-        }
-        cmd.getResponse().append("boardsize\n");
-        cmd.getResponse().append("protocol_version\n");
-        cmd.getResponse().append("quit\n");
-        if (m_version1)
-        {
-            cmd.getResponse().append("black\n");
-            cmd.getResponse().append("help\n");
-            cmd.getResponse().append("genmove_white\n");
-            cmd.getResponse().append("genmove_black\n");
-            cmd.getResponse().append("white\n");
-        }
-        else
-        {
-            cmd.getResponse().append("clear_board\n");        
-            cmd.getResponse().append("genmove\n");
-            cmd.getResponse().append("list_commands\n");
-            cmd.getResponse().append("play\n");
-        }
-        if (m_emuHandicap)
-        {
-            cmd.getResponse().append("set_free_handicap\n");
-            cmd.getResponse().append("get_free_handicap\n");
-        }
-        if (m_emuLoadsgf)
-            cmd.getResponse().append("loadsgf\n");
-        cmd.getResponse().append("gtpadapter_showboard\n");
+        cmd.checkNuArg(1);
+        play(GoColor.BLACK, cmd.getPointArg(0, m_boardSize));
     }
 
-    public void cmdName(GtpCommand cmd) throws GtpError
+    public void cmdBoardsize(GtpCommand cmd) throws GtpError
     {
-        assert(m_name != null);
-        int index = m_name.indexOf(':');
-        if (index < 0)
-            cmd.setResponse(m_name);
-        else
-            cmd.setResponse(m_name.substring(0, index));
+        int size = cmd.getIntArg();
+        if (size < 1)
+            throw new GtpError("Invalid board size");
+        if (m_size > 0 && size != m_size)
+            throw new GtpError("Boardsize must be " + m_size);
+        String command = m_gtp.getCommandBoardsize(size);
+        if (command != null)
+            send(command);
+        m_boardSize = size;
+        m_board = new Board(m_boardSize);
+        m_passInserted.clear();
+        command = m_gtp.getCommandClearBoard(m_boardSize);
+        send(command);
     }
 
-    public void cmdVersion(GtpCommand cmd) throws GtpError
+    public void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
-        assert(m_name != null);
-        int index = m_name.indexOf(':');
-        if (index >= 0)
-            cmd.setResponse(m_name.substring(index + 1));
+        cmd.checkArgNone();
+        send(m_gtp.getCommandClearBoard(m_boardSize));
+        m_board = new Board(m_boardSize);
+        m_passInserted.clear();
     }
 
-    public void handleCommand(GtpCommand cmd) throws GtpError
+    public void cmdForward(GtpCommand cmd) throws GtpError
     {
-        if (cmd.getCommand().equals("black"))
-            cmdPlay(GoColor.BLACK, cmd);
-        else if (cmd.getCommand().equals("boardsize"))
-            cmdBoardsize(cmd);
-        else if (cmd.getCommand().equals("clear_board"))
-            cmdClearBoard();
-        else if (cmd.getCommand().equals("final_score") && m_noScore)
-            cmdUnknown();
-        else if (cmd.getCommand().equals("final_status_list") && m_noScore)
-            cmdUnknown();
-        else if (cmd.getCommand().equals("genmove"))
-            cmdGenmove(cmd);
-        else if (cmd.getCommand().equals("genmove_black"))
-            cmdGenmove(GoColor.BLACK, cmd);
-        else if (cmd.getCommand().equals("genmove_white"))
-            cmdGenmove(GoColor.WHITE, cmd);
-        else if (cmd.getCommand().equals("gg-undo"))
-            cmdGGUndo(cmd);
-        else if (cmd.getCommand().equals("gtpadapter_showboard"))
-            cmdGtpAdapterShowBoard(cmd);
-        else if (cmd.getCommand().equals("help"))
-            cmdListCommands(cmd);
-        else if (cmd.getCommand().equals("list_commands"))
-            cmdListCommands(cmd);
-        else if (cmd.getCommand().equals("loadsgf"))
-            cmdLoadsgf(cmd);
-        else if (cmd.getCommand().equals("name") && m_name != null)
-            cmdName(cmd);
-        else if (cmd.getCommand().equals("place_free_handicap")
-                 && m_emuHandicap)
-            cmdPlaceFreeHandicap(cmd);
-        else if (cmd.getCommand().equals("play"))
-            cmdPlay(cmd);
-        else if (cmd.getCommand().equals("protocol_version"))
-            cmd.getResponse().append(m_version1 ? "1" : "2");
-        else if (cmd.getCommand().equals("quit"))
-            cmdQuit();
-        else if (cmd.getCommand().equals("set_free_handicap")
-                 && m_emuHandicap)
-            cmdSetFreeHandicap(cmd);
-        else if (cmd.getCommand().equals("version") && m_name != null)
-            cmdVersion(cmd);
-        else if (cmd.getCommand().equals("undo"))
-            cmdUndo(cmd);
-        else if (cmd.getCommand().equals("white"))
-            cmdPlay(GoColor.WHITE, cmd);
-        else
-            send(cmd.getLine(), cmd.getResponse());
+        send(cmd.getLine(), cmd.getResponse());
+    }
+
+    public void cmdGenmove(GtpCommand cmd) throws GtpError
+    {
+        cmdGenmove(cmd.getColorArg(), cmd);
+    }
+
+    public void cmdGenmoveBlack(GtpCommand cmd) throws GtpError
+    {
+        cmdGenmove(GoColor.BLACK, cmd);
+    }
+
+    public void cmdGenmoveWhite(GtpCommand cmd) throws GtpError
+    {
+        cmdGenmove(GoColor.WHITE, cmd);
+    }
+
+    public void cmdGenmove(GoColor color, GtpCommand cmd) throws GtpError
+    {
+        if (checkResign(color, cmd.getResponse()))
+            return;
+        String command = m_gtp.getCommandGenmove(color);
+        fillPass(color);
+        String response;
+        try
+        {
+            response = send(command);
+        }
+        catch (GtpError e)
+        {
+            undoFillPass();
+            throw e;
+        }
+        if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
+            return;
+        GoPoint point = GtpUtil.parsePoint(response, m_boardSize);
+        m_board.play(point, color);
+        cmd.setResponse(response);
+    }
+
+    public void cmdGGUndo(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkNuArgLessEqual(1);
+        int n = 1;
+        if (cmd.getNuArg() == 1)
+            n = cmd.getIntArg(0, 1, m_board.getNumberPlacements());
+        int total = 0;
+        Stack stack = new Stack();
+        for (int i = 0; i < n; ++i)
+        {
+            ++total;
+            if (m_fillPasses)
+            {
+                Boolean passInserted = (Boolean)m_passInserted.pop();
+                stack.push(passInserted);
+                if (passInserted.booleanValue())
+                    ++total;
+            }
+        }
+        try
+        {
+            send("gg-undo " + total);
+        }
+        catch (GtpError e)
+        {
+            while (! stack.empty())
+                m_passInserted.push(stack.pop());
+            return;
+        }
+        m_board.undo(total);
+    }
+
+    public void cmdGtpAdapterShowBoard(GtpCommand cmd) throws GtpError
+    {
+        OutputStream outputStream = new ByteArrayOutputStream(2048);
+        PrintStream printStream = new PrintStream(outputStream);
+        BoardUtil.print(m_board, printStream, true);
+        cmd.getResponse().append("\n");
+        cmd.getResponse().append(outputStream.toString());
+    }
+
+    public void cmdLoadsgf(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkNuArgLessEqual(2);
+        String filename = cmd.getArg(0);
+        String command = "loadsgf " + filename;
+        int maxMove = -1;
+        if (cmd.getNuArg() == 2)
+            maxMove = cmd.getIntArg(1);
+        GoColor toMove = GoColor.EMPTY;
+        try
+        {
+            FileInputStream fileStream =
+                new FileInputStream(new File(filename));
+            SgfReader reader = new SgfReader(fileStream, filename, null, 0);
+            GameTree gameTree = reader.getGameTree();
+            m_boardSize = gameTree.getGameInformation().m_boardSize;
+            m_board = new Board(m_boardSize);
+            m_passInserted.clear();
+            m_gtp.sendBoardsize(m_boardSize);
+            m_gtp.sendClearBoard(m_boardSize);
+            Node node = gameTree.getRoot();
+            int moveNumber = 0;
+            while (node != null)
+            {
+                if (node.getMove() != null)
+                {
+                    ++moveNumber;
+                    if (maxMove >= 0 && moveNumber >= maxMove)
+                        break;
+                }
+                ArrayList moves = new ArrayList();
+                NodeUtil.getAllAsMoves(node, moves);
+                for (int i = 0; i < moves.size(); ++i)
+                {
+                    Move move = (Move)moves.get(i);
+                    play(move.getColor(), move.getPoint());
+                }
+                toMove = node.getToMove();
+                node = node.getChild();
+            }
+            if (toMove != GoColor.EMPTY && toMove != m_board.getToMove())
+            {
+                play(m_board.getToMove(), null);
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new GtpError("File not found");
+        }
+        catch (SgfReader.SgfError e)
+        {
+            throw new GtpError("Could not read file");
+        }
+    }
+
+    public void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
+    {
+        int n = cmd.getIntArg();
+        ArrayList stones = Board.getHandicapStones(m_boardSize, n);
+        if  (stones == null)
+            throw new GtpError("Invalid number of handicap stones");
+        StringBuffer pointList = new StringBuffer(128);
+        for (int i = 0; i < stones.size(); ++i)
+        {
+            GoPoint point = (GoPoint)stones.get(i);
+            play(GoColor.BLACK, point);
+            if (pointList.length() > 0)
+                pointList.append(' ');
+            pointList.append(point);
+        }
+        cmd.setResponse(pointList.toString());
+    }
+
+    public void cmdPlay(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkNuArg(2);
+        GoColor color = cmd.getColorArg(0);
+        GoPoint point = cmd.getPointArg(1, m_boardSize);
+        play(color, point);
+    }
+
+    public void cmdProtocolVersion1(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        cmd.setResponse("1");
+    }
+
+    public void cmdQuit(GtpCommand cmd) throws GtpError
+    {
+        send("quit");
+        super.cmdQuit(cmd);
     }
 
     public void interruptProgram(GtpClientBase gtp)
@@ -216,22 +297,6 @@ public class GtpAdapter
     public void interruptCommand()
     {
         interruptProgram(m_gtp);
-    }
-
-    /** Emulate loadsgf command.
-        Should be set before handling any commands.
-    */
-    public void setEmuLoadSgf()
-    {
-        m_emuLoadsgf = true;
-    }
-
-    /** Emulate handicap commands.
-        Should be set before handling any commands.
-    */
-    public void setEmuHandicap()
-    {
-        m_emuHandicap = true;
     }
 
     /** Fill moves of non-alternating colors with pass moves.
@@ -254,6 +319,24 @@ public class GtpAdapter
         m_board = new Board(m_boardSize);
     }
 
+    public void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
+    {
+        for (int i = 0; i < cmd.getNuArg(); ++i)
+            play(GoColor.BLACK, cmd.getPointArg(i, m_boardSize));
+    }
+
+    public void cmdUndo(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        undo();
+    }
+
+    public void cmdWhite(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkNuArg(1);
+        play(GoColor.WHITE, cmd.getPointArg(0, m_boardSize));
+    }
+
     /** Translate move commands to lower case.
         Should be set before handling any commands.
     */
@@ -262,20 +345,31 @@ public class GtpAdapter
         m_lowerCase = true;
     }
 
-    /** Set response for name command.
-        Should be set before handling any commands.
-    */
     public void setName(String name)
     {
-        m_name = name;
-    }
-
-    /** Hide final_score and final_status commands.
-        Should be set before handling any commands.
-    */
-    public void setNoScore()
-    {
-        m_noScore = true;
+        if (name == null)
+        {
+            register("name", m_callbackForward);
+            register("version", m_callbackForward);
+            return;
+        }
+        int index = name.indexOf(':');
+        if (index < 0)
+        {
+            super.setName(name);
+            super.setVersion("");
+        }
+        else
+        {
+            super.setName(name.substring(0, index));
+            super.setVersion(name.substring(index + 1));
+        }
+        register("name", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdName(cmd); } });
+        register("version", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdVersion(cmd); } });
     }
 
     /** Check estimate_score and resign, if score too bad.
@@ -287,27 +381,11 @@ public class GtpAdapter
         m_resignScore = Math.abs(resignScore);
     }
 
-    /** Answer protocol_version command with 1.
-        Should be set before handling any commands.
-    */
-    public void setVersion1()
-    {
-        m_version1 = true;
-    }
-
-    private boolean m_emuHandicap;
-
-    private boolean m_emuLoadsgf;
-
     private boolean m_fillPasses;
 
     private boolean m_lowerCase;
 
-    private boolean m_noScore;
-
     private boolean m_resign;
-
-    private boolean m_version1;
 
     /** Only accept this board size.
         A value of -1 means accept any size.
@@ -320,11 +398,13 @@ public class GtpAdapter
 
     private Board m_board;
 
+    private GtpCallback m_callbackForward = new GtpCallback() {
+            public void run(GtpCommand cmd) throws GtpError {
+                cmdForward(cmd); } };
+
     private final GtpClientBase m_gtp;
 
     private final Stack m_passInserted = new Stack();
-
-    private String m_name;
 
     private boolean checkResign(GoColor color, StringBuffer response)
     {
@@ -374,219 +454,6 @@ public class GtpAdapter
         return false;
     }
 
-    private void cmdBoardsize(GtpCommand cmd) throws GtpError
-    {
-        int size = cmd.getIntArg();
-        if (size < 1)
-            throw new GtpError("Invalid board size");
-        if (m_size > 0 && size != m_size)
-            throw new GtpError("Boardsize must be " + m_size);
-        String command = m_gtp.getCommandBoardsize(size);
-        if (command != null)
-            send(command);
-        m_boardSize = size;
-        m_board = new Board(m_boardSize);
-        m_passInserted.clear();
-        command = m_gtp.getCommandClearBoard(m_boardSize);
-        send(command);
-    }
-
-    private void cmdClearBoard() throws GtpError
-    {
-        send(m_gtp.getCommandClearBoard(m_boardSize));
-        m_board = new Board(m_boardSize);
-        m_passInserted.clear();
-    }
-
-    private void cmdGenmove(GtpCommand cmd) throws GtpError
-    {
-        cmdGenmove(cmd.getColorArg(), cmd);
-    }
-
-    private void cmdGenmove(GoColor color, GtpCommand cmd) throws GtpError
-    {
-        if (checkResign(color, cmd.getResponse()))
-            return;
-        String command = m_gtp.getCommandGenmove(color);
-        fillPass(color);
-        String response;
-        try
-        {
-            response = send(command);
-        }
-        catch (GtpError e)
-        {
-            undoFillPass();
-            throw e;
-        }
-        if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
-            return;
-        GoPoint point = GtpUtil.parsePoint(response, m_boardSize);
-        m_board.play(point, color);
-        cmd.setResponse(response);
-    }
-
-    private void cmdGGUndo(GtpCommand cmd) throws GtpError
-    {
-        cmd.checkNuArgLessEqual(1);
-        int n = 1;
-        if (cmd.getNuArg() == 1)
-            n = cmd.getIntArg(0, 1, m_board.getNumberPlacements());
-        int total = 0;
-        Stack stack = new Stack();
-        for (int i = 0; i < n; ++i)
-        {
-            ++total;
-            if (m_fillPasses)
-            {
-                Boolean passInserted = (Boolean)m_passInserted.pop();
-                stack.push(passInserted);
-                if (passInserted.booleanValue())
-                    ++total;
-            }
-        }
-        try
-        {
-            send("gg-undo " + total);
-        }
-        catch (GtpError e)
-        {
-            while (! stack.empty())
-                m_passInserted.push(stack.pop());
-            return;
-        }
-        m_board.undo(total);
-    }
-
-    private void cmdGtpAdapterShowBoard(GtpCommand cmd) throws GtpError
-    {
-        OutputStream outputStream = new ByteArrayOutputStream(2048);
-        PrintStream printStream = new PrintStream(outputStream);
-        BoardUtil.print(m_board, printStream, true);
-        cmd.getResponse().append("\n");
-        cmd.getResponse().append(outputStream.toString());
-    }
-
-    private void cmdLoadsgf(GtpCommand cmd) throws GtpError
-    {
-        cmd.checkNuArgLessEqual(2);
-        String filename = cmd.getArg(0);
-        String command = "loadsgf " + filename;
-        int maxMove = -1;
-        if (cmd.getNuArg() == 2)
-            maxMove = cmd.getIntArg(1);
-        if (! m_emuLoadsgf)
-            send(command);
-        GoColor toMove = GoColor.EMPTY;
-        try
-        {
-            FileInputStream fileStream =
-                new FileInputStream(new File(filename));
-            SgfReader reader = new SgfReader(fileStream, filename, null, 0);
-            GameTree gameTree = reader.getGameTree();
-            m_boardSize = gameTree.getGameInformation().m_boardSize;
-            m_board = new Board(m_boardSize);
-            m_passInserted.clear();
-            if (m_emuLoadsgf)
-            {
-                m_gtp.sendBoardsize(m_boardSize);
-                m_gtp.sendClearBoard(m_boardSize);
-            }
-            Node node = gameTree.getRoot();
-            int moveNumber = 0;
-            while (node != null)
-            {
-                if (node.getMove() != null)
-                {
-                    ++moveNumber;
-                    if (maxMove >= 0 && moveNumber >= maxMove)
-                        break;
-                }
-                ArrayList moves = new ArrayList();
-                NodeUtil.getAllAsMoves(node, moves);
-                for (int i = 0; i < moves.size(); ++i)
-                {
-                    Move move = (Move)moves.get(i);
-                    if (m_emuLoadsgf)
-                        play(move.getColor(), move.getPoint());
-                    else
-                        m_board.play(move);
-                }
-                toMove = node.getToMove();
-                node = node.getChild();
-            }
-            if (toMove != GoColor.EMPTY && toMove != m_board.getToMove())
-            {
-                if (m_emuLoadsgf)
-                    play(m_board.getToMove(), null);
-                else
-                    m_board.setToMove(toMove);
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            throw new GtpError("File not found");
-        }
-        catch (SgfReader.SgfError e)
-        {
-            throw new GtpError("Could not read file");
-        }
-    }
-
-    private void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
-    {
-        int n = cmd.getIntArg();
-        ArrayList stones = Board.getHandicapStones(m_boardSize, n);
-        if  (stones == null)
-            throw new GtpError("Invalid number of handicap stones");
-        StringBuffer pointList = new StringBuffer(128);
-        for (int i = 0; i < stones.size(); ++i)
-        {
-            GoPoint point = (GoPoint)stones.get(i);
-            play(GoColor.BLACK, point);
-            if (pointList.length() > 0)
-                pointList.append(' ');
-            pointList.append(point);
-        }
-        cmd.setResponse(pointList.toString());
-    }
-
-    private void cmdPlay(GtpCommand cmd) throws GtpError
-    {
-        cmd.checkNuArg(2);
-        GoColor color = cmd.getColorArg(0);
-        GoPoint point = cmd.getPointArg(1, m_boardSize);
-        play(color, point);
-    }
-
-    private void cmdPlay(GoColor color, GtpCommand cmd) throws GtpError
-    {
-        cmd.checkNuArg(1);
-        play(color, cmd.getPointArg(0, m_boardSize));
-    }
-
-    private void cmdQuit() throws GtpError
-    {
-        send("quit");
-    }
-
-    private void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
-    {
-        for (int i = 0; i < cmd.getNuArg(); ++i)
-            play(GoColor.BLACK, cmd.getPointArg(i, m_boardSize));
-    }
-
-    private void cmdUndo(GtpCommand cmd) throws GtpError
-    {
-        cmd.checkArgNone();
-        undo();
-    }
-
-    private void cmdUnknown() throws GtpError
-    {
-        throw new GtpError("Unknown command");
-    }
-
     private void fillPass(GoColor color) throws GtpError
     {
         if (! m_fillPasses)
@@ -610,16 +477,17 @@ public class GtpAdapter
         }
     }
 
-    private void init() throws GtpError
+    private void init(boolean emuHandicap, boolean noScore,
+                      boolean version1) throws GtpError
     {
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
         m_boardSize = GoPoint.DEFAULT_SIZE;
         m_board = new Board(m_boardSize);
         m_size = -1;
-        m_name = null;
         m_resign = false;
         m_fillPasses = false;
+        registerCommands(emuHandicap, noScore, version1);
     }
 
     private void play(GoColor color, GoPoint point) throws GtpError
@@ -631,6 +499,95 @@ public class GtpAdapter
             command = command.toLowerCase(Locale.ENGLISH);
         send(command);
         m_board.play(move);
+    }
+
+    private void registerCommands(boolean emuHandicap, boolean noScore,
+                                  boolean version1)
+    {
+        GtpCallback callbackUnknown = new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdUnknown(cmd); } };
+        register("boardsize", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdBoardsize(cmd); } });
+        register("gtpadapter_showboard", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdGtpAdapterShowBoard(cmd); } });
+        if (version1)
+            register("protocol_version", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdProtocolVersion1(cmd); } });
+        register("loadsgf", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdLoadsgf(cmd); } });
+        setName(null);
+        if (emuHandicap)
+        {
+            register("place_free_handicap", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdPlaceFreeHandicap(cmd); } });
+            register("set_free_handicap", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdSetFreeHandicap(cmd); } });
+        }
+        if (noScore)
+        {
+            register("final_score", callbackUnknown);
+            register("final_status_list", callbackUnknown);
+        }
+        if (version1)
+        {
+            register("black", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdBlack(cmd); } });
+            register("clear_board", callbackUnknown);
+            register("genmove", callbackUnknown);
+            register("genmove_black", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdGenmoveBlack(cmd); } });
+            register("genmove_white", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdGenmoveWhite(cmd); } });
+            register("help", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdListCommands(cmd); } });
+            register("known_command", callbackUnknown);
+            register("list_commands", callbackUnknown);
+            register("play", callbackUnknown);
+            register("white", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdWhite(cmd); } });
+        }
+        else
+        {
+            register("black", callbackUnknown);
+            register("clear_board", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdClearBoard(cmd); } });
+            register("genmove", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdGenmove(cmd); } });
+            register("genmove_black", callbackUnknown);
+            register("genmove_white", callbackUnknown);
+            register("help", callbackUnknown);
+            register("known_command", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdKnownCommand(cmd); } });
+            register("list_commands", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdListCommands(cmd); } });
+            register("play", new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdPlay(cmd); } });
+            register("white", callbackUnknown);
+        }
+        ArrayList commands = m_gtp.getSupportedCommands();
+        for (int i = 0; i < commands.size(); ++i)
+        {
+            String command = (String)commands.get(i);
+            if (! isRegistered(command))
+                register(command, m_callbackForward);
+        }
     }
 
     private String send(String cmd) throws GtpError

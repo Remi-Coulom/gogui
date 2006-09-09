@@ -43,21 +43,22 @@ public class GtpAdapterTest
             // Much slower than using GtpEngineClient
             GtpEngineConnection expectConnection
                 = new GtpEngineConnection(m_expect);
-            m_adapter = new GtpAdapter(expectConnection.getGtpClient(), null);
+            m_adapter = new GtpAdapter(expectConnection.getGtpClient(), null,
+                                       false, false, false);
             GtpEngineConnection adapterConnection
                 = new GtpEngineConnection(m_adapter);
             m_gtp = adapterConnection.getGtpClient();
         }
         else
         {
-            m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null);
+            m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null,
+                                       false, false, false);
             m_gtp = new GtpEngineClient(m_adapter);
         }
     }
 
     public void testLoadSgf() throws ErrorMessage, IOException, GtpError
     {
-        m_adapter.setEmuLoadSgf();
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("play b D4", "");
