@@ -192,7 +192,6 @@ public class GtpAdapter
     {
         cmd.checkNuArgLessEqual(2);
         String filename = cmd.getArg(0);
-        String command = "loadsgf " + filename;
         int maxMove = -1;
         if (cmd.getNuArg() == 2)
             maxMove = cmd.getIntArg(1);

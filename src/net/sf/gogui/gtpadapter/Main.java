@@ -27,7 +27,6 @@ public final class Main
             String options[] = {
                 "config:",
                 "emuhandicap",
-                "emuloadsgf",
                 "fillpasses",
                 "gtpfile:",
                 "help",
@@ -58,7 +57,6 @@ public final class Main
             boolean noScore = opt.isSet("noscore");
             boolean version1 = opt.isSet("version1");
             boolean emuHandicap = opt.isSet("emuhandicap");
-            boolean emuLoadsgf = opt.isSet("emuloadsgf");
             boolean fillPasses = opt.isSet("fillpasses");
             String name = opt.getString("name", null);
             String gtpFile = opt.getString("gtpfile", null);
