@@ -9,9 +9,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
-import net.sf.gogui.gtp.GtpClient;
+import net.sf.gogui.gtp.GtpClientBase;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpEngineClient;
+import net.sf.gogui.gtp.GtpEngineConnection;
 import net.sf.gogui.gtp.GtpExpectEngine;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StreamCopy;
@@ -31,13 +32,27 @@ public class GtpAdapterTest
         return new junit.framework.TestSuite(GtpAdapterTest.class);
     }
 
-    public void setUp() throws GtpError
+    public void setUp() throws IOException, GtpError
     {
         m_expect = new GtpExpectEngine(null);
         expect("protocol_version", "2");
         expect("list_commands", "");
-        m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null);
-        m_gtp = new GtpEngineClient(m_adapter);
+        final boolean useEngineConnection = false;
+        if (useEngineConnection)
+        {
+            // Much slower than using GtpEngineClient
+            GtpEngineConnection expectConnection
+                = new GtpEngineConnection(m_expect);
+            m_adapter = new GtpAdapter(expectConnection.getGtpClient(), null);
+            GtpEngineConnection adapterConnection
+                = new GtpEngineConnection(m_adapter);
+            m_gtp = adapterConnection.getGtpClient();
+        }
+        else
+        {
+            m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null);
+            m_gtp = new GtpEngineClient(m_adapter);
+        }
     }
 
     public void testLoadSgf() throws ErrorMessage, IOException, GtpError
@@ -69,7 +84,7 @@ public class GtpAdapterTest
 
     private GtpExpectEngine m_expect;
 
-    private GtpEngineClient m_gtp;
+    private GtpClientBase m_gtp;
 
     private void assertExpectQueueEmpty()
     {
