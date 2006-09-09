@@ -43,8 +43,6 @@ public final class Move
         int x = point.getX();
         int y = point.getY();
         int max = Math.max(x, y);
-        if (max >= s_size)
-            grow(max + 1);
         if (color == GoColor.BLACK)
             return s_movesBlack[x][y];
         else if (color == GoColor.WHITE)
@@ -86,8 +84,6 @@ public final class Move
         return m_string;
     }
 
-    private static int s_size;
-
     private static Move s_passBlack;
 
     private static Move s_passWhite;
@@ -108,29 +104,17 @@ public final class Move
     {
         s_passBlack = new Move(null, GoColor.BLACK);
         s_passWhite = new Move(null, GoColor.WHITE);
-        s_size = 0;
-        grow(GoPoint.DEFAULT_SIZE);
-    };
-
-    private static void grow(int size)
-    {
-        assert(size > s_size);
-        s_movesBlack = grow(size, GoColor.BLACK, s_movesBlack);
-        s_movesWhite = grow(size, GoColor.WHITE, s_movesWhite);
-        s_movesEmpty = grow(size, GoColor.EMPTY, s_movesEmpty);
-        s_size = size;
+        s_movesBlack = init(GoColor.BLACK);
+        s_movesWhite = init(GoColor.WHITE);
+        s_movesEmpty = init(GoColor.EMPTY);
     }
 
-    private static Move[][] grow(int size, GoColor color, Move[][] moves)
+    private static Move[][] init(GoColor color)
     {
-        assert(size > s_size);
-        Move[][] result = new Move[size][size];
-        for (int x = 0; x < size; ++x)
-            for (int y = 0; y < size; ++y)
-                if (x < s_size && y < s_size)
-                    result[x][y] = moves[x][y];
-                else
-                    result[x][y] = new Move(GoPoint.get(x, y), color);
+        Move[][] result = new Move[GoPoint.MAXSIZE][GoPoint.MAXSIZE];
+        for (int x = 0; x < GoPoint.MAXSIZE; ++x)
+            for (int y = 0; y < GoPoint.MAXSIZE; ++y)
+                result[x][y] = new Move(GoPoint.get(x, y), color);
         return result;
     }
 
