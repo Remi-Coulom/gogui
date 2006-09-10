@@ -7,6 +7,10 @@ package net.sf.gogui.util;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 
 //----------------------------------------------------------------------------
 
@@ -33,29 +37,19 @@ public class StreamCopy
     */
     public void run()
     {
+        ReadableByteChannel srcChannel = Channels.newChannel(m_src);
+        WritableByteChannel destChannel = Channels.newChannel(m_dest);
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
         try
         {
-            byte buffer[] = new byte[1024];
-            while (true)
+            while (srcChannel.read(buffer) != -1)
             {
-                int n = m_src.read(buffer);
-                if (n < 0)
-                {
-                    if (m_close)
-                        m_dest.close();
-                    break;
-                }
-                if (n == 0)
-                {
-                    // Not sure if this is necessary.
-                    Thread.sleep(100);
-                    continue;
-                }
-                if (m_verbose)
-                    System.err.write(buffer, 0, n);
-                m_dest.write(buffer, 0, n);
-                m_dest.flush();
+                buffer.flip();
+                destChannel.write(buffer);
+                buffer.compact();
             }
+        if (m_close)
+            m_dest.close();
         }
         catch (Throwable e)
         {
