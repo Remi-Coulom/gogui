@@ -39,7 +39,7 @@ public class StreamCopy
     {
         ReadableByteChannel srcChannel = Channels.newChannel(m_src);
         WritableByteChannel destChannel = Channels.newChannel(m_dest);
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(2048);
         try
         {
             while (srcChannel.read(buffer) != -1)
