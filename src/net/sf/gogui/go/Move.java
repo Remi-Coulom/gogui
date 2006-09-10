@@ -42,7 +42,6 @@ public final class Move
         }
         int x = point.getX();
         int y = point.getY();
-        int max = Math.max(x, y);
         if (color == GoColor.BLACK)
             return s_movesBlack[x][y];
         else if (color == GoColor.WHITE)

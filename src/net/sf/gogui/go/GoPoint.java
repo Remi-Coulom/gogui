@@ -77,7 +77,6 @@ public final class GoPoint
         assert(y >= 0);
         assert(x < MAXSIZE);
         assert(y < MAXSIZE);
-        int max = Math.max(x, y);
         GoPoint point = s_points[x][y];
         assert(point != null);
         return point;
