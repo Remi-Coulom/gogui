@@ -45,12 +45,6 @@ public class StreamCopy
                         m_dest.close();
                     break;
                 }
-                if (n == 0)
-                {
-                    // Not sure if this is necessary.
-                    Thread.sleep(100);
-                    continue;
-                }
                 if (m_verbose)
                     System.err.write(buffer, 0, n);
                 m_dest.write(buffer, 0, n);
