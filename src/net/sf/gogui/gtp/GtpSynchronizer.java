@@ -87,7 +87,9 @@ public class GtpSynchronizer
     }
 
     /** Send human move to engine.
-        The move is not played on the board yet.
+        The move is not played on the board yet. This function is useful,
+        if it should be first tested, if the engine accepts a move, before
+        playing it on the board, e.g. after a new human move was entered.
     */
     public void updateHumanMove(ConstBoard board, Move move) throws GtpError
     {
@@ -101,7 +103,10 @@ public class GtpSynchronizer
     }
 
     /** Update internal state after genmove.
-        The computer move is already played on the board.
+        Needs to be called after each genmove (or kgs-genmove_cleanup)
+        command. The computer move is expected to be already played on the
+        board, but does not need to be transmitted to the program anymore,
+        because genmove already executes the move at the program's side.
     */
     public void updateAfterGenmove(ConstBoard board)
     {
