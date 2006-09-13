@@ -2640,7 +2640,7 @@ public class GoGui
                 m_guiBoard.markLastMove(point);
             m_guiBoard.paintImmediately(point);
         }
-        if (! isOutOfSync())
+        if (m_gtp != null && ! isOutOfSync())
         {
             try
             {
