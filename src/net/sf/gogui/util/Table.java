@@ -7,6 +7,7 @@ package net.sf.gogui.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -79,12 +80,13 @@ public class Table
         return m_properties.getProperty(key, def);
     }
 
-    public void read(File file) throws Exception
+    public void read(File file) throws FileNotFoundException, IOException,
+                                       ErrorMessage
     {
         read(new FileReader(file));
     }
 
-    public void read(Reader reader) throws Exception
+    public void read(Reader reader) throws IOException, ErrorMessage
     {
         BufferedReader bufferedReader = new BufferedReader(reader);
         m_lineNumber = 0;
