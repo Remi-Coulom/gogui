@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -98,6 +99,19 @@ public class Table
             handleLine(line);
         }
         bufferedReader.close();
+    }
+
+    public void save(File file) throws IOException
+    {
+        FileWriter writer = new FileWriter(file);
+        try
+        {
+            save(writer);
+        }
+        finally
+        {
+            writer.close();
+        }
     }
 
     public void save(Writer out) throws IOException
