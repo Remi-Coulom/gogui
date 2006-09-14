@@ -476,19 +476,6 @@ public class TwoGtp
             try
             {
                 m_table.read(getResultFile());
-                if (m_table.getNumberColumns() != 11
-                    || ! m_table.getColumnTitle(0).equals("GAME")
-                    || ! m_table.getColumnTitle(1).equals("RES_B")
-                    || ! m_table.getColumnTitle(2).equals("RES_W")
-                    || ! m_table.getColumnTitle(3).equals("RES_R")
-                    || ! m_table.getColumnTitle(4).equals("ALT")
-                    || ! m_table.getColumnTitle(5).equals("DUP")
-                    || ! m_table.getColumnTitle(6).equals("LEN")
-                    || ! m_table.getColumnTitle(7).equals("CPU_B")
-                    || ! m_table.getColumnTitle(8).equals("CPU_W")
-                    || ! m_table.getColumnTitle(9).equals("ERR")
-                    || ! m_table.getColumnTitle(10).equals("ERR_MSG"))
-                    throw new ErrorMessage("Invalid file format: " + file);
                 int lastRowIndex = m_table.getNumberRows() - 1;
                 m_gameIndex =
                     Integer.parseInt(m_table.get("GAME", lastRowIndex)) + 1;
