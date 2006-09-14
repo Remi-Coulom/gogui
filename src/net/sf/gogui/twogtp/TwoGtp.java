@@ -37,6 +37,7 @@ import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
+import net.sf.gogui.util.Table;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -62,8 +63,6 @@ public class TwoGtp
         m_sgfFile = sgfFile;
         if (force)
             getResultFile().delete();
-        findInitialGameIndex();
-        readGames();
         m_black = new GtpClient(black, verbose, null);
         m_black.setLogPrefix("B");
         m_white = new GtpClient(white, verbose, null);
@@ -122,6 +121,8 @@ public class TwoGtp
         m_verbose = verbose;
         m_loadsgf = loadsgf;
         m_timeSettings = timeSettings;
+        initTable();
+        readGames();
         initGame(size);
     }
 
@@ -381,6 +382,8 @@ public class TwoGtp
 
     private final GtpClient m_white;
 
+    private Table m_table;
+
     private final TimeSettings m_timeSettings;
 
     private void checkInconsistentState() throws GtpError
@@ -408,7 +411,14 @@ public class TwoGtp
 
     private void cmdGenmove(GtpCommand cmd) throws GtpError
     {
-        sendGenmove(cmd.getColorArg(), cmd.getResponse());
+        try
+        {
+            sendGenmove(cmd.getColorArg(), cmd.getResponse());
+        }
+        catch (ErrorMessage e)
+        {
+            throw new GtpError(e.getMessage());
+        }
     }
 
     private void cmdPlay(GtpCommand cmd) throws GtpError
@@ -457,35 +467,84 @@ public class TwoGtp
             throw new GtpError("neither player supports final_status");
     }
 
-    private void findInitialGameIndex()
+    private void initTable() throws ErrorMessage
     {
-        m_gameIndex = 0;
-        try
-        {
-            InputStream inputStream = new FileInputStream(getResultFile());
-            Reader reader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            String line;
-            while (true)
+        File file = getResultFile();
+        if (file.exists())
+        {            
+            m_table = new Table();
+            try
             {
-                line = bufferedReader.readLine();
-                if (line == null)
-                    break;
-                if (line.trim().startsWith("#"))
-                    continue;
-                String[] elements = line.split("\\t");
-                int gameIndex = Integer.parseInt(elements[0]);
-                if (gameIndex + 1 > m_gameIndex)
-                    m_gameIndex = gameIndex + 1;
+                m_table.read(getResultFile());
+                if (m_table.getNumberColumns() != 11
+                    || ! m_table.getColumnTitle(0).equals("GAME")
+                    || ! m_table.getColumnTitle(1).equals("RES_B")
+                    || ! m_table.getColumnTitle(2).equals("RES_W")
+                    || ! m_table.getColumnTitle(3).equals("RES_R")
+                    || ! m_table.getColumnTitle(4).equals("ALT")
+                    || ! m_table.getColumnTitle(5).equals("DUP")
+                    || ! m_table.getColumnTitle(6).equals("LEN")
+                    || ! m_table.getColumnTitle(7).equals("CPU_B")
+                    || ! m_table.getColumnTitle(8).equals("CPU_W")
+                    || ! m_table.getColumnTitle(9).equals("ERR")
+                    || ! m_table.getColumnTitle(10).equals("ERR_MSG"))
+                    throw new ErrorMessage("Invalid file format: " + file);
+                int lastRowIndex = m_table.getNumberRows() - 1;
+                m_gameIndex =
+                    Integer.parseInt(m_table.get("GAME", lastRowIndex)) + 1;
+                if (m_gameIndex < 0)
+                    throw new ErrorMessage("Invalid file format: " + file);
+            }                        
+            catch (NumberFormatException e)
+            {
+                throw new ErrorMessage("Invalid file format: " + file);
             }
-            bufferedReader.close();
+            catch (FileNotFoundException e)
+            {
+                throw new ErrorMessage(e.getMessage());
+            }
+            catch (IOException e)
+            {
+                throw new ErrorMessage("Read error: " + file);
+            }
+            return;
         }
-        catch (FileNotFoundException e)
-        {
-        }
-        catch (IOException e)
-        {
-        }
+        ArrayList columns = new ArrayList();
+        columns.add("GAME");
+        columns.add("RES_B");
+        columns.add("RES_W");
+        columns.add("RES_R");
+        columns.add("ALT");
+        columns.add("DUP");
+        columns.add("LEN");
+        columns.add("CPU_B");
+        columns.add("CPU_W");
+        columns.add("ERR");
+        columns.add("ERR_MSG");
+        m_table = new Table(columns);
+        String blackName = m_blackName;
+        String whiteName = m_whiteName;
+        if (! m_blackVersion.equals(""))
+            blackName = m_blackName + ":" + m_blackVersion;
+        if (! m_whiteVersion.equals(""))
+            whiteName = m_whiteName + ":" + m_whiteVersion;
+        String refereeName = "-";
+        if (m_referee != null)
+            refereeName = m_refereeName + ":" + m_refereeVersion;
+        m_table.setProperty("Black", blackName);
+        m_table.setProperty("White", whiteName);
+        m_table.setProperty("Referee", refereeName);
+        m_table.setProperty("BlackCommand", m_black.getProgramCommand());
+        m_table.setProperty("WhiteCommand", m_white.getProgramCommand());
+        m_table.setProperty("RefereeCommand", m_refereeCommand);
+        m_table.setProperty("Size", Integer.toString(m_size));
+        m_table.setProperty("Komi", GameInformation.roundKomi(m_komi));
+        if (m_openings != null)
+            m_table.setProperty("Openings",
+                                m_openings.getDirectory() + " ("
+                                + m_openings.getNumber() + " files)");
+        m_table.setProperty("Date", StringUtil.getDate());
+        m_table.setProperty("Host", Platform.getHostInfo());
     }
 
     private void forward(GtpClient gtp, GtpCommand cmd) throws GtpError
@@ -601,6 +660,7 @@ public class TwoGtp
     }
 
     private void handleEndOfGame(boolean error, String errorMessage)
+        throws ErrorMessage
     {
         try
         {
@@ -929,51 +989,31 @@ public class TwoGtp
                             String duplicate, int numberMoves, boolean error,
                             String errorMessage, double cpuTimeBlack,
                             double cpuTimeWhite)
-         throws FileNotFoundException
+         throws ErrorMessage
     {
         if (m_sgfFile.equals(""))
             return;
-        File file = getResultFile();
-        if (! file.exists())
-        {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            PrintStream out = new PrintStream(fileOutputStream);
-            String blackName = m_blackName;
-            String whiteName = m_whiteName;
-            if (! m_blackVersion.equals(""))
-                blackName = m_blackName + ":" + m_blackVersion;
-            if (! m_whiteVersion.equals(""))
-                whiteName = m_whiteName + ":" + m_whiteVersion;
-            String refereeName = "-";
-            if (m_referee != null)
-                refereeName = m_refereeName + ":" + m_refereeVersion;
-            out.println("# Black: " + blackName);
-            out.println("# White: " + whiteName);
-            out.println("# Referee: " + refereeName);
-            out.println("# BlackCommand: " + m_black.getProgramCommand());
-            out.println("# WhiteCommand: " + m_white.getProgramCommand());
-            out.println("# RefereeCommand: " + m_refereeCommand);
-            out.println("# Size: " + m_size);
-            out.println("# Komi: " + m_komi);
-            if (m_openings != null)
-                out.println("# Openings: " + m_openings.getDirectory()
-                            + " (" + m_openings.getNumber() + " files)");
-            out.println("# Date: " + StringUtil.getDate());
-            out.println("# Host: " + Platform.getHostInfo());
-            out.println("#GAME\tRES_B\tRES_W\tRES_R\tALT\tDUP\tLEN\tCPU_B\t"
-                        + "CPU_W\tERR\tERR_MSG");
-            out.close();
-        }
         NumberFormat format = StringUtil.getNumberFormat(1);
-        FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-        PrintStream out = new PrintStream(fileOutputStream);
-        out.println(Integer.toString(m_gameIndex) + "\t" + resultBlack + "\t"
-                    + resultWhite + "\t"  + resultReferee + "\t"
-                    + (alternated ? "1" : "0") + "\t" + duplicate + "\t"
-                    + numberMoves + "\t" + format.format(cpuTimeBlack) + "\t"
-                    + format.format(cpuTimeWhite) + "\t" +
-                    (error ? "1" : "0") + "\t" + errorMessage);
-        out.close();
+        m_table.startRow();
+        m_table.set("GAME", Integer.toString(m_gameIndex));
+        m_table.set("RES_B", resultBlack);
+        m_table.set("RES_W", resultWhite);
+        m_table.set("RES_R", resultReferee);
+        m_table.set("ALT", alternated ? "1" : "0");
+        m_table.set("DUP", duplicate);
+        m_table.set("LEN", numberMoves);
+        m_table.set("CPU_B", format.format(cpuTimeBlack));
+        m_table.set("CPU_W", format.format(cpuTimeWhite));
+        m_table.set("ERR", error ? "1" : "0");
+        m_table.set("ERR_MSG", errorMessage);
+        try
+        {
+            m_table.save(getResultFile());
+        }
+        catch (IOException e)
+        {
+            throw new ErrorMessage("Could not write to: " + getResultFile());
+        }
     }
 
     private void send(GtpClient gtp1, GtpClient gtp2, String command1,
@@ -1016,7 +1056,7 @@ public class TwoGtp
     }
 
     private void sendGenmove(GoColor color, StringBuffer response)
-        throws GtpError
+        throws GtpError, ErrorMessage
     {
         checkInconsistentState();
         if (m_openings != null && m_openingMovesIndex < m_openingMoves.size()
