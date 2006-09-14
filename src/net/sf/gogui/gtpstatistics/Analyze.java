@@ -221,7 +221,7 @@ public class Analyze
                   "<hr>\n");
     }
 
-    private void findGameGlobalCommands()
+    private void findGameGlobalCommands() throws ErrorMessage
     {
         m_gameGlobalCommands = new ArrayList();
         for (int i = 0; i < m_commands.size(); ++i)
@@ -377,7 +377,7 @@ public class Analyze
         plot.plot(file, table, "Move", command, null);
     }
 
-    private Color getColor(String command)
+    private Color getColor(String command) throws ErrorMessage
     {
         int index = m_table.getColumnIndex(command);
         return PLOT_COLOR[(index - 2) % PLOT_COLOR.length];
@@ -400,7 +400,7 @@ public class Analyze
         return Math.max(10, Math.min(numberMoves * 9, 1040));
     }
 
-    private void initGameInfo() throws IOException
+    private void initGameInfo() throws ErrorMessage, IOException
     {
         m_gameInfo = new ArrayList();
         String last = null;

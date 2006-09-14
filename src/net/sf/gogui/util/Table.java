@@ -39,12 +39,49 @@ public class Table
         return (String)getRow(row).get(column);
     }
 
-    public String get(String columnTitle, int row)
+    public String get(String columnTitle, int row) throws ErrorMessage
     {
         return get(getColumnIndex(columnTitle), row);
     }
 
-    public int getColumnIndex(String column)
+    public double getDouble(int column, int row) throws ErrorMessage
+    {
+        try
+        {
+            return Double.parseDouble(get(column, row));
+        }
+        catch (NumberFormatException e)
+        {
+            throw new ErrorMessage("Expected floating point number in table "
+                                   + "(column=" + column + ", row=" + row
+                                   + ")");
+        }
+    }
+
+    public double getDouble(String columnTitle, int row) throws ErrorMessage
+    {
+        return getDouble(getColumnIndex(columnTitle), row);
+    }
+
+    public int getInt(int column, int row) throws ErrorMessage
+    {
+        try
+        {
+            return Integer.parseInt(get(column, row));
+        }
+        catch (NumberFormatException e)
+        {
+            throw new ErrorMessage("Expected integer in table (column="
+                                   + column + ", row=" + row + ")");
+        }
+    }
+
+    public int getInt(String columnTitle, int row) throws ErrorMessage
+    {
+        return getInt(getColumnIndex(columnTitle), row);
+    }
+
+    public int getColumnIndex(String column) throws ErrorMessage
     {
         for (int i = 0; i < m_numberColumns; ++i)
         {
@@ -52,8 +89,7 @@ public class Table
             if (title.equals(column))
                 return i;
         }
-        assert(false);
-        return -1;
+        throw new ErrorMessage("No such column in table: " + column);
     }
 
     public String getColumnTitle(int index)
@@ -76,9 +112,18 @@ public class Table
         return m_rows.size();
     }
 
+    /** Get meta information.
+        @param key the property key
+        @param def the default value, if this property does not exist
+    */
     public String getProperty(String key, String def)
     {
         return m_properties.getProperty(key, def);
+    }
+
+    public boolean hasProperty(String key)
+    {
+        return (m_properties.get(key) != null);
     }
 
     public void read(File file) throws FileNotFoundException, IOException,
@@ -161,21 +206,25 @@ public class Table
         m_lastRow.set(column, value);
     }
 
-    public void set(String column, int value)
+    public void set(String column, int value) throws ErrorMessage
     {
         set(column, Integer.toString(value));
     }
 
-    public void set(String column, double value)
+    public void set(String column, double value) throws ErrorMessage
     {
         set(column, Double.toString(value));
     }
 
-    public void set(String column, String value)
+    public void set(String column, String value) throws ErrorMessage
     {
         set(getColumnIndex(column), value);
     }
 
+    /** Set meta information.
+        @param key the property key
+        @param value the property value
+    */
     public Object setProperty(String key, String value)
     {
         return m_properties.setProperty(key, value);

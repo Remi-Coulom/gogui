@@ -327,34 +327,41 @@ public class GtpStatistics
     {
         System.err.println(name + ":" + number);
         m_table.startRow();
-        m_table.set("File", name);
-        m_table.set("Move", number);
-        for (int i = 0; i < m_commands.size(); ++i)
+        try
         {
-            Command command = getCommand(i);
-            if (command.m_begin && beginCommands)
+            m_table.set("File", name);
+            m_table.set("Move", number);
+            for (int i = 0; i < m_commands.size(); ++i)
             {
-                String response = send(command.m_command, toMove, move);
-                m_table.set(command.m_columnTitle, response);
+                Command command = getCommand(i);
+                if (command.m_begin && beginCommands)
+                {
+                    String response = send(command.m_command, toMove, move);
+                    m_table.set(command.m_columnTitle, response);
+                }
+            }
+            for (int i = 0; i < m_commands.size(); ++i)
+            {
+                Command command = getCommand(i);
+                if (! command.m_begin && ! command.m_final && regularCommands)
+                {
+                    String response = send(command.m_command, toMove, move);
+                    m_table.set(command.m_columnTitle, response);
+                }
+            }
+            for (int i = 0; i < m_commands.size(); ++i)
+            {
+                Command command = getCommand(i);
+                if (command.m_final && finalCommands)
+                {
+                    String response = send(command.m_command, toMove, move);
+                    m_table.set(command.m_columnTitle, response);
+                }
             }
         }
-        for (int i = 0; i < m_commands.size(); ++i)
+        catch (ErrorMessage e)
         {
-            Command command = getCommand(i);
-            if (! command.m_begin && ! command.m_final && regularCommands)
-            {
-                String response = send(command.m_command, toMove, move);
-                m_table.set(command.m_columnTitle, response);
-            }
-        }
-        for (int i = 0; i < m_commands.size(); ++i)
-        {
-            Command command = getCommand(i);
-            if (command.m_final && finalCommands)
-            {
-                String response = send(command.m_command, toMove, move);
-                m_table.set(command.m_columnTitle, response);
-            }
+            assert(false);
         }
     }
 

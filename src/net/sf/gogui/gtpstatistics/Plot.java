@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 import net.sf.gogui.gui.GuiUtil;
+import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.util.TableUtil;
 
@@ -318,15 +319,8 @@ public class Plot
         {
             try
             {
-                String xValue = table.get(columnX, row);
-                String yValue = table.get(columnY, row);
-                if (xValue == null || yValue == null)
-                {
-                    last = null;
-                    continue;
-                }
-                double x = Double.parseDouble(xValue);
-                double y = Double.parseDouble(yValue);
+                double x = table.getDouble(columnX, row);
+                double y = table.getDouble(columnY, row);
                 Point point = getPoint(x, y);
                 if (withBars)
                 {
@@ -340,8 +334,7 @@ public class Plot
                     m_graphics2D.drawLine(last.x, last.y, point.x, point.y);
                 if (errorColumn != null)
                 {
-                    double err
-                        = Double.parseDouble(table.get(errorColumn, row));
+                    double err = table.getDouble(errorColumn, row);
                     Point top = getPoint(x, y + err);
                     Point bottom = getPoint(x, y - err);
                     m_graphics2D.drawLine(top.x, top.y, bottom.x, bottom.y);
@@ -350,7 +343,7 @@ public class Plot
                     m_graphics2D.fillRect(point.x - 1, point.y - 1, 3, 3);
                 last = point;
             }
-            catch (NumberFormatException e)
+            catch (ErrorMessage e)
             {
                 last = null;
             }
@@ -543,19 +536,19 @@ public class Plot
         m_onlyIntValuesY = true;
         for (int row = 0; row < table.getNumberRows(); ++row)
         {
-            String xValue = table.get(columnX, row);
-            String yValue = table.get(columnY, row);
-            if (xValue == null || yValue == null
-                || ! TableUtil.isNumberValue(yValue))
-                continue;
-            if (! TableUtil.isBoolValue(yValue))
-                m_onlyBoolValues = false;
-            if (! TableUtil.isIntValue(xValue))
-                m_onlyIntValuesX = false;
-            if (! TableUtil.isIntValue(yValue))
-                m_onlyIntValuesY = false;
             try
             {
+                String xValue = table.get(columnX, row);
+                String yValue = table.get(columnY, row);
+                if (xValue == null || yValue == null
+                    || ! TableUtil.isNumberValue(yValue))
+                    continue;
+                if (! TableUtil.isBoolValue(yValue))
+                    m_onlyBoolValues = false;
+                if (! TableUtil.isIntValue(xValue))
+                    m_onlyIntValuesX = false;
+                if (! TableUtil.isIntValue(yValue))
+                    m_onlyIntValuesY = false;
                 double x = Double.parseDouble(xValue);
                 double y = Double.parseDouble(yValue);
                 minX = Math.min(minX, x);
@@ -563,7 +556,7 @@ public class Plot
                 minY = Math.min(minY, y);
                 maxY = Math.max(maxY, y);
             }
-            catch (NumberFormatException e)
+            catch (ErrorMessage e)
             {
             }
         }

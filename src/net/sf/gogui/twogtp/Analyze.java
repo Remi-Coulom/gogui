@@ -17,6 +17,7 @@ import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Histogram;
 import net.sf.gogui.util.Statistics;
 import net.sf.gogui.util.StringUtil;
+import net.sf.gogui.util.Table;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -27,7 +28,7 @@ public class Analyze
     public Analyze(String filename, boolean force) throws Exception
     {
         File file = new File(filename);
-        readFile(file);
+        readTable(file);
         File htmlFile =
             new File(FileUtil.replaceExtension(file, "dat", "html"));
         File dataFile =
@@ -55,8 +56,6 @@ public class Analyze
         public Histogram m_histo = new Histogram(-400, 400, 10);
     }
 
-    private boolean m_hasReferee;
-
     private int m_duplicates;
 
     private int m_errors;
@@ -65,33 +64,9 @@ public class Analyze
 
     private int m_gamesUsed;
 
-    private int m_lineNumber;
-
-    private String m_black = "Black";
-
     private static final String COLOR_HEADER = "#91aee8";
 
     private static final String COLOR_INFO = "#e0e0e0";
-
-    private String m_white = "White";
-
-    private String m_referee = "-";
-
-    private String m_blackCommand = "";
-
-    private String m_refereeCommand = "";
-
-    private String m_whiteCommand = "";
-
-    private String m_size = "";
-
-    private String m_komi = "";
-
-    private String m_date = "";
-
-    private String m_host = "";
-
-    private String m_openings;
 
     private final ArrayList m_entries = new ArrayList(128);
 
@@ -107,6 +82,8 @@ public class Analyze
     private final Statistics m_cpuBlack = new Statistics();
 
     private final Statistics m_cpuWhite = new Statistics();
+
+    private Table m_table;
 
     private void calcStatistics()
     {
@@ -131,87 +108,6 @@ public class Analyze
             m_cpuBlack.add(e.m_cpuBlack);
             m_cpuWhite.add(e.m_cpuWhite);
             m_length.add(e.m_length);
-        }
-    }
-
-    private String getCommentValue(String comment, String key)
-    {
-        assert(comment.startsWith(key));
-        return comment.substring(key.length()).trim();
-    }
-
-    /** Get comment value and replace spaces by HTML non-breaking spaces */
-    private String getCommentValueNbsp(String comment, String key)
-    {
-        return getCommentValue(comment, key).replaceAll(" ", "&nbsp;");
-    }
-
-    private void handleComment(String comment)
-    {
-        comment = comment.trim();
-        if (comment.startsWith("Black:"))
-            m_black = getCommentValueNbsp(comment, "Black:");
-        else if (comment.startsWith("White:"))
-            m_white = getCommentValueNbsp(comment, "White:");
-        else if (comment.startsWith("Referee:"))
-        {
-            m_referee = getCommentValueNbsp(comment, "Referee:");
-            m_hasReferee =
-                (! m_referee.equals("") && ! m_referee.equals("-"));
-        }
-        else if (comment.startsWith("BlackCommand:"))
-            m_blackCommand = getCommentValue(comment, "BlackCommand:");
-        else if (comment.startsWith("RefereeCommand:"))
-            m_refereeCommand = getCommentValue(comment, "RefereeCommand:");
-        else if (comment.startsWith("WhiteCommand:"))
-            m_whiteCommand = getCommentValue(comment, "WhiteCommand:");
-        else if (comment.startsWith("Size:"))
-            m_size = getCommentValue(comment, "Size:");
-        else if (comment.startsWith("Komi:"))
-            m_komi = getCommentValue(comment, "Komi:");
-        else if (comment.startsWith("Openings:"))
-            m_openings = getCommentValue(comment, "Openings:");
-        else if (comment.startsWith("Date:"))
-            m_date = getCommentValue(comment, "Date:");
-        else if (comment.startsWith("Host:"))
-            m_host = getCommentValue(comment, "Host:");
-    }
-
-    private void handleLine(String line) throws ErrorMessage
-    {
-        line = line.trim();
-        if (line.startsWith("#"))
-        {
-            handleComment(line.substring(1));
-            return;
-        }
-        String[] array = line.split("\\t");
-        if (array.length < 10 || array.length > 11)
-            throwErrorMessage("Wrong file format");
-        try
-        {
-            int gameIndex = Integer.parseInt(array[0]);
-            String resultBlack = array[1];
-            String resultWhite = array[2];
-            String resultReferee = array[3];
-            boolean alternated = (Integer.parseInt(array[4]) != 0);
-            String duplicate = array[5];
-            int length = Integer.parseInt(array[6]);
-            double cpuBlack = Double.parseDouble(array[7]);
-            double cpuWhite = Double.parseDouble(array[8]);
-            boolean error = (Integer.parseInt(array[9]) != 0);
-            String errorMessage = "";
-            if (array.length == 11)
-                errorMessage = array[10];
-            m_entries.add(new Entry(gameIndex, resultBlack, resultWhite,
-                                    resultReferee, alternated, duplicate,
-                                    length, cpuBlack, cpuWhite, error,
-                                    errorMessage));
-
-        }
-        catch (NumberFormatException e)
-        {
-            throwErrorMessage("Wrong file format");
         }
     }
 
@@ -253,22 +149,35 @@ public class Analyze
             statistics.m_histo.add(score);
     }
 
-    private void readFile(File file) throws Exception
+    private void readTable(File file) throws Exception
     {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        m_lineNumber = 0;
-        String line = null;
-        while ((line = reader.readLine()) != null)
+        m_table = new Table();
+        m_table.read(file);
+        try
         {
-            ++m_lineNumber;
-            handleLine(line);
+            for (int i = 0; i < m_table.getNumberRows(); ++i)
+            {            
+                int gameIndex = m_table.getInt("GAME", i);
+                String resultBlack = m_table.get("RES_B", i);
+                String resultWhite = m_table.get("RES_W", i);
+                String resultReferee = m_table.get("RES_R", i);
+                boolean alternated = (m_table.getInt("ALT", i) != 0);
+                String duplicate = m_table.get("DUP", i);
+                int length = m_table.getInt("LEN", i);
+                double cpuBlack = m_table.getDouble("CPU_B", i);
+                double cpuWhite = m_table.getDouble("CPU_W", i);
+                boolean error = (m_table.getInt("ERR", i) != 0);
+                String errorMessage = m_table.get("ERR_MSG", i);;
+                m_entries.add(new Entry(gameIndex, resultBlack, resultWhite,
+                                        resultReferee, alternated, duplicate,
+                                        length, cpuBlack, cpuWhite, error,
+                                        errorMessage));   
+            }
         }
-        reader.close();
-    }
-
-    private void throwErrorMessage(String message) throws ErrorMessage
-    {
-        throw new ErrorMessage("Line " + m_lineNumber + ": " + message);
+        catch (NumberFormatException e)
+        {
+            throw new ErrorMessage("Wrong file format");
+        }
     }
 
     private void writeHtml(File file) throws Exception
@@ -282,9 +191,11 @@ public class Analyze
         PrintStream out = new PrintStream(new FileOutputStream(file));
         NumberFormat format = StringUtil.getNumberFormat(1);
         String charset = StringUtil.getDefaultEncoding();
+        String black = m_table.getProperty("Black", "");
+        String white = m_table.getProperty("White", "");
         out.print("<html>\n" +
                   "<head>\n" +
-                  "<title>" + m_black + " - " + m_white + "</title>\n" +
+                  "<title>" + black + " - " + white + "</title>\n" +
                   "<meta http-equiv=\"Content-Type\""
                   + " content=\"text/html; charset=" + charset + "\">\n" +
                   "<meta name=\"generator\" content=\"TwoGtp "
@@ -295,25 +206,27 @@ public class Analyze
                   "<table border=\"0\" width=\"100%\" bgcolor=\""
                   + COLOR_HEADER + "\">\n" +
                   "<tr><td>\n" +
-                  "<h1>" + m_black + " - " + m_white + "</h1>\n" +
+                  "<h1>" + black + " - " + white + "</h1>\n" +
                   "</td></tr>\n" +
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + COLOR_INFO
                   + "\">\n");
-        writeHtmlRow(out, "Black", m_black);
-        writeHtmlRow(out, "White", m_white);
-        writeHtmlRow(out, "Size", m_size);
-        writeHtmlRow(out, "Komi", m_komi);
-        if (m_openings != null)
-            writeHtmlRow(out, "Openings", m_openings);
-        writeHtmlRow(out, "Date", m_date);
-        writeHtmlRow(out, "Host", m_host);
-        if (m_hasReferee)
-            writeHtmlRow(out, "Referee", m_referee);
-        writeHtmlRow(out, "Black command", m_blackCommand);
-        writeHtmlRow(out, "White command", m_whiteCommand);
-        if (m_hasReferee)
-            writeHtmlRow(out, "Referee command", m_refereeCommand);
+        String referee = m_table.getProperty("Referee", null);
+        if (referee.equals("-") || referee.equals(""))
+            referee = null;
+        writePropertyHtmlRow(out, "Black");
+        writePropertyHtmlRow(out, "White");
+        writePropertyHtmlRow(out, "Size");
+        writePropertyHtmlRow(out, "Komi");
+        if (m_table.hasProperty("Openings"))
+            writePropertyHtmlRow(out, "Openings");
+        writePropertyHtmlRow(out, "Date");
+        writePropertyHtmlRow(out, "Host");
+        writePropertyHtmlRow(out, "Referee");
+        writePropertyHtmlRow(out, "BlackCommand");
+        writePropertyHtmlRow(out, "WhiteCommand");
+        if (referee != null)
+            writePropertyHtmlRow(out, "RefereeCommand");
         writeHtmlRow(out, "Games", m_games);
         writeHtmlRow(out, "Errors", m_errors);
         writeHtmlRow(out, "Duplicates", m_duplicates);
@@ -323,23 +236,23 @@ public class Analyze
         writeHtmlRow(out, "CpuTime White", m_cpuWhite, format);
         out.print("</table>\n" +
                   "<hr>\n");
-        if (m_hasReferee)
+        if (referee != null)
         {
-            writeHtmlResults(out, m_referee, m_statisticsReferee);
+            writeHtmlResults(out, referee, m_statisticsReferee);
             out.println("<hr>");
         }
-        writeHtmlResults(out, m_black, m_statisticsBlack);
+        writeHtmlResults(out, black, m_statisticsBlack);
         out.println("<hr>");
-        writeHtmlResults(out, m_white, m_statisticsWhite);
+        writeHtmlResults(out, white, m_statisticsWhite);
         out.println("<hr>");
         out.print("<table border=\"0\">\n" +
                   "<thead>\n" +
                   "<tr bgcolor=\"" + COLOR_HEADER + "\">\n" +
                   "<th>Game</th>\n");
-        if (m_hasReferee)
-            out.print("<th>Result [" + m_referee + "]</th>\n");
-        out.print("<th>Result [" + m_black + "]</th>\n" +
-                  "<th>Result [" + m_white + "]</th>\n");
+        if (referee != null)
+            out.print("<th>Result [" + referee + "]</th>\n");
+        out.print("<th>Result [" + black + "]</th>\n" +
+                  "<th>Result [" + white + "]</th>\n");
         out.print("<th>Colors Exchanged</th>\n" +
                   "<th>Duplicate</th>\n" +
                   "<th>Length</th>\n" +
@@ -356,7 +269,7 @@ public class Analyze
             out.print("<tr align=\"center\" bgcolor=\"" + COLOR_INFO
                       + "\"><td><a href=\"" + name + "\">" + name
                       + "</a></td>\n");
-            if (m_hasReferee)
+            if (referee != null)
                 out.print("<td>" + e.m_resultReferee + "</td>");
             out.print("<td>" + e.m_resultBlack + "</td>" +
                       "<td>" + e.m_resultWhite + "</td>");
@@ -401,6 +314,13 @@ public class Analyze
                   "</table>\n" +
                   "</p>\n");
         statistics.m_histo.printHtml(out);
+    }
+
+    private void writePropertyHtmlRow(PrintStream out, String key)
+        throws Exception
+    {
+        String value = m_table.getProperty(key, "");
+        writeHtmlRow(out, key, value);
     }
 
     private void writeHtmlRow(PrintStream out, String label,
@@ -522,6 +442,8 @@ final class Entry
         m_cpuWhite = cpuWhite;
         m_error = error;
         m_errorMessage = errorMessage;
+        if (m_errorMessage == null)
+            m_errorMessage = "";
     }
 }
 
