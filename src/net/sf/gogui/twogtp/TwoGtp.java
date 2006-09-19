@@ -5,17 +5,12 @@
 
 package net.sf.gogui.twogtp;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.Reader;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import net.sf.gogui.game.GameInformation;

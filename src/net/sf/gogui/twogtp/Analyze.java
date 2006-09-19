@@ -5,10 +5,8 @@
 
 package net.sf.gogui.twogtp;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
