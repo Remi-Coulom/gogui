@@ -738,8 +738,6 @@ public class GoGui
                           "in setup mode");
                 return;
             }
-            if (m_analyzeDialog != null)
-                m_analyzeDialog.setRunButtonEnabled(true);
             m_analyzeCommand = null;
             setBoardCursorDefault();
         }
@@ -800,7 +798,6 @@ public class GoGui
             m_analyzeCommand.setPointArg(p);
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(p, true);
-            m_analyzeDialog.setRunButtonEnabled(true);
             analyzeBegin(false, false);
             return;
         }
@@ -922,14 +919,10 @@ public class GoGui
         {
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(m_analyzeCommand.getPointArg(), true);
-            if (m_analyzeDialog != null)
-                m_analyzeDialog.setRunButtonEnabled(true);
         }
         else if (needsPointArg || m_analyzeCommand.needsPointListArg())
         {
             m_guiBoard.clearAllSelect();
-            if (m_analyzeDialog != null)
-                m_analyzeDialog.setRunButtonEnabled(false);
             if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
                 GuiBoardUtil.setSelect(m_guiBoard,
                                         m_analyzeCommand.getPointListArg(),
