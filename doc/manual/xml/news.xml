@@ -16,6 +16,12 @@ Fix exception if program resigns on first move
 </listitem>
 <listitem>
 <simpara>
+Don't disable run button in analyze dialog anymore, it was not reliably
+enabled again in all cases
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other minor fixes
 </simpara>
 </listitem>

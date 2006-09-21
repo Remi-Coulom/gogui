@@ -180,11 +180,6 @@ public final class AnalyzeDialog
         reload();
     }
 
-    public void setRunButtonEnabled(boolean enabled)
-    {
-        m_runButton.setEnabled(enabled);
-    }
-
     public void setSelectedColor(GoColor color)
     {
         m_selectedColor = color;
