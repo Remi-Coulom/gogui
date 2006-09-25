@@ -538,6 +538,8 @@ public final class NodeUtil
             }
             appendInfo(buffer, "Labels", labelsBuffer.toString());
         }
+        if (node.getValue() != Float.NaN)
+            appendInfo(buffer, "Value", Float.toString(node.getValue()));
         Map sgfProperties = node.getSgfProperties();
         if (sgfProperties != null)
         {
