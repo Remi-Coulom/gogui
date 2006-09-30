@@ -18,6 +18,7 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Move;
 import net.sf.gogui.version.Version;
 
 //----------------------------------------------------------------------------
@@ -35,21 +36,44 @@ public class SgfReaderTest
         return new junit.framework.TestSuite(SgfReaderTest.class);
     }
 
-    public void testRead() throws Exception
-    {
-        readSgfFile("verbose-property-names.sgf", false, true);
-        checkTimeSettings("time-settings-1.sgf", 1800000, 60000, 5);
-    }
-
     public void testFF4Example() throws Exception
     {
         SgfReader reader = getReader("ff4_ex.sgf");
         checkFF4Example(reader);
     }
 
+    /** Test parsing of human-readable move encoding as used by SmartGo. */
+    public void testHumanReadable() throws Exception
+    {
+        SgfReader reader = getReader("human-readable.sgf");
+        GameTree gameTree = reader.getGameTree();
+        Node node = gameTree.getRoot();
+        assertNull(node.getMove());
+        node = node.getChild();
+        assertEquals(Move.get(16, 15, GoColor.BLACK), node.getMove());
+        node = node.getChild();
+        assertEquals(Move.get(3, 3, GoColor.WHITE), node.getMove());
+        node = node.getChild();
+        assertEquals(Move.get(2, 15, GoColor.BLACK), node.getMove());
+        node = node.getChild();
+        assertEquals(Move.get(15, 3, GoColor.WHITE), node.getMove());
+        node = node.getChild();
+        assertEquals(Move.get(16, 5, GoColor.BLACK), node.getMove());
+        node = node.getChild();
+        assertEquals(Move.get(null, GoColor.WHITE), node.getMove());
+        node = node.getChild();
+        assertNull(node);
+    }
+
     public void testInvalidMove() throws Exception
     {
         readSgfFile("invalidmove.sgf", true, false);
+    }
+
+    public void testRead() throws Exception
+    {
+        readSgfFile("verbose-property-names.sgf", false, true);
+        checkTimeSettings("time-settings-1.sgf", 1800000, 60000, 5);
     }
 
     /** Test FF4 example after writing and reading again.

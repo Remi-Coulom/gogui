@@ -486,14 +486,31 @@ public final class SgfReader
         return true;
     }
 
+    /** Parse point value.
+        @return Point or null, if pass move
+        @throw SgfError On invalid value
+    */
     private GoPoint parsePoint(String s) throws SgfError
     {
         s = s.trim().toLowerCase(Locale.ENGLISH);
         if (s.equals(""))
             return null;
-        if (s.length() != 2)
-            throw getError("Invalid coordinates: " + s);
         int boardSize = m_gameInformation.m_boardSize;
+        if (s.length() > 2
+            || (s.length() == 2 && s.charAt(1) < 'a' || s.charAt(1) > 'z'))
+        {
+            // Try human-readable encoding as used by SmartGo
+            try
+            {
+                return GoPoint.parsePoint(s, boardSize);
+            }
+            catch (GoPoint.InvalidPoint e)
+            {
+                throwInvalidCoordinates(s);
+            }
+        }
+        else if (s.length() != 2)
+            throwInvalidCoordinates(s);
         if (s.equals("tt") && boardSize <= 19)
             return null;
         int x = s.charAt(0) - 'a';
@@ -502,10 +519,11 @@ public final class SgfReader
         {
             if (x == boardSize && y == -1)
             {
+                // Some programs encode pass moves, e.g. as jj for boardsize 9
                 setWarning("Non-standard pass move encoding");
                 return null;
             }
-            throw getError("Invalid coordinates: " + s);
+            throwInvalidCoordinates(s);
         }
         return GoPoint.get(x, y);
     }
@@ -1014,6 +1032,11 @@ public final class SgfReader
     private void setWarning(String message)
     {
         m_warnings.add(message);
+    }
+
+    private void throwInvalidCoordinates(String s) throws SgfError
+    {
+        throw getError("Invalid coordinates: '" + s + "'");
     }
 }
 
