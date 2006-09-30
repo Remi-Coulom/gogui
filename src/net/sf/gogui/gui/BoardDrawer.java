@@ -53,17 +53,15 @@ public class BoardDrawer
         assert(m_size <= GoPoint.MAXSIZE);
         if (showGrid)
         {
-            m_fieldSize = width / (m_size + 2);
-            m_fieldOffset =
-                (width - (m_size + 2) * m_fieldSize) / 2
-                + m_fieldSize;
+            // Minimum border 3/5 field size
+            m_fieldSize = (5 * width / 3) / (5 * m_size / 3 + 2);
         }
         else
         {
             // Minimum border 1/5 field size
             m_fieldSize = (5 * width) / (5 * m_size + 2);
-            m_fieldOffset = (width - m_size * m_fieldSize) / 2;
         }
+        m_fieldOffset = (width - m_size * m_fieldSize) / 2;
         drawBackground(graphics);
         drawGrid(graphics);
         if (showGrid)
@@ -187,12 +185,18 @@ public class BoardDrawer
         int stringWidth = graphics.getFontMetrics().stringWidth("XX");
         if (m_fieldSize < stringWidth)
             return;
-        char c = 'A';
+        int offset = (m_fieldSize + m_fieldOffset) / 2;
+        Point point;
+        char c = 'A';        
         for (int x = 0; x < m_size; ++x)
         {
             String string = Character.toString(c);
-            drawLabel(graphics, getLocation(x, -1), string);
-            drawLabel(graphics, getLocation(x, m_size), string);
+            point = getLocation(x, 0);
+            point.y += offset;
+            drawLabel(graphics, point, string);
+            point = getLocation(x, m_size - 1);
+            point.y -= offset;
+            drawLabel(graphics, point, string);
             ++c;
             if (c == 'I')
                 ++c;
@@ -200,8 +204,12 @@ public class BoardDrawer
         for (int y = 0; y < m_size; ++y)
         {
             String string = Integer.toString(y + 1);
-            drawLabel(graphics, getLocation(-1, y), string);
-            drawLabel(graphics, getLocation(m_size, y), string);
+            point = getLocation(0, y);
+            point.x -= offset;
+            drawLabel(graphics, point, string);
+            point = getLocation(m_size - 1, y);
+            point.x += offset;
+            drawLabel(graphics, point, string);
         }
     }
 
