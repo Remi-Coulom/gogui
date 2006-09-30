@@ -75,7 +75,7 @@ public class ParameterDialog
         {
             m_key = key;
             m_value = value;
-            m_label = key.replace('_', ' ');
+            m_label = StringUtils.capitalize(key.replace('_', ' '));
         }
 
         public String getKey()
@@ -217,6 +217,15 @@ public class ParameterDialog
             {
                 type = string;
                 line = line.replaceFirst("\\[string\\]", "").trim();
+            }
+            else if (line.startsWith("["))
+            {
+                // Treat unknown types as string for compatibiliy with future
+                // types
+                type = string;
+                int pos = line.indexOf(']');
+                if (pos >= 0)
+                    line = line.substring(pos + 1).trim();                
             }
             int pos = line.indexOf(' ');
             if (pos < 0)
