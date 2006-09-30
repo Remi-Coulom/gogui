@@ -173,14 +173,14 @@ public final class RecentMenu
 
     public void put()
     {
-        Preferences prefs = PrefUtil.getNode(m_path);
+        Preferences prefs = PrefUtil.createNode(m_path);
         if (prefs == null)
             return;
         int size = getCount();
         prefs.putInt("size", size);
         for (int i = 0; i < size; ++i)
         {
-            prefs = PrefUtil.getNode(m_path + "/" + (size - i - 1));
+            prefs = PrefUtil.createNode(m_path + "/" + (size - i - 1));
             if (prefs == null)
                 break;
             prefs.put("label", getLabel(i));
