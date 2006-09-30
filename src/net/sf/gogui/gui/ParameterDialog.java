@@ -75,7 +75,7 @@ public class ParameterDialog
         {
             m_key = key;
             m_value = value;
-            m_label = key.replace('_', ' ');
+            m_label = StringUtil.capitalize(key.replace('_', ' '));
         }
 
         public String getKey()
