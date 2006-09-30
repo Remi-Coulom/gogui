@@ -121,6 +121,8 @@ public class BoardDrawer
 
     private BoardConstants m_constants;
 
+    private final Color m_gridLabelColor = new Color(96, 96, 96);
+
     private final Image m_image;
 
     private void drawFields(Graphics graphics, GuiField field[][])
@@ -180,7 +182,7 @@ public class BoardDrawer
 
     private void drawGridLabels(Graphics graphics)
     {
-        graphics.setColor(Color.darkGray);
+        graphics.setColor(m_gridLabelColor);
         graphics.setFont(UIManager.getFont("Label.font"));
         int stringWidth = graphics.getFontMetrics().stringWidth("XX");
         if (m_fieldSize < stringWidth)
