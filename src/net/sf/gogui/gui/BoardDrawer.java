@@ -22,9 +22,9 @@ import net.sf.gogui.go.BoardConstants;
 //----------------------------------------------------------------------------
 
 /** Draws a board. */
-public class GuiBoardDrawer
+public class BoardDrawer
 {
-    public GuiBoardDrawer(boolean fastPaint)
+    public BoardDrawer(boolean fastPaint)
     {
         m_fastPaint = fastPaint;
         ClassLoader classLoader = getClass().getClassLoader();

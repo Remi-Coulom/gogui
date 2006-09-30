@@ -35,7 +35,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gui.GuiField;
-import net.sf.gogui.gui.GuiBoardDrawer;
+import net.sf.gogui.gui.BoardDrawer;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.FileUtil;
@@ -53,7 +53,7 @@ public final class Thumbnail
     public Thumbnail(boolean verbose)
     {
         m_verbose = verbose;
-        m_drawer = new GuiBoardDrawer(false);
+        m_drawer = new BoardDrawer(false);
     }
 
     public static boolean checkThumbnailSupport()
@@ -193,7 +193,7 @@ public final class Thumbnail
 
     private File m_lastThumbnail;
 
-    private final GuiBoardDrawer m_drawer;
+    private final BoardDrawer m_drawer;
 
     private BufferedImage createImage(int width, int height)
     {

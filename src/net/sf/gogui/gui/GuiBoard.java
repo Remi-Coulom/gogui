@@ -70,7 +70,7 @@ public final class GuiBoard
     */
     public GuiBoard(int size, boolean fastPaint)
     {
-        m_drawer = new GuiBoardDrawer(fastPaint);
+        m_drawer = new BoardDrawer(fastPaint);
         setPreferredFieldSize();
         initSize(size);
     }
@@ -761,7 +761,7 @@ public final class GuiBoard
 
     private GoPoint m_lastMove;
 
-    private GuiBoardDrawer m_drawer;
+    private BoardDrawer m_drawer;
 
     private GuiField m_field[][];
 
