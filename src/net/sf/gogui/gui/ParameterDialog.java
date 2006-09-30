@@ -50,9 +50,11 @@ public class ParameterDialog
             Parameter parameter = (Parameter)parameters.get(i);
             if (! parameter.isChanged())
                 continue;
-            String command =
-                paramCommand + " " + parameter.getKey() + " "
-                + parameter.getNewValue();
+            String key = parameter.getKey();
+            String newValue = parameter.getNewValue();
+            if (newValue.equals("") || newValue.indexOf(' ') >= 0)
+                newValue = "\"" + newValue + "\"";
+            String command = paramCommand + " " + key + " " + newValue;
             try
             {
                 gtp.send(command);
