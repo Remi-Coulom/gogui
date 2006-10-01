@@ -3015,7 +3015,7 @@ public class GoGui
             m_comment.setPreferredSize(preferredCommentSize);
             m_splitPane.resetToPreferredSizes();
             pack();
-        }
+            }
     }
 
     private void restoreSize(Window window, String name)
