@@ -7,6 +7,7 @@ package net.sf.gogui.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -51,16 +52,13 @@ public class BoardDrawer
         if (m_constants == null || m_constants.getSize() != m_size)
             m_constants = new BoardConstants(m_size);
         assert(m_size <= GoPoint.MAXSIZE);
+        double borderSize;
         if (showGrid)
-        {
-            // Minimum border 3/5 field size
-            m_fieldSize = (5 * width / 3) / (5 * m_size / 3 + 2);
-        }
+            borderSize = BORDER_SIZE;
         else
-        {
-            // Minimum border 1/5 field size
-            m_fieldSize = (5 * width) / (5 * m_size + 2);
-        }
+            borderSize = BORDER_SIZE_NOGRID;
+        m_fieldSize =
+            Math.round((float)Math.floor(width / (m_size + 2 * borderSize)));
         m_fieldOffset = (width - m_size * m_fieldSize) / 2;
         drawBackground(graphics);
         drawGrid(graphics);
@@ -101,10 +99,37 @@ public class BoardDrawer
         return null;
     }
 
+    /** Get preferred board size given a preferred field size.
+        The drawer can draw any board size. The border has a variable size
+        to ensure that all fields have exactly the same size (in pixels).
+        If a preferred field size is known (e.g. from a different board size,
+        or from the last settings), then using the board size returned by this
+        function will draw the board such that the field size is exactly the
+        preferred one.
+    */
+    public static Dimension getPreferredSize(int preferredFieldSize,
+                                             int boardSize, boolean showGrid)
+    {
+        double borderSize;
+        if (showGrid)
+            borderSize = BORDER_SIZE * preferredFieldSize;
+        else
+            borderSize = BORDER_SIZE_NOGRID * preferredFieldSize;
+        int preferredSize = (preferredFieldSize * boardSize
+                             + 2 * Math.round((float)Math.ceil(borderSize)));
+        return new Dimension(preferredSize, preferredSize);
+    }
+
     public int getShadowOffset()
     {
         return (m_fieldSize  - 2 * GuiField.getStoneMargin(m_fieldSize)) / 12;
     }
+
+    /** Preferred border size (in fraction of field size) if grid is drawn. */
+    private static final double BORDER_SIZE = 0.6;
+
+    /** Preferred border size (in fraction of field size) if grid is drawn. */
+    private static final double BORDER_SIZE_NOGRID = 0.2;
 
     private final boolean m_fastPaint;
 

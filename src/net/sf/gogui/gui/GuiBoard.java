@@ -709,20 +709,9 @@ public final class GuiBoard
         public void setPreferredFieldSize()
         {
             int preferredFieldSize = getPreferredFieldSize().width;
-            int preferredSize;
-            int minimumSize;
-            if (m_showGrid)
-            {
-                preferredSize = preferredFieldSize * (m_size + 2);
-                minimumSize = 4 * (m_size + 2);
-            }
-            else
-            {
-                preferredSize =
-                    preferredFieldSize * m_size + preferredFieldSize / 2;
-                minimumSize = 4 * m_size + 2;
-            }
-            setPreferredSize(new Dimension(preferredSize, preferredSize));
+            setPreferredSize(BoardDrawer.getPreferredSize(preferredFieldSize,
+                                                          m_size, m_showGrid));
+            int minimumSize = 4 * m_size + 2;
             setMinimumSize(new Dimension(minimumSize, minimumSize));
         }
 
