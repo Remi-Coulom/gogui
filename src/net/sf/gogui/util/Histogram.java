@@ -57,7 +57,7 @@ public class Histogram
     public void printHtml(PrintStream out)
     {
         out.print("<p>\n" +
-                  "<table cellspacing=\"1\" cellpadding=\"0\""
+                  "<table border=\"0\" cellspacing=\"1\" cellpadding=\"0\""
                   + " rules=\"groups\">\n");
         int min;
         for (min = 0; min < m_size - 1 && m_array[min] == 0; ++min)
@@ -73,7 +73,8 @@ public class Histogram
                 out.print("<tbody>\n");
             out.print("<tr><td align=\"right\"><small>" + getValue(i)
                       + "</small></td><td><table cellspacing=\"0\"" +
-                      " cellpadding=\"0\" width=\"" + scale + "\"><tr>" +
+                      " cellpadding=\"0\" border=\"0\" width=\"" + scale
+                      + "\"><tr>" +
                       "<td bgcolor=\"#666666\" width=\"" + width +
                       "\"></td>" + "<td bgcolor=\"#cccccc\" width=\""
                       + (scale - width) + "\"><small>"
