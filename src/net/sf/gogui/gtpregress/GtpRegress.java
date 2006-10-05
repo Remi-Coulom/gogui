@@ -635,6 +635,20 @@ public class GtpRegress
         }
     }
 
+    private String getTimeString(double seconds)
+    {
+        NumberFormat format1 = StringUtil.getNumberFormat(1);
+        StringBuffer buffer = new StringBuffer(16);
+        buffer.append(format1.format(seconds));
+        if (seconds > 60)
+        {
+            buffer.append(" [");
+            buffer.append(StringUtil.formatTime((long)seconds));
+            buffer.append(']');
+        }
+        return buffer.toString();
+    }
+
     private TestSummary getTotalSummary()
     {
         TestSummary total = new TestSummary();
@@ -852,7 +866,6 @@ public class GtpRegress
                           + "\">" + file + "</a></td>");
         }
         double time = ((double)summary.m_timeMillis) / 1000F;
-        NumberFormat format = StringUtil.getNumberFormat(1);
         String colorAttrUnexpectedFails = "";
         if (summary.m_unexpectedFails > 0)
             colorAttrUnexpectedFails = " bgcolor=\"" + COLOR_RED + "\"";
@@ -871,8 +884,8 @@ public class GtpRegress
                   "<td>" + summary.m_expectedPasses + "</td>\n" +
                   "<td" + colorAttrOtherErrors + ">\n"
                   + summary.m_otherErrors + "</td>\n" +
-                  "<td>" + format.format(time) + "</td>\n" +
-                  "<td>" + format.format(summary.m_cpuTime) + "</td>\n" +
+                  "<td>" + getTimeString(time) + "</td>\n" +
+                  "<td>" + getTimeString(summary.m_cpuTime) + "</td>\n" +
                   "</tr>\n");
         if (foot)
             out.print("</tfoot>\n");
