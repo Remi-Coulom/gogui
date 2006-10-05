@@ -513,6 +513,7 @@ public class GtpRegress
                     + Version.get() + "\">\n" +
                     "<style type=\"text/css\">\n" +
                     "<!--\n" +
+                    "body { margin:0; }\n" +
                     "span.comment { color:#999999; }\n" +
                     "span.fail { font-weight:bold; color:" + COLOR_RED
                     + "; }\n" +
@@ -529,7 +530,7 @@ public class GtpRegress
                     "<body bgcolor=\"white\" text=\"black\"" +
                     " link=\"#0000ee\" vlink=\"#551a8b\">\n" +
                     "<table border=\"0\" width=\"100%\" bgcolor=\""
-                    + COLOR_HEADER + "\">\n" +
+                    + COLOR_HEADER + "\" border=\"0\">\n" +
                     "<tr><td>\n" +
                     "<h1>Output: " + m_testFile + "</h1>\n" +
                     "</td></tr>\n" +
@@ -538,7 +539,7 @@ public class GtpRegress
                     + "\">\n");
         writeInfo(m_out, false);
         m_out.print("</table>\n" +
-                    "<pre>\n");
+                    "<pre style=\"margin:1em\">\n");
     }
 
     private synchronized void printOut(String style, String line, int id)
@@ -597,8 +598,8 @@ public class GtpRegress
         if (m_currentStyle != null)
             m_out.print("</span>");
         m_out.println("</pre>\n" +
-                      "<hr>\n" +
-                      "<pre>");
+                      "<hr style=\"margin:1em\">\n" +
+                      "<pre style=\"margin:1em\">");
     }
 
     private synchronized void printOutLine(String style, String line)
@@ -793,6 +794,11 @@ public class GtpRegress
                   "<title>Regression Test Summary</title>\n" +
                   "<meta name=\"generator\" content=\"GtpRegress "
                   + Version.get() + "\">\n" +
+                  "<style type=\"text/css\">\n" +
+                  "<!--\n" +
+                  "body { margin:0; }\n" +
+                  "-->\n" +
+                  "</style>\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
@@ -806,7 +812,8 @@ public class GtpRegress
                   + "\">\n");
         writeInfo(out, true);
         out.print("</table>\n" +
-                  "<table width=\"100%\">\n" +
+                  "<table width=\"100%\" border=\"0\" cellpadding=\"0\""
+                  + "cellspacing=\"1\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"20%\">\n" +
                   "<col width=\"10%\">\n" +
@@ -913,6 +920,11 @@ public class GtpRegress
                   "<title>Summary: " + m_testFile + "</title>\n" +
                   "<meta name=\"generator\" content=\"GtpRegress "
                   + Version.get() + "\">\n" +
+                  "<style type=\"text/css\">\n" +
+                  "<!--\n" +
+                  "body { margin:0; }\n" +
+                  "-->\n" +
+                  "</style>\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"blue\""
                   + " vlink=\"purple\" alink=\"red\">\n" +
@@ -929,7 +941,8 @@ public class GtpRegress
                   + m_outFileRelativeName + "\">"
                   + m_outFileRelativeName + "</a></td></tr>\n" +
                   "</table>\n" +
-                  "<table width=\"100%\">\n" +
+                  "<table width=\"100%\" border=\"0\" cellpadding=\"0\""
+                  + " cellspacing=\"1\">\n" +
                   "<colgroup>\n" +
                   "<col width=\"12%\">\n" +
                   "<col width=\"12%\">\n" +
@@ -954,7 +967,8 @@ public class GtpRegress
                   "</thead>\n");
         writeSummaryRow(out, summary, false, false);
         out.print("</table>\n" +
-                  "<table width=\"100%\">\n" +
+                  "<table width=\"100%\" border=\"0\" cellpadding=\"0\""
+                  + " cellspacing=\"1\">\n" +
                   "<thead>\n" +
                   "<tr bgcolor=\"" + COLOR_HEADER + "\">\n" +
                   "<th>ID</th>\n" +
