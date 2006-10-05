@@ -8,6 +8,7 @@ package net.sf.gogui.gui;
 import java.util.Date;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.util.StringUtil;
 
 //----------------------------------------------------------------------------
 
@@ -74,44 +75,7 @@ public final class Clock
     public static String getTimeString(double timeLeft, int movesLeft)
     {
         StringBuffer buffer = new StringBuffer(8);
-        long time = (long)timeLeft;
-        if (time < 0)
-        {
-            buffer.append('-');
-            time *= -1;
-        }
-        long hours = time / 3600;
-        time %= 3600;
-        long minutes = time / 60;
-        time %= 60;
-        long seconds = time;
-        if (hours > 0)
-        {
-            if (hours > 9999)
-                // Extremely large numbers are like a problem in
-                // Date.getTime(), as it can happen when running in the
-                // netbeans profiler, and we don't want extremly long time
-                // strings to change the layout of the time label
-                buffer.append(">9999");
-            else
-                buffer.append(hours);
-            buffer.append(':');
-        }
-        if (minutes >= 10)
-            buffer.append(minutes);
-        else
-        {
-            buffer.append('0');
-            buffer.append(minutes);
-        }
-        buffer.append(':');
-        if (seconds >= 10)
-            buffer.append(seconds);
-        else
-        {
-            buffer.append('0');
-            buffer.append(seconds);
-        }
+        buffer.append(StringUtil.formatTime((long)timeLeft));
         if (movesLeft >= 0)
         {
             buffer.append('/');
