@@ -32,6 +32,49 @@ public final class StringUtil
         return buffer.toString();
     }
 
+    /** Format elapsed time as [[h+]:[mm]]:ss */
+    public static String formatTime(long seconds)
+    {
+        StringBuffer buffer = new StringBuffer(8);
+        if (seconds < 0)
+        {
+            buffer.append('-');
+            seconds *= -1;
+        }
+        long hours = seconds / 3600;
+        seconds %= 3600;
+        long minutes = seconds / 60;
+        seconds %= 60;
+        if (hours > 0)
+        {
+            if (hours > 9999)
+                // Extremely large numbers are like a problem in
+                // Date.getTime(), as it can happen when running in the
+                // netbeans profiler, and we don't want extremly long time
+                // strings to change the layout of the time label
+                buffer.append(">9999");
+            else
+                buffer.append(hours);
+            buffer.append(':');
+        }
+        if (minutes >= 10)
+            buffer.append(minutes);
+        else
+        {
+            buffer.append('0');
+            buffer.append(minutes);
+        }
+        buffer.append(':');
+        if (seconds >= 10)
+            buffer.append(seconds);
+        else
+        {
+            buffer.append('0');
+            buffer.append(seconds);
+        }
+        return buffer.toString();
+    }
+
     public static String getDate()
     {
         DateFormat format = DateFormat.getDateTimeInstance(DateFormat.LONG,
