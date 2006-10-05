@@ -919,7 +919,7 @@ public class GtpRegress
                   "<head>\n" +
                   "<title>Summary: " + m_testFile + "</title>\n" +
                   "<meta name=\"generator\" content=\"GtpRegress "
-                  + Version.get() + "\">\n" +
+                  + Version.get() + " (http://gogui.sf.net)\">\n" +
                   "<style type=\"text/css\">\n" +
                   "<!--\n" +
                   "body { margin:0; }\n" +

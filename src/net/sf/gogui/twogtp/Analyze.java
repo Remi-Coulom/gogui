@@ -197,14 +197,20 @@ public class Analyze
                   "<meta http-equiv=\"Content-Type\""
                   + " content=\"text/html; charset=" + charset + "\">\n" +
                   "<meta name=\"generator\" content=\"TwoGtp "
-                  + Version.get() + "\">\n" +
+                  + Version.get() + " (http://gogui.sf.net)\">\n" +
+                    "<style type=\"text/css\">\n" +
+                    "<!--\n" +
+                    "body { margin:0; }\n" +
+                    "-->\n" +
+                    "</style>\n" +
                   "</head>\n" +
                   "<body bgcolor=\"white\" text=\"black\" link=\"#0000ee\"" +
                   " vlink=\"#551a8b\">\n" +
                   "<table border=\"0\" width=\"100%\" bgcolor=\""
                   + COLOR_HEADER + "\">\n" +
                   "<tr><td>\n" +
-                  "<h1>" + black + " - " + white + "</h1>\n" +
+                  "<h1>" + black + " - " + white
+                  + "</h1>\n" +
                   "</td></tr>\n" +
                   "</table>\n" +
                   "<table width=\"100%\" bgcolor=\"" + COLOR_INFO
@@ -243,7 +249,8 @@ public class Analyze
         out.println("<hr>");
         writeHtmlResults(out, white, m_statisticsWhite);
         out.println("<hr>");
-        out.print("<table border=\"0\">\n" +
+        out.print("<table border=\"0\" width=\"100%\" cellpadding=\"0\""
+                  + " cellspacing=\"1\">\n" +
                   "<thead>\n" +
                   "<tr bgcolor=\"" + COLOR_HEADER + "\">\n" +
                   "<th>Game</th>\n");
@@ -281,11 +288,6 @@ public class Analyze
                       "</tr>\n");
         }
         out.print("</table>\n" +
-                  "<hr>\n" +
-                  "<address><small>Generated on " + StringUtil.getDateShort()
-                  + " by TwoGtp " + Version.get()
-                  + " (<a href=\"http://gogui.sf.net\">"
-                  + "http://gogui.sf.net</a>)</small></address>\n" +
                   "</body>\n" +
                   "</html>\n");
         out.close();
@@ -296,7 +298,8 @@ public class Analyze
         throws Exception
     {
         NumberFormat format = StringUtil.getNumberFormat(1);
-        out.print("<h2>Result [" + name + "]</h2>\n" +
+        out.print("<div style=\"margin:1em\">\n" +
+                  "<h2>Result [" + name + "]</h2>\n" +
                   "<p>\n" +
                   "<table border=\"0\">\n");
         writeHtmlRow(out, "Black score", statistics.m_histo, format);
@@ -312,6 +315,7 @@ public class Analyze
                   "</table>\n" +
                   "</p>\n");
         statistics.m_histo.printHtml(out);
+        out.print("</div>\n");
     }
 
     private void writePropertyHtmlRow(PrintStream out, String key)
