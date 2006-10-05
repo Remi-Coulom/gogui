@@ -642,9 +642,9 @@ public class GtpRegress
         buffer.append(format1.format(seconds));
         if (seconds > 60)
         {
-            buffer.append(" [");
+            buffer.append("  (");
             buffer.append(StringUtil.formatTime((long)seconds));
-            buffer.append(']');
+            buffer.append(')');
         }
         return buffer.toString();
     }
