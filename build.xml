@@ -3,7 +3,7 @@
 Build file for Apache Ant (http://ant.apache.org/)
 
 $Id$
-$Source$
+$URL$
 -->
 
 <project name="GoGui" default="all">
