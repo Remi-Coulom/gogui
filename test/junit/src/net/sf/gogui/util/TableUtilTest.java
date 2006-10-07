@@ -19,7 +19,7 @@ public class TableUtilTest
         return new junit.framework.TestSuite(TableUtilTest.class);
     }
 
-    public void testAllEmpty()
+    public void testAllEmpty() throws ErrorMessage
     {
         ArrayList columnTitles = new ArrayList();
         columnTitles.add("column1");
@@ -33,7 +33,7 @@ public class TableUtilTest
         assertFalse(TableUtil.allEmpty(table, "column2"));
     }
 
-    public void testAppendRow()
+    public void testAppendRow() throws ErrorMessage
     {
         ArrayList columnTitles = new ArrayList();
         columnTitles.add("column1");
