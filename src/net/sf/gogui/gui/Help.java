@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -27,8 +26,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import net.sf.gogui.util.Platform;
 
-//----------------------------------------------------------------------------
-
 class AntialiasingEditorPane
     extends JEditorPane
 {
@@ -43,8 +40,6 @@ class AntialiasingEditorPane
     */
     private static final long serialVersionUID = 0L; // SUID
 }
-
-//----------------------------------------------------------------------------
 
 /** Dialog for displaying help in HTML format. */
 public class Help
@@ -235,4 +230,3 @@ public class Help
     }
 }
 
-//----------------------------------------------------------------------------

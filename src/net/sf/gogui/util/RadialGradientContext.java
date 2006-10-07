@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -11,8 +10,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.ColorModel;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
- 
-//----------------------------------------------------------------------------
 
 /** Creates a raster with a radial color gradient. */
 public class RadialGradientContext
@@ -100,4 +97,3 @@ public class RadialGradientContext
     private WritableRaster m_raster;
 }
 
-//----------------------------------------------------------------------------

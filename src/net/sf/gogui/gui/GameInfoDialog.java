@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -17,8 +16,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.TimeSettings;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for editing game settings and other information. */
 public final class GameInfoDialog
@@ -302,4 +299,3 @@ public final class GameInfoDialog
     }
 }
 
-//----------------------------------------------------------------------------

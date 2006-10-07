@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -35,8 +34,6 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.ProgressShow;
-
-//----------------------------------------------------------------------------
 
 /** GUI utility classes and static functions. */
 public class GuiUtil
@@ -369,4 +366,3 @@ public class GuiUtil
     private static URL s_iconURL;
 }
 
-//----------------------------------------------------------------------------

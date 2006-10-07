@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpadapter;
@@ -13,8 +12,6 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** GtpAdapter main function. */
 public final class Main
@@ -142,4 +139,3 @@ public final class Main
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpdisplay;
@@ -11,8 +10,6 @@ import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** GtpDisplay main function. */
 public final class Main
@@ -85,4 +82,3 @@ public final class Main
     }
 }
 
-//----------------------------------------------------------------------------

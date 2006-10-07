@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -9,8 +8,6 @@ import java.awt.Component;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 import net.sf.gogui.gui.SimpleDialogs;
-
-//----------------------------------------------------------------------------
 
 /** Print a printable. */
 public final class Print
@@ -38,4 +35,3 @@ public final class Print
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
@@ -9,8 +8,6 @@ import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-
-//----------------------------------------------------------------------------
 
 public class NodeUtilTest
     extends junit.framework.TestCase
@@ -330,4 +327,3 @@ public class NodeUtilTest
     private Node m_node11;
 }
 
-//----------------------------------------------------------------------------

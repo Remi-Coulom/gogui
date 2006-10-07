@@ -1,11 +1,8 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.tex;
-
-//----------------------------------------------------------------------------
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -19,8 +16,6 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-
-//----------------------------------------------------------------------------
 
 /** Write a game or board position in PSGO style to a stream. */
 public class TexWriter
@@ -290,4 +285,3 @@ public class TexWriter
     }
 }
 
-//----------------------------------------------------------------------------

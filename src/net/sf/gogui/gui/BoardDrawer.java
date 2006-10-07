@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -19,8 +18,6 @@ import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
-
-//----------------------------------------------------------------------------
 
 /** Draws a board. */
 public class BoardDrawer
@@ -287,4 +284,3 @@ public class BoardDrawer
     }
 }
 
-//----------------------------------------------------------------------------

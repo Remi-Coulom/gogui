@@ -1,13 +1,10 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
 
 import net.sf.gogui.util.ErrorMessage;
-
-//----------------------------------------------------------------------------
 
 /** Time settings.
     Time settings consist of a base time for the game and an optional
@@ -152,4 +149,3 @@ public final class TimeSettings
     private final int m_byoyomiMoves;
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -11,8 +10,6 @@ import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.gui.SimpleDialogs;
-
-//----------------------------------------------------------------------------
 
 /** Ask for a variation. */
 public final class GotoVariationDialog
@@ -37,4 +34,3 @@ public final class GotoVariationDialog
     }
 }
 
-//----------------------------------------------------------------------------

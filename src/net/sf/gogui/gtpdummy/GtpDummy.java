@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpdummy;
@@ -14,8 +13,6 @@ import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** Dummy Go program for testing GTP controlling programs.
     See the GtpDummy documentation for information about the extension
@@ -388,4 +385,3 @@ public class GtpDummy
     }
 }
 
-//----------------------------------------------------------------------------

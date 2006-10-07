@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
@@ -9,8 +8,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-
-//----------------------------------------------------------------------------
 
 /** In-process GTP client connection to a GtpEngine.
     For accessing an in-process GtpEngine as a GtpClient for testing purposes.
@@ -64,4 +61,3 @@ public class GtpEngineConnection
     private GtpEngine m_engine;
 }
 
-//----------------------------------------------------------------------------

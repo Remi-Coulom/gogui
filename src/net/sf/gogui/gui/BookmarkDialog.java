@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -15,8 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for displaying and editing a bookmark. */
 public class BookmarkDialog
@@ -138,4 +135,3 @@ public class BookmarkDialog
     }
 }
 
-//----------------------------------------------------------------------------

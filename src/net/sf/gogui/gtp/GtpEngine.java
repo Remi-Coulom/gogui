@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
@@ -16,8 +15,6 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Base class for Go programs and tools implementing GTP. */
 public abstract class GtpEngine
@@ -273,8 +270,6 @@ public abstract class GtpEngine
     private PrintStream m_out;
 }
 
-//----------------------------------------------------------------------------
-
 /** Thread reading the command stream.
     Reading is done in a seperate thread to allow the notification
     of GtpServer about an asynchronous interrupt received using
@@ -379,4 +374,3 @@ class ReadThread
     private final GtpEngine m_gtpServer;
 }
 
-//----------------------------------------------------------------------------

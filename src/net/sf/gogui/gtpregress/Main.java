@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpregress;
@@ -10,8 +9,6 @@ import java.util.ArrayList;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** GtpRegress main function. */
 public final class Main
@@ -82,5 +79,4 @@ public final class Main
                   "-version      Display this help and exit\n");
     }
 }
-    
-//----------------------------------------------------------------------------
+

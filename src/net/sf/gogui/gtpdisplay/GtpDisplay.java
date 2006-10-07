@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpdisplay;
@@ -28,8 +27,6 @@ import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
-
-//----------------------------------------------------------------------------
 
 /** GTP adapter showing the current board in a window. */
 public class GtpDisplay
@@ -522,4 +519,3 @@ public class GtpDisplay
     }
 }
 
-//----------------------------------------------------------------------------

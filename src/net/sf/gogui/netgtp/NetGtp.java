@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.netgtp;
@@ -16,8 +15,6 @@ import java.io.PrintStream;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Connects to a remote Go program supporting GTP. */
 public final class NetGtp
@@ -128,8 +125,6 @@ public final class NetGtp
         out.print(text);
     }
 }
-    
-//----------------------------------------------------------------------------
 
 class SocketOutputCopy
     extends Thread
@@ -167,4 +162,3 @@ class SocketOutputCopy
     private final Socket m_socket;
 };
 
-//----------------------------------------------------------------------------

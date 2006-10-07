@@ -1,13 +1,10 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
 
 import java.io.StringReader;
-
-//----------------------------------------------------------------------------
 
 public class TableTest
     extends junit.framework.TestCase
@@ -47,3 +44,4 @@ public class TableTest
         return table;
     }
 }
+

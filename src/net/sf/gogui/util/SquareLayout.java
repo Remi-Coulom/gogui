@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -10,8 +9,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.LayoutManager;
-
-//----------------------------------------------------------------------------
 
 /** Layout manager for 1:1 aspect ratio.
     Expects that the container to layout has only a single child component.
@@ -81,4 +78,3 @@ public class SquareLayout
     }
 }
 
-//----------------------------------------------------------------------------

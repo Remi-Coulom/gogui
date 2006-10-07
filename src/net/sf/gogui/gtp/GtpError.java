@@ -1,13 +1,10 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
 
 import net.sf.gogui.util.ErrorMessage;
-
-//----------------------------------------------------------------------------
 
 /** Exception indication the failure of a GTP command. */
 public class GtpError
@@ -22,6 +19,5 @@ public class GtpError
         Contains a marker comment for use with serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-}    
+}
 
-//----------------------------------------------------------------------------

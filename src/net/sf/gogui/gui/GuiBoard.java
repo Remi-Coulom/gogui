@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -28,8 +27,6 @@ import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.SquareLayout;
-
-//----------------------------------------------------------------------------
 
 /** Graphical display of a Go board.
     This class does not use go.Board, so it can be used with other board
@@ -891,4 +888,3 @@ public final class GuiBoard
     }
 }
 
-//----------------------------------------------------------------------------

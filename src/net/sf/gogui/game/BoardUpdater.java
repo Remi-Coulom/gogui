@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
@@ -9,8 +8,6 @@ import java.util.ArrayList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
-
-//----------------------------------------------------------------------------
 
 /** Updates a go.Board to a node in a GameTree. */
 public class BoardUpdater
@@ -51,4 +48,3 @@ public class BoardUpdater
     private ArrayList m_nodes;
 }
 
-//----------------------------------------------------------------------------

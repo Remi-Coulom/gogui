@@ -1,14 +1,11 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-
-//----------------------------------------------------------------------------
 
 /** Thread copying the output of one stream to another stream. */
 public class StreamCopy
@@ -66,4 +63,3 @@ public class StreamCopy
     private final OutputStream m_dest;
 };
 
-//----------------------------------------------------------------------------

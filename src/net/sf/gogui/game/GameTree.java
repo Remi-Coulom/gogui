@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
@@ -10,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-
-//----------------------------------------------------------------------------
 
 /** Game tree. */
 public class GameTree
@@ -100,4 +97,3 @@ public class GameTree
     }
 }
 
-//----------------------------------------------------------------------------

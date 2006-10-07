@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gmptogtp;
@@ -15,8 +14,6 @@ import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** GTP to GMP adapter. */
 public class GmpToGtp
@@ -187,4 +184,3 @@ public class GmpToGtp
     }
 }
 
-//----------------------------------------------------------------------------

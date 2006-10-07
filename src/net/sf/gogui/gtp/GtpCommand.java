@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
@@ -10,8 +9,6 @@ import java.util.Locale;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** GTP command.
     Handles parsing the command line and storing the response to the command.
@@ -375,4 +372,3 @@ public class GtpCommand
     }
 }
 
-//----------------------------------------------------------------------------

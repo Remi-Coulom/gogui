@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -28,8 +27,6 @@ import javax.swing.WindowConstants;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.util.PrefUtil;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for selecting a Go engine. */
 public class SelectProgram
@@ -206,4 +203,3 @@ public class SelectProgram
     }
 }
 
-//----------------------------------------------------------------------------

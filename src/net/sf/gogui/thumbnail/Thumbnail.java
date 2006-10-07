@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.thumbnail;
@@ -41,8 +40,6 @@ import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** Thumbnail creator.
     Creates thumbnails according to the freedesktop.org standard.
@@ -317,4 +314,3 @@ public final class Thumbnail
     }
 }
 
-//----------------------------------------------------------------------------

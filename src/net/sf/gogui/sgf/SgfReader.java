@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.sgf;
@@ -31,8 +30,6 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.ProgressShow;
-
-//----------------------------------------------------------------------------
 
 class ByteCountInputStream
     extends InputStream
@@ -75,8 +72,6 @@ class ByteCountInputStream
 
     private final InputStream m_in;
 }
-
-//----------------------------------------------------------------------------
 
 /** SGF reader.
     @bug The error messages sometimes contain wrong line numbers, because of
@@ -1040,4 +1035,3 @@ public final class SgfReader
     }
 }
 
-//----------------------------------------------------------------------------

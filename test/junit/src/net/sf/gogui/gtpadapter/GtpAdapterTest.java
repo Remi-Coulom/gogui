@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpadapter;
@@ -16,8 +15,6 @@ import net.sf.gogui.gtp.GtpEngineConnection;
 import net.sf.gogui.gtp.GtpExpectEngine;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StreamCopy;
-
-//----------------------------------------------------------------------------
 
 public class GtpAdapterTest
     extends junit.framework.TestCase
@@ -116,4 +113,3 @@ public class GtpAdapterTest
     }
 }
 
-//----------------------------------------------------------------------------

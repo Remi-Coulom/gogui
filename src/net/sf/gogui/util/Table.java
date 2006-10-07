@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -16,8 +15,6 @@ import java.io.Writer;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Table of string elements. */
 public class Table
@@ -309,4 +306,3 @@ public class Table
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -17,8 +16,6 @@ import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-
-//----------------------------------------------------------------------------
 
 /** Utility functions for class GuiBoard. */
 public final class GuiBoardUtil
@@ -345,4 +342,3 @@ public final class GuiBoardUtil
     }
 }
 
-//----------------------------------------------------------------------------

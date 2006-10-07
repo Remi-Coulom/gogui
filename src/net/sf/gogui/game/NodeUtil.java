@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
@@ -15,8 +14,6 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Utility functions operating on a tree of nodes. */
 public final class NodeUtil
@@ -723,4 +720,3 @@ public final class NodeUtil
     }
 }
 
-//----------------------------------------------------------------------------

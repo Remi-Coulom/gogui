@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -10,8 +9,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Static file utility functions. */
 public final class FileUtil
@@ -153,4 +150,3 @@ public final class FileUtil
     }
 }
 
-//----------------------------------------------------------------------------

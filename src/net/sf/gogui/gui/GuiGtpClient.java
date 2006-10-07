@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -15,8 +14,6 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
-
-//----------------------------------------------------------------------------
 
 /** Wrapper around gtp.GtpClient to be used in a GUI environment.
     Allows to send fast commands immediately in the event dispatch thread
@@ -332,4 +329,3 @@ public class GuiGtpClient
     private String m_response;
 }
 
-//----------------------------------------------------------------------------

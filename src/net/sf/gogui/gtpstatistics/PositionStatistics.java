@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpstatistics;
@@ -10,8 +9,6 @@ import net.sf.gogui.util.Statistics;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.util.TableUtil;
-
-//----------------------------------------------------------------------------
 
 /** Collect GTP response statistics for a set of positions. */
 public final class PositionStatistics
@@ -149,4 +146,3 @@ public final class PositionStatistics
     }
 }
 
-//----------------------------------------------------------------------------

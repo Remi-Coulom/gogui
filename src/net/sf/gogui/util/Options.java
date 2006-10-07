@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -15,8 +14,6 @@ import java.io.Reader;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Parser for command line options.
     Options begin with a single '-' character.
@@ -361,4 +358,3 @@ public class Options
     }
 }
 
-//----------------------------------------------------------------------------

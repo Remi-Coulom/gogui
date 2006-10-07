@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
@@ -8,8 +7,6 @@ package net.sf.gogui.game;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
-
-//----------------------------------------------------------------------------
 
 public class BoardUpdaterTest
     extends junit.framework.TestCase
@@ -65,4 +62,3 @@ public class BoardUpdaterTest
     private BoardUpdater m_updater;
 }
 
-//----------------------------------------------------------------------------

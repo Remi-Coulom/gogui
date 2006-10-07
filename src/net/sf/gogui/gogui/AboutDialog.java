@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -23,8 +22,6 @@ import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** About dialog for GoGui. */
 public final class AboutDialog
@@ -208,4 +205,3 @@ public final class AboutDialog
     }
 }
 
-//----------------------------------------------------------------------------

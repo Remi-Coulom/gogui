@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
@@ -10,8 +9,6 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpExpectEngine;
-
-//----------------------------------------------------------------------------
 
 public class GtpSynchronizerTest
     extends junit.framework.TestCase
@@ -154,4 +151,3 @@ public class GtpSynchronizerTest
     }
 }
 
-//----------------------------------------------------------------------------

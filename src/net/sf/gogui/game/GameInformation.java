@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
@@ -8,8 +7,6 @@ package net.sf.gogui.game;
 import java.util.Locale;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Game information.
     Contains information about the board size, handicap, rules and players.
@@ -110,4 +107,3 @@ public class GameInformation
     }
 }
 
-//----------------------------------------------------------------------------

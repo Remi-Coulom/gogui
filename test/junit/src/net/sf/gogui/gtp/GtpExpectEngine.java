@@ -1,14 +1,11 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** GTP engine that expects a certain sequence of commands.
     Intended for testing GTP controllers.
@@ -58,4 +55,3 @@ public class GtpExpectEngine
     private ArrayList m_responses = new ArrayList();
 }
 
-//----------------------------------------------------------------------------

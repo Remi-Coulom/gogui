@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
@@ -17,8 +16,6 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Utility functions for parsing GTP responses. */
 public final class GtpUtil
@@ -257,4 +254,3 @@ public final class GtpUtil
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gmptogtp;
@@ -20,8 +19,6 @@ import net.sf.gogui.util.Options;
 import net.sf.gogui.util.ProcessUtil;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** GmpToGtp main function. */
 public final class Main
@@ -217,4 +214,3 @@ public final class Main
     }
 }
 
-//----------------------------------------------------------------------------

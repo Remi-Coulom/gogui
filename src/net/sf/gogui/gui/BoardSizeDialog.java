@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -8,8 +7,6 @@ package net.sf.gogui.gui;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.go.GoPoint;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for entering a board size. */
 public final class BoardSizeDialog
@@ -43,4 +40,3 @@ public final class BoardSizeDialog
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,14 +1,11 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.specialmac;
 
 import com.apple.eawt.*;
 import net.sf.gogui.utils.Platform;
-
-//----------------------------------------------------------------------------
 
 class Listener
     extends ApplicationAdapter
@@ -36,8 +33,6 @@ class Listener
     private Platform.SpecialMacHandler m_handler;
 }
 
-//----------------------------------------------------------------------------
-
 /** Registration of handler for events from Mac Application menu.
     This class depends on com.apple and should therefore only
     loaded if the platform is Mac using reflection.
@@ -54,4 +49,3 @@ public class RegisterSpecialMacHandler
     }
 }
 
-//----------------------------------------------------------------------------

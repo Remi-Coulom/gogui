@@ -1,11 +1,8 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
-
-//----------------------------------------------------------------------------
 
 /** In-process GTP client connection to a GtpEngine.
     Better performance than GtpEngineConnection, because the connection
@@ -49,4 +46,3 @@ public class GtpEngineClient
     private GtpEngine m_engine;
 }
 
-//----------------------------------------------------------------------------

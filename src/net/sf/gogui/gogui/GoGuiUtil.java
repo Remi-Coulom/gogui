@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -13,8 +12,6 @@ import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.TextViewer;
-
-//----------------------------------------------------------------------------
 
 /** Utility functions for class GoGui. */
 public final class GoGuiUtil
@@ -67,4 +64,3 @@ public final class GoGuiUtil
     }
 }
 
-//----------------------------------------------------------------------------

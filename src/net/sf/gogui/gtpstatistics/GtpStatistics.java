@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpstatistics;
@@ -26,8 +25,6 @@ import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
-
-//----------------------------------------------------------------------------
 
 /** Run commands of a GTP engine on all positions in a game collection. */
 public class GtpStatistics
@@ -470,5 +467,4 @@ public class GtpStatistics
         return toMove;
     }
 }
-    
-//----------------------------------------------------------------------------
+

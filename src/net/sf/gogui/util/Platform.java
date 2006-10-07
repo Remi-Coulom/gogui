@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -11,8 +10,6 @@ import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.URL;
-
-//----------------------------------------------------------------------------
 
 /** Static utility functions for platform detection and platform-dependent
     behavior.
@@ -218,4 +215,3 @@ public class Platform
     }
 }
 
-//----------------------------------------------------------------------------

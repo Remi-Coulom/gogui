@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gmp;
@@ -10,8 +9,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-
-//----------------------------------------------------------------------------
 
 public class GmpTest
     extends junit.framework.TestCase
@@ -247,4 +244,3 @@ public class GmpTest
     }
 }
 
-//----------------------------------------------------------------------------

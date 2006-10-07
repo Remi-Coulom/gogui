@@ -1,13 +1,10 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
 
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Message queue for synchronized passing of messages between threads.
     @bug Queue has no limit on capacity; replace with
@@ -114,4 +111,3 @@ public class MessageQueue
     private final Object m_mutex = new Object();
 }
 
-//----------------------------------------------------------------------------

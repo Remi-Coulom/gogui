@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -10,8 +9,6 @@ import javax.swing.JOptionPane;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gui.GuiGtpClient;
 import net.sf.gogui.gui.SimpleDialogs;
-
-//----------------------------------------------------------------------------
 
 /** Interrupt command. */
 public final class Interrupt
@@ -55,4 +52,3 @@ public final class Interrupt
     }
 }
 
-//----------------------------------------------------------------------------

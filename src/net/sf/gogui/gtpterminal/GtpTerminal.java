@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpterminal;
@@ -29,8 +28,6 @@ import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** Simple text based interface to Go programs supporting GTP. */
 public class GtpTerminal
@@ -406,4 +403,3 @@ public class GtpTerminal
     }
 }
 
-//----------------------------------------------------------------------------

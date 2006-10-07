@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpstatistics;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 import net.sf.gogui.util.Histogram;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.util.TableUtil;
-
-//----------------------------------------------------------------------------
 
 /** Collect GTP response statistics for a command. */
 public final class CommandStatistics
@@ -145,4 +142,3 @@ public final class CommandStatistics
     }
 }
 
-//----------------------------------------------------------------------------

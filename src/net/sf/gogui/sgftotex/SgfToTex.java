@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.sgftotex;
@@ -18,8 +17,6 @@ import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** SGF to LaTeX converter. */
 public final class SgfToTex
@@ -119,5 +116,4 @@ public final class SgfToTex
                   "-version print version and exit\n");
     }
 }
-    
-//----------------------------------------------------------------------------
+

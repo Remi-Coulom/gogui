@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpserver;
@@ -18,8 +17,6 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Connects a Go program supporting GTP to a socket. */
 public final class GtpServer
@@ -181,5 +178,4 @@ public final class GtpServer
                   "-version print version and exit\n");
     }
 }
-    
-//----------------------------------------------------------------------------
+

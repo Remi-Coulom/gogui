@@ -1,11 +1,8 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
-
-//----------------------------------------------------------------------------
 
 /** Callback function for a command.
     It should throw a GtpError for creating a failure response,
@@ -16,4 +13,3 @@ public interface GtpCallback
     void run(GtpCommand cmd) throws GtpError;
 }
 
-//----------------------------------------------------------------------------

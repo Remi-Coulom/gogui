@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -10,8 +9,6 @@ import javax.swing.JOptionPane;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.gui.SimpleDialogs;
-
-//----------------------------------------------------------------------------
 
 /** Ask for a move number in a variation given by a node. */
 public final class MoveNumberDialog
@@ -47,4 +44,3 @@ public final class MoveNumberDialog
     }
 }
 
-//----------------------------------------------------------------------------

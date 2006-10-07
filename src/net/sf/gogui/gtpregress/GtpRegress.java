@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpregress;
@@ -23,8 +22,6 @@ import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** Runs GTP regression tests. */
 public class GtpRegress
@@ -1033,5 +1030,4 @@ public class GtpRegress
         out.close();
     }
 }
-    
-//----------------------------------------------------------------------------
+

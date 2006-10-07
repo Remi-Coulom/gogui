@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpadapter;
@@ -34,8 +33,6 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** GTP adapter for logging or protocol translations. */
 public class GtpAdapter
@@ -676,4 +673,3 @@ public class GtpAdapter
     }
 }
 
-//----------------------------------------------------------------------------

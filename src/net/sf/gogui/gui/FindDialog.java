@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -27,8 +26,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import net.sf.gogui.util.PrefUtil;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for entering a search pattern. */
 public class FindDialog
@@ -180,4 +177,3 @@ public class FindDialog
     }
 }
 
-//----------------------------------------------------------------------------

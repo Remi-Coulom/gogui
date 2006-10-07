@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.game;
@@ -12,8 +11,6 @@ import java.util.TreeMap;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
-
-//----------------------------------------------------------------------------
 
 /** Extended info.
     Contains markups and value, because these are used in the large SGF
@@ -31,8 +28,6 @@ final class ExtraInfo
     public MoreExtraInfo m_moreExtraInfo;
 }
 
-//----------------------------------------------------------------------------
-
 /** More extended info.
     Contains all the information typically not in large SGF traces.
 */
@@ -47,8 +42,6 @@ final class MoreExtraInfo
     public Map m_label;
 }
 
-//----------------------------------------------------------------------------
-
 final class SetupInfo
 {
     public GoColor m_player = GoColor.EMPTY;
@@ -59,8 +52,6 @@ final class SetupInfo
 
     public ArrayList m_empty = new ArrayList();
 }
-
-//----------------------------------------------------------------------------
 
 final class TimeInfo
 {
@@ -73,8 +64,6 @@ final class TimeInfo
     public double m_timeLeftWhite = Double.NaN;
 
 }
-
-//----------------------------------------------------------------------------
 
 /** Node in a game tree.
     The memory requirement is optimized for nodes containing only a move and
@@ -751,4 +740,3 @@ public final class Node
     }
 }
 
-//----------------------------------------------------------------------------

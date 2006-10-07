@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -24,8 +23,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import net.sf.gogui.game.Node;
-
-//----------------------------------------------------------------------------
 
 /** Scroll pane for displaying a comment to the current game node. */
 public class Comment
@@ -184,4 +181,3 @@ public class Comment
     }
 }
 
-//----------------------------------------------------------------------------

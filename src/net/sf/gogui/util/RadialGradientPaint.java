@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -14,8 +13,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ColorModel;
- 
-//----------------------------------------------------------------------------
 
 /** Creates a PaintContext for a radial gradient. */
 public class RadialGradientPaint
@@ -79,4 +76,3 @@ public class RadialGradientPaint
     private final Color m_pointColor;
 }
 
-//----------------------------------------------------------------------------

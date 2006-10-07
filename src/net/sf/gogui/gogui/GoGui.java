@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -96,8 +95,6 @@ import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.ProgressShow;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** Graphical user interface to a Go program. */
 public class GoGui
@@ -3498,4 +3495,3 @@ public class GoGui
     }
 }
 
-//----------------------------------------------------------------------------

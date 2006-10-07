@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.twogtp;
@@ -34,8 +33,6 @@ import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** GTP adapter for playing games between two Go programs. */
 public class TwoGtp
@@ -1227,4 +1224,3 @@ public class TwoGtp
     }
 }
 
-//----------------------------------------------------------------------------

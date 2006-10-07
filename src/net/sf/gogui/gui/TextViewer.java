@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -24,8 +23,6 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for displaying text.
     Allows syntax highlighting for analyze commands of type <i>hstring</i>.
@@ -187,4 +184,3 @@ public class TextViewer
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -9,8 +8,6 @@ import java.util.Date;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Time control for a Go game.
     If the clock is not initialized with Clock.setTimeSettings, the clock
@@ -269,4 +266,3 @@ public final class Clock
     }
 }
 
-//----------------------------------------------------------------------------

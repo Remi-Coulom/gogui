@@ -1,13 +1,10 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Some values that are constant for a given board size. */
 public final class BoardConstants
@@ -99,5 +96,4 @@ public final class BoardConstants
 
     private int m_handicapLine3;
 }
-    
-//----------------------------------------------------------------------------
+

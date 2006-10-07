@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -14,8 +13,6 @@ import javax.swing.JComponent;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
-
-//----------------------------------------------------------------------------
 
 class GameTreeNode
     extends JComponent
@@ -155,4 +152,3 @@ class GameTreeNode
     }
 }
 
-//----------------------------------------------------------------------------

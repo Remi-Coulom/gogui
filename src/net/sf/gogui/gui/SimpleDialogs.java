@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -31,8 +30,6 @@ import net.sf.gogui.sgf.SgfFilter;
 import net.sf.gogui.thumbnail.Thumbnail;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Simple message dialogs and file selectors. */
 public final class SimpleDialogs
@@ -284,8 +281,6 @@ public final class SimpleDialogs
     }
 }
 
-//----------------------------------------------------------------------------
-
 class SgfPreview
     extends JPanel
     implements PropertyChangeListener
@@ -423,4 +418,3 @@ class SgfPreview
     }
 }
 
-//----------------------------------------------------------------------------

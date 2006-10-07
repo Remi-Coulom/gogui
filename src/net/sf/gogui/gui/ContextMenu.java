@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -16,8 +15,6 @@ import net.sf.gogui.game.MarkType;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.ErrorMessage;
-
-//----------------------------------------------------------------------------
 
 /** Context menu for fields on board. */
 public class ContextMenu
@@ -233,4 +230,3 @@ public class ContextMenu
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.sgf;
@@ -8,8 +7,6 @@ package net.sf.gogui.sgf;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 import net.sf.gogui.util.FileUtil;
-
-//----------------------------------------------------------------------------
 
 /** Swing file filter for SGF files. */
 public class SgfFilter
@@ -33,4 +30,3 @@ public class SgfFilter
     }
 }
 
-//----------------------------------------------------------------------------

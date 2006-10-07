@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -18,8 +17,6 @@ import java.awt.geom.Point2D;
 import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.RadialGradientPaint;
- 
-//----------------------------------------------------------------------------
 
 /** Component representing a field on the board.
     The implementation assumes that the size of the component is a square,
@@ -554,4 +551,3 @@ public class GuiField
     }
 }
 
-//----------------------------------------------------------------------------

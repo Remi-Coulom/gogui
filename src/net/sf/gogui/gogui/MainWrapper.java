@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -10,8 +9,6 @@ import java.lang.reflect.Modifier;
 import java.util.Locale;
 import net.sf.gogui.util.ErrorMessage;
 
-//----------------------------------------------------------------------------
- 
 /** Wrapper for starting GoGui.
     Loads the main class with the reflection API to set Mac AWT
     properties before any AWT class is loaded.
@@ -66,4 +63,3 @@ public final class MainWrapper
     }
 }
 
-//----------------------------------------------------------------------------

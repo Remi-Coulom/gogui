@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpstatistics;
@@ -21,8 +20,6 @@ import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.util.TableUtil;
-
-//----------------------------------------------------------------------------
 
 /** Produce a PNG plot from table data. */
 public class Plot
@@ -640,4 +637,3 @@ public class Plot
     }
 }
 
-//----------------------------------------------------------------------------

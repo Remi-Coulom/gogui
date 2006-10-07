@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -21,8 +20,6 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Analyze command.
     See GoGui documentation, chapter "Analyze Commands"
@@ -526,4 +523,3 @@ public class AnalyzeCommand
     }
 }
 
-//----------------------------------------------------------------------------

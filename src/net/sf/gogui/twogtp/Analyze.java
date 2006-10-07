@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.twogtp;
@@ -17,8 +16,6 @@ import net.sf.gogui.util.Statistics;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** Analyze the game results and produce a HTML formatted report. */
 public class Analyze
@@ -402,8 +399,6 @@ public class Analyze
     }
 }
 
-//----------------------------------------------------------------------------
-
 final class Entry
 {
     public int m_gameIndex;
@@ -449,4 +444,3 @@ final class Entry
     }
 }
 
-//----------------------------------------------------------------------------

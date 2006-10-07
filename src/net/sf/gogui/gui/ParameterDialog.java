@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -19,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for editing parameters in response to an analyze command of type
     <i>param</i>.
@@ -240,3 +237,4 @@ public class ParameterDialog
         return parameters;
     }
 }
+

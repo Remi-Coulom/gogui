@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -14,8 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-
-//----------------------------------------------------------------------------
 
 /** Message which can be disabled.
     Also provides multi-line word-wrapped text.
@@ -175,4 +172,3 @@ public class OptionalMessage
     }
 }
 
-//----------------------------------------------------------------------------

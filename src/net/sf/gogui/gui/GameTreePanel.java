@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -33,8 +32,6 @@ import javax.swing.UIManager;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
-
-//----------------------------------------------------------------------------
 
 /** Panel displaying a game tree. */
 public class GameTreePanel
@@ -773,4 +770,3 @@ public class GameTreePanel
     }
 }
 
-//----------------------------------------------------------------------------

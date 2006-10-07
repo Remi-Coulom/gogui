@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -9,8 +8,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-//----------------------------------------------------------------------------
 
 public class StreamCopyTest
     extends junit.framework.TestCase
@@ -36,4 +33,3 @@ public class StreamCopyTest
     }
 }
 
-//----------------------------------------------------------------------------

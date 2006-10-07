@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -9,8 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-//----------------------------------------------------------------------------
 
 class ExitWaiter
     extends Thread
@@ -56,8 +53,6 @@ class ExitWaiter
 
     private final Process m_process;
 };
-
-//----------------------------------------------------------------------------
 
 /** Static utility functions and classes related to processes.
 */
@@ -141,4 +136,3 @@ public class ProcessUtil
     }
 }
 
-//----------------------------------------------------------------------------

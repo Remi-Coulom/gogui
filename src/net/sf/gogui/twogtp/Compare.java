@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.twogtp;
@@ -20,8 +19,6 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.go.MoveUtil;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.sgf.SgfReader;
-
-//----------------------------------------------------------------------------
 
 /** Find duplicates in games. */
 public final class Compare
@@ -144,4 +141,3 @@ public final class Compare
     }
 }
 
-//----------------------------------------------------------------------------

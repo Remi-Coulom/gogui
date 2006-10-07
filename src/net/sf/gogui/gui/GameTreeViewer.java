@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -20,8 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for displaying the game tree. */
 public class GameTreeViewer
@@ -186,5 +183,4 @@ public class GameTreeViewer
     private final Listener m_listener;
 }
 
-//----------------------------------------------------------------------------
 

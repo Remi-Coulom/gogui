@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
@@ -12,8 +11,6 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.Placement;
-
-//----------------------------------------------------------------------------
 
 /** Synchronizes a GTP engine with a Go board.
     Handles different capabilities of different engines.
@@ -286,4 +283,3 @@ public class GtpSynchronizer
     }
 }
 
-//----------------------------------------------------------------------------

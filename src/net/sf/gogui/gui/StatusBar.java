@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -12,8 +11,6 @@ import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.sf.gogui.util.Platform;
-
-//----------------------------------------------------------------------------
 
 /** Status bar. */
 public class StatusBar
@@ -57,4 +54,3 @@ public class StatusBar
     private final JTextField m_textField;
 }
 
-//----------------------------------------------------------------------------

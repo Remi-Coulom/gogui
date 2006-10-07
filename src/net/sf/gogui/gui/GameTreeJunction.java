@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -9,8 +8,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JComponent;
-
-//----------------------------------------------------------------------------
 
 class GameTreeJunction
     extends JComponent
@@ -54,4 +51,3 @@ class GameTreeJunction
 
 }
 
-//----------------------------------------------------------------------------

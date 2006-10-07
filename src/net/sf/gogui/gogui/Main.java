@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -10,8 +9,6 @@ import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** GoGui main function. */
 public final class Main
@@ -72,4 +69,3 @@ public final class Main
     }
 }
 
-//----------------------------------------------------------------------------

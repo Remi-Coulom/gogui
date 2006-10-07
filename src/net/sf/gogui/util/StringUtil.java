@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -13,8 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Static utility functions related to strings. */
 public final class StringUtil
@@ -208,4 +205,3 @@ public final class StringUtil
     }
 }
 
-//----------------------------------------------------------------------------

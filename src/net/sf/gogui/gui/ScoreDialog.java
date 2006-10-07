@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -21,8 +20,6 @@ import javax.swing.SwingConstants;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.Score;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for displaying the game score and result. */
 public class ScoreDialog
@@ -141,4 +138,3 @@ public class ScoreDialog
     }
 }
 
-//----------------------------------------------------------------------------

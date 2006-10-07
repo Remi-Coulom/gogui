@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -18,8 +17,6 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Show response to an AnalyzeCommand in the GUI. */
 public final class AnalyzeShow
@@ -424,4 +421,3 @@ public final class AnalyzeShow
     }
 }
 
-//----------------------------------------------------------------------------

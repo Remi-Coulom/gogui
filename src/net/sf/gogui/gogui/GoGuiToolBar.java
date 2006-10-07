@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -14,8 +13,6 @@ import javax.swing.JToolBar;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.util.Platform;
-
-//----------------------------------------------------------------------------
 
 /** Tool bar for GoGui. */
 public class GoGuiToolBar
@@ -206,8 +203,6 @@ public class GoGuiToolBar
     }
 }
 
-//----------------------------------------------------------------------------
-
 /** Toolbar button with optional same disabled icon.
     Can use the same icon in disabled state to avoid too much toolbar
     flickering if button is disabled during command in progress.
@@ -241,4 +236,3 @@ class OptionalButton
     private final Icon m_disabledIcon;
 }
 
-//----------------------------------------------------------------------------

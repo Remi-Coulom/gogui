@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -44,8 +43,6 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;
-
-//----------------------------------------------------------------------------
 
 class GtpShellText
     extends GuiTextPane
@@ -221,8 +218,6 @@ class GtpShellText
         }
     }
 }
-
-//----------------------------------------------------------------------------
 
 /** Dialog for displaying the GTP stream and for entering commands. */
 public class GtpShell
@@ -900,4 +895,3 @@ public class GtpShell
     }
 }
 
-//----------------------------------------------------------------------------

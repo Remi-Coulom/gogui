@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.thumbnail;
@@ -11,8 +10,6 @@ import java.util.ArrayList;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** SgfThumbnail main function. */
 public final class Main
@@ -84,4 +81,3 @@ public final class Main
     }
 }
 
-//----------------------------------------------------------------------------

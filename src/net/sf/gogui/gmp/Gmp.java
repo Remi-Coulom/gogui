@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import net.sf.gogui.util.StringUtil;
 
-//----------------------------------------------------------------------------
-
 /** Static utility functions. */
 class Util
 {
@@ -52,8 +50,6 @@ class Util
     }
 
 }
-
-//----------------------------------------------------------------------------
 
 /** GMP command. */
 class Cmd
@@ -330,8 +326,6 @@ class Cmd
     }
 };
 
-//----------------------------------------------------------------------------
-
 /** Thread handling sending and resending of packets. */
 class WriteThread extends Thread
 {
@@ -458,8 +452,6 @@ class WriteThread extends Thread
         }
     }
 }
-
-//----------------------------------------------------------------------------
 
 /** Handles incoming packets and allows to send commands. */
 class MainThread
@@ -1014,8 +1006,6 @@ class MainThread
     }
 }
 
-//----------------------------------------------------------------------------
-
 /** GMP connection.
     This class is final because it starts a thread in its constructor which
     might conflict with subclassing because the subclass constructor will
@@ -1179,4 +1169,3 @@ public final class Gmp
     private final MainThread m_mainThread;
 }
 
-//----------------------------------------------------------------------------

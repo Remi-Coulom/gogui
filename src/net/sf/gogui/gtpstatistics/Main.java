@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpstatistics;
@@ -13,8 +12,6 @@ import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** GtpStatistics main function. */
 public final class Main
@@ -159,5 +156,4 @@ public final class Main
                   "-version      Display this help and exit\n");
     }
 }
-    
-//----------------------------------------------------------------------------
+

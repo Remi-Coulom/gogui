@@ -1,14 +1,11 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
-//----------------------------------------------------------------------------
 
 class ImageButton
     extends JButton
@@ -31,5 +28,4 @@ class ImageButton
     private static final long serialVersionUID = 0L; // SUID
 }
 
-//----------------------------------------------------------------------------
 

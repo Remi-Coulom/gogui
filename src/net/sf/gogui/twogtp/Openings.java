@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.twogtp;
@@ -14,8 +13,6 @@ import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 
-//----------------------------------------------------------------------------
-
 class Filter
     implements FileFilter
 {
@@ -24,8 +21,6 @@ class Filter
         return FileUtil.hasExtension(f, "sgf");
     }
 }
-
-//----------------------------------------------------------------------------
 
 /** Access opening SGF files from directory. */
 public class Openings
@@ -104,4 +99,3 @@ public class Openings
     }
 }
 
-//----------------------------------------------------------------------------

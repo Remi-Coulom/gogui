@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -10,8 +9,6 @@ import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.PrefUtil;
-
-//----------------------------------------------------------------------------
 
 /** Link to a position in a game file. */
 public final class Bookmark
@@ -120,4 +117,3 @@ public final class Bookmark
     }
 }
 
-//----------------------------------------------------------------------------

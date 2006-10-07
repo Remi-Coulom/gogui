@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -11,8 +10,6 @@ import java.util.prefs.Preferences;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import net.sf.gogui.util.PrefUtil;
-
-//----------------------------------------------------------------------------
 
 class RecentMenuItem
     extends JMenuItem
@@ -51,8 +48,6 @@ class RecentMenuItem
 
     private final String m_value;
 }
-
-//----------------------------------------------------------------------------
 
 /** Menu for recent item.
     Handles removing duplicates and storing the items between sessions.
@@ -189,4 +184,3 @@ public final class RecentMenu
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -39,8 +38,6 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.PrefUtil;
-
-//----------------------------------------------------------------------------
 
 /** Dialog for selecting an AnalyzeCommand. */
 public final class AnalyzeDialog
@@ -509,4 +506,3 @@ public final class AnalyzeDialog
     }
 }
 
-//----------------------------------------------------------------------------

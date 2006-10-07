@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpdummy;
@@ -11,8 +10,6 @@ import java.io.PrintStream;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** GtpDummy main function. */
 public final class Main
@@ -83,4 +80,3 @@ public final class Main
     }
 }
 
-//----------------------------------------------------------------------------

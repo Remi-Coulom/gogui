@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.go;
@@ -8,8 +7,6 @@ package net.sf.gogui.go;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Intersection on the Go board.
     This class is immutable and references to the same point are unique.
@@ -270,4 +267,3 @@ public final class GoPoint
     }
 }
 
-//----------------------------------------------------------------------------

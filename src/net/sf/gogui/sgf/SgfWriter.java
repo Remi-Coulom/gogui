@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.sgf;
@@ -20,8 +19,6 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;
-
-//----------------------------------------------------------------------------
 
 /** Write in SGF format. */
 public class SgfWriter
@@ -406,4 +403,3 @@ public class SgfWriter
     }
 }
 
-//----------------------------------------------------------------------------

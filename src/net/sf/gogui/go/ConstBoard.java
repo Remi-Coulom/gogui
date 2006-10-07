@@ -1,13 +1,10 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
-
-//----------------------------------------------------------------------------
 
 /** Const functions of go.Board. */
 public interface ConstBoard
@@ -51,4 +48,3 @@ public interface ConstBoard
     boolean isSuicide(GoPoint point, GoColor toMove);
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -29,8 +28,6 @@ import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.util.Platform;
-
-//----------------------------------------------------------------------------
 
 /** Menu bar for GoGui. */
 public class GoGuiMenuBar
@@ -1140,8 +1137,6 @@ public class GoGuiMenuBar
     }
 }
 
-//----------------------------------------------------------------------------
-
 /** Menu with assertions for unique mnemonics and accelerators. */
 class JMenuChecked
     extends JMenu
@@ -1225,4 +1220,3 @@ class JMenuChecked
     private static ArrayList s_accelerators = new ArrayList();
 }
 
-//----------------------------------------------------------------------------

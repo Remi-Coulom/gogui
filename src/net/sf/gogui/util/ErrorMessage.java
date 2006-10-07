@@ -1,11 +1,8 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
-
-//----------------------------------------------------------------------------
 
 /** Error with error message.
     ErrorMessage are exceptions with a message meaningful for presentation
@@ -28,4 +25,3 @@ public class ErrorMessage
     private static final long serialVersionUID = 0L; // SUID
 }
 
-//----------------------------------------------------------------------------

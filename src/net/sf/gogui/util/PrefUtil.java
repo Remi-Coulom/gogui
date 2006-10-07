@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -8,8 +7,6 @@ package net.sf.gogui.util;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import java.util.prefs.BackingStoreException;
-
-//----------------------------------------------------------------------------
 
 /** Utils for using java.util.prefs package. */
 public final class PrefUtil
@@ -93,4 +90,3 @@ public final class PrefUtil
     }
 }
 
-//----------------------------------------------------------------------------

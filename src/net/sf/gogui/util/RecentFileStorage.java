@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.util;
@@ -27,8 +26,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-//----------------------------------------------------------------------------
 
 /** Recent file storage according to the Freedesktop standard.
     http://standards.freedesktop.org/recent-file-spec/0.2/
@@ -219,4 +216,3 @@ public final class RecentFileStorage
     }
 }
 
-//----------------------------------------------------------------------------

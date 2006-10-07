@@ -1,14 +1,11 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
 
 import javax.swing.SwingUtilities;
 import net.sf.gogui.go.ConstBoard;
-
-//----------------------------------------------------------------------------
 
 /** Parse standard error for GoGui live graphics commands. */
 public class LiveGfx
@@ -114,4 +111,3 @@ public class LiveGfx
     }
 }
 
-//----------------------------------------------------------------------------

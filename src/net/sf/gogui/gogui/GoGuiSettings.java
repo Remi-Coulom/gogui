@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gogui;
@@ -11,8 +10,6 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.version.Version;
-
-//----------------------------------------------------------------------------
 
 /** Parse command line options.
     Also modifies the persistent preferences if some command line options
@@ -167,5 +164,4 @@ public final class GoGuiSettings
     }
 }
 
-//----------------------------------------------------------------------------
 

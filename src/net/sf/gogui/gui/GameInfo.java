@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -18,8 +17,6 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-
-//----------------------------------------------------------------------------
 
 /** Panel displaying information about the current position. */
 public class GameInfo
@@ -167,4 +164,3 @@ public class GameInfo
     }
 }
 
-//----------------------------------------------------------------------------

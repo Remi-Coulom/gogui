@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtp;
@@ -16,8 +15,6 @@ import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.MessageQueue;
 import net.sf.gogui.util.ProcessUtil;
-
-//----------------------------------------------------------------------------
 
 /** Interface to a Go program that uses GTP over the standard I/O streams.
     <p>
@@ -740,4 +737,3 @@ public final class GtpClient
     }
 }
 
-//----------------------------------------------------------------------------

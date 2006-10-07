@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gtpstatistics;
@@ -17,8 +16,6 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.ErrorMessage;
-
-//----------------------------------------------------------------------------
 
 /** Check that SGF files meet the requirements for a GtpStatistics run. */
 public class FileCheck
@@ -92,4 +89,3 @@ public class FileCheck
     }
 }
 
-//----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 //----------------------------------------------------------------------------
 // $Id$
-// $Source$
 //----------------------------------------------------------------------------
 
 package net.sf.gogui.gui;
@@ -15,8 +14,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import net.sf.gogui.util.Platform;
-
-//----------------------------------------------------------------------------
 
 /** Internally uses a JTextPane or JTextArea.
     JTextArea is more lightweight and better supported in GNU Classpath 0.90,
@@ -113,4 +110,3 @@ public class GuiTextPane
     private final JTextPane m_textPane;
 }
 
-//----------------------------------------------------------------------------
