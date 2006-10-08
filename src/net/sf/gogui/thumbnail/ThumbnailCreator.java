@@ -38,29 +38,18 @@ import net.sf.gogui.gui.BoardDrawer;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.FileUtil;
-import net.sf.gogui.util.Platform;
 import net.sf.gogui.version.Version;
 
 /** Thumbnail creator.
     Creates thumbnails according to the freedesktop.org standard.
     @todo Save to temp file and rename as required by the standard.
 */
-public final class Thumbnail
+public final class ThumbnailCreator
 {
-    public Thumbnail(boolean verbose)
+    public ThumbnailCreator(boolean verbose)
     {
         m_verbose = verbose;
         m_drawer = new BoardDrawer(false);
-    }
-
-    public static boolean checkThumbnailSupport()
-    {
-        File dir = getNormalDir();
-        // On Windows we try to create the directory, not in other platforms,
-        // because we cannot create it with the right permissions from Java
-        if (! dir.exists() && Platform.isWindows())
-            dir.mkdirs();
-        return dir.exists();
     }
 
     public boolean create(File input)
@@ -131,7 +120,8 @@ public final class Thumbnail
                 image = getImage(field, imageSize, imageSize);
 
             if (output == null)
-                output = new File(getNormalDir(), md5 + ".png");
+                output = new File(ThumbnailPlatform.getNormalDir(),
+                                  md5 + ".png");
 
             long lastModified = input.lastModified() / 1000L;
             if (lastModified == 0L)
@@ -274,12 +264,6 @@ public final class Thumbnail
         if (! m_verbose)
             return;
         System.err.println(line);
-    }
-
-    private static File getNormalDir()
-    {
-        String home = System.getProperty("user.home", "");
-        return new File(new File(home, ".thumbnails"), "normal");
     }
 
     private void writeImage(BufferedImage image, File file, URI uri,

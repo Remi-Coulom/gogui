@@ -5,6 +5,8 @@
 
 package net.sf.gogui.version;
 
+//----------------------------------------------------------------------------
+
 /** Version information for all packages. */
 public final class Version
 {
@@ -23,3 +25,4 @@ public final class Version
     }
 }
 
+//----------------------------------------------------------------------------

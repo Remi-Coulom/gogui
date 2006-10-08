@@ -27,7 +27,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import net.sf.gogui.sgf.SgfFilter;
-import net.sf.gogui.thumbnail.Thumbnail;
+import net.sf.gogui.thumbnail.ThumbnailCreator;
+import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 
@@ -247,9 +248,7 @@ public final class SimpleDialogs
         if (setSgfFilter)
         {
             chooser.setFileFilter(sgfFilter);
-            // Thumbnail creation does not work on GNU classpath 0.90 yet
-            if (Thumbnail.checkThumbnailSupport()
-                && ! Platform.isGnuClasspath())
+            if (ThumbnailPlatform.checkThumbnailSupport())
             {
                 SgfPreview preview = new SgfPreview();
                 chooser.setAccessory(preview);
@@ -392,18 +391,19 @@ class SgfPreview
 
     private final ImagePanel m_imagePanel;
 
-    private final Thumbnail m_thumbnail = new Thumbnail(false);
+    private final ThumbnailCreator m_thumbnailCreator
+        = new ThumbnailCreator(false);
 
     public void preview()
     {
         if (m_file == null)
             return;
-        m_thumbnail.create(m_file);
-        File thumbnail = m_thumbnail.getLastThumbnail();
+        m_thumbnailCreator.create(m_file);
+        File thumbnail = m_thumbnailCreator.getLastThumbnail();
         if (thumbnail == null)
         {
             SimpleDialogs.showError(this, "Preview generation failed:\n" +
-                                    m_thumbnail.getLastError());
+                                    m_thumbnailCreator.getLastError());
             m_image = null;
         }
         else
@@ -411,7 +411,7 @@ class SgfPreview
             ImageIcon icon = new ImageIcon(thumbnail.toString());
             m_image = icon.getImage();
         }
-        String description = m_thumbnail.getLastDescription();
+        String description = m_thumbnailCreator.getLastDescription();
         m_description.setText(description);
         m_imagePanel.repaint();
         m_preview.setEnabled(false);

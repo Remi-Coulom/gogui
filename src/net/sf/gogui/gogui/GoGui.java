@@ -89,7 +89,8 @@ import net.sf.gogui.gui.Util;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
-import net.sf.gogui.thumbnail.Thumbnail;
+import net.sf.gogui.thumbnail.ThumbnailCreator;
+import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.util.Platform;
@@ -1131,7 +1132,8 @@ public class GoGui
 
     private String m_programAnalyzeCommands;
 
-    private final Thumbnail m_thumbnail = new Thumbnail(false);
+    private final ThumbnailCreator m_thumbnailCreator =
+        new ThumbnailCreator(false);
 
     private TimeSettings m_timeSettings;
 
@@ -2409,14 +2411,14 @@ public class GoGui
 
     private void createThumbnail(File file)
     {
-        if (! Thumbnail.checkThumbnailSupport())
+        if (! ThumbnailPlatform.checkThumbnailSupport())
             return;
         // Thumbnail creation does not work on GNU classpath 0.90 yet
         if (Platform.isGnuClasspath())
             return;
         String path = file.getAbsolutePath();
         if (! path.startsWith("/tmp") && ! path.startsWith("/var/tmp"))
-            m_thumbnail.create(file);
+            m_thumbnailCreator.create(file);
     }
 
     private void currentNodeChanged()

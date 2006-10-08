@@ -49,10 +49,10 @@ public final class Main
             if (arguments.size() == 2)
                 output = new File((String)arguments.get(1));
             int size = opt.getInteger("size", 128, 1);
-            Thumbnail thumbnail = new Thumbnail(verbose);
-            if (! thumbnail.create(input, output, size, true))
+            ThumbnailCreator thumbnailCreator = new ThumbnailCreator(verbose);
+            if (! thumbnailCreator.create(input, output, size, true))
             {
-                System.err.println(thumbnail.getLastError());
+                System.err.println(thumbnailCreator.getLastError());
                 System.exit(-1);
             }
         }
