@@ -245,11 +245,17 @@ public class GuiField
     private static final AlphaComposite COMPOSITE_5
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
 
+    private static final AlphaComposite COMPOSITE_6
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
+
     private static final AlphaComposite COMPOSITE_7
-        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f); 
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
 
     private static final AlphaComposite COMPOSITE_95
-        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.95f); 
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.95f);
+
+    private static final AlphaComposite COMPOSITE_97
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.97f);
 
     private static final Stroke THICK_STROKE
         = new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
@@ -341,7 +347,7 @@ public class GuiField
         double d = Math.abs(m_influence);
         if (d < 0.01)
             return;
-        setComposite(COMPOSITE_7);
+        setComposite(COMPOSITE_6);
         if (m_influence > 0)
             m_graphics.setColor(COLOR_INFLUENCE_BLACK);
         else
@@ -353,6 +359,7 @@ public class GuiField
 
     private void drawLabel()
     {
+        setComposite(COMPOSITE_97);
         setFont(m_graphics, m_size);
         FontMetrics metrics = m_graphics.getFontMetrics();
         int stringWidth = metrics.stringWidth(m_label);
