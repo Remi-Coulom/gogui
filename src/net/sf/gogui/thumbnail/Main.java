@@ -20,7 +20,9 @@ public final class Main
         try
         {
             String options[] = {
+                "check-expire:",
                 "config:",
+                "expire:",
                 "help",
                 "size:",
                 "verbose",
@@ -30,12 +32,24 @@ public final class Main
             if (opt.isSet("help"))
             {
                 printUsage(System.out);
-                System.exit(0);
+                return;
             }
             if (opt.isSet("version"))
             {
                 System.out.println("SgfThumbnail " + Version.get());
-                System.exit(0);
+                return;
+            }
+            if (opt.isSet("expire"))
+            {
+                int seconds = opt.getInteger("expire", 0, 0);
+                ThumbnailUtil.expire(seconds, false);
+                return;
+            }
+            if (opt.isSet("check-expire"))
+            {
+                int seconds = opt.getInteger("expire", 0, 0);
+                ThumbnailUtil.expire(seconds, true);
+                return;
             }
             boolean verbose = opt.isSet("verbose");
             ArrayList arguments = opt.getArguments();

@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.stream.ImageInputStream;
+import net.sf.gogui.util.StringUtil;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -56,7 +57,20 @@ public final class ThumbnailReader
         Iterator iter = ImageIO.getImageReaders(stream);
         ImageReader reader = (ImageReader)iter.next();
         reader.setInput(stream, true);
-        IIOMetadata metadata = reader.getImageMetadata(0);
+        IIOMetadata metadata;
+        try
+        {
+            metadata = reader.getImageMetadata(0);
+        }
+        catch (Throwable t)
+        {
+            // Some PNGs generate a NegativeArraySizeException in
+            // com.sun.imageio.plugins.png.PNGImageReader.readMetadata
+            // with Java 1.5. Ignore these PNGs until the problem is
+            // understood.
+            StringUtil.printException(t);
+            throw new IOException("Internal error reading PNG meta data");
+        }
         String formatName = "javax_imageio_1.0";
         Node root = metadata.getAsTree(formatName);
         try
