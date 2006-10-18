@@ -4,6 +4,8 @@ When using time left properties from a read SGF file, the father node
 should also be considered, because the file could have only a time left
 property for one color in each node.
 
+TwoGtp: should not query game result if game was aborted due to a failure
+response
 
 MAYBE LATER:
 
