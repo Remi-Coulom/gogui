@@ -3198,6 +3198,9 @@ public class GoGui
         new SgfWriter(out, m_gameTree, "GoGui", Version.get());
         m_menuBar.addRecent(file);
         createThumbnail(file);
+        m_loadedFile = file;
+        setTitle();
+        setNeedsSave(false);
         return true;
     }
 
@@ -3206,12 +3209,7 @@ public class GoGui
         File file = SimpleDialogs.showSaveSgf(this);
         if (file == null)
             return false;
-        if (! save(file))
-            return false;
-        m_loadedFile = file;
-        setTitle();
-        setNeedsSave(false);
-        return true;
+        return save(file);
     }
 
     private void savePosition(File file) throws FileNotFoundException
