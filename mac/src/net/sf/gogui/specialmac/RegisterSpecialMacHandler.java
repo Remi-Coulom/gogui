@@ -5,7 +5,7 @@
 package net.sf.gogui.specialmac;
 
 import com.apple.eawt.*;
-import net.sf.gogui.utils.Platform;
+import net.sf.gogui.util.Platform;
 
 class Listener
     extends ApplicationAdapter
