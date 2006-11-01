@@ -85,17 +85,16 @@ public class Platform
     /** Check if the platform is Mac OS X. */
     public static boolean isMac()
     {
-        // According to the article "Tailoring Java Applications for Mac OS X"
-        // (Technical Note TN2042) it is better to check for mrj.version than
-        // to parse os.name
-        return (System.getProperty("mrj.version") != null);
+        // See http://developer.apple.com/technotes/tn2002/tn2110.html
+        String name = System.getProperty("os.name");
+        return name.toLowerCase().startsWith("mac os x");
     }
 
     /** Check if the platform is Unix. */
     public static boolean isUnix()
     {
-        String osName = System.getProperty("os.name");
-        return osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0;
+        String name = System.getProperty("os.name");
+        return name.indexOf("nix") >= 0 || name.indexOf("nux") >= 0;
     }
 
     /** Check if the platform is Windows. */
