@@ -788,7 +788,7 @@ public class GoGui
             m_board.setToMove(toMove);
             updateGameInfo(true);
             updateFromGoBoard();
-            setNeedsSave(true);
+            setModified(true);
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
                  && ! modifiedSelect)
@@ -1021,7 +1021,8 @@ public class GoGui
 
     private boolean m_lostOnTimeShown;
 
-    private boolean m_needsSave;
+    /** Flag that m_gameTree was modified after creation or loading from file. */
+    private boolean m_modified;
 
     private boolean m_resigned;
 
@@ -1418,7 +1419,7 @@ public class GoGui
             showError("Cannot set bookmark if no file loaded");
             return;
         }
-        if (m_needsSave)
+        if (m_modified)
         {
             showError("Cannot set bookmark if file modified");
             return;
@@ -1561,7 +1562,7 @@ public class GoGui
 
     private void cbCommentChanged()
     {
-        setNeedsSave(true);
+        setModified(true);
         if (m_gameTreeViewer != null)
             m_gameTreeViewer.redrawCurrentNode();
     }
@@ -1866,7 +1867,7 @@ public class GoGui
         if (! showQuestion("Delete all variations but main?"))
             return;
         m_gameTree.keepOnlyMainVariation();
-        setNeedsSave(true);
+        setModified(true);
         boardChangedBegin(false, true);
     }
 
@@ -1878,7 +1879,7 @@ public class GoGui
         m_gameTree = NodeUtil.makeTreeFromPosition(info, m_board);
         m_board.init(m_boardSize);
         executeRoot();
-        setNeedsSave(true);
+        setModified(true);
         boardChangedBegin(false, true);
     }
 
@@ -1887,7 +1888,7 @@ public class GoGui
         if (! showQuestion("Make current to main variation?"))
             return;
         NodeUtil.makeMainVariation(m_currentNode);
-        setNeedsSave(true);
+        setModified(true);
         boardChangedBegin(false, true);
     }
 
@@ -2131,7 +2132,7 @@ public class GoGui
         Node oldCurrentNode = m_currentNode;
         backward(1);
         m_currentNode.removeChild(oldCurrentNode);
-        setNeedsSave(true);
+        setModified(true);
         boardChangedBegin(false, true);
     }
 
@@ -2143,7 +2144,7 @@ public class GoGui
         if (! showQuestion("Truncate children?"))
             return;
         NodeUtil.truncateChildren(m_currentNode);
-        setNeedsSave(true);
+        setModified(true);
         boardChangedBegin(false, true);
     }
 
@@ -2210,7 +2211,7 @@ public class GoGui
     */
     private boolean checkSaveGame()
     {
-        if (! m_needsSave)
+        if (! m_modified)
             return true;
         if (m_saveQuestion == null)
             m_saveQuestion = new OptionalMessage(this);
@@ -2224,7 +2225,7 @@ public class GoGui
             else
                 return save(m_loadedFile);
         case 1:
-            setNeedsSave(false);
+            setModified(false);
             return true;
         case 2:
             return false;
@@ -2314,7 +2315,7 @@ public class GoGui
                     && m_board.getColor(point) != GoColor.EMPTY)
                     showWarning("Program played move on non-empty point");
                 Move move = Move.get(point, toMove);
-                setNeedsSave(true);
+                setModified(true);
                 m_board.play(move);
                 Node node = createNode(move);
                 m_currentNode = node;
@@ -2492,7 +2493,7 @@ public class GoGui
             return;
         m_currentNode.setLabel(point, value);
         m_guiBoard.setLabel(point, value);
-        setNeedsSave(true);
+        setModified(true);
         updateGuiBoard();
     }
 
@@ -2656,7 +2657,7 @@ public class GoGui
         m_board.play(move);
         if (newNodeCreated)
             m_clock.startMove(m_board.getToMove());
-        setNeedsSave(newNodeCreated);
+        setModified(newNodeCreated);
         GoColor color = move.getColor();
         if (NodeUtil.getMoveNumber(m_currentNode) > 0
             && m_clock.lostOnTime(color)
@@ -2709,7 +2710,7 @@ public class GoGui
         resetBoard();
         m_clock.reset();
         m_lostOnTimeShown = false;
-        setNeedsSave(false);
+        setModified(false);
         m_resigned = false;
         m_menuBar.enableFindNext(false);
     }
@@ -2912,7 +2913,7 @@ public class GoGui
             m_guiBoard.setMarkSquare(point, mark);
         else if (type == MarkType.TRIANGLE)
             m_guiBoard.setMarkTriangle(point, mark);        
-        setNeedsSave(true);
+        setModified(true);
         updateGuiBoard();
     }
 
@@ -3049,7 +3050,7 @@ public class GoGui
         createThumbnail(file);
         m_loadedFile = file;
         setTitle();
-        setNeedsSave(false);
+        setModified(false);
         return true;
     }
 
@@ -3188,15 +3189,15 @@ public class GoGui
         Util.sendKomi(this, komi, m_name, m_gtp);
     }
 
-    private void setNeedsSave(boolean needsSave)
+    private void setModified(boolean modified)
     {
-        if (m_needsSave == needsSave)
+        if (m_modified == modified)
             return;
-        m_needsSave = needsSave;
+        m_modified = modified;
         // Set Swing property on root window, good for e.g. Mac close
         // buttons (See Mac QA1146)
         getRootPane().putClientProperty("windowModified",
-                                        Boolean.valueOf(needsSave));
+                                        Boolean.valueOf(modified));
         setTitle();
     }
     
@@ -3252,9 +3253,11 @@ public class GoGui
         if (m_loadedFile != null)
         {
             filename = m_loadedFile.getName();
-            if (m_needsSave)
+            if (m_modified)
                 filename = filename + " [modified]";
         }
+        else if (m_modified)
+                filename = "[modified]";
         String gameName = m_gameTree.getGameInformation().suggestGameName();
         if (gameName != null)
         {
