@@ -1063,9 +1063,7 @@ public class GoGui
 
     private final Comment m_comment;
 
-    /** Last loaded or saved file.
-        If file was modified, the value is null.
-    */
+    /** Last loaded or saved file. */
     private File m_loadedFile;
 
     private final GameInfo m_gameInfo;    
@@ -1897,7 +1895,7 @@ public class GoGui
         if (! checkSaveGame())
             return;
         m_prefs.putInt("boardsize", size);
-        fileInvalid();
+        clearLoadedFile();
         newGame(size);
         computerWhite();
         m_clock.startMove(GoColor.BLACK);
@@ -2545,7 +2543,7 @@ public class GoGui
         return ! isOutOfSync();
     }
 
-    private void fileInvalid()
+    private void clearLoadedFile()
     {
         if (m_loadedFile == null)
             return;
@@ -3257,7 +3255,7 @@ public class GoGui
                 filename = filename + " [modified]";
         }
         else if (m_modified)
-                filename = "[modified]";
+            filename = "[modified]";
         String gameName = m_gameTree.getGameInformation().suggestGameName();
         if (gameName != null)
         {
@@ -3322,7 +3320,7 @@ public class GoGui
         }
         m_currentNode.setPlayer(toMove);
         executeRoot();
-        fileInvalid();
+        clearLoadedFile();
         updateGameInfo(true);
         boardChangedBegin(false, false);
     }
