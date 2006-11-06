@@ -300,8 +300,6 @@ public class GoGui
             cbAnalyze();
         else if (command.equals("analyze-only-supported"))
             cbAnalyzeOnlySupported();
-        else if (command.equals("analyze-reload"))
-            cbAnalyzeReload();
         else if (command.equals("analyze-sort"))
             cbAnalyzeSort();
         else if (command.equals("attach-program"))
@@ -510,12 +508,6 @@ public class GoGui
         m_prefs.putBoolean("analyze-only-supported-commands", onlySupported);
         if (m_analyzeDialog != null)
             m_analyzeDialog.setOnlySupported(onlySupported);
-    }
-
-    public void cbAnalyzeReload()
-    {
-        if (m_analyzeDialog != null)
-            m_analyzeDialog.reload();
     }
 
     public void cbAnalyzeSort()

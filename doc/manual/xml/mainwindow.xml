@@ -847,15 +847,6 @@ files.
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guisubmenu>Configure Analyze</guisubmenu> / <guimenuitem>Reload Configuration</guimenuitem></term>
-<listitem>
-<para>
-Reload configuration files defining the commands after they were edited.
-</para>
-</listitem>
-</varlistentry>
-
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>

@@ -114,26 +114,6 @@ public final class AnalyzeDialog
         return GoColor.BLACK;
     }
 
-    public void reload()
-    {
-        try
-        {
-            ArrayList supportedCommands = null;
-            if (m_onlySupportedCommands)
-                supportedCommands = m_supportedCommands;
-            AnalyzeCommand.read(m_commands, m_labels, supportedCommands,
-                                m_programAnalyzeCommands);
-            if (m_sort)
-                sortLists();
-            m_list.setListData(m_labels.toArray());
-            comboBoxChanged();
-        }
-        catch (Exception e)
-        {            
-            SimpleDialogs.showError(this, e.getMessage());
-        }
-    }
-
     public void saveRecent()
     {
         if (! m_recentModified)
@@ -366,6 +346,26 @@ public final class AnalyzeDialog
         for (int i = 0; i < list.size(); ++i)
             m_comboBoxHistory.addItem((String)list.get(i));
         m_firstIsTemp = false;
+    }
+
+    private void reload()
+    {
+        try
+        {
+            ArrayList supportedCommands = null;
+            if (m_onlySupportedCommands)
+                supportedCommands = m_supportedCommands;
+            AnalyzeCommand.read(m_commands, m_labels, supportedCommands,
+                                m_programAnalyzeCommands);
+            if (m_sort)
+                sortLists();
+            m_list.setListData(m_labels.toArray());
+            comboBoxChanged();
+        }
+        catch (Exception e)
+        {            
+            SimpleDialogs.showError(this, e.getMessage());
+        }
     }
 
     private void runCommand()

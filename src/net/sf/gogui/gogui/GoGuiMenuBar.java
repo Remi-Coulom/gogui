@@ -783,8 +783,6 @@ public class GoGuiMenuBar
                      "analyze-only-supported");
         m_itemAnalyzeSort = new JCheckBoxMenuItem("Sort Alphabetically");
         menu.addItem(m_itemAnalyzeSort, KeyEvent.VK_S, "analyze-sort");
-        menu.addSeparator();
-        menu.addItem("Reload Configuration", KeyEvent.VK_R, "analyze-reload");
         return menu;
     }
 
