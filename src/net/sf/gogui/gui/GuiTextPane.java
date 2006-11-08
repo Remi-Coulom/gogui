@@ -21,9 +21,9 @@ import net.sf.gogui.util.Platform;
 */
 public class GuiTextPane
 {
-    public GuiTextPane(boolean fast)
+    public GuiTextPane()
     {
-        if (fast || Platform.isGnuClasspath())
+        if (Platform.isGnuClasspath())
         {
             JTextArea textArea = new JTextArea();
             m_textComponent = textArea;
@@ -109,4 +109,3 @@ public class GuiTextPane
 
     private final JTextPane m_textPane;
 }
-

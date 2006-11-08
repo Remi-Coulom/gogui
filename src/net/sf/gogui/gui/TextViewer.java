@@ -41,17 +41,17 @@ public class TextViewer
     }
 
     public TextViewer(Frame owner, String title, String text,
-                      boolean highlight, Listener listener, boolean fastPaint)
+                      boolean highlight, Listener listener)
     {
         super(owner, title);
-        initialize(text, highlight, listener, fastPaint);
+        initialize(text, highlight, listener);
     }
 
     public TextViewer(Dialog owner, String title, String text,
-                      boolean highlight, Listener listener, boolean fastPaint)
+                      boolean highlight, Listener listener)
     {
         super(owner, title);
-        initialize(text, highlight, listener, fastPaint);
+        initialize(text, highlight, listener);
     }
 
     /** Serial version to suppress compiler warning.
@@ -101,14 +101,13 @@ public class TextViewer
         }
     }
 
-    private void initialize(String text, boolean highlight, Listener listener,
-                            boolean fastPaint)
+    private void initialize(String text, boolean highlight, Listener listener)
     {
         m_listener = listener;
         JPanel panel = new JPanel(new BorderLayout());
         Container contentPane = getContentPane();
         contentPane.add(panel, BorderLayout.CENTER);
-        m_textPane = new GuiTextPane(fastPaint);
+        m_textPane = new GuiTextPane();
         GuiUtil.setMonospacedFont(m_textPane.get());
         Document doc = m_textPane.getDocument();
         while (text.charAt(text.length() - 1) == '\n')

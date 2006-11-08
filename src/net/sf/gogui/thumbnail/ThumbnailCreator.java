@@ -49,7 +49,7 @@ public final class ThumbnailCreator
     public ThumbnailCreator(boolean verbose)
     {
         m_verbose = verbose;
-        m_drawer = new BoardDrawer(false);
+        m_drawer = new BoardDrawer();
     }
 
     public boolean create(File input)

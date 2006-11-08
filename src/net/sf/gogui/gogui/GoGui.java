@@ -106,10 +106,9 @@ public class GoGui
     public GoGui(String program, String file, int move, String time,
                  boolean verbose, boolean computerBlack,
                  boolean computerWhite, boolean auto, String gtpFile,
-                 String gtpCommand, String initAnalyze, boolean fastPaint)
+                 String gtpCommand, String initAnalyze)
         throws GtpError, ErrorMessage
     {
-        m_fastPaint = fastPaint;
         m_boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
         if (file == null)
@@ -140,7 +139,7 @@ public class GoGui
 
         m_board = new Board(m_boardSize);
 
-        m_guiBoard = new GuiBoard(m_boardSize, fastPaint);
+        m_guiBoard = new GuiBoard(m_boardSize);
         m_guiBoard.setListener(this);
         m_statusBar = new StatusBar();
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
@@ -161,7 +160,7 @@ public class GoGui
                     GuiBoardUtil.showPointList(m_guiBoard, list);
                 }
             };
-        m_comment = new Comment(commentListener, m_fastPaint);
+        m_comment = new Comment(commentListener);
         boolean fontFixed = m_prefs.getBoolean("comment-font-fixed", false);
         m_comment.setFontFixed(fontFixed);
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
@@ -690,8 +689,7 @@ public class GoGui
         {
             if (m_gameTreeViewer == null)
             {
-                m_gameTreeViewer
-                    = new GameTreeViewer(this, this, m_fastPaint);
+                m_gameTreeViewer = new GameTreeViewer(this, this);
                 m_gameTreeViewer.setLabelMode(m_menuBar.getGameTreeLabels());
                 m_gameTreeViewer.setSizeMode(m_menuBar.getGameTreeSize());
                 boolean showSubtreeSizes = m_menuBar.getShowSubtreeSizes();
@@ -1001,8 +999,6 @@ public class GoGui
 
     private boolean m_computerWhite;
 
-    private final boolean m_fastPaint;
-
     private boolean m_ignoreInvalidResponses;
 
     /** State variable used between cbInterrupt and computerMoved. */
@@ -1013,7 +1009,9 @@ public class GoGui
 
     private boolean m_lostOnTimeShown;
 
-    /** Flag that m_gameTree was modified after creation or loading from file. */
+    /** Flag that m_gameTree was modified after creation or loading from
+        file.
+    */
     private boolean m_modified;
 
     private boolean m_resigned;
@@ -1187,7 +1185,7 @@ public class GoGui
                 else
                     GoGuiUtil.showAnalyzeTextOutput(this, m_guiBoard, type,
                                                      pointArg, title,
-                                                     response, m_fastPaint);
+                                                     response);
             }
             if (! statusContainsResponse && type != AnalyzeCommand.PARAM)
                 showStatus(title);
@@ -1220,7 +1218,7 @@ public class GoGui
             m_gtpShell.dispose();
             m_gtpShell = null;
         }
-        m_gtpShell = new GtpShell(this, this, m_fastPaint);
+        m_gtpShell = new GtpShell(this, this);
         m_gtpShell.addWindowListener(new WindowAdapter()
             {
                 public void windowClosing(WindowEvent e)

@@ -48,12 +48,12 @@ public class GameTreeViewer
         void disposeGameTree();
     }
 
-    public GameTreeViewer(Frame owner, Listener listener, boolean fastPaint)
+    public GameTreeViewer(Frame owner, Listener listener)
     {
         super(owner, "Tree");
         Container contentPane = getContentPane();
         m_listener = listener;
-        m_panel = new GameTreePanel(this, listener, fastPaint,
+        m_panel = new GameTreePanel(this, listener,
                                     GameTreePanel.LABEL_NUMBER,
                                     GameTreePanel.SIZE_NORMAL);
         m_scrollPane =

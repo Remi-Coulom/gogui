@@ -47,10 +47,8 @@ import net.sf.gogui.util.PrefUtil;
 class GtpShellText
     extends GuiTextPane
 {
-    public GtpShellText(int historyMin, int historyMax, boolean timeStamp,
-                        boolean fast)
+    public GtpShellText(int historyMin, int historyMax, boolean timeStamp)
     {
-        super(fast);
         GuiUtil.setMonospacedFont(get());
         m_startTime = System.currentTimeMillis();
         m_timeStamp = timeStamp;
@@ -233,7 +231,7 @@ public class GtpShell
         boolean sendGtpCommand(String command, boolean sync) throws GtpError;
     }
 
-    public GtpShell(Frame owner, Callback callback, boolean fast)
+    public GtpShell(Frame owner, Callback callback)
     {
         super(owner, "Shell");
         m_callback = callback;
@@ -242,8 +240,8 @@ public class GtpShell
         m_historyMax = prefs.getInt("history-max", 3000);
         JPanel panel = new JPanel(new BorderLayout());
         getContentPane().add(panel, BorderLayout.CENTER);
-        m_gtpShellText
-            = new GtpShellText(m_historyMin, m_historyMax, m_timeStamp, fast);
+        m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax,
+                                          m_timeStamp);
         m_scrollPane =
             new JScrollPane(m_gtpShellText.get(),
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

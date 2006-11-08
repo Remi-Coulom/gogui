@@ -18,8 +18,7 @@ public final class GoGuiUtil
 {
     public static void showAnalyzeTextOutput(Frame owner, GuiBoard guiBoard,
                                              int type, GoPoint pointArg,
-                                             String title, String response,
-                                             boolean fastPaint)
+                                             String title, String response)
     {
         boolean highlight = (type == AnalyzeCommand.HSTRING
                              || type == AnalyzeCommand.HPSTRING);
@@ -27,8 +26,7 @@ public final class GoGuiUtil
         if (type == AnalyzeCommand.PSTRING || type == AnalyzeCommand.HPSTRING)
             listener = new PointSelectionMarker(guiBoard);
         TextViewer textViewer = new TextViewer(owner, title, response,
-                                               highlight, listener,
-                                               fastPaint);
+                                               highlight, listener);
         if (pointArg == null)
             textViewer.setLocationRelativeTo(owner);
         else

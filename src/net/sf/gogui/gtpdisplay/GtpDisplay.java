@@ -32,7 +32,7 @@ import net.sf.gogui.gui.StatusBar;
 public class GtpDisplay
     extends GtpEngine
 {
-    public GtpDisplay(String program, boolean verbose, boolean fastPaint)
+    public GtpDisplay(String program, boolean verbose)
         throws Exception
     {
         super(null);
@@ -68,7 +68,7 @@ public class GtpDisplay
             m_frame.setTitle(title);
         }
         Container contentPane = m_frame.getContentPane();
-        m_guiBoard = new GuiBoard(m_size, fastPaint);
+        m_guiBoard = new GuiBoard(m_size);
         if (m_gtp != null)
             m_guiBoard.setShowCursor(false);
         m_guiBoard.setListener(new GuiBoard.Listener()

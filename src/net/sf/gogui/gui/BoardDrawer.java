@@ -22,9 +22,8 @@ import net.sf.gogui.go.BoardConstants;
 /** Draws a board. */
 public class BoardDrawer
 {
-    public BoardDrawer(boolean fastPaint)
+    public BoardDrawer()
     {
-        m_fastPaint = fastPaint;
         ClassLoader classLoader = getClass().getClassLoader();
         URL url = classLoader.getResource("net/sf/gogui/images/wood.png");
         if (url == null)
@@ -42,8 +41,7 @@ public class BoardDrawer
     public void draw(Graphics graphics, GuiField[][] field, int width,
                      boolean showGrid)
     {
-        if (! m_fastPaint)
-            GuiUtil.setAntiAlias(graphics);
+        GuiUtil.setAntiAlias(graphics);
         m_width = width;
         m_size = field.length;
         if (m_constants == null || m_constants.getSize() != m_size)
@@ -128,8 +126,6 @@ public class BoardDrawer
     /** Preferred border size (in fraction of field size) if grid is drawn. */
     private static final double BORDER_SIZE_NOGRID = 0.2;
 
-    private final boolean m_fastPaint;
-
     private int m_fieldSize;
 
     private int m_fieldOffset;
@@ -157,14 +153,14 @@ public class BoardDrawer
             {
                 Point location = getLocation(x, y);
                 field[x][y].draw(graphics, m_fieldSize, location.x,
-                                 location.y, m_fastPaint);
+                                 location.y);
             }
         }
     }
 
     private void drawBackground(Graphics graphics)
     {
-        if (m_image != null && ! m_fastPaint)
+        if (m_image != null)
             graphics.drawImage(m_image, 0, 0, m_width, m_width, null);
         else
         {
@@ -253,7 +249,7 @@ public class BoardDrawer
             return;
         Graphics2D graphics2D =
             graphics instanceof Graphics2D ? (Graphics2D)graphics : null;
-        if (graphics2D == null || m_fastPaint)
+        if (graphics2D == null)
             return;
         graphics2D.setComposite(COMPOSITE_3);
         int size = m_fieldSize - 2 * GuiField.getStoneMargin(m_fieldSize);

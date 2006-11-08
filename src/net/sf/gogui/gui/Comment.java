@@ -38,10 +38,10 @@ public class Comment
         void textSelected(String text);
     }
 
-    public Comment(Listener listener, boolean fastPaint)
+    public Comment(Listener listener)
     {
         m_listener = listener;
-        m_textPane = new GuiTextPane(fastPaint);
+        m_textPane = new GuiTextPane();
         setFocusTraversalKeys(m_textPane);
         m_textPane.addStyle("marked", Color.white, Color.decode("#38d878"), 
                             false);

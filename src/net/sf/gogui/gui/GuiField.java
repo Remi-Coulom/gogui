@@ -34,13 +34,12 @@ public class GuiField
         m_influence = 0;
     }
 
-    public void draw(Graphics graphics, int size, int x, int y,
-                     boolean fastPaint)
+    public void draw(Graphics graphics, int size, int x, int y)
     {
         if (! graphics.hitClip(x, y, size, size))
             return;
         m_graphics = graphics.create(x, y, size, size);
-        if (! fastPaint && m_graphics instanceof Graphics2D)
+        if (m_graphics instanceof Graphics2D)
             m_graphics2D = (Graphics2D)m_graphics;
         else
             m_graphics2D = null;

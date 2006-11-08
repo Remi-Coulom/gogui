@@ -43,6 +43,11 @@ GtpDisplay: support resign
 </listitem>
 <listitem>
 <simpara>
+GoGui, GtpDisplay: don't support option -fast anymore
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Several minor fixes
 </simpara>
 </listitem>

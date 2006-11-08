@@ -25,7 +25,6 @@
 </group>
 <arg><option>-command</option> <replaceable>command</replaceable></arg>
 <arg><option>-config</option> <replaceable>file</replaceable></arg>
-<arg><option>-fast</option></arg>
 <arg><option>-gtpfile</option> <replaceable>filename</replaceable></arg>
 <arg><option>-komi</option> <replaceable>value</replaceable></arg>
 <arg><option>-laf</option> <replaceable>name</replaceable></arg>
@@ -140,17 +139,6 @@ Computer plays no side.
 <listitem>
 <para>
 Read command line options and arguments from file.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<option>-fast</option>
-</term>
-<listitem>
-<para>
-Use simple and fast graphics for board.
 </para>
 </listitem>
 </varlistentry>

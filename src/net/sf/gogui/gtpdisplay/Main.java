@@ -20,7 +20,6 @@ public final class Main
         {
             String options[] = {
                 "config:",
-                "fast",
                 "help",
                 "laf:",
                 "verbose",
@@ -38,7 +37,6 @@ public final class Main
                 System.exit(0);
             }
             boolean verbose = opt.isSet("verbose");
-            boolean fastPaint = opt.isSet("fast");
             String lookAndFeel = opt.getString("laf", null);
             ArrayList arguments = opt.getArguments();
             if (arguments.size() > 1)
@@ -51,7 +49,7 @@ public final class Main
                 program = (String)arguments.get(0);
             GuiUtil.initLookAndFeel(lookAndFeel);
             GtpDisplay gtpDisplay
-                = new GtpDisplay(program, verbose, fastPaint);
+                = new GtpDisplay(program, verbose);
             gtpDisplay.mainLoop(System.in, System.out);
             gtpDisplay.close();
         }

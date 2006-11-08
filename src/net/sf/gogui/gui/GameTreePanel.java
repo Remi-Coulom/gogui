@@ -55,11 +55,10 @@ public class GameTreePanel
     public static final Color BACKGROUND = new Color(192, 192, 192);
 
     public GameTreePanel(JDialog owner, GameTreeViewer.Listener listener,
-                         boolean fastPaint, int labelMode, int sizeMode)
+                         int labelMode, int sizeMode)
     {
         super(new SpringLayout());
         m_owner = owner;
-        m_fastPaint = fastPaint;
         setBackground(BACKGROUND);
         m_labelMode = labelMode;
         m_sizeMode = sizeMode;
@@ -122,11 +121,6 @@ public class GameTreePanel
         return m_currentNode;
     }
 
-    public boolean getFastPaint()
-    {
-        return m_fastPaint;
-    }
-    
     public int getLabelMode()
     {
         return m_labelMode;
@@ -203,8 +197,7 @@ public class GameTreePanel
 
     public void paintComponent(Graphics graphics)
     {
-        if (! getFastPaint())
-            GuiUtil.setAntiAlias(graphics);
+        GuiUtil.setAntiAlias(graphics);
         super.paintComponent(graphics);
     }
 
@@ -385,8 +378,6 @@ public class GameTreePanel
             panel.scrollRectToVisible(rectangle);
         }
     }
-
-    private final boolean m_fastPaint;
 
     private boolean m_showSubtreeSizes;
 
@@ -612,7 +603,7 @@ public class GameTreePanel
         String nodeInfo = NodeUtil.nodeInfo(node);
         String title = "Node Info";
         TextViewer textViewer = new TextViewer(m_owner, title, nodeInfo, true,
-                                               null, m_fastPaint);
+                                               null);
         textViewer.setLocation(location);
         textViewer.setVisible(true);
     }
@@ -764,7 +755,7 @@ public class GameTreePanel
         String treeInfo = NodeUtil.treeInfo(node);
         String title = "Subtree Info";
         TextViewer textViewer = new TextViewer(m_owner, title, treeInfo, true,
-                                               null, m_fastPaint);
+                                               null);
         textViewer.setLocation(location);
         textViewer.setVisible(true);
     }

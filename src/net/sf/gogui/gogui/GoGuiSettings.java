@@ -24,8 +24,6 @@ public final class GoGuiSettings
 
     public boolean m_computerWhite;
 
-    public boolean m_fastPaint;
-
     /** True if no startup is required.
         This happens for the -help and -version options which are already
         handled in the constructor.
@@ -63,7 +61,6 @@ public final class GoGuiSettings
             "computer-none",
             "config:",
             "gtpfile:",
-            "fast",
             "help",
             "komi:",
             "laf:",
@@ -90,7 +87,6 @@ public final class GoGuiSettings
         }
         m_prefs = Preferences.userNodeForPackage(c);
         m_initAnalyze = opt.getString("analyze");
-        m_fastPaint = opt.isSet("fast");
         m_auto = opt.isSet("auto");
         m_computerBlack = false;
         m_computerWhite = true;

@@ -63,11 +63,10 @@ public final class GuiBoard
 
     /** Constructor.
         @param size The board size.
-        @param fastPaint Don't use Graphics2D capabilities.
     */
-    public GuiBoard(int size, boolean fastPaint)
+    public GuiBoard(int size)
     {
-        m_drawer = new BoardDrawer(fastPaint);
+        m_drawer = new BoardDrawer();
         setPreferredFieldSize();
         initSize(size);
     }
