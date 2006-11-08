@@ -11,9 +11,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
 import net.sf.gogui.go.GoColor;
@@ -300,19 +302,37 @@ public class AnalyzeCommand
     {
         commands.clear();
         labels.clear();
-        ArrayList files = getFiles();
-        File defaultFile = new File(getDir(), "analyze-commands");
-        if (! files.contains(defaultFile))
+        if (programAnalyzeCommands != null)
         {
-            copyDefaults(defaultFile);
-            files = getFiles();
+            Reader stringReader = new StringReader(programAnalyzeCommands);
+            BufferedReader reader = new BufferedReader(stringReader);
+            readConfig(reader, "program response to gogui_analyze_commands",
+                       commands, labels, supportedCommands);
+            return;
         }
+        String resource = "net/sf/gogui/config/analyze-commands";
+        URL url = ClassLoader.getSystemClassLoader().getResource(resource);
+        if (url == null)
+            return;
+        try
+        {
+            InputStream inputStream = url.openStream();
+            Reader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            readConfig(reader, "builtin default commands", commands, labels,
+                       supportedCommands);
+        }
+        catch (IOException e)
+        {
+            throw new ErrorMessage(e.getMessage());
+        }
+        ArrayList files = getFiles();
         for (int i = 0; i < files.size(); ++i)
         {
             File file = (File)files.get(i);
             try
             {
-                FileReader fileReader = new FileReader(file);
+                Reader fileReader = new FileReader(file);
                 BufferedReader reader = new BufferedReader(fileReader);
                 readConfig(reader, file.getName(), commands, labels,
                            supportedCommands);
@@ -321,14 +341,6 @@ public class AnalyzeCommand
             {
                 throw new ErrorMessage("File " + file + " not found");
             }
-        }
-        if (programAnalyzeCommands != null)
-        {
-            StringReader stringReader
-                = new StringReader(programAnalyzeCommands);
-            BufferedReader reader = new BufferedReader(stringReader);
-            readConfig(reader, "program response to gogui_analyze_commands",
-                       commands, labels, supportedCommands);
         }
     }
 
@@ -425,28 +437,6 @@ public class AnalyzeCommand
     private GoPoint m_pointArg;
 
     private ArrayList m_pointListArg = new ArrayList();
-
-    private static void copyDefaults(File file)
-    {
-        String resource = "net/sf/gogui/config/analyze-commands";
-        URL url = ClassLoader.getSystemClassLoader().getResource(resource);
-        if (url == null)
-            return;
-        try
-        {
-            InputStream in = url.openStream();
-            OutputStream out = new FileOutputStream(file);
-            byte[] buffer = new byte[1024];
-            int n;
-            while ((n = in.read(buffer)) >= 0)
-                out.write(buffer, 0, n);
-            in.close();
-            out.close();
-        }
-        catch (IOException e)
-        {
-        }
-    }
 
     private static File getDir()
     {

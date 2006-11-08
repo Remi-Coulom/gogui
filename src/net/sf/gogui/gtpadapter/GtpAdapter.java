@@ -176,6 +176,14 @@ public class GtpAdapter
         m_board.undo(total);
     }
 
+    public void cmdGoGuiAnalyzeCommands(GtpCommand cmd) throws GtpError
+    {
+        cmd.checkArgNone();
+        String response =
+            "string/GtpAdapter ShowBoard/gtpadapter_showboard\n";
+        cmd.setResponse(response);
+    }
+
     public void cmdGtpAdapterShowBoard(GtpCommand cmd) throws GtpError
     {
         OutputStream outputStream = new ByteArrayOutputStream(2048);
@@ -506,6 +514,9 @@ public class GtpAdapter
         register("boardsize", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdBoardsize(cmd); } });
+        register("gogui_analyze_commands", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdGoGuiAnalyzeCommands(cmd); } });
         register("gtpadapter_showboard", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGtpAdapterShowBoard(cmd); } });

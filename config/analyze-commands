@@ -1,5 +1,4 @@
-# GoGui Analyze Commands
-# Copy this file to ~/.gogui/analyze-commands
+# GoGui Default Analyze Commands
 
 # Standard GTP version 1 and 2 commands
 string/Final Score/final_score
@@ -113,27 +112,3 @@ plist/Worm Stones/worm_stones %p %c
 
 # GoGui extensions
 string/GoGui SigInt/gogui_sigint
-
-# GmpToGtp extensions
-string/Gmp Talk Received/gmp_talk
-none/Gmp Talk Send/gmp_talk %s
-hpstring/Gmp Queue/gmp_queue
-
-# GtpAdapter extensions
-string/GtpAdapter ShowBoard/gtpadapter_showboard
-
-# GtpDummy extensions
-bwboard/Dummy BWBoard/dummy_bwboard
-none/Dummy Crash/dummy_crash
-none/Dummy Delay/dummy_delay %o
-none/Dummy Delay 0s/dummy_delay 0
-none/Dummy Delay 20s/dummy_delay 20
-eplist/Dummy EPList/dummy_eplist
-gfx/Dummy Gfx/dummy_gfx
-none/Dummy Invalid/dummy_invalid
-none/Dummy Live Gfx/dummy_live_gfx
-string/Dummy Long Response/dummy_long_response %s
-none/Dummy Next Failure/dummy_next_failure %s
-none/Dummy Next Success/dummy_next_success %s
-none/Dummy Sleep/dummy_sleep %s
-none/Dummy Sleep 20s/dummy_sleep

@@ -3,34 +3,37 @@
   
 <para>
 GoGui allows to define analyze commands.
-An analyze command is sent to the Go program and the response is displayed
-graphically on the board.
+An analyze command corresponds to a GTP command and describes its parameters
+and response type in a way that they can be invoked from the user interface
+and the response be displayed graphically on the board.
 </para>
   
 <para>
 Analyze commands can be run from the analyze dialog or (if they have a
 single point and an optional color argument) from the context menu of a field
 on the board.
-In the analyze dialog, you can also select, if the command should
+In the analyze dialog, you can also select if the command should
 automatically run after each change on the board, and if the board should
 be cleared from results of previous commands before displaying the new
 result.
 </para>
 
 <para>
-Analyze commands are defined in the
-configuration file <userinput>~/.gogui/analyze-commands</userinput>.
-All files beginning with <userinput>~/.gogui/analyze-commands</userinput>
-are loaded.
-If none exists, a default file is created.
-The Go program can also implement the GTP extension command
+The Go program can implement the GTP extension command
 <command>gogui_analyze_commands</command>, which allows GoGui to query
 program specific analyze commands from the program when a new program is
 attached.
+Otherwise a default configuration is used that knows some standard GTP
+and GNU Go extension commands.
+Analyze commands can also be defined in the
+configuration file <filename>~/.gogui/analyze-commands</filename>
+in the user's home directory.
 </para>
 
 <para>
-There is one line per command in the format:
+An example configuration is the default configuration file
+<filename>config/analyze-commands</filename> in the GoGui package.
+The format consists of one line per command:
 </para>
   
 <programlisting>
