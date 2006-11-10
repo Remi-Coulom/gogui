@@ -10,7 +10,12 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -347,6 +352,8 @@ public class GoGui
             close();
         else if (command.equals("export-ascii"))
             cbExportAscii();
+        else if (command.equals("export-clipboard"))
+            cbExportClipboard();
         else if (command.equals("export-latex"))
             cbExportLatex();
         else if (command.equals("export-latex-position"))
@@ -1583,13 +1590,27 @@ public class GoGui
             return;
         try
         {
-            OutputStream out = new FileOutputStream(file);
-            BoardUtil.print(m_board, new PrintStream(out), false);
+            String text = BoardUtil.toString(m_board, false);
+            PrintStream out = new PrintStream(new FileOutputStream(file));
         }
         catch (FileNotFoundException e)
         {
             showError("Export failed", e);
         }
+    }
+
+    private void cbExportClipboard()
+    {
+        String text = BoardUtil.toString(m_board, false);
+        StringSelection selection = new StringSelection(text);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        ClipboardOwner owner = new ClipboardOwner() {
+                public void lostOwnership(Clipboard clipboard,
+                                          Transferable contents)
+                {
+                }
+            };
+        clipboard.setContents(selection, owner);
     }
 
     private void cbExportSgfPosition()

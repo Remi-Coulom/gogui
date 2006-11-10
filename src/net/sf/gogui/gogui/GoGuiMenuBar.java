@@ -913,6 +913,8 @@ public class GoGuiMenuBar
         menu.addItem("LaTeX Position...", KeyEvent.VK_P,
                      "export-latex-position");
         menu.addItem("Text Position...", KeyEvent.VK_T, "export-ascii");
+        menu.addItem("Text Position to Clipboard", KeyEvent.VK_C,
+                     "export-clipboard");
         return menu;
     }
 

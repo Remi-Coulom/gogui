@@ -345,7 +345,7 @@ public class GtpTerminal
 
     private void printBoard()
     {
-        BoardUtil.print(m_board, System.out, true);
+        System.out.print(BoardUtil.toString(m_board, true));
     }
 
     private void save(String[] cmdArray)

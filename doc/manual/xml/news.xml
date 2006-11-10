@@ -28,6 +28,11 @@ Automatically clear board before drawing live graphics commands
 </listitem>
 <listitem>
 <simpara>
+New menu item Export Text Position to Clipboard
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 GtpAdapter: always handle the loadsgf command in the adapter
 </simpara>
 </listitem>

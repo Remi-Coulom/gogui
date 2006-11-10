@@ -12,17 +12,18 @@ public final class BoardUtil
     /** Number of rotation modes for #rotate(). */
     public static final int NUMBER_ROTATIONS = 8;
 
-    /** Print board position in text format.
+    /** Get board position as text diagram.
         @param board The board to print.
-        @param out The stream to print to.
         @param withGameInfo Print game information (prisoners, recent moves)
+        @return Board position as text diagram.
     */
-    public static void print(ConstBoard board, PrintStream out,
-                             boolean withGameInfo)
+    public static String toString(ConstBoard board, boolean withGameInfo)
     {
         StringBuffer s = new StringBuffer(1024);
         int size = board.getSize();
-        printXCoords(size, s);
+        String separator = System.getProperty("line.separator");
+        assert(separator != null);
+        printXCoords(size, s, separator);
         for (int y = size - 1; y >= 0; --y)
         {
             printYCoord(y, s);
@@ -46,15 +47,15 @@ public final class BoardUtil
             printYCoord(y, s);
             if (withGameInfo)
                 printGameInfo(board, s, y);
-            s.append('\n');
+            s.append(separator);
         }
-        printXCoords(size, s);
+        printXCoords(size, s, separator);
         if (! withGameInfo)
         {
             printToMove(board, s);
-            s.append('\n');
+            s.append(separator);
         }
-        out.print(s);
+        return s.toString();
     }
 
     /** Rotate/mirror point.
@@ -135,7 +136,8 @@ public final class BoardUtil
         buffer.append(" to move");
     }
 
-    private static void printXCoords(int size, StringBuffer s)
+    private static void printXCoords(int size, StringBuffer s,
+                                     String separator)
     {
         s.append("   ");
         int x;
@@ -147,7 +149,7 @@ public final class BoardUtil
             s.append(c);
             s.append(' ');
         }
-        s.append('\n');
+        s.append(separator);
     }
 
     private static void printYCoord(int y, StringBuffer s)

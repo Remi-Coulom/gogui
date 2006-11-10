@@ -5,7 +5,6 @@
 package net.sf.gogui.gtpadapter;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -186,11 +185,8 @@ public class GtpAdapter
 
     public void cmdGtpAdapterShowBoard(GtpCommand cmd) throws GtpError
     {
-        OutputStream outputStream = new ByteArrayOutputStream(2048);
-        PrintStream printStream = new PrintStream(outputStream);
-        BoardUtil.print(m_board, printStream, true);
         cmd.getResponse().append("\n");
-        cmd.getResponse().append(outputStream.toString());
+        cmd.getResponse().append(BoardUtil.toString(m_board, true));
     }
 
     public void cmdLoadsgf(GtpCommand cmd) throws GtpError

@@ -151,7 +151,16 @@ Some board markups are also exported
 <term><guisubmenu>Export</guisubmenu> / <guimenuitem>Text Position</guimenuitem></term>
 <listitem>
 <para>
-Export the current position to a text file.
+Export the current position as a text diagram to a file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Export</guisubmenu> / <guimenuitem>Text Position to Clipboard</guimenuitem></term>
+<listitem>
+<para>
+Export the current position as a text diagram to the clipboard.
 </para>
 </listitem>
 </varlistentry>
