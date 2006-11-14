@@ -43,7 +43,7 @@ public class GameInfo
     public void actionPerformed(ActionEvent evt)
     {
         if (m_clock.isRunning())
-            updateTime();
+            updateTimeFromClock();
     }
 
     public void fastUpdateMoveNumber(String text)
@@ -83,22 +83,18 @@ public class GameInfo
         }
         m_last.setText(lastMove);
         m_variation.setText(NodeUtil.getVariationString(node));
-        double timeLeftBlack = node.getTimeLeft(GoColor.BLACK);
-        int movesLeftBlack = node.getMovesLeft(GoColor.BLACK);
-        if (! Double.isNaN(timeLeftBlack))
-            m_timeB.setText(Clock.getTimeString(timeLeftBlack,
-                                                movesLeftBlack));
-        double timeLeftWhite = node.getTimeLeft(GoColor.WHITE);
-        int movesLeftWhite = node.getMovesLeft(GoColor.WHITE);
-        if (! Double.isNaN(timeLeftWhite))
-            m_timeW.setText(Clock.getTimeString(timeLeftWhite,
-                                                movesLeftWhite));
+        // Usually time left information is stored in a node only for the
+        // player who moved, so we check the father node too
+        Node father = node.getFather();
+        if (father != null)
+            updateTimeFromNode(father);
+        updateTimeFromNode(node);
     }
 
-    public void updateTime()
+    public void updateTimeFromClock()
     {
-        updateTime(GoColor.BLACK);
-        updateTime(GoColor.WHITE);
+        updateTimeFromClock(GoColor.BLACK);
+        updateTimeFromClock(GoColor.WHITE);
     }
 
     /** Serial version to suppress compiler warning.
@@ -152,7 +148,7 @@ public class GameInfo
         }
     }
 
-    private void updateTime(GoColor color)
+    private void updateTimeFromClock(GoColor color)
     {
         String text = m_clock.getTimeString(color);
         if (text == null)
@@ -161,6 +157,20 @@ public class GameInfo
             m_timeB.setText(text);
         else
             m_timeW.setText(text);
+    }
+
+    private void updateTimeFromNode(Node node)
+    {
+        double timeLeftBlack = node.getTimeLeft(GoColor.BLACK);
+        int movesLeftBlack = node.getMovesLeft(GoColor.BLACK);
+        if (! Double.isNaN(timeLeftBlack))
+            m_timeB.setText(Clock.getTimeString(timeLeftBlack,
+                                                movesLeftBlack));
+        double timeLeftWhite = node.getTimeLeft(GoColor.WHITE);
+        int movesLeftWhite = node.getMovesLeft(GoColor.WHITE);
+        if (! Double.isNaN(timeLeftWhite))
+            m_timeW.setText(Clock.getTimeString(timeLeftWhite,
+                                                movesLeftWhite));
     }
 }
 
