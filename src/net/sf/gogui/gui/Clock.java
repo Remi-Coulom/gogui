@@ -6,7 +6,6 @@ package net.sf.gogui.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.StringUtil;
@@ -64,7 +63,7 @@ public final class Clock
         TimeRecord record = getRecord(color);
         long time = record.m_time;
         if (m_toMove.equals(color))
-            time += new Date().getTime() - m_startMoveTime;
+            time += System.currentTimeMillis() - m_startMoveTime;
         if (isInitialized())
         {
             if (record.m_isInByoyomi)
@@ -100,7 +99,7 @@ public final class Clock
         if (m_toMove == GoColor.EMPTY)
             return;
         TimeRecord record = getRecord(m_toMove);
-        long time = new Date().getTime() - m_startMoveTime;
+        long time = System.currentTimeMillis() - m_startMoveTime;
         record.m_time += time;
         m_toMove = GoColor.EMPTY;
         updateListener();
@@ -200,7 +199,7 @@ public final class Clock
         if  (m_toMove != GoColor.EMPTY)
             stopMove();
         m_toMove = color;
-        m_startMoveTime = new Date().getTime();
+        m_startMoveTime = System.currentTimeMillis();
         m_timer.start();
     }
 
@@ -214,7 +213,7 @@ public final class Clock
         if (m_toMove == GoColor.EMPTY)
             return;
         TimeRecord record = getRecord(m_toMove);
-        long time = new Date().getTime() - m_startMoveTime;
+        long time = System.currentTimeMillis() - m_startMoveTime;
         record.m_time += time;
         if (isInitialized() && getUseByoyomi())
         {
