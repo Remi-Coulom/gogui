@@ -103,6 +103,7 @@ public final class Clock
         record.m_time += time;
         m_toMove = GoColor.EMPTY;
         updateListener();
+        m_timer.stop();
     }
 
     public boolean isInitialized()
