@@ -4,6 +4,8 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Date;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
@@ -17,13 +19,25 @@ import net.sf.gogui.util.StringUtil;
 */
 public final class Clock
 {
+    public interface Listener
+    {
+        void clockChanged(Clock clock);
+    }
+
     public Clock()
     {
+        ActionListener listener = new ActionListener() {
+                public void actionPerformed(ActionEvent event)
+                {
+                    updateListener();
+                }
+            };
+        m_timer = new javax.swing.Timer(1000, listener);
         reset();
     }
 
     /** Get moves left.
-        Requires: getUseByoyomi() && isInByoyomi(color)
+        Requires: getUseByoyomi() and isInByoyomi(color)
     */
     public int getMovesLeft(GoColor color)
     {
@@ -68,7 +82,7 @@ public final class Clock
         return getTimeString((double)time, movesLeft);
     }
 
-    /** If not in byoyomi movesLeft < 0. */
+    /** If not in byoyomi movesLeft &lt; 0 */
     public static String getTimeString(double timeLeft, int movesLeft)
     {
         StringBuffer buffer = new StringBuffer(8);
@@ -89,6 +103,7 @@ public final class Clock
         long time = new Date().getTime() - m_startMoveTime;
         record.m_time += time;
         m_toMove = GoColor.EMPTY;
+        updateListener();
     }
 
     public boolean isInitialized()
@@ -123,6 +138,7 @@ public final class Clock
         reset(GoColor.BLACK);
         reset(GoColor.WHITE);
         m_toMove = GoColor.EMPTY;
+        updateListener();
     }
 
     public void reset(GoColor color)
@@ -132,6 +148,15 @@ public final class Clock
         timeRecord.m_movesLeft = 0;
         timeRecord.m_isInByoyomi = false;
         timeRecord.m_byoyomiExceeded = false;
+        updateListener();
+    }
+
+    /** Register listener for clock changes.
+        Only one listener supported at the moment.
+    */
+    public void setListener(Listener listener)
+    {
+        m_listener = listener;
     }
 
     public void setTimeSettings(TimeSettings settings)
@@ -163,6 +188,7 @@ public final class Clock
         }
         if (m_toMove != GoColor.EMPTY)
             startMove(m_toMove);
+        updateListener();
     }
 
     /** Start time for a move.
@@ -175,6 +201,7 @@ public final class Clock
             stopMove();
         m_toMove = color;
         m_startMoveTime = new Date().getTime();
+        m_timer.start();
     }
 
     /** Stop time for a move.
@@ -214,6 +241,8 @@ public final class Clock
             }
         }
         m_toMove = GoColor.EMPTY;
+        updateListener();
+        m_timer.stop();
     }    
 
     private static class TimeRecord
@@ -236,6 +265,10 @@ public final class Clock
     private final TimeRecord m_timeRecordWhite = new TimeRecord();
 
     private TimeSettings m_timeSettings;
+
+    private Listener m_listener;
+
+    private final javax.swing.Timer m_timer;
 
     private TimeRecord getRecord(GoColor c)
     {
@@ -263,6 +296,12 @@ public final class Clock
     private boolean getUseByoyomi()
     {
         return m_timeSettings.getUseByoyomi();
+    }
+
+    private void updateListener()
+    {
+        if (m_listener != null)
+            m_listener.clockChanged(this);
     }
 }
 

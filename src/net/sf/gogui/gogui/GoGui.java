@@ -1463,7 +1463,7 @@ public class GoGui
             cbNewGame(Integer.parseInt(size));
             m_clock.reset();
             m_clock.halt();
-            m_gameInfo.updateTimeFromClock();
+            m_gameInfo.updateTimeFromClock(m_clock);
             updateMenuBar();
         }
         catch (NumberFormatException e)
@@ -1482,7 +1482,7 @@ public class GoGui
         m_clock.reset();
         m_clock.halt();
             updateMenuBar();
-        m_gameInfo.updateTimeFromClock();
+        m_gameInfo.updateTimeFromClock(m_clock);
     }
     
     private void cbBookmark(String number)
@@ -1551,7 +1551,7 @@ public class GoGui
         Node father = m_currentNode.getFather();
         if (father != null)
             clockRestore(father, color);
-        m_gameInfo.updateTimeFromClock();
+        m_gameInfo.updateTimeFromClock(m_clock);
         updateMenuBar();
     }
 

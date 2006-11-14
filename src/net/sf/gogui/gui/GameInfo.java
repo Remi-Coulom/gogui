@@ -21,12 +21,13 @@ import net.sf.gogui.go.Move;
 /** Panel displaying information about the current position. */
 public class GameInfo
     extends JPanel
-    implements ActionListener
 {
+    /** Constructor.
+        @param clock Clock to register as listener or null.
+    */
     public GameInfo(Clock clock)
     {
         super(new GridLayout(0, 2, GuiUtil.SMALL_PAD, GuiUtil.SMALL_PAD));
-        m_clock = clock;
         m_move = addEntry("To play:");
         m_number = addEntry("Moves:");
         m_last = addEntry("Last move:");
@@ -37,13 +38,16 @@ public class GameInfo
         m_timeW = addEntry("Time White:");
         m_timeB.setText("00:00");
         m_timeW.setText("00:00");
-        new javax.swing.Timer(1000, this).start();
-    }
-
-    public void actionPerformed(ActionEvent evt)
-    {
-        if (m_clock.isRunning())
-            updateTimeFromClock();
+        if (clock != null)
+        {
+            Clock.Listener listener = new Clock.Listener() {
+                    public void clockChanged(Clock clock)
+                    {
+                        updateTimeFromClock(clock);
+                    }
+                };
+            clock.setListener(listener);
+        }
     }
 
     public void fastUpdateMoveNumber(String text)
@@ -91,10 +95,10 @@ public class GameInfo
         updateTimeFromNode(node);
     }
 
-    public void updateTimeFromClock()
+    public void updateTimeFromClock(Clock clock)
     {
-        updateTimeFromClock(GoColor.BLACK);
-        updateTimeFromClock(GoColor.WHITE);
+        updateTimeFromClock(clock, GoColor.BLACK);
+        updateTimeFromClock(clock, GoColor.WHITE);
     }
 
     /** Serial version to suppress compiler warning.
@@ -117,8 +121,6 @@ public class GameInfo
     private final JTextField m_timeW;
 
     private final JTextField m_variation;
-
-    private final Clock m_clock;
 
     private JTextField addEntry(String text)
     {
@@ -148,9 +150,9 @@ public class GameInfo
         }
     }
 
-    private void updateTimeFromClock(GoColor color)
+    private void updateTimeFromClock(Clock clock, GoColor color)
     {
-        String text = m_clock.getTimeString(color);
+        String text = clock.getTimeString(color);
         if (text == null)
             text = " ";
         if (color == GoColor.BLACK)
