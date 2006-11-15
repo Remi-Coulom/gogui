@@ -566,7 +566,10 @@ public class GtpRegress
                 line = stringBuffer.toString();
             }
         }
-        if (style != m_currentStyle)
+        if ((style == null && m_currentStyle != null)
+            || (style != null && m_currentStyle == null)
+            || (style != null && m_currentStyle != null
+                && ! style.equals(m_currentStyle)))
         {
             if (m_currentStyle != null)
                 m_out.print("</span>");
