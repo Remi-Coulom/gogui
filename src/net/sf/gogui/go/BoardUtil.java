@@ -4,8 +4,6 @@
 
 package net.sf.gogui.go;
 
-import java.io.PrintStream;
-
 /** Static utility functions related to class Board. */
 public final class BoardUtil
 {
