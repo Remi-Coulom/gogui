@@ -18,6 +18,8 @@ public final class Placement
 
     public boolean equals(Object object)
     {
+        if (object == null)
+            return false;
         Placement placement = (Placement)object;
         return (m_point == placement.m_point
                 && m_color == placement.m_color
@@ -32,6 +34,20 @@ public final class Placement
     public GoPoint getPoint()
     {
         return m_point;
+    }
+
+    public int hashCode()
+    {
+        int hashCode = m_point.hashCode() << 3;
+        if (m_isSetup)
+            hashCode |= (1 << 2);
+        if (m_color == GoColor.BLACK)
+            hashCode |= 1;
+        else if (m_color == GoColor.WHITE)
+            hashCode |= 2;
+        else
+            hashCode |= 3;
+        return hashCode;
     }
 
     public boolean isPassMove()
