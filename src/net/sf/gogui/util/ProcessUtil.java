@@ -78,24 +78,30 @@ public class ProcessUtil
         discardErr.start();
         InputStream in = process.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        StringBuffer result = new StringBuffer();
-        String line;
-        while ((line = reader.readLine()) != null)
-        {
-            result.append(line);
-            result.append('\n');
-        }
-        reader.close();
         try
         {
-            if (process.waitFor() != 0)
-                throw new IOException("Process returned error status");
+            StringBuffer result = new StringBuffer();
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                result.append(line);
+                result.append('\n');
+            }
+            try
+            {
+                if (process.waitFor() != 0)
+                    throw new IOException("Process returned error status");
+            }
+            catch (InterruptedException e)
+            {
+                throw new IOException("InterruptedException");
+            }
+            return result.toString();
         }
-        catch (InterruptedException e)
+        finally
         {
-            throw new IOException("InterruptedException");
+            reader.close();
         }
-        return result.toString();
     }
 
     /** Run a process.
