@@ -1593,6 +1593,7 @@ public class GoGui
             String text = BoardUtil.toString(m_board, false);
             PrintStream out = new PrintStream(new FileOutputStream(file));
             out.print(text);
+            out.close();
         }
         catch (FileNotFoundException e)
         {
