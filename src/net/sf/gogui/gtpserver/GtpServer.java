@@ -149,16 +149,22 @@ public final class GtpServer
             System.err.println("Sending login information from file "
                                + userFile);
             InputStream inputStream = new FileInputStream(new File(userFile));
-            OutputStream outputStream = socket.getOutputStream();
-            byte buffer[] = new byte[1024];
-            while (true)
+            try
             {
-                int n = inputStream.read(buffer);
-                if (n < 0)
-                    break;
-                outputStream.write(buffer, 0, n);
+                OutputStream outputStream = socket.getOutputStream();
+                byte buffer[] = new byte[1024];
+                while (true)
+                {
+                    int n = inputStream.read(buffer);
+                    if (n < 0)
+                        break;
+                    outputStream.write(buffer, 0, n);
+                }
             }
-            inputStream.close();
+            finally
+            {
+                inputStream.close();
+            }
         }
         System.err.println("Connected");
         return socket;
