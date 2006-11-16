@@ -396,6 +396,7 @@ class WriteThread extends Thread
     */
     public boolean sendTalk(String talk)
     {
+        Util.log("send talk: '" + talk + "'", m_verbose);
         synchronized (m_mutex)
         {
             int size = talk.length();
