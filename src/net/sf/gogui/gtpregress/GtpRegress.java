@@ -668,23 +668,8 @@ public class GtpRegress
         return total;
     }
 
-    private void runTest(String test)
-        throws Exception
+    private void queryNameAndVersion() throws GtpError
     {
-        m_tests.clear();
-        m_dataFiles.clear();
-        m_otherErrors = 0;
-        m_testFile = new File(test);
-        initOutFile();
-        File outFile = new File(m_outFileName);
-        File testFileDir = m_testFile.getAbsoluteFile().getParentFile();
-        m_relativePath = FileUtil.getRelativeURI(outFile, testFileDir);
-        if (! m_relativePath.equals("") && ! m_relativePath.endsWith("/"))
-            m_relativePath = m_relativePath + "/";
-        FileReader fileReader = new FileReader(m_testFile);
-        BufferedReader reader = new BufferedReader(fileReader);
-        m_gtp = new GtpClient(m_program, m_verbose, this);
-        m_lastSgf = null;
         try
         {
             m_name = send("name");
@@ -703,38 +688,63 @@ public class GtpRegress
         {
             m_version = "";
         }
-        double cpuTime = getCpuTime();
-        long timeMillis = System.currentTimeMillis();
-        printOutSeparator();
-        String line;
-        while (true)
+    }
+
+    private void runTest(String test) throws Exception
+    {
+        m_tests.clear();
+        m_dataFiles.clear();
+        m_otherErrors = 0;
+        m_testFile = new File(test);
+        initOutFile();
+        File outFile = new File(m_outFileName);
+        File testFileDir = m_testFile.getAbsoluteFile().getParentFile();
+        m_relativePath = FileUtil.getRelativeURI(outFile, testFileDir);
+        if (! m_relativePath.equals("") && ! m_relativePath.endsWith("/"))
+            m_relativePath = m_relativePath + "/";
+        FileReader fileReader = new FileReader(m_testFile);
+        BufferedReader reader = new BufferedReader(fileReader);
+        try
         {
-            line = reader.readLine();
-            if (line == null)
-                break;
-            handleLine(line);
+            m_gtp = new GtpClient(m_program, m_verbose, this);
+            m_lastSgf = null;
+            queryNameAndVersion();
+            double cpuTime = getCpuTime();
+            long timeMillis = System.currentTimeMillis();
+            printOutSeparator();
+            String line;
+            while (true)
+            {
+                line = reader.readLine();
+                if (line == null)
+                    break;
+                handleLine(line);
+            }
+            timeMillis = System.currentTimeMillis() - timeMillis;
+            if (m_lastFullResponse != null)
+            {
+                handleLastResponse();
+                m_lastFullResponse = null;
+            }
+            printOutSeparator();
+            cpuTime = getCpuTime() - cpuTime;
+            if (m_lastFullResponse != null)
+            {
+                handleLastResponse();
+                m_lastFullResponse = null;
+            }
+            if (! m_gtp.isProgramDead())
+                send("quit");
+            m_gtp.waitForExit();
+            finishOutFile();
+            TestSummary testSummary = getTestSummary(timeMillis, cpuTime);
+            m_testSummaries.add(testSummary);
+            writeTestSummary(testSummary);
         }
-        timeMillis = System.currentTimeMillis() - timeMillis;
-        if (m_lastFullResponse != null)
+        finally
         {
-            handleLastResponse();
-            m_lastFullResponse = null;
+            reader.close();
         }
-        printOutSeparator();
-        cpuTime = getCpuTime() - cpuTime;
-        if (m_lastFullResponse != null)
-        {
-            handleLastResponse();
-            m_lastFullResponse = null;
-        }
-        if (! m_gtp.isProgramDead())
-            send("quit");
-        m_gtp.waitForExit();
-        reader.close();
-        finishOutFile();
-        TestSummary testSummary = getTestSummary(timeMillis, cpuTime);
-        m_testSummaries.add(testSummary);
-        writeTestSummary(testSummary);
     }
 
     private String truncate(String string)
