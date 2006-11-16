@@ -344,7 +344,8 @@ public class GtpDisplay
         if (m_gtp == null)
         {
             if (m_frame == null)
-                throw GtpError("GtpDisplay terminated"); // can that happen?
+                // can that happen?
+                throw new GtpError("GtpDisplay terminated");
             m_color = color;
             invokeAndWait(new Runnable()
                 {
