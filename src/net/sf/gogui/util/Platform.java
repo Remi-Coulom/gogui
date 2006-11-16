@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.URL;
+import java.util.Locale;
 
 /** Static utility functions for platform detection and platform-dependent
     behavior.
@@ -87,7 +88,7 @@ public class Platform
     {
         // See http://developer.apple.com/technotes/tn2002/tn2110.html
         String name = System.getProperty("os.name");
-        return name.toLowerCase().startsWith("mac os x");
+        return name.toLowerCase(Locale.getDefault()).startsWith("mac os x");
     }
 
     /** Check if the platform is Unix. */
