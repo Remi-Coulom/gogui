@@ -390,18 +390,21 @@ class WriteThread extends Thread
         }
     }
 
+    /** Send talk.
+        Non-ASCII characters in the range [4..126] are replaced by '?'.
+        @param talk Talk text.
+    */
     public boolean sendTalk(String talk)
     {
         synchronized (m_mutex)
         {
             int size = talk.length();
-            byte buffer[] = new byte[size + 1];
+            byte buffer[] = new byte[size];
             for (int i = 0; i < size; ++i)
             {
-                byte b = (byte)talk.charAt(i);
-                buffer[i] = ((b > 3 && b < 127) ? b : (byte)'?');            
+                char c = talk.charAt(i);
+                buffer[i] = (byte)((c > 3 && c < 127) ? c : '?');
             }
-            buffer[size] = (byte)'\n';
             try
             {
                 m_out.write(buffer);
@@ -411,7 +414,15 @@ class WriteThread extends Thread
             {
                 return false;
             }
-            return false;
+            StringBuffer logText = new StringBuffer(256);
+            logText.append("send");
+            for (int i = 0; i < buffer.length; ++i)
+            {
+                logText.append(' ');
+                logText.append(Util.format(buffer[i]));
+            }
+            Util.log(logText.toString(), m_verbose);
+            return true;
         }
     }
 

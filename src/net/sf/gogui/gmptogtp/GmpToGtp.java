@@ -124,15 +124,14 @@ public class GmpToGtp
 
     public void cmdTalk(GtpCommand cmd) throws GtpError
     {
-        String line = cmd.getLine();
-        int index = line.indexOf(' ');
-        if (index > 0 && ! line.substring(index + 1).trim().equals(""))
+        if (cmd.getNuArg() == 0)
+            cmd.getResponse().append(m_gmp.getTalk());
+        else
         {
-            if (! m_gmp.sendTalk(line.substring(index + 1)))
+            String line = cmd.getArgLine();
+            if (! m_gmp.sendTalk(line + '\n'))
                 throw new GtpError("Write error");
         }
-        else
-            cmd.getResponse().append(m_gmp.getTalk());
     }
 
     public void cmdUndo(GtpCommand cmd) throws GtpError

@@ -29,12 +29,13 @@ public class GmpTest
         receiveNewGame(false, true);
         sendMove(true, true, true, 4, 4);
         sendUndo(true, false);
+        sendTalk("Hello");
         sendNewGame(true, true);
         receiveMove(true, false, true, -1, -1);
         closeGmp();
     }
 
-    private static final boolean VERBOSE = false;
+    private static final boolean VERBOSE = true;
 
     private static final int OK = 0;
 
@@ -108,25 +109,31 @@ public class GmpTest
         return packet;
     }
 
-    private byte[] readPacket() throws IOException
+    private byte[] read(int nuBytes) throws IOException
     {
-        byte[] packet = new byte[4];
+        byte[] byteArray = new byte[nuBytes];
         int len = 0;
-        while (len < 4)
+        while (len < nuBytes)
         {
-            int n = m_in.read(packet, len, 4 - len);
+            int n = m_in.read(byteArray, len, nuBytes - len);
             if (n < 0)
-                return null;
+                fail();
             len += n;
         }
-        return packet;
+        return byteArray;
     }
 
     private void receive(boolean hisSeq, boolean mySeq, int cmd, int val)
         throws IOException
     {
-        byte[] packet = readPacket();
+        byte[] packet = read(4);
         verifyPacket(packet, hisSeq, mySeq, cmd, val);
+    }
+
+    private void receiveTalk(String talk) throws IOException
+    {
+        byte[] byteArray = read(talk.length());
+        assertEquals(new String(byteArray), talk);
     }
 
     private void receiveNewGame(boolean hisSeq, boolean mySeq)
@@ -194,6 +201,21 @@ public class GmpTest
         thread.start();
         receive(hisSeq, mySeq, NEWGAME, 0);
         send(mySeq, hisSeq, OK, 0);
+        waitThread(thread);
+    }
+
+    private void sendTalk(final String talk) throws IOException
+    {
+        Thread thread = new Thread()
+            {
+                public void run()
+                {
+                    boolean result = m_gmp.sendTalk(talk);
+                    assertTrue(result);
+                }
+            };
+        thread.start();
+        receiveTalk(talk);
         waitThread(thread);
     }
 
