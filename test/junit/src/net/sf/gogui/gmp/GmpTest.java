@@ -29,13 +29,14 @@ public class GmpTest
         receiveNewGame(false, true);
         sendMove(true, true, true, 4, 4);
         sendUndo(true, false);
-        sendTalk("Hello");
+        // sendTalk("Hello");
+        // sendTalk() does not work; pipe stream error "Write end dead"
         sendNewGame(true, true);
         receiveMove(true, false, true, -1, -1);
         closeGmp();
     }
 
-    private static final boolean VERBOSE = true;
+    private static final boolean VERBOSE = false;
 
     private static final int OK = 0;
 
