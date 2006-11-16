@@ -240,8 +240,7 @@ public class GtpShell
         m_historyMax = prefs.getInt("history-max", 3000);
         JPanel panel = new JPanel(new BorderLayout());
         getContentPane().add(panel, BorderLayout.CENTER);
-        m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax,
-                                          m_timeStamp);
+        m_gtpShellText = new GtpShellText(m_historyMin, m_historyMax, false);
         m_scrollPane =
             new JScrollPane(m_gtpShellText.get(),
                             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -543,8 +542,6 @@ public class GtpShell
 
         private final String m_item;
     }
-
-    private boolean m_timeStamp;
 
     private boolean m_disableCompletions;
 
