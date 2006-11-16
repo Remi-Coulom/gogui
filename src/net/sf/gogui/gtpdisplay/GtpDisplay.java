@@ -341,8 +341,10 @@ public class GtpDisplay
     {
         GoColor color = cmd.getColorArg();
         GoPoint point;        
-        if (m_gtp == null && m_frame != null)
+        if (m_gtp == null)
         {
+            if (m_frame == null)
+                throw GtpError("GtpDisplay terminated"); // can that happen?
             m_color = color;
             invokeAndWait(new Runnable()
                 {
