@@ -82,8 +82,14 @@ public class GtpStatistics
         m_table.setProperty("Games", Integer.toString(m_numberGames));
         m_table.setProperty("Backward", backward ? "yes" : "no");
         FileWriter writer = new FileWriter(output);
-        m_table.save(writer);
-        writer.close();
+        try
+        {
+            m_table.save(writer);
+        }
+        finally
+        {
+            writer.close();
+        }
     }
 
     public boolean getResult()

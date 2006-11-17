@@ -83,8 +83,14 @@ public class Analyze
                 plot.setPlotStyleNoLines();
                 plot.plot(pngFile, table, "Move", "Mean", "Error");
                 FileWriter writer = new FileWriter(dataFile);
-                table.save(writer, false);
-                writer.close();
+                try
+                {
+                    table.save(writer, false);
+                }
+                finally
+                {
+                    writer.close();
+                }
                 out.print("<tr><td>\n");
                 writePlot(out, getCommandLink(i), pngFile.getName(),
                           "<a href=\"" + dataFile.getName()
@@ -464,8 +470,14 @@ public class Analyze
         plot.setNoPlotYZero();
         plot.plot(getCountFile(), table, "Move", "Count", null);
         FileWriter writer = new FileWriter(getCountDataFile());
-        table.save(writer, false);
-        writer.close();
+        try
+        {
+            table.save(writer, false);
+        }
+        finally
+        {
+            writer.close();
+        }
     }
 
     private boolean isGameGlobalCommand(String command)
