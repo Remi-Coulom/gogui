@@ -204,14 +204,21 @@ public final class ThumbnailCreator
         throws FileNotFoundException, SgfReader.SgfError
     {
         FileInputStream in = new FileInputStream(file);
-        SgfReader reader = new SgfReader(in, file.toString(), null, 0);
+        SgfReader reader;
         try
         {
-            in.close();
+            reader = new SgfReader(in, file.toString(), null, 0);
         }
-        catch (IOException e)
+        finally
         {
-            log(e.getMessage());
+            try
+            {
+                in.close();
+            }
+            catch (IOException e)
+            {
+                log(e.getMessage());
+            }
         }
         GameTree tree = reader.getGameTree();
         GameInformation gameInformation = tree.getGameInformation();
