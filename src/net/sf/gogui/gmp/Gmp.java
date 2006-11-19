@@ -417,7 +417,7 @@ class WriteThread extends Thread
             {
                 return false;
             }
-            return false;
+            return true;
         }
     }
 
