@@ -1,7 +1,5 @@
 BUGS:
 
-GtpSynchronizer: don't enter outOfSync state if first command fails
-
 TwoGtp: should not query game result if game was aborted due to a failure
 response
 
