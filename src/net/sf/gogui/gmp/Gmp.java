@@ -7,7 +7,7 @@
   
   Simple version of the protocol:
   Appendix A in Call For Participation to the FJK Computer Go Tournament 2000
-  http://www.brl.ntt.co.jp/sig-gi/fjk2k-go/cfp-english.txt
+  http://sig-gi.c.u-tokyo.ac.jp/fjk2k-go/cfp-english.txt  
   
   $Id$
   $Source$
