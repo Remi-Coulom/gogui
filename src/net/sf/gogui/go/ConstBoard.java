@@ -6,7 +6,9 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 
-/** Const functions of go.Board. */
+/** Const functions of go.Board.
+    @see Board
+*/
 public interface ConstBoard
 {
     boolean bothPassed();
