@@ -6,8 +6,16 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 
+/** Count the final score on a Go board.
+    Allows to mark stones as dead and count the territory surrounded by
+    alive stones of one color.
+*/
 public class CountScore
 {
+    /** Begin counting a score.
+        @param board The board.
+        @param isDeadStone Initial set of stones to be marked as dead.
+     */
     public void begin(ConstBoard board, GoPoint[] isDeadStone)
     {
         m_board = board;
@@ -22,6 +30,7 @@ public class CountScore
         compute();
     }
 
+    /** Update score after changing the life-death status of stones. */
     public void compute()
     {
         Marker mark = new Marker(m_board.getSize());
@@ -48,19 +57,12 @@ public class CountScore
             {
                 territory.clear();
                 if (isTerritory(mark, p, territory, GoColor.BLACK))
-                {
-                    for (int j = 0; j < territory.size(); ++j)
-                        setScore((GoPoint)territory.get(j), GoColor.BLACK);
-                }
+                    setScore(territory, GoColor.BLACK);
                 else
                 {
                     mark.set(territory, false);
                     if (isTerritory(mark, p, territory, GoColor.WHITE))
-                    {
-                        for (int j = 0; j < territory.size(); ++j)
-                            setScore((GoPoint)territory.get(j),
-                                     GoColor.WHITE);
-                    }
+                        setScore(territory, GoColor.WHITE);
                     else
                         mark.set(territory, false);
                 }
@@ -68,16 +70,29 @@ public class CountScore
         }
     }
 
+    /** Get the owner of a point.
+        @param p The point (empty or occupied)
+        @return GoColor.BLACK, if point belongs to Black; GoColor.WHITE, if
+        point belongs to White; GoColor.EMPTY, if point is neutral.
+    */
     public GoColor getColor(GoPoint p)
     {
         return m_score[p.getX()][p.getY()];
     }
 
+    /** Get the life-death status of a stone.
+        @param p The stone.
+        @return true, if stone is dead, false if stone is alive.
+    */
     public boolean getDead(GoPoint p)
     {
         return m_dead.get(p);
     }
 
+    /** Get the score.
+        @param komi The komi.
+        @param rules The rules (Board.RULES_CHINESE or Board.RULES_JAPANESE)
+    */
     public Score getScore(double komi, int rules)
     {
         Score s = new Score();
@@ -138,6 +153,13 @@ public class CountScore
         return s;
     }
 
+    /** Change the life-death status of a stone.
+        All stones in a block have to be marked as dead or alive.
+        You have to call #update() to update the score after changing the
+        life-death status of one or more stones.
+        @param p The stone.
+        @param value true, if stone is dead, false if stone is alive.
+    */
     public void setDead(GoPoint p, boolean value)
     {
         m_dead.set(p, value);
@@ -172,6 +194,12 @@ public class CountScore
     {
         assert(c != null);
         m_score[p.getX()][p.getY()] = c;
+    }
+
+    private void setScore(ArrayList points, GoColor c)
+    {
+        for (int i = 0; i < points.size(); ++i)
+            setScore((GoPoint)points.get(i), c);
     }
 }
 
