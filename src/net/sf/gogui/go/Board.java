@@ -143,6 +143,20 @@ public final class Board
         return new BoardConstants(size).getHandicapStones(n);
     }
 
+    /** Opponent stones captured in last move.
+        Does not include player stones killed by suicide.
+        Requires that there is a last move (or setup stone).
+        @return List of opponent stones (go.Point) captured in last move;
+        empty if none were killed or if last placement was a setup stone.
+        @see #getSuicide()
+    */
+    ArrayList getKilled()
+    {
+        assert(getNumberPlacements() > 0);
+        StackEntry entry = (StackEntry)m_stack.get(getNumberPlacements() - 1);
+        return new ArrayList(entry.m_killed);
+    }
+
     public Placement getPlacement(int i)
     {
         return ((StackEntry)m_stack.get(i)).m_placement;
@@ -177,6 +191,20 @@ public final class Board
         findStones(p, color, stones);
         m_mark.set(stones, false);
         assert(m_mark.isCleared());
+    }
+
+    /** Player stones killed by suicide in last move.
+        Requires that there is a last move (or setup stone).
+        @return List of stones (go.Point) killed by suicide in last move,
+        including the stone played; empty if no stones were killed by suicide
+        or if last placement was a setup stone..
+        @see #getKilled()
+    */
+    ArrayList getSuicide()
+    {
+        assert(getNumberPlacements() > 0);
+        StackEntry entry = (StackEntry)m_stack.get(getNumberPlacements() - 1);
+        return new ArrayList(entry.m_suicide);
     }
 
     public GoColor getToMove()

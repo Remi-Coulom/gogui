@@ -4,6 +4,8 @@
 
 package net.sf.gogui.go;
 
+import java.util.ArrayList;
+
 public class BoardTest
     extends junit.framework.TestCase
 {
@@ -59,6 +61,62 @@ public class BoardTest
         assertFalse(board.contains(GoPoint.get(19, 0)));
         assertFalse(board.contains(GoPoint.get(19, 19)));
         assertFalse(board.contains(GoPoint.get(20, 20)));
+    }
+
+    /** Test Board.getKilled() */
+    public void testGetKilled()
+    {
+        Board board = new Board(19);
+        // 4 . . . . .
+        // 3 . . O . .
+        // 2 O O @ O .
+        // 1 @ @ . . .
+        //   A B C D E
+        board.setup(GoPoint.get(0, 0), GoColor.BLACK);
+        board.setup(GoPoint.get(1, 0), GoColor.BLACK);
+        board.setup(GoPoint.get(2, 1), GoColor.BLACK);
+        board.setup(GoPoint.get(0, 1), GoColor.WHITE);
+        board.setup(GoPoint.get(1, 1), GoColor.WHITE);
+        board.setup(GoPoint.get(2, 2), GoColor.WHITE);
+        board.setup(GoPoint.get(3, 1), GoColor.WHITE);
+        board.play(GoPoint.get(2, 0), GoColor.WHITE);
+        ArrayList killed = board.getKilled();
+        assertEquals(3, killed.size());
+        assertTrue(killed.contains(GoPoint.get(0, 0)));
+        assertTrue(killed.contains(GoPoint.get(1, 0)));
+        assertTrue(killed.contains(GoPoint.get(2, 1)));
+        board.undo();
+        board.setup(GoPoint.get(3, 0), GoColor.WHITE);
+        killed = board.getKilled();
+        assertEquals(0, killed.size());
+        board.undo();
+        board.play(GoPoint.get(3, 0), GoColor.WHITE);
+        assertTrue(board.getKilled().isEmpty());
+    }
+
+    /** Test Board.getSuicide() */
+    public void testGetSuicide()
+    {
+        Board board = new Board(19);
+        // 4 . . . .
+        // 3 O . . .
+        // 2 @ O . .
+        // 1 . @ O .
+        //   A B C D
+        board.setup(GoPoint.get(0, 1), GoColor.BLACK);
+        board.setup(GoPoint.get(1, 0), GoColor.BLACK);
+        board.setup(GoPoint.get(0, 2), GoColor.WHITE);
+        board.setup(GoPoint.get(1, 1), GoColor.WHITE);
+        board.setup(GoPoint.get(2, 0), GoColor.WHITE);
+        board.play(GoPoint.get(0, 0), GoColor.BLACK);
+        ArrayList suicide = board.getSuicide();
+        assertEquals(3, suicide.size());
+        assertTrue(suicide.contains(GoPoint.get(0, 0)));
+        assertTrue(suicide.contains(GoPoint.get(0, 1)));
+        assertTrue(suicide.contains(GoPoint.get(1, 0)));
+        board.undo();
+        board.setup(GoPoint.get(0, 0), GoColor.BLACK);
+        assertTrue(board.getSuicide().isEmpty());
     }
 
     public void testIsSuicide()
