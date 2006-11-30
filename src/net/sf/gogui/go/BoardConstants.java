@@ -29,6 +29,16 @@ public final class BoardConstants
         return s_boardConstants[boardSize];
     }
 
+    /** Get location of handicap stones.
+        The handicap stone locations are defined as in the GTP version 2
+        specification (section 4.1.1 Fixed Handicap Placement).
+        Even board sizes and sizes smaller than 9 support up to 4 handicap
+        stones; other sizes up to 9 handicap stones.
+        @param n The number of handicap stones.
+        @return List of points (go.Point) corresponding to the handicap
+        stone locations or null if handicap locations are not defined for
+        this combination of number of handicap stones and board size.
+    */
     public ArrayList getHandicapStones(int n)
     {
         ArrayList result = new ArrayList(9);
@@ -91,6 +101,10 @@ public final class BoardConstants
                 || i == m_handicapLine3);
     }
 
+    /** Check if point is a potential location of a handicap stone.
+        @param p The point to check.
+        @return true, if point is a potential location of a handicap stone.
+    */
     public boolean isHandicap(GoPoint p)
     {
         int x = p.getX();
@@ -122,7 +136,7 @@ public final class BoardConstants
             m_handicapLine1 = 3;
             m_handicapLine3 = size - 4;
         }
-        else if (size >= 8)
+        else if (size >= 7)
         {
             m_handicapLine1 = 2;
             m_handicapLine3 = size - 3;

@@ -28,6 +28,11 @@ Automatically clear board before drawing live graphics commands
 </listitem>
 <listitem>
 <simpara>
+Support handicap stones on 7x7 boards
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 New menu item Export Text Position to Clipboard
 </simpara>
 </listitem>
