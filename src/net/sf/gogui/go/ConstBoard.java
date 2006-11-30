@@ -25,6 +25,8 @@ public interface ConstBoard
 
     ArrayList getHandicapStones(int n);
 
+    ArrayList getKilled();
+
     Placement getPlacement(int i);
 
     int getNumberPlacements();
@@ -36,6 +38,8 @@ public interface ConstBoard
     int getSize();
 
     void getStones(GoPoint p, GoColor color, ArrayList stones);
+
+    ArrayList getSuicide();
 
     GoColor getToMove();
 
