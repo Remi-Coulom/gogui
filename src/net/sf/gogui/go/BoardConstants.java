@@ -6,28 +6,27 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 
-/** Some values that are constant for a given board size. */
+/** Some values that are constant for a given board size.
+    Instances of this class are immutable.
+ */
 public final class BoardConstants
 {
-    public BoardConstants(int size)
+    /** Get board constants for a given board size.
+        The instance is created if it did not exist before, otherwise a
+        reference to the existing one is returned.
+        The creation is done in a thread-safe way.
+        @param boardSize The new board size (number of points per
+        row / column) in the range from one to GoPoint.MAXSIZE
+        @return The board constants.
+    */
+    public static BoardConstants get(int boardSize)
     {
-        m_size = size;
-        m_handicapLine1 = -1;
-        m_handicapLine2 = -1;
-        m_handicapLine3 = -1;
-        if (size >= 13)
+        synchronized (s_boardConstants)
         {
-            m_handicapLine1 = 3;
-            m_handicapLine3 = size - 4;
+            if (s_boardConstants[boardSize] == null)
+                s_boardConstants[boardSize] = new BoardConstants(boardSize);
         }
-        else if (size >= 8)
-        {
-            m_handicapLine1 = 2;
-            m_handicapLine3 = size - 3;
-        }
-        if (size >= 11 && size % 2 != 0)
-            m_handicapLine2 = size / 2;
-        initAllPoints();
+        return s_boardConstants[boardSize];
     }
 
     public ArrayList getHandicapStones(int n)
@@ -99,6 +98,9 @@ public final class BoardConstants
         return (isHandicapLine(x) && isHandicapLine(y));
     }
 
+    static BoardConstants[] s_boardConstants
+        = new BoardConstants[GoPoint.MAXSIZE + 1];
+
     private final int m_size;
 
     private int m_handicapLine1;
@@ -108,6 +110,27 @@ public final class BoardConstants
     private int m_handicapLine3;
 
     private GoPoint m_allPoints[];
+
+    private BoardConstants(int size)
+    {
+        m_size = size;
+        m_handicapLine1 = -1;
+        m_handicapLine2 = -1;
+        m_handicapLine3 = -1;
+        if (size >= 13)
+        {
+            m_handicapLine1 = 3;
+            m_handicapLine3 = size - 4;
+        }
+        else if (size >= 8)
+        {
+            m_handicapLine1 = 2;
+            m_handicapLine3 = size - 3;
+        }
+        if (size >= 11 && size % 2 != 0)
+            m_handicapLine2 = size / 2;
+        initAllPoints();
+    }
 
     private void initAllPoints()
     {

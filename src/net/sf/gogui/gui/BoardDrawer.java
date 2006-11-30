@@ -45,7 +45,7 @@ public class BoardDrawer
         m_width = width;
         m_size = field.length;
         if (m_constants == null || m_constants.getSize() != m_size)
-            m_constants = new BoardConstants(m_size);
+            m_constants = BoardConstants.get(m_size);
         assert(m_size <= GoPoint.MAXSIZE);
         double borderSize;
         if (showGrid)

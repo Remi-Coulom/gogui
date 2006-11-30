@@ -26,7 +26,8 @@ public final class Board
     public static final int RULES_JAPANESE = 2;
 
     /** Constructor.
-        @param boardSize The board size (number of points per row / column).
+        @param boardSize The board size (number of points per row / column)
+        in the range from one to GoPoint.MAXSIZE
     */
     public Board(int boardSize)
     {
@@ -168,7 +169,7 @@ public final class Board
     */
     public static ArrayList getHandicapStones(int size, int n)
     {
-        return new BoardConstants(size).getHandicapStones(n);
+        return BoardConstants.get(size).getHandicapStones(n);
     }
 
     /** Opponent stones captured in last move.
@@ -266,14 +267,15 @@ public final class Board
     /** Initialize the board for a given board size.
         For changing the board size.
         Also calls newGame().
-        @param size The new board size.
+        @param boardSize The new board size (number of points per
+        row / column) in the range from one to GoPoint.MAXSIZE
     */
     public void init(int size)
     {
         m_size = size;
         m_color = new GoColor[m_size][m_size];
         m_mark = new Marker(m_size);
-        m_constants = new BoardConstants(size);
+        m_constants = BoardConstants.get(size);
         newGame();
     }
 

@@ -259,7 +259,7 @@ public final class GuiBoard
     {
         assert(size > 0 && size <= GoPoint.MAXSIZE);
         m_size = size;
-        m_constants = new BoardConstants(size);
+        m_constants = BoardConstants.get(size);
         m_field = new GuiField[size][size];
         removeAll();
         m_cursor = null;
