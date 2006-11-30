@@ -150,7 +150,7 @@ public final class Board
         empty if none were killed or if last placement was a setup stone.
         @see #getSuicide()
     */
-    ArrayList getKilled()
+    public ArrayList getKilled()
     {
         assert(getNumberPlacements() > 0);
         StackEntry entry = (StackEntry)m_stack.get(getNumberPlacements() - 1);
@@ -200,7 +200,7 @@ public final class Board
         or if last placement was a setup stone..
         @see #getKilled()
     */
-    ArrayList getSuicide()
+    public ArrayList getSuicide()
     {
         assert(getNumberPlacements() > 0);
         StackEntry entry = (StackEntry)m_stack.get(getNumberPlacements() - 1);
