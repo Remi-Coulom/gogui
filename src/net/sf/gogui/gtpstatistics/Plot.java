@@ -105,7 +105,7 @@ public class Plot
     }
 
     /** Enable drawing of solid lines at certain x-intervals.
-        @note The new implementation does no longer use solid lines, but
+        NOTE: The new implementation does no longer use solid lines, but
         changes white and gray background color at the solid line interval.
         @param solidLineInterval The interval for the solid lines.
     */
@@ -117,7 +117,7 @@ public class Plot
 
     /** Set x-label intervals.
         By default, every x-tic (grid line) gets an x-label.
-        @note Misleading name, should be tics per x-label.
+        NOTE: Misleading name, should be tics per x-label.
         @param xLabelPerTic The number of tics per x-label.
     */
     public void setXLabelPerTic(int xLabelPerTic)
