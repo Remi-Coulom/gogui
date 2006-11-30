@@ -53,7 +53,9 @@ public final class Board
         return point.isOnBoard(getSize());
     }
 
-    /** Play move or setup stone. */
+    /** Play move or setup stone.
+        @param placement The placement to play.
+    */
     public void doPlacement(Placement placement)
     {
         GoPoint p = placement.getPoint();
@@ -101,6 +103,10 @@ public final class Board
             m_toMove = otherColor;        
     }
 
+    /** Get points adjacent to a point.
+        @param point The point.
+        @return List of points adjacent.
+    */
     public ArrayList getAdjacentPoints(GoPoint point)
     {
         final int maxAdjacent = 4;
@@ -118,26 +124,48 @@ public final class Board
         return result;
     }
 
+    /** Get number of black captured stones.
+        @return The total number of black stones captured by all moves played.
+    */
     public int getCapturedB()
     {
         return m_capturedB;
     }
 
+    /** Get number of white captured stones.
+        @return The total number of white stones captured by all moves played.
+    */
     public int getCapturedW()
     {
         return m_capturedW;
     }
 
+    /** Get state of a point on the board.
+        @return GoColor.BLACK, GoColor.WHITE or GoColor.EMPTY
+    */
     public GoColor getColor(GoPoint p)
     {
         return m_color[p.getX()][p.getY()];
     }
 
+    /** Get location of handicap stones.
+        @param n The number of handicap stones.
+        @return List of points (go.Point) corresponding to the handicap
+        stone locations.
+        @see BoardConstants#getHandicapStones
+    */
     public ArrayList getHandicapStones(int n)
     {
         return m_constants.getHandicapStones(n);
     }
 
+    /** Get location of handicap stones for a given board size.
+        @param n The number of handicap stones.
+        @param size The board size.
+        @return List of points (go.Point) corresponding to the handicap
+        stone locations.
+        @see BoardConstants#getHandicapStones
+    */
     public static ArrayList getHandicapStones(int size, int n)
     {
         return new BoardConstants(size).getHandicapStones(n);
@@ -157,21 +185,41 @@ public final class Board
         return new ArrayList(entry.m_killed);
     }
 
+    /** Get a placement (move or setup stone) from the sequence of placements
+        played so far.
+        @param i The number of the placement (starting with zero).
+        @return The placement with the given number.
+        @see #getNumberPlacements()
+    */
     public Placement getPlacement(int i)
     {
         return ((StackEntry)m_stack.get(i)).m_placement;
     }
 
+    /** Get a point on the board.
+        Can be used for iterating over all points.
+        @param i The index of the point between 0 and size * size - 1.
+        @return The point with the given index.
+        @see #getNumberPoints()
+    */
     public GoPoint getPoint(int i)
     {
         return m_allPoints[i];
     }
 
+    /** Get the number of placements (moves or setup stones) played so far.
+        @return The number of placements.
+        @see #getPlacement
+    */
     public int getNumberPlacements()
     {
         return m_stack.size();
     }
 
+    /** Get the number of points on the board.
+        @return The number of points on the board (size * size).
+        @see #getPoint
+    */
     public int getNumberPoints()
     {
         return m_allPoints.length;
@@ -207,11 +255,19 @@ public final class Board
         return new ArrayList(entry.m_suicide);
     }
 
+    /** Get color to move.
+        @return The color to move.
+    */
     public GoColor getToMove()
     {
         return m_toMove;
     }
 
+    /** Initialize the board for a given board size.
+        For changing the board size.
+        Also calls newGame().
+        @param size The new board size.
+    */
     public void init(int size)
     {
         m_size = size;
@@ -222,6 +278,12 @@ public final class Board
         newGame();
     }
 
+    /** Check if a move would capture anything (including suicide).
+        @param point The point to check.
+        @param toMove The player color.
+        @return true, if a move on the given point by the given player would
+        capture any opponent stones, or be a suicide move.
+    */
     public boolean isCaptureOrSuicide(GoPoint point, GoColor toMove)
     {
         if (getColor(point) != GoColor.EMPTY)
@@ -235,6 +297,11 @@ public final class Board
         return result;
     }
 
+    /** Check if a point is a handicap point.
+        @param point The point to check.
+        @return true, if the given point is a handicap point.
+        @see BoardConstants#isHandicap
+    */
     public boolean isHandicap(GoPoint point)
     {
         return m_constants.isHandicap(point);
@@ -250,11 +317,20 @@ public final class Board
         return point == m_koPoint;
     }
 
+    /** Check if any placements (moves or setup stones) were made on the
+        board.
+    */
     public boolean isModified()
     {
         return (m_stack.size() > 0);
     }
 
+    /** Check if a point would be a suicide move.
+        @param point The point to check.
+        @param toMove The player color to check.
+        @return true, if a move at the given point by the given player
+        would be a suicide move.
+    */
     public boolean isSuicide(GoPoint point, GoColor toMove)
     {
         if (getColor(point) != GoColor.EMPTY)
@@ -267,6 +343,10 @@ public final class Board
         return result;
     }
 
+    /** Start a new game.
+        Takes back the effects of any placements (moves or setup stones)
+        on the board.
+    */
     public void newGame()
     {
         for (int i = 0; i < m_allPoints.length; ++i)
@@ -278,6 +358,11 @@ public final class Board
         m_koPoint = null;
     }
 
+    /** Play a move.
+        @param point The location of the move.
+        @param color The player who played the move.
+        @see #play(Move)
+    */
     public void play(GoPoint point, GoColor color)
     {
         play(Move.get(point, color));
@@ -287,12 +372,19 @@ public final class Board
         Never fails, even if ko rule is violated, suicide or play on occupied
         points. For example, when loading an SGF file with illegal moves,
         we still want to be able to load and execute the moves.
+        A move will place a stone of the given color, capture all dead
+        blocks adjacent to the stone, capture the block the stone is part of
+        if it was a suicide move and switches the color to move.
+        @param move The move (location and player)
     */
     public void play(Move move)
     {
         doPlacement(new Placement(move.getPoint(), move.getColor(), false));
     }
 
+    /** Change the color to move.
+        @param toMove The new color to move.
+    */
     public void setToMove(GoColor toMove)
     {
         m_toMove = toMove;
@@ -309,7 +401,11 @@ public final class Board
         doPlacement(new Placement(p, color, true));
     }
 
-    /** Undo last move or setup stone. */
+    /** Undo the last placement (move or setup stone).
+        Restores any stones removed by the last placement (captured or
+        suicide) if it was a move and restore the color who was to move before
+        the placement.
+    */
     public void undo()
     {
         assert(getNumberPlacements() > 0);
@@ -353,6 +449,7 @@ public final class Board
     /** Undo a number of moves or setup stones.
         @param n Number of moves to undo. Must be between 0
         and getNumberPlacements().
+        @see #undo()
     */
     public void undo(int n)
     {
