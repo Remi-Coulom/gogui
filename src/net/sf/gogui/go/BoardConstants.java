@@ -27,6 +27,7 @@ public final class BoardConstants
         }
         if (size >= 11 && size % 2 != 0)
             m_handicapLine2 = size / 2;
+        initAllPoints();
     }
 
     public ArrayList getHandicapStones(int n)
@@ -65,6 +66,16 @@ public final class BoardConstants
         return result;
     }
 
+    public int getNumberPoints()
+    {
+        return m_allPoints.length;
+    }
+
+    public GoPoint getPoint(int i)
+    {
+        return m_allPoints[i];
+    }
+
     public int getSize()
     {
         return m_size;
@@ -95,5 +106,19 @@ public final class BoardConstants
     private int m_handicapLine2;
 
     private int m_handicapLine3;
+
+    private GoPoint m_allPoints[];
+
+    private void initAllPoints()
+    {
+        m_allPoints = new GoPoint[m_size * m_size];
+        int i = 0;
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+            {
+                GoPoint point = GoPoint.get(x, y);
+                m_allPoints[i++] = point;
+            }
+    }
 }
 

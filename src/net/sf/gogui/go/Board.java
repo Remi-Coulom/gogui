@@ -204,7 +204,7 @@ public final class Board
     */
     public GoPoint getPoint(int i)
     {
-        return m_allPoints[i];
+        return m_constants.getPoint(i);
     }
 
     /** Get the number of placements (moves or setup stones) played so far.
@@ -222,7 +222,7 @@ public final class Board
     */
     public int getNumberPoints()
     {
-        return m_allPoints.length;
+        return m_constants.getNumberPoints();
     }
 
     /** Get board size.
@@ -274,7 +274,6 @@ public final class Board
         m_color = new GoColor[m_size][m_size];
         m_mark = new Marker(m_size);
         m_constants = new BoardConstants(size);
-        initAllPoints();
         newGame();
     }
 
@@ -349,8 +348,8 @@ public final class Board
     */
     public void newGame()
     {
-        for (int i = 0; i < m_allPoints.length; ++i)
-            setColor(m_allPoints[i], GoColor.EMPTY);
+        for (int i = 0; i < getNumberPoints(); ++i)
+            setColor(getPoint(i), GoColor.EMPTY);
         m_stack.clear();        
         m_capturedB = 0;
         m_capturedW = 0;
@@ -508,8 +507,6 @@ public final class Board
 
     private GoPoint m_koPoint;
 
-    private GoPoint m_allPoints[];
-
     private boolean isSingleStoneSingleLib(GoPoint point, GoColor color)
     {
         if (getColor(point) != color)
@@ -557,18 +554,6 @@ public final class Board
         ArrayList adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
             findStones((GoPoint)(adj.get(i)), color, stones);
-    }
-
-    private void initAllPoints()
-    {
-        m_allPoints = new GoPoint[m_size * m_size];
-        int i = 0;
-        for (int x = 0; x < m_size; ++x)
-            for (int y = 0; y < m_size; ++y)
-            {
-                GoPoint point = GoPoint.get(x, y);
-                m_allPoints[i++] = point;
-            }
     }
 
     private boolean isDead(GoPoint p, GoColor color, ArrayList stones)
