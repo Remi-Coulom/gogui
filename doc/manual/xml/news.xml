@@ -28,7 +28,7 @@ Automatically clear board before drawing live graphics commands
 </listitem>
 <listitem>
 <simpara>
-Support handicap stones on 7x7 boards
+Use same fixed handicap locations as in GTP specification
 </simpara>
 </listitem>
 <listitem>

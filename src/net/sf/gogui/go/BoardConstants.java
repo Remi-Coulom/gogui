@@ -41,16 +41,14 @@ public final class BoardConstants
     */
     public ArrayList getHandicapStones(int n)
     {
-        ArrayList result = new ArrayList(9);
-        if (n == 0)
-            return result;
         int line1 = m_handicapLine1;
         int line2 = m_handicapLine2;
         int line3 = m_handicapLine3;
         if (line1 < 0)
             return null;
-        if (n > 4 && line2 < 0)
+        if (n < 2 || n > 9 || (n > 4 && line2 < 0))
             return null;
+        ArrayList result = new ArrayList(9);
         if (n >= 1)
             result.add(GoPoint.get(line1, line1));
         if (n >= 2)
@@ -141,7 +139,7 @@ public final class BoardConstants
             m_handicapLine1 = 2;
             m_handicapLine3 = size - 3;
         }
-        if (size >= 11 && size % 2 != 0)
+        if (size >= 9 && size % 2 != 0)
             m_handicapLine2 = size / 2;
         initAllPoints();
     }
