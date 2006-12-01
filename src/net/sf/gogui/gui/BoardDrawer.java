@@ -186,17 +186,15 @@ public class BoardDrawer
             Point bottom = getCenter(x, m_size - 1);
             graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
         }
-        if (m_fieldSize < 5)
-            return;
         int r;
-        if (m_fieldSize < 17)
+        if (m_fieldSize <= 7)
+            return;
+        else if (m_fieldSize <= 33)
             r = 1;
-        else if (m_fieldSize < 34)
+        else if (m_fieldSize <= 60)
             r = 2;
-        else if (m_fieldSize < 51)
-            r = 3;
         else
-            r = 4;
+            r = 3;
         for (int x = 0; x < m_size; ++x)
             if (m_constants.isHandicapLine(x))
                 for (int y = 0; y < m_size; ++y)
