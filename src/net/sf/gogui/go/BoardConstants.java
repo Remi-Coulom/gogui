@@ -36,19 +36,22 @@ public final class BoardConstants
         stones; other sizes up to 9 handicap stones.
         @param n The number of handicap stones.
         @return List of points (go.Point) corresponding to the handicap
-        stone locations or null if handicap locations are not defined for
-        this combination of number of handicap stones and board size.
+        stone locations; null if handicap locations are not defined for
+        this combination of number of handicap stones and board size; empty
+        list for zero handicap stones.
     */
     public ArrayList getHandicapStones(int n)
     {
+        ArrayList result = new ArrayList(9);
+        if (n == 0)
+            return result;
         int line1 = m_handicapLine1;
         int line2 = m_handicapLine2;
         int line3 = m_handicapLine3;
         if (line1 < 0)
             return null;
-        if (n < 2 || n > 9 || (n > 4 && line2 < 0))
+        if (n == 1 || n > 9 || (n > 4 && line2 < 0))
             return null;
-        ArrayList result = new ArrayList(9);
         if (n >= 1)
             result.add(GoPoint.get(line1, line1));
         if (n >= 2)

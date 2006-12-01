@@ -32,7 +32,12 @@ public class BoardConstantsTest
             {
                 String message = "size=" + size + " n=" + n;
                 ArrayList list = constants.getHandicapStones(n);
-                if (size <= 6 || n < 2 || n > 9)
+                if (n == 0)
+                {
+                    assertNotNull(message, list);
+                    assertTrue(message, list.isEmpty());
+                }
+                else if (size <= 6 || n == 1 || n > 9)
                     assertNull(message, list);
                 else if (size == 7 || size % 2 == 0)
                 {
