@@ -677,6 +677,9 @@ public final class SgfReader
                     m_newCharset = v.trim();
                     if (Charset.isSupported(m_newCharset))
                         throw new SgfCharsetChanged();
+                    else
+                        setWarning("Unknown character set \"" + m_newCharset
+                                   + "\"");
                 }
             }
             else if (p == "CR")
