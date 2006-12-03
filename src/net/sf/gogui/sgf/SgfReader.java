@@ -123,6 +123,7 @@ public final class SgfReader
             progressShow.showProgress(0);
         try
         {
+            // SGF FF 4 standard defines ISO-8859-1 as default
             readSgf(in, "ISO-8859-1");
         }
         catch (SgfCharsetChanged e1)
@@ -895,6 +896,11 @@ public final class SgfReader
             }
             catch (UnsupportedEncodingException e)
             {
+                // Should actually not happen, because this function is only
+                // called with charset ISO-8859-1 (should be supported on every
+                // Java platform according to Charset documentation) or with a
+                // CA property value, which was already checked with
+                // Charset.isSupported()
                 setWarning("Character set \"" + charset + "\" not supported");
                 reader = new InputStreamReader(in);
             }
