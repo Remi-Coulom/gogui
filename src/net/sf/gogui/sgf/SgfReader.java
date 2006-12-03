@@ -691,6 +691,9 @@ public final class SgfReader
                     m_newCharset = v.trim();
                     if (Charset.isSupported(m_newCharset))
                         throw new SgfCharsetChanged();
+                    else
+                        setWarning("Unknown character set \"" + m_newCharset
+                                   + "\"");
                 }
             }
             else if (p == "CR")
@@ -892,6 +895,7 @@ public final class SgfReader
             }
             catch (UnsupportedEncodingException e)
             {
+                setWarning("Character set \"" + charset + "\" not supported");
                 reader = new InputStreamReader(in);
             }
             m_reader = new BufferedReader(reader);
