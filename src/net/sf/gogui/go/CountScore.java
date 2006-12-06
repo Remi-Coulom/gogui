@@ -9,6 +9,11 @@ import java.util.ArrayList;
 /** Count the final score on a Go board.
     Allows to mark stones as dead and count the territory surrounded by
     alive stones of one color.
+    The reason why all stones in a dead block have to marked as dead is that
+    Go engines return a list of dead stones on the final_status GTP command.
+    It could happen that the program returns nonsense (e.g. a contiguous block
+    of stones with only some stones dead) and this class should not crash
+    if that happens (even if the score will be no longer meaningful).
 */
 public class CountScore
 {
@@ -154,7 +159,8 @@ public class CountScore
     }
 
     /** Change the life-death status of a stone.
-        All stones in a block have to be marked as dead or alive.
+        All stones in a block have to be marked as dead or alive (see comment
+        in the description of this class).
         You have to call #update() to update the score after changing the
         life-death status of one or more stones.
         @param p The stone.
