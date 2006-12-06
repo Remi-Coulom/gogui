@@ -120,31 +120,37 @@ public class TwoGtp
 
     public void autoPlay() throws Exception
     {
-        System.in.close();
-        StringBuffer response = new StringBuffer(256);
-        while (m_gameIndex < m_numberGames)
+        try
         {
-            try
+            System.in.close();
+            StringBuffer response = new StringBuffer(256);
+            while (m_gameIndex < m_numberGames)
             {
-                newGame(m_size);
-                while (! gameOver())
+                try
                 {
-                    response.setLength(0);
-                    sendGenmove(m_board.getToMove(), response);
+                    newGame(m_size);
+                    while (! gameOver())
+                    {
+                        response.setLength(0);
+                        sendGenmove(m_board.getToMove(), response);
+                    }
                 }
+                catch (GtpError e)
+                {
+                    handleEndOfGame(true, e.getMessage());
+                }
+                if (m_black.isProgramDead())
+                    throw new ErrorMessage("Black program died");
+                if (m_white.isProgramDead())
+                    throw new ErrorMessage("White program died");
             }
-            catch (GtpError e)
-            {
-                handleEndOfGame(true, e.getMessage());
-            }
-            if (m_black.isProgramDead())
-                throw new ErrorMessage("Black program died");
-            if (m_white.isProgramDead())
-                throw new ErrorMessage("White program died");
+            m_black.send("quit");
+            m_white.send("quit");
         }
-        m_black.send("quit");
-        m_white.send("quit");
-        close();
+        finally
+        {
+            close();
+        }
     }
 
     public void close()
