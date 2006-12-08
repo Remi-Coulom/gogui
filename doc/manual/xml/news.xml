@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Store lost on time information in game result
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Use platform specific storage of preferences; don't use .gogui/config
 anymore
 </simpara>
