@@ -2196,6 +2196,25 @@ public class GoGui
         }
     }
 
+    private void checkLostOnTime(GoColor color)
+    {
+        if (m_clock.lostOnTime(color) && ! m_lostOnTimeShown)
+        {
+            if (color == GoColor.BLACK)
+            {
+                showInfo("Black lost on time.");
+                setResult("W+Time");
+            }
+            else
+            {
+                assert(color == GoColor.WHITE);
+                showInfo("White lost on time.");
+                setResult("B+Time");
+            }
+            m_lostOnTimeShown = true;
+        }
+    }
+
     private boolean checkCurrentNodeExecuted()
     {
         if (m_commandThread == null)
@@ -2314,6 +2333,7 @@ public class GoGui
             m_clock.stopMove();
             String response = m_commandThread.getResponse();
             GoColor toMove = m_board.getToMove();
+            checkLostOnTime(toMove);
             boolean gameTreeChanged = false;
             if (response.equalsIgnoreCase("resign"))
             {
@@ -2756,14 +2776,7 @@ public class GoGui
             if (newNodeCreated)
                 m_clock.startMove(m_board.getToMove());
             setNeedsSave(newNodeCreated);
-            GoColor color = move.getColor();
-            if (NodeUtils.getMoveNumber(m_currentNode) > 0
-                && m_clock.lostOnTime(color)
-                && ! m_lostOnTimeShown)
-            {
-                showInfo(color.toString() + " lost on time.");
-                m_lostOnTimeShown = true;
-            }
+            checkLostOnTime(move.getColor());
             m_resigned = false;
             boolean gameTreeChanged = newNodeCreated;
             if (newNodeCreated
