@@ -2198,7 +2198,9 @@ public class GoGui
 
     private void checkLostOnTime(GoColor color)
     {
-        if (m_clock.lostOnTime(color) && ! m_lostOnTimeShown)
+        if (m_clock.lostOnTime(color)
+            && ! m_clock.lostOnTime(color.otherColor())
+            && ! m_lostOnTimeShown)
         {
             if (color == GoColor.BLACK)
             {
