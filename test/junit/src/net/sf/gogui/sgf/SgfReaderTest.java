@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.MarkType;
@@ -101,38 +102,38 @@ public class SgfReaderTest
     {
         GameTree gameTree = reader.getGameTree();
         GameInformation info = gameTree.getGameInformation();
-        assertEquals(info.m_boardSize, 19);
-        Node root = gameTree.getRoot();
+        assertEquals(info.getBoardSize(), 19);
+        ConstNode root = gameTree.getRoot();
         assertEquals(NodeUtil.subtreeSize(root), 54);
         assertEquals(root.getNumberChildren(), 5);
-        Node node;
-        node = root.getChild(1);
+        ConstNode node;
+        node = root.getChildConst(1);
         assertEquals(node.getNumberChildren(), 1);
         checkSetup(node, 16, 16, 0);
-        node = node.getChild();
+        node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 1);
         checkSetup(node, 0, 0, 9);
-        node = node.getChild();
+        node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 1);
         checkSetup(node, 1, 1, 0);
-        node = node.getChild();
+        node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 0);
         assertEquals(node.getPlayer(), GoColor.WHITE);
-        node = root.getChild(2);
+        node = root.getChildConst(2);
         assertEquals(node.getNumberChildren(), 1);
         checkSetup(node, 35, 37, 0);
-        node = node.getChild();
+        node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 1);
-        assertEquals(node.getMarked(MarkType.MARK).size(), 9);
-        assertEquals(node.getMarked(MarkType.CIRCLE).size(), 9);
-        assertEquals(node.getMarked(MarkType.SQUARE).size(), 9);
-        assertEquals(node.getMarked(MarkType.TRIANGLE).size(), 9);
-        assertEquals(node.getMarked(MarkType.SELECT).size(), 9);
-        assertEquals(node.getMarked(MarkType.TERRITORY_BLACK).size(), 18);
-        assertEquals(node.getMarked(MarkType.TERRITORY_WHITE).size(), 19);
-        node = node.getChild();
+        assertEquals(node.getMarkedConst(MarkType.MARK).size(), 9);
+        assertEquals(node.getMarkedConst(MarkType.CIRCLE).size(), 9);
+        assertEquals(node.getMarkedConst(MarkType.SQUARE).size(), 9);
+        assertEquals(node.getMarkedConst(MarkType.TRIANGLE).size(), 9);
+        assertEquals(node.getMarkedConst(MarkType.SELECT).size(), 9);
+        assertEquals(node.getMarkedConst(MarkType.TERRITORY_BLACK).size(), 18);
+        assertEquals(node.getMarkedConst(MarkType.TERRITORY_WHITE).size(), 19);
+        node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 1);
-        assertEquals(node.getLabels().size(), 22);
+        assertEquals(node.getLabelsConst().size(), 22);
         checkLabel(node, "D17", "1");
         checkLabel(node, "F17", "2");
         checkLabel(node, "O17", "3");
@@ -155,14 +156,14 @@ public class SgfReaderTest
         checkLabel(node, "N3", "123456");
         checkLabel(node, "N2", "1234567");
         checkLabel(node, "N1", "12345678");
-        node = node.getChild();
+        node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 0);
         checkSgfProperty(node, "AR",
                          "[aa:sc][sa:ac][aa:sa][aa:ac][cd:cj][gd:md][fh:ij]"
                          + "[kj:nh]");
         checkSgfProperty(node, "DD", "[kq:os][dq:hs]");
         checkSgfProperty(node, "LN", "[pj:pd][nf:ff][ih:fj][kh:nj]");
-        node = root.getChild(3);
+        node = root.getChildConst(3);
         assertEquals(node.getNumberChildren(), 6);
         assertEquals(node.getComment(),
                      "There are hard linebreaks & soft linebreaks.\n" +
@@ -181,24 +182,25 @@ public class SgfReaderTest
                      "linebreak 2 \"\\n\\r\": >ok<\n" +
                      "linebreak 3 \"\\r\\n\": >ok<\n" +
                      "linebreak 4 \"\\r\": >ok<");
-        node = node.getChild();
+        node = node.getChildConst();
         assertEquals(node.getNumberChildren(), 4);
     }
 
-    private void checkLabel(Node node, String pointString, String label)
+    private void checkLabel(ConstNode node, String pointString, String label)
         throws GoPoint.InvalidPoint
     {
         GoPoint point = GoPoint.parsePoint(pointString, 19);
         assertEquals(node.getLabel(point), label);
     }
 
-    private void checkSgfProperty(Node node, String property, String value)
+    private void checkSgfProperty(ConstNode node, String property,
+                                  String value)
         throws GoPoint.InvalidPoint
     {
-        assertEquals(value, node.getSgfProperties().get(property));
+        assertEquals(value, node.getSgfPropertiesConst().get(property));
     }
 
-    private void checkSetup(Node node, int black, int white, int empty)
+    private void checkSetup(ConstNode node, int black, int white, int empty)
         throws GoPoint.InvalidPoint
     {
         assertEquals(node.getNumberAddBlack(), black);
@@ -213,7 +215,7 @@ public class SgfReaderTest
         SgfReader reader = getReader(name);
         GameTree gameTree = reader.getGameTree();
         GameInformation gameInformation = gameTree.getGameInformation();
-        TimeSettings timeSettings = gameInformation.m_timeSettings;
+        TimeSettings timeSettings = gameInformation.getTimeSettings();
         assertNotNull(timeSettings);
         assertEquals(timeSettings.getPreByoyomi(), preByoyomi);
         assertEquals(timeSettings.getByoyomi(), byoyomi);

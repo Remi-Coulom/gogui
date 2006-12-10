@@ -14,6 +14,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Stack;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
@@ -202,12 +203,12 @@ public class GtpAdapter
                 new FileInputStream(new File(filename));
             SgfReader reader = new SgfReader(fileStream, filename, null, 0);
             GameTree gameTree = reader.getGameTree();
-            m_boardSize = gameTree.getGameInformation().m_boardSize;
+            m_boardSize = gameTree.getGameInformation().getBoardSize();
             m_board = new Board(m_boardSize);
             m_passInserted.clear();
             m_gtp.sendBoardsize(m_boardSize);
             m_gtp.sendClearBoard(m_boardSize);
-            Node node = gameTree.getRoot();
+            ConstNode node = gameTree.getRoot();
             int moveNumber = 0;
             while (node != null)
             {
@@ -225,7 +226,7 @@ public class GtpAdapter
                     play(move.getColor(), move.getPoint());
                 }
                 toMove = node.getToMove();
-                node = node.getChild();
+                node = node.getChildConst();
             }
             if (toMove != GoColor.EMPTY && toMove != m_board.getToMove())
             {

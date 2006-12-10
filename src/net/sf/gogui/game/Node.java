@@ -310,7 +310,10 @@ public final class Node
     */
     public Map getLabelsConst()
     {
-        return new TreeMap(getLabels());
+        Map labels = getLabels();
+        if (labels == null)
+            return null;
+        return new TreeMap(labels);
     }
 
     /** Get all markups of a type.
@@ -330,7 +333,10 @@ public final class Node
     */
     public ArrayList getMarkedConst(MarkType type)
     {
-        return new ArrayList(getMarkedConst(type));
+        ArrayList marked = getMarked(type);
+        if (marked == null)
+            return null;
+        return new ArrayList(marked);
     }
 
     /** Get move contained in this node.
@@ -434,7 +440,10 @@ public final class Node
     */
     public Map getSgfPropertiesConst()
     {
-        return new TreeMap(getSgfProperties());
+        Map sgfProperties = getSgfProperties();
+        if (sgfProperties == null)
+            return null;
+        return new TreeMap(sgfProperties);
     }
 
     /** Time left for color after move was made.

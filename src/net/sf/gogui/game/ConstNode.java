@@ -10,7 +10,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
-/** Const functions of go.Node.
+/** Const functions of game.Node.
     @see Node
 */
 public interface ConstNode
@@ -30,6 +30,8 @@ public interface ConstNode
     ConstNode getChildConst(int i);
 
     int getChildIndex(ConstNode child);
+
+    String getLabel(GoPoint point);
 
     Map getLabelsConst();
 
@@ -56,6 +58,8 @@ public interface ConstNode
     GoColor getToMove();
 
     float getValue();
+
+    boolean hasComment();
 
     boolean hasSetup();
 

@@ -222,12 +222,12 @@ public final class ThumbnailCreator
         }
         GameTree tree = reader.getGameTree();
         GameInformation gameInformation = tree.getGameInformation();
-        int size = gameInformation.m_boardSize;
+        int size = gameInformation.getBoardSize();
         m_description = gameInformation.suggestGameName();
         if (m_description == null)
             m_description = "";
         Board board = new Board(size);
-        net.sf.gogui.game.Node node = tree.getRoot();
+        net.sf.gogui.game.ConstNode node = tree.getRoot();
         ArrayList nodeMoves = new ArrayList();
         while (node != null)
         {
@@ -235,7 +235,7 @@ public final class ThumbnailCreator
             moves.addAll(nodeMoves);
             if (node.getNumberAddBlack() > 0 && node.getNumberAddWhite() > 0)
                 break;
-            node = node.getChild();
+            node = node.getChildConst();
         }
         //if (m_verbose)
         //    BoardUtil.print(board, System.err);

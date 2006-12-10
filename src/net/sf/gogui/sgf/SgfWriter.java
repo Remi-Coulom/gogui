@@ -9,8 +9,10 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Iterator;
+import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameTree;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
-import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
@@ -30,28 +32,29 @@ public class SgfWriter
         @param version If not null, version appended to application name in
         AP property.
     */
-    public SgfWriter(OutputStream out, GameTree gameTree,
+    public SgfWriter(OutputStream out, ConstGameTree gameTree,
                      String application, String version)
     {        
         m_out = new PrintStream(out);
         print("(");
-        GameInformation gameInformation = gameTree.getGameInformation();
-        m_size = gameInformation.m_boardSize;
-        String result = gameInformation.m_result;
-        String playerBlack = gameInformation.m_playerBlack;
-        String playerWhite = gameInformation.m_playerWhite;
-        String rankBlack = gameInformation.m_blackRank;
-        String rankWhite = gameInformation.m_whiteRank;
-        String date = gameInformation.m_date;
-        String rules = gameInformation.m_rules;
-        int handicap = gameInformation.m_handicap;
-        double komi = gameInformation.m_komi;
-        TimeSettings timeSettings = gameInformation.m_timeSettings;
+        ConstGameInformation gameInformation =
+            gameTree.getGameInformationConst();
+        m_size = gameInformation.getBoardSize();
+        String result = gameInformation.getResult();
+        String playerBlack = gameInformation.getPlayerBlack();
+        String playerWhite = gameInformation.getPlayerWhite();
+        String rankBlack = gameInformation.getBlackRank();
+        String rankWhite = gameInformation.getWhiteRank();
+        String date = gameInformation.getDate();
+        String rules = gameInformation.getRules();
+        int handicap = gameInformation.getHandicap();
+        double komi = gameInformation.getKomi();
+        TimeSettings timeSettings = gameInformation.getTimeSettings();
         printHeader(application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, result, komi, rules,
                     timeSettings);
         printNewLine();
-        printNode(gameTree.getRoot(), true);
+        printNode(gameTree.getRootConst(), true);
         print(")");
         m_out.println(m_buffer.toString());
         m_out.close();
@@ -115,14 +118,14 @@ public class SgfWriter
         return result.toString();
     }
 
-    private static int getMoveNumberInVariation(Node node)
+    private static int getMoveNumberInVariation(ConstNode node)
     {
         int moveNumber = 0;
         while (node != null)
         {
             if (node.getMove() != null)
                 ++moveNumber;
-            node = node.getFather();
+            node = node.getFatherConst();
             if (node != null && node.getNumberChildren() > 1)
                 break;
         }
@@ -225,9 +228,9 @@ public class SgfWriter
             print("RE[" + result + "]");
     }
 
-    private void printLabels(Node node)
+    private void printLabels(ConstNode node)
     {
-        Map labels = node.getLabels();
+        Map labels = node.getLabelsConst();
         if (labels == null)
             return;
         StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
@@ -247,14 +250,14 @@ public class SgfWriter
         print(buffer.toString());
     }
 
-    private void printMarked(Node node, String property, MarkType type)
+    private void printMarked(ConstNode node, String property, MarkType type)
     {
-        ArrayList marked = node.getMarked(type);
+        ArrayList marked = node.getMarkedConst(type);
         if (marked != null)
             print(property + getPointList(marked));
     }
 
-    private void printNode(Node node, boolean isRoot)
+    private void printNode(ConstNode node, boolean isRoot)
     {
         Move move = node.getMove();
         if (! isRoot)
@@ -334,7 +337,7 @@ public class SgfWriter
         {
             print("V[" + node.getValue() + "]");
         }
-        Map sgfProperties = node.getSgfProperties();
+        Map sgfProperties = node.getSgfPropertiesConst();
         if (sgfProperties != null)
         {
             Iterator it = sgfProperties.entrySet().iterator();
@@ -351,14 +354,14 @@ public class SgfWriter
             return;
         if (numberChildren == 1)
         {
-            printNode(node.getChild(), false);
+            printNode(node.getChildConst(), false);
             return;
         }
         for (int i = 0; i < numberChildren; ++i)
         {
             printNewLine();
             print("(");
-            printNode(node.getChild(i), false);
+            printNode(node.getChildConst(i), false);
             print(")");
         }
     }

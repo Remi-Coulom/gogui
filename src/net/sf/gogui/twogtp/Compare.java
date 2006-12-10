@@ -7,6 +7,7 @@ package net.sf.gogui.twogtp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -102,7 +103,7 @@ public final class Compare
                 = new SgfReader(fileStream, file.toString(), null, 0);
             GameTree gameTree = reader.getGameTree();
             GameInformation gameInformation = gameTree.getGameInformation();
-            int size = gameInformation.m_boardSize;
+            int size = gameInformation.getBoardSize();
             if (board == null)
                 board = new Board(size);
             else if (size != board.getSize())
@@ -121,7 +122,7 @@ public final class Compare
         All setup stones are translated to moves and passes are filled in
         to ensure that moves are alternating beginning with black.
     */
-    public static ArrayList getAllAsMoves(Node node)
+    public static ArrayList getAllAsMoves(ConstNode node)
     {
         ArrayList moves = new ArrayList(128);
         ArrayList nodeMoves = new ArrayList(128);
@@ -129,7 +130,7 @@ public final class Compare
         {
             NodeUtil.getAllAsMoves(node, nodeMoves);
             moves.addAll(nodeMoves);
-            node = node.getChild();
+            node = node.getChildConst();
         }
         moves = MoveUtil.fillPasses(moves, GoColor.BLACK);
         return moves;

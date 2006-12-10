@@ -12,6 +12,7 @@ import net.sf.gogui.go.GoPoint;
 
 /** Game tree. */
 public class GameTree
+    implements ConstGameTree
 {
     public GameTree()
     {
@@ -26,13 +27,13 @@ public class GameTree
         m_gameInformation = new GameInformation(boardSize);
         setDate();
         m_root = new Node();
-        m_gameInformation.m_komi = komi;
-        m_gameInformation.m_rules = rules;
+        m_gameInformation.setKomi(komi);
+        m_gameInformation.setRules(rules);
         if (timeSettings != null)
-            m_gameInformation.m_timeSettings = new TimeSettings(timeSettings);
+            m_gameInformation.setTimeSettings(timeSettings);
         if (handicap != null)
         {
-            m_gameInformation.m_handicap = handicap.size();
+            m_gameInformation.setHandicap(handicap.size());
             if (handicap.size() > 0)
             {
                 m_root.setPlayer(GoColor.WHITE);
@@ -53,6 +54,11 @@ public class GameTree
         return m_gameInformation;
     }
 
+    public ConstGameInformation getGameInformationConst()
+    {
+        return m_gameInformation;
+    }
+
     /** Get a non-const reference to a const node.
         Requires: node is part of this game tree.
     */
@@ -63,6 +69,11 @@ public class GameTree
     }
 
     public Node getRoot()
+    {
+        return m_root;
+    }
+
+    public ConstNode getRootConst()
     {
         return m_root;
     }
@@ -100,9 +111,9 @@ public class GameTree
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
         DecimalFormat format = new DecimalFormat("00");
-        m_gameInformation.m_date =
-            Integer.toString(year) + "-" + format.format(month)
-            + "-" + format.format(day);
+        m_gameInformation.setDate(Integer.toString(year) + "-"
+                                  + format.format(month) + "-"
+                                  + format.format(day));
     }
 }
 

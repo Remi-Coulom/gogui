@@ -40,52 +40,52 @@ public final class GameInfoDialog
         dialog.dispose();
         boolean changed = false;
         String black = getTextFieldContent(gameInfoDialog.m_playerBlack);
-        if (! black.equals(gameInformation.m_playerBlack))
+        if (! black.equals(gameInformation.getPlayerBlack()))
         {
-            gameInformation.m_playerBlack = black;
+            gameInformation.setPlayerBlack(black);
             changed = true;
         }
         String white = getTextFieldContent(gameInfoDialog.m_playerWhite);
-        if (! white.equals(gameInformation.m_playerWhite))
+        if (! white.equals(gameInformation.getPlayerWhite()))
         {
-            gameInformation.m_playerWhite = white;
+            gameInformation.setPlayerWhite(white);
             changed = true;
         }
         String rankBlack = getTextFieldContent(gameInfoDialog.m_rankBlack);
-        if (! rankBlack.equals(gameInformation.m_blackRank))
+        if (! rankBlack.equals(gameInformation.getBlackRank()))
         {
-            gameInformation.m_blackRank = rankBlack;
+            gameInformation.setBlackRank(rankBlack);
             changed = true;
         }
         String rankWhite = getTextFieldContent(gameInfoDialog.m_rankWhite);
-        if (! rankWhite.equals(gameInformation.m_whiteRank))
+        if (! rankWhite.equals(gameInformation.getWhiteRank()))
         {
-            gameInformation.m_whiteRank = rankWhite;
+            gameInformation.setWhiteRank(rankWhite);
             changed = true;
         }
         String rules = getTextFieldContent(gameInfoDialog.m_rules);
-        if (! rules.equals(gameInformation.m_rules))
+        if (! rules.equals(gameInformation.getRules()))
         {
-            gameInformation.m_rules = rules;
+            gameInformation.setRules(rules);
             changed = true;
         }
         String result = getTextFieldContent(gameInfoDialog.m_result);
-        if (! result.equals(gameInformation.m_result))
+        if (! result.equals(gameInformation.getResult()))
         {
-            gameInformation.m_result = result;
+            gameInformation.setResult(result);
             changed = true;
         }
         String date = getTextFieldContent(gameInfoDialog.m_date);
-        if (! date.equals(gameInformation.m_date))
+        if (! date.equals(gameInformation.getDate()))
         {
-            gameInformation.m_date = date;
+            gameInformation.setDate(date);
             changed = true;
         }
         double komi =
             Double.parseDouble(getTextFieldContent(gameInfoDialog.m_komi));
         if (! gameInformation.komiEquals(komi))
         {
-            gameInformation.m_komi = komi;
+            gameInformation.setKomi(komi);
             changed = true;
         }
         String preByoyomiContent
@@ -96,9 +96,9 @@ public final class GameInfoDialog
             = getTextFieldContent(gameInfoDialog.m_byoyomiMoves);
         if (preByoyomiContent.equals(""))
         {
-            if (gameInformation.m_timeSettings != null)
+            if (gameInformation.getTimeSettings() != null)
             {
-                gameInformation.m_timeSettings = null;
+                gameInformation.setTimeSettings(null);
                 changed = true;
             }
         }
@@ -111,7 +111,7 @@ public final class GameInfoDialog
                 byoyomi = Integer.parseInt(byoyomiContent) * 60000L;
             if (! byoyomiMovesContent.equals(""))
                 byoyomiMoves = Integer.parseInt(byoyomiMovesContent);
-            TimeSettings timeSettings = gameInformation.m_timeSettings;
+            TimeSettings timeSettings = gameInformation.getTimeSettings();
             if (byoyomi > 0 && byoyomiMoves > 0)
             {
                 if (timeSettings == null
@@ -119,8 +119,9 @@ public final class GameInfoDialog
                     || byoyomi != timeSettings.getByoyomi()
                     || byoyomiMoves != timeSettings.getByoyomiMoves())
                 {
-                    gameInformation.m_timeSettings
-                        = new TimeSettings(preByoyomi, byoyomi, byoyomiMoves);
+                    TimeSettings newTimeSettings =
+                        new TimeSettings(preByoyomi, byoyomi, byoyomiMoves);
+                    gameInformation.setTimeSettings(newTimeSettings);
                     changed = true;
                 }
             }
@@ -129,8 +130,9 @@ public final class GameInfoDialog
                 if (timeSettings == null
                     || preByoyomi != timeSettings.getPreByoyomi())
                 {
-                    gameInformation.m_timeSettings
-                        = new TimeSettings(preByoyomi);
+                    TimeSettings newTimeSettings =
+                        new TimeSettings(preByoyomi);
+                    gameInformation.setTimeSettings(newTimeSettings);
                     changed = true;
                 }
             }
@@ -178,18 +180,18 @@ public final class GameInfoDialog
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.SMALL_PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
         m_playerBlack = createEntry("Black player:",
-                                    gameInformation.m_playerBlack);
+                                    gameInformation.getPlayerBlack());
         m_rankBlack = createEntry("Black rank:",
-                                  gameInformation.m_blackRank);
+                                  gameInformation.getBlackRank());
         m_playerWhite = createEntry("White player:",
-                                    gameInformation.m_playerWhite);
+                                    gameInformation.getPlayerWhite());
         m_rankWhite = createEntry("White rank:",
-                                  gameInformation.m_whiteRank);
-        m_date = createEntry("Date:", gameInformation.m_date);
-        m_rules = createEntry("Rules:", gameInformation.m_rules);
+                                  gameInformation.getWhiteRank());
+        m_date = createEntry("Date:", gameInformation.getDate());
+        m_rules = createEntry("Rules:", gameInformation.getRules());
         m_komi = createEntry("Komi:", gameInformation.roundKomi());
-        m_result = createEntry("Result:", gameInformation.m_result);
-        createTimeEntry(gameInformation.m_timeSettings);
+        m_result = createEntry("Result:", gameInformation.getResult());
+        createTimeEntry(gameInformation.getTimeSettings());
         setMessage(panel);
         setOptionType(OK_CANCEL_OPTION);
     }

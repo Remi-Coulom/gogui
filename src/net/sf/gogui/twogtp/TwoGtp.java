@@ -717,7 +717,7 @@ public class TwoGtp
     {
         m_board = new Board(size);
         m_gameTree = new GameTree(size, m_komi, null, null, null);
-        m_currentNode = m_gameTree.getRoot();
+        setCurrentNode(m_gameTree.getRoot());
         m_resigned = false;
         if (m_openings != null)
         {
@@ -737,11 +737,11 @@ public class TwoGtp
             m_openingFile = m_openings.getFilename();
             if (m_verbose)
                 System.err.println("Loaded opening " + m_openingFile);
-            if (m_openings.getGameInformation().m_boardSize != size)
+            if (m_openings.getGameInformation().getBoardSize() != size)
                 throw new GtpError("Wrong board size: " + m_openingFile);
             m_gameTree = m_openings.getGameTree();
             if (m_isKomiFixed)
-                m_gameTree.getGameInformation().m_komi = m_komi;
+                m_gameTree.getGameInformation().setKomi(m_komi);
             m_openingMoves = Compare.getAllAsMoves(m_gameTree.getRoot());
             m_openingMovesIndex = 0;
             ConstNode root = m_gameTree.getRoot();
@@ -778,7 +778,7 @@ public class TwoGtp
                                + " is fixed by command line option");
         double komi = cmd.getDoubleArg();
         m_komi = komi;
-        m_gameTree.getGameInformation().m_komi = m_komi;
+        m_gameTree.getGameInformation().setKomi(m_komi);
         sendIfSupported("komi", "komi " + m_komi);
     }
 
@@ -893,7 +893,7 @@ public class TwoGtp
                 FileInputStream fileStream = new FileInputStream(file);
                 SgfReader reader =
                     new SgfReader(fileStream, file.toString(), null, 0);
-                Node root = reader.getGameTree().getRoot();
+                ConstNode root = reader.getGameTree().getRoot();
                 m_games.add(Compare.getAllAsMoves(root));
             }
             catch (SgfReader.SgfError e)
@@ -939,12 +939,12 @@ public class TwoGtp
             resultReferee = inverseResult(resultReferee);
         }
         GameInformation gameInformation = m_gameTree.getGameInformation();
-        gameInformation.m_playerBlack = blackName;
-        gameInformation.m_playerWhite = whiteName;
+        gameInformation.setPlayerBlack(blackName);
+        gameInformation.setPlayerWhite(whiteName);
         if (m_referee != null)
-            gameInformation.m_result = resultReferee;
+            gameInformation.setResult(resultReferee);
         else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
-            gameInformation.m_result = resultBlack;
+            gameInformation.setResult(resultBlack);
         String host = Platform.getHostInfo();
         String gameComment =
             "Black: " + blackCommand +

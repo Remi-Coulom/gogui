@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -225,7 +226,7 @@ public class GtpTerminal
     {
         m_board = new Board(size);
         m_gameTree = new GameTree(size, 0, null, null, null);
-        m_currentNode = m_gameTree.getRoot();
+        setCurrentNode(m_gameTree.getRoot());
     }
 
     private void listCommands()
@@ -262,15 +263,15 @@ public class GtpTerminal
                 System.out.print(warnings);
             GameTree gameTree = reader.getGameTree();
             GameInformation gameInformation = gameTree.getGameInformation();
-            if (gameInformation.m_handicap > 0)
+            if (gameInformation.getHandicap() > 0)
             {
                 System.out.println("Handicap games not supported");
                 return;
             }
-            if (! newGame(gameInformation.m_boardSize))
+            if (! newGame(gameInformation.getBoardSize()))
                 return;
-            send("komi " + gameInformation.m_komi);
-            Node node = gameTree.getRoot();
+            send("komi " + gameInformation.getKomi());
+            ConstNode node = gameTree.getRoot();
             while (node != null)
             {
                 for (int i = 0; i < node.getNumberAddBlack(); ++i)
@@ -283,7 +284,7 @@ public class GtpTerminal
                 if (move != null
                     && ! cmdPlay(move.getColor(), move.getPoint()))
                         return;
-                node = node.getChild();
+                node = node.getChildConst();
             }
             printBoard();
         }
@@ -387,6 +388,11 @@ public class GtpTerminal
             response.append(error.getMessage());
             return false;
         }
+    }
+
+    private void setCurrentNode(ConstNode node)
+    {
+        m_currentNode = m_gameTree.getNode(node);
     }
 
     private void undo()

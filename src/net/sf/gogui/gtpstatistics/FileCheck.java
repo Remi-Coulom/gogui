@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -52,11 +53,11 @@ public class FileCheck
         SgfReader reader = new SgfReader(in, m_name, null, 0);
         GameTree tree = reader.getGameTree();
         GameInformation info = tree.getGameInformation();
-        if (info.m_boardSize != m_size)
+        if (info.getBoardSize() != m_size)
             throwError("size is not " + m_size);
-        Node root = tree.getRoot();
+        ConstNode root = tree.getRoot();
         GoColor toMove = GoColor.BLACK;
-        for (Node node = root; node != null; node = node.getChild())
+        for (ConstNode node = root; node != null; node = node.getChildConst())
         {
             if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
             {

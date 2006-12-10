@@ -10,14 +10,14 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseListener;
 import javax.swing.JComponent;
-import net.sf.gogui.game.Node;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 
 class GameTreeNode
     extends JComponent
 {
-    public GameTreeNode(Node node, int moveNumber,
+    public GameTreeNode(ConstNode node, int moveNumber,
                         GameTreePanel gameTreePanel,
                         MouseListener mouseListener, Font font,
                         Dimension size)
@@ -34,7 +34,7 @@ class GameTreeNode
         setPreferredSize(size);
     }
 
-    public Node getNode()
+    public ConstNode getNode()
     {
         return m_node;
     }
@@ -122,7 +122,7 @@ class GameTreeNode
 
     private final GameTreePanel m_gameTreePanel;
 
-    private final Node m_node;
+    private final ConstNode m_node;
 
     private void drawText(Graphics graphics)
     {

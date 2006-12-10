@@ -665,13 +665,13 @@ public class Analyze
             InputStream in = new FileInputStream(new File(game));
             SgfReader reader = new SgfReader(in, game, null, 0);
             GameInformation info = reader.getGameTree().getGameInformation();
-            String playerBlack = info.m_playerBlack;
+            String playerBlack = info.getPlayerBlack();
             if (playerBlack == null)
                 playerBlack = "?";
-            String playerWhite = info.m_playerWhite;
+            String playerWhite = info.getPlayerWhite();
             if (playerWhite == null)
                 playerWhite = "?";
-            String result = info.m_result;
+            String result = info.getResult();
             if (result == null)
                 result = "?";
             writeHtmlRow(out, "Black", playerBlack);

@@ -437,11 +437,11 @@ public final class NodeUtil
     }
 
     /** Create a game tree with the current board position as setup stones. */
-    public static GameTree makeTreeFromPosition(GameInformation info,
+    public static GameTree makeTreeFromPosition(ConstGameInformation info,
                                                 ConstBoard board)
     {
-        GameTree tree = new GameTree(board.getSize(), info.m_komi, null,
-                                     info.m_rules, info.m_timeSettings);
+        GameTree tree = new GameTree(board.getSize(), info.getKomi(), null,
+                                     info.getRules(), info.getTimeSettings());
         Node root = tree.getRoot();
         for (int i = 0; i < board.getNumberPoints(); ++i)
         {

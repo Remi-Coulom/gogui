@@ -245,7 +245,7 @@ public final class SgfReader
         if ((root.getNumberAddWhite() + root.getNumberAddBlack() > 0)
             && root.getPlayer() == GoColor.EMPTY)
         {
-            if (gameInformation.m_handicap > 0)
+            if (gameInformation.getHandicap() > 0)
             {
                 root.setPlayer(GoColor.WHITE);
             }
@@ -491,7 +491,7 @@ public final class SgfReader
         s = s.trim().toLowerCase(Locale.ENGLISH);
         if (s.equals(""))
             return null;
-        int boardSize = m_gameInformation.m_boardSize;
+        int boardSize = m_gameInformation.getBoardSize();
         if (s.length() > 2
             || (s.length() == 2 && s.charAt(1) < 'a' || s.charAt(1) > 'z'))
         {
@@ -565,7 +565,7 @@ public final class SgfReader
             return;
         try
         {
-            m_gameInformation.m_komi = Double.parseDouble(value);
+            m_gameInformation.setKomi(Double.parseDouble(value));
         }
         catch (NumberFormatException e)
         {
@@ -675,7 +675,7 @@ public final class SgfReader
                 }
             }
             else if (p == "BR")
-                m_gameInformation.m_blackRank = v;
+                m_gameInformation.setBlackRank(v);
             else if (p == "C")
             {
                 String comment;
@@ -700,7 +700,7 @@ public final class SgfReader
             else if (p == "CR")
                 readMarked(node, MarkType.CIRCLE);
             else if (p == "DT")
-                m_gameInformation.m_date = v;
+                m_gameInformation.setDate(v);
             else if (p == "FF")
             {
                 int format = -1;
@@ -727,7 +727,7 @@ public final class SgfReader
             {
                 try
                 {
-                    m_gameInformation.m_handicap = Integer.parseInt(v);
+                    m_gameInformation.setHandicap(Integer.parseInt(v));
                 }
                 catch (NumberFormatException e)
                 {
@@ -801,15 +801,15 @@ public final class SgfReader
                 }
             }
             else if (p == "PB")
-                m_gameInformation.m_playerBlack = v;
+                m_gameInformation.setPlayerBlack(v);
             else if (p == "PW")
-                m_gameInformation.m_playerWhite = v;
+                m_gameInformation.setPlayerWhite(v);
             else if (p == "PL")
                 node.setPlayer(parseColor(v));
             else if (p == "RE")
-                m_gameInformation.m_result = v;
+                m_gameInformation.setResult(v);
             else if (p == "RU")
-                m_gameInformation.m_rules = v;
+                m_gameInformation.setRules(v);
             else if (p == "SQ")
                 readMarked(node, MarkType.SQUARE);
             else if (p == "SL")
@@ -824,7 +824,7 @@ public final class SgfReader
                 }
                 try
                 {
-                    m_gameInformation.m_boardSize = parseInt(v);
+                    m_gameInformation.setBoardSize(parseInt(v));
                 }
                 catch (NumberFormatException e)
                 {
@@ -866,7 +866,7 @@ public final class SgfReader
                 }
             }
             else if (p == "WR")
-                m_gameInformation.m_whiteRank = v;
+                m_gameInformation.setWhiteRank(v);
             else if (p != "FF" && p != "GN" && p != "AP")
                 addSgfProperty(node, p);
             return true;
@@ -1027,11 +1027,12 @@ public final class SgfReader
             return;
         if (m_byoyomi <= 0 || m_byoyomiMoves <= 0)
         {
-            m_gameInformation.m_timeSettings = new TimeSettings(m_preByoyomi);
+            m_gameInformation.setTimeSettings(new TimeSettings(m_preByoyomi));
             return;
         }
-        m_gameInformation.m_timeSettings
-            = new TimeSettings(m_preByoyomi, m_byoyomi, m_byoyomiMoves);
+        m_gameInformation.setTimeSettings(new TimeSettings(m_preByoyomi,
+                                                           m_byoyomi,
+                                                           m_byoyomiMoves));
     }
 
     private void setWarning(String message)

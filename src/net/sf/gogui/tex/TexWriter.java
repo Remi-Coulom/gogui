@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -48,7 +49,7 @@ public class TexWriter
         printBeginDocument();
         if (title != null && ! title.trim().equals(""))
             m_out.println("\\section*{" + escape(title) + "}");
-        printBeginPSGo(gameTree.getGameInformation().m_boardSize);
+        printBeginPSGo(gameTree.getGameInformation().getBoardSize());
         String comment = printTree(gameTree);
         printEndPSGo();
         if (! comment.equals(""))
@@ -152,12 +153,12 @@ public class TexWriter
     {
         GameInformation gameInformation = gameTree.getGameInformation();
         StringBuffer comment = new StringBuffer();
-        int size = gameInformation.m_boardSize;
-        Node firstMoveAtPoint[][] = new Node[size][size];
+        int size = gameInformation.getBoardSize();
+        ConstNode firstMoveAtPoint[][] = new ConstNode[size][size];
         ArrayList needsComment = new ArrayList();
         boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
-        Node node = gameTree.getRoot();
+        ConstNode node = gameTree.getRoot();
         while (node != null)
         {
             for (int i = 0; i < node.getNumberAddBlack(); ++i)
@@ -169,7 +170,7 @@ public class TexWriter
             Move move = node.getMove();
             if (move == null)
             {
-                node = node.getChild();
+                node = node.getChildConst();
                 continue;
             }
             GoPoint point = move.getPoint();
@@ -214,7 +215,7 @@ public class TexWriter
                 firstMoveAtPoint[point.getX()][point.getY()] = node;
             }
             blackToMove = ! blackToMove;
-            node = node.getChild();
+            node = node.getChildConst();
         }
         for (int i = 0; i < needsComment.size(); ++i)
         {
@@ -232,7 +233,7 @@ public class TexWriter
                 int x = point.getX();
                 int y = point.getY();
                 comment.append("~at~");
-                Node first = firstMoveAtPoint[x][y];
+                ConstNode first = firstMoveAtPoint[x][y];
                 GoColor firstMoveColor = first.getMove().getColor();
                 int firstMoveNumber = NodeUtil.getMoveNumber(first);
                 comment.append(getStoneInTextString(firstMoveNumber,

@@ -12,33 +12,70 @@ import net.sf.gogui.util.StringUtil;
     Contains information about the board size, handicap, rules and players.
 */
 public class GameInformation
+    implements ConstGameInformation
 {
     public GameInformation(int boardSize)
     {
         m_boardSize = boardSize;
     }
 
-    public int m_boardSize;
+    public int getBoardSize()
+    {
+        return m_boardSize;
+    }
 
-    public int m_handicap;
+    public String getBlackRank()
+    {
+        return m_blackRank;
+    }
 
-    public double m_komi;
+    public String getDate()
+    {
+        return m_date;
+    }
 
-    public String m_blackRank;
+    public int getHandicap()
+    {
+        return m_handicap;
+    }
 
-    public String m_date;
+    public double getKomi()
+    {
+        return m_komi;
+    }
 
-    public String m_playerBlack;
+    public String getPlayerBlack()
+    {
+        return m_playerBlack;
+    }
 
-    public String m_playerWhite;
+    public String getPlayerWhite()
+    {
+        return m_playerWhite;
+    }
 
-    public String m_result;
+    public String getResult()
+    {
+        return m_result;
+    }
 
-    public String m_rules;
+    public String getRules()
+    {
+        return m_rules;
+    }
 
-    public String m_whiteRank;
+    public String getWhiteRank()
+    {
+        return m_whiteRank;
+    }
 
-    public TimeSettings m_timeSettings;
+    /** Get a copy of the time settings. */
+    public TimeSettings getTimeSettings()        
+    {
+        if (m_timeSettings == null)
+            return null;
+        return new TimeSettings(m_timeSettings);
+    }
 
     /** Compare komi with a resultion of 0.5 points. */
     public boolean komiEquals(double komi)
@@ -81,6 +118,66 @@ public class GameInformation
         return Long.toString(intKomi / 2) + ".5";
     }
 
+    public void setBlackRank(String rank)
+    {
+        m_blackRank = rank;
+    }
+
+    public void setBoardSize(int boardSize)
+    {
+        m_boardSize = boardSize;
+    }
+
+    public void setDate(String date)
+    {
+        m_date = date;
+    }
+
+    public void setHandicap(int handicap)
+    {
+        m_handicap = handicap;
+    }
+
+    public void setKomi(double komi)
+    {
+        m_komi = komi;
+    }
+
+    public void setPlayerBlack(String name)
+    {
+        m_playerBlack = name;
+    }
+
+    public void setPlayerWhite(String name)
+    {
+        m_playerWhite = name;
+    }
+
+    public void setResult(String result)
+    {
+        m_result = result;
+    }
+
+    public void setRules(String rules)
+    {
+        m_rules = rules;
+    }
+
+    /** Set time settings.
+        Keeps a copy of the arguments.
+    */
+    public void setTimeSettings(TimeSettings timeSettings)
+    {
+        if (timeSettings == null)
+            m_timeSettings = timeSettings;
+        m_timeSettings = new TimeSettings(timeSettings);
+    }
+
+    public void setWhiteRank(String rank)
+    {
+        m_whiteRank = rank;
+    }
+
     /** Suggest a game name from the player names.
         @return A game name built from the player names or null, if not at
         least one player name is known.
@@ -105,5 +202,27 @@ public class GameInformation
             playerWhite = "Unknown";
         return playerWhite + " vs " + playerBlack + " (B)";
     }
+
+    private int m_boardSize;
+
+    private int m_handicap;
+
+    private double m_komi;
+
+    private String m_blackRank;
+
+    private String m_date;
+
+    private String m_playerBlack;
+
+    private String m_playerWhite;
+
+    private String m_result;
+
+    private String m_rules;
+
+    private String m_whiteRank;
+
+    private TimeSettings m_timeSettings;
 }
 

@@ -818,7 +818,7 @@ public class GoGui
         else if (m_scoreMode && ! modifiedSelect)
         {
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, m_board, p);
-            double komi = m_gameTree.getGameInformation().m_komi;
+            double komi = m_gameTree.getGameInformation().getKomi();
             m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
             return;
         }
@@ -1716,16 +1716,16 @@ public class GoGui
             return;
         if (! gameInformation.komiEquals(m_prefs.getDouble("komi", 6.5)))
         {
-            m_prefs.putDouble("komi", gameInformation.m_komi);
-            setKomi(gameInformation.m_komi);
+            m_prefs.putDouble("komi", gameInformation.getKomi());
+            setKomi(gameInformation.getKomi());
         }
-        if (gameInformation.m_rules != null
-            && ! gameInformation.m_rules.equals(m_prefs.get("rules", "")))
+        if (gameInformation.getRules() != null
+            && ! gameInformation.getRules().equals(m_prefs.get("rules", "")))
         {
-            m_prefs.put("rules", gameInformation.m_rules);
+            m_prefs.put("rules", gameInformation.getRules());
             setRules();
         }
-        TimeSettings timeSettings = gameInformation.m_timeSettings;
+        TimeSettings timeSettings = gameInformation.getTimeSettings();
         if (timeSettings == null)
             m_timeSettings = null;
         else
@@ -2045,7 +2045,7 @@ public class GoGui
         m_scoreDialog.setVisible(false);
         if (accepted)
         {
-            double komi = m_gameTree.getGameInformation().m_komi;
+            double komi = m_gameTree.getGameInformation().getKomi();
             setResult(m_countScore.getScore(komi, getRules()).formatResult());
         }
         clearStatus();
@@ -2071,7 +2071,7 @@ public class GoGui
             // Create a dummy game tree, so that GameTreeDialog shows
             // a setup node
             m_gameTree = new GameTree(m_boardSize, 0, null, null, null);
-            m_currentNode = m_gameTree.getRoot();
+            setCurrentNode(m_gameTree.getRoot());
             m_currentNode.addBlack(GoPoint.get(0, 0));
             m_clock.reset();
             updateGameInfo(true);
@@ -2559,7 +2559,7 @@ public class GoGui
 
     private boolean executeRoot()
     {
-        m_currentNode = m_gameTree.getRoot();
+        setCurrentNode(m_gameTree.getRoot());
         if (m_gtp != null)
         {
             try
@@ -2573,7 +2573,7 @@ public class GoGui
             }
         }
         GameInformation gameInformation = m_gameTree.getGameInformation();
-        setKomi(gameInformation.m_komi);
+        setKomi(gameInformation.getKomi());
         setRules();
         setTimeSettings();
         currentNodeChanged();
@@ -2733,7 +2733,7 @@ public class GoGui
                                   handicap, m_prefs.get("rules", ""),
                                   m_timeSettings);
         m_board.newGame();        
-        m_currentNode = m_gameTree.getRoot();
+        setCurrentNode(m_gameTree.getRoot());
         updateFromGoBoard();
         resetBoard();
         m_clock.reset();
@@ -2838,7 +2838,7 @@ public class GoGui
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
-        double komi = m_gameTree.getGameInformation().m_komi;
+        double komi = m_gameTree.getGameInformation().getKomi();
         m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
@@ -2894,7 +2894,7 @@ public class GoGui
             SgfReader reader = runnable.getReader();
             GameInformation gameInformation =
                 reader.getGameTree().getGameInformation();
-            initGame(gameInformation.m_boardSize);
+            initGame(gameInformation.getBoardSize());
             m_menuBar.addRecent(file);
             m_gameTree = reader.getGameTree();
             if (executeRoot() && move > 0)
@@ -3236,13 +3236,13 @@ public class GoGui
     
     private void setResult(String result)
     {
-        String oldResult = m_gameTree.getGameInformation().m_result;
+        String oldResult = m_gameTree.getGameInformation().getResult();
         if (! (oldResult == null || oldResult.equals("")
                || oldResult.equals(result))
             && ! showQuestion("Overwrite old result " + oldResult + "\n" +
                               "with " + result + "?"))
             return;
-        m_gameTree.getGameInformation().m_result = result;
+        m_gameTree.getGameInformation().setResult(result);
     }
 
     private void setRules()
@@ -3255,7 +3255,7 @@ public class GoGui
         if (m_gtp == null)
             return;
         TimeSettings timeSettings =
-            m_gameTree.getGameInformation().m_timeSettings;
+            m_gameTree.getGameInformation().getTimeSettings();
         if (timeSettings == null)
             return;
         if (! m_gtp.isCommandSupported("time_settings"))
@@ -3341,7 +3341,7 @@ public class GoGui
         m_board.newGame();        
         m_gameTree = new GameTree(size, m_prefs.getDouble("komi", 6.5), null,
                                   m_prefs.get("rules", ""), null);
-        m_currentNode = m_gameTree.getRoot();
+        setCurrentNode(m_gameTree.getRoot());
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
             GoPoint point = m_board.getPoint(i);

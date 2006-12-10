@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -174,12 +175,12 @@ public class GtpStatistics
     private void checkGame(GameTree tree, String name) throws ErrorMessage
     {
         GameInformation info = tree.getGameInformation();
-        int size = info.m_boardSize;
+        int size = info.getBoardSize();
         if (size != m_size)
             throw new ErrorMessage(name + " has not size " + m_size);
-        Node root = tree.getRoot();
+        ConstNode root = tree.getRoot();
         GoColor toMove = GoColor.BLACK;
-        for (Node node = root; node != null; node = node.getChild())
+        for (ConstNode node = root; node != null; node = node.getChildConst())
         {
             if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
             {
@@ -312,10 +313,10 @@ public class GtpStatistics
         GameTree tree = reader.getGameTree();
         checkGame(tree, name);
         GameInformation info = tree.getGameInformation();
-        int size = info.m_boardSize;
+        int size = info.getBoardSize();
         m_gtp.sendBoardsize(size);
         m_gtp.sendClearBoard(size);
-        Node root = tree.getRoot();
+        ConstNode root = tree.getRoot();
         if (m_backward)
             iteratePositionsBackward(root, name);
         else
@@ -368,11 +369,11 @@ public class GtpStatistics
         }
     }
 
-    private void iteratePositions(Node root, String name) throws GtpError
+    private void iteratePositions(ConstNode root, String name) throws GtpError
     {
         int number = 0;
         GoColor toMove = GoColor.BLACK;
-        for (Node node = root; node != null; node = node.getChild())
+        for (ConstNode node = root; node != null; node = node.getChildConst())
         {
             if (node.getNumberAddWhite() + node.getNumberAddBlack() > 0)
             {
@@ -400,10 +401,10 @@ public class GtpStatistics
                        regularCommands, true);
     }
 
-    private void iteratePositionsBackward(Node root, String name)
+    private void iteratePositionsBackward(ConstNode root, String name)
         throws GtpError
     {
-        Node node = root;
+        ConstNode node = root;
         GoColor toMove = GoColor.BLACK;
         while (true)
         {
@@ -418,7 +419,7 @@ public class GtpStatistics
                 m_gtp.sendPlay(move);
                 toMove = toMove.otherColor();
             }
-            Node child = node.getChild();
+            ConstNode child = node.getChildConst();
             if (child == null)
                 break;
             node = child;
@@ -428,7 +429,7 @@ public class GtpStatistics
         boolean regularCommands = (number >= m_min && number <= m_max);
         handlePosition(name, toMove, null, number, true, regularCommands,
                        finalCommands);
-        for ( ; node != root; node = node.getFather())
+        for ( ; node != root; node = node.getFatherConst())
         {
             // checked in checkGame
             assert(node.getNumberAddWhite() + node.getNumberAddBlack() == 0);
@@ -437,7 +438,7 @@ public class GtpStatistics
             {
                 m_gtp.send("undo");
                 ++number;
-                finalCommands = (node.getFather() == root);
+                finalCommands = (node.getFatherConst() == root);
                 regularCommands = (number >= m_min && number <= m_max);
                 if (finalCommands || regularCommands)
                     handlePosition(name, toMove, move, number, false,
@@ -458,7 +459,7 @@ public class GtpStatistics
     /** Send setup stones as moves.
         @return New color to move.
      */
-    private GoColor sendSetup(Node node) throws GtpError
+    private GoColor sendSetup(ConstNode node) throws GtpError
     {
         ArrayList moves = new ArrayList();
         NodeUtil.getAllAsMoves(node, moves);

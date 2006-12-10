@@ -78,7 +78,7 @@ public class GameTreePanel
                     GameTreeNode gameNode = (GameTreeNode)event.getSource();
                     if (event.getClickCount() == 2)
                     {
-                        Node node = gameNode.getNode();
+                        ConstNode node = gameNode.getNode();
                         if (node.getNumberChildren() > 1)
                         {
                             if (m_expanded.contains(node))
@@ -117,7 +117,7 @@ public class GameTreePanel
             };
     }
 
-    public Node getCurrentNode()
+    public ConstNode getCurrentNode()
     {
         return m_currentNode;
     }
@@ -180,18 +180,18 @@ public class GameTreePanel
         return m_sizeMode;
     }
     
-    public void gotoNode(Node node)
+    public void gotoNode(ConstNode node)
     {
         if (m_listener != null)
             m_listener.cbGotoNode(node);
     }
 
-    public boolean isCurrent(Node node)
+    public boolean isCurrent(ConstNode node)
     {
         return node == m_currentNode;
     }
 
-    public boolean isExpanded(Node node)
+    public boolean isExpanded(ConstNode node)
     {
         return m_expanded.contains(node);
     }
@@ -301,7 +301,7 @@ public class GameTreePanel
                   gameNode);
     }
 
-    public void update(GameTree gameTree, Node currentNode, int minWidth,
+    public void update(GameTree gameTree, ConstNode currentNode, int minWidth,
                        int minHeight)
     {
         assert(currentNode != null);
@@ -319,7 +319,7 @@ public class GameTreePanel
         m_maxY = minHeight;
         try
         {
-            Node root = m_gameTree.getRoot();
+            ConstNode root = m_gameTree.getRoot();
             createNodes(this, root, 0, 0, MARGIN, MARGIN, 0);
             if (gameTreeChanged)
             {
@@ -422,9 +422,9 @@ public class GameTreePanel
     /** Used for focus workaround on Mac Java 1.4.2 if not null. */
     private JScrollPane m_scrollPane;
 
-    private Node m_currentNode;
+    private ConstNode m_currentNode;
 
-    private Node m_popupNode;
+    private ConstNode m_popupNode;
 
     private final HashMap m_map = new HashMap(500, 0.8f);
 
@@ -478,7 +478,7 @@ public class GameTreePanel
         m_preferredNodeSize = new Dimension(m_nodeFullSize, m_nodeFullSize);
     }
 
-    private int createNodes(Component father, Node node, int x, int y,
+    private int createNodes(Component father, ConstNode node, int x, int y,
                             int dx, int dy, int moveNumber)
     {
         m_maxX = Math.max(x, m_maxX);
@@ -519,7 +519,7 @@ public class GameTreePanel
             for (int i = 0; i < maxChildren; ++i)
             {
                 childrenDy[i] = dy;
-                dy += createNodes(gameNode, node.getChild(i),
+                dy += createNodes(gameNode, node.getChildConst(i),
                                   x + dx, y + dy, dx, dy, moveNumber);
                 if (! notExpanded && i < numberChildren - 1)
                     dy += m_nodeFullSize;
@@ -540,20 +540,20 @@ public class GameTreePanel
         return dy;
     }
 
-    private GameTreeNode getGameTreeNode(Node node)
+    private GameTreeNode getGameTreeNode(ConstNode node)
     {
         return (GameTreeNode)m_map.get(node);
     }
 
-    private boolean ensureVisible(Node node)
+    private boolean ensureVisible(ConstNode node)
     {
         boolean changed = false;
         boolean showSubtreeSizes = getShowSubtreeSizes();
         while (node != null)
         {
-            Node father = node.getFather();
+            ConstNode father = node.getFatherConst();
             if (father != null
-                && (father.getChild() != node
+                && (father.getChildConst() != node
                     || (showSubtreeSizes && father.getNumberChildren() > 1)))
                 if (m_expanded.add(father))
                     changed = true;
@@ -562,14 +562,14 @@ public class GameTreePanel
         return changed;
     }
 
-    private void hideOthers(Node node)
+    private void hideOthers(ConstNode node)
     {
         m_expanded.clear();
         ensureVisible(node);
         update(m_gameTree, m_currentNode, getWidth(), getHeight());
     }
 
-    private void hideSubtree(Node root)
+    private void hideSubtree(ConstNode root)
     {
         boolean changed = false;
         boolean currentChanged = false;
@@ -599,7 +599,7 @@ public class GameTreePanel
         }
     }
 
-    private void nodeInfo(Point location, Node node)
+    private void nodeInfo(Point location, ConstNode node)
     {
         String nodeInfo = NodeUtil.nodeInfo(node);
         String title = "Node Info";
@@ -619,7 +619,7 @@ public class GameTreePanel
                              SpringLayout.NORTH, father);
     }
 
-    private void scrollTo(Node node)
+    private void scrollTo(ConstNode node)
     {
         if (node == null)
             return;
@@ -635,7 +635,7 @@ public class GameTreePanel
 
     private void showPopup(int x, int y, GameTreeNode gameNode)
     {
-        Node node = gameNode.getNode();
+        ConstNode node = gameNode.getNode();
         m_popupNode = node;
         ActionListener listener = new ActionListener()
             {
@@ -713,7 +713,7 @@ public class GameTreePanel
         m_popupLocation = popup.getLocationOnScreen();
     }
 
-    private void showSubtree(Node root)
+    private void showSubtree(ConstNode root)
     {
         if (NodeUtil.subtreeGreaterThan(root, 10000)
             && ! SimpleDialogs.showQuestion(m_owner,
@@ -742,7 +742,7 @@ public class GameTreePanel
         }
     }
 
-    private void showVariations(Node node)
+    private void showVariations(ConstNode node)
     {
         if (node.getNumberChildren() > 1 && m_expanded.add(node))
         {
@@ -751,7 +751,7 @@ public class GameTreePanel
         }
     }
 
-    private void treeInfo(Point location, Node node)
+    private void treeInfo(Point location, ConstNode node)
     {
         String treeInfo = NodeUtil.treeInfo(node);
         String title = "Subtree Info";
