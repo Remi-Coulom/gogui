@@ -71,6 +71,7 @@ final class TimeInfo
     The optimization also expects that most nodes have only one child.
 */
 public final class Node
+    implements ConstNode
 {
     /** Construct empty node. */
     public Node()
@@ -208,6 +209,14 @@ public final class Node
         return getChild(0);
     }
 
+    /** Child of main variation or null if no child (const).
+        @return Node with index 0 or null, if no children.
+    */
+    public ConstNode getChildConst()
+    {
+        return getChild();
+    }
+
     /** Get child node.
         @param i Index of the child in [0...getNumberChildren() - 1]
         @return The child node
@@ -219,14 +228,23 @@ public final class Node
         return (Node)((ArrayList)m_children).get(i);
     }
 
+    /** Get child node (const).
+        @param i Index of the child in [0...getNumberChildren() - 1]
+        @return The child node
+    */
+    public ConstNode getChildConst(int i)
+    {
+        return getChild(i);
+    }
+
     /** Get index of child node.
         @param child The child.
         @return Index of child or -1, if node is not a child of this node.
     */  
-    public int getChildIndex(Node child)
+    public int getChildIndex(ConstNode child)
     {
         for (int i = 0; i < getNumberChildren(); ++i)
-            if (getChild(i) == child)
+            if (getChildConst(i) == child)
                 return i;
         return -1;
     }
@@ -257,6 +275,14 @@ public final class Node
         return m_father;
     }
 
+    /** Get father node (const).
+        @return Father node of this node or null, if no father.
+    */
+    public ConstNode getFatherConst()
+    {
+        return m_father;
+    }
+
     /** Get label for a location on the board.
         @param point The location.
         @return Label at location or null, if no label.
@@ -279,6 +305,14 @@ public final class Node
         return m_extraInfo.m_moreExtraInfo.m_label;
     }
 
+    /** Get all labels on the board (const).
+        @return Map containing (Point,String) pairs.
+    */
+    public Map getLabelsConst()
+    {
+        return new TreeMap(getLabels());
+    }
+
     /** Get all markups of a type.
         @param type Markup type from Node.MARK_TYPES.
         @return Map containing (Point,String) pairs.
@@ -288,6 +322,15 @@ public final class Node
         if (m_extraInfo == null || m_extraInfo.m_marked == null)
             return null;
         return (ArrayList)m_extraInfo.m_marked.get(type);
+    }
+
+    /** Get all markups of a type (const).
+        @param type Markup type from Node.MARK_TYPES.
+        @return Map containing (Point,String) pairs.
+    */
+    public ArrayList getMarkedConst(MarkType type)
+    {
+        return new ArrayList(getMarkedConst(type));
     }
 
     /** Get move contained in this node.
@@ -382,6 +425,16 @@ public final class Node
         if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
             return null;
         return m_extraInfo.m_moreExtraInfo.m_sgfProperties;
+    }
+
+    /** Get other unspecified SGF properties (const).
+        @return The map with other SGF properties mapping String label
+        to String value
+        @see #addSgfProperty
+    */
+    public Map getSgfPropertiesConst()
+    {
+        return new TreeMap(getSgfProperties());
     }
 
     /** Time left for color after move was made.
@@ -624,36 +677,36 @@ public final class Node
         @param child The child
         @return The next child or null, if there is no next child
     */
-    public Node variationAfter(Node child)
+    public ConstNode variationAfter(ConstNode child)
     {
         int numberChildren = getNumberChildren();
         if (numberChildren == 1)
             return null;
         int i;
         for (i = 0; i < numberChildren; ++i)
-            if (getChild(i) == child)
+            if (getChildConst(i) == child)
                 break;
         if (i == numberChildren - 1)
             return null;
-        return getChild(i + 1);
+        return getChildConst(i + 1);
     }
 
     /** Return previous child before a given child.
         @param child The child
         @return The previous child or null, if there is no previous child
     */
-    public Node variationBefore(Node child)
+    public ConstNode variationBefore(ConstNode child)
     {
         int numberChildren = getNumberChildren();
         if (numberChildren == 1)
             return null;
         int i;
         for (i = 0; i < numberChildren; ++i)
-            if (getChild(i) == child)
+            if (getChildConst(i) == child)
                 break;
         if (i == 0)
             return null;
-        return getChild(i - 1);
+        return getChildConst(i - 1);
     }
 
     /** Comment stored as bytes.

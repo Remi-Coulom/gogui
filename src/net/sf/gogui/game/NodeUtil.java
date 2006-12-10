@@ -22,23 +22,23 @@ public final class NodeUtil
         containing a given node.
         @return null if no such node exists.
     */
-    public static Node findByMoveNumber(Node node, int moveNumber)
+    public static ConstNode findByMoveNumber(ConstNode node, int moveNumber)
     {
         int maxMoveNumber = getMoveNumber(node) + getMovesLeft(node);
         if (moveNumber < 0 || moveNumber >  maxMoveNumber)
             return null;
         if (moveNumber <= getMoveNumber(node))
         {
-            while (node.getFather() != null
+            while (node.getFatherConst() != null
                    && (getMoveNumber(node) > moveNumber
                        || node.getMove() == null))
-                node = node.getFather();
+                node = node.getFatherConst();
         }
         else
         {
-            while (node.getChild() != null
+            while (node.getChildConst() != null
                    && getMoveNumber(node) < moveNumber)
-                node = node.getChild();
+                node = node.getChildConst();
         }
         return node;
     }
@@ -51,7 +51,7 @@ public final class NodeUtil
         Returns null, if the variation string is invalid or does not specify
         a node in the given tree.
     */
-    public static Node findByVariation(Node root, String variation)
+    public static ConstNode findByVariation(ConstNode root, String variation)
     {
         if (variation.trim().equals(""))
             return root;
@@ -70,29 +70,29 @@ public final class NodeUtil
                 return null;
             }
         }
-        Node node = root;
+        ConstNode node = root;
         for (int i = 0; i < n.length; ++i)
         {
             while (node.getNumberChildren() <= 1)
             {
-                node = node.getChild();
+                node = node.getChildConst();
                 if (node == null)
                     return null;
             }
             if (n[i] >= node.getNumberChildren())
                 return null;
-            node = node.getChild(n[i]);
+            node = node.getChildConst(n[i]);
         }
         return node;
     }
 
-    public static boolean commentContains(Node node, Pattern pattern)
+    public static boolean commentContains(ConstNode node, Pattern pattern)
     {
         String comment = node.getComment();
         return (comment != null && pattern.matcher(comment).find());
     }
 
-    public static Node findInComments(Node node, Pattern pattern)
+    public static ConstNode findInComments(ConstNode node, Pattern pattern)
     {
         node = nextNode(node);
         while (node != null)
@@ -140,7 +140,7 @@ public final class NodeUtil
         @param node the node
         @param moves the resulting moves
     */
-    public static void getAllAsMoves(Node node, ArrayList moves)
+    public static void getAllAsMoves(ConstNode node, ArrayList moves)
     {
         moves.clear();
         Move move = node.getMove();
@@ -183,10 +183,10 @@ public final class NodeUtil
     }
 
     /** Find the last node that was still in the main variation. */
-    public static Node getBackToMainVariation(Node node)
+    public static ConstNode getBackToMainVariation(ConstNode node)
     {
         while (! isInMainVariation(node))
-            node = node.getFather();
+            node = node.getFatherConst();
         return node;
     }
 
@@ -194,12 +194,12 @@ public final class NodeUtil
         @return ArrayList contaning the move points, not including passes
         and independent of color.
     */
-    public static ArrayList getChildrenMoves(Node node)
+    public static ArrayList getChildrenMoves(ConstNode node)
     {
         ArrayList moves = new ArrayList();
         for (int i = 0; i < node.getNumberChildren(); ++i)
         {
-            Move childMove = node.getChild(i).getMove();
+            Move childMove = node.getChildConst(i).getMove();
             if (childMove != null && childMove.getPoint() != null)
                 moves.add(childMove.getPoint());
         }
@@ -209,81 +209,81 @@ public final class NodeUtil
     /** Get child node containg a certain move.
         @return null if no such child existst.
     */
-    public static Node getChildWithMove(Node node, Move move)
+    public static ConstNode getChildWithMove(ConstNode node, Move move)
     {
         for (int i = 0; i < node.getNumberChildren(); ++i)
         {
-            Node child = node.getChild(i);
-            Move childMove = node.getChild(i).getMove();
+            ConstNode child = node.getChildConst(i);
+            Move childMove = child.getMove();
             if (childMove != null && childMove.equals(move))
                 return child;
         }
         return null;
     }
 
-    public static int getDepth(Node node)
+    public static int getDepth(ConstNode node)
     {
         int depth = 0;
-        while (node.getFather() != null)
+        while (node.getFatherConst() != null)
         {
-            node = node.getFather();
+            node = node.getFatherConst();
             ++depth;
         }
         return depth;
     }
 
     /** Get last node in main variation. */
-    public static Node getLast(Node node)
+    public static ConstNode getLast(ConstNode node)
     {
         while (node.getNumberChildren() > 0)
-            node = node.getChild();
+            node = node.getChildConst();
         return node;
     }
 
-    public static int getMoveNumber(Node node)
+    public static int getMoveNumber(ConstNode node)
     {
         int moveNumber = 0;
         while (node != null)
         {
             if (node.getMove() != null)
                 ++moveNumber;
-            node = node.getFather();
+            node = node.getFatherConst();
         }
         return moveNumber;
     }
 
     /** Moves left in main variation. */
-    public static int getMovesLeft(Node node)
+    public static int getMovesLeft(ConstNode node)
     {
         int movesLeft = 0;
-        node = node.getChild();
+        node = node.getChildConst();
         while (node != null)
         {
             if (node.getMove() != null)
                 ++movesLeft;
-            node = node.getChild();
+            node = node.getChildConst();
         }
         return movesLeft;
     }
 
     /** Return next variation of this node. */
-    public static Node getNextVariation(Node node)
+    public static ConstNode getNextVariation(ConstNode node)
     {
-        Node father = node.getFather();
+        ConstNode father = node.getFatherConst();
         if (father == null)
             return null;
         return father.variationAfter(node);
     }
 
     /** Return next variation before this node. */
-    public static Node getNextEarlierVariation(Node node)
+    public static ConstNode getNextEarlierVariation(ConstNode node)
     {
-        Node child = node;
-        node = node.getFather();
+        ConstNode child = node;
+        node = node.getFatherConst();
         while (node != null && node.variationAfter(child) == null)
         {
             child = node;
-            node = node.getFather();
+            node = node.getFatherConst();
         }
         if (node == null)
             return null;
@@ -291,46 +291,46 @@ public final class NodeUtil
     }
 
     /** Nodes left in main variation. */
-    public static int getNodesLeft(Node node)
+    public static int getNodesLeft(ConstNode node)
     {
         int nodesLeft = 0;
         while (node != null)
         {
             ++nodesLeft;
-            node = node.getChild();
+            node = node.getChildConst();
         }
         return nodesLeft;
     }
 
     /** Get nodes in path a given node to the root node. */
-    public static void getPathToRoot(Node node, ArrayList result)
+    public static void getPathToRoot(ConstNode node, ArrayList result)
     {
         result.clear();
         while (node != null)
         {
             result.add(node);
-            node = node.getFather();
+            node = node.getFatherConst();
         }
     }
 
     /** Return previous variation of this node. */
-    public static Node getPreviousVariation(Node node)
+    public static ConstNode getPreviousVariation(ConstNode node)
     {
-        Node father = node.getFather();
+        ConstNode father = node.getFatherConst();
         if (father == null)
             return null;
         return father.variationBefore(node);
     }
 
     /** Return previous variation before this node. */
-    public static Node getPreviousEarlierVariation(Node node)
+    public static ConstNode getPreviousEarlierVariation(ConstNode node)
     {
-        Node child = node;
-        node = node.getFather();
+        ConstNode child = node;
+        node = node.getFatherConst();
         while (node != null && node.variationBefore(child) == null)
         {
             child = node;
-            node = node.getFather();
+            node = node.getFatherConst();
         }
         if (node == null)
             return null;
@@ -338,7 +338,14 @@ public final class NodeUtil
         if (node == null)
             return null;
         while (hasSubtree(node))
-            node = node.getChild(node.getNumberChildren() - 1);
+            node = node.getChildConst(node.getNumberChildren() - 1);
+        return node;
+    }
+
+    public static ConstNode getRoot(ConstNode node)
+    {
+        while (node.getFatherConst() != null)
+            node = node.getFatherConst();
         return node;
     }
 
@@ -348,12 +355,12 @@ public final class NodeUtil
         The childs are counted starting with 1 and the numbers are separated
         by colons.
     */
-    public static String getVariationString(Node node)
+    public static String getVariationString(ConstNode node)
     {
         ArrayList list = new ArrayList();
         while (node != null)
         {
-            Node father = node.getFather();
+            ConstNode father = node.getFatherConst();
             if (father != null && father.getNumberChildren() > 1)
             {
                 int index = father.getChildIndex(node) + 1;
@@ -372,17 +379,17 @@ public final class NodeUtil
     }
 
     /** Subtree of node contains at least one node with 2 or more children. */
-    public static boolean hasSubtree(Node node)
+    public static boolean hasSubtree(ConstNode node)
     {
         while (node != null && node.getNumberChildren() < 2)
-            node = node.getChild();
+            node = node.getChildConst();
         return (node != null);
     }
 
     /** Check if game is in cleanup stage.
         Cleanup stage is after two consecutive pass moves have been played.
     */
-    public static boolean isInCleanup(Node node)
+    public static boolean isInCleanup(ConstNode node)
     {
         boolean lastPass = false;
         while (node != null)
@@ -399,30 +406,30 @@ public final class NodeUtil
                 else
                     lastPass = false;
             }
-            node = node.getFather();
+            node = node.getFatherConst();
         }
         return false;
     }
 
-    public static boolean isInMainVariation(Node node)
+    public static boolean isInMainVariation(ConstNode node)
     {
-        while (node.getFather() != null)
+        while (node.getFatherConst() != null)
         {
-            if (node.getFather().getChild(0) != node)
+            if (node.getFatherConst().getChildConst(0) != node)
                 return false;
-            node = node.getFather();
+            node = node.getFatherConst();
         }
         return true;
     }
 
-    public static boolean isRootWithoutChildren(Node node)
+    public static boolean isRootWithoutChildren(ConstNode node)
     {
-        return (node.getFather() == null && node.getChild() == null);
+        return (node.getFatherConst() == null && node.getChildConst() == null);
     }
 
     public static void makeMainVariation(Node node)
     {
-        while (node.getFather() != null)
+        while (node.getFatherConst() != null)
         {
             node.getFather().makeMainVariation(node);
             node = node.getFather();
@@ -450,16 +457,16 @@ public final class NodeUtil
     }
 
     /** Get next node for iteration in complete tree. */
-    public static Node nextNode(Node node)
+    public static ConstNode nextNode(ConstNode node)
     {
-        Node child = node.getChild();
+        ConstNode child = node.getChildConst();
         if (child != null)
             return child;
         return getNextEarlierVariation(node);
     }
 
     /** Get next node for iteration in subtree. */
-    public static Node nextNode(Node node, int depth)
+    public static ConstNode nextNode(ConstNode node, int depth)
     {
         node = nextNode(node);
         if (node == null || NodeUtil.getDepth(node) <= depth)
@@ -467,7 +474,7 @@ public final class NodeUtil
         return node;
     }
 
-    public static String nodeInfo(Node node)
+    public static String nodeInfo(ConstNode node)
     {
         StringBuffer buffer = new StringBuffer(128);
         buffer.append("NodeProperties:\n");
@@ -512,12 +519,12 @@ public final class NodeUtil
         for (int i = 0; i < MarkType.getNumberTypes(); ++i)
         {
             MarkType type = MarkType.getType(i);
-            ArrayList marked = node.getMarked(type);
+            ArrayList marked = node.getMarkedConst(type);
             if (marked != null && marked.size() > 0)
                 appendInfo(buffer, "Marked " +
                            StringUtil.capitalize(type.toString()), marked);
         }
-        Map labels = node.getLabels();
+        Map labels = node.getLabelsConst();
         if (labels != null && labels.size() > 0)
         {
             StringBuffer labelsBuffer = new StringBuffer();
@@ -537,7 +544,7 @@ public final class NodeUtil
         }
         if (! Float.isNaN(node.getValue()))
             appendInfo(buffer, "Value", Float.toString(node.getValue()));
-        Map sgfProperties = node.getSgfProperties();
+        Map sgfProperties = node.getSgfPropertiesConst();
         if (sgfProperties != null)
         {
             buffer.append("SgfProperties:\n");
@@ -553,7 +560,7 @@ public final class NodeUtil
         return buffer.toString();
     }
         
-    public static boolean subtreeGreaterThan(Node node, int size)
+    public static boolean subtreeGreaterThan(ConstNode node, int size)
     {
         int n = 0;
         int depth = NodeUtil.getDepth(node);
@@ -570,7 +577,7 @@ public final class NodeUtil
     /** Number of nodes in subtree.
         Does not include this node.
     */
-    public static int subtreeSize(Node node)
+    public static int subtreeSize(ConstNode node)
     {
         int n = 0;
         int depth = NodeUtil.getDepth(node);
@@ -582,7 +589,7 @@ public final class NodeUtil
         return n;
     }
 
-    public static String treeInfo(Node node)
+    public static String treeInfo(ConstNode node)
     {
         int numberNodes = 0;
         int numberTerminal = 0;
@@ -682,7 +689,7 @@ public final class NodeUtil
         buffer.append('\n');
     }
 
-    private static void appendInfoComment(StringBuffer buffer, Node node)
+    private static void appendInfoComment(StringBuffer buffer, ConstNode node)
     {
         String comment = node.getComment();
         if (comment == null)

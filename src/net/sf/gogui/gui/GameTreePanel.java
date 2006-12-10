@@ -29,6 +29,7 @@ import javax.swing.Scrollable;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
@@ -573,7 +574,7 @@ public class GameTreePanel
         boolean changed = false;
         boolean currentChanged = false;
         int depth = NodeUtil.getDepth(root);
-        Node node = root;
+        ConstNode node = root;
         while (node != null)
         {
             if (node == m_currentNode)
@@ -719,7 +720,7 @@ public class GameTreePanel
                                             "Really expand large subtree?"))
             return;
         boolean changed = false;
-        Node node = root;
+        ConstNode node = root;
         int depth = NodeUtil.getDepth(node);
         while (node != null)
         {

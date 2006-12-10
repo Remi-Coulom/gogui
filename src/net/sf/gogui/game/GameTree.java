@@ -53,6 +53,15 @@ public class GameTree
         return m_gameInformation;
     }
 
+    /** Get a non-const reference to a const node.
+        Requires: node is part of this game tree.
+    */
+    public Node getNode(ConstNode node)
+    {
+        assert(NodeUtil.getRoot(node) == getRoot());
+        return (Node)node;
+    }
+
     public Node getRoot()
     {
         return m_root;
@@ -60,12 +69,12 @@ public class GameTree
 
     public boolean hasVariations()
     {        
-        Node node = m_root;
+        ConstNode node = m_root;
         while (node != null)
         {
             if (node.getNumberChildren() > 1)
                 return true;
-            node = node.getChild();
+            node = node.getChildConst();
         }
         return false;
     }

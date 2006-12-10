@@ -44,6 +44,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.BoardUpdater;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
@@ -602,7 +603,7 @@ public class GoGui
         boardChangedBegin(false, false);
     }
 
-    public void cbGotoNode(Node node)
+    public void cbGotoNode(ConstNode node)
     {
         gotoNode(node);
         boardChangedBegin(false, false);
@@ -635,28 +636,28 @@ public class GoGui
 
     public void cbNextVariation()
     {
-        Node node = NodeUtil.getNextVariation(m_currentNode);
+        ConstNode node = NodeUtil.getNextVariation(m_currentNode);
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbNextEarlierVariation()
     {
-        Node node = NodeUtil.getNextEarlierVariation(m_currentNode);
+        ConstNode node = NodeUtil.getNextEarlierVariation(m_currentNode);
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbPreviousVariation()
     {
-        Node node = NodeUtil.getPreviousVariation(m_currentNode);
+        ConstNode node = NodeUtil.getPreviousVariation(m_currentNode);
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbPreviousEarlierVariation()
     {
-        Node node = NodeUtil.getPreviousEarlierVariation(m_currentNode);
+        ConstNode node = NodeUtil.getPreviousEarlierVariation(m_currentNode);
         if (node != null)
             cbGotoNode(node);
     }
@@ -1451,7 +1452,7 @@ public class GoGui
 
     private void cbBackToMainVar()
     {
-        Node node = NodeUtil.getBackToMainVariation(m_currentNode);
+        ConstNode node = NodeUtil.getBackToMainVariation(m_currentNode);
         cbGotoNode(node);
     }
 
@@ -1503,7 +1504,7 @@ public class GoGui
                 if (! loadFile(file, -1))
                     return;
             String variation = bookmark.m_variation;
-            Node node = m_gameTree.getRoot();
+            ConstNode node = m_gameTree.getRoot();
             if (! variation.equals(""))
             {
                 node = NodeUtil.findByVariation(node, variation);
@@ -1686,8 +1687,8 @@ public class GoGui
     {
         if (m_pattern == null)
             return;
-        Node root = m_gameTree.getRoot();
-        Node node = NodeUtil.findInComments(m_currentNode, m_pattern);
+        ConstNode root = m_gameTree.getRoot();
+        ConstNode node = NodeUtil.findInComments(m_currentNode, m_pattern);
         if (node == null)
             if (m_currentNode != root)
                 if (showQuestion("End of tree reached. Continue from start?"))
@@ -1768,7 +1769,7 @@ public class GoGui
 
     private void cbGoto()
     {
-        Node node = MoveNumberDialog.show(this, m_currentNode);
+        ConstNode node = MoveNumberDialog.show(this, m_currentNode);
         if (node == null)
             return;
         cbGotoNode(node);
@@ -1776,7 +1777,8 @@ public class GoGui
 
     private void cbGotoVariation()
     {
-        Node node = GotoVariationDialog.show(this, m_gameTree, m_currentNode);
+        ConstNode node = GotoVariationDialog.show(this, m_gameTree,
+                                                  m_currentNode);
         if (node == null)
             return;
         cbGotoNode(node);
@@ -2641,12 +2643,12 @@ public class GoGui
         return m_gameTree.getGameInformation().parseRules();
     }
 
-    private void gotoNode(Node node)
+    private void gotoNode(ConstNode node)
     {
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        m_currentNode = node;
+        setCurrentNode(node);
         currentNodeChanged();
     }
 
@@ -2680,13 +2682,13 @@ public class GoGui
             }
         }
         boolean newNodeCreated = false;
-        Node node = NodeUtil.getChildWithMove(m_currentNode, move);
+        ConstNode node = NodeUtil.getChildWithMove(m_currentNode, move);
         if (node == null)
         {
             newNodeCreated = true;
             node = createNode(move);
         }
-        m_currentNode = node;
+        setCurrentNode(node);
         m_board.play(move);
         if (newNodeCreated)
             m_clock.startMove(m_board.getToMove());
@@ -3197,6 +3199,11 @@ public class GoGui
     {
         setCursorDefault(m_guiBoard);
         setCursorDefault(m_infoPanel);
+    }
+
+    private void setCurrentNode(ConstNode node)
+    {
+        m_currentNode = m_gameTree.getNode(node);
     }
 
     private void setCursor(Component component, int type)

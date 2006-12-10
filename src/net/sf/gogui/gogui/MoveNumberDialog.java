@@ -6,6 +6,7 @@ package net.sf.gogui.gogui;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.gui.SimpleDialogs;
@@ -13,7 +14,7 @@ import net.sf.gogui.gui.SimpleDialogs;
 /** Ask for a move number in a variation given by a node. */
 public final class MoveNumberDialog
 {
-    public static Node show(Component parent, Node node)
+    public static ConstNode show(Component parent, ConstNode node)
     {
         int number = NodeUtil.getMoveNumber(node);        
         String value = Integer.toString(number);

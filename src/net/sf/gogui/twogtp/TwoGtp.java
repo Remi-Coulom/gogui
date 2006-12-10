@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
@@ -743,8 +744,8 @@ public class TwoGtp
                 m_gameTree.getGameInformation().m_komi = m_komi;
             m_openingMoves = Compare.getAllAsMoves(m_gameTree.getRoot());
             m_openingMovesIndex = 0;
-            Node root = m_gameTree.getRoot();
-            m_currentNode = NodeUtil.getLast(root);
+            ConstNode root = m_gameTree.getRoot();
+            setCurrentNode(NodeUtil.getLast(root));
             if (m_loadsgf)
             {
                 String command = "loadsgf " + m_openingFile;
@@ -1204,6 +1205,11 @@ public class TwoGtp
                                "Disabling referee for this game.");
             m_refereeIsDisabled = true;
         }        
+    }
+
+    private void setCurrentNode(ConstNode node)
+    {
+        m_currentNode = m_gameTree.getNode(node);
     }
 
     private void twogtpColor(GtpClient gtp, GtpCommand cmd) throws GtpError

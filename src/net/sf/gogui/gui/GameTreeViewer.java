@@ -17,6 +17,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 
@@ -35,7 +36,7 @@ public class GameTreeViewer
 
         void cbForward(int n);
 
-        void cbGotoNode(Node node);
+        void cbGotoNode(ConstNode node);
 
         void cbNextEarlierVariation();
 
