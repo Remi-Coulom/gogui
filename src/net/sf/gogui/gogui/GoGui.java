@@ -1725,14 +1725,7 @@ public class GoGui
             m_prefs.put("rules", gameInformation.getRules());
             setRules();
         }
-        TimeSettings timeSettings = gameInformation.getTimeSettings();
-        if (timeSettings == null)
-            m_timeSettings = null;
-        else
-        {
-            m_timeSettings = new TimeSettings(timeSettings);
-            setTimeSettings();
-        }
+        m_timeSettings = gameInformation.getTimeSettings();
         setTitle();
     }
 

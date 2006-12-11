@@ -12,6 +12,7 @@ import net.sf.gogui.util.ErrorMessage;
     number of moves assigned, which need to be played during an overtime
     period. The base time can be zero. If no overtime periods are used,
     the whole game must be finished in the base time.
+    This class is immutable.
 */
 public final class TimeSettings
 {
@@ -39,16 +40,6 @@ public final class TimeSettings
         m_preByoyomi = preByoyomi;
         m_byoyomi = byoyomi;
         m_byoyomiMoves = byoyomiMoves;
-    }
-
-    /** Copy constructor.
-        @param timeSettings The object to be copied.
-    */
-    public TimeSettings(TimeSettings timeSettings)
-    {
-        m_preByoyomi = timeSettings.m_preByoyomi;
-        m_byoyomi = timeSettings.m_byoyomi;
-        m_byoyomiMoves = timeSettings.m_byoyomiMoves;
     }
 
     /** Get time for overtime period.

@@ -72,9 +72,7 @@ public class GameInformation
     /** Get a copy of the time settings. */
     public TimeSettings getTimeSettings()        
     {
-        if (m_timeSettings == null)
-            return null;
-        return new TimeSettings(m_timeSettings);
+        return m_timeSettings;
     }
 
     /** Compare komi with a resultion of 0.5 points. */
@@ -168,9 +166,7 @@ public class GameInformation
     */
     public void setTimeSettings(TimeSettings timeSettings)
     {
-        if (timeSettings == null)
-            m_timeSettings = timeSettings;
-        m_timeSettings = new TimeSettings(timeSettings);
+        m_timeSettings = timeSettings;
     }
 
     public void setWhiteRank(String rank)
