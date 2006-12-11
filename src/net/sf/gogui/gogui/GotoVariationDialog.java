@@ -8,7 +8,6 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.gui.SimpleDialogs;
 

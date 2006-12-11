@@ -14,7 +14,6 @@ import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.MarkType;
-import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;

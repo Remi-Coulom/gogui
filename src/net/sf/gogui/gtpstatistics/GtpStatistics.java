@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
