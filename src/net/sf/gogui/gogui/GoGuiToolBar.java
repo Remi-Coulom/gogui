@@ -10,7 +10,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
-import net.sf.gogui.game.Node;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.util.Platform;
 
@@ -63,10 +63,10 @@ public class GoGuiToolBar
     }
 
     /** Enable/disable buttons according to current position. */
-    public void update(Node node)
+    public void update(ConstNode node)
     {
         assert(node != null);
-        boolean hasFather = (node.getFather() != null);
+        boolean hasFather = (node.getFatherConst() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
         boolean hasPreviousVariation =
@@ -82,7 +82,7 @@ public class GoGuiToolBar
         paintImmediately(getVisibleRect());
     }
 
-    public void enableAll(boolean enable, Node node)
+    public void enableAll(boolean enable, ConstNode node)
     {
         setEnabled(m_buttonBeginning, enable);
         setEnabled(m_buttonBackward, enable);

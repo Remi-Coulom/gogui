@@ -9,8 +9,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.GameInformation;
-import net.sf.gogui.game.GameTree;
+import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.ConstBoard;
@@ -41,7 +41,7 @@ public class TexWriter
         m_out.close();
     }
 
-    public TexWriter(String title, OutputStream out, GameTree gameTree,
+    public TexWriter(String title, OutputStream out, ConstGameTree tree,
                      boolean usePass)
     {        
         m_out = new PrintStream(out);
@@ -49,8 +49,8 @@ public class TexWriter
         printBeginDocument();
         if (title != null && ! title.trim().equals(""))
             m_out.println("\\section*{" + escape(title) + "}");
-        printBeginPSGo(gameTree.getGameInformation().getBoardSize());
-        String comment = printTree(gameTree);
+        printBeginPSGo(tree.getGameInformationConst().getBoardSize());
+        String comment = printTree(tree);
         printEndPSGo();
         if (! comment.equals(""))
         {
@@ -149,16 +149,16 @@ public class TexWriter
         m_out.println("\\end{psgoboard}");
     }
 
-    private String printTree(GameTree gameTree)
+    private String printTree(ConstGameTree tree)
     {
-        GameInformation gameInformation = gameTree.getGameInformation();
+        ConstGameInformation gameInformation = tree.getGameInformationConst();
         StringBuffer comment = new StringBuffer();
         int size = gameInformation.getBoardSize();
         ConstNode firstMoveAtPoint[][] = new ConstNode[size][size];
         ArrayList needsComment = new ArrayList();
         boolean blackToMove = true;
         m_out.println("\\setcounter{gomove}{0}");
-        ConstNode node = gameTree.getRoot();
+        ConstNode node = tree.getRootConst();
         while (node != null)
         {
             for (int i = 0; i < node.getNumberAddBlack(); ++i)
