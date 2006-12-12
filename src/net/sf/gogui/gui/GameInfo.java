@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import net.sf.gogui.game.Node;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
@@ -54,7 +54,7 @@ public class GameInfo
         m_number.paintImmediately(m_number.getVisibleRect());
     }
 
-    public void update(Node node, ConstBoard board)
+    public void update(ConstNode node, ConstBoard board)
     {
         if (board.getToMove() == GoColor.BLACK)
             m_move.setText("Black");
@@ -87,7 +87,7 @@ public class GameInfo
         m_variation.setText(NodeUtil.getVariationString(node));
         // Usually time left information is stored in a node only for the
         // player who moved, so we check the father node too
-        Node father = node.getFather();
+        ConstNode father = node.getFatherConst();
         if (father != null)
             updateTimeFromNode(father);
         updateTimeFromNode(node);
@@ -133,7 +133,7 @@ public class GameInfo
         return entry;
     }
 
-    private void updateMoveNumber(Node node)
+    private void updateMoveNumber(ConstNode node)
     {
         int moveNumber = NodeUtil.getMoveNumber(node);
         int movesLeft = NodeUtil.getMovesLeft(node);
@@ -159,7 +159,7 @@ public class GameInfo
             m_timeW.setText(text);
     }
 
-    private void updateTimeFromNode(Node node)
+    private void updateTimeFromNode(ConstNode node)
     {
         double timeLeftBlack = node.getTimeLeft(GoColor.BLACK);
         int movesLeftBlack = node.getMovesLeft(GoColor.BLACK);

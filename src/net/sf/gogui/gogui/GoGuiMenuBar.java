@@ -19,8 +19,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
-import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.Node;
+import net.sf.gogui.game.ConstGameTree;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.Bookmark;
@@ -483,9 +483,9 @@ public class GoGuiMenuBar
     }
 
     /** Enable/disable items according to current position. */
-    public void update(GameTree gameTree, Node node, Clock clock)
+    public void update(ConstGameTree gameTree, ConstNode node, Clock clock)
     {
-        Node father = node.getFather();
+        ConstNode father = node.getFatherConst();
         boolean hasFather = (father != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
@@ -690,11 +690,11 @@ public class GoGuiMenuBar
 
     private final ArrayList m_bookmarkItems = new ArrayList();
 
-    private boolean canRestoreTime(Node node)
+    private boolean canRestoreTime(ConstNode node)
     {
         return ! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
             || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE))
-            || node.getFather() == null;
+            || node.getFatherConst() == null;
     }
 
     private JMenuChecked createBoardSizeMenu()

@@ -18,8 +18,7 @@ import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.Node;
+import net.sf.gogui.game.ConstGameTree;
 
 /** Dialog for displaying the game tree. */
 public class GameTreeViewer
@@ -129,7 +128,7 @@ public class GameTreeViewer
         pack();
     }
 
-    public void addNewSingleChild(Node node)
+    public void addNewSingleChild(ConstNode node)
     {
         m_panel.addNewSingleChild(node);
     }
@@ -159,14 +158,14 @@ public class GameTreeViewer
         m_panel.setShowSubtreeSizes(enable);
     }
 
-    public void update(GameTree gameTree, Node currentNode)
+    public void update(ConstGameTree gameTree, ConstNode currentNode)
     {
         Dimension size = m_scrollPane.getViewport().getSize();
         m_panel.update(gameTree, currentNode, size.width, size.height);
         repaint();
     }
 
-    public void update(Node currentNode)
+    public void update(ConstNode currentNode)
     {
         Dimension size = m_scrollPane.getViewport().getSize();
         m_panel.update(currentNode, size.width, size.height);

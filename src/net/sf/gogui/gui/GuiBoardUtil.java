@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.MarkType;
-import net.sf.gogui.game.Node;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
@@ -198,36 +198,36 @@ public final class GuiBoardUtil
             }
     }
 
-    public static void showMarkup(GuiBoard guiBoard, Node node)
+    public static void showMarkup(GuiBoard guiBoard, ConstNode node)
     {
         ArrayList mark;
-        mark = node.getMarked(MarkType.MARK);
+        mark = node.getMarkedConst(MarkType.MARK);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMark((GoPoint)(mark.get(i)), true);
-        mark = node.getMarked(MarkType.CIRCLE);
+        mark = node.getMarkedConst(MarkType.CIRCLE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkCircle((GoPoint)(mark.get(i)), true);
-        mark = node.getMarked(MarkType.SQUARE);
+        mark = node.getMarkedConst(MarkType.SQUARE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkSquare((GoPoint)(mark.get(i)), true);
-        mark = node.getMarked(MarkType.TRIANGLE);
+        mark = node.getMarkedConst(MarkType.TRIANGLE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setMarkTriangle((GoPoint)(mark.get(i)), true);
-        GuiBoardUtil.setSelect(guiBoard, node.getMarked(MarkType.SELECT),
+        GuiBoardUtil.setSelect(guiBoard, node.getMarkedConst(MarkType.SELECT),
                                 true);
-        mark = node.getMarked(MarkType.TERRITORY_BLACK);
+        mark = node.getMarkedConst(MarkType.TERRITORY_BLACK);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setTerritory((GoPoint)(mark.get(i)), GoColor.BLACK);
-        mark = node.getMarked(MarkType.TERRITORY_WHITE);
+        mark = node.getMarkedConst(MarkType.TERRITORY_WHITE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
                 guiBoard.setTerritory((GoPoint)(mark.get(i)), GoColor.WHITE);
-        Map labels = node.getLabels();
+        Map labels = node.getLabelsConst();
         if (labels != null)
         {
             Iterator i = labels.entrySet().iterator();

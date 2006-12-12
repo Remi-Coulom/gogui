@@ -32,4 +32,8 @@ public interface ConstGameInformation
     String getWhiteRank();
 
     boolean komiEquals(double komi);
+
+    int parseRules();
+
+    String suggestGameName();
 }
