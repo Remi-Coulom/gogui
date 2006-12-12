@@ -152,9 +152,12 @@ public class GoGui
 
         Comment.Listener commentListener = new Comment.Listener()
             {
-                public void changed()
+                public void changed(String comment)
                 {
-                    cbCommentChanged();
+                    setModified(true);
+                    if (m_gameTreeViewer != null)
+                        m_gameTreeViewer.redrawCurrentNode();
+                    m_currentNode.setComment(comment);
                 }
 
                 public void textSelected(String text)
@@ -1554,13 +1557,6 @@ public class GoGui
             clockRestore(father, color);
         m_gameInfo.updateTimeFromClock(m_clock);
         updateMenuBar();
-    }
-
-    private void cbCommentChanged()
-    {
-        setModified(true);
-        if (m_gameTreeViewer != null)
-            m_gameTreeViewer.redrawCurrentNode();
     }
 
     private void cbCommentFontFixed()
@@ -3488,7 +3484,7 @@ public class GoGui
     {
         m_gameInfo.update(m_currentNode, m_board);
         updateGameTree(gameTreeChanged);
-        m_comment.setNode(m_currentNode);
+        m_comment.setComment(m_currentNode.getComment());
         updateGuiBoard();
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSelectedColor(m_board.getToMove());
