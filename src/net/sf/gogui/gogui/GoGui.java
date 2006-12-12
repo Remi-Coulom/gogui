@@ -2284,8 +2284,8 @@ public class GoGui
         }
         if (move.getColor() != color)
             return;
-        double timeLeft = m_currentNode.getTimeLeft(color);
-        int movesLeft = m_currentNode.getMovesLeft(color);
+        double timeLeft = node.getTimeLeft(color);
+        int movesLeft = node.getMovesLeft(color);
         if (! Double.isNaN(timeLeft))
             m_clock.setTimeLeft(color, (long)(timeLeft * 1000), movesLeft);
     }
