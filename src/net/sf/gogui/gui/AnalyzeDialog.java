@@ -11,6 +11,8 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -318,6 +320,13 @@ public final class AnalyzeDialog
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         optionsPanel.add(leftPanel);
         m_autoRun = new JCheckBox("Auto run");
+        m_autoRun.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e)
+                {
+                    if (! m_autoRun.isSelected())
+                        m_callback.clearAnalyzeCommand();
+                }
+            });
         m_autoRun.setToolTipText("Automatically run after changes on board");
         leftPanel.add(m_autoRun);
         m_clearBoard = new JCheckBox("Clear board");
