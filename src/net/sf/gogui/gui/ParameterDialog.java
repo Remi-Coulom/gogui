@@ -1,3 +1,4 @@
+
 //----------------------------------------------------------------------------
 // $Id$
 // $Source$
@@ -156,7 +157,7 @@ public class ParameterDialog
         {
             super(key, value);
             m_panel = new JPanel(new GridLayout(1, 0, GuiUtils.PAD, 0));
-            m_panel.add(new JLabel(getLabel()));
+            m_panel.add(new JLabel(getLabel() + ":"));
             m_textField = new JTextField(value);
             m_panel.add(m_textField);
         }
