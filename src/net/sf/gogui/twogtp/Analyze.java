@@ -388,8 +388,11 @@ public class Analyze
         out.print("<h2>Result [" + name + "]</h2>\n" +
                   "<p>\n" +
                   "<table border=\"0\">\n");
-        writeHtmlRow(out, "Black score", statistics.m_histo, format);
-        writeHtmlRowPercentData(out, "Black wins", statistics.m_win, format);
+        if (statistics.m_histo.getCount() > 0)
+            writeHtmlRow(out, "Black score", statistics.m_histo, format);
+        if (statistics.m_win.getCount() > 0)
+            writeHtmlRowPercentData(out, "Black wins", statistics.m_win,
+                                    format);
         out.print("<tr><th align=\"left\">Unknown Result"
                   + ":</th><td align=\"left\">"
                   + format.format(statistics.m_unknownResult.getMean() * 100)
