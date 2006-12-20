@@ -299,8 +299,11 @@ public class Analyze
                   "<h2>Result [" + name + "]</h2>\n" +
                   "<p>\n" +
                   "<table border=\"0\">\n");
-        writeHtmlRow(out, "Black score", statistics.m_histo, format);
-        writeHtmlRowPercentData(out, "Black wins", statistics.m_win, format);
+        if (statistics.m_histo.getCount() > 0)
+            writeHtmlRow(out, "Black score", statistics.m_histo, format);
+        if (statistics.m_win.getCount() > 0)
+            writeHtmlRowPercentData(out, "Black wins", statistics.m_win,
+                                    format);
         out.print("<tr><th align=\"left\">Unknown Result"
                   + ":</th><td align=\"left\">"
                   + format.format(statistics.m_unknownResult.getMean() * 100)
@@ -339,13 +342,17 @@ public class Analyze
                               Statistics statistics,
                               NumberFormat format) throws Exception
     {
-        String value =
-            format.format(statistics.getMean()) + " (&plusmn;"
-            + format.format(statistics.getError())
-            + ") <small>min=" + format.format(statistics.getMin())
-            + " max=" + format.format(statistics.getMax())
-            + " deviation=" + format.format(statistics.getDeviation())
-            + "</small>";
+        String value;
+        if (statistics.getCount() == 0)
+            value = "";
+        else
+            value =
+                format.format(statistics.getMean()) + " (&plusmn;"
+                + format.format(statistics.getError())
+                + ") <small>min=" + format.format(statistics.getMin())
+                + " max=" + format.format(statistics.getMax())
+                + " deviation=" + format.format(statistics.getDeviation())
+                + "</small>";
         writeHtmlRow(out, label, value);
     }
 
@@ -353,11 +360,14 @@ public class Analyze
                                          Statistics statistics,
                                          NumberFormat format) throws Exception
     {
-        out.print("<tr><th align=\"left\">" + label + ":</th>"
-                  + "<td align=\"left\">"
-                  + format.format(statistics.getMean() * 100) + "% (&plusmn;"
-                  + format.format(statistics.getError() * 100)
-                  + ")</td></tr>\n");
+        String value;
+        if (statistics.getCount() == 0)
+            value = "";
+        else
+            value =
+                format.format(statistics.getMean() * 100) + "% (&plusmn;"
+                + format.format(statistics.getError() * 100) + ")";
+        writeHtmlRow(out, label, value);
     }
 
     private void writeData(File file) throws Exception
