@@ -137,7 +137,6 @@ public final class GoGuiSettings
             "-computer-black Computer plays black\n" +
             "-computer-none  Computer plays no side\n" +
             "-config         Config file\n" +
-            "-fast           Fast and simple graphics\n" +
             "-gtpfile file   Send GTP file at startup\n" +
             "-help           Display this help and exit\n" +
             "-komi value     Set komi\n" +

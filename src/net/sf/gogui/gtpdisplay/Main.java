@@ -71,7 +71,6 @@ public final class Main
             "Usage: java -jar gtpdisplay.jar program\n" +
             "\n" +
             "-config       Config file\n" +
-            "-fast         Fast and simple graphics\n" +
             "-help         Print help and exit\n" +
             "-laf          Set Swing look and feel\n" +
             "-verbose      Log GTP stream to stderr\n" +
