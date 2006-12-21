@@ -47,6 +47,5 @@
 150 genmove black
 #? [[A-T]1?[0-9]]
 
-# Expected failure. GNU Go 3.6 cannot handle talk text and terminates.
 160 gmp_talk Test talk
-#? []*
+#? []
