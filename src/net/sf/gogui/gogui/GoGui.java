@@ -502,7 +502,7 @@ public class GoGui
                             m_menuBar.setShowAnalyze(false);
                         }
                     });
-                m_analyzeDialog.setBoardSize(m_board.getSize());
+                m_analyzeDialog.setBoardSize(getBoardSize());
                 restoreSize(m_analyzeDialog, "analyze");
                 setTitle();
             }
@@ -1386,7 +1386,7 @@ public class GoGui
         updateGameInfo(gameTreeChanged);
         m_toolBar.update(getCurrentNode());
         updateMenuBar();
-        m_menuBar.selectBoardSizeItem(m_board.getSize());
+        m_menuBar.selectBoardSizeItem(getBoardSize());
         if (m_gtp != null
             && ! isOutOfSync()
             && m_analyzeCommand != null
@@ -2993,7 +2993,7 @@ public class GoGui
         updateFromGoBoard();
         m_toolBar.update(getCurrentNode());
         updateMenuBar();
-        m_menuBar.selectBoardSizeItem(m_board.getSize());
+        m_menuBar.selectBoardSizeItem(getBoardSize());
         setTitle();
         setTitleFromProgram();
         showToMove();
@@ -3008,7 +3008,7 @@ public class GoGui
         updateFromGoBoard();
         m_toolBar.update(getCurrentNode());
         updateMenuBar();
-        m_menuBar.selectBoardSizeItem(m_board.getSize());
+        m_menuBar.selectBoardSizeItem(getBoardSize());
     }
 
     private void registerSpecialMacHandler()
@@ -3368,7 +3368,7 @@ public class GoGui
         m_showLastMove = m_menuBar.getShowLastMove();
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, getCurrentNode());
-        int size = m_board.getSize();
+        int size = getBoardSize();
         GoColor color[][] = new GoColor[size][size];
         for (int i = 0; i < getBoard().getNumberPoints(); ++i)
         {
