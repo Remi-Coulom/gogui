@@ -44,6 +44,8 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.BoardUpdater;
+import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
@@ -53,6 +55,7 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -116,7 +119,7 @@ public class GoGui
                  String gtpCommand, String initAnalyze)
         throws GtpError, ErrorMessage
     {
-        m_boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
+        int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
         if (file == null)
             m_file = null;
@@ -144,9 +147,9 @@ public class GoGui
         m_gameInfo.setBorder(GuiUtil.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
 
-        m_board = new Board(m_boardSize);
+        m_board = new Board(boardSize);
 
-        m_guiBoard = new GuiBoard(m_boardSize);
+        m_guiBoard = new GuiBoard(boardSize);
         m_guiBoard.setListener(this);
         m_statusBar = new StatusBar();
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
@@ -166,7 +169,7 @@ public class GoGui
                     if (text == null)
                         text = "";
                     GoPoint list[] =
-                        GtpUtil.parsePointString(text, m_boardSize);
+                        GtpUtil.parsePointString(text, getBoardSize());
                     GuiBoardUtil.showPointList(m_guiBoard, list);
                 }
             };
@@ -210,7 +213,7 @@ public class GoGui
                 }
             };
         m_menuBar = new GoGuiMenuBar(this, recentCallback, recentGtp);
-        m_menuBar.selectBoardSizeItem(m_boardSize);
+        m_menuBar.selectBoardSizeItem(getBoardSize());
         boolean onlySupported
             = m_prefs.getBoolean("analyze-only-supported-commands", true);
         m_menuBar.setAnalyzeOnlySupported(onlySupported);
@@ -418,7 +421,7 @@ public class GoGui
         else if (command.equals("next-earlier-variation"))
             cbNextEarlierVariation();
         else if (command.equals("new-game"))
-            cbNewGame(m_boardSize);
+            cbNewGame(getBoardSize());
         else if (command.equals("open"))
             cbOpen();
         else if (command.equals("pass"))
@@ -570,7 +573,7 @@ public class GoGui
 
     public void cbBeginning()
     {
-        backward(NodeUtil.getDepth(m_currentNode));
+        backward(NodeUtil.getDepth(getCurrentNode()));
         boardChangedBegin(false, false);
     }
 
@@ -597,7 +600,7 @@ public class GoGui
 
     public void cbEnd()
     {
-        forward(NodeUtil.getNodesLeft(m_currentNode));
+        forward(NodeUtil.getNodesLeft(getCurrentNode()));
         boardChangedBegin(false, false);
     }
 
@@ -640,28 +643,29 @@ public class GoGui
 
     public void cbNextVariation()
     {
-        ConstNode node = NodeUtil.getNextVariation(m_currentNode);
+        ConstNode node = NodeUtil.getNextVariation(getCurrentNode());
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbNextEarlierVariation()
     {
-        ConstNode node = NodeUtil.getNextEarlierVariation(m_currentNode);
+        ConstNode node = NodeUtil.getNextEarlierVariation(getCurrentNode());
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbPreviousVariation()
     {
-        ConstNode node = NodeUtil.getPreviousVariation(m_currentNode);
+        ConstNode node = NodeUtil.getPreviousVariation(getCurrentNode());
         if (node != null)
             cbGotoNode(node);
     }
 
     public void cbPreviousEarlierVariation()
     {
-        ConstNode node = NodeUtil.getPreviousEarlierVariation(m_currentNode);
+        ConstNode node =
+            NodeUtil.getPreviousEarlierVariation(getCurrentNode());
         if (node != null)
             cbGotoNode(node);
     }
@@ -778,13 +782,13 @@ public class GoGui
             return;
         if (m_setupMode)
         {
-            GoColor toMove = m_board.getToMove();
+            GoColor toMove = getToMove();
             GoColor color;
             if (modifiedSelect)
                 color = toMove.otherColor();
             else
                 color = toMove;
-            if (m_board.getColor(p) == color)
+            if (getBoard().getColor(p) == color)
                 color = GoColor.EMPTY;
             m_board.setup(p, color);
             m_board.setToMove(toMove);
@@ -821,8 +825,8 @@ public class GoGui
         }
         else if (m_scoreMode && ! modifiedSelect)
         {
-            GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, m_board, p);
-            Komi komi = m_gameTree.getGameInformation().getKomi();
+            GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, getBoard(), p);
+            Komi komi = getGameInformation().getKomi();
             m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
             return;
         }
@@ -830,13 +834,13 @@ public class GoGui
             m_guiBoard.contextMenu(p);
         else
         {
-            if (m_board.isSuicide(p, m_board.getToMove())
+            if (getBoard().isSuicide(p, getToMove())
                 && ! showQuestion("Play suicide?"))
                 return;
-            else if (m_board.isKo(p)
+            else if (getBoard().isKo(p)
                 && ! showQuestion("Play illegal Ko move?"))
                 return;
-            Move move = Move.get(p, m_board.getToMove());
+            Move move = Move.get(p, getToMove());
             humanMoved(move);
         }
     }
@@ -1042,8 +1046,6 @@ public class GoGui
 
     private final boolean m_verbose;
 
-    private int m_boardSize;
-
     private int m_handicap;
 
     private final int m_move;
@@ -1148,7 +1150,7 @@ public class GoGui
             || m_analyzeCommand.isPointArgMissing())
             return;
         showStatus("Running " + m_analyzeCommand.getResultTitle() + "...");
-        GoColor toMove = m_board.getToMove();
+        GoColor toMove = getToMove();
         m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
         runLengthyCommand(m_lastAnalyzeCommand,
                           new AnalyzeContinue(checkComputerMove, resetBoard));
@@ -1167,7 +1169,7 @@ public class GoGui
             boolean statusContainsResponse = false;
             String response = m_gtp.getResponse();
             String statusText = AnalyzeShow.show(m_analyzeCommand, m_guiBoard,
-                                                 m_board, response);
+                                                 getBoard(), response);
             if (statusText != null)
             {
                 m_statusBar.setText(statusText);
@@ -1281,7 +1283,7 @@ public class GoGui
                 }
 
                 private LiveGfx m_liveGfx =
-                    new LiveGfx(m_board, m_guiBoard, m_statusBar);
+                    new LiveGfx(getBoard(), m_guiBoard, m_statusBar);
             };
         GtpSynchronizer.Callback synchronizerCallback =
             new GtpSynchronizer.Callback()
@@ -1351,7 +1353,7 @@ public class GoGui
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
         Node oldCurrentNode = m_currentNode;
-        m_board.init(m_boardSize);
+        m_board.init(getBoardSize());
         if (executeRoot())
             gotoNode(oldCurrentNode);
         setTitle();
@@ -1363,7 +1365,8 @@ public class GoGui
     {
         if (n == 0)
             return;
-        for (int i = 0; i < n && m_currentNode != m_gameTree.getRoot(); ++i)
+        for (int i = 0; i < n && m_currentNode != getTree().getRootConst();
+             ++i)
             m_currentNode = m_currentNode.getFather();
         currentNodeChanged();
     }
@@ -1381,7 +1384,7 @@ public class GoGui
     {
         updateFromGoBoard();
         updateGameInfo(gameTreeChanged);
-        m_toolBar.update(m_currentNode);
+        m_toolBar.update(getCurrentNode());
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         if (m_gtp != null
@@ -1424,14 +1427,14 @@ public class GoGui
             showError("Cannot set bookmark if file modified");
             return;
         }
-        if (m_currentNode.getFather() != null
-            && m_currentNode.getMove() == null)
+        if (getCurrentNode().getFatherConst() != null
+            && getCurrentNode().getMove() == null)
         {
             showError("Cannot set bookmark at non-root node without move");
             return;
         }
-        String variation = NodeUtil.getVariationString(m_currentNode);
-        int move = NodeUtil.getMoveNumber(m_currentNode);
+        String variation = NodeUtil.getVariationString(getCurrentNode());
+        int move = NodeUtil.getMoveNumber(getCurrentNode());
         Bookmark bookmark = new Bookmark(m_loadedFile, move, variation);
         if (! BookmarkDialog.show(this, "Add Bookmark", bookmark, true))
             return;
@@ -1456,20 +1459,22 @@ public class GoGui
 
     private void cbBackToMainVar()
     {
-        ConstNode node = NodeUtil.getBackToMainVariation(m_currentNode);
+        ConstNode node = NodeUtil.getBackToMainVariation(getCurrentNode());
         cbGotoNode(node);
     }
 
-    private void cbBoardSize(String size)
+    private void cbBoardSize(String boardSizeString)
     {
         try
         {
             saveSession();
-            cbNewGame(Integer.parseInt(size));
+            int boardSize = Integer.parseInt(boardSizeString);
+            cbNewGame(boardSize);
             m_clock.reset();
             m_clock.halt();
             m_gameInfo.updateTimeFromClock(m_clock);
             updateMenuBar();
+            m_prefs.putInt("boardsize", boardSize);
         }
         catch (NumberFormatException e)
         {
@@ -1479,14 +1484,15 @@ public class GoGui
 
     private void cbBoardSizeOther()
     {
-        int size = BoardSizeDialog.show(this, m_boardSize);
+        int size = BoardSizeDialog.show(this, getBoardSize());
         if (size < 1 || size > GoPoint.MAXSIZE)
             return;
         saveSession();
         cbNewGame(size);
         m_clock.reset();
         m_clock.halt();
-            updateMenuBar();
+        updateMenuBar();
+        m_prefs.putInt("boardsize", size);
         m_gameInfo.updateTimeFromClock(m_clock);
     }
     
@@ -1508,7 +1514,7 @@ public class GoGui
                 if (! loadFile(file, -1))
                     return;
             String variation = bookmark.m_variation;
-            ConstNode node = m_gameTree.getRoot();
+            ConstNode node = getTree().getRootConst();
             if (! variation.equals(""))
             {
                 node = NodeUtil.findByVariation(node, variation);
@@ -1545,15 +1551,16 @@ public class GoGui
     {
         if (m_clock.isRunning())
             return;
-        m_clock.startMove(m_board.getToMove());
+        m_clock.startMove(getToMove());
         updateMenuBar();
     }
 
     private void cbClockRestore()
     {        
-        GoColor color = m_board.getToMove();
-        clockRestore(m_currentNode, color.otherColor());
-        Node father = m_currentNode.getFather();
+        GoColor color = getToMove();
+        ConstNode currentNode = getCurrentNode();
+        clockRestore(currentNode, color.otherColor());
+        ConstNode father = currentNode.getFatherConst();
         if (father != null)
             clockRestore(father, color);
         m_gameInfo.updateTimeFromClock(m_clock);
@@ -1588,7 +1595,7 @@ public class GoGui
             return;
         try
         {
-            String text = BoardUtil.toString(m_board, false);
+            String text = BoardUtil.toString(getBoard(), false);
             PrintStream out = new PrintStream(new FileOutputStream(file));
             out.print(text);
             out.close();
@@ -1601,7 +1608,7 @@ public class GoGui
 
     private void cbExportClipboard()
     {
-        String text = BoardUtil.toString(m_board, false);
+        String text = BoardUtil.toString(getBoard(), false);
         StringSelection selection = new StringSelection(text);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         ClipboardOwner owner = new ClipboardOwner() {
@@ -1638,7 +1645,7 @@ public class GoGui
             OutputStream out = new FileOutputStream(file);
             String title = FileUtil.removeExtension(new File(file.getName()),
                                                      "tex");
-            new TexWriter(title, out, m_gameTree, false);
+            new TexWriter(title, out, getTree(), false);
         }
         catch (FileNotFoundException e)
         {
@@ -1656,7 +1663,7 @@ public class GoGui
             OutputStream out = new FileOutputStream(file);
             String title = FileUtil.removeExtension(new File(file.getName()),
                                                      "tex");
-            new TexWriter(title, out, m_board, false,
+            new TexWriter(title, out, getBoard(), false,
                           GuiBoardUtil.getLabels(m_guiBoard),
                           GuiBoardUtil.getMarkSquare(m_guiBoard),
                           GuiBoardUtil.getSelects(m_guiBoard));
@@ -1674,7 +1681,7 @@ public class GoGui
             return;
         m_pattern = pattern;
         m_menuBar.enableFindNext(true);
-        if (NodeUtil.commentContains(m_currentNode, m_pattern))
+        if (NodeUtil.commentContains(getCurrentNode(), m_pattern))
             m_comment.markAll(m_pattern);
         else
             cbFindNext();
@@ -1684,10 +1691,10 @@ public class GoGui
     {
         if (m_pattern == null)
             return;
-        ConstNode root = m_gameTree.getRoot();
-        ConstNode node = NodeUtil.findInComments(m_currentNode, m_pattern);
+        ConstNode root = getTree().getRootConst();
+        ConstNode node = NodeUtil.findInComments(getCurrentNode(), m_pattern);
         if (node == null)
-            if (m_currentNode != root)
+            if (getCurrentNode() != root)
                 if (showQuestion("End of tree reached. Continue from start?"))
                 {
                     node = root;
@@ -1761,7 +1768,7 @@ public class GoGui
 
     private void cbGoto()
     {
-        ConstNode node = MoveNumberDialog.show(this, m_currentNode);
+        ConstNode node = MoveNumberDialog.show(this, getCurrentNode());
         if (node == null)
             return;
         cbGotoNode(node);
@@ -1769,8 +1776,8 @@ public class GoGui
 
     private void cbGotoVariation()
     {
-        ConstNode node = GotoVariationDialog.show(this, m_gameTree,
-                                                  m_currentNode);
+        ConstNode node = GotoVariationDialog.show(this, getTree(),
+                                                  getCurrentNode());
         if (node == null)
             return;
         cbGotoNode(node);
@@ -1781,12 +1788,12 @@ public class GoGui
         try
         {
             m_handicap = Integer.parseInt(handicap);
-            if (m_board.isModified())
+            if (getBoard().isModified())
                 showInfo("Handicap will take effect on next game.");
             else
             {
                 computerBlack();
-                newGame(m_boardSize);
+                newGame(getBoardSize());
             }
         }
         catch (NumberFormatException e)
@@ -1867,7 +1874,7 @@ public class GoGui
 
     private void cbKeepOnlyMainVariation()
     {
-        if (! NodeUtil.isInMainVariation(m_currentNode))
+        if (! NodeUtil.isInMainVariation(getCurrentNode()))
             return;
         if (! showQuestion("Delete all variations but main?"))
             return;
@@ -1880,9 +1887,9 @@ public class GoGui
     {
         if (! showQuestion("Delete all moves?"))
             return;
-        GameInformation info = m_gameTree.getGameInformation();
-        m_gameTree = NodeUtil.makeTreeFromPosition(info, m_board);
-        m_board.init(m_boardSize);
+        ConstGameInformation info = getGameInformation();
+        m_gameTree = NodeUtil.makeTreeFromPosition(info, getBoard());
+        m_board.init(getBoardSize());
         executeRoot();
         setModified(true);
         boardChangedBegin(false, true);
@@ -1901,7 +1908,6 @@ public class GoGui
     {
         if (! checkSaveGame())
             return;
-        m_prefs.putInt("boardsize", size);
         clearLoadedFile();
         newGame(size);
         computerWhite();
@@ -1930,7 +1936,7 @@ public class GoGui
             m_passWarning = new OptionalMessage(this);
         if (! m_passWarning.showQuestion("Really pass?"))
             return;
-        humanMoved(Move.getPass(m_board.getToMove()));
+        humanMoved(Move.getPass(getToMove()));
     }
 
     private void cbPlay(boolean isSingleMove)
@@ -1941,17 +1947,17 @@ public class GoGui
             return;
         if (! isSingleMove && ! isComputerBoth())
         {
-            if (m_board.getToMove() == GoColor.BLACK)
+            if (getToMove() == GoColor.BLACK)
                 computerBlack();
             else
                 computerWhite();
         }
         m_interruptComputerBoth = false;
         generateMove(isSingleMove);
-        if (m_currentNode == m_gameTree.getRoot()
-            && m_currentNode.getNumberChildren() == 0)
+        if (getCurrentNode() == getTree().getRootConst()
+            && getCurrentNode().getNumberChildren() == 0)
             m_clock.reset();
-        m_clock.startMove(m_board.getToMove());
+        m_clock.startMove(getToMove());
     }
 
 
@@ -2022,7 +2028,7 @@ public class GoGui
             String response = m_gtp.getResponse();
             try
             {
-                isDeadStone = GtpUtil.parsePointList(response, m_boardSize);
+                isDeadStone = GtpUtil.parsePointList(response, getBoardSize());
             }
             catch (GtpError error)
             {
@@ -2037,13 +2043,13 @@ public class GoGui
         m_scoreDialog.setVisible(false);
         if (accepted)
         {
-            Komi komi = m_gameTree.getGameInformation().getKomi();
+            Komi komi = getGameInformation().getKomi();
             setResult(m_countScore.getScore(komi, getRules()).formatResult());
         }
         clearStatus();
         m_guiBoard.clearAll();
         m_scoreMode = false;
-        m_toolBar.enableAll(true, m_currentNode);
+        m_toolBar.enableAll(true, getCurrentNode());
         m_menuBar.setNormalMode();
     }
 
@@ -2062,7 +2068,7 @@ public class GoGui
         {
             // Create a dummy game tree, so that GameTreeDialog shows
             // a setup node
-            m_gameTree = new GameTree(m_boardSize, null, null, null, null);
+            m_gameTree = new GameTree(getBoardSize(), null, null, null, null);
             setCurrentNode(m_gameTree.getRoot());
             m_currentNode.addBlack(GoPoint.get(0, 0));
             m_clock.reset();
@@ -2130,7 +2136,7 @@ public class GoGui
 
     private void cbTruncate()
     {
-        if (m_currentNode.getFather() == null)
+        if (getCurrentNode().getFatherConst() == null)
             return;
         if (! showQuestion("Truncate current?"))
             return;
@@ -2143,7 +2149,7 @@ public class GoGui
 
     private void cbTruncateChildren()
     {
-        int numberChildren = m_currentNode.getNumberChildren();
+        int numberChildren = getCurrentNode().getNumberChildren();
         if (numberChildren == 0)
             return;
         if (! showQuestion("Truncate children?"))
@@ -2157,8 +2163,8 @@ public class GoGui
     {
         if (m_gtp == null || isOutOfSync())
             return;
-        int moveNumber = NodeUtil.getMoveNumber(m_currentNode);
-        boolean bothPassed = (moveNumber >= 2 && m_board.bothPassed());
+        int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
+        boolean bothPassed = (moveNumber >= 2 && getBoard().bothPassed());
         if (bothPassed)
             m_menuBar.setCleanup(true);
         boolean gameFinished = (bothPassed || m_resigned);
@@ -2168,7 +2174,7 @@ public class GoGui
             {
                 if (m_auto)
                 {
-                    newGame(m_boardSize);
+                    newGame(getBoardSize());
                     checkComputerMove();
                     return;
                 }
@@ -2266,12 +2272,12 @@ public class GoGui
         m_statusBar.clear();
     }
 
-    private void clockRestore(Node node, GoColor color)
+    private void clockRestore(ConstNode node, GoColor color)
     {
         Move move = node.getMove();
         if (move == null)
         {
-            if (node == m_gameTree.getRoot())
+            if (node == getTree().getRootConst())
                 m_clock.reset();
             return;
         }
@@ -2325,7 +2331,7 @@ public class GoGui
         {
             m_clock.stopMove();
             String response = m_gtp.getResponse();
-            GoColor toMove = m_board.getToMove();
+            GoColor toMove = getToMove();
             checkLostOnTime(toMove);
             boolean gameTreeChanged = false;
             if (response.equalsIgnoreCase("resign"))
@@ -2337,28 +2343,29 @@ public class GoGui
             }
             else
             {
-                GoPoint point = GtpUtil.parsePoint(response, m_boardSize);
+                GoPoint point = GtpUtil.parsePoint(response, getBoardSize());
                 if (point != null
-                    && m_board.getColor(point) != GoColor.EMPTY)
+                    && getBoard().getColor(point) != GoColor.EMPTY)
                     showWarning("Program played move on non-empty point");
                 Move move = Move.get(point, toMove);
                 setModified(true);
                 m_board.play(move);
                 Node node = createNode(move);
                 m_currentNode = node;
-                m_gtp.updateAfterGenmove(m_board);
+                m_gtp.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
                 m_resigned = false;
                 gameTreeChanged = true;
-                if (m_currentNode.getFather().getNumberChildren() == 1)
+                ConstNode currentNode = getCurrentNode();
+                if (currentNode.getFatherConst().getNumberChildren() == 1)
                 {
                     if (m_gameTreeViewer != null)
-                        m_gameTreeViewer.addNewSingleChild(m_currentNode);
+                        m_gameTreeViewer.addNewSingleChild(currentNode);
                     gameTreeChanged = false;
                 }
             }
-            m_clock.startMove(m_board.getToMove());
+            m_clock.startMove(getToMove());
             updateMenuBar();
             boolean doCheckComputerMove
                 = (! m_isSingleMove
@@ -2381,7 +2388,7 @@ public class GoGui
 
     private boolean computerToMove()
     {
-        if (m_board.getToMove() == GoColor.BLACK)
+        if (getToMove() == GoColor.BLACK)
             return m_computerBlack;
         else
             return m_computerWhite;
@@ -2451,13 +2458,13 @@ public class GoGui
 
     private void currentNodeChanged()
     {
-        m_boardUpdater.update(m_gameTree, m_currentNode, m_board);
+        m_boardUpdater.update(getTree(), getCurrentNode(), m_board);
         updateFromGoBoard();
         if (m_gtp != null)
         {
             try
             {
-                m_gtp.synchronize(m_board);
+                m_gtp.synchronize(getBoard());
             }
             catch (GtpError e)
             {
@@ -2514,7 +2521,7 @@ public class GoGui
 
     private void editLabel(GoPoint point)
     {
-        String value = m_currentNode.getLabel(point);
+        String value = getCurrentNode().getLabel(point);
         value = JOptionPane.showInputDialog(this, "Label " + point, value);
         if (value == null)
             return;
@@ -2528,7 +2535,7 @@ public class GoGui
     {
         clearStatus();
         m_menuBar.setNormalMode();
-        m_toolBar.enableAll(true, m_currentNode);
+        m_toolBar.enableAll(true, getCurrentNode());
         if (m_gtpShell != null)
             m_gtpShell.setCommandInProgess(false);
         if (m_analyzeCommand != null
@@ -2551,12 +2558,12 @@ public class GoGui
 
     private boolean executeRoot()
     {
-        setCurrentNode(m_gameTree.getRoot());
+        setCurrentNode(getTree().getRootConst());
         if (m_gtp != null)
         {
             try
             {
-                m_gtp.initSynchronize(m_board);
+                m_gtp.initSynchronize(getBoard());
             }
             catch (GtpError error)
             {
@@ -2564,8 +2571,7 @@ public class GoGui
                 return false;
             }
         }
-        GameInformation gameInformation = m_gameTree.getGameInformation();
-        setKomi(gameInformation.getKomi());
+        setKomi(getGameInformation().getKomi());
         setRules();
         setTimeSettings();
         currentNodeChanged();
@@ -2583,10 +2589,10 @@ public class GoGui
     private void forward(int n)
     {
         assert(n >= 0);
-        Node node = m_currentNode;
+        ConstNode node = getCurrentNode();
         for (int i = 0; i < n; ++i)
         {
-            Node child = node.getChild();
+            ConstNode child = node.getChildConst();
             if (child == null)
                 break;
             node = child;
@@ -2597,7 +2603,7 @@ public class GoGui
     private void generateMove(boolean isSingleMove)
     {
         showStatus(m_name + " is thinking...");
-        GoColor toMove = m_board.getToMove();
+        GoColor toMove = getToMove();
         String command;
         if (m_menuBar.getCleanup()
             && (m_gtp.isCommandSupported("kgs-genmove_cleanup")
@@ -2630,6 +2636,26 @@ public class GoGui
         runLengthyCommand(command, callback);
     }
 
+    private ConstBoard getBoard()
+    {
+        return m_board;
+    }
+
+    private int getBoardSize()
+    {
+        return m_board.getSize();
+    }
+
+    private ConstNode getCurrentNode()
+    {
+        return m_currentNode;
+    }
+
+    private ConstGameInformation getGameInformation()
+    {
+        return getTree().getGameInformationConst();
+    }
+
     private Komi getPrefsKomi()
     {
         try
@@ -2645,7 +2671,17 @@ public class GoGui
 
     private int getRules()
     {
-        return m_gameTree.getGameInformation().parseRules();
+        return getGameInformation().parseRules();
+    }
+
+    private GoColor getToMove()
+    {
+        return m_board.getToMove();
+    }
+
+    private ConstGameTree getTree()
+    {
+        return m_gameTree;
     }
 
     private void gotoNode(ConstNode node)
@@ -2660,7 +2696,7 @@ public class GoGui
     private void humanMoved(Move move)
     {
         GoPoint point = move.getPoint();
-        if (point != null && m_board.getColor(point) != GoColor.EMPTY)
+        if (point != null && getBoard().getColor(point) != GoColor.EMPTY)
             return;
         m_clock.stopMove();
         if (point != null)
@@ -2677,7 +2713,7 @@ public class GoGui
         {
             try
             {
-                m_gtp.updateHumanMove(m_board, move);
+                m_gtp.updateHumanMove(getBoard(), move);
             }
             catch (GtpError e)
             {
@@ -2687,7 +2723,7 @@ public class GoGui
             }
         }
         boolean newNodeCreated = false;
-        ConstNode node = NodeUtil.getChildWithMove(m_currentNode, move);
+        ConstNode node = NodeUtil.getChildWithMove(getCurrentNode(), move);
         if (node == null)
         {
             newNodeCreated = true;
@@ -2696,16 +2732,17 @@ public class GoGui
         setCurrentNode(node);
         m_board.play(move);
         if (newNodeCreated)
-            m_clock.startMove(m_board.getToMove());
+            m_clock.startMove(getToMove());
         setModified(newNodeCreated);
         checkLostOnTime(move.getColor());
         m_resigned = false;
         boolean gameTreeChanged = newNodeCreated;
+        ConstNode currentNode = getCurrentNode();
         if (newNodeCreated
-            && m_currentNode.getFather().getNumberChildren() == 1)
+            && currentNode.getFatherConst().getNumberChildren() == 1)
         {
             if (m_gameTreeViewer != null)
-                m_gameTreeViewer.addNewSingleChild(m_currentNode);
+                m_gameTreeViewer.addNewSingleChild(currentNode);
             gameTreeChanged = false;
         }
         boardChangedBegin(true, gameTreeChanged);
@@ -2713,9 +2750,8 @@ public class GoGui
 
     private void initGame(int size)
     {
-        if (size != m_boardSize)
+        if (size != getBoardSize())
         {
-            m_boardSize = size;
             m_board.init(size);
             m_guiBoard.initSize(size);
             m_guiBoard.setShowGrid(m_menuBar.getShowGrid());
@@ -2730,7 +2766,7 @@ public class GoGui
             if (m_gameTreeViewer != null)
                 restoreSize(m_gameTreeViewer, "tree");
         }
-        ArrayList handicap = m_board.getHandicapStones(m_handicap);
+        ArrayList handicap = getBoard().getHandicapStones(m_handicap);
         if (handicap == null)
             showWarning("Handicap stone locations not\n" +
                         "defined for this board size");
@@ -2750,9 +2786,9 @@ public class GoGui
     private void initialize()
     {
         if (m_file == null)
-            newGame(m_boardSize);
+            newGame(getBoardSize());
         else
-            newGameFile(m_boardSize, m_move);
+            newGameFile(getBoardSize(), m_move);
         if (! m_prefs.getBoolean("show-info-panel", true))
         {
             m_menuBar.setShowInfoPanel(false);
@@ -2770,7 +2806,7 @@ public class GoGui
         setVisible(true);
         m_bookmarks = Bookmark.load();
         m_menuBar.setBookmarks(m_bookmarks);
-        m_toolBar.enableAll(true, m_currentNode);
+        m_toolBar.enableAll(true, getCurrentNode());
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
@@ -2837,12 +2873,12 @@ public class GoGui
     private void initScore(GoPoint[] isDeadStone)
     {
         resetBoard();
-        GuiBoardUtil.scoreBegin(m_guiBoard, m_countScore, m_board,
+        GuiBoardUtil.scoreBegin(m_guiBoard, m_countScore, getBoard(),
                                 isDeadStone);
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
-        Komi komi = m_gameTree.getGameInformation().getKomi();
+        Komi komi = getGameInformation().getKomi();
         m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
@@ -2890,7 +2926,7 @@ public class GoGui
             LoadFileRunnable runnable = new LoadFileRunnable(in, file);
             if (file.length() > 500000)
             {
-                newGame(m_boardSize); // Frees space if already large tree
+                newGame(getBoardSize()); // Frees space if already large tree
                 GuiUtil.runProgress(this, "Loading...", runnable);
             }
             else
@@ -2955,7 +2991,7 @@ public class GoGui
         executeRoot();
         updateGameInfo(true);
         updateFromGoBoard();
-        m_toolBar.update(m_currentNode);
+        m_toolBar.update(getCurrentNode());
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
         setTitle();
@@ -2970,7 +3006,7 @@ public class GoGui
         m_clock.reset();
         updateGameInfo(true);
         updateFromGoBoard();
-        m_toolBar.update(m_currentNode);
+        m_toolBar.update(getCurrentNode());
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(m_board.getSize());
     }
@@ -3020,14 +3056,14 @@ public class GoGui
     private void restoreMainWindow()
     {
         setState(Frame.NORMAL);
-        m_session.restoreLocation(this, "main", m_boardSize);
+        m_session.restoreLocation(this, "main", getBoardSize());
         Dimension preferredCommentSize = null;
-        String path = "windows/main/size-" + m_boardSize + "/fieldsize";
+        String path = "windows/main/size-" + getBoardSize() + "/fieldsize";
         int fieldSize = m_prefs.getInt(path, -1);
         if (fieldSize > 0)
             m_guiBoard.setPreferredFieldSize(new Dimension(fieldSize,
                                                            fieldSize));
-        path = "windows/main/size-" + m_boardSize + "/comment";
+        path = "windows/main/size-" + getBoardSize() + "/comment";
         int width = m_prefs.getInt(path + "/width", -1);
         int height = m_prefs.getInt(path + "/height", -1);
         if (width > 0 && height > 0)
@@ -3052,7 +3088,7 @@ public class GoGui
 
     private void restoreSize(Window window, String name)
     {
-        m_session.restoreSize(window, name, m_boardSize);
+        m_session.restoreSize(window, name, getBoardSize());
     }
 
     private void runLengthyCommand(String cmd, Runnable callback)
@@ -3077,7 +3113,7 @@ public class GoGui
             showError("Saving file failed", e);
             return false;
         }
-        new SgfWriter(out, m_gameTree, "GoGui", Version.get());
+        new SgfWriter(out, getTree(), "GoGui", Version.get());
         m_menuBar.addRecent(file);
         createThumbnail(file);
         m_loadedFile = file;
@@ -3097,7 +3133,7 @@ public class GoGui
     private void savePosition(File file) throws FileNotFoundException
     {
         OutputStream out = new FileOutputStream(file);
-        new SgfWriter(out, m_board, "GoGui", Version.get());
+        new SgfWriter(out, getBoard(), "GoGui", Version.get());
         m_menuBar.addRecent(file);
     }
 
@@ -3108,7 +3144,7 @@ public class GoGui
             m_gtpShell.saveHistory();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        m_session.saveLocation(this, "main", m_boardSize);
+        m_session.saveLocation(this, "main", getBoardSize());
         if (m_help != null)
             saveSize(m_help, "help");
         saveSizeAndVisible(m_gameTreeViewer, "tree");
@@ -3119,23 +3155,23 @@ public class GoGui
         }
         if (GuiUtil.isNormalSizeMode(this))
         {            
-            String name = "windows/main/size-" + m_boardSize + "/fieldsize";
+            String name = "windows/main/size-" + getBoardSize() + "/fieldsize";
             m_prefs.putInt(name, m_guiBoard.getFieldSize().width);
-            name = "windows/main/size-" + m_boardSize + "/comment/width";
+            name = "windows/main/size-" + getBoardSize() + "/comment/width";
             m_prefs.putInt(name, m_comment.getWidth());
-            name = "windows/main/size-" + m_boardSize + "/comment/height";
+            name = "windows/main/size-" + getBoardSize() + "/comment/height";
             m_prefs.putInt(name, m_comment.getHeight());
         }
     }
 
     private void saveSize(JDialog dialog, String name)
     {
-        m_session.saveSize(dialog, name, m_boardSize);
+        m_session.saveSize(dialog, name, getBoardSize());
     }
 
     private void saveSizeAndVisible(JDialog dialog, String name)
     {
-        m_session.saveSizeAndVisible(dialog, name, m_boardSize);
+        m_session.saveSizeAndVisible(dialog, name, getBoardSize());
     }
 
     private void sendGtp(Reader reader)
@@ -3240,7 +3276,7 @@ public class GoGui
     
     private void setResult(String result)
     {
-        String oldResult = m_gameTree.getGameInformation().getResult();
+        String oldResult = getGameInformation().getResult();
         if (! (oldResult == null || oldResult.equals("")
                || oldResult.equals(result))
             && ! showQuestion("Overwrite old result " + oldResult + "\n" +
@@ -3258,8 +3294,7 @@ public class GoGui
     {
         if (m_gtp == null)
             return;
-        TimeSettings timeSettings =
-            m_gameTree.getGameInformation().getTimeSettings();
+        TimeSettings timeSettings = getGameInformation().getTimeSettings();
         if (timeSettings == null)
             return;
         if (! m_gtp.isCommandSupported("time_settings"))
@@ -3295,7 +3330,7 @@ public class GoGui
         }
         else if (m_modified)
             filename = "[modified]";
-        String gameName = m_gameTree.getGameInformation().suggestGameName();
+        String gameName = getGameInformation().suggestGameName();
         if (gameName != null)
         {
             if (filename != null)
@@ -3332,16 +3367,15 @@ public class GoGui
         m_setupMode = false;
         m_showLastMove = m_menuBar.getShowLastMove();
         m_menuBar.setNormalMode();
-        m_toolBar.enableAll(true, m_currentNode);
+        m_toolBar.enableAll(true, getCurrentNode());
         int size = m_board.getSize();
         GoColor color[][] = new GoColor[size][size];
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        for (int i = 0; i < getBoard().getNumberPoints(); ++i)
         {
-            GoPoint p = m_board.getPoint(i);
-            color[p.getX()][p.getY()] = m_board.getColor(p);
+            GoPoint p = getBoard().getPoint(i);
+            color[p.getX()][p.getY()] = getBoard().getColor(p);
         }
-        GoColor toMove = m_board.getToMove();
-        m_boardSize = size;
+        GoColor toMove = getToMove();
         m_board.newGame();        
         m_gameTree = new GameTree(size, getPrefsKomi(), null,
                                   m_prefs.get("rules", ""), null);
@@ -3464,7 +3498,7 @@ public class GoGui
             clearStatus();
             return;
         }
-        GoColor toMove = m_board.getToMove();
+        GoColor toMove = getToMove();
         if (toMove == GoColor.WHITE)
             showStatus("White to play");
         else if (toMove == GoColor.BLACK)
@@ -3490,19 +3524,19 @@ public class GoGui
 
     private void updateFromGoBoard()
     {
-        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, m_showLastMove);
-        if (m_currentNode.getMove() == null)
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), m_showLastMove);
+        if (getCurrentNode().getMove() == null)
             m_guiBoard.markLastMove(null);
     }
 
     private void updateGameInfo(boolean gameTreeChanged)
     {
-        m_gameInfo.update(m_currentNode, m_board);
+        m_gameInfo.update(getCurrentNode(), getBoard());
         updateGameTree(gameTreeChanged);
-        m_comment.setComment(m_currentNode.getComment());
+        m_comment.setComment(getCurrentNode().getComment());
         updateGuiBoard();
         if (m_analyzeDialog != null)
-            m_analyzeDialog.setSelectedColor(m_board.getToMove());
+            m_analyzeDialog.setSelectedColor(getToMove());
     }
 
     private void updateGameTree(boolean gameTreeChanged)
@@ -3511,10 +3545,10 @@ public class GoGui
             return;
         if (! gameTreeChanged)
         {
-            m_gameTreeViewer.update(m_currentNode);
+            m_gameTreeViewer.update(getCurrentNode());
             return;
         }
-        m_gameTreeViewer.update(m_gameTree, m_currentNode);
+        m_gameTreeViewer.update(getTree(), getCurrentNode());
     }
 
     private void updateGuiBoard()
@@ -3522,15 +3556,15 @@ public class GoGui
         if (m_showVariations)
         {
             ArrayList childrenMoves
-                = NodeUtil.getChildrenMoves(m_currentNode);
+                = NodeUtil.getChildrenMoves(getCurrentNode());
             GuiBoardUtil.showChildrenMoves(m_guiBoard, childrenMoves);
         }
-        GuiBoardUtil.showMarkup(m_guiBoard, m_currentNode);
+        GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
     }
 
     private void updateMenuBar()
     {
-        m_menuBar.update(m_gameTree, m_currentNode, m_clock);
+        m_menuBar.update(getTree(), getCurrentNode(), m_clock);
     }
 }
 
