@@ -187,13 +187,13 @@ public final class AboutDialog
         Runtime runtime = Runtime.getRuntime();
         long max = runtime.maxMemory();
         String maxString =
-            (max == Long.MAX_VALUE ? "unlimited" : Long.toString(max));
-        buffer.append("Memory: ");
+            (max == Long.MAX_VALUE ? "none" : getMemorySizeString(max));
+        buffer.append("Memory limit: ");
         buffer.append(maxString);
         buffer.append("<br>(");
-        buffer.append(runtime.totalMemory());
-        buffer.append(" total, ");
-        buffer.append(runtime.freeMemory());
+        buffer.append(getMemorySizeString(runtime.totalMemory()));
+        buffer.append(" current, ");
+        buffer.append(getMemorySizeString(runtime.freeMemory()));
         buffer.append(" free)");
         return createPanel(buffer.toString());
     }
@@ -202,6 +202,15 @@ public final class AboutDialog
     {
         ClassLoader loader = getClass().getClassLoader();
         return loader.getResource("net/sf/gogui/images/" + name);
+    }
+
+    private String getMemorySizeString(long size)
+    {
+        if (size < 1000)
+            return size + " Bytes";
+        if (size < 1000000)
+            return (size / 1000) + " kB";
+        return (size / 1000000) + " MB";
     }
 }
 
