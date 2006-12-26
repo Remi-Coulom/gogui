@@ -43,8 +43,8 @@ public class SgfWriter
         String result = gameInformation.getResult();
         String playerBlack = gameInformation.getPlayerBlack();
         String playerWhite = gameInformation.getPlayerWhite();
-        String rankBlack = gameInformation.getBlackRank();
-        String rankWhite = gameInformation.getWhiteRank();
+        String rankBlack = gameInformation.getRankBlack();
+        String rankWhite = gameInformation.getRankWhite();
         String date = gameInformation.getDate();
         String rules = gameInformation.getRules();
         int handicap = gameInformation.getHandicap();

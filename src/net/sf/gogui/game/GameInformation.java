@@ -25,24 +25,19 @@ public class GameInformation
         m_boardSize = gameInformation.getBoardSize();
         m_handicap = gameInformation.getHandicap();
         m_komi = gameInformation.getKomi();
-        m_blackRank = gameInformation.getBlackRank();
+        m_rankBlack = gameInformation.getRankBlack();
         m_date = gameInformation.getDate();
         m_playerBlack = gameInformation.getPlayerBlack();
         m_playerWhite = gameInformation.getPlayerWhite();
         m_result = gameInformation.getResult();
         m_rules = gameInformation.getRules();
-        m_whiteRank = gameInformation.getWhiteRank();
+        m_rankWhite = gameInformation.getRankWhite();
         m_timeSettings = gameInformation.getTimeSettings();
     }
 
     public int getBoardSize()
     {
         return m_boardSize;
-    }
-
-    public String getBlackRank()
-    {
-        return m_blackRank;
     }
 
     public String getDate()
@@ -73,6 +68,16 @@ public class GameInformation
         return m_playerWhite;
     }
 
+    public String getRankBlack()
+    {
+        return m_rankBlack;
+    }
+
+    public String getRankWhite()
+    {
+        return m_rankWhite;
+    }
+
     public String getResult()
     {
         return m_result;
@@ -81,11 +86,6 @@ public class GameInformation
     public String getRules()
     {
         return m_rules;
-    }
-
-    public String getWhiteRank()
-    {
-        return m_whiteRank;
     }
 
     /** Get a copy of the time settings. */
@@ -116,7 +116,7 @@ public class GameInformation
 
     public void setBlackRank(String rank)
     {
-        m_blackRank = rank;
+        m_rankBlack = rank;
     }
 
     public void setBoardSize(int boardSize)
@@ -169,7 +169,7 @@ public class GameInformation
 
     public void setWhiteRank(String rank)
     {
-        m_whiteRank = rank;
+        m_rankWhite = rank;
     }
 
     /** Suggest a game name from the player names.
@@ -203,19 +203,19 @@ public class GameInformation
 
     private Komi m_komi;
 
-    private String m_blackRank;
-
     private String m_date;
 
     private String m_playerBlack;
 
     private String m_playerWhite;
 
+    private String m_rankBlack;
+
+    private String m_rankWhite;
+
     private String m_result;
 
     private String m_rules;
-
-    private String m_whiteRank;
 
     private TimeSettings m_timeSettings;
 }

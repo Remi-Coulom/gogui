@@ -1719,12 +1719,12 @@ public class GoGui
         GameInformation info = new GameInformation(getGameInformation());
         if (! GameInfoDialog.show(this, info))
             return;
-        m_gameTree.getGameInformation().setBlackRank(info.getBlackRank());
+        m_gameTree.getGameInformation().setBlackRank(info.getRankBlack());
         m_gameTree.getGameInformation().setDate(info.getDate());
         m_gameTree.getGameInformation().setPlayerBlack(info.getPlayerBlack());
         m_gameTree.getGameInformation().setPlayerWhite(info.getPlayerWhite());
         m_gameTree.getGameInformation().setResult(info.getResult());
-        m_gameTree.getGameInformation().setWhiteRank(info.getWhiteRank());
+        m_gameTree.getGameInformation().setWhiteRank(info.getRankWhite());
         Komi prefsKomi = getPrefsKomi();
         Komi komi = info.getKomi();
         if (komi != null && ! komi.equals(prefsKomi))

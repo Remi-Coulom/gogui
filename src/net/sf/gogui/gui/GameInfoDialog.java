@@ -53,13 +53,13 @@ public final class GameInfoDialog
             changed = true;
         }
         String rankBlack = getTextFieldContent(gameInfoDialog.m_rankBlack);
-        if (! rankBlack.equals(gameInformation.getBlackRank()))
+        if (! rankBlack.equals(gameInformation.getRankBlack()))
         {
             gameInformation.setBlackRank(rankBlack);
             changed = true;
         }
         String rankWhite = getTextFieldContent(gameInfoDialog.m_rankWhite);
-        if (! rankWhite.equals(gameInformation.getWhiteRank()))
+        if (! rankWhite.equals(gameInformation.getRankWhite()))
         {
             gameInformation.setWhiteRank(rankWhite);
             changed = true;
@@ -192,11 +192,11 @@ public final class GameInfoDialog
         m_playerBlack = createEntry("Black player:",
                                     gameInformation.getPlayerBlack());
         m_rankBlack = createEntry("Black rank:",
-                                  gameInformation.getBlackRank());
+                                  gameInformation.getRankBlack());
         m_playerWhite = createEntry("White player:",
                                     gameInformation.getPlayerWhite());
         m_rankWhite = createEntry("White rank:",
-                                  gameInformation.getWhiteRank());
+                                  gameInformation.getRankWhite());
         m_date = createEntry("Date:", gameInformation.getDate());
         m_rules = createEntry("Rules:", gameInformation.getRules());
         Komi komi = gameInformation.getKomi();

@@ -11,8 +11,6 @@ import net.sf.gogui.go.Komi;
 */
 public interface ConstGameInformation
 {
-    String getBlackRank();
-
     int getBoardSize();
 
     String getDate();
@@ -25,13 +23,15 @@ public interface ConstGameInformation
 
     String getPlayerWhite();
 
+    String getRankBlack();
+
+    String getRankWhite();
+
     String getResult();
 
     String getRules();
 
     TimeSettings getTimeSettings();
-
-    String getWhiteRank();
 
     int parseRules();
 
