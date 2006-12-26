@@ -19,12 +19,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
+import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.Bookmark;
-import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.util.Platform;
@@ -483,7 +483,8 @@ public class GoGuiMenuBar
     }
 
     /** Enable/disable items according to current position. */
-    public void update(ConstGameTree gameTree, ConstNode node, Clock clock)
+    public void update(ConstGameTree gameTree, ConstNode node,
+                       ConstClock clock)
     {
         ConstNode father = node.getFatherConst();
         boolean hasFather = (father != null);

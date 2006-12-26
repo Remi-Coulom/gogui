@@ -44,7 +44,9 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.BoardUpdater;
+import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.GameInformation;
@@ -69,7 +71,6 @@ import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.AnalyzeDialog;
 import net.sf.gogui.gui.AnalyzeShow;
 import net.sf.gogui.gui.BoardSizeDialog;
-import net.sf.gogui.gui.Clock;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.BookmarkDialog;
 import net.sf.gogui.gui.Comment;
@@ -1541,7 +1542,7 @@ public class GoGui
 
     private void cbClockHalt()
     {
-        if (! m_clock.isRunning())
+        if (! getClock().isRunning())
             return;
         m_clock.halt();
         updateMenuBar();
@@ -1549,7 +1550,7 @@ public class GoGui
 
     private void cbClockResume()
     {
-        if (m_clock.isRunning())
+        if (getClock().isRunning())
             return;
         m_clock.startMove(getToMove());
         updateMenuBar();
@@ -2199,8 +2200,8 @@ public class GoGui
 
     private void checkLostOnTime(GoColor color)
     {
-        if (m_clock.lostOnTime(color)
-            && ! m_clock.lostOnTime(color.otherColor())
+        if (getClock().lostOnTime(color)
+            && ! getClock().lostOnTime(color.otherColor())
             && ! m_lostOnTimeShown)
         {
             if (color == GoColor.BLACK)
@@ -2644,6 +2645,11 @@ public class GoGui
     private int getBoardSize()
     {
         return m_board.getSize();
+    }
+
+    private ConstClock getClock()
+    {
+        return m_clock;
     }
 
     private ConstNode getCurrentNode()

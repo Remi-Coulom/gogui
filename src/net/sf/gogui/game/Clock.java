@@ -2,7 +2,7 @@
 // $Id$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gui;
+package net.sf.gogui.game;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +17,7 @@ import net.sf.gogui.util.StringUtil;
     The time unit is milliseconds.
 */
 public final class Clock
+    implements ConstClock
 {
     public interface Listener
     {

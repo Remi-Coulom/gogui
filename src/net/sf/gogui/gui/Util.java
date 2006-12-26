@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
+import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
@@ -22,7 +23,8 @@ public final class Util
         Also adds time information from clock, if not null and initialized.
         The clock must not be running.
     */
-    public static Node createNode(Node currentNode, Move move, Clock clock)
+    public static Node createNode(Node currentNode, Move move,
+                                  ConstClock clock)
     {
         Node node = new Node(move);
         if (clock != null && clock.isInitialized())

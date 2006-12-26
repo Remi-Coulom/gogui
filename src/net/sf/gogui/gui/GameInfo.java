@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
