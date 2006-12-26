@@ -1353,10 +1353,9 @@ public class GoGui
             sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
-        Node oldCurrentNode = m_currentNode;
         m_board.init(getBoardSize());
-        if (executeRoot())
-            gotoNode(oldCurrentNode);
+        initGtp();
+        setCurrentNode(getTree().getRootConst());
         setTitle();
         return true;
     }    
@@ -1854,7 +1853,8 @@ public class GoGui
         ConstGameInformation info = getGameInformation();
         m_gameTree = NodeUtil.makeTreeFromPosition(info, getBoard());
         m_board.init(getBoardSize());
-        executeRoot();
+        initGtp();
+        setCurrentNode(getTree().getRootConst());
         setModified(true);
         boardChangedBegin(false, true);
     }
@@ -2520,28 +2520,6 @@ public class GoGui
         return true;
     }
 
-    private boolean executeRoot()
-    {
-        setCurrentNode(getTree().getRootConst());
-        if (m_gtp != null)
-        {
-            try
-            {
-                m_gtp.initSynchronize(getBoard());
-            }
-            catch (GtpError error)
-            {
-                showError(error);
-                return false;
-            }
-        }
-        setKomi(getGameInformation().getKomi());
-        setRules();
-        setTimeSettings();
-        currentNodeChanged();
-        return ! isOutOfSync();
-    }
-
     private void clearLoadedFile()
     {
         if (m_loadedFile == null)
@@ -2752,6 +2730,27 @@ public class GoGui
         m_menuBar.enableFindNext(false);
     }
 
+    private boolean initGtp()
+    {
+        if (m_gtp != null)
+        {
+            try
+            {
+                m_gtp.initSynchronize(getBoard());
+            }
+            catch (GtpError error)
+            {
+                showError(error);
+                return false;
+            }
+        }
+        setKomi(getGameInformation().getKomi());
+        setRules();
+        setTimeSettings();
+        currentNodeChanged();
+        return ! isOutOfSync();
+    }
+
     private void initialize()
     {
         if (m_file == null)
@@ -2906,7 +2905,9 @@ public class GoGui
             initGame(gameInformation.getBoardSize());
             m_menuBar.addRecent(file);
             m_gameTree = reader.getGameTree();
-            if (executeRoot() && move > 0)
+            initGtp();
+            setCurrentNode(getTree().getRootConst());
+            if (move > 0)
                 forward(move);            
             m_loadedFile = file;
             setTitle();
@@ -2957,7 +2958,8 @@ public class GoGui
     private void newGame(int size)
     {
         initGame(size);
-        executeRoot();
+        initGtp();
+        setCurrentNode(getTree().getRootConst());
         updateGameInfo(true);
         updateFromGoBoard();
         m_toolBar.update(getCurrentNode());
@@ -3361,7 +3363,8 @@ public class GoGui
                 m_currentNode.addWhite(point);
         }
         m_currentNode.setPlayer(toMove);
-        executeRoot();
+        initGtp();
+        setCurrentNode(getTree().getRootConst());
         clearLoadedFile();
         updateGameInfo(true);
         boardChangedBegin(false, false);
