@@ -20,6 +20,21 @@ public class GameInformation
         m_boardSize = boardSize;
     }
 
+    public GameInformation(ConstGameInformation gameInformation)
+    {
+        m_boardSize = gameInformation.getBoardSize();
+        m_handicap = gameInformation.getHandicap();
+        m_komi = gameInformation.getKomi();
+        m_blackRank = gameInformation.getBlackRank();
+        m_date = gameInformation.getDate();
+        m_playerBlack = gameInformation.getPlayerBlack();
+        m_playerWhite = gameInformation.getPlayerWhite();
+        m_result = gameInformation.getResult();
+        m_rules = gameInformation.getRules();
+        m_whiteRank = gameInformation.getWhiteRank();
+        m_timeSettings = gameInformation.getTimeSettings();
+    }
+
     public int getBoardSize()
     {
         return m_boardSize;

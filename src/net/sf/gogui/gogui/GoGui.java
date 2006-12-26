@@ -1716,23 +1716,29 @@ public class GoGui
 
     private void cbGameInfo()
     {
-        GameInformation gameInformation = m_gameTree.getGameInformation();
-        if (! GameInfoDialog.show(this, gameInformation))
+        GameInformation info = new GameInformation(getGameInformation());
+        if (! GameInfoDialog.show(this, info))
             return;
+        m_gameTree.getGameInformation().setBlackRank(info.getBlackRank());
+        m_gameTree.getGameInformation().setDate(info.getDate());
+        m_gameTree.getGameInformation().setPlayerBlack(info.getPlayerBlack());
+        m_gameTree.getGameInformation().setPlayerWhite(info.getPlayerWhite());
+        m_gameTree.getGameInformation().setResult(info.getResult());
+        m_gameTree.getGameInformation().setWhiteRank(info.getWhiteRank());
         Komi prefsKomi = getPrefsKomi();
-        Komi komi = gameInformation.getKomi();
+        Komi komi = info.getKomi();
         if (komi != null && ! komi.equals(prefsKomi))
         {
             m_prefs.put("komi", komi.toString());
             setKomi(komi);
         }
-        if (gameInformation.getRules() != null
-            && ! gameInformation.getRules().equals(m_prefs.get("rules", "")))
+        if (info.getRules() != null
+            && ! info.getRules().equals(m_prefs.get("rules", "")))
         {
-            m_prefs.put("rules", gameInformation.getRules());
+            m_prefs.put("rules", info.getRules());
             setRules();
         }
-        m_timeSettings = gameInformation.getTimeSettings();
+        m_timeSettings = info.getTimeSettings();
         setTitle();
     }
 
