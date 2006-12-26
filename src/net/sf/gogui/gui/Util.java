@@ -10,6 +10,7 @@ import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.StringUtil;
@@ -53,15 +54,15 @@ public final class Util
         it supports the command.
         Errors are shown to the user.
     */
-    public static void sendKomi(Component parent, double komi,
+    public static void sendKomi(Component parent, Komi komi,
                                 String name, GuiGtpClient gtp)
     {
-        if (gtp == null)
+        if (gtp == null || komi == null)
             return;
         try
         {
             if (gtp.isCommandSupported("komi"))
-                gtp.send("komi " + GameInformation.roundKomi(komi));
+                gtp.send("komi " + komi);
         }
         catch (GtpError e)
         {

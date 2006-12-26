@@ -225,7 +225,7 @@ public class GtpTerminal
     private void initGame(int size)
     {
         m_board = new Board(size);
-        m_gameTree = new GameTree(size, 0, null, null, null);
+        m_gameTree = new GameTree(size, null, null, null, null);
         setCurrentNode(m_gameTree.getRoot());
     }
 

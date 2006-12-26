@@ -6,6 +6,7 @@ package net.sf.gogui.game;
 
 import java.util.Locale;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.util.StringUtil;
 
 /** Game information.
@@ -39,7 +40,10 @@ public class GameInformation
         return m_handicap;
     }
 
-    public double getKomi()
+    /** Get komi.
+        @return The komi or null if komi is unknown.
+    */
+    public Komi getKomi()
     {
         return m_komi;
     }
@@ -75,12 +79,6 @@ public class GameInformation
         return m_timeSettings;
     }
 
-    /** Compare komi with a resultion of 0.5 points. */
-    public boolean komiEquals(double komi)
-    {
-        return Math.abs(m_komi - komi) < 0.25;
-    }
-
     /** Try to parse rules.
         @return Board.RULES_JAPANESE if rules string (to lowercase) is
         "japanese", Board.RULES_CHINESE if "chinese", Board.RULES_UNKNOWN
@@ -99,21 +97,6 @@ public class GameInformation
                 result = Board.RULES_CHINESE;
         }
         return result;
-    }
-
-    /** Get komi as string rounded to 0.5 points. */
-    public String roundKomi()
-    {
-        return roundKomi(m_komi);
-    }
-
-    /** Get komi as string rounded to 0.5 points. */
-    public static String roundKomi(double komi)
-    {
-        long intKomi = Math.round(komi * 2);
-        if (intKomi % 2 == 0)
-            return Long.toString(intKomi / 2);
-        return Long.toString(intKomi / 2) + ".5";
     }
 
     public void setBlackRank(String rank)
@@ -136,7 +119,7 @@ public class GameInformation
         m_handicap = handicap;
     }
 
-    public void setKomi(double komi)
+    public void setKomi(Komi komi)
     {
         m_komi = komi;
     }
@@ -203,7 +186,7 @@ public class GameInformation
 
     private int m_handicap;
 
-    private double m_komi;
+    private Komi m_komi;
 
     private String m_blackRank;
 

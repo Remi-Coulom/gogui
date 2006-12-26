@@ -20,6 +20,7 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.gtp.GtpClient;
@@ -40,9 +41,9 @@ public class TwoGtp
     extends GtpEngine
 {
     public TwoGtp(String black, String white, String referee, String observer,
-                  int size, double komi, boolean isKomiFixed, int numberGames,
-                  boolean alternate, String sgfFile, boolean force,
-                  boolean verbose, Openings openings, boolean loadsgf,
+                  int size, Komi komi, int numberGames, boolean alternate,
+                  String sgfFile, boolean force, boolean verbose,
+                  Openings openings, boolean loadsgf,
                   TimeSettings timeSettings)
         throws Exception
     {
@@ -107,7 +108,6 @@ public class TwoGtp
         }        
         m_size = size;
         m_komi = komi;
-        m_isKomiFixed = isKomiFixed;
         m_alternate = alternate;
         m_numberGames = numberGames;
         m_openings = openings;
@@ -315,8 +315,6 @@ public class TwoGtp
 
     private boolean m_inconsistentState;
 
-    private final boolean m_isKomiFixed;
-
     private final boolean m_loadsgf;
 
     private boolean m_observerIsDisabled;
@@ -335,7 +333,11 @@ public class TwoGtp
 
     private final int m_size;
 
-    private double m_komi;
+    /** Enforced komi.
+        Contains komi if komi is enforced by command line option, null
+        otherwise.
+    */
+    private Komi m_komi;
 
     private double m_cpuTimeBlack;
 
@@ -524,7 +526,7 @@ public class TwoGtp
         m_table.setProperty("WhiteCommand", m_white.getProgramCommand());
         m_table.setProperty("RefereeCommand", m_refereeCommand);
         m_table.setProperty("Size", Integer.toString(m_size));
-        m_table.setProperty("Komi", GameInformation.roundKomi(m_komi));
+        m_table.setProperty("Komi", m_komi.toString());
         if (m_openings != null)
             m_table.setProperty("Openings",
                                 m_openings.getDirectory() + " ("
@@ -772,13 +774,21 @@ public class TwoGtp
 
     private void komi(GtpCommand cmd) throws GtpError
     {
-        if (m_isKomiFixed)
+        cmd.checkNuArg(1);
+        if (m_komi != null)
             throw new GtpError("Komi " + m_komi
                                + " is fixed by command line option");
-        double komi = cmd.getDoubleArg();
-        m_komi = komi;
-        m_gameTree.getGameInformation().setKomi(m_komi);
-        sendIfSupported("komi", "komi " + m_komi);
+        String arg = cmd.getArg(0);
+        try
+        {
+            Komi komi = Komi.parseKomi(arg);
+            m_gameTree.getGameInformation().setKomi(komi);
+            sendIfSupported("komi", "komi " + komi);
+        }
+        catch (Komi.InvalidKomi e)
+        {
+            throw new GtpError("invalid komi: " + arg);
+        }
     }
 
     private void mergeResponse(StringBuffer response,

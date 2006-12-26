@@ -26,6 +26,7 @@ import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.ErrorMessage;
@@ -561,13 +562,11 @@ public final class SgfReader
     
     private void readKomi(String value) throws SgfError
     {
-        if (value.trim().equals(""))
-            return;
         try
         {
-            m_gameInformation.setKomi(Double.parseDouble(value));
+            m_gameInformation.setKomi(Komi.parseKomi(value));
         }
-        catch (NumberFormatException e)
+        catch (Komi.InvalidKomi e)
         {
             setWarning("Invalid value for komi");
         }

@@ -4,6 +4,8 @@
 
 package net.sf.gogui.game;
 
+import net.sf.gogui.go.Komi;
+
 /** Const functions of game.GameInformation.
     @see GameInformation
 */
@@ -17,7 +19,7 @@ public interface ConstGameInformation
 
     int getHandicap();
 
-    double getKomi();
+    Komi getKomi();
 
     String getPlayerBlack();
 
@@ -30,8 +32,6 @@ public interface ConstGameInformation
     TimeSettings getTimeSettings();
 
     String getWhiteRank();
-
-    boolean komiEquals(double komi);
 
     int parseRules();
 

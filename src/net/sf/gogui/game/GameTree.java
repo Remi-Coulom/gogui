@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Komi;
 
 /** Game tree. */
 public class GameTree
@@ -21,7 +22,7 @@ public class GameTree
         m_root = new Node();
     }
 
-    public GameTree(int boardSize, double komi, ArrayList handicap,
+    public GameTree(int boardSize, Komi komi, ArrayList handicap,
                     String rules, TimeSettings timeSettings)
     {
         m_gameInformation = new GameInformation(boardSize);

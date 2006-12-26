@@ -56,6 +56,7 @@ import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
@@ -821,7 +822,7 @@ public class GoGui
         else if (m_scoreMode && ! modifiedSelect)
         {
             GuiBoardUtil.scoreSetDead(m_guiBoard, m_countScore, m_board, p);
-            double komi = m_gameTree.getGameInformation().getKomi();
+            Komi komi = m_gameTree.getGameInformation().getKomi();
             m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
             return;
         }
@@ -1710,10 +1711,12 @@ public class GoGui
         GameInformation gameInformation = m_gameTree.getGameInformation();
         if (! GameInfoDialog.show(this, gameInformation))
             return;
-        if (! gameInformation.komiEquals(m_prefs.getDouble("komi", 6.5)))
+        Komi prefsKomi = getPrefsKomi();
+        Komi komi = gameInformation.getKomi();
+        if (komi != null && ! komi.equals(prefsKomi))
         {
-            m_prefs.putDouble("komi", gameInformation.getKomi());
-            setKomi(gameInformation.getKomi());
+            m_prefs.put("komi", komi.toString());
+            setKomi(komi);
         }
         if (gameInformation.getRules() != null
             && ! gameInformation.getRules().equals(m_prefs.get("rules", "")))
@@ -2034,7 +2037,7 @@ public class GoGui
         m_scoreDialog.setVisible(false);
         if (accepted)
         {
-            double komi = m_gameTree.getGameInformation().getKomi();
+            Komi komi = m_gameTree.getGameInformation().getKomi();
             setResult(m_countScore.getScore(komi, getRules()).formatResult());
         }
         clearStatus();
@@ -2059,7 +2062,7 @@ public class GoGui
         {
             // Create a dummy game tree, so that GameTreeDialog shows
             // a setup node
-            m_gameTree = new GameTree(m_boardSize, 0, null, null, null);
+            m_gameTree = new GameTree(m_boardSize, null, null, null, null);
             setCurrentNode(m_gameTree.getRoot());
             m_currentNode.addBlack(GoPoint.get(0, 0));
             m_clock.reset();
@@ -2627,6 +2630,19 @@ public class GoGui
         runLengthyCommand(command, callback);
     }
 
+    private Komi getPrefsKomi()
+    {
+        try
+        {
+            String s = m_prefs.get("komi", "6.5");
+            return Komi.parseKomi(s);
+        }
+        catch (Komi.InvalidKomi e)
+        {
+            return null;
+        }
+    }
+
     private int getRules()
     {
         return m_gameTree.getGameInformation().parseRules();
@@ -2718,9 +2734,8 @@ public class GoGui
         if (handicap == null)
             showWarning("Handicap stone locations not\n" +
                         "defined for this board size");
-        m_gameTree = new GameTree(size, m_prefs.getDouble("komi", 6.5),
-                                  handicap, m_prefs.get("rules", ""),
-                                  m_timeSettings);
+        m_gameTree = new GameTree(size, getPrefsKomi(), handicap,
+                                  m_prefs.get("rules", ""), m_timeSettings);
         m_board.newGame();        
         setCurrentNode(m_gameTree.getRoot());
         updateFromGoBoard();
@@ -2827,7 +2842,7 @@ public class GoGui
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
-        double komi = m_gameTree.getGameInformation().getKomi();
+        Komi komi = m_gameTree.getGameInformation().getKomi();
         m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
         m_scoreDialog.setVisible(true);
         m_menuBar.setScoreMode();
@@ -3206,7 +3221,7 @@ public class GoGui
         component.setCursor(Cursor.getDefaultCursor());
     }
 
-    private void setKomi(double komi)
+    private void setKomi(Komi komi)
     {
         Util.sendKomi(this, komi, m_name, m_gtp);
     }
@@ -3328,7 +3343,7 @@ public class GoGui
         GoColor toMove = m_board.getToMove();
         m_boardSize = size;
         m_board.newGame();        
-        m_gameTree = new GameTree(size, m_prefs.getDouble("komi", 6.5), null,
+        m_gameTree = new GameTree(size, getPrefsKomi(), null,
                                   m_prefs.get("rules", ""), null);
         setCurrentNode(m_gameTree.getRoot());
         for (int i = 0; i < m_board.getNumberPoints(); ++i)

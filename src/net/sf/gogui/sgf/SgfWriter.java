@@ -17,6 +17,7 @@ import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;
@@ -47,7 +48,7 @@ public class SgfWriter
         String date = gameInformation.getDate();
         String rules = gameInformation.getRules();
         int handicap = gameInformation.getHandicap();
-        double komi = gameInformation.getKomi();
+        Komi komi = gameInformation.getKomi();
         TimeSettings timeSettings = gameInformation.getTimeSettings();
         printHeader(application, version, handicap, date, playerBlack,
                     playerWhite, rankBlack, rankWhite, result, komi, rules,
@@ -191,14 +192,14 @@ public class SgfWriter
     private void printHeader(String application, String version, int handicap,
                              String date, String playerBlack,
                              String playerWhite, String rankBlack,
-                             String rankWhite, String result, double komi,
+                             String rankWhite, String result, Komi komi,
                              String rules, TimeSettings timeSettings)
     {
         printHeader(application, version);
         if (handicap > 0)
             print("HA[" + handicap + "]");
-        else
-            print("KM[" + GameInformation.roundKomi(komi) + "]");
+        else if (komi != null)
+            print("KM[" + komi + "]");
         if (rules != null && ! rules.equals(""))
             print("RU[" + getEscaped(rules) + "]");
         if (timeSettings != null)

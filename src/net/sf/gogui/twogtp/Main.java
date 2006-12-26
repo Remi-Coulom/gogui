@@ -7,6 +7,7 @@ package net.sf.gogui.twogtp;
 import java.io.File;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
@@ -97,11 +98,10 @@ public final class Main
             String referee = opt.getString("referee", "");
             String observer = opt.getString("observer", "");
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
-                                      GoPoint.MAXSIZE);
-            double komi = 6.5;
-            boolean isKomiFixed = opt.isSet("komi");
-            if (isKomiFixed)
-                komi = opt.getDouble("komi");
+                                      GoPoint.MAXSIZE);            
+            Komi komi = new Komi(6.5);
+            if (opt.isSet("komi"))
+                komi = Komi.parseKomi(opt.getString("komi"));
             TimeSettings timeSettings = null;
             if (opt.isSet("time"))
                 timeSettings = TimeSettings.parse(opt.getString("time"));
@@ -121,8 +121,8 @@ public final class Main
                                        + " -auto");
             TwoGtp twoGtp
                 = new TwoGtp(black, white, referee, observer, size, komi,
-                             isKomiFixed, games, alternate, sgfFile, force,
-                             verbose, openings, loadsgf, timeSettings);
+                             games, alternate, sgfFile, force, verbose,
+                             openings, loadsgf, timeSettings);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)

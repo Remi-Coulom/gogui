@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import net.sf.gogui.go.Komi;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.TimeSettings;
 
@@ -81,9 +82,18 @@ public final class GameInfoDialog
             gameInformation.setDate(date);
             changed = true;
         }
-        double komi =
-            Double.parseDouble(getTextFieldContent(gameInfoDialog.m_komi));
-        if (! gameInformation.komiEquals(komi))
+        String komiText = getTextFieldContent(gameInfoDialog.m_komi);
+        Komi komi = null;
+        try
+        {
+            komi = Komi.parseKomi(komiText);
+        }
+        catch (Komi.InvalidKomi e)
+        {
+            assert(false); // already validated
+        }
+        if (((komi == null) != (gameInformation.getKomi() == null))
+            || ! gameInformation.getKomi().equals(komi))
         {
             gameInformation.setKomi(komi);
             changed = true;
@@ -189,7 +199,8 @@ public final class GameInfoDialog
                                   gameInformation.getWhiteRank());
         m_date = createEntry("Date:", gameInformation.getDate());
         m_rules = createEntry("Rules:", gameInformation.getRules());
-        m_komi = createEntry("Komi:", gameInformation.roundKomi());
+        Komi komi = gameInformation.getKomi();
+        m_komi = createEntry("Komi:", komi == null ? "" : komi.toString());
         m_result = createEntry("Result:", gameInformation.getResult());
         createTimeEntry(gameInformation.getTimeSettings());
         setMessage(panel);
@@ -250,7 +261,7 @@ public final class GameInfoDialog
 
     private boolean validate(Component parent)
     {
-        if (! validateDouble(parent, m_komi, "Invalid komi"))
+        if (! validateKomi(parent, m_komi, "Invalid komi"))
             return false;
         if (! validatePosIntOrEmpty(parent, m_preByoyomi,
                                     "Invalid time settings"))
@@ -264,14 +275,15 @@ public final class GameInfoDialog
         return true;
     }
 
-    private boolean validateDouble(Component parent, JTextField textField,
-                                   String errorMessage)
+    private boolean validateKomi(Component parent, JTextField textField,
+                                 String errorMessage)
     {
+        String text = getTextFieldContent(textField);
         try
         {
-            Double.parseDouble(getTextFieldContent(textField));
+            Komi.parseKomi(text);
         }
-        catch (NumberFormatException e)
+        catch (Komi.InvalidKomi e)
         {
             SimpleDialogs.showError(parent, errorMessage);
             return false;

@@ -11,6 +11,17 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Update to look and feel JGoodies Looks 2.1.1
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Don't use default komi anymore if game is loaded with unknown komi
+anymore
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Store lost on time information in game result
 </simpara>
 </listitem>
@@ -33,7 +44,7 @@ Automatically clear board before drawing live graphics commands
 </listitem>
 <listitem>
 <simpara>
-Use same fixed handicap locations as in GTP specification
+Use same handicap locations as in GTP specification
 </simpara>
 </listitem>
 <listitem>

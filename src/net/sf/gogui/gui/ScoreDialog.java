@@ -81,7 +81,8 @@ public class ScoreDialog
         m_areaWhite.setText(Integer.toString(score.m_areaWhite));
         m_capturedBlack.setText(Integer.toString(score.m_capturedBlack));
         m_capturedWhite.setText(Integer.toString(score.m_capturedWhite));
-        m_komi.setText(GameInformation.roundKomi(score.m_komi));
+        if (score.m_komi != null)
+            m_komi.setText(score.m_komi.toString());
         m_resultChinese.setText(Score.formatResult(score.m_resultChinese));
         m_resultJapanese.setText(Score.formatResult(score.m_resultJapanese));
         m_rules.setText(score.m_rules == Board.RULES_JAPANESE ? "Japanese"

@@ -16,11 +16,5 @@ public class GameInformationTest
     {
         return new junit.framework.TestSuite(GameInformationTest.class);
     }
-
-    public void testFormatKomi()
-    {
-        assertEquals(GameInformation.roundKomi(1.99), "2");
-        assertEquals(GameInformation.roundKomi(2.51), "2.5");
-    }
 }
 

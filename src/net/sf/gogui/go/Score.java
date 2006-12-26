@@ -19,7 +19,7 @@ public class Score
 
     public int m_capturedWhite;
 
-    public double m_komi;
+    public Komi m_komi;
 
     public double m_result;
 
