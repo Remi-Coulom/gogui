@@ -1,0 +1,5 @@
+This directory contains JGoodies Looks from http://jgoodies.com.
+Due to its size, a copy is no longer included in the GoGui SVN repository
+(however it is included in the GoGui releases).
+If you checked out the GoGui sources from SVN, download the Looks zip-file with the version used in build.xml and copy it here.
+
