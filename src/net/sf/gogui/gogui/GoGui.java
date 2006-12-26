@@ -737,12 +737,6 @@ public class GoGui
                           "while command in progress");
                 return;
             }
-            if (m_setupMode)
-            {
-                showError("Cannot clear analyze command\n" +
-                          "in setup mode");
-                return;
-            }
             m_analyzeCommand = null;
             setBoardCursorDefault();
         }
@@ -791,7 +785,7 @@ public class GoGui
                 color = toMove;
             if (getBoard().getColor(p) == color)
                 color = GoColor.EMPTY;
-            m_board.setup(p, color);
+            setup(p, color);
             m_board.setToMove(toMove);
             updateGameInfo(true);
             updateFromGoBoard();
@@ -853,11 +847,6 @@ public class GoGui
             return false;
         if (! checkProgramInSync())
             return false;
-        if (m_setupMode)
-        {
-            showError("Cannot send command in setup mode");
-            return false;
-        }
         if (sync)
         {
             m_gtp.send(command);
@@ -911,12 +900,6 @@ public class GoGui
         }
         if (! checkProgramInSync())
             return;
-        if (m_setupMode)
-        {
-            showError("Cannot run analyze command\n" +
-                      "in setup mode");
-            return;
-        }
         initAnalyzeCommand(command, autoRun);
         m_analyzeOneRunOnly = oneRunOnly;
         boolean needsPointArg = m_analyzeCommand.needsPointArg();
@@ -2023,26 +2006,22 @@ public class GoGui
         {
             setupDone();
             return;
-        }
-        if (! checkSaveGame())
-            return;
+        }        
         m_menuBar.setSetupMode();
         m_showLastMove = false;
-        if (m_gameTreeViewer != null)
-        {
-            // Create a dummy game tree, so that GameTreeDialog shows
-            // a setup node
-            m_gameTree = new GameTree(getBoardSize(), null, null, null, null);
-            setCurrentNode(m_gameTree.getRoot());
-            m_currentNode.addBlack(GoPoint.get(0, 0));
-            m_clock.reset();
-            updateGameInfo(true);
-        }
         resetBoard();
         m_setupMode = true;
         m_toolBar.enableAll(false, null);
         showStatus("Setup Black");
         m_board.setToMove(GoColor.BLACK);
+        if (getCurrentNode().getMove() != null)
+        {
+            Node node = new Node();
+            m_currentNode.append(node);
+            gotoNode(node);
+            currentNodeChanged();
+            updateGameTree(true);
+        }
     }
 
     private void cbSetupBlack()
@@ -2257,8 +2236,6 @@ public class GoGui
     {
         if (isCommandInProgress() && ! showQuestion("Kill program?"))
                 return;
-        if (m_setupMode)
-            setupDone();
         if (! checkSaveGame())
             return;
         saveSession();        
@@ -3333,36 +3310,35 @@ public class GoGui
         }
     }
 
+    private void setup(GoPoint point, GoColor color)
+    {
+        assert(point != null);
+        m_currentNode.removeSetup(point);
+        Node father = m_currentNode.getFather();
+        if (father != null)
+        {
+            m_boardUpdater.update(getTree(), father, m_board);
+            GoColor oldColor = m_board.getColor(point);
+            m_boardUpdater.update(getTree(), m_currentNode, m_board);
+            if (oldColor == color)
+                return;
+        }
+        if (color == GoColor.EMPTY)
+            m_currentNode.addEmpty(point);
+        else if (color == GoColor.BLACK)
+            m_currentNode.addBlack(point);
+        else if (color == GoColor.WHITE)
+            m_currentNode.addWhite(point);
+        currentNodeChanged();
+    }
+
     private void setupDone()
     {
         m_setupMode = false;
         m_showLastMove = m_menuBar.getShowLastMove();
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, getCurrentNode());
-        int size = getBoardSize();
-        GoColor color[][] = new GoColor[size][size];
-        for (int i = 0; i < getBoard().getNumberPoints(); ++i)
-        {
-            GoPoint p = getBoard().getPoint(i);
-            color[p.getX()][p.getY()] = getBoard().getColor(p);
-        }
-        GoColor toMove = getToMove();
-        m_board.newGame();        
-        m_gameTree = new GameTree(size, getPrefsKomi(), null,
-                                  m_prefs.get("rules", ""), null);
-        setCurrentNode(m_gameTree.getRoot());
-        for (int i = 0; i < m_board.getNumberPoints(); ++i)
-        {
-            GoPoint point = m_board.getPoint(i);
-            int x = point.getX();
-            int y = point.getY();
-            GoColor c = color[x][y];
-            if (c == GoColor.BLACK)
-                m_currentNode.addBlack(point);
-            else if (c == GoColor.WHITE)
-                m_currentNode.addWhite(point);
-        }
-        m_currentNode.setPlayer(toMove);
+        m_currentNode.setPlayer(getToMove());
         initGtp();
         setCurrentNode(getTree().getRootConst());
         clearLoadedFile();

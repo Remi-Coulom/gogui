@@ -563,6 +563,24 @@ public final class Node
             pointList.remove(point);
     }
 
+    /** Remove setup at point.
+        Remove any setup that was added with #AddBlack, #AddWhite or #AddEmpty
+        at a certain point.
+        @param point Location of the setup.
+    */
+    public void removeSetup(GoPoint point)
+    {
+        assert(point != null);
+        if (m_extraInfo == null || m_extraInfo.m_moreExtraInfo == null)
+            return;
+        SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
+        if (setupInfo == null)
+            return;
+        while (setupInfo.m_black.remove(point));
+        while (setupInfo.m_white.remove(point));
+        while (setupInfo.m_empty.remove(point));
+    }
+
     /** Remove all children but the first. */
     public void removeVariations()
     {

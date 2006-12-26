@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Allow setup stones in non-root position
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Update to look and feel JGoodies Looks 2.1.1
 </simpara>
 </listitem>
