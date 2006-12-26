@@ -114,11 +114,6 @@ public class GameInformation
         return result;
     }
 
-    public void setBlackRank(String rank)
-    {
-        m_rankBlack = rank;
-    }
-
     public void setBoardSize(int boardSize)
     {
         m_boardSize = boardSize;
@@ -149,6 +144,16 @@ public class GameInformation
         m_playerWhite = name;
     }
 
+    public void setRankBlack(String rank)
+    {
+        m_rankBlack = rank;
+    }
+
+    public void setRankWhite(String rank)
+    {
+        m_rankWhite = rank;
+    }
+
     public void setResult(String result)
     {
         m_result = result;
@@ -165,11 +170,6 @@ public class GameInformation
     public void setTimeSettings(TimeSettings timeSettings)
     {
         m_timeSettings = timeSettings;
-    }
-
-    public void setWhiteRank(String rank)
-    {
-        m_rankWhite = rank;
     }
 
     /** Suggest a game name from the player names.

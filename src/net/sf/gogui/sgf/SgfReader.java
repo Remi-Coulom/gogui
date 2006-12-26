@@ -674,7 +674,7 @@ public final class SgfReader
                 }
             }
             else if (p == "BR")
-                m_gameInformation.setBlackRank(v);
+                m_gameInformation.setRankBlack(v);
             else if (p == "C")
             {
                 String comment;
@@ -865,7 +865,7 @@ public final class SgfReader
                 }
             }
             else if (p == "WR")
-                m_gameInformation.setWhiteRank(v);
+                m_gameInformation.setRankWhite(v);
             else if (p != "FF" && p != "GN" && p != "AP")
                 addSgfProperty(node, p);
             return true;

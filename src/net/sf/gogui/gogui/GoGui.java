@@ -49,6 +49,7 @@ import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.game.Game;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.MarkType;
@@ -148,7 +149,7 @@ public class GoGui
         m_gameInfo.setBorder(GuiUtil.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
 
-        m_board = new Board(boardSize);
+        m_game = new Game(boardSize);
 
         m_guiBoard = new GuiBoard(boardSize);
         m_guiBoard.setListener(this);
@@ -162,7 +163,7 @@ public class GoGui
                     setModified(true);
                     if (m_gameTreeViewer != null)
                         m_gameTreeViewer.redrawCurrentNode();
-                    m_currentNode.setComment(comment);
+                    m_game.setComment(comment);
                 }
 
                 public void textSelected(String text)
@@ -786,7 +787,7 @@ public class GoGui
             if (getBoard().getColor(p) == color)
                 color = GoColor.EMPTY;
             setup(p, color);
-            m_board.setToMove(toMove);
+            m_game.setToMove(toMove);
             updateGameInfo(true);
             updateFromGoBoard();
             setModified(true);
@@ -1039,10 +1040,6 @@ public class GoGui
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final Board m_board;
-
-    private final BoardUpdater m_boardUpdater = new BoardUpdater();
-
     private final GuiBoard m_guiBoard;
 
     private final Clock m_clock;
@@ -1058,8 +1055,6 @@ public class GoGui
 
     private GtpShell m_gtpShell;
 
-    private GameTree m_gameTree;
-
     private GameTreeViewer m_gameTreeViewer;
 
     private Help m_help;
@@ -1072,7 +1067,7 @@ public class GoGui
 
     private final GoGuiMenuBar m_menuBar;
 
-    private Node m_currentNode;
+    private Game m_game;
 
     private OptionalMessage m_gameFinishedMessage;
 
@@ -1336,21 +1331,16 @@ public class GoGui
             sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
             sendGtpString(m_gtpCommand);
-        m_board.init(getBoardSize());
         initGtp();
-        setCurrentNode(getTree().getRootConst());
         setTitle();
+        currentNodeChanged();
         return true;
     }    
 
     /** Go backward a number of nodes in the tree. */
     private void backward(int n)
     {
-        if (n == 0)
-            return;
-        for (int i = 0; i < n && m_currentNode != getTree().getRootConst();
-             ++i)
-            m_currentNode = m_currentNode.getFather();
+        m_game.backward(n);
         currentNodeChanged();
     }
 
@@ -1701,12 +1691,12 @@ public class GoGui
         GameInformation info = new GameInformation(getGameInformation());
         if (! GameInfoDialog.show(this, info))
             return;
-        m_gameTree.getGameInformation().setBlackRank(info.getRankBlack());
-        m_gameTree.getGameInformation().setDate(info.getDate());
-        m_gameTree.getGameInformation().setPlayerBlack(info.getPlayerBlack());
-        m_gameTree.getGameInformation().setPlayerWhite(info.getPlayerWhite());
-        m_gameTree.getGameInformation().setResult(info.getResult());
-        m_gameTree.getGameInformation().setWhiteRank(info.getRankWhite());
+        m_game.setDate(info.getDate());
+        m_game.setPlayerBlack(info.getPlayerBlack());
+        m_game.setPlayerWhite(info.getPlayerWhite());
+        m_game.setResult(info.getResult());
+        m_game.setRankBlack(info.getRankBlack());
+        m_game.setRankWhite(info.getRankWhite());
         Komi prefsKomi = getPrefsKomi();
         Komi komi = info.getKomi();
         if (komi != null && ! komi.equals(prefsKomi))
@@ -1824,7 +1814,7 @@ public class GoGui
             return;
         if (! showQuestion("Delete all variations but main?"))
             return;
-        m_gameTree.keepOnlyMainVariation();
+        m_game.keepOnlyMainVariation();
         setModified(true);
         boardChangedBegin(false, true);
     }
@@ -1833,11 +1823,8 @@ public class GoGui
     {
         if (! showQuestion("Delete all moves?"))
             return;
-        ConstGameInformation info = getGameInformation();
-        m_gameTree = NodeUtil.makeTreeFromPosition(info, getBoard());
-        m_board.init(getBoardSize());
+        m_game.keepOnlyPosition();
         initGtp();
-        setCurrentNode(getTree().getRootConst());
         setModified(true);
         boardChangedBegin(false, true);
     }
@@ -1846,7 +1833,7 @@ public class GoGui
     {
         if (! showQuestion("Make current to main variation?"))
             return;
-        NodeUtil.makeMainVariation(m_currentNode);
+        m_game.makeMainVariation();
         setModified(true);
         boardChangedBegin(false, true);
     }
@@ -2013,12 +2000,10 @@ public class GoGui
         m_setupMode = true;
         m_toolBar.enableAll(false, null);
         showStatus("Setup Black");
-        m_board.setToMove(GoColor.BLACK);
+        m_game.setToMove(GoColor.BLACK);
         if (getCurrentNode().getMove() != null)
         {
-            Node node = new Node();
-            m_currentNode.append(node);
-            gotoNode(node);
+            m_game.createNewChild();
             currentNodeChanged();
             updateGameTree(true);
         }
@@ -2027,14 +2012,14 @@ public class GoGui
     private void cbSetupBlack()
     {
         showStatus("Setup Black");
-        m_board.setToMove(GoColor.BLACK);
+        m_game.setToMove(GoColor.BLACK);
         updateGameInfo(false);
     }
 
     private void cbSetupWhite()
     {
         showStatus("Setup White");
-        m_board.setToMove(GoColor.WHITE);
+        m_game.setToMove(GoColor.WHITE);
         updateGameInfo(false);
     }
 
@@ -2083,9 +2068,7 @@ public class GoGui
             return;
         if (! showQuestion("Truncate current?"))
             return;
-        Node oldCurrentNode = m_currentNode;
-        backward(1);
-        m_currentNode.removeChild(oldCurrentNode);
+        m_game.truncate();
         setModified(true);
         boardChangedBegin(false, true);
     }
@@ -2097,7 +2080,7 @@ public class GoGui
             return;
         if (! showQuestion("Truncate children?"))
             return;
-        NodeUtil.truncateChildren(m_currentNode);
+        m_game.truncateChildren();
         setModified(true);
         boardChangedBegin(false, true);
     }
@@ -2289,10 +2272,8 @@ public class GoGui
                     && getBoard().getColor(point) != GoColor.EMPTY)
                     showWarning("Program played move on non-empty point");
                 Move move = Move.get(point, toMove);
-                setModified(true);
-                m_board.play(move);
-                Node node = createNode(move);
-                m_currentNode = node;
+                setModified(true);                
+                m_game.play(move, m_clock);
                 m_gtp.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
@@ -2340,11 +2321,6 @@ public class GoGui
         m_computerBlack = false;
         m_computerWhite = true;
         m_menuBar.setComputerWhite();
-    }
-
-    private Node createNode(Move move)
-    {
-        return Util.createNode(m_currentNode, move, m_clock);
     }
 
     private ContextMenu createContextMenu(GoPoint point)
@@ -2399,7 +2375,6 @@ public class GoGui
 
     private void currentNodeChanged()
     {
-        m_boardUpdater.update(getTree(), getCurrentNode(), m_board);
         updateFromGoBoard();
         if (m_gtp != null)
         {
@@ -2466,7 +2441,7 @@ public class GoGui
         value = JOptionPane.showInputDialog(this, "Label " + point, value);
         if (value == null)
             return;
-        m_currentNode.setLabel(point, value);
+        m_game.setLabel(point, value);
         m_guiBoard.setLabel(point, value);
         setModified(true);
         updateGuiBoard();
@@ -2557,12 +2532,12 @@ public class GoGui
 
     private ConstBoard getBoard()
     {
-        return m_board;
+        return m_game.getBoard();
     }
 
     private int getBoardSize()
     {
-        return m_board.getSize();
+        return m_game.getSize();
     }
 
     private ConstClock getClock()
@@ -2572,12 +2547,12 @@ public class GoGui
 
     private ConstNode getCurrentNode()
     {
-        return m_currentNode;
+        return m_game.getCurrentNode();
     }
 
     private ConstGameInformation getGameInformation()
     {
-        return getTree().getGameInformationConst();
+        return m_game.getGameInformation();
     }
 
     private Komi getPrefsKomi()
@@ -2600,12 +2575,12 @@ public class GoGui
 
     private GoColor getToMove()
     {
-        return m_board.getToMove();
+        return m_game.getToMove();
     }
 
     private ConstGameTree getTree()
     {
-        return m_gameTree;
+        return m_game.getTree();
     }
 
     private void gotoNode(ConstNode node)
@@ -2613,7 +2588,7 @@ public class GoGui
         // GameTreeViewer is not disabled in score mode
         if (m_scoreMode)
             return;
-        setCurrentNode(node);
+        m_game.gotoNode(node);
         currentNodeChanged();
     }
 
@@ -2651,10 +2626,10 @@ public class GoGui
         if (node == null)
         {
             newNodeCreated = true;
-            node = createNode(move);
+            m_game.play(move, m_clock);
         }
-        setCurrentNode(node);
-        m_board.play(move);
+        else
+            m_game.gotoNode(node);
         if (newNodeCreated)
             m_clock.startMove(getToMove());
         setModified(newNodeCreated);
@@ -2676,7 +2651,6 @@ public class GoGui
     {
         if (size != getBoardSize())
         {
-            m_board.init(size);
             m_guiBoard.initSize(size);
             m_guiBoard.setShowGrid(m_menuBar.getShowGrid());
             restoreMainWindow();
@@ -2694,10 +2668,8 @@ public class GoGui
         if (handicap == null)
             showWarning("Handicap stone locations not\n" +
                         "defined for this board size");
-        m_gameTree = new GameTree(size, getPrefsKomi(), handicap,
-                                  m_prefs.get("rules", ""), m_timeSettings);
-        m_board.newGame();        
-        setCurrentNode(m_gameTree.getRoot());
+        m_game.init(size, getPrefsKomi(), handicap, m_prefs.get("rules", ""),
+                    m_timeSettings);
         updateFromGoBoard();
         resetBoard();
         m_clock.reset();
@@ -2881,9 +2853,8 @@ public class GoGui
                 reader.getGameTree().getGameInformation();
             initGame(gameInformation.getBoardSize());
             m_menuBar.addRecent(file);
-            m_gameTree = reader.getGameTree();
+            m_game.init(reader.getGameTree());
             initGtp();
-            setCurrentNode(getTree().getRootConst());
             if (move > 0)
                 forward(move);            
             m_loadedFile = file;
@@ -2917,9 +2888,9 @@ public class GoGui
     public void mark(GoPoint point, MarkType type, boolean mark)
     {
         if (mark)
-            m_currentNode.addMarked(point, type);
+            m_game.addMarked(point, type);
         else
-            m_currentNode.removeMarked(point, type);
+            m_game.removeMarked(point, type);
         if (type == MarkType.MARK)
             m_guiBoard.setMark(point, mark);
         else if (type == MarkType.CIRCLE)
@@ -2936,7 +2907,6 @@ public class GoGui
     {
         initGame(size);
         initGtp();
-        setCurrentNode(getTree().getRootConst());
         updateGameInfo(true);
         updateFromGoBoard();
         m_toolBar.update(getCurrentNode());
@@ -3189,11 +3159,6 @@ public class GoGui
         setCursorDefault(m_infoPanel);
     }
 
-    private void setCurrentNode(ConstNode node)
-    {
-        m_currentNode = m_gameTree.getNode(node);
-    }
-
     private void setCursor(Component component, int type)
     {
         Cursor cursor = Cursor.getPredefinedCursor(type);
@@ -3230,7 +3195,7 @@ public class GoGui
             && ! showQuestion("Overwrite old result " + oldResult + "\n" +
                               "with " + result + "?"))
             return;
-        m_gameTree.getGameInformation().setResult(result);
+        m_game.setResult(result);
     }
 
     private void setRules()
@@ -3313,22 +3278,7 @@ public class GoGui
     private void setup(GoPoint point, GoColor color)
     {
         assert(point != null);
-        m_currentNode.removeSetup(point);
-        Node father = m_currentNode.getFather();
-        if (father != null)
-        {
-            m_boardUpdater.update(getTree(), father, m_board);
-            GoColor oldColor = m_board.getColor(point);
-            m_boardUpdater.update(getTree(), m_currentNode, m_board);
-            if (oldColor == color)
-                return;
-        }
-        if (color == GoColor.EMPTY)
-            m_currentNode.addEmpty(point);
-        else if (color == GoColor.BLACK)
-            m_currentNode.addBlack(point);
-        else if (color == GoColor.WHITE)
-            m_currentNode.addWhite(point);
+        m_game.setup(point, color);
         currentNodeChanged();
     }
 
@@ -3338,9 +3288,8 @@ public class GoGui
         m_showLastMove = m_menuBar.getShowLastMove();
         m_menuBar.setNormalMode();
         m_toolBar.enableAll(true, getCurrentNode());
-        m_currentNode.setPlayer(getToMove());
+        m_game.setToMove(getToMove());
         initGtp();
-        setCurrentNode(getTree().getRootConst());
         clearLoadedFile();
         updateGameInfo(true);
         boardChangedBegin(false, false);

@@ -19,38 +19,6 @@ import net.sf.gogui.util.StringUtil;
 /** Static utility functions. */
 public final class Util
 {
-    /** Create a new node with a move and append it to current node.
-        Also adds time information from clock, if not null and initialized.
-        The clock must not be running.
-    */
-    public static Node createNode(Node currentNode, Move move,
-                                  ConstClock clock)
-    {
-        Node node = new Node(move);
-        if (clock != null && clock.isInitialized())
-        {
-            assert(! clock.isRunning());
-            GoColor color = move.getColor();
-            // Round time to seconds
-            long timeLeft = clock.getTimeLeft(color) / 1000L;
-            if (color == GoColor.BLACK)
-            {
-                node.setTimeLeftBlack((double)timeLeft);
-                if (clock.isInByoyomi(color))
-                    node.setMovesLeftBlack(clock.getMovesLeft(color));
-            }
-            else
-            {
-                assert(color == GoColor.WHITE);
-                node.setTimeLeftWhite((double)timeLeft);
-                if (clock.isInByoyomi(color))
-                    node.setMovesLeftWhite(clock.getMovesLeft(color));
-            }
-        }
-        currentNode.append(node);
-        return node;
-    }
-
     /** Set komi.
         Sends the komi command if the CommandThread is not null and
         it supports the command.

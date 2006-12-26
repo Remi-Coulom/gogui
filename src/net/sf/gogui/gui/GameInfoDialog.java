@@ -55,13 +55,13 @@ public final class GameInfoDialog
         String rankBlack = getTextFieldContent(gameInfoDialog.m_rankBlack);
         if (! rankBlack.equals(gameInformation.getRankBlack()))
         {
-            gameInformation.setBlackRank(rankBlack);
+            gameInformation.setRankBlack(rankBlack);
             changed = true;
         }
         String rankWhite = getTextFieldContent(gameInfoDialog.m_rankWhite);
         if (! rankWhite.equals(gameInformation.getRankWhite()))
         {
-            gameInformation.setWhiteRank(rankWhite);
+            gameInformation.setRankWhite(rankWhite);
             changed = true;
         }
         String rules = getTextFieldContent(gameInfoDialog.m_rules);
