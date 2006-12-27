@@ -208,9 +208,11 @@ public class Game
         {
             m_boardUpdater.update(getTree(), father, m_board);
             GoColor oldColor = m_board.getColor(point);
-            m_boardUpdater.update(getTree(), m_current, m_board);
             if (oldColor == color)
+            {
+                updateBoard();
                 return;
+            }
         }
         if (color == GoColor.EMPTY)
             m_current.addEmpty(point);
@@ -218,6 +220,7 @@ public class Game
             m_current.addBlack(point);
         else if (color == GoColor.WHITE)
             m_current.addWhite(point);
+        updateBoard();
     }
 
     /** Truncate current node and subtree.

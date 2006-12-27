@@ -1995,7 +1995,6 @@ public class GoGui
             return;
         }        
         m_menuBar.setSetupMode();
-        m_showLastMove = false;
         resetBoard();
         m_setupMode = true;
         m_toolBar.enableAll(false, null);
@@ -2193,6 +2192,14 @@ public class GoGui
         }
     }
     
+    private void clearLoadedFile()
+    {
+        if (m_loadedFile == null)
+            return;
+        m_loadedFile = null;
+        setTitle();
+    }
+
     private void clearStatus()
     {
         m_statusBar.clear();
@@ -2470,14 +2477,6 @@ public class GoGui
             return false;
         }
         return true;
-    }
-
-    private void clearLoadedFile()
-    {
-        if (m_loadedFile == null)
-            return;
-        m_loadedFile = null;
-        setTitle();
     }
 
     private void forward(int n)
