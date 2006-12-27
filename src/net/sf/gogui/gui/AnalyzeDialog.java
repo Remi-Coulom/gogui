@@ -449,9 +449,7 @@ public final class AnalyzeDialog
             command.setColorArg(getSelectedColor());
         boolean autoRun = m_autoRun.isSelected();
         boolean clearBoard = m_clearBoard.isSelected();
-        if (clearBoard)
-            m_callback.clearAnalyzeCommand();
-        m_callback.setAnalyzeCommand(command, autoRun, false, false);
+        m_callback.setAnalyzeCommand(command, autoRun, clearBoard, false);
     }
 
     private void selectCommand(int index)
