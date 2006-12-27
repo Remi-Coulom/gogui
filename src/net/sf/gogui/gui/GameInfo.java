@@ -9,8 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Clock;
+import net.sf.gogui.game.Game;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
@@ -24,7 +26,7 @@ public class GameInfo
     /** Constructor.
         @param clock Clock to register as listener or null.
     */
-    public GameInfo(Clock clock)
+    public GameInfo(Game game)
     {
         super(new GridLayout(0, 2, GuiUtil.SMALL_PAD, GuiUtil.SMALL_PAD));
         m_move = addEntry("To play:");
@@ -37,16 +39,13 @@ public class GameInfo
         m_timeW = addEntry("Time White:");
         m_timeB.setText("00:00");
         m_timeW.setText("00:00");
-        if (clock != null)
-        {
-            Clock.Listener listener = new Clock.Listener() {
-                    public void clockChanged(Clock clock)
-                    {
-                        updateTimeFromClock(clock);
-                    }
-                };
-            clock.setListener(listener);
-        }
+        Clock.Listener listener = new Clock.Listener() {
+                public void clockChanged(ConstClock clock)
+                {
+                    updateTimeFromClock(clock);
+                }
+            };
+        game.setClockListener(listener);
     }
 
     public void fastUpdateMoveNumber(String text)
@@ -94,7 +93,7 @@ public class GameInfo
         updateTimeFromNode(node);
     }
 
-    public void updateTimeFromClock(Clock clock)
+    public void updateTimeFromClock(ConstClock clock)
     {
         updateTimeFromClock(clock, GoColor.BLACK);
         updateTimeFromClock(clock, GoColor.WHITE);
@@ -149,7 +148,7 @@ public class GameInfo
         }
     }
 
-    private void updateTimeFromClock(Clock clock, GoColor color)
+    private void updateTimeFromClock(ConstClock clock, GoColor color)
     {
         String text = clock.getTimeString(color);
         if (text == null)

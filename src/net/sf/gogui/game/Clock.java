@@ -21,7 +21,7 @@ public final class Clock
 {
     public interface Listener
     {
-        void clockChanged(Clock clock);
+        void clockChanged(ConstClock clock);
     }
 
     public Clock()

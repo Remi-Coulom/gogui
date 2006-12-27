@@ -13,12 +13,13 @@ import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.ObjectUtil;
 
-/** Manages a tree, board and current node in tree. */
+/** Manages a tree, board, current node and clock. */
 public class Game
 {
     public Game(int boardSize)
     {
         m_board = new Board(boardSize);
+        m_clock = new Clock();
         init(boardSize, null, null, "", null);
     }
 
@@ -26,6 +27,7 @@ public class Game
                 TimeSettings timeSettings)
     {
         m_board = new Board(boardSize);
+        m_clock = new Clock();
         init(boardSize, komi, handicap, rules, timeSettings);
     }
 
@@ -84,6 +86,11 @@ public class Game
         return m_board;
     }
 
+    public ConstClock getClock()
+    {
+        return m_clock;
+    }
+
     public ConstNode getCurrentNode()
     {
         return m_current;
@@ -116,12 +123,19 @@ public class Game
         updateBoard();
     }
 
+    public void haltClock()
+    {
+        m_clock.halt();
+    }
+
     public void init(int boardSize, Komi komi, ArrayList handicap,
                      String rules, TimeSettings timeSettings)
     {
         m_tree = new GameTree(boardSize, komi, handicap, rules, timeSettings);
         m_current = m_tree.getRoot();
         updateBoard();
+        m_clock.reset();
+        m_clock.halt();
         m_modified = false;
     }
 
@@ -130,6 +144,8 @@ public class Game
         m_tree = tree;
         m_current = m_tree.getRoot();
         updateBoard();
+        m_clock.reset();
+        m_clock.halt();
         m_modified = false;
     }
 
@@ -164,11 +180,35 @@ public class Game
         m_modified = true;
     }
 
-    public void play(Move move, ConstClock clock)
+    public void play(Move move)
     {
-        m_current = createNode(m_current, move, clock);
+        m_clock.stopMove();
+        Node node = new Node(move);
+        if (m_clock.isInitialized())
+        {
+            assert(! m_clock.isRunning());
+            GoColor color = move.getColor();
+            // Round time to seconds
+            long timeLeft = m_clock.getTimeLeft(color) / 1000L;
+            if (color == GoColor.BLACK)
+            {
+                node.setTimeLeftBlack((double)timeLeft);
+                if (m_clock.isInByoyomi(color))
+                    node.setMovesLeftBlack(m_clock.getMovesLeft(color));
+            }
+            else
+            {
+                assert(color == GoColor.WHITE);
+                node.setTimeLeftWhite((double)timeLeft);
+                if (m_clock.isInByoyomi(color))
+                    node.setMovesLeftWhite(m_clock.getMovesLeft(color));
+            }
+        }
+        m_current.append(node);
+        m_current = node;
         updateBoard();
         m_modified = true;
+        m_clock.startMove(getToMove());
     }
 
     /** Remove a mark property from current node. */
@@ -176,6 +216,26 @@ public class Game
     {
         m_current.removeMarked(point, type);
         m_modified = true;
+    }
+
+    public void resetClock()
+    {
+        m_clock.reset();
+    }
+
+    public void restoreClock()
+    {        
+        GoColor color = getToMove();
+        ConstNode currentNode = getCurrentNode();
+        restoreClock(currentNode, color.otherColor());
+        ConstNode father = currentNode.getFatherConst();
+        if (father != null)
+            restoreClock(father, color);
+    }
+
+    public void setClockListener(Clock.Listener listener)
+    {
+        m_clock.setListener(listener);
     }
 
     /** Set comment in current node. */
@@ -246,6 +306,11 @@ public class Game
         m_board.setToMove(color);
     }
 
+    public void setTimeSettings(TimeSettings timeSettings)
+    {
+        m_clock.setTimeSettings(timeSettings);
+    }
+
     public void setup(GoPoint point, GoColor color)
     {
         assert(point != null);
@@ -271,6 +336,12 @@ public class Game
         updateBoard();
     }
 
+    public void startClock()
+    {
+        if (! m_clock.isRunning())
+            m_clock.startMove(getToMove());
+    }
+
     /** Truncate current node and subtree.
         New current node is the father of the old current node.
     */
@@ -293,49 +364,36 @@ public class Game
     /** See #isModified() */
     private boolean m_modified;
 
-    private Board m_board;
+    private final Board m_board;
 
-    private BoardUpdater m_boardUpdater = new BoardUpdater();
+    private final BoardUpdater m_boardUpdater = new BoardUpdater();
 
     private GameTree m_tree;
 
     private Node m_current;
 
-    /** Create a new node with a move and append it to current node.
-        Also adds time information from clock, if not null and initialized.
-        The clock must not be running.
-    */
-    private static Node createNode(Node currentNode, Move move,
-                                   ConstClock clock)
-    {
-        Node node = new Node(move);
-        if (clock != null && clock.isInitialized())
-        {
-            assert(! clock.isRunning());
-            GoColor color = move.getColor();
-            // Round time to seconds
-            long timeLeft = clock.getTimeLeft(color) / 1000L;
-            if (color == GoColor.BLACK)
-            {
-                node.setTimeLeftBlack((double)timeLeft);
-                if (clock.isInByoyomi(color))
-                    node.setMovesLeftBlack(clock.getMovesLeft(color));
-            }
-            else
-            {
-                assert(color == GoColor.WHITE);
-                node.setTimeLeftWhite((double)timeLeft);
-                if (clock.isInByoyomi(color))
-                    node.setMovesLeftWhite(clock.getMovesLeft(color));
-            }
-        }
-        currentNode.append(node);
-        return node;
-    }
+    private final Clock m_clock;
 
     private ConstNode getRoot()
     {
         return m_tree.getRoot();
+    }
+
+    private void restoreClock(ConstNode node, GoColor color)
+    {
+        Move move = node.getMove();
+        if (move == null)
+        {
+            if (node == getTree().getRootConst())
+                resetClock();
+            return;
+        }
+        if (move.getColor() != color)
+            return;
+        double timeLeft = node.getTimeLeft(color);
+        int movesLeft = node.getMovesLeft(color);
+        if (! Double.isNaN(timeLeft))
+            m_clock.setTimeLeft(color, (long)(timeLeft * 1000), movesLeft);
     }
 
     private void updateBoard()

@@ -144,13 +144,10 @@ public class GoGui
         m_toolBar = new GoGuiToolBar(this);
 
         m_infoPanel = new JPanel(new BorderLayout());
-        m_clock = new Clock();
-        m_gameInfo = new GameInfo(m_clock);
+        m_game = new Game(boardSize);
+        m_gameInfo = new GameInfo(m_game);
         m_gameInfo.setBorder(GuiUtil.createSmallEmptyBorder());
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
-
-        m_game = new Game(boardSize);
-
         m_guiBoard = new GuiBoard(boardSize);
         m_guiBoard.setListener(this);
         m_statusBar = new StatusBar();
@@ -423,7 +420,7 @@ public class GoGui
         else if (command.equals("next-earlier-variation"))
             cbNextEarlierVariation();
         else if (command.equals("new-game"))
-            cbNewGame(getBoardSize());
+            cbNewGame(getBoardSize(), true);
         else if (command.equals("open"))
             cbOpen();
         else if (command.equals("pass"))
@@ -1037,8 +1034,6 @@ public class GoGui
 
     private final GuiBoard m_guiBoard;
 
-    private final Clock m_clock;
-
     private GuiGtpClient m_gtp;
 
     private final Comment m_comment;
@@ -1437,10 +1432,8 @@ public class GoGui
         {
             saveSession();
             int boardSize = Integer.parseInt(boardSizeString);
-            cbNewGame(boardSize);
-            m_clock.reset();
-            m_clock.halt();
-            m_gameInfo.updateTimeFromClock(m_clock);
+            cbNewGame(boardSize, false);
+            m_gameInfo.updateTimeFromClock(getClock());
             updateMenuBar();
             m_prefs.putInt("boardsize", boardSize);
         }
@@ -1456,12 +1449,10 @@ public class GoGui
         if (size < 1 || size > GoPoint.MAXSIZE)
             return;
         saveSession();
-        cbNewGame(size);
-        m_clock.reset();
-        m_clock.halt();
+        cbNewGame(size, false);
         updateMenuBar();
         m_prefs.putInt("boardsize", size);
-        m_gameInfo.updateTimeFromClock(m_clock);
+        m_gameInfo.updateTimeFromClock(getClock());
     }
     
     private void cbBookmark(String number)
@@ -1511,27 +1502,20 @@ public class GoGui
     {
         if (! getClock().isRunning())
             return;
-        m_clock.halt();
+        m_game.haltClock();
         updateMenuBar();
     }
 
     private void cbClockResume()
     {
-        if (getClock().isRunning())
-            return;
-        m_clock.startMove(getToMove());
+        m_game.startClock();
         updateMenuBar();
     }
 
     private void cbClockRestore()
     {        
-        GoColor color = getToMove();
-        ConstNode currentNode = getCurrentNode();
-        clockRestore(currentNode, color.otherColor());
-        ConstNode father = currentNode.getFatherConst();
-        if (father != null)
-            clockRestore(father, color);
-        m_gameInfo.updateTimeFromClock(m_clock);
+        m_game.restoreClock();
+        m_gameInfo.updateTimeFromClock(getClock());
         updateMenuBar();
     }
 
@@ -1833,14 +1817,15 @@ public class GoGui
         boardChangedBegin(false, true);
     }
 
-    private void cbNewGame(int size)
+    private void cbNewGame(int size, boolean startClock)
     {
         if (! checkSaveGame())
             return;
         clearLoadedFile();
         newGame(size);
         computerWhite();
-        m_clock.startMove(GoColor.BLACK);
+        if (startClock)
+            m_game.startClock();
         updateMenuBar();
         boardChangedBegin(true, true);
     }
@@ -1885,8 +1870,8 @@ public class GoGui
         generateMove(isSingleMove);
         if (getCurrentNode() == getTree().getRootConst()
             && getCurrentNode().getNumberChildren() == 0)
-            m_clock.reset();
-        m_clock.startMove(getToMove());
+            m_game.resetClock();
+        m_game.startClock();
     }
 
 
@@ -2098,7 +2083,7 @@ public class GoGui
                     checkComputerMove();
                     return;
                 }
-                m_clock.halt();
+                m_game.haltClock();
                 showGameFinished();
                 return;
             }
@@ -2108,7 +2093,7 @@ public class GoGui
         {
             if (gameFinished)
             {
-                m_clock.halt();
+                m_game.haltClock();
                 showGameFinished();
                 return;
             }
@@ -2200,23 +2185,6 @@ public class GoGui
         m_statusBar.clear();
     }
 
-    private void clockRestore(ConstNode node, GoColor color)
-    {
-        Move move = node.getMove();
-        if (move == null)
-        {
-            if (node == getTree().getRootConst())
-                m_clock.reset();
-            return;
-        }
-        if (move.getColor() != color)
-            return;
-        double timeLeft = node.getTimeLeft(color);
-        int movesLeft = node.getMovesLeft(color);
-        if (! Double.isNaN(timeLeft))
-            m_clock.setTimeLeft(color, (long)(timeLeft * 1000), movesLeft);
-    }
-
     private void close()
     {
         if (isCommandInProgress() && ! showQuestion("Kill program?"))
@@ -2255,7 +2223,6 @@ public class GoGui
             java.awt.Toolkit.getDefaultToolkit().beep();
         try
         {
-            m_clock.stopMove();
             String response = m_gtp.getResponse();
             GoColor toMove = getToMove();
             checkLostOnTime(toMove);
@@ -2274,7 +2241,7 @@ public class GoGui
                     && getBoard().getColor(point) != GoColor.EMPTY)
                     showWarning("Program played move on non-empty point");
                 Move move = Move.get(point, toMove);
-                m_game.play(move, m_clock);
+                m_game.play(move);
                 updateModified();                
                 m_gtp.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
@@ -2289,7 +2256,6 @@ public class GoGui
                     gameTreeChanged = false;
                 }
             }
-            m_clock.startMove(getToMove());
             updateMenuBar();
             boolean doCheckComputerMove
                 = (! m_isSingleMove
@@ -2511,7 +2477,6 @@ public class GoGui
         else
         {
             command = m_gtp.getCommandGenmove(toMove);
-            m_clock.startMove(toMove);
         }
         m_isSingleMove = isSingleMove;
         Runnable callback = new Runnable()
@@ -2536,7 +2501,7 @@ public class GoGui
 
     private ConstClock getClock()
     {
-        return m_clock;
+        return m_game.getClock();
     }
 
     private ConstNode getCurrentNode()
@@ -2591,7 +2556,6 @@ public class GoGui
         GoPoint point = move.getPoint();
         if (point != null && getBoard().getColor(point) != GoColor.EMPTY)
             return;
-        m_clock.stopMove();
         if (point != null)
         {
             // Paint point immediately to pretend better responsiveness
@@ -2620,12 +2584,13 @@ public class GoGui
         if (node == null)
         {
             newNodeCreated = true;
-            m_game.play(move, m_clock);
+            m_game.play(move);
         }
         else
-            m_game.gotoNode(node);
-        if (newNodeCreated)
-            m_clock.startMove(getToMove());
+        {
+            m_game.haltClock();
+            m_game.gotoNode(node);            
+        }
         updateModified();                
         checkLostOnTime(move.getColor());
         m_resigned = false;
@@ -2666,7 +2631,7 @@ public class GoGui
                     m_timeSettings);
         updateFromGoBoard();
         resetBoard();
-        m_clock.reset();
+        m_game.resetClock();
         m_lostOnTimeShown = false;
         updateModified();                
         m_resigned = false;
@@ -2915,7 +2880,6 @@ public class GoGui
     {
         initGame(size);
         loadFile(m_file, move);
-        m_clock.reset();
         updateGameInfo(true);
         updateFromGoBoard();
         m_toolBar.update(getCurrentNode());
@@ -3194,7 +3158,7 @@ public class GoGui
             return;
         if (! m_gtp.isCommandSupported("time_settings"))
             return;
-        m_clock.setTimeSettings(timeSettings);
+        m_game.setTimeSettings(timeSettings);
         String command = GtpUtil.getTimeSettingsCommand(timeSettings);
         try
         {
@@ -3443,7 +3407,7 @@ public class GoGui
 
     private void updateMenuBar()
     {
-        m_menuBar.update(getTree(), getCurrentNode(), m_clock);
+        m_menuBar.update(getTree(), getCurrentNode(), getClock());
     }
 
     private void updateModified()
