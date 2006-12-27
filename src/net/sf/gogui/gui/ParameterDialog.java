@@ -50,8 +50,6 @@ public class ParameterDialog
                 continue;
             String key = parameter.getKey();
             String newValue = parameter.getNewValue();
-            if (newValue.equals("") || newValue.indexOf(' ') >= 0)
-                newValue = "\"" + newValue + "\"";
             String command = paramCommand + " " + key + " " + newValue;
             try
             {
@@ -226,10 +224,18 @@ public class ParameterDialog
                     line = line.substring(pos + 1).trim();                
             }
             int pos = line.indexOf(' ');
+            String key;
+            String value;
             if (pos < 0)
-                continue;
-            String key = line.substring(0, pos).trim();
-            String value = line.substring(pos + 1).trim();
+            {
+                key = line.trim();
+                value = "";
+            }
+            else
+            {
+                key = line.substring(0, pos).trim();
+                value = line.substring(pos + 1).trim();
+            }
             if (type == bool)
                 parameters.add(new BoolParameter(key, value));
             else
