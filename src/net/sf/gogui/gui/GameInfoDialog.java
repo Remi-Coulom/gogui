@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.TimeSettings;
+import net.sf.gogui.util.ObjectUtil;
 
 /** Dialog for editing game settings and other information. */
 public final class GameInfoDialog
@@ -92,8 +93,7 @@ public final class GameInfoDialog
         {
             assert(false); // already validated
         }
-        if (((komi == null) != (gameInformation.getKomi() == null))
-            || ! gameInformation.getKomi().equals(komi))
+        if (! ObjectUtil.equals(komi, gameInformation.getKomi()))
         {
             gameInformation.setKomi(komi);
             changed = true;
