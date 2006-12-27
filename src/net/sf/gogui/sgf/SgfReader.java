@@ -715,22 +715,29 @@ public final class SgfReader
             }
             else if (p == "GM")
             {
+                // Some SGF files contain GM[], interpret as GM[1]
                 v = v.trim();
-                if (v.equals(""))
-                    setWarning("Empty value for game type");
-                else if (! v.equals("1"))
-                    throw getError("Not a Go game");
+                if (! v.equals(""))
+                {
+                    if (! v.equals("1"))
+                        throw getError("Not a Go game");
+                }
                 
             }
             else if (p == "HA")
             {
-                try
+                // Some SGF files contain HA[], interpret as no handicap
+                v = v.trim();
+                if (! v.equals(""))
                 {
-                    m_gameInformation.setHandicap(Integer.parseInt(v));
-                }
-                catch (NumberFormatException e)
-                {
-                    setWarning("Invalid handicap value");
+                    try
+                    {
+                        m_gameInformation.setHandicap(Integer.parseInt(v));
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        setWarning("Invalid handicap value");
+                    }
                 }
             }
             else if (p == "KM")
