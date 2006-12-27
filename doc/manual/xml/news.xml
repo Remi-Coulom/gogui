@@ -31,6 +31,13 @@ arguments
 </listitem>
 <listitem>
 <simpara>
+Don't escape empty strings or strings with whitespace in analyze commands of
+type "param" anymore; the parameter value is the remaining line after the
+parameter key
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Other minor fixes
 </simpara>
 </listitem>
