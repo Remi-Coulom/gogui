@@ -71,6 +71,7 @@ class GtpShellText
 
     public void appendError(String text)
     {
+        appendTimeStamp();
         appendText(text, "error");
     }
 
