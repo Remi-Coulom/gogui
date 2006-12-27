@@ -13,8 +13,8 @@ import net.sf.gogui.util.StringUtil;
 /** Time control for a Go game.
     If the clock is not initialized with Clock.setTimeSettings, the clock
     will count upwards, otherwise the time settings with main and/or
-    byoyomi time are used.
-    The time unit is milliseconds.
+    byoyomi time are used. The time unit is milliseconds.
+    TODO: Classes in net.sf.gogui.game should not depend on java.awt
 */
 public final class Clock
     implements ConstClock
