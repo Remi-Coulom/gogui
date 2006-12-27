@@ -14,7 +14,9 @@ import net.sf.gogui.util.StringUtil;
     If the clock is not initialized with Clock.setTimeSettings, the clock
     will count upwards, otherwise the time settings with main and/or
     byoyomi time are used. The time unit is milliseconds.
-    TODO: Classes in net.sf.gogui.game should not depend on java.awt
+    TODO: Classes in net.sf.gogui.game should not depend on java.awt, maybe
+    use a function update(currentTime) to update the clock, that would also
+    make testing easier
 */
 public final class Clock
     implements ConstClock
