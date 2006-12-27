@@ -11,6 +11,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.util.ObjectUtil;
 
 /** Manages a tree, board and current node in tree. */
 public class Game
@@ -32,6 +33,7 @@ public class Game
     public void addMarked(GoPoint point, MarkType type)
     {
         m_current.addMarked(point, type);
+        m_modified = true;
     }
 
     public void backward(int n)
@@ -40,6 +42,15 @@ public class Game
         for (int i = 0; i < n && m_current != getRoot(); ++i)
             m_current = m_current.getFather();
         updateBoard();
+    }
+
+    /** Clear modified flag.
+        Can be used for instance after game was saved.
+        @see #isModified()
+    */
+    public void clearModified()
+    {
+        m_modified = false;
     }
 
     /** Append new empty node and make it current node.
@@ -51,6 +62,7 @@ public class Game
         Node node = new Node();
         m_current.append(node);
         m_current = node;
+        m_modified = true;
     }
 
     public void forward(int n)
@@ -110,6 +122,7 @@ public class Game
         m_tree = new GameTree(boardSize, komi, handicap, rules, timeSettings);
         m_current = m_tree.getRoot();
         updateBoard();
+        m_modified = false;
     }
 
     public void init(GameTree tree)
@@ -117,11 +130,22 @@ public class Game
         m_tree = tree;
         m_current = m_tree.getRoot();
         updateBoard();
+        m_modified = false;
+    }
+
+    /** Check if game was modified.
+        @return true, if game was mofified since constructor or last call to
+        one of the init() functions or to clearModified().
+    */
+    public boolean isModified()
+    {
+        return m_modified;
     }
 
     public void keepOnlyMainVariation()
     {
         m_tree.keepOnlyMainVariation();
+        m_modified = true;
     }
 
     public void keepOnlyPosition()
@@ -130,71 +154,94 @@ public class Game
         m_board.init(m_board.getSize());
         m_current = m_tree.getRoot();
         updateBoard();
+        m_modified = true;
     }
 
     /** Make current node the main variation. */
     public void makeMainVariation()
     {
         NodeUtil.makeMainVariation(m_current);
+        m_modified = true;
     }
 
     public void play(Move move, ConstClock clock)
     {
         m_current = createNode(m_current, move, clock);
         updateBoard();
+        m_modified = true;
     }
 
     /** Remove a mark property from current node. */
     public void removeMarked(GoPoint point, MarkType type)
     {
         m_current.removeMarked(point, type);
+        m_modified = true;
     }
 
     /** Set comment in current node. */
     public void setComment(String comment)
     {
+        m_modified = ! ObjectUtil.equals(comment, m_current.getComment());
         m_current.setComment(comment);
     }
 
     public void setDate(String date)
     {
-        m_tree.getGameInformation().setDate(date);
+        GameInformation gameInformation = m_tree.getGameInformation();
+        m_modified = ! ObjectUtil.equals(date, gameInformation.getDate());
+        gameInformation.setDate(date);
     }
 
     public void setResult(String result)
     {
-        m_tree.getGameInformation().setResult(result);
+        GameInformation gameInformation = m_tree.getGameInformation();
+        m_modified = ! ObjectUtil.equals(result, gameInformation.getResult());
+        gameInformation.setResult(result);
     }
 
     /** Set label in current node. */
     public void setLabel(GoPoint point, String value)
     {
+        m_modified = ! ObjectUtil.equals(value, m_current.getLabel(point));
         m_current.setLabel(point, value);
     }
 
     public void setPlayerBlack(String name)
     {
-        m_tree.getGameInformation().setPlayerBlack(name);
+        GameInformation gameInformation = m_tree.getGameInformation();
+        m_modified = ! ObjectUtil.equals(name,
+                                         gameInformation.getPlayerBlack());
+        gameInformation.setPlayerBlack(name);
     }
 
     public void setPlayerWhite(String name)
     {
+        GameInformation gameInformation = m_tree.getGameInformation();
+        m_modified = ! ObjectUtil.equals(name,
+                                         gameInformation.getPlayerWhite());
         m_tree.getGameInformation().setPlayerWhite(name);
     }
 
-    public void setRankBlack(String name)
+    public void setRankBlack(String rank)
     {
-        m_tree.getGameInformation().setRankBlack(name);
+        GameInformation gameInformation = m_tree.getGameInformation();
+        m_modified = ! ObjectUtil.equals(rank, gameInformation.getRankBlack());
+        m_tree.getGameInformation().setRankBlack(rank);
     }
 
-    public void setRankWhite(String name)
+    public void setRankWhite(String rank)
     {
-        m_tree.getGameInformation().setRankWhite(name);
+        GameInformation gameInformation = m_tree.getGameInformation();
+        m_modified = ! ObjectUtil.equals(rank, gameInformation.getRankWhite());
+        m_tree.getGameInformation().setRankWhite(rank);
     }
 
     public void setToMove(GoColor color)
     {
-        assert(color != GoColor.EMPTY);
+        assert(color != null);
+        assert(! color.equals(GoColor.EMPTY));
+        m_modified = (! ObjectUtil.equals(color, m_current.getPlayer())
+                      || color.equals(m_board.getToMove()));
         m_current.setPlayer(color);
         m_board.setToMove(color);
     }
@@ -202,6 +249,7 @@ public class Game
     public void setup(GoPoint point, GoColor color)
     {
         assert(point != null);
+        m_modified = true;
         m_current.removeSetup(point);
         Node father = m_current.getFather();
         if (father != null)
@@ -232,13 +280,18 @@ public class Game
         Node oldCurrentNode = m_current;
         backward(1);
         m_current.removeChild(oldCurrentNode);
+        m_modified = true;
     }
 
     /** Remove children of currentNode. */
     public void truncateChildren()
     {
         NodeUtil.truncateChildren(m_current);
+        m_modified = true;
     }
+
+    /** See #isModified() */
+    private boolean m_modified;
 
     private Board m_board;
 
