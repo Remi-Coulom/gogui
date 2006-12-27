@@ -845,17 +845,6 @@ Only show commands supported by the current Go engine.
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guisubmenu>Configure Analyze</guisubmenu> / <guimenuitem>Sort Alphabetically</guimenuitem></term>
-<listitem>
-<para>
-Sort command labels alphabetically.
-Otherwise the analyze command list has the same order as in the configuration
-files.
-</para>
-</listitem>
-</varlistentry>
-
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
