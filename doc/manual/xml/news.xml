@@ -16,11 +16,6 @@ Allow setup stones in non-root position
 </listitem>
 <listitem>
 <simpara>
-Update to look and feel JGoodies Looks 2.1.1
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 Don't use default komi anymore if game is loaded with unknown komi
 anymore
 </simpara>
