@@ -786,7 +786,7 @@ public class GoGui
             m_analyzeCommand.setPointArg(p);
             m_guiBoard.clearAllSelect();
             m_guiBoard.setSelect(p, true);
-            analyzeBegin(false, false);
+            analyzeBegin(false);
             return;
         }
         else if (m_analyzeCommand != null
@@ -804,7 +804,7 @@ public class GoGui
             m_guiBoard.clearAllSelect();
             GuiBoardUtils.setSelect(m_guiBoard, pointListArg, true);
             if (modifiedSelect && pointListArg.size() > 0)
-                analyzeBegin(false, false);
+                analyzeBegin(false);
             return;
         }
         else if (m_scoreMode && ! modifiedSelect)
@@ -861,12 +861,14 @@ public class GoGui
         endLengthyCommand();
     }
 
-    public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun)
+    public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
+                                   boolean clearBoard)
     {
         if (m_commandThread == null)
             return;
         m_analyzeCommand = command;
         m_analyzeAutoRun = autoRun;
+        m_analyzeClearBoard = clearBoard;
         if (command.needsPointArg())
         {
             setBoardCursor(Cursor.HAND_CURSOR);
@@ -894,7 +896,7 @@ public class GoGui
                       "in setup mode");
             return;
         }
-        initAnalyzeCommand(command, autoRun);
+        initAnalyzeCommand(command, autoRun, clearBoard);
         m_analyzeOneRunOnly = oneRunOnly;
         boolean needsPointArg = m_analyzeCommand.needsPointArg();
         if (needsPointArg && ! m_analyzeCommand.isPointArgMissing())
@@ -912,27 +914,23 @@ public class GoGui
             toFront();
             return;
         }
-        analyzeBegin(false, clearBoard);
+        analyzeBegin(false);
     }    
 
     private class AnalyzeContinue
         implements Runnable
     {
-        public AnalyzeContinue(boolean checkComputerMove,
-                               boolean resetBoard)
+        public AnalyzeContinue(boolean checkComputerMove)
         {
             m_checkComputerMove = checkComputerMove;
-            m_resetBoard = resetBoard;
         }
 
         public void run()
         {
-            analyzeContinue(m_checkComputerMove, m_resetBoard);
+            analyzeContinue(m_checkComputerMove);
         }
         
         private final boolean m_checkComputerMove;
-
-        private final boolean m_resetBoard;
     }
 
     private class ShowInvalidResponse
@@ -982,6 +980,8 @@ public class GoGui
     }
 
     private boolean m_analyzeAutoRun;
+
+    private boolean m_analyzeClearBoard;
 
     private boolean m_analyzeOneRunOnly;
 
@@ -1127,7 +1127,7 @@ public class GoGui
 
     private ArrayList m_bookmarks;
 
-    private void analyzeBegin(boolean checkComputerMove, boolean resetBoard)
+    private void analyzeBegin(boolean checkComputerMove)
     {
         if (m_commandThread == null || m_analyzeCommand == null
             || m_analyzeCommand.isPointArgMissing())
@@ -1136,13 +1136,12 @@ public class GoGui
         GoColor toMove = m_board.getToMove();
         m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
         runLengthyCommand(m_lastAnalyzeCommand,
-                          new AnalyzeContinue(checkComputerMove, resetBoard));
+                          new AnalyzeContinue(checkComputerMove));
     }
 
-    private void analyzeContinue(boolean checkComputerMove,
-                                 boolean resetBoard)
+    private void analyzeContinue(boolean checkComputerMove)
     {
-        if (resetBoard)
+        if (m_analyzeClearBoard)
             resetBoard();
         if (! endLengthyCommand())
             return;
@@ -1399,7 +1398,7 @@ public class GoGui
             && m_analyzeCommand != null
             && m_analyzeAutoRun
             && ! m_analyzeCommand.isPointArgMissing())
-            analyzeBegin(doCheckComputerMove, true);
+            analyzeBegin(doCheckComputerMove);
         else
         {
             resetBoard();
@@ -2897,7 +2896,7 @@ public class GoGui
                 showError("Unknown analyze command \"" + m_initAnalyze
                           + "\"");
             else
-                initAnalyzeCommand(analyzeCommand, true);
+                initAnalyzeCommand(analyzeCommand, true, true);
         }
         setTitleFromProgram();
         getLayeredPane().setVisible(true);
