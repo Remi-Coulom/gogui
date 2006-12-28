@@ -100,11 +100,6 @@ public class GoGuiMenuBar
         return m_itemAnalyzeOnlySupported.isSelected();
     }
 
-    public boolean getAnalyzeSort()
-    {
-        return m_itemAnalyzeSort.isSelected();
-    }
-
     public boolean getAutoNumber()
     {
         return m_itemAutoNumber.isSelected();        
@@ -213,11 +208,6 @@ public class GoGuiMenuBar
     public void setAnalyzeOnlySupported(boolean enable)
     {
         m_itemAnalyzeOnlySupported.setSelected(enable);        
-    }
-
-    public void setAnalyzeSort(boolean enable)
-    {
-        m_itemAnalyzeSort.setSelected(enable);        
     }
 
     public void setAutoNumber(boolean enable)
@@ -585,8 +575,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemAnalyzeOnlySupported;
 
-    private JMenuItem m_itemAnalyzeSort;
-
     private JMenuItem m_itemBackToMainVar;
 
     private JMenuItem m_itemBackward;
@@ -782,8 +770,6 @@ public class GoGuiMenuBar
             new JCheckBoxMenuItem("Only Supported Commands");
         menu.addItem(m_itemAnalyzeOnlySupported, KeyEvent.VK_O,
                      "analyze-only-supported");
-        m_itemAnalyzeSort = new JCheckBoxMenuItem("Sort Alphabetically");
-        menu.addItem(m_itemAnalyzeSort, KeyEvent.VK_S, "analyze-sort");
         return menu;
     }
 

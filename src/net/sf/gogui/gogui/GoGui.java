@@ -216,7 +216,6 @@ public class GoGui
         boolean onlySupported
             = m_prefs.getBoolean("analyze-only-supported-commands", true);
         m_menuBar.setAnalyzeOnlySupported(onlySupported);
-        m_menuBar.setAnalyzeSort(m_prefs.getBoolean("analyze-sort", true));
         m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels",
                                                  GameTreePanel.LABEL_NUMBER));
         m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size",
@@ -311,8 +310,6 @@ public class GoGui
             cbAnalyze();
         else if (command.equals("analyze-only-supported"))
             cbAnalyzeOnlySupported();
-        else if (command.equals("analyze-sort"))
-            cbAnalyzeSort();
         else if (command.equals("attach-program"))
             cbAttachProgram();
         else if (command.equals("auto-number"))
@@ -488,9 +485,8 @@ public class GoGui
             if (m_analyzeDialog == null)
             {
                 boolean onlySupported = m_menuBar.getAnalyzeOnlySupported();
-                boolean sort = m_menuBar.getAnalyzeSort();
                 m_analyzeDialog =
-                    new AnalyzeDialog(this, this, onlySupported, sort,
+                    new AnalyzeDialog(this, this, onlySupported,
                                       m_gtp.getSupportedCommands(),
                                       m_programAnalyzeCommands,
                                       m_gtp);
@@ -521,14 +517,6 @@ public class GoGui
         m_prefs.putBoolean("analyze-only-supported-commands", onlySupported);
         if (m_analyzeDialog != null)
             m_analyzeDialog.setOnlySupported(onlySupported);
-    }
-
-    public void cbAnalyzeSort()
-    {
-        boolean sort = m_menuBar.getAnalyzeSort();
-        m_prefs.putBoolean("analyze-sort", sort);
-        if (m_analyzeDialog != null)
-            m_analyzeDialog.setSort(sort);
     }
 
     public void cbAttachProgram()
@@ -3421,4 +3409,3 @@ public class GoGui
         setTitle();
     }    
 }
-

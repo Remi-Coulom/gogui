@@ -55,16 +55,13 @@ public final class AnalyzeDialog
                                boolean clearBoard, boolean oneRunOnly);
     }
 
-    public AnalyzeDialog(Frame owner, Callback callback,
-                         boolean onlySupported, boolean sort,
+    public AnalyzeDialog(Frame owner, Callback callback, boolean onlySupported,
                          ArrayList supportedCommands,
-                         String programAnalyzeCommands,
-                         GuiGtpClient gtp)
+                         String programAnalyzeCommands, GuiGtpClient gtp)
     {
         super(owner, "Analyze");
         m_gtp = gtp;
         m_onlySupportedCommands = onlySupported;
-        m_sort = sort;
         m_supportedCommands = supportedCommands;
         m_programAnalyzeCommands = programAnalyzeCommands;
         m_callback = callback;
@@ -150,12 +147,6 @@ public final class AnalyzeDialog
         selectColor();
     }
 
-    public void setSort(boolean sort)
-    {
-        m_sort = sort;
-        reload();
-    }
-
     public void valueChanged(ListSelectionEvent e)
     {
         int index = m_list.getSelectedIndex();
@@ -170,8 +161,6 @@ public final class AnalyzeDialog
     }
 
     private boolean m_onlySupportedCommands;
-
-    private boolean m_sort;
 
     private boolean m_recentModified;
 
@@ -366,8 +355,6 @@ public final class AnalyzeDialog
                 supportedCommands = m_supportedCommands;
             AnalyzeCommand.read(m_commands, m_labels, supportedCommands,
                                 m_programAnalyzeCommands);
-            if (m_sort)
-                sortLists();
             m_list.setListData(m_labels.toArray());
             comboBoxChanged();
         }
@@ -475,25 +462,6 @@ public final class AnalyzeDialog
             m_comboBoxColor.setSelectedItem("Black");
         else if (m_selectedColor == GoColor.WHITE)
             m_comboBoxColor.setSelectedItem("White");
-    }
-
-    private void sortLists()
-    {
-        for (int i = 0; i < m_labels.size() - 1; ++i)
-            for (int j = i + 1; j < m_labels.size(); ++j)
-            {
-                String labelI = (String)m_labels.get(i);
-                String labelJ = (String)m_labels.get(j);
-                if (labelI.compareTo(labelJ) > 0)
-                {
-                    m_labels.set(i, labelJ);
-                    m_labels.set(j, labelI);
-                    String cmdI = (String)m_commands.get(i);
-                    String cmdJ = (String)m_commands.get(j);
-                    m_commands.set(i, cmdJ);
-                    m_commands.set(j, cmdI);
-                }
-            }
     }
 
     private void updateRecent(int index)
