@@ -766,6 +766,7 @@ public class GoGui
             if (getBoard().getColor(p) == color)
                 color = GoColor.EMPTY;
             setup(p, color);
+            paintImmediately(p, color, false);
             m_game.setToMove(toMove);
             updateGameInfo(true);
             updateFromGoBoard();
@@ -2530,15 +2531,7 @@ public class GoGui
         if (point != null && getBoard().getColor(point) != GoColor.EMPTY)
             return;
         if (point != null)
-        {
-            // Paint point immediately to pretend better responsiveness
-            // because updating game tree or response to GTP play command
-            // can be slow
-            m_guiBoard.setColor(point, move.getColor());
-            if (m_showLastMove)
-                m_guiBoard.markLastMove(point);
-            m_guiBoard.paintImmediately(point);
-        }
+            paintImmediately(point, move.getColor(), true);
         if (m_gtp != null && ! isOutOfSync())
         {
             try
@@ -2858,6 +2851,18 @@ public class GoGui
         m_toolBar.update(getCurrentNode());
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(getBoardSize());
+    }
+
+    /** Paint point immediately to pretend better responsiveness.
+        Necessary because waiting for a repaint of the Go board can be slow
+        due to the updating game tree or response to GTP commands.
+    */
+    private void paintImmediately(GoPoint point, GoColor color, boolean isMove)
+    {
+        m_guiBoard.setColor(point, color);
+        if (isMove && m_showLastMove)
+            m_guiBoard.markLastMove(point);
+        m_guiBoard.paintImmediately(point);
     }
 
     private void registerSpecialMacHandler()
