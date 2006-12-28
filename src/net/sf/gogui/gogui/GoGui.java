@@ -2114,16 +2114,8 @@ public class GoGui
     {
         if (isOutOfSync())
         {
-            Object[] options = { "Detach Program", "Cancel" };
-            Object message =
-                "Could not synchronize current\n" +
-                "position with Go program";
-            int n = JOptionPane.showOptionDialog(this, message, "Error",
-                                                 JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.ERROR_MESSAGE,
-                                                 null, options, options[1]);
-            if (n == 0)
-                cbDetachProgram();
+            showError("Could not synchronize current\n" +
+                      "position with Go program");
             return false;
         }
         return true;
