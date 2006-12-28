@@ -766,7 +766,6 @@ public class GoGui
             if (getBoard().getColor(p) == color)
                 color = GoColor.EMPTY;
             setup(p, color);
-            paintImmediately(p, color, false);
             m_game.setToMove(toMove);
             updateGameInfo(true);
             updateFromGoBoard();
@@ -3203,7 +3202,6 @@ public class GoGui
     {
         assert(point != null);
         m_game.setup(point, color);
-        currentNodeChanged();
     }
 
     private void setupDone()
