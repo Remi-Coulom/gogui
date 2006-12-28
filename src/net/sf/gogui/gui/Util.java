@@ -6,13 +6,8 @@ package net.sf.gogui.gui;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
-import net.sf.gogui.game.ConstClock;
-import net.sf.gogui.game.GameInformation;
-import net.sf.gogui.game.Node;
 import net.sf.gogui.go.Board;
-import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
-import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.StringUtil;
 

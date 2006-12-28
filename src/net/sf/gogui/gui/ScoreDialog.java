@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.Score;
 
