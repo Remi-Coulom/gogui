@@ -93,12 +93,12 @@ public final class Clock
 
     public void halt()
     {
-        if (m_toMove == GoColor.EMPTY)
+        if (m_toMove == null)
             return;
         TimeRecord record = getRecord(m_toMove);
         long time = System.currentTimeMillis() - m_startMoveTime;
         record.m_time += time;
-        m_toMove = GoColor.EMPTY;
+        m_toMove = null;
         updateListener();
         stopTimer();
     }
@@ -115,7 +115,7 @@ public final class Clock
 
     public boolean isRunning()
     {
-        return (m_toMove != GoColor.EMPTY);
+        return (m_toMove != null);
     }
 
     public boolean lostOnTime(GoColor color)
@@ -134,7 +134,7 @@ public final class Clock
     {
         reset(GoColor.BLACK);
         reset(GoColor.WHITE);
-        m_toMove = GoColor.EMPTY;
+        m_toMove = null;
         updateListener();
     }
 
@@ -183,7 +183,7 @@ public final class Clock
             record.m_movesLeft = -1;
             record.m_byoyomiExceeded = false;
         }
-        if (m_toMove != GoColor.EMPTY)
+        if (m_toMove != null)
             startMove(m_toMove);
         updateListener();
     }
@@ -194,7 +194,8 @@ public final class Clock
     */
     public void startMove(GoColor color)
     {
-        if  (m_toMove != GoColor.EMPTY)
+        assert(color == GoColor.BLACK || color == GoColor.WHITE);
+        if  (m_toMove != null)
             stopMove();
         m_toMove = color;
         m_startMoveTime = System.currentTimeMillis();
@@ -208,7 +209,7 @@ public final class Clock
     */
     public void stopMove()
     {
-        if (m_toMove == GoColor.EMPTY)
+        if (m_toMove == null)
             return;
         TimeRecord record = getRecord(m_toMove);
         long time = System.currentTimeMillis() - m_startMoveTime;
@@ -237,7 +238,7 @@ public final class Clock
                 }
             }
         }
-        m_toMove = GoColor.EMPTY;
+        m_toMove = null;
         updateListener();
         stopTimer();
     }    
@@ -264,7 +265,7 @@ public final class Clock
 
     private long m_startMoveTime;
 
-    private GoColor m_toMove = GoColor.EMPTY;
+    private GoColor m_toMove;
 
     private final TimeRecord m_timeRecordBlack = new TimeRecord();
 
@@ -281,7 +282,10 @@ public final class Clock
         if (c == GoColor.BLACK)
             return m_timeRecordBlack;
         else
+        {
+            assert(c == GoColor.WHITE);
             return m_timeRecordWhite;
+        }
     }
 
     private long getByoyomi()
