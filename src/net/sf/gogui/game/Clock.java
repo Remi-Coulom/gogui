@@ -4,8 +4,8 @@
 
 package net.sf.gogui.game;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.TimerTask;
+import java.util.Timer;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.StringUtil;
@@ -14,13 +14,14 @@ import net.sf.gogui.util.StringUtil;
     If the clock is not initialized with Clock.setTimeSettings, the clock
     will count upwards, otherwise the time settings with main and/or
     byoyomi time are used. The time unit is milliseconds.
-    TODO: Classes in net.sf.gogui.game should not depend on java.awt, maybe
-    use a function update(currentTime) to update the clock, that would also
-    make testing easier
 */
 public final class Clock
     implements ConstClock
 {
+    /** Listener to clock changes.
+        This function will be called from a different thread at regular
+        intervals.
+    */
     public interface Listener
     {
         void clockChanged(ConstClock clock);
@@ -28,13 +29,6 @@ public final class Clock
 
     public Clock()
     {
-        ActionListener listener = new ActionListener() {
-                public void actionPerformed(ActionEvent event)
-                {
-                    updateListener();
-                }
-            };
-        m_timer = new javax.swing.Timer(1000, listener);
         reset();
     }
 
@@ -106,7 +100,7 @@ public final class Clock
         record.m_time += time;
         m_toMove = GoColor.EMPTY;
         updateListener();
-        m_timer.stop();
+        stopTimer();
     }
 
     public boolean isInitialized()
@@ -204,7 +198,7 @@ public final class Clock
             stopMove();
         m_toMove = color;
         m_startMoveTime = System.currentTimeMillis();
-        m_timer.start();
+        startTimer();
     }
 
     /** Stop time for a move.
@@ -245,8 +239,17 @@ public final class Clock
         }
         m_toMove = GoColor.EMPTY;
         updateListener();
-        m_timer.stop();
+        stopTimer();
     }    
+
+    private class UpdateListenerTask
+        extends TimerTask
+    {
+        public void run()
+        {
+            updateListener();
+        }
+    };
 
     private static class TimeRecord
     {
@@ -271,7 +274,7 @@ public final class Clock
 
     private Listener m_listener;
 
-    private final javax.swing.Timer m_timer;
+    private Timer m_timer;
 
     private TimeRecord getRecord(GoColor c)
     {
@@ -299,6 +302,25 @@ public final class Clock
     private boolean getUseByoyomi()
     {
         return m_timeSettings.getUseByoyomi();
+    }
+
+    private void startTimer()
+    {
+        if (m_timer == null)
+        {
+            m_timer = new Timer("net.sf.gogui.game.Clock Timer");
+            UpdateListenerTask task = new UpdateListenerTask();
+            m_timer.scheduleAtFixedRate(task, 1000, 1000);
+        }
+    }
+
+    private void stopTimer()
+    {
+        if (m_timer != null)
+        {
+            m_timer.cancel();
+            m_timer = null;
+        }
     }
 
     private void updateListener()

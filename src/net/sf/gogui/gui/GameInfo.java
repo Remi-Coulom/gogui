@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Clock;
@@ -29,6 +30,7 @@ public class GameInfo
     public GameInfo(Game game)
     {
         super(new GridLayout(0, 2, GuiUtil.SMALL_PAD, GuiUtil.SMALL_PAD));
+        m_game = game;
         m_move = addEntry("To play:");
         m_number = addEntry("Moves:");
         m_last = addEntry("Last move:");
@@ -42,7 +44,7 @@ public class GameInfo
         Clock.Listener listener = new Clock.Listener() {
                 public void clockChanged(ConstClock clock)
                 {
-                    updateTimeFromClock(clock);
+                    SwingUtilities.invokeLater(m_updateTime);
                 }
             };
         game.setClockListener(listener);
@@ -99,6 +101,15 @@ public class GameInfo
         updateTimeFromClock(clock, GoColor.WHITE);
     }
 
+    private class UpdateTimeRunnable
+        implements Runnable
+    {
+        public void run()
+        {
+            updateTimeFromClock(m_game.getClock());
+        }
+    }
+
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
@@ -119,6 +130,10 @@ public class GameInfo
     private final JTextField m_timeW;
 
     private final JTextField m_variation;
+
+    private final Game m_game;
+
+    private final UpdateTimeRunnable m_updateTime = new UpdateTimeRunnable();
 
     private JTextField addEntry(String text)
     {
