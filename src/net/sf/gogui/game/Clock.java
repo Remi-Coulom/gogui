@@ -18,6 +18,20 @@ import net.sf.gogui.util.StringUtil;
 public final class Clock
     implements ConstClock
 {
+    public interface TimeSource
+    {
+        long currentTimeMillis();
+    }
+
+    public static final class SystemTimeSource
+        implements TimeSource
+    {
+        public long currentTimeMillis()
+        {
+            return System.currentTimeMillis();
+        }
+    }
+
     /** Listener to clock changes.
         This function will be called from a different thread at regular
         intervals.
@@ -29,6 +43,13 @@ public final class Clock
 
     public Clock()
     {
+        m_timeSource = new SystemTimeSource();
+        reset();
+    }
+
+    public Clock(TimeSource timeSource)
+    {
+        m_timeSource = timeSource;
         reset();
     }
 
@@ -57,10 +78,11 @@ public final class Clock
 
     public String getTimeString(GoColor color)
     {
+        assert(color == GoColor.BLACK || color == GoColor.WHITE);
         TimeRecord record = getRecord(color);
         long time = record.m_time;
-        if (m_toMove.equals(color))
-            time += System.currentTimeMillis() - m_startMoveTime;
+        if (color.equals(m_toMove))
+            time += currentTimeMillis() - m_startMoveTime;
         if (isInitialized())
         {
             if (record.m_isInByoyomi)
@@ -96,7 +118,7 @@ public final class Clock
         if (m_toMove == null)
             return;
         TimeRecord record = getRecord(m_toMove);
-        long time = System.currentTimeMillis() - m_startMoveTime;
+        long time = currentTimeMillis() - m_startMoveTime;
         record.m_time += time;
         m_toMove = null;
         updateListener();
@@ -198,7 +220,7 @@ public final class Clock
         if  (m_toMove != null)
             stopMove();
         m_toMove = color;
-        m_startMoveTime = System.currentTimeMillis();
+        m_startMoveTime = currentTimeMillis();
         startTimer();
     }
 
@@ -212,7 +234,7 @@ public final class Clock
         if (m_toMove == null)
             return;
         TimeRecord record = getRecord(m_toMove);
-        long time = System.currentTimeMillis() - m_startMoveTime;
+        long time = currentTimeMillis() - m_startMoveTime;
         record.m_time += time;
         if (isInitialized() && getUseByoyomi())
         {
@@ -276,6 +298,13 @@ public final class Clock
     private Listener m_listener;
 
     private Timer m_timer;
+
+    private TimeSource m_timeSource;
+
+    private long currentTimeMillis()
+    {
+        return m_timeSource.currentTimeMillis();
+    }
 
     private TimeRecord getRecord(GoColor c)
     {
