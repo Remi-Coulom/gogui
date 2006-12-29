@@ -12,7 +12,7 @@ import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.util.StringUtil;
 
 /** Static utility functions. */
-public final class Util
+public final class GuiGtpUtil
 {
     /** Set komi.
         Sends the komi command if the CommandThread is not null and
@@ -74,7 +74,7 @@ public final class Util
     }
 
     /** Make constructor unavailable; class is for namespace only. */
-    private Util()
+    private GuiGtpUtil()
     {
     }
 }

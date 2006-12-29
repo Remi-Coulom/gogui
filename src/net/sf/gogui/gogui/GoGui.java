@@ -80,6 +80,7 @@ import net.sf.gogui.gui.GtpShell;
 import net.sf.gogui.gui.GuiBoard;
 import net.sf.gogui.gui.GuiBoardUtil;
 import net.sf.gogui.gui.GuiGtpClient;
+import net.sf.gogui.gui.GuiGtpUtil;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.gui.Help;
 import net.sf.gogui.gui.LiveGfx;
@@ -91,7 +92,6 @@ import net.sf.gogui.gui.Session;
 import net.sf.gogui.gui.ScoreDialog;
 import net.sf.gogui.gui.SimpleDialogs;
 import net.sf.gogui.gui.StatusBar;
-import net.sf.gogui.gui.Util;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
@@ -3107,7 +3107,7 @@ public class GoGui
 
     private void setKomi(Komi komi)
     {
-        Util.sendKomi(this, komi, m_name, m_gtp);
+        GuiGtpUtil.sendKomi(this, komi, m_name, m_gtp);
     }
 
     private void setResult(String result)
@@ -3123,7 +3123,7 @@ public class GoGui
 
     private void setRules()
     {
-        Util.sendRules(getRules(), m_gtp);
+        GuiGtpUtil.sendRules(getRules(), m_gtp);
     }
 
     private void setTimeSettings()
@@ -3224,7 +3224,7 @@ public class GoGui
 
     private void showError(GtpError error)
     {        
-        Util.showError(this, m_name, error);
+        GuiGtpUtil.showError(this, m_name, error);
     }
 
     private void showError(String message)
