@@ -38,26 +38,26 @@ public final class Main
                 "version1"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 printUsage(System.out);
                 return;
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 if (opt.getArguments().size() > 0)
                     fail("No arguments allowed with option -version");
                 System.out.println("GtpAdapter " + Version.get());
                 return;
             }
-            boolean verbose = opt.isSet("verbose");
-            boolean noScore = opt.isSet("noscore");
-            boolean version1 = opt.isSet("version1");
-            boolean emuHandicap = opt.isSet("emuhandicap");
-            boolean fillPasses = opt.isSet("fillpasses");
-            String name = opt.getString("name", null);
-            String gtpFile = opt.getString("gtpfile", null);
-            boolean resign = opt.isSet("resign");
+            boolean verbose = opt.contains("verbose");
+            boolean noScore = opt.contains("noscore");
+            boolean version1 = opt.contains("version1");
+            boolean emuHandicap = opt.contains("emuhandicap");
+            boolean fillPasses = opt.contains("fillpasses");
+            String name = opt.get("name", null);
+            String gtpFile = opt.get("gtpfile", null);
+            boolean resign = opt.contains("resign");
             int resignScore = opt.getInteger("resign");            
             ArrayList arguments = opt.getArguments();
             if (arguments.size() != 1)
@@ -66,9 +66,9 @@ public final class Main
                 fail();
             }
             PrintStream log = null;
-            if (opt.isSet("log"))
+            if (opt.contains("log"))
             {
-                File file = new File(opt.getString("log"));
+                File file = new File(opt.get("log"));
                 log = new PrintStream(new FileOutputStream(file));
             }
             String program = (String)arguments.get(0);
@@ -81,9 +81,9 @@ public final class Main
                 adapter.setFillPasses();
             if (resign)
                 adapter.setResign(resignScore);
-            if (opt.isSet("lowercase"))
+            if (opt.contains("lowercase"))
                 adapter.setLowerCase();
-            if (opt.isSet("size"))
+            if (opt.contains("size"))
             {
                 int size = opt.getInteger("size", 0, 1, GoPoint.MAXSIZE);
                 adapter.setFixedSize(size);

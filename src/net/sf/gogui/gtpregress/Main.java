@@ -26,19 +26,19 @@ public final class Main
                 "version"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 printUsage(System.out);
                 return;
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("GtpRegress " + Version.get());
                 return;
             }
-            boolean verbose = opt.isSet("verbose");
-            boolean longOutput = opt.isSet("long");
-            String output = opt.getString("output", "");
+            boolean verbose = opt.contains("verbose");
+            boolean longOutput = opt.contains("long");
+            String output = opt.get("output", "");
             ArrayList arguments = opt.getArguments();
             int size = arguments.size();
             if (size < 2)

@@ -85,12 +85,12 @@ public final class NetGtp
                 "version"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 printUsage(System.out);
                 System.exit(0);
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("NetGtp " + Version.get());
                 System.exit(0);

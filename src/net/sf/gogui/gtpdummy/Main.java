@@ -28,7 +28,7 @@ public final class Main
                 "version"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 String helpText =
                     "Usage: java -jar gtpdummy.jar [options]\n" +
@@ -42,20 +42,20 @@ public final class Main
                 System.out.print(helpText);
                 return;
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("GtpDummy " + Version.get());
                 return;
             }
             PrintStream log = null;
-            if (opt.isSet("log"))
+            if (opt.contains("log"))
             {
-                File file = new File(opt.getString("log"));
+                File file = new File(opt.get("log"));
                 log = new PrintStream(new FileOutputStream(file));
             }
             long randomSeed = 0;
             boolean useRandomSeed = false;
-            if (opt.isSet("srand"))
+            if (opt.contains("srand"))
             {
                 randomSeed = opt.getLong("srand");
                 useRandomSeed = true;

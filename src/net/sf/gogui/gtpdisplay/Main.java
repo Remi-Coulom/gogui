@@ -26,18 +26,18 @@ public final class Main
                 "version"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 printUsage(System.out);
                 System.exit(0);
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("GtpDisplay " + Version.get());
                 System.exit(0);
             }
-            boolean verbose = opt.isSet("verbose");
-            String lookAndFeel = opt.getString("laf", null);
+            boolean verbose = opt.contains("verbose");
+            String lookAndFeel = opt.get("laf", null);
             ArrayList arguments = opt.getArguments();
             if (arguments.size() > 1)
             {

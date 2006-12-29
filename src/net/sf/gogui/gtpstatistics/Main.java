@@ -40,31 +40,31 @@ public final class Main
                 "version"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 printUsage(System.out);
                 return;
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("GtpStatistics " + Version.get());
                 return;
             }
-            boolean analyze = opt.isSet("analyze");
-            boolean allowSetup = opt.isSet("setup");
-            boolean backward = opt.isSet("backward");
+            boolean analyze = opt.contains("analyze");
+            boolean allowSetup = opt.contains("setup");
+            boolean backward = opt.contains("backward");
             String program = "";
             if (! analyze)
             {
-                if (! opt.isSet("program"))
+                if (! opt.contains("program"))
                 {
                     System.out.println("Need option -program");
                     System.exit(-1);
                 }
-                program = opt.getString("program");
+                program = opt.get("program");
             }
-            boolean verbose = opt.isSet("verbose");
-            boolean force = opt.isSet("force");
+            boolean verbose = opt.contains("verbose");
+            boolean force = opt.contains("force");
             int min = opt.getInteger("min", 0, 0);
             int max = opt.getInteger("max", Integer.MAX_VALUE, 0);
             int precision = opt.getInteger("precision", 3, 0);
@@ -82,8 +82,8 @@ public final class Main
                     printUsage(System.err);
                     System.exit(-1);
                 }
-                String fileName = opt.getString("analyze");
-                String output = opt.getString("output");
+                String fileName = opt.get("analyze");
+                String output = opt.get("output");
                 new Analyze(fileName, output, precision);
             }
             else
@@ -94,8 +94,8 @@ public final class Main
                     System.exit(-1);
                 }
                 File output;
-                if (opt.isSet("output"))
-                    output = new File(opt.getString("output"));
+                if (opt.contains("output"))
+                    output = new File(opt.get("output"));
                 else
                     output = new File("gtpstatistics.dat");
                 GtpStatistics gtpStatistics
@@ -122,9 +122,9 @@ public final class Main
         throws ErrorMessage
     {
         ArrayList result = null;
-        if (opt.isSet(option))
+        if (opt.contains(option))
         {
-            String string = opt.getString(option);
+            String string = opt.get(option);
             String[] array = StringUtil.split(string, ',');
             result = new ArrayList(array.length);
             for (int i = 0; i < array.length; ++i)

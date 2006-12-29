@@ -93,31 +93,31 @@ public final class GtpServer
                 "version",
             };
             Options opt = Options.parse(args, options);
-            boolean verbose = opt.isSet("verbose");
-            boolean loop = opt.isSet("loop");
-            if (loop && opt.isSet("remote"))
+            boolean verbose = opt.contains("verbose");
+            boolean loop = opt.contains("loop");
+            if (loop && opt.contains("remote"))
             {
                 System.err.println("Option -loop can't be used with -remote");
                 System.exit(-1);
             }
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 printUsage(System.out);
                 return;
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("GtpServer " + Version.get());
                 return;
             }
-            if (! opt.isSet("port"))
+            if (! opt.contains("port"))
             {
                 System.err.println("Please specify port with option -port");
                 System.exit(-1);
             }
             int port = opt.getInteger("port");
-            String remoteHost = opt.getString("remote", null);
-            String userFile = opt.getString("user", null);
+            String remoteHost = opt.get("remote", null);
+            String userFile = opt.get("user", null);
             if (userFile != null && remoteHost == null)
             {
                 System.err.println("Option -user only valid with -remote");

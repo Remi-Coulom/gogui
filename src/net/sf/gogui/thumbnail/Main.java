@@ -29,29 +29,29 @@ public final class Main
                 "version",
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 printUsage(System.out);
                 return;
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("SgfThumbnail " + Version.get());
                 return;
             }
-            if (opt.isSet("expire"))
+            if (opt.contains("expire"))
             {
                 int seconds = opt.getInteger("expire", 0, 0);
                 ThumbnailUtil.expire(seconds, false);
                 return;
             }
-            if (opt.isSet("check-expire"))
+            if (opt.contains("check-expire"))
             {
                 int seconds = opt.getInteger("expire", 0, 0);
                 ThumbnailUtil.expire(seconds, true);
                 return;
             }
-            boolean verbose = opt.isSet("verbose");
+            boolean verbose = opt.contains("verbose");
             ArrayList arguments = opt.getArguments();
             if (arguments.size() == 0 || arguments.size() > 2)
             {

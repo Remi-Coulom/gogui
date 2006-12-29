@@ -44,7 +44,7 @@ public final class Main
                 "white:"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 String helpText =
                     "Usage: java -jar twogtp.jar [options]\n" +
@@ -72,48 +72,48 @@ public final class Main
                 System.out.print(helpText);
                 System.exit(0);
             }
-            boolean compare = opt.isSet("compare");
+            boolean compare = opt.contains("compare");
             if (compare)
             {
                 Compare.compare(opt.getArguments());
                 System.exit(0);
             }
-            boolean force = opt.isSet("force");
-            if (opt.isSet("version"))
+            boolean force = opt.contains("force");
+            if (opt.contains("version"))
             {
                 System.out.println("TwoGtp " + Version.get());
                 System.exit(0);
             }
             if (opt.contains("analyze"))
             {
-                String filename = opt.getString("analyze");
+                String filename = opt.get("analyze");
                 new Analyze(filename, force);
                 return;
             }                
-            boolean alternate = opt.isSet("alternate");
-            boolean auto = opt.isSet("auto");
-            boolean verbose = opt.isSet("verbose");
-            String black = opt.getString("black", "");
-            String white = opt.getString("white", "");
-            String referee = opt.getString("referee", "");
-            String observer = opt.getString("observer", "");
+            boolean alternate = opt.contains("alternate");
+            boolean auto = opt.contains("auto");
+            boolean verbose = opt.contains("verbose");
+            String black = opt.get("black", "");
+            String white = opt.get("white", "");
+            String referee = opt.get("referee", "");
+            String observer = opt.get("observer", "");
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE, 1,
                                       GoPoint.MAXSIZE);            
             Komi komi = new Komi(6.5);
-            if (opt.isSet("komi"))
-                komi = Komi.parseKomi(opt.getString("komi"));
+            if (opt.contains("komi"))
+                komi = Komi.parseKomi(opt.get("komi"));
             TimeSettings timeSettings = null;
-            if (opt.isSet("time"))
-                timeSettings = TimeSettings.parse(opt.getString("time"));
+            if (opt.contains("time"))
+                timeSettings = TimeSettings.parse(opt.get("time"));
             int defaultGames = (auto ? 1 : 0);
             int games = opt.getInteger("games", defaultGames, 0);
-            String sgfFile = opt.getString("sgffile", "");
-            if (opt.isSet("games") && sgfFile.equals(""))
+            String sgfFile = opt.get("sgffile", "");
+            if (opt.contains("games") && sgfFile.equals(""))
                 throw new ErrorMessage("Use option -sgffile with -games");
             Openings openings = null;
-            if (opt.isSet("openings"))
-                openings = new Openings(new File(opt.getString("openings")));
-            boolean loadsgf = opt.isSet("loadsgf");
+            if (opt.contains("openings"))
+                openings = new Openings(new File(opt.get("openings")));
+            boolean loadsgf = opt.contains("loadsgf");
             if (loadsgf && openings == null)
                 throw new ErrorMessage("Use option -loadsgf with -openings");
             if (loadsgf && ! auto)

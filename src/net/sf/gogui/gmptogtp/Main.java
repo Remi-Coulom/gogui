@@ -48,7 +48,7 @@ public final class Main
                 "version"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 String helpText =
                     "Usage: java -jar gmptogtp.jar [options]\n" +
@@ -68,30 +68,30 @@ public final class Main
                 System.out.print(helpText);
                 return;
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("GmpToGtp " + Version.get());
                 return;
             }
-            if (opt.isSet("list"))
+            if (opt.contains("list"))
             {
                 listDevices();
                 return;
             }
-            String color = opt.getString("color", "");
+            String color = opt.get("color", "");
             if (! color.equals("") && ! color.equalsIgnoreCase("black")
                 && ! color.equalsIgnoreCase("white"))
                 throw new Exception("invalid color");
-            String device = opt.getString("device", "");
+            String device = opt.get("device", "");
             int size = opt.getInteger("size", GoPoint.DEFAULT_SIZE);
             if (size < 1 || size > 22)
                 throw new Exception("invalid size");
             int baud = opt.getInteger("baud", 2400);
             if (baud <= 0)
                 throw new Exception("invalid baud value");
-            boolean verbose = opt.isSet("verbose");
-            boolean simple = opt.isSet("simple");
-            boolean wait = opt.isSet("wait");
+            boolean verbose = opt.contains("verbose");
+            boolean simple = opt.contains("simple");
+            boolean wait = opt.contains("wait");
             String program = null;
             ArrayList arguments = opt.getArguments();
             if (arguments.size() == 1)
@@ -107,7 +107,7 @@ public final class Main
                 System.exit(-1);
             }
             String title = "Go Modem ";
-            String flow = opt.getString("flow", "rtscts");                
+            String flow = opt.get("flow", "rtscts");                
             if (device.equals(""))
             {
                 Runtime runtime = Runtime.getRuntime();

@@ -34,19 +34,19 @@ public final class SgfToTex
                 "version"
             };
             Options opt = Options.parse(args, options);
-            if (opt.isSet("help"))
+            if (opt.contains("help"))
             {
                 printUsage(System.out);
                 System.exit(0);
             }
-            if (opt.isSet("version"))
+            if (opt.contains("version"))
             {
                 System.out.println("SgfToTex " + Version.get());
                 System.exit(0);
             }
-            boolean usePass = opt.isSet("pass");
-            boolean force = opt.isSet("force");
-            String title = opt.getString("title", "");
+            boolean usePass = opt.contains("pass");
+            boolean force = opt.contains("force");
+            String title = opt.get("title", "");
             ArrayList arguments = opt.getArguments();
             InputStream in;
             OutputStream out;

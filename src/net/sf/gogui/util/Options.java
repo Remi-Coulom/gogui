@@ -39,13 +39,34 @@ public class Options
         parseArgs(args);
     }
 
-    /** Check if option is present.
-        @param option The option to check.
-        @return true if option is present.
-    */
+    /** Check if option is present. */
     public boolean contains(String option)
     {
-        return getValue(option) != null;
+        String value = get(option, null);
+        return (value != null);
+    }
+
+    /** Return string option value.
+        @param option The option key.
+        @return The option value or en empty string, if option is not present.
+    */
+    public String get(String option)
+    {
+        return get(option, "");
+    }
+
+    /** Return string option value.
+        @param option The option key.
+        @param defaultValue The default value.
+        @return The option value or defaultValue, if option is not present.
+    */
+    public String get(String option, String defaultValue)
+    {
+        assert(isValidOption(option));
+        String value = getValue(option);
+        if (value == null)
+            return defaultValue;
+        return value;
     }
 
     /** Get remaining arguments that are not options.
@@ -75,7 +96,7 @@ public class Options
     public double getDouble(String option, double defaultValue)
         throws ErrorMessage
     {
-        String value = getString(option, Double.toString(defaultValue));
+        String value = get(option, Double.toString(defaultValue));
         if (value == null)
             return defaultValue;
         try
@@ -107,7 +128,7 @@ public class Options
     */
     public int getInteger(String option, int defaultValue) throws ErrorMessage
     {
-        String value = getString(option, Integer.toString(defaultValue));
+        String value = get(option, Integer.toString(defaultValue));
         if (value == null)
             return defaultValue;
         try
@@ -175,7 +196,7 @@ public class Options
     */
     public long getLong(String option, long defaultValue) throws ErrorMessage
     {
-        String value = getString(option, Long.toString(defaultValue));
+        String value = get(option, Long.toString(defaultValue));
         if (value == null)
             return defaultValue;
         try
@@ -189,36 +210,6 @@ public class Options
         }
     }
 
-    /** Return string option value.
-        @param option The option key.
-        @return The option value or en empty string, if option is not present.
-    */
-    public String getString(String option)
-    {
-        return getString(option, "");
-    }
-
-    /** Return string option value.
-        @param option The option key.
-        @param defaultValue The default value.
-        @return The option value or defaultValue, if option is not present.
-    */
-    public String getString(String option, String defaultValue)
-    {
-        assert(isValidOption(option));
-        String value = getValue(option);
-        if (value == null)
-            return defaultValue;
-        return value;
-    }
-
-    /** Check if option is present. */
-    public boolean isSet(String option)
-    {
-        String value = getString(option, null);
-        return (value != null);
-    }
-
     /** Read options from a file given with the option "config".
         Requires that "config" is an allowed option.
         @throws ErrorMessage If options in file are not valid according to
@@ -226,9 +217,9 @@ public class Options
     */
     public void handleConfigOption() throws ErrorMessage
     {
-        if (! isSet("config"))
+        if (! contains("config"))
             return;
-        String filename = getString("config");
+        String filename = get("config");
         InputStream inputStream;
         try
         {

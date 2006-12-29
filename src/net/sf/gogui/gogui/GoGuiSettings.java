@@ -73,45 +73,45 @@ public final class GoGuiSettings
             "version"
         };
         Options opt = Options.parse(args, options);
-        if (opt.isSet("help"))
+        if (opt.contains("help"))
         {
             printHelp();
             m_noStartup = true;
             return;
         }
-        if (opt.isSet("version"))
+        if (opt.contains("version"))
         {
             m_noStartup = true;
             System.out.println("GoGui " + Version.get());
             return;
         }
         m_prefs = Preferences.userNodeForPackage(c);
-        m_initAnalyze = opt.getString("analyze");
-        m_auto = opt.isSet("auto");
+        m_initAnalyze = opt.get("analyze");
+        m_auto = opt.contains("auto");
         m_computerBlack = false;
         m_computerWhite = true;
-        if (opt.isSet("computer-none"))
+        if (opt.contains("computer-none"))
             m_computerWhite = false;
-        else if (opt.isSet("computer-black"))
+        else if (opt.contains("computer-black"))
         {
             m_computerBlack = true;
             m_computerWhite = false;
         }
-        else if (opt.isSet("computer-both"))
+        else if (opt.contains("computer-both"))
             m_computerBlack = true;
-        m_program = opt.getString("program", null);
-        m_gtpFile = opt.getString("gtpfile", "");
-        m_gtpCommand = opt.getString("command", "");
+        m_program = opt.get("program", null);
+        m_gtpFile = opt.get("gtpfile", "");
+        m_gtpCommand = opt.get("command", "");
         if (opt.contains("komi"))
             m_prefs.putDouble("komi", opt.getDouble("komi"));        
-        m_lookAndFeel = opt.getString("laf", null);
+        m_lookAndFeel = opt.get("laf", null);
         m_move = opt.getInteger("move", -1);
         if (opt.contains("size"))
             m_prefs.putInt("boardsize", opt.getInteger("size"));
-        m_rules = opt.getString("rules", "");
+        m_rules = opt.get("rules", "");
         m_prefs.put("rules", m_rules);
-        m_time = opt.getString("time", null);
-        m_verbose = opt.isSet("verbose");
+        m_time = opt.get("time", null);
+        m_verbose = opt.contains("verbose");
         ArrayList arguments = opt.getArguments();
         m_file = null;
         if (arguments.size() == 1)
