@@ -62,7 +62,8 @@ New menu item Export Text Position to Clipboard
 </listitem>
 <listitem>
 <simpara>
-GtpAdapter: always handle the loadsgf command in the adapter
+GtpAdapter: always handle the loadsgf command in the adapter, don't use option
+-emuloadsgf anymore
 </simpara>
 </listitem>
 <listitem>
