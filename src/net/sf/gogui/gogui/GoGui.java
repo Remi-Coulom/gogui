@@ -2210,9 +2210,20 @@ public class GoGui
             else
             {
                 GoPoint point = GtpUtil.parsePoint(response, getBoardSize());
-                if (point != null
-                    && getBoard().getColor(point) != GoColor.EMPTY)
-                    showWarning("Program played move on non-empty point");
+                ConstBoard board = getBoard();
+                if (point != null)
+                {
+                    if (board.getColor(point) != GoColor.EMPTY)
+                    {
+                        showWarning("Program played move on non-empty point");
+                        computerNone();
+                    }
+                    else if (board.isKo(point))
+                    {
+                        showWarning("Program violated Ko rule");
+                        computerNone();
+                    }
+                }
                 Move move = Move.get(point, toMove);
                 m_game.play(move);
                 updateModified();                

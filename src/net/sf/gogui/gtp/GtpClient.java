@@ -100,6 +100,9 @@ public final class GtpClient
                 program.replaceAll("%SRAND", Integer.toString(rand));
         }
         m_program = program;
+        if (program == null || program.trim().equals(""))
+            throw new GtpError("Command for invoking Go program must be"
+                               + " not empty");
         Runtime runtime = Runtime.getRuntime();
         try
         {
