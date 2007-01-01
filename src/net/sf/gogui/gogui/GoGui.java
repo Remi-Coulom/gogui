@@ -1213,23 +1213,29 @@ public class GoGui
             {
                 public void receivedInvalidResponse(String s)
                 {
-                    m_gtpShell.receivedInvalidResponse(s);
+                    if (m_gtpShell != null)
+                        m_gtpShell.receivedInvalidResponse(s);
                 }
 
                 public void receivedResponse(boolean error, String s)
                 {
-                    m_gtpShell.receivedResponse(error, s);
+                    if (m_gtpShell != null)
+                        m_gtpShell.receivedResponse(error, s);
                 }
 
                 public void receivedStdErr(String s)
                 {
-                    m_gtpShell.receivedStdErr(s);
-                    m_liveGfx.receivedStdErr(s);
+                    if (m_gtpShell != null)
+                    {
+                        m_gtpShell.receivedStdErr(s);
+                        m_liveGfx.receivedStdErr(s);
+                    }
                 }
 
                 public void sentCommand(String s)
                 {
-                    m_gtpShell.sentCommand(s);
+                    if (m_gtpShell != null)
+                        m_gtpShell.sentCommand(s);
                 }
 
                 private LiveGfx m_liveGfx =
