@@ -96,7 +96,7 @@ public class LiveGfx
                 });
             // Throttle thread a bit to avoid long delays of other repaint
             // events in the event queue
-            Thread.sleep(20);
+            Thread.sleep(50);
         }
         catch (InterruptedException e)
         {
