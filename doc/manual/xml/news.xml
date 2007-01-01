@@ -83,6 +83,11 @@ GoGui, GtpDisplay: don't support option -fast anymore
 </listitem>
 <listitem>
 <simpara>
+TwoGtp: new option -maxmoves
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Several minor fixes
 </simpara>
 </listitem>

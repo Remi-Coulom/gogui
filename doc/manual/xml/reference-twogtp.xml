@@ -29,6 +29,7 @@ Go Text Protocol adapter for playing games between two Go programs.
 <arg><option>-games</option> <replaceable>n</replaceable></arg>
 <arg><option>-komi</option> <replaceable>komi</replaceable></arg>
 <arg><option>-loadsgf</option></arg>
+<arg><option>-maxmoves</option> <replaceable>n</replaceable></arg>
 <arg><option>-observer</option> <replaceable>command</replaceable></arg>
 <arg><option>-openings</option> <replaceable>dir</replaceable></arg>
 <arg><option>-referee</option> <replaceable>command</replaceable></arg>
@@ -261,6 +262,16 @@ used.
 <listitem>
 <para>
 See <option>-openings</option>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>-maxmoves</option> <replaceable>n</replaceable></term>
+<listitem>
+<para>
+Limit the maximum number of moves. Can be useful if some games would not
+terminate otherwise. Default is no limit.
 </para>
 </listitem>
 </varlistentry>

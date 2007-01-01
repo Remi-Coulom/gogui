@@ -33,6 +33,7 @@ public final class Main
                 "help",
                 "loadsgf",
                 "komi:",
+                "maxmoves:",
                 "observer:",
                 "openings:",
                 "referee:",
@@ -59,6 +60,7 @@ public final class Main
                     "-games          number of games (0=unlimited)\n" +
                     "-help           display this help and exit\n" +
                     "-komi           komi\n" +
+                    "-maxmoves       move limit\n" +
                     "-loadsgf        use loadsgf command for openings\n" +
                     "-observer       command for observer program\n" +
                     "-openings       directory with opening sgf files\n" +
@@ -102,6 +104,7 @@ public final class Main
             Komi komi = new Komi(6.5);
             if (opt.contains("komi"))
                 komi = Komi.parseKomi(opt.get("komi"));
+            int maxMoves = opt.getInteger("maxmoves", -1, -1);
             TimeSettings timeSettings = null;
             if (opt.contains("time"))
                 timeSettings = TimeSettings.parse(opt.get("time"));
@@ -123,6 +126,8 @@ public final class Main
                 = new TwoGtp(black, white, referee, observer, size, komi,
                              games, alternate, sgfFile, force, verbose,
                              openings, loadsgf, timeSettings);
+            if (maxMoves >= 0)
+                twoGtp.setMaxMoves(maxMoves);
             if (auto)
             {
                 if (twoGtp.gamesLeft() == 0)

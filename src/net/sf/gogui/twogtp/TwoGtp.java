@@ -309,6 +309,15 @@ public class TwoGtp
             interruptProgram(m_observer);
     }
 
+    /** Limit number of moves.
+        @param maxMoves Maximum number of moves after which genmove will fail,
+        -1 for no limit.
+    */
+    public void setMaxMoves(int maxMoves)
+    {
+        m_maxMoves = maxMoves;
+    }
+
     private final boolean m_alternate;
 
     private boolean m_gameSaved;
@@ -316,6 +325,8 @@ public class TwoGtp
     private boolean m_inconsistentState;
 
     private final boolean m_loadsgf;
+    
+    private int m_maxMoves = -1;
 
     private boolean m_observerIsDisabled;
 
@@ -1054,6 +1065,9 @@ public class TwoGtp
         throws GtpError, ErrorMessage
     {
         checkInconsistentState();
+        if (m_maxMoves >= 0
+            && NodeUtil.getMoveNumber(m_currentNode) > m_maxMoves)
+            throw new GtpError("move limit exceeded");
         if (m_openings != null && m_openingMovesIndex < m_openingMoves.size()
             && ! m_loadsgf)
         {
