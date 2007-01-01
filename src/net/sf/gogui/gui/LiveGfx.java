@@ -25,16 +25,7 @@ public class LiveGfx
             char c = s.charAt(i);
             if (c == '\r' || c == '\n')
             {
-                if (SwingUtilities.isEventDispatchThread())
-                    handleLine(m_buffer.toString());
-                else
-                    invokeAndWait(new Runnable()
-                        {
-                            public void run()
-                            {
-                                handleLine(m_buffer.toString());
-                            }
-                        });
+                handleLine(m_buffer.toString());
                 m_buffer.setLength(0);
             }
             else
@@ -85,29 +76,34 @@ public class LiveGfx
         }
     }
 
-    private void invokeAndWait(Runnable runnable)
+    private void showGfx(final String text)
     {
         try
         {
-            SwingUtilities.invokeAndWait(runnable);
+            // Use invokeAndWait to ensure that each gogui-gfx command is
+            // really shown (and no commands are merged by the repaint manager)
+            SwingUtilities.invokeAndWait(new Runnable() {
+                    public void run()
+                    {
+                        m_guiBoard.clearAll();
+                        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board,
+                                                       false);
+                        String statusText =
+                            AnalyzeShow.showGfx(text, m_guiBoard);
+                        if (statusText != null)
+                            m_statusBar.setText(statusText);
+                    }
+                });
+            // Throttle thread a bit to avoid long delays of other repaint
+            // events in the event queue
+            Thread.sleep(20);
         }
         catch (InterruptedException e)
         {
-            System.err.println("Thread interrupted");
         }
         catch (java.lang.reflect.InvocationTargetException e)
         {
-            System.err.println("InvocationTargetException");
         }
-    }
-
-    private void showGfx(String text)
-    {
-        m_guiBoard.clearAll();
-        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, false);
-        String statusText = AnalyzeShow.showGfx(text, m_guiBoard);
-        if (statusText != null)
-            m_statusBar.setText(statusText);
     }
 }
 
