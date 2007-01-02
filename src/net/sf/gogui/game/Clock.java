@@ -341,7 +341,7 @@ public final class Clock
     {
         if (m_timer == null)
         {
-            m_timer = new Timer("net.sf.gogui.game.Clock Timer");
+            m_timer = new Timer();
             UpdateListenerTask task = new UpdateListenerTask();
             m_timer.scheduleAtFixedRate(task, 1000, 1000);
         }
