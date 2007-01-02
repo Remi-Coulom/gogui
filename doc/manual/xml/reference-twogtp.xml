@@ -271,7 +271,7 @@ See <option>-openings</option>.
 <listitem>
 <para>
 Limit the maximum number of moves. Can be useful if some games would not
-terminate otherwise. Default is no limit.
+terminate otherwise. Default is 1000. -1 means no limit.
 </para>
 </listitem>
 </varlistentry>

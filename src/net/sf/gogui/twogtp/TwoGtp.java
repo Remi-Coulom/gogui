@@ -326,7 +326,7 @@ public class TwoGtp
 
     private final boolean m_loadsgf;
     
-    private int m_maxMoves = -1;
+    private int m_maxMoves = 1000;
 
     private boolean m_observerIsDisabled;
 
