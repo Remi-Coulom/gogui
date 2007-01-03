@@ -240,10 +240,19 @@ public class Analyze
                     score = -Double.parseDouble(s.substring(2));
                     hasScore = true;
                 }
+                else if (! s.equals(""))
+                    System.err.println("Ignored invalid score: " + result);
             }
         }
         catch (NumberFormatException e)
         {
+            System.err.println("Ignored invalid score: " + result);
+        }
+        if (score < statistics.m_histo.getHistoMin()
+            || score > statistics.m_histo.getHistoMax())
+        {
+            System.err.println("Ignored invalid score: " + result);
+            hasScore = false;
         }
         statistics.m_unknownResult.add(hasResult ? 0 : 1);
         if (hasResult)
