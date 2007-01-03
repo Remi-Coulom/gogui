@@ -179,6 +179,10 @@ public class TextViewer
             size.width = Math.min(size.width, maxWidth);
             size.height = Math.min(size.height, maxHeight);
         }
+        // Windows with a title bar should have a minumum window size
+        // we use Apple's guidelines of 128x32
+        size.height = Math.max(size.height, 32);
+        size.width = Math.max(size.width, 128);
         setSize(size);
     }
 }
