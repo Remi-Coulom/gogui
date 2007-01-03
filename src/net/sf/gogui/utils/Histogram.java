@@ -38,6 +38,16 @@ public class Histogram
         return m_array[i];
     }
 
+    public double getHistoMin()
+    {
+        return m_min;
+    }
+
+    public double getHistoMax()
+    {
+        return m_max;
+    }
+
     /** Return number of intervals. */
     public int getSize()
     {
