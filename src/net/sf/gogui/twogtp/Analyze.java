@@ -48,7 +48,7 @@ public class Analyze
 
         public Statistics m_win = new Statistics();
 
-        public Histogram m_histo = new Histogram(-400, 400, 10);
+        public Histogram m_histo = new Histogram(-1000, 1000, 10);
     }
 
     private int m_duplicates;
