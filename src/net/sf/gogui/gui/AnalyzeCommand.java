@@ -241,12 +241,7 @@ public class AnalyzeCommand
 
     public boolean needsColorArg()
     {
-        return needsColorArg(m_command);
-    }
-
-    public static boolean needsColorArg(String command)
-    {
-        return (command.indexOf("%c") >= 0);
+        return (m_command.indexOf("%c") >= 0);
     }
 
     public boolean needsFileArg()

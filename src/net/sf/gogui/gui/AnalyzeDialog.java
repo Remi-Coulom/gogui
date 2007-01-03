@@ -441,10 +441,12 @@ public final class AnalyzeDialog
 
     private void selectCommand(int index)
     {
-        boolean needsColorArg =
-            AnalyzeCommand.needsColorArg((String)m_commands.get(index));
-        m_labelColor.setEnabled(needsColorArg);
-        m_comboBoxColor.setEnabled(needsColorArg);
+        AnalyzeCommand command =
+            new AnalyzeCommand((String)m_commands.get(index));
+        m_labelColor.setEnabled(command.needsColorArg());
+        m_comboBoxColor.setEnabled(command.needsColorArg());
+        m_autoRun.setEnabled(command.getType() != AnalyzeCommand.PARAM);
+        m_clearBoard.setEnabled(command.getType() != AnalyzeCommand.PARAM);
         m_runButton.setEnabled(true);
         String label = (String)m_labels.get(index);
         m_comboBoxHistory.removeActionListener(this);
