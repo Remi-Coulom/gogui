@@ -1175,6 +1175,8 @@ public class GoGui
             {
                 if (response.indexOf("\n") < 0)
                 {
+                    if (response.trim().equals(""))
+                        response = "(empty response)";
                     showStatus(title + ": " + response);
                     statusContainsResponse = true;
                 }
