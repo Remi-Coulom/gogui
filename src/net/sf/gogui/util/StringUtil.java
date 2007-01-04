@@ -97,6 +97,26 @@ public final class StringUtil
         return out.getEncoding();
     }
 
+    /** Return a printable error message for an exception.
+        Returns the error message is for instances of ErrorMessage or
+        for other exceptions the class name with the exception message
+        appended, if not empty.
+    */    
+    public static String getErrorMessage(Throwable e)
+    {
+        String message = e.getMessage();
+        boolean hasMessage = (message != null && ! message.trim().equals(""));
+        String className = e.getClass().getName();
+        String result;
+        if (e instanceof ErrorMessage)
+            result = message;
+        else if (hasMessage)
+            result = className + ":\n" + message;
+        else
+            result = className;
+        return result;
+    }
+
     /** Return a number formatter with maximum fraction digits,
         no grouping, locale ENGLISH.
     */
@@ -117,22 +137,13 @@ public final class StringUtil
     */
     public static String printException(Throwable exception)
     {
-        String message = exception.getMessage();
-        boolean hasMessage = (message != null && ! message.trim().equals(""));
-        String className = exception.getClass().getName();
+        String result = getErrorMessage(exception);
+        System.err.println(result);
         boolean isSevere = (exception instanceof RuntimeException
                             || exception instanceof Error);     
-        String result;
-        if (exception instanceof ErrorMessage)
-            result = message;
-        else if (hasMessage)
-            result = className + ":\n" + message;
-        else
-            result = className;
-        System.err.println(result);
         if (isSevere)
             exception.printStackTrace();
-        return result; 
+        return result;
     }
 
     /** Split string into tokens. */
