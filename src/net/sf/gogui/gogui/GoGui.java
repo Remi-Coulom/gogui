@@ -14,7 +14,9 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -47,6 +49,7 @@ import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Game;
+import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.NodeUtil;
@@ -95,6 +98,8 @@ import net.sf.gogui.gui.StatusBar;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.tex.TexWriter;
+import net.sf.gogui.text.TextParser;
+import net.sf.gogui.text.ParseError;
 import net.sf.gogui.thumbnail.ThumbnailCreator;
 import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.ErrorMessage;
@@ -398,6 +403,10 @@ public class GoGui
             cbHandicap(command.substring("handicap-".length()));
         else if (command.equals("help"))
             cbHelp();
+        else if (command.equals("import-ascii"))
+            cbImportAscii();
+        else if (command.equals("import-clipboard"))
+            cbImportClipboard();
         else if (command.equals("interrupt"))
             cbInterrupt();
         else if (command.equals("keep-only-main-variation"))
@@ -1531,7 +1540,7 @@ public class GoGui
 
     private void cbExportAscii()
     {
-        File file = SimpleDialogs.showSave(this, "Export Text Diagram");
+        File file = SimpleDialogs.showSave(this, "Export Text Position");
         if (file == null)
             return;
         try
@@ -1765,6 +1774,50 @@ public class GoGui
         }
         m_help.setVisible(true);
         m_help.toFront();
+    }
+
+    private void cbImportAscii()
+    {
+        File file = SimpleDialogs.showOpen(this, "Import Text Position");
+        if (file == null)
+            return;
+        try
+        {
+            importTextPosition(new FileReader(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("File not found");
+        }
+    }
+
+    private void cbImportClipboard()
+    {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Reader reader = null;
+        Transferable content = clipboard.getContents(this);
+        if (content != null
+            && content.isDataFlavorSupported(DataFlavor.stringFlavor))
+        {
+            try
+            {
+                String text =
+                    (String)content.getTransferData(DataFlavor.stringFlavor);
+                reader = new StringReader(text);
+            }
+            catch (UnsupportedFlavorException e)
+            {
+            }
+            catch (IOException e)
+            {
+            }
+        }
+        if (reader == null)
+        {
+            showError("No text selection in clipboard");
+            return;
+        }
+        importTextPosition(reader);
     }
 
     private void cbInterrupt()
@@ -2588,6 +2641,26 @@ public class GoGui
             gameTreeChanged = false;
         }
         boardChangedBegin(true, gameTreeChanged);
+    }
+
+    private void importTextPosition(Reader reader)
+    {
+        try
+        {
+            TextParser parser = new TextParser();
+            parser.parse(reader);
+            GameTree tree =
+                NodeUtil.makeTreeFromPosition(null, parser.getBoard());
+            m_game.init(tree);
+        }
+        catch (ParseError e)
+        {
+            showError("Import failed", e);
+        }
+        m_guiBoard.initSize(getBoard().getSize());
+        initGtp();
+        updateModified();
+        boardChangedBegin(false, true);
     }
 
     private void initGame(int size)

@@ -409,6 +409,7 @@ ${looks.zipfile}
  net/sf/gogui/images/*.png
  net/sf/gogui/sgf/*.class
  net/sf/gogui/tex/*.class
+ net/sf/gogui/text/*.class
  net/sf/gogui/thumbnail/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/Version.class

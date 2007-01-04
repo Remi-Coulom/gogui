@@ -915,6 +915,7 @@ public class GoGuiMenuBar
                      SHORTCUT, "save");
         menu.addItem("Save As...", KeyEvent.VK_A, "save-as");
         menu.addSeparator();
+        menu.add(createMenuImport());
         menu.add(createMenuExport());
         menu.addSeparator();
         menu.addItem("Print...", KeyEvent.VK_P, KeyEvent.VK_P,
@@ -1023,6 +1024,16 @@ public class GoGuiMenuBar
                                            "about");
         m_itemHelp = itemHelp;
         m_itemAbout = itemAbout;
+        return menu;
+    }
+
+    private JMenuChecked createMenuImport()
+    {
+        JMenuChecked menu = new JMenuChecked("Import", m_listener);
+        menu.setMnemonic(KeyEvent.VK_I);
+        menu.addItem("Text Position...", KeyEvent.VK_T, "import-ascii");
+        menu.addItem("Text Position from Clipboard", KeyEvent.VK_C,
+                     "import-clipboard");
         return menu;
     }
 

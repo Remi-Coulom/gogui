@@ -11,6 +11,11 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Import Go positions in text format from files or clipboard
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Allow setup stones in non-root position
 </simpara>
 </listitem>

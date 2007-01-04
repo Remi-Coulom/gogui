@@ -440,7 +440,10 @@ public final class NodeUtil
     public static GameTree makeTreeFromPosition(ConstGameInformation info,
                                                 ConstBoard board)
     {
-        GameTree tree = new GameTree(board.getSize(), info.getKomi(), null,
+        int size = board.getSize();
+        if (info == null)
+            info = new GameInformation(size);
+        GameTree tree = new GameTree(size, info.getKomi(), null,
                                      info.getRules(), info.getTimeSettings());
         Node root = tree.getRoot();
         for (int i = 0; i < board.getNumberPoints(); ++i)
