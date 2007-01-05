@@ -23,7 +23,7 @@ public class TextParserTest
         return new junit.framework.TestSuite(TextParserTest.class);
     }
 
-    public void testParse1()
+    public void testParse()
     {
         parse(" +  +  O  +  O  O  #  #  + \n" +
               " +  +  O  +  O  O  #  #  + \n" +
@@ -48,6 +48,28 @@ public class TextParserTest
         checkColor(3, 1, GoColor.BLACK);
         checkColor(3, 2, GoColor.WHITE);
         checkColor(3, 3, GoColor.BLACK);
+    }
+
+    public void testHeightGreaterWidth()
+    {
+        parse(". X . .\n" +
+              "O . . .\n" +
+              ". . . .\n" +
+              ". . . .\n" +
+              ". . . .\n" +
+              ". . . .\n");
+        checkSize(6);
+        checkColor(0, 4, GoColor.WHITE);
+        checkColor(1, 5, GoColor.BLACK);
+    }
+
+    public void testWidthGreaterHeight()
+    {
+        parse(". X . . . .\n" +
+              "O . . . . .\n");
+        checkSize(6);
+        checkColor(0, 4, GoColor.WHITE);
+        checkColor(1, 5, GoColor.BLACK);
     }
 
     public void testParseGnuGo()

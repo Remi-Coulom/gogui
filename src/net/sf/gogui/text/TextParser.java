@@ -38,20 +38,32 @@ public class TextParser
             {
                 line = readLine();
                 if (line == null)
-                    throw new ParseError("Expected start of position");
+                    throw new ParseError("could not find position");
                 if (isBoardRow(line, true))
                     break;
             }
-            m_board = new Board(m_size);
-            parseBoardRow(line, m_size - 1);
-            for (int y = m_size - 2; y >= 0; --y)
+            int size = m_width;
+            m_board = new Board(m_width);
+            parseBoardRow(line, size - 1);
+            int i = 2;
+            while (true)
             {
                 line = readLine();
-                // Allow one parse failure per line in case long lines were
-                // wrapped
+                if (line == null)
+                    break;
                 if (! isBoardRow(line, false))
+                    // Allow one failure if long lines were wrapped
                     line = readLine();
-                parseBoardRow(line, y);
+                if (line == null || ! isBoardRow(line, false))
+                    break;
+                if (size - i < 0)
+                {
+                    // Handle rectangular shape (height > width)
+                    increaseBoardSize();
+                    ++size;
+                }    
+                parseBoardRow(line, size - i);
+                ++i;
             }
         }
         finally
@@ -67,7 +79,7 @@ public class TextParser
         }
     }
 
-    private int m_size;
+    private int m_width;
 
     private Character m_charBlack;
 
@@ -89,11 +101,26 @@ public class TextParser
         return i;
     }
 
+    /** Increase boardsize by one.
+        Keep existing position (shifted upward by one line)
+    */
+    private void increaseBoardSize()
+    {
+        int newSize = m_board.getSize() + 1;
+        Board newBoard = new Board(newSize);
+        for (int i = 0; i < m_board.getNumberPoints(); ++i)
+        {
+            GoPoint p = m_board.getPoint(i);
+            newBoard.setup(p.up(newSize), m_board.getColor(p));
+        }
+        m_board = newBoard;
+    }
+
     private boolean isBlack(char c)
     {
         if (m_charBlack != null)
             return (c == m_charBlack.charValue());
-        if (c == 'X' || c == '@' || c == '#' || c =='x')
+        if (c == 'X' || c == '@' || c == '#' || c == 'x')
         {
             m_charBlack = new Character(c);
             return true;
@@ -136,7 +163,7 @@ public class TextParser
         if (size < 3 || size > GoPoint.MAXSIZE)
             return false;
         if (initSize)
-            m_size = size;
+            m_width = size;
         return true;
     }
 
@@ -163,23 +190,20 @@ public class TextParser
             else
                 break;
         }
-        if (x != m_size)
+        if (x != m_width)
+            // Rows with different widths
             throw new ParseError("Could not determine board size");
     }
 
     private String readLine() throws ParseError
     {
-        String line;
         try
         {
-            line = m_reader.readLine();
+            return m_reader.readLine();
         }
         catch (IOException e)
         {
-            line = null;
+            return null;
         }
-        if (line == null)
-            throw new ParseError("Could not find position");
-        return line;
     }
 }
