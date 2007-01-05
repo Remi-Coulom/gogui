@@ -11,7 +11,17 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
-/** Parse Go positions from ASCII text. */
+/** Parse Go positions from ASCII text.
+    Can handle a variety of formats.
+    Black stones can be represented by 'X', 'x', '@' or '#'; white stones by
+    'O' or 'o' (however one representation must be used consistently); '.' and
+    '+' are interpreted as empty points.
+    Space characters are allowed between the points; leading numbers (or '|'
+    and '$' characters) are ignored, as well as single inserted invalid lines
+    (to support appended text after the row that was wrapped).
+    Non-rectangular positions will be read into the smallest containing square
+    board size at the top left position.
+*/
 public class TextParser
 {
     public TextParser()

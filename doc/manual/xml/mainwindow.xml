@@ -113,6 +113,34 @@ PSGO</ulink> style.
 </varlistentry>
 
 <varlistentry>
+<term><guisubmenu>Import</guisubmenu> / <guimenuitem>Text Position</guimenuitem></term>
+<listitem>
+<para>
+Import a text position from a file. Can handle a variety of formats.
+Black stones can be represented by 'X', 'x', '@' or '#'; white stones by
+'O' or 'o' (however one representation must be used consistently); '.' and
+'+' are interpreted as empty points.
+Space characters are allowed between the points; leading numbers (or '|'
+and '$' characters) are ignored, as well as single inserted invalid lines
+(to support appended text after the row that was wrapped).
+Non-rectangular positions will be read into the smallest containing square
+board size at the top left position.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guisubmenu>Import</guisubmenu> / <guimenuitem>Text Position from Clipboard</guimenuitem></term>
+<listitem>
+<para>
+Import a text position from the clipboard. Same as 
+<guisubmenu>Import</guisubmenu> / <guimenuitem>Text Position</guimenuitem>,
+but parses the text selection copied to the clipboard.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><guisubmenu>Export</guisubmenu> / <guimenuitem>SGF Position</guimenuitem></term>
 <listitem>
 <para>
