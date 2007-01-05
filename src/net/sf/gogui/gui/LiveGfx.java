@@ -78,22 +78,28 @@ public class LiveGfx
 
     private void showGfx(final String text)
     {
+        Runnable runnable = new Runnable() {
+                public void run()
+                {
+                    m_guiBoard.clearAll();
+                    GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board,
+                                                   false);
+                    String statusText =
+                        AnalyzeShow.showGfx(text, m_guiBoard);
+                    if (statusText != null)
+                        m_statusBar.setText(statusText);
+                }
+            };
+        if (SwingUtilities.isEventDispatchThread())
+        {
+            runnable.run();
+            return;
+        }
         try
         {
             // Use invokeAndWait to ensure that each gogui-gfx command is
             // really shown (and no commands are merged by the repaint manager)
-            SwingUtilities.invokeAndWait(new Runnable() {
-                    public void run()
-                    {
-                        m_guiBoard.clearAll();
-                        GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board,
-                                                       false);
-                        String statusText =
-                            AnalyzeShow.showGfx(text, m_guiBoard);
-                        if (statusText != null)
-                            m_statusBar.setText(statusText);
-                    }
-                });
+            SwingUtilities.invokeAndWait(runnable);
             // Throttle thread a bit to avoid long delays of other repaint
             // events in the event queue
             Thread.sleep(50);
