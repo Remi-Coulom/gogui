@@ -42,9 +42,8 @@ public class TextParser
                 if (isBoardRow(line, true))
                     break;
             }
-            int size = m_width;
             m_board = new Board(m_width);
-            parseBoardRow(line, size - 1);
+            parseBoardRow(line, m_board.getSize() - 1);
             int i = 2;
             while (true)
             {
@@ -56,13 +55,9 @@ public class TextParser
                     line = readLine();
                 if (line == null || ! isBoardRow(line, false))
                     break;
-                if (size - i < 0)
-                {
-                    // Handle rectangular shape (height > width)
+                if (m_board.getSize() - i < 0)
                     increaseBoardSize();
-                    ++size;
-                }    
-                parseBoardRow(line, size - i);
+                parseBoardRow(line, m_board.getSize() - i);
                 ++i;
             }
         }
@@ -89,13 +84,19 @@ public class TextParser
 
     private BufferedReader m_reader;
 
-    private int ignoreNumbers(String line, int startPos)
+    /** Ignore characters at beginning of line.
+        Ignores characters that are sometimes left of the actual position.
+        The included characters are digits, pipe symbols (edge) and dollar
+        signs.
+     */
+    private int ignoreBeginning(String line)
     {
         int i;
-        for (i = startPos; i < line.length(); ++i)
+        for (i = 0; i < line.length(); ++i)
         {
             char c = line.charAt(i);
-            if (! Character.isSpaceChar(c) && ! Character.isDigit(c))
+            if (! Character.isSpaceChar(c) && ! Character.isDigit(c)
+                && c != '$' && c != '|')
                 break;
         }
         return i;
@@ -149,7 +150,7 @@ public class TextParser
         throws ParseError
     {
         int size = 0;
-        for (int i = ignoreNumbers(line, 0); i < line.length(); ++i)
+        for (int i = ignoreBeginning(line); i < line.length(); ++i)
         {
             char c = line.charAt(i);
             if (Character.isSpaceChar(c))
@@ -170,29 +171,34 @@ public class TextParser
     private void parseBoardRow(String line, int y) throws ParseError
     {
         int x = 0;
-        for (int i = ignoreNumbers(line, 0); i < line.length(); ++i)
+        for (int i = ignoreBeginning(line); i < line.length(); ++i)
         {
             char c = line.charAt(i);
             if (Character.isSpaceChar(c))
                 continue;
             if (isBlack(c))
             {
+                if (x >= m_board.getSize())
+                    increaseBoardSize();
                 m_board.setup(GoPoint.get(x, y), GoColor.BLACK);
                 ++x;
             }
             else if (isWhite(c))
             {
+                if (x >= m_board.getSize())
+                    increaseBoardSize();
                 m_board.setup(GoPoint.get(x, y), GoColor.WHITE);
                 ++x;
             }
             else if (isEmpty(c))
+            {
+                if (x >= m_board.getSize())
+                    increaseBoardSize();
                 ++x;
+            }
             else
                 break;
         }
-        if (x != m_width)
-            // Rows with different widths
-            throw new ParseError("Could not determine board size");
     }
 
     private String readLine() throws ParseError

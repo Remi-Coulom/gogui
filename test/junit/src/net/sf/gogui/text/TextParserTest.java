@@ -72,6 +72,20 @@ public class TextParserTest
         checkColor(1, 5, GoColor.BLACK);
     }
 
+    /** Test example from GNU Go documentation width row width increasing. */
+    public void testWidthIncreasing()
+    {
+        parse("XXXXX\n" +
+              "XOOOX\n" +
+              "XO.OOX\n" +
+              "XX..OX\n" +
+              "XXOOXX\n" +
+              "XXXXX\n");
+        checkSize(6);
+        checkColor(0, 5, GoColor.BLACK);
+        checkColor(5, 5, GoColor.EMPTY);
+    }
+
     public void testParseGnuGo()
     {
         parse("   A B C D E F G H J K L M N O P Q R S T\n" +
