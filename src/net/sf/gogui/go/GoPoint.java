@@ -225,7 +225,7 @@ public final class GoPoint
     
     /** Return point above.
         @param max Current board size.
-        @return The point below this point (x, y + 1) or this point if no such
+        @return The point above this point (x, y + 1) or this point if no such
         point exists.
     */
     public GoPoint up(int max)
