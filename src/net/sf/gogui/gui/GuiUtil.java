@@ -12,6 +12,14 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
 import java.net.URL;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
@@ -67,6 +75,19 @@ public class GuiUtil
         StyleConstants.setBackground(style, background);
     }
 
+    public static void copyToClipboard(String text)
+    {
+        StringSelection selection = new StringSelection(text);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        ClipboardOwner owner = new ClipboardOwner() {
+                public void lostOwnership(Clipboard clipboard,
+                                          Transferable contents)
+                {
+                }
+            };
+        clipboard.setContents(selection, owner);
+    }
+
     /** Create empty border with normal padding.
         @see #PAD
     */
@@ -99,6 +120,27 @@ public class GuiUtil
     {
         return new Box.Filler(SMALL_FILLER_DIMENSION, SMALL_FILLER_DIMENSION,
                               SMALL_FILLER_DIMENSION);
+    }
+
+    public static String getClipboardText()
+    {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable content = clipboard.getContents(null);
+        if (content == null
+            || ! content.isDataFlavorSupported(DataFlavor.stringFlavor))
+            return null;
+        try
+        {
+            return (String)content.getTransferData(DataFlavor.stringFlavor);
+        }
+        catch (UnsupportedFlavorException e)
+        {
+            return null;
+        }
+        catch (IOException e)
+        {
+            return null;
+        }
     }
 
     /** Get size of default monspaced font.

@@ -12,12 +12,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -1558,16 +1552,7 @@ public class GoGui
 
     private void cbExportClipboard()
     {
-        String text = BoardUtil.toString(getBoard(), false);
-        StringSelection selection = new StringSelection(text);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        ClipboardOwner owner = new ClipboardOwner() {
-                public void lostOwnership(Clipboard clipboard,
-                                          Transferable contents)
-                {
-                }
-            };
-        clipboard.setContents(selection, owner);
+        GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false));
     }
 
     private void cbExportSgfPosition()
@@ -1793,31 +1778,11 @@ public class GoGui
 
     private void cbImportClipboard()
     {
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        Reader reader = null;
-        Transferable content = clipboard.getContents(this);
-        if (content != null
-            && content.isDataFlavorSupported(DataFlavor.stringFlavor))
-        {
-            try
-            {
-                String text =
-                    (String)content.getTransferData(DataFlavor.stringFlavor);
-                reader = new StringReader(text);
-            }
-            catch (UnsupportedFlavorException e)
-            {
-            }
-            catch (IOException e)
-            {
-            }
-        }
-        if (reader == null)
-        {
+        String text = GuiUtil.getClipboardText();
+        if (text == null)
             showError("No text selection in clipboard");
-            return;
-        }
-        importTextPosition(reader);
+        else
+            importTextPosition(new StringReader(text));
     }
 
     private void cbInterrupt()
