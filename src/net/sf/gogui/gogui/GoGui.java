@@ -1910,7 +1910,13 @@ public class GoGui
         m_prefs.setInt("boardsize", size);
         fileInvalid();
         newGame(size);
-        computerWhite();
+        if (! isComputerNone())
+        {
+            if (m_handicap == 0)
+                computerWhite();
+            else
+                computerBlack();
+        }
         m_clock.startMove(GoColor.BLACK);
         updateMenuBar();
         boardChangedBegin(true, true);
@@ -2955,6 +2961,11 @@ public class GoGui
     private boolean isComputerBoth()
     {
         return (m_computerBlack && m_computerWhite);
+    }
+
+    private boolean isComputerNone()
+    {
+        return (! m_computerBlack && ! m_computerWhite);
     }
 
     private boolean isCommandInProgress()

@@ -25,6 +25,12 @@ Add more 9x9 openings for use with TwoGtp
 </listitem>
 <listitem>
 <simpara>
+Initialize computer color on new game with color not to play first or
+none, if it was none before
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Fix problem with clear board option in analyze dialog for commands with point
 arguments
 </simpara>
