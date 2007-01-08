@@ -2219,7 +2219,7 @@ public class GoGui
         if (! endLengthyCommand())
             return;
         if (m_beepAfterMove)
-            java.awt.Toolkit.getDefaultToolkit().beep();
+            Toolkit.getDefaultToolkit().beep();
         try
         {
             String response = m_gtp.getResponse();
