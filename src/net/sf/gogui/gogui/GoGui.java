@@ -1830,7 +1830,13 @@ public class GoGui
             return;
         clearLoadedFile();
         newGame(size);
-        computerWhite();
+        if (! isComputerNone())
+        {
+            if (m_handicap == 0)
+                computerWhite();
+            else
+                computerBlack();
+        }
         if (startClock)
             m_game.startClock();
         updateMenuBar();
@@ -2802,6 +2808,11 @@ public class GoGui
     private boolean isComputerBoth()
     {
         return (m_computerBlack && m_computerWhite);
+    }
+
+    private boolean isComputerNone()
+    {
+        return (! m_computerBlack && ! m_computerWhite);
     }
 
     private boolean isCommandInProgress()
