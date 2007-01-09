@@ -49,6 +49,11 @@ class GameTreeNode
         int halfSize = size / 2;
         int numberChildren = m_node.getNumberChildren();
         boolean isExpanded = m_gameTreePanel.isExpanded(m_node);
+        if (m_gameTreePanel.isCurrent(m_node))
+        {
+            graphics.setColor(COLOR_CURSOR);
+            graphics.fillRect(0, 0, size, fullSize);
+        }
         graphics.setColor(Color.DARK_GRAY);
         if ((numberChildren > 1 &&
              (isExpanded || ! m_gameTreePanel.getShowSubtreeSizes()))
@@ -98,20 +103,6 @@ class GameTreeNode
             int d = size / 5;
             graphics.drawLine(d, y, size - d, y);
         }
-        if (m_gameTreePanel.isCurrent(m_node))
-        {
-            graphics.setColor(Color.red);
-            int d = size / 6;
-            int w = size;
-            graphics.drawLine(d, d, 2 * d, d);
-            graphics.drawLine(d, d, d, 2 * d);
-            graphics.drawLine(d, w - 2 * d - 1, d, w - d - 1);
-            graphics.drawLine(d, w - d - 1, 2 * d, w - d - 1);
-            graphics.drawLine(w - 2 * d - 1, d, w - d - 1, d);
-            graphics.drawLine(w - d - 1, d, w - d - 1, 2 * d);
-            graphics.drawLine(w - d - 1, w - d - 1, w - d - 1, w - 2 * d - 1);
-            graphics.drawLine(w - d - 1, w - d - 1, w - 2 * d - 1, w - d - 1);
-        }
     }
 
     private final int m_moveNumber;
@@ -122,6 +113,8 @@ class GameTreeNode
     private static final long serialVersionUID = 0L; // SUID
 
     private static final Color COLOR_LIGHT_BLUE = new Color(103, 122, 164);
+
+    private static final Color COLOR_CURSOR = new Color(142, 168, 226);
 
     private final GameTreePanel m_gameTreePanel;
 
