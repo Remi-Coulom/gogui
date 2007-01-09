@@ -322,6 +322,12 @@ public class GuiField
         int w = m_size;
         int d2 = 2 * d;
         m_graphics.setColor(COLOR_LAST_MOVE);
+        Stroke oldStroke = null;
+        if (m_graphics2D != null && m_size > 10)
+        {
+            oldStroke = m_graphics2D.getStroke();
+            m_graphics2D.setStroke(THICK_STROKE);
+        }
         m_graphics.drawLine(d, d, d2, d);
         m_graphics.drawLine(d, d, d, d2);
         m_graphics.drawLine(d, w - d2 - 1, d, w - d - 1);
@@ -330,6 +336,8 @@ public class GuiField
         m_graphics.drawLine(w - d - 1, d, w - d - 1, d2);
         m_graphics.drawLine(w - d - 1, w - d - 1, w - d - 1, w - d2 - 1);
         m_graphics.drawLine(w - d - 1, w - d - 1, w - d2 - 1, w - d - 1);
+        if (oldStroke != null)
+            m_graphics2D.setStroke(oldStroke);
         m_graphics.setPaintMode();
     }
 
