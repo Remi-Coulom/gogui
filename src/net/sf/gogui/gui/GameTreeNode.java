@@ -49,7 +49,7 @@ class GameTreeNode
         if (m_gameTreePanel.isCurrent(m_node))
         {
             graphics.setColor(COLOR_CURSOR);
-            graphics.fillRect(0, 0, size, fullSize);
+            graphics.fillRect(0, 0, size, fullSize - 1);
         }
         graphics.setColor(Color.DARK_GRAY);
         if ((numberChildren > 1 &&
