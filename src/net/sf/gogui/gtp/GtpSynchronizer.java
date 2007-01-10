@@ -30,6 +30,14 @@ public class GtpSynchronizer
         void run(int moveNumber);
     }
 
+    public GtpSynchronizer(GtpClientBase gtp)
+    {
+        m_fillPasses = false;
+        m_gtp = gtp;
+        m_callback = null;
+        m_isOutOfSync = true;
+    }
+
     public GtpSynchronizer(GtpClientBase gtp, Callback callback,
                            boolean fillPasses)
     {
