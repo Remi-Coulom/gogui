@@ -101,6 +101,11 @@ public class Game
         return m_tree.getGameInformation();
     }
 
+    public int getMoveNumber()
+    {
+        return NodeUtil.getMoveNumber(getCurrentNode());
+    }
+
     public int getSize()
     {
         return m_board.getSize();
@@ -241,8 +246,14 @@ public class Game
     /** Set comment in current node. */
     public void setComment(String comment)
     {
-        m_modified = ! ObjectUtil.equals(comment, m_current.getComment());
-        m_current.setComment(comment);
+        setComment(comment, m_current);
+    }
+
+    public void setComment(String comment, ConstNode node)
+    {
+        assert(NodeUtil.getRoot(node) == getRoot());
+        m_modified = ! ObjectUtil.equals(comment, node.getComment());
+        ((Node)node).setComment(comment);
     }
 
     public void setDate(String date)
@@ -252,11 +263,11 @@ public class Game
         gameInformation.setDate(date);
     }
 
-    public void setResult(String result)
+    public void setKomi(Komi komi)
     {
         GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(result, gameInformation.getResult());
-        gameInformation.setResult(result);
+        m_modified = ! ObjectUtil.equals(komi, gameInformation.getKomi());
+        gameInformation.setKomi(komi);
     }
 
     /** Set label in current node. */
@@ -294,6 +305,13 @@ public class Game
         GameInformation gameInformation = m_tree.getGameInformation();
         m_modified = ! ObjectUtil.equals(rank, gameInformation.getRankWhite());
         m_tree.getGameInformation().setRankWhite(rank);
+    }
+
+    public void setResult(String result)
+    {
+        GameInformation gameInformation = m_tree.getGameInformation();
+        m_modified = ! ObjectUtil.equals(result, gameInformation.getResult());
+        gameInformation.setResult(result);
     }
 
     public void setToMove(GoColor color)
