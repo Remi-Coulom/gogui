@@ -18,8 +18,8 @@ import net.sf.gogui.util.StringUtil;
 */
 public abstract class GtpClientBase
 {
-    /** Close connection.
-        Should do nothing if the concrete class does communicate through
+    /** Close output connection.
+        Should do nothing if the concrete class does not communicate through
         streams.
     */
     public abstract void close();
