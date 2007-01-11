@@ -157,7 +157,7 @@ public abstract class GtpEngine
         }
     }
 
-    /** Utility function for parsing an point argument.
+    /** Utility function for parsing a point argument.
         @param cmdArray Command line split into words.
         @param boardSize Board size is needed for parsing the point
         @return GoPoint argument
