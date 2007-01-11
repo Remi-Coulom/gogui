@@ -337,11 +337,13 @@ public final class GtpClient
         try
         {
             m_process.waitFor();
+            m_errorThread.join();
+            m_inputThread.join();
         }
         catch (InterruptedException e)
         {
-            System.err.println("Interrupted");
-        }
+            System.err.println("GtpClient: InterruptedException");
+        }        
     }
 
     /** More sophisticated version of waitFor with timeout. */
@@ -360,6 +362,15 @@ public final class GtpClient
                 return;
             }
         }
+        try
+        {
+            m_errorThread.join(timeout);
+            m_inputThread.join(timeout);
+        }
+        catch (InterruptedException e)
+        {
+            System.err.println("GtpClient: InterruptedException");
+        }        
     }
 
     private static final class Message
@@ -579,6 +590,10 @@ public final class GtpClient
 
     private TimeoutCallback m_timeoutCallback;
 
+    private InputThread m_inputThread;
+
+    private ErrorThread m_errorThread;
+
     private synchronized boolean getExitInProgress()
     {
         return m_exitInProgress;
@@ -597,13 +612,13 @@ public final class GtpClient
         m_out = new PrintWriter(out);
         m_isProgramDead = false;        
         m_queue = new MessageQueue();
-        InputThread inputThread = new InputThread(in, m_queue);
+        m_inputThread = new InputThread(in, m_queue);
         if (err != null)
         {
-            ErrorThread errorThread = new ErrorThread(err, m_queue);
-            errorThread.start();
+            m_errorThread = new ErrorThread(err, m_queue);
+            m_errorThread.start();
         }
-        inputThread.start();
+        m_inputThread.start();
     }
 
     private synchronized void log(String msg)
