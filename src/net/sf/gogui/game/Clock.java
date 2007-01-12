@@ -172,6 +172,9 @@ public final class Clock
 
     /** Register listener for clock changes.
         Only one listener supported at the moment.
+        If the clock has a listener, the clock should be stopped with halt()
+        if it is no longer used, otherwise the timer thread can keep an
+        application from terminating.
     */
     public void setListener(Listener listener)
     {
@@ -351,8 +354,8 @@ public final class Clock
     {
         if (m_timer != null)
         {
-            m_timer.cancel();
             m_timer.purge();
+            m_timer.cancel();
             m_timer = null;
         }
     }

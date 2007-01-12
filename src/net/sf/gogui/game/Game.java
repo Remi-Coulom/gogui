@@ -238,6 +238,11 @@ public class Game
             restoreClock(father, color);
     }
 
+    /** Set clock listener.
+        If the clock has a listener, the clock should be stopped with
+        haltClock() if it is no longer used, otherwise the timer thread can
+        keep an application from terminating.
+    */
     public void setClockListener(Clock.Listener listener)
     {
         m_clock.setListener(listener);
