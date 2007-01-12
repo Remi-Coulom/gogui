@@ -56,7 +56,7 @@ public class Openings
     }
 
     /** Get game tree of currently loaded file. */
-    public GameTree getGameTree()
+    public GameTree getTree()
     {
         return m_gameTree;
     }

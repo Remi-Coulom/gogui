@@ -93,6 +93,13 @@ TwoGtp: new option -maxmoves
 </listitem>
 <listitem>
 <simpara>
+TwoGtp: option -loadsgf no longer exists; programs should implement
+play_sequence if the transmission of openings with many stones or moves is
+slow
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Several minor fixes
 </simpara>
 </listitem>

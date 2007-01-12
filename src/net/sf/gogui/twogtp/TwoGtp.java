@@ -12,13 +12,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.GameInformation;
+import net.sf.gogui.game.Game;
+import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
-import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
@@ -27,10 +29,12 @@ import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.sgf.SgfWriter;
 import net.sf.gogui.util.ErrorMessage;
+import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
@@ -43,8 +47,7 @@ public class TwoGtp
     public TwoGtp(String black, String white, String referee, String observer,
                   int size, Komi komi, int numberGames, boolean alternate,
                   String sgfFile, boolean force, boolean verbose,
-                  Openings openings, boolean loadsgf,
-                  TimeSettings timeSettings)
+                  Openings openings, TimeSettings timeSettings)
         throws Exception
     {
         super(null);
@@ -59,28 +62,37 @@ public class TwoGtp
             getResultFile().delete();
         m_black = new GtpClient(black, verbose, null);
         m_black.setLogPrefix("B");
+        m_synchronizerBlack = new GtpSynchronizer(m_black);
         m_white = new GtpClient(white, verbose, null);
         m_white.setLogPrefix("W");
+        m_synchronizerWhite = new GtpSynchronizer(m_white);
         m_refereeCommand = referee;
         if (! referee.equals(""))
         {
             m_referee = new GtpClient(referee, verbose, null);
             m_referee.setLogPrefix("R");
+            m_synchronizerReferee = new GtpSynchronizer(m_referee);
         }
         else
+        {
             m_referee = null;
+            m_synchronizerReferee = null;
+        }
         if (! observer.equals(""))
         {
             m_observer = new GtpClient(observer, verbose, null);
             m_observer.setLogPrefix("O");
+            m_synchronizerObserver = new GtpSynchronizer(m_observer);
         }
         else
+        {
             m_observer = null;
-        m_inconsistentState = false;
+            m_synchronizerObserver = null;
+        }
         m_black.queryProtocolVersion();
         m_white.queryProtocolVersion();
-        m_blackName = getName(m_black);
-        m_whiteName = getName(m_white);        
+        m_nameBlack = getName(m_black, "Black");
+        m_nameWhite = getName(m_white, "White");
         m_blackVersion = getVersion(m_black);
         m_whiteVersion = getVersion(m_white);        
         m_black.querySupportedCommands();
@@ -90,14 +102,14 @@ public class TwoGtp
         if (m_referee != null)
         {
             m_referee.queryProtocolVersion();
-            m_refereeName = getName(m_referee);        
+            m_nameReferee = getName(m_referee, "Referee");        
             m_refereeVersion = getVersion(m_referee);        
             m_referee.querySupportedCommands();
             m_referee.queryInterruptSupport();
         }
         else
         {
-            m_refereeName = null;
+            m_nameReferee = null;
             m_refereeVersion = null;
         }
         if (m_observer != null)
@@ -112,7 +124,6 @@ public class TwoGtp
         m_numberGames = numberGames;
         m_openings = openings;
         m_verbose = verbose;
-        m_loadsgf = loadsgf;
         m_timeSettings = timeSettings;
         initTable();
         readGames();
@@ -133,7 +144,7 @@ public class TwoGtp
                     while (! gameOver())
                     {
                         response.setLength(0);
-                        sendGenmove(m_board.getToMove(), response);
+                        sendGenmove(getToMove(), response);
                     }
                 }
                 catch (GtpError e)
@@ -145,30 +156,12 @@ public class TwoGtp
                 if (m_white.isProgramDead())
                     throw new ErrorMessage("White program died");
             }
-            m_black.send("quit");
-            m_white.send("quit");
         }
         finally
         {
             close();
         }
     }
-
-    public void close()
-    {
-        m_black.close();
-        m_white.close();
-        if (m_referee != null)
-            m_referee.close();
-        if (m_observer != null)
-            m_observer.close();
-        m_black.waitForExit();
-        m_white.waitForExit();
-        if (m_referee != null)
-            m_referee.waitForExit();
-        if (m_observer != null)
-            m_observer.waitForExit();
-    }    
 
     /** Returns number of games left of -1 if no maximum set. */
     public int gamesLeft()
@@ -195,8 +188,6 @@ public class TwoGtp
             ;
         else if (command.equals("gogui_title"))
             cmd.setResponse(getTitle());
-        else if (command.equals("loadsgf"))
-            sendBoth(cmd.getLine(), true);
         else if (command.equals("twogtp_black"))
             twogtpColor(m_black, cmd);
         else if (command.equals("twogtp_white"))
@@ -206,7 +197,10 @@ public class TwoGtp
         else if (command.equals("twogtp_observer"))
             twogtpObserver(cmd);
         else if (command.equals("quit"))
-            sendBoth("quit", false);
+        {
+            close();
+            setQuit();
+        }
         else if (command.equals("play"))
             cmdPlay(cmd);
         else if (command.equals("undo"))
@@ -234,7 +228,6 @@ public class TwoGtp
                             "gogui_title\n" +
                             "komi\n" +
                             "list_commands\n" +
-                            "loadsgf\n" +
                             "name\n" +
                             "play\n" +
                             "quit\n" +
@@ -251,6 +244,7 @@ public class TwoGtp
                  || command.equals("black")
                  || command.equals("white")
                  || command.equals("kgs-genmove_cleanup")
+                 || command.equals("loadsgf")
                  || command.equals("genmove_cleanup"))
             throw new GtpError("unknown command");
         else if (command.equals("time_settings"))
@@ -260,10 +254,10 @@ public class TwoGtp
             boolean isExtCommandBlack = m_black.isCommandSupported(command);
             boolean isExtCommandWhite = m_white.isCommandSupported(command);
             boolean isExtCommandReferee = false;
-            if (m_referee != null && ! m_refereeIsDisabled)
+            if (m_referee != null)
                 isExtCommandReferee = m_referee.isCommandSupported(command);
             boolean isExtCommandObserver = false;
-            if (m_observer != null && ! m_observerIsDisabled)
+            if (m_observer != null)
                 isExtCommandObserver = m_observer.isCommandSupported(command);
             if (isExtCommandBlack && ! isExtCommandObserver
                 && ! isExtCommandWhite && ! isExtCommandReferee)
@@ -303,9 +297,9 @@ public class TwoGtp
     {
         interruptProgram(m_black);
         interruptProgram(m_white);
-        if (m_referee != null && ! m_refereeIsDisabled)
+        if (m_referee != null)
             interruptProgram(m_referee);
-        if (m_observer != null && ! m_observerIsDisabled)
+        if (m_observer != null)
             interruptProgram(m_observer);
     }
 
@@ -322,15 +316,7 @@ public class TwoGtp
 
     private boolean m_gameSaved;
 
-    private boolean m_inconsistentState;
-
-    private final boolean m_loadsgf;
-    
     private int m_maxMoves = 1000;
-
-    private boolean m_observerIsDisabled;
-
-    private boolean m_refereeIsDisabled;
 
     private boolean m_resigned;
 
@@ -339,8 +325,6 @@ public class TwoGtp
     private int m_gameIndex;
 
     private final int m_numberGames;
-
-    private int m_openingMovesIndex;
 
     private final int m_size;
 
@@ -354,17 +338,17 @@ public class TwoGtp
 
     private double m_cpuTimeWhite;
 
-    private Board m_board;
+    private Game m_game;
 
     private GoColor m_resignColor;
 
-    private GameTree m_gameTree;
-
-    private Node m_currentNode;
-
     private final Openings m_openings;
 
-    private final String m_blackName;
+    private final String m_nameBlack;
+
+    private final String m_nameReferee;
+
+    private final String m_nameWhite;
 
     private final String m_blackVersion;
 
@@ -372,36 +356,68 @@ public class TwoGtp
 
     private final String m_refereeCommand;
 
-    private final String m_refereeName;
-
     private final String m_refereeVersion;
 
     private final String m_sgfFile;
-
-    private final String m_whiteName;
 
     private final String m_whiteVersion;
 
     private final ArrayList m_games = new ArrayList(100);
 
-    private ArrayList m_openingMoves;
-
     private final GtpClient m_black;
 
-    private final GtpClient m_observer;
+    private GtpClient m_observer;
 
-    private final GtpClient m_referee;
+    private GtpClient m_referee;
 
     private final GtpClient m_white;
+
+    private final GtpSynchronizer m_synchronizerBlack;
+
+    private final GtpSynchronizer m_synchronizerWhite;
+
+    private final GtpSynchronizer m_synchronizerReferee;
+
+    private final GtpSynchronizer m_synchronizerObserver;
 
     private Table m_table;
 
     private final TimeSettings m_timeSettings;
 
+    private ConstNode m_lastOpeningNode;
+
     private void checkInconsistentState() throws GtpError
     {
-        if (m_inconsistentState)
+        if (m_synchronizerBlack.isOutOfSync()
+            || m_synchronizerWhite.isOutOfSync()
+            || (m_referee != null && m_synchronizerReferee.isOutOfSync())
+            || (m_observer != null && m_synchronizerObserver.isOutOfSync()))
             throw new GtpError("Inconsistent state");
+    }
+
+    public void close()
+    {
+        close(m_black);
+        close(m_white);
+        close(m_referee);
+        close(m_observer);
+    }    
+
+    private void close(GtpClient gtp)
+    {
+        if (gtp == null)
+            return;
+        // Some programs don't handle closing input stream well, so
+        // we send an explicit quit
+        try
+        {
+            gtp.send("quit");
+        }
+        catch (GtpError e)
+        {
+        }
+        gtp.close();
+        gtp.waitForExit();
     }
 
     private void cmdBoardSize(GtpCommand cmd) throws GtpError
@@ -440,36 +456,25 @@ public class TwoGtp
         GoColor color = cmd.getColorArg(0);
         GoPoint point = cmd.getPointArg(1, m_size);
         Move move = Move.get(point, color);
-        if (m_openings != null)
-        {
-            if (m_openingMovesIndex < m_openingMoves.size()
-                && ! move.equals(getOpeningMove(m_openingMovesIndex)))
-                throw new GtpError("Move not allowed if openings are used");
-        }
-        sendMove(move);
+        m_game.play(move);
+        synchronize();
     }
 
     private void cmdUndo(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
-        checkInconsistentState();
-        sendBoth("undo", true);
-        m_board.undo();
-        if (m_openings == null
-            || m_openingMovesIndex > m_openingMoves.size())
-            m_currentNode = m_currentNode.getFather();
-        if (m_openings != null)
-        {
-            --m_openingMovesIndex;
-            // Shouldn't happen if programs don't accept undo w/o moves
-            if (m_openingMovesIndex < 0)
-                m_openingMovesIndex = 0;
-        }
+        int moveNumber = m_game.getMoveNumber();
+        if (moveNumber == 0)
+            throw new GtpError("cannot undo");
+        m_game.backward(1);
+        assert(m_game.getMoveNumber() == moveNumber - 1);
+        synchronize();
     }
 
     private void finalStatusCommand(GtpCommand cmd) throws GtpError
     {
-        if (m_referee != null && ! m_refereeIsDisabled)
+        checkInconsistentState();
+        if (m_referee != null)
             forward(m_referee, cmd);
         else if (m_black.isCommandSupported("final_status"))
             forward(m_black, cmd);
@@ -521,18 +526,18 @@ public class TwoGtp
         columns.add("ERR");
         columns.add("ERR_MSG");
         m_table = new Table(columns);
-        String blackName = m_blackName;
-        String whiteName = m_whiteName;
+        String nameBlack = m_nameBlack;
+        String nameWhite = m_nameWhite;
         if (! m_blackVersion.equals(""))
-            blackName = m_blackName + ":" + m_blackVersion;
+            nameBlack = m_nameBlack + ":" + m_blackVersion;
         if (! m_whiteVersion.equals(""))
-            whiteName = m_whiteName + ":" + m_whiteVersion;
-        String refereeName = "-";
+            nameWhite = m_nameWhite + ":" + m_whiteVersion;
+        String nameReferee = "-";
         if (m_referee != null)
-            refereeName = m_refereeName + ":" + m_refereeVersion;
-        m_table.setProperty("Black", blackName);
-        m_table.setProperty("White", whiteName);
-        m_table.setProperty("Referee", refereeName);
+            nameReferee = m_nameReferee + ":" + m_refereeVersion;
+        m_table.setProperty("Black", nameBlack);
+        m_table.setProperty("White", nameWhite);
+        m_table.setProperty("Referee", nameReferee);
         m_table.setProperty("BlackCommand", m_black.getProgramCommand());
         m_table.setProperty("WhiteCommand", m_white.getProgramCommand());
         m_table.setProperty("RefereeCommand", m_refereeCommand);
@@ -553,7 +558,12 @@ public class TwoGtp
 
     private boolean gameOver()
     {
-        return (m_board.bothPassed() || m_resigned);
+        return (getBoard().bothPassed() || m_resigned);
+    }
+
+    private ConstBoard getBoard()
+    {
+        return m_game.getBoard();
     }
 
     private double getCpuTime(GtpClient gtp)
@@ -570,12 +580,22 @@ public class TwoGtp
         return result;
     }
 
+    private ConstNode getCurrentNode()
+    {
+        return m_game.getCurrentNode();
+    }
+
+    private ConstGameInformation getGameInformation()
+    {
+        return m_game.getGameInformation();
+    }
+
     private File getFile(int gameIndex)
     {
         return new File(m_sgfFile + "-" + gameIndex + ".sgf");
     }
 
-    private static String getName(GtpClient gtp)
+    private static String getName(GtpClient gtp, String defaultName)
     {
         try
         {
@@ -584,14 +604,19 @@ public class TwoGtp
                 return name;
         }
         catch (GtpError e)
-        {
+        {            
         }
-        return "Unknown";
+        return defaultName;
     }
 
-    private Move getOpeningMove(int i)
+    private GoColor getToMove()
     {
-        return (Move)m_openingMoves.get(i);
+        return m_game.getToMove();
+    }
+
+    private ConstGameTree getTree()
+    {
+        return m_game.getTree();
     }
 
     private static String getVersion(GtpClient gtp)
@@ -628,26 +653,26 @@ public class TwoGtp
     private String getTitle()
     {
         StringBuffer buffer = new StringBuffer();
-        String blackName = m_blackName;
-        String whiteName = m_whiteName;
-        if (blackName.equals(whiteName))
+        String nameBlack = m_nameBlack;
+        String nameWhite = m_nameWhite;
+        if (nameBlack.equals(nameWhite))
         {
             if (! m_blackVersion.equals(""))
-                blackName = m_blackName + ":" + m_blackVersion;
+                nameBlack = m_nameBlack + ":" + m_blackVersion;
             if (! m_whiteVersion.equals(""))
-                whiteName = m_whiteName + ":" + m_whiteVersion;
+                nameWhite = m_nameWhite + ":" + m_whiteVersion;
         }
         if (isAlternated())
         {
-            String tmpName = blackName;
-            blackName = whiteName;
-            whiteName = tmpName;
+            String tmpName = nameBlack;
+            nameBlack = nameWhite;
+            nameWhite = tmpName;
         }
-        blackName = StringUtil.capitalize(blackName);
-        whiteName = StringUtil.capitalize(whiteName);
-        buffer.append(whiteName);
+        nameBlack = StringUtil.capitalize(nameBlack);
+        nameWhite = StringUtil.capitalize(nameWhite);
+        buffer.append(nameWhite);
         buffer.append(" vs ");
-        buffer.append(blackName);
+        buffer.append(nameBlack);
         buffer.append(" (B)");
         if (! m_sgfFile.equals(""))
         {
@@ -661,6 +686,7 @@ public class TwoGtp
     private void handleEndOfGame(boolean error, String errorMessage)
         throws ErrorMessage
     {
+        checkInconsistentState();
         try
         {
             String resultBlack;
@@ -679,7 +705,7 @@ public class TwoGtp
                 resultBlack = getResult(m_black);
                 resultWhite = getResult(m_white);
                 resultReferee = "?";
-                if (m_referee != null && ! m_refereeIsDisabled)
+                if (m_referee != null)
                     resultReferee = getResult(m_referee);
             }
             double cpuTimeBlack
@@ -694,10 +720,10 @@ public class TwoGtp
                 resultWhite = inverseResult(resultWhite);
                 resultReferee = inverseResult(resultReferee);
             }
-            ArrayList moves = Compare.getAllAsMoves(m_gameTree.getRoot());
+            ArrayList moves = Compare.getAllAsMoves(getTree().getRootConst());
             String duplicate =
-                Compare.checkDuplicate(m_board, moves, m_games, m_alternate,
-                                       isAlternated());
+                Compare.checkDuplicate(getBoard(), moves, m_games,
+                                       m_alternate, isAlternated());
             // If a program is dead we wait for a few seconds, because it
             // could be because the TwoGtp process was killed and we don't
             // want to write a result in this case.
@@ -712,7 +738,7 @@ public class TwoGtp
                     assert(false);
                 }
             }
-            int moveNumber = NodeUtil.getMoveNumber(m_currentNode);
+            int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
             saveResult(resultBlack, resultWhite, resultReferee,
                        isAlternated(), duplicate, moveNumber, error,
                        errorMessage, cpuTimeBlack, cpuTimeWhite);
@@ -728,9 +754,9 @@ public class TwoGtp
 
     private void initGame(int size) throws GtpError
     {
-        m_board = new Board(size);
-        m_gameTree = new GameTree(size, m_komi, null, null, null);
-        setCurrentNode(m_gameTree.getRoot());
+        m_game = new Game(size, m_komi, null, null, null);
+        // Clock is not needed
+        m_game.haltClock();
         m_resigned = false;
         if (m_openings != null)
         {
@@ -752,20 +778,13 @@ public class TwoGtp
                 System.err.println("Loaded opening " + m_openingFile);
             if (m_openings.getGameInformation().getBoardSize() != size)
                 throw new GtpError("Wrong board size: " + m_openingFile);
-            m_gameTree = m_openings.getGameTree();
-            m_gameTree.getGameInformation().setKomi(m_komi);
-            m_openingMoves = Compare.getAllAsMoves(m_gameTree.getRoot());
-            m_openingMovesIndex = 0;
-            ConstNode root = m_gameTree.getRoot();
-            setCurrentNode(NodeUtil.getLast(root));
-            if (m_loadsgf)
-            {
-                String command = "loadsgf " + m_openingFile;
-                send(m_black, m_white, command, command, command,
-                     command, true);
-                m_openingMovesIndex = m_openingMoves.size();
-            }
+            m_game.init(m_openings.getTree());
+            m_game.setKomi(m_komi);
+            m_lastOpeningNode = NodeUtil.getLast(getTree().getRootConst());
         }
+        else
+            m_lastOpeningNode = null;
+        synchronizeInit();
     }
 
     private String inverseResult(String result)
@@ -783,17 +802,28 @@ public class TwoGtp
         return (m_alternate && m_gameIndex % 2 != 0);
     }
 
+    private boolean isInOpening()
+    {
+        if (m_lastOpeningNode == null)
+            return false;
+        for (ConstNode node = getCurrentNode().getChildConst(); node != null;
+             node = node.getChildConst())
+            if (node == m_lastOpeningNode)
+                return true;
+        return false;
+    }
+
     private void komi(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(1);
-        if (m_komi != null)
-            throw new GtpError("Komi " + m_komi
-                               + " is fixed by command line option");
         String arg = cmd.getArg(0);
         try
         {
             Komi komi = Komi.parseKomi(arg);
-            m_gameTree.getGameInformation().setKomi(komi);
+            if (! ObjectUtil.equals(komi, m_komi))
+                throw new GtpError("Komi " + m_komi
+                                   + " is fixed by command line option");
+            m_game.setKomi(komi);
             sendIfSupported("komi", "komi " + komi);
         }
         catch (Komi.InvalidKomi e)
@@ -802,98 +832,16 @@ public class TwoGtp
         }
     }
 
-    private void mergeResponse(StringBuffer response,
-                               String response1, String response2,
-                               String prefix1, String prefix2)
-    {
-        boolean empty1 = (response1 == null || response1.equals(""));
-        boolean empty2 = (response2 == null || response2.equals(""));        
-        if (empty1 && empty2)
-            return;
-        boolean isMultiLine =
-            ((response1 != null && response1.indexOf('\n') >= 0)
-             || (response2 != null && response2.indexOf('\n') >= 0));
-        if (! empty1)
-        {
-            response.append(prefix1);
-            if (isMultiLine)
-                response.append(":\n");
-            else
-                response.append(": ");
-            response.append(response1);
-            if (! empty2)
-            {
-                if (isMultiLine)
-                    response.append('\n');
-                else
-                    response.append("  ");
-            }
-        }
-        if (! empty2)
-        {
-            response.append(prefix2);
-            if (isMultiLine)
-                response.append(":\n");
-            else
-                response.append(": ");
-            response.append(response2);
-        }
-        assert response.indexOf("\n\n") < 0;
-    }
-
     private void newGame(int size) throws GtpError
     {
         m_cpuTimeBlack = getCpuTime(m_black);
         m_cpuTimeWhite = getCpuTime(m_white);
-        m_black.sendBoardsize(size);
-        m_black.sendClearBoard(size);
-        try
-        {
-            m_white.sendBoardsize(size);
-            m_white.sendClearBoard(size);
-        }
-        catch (GtpError e)
-        {
-            m_inconsistentState = true;
-            throw e;
-        }
-        if (m_referee != null)
-        {
-            String commandBoardsize = m_referee.getCommandBoardsize(size);
-            if (commandBoardsize != null)
-                sendToReferee(commandBoardsize);
-            sendToReferee(m_referee.getCommandClearBoard(size));
-            m_refereeIsDisabled = false;
-        }
-        if (m_observer != null)
-        {
-            String commandBoardsize = m_observer.getCommandBoardsize(size);
-            if (commandBoardsize != null)
-                sendToObserver(commandBoardsize);
-            sendToObserver(m_observer.getCommandClearBoard(size));
-            m_observerIsDisabled = false;
-        }
-        m_inconsistentState = false;
         initGame(size);
         m_gameSaved = false;
         sendIfSupported("komi", "komi " + m_komi);
         if (m_timeSettings != null)
             sendIfSupported("time_settings",
                             GtpUtil.getTimeSettingsCommand(m_timeSettings));
-    }
-
-    private void play(Move move)
-    {
-        m_board.play(move);        
-        if (m_openings != null)
-            ++m_openingMovesIndex;
-        if (m_openings == null
-            || m_openingMovesIndex > m_openingMoves.size())
-        {
-            Node node = new Node(move);
-            m_currentNode.append(node);
-            m_currentNode = node;
-        }
     }
 
     private void readGames()
@@ -935,22 +883,22 @@ public class TwoGtp
     {
         if (m_sgfFile.equals(""))
             return;
-        String blackName = m_blackName;
+        String nameBlack = m_nameBlack;
         if (! m_blackVersion.equals(""))
-            blackName = blackName + ":" + m_blackVersion;
-        String whiteName = m_whiteName;
+            nameBlack = nameBlack + ":" + m_blackVersion;
+        String nameWhite = m_nameWhite;
         if (! m_whiteVersion.equals(""))
-            whiteName = whiteName + ":" + m_whiteVersion;
+            nameWhite = nameWhite + ":" + m_whiteVersion;
         String blackCommand = m_black.getProgramCommand();
         String whiteCommand = m_white.getProgramCommand();
         if (isAlternated())
         {
-            blackName = m_whiteName;
+            nameBlack = m_nameWhite;
             if (! m_whiteVersion.equals(""))
-                blackName = blackName + ":" + m_whiteVersion;
-            whiteName = m_blackName;
+                nameBlack = nameBlack + ":" + m_whiteVersion;
+            nameWhite = m_nameBlack;
             if (! m_blackVersion.equals(""))
-                whiteName = whiteName + ":" + m_blackVersion;
+                nameWhite = nameWhite + ":" + m_blackVersion;
             blackCommand = m_white.getProgramCommand();
             whiteCommand = m_black.getProgramCommand();
             String resultTmp = inverseResult(resultWhite);
@@ -958,13 +906,12 @@ public class TwoGtp
             resultBlack = resultTmp;
             resultReferee = inverseResult(resultReferee);
         }
-        GameInformation gameInformation = m_gameTree.getGameInformation();
-        gameInformation.setPlayerBlack(blackName);
-        gameInformation.setPlayerWhite(whiteName);
+        m_game.setPlayerBlack(nameBlack);
+        m_game.setPlayerWhite(nameWhite);
         if (m_referee != null)
-            gameInformation.setResult(resultReferee);
+            m_game.setResult(resultReferee);
         else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))
-            gameInformation.setResult(resultBlack);
+            m_game.setResult(resultBlack);
         String host = Platform.getHostInfo();
         String gameComment =
             "Black: " + blackCommand +
@@ -982,12 +929,12 @@ public class TwoGtp
         gameComment = gameComment +
             "\nHost: " + host +
             "\nDate: " + StringUtil.getDate();
-        m_gameTree.getRoot().setComment(gameComment);
+        m_game.setComment(gameComment, getTree().getRootConst());
         File file = getFile(m_gameIndex);
         if (m_verbose)
             System.err.println("Saving " + file);
         OutputStream out = new FileOutputStream(file);
-        new SgfWriter(out, m_gameTree, "TwoGtp", Version.get());
+        new SgfWriter(out, getTree(), "TwoGtp", Version.get());
     }
 
     private void saveResult(String resultBlack, String resultWhite,
@@ -1022,90 +969,47 @@ public class TwoGtp
         }
     }
 
-    private void send(GtpClient gtp1, GtpClient gtp2, String command1,
-                      String command2, String commandReferee,
-                      String commandObserver, boolean changesState)
-        throws GtpError
-    {
-        assert((gtp1 == m_black && gtp2 == m_white)
-               || (gtp1 == m_white && gtp2 == m_black));
-        if (changesState)
-            checkInconsistentState();
-        try
-        {
-            gtp1.send(command1);
-        }
-        catch (GtpError e)
-        {
-            if (changesState)
-                throw e;
-        }
-        try
-        {
-            gtp2.send(command2);
-        }
-        catch (GtpError e)
-        {
-            if (changesState)
-                m_inconsistentState = true;
-            throw e;
-        }
-        sendToReferee(commandReferee);
-        sendToObserver(commandObserver);
-    }
-
-    private void sendBoth(String command, boolean changesState)
-        throws GtpError
-    {
-        send(m_black, m_white, command, command, command, command,
-             changesState);
-    }
-
     private void sendGenmove(GoColor color, StringBuffer response)
         throws GtpError, ErrorMessage
     {
         checkInconsistentState();
-        if (m_maxMoves >= 0
-            && NodeUtil.getMoveNumber(m_currentNode) > m_maxMoves)
+        int moveNumber = m_game.getMoveNumber();
+        if (m_maxMoves >= 0 && moveNumber > m_maxMoves)
             throw new GtpError("move limit exceeded");
-        if (m_openings != null && m_openingMovesIndex < m_openingMoves.size()
-            && ! m_loadsgf)
+        if (isInOpening())
         {
-            Move move = getOpeningMove(m_openingMovesIndex);
+            ConstNode child = getCurrentNode().getChildConst();
+            Move move = child.getMove();
             if (move.getColor() != color)
-                throw new GtpError("Not allowed if openings are used");
-            sendMove(move);
-            response.append(GoPoint.toString(move.getPoint()));
+                throw new GtpError("next opening move is " + move);
+            m_game.gotoNode(child);
+            synchronize();
+            response.append(GoPoint.toString(move.getPoint()));            
             return;
         }
-        GtpClient gtp1;
-        GtpClient gtp2;
-        String prefix1;
-        String prefix2;
+        GtpClient gtp;
+        String name;
         String command;
+        GtpSynchronizer synchronizer;
         boolean exchangeColors =
             (color == GoColor.BLACK && isAlternated())
             || (color == GoColor.WHITE && ! isAlternated());
         if (exchangeColors)
         {
-            gtp1 = m_white;
-            gtp2 = m_black;
-            prefix1 = "W";
-            prefix2 = "B";
+            gtp = m_white;
+            name = m_nameWhite;
+            synchronizer = m_synchronizerWhite;
             command = m_white.getCommandGenmove(color);
         }
         else
         {
-            gtp1 = m_black;
-            gtp2 = m_white;
-            prefix1 = "B";
-            prefix2 = "W";
+            gtp = m_black;
+            name = m_nameBlack;
+            synchronizer = m_synchronizerBlack;
             command = m_black.getCommandGenmove(color);
         }
-        String response1 = null;
-        String response2 = null;
-        response1 = gtp1.send(command);
-        if (response1.equalsIgnoreCase("resign"))
+        String responseGenmove = gtp.send(command);
+        if (responseGenmove.equalsIgnoreCase("resign"))
         {
             response.append("resign");
             m_resigned = true;
@@ -1113,43 +1017,22 @@ public class TwoGtp
         }
         else
         {
+            ConstBoard board = getBoard();
             GoPoint point = null;
             try
             {
-                point = GtpUtil.parsePoint(response1, m_board.getSize());
+                point = GtpUtil.parsePoint(responseGenmove, board.getSize());
             }
             catch (GtpError e)
             {
-                m_inconsistentState = true;
-                throw new GtpError(prefix1 + " played invalid move");
+                throw new GtpError(name + " played invalid move: "
+                                   + responseGenmove);
             }
             Move move = Move.get(point, color);
-            String command2 = gtp2.getCommandPlay(move);
-            try
-            {
-                gtp2.send(command2);
-            }
-            catch (GtpError e)
-            {
-                response2 = e.getMessage();
-                try
-                {
-                    gtp1.send("undo");
-                }
-                catch (GtpError errorUndo)
-                {
-                    m_inconsistentState = true;
-                }
-                mergeResponse(response, response1, response2, prefix1,
-                              prefix2);
-                throw new GtpError(response.toString());
-            }
-            response.append(response1);
-            if (m_referee != null && ! m_refereeIsDisabled)
-                sendToReferee(m_referee.getCommandPlay(move));
-            if (m_observer != null && ! m_observerIsDisabled)
-                sendToObserver(m_observer.getCommandPlay(move));
-            play(move);
+            m_game.play(move);
+            synchronizer.updateAfterGenmove(board);
+            synchronize();
+            response.append(GoPoint.toString(move.getPoint()));            
         }
         if (gameOver() && ! m_gameSaved)
         {
@@ -1162,9 +1045,9 @@ public class TwoGtp
     {
         sendIfSupported(m_black, cmd, cmdLine);
         sendIfSupported(m_white, cmd, cmdLine);
-        if (m_referee != null && ! m_refereeIsDisabled)
+        if (m_referee != null)
             sendIfSupported(m_referee, cmd, cmdLine);
-        if (m_observer != null && ! m_observerIsDisabled)
+        if (m_observer != null)
             sendIfSupported(m_observer, cmd, cmdLine);
     }
 
@@ -1181,24 +1064,9 @@ public class TwoGtp
         }
     }
 
-    private void sendMove(Move move) throws GtpError
-    {
-        String cmdBlack = m_black.getCommandPlay(move);
-        String cmdWhite = m_white.getCommandPlay(move);
-        String cmdReferee = null;
-        if (m_referee != null)
-            cmdReferee = m_referee.getCommandPlay(move);
-        String cmdObserver = null;
-        if (m_observer != null)
-            cmdObserver = m_observer.getCommandPlay(move);
-        send(m_black, m_white, cmdBlack, cmdWhite, cmdReferee, cmdObserver,
-             true);
-        play(move);
-    }
-
     private void sendToObserver(String command)
     {
-        if (m_observer == null || m_observerIsDisabled)
+        if (m_observer == null)
             return;
         try
         {
@@ -1209,13 +1077,13 @@ public class TwoGtp
             System.err.println("Observer denied " + command + " command: "
                                + e.getMessage() + "\n" +
                                "Disabling observer for this game.");
-            m_observerIsDisabled = true;
+            m_observer = null;
         }        
     }
 
     private void sendToReferee(String command)
     {
-        if (m_referee == null || m_refereeIsDisabled)
+        if (m_referee == null)
             return;
         try
         {
@@ -1226,13 +1094,54 @@ public class TwoGtp
             System.err.println("Referee denied " + command + " command: "
                                + e.getMessage() + "\n" +
                                "Disabling referee for this game.");
-            m_refereeIsDisabled = true;
+            m_referee = null;
         }        
     }
 
-    private void setCurrentNode(ConstNode node)
+    private void synchronize() throws GtpError
     {
-        m_currentNode = m_gameTree.getNode(node);
+        synchronize(m_synchronizerBlack, m_nameBlack);
+        synchronize(m_synchronizerWhite, m_nameWhite);
+        synchronize(m_synchronizerReferee, m_nameReferee);
+        synchronize(m_synchronizerObserver, "Observer");
+    }
+
+    private void synchronize(GtpSynchronizer synchronizer,
+                             String name) throws GtpError
+    {
+        if (synchronizer == null)
+            return;
+        try
+        {
+            synchronizer.synchronize(getBoard());
+        }
+        catch (GtpError e)
+        {
+            throw new GtpError(name + ": " + e.getMessage());
+        }
+    }
+
+    private void synchronizeInit() throws GtpError
+    {
+        synchronizeInit(m_synchronizerBlack, m_nameBlack);
+        synchronizeInit(m_synchronizerWhite, m_nameWhite);
+        synchronizeInit(m_synchronizerReferee, m_nameReferee);
+        synchronizeInit(m_synchronizerObserver, "Observer");
+    }
+
+    private void synchronizeInit(GtpSynchronizer synchronizer,
+                                 String name) throws GtpError
+    {
+        if (synchronizer == null)
+            return;
+        try
+        {
+            synchronizer.init(getBoard());
+        }
+        catch (GtpError e)
+        {
+            throw new GtpError(name + ": " + e.getMessage());
+        }
     }
 
     private void twogtpColor(GtpClient gtp, GtpCommand cmd) throws GtpError
@@ -1243,18 +1152,14 @@ public class TwoGtp
     private void twogtpObserver(GtpCommand cmd) throws GtpError
     {
         if (m_observer == null)
-            throw new GtpError("No observer enabled");
-        if (m_observerIsDisabled)
-            throw new GtpError("Observer disabled for this game");
+            throw new GtpError("no observer enabled");
         twogtpColor(m_observer, cmd);
     }
 
     private void twogtpReferee(GtpCommand cmd) throws GtpError
     {
         if (m_referee == null)
-            throw new GtpError("No referee enabled");
-        if (m_refereeIsDisabled)
-            throw new GtpError("Referee disabled for this game");
+            throw new GtpError("no referee enabled");
         twogtpColor(m_referee, cmd);
     }
 }

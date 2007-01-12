@@ -31,7 +31,6 @@ public final class Main
                 "force",
                 "games:",
                 "help",
-                "loadsgf",
                 "komi:",
                 "maxmoves:",
                 "observer:",
@@ -61,7 +60,6 @@ public final class Main
                     "-help           display this help and exit\n" +
                     "-komi           komi\n" +
                     "-maxmoves       move limit\n" +
-                    "-loadsgf        use loadsgf command for openings\n" +
                     "-observer       command for observer program\n" +
                     "-openings       directory with opening sgf files\n" +
                     "-referee        command for referee program\n" +
@@ -116,16 +114,10 @@ public final class Main
             Openings openings = null;
             if (opt.contains("openings"))
                 openings = new Openings(new File(opt.get("openings")));
-            boolean loadsgf = opt.contains("loadsgf");
-            if (loadsgf && openings == null)
-                throw new ErrorMessage("Use option -loadsgf with -openings");
-            if (loadsgf && ! auto)
-                throw new ErrorMessage("Option -loadsgf can only be used with"
-                                       + " -auto");
             TwoGtp twoGtp
                 = new TwoGtp(black, white, referee, observer, size, komi,
                              games, alternate, sgfFile, force, verbose,
-                             openings, loadsgf, timeSettings);
+                             openings, timeSettings);
             twoGtp.setMaxMoves(maxMoves);
             if (auto)
             {
@@ -135,7 +127,6 @@ public final class Main
             }
             else
                 twoGtp.mainLoop(System.in, System.out);
-            twoGtp.close();
         }
         catch (Throwable t)
         {
