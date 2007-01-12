@@ -339,7 +339,7 @@ public final class Clock
 
     private void startTimer()
     {
-        if (m_timer == null)
+        if (m_timer == null && m_listener != null)
         {
             m_timer = new Timer();
             UpdateListenerTask task = new UpdateListenerTask();
@@ -352,6 +352,7 @@ public final class Clock
         if (m_timer != null)
         {
             m_timer.cancel();
+            m_timer.purge();
             m_timer = null;
         }
     }
