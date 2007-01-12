@@ -1,5 +1,4 @@
 19x19 opening positions which can be used for twogtp with the -openings
 option.
-The positions were selected from SGF game records of the Kiseido Go Server
-2000-2003 where either one of the players (or both) is 7d or stronger, or
-both are 6d.
+All positions are taken from games with players of rank greater or equal
+one dan.
