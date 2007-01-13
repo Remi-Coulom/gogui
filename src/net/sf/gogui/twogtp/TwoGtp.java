@@ -16,8 +16,6 @@ import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.game.ConstGameTree;
-import net.sf.gogui.game.GameTree;
-import net.sf.gogui.game.Node;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
@@ -585,11 +583,6 @@ public class TwoGtp
         return m_game.getCurrentNode();
     }
 
-    private ConstGameInformation getGameInformation()
-    {
-        return m_game.getGameInformation();
-    }
-
     private File getFile(int gameIndex)
     {
         return new File(m_sgfFile + "-" + gameIndex + ".sgf");
@@ -1061,40 +1054,6 @@ public class TwoGtp
         catch (GtpError e)
         {
         }
-    }
-
-    private void sendToObserver(String command)
-    {
-        if (m_observer == null)
-            return;
-        try
-        {
-            m_observer.send(command);
-        }
-        catch (GtpError e)
-        {
-            System.err.println("Observer denied " + command + " command: "
-                               + e.getMessage() + "\n" +
-                               "Disabling observer for this game.");
-            m_observer = null;
-        }        
-    }
-
-    private void sendToReferee(String command)
-    {
-        if (m_referee == null)
-            return;
-        try
-        {
-            m_referee.send(command);
-        }
-        catch (GtpError e)
-        {
-            System.err.println("Referee denied " + command + " command: "
-                               + e.getMessage() + "\n" +
-                               "Disabling referee for this game.");
-            m_referee = null;
-        }        
     }
 
     private void synchronize() throws GtpError
