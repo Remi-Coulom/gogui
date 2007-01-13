@@ -686,7 +686,6 @@ public class TwoGtp
     private void handleEndOfGame(boolean error, String errorMessage)
         throws ErrorMessage
     {
-        checkInconsistentState();
         try
         {
             String resultBlack;
