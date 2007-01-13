@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Game;
 import net.sf.gogui.game.ConstGameTree;
