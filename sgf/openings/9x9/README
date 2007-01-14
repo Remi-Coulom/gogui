@@ -4,3 +4,6 @@ option.
 The positions were selected from dan-level games of various sources
 and from http://www.smartgo.com/sgf/tourney9.sgf (courtesy of Anders Kierulf).
 
+They should be roughly balanced, but it is still recommended to play each of
+them twice with colors exchanged and average over the results
+(twogtp -alternate option).
