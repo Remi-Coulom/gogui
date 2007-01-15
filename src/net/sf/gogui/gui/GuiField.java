@@ -14,7 +14,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
-import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.RadialGradientPaint;
 
@@ -543,25 +542,10 @@ public class GuiField
             graphics.setFont(s_cachedFont);
             return;
         }
-        Font font = UIManager.getFont("Label.font");
-        if (font != null)
-        {
-            FontMetrics metrics = graphics.getFontMetrics(font);
-            double scale = (double)fieldSize / metrics.getAscent() / 2.3;
-            if (scale < 0.95)
-            {
-                int size = font.getSize();
-                Font derivedFont
-                    = font.deriveFont(Font.BOLD, (float)(size * scale));
-                if (derivedFont != null)
-                    font = derivedFont;
-            }
-            else
-                font = font.deriveFont(Font.BOLD);
-        }
-        s_cachedFont = font;
+        int fontSize = (int)((double)fieldSize / 3);
+        s_cachedFont = new Font("SansSerif", Font.PLAIN, fontSize);
         s_cachedFontFieldSize = fieldSize;
-        graphics.setFont(font);
+        graphics.setFont(s_cachedFont);
     }
 }
 
