@@ -4,15 +4,11 @@
 <revhistory>
 
 <revision>
-<revnumber>&version;</revnumber>
-<date></date>
+<revnumber>0.9.4</revnumber>
+<date>15 Jan 2007</date>
 <authorinitials>enz</authorinitials>
 <revdescription>
 <itemizedlist>
-<listitem>
-<simpara>
-</simpara>
-</listitem>
 <listitem>
 <simpara>
 Update to look and feel JGoodies Looks 2.1.1
