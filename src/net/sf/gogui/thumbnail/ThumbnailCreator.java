@@ -35,7 +35,6 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.sgf.SgfReader;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.version.Version;
@@ -246,7 +245,6 @@ public final class ThumbnailCreator
     {
         BufferedImage image = createImage(width, height);
         Graphics2D graphics = image.createGraphics();
-        GuiUtil.setAntiAlias(graphics);
         m_drawer.draw(graphics, field, width, false);
         graphics.dispose();
         return image;
