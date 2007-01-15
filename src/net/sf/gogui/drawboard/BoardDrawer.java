@@ -2,7 +2,7 @@
 // $Id$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gui;
+package net.sf.gogui.drawboard;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -15,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.net.URL;
 import net.sf.gogui.go.GoColor;
@@ -42,7 +43,12 @@ public class BoardDrawer
     public void draw(Graphics graphics, GuiField[][] field, int width,
                      boolean showGrid)
     {
-        GuiUtil.setAntiAlias(graphics);
+        if (graphics instanceof Graphics2D)
+        {
+            Graphics2D graphics2D = (Graphics2D)graphics;
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                        RenderingHints.VALUE_ANTIALIAS_ON);
+        }
         m_width = width;
         m_size = field.length;
         if (m_constants == null || m_constants.getSize() != m_size)

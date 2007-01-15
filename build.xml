@@ -401,6 +401,7 @@ ${looks.zipfile}
  net/sf/gogui/config/analyze-commands
  net/sf/gogui/doc/*.html
  net/sf/gogui/doc/*.png
+ net/sf/gogui/drawboard/*.png
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
@@ -451,6 +452,7 @@ ${looks.zipfile}
 <attribute name="Class-Path" value="${looks.jarfile}"/>
 </manifest>
 <fileset dir="build" includes="
+ net/sf/gogui/drawboard/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gui/*.class
@@ -587,6 +589,7 @@ ${looks.zipfile}
  overview="src/net/sf/gogui/overview.html"
  classpath="external/javacomm/commapi/comm.jar"
  packagenames="
+  net/sf/gogui/drawboard.*,
   net/sf/gogui/game.*,
   net/sf/gogui/gmp.*,
   net/sf/gogui/gmptogtp.*,
@@ -766,9 +769,9 @@ ${looks.zipfile}
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
 <fileset dir="build" includes="
+ net/sf/gogui/drawboard/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
- net/sf/gogui/gui/*.class
  net/sf/gogui/sgf/*.class
  net/sf/gogui/thumbnail/*.class
  net/sf/gogui/util/*.class

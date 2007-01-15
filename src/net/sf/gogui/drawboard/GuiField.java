@@ -2,7 +2,7 @@
 // $Id$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.gui;
+package net.sf.gogui.drawboard;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -130,10 +130,6 @@ public class GuiField
     public boolean isInfluenceSet()
     {
         return m_influenceSet;
-    }
-
-    public void paintComponent(Graphics graphics)
-    {
     }
 
     public void setFieldBackground(Color color)

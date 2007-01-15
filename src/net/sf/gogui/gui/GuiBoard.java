@@ -23,6 +23,8 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import javax.swing.JPanel;
+import net.sf.gogui.drawboard.BoardDrawer;
+import net.sf.gogui.drawboard.GuiField;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
