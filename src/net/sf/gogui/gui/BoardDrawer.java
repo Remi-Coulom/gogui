@@ -6,15 +6,17 @@ package net.sf.gogui.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.Point;
-import java.awt.Font;
-import java.awt.FontMetrics;
+import java.awt.Toolkit;
 import java.net.URL;
-import javax.swing.ImageIcon;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
@@ -25,11 +27,10 @@ public class BoardDrawer
     public BoardDrawer()
     {
         ClassLoader classLoader = getClass().getClassLoader();
+        m_image = null;
         URL url = classLoader.getResource("net/sf/gogui/images/wood.png");
-        if (url == null)
-            m_image = null;
-        else
-            m_image = new ImageIcon(url).getImage();
+        if (url != null)
+            m_image = loadImage(url);
     }
 
     /** Draw a board into graphics object.
@@ -145,7 +146,7 @@ public class BoardDrawer
 
     private static Font s_cachedFont;
 
-    private final Image m_image;
+    private Image m_image;
 
     private void drawFields(Graphics graphics, GuiField field[][])
     {
@@ -279,6 +280,22 @@ public class BoardDrawer
         int x = Math.max((m_fieldSize - stringWidth) / 2, 0);
         int y = stringHeight + (m_fieldSize - stringHeight) / 2;
         graphics.drawString(string, location.x + x, location.y + y);
+    }
+
+    private static Image loadImage(URL url)
+    {
+        Image image = Toolkit.getDefaultToolkit().getImage(url);
+        MediaTracker mediaTracker = new MediaTracker(new Container());
+        mediaTracker.addImage(image, 0);
+        try
+        {
+            mediaTracker.waitForID(0);
+        }
+        catch (InterruptedException e)
+        {
+            return null;
+        }
+        return image;
     }
 
     private static void setFont(Graphics graphics, int fieldSize)
