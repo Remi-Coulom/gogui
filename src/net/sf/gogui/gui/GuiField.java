@@ -543,7 +543,7 @@ public class GuiField
             return;
         }
         int fontSize = (int)((double)fieldSize / 3);
-        s_cachedFont = new Font("SansSerif", Font.PLAIN, fontSize);
+        s_cachedFont = new Font("SansSerif", Font.BOLD, fontSize);
         s_cachedFontFieldSize = fieldSize;
         graphics.setFont(s_cachedFont);
     }
