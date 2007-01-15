@@ -11,10 +11,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.net.URL;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.BoardConstants;
@@ -134,12 +134,16 @@ public class BoardDrawer
 
     private int m_width;
 
+    private static int s_cachedFontFieldSize;
+
     private static final AlphaComposite COMPOSITE_3
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f);
 
     private BoardConstants m_constants;
 
     private final Color m_gridLabelColor = new Color(96, 96, 96);
+
+    private static Font s_cachedFont;
 
     private final Image m_image;
 
@@ -209,7 +213,7 @@ public class BoardDrawer
     private void drawGridLabels(Graphics graphics)
     {
         graphics.setColor(m_gridLabelColor);
-        graphics.setFont(UIManager.getFont("Label.font"));
+        setFont(graphics, m_fieldSize);
         int stringWidth = graphics.getFontMetrics().stringWidth("XX");
         if (m_fieldSize < stringWidth)
             return;
@@ -275,6 +279,19 @@ public class BoardDrawer
         int x = Math.max((m_fieldSize - stringWidth) / 2, 0);
         int y = stringHeight + (m_fieldSize - stringHeight) / 2;
         graphics.drawString(string, location.x + x, location.y + y);
+    }
+
+    private static void setFont(Graphics graphics, int fieldSize)
+    {
+        if (s_cachedFont != null && s_cachedFontFieldSize == fieldSize)
+        {
+            graphics.setFont(s_cachedFont);
+            return;
+        }
+        int fontSize = (int)((double)fieldSize / 3.5);
+        s_cachedFont = new Font("SansSerif", Font.PLAIN, fontSize);
+        s_cachedFontFieldSize = fieldSize;
+        graphics.setFont(s_cachedFont);
     }
 }
 
