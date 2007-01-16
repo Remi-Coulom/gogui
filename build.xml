@@ -198,6 +198,7 @@ $URL$
  test/checkstyle/checkstyle_checks.xml
  test/junit/src/net/sf/gogui/*/*.java
  test/junit/src/net/sf/gogui/*/*.sgf
+ test/junit/src/net/sf/gogui/*/*.png
  test/pmd/ruleset.xml
  test/regress/*.tst
 " />
@@ -643,6 +644,7 @@ ${looks.zipfile}
  classpath="build"/>
 <copy todir="build/test">
 <fileset dir="test/junit/src" includes="net/sf/gogui/*/*.sgf"/>
+<fileset dir="test/junit/src" includes="net/sf/gogui/*/*.png"/>
 </copy>
 </target>
 

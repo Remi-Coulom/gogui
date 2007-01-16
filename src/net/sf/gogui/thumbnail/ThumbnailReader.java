@@ -73,28 +73,34 @@ public final class ThumbnailReader
         }
         String formatName = "javax_imageio_1.0";
         Node root = metadata.getAsTree(formatName);
+        String uri = getMeta(root, "Thumb::URI");
         try
         {
-            metaData.m_uri = new URI(getMeta(root, "Thumb::URI"));
+            if (uri == null)
+                warning(file, "no Thumb::URI");
+            else
+                metaData.m_uri = new URI(uri);
         }
         catch (URISyntaxException e)
         {
-            System.err.println("File " + file + " has invalid Thumb::URI "
-                               + getMeta(root, "Thumb::URI"));
+            warning(file, "invalid Thumb::URI " + uri);
         }
+        String lastModified = getMeta(root, "Thumb::MTime");
         try
         {
-            metaData.m_lastModified =
-                Long.parseLong(getMeta(root, "Thumb::MTime"));
+            if (lastModified == null)
+                warning(file, "no Thumb::MTime");
+            else
+                metaData.m_lastModified =
+                    Long.parseLong(getMeta(root, "Thumb::MTime"));
         }
         catch (NumberFormatException e)
         {
-            System.err.println("File " + file + " has invalid Thumb::MTime "
-                               + getMeta(root, "Thumb::MTime"));
+            warning(file, "invalid Thumb::MTime " + lastModified);
         }
         metaData.m_mimeType = getMeta(root, "Thumb::Mimetype");
-        metaData.m_description = getMeta(root, "Thumb::Description");
-        metaData.m_software = getMeta(root, "Thumb::Software");
+        metaData.m_description = getMeta(root, "Description");
+        metaData.m_software = getMeta(root, "Software");
         return metaData;
     }
 
@@ -105,39 +111,35 @@ public final class ThumbnailReader
     */
     private static String getMeta(Node node, String key)
     {
-        String result = "";
-        boolean found = false;
-        for (Node child = node.getFirstChild(); child != null && ! found;
+        if ("TextEntry".equalsIgnoreCase(node.getNodeName()))
+        {
+            String keyword = null;
+            String value = null;
+            NamedNodeMap attributes = node.getAttributes();
+            for (int i = 0; i < attributes.getLength(); ++i)
+            {
+                Node attribute = attributes.item(i);
+                if (attribute.getNodeName().equals("keyword"))
+                    keyword = attribute.getNodeValue();
+                else if (attribute.getNodeName().equals("value"))
+                    value = attribute.getNodeValue();
+            }
+            if (key.equals(keyword))
+                return value;
+        }
+        for (Node child = node.getFirstChild(); child != null;
              child = child.getNextSibling())
         {
-            if (! child.getNodeName().equals("Text"))
-                continue;
-            for (Node grandChild = child.getFirstChild();
-                 grandChild != null && ! found;
-                 grandChild = grandChild.getNextSibling())
-            {
-                if (! grandChild.getNodeName().equals("TextEntry"))
-                    continue;
-                NamedNodeMap attrs = grandChild.getAttributes();
-                String keyword = "";
-                String value = "";
-                for (int i = 0; i < attrs.getLength(); i++)
-                {
-                    Node attr = attrs.item(i);
-                    String name = attr.getNodeName();
-                    if (name.equals("keyword"))
-                        keyword = attr.getNodeValue();
-                    else if (name.equals("value"))
-                        value = attr.getNodeValue();
-                }
-                if (keyword.equals(key))
-                {
-                    result = value;
-                    found = true;
-                }
-            }
+            String value = getMeta(child, key);
+            if (value != null)
+                return value;
         }
-        return result;
+        return null;
+    }
+
+    private static void warning(File file, String message)
+    {
+        System.err.println(file + ": " + message);
     }
 }
 
