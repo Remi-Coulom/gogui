@@ -24,9 +24,6 @@ import net.sf.gogui.go.Move;
 public class GameInfo
     extends JPanel
 {
-    /** Constructor.
-        @param clock Clock to register as listener or null.
-    */
     public GameInfo(Game game)
     {
         super(new GridLayout(0, 2, GuiUtil.SMALL_PAD, GuiUtil.SMALL_PAD));

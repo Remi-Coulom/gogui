@@ -267,7 +267,7 @@ public final class Board
     /** Initialize the board for a given board size.
         For changing the board size.
         Also calls newGame().
-        @param boardSize The new board size (number of points per
+        @param size The new board size (number of points per
         row / column) in the range from one to GoPoint.MAXSIZE
     */
     public void init(int size)
