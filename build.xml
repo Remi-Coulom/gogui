@@ -401,7 +401,7 @@ ${looks.zipfile}
  net/sf/gogui/config/analyze-commands
  net/sf/gogui/doc/*.html
  net/sf/gogui/doc/*.png
- net/sf/gogui/drawboard/*.png
+ net/sf/gogui/drawboard/*.class
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/gtp/*.class
