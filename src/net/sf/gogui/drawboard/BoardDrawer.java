@@ -311,7 +311,7 @@ public class BoardDrawer
             graphics.setFont(s_cachedFont);
             return;
         }
-        int fontSize = (int)((double)fieldSize / 3.5);
+        int fontSize = (int)((double)fieldSize / 3);
         s_cachedFont = new Font("SansSerif", Font.PLAIN, fontSize);
         s_cachedFontFieldSize = fieldSize;
         graphics.setFont(s_cachedFont);
