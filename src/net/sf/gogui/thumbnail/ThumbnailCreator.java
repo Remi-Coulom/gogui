@@ -51,6 +51,11 @@ public final class ThumbnailCreator
         m_drawer = new BoardDrawer();
     }
 
+    /** Create thumbnail at standard location.
+        @todo Use ThumbnaulReader to check if an up-to-date thumbnail already
+        exists and do not create a new one in this case (required by the
+        thumbnail standard)
+    */
     public boolean create(File input)
     {
         return create(input, null, 128, true);
