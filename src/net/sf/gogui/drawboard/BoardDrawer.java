@@ -219,11 +219,10 @@ public class BoardDrawer
 
     private void drawGridLabels(Graphics graphics)
     {
+        if (m_fieldSize < 15)
+            return;
         graphics.setColor(m_gridLabelColor);
         setFont(graphics, m_fieldSize);
-        int stringWidth = graphics.getFontMetrics().stringWidth("XX");
-        if (m_fieldSize < stringWidth)
-            return;
         int offset = (m_fieldSize + m_fieldOffset) / 2;
         Point point;
         char c = 'A';        
