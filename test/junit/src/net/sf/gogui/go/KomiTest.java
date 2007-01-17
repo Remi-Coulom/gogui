@@ -4,7 +4,7 @@
 
 package net.sf.gogui.go;
 
-public class KomiTest
+public final class KomiTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

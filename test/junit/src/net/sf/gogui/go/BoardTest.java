@@ -6,7 +6,7 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 
-public class BoardTest
+public final class BoardTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

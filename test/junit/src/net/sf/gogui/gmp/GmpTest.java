@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-public class GmpTest
+public final class GmpTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

@@ -6,7 +6,7 @@ package net.sf.gogui.go;
 
 import java.util.ArrayList;
 
-public class GoPointTest
+public final class GoPointTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

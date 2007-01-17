@@ -9,7 +9,7 @@ package net.sf.gogui.gtp;
     is not made on the streams level, but the command handler is
     called directly at the GtpEngine.
 */
-public class GtpEngineClient
+public final class GtpEngineClient
     extends GtpClientBase
 {
     public GtpEngineClient(GtpEngine engine)

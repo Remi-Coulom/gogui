@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import net.sf.gogui.util.ErrorMessage;
 
-public class ThumbnailReaderTest
+public final class ThumbnailReaderTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

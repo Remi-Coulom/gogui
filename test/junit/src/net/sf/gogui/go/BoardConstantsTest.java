@@ -7,7 +7,7 @@ package net.sf.gogui.go;
 import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
 
-public class BoardConstantsTest
+public final class BoardConstantsTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

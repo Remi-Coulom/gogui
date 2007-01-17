@@ -6,7 +6,7 @@ package net.sf.gogui.game;
 
 import net.sf.gogui.util.ErrorMessage;
 
-public class TimeSettingsTest
+public final class TimeSettingsTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

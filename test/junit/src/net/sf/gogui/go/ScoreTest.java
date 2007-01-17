@@ -4,7 +4,7 @@
 
 package net.sf.gogui.go;
 
-public class ScoreTest
+public final class ScoreTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

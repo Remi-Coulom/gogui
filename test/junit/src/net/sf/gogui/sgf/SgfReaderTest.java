@@ -21,7 +21,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.version.Version;
 
-public class SgfReaderTest
+public final class SgfReaderTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

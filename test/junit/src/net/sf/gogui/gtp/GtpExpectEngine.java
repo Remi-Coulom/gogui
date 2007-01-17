@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /** GTP engine that expects a certain sequence of commands.
     Intended for testing GTP controllers.
 */
-public class GtpExpectEngine
+public final class GtpExpectEngine
     extends GtpEngine
 {
     public GtpExpectEngine(PrintStream log)

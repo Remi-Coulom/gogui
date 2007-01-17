@@ -4,7 +4,7 @@
 
 package net.sf.gogui.util;
 
-public class StatisticsTest
+public final class StatisticsTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

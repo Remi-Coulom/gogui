@@ -6,7 +6,7 @@ package net.sf.gogui.game;
 
 import net.sf.gogui.go.GoPoint;
 
-public class NodeTest
+public final class NodeTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

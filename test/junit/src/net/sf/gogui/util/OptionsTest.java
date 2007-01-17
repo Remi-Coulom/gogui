@@ -6,7 +6,7 @@ package net.sf.gogui.util;
 
 import java.util.ArrayList;
 
-public class OptionsTest
+public final class OptionsTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

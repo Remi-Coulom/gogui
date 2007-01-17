@@ -6,7 +6,7 @@ package net.sf.gogui.util;
 
 import java.io.StringReader;
 
-public class TableTest
+public final class TableTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

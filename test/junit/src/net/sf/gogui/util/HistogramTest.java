@@ -4,7 +4,7 @@
 
 package net.sf.gogui.util;
 
-public class HistogramTest
+public final class HistogramTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

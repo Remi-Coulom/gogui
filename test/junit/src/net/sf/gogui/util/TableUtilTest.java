@@ -6,7 +6,7 @@ package net.sf.gogui.util;
 
 import java.util.ArrayList;
 
-public class TableUtilTest
+public final class TableUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

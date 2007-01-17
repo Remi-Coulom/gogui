@@ -9,7 +9,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
-public class NodeUtilTest
+public final class NodeUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

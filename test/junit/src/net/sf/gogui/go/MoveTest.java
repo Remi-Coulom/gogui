@@ -4,7 +4,7 @@
 
 package net.sf.gogui.go;
 
-public class MoveTest
+public final class MoveTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

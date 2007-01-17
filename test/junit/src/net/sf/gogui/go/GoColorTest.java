@@ -4,7 +4,7 @@
 
 package net.sf.gogui.go;
 
-public class GoColorTest
+public final class GoColorTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

@@ -6,7 +6,7 @@ package net.sf.gogui.util;
 
 import java.io.File;
 
-public class FileUtilTest
+public final class FileUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

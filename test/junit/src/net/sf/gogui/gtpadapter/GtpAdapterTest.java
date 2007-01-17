@@ -16,7 +16,7 @@ import net.sf.gogui.gtp.GtpExpectEngine;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StreamCopy;
 
-public class GtpAdapterTest
+public final class GtpAdapterTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

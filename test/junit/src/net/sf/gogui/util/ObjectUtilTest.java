@@ -7,7 +7,7 @@ package net.sf.gogui.util;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class ObjectUtilTest
+public final class ObjectUtilTest
     extends junit.framework.TestCase
 {
     public static void main(Object args[])

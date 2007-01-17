@@ -4,7 +4,7 @@
 
 package net.sf.gogui.go;
 
-public class PlacementTest
+public final class PlacementTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

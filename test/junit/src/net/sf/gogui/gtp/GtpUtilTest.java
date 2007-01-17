@@ -7,7 +7,7 @@ package net.sf.gogui.gtp;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoPoint;
 
-public class GtpUtilTest
+public final class GtpUtilTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

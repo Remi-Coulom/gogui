@@ -10,7 +10,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
-public class TextParserTest
+public final class TextParserTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

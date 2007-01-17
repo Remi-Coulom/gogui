@@ -8,7 +8,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 
-public class BoardUpdaterTest
+public final class BoardUpdaterTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])

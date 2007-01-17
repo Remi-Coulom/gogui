@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class StreamCopyTest
+public final class StreamCopyTest
     extends junit.framework.TestCase
 {
     public static void main(String args[])
