@@ -64,9 +64,13 @@ public final class Main
                 output = new File((String)arguments.get(1));
             int size = opt.getInteger("size", 128, 1);
             ThumbnailCreator thumbnailCreator = new ThumbnailCreator(verbose);
-            if (! thumbnailCreator.create(input, output, size, true))
+            try
             {
-                System.err.println(thumbnailCreator.getLastError());
+                thumbnailCreator.create(input, output, size, true);
+            }
+            catch (ThumbnailCreator.Error e)
+            {
+                System.err.println(e.getMessage());
                 System.exit(-1);
             }
         }

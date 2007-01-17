@@ -36,6 +36,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.sgf.SgfReader;
+import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
 import net.sf.gogui.version.Version;
 
@@ -45,6 +46,15 @@ import net.sf.gogui.version.Version;
 */
 public final class ThumbnailCreator
 {
+    public static class Error
+        extends ErrorMessage
+    {
+        public Error(String message)
+        {
+            super(message);
+        }
+    }
+
     public ThumbnailCreator(boolean verbose)
     {
         m_verbose = verbose;
@@ -52,13 +62,24 @@ public final class ThumbnailCreator
     }
 
     /** Create thumbnail at standard location.
-        @todo Use ThumbnaulReader to check if an up-to-date thumbnail already
-        exists and do not create a new one in this case (required by the
-        thumbnail standard)
+        Does not create the thumnbail if an up-to-date thumbnail already
+        exists.
     */
-    public boolean create(File input)
+    public void create(File input) throws Error
     {
-        return create(input, null, 128, true);
+        File file = getThumbnailFileNormalSize(input);
+        URI uri = getURI(input);
+        long lastModified = getLastModified(input);
+        try
+        {
+            ThumbnailReader.MetaData data = ThumbnailReader.read(file);
+            if (data.m_uri.equals(uri) && data.m_lastModified == lastModified)
+                return;
+        }
+        catch (IOException e)
+        {
+        }
+        create(input, null, 128, true);
     }
 
     /** Create thumbnail.
@@ -69,25 +90,16 @@ public final class ThumbnailCreator
         @param scale If true thumbnailSize will be scaled down for boards
         smaller than 19.
     */
-    public boolean create(File input, File output, int thumbnailSize,
-                          boolean scale)
+    public void create(File input, File output, int thumbnailSize,
+                       boolean scale) throws Error
     {
         assert(thumbnailSize > 0);
         m_lastThumbnail = null;
-        m_lastError = "";
         try
         {
             log("File: " + input);
-            URI uri = FileUtil.getURI(input);
-            if (uri == null)
-            {
-                m_lastError = "Invalid file name";
-                return false;
-            }
+            URI uri = getURI(input);
             log("URI: " + uri);
-            String md5 = getMD5(uri.toString());
-            if (m_verbose)
-                log("MD5: " + md5);
             ArrayList moves = new ArrayList();
             m_description = "";
             Board board = readFile(input, moves);
@@ -122,53 +134,28 @@ public final class ThumbnailCreator
             }
             else
                 image = getImage(field, imageSize, imageSize);
-
             if (output == null)
-                output = new File(ThumbnailPlatform.getNormalDir(),
-                                  md5 + ".png");
-
-            long lastModified = input.lastModified() / 1000L;
-            if (lastModified == 0L)
-            {
-                System.err.println("Could not get last modification time: "
-                                   + input);
-                return false;
-            }
+                output = getThumbnailFileNormalSize(input);
+            long lastModified = getLastModified(input);
             writeImage(image, output, uri, lastModified);
-
-            return true;
         }
         catch (FileNotFoundException e)
         {
-            m_lastError = "File not found: " + input;
-            log(m_lastError);
+            throw new Error("File not found: " + input);
         }
         catch (IOException e)
         {
-            m_lastError = e.getMessage();
-            log(m_lastError);
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            m_lastError = "No MD5 message digest found";
-            log(m_lastError);
+            throw new Error(e.getMessage());
         }
         catch (SgfReader.SgfError e)
         {
-            m_lastError = e.getMessage();
-            log(m_lastError);
+            throw new Error(e.getMessage());
         }
-        return false;
     }
 
     public String getLastDescription()
     {
         return m_description;
-    }
-
-    public String getLastError()
-    {
-        return m_lastError;
     }
 
     public File getLastThumbnail()
@@ -179,8 +166,6 @@ public final class ThumbnailCreator
     private final boolean m_verbose;
 
     private String m_description;
-
-    private String m_lastError;
 
     private File m_lastThumbnail;
 
@@ -255,18 +240,51 @@ public final class ThumbnailCreator
         return image;
     }
 
-    private static String getMD5(String string)
-        throws NoSuchAlgorithmException, UnsupportedEncodingException
+    private long getLastModified(File file) throws Error
     {
-        MessageDigest digest = MessageDigest.getInstance("MD5");
-        byte[] md5 = digest.digest(string.getBytes("US-ASCII"));
-        StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < md5.length; ++i)
+        long lastModified = file.lastModified() / 1000L;
+        if (lastModified == 0L)
+            throw new Error("Could not get last modification time: " + file);
+        return lastModified;
+    }
+
+    private String getMD5(String string) throws Error
+    {
+        try
         {
-            buffer.append(Integer.toHexString((md5[i] >> 4) & 0x0F));
-            buffer.append(Integer.toHexString(md5[i] & 0x0F));
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] md5 = digest.digest(string.getBytes("US-ASCII"));
+            StringBuffer buffer = new StringBuffer();
+            for (int i = 0; i < md5.length; ++i)
+            {
+                buffer.append(Integer.toHexString((md5[i] >> 4) & 0x0F));
+                buffer.append(Integer.toHexString(md5[i] & 0x0F));
+            }
+            return buffer.toString();
         }
-        return buffer.toString();
+        catch (NoSuchAlgorithmException e)
+        {
+            throw new Error("No MD5 message digest found");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new Error("MD5: unsupported encoding");
+        }
+    }
+
+    private File getThumbnailFileNormalSize(File file) throws Error
+    {
+        URI uri = getURI(file);
+        String md5 = getMD5(uri.toString());
+        return new File(ThumbnailPlatform.getNormalDir(), md5 + ".png");
+    }
+
+    private URI getURI(File file) throws Error
+    {
+        URI uri = FileUtil.getURI(file);
+        if (uri == null)
+            throw new Error("Invalid file name");
+        return uri;
     }
 
     private void log(String line)

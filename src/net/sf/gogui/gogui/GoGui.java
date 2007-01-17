@@ -2354,7 +2354,15 @@ public class GoGui
             return;
         String path = file.getAbsolutePath();
         if (! path.startsWith("/tmp") && ! path.startsWith("/var/tmp"))
-            m_thumbnailCreator.create(file);
+        {
+            try
+            {
+                m_thumbnailCreator.create(file);
+            }
+            catch (ThumbnailCreator.Error e)
+            {
+            }
+        }
     }
 
     private void currentNodeChanged()
