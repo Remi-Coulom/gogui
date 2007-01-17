@@ -2,7 +2,7 @@
 // $Id$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.util;
+package net.sf.gogui.drawboard;
 
 import java.awt.Color;
 import java.awt.PaintContext;

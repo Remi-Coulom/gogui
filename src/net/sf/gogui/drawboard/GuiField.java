@@ -15,7 +15,6 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import net.sf.gogui.go.GoColor;
-import net.sf.gogui.util.RadialGradientPaint;
 
 /** Component representing a field on the board.
     The implementation assumes that the size of the component is a square,
