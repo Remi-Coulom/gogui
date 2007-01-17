@@ -2,7 +2,7 @@
 // $Id$
 //----------------------------------------------------------------------------
 
-package net.sf.gogui.util;
+package net.sf.gogui.gui;
 
 import java.awt.Component;
 import java.awt.Container;
