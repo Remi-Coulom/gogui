@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import net.sf.gogui.util.FileUtil;
 
-class ThumbnailUtil
+public class ThumbnailUtil
 {
     /** Expire all thumbnails older than a certain age. */
     public static void expire(int seconds, boolean checkOnly)
