@@ -18,7 +18,7 @@ public final class Placement
 
     public boolean equals(Object object)
     {
-        if (object == null)
+        if (object == null || object.getClass() != getClass())
             return false;
         Placement placement = (Placement)object;
         return (m_point == placement.m_point
