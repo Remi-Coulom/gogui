@@ -606,6 +606,7 @@ ${looks.zipfile}
   net/sf/gogui/gui.*,
   net/sf/gogui/netgtp.*,
   net/sf/gogui/sgf.*,
+  net/sf/gogui/sgfthumbnail.*,
   net/sf/gogui/sgftotex.*,
   net/sf/gogui/tex.*,
   net/sf/gogui/thumbnail.*,
@@ -765,7 +766,7 @@ ${looks.zipfile}
 <mkdir dir="lib"/>
 <jar destfile="lib/sgfthumbnail.jar">
 <manifest>
-<attribute name="Main-Class" value="net.sf.gogui.thumbnail.Main"/>
+<attribute name="Main-Class" value="net.sf.gogui.sgfthumbnail.Main"/>
 <attribute name="Built-By" value="${user.name}"/>
 <attribute name="Build-Date" value="${DSTAMP} ${TSTAMP}"/>
 </manifest>
@@ -774,6 +775,7 @@ ${looks.zipfile}
  net/sf/gogui/game/*.class
  net/sf/gogui/go/*.class
  net/sf/gogui/sgf/*.class
+ net/sf/gogui/sgfthumbnail/*.class
  net/sf/gogui/thumbnail/*.class
  net/sf/gogui/util/*.class
  net/sf/gogui/version/*.class
