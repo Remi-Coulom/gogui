@@ -121,11 +121,11 @@ public class Help
 
     private void appendHistory(URL url)
     {
-        if (m_historyIndex >= 0 && getHistory(m_historyIndex).equals(url))
+        if (m_historyIndex >= 0 && historyEquals(m_historyIndex, url))
             return;
         if (m_historyIndex + 1 < m_history.size())
         {
-            if (! getHistory(m_historyIndex + 1).equals(url))
+            if (! historyEquals(m_historyIndex + 1, url))
             {
                 m_history = m_history.subList(0, m_historyIndex + 1);
                 m_history.add(url);
@@ -202,6 +202,13 @@ public class Help
         boolean forwardPossible = (m_historyIndex < m_history.size() - 1);
         m_buttonBack.setEnabled(backPossible);
         m_buttonForward.setEnabled(forwardPossible);
+    }
+
+    private boolean historyEquals(int index, URL url)
+    {
+        // Compare as strings to avoid Findbugs warning about potentially
+        // blocking URL.equals()
+        return getHistory(index).toString().equals(url.toString());
     }
 
     private void loadURL(URL url)
