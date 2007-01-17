@@ -42,7 +42,6 @@ import net.sf.gogui.version.Version;
 
 /** Thumbnail creator.
     Creates thumbnails according to the freedesktop.org standard.
-    @todo Save to temp file and rename as required by the standard.
 */
 public final class ThumbnailCreator
 {
@@ -296,7 +295,7 @@ public final class ThumbnailCreator
 
     private void writeImage(BufferedImage image, File file, URI uri,
                             long lastModified)
-        throws IOException
+        throws IOException, Error
     {
         Iterator iter = ImageIO.getImageWritersBySuffix("png");
         ImageWriter writer = (ImageWriter)iter.next();
@@ -319,9 +318,13 @@ public final class ThumbnailCreator
             assert(false);
             return;
         }
-        ImageOutputStream ios = ImageIO.createImageOutputStream(file);
+        File tempFile = File.createTempFile("gogui-thumbnail", ".png");
+        tempFile.deleteOnExit();
+        ImageOutputStream ios = ImageIO.createImageOutputStream(tempFile);
         writer.setOutput(ios);
         writer.write(null, new IIOImage(image, null, meta), null);
+        if (! tempFile.renameTo(file))
+            throw new Error("Could not rename " + tempFile + " to " + file);
         m_lastThumbnail = file;
     }
 }
