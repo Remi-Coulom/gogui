@@ -1003,8 +1003,8 @@ public final class SgfReader
             {
                 assert(matcher.groupCount() == 2);
                 m_preByoyomi =
-                    (Integer.parseInt(matcher.group(1)) * 60 
-                     + Integer.parseInt(matcher.group(2))) * 1000;
+                    (Integer.parseInt(matcher.group(1)) * 60L
+                     + Integer.parseInt(matcher.group(2))) * 1000L;
                 return;
             }
             pattern = Pattern.compile("(\\d+):(\\d\\d):(\\d\\d)");
@@ -1013,9 +1013,9 @@ public final class SgfReader
             {
                 assert(matcher.groupCount() == 3);
                 m_preByoyomi =
-                    (Integer.parseInt(matcher.group(1)) * 3600 
-                     + Integer.parseInt(matcher.group(2)) * 60
-                     + Integer.parseInt(matcher.group(3))) * 1000;
+                    (Integer.parseInt(matcher.group(1)) * 3600L
+                     + Integer.parseInt(matcher.group(2)) * 60L
+                     + Integer.parseInt(matcher.group(3))) * 1000L;
                 return;
             }
         }
