@@ -398,21 +398,21 @@ class SgfPreview
     {
         if (m_file == null)
             return;
-        m_thumbnailCreator.create(m_file);
-        File thumbnail = m_thumbnailCreator.getLastThumbnail();
-        if (thumbnail == null)
+        try
         {
-            SimpleDialogs.showError(this, "Preview generation failed:\n" +
-                                    m_thumbnailCreator.getLastError());
-            m_image = null;
-        }
-        else
-        {
+            m_thumbnailCreator.create(m_file);
+            File thumbnail = m_thumbnailCreator.getLastThumbnail();
             ImageIcon icon = new ImageIcon(thumbnail.toString());
             m_image = icon.getImage();
+            String description = m_thumbnailCreator.getLastDescription();
+            m_description.setText(description);
         }
-        String description = m_thumbnailCreator.getLastDescription();
-        m_description.setText(description);
+        catch (ThumbnailCreator.Error e)
+        {
+            SimpleDialogs.showError(this, "Preview generation failed:\n" +
+                                    e.getMessgae());
+            m_image = null;
+        }
         m_imagePanel.repaint();
         m_preview.setEnabled(false);
     }
