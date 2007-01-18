@@ -20,6 +20,76 @@ import net.sf.gogui.util.StringUtil;
 /** Utility functions for parsing GTP responses. */
 public final class GtpUtil
 {
+    /** Construct a gogui-play_sequence command from a list of moves. */
+    public static String getPlaySequenceCommand(ArrayList moves)
+    {
+        StringBuffer cmd = new StringBuffer(2048);
+        cmd.append("play_sequence");
+        for (int i = 0; i < moves.size(); ++i)
+        {
+            Move move = (Move)moves.get(i);
+            GoColor color = move.getColor();
+            if (color == GoColor.BLACK)
+                cmd.append(" b ");
+            else if (color == GoColor.WHITE)
+                cmd.append(" w ");
+            else
+                cmd.append(" empty ");
+            cmd.append(GoPoint.toString(move.getPoint()));
+        }
+        return cmd.toString();
+    }
+
+    public static String getTimeSettingsCommand(TimeSettings settings)
+    {
+        long preByoyomi = settings.getPreByoyomi() / 1000;
+        long byoyomi = 0;
+        long byoyomiMoves = 0;
+        if (settings.getUseByoyomi())
+        {
+            byoyomi = settings.getByoyomi() / 1000;
+            byoyomiMoves = settings.getByoyomiMoves();
+        }
+        return "time_settings " + preByoyomi + " " + byoyomi + " "
+            + byoyomiMoves;
+    }
+
+    /** Check if command changes the board state.
+        Compares command to known GTP commands that change the board state,
+        such that a controller that keeps track of the board state cannot
+        blindly forward them to a GTP engine without updating its internal
+        board state too. Includes all such commands from GTP protocol version
+        1 and 2, the <code>quit</code> command, and some known GTP extension
+        commands (e.g. <code>gg-undo</code> from GNU Go and
+        <code>play_sequence</code> from GoGui). Does not include non-criticlal
+        state changing commands like <code>komi</code>.
+        @param cmd The command or complete command line
+        @return <code>true</code> if command is a state-changing command
+    */
+    public static boolean isStateChangingCommand(String command)
+    {
+        GtpCommand cmd = new GtpCommand(command);
+        String c = cmd.getCommand();
+        return (c.equals("boardsize")
+                || c.equals("black")
+                || c.equals("clear_board")
+                || c.equals("fixed_handicap")
+                || c.equals("genmove")
+                || c.equals("genmove_black")
+                || c.equals("genmove_cleanup")
+                || c.equals("genmove_white")
+                || c.equals("gg-undo")
+                || c.equals("kgs-genmove_cleanup")
+                || c.equals("loadsgf")
+                || c.equals("place_free_handicap")
+                || c.equals("play")
+                || c.equals("play_sequence")
+                || c.equals("quit")
+                || c.equals("set_free_handicap")
+                || c.equals("undo")
+                || c.equals("white"));
+    }
+
     public static double[][] parseDoubleBoard(String response, int boardSize)
         throws GtpError
     {
@@ -212,40 +282,6 @@ public final class GtpUtil
         for (int i = 0; i < result.length; ++i)
             result[i] = (Move)list.get(i);
         return result;
-    }
-
-    /** Construct a gogui-play_sequence command from a list of moves. */
-    public static String getPlaySequenceCommand(ArrayList moves)
-    {
-        StringBuffer cmd = new StringBuffer(2048);
-        cmd.append("play_sequence");
-        for (int i = 0; i < moves.size(); ++i)
-        {
-            Move move = (Move)moves.get(i);
-            GoColor color = move.getColor();
-            if (color == GoColor.BLACK)
-                cmd.append(" b ");
-            else if (color == GoColor.WHITE)
-                cmd.append(" w ");
-            else
-                cmd.append(" empty ");
-            cmd.append(GoPoint.toString(move.getPoint()));
-        }
-        return cmd.toString();
-    }
-
-    public static String getTimeSettingsCommand(TimeSettings settings)
-    {
-        long preByoyomi = settings.getPreByoyomi() / 1000;
-        long byoyomi = 0;
-        long byoyomiMoves = 0;
-        if (settings.getUseByoyomi())
-        {
-            byoyomi = settings.getByoyomi() / 1000;
-            byoyomiMoves = settings.getByoyomiMoves();
-        }
-        return "time_settings " + preByoyomi + " " + byoyomi + " "
-            + byoyomiMoves;
     }
 
     /** Make constructor unavailable; class is for namespace only. */

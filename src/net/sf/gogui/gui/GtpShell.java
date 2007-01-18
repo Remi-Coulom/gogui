@@ -42,6 +42,7 @@ import javax.swing.text.Style;
 import net.sf.gogui.game.Clock;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
+import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.PrefUtil;
 
@@ -360,19 +361,7 @@ public class GtpShell
         }
         else
         {
-            if (c.startsWith("boardsize ")
-                || c.startsWith("black ")
-                || c.equals("clear_board")
-                || c.startsWith("genmove ")
-                || c.startsWith("genmove_black ")
-                || c.startsWith("genmove_cleanup ")
-                || c.startsWith("genmove_white ")
-                || c.startsWith("kgs-genmove_cleanup ")
-                || c.startsWith("loadsgf ")
-                || c.startsWith("play ")
-                || c.startsWith("play_sequence ")
-                || c.startsWith("white ")
-                || c.startsWith("quit"))
+            if (GtpUtil.isStateChangingCommand(c))
             {
                 if (m_modifyWarning == null)
                     m_modifyWarning = new OptionalMessage(this);
@@ -891,4 +880,3 @@ public class GtpShell
         m_isFinalSizeSet = true;
     }
 }
-

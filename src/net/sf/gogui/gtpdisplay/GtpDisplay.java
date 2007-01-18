@@ -276,7 +276,7 @@ public class GtpDisplay
                     public void run()
                     {
                         showStatus("Input move for " + m_color
-                                   + " (right click for pass)");
+                                   + " (Ctrl-button and click for pass)");
                     }
                 });
             synchronized (m_mutex)
@@ -405,27 +405,12 @@ public class GtpDisplay
             for (int i = 0; i < commands.size(); ++i)
             {
                 String c = (String)commands.get(i);
-                if (c.equals("boardsize")
-                    || c.equals("black")
-                    || c.equals("clear_board")
-                    || c.equals("fixed_handicap")
-                    || c.equals("genmove")
-                    || c.equals("genmove_black")
-                    || c.equals("genmove_white")
-                    || c.equals("gg-undo")
+                if (GtpUtil.isStateChangingCommand(c)
                     || c.equals("help")
                     || c.equals("known_command")
                     || c.equals("komi")
                     || c.equals("list_commands")
-                    || c.equals("loadsgf")
-                    || c.equals("place_free_handicap")
-                    || c.equals("play")
-                    || c.equals("play_sequence")
-                    || c.equals("protocol_version")
-                    || c.equals("quit")
-                    || c.equals("set_free_handicap")
-                    || c.equals("undo")
-                    || c.equals("white"))
+                    || c.equals("protocol_version"))
                     continue;
                 register(c, forwardCallback);
             }

@@ -236,13 +236,7 @@ public class TwoGtp
                             "twogtp_white\n" +
                             "undo\n" +
                             "version\n");
-        else if (command.equals("genmove_black")
-                 || command.equals("genmove_white")
-                 || command.equals("black")
-                 || command.equals("white")
-                 || command.equals("kgs-genmove_cleanup")
-                 || command.equals("loadsgf")
-                 || command.equals("genmove_cleanup"))
+        else if (GtpUtil.isStateChangingCommand(command))
             throw new GtpError("unknown command");
         else if (command.equals("time_settings"))
             sendIfSupported(command, cmd.getLine());
