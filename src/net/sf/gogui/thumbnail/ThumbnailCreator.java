@@ -72,16 +72,20 @@ public final class ThumbnailCreator
     public void create(File input) throws Error
     {
         File file = getThumbnailFileNormalSize(input);
-        URI uri = getURI(input);
-        long lastModified = getLastModified(input);
-        try
+        if (file.exists())
         {
-            ThumbnailReader.MetaData data = ThumbnailReader.read(file);
-            if (data.m_uri.equals(uri) && data.m_lastModified == lastModified)
-                return;
-        }
-        catch (IOException e)
-        {
+            URI uri = getURI(input);
+            long lastModified = getLastModified(input);        
+            try
+            {
+                ThumbnailReader.MetaData data = ThumbnailReader.read(file);
+                if (uri.equals(data.m_uri)
+                    && data.m_lastModified == lastModified)
+                    return;
+            }
+            catch (IOException e)
+            {
+            }
         }
         create(input, null, 128, true);
     }
