@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.Options;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.version.Version;
@@ -46,7 +47,8 @@ public final class Main
             if (opt.contains("version"))
             {
                 if (opt.getArguments().size() > 0)
-                    fail("No arguments allowed with option -version");
+                    throw new ErrorMessage("No arguments allowed with"
+                                           + " option -version");
                 System.out.println("GtpAdapter " + Version.get());
                 return;
             }
@@ -63,7 +65,7 @@ public final class Main
             if (arguments.size() != 1)
             {
                 printUsage(System.err);
-                fail();
+                System.exit(-1);
             }
             PrintStream log = null;
             if (opt.contains("log"))
@@ -96,24 +98,13 @@ public final class Main
         catch (Throwable t)
         {
             StringUtil.printException(t);
-            fail();
+            System.exit(-1);
         }
     }
 
     /** Make constructor unavailable; class is for namespace only. */
     private Main()
     {
-    }
-
-    private static void fail()
-    {
-        System.exit(-1);
-    }
-
-    private static void fail(String message)
-    {
-        System.err.println(message);
-        fail();
     }
 
     private static void printUsage(PrintStream out)
