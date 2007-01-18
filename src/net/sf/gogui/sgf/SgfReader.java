@@ -294,15 +294,14 @@ public final class SgfReader
     }
 
     /** Check for obsolete long names for standard properties.
-        @param property Property name (must have been retrieved with
-        String.intern() because comparisons are done with ==
+        @param property Property name
         @return Short standard version of the property or original property
     */
     private String checkForObsoleteLongProps(String property)
     {
-        assert(property == property.intern());
         if (property.length() <= 2)
             return property;
+        property = property.intern();
         String shortName = null;
         if (property == "ADDBLACK")
             shortName = "AB";
