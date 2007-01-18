@@ -17,6 +17,7 @@ import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.gtp.GtpCallback;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
@@ -44,6 +45,7 @@ public class GtpDisplay
         }
         else
             m_gtp = null;
+        registerCommands();
         m_size = GoPoint.DEFAULT_SIZE;
         m_board = new Board(m_size);
         m_frame = new JFrame();
@@ -122,40 +124,9 @@ public class GtpDisplay
         }
     }
 
-    public void cmdListCommands(GtpCommand cmd)
+    public void cmdForward(GtpCommand cmd) throws GtpError
     {
-        if (m_gtp != null)
-        {
-            ArrayList commands = m_gtp.getSupportedCommands();
-            for (int i = 0; i < commands.size(); ++i)
-            {
-                String c = (String)commands.get(i);
-                if (c.equals("boardsize")
-                    || c.equals("black")
-                    || c.equals("clear_board")
-                    || c.equals("genmove")
-                    || c.equals("genmove_black")
-                    || c.equals("genmove_white")
-                    || c.equals("help")
-                    || c.equals("komi")
-                    || c.equals("list_commands")
-                    || c.equals("play")
-                    || c.equals("protocol_version")
-                    || c.equals("quit")
-                    || c.equals("white"))
-                    continue;
-                cmd.getResponse().append(c);
-                cmd.getResponse().append("\n");
-            }
-        }
-        cmd.getResponse().append("boardsize\n");
-        cmd.getResponse().append("clear_board\n");        
-        cmd.getResponse().append("genmove\n");
-        cmd.getResponse().append("komi\n");
-        cmd.getResponse().append("list_commands\n");
-        cmd.getResponse().append("play\n");
-        cmd.getResponse().append("protocol_version\n");
-        cmd.getResponse().append("quit\n");
+        send(cmd.getLine(), cmd.getResponse());
     }
 
     public void cmdName(GtpCommand cmd)
@@ -170,54 +141,7 @@ public class GtpDisplay
     {
         if (m_gtp != null)
             send("quit", cmd.getResponse());
-    }
-
-    public void handleCommand(GtpCommand cmd) throws GtpError
-    {
-        if (cmd.getCommand().equals("black"))
-            cmdPlay(GoColor.BLACK, cmd);
-        else if (cmd.getCommand().equals("boardsize"))
-            cmdBoardsize(cmd);
-        else if (cmd.getCommand().equals("clear_board"))
-            cmdClearBoard(cmd);
-        else if (cmd.getCommand().equals("genmove"))
-            cmdGenmove(cmd);
-        else if (cmd.getCommand().equals("genmove_black"))
-            cmdUnknown();
-        else if (cmd.getCommand().equals("genmove_white"))
-            cmdUnknown();
-        else if (cmd.getCommand().equals("help"))
-            cmdListCommands(cmd);
-        else if (cmd.getCommand().equals("komi"))
-            cmdKomi(cmd);
-        else if (cmd.getCommand().equals("list_commands"))
-            cmdListCommands(cmd);
-        else if (cmd.getCommand().equals("loadsgf"))
-            cmdUnknown();
-        else if (cmd.getCommand().equals("name"))
-            cmdName(cmd);
-        else if (cmd.getCommand().equals("place_free_handicap"))
-            cmdPlaceFreeHandicap(cmd);
-        else if (cmd.getCommand().equals("play"))
-            cmdPlay(cmd);
-        else if (cmd.getCommand().equals("protocol_version"))
-            cmd.setResponse("2");
-        else if (cmd.getCommand().equals("set_free_handicap"))
-            cmdSetFreeHandicap(cmd);
-        else if (cmd.getCommand().equals("version"))
-            cmdVersion();
-        else if (cmd.getCommand().equals("undo"))
-            cmdUndo(cmd);
-        else if (cmd.getCommand().equals("white"))
-            cmdPlay(GoColor.WHITE, cmd);
-        else if (cmd.getCommand().equals("quit"))
-            cmdQuit(cmd);
-        else
-        {
-            if (m_gtp == null)
-                throw new GtpError("unknown command");
-            send(cmd.getLine(), cmd.getResponse());
-        }
+        setQuit();
     }
 
     public void interruptCommand()
@@ -423,13 +347,6 @@ public class GtpDisplay
         play(color, point);
     }
 
-    private void cmdPlay(GoColor color, GtpCommand cmd) throws GtpError
-    {
-        cmd.checkNuArg(1);
-        GoPoint point = cmd.getPointArg(0, m_size);
-        play(color, point);
-    }
-
     private void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
     {
         for (int i = 0; i < cmd.getNuArg(); ++i)
@@ -440,15 +357,6 @@ public class GtpDisplay
     {
         cmd.checkArgNone();
         undo();
-    }
-
-    private void cmdUnknown() throws GtpError
-    {
-        throw new GtpError("Unknown command");
-    }
-
-    private void cmdVersion()
-    {
     }
 
     private void invokeAndWait(Runnable runnable) throws GtpError
@@ -486,6 +394,77 @@ public class GtpDisplay
             });
     }
 
+    private void registerCommands()
+    {
+        if (m_gtp != null)
+        {
+            GtpCallback forwardCallback = new GtpCallback() {
+                    public void run(GtpCommand cmd) throws GtpError {
+                        cmdForward(cmd); } };
+            ArrayList commands = m_gtp.getSupportedCommands();
+            for (int i = 0; i < commands.size(); ++i)
+            {
+                String c = (String)commands.get(i);
+                if (c.equals("boardsize")
+                    || c.equals("black")
+                    || c.equals("clear_board")
+                    || c.equals("fixed_handicap")
+                    || c.equals("genmove")
+                    || c.equals("genmove_black")
+                    || c.equals("genmove_white")
+                    || c.equals("gg-undo")
+                    || c.equals("help")
+                    || c.equals("known_command")
+                    || c.equals("komi")
+                    || c.equals("list_commands")
+                    || c.equals("loadsgf")
+                    || c.equals("place_free_handicap")
+                    || c.equals("play")
+                    || c.equals("play_sequence")
+                    || c.equals("protocol_version")
+                    || c.equals("quit")
+                    || c.equals("set_free_handicap")
+                    || c.equals("undo")
+                    || c.equals("white"))
+                    continue;
+                register(c, forwardCallback);
+            }
+        }
+        register("boardsize", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdBoardsize(cmd); } });
+        register("clear_board", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdClearBoard(cmd); } });
+        register("genmove", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdGenmove(cmd); } });
+        register("komi", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdKomi(cmd); } });
+        register("name", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdName(cmd); } });
+        register("place_free_handicap", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdPlaceFreeHandicap(cmd); } });
+        register("play", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdPlay(cmd); } });
+        register("quit", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdQuit(cmd); } });
+        register("set_free_handicap", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdSetFreeHandicap(cmd); } });
+        register("undo", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdUndo(cmd); } });
+        register("version", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdVersion(cmd); } });
+    }
+
     private void send(String cmd, StringBuffer response) throws GtpError
     {
         response.append(m_gtp.send(cmd));
@@ -521,4 +500,3 @@ public class GtpDisplay
         GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board, true);
     }
 }
-
