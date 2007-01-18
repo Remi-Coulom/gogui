@@ -24,7 +24,7 @@ public final class StatisticsTest
         s.add(9.0);
         s.add(8.0);
         s.add(5.0);
-        final double epsilon = 1e-7;
+        double epsilon = 1e-7;
         double sum = 6.0 + 9.0 + 8.0 + 5.0;
         int count = 4;
         double min = 5.0;

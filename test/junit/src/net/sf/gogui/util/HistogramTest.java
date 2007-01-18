@@ -24,7 +24,7 @@ public final class HistogramTest
         h.add(9.0);
         h.add(8.5);
         h.add(5.0);
-        final double epsilon = 1e-7;
+        double epsilon = 1e-7;
         assertEquals(4, h.getCount());
         assertEquals(0, h.getCount(0));
         assertEquals(0, h.getCount(1));
@@ -46,7 +46,7 @@ public final class HistogramTest
         Histogram h = new Histogram(0.0, 1.0, 1.0);
         h.add(0.0);
         h.add(1.0);
-        final double epsilon = 1e-7;
+        double epsilon = 1e-7;
         assertEquals(2, h.getCount());
         assertEquals(2, h.getCount(0));
         assertEquals(1, h.getSize());

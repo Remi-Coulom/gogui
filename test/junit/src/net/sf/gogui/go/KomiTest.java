@@ -109,7 +109,7 @@ public final class KomiTest
 
     public void testToDouble() throws Komi.InvalidKomi
     {
-        final double delta = 1e-10;
+        double delta = 1e-10;
         assertEquals(0, (new Komi(0)).toDouble(), delta);
         assertEquals(5, (new Komi(5)).toDouble(), delta);
         assertEquals(0.5, (new Komi(0.5)).toDouble(), delta);
