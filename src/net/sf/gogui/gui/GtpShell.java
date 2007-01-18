@@ -413,7 +413,11 @@ public class GtpShell
     public void setInitialCompletions(ArrayList completions)
     {
         for (int i = completions.size() - 1; i >= 0; --i)
-            appendToHistory(completions.get(i).toString());
+        {
+            String command = completions.get(i).toString();
+            if (! GtpUtil.isStateChangingCommand(command))
+                appendToHistory(command);
+        }
         ArrayList list =
             PrefUtil.getList("net/sf/gogui/gui/gtpshell/recentcommands");
         for (int i = 0; i < list.size(); ++i)
