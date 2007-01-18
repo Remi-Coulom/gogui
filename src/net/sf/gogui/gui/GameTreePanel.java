@@ -441,9 +441,6 @@ public class GameTreePanel
         case SIZE_LARGE:
             fontScale = 1.0;
             break;
-        case SIZE_NORMAL:
-            fontScale = 0.7;
-            break;
         case SIZE_SMALL:
             fontScale = 0.5;
             break;
@@ -451,8 +448,8 @@ public class GameTreePanel
             fontScale = 0.2;
             break;
         default:
+            assert(sizeMode == SIZE_NORMAL);
             fontScale = 0.7;
-            assert(false);
         }
         m_nodeSize = 25;
         m_nodeFullSize = 35;
