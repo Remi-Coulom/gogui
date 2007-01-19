@@ -362,10 +362,10 @@ public class GtpDummy
         register("genmove", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGenmove(cmd); } });
-        register("gogui_analyze_commands", new GtpCallback() {
+        register("gogui-analyze_commands", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGoGuiAnalyzeCommands(cmd); } });
-        register("gogui_interrupt", new GtpCallback() {
+        register("gogui-interrupt", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdInterrupt(cmd); } });
         register("play", new GtpCallback() {

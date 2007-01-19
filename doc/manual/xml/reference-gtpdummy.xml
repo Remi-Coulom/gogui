@@ -253,7 +253,7 @@ Print argument to standard error.
 </varlistentry>
 
 <varlistentry>
-<term><command>gogui_interrupt</command></term>
+<term><command>gogui-interrupt</command></term>
 <listitem>
 <para>
 Indicate interrupt ability for GoGui.

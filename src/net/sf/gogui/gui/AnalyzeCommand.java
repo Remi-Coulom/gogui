@@ -299,7 +299,7 @@ public class AnalyzeCommand
         {
             Reader stringReader = new StringReader(programAnalyzeCommands);
             BufferedReader reader = new BufferedReader(stringReader);
-            readConfig(reader, "program response to gogui_analyze_commands",
+            readConfig(reader, "program response to gogui-analyze_commands",
                        commands, labels, supportedCommands);
             return;
         }

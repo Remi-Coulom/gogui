@@ -178,13 +178,13 @@ public class GmpToGtp
         register("gmp_talk", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdTalk(cmd); } });
-        register("gogui_analyze_commands", new GtpCallback() {
+        register("gogui-analyze_commands", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGoGuiAnalyzeCommands(cmd); } });
-        register("gogui_interrupt", new GtpCallback() {
+        register("gogui-interrupt", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGoguiInterrupt(cmd); } });
-        register("gogui_title", new GtpCallback() {
+        register("gogui-title", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGoguiTitle(cmd); } });
         register("play", new GtpCallback() {

@@ -234,7 +234,7 @@ Wait for other side to send the first newgame command.
 <variablelist>
 
 <varlistentry>
-<term><command>gogui_interrupt</command></term>
+<term><command>gogui-interrupt</command></term>
 <listitem>
 <para>
 Indicate interrupt ability for GoGui.

@@ -56,19 +56,30 @@ public class GuiGtpClient
         m_gtp.setAutoNumber(enable);
     }
 
-    /** Get response to asynchronous command.
-        You must call getException() first.
+    /** Query analyze commands configuration from the program.
+        @return The response to gogui-analyze_commands or null, if this
+        command is not supported.
     */
-    public String getResponse()
+    public String getAnalyzeCommands()
     {
-        synchronized (m_mutex)
+        String command;
+        if (isCommandSupported("gogui-analyze_commands"))
+            command = "gogui-analyze_commands";
+        else if (isCommandSupported("gogui_analyze_commands"))
+            // Used by old versions of GoGui
+            command = "gogui_analyze_commands";
+        else
+            return null;
+        try
         {
-            assert(SwingUtilities.isEventDispatchThread());
-            assert(! m_commandInProgress);
-            return m_response;
+            return send(command);
+        }
+        catch (GtpError e)
+        {
+            return null;
         }
     }
-    
+
     public String getCommandClearBoard(int size)
     {
         return m_gtp.getCommandClearBoard(size);
@@ -110,10 +121,38 @@ public class GuiGtpClient
         return m_gtp.getProtocolVersion();
     }
 
+    /** Get response to asynchronous command.
+        You must call getException() first.
+    */
+    public String getResponse()
+    {
+        synchronized (m_mutex)
+        {
+            assert(SwingUtilities.isEventDispatchThread());
+            assert(! m_commandInProgress);
+            return m_response;
+        }
+    }
+    
     public ArrayList getSupportedCommands()
     {
         assert(SwingUtilities.isEventDispatchThread());
         return m_gtp.getSupportedCommands();
+    }
+
+    public String getTitleFromProgram()
+    {
+        try
+        {
+            if (isCommandSupported("gogui-title"))
+                return send("gogui-title");
+            else if (isCommandSupported("gogui_title"))
+                return send("gogui_title");
+        }
+        catch (GtpError e)
+        {
+        }
+        return null;
     }
 
     public void sendInterrupt() throws GtpError
@@ -328,4 +367,3 @@ public class GuiGtpClient
 
     private String m_response;
 }
-

@@ -222,9 +222,9 @@ public class GtpSynchronizer
 
     private void playSequence(ArrayList moves) throws GtpError
     {
-        if (moves.size() > 1 && isCommandSupported("play_sequence"))
+        if (moves.size() > 1 && GtpClientUtil.isPlaySequenceSupported(m_gtp))
         {
-            String cmd = GtpUtil.getPlaySequenceCommand(moves);
+            String cmd = GtpClientUtil.getPlaySequenceCommand(m_gtp, moves);
             m_gtp.send(cmd);
             for (int i = 0; i < moves.size(); ++i)
                 m_board.play((Move)moves.get(i));

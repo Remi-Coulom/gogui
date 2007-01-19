@@ -181,9 +181,9 @@ public class TwoGtp
             finalStatusCommand(cmd);
         else if (command.equals("final_status_list"))
             finalStatusCommand(cmd);
-        else if (command.equals("gogui_interrupt"))
+        else if (command.equals("gogui-interrupt"))
             ;
-        else if (command.equals("gogui_title"))
+        else if (command.equals("gogui-title"))
             cmd.setResponse(getTitle());
         else if (command.equals("twogtp_black"))
             twogtpColor(m_black, cmd);
@@ -221,8 +221,8 @@ public class TwoGtp
                             "final_status\n" +
                             "final_status_list\n" +
                             "genmove\n" +
-                            "gogui_interrupt\n" +
-                            "gogui_title\n" +
+                            "gogui-interrupt\n" +
+                            "gogui-title\n" +
                             "komi\n" +
                             "list_commands\n" +
                             "name\n" +

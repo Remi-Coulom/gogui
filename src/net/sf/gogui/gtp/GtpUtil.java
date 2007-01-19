@@ -17,29 +17,9 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.util.StringUtil;
 
-/** Utility functions for parsing GTP responses. */
+/** Utility functions used in package gtp. */
 public final class GtpUtil
 {
-    /** Construct a gogui-play_sequence command from a list of moves. */
-    public static String getPlaySequenceCommand(ArrayList moves)
-    {
-        StringBuffer cmd = new StringBuffer(2048);
-        cmd.append("play_sequence");
-        for (int i = 0; i < moves.size(); ++i)
-        {
-            Move move = (Move)moves.get(i);
-            GoColor color = move.getColor();
-            if (color == GoColor.BLACK)
-                cmd.append(" b ");
-            else if (color == GoColor.WHITE)
-                cmd.append(" w ");
-            else
-                cmd.append(" empty ");
-            cmd.append(GoPoint.toString(move.getPoint()));
-        }
-        return cmd.toString();
-    }
-
     public static String getTimeSettingsCommand(TimeSettings settings)
     {
         long preByoyomi = settings.getPreByoyomi() / 1000;
@@ -61,8 +41,8 @@ public final class GtpUtil
         board state too. Includes all such commands from GTP protocol version
         1 and 2, the <code>quit</code> command, and some known GTP extension
         commands (e.g. <code>gg-undo</code> from GNU Go and
-        <code>play_sequence</code> from GoGui). Does not include non-criticlal
-        state changing commands like <code>komi</code>.
+        <code>gogui-play_sequence</code> from GoGui). Does not include
+        non-criticlal state changing commands like <code>komi</code>.
         @param cmd The command or complete command line
         @return <code>true</code> if command is a state-changing command
     */
@@ -79,6 +59,7 @@ public final class GtpUtil
                 || c.equals("genmove_cleanup")
                 || c.equals("genmove_white")
                 || c.equals("gg-undo")
+                || c.equals("gogui-play_sequence")
                 || c.equals("kgs-genmove_cleanup")
                 || c.equals("loadsgf")
                 || c.equals("place_free_handicap")

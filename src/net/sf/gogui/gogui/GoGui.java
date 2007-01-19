@@ -56,6 +56,7 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
+import net.sf.gogui.gtp.GtpClientUtil;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
@@ -1303,7 +1304,7 @@ public class GoGui
             = m_gtp.isCommandSupported("kgs-genmove_cleanup")
             || m_gtp.isCommandSupported("genmove_cleanup");
         m_menuBar.enableCleanup(cleanupSupported);
-        initProgramAnalyzeCommands();
+        m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
         restoreSize(m_gtpShell, "shell");
         m_gtpShell.setProgramName(m_name);
         ArrayList supportedCommands =
@@ -2766,22 +2767,6 @@ public class GoGui
         checkComputerMove();
     }
 
-    private void initProgramAnalyzeCommands()
-    {
-        m_programAnalyzeCommands = null;
-        if (m_gtp.isCommandSupported("gogui_analyze_commands"))
-        {
-            try
-            {
-                m_programAnalyzeCommands
-                    = m_gtp.send("gogui_analyze_commands");
-            }
-            catch (GtpError e)
-            {
-            }    
-        }
-    }
-
     private void initScore(GoPoint[] isDeadStone)
     {
         resetBoard();
@@ -3258,20 +3243,12 @@ public class GoGui
 
     private void setTitleFromProgram()
     {
-        m_titleFromProgram = null;
         if (m_gtp == null)
-            return;
-        if (m_gtp.isCommandSupported("gogui_title"))
-        {
-            try
-            {
-                m_titleFromProgram = m_gtp.send("gogui_title");
-                setTitle(m_titleFromProgram);
-            }
-            catch (GtpError e)
-            {
-            }
-        }
+            m_titleFromProgram = null;
+        else
+            m_titleFromProgram = m_gtp.getTitleFromProgram();
+        if (m_titleFromProgram != null)
+            setTitle(m_titleFromProgram);
     }
 
     private void setup(GoPoint point, GoColor color)

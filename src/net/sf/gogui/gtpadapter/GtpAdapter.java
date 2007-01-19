@@ -509,7 +509,7 @@ public class GtpAdapter
         register("boardsize", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdBoardsize(cmd); } });
-        register("gogui_analyze_commands", new GtpCallback() {
+        register("gogui-analyze_commands", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGoGuiAnalyzeCommands(cmd); } });
         register("gtpadapter_showboard", new GtpCallback() {

@@ -11,6 +11,16 @@
 <itemizedlist>
 <listitem>
 <simpara>
+The following GoGui extension commands use the prefix gogui- now according to
+the GTP standard for extension commands: gogui-play_sequence,
+gogui-analyze_commands, gogui-interrupt, gogui-sigint, gogui-title.
+The old versions (play_sequence, gogui_analyze_commands, gogui_interrupt,
+gogui_sigint, gogui_title) are deprecated and may not be supported in the
+future.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Import Go positions in text format from files or clipboard
 </simpara>
 </listitem>

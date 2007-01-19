@@ -20,7 +20,7 @@ result.
 
 <para>
 The Go program can implement the GTP extension command
-<command>gogui_analyze_commands</command>, which allows GoGui to query
+<command>gogui-analyze_commands</command>, which allows GoGui to query
 program specific analyze commands from the program when a new program is
 attached.
 Otherwise a default configuration is used that knows some standard GTP

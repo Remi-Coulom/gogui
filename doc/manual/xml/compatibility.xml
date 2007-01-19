@@ -153,7 +153,7 @@ the program:
 
 <variablelist>
 <varlistentry>
-<term><command>gogui_analyze_commands</command></term>
+<term><command>gogui-analyze_commands</command></term>
 <listitem>
 <para>
 See <xref linkend="analyze"/>.
@@ -161,7 +161,7 @@ See <xref linkend="analyze"/>.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><command>gogui_interrupt</command></term>
+<term><command>gogui-interrupt</command></term>
 <listitem>
 <para>
 See <xref linkend="interrupt"/>.
@@ -169,7 +169,7 @@ See <xref linkend="interrupt"/>.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><command>gogui_sigint</command></term>
+<term><command>gogui-sigint</command></term>
 <listitem>
 <para>
 See <xref linkend="interrupt"/>.
@@ -177,7 +177,7 @@ See <xref linkend="interrupt"/>.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><command>gogui_title</command></term>
+<term><command>gogui-title</command></term>
 <listitem>
 <para>
 For providing a window title, which may be game specific, or include
@@ -187,7 +187,7 @@ The title is queried and set after a new game is started.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><command>play_sequence</command></term>
+<term><command>gogui-play_sequence</command></term>
 <listitem>
 <para>
 This is an extension to the standard <command>play</command> command which
