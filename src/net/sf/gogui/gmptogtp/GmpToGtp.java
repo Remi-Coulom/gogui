@@ -80,9 +80,9 @@ public class GmpToGtp
     {
         cmd.checkArgNone();
         String response =
-            "string/Gmp Talk Received/gmp_talk\n" +
-            "none/Gmp Talk Send/gmp_talk %s\n" +
-            "hpstring/Gmp Queue/gmp_queue\n";
+            "string/Gmp Talk Received/gmptogtp-talk\n" +
+            "none/Gmp Talk Send/gmptogtp-talk %s\n" +
+            "hpstring/Gmp Queue/gmptogtp-queue\n";
         cmd.setResponse(response);
     }
 
@@ -172,10 +172,10 @@ public class GmpToGtp
         register("genmove", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGenmove(cmd); } });
-        register("gmp_queue", new GtpCallback() {
+        register("gmptogtp-queue", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdQueue(cmd); } });
-        register("gmp_talk", new GtpCallback() {
+        register("gmptogtp-talk", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdTalk(cmd); } });
         register("gogui-analyze_commands", new GtpCallback() {

@@ -178,7 +178,7 @@ public class GtpAdapter
     {
         cmd.checkArgNone();
         String response =
-            "string/GtpAdapter ShowBoard/gtpadapter_showboard\n";
+            "string/GtpAdapter ShowBoard/gtpadapter-showboard\n";
         cmd.setResponse(response);
     }
 
@@ -512,7 +512,7 @@ public class GtpAdapter
         register("gogui-analyze_commands", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGoGuiAnalyzeCommands(cmd); } });
-        register("gtpadapter_showboard", new GtpCallback() {
+        register("gtpadapter-showboard", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGtpAdapterShowBoard(cmd); } });
         if (version1)

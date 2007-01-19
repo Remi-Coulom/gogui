@@ -118,18 +118,18 @@ public class GtpDummy
     {
         cmd.checkArgNone();
         String response =
-            "bwboard/Dummy BWBoard/dummy_bwboard\n" +
-            "none/Dummy Crash/dummy_crash\n" +
-            "none/Dummy Delay/dummy_delay %o\n" +
-            "eplist/Dummy EPList/dummy_eplist\n" +
-            "gfx/Dummy Gfx/dummy_gfx\n" +
-            "none/Dummy Invalid/dummy_invalid\n" +
-            "none/Dummy Live Gfx/dummy_live_gfx\n" +
-            "string/Dummy Long Response/dummy_long_response %s\n" +
-            "none/Dummy Next Failure/dummy_next_failure %s\n" +
-            "none/Dummy Next Success/dummy_next_success %s\n" +
-            "none/Dummy Sleep/dummy_sleep %s\n" +
-            "none/Dummy Sleep 20s/dummy_sleep\n";
+            "bwboard/Dummy BWBoard/gtpdummy-bwboard\n" +
+            "none/Dummy Crash/gtpdummy-crash\n" +
+            "none/Dummy Delay/gtpdummy-delay %o\n" +
+            "eplist/Dummy EPList/gtpdummy-eplist\n" +
+            "gfx/Dummy Gfx/gtpdummy-gfx\n" +
+            "none/Dummy Invalid/gtpdummy-invalid\n" +
+            "none/Dummy Live Gfx/gtpdummy-live_gfx\n" +
+            "string/Dummy Long Response/gtpdummy-long_response %s\n" +
+            "none/Dummy Next Failure/gtpdummy-next_failure %s\n" +
+            "none/Dummy Next Success/gtpdummy-next_success %s\n" +
+            "none/Dummy Sleep/gtpdummy-sleep %s\n" +
+            "none/Dummy Sleep 20s/gtpdummy-sleep\n";
         cmd.setResponse(response);
     }
 
@@ -295,7 +295,7 @@ public class GtpDummy
 
     private final Thread m_thread;
 
-    /** Editable point list for dummy_eplist command. */
+    /** Editable point list for gtpdummy-eplist command. */
     private ArrayList m_ePList = new ArrayList();
 
     private void initSize(int size)
@@ -320,37 +320,37 @@ public class GtpDummy
         register("clear_board", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdClearBoard(cmd); } });
-        register("dummy_bwboard", new GtpCallback() {
+        register("gtpdummy-bwboard", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdBWBoard(cmd); } });
-        register("dummy_delay", new GtpCallback() {
+        register("gtpdummy-delay", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdDelay(cmd); } });
-        register("dummy_eplist", new GtpCallback() {
+        register("gtpdummy-eplist", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdEPList(cmd); } });
-        register("dummy_gfx", new GtpCallback() {
+        register("gtpdummy-gfx", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGfx(cmd); } });
-        register("dummy_invalid", new GtpCallback() {
+        register("gtpdummy-invalid", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdInvalid(cmd); } });
-        register("dummy_live_gfx", new GtpCallback() {
+        register("gtpdummy-live_gfx", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLiveGfx(cmd); } });
-        register("dummy_long_response", new GtpCallback() {
+        register("gtpdummy-long_response", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLongResponse(cmd); } });
-        register("dummy_crash", new GtpCallback() {
+        register("gtpdummy-crash", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdCrash(cmd); } });
-        register("dummy_next_failure", new GtpCallback() {
+        register("gtpdummy-next_failure", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdNextFailure(cmd); } });
-        register("dummy_next_success", new GtpCallback() {
+        register("gtpdummy-next_success", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdNextSuccess(cmd); } });
-        register("dummy_sleep", new GtpCallback() {
+        register("gtpdummy-sleep", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdSleep(cmd); } });
         register("echo", new GtpCallback() {

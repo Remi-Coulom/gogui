@@ -391,7 +391,7 @@ Return a title for the current game, consisting of the game number (if option
 
 <varlistentry>
 <term>
-<command>twogtp_black <replaceable>command</replaceable></command>
+<command>twogtp-black <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -402,7 +402,7 @@ Send command to black player.
 
 <varlistentry>
 <term>
-<command>twogtp_observer <replaceable>command</replaceable></command>
+<command>twogtp-observer <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -413,7 +413,7 @@ Send command to observer program.
 
 <varlistentry>
 <term>
-<command>twogtp_referee <replaceable>command</replaceable></command>
+<command>twogtp-referee <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -424,7 +424,7 @@ Send command to referee program.
 
 <varlistentry>
 <term>
-<command>twogtp_white <replaceable>command</replaceable></command>
+<command>twogtp-white <replaceable>command</replaceable></command>
 </term>
 <listitem>
 <para>

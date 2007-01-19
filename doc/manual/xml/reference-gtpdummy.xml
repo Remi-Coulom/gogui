@@ -112,7 +112,7 @@ Print version and exit.
 <variablelist>
 
 <varlistentry>
-<term><command>dummy_bwboard</command></term>
+<term><command>gtpdummy-bwboard</command></term>
 <listitem>
 <para>
 Output a board randomly filled with "B" and "W".
@@ -121,7 +121,7 @@ Output a board randomly filled with "B" and "W".
 </varlistentry>
 
 <varlistentry>
-<term><command>dummy_crash</command></term>
+<term><command>gtpdummy-crash</command></term>
 <listitem>
 <para>
 Exit program with return code -1.
@@ -131,7 +131,7 @@ Exit program with return code -1.
 
 <varlistentry>
 <term>
-<command>dummy_delay <replaceable>seconds</replaceable></command>
+<command>gtpdummy-delay <replaceable>seconds</replaceable></command>
 </term>
 <listitem>
 <para>
@@ -144,7 +144,7 @@ If no argument is given, the current delay value is returned.
 
 <varlistentry>
 <term>
-<command>dummy_eplist</command>
+<command>gtpdummy-eplist</command>
 </term>
 <listitem>
 <para>
@@ -157,7 +157,7 @@ If the argument is "show", the current point list is shown.
 
 <varlistentry>
 <term>
-<command>dummy_gfx</command>
+<command>gtpdummy-gfx</command>
 </term>
 <listitem>
 <para>
@@ -167,7 +167,7 @@ Command for testing the gfx analyze return type of GoGui.
 </varlistentry>
 
 <varlistentry>
-<term><command>dummy_invalid</command></term>
+<term><command>gtpdummy-invalid</command></term>
 <listitem>
 <para>
 Print an invalid GTP response which does not start with a status character.
@@ -177,7 +177,7 @@ Print an invalid GTP response which does not start with a status character.
 
 <varlistentry>
 <term>
-<command>dummy_live_gfx</command>
+<command>gtpdummy-live_gfx</command>
 </term>
 <listitem>
 <para>
@@ -188,7 +188,7 @@ Command for testing live graphics in GoGui.
 
 <varlistentry>
 <term>
-<command>dummy_long_response <replaceable>n</replaceable></command> 
+<command>gtpdummy-long_response <replaceable>n</replaceable></command> 
 </term>
 <listitem>
 <para>
@@ -199,7 +199,7 @@ Print a GTP response with <replaceable>n</replaceable> lines.
 
 <varlistentry>
 <term>
-<command>dummy_next_failure <replaceable>response</replaceable>
+<command>gtpdummy-next_failure <replaceable>response</replaceable>
 </command>
 </term>
 <listitem>
@@ -211,7 +211,7 @@ Let next command fail with <replaceable>response</replaceable>.
 
 <varlistentry>
 <term>
-<command>dummy_next_success <replaceable>response</replaceable>
+<command>gtpdummy-next_success <replaceable>response</replaceable>
 </command>
 </term>
 <listitem>
@@ -223,7 +223,7 @@ Let next command succeed with <replaceable>response</replaceable>.
 
 <varlistentry>
 <term>
-<command>dummy_sleep <replaceable>seconds</replaceable>
+<command>gtpdummy-sleep <replaceable>seconds</replaceable>
 </command>
 </term>
 <listitem>

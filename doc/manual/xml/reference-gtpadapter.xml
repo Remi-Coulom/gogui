@@ -231,7 +231,7 @@ correctly to the GTP version of the Go program.
 <variablelist>
 
 <varlistentry>
-<term><command>gtpadapter_showboard</command></term>
+<term><command>gtpadapter-showboard</command></term>
 <listitem>
 <para>
 Show the internal Go board.
