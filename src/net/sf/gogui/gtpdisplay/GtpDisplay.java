@@ -101,27 +101,20 @@ public class GtpDisplay
             m_gtp.close();
             m_gtp.waitForExit();
         }
-        try
-        {
-            invokeAndWait(new Runnable()
+        invokeAndWait(new Runnable()
+            {
+                public void run()
                 {
-                    public void run()
+                    if (m_frame != null)
                     {
-                        if (m_frame != null)
-                        {
-                            SimpleDialogs.showInfo(m_frame,
-                                                   "GTP stream was closed");
-                            showStatus("GTP stream was closed");
-                        }
-                        else if (m_gtp == null)
-                            System.exit(0);
+                        SimpleDialogs.showInfo(m_frame,
+                                               "GTP stream was closed");
+                        showStatus("GTP stream was closed");
                     }
-                });
-        }
-        catch (GtpError e)
-        {
-            System.err.println(e.getMessage());
-        }
+                    else if (m_gtp == null)
+                        System.exit(0);
+                }
+            });
     }
 
     public void cmdForward(GtpCommand cmd) throws GtpError
@@ -142,6 +135,12 @@ public class GtpDisplay
         if (m_gtp != null)
             send("quit", cmd.getResponse());
         setQuit();
+    }
+
+    public void handleCommand(GtpCommand cmd) throws GtpError
+    {
+        showStatus(cmd.getLine());
+        super.handleCommand(cmd);
     }
 
     public void interruptCommand()
@@ -271,14 +270,8 @@ public class GtpDisplay
                 // can that happen?
                 throw new GtpError("GtpDisplay terminated");
             m_color = color;
-            invokeAndWait(new Runnable()
-                {
-                    public void run()
-                    {
-                        showStatus("Input move for " + m_color
-                                   + " (Ctrl-button and click for pass)");
-                    }
-                });
+            showStatus("Input move for " + m_color
+                       + " (Ctrl-button and click for pass)");
             synchronized (m_mutex)
             {
                 try
@@ -309,7 +302,8 @@ public class GtpDisplay
                 {                    
                     m_board.play(m_move);
                     updateFromGoBoard();
-                    clearStatus();
+                    if (m_gtp == null)
+                        clearStatus();
                 }
             });
     }
@@ -359,7 +353,7 @@ public class GtpDisplay
         undo();
     }
 
-    private void invokeAndWait(Runnable runnable) throws GtpError
+    private void invokeAndWait(Runnable runnable)
     {
         try
         {
@@ -367,12 +361,11 @@ public class GtpDisplay
         }
         catch (InterruptedException e)
         {
-            // Shouldn't happen
-            throw new GtpError("InterruptedException");
+            System.err.println("InterruptedException");
         }
         catch (java.lang.reflect.InvocationTargetException e)
         {
-            throw new GtpError("InvocationTargetException");
+            System.err.println("InvocationTargetException");
         }
     }
 
@@ -460,10 +453,20 @@ public class GtpDisplay
         m_gtp.send(cmd);
     }
 
-    private void showStatus(String text)
+    private void showStatus(final String text)
     {
-        assert(SwingUtilities.isEventDispatchThread());
-        m_statusBar.setText(text);
+        Runnable runnable = new Runnable()
+            {
+                public void run()
+                {
+                    if (m_frame != null)
+                        m_statusBar.setText(text);
+                }
+            };
+        if (SwingUtilities.isEventDispatchThread())
+            runnable.run();
+        else
+            invokeAndWait(runnable);
     }
 
     private void undo() throws GtpError
