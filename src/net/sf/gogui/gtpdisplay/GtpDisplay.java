@@ -235,8 +235,11 @@ public class GtpDisplay
                 public void run()
                 {
                     m_board.init(m_size);
-                    m_guiBoard.initSize(m_size);
-                    m_frame.pack();
+                    if (m_guiBoard.getBoardSize() != m_size)
+                    {
+                        m_guiBoard.initSize(m_size);
+                        m_frame.pack();
+                    }
                     updateFromGoBoard();
                 }
             });
