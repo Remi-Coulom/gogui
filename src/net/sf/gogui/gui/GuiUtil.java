@@ -296,11 +296,11 @@ public class GuiUtil
     static
     {
         ClassLoader loader = ClassLoader.getSystemClassLoader();
-        // There are problems on most platforms with larger icons auto-scaled
-        // down and transparency issues (Windows, Linux Sun Java 1.5.0)
-        // Best solution for now is to take a 16x16 icon with no transparency
+        // There are problems on some platforms with transparency (e.g. Linux
+        // Sun Java 1.5.0). Best solution for now is to take an icon without
+        // transparency
         s_iconURL =
-            loader.getResource("net/sf/gogui/images/gogui-16x16-notrans.png");
+            loader.getResource("net/sf/gogui/images/gogui-48x48-notrans.png");
     }
 
     private static class ProgressThread

@@ -133,7 +133,7 @@ public final class AboutDialog
         String supportUrl =
             "http://sourceforge.net/donate/index.php?group_id=59117";
         return createPanel("<p align=\"center\"><img src=\""
-                           + getImage("gogui.png") + "\"></p>" +
+                           + getImage("gogui-48x48.png") + "\"></p>" +
                            "<p align=\"center\"><b>GoGui</b></p>" +
                            "<p align=\"center\">" +
                            "Version " + Version.get() + "</p>" +
