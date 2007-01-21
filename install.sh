@@ -74,7 +74,7 @@ install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 # Install icons
 
-for SIZE in 16 32 48 128; do
+for SIZE in 16 32 48 64 128; do
     install -d $PREFIX/share/icons/hicolor/"$SIZE"x"$SIZE"/apps
     install -m 644 src/net/sf/gogui/images/gogui-"$SIZE"x"$SIZE".png \
         $PREFIX/share/icons/hicolor/"$SIZE"x"$SIZE"/apps/gogui.png
