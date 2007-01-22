@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import javax.swing.ComboBoxEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -146,9 +147,13 @@ public class SelectProgram
         m_textField.addKeyListener(keyListener);
         GuiUtil.setMonospacedFont(m_comboBox);
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
-        JButton button =
-            new ImageButton("net/sf/gogui/images/document-open.png", "Browse",
-                            "Browse for Go program");
+        JButton button = new JButton();
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        java.net.URL url =
+            classLoader.getResource("net/sf/gogui/images/document-open.png");
+        if (url != null)
+            button.setIcon(new ImageIcon(url));
+        button.setToolTipText("Browse for Go program");
         button.setActionCommand("open");
         button.addActionListener(this);
         innerPanel.add(button, BorderLayout.EAST);
