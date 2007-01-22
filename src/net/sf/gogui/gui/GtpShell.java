@@ -722,7 +722,7 @@ public class GtpShell
         m_runButton = new JButton();
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         URL url =
-            classLoader.getResource("net/sf/gogui/images/exec.png");
+            classLoader.getResource("net/sf/gogui/images/gogui-exec.png");
         if (url == null)
             m_runButton.setText("Run");
         else

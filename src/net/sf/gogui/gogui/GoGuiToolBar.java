@@ -26,29 +26,31 @@ public class GoGuiToolBar
     public GoGuiToolBar(ActionListener listener)
     {
         m_listener = listener;
-        m_buttonOpen = addButton("fileopen.png", "open", "Open");
-        m_buttonSave = addButton("filesave2.png", "save", "Save");
+        m_buttonOpen = addButton("document-open.png", "open", "Open");
+        m_buttonSave = addButton("document-save.png", "save", "Save");
         addSeparator();
-        m_buttonNew = addButton("filenew.png", "new-game", "New Game");
+        m_buttonNew = addButton("gogui-newgame.png", "new-game", "New Game");
+        m_buttonPass = addButton("gogui-pass.png", "pass", "Pass");
         addSeparator();
-        m_buttonPlay = addOptionalButton("next.png", "play", "Play");
-        m_buttonPass = addButton("pass.png", "pass", "Pass");
+        m_buttonPlay = addOptionalButton("gogui-play.png", "play", "Play");
         m_buttonInterrupt =
-            addOptionalButton("stop.png", "interrupt", "Interrupt");
+            addOptionalButton("gogui-interrupt.png", "interrupt", "Interrupt");
         addSeparator();
         m_buttonBeginning =
-            addOptionalButton("beginning.png", "beginning", "Beginning");
+            addOptionalButton("gogui-first.png", "beginning", "Beginning");
         m_buttonBackward =
-            addRepeatButton("back.png", "backward", "backward-10", "Backward");
+            addRepeatButton("gogui-previous.png", "backward", "backward-10",
+                            "Backward");
         m_buttonForward
-            = addRepeatButton("forward.png", "forward", "forward-10",
+            = addRepeatButton("gogui-next.png", "forward", "forward-10",
                               "Forward");
-        m_buttonEnd = addOptionalButton("end.png", "end", "End");
+        m_buttonEnd = addOptionalButton("gogui-last.png", "end", "End");
         addSeparator();
         m_buttonNextVariation =
-            addOptionalButton("down.png", "next-variation", "Next Variation");
+            addOptionalButton("gogui-down.png", "next-variation",
+                              "Next Variation");
         m_buttonPreviousVariation =
-            addOptionalButton("up.png", "previous-variation",
+            addOptionalButton("gogui-up.png", "previous-variation",
                               "Previous Variation");
         setRollover(true);
         setFloatable(false);

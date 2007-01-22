@@ -946,16 +946,15 @@ public class GoGuiMenuBar
                            KeyEvent.VK_F5,
                            getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK,
                            "play-single");
-        menu.addItem("Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
-                     getFunctionKeyShortcut(), "pass");
         m_itemInterrupt =
             menu.addItem("Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
                          0, "interrupt");
-        menu.add(createClockMenu());
-        menu.addSeparator();
         m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
+        menu.addSeparator();
         m_itemCleanup.setMnemonic(KeyEvent.VK_E);
-        menu.add(m_itemCleanup);
+        menu.addItem("Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
+                     getFunctionKeyShortcut(), "pass");
+        menu.add(createClockMenu());
         menu.addItem("Score", KeyEvent.VK_O, "score");
         return menu;
     }

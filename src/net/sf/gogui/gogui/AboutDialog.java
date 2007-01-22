@@ -69,7 +69,7 @@ public final class AboutDialog
             int width = GuiUtil.getDefaultMonoFontSize() * 25;
             programPanel =
                 createPanel("<p align=\"center\"><img src=\""
-                            + getImage("program.png") + "\"></p>" +
+                            + getImage("gogui-program.png") + "\"></p>" +
                             "<p align=\"center\"><b>" + name + "</b></p>" +
                             versionInfo +
                             "<p align=\"center\" width=\"" + width + "\">" +

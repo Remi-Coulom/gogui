@@ -149,11 +149,11 @@ public class Help
     private JComponent createButtons()
     {
         JToolBar toolBar = new JToolBar();
-        toolBar.add(createToolBarButton("gohome.png", "contents",
+        toolBar.add(createToolBarButton("go-home.png", "contents",
                                         "Table of Contents"));
-        m_buttonBack = createToolBarButton("back.png", "back", "Back");
+        m_buttonBack = createToolBarButton("go-previous.png", "back", "Back");
         toolBar.add(m_buttonBack);
-        m_buttonForward = createToolBarButton("forward.png", "forward",
+        m_buttonForward = createToolBarButton("go-next.png", "forward",
                                               "Forward");
         toolBar.add(m_buttonForward);
         toolBar.setRollover(true);
