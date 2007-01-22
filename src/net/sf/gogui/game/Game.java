@@ -15,6 +15,7 @@ import net.sf.gogui.util.ObjectUtil;
 
 /** Manages a tree, board, current node and clock. */
 public class Game
+    implements ConstGame
 {
     public Game(int boardSize)
     {
