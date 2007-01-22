@@ -74,11 +74,9 @@ install -m 644 doc/manual/man/*.1 $PREFIX/share/man/man1
 
 # Install icons
 
-for SIZE in 16 32 48 64 128; do
-    install -d $PREFIX/share/icons/hicolor/"$SIZE"x"$SIZE"/apps
-    install -m 644 src/net/sf/gogui/images/gogui-"$SIZE"x"$SIZE".png \
-        $PREFIX/share/icons/hicolor/"$SIZE"x"$SIZE"/apps/gogui.png
-done
+install -d $PREFIX/share/icons/hicolor/48x48/apps
+install -m 644 src/net/sf/gogui/images/gogui-48x48.png \
+    $PREFIX/share/icons/hicolor/48x48/apps/gogui.png
 # hicolor is the standard according to freedesktop.org, but for compatibility
 # we also install the icon to pixmaps
 install -d $PREFIX/share/pixmaps
