@@ -900,6 +900,19 @@ Show the version of GoGui and the Go program (if there is a program attached).
 </varlistentry>
 
 </variablelist>
+</section>
+
+<section>
+<title>Tool Bar</title>
+<indexterm>
+<primary>tool bar</primary>
+</indexterm>
+<para>
+The tool bar contains buttons for frequently used commands from the main menu.
+The forward and backward buttons correspond to the Forward and Backward menu
+item if clicked once, but send repeatedly Forward 10 and Backward 10 commands
+if they are pressed and held down for a longer time.
+</para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
 

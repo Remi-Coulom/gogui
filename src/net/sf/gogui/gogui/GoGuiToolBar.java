@@ -4,12 +4,16 @@
 
 package net.sf.gogui.gogui;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import javax.swing.Timer;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.util.Platform;
@@ -34,14 +38,11 @@ public class GoGuiToolBar
         addSeparator();
         m_buttonBeginning =
             addOptionalButton("beginning.png", "beginning", "Beginning");
-        m_buttonBackward10 =
-            addOptionalButton("backward10.png", "backward-10", "Backward 10");
         m_buttonBackward =
-            addOptionalButton("back.png", "backward", "Backward");
+            addRepeatButton("back.png", "backward", "backward-10", "Backward");
         m_buttonForward
-            = addOptionalButton("forward.png", "forward", "Forward");
-        m_buttonForward10 =
-            addOptionalButton("forward10.png", "forward-10", "Forward 10");
+            = addRepeatButton("forward.png", "forward", "forward-10",
+                              "Forward");
         m_buttonEnd = addOptionalButton("end.png", "end", "End");
         addSeparator();
         m_buttonNextVariation =
@@ -73,9 +74,7 @@ public class GoGuiToolBar
             (NodeUtil.getPreviousVariation(node) != null);
         m_buttonBeginning.setSameDisabledIcon(hasFather);
         m_buttonBackward.setSameDisabledIcon(hasFather);
-        m_buttonBackward10.setSameDisabledIcon(hasFather);
         m_buttonForward.setSameDisabledIcon(hasChildren);
-        m_buttonForward10.setSameDisabledIcon(hasChildren);
         m_buttonEnd.setSameDisabledIcon(hasChildren);
         m_buttonNextVariation.setSameDisabledIcon(hasNextVariation);
         m_buttonPreviousVariation.setSameDisabledIcon(hasPreviousVariation);
@@ -86,10 +85,8 @@ public class GoGuiToolBar
     {
         setEnabled(m_buttonBeginning, enable);
         setEnabled(m_buttonBackward, enable);
-        setEnabled(m_buttonBackward10, enable);
         setEnabled(m_buttonEnd, enable);
         setEnabled(m_buttonForward, enable);
-        setEnabled(m_buttonForward10, enable);
         setEnabled(m_buttonInterrupt, false);
         setEnabled(m_buttonNew, enable);
         setEnabled(m_buttonNextVariation, enable);
@@ -135,17 +132,13 @@ public class GoGuiToolBar
 
     private final OptionalButton m_buttonBeginning;
 
-    private final OptionalButton m_buttonBackward;
-
-    private final OptionalButton m_buttonBackward10;
+    private final RepeatButton m_buttonBackward;
 
     private final OptionalButton m_buttonEnd;
 
     private final OptionalButton m_buttonPlay;
 
-    private final OptionalButton m_buttonForward;
-
-    private final OptionalButton m_buttonForward10;
+    private final RepeatButton m_buttonForward;
 
     private final OptionalButton m_buttonInterrupt;
 
@@ -161,6 +154,10 @@ public class GoGuiToolBar
 
     private final JButton m_buttonSave;
 
+    /** Add button with same icon for enabled and disabled state.
+        Avoids too much flickering of the toolbar during the game
+        (for buttons that are disabled while the computer is thinking).
+    */
     private JButton addButton(String icon, String command, String toolTip)
     {
         JButton button = new JButton();
@@ -171,22 +168,37 @@ public class GoGuiToolBar
         return button;
     }
 
-    private JButton addButton(JButton button, String command, String toolTip)
+    private JButton addButton(JButton button, String toolTip)
     {
-        button.setActionCommand(command);
         button.setToolTipText(toolTip);
-        button.addActionListener(m_listener);
         button.setFocusable(false);
         add(button);
         return button;
     }
 
+    private JButton addButton(JButton button, String command, String toolTip)
+    {
+        button.setActionCommand(command);
+        button.addActionListener(m_listener);
+        return addButton(button, toolTip);
+    }
+
     private OptionalButton addOptionalButton(String icon, String command,
-                                                 String toolTip)
+                                             String toolTip)
     {
         Icon imageIcon = getIcon(icon, command);
         OptionalButton button = new OptionalButton(imageIcon);
         addButton(button, command, toolTip);
+        return button;
+    }
+
+    private RepeatButton addRepeatButton(String icon, String command1,
+                                         String command2, String toolTip)
+    {
+        Icon imageIcon = getIcon(icon, command1);
+        RepeatButton button = new RepeatButton(imageIcon, command1, command2,
+                                               m_listener);
+        addButton(button, toolTip);
         return button;
     }
 
@@ -236,3 +248,63 @@ class OptionalButton
     private final Icon m_disabledIcon;
 }
 
+/** Button that triggers repeated actions when hold down for a longer time. */
+class RepeatButton
+    extends OptionalButton
+{
+    /** Constructor.
+        @param command1 The default command used for clicks
+        @param command2 The command used for the repeated commands
+    */
+    public RepeatButton(Icon icon, String command1, String command2,
+                        ActionListener listener)
+    {
+        super(icon);
+        m_listener = listener;
+        m_command1 = command1;
+        m_command2 = command2;
+        m_timer = new Timer(1000, new ActionListener() {
+                public void actionPerformed(ActionEvent event)
+                {
+                    ++m_count;
+                    fireActionCommand(m_command2);
+                }
+            });
+        m_timer.stop();
+        addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent event)
+                {
+                    m_count = 0;
+                    m_timer.start();
+                }
+
+                public void mouseReleased(MouseEvent event)
+                {
+                    m_timer.stop();
+                    if (contains(event.getPoint()) && m_count == 0)
+                        fireActionCommand(m_command1);
+                }
+            });
+    }
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
+    private int m_count;
+
+    private Timer m_timer;
+
+    private String m_command1;
+
+    private String m_command2;
+
+    ActionListener m_listener;
+
+    private void fireActionCommand(String command)
+    {
+        ActionEvent event = new ActionEvent(this, 0, command);
+        m_listener.actionPerformed(event);
+    }
+}
