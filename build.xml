@@ -158,6 +158,7 @@ $URL$
  config/analyze-commands*
  config/gogui*.desktop
  config/gogui-application-x-go-sgf.png
+ config/gogui-application-x-go-sgf.svg
  config/gogui.omf
  config/gogui.schemas
  config/gogui.xml
@@ -189,6 +190,7 @@ $URL$
  sgf/openings/19x19/README
  sgf/openings/19x19/*.sgf
  src/net/sf/gogui/images/*.png
+ src/net/sf/gogui/images/*.svg
  src/net/sf/gogui/overview.html
  src/net/sf/gogui/*/package.html
  src/net/sf/gogui/*/*.java
