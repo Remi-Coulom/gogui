@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.Platform;
@@ -25,17 +27,19 @@ public class StatusBar
     public StatusBar(boolean showToPlay)
     {
         super(new BorderLayout());
-        JPanel panel = new JPanel(new BorderLayout());
-        add(panel, BorderLayout.CENTER);
-        // Workaround for Java 1.4.1 on Mac OS X: add some empty space
-        // so that status bar does not overlap the window resize widget
+        JPanel outerPanel = new JPanel(new BorderLayout());
+        add(outerPanel, BorderLayout.CENTER);
         if (Platform.isMac())
         {
+            // Workaround for Java 1.4.1 on Mac OS X: add some empty space
+            // so that status bar does not overlap the window resize widget
             Dimension dimension = new Dimension(20, 1);
             Box.Filler filler =
                 new Box.Filler(dimension, dimension, dimension);
-            add(filler, BorderLayout.EAST);
+            outerPanel.add(filler, BorderLayout.EAST);
         }
+        JPanel panel = new JPanel(new BorderLayout());
+        outerPanel.add(panel, BorderLayout.CENTER);
         m_iconBox = Box.createHorizontalBox();
         panel.add(m_iconBox, BorderLayout.WEST);
         m_showProgress = false;
@@ -47,10 +51,17 @@ public class StatusBar
         setToPlay(GoColor.BLACK);
         m_progressBar = new JProgressBar();
         initIconBox();
-        m_textField = new JTextField();
-        m_textField.setEditable(false);
-        m_textField.setFocusable(false);
-        panel.add(m_textField, BorderLayout.CENTER);
+        m_text = new JTextField();
+        m_text.setEditable(false);
+        m_text.setFocusable(false);
+        panel.add(m_text, BorderLayout.CENTER);
+        Box moveTextBox = Box.createHorizontalBox();
+        panel.add(moveTextBox, BorderLayout.EAST);
+        m_moveText = new JTextField(12);
+        m_moveText.setEditable(false);
+        m_moveText.setFocusable(false);
+        m_moveText.setHorizontalAlignment(SwingConstants.LEFT);
+        moveTextBox.add(m_moveText);
     }
 
     public void clear()
@@ -65,6 +76,13 @@ public class StatusBar
             m_showProgress = false;
             initIconBox();
         }
+    }
+
+    public void immediatelyPaintMoveText(String text)
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        m_moveText.setText(text);
+        m_moveText.paintImmediately(m_moveText.getVisibleRect());
     }
 
     /** Show progress bar.
@@ -96,9 +114,21 @@ public class StatusBar
         }
     }
 
+    /** Set text with move information.
+        This text is displayed right and contains e.g. information about
+        the last move, current move number etc.
+    */
+    public void setMoveText(String text, String toolTip)
+    {
+        if (text.length() > 18)
+            text = text.substring(0, 18) + " ...";
+        m_moveText.setText(text);
+        m_moveText.setToolTipText(toolTip);
+    }
+
     public void setText(String text)
     {
-        m_textField.setText(text);
+        m_text.setText(text);
     }
 
     public void setToPlay(GoColor color)
@@ -137,7 +167,9 @@ public class StatusBar
 
     private final JProgressBar m_progressBar;
 
-    private final JTextField m_textField;
+    private final JTextField m_moveText;
+
+    private final JTextField m_text;
 
     private void initIconBox()
     {

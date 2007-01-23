@@ -28,9 +28,6 @@ public class GameInfo
     {
         super(new GridLayout(0, 2, GuiUtil.SMALL_PAD, GuiUtil.SMALL_PAD));
         m_game = game;
-        m_number = addEntry("Moves:");
-        m_last = addEntry("Last move:");
-        m_variation = addEntry("Variation:");
         m_captB = addEntry("Captured Black:");
         m_captW = addEntry("Captured White:");
         m_timeB = addEntry("Time Black:");
@@ -46,12 +43,6 @@ public class GameInfo
         game.setClockListener(listener);
     }
 
-    public void fastUpdateMoveNumber(String text)
-    {
-        m_number.setText(text);
-        m_number.paintImmediately(m_number.getVisibleRect());
-    }
-
     public void update(ConstNode node, ConstBoard board)
     {
         int capturedB = board.getCapturedB();
@@ -64,21 +55,6 @@ public class GameInfo
             m_captW.setText("");
         else
             m_captW.setText(Integer.toString(capturedW));
-        updateMoveNumber(node);
-        String lastMove = "";
-        Move move = node.getMove();
-        if (move != null)
-        {
-            GoColor c = move.getColor();
-            GoPoint p = move.getPoint();
-            lastMove = (c == GoColor.BLACK ? "B " : "W ");
-            if (p == null)
-                lastMove += "PASS";
-            else
-                lastMove += p.toString();
-        }
-        m_last.setText(lastMove);
-        m_variation.setText(NodeUtil.getVariationString(node));
         // Usually time left information is stored in a node only for the
         // player who moved, so we check the father node too
         ConstNode father = node.getFatherConst();
@@ -107,10 +83,6 @@ public class GameInfo
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final JTextField m_number;
-
-    private final JTextField m_last;
-
     private final JTextField m_captB;
 
     private final JTextField m_captW;
@@ -118,8 +90,6 @@ public class GameInfo
     private final JTextField m_timeB;
 
     private final JTextField m_timeW;
-
-    private final JTextField m_variation;
 
     private final Game m_game;
 
@@ -136,21 +106,6 @@ public class GameInfo
         entry.setFocusable(false);
         add(entry);
         return entry;
-    }
-
-    private void updateMoveNumber(ConstNode node)
-    {
-        int moveNumber = NodeUtil.getMoveNumber(node);
-        int movesLeft = NodeUtil.getMovesLeft(node);
-        if (moveNumber == 0 && movesLeft == 0)
-            m_number.setText("");
-        else
-        {
-            String numberString = Integer.toString(moveNumber);
-            if (movesLeft > 0)
-                numberString += "/" + (moveNumber + movesLeft);
-            m_number.setText(numberString);
-        }
     }
 
     private void updateTimeFromClock(ConstClock clock, GoColor color)

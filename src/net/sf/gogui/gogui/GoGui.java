@@ -1343,7 +1343,8 @@ public class GoGui
             {
                 public void run(int moveNumber)
                 {
-                    m_gameInfo.fastUpdateMoveNumber("[" + moveNumber + "]");
+                    String text = "[" + moveNumber + "]";
+                    m_statusBar.immediatelyPaintMoveText(text);
                 }
             };
         try
@@ -3050,6 +3051,7 @@ public class GoGui
         m_menuBar.addRecent(file);
         createThumbnail(file);
         setFile(file);
+        m_game.clearModified();
         updateModified();                
         return true;
     }
@@ -3408,7 +3410,7 @@ public class GoGui
     {
         m_actions.update();
         m_toolBar.update();
-        m_statusBar.setToPlay(getToMove());
+        GoGuiUtil.updateMoveText(m_statusBar, getGame());
     }
 
     private void updateFromGoBoard()
