@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import javax.swing.Box;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -150,6 +151,13 @@ public class GuiUtil
     public static int getDefaultMonoFontSize()
     {
         return MONOSPACED_FONT.getSize();
+    }
+
+    public static Icon getIcon(String icon, String name)
+    {
+        String resource = "net/sf/gogui/images/" + icon + ".png";
+        URL url = GuiUtil.class.getClassLoader().getResource(resource);
+        return new ImageIcon(url, name);
     }
 
     /** Init look and feel.

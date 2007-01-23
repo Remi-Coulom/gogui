@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.ComboBoxEditor;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -720,16 +719,7 @@ public class GtpShell
             });
         panel.add(m_comboBox);
         m_runButton = new JButton();
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        URL url =
-            classLoader.getResource("net/sf/gogui/images/gogui-exec.png");
-        if (url == null)
-            m_runButton.setText("Run");
-        else
-        {
-            ImageIcon imageIcon = new ImageIcon(url, "Run");
-            m_runButton.setIcon(imageIcon);
-        }
+        m_runButton.setIcon(GuiUtil.getIcon("gogui-exec", "Run"));
         m_runButton.setActionCommand("run");
         m_runButton.addActionListener(this);
         buttonPanel.add(GuiUtil.createSmallFiller(), BorderLayout.WEST);

@@ -11,10 +11,10 @@ import java.io.File;
 import java.net.URL;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
+import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.Platform;
 
 /** Actions used in the GoGui tool bar and menu bar.
@@ -206,7 +206,8 @@ public class GoGuiActions
             action.putValue(AbstractAction.ACCELERATOR_KEY, keyStroke);
         }
         if (icon != null)
-            action.putValue(AbstractAction.SMALL_ICON, getIcon(icon, name));
+            action.putValue(AbstractAction.SMALL_ICON,
+                            GuiUtil.getIcon(icon, name));
     }
 
     private void setDescription(AbstractAction action, String desc)
@@ -222,13 +223,6 @@ public class GoGuiActions
         if (Platform.isMac())
             return getShortcut();
         return 0;
-    }
-
-    private Icon getIcon(String icon, String name)
-    {
-        String resource = "net/sf/gogui/images/" + icon + ".png";
-        URL url = getClass().getClassLoader().getResource(resource);
-        return new ImageIcon(url, name);
     }
 
     private static KeyStroke getKeyStroke(int keyCode, int modifier)

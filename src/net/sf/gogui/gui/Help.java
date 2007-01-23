@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -149,12 +148,11 @@ public class Help
     private JComponent createButtons()
     {
         JToolBar toolBar = new JToolBar();
-        toolBar.add(createToolBarButton("go-home.png", "contents",
+        toolBar.add(createToolBarButton("go-home", "contents",
                                         "Table of Contents"));
-        m_buttonBack = createToolBarButton("go-previous.png", "back", "Back");
+        m_buttonBack = createToolBarButton("go-previous", "back", "Back");
         toolBar.add(m_buttonBack);
-        m_buttonForward = createToolBarButton("go-next.png", "forward",
-                                              "Forward");
+        m_buttonForward = createToolBarButton("go-next", "forward", "Forward");
         toolBar.add(m_buttonForward);
         toolBar.setRollover(true);
         toolBar.setFloatable(false);
@@ -170,15 +168,7 @@ public class Help
         button.setActionCommand(command);
         button.setToolTipText(toolTip);
         button.addActionListener(this);
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        URL url = classLoader.getResource("net/sf/gogui/images/" + icon);
-        if (url == null)
-            button.setText(command);
-        else
-        {
-            ImageIcon imageIcon = new ImageIcon(url, command);
-            button.setIcon(imageIcon);
-        }
+        button.setIcon(GuiUtil.getIcon(icon, command));
         button.setFocusable(false);
         return button;
     }
