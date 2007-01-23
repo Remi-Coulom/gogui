@@ -28,7 +28,6 @@ public class GameInfo
     {
         super(new GridLayout(0, 2, GuiUtil.SMALL_PAD, GuiUtil.SMALL_PAD));
         m_game = game;
-        m_move = addEntry("To play:");
         m_number = addEntry("Moves:");
         m_last = addEntry("Last move:");
         m_variation = addEntry("Variation:");
@@ -55,10 +54,6 @@ public class GameInfo
 
     public void update(ConstNode node, ConstBoard board)
     {
-        if (board.getToMove() == GoColor.BLACK)
-            m_move.setText("Black");
-        else
-            m_move.setText("White");
         int capturedB = board.getCapturedB();
         if (capturedB == 0)
             m_captB.setText("");
@@ -111,8 +106,6 @@ public class GameInfo
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
-
-    private final JTextField m_move;
 
     private final JTextField m_number;
 

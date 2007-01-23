@@ -142,7 +142,7 @@ public class GoGui
         m_infoPanel.add(m_gameInfo, BorderLayout.NORTH);
         m_guiBoard = new GuiBoard(boardSize);
         m_guiBoard.setListener(this);
-        m_statusBar = new StatusBar();
+        m_statusBar = new StatusBar(true);
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
 
         Comment.Listener commentListener = new Comment.Listener()
@@ -1428,7 +1428,7 @@ public class GoGui
     {
         updateFromGoBoard();
         updateGameInfo(gameTreeChanged);
-        updateActions();
+        updateViews();
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(getBoardSize());
         if (m_gtp != null
@@ -2770,7 +2770,7 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, false, true);
         }
         setTitleFromProgram();
-        updateActions();
+        updateViews();
         getLayeredPane().setVisible(true);
         toFrontLater();
         checkComputerMove();
@@ -3193,7 +3193,7 @@ public class GoGui
     private void setFile(File file)
     {
         m_file = file;
-        updateActions();
+        updateViews();
         setTitle();
     }
 
@@ -3424,10 +3424,11 @@ public class GoGui
             });
     }
 
-    private void updateActions()
+    private void updateViews()
     {
         m_actions.update();
         m_toolBar.update();
+        m_statusBar.setToPlay(getToMove());
     }
 
     private void updateFromGoBoard()

@@ -87,7 +87,7 @@ public class GtpDisplay
                 }
             });
         contentPane.add(m_guiBoard);
-        m_statusBar = new StatusBar();
+        m_statusBar = new StatusBar(false);
         contentPane.add(m_statusBar, BorderLayout.SOUTH);
         GuiUtil.setGoIcon(m_frame);
         m_frame.pack();
