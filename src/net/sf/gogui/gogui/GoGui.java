@@ -1440,7 +1440,7 @@ public class GoGui
         else
         {
             resetBoard();
-            showToMove();
+            clearStatus();
             if (doCheckComputerMove)
                 checkComputerMove();
         }
@@ -2900,7 +2900,7 @@ public class GoGui
         m_menuBar.selectBoardSizeItem(getBoardSize());
         setTitle();
         setTitleFromProgram();
-        showToMove();
+        clearStatus();
     }
 
     private void newGame(int size, boolean startClock)
@@ -3385,20 +3385,6 @@ public class GoGui
         }
         m_splitPane.resetToPreferredSizes();
         pack();
-    }
-
-    private void showToMove()
-    {
-        if (m_showInfoPanel)
-        {
-            clearStatus();
-            return;
-        }
-        GoColor toMove = getToMove();
-        if (toMove == GoColor.WHITE)
-            showStatus("White to play");
-        else if (toMove == GoColor.BLACK)
-            showStatus("Black to play");
     }
 
     private void showWarning(String message)
