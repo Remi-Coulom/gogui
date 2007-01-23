@@ -823,7 +823,7 @@ public class GoGui
 
     public void fieldClicked(GoPoint p, boolean modifiedSelect)
     {
-        if (isCommandInProgress())
+        if (! checkCommandInProgress())
             return;
         if (m_setupMode)
         {
@@ -1195,7 +1195,7 @@ public class GoGui
         if (m_gtp == null || m_analyzeCommand == null
             || m_analyzeCommand.isPointArgMissing())
             return;
-        showStatus("Running " + m_analyzeCommand.getResultTitle() + "...");
+        showStatus(m_analyzeCommand.getResultTitle());
         GoColor toMove = getToMove();
         m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
         runLengthyCommand(m_lastAnalyzeCommand,
@@ -1418,7 +1418,7 @@ public class GoGui
 
     private void beginLengthyCommand()
     {
-        setBoardCursor(Cursor.WAIT_CURSOR);
+        m_statusBar.setProgress(-1);
         m_menuBar.setCommandInProgress();
         m_gtpShell.setCommandInProgess(true);
     }
@@ -2452,16 +2452,11 @@ public class GoGui
 
     private boolean endLengthyCommand()
     {
+        m_statusBar.clearProgress();
         clearStatus();
         m_menuBar.setNormalMode();
         if (m_gtpShell != null)
             m_gtpShell.setCommandInProgess(false);
-        if (m_analyzeCommand != null
-            && (m_analyzeCommand.needsPointArg()
-                || m_analyzeCommand.needsPointListArg()))
-            setBoardCursor(Cursor.HAND_CURSOR);
-        else
-            setBoardCursorDefault();
         // Program could have been killed in cbInterrupt
         if (m_gtp == null)
             return false;
@@ -2490,7 +2485,6 @@ public class GoGui
 
     private void generateMove(boolean isSingleMove)
     {
-        showStatus(m_name + " is thinking...");
         GoColor toMove = getToMove();
         String command;
         if (m_menuBar.getCleanup()

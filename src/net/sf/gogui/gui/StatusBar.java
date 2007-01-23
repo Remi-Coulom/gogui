@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import net.sf.gogui.go.GoColor;
@@ -21,7 +22,7 @@ import net.sf.gogui.util.Platform;
 public class StatusBar
     extends JPanel
 {
-    public StatusBar(boolean withToPlayIcon)
+    public StatusBar(boolean showToPlay)
     {
         super(new BorderLayout());
         JPanel panel = new JPanel(new BorderLayout());
@@ -37,18 +38,15 @@ public class StatusBar
         }
         m_iconBox = Box.createHorizontalBox();
         panel.add(m_iconBox, BorderLayout.WEST);
-        if (withToPlayIcon)
-        {
-            m_toPlayLabel = new JLabel();
-            m_toPlayLabel.setBorder(UIManager.getBorder("TextField.border"));
-            m_toPlayLabel.setMaximumSize(new Dimension(Short.MAX_VALUE,
-                                                       Short.MAX_VALUE));
-            setToPlay(GoColor.BLACK);
-            m_iconBox.add(m_toPlayLabel);
-            m_iconBox.add(GuiUtil.createSmallFiller());
-        }
-        else
-            m_toPlayLabel = null;
+        m_showProgress = false;
+        m_showToPlay = showToPlay;
+        m_toPlayLabel = new JLabel();
+        m_toPlayLabel.setBorder(UIManager.getBorder("TextField.border"));
+        m_toPlayLabel.setMaximumSize(new Dimension(Short.MAX_VALUE,
+                                                   Short.MAX_VALUE));
+        setToPlay(GoColor.BLACK);
+        m_progressBar = new JProgressBar();
+        initIconBox();
         m_textField = new JTextField();
         m_textField.setEditable(false);
         m_textField.setFocusable(false);
@@ -58,6 +56,44 @@ public class StatusBar
     public void clear()
     {
         setText("");
+    }
+
+    public void clearProgress()
+    {
+        if (m_showProgress)
+        {
+            m_showProgress = false;
+            initIconBox();
+        }
+    }
+
+    /** Show progress bar.
+        @param percent Percentage between 0 and 100, -1 if unknown.
+    */
+    public void setProgress(int percent)
+    {
+        if (! m_showProgress)
+        {
+            m_showProgress = true;
+            initIconBox();
+        }
+        if (percent < 0)
+        {
+            // First set to minimum to reset indeterminate animation
+            m_progressBar.setIndeterminate(false);
+            m_progressBar.setValue(m_progressBar.getMinimum());
+
+            m_progressBar.setIndeterminate(true);
+            m_progressBar.setStringPainted(true);
+            m_progressBar.setString("Thinking");
+        }
+        else
+        {
+            m_progressBar.setIndeterminate(false);
+            m_progressBar.setValue(percent);
+            m_progressBar.setStringPainted(true);
+            m_progressBar.setString(null);
+        }
     }
 
     public void setText(String text)
@@ -85,6 +121,10 @@ public class StatusBar
     */
     private static final long serialVersionUID = 0L; // SUID
 
+    private boolean m_showProgress;
+
+    private boolean m_showToPlay;
+
     private static final Icon m_iconBlack =
         GuiUtil.getIcon("gogui-black", "Black");
 
@@ -95,6 +135,24 @@ public class StatusBar
 
     private final JLabel m_toPlayLabel;
 
+    private final JProgressBar m_progressBar;
+
     private final JTextField m_textField;
+
+    private void initIconBox()
+    {
+        m_iconBox.removeAll();
+        if (m_showToPlay)
+        {
+            m_iconBox.add(m_toPlayLabel);
+            m_iconBox.add(GuiUtil.createSmallFiller());
+        }
+        if (m_showProgress)
+        {
+            m_iconBox.add(m_progressBar);
+            m_iconBox.add(GuiUtil.createSmallFiller());
+        }
+        m_iconBox.revalidate();
+    }
 }
 
