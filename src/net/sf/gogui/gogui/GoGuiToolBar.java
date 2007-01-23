@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.net.URL;
+import javax.swing.Action;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -24,10 +25,12 @@ public class GoGuiToolBar
     extends JToolBar
 {
     /** Tool bar for GoGui. */
-    public GoGuiToolBar(GoGuiActions actions)
+    public GoGuiToolBar(GoGui goGui)
     {
+        m_goGui = goGui;
+        GoGuiActions actions = m_goGui.getActions();
         addButton(actions.m_actionOpen);
-        addButton(actions.m_actionSave);
+        m_buttonSave = addButton(actions.m_actionSave);
         addSeparator();
         addButton(actions.m_actionNewGame);
         addButton(actions.m_actionPass);
@@ -48,18 +51,30 @@ public class GoGuiToolBar
         putClientProperty("jgoodies.headerStyle", "Both");
     }
 
+    public void update()
+    {
+        GoGuiActions actions = m_goGui.getActions();
+        if (m_goGui.getFile() == null)
+            setAction(m_buttonSave, actions.m_actionSaveAs);
+        else
+            setAction(m_buttonSave, actions.m_actionSave);
+    }
+
     /** Serial version to suppress compiler warning.
         Contains a marker comment for use with serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private void addButton(AbstractAction action)
+    GoGui m_goGui;
+
+    JButton m_buttonSave;
+
+    private JButton addButton(AbstractAction action)
     {
         JButton button = new JButton(action);
-        // Don't use text unless there is no icon
-        if (button.getIcon() != null)
-            button.setText(null);
+        setAction(button, action);
         add(button);
+        return button;
     }
 
     private void addRepeatButton(AbstractAction action,
@@ -70,6 +85,14 @@ public class GoGuiToolBar
         if (button.getIcon() != null)
             button.setText(null);
         add(button);
+    }
+
+    private void setAction(JButton button, Action action)
+    {
+        button.setAction(action);
+        // Don't use text unless there is no icon
+        if (button.getIcon() != null)
+            button.setText(null);
     }
 }
 

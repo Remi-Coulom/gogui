@@ -133,7 +133,7 @@ public class GoGui
         Container contentPane = getContentPane();        
         m_innerPanel = new JPanel(new BorderLayout());
         contentPane.add(m_innerPanel, BorderLayout.CENTER);
-        m_toolBar = new GoGuiToolBar(m_actions);
+        m_toolBar = new GoGuiToolBar(this);
 
         m_infoPanel = new JPanel(new BorderLayout());
         m_game = new Game(boardSize);
@@ -399,8 +399,6 @@ public class GoGui
             cbPreviousEarlierVariation();
         else if (command.equals("print"))
             cbPrint();
-        else if (command.equals("save-as"))
-            cbSaveAs();
         else if (command.equals("score"))
             cbScore();
         else if (command.equals("score-cancel"))
@@ -571,6 +569,11 @@ public class GoGui
             }
             save(m_file);
         }
+    }
+
+    public void actionSaveAs()
+    {
+        saveDialog();
     }
 
     public void cbAnalyze()
@@ -887,6 +890,11 @@ public class GoGui
         }
     }
 
+    public GoGuiActions getActions()
+    {
+        return m_actions;
+    }
+
     public File getFile()
     {
         return m_file;
@@ -946,6 +954,11 @@ public class GoGui
             setBoardCursor(Cursor.HAND_CURSOR);
             showStatusSelectPointList();
         }
+    }
+
+    public boolean isModified()
+    {
+        return m_game.isModified();
     }
 
     public boolean isProgramAttached()
@@ -1415,7 +1428,7 @@ public class GoGui
     {
         updateFromGoBoard();
         updateGameInfo(gameTreeChanged);
-        m_actions.update();
+        updateActions();
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(getBoardSize());
         if (m_gtp != null
@@ -1453,7 +1466,7 @@ public class GoGui
             showError("Cannot set bookmark if no file loaded");
             return;
         }
-        if (m_game.isModified())
+        if (isModified())
         {
             showError("Cannot set bookmark if file modified");
             return;
@@ -1805,7 +1818,7 @@ public class GoGui
         try
         {
             m_handicap = Integer.parseInt(handicap);
-            if (getBoard().isModified())
+            if (isModified())
                 showInfo("Handicap will take effect on next game.");
             else
             {
@@ -1894,11 +1907,6 @@ public class GoGui
     private void cbPrint()
     {
         Print.run(this, m_guiBoard);
-    }
-
-    private void cbSaveAs()
-    {
-        saveDialog();
     }
 
     private void cbScore()
@@ -2146,7 +2154,7 @@ public class GoGui
     */
     private boolean checkSaveGame()
     {
-        if (! m_game.isModified())
+        if (! isModified())
             return true;
         if (m_saveQuestion == null)
             m_saveQuestion = new OptionalMessage(this);
@@ -2762,7 +2770,7 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, false, true);
         }
         setTitleFromProgram();
-        m_actions.update();
+        updateActions();
         getLayeredPane().setVisible(true);
         toFrontLater();
         checkComputerMove();
@@ -3185,7 +3193,7 @@ public class GoGui
     private void setFile(File file)
     {
         m_file = file;
-        m_actions.updateFile();
+        updateActions();
         setTitle();
     }
 
@@ -3245,10 +3253,10 @@ public class GoGui
         if (m_file != null)
         {
             filename = m_file.getName();
-            if (m_game.isModified())
+            if (isModified())
                 filename = filename + " [modified]";
         }
-        else if (m_game.isModified())
+        else if (isModified())
             filename = "[modified]";
         String gameName = getGameInformation().suggestGameName();
         if (gameName != null)
@@ -3416,6 +3424,12 @@ public class GoGui
             });
     }
 
+    private void updateActions()
+    {
+        m_actions.update();
+        m_toolBar.update();
+    }
+
     private void updateFromGoBoard()
     {
         GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), m_showLastMove);
@@ -3467,7 +3481,7 @@ public class GoGui
         // buttons (See Mac QA1146)
         Object object = getRootPane().getClientProperty("windowModified");
         boolean modified = (object != null && ! Boolean.FALSE.equals(object));
-        if (m_game.isModified() != modified)
+        if (isModified() != modified)
             getRootPane().putClientProperty("windowModified",
                                             Boolean.valueOf(modified));
         setTitle();

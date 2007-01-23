@@ -56,6 +56,8 @@ public class GoGuiActions
 
     public final AbstractAction m_actionSave;
 
+    public final AbstractAction m_actionSaveAs;
+
     public GoGuiActions(GoGui goGui)
     {
         m_goGui = goGui;
@@ -143,6 +145,12 @@ public class GoGuiActions
                     m_goGui.actionSave(); } };
         init(m_actionSave, "Save", "Save game", KeyEvent.VK_S,
              "document-save");
+
+        m_actionSaveAs = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionSaveAs(); } };
+        init(m_actionSaveAs, "Save As...", "Save game under new filename",
+             "document-save-as");
     }
 
     public void update()
@@ -164,10 +172,6 @@ public class GoGuiActions
         m_actionNextVariation.setEnabled(hasNextVariation);
         m_actionPlay.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
-    }
-
-    public void updateFile()
-    {
         updateFile(m_goGui.getFile());
     }
 
@@ -243,6 +247,6 @@ public class GoGuiActions
         if (file != null)
             desc = desc + " (" + file + ")";
         setDescription(m_actionSave, desc);
-        m_actionSave.setEnabled(file != null);
+        m_actionSave.setEnabled(file != null && m_goGui.isModified());
     }
 }

@@ -882,7 +882,7 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionOpen, KeyEvent.VK_O);
         menu.add(createRecentMenu(callback));
         menu.addItem(actions.m_actionSave, KeyEvent.VK_S);
-        menu.addItem("Save As...", KeyEvent.VK_A, "save-as");
+        menu.addItem(actions.m_actionSaveAs, KeyEvent.VK_A);
         menu.addSeparator();
         menu.add(createMenuImport());
         menu.add(createMenuExport());
