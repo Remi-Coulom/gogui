@@ -69,12 +69,18 @@ public class GoGuiToolBar
 
     JButton m_buttonSave;
 
+    private JButton addButton(JButton button)
+    {
+        button.setFocusable(false);
+        add(button);
+        return button;
+    }
+
     private JButton addButton(AbstractAction action)
     {
         JButton button = new JButton(action);
         setAction(button, action);
-        add(button);
-        return button;
+        return addButton(button);
     }
 
     private void addRepeatButton(AbstractAction action,
@@ -84,7 +90,7 @@ public class GoGuiToolBar
         // Don't use text unless there is no icon
         if (button.getIcon() != null)
             button.setText(null);
-        add(button);
+        addButton(button);
     }
 
     private void setAction(JButton button, Action action)
