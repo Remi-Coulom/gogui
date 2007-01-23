@@ -20,11 +20,11 @@ $URL$
 
 <property name="docbook.name" value="docbook-xsl-1.68.1"/>
 
-<property name="looks.zipfile" value="external/jgoodies/looks-2_1_1.zip"/>
+<property name="looks.zipfile" value="external/jgoodies/looks-2_1_2.zip"/>
 
-<property name="looks.dir" value="looks-2.1.1"/>
+<property name="looks.dir" value="looks-2.1.2"/>
 
-<property name="looks.jarfile" value="looks-2.1.1.jar"/>
+<property name="looks.jarfile" value="looks-2.1.2.jar"/>
 
 <property name="docbook.path" value="external/docbook/${docbook.name}"/>
 
