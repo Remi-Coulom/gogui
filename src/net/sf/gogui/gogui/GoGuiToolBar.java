@@ -126,7 +126,6 @@ class RepeatButton
         addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent event)
                 {
-                    m_timer.stop();
                     if (contains(event.getPoint()) && m_count == 0)
                         m_action.actionPerformed(null);
                     enableAction();
@@ -137,6 +136,11 @@ class RepeatButton
                     disableAction();
                     m_count = 0;
                     m_timer.start();
+                }
+
+                public void mouseReleased(MouseEvent event)
+                {
+                    m_timer.stop();
                 }
             });
     }
