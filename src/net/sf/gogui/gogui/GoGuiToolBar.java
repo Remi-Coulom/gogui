@@ -95,17 +95,19 @@ class RepeatButton
             });
         m_timer.stop();
         addMouseListener(new MouseAdapter() {
-                public void mousePressed(MouseEvent event)
-                {
-                    m_count = 0;
-                    m_timer.start();
-                }
-
-                public void mouseReleased(MouseEvent event)
+                public void mouseClicked(MouseEvent event)
                 {
                     m_timer.stop();
                     if (contains(event.getPoint()) && m_count == 0)
                         m_action.actionPerformed(null);
+                    enableAction();
+                }
+
+                public void mousePressed(MouseEvent event)
+                {
+                    disableAction();
+                    m_count = 0;
+                    m_timer.start();
                 }
             });
     }
@@ -119,7 +121,20 @@ class RepeatButton
 
     private Timer m_timer;
 
-    AbstractAction m_action;
+    private AbstractAction m_action;
 
-    AbstractAction m_repeatAction;
+    private AbstractAction m_repeatAction;
+
+    private void disableAction()
+    {
+        setAction(null);
+        setIcon((Icon)m_action.getValue(AbstractAction.SMALL_ICON));
+    }
+
+    private void enableAction()
+    {
+        setAction(m_action);
+        if (getIcon() != null)
+            setText(null);
+    }
 }
