@@ -4,6 +4,7 @@
 
 package net.sf.gogui.gogui;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 import net.sf.gogui.go.GoPoint;
@@ -34,7 +35,7 @@ public final class GoGuiSettings
 
     public int m_move;
 
-    public String m_file;
+    public File m_file;
 
     public String m_gtpCommand;
 
@@ -115,7 +116,7 @@ public final class GoGuiSettings
         ArrayList arguments = opt.getArguments();
         m_file = null;
         if (arguments.size() == 1)
-            m_file = (String)arguments.get(0);
+            m_file = new File((String)arguments.get(0));
         else if (arguments.size() > 1)
             throw new ErrorMessage("Only one argument allowed");
         validate();

@@ -39,6 +39,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.ConstClock;
+import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstGameInformation;
 import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
@@ -106,10 +107,10 @@ import net.sf.gogui.version.Version;
 /** Graphical user interface to a Go program. */
 public class GoGui
     extends JFrame
-    implements ActionListener, AnalyzeDialog.Callback, GuiBoard.Listener,
-               GameTreeViewer.Listener, GtpShell.Callback
+    implements ActionListener, AnalyzeDialog.Callback,
+               GuiBoard.Listener, GameTreeViewer.Listener, GtpShell.Callback
 {
-    public GoGui(String program, String file, int move, String time,
+    public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean computerBlack,
                  boolean computerWhite, boolean auto, String gtpFile,
                  String gtpCommand, String initAnalyze)
@@ -117,10 +118,7 @@ public class GoGui
     {
         int boardSize = m_prefs.getInt("boardsize", GoPoint.DEFAULT_SIZE);
         m_beepAfterMove = m_prefs.getBoolean("beep-after-move", true);
-        if (file == null)
-            m_file = null;
-        else
-            m_file = new File(file);
+        m_file = file;
         m_gtpFile = gtpFile;
         m_gtpCommand = gtpCommand;
         m_move = move;
@@ -135,7 +133,7 @@ public class GoGui
         Container contentPane = getContentPane();        
         m_innerPanel = new JPanel(new BorderLayout());
         contentPane.add(m_innerPanel, BorderLayout.CENTER);
-        m_toolBar = new GoGuiToolBar(this);
+        m_toolBar = new GoGuiToolBar(m_actions);
 
         m_infoPanel = new JPanel(new BorderLayout());
         m_game = new Game(boardSize);
@@ -205,7 +203,8 @@ public class GoGui
                     m_menuBar.addRecentGtp(file);
                 }
             };
-        m_menuBar = new GoGuiMenuBar(this, recentCallback, recentGtp);
+        m_menuBar =
+            new GoGuiMenuBar(this, m_actions, recentCallback, recentGtp);
         m_menuBar.selectBoardSizeItem(getBoardSize());
         boolean onlySupported
             = m_prefs.getBoolean("analyze-only-supported-commands", true);
@@ -249,10 +248,7 @@ public class GoGui
         if (m_program != null && m_program.trim().equals(""))
             m_program = null;
         if (m_program == null)
-        {
-            m_toolBar.setComputerEnabled(false);
             m_menuBar.setComputerEnabled(false);
-        }
         m_menuBar.setNormalMode();
         m_guiBoard.requestFocusInWindow();
         if (time != null)
@@ -285,7 +281,6 @@ public class GoGui
             && ! command.equals("auto-number")
             && ! command.equals("timestamp")
             && ! command.equals("help")
-            && ! command.equals("interrupt")
             && ! command.equals("show-grid")
             && ! command.equals("show-shell")
             && ! command.equals("show-toolbar")
@@ -310,14 +305,8 @@ public class GoGui
             cbAutoNumber();
         else if (command.equals("back-to-main-variation"))
             cbBackToMainVar();
-        else if (command.equals("backward"))
-            cbBackward(1);
-        else if (command.equals("backward-10"))
-            cbBackward(10);
         else if (command.equals("beep-after-move"))
             cbBeepAfterMove();
-        else if (command.equals("beginning"))
-            cbBeginning();
         else if (command.equals("board-size-other"))
             cbBoardSizeOther();
         else if (command.startsWith("board-size-"))
@@ -344,8 +333,6 @@ public class GoGui
             computerWhite();
         else if (command.equals("detach-program"))
             cbDetachProgram();
-        else if (command.equals("end"))
-            cbEnd();
         else if (command.equals("exit"))
             close();
         else if (command.equals("export-ascii"))
@@ -362,10 +349,6 @@ public class GoGui
             cbFindInComments();
         else if (command.equals("find-next"))
             cbFindNext();
-        else if (command.equals("forward"))
-            cbForward(1);
-        else if (command.equals("forward-10"))
-            cbForward(10);
         else if (command.equals("game-info"))
             cbGameInfo();
         else if (command.equals("goto"))
@@ -402,36 +385,20 @@ public class GoGui
             cbImportAscii();
         else if (command.equals("import-clipboard"))
             cbImportClipboard();
-        else if (command.equals("interrupt"))
-            cbInterrupt();
         else if (command.equals("keep-only-main-variation"))
             cbKeepOnlyMainVariation();
         else if (command.equals("keep-only-position"))
             cbKeepOnlyPosition();
         else if (command.equals("make-main-variation"))
             cbMakeMainVariation();
-        else if (command.equals("next-variation"))
-            cbNextVariation();
         else if (command.equals("next-earlier-variation"))
             cbNextEarlierVariation();
-        else if (command.equals("new-game"))
-            cbNewGame(getBoardSize(), true);
-        else if (command.equals("open"))
-            cbOpen();
-        else if (command.equals("pass"))
-            cbPass();
-        else if (command.equals("play"))
-            cbPlay(false);
         else if (command.equals("play-single"))
-            cbPlay(true);
-        else if (command.equals("previous-variation"))
-            cbPreviousVariation();
+            actionPlay(true);
         else if (command.equals("previous-earlier-variation"))
             cbPreviousEarlierVariation();
         else if (command.equals("print"))
             cbPrint();
-        else if (command.equals("save"))
-            cbSave();
         else if (command.equals("save-as"))
             cbSaveAs();
         else if (command.equals("score"))
@@ -472,6 +439,140 @@ public class GoGui
             assert(false);
     }
     
+    public void actionBackward(int n)
+    {
+        if (! checkSpecialMode())
+            return;
+        backward(n);
+        boardChangedBegin(false, false);
+    }
+
+    public void actionBeginning()
+    {
+        if (! checkSpecialMode())
+            return;
+        backward(NodeUtil.getDepth(getCurrentNode()));
+        boardChangedBegin(false, false);
+    }
+
+    public void actionEnd()
+    {
+        if (! checkSpecialMode())
+            return;
+        forward(NodeUtil.getNodesLeft(getCurrentNode()));
+        boardChangedBegin(false, false);
+    }
+
+    public void actionForward(int n)
+    {
+        if (! checkSpecialMode())
+            return;
+        forward(n);
+        boardChangedBegin(false, false);
+    }
+
+    public void actionInterrupt()
+    {
+        if (! isCommandInProgress())
+        {
+            showError("Computer is not thinking");
+            return;
+        }
+        if (m_gtp == null || m_gtp.isProgramDead())
+            return;
+        if (Interrupt.run(this, m_gtp))
+            showStatus("Interrupting...");
+    }
+
+    public void actionNewGame()
+    {
+        if (! checkSpecialMode())
+            return;
+        newGame(getBoardSize(), true);
+    }
+
+    public void actionNextVariation()
+    {
+        if (! checkSpecialMode())
+            return;
+        ConstNode node = NodeUtil.getNextVariation(getCurrentNode());
+        if (node != null)
+            cbGotoNode(node);
+    }
+
+    public void actionOpen()
+    {
+        if (! checkSpecialMode())
+            return;
+        if (! checkSaveGame())
+            return;
+        File file = SimpleDialogs.showOpenSgf(this);
+        if (file == null)
+            return;
+        m_menuBar.addRecent(file);
+        loadFile(file, -1);
+        boardChangedBegin(false, true);
+    }
+
+    public void actionPass()
+    {
+        if (! checkSpecialMode())
+            return;
+        if (m_passWarning == null)
+            m_passWarning = new OptionalMessage(this);
+        if (! m_passWarning.showQuestion("Really pass?"))
+            return;
+        humanMoved(Move.getPass(getToMove()));
+    }
+
+    public void actionPlay(boolean isSingleMove)
+    {
+        if (! checkSpecialMode())
+            return;
+        if (m_gtp == null || ! checkProgramInSync())
+            return;
+        if (! isSingleMove && ! isComputerBoth())
+        {
+            if (getToMove() == GoColor.BLACK)
+                computerBlack();
+            else
+                computerWhite();
+        }
+        m_interruptComputerBoth = false;
+        generateMove(isSingleMove);
+        if (getCurrentNode() == getTree().getRootConst()
+            && getCurrentNode().getNumberChildren() == 0)
+            m_game.resetClock();
+        m_game.startClock();
+    }
+
+    public void actionPreviousVariation()
+    {
+        if (! checkSpecialMode())
+            return;
+        ConstNode node = NodeUtil.getPreviousVariation(getCurrentNode());
+        if (node != null)
+            cbGotoNode(node);
+    }
+
+    public void actionSave()
+    {
+        if (m_file == null)
+            saveDialog();
+        else
+        {
+            if (m_file.exists())
+            {
+                if (m_overwriteWarning == null)
+                    m_overwriteWarning = new OptionalMessage(this);
+                String message = "Overwrite " + m_file + "?";
+                if (! m_overwriteWarning.showWarning(message))
+                    return;
+            }
+            save(m_file);
+        }
+    }
+
     public void cbAnalyze()
     {        
         if (m_gtp == null)
@@ -550,18 +651,6 @@ public class GoGui
             m_gtp.setAutoNumber(enable);
     }
 
-    public void cbBackward(int n)
-    {
-        backward(n);
-        boardChangedBegin(false, false);
-    }
-
-    public void cbBeginning()
-    {
-        backward(NodeUtil.getDepth(getCurrentNode()));
-        boardChangedBegin(false, false);
-    }
-
     public void cbCommandCompletion()
     {
         if (m_gtpShell == null)
@@ -581,18 +670,6 @@ public class GoGui
         detachProgram();
         m_prefs.put("program", "");
         return true;
-    }
-
-    public void cbEnd()
-    {
-        forward(NodeUtil.getNodesLeft(getCurrentNode()));
-        boardChangedBegin(false, false);
-    }
-
-    public void cbForward(int n)
-    {
-        forward(n);
-        boardChangedBegin(false, false);
     }
 
     public void cbGotoNode(ConstNode node)
@@ -626,23 +703,9 @@ public class GoGui
         m_menuBar.addRecentGtp(file);
     }
 
-    public void cbNextVariation()
-    {
-        ConstNode node = NodeUtil.getNextVariation(getCurrentNode());
-        if (node != null)
-            cbGotoNode(node);
-    }
-
     public void cbNextEarlierVariation()
     {
         ConstNode node = NodeUtil.getNextEarlierVariation(getCurrentNode());
-        if (node != null)
-            cbGotoNode(node);
-    }
-
-    public void cbPreviousVariation()
-    {
-        ConstNode node = NodeUtil.getPreviousVariation(getCurrentNode());
         if (node != null)
             cbGotoNode(node);
     }
@@ -824,6 +887,16 @@ public class GoGui
         }
     }
 
+    public File getFile()
+    {
+        return m_file;
+    }
+
+    public ConstGame getGame()
+    {
+        return m_game;
+    }
+
     public boolean sendGtpCommand(String command, boolean sync)
         throws GtpError
     {
@@ -843,8 +916,8 @@ public class GoGui
                     sendGtpCommandContinue();
                 }
             };
-        beginLengthyCommand();
         m_gtp.send(command, callback);
+        beginLengthyCommand();
         return true;
     }
 
@@ -873,6 +946,11 @@ public class GoGui
             setBoardCursor(Cursor.HAND_CURSOR);
             showStatusSelectPointList();
         }
+    }
+
+    public boolean isProgramAttached()
+    {
+        return (m_gtp != null);
     }
 
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
@@ -1024,8 +1102,8 @@ public class GoGui
 
     private final Comment m_comment;
 
-    /** Last loaded or saved file. */
-    private File m_loadedFile;
+    /** File corresponding to the current game. */
+    private File m_file;
 
     private final GameInfo m_gameInfo;    
 
@@ -1056,8 +1134,6 @@ public class GoGui
     private Pattern m_pattern;
 
     private AnalyzeCommand m_analyzeCommand;
-
-    private final File m_file;
 
     private final Session m_session = new Session("");
 
@@ -1094,6 +1170,8 @@ public class GoGui
         new ThumbnailCreator(false);
 
     private TimeSettings m_timeSettings;
+
+    private final GoGuiActions m_actions = new GoGuiActions(this);
 
     private final GoGuiToolBar m_toolBar;
 
@@ -1266,12 +1344,10 @@ public class GoGui
         catch (GtpError e)
         {
             showError(e);
-            m_toolBar.setComputerEnabled(false);
             m_menuBar.setComputerEnabled(false);
             return false;
         }
         m_menuBar.setComputerEnabled(true);
-        m_toolBar.setComputerEnabled(true);
         m_name = null;
         m_titleFromProgram = null;
         try
@@ -1331,7 +1407,6 @@ public class GoGui
     {
         setBoardCursor(Cursor.WAIT_CURSOR);
         m_menuBar.setCommandInProgress();
-        m_toolBar.setCommandInProgress();
         m_gtpShell.setCommandInProgess(true);
     }
 
@@ -1340,7 +1415,7 @@ public class GoGui
     {
         updateFromGoBoard();
         updateGameInfo(gameTreeChanged);
-        m_toolBar.update(getCurrentNode());
+        m_actions.update();
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(getBoardSize());
         if (m_gtp != null
@@ -1373,7 +1448,7 @@ public class GoGui
 
     private void cbAddBookmark()
     {
-        if (m_loadedFile == null)
+        if (m_file == null)
         {
             showError("Cannot set bookmark if no file loaded");
             return;
@@ -1391,7 +1466,7 @@ public class GoGui
         }
         String variation = NodeUtil.getVariationString(getCurrentNode());
         int move = NodeUtil.getMoveNumber(getCurrentNode());
-        Bookmark bookmark = new Bookmark(m_loadedFile, move, variation);
+        Bookmark bookmark = new Bookmark(m_file, move, variation);
         if (! BookmarkDialog.show(this, "Add Bookmark", bookmark, true))
             return;
         m_bookmarks.add(bookmark);
@@ -1425,7 +1500,7 @@ public class GoGui
         {
             saveSession();
             int boardSize = Integer.parseInt(boardSizeString);
-            cbNewGame(boardSize, false);
+            newGame(boardSize, false);
             m_gameInfo.updateTimeFromClock(getClock());
             updateMenuBar();
             m_prefs.putInt("boardsize", boardSize);
@@ -1442,7 +1517,7 @@ public class GoGui
         if (size < 1 || size > GoPoint.MAXSIZE)
             return;
         saveSession();
-        cbNewGame(size, false);
+        newGame(size, false);
         updateMenuBar();
         m_prefs.putInt("boardsize", size);
         m_gameInfo.updateTimeFromClock(getClock());
@@ -1462,7 +1537,7 @@ public class GoGui
             }
             Bookmark bookmark = (Bookmark)m_bookmarks.get(n);
             File file = bookmark.m_file;
-            if (m_loadedFile == null || ! file.equals(m_loadedFile))
+            if (m_file == null || ! file.equals(m_file))
                 if (! loadFile(file, -1))
                     return;
             String variation = bookmark.m_variation;
@@ -1786,15 +1861,6 @@ public class GoGui
             importTextPosition(new StringReader(text));
     }
 
-    private void cbInterrupt()
-    {
-        if (! isCommandInProgress() || m_gtp == null
-            || m_gtp.isProgramDead())
-            return;
-        if (Interrupt.run(this, m_gtp))
-            showStatus("Interrupting...");
-    }
-
     private void cbKeepOnlyMainVariation()
     {
         if (! NodeUtil.isInMainVariation(getCurrentNode()))
@@ -1825,91 +1891,9 @@ public class GoGui
         boardChangedBegin(false, true);
     }
 
-    private void cbNewGame(int size, boolean startClock)
-    {
-        if (! checkSaveGame())
-            return;
-        clearLoadedFile();
-        newGame(size);
-        if (! isComputerNone())
-        {
-            if (m_handicap == 0)
-                computerWhite();
-            else
-                computerBlack();
-        }
-        if (startClock)
-            m_game.startClock();
-        updateMenuBar();
-        boardChangedBegin(true, true);
-    }
-
-    private void cbOpen()
-    {
-        if (! checkSaveGame())
-            return;
-        File file = SimpleDialogs.showOpenSgf(this);
-        if (file == null)
-            return;
-        m_menuBar.addRecent(file);
-        loadFile(file, -1);
-        boardChangedBegin(false, true);
-    }
-
-    private void cbPass()
-    {
-        if (isCommandInProgress())
-            return;
-        if (m_passWarning == null)
-            m_passWarning = new OptionalMessage(this);
-        if (! m_passWarning.showQuestion("Really pass?"))
-            return;
-        humanMoved(Move.getPass(getToMove()));
-    }
-
-    private void cbPlay(boolean isSingleMove)
-    {
-        if (m_gtp == null || isCommandInProgress())
-            return;
-        if (! checkProgramInSync())
-            return;
-        if (! isSingleMove && ! isComputerBoth())
-        {
-            if (getToMove() == GoColor.BLACK)
-                computerBlack();
-            else
-                computerWhite();
-        }
-        m_interruptComputerBoth = false;
-        generateMove(isSingleMove);
-        if (getCurrentNode() == getTree().getRootConst()
-            && getCurrentNode().getNumberChildren() == 0)
-            m_game.resetClock();
-        m_game.startClock();
-    }
-
-
     private void cbPrint()
     {
         Print.run(this, m_guiBoard);
-    }
-
-    private void cbSave()
-    {
-        if (m_loadedFile == null)
-            saveDialog();
-        else
-        {
-            if (m_loadedFile.exists())
-            {
-                if (m_overwriteWarning == null)
-                    m_overwriteWarning = new OptionalMessage(this);
-                String message = "Overwrite " + m_loadedFile + "?";
-                if (! m_overwriteWarning.showWarning(message))
-                    return;
-            }
-            save(m_loadedFile);
-        }
     }
 
     private void cbSaveAs()
@@ -1977,7 +1961,6 @@ public class GoGui
         clearStatus();
         m_guiBoard.clearAll();
         m_scoreMode = false;
-        m_toolBar.enableAll(true, getCurrentNode());
         m_menuBar.setNormalMode();
     }
 
@@ -1991,7 +1974,6 @@ public class GoGui
         m_menuBar.setSetupMode();
         resetBoard();
         m_setupMode = true;
-        m_toolBar.enableAll(false, null);
         showStatus("Setup Black");
         m_game.setToMove(GoColor.BLACK);
         if (getCurrentNode().getMove() != null)
@@ -2076,6 +2058,16 @@ public class GoGui
         m_game.truncateChildren();
         updateModified();
         boardChangedBegin(false, true);
+    }
+
+    private boolean checkCommandInProgress()
+    {
+        if (isCommandInProgress())
+        {
+            showError("Cannot execute while computer is thinking");
+            return false;
+        }
+        return true;
     }
 
     private void checkComputerMove()
@@ -2163,10 +2155,10 @@ public class GoGui
         switch (result)
         {
         case 0:
-            if (m_loadedFile == null)
+            if (m_file == null)
                 return saveDialog();
             else
-                return save(m_loadedFile);
+                return save(m_file);
         case 1:
             m_game.clearModified();
             return true;
@@ -2178,12 +2170,23 @@ public class GoGui
         }
     }
     
-    private void clearLoadedFile()
+    /** Check if command is in progress or setup or score mode. */
+    private boolean checkSpecialMode()
     {
-        if (m_loadedFile == null)
-            return;
-        m_loadedFile = null;
-        setTitle();
+        if (! checkCommandInProgress())
+            return false;
+        // TODO: maybe automatically leave setup or score mode instead?
+        if (m_setupMode)
+        {
+            showError("Cannot execute while in setup mode");
+            return false;
+        }
+        if (m_scoreMode)
+        {
+            showError("Cannot execute while in score mode");
+            return false;
+        }
+        return true;
     }
 
     private void clearStatus()
@@ -2413,7 +2416,6 @@ public class GoGui
         m_gtp = null;
         m_name = null;
         m_version = null;
-        m_toolBar.setComputerEnabled(false);
         m_menuBar.setComputerEnabled(false);
         m_gtpShell.dispose();
         m_gtpShell = null;
@@ -2444,7 +2446,6 @@ public class GoGui
     {
         clearStatus();
         m_menuBar.setNormalMode();
-        m_toolBar.enableAll(true, getCurrentNode());
         if (m_gtpShell != null)
             m_gtpShell.setCommandInProgess(false);
         if (m_analyzeCommand != null
@@ -2719,7 +2720,6 @@ public class GoGui
         setVisible(true);
         m_bookmarks = Bookmark.load();
         m_menuBar.setBookmarks(m_bookmarks);
-        m_toolBar.enableAll(true, getCurrentNode());
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
@@ -2798,6 +2798,13 @@ public class GoGui
         }
     }
 
+    private boolean isCommandInProgress()
+    {
+        if (m_gtp == null)
+            return false;
+        return m_gtp.isCommandInProgress();
+    }
+
     private boolean isComputerBoth()
     {
         return (m_computerBlack && m_computerWhite);
@@ -2806,13 +2813,6 @@ public class GoGui
     private boolean isComputerNone()
     {
         return (! m_computerBlack && ! m_computerWhite);
-    }
-
-    private boolean isCommandInProgress()
-    {
-        if (m_gtp == null)
-            return false;
-        return m_gtp.isCommandInProgress();
     }
 
     private boolean isOutOfSync()
@@ -2842,8 +2842,7 @@ public class GoGui
             initGtp();
             if (move > 0)
                 forward(move);            
-            m_loadedFile = file;
-            setTitle();
+            setFile(file);
             String warnings = reader.getWarnings();
             if (warnings != null)
                 showWarning("File " + file.getName() + ":\n" + warnings);
@@ -2894,12 +2893,30 @@ public class GoGui
         initGtp();
         updateGameInfo(true);
         updateFromGoBoard();
-        m_toolBar.update(getCurrentNode());
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(getBoardSize());
         setTitle();
         setTitleFromProgram();
         showToMove();
+    }
+
+    private void newGame(int size, boolean startClock)
+    {
+        if (! checkSaveGame())
+            return;
+        setFile(null);
+        newGame(size);
+        if (! isComputerNone())
+        {
+            if (m_handicap == 0)
+                computerWhite();
+            else
+                computerBlack();
+        }
+        if (startClock)
+            m_game.startClock();
+        updateMenuBar();
+        boardChangedBegin(true, true);
     }
 
     private void newGameFile(int size, int move)
@@ -2908,7 +2925,6 @@ public class GoGui
         loadFile(m_file, move);
         updateGameInfo(true);
         updateFromGoBoard();
-        m_toolBar.update(getCurrentNode());
         updateMenuBar();
         m_menuBar.selectBoardSizeItem(getBoardSize());
     }
@@ -3008,8 +3024,8 @@ public class GoGui
     private void runLengthyCommand(String cmd, Runnable callback)
     {
         assert(m_gtp != null);
-        beginLengthyCommand();
         m_gtp.send(cmd, callback);
+        beginLengthyCommand();
     }
 
     /** Save game to file.
@@ -3030,8 +3046,7 @@ public class GoGui
         new SgfWriter(out, getTree(), "GoGui", Version.get());
         m_menuBar.addRecent(file);
         createThumbnail(file);
-        m_loadedFile = file;
-        setTitle();
+        setFile(file);
         updateModified();                
         return true;
     }
@@ -3166,6 +3181,13 @@ public class GoGui
         component.setCursor(Cursor.getDefaultCursor());
     }
 
+    private void setFile(File file)
+    {
+        m_file = file;
+        m_actions.updateFile();
+        setTitle();
+    }
+
     private void setKomi(Komi komi)
     {
         GuiGtpUtil.sendKomi(this, komi, m_name, m_gtp);
@@ -3219,9 +3241,9 @@ public class GoGui
         if (m_gtp != null)
             appName = m_name;
         String filename = null;
-        if (m_loadedFile != null)
+        if (m_file != null)
         {
-            filename = m_loadedFile.getName();
+            filename = m_file.getName();
             if (m_game.isModified())
                 filename = filename + " [modified]";
         }
@@ -3262,10 +3284,9 @@ public class GoGui
         m_setupMode = false;
         m_showLastMove = m_menuBar.getShowLastMove();
         m_menuBar.setNormalMode();
-        m_toolBar.enableAll(true, getCurrentNode());
         m_game.setToMove(getToMove());
         initGtp();
-        clearLoadedFile();
+        setFile(null);
         updateGameInfo(true);
         boardChangedBegin(false, false);
     }

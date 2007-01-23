@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -32,17 +33,17 @@ import net.sf.gogui.util.Platform;
 /** Menu bar for GoGui. */
 public class GoGuiMenuBar
 {
-    public GoGuiMenuBar(ActionListener listener,
+    public GoGuiMenuBar(ActionListener listener, GoGuiActions actions,
                         RecentFileMenu.Callback recentCallback,
                         RecentFileMenu.Callback recentGtpCallback)
     {
         m_listener = listener;
         m_menuBar = new JMenuBar();
-        m_menuFile = createMenuFile(recentCallback);
+        m_menuFile = createMenuFile(actions, recentCallback);
         m_menuBar.add(m_menuFile);
-        m_menuBar.add(createMenuGame());
+        m_menuBar.add(createMenuGame(actions));
         m_menuBar.add(createMenuEdit());
-        m_menuBar.add(createMenuGo());
+        m_menuBar.add(createMenuGo(actions));
         m_menuShell = createMenuShell(recentGtpCallback);
         m_menuBar.add(m_menuShell);
         m_menuBookmarks = createMenuBookMarks();
@@ -251,7 +252,6 @@ public class GoGuiMenuBar
     {
         m_isComputerDisabled = ! enabled;
         m_menuComputerColor.setEnabled(enabled);
-        m_itemComputerPlay.setEnabled(enabled);
         m_itemComputerPlaySingle.setEnabled(enabled);
         m_itemBeepAfterMove.setEnabled(enabled);
         m_itemDetachProgram.setEnabled(enabled);
@@ -305,7 +305,6 @@ public class GoGuiMenuBar
         m_menuFile.setEnabled(true);
         m_itemDetachProgram.setEnabled(true);
         m_itemQuit.setEnabled(true);
-        m_itemInterrupt.setEnabled(true);
         m_menuComputerColor.setEnabled(true);
         m_menuHelp.setEnabled(true);
         m_itemAbout.setEnabled(true);
@@ -394,7 +393,6 @@ public class GoGuiMenuBar
         enableAll();
         m_recent.updateEnabled();
         m_recentGtp.updateEnabled();
-        m_itemInterrupt.setEnabled(false);
         m_itemSetup.setSelected(false);
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
@@ -488,16 +486,8 @@ public class GoGuiMenuBar
             (NodeUtil.getPreviousVariation(node) != null);
         boolean isInMain = NodeUtil.isInMainVariation(node);
         boolean treeHasVariations = gameTree.hasVariations();
-        m_itemBeginning.setEnabled(hasFather);
-        m_itemBackward.setEnabled(hasFather);
-        m_itemBackward10.setEnabled(hasFather);
-        m_itemForward.setEnabled(hasChildren);
-        m_itemForward10.setEnabled(hasChildren);
-        m_itemEnd.setEnabled(hasChildren);
         m_itemGoto.setEnabled(hasFather || hasChildren);
         m_itemGotoVar.setEnabled(hasFather || hasChildren);
-        m_itemNextVariation.setEnabled(hasNextVariation);
-        m_itemPreviousVariation.setEnabled(hasPrevVariation);
         m_itemNextEarlierVariation.setEnabled(hasNextEarlierVariation);
         m_itemPreviousEarlierBackward.setEnabled(hasPrevEarlierVariation);
         m_itemBackToMainVar.setEnabled(! isInMain);
@@ -577,12 +567,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemBackToMainVar;
 
-    private JMenuItem m_itemBackward;
-
-    private JMenuItem m_itemBackward10;
-
-    private JMenuItem m_itemBeginning;
-
     private JMenuItem[] m_itemBoardSize;
 
     private JMenuItem m_itemBoardSizeOther;
@@ -601,21 +585,13 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemComputerNone;
 
-    private JMenuItem m_itemComputerPlay;
-
     private JMenuItem m_itemComputerPlaySingle;
 
     private JMenuItem m_itemComputerWhite;
 
     private JMenuItem m_itemDetachProgram;
 
-    private JMenuItem m_itemEnd;
-
     private JMenuItem m_itemFindNext;
-
-    private JMenuItem m_itemForward;
-
-    private JMenuItem m_itemForward10;
 
     private JMenuItem m_itemGameTreeLarge;
 
@@ -637,19 +613,13 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemHelp;
 
-    private JMenuItem m_itemInterrupt;
-
     private JMenuItem m_itemKeepOnlyMainVar;
 
     private JMenuItem m_itemKeepOnlyPosition;
 
     private JMenuItem m_itemMakeMainVar;
 
-    private JMenuItem m_itemNextVariation;
-
     private JMenuItem m_itemNextEarlierVariation;
-
-    private JMenuItem m_itemPreviousVariation;
 
     private JMenuItem m_itemPreviousEarlierBackward;
 
@@ -905,14 +875,13 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuFile(RecentFileMenu.Callback callback)
+    private JMenuChecked createMenuFile(GoGuiActions actions,
+                                        RecentFileMenu.Callback callback)
     {
         JMenuChecked menu = createMenu("File", KeyEvent.VK_F);
-        menu.addItem("Open...", KeyEvent.VK_O, KeyEvent.VK_O,
-                     SHORTCUT, "open");
+        menu.addItem(actions.m_actionOpen, KeyEvent.VK_O);
         menu.add(createRecentMenu(callback));
-        menu.addItem("Save", KeyEvent.VK_S, KeyEvent.VK_S,
-                     SHORTCUT, "save");
+        menu.addItem(actions.m_actionSave, KeyEvent.VK_S);
         menu.addItem("Save As...", KeyEvent.VK_A, "save-as");
         menu.addSeparator();
         menu.add(createMenuImport());
@@ -931,70 +900,45 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuGame()
+    private JMenuChecked createMenuGame(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Game", KeyEvent.VK_A);
-        menu.addItem("New Game", KeyEvent.VK_N, "new-game");
+        menu.addItem(actions.m_actionNewGame, KeyEvent.VK_N);
         menu.addSeparator();
         m_menuComputerColor = createComputerColorMenu();
         menu.add(m_menuComputerColor);
-        m_itemComputerPlay = menu.addItem("Play", KeyEvent.VK_L,
-                                          KeyEvent.VK_F5,
-                                          getFunctionKeyShortcut(), "play");
+        menu.addItem(actions.m_actionPlay, KeyEvent.VK_L);
         m_itemComputerPlaySingle
             = menu.addItem("Play Single Move", KeyEvent.VK_S,
                            KeyEvent.VK_F5,
                            getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK,
                            "play-single");
-        m_itemInterrupt =
-            menu.addItem("Interrupt", KeyEvent.VK_T, KeyEvent.VK_ESCAPE,
-                         0, "interrupt");
+        menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_T);
         m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
-        menu.addSeparator();
         m_itemCleanup.setMnemonic(KeyEvent.VK_E);
-        menu.addItem("Pass", KeyEvent.VK_P, KeyEvent.VK_F2,
-                     getFunctionKeyShortcut(), "pass");
+        menu.addSeparator();
+        menu.addItem(actions.m_actionPass, KeyEvent.VK_P);
         menu.add(createClockMenu());
         menu.addItem("Score", KeyEvent.VK_O, "score");
         return menu;
     }
 
-    private JMenuChecked createMenuGo()
+    private JMenuChecked createMenuGo(GoGuiActions actions)
     {
         int shiftMask = java.awt.event.InputEvent.SHIFT_MASK;
         JMenuChecked menu = createMenu("Go", KeyEvent.VK_G);
-        m_itemBeginning =
-            menu.addItem("Beginning", KeyEvent.VK_B, KeyEvent.VK_HOME,
-                         SHORTCUT, "beginning");
-        m_itemBackward10 =
-            menu.addItem("Backward 10", KeyEvent.VK_W, KeyEvent.VK_LEFT,
-                         SHORTCUT | ActionEvent.SHIFT_MASK,
-                         "backward-10");
-        m_itemBackward =
-            menu.addItem("Backward", KeyEvent.VK_K, KeyEvent.VK_LEFT,
-                         SHORTCUT, "backward");
-        m_itemForward =
-            menu.addItem("Forward", KeyEvent.VK_F, KeyEvent.VK_RIGHT,
-                         SHORTCUT, "forward");
-        m_itemForward10 =
-            menu.addItem("Forward 10", KeyEvent.VK_R, KeyEvent.VK_RIGHT,
-                         SHORTCUT | ActionEvent.SHIFT_MASK,
-                         "forward-10");
-        m_itemEnd =
-            menu.addItem("End", KeyEvent.VK_E, KeyEvent.VK_END,
-                         SHORTCUT, "end");
+        menu.addItem(actions.m_actionBeginning, KeyEvent.VK_B);
+        menu.addItem(actions.m_actionBackwardTen, KeyEvent.VK_W);
+        menu.addItem(actions.m_actionBackward, KeyEvent.VK_K);
+        menu.addItem(actions.m_actionForward, KeyEvent.VK_F);
+        menu.addItem(actions.m_actionForwardTen, KeyEvent.VK_R);
+        menu.addItem(actions.m_actionEnd, KeyEvent.VK_E);
         m_itemGoto =
             menu.addItem("Go to Move...", KeyEvent.VK_O, KeyEvent.VK_G,
                          SHORTCUT, "goto");
         menu.addSeparator();
-        m_itemNextVariation =
-            menu.addItem("Next Variation", KeyEvent.VK_N,
-                         KeyEvent.VK_DOWN, SHORTCUT,
-                         "next-variation");
-        m_itemPreviousVariation =
-            menu.addItem("Previous Variation", KeyEvent.VK_P,
-                         KeyEvent.VK_UP, SHORTCUT,
-                         "previous-variation");
+        menu.addItem(actions.m_actionNextVariation, KeyEvent.VK_N);
+        menu.addItem(actions.m_actionPreviousVariation, KeyEvent.VK_P);
         m_itemNextEarlierVariation =
             menu.addItem("Next Earlier Variation", KeyEvent.VK_X,
                          KeyEvent.VK_DOWN, SHORTCUT | shiftMask,
@@ -1152,17 +1096,18 @@ class JMenuChecked
         return item;
     }
 
+    public JMenuItem addItem(AbstractAction action, int mnemonic)
+    {
+        JMenuItem item = new JMenuItem(action);
+        item.setIcon(null);
+        setMnemonic(item, mnemonic);
+        add(item);
+        return item;
+    }
+
     public JMenuItem addItem(JMenuItem item, int mnemonic, String command)
     {
-        item.setMnemonic(mnemonic);
-        Integer integer = new Integer(mnemonic);
-        if (m_mnemonics.contains(integer))
-        {
-            System.err.println("Warning: duplicate mnemonic item "
-                               + item.getText());
-            assert(false);
-        }
-        m_mnemonics.add(integer);
+        setMnemonic(item, mnemonic);
         return addItem(item, command);
     }
 
@@ -1215,5 +1160,17 @@ class JMenuChecked
     private final ArrayList m_mnemonics = new ArrayList();
 
     private static ArrayList s_accelerators = new ArrayList();
-}
 
+    private void setMnemonic(JMenuItem item, int mnemonic)
+    {
+        item.setMnemonic(mnemonic);
+        Integer integer = new Integer(mnemonic);
+        if (m_mnemonics.contains(integer))
+        {
+            System.err.println("Warning: duplicate mnemonic item "
+                               + item.getText());
+            assert(false);
+        }
+        m_mnemonics.add(integer);
+    }
+}
