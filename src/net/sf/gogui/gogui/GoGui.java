@@ -2762,6 +2762,7 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, false, true);
         }
         setTitleFromProgram();
+        m_actions.update();
         getLayeredPane().setVisible(true);
         toFrontLater();
         checkComputerMove();
