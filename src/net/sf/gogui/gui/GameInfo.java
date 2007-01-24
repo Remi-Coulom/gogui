@@ -41,7 +41,7 @@ public class GameInfo
         m_game = game;
         Box boxBlack = Box.createVerticalBox();
         panel.add(boxBlack);
-        JLabel iconBlack = new JLabel(GuiUtil.getIcon("gogui-black-48x48",
+        JLabel iconBlack = new JLabel(GuiUtil.getIcon("gogui-black-32x32",
                                                       "Black"));
         iconBlack.setAlignmentX(Component.CENTER_ALIGNMENT);
         boxBlack.add(iconBlack);
@@ -54,7 +54,7 @@ public class GameInfo
 
         Box boxWhite = Box.createVerticalBox();
         panel.add(boxWhite);
-        JLabel iconWhite = new JLabel(GuiUtil.getIcon("gogui-white-48x48",
+        JLabel iconWhite = new JLabel(GuiUtil.getIcon("gogui-white-32x32",
                                                       "White"));
         iconWhite.setAlignmentX(Component.CENTER_ALIGNMENT);
         boxWhite.add(iconWhite);
