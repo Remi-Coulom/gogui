@@ -151,6 +151,7 @@ class GuiClock
     {
         super(11);
         setEditable(false);
+        setFocusable(false);
         setHorizontalAlignment(SwingConstants.CENTER);
         GuiUtil.setMonospacedFont(this);
         if (color == GoColor.BLACK)
