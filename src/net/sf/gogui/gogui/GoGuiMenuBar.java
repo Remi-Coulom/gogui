@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -236,26 +238,6 @@ public class GoGuiMenuBar
             m_menuBookmarks.addItem(item, "bookmark-" + i);
             m_bookmarkItems.add(item);
         }
-    }
-
-    public void setComputerBlack()
-    {
-        m_itemComputerBlack.setSelected(true);
-    }
-
-    public void setComputerBoth()
-    {
-        m_itemComputerBoth.setSelected(true);
-    }
-
-    public void setComputerNone()
-    {
-        m_itemComputerNone.setSelected(true);
-    }
-
-    public void setComputerWhite()
-    {
-        m_itemComputerWhite.setSelected(true);
     }
 
     public void selectBoardSizeItem(int size)
@@ -507,16 +489,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemCommentFontFixed;
 
-    private JMenuItem m_itemComputerBlack;
-
-    private JMenuItem m_itemComputerBoth;
-
-    private JMenuItem m_itemComputerNone;
-
-    private JMenuItem m_itemComputerPlaySingle;
-
-    private JMenuItem m_itemComputerWhite;
-
     private JMenuItem m_itemFindNext;
 
     private JMenuItem m_itemGameTreeLarge;
@@ -608,18 +580,14 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createComputerColorMenu()
+    private JMenuChecked createComputerColorMenu(GoGuiActions actions)
     {
         ButtonGroup group = new ButtonGroup();
         JMenuChecked menu = createMenu("Computer Color", KeyEvent.VK_C);
-        m_itemComputerBlack = menu.addRadioItem(group, "Black", KeyEvent.VK_B,
-                                                "computer-black");
-        m_itemComputerWhite = menu.addRadioItem(group, "White", KeyEvent.VK_W,
-                                                "computer-white");
-        m_itemComputerBoth = menu.addRadioItem(group, "Both", KeyEvent.VK_T,
-                                               "computer-both");
-        m_itemComputerNone = menu.addRadioItem(group, "None", KeyEvent.VK_N,
-                                               "computer-none");
+        menu.addRadioItem(group, actions.m_actionComputerBlack, KeyEvent.VK_B);
+        menu.addRadioItem(group, actions.m_actionComputerWhite, KeyEvent.VK_W);
+        menu.addRadioItem(group, actions.m_actionComputerBoth, KeyEvent.VK_T);
+        menu.addRadioItem(group, actions.m_actionComputerNone, KeyEvent.VK_N);
         return menu;
     }
 
@@ -782,18 +750,16 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuExport()
+    private JMenuChecked createMenuExport(GoGuiActions actions)
     {
         JMenuChecked menu = new JMenuChecked("Export", m_listener);
         menu.setMnemonic(KeyEvent.VK_E);
-        menu.addItem("SGF Position...", KeyEvent.VK_S, "export-sgf-position");
-        menu.addItem("LaTeX Main Variation...", KeyEvent.VK_L,
-                     "export-latex");
-        menu.addItem("LaTeX Position...", KeyEvent.VK_P,
-                     "export-latex-position");
-        menu.addItem("Text Position...", KeyEvent.VK_T, "export-ascii");
-        menu.addItem("Text Position to Clipboard", KeyEvent.VK_C,
-                     "export-clipboard");
+        menu.addItem(actions.m_actionExportSgfPosition, KeyEvent.VK_S);
+        menu.addItem(actions.m_actionExportLatexMainVariation, KeyEvent.VK_L);
+        menu.addItem(actions.m_actionExportLatexPosition, KeyEvent.VK_P);
+        menu.addItem(actions.m_actionExportTextPosition, KeyEvent.VK_T);
+        menu.addItem(actions.m_actionExportTextPositionToClipboard,
+                     KeyEvent.VK_C);
         return menu;
     }
 
@@ -806,8 +772,8 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionSave, KeyEvent.VK_S);
         menu.addItem(actions.m_actionSaveAs, KeyEvent.VK_A);
         menu.addSeparator();
-        menu.add(createMenuImport());
-        menu.add(createMenuExport());
+        menu.add(createMenuImport(actions));
+        menu.add(createMenuExport(actions));
         menu.addSeparator();
         menu.addItem(actions.m_actionPrint, KeyEvent.VK_P);
         menu.addSeparator();
@@ -822,14 +788,10 @@ public class GoGuiMenuBar
         JMenuChecked menu = createMenu("Game", KeyEvent.VK_A);
         menu.addItem(actions.m_actionNewGame, KeyEvent.VK_N);
         menu.addSeparator();
-        m_menuComputerColor = createComputerColorMenu();
+        m_menuComputerColor = createComputerColorMenu(actions);
         menu.add(m_menuComputerColor);
         menu.addItem(actions.m_actionPlay, KeyEvent.VK_L);
-        m_itemComputerPlaySingle
-            = menu.addItem("Play Single Move", KeyEvent.VK_S,
-                           KeyEvent.VK_F5,
-                           getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK,
-                           "play-single");
+        menu.addItem(actions.m_actionPlaySingleMove, KeyEvent.VK_S);
         menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_T);
         m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
         m_itemCleanup.setMnemonic(KeyEvent.VK_E);
@@ -882,13 +844,13 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuImport()
+    private JMenuChecked createMenuImport(GoGuiActions actions)
     {
         JMenuChecked menu = new JMenuChecked("Import", m_listener);
         menu.setMnemonic(KeyEvent.VK_I);
-        menu.addItem("Text Position...", KeyEvent.VK_T, "import-ascii");
-        menu.addItem("Text Position from Clipboard", KeyEvent.VK_C,
-                     "import-clipboard");
+        menu.addItem(actions.m_actionImportTextPosition, KeyEvent.VK_T);
+        menu.addItem(actions.m_actionImportTextPositionFromClipboard,
+                     KeyEvent.VK_C);
         return menu;
     }
 
@@ -1030,6 +992,17 @@ class JMenuChecked
         return addItem(item, mnemonic, command);
     }
 
+    public JMenuItem addRadioItem(ButtonGroup group, AbstractAction action,
+                                  int mnemonic)
+    {
+        JMenuItem item = new GoGuiRadioButtonMenuItem(action);        
+        group.add(item);
+        item.setIcon(null);
+        setMnemonic(item, mnemonic);
+        add(item);
+        return item;
+    }
+
     /** Serial version to suppress compiler warning.
         Contains a marker comment for use with serialver.sourceforge.net
     */
@@ -1052,5 +1025,20 @@ class JMenuChecked
             assert(false);
         }
         m_mnemonics.add(integer);
+    }
+}
+
+/** Radio menu item with additional "selected" action property. */
+class GoGuiRadioButtonMenuItem
+    extends JRadioButtonMenuItem
+{
+    public GoGuiRadioButtonMenuItem(AbstractAction action)
+    {
+        super(action);
+        action.addPropertyChangeListener(new PropertyChangeListener() {
+                public void  propertyChange(PropertyChangeEvent e) {
+                    if (e.getPropertyName().equals("selected"))
+                        setSelected(((Boolean)e.getNewValue()).booleanValue());
+                } } );
     }
 }

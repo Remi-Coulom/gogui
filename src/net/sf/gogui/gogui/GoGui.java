@@ -268,10 +268,6 @@ public class GoGui
         if (isCommandInProgress()
             && ! command.equals("beep-after-move")
             && ! command.equals("comment-font-fixed")
-            && ! command.equals("computer-black")
-            && ! command.equals("computer-both")
-            && ! command.equals("computer-none")
-            && ! command.equals("computer-white")
             && ! command.equals("gtpshell-save")
             && ! command.equals("gtpshell-save-commands")
             && ! command.equals("command-completion")
@@ -314,24 +310,6 @@ public class GoGui
             cbCommandCompletion();
         else if (command.equals("comment-font-fixed"))
             cbCommentFontFixed();
-        else if (command.equals("computer-black"))
-            computerBlack();
-        else if (command.equals("computer-both"))
-            cbComputerBoth();
-        else if (command.equals("computer-none"))
-            computerNone();
-        else if (command.equals("computer-white"))
-            computerWhite();
-        else if (command.equals("export-ascii"))
-            cbExportAscii();
-        else if (command.equals("export-clipboard"))
-            cbExportClipboard();
-        else if (command.equals("export-latex"))
-            cbExportLatex();
-        else if (command.equals("export-latex-position"))
-            cbExportLatexPosition();
-        else if (command.equals("export-sgf-position"))
-            cbExportSgfPosition();
         else if (command.equals("find-in-comments"))
             cbFindInComments();
         else if (command.equals("find-next"))
@@ -366,10 +344,6 @@ public class GoGui
             cbGtpShellSendFile();
         else if (command.startsWith("handicap-"))
             cbHandicap(command.substring("handicap-".length()));
-        else if (command.equals("import-ascii"))
-            cbImportAscii();
-        else if (command.equals("import-clipboard"))
-            cbImportClipboard();
         else if (command.equals("keep-only-main-variation"))
             cbKeepOnlyMainVariation();
         else if (command.equals("keep-only-position"))
@@ -378,8 +352,6 @@ public class GoGui
             cbMakeMainVariation();
         else if (command.equals("next-earlier-variation"))
             cbNextEarlierVariation();
-        else if (command.equals("play-single"))
-            actionPlay(true);
         else if (command.equals("previous-earlier-variation"))
             cbPreviousEarlierVariation();
         else if (command.equals("score"))
@@ -478,6 +450,14 @@ public class GoGui
         boardChangedBegin(false, false);
     }
 
+    public void actionComputerColor(boolean isBlack, boolean isWhite)
+    {
+        m_computerBlack = isBlack;
+        m_computerWhite = isWhite;
+        if (! isCommandInProgress())
+            checkComputerMove();
+    }
+
     public boolean actionDetachProgram()
     {        
         if (m_gtp == null)
@@ -515,12 +495,117 @@ public class GoGui
         boardChangedBegin(false, false);
     }
 
+    public void actionExportLatexMainVariation()
+    {
+        File file = SimpleDialogs.showSave(this, "Export LaTeX");
+        if (file == null)
+            return;
+        try
+        {
+            OutputStream out = new FileOutputStream(file);
+            String title = FileUtil.removeExtension(new File(file.getName()),
+                                                     "tex");
+            new TexWriter(title, out, getTree(), false);
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Export failed", e);
+        }
+    }
+
+    public void actionExportLatexPosition()
+    {
+        File file = SimpleDialogs.showSave(this, "Export LaTeX Position");
+        if (file == null)
+            return;
+        try
+        {
+            OutputStream out = new FileOutputStream(file);
+            String title = FileUtil.removeExtension(new File(file.getName()),
+                                                     "tex");
+            new TexWriter(title, out, getBoard(), false,
+                          GuiBoardUtil.getLabels(m_guiBoard),
+                          GuiBoardUtil.getMarkSquare(m_guiBoard),
+                          GuiBoardUtil.getSelects(m_guiBoard));
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Export failed", e);
+        }
+    }
+
+    public void actionExportSgfPosition()
+    {
+        File file = SimpleDialogs.showSaveSgf(this);
+        if (file == null)
+            return;
+        try
+        {
+            savePosition(file);
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Could not save position", e);
+        }
+    }
+
+    public void actionExportTextPosition()
+    {
+        File file = SimpleDialogs.showSave(this, "Export Text Position");
+        if (file == null)
+            return;
+        try
+        {
+            String text = BoardUtil.toString(getBoard(), false);
+            PrintStream out = new PrintStream(new FileOutputStream(file));
+            out.print(text);
+            out.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("Export failed", e);
+        }
+    }
+
+    public void actionExportTextPositionToClipboard()
+    {
+        GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false));
+    }
+
     public void actionForward(int n)
     {
         if (! checkSpecialMode())
             return;
         forward(n);
         boardChangedBegin(false, false);
+    }
+
+    public void actionImportTextPosition()
+    {
+        if (! checkSpecialMode())
+            return;
+        File file = SimpleDialogs.showOpen(this, "Import Text Position");
+        if (file == null)
+            return;
+        try
+        {
+            importTextPosition(new FileReader(file));
+        }
+        catch (FileNotFoundException e)
+        {
+            showError("File not found");
+        }
+    }
+
+    public void actionImportTextPositionFromClipboard()
+    {
+        if (! checkSpecialMode())
+            return;
+        String text = GuiUtil.getClipboardText();
+        if (text == null)
+            showError("No text selection in clipboard");
+        else
+            importTextPosition(new StringReader(text));
     }
 
     public void actionInterrupt()
@@ -585,10 +670,12 @@ public class GoGui
             return;
         if (! isSingleMove && ! isComputerBoth())
         {
+            m_computerBlack = false;
+            m_computerWhite = false;
             if (getToMove() == GoColor.BLACK)
-                computerBlack();
+                m_computerBlack = true;
             else
-                computerWhite();
+                m_computerWhite = true;
         }
         m_interruptComputerBoth = false;
         generateMove(isSingleMove);
@@ -821,6 +908,15 @@ public class GoGui
             resetBoard();
             clearStatus();
         }
+    }
+
+    /** Check if computer plays a color (or both). */
+    public boolean isComputerColor(GoColor color)
+    {
+        if (color == GoColor.BLACK)
+            return m_computerBlack;
+        assert(color == GoColor.WHITE);
+        return m_computerWhite;
     }
 
     public void contextMenu(GoPoint point, Component invoker, int x, int y)
@@ -1468,7 +1564,7 @@ public class GoGui
         }
     }
 
-    private void cbAddBookmark()
+    public void cbAddBookmark()
     {
         if (m_file == null)
         {
@@ -1616,95 +1712,11 @@ public class GoGui
         m_prefs.putBoolean("comment-font-fixed", fixed);
     }
 
-    private void cbComputerBoth()
-    {
-        computerBoth();
-        if (! isCommandInProgress())
-            checkComputerMove();
-    }
-
     private void cbEditBookmarks()
     {
         if (! EditBookmarksDialog.show(this, m_bookmarks))
             return;
         m_menuBar.setBookmarks(m_bookmarks);
-    }
-
-    private void cbExportAscii()
-    {
-        File file = SimpleDialogs.showSave(this, "Export Text Position");
-        if (file == null)
-            return;
-        try
-        {
-            String text = BoardUtil.toString(getBoard(), false);
-            PrintStream out = new PrintStream(new FileOutputStream(file));
-            out.print(text);
-            out.close();
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Export failed", e);
-        }
-    }
-
-    private void cbExportClipboard()
-    {
-        GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false));
-    }
-
-    private void cbExportSgfPosition()
-    {
-        File file = SimpleDialogs.showSaveSgf(this);
-        if (file == null)
-            return;
-        try
-        {
-            savePosition(file);
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Could not save position", e);
-        }
-    }
-
-    private void cbExportLatex()
-    {
-        File file = SimpleDialogs.showSave(this, "Export LaTeX");
-        if (file == null)
-            return;
-        try
-        {
-            OutputStream out = new FileOutputStream(file);
-            String title = FileUtil.removeExtension(new File(file.getName()),
-                                                     "tex");
-            new TexWriter(title, out, getTree(), false);
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Export failed", e);
-        }
-    }
-
-    private void cbExportLatexPosition()
-    {
-        File file = SimpleDialogs.showSave(this, "Export LaTeX Position");
-        if (file == null)
-            return;
-        try
-        {
-            OutputStream out = new FileOutputStream(file);
-            String title = FileUtil.removeExtension(new File(file.getName()),
-                                                     "tex");
-            new TexWriter(title, out, getBoard(), false,
-                          GuiBoardUtil.getLabels(m_guiBoard),
-                          GuiBoardUtil.getMarkSquare(m_guiBoard),
-                          GuiBoardUtil.getSelects(m_guiBoard));
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("Export failed", e);
-        }
     }
 
     private void cbFindInComments()
@@ -1831,7 +1843,8 @@ public class GoGui
                 showInfo("Handicap will take effect on next game.");
             else
             {
-                computerBlack();
+                m_computerBlack = true;
+                m_computerWhite = true;
                 newGame(getBoardSize());
             }
         }
@@ -1839,30 +1852,6 @@ public class GoGui
         {
             assert(false);
         }
-    }
-
-    private void cbImportAscii()
-    {
-        File file = SimpleDialogs.showOpen(this, "Import Text Position");
-        if (file == null)
-            return;
-        try
-        {
-            importTextPosition(new FileReader(file));
-        }
-        catch (FileNotFoundException e)
-        {
-            showError("File not found");
-        }
-    }
-
-    private void cbImportClipboard()
-    {
-        String text = GuiUtil.getClipboardText();
-        if (text == null)
-            showError("No text selection in clipboard");
-        else
-            importTextPosition(new StringReader(text));
     }
 
     private void cbKeepOnlyMainVariation()
@@ -2203,20 +2192,6 @@ public class GoGui
         System.exit(0);
     }
 
-    private void computerBlack()
-    {
-        m_computerBlack = true;
-        m_computerWhite = false;
-        m_menuBar.setComputerBlack();
-    }
-
-    private void computerBoth()
-    {
-        m_computerBlack = true;
-        m_computerWhite = true;
-        m_menuBar.setComputerBoth();
-    }
-
     private void computerMoved()
     {
         if (! endLengthyCommand())
@@ -2245,12 +2220,14 @@ public class GoGui
                     if (board.getColor(point) != GoColor.EMPTY)
                     {
                         showWarning("Program played move on non-empty point");
-                        computerNone();
+                        m_computerBlack = false;
+                        m_computerWhite = false;
                     }
                     else if (board.isKo(point))
                     {
                         showWarning("Program violated Ko rule");
-                        computerNone();
+                        m_computerBlack = false;
+                        m_computerWhite = false;
                     }
                 }
                 Move move = Move.get(point, toMove);
@@ -2282,26 +2259,12 @@ public class GoGui
         }
     }
 
-    private void computerNone()
-    {
-        m_computerBlack = false;
-        m_computerWhite = false;
-        m_menuBar.setComputerNone();
-    }
-
     private boolean computerToMove()
     {
         if (getToMove() == GoColor.BLACK)
             return m_computerBlack;
         else
             return m_computerWhite;
-    }
-
-    private void computerWhite()
-    {
-        m_computerBlack = false;
-        m_computerWhite = true;
-        m_menuBar.setComputerWhite();
     }
 
     private ContextMenu createContextMenu(GoPoint point)
@@ -2709,15 +2672,6 @@ public class GoGui
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
-        if (m_gtp == null
-            || (! m_computerBlack && ! m_computerWhite))
-            computerNone();
-        else if (isComputerBoth())
-            computerBoth();
-        else  if (m_computerBlack)
-            computerBlack();
-        else
-            computerWhite();
         updateGameInfo(true);
         registerSpecialMacHandler();
         initProgressBarTimer();
@@ -2848,7 +2802,8 @@ public class GoGui
             if (warnings != null)
                 showWarning("File " + file.getName() + ":\n" + warnings);
             SimpleDialogs.setLastFile(file);
-            computerNone();
+            m_computerBlack = false;
+            m_computerWhite = false;
             createThumbnail(file);
         }
         catch (FileNotFoundException e)
@@ -2907,12 +2862,14 @@ public class GoGui
             return;
         setFile(null);
         newGame(size);
-        if (! isComputerNone())
+        if (m_computerBlack || m_computerWhite)
         {
+            m_computerBlack = false;
+            m_computerWhite = false;
             if (m_handicap == 0)
-                computerWhite();
+                m_computerWhite = true;
             else
-                computerBlack();
+                m_computerBlack = true;
         }
         if (startClock)
             m_game.startClock();

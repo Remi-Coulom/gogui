@@ -14,6 +14,7 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
+import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.Platform;
 
@@ -28,176 +29,227 @@ import net.sf.gogui.util.Platform;
 */
 public class GoGuiActions
 {
-    public final AbstractAction m_actionAbout;
+    public final AbstractAction m_actionAbout =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionAbout(); } },
+             "About", "Show information about GoGui, Go program and Java");
 
-    public final AbstractAction m_actionAttachProgram;
+    public final AbstractAction m_actionAttachProgram =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionAttachProgram(); } },
+             "Attach Program...", "Attach Go program to current game",
+             KeyEvent.VK_A, null);
 
-    public final AbstractAction m_actionBackward;
+    public final AbstractAction m_actionBackward =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBackward(1); } },
+             "Backward", "Go one move backward", KeyEvent.VK_LEFT,
+             "gogui-previous");
 
-    public final AbstractAction m_actionBackwardTen;
+    public final AbstractAction m_actionBackwardTen =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBackward(10); } },
+             "Backward 10", "Go ten moves backward",
+             KeyEvent.VK_LEFT, getShortcut() | ActionEvent.SHIFT_MASK, null);
 
-    public final AbstractAction m_actionBeginning;
+    public final AbstractAction m_actionBeginning =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBeginning(); } },
+             "Beginning", "Go to beginning of game", KeyEvent.VK_HOME,
+             "gogui-first");
 
-    public final AbstractAction m_actionDetachProgram;
+    public final AbstractAction m_actionComputerBlack =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionComputerColor(true, false); } },
+             "Black", "Make computer play Black");
 
-    public final AbstractAction m_actionDocumentation;
+    public final AbstractAction m_actionComputerBoth =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionComputerColor(true, true); } },
+             "Both", "Make computer play both sides");
 
-    public final AbstractAction m_actionEnd;
+    public final AbstractAction m_actionComputerNone =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionComputerColor(false, false); } },
+             "None", "Make computer play no side");
 
-    public final AbstractAction m_actionForward;
+    public final AbstractAction m_actionComputerWhite =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionComputerColor(false, true); } },
+             "White", "Make computer play White");
 
-    public final AbstractAction m_actionForwardTen;
+    public final AbstractAction m_actionDetachProgram =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionDetachProgram(); } },
+             "Detach Program...",
+             "Detach Go program from current game and terminate it");
 
-    public final AbstractAction m_actionInterrupt;
+    public final AbstractAction m_actionDocumentation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionDocumentation(); } },
+             "GoGui Documentation", "Open GoGui manual", KeyEvent.VK_F1,
+             getFunctionKeyShortcut());
 
-    public final AbstractAction m_actionNextVariation;
+    public final AbstractAction m_actionEnd =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionEnd(); } },
+             "End", "Go to end of game", KeyEvent.VK_END, "gogui-last");
 
-    public final AbstractAction m_actionNewGame;
+    public final AbstractAction m_actionExportSgfPosition =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionExportSgfPosition(); } },
+             "SGF Position...", "Export position as SGF file");
 
-    public final AbstractAction m_actionOpen;
+    public final AbstractAction m_actionExportLatexMainVariation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionExportLatexMainVariation(); } },
+             "LaTeX Main Variation...",
+             "Export main variation as LaTeX PSGO file");
 
-    public final AbstractAction m_actionPass;
+    public final AbstractAction m_actionExportLatexPosition =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionExportLatexPosition(); } },
+             "LaTeX Position...", "Export position as LaTeX PSGO file");
 
-    public final AbstractAction m_actionPlay;
+    public final AbstractAction m_actionExportTextPosition =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionExportTextPosition(); } },
+             "Text Position...", "Export position as text diagram");
 
-    public final AbstractAction m_actionPreviousVariation;
+    public final AbstractAction m_actionExportTextPositionToClipboard =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionExportTextPositionToClipboard(); } },
+             "Text Position to Clipboard",
+             "Export position as text diagram to clipboard");
 
-    public final AbstractAction m_actionPrint;
+    public final AbstractAction m_actionForward =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionForward(1); } },
+             "Forward", "Go one move forward", KeyEvent.VK_RIGHT,
+             "gogui-next");
 
-    public final AbstractAction m_actionSave;
+    public final AbstractAction m_actionForwardTen =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionForward(10); } },
+             "Forward 10", "Go ten moves forward", KeyEvent.VK_RIGHT,
+             getShortcut() | ActionEvent.SHIFT_MASK, null);
 
-    public final AbstractAction m_actionSaveAs;
+    public final AbstractAction m_actionImportTextPosition =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionImportTextPosition(); } },
+             "Text Position...",
+             "Import position as text diagram from file");
 
-    public final AbstractAction m_actionQuit;
+    public final AbstractAction m_actionImportTextPositionFromClipboard =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionImportTextPositionFromClipboard(); } },
+             "Text Position from Clipboard",
+             "Import position as text diagram from clipboard");
+
+    public final AbstractAction m_actionInterrupt =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionInterrupt(); } },
+             "Interrupt", "Interrupt program", KeyEvent.VK_ESCAPE, 0,
+             "gogui-interrupt");
+
+    public final AbstractAction m_actionNextVariation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionNextVariation(); } },
+             "Next Variation", "Go to next variation", KeyEvent.VK_DOWN,
+             "gogui-down");
+
+    public final AbstractAction m_actionNewGame =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionNewGame(); } },
+             "New Game", "Clear board and begin new game", "gogui-newgame");
+
+    public final AbstractAction m_actionOpen =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionOpen(); } },
+             "Open...", "Open game", KeyEvent.VK_O, "document-open");
+
+    public final AbstractAction m_actionPass =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionPass(); } },
+             "Pass", "Play a pass", KeyEvent.VK_F2,
+             getFunctionKeyShortcut(), "gogui-pass");
+
+    public final AbstractAction m_actionPlay =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionPlay(false); } },
+             "Play", "Make computer play", KeyEvent.VK_F5,
+             getFunctionKeyShortcut(), "gogui-play");
+
+    public final AbstractAction m_actionPlaySingleMove =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionPlay(true); } },
+             "Play Single Move",
+             "Make computer play a move (do not change computer color)",
+             KeyEvent.VK_F5,
+             getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK);
+
+    public final AbstractAction m_actionPreviousVariation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionPreviousVariation(); } },
+             "Previous Variation", "Go to previous variation", KeyEvent.VK_UP,
+             "gogui-up");
+
+    public final AbstractAction m_actionPrint =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionPrint(); } },
+             "Print...", "Print current position", KeyEvent.VK_P, null);
+
+    public final AbstractAction m_actionSave =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionSave(); } },
+             "Save", "Save game", KeyEvent.VK_S, "document-save");
+
+    public final AbstractAction m_actionSaveAs =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionSaveAs(); } },
+             "Save As...", "Save game", "document-save-as");
+
+    public final AbstractAction m_actionQuit =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionQuit(); } },
+             "Quit", "Quit GoGui", KeyEvent.VK_Q, null);
 
     public GoGuiActions(GoGui goGui)
     {
         m_goGui = goGui;
-
-        m_actionAbout = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionAbout(); } };
-        init(m_actionAbout, "About",
-             "Show information about GoGui, Go program and Java environment");
-
-        m_actionAttachProgram = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionAttachProgram(); } };
-        init(m_actionAttachProgram, "Attach Program...",
-             "Attach Go program to current game", KeyEvent.VK_A, null);
-
-        m_actionBackward = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionBackward(1); } };
-        init(m_actionBackward, "Backward", "Go one move backward",
-             KeyEvent.VK_LEFT, "gogui-previous");
-
-        m_actionBackwardTen = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionBackward(10); } };
-        init(m_actionBackwardTen, "Backward 10", "Go ten moves backward",
-             KeyEvent.VK_LEFT, getShortcut() | ActionEvent.SHIFT_MASK, null);
-
-        m_actionBeginning = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionBeginning(); } };
-        init(m_actionBeginning, "Beginning", "Go to beginning of game",
-             KeyEvent.VK_HOME, "gogui-first");
-
-        m_actionDetachProgram = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionDetachProgram(); } };
-        init(m_actionDetachProgram, "Detach Program...",
-             "Detach Go program from current game and terminate it");
-
-        m_actionDocumentation = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionDocumentation(); } };
-        init(m_actionDocumentation, "GoGui Documentation",
-             "Open GoGui manual", KeyEvent.VK_F1, getFunctionKeyShortcut());
-
-        m_actionEnd = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionEnd(); } };
-        init(m_actionEnd, "End", "Go to end of game",
-             KeyEvent.VK_END, "gogui-last");
-
-        m_actionForward = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionForward(1); } };
-        init(m_actionForward, "Forward", "Go one move forward",
-             KeyEvent.VK_RIGHT, "gogui-next");
-
-        m_actionForwardTen = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionForward(10); } };
-        init(m_actionForwardTen, "Forward 10", "Go ten moves forward",
-             KeyEvent.VK_RIGHT, getShortcut() | ActionEvent.SHIFT_MASK, null);
-
-        m_actionInterrupt = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionInterrupt(); } };
-        init(m_actionInterrupt, "Interrupt", "Interrupt program",
-             KeyEvent.VK_ESCAPE, 0, "gogui-interrupt");
-
-        m_actionNextVariation = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionNextVariation(); } };
-        init(m_actionNextVariation, "Next Variation", "Go to next variation",
-             KeyEvent.VK_DOWN, "gogui-down");
-
-        m_actionNewGame = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionNewGame(); } };
-        init(m_actionNewGame, "New Game", "Clear board and begin new game",
-             "gogui-newgame");
-
-        m_actionOpen = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionOpen(); } };
-        init(m_actionOpen, "Open...", "Open game", KeyEvent.VK_O,
-             "document-open");
-
-        m_actionPass = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionPass(); } };
-        init(m_actionPass, "Pass", "Play a pass", KeyEvent.VK_F2,
-             getFunctionKeyShortcut(), "gogui-pass");
-
-        m_actionPlay = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionPlay(false); } };
-        init(m_actionPlay, "Play", "Make computer play", KeyEvent.VK_F5,
-             getFunctionKeyShortcut(), "gogui-play");
-
-        m_actionPreviousVariation = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionPreviousVariation(); } };
-        init(m_actionPreviousVariation, "Previous Variation",
-             "Go to previous variation", KeyEvent.VK_UP, "gogui-up");
-
-        m_actionPrint = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionPrint(); } };
-        init(m_actionPrint, "Print...", "Print current position",
-             KeyEvent.VK_P, null);
-
-        m_actionSave = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionSave(); } };
-        init(m_actionSave, "Save", "Save game", KeyEvent.VK_S,
-             "document-save");
-
-        m_actionSaveAs = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionSaveAs(); } };
-        init(m_actionSaveAs, "Save As...", "Save game", "document-save-as");
-
-        m_actionQuit = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionQuit(); } };
-        init(m_actionQuit, "Quit", "Quit GoGui", KeyEvent.VK_Q, null);
-
     }
 
     public void update()
@@ -209,9 +261,19 @@ public class GoGuiActions
         boolean hasPreviousVariation =
             (NodeUtil.getPreviousVariation(node) != null);
         boolean isProgramAttached = m_goGui.isProgramAttached();
+        boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
+        boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
         m_actionBackward.setEnabled(hasFather);
         m_actionBackwardTen.setEnabled(hasFather);
         m_actionBeginning.setEnabled(hasFather);
+        m_actionComputerBlack.setEnabled(isProgramAttached);
+        setSelected(m_actionComputerBlack, computerBlack && ! computerWhite);
+        m_actionComputerBoth.setEnabled(isProgramAttached);
+        setSelected(m_actionComputerBoth, computerBlack && computerWhite);
+        m_actionComputerNone.setEnabled(isProgramAttached);
+        setSelected(m_actionComputerNone, ! computerBlack && ! computerWhite);
+        m_actionComputerWhite.setEnabled(isProgramAttached);
+        setSelected(m_actionComputerWhite, ! computerBlack && computerWhite);
         m_actionDetachProgram.setEnabled(isProgramAttached);
         m_actionEnd.setEnabled(hasChildren);
         m_actionForward.setEnabled(hasChildren);
@@ -225,37 +287,41 @@ public class GoGuiActions
 
     private final GoGui m_goGui;
 
-    private void init(AbstractAction action, String name, String desc)
+    private static AbstractAction init(AbstractAction action, String name,
+                                       String desc)
     {
-        init(action, name, desc, null, 0, null);
+        return init(action, name, desc, null, 0, null);
     }
 
-    private void init(AbstractAction action, String name, String desc,
-                      String icon)
+    private static AbstractAction init(AbstractAction action, String name,
+                                       String desc, String icon)
     {
-        init(action, name, desc, null, 0, icon);
+        return init(action, name, desc, null, 0, icon);
     }
 
-    private void init(AbstractAction action, String name, String desc,
-                      int accel, String icon)
+    private static AbstractAction init(AbstractAction action, String name,
+                                       String desc, int accel, String icon)
     {
-        init(action, name, desc, new Integer(accel), getShortcut(), icon);
+        return init(action, name, desc, new Integer(accel), getShortcut(),
+                    icon);
     }
 
-    private void init(AbstractAction action, String name, String desc,
-                      int accel, int modifier, String icon)
+    private static AbstractAction init(AbstractAction action, String name,
+                                       String desc, int accel, int modifier,
+                                       String icon)
     {
-        init(action, name, desc, new Integer(accel), modifier, icon);
+        return init(action, name, desc, new Integer(accel), modifier, icon);
     }
 
-    private void init(AbstractAction action, String name, String desc,
-                      int accel, int modifier)
+    private static AbstractAction init(AbstractAction action, String name,
+                                       String desc, int accel, int modifier)
     {
-        init(action, name, desc, new Integer(accel), modifier, null);
+        return init(action, name, desc, new Integer(accel), modifier, null);
     }
 
-    private void init(AbstractAction action, String name, String desc,
-                      Integer accel, int modifier, String icon)
+    private static AbstractAction init(AbstractAction action, String name,
+                                       String desc, Integer accel,
+                                       int modifier, String icon)
     {
         action.putValue(AbstractAction.NAME, name);
         setDescription(action, desc);
@@ -267,11 +333,17 @@ public class GoGuiActions
         if (icon != null)
             action.putValue(AbstractAction.SMALL_ICON,
                             GuiUtil.getIcon(icon, name));
+        return action;
     }
 
-    private void setDescription(AbstractAction action, String desc)
+    private static void setDescription(AbstractAction action, String desc)
     {
         action.putValue(AbstractAction.SHORT_DESCRIPTION, desc);
+    }
+
+    private static void setSelected(AbstractAction action, boolean selected)
+    {
+        action.putValue("selected", Boolean.valueOf(selected));
     }
 
     /** Get shortcut modifier for function keys.
