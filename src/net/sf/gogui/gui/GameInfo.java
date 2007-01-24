@@ -4,9 +4,17 @@
 
 package net.sf.gogui.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -25,15 +33,38 @@ public class GameInfo
     extends JPanel
 {
     public GameInfo(Game game)
-    {
-        super(new GridLayout(0, 2, GuiUtil.SMALL_PAD, GuiUtil.SMALL_PAD));
+    {        
+        setBorder(GuiUtil.createEmptyBorder());
+        JPanel panel =
+            new JPanel(new GridLayout(0, 2, GuiUtil.PAD, GuiUtil.PAD));
+        add(panel, BorderLayout.CENTER);
         m_game = game;
-        m_captB = addEntry("Captured Black:");
-        m_captW = addEntry("Captured White:");
-        m_timeB = addEntry("Time Black:");
-        m_timeW = addEntry("Time White:");
-        m_timeB.setText("00:00");
-        m_timeW.setText("00:00");
+        Box boxBlack = Box.createVerticalBox();
+        panel.add(boxBlack);
+        JLabel iconBlack = new JLabel(GuiUtil.getIcon("gogui-black-48x48",
+                                                      "Black"));
+        iconBlack.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boxBlack.add(iconBlack);
+        boxBlack.add(GuiUtil.createFiller());
+        m_clockBlack = new GuiClock(GoColor.BLACK);
+        m_clockBlack.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boxBlack.add(m_clockBlack);
+        m_prisonersWhite = new Prisoners(GoColor.WHITE);
+        boxBlack.add(m_prisonersWhite);
+
+        Box boxWhite = Box.createVerticalBox();
+        panel.add(boxWhite);
+        JLabel iconWhite = new JLabel(GuiUtil.getIcon("gogui-white-48x48",
+                                                      "White"));
+        iconWhite.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boxWhite.add(iconWhite);
+        boxWhite.add(GuiUtil.createFiller());
+        m_clockWhite = new GuiClock(GoColor.WHITE);
+        m_clockWhite.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boxWhite.add(m_clockWhite);
+        m_prisonersBlack = new Prisoners(GoColor.BLACK);
+        boxWhite.add(m_prisonersBlack);
+
         Clock.Listener listener = new Clock.Listener() {
                 public void clockChanged(ConstClock clock)
                 {
@@ -45,16 +76,8 @@ public class GameInfo
 
     public void update(ConstNode node, ConstBoard board)
     {
-        int capturedB = board.getCapturedB();
-        if (capturedB == 0)
-            m_captB.setText("");
-        else
-            m_captB.setText(Integer.toString(capturedB));
-        int capturedW = board.getCapturedW();
-        if (capturedW == 0)
-            m_captW.setText("");
-        else
-            m_captW.setText(Integer.toString(capturedW));
+        m_prisonersBlack.setCount(board.getCapturedB());
+        m_prisonersWhite.setCount(board.getCapturedW());
         // Usually time left information is stored in a node only for the
         // player who moved, so we check the father node too
         ConstNode father = node.getFatherConst();
@@ -83,30 +106,17 @@ public class GameInfo
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final JTextField m_captB;
+    private final GuiClock m_clockBlack;
 
-    private final JTextField m_captW;
+    private final GuiClock m_clockWhite;
 
-    private final JTextField m_timeB;
+    private Prisoners m_prisonersBlack;
 
-    private final JTextField m_timeW;
+    private Prisoners m_prisonersWhite;
 
     private final Game m_game;
 
     private final UpdateTimeRunnable m_updateTime = new UpdateTimeRunnable();
-
-    private JTextField addEntry(String text)
-    {
-        JLabel label = new JLabel(text);
-        label.setHorizontalAlignment(SwingConstants.LEFT);
-        add(label);
-        JTextField entry = new JTextField(" ");
-        entry.setHorizontalAlignment(SwingConstants.LEFT);
-        entry.setEditable(false);
-        entry.setFocusable(false);
-        add(entry);
-        return entry;
-    }
 
     private void updateTimeFromClock(ConstClock clock, GoColor color)
     {
@@ -114,9 +124,9 @@ public class GameInfo
         if (text == null)
             text = " ";
         if (color == GoColor.BLACK)
-            m_timeB.setText(text);
+            m_clockBlack.setText(text);
         else
-            m_timeW.setText(text);
+            m_clockWhite.setText(text);
     }
 
     private void updateTimeFromNode(ConstNode node)
@@ -124,13 +134,59 @@ public class GameInfo
         double timeLeftBlack = node.getTimeLeft(GoColor.BLACK);
         int movesLeftBlack = node.getMovesLeft(GoColor.BLACK);
         if (! Double.isNaN(timeLeftBlack))
-            m_timeB.setText(Clock.getTimeString(timeLeftBlack,
-                                                movesLeftBlack));
+            m_clockBlack.setText(Clock.getTimeString(timeLeftBlack,
+                                                     movesLeftBlack));
         double timeLeftWhite = node.getTimeLeft(GoColor.WHITE);
         int movesLeftWhite = node.getMovesLeft(GoColor.WHITE);
         if (! Double.isNaN(timeLeftWhite))
-            m_timeW.setText(Clock.getTimeString(timeLeftWhite,
-                                                movesLeftWhite));
+            m_clockWhite.setText(Clock.getTimeString(timeLeftWhite,
+                                                     movesLeftWhite));
     }
 }
 
+class GuiClock
+    extends JTextField
+{
+    public GuiClock(GoColor color)
+    {
+        super(11);
+        setEditable(false);
+        setHorizontalAlignment(SwingConstants.CENTER);
+        GuiUtil.setMonospacedFont(this);
+        if (color == GoColor.BLACK)
+            setToolTipText("Time used by Black");
+        else
+            setToolTipText("Time used by White");
+    }
+}
+
+class Prisoners
+    extends JPanel
+{
+    public Prisoners(GoColor color)
+    {
+        Icon icon;
+        if (color == GoColor.BLACK)
+        {
+            setToolTipText("Black stones captured");
+            icon = GuiUtil.getIcon("gogui-black", "Black");
+        }
+        else
+        {
+            setToolTipText("White stones captured");
+            icon = GuiUtil.getIcon("gogui-white", "White");
+        }
+        JLabel labelStone = new JLabel(icon);
+        add(labelStone, BorderLayout.WEST);
+        m_text = new JLabel();
+        add(m_text, BorderLayout.CENTER);
+        setCount(0);
+    }
+
+    public void setCount(int n)
+    {
+        m_text.setText(Integer.toString(n));
+    }
+
+    private JLabel m_text;
+}
