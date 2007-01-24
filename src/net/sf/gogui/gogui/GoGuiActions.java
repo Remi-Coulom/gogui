@@ -28,11 +28,19 @@ import net.sf.gogui.util.Platform;
 */
 public class GoGuiActions
 {
+    public final AbstractAction m_actionAbout;
+
+    public final AbstractAction m_actionAttachProgram;
+
     public final AbstractAction m_actionBackward;
 
     public final AbstractAction m_actionBackwardTen;
 
     public final AbstractAction m_actionBeginning;
+
+    public final AbstractAction m_actionDetachProgram;
+
+    public final AbstractAction m_actionDocumentation;
 
     public final AbstractAction m_actionEnd;
 
@@ -54,13 +62,29 @@ public class GoGuiActions
 
     public final AbstractAction m_actionPreviousVariation;
 
+    public final AbstractAction m_actionPrint;
+
     public final AbstractAction m_actionSave;
 
     public final AbstractAction m_actionSaveAs;
 
+    public final AbstractAction m_actionQuit;
+
     public GoGuiActions(GoGui goGui)
     {
         m_goGui = goGui;
+
+        m_actionAbout = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionAbout(); } };
+        init(m_actionAbout, "About",
+             "Show information about GoGui, Go program and Java environment");
+
+        m_actionAttachProgram = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionAttachProgram(); } };
+        init(m_actionAttachProgram, "Attach Program...",
+             "Attach Go program to current game", KeyEvent.VK_A, null);
 
         m_actionBackward = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -79,6 +103,18 @@ public class GoGuiActions
                     m_goGui.actionBeginning(); } };
         init(m_actionBeginning, "Beginning", "Go to beginning of game",
              KeyEvent.VK_HOME, "gogui-first");
+
+        m_actionDetachProgram = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionDetachProgram(); } };
+        init(m_actionDetachProgram, "Detach Program...",
+             "Detach Go program from current game and terminate it");
+
+        m_actionDocumentation = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionDocumentation(); } };
+        init(m_actionAbout, "GoGui Documentation", "Browse GoGui manual",
+             KeyEvent.VK_F1, getFunctionKeyShortcut());
 
         m_actionEnd = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -140,6 +176,12 @@ public class GoGuiActions
         init(m_actionPreviousVariation, "Previous Variation",
              "Go to previous variation", KeyEvent.VK_UP, "gogui-up");
 
+        m_actionPrint = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionPrint(); } };
+        init(m_actionPrint, "Print...", "Print current position",
+             KeyEvent.VK_P, null);
+
         m_actionSave = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionSave(); } };
@@ -149,8 +191,13 @@ public class GoGuiActions
         m_actionSaveAs = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionSaveAs(); } };
-        init(m_actionSaveAs, "Save As...", "Save game under new filename",
-             "document-save-as");
+        init(m_actionSaveAs, "Save As...", "Save game", "document-save-as");
+
+        m_actionQuit = new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionQuit(); } };
+        init(m_actionQuit, "Quit", "Quit GoGui", KeyEvent.VK_Q, null);
+
     }
 
     public void update()
@@ -165,6 +212,7 @@ public class GoGuiActions
         m_actionBackward.setEnabled(hasFather);
         m_actionBackwardTen.setEnabled(hasFather);
         m_actionBeginning.setEnabled(hasFather);
+        m_actionDetachProgram.setEnabled(isProgramAttached);
         m_actionEnd.setEnabled(hasChildren);
         m_actionForward.setEnabled(hasChildren);
         m_actionForwardTen.setEnabled(hasChildren);
@@ -176,6 +224,11 @@ public class GoGuiActions
     }
 
     private final GoGui m_goGui;
+
+    private void init(AbstractAction action, String name, String desc)
+    {
+        init(action, name, desc, null, 0, null);
+    }
 
     private void init(AbstractAction action, String name, String desc,
                       String icon)
@@ -193,6 +246,12 @@ public class GoGuiActions
                       int accel, int modifier, String icon)
     {
         init(action, name, desc, new Integer(accel), modifier, icon);
+    }
+
+    private void init(AbstractAction action, String name, String desc,
+                      int accel, int modifier)
+    {
+        init(action, name, desc, new Integer(accel), modifier, null);
     }
 
     private void init(AbstractAction action, String name, String desc,

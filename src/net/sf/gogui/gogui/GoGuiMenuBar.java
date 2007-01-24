@@ -50,7 +50,7 @@ public class GoGuiMenuBar
         m_menuBar.add(m_menuBookmarks);
         m_menuSettings = createMenuSettings();
         m_menuBar.add(m_menuSettings);
-        m_menuHelp = createMenuHelp();
+        m_menuHelp = createMenuHelp(actions);
         m_menuBar.add(m_menuHelp);
         setHeaderStyleSingle(true);
     }
@@ -248,25 +248,6 @@ public class GoGuiMenuBar
         m_itemComputerBoth.setSelected(true);
     }
 
-    public void setComputerEnabled(boolean enabled)
-    {
-        m_isComputerDisabled = ! enabled;
-        m_menuComputerColor.setEnabled(enabled);
-        m_itemComputerPlaySingle.setEnabled(enabled);
-        m_itemBeepAfterMove.setEnabled(enabled);
-        m_itemDetachProgram.setEnabled(enabled);
-        enableAll(m_menuShell, enabled);
-        if (enabled)
-        {
-            m_recent.updateEnabled();
-            m_recentGtp.updateEnabled();
-        }
-        m_itemShowAnalyze.setEnabled(enabled);
-        m_itemShowShell.setEnabled(enabled);
-        if (! enabled)
-            enableCleanup(false);
-    }
-
     public void setComputerNone()
     {
         m_itemComputerNone.setSelected(true);
@@ -296,35 +277,6 @@ public class GoGuiMenuBar
     public void setCleanup(boolean enable)
     {
         m_itemCleanup.setSelected(enable);
-    }
-
-    public void setCommandInProgress()
-    {
-        assert(! m_isComputerDisabled);
-        disableAll();
-        m_menuFile.setEnabled(true);
-        m_itemDetachProgram.setEnabled(true);
-        m_itemQuit.setEnabled(true);
-        m_menuComputerColor.setEnabled(true);
-        m_menuHelp.setEnabled(true);
-        m_itemAbout.setEnabled(true);
-        m_itemHelp.setEnabled(true);
-        m_menuSettings.setEnabled(true);
-        m_itemBeepAfterMove.setEnabled(true);
-        m_itemShowCursor.setEnabled(true);
-        m_itemShowGrid.setEnabled(true);
-        m_itemShowInfoPanel.setEnabled(true);
-        m_itemShowLastMove.setEnabled(true);
-        m_itemShowToolbar.setEnabled(true);
-        m_itemShowVariations.setEnabled(true);
-        m_itemShowAnalyze.setEnabled(true);
-        m_itemShowShell.setEnabled(true);
-        m_itemShowTree.setEnabled(true);
-        m_itemSaveLog.setEnabled(true);
-        m_itemSaveCommands.setEnabled(true);
-        m_itemCommandCompletion.setEnabled(true);
-        m_itemAutoNumber.setEnabled(true);
-        m_itemTimeStamp.setEnabled(true);
     }
 
     public void setCommandCompletion(boolean enable)
@@ -390,34 +342,12 @@ public class GoGuiMenuBar
 
     public void setNormalMode()
     {
-        enableAll();
         m_recent.updateEnabled();
         m_recentGtp.updateEnabled();
         m_itemSetup.setSelected(false);
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
         m_itemFindNext.setEnabled(m_findNextEnabled);
-        setComputerEnabled(! m_isComputerDisabled);
-    }
-
-    public void setSetupMode()
-    {
-        disableAll();
-        m_itemSetup.setEnabled(true);
-        m_itemSetupBlack.setEnabled(true);
-        m_itemSetupWhite.setEnabled(true);
-        m_itemSetupBlack.setSelected(true);
-        m_itemAbout.setEnabled(true);
-        m_itemQuit.setEnabled(true);
-        m_itemHelp.setEnabled(true);
-    }
-
-    public void setScoreMode()
-    {
-        disableAll();
-        m_itemHelp.setEnabled(true);
-        m_itemAbout.setEnabled(true);
-        m_itemQuit.setEnabled(true);
     }
 
     public void setShowAnalyze(boolean enable)
@@ -561,8 +491,6 @@ public class GoGuiMenuBar
 
     private final JMenuBar m_menuBar;
 
-    private JMenuItem m_itemAbout;
-
     private JMenuItem m_itemAnalyzeOnlySupported;
 
     private JMenuItem m_itemBackToMainVar;
@@ -589,8 +517,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemComputerWhite;
 
-    private JMenuItem m_itemDetachProgram;
-
     private JMenuItem m_itemFindNext;
 
     private JMenuItem m_itemGameTreeLarge;
@@ -611,8 +537,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemGotoVar;
 
-    private JMenuItem m_itemHelp;
-
     private JMenuItem m_itemKeepOnlyMainVar;
 
     private JMenuItem m_itemKeepOnlyPosition;
@@ -622,8 +546,6 @@ public class GoGuiMenuBar
     private JMenuItem m_itemNextEarlierVariation;
 
     private JMenuItem m_itemPreviousEarlierBackward;
-
-    private JMenuItem m_itemQuit;
 
     private JMenuItem m_itemSetupBlack;
 
@@ -887,16 +809,11 @@ public class GoGuiMenuBar
         menu.add(createMenuImport());
         menu.add(createMenuExport());
         menu.addSeparator();
-        menu.addItem("Print...", KeyEvent.VK_P, KeyEvent.VK_P,
-                     SHORTCUT, "print");
+        menu.addItem(actions.m_actionPrint, KeyEvent.VK_P);
         menu.addSeparator();
-        menu.addItem("Attach Program...", KeyEvent.VK_T, KeyEvent.VK_A,
-                     SHORTCUT, "attach-program");
-        m_itemDetachProgram = menu.addItem("Detach Program",
-                                           KeyEvent.VK_D, "detach-program");
-        menu.addSeparator();
-        m_itemQuit = menu.addItem("Quit", KeyEvent.VK_Q, KeyEvent.VK_Q,
-                                  SHORTCUT, "exit");
+        menu.addItem(actions.m_actionAttachProgram, KeyEvent.VK_T);
+        menu.addItem(actions.m_actionDetachProgram, KeyEvent.VK_D);
+        menu.addItem(actions.m_actionQuit, KeyEvent.VK_Q);
         return menu;
     }
 
@@ -957,16 +874,11 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuHelp()
+    private JMenuChecked createMenuHelp(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Help", KeyEvent.VK_H);
-        JMenuItem itemHelp =
-            menu.addItem("GoGui Documentation", KeyEvent.VK_G,
-                         KeyEvent.VK_F1, getFunctionKeyShortcut(), "help");
-        JMenuItem itemAbout = menu.addItem("About", KeyEvent.VK_A,
-                                           "about");
-        m_itemHelp = itemHelp;
-        m_itemAbout = itemAbout;
+        menu.addItem(actions.m_actionDocumentation, KeyEvent.VK_G);
+        menu.addItem(actions.m_actionAbout, KeyEvent.VK_A);
         return menu;
     }
 
@@ -1033,38 +945,6 @@ public class GoGuiMenuBar
         JMenu menu = m_recent.getMenu();
         menu.setMnemonic(KeyEvent.VK_R);
         return menu;
-    }
-
-    private void disableAll()
-    {
-        for (int i = 0; i < m_menuBar.getMenuCount(); ++i)
-        {
-            JMenu menu = m_menuBar.getMenu(i);
-            if (menu != null)
-                enableAll(menu, false);
-        }
-    }
-
-    private void enableAll()
-    {
-        for (int i = 0; i < m_menuBar.getMenuCount(); ++i)
-        {
-            JMenu menu = m_menuBar.getMenu(i);
-            if (menu != null)
-            {
-                menu.setEnabled(true);
-                for (int j = 0; j < menu.getItemCount(); ++j)
-                    if (menu.getItem(j) != null)
-                        menu.getItem(j).setEnabled(true);
-            }
-        }
-    }
-
-    private void enableAll(JMenu menu, boolean enabled)
-    {
-        for (int i = 0; i < menu.getItemCount(); ++i)
-            if (menu.getItem(i) != null)
-                menu.getItem(i).setEnabled(enabled);
     }
 
     /** Get shortcut modifier for function keys.

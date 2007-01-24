@@ -247,8 +247,6 @@ public class GoGui
             m_program = program;
         if (m_program != null && m_program.trim().equals(""))
             m_program = null;
-        if (m_program == null)
-            m_menuBar.setComputerEnabled(false);
         m_menuBar.setNormalMode();
         m_guiBoard.requestFocusInWindow();
         if (time != null)
@@ -267,31 +265,25 @@ public class GoGui
     {
         String command = event.getActionCommand();
         if (isCommandInProgress()
-            && ! command.equals("about")
             && ! command.equals("beep-after-move")
             && ! command.equals("comment-font-fixed")
             && ! command.equals("computer-black")
             && ! command.equals("computer-both")
             && ! command.equals("computer-none")
             && ! command.equals("computer-white")
-            && ! command.equals("detach-program")
             && ! command.equals("gtpshell-save")
             && ! command.equals("gtpshell-save-commands")
             && ! command.equals("command-completion")
             && ! command.equals("auto-number")
             && ! command.equals("timestamp")
-            && ! command.equals("help")
             && ! command.equals("show-grid")
             && ! command.equals("show-shell")
             && ! command.equals("show-toolbar")
             && ! command.equals("show-tree")
             && ! command.equals("show-info-panel")
-            && ! command.equals("show-last-move")
-            && ! command.equals("exit"))
+            && ! command.equals("show-last-move"))
             return;
-        if (command.equals("about"))
-            cbAbout();
-        else if (command.equals("add-bookmark"))
+        if (command.equals("add-bookmark"))
             cbAddBookmark();
         else if (command.equals("edit-bookmarks"))
             cbEditBookmarks();
@@ -299,8 +291,6 @@ public class GoGui
             cbAnalyze();
         else if (command.equals("analyze-only-supported"))
             cbAnalyzeOnlySupported();
-        else if (command.equals("attach-program"))
-            cbAttachProgram();
         else if (command.equals("auto-number"))
             cbAutoNumber();
         else if (command.equals("back-to-main-variation"))
@@ -331,10 +321,6 @@ public class GoGui
             computerNone();
         else if (command.equals("computer-white"))
             computerWhite();
-        else if (command.equals("detach-program"))
-            cbDetachProgram();
-        else if (command.equals("exit"))
-            close();
         else if (command.equals("export-ascii"))
             cbExportAscii();
         else if (command.equals("export-clipboard"))
@@ -379,8 +365,6 @@ public class GoGui
             cbGtpShellSendFile();
         else if (command.startsWith("handicap-"))
             cbHandicap(command.substring("handicap-".length()));
-        else if (command.equals("help"))
-            cbHelp();
         else if (command.equals("import-ascii"))
             cbImportAscii();
         else if (command.equals("import-clipboard"))
@@ -397,8 +381,6 @@ public class GoGui
             actionPlay(true);
         else if (command.equals("previous-earlier-variation"))
             cbPreviousEarlierVariation();
-        else if (command.equals("print"))
-            cbPrint();
         else if (command.equals("score"))
             cbScore();
         else if (command.equals("score-cancel"))
@@ -437,6 +419,48 @@ public class GoGui
             assert(false);
     }
     
+    public void actionAbout()
+    {
+        String protocolVersion = null;
+        String command = null;
+        if (m_gtp != null)
+        {
+            protocolVersion =
+                Integer.toString(m_gtp.getProtocolVersion());
+            command = m_gtp.getProgramCommand();
+        }
+        AboutDialog.show(this, m_name, m_version, protocolVersion, command);
+    }
+
+    public void actionAttachProgram()
+    {        
+        if (! checkCommandInProgress())
+            return;
+        String program = SelectProgram.select(this);
+        if (program == null)
+            return;
+        if (m_gtp != null)
+            if (! actionDetachProgram())
+                return;
+        if (! attachProgram(program))
+        {
+            m_prefs.put("program", "");
+            return;
+        }
+        m_prefs.put("program", m_program);
+        if (m_gtpShell != null && m_session.isVisible("shell"))
+        {
+            m_menuBar.setShowShell(true);
+            cbShowShell();
+        }
+        if (m_session.isVisible("analyze"))
+        {
+            m_menuBar.setShowAnalyze(true);
+            cbAnalyze();
+        }
+        toFrontLater();
+    }
+
     public void actionBackward(int n)
     {
         if (! checkSpecialMode())
@@ -451,6 +475,35 @@ public class GoGui
             return;
         backward(NodeUtil.getDepth(getCurrentNode()));
         boardChangedBegin(false, false);
+    }
+
+    public boolean actionDetachProgram()
+    {        
+        if (m_gtp == null)
+            return false;
+        if (isCommandInProgress() && ! showQuestion("Kill program?"))
+            return false;
+        detachProgram();
+        m_prefs.put("program", "");
+        return true;
+    }
+
+    public void actionDocumentation()
+    {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL url = classLoader.getResource("net/sf/gogui/doc/index.html");
+        if (url == null)
+        {
+            showError("Help not found");
+            return;
+        }
+        if (m_help == null)
+        {
+            m_help = new Help(this, url);
+            restoreSize(m_help, "help");
+        }
+        m_help.setVisible(true);
+        m_help.toFront();
     }
 
     public void actionEnd()
@@ -553,6 +606,11 @@ public class GoGui
             cbGotoNode(node);
     }
 
+    public void actionPrint()
+    {
+        Print.run(this, m_guiBoard);
+    }
+
     public void actionSave()
     {
         if (m_file == null)
@@ -574,6 +632,11 @@ public class GoGui
     public void actionSaveAs()
     {
         saveDialog();
+    }
+
+    public void actionQuit()
+    {
+        close();
     }
 
     public void cbAnalyze()
@@ -621,33 +684,6 @@ public class GoGui
             m_analyzeDialog.setOnlySupported(onlySupported);
     }
 
-    public void cbAttachProgram()
-    {        
-        String program = SelectProgram.select(this);
-        if (program == null)
-            return;
-        if (m_gtp != null)
-            if (! cbDetachProgram())
-                return;
-        if (! attachProgram(program))
-        {
-            m_prefs.put("program", "");
-            return;
-        }
-        m_prefs.put("program", m_program);
-        if (m_gtpShell != null && m_session.isVisible("shell"))
-        {
-            m_menuBar.setShowShell(true);
-            cbShowShell();
-        }
-        if (m_session.isVisible("analyze"))
-        {
-            m_menuBar.setShowAnalyze(true);
-            cbAnalyze();
-        }
-        toFrontLater();
-    }
-
     public void cbAutoNumber(boolean enable)
     {
         if (m_gtp != null)
@@ -662,17 +698,6 @@ public class GoGui
         m_gtpShell.setCommandCompletion(commandCompletion);
         m_prefs.putBoolean("gtpshell-disable-completions",
                            ! commandCompletion);
-    }
-
-    public boolean cbDetachProgram()
-    {        
-        if (m_gtp == null)
-            return false;
-        if (isCommandInProgress() && ! showQuestion("Kill program?"))
-            return false;
-        detachProgram();
-        m_prefs.put("program", "");
-        return true;
     }
 
     public void cbGotoNode(ConstNode node)
@@ -1358,10 +1383,8 @@ public class GoGui
         catch (GtpError e)
         {
             showError(e);
-            m_menuBar.setComputerEnabled(false);
             return false;
         }
-        m_menuBar.setComputerEnabled(true);
         m_name = null;
         m_titleFromProgram = null;
         try
@@ -1420,7 +1443,6 @@ public class GoGui
     private void beginLengthyCommand()
     {
         m_statusBar.setProgress(-1);
-        m_menuBar.setCommandInProgress();
         m_gtpShell.setCommandInProgess(true);
     }
 
@@ -1445,19 +1467,6 @@ public class GoGui
             if (doCheckComputerMove)
                 checkComputerMove();
         }
-    }
-
-    private void cbAbout()
-    {
-        String protocolVersion = null;
-        String command = null;
-        if (m_gtp != null)
-        {
-            protocolVersion =
-                Integer.toString(m_gtp.getProtocolVersion());
-            command = m_gtp.getProgramCommand();
-        }
-        AboutDialog.show(this, m_name, m_version, protocolVersion, command);
     }
 
     private void cbAddBookmark()
@@ -1833,24 +1842,6 @@ public class GoGui
         }
     }
 
-    private void cbHelp()
-    {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL url = classLoader.getResource("net/sf/gogui/doc/index.html");
-        if (url == null)
-        {
-            showError("Help not found");
-            return;
-        }
-        if (m_help == null)
-        {
-            m_help = new Help(this, url);
-            restoreSize(m_help, "help");
-        }
-        m_help.setVisible(true);
-        m_help.toFront();
-    }
-
     private void cbImportAscii()
     {
         File file = SimpleDialogs.showOpen(this, "Import Text Position");
@@ -1903,11 +1894,6 @@ public class GoGui
         m_game.makeMainVariation();
         updateModified();
         boardChangedBegin(false, true);
-    }
-
-    private void cbPrint()
-    {
-        Print.run(this, m_guiBoard);
     }
 
     private void cbScore()
@@ -1980,7 +1966,6 @@ public class GoGui
             setupDone();
             return;
         }        
-        m_menuBar.setSetupMode();
         resetBoard();
         m_setupMode = true;
         showStatus("Setup Black");
@@ -2425,7 +2410,6 @@ public class GoGui
         m_gtp = null;
         m_name = null;
         m_version = null;
-        m_menuBar.setComputerEnabled(false);
         m_gtpShell.dispose();
         m_gtpShell = null;
         if (m_analyzeDialog != null)
@@ -2782,7 +2766,6 @@ public class GoGui
         Komi komi = getGameInformation().getKomi();
         m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
         m_scoreDialog.setVisible(true);
-        m_menuBar.setScoreMode();
         showStatus("Please mark dead groups");
     }
 
@@ -2954,7 +2937,7 @@ public class GoGui
                 public boolean handleAbout()
                 {
                     assert(SwingUtilities.isEventDispatchThread());
-                    cbAbout();
+                    actionAbout();
                     return true;
                 }
                 
