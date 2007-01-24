@@ -61,6 +61,7 @@ public class StatusBar
         m_moveText.setEditable(false);
         m_moveText.setFocusable(false);
         m_moveText.setHorizontalAlignment(SwingConstants.LEFT);
+        moveTextBox.add(GuiUtil.createSmallFiller());
         moveTextBox.add(m_moveText);
     }
 
