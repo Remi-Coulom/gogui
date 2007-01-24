@@ -81,7 +81,10 @@ public final class ThumbnailCreator
                 ThumbnailReader.MetaData data = ThumbnailReader.read(file);
                 if (uri.equals(data.m_uri)
                     && data.m_lastModified == lastModified)
+                {
+                    m_lastThumbnail = file;
                     return;
+                }
             }
             catch (IOException e)
             {
