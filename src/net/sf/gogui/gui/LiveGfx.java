@@ -84,10 +84,7 @@ public class LiveGfx
                     m_guiBoard.clearAll();
                     GuiBoardUtil.updateFromGoBoard(m_guiBoard, m_board,
                                                    false);
-                    String statusText =
-                        AnalyzeShow.showGfx(text, m_guiBoard);
-                    if (statusText != null)
-                        m_statusBar.setText(statusText);
+                    AnalyzeShow.showGfx(text, m_guiBoard, m_statusBar);
                 }
             };
         if (SwingUtilities.isEventDispatchThread())

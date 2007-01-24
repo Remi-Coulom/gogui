@@ -1236,15 +1236,10 @@ public class GoGui
         String title = m_analyzeCommand.getResultTitle();
         try
         {
-            boolean statusContainsResponse = false;
+            clearStatus();
             String response = m_gtp.getResponse();
-            String statusText = AnalyzeShow.show(m_analyzeCommand, m_guiBoard,
-                                                 getBoard(), response);
-            if (statusText != null)
-            {
-                m_statusBar.setText(statusText);
-                statusContainsResponse = true;
-            }
+            AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_statusBar,
+                             getBoard(), response);
             int type = m_analyzeCommand.getType();
             GoPoint pointArg = null;
             if (m_analyzeCommand.needsPointArg())
@@ -1257,8 +1252,7 @@ public class GoGui
             }
             if (type == AnalyzeCommand.PARAM)
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
-                                               title, response,
-                                               m_gtp);
+                                               title, response, m_gtp);
             if (AnalyzeCommand.isTextType(type))
             {
                 if (response.indexOf("\n") < 0)
@@ -1266,14 +1260,13 @@ public class GoGui
                     if (response.trim().equals(""))
                         response = "(empty response)";
                     showStatus(title + ": " + response);
-                    statusContainsResponse = true;
                 }
                 else
                     GoGuiUtil.showAnalyzeTextOutput(this, m_guiBoard, type,
-                                                     pointArg, title,
-                                                     response);
+                                                    pointArg, title, response);
             }
-            if (! statusContainsResponse && type != AnalyzeCommand.PARAM)
+            if ("".equals(m_statusBar.getText()) &&
+                type != AnalyzeCommand.PARAM && type != AnalyzeCommand.NONE)
                 showStatus(title);
             if (checkComputerMove)
                 checkComputerMove();

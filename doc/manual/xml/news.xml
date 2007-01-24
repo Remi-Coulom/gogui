@@ -11,6 +11,13 @@
 <itemizedlist>
 <listitem>
 <simpara>
+The wait cursor while the computer is thinking was replaced by a progress
+bar in the status bar, which is in indeterminate mode by default, but can
+be controlled with the PROGRESS live graphics command
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 The forward 10 and backward 10 toolbar buttons no longer exist. Instead
 the forward and backward button navigate in steps of 10 moves if they are
 pressed and held down for a longer time

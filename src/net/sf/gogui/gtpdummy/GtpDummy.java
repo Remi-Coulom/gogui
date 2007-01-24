@@ -243,7 +243,15 @@ public class GtpDummy
         long millis = 20000;
         if (cmd.getNuArg() == 1)
             millis = (long)(cmd.getDoubleArg(0) * 1000.0);
-        sleep(millis);
+        long showProgressInterval = Math.max(millis / 100, 1000);
+        long steps = millis / showProgressInterval;
+        long remaining = millis - steps * showProgressInterval;
+        for (long i = 0; i < steps; ++i)
+        {
+            System.err.println("gogui-gfx: PROGRESS " + (100L * i / steps));
+            sleep(showProgressInterval);
+        }
+        sleep(remaining);
     }
 
     public void handleCommand(GtpCommand cmd) throws GtpError

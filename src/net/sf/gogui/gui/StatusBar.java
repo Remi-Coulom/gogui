@@ -79,6 +79,12 @@ public class StatusBar
         }
     }
 
+    public String getText()
+    {
+        return m_text.getText();
+    }
+
+
     public void immediatelyPaintMoveText(String text)
     {
         assert(SwingUtilities.isEventDispatchThread());

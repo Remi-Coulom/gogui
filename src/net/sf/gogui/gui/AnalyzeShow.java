@@ -21,11 +21,10 @@ import net.sf.gogui.util.StringUtil;
 /** Show response to an AnalyzeCommand in the GUI. */
 public final class AnalyzeShow
 {
-    /** Parse analyze command response and display it on the board.
-        @return Text for status bar (from gfx TEXT) or null
-    */
-    public static String show(AnalyzeCommand command, GuiBoard guiBoard,
-                              ConstBoard board, String response)
+    /** Parse analyze command response and display it on the board. */
+    public static void show(AnalyzeCommand command, GuiBoard guiBoard,
+                            StatusBar statusBar, ConstBoard board,
+                            String response)
         throws GtpError
     {
         GoPoint pointArg = command.getPointArg();
@@ -36,7 +35,6 @@ public final class AnalyzeShow
             guiBoard.setSelect(pointArg, true);
         int type = command.getType();
         int size = board.getSize();
-        String statusText = null;
         switch (type)
         {
         case AnalyzeCommand.BWBOARD:
@@ -59,7 +57,7 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.GFX:
             {
-                statusText = showGfx(response, guiBoard);
+                showGfx(response, guiBoard, statusBar);
             }
             break;
         case AnalyzeCommand.PLIST:
@@ -128,17 +126,14 @@ public final class AnalyzeShow
         default:
             break;
         }
-        return statusText;
     }
 
-    /** Parse gfx analyze command response and display it on the board.
-        @return Text for status bar (from gfx TEXT) or null
-    */
-    public static String showGfx(String response, GuiBoard guiBoard)
+    /** Parse gfx analyze command response and display it on the board. */
+    public static void showGfx(String response, GuiBoard guiBoard,
+                               StatusBar statusBar)
     {
         BufferedReader reader
             = new BufferedReader(new StringReader(response));
-        String statusText = null;
         while (true)
         {
             String line;
@@ -153,11 +148,8 @@ public final class AnalyzeShow
             }
             if (line == null)
                 break;
-            String text = showGfxLine(line, guiBoard);
-            if (text != null)
-                statusText = text;
+            showGfxLine(line, guiBoard, statusBar);
         }
-        return statusText;
     }
 
     public static void showGfxCircle(String[] arg, GuiBoard guiBoard)
@@ -243,56 +235,55 @@ public final class AnalyzeShow
         }
     }
     
-    /** Parse gfx analyze command response line and display it on the board.
-        @return Text for status bar (from gfx TEXT) or null
-    */
-    public static String showGfxLine(String line, GuiBoard guiBoard)
+    /** Parse gfx analyze command response line and display it on the board. */
+    public static void showGfxLine(String line, GuiBoard guiBoard,
+                                   StatusBar statusBar)
     {
-        String[] arg = StringUtil.splitArguments(line);
-        if (arg.length == 0)
-            return null;
-        String statusText = null;
-        String cmd = arg[0].toUpperCase(Locale.ENGLISH);
+        String[] args = StringUtil.splitArguments(line);
+        if (args.length == 0)
+            return;
+        String cmd = args[0].toUpperCase(Locale.ENGLISH);
         if (cmd.equals("BLACK"))
-            showGfxTerritory(arg, GoColor.BLACK, guiBoard);
+            showGfxTerritory(args, GoColor.BLACK, guiBoard);
         else if (cmd.equals("CIRCLE"))
-            showGfxCircle(arg, guiBoard);
+            showGfxCircle(args, guiBoard);
         else if (cmd.equals("CLEAR"))
             guiBoard.clearAll();
         else if (cmd.equals("COLOR"))
-            showGfxColor(arg, guiBoard);
+            showGfxColor(args, guiBoard);
         else if (cmd.equals("INFLUENCE"))
-            showGfxInfluence(arg, guiBoard);
+            showGfxInfluence(args, guiBoard);
         else if (cmd.equals("LABEL"))
-            showGfxLabel(arg, guiBoard);
+            showGfxLabel(args, guiBoard);
         else if (cmd.equals("MARK"))
-            showGfxMark(arg, guiBoard);
+            showGfxMark(args, guiBoard);
+        else if (cmd.equals("PROGRESS"))
+            showGfxProgress(args, statusBar);
         else if (cmd.equals("SQUARE"))
-            showGfxSquare(arg, guiBoard);
+            showGfxSquare(args, guiBoard);
         else if (cmd.equals("TEXT"))
         {
             line = line.trim();
             int pos = line.indexOf(' ');
             if (pos > 0)
-                statusText = line.substring(pos + 1);
+                statusBar.setText(line.substring(pos + 1));
         }
         else if (cmd.equals("TRIANGLE"))
-            showGfxTriangle(arg, guiBoard);
+            showGfxTriangle(args, guiBoard);
         else if (cmd.equals("VAR"))
-            showGfxVariation(arg, guiBoard);
+            showGfxVariation(args, guiBoard);
         else if (cmd.equals("WHITE"))
-            showGfxTerritory(arg, GoColor.WHITE, guiBoard);
-        return statusText;
+            showGfxTerritory(args, GoColor.WHITE, guiBoard);
     }
 
-    public static void showGfxMark(String[] arg, GuiBoard guiBoard)
+    public static void showGfxMark(String[] args, GuiBoard guiBoard)
     {
         int size = guiBoard.getBoardSize();
-        for (int i = 1; i < arg.length; ++i)
+        for (int i = 1; i < args.length; ++i)
         {
             try
             {
-                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                GoPoint point = GoPoint.parsePoint(args[i], size);
                 if (point == null)
                     continue;
                 guiBoard.setMark(point, true);
@@ -303,14 +294,32 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxSquare(String[] arg, GuiBoard guiBoard)
+    public static void showGfxProgress(String[] args, StatusBar statusBar)
+    {
+        if (args.length < 1)
+            return;
+        try
+        {
+            int percent = Integer.parseInt(args[1]);
+            if (percent < 0)
+                percent = 0;
+            if (percent > 100)
+                percent = 100;
+            statusBar.setProgress(percent);
+        }
+        catch (NumberFormatException e)
+        {
+        }
+    }
+
+    public static void showGfxSquare(String[] args, GuiBoard guiBoard)
     {
         int size = guiBoard.getBoardSize();
-        for (int i = 1; i < arg.length; ++i)
+        for (int i = 1; i < args.length; ++i)
         {
             try
             {
-                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                GoPoint point = GoPoint.parsePoint(args[i], size);
                 if (point == null)
                     continue;
                 guiBoard.setMarkSquare(point, true);
@@ -321,14 +330,14 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxTriangle(String[] arg, GuiBoard guiBoard)
+    public static void showGfxTriangle(String[] args, GuiBoard guiBoard)
     {
         int size = guiBoard.getBoardSize();
-        for (int i = 1; i < arg.length; ++i)
+        for (int i = 1; i < args.length; ++i)
         {
             try
             {
-                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                GoPoint point = GoPoint.parsePoint(args[i], size);
                 if (point == null)
                     continue;
                 guiBoard.setMarkTriangle(point, true);
@@ -339,15 +348,15 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxTerritory(String[] arg, GoColor color,
+    public static void showGfxTerritory(String[] args, GoColor color,
                                         GuiBoard guiBoard)
     {
         int size = guiBoard.getBoardSize();
-        for (int i = 1; i < arg.length; ++i)
+        for (int i = 1; i < args.length; ++i)
         {
             try
             {
-                GoPoint point = GoPoint.parsePoint(arg[i], size);
+                GoPoint point = GoPoint.parsePoint(args[i], size);
                 if (point == null)
                     continue;
                 guiBoard.setTerritory(point, color);
@@ -358,24 +367,24 @@ public final class AnalyzeShow
         }
     }
 
-    public static void showGfxVariation(String[] arg, GuiBoard guiBoard)
+    public static void showGfxVariation(String[] args, GuiBoard guiBoard)
     {
         int size = guiBoard.getBoardSize();
         int n = 0;
-        for (int i = 1; i < arg.length; i += 2)
+        for (int i = 1; i < args.length; i += 2)
         {
             try
             {
                 GoColor color;
-                if (arg[i].equalsIgnoreCase("b"))
+                if (args[i].equalsIgnoreCase("b"))
                     color = GoColor.BLACK;
-                else if (arg[i].equalsIgnoreCase("w"))
+                else if (args[i].equalsIgnoreCase("w"))
                     color = GoColor.WHITE;
                 else
                     break;
-                if (i + 1 >= arg.length)
+                if (i + 1 >= args.length)
                     break;
-                GoPoint point = GoPoint.parsePoint(arg[i + 1], size);
+                GoPoint point = GoPoint.parsePoint(args[i + 1], size);
                 ++n;
                 if (point != null)
                 {
