@@ -37,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
@@ -1209,6 +1210,11 @@ public class GoGui
 
     private TimeSettings m_timeSettings;
 
+    /** Timer to make progress bar visible with some delay.
+        Avoids showing the progress bar for short thinking times.
+    */
+    private Timer m_progressBarTimer;
+
     private final GoGuiActions m_actions = new GoGuiActions(this);
 
     private final GoGuiToolBar m_toolBar;
@@ -1435,7 +1441,7 @@ public class GoGui
 
     private void beginLengthyCommand()
     {
-        m_statusBar.setProgress(-1);
+        m_progressBarTimer.restart();
         m_gtpShell.setCommandInProgess(true);
     }
 
@@ -2714,6 +2720,7 @@ public class GoGui
             computerWhite();
         updateGameInfo(true);
         registerSpecialMacHandler();
+        initProgressBarTimer();
         // Children dialogs should be set visible after main window, otherwise
         // they get minimize window buttons and a taskbar entry (KDE 3.4)
         if (m_gtpShell != null && m_session.isVisible("shell"))
@@ -2746,6 +2753,20 @@ public class GoGui
         getLayeredPane().setVisible(true);
         toFrontLater();
         checkComputerMove();
+    }
+
+    private void initProgressBarTimer()
+    {
+        m_progressBarTimer = new Timer(500, new ActionListener() {
+                public void actionPerformed(ActionEvent e)
+                {
+                    if (isCommandInProgress()
+                        && ! m_statusBar.isProgressShown())
+                        m_statusBar.setProgress(-1);
+                }
+            });
+        m_progressBarTimer.setRepeats(false);
+        m_progressBarTimer.stop();
     }
 
     private void initScore(GoPoint[] isDeadStone)

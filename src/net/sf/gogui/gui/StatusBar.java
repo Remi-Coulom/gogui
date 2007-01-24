@@ -92,6 +92,11 @@ public class StatusBar
         m_moveText.paintImmediately(m_moveText.getVisibleRect());
     }
 
+    public boolean isProgressShown()
+    {
+        return m_showProgress;
+    }
+
     /** Show progress bar.
         @param percent Percentage between 0 and 100, -1 if unknown.
     */
