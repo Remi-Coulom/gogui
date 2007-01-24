@@ -27,9 +27,6 @@ public final class MainWrapper
         // On Windows, use GDI instead of DirectDraw to avoid screen flicker
         // see http://mindprod.com/jgloss/flicker.html
         System.setProperty("sun.java2d.noddraw", "true");
-        // Java 1.6 does not detect antialiasing settings automatically on some
-        // desktops (e.g. KDE) so we enforce LCD type antialiasing
-        System.setProperty("awt.useSystemAAFontSettings", "lcd");
         GoGuiSettings settings;
         try
         {
