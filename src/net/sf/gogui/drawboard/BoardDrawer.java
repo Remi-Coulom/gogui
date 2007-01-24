@@ -150,6 +150,8 @@ public class BoardDrawer
 
     private final Color m_gridLabelColor = new Color(96, 96, 96);
 
+    private final Color m_gridColor = new Color(80, 80, 80);
+
     private static Font s_cachedFont;
 
     private Image m_image;
@@ -187,12 +189,20 @@ public class BoardDrawer
         graphics.setColor(Color.darkGray);
         for (int y = 0; y < m_size; ++y)
         {
+            if (y == 0 || y == m_size - 1)
+                graphics.setColor(Color.black);
+            else
+                graphics.setColor(m_gridColor);
             Point left = getCenter(0, y);
             Point right = getCenter(m_size - 1, y);
             graphics.drawLine(left.x, left.y, right.x, right.y);
         }
         for (int x = 0; x < m_size; ++x)
         {
+            if (x == 0 || x == m_size - 1)
+                graphics.setColor(Color.black);
+            else
+                graphics.setColor(m_gridColor);
             Point top = getCenter(x, 0);
             Point bottom = getCenter(x, m_size - 1);
             graphics.drawLine(top.x, top.y, bottom.x, bottom.y);
