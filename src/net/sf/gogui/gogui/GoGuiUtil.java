@@ -57,7 +57,10 @@ public final class GoGuiUtil
         {
             moveText.append(moveNumber);
             toolTip.append(moveNumber);
-            toolTip.append(" moves played");
+            if (moveNumber == 1)
+                toolTip.append(" move played");
+            else
+                toolTip.append(" moves played");
         }
         if (move != null)
         {
@@ -79,11 +82,11 @@ public final class GoGuiUtil
             toolTip.append(moveNumber + movesLeft);
             toolTip.append(")");
         }
-        if (! "".equals(variation) || movesLeft > 0)
+        if (! "".equals(variation))
         {
-            moveText.append(" (");
+            moveText.append(" [");
             moveText.append(variation);
-            moveText.append(")");
+            moveText.append("]");
             toolTip.append(" (variation ");
             toolTip.append(variation);
             toolTip.append(")");
