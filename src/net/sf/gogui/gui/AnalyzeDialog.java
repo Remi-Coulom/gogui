@@ -296,6 +296,7 @@ public final class AnalyzeDialog
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(GuiUtil.createFiller());
         m_comboBoxHistory = new JComboBox();
         panel.add(m_comboBoxHistory);
         JPanel lowerPanel = new JPanel();
