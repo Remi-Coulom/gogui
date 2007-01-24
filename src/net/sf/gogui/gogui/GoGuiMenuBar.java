@@ -383,8 +383,7 @@ public class GoGuiMenuBar
     }
 
     /** Enable/disable items according to current position. */
-    public void update(ConstGameTree gameTree, ConstNode node,
-                       ConstClock clock)
+    public void update(ConstGameTree gameTree, ConstNode node)
     {
         ConstNode father = node.getFatherConst();
         boolean hasFather = (father != null);
@@ -408,12 +407,6 @@ public class GoGuiMenuBar
         m_itemMakeMainVar.setEnabled(! isInMain);
         m_itemKeepOnlyMainVar.setEnabled(isInMain && treeHasVariations);
         m_itemKeepOnlyPosition.setEnabled(hasFather || hasChildren);
-        m_itemClockHalt.setEnabled(clock.isRunning());
-        m_itemClockResume.setEnabled(! clock.isRunning());
-        boolean canRestoreClock = clock.isInitialized()
-            && (canRestoreTime(node)
-                || (father != null && canRestoreTime(father)));
-        m_itemClockRestore.setEnabled(canRestoreClock);
         if (! NodeUtil.isInCleanup(node))
             setCleanup(false);
     }
@@ -543,13 +536,6 @@ public class GoGuiMenuBar
 
     private final ArrayList m_bookmarkItems = new ArrayList();
 
-    private boolean canRestoreTime(ConstNode node)
-    {
-        return ! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
-            || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE))
-            || node.getFatherConst() == null;
-    }
-
     private JMenuChecked createBoardSizeMenu()
     {
         JMenuChecked menu = createMenu("Board Size", KeyEvent.VK_S);
@@ -569,14 +555,12 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createClockMenu()
+    private JMenuChecked createClockMenu(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Clock", KeyEvent.VK_K);
-        m_itemClockHalt = menu.addItem("Halt", KeyEvent.VK_H, "clock-halt");
-        m_itemClockResume = menu.addItem("Resume", KeyEvent.VK_R,
-                                         "clock-resume");
-        m_itemClockRestore = menu.addItem("Restore", KeyEvent.VK_S,
-                                          "clock-restore");
+        menu.addItem(actions.m_actionClockHalt, KeyEvent.VK_H);
+        menu.addItem(actions.m_actionClockResume, KeyEvent.VK_R);
+        menu.addItem(actions.m_actionClockRestore, KeyEvent.VK_S);
         return menu;
     }
 
@@ -797,8 +781,8 @@ public class GoGuiMenuBar
         m_itemCleanup.setMnemonic(KeyEvent.VK_E);
         menu.addSeparator();
         menu.addItem(actions.m_actionPass, KeyEvent.VK_P);
-        menu.add(createClockMenu());
-        menu.addItem("Score", KeyEvent.VK_O, "score");
+        menu.add(createClockMenu(actions));
+        menu.addItem(actions.m_actionScore, KeyEvent.VK_O);
         return menu;
     }
 

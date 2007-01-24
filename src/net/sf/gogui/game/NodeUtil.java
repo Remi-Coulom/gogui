@@ -18,6 +18,25 @@ import net.sf.gogui.util.StringUtil;
 /** Utility functions operating on a tree of nodes. */
 public final class NodeUtil
 {
+    public static boolean canRestoreTime(ConstNode node, ConstClock clock)
+    {
+        if (! clock.isInitialized())
+            return false;
+        ConstNode father = node.getFatherConst();
+        if (father == null)
+            return true;
+        if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
+            || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE)))
+            return true;
+        node = father;
+        if (father == null)
+            return true;
+        if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK))
+            || ! Double.isNaN(node.getTimeLeft(GoColor.WHITE)))
+            return true;
+        return false;
+    }
+
     /** Find first node with a certain move number in main variation
         containing a given node.
         @return null if no such node exists.

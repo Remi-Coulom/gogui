@@ -109,7 +109,8 @@ import net.sf.gogui.version.Version;
 public class GoGui
     extends JFrame
     implements ActionListener, AnalyzeDialog.Callback,
-               GuiBoard.Listener, GameTreeViewer.Listener, GtpShell.Callback
+               GuiBoard.Listener, GameTreeViewer.Listener, GtpShell.Callback,
+               ScoreDialog.Listener
 {
     public GoGui(String program, File file, int move, String time,
                  boolean verbose, boolean computerBlack,
@@ -300,12 +301,6 @@ public class GoGui
             cbBoardSize(command.substring("board-size-".length()));
         else if (command.startsWith("bookmark-"))
             cbBookmark(command.substring("bookmark-".length()));
-        else if (command.equals("clock-halt"))
-            cbClockHalt();
-        else if (command.equals("clock-resume"))
-            cbClockResume();
-        else if (command.equals("clock-restore"))
-            cbClockRestore();
         else if (command.equals("command-completion"))
             cbCommandCompletion();
         else if (command.equals("comment-font-fixed"))
@@ -354,12 +349,6 @@ public class GoGui
             cbNextEarlierVariation();
         else if (command.equals("previous-earlier-variation"))
             cbPreviousEarlierVariation();
-        else if (command.equals("score"))
-            cbScore();
-        else if (command.equals("score-cancel"))
-            cbScoreDone(false);
-        else if (command.equals("score-done"))
-            cbScoreDone(true);
         else if (command.equals("setup"))
             cbSetup();
         else if (command.equals("setup-black"))
@@ -448,6 +437,31 @@ public class GoGui
             return;
         backward(NodeUtil.getDepth(getCurrentNode()));
         boardChangedBegin(false, false);
+    }
+
+    public void actionClockHalt()
+    {
+        if (! getClock().isRunning())
+            return;
+        m_game.haltClock();
+        updateViews();
+    }
+
+    public void actionClockResume()
+    {
+        if (getClock().isRunning())
+            return;
+        m_game.startClock();
+        updateViews();
+    }
+
+    public void actionClockRestore()
+    {        
+        if (! NodeUtil.canRestoreTime(getCurrentNode(), getClock()))
+            return;
+        m_game.restoreClock();
+        m_gameInfo.updateTimeFromClock(getClock());
+        updateViews();
     }
 
     public void actionComputerColor(boolean isBlack, boolean isWhite)
@@ -720,6 +734,55 @@ public class GoGui
     public void actionSaveAs()
     {
         saveDialog();
+    }
+
+    public void actionScore()
+    {
+        if (m_scoreMode)
+            return;
+        if (! checkSpecialMode())
+            return;
+        if (m_gtp == null)
+        {
+            showInfo("No program is attached.\n" +
+                     "Please mark dead groups manually.");
+            initScore(null);
+            return;
+        }
+        if (m_gtp.isCommandSupported("final_status_list"))
+        {
+            Runnable callback = new Runnable()
+                {
+                    public void run()
+                    {
+                        cbScoreContinue();
+                    }
+                };
+            showStatus("Scoring...");
+            runLengthyCommand("final_status_list dead", callback);
+        }
+        else
+        {
+            showInfo(m_name + " does not support scoring.\n" +
+                     "Please mark dead groups manually.");
+            initScore(null);
+        }
+    }
+
+    public void actionScoreDone(boolean accepted)
+    {
+        if (! m_scoreMode)
+            return;
+        m_scoreDialog.setVisible(false);
+        if (accepted)
+        {
+            Komi komi = getGameInformation().getKomi();
+            setResult(m_countScore.getScore(komi, getRules()).formatResult());
+        }
+        clearStatus();
+        m_guiBoard.clearAll();
+        m_scoreMode = false;
+        m_menuBar.setNormalMode();
     }
 
     public void actionQuit()
@@ -1684,27 +1747,6 @@ public class GoGui
         }
     }
 
-    private void cbClockHalt()
-    {
-        if (! getClock().isRunning())
-            return;
-        m_game.haltClock();
-        updateMenuBar();
-    }
-
-    private void cbClockResume()
-    {
-        m_game.startClock();
-        updateMenuBar();
-    }
-
-    private void cbClockRestore()
-    {        
-        m_game.restoreClock();
-        m_gameInfo.updateTimeFromClock(getClock());
-        updateMenuBar();
-    }
-
     private void cbCommentFontFixed()
     {
         boolean fixed = m_menuBar.getCommentFontFixed();
@@ -1884,35 +1926,6 @@ public class GoGui
         boardChangedBegin(false, true);
     }
 
-    private void cbScore()
-    {
-        if (m_gtp == null)
-        {
-            showInfo("No program is attached.\n" +
-                     "Please mark dead groups manually.");
-            initScore(null);
-            return;
-        }
-        if (m_gtp.isCommandSupported("final_status_list"))
-        {
-            Runnable callback = new Runnable()
-                {
-                    public void run()
-                    {
-                        cbScoreContinue();
-                    }
-                };
-            showStatus("Scoring...");
-            runLengthyCommand("final_status_list dead", callback);
-        }
-        else
-        {
-            showInfo(m_name + " does not support scoring.\n" +
-                     "Please mark dead groups manually.");
-            initScore(null);
-        }
-    }
-
     private void cbScoreContinue()
     {
         boolean success = endLengthyCommand();
@@ -1932,20 +1945,6 @@ public class GoGui
         }
         initScore(isDeadStone);
     }    
-
-    private void cbScoreDone(boolean accepted)
-    {
-        m_scoreDialog.setVisible(false);
-        if (accepted)
-        {
-            Komi komi = getGameInformation().getKomi();
-            setResult(m_countScore.getScore(komi, getRules()).formatResult());
-        }
-        clearStatus();
-        m_guiBoard.clearAll();
-        m_scoreMode = false;
-        m_menuBar.setNormalMode();
-    }
 
     private void cbSetup()
     {
@@ -3409,7 +3408,7 @@ public class GoGui
 
     private void updateMenuBar()
     {
-        m_menuBar.update(getTree(), getCurrentNode(), getClock());
+        m_menuBar.update(getTree(), getCurrentNode());
     }
 
     private void updateModified()

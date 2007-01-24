@@ -12,6 +12,8 @@ import java.net.URL;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
+import net.sf.gogui.game.ConstClock;
+import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
@@ -62,6 +64,24 @@ public class GoGuiActions
                     m_goGui.actionBeginning(); } },
              "Beginning", "Go to beginning of game", KeyEvent.VK_HOME,
              "gogui-first");
+
+    public final AbstractAction m_actionClockHalt =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionClockHalt(); } },
+             "Halt", "Halt clock");
+
+    public final AbstractAction m_actionClockResume =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionClockResume(); } },
+             "Resume", "Resume clock");
+
+    public final AbstractAction m_actionClockRestore =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionClockRestore(); } },
+             "Restore", "Restore clock to time stored at current position");
 
     public final AbstractAction m_actionComputerBlack =
         init(new AbstractAction() {
@@ -241,6 +261,12 @@ public class GoGuiActions
                     m_goGui.actionSaveAs(); } },
              "Save As...", "Save game", "document-save-as");
 
+    public final AbstractAction m_actionScore =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionScore(); } },
+             "Score", "Score position");
+
     public final AbstractAction m_actionQuit =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -254,7 +280,8 @@ public class GoGuiActions
 
     public void update()
     {
-        ConstNode node = m_goGui.getGame().getCurrentNode();
+        ConstGame game = m_goGui.getGame();
+        ConstNode node = game.getCurrentNode();
         boolean hasFather = (node.getFatherConst() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
@@ -263,9 +290,13 @@ public class GoGuiActions
         boolean isProgramAttached = m_goGui.isProgramAttached();
         boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
         boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
+        ConstClock clock = game.getClock();
         m_actionBackward.setEnabled(hasFather);
         m_actionBackwardTen.setEnabled(hasFather);
         m_actionBeginning.setEnabled(hasFather);
+        m_actionClockHalt.setEnabled(clock.isRunning());
+        m_actionClockResume.setEnabled(! clock.isRunning());
+        m_actionClockRestore.setEnabled(NodeUtil.canRestoreTime(node, clock));
         m_actionComputerBlack.setEnabled(isProgramAttached);
         setSelected(m_actionComputerBlack, computerBlack && ! computerWhite);
         m_actionComputerBoth.setEnabled(isProgramAttached);

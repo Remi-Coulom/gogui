@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -24,7 +25,12 @@ import net.sf.gogui.go.Score;
 public class ScoreDialog
     extends JDialog
 {
-    public ScoreDialog(Frame owner, ActionListener listener)
+    public interface Listener
+    {
+        void actionScoreDone(boolean accepted);
+    }
+
+    public ScoreDialog(Frame owner, final Listener listener)
     {
         super(owner, "Score");
         WindowAdapter windowAdapter = new WindowAdapter()
@@ -58,11 +64,15 @@ public class ScoreDialog
         panel.add(GuiUtil.createFiller());
         panel.add(panelResult);
         JButton okButton = new JButton("Ok");
-        okButton.setActionCommand("score-done");
-        okButton.addActionListener(listener);
+        okButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    listener.actionScoreDone(true);
+            } });
         m_cancelButton = new JButton("Cancel");
-        m_cancelButton.setActionCommand("score-cancel");
-        m_cancelButton.addActionListener(listener);
+        m_cancelButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    listener.actionScoreDone(false);
+            } });
         Object options[] = { okButton, m_cancelButton };
         JOptionPane optionPane = new JOptionPane(panel,
                                                  JOptionPane.PLAIN_MESSAGE,
