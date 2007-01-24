@@ -113,8 +113,8 @@ public class GoGuiActions
         m_actionDocumentation = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionDocumentation(); } };
-        init(m_actionAbout, "GoGui Documentation", "Browse GoGui manual",
-             KeyEvent.VK_F1, getFunctionKeyShortcut());
+        init(m_actionDocumentation, "GoGui Documentation",
+             "Open GoGui manual", KeyEvent.VK_F1, getFunctionKeyShortcut());
 
         m_actionEnd = new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
