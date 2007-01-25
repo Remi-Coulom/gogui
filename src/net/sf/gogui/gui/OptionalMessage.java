@@ -67,7 +67,8 @@ public class OptionalMessage
             result = 1;
         else
         {
-            assert(value == m_options[2] || value == null);
+            assert(value == m_options[2] || value == null
+                   || value.equals(new Integer(-1)));
             result = 2;
         }
         if (result != 2)
