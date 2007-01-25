@@ -207,9 +207,6 @@ public class GoGui
             };
         m_menuBar =
             new GoGuiMenuBar(this, m_actions, recentCallback, recentGtp);
-        boolean onlySupported
-            = m_prefs.getBoolean("analyze-only-supported-commands", true);
-        m_menuBar.setAnalyzeOnlySupported(onlySupported);
         m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels",
                                                  GameTreePanel.LABEL_NUMBER));
         m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size",
@@ -286,8 +283,6 @@ public class GoGui
             cbEditBookmarks();
         else if (command.equals("analyze"))
             cbAnalyze();
-        else if (command.equals("analyze-only-supported"))
-            cbAnalyzeOnlySupported();
         else if (command.equals("auto-number"))
             cbAutoNumber();
         else if (command.equals("back-to-main-variation"))
@@ -984,12 +979,9 @@ public class GoGui
         {
             if (m_analyzeDialog == null)
             {
-                boolean onlySupported = m_menuBar.getAnalyzeOnlySupported();
                 m_analyzeDialog =
-                    new AnalyzeDialog(this, this, onlySupported,
-                                      m_gtp.getSupportedCommands(),
-                                      m_programAnalyzeCommands,
-                                      m_gtp);
+                    new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
+                                      m_programAnalyzeCommands, m_gtp);
                 m_analyzeDialog.addWindowListener(new WindowAdapter()
                     {
                         public void windowClosing(WindowEvent e)
@@ -1009,14 +1001,6 @@ public class GoGui
                 m_analyzeDialog.close();
             m_analyzeDialog = null;
         }
-    }
-
-    public void cbAnalyzeOnlySupported()
-    {
-        boolean onlySupported = m_menuBar.getAnalyzeOnlySupported();
-        m_prefs.putBoolean("analyze-only-supported-commands", onlySupported);
-        if (m_analyzeDialog != null)
-            m_analyzeDialog.setOnlySupported(onlySupported);
     }
 
     public void cbAutoNumber(boolean enable)

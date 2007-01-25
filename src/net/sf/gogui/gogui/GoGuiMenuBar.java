@@ -92,11 +92,6 @@ public class GoGuiMenuBar
         m_itemCleanup.setEnabled(enable);
     }
 
-    public boolean getAnalyzeOnlySupported()
-    {
-        return m_itemAnalyzeOnlySupported.isSelected();
-    }
-
     public boolean getAutoNumber()
     {
         return m_itemAutoNumber.isSelected();        
@@ -200,11 +195,6 @@ public class GoGuiMenuBar
     public boolean getShowVariations()
     {
         return m_itemShowVariations.isSelected();
-    }
-
-    public void setAnalyzeOnlySupported(boolean enable)
-    {
-        m_itemAnalyzeOnlySupported.setSelected(enable);        
     }
 
     public void setAutoNumber(boolean enable)
@@ -434,8 +424,6 @@ public class GoGuiMenuBar
 
     private final JMenuBar m_menuBar;
 
-    private JMenuItem m_itemAnalyzeOnlySupported;
-
     private JMenuItem m_itemBackToMainVar;
 
     private JMenuItem[] m_itemBoardSize;
@@ -552,17 +540,6 @@ public class GoGuiMenuBar
                      SHORTCUT, "add-bookmark");
         menu.addItem("Edit Bookmarks...", KeyEvent.VK_E,
                      "edit-bookmarks");
-        return menu;
-    }
-
-    private JMenuChecked createMenuConfigureAnalyze()
-    {
-        JMenuChecked menu = new JMenuChecked("Configure Analyze", m_listener);
-        menu.setMnemonic(KeyEvent.VK_N);
-        m_itemAnalyzeOnlySupported =
-            new JCheckBoxMenuItem("Only Supported Commands");
-        menu.addItem(m_itemAnalyzeOnlySupported, KeyEvent.VK_O,
-                     "analyze-only-supported");
         return menu;
     }
 
@@ -811,7 +788,6 @@ public class GoGuiMenuBar
         menu.add(createMenuConfigureBoard());
         menu.add(createMenuConfigureTree());
         menu.add(createMenuConfigureShell());
-        menu.add(createMenuConfigureAnalyze());
         return menu;
     }
 

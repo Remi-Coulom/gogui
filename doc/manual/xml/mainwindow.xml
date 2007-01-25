@@ -864,15 +864,6 @@ Prepend each sent or received line with a time stamp.
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term><guisubmenu>Configure Analyze</guisubmenu> / <guimenuitem>Only Supported Commands</guimenuitem></term>
-<listitem>
-<para>
-Only show commands supported by the current Go engine.
-</para>
-</listitem>
-</varlistentry>
-
 </variablelist>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>

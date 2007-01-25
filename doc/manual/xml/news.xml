@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+Remove menu Configure Analyze / Only Supported Commands; this is the default
+and only behaviour now
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 The wait cursor while the computer is thinking was replaced by a progress
 bar in the status bar, which is in indeterminate mode by default, but can
 be controlled with the PROGRESS live graphics command

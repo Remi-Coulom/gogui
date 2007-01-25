@@ -55,13 +55,12 @@ public final class AnalyzeDialog
                                boolean clearBoard, boolean oneRunOnly);
     }
 
-    public AnalyzeDialog(Frame owner, Callback callback, boolean onlySupported,
+    public AnalyzeDialog(Frame owner, Callback callback,
                          ArrayList supportedCommands,
                          String programAnalyzeCommands, GuiGtpClient gtp)
     {
         super(owner, "Analyze");
         m_gtp = gtp;
-        m_onlySupportedCommands = onlySupported;
         m_supportedCommands = supportedCommands;
         m_programAnalyzeCommands = programAnalyzeCommands;
         m_callback = callback;
@@ -135,12 +134,6 @@ public final class AnalyzeDialog
         m_boardSize = boardSize;
     }
 
-    public void setOnlySupported(boolean onlySupported)
-    {
-        m_onlySupportedCommands = onlySupported;
-        reload();
-    }
-
     public void setSelectedColor(GoColor color)
     {
         m_selectedColor = color;
@@ -159,8 +152,6 @@ public final class AnalyzeDialog
             m_runButton.setEnabled(false);
         }
     }
-
-    private boolean m_onlySupportedCommands;
 
     private boolean m_recentModified;
 
@@ -351,9 +342,7 @@ public final class AnalyzeDialog
     {
         try
         {
-            ArrayList supportedCommands = null;
-            if (m_onlySupportedCommands)
-                supportedCommands = m_supportedCommands;
+            ArrayList supportedCommands = m_supportedCommands;
             AnalyzeCommand.read(m_commands, m_labels, supportedCommands,
                                 m_programAnalyzeCommands);
             m_list.setListData(m_labels.toArray());
