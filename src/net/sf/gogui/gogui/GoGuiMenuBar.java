@@ -234,17 +234,6 @@ public class GoGuiMenuBar
         }
     }
 
-    public void selectBoardSizeItem(int size)
-    {
-        for (int i = 0; i < s_possibleBoardSizes.length; ++i)
-            if (s_possibleBoardSizes[i] == size)
-            {
-                m_itemBoardSize[i].setSelected(true);
-                return;
-            }
-        m_itemBoardSizeOther.setSelected(true);
-    }
-
     public void setBeepAfterMove(boolean enable)
     {
         m_itemBeepAfterMove.setSelected(enable);
@@ -320,9 +309,6 @@ public class GoGuiMenuBar
     {
         m_recent.updateEnabled();
         m_recentGtp.updateEnabled();
-        m_itemSetup.setSelected(false);
-        m_itemSetupBlack.setEnabled(false);
-        m_itemSetupWhite.setEnabled(false);
     }
 
     public void setShowAnalyze(boolean enable)
@@ -395,11 +381,6 @@ public class GoGuiMenuBar
         m_itemNextEarlierVariation.setEnabled(hasNextEarlierVariation);
         m_itemPreviousEarlierBackward.setEnabled(hasPrevEarlierVariation);
         m_itemBackToMainVar.setEnabled(! isInMain);
-        m_itemTruncate.setEnabled(hasFather);
-        m_itemTruncateChildren.setEnabled(hasChildren);
-        m_itemMakeMainVar.setEnabled(! isInMain);
-        m_itemKeepOnlyMainVar.setEnabled(isInMain && treeHasVariations);
-        m_itemKeepOnlyPosition.setEnabled(hasFather || hasChildren);
         if (! NodeUtil.isInCleanup(node))
             setCleanup(false);
     }
@@ -407,10 +388,6 @@ public class GoGuiMenuBar
     private boolean m_findNextEnabled;
 
     private boolean m_isComputerDisabled;
-
-    private static int s_possibleBoardSizes[] = { 9, 11, 13, 15, 17, 19 };
-
-    private static int s_possibleHandicaps[] = { 0, 2, 3, 4, 5, 6, 7, 8, 9 };
 
     private static final int SHORTCUT =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -440,8 +417,6 @@ public class GoGuiMenuBar
     private JCheckBoxMenuItem m_itemShowTree;
 
     private JCheckBoxMenuItem m_itemShowVariations;
-
-    private JCheckBoxMenuItem m_itemSetup;
 
     private JCheckBoxMenuItem m_itemTimeStamp;
 
@@ -493,19 +468,9 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemGotoVar;
 
-    private JMenuItem m_itemKeepOnlyMainVar;
-
-    private JMenuItem m_itemKeepOnlyPosition;
-
-    private JMenuItem m_itemMakeMainVar;
-
     private JMenuItem m_itemNextEarlierVariation;
 
     private JMenuItem m_itemPreviousEarlierBackward;
-
-    private JMenuItem m_itemSetupBlack;
-
-    private JMenuItem m_itemSetupWhite;
 
     private JMenuItem m_itemShowInfoPanel;
 
@@ -515,10 +480,6 @@ public class GoGuiMenuBar
 
     private JMenuItem m_itemSaveLog;
 
-    private JMenuItem m_itemTruncate;
-
-    private JMenuItem m_itemTruncateChildren;
-
     private JSeparator m_bookmarksSeparator;
 
     private RecentFileMenu m_recent;
@@ -527,22 +488,17 @@ public class GoGuiMenuBar
 
     private final ArrayList m_bookmarkItems = new ArrayList();
 
-    private JMenuChecked createBoardSizeMenu()
+    private JMenuChecked createBoardSizeMenu(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Board Size", KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
-        int n = s_possibleBoardSizes.length;
-        m_itemBoardSize = new JMenuItem[n];
-        for (int i = 0; i < n; ++i)
-        {
-            String s = Integer.toString(s_possibleBoardSizes[i]);
-            JMenuItem item = menu.addRadioItem(group, s, "board-size-" + s);
-            m_itemBoardSize[i] = item;
-        }
-        menu.addSeparator();
-        JMenuItem item =
-            menu.addRadioItem(group, "Other", "board-size-other");
-        m_itemBoardSizeOther = item;
+        menu.addRadioItem(group, actions.m_actionBoardSize9);
+        menu.addRadioItem(group, actions.m_actionBoardSize11);
+        menu.addRadioItem(group, actions.m_actionBoardSize13);
+        menu.addRadioItem(group, actions.m_actionBoardSize15);
+        menu.addRadioItem(group, actions.m_actionBoardSize17);
+        menu.addRadioItem(group, actions.m_actionBoardSize19);
+        menu.addRadioItem(group, actions.m_actionBoardSizeOther);
         return menu;
     }
 
@@ -566,17 +522,19 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createHandicapMenu()
+    private JMenuChecked createHandicapMenu(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Handicap", KeyEvent.VK_H);
         ButtonGroup group = new ButtonGroup();
-        for (int i = 0; i < s_possibleHandicaps.length; ++i)
-        {
-            String s = Integer.toString(s_possibleHandicaps[i]);
-            JMenuItem item = menu.addRadioItem(group, s, "handicap-" + s);
-            if (s_possibleHandicaps[i] == 0)
-                item.setSelected(true);
-        }
+        menu.addRadioItem(group, actions.m_actionHandicapNone);
+        menu.addRadioItem(group, actions.m_actionHandicap2);
+        menu.addRadioItem(group, actions.m_actionHandicap3);
+        menu.addRadioItem(group, actions.m_actionHandicap4);
+        menu.addRadioItem(group, actions.m_actionHandicap5);
+        menu.addRadioItem(group, actions.m_actionHandicap6);
+        menu.addRadioItem(group, actions.m_actionHandicap7);
+        menu.addRadioItem(group, actions.m_actionHandicap8);
+        menu.addRadioItem(group, actions.m_actionHandicap9);
         return menu;
     }
 
@@ -692,31 +650,19 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionFindNext, KeyEvent.VK_N);
         menu.addSeparator();
         menu.addItem(actions.m_actionGameInfo, KeyEvent.VK_G);
-        menu.add(createBoardSizeMenu());
-        menu.add(createHandicapMenu());
+        menu.add(createBoardSizeMenu(actions));
+        menu.add(createHandicapMenu(actions));
         menu.addSeparator();
-        m_itemMakeMainVar =
-            menu.addItem("Make Main Variation", KeyEvent.VK_M,
-                         "make-main-variation");
-        m_itemKeepOnlyMainVar =
-            menu.addItem("Delete Side Variations", KeyEvent.VK_D,
-                         "keep-only-main-variation");
-        m_itemKeepOnlyPosition =
-            menu.addItem("Keep Only Position", KeyEvent.VK_K,
-                         "keep-only-position");
-        m_itemTruncate = menu.addItem("Truncate", KeyEvent.VK_T, "truncate");
-        m_itemTruncateChildren
-            = menu.addItem("Truncate Children", KeyEvent.VK_C,
-                           "truncate-children");
+        menu.addItem(actions.m_actionMakeMainVariation, KeyEvent.VK_M);
+        menu.addItem(actions.m_actionDeleteSideVariations, KeyEvent.VK_D);
+        menu.addItem(actions.m_actionKeepOnlyPosition, KeyEvent.VK_K);
+        menu.addItem(actions.m_actionTruncate, KeyEvent.VK_T);
+        menu.addItem(actions.m_actionTruncateChildren, KeyEvent.VK_C);
         menu.addSeparator();
-        m_itemSetup = new JCheckBoxMenuItem("Setup Mode");
-        menu.addItem(m_itemSetup, KeyEvent.VK_S, "setup");
+        menu.addItem(actions.m_actionSetup, KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
-        m_itemSetupBlack = menu.addRadioItem(group, "Setup Black",
-                                             KeyEvent.VK_B, "setup-black");
-        m_itemSetupBlack.setSelected(true);
-        m_itemSetupWhite = menu.addRadioItem(group, "Setup White",
-                                             KeyEvent.VK_W, "setup-white");
+        menu.addRadioItem(group, actions.m_actionSetupBlack, KeyEvent.VK_B);
+        menu.addRadioItem(group, actions.m_actionSetupWhite, KeyEvent.VK_W);
         return menu;
     }
 
@@ -965,10 +911,16 @@ class JMenuChecked
     public JMenuItem addRadioItem(ButtonGroup group, AbstractAction action,
                                   int mnemonic)
     {
-        JMenuItem item = new GoGuiRadioButtonMenuItem(action);        
+        JMenuItem item = addRadioItem(group, action);
+        setMnemonic(item, mnemonic);
+        return item;
+    }
+
+    public JMenuItem addRadioItem(ButtonGroup group, AbstractAction action)
+    {
+        JMenuItem item = new GoGuiRadioButtonMenuItem(action);
         group.add(item);
         item.setIcon(null);
-        setMnemonic(item, mnemonic);
         add(item);
         return item;
     }

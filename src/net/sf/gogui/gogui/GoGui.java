@@ -207,7 +207,6 @@ public class GoGui
             };
         m_menuBar =
             new GoGuiMenuBar(this, m_actions, recentCallback, recentGtp);
-        m_menuBar.selectBoardSizeItem(getBoardSize());
         boolean onlySupported
             = m_prefs.getBoolean("analyze-only-supported-commands", true);
         m_menuBar.setAnalyzeOnlySupported(onlySupported);
@@ -295,10 +294,6 @@ public class GoGui
             cbBackToMainVar();
         else if (command.equals("beep-after-move"))
             cbBeepAfterMove();
-        else if (command.equals("board-size-other"))
-            cbBoardSizeOther();
-        else if (command.startsWith("board-size-"))
-            cbBoardSize(command.substring("board-size-".length()));
         else if (command.startsWith("bookmark-"))
             cbBookmark(command.substring("bookmark-".length()));
         else if (command.equals("command-completion"))
@@ -331,24 +326,10 @@ public class GoGui
             cbGtpShellSaveCommands();
         else if (command.equals("gtpshell-send-file"))
             cbGtpShellSendFile();
-        else if (command.startsWith("handicap-"))
-            cbHandicap(command.substring("handicap-".length()));
-        else if (command.equals("keep-only-main-variation"))
-            cbKeepOnlyMainVariation();
-        else if (command.equals("keep-only-position"))
-            cbKeepOnlyPosition();
-        else if (command.equals("make-main-variation"))
-            cbMakeMainVariation();
         else if (command.equals("next-earlier-variation"))
             cbNextEarlierVariation();
         else if (command.equals("previous-earlier-variation"))
             cbPreviousEarlierVariation();
-        else if (command.equals("setup"))
-            cbSetup();
-        else if (command.equals("setup-black"))
-            cbSetupBlack();
-        else if (command.equals("setup-white"))
-            cbSetupWhite();
         else if (command.equals("show-cursor"))
             cbShowCursor();
         else if (command.equals("show-grid"))
@@ -367,10 +348,6 @@ public class GoGui
             cbShowVariations();
         else if (command.equals("timestamp"))
             cbTimeStamp();
-        else if (command.equals("truncate"))
-            cbTruncate();
-        else if (command.equals("truncate-children"))
-            cbTruncateChildren();
         else
             assert(false);
     }
@@ -435,6 +412,31 @@ public class GoGui
         boardChangedBegin(false, false);
     }
 
+    public void actionBoardSize(int boardSize)
+    {
+        if (! checkCommandInProgress())
+            return;
+        saveSession();
+        newGame(boardSize, false);
+        m_gameInfo.updateTimeFromClock(getClock());
+        updateMenuBar();
+        m_prefs.putInt("boardsize", boardSize);
+    }
+
+    public void actionBoardSizeOther()
+    {
+        if (! checkCommandInProgress())
+            return;
+        int size = BoardSizeDialog.show(this, getBoardSize());
+        if (size < 1 || size > GoPoint.MAXSIZE)
+            return;
+        saveSession();
+        newGame(size, false);
+        updateMenuBar();
+        m_prefs.putInt("boardsize", size);
+        m_gameInfo.updateTimeFromClock(getClock());
+    }
+    
     public void actionClockHalt()
     {
         if (! getClock().isRunning())
@@ -466,6 +468,19 @@ public class GoGui
         m_computerWhite = isWhite;
         if (! isCommandInProgress())
             checkComputerMove();
+    }
+
+    public void actionDeleteSideVariations()
+    {
+        if (! checkSpecialMode())
+            return;
+        if (! NodeUtil.isInMainVariation(getCurrentNode()))
+            return;
+        if (! showQuestion("Delete all variations but main?"))
+            return;
+        m_game.keepOnlyMainVariation();
+        updateModified();
+        boardChangedBegin(false, true);
     }
 
     public boolean actionDetachProgram()
@@ -666,6 +681,21 @@ public class GoGui
         updateViews();
     }
 
+    public void actionHandicap(int handicap)
+    {
+        if (! checkCommandInProgress())
+            return;
+        m_handicap = handicap;
+        if (isModified())
+            showInfo("Handicap will take effect on next game.");
+        else
+        {
+            m_computerBlack = false;
+            m_computerWhite = false;
+            newGame(getBoardSize());
+        }
+    }
+
     public void actionImportTextPosition()
     {
         if (! checkSpecialMode())
@@ -705,6 +735,29 @@ public class GoGui
             return;
         if (Interrupt.run(this, m_gtp))
             showStatus("Interrupting...");
+    }
+
+    public void actionKeepOnlyPosition()
+    {
+        if (! checkSpecialMode())
+            return;
+        if (! showQuestion("Delete all moves?"))
+            return;
+        m_game.keepOnlyPosition();
+        initGtp();
+        updateModified();
+        boardChangedBegin(false, true);
+    }
+
+    public void actionMakeMainVariation()
+    {
+        if (! checkSpecialMode())
+            return;
+        if (! showQuestion("Make current to main variation?"))
+            return;
+        m_game.makeMainVariation();
+        updateModified();
+        boardChangedBegin(false, true);
     }
 
     public void actionNewGame()
@@ -855,6 +908,65 @@ public class GoGui
         m_guiBoard.clearAll();
         m_scoreMode = false;
         m_menuBar.setNormalMode();
+    }
+
+    public void actionSetup()
+    {
+        if (! checkCommandInProgress())
+            return;
+        if (m_setupMode)
+        {
+            setupDone();
+            return;
+        }        
+        resetBoard();
+        m_setupMode = true;
+        showStatus("Setup Black");
+        m_game.setToMove(GoColor.BLACK);
+        if (getCurrentNode().getMove() != null)
+        {
+            m_game.createNewChild();
+            currentNodeChanged();
+            updateGameTree(true);
+        }
+    }
+
+    public void actionSetupColor(GoColor color)
+    {
+        assert(color.isBlackWhite());
+        if (color == GoColor.BLACK)            
+            showStatus("Setup Black");
+        else
+            showStatus("Setup White");
+        m_game.setToMove(color);
+        updateViews();
+    }
+
+    public void actionTruncate()
+    {
+        if (! checkSpecialMode())
+            return;
+        if (getCurrentNode().getFatherConst() == null)
+            return;
+        if (! showQuestion("Truncate current?"))
+            return;
+        m_game.truncate();
+        updateModified();
+        boardChangedBegin(false, true);
+    }
+
+    public void actionTruncateChildren()
+    {
+        if (! checkSpecialMode())
+            return;
+        int numberChildren = getCurrentNode().getNumberChildren();
+        if (numberChildren == 0)
+            return;
+        if (! showQuestion("Truncate children?"))
+            return;
+        m_game.truncateChildren();
+        updateModified();
+        boardChangedBegin(false, true);
     }
 
     public void actionQuit()
@@ -1162,10 +1274,25 @@ public class GoGui
         return m_game;
     }
 
+    public int getHandicapDefault()
+    {
+        return m_handicap;
+    }
+
     /** Get currently used pattern for search in comments. */
     public Pattern getPattern()
     {
         return m_pattern;
+    }
+
+    public GoColor getSetupColor()
+    {
+        return m_game.getToMove();
+    }
+
+    public boolean isInSetupMode()
+    {
+        return m_setupMode;
     }
 
     public boolean sendGtpCommand(String command, boolean sync)
@@ -1689,7 +1816,6 @@ public class GoGui
         updateGameInfo(gameTreeChanged);
         updateViews();
         updateMenuBar();
-        m_menuBar.selectBoardSizeItem(getBoardSize());
         if (m_gtp != null
             && ! isOutOfSync()
             && m_analyzeCommand != null
@@ -1753,35 +1879,6 @@ public class GoGui
         cbGotoNode(node);
     }
 
-    private void cbBoardSize(String boardSizeString)
-    {
-        try
-        {
-            saveSession();
-            int boardSize = Integer.parseInt(boardSizeString);
-            newGame(boardSize, false);
-            m_gameInfo.updateTimeFromClock(getClock());
-            updateMenuBar();
-            m_prefs.putInt("boardsize", boardSize);
-        }
-        catch (NumberFormatException e)
-        {
-            assert(false);
-        }
-    }
-
-    private void cbBoardSizeOther()
-    {
-        int size = BoardSizeDialog.show(this, getBoardSize());
-        if (size < 1 || size > GoPoint.MAXSIZE)
-            return;
-        saveSession();
-        newGame(size, false);
-        updateMenuBar();
-        m_prefs.putInt("boardsize", size);
-        m_gameInfo.updateTimeFromClock(getClock());
-    }
-    
     private void cbBookmark(String number)
     {
         if (! checkSaveGame())
@@ -1887,56 +1984,6 @@ public class GoGui
         cbGotoNode(node);
     }
 
-    private void cbHandicap(String handicap)
-    {
-        try
-        {
-            m_handicap = Integer.parseInt(handicap);
-            if (isModified())
-                showInfo("Handicap will take effect on next game.");
-            else
-            {
-                m_computerBlack = true;
-                m_computerWhite = true;
-                newGame(getBoardSize());
-            }
-        }
-        catch (NumberFormatException e)
-        {
-            assert(false);
-        }
-    }
-
-    private void cbKeepOnlyMainVariation()
-    {
-        if (! NodeUtil.isInMainVariation(getCurrentNode()))
-            return;
-        if (! showQuestion("Delete all variations but main?"))
-            return;
-        m_game.keepOnlyMainVariation();
-        updateModified();
-        boardChangedBegin(false, true);
-    }
-
-    private void cbKeepOnlyPosition()
-    {
-        if (! showQuestion("Delete all moves?"))
-            return;
-        m_game.keepOnlyPosition();
-        initGtp();
-        updateModified();
-        boardChangedBegin(false, true);
-    }
-
-    private void cbMakeMainVariation()
-    {
-        if (! showQuestion("Make current to main variation?"))
-            return;
-        m_game.makeMainVariation();
-        updateModified();
-        boardChangedBegin(false, true);
-    }
-
     private void cbScoreContinue()
     {
         boolean success = endLengthyCommand();
@@ -1956,39 +2003,6 @@ public class GoGui
         }
         initScore(isDeadStone);
     }    
-
-    private void cbSetup()
-    {
-        if (m_setupMode)
-        {
-            setupDone();
-            return;
-        }        
-        resetBoard();
-        m_setupMode = true;
-        showStatus("Setup Black");
-        m_game.setToMove(GoColor.BLACK);
-        if (getCurrentNode().getMove() != null)
-        {
-            m_game.createNewChild();
-            currentNodeChanged();
-            updateGameTree(true);
-        }
-    }
-
-    private void cbSetupBlack()
-    {
-        showStatus("Setup Black");
-        m_game.setToMove(GoColor.BLACK);
-        updateGameInfo(false);
-    }
-
-    private void cbSetupWhite()
-    {
-        showStatus("Setup White");
-        m_game.setToMove(GoColor.WHITE);
-        updateGameInfo(false);
-    }
 
     private void cbShowCursor()
     {
@@ -2027,29 +2041,6 @@ public class GoGui
         boolean enable = m_menuBar.getTimeStamp();
         m_gtpShell.setTimeStamp(enable);
         m_prefs.putBoolean("gtpshell-timestamp", enable);
-    }
-
-    private void cbTruncate()
-    {
-        if (getCurrentNode().getFatherConst() == null)
-            return;
-        if (! showQuestion("Truncate current?"))
-            return;
-        m_game.truncate();
-        updateModified();
-        boardChangedBegin(false, true);
-    }
-
-    private void cbTruncateChildren()
-    {
-        int numberChildren = getCurrentNode().getNumberChildren();
-        if (numberChildren == 0)
-            return;
-        if (! showQuestion("Truncate children?"))
-            return;
-        m_game.truncateChildren();
-        updateModified();
-        boardChangedBegin(false, true);
     }
 
     private boolean checkCommandInProgress()
@@ -2857,10 +2848,8 @@ public class GoGui
     {
         initGame(size);
         initGtp();
-        updateGameInfo(true);
         updateFromGoBoard();
-        updateMenuBar();
-        m_menuBar.selectBoardSizeItem(getBoardSize());
+        updateViews();
         setTitle();
         setTitleFromProgram();
         clearStatus();
@@ -2893,8 +2882,7 @@ public class GoGui
         loadFile(m_file, move);
         updateGameInfo(true);
         updateFromGoBoard();
-        updateMenuBar();
-        m_menuBar.selectBoardSizeItem(getBoardSize());
+        updateViews();
     }
 
     /** Paint point immediately to pretend better responsiveness.

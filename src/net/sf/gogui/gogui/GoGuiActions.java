@@ -65,6 +65,48 @@ public class GoGuiActions
              "Beginning", "Go to beginning of game", KeyEvent.VK_HOME,
              "gogui-first");
 
+    public final AbstractAction m_actionBoardSize9 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBoardSize(9); } },
+             "9", "Change board size to 9x9");
+
+    public final AbstractAction m_actionBoardSize11 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBoardSize(11); } },
+             "11", "Change board size to 11x11");
+
+    public final AbstractAction m_actionBoardSize13 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBoardSize(13); } },
+             "13", "Change board size to 13x13");
+
+    public final AbstractAction m_actionBoardSize15 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBoardSize(15); } },
+             "15", "Change board size to 15x15");
+
+    public final AbstractAction m_actionBoardSize17 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBoardSize(17); } },
+             "17", "Change board size to 17x17");
+
+    public final AbstractAction m_actionBoardSize19 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBoardSize(19); } },
+             "19", "Change board size to 19x19");
+
+    public final AbstractAction m_actionBoardSizeOther =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBoardSizeOther(); } },
+             "Other", "Change board size to other values");
+
     public final AbstractAction m_actionClockHalt =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -106,6 +148,13 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionComputerColor(false, true); } },
              "White", "Make computer play White");
+
+    public final AbstractAction m_actionDeleteSideVariations =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionDeleteSideVariations(); } },
+             "Delete side variations",
+             "Delete all variations but the main variation");
 
     public final AbstractAction m_actionDetachProgram =
         init(new AbstractAction() {
@@ -193,6 +242,60 @@ public class GoGuiActions
                     m_goGui.actionGameInfo(); } },
              "Game Info", "Show and edit game information", KeyEvent.VK_I);
 
+    public final AbstractAction m_actionHandicapNone =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(0); } },
+             "None", "Do not use handicap stones");
+
+    public final AbstractAction m_actionHandicap2 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(2); } },
+             "2", "Use two handicap stones");
+
+    public final AbstractAction m_actionHandicap3 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(3); } },
+             "3", "Use three handicap stones");
+
+    public final AbstractAction m_actionHandicap4 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(4); } },
+             "4", "Use four handicap stones");
+
+    public final AbstractAction m_actionHandicap5 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(5); } },
+             "5", "Use five handicap stones");
+
+    public final AbstractAction m_actionHandicap6 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(6); } },
+             "6", "Use six handicap stones");
+
+    public final AbstractAction m_actionHandicap7 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(7); } },
+             "7", "Use seven handicap stones");
+
+    public final AbstractAction m_actionHandicap8 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(8); } },
+             "8", "Use eight handicap stones");
+
+    public final AbstractAction m_actionHandicap9 =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionHandicap(9); } },
+             "9", "Use nine handicap stones");
+
     public final AbstractAction m_actionImportTextPosition =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -213,6 +316,20 @@ public class GoGuiActions
                     m_goGui.actionInterrupt(); } },
              "Interrupt", "Interrupt program", KeyEvent.VK_ESCAPE, 0,
              "gogui-interrupt");
+
+    public final AbstractAction m_actionKeepOnlyPosition =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionKeepOnlyPosition(); } },
+             "Keep only Position",
+             "Delete variations and moves and keep only the current position");
+
+    public final AbstractAction m_actionMakeMainVariation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionMakeMainVariation(); } },
+             "Make Main Variation",
+             "Make current variation the main variation");
 
     public final AbstractAction m_actionNextVariation =
         init(new AbstractAction() {
@@ -287,6 +404,36 @@ public class GoGuiActions
                     m_goGui.actionScore(); } },
              "Score", "Score position");
 
+    public final AbstractAction m_actionSetup =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionSetup(); } },
+             "Setup", "Enter or leave setup mode");
+
+    public final AbstractAction m_actionSetupBlack =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionSetupColor(GoColor.BLACK); } },
+             "Setup Black", "Change setup color to Black");
+
+    public final AbstractAction m_actionSetupWhite =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionSetupColor(GoColor.WHITE); } },
+             "Setup White", "Change setup color to White");
+
+    public final AbstractAction m_actionTruncate =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTruncate(); } },
+             "Truncate", "Truncate subtree including this position");
+
+    public final AbstractAction m_actionTruncateChildren =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTruncateChildren(); } },
+             "Truncate Children", "Truncate all children of this position");
+
     public final AbstractAction m_actionQuit =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -301,20 +448,34 @@ public class GoGuiActions
     public void update()
     {
         ConstGame game = m_goGui.getGame();
+        int handicap = m_goGui.getHandicapDefault();
+        boolean setupMode = m_goGui.isInSetupMode();
+        GoColor setupColor = m_goGui.getSetupColor();
         ConstNode node = game.getCurrentNode();
         boolean hasFather = (node.getFatherConst() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
         boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
         boolean hasPreviousVariation =
             (NodeUtil.getPreviousVariation(node) != null);
+        boolean isInMain = NodeUtil.isInMainVariation(node);
+        boolean treeHasVariations = game.getTree().hasVariations();
         boolean isProgramAttached = m_goGui.isProgramAttached();
         boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
         boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
         boolean hasPattern = (m_goGui.getPattern() != null);
         ConstClock clock = game.getClock();
+        int boardSize = game.getSize();
         m_actionBackward.setEnabled(hasFather);
         m_actionBackwardTen.setEnabled(hasFather);
         m_actionBeginning.setEnabled(hasFather);
+        setSelected(m_actionBoardSize9, boardSize == 9);
+        setSelected(m_actionBoardSize11, boardSize == 11);
+        setSelected(m_actionBoardSize13, boardSize == 13);
+        setSelected(m_actionBoardSize15, boardSize == 15);
+        setSelected(m_actionBoardSize17, boardSize == 17);
+        setSelected(m_actionBoardSize19, boardSize == 19);
+        setSelected(m_actionBoardSizeOther,
+                    boardSize < 9 || boardSize > 19 || boardSize % 2 == 0);
         m_actionClockHalt.setEnabled(clock.isRunning());
         m_actionClockResume.setEnabled(! clock.isRunning());
         m_actionClockRestore.setEnabled(NodeUtil.canRestoreTime(node, clock));
@@ -326,15 +487,32 @@ public class GoGuiActions
         setSelected(m_actionComputerNone, ! computerBlack && ! computerWhite);
         m_actionComputerWhite.setEnabled(isProgramAttached);
         setSelected(m_actionComputerWhite, ! computerBlack && computerWhite);
+        m_actionDeleteSideVariations.setEnabled(isInMain && treeHasVariations);
         m_actionDetachProgram.setEnabled(isProgramAttached);
         m_actionEnd.setEnabled(hasChildren);
         m_actionFindNext.setEnabled(hasPattern);
         m_actionForward.setEnabled(hasChildren);
         m_actionForwardTen.setEnabled(hasChildren);
+        setSelected(m_actionHandicapNone, handicap == 0);
+        setSelected(m_actionHandicap2, handicap == 2);
+        setSelected(m_actionHandicap3, handicap == 3);
+        setSelected(m_actionHandicap4, handicap == 4);
+        setSelected(m_actionHandicap5, handicap == 5);
+        setSelected(m_actionHandicap6, handicap == 6);
+        setSelected(m_actionHandicap7, handicap == 7);
+        setSelected(m_actionHandicap8, handicap == 8);
+        setSelected(m_actionHandicap9, handicap == 9);
         m_actionInterrupt.setEnabled(isProgramAttached);
+        m_actionKeepOnlyPosition.setEnabled(hasFather || hasChildren);
+        m_actionMakeMainVariation.setEnabled(! isInMain);
         m_actionNextVariation.setEnabled(hasNextVariation);
         m_actionPlay.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
+        m_actionSetup.setEnabled(setupMode);
+        setSelected(m_actionSetupBlack, setupColor == GoColor.BLACK);
+        setSelected(m_actionSetupWhite, setupColor == GoColor.WHITE);
+        m_actionTruncate.setEnabled(hasFather);
+        m_actionTruncateChildren.setEnabled(hasChildren);
         updateFile(m_goGui.getFile());
     }
 

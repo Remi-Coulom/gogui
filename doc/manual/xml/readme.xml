@@ -18,33 +18,5 @@ to facilitate debugging and reproducing errors.
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
-<section>
-<title>Requirements</title>
-<para>
-GoGui requires Java 1.4.
-It is recommended to use the most recent Java runtime environment from Sun.
-Testing is mainly done using Sun's JDK on GNU/Linux and on Mac OS/X.
-</para>
-</section>
-
-<section>
-<title>Project Websites</title>
-<itemizedlist>
-<listitem>
-<simpara>
-<ulink url="http://gogui.sf.net">GoGui home page</ulink>
-</simpara>
-</listitem>
-<listitem>
-<simpara>
-<ulink url="http://sf.net/projects/gogui/">
-GoGui project page at SourceForge</ulink>
-</simpara>
-</listitem>
-</itemizedlist>
-
-<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
-
-</section>
 
 </article>
