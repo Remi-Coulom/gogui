@@ -17,6 +17,13 @@ public final class GoColorTest
         return new junit.framework.TestSuite(GoColorTest.class);
     }
 
+    public void testIsBlackWhite()
+    {
+        assertTrue(GoColor.BLACK.isBlackWhite());
+        assertTrue(GoColor.WHITE.isBlackWhite());
+        assertFalse(GoColor.EMPTY.isBlackWhite());
+    }
+
     public void testOtherColor()
     {
         assertSame(GoColor.BLACK.otherColor(), GoColor.WHITE);

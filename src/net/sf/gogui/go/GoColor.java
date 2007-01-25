@@ -23,6 +23,11 @@ public final class GoColor
         return super.hashCode();
     }
 
+    public boolean isBlackWhite()
+    {
+        return (this == BLACK || this == WHITE);
+    }
+
     /** Return other color.
         @return BLACK for WHITE, WHITE for BLACK, EMPTY for EMPTY.
     */
