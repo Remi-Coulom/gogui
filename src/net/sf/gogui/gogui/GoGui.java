@@ -305,12 +305,6 @@ public class GoGui
             cbCommandCompletion();
         else if (command.equals("comment-font-fixed"))
             cbCommentFontFixed();
-        else if (command.equals("find-in-comments"))
-            cbFindInComments();
-        else if (command.equals("find-next"))
-            cbFindNext();
-        else if (command.equals("game-info"))
-            cbGameInfo();
         else if (command.equals("goto"))
             cbGoto();
         else if (command.equals("goto-variation"))
@@ -407,6 +401,7 @@ public class GoGui
         if (! attachProgram(program))
         {
             m_prefs.put("program", "");
+            updateViews();
             return;
         }
         m_prefs.put("program", m_program);
@@ -421,6 +416,7 @@ public class GoGui
             cbAnalyze();
         }
         toFrontLater();
+        updateViews();
     }
 
     public void actionBackward(int n)
@@ -480,6 +476,7 @@ public class GoGui
             return false;
         detachProgram();
         m_prefs.put("program", "");
+        updateViews();
         return true;
     }
 
@@ -586,12 +583,87 @@ public class GoGui
         GuiUtil.copyToClipboard(BoardUtil.toString(getBoard(), false));
     }
 
+    public void actionFind()
+    {
+        if (! checkSpecialMode())
+            return;
+        Pattern pattern = FindDialog.run(this, m_comment.getSelectedText());
+        if (pattern == null)
+            return;
+        m_pattern = pattern;
+        if (NodeUtil.commentContains(getCurrentNode(), m_pattern))
+            m_comment.markAll(m_pattern);
+        else
+            actionFindNext();
+        updateViews();
+    }
+
+    public void actionFindNext()
+    {
+        if (! checkSpecialMode())
+            return;
+        if (m_pattern == null)
+            return;
+        ConstNode root = getTree().getRootConst();
+        ConstNode node = NodeUtil.findInComments(getCurrentNode(), m_pattern);
+        if (node == null)
+            if (getCurrentNode() != root)
+                if (showQuestion("End of tree reached. Continue from start?"))
+                {
+                    node = root;
+                    if (! NodeUtil.commentContains(node, m_pattern))
+                        node = NodeUtil.findInComments(node, m_pattern);
+                }
+        if (node == null)
+        {
+            showInfo("Not found");
+            m_pattern = null;
+        }
+        else
+        {
+            cbGotoNode(node);
+            m_comment.markAll(m_pattern);
+        }
+    }
+
     public void actionForward(int n)
     {
         if (! checkSpecialMode())
             return;
         forward(n);
         boardChangedBegin(false, false);
+    }
+
+    public void actionGameInfo()
+    {
+        if (! checkCommandInProgress())
+            // Changes in game info may send GTP commands
+            return;
+        GameInformation info = new GameInformation(getGameInformation());
+        if (! GameInfoDialog.show(this, info))
+            return;
+        m_game.setDate(info.getDate());
+        m_game.setPlayerBlack(info.getPlayerBlack());
+        m_game.setPlayerWhite(info.getPlayerWhite());
+        m_game.setResult(info.getResult());
+        m_game.setRankBlack(info.getRankBlack());
+        m_game.setRankWhite(info.getRankWhite());
+        Komi prefsKomi = getPrefsKomi();
+        Komi komi = info.getKomi();
+        if (komi != null && ! komi.equals(prefsKomi))
+        {
+            m_prefs.put("komi", komi.toString());
+            setKomi(komi);
+        }
+        if (info.getRules() != null
+            && ! info.getRules().equals(m_prefs.get("rules", "")))
+        {
+            m_prefs.put("rules", info.getRules());
+            setRules();
+        }
+        m_timeSettings = info.getTimeSettings();
+        setTitle();
+        updateViews();
     }
 
     public void actionImportTextPosition()
@@ -1088,6 +1160,12 @@ public class GoGui
     public ConstGame getGame()
     {
         return m_game;
+    }
+
+    /** Get currently used pattern for search in comments. */
+    public Pattern getPattern()
+    {
+        return m_pattern;
     }
 
     public boolean sendGtpCommand(String command, boolean sync)
@@ -1759,73 +1837,6 @@ public class GoGui
         if (! EditBookmarksDialog.show(this, m_bookmarks))
             return;
         m_menuBar.setBookmarks(m_bookmarks);
-    }
-
-    private void cbFindInComments()
-    {
-        Pattern pattern = FindDialog.run(this, m_comment.getSelectedText());
-        if (pattern == null)
-            return;
-        m_pattern = pattern;
-        m_menuBar.enableFindNext(true);
-        if (NodeUtil.commentContains(getCurrentNode(), m_pattern))
-            m_comment.markAll(m_pattern);
-        else
-            cbFindNext();
-    }
-
-    private void cbFindNext()
-    {
-        if (m_pattern == null)
-            return;
-        ConstNode root = getTree().getRootConst();
-        ConstNode node = NodeUtil.findInComments(getCurrentNode(), m_pattern);
-        if (node == null)
-            if (getCurrentNode() != root)
-                if (showQuestion("End of tree reached. Continue from start?"))
-                {
-                    node = root;
-                    if (! NodeUtil.commentContains(node, m_pattern))
-                        node = NodeUtil.findInComments(node, m_pattern);
-                }
-        if (node == null)
-        {
-            showInfo("Not found");
-            m_menuBar.enableFindNext(false);
-        }
-        else
-        {
-            cbGotoNode(node);
-            m_comment.markAll(m_pattern);
-        }
-    }
-
-    private void cbGameInfo()
-    {
-        GameInformation info = new GameInformation(getGameInformation());
-        if (! GameInfoDialog.show(this, info))
-            return;
-        m_game.setDate(info.getDate());
-        m_game.setPlayerBlack(info.getPlayerBlack());
-        m_game.setPlayerWhite(info.getPlayerWhite());
-        m_game.setResult(info.getResult());
-        m_game.setRankBlack(info.getRankBlack());
-        m_game.setRankWhite(info.getRankWhite());
-        Komi prefsKomi = getPrefsKomi();
-        Komi komi = info.getKomi();
-        if (komi != null && ! komi.equals(prefsKomi))
-        {
-            m_prefs.put("komi", komi.toString());
-            setKomi(komi);
-        }
-        if (info.getRules() != null
-            && ! info.getRules().equals(m_prefs.get("rules", "")))
-        {
-            m_prefs.put("rules", info.getRules());
-            setRules();
-        }
-        m_timeSettings = info.getTimeSettings();
-        setTitle();
     }
 
     private void cbGameTreeLabels(int mode)
@@ -2621,7 +2632,7 @@ public class GoGui
         m_lostOnTimeShown = false;
         updateModified();                
         m_resigned = false;
-        m_menuBar.enableFindNext(false);
+        m_pattern = null;
     }
 
     private boolean initGtp()

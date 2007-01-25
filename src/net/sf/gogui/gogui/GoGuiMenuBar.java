@@ -44,7 +44,7 @@ public class GoGuiMenuBar
         m_menuFile = createMenuFile(actions, recentCallback);
         m_menuBar.add(m_menuFile);
         m_menuBar.add(createMenuGame(actions));
-        m_menuBar.add(createMenuEdit());
+        m_menuBar.add(createMenuEdit(actions));
         m_menuBar.add(createMenuGo(actions));
         m_menuShell = createMenuShell(recentGtpCallback);
         m_menuBar.add(m_menuShell);
@@ -90,12 +90,6 @@ public class GoGuiMenuBar
     public void enableCleanup(boolean enable)
     {
         m_itemCleanup.setEnabled(enable);
-    }
-
-    public void enableFindNext(boolean enable)
-    {
-        m_findNextEnabled = enable;
-        m_itemFindNext.setEnabled(enable);
     }
 
     public boolean getAnalyzeOnlySupported()
@@ -329,7 +323,6 @@ public class GoGuiMenuBar
         m_itemSetup.setSelected(false);
         m_itemSetupBlack.setEnabled(false);
         m_itemSetupWhite.setEnabled(false);
-        m_itemFindNext.setEnabled(m_findNextEnabled);
     }
 
     public void setShowAnalyze(boolean enable)
@@ -481,8 +474,6 @@ public class GoGuiMenuBar
     private JMenuItem m_itemClockResume;
 
     private JMenuItem m_itemCommentFontFixed;
-
-    private JMenuItem m_itemFindNext;
 
     private JMenuItem m_itemGameTreeLarge;
 
@@ -694,18 +685,13 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuEdit()
+    private JMenuChecked createMenuEdit(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Edit", KeyEvent.VK_E);
-        menu.addItem("Find in Comments...", KeyEvent.VK_F, KeyEvent.VK_F,
-                     SHORTCUT, "find-in-comments");
-        m_itemFindNext =
-            menu.addItem("Find Next", KeyEvent.VK_N, KeyEvent.VK_F3,
-                         getFunctionKeyShortcut(), "find-next");
-        m_itemFindNext.setEnabled(false);
+        menu.addItem(actions.m_actionFind, KeyEvent.VK_F);
+        menu.addItem(actions.m_actionFindNext, KeyEvent.VK_N);
         menu.addSeparator();
-        menu.addItem("Game Info", KeyEvent.VK_G, KeyEvent.VK_I,
-                     SHORTCUT, "game-info");
+        menu.addItem(actions.m_actionGameInfo, KeyEvent.VK_G);
         menu.add(createBoardSizeMenu());
         menu.add(createHandicapMenu());
         menu.addSeparator();

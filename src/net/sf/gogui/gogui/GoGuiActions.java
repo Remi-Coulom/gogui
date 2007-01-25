@@ -159,6 +159,20 @@ public class GoGuiActions
              "Text Position to Clipboard",
              "Export position as text diagram to clipboard");
 
+    public final AbstractAction m_actionFind =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionFind(); } },
+             "Find in Comments...", "Search for matching text in comments",
+             KeyEvent.VK_F);
+
+    public final AbstractAction m_actionFindNext =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionFindNext(); } },
+             "Find Next", "Search for next match in comments",
+             KeyEvent.VK_F3, getFunctionKeyShortcut());
+
     public final AbstractAction m_actionForward =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -172,6 +186,12 @@ public class GoGuiActions
                     m_goGui.actionForward(10); } },
              "Forward 10", "Go ten moves forward", KeyEvent.VK_RIGHT,
              getShortcut() | ActionEvent.SHIFT_MASK, null);
+
+    public final AbstractAction m_actionGameInfo =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionGameInfo(); } },
+             "Game Info", "Show and edit game information", KeyEvent.VK_I);
 
     public final AbstractAction m_actionImportTextPosition =
         init(new AbstractAction() {
@@ -290,6 +310,7 @@ public class GoGuiActions
         boolean isProgramAttached = m_goGui.isProgramAttached();
         boolean computerBlack = m_goGui.isComputerColor(GoColor.BLACK);
         boolean computerWhite = m_goGui.isComputerColor(GoColor.WHITE);
+        boolean hasPattern = (m_goGui.getPattern() != null);
         ConstClock clock = game.getClock();
         m_actionBackward.setEnabled(hasFather);
         m_actionBackwardTen.setEnabled(hasFather);
@@ -307,6 +328,7 @@ public class GoGuiActions
         setSelected(m_actionComputerWhite, ! computerBlack && computerWhite);
         m_actionDetachProgram.setEnabled(isProgramAttached);
         m_actionEnd.setEnabled(hasChildren);
+        m_actionFindNext.setEnabled(hasPattern);
         m_actionForward.setEnabled(hasChildren);
         m_actionForwardTen.setEnabled(hasChildren);
         m_actionInterrupt.setEnabled(isProgramAttached);
@@ -335,6 +357,13 @@ public class GoGuiActions
     {
         return init(action, name, desc, new Integer(accel), getShortcut(),
                     icon);
+    }
+
+    private static AbstractAction init(AbstractAction action, String name,
+                                       String desc, int accel)
+    {
+        return init(action, name, desc, new Integer(accel), getShortcut(),
+                    null);
     }
 
     private static AbstractAction init(AbstractAction action, String name,
