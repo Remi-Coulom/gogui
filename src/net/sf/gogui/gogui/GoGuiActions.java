@@ -44,6 +44,13 @@ public class GoGuiActions
              "Attach Program...", "Attach Go program to current game",
              KeyEvent.VK_A, null);
 
+    public final AbstractAction m_actionBackToMainVariation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionBackToMainVariation(); } },
+             "Back to Main Variation", "Go back to main variation",
+             KeyEvent.VK_M);
+
     public final AbstractAction m_actionBackward =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -148,6 +155,19 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionComputerColor(false, true); } },
              "White", "Make computer play White");
+
+    public final AbstractAction m_actionGoto =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionGoto(); } },
+             "Go to Move...", "Go to position after a move number",
+             KeyEvent.VK_G);
+
+    public final AbstractAction m_actionGotoVariation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionGotoVariation(); } },
+             "Go to Variation...", "Go to beginning of a variation");
 
     public final AbstractAction m_actionDeleteSideVariations =
         init(new AbstractAction() {
@@ -331,6 +351,13 @@ public class GoGuiActions
              "Make Main Variation",
              "Make current variation the main variation");
 
+    public final AbstractAction m_actionNextEarlierVariation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionNextEarlierVariation(); } },
+             "Next Earlier Variation", "Go to next earlier variation",
+             KeyEvent.VK_DOWN, getShortcut() | ActionEvent.SHIFT_MASK);
+
     public final AbstractAction m_actionNextVariation =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -372,6 +399,13 @@ public class GoGuiActions
              "Make computer play a move (do not change computer color)",
              KeyEvent.VK_F5,
              getFunctionKeyShortcut() | ActionEvent.SHIFT_MASK);
+
+    public final AbstractAction m_actionPreviousEarlierVariation =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionPreviousEarlierVariation(); } },
+             "Previous Earlier Variation", "Go to previous earlier variation",
+             KeyEvent.VK_UP, getShortcut() | ActionEvent.SHIFT_MASK);
 
     public final AbstractAction m_actionPreviousVariation =
         init(new AbstractAction() {
@@ -457,6 +491,10 @@ public class GoGuiActions
         boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
         boolean hasPreviousVariation =
             (NodeUtil.getPreviousVariation(node) != null);
+        boolean hasNextEarlierVariation =
+            (NodeUtil.getNextEarlierVariation(node) != null);
+        boolean hasPrevEarlierVariation =
+            (NodeUtil.getPreviousEarlierVariation(node) != null);
         boolean isInMain = NodeUtil.isInMainVariation(node);
         boolean treeHasVariations = game.getTree().hasVariations();
         boolean isProgramAttached = m_goGui.isProgramAttached();
@@ -465,6 +503,7 @@ public class GoGuiActions
         boolean hasPattern = (m_goGui.getPattern() != null);
         ConstClock clock = game.getClock();
         int boardSize = game.getSize();
+        m_actionBackToMainVariation.setEnabled(! isInMain);
         m_actionBackward.setEnabled(hasFather);
         m_actionBackwardTen.setEnabled(hasFather);
         m_actionBeginning.setEnabled(hasFather);
@@ -493,6 +532,8 @@ public class GoGuiActions
         m_actionFindNext.setEnabled(hasPattern);
         m_actionForward.setEnabled(hasChildren);
         m_actionForwardTen.setEnabled(hasChildren);
+        m_actionGoto.setEnabled(hasFather || hasChildren);
+        m_actionGotoVariation.setEnabled(hasFather || hasChildren);
         setSelected(m_actionHandicapNone, handicap == 0);
         setSelected(m_actionHandicap2, handicap == 2);
         setSelected(m_actionHandicap3, handicap == 3);
@@ -505,10 +546,13 @@ public class GoGuiActions
         m_actionInterrupt.setEnabled(isProgramAttached);
         m_actionKeepOnlyPosition.setEnabled(hasFather || hasChildren);
         m_actionMakeMainVariation.setEnabled(! isInMain);
+        m_actionNextEarlierVariation.setEnabled(hasNextEarlierVariation);
         m_actionNextVariation.setEnabled(hasNextVariation);
         m_actionPlay.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
-        m_actionSetup.setEnabled(setupMode);
+        m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
+        m_actionSetupBlack.setEnabled(setupMode);
+        m_actionSetupWhite.setEnabled(setupMode);
         setSelected(m_actionSetupBlack, setupColor == GoColor.BLACK);
         setSelected(m_actionSetupWhite, setupColor == GoColor.WHITE);
         m_actionTruncate.setEnabled(hasFather);

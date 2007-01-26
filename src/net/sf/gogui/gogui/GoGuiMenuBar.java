@@ -87,11 +87,6 @@ public class GoGuiMenuBar
         m_recentGtp.updateEnabled();
     }
 
-    public void enableCleanup(boolean enable)
-    {
-        m_itemCleanup.setEnabled(enable);
-    }
-
     public boolean getAutoNumber()
     {
         return m_itemAutoNumber.isSelected();        
@@ -100,11 +95,6 @@ public class GoGuiMenuBar
     public boolean getTimeStamp()
     {
         return m_itemTimeStamp.isSelected();        
-    }
-
-    public boolean getCleanup()
-    {
-        return m_itemCleanup.isSelected();
     }
 
     public boolean getCommandCompletion()
@@ -229,11 +219,6 @@ public class GoGuiMenuBar
         m_itemBeepAfterMove.setSelected(enable);
     }
 
-    public void setCleanup(boolean enable)
-    {
-        m_itemCleanup.setSelected(enable);
-    }
-
     public void setCommandCompletion(boolean enable)
     {
         m_itemCommandCompletion.setSelected(enable);
@@ -351,30 +336,6 @@ public class GoGuiMenuBar
         m_itemShowVariations.setSelected(enable);
     }
 
-    /** Enable/disable items according to current position. */
-    public void update(ConstGameTree gameTree, ConstNode node)
-    {
-        ConstNode father = node.getFatherConst();
-        boolean hasFather = (father != null);
-        boolean hasChildren = (node.getNumberChildren() > 0);
-        boolean hasNextVariation = (NodeUtil.getNextVariation(node) != null);
-        boolean hasNextEarlierVariation =
-            (NodeUtil.getNextEarlierVariation(node) != null);
-        boolean hasPrevEarlierVariation =
-            (NodeUtil.getPreviousEarlierVariation(node) != null);
-        boolean hasPrevVariation =
-            (NodeUtil.getPreviousVariation(node) != null);
-        boolean isInMain = NodeUtil.isInMainVariation(node);
-        boolean treeHasVariations = gameTree.hasVariations();
-        m_itemGoto.setEnabled(hasFather || hasChildren);
-        m_itemGotoVar.setEnabled(hasFather || hasChildren);
-        m_itemNextEarlierVariation.setEnabled(hasNextEarlierVariation);
-        m_itemPreviousEarlierBackward.setEnabled(hasPrevEarlierVariation);
-        m_itemBackToMainVar.setEnabled(! isInMain);
-        if (! NodeUtil.isInCleanup(node))
-            setCleanup(false);
-    }
-
     private boolean m_findNextEnabled;
 
     private boolean m_isComputerDisabled;
@@ -387,8 +348,6 @@ public class GoGuiMenuBar
     private JCheckBoxMenuItem m_itemAutoNumber;
 
     private JCheckBoxMenuItem m_itemBeepAfterMove;
-
-    private JCheckBoxMenuItem m_itemCleanup;
 
     private JCheckBoxMenuItem m_itemCommandCompletion;
 
@@ -424,8 +383,6 @@ public class GoGuiMenuBar
 
     private final JMenuBar m_menuBar;
 
-    private JMenuItem m_itemBackToMainVar;
-
     private JMenuItem[] m_itemBoardSize;
 
     private JMenuItem m_itemBoardSizeOther;
@@ -451,14 +408,6 @@ public class GoGuiMenuBar
     private JMenuItem m_itemGameTreeSmall;
 
     private JMenuItem m_itemGameTreeTiny;
-
-    private JMenuItem m_itemGoto;
-
-    private JMenuItem m_itemGotoVar;
-
-    private JMenuItem m_itemNextEarlierVariation;
-
-    private JMenuItem m_itemPreviousEarlierBackward;
 
     private JMenuItem m_itemShowInfoPanel;
 
@@ -686,8 +635,6 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionPlay, KeyEvent.VK_L);
         menu.addItem(actions.m_actionPlaySingleMove, KeyEvent.VK_S);
         menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_T);
-        m_itemCleanup = new JCheckBoxMenuItem("Cleanup");
-        m_itemCleanup.setMnemonic(KeyEvent.VK_E);
         menu.addSeparator();
         menu.addItem(actions.m_actionPass, KeyEvent.VK_P);
         menu.add(createClockMenu(actions));
@@ -705,27 +652,14 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionForward, KeyEvent.VK_F);
         menu.addItem(actions.m_actionForwardTen, KeyEvent.VK_R);
         menu.addItem(actions.m_actionEnd, KeyEvent.VK_E);
-        m_itemGoto =
-            menu.addItem("Go to Move...", KeyEvent.VK_O, KeyEvent.VK_G,
-                         SHORTCUT, "goto");
+        menu.addItem(actions.m_actionGoto, KeyEvent.VK_O);
         menu.addSeparator();
         menu.addItem(actions.m_actionNextVariation, KeyEvent.VK_N);
         menu.addItem(actions.m_actionPreviousVariation, KeyEvent.VK_P);
-        m_itemNextEarlierVariation =
-            menu.addItem("Next Earlier Variation", KeyEvent.VK_X,
-                         KeyEvent.VK_DOWN, SHORTCUT | shiftMask,
-                         "next-earlier-variation");
-        m_itemPreviousEarlierBackward =
-            menu.addItem("Previous Earlier Variation", KeyEvent.VK_L,
-                         KeyEvent.VK_UP, SHORTCUT | shiftMask,
-                         "previous-earlier-variation");
-        m_itemBackToMainVar =
-            menu.addItem("Back to Main Variation", KeyEvent.VK_M,
-                         KeyEvent.VK_M, SHORTCUT,
-                         "back-to-main-variation");
-        m_itemGotoVar =
-            menu.addItem("Go to Variation...",
-                         KeyEvent.VK_V, "goto-variation");
+        menu.addItem(actions.m_actionNextEarlierVariation, KeyEvent.VK_X);
+        menu.addItem(actions.m_actionPreviousEarlierVariation, KeyEvent.VK_L);
+        menu.addItem(actions.m_actionBackToMainVariation, KeyEvent.VK_M);
+        menu.addItem(actions.m_actionGotoVariation, KeyEvent.VK_V);
         return menu;
     }
 

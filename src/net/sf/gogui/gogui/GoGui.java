@@ -285,8 +285,6 @@ public class GoGui
             cbAnalyze();
         else if (command.equals("auto-number"))
             cbAutoNumber();
-        else if (command.equals("back-to-main-variation"))
-            cbBackToMainVar();
         else if (command.equals("beep-after-move"))
             cbBeepAfterMove();
         else if (command.startsWith("bookmark-"))
@@ -295,10 +293,6 @@ public class GoGui
             cbCommandCompletion();
         else if (command.equals("comment-font-fixed"))
             cbCommentFontFixed();
-        else if (command.equals("goto"))
-            cbGoto();
-        else if (command.equals("goto-variation"))
-            cbGotoVariation();
         else if (command.equals("gametree-move"))
             cbGameTreeLabels(GameTreePanel.LABEL_MOVE);
         else if (command.equals("gametree-number"))
@@ -321,10 +315,6 @@ public class GoGui
             cbGtpShellSaveCommands();
         else if (command.equals("gtpshell-send-file"))
             cbGtpShellSendFile();
-        else if (command.equals("next-earlier-variation"))
-            cbNextEarlierVariation();
-        else if (command.equals("previous-earlier-variation"))
-            cbPreviousEarlierVariation();
         else if (command.equals("show-cursor"))
             cbShowCursor();
         else if (command.equals("show-grid"))
@@ -391,6 +381,14 @@ public class GoGui
         updateViews();
     }
 
+    public void actionBackToMainVariation()
+    {
+        if (! checkSpecialMode())
+            return;
+        ConstNode node = NodeUtil.getBackToMainVariation(getCurrentNode());
+        actionGotoNode(node);
+    }
+
     public void actionBackward(int n)
     {
         if (! checkSpecialMode())
@@ -414,7 +412,6 @@ public class GoGui
         saveSession();
         newGame(boardSize, false);
         m_gameInfo.updateTimeFromClock(getClock());
-        updateMenuBar();
         m_prefs.putInt("boardsize", boardSize);
     }
 
@@ -427,7 +424,6 @@ public class GoGui
             return;
         saveSession();
         newGame(size, false);
-        updateMenuBar();
         m_prefs.putInt("boardsize", size);
         m_gameInfo.updateTimeFromClock(getClock());
     }
@@ -631,7 +627,7 @@ public class GoGui
         }
         else
         {
-            cbGotoNode(node);
+            actionGotoNode(node);
             m_comment.markAll(m_pattern);
         }
     }
@@ -674,6 +670,33 @@ public class GoGui
         m_timeSettings = info.getTimeSettings();
         setTitle();
         updateViews();
+    }
+
+    public void actionGoto()
+    {
+        if (! checkSpecialMode())
+            return;
+        ConstNode node = MoveNumberDialog.show(this, getCurrentNode());
+        if (node == null)
+            return;
+        actionGotoNode(node);
+    }
+
+    public void actionGotoNode(ConstNode node)
+    {
+        gotoNode(node);
+        boardChangedBegin(false, false);
+    }
+
+    public void actionGotoVariation()
+    {
+        if (! checkSpecialMode())
+            return;
+        ConstNode node = GotoVariationDialog.show(this, getTree(),
+                                                  getCurrentNode());
+        if (node == null)
+            return;
+        actionGotoNode(node);
     }
 
     public void actionHandicap(int handicap)
@@ -762,13 +785,22 @@ public class GoGui
         newGame(getBoardSize(), true);
     }
 
+    public void actionNextEarlierVariation()
+    {
+        if (! checkSpecialMode())
+            return;
+        ConstNode node = NodeUtil.getNextEarlierVariation(getCurrentNode());
+        if (node != null)
+            actionGotoNode(node);
+    }
+
     public void actionNextVariation()
     {
         if (! checkSpecialMode())
             return;
         ConstNode node = NodeUtil.getNextVariation(getCurrentNode());
         if (node != null)
-            cbGotoNode(node);
+            actionGotoNode(node);
     }
 
     public void actionOpen()
@@ -819,13 +851,23 @@ public class GoGui
         m_game.startClock();
     }
 
+    public void actionPreviousEarlierVariation()
+    {
+        if (! checkSpecialMode())
+            return;
+        ConstNode node =
+            NodeUtil.getPreviousEarlierVariation(getCurrentNode());
+        if (node != null)
+            actionGotoNode(node);
+    }
+
     public void actionPreviousVariation()
     {
         if (! checkSpecialMode())
             return;
         ConstNode node = NodeUtil.getPreviousVariation(getCurrentNode());
         if (node != null)
-            cbGotoNode(node);
+            actionGotoNode(node);
     }
 
     public void actionPrint()
@@ -1019,12 +1061,6 @@ public class GoGui
                            ! commandCompletion);
     }
 
-    public void cbGotoNode(ConstNode node)
-    {
-        gotoNode(node);
-        boardChangedBegin(false, false);
-    }
-
     public void cbGtpShellSave()
     {
         if (m_gtpShell == null)
@@ -1048,21 +1084,6 @@ public class GoGui
             return;
         sendGtpFile(file);
         m_menuBar.addRecentGtp(file);
-    }
-
-    public void cbNextEarlierVariation()
-    {
-        ConstNode node = NodeUtil.getNextEarlierVariation(getCurrentNode());
-        if (node != null)
-            cbGotoNode(node);
-    }
-
-    public void cbPreviousEarlierVariation()
-    {
-        ConstNode node =
-            NodeUtil.getPreviousEarlierVariation(getCurrentNode());
-        if (node != null)
-            cbGotoNode(node);
     }
 
     public void cbShowShell()
@@ -1760,10 +1781,6 @@ public class GoGui
         catch (GtpError e)
         {
         }        
-        boolean cleanupSupported
-            = m_gtp.isCommandSupported("kgs-genmove_cleanup")
-            || m_gtp.isCommandSupported("genmove_cleanup");
-        m_menuBar.enableCleanup(cleanupSupported);
         m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
         restoreSize(m_gtpShell, "shell");
         m_gtpShell.setProgramName(m_name);
@@ -1799,7 +1816,6 @@ public class GoGui
         updateFromGoBoard();
         updateGameInfo(gameTreeChanged);
         updateViews();
-        updateMenuBar();
         if (m_gtp != null
             && ! isOutOfSync()
             && m_analyzeCommand != null
@@ -1855,12 +1871,6 @@ public class GoGui
     {
         m_beepAfterMove = m_menuBar.getBeepAfterMove();
         m_prefs.putBoolean("beep-after-move", m_beepAfterMove);
-    }
-
-    private void cbBackToMainVar()
-    {
-        ConstNode node = NodeUtil.getBackToMainVariation(getCurrentNode());
-        cbGotoNode(node);
     }
 
     private void cbBookmark(String number)
@@ -1951,23 +1961,6 @@ public class GoGui
         }
     }
 
-    private void cbGoto()
-    {
-        ConstNode node = MoveNumberDialog.show(this, getCurrentNode());
-        if (node == null)
-            return;
-        cbGotoNode(node);
-    }
-
-    private void cbGotoVariation()
-    {
-        ConstNode node = GotoVariationDialog.show(this, getTree(),
-                                                  getCurrentNode());
-        if (node == null)
-            return;
-        cbGotoNode(node);
-    }
-
     private void cbScoreContinue()
     {
         boolean success = endLengthyCommand();
@@ -2043,8 +2036,6 @@ public class GoGui
             return;
         int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
         boolean bothPassed = (moveNumber >= 2 && getBoard().bothPassed());
-        if (bothPassed)
-            m_menuBar.setCleanup(true);
         boolean gameFinished = (bothPassed || m_resigned);
         if (isComputerBoth())
         {
@@ -2231,7 +2222,6 @@ public class GoGui
                     gameTreeChanged = false;
                 }
             }
-            updateMenuBar();
             boolean doCheckComputerMove
                 = (! m_isSingleMove
                    && ! (isComputerBoth() && m_interruptComputerBoth));
@@ -2419,14 +2409,10 @@ public class GoGui
     {
         GoColor toMove = getToMove();
         String command;
-        if (m_menuBar.getCleanup()
-            && (m_gtp.isCommandSupported("kgs-genmove_cleanup")
-                || m_gtp.isCommandSupported("genmove_cleanup")))
+        if (NodeUtil.isInCleanup(getCurrentNode())
+            && m_gtp.isCommandSupported("kgs-genmove_cleanup"))
         {
-            if (m_gtp.isCommandSupported("genmove_cleanup"))
-                command = "genmove_cleanup";
-            else
-                command = "kgs-genmove_cleanup";
+            command = "kgs-genmove_cleanup";
             if (toMove == GoColor.BLACK)
                 command += " b";
             else if (toMove == GoColor.WHITE)
@@ -2856,7 +2842,6 @@ public class GoGui
         }
         if (startClock)
             m_game.startClock();
-        updateMenuBar();
         boardChangedBegin(true, true);
     }
 
@@ -3389,20 +3374,10 @@ public class GoGui
         GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
     }
 
-    private void updateMenuBar()
-    {
-        m_menuBar.update(getTree(), getCurrentNode());
-    }
-
     private void updateModified()
     {
-        // Set Swing property on root window, good for e.g. Mac close
-        // buttons (See Mac QA1146)
-        Object object = getRootPane().getClientProperty("windowModified");
-        boolean modified = (object != null && ! Boolean.FALSE.equals(object));
-        if (isModified() != modified)
-            getRootPane().putClientProperty("windowModified",
-                                            Boolean.valueOf(modified));
+        getRootPane().putClientProperty("windowModified",
+                                        Boolean.valueOf(isModified()));
         setTitle();
     }    
 }

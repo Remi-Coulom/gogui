@@ -82,11 +82,6 @@ The following other commands are used by GoGui:
 </listitem>
 <listitem>
 <simpara>
-<command>genmove_cleanup</command>
-</simpara>
-</listitem>
-<listitem>
-<simpara>
 <command>help</command>
 (<command>list_commands</command>)
 </simpara>

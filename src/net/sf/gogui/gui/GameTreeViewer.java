@@ -35,13 +35,13 @@ public class GameTreeViewer
 
         void actionForward(int n);
 
-        void cbGotoNode(ConstNode node);
+        void actionGotoNode(ConstNode node);
 
-        void cbNextEarlierVariation();
+        void actionNextEarlierVariation();
 
         void actionNextVariation();
 
-        void cbPreviousEarlierVariation();
+        void actionPreviousEarlierVariation();
 
         void actionPreviousVariation();
 
@@ -87,11 +87,11 @@ public class GameTreeViewer
                     else if (c == KeyEvent.VK_DOWN && ! shift)
                         m_listener.actionNextVariation();
                     else if (c == KeyEvent.VK_DOWN && shift)
-                        m_listener.cbNextEarlierVariation();
+                        m_listener.actionNextEarlierVariation();
                     else if (c == KeyEvent.VK_UP && ! shift)
                         m_listener.actionPreviousVariation();
                     else if (c == KeyEvent.VK_UP && shift)
-                        m_listener.cbPreviousEarlierVariation();
+                        m_listener.actionPreviousEarlierVariation();
                     else if (c == KeyEvent.VK_HOME && ! shift)
                         m_listener.actionBeginning();
                     else if (c == KeyEvent.VK_END && ! shift)

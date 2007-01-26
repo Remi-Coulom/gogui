@@ -309,25 +309,6 @@ Make a pass move.
 </listitem>
 </varlistentry>
 
-<varlistentry id="cleanup">
-<term><guimenuitem>Cleanup</guimenuitem></term>
-<listitem>
-<para>
-Generate cleanup moves.
-<indexterm>
-<primary>Cleanup Moves</primary>
-</indexterm>
-Cleanup moves are moves played after the game has ended with two passes
-in a row.
-They should not pass before all dead stones are captured.
-This item is only enabled, if the program supports the
-<command>kgs-genmove_cleanup</command> or <command>genmove_cleanup</command>
-command.
-It will be automatically set after two pass moves have been played.
-</para>
-</listitem>
-</varlistentry>
-
 <varlistentry id="score">
 <term><guimenuitem>Score</guimenuitem></term>
 <listitem>

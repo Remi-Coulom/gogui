@@ -11,8 +11,15 @@
 <itemizedlist>
 <listitem>
 <simpara>
-Remove menu Configure Analyze / Only Supported Commands; this is the default
-and only behaviour now
+Remove menu item Configure Analyze / Only Supported Commands; this is the
+default and only behaviour now
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Remove menu item Game / Cleanup; GoGui will now always use kgs-genmove_cleanup
+commands if play is continued after game has ended and program supports
+kgs-genmove_cleanup
 </simpara>
 </listitem>
 <listitem>
