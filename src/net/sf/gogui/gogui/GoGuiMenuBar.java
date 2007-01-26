@@ -109,26 +109,6 @@ public class GoGuiMenuBar
         return m_itemCommandCompletion.isSelected();
     }
 
-    public int getGameTreeLabels()
-    {
-        if (m_itemGameTreeNumber.isSelected())
-            return GameTreePanel.LABEL_NUMBER;
-        if (m_itemGameTreeMove.isSelected())
-            return GameTreePanel.LABEL_MOVE;
-        return GameTreePanel.LABEL_NONE;
-    }
-
-    public int getGameTreeSize()
-    {
-        if (m_itemGameTreeLarge.isSelected())
-            return GameTreePanel.SIZE_LARGE;
-        if (m_itemGameTreeSmall.isSelected())
-            return GameTreePanel.SIZE_SMALL;
-        if (m_itemGameTreeTiny.isSelected())
-            return GameTreePanel.SIZE_TINY;
-        return GameTreePanel.SIZE_NORMAL;
-    }
-
     public JMenuBar getMenuBar()
     {
         return m_menuBar;
@@ -174,44 +154,6 @@ public class GoGuiMenuBar
     public void setCommandCompletion(boolean enable)
     {
         m_itemCommandCompletion.setSelected(enable);
-    }
-    public void setGameTreeLabels(int mode)
-    {
-        switch (mode)
-        {
-        case GameTreePanel.LABEL_NUMBER:
-            m_itemGameTreeNumber.setSelected(true);
-            break;
-        case GameTreePanel.LABEL_MOVE:
-            m_itemGameTreeMove.setSelected(true);
-            break;
-        case GameTreePanel.LABEL_NONE:
-            m_itemGameTreeNone.setSelected(true);
-            break;
-        default:
-            break;
-        }
-    }
-
-    public void setGameTreeSize(int mode)
-    {
-        switch (mode)
-        {
-        case GameTreePanel.SIZE_LARGE:
-            m_itemGameTreeLarge.setSelected(true);
-            break;
-        case GameTreePanel.SIZE_NORMAL:
-            m_itemGameTreeNormal.setSelected(true);
-            break;
-        case GameTreePanel.SIZE_SMALL:
-            m_itemGameTreeSmall.setSelected(true);
-            break;
-        case GameTreePanel.SIZE_TINY:
-            m_itemGameTreeTiny.setSelected(true);
-            break;
-        default:
-            break;
-        }
     }
 
     /** Is it a single menu bar or does a tool bar exist? */
@@ -270,20 +212,6 @@ public class GoGuiMenuBar
     private final JMenuChecked m_menuSettings;
 
     private final JMenuBar m_menuBar;
-
-    private JMenuItem m_itemGameTreeLarge;
-
-    private JMenuItem m_itemGameTreeMove;
-
-    private JMenuItem m_itemGameTreeNormal;
-
-    private JMenuItem m_itemGameTreeNone;
-
-    private JMenuItem m_itemGameTreeNumber;
-
-    private JMenuItem m_itemGameTreeSmall;
-
-    private JMenuItem m_itemGameTreeTiny;
 
     private JSeparator m_bookmarksSeparator;
 
@@ -403,30 +331,23 @@ public class GoGuiMenuBar
         menu.setMnemonic(KeyEvent.VK_E);
         JMenuChecked menuLabel = createMenu("Labels", KeyEvent.VK_L);
         ButtonGroup group = new ButtonGroup();
-        m_itemGameTreeNumber =
-            menuLabel.addRadioItem(group, "Move Number", KeyEvent.VK_N,
-                                   "gametree-number");
-        m_itemGameTreeMove =
-            menuLabel.addRadioItem(group, "Move", KeyEvent.VK_M,
-                                   "gametree-move");
-        m_itemGameTreeNone =
-            menuLabel.addRadioItem(group, "None", KeyEvent.VK_O,
-                                   "gametree-none");
+        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNumber,
+                               KeyEvent.VK_N);
+        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsMove,
+                               KeyEvent.VK_M);
+        menuLabel.addRadioItem(group, actions.m_actionTreeLabelsNone,
+                               KeyEvent.VK_O);
         menu.add(menuLabel);
         JMenuChecked menuSize = createMenu("Size", KeyEvent.VK_S);
         group = new ButtonGroup();
-        m_itemGameTreeLarge =
-            menuSize.addRadioItem(group, "Large", KeyEvent.VK_L,
-                                  "gametree-large");
-        m_itemGameTreeNormal =
-            menuSize.addRadioItem(group, "Normal", KeyEvent.VK_N,
-                                  "gametree-normal");
-        m_itemGameTreeSmall =
-            menuSize.addRadioItem(group, "Small", KeyEvent.VK_S,
-                                  "gametree-small");
-        m_itemGameTreeTiny =
-            menuSize.addRadioItem(group, "Tiny", KeyEvent.VK_T,
-                                  "gametree-tiny");
+        menuSize.addRadioItem(group, actions.m_actionTreeSizeLarge,
+                              KeyEvent.VK_L);
+        menuSize.addRadioItem(group, actions.m_actionTreeSizeNormal,
+                              KeyEvent.VK_N);
+        menuSize.addRadioItem(group, actions.m_actionTreeSizeSmall,
+                              KeyEvent.VK_S);
+        menuSize.addRadioItem(group, actions.m_actionTreeSizeTiny,
+                              KeyEvent.VK_T);
         menu.add(menuSize);
         m_itemShowSubtreeSizes = new JCheckBoxMenuItem("Show Subtree Sizes");
         menu.addItem(m_itemShowSubtreeSizes, KeyEvent.VK_S,

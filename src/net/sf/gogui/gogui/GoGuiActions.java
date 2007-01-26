@@ -18,6 +18,7 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.ConstGuiBoard;
+import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.Platform;
 
@@ -560,6 +561,48 @@ public class GoGuiActions
              "Show Variations",
              "Label children moves with letters on board");
 
+    public final AbstractAction m_actionTreeLabelsNumber =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTreeLabels(GameTreePanel.LABEL_NUMBER); } },
+             "Move Number", null);
+
+    public final AbstractAction m_actionTreeLabelsMove =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTreeLabels(GameTreePanel.LABEL_MOVE); } },
+             "Move", null);
+
+    public final AbstractAction m_actionTreeLabelsNone =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTreeLabels(GameTreePanel.LABEL_NONE); } },
+             "None", null);
+
+    public final AbstractAction m_actionTreeSizeLarge =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTreeSize(GameTreePanel.SIZE_LARGE); } },
+             "Large", null);
+
+    public final AbstractAction m_actionTreeSizeNormal =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTreeSize(GameTreePanel.SIZE_NORMAL); } },
+             "Normal", null);
+
+    public final AbstractAction m_actionTreeSizeSmall =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTreeSize(GameTreePanel.SIZE_SMALL); } },
+             "Small", null);
+
+    public final AbstractAction m_actionTreeSizeTiny =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionTreeSize(GameTreePanel.SIZE_TINY); } },
+             "Tiny", null);
+
     public final AbstractAction m_actionTruncate =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -679,6 +722,20 @@ public class GoGuiActions
         setSelected(m_actionToggleShowToolbar, m_goGui.isToolbarShown());
         setSelected(m_actionToggleShowTree, m_goGui.isTreeShown());
         setSelected(m_actionToggleShowVariations, m_goGui.getShowVariations());
+        setSelected(m_actionTreeLabelsNumber,
+                    m_goGui.getTreeLabels() == GameTreePanel.LABEL_NUMBER);
+        setSelected(m_actionTreeLabelsMove,
+                    m_goGui.getTreeLabels() == GameTreePanel.LABEL_MOVE);
+        setSelected(m_actionTreeLabelsNone,
+                    m_goGui.getTreeLabels() == GameTreePanel.LABEL_NONE);
+        setSelected(m_actionTreeSizeLarge,
+                    m_goGui.getTreeSize() == GameTreePanel.SIZE_LARGE);
+        setSelected(m_actionTreeSizeNormal,
+                    m_goGui.getTreeSize() == GameTreePanel.SIZE_NORMAL);
+        setSelected(m_actionTreeSizeSmall,
+                    m_goGui.getTreeSize() == GameTreePanel.SIZE_SMALL);
+        setSelected(m_actionTreeSizeTiny,
+                    m_goGui.getTreeSize() == GameTreePanel.SIZE_TINY);
         m_actionTruncate.setEnabled(hasFather);
         m_actionTruncateChildren.setEnabled(hasChildren);
         updateFile(file, isModified);

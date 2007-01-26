@@ -208,10 +208,10 @@ public class GoGui
             };
         m_menuBar = new GoGuiMenuBar(this, m_actions, recentCallback,
                                      recentGtp, this);
-        m_menuBar.setGameTreeLabels(m_prefs.getInt("gametree-labels",
-                                                 GameTreePanel.LABEL_NUMBER));
-        m_menuBar.setGameTreeSize(m_prefs.getInt("gametree-size",
-                                                 GameTreePanel.SIZE_NORMAL));
+        m_treeLabels = m_prefs.getInt("gametree-labels",
+                                      GameTreePanel.LABEL_NUMBER);
+        m_treeSize = m_prefs.getInt("gametree-size",
+                                    GameTreePanel.SIZE_NORMAL);
         boolean showSubtreeSizes =
             m_prefs.getBoolean("gametree-show-subtree-sizes", false);
         m_menuBar.setShowSubtreeSizes(showSubtreeSizes);
@@ -259,20 +259,6 @@ public class GoGui
             cbAutoNumber();
         else if (command.equals("command-completion"))
             cbCommandCompletion();
-        else if (command.equals("gametree-move"))
-            cbGameTreeLabels(GameTreePanel.LABEL_MOVE);
-        else if (command.equals("gametree-number"))
-            cbGameTreeLabels(GameTreePanel.LABEL_NUMBER);
-        else if (command.equals("gametree-none"))
-            cbGameTreeLabels(GameTreePanel.LABEL_NONE);
-        else if (command.equals("gametree-large"))
-            cbGameTreeSize(GameTreePanel.SIZE_LARGE);
-        else if (command.equals("gametree-normal"))
-            cbGameTreeSize(GameTreePanel.SIZE_NORMAL);
-        else if (command.equals("gametree-small"))
-            cbGameTreeSize(GameTreePanel.SIZE_SMALL);
-        else if (command.equals("gametree-tiny"))
-            cbGameTreeSize(GameTreePanel.SIZE_TINY);
         else if (command.equals("gametree-show-subtree-sizes"))
             cbGameTreeShowSubtreeSizes();
         else if (command.equals("timestamp"))
@@ -1110,8 +1096,8 @@ public class GoGui
         if (m_gameTreeViewer == null)
         {
             m_gameTreeViewer = new GameTreeViewer(this, this);
-            m_gameTreeViewer.setLabelMode(m_menuBar.getGameTreeLabels());
-            m_gameTreeViewer.setSizeMode(m_menuBar.getGameTreeSize());
+            m_gameTreeViewer.setLabelMode(m_treeLabels);
+            m_gameTreeViewer.setSizeMode(m_treeSize);
             boolean showSubtreeSizes = m_menuBar.getShowSubtreeSizes();
             m_gameTreeViewer.setShowSubtreeSizes(showSubtreeSizes);
             restoreSize(m_gameTreeViewer, "tree");
@@ -1129,6 +1115,30 @@ public class GoGui
         m_showVariations = ! m_showVariations;
         m_prefs.putBoolean("show-variations", m_showVariations);
         resetBoard();
+        updateViews();
+    }
+
+    public void actionTreeLabels(int mode)
+    {
+        m_treeLabels = mode;
+        m_prefs.putInt("gametree-labels", mode);
+        if (m_gameTreeViewer != null)
+        {
+            m_gameTreeViewer.setLabelMode(mode);
+            updateGameTree(true);
+        }
+        updateViews();
+    }
+
+    public void actionTreeSize(int mode)
+    {
+        m_treeSize = mode;
+        m_prefs.putInt("gametree-size", mode);
+        if (m_gameTreeViewer != null)
+        {
+            m_gameTreeViewer.setSizeMode(mode);
+            updateGameTree(true);
+        }
         updateViews();
     }
 
@@ -1223,6 +1233,16 @@ public class GoGui
     public boolean getShowVariations()
     {
         return m_showVariations;
+    }
+
+    public int getTreeLabels()
+    {
+        return m_treeLabels;
+    }
+
+    public int getTreeSize()
+    {
+        return m_treeSize;
     }
 
     public boolean isAnalyzeDialogShown()
@@ -1597,6 +1617,10 @@ public class GoGui
 
     private final int m_move;
 
+    private int m_treeLabels;
+
+    private int m_treeSize;
+
     /** Serial version to suppress compiler warning.
         Contains a marker comment for use with serialver.sourceforge.net
     */
@@ -1936,26 +1960,6 @@ public class GoGui
         boolean enable = m_menuBar.getAutoNumber();
         m_gtp.setAutoNumber(enable);
         m_prefs.putBoolean("gtpshell-autonumber", enable);
-    }
-
-    private void cbGameTreeLabels(int mode)
-    {
-        m_prefs.putInt("gametree-labels", mode);
-        if (m_gameTreeViewer != null)
-        {
-            m_gameTreeViewer.setLabelMode(mode);
-            updateGameTree(true);
-        }
-    }
-
-    private void cbGameTreeSize(int mode)
-    {
-        m_prefs.putInt("gametree-size", mode);
-        if (m_gameTreeViewer != null)
-        {
-            m_gameTreeViewer.setSizeMode(mode);
-            updateGameTree(true);
-        }
     }
 
     private void cbGameTreeShowSubtreeSizes()
