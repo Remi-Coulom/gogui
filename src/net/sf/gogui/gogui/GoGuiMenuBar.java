@@ -109,11 +109,6 @@ public class GoGuiMenuBar
         return m_itemCommandCompletion.isSelected();
     }
 
-    public boolean getCommentFontFixed()
-    {
-        return m_itemCommentFontFixed.isSelected();
-    }
-
     public int getGameTreeLabels()
     {
         if (m_itemGameTreeNumber.isSelected())
@@ -180,11 +175,6 @@ public class GoGuiMenuBar
     {
         m_itemCommandCompletion.setSelected(enable);
     }
-    public void setCommentFontFixed(boolean enable)
-    {
-        m_itemCommentFontFixed.setSelected(enable);
-    }
-
     public void setGameTreeLabels(int mode)
     {
         switch (mode)
@@ -280,18 +270,6 @@ public class GoGuiMenuBar
     private final JMenuChecked m_menuSettings;
 
     private final JMenuBar m_menuBar;
-
-    private JMenuItem[] m_itemBoardSize;
-
-    private JMenuItem m_itemBoardSizeOther;
-
-    private JMenuItem m_itemClockHalt;
-
-    private JMenuItem m_itemClockRestore;
-
-    private JMenuItem m_itemClockResume;
-
-    private JMenuItem m_itemCommentFontFixed;
 
     private JMenuItem m_itemGameTreeLarge;
 
@@ -399,10 +377,9 @@ public class GoGuiMenuBar
         GoGuiCheckBoxMenuItem itemBeepAfterMove =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleBeepAfterMove);
         menu.addItem(itemBeepAfterMove, KeyEvent.VK_B);
-        m_itemCommentFontFixed =
-            new JCheckBoxMenuItem("Fixed Size Comment Font");
-        menu.addItem(m_itemCommentFontFixed, KeyEvent.VK_F,
-                     "comment-font-fixed");
+        GoGuiCheckBoxMenuItem itemToggleCommentMonoFont =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleCommentMonoFont);
+        menu.addItem(itemToggleCommentMonoFont, KeyEvent.VK_F);
         return menu;
     }
 

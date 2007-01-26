@@ -60,11 +60,17 @@ public class Comment
         m_textPane.get().addCaretListener(caretListener);
         setViewportView(m_textPane.get());
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        setMonoFont(false);
     }
 
     public void changedUpdate(DocumentEvent e) 
     {
         fireChangedEvent();
+    }
+
+    public boolean getMonoFont()
+    {
+        return m_monoFont;
     }
 
     public boolean getScrollableTracksViewportWidth()
@@ -115,12 +121,13 @@ public class Comment
     }
 
     /** Enable/disable fixed size font. */
-    public void setFontFixed(boolean fixed)
+    public void setMonoFont(boolean enable)
     {
-        if (fixed)
+        if (enable)
             GuiUtil.setMonospacedFont(m_textPane.get());
         else
             m_textPane.get().setFont(UIManager.getFont("TextArea.font"));
+        m_monoFont = enable;
         m_textPane.get().repaint();
     }
 
@@ -136,12 +143,14 @@ public class Comment
         m_duringSetText = false;
     }
 
+    private boolean m_monoFont;
+
     private boolean m_duringSetText;
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
-    private static final long serialVersionUID = 0L; // SUID
+    private static final long serialVersionUID = 0L; // SUID    
 
     private final GuiTextPane m_textPane;
 

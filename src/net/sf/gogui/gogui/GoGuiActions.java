@@ -495,6 +495,12 @@ public class GoGuiActions
                     m_goGui.actionToggleBeepAfterMove(); } },
              "Beep After Move", "Beep after computer played a move");
 
+    public final AbstractAction m_actionToggleCommentMonoFont =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleCommentMonoFont(); } },
+             "Monospace Comment Font", "Use fixed width font for comment");
+
     public final AbstractAction m_actionToggleShowAnalyzeDialog =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -661,6 +667,8 @@ public class GoGuiActions
         m_actionShellSendFile.setEnabled(isProgramAttached);
         m_actionToggleBeepAfterMove.setEnabled(isProgramAttached);
         setSelected(m_actionToggleBeepAfterMove, m_goGui.getBeepAfterMove());
+        setSelected(m_actionToggleCommentMonoFont,
+                    m_goGui.getCommentMonoFont());
         setSelected(m_actionToggleShowAnalyzeDialog,
                     m_goGui.isAnalyzeDialogShown());
         setSelected(m_actionToggleShowCursor, guiBoard.getShowCursor());

@@ -168,8 +168,8 @@ public class GoGui
                 }
             };
         m_comment = new Comment(commentListener);
-        boolean fontFixed = m_prefs.getBoolean("comment-font-fixed", false);
-        m_comment.setFontFixed(fontFixed);
+        boolean monoFont = m_prefs.getBoolean("comment-font-fixed", false);
+        m_comment.setMonoFont(monoFont);
         m_infoPanel.add(m_comment, BorderLayout.CENTER);
         m_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                      m_guiBoard, m_infoPanel);
@@ -223,7 +223,6 @@ public class GoGui
             = ! m_prefs.getBoolean("gtpshell-disable-completions",
                                 Platform.isMac());
         m_menuBar.setCommandCompletion(completion);
-        m_menuBar.setCommentFontFixed(fontFixed);
         m_menuBar.setTimeStamp(m_prefs.getBoolean("gtpshell-timestamp",
                                                   false));
         m_showLastMove = m_prefs.getBoolean("show-last-move", true);        
@@ -260,8 +259,6 @@ public class GoGui
             cbAutoNumber();
         else if (command.equals("command-completion"))
             cbCommandCompletion();
-        else if (command.equals("comment-font-fixed"))
-            cbCommentFontFixed();
         else if (command.equals("gametree-move"))
             cbGameTreeLabels(GameTreePanel.LABEL_MOVE);
         else if (command.equals("gametree-number"))
@@ -1017,6 +1014,13 @@ public class GoGui
         m_prefs.putBoolean("beep-after-move", m_beepAfterMove);
     }
 
+    public void actionToggleCommentMonoFont()
+    {
+        boolean monoFont = ! m_comment.getMonoFont();
+        m_comment.setMonoFont(monoFont);
+        m_prefs.putBoolean("comment-font-fixed", monoFont);
+    }
+
     public void actionToggleShowAnalyzeDialog()
     {        
         if (m_gtp == null)
@@ -1206,6 +1210,11 @@ public class GoGui
         return m_beepAfterMove;
     }
 
+    public boolean getCommentMonoFont()
+    {
+        return m_comment.getMonoFont();
+    }
+
     public boolean getShowLastMove()
     {
         return m_showLastMove;
@@ -1366,6 +1375,11 @@ public class GoGui
     public int getHandicapDefault()
     {
         return m_handicap;
+    }
+
+    public boolean getMonoFont()
+    {
+        return m_comment.getMonoFont();
     }
 
     /** Get currently used pattern for search in comments. */
@@ -1922,13 +1936,6 @@ public class GoGui
         boolean enable = m_menuBar.getAutoNumber();
         m_gtp.setAutoNumber(enable);
         m_prefs.putBoolean("gtpshell-autonumber", enable);
-    }
-
-    private void cbCommentFontFixed()
-    {
-        boolean fixed = m_menuBar.getCommentFontFixed();
-        m_comment.setFontFixed(fixed);
-        m_prefs.putBoolean("comment-font-fixed", fixed);
     }
 
     private void cbGameTreeLabels(int mode)
