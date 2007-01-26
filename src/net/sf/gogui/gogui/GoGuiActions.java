@@ -37,6 +37,14 @@ public class GoGuiActions
                     m_goGui.actionAbout(); } },
              "About", "Show information about GoGui, Go program and Java");
 
+    public final AbstractAction m_actionAddBookmark =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionAddBookmark(); } },
+             "Add Bookmark",
+             "Add bookmark at current position in current file",
+             KeyEvent.VK_B);
+
     public final AbstractAction m_actionAttachProgram =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -156,6 +164,12 @@ public class GoGuiActions
                     m_goGui.actionComputerColor(false, true); } },
              "White", "Make computer play White");
 
+    public final AbstractAction m_actionEditBookmarks =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionEditBookmarks(); } },
+             "Edit Bookmarks...", "Edit list of bookmarks");
+
     public final AbstractAction m_actionGoto =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -261,6 +275,24 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionGameInfo(); } },
              "Game Info", "Show and edit game information", KeyEvent.VK_I);
+
+    public final AbstractAction m_actionShellSave =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShellSave(); } },
+             "Save Log...", "Save GTP history");
+
+    public final AbstractAction m_actionShellSaveCommands =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShellSaveCommands(); } },
+             "Save Commands...", "Save history of GTP commands");
+
+    public final AbstractAction m_actionShellSendFile =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShellSendFile(); } },
+             "Send File...", "Send file with GTP commands");
 
     public final AbstractAction m_actionHandicapNone =
         init(new AbstractAction() {
@@ -456,6 +488,40 @@ public class GoGuiActions
                     m_goGui.actionSetupColor(GoColor.WHITE); } },
              "Setup White", "Change setup color to White");
 
+    public final AbstractAction m_actionToggleShowAnalyzeDialog =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowAnalyzeDialog(); } },
+             "Show Analyze", "Show window with analyze commands",
+             KeyEvent.VK_F9, getFunctionKeyShortcut());
+
+    public final AbstractAction m_actionToggleShowInfoPanel =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowInfoPanel(); } },
+             "Show Info Panel",
+             "Show panel with comment and game information");
+
+    public final AbstractAction m_actionToggleShowShell =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowShell(); } },
+             "Show Shell", "Show GTP shell window",
+             KeyEvent.VK_F8, getFunctionKeyShortcut());
+
+    public final AbstractAction m_actionToggleShowToolbar =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowToolbar(); } },
+             "Show Tool Bar", "Show tool bar");
+
+    public final AbstractAction m_actionToggleShowTree =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowTree(); } },
+             "Show Tree", "Show game tree window",
+             KeyEvent.VK_F7, getFunctionKeyShortcut());
+
     public final AbstractAction m_actionTruncate =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -485,6 +551,8 @@ public class GoGuiActions
         int handicap = m_goGui.getHandicapDefault();
         boolean setupMode = m_goGui.isInSetupMode();
         GoColor setupColor = m_goGui.getSetupColor();
+        File file = m_goGui.getFile();
+        boolean isModified = m_goGui.isModified();
         ConstNode node = game.getCurrentNode();
         boolean hasFather = (node.getFatherConst() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
@@ -555,9 +623,18 @@ public class GoGuiActions
         m_actionSetupWhite.setEnabled(setupMode);
         setSelected(m_actionSetupBlack, setupColor == GoColor.BLACK);
         setSelected(m_actionSetupWhite, setupColor == GoColor.WHITE);
+        m_actionShellSave.setEnabled(isProgramAttached);
+        m_actionShellSaveCommands.setEnabled(isProgramAttached);
+        m_actionShellSendFile.setEnabled(isProgramAttached);
+        setSelected(m_actionToggleShowAnalyzeDialog,
+                    m_goGui.isAnalyzeDialogShown());
+        setSelected(m_actionToggleShowInfoPanel, m_goGui.isInfoPanelShown());
+        setSelected(m_actionToggleShowShell, m_goGui.isShellShown());
+        setSelected(m_actionToggleShowToolbar, m_goGui.isToolbarShown());
+        setSelected(m_actionToggleShowTree, m_goGui.isTreeShown());
         m_actionTruncate.setEnabled(hasFather);
         m_actionTruncateChildren.setEnabled(hasChildren);
-        updateFile(m_goGui.getFile());
+        updateFile(file, isModified);
     }
 
     private final GoGui m_goGui;
@@ -648,12 +725,12 @@ public class GoGuiActions
         return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     }
 
-    private void updateFile(File file)
+    private void updateFile(File file, boolean isModified)
     {
         String desc = "Save game";
         if (file != null)
             desc = desc + " (" + file + ")";
         setDescription(m_actionSave, desc);
-        m_actionSave.setEnabled(file != null && m_goGui.isModified());
+        m_actionSave.setEnabled(file != null && isModified);
     }
 }

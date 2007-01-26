@@ -35,22 +35,29 @@ import net.sf.gogui.util.Platform;
 /** Menu bar for GoGui. */
 public class GoGuiMenuBar
 {
+    public interface BookmarkListener
+    {
+        void actionGotoBookmark(int i);
+    }
+
     public GoGuiMenuBar(ActionListener listener, GoGuiActions actions,
                         RecentFileMenu.Callback recentCallback,
-                        RecentFileMenu.Callback recentGtpCallback)
+                        RecentFileMenu.Callback recentGtpCallback,
+                        GoGuiMenuBar.BookmarkListener bookmarkListener)
     {
         m_listener = listener;
+        m_bookmarkListener = bookmarkListener;
         m_menuBar = new JMenuBar();
         m_menuFile = createMenuFile(actions, recentCallback);
         m_menuBar.add(m_menuFile);
         m_menuBar.add(createMenuGame(actions));
         m_menuBar.add(createMenuEdit(actions));
         m_menuBar.add(createMenuGo(actions));
-        m_menuShell = createMenuShell(recentGtpCallback);
+        m_menuShell = createMenuShell(actions, recentGtpCallback);
         m_menuBar.add(m_menuShell);
-        m_menuBookmarks = createMenuBookMarks();
+        m_menuBookmarks = createMenuBookMarks(actions);
         m_menuBar.add(m_menuBookmarks);
-        m_menuSettings = createMenuSettings();
+        m_menuSettings = createMenuSettings(actions);
         m_menuBar.add(m_menuSettings);
         m_menuHelp = createMenuHelp(actions);
         m_menuBar.add(m_menuHelp);
@@ -137,11 +144,6 @@ public class GoGuiMenuBar
         return m_menuBar;
     }
 
-    public boolean getShowAnalyze()
-    {
-        return m_itemShowAnalyze.isSelected();
-    }
-
     public boolean getShowCursor()
     {
         return m_itemShowCursor.isSelected();
@@ -152,34 +154,14 @@ public class GoGuiMenuBar
         return m_itemShowGrid.isSelected();
     }
 
-    public boolean getShowInfoPanel()
-    {
-        return m_itemShowInfoPanel.isSelected();
-    }
-
     public boolean getShowLastMove()
     {
         return m_itemShowLastMove.isSelected();
     }
 
-    public boolean getShowShell()
-    {
-        return m_itemShowShell.isSelected();
-    }
-
     public boolean getShowSubtreeSizes()
     {
         return m_itemShowSubtreeSizes.isSelected();
-    }
-
-    public boolean getShowToolbar()
-    {
-        return m_itemShowToolbar.isSelected();
-    }
-
-    public boolean getShowTree()
-    {
-        return m_itemShowTree.isSelected();
     }
 
     public boolean getShowVariations()
@@ -209,7 +191,12 @@ public class GoGuiMenuBar
         {
             Bookmark bookmark = (Bookmark)bookmarks.get(i);
             JMenuItem item = new JMenuItem(bookmark.m_name);
-            m_menuBookmarks.addItem(item, "bookmark-" + i);
+            final int bookmarkIndex = i;
+            item.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        m_bookmarkListener.actionGotoBookmark(bookmarkIndex);
+                    } } );
+            m_menuBookmarks.add(item);
             m_bookmarkItems.add(item);
         }
     }
@@ -286,11 +273,6 @@ public class GoGuiMenuBar
         m_recentGtp.updateEnabled();
     }
 
-    public void setShowAnalyze(boolean enable)
-    {
-        m_itemShowAnalyze.setSelected(enable);
-    }
-
     public void setShowCursor(boolean enable)
     {
         m_itemShowCursor.setSelected(enable);
@@ -301,34 +283,14 @@ public class GoGuiMenuBar
         m_itemShowGrid.setSelected(enable);
     }
 
-    public void setShowInfoPanel(boolean enable)
-    {
-        m_itemShowInfoPanel.setSelected(enable);
-    }
-
     public void setShowLastMove(boolean enable)
     {
         m_itemShowLastMove.setSelected(enable);
     }
 
-    public void setShowShell(boolean enable)
-    {
-        m_itemShowShell.setSelected(enable);
-    }
-
     public void setShowSubtreeSizes(boolean enable)
     {
         m_itemShowSubtreeSizes.setSelected(enable);
-    }
-
-    public void setShowToolbar(boolean enable)
-    {
-        m_itemShowToolbar.setSelected(enable);
-    }
-
-    public void setShowTree(boolean enable)
-    {
-        m_itemShowTree.setSelected(enable);
     }
 
     public void setShowVariations(boolean enable)
@@ -345,13 +307,13 @@ public class GoGuiMenuBar
 
     private final ActionListener m_listener;
 
+    private final BookmarkListener m_bookmarkListener;
+
     private JCheckBoxMenuItem m_itemAutoNumber;
 
     private JCheckBoxMenuItem m_itemBeepAfterMove;
 
     private JCheckBoxMenuItem m_itemCommandCompletion;
-
-    private JCheckBoxMenuItem m_itemShowAnalyze;
 
     private JCheckBoxMenuItem m_itemShowCursor;
 
@@ -359,11 +321,7 @@ public class GoGuiMenuBar
 
     private JCheckBoxMenuItem m_itemShowLastMove;
 
-    private JCheckBoxMenuItem m_itemShowShell;
-
     private JCheckBoxMenuItem m_itemShowSubtreeSizes;
-
-    private JCheckBoxMenuItem m_itemShowTree;
 
     private JCheckBoxMenuItem m_itemShowVariations;
 
@@ -408,14 +366,6 @@ public class GoGuiMenuBar
     private JMenuItem m_itemGameTreeSmall;
 
     private JMenuItem m_itemGameTreeTiny;
-
-    private JMenuItem m_itemShowInfoPanel;
-
-    private JMenuItem m_itemShowToolbar;
-
-    private JMenuItem m_itemSaveCommands;
-
-    private JMenuItem m_itemSaveLog;
 
     private JSeparator m_bookmarksSeparator;
 
@@ -482,13 +432,11 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuBookMarks()
+    private JMenuChecked createMenuBookMarks(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Bookmarks", KeyEvent.VK_B);
-        menu.addItem("Add Bookmark", KeyEvent.VK_A, KeyEvent.VK_B,
-                     SHORTCUT, "add-bookmark");
-        menu.addItem("Edit Bookmarks...", KeyEvent.VK_E,
-                     "edit-bookmarks");
+        menu.addItem(actions.m_actionAddBookmark, KeyEvent.VK_A);
+        menu.addItem(actions.m_actionEditBookmarks, KeyEvent.VK_E);
         return menu;
     }
 
@@ -681,16 +629,13 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuShell(RecentFileMenu.Callback callback)
+    private JMenuChecked createMenuShell(GoGuiActions actions,
+                                         RecentFileMenu.Callback callback)
     {
         JMenuChecked menu = createMenu("Shell", KeyEvent.VK_L);
-        m_itemSaveLog = menu.addItem("Save Log...", KeyEvent.VK_L,
-                                     "gtpshell-save");
-        m_itemSaveCommands = menu.addItem("Save Commands...",
-                                          KeyEvent.VK_C,
-                                          "gtpshell-save-commands");
-        menu.addItem("Send File...", KeyEvent.VK_F,
-                     "gtpshell-send-file");
+        menu.addItem(actions.m_actionShellSave, KeyEvent.VK_L);
+        menu.addItem(actions.m_actionShellSaveCommands, KeyEvent.VK_C);
+        menu.addItem(actions.m_actionShellSendFile, KeyEvent.VK_F);
         m_recentGtp = new RecentFileMenu("Send Recent",
                                          "net/sf/gogui/recentgtpfiles",
                                          callback);
@@ -699,25 +644,25 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuSettings()
+    private JMenuChecked createMenuSettings(GoGuiActions actions)
     {
         JMenuChecked menu = createMenu("Settings", KeyEvent.VK_S);
-        m_itemShowToolbar = new JCheckBoxMenuItem("Show Toolbar");
-        menu.addItem(m_itemShowToolbar, KeyEvent.VK_T,
-                     "show-toolbar");
-        m_itemShowInfoPanel = new JCheckBoxMenuItem("Show Info Panel");
-        menu.addItem(m_itemShowInfoPanel, KeyEvent.VK_I,
-                     "show-info-panel");
+        GoGuiCheckBoxMenuItem itemToggleShowToolbar =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowToolbar);
+        menu.addItem(itemToggleShowToolbar, KeyEvent.VK_T);
+        GoGuiCheckBoxMenuItem itemToggleShowInfoPanel =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowInfoPanel);
+        menu.addItem(itemToggleShowInfoPanel, KeyEvent.VK_I);
         menu.addSeparator();
-        m_itemShowTree = new JCheckBoxMenuItem("Show Tree");
-        menu.addItem(m_itemShowTree, KeyEvent.VK_R, KeyEvent.VK_F7,
-                     getFunctionKeyShortcut(), "show-tree");
-        m_itemShowShell = new JCheckBoxMenuItem("Show Shell");
-        menu.addItem(m_itemShowShell, KeyEvent.VK_S, KeyEvent.VK_F8,
-                     getFunctionKeyShortcut(), "show-shell");
-        m_itemShowAnalyze = new JCheckBoxMenuItem("Show Analyze");
-        menu.addItem(m_itemShowAnalyze, KeyEvent.VK_A, KeyEvent.VK_F9,
-                     getFunctionKeyShortcut(), "analyze");
+        GoGuiCheckBoxMenuItem itemToggleShowTree =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowTree);
+        menu.addItem(itemToggleShowTree, KeyEvent.VK_R);
+        GoGuiCheckBoxMenuItem itemToggleShowShell =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowShell);
+        menu.addItem(itemToggleShowShell, KeyEvent.VK_S);
+        GoGuiCheckBoxMenuItem itemToggleShowAnalyzeDialog =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowAnalyzeDialog);
+        menu.addItem(itemToggleShowAnalyzeDialog, KeyEvent.VK_A);
         menu.addSeparator();
         menu.add(createMenuConfigureBoard());
         menu.add(createMenuConfigureTree());
@@ -760,6 +705,14 @@ class JMenuChecked
     {
         item.addActionListener(m_listener);
         item.setActionCommand(command);
+        add(item);
+        return item;
+    }
+
+    public JMenuItem addItem(JMenuItem item, int mnemonic)
+    {
+        item.setIcon(null);
+        setMnemonic(item, mnemonic);
         add(item);
         return item;
     }
@@ -865,6 +818,21 @@ class GoGuiRadioButtonMenuItem
     extends JRadioButtonMenuItem
 {
     public GoGuiRadioButtonMenuItem(AbstractAction action)
+    {
+        super(action);
+        action.addPropertyChangeListener(new PropertyChangeListener() {
+                public void  propertyChange(PropertyChangeEvent e) {
+                    if (e.getPropertyName().equals("selected"))
+                        setSelected(((Boolean)e.getNewValue()).booleanValue());
+                } } );
+    }
+}
+
+/** Checkbox item with additional "selected" action property. */
+class GoGuiCheckBoxMenuItem
+    extends JCheckBoxMenuItem
+{
+    public GoGuiCheckBoxMenuItem(AbstractAction action)
     {
         super(action);
         action.addPropertyChangeListener(new PropertyChangeListener() {
