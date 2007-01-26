@@ -268,7 +268,7 @@ public class GuiField
 
     private static final Color COLOR_MARK = Color.decode("#4040ff");
 
-    private static final Color COLOR_STONE_BLACK = Color.decode("#060606");
+    private static final Color COLOR_STONE_BLACK = Color.decode("#0c0c0c");
 
     private static final Color COLOR_STONE_BLACK_BRIGHT
         = Color.decode("#666666");
