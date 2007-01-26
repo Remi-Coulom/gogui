@@ -15,15 +15,29 @@ import java.awt.image.WritableRaster;
 public class RadialGradientContext
     implements PaintContext
 {
-    public RadialGradientContext(Point2D point, Color color1,
-                                 Point2D radius, Color color2)
+    /** Create a radial gradient context.
+        @param center The center point.
+        @param radius1 The radius along the first axis of the ellipse.
+        @param radius1 The radius along the second axis of the ellipse.
+        @param focus Focus shift away from the center along second radius
+        normalized to interval between zero and one.
+        @param color1 First color.
+        @param color2 Second color.
+    */
+    public RadialGradientContext(Point2D center, Point2D radius1,
+                                 Point2D radius2, double focus, Color color1,
+                                 Color color2)
     {
-        m_point = point;
+        m_center = center;
+        m_radius1 = radius1;
+        m_radius2 = radius2;
+        m_length1 = radius1.distance(0, 0);
+        m_length2 = radius2.distance(0, 0);
+        m_focus = focus;
         m_red1 = color1.getRed();
         m_green1 = color1.getGreen();
         m_blue1 = color1.getBlue();
         m_alpha1 = color1.getAlpha();
-        m_radius = radius.distance(0, 0);
         m_redDiff = color2.getRed() - m_red1;
         m_greenDiff = color2.getGreen() - m_green1;
         m_blueDiff = color2.getBlue() - m_blue1;
@@ -55,8 +69,18 @@ public class RadialGradientContext
         for (int j = 0; j < height; ++j)
             for (int i = 0; i < width; ++i)
             {
-                double distance = m_point.distance(x + i, y + j);
-                double ratio = Math.min(distance / m_radius, 1.0);
+                Point2D p = new Point2D.Double(x + i, y + j);
+                Point2D d = getDifference(p, m_center);
+                double distance1 = getScalarProduct(d, m_radius1) / m_length1;
+                double ratio1 = Math.abs(distance1) / m_length1;
+                double distance2 = getScalarProduct(d, m_radius2) / m_length2;
+                double ratio2 = distance2 / m_length2;
+                if (ratio2 > m_focus)
+                    ratio2 = (ratio2 - m_focus) / (1.0 - m_focus);
+                else
+                    ratio2 = (ratio2 - m_focus) / (-1.0 - m_focus);
+                double ratio = Math.sqrt(ratio1 * ratio1 + ratio2 * ratio2);
+                ratio = Math.min(ratio, 1.0);
                 data[++index] = (int)(m_red1 + ratio * m_redDiff);
                 data[++index] = (int)(m_green1 + ratio * m_greenDiff);
                 data[++index] = (int)(m_blue1 + ratio * m_blueDiff);
@@ -90,10 +114,29 @@ public class RadialGradientContext
 
     private int m_width;
 
-    private final double m_radius;
+    private double m_length1;
 
-    private final Point2D m_point;
+    private double m_length2;
+
+    private double m_focus;
+
+    private final Point2D m_center;
+
+    private final Point2D m_radius1;
+
+    private final Point2D m_radius2;
 
     private WritableRaster m_raster;
+
+    private static Point2D getDifference(Point2D p1, Point2D p2)
+    {
+        return new Point2D.Double(p1.getX() - p2.getX(),
+                                  p1.getY() - p2.getY());
+    }
+
+    private static double getScalarProduct(Point2D p1, Point2D p2)
+    {
+        return (p1.getX() * p2.getX() + p1.getY() * p2.getY());
+    }
 }
 

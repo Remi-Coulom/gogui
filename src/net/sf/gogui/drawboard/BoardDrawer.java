@@ -271,7 +271,8 @@ public class BoardDrawer
             return;
         graphics2D.setComposite(COMPOSITE_3);
         int size = m_fieldSize - 2 * GuiField.getStoneMargin(m_fieldSize);
-        int offset = getShadowOffset();
+        int offsetX = getShadowOffset() / 3; // Relates to stone gradient
+        int offsetY = getShadowOffset();
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
             {
@@ -279,8 +280,8 @@ public class BoardDrawer
                     continue;
                 Point location = getCenter(x, y);
                 graphics.setColor(Color.black);
-                graphics.fillOval(location.x - size / 2 + offset,
-                                  location.y - size / 2 + offset,
+                graphics.fillOval(location.x - size / 2 + offsetX,
+                                  location.y - size / 2 + offsetY,
                                   size, size);
             }
         graphics.setPaintMode();

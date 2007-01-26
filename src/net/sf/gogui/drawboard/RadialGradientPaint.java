@@ -18,17 +18,28 @@ import java.awt.image.ColorModel;
 public class RadialGradientPaint
     implements Paint
 {
-    public RadialGradientPaint(Point2D point, Color pointColor,
-                               Point2D radius, Color backgroundColor)
+    /** Create a radial gradient paint.
+        @param center The center point.
+        @param radius1 The radius along the first axis of the ellipse.
+        @param radius1 The radius along the second axis of the ellipse.
+        @param focus Focus shift away from the center along second radius
+        normalized to interval between zero and one.
+        @param color1 First color.
+        @param color2 Second color.
+    */
+    public RadialGradientPaint(Point2D center, Point2D radius1,
+                               Point2D radius2, double focus, Color color1,
+                               Color color2)
     {
-        assert(radius.distance(0, 0) > 0);
-        m_point = point;
-        m_radius = radius;
-        m_pointColor = pointColor;
-        m_backgroundColor = backgroundColor;
-        int alphaPoint = pointColor.getAlpha();
-        int alphaBackground = backgroundColor.getAlpha();
-        if ((alphaPoint & alphaBackground) == 0xff)
+        m_center = center;
+        m_radius1 = radius1;
+        m_radius2 = radius2;
+        m_focus = focus;
+        m_color1 = color1;
+        m_color2 = color2;
+        int alpha1 = color1.getAlpha();
+        int alpha2 = color2.getAlpha();
+        if ((alpha1 & alpha2) == 0xff)
             m_transparency = OPAQUE;
         else
             m_transparency = TRANSLUCENT;
@@ -40,17 +51,21 @@ public class RadialGradientPaint
                                       AffineTransform xform,
                                       RenderingHints hints)
     {
-        Point2D transformedPoint = xform.transform(m_point, null);
-        Point2D transformedRadius = xform.deltaTransform(m_radius, null);
+        Point2D transformedCenter = xform.transform(m_center, null);
+        Point2D transformedRadius1 = xform.deltaTransform(m_radius1, null);
+        Point2D transformedRadius2 = xform.deltaTransform(m_radius2, null);
         if (m_cachedContext != null
-            && transformedPoint.equals(m_transformedPoint)
-            && transformedRadius.equals(m_transformedRadius))
+            && transformedCenter.equals(m_transformedCenter)
+            && transformedRadius1.equals(m_transformedRadius1)
+            && transformedRadius2.equals(m_transformedRadius2))
             return m_cachedContext;
-        m_transformedPoint = (Point2D)transformedPoint.clone();
-        m_transformedRadius = (Point2D)transformedRadius.clone();
+        m_transformedCenter = (Point2D)transformedCenter.clone();
+        m_transformedRadius1 = (Point2D)transformedRadius1.clone();
+        m_transformedRadius2 = (Point2D)transformedRadius2.clone();
         m_cachedContext =
-            new RadialGradientContext(transformedPoint, m_pointColor,
-                                      transformedRadius, m_backgroundColor);
+            new RadialGradientContext(transformedCenter, transformedRadius1,
+                                      transformedRadius2, m_focus,
+                                      m_color1, m_color2);
         return m_cachedContext;
     }
 
@@ -61,18 +76,24 @@ public class RadialGradientPaint
 
     private final int m_transparency;
 
-    private Point2D m_transformedPoint;
+    private Point2D m_transformedCenter;
 
-    private Point2D m_transformedRadius;
+    private Point2D m_transformedRadius1;
+
+    private Point2D m_transformedRadius2;
 
     private RadialGradientContext m_cachedContext;    
 
-    private final Point2D m_point;
+    private double m_focus;
 
-    private final Point2D m_radius;
+    private final Point2D m_center;
 
-    private final Color m_backgroundColor;
+    private final Point2D m_radius1;
 
-    private final Color m_pointColor;
+    private final Point2D m_radius2;
+
+    private final Color m_color1;
+
+    private final Color m_color2;
 }
 
