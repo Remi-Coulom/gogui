@@ -271,7 +271,7 @@ public class BoardDrawer
             return;
         graphics2D.setComposite(COMPOSITE_3);
         int size = m_fieldSize - 2 * GuiField.getStoneMargin(m_fieldSize);
-        int offsetX = getShadowOffset() / 3; // Relates to stone gradient
+        int offsetX = getShadowOffset() / 5; // Relates to stone gradient
         int offsetY = getShadowOffset();
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
