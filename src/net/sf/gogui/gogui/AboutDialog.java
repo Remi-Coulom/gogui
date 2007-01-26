@@ -28,10 +28,9 @@ public final class AboutDialog
     extends JOptionPane
 {
     public static void show(Component parent, String name, String version,
-                            String protocolVersion, String command)
+                            String command)
     {
-        AboutDialog aboutDialog =
-            new AboutDialog(name, version, protocolVersion, command);
+        AboutDialog aboutDialog = new AboutDialog(name, version, command);
         JDialog dialog = aboutDialog.createDialog(parent, "About");
         // Workaround for Sun Bug ID 4545951 (still in Linux JDK 1.5.0_04-b05)
         aboutDialog.m_tabbedPane.invalidate();
@@ -47,8 +46,7 @@ public final class AboutDialog
 
     private JTabbedPane m_tabbedPane;
 
-    private AboutDialog(String name, String version, String protocolVersion,
-                        String command)
+    private AboutDialog(String name, String version, String command)
     {
         m_tabbedPane = new JTabbedPane();
         m_tabbedPane.putClientProperty("jgoodies.noContentBorder",
@@ -73,9 +71,6 @@ public final class AboutDialog
                             "<p align=\"center\"><b>" + name + "</b></p>" +
                             versionInfo +
                             "<p align=\"center\" width=\"" + width + "\">" +
-                            "GTP protocol version " + protocolVersion
-                            + "<br>" +
-                            "Command: " +
                             "<tt>" + command + "</tt></p>");
         }
         else
@@ -175,12 +170,6 @@ public final class AboutDialog
             if (vendor != null)
             {
                 buffer.append(vendor);
-            }
-            String info = System.getProperty("java.vm.info");
-            if (info != null)
-            {
-                buffer.append("<br>");
-                buffer.append(info);
             }
             buffer.append("<br>");
         }

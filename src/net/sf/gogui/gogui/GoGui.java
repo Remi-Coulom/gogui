@@ -303,12 +303,8 @@ public class GoGui
         String protocolVersion = null;
         String command = null;
         if (m_gtp != null)
-        {
-            protocolVersion =
-                Integer.toString(m_gtp.getProtocolVersion());
             command = m_gtp.getProgramCommand();
-        }
-        AboutDialog.show(this, m_name, m_version, protocolVersion, command);
+        AboutDialog.show(this, m_name, m_version, command);
     }
 
     public void actionAddBookmark()
