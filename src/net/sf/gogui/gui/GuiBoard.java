@@ -35,7 +35,7 @@ import net.sf.gogui.go.GoPoint;
 */
 public final class GuiBoard
     extends JPanel
-    implements Printable
+    implements ConstGuiBoard, Printable
 {
     /** Callback for clicks on a field. */
     public interface Listener
