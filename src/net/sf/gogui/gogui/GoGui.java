@@ -69,6 +69,7 @@ import net.sf.gogui.gui.BoardSizeDialog;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.BookmarkDialog;
 import net.sf.gogui.gui.Comment;
+import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.ContextMenu;
 import net.sf.gogui.gui.EditBookmarksDialog;
 import net.sf.gogui.gui.FindDialog;
@@ -225,15 +226,10 @@ public class GoGui
         m_menuBar.setCommentFontFixed(fontFixed);
         m_menuBar.setTimeStamp(m_prefs.getBoolean("gtpshell-timestamp",
                                                   false));
-        m_menuBar.setBeepAfterMove(m_beepAfterMove);
         m_showLastMove = m_prefs.getBoolean("show-last-move", true);        
-        m_menuBar.setShowLastMove(m_showLastMove);
         m_showVariations = m_prefs.getBoolean("show-variations", false);
-        m_menuBar.setShowVariations(m_showVariations);
         boolean showCursor = m_prefs.getBoolean("show-cursor", false);
-        m_menuBar.setShowCursor(showCursor);
         boolean showGrid = m_prefs.getBoolean("show-grid", true);
-        m_menuBar.setShowGrid(showGrid);
         m_guiBoard.setShowCursor(showCursor);
         m_guiBoard.setShowGrid(showGrid);
         setJMenuBar(m_menuBar.getMenuBar());
@@ -262,8 +258,6 @@ public class GoGui
         String command = event.getActionCommand();
         if (command.equals("auto-number"))
             cbAutoNumber();
-        else if (command.equals("beep-after-move"))
-            cbBeepAfterMove();
         else if (command.equals("command-completion"))
             cbCommandCompletion();
         else if (command.equals("comment-font-fixed"))
@@ -284,14 +278,6 @@ public class GoGui
             cbGameTreeSize(GameTreePanel.SIZE_TINY);
         else if (command.equals("gametree-show-subtree-sizes"))
             cbGameTreeShowSubtreeSizes();
-        else if (command.equals("show-cursor"))
-            cbShowCursor();
-        else if (command.equals("show-grid"))
-            cbShowGrid();
-        else if (command.equals("show-last-move"))
-            cbShowLastMove();
-        else if (command.equals("show-variations"))
-            cbShowVariations();
         else if (command.equals("timestamp"))
             cbTimeStamp();
         else
@@ -1025,6 +1011,12 @@ public class GoGui
         m_menuBar.addRecentGtp(file);
     }
 
+    public void actionToggleBeepAfterMove()
+    {
+        m_beepAfterMove = ! m_beepAfterMove;
+        m_prefs.putBoolean("beep-after-move", m_beepAfterMove);
+    }
+
     public void actionToggleShowAnalyzeDialog()
     {        
         if (m_gtp == null)
@@ -1056,6 +1048,20 @@ public class GoGui
         }
     }
 
+    public void actionToggleShowCursor()
+    {
+        boolean showCursor = ! m_guiBoard.getShowCursor();
+        m_guiBoard.setShowCursor(showCursor);
+        m_prefs.putBoolean("show-cursor", showCursor);
+    }
+
+    public void actionToggleShowGrid()
+    {
+        boolean showGrid = ! m_guiBoard.getShowGrid();
+        m_guiBoard.setShowGrid(showGrid);
+        m_prefs.putBoolean("show-grid", showGrid);
+    }
+
     public void actionToggleShowInfoPanel()
     {
         if (GuiUtil.isNormalSizeMode(this))
@@ -1065,6 +1071,14 @@ public class GoGui
             m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
         }
         showInfoPanel(! m_showInfoPanel);
+        updateViews();
+    }
+
+    public void actionToggleShowLastMove()
+    {
+        m_showLastMove = ! m_showLastMove;
+        m_prefs.putBoolean("show-last-move", m_showLastMove);
+        updateFromGoBoard();
         updateViews();
     }
 
@@ -1104,6 +1118,14 @@ public class GoGui
         }
         else
             disposeGameTree();
+    }
+
+    public void actionToggleShowVariations()
+    {
+        m_showVariations = ! m_showVariations;
+        m_prefs.putBoolean("show-variations", m_showVariations);
+        resetBoard();
+        updateViews();
     }
 
     public void actionTruncate()
@@ -1177,6 +1199,21 @@ public class GoGui
             resetBoard();
             clearStatus();
         }
+    }
+
+    public boolean getBeepAfterMove()
+    {
+        return m_beepAfterMove;
+    }
+
+    public boolean getShowLastMove()
+    {
+        return m_showLastMove;
+    }
+
+    public boolean getShowVariations()
+    {
+        return m_showVariations;
     }
 
     public boolean isAnalyzeDialogShown()
@@ -1319,6 +1356,11 @@ public class GoGui
     public ConstGame getGame()
     {
         return m_game;
+    }
+
+    public ConstGuiBoard getGuiBoard()
+    {
+        return m_guiBoard;
     }
 
     public int getHandicapDefault()
@@ -1882,12 +1924,6 @@ public class GoGui
         m_prefs.putBoolean("gtpshell-autonumber", enable);
     }
 
-    private void cbBeepAfterMove()
-    {
-        m_beepAfterMove = m_menuBar.getBeepAfterMove();
-        m_prefs.putBoolean("beep-after-move", m_beepAfterMove);
-    }
-
     private void cbCommentFontFixed()
     {
         boolean fixed = m_menuBar.getCommentFontFixed();
@@ -1945,36 +1981,6 @@ public class GoGui
         }
         initScore(isDeadStone);
     }    
-
-    private void cbShowCursor()
-    {
-        boolean showCursor = m_menuBar.getShowCursor();
-        m_guiBoard.setShowCursor(showCursor);
-        m_prefs.putBoolean("show-cursor", showCursor);
-    }
-
-    private void cbShowGrid()
-    {
-        boolean showGrid = m_menuBar.getShowGrid();
-        m_guiBoard.setShowGrid(showGrid);
-        m_prefs.putBoolean("show-grid", showGrid);
-    }
-
-    private void cbShowLastMove()
-    {
-        m_showLastMove = m_menuBar.getShowLastMove();
-        m_prefs.putBoolean("show-last-move", m_showLastMove);
-        updateFromGoBoard();
-        updateGameInfo(false);
-    }
-
-    private void cbShowVariations()
-    {
-        m_showVariations = m_menuBar.getShowVariations();
-        m_prefs.putBoolean("show-variations", m_showVariations);
-        resetBoard();
-        updateGameInfo(false);
-    }
 
     private void cbTimeStamp()
     {
@@ -2534,7 +2540,6 @@ public class GoGui
         if (size != getBoardSize())
         {
             m_guiBoard.initSize(size);
-            m_guiBoard.setShowGrid(m_menuBar.getShowGrid());
             restoreMainWindow();
             if (m_gtpShell != null)
                 restoreSize(m_gtpShell, "shell");
@@ -3158,7 +3163,6 @@ public class GoGui
     private void setupDone()
     {
         m_setupMode = false;
-        m_showLastMove = m_menuBar.getShowLastMove();
         m_menuBar.setNormalMode();
         m_game.setToMove(getToMove());
         initGtp();

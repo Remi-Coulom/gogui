@@ -32,4 +32,6 @@ public interface ConstGuiBoard
     boolean getSelect(GoPoint point);
 
     boolean getShowCursor();
+
+    boolean getShowGrid();
 }

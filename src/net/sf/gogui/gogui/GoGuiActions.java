@@ -17,6 +17,7 @@ import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.gui.ConstGuiBoard;
 import net.sf.gogui.gui.GuiUtil;
 import net.sf.gogui.util.Platform;
 
@@ -488,6 +489,12 @@ public class GoGuiActions
                     m_goGui.actionSetupColor(GoColor.WHITE); } },
              "Setup White", "Change setup color to White");
 
+    public final AbstractAction m_actionToggleBeepAfterMove =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleBeepAfterMove(); } },
+             "Beep After Move", "Beep after computer played a move");
+
     public final AbstractAction m_actionToggleShowAnalyzeDialog =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
@@ -495,12 +502,30 @@ public class GoGuiActions
              "Show Analyze", "Show window with analyze commands",
              KeyEvent.VK_F9, getFunctionKeyShortcut());
 
+    public final AbstractAction m_actionToggleShowCursor =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowCursor(); } },
+             "Show Cursor", "Show cursor on board");
+
+    public final AbstractAction m_actionToggleShowGrid =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowGrid(); } },
+             "Show Grid", "Show board grid labels");
+
     public final AbstractAction m_actionToggleShowInfoPanel =
         init(new AbstractAction() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowInfoPanel(); } },
              "Show Info Panel",
              "Show panel with comment and game information");
+
+    public final AbstractAction m_actionToggleShowLastMove =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowLastMove(); } },
+             "Show Last Move", "Mark last move on board");
 
     public final AbstractAction m_actionToggleShowShell =
         init(new AbstractAction() {
@@ -521,6 +546,13 @@ public class GoGuiActions
                     m_goGui.actionToggleShowTree(); } },
              "Show Tree", "Show game tree window",
              KeyEvent.VK_F7, getFunctionKeyShortcut());
+
+    public final AbstractAction m_actionToggleShowVariations =
+        init(new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionToggleShowVariations(); } },
+             "Show Variations",
+             "Label children moves with letters on board");
 
     public final AbstractAction m_actionTruncate =
         init(new AbstractAction() {
@@ -553,6 +585,7 @@ public class GoGuiActions
         GoColor setupColor = m_goGui.getSetupColor();
         File file = m_goGui.getFile();
         boolean isModified = m_goGui.isModified();
+        ConstGuiBoard guiBoard = m_goGui.getGuiBoard();
         ConstNode node = game.getCurrentNode();
         boolean hasFather = (node.getFatherConst() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
@@ -626,12 +659,18 @@ public class GoGuiActions
         m_actionShellSave.setEnabled(isProgramAttached);
         m_actionShellSaveCommands.setEnabled(isProgramAttached);
         m_actionShellSendFile.setEnabled(isProgramAttached);
+        m_actionToggleBeepAfterMove.setEnabled(isProgramAttached);
+        setSelected(m_actionToggleBeepAfterMove, m_goGui.getBeepAfterMove());
         setSelected(m_actionToggleShowAnalyzeDialog,
                     m_goGui.isAnalyzeDialogShown());
+        setSelected(m_actionToggleShowCursor, guiBoard.getShowCursor());
+        setSelected(m_actionToggleShowGrid, guiBoard.getShowGrid());
         setSelected(m_actionToggleShowInfoPanel, m_goGui.isInfoPanelShown());
+        setSelected(m_actionToggleShowLastMove, m_goGui.getShowLastMove());
         setSelected(m_actionToggleShowShell, m_goGui.isShellShown());
         setSelected(m_actionToggleShowToolbar, m_goGui.isToolbarShown());
         setSelected(m_actionToggleShowTree, m_goGui.isTreeShown());
+        setSelected(m_actionToggleShowVariations, m_goGui.getShowVariations());
         m_actionTruncate.setEnabled(hasFather);
         m_actionTruncateChildren.setEnabled(hasChildren);
         updateFile(file, isModified);

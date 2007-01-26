@@ -253,6 +253,11 @@ public final class GuiBoard
         return m_showCursor;
     }
 
+    public boolean getShowGrid()
+    {
+        return m_showGrid;
+    }
+
     /** Change the board size.
         @param size The new board size.
     */

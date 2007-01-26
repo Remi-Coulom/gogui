@@ -114,11 +114,6 @@ public class GoGuiMenuBar
         return m_itemCommentFontFixed.isSelected();
     }
 
-    public boolean getBeepAfterMove()
-    {
-        return m_itemBeepAfterMove.isSelected();
-    }
-
     public int getGameTreeLabels()
     {
         if (m_itemGameTreeNumber.isSelected())
@@ -144,29 +139,9 @@ public class GoGuiMenuBar
         return m_menuBar;
     }
 
-    public boolean getShowCursor()
-    {
-        return m_itemShowCursor.isSelected();
-    }
-
-    public boolean getShowGrid()
-    {
-        return m_itemShowGrid.isSelected();
-    }
-
-    public boolean getShowLastMove()
-    {
-        return m_itemShowLastMove.isSelected();
-    }
-
     public boolean getShowSubtreeSizes()
     {
         return m_itemShowSubtreeSizes.isSelected();
-    }
-
-    public boolean getShowVariations()
-    {
-        return m_itemShowVariations.isSelected();
     }
 
     public void setAutoNumber(boolean enable)
@@ -199,11 +174,6 @@ public class GoGuiMenuBar
             m_menuBookmarks.add(item);
             m_bookmarkItems.add(item);
         }
-    }
-
-    public void setBeepAfterMove(boolean enable)
-    {
-        m_itemBeepAfterMove.setSelected(enable);
     }
 
     public void setCommandCompletion(boolean enable)
@@ -273,29 +243,9 @@ public class GoGuiMenuBar
         m_recentGtp.updateEnabled();
     }
 
-    public void setShowCursor(boolean enable)
-    {
-        m_itemShowCursor.setSelected(enable);
-    }
-
-    public void setShowGrid(boolean enable)
-    {
-        m_itemShowGrid.setSelected(enable);
-    }
-
-    public void setShowLastMove(boolean enable)
-    {
-        m_itemShowLastMove.setSelected(enable);
-    }
-
     public void setShowSubtreeSizes(boolean enable)
     {
         m_itemShowSubtreeSizes.setSelected(enable);
-    }
-
-    public void setShowVariations(boolean enable)
-    {
-        m_itemShowVariations.setSelected(enable);
     }
 
     private boolean m_findNextEnabled;
@@ -311,19 +261,9 @@ public class GoGuiMenuBar
 
     private JCheckBoxMenuItem m_itemAutoNumber;
 
-    private JCheckBoxMenuItem m_itemBeepAfterMove;
-
     private JCheckBoxMenuItem m_itemCommandCompletion;
 
-    private JCheckBoxMenuItem m_itemShowCursor;
-
-    private JCheckBoxMenuItem m_itemShowGrid;
-
-    private JCheckBoxMenuItem m_itemShowLastMove;
-
     private JCheckBoxMenuItem m_itemShowSubtreeSizes;
-
-    private JCheckBoxMenuItem m_itemShowVariations;
 
     private JCheckBoxMenuItem m_itemTimeStamp;
 
@@ -440,25 +380,25 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuConfigureBoard()
+    private JMenuChecked createMenuConfigureBoard(GoGuiActions actions)
     {
         JMenuChecked menu = new JMenuChecked("Configure Board", m_listener);
         menu.setMnemonic(KeyEvent.VK_B);
-        m_itemShowCursor = new JCheckBoxMenuItem("Show Cursor");
-        m_itemShowCursor.setSelected(true);
-        menu.addItem(m_itemShowCursor, KeyEvent.VK_C,
-                     "show-cursor");
-        m_itemShowGrid = new JCheckBoxMenuItem("Show Grid");
-        m_itemShowGrid.setSelected(true);
-        menu.addItem(m_itemShowGrid, KeyEvent.VK_G, "show-grid");
-        m_itemShowLastMove = new JCheckBoxMenuItem("Show Last Move");
-        m_itemShowLastMove.setSelected(true);
-        menu.addItem(m_itemShowLastMove, KeyEvent.VK_L, "show-last-move");
-        m_itemShowVariations = new JCheckBoxMenuItem("Show Variations");
-        m_itemShowVariations.setSelected(true);
-        menu.addItem(m_itemShowVariations, KeyEvent.VK_V, "show-variations");
-        m_itemBeepAfterMove = new JCheckBoxMenuItem("Beep After Move");
-        menu.addItem(m_itemBeepAfterMove, KeyEvent.VK_B, "beep-after-move");
+        GoGuiCheckBoxMenuItem itemShowCursor =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowCursor);
+        menu.addItem(itemShowCursor, KeyEvent.VK_C);
+        GoGuiCheckBoxMenuItem itemShowGrid =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowGrid);
+        menu.addItem(itemShowGrid, KeyEvent.VK_G);
+        GoGuiCheckBoxMenuItem itemShowLastMove =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowLastMove);
+        menu.addItem(itemShowLastMove, KeyEvent.VK_L);
+        GoGuiCheckBoxMenuItem itemShowVariations =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowVariations);
+        menu.addItem(itemShowVariations, KeyEvent.VK_V);
+        GoGuiCheckBoxMenuItem itemBeepAfterMove =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleBeepAfterMove);
+        menu.addItem(itemBeepAfterMove, KeyEvent.VK_B);
         m_itemCommentFontFixed =
             new JCheckBoxMenuItem("Fixed Size Comment Font");
         menu.addItem(m_itemCommentFontFixed, KeyEvent.VK_F,
@@ -466,7 +406,7 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuConfigureShell()
+    private JMenuChecked createMenuConfigureShell(GoGuiActions actions)
     {
         JMenuChecked menu = new JMenuChecked("Configure Shell", m_listener);
         menu.setMnemonic(KeyEvent.VK_H);
@@ -480,7 +420,7 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenuChecked createMenuConfigureTree()
+    private JMenuChecked createMenuConfigureTree(GoGuiActions actions)
     {
         JMenuChecked menu = new JMenuChecked("Configure Tree", m_listener);
         menu.setMnemonic(KeyEvent.VK_E);
@@ -664,9 +604,9 @@ public class GoGuiMenuBar
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowAnalyzeDialog);
         menu.addItem(itemToggleShowAnalyzeDialog, KeyEvent.VK_A);
         menu.addSeparator();
-        menu.add(createMenuConfigureBoard());
-        menu.add(createMenuConfigureTree());
-        menu.add(createMenuConfigureShell());
+        menu.add(createMenuConfigureBoard(actions));
+        menu.add(createMenuConfigureTree(actions));
+        menu.add(createMenuConfigureShell(actions));
         return menu;
     }
 
