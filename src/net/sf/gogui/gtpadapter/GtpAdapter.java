@@ -474,6 +474,12 @@ public class GtpAdapter
                     public void run(GtpCommand cmd) throws GtpError {
                         cmdPlay(cmd); } });
         }
+        register("undo", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdUndo(cmd); } });
+        register("gg-undo", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdGGUndo(cmd); } });
     }
 
     private String send(String cmd) throws GtpError
