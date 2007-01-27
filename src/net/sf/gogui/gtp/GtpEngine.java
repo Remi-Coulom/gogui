@@ -207,8 +207,7 @@ public abstract class GtpEngine
     */
     public void register(String command, GtpCallback callback)
     {
-        if (m_commands.containsKey(command))
-            m_commands.remove(command);
+        unregister(command);
         m_commands.put(command, callback);
     }
 
@@ -248,6 +247,12 @@ public abstract class GtpEngine
     public void setVersion(String version)
     {
         m_version = version;
+    }
+
+    public void unregister(String command)
+    {
+        if (m_commands.containsKey(command))
+            m_commands.remove(command);
     }
 
     private boolean m_quit;

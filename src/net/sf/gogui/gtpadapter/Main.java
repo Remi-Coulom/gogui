@@ -57,6 +57,7 @@ public final class Main
             boolean version1 = opt.contains("version1");
             boolean emuHandicap = opt.contains("emuhandicap");
             boolean fillPasses = opt.contains("fillpasses");
+            boolean lowerCase = opt.contains("lowercase");
             String name = opt.get("name", null);
             String gtpFile = opt.get("gtpfile", null);
             boolean resign = opt.contains("resign");
@@ -76,15 +77,11 @@ public final class Main
             String program = (String)arguments.get(0);
             GtpAdapter adapter
                 = new GtpAdapter(program, log, gtpFile, verbose, emuHandicap,
-                                 noScore, version1);
+                                 noScore, version1, fillPasses, lowerCase);
             if (name != null)
                 adapter.setName(name);
-            if (fillPasses)
-                adapter.setFillPasses();
             if (resign)
                 adapter.setResign(resignScore);
-            if (opt.contains("lowercase"))
-                adapter.setLowerCase();
             if (opt.contains("size"))
             {
                 int size = opt.getInteger("size", 0, 1, GoPoint.MAXSIZE);

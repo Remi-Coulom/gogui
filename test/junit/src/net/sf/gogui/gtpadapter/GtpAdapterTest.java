@@ -29,50 +29,59 @@ public final class GtpAdapterTest
         return new junit.framework.TestSuite(GtpAdapterTest.class);
     }
 
-    public void setUp() throws IOException, GtpError
+    /** Test clear_board and boardsize commands.
+        The GtpSynchronizer used by GtpAdapter should always send a boardsize
+        and clear_board command after receiving a boardsize command to avoid
+        not knowing the state after the boardsize command.
+    */
+    public void testClearBoard() throws ErrorMessage, IOException, GtpError
     {
-        m_expect = new GtpExpectEngine(null);
-        expect("protocol_version", "2");
-        expect("list_commands", "");
-        final boolean useEngineConnection = false;
-        if (useEngineConnection)
-        {
-            // Much slower than using GtpEngineClient
-            GtpEngineConnection expectConnection
-                = new GtpEngineConnection(m_expect);
-            m_adapter = new GtpAdapter(expectConnection.getGtpClient(), null,
-                                       false, false, false);
-            GtpEngineConnection adapterConnection
-                = new GtpEngineConnection(m_adapter);
-            m_gtp = adapterConnection.getGtpClient();
-        }
-        else
-        {
-            m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null,
-                                       false, false, false);
-            m_gtp = new GtpEngineClient(m_adapter);
-        }
+        initAdapter();
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        send("boardsize 19");
+        assertExpectQueueEmpty();
+        send("clear_board");
+        // Now there is nothing to do for the GtpSynchronizer
+        assertExpectQueueEmpty();
     }
 
     public void testLoadSgf() throws ErrorMessage, IOException, GtpError
     {
+        initAdapter();
         expect("boardsize 19", "");
         expect("clear_board", "");
         expect("play b D4", "");
         expect("play w Q16", "");
-        send("loadsgf " + getTmpFile("test.sgf").toString());
+        send("loadsgf " + getTmpFile("test.sgf"));
         assertExpectQueueEmpty();
     }
 
+    public void testLowerCase() throws ErrorMessage, IOException, GtpError
+    {
+        initAdapter(true, "");
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        expect("play b d4", "");
+        expect("play w pass", "");
+        send("play b D4");
+        send("play w PASS");
+        assertExpectQueueEmpty();
+    }
+
+    /** Test that adapter returns the program's name. */
     public void testName() throws ErrorMessage, IOException, GtpError
     {
+        initAdapter(false, "name");
         expect("name", "Foo");
         assertEquals("Foo", send("name"));
         assertExpectQueueEmpty();
     }
 
+    /** Test that adapter returns its own name if if was set with setName(). */
     public void testName2() throws ErrorMessage, IOException, GtpError
     {
+        initAdapter();
         m_adapter.setName("Bar");
         assertEquals("Bar", send("name"));
         assertExpectQueueEmpty();
@@ -105,6 +114,39 @@ public final class GtpAdapterTest
             = new StreamCopy(false, in, new FileOutputStream(file), true);
         copy.run();
         return file;
+    }
+
+    public void initAdapter() throws IOException, GtpError
+    {
+        initAdapter(false, "");
+    }
+
+    public void initAdapter(boolean lowerCase, String supportedCommands)
+        throws IOException, GtpError
+    {
+        m_expect = new GtpExpectEngine(null);
+        // GtpAdapter sends protocol_version and list_commands at startup
+        expect("protocol_version", "2");
+        expect("list_commands", supportedCommands);
+        final boolean useEngineConnection = false;
+        if (useEngineConnection)
+        {
+            // Much slower than using GtpEngineClient
+            GtpEngineConnection expectConnection
+                = new GtpEngineConnection(m_expect);
+            m_adapter = new GtpAdapter(expectConnection.getGtpClient(), null,
+                                       false, false, false, lowerCase);
+            GtpEngineConnection adapterConnection
+                = new GtpEngineConnection(m_adapter);
+            m_gtp = adapterConnection.getGtpClient();
+        }
+        else
+        {
+            m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null,
+                                       false, false, false, lowerCase);
+            m_gtp = new GtpEngineClient(m_adapter);
+        }
+        assertExpectQueueEmpty();
     }
 
     private String send(String command) throws GtpError

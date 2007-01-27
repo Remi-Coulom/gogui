@@ -5,6 +5,7 @@
 package net.sf.gogui.gtp;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -83,21 +84,28 @@ public abstract class GtpClientBase
     {
         String point = GoPoint.toString(move.getPoint());
         GoColor color = move.getColor();
+        String command;
         if (m_protocolVersion == 1)
         {
             if (color == GoColor.BLACK)
-                return "black " + point;
-            if (color == GoColor.WHITE)
-                return "white " + point;
-            assert(color == GoColor.EMPTY);
-            return "empty " + point;
+               command = "black " + point;
+            else if (color == GoColor.WHITE)
+                command = "white " + point;
+            else
+                command = "empty " + point;
         }
-        if (color == GoColor.BLACK)
-            return "play b " + point;
-        if (color == GoColor.WHITE)
-            return "play w " + point;
-        assert(color == GoColor.EMPTY);
-        return "play empty " + point;
+        else
+        {
+            if (color == GoColor.BLACK)
+                command = "play b " + point;
+            else if (color == GoColor.WHITE)
+                command = "play w " + point;
+            else
+                command = "play empty " + point;
+        }
+        if (m_lowerCase)
+            command = command.toLowerCase(Locale.ENGLISH);
+        return command;
     }
 
     /** Send cputime command and convert the result to double.
@@ -278,10 +286,21 @@ public abstract class GtpClientBase
     */
     public abstract void sendInterrupt() throws GtpError;
 
+    /** Enable lower case mode for play commands.
+        For engines that don't implement GTP correctly and understand
+        only lower case moves in the play command.
+    */
+    public void setLowerCase()
+    {
+        m_lowerCase = true;
+    }
+
     /** Wait until the process of the program exits.
         Should do nothing if the concrete class does not create a process.
     */
     public abstract void waitForExit();
+
+    private boolean m_lowerCase;
 
     private int m_protocolVersion = 2;
 
