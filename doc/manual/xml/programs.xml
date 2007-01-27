@@ -7,26 +7,19 @@ The following Go programs can be used with GoGui:
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
   
 <section>
-<title>AmigoPlus</title>
+<title>AmigoGtp</title>
 <indexterm>
-<primary>AmigoPlus</primary>
+<primary>AmigoGtp</primary>
 </indexterm>
 <para>
-<ulink url="http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm">
-http://www.ibiblio.org/pub/Linux/games/strategy/amigoplus.lsm</ulink>
+<ulink url="http://www.cs.ualberta.ca/~emarkus/amigogtp/">
+http://www.cs.ualberta.ca/~emarkus/amigogtp/</ulink>
 </para>
 <para>
-Operating systems: Unix
+Operating systems: Unix, Windows
 </para>
 <para>
-Command: <userinput>amigoplus -gtp</userinput>
-</para>
-<para>
-<note>
-<simpara>
-AmigoPlus 0.1.2 has several bugs in its GTP implementation.
-</simpara>
-</note>
+Command: <userinput>amigogtp</userinput>
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
@@ -53,7 +46,7 @@ GTP mode, however, this window can simply be ignored and minimized.
 </para>
 <para>
 Aya also works on Unix in the <ulink url="http://www.winehq.com">Wine</ulink>
-Windows emulator, the command would be then:
+Windows emulator using the command:
 </para>
 <para>
 <userinput>wine Aya.exe --mode gtp</userinput>
@@ -101,17 +94,17 @@ http://remi.coulom.free.fr/CrazyStone/</ulink>
 Operating systems: Windows
 </para>
 <para>
-Command: <userinput>CrazyStone-0001.exe</userinput>
+Command: <userinput>CrazyStone-0006-9x9.exe</userinput>
 </para>
 <para>
 <note>
 <para>
 Crazy Stone also works on Unix in the
-<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator, the command
-would be then:
+<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator using the
+command:
 </para>
 <para>
-<userinput>wine CrazyStone-0001.exe</userinput>
+<userinput>wine CrazyStone-0006-9x9.exe</userinput>
 </para>
 </note>
 </para>
@@ -155,8 +148,8 @@ Command: <userinput>Go169.exe</userinput>
 <note>
 <para>
 Go169 also works on Unix in the
-<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator, the command
-would be then:
+<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator using the
+command:
 </para>
 <para>
 <userinput>wine Go169.exe</userinput>
@@ -179,13 +172,17 @@ http://www.math-info.univ-paris5.fr/~bouzy/INDIGO.html</ulink>
 Operating systems: GNU/Linux, Windows
 </para>
 <para>
-Command: <userinput>gtpadapter -lowercase &quot;Indigo2004-Linux.exe -gtp&quot;</userinput>
+Command: <userinput>IdgConsole2004.exe -gtp</userinput>
 </para>
 <para>
 <note>
 <para>
-The 2004 version of INDIGO does not handle uppercase pass moves.
-You can use GtpAdapter to translate moves to lowercase.
+INDIGO also works on Unix in the
+<ulink url="http://www.winehq.com">Wine</ulink> Windows emulator using the
+command:
+</para>
+<para>
+<userinput>wine IdgConsole2004.exe -gtp</userinput>
 </para>
 </note>
 </para>
