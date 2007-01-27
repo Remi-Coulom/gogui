@@ -152,6 +152,11 @@ class GuiClock
         else
             setToolTipText("Time used by White");
     }
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 }
 
 class Prisoners
@@ -181,6 +186,11 @@ class Prisoners
     {
         m_text.setText(Integer.toString(n));
     }
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 
     private JLabel m_text;
 }
