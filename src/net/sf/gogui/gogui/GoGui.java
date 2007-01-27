@@ -3083,7 +3083,6 @@ public class GoGui
         int height = 32;
         Insets rootInsets = getRootPane().getInsets();
         int rootInsetsWidth = rootInsets.left + rootInsets.right;
-        int rootInsetsHeight = rootInsets.top + rootInsets.bottom;
         Dimension menuBarSize = getJMenuBar().getPreferredSize();
         width = Math.max(width, (int)menuBarSize.getWidth() + rootInsetsWidth);
         height = Math.max(height, (int)menuBarSize.getHeight());
