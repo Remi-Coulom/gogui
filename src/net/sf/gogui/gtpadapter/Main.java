@@ -61,6 +61,7 @@ public final class Main
             boolean resign = opt.contains("resign");
             int resignScore = opt.getInteger("resign");            
             ArrayList arguments = opt.getArguments();
+            int size = opt.getInteger("size", 19, 1, GoPoint.MAXSIZE);
             if (arguments.size() != 1)
             {
                 printUsage(System.err);
@@ -75,16 +76,11 @@ public final class Main
             String program = (String)arguments.get(0);
             GtpAdapter adapter
                 = new GtpAdapter(program, log, gtpFile, verbose, noScore,
-                                 version1, fillPasses, lowerCase);
+                                 version1, fillPasses, lowerCase, size);
             if (name != null)
                 adapter.setName(name);
             if (resign)
                 adapter.setResign(resignScore);
-            if (opt.contains("size"))
-            {
-                int size = opt.getInteger("size", 0, 1, GoPoint.MAXSIZE);
-                adapter.setFixedSize(size);
-            }
             adapter.mainLoop(System.in, System.out);
             adapter.close();
             if (log != null)

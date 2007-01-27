@@ -37,7 +37,7 @@ public class GtpAdapter
 {
     public GtpAdapter(String program, PrintStream log, String gtpFile,
                       boolean verbose, boolean noScore, boolean version1,
-                      boolean fillPasses, boolean lowerCase)
+                      boolean fillPasses, boolean lowerCase, int size)
         throws Exception
     {
         super(log);
@@ -49,14 +49,14 @@ public class GtpAdapter
         m_synchronizer = new GtpSynchronizer(m_gtp, null, fillPasses);
         if (gtpFile != null)
             sendGtpFile(gtpFile);
-        init(noScore, version1);
+        init(noScore, version1, size);
     }
 
     /** Construct with existing GtpClientBase.
         For testing this class.
     */
     public GtpAdapter(GtpClientBase gtp, PrintStream log, boolean noScore,
-                      boolean version1, boolean lowerCase)
+                      boolean version1, boolean lowerCase, int size)
         throws GtpError
     {
         super(log);
@@ -64,7 +64,7 @@ public class GtpAdapter
         if (lowerCase)
             m_gtp.setLowerCase();
         m_synchronizer = new GtpSynchronizer(m_gtp, null, false);
-        init(noScore, version1);
+        init(noScore, version1, size);
     }
 
     public void close()
@@ -76,25 +76,21 @@ public class GtpAdapter
     public void cmdBlack(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(1);
-        play(GoColor.BLACK, cmd.getPointArg(0, m_boardSize));
+        play(GoColor.BLACK, getPointArg(cmd, 0));
     }
 
     public void cmdBoardsize(GtpCommand cmd) throws GtpError
     {
-        int size = cmd.getIntArg();
-        if (size < 1)
-            throw new GtpError("Invalid board size");
-        if (m_size > 0 && size != m_size)
-            throw new GtpError("Boardsize must be " + m_size);
-        m_boardSize = size;
-        m_board.init(m_boardSize);
+        cmd.checkNuArg(1);
+        int size = cmd.getIntArg(0, 1, GoPoint.MAXSIZE);
+        m_board.init(size);
         synchronize();
     }
 
     public void cmdClearBoard(GtpCommand cmd) throws GtpError
     {
         cmd.checkArgNone();
-        m_board.init(m_boardSize);
+        m_board.init(m_board.getSize());
         synchronize();
     }
 
@@ -126,7 +122,7 @@ public class GtpAdapter
         String response = send(command);
         if (response.toLowerCase(Locale.ENGLISH).trim().equals("resign"))
             return;
-        GoPoint point = GtpUtil.parsePoint(response, m_boardSize);
+        GoPoint point = GtpUtil.parsePoint(response, m_board.getSize());
         m_board.play(point, color);
         m_synchronizer.updateAfterGenmove(m_board);
         cmd.setResponse(response);
@@ -186,13 +182,13 @@ public class GtpAdapter
         ArrayList stones;
         if (m_gtp.isCommandSupported("place_free_handicap"))
         {
-            String response = send("place_free_handicap");
-            stones = GtpUtil.parsePointList(response, m_boardSize);
+            String response = send(cmd.getLine());
+            stones = GtpUtil.parsePointList(response, m_board.getSize());
         }
         else
         {
             int n = cmd.getIntArg();
-            stones = Board.getHandicapStones(m_boardSize, n);
+            stones = Board.getHandicapStones(m_board.getSize(), n);
             if  (stones == null)
                 throw new GtpError("Invalid number of handicap stones");
         }
@@ -213,7 +209,7 @@ public class GtpAdapter
     {
         cmd.checkNuArg(2);
         GoColor color = cmd.getColorArg(0);
-        GoPoint point = cmd.getPointArg(1, m_boardSize);
+        GoPoint point = getPointArg(cmd, 1);
         if (point != null && m_board.getColor(point) != GoColor.EMPTY)
             throw new GtpError("point is occupied");
         play(color, point);
@@ -234,7 +230,7 @@ public class GtpAdapter
     public void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
     {
         for (int i = 0; i < cmd.getNuArg(); ++i)
-            m_board.setup(cmd.getPointArg(i, m_boardSize), GoColor.BLACK);
+            m_board.setup(getPointArg(cmd, i), GoColor.BLACK);
         synchronize();
     }
 
@@ -248,7 +244,7 @@ public class GtpAdapter
     public void cmdWhite(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArg(1);
-        play(GoColor.WHITE, cmd.getPointArg(0, m_boardSize));
+        play(GoColor.WHITE, getPointArg(cmd, 0));
     }
 
     public void interruptCommand()
@@ -262,18 +258,6 @@ public class GtpAdapter
         {
             System.err.println(e);
         }
-    }
-
-    /** Accept only a fixed board size.
-        Should be set before handling any commands.
-    */
-    public void setFixedSize(int size)
-    {
-        assert(size > 0);
-        assert(size <= GoPoint.MAXSIZE);
-        m_size = size;
-        m_boardSize = size;
-        m_board.init(m_boardSize);
     }
 
     public void setName(String name)
@@ -317,10 +301,6 @@ public class GtpAdapter
     /** Only accept this board size.
         A value of -1 means accept any size.
     */
-    private int m_size;
-
-    private int m_boardSize;
-
     private int m_resignScore;
 
     private Board m_board;
@@ -381,15 +361,20 @@ public class GtpAdapter
         return false;
     }
 
-    private void init(boolean noScore, boolean version1) throws GtpError
+    private GoPoint getPointArg(GtpCommand cmd, int i) throws GtpError
+    {
+        return cmd.getPointArg(i, m_board.getSize());
+    }
+
+    private void init(boolean noScore, boolean version1, int size)
+        throws GtpError
     {
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
-        m_boardSize = GoPoint.DEFAULT_SIZE;
-        m_board = new Board(m_boardSize);
-        m_size = -1;
+        m_board = new Board(size);
         m_resign = false;
         registerCommands(noScore, version1);
+        synchronize();
     }
 
     private void play(GoColor color, GoPoint point) throws GtpError

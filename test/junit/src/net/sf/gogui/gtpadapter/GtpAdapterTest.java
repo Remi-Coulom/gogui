@@ -37,20 +37,45 @@ public final class GtpAdapterTest
     public void testClearBoard() throws ErrorMessage, IOException, GtpError
     {
         initAdapter();
-        expect("boardsize 19", "");
-        expect("clear_board", "");
         send("boardsize 19");
+        // Nothing to do for the GtpSynchronizer
         assertExpectQueueEmpty();
         send("clear_board");
-        // Now there is nothing to do for the GtpSynchronizer
+        // Nothing to do for the GtpSynchronizer
+        assertExpectQueueEmpty();
+    }
+
+    /** Test that place_free_handicap used if supported by the engine.
+        GtpSynchronizer will still transmit them as play commands until
+        it also supports place_free_handicap.
+    */
+    public void testFreeHandicap()
+        throws ErrorMessage, IOException, GtpError
+    {
+        initAdapter(false, "place_free_handicap");
+        expect("place_free_handicap 2", "A1 A2");
+        expect("play b A1", "");
+        expect("play b A2", "");
+        assertEquals("A1 A2", send("place_free_handicap 2"));
+        assertExpectQueueEmpty();
+    }
+
+    /** Test that place_free_handicap is emulated if not supported by the
+        engine.
+    */
+    public void testFreeHandicapEmu()
+        throws ErrorMessage, IOException, GtpError
+    {
+        initAdapter();
+        expect("play b D4", "");
+        expect("play b Q16", "");
+        assertEquals("D4 Q16", send("place_free_handicap 2"));
         assertExpectQueueEmpty();
     }
 
     public void testLoadSgf() throws ErrorMessage, IOException, GtpError
     {
         initAdapter();
-        expect("boardsize 19", "");
-        expect("clear_board", "");
         expect("play b D4", "");
         expect("play w Q16", "");
         send("loadsgf " + getTmpFile("test.sgf"));
@@ -60,8 +85,6 @@ public final class GtpAdapterTest
     public void testLowerCase() throws ErrorMessage, IOException, GtpError
     {
         initAdapter(true, "");
-        expect("boardsize 19", "");
-        expect("clear_board", "");
         expect("play b d4", "");
         expect("play w pass", "");
         send("play b D4");
@@ -125,9 +148,10 @@ public final class GtpAdapterTest
         throws IOException, GtpError
     {
         m_expect = new GtpExpectEngine(null);
-        // GtpAdapter sends protocol_version and list_commands at startup
         expect("protocol_version", "2");
         expect("list_commands", supportedCommands);
+        expect("boardsize 19", "");
+        expect("clear_board", "");
         final boolean useEngineConnection = false;
         if (useEngineConnection)
         {
@@ -135,7 +159,7 @@ public final class GtpAdapterTest
             GtpEngineConnection expectConnection
                 = new GtpEngineConnection(m_expect);
             m_adapter = new GtpAdapter(expectConnection.getGtpClient(), null,
-                                       false, false, lowerCase);
+                                       false, false, lowerCase, 19);
             GtpEngineConnection adapterConnection
                 = new GtpEngineConnection(m_adapter);
             m_gtp = adapterConnection.getGtpClient();
@@ -143,7 +167,7 @@ public final class GtpAdapterTest
         else
         {
             m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null,
-                                       false, false, lowerCase);
+                                       false, false, lowerCase, 19);
             m_gtp = new GtpEngineClient(m_adapter);
         }
         assertExpectQueueEmpty();

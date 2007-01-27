@@ -179,7 +179,7 @@ is below the given score (to the disadvantage of the side to move).
 </term>
 <listitem>
 <para>
-Only accept this board size, even if the program accepts other sizes.
+Board size at startup. Default is 19.
 </para>
 </listitem>
 </varlistentry>
