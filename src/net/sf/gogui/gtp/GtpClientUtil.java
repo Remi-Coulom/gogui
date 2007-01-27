@@ -4,18 +4,10 @@
 
 package net.sf.gogui.gtp;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.util.StringUtil;
 
 /** Utility functions for using a GtpClient. */
 public final class GtpClientUtil
