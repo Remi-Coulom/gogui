@@ -6,7 +6,6 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.Box;
 import javax.swing.Icon;
