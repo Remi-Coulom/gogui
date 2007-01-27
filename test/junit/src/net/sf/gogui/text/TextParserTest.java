@@ -75,12 +75,12 @@ public final class TextParserTest
     /** Test example from GNU Go documentation width row width increasing. */
     public void testWidthIncreasing()
     {
-        parse("XXXXX\n" +
-              "XOOOX\n" +
-              "XO.OOX\n" +
-              "XX..OX\n" +
-              "XXOOXX\n" +
-              "XXXXX\n");
+        parse("@@@@@\n" +
+              "@OOO@\n" +
+              "@O.OO@\n" +
+              "@@..O@\n" +
+              "@@OO@@\n" +
+              "@@@@@\n");
         checkSize(6);
         checkColor(0, 5, GoColor.BLACK);
         checkColor(5, 5, GoColor.EMPTY);
