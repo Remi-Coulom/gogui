@@ -10,6 +10,13 @@ public final class BoardUtil
     /** Number of rotation modes for #rotate(). */
     public static final int NUMBER_ROTATIONS = 8;
 
+    public static void copy(Board target, ConstBoard source)
+    {
+        target.init(source.getSize());
+        for (int i = 0; i < source.getNumberPlacements(); ++i)
+            target.doPlacement(source.getPlacement(i));
+    }
+
     /** Get board position as text diagram.
         @param board The board to print.
         @param withGameInfo Print game information (prisoners, recent moves)
@@ -131,7 +138,7 @@ public final class BoardUtil
     private static void printToMove(ConstBoard board, StringBuffer buffer)
     {
         buffer.append(board.getToMove() == GoColor.BLACK ? "Black" : "White");
-        buffer.append(" to move");
+        buffer.append(" to play");
     }
 
     private static void printXCoords(int size, StringBuffer s,
