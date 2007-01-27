@@ -31,14 +31,14 @@ public final class BoardUtil
         printXCoords(size, s, separator);
         for (int y = size - 1; y >= 0; --y)
         {
-            printYCoord(y, s);
+            printYCoord(y, s, true);
             s.append(' ');
             for (int x = 0; x < size; ++x)
             {
                 GoPoint point = GoPoint.get(x, y);
                 GoColor color = board.getColor(point);
                 if (color == GoColor.BLACK)
-                    s.append("@ ");
+                    s.append("X ");
                 else if (color == GoColor.WHITE)
                     s.append("O ");
                 else
@@ -49,7 +49,7 @@ public final class BoardUtil
                         s.append(". ");
                 }
             }
-            printYCoord(y, s);
+            printYCoord(y, s, false);
             if (withGameInfo)
                 printGameInfo(board, s, y);
             s.append(separator);
@@ -157,11 +157,13 @@ public final class BoardUtil
         s.append(separator);
     }
 
-    private static void printYCoord(int y, StringBuffer s)
+    private static void printYCoord(int y, StringBuffer s, boolean alignRight)
     {
         String string = Integer.toString(y + 1);
+        if (alignRight && string.length() == 1)
+            s.append(' ');
         s.append(string);
-        if (string.length() == 1)
+        if (! alignRight && string.length() == 1)
             s.append(' ');
     }
 }
