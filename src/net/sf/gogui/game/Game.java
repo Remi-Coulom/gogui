@@ -32,6 +32,14 @@ public class Game
         init(boardSize, komi, handicap, rules, timeSettings);
     }
 
+    public Game(GameTree tree)
+    {
+        int boardSize = tree.getGameInformation().getBoardSize();
+        m_board = new Board(boardSize);
+        m_clock = new Clock();
+        init(tree);
+    }
+
     /** Add a mark property to current node. */
     public void addMarked(GoPoint point, MarkType type)
     {
