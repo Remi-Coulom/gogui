@@ -271,7 +271,7 @@ public class GuiField
     private static final Color COLOR_STONE_BLACK = Color.decode("#202028");
 
     private static final Color COLOR_STONE_BLACK_BRIGHT
-        = Color.decode("#a0a0a8");
+        = Color.decode("#808088");
 
     private static final Color COLOR_STONE_WHITE = Color.decode("#d7d0c9");
 
