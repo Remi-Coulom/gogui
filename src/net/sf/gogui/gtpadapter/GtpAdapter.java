@@ -200,7 +200,7 @@ public class GtpAdapter
         for (int i = 0; i < stones.size(); ++i)
         {
             GoPoint point = (GoPoint)stones.get(i);            
-            m_board.play(Move.get(point, GoColor.BLACK));
+            m_board.setup(point, GoColor.BLACK);
             if (pointList.length() > 0)
                 pointList.append(' ');
             pointList.append(point);
@@ -234,7 +234,7 @@ public class GtpAdapter
     public void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
     {
         for (int i = 0; i < cmd.getNuArg(); ++i)
-            m_board.play(cmd.getPointArg(i, m_boardSize), GoColor.BLACK);
+            m_board.setup(cmd.getPointArg(i, m_boardSize), GoColor.BLACK);
         synchronize();
     }
 
