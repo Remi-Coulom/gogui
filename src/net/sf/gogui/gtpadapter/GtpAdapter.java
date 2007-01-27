@@ -204,6 +204,8 @@ public class GtpAdapter
         cmd.checkNuArg(2);
         GoColor color = cmd.getColorArg(0);
         GoPoint point = cmd.getPointArg(1, m_boardSize);
+        if (m_board.getColor(point) != GoColor.EMPTY)
+            throw new GtpError("point is occupied");
         play(color, point);
     }
 
