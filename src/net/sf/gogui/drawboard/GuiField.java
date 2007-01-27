@@ -268,15 +268,15 @@ public class GuiField
 
     private static final Color COLOR_MARK = Color.decode("#4040ff");
 
-    private static final Color COLOR_STONE_BLACK = Color.decode("#0c0c0c");
+    private static final Color COLOR_STONE_BLACK = Color.decode("#202028");
 
     private static final Color COLOR_STONE_BLACK_BRIGHT
-        = Color.decode("#666666");
+        = Color.decode("#a0a0a8");
 
     private static final Color COLOR_STONE_WHITE = Color.decode("#d7d0c9");
 
     private static final Color COLOR_STONE_WHITE_BRIGHT
-        = Color.decode("#f6eee6");
+        = Color.decode("#f0f0e9");
 
     private static Font s_cachedFont;
 
@@ -503,10 +503,10 @@ public class GuiField
         }
         if (size == paintSize && paint != null)
             return paint;
-        Point2D.Double center = new Point2D.Double(0.46 * size, 0.29 * size);
-        Point2D.Double radius1 = new Point2D.Double(0.55 * size, -0.08 * size);
-        Point2D.Double radius2 = new Point2D.Double(0.08 * size, 0.35 * size);
-        double focus = -0.63;
+        Point2D.Double center = new Point2D.Double(0.43 * size, 0.21 * size);
+        Point2D.Double radius1 = new Point2D.Double(0.47 * size, -0.15 * size);
+        Point2D.Double radius2 = new Point2D.Double(0.08 * size, 0.25 * size);
+        double focus = -0.4;
         paint = new RadialGradientPaint(center, radius1, radius2, focus,
                                         colorBright, colorNormal);
         if (color == GoColor.BLACK)
