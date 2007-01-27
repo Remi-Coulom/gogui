@@ -149,7 +149,7 @@ public abstract class GtpClientBase
     /** Check if a command is supported.
         Note: call querySupportedCommands() first.
     */
-    public boolean isCommandSupported(String command)
+    public boolean isSupported(String command)
     {
         if (m_supportedCommands == null)
             return false;
@@ -164,7 +164,7 @@ public abstract class GtpClientBase
     */
     public boolean isCpuTimeSupported()
     {
-        return isCommandSupported("cputime");
+        return isSupported("cputime");
     }
 
     /** Check if interrupting a command is supported. */
@@ -218,7 +218,7 @@ public abstract class GtpClientBase
 
     /** Query the supported commands.
         @see GtpClientBase#getSupportedCommands
-        @see GtpClientBase#isCommandSupported
+        @see GtpClientBase#isSupported
     */
     public void querySupportedCommands() throws GtpError
     {

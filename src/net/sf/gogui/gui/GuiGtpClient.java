@@ -63,9 +63,9 @@ public class GuiGtpClient
     public String getAnalyzeCommands()
     {
         String command;
-        if (isCommandSupported("gogui-analyze_commands"))
+        if (isSupported("gogui-analyze_commands"))
             command = "gogui-analyze_commands";
-        else if (isCommandSupported("gogui_analyze_commands"))
+        else if (isSupported("gogui_analyze_commands"))
             // Used by old versions of GoGui
             command = "gogui_analyze_commands";
         else
@@ -144,9 +144,9 @@ public class GuiGtpClient
     {
         try
         {
-            if (isCommandSupported("gogui-title"))
+            if (isSupported("gogui-title"))
                 return send("gogui-title");
-            else if (isCommandSupported("gogui_title"))
+            else if (isSupported("gogui_title"))
                 return send("gogui_title");
         }
         catch (GtpError e)
@@ -172,11 +172,11 @@ public class GuiGtpClient
         return m_commandInProgress;
     }
 
-    public boolean isCommandSupported(String command)
+    public boolean isSupported(String command)
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);
-        return m_gtp.isCommandSupported(command);
+        return m_gtp.isSupported(command);
     }
 
     public boolean isInterruptSupported()

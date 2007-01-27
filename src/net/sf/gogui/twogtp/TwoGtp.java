@@ -242,14 +242,14 @@ public class TwoGtp
             sendIfSupported(command, cmd.getLine());
         else
         {
-            boolean isExtCommandBlack = m_black.isCommandSupported(command);
-            boolean isExtCommandWhite = m_white.isCommandSupported(command);
+            boolean isExtCommandBlack = m_black.isSupported(command);
+            boolean isExtCommandWhite = m_white.isSupported(command);
             boolean isExtCommandReferee = false;
             if (m_referee != null)
-                isExtCommandReferee = m_referee.isCommandSupported(command);
+                isExtCommandReferee = m_referee.isSupported(command);
             boolean isExtCommandObserver = false;
             if (m_observer != null)
-                isExtCommandObserver = m_observer.isCommandSupported(command);
+                isExtCommandObserver = m_observer.isSupported(command);
             if (isExtCommandBlack && ! isExtCommandObserver
                 && ! isExtCommandWhite && ! isExtCommandReferee)
                 forward(m_black, cmd);
@@ -467,9 +467,9 @@ public class TwoGtp
         checkInconsistentState();
         if (m_referee != null)
             forward(m_referee, cmd);
-        else if (m_black.isCommandSupported("final_status"))
+        else if (m_black.isSupported("final_status"))
             forward(m_black, cmd);
-        else if (m_white.isCommandSupported("final_status"))
+        else if (m_white.isSupported("final_status"))
             forward(m_white, cmd);
         else
             throw new GtpError("neither player supports final_status");
@@ -1038,7 +1038,7 @@ public class TwoGtp
 
     private void sendIfSupported(GtpClient gtp, String cmd, String cmdLine)
     {
-        if (! gtp.isCommandSupported(cmd))
+        if (! gtp.isSupported(cmd))
             return;
         try
         {

@@ -26,7 +26,7 @@ public final class GuiGtpUtil
             return;
         try
         {
-            if (gtp.isCommandSupported("komi"))
+            if (gtp.isSupported("komi"))
                 gtp.send("komi " + komi);
         }
         catch (GtpError e)
@@ -45,7 +45,7 @@ public final class GuiGtpUtil
     {
         if (gtp == null
             || rules == Board.RULES_UNKNOWN
-            || ! gtp.isCommandSupported("scoring_system"))
+            || ! gtp.isSupported("scoring_system"))
             return;
         try
         {

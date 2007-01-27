@@ -189,19 +189,19 @@ public final class GtpClient
     {
         try
         {
-            if (isCommandSupported("gogui-interrupt"))
+            if (isSupported("gogui-interrupt"))
             {
                 send("gogui-interrupt");
                 m_isInterruptCommentSupported = true;
             }
-            else if (isCommandSupported("gogui_interrupt"))
+            else if (isSupported("gogui_interrupt"))
             {
                 send("gogui_interrupt");
                 m_isInterruptCommentSupported = true;
             }
-            else if (isCommandSupported("gogui-sigint"))
+            else if (isSupported("gogui-sigint"))
                 m_pid = send("gogui-sigint").trim();
-            else if (isCommandSupported("gogui_sigint"))
+            else if (isSupported("gogui_sigint"))
                 m_pid = send("gogui_sigint").trim();
         }
         catch (GtpError e)

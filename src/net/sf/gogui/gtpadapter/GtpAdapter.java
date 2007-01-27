@@ -144,9 +144,9 @@ public class GtpAdapter
         String response =
             "string/GtpAdapter ShowBoard/gtpadapter-showboard\n"  ;
         String command = null;
-        if (m_gtp.isCommandSupported("gogui-analyze_commands"))
+        if (m_gtp.isSupported("gogui-analyze_commands"))
             command = "gogui-analyze_commands";
-        else if (m_gtp.isCommandSupported("gogui_analyze_commands"))
+        else if (m_gtp.isSupported("gogui_analyze_commands"))
             command = "gogui_analyze_commands"; // deprecated
         if (command != null)
             response += send(command);
@@ -180,7 +180,7 @@ public class GtpAdapter
     public void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
         ArrayList stones;
-        if (m_gtp.isCommandSupported("place_free_handicap"))
+        if (m_gtp.isSupported("place_free_handicap"))
         {
             String response = send(cmd.getLine());
             stones = GtpUtil.parsePointList(response, m_board.getSize());

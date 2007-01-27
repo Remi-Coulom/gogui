@@ -36,9 +36,9 @@ public final class GtpClientUtil
 
     public static String getPlaySequenceCommand(GtpClientBase gtp)
     {
-        if (gtp.isCommandSupported("gogui-play_sequence"))
+        if (gtp.isSupported("gogui-play_sequence"))
             return "gogui-play_sequence";
-        if (gtp.isCommandSupported("play_sequence"))
+        if (gtp.isSupported("play_sequence"))
             return "play_sequence";
         return null;
     }

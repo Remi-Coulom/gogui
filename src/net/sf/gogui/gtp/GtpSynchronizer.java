@@ -80,7 +80,7 @@ public class GtpSynchronizer
         computeToExecuteAll(board, m_toExecuteAll);
         int numberUndo = computeToExecuteMissing(m_toExecuteMissing, board);
         boolean undoSupported =
-            (isCommandSupported("undo") || isCommandSupported("gg-undo"));
+            (isSupported("undo") || isSupported("gg-undo"));
         if (undoSupported || numberUndo == 0)
         {
             undo(numberUndo);
@@ -164,7 +164,7 @@ public class GtpSynchronizer
         throws GtpError
     {
         toExecuteAll.clear();
-        //boolean isSetupSupported = isCommandSupported("setup");
+        //boolean isSetupSupported = isSupported("setup");
         boolean isSetupSupported = false; // TODO: implement setup command
         m_tempBoard.init(board.getSize());
         for (int i = 0; i < board.getNumberPlacements(); ++i)
@@ -260,9 +260,9 @@ public class GtpSynchronizer
         return i;
     }
 
-    private boolean isCommandSupported(String command)
+    private boolean isSupported(String command)
     {
-        return m_gtp.isCommandSupported(command);
+        return m_gtp.isSupported(command);
     }
 
     private void undo(int n) throws GtpError
@@ -270,15 +270,15 @@ public class GtpSynchronizer
         if (n == 0)
             return;
         assert(n > 0);
-        if (isCommandSupported("gg-undo")
-            && (n > 1 || ! isCommandSupported("undo")))
+        if (isSupported("gg-undo")
+            && (n > 1 || ! isSupported("undo")))
         {
             m_gtp.send("gg-undo " + n);
             m_board.undo(n);
         }
         else
         {
-            if (! isCommandSupported("undo"))
+            if (! isSupported("undo"))
                 throw new GtpError("Program does not support undo");
             for (int i = 0; i < n; ++i)
             {

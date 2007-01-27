@@ -879,7 +879,7 @@ public class GoGui
             initScore(null);
             return;
         }
-        if (m_gtp.isCommandSupported("final_status_list"))
+        if (m_gtp.isSupported("final_status_list"))
         {
             Runnable callback = new Runnable()
                 {
@@ -2312,7 +2312,7 @@ public class GoGui
                 // correctly, so we send a quit before
                 try
                 {
-                    if (m_gtp.isCommandSupported("quit"))
+                    if (m_gtp.isSupported("quit"))
                         m_gtp.send("quit");
                 }
                 catch (GtpError e)
@@ -2389,7 +2389,7 @@ public class GoGui
         GoColor toMove = getToMove();
         String command;
         if (NodeUtil.isInCleanup(getCurrentNode())
-            && m_gtp.isCommandSupported("kgs-genmove_cleanup"))
+            && m_gtp.isSupported("kgs-genmove_cleanup"))
         {
             command = "kgs-genmove_cleanup";
             if (toMove == GoColor.BLACK)
@@ -3123,7 +3123,7 @@ public class GoGui
         TimeSettings timeSettings = getGameInformation().getTimeSettings();
         if (timeSettings == null)
             return;
-        if (! m_gtp.isCommandSupported("time_settings"))
+        if (! m_gtp.isSupported("time_settings"))
             return;
         m_game.setTimeSettings(timeSettings);
         String command = GtpUtil.getTimeSettingsCommand(timeSettings);
