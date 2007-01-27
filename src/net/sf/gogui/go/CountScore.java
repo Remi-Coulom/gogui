@@ -21,7 +21,7 @@ public class CountScore
         @param board The board.
         @param isDeadStone Initial set of stones to be marked as dead.
      */
-    public void begin(ConstBoard board, GoPoint[] isDeadStone)
+    public void begin(ConstBoard board, ArrayList deadStones)
     {
         m_board = board;
         int size = board.getSize();
@@ -29,9 +29,9 @@ public class CountScore
         m_score = new GoColor[size][size];
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
             m_dead.clear(m_board.getPoint(i));
-        if (isDeadStone != null)
-            for (int i = 0; i < isDeadStone.length; ++i)
-                m_dead.set(isDeadStone[i]);
+        if (deadStones != null)
+            for (int i = 0; i < deadStones.size(); ++i)
+                m_dead.set((GoPoint)deadStones.get(i));
         compute();
     }
 

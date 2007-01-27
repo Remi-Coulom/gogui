@@ -62,15 +62,15 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.PLIST:
             {
-                GoPoint list[] = GtpUtil.parsePointList(response, size);
-                GuiBoardUtil.showPointList(guiBoard, list);
+                ArrayList points = GtpUtil.parsePointList(response, size);
+                GuiBoardUtil.showPointList(guiBoard, points);
             }
             break;
         case AnalyzeCommand.HPSTRING:
         case AnalyzeCommand.PSTRING:
             {
-                GoPoint list[] = GtpUtil.parsePointString(response, size);
-                GuiBoardUtil.showPointList(guiBoard, list);
+                ArrayList points = GtpUtil.parsePointString(response, size);
+                GuiBoardUtil.showPointList(guiBoard, points);
             }
             break;
         case AnalyzeCommand.PSPAIRS:

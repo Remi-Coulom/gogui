@@ -4,6 +4,7 @@
 
 package net.sf.gogui.gtp;
 
+import java.util.ArrayList;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoPoint;
 
@@ -23,13 +24,13 @@ public final class GtpUtilTest
     public void testParsePointString() throws GtpError
     {
         String s = " A1 b2\n textC3 C3 PASS text\tpass";
-        GoPoint[] points = GtpUtil.parsePointString(s, 19);
-        assertEquals(5, points.length);
-        assertSame(GoPoint.get(0, 0), points[0]);
-        assertSame(GoPoint.get(1, 1), points[1]);
-        assertSame(GoPoint.get(2, 2), points[2]);
-        assertSame(null, points[3]);
-        assertSame(null, points[4]);
+        ArrayList points = GtpUtil.parsePointString(s, 19);
+        assertEquals(5, points.size());
+        assertSame(GoPoint.get(0, 0), points.get(0));
+        assertSame(GoPoint.get(1, 1), points.get(1));
+        assertSame(GoPoint.get(2, 2), points.get(2));
+        assertSame(null, points.get(3));
+        assertSame(null, points.get(4));
     }
 
     public void getTimeSettingsCommand()

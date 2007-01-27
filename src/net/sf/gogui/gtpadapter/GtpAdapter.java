@@ -36,8 +36,8 @@ public class GtpAdapter
     extends GtpEngine
 {
     public GtpAdapter(String program, PrintStream log, String gtpFile,
-                      boolean verbose, boolean emuHandicap, boolean noScore,
-                      boolean version1, boolean fillPasses, boolean lowerCase)
+                      boolean verbose, boolean noScore, boolean version1,
+                      boolean fillPasses, boolean lowerCase)
         throws Exception
     {
         super(log);
@@ -49,14 +49,14 @@ public class GtpAdapter
         m_synchronizer = new GtpSynchronizer(m_gtp, null, fillPasses);
         if (gtpFile != null)
             sendGtpFile(gtpFile);
-        init(emuHandicap, noScore, version1);
+        init(noScore, version1);
     }
 
     /** Construct with existing GtpClientBase.
         For testing this class.
     */
-    public GtpAdapter(GtpClientBase gtp, PrintStream log, boolean emuHandicap,
-                      boolean noScore, boolean version1, boolean lowerCase)
+    public GtpAdapter(GtpClientBase gtp, PrintStream log, boolean noScore,
+                      boolean version1, boolean lowerCase)
         throws GtpError
     {
         super(log);
@@ -64,7 +64,7 @@ public class GtpAdapter
         if (lowerCase)
             m_gtp.setLowerCase();
         m_synchronizer = new GtpSynchronizer(m_gtp, null, false);
-        init(emuHandicap, noScore, version1);
+        init(noScore, version1);
     }
 
     public void close()
@@ -183,20 +183,30 @@ public class GtpAdapter
 
     public void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
-        int n = cmd.getIntArg();
-        ArrayList stones = Board.getHandicapStones(m_boardSize, n);
-        if  (stones == null)
-            throw new GtpError("Invalid number of handicap stones");
+        ArrayList stones;
+        if (m_gtp.isCommandSupported("place_free_handicap"))
+        {
+            String response = send("place_free_handicap");
+            stones = GtpUtil.parsePointList(response, m_boardSize);
+        }
+        else
+        {
+            int n = cmd.getIntArg();
+            stones = Board.getHandicapStones(m_boardSize, n);
+            if  (stones == null)
+                throw new GtpError("Invalid number of handicap stones");
+        }
         StringBuffer pointList = new StringBuffer(128);
         for (int i = 0; i < stones.size(); ++i)
         {
-            GoPoint point = (GoPoint)stones.get(i);
-            play(GoColor.BLACK, point);
+            GoPoint point = (GoPoint)stones.get(i);            
+            m_board.play(Move.get(point, GoColor.BLACK));
             if (pointList.length() > 0)
                 pointList.append(' ');
             pointList.append(point);
         }
         cmd.setResponse(pointList.toString());
+        synchronize();
     }
 
     public void cmdPlay(GtpCommand cmd) throws GtpError
@@ -204,7 +214,7 @@ public class GtpAdapter
         cmd.checkNuArg(2);
         GoColor color = cmd.getColorArg(0);
         GoPoint point = cmd.getPointArg(1, m_boardSize);
-        if (m_board.getColor(point) != GoColor.EMPTY)
+        if (point != null && m_board.getColor(point) != GoColor.EMPTY)
             throw new GtpError("point is occupied");
         play(color, point);
     }
@@ -219,19 +229,6 @@ public class GtpAdapter
     {
         send("quit");
         super.cmdQuit(cmd);
-    }
-
-    public void interruptProgram(GtpClientBase gtp)
-    {
-        try
-        {
-            if (gtp.isInterruptSupported())
-                gtp.sendInterrupt();
-        }
-        catch (GtpError e)
-        {
-            System.err.println(e);
-        }
     }
 
     public void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
@@ -256,7 +253,15 @@ public class GtpAdapter
 
     public void interruptCommand()
     {
-        interruptProgram(m_gtp);
+        try
+        {
+            if (m_gtp.isInterruptSupported())
+                m_gtp.sendInterrupt();
+        }
+        catch (GtpError e)
+        {
+            System.err.println(e);
+        }
     }
 
     /** Accept only a fixed board size.
@@ -376,8 +381,7 @@ public class GtpAdapter
         return false;
     }
 
-    private void init(boolean emuHandicap, boolean noScore,
-                      boolean version1) throws GtpError
+    private void init(boolean noScore, boolean version1) throws GtpError
     {
         m_gtp.queryProtocolVersion();
         m_gtp.querySupportedCommands();
@@ -385,7 +389,7 @@ public class GtpAdapter
         m_board = new Board(m_boardSize);
         m_size = -1;
         m_resign = false;
-        registerCommands(emuHandicap, noScore, version1);
+        registerCommands(noScore, version1);
     }
 
     private void play(GoColor color, GoPoint point) throws GtpError
@@ -395,8 +399,7 @@ public class GtpAdapter
         synchronize();
     }
 
-    private void registerCommands(boolean emuHandicap, boolean noScore,
-                                  boolean version1)
+    private void registerCommands(boolean noScore, boolean version1)
     {
         ArrayList commands = m_gtp.getSupportedCommands();
         for (int i = 0; i < commands.size(); ++i)
@@ -422,15 +425,12 @@ public class GtpAdapter
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdLoadsgf(cmd); } });
         setName(null);
-        if (emuHandicap)
-        {
-            register("place_free_handicap", new GtpCallback() {
-                    public void run(GtpCommand cmd) throws GtpError {
-                        cmdPlaceFreeHandicap(cmd); } });
-            register("set_free_handicap", new GtpCallback() {
-                    public void run(GtpCommand cmd) throws GtpError {
-                        cmdSetFreeHandicap(cmd); } });
-        }
+        register("place_free_handicap", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdPlaceFreeHandicap(cmd); } });
+        register("set_free_handicap", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdSetFreeHandicap(cmd); } });
         if (noScore)
         {
             unregister("final_score");

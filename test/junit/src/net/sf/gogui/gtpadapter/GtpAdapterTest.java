@@ -135,7 +135,7 @@ public final class GtpAdapterTest
             GtpEngineConnection expectConnection
                 = new GtpEngineConnection(m_expect);
             m_adapter = new GtpAdapter(expectConnection.getGtpClient(), null,
-                                       false, false, false, lowerCase);
+                                       false, false, lowerCase);
             GtpEngineConnection adapterConnection
                 = new GtpEngineConnection(m_adapter);
             m_gtp = adapterConnection.getGtpClient();
@@ -143,7 +143,7 @@ public final class GtpAdapterTest
         else
         {
             m_adapter = new GtpAdapter(new GtpEngineClient(m_expect), null,
-                                       false, false, false, lowerCase);
+                                       false, false, lowerCase);
             m_gtp = new GtpEngineClient(m_adapter);
         }
         assertExpectQueueEmpty();

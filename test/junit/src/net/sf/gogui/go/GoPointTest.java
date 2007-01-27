@@ -72,16 +72,11 @@ public final class GoPointTest
         checkInvalid("19Z", 19);
         checkInvalid("A100", 25);
         checkInvalid("C10", 9);
-        ArrayList pointListArrayList
-            = GoPoint.parsePointListArrayList("  R15 PASS T19 ", 19);
-        assertEquals(pointListArrayList.size(), 3);
-        checkPoint((GoPoint)pointListArrayList.get(0), 16, 14);
-        assertNull((GoPoint)pointListArrayList.get(1));
-        checkPoint((GoPoint)pointListArrayList.get(2), 18, 18);
-        GoPoint[] pointList = GoPoint.parsePointList("PASS A1", 9);
-        assertEquals(pointList.length, 2);
-        assertNull(pointList[0]);
-        checkPoint(pointList[1], 0, 0);
+        ArrayList points = GoPoint.parsePointList("  R15 PASS T19 ", 19);
+        assertEquals(points.size(), 3);
+        checkPoint((GoPoint)points.get(0), 16, 14);
+        assertNull((GoPoint)points.get(1));
+        checkPoint((GoPoint)points.get(2), 18, 18);
     }
 
     public void testUnique()

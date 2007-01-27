@@ -151,17 +151,7 @@ public final class GoPoint
         return GoPoint.get(x, y);
     }
 
-    public static GoPoint[] parsePointList(String s, int boardSize)
-        throws InvalidPoint
-    {
-        ArrayList list = parsePointListArrayList(s, boardSize);
-        GoPoint result[] = new GoPoint[list.size()];
-        for (int i = 0; i < result.length; ++i)
-            result[i] = (GoPoint)list.get(i);
-        return result;
-    }
-
-    public static ArrayList parsePointListArrayList(String s, int boardSize)
+    public static ArrayList parsePointList(String s, int boardSize)
         throws InvalidPoint
     {
         ArrayList list = new ArrayList();

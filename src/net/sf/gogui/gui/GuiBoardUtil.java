@@ -101,12 +101,12 @@ public final class GuiBoardUtil
     }
 
     public static void scoreBegin(GuiBoard guiBoard, CountScore countScore,
-                                  ConstBoard board, GoPoint[] isDeadStone)
+                                  ConstBoard board, ArrayList deadStones)
     {
-        countScore.begin(board, isDeadStone);
-        if (isDeadStone != null)
-            for (int i = 0; i < isDeadStone.length; ++i)
-                guiBoard.setCrossHair(isDeadStone[i], true);
+        countScore.begin(board, deadStones);
+        if (deadStones != null)
+            for (int i = 0; i < deadStones.size(); ++i)
+                guiBoard.setCrossHair((GoPoint)deadStones.get(i), true);
         computeScore(guiBoard, countScore, board);
     }
 
@@ -241,12 +241,12 @@ public final class GuiBoardUtil
         }
     }
 
-    public static void showPointList(GuiBoard guiBoard, GoPoint pointList[])
+    public static void showPointList(GuiBoard guiBoard, ArrayList points)
     {
         guiBoard.clearAllMarkup();
-        for (int i = 0; i < pointList.length; ++i)
+        for (int i = 0; i < points.size(); ++i)
         {
-            GoPoint p = pointList[i];
+            GoPoint p = (GoPoint)points.get(i);
             if (p != null && p.isOnBoard(guiBoard.getBoardSize()))
                 guiBoard.setMarkSquare(p, true);
         }

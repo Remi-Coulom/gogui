@@ -162,9 +162,9 @@ public class GoGui
                 {
                     if (text == null)
                         text = "";
-                    GoPoint list[] =
+                    ArrayList points =
                         GtpUtil.parsePointString(text, getBoardSize());
-                    GuiBoardUtil.showPointList(m_guiBoard, list);
+                    GuiBoardUtil.showPointList(m_guiBoard, points);
                 }
             };
         m_comment = new Comment(commentListener);
@@ -1984,7 +1984,7 @@ public class GoGui
     {
         boolean success = endLengthyCommand();
         clearStatus();
-        GoPoint[] isDeadStone = null;
+        ArrayList isDeadStone = null;
         if (success)
         {
             String response = m_gtp.getResponse();
@@ -2657,11 +2657,11 @@ public class GoGui
         m_progressBarTimer.stop();
     }
 
-    private void initScore(GoPoint[] isDeadStone)
+    private void initScore(ArrayList deadStones)
     {
         resetBoard();
         GuiBoardUtil.scoreBegin(m_guiBoard, m_countScore, getBoard(),
-                                isDeadStone);
+                                deadStones);
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);

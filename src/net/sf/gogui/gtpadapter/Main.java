@@ -24,7 +24,6 @@ public final class Main
         {
             String options[] = {
                 "config:",
-                "emuhandicap",
                 "fillpasses",
                 "gtpfile:",
                 "help",
@@ -55,7 +54,6 @@ public final class Main
             boolean verbose = opt.contains("verbose");
             boolean noScore = opt.contains("noscore");
             boolean version1 = opt.contains("version1");
-            boolean emuHandicap = opt.contains("emuhandicap");
             boolean fillPasses = opt.contains("fillpasses");
             boolean lowerCase = opt.contains("lowercase");
             String name = opt.get("name", null);
@@ -76,8 +74,8 @@ public final class Main
             }
             String program = (String)arguments.get(0);
             GtpAdapter adapter
-                = new GtpAdapter(program, log, gtpFile, verbose, emuHandicap,
-                                 noScore, version1, fillPasses, lowerCase);
+                = new GtpAdapter(program, log, gtpFile, verbose, noScore,
+                                 version1, fillPasses, lowerCase);
             if (name != null)
                 adapter.setName(name);
             if (resign)

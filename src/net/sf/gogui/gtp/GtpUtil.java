@@ -102,7 +102,7 @@ public final class GtpUtil
         }
     }
     
-    public static GoPoint[] parsePointList(String s, int boardSize)
+    public static ArrayList parsePointList(String s, int boardSize)
         throws GtpError
     {
         try
@@ -120,7 +120,7 @@ public final class GtpUtil
     {
         try
         {
-            return GoPoint.parsePointListArrayList(s, boardSize);
+            return GoPoint.parsePointList(s, boardSize);
         }
         catch (GoPoint.InvalidPoint e)
         {
@@ -129,13 +129,13 @@ public final class GtpUtil
     }
 
     /** Find all points contained in string. */
-    public static GoPoint[] parsePointString(String text)
+    public static ArrayList parsePointString(String text)
     {
         return parsePointString(text, GoPoint.MAXSIZE);
     }
 
     /** Find all points contained in string. */
-    public static GoPoint[] parsePointString(String text, int boardSize)
+    public static ArrayList parsePointString(String text, int boardSize)
     {
         String regex = "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1\\d|[1-9]))\\b";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
@@ -157,10 +157,7 @@ public final class GtpUtil
             }
             list.add(point);
         }
-        GoPoint result[] = new GoPoint[list.size()];
-        for (int i = 0; i < result.length; ++i)
-            result[i] = (GoPoint)list.get(i);
-        return result;
+        return list;
     }
 
     public static void parsePointStringList(String s, ArrayList pointList,
