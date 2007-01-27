@@ -10,6 +10,7 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionListener;
@@ -227,6 +228,7 @@ public class GoGui
         m_guiBoard.setShowCursor(showCursor);
         m_guiBoard.setShowGrid(showGrid);
         setJMenuBar(m_menuBar.getMenuBar());
+        setMinimumSize();
         if (program == null)
             m_program = m_prefs.get("program", null);
         else
@@ -3075,6 +3077,30 @@ public class GoGui
         GuiGtpUtil.sendKomi(this, komi, m_name, m_gtp);
     }
 
+    private void setMinimumSize()
+    {
+        int width = 128;
+        int height = 32;
+        Insets rootInsets = getRootPane().getInsets();
+        int rootInsetsWidth = rootInsets.left + rootInsets.right;
+        int rootInsetsHeight = rootInsets.top + rootInsets.bottom;
+        Dimension menuBarSize = getJMenuBar().getPreferredSize();
+        width = Math.max(width, (int)menuBarSize.getWidth() + rootInsetsWidth);
+        height = Math.max(height, (int)menuBarSize.getHeight());
+        if (m_showToolbar)
+        {
+            Insets contentInsets = getContentPane().getInsets();
+            int contentInsetsWidth = contentInsets.left + contentInsets.right;
+            Dimension toolBarSize = m_toolBar.getPreferredSize();
+            width = Math.max(width,
+                             (int)toolBarSize.getWidth() + rootInsetsWidth
+                             + contentInsetsWidth + GuiUtil.PAD);
+            height += (int)toolBarSize.getHeight();
+        }
+        height += 224;
+        setMinimumSize(new Dimension(width, height));
+    }
+
     private void setResult(String result)
     {
         String oldResult = getGameInformation().getResult();
@@ -3259,6 +3285,7 @@ public class GoGui
             m_menuBar.setHeaderStyleSingle(true);
         }
         m_splitPane.resetToPreferredSizes();
+        setMinimumSize();
         pack();
     }
 
