@@ -105,21 +105,20 @@ public final class SgfReader
         FileInputStream, because it has to be reopened with a different
         encoding.
         @param in Stream to read from.
-        @param name Name prepended to error messages (must be the filename
-        for FileInputStream to allow reopening the stream after a charset
-        change)
+        @param file File name if input stream is a FileInputStream to allow
+        reopening the stream after a charset change
         @param progressShow Callback to show progress, can be null
         @param size Size of stream if progressShow != null
         @throws SgfReader.SgfError If reading fails.
     */
-    public SgfReader(InputStream in, String name, ProgressShow progressShow,
+    public SgfReader(InputStream in, File file, ProgressShow progressShow,
                      long size)
         throws SgfError
     {
-        m_name = name;
+        m_file = file;
         m_progressShow = progressShow;
         m_size = size;
-        m_isFile = (in instanceof FileInputStream && name != null);
+        m_isFile = (in instanceof FileInputStream && file != null);
         if (progressShow != null)
             progressShow.showProgress(0);
         try
@@ -131,7 +130,7 @@ public final class SgfReader
         {
             try
             {
-                in = new FileInputStream(new File(name));
+                in = new FileInputStream(file);
             }
             catch (IOException e2)
             {
@@ -215,7 +214,7 @@ public final class SgfReader
 
     private StreamTokenizer m_tokenizer;
 
-    private final String m_name;
+    private final File m_file;
 
     private String m_newCharset;
 
@@ -372,11 +371,11 @@ public final class SgfReader
     private SgfError getError(String message)
     {
         int lineNumber = m_tokenizer.lineno();
-        if (m_name == null)
+        if (m_file == null)
             return new SgfError(lineNumber + ": " + message);
         else
         {
-            String s = m_name + ":" + lineNumber + ": " + message;
+            String s = m_file + ":" + lineNumber + ": " + message;
             return new SgfError(s);
         }
     }

@@ -207,7 +207,7 @@ public final class ThumbnailCreator
         SgfReader reader;
         try
         {
-            reader = new SgfReader(in, file.toString(), null, 0);
+            reader = new SgfReader(in, file, null, 0);
         }
         finally
         {

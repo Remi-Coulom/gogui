@@ -191,16 +191,15 @@ public class GtpAdapter
     public void cmdLoadsgf(GtpCommand cmd) throws GtpError
     {
         cmd.checkNuArgLessEqual(2);
-        String filename = cmd.getArg(0);
+        File file = new File(cmd.getArg(0));
         int maxMove = -1;
         if (cmd.getNuArg() == 2)
             maxMove = cmd.getIntArg(1);
         GoColor toMove = GoColor.EMPTY;
         try
         {
-            FileInputStream fileStream =
-                new FileInputStream(new File(filename));
-            SgfReader reader = new SgfReader(fileStream, filename, null, 0);
+            FileInputStream fileStream = new FileInputStream(file);
+            SgfReader reader = new SgfReader(fileStream, file, null, 0);
             GameTree gameTree = reader.getGameTree();
             m_boardSize = gameTree.getGameInformation().getBoardSize();
             m_board = new Board(m_boardSize);

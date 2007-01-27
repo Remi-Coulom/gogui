@@ -98,8 +98,7 @@ public final class Compare
             String filename = (String)filenames.get(gameNumber);
             File file = new File(filename);
             FileInputStream fileStream = new FileInputStream(file);
-            SgfReader reader
-                = new SgfReader(fileStream, file.toString(), null, 0);
+            SgfReader reader = new SgfReader(fileStream, file, null, 0);
             GameTree gameTree = reader.getGameTree();
             GameInformation gameInformation = gameTree.getGameInformation();
             int size = gameInformation.getBoardSize();

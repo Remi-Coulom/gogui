@@ -306,8 +306,9 @@ public class GtpStatistics
         throws ErrorMessage, FileNotFoundException, GtpError,
                SgfReader.SgfError
     {
-        InputStream in = new FileInputStream(new File(name));
-        SgfReader reader = new SgfReader(in, name, null, 0);
+        File file = new File(name);
+        InputStream in = new FileInputStream(file);
+        SgfReader reader = new SgfReader(in, file, null, 0);
         ++m_numberGames;
         GameTree tree = reader.getGameTree();
         checkGame(tree, name);

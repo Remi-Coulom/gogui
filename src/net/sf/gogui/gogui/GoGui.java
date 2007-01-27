@@ -1581,7 +1581,7 @@ public class GoGui
 
         public void run(ProgressShow progressShow) throws Throwable
         {
-            m_reader = new SgfReader(m_in, m_file.toString(), progressShow,
+            m_reader = new SgfReader(m_in, m_file, progressShow,
                                      m_file.length());
         }
 

@@ -27,7 +27,7 @@ public class FileCheck
         m_allowSetup = allowSetup;
         for (int i = 0; i < sgfFiles.size(); ++i)
         {
-            m_name = (String)sgfFiles.get(i);
+            m_file = new File((String)sgfFiles.get(i));
             checkFile();
         }
     }
@@ -36,20 +36,20 @@ public class FileCheck
 
     private final int m_size;
 
-    private String m_name;
+    private File m_file;
 
     private void checkFile() throws ErrorMessage
     {
         InputStream in = null;
         try
         {
-            in = new FileInputStream(new File(m_name));
+            in = new FileInputStream(m_file);
         }
         catch (FileNotFoundException e)
         {
             throwError("file not found");
         }
-        SgfReader reader = new SgfReader(in, m_name, null, 0);
+        SgfReader reader = new SgfReader(in, m_file, null, 0);
         GameTree tree = reader.getGameTree();
         GameInformation info = tree.getGameInformation();
         if (info.getBoardSize() != m_size)
@@ -85,7 +85,7 @@ public class FileCheck
 
     private void throwError(String reason) throws ErrorMessage
     {
-        throw new ErrorMessage(m_name + ": " + reason);
+        throw new ErrorMessage(m_file + ": " + reason);
     }
 }
 

@@ -100,7 +100,7 @@ public final class SgfToTex
                                 String title, boolean usePass)
         throws SgfReader.SgfError
     {
-        SgfReader reader = new SgfReader(in, name, null, 0);
+        SgfReader reader = new SgfReader(in, new File(name), null, 0);
         new TexWriter(title, out, reader.getGameTree(), usePass);
     }
 

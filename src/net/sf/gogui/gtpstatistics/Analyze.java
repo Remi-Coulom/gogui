@@ -663,7 +663,7 @@ public class Analyze
         try
         {
             InputStream in = new FileInputStream(new File(game));
-            SgfReader reader = new SgfReader(in, game, null, 0);
+            SgfReader reader = new SgfReader(in, new File(game), null, 0);
             GameInformation info = reader.getGameTree().getGameInformation();
             String playerBlack = info.getPlayerBlack();
             if (playerBlack == null)

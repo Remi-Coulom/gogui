@@ -845,7 +845,7 @@ public class TwoGtp
             {
                 FileInputStream fileStream = new FileInputStream(file);
                 SgfReader reader =
-                    new SgfReader(fileStream, file.toString(), null, 0);
+                    new SgfReader(fileStream, file, null, 0);
                 ConstNode root = reader.getGameTree().getRoot();
                 m_games.add(Compare.getAllAsMoves(root));
             }

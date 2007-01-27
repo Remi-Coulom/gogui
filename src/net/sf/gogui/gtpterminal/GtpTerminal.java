@@ -256,8 +256,7 @@ public class GtpTerminal
         try
         {
             FileInputStream fileStream = new FileInputStream(file);
-            SgfReader reader =
-                new SgfReader(fileStream, file.toString(), null, 0);
+            SgfReader reader = new SgfReader(fileStream, file, null, 0);
             String warnings = reader.getWarnings();
             if (warnings != null)
                 System.out.print(warnings);
