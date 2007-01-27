@@ -132,6 +132,7 @@ public class Game
 
     public void gotoNode(ConstNode node)
     {
+        assert(node != null);
         assert(NodeUtil.getRoot(node) == getRoot());
         m_current = (Node)node;
         updateBoard();
