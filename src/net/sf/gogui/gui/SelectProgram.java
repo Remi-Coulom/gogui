@@ -27,7 +27,6 @@ import javax.swing.WindowConstants;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.util.PrefUtil;
-import net.sf.gogui.util.PrefUtil;
 
 /** Dialog for selecting a Go engine. */
 public class SelectProgram

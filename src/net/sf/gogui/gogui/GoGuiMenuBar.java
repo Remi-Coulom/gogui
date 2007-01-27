@@ -4,7 +4,6 @@
 
 package net.sf.gogui.gogui;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -23,7 +22,6 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 import net.sf.gogui.gui.Bookmark;
 import net.sf.gogui.gui.RecentFileMenu;
-import net.sf.gogui.util.Platform;
 
 /** Menu bar for GoGui. */
 public class GoGuiMenuBar
@@ -121,9 +119,6 @@ public class GoGuiMenuBar
         getMenuBar().putClientProperty("jgoodies.headerStyle",
                                        isSingle ? "Single" : "Both");
     }
-
-    private static final int SHORTCUT =
-        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     private final BookmarkListener m_bookmarkListener;
 
