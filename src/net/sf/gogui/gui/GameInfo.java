@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.Box;
 import javax.swing.Icon;
@@ -151,6 +152,7 @@ class GuiClock
             setToolTipText("Time used by Black");
         else
             setToolTipText("Time used by White");
+        setMinimumSize(getPreferredSize());
     }
 
     /** Serial version to suppress compiler warning.
