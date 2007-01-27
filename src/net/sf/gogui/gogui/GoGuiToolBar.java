@@ -8,17 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
-import java.net.URL;
 import javax.swing.Action;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
-import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.util.Platform;
 
 /** Tool bar for GoGui. */
 public class GoGuiToolBar

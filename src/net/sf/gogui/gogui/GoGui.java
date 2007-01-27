@@ -58,7 +58,6 @@ import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.gtp.GtpClient;
-import net.sf.gogui.gtp.GtpClientUtil;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
 import net.sf.gogui.gtp.GtpUtil;
@@ -109,8 +108,8 @@ import net.sf.gogui.version.Version;
 /** Graphical user interface to a Go program. */
 public class GoGui
     extends JFrame
-    implements ActionListener, AnalyzeDialog.Callback,
-               GuiBoard.Listener, GameTreeViewer.Listener, GtpShell.Listener,
+    implements AnalyzeDialog.Callback, GuiBoard.Listener,
+               GameTreeViewer.Listener, GtpShell.Listener,
                ScoreDialog.Listener, GoGuiMenuBar.BookmarkListener
 {
     public GoGui(String program, File file, int move, String time,
@@ -206,25 +205,21 @@ public class GoGui
                     m_menuBar.addRecentGtp(file);
                 }
             };
-        m_menuBar = new GoGuiMenuBar(this, m_actions, recentCallback,
-                                     recentGtp, this);
+        m_menuBar = new GoGuiMenuBar(m_actions, recentCallback, recentGtp,
+                                     this);
         m_treeLabels = m_prefs.getInt("gametree-labels",
                                       GameTreePanel.LABEL_NUMBER);
         m_treeSize = m_prefs.getInt("gametree-size",
                                     GameTreePanel.SIZE_NORMAL);
-        boolean showSubtreeSizes =
+        m_showSubtreeSizes =
             m_prefs.getBoolean("gametree-show-subtree-sizes", false);
-        m_menuBar.setShowSubtreeSizes(showSubtreeSizes);
-        m_menuBar.setAutoNumber(m_prefs.getBoolean("gtpshell-autonumber",
-                                                   false));
+        m_autoNumber = m_prefs.getBoolean("gtpshell-autonumber", false);
         // JComboBox has problems on the Mac, see section Bugs in
         // documentation
-        boolean completion
-            = ! m_prefs.getBoolean("gtpshell-disable-completions",
-                                Platform.isMac());
-        m_menuBar.setCommandCompletion(completion);
-        m_menuBar.setTimeStamp(m_prefs.getBoolean("gtpshell-timestamp",
-                                                  false));
+        m_commandCompletion =
+            ! m_prefs.getBoolean("gtpshell-disable-completions",
+                                 Platform.isMac());
+        m_timeStamp = m_prefs.getBoolean("gtpshell-timestamp", false);
         m_showLastMove = m_prefs.getBoolean("show-last-move", true);        
         m_showVariations = m_prefs.getBoolean("show-variations", false);
         boolean showCursor = m_prefs.getBoolean("show-cursor", false);
@@ -238,7 +233,6 @@ public class GoGui
             m_program = program;
         if (m_program != null && m_program.trim().equals(""))
             m_program = null;
-        m_menuBar.setNormalMode();
         m_guiBoard.requestFocusInWindow();
         if (time != null)
             m_timeSettings = TimeSettings.parse(time);
@@ -252,24 +246,8 @@ public class GoGui
         SwingUtilities.invokeLater(callback);
     }
     
-    public void actionPerformed(ActionEvent event)
-    {
-        String command = event.getActionCommand();
-        if (command.equals("auto-number"))
-            cbAutoNumber();
-        else if (command.equals("command-completion"))
-            cbCommandCompletion();
-        else if (command.equals("gametree-show-subtree-sizes"))
-            cbGameTreeShowSubtreeSizes();
-        else if (command.equals("timestamp"))
-            cbTimeStamp();
-        else
-            assert(false);
-    }
-    
     public void actionAbout()
     {
-        String protocolVersion = null;
         String command = null;
         if (m_gtp != null)
             command = m_gtp.getProgramCommand();
@@ -932,7 +910,6 @@ public class GoGui
         clearStatus();
         m_guiBoard.clearAll();
         m_scoreMode = false;
-        m_menuBar.setNormalMode();
     }
 
     public void actionSetup()
@@ -1000,11 +977,27 @@ public class GoGui
         m_prefs.putBoolean("beep-after-move", m_beepAfterMove);
     }
 
+    public void actionToggleAutoNumber()
+    {
+        m_autoNumber = ! m_autoNumber;
+        if (m_gtp != null)
+            m_gtp.setAutoNumber(m_autoNumber);
+    }
+
     public void actionToggleCommentMonoFont()
     {
         boolean monoFont = ! m_comment.getMonoFont();
         m_comment.setMonoFont(monoFont);
         m_prefs.putBoolean("comment-font-fixed", monoFont);
+    }
+
+    public void actionToggleCompletion()
+    {
+        m_commandCompletion = ! m_commandCompletion;
+        if (m_gtpShell != null)
+            m_gtpShell.setCommandCompletion(m_commandCompletion);
+        m_prefs.putBoolean("gtpshell-disable-completions",
+                           ! m_commandCompletion);
     }
 
     public void actionToggleShowAnalyzeDialog()
@@ -1079,6 +1072,18 @@ public class GoGui
         m_gtpShell.setVisible(! m_gtpShell.isVisible());
     }
 
+    public void actionToggleShowSubtreeSizes()
+    {
+        m_showSubtreeSizes = ! m_showSubtreeSizes;
+        m_prefs.putBoolean("gametree-show-subtree-sizes", m_showSubtreeSizes);
+        if (m_gameTreeViewer != null)
+        {
+            m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
+            updateGameTree(true);
+        }
+        updateViews();
+    }
+
     public void actionToggleShowToolbar()
     {
         if (GuiUtil.isNormalSizeMode(this))
@@ -1098,8 +1103,7 @@ public class GoGui
             m_gameTreeViewer = new GameTreeViewer(this, this);
             m_gameTreeViewer.setLabelMode(m_treeLabels);
             m_gameTreeViewer.setSizeMode(m_treeSize);
-            boolean showSubtreeSizes = m_menuBar.getShowSubtreeSizes();
-            m_gameTreeViewer.setShowSubtreeSizes(showSubtreeSizes);
+            m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
             restoreSize(m_gameTreeViewer, "tree");
             updateGameTree(true);
             // updateGameTree can close viewer
@@ -1115,6 +1119,15 @@ public class GoGui
         m_showVariations = ! m_showVariations;
         m_prefs.putBoolean("show-variations", m_showVariations);
         resetBoard();
+        updateViews();
+    }
+
+    public void actionToggleTimeStamp()
+    {
+        m_timeStamp = ! m_timeStamp;
+        if (m_gtpShell != null)
+            m_gtpShell.setTimeStamp(m_timeStamp);
+        m_prefs.putBoolean("gtpshell-timestamp", m_timeStamp);
         updateViews();
     }
 
@@ -1174,22 +1187,6 @@ public class GoGui
         close();
     }
 
-    public void cbAutoNumber(boolean enable)
-    {
-        if (m_gtp != null)
-            m_gtp.setAutoNumber(enable);
-    }
-
-    public void cbCommandCompletion()
-    {
-        if (m_gtpShell == null)
-            return;
-        boolean commandCompletion = m_menuBar.getCommandCompletion();
-        m_gtpShell.setCommandCompletion(commandCompletion);
-        m_prefs.putBoolean("gtpshell-disable-completions",
-                           ! commandCompletion);
-    }
-
     public void clearAnalyzeCommand()
     {
         clearAnalyzeCommand(true);
@@ -1215,6 +1212,11 @@ public class GoGui
         }
     }
 
+    public boolean getAutoNumber()
+    {
+        return m_autoNumber;
+    }
+
     public boolean getBeepAfterMove()
     {
         return m_beepAfterMove;
@@ -1225,14 +1227,29 @@ public class GoGui
         return m_comment.getMonoFont();
     }
 
+    public boolean getCompletion()
+    {
+        return m_commandCompletion;
+    }
+
     public boolean getShowLastMove()
     {
         return m_showLastMove;
     }
 
+    public boolean getShowSubtreeSizes()
+    {
+        return m_showSubtreeSizes;
+    }
+
     public boolean getShowVariations()
     {
         return m_showVariations;
+    }
+
+    public boolean getTimeStamp()
+    {
+        return m_timeStamp;
     }
 
     public int getTreeLabels()
@@ -1579,6 +1596,12 @@ public class GoGui
 
     private boolean m_analyzeOneRunOnly;
 
+    private boolean m_autoNumber;
+
+    private boolean m_commandCompletion;
+
+    private boolean m_timeStamp;
+
     private final boolean m_auto;
 
     private boolean m_beepAfterMove;
@@ -1606,6 +1629,8 @@ public class GoGui
     private boolean m_showInfoPanel;
 
     private boolean m_showLastMove;
+
+    private boolean m_showSubtreeSizes;
 
     private boolean m_showToolbar;
 
@@ -1803,8 +1828,8 @@ public class GoGui
                 }
             });
         m_gtpShell.setProgramCommand(program);
-        m_gtpShell.setTimeStamp(m_menuBar.getTimeStamp());
-        m_gtpShell.setCommandCompletion(m_menuBar.getCommandCompletion());
+        m_gtpShell.setTimeStamp(m_timeStamp);
+        m_gtpShell.setCommandCompletion(m_commandCompletion);
         m_ignoreInvalidResponses = false;
         GtpClient.InvalidResponseCallback invalidResponseCallback =
             new GtpClient.InvalidResponseCallback()
@@ -1866,7 +1891,7 @@ public class GoGui
         {
             GtpClient gtp = new GtpClient(m_program, m_verbose, ioCallback);
             gtp.setInvalidResponseCallback(invalidResponseCallback);
-            gtp.setAutoNumber(m_menuBar.getAutoNumber());
+            gtp.setAutoNumber(m_autoNumber);
             m_gtp = new GuiGtpClient(gtp, this, synchronizerCallback);
             m_gtp.start();
         }
@@ -1953,26 +1978,6 @@ public class GoGui
         }
     }
 
-    private void cbAutoNumber()
-    {
-        if (m_gtp == null)
-            return;
-        boolean enable = m_menuBar.getAutoNumber();
-        m_gtp.setAutoNumber(enable);
-        m_prefs.putBoolean("gtpshell-autonumber", enable);
-    }
-
-    private void cbGameTreeShowSubtreeSizes()
-    {
-        boolean enable = m_menuBar.getShowSubtreeSizes();
-        m_prefs.putBoolean("gametree-show-subtree-sizes", enable);
-        if (m_gameTreeViewer != null)
-        {
-            m_gameTreeViewer.setShowSubtreeSizes(enable);
-            updateGameTree(true);
-        }
-    }
-
     private void cbScoreContinue()
     {
         boolean success = endLengthyCommand();
@@ -1992,15 +1997,6 @@ public class GoGui
         }
         initScore(isDeadStone);
     }    
-
-    private void cbTimeStamp()
-    {
-        if (m_gtpShell == null)
-            return;
-        boolean enable = m_menuBar.getTimeStamp();
-        m_gtpShell.setTimeStamp(enable);
-        m_prefs.putBoolean("gtpshell-timestamp", enable);
-    }
 
     private boolean checkCommandInProgress()
     {
@@ -2358,7 +2354,6 @@ public class GoGui
     {
         m_statusBar.clearProgress();
         clearStatus();
-        m_menuBar.setNormalMode();
         if (m_gtpShell != null)
             m_gtpShell.setCommandInProgess(false);
         // Program could have been killed in cbInterrupt
@@ -2700,11 +2695,6 @@ public class GoGui
     private boolean isComputerBoth()
     {
         return (m_computerBlack && m_computerWhite);
-    }
-
-    private boolean isComputerNone()
-    {
-        return (! m_computerBlack && ! m_computerWhite);
     }
 
     private boolean isOutOfSync()
@@ -3174,7 +3164,6 @@ public class GoGui
     private void setupDone()
     {
         m_setupMode = false;
-        m_menuBar.setNormalMode();
         m_game.setToMove(getToMove());
         initGtp();
         setFile(null);

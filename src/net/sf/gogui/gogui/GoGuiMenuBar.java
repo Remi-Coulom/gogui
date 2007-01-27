@@ -21,14 +21,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.KeyStroke;
-import net.sf.gogui.game.ConstClock;
-import net.sf.gogui.game.ConstGameTree;
-import net.sf.gogui.game.ConstNode;
-import net.sf.gogui.game.NodeUtil;
-import net.sf.gogui.go.GoColor;
 import net.sf.gogui.gui.Bookmark;
-import net.sf.gogui.gui.GameTreePanel;
 import net.sf.gogui.gui.RecentFileMenu;
 import net.sf.gogui.util.Platform;
 
@@ -40,27 +33,22 @@ public class GoGuiMenuBar
         void actionGotoBookmark(int i);
     }
 
-    public GoGuiMenuBar(ActionListener listener, GoGuiActions actions,
+    public GoGuiMenuBar(GoGuiActions actions,
                         RecentFileMenu.Callback recentCallback,
                         RecentFileMenu.Callback recentGtpCallback,
                         GoGuiMenuBar.BookmarkListener bookmarkListener)
     {
-        m_listener = listener;
         m_bookmarkListener = bookmarkListener;
         m_menuBar = new JMenuBar();
-        m_menuFile = createMenuFile(actions, recentCallback);
-        m_menuBar.add(m_menuFile);
+        m_menuBar.add(createMenuFile(actions, recentCallback));
         m_menuBar.add(createMenuGame(actions));
         m_menuBar.add(createMenuEdit(actions));
         m_menuBar.add(createMenuGo(actions));
-        m_menuShell = createMenuShell(actions, recentGtpCallback);
-        m_menuBar.add(m_menuShell);
+        m_menuBar.add(createMenuShell(actions, recentGtpCallback));
         m_menuBookmarks = createMenuBookMarks(actions);
         m_menuBar.add(m_menuBookmarks);
-        m_menuSettings = createMenuSettings(actions);
-        m_menuBar.add(m_menuSettings);
-        m_menuHelp = createMenuHelp(actions);
-        m_menuBar.add(m_menuHelp);
+        m_menuBar.add(createMenuSettings(actions));
+        m_menuBar.add(createMenuHelp(actions));
         setHeaderStyleSingle(true);
     }
 
@@ -94,34 +82,9 @@ public class GoGuiMenuBar
         m_recentGtp.updateEnabled();
     }
 
-    public boolean getAutoNumber()
-    {
-        return m_itemAutoNumber.isSelected();        
-    }
-
-    public boolean getTimeStamp()
-    {
-        return m_itemTimeStamp.isSelected();        
-    }
-
-    public boolean getCommandCompletion()
-    {
-        return m_itemCommandCompletion.isSelected();
-    }
-
     public JMenuBar getMenuBar()
     {
         return m_menuBar;
-    }
-
-    public boolean getShowSubtreeSizes()
-    {
-        return m_itemShowSubtreeSizes.isSelected();
-    }
-
-    public void setAutoNumber(boolean enable)
-    {
-        m_itemAutoNumber.setSelected(enable);        
     }
 
     public void setBookmarks(ArrayList bookmarks)
@@ -151,11 +114,6 @@ public class GoGuiMenuBar
         }
     }
 
-    public void setCommandCompletion(boolean enable)
-    {
-        m_itemCommandCompletion.setSelected(enable);
-    }
-
     /** Is it a single menu bar or does a tool bar exist? */
     public void setHeaderStyleSingle(boolean isSingle)
     {
@@ -164,52 +122,12 @@ public class GoGuiMenuBar
                                        isSingle ? "Single" : "Both");
     }
 
-    public void setTimeStamp(boolean enable)
-    {
-        m_itemTimeStamp.setSelected(enable);        
-    }
-
-    public void setNormalMode()
-    {
-        m_recent.updateEnabled();
-        m_recentGtp.updateEnabled();
-    }
-
-    public void setShowSubtreeSizes(boolean enable)
-    {
-        m_itemShowSubtreeSizes.setSelected(enable);
-    }
-
-    private boolean m_findNextEnabled;
-
-    private boolean m_isComputerDisabled;
-
     private static final int SHORTCUT =
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-    private final ActionListener m_listener;
-
     private final BookmarkListener m_bookmarkListener;
 
-    private JCheckBoxMenuItem m_itemAutoNumber;
-
-    private JCheckBoxMenuItem m_itemCommandCompletion;
-
-    private JCheckBoxMenuItem m_itemShowSubtreeSizes;
-
-    private JCheckBoxMenuItem m_itemTimeStamp;
-
-    private JMenuChecked m_menuComputerColor;
-
     private final JMenuChecked m_menuBookmarks;
-
-    private final JMenuChecked m_menuFile;
-
-    private final JMenuChecked m_menuHelp;
-
-    private final JMenuChecked m_menuShell;
-
-    private final JMenuChecked m_menuSettings;
 
     private final JMenuBar m_menuBar;
 
@@ -273,7 +191,7 @@ public class GoGuiMenuBar
 
     private JMenuChecked createMenu(String name, int mnemonic)
     {
-        JMenuChecked menu = new JMenuChecked(name, m_listener);
+        JMenuChecked menu = new JMenuChecked(name);
         menu.setMnemonic(mnemonic);
         return menu;
     }
@@ -288,7 +206,7 @@ public class GoGuiMenuBar
 
     private JMenuChecked createMenuConfigureBoard(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Configure Board", m_listener);
+        JMenuChecked menu = new JMenuChecked("Configure Board");
         menu.setMnemonic(KeyEvent.VK_B);
         GoGuiCheckBoxMenuItem itemShowCursor =
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowCursor);
@@ -313,21 +231,23 @@ public class GoGuiMenuBar
 
     private JMenuChecked createMenuConfigureShell(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Configure Shell", m_listener);
+        JMenuChecked menu = new JMenuChecked("Configure Shell");
         menu.setMnemonic(KeyEvent.VK_H);
-        m_itemCommandCompletion = new JCheckBoxMenuItem("Popup Completions");
-        menu.addItem(m_itemCommandCompletion, KeyEvent.VK_P,
-                     "command-completion");
-        m_itemAutoNumber = new JCheckBoxMenuItem("Auto Number");
-        menu.addItem(m_itemAutoNumber, KeyEvent.VK_A, "auto-number");
-        m_itemTimeStamp = new JCheckBoxMenuItem("Timestamp");
-        menu.addItem(m_itemTimeStamp, KeyEvent.VK_T, "timestamp");
+        GoGuiCheckBoxMenuItem itemCompletion =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleCompletion);
+        menu.addItem(itemCompletion, KeyEvent.VK_P);
+        GoGuiCheckBoxMenuItem itemAutonumber =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleAutoNumber);
+        menu.addItem(itemAutonumber, KeyEvent.VK_A);
+        GoGuiCheckBoxMenuItem itemTimestamp =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleTimeStamp);
+        menu.addItem(itemTimestamp, KeyEvent.VK_T);
         return menu;
     }
 
     private JMenuChecked createMenuConfigureTree(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Configure Tree", m_listener);
+        JMenuChecked menu = new JMenuChecked("Configure Tree");
         menu.setMnemonic(KeyEvent.VK_E);
         JMenuChecked menuLabel = createMenu("Labels", KeyEvent.VK_L);
         ButtonGroup group = new ButtonGroup();
@@ -349,9 +269,9 @@ public class GoGuiMenuBar
         menuSize.addRadioItem(group, actions.m_actionTreeSizeTiny,
                               KeyEvent.VK_T);
         menu.add(menuSize);
-        m_itemShowSubtreeSizes = new JCheckBoxMenuItem("Show Subtree Sizes");
-        menu.addItem(m_itemShowSubtreeSizes, KeyEvent.VK_S,
-                     "gametree-show-subtree-sizes");
+        GoGuiCheckBoxMenuItem itemShowSubtreeSizes =
+            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowSubtreeSizes);
+        menu.addItem(itemShowSubtreeSizes, KeyEvent.VK_S);
         return menu;
     }
 
@@ -380,7 +300,7 @@ public class GoGuiMenuBar
 
     private JMenuChecked createMenuExport(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Export", m_listener);
+        JMenuChecked menu = new JMenuChecked("Export");
         menu.setMnemonic(KeyEvent.VK_E);
         menu.addItem(actions.m_actionExportSgfPosition, KeyEvent.VK_S);
         menu.addItem(actions.m_actionExportLatexMainVariation, KeyEvent.VK_L);
@@ -416,8 +336,7 @@ public class GoGuiMenuBar
         JMenuChecked menu = createMenu("Game", KeyEvent.VK_A);
         menu.addItem(actions.m_actionNewGame, KeyEvent.VK_N);
         menu.addSeparator();
-        m_menuComputerColor = createComputerColorMenu(actions);
-        menu.add(m_menuComputerColor);
+        menu.add(createComputerColorMenu(actions));
         menu.addItem(actions.m_actionPlay, KeyEvent.VK_L);
         menu.addItem(actions.m_actionPlaySingleMove, KeyEvent.VK_S);
         menu.addItem(actions.m_actionInterrupt, KeyEvent.VK_T);
@@ -430,7 +349,6 @@ public class GoGuiMenuBar
 
     private JMenuChecked createMenuGo(GoGuiActions actions)
     {
-        int shiftMask = java.awt.event.InputEvent.SHIFT_MASK;
         JMenuChecked menu = createMenu("Go", KeyEvent.VK_G);
         menu.addItem(actions.m_actionBeginning, KeyEvent.VK_B);
         menu.addItem(actions.m_actionBackwardTen, KeyEvent.VK_W);
@@ -459,7 +377,7 @@ public class GoGuiMenuBar
 
     private JMenuChecked createMenuImport(GoGuiActions actions)
     {
-        JMenuChecked menu = new JMenuChecked("Import", m_listener);
+        JMenuChecked menu = new JMenuChecked("Import");
         menu.setMnemonic(KeyEvent.VK_I);
         menu.addItem(actions.m_actionImportTextPosition, KeyEvent.VK_T);
         menu.addItem(actions.m_actionImportTextPositionFromClipboard,
@@ -517,34 +435,15 @@ public class GoGuiMenuBar
         menu.setMnemonic(KeyEvent.VK_R);
         return menu;
     }
-
-    /** Get shortcut modifier for function keys.
-        Returns 0, unless platform is Mac.
-    */
-    private static int getFunctionKeyShortcut()
-    {
-        if (Platform.isMac())
-            return SHORTCUT;
-        return 0;
-    }
 }
 
-/** Menu with assertions for unique mnemonics and accelerators. */
+/** Menu with assertions for unique mnemonics. */
 class JMenuChecked
     extends JMenu
 {
-    public JMenuChecked(String text, ActionListener listener)
+    public JMenuChecked(String text)
     {
         super(text);
-        m_listener = listener;
-    }
-
-    public JMenuItem addItem(JMenuItem item, String command)
-    {
-        item.addActionListener(m_listener);
-        item.setActionCommand(command);
-        add(item);
-        return item;
     }
 
     public JMenuItem addItem(JMenuItem item, int mnemonic)
@@ -562,51 +461,6 @@ class JMenuChecked
         setMnemonic(item, mnemonic);
         add(item);
         return item;
-    }
-
-    public JMenuItem addItem(JMenuItem item, int mnemonic, String command)
-    {
-        setMnemonic(item, mnemonic);
-        return addItem(item, command);
-    }
-
-    public JMenuItem addItem(String label, int mnemonic, String command)
-    {
-        JMenuItem item = new JMenuItem(label);
-        return addItem(item, mnemonic, command);        
-    }
-
-    public JMenuItem addItem(JMenuItem item, int mnemonic, int accel,
-                             int modifier, String command)
-    {
-        KeyStroke keyStroke = KeyStroke.getKeyStroke(accel, modifier); 
-        assert(! s_accelerators.contains(keyStroke));
-        s_accelerators.add(keyStroke);
-        item.setAccelerator(keyStroke);
-        return addItem(item, mnemonic, command);
-    }
-
-    public JMenuItem addItem(String label, int mnemonic, int accel,
-                             int modifier, String command)
-    {
-        return addItem(new JMenuItem(label), mnemonic, accel, modifier,
-                       command);
-    }
-
-    public JMenuItem addRadioItem(ButtonGroup group, String label,
-                                  String command)
-    {
-        JMenuItem item = new JRadioButtonMenuItem(label);
-        group.add(item);
-        return addItem(item, command);
-    }
-
-    public JMenuItem addRadioItem(ButtonGroup group, String label,
-                                  int mnemonic, String command)
-    {
-        JMenuItem item = new JRadioButtonMenuItem(label);
-        group.add(item);
-        return addItem(item, mnemonic, command);
     }
 
     public JMenuItem addRadioItem(ButtonGroup group, AbstractAction action,
@@ -631,11 +485,7 @@ class JMenuChecked
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private final ActionListener m_listener;
-
     private final ArrayList m_mnemonics = new ArrayList();
-
-    private static ArrayList s_accelerators = new ArrayList();
 
     private void setMnemonic(JMenuItem item, int mnemonic)
     {
@@ -664,6 +514,11 @@ class GoGuiRadioButtonMenuItem
                         setSelected(((Boolean)e.getNewValue()).booleanValue());
                 } } );
     }
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 }
 
 /** Checkbox item with additional "selected" action property. */
@@ -679,4 +534,9 @@ class GoGuiCheckBoxMenuItem
                         setSelected(((Boolean)e.getNewValue()).booleanValue());
                 } } );
     }
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 }
