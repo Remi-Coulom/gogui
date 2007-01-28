@@ -76,6 +76,7 @@ public final class Board
                     board.m_capturedBlack += m_killed.size();
                 }
             }
+            m_oldToMove = board.m_toMove;
             board.m_toMove = otherColor;        
         }
 

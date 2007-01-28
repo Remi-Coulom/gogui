@@ -198,6 +198,7 @@ public final class BoardTest
         board.play(GoPoint.get(0, 0), GoColor.BLACK);
         board.undo();
         assertEquals(GoColor.EMPTY, board.getColor(GoPoint.get(0, 0)));
+        assertEquals(GoColor.BLACK, board.getToMove());
     }
 }
 
