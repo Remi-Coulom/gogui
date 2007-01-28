@@ -7,6 +7,7 @@ package net.sf.gogui.gtp;
 import java.util.ArrayList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -161,28 +162,49 @@ public class GtpSynchronizer
         throws GtpError
     {
         toExecuteAll.clear();
-        //boolean isSetupSupported = isSupported("setup");
-        boolean isSetupSupported = false; // TODO: implement setup command
         m_tempBoard.init(board.getSize());
         for (int i = 0; i < board.getNumberPlacements(); ++i)
         {
             Board.Placement placement = board.getPlacement(i);
-            if (placement instanceof Board.Setup && ! isSetupSupported)
+            if (placement instanceof Board.Setup)
             {
-                GoPoint p = ((Board.Setup)placement).getPoint();
-                GoColor c = ((Board.Setup)placement).getColor();
-                if (c == GoColor.EMPTY)
-                    throw new GtpError("program does not support setup empty");
-                if (m_tempBoard.isCaptureOrSuicide(p, c))
-                    throw new GtpError("program does not support setup");
-                placement = new Board.Play(Move.get(p, c));
+                Board.Setup setup = (Board.Setup)placement;
+                // Translate into moves if possible
+                ConstPointList setupBlack = setup.getBlack();
+                ConstPointList setupWhite = setup.getWhite();
+                ConstPointList setupEmpty = setup.getEmpty();
+                if (setupEmpty.size() > 0)
+                    throw new GtpError("cannot transmit setup empty as move");
+                for (int j = 0; j < setupBlack.size(); ++j)
+                {
+                    GoPoint p = setupBlack.get(j);
+                    if (m_tempBoard.isCaptureOrSuicide(p, GoColor.BLACK))
+                        throw new GtpError("cannot transmit setup as move "
+                                           + "if stones are captured");
+                    placement = new Board.Play(Move.get(p, GoColor.BLACK));
+                    toExecuteAll.add(placement);
+                    m_tempBoard.doPlacement(placement);
+                }
+                for (int j = 0; j < setupWhite.size(); ++j)
+                {
+                    GoPoint p = setupWhite.get(j);
+                    if (m_tempBoard.isCaptureOrSuicide(p, GoColor.WHITE))
+                        throw new GtpError("cannot transmit setup as move "
+                                           + "if stones are captured");
+                    placement = new Board.Play(Move.get(p, GoColor.WHITE));
+                    toExecuteAll.add(placement);
+                    m_tempBoard.doPlacement(placement);
+                }
             }
-            GoColor toMove = m_tempBoard.getToMove();
-            if (m_fillPasses && placement instanceof Board.Play
-                && ((Board.Play)placement).getMove().getColor() != toMove)
-                toExecuteAll.add(new Board.Play(Move.getPass(toMove)));
-            toExecuteAll.add(placement);
-            m_tempBoard.doPlacement(placement);
+            else if (placement instanceof Board.Play)
+            {
+                GoColor toMove = m_tempBoard.getToMove();
+                if (m_fillPasses
+                    && ((Board.Play)placement).getMove().getColor() != toMove)
+                    toExecuteAll.add(new Board.Play(Move.getPass(toMove)));
+                toExecuteAll.add(placement);
+                m_tempBoard.doPlacement(placement);
+            }
         }
     }
 

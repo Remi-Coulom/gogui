@@ -20,6 +20,12 @@ public final class PointList
         m_list = new ArrayList(initialCapacity);
     }
 
+    public PointList(GoPoint p)
+    {
+        this(1);
+        add(p);
+    }
+
     public PointList(ConstPointList list)
     {
         m_list = new ArrayList(((PointList)list).m_list);

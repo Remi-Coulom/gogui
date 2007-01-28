@@ -5,6 +5,7 @@
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
+import net.sf.gogui.util.ObjectUtil;
 
 /** Go board. */
 public final class Board
@@ -128,10 +129,20 @@ public final class Board
     public static class Setup
         extends Placement
     {
-        public Setup(GoColor color, GoPoint point)
+        public Setup(ConstPointList black, ConstPointList white)
         {
-            m_color = color;
-            m_point = point;
+            this(black, white, null);
+        }
+
+        public Setup(ConstPointList black, ConstPointList white,
+                     ConstPointList empty)
+        {
+            if (black != null && black.size() > 0)
+                m_black = new PointList(black);
+            if (white != null && white.size() > 0)
+                m_white = new PointList(white);
+            if (empty != null && empty.size() > 0)
+                m_empty = new PointList(empty);
         }
 
         public boolean equals(Object object)
@@ -139,41 +150,84 @@ public final class Board
             if (object == null || object.getClass() != getClass())
                 return false;        
             Setup setup = (Setup)object;
-            return (setup.m_color == m_color && setup.m_point == m_point);
+            return (ObjectUtil.equals(setup.m_black, m_black)
+                    && ObjectUtil.equals(setup.m_white, m_white)
+                    && ObjectUtil.equals(setup.m_empty, m_empty));
         }
 
-        public GoColor getColor()
+        public ConstPointList getEmpty()
         {
-            return m_color;
+            if (m_empty == null)
+                return PointList.getEmptyList();
+            return m_empty;
         }
 
-        public GoPoint getPoint()
+        public ConstPointList getWhite()
         {
-            return m_point;
+            if (m_white == null)
+                return PointList.getEmptyList();
+            return m_white;
+        }
+
+        public ConstPointList getBlack()
+        {
+            if (m_black == null)
+                return PointList.getEmptyList();
+            return m_black;
         }
 
         protected void execute(Board board)
         {
-            GoColor old = GoColor.EMPTY;
-            GoPoint oldKoPoint = board.m_koPoint;
+            m_oldKoPoint = board.m_koPoint;
             board.m_koPoint = null;
-            m_oldColor = board.getColor(m_point);
-            board.setColor(m_point, m_color);
+            m_oldColor = new ArrayList();
+            setup(board, GoColor.BLACK, m_black);
+            setup(board, GoColor.WHITE, m_white);
+            setup(board, GoColor.EMPTY, m_empty);
         }
 
         protected void undo(Board board)
         {
-            board.setColor(m_point, m_oldColor);
+            undoSetup(board, GoColor.EMPTY, m_empty);
+            undoSetup(board, GoColor.WHITE, m_white);
+            undoSetup(board, GoColor.BLACK, m_black);
             board.m_koPoint = m_oldKoPoint;
         }
 
-        private final GoColor m_color;
+        private PointList m_black;
 
-        private final GoPoint m_point;
+        private PointList m_white;
+
+        private PointList m_empty;
+
+        private ArrayList m_oldColor;
 
         private GoPoint m_oldKoPoint;
 
-        private GoColor m_oldColor;
+        private void setup(Board board, GoColor c, ConstPointList points)
+        {
+            if (points == null)
+                return;
+            for (int i = 0; i < points.size(); ++i)
+            {
+                GoPoint p = points.get(i);
+                m_oldColor.add(board.getColor(p));
+                board.setColor(p, c);
+            }
+        }
+
+        private void undoSetup(Board board, GoColor c, ConstPointList points)
+        {
+            if (points == null)
+                return;
+            for (int i = points.size() - 1; i >= 0; --i)
+            {
+                GoPoint p = points.get(i);
+                int index = m_oldColor.size() - 1;
+                board.setColor(p, (GoColor)m_oldColor.get(index));
+                m_oldColor.remove(index);
+            }
+        }
     }
 
     /** Constant for unknown rules. */
@@ -532,15 +586,16 @@ public final class Board
         m_toMove = toMove;
     }
 
-    /** Add a setup stone.
-        A setup stone differs from a move in that no stones are captured and
-        the color to move does not switched.
-        @param p the point
-        @param color the color; GoColor.EMPTY for removing a stone
-    */
-    public void setup(GoPoint p, GoColor color)
+    public void setup(ConstPointList black, ConstPointList white)
     {
-        doPlacement(new Setup(color, p));
+        setup(black, white, null);
+    }
+
+    /** Add setup stones. */
+    public void setup(ConstPointList black, ConstPointList white,
+                      ConstPointList empty)
+    {
+        doPlacement(new Setup(black, white, empty));
     }
 
     /** Undo the last placement (move or setup stone).

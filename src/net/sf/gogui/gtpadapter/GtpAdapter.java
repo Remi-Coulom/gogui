@@ -16,8 +16,9 @@ import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
-import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpCallback;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpClientBase;
@@ -193,16 +194,18 @@ public class GtpAdapter
             if  (stones == null)
                 throw new GtpError("Invalid number of handicap stones");
         }
-        StringBuffer pointList = new StringBuffer(128);
+        StringBuffer response = new StringBuffer(128);
+        PointList points = new PointList();
         for (int i = 0; i < stones.size(); ++i)
         {
-            GoPoint point = stones.get(i);            
-            m_board.setup(point, GoColor.BLACK);
-            if (pointList.length() > 0)
-                pointList.append(' ');
-            pointList.append(point);
+            GoPoint p = stones.get(i);            
+            points.add(p);
+            if (response.length() > 0)
+                response.append(' ');
+            response.append(p);
         }
-        cmd.setResponse(pointList.toString());
+        m_board.setup(points, null, null);
+        cmd.setResponse(response.toString());
         synchronize();
     }
 
@@ -230,8 +233,10 @@ public class GtpAdapter
 
     public void cmdSetFreeHandicap(GtpCommand cmd) throws GtpError
     {
+        PointList points = new PointList();
         for (int i = 0; i < cmd.getNuArg(); ++i)
-            m_board.setup(getPointArg(cmd, i), GoColor.BLACK);
+            points.add(getPointArg(cmd, i));
+        m_board.setup(points, null, null);
         synchronize();
     }
 

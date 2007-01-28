@@ -45,7 +45,7 @@ public final class BoardUpdaterTest
         root.append(child);
         Board board = new Board(19);
         m_updater.update(tree, child, board);
-        assertEquals(11, board.getNumberPlacements());
+        assertEquals(2, board.getNumberPlacements());
         assertEquals(GoColor.BLACK, board.getColor(GoPoint.get(1, 1)));
         assertEquals(GoColor.BLACK, board.getColor(GoPoint.get(1, 2)));
         assertEquals(GoColor.BLACK, board.getColor(GoPoint.get(1, 3)));

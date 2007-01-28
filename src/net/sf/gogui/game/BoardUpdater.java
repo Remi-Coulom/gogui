@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 
 /** Updates a go.Board to a node in a GameTree. */
 public class BoardUpdater
@@ -26,12 +27,19 @@ public class BoardUpdater
         for (int i = m_nodes.size() - 1; i >= 0; --i)
         {
             Node node = (Node)m_nodes.get(i);
-            for (int j = 0; j < node.getNumberAddBlack(); ++j)
-                board.setup(node.getAddBlack(j), GoColor.BLACK);
-            for (int j = 0; j < node.getNumberAddWhite(); ++j)
-                board.setup(node.getAddWhite(j), GoColor.WHITE);
-            for (int j = 0; j < node.getNumberAddEmpty(); ++j)
-                board.setup(node.getAddEmpty(j), GoColor.EMPTY);
+            if (node.hasSetup())
+            {
+                PointList setupBlack = new PointList();
+                for (int j = 0; j < node.getNumberAddBlack(); ++j)
+                    setupBlack.add(node.getAddBlack(j));
+                PointList setupWhite = new PointList();
+                for (int j = 0; j < node.getNumberAddWhite(); ++j)
+                    setupWhite.add(node.getAddWhite(j));
+                PointList setupEmpty = new PointList();
+                for (int j = 0; j < node.getNumberAddEmpty(); ++j)
+                    setupEmpty.add(node.getAddEmpty(j));
+                board.setup(setupBlack, setupWhite, setupEmpty);
+            }
             Move move = node.getMove();
             if (move != null)
                 board.play(move);

@@ -10,6 +10,7 @@ import java.io.Reader;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 
 /** Parse Go positions from ASCII text.
     Can handle a variety of formats.
@@ -119,11 +120,19 @@ public class TextParser
     {
         int newSize = m_board.getSize() + 1;
         Board newBoard = new Board(newSize);
+        PointList black = new PointList();
+        PointList white = new PointList();
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
             GoPoint p = m_board.getPoint(i);
-            newBoard.setup(p.up(newSize), m_board.getColor(p));
+            GoColor c = m_board.getColor(p);
+            p = p.up(newSize);
+            if (c == GoColor.BLACK)
+                black.add(p);
+            else if (c == GoColor.WHITE)
+                white.add(p);
         }
+        newBoard.setup(black, white);
         m_board = newBoard;
     }
 
@@ -190,14 +199,14 @@ public class TextParser
             {
                 if (x >= m_board.getSize())
                     increaseBoardSize();
-                m_board.setup(GoPoint.get(x, y), GoColor.BLACK);
+                m_board.setup(new PointList(GoPoint.get(x, y)), null);
                 ++x;
             }
             else if (isWhite(c))
             {
                 if (x >= m_board.getSize())
                     increaseBoardSize();
-                m_board.setup(GoPoint.get(x, y), GoColor.WHITE);
+                m_board.setup(null, new PointList(GoPoint.get(x, y)));
                 ++x;
             }
             else if (isEmpty(c))
