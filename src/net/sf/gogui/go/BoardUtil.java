@@ -134,9 +134,9 @@ public final class BoardUtil
         else if (yIndex == size - 2)
         {
             s.append("  Prisoners: B ");
-            s.append(board.getCapturedB());
+            s.append(board.getCapturedBlack());
             s.append("  W ");
-            s.append(board.getCapturedW());
+            s.append(board.getCapturedWhite());
         }
     }
 

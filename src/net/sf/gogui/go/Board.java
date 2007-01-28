@@ -88,13 +88,13 @@ public final class Board
                     m_koPoint = null;
                 if (color == GoColor.BLACK)
                 {
-                    m_capturedB += suicide.size();
-                    m_capturedW += killed.size();
+                    m_capturedBlack += suicide.size();
+                    m_capturedWhite += killed.size();
                 }
                 else
                 {
-                    m_capturedW += suicide.size();
-                    m_capturedB += killed.size();
+                    m_capturedWhite += suicide.size();
+                    m_capturedBlack += killed.size();
                 }
             }
         }
@@ -128,17 +128,17 @@ public final class Board
     /** Get number of black captured stones.
         @return The total number of black stones captured by all moves played.
     */
-    public int getCapturedB()
+    public int getCapturedBlack()
     {
-        return m_capturedB;
+        return m_capturedBlack;
     }
 
     /** Get number of white captured stones.
         @return The total number of white stones captured by all moves played.
     */
-    public int getCapturedW()
+    public int getCapturedWhite()
     {
-        return m_capturedW;
+        return m_capturedWhite;
     }
 
     /** Get state of a point on the board.
@@ -353,8 +353,8 @@ public final class Board
         for (int i = 0; i < getNumberPoints(); ++i)
             setColor(getPoint(i), GoColor.EMPTY);
         m_stack.clear();        
-        m_capturedB = 0;
-        m_capturedW = 0;
+        m_capturedBlack = 0;
+        m_capturedWhite = 0;
         m_toMove = GoColor.BLACK;
         m_koPoint = null;
     }
@@ -434,13 +434,13 @@ public final class Board
             }
             if (c == GoColor.BLACK)
             {
-                m_capturedB -= suicide.size();
-                m_capturedW -= killed.size();
+                m_capturedBlack -= suicide.size();
+                m_capturedWhite -= killed.size();
             }
             else
             {
-                m_capturedW -= suicide.size();
-                m_capturedB -= killed.size();
+                m_capturedWhite -= suicide.size();
+                m_capturedBlack -= killed.size();
             }
         }
         m_toMove = entry.m_oldToMove;
@@ -495,9 +495,9 @@ public final class Board
 
     private int m_size;
 
-    private int m_capturedB;
+    private int m_capturedBlack;
 
-    private int m_capturedW;
+    private int m_capturedWhite;
 
     private final ArrayList m_stack = new ArrayList(361);
 

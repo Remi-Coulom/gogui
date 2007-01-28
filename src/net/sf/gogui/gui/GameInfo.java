@@ -69,8 +69,8 @@ public class GameInfo
 
     public void update(ConstNode node, ConstBoard board)
     {
-        m_prisonersBlack.setCount(board.getCapturedB());
-        m_prisonersWhite.setCount(board.getCapturedW());
+        m_prisonersBlack.setCount(board.getCapturedBlack());
+        m_prisonersWhite.setCount(board.getCapturedWhite());
         // Usually time left information is stored in a node only for the
         // player who moved, so we check the father node too
         ConstNode father = node.getFatherConst();
