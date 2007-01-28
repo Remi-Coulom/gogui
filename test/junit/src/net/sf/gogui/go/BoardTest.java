@@ -135,6 +135,16 @@ public final class BoardTest
         assertTrue(board.isSuicide(GoPoint.get(1, 0), GoColor.WHITE));
     }
 
+    public void testGetLastMove()
+    {
+        Board board = new Board(19);
+        assertNull(board.getLastMove());
+        board.play(GoPoint.get(0, 0), GoColor.BLACK);
+        assertEquals(Move.get(0, 0, GoColor.BLACK), board.getLastMove());
+        board.setup(GoPoint.get(1, 1), GoColor.BLACK);        
+        assertNull(board.getLastMove());
+    }
+
     /** Test that playing on a occupied field does not fail.
         Board.play spciefies that a play never fails.
         Also tests that the old stone is correctly restored.
@@ -171,13 +181,15 @@ public final class BoardTest
         assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(0, 0)));
     }
 
-    /** Test that setup does not change color to move. */
-    public void testSetupToMove()
+    public void testToMove()
     {
         Board board = new Board(19);
         assertEquals(GoColor.BLACK, board.getToMove());
-        board.setup(GoPoint.get(0, 0), GoColor.BLACK);
-        assertEquals(GoColor.BLACK, board.getToMove());
+        board.play(GoPoint.get(0, 0), GoColor.BLACK);
+        assertEquals(GoColor.WHITE, board.getToMove());
+        // Setup should not change to move
+        board.setup(GoPoint.get(1, 1), GoColor.BLACK);        
+        assertEquals(GoColor.WHITE, board.getToMove());
     }
 
     public void testUndo()
