@@ -10,8 +10,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.util.StringUtil;
 
@@ -213,9 +215,9 @@ public final class NodeUtil
         @return ArrayList contaning the move points, not including passes
         and independent of color.
     */
-    public static ArrayList getChildrenMoves(ConstNode node)
+    public static PointList getChildrenMoves(ConstNode node)
     {
-        ArrayList moves = new ArrayList();
+        PointList moves = new PointList();
         for (int i = 0; i < node.getNumberChildren(); ++i)
         {
             Move childMove = node.getChildConst(i).getMove();
@@ -508,17 +510,17 @@ public final class NodeUtil
             appendInfo(buffer, "MoveNumber", getMoveNumber(node));
         }
         appendInfo(buffer, "Variation", getVariationString(node));
-        ArrayList addBlack = new ArrayList();
+        PointList addBlack = new PointList();
         for (int i = 0; i < node.getNumberAddBlack(); ++i)
             addBlack.add(node.getAddBlack(i));
         if (node.getNumberAddBlack() > 0)
             appendInfo(buffer, "AddBlack", addBlack);
-        ArrayList addWhite = new ArrayList();
+        PointList addWhite = new PointList();
         for (int i = 0; i < node.getNumberAddWhite(); ++i)
             addWhite.add(node.getAddWhite(i));
         if (node.getNumberAddWhite() > 0)
             appendInfo(buffer, "AddWhite", addWhite);
-        ArrayList addEmpty = new ArrayList();
+        PointList addEmpty = new PointList();
         for (int i = 0; i < node.getNumberAddEmpty(); ++i)
             addEmpty.add(node.getAddEmpty(i));
         if (node.getNumberAddEmpty() > 0)
@@ -541,7 +543,7 @@ public final class NodeUtil
         for (int i = 0; i < MarkType.getNumberTypes(); ++i)
         {
             MarkType type = MarkType.getType(i);
-            ArrayList marked = node.getMarkedConst(type);
+            ConstPointList marked = node.getMarkedConst(type);
             if (marked != null && marked.size() > 0)
                 appendInfo(buffer, "Marked " +
                            StringUtil.capitalize(type.toString()), marked);
@@ -687,7 +689,7 @@ public final class NodeUtil
     }
 
     private static void appendInfo(StringBuffer buffer, String label,
-                                   ArrayList points)
+                                   ConstPointList points)
     {
         appendInfoLabel(buffer, label);
         for (int i = 0; i < points.size(); ++i)
@@ -697,7 +699,7 @@ public final class NodeUtil
                 buffer.append('\n');
                 appendInfoLabel(buffer, "");
             }
-            buffer.append((GoPoint)points.get(i));
+            buffer.append(points.get(i));
             buffer.append(' ');
         }
         buffer.append('\n');

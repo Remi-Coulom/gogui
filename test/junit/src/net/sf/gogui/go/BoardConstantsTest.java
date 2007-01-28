@@ -31,7 +31,7 @@ public final class BoardConstantsTest
             for (int n = 0; n < 20; ++n)
             {
                 String message = "size=" + size + " n=" + n;
-                ArrayList list = constants.getHandicapStones(n);
+                ConstPointList list = constants.getHandicapStones(n);
                 if (n == 0)
                 {
                     assertNotNull(message, list);

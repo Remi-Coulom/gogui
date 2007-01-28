@@ -7,6 +7,7 @@ package net.sf.gogui.game;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
@@ -22,7 +23,7 @@ public class GameTree
         m_root = new Node();
     }
 
-    public GameTree(int boardSize, Komi komi, ArrayList handicap,
+    public GameTree(int boardSize, Komi komi, ConstPointList handicap,
                     String rules, TimeSettings timeSettings)
     {
         m_gameInformation = new GameInformation(boardSize);
@@ -39,7 +40,7 @@ public class GameTree
             {
                 m_root.setPlayer(GoColor.WHITE);
                 for (int i = 0; i < handicap.size(); ++i)
-                    m_root.addBlack((GoPoint)handicap.get(i));
+                    m_root.addBlack(handicap.get(i));
             }
         }
     }

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Locale;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.GoColor;
@@ -179,7 +180,7 @@ public class GtpAdapter
 
     public void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
-        ArrayList stones;
+        ConstPointList stones;
         if (m_gtp.isSupported("place_free_handicap"))
         {
             String response = send(cmd.getLine());
@@ -195,7 +196,7 @@ public class GtpAdapter
         StringBuffer pointList = new StringBuffer(128);
         for (int i = 0; i < stones.size(); ++i)
         {
-            GoPoint point = (GoPoint)stones.get(i);            
+            GoPoint point = stones.get(i);            
             m_board.setup(point, GoColor.BLACK);
             if (pointList.length() > 0)
                 pointList.append(' ');

@@ -5,9 +5,9 @@
 package net.sf.gogui.gtpdummy;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Random;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpCallback;
 import net.sf.gogui.gtp.GtpCommand;
 import net.sf.gogui.gtp.GtpEngine;
@@ -314,7 +314,7 @@ public class GtpDummy
     private final Thread m_thread;
 
     /** Editable point list for gtpdummy-eplist command. */
-    private ArrayList m_ePList = new ArrayList();
+    private PointList m_ePList = new PointList();
 
     private void initSize(int size)
     {

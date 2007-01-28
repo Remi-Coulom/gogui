@@ -15,7 +15,7 @@ public interface ConstBoard
 
     boolean contains(GoPoint point);
 
-    ArrayList getAdjacentPoints(GoPoint point);
+    ConstPointList getAdjacentPoints(GoPoint point);
 
     int getCapturedBlack();
 
@@ -23,9 +23,9 @@ public interface ConstBoard
 
     GoColor getColor(GoPoint p);
 
-    ArrayList getHandicapStones(int n);
+    ConstPointList getHandicapStones(int n);
 
-    ArrayList getKilled();
+    ConstPointList getKilled();
 
     Move getLastMove();
 
@@ -39,9 +39,9 @@ public interface ConstBoard
 
     int getSize();
 
-    void getStones(GoPoint p, GoColor color, ArrayList stones);
+    void getStones(GoPoint p, GoColor color, PointList stones);
 
-    ArrayList getSuicide();
+    ConstPointList getSuicide();
 
     GoColor getToMove();
 

@@ -8,8 +8,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.go.GoPoint;
 
 /** Extended info.
@@ -46,11 +48,11 @@ final class SetupInfo
 {
     public GoColor m_player = GoColor.EMPTY;
 
-    public ArrayList m_black = new ArrayList();
+    public PointList m_black = new PointList();
 
-    public ArrayList m_white = new ArrayList();
+    public PointList m_white = new PointList();
 
-    public ArrayList m_empty = new ArrayList();
+    public PointList m_empty = new PointList();
 }
 
 final class TimeInfo
@@ -137,10 +139,10 @@ public final class Node
     {
         assert(point != null);
         Map marked = createMarked();
-        ArrayList pointList = (ArrayList)marked.get(type);
+        PointList pointList = (PointList)marked.get(type);
         if (pointList == null)
         {
-            pointList = new ArrayList(1);
+            pointList = new PointList(1);
             pointList.add(point);
             marked.put(type, pointList);
         }
@@ -176,7 +178,7 @@ public final class Node
     public GoPoint getAddBlack(int i)
     {
         SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
-        return (GoPoint)setupInfo.m_black.get(i);
+        return setupInfo.m_black.get(i);
     }
 
     /** Get empty setup point.
@@ -186,7 +188,7 @@ public final class Node
     public GoPoint getAddEmpty(int i)
     {
         SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
-        return (GoPoint)setupInfo.m_empty.get(i);
+        return setupInfo.m_empty.get(i);
     }
 
     /** Get white setup stone.
@@ -196,7 +198,7 @@ public final class Node
     public GoPoint getAddWhite(int i)
     {
         SetupInfo setupInfo = m_extraInfo.m_moreExtraInfo.m_setupInfo;
-        return (GoPoint)setupInfo.m_white.get(i);
+        return setupInfo.m_white.get(i);
     }
 
     /** Child of main variation or null if no child.
@@ -320,23 +322,20 @@ public final class Node
         @param type Markup type from Node.MARK_TYPES.
         @return Map containing (Point,String) pairs.
     */
-    public ArrayList getMarked(MarkType type)
+    public PointList getMarked(MarkType type)
     {
         if (m_extraInfo == null || m_extraInfo.m_marked == null)
             return null;
-        return (ArrayList)m_extraInfo.m_marked.get(type);
+        return (PointList)m_extraInfo.m_marked.get(type);
     }
 
     /** Get all markups of a type (const).
         @param type Markup type from Node.MARK_TYPES.
         @return Map containing (Point,String) pairs.
     */
-    public ArrayList getMarkedConst(MarkType type)
+    public ConstPointList getMarkedConst(MarkType type)
     {
-        ArrayList marked = getMarked(type);
-        if (marked == null)
-            return null;
-        return new ArrayList(marked);
+        return getMarked(type);
     }
 
     /** Get move contained in this node.
@@ -558,7 +557,7 @@ public final class Node
     {
         assert(point != null);
         Map marked = createMarked();
-        ArrayList pointList = (ArrayList)marked.get(type);
+        PointList pointList = (PointList)marked.get(type);
         if (pointList != null)
             pointList.remove(point);
     }

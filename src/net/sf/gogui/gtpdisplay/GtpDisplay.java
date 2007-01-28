@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
@@ -321,13 +322,13 @@ public class GtpDisplay
     private void cmdPlaceFreeHandicap(GtpCommand cmd) throws GtpError
     {
         int n = cmd.getIntArg();
-        ArrayList stones = Board.getHandicapStones(m_size, n);
+        ConstPointList stones = Board.getHandicapStones(m_size, n);
         if  (stones == null)
             throw new GtpError("Invalid number of handicap stones");
         StringBuffer pointList = new StringBuffer(128);
         for (int i = 0; i < stones.size(); ++i)
         {
-            GoPoint point = (GoPoint)stones.get(i);
+            GoPoint point = stones.get(i);
             play(GoColor.BLACK, point);
             if (pointList.length() > 0)
                 pointList.append(' ');

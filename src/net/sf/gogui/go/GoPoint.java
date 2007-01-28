@@ -151,10 +151,10 @@ public final class GoPoint
         return GoPoint.get(x, y);
     }
 
-    public static ArrayList parsePointList(String s, int boardSize)
+    public static PointList parsePointList(String s, int boardSize)
         throws InvalidPoint
     {
-        ArrayList list = new ArrayList();
+        PointList list = new PointList();
         String p[] = StringUtil.splitArguments(s);
         for (int i = 0; i < p.length; ++i)
             if (! p[i].equals(""))
@@ -198,7 +198,7 @@ public final class GoPoint
         Points are separated by a single space.
         If pointList is null, "(null)" is returned.
     */
-    public static String toString(ArrayList pointList)
+    public static String toString(ConstPointList pointList)
     {
         if (pointList == null)
             return "(null)";
@@ -206,7 +206,7 @@ public final class GoPoint
         StringBuffer buffer = new StringBuffer(length * 4);
         for (int i = 0; i < length; ++i)
         {
-            buffer.append(((GoPoint)pointList.get(i)).toString());
+            buffer.append(pointList.get(i).toString());
             if (i < length - 1)
                 buffer.append(' ');
         }

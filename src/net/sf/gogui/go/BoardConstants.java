@@ -40,9 +40,9 @@ public final class BoardConstants
         this combination of number of handicap stones and board size; empty
         list for zero handicap stones.
     */
-    public ArrayList getHandicapStones(int n)
+    public ConstPointList getHandicapStones(int n)
     {
-        ArrayList result = new ArrayList(9);
+        PointList result = new PointList(9);
         if (n == 0)
             return result;
         int line1 = m_handicapLine1;

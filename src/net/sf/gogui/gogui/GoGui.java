@@ -53,11 +53,13 @@ import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.BoardUtil;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpClient;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpSynchronizer;
@@ -162,7 +164,7 @@ public class GoGui
                 {
                     if (text == null)
                         text = "";
-                    ArrayList points =
+                    PointList points =
                         GtpUtil.parsePointString(text, getBoardSize());
                     GuiBoardUtil.showPointList(m_guiBoard, points);
                 }
@@ -1354,7 +1356,7 @@ public class GoGui
         else if (m_analyzeCommand != null
                  && m_analyzeCommand.needsPointListArg())
         {
-            ArrayList pointListArg = m_analyzeCommand.getPointListArg();
+            PointList pointListArg = m_analyzeCommand.getPointListArg();
             if (pointListArg.contains(p))
             {
                 pointListArg.remove(p);
@@ -1770,9 +1772,9 @@ public class GoGui
                 pointArg = m_analyzeCommand.getPointArg();
             else if (m_analyzeCommand.needsPointListArg())
             {
-                ArrayList list = m_analyzeCommand.getPointListArg();
+                ConstPointList list = m_analyzeCommand.getPointListArg();
                 if (list.size() > 0)
-                    pointArg = (GoPoint)list.get(list.size() - 1);
+                    pointArg = list.get(list.size() - 1);
             }
             if (type == AnalyzeCommand.PARAM)
                 ParameterDialog.editParameters(m_lastAnalyzeCommand, this,
@@ -1984,7 +1986,7 @@ public class GoGui
     {
         boolean success = endLengthyCommand();
         clearStatus();
-        ArrayList isDeadStone = null;
+        PointList isDeadStone = null;
         if (success)
         {
             String response = m_gtp.getResponse();
@@ -2559,7 +2561,7 @@ public class GoGui
             if (m_gameTreeViewer != null)
                 restoreSize(m_gameTreeViewer, "tree");
         }
-        ArrayList handicap = getBoard().getHandicapStones(m_handicap);
+        ConstPointList handicap = getBoard().getHandicapStones(m_handicap);
         if (handicap == null)
             showWarning("Handicap stone locations not\n" +
                         "defined for this board size");
@@ -2657,7 +2659,7 @@ public class GoGui
         m_progressBarTimer.stop();
     }
 
-    private void initScore(ArrayList deadStones)
+    private void initScore(ConstPointList deadStones)
     {
         resetBoard();
         GuiBoardUtil.scoreBegin(m_guiBoard, m_countScore, getBoard(),
@@ -3345,7 +3347,7 @@ public class GoGui
     {
         if (m_showVariations)
         {
-            ArrayList childrenMoves
+            ConstPointList childrenMoves
                 = NodeUtil.getChildrenMoves(getCurrentNode());
             GuiBoardUtil.showChildrenMoves(m_guiBoard, childrenMoves);
         }

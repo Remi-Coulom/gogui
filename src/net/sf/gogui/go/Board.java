@@ -43,8 +43,8 @@ public final class Board
             GoPoint p = m_move.getPoint();
             GoColor c = m_move.getColor();
             GoColor otherColor = c.otherColor();
-            m_killed = new ArrayList();
-            m_suicide = new ArrayList();
+            m_killed = new PointList();
+            m_suicide = new PointList();
             GoPoint m_oldKoPoint = board.m_koPoint;
             board.m_koPoint = null;
             if (p != null)
@@ -52,14 +52,13 @@ public final class Board
                 m_oldColor = board.getColor(p);
                 board.setColor(p, c);
                 assert(c != GoColor.EMPTY);
-                ArrayList adj = board.getAdjacentPoints(p);
+                ConstPointList adj = board.getAdjacentPoints(p);
                 for (int i = 0; i < adj.size(); ++i)
                 {
                     int killedSize = m_killed.size();
-                    board.checkKill((GoPoint)(adj.get(i)), otherColor,
-                                    m_killed);
+                    board.checkKill(adj.get(i), otherColor, m_killed);
                     if (m_killed.size() == killedSize + 1)
-                        board.m_koPoint = (GoPoint)m_killed.get(killedSize);
+                        board.m_koPoint = m_killed.get(killedSize);
                 }
                 board.checkKill(p, c, m_suicide);
                 if (board.m_koPoint != null
@@ -89,13 +88,13 @@ public final class Board
                 GoColor otherColor = c.otherColor();
                 for (int i = 0; i < m_suicide.size(); ++i)
                 {
-                    GoPoint stone = (GoPoint)m_suicide.get(i);
+                    GoPoint stone = m_suicide.get(i);
                     board.setColor(stone, c);
                 }
                 board.setColor(p, m_oldColor);
                 for (int i = 0; i < m_killed.size(); ++i)
                 {
-                    GoPoint stone = (GoPoint)m_killed.get(i);
+                    GoPoint stone = m_killed.get(i);
                     board.setColor(stone, otherColor);
                 }
                 if (c == GoColor.BLACK)
@@ -121,9 +120,9 @@ public final class Board
 
         private GoColor m_oldToMove;
 
-        private ArrayList m_killed;
+        private PointList m_killed;
 
-        private ArrayList m_suicide;
+        private PointList m_suicide;
     }
 
     public static class Setup
@@ -236,10 +235,10 @@ public final class Board
         @param point The point.
         @return List of points adjacent.
     */
-    public ArrayList getAdjacentPoints(GoPoint point)
+    public ConstPointList getAdjacentPoints(GoPoint point)
     {
         final int maxAdjacent = 4;
-        ArrayList result = new ArrayList(maxAdjacent);
+        PointList result = new PointList(maxAdjacent);
         int x = point.getX();
         int y = point.getY();
         if (x > 0)
@@ -283,7 +282,7 @@ public final class Board
         stone locations.
         @see BoardConstants#getHandicapStones
     */
-    public ArrayList getHandicapStones(int n)
+    public ConstPointList getHandicapStones(int n)
     {
         return m_constants.getHandicapStones(n);
     }
@@ -295,7 +294,7 @@ public final class Board
         stone locations.
         @see BoardConstants#getHandicapStones
     */
-    public static ArrayList getHandicapStones(int size, int n)
+    public static ConstPointList getHandicapStones(int size, int n)
     {
         return BoardConstants.get(size).getHandicapStones(n);
     }
@@ -307,15 +306,14 @@ public final class Board
         empty if none were killed or if last placement was a setup stone.
         @see #getSuicide()
     */
-    public ArrayList getKilled()
+    public ConstPointList getKilled()
     {
         int numberPlacements = getNumberPlacements();
         assert(numberPlacements > 0);
-        ArrayList killed = new ArrayList();
         Placement placement = (Placement)m_stack.get(numberPlacements - 1);
         if (placement instanceof Play)
-            killed.addAll(((Play)placement).m_killed);
-        return killed;
+            return ((Play)placement).m_killed;
+        return PointList.getEmptyList();
     }
 
     /** Return last move.
@@ -379,7 +377,7 @@ public final class Board
         return m_size;
     }
 
-    public void getStones(GoPoint p, GoColor color, ArrayList stones)
+    public void getStones(GoPoint p, GoColor color, PointList stones)
     {
         assert(m_mark.isCleared());
         findStones(p, color, stones);
@@ -394,15 +392,14 @@ public final class Board
         or if last placement was a setup stone..
         @see #getKilled()
     */
-    public ArrayList getSuicide()
+    public ConstPointList getSuicide()
     {
         int numberPlacements = getNumberPlacements();
         assert(numberPlacements > 0);
-        ArrayList suicide = new ArrayList();
         Placement placement = (Placement)m_stack.get(numberPlacements - 1);
         if (placement instanceof Play)
-            suicide.addAll(((Play)placement).m_suicide);
-        return suicide;
+            return ((Play)placement).m_suicide;
+        return PointList.getEmptyList();
     }
 
     /** Get color to move.
@@ -595,11 +592,11 @@ public final class Board
     {
         if (getColor(point) != color)
             return false;
-        ArrayList adj = getAdjacentPoints(point);
+        ConstPointList adj = getAdjacentPoints(point);
         int lib = 0;
         for (int i = 0; i < adj.size(); ++i)
         {
-            GoColor adjColor = getColor((GoPoint)adj.get(i));
+            GoColor adjColor = getColor(adj.get(i));
             if (adjColor == GoColor.EMPTY)
             {
                 ++lib;
@@ -612,21 +609,21 @@ public final class Board
         return true;
     }
 
-    private void checkKill(GoPoint p, GoColor color, ArrayList killed)
+    private void checkKill(GoPoint p, GoColor color, PointList killed)
     {
         assert(m_mark.isCleared());
-        ArrayList stones = new ArrayList();
+        PointList stones = new PointList();
         if (isDead(p, color, stones))
         {
             killed.addAll(stones);
             for (int i = 0; i < stones.size(); ++i)
-                setColor((GoPoint)stones.get(i), GoColor.EMPTY);
+                setColor(stones.get(i), GoColor.EMPTY);
         }
         m_mark.set(stones, false);
         assert(m_mark.isCleared());
     }
 
-    private void findStones(GoPoint p, GoColor color, ArrayList stones)
+    private void findStones(GoPoint p, GoColor color, PointList stones)
     {
         GoColor c = getColor(p);
         if (c != color)
@@ -635,12 +632,12 @@ public final class Board
             return;
         m_mark.set(p, true);
         stones.add(p);
-        ArrayList adj = getAdjacentPoints(p);
+        ConstPointList adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
-            findStones((GoPoint)(adj.get(i)), color, stones);
+            findStones(adj.get(i), color, stones);
     }
 
-    private boolean isDead(GoPoint p, GoColor color, ArrayList stones)
+    private boolean isDead(GoPoint p, GoColor color, PointList stones)
     {
         GoColor c = getColor(p);
         if (c == GoColor.EMPTY)
@@ -651,9 +648,9 @@ public final class Board
             return true;
         m_mark.set(p, true);
         stones.add(p);
-        ArrayList adj = getAdjacentPoints(p);
+        ConstPointList adj = getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
-            if (! isDead((GoPoint)(adj.get(i)), color, stones))
+            if (! isDead(adj.get(i), color, stones))
                 return false;
         return true;
     }

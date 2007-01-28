@@ -4,10 +4,10 @@
 
 package net.sf.gogui.gtp;
 
-import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.StringUtil;
 
 /** GTP command.
@@ -260,12 +260,12 @@ public class GtpCommand
         All arguments will be parsed as points.
         @param boardSize The board size (points will be checked to be within
         this board size).
-        @return ArrayList containg the points (GoPoint).
+        @return Point list containg the points.
         @throws GtpError If at least one argument is not a valid point.
     */
-    public ArrayList getPointListArg(int boardSize) throws GtpError
+    public PointList getPointListArg(int boardSize) throws GtpError
     {
-        ArrayList pointList = new ArrayList();
+        PointList pointList = new PointList();
         for (int i = 0; i < getNuArg(); ++i)
             pointList.add(getPointArg(i, boardSize));
         return pointList;

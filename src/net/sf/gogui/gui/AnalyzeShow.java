@@ -11,9 +11,11 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Locale;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.StringUtil;
@@ -28,7 +30,7 @@ public final class AnalyzeShow
         throws GtpError
     {
         GoPoint pointArg = command.getPointArg();
-        ArrayList pointListArg = command.getPointListArg();
+        PointList pointListArg = command.getPointListArg();
         guiBoard.clearAllSelect();
         GuiBoardUtil.setSelect(guiBoard, pointListArg, true);
         if (pointArg != null)
@@ -62,20 +64,20 @@ public final class AnalyzeShow
             break;
         case AnalyzeCommand.PLIST:
             {
-                ArrayList points = GtpUtil.parsePointList(response, size);
+                PointList points = GtpUtil.parsePointList(response, size);
                 GuiBoardUtil.showPointList(guiBoard, points);
             }
             break;
         case AnalyzeCommand.HPSTRING:
         case AnalyzeCommand.PSTRING:
             {
-                ArrayList points = GtpUtil.parsePointString(response, size);
+                PointList points = GtpUtil.parsePointString(response, size);
                 GuiBoardUtil.showPointList(guiBoard, points);
             }
             break;
         case AnalyzeCommand.PSPAIRS:
             {
-                ArrayList pointList = new ArrayList(32);
+                PointList pointList = new PointList(32);
                 ArrayList stringList = new ArrayList(32);
                 GtpUtil.parsePointStringList(response, pointList, stringList,
                                               size);
@@ -404,7 +406,7 @@ public final class AnalyzeShow
     }
 
     private static GoColor getColor(ConstBoard board, GoPoint pointArg,
-                                    ArrayList pointListArg)
+                                    ConstPointList pointListArg)
     {
         GoColor color = GoColor.EMPTY;
         if (pointArg != null)
@@ -413,7 +415,7 @@ public final class AnalyzeShow
             return color;
         for (int i = 0; i < pointListArg.size(); ++i)
         {
-            GoPoint point = (GoPoint)pointListArg.get(i);
+            GoPoint point = pointListArg.get(i);
             color = board.getColor(point);
             if (color != GoColor.EMPTY)
                 break;

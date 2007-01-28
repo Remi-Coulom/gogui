@@ -15,10 +15,12 @@ import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.StringUtil;
 
 /** Write in SGF format. */
@@ -145,11 +147,11 @@ public class SgfWriter
         return "[" + getPoint(point) + "]";
     }
 
-    private String getPointList(ArrayList v)
+    private String getPointList(ConstPointList v)
     {
         StringBuffer buffer = new StringBuffer(STRINGBUF_CAPACITY);
         for (int i = 0; i < v.size(); ++i)
-            buffer.append(getPointValue((GoPoint)v.get(i)));
+            buffer.append(getPointValue(v.get(i)));
         return buffer.toString();
     }
     
@@ -251,7 +253,7 @@ public class SgfWriter
 
     private void printMarked(ConstNode node, String property, MarkType type)
     {
-        ArrayList marked = node.getMarkedConst(type);
+        ConstPointList marked = node.getMarkedConst(type);
         if (marked != null)
             print(property + getPointList(marked));
     }
@@ -368,8 +370,8 @@ public class SgfWriter
     private void printPosition(ConstBoard board)
     {
         int numberPoints = board.getNumberPoints();
-        ArrayList black = new ArrayList(numberPoints);
-        ArrayList white = new ArrayList(numberPoints);
+        PointList black = new PointList(numberPoints);
+        PointList white = new PointList(numberPoints);
         for (int i = 0; i < numberPoints; ++i)
         {
             GoPoint p = board.getPoint(i);
@@ -384,7 +386,7 @@ public class SgfWriter
         printToPlay(board.getToMove());
     }
 
-    private void printSetup(ArrayList black, ArrayList white)
+    private void printSetup(ConstPointList black, ConstPointList white)
     {
         if (black.size() > 0 || white.size() > 0)
         {

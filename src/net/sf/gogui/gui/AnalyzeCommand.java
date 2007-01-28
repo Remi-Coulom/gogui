@@ -16,8 +16,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.StringUtil;
 
@@ -167,7 +169,7 @@ public class AnalyzeCommand
         return m_pointArg;
     }
 
-    public ArrayList getPointListArg()
+    public PointList getPointListArg()
     {
         return m_pointListArg;
     }
@@ -200,7 +202,7 @@ public class AnalyzeCommand
             for (int i = 0; i < m_pointListArg.size(); ++i)
             {
                 buffer.append(' ');
-                buffer.append(((GoPoint)(m_pointListArg.get(i))).toString());
+                buffer.append(m_pointListArg.get(i).toString());
             }
         }
         if (needsStringArg() && m_stringArg != null)
@@ -396,9 +398,9 @@ public class AnalyzeCommand
         m_pointArg = point;
     }
 
-    public void setPointListArg(ArrayList pointList)
+    public void setPointListArg(ConstPointList pointList)
     {
-        m_pointListArg = pointList;
+        m_pointListArg = new PointList(pointList);
     }
 
     public void setStringArg(String value)
@@ -429,7 +431,7 @@ public class AnalyzeCommand
 
     private GoPoint m_pointArg;
 
-    private ArrayList m_pointListArg = new ArrayList();
+    private PointList m_pointListArg = new PointList();
 
     private static File getDir()
     {

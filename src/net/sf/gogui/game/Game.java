@@ -4,8 +4,8 @@
 
 package net.sf.gogui.game;
 
-import java.util.ArrayList;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -24,8 +24,8 @@ public class Game
         init(boardSize, null, null, "", null);
     }
 
-    public Game(int boardSize, Komi komi, ArrayList handicap, String rules,
-                TimeSettings timeSettings)
+    public Game(int boardSize, Komi komi, ConstPointList handicap,
+                String rules, TimeSettings timeSettings)
     {
         m_board = new Board(boardSize);
         m_clock = new Clock();
@@ -143,7 +143,7 @@ public class Game
         m_clock.halt();
     }
 
-    public void init(int boardSize, Komi komi, ArrayList handicap,
+    public void init(int boardSize, Komi komi, ConstPointList handicap,
                      String rules, TimeSettings timeSettings)
     {
         m_tree = new GameTree(boardSize, komi, handicap, rules, timeSettings);

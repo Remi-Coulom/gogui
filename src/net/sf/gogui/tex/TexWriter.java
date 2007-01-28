@@ -17,6 +17,7 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 
 /** Write a game or board position in PSGO style to a stream. */
 public class TexWriter

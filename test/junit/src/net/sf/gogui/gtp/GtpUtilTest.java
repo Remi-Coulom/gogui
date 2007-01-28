@@ -7,6 +7,7 @@ package net.sf.gogui.gtp;
 import java.util.ArrayList;
 import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 
 public final class GtpUtilTest
     extends junit.framework.TestCase
@@ -24,7 +25,7 @@ public final class GtpUtilTest
     public void testParsePointString() throws GtpError
     {
         String s = " A1 b2\n textC3 C3 PASS text\tpass";
-        ArrayList points = GtpUtil.parsePointString(s, 19);
+        PointList points = GtpUtil.parsePointString(s, 19);
         assertEquals(5, points.size());
         assertSame(GoPoint.get(0, 0), points.get(0));
         assertSame(GoPoint.get(1, 1), points.get(1));

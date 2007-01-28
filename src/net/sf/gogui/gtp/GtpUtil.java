@@ -15,6 +15,7 @@ import net.sf.gogui.game.TimeSettings;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.StringUtil;
 
 /** Utility functions used in package gtp. */
@@ -102,20 +103,7 @@ public final class GtpUtil
         }
     }
     
-    public static ArrayList parsePointList(String s, int boardSize)
-        throws GtpError
-    {
-        try
-        {
-            return GoPoint.parsePointList(s, boardSize);
-        }
-        catch (GoPoint.InvalidPoint e)
-        {
-            throw new GtpError("Invalid point or move");
-        }
-    }
-
-    public static ArrayList parsePointArrayList(String s, int boardSize)
+    public static PointList parsePointList(String s, int boardSize)
         throws GtpError
     {
         try
@@ -129,18 +117,18 @@ public final class GtpUtil
     }
 
     /** Find all points contained in string. */
-    public static ArrayList parsePointString(String text)
+    public static PointList parsePointString(String text)
     {
         return parsePointString(text, GoPoint.MAXSIZE);
     }
 
     /** Find all points contained in string. */
-    public static ArrayList parsePointString(String text, int boardSize)
+    public static PointList parsePointString(String text, int boardSize)
     {
         String regex = "\\b([Pp][Aa][Ss][Ss]|[A-Ta-t](1\\d|[1-9]))\\b";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(text);
-        ArrayList list = new ArrayList(32);
+        PointList list = new PointList(32);
         while (matcher.find())
         {
             int start = matcher.start();
@@ -160,7 +148,7 @@ public final class GtpUtil
         return list;
     }
 
-    public static void parsePointStringList(String s, ArrayList pointList,
+    public static void parsePointStringList(String s, PointList pointList,
                                             ArrayList stringList,
                                             int boardsize) throws GtpError
     {

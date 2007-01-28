@@ -80,7 +80,7 @@ public final class BoardTest
         board.setup(GoPoint.get(2, 2), GoColor.WHITE);
         board.setup(GoPoint.get(3, 1), GoColor.WHITE);
         board.play(GoPoint.get(2, 0), GoColor.WHITE);
-        ArrayList killed = board.getKilled();
+        ConstPointList killed = board.getKilled();
         assertEquals(3, killed.size());
         assertTrue(killed.contains(GoPoint.get(0, 0)));
         assertTrue(killed.contains(GoPoint.get(1, 0)));
@@ -109,7 +109,7 @@ public final class BoardTest
         board.setup(GoPoint.get(1, 1), GoColor.WHITE);
         board.setup(GoPoint.get(2, 0), GoColor.WHITE);
         board.play(GoPoint.get(0, 0), GoColor.BLACK);
-        ArrayList suicide = board.getSuicide();
+        ConstPointList suicide = board.getSuicide();
         assertEquals(3, suicide.size());
         assertTrue(suicide.contains(GoPoint.get(0, 0)));
         assertTrue(suicide.contains(GoPoint.get(0, 1)));

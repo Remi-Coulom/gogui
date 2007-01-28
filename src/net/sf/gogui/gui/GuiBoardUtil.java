@@ -12,10 +12,12 @@ import java.util.Map;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.MarkType;
 import net.sf.gogui.go.ConstBoard;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.CountScore;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 
 /** Utility functions for class GuiBoard. */
 public final class GuiBoardUtil
@@ -91,22 +93,22 @@ public final class GuiBoardUtil
         return result;
     }
 
-    public static void setSelect(GuiBoard guiBoard, ArrayList pointList,
+    public static void setSelect(GuiBoard guiBoard, ConstPointList pointList,
                                  boolean select)
     {
         if (pointList == null)
             return;
         for (int i = 0; i < pointList.size(); ++i)
-            guiBoard.setSelect((GoPoint)pointList.get(i), select);
+            guiBoard.setSelect(pointList.get(i), select);
     }
 
     public static void scoreBegin(GuiBoard guiBoard, CountScore countScore,
-                                  ConstBoard board, ArrayList deadStones)
+                                  ConstBoard board, ConstPointList deadStones)
     {
         countScore.begin(board, deadStones);
         if (deadStones != null)
             for (int i = 0; i < deadStones.size(); ++i)
-                guiBoard.setCrossHair((GoPoint)deadStones.get(i), true);
+                guiBoard.setCrossHair(deadStones.get(i), true);
         computeScore(guiBoard, countScore, board);
     }
 
@@ -116,12 +118,12 @@ public final class GuiBoardUtil
         GoColor c = board.getColor(p);
         if (c == GoColor.EMPTY)
             return;
-        ArrayList stones = new ArrayList(board.getNumberPoints());
+        PointList stones = new PointList(board.getNumberPoints());
         board.getStones(p, c, stones);
-        boolean dead = ! countScore.getDead((GoPoint)(stones.get(0)));
+        boolean dead = ! countScore.getDead(stones.get(0));
         for (int i = 0; i < stones.size(); ++i)
         {
-            GoPoint stone = (GoPoint)stones.get(i);
+            GoPoint stone = stones.get(i);
             countScore.setDead(stone, dead);
             guiBoard.setCrossHair(stone, dead);
         }
@@ -145,14 +147,14 @@ public final class GuiBoardUtil
     }
 
     public static void showChildrenMoves(GuiBoard guiBoard,
-                                         ArrayList childrenMoves)
+                                         ConstPointList childrenMoves)
     {
         guiBoard.clearAllLabels();
         int numberMarked = 0;
         char label = 'A';
         for (int i = 0; i < childrenMoves.size(); ++i)
         {
-            GoPoint point = (GoPoint)childrenMoves.get(i);
+            GoPoint point = childrenMoves.get(i);
             String s = guiBoard.getLabel(point);
             if (! s.equals(""))
             {
@@ -200,33 +202,33 @@ public final class GuiBoardUtil
 
     public static void showMarkup(GuiBoard guiBoard, ConstNode node)
     {
-        ArrayList mark;
+        ConstPointList mark;
         mark = node.getMarkedConst(MarkType.MARK);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setMark((GoPoint)(mark.get(i)), true);
+                guiBoard.setMark(mark.get(i), true);
         mark = node.getMarkedConst(MarkType.CIRCLE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setMarkCircle((GoPoint)(mark.get(i)), true);
+                guiBoard.setMarkCircle(mark.get(i), true);
         mark = node.getMarkedConst(MarkType.SQUARE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setMarkSquare((GoPoint)(mark.get(i)), true);
+                guiBoard.setMarkSquare(mark.get(i), true);
         mark = node.getMarkedConst(MarkType.TRIANGLE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setMarkTriangle((GoPoint)(mark.get(i)), true);
+                guiBoard.setMarkTriangle(mark.get(i), true);
         GuiBoardUtil.setSelect(guiBoard, node.getMarkedConst(MarkType.SELECT),
                                 true);
         mark = node.getMarkedConst(MarkType.TERRITORY_BLACK);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setTerritory((GoPoint)(mark.get(i)), GoColor.BLACK);
+                guiBoard.setTerritory(mark.get(i), GoColor.BLACK);
         mark = node.getMarkedConst(MarkType.TERRITORY_WHITE);
         if (mark != null)
             for (int i = 0; i < mark.size(); ++i)
-                guiBoard.setTerritory((GoPoint)(mark.get(i)), GoColor.WHITE);
+                guiBoard.setTerritory(mark.get(i), GoColor.WHITE);
         Map labels = node.getLabelsConst();
         if (labels != null)
         {
@@ -241,25 +243,25 @@ public final class GuiBoardUtil
         }
     }
 
-    public static void showPointList(GuiBoard guiBoard, ArrayList points)
+    public static void showPointList(GuiBoard guiBoard, ConstPointList points)
     {
         guiBoard.clearAllMarkup();
         for (int i = 0; i < points.size(); ++i)
         {
-            GoPoint p = (GoPoint)points.get(i);
+            GoPoint p = points.get(i);
             if (p != null && p.isOnBoard(guiBoard.getBoardSize()))
                 guiBoard.setMarkSquare(p, true);
         }
     }
 
     public static void showPointStringList(GuiBoard guiBoard,
-                                           ArrayList pointList,
+                                           ConstPointList pointList,
                                            ArrayList stringList)
     {
         guiBoard.clearAllLabels();
         for (int i = 0; i < pointList.size(); ++i)
         {
-            GoPoint point = (GoPoint)pointList.get(i);
+            GoPoint point = pointList.get(i);
             String string = (String)stringList.get(i);
             if (point != null)
                 guiBoard.setLabel(point, string);

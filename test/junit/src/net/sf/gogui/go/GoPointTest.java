@@ -49,8 +49,8 @@ public final class GoPointTest
         assertEquals(getPoint(18, 18).toString(), "T19");
         assertEquals(getPoint(9, 20).toString(), "K21");
         assertEquals(getPoint(9, 20).toString(), "K21");
-        assertEquals(GoPoint.toString((ArrayList)null), "(null)");
-        ArrayList v = new ArrayList();
+        assertEquals(GoPoint.toString((PointList)null), "(null)");
+        PointList v = new PointList();
         assertEquals(GoPoint.toString(v), "");
         v.add(getPoint(0, 0));
         assertEquals(GoPoint.toString(v), "A1");
@@ -72,11 +72,11 @@ public final class GoPointTest
         checkInvalid("19Z", 19);
         checkInvalid("A100", 25);
         checkInvalid("C10", 9);
-        ArrayList points = GoPoint.parsePointList("  R15 PASS T19 ", 19);
+        PointList points = GoPoint.parsePointList("  R15 PASS T19 ", 19);
         assertEquals(points.size(), 3);
-        checkPoint((GoPoint)points.get(0), 16, 14);
-        assertNull((GoPoint)points.get(1));
-        checkPoint((GoPoint)points.get(2), 18, 18);
+        checkPoint(points.get(0), 16, 14);
+        assertNull(points.get(1));
+        checkPoint(points.get(2), 18, 18);
     }
 
     public void testUnique()

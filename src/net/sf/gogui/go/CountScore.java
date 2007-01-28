@@ -21,7 +21,7 @@ public class CountScore
         @param board The board.
         @param isDeadStone Initial set of stones to be marked as dead.
      */
-    public void begin(ConstBoard board, ArrayList deadStones)
+    public void begin(ConstBoard board, ConstPointList deadStones)
     {
         m_board = board;
         int size = board.getSize();
@@ -31,7 +31,7 @@ public class CountScore
             m_dead.clear(m_board.getPoint(i));
         if (deadStones != null)
             for (int i = 0; i < deadStones.size(); ++i)
-                m_dead.set((GoPoint)deadStones.get(i));
+                m_dead.set(deadStones.get(i));
         compute();
     }
 
@@ -54,7 +54,7 @@ public class CountScore
         }
         if (allEmpty)
             return;
-        ArrayList territory = new ArrayList(m_board.getNumberPoints());
+        PointList territory = new PointList(m_board.getNumberPoints());
         for (int i = 0; i < m_board.getNumberPoints(); ++i)
         {
             GoPoint p = m_board.getPoint(i);
@@ -183,7 +183,7 @@ public class CountScore
     private ConstBoard m_board;
 
     private boolean isTerritory(Marker mark, GoPoint p,
-                                ArrayList territory, GoColor color)
+                                PointList territory, GoColor color)
     {
         GoColor c = getColor(p);
         if (c == color.otherColor() && ! m_dead.get(p))
@@ -194,9 +194,9 @@ public class CountScore
             return true;
         mark.set(p, true);
         territory.add(p);
-        ArrayList adj = m_board.getAdjacentPoints(p);
+        ConstPointList adj = m_board.getAdjacentPoints(p);
         for (int i = 0; i < adj.size(); ++i)
-            if (! isTerritory(mark, (GoPoint)(adj.get(i)), territory, color))
+            if (! isTerritory(mark, adj.get(i), territory, color))
                 return false;
         return true;
     }
@@ -207,10 +207,10 @@ public class CountScore
         m_score[p.getX()][p.getY()] = c;
     }
 
-    private void setScore(ArrayList points, GoColor c)
+    private void setScore(ConstPointList points, GoColor c)
     {
         for (int i = 0; i < points.size(); ++i)
-            setScore((GoPoint)points.get(i), c);
+            setScore(points.get(i), c);
     }
 }
 

@@ -6,13 +6,13 @@ package net.sf.gogui.gogui;
 
 import java.awt.Frame;
 import java.awt.Point;
-import java.util.ArrayList;
 import net.sf.gogui.game.ConstGame;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.gui.AnalyzeCommand;
 import net.sf.gogui.gui.GuiBoard;
@@ -107,7 +107,7 @@ public final class GoGuiUtil
         {
             if (! m_guiBoard.isShowing())
                 return;
-            ArrayList points = GtpUtil.parsePointString(text);
+            PointList points = GtpUtil.parsePointString(text);
             GuiBoardUtil.showPointList(m_guiBoard, points);
         }
 

@@ -5,9 +5,11 @@
 package net.sf.gogui.game;
 
 import java.util.ArrayList;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
+import net.sf.gogui.go.PointList;
 
 public final class NodeUtilTest
     extends junit.framework.TestCase
@@ -197,7 +199,7 @@ public final class NodeUtilTest
 
     public void testGetChildrenMoves()
     {
-        ArrayList moves = NodeUtil.getChildrenMoves(m_node7);
+        ConstPointList moves = NodeUtil.getChildrenMoves(m_node7);
         assertEquals(moves.size(), 3);
         assertTrue(moves.get(0) == GoPoint.get(0, 0));
         assertTrue(moves.get(1) == GoPoint.get(0, 0));
@@ -207,12 +209,10 @@ public final class NodeUtilTest
     public void testGetChildWithMove()
     {
         assertTrue(NodeUtil.getChildWithMove(m_node7,
-                                              Move.get(0, 0,
-                                                          GoColor.BLACK))
+                                             Move.get(0, 0, GoColor.BLACK))
                    == m_node8);
         assertNull(NodeUtil.getChildWithMove(m_node7,
-                                              Move.get(2, 3,
-                                                          GoColor.BLACK)));
+                                             Move.get(2, 3, GoColor.BLACK)));
     }
 
     public void testGetDepth()

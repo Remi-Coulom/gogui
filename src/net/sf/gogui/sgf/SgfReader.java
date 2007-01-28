@@ -29,6 +29,7 @@ import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.go.Move;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.ProgressShow;
 
@@ -221,7 +222,7 @@ public final class SgfReader
     /** Pre-allocated temporary buffer for use within functions. */
     private final StringBuffer m_buffer = new StringBuffer(512);
 
-    private final ArrayList m_pointList = new ArrayList();
+    private final PointList m_pointList = new PointList();
 
     private final ArrayList m_values = new ArrayList();
 
@@ -382,7 +383,7 @@ public final class SgfReader
 
     private GoPoint getPointList(int i)
     {
-        return (GoPoint)m_pointList.get(i);
+        return m_pointList.get(i);
     }
 
     private String getValue(int i)

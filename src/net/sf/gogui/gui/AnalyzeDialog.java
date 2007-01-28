@@ -35,8 +35,10 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import net.sf.gogui.go.ConstPointList;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpError;
 import net.sf.gogui.gtp.GtpUtil;
 import net.sf.gogui.util.PrefUtil;
@@ -401,12 +403,12 @@ public final class AnalyzeDialog
         {
             try
             {
-                command.setPointListArg(new ArrayList());
+                command.setPointListArg(new PointList());
                 String commandWithoutArg =
                     command.replaceWildCards(m_selectedColor) + " show";
                 String response = m_gtp.send(commandWithoutArg);
-                ArrayList pointList =
-                    GtpUtil.parsePointArrayList(response, m_boardSize);
+                ConstPointList pointList =
+                    GtpUtil.parsePointList(response, m_boardSize);
                 command.setPointListArg(pointList);
             }
             catch (GtpError e)
