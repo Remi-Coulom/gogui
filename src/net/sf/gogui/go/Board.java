@@ -10,6 +10,172 @@ import java.util.ArrayList;
 public final class Board
     implements ConstBoard
 {
+    public static abstract class Placement
+    {
+        protected abstract void execute(Board board);
+
+        protected abstract void undo(Board board);
+    }
+
+    public static class Play
+        extends Placement
+    {
+        public Play(Move move)
+        {
+            m_move = move;
+        }
+
+        public boolean equals(Object object)
+        {
+            if (object == null || object.getClass() != getClass())
+                return false;        
+            Play play = (Play)object;
+            return (play.m_move == m_move);
+        }
+
+        public Move getMove()
+        {
+            return m_move;
+        }
+
+        protected void execute(Board board)
+        {
+            GoPoint p = m_move.getPoint();
+            GoColor c = m_move.getColor();
+            GoColor otherColor = c.otherColor();
+            m_killed = new ArrayList();
+            m_suicide = new ArrayList();
+            GoPoint m_oldKoPoint = board.m_koPoint;
+            board.m_koPoint = null;
+            if (p != null)
+            {
+                m_oldColor = board.getColor(p);
+                board.setColor(p, c);
+                assert(c != GoColor.EMPTY);
+                ArrayList adj = board.getAdjacentPoints(p);
+                for (int i = 0; i < adj.size(); ++i)
+                {
+                    int killedSize = m_killed.size();
+                    board.checkKill((GoPoint)(adj.get(i)), otherColor,
+                                    m_killed);
+                    if (m_killed.size() == killedSize + 1)
+                        board.m_koPoint = (GoPoint)m_killed.get(killedSize);
+                }
+                board.checkKill(p, c, m_suicide);
+                if (board.m_koPoint != null
+                    && ! board.isSingleStoneSingleLib(p, c))
+                    board.m_koPoint = null;
+                if (c == GoColor.BLACK)
+                {
+                    board.m_capturedBlack += m_suicide.size();
+                    board.m_capturedWhite += m_killed.size();
+                }
+                else
+                {
+                    board.m_capturedWhite += m_suicide.size();
+                    board.m_capturedBlack += m_killed.size();
+                }
+            }
+            board.m_toMove = otherColor;        
+        }
+
+        protected void undo(Board board)
+        {
+            GoPoint p = m_move.getPoint();
+            if (p != null)
+            {
+                GoColor c = m_move.getColor();
+                GoColor otherColor = c.otherColor();
+                for (int i = 0; i < m_suicide.size(); ++i)
+                {
+                    GoPoint stone = (GoPoint)m_suicide.get(i);
+                    board.setColor(stone, c);
+                }
+                board.setColor(p, m_oldColor);
+                for (int i = 0; i < m_killed.size(); ++i)
+                {
+                    GoPoint stone = (GoPoint)m_killed.get(i);
+                    board.setColor(stone, otherColor);
+                }
+                if (c == GoColor.BLACK)
+                {
+                    board.m_capturedBlack -= m_suicide.size();
+                    board.m_capturedWhite -= m_killed.size();
+                }
+                else
+                {
+                    board.m_capturedWhite -= m_suicide.size();
+                    board.m_capturedBlack -= m_killed.size();
+                }
+            }
+            board.m_toMove = m_oldToMove;
+            board.m_koPoint = m_oldKoPoint;
+        }
+
+        private final Move m_move;
+
+        private GoPoint m_oldKoPoint;
+
+        private GoColor m_oldColor;
+
+        private GoColor m_oldToMove;
+
+        private ArrayList m_killed;
+
+        private ArrayList m_suicide;
+    }
+
+    public static class Setup
+        extends Placement
+    {
+        public Setup(GoColor color, GoPoint point)
+        {
+            m_color = color;
+            m_point = point;
+        }
+
+        public boolean equals(Object object)
+        {
+            if (object == null || object.getClass() != getClass())
+                return false;        
+            Setup setup = (Setup)object;
+            return (setup.m_color == m_color && setup.m_point == m_point);
+        }
+
+        public GoColor getColor()
+        {
+            return m_color;
+        }
+
+        public GoPoint getPoint()
+        {
+            return m_point;
+        }
+
+        protected void execute(Board board)
+        {
+            GoColor old = GoColor.EMPTY;
+            GoPoint oldKoPoint = board.m_koPoint;
+            board.m_koPoint = null;
+            m_oldColor = board.getColor(m_point);
+            board.setColor(m_point, m_color);
+        }
+
+        protected void undo(Board board)
+        {
+            board.setColor(m_point, m_oldColor);
+            board.m_koPoint = m_oldKoPoint;
+        }
+
+        private final GoColor m_color;
+
+        private final GoPoint m_point;
+
+        private GoPoint m_oldKoPoint;
+
+        private GoColor m_oldColor;
+    }
+
     /** Constant for unknown rules. */
     public static final int RULES_UNKNOWN = 0;
 
@@ -41,8 +207,10 @@ public final class Board
     {
         int n = getNumberPlacements();
         return (n >= 2
-                && getPlacement(n - 1).isPassMove()
-                && getPlacement(n - 2).isPassMove());
+                && getPlacement(n - 1) instanceof Play
+                && ((Play)getPlacement(n - 1)).getMove().getPoint() == null
+                && getPlacement(n - 2) instanceof Play
+                && ((Play)getPlacement(n - 2)).getMove().getPoint() == null);
     }
 
     /** Check if board contains a point.
@@ -59,49 +227,8 @@ public final class Board
     */
     public void doPlacement(Placement placement)
     {
-        GoPoint p = placement.getPoint();
-        GoColor color = placement.getColor();
-        boolean isSetup = placement.isSetup();
-        GoColor otherColor = color.otherColor();
-        ArrayList killed = new ArrayList();
-        ArrayList suicide = new ArrayList();
-        GoColor old = GoColor.EMPTY;
-        GoPoint oldKoPoint = m_koPoint;
-        m_koPoint = null;
-        if (p != null)
-        {
-            old = getColor(p);
-            setColor(p, color);
-            if (! isSetup)
-            {
-                assert(color != GoColor.EMPTY);
-                ArrayList adj = getAdjacentPoints(p);
-                for (int i = 0; i < adj.size(); ++i)
-                {
-                    int killedSize = killed.size();
-                    checkKill((GoPoint)(adj.get(i)), otherColor, killed);
-                    if (killed.size() == killedSize + 1)
-                        m_koPoint = (GoPoint)killed.get(killedSize);
-                }
-                checkKill(p, color, suicide);
-                if (m_koPoint != null && ! isSingleStoneSingleLib(p, color))
-                    m_koPoint = null;
-                if (color == GoColor.BLACK)
-                {
-                    m_capturedBlack += suicide.size();
-                    m_capturedWhite += killed.size();
-                }
-                else
-                {
-                    m_capturedWhite += suicide.size();
-                    m_capturedBlack += killed.size();
-                }
-            }
-        }
-        m_stack.add(new StackEntry(m_toMove, placement, old, killed,
-                                   suicide, oldKoPoint));
-        if (! isSetup)
-            m_toMove = otherColor;        
+        placement.execute(this);
+        m_stack.add(placement);
     }
 
     /** Get points adjacent to a point.
@@ -181,31 +308,26 @@ public final class Board
     */
     public ArrayList getKilled()
     {
-        assert(getNumberPlacements() > 0);
-        StackEntry entry = (StackEntry)m_stack.get(getNumberPlacements() - 1);
-        return new ArrayList(entry.m_killed);
+        int numberPlacements = getNumberPlacements();
+        assert(numberPlacements > 0);
+        ArrayList killed = new ArrayList();
+        Placement placement = (Placement)m_stack.get(numberPlacements - 1);
+        if (placement instanceof Play)
+            killed.addAll(((Play)placement).m_killed);
+        return killed;
     }
 
-    /** Get a placement (move or setup stone) from the sequence of placements
-        played so far.
-        @param i The number of the placement (starting with zero).
-        @return The placement with the given number.
-        @see #getNumberPlacements()
+    /** Return last move.
+        @return Last move or null if no placement was done yet or last
+        placement was not a move.
     */
-    public Placement getPlacement(int i)
+    public Move getLastMove()
     {
-        return ((StackEntry)m_stack.get(i)).m_placement;
-    }
-
-    /** Get a point on the board.
-        Can be used for iterating over all points.
-        @param i The index of the point between 0 and size * size - 1.
-        @return The point with the given index.
-        @see #getNumberPoints()
-    */
-    public GoPoint getPoint(int i)
-    {
-        return m_constants.getPoint(i);
+        int n = getNumberPlacements();
+        if (n > 0 && getPlacement(n - 1) instanceof Play)
+            return ((Play)getPlacement(n - 1)).getMove();
+        else
+            return null;
     }
 
     /** Get the number of placements (moves or setup stones) played so far.
@@ -224,6 +346,28 @@ public final class Board
     public int getNumberPoints()
     {
         return m_constants.getNumberPoints();
+    }
+
+    /** Get a placement (move or setup stone) from the sequence of placements
+        played so far.
+        @param i The number of the placement (starting with zero).
+        @return The placement with the given number.
+        @see #getNumberPlacements()
+    */
+    public Placement getPlacement(int i)
+    {
+        return (Placement)m_stack.get(i);
+    }
+
+    /** Get a point on the board.
+        Can be used for iterating over all points.
+        @param i The index of the point between 0 and size * size - 1.
+        @return The point with the given index.
+        @see #getNumberPoints()
+    */
+    public GoPoint getPoint(int i)
+    {
+        return m_constants.getPoint(i);
     }
 
     /** Get board size.
@@ -251,9 +395,13 @@ public final class Board
     */
     public ArrayList getSuicide()
     {
-        assert(getNumberPlacements() > 0);
-        StackEntry entry = (StackEntry)m_stack.get(getNumberPlacements() - 1);
-        return new ArrayList(entry.m_suicide);
+        int numberPlacements = getNumberPlacements();
+        assert(numberPlacements > 0);
+        ArrayList suicide = new ArrayList();
+        Placement placement = (Placement)m_stack.get(numberPlacements - 1);
+        if (placement instanceof Play)
+            suicide.addAll(((Play)placement).m_suicide);
+        return suicide;
     }
 
     /** Get color to move.
@@ -290,10 +438,7 @@ public final class Board
         if (getColor(point) != GoColor.EMPTY)
             return false;
         play(point, toMove);
-        int n = getNumberPlacements();
-        StackEntry entry = (StackEntry)m_stack.get(n - 1);
-        boolean result = (entry.m_suicide.size() > 0
-                          || entry.m_killed.size() > 0);
+        boolean result = (getKilled().size() > 0 || getSuicide().size() > 0);
         undo();
         return result;
     }
@@ -337,9 +482,7 @@ public final class Board
         if (getColor(point) != GoColor.EMPTY)
             return false;
         play(point, toMove);
-        int n = getNumberPlacements();
-        StackEntry entry = (StackEntry)m_stack.get(n - 1);
-        boolean result = (entry.m_suicide.size() > 0);
+        boolean result = (getSuicide().size() > 0);
         undo();
         return result;
     }
@@ -380,7 +523,7 @@ public final class Board
     */
     public void play(Move move)
     {
-        doPlacement(new Placement(move.getPoint(), move.getColor(), false));
+        doPlacement(new Play(move));
     }
 
     /** Change the color to move.
@@ -399,7 +542,7 @@ public final class Board
     */
     public void setup(GoPoint p, GoColor color)
     {
-        doPlacement(new Placement(p, color, true));
+        doPlacement(new Setup(color, p));
     }
 
     /** Undo the last placement (move or setup stone).
@@ -409,42 +552,11 @@ public final class Board
     */
     public void undo()
     {
-        assert(getNumberPlacements() > 0);
         int index = getNumberPlacements() - 1;
-        StackEntry entry = (StackEntry)m_stack.get(index);
+        assert(index >= 0);
+        Placement placement = (Placement)m_stack.get(index);
+        placement.undo(this);
         m_stack.remove(index);
-        Placement placement = entry.m_placement;
-        GoColor c = placement.getColor();
-        GoColor otherColor = c.otherColor();
-        GoPoint p = placement.getPoint();
-        if (p != null)
-        {
-            ArrayList suicide = entry.m_suicide;
-            for (int i = 0; i < suicide.size(); ++i)
-            {
-                GoPoint stone = (GoPoint)suicide.get(i);
-                setColor(stone, c);
-            }
-            setColor(p, entry.m_oldColor);
-            ArrayList killed = entry.m_killed;
-            for (int i = 0; i < killed.size(); ++i)
-            {
-                GoPoint stone = (GoPoint)killed.get(i);
-                setColor(stone, otherColor);
-            }
-            if (c == GoColor.BLACK)
-            {
-                m_capturedBlack -= suicide.size();
-                m_capturedWhite -= killed.size();
-            }
-            else
-            {
-                m_capturedWhite -= suicide.size();
-                m_capturedBlack -= killed.size();
-            }
-        }
-        m_toMove = entry.m_oldToMove;
-        m_koPoint = entry.m_oldKoPoint;
     }
 
     /** Undo a number of moves or setup stones.
@@ -458,37 +570,6 @@ public final class Board
         assert(n <= getNumberPlacements());
         for (int i = 0; i < n; ++i)
             undo();
-    }
-
-    /** Information necessary to undo a move or setup stone. */
-    private static class StackEntry
-    {
-        public StackEntry(GoColor oldToMove, Placement placement,
-                          GoColor oldColor, ArrayList killed,
-                          ArrayList suicide, GoPoint oldKoPoint)
-        {
-            m_oldColor = oldColor;
-            m_oldToMove = oldToMove;
-            m_placement = placement;
-            m_killed = killed;
-            m_suicide = suicide;
-            m_oldKoPoint = oldKoPoint;
-        }
-
-        public final GoPoint m_oldKoPoint;
-
-        /** Old stone color of field.
-            Needed in case move was played on a non-empty point.
-        */
-        public final GoColor m_oldColor;
-
-        public final GoColor m_oldToMove;
-
-        public final Placement m_placement;
-
-        public final ArrayList m_killed;
-
-        public final ArrayList m_suicide;
     }
 
     private Marker m_mark;

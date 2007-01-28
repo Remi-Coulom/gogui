@@ -27,7 +27,9 @@ public interface ConstBoard
 
     ArrayList getKilled();
 
-    Placement getPlacement(int i);
+    Move getLastMove();
+
+    Board.Placement getPlacement(int i);
 
     int getNumberPlacements();
 

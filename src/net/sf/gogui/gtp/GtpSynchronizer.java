@@ -10,7 +10,6 @@ import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
-import net.sf.gogui.go.Placement;
 
 /** Synchronizes a GTP engine with a Go board.
     Handles different capabilities of different engines.
@@ -115,10 +114,8 @@ public class GtpSynchronizer
     */
     public void updateAfterGenmove(ConstBoard board)
     {
-        Placement placement =
-            board.getPlacement(board.getNumberPlacements() - 1);
-        assert(! placement.isSetup());
-        Move move = Move.get(placement.getPoint(), placement.getColor());
+        Move move = board.getLastMove();
+        assert(move != null);
         m_board.play(move);
         try
         {
@@ -169,21 +166,21 @@ public class GtpSynchronizer
         m_tempBoard.init(board.getSize());
         for (int i = 0; i < board.getNumberPlacements(); ++i)
         {
-            Placement placement = board.getPlacement(i);
-            GoColor color = placement.getColor();            
-            GoPoint point = placement.getPoint();
-            if (placement.isSetup() && ! isSetupSupported)
+            Board.Placement placement = board.getPlacement(i);
+            if (placement instanceof Board.Setup && ! isSetupSupported)
             {
-                if (color == GoColor.EMPTY)
+                GoPoint p = ((Board.Setup)placement).getPoint();
+                GoColor c = ((Board.Setup)placement).getColor();
+                if (c == GoColor.EMPTY)
                     throw new GtpError("program does not support setup empty");
-                if (m_tempBoard.isCaptureOrSuicide(point, color))
+                if (m_tempBoard.isCaptureOrSuicide(p, c))
                     throw new GtpError("program does not support setup");
-                placement = new Placement(point, color, false);
+                placement = new Board.Play(Move.get(p, c));
             }
-            boolean isSetup = placement.isSetup();
             GoColor toMove = m_tempBoard.getToMove();
-            if (m_fillPasses && ! isSetup && color != toMove)
-                toExecuteAll.add(new Placement(null, toMove, false));
+            if (m_fillPasses && placement instanceof Board.Play
+                && ((Board.Play)placement).getMove().getColor() != toMove)
+                toExecuteAll.add(new Board.Play(Move.getPass(toMove)));
             toExecuteAll.add(placement);
             m_tempBoard.doPlacement(placement);
         }
@@ -201,7 +198,7 @@ public class GtpSynchronizer
         toExecuteMissing.clear();
         for (int i = numberCommonMoves; i < m_toExecuteAll.size(); ++i)
         {
-            Placement placement = (Placement)m_toExecuteAll.get(i);
+            Board.Placement placement = (Board.Placement)m_toExecuteAll.get(i);
             toExecuteMissing.add(placement);
         }
         return numberUndo;
@@ -212,9 +209,9 @@ public class GtpSynchronizer
         m_sequence.clear();
         for (int i = 0; i < placements.size(); ++i)
         {
-            Placement placement = (Placement)placements.get(i);
-            assert(! placement.isSetup()); // TODO: handle setup
-            Move move = Move.get(placement.getPoint(), placement.getColor());
+            Board.Placement placement = (Board.Placement)placements.get(i);
+            assert(placement instanceof Board.Play); // TODO: handle setup
+            Move move = ((Board.Play)placement).getMove();
             m_sequence.add(move);
         }
         playSequence(m_sequence);
@@ -253,7 +250,7 @@ public class GtpSynchronizer
         {
             if (i >= m_board.getNumberPlacements())
                 break;
-            Placement placement = ((Placement)toExecuteAll.get(i));
+            Board.Placement placement = ((Board.Placement)toExecuteAll.get(i));
             if (! placement.equals(m_board.getPlacement(i)))
                 break;
         }
