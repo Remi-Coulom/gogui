@@ -28,9 +28,11 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
 import net.sf.gogui.drawboard.GuiField;
 import net.sf.gogui.drawboard.BoardDrawer;
+import net.sf.gogui.game.BoardUpdater;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.GameTree;
 import net.sf.gogui.game.NodeUtil;
+import net.sf.gogui.go.ConstBoard;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
@@ -111,11 +113,8 @@ public final class ThumbnailCreator
             log("File: " + input);
             URI uri = getURI(input);
             log("URI: " + uri);
-            ArrayList moves = new ArrayList();
             m_description = "";
-            Board board = readFile(input, moves);
-            for (int i = 0; i < moves.size(); ++i)
-                board.play((Move)moves.get(i));
+            ConstBoard board = readFile(input);
             int size = board.getSize();
             GuiField[][] field = new GuiField[size][size];
             for (int x = 0; x < size; ++x)
@@ -200,7 +199,7 @@ public final class ThumbnailCreator
         node.appendChild(text);
     }
 
-    private Board readFile(File file, ArrayList moves)
+    private ConstBoard readFile(File file)
         throws FileNotFoundException, SgfReader.SgfError
     {
         FileInputStream in = new FileInputStream(file);
@@ -228,17 +227,11 @@ public final class ThumbnailCreator
             m_description = "";
         Board board = new Board(size);
         net.sf.gogui.game.ConstNode node = tree.getRoot();
-        ArrayList nodeMoves = new ArrayList();
-        while (node != null)
-        {
-            NodeUtil.getAllAsMoves(node, nodeMoves);
-            moves.addAll(nodeMoves);
-            if (node.getNumberAddBlack() > 0 && node.getNumberAddWhite() > 0)
-                break;
+        while (node.getNumberChildren() > 0 && node.getNumberAddBlack() == 0
+               && node.getNumberAddWhite() == 0)
             node = node.getChildConst();
-        }
-        //if (m_verbose)
-        //    BoardUtil.print(board, System.err);
+        new BoardUpdater().update(tree, node, board);
+        //System.err.print(net.sf.gogui.go.BoardUtil.toString(board));
         return board;
     }
 
