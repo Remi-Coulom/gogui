@@ -17,9 +17,14 @@ public final class BoardUtil
             target.doPlacement(source.getPlacement(i));
     }
 
+    public static String toString(ConstBoard board)
+    {
+        return toString(board, true);
+    }
+
     /** Get board position as text diagram.
         @param board The board to print.
-        @param withGameInfo Print game information (prisoners, recent moves)
+        @param withGameInfo Print game information (prisoners)
         @return Board position as text diagram.
     */
     public static String toString(ConstBoard board, boolean withGameInfo)
