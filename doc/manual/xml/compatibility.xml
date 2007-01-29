@@ -23,37 +23,29 @@ It is required that the Go program can handle the following commands:
 <itemizedlist>
 <listitem>
 <simpara>
-<command>boardsize</command>
-(<command>boardsize</command>, <command>clear_board</command>)
+<command>boardsize</command>, <command>clear_board</command>
+(<command>boardsize</command>)
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<command>black</command>, <command>white</command>
-(<command>play</command>)
+<command>play</command>
+(<command>black</command>, <command>white</command>)
 </simpara>
 </listitem>
 <listitem>
 <simpara>
-<command>genmove_black</command>,
-<command>genmove_white</command>
-(<command>genmove</command>)
+<command>genmove</command>
+(<command>genmove_black</command>, <command>genmove_white</command>)
 </simpara>
 </listitem>
 </itemizedlist>
     
 <para>
 The commands in parentheses are used if the program supports
-the <command>protocol_version</command> command and responds with 2.
+the <command>protocol_version</command> command and responds with 1.
 </para>
     
-<para>
-In particular the Go program is not required to support the
-<command>loadsgf</command> command.
-GoGui translates all moves, setup and handicap stones into a series of
-<command>black</command>, <command>white</command>
-(<command>play</command>) commands.
-</para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
 </section>
   
@@ -132,14 +124,24 @@ game from the beginning.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
     
-<note>
-<simpara>
+<para>
 The command <command>scoring_system area/territory</command>
 (from an early draft of GTP version 2) is used for setting Chinese/Japanese
 rules, if the command is supported by the program.
 Otherwise the rule settings are quietly ignored.
-</simpara>
+<note>
+<para>
+<command>scoring_system</command> is deprecated and may not be supported
+in the future.
+</para>
 </note>
+</para>
+
+<para>
+The command <command>gg-undo</command> is en extension command used by GNU Go,
+which differs from undo in an optional integer argument to undo multiple
+moves.
+</para>
 
 <para>
 The following GoGui specific GTP extension commands are used if supported by
@@ -195,6 +197,21 @@ Note that the command line length can become large for this command; the Go
 program should not use a limit for the command length.
 The Go program is expected to return a failure and not to change its current
 board state if it cannot execute all of the moves in the sequence.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>gogui-setup</command>, <command>gogui-undo_setup</command></term>
+<listitem>
+<para>
+For transmitting setup stones. The argument to <command>gogui-setup</command>
+is a sequence of color point pairs like for
+<command>gogui-play_sequence</command>, but with the additional color
+<userinput>e</userinput> (empty) for removing stones on the board.
+The command <command>gogui-undo_setup</command> takes no argument and should
+undo the effects of the previous <command>gogui-setup</command> command.
+If these commands are not supported setup stones will be transmitted as moves
+if possible.
 </para>
 </listitem>
 </varlistentry>

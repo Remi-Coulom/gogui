@@ -8,6 +8,7 @@ import java.io.IOException;
 import net.sf.gogui.go.Board;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.go.PointList;
 import net.sf.gogui.gtp.GtpExpectEngine;
 
 public final class GtpSynchronizerTest
@@ -103,6 +104,36 @@ public final class GtpSynchronizerTest
         expect("undo", "");
         expect("play w F6", "");
         expect("play b E5", "");
+        synchronize();
+        assertExpectQueueEmpty();
+    }
+
+    /** Test that gogui-setup command is used if supported by the engine. */
+    public void testSetup() throws GtpError
+    {
+        createSynchronizer(true);
+        m_synchronizer = new GtpSynchronizer(m_gtp, null, true);
+        expect("list_commands",
+               "gogui-setup\n" +
+               "gogui-undo_setup\n" +
+               "undo");
+        m_gtp.querySupportedCommands();
+        assertExpectQueueEmpty();
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+        PointList black = new PointList();
+        black.add(GoPoint.get(3, 4));
+        black.add(GoPoint.get(4, 4));
+        PointList white = new PointList();
+        white.add(GoPoint.get(5, 5));
+        m_board.setup(black, white);
+        expect("gogui-setup b D5 b E5 w F6", "");
+        synchronize();
+        assertExpectQueueEmpty();
+        m_board.undo();
+        expect("gogui-undo_setup", "");
         synchronize();
         assertExpectQueueEmpty();
     }

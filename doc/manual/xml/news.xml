@@ -11,6 +11,12 @@
 <itemizedlist>
 <listitem>
 <simpara>
+New optional commands gogui-setup and gogui-undo_setup for avoiding to
+transmit setup stones as moves to the Go engine
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Remove menu item Configure Analyze / Only Supported Commands; this is the
 default and only behaviour now
 </simpara>
@@ -44,6 +50,12 @@ gogui-analyze_commands, gogui-interrupt, gogui-sigint, gogui-title.
 The old versions (play_sequence, gogui_analyze_commands, gogui_interrupt,
 gogui_sigint, gogui_title) are deprecated and may not be supported in the
 future.
+</simpara>
+</listitem>
+<listitem>
+<simpara>
+Add note to documentation that the scoring_system command is deprecated and may
+not be supported in the future
 </simpara>
 </listitem>
 <listitem>
