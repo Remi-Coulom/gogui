@@ -17,6 +17,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Locale;
+import java.util.prefs.Preferences;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -26,6 +27,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import net.sf.gogui.sgf.SgfFilter;
 import net.sf.gogui.thumbnail.ThumbnailCreator;
 import net.sf.gogui.thumbnail.ThumbnailPlatform;
@@ -302,18 +305,22 @@ class SgfPreview
         JPanel buttonPanel = new JPanel();
         add(buttonPanel, BorderLayout.SOUTH);
         m_auto = new JCheckBox("Automatic preview");
+        m_auto.setSelected(m_prefs.getBoolean("auto-preview", false));
+        m_auto.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent e) {
+                    boolean isSelected = m_auto.isSelected();
+                    m_prefs.putBoolean("auto-preview", isSelected);
+                    if (isSelected)
+                        preview();
+                } });
         buttonPanel.add(m_auto);
         m_preview = new JButton("Preview");
         m_preview.setActionCommand("preview");
-        ActionListener listener = new ActionListener()
-            {
-                public void actionPerformed(ActionEvent event)
-                {
+        m_preview.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
                     if (event.getActionCommand().equals("preview"))
                         preview();
-                }
-            };
-        m_preview.addActionListener(listener);
+                } });
         m_preview.setEnabled(false);
         buttonPanel.add(m_preview);
     }
@@ -393,6 +400,9 @@ class SgfPreview
 
     private final ThumbnailCreator m_thumbnailCreator
         = new ThumbnailCreator(false);
+
+    private final Preferences m_prefs =
+        Preferences.userNodeForPackage(getClass());        
 
     public void preview()
     {
