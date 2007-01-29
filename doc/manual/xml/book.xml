@@ -28,6 +28,7 @@
 <!ENTITY reference-sgftotex SYSTEM "reference-sgftotex.xml">
 <!ENTITY reference-sgfthumbnail SYSTEM "reference-sgfthumbnail.xml">
 <!ENTITY reference-twogtp SYSTEM "reference-twogtp.xml">
+<!ENTITY setup SYSTEM "setup.xml">
 <!ENTITY tools SYSTEM "tools.xml">
 <!ENTITY version SYSTEM "version.xml">
 ]>
@@ -57,6 +58,7 @@ GoGui is a graphical interface to programs that play the game of Go.
 &gtpshell;
 &analyze;
 &live-gfx;
+&setup;
 &interrupt;
 &tools;
 <appendix id="appendix-reference">

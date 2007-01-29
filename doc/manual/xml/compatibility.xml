@@ -208,18 +208,26 @@ board state if it cannot execute all of the moves in the sequence.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><command>gogui-setup</command>, <command>gogui-undo_setup</command></term>
+<term><command>gogui-setup_player</command></term>
 <listitem>
 <para>
-For transmitting setup stones.
-The argument to <command>gogui-setup</command> is a sequence of color point
-pairs like for <command>gogui-play_sequence</command>.
-Stones can be removed from the board by using the color
-<userinput>e</userinput> (empty).
-The command <command>gogui-undo_setup</command> takes no argument and should
-undo the effects of the previous <command>gogui-setup</command> command.
-If these commands are not supported setup stones will be transmitted as moves
-if possible.
+See <xref linkend="setup"/>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>gogui-setup</command></term>
+<listitem>
+<para>
+See <xref linkend="setup"/>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>gogui-undo_setup</command></term>
+<listitem>
+<para>
+See <xref linkend="setup"/>.
 </para>
 </listitem>
 </varlistentry>

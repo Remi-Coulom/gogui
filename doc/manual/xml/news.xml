@@ -11,8 +11,8 @@
 <itemizedlist>
 <listitem>
 <simpara>
-New optional commands gogui-setup and gogui-undo_setup for avoiding to
-transmit setup stones as moves to the Go engine
+New optional commands for setting up positions; see section Setup Commands
+in the manual
 </simpara>
 </listitem>
 <listitem>

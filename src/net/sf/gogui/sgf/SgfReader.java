@@ -244,7 +244,7 @@ public final class SgfReader
         Node root = m_gameTree.getRoot();
         GameInformation gameInformation = m_gameTree.getGameInformation();
         if ((root.getNumberAddWhite() + root.getNumberAddBlack() > 0)
-            && root.getPlayer() == GoColor.EMPTY)
+            && root.getPlayer() == null)
         {
             if (gameInformation.getHandicap() > 0)
             {

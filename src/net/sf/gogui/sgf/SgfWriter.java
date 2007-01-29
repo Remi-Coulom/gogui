@@ -324,7 +324,7 @@ public class SgfWriter
         {
             print("OW[" + node.getMovesLeft(GoColor.WHITE) + "]");
         }
-        if (node.getPlayer() != GoColor.EMPTY)
+        if (node.getPlayer() != null)
             printToPlay(node.getPlayer());
         printMarked(node, "MA", MarkType.MARK);
         printMarked(node, "CR", MarkType.CIRCLE);

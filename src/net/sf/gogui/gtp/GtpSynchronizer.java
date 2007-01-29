@@ -72,6 +72,7 @@ public class GtpSynchronizer
         m_isSupportedUndo = isSupported("undo");
         m_isSupportedGGUndo = isSupported("gg-undo");
         m_isSupportedSetup = isSupported("gogui-setup");
+        m_isSupportedSetupPlayer = isSupported("gogui-setup_player");
         m_isSupportedHandicap = isSupported("set_free_handicap");
         int size = board.getSize();
         if (m_board == null || size != m_board.getSize()
@@ -141,6 +142,8 @@ public class GtpSynchronizer
     private boolean m_isSupportedHandicap;
 
     private boolean m_isSupportedPlaySequence;
+
+    private boolean m_isSupportedSetupPlayer;
 
     private boolean m_isSupportedGGUndo;
 
@@ -267,25 +270,32 @@ public class GtpSynchronizer
 
     private void doSetup(Board.Setup setup) throws GtpError
     {
+        ConstPointList black = setup.getBlack();
+        ConstPointList white = setup.getWhite();
+        ConstPointList empty = setup.getEmpty();
+        GoColor toMove = setup.getToMove();        
         StringBuffer command = new StringBuffer(128);
         command.append("gogui-setup");
-        for (int i = 0; i < setup.getBlack().size(); ++i)
+        for (int i = 0; i < black.size(); ++i)
         {
             command.append(" b ");
-            command.append(setup.getBlack().get(i));
+            command.append(black.get(i));
         }
-        for (int i = 0; i < setup.getWhite().size(); ++i)
+        for (int i = 0; i < white.size(); ++i)
         {
             command.append(" w ");
-            command.append(setup.getWhite().get(i));
+            command.append(white.get(i));
         }
-        for (int i = 0; i < setup.getEmpty().size(); ++i)
+        for (int i = 0; i < empty.size(); ++i)
         {
             command.append(" e ");
-            command.append(setup.getEmpty().get(i));
+            command.append(empty.get(i));
         }
         m_gtp.send(command.toString());
-        m_board.setup(setup.getBlack(), setup.getWhite(), setup.getEmpty());
+        m_board.setup(black, white, empty, toMove);
+        if (toMove != null && m_isSupportedSetupPlayer)
+            m_gtp.send("gogui-setup_player "
+                       + (toMove == GoColor.BLACK ? "b" : "w"));
     }
 
     private void doSetupHandicap(Board.SetupHandicap setup) throws GtpError

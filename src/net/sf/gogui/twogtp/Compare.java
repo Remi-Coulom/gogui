@@ -20,7 +20,9 @@ import net.sf.gogui.go.MoveUtil;
 import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.sgf.SgfReader;
 
-/** Find duplicates in games. */
+/** Find duplicates in games.
+    @todo Don't use NodeUtil.getAllAsMoves() anymore, compare placements
+*/
 public final class Compare
 {
     /** Check if game already exists in game collection.

@@ -46,7 +46,7 @@ final class MoreExtraInfo
 
 final class SetupInfo
 {
-    public GoColor m_player = GoColor.EMPTY;
+    public GoColor m_player;
 
     public PointList m_black = new PointList();
 
@@ -409,14 +409,13 @@ public final class Node
 
     /** Color to play if explicitely set.
         @see #getToMove for getting the color to play.
-        @return Color to play or GoColor.EMPTY if color is not explicitely
-        set.
+        @return Color to play or null if color is not explicitely set.
     */
     public GoColor getPlayer()
     {
         SetupInfo setupInfo = getSetupInfo();
         if (setupInfo == null)
-            return GoColor.EMPTY;
+            return null;
         return setupInfo.m_player;
     }
 
@@ -463,17 +462,17 @@ public final class Node
     /** Get color to move.
         If a player is explicitely set, it is returned, otherwise if the
         node contains a move, the color of the move is returned.
-        @return The color to move or GoColor.EMPTY if nothing is known about
+        @return The color to move or null if nothing is known about
         the color to move
     */
     public GoColor getToMove()
     {
         GoColor player = getPlayer();
-        if (player != GoColor.EMPTY)
+        if (player != null)
             return player;
         if (m_move != null)
             return m_move.getColor().otherColor();
-        return GoColor.EMPTY;
+        return null;
     }
 
     /** Return a value for the node.

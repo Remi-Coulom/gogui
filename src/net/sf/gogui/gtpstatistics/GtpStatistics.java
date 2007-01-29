@@ -26,7 +26,9 @@ import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.StringUtil;
 import net.sf.gogui.util.Table;
 
-/** Run commands of a GTP engine on all positions in a game collection. */
+/** Run commands of a GTP engine on all positions in a game collection.
+    @todo Use GtpSynchronizer
+*/
 public class GtpStatistics
 {
     public GtpStatistics(String program, ArrayList sgfFiles, File output,

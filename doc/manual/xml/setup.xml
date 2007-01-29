@@ -1,0 +1,70 @@
+<chapter id="setup">
+<title>Setup Commands</title>
+
+<indexterm>
+<primary>setup</primary>
+</indexterm>
+
+<para>
+The GTP version 2 specification contains no commands for setting up
+positions by specifying the location of stones on the board.
+GoGui will send setup stones as moves to the Go program, if possible, which has
+some disadvantages.
+</para>
+<para>
+For example, the program cannot know that these moves are not real moves
+and if it maintains its own game tree for saving information like search
+traces, the internal trees will start with a long series of move nodes, if
+an initial setup position was transmitted by moves.
+Also, it is not possible to remove stones with setup commands, which is
+possible in the SGF file format, and therefore the Go program cannot be
+synchronized to some positions in SGF files that use this feature.
+</para>
+<para>
+Therefore, GoGui defines a set of GTP extension commands for setting up
+positions, which will be used if the Go program supports them:
+<variablelist>
+<varlistentry>
+<term><command>gogui-setup</command></term>
+<listitem>
+<para>
+The argument to  is a sequence of color point pairs (like for
+<command>gogui-play_sequence</command>).
+Stones can be removed from the board by using the color
+<userinput>e</userinput> (empty).
+This command does not have to succeed always. For instance some engines may
+only allow setup positions if no moves were played yet.
+However, as with all GTP commands, the state should not be changed, if the
+command fails.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>gogui-setup_player</command></term>
+<listitem>
+<para>
+The argument is a color (<userinput>b</userinput> or <userinput>w</userinput>)
+and should set the color to play.
+This command is only sent, if the color to play is known (e.g. by a player
+property in the SGF file) and if the command is supported by the Go program.
+Any undo commands (<command>undo</command>,
+<command>gogui-undo_setup</command>) should always restore the old color
+to play.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><command>gogui-undo_setup</command></term>
+<listitem>
+<para>
+Takes no argument and should undo the effects of the previous
+<command>gogui-setup</command> command. Should fail, if the last change
+on the board was not a setup.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+<para><!-- Empty paragraph to enforce space in JEditorPane --></para>
+
+</chapter>

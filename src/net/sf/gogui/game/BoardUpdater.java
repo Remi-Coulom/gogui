@@ -47,9 +47,6 @@ public class BoardUpdater
                 board.play(move);
                 isFirstPlacement = false;
             }
-            GoColor toMove = node.getToMove();
-            if (toMove != GoColor.EMPTY)
-                board.setToMove(toMove);
         }
     }
 
@@ -69,7 +66,7 @@ public class BoardUpdater
         PointList setupEmpty = new PointList();
         for (int i = 0; i < node.getNumberAddEmpty(); ++i)
             setupEmpty.add(node.getAddEmpty(i));
-        board.setup(setupBlack, setupWhite, setupEmpty);
+        board.setup(setupBlack, setupWhite, setupEmpty, node.getPlayer());
     }
 
     private void doSetupHandicap(ConstNode node, Board board)

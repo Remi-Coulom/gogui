@@ -197,7 +197,7 @@ public final class NodeUtil
             GoColor toMove = node.getToMove();
             Move lastMove = (Move)moves.get(moves.size() - 1);
             GoColor otherColor = lastMove.getColor().otherColor();
-            if (toMove != GoColor.EMPTY && toMove != otherColor
+            if (toMove != null && toMove != otherColor
                 && otherColor != GoColor.EMPTY)
                 moves.add(Move.getPass(otherColor));
         }
@@ -525,7 +525,7 @@ public final class NodeUtil
             addEmpty.add(node.getAddEmpty(i));
         if (node.getNumberAddEmpty() > 0)
             appendInfo(buffer, "AddEmpty", addEmpty);
-        if (node.getPlayer() != GoColor.EMPTY)
+        if (node.getPlayer() != null)
             appendInfo(buffer, "Player", node.getPlayer().toString());
         if (! Double.isNaN(node.getTimeLeft(GoColor.BLACK)))
             appendInfo(buffer, "TimeLeftBlack",

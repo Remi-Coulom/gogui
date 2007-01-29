@@ -137,12 +137,19 @@ public final class Board
         public Setup(ConstPointList black, ConstPointList white,
                      ConstPointList empty)
         {
+            this(black, white, empty, null);
+        }
+
+        public Setup(ConstPointList black, ConstPointList white,
+                     ConstPointList empty, GoColor toMove)
+        {
             if (black != null && black.size() > 0)
                 m_black = new PointList(black);
             if (white != null && white.size() > 0)
                 m_white = new PointList(white);
             if (empty != null && empty.size() > 0)
                 m_empty = new PointList(empty);
+            m_toMove = toMove;
         }
 
         public boolean equals(Object object)
@@ -176,10 +183,18 @@ public final class Board
             return m_black;
         }
 
+        public GoColor getToMove()
+        {
+            return m_toMove;
+        }
+
         protected void execute(Board board)
         {
             m_oldKoPoint = board.m_koPoint;
             board.m_koPoint = null;
+            m_oldToMove = board.m_toMove;
+            if (m_toMove != null)
+                board.m_toMove = m_toMove;
             m_oldColor = new ArrayList();
             setup(board, GoColor.BLACK, m_black);
             setup(board, GoColor.WHITE, m_white);
@@ -192,6 +207,7 @@ public final class Board
             undoSetup(board, GoColor.WHITE, m_white);
             undoSetup(board, GoColor.BLACK, m_black);
             board.m_koPoint = m_oldKoPoint;
+            board.m_toMove = m_oldToMove;
         }
 
         private PointList m_black;
@@ -200,9 +216,13 @@ public final class Board
 
         private PointList m_empty;
 
+        private GoColor  m_toMove;
+
         private ArrayList m_oldColor;
 
         private GoPoint m_oldKoPoint;
+
+        private GoColor  m_oldToMove;
 
         private void setup(Board board, GoColor c, ConstPointList points)
         {
@@ -238,19 +258,7 @@ public final class Board
     {
         public SetupHandicap(ConstPointList points)
         {
-            super(points, null);
-        }
-
-        protected void execute(Board board)
-        {
-            super.execute(board);
-            board.m_toMove = GoColor.WHITE;
-        }
-
-        protected void undo(Board board)
-        {
-            super.undo(board);
-            board.m_toMove = GoColor.BLACK;
+            super(points, null, null, GoColor.WHITE);
         }
     }
 
@@ -617,11 +625,23 @@ public final class Board
         setup(black, white, null);
     }
 
-    /** Add setup stones. */
     public void setup(ConstPointList black, ConstPointList white,
                       ConstPointList empty)
     {
-        doPlacement(new Setup(black, white, empty));
+        setup(black, white, empty, null);
+    }
+
+    /** Add setup stones.
+        @param black Black stones to add on the board.
+        @param white White stones to add on the board.
+        @param empty Stones to remove from the board.
+        @param toMove New color to play (if null, color to play will not
+        change)
+    */
+    public void setup(ConstPointList black, ConstPointList white,
+                      ConstPointList empty, GoColor toMove)
+    {
+        doPlacement(new Setup(black, white, empty, toMove));
     }
 
     public void setupHandicap(ConstPointList points)
