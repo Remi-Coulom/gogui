@@ -51,6 +51,14 @@ public final class PointList
         return m_list.contains(p);
     }
 
+    public boolean equals(Object object)
+    {
+        if (object == null || object.getClass() != getClass())
+            return false;        
+        PointList list = (PointList)object;
+        return list.m_list.equals(m_list);
+    }
+
     public GoPoint get(int index)
     {
         return (GoPoint)m_list.get(index);
@@ -63,6 +71,11 @@ public final class PointList
     public static ConstPointList getEmptyList()
     {
         return m_emptyList;
+    }
+
+    public int hashCode()
+    {
+        return m_list.hashCode();
     }
 
     public boolean isEmpty()
