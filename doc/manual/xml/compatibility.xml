@@ -123,10 +123,10 @@ The following other commands are used by GoGui:
 <para>
 If the Go program does not understand them, you will still be able to play
 games, but you cannot use all of the functionality of GoGui.
-If the <command>undo</command> is not supported, the position will be
+If <command>undo</command> is not supported, the position will be
 synchronized with the Go program after an undo by sending the complete
 game from the beginning.
-If the command <command>set_free_handicap</command> is not supported, GoGui
+If <command>set_free_handicap</command> is not supported, GoGui
 will transmit handicap stones with <command>play</command> commands.
 </para>
 <para><!-- Empty paragraph to enforce space in JEditorPane --></para>
@@ -211,10 +211,11 @@ board state if it cannot execute all of the moves in the sequence.
 <term><command>gogui-setup</command>, <command>gogui-undo_setup</command></term>
 <listitem>
 <para>
-For transmitting setup stones. The argument to <command>gogui-setup</command>
-is a sequence of color point pairs like for
-<command>gogui-play_sequence</command>, but with the additional color
-<userinput>e</userinput> (empty) for removing stones on the board.
+For transmitting setup stones.
+The argument to <command>gogui-setup</command> is a sequence of color point
+pairs like for <command>gogui-play_sequence</command>.
+Stones can be removed from the board by using the color
+<userinput>e</userinput> (empty).
 The command <command>gogui-undo_setup</command> takes no argument and should
 undo the effects of the previous <command>gogui-setup</command> command.
 If these commands are not supported setup stones will be transmitted as moves
