@@ -68,7 +68,7 @@ class GameTreeNode
             }
         }
         Move move = m_node.getMove();
-        if (m_node.getNumberAddBlack() + m_node.getNumberAddWhite() > 0)
+        if (m_node.hasSetup())
         {
             graphics.setColor(Color.black);
             graphics.fillOval(0, 0, halfSize, halfSize);
