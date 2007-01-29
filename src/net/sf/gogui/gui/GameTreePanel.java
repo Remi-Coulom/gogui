@@ -272,6 +272,11 @@ public class GameTreePanel
         assert(father != null);
         assert(father.getNumberChildren() == 1);
         GameTreeNode fatherGameNode = getGameTreeNode(father);
+        if (fatherGameNode == null)
+        {
+            assert(false);
+            return;
+        }
         assert(! isExpanded(father));
         int moveNumber = NodeUtil.getMoveNumber(node);
         GameTreeNode gameNode =
@@ -354,8 +359,18 @@ public class GameTreePanel
             return;
         }
         GameTreeNode gameNode = getGameTreeNode(m_currentNode);
+        if (gameNode == null)
+        {
+            assert(false);
+            return;
+        }
         gameNode.repaint();
         gameNode = getGameTreeNode(currentNode);
+        if (gameNode == null)
+        {
+            assert(false);
+            return;
+        }
         Point location = gameNode.getLocation();
         m_currentNodeX = location.x;
         m_currentNodeY = location.y;
