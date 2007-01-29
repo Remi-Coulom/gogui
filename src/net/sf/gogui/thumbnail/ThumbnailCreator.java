@@ -323,13 +323,16 @@ public final class ThumbnailCreator
             assert(false);
             return;
         }
-        File tempFile = File.createTempFile("gogui-thumbnail", ".png");
-        tempFile.deleteOnExit();
-        ImageOutputStream ios = ImageIO.createImageOutputStream(tempFile);
+        // Renaming a temporary file as required bu the standard does
+        // not work, because File.renameTo may fail on some platforms
+        //File tempFile = File.createTempFile("gogui-thumbnail", ".png");
+        //tempFile.deleteOnExit();
+        //ImageOutputStream ios = ImageIO.createImageOutputStream(tempFile);
+        ImageOutputStream ios = ImageIO.createImageOutputStream(file);
         writer.setOutput(ios);
         writer.write(null, new IIOImage(image, null, meta), null);
-        if (! tempFile.renameTo(file))
-            throw new Error("Could not rename " + tempFile + " to " + file);
+        //if (! tempFile.renameTo(file))
+        //    throw new Error("Could not rename " + tempFile + " to " + file);
         m_lastThumbnail = file;
     }
 }
