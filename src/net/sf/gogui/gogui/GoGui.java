@@ -1748,11 +1748,11 @@ public class GoGui
         if (m_gtp == null || m_analyzeCommand == null
             || m_analyzeCommand.isPointArgMissing())
             return;
-        showStatus(m_analyzeCommand.getResultTitle());
         GoColor toMove = getToMove();
         m_lastAnalyzeCommand = m_analyzeCommand.replaceWildCards(toMove);
         runLengthyCommand(m_lastAnalyzeCommand,
                           new AnalyzeContinue(checkComputerMove));
+        showStatus(m_analyzeCommand.getResultTitle() + "...");
     }
 
     private void analyzeContinue(boolean checkComputerMove)
@@ -1961,6 +1961,7 @@ public class GoGui
     {
         m_progressBarTimer.restart();
         m_gtpShell.setCommandInProgess(true);
+        showStatus("Thinking...");
     }
 
     private void boardChangedBegin(boolean doCheckComputerMove,
@@ -2652,9 +2653,11 @@ public class GoGui
         m_progressBarTimer = new Timer(500, new ActionListener() {
                 public void actionPerformed(ActionEvent e)
                 {
-                    if (isCommandInProgress()
-                        && ! m_statusBar.isProgressShown())
-                        m_statusBar.setProgress(-1);
+                    if (isCommandInProgress())
+                    {
+                        if (! m_statusBar.isProgressShown())
+                            m_statusBar.setProgress(-1);
+                    }
                 }
             });
         m_progressBarTimer.setRepeats(false);

@@ -105,22 +105,21 @@ public class StatusBar
             m_showProgress = true;
             initIconBox();
         }
+        // Don't use text on progress bar, because otherwise it will
+        // be green in indetemrminate and blue in dterminate mode on
+        // Windows XP JDK 1.6
         if (percent < 0)
         {
             // First set to minimum to reset indeterminate animation
             m_progressBar.setIndeterminate(false);
             m_progressBar.setValue(m_progressBar.getMinimum());
-
             m_progressBar.setIndeterminate(true);
-            m_progressBar.setStringPainted(true);
-            m_progressBar.setString("Thinking");
         }
         else
         {
             m_progressBar.setIndeterminate(false);
             m_progressBar.setValue(percent);
-            m_progressBar.setStringPainted(true);
-            m_progressBar.setString(null);
+            m_progressBar.setStringPainted(false);
         }
     }
 
