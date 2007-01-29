@@ -225,6 +225,24 @@ public final class BoardTest
         assertEquals(GoColor.WHITE, board.getToMove());
     }
 
+    /** Test that a placement from one board can be executed on another board.
+        This happens should Board.Placement contain data for restoring
+        the state specific to one board.
+    */
+    public void testTransferPlacement()
+    {
+        Board board1 = new Board(19);
+        Board board2 = new Board(19);
+        GoPoint p = GoPoint.get(0, 0);
+        PointList list = new PointList(p);
+        board1.setup(list, null);
+        board1.setup(null, null, list);
+        board2.setup(null, list);
+        board2.doPlacement(board1.getPlacement(1));
+        board1.undo();
+        assertEquals(GoColor.BLACK, board1.getColor(p));
+    }
+
     public void testUndo()
     {
         Board board = new Board(19);
