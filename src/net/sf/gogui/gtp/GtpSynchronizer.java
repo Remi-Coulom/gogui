@@ -72,8 +72,10 @@ public class GtpSynchronizer
         m_isSupportedUndo = isSupported("undo");
         m_isSupportedGGUndo = isSupported("gg-undo");
         m_isSupportedSetup = isSupported("gogui-setup");
+        m_isSupportedHandicap = isSupported("set_free_handicap");
         int size = board.getSize();
-        if (m_board == null || size != m_board.getSize())
+        if (m_board == null || size != m_board.getSize()
+            || getHandicap(board) != getHandicap(m_board))
         {
             init(board);
             return;
@@ -104,7 +106,7 @@ public class GtpSynchronizer
         assert(findNumberCommonMoves(toExecuteAll) == toExecuteAll.size());
         GoColor toMove = m_board.getToMove();
         if (m_fillPasses && toMove != move.getColor())
-            play(Move.get(null, toMove));
+            play(Move.getPass(toMove));
         play(move);
     }
 
@@ -136,6 +138,8 @@ public class GtpSynchronizer
 
     private boolean m_isOutOfSync;
 
+    private boolean m_isSupportedHandicap;
+
     private boolean m_isSupportedPlaySequence;
 
     private boolean m_isSupportedGGUndo;
@@ -165,7 +169,9 @@ public class GtpSynchronizer
             if (placement instanceof Board.Setup)
             {
                 Board.Setup setup = (Board.Setup)placement;
-                if (m_isSupportedSetup)
+                if (m_isSupportedSetup
+                    || (placement instanceof Board.SetupHandicap
+                        && m_isSupportedHandicap))
                 {
                     toExecuteAll.add(placement);
                     tempBoard.doPlacement(placement);
@@ -234,7 +240,10 @@ public class GtpSynchronizer
         for (int i = 0; i < placements.size(); ++i)
         {
             Board.Placement placement = (Board.Placement)placements.get(i);
-            if (placement instanceof Board.Setup)
+            if (placement instanceof Board.SetupHandicap
+                && m_isSupportedHandicap)
+                doSetupHandicap((Board.SetupHandicap)placement);
+            else if (placement instanceof Board.Setup)
                 doSetup((Board.Setup)placement);
             else if (placement instanceof Board.Play)
             {
@@ -279,6 +288,55 @@ public class GtpSynchronizer
         m_board.setup(setup.getBlack(), setup.getWhite(), setup.getEmpty());
     }
 
+    private void doSetupHandicap(Board.SetupHandicap setup) throws GtpError
+    {
+        StringBuffer command = new StringBuffer(128);
+        command.append("set_free_handicap");
+        for (int i = 0; i < setup.getBlack().size(); ++i)
+        {
+            command.append(' ');
+            command.append(setup.getBlack().get(i));
+        }
+        m_gtp.send(command.toString());
+        m_board.setupHandicap(setup.getBlack());
+    }
+
+    private int findNumberCommonMoves(ArrayList toExecuteAll)
+    {
+        int i;
+        for (i = 0; i < toExecuteAll.size(); ++i)
+        {
+            if (i >= m_board.getNumberPlacements())
+                break;
+            Board.Placement placement = ((Board.Placement)toExecuteAll.get(i));
+            if (! placement.equals(m_board.getPlacement(i)))
+                break;
+        }
+        return i;
+    }
+
+    private static int getHandicap(ConstBoard board)
+    {
+        int handicap = 0;
+        if (board.getNumberPlacements() == 0)
+            return 0;
+        Board.Placement placement = board.getPlacement(0);
+        if (! (placement instanceof Board.SetupHandicap))
+            return 0;
+        return ((Board.SetupHandicap)placement).getBlack().size();
+    }
+
+    private boolean isSupported(String command)
+    {
+        return m_gtp.isSupported(command);
+    }
+
+    private void play(Move move) throws GtpError
+    {
+        m_gtp.sendPlay(move);
+        m_board.play(move);
+    }
+
     private void playSequence(ArrayList moves) throws GtpError
     {
         if (moves.size() > 1 && m_isSupportedPlaySequence)
@@ -297,31 +355,6 @@ public class GtpSynchronizer
                     m_callback.run(m_board.getNumberPlacements());
             }
         }
-    }
-
-    private void play(Move move) throws GtpError
-    {
-        m_gtp.sendPlay(move);
-        m_board.play(move);
-    }
-
-    private int findNumberCommonMoves(ArrayList toExecuteAll)
-    {
-        int i;
-        for (i = 0; i < toExecuteAll.size(); ++i)
-        {
-            if (i >= m_board.getNumberPlacements())
-                break;
-            Board.Placement placement = ((Board.Placement)toExecuteAll.get(i));
-            if (! placement.equals(m_board.getPlacement(i)))
-                break;
-        }
-        return i;
-    }
-
-    private boolean isSupported(String command)
-    {
-        return m_gtp.isSupported(command);
     }
 
     private void undoPlacements(int n) throws GtpError

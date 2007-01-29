@@ -17,6 +17,11 @@ transmit setup stones as moves to the Go engine
 </listitem>
 <listitem>
 <simpara>
+Use set_free_handicap if supported by the Go engine
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Remove menu item Configure Analyze / Only Supported Commands; this is the
 default and only behaviour now
 </simpara>

@@ -33,7 +33,7 @@ public final class GtpSynchronizerTest
 
     public void testBasic() throws GtpError
     {
-        createSynchronizer(false);
+        createSynchronizer();
         expect("list_commands", "undo");
         m_gtp.querySupportedCommands();
         assertExpectQueueEmpty();
@@ -71,7 +71,6 @@ public final class GtpSynchronizerTest
     public void testBasicFillPasses() throws GtpError
     {
         createSynchronizer(true);
-        m_synchronizer = new GtpSynchronizer(m_gtp, null, true);
         expect("list_commands", "undo");
         m_gtp.querySupportedCommands();
         assertExpectQueueEmpty();
@@ -108,11 +107,59 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
     }
 
+    /** Test that set_free_handicap command is used if supported by the
+        engine.
+    */
+    public void testSetupHandicap() throws GtpError
+    {
+        createSynchronizer();
+
+        expect("list_commands", "set_free_handicap");
+        m_gtp.querySupportedCommands();
+        assertExpectQueueEmpty();
+
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+
+        PointList black = new PointList();
+        black.add(GoPoint.get(3, 4));
+        black.add(GoPoint.get(4, 4));
+
+        m_board.setupHandicap(black);
+        // Changed handicap setup should trigger a re-transmission from scratch
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        expect("set_free_handicap D5 E5", "");
+        synchronize();
+        assertExpectQueueEmpty();
+
+        m_board.undo();
+        // There is no GTP command to undo a handicap placement
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+
+        m_board.setupHandicap(black);
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        expect("set_free_handicap D5 E5", "");
+        synchronize();
+        assertExpectQueueEmpty();
+
+        // Playing a move should not trigger a re-transmission
+        play(GoPoint.get(5, 5), GoColor.WHITE);
+        expect("play w F6", "");
+        synchronize();
+        assertExpectQueueEmpty();
+    }
+
     /** Test that gogui-setup command is used if supported by the engine. */
     public void testSetup() throws GtpError
     {
-        createSynchronizer(true);
-        m_synchronizer = new GtpSynchronizer(m_gtp, null, true);
+        createSynchronizer();
         expect("list_commands",
                "gogui-setup\n" +
                "gogui-undo_setup\n" +
@@ -149,6 +196,11 @@ public final class GtpSynchronizerTest
     private void assertExpectQueueEmpty()
     {
         assertTrue(m_expect.isExpectQueueEmpty());
+    }
+
+    private void createSynchronizer()
+    {
+        createSynchronizer(false);
     }
 
     private void createSynchronizer(boolean fillPasses)

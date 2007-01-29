@@ -198,6 +198,22 @@ public final class BoardTest
         assertEquals(GoColor.WHITE, board.getColor(GoPoint.get(0, 0)));
     }
 
+    public void testSetupHandicap()
+    {
+        Board board = new Board(19);
+        PointList stones = new PointList();
+        stones.add(GoPoint.get(4, 4));
+        stones.add(GoPoint.get(5, 5));
+        board.setupHandicap(stones);
+        assertEquals(GoColor.WHITE, board.getToMove());
+        assertEquals(GoColor.BLACK, board.getColor(GoPoint.get(4, 4)));
+        assertEquals(GoColor.BLACK, board.getColor(GoPoint.get(5, 5)));
+        board.undo();
+        assertEquals(GoColor.BLACK, board.getToMove());
+        assertEquals(GoColor.EMPTY, board.getColor(GoPoint.get(4, 4)));
+        assertEquals(GoColor.EMPTY, board.getColor(GoPoint.get(5, 5)));
+    }
+
     public void testToMove()
     {
         Board board = new Board(19);

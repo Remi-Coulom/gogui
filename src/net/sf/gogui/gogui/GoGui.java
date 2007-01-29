@@ -681,6 +681,8 @@ public class GoGui
             m_computerBlack = false;
             m_computerWhite = false;
             newGame(getBoardSize());
+            updateViews();
+            updateGameTree(true);
         }
     }
 

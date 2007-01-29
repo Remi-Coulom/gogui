@@ -20,29 +20,33 @@ public class BoardUpdater
 
     public void update(ConstGameTree tree, ConstNode currentNode, Board board)
     {
-        int size = tree.getGameInformationConst().getBoardSize();
+        ConstGameInformation gameInformation = tree.getGameInformationConst();
+        int size = gameInformation.getBoardSize();
+        int handicap = gameInformation.getHandicap();
         m_nodes.clear();
         NodeUtil.getPathToRoot(currentNode, m_nodes);
         board.init(size);
+        boolean isFirstPlacement = true;
         for (int i = m_nodes.size() - 1; i >= 0; --i)
         {
-            Node node = (Node)m_nodes.get(i);
+            ConstNode node = (ConstNode)m_nodes.get(i);
             if (node.hasSetup())
             {
-                PointList setupBlack = new PointList();
-                for (int j = 0; j < node.getNumberAddBlack(); ++j)
-                    setupBlack.add(node.getAddBlack(j));
-                PointList setupWhite = new PointList();
-                for (int j = 0; j < node.getNumberAddWhite(); ++j)
-                    setupWhite.add(node.getAddWhite(j));
-                PointList setupEmpty = new PointList();
-                for (int j = 0; j < node.getNumberAddEmpty(); ++j)
-                    setupEmpty.add(node.getAddEmpty(j));
-                board.setup(setupBlack, setupWhite, setupEmpty);
+                if (isFirstPlacement
+                    && node.getNumberAddWhite() == 0
+                    && node.getNumberAddEmpty() == 0
+                    && node.getNumberAddBlack() == handicap)
+                    doSetupHandicap(node, board);
+                else
+                    doSetup(node, board);
+                isFirstPlacement = false;
             }
             Move move = node.getMove();
             if (move != null)
+            {
                 board.play(move);
+                isFirstPlacement = false;
+            }
             GoColor toMove = node.getToMove();
             if (toMove != GoColor.EMPTY)
                 board.setToMove(toMove);
@@ -53,5 +57,27 @@ public class BoardUpdater
         Member variable for avoiding frequent new memory allocations.
     */
     private ArrayList m_nodes;
+
+    private void doSetup(ConstNode node, Board board)
+    {
+        PointList setupBlack = new PointList();
+        for (int i = 0; i < node.getNumberAddBlack(); ++i)
+            setupBlack.add(node.getAddBlack(i));
+        PointList setupWhite = new PointList();
+        for (int i = 0; i < node.getNumberAddWhite(); ++i)
+            setupWhite.add(node.getAddWhite(i));
+        PointList setupEmpty = new PointList();
+        for (int i = 0; i < node.getNumberAddEmpty(); ++i)
+            setupEmpty.add(node.getAddEmpty(i));
+        board.setup(setupBlack, setupWhite, setupEmpty);
+    }
+
+    private void doSetupHandicap(ConstNode node, Board board)
+    {
+        PointList points = new PointList();
+        for (int i = 0; i < node.getNumberAddBlack(); ++i)
+            points.add(node.getAddBlack(i));
+        board.setupHandicap(points);
+    }
 }
 

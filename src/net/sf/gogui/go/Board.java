@@ -230,6 +230,30 @@ public final class Board
         }
     }
 
+    /** Handicap stones placements.
+        This placement is only allowed as the first placement on the board.
+    */
+    public static class SetupHandicap
+        extends Setup
+    {
+        public SetupHandicap(ConstPointList points)
+        {
+            super(points, null);
+        }
+
+        protected void execute(Board board)
+        {
+            super.execute(board);
+            board.m_toMove = GoColor.WHITE;
+        }
+
+        protected void undo(Board board)
+        {
+            super.undo(board);
+            board.m_toMove = GoColor.BLACK;
+        }
+    }
+
     /** Constant for unknown rules. */
     public static final int RULES_UNKNOWN = 0;
 
@@ -281,6 +305,8 @@ public final class Board
     */
     public void doPlacement(Placement placement)
     {
+        assert(! (placement instanceof SetupHandicap)
+               || getNumberPlacements() == 0);
         placement.execute(this);
         m_stack.add(placement);
     }
@@ -596,6 +622,11 @@ public final class Board
                       ConstPointList empty)
     {
         doPlacement(new Setup(black, white, empty));
+    }
+
+    public void setupHandicap(ConstPointList points)
+    {
+        doPlacement(new SetupHandicap(points));
     }
 
     /** Undo the last placement (move or setup stone).
