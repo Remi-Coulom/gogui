@@ -182,7 +182,7 @@ public class GuiUtil
             showError = false;
             if (Platform.isWindows())
                 lookAndFeel = "system";
-            else if (Platform.isLinux())
+            else if (Platform.isUnix())
                 lookAndFeel = "plasticxp";
             else
                 return;
