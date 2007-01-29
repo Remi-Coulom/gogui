@@ -183,7 +183,7 @@ Set the komi value.
 <listitem>
 <para>
 Set Swing look and feel.
-If this option is not used, GoGui tries to use plasticxp (jwindows on
+If this option is not used, GoGui tries to use plasticxp (system on
 Windows), but shows no error if the look and feel is not found.
 If the option is used, the name can be an empty string for the default look
 and feel of the Java implementation, a full class name, or one of the
