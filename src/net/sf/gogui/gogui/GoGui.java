@@ -1696,7 +1696,8 @@ public class GoGui
 
     private AnalyzeCommand m_analyzeCommand;
 
-    private final Session m_session = new Session("");
+    private final Session m_session =
+        new Session("net/sf/gogui/gogui/session");
 
     private final CountScore m_countScore = new CountScore();
 
@@ -2994,7 +2995,9 @@ public class GoGui
     private void saveSizeAndVisible(JDialog dialog, String name)
     {
         int size = getBoardSize();
-        m_session.saveSizeAndVisible(dialog, this, name + "-" + size);
+        if (dialog != null)
+            m_session.saveSize(dialog, this, name + "-" + size);
+        m_session.saveVisible(dialog, name);
     }
 
     private void sendGtp(Reader reader)

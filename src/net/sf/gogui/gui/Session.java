@@ -24,15 +24,17 @@ public final class Session
     */
     public Session(String path)
     {
+        assert(path != null);
+        assert(! path.trim().equals(""));
         m_path = path;
     }
 
     public boolean isVisible(String name)
     {
-        Preferences prefs = getNode(name);
+        Preferences prefs = getNode(null);
         if (prefs == null)
             return false;
-        return prefs.getBoolean("show", false);
+        return prefs.getBoolean("show-" + name, false);
     }
 
     public void restoreLocation(Window window, String name)
@@ -126,20 +128,13 @@ public final class Session
         saveWidthHeight(window, name);
     }
 
-    public void saveSizeAndVisible(Window window, Window owner, String name)
-    {
-        if (window != null)
-            saveSize(window, owner, name);
-        saveVisible(window, name);
-    }
-
     public void saveVisible(Window window, String name)
     {
         boolean isVisible = (window != null && window.isVisible());
-        Preferences prefs = createNode(name);
+        Preferences prefs = createNode(null);
         if (prefs == null)
             return;
-        prefs.putBoolean("show", isVisible);
+        prefs.putBoolean("show-" + name, isVisible);
     }
 
     private final String m_path;
@@ -156,10 +151,10 @@ public final class Session
 
     private String getPath(String name)
     {
-        if (m_path == "")
-            return "windows/" + name;
+        if (name == null)
+            return m_path;
         else
-            return m_path + "/windows/" + name;
+            return m_path + "/" + name;
     }
 
     private static Dimension getScreenSize()
