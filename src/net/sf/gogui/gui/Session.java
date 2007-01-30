@@ -35,9 +35,9 @@ public final class Session
         return prefs.getBoolean("show", false);
     }
 
-    public void restoreLocation(Window window, String name, int boardSize)
+    public void restoreLocation(Window window, String name)
     {
-        Preferences prefs = getNode(name, boardSize);
+        Preferences prefs = getNode(name);
         if (prefs == null)
             return;
         int x = prefs.getInt("x", -1);
@@ -61,9 +61,9 @@ public final class Session
         }
     }
 
-    public void restoreSize(Window window, String name, int boardSize)
+    public void restoreSize(Window window, String name)
     {
-        Preferences prefs = getNode(name, boardSize);
+        Preferences prefs = getNode(name);
         if (prefs == null)
             return;
         int x = prefs.getInt("x", -1);
@@ -98,11 +98,11 @@ public final class Session
         }
     }
 
-    public void saveLocation(Window window, String name, int boardSize)
+    public void saveLocation(Window window, String name)
     {
         if (isFrameSpecialMode(window))
             return;
-        Preferences prefs = createNode(name, boardSize);
+        Preferences prefs = createNode(name);
         if (prefs == null)
             return;
         Point location = window.getLocation();
@@ -110,11 +110,11 @@ public final class Session
         prefs.putInt("y", location.y);
     }
 
-    public void saveSize(Window window, String name, int boardSize)
+    public void saveSize(Window window, String name)
     {
         if (isFrameSpecialMode(window))
             return;
-        Preferences prefs = createNode(name, boardSize);
+        Preferences prefs = createNode(name);
         if (prefs == null)
             return;
         Point location = window.getLocation();
@@ -125,10 +125,10 @@ public final class Session
         prefs.putInt("height", size.height);
     }
 
-    public void saveSizeAndVisible(Window window, String name, int boardSize)
+    public void saveSizeAndVisible(Window window, String name)
     {
         if (window != null)
-            saveSize(window, name, boardSize);
+            saveSize(window, name);
         saveVisible(window, name);
     }
 
@@ -143,32 +143,14 @@ public final class Session
 
     private final String m_path;
 
-    private Preferences createNode(String name, int boardSize)
-    {
-        return PrefUtil.createNode(getPath(name, boardSize));
-    }
-
     private Preferences createNode(String name)
     {
         return PrefUtil.createNode(getPath(name));
     }
 
-    private Preferences getNode(String name, int boardSize)
-    {
-        return PrefUtil.getNode(getPath(name, boardSize));
-    }
-
     private Preferences getNode(String name)
     {
         return PrefUtil.getNode(getPath(name));
-    }
-
-    private String getPath(String name, int boardSize)
-    {
-        if (m_path == "")
-            return "windows/" + name + "/size-" + boardSize;
-        else
-            return m_path + "/windows/" + name + "/size-" + boardSize;
     }
 
     private String getPath(String name)

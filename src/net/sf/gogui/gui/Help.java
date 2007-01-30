@@ -16,8 +16,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -42,12 +42,12 @@ class AntialiasingEditorPane
 
 /** Dialog for displaying help in HTML format. */
 public class Help
-    extends JDialog
+    extends JFrame
     implements ActionListener, HyperlinkListener
 {
-    public Help(Frame owner, URL contents)
+    public Help(URL contents)
     {
-        super(owner, "Documentation - GoGui");
+        super("Documentation - GoGui");
         m_contents = contents;
         Container contentPane = getContentPane();
         JPanel panel = new JPanel(new BorderLayout());
@@ -64,6 +64,7 @@ public class Help
                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(width, height));
         panel.add(scrollPane, BorderLayout.CENTER);
+        GuiUtil.setGoIcon(this);
         pack();
         loadURL(m_contents);
         appendHistory(m_contents);

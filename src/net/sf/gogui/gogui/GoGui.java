@@ -426,8 +426,8 @@ public class GoGui
         }
         if (m_help == null)
         {
-            m_help = new Help(this, url);
-            restoreSize(m_help, "help");
+            m_help = new Help(url);
+            m_session.restoreSize(m_help, "help");
         }
         m_help.setVisible(true);
         m_help.toFront();
@@ -2878,7 +2878,7 @@ public class GoGui
     private void restoreMainWindow(int size)
     {
         setState(Frame.NORMAL);
-        m_session.restoreLocation(this, "main", size);
+        m_session.restoreLocation(this, "main-" + size);
         String path = "windows/main/size-" + size + "/fieldsize";
         int fieldSize = m_prefs.getInt(path, -1);
         if (fieldSize > 0)
@@ -2893,7 +2893,6 @@ public class GoGui
             preferredCommentSize = new Dimension(width, height);
             m_comment.setPreferredSize(preferredCommentSize);
         }
-        System.err.println("XXX restoreMainWindow preferredCommentSize=" + preferredCommentSize);
         m_splitPane.resetToPreferredSizes();
         pack();
         // To avoid smallish empty borders (less than one field size) on top
@@ -2904,7 +2903,6 @@ public class GoGui
         {
             preferredCommentSize.height -= 2 * fieldSize;
             m_comment.setPreferredSize(preferredCommentSize);
-        System.err.println("XXX restoreMainWindow preferredCommentSizeAdjusted=" + preferredCommentSize);
             m_splitPane.resetToPreferredSizes();
             pack();
         }
@@ -2912,7 +2910,7 @@ public class GoGui
 
     private void restoreSize(Window window, String name)
     {
-        m_session.restoreSize(window, name, getBoardSize());
+        m_session.restoreSize(window, name + "-" + getBoardSize());
     }
 
     private void runLengthyCommand(String cmd, Runnable callback)
@@ -2968,9 +2966,9 @@ public class GoGui
             m_gtpShell.saveHistory();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        m_session.saveLocation(this, "main", getBoardSize());
+        m_session.saveLocation(this, "main-" + getBoardSize());
         if (m_help != null)
-            saveSize(m_help, "help");
+            m_session.saveSize(m_help, "help");
         saveSizeAndVisible(m_gameTreeViewer, "tree");
         if (m_gtp != null)
         {
@@ -2983,21 +2981,19 @@ public class GoGui
             m_prefs.putInt(name, m_guiBoard.getFieldSize().width);
             name = "windows/main/size-" + getBoardSize() + "/comment/width";
             m_prefs.putInt(name, m_comment.getWidth());
-            System.err.println("saveSession " + name + " " + m_comment.getWidth());
             name = "windows/main/size-" + getBoardSize() + "/comment/height";
             m_prefs.putInt(name, m_comment.getHeight());
-            System.err.println("saveSession " + name + " " + m_comment.getHeight());
         }
     }
 
     private void saveSize(JDialog dialog, String name)
     {
-        m_session.saveSize(dialog, name, getBoardSize());
+        m_session.saveSize(dialog, name + "-" + getBoardSize());
     }
 
     private void saveSizeAndVisible(JDialog dialog, String name)
     {
-        m_session.saveSizeAndVisible(dialog, name, getBoardSize());
+        m_session.saveSizeAndVisible(dialog, name + "-" + getBoardSize());
     }
 
     private void sendGtp(Reader reader)
