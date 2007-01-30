@@ -144,7 +144,6 @@ public class SelectProgram
                 }
             };
         m_textField.addKeyListener(keyListener);
-        GuiUtil.setMonospacedFont(m_comboBox);
         innerPanel.add(m_comboBox, BorderLayout.CENTER);
         JButton button = new JButton();
         button.setIcon(GuiUtil.getIcon("document-open", "Browse"));
