@@ -24,9 +24,6 @@ public final class MainWrapper
         System.setProperty("apple.laf.useScreenMenuBar", "false");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name",
                            "GoGui");
-        // On Windows, use GDI instead of DirectDraw to avoid screen flicker
-        // see http://mindprod.com/jgloss/flicker.html
-        System.setProperty("sun.java2d.noddraw", "true");
         GoGuiSettings settings;
         try
         {
