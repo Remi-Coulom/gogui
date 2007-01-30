@@ -1035,6 +1035,7 @@ public class GoGui
                 m_analyzeDialog.close();
             m_analyzeDialog = null;
         }
+        updateViews();
     }
 
     public void actionToggleShowCursor()
@@ -1075,7 +1076,18 @@ public class GoGui
     {
         if (m_gtpShell == null)
             return;
-        m_gtpShell.setVisible(! m_gtpShell.isVisible());
+        boolean isVisible = m_gtpShell.isVisible();
+        if (! isVisible)
+        {
+            restoreSize(m_gtpShell, "shell");
+            m_gtpShell.setVisible(true);
+        }
+        else
+        {
+            saveSession();
+            m_gtpShell.setVisible(false);
+        }
+        updateViews();
     }
 
     public void actionToggleShowSubtreeSizes()
@@ -1118,6 +1130,7 @@ public class GoGui
         }
         else
             disposeGameTree();
+        updateViews();
     }
 
     public void actionToggleShowVariations()
@@ -1832,6 +1845,7 @@ public class GoGui
                 public void windowClosing(WindowEvent e)
                 {
                     updateViews();
+                    saveSession();
                 }
             });
         m_gtpShell.setProgramCommand(program);
