@@ -863,6 +863,8 @@ public class GtpShell
         viewport width.
         The garbage text disappears after resizing the dialog,
         so we use JDialog.setSize after the first text was inserted.
+        This workaround should be removed when no longer needed (e.g. after
+        requiring newer Java versions that don't need this workaround).
     */
     private void setFinalSize()
     {
