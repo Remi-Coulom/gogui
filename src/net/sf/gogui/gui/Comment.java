@@ -44,8 +44,7 @@ public class Comment
         setFocusTraversalKeys(m_textPane);
         m_textPane.addStyle("marked", Color.white, Color.decode("#38d878"), 
                             false);
-        int fontSize = GuiUtil.getDefaultMonoFontSize();
-        setPreferredSize(new Dimension(15 * fontSize, 5 * fontSize));
+        setPreferredSize();
         m_textPane.getDocument().addDocumentListener(this);
         CaretListener caretListener = new CaretListener()
             {
@@ -141,6 +140,12 @@ public class Comment
         m_textPane.get().setText(comment);
         m_textPane.get().setCaretPosition(0);
         m_duringSetText = false;
+    }
+
+    public void setPreferredSize()
+    {
+        int fontSize = GuiUtil.getDefaultMonoFontSize();
+        setPreferredSize(new Dimension(15 * fontSize, 5 * fontSize));
     }
 
     private boolean m_monoFont;

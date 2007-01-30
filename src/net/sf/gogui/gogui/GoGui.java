@@ -2894,6 +2894,8 @@ public class GoGui
             preferredCommentSize = new Dimension(width, height);
             m_comment.setPreferredSize(preferredCommentSize);
         }
+        else
+            m_comment.setPreferredSize();
         m_splitPane.resetToPreferredSizes();
         pack();
         // To avoid smallish empty borders (less than one field size) on top
