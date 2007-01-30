@@ -47,19 +47,6 @@ public final class Session
         setLocationChecked(window, x, y);
     }
 
-    public void restoreLocation(Window window, Window owner, String name)
-    {
-        Preferences prefs = getNode(name);
-        if (prefs == null)
-            return;
-        int x = prefs.getInt("x", -1);
-        int y = prefs.getInt("y", -1);
-        if (x == -1 || y == -1)
-            return;
-        Point ownerLocation = owner.getLocation();
-        setLocationChecked(window, x + ownerLocation.x, y + ownerLocation.y);
-    }
-
     public void restoreSize(Window window, String name)
     {
         Preferences prefs = getNode(name);
