@@ -2555,7 +2555,7 @@ public class GoGui
         if (size != getBoardSize())
         {
             m_guiBoard.initSize(size);
-            restoreMainWindow();
+            restoreMainWindow(size);
             if (m_gtpShell != null)
                 restoreSize(m_gtpShell, "shell");
             if (m_analyzeDialog != null)
@@ -2612,7 +2612,7 @@ public class GoGui
             showInfoPanel(true);
         if (m_prefs.getBoolean("show-toolbar", true))
             showToolbar(true);
-        restoreMainWindow();
+        restoreMainWindow(getBoardSize());
         // Attaching a program can take some time, so we want to make
         // the window visible, but not draw the window content yet
         getLayeredPane().setVisible(false);
@@ -2875,24 +2875,25 @@ public class GoGui
         updateGuiBoard();
     }
     
-    private void restoreMainWindow()
+    private void restoreMainWindow(int size)
     {
         setState(Frame.NORMAL);
-        m_session.restoreLocation(this, "main", getBoardSize());
-        Dimension preferredCommentSize = null;
-        String path = "windows/main/size-" + getBoardSize() + "/fieldsize";
+        m_session.restoreLocation(this, "main", size);
+        String path = "windows/main/size-" + size + "/fieldsize";
         int fieldSize = m_prefs.getInt(path, -1);
         if (fieldSize > 0)
             m_guiBoard.setPreferredFieldSize(new Dimension(fieldSize,
                                                            fieldSize));
-        path = "windows/main/size-" + getBoardSize() + "/comment";
+        path = "windows/main/size-" + size + "/comment";
         int width = m_prefs.getInt(path + "/width", -1);
         int height = m_prefs.getInt(path + "/height", -1);
+        Dimension preferredCommentSize = null;
         if (width > 0 && height > 0)
         {
             preferredCommentSize = new Dimension(width, height);
             m_comment.setPreferredSize(preferredCommentSize);
         }
+        System.err.println("XXX restoreMainWindow preferredCommentSize=" + preferredCommentSize);
         m_splitPane.resetToPreferredSizes();
         pack();
         // To avoid smallish empty borders (less than one field size) on top
@@ -2903,9 +2904,10 @@ public class GoGui
         {
             preferredCommentSize.height -= 2 * fieldSize;
             m_comment.setPreferredSize(preferredCommentSize);
+        System.err.println("XXX restoreMainWindow preferredCommentSizeAdjusted=" + preferredCommentSize);
             m_splitPane.resetToPreferredSizes();
             pack();
-            }
+        }
     }
 
     private void restoreSize(Window window, String name)
@@ -2981,8 +2983,10 @@ public class GoGui
             m_prefs.putInt(name, m_guiBoard.getFieldSize().width);
             name = "windows/main/size-" + getBoardSize() + "/comment/width";
             m_prefs.putInt(name, m_comment.getWidth());
+            System.err.println("saveSession " + name + " " + m_comment.getWidth());
             name = "windows/main/size-" + getBoardSize() + "/comment/height";
             m_prefs.putInt(name, m_comment.getHeight());
+            System.err.println("saveSession " + name + " " + m_comment.getHeight());
         }
     }
 
