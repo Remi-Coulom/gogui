@@ -6,6 +6,7 @@ package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -76,8 +77,11 @@ public final class AnalyzeDialog
             };
         addWindowListener(windowAdapter);
         Container contentPane = getContentPane();
-        contentPane.add(createCommandPanel(), BorderLayout.CENTER);
+        JPanel commandPanel = createCommandPanel();
+        contentPane.add(commandPanel, BorderLayout.CENTER);
         comboBoxChanged();
+        int minWidth = commandPanel.getPreferredSize().width;
+        setMinimumSize(new Dimension(minWidth, 192));
         pack();
         m_list.requestFocusInWindow();
     }
@@ -248,7 +252,7 @@ public final class AnalyzeDialog
         m_labelColor = new JLabel("Color:");
         m_labelColor.setHorizontalAlignment(SwingConstants.LEFT);
         m_colorPanel.add(m_labelColor);
-        String[] colors = {"Black", "White"};
+        String[] colors = { "Black", "White" };
         m_comboBoxColor = new JComboBox(colors);
         m_comboBoxColor.setToolTipText("Color argument for command");
         m_colorPanel.add(m_comboBoxColor);

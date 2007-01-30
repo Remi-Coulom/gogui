@@ -125,6 +125,7 @@ public class GameTreeViewer
                     m_listener.disposeGameTree();
                 }
             });
+        setMinimumSize(new Dimension(128, 96));
         pack();
     }
 
