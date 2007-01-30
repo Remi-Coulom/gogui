@@ -93,6 +93,18 @@ public final class SimpleDialogs
         return (r == 0);
     }
 
+    public static int showYesNoCancelQuestion(Component parent, String message)
+    {
+        
+        int result =
+            JOptionPane.showConfirmDialog(parent, message, "Question",
+                                          JOptionPane.YES_NO_CANCEL_OPTION,
+                                          JOptionPane.QUESTION_MESSAGE);
+        if (result < 0)
+            return 2; // Handle dialog closing as cancel
+        return result;
+    }
+
     public static File showSave(Component parent, String title)
     {
         return showFileChooserSave(parent, null, false, title);

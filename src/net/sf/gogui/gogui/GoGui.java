@@ -2084,18 +2084,29 @@ public class GoGui
         return true;
     }
 
+    private boolean checkSaveGame()
+    {
+        return checkSaveGame(false);
+    }
+
     /** Ask for saving file if it was modified.
         @return true If file was not modified, user chose not to save it
         or file was saved successfully
     */
-    private boolean checkSaveGame()
+    private boolean checkSaveGame(boolean isProgramTerminating)
     {
         if (! isModified())
             return true;
-        if (m_saveQuestion == null)
-            m_saveQuestion = new OptionalMessage(this);
-        int result =
-            m_saveQuestion.showYesNoCancelQuestion("Save current game?");
+        String message = "Save current game?";
+        int result;
+        if (! isProgramTerminating)
+        {
+            if (m_saveQuestion == null)
+                m_saveQuestion = new OptionalMessage(this);
+            result = m_saveQuestion.showYesNoCancelQuestion(message);
+        }
+        else
+            result = SimpleDialogs.showYesNoCancelQuestion(this, message);
         switch (result)
         {
         case 0:
@@ -2142,7 +2153,7 @@ public class GoGui
     {
         if (isCommandInProgress() && ! showQuestion("Kill program?"))
                 return;
-        if (! checkSaveGame())
+        if (! checkSaveGame(true))
             return;
         saveSession();        
         if (m_gtp != null)
