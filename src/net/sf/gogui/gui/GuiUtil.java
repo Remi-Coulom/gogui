@@ -384,21 +384,7 @@ public class GuiUtil
         private Throwable m_throwable;
     }
 
-    static
-    {
-        Font textAreaFont = UIManager.getFont("TextArea.font");
-        if (textAreaFont == null)
-        {
-            MONOSPACED_FONT = Font.decode("Monospaced");
-        }
-        else
-        {
-            int size = Math.max(11, textAreaFont.getSize());
-            MONOSPACED_FONT = new Font("Monospaced", Font.PLAIN, size);
-        }
-    }
-
-    private static final Font MONOSPACED_FONT;
+    private static final Font MONOSPACED_FONT = Font.decode("Monospaced");
 
     private static final Border EMPTY_BORDER =
         BorderFactory.createEmptyBorder(PAD, PAD, PAD, PAD);
