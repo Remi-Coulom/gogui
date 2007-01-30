@@ -5,6 +5,7 @@
 package net.sf.gogui.go;
 
 import java.util.ArrayList;
+import java.util.Random;
 import net.sf.gogui.util.ObjectUtil;
 
 /** Go board. */
@@ -475,6 +476,14 @@ public final class Board
         return m_constants.getNumberPoints();
     }
 
+    /** Get a hash code for the current position.
+        Does not take into account who is to play.
+    */
+    public long getPositionHashCode()
+    {
+        return m_positionHashCode;
+    }
+
     /** Get a placement (move or setup stone) from the sequence of placements
         played so far.
         @param i The number of the placement (starting with zero).
@@ -620,6 +629,7 @@ public final class Board
     */
     public void newGame()
     {
+        m_positionHashCode = m_randomNumbersBoardSize[m_size];
         for (int i = 0; i < getNumberPoints(); ++i)
             setColor(getPoint(i), GoColor.EMPTY);
         m_placements.clear();        
@@ -726,17 +736,43 @@ public final class Board
 
     private int m_capturedWhite;
 
+    private long m_positionHashCode;
+
     private final ArrayList m_placements = new ArrayList(361);
 
     private final ArrayList m_actions = new ArrayList(361);
 
-    private GoColor m_color[][];
+    private GoColor[][] m_color;
 
     private GoColor m_toMove;
 
     private BoardConstants m_constants;
 
     private GoPoint m_koPoint;
+
+    /** Black stone random numbers for computing the position hash code. */
+    private static long[][] m_randomNumbersBlack;
+
+    /** White stone random numbers for computing the position hash code. */
+    private static long[][] m_randomNumbersWhite;
+
+    /** Board size random numbers for computing the position hash code. */
+    private static long[] m_randomNumbersBoardSize;
+
+    {
+        Random random = new Random(1);
+        m_randomNumbersBoardSize = new long[GoPoint.MAXSIZE];
+        for (int i = 0; i < GoPoint.MAXSIZE; ++i)
+            m_randomNumbersBoardSize[i] = random.nextLong();
+        m_randomNumbersBlack = new long[GoPoint.MAXSIZE][GoPoint.MAXSIZE];
+        m_randomNumbersWhite = new long[GoPoint.MAXSIZE][GoPoint.MAXSIZE];
+        for (int x = 0; x < GoPoint.MAXSIZE; ++x)
+            for (int y = 0; y < GoPoint.MAXSIZE; ++y)
+            {
+                m_randomNumbersBlack[x][y] = random.nextLong();
+                m_randomNumbersWhite[x][y] = random.nextLong();
+            }
+    }
 
     private boolean isSingleStoneSingleLib(GoPoint point, GoColor color)
     {
@@ -808,7 +844,17 @@ public final class Board
     private void setColor(GoPoint point, GoColor color)
     {
         assert(point != null);
-        m_color[point.getX()][point.getY()] = color;
+        int x = point.getX();
+        int y = point.getY();
+        GoColor oldColor = m_color[x][y]; 
+        if (oldColor == GoColor.BLACK)
+            m_positionHashCode ^= m_randomNumbersBlack[x][y];
+        else
+            m_positionHashCode ^= m_randomNumbersWhite[x][y];
+        m_color[x][y] = color;
+        if (color == GoColor.BLACK)
+            m_positionHashCode ^= m_randomNumbersBlack[x][y];
+        else
+            m_positionHashCode ^= m_randomNumbersWhite[x][y];
     }
 }
-

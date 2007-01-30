@@ -125,6 +125,42 @@ public final class BoardTest
         assertTrue(board.getSuicide().isEmpty());
     }
 
+    public void testGetPositionHashCode1()
+    {
+        Board board = new Board(19);
+        long hashCode = board.getPositionHashCode();
+        // Hash code should depend on size
+        assertTrue(hashCode != (new Board(9)).getPositionHashCode());
+        board.play(GoPoint.get(0, 1), GoColor.BLACK);
+        assertTrue(hashCode != board.getPositionHashCode());
+        board.undo();
+        assertEquals(hashCode, board.getPositionHashCode());
+    }
+
+    public void testGetPositionHashCode2()
+    {
+        Board board = new Board(19);
+        // 3 . . . .
+        // 2 @ O . .
+        // 1 . @ O .
+        //   A B C D
+        PointList black = new PointList();
+        PointList white = new PointList();
+        black.add(GoPoint.get(0, 1));
+        black.add(GoPoint.get(1, 0));
+        white.add(GoPoint.get(1, 1));
+        white.add(GoPoint.get(2, 0));
+        board.setup(black, white);
+        long hashCode = board.getPositionHashCode();
+        board.play(GoPoint.get(0, 0), GoColor.WHITE);
+        assertTrue(hashCode != board.getPositionHashCode());
+        board.play(GoPoint.get(1, 0), GoColor.BLACK);
+        assertEquals(hashCode, board.getPositionHashCode());
+        board.play(Move.getPass(GoColor.BLACK));
+        // Hash code should not depend on color to move
+        assertEquals(hashCode, board.getPositionHashCode());
+    }
+
     public void testIsSuicide()
     {
         Board board = new Board(19);
