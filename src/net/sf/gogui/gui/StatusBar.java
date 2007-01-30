@@ -5,16 +5,18 @@
 package net.sf.gogui.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.BorderFactory;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.util.Platform;
 
@@ -37,28 +39,39 @@ public class StatusBar
             outerPanel.add(filler, BorderLayout.EAST);
         }
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createLineBorder(Color.gray));
         outerPanel.add(panel, BorderLayout.CENTER);
         m_iconBox = Box.createHorizontalBox();
         panel.add(m_iconBox, BorderLayout.WEST);
-        m_showProgress = false;
         m_showToPlay = showToPlay;
         m_toPlayLabel = new JLabel();
-        m_toPlayLabel.setBorder(UIManager.getBorder("TextField.border"));
         m_toPlayLabel.setMaximumSize(new Dimension(Short.MAX_VALUE,
                                                    Short.MAX_VALUE));
         setToPlay(GoColor.BLACK);
+        m_iconBox.add(m_toPlayLabel);
+        m_iconBox.add(GuiUtil.createSmallFiller());
         m_progressBar = new JProgressBar();
-        initIconBox();
+        m_progressBar.setVisible(false);
+        m_progressBar.setPreferredSize(new Dimension(72, 16));
+        m_iconBox.add(m_progressBar);
+        m_progressBarDistance = GuiUtil.createFiller();
+        m_progressBarDistance.setVisible(false);
+        m_iconBox.add(m_progressBarDistance);
         m_text = new JTextField();
         m_text.setEditable(false);
         m_text.setFocusable(false);
+        m_text.setBorder(null);
         panel.add(m_text, BorderLayout.CENTER);
         Box moveTextBox = Box.createHorizontalBox();
         panel.add(moveTextBox, BorderLayout.EAST);
         m_moveText = new JTextField(12);
         m_moveText.setEditable(false);
         m_moveText.setFocusable(false);
+        m_moveText.setBorder(null);
         m_moveText.setHorizontalAlignment(SwingConstants.LEFT);
+        m_moveTextSeparator = new JSeparator(SwingConstants.VERTICAL);
+        m_moveTextSeparator.setVisible(false);
+        moveTextBox.add(m_moveTextSeparator);
         moveTextBox.add(GuiUtil.createSmallFiller());
         moveTextBox.add(m_moveText);
     }
@@ -70,11 +83,8 @@ public class StatusBar
 
     public void clearProgress()
     {
-        if (m_showProgress)
-        {
-            m_showProgress = false;
-            initIconBox();
-        }
+        m_progressBar.setVisible(false);
+        m_progressBarDistance.setVisible(false);
     }
 
     public String getText()
@@ -92,7 +102,7 @@ public class StatusBar
 
     public boolean isProgressShown()
     {
-        return m_showProgress;
+        return m_progressBar.isVisible();
     }
 
     /** Show progress bar.
@@ -100,11 +110,8 @@ public class StatusBar
     */
     public void setProgress(int percent)
     {
-        if (! m_showProgress)
-        {
-            m_showProgress = true;
-            initIconBox();
-        }
+        m_progressBar.setVisible(true);
+        m_progressBarDistance.setVisible(true);
         // Don't use text on progress bar, because otherwise it will
         // be green in indetemrminate and blue in dterminate mode on
         // Windows XP JDK 1.6
@@ -129,6 +136,13 @@ public class StatusBar
     */
     public void setMoveText(String text, String toolTip)
     {
+        if (text == null || text.trim().equals(""))
+        {
+            m_moveText.setText("");
+            m_moveTextSeparator.setVisible(false);
+            return;
+        }
+        m_moveTextSeparator.setVisible(true);
         if (text.length() > 18)
             text = text.substring(0, 18) + " ...";
         m_moveText.setText(text);
@@ -160,8 +174,6 @@ public class StatusBar
     */
     private static final long serialVersionUID = 0L; // SUID
 
-    private boolean m_showProgress;
-
     private boolean m_showToPlay;
 
     private static final Icon m_iconBlack =
@@ -180,20 +192,8 @@ public class StatusBar
 
     private final JTextField m_text;
 
-    private void initIconBox()
-    {
-        m_iconBox.removeAll();
-        if (m_showToPlay)
-        {
-            m_iconBox.add(m_toPlayLabel);
-            m_iconBox.add(GuiUtil.createSmallFiller());
-        }
-        if (m_showProgress)
-        {
-            m_iconBox.add(m_progressBar);
-            m_iconBox.add(GuiUtil.createSmallFiller());
-        }
-        m_iconBox.revalidate();
-    }
+    private final JSeparator m_moveTextSeparator;
+
+    Box.Filler m_progressBarDistance;
 }
 
