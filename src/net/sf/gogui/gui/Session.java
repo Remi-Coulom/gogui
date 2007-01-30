@@ -47,6 +47,19 @@ public final class Session
         setLocationChecked(window, x, y);
     }
 
+    public void restoreLocation(Window window, Window owner, String name)
+    {
+        Preferences prefs = getNode(name);
+        if (prefs == null)
+            return;
+        int x = prefs.getInt("x", -1);
+        int y = prefs.getInt("y", -1);
+        if (x == -1 || y == -1)
+            return;
+        Point ownerLocation = owner.getLocation();
+        setLocationChecked(window, x + ownerLocation.x, y + ownerLocation.y);
+    }
+
     public void restoreSize(Window window, String name)
     {
         Preferences prefs = getNode(name);
@@ -61,6 +74,22 @@ public final class Session
         setSizeChecked(window, x, y, width, height);
     }
 
+    public void restoreSize(Window window, Window owner, String name)
+    {
+        Preferences prefs = getNode(name);
+        if (prefs == null)
+            return;
+        int x = prefs.getInt("x", -1);
+        int y = prefs.getInt("y", -1);
+        int width = prefs.getInt("width", -1);
+        int height = prefs.getInt("height", -1);
+        if (x == -1 || y == -1 || width == -1 || height == -1)
+            return;
+        Point ownerLocation = owner.getLocation();
+        setSizeChecked(window, x + ownerLocation.x,  y + ownerLocation.y,
+                       width, height);
+    }
+
     public void saveLocation(Window window, String name)
     {
         if (isFrameSpecialMode(window))
@@ -73,7 +102,7 @@ public final class Session
         prefs.putInt("y", location.y);
     }
 
-    public void saveSize(Window window, String name)
+    public void saveLocation(Window window, Window owner, String name)
     {
         if (isFrameSpecialMode(window))
             return;
@@ -81,17 +110,31 @@ public final class Session
         if (prefs == null)
             return;
         Point location = window.getLocation();
-        prefs.putInt("x", location.x);
-        prefs.putInt("y", location.y);
-        Dimension size = window.getSize();
-        prefs.putInt("width", size.width);
-        prefs.putInt("height", size.height);
+        Point ownerLocation = owner.getLocation();
+        prefs.putInt("x", location.x - ownerLocation.x);
+        prefs.putInt("y", location.y - ownerLocation.y);
     }
 
-    public void saveSizeAndVisible(Window window, String name)
+    public void saveSize(Window window, String name)
+    {
+        saveLocation(window, name);
+        if (isFrameSpecialMode(window))
+            return;
+        saveWidthHeight(window, name);
+    }
+
+    public void saveSize(Window window, Window owner, String name)
+    {
+        saveLocation(window, owner, name);
+        if (isFrameSpecialMode(window))
+            return;
+        saveWidthHeight(window, name);
+    }
+
+    public void saveSizeAndVisible(Window window, Window owner, String name)
     {
         if (window != null)
-            saveSize(window, name);
+            saveSize(window, owner, name);
         saveVisible(window, name);
     }
 
@@ -133,6 +176,16 @@ public final class Session
     {
         return (window instanceof JFrame
                 && ! GuiUtil.isNormalSizeMode((JFrame)window));
+    }
+
+    private void saveWidthHeight(Window window, String name)
+    {
+        Preferences prefs = createNode(name);
+        if (prefs == null)
+            return;
+        Dimension size = window.getSize();
+        prefs.putInt("width", size.width);
+        prefs.putInt("height", size.height);
     }
 
     private void setLocationChecked(Window window, int x, int y)

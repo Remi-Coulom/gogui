@@ -2908,9 +2908,9 @@ public class GoGui
         }
     }
 
-    private void restoreSize(Window window, String name)
+    private void restoreSize(JDialog dialog, String name)
     {
-        m_session.restoreSize(window, name + "-" + getBoardSize());
+        m_session.restoreSize(dialog, this, name + "-" + getBoardSize());
     }
 
     private void runLengthyCommand(String cmd, Runnable callback)
@@ -2966,7 +2966,6 @@ public class GoGui
             m_gtpShell.saveHistory();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
-        m_session.saveLocation(this, "main-" + getBoardSize());
         if (m_help != null)
             m_session.saveSize(m_help, "help");
         saveSizeAndVisible(m_gameTreeViewer, "tree");
@@ -2975,6 +2974,7 @@ public class GoGui
             saveSizeAndVisible(m_gtpShell, "shell");
             saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
+        m_session.saveLocation(this, "main-" + getBoardSize());
         if (GuiUtil.isNormalSizeMode(this))
         {            
             String name = "windows/main/size-" + getBoardSize() + "/fieldsize";
@@ -2993,7 +2993,8 @@ public class GoGui
 
     private void saveSizeAndVisible(JDialog dialog, String name)
     {
-        m_session.saveSizeAndVisible(dialog, name + "-" + getBoardSize());
+        int size = getBoardSize();
+        m_session.saveSizeAndVisible(dialog, this, name + "-" + size);
     }
 
     private void sendGtp(Reader reader)
