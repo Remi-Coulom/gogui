@@ -160,6 +160,9 @@ public class OptionalMessage
             optionType = JOptionPane.OK_OPTION;
         }
         m_disabledCheckBox.setSelected(m_disabled);
+        String toolTipText =
+            "Disable this kind of messages for the current session";
+        m_disabledCheckBox.setToolTipText(toolTipText);
         checkBoxPanel.add(m_disabledCheckBox, BorderLayout.WEST);
         panel.add(checkBoxPanel);
         m_optionPane = new JOptionPane(panel, type, optionType, null,
