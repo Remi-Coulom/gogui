@@ -60,12 +60,23 @@ public final class GuiGtpUtil
 
     public static void showError(Component parent, String name,
                                  GtpError error)
+    {
+        showError(parent, null, name, error);
+    }
+
+    public static void showError(Component parent, String prefix, String name,
+                                 GtpError error)
     {        
-        String message = error.getMessage().trim();
-        if (message.length() == 0)
-            message = "Command failed";
+        String message;
+        if (prefix != null)
+            message = prefix + "\n";
         else
-            message = StringUtil.capitalize(message);
+            message = "";
+        String response = error.getMessage().trim();
+        if (response.length() == 0)
+            message += "Command failed";
+        else
+            message += StringUtil.capitalize(response);
         String title = "Error";
         if (name != null)
             title = title + " - " + name;

@@ -2296,8 +2296,10 @@ public class GoGui
             }
             catch (GtpError e)
             {
-                showError(e);
-                checkProgramInSync();
+                GuiGtpUtil.showError(this,
+                                     "Could not synchronize current\n" +
+                                     "position with " + m_name + ":",
+                                     m_name, e);
             }
         }
     }
