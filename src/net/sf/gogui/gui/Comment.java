@@ -45,7 +45,7 @@ public class Comment
         m_textPane.addStyle("marked", Color.white, Color.decode("#38d878"), 
                             false);
         int fontSize = GuiUtil.getDefaultMonoFontSize();
-        setPreferredSize(new Dimension(20 * fontSize, 10 * fontSize));
+        setPreferredSize(new Dimension(15 * fontSize, 10 * fontSize));
         m_textPane.getDocument().addDocumentListener(this);
         CaretListener caretListener = new CaretListener()
             {
