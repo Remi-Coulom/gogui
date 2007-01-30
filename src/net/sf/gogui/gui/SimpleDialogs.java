@@ -291,9 +291,10 @@ class SgfPreview
     {
         setLayout(new BorderLayout());
         JPanel previewPanel = new JPanel();
+        previewPanel.setBorder(GuiUtil.createEmptyBorder());
         previewPanel.setLayout(new BoxLayout(previewPanel, BoxLayout.Y_AXIS));
         previewPanel.add(Box.createVerticalGlue());
-        Dimension dimension = new Dimension(128 + 10, 224 + 10);
+        Dimension dimension = new Dimension(140, 235);
         previewPanel.setPreferredSize(dimension);
         add(previewPanel);
         m_imagePanel = new ImagePanel();
@@ -355,7 +356,8 @@ class SgfPreview
     {
         public ImagePanel()
         {
-            Dimension dimension = new Dimension(128 + 10, 128 + 10);
+            // Image size is 128x128
+            Dimension dimension = new Dimension(140, 140);
             setPreferredSize(dimension);
             setMaximumSize(dimension);
         }
