@@ -738,11 +738,13 @@ public class GoGuiActions
         m_actionToggleCommentMonoFont.setSelected(commentMonoFont);
         m_actionToggleCompletion.setSelected(m_goGui.getCompletion());
         boolean isAnalyzeDialogShown = m_goGui.isAnalyzeDialogShown();
+        m_actionToggleShowAnalyzeDialog.setEnabled(isProgramAttached);
         m_actionToggleShowAnalyzeDialog.setSelected(isAnalyzeDialogShown);
         m_actionToggleShowCursor.setSelected(guiBoard.getShowCursor());
         m_actionToggleShowGrid.setSelected(guiBoard.getShowGrid());
         m_actionToggleShowInfoPanel.setSelected(m_goGui.isInfoPanelShown());
         m_actionToggleShowLastMove.setSelected(m_goGui.getShowLastMove());
+        m_actionToggleShowShell.setEnabled(isProgramAttached);
         m_actionToggleShowShell.setSelected(m_goGui.isShellShown());
         boolean showSubtreeSizes = m_goGui.getShowSubtreeSizes();
         m_actionToggleShowSubtreeSizes.setSelected(showSubtreeSizes);
