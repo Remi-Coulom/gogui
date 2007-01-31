@@ -9,7 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
+import javax.swing.ActionMap;
 import javax.swing.AbstractAction;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import net.sf.gogui.game.ConstClock;
 import net.sf.gogui.game.ConstGame;
@@ -32,6 +36,88 @@ import net.sf.gogui.util.Platform;
 */
 public class GoGuiActions
 {
+    class GoGuiAction
+        extends AbstractAction
+    {
+        public GoGuiAction(ActionListener listener, String name, String desc)
+        {
+            this(listener, name, desc, null, 0, null);
+        }
+    
+        public GoGuiAction(ActionListener listener, String name, String desc,
+                           String icon)
+        {
+            this(listener, name, desc, null, 0, icon);
+        }
+
+        public GoGuiAction(ActionListener listener, String name, String desc,
+                           int accel, String icon)
+        {
+            this(listener, name, desc, new Integer(accel), getShortcut(),
+                 icon);
+        }
+
+        public GoGuiAction(ActionListener listener, String name, String desc,
+                           int accel)
+        {
+            this(listener, name, desc, new Integer(accel), getShortcut(),
+                 null);
+        }
+
+        public GoGuiAction(ActionListener listener, String name, String desc,
+                           int accel, int modifier, String icon)
+        {
+            this(listener, name, desc, new Integer(accel), modifier, icon);
+        }
+
+        public GoGuiAction(ActionListener listener, String name, String desc,
+                           int accel, int modifier)
+        {
+            this(listener, name, desc, new Integer(accel), modifier, null);
+        }
+
+        public GoGuiAction(ActionListener listener, String name, String desc,
+                           Integer accel, int modifier, String icon)
+        {
+            m_listener = listener;
+            putValue(AbstractAction.NAME, name);
+            setDescription(desc);
+            if (accel != null)
+            {
+                KeyStroke keyStroke = getKeyStroke(accel.intValue(), modifier);
+                putValue(AbstractAction.ACCELERATOR_KEY, keyStroke);
+            }
+            if (icon != null)
+                putValue(AbstractAction.SMALL_ICON,
+                         GuiUtil.getIcon(icon, name));
+            m_allActions.add(this);
+        }
+
+        public void actionPerformed(ActionEvent e)
+        {
+            m_listener.actionPerformed(e);
+        }
+
+        public void setDescription(String desc)
+        {
+            putValue(AbstractAction.SHORT_DESCRIPTION, desc);
+        }
+
+        public void setSelected(boolean selected)
+        {
+            putValue("selected", Boolean.valueOf(selected));
+        }
+
+        /** Serial version to suppress compiler warning.
+            Contains a marker comment for serialver.sourceforge.net
+        */
+        private static final long serialVersionUID = 0L; // SUID
+
+        private final ActionListener m_listener;
+    }
+
+    public final ArrayList m_allActions = new ArrayList();
+
     public final GoGuiAction m_actionAbout =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -649,6 +735,25 @@ public class GoGuiActions
         m_goGui = goGui;
     }
 
+    public void registerAll(JComponent component)
+    {
+        int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ;
+        InputMap inputMap = component.getInputMap(condition);
+        ActionMap actionMap = component.getActionMap();
+        for (int i = 0; i < m_allActions.size(); ++i)
+        {
+            GoGuiAction action = (GoGuiAction)m_allActions.get(i);
+            KeyStroke keyStroke =
+                (KeyStroke)action.getValue(AbstractAction.ACCELERATOR_KEY);
+            if (keyStroke != null)
+            {
+                String name = (String)action.getValue(AbstractAction.NAME);
+                inputMap.put(keyStroke, name);
+                actionMap.put(name, action);
+            }
+        }
+    }
+
     public void update()
     {
         ConstGame game = m_goGui.getGame();
@@ -783,9 +888,14 @@ public class GoGuiActions
         return 0;
     }
 
+    private static KeyStroke getKeyStroke(int keyCode, int modifier)
+    {
+        return KeyStroke.getKeyStroke(keyCode, modifier);
+    }
+    
     private static int getShortcut()
     {
-        return GoGuiAction.getShortcut();
+        return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     }
 
     private void updateFile(File file, boolean isModified)
@@ -795,91 +905,5 @@ public class GoGuiActions
             desc = desc + " (" + file + ")";
         m_actionSave.setDescription(desc);
         m_actionSave.setEnabled(file != null && isModified);
-    }
-}
-
-class GoGuiAction
-    extends AbstractAction
-{
-    public GoGuiAction(ActionListener listener, String name, String desc)
-    {
-        this(listener, name, desc, null, 0, null);
-    }
-    
-    public GoGuiAction(ActionListener listener, String name, String desc,
-                       String icon)
-    {
-        this(listener, name, desc, null, 0, icon);
-    }
-
-    public GoGuiAction(ActionListener listener, String name, String desc,
-                       int accel, String icon)
-    {
-        this(listener, name, desc, new Integer(accel), getShortcut(), icon);
-    }
-
-    public GoGuiAction(ActionListener listener, String name, String desc,
-                       int accel)
-    {
-        this(listener, name, desc, new Integer(accel), getShortcut(), null);
-    }
-
-    public GoGuiAction(ActionListener listener, String name, String desc,
-                       int accel, int modifier, String icon)
-    {
-        this(listener, name, desc, new Integer(accel), modifier, icon);
-    }
-
-    public GoGuiAction(ActionListener listener, String name, String desc,
-                       int accel, int modifier)
-    {
-        this(listener, name, desc, new Integer(accel), modifier, null);
-    }
-
-    public GoGuiAction(ActionListener listener, String name, String desc,
-                       Integer accel, int modifier, String icon)
-    {
-        m_listener = listener;
-        putValue(AbstractAction.NAME, name);
-        setDescription(desc);
-        if (accel != null)
-        {
-            KeyStroke keyStroke = getKeyStroke(accel.intValue(), modifier);
-            putValue(AbstractAction.ACCELERATOR_KEY, keyStroke);
-        }
-        if (icon != null)
-            putValue(AbstractAction.SMALL_ICON, GuiUtil.getIcon(icon, name));
-    }
-
-    public void actionPerformed(ActionEvent e)
-    {
-        m_listener.actionPerformed(e);
-    }
-
-    public static int getShortcut()
-    {
-        return Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    }
-
-    public void setDescription(String desc)
-    {
-        putValue(AbstractAction.SHORT_DESCRIPTION, desc);
-    }
-
-    public void setSelected(boolean selected)
-    {
-        putValue("selected", Boolean.valueOf(selected));
-    }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sourceforge.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
-    private final ActionListener m_listener;
-
-    private static KeyStroke getKeyStroke(int keyCode, int modifier)
-    {
-        return KeyStroke.getKeyStroke(keyCode, modifier);
     }
 }

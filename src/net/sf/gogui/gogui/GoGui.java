@@ -1808,6 +1808,7 @@ public class GoGui
             m_gtpShell = null;
         }
         m_gtpShell = new GtpShell(this, this);
+        m_actions.registerAll(m_gtpShell.getLayeredPane());
         m_gtpShell.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     actionToggleShowShell();
@@ -2214,6 +2215,7 @@ public class GoGui
         m_analyzeDialog =
             new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
                               m_programAnalyzeCommands, m_gtp);
+        m_actions.registerAll(m_analyzeDialog.getLayeredPane());
         m_analyzeDialog.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     actionToggleShowAnalyzeDialog();
@@ -2270,6 +2272,7 @@ public class GoGui
                     actionToggleShowTree();
                 }
             });
+        m_actions.registerAll(m_gameTreeViewer.getLayeredPane());
         m_gameTreeViewer.setLabelMode(m_treeLabels);
         m_gameTreeViewer.setSizeMode(m_treeSize);
         m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
