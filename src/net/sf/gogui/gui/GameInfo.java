@@ -169,12 +169,12 @@ class Prisoners
         if (color == GoColor.BLACK)
         {
             setToolTipText("Black stones captured");
-            icon = GuiUtil.getIcon("gogui-black", "Black");
+            icon = GuiUtil.getIcon("gogui-black-16x16", "Black");
         }
         else
         {
             setToolTipText("White stones captured");
-            icon = GuiUtil.getIcon("gogui-white", "White");
+            icon = GuiUtil.getIcon("gogui-white-16x16", "White");
         }
         JLabel labelStone = new JLabel(icon);
         add(labelStone, BorderLayout.WEST);

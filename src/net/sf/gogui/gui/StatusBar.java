@@ -177,10 +177,10 @@ public class StatusBar
     private boolean m_showToPlay;
 
     private static final Icon m_iconBlack =
-        GuiUtil.getIcon("gogui-black", "Black");
+        GuiUtil.getIcon("gogui-black-16x16", "Black");
 
     private static final Icon m_iconWhite =
-        GuiUtil.getIcon("gogui-white", "White");
+        GuiUtil.getIcon("gogui-white-16x16", "White");
 
     private Box m_iconBox;
 
