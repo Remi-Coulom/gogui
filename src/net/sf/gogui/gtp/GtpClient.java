@@ -733,7 +733,7 @@ public final class GtpClient
     private void throwProgramDied() throws GtpError
     {
         m_isProgramDead = true;
-        throw new GtpError("Go program died");
+        throw new GtpError("Go program terminated unexpectedly");
     }
 
     private Message waitForMessage(long timeout) throws GtpError
