@@ -149,7 +149,6 @@ public class GoGui
         m_guiBoard.setListener(this);
         m_statusBar = new StatusBar(true);
         m_innerPanel.add(m_statusBar, BorderLayout.SOUTH);
-
         Comment.Listener commentListener = new Comment.Listener()
             {
                 public void changed(String comment)
@@ -157,7 +156,7 @@ public class GoGui
                     if (m_gameTreeViewer != null)
                         m_gameTreeViewer.redrawCurrentNode();
                     m_game.setComment(comment);
-                    updateModified();
+                    updateViews(false);
                 }
 
                 public void textSelected(String text)
@@ -296,7 +295,7 @@ public class GoGui
         if (! attachProgram(program))
         {
             m_prefs.put("program", "");
-            updateViews();
+            updateViews(false);
             return;
         }
         m_prefs.put("program", m_program);
@@ -305,12 +304,12 @@ public class GoGui
         if (m_session.isVisible("analyze"))
             actionToggleShowAnalyzeDialog();
         toFrontLater();
-        updateViews();
+        updateViews(false);
     }
 
     public void actionBackToMainVariation()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         ConstNode node = NodeUtil.getBackToMainVariation(getCurrentNode());
         actionGotoNode(node);
@@ -318,7 +317,7 @@ public class GoGui
 
     public void actionBackward(int n)
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         backward(n);
         boardChangedBegin(false, false);
@@ -326,7 +325,7 @@ public class GoGui
 
     public void actionBeginning()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         backward(NodeUtil.getDepth(getCurrentNode()));
         boardChangedBegin(false, false);
@@ -359,7 +358,7 @@ public class GoGui
         if (! getClock().isRunning())
             return;
         m_game.haltClock();
-        updateViews();
+        updateViews(false);
     }
 
     public void actionClockResume()
@@ -367,7 +366,7 @@ public class GoGui
         if (getClock().isRunning())
             return;
         m_game.startClock();
-        updateViews();
+        updateViews(false);
     }
 
     public void actionClockRestore()
@@ -376,7 +375,7 @@ public class GoGui
             return;
         m_game.restoreClock();
         m_gameInfo.updateTimeFromClock(getClock());
-        updateViews();
+        updateViews(false);
     }
 
     public void actionComputerColor(boolean isBlack, boolean isWhite)
@@ -385,18 +384,18 @@ public class GoGui
         m_computerWhite = isWhite;
         if (! isCommandInProgress())
             checkComputerMove();
+        updateViews(false);
     }
 
     public void actionDeleteSideVariations()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (! NodeUtil.isInMainVariation(getCurrentNode()))
             return;
         if (! showQuestion("Delete all variations but main?"))
             return;
         m_game.keepOnlyMainVariation();
-        updateModified();
         boardChangedBegin(false, true);
     }
 
@@ -408,7 +407,7 @@ public class GoGui
             return false;
         detachProgram();
         m_prefs.put("program", "");
-        updateViews();
+        updateViews(false);
         return true;
     }
 
@@ -439,7 +438,7 @@ public class GoGui
 
     public void actionEnd()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         forward(NodeUtil.getNodesLeft(getCurrentNode()));
         boardChangedBegin(false, false);
@@ -524,7 +523,7 @@ public class GoGui
 
     public void actionFind()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         Pattern pattern = FindDialog.run(this, m_comment.getSelectedText());
         if (pattern == null)
@@ -534,12 +533,12 @@ public class GoGui
             m_comment.markAll(m_pattern);
         else
             actionFindNext();
-        updateViews();
+        updateViews(false);
     }
 
     public void actionFindNext()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (m_pattern == null)
             return;
@@ -567,7 +566,7 @@ public class GoGui
 
     public void actionForward(int n)
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         forward(n);
         boardChangedBegin(false, false);
@@ -602,12 +601,12 @@ public class GoGui
         }
         m_timeSettings = info.getTimeSettings();
         setTitle();
-        updateViews();
+        updateViews(false);
     }
 
     public void actionGoto()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         ConstNode node = MoveNumberDialog.show(this, getCurrentNode());
         if (node == null)
@@ -617,7 +616,7 @@ public class GoGui
 
     public void actionGotoBookmark(int i)
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (! checkSaveGame())
             return;
@@ -651,13 +650,15 @@ public class GoGui
 
     public void actionGotoNode(ConstNode node)
     {
+        if (! checkStateChangePossible())
+            return;
         gotoNode(node);
         boardChangedBegin(false, false);
     }
 
     public void actionGotoVariation()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         ConstNode node = GotoVariationDialog.show(this, getTree(),
                                                   getCurrentNode());
@@ -678,14 +679,13 @@ public class GoGui
             m_computerBlack = false;
             m_computerWhite = false;
             newGame(getBoardSize());
-            updateViews();
-            updateGameTree(true);
+            updateViews(true);
         }
     }
 
     public void actionImportTextPosition()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         File file = SimpleDialogs.showOpen(this, "Import Text Position");
         if (file == null)
@@ -702,7 +702,7 @@ public class GoGui
 
     public void actionImportTextPositionFromClipboard()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         String text = GuiUtil.getClipboardText();
         if (text == null)
@@ -726,37 +726,35 @@ public class GoGui
 
     public void actionKeepOnlyPosition()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (! showQuestion("Delete all moves?"))
             return;
         m_game.keepOnlyPosition();
         initGtp();
-        updateModified();
         boardChangedBegin(false, true);
     }
 
     public void actionMakeMainVariation()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (! showQuestion("Make current to main variation?"))
             return;
         m_game.makeMainVariation();
-        updateModified();
         boardChangedBegin(false, true);
     }
 
     public void actionNewGame()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         newGame(getBoardSize(), true);
     }
 
     public void actionNextEarlierVariation()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         ConstNode node = NodeUtil.getNextEarlierVariation(getCurrentNode());
         if (node != null)
@@ -765,7 +763,7 @@ public class GoGui
 
     public void actionNextVariation()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         ConstNode node = NodeUtil.getNextVariation(getCurrentNode());
         if (node != null)
@@ -774,7 +772,7 @@ public class GoGui
 
     public void actionOpen()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (! checkSaveGame())
             return;
@@ -788,7 +786,7 @@ public class GoGui
 
     public void actionPass()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (m_passWarning == null)
             m_passWarning = new OptionalMessage(this);
@@ -799,7 +797,7 @@ public class GoGui
 
     public void actionPlay(boolean isSingleMove)
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (m_gtp == null || ! checkProgramInSync())
             return;
@@ -822,7 +820,7 @@ public class GoGui
 
     public void actionPreviousEarlierVariation()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         ConstNode node =
             NodeUtil.getPreviousEarlierVariation(getCurrentNode());
@@ -832,7 +830,7 @@ public class GoGui
 
     public void actionPreviousVariation()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         ConstNode node = NodeUtil.getPreviousVariation(getCurrentNode());
         if (node != null)
@@ -871,7 +869,7 @@ public class GoGui
     {
         if (m_scoreMode)
             return;
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (m_gtp == null)
         {
@@ -886,7 +884,7 @@ public class GoGui
                 {
                     public void run()
                     {
-                        cbScoreContinue();
+                        scoreContinue();
                     }
                 };
             showStatus("Scoring...");
@@ -932,8 +930,10 @@ public class GoGui
         {
             m_game.createNewChild();
             currentNodeChanged();
-            updateGameTree(true);
+            updateViews(true);
         }
+        else
+            updateViews(false);
     }
 
     public void actionSetupColor(GoColor color)
@@ -944,7 +944,7 @@ public class GoGui
         else
             showStatus("Setup White");
         m_game.setToMove(color);
-        updateViews();
+        updateViews(false);
     }
 
     public void actionShellSave()
@@ -963,7 +963,7 @@ public class GoGui
 
     public void actionShellSendFile()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (m_gtpShell == null)
             return;
@@ -1030,7 +1030,7 @@ public class GoGui
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
-        updateViews();
+        updateViews(false);
     }
 
     public void actionToggleShowCursor()
@@ -1056,7 +1056,7 @@ public class GoGui
             m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
         }
         showInfoPanel(! m_showInfoPanel);
-        updateViews();
+        updateViews(false);
     }
 
     public void actionToggleShowLastMove()
@@ -1064,7 +1064,7 @@ public class GoGui
         m_showLastMove = ! m_showLastMove;
         m_prefs.putBoolean("show-last-move", m_showLastMove);
         updateFromGoBoard();
-        updateViews();
+        updateViews(false);
     }
 
     public void actionToggleShowShell()
@@ -1082,7 +1082,7 @@ public class GoGui
             saveSession();
             m_gtpShell.setVisible(false);
         }
-        updateViews();
+        updateViews(false);
     }
 
     public void actionToggleShowSubtreeSizes()
@@ -1092,9 +1092,10 @@ public class GoGui
         if (m_gameTreeViewer != null)
         {
             m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
-            updateGameTree(true);
+            updateViews(true);
         }
-        updateViews();
+        else
+            updateViews(false);
     }
 
     public void actionToggleShowToolbar()
@@ -1106,35 +1107,23 @@ public class GoGui
             m_guiBoard.setPreferredFieldSize(m_guiBoard.getFieldSize());
         }
         showToolbar(! m_showToolbar);
-        updateViews();
+        updateViews(false);
     }
 
     public void actionToggleShowTree()
     {
         if (m_gameTreeViewer == null)
         {
-            m_gameTreeViewer = new GameTreeViewer(this, this);
-            m_gameTreeViewer.addWindowListener(new WindowAdapter() {
-                    public void windowClosing(WindowEvent e) {
-                        actionToggleShowTree();
-                    }
-                });
-            m_gameTreeViewer.setLabelMode(m_treeLabels);
-            m_gameTreeViewer.setSizeMode(m_treeSize);
-            m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
-            restoreSize(m_gameTreeViewer, "tree");
-            updateGameTree(true);
-            // updateGameTree can close viewer
-            if (m_gameTreeViewer != null)
-                m_gameTreeViewer.setVisible(true);
+            createTree();
+            updateViews(true);
         }
         else
         {
             saveSession();
             m_gameTreeViewer.dispose();
             m_gameTreeViewer = null;
+            updateViews(false);
         }
-        updateViews();
     }
 
     public void actionToggleShowVariations()
@@ -1142,7 +1131,7 @@ public class GoGui
         m_showVariations = ! m_showVariations;
         m_prefs.putBoolean("show-variations", m_showVariations);
         resetBoard();
-        updateViews();
+        updateViews(false);
     }
 
     public void actionToggleTimeStamp()
@@ -1151,7 +1140,7 @@ public class GoGui
         if (m_gtpShell != null)
             m_gtpShell.setTimeStamp(m_timeStamp);
         m_prefs.putBoolean("gtpshell-timestamp", m_timeStamp);
-        updateViews();
+        updateViews(false);
     }
 
     public void actionTreeLabels(int mode)
@@ -1161,9 +1150,10 @@ public class GoGui
         if (m_gameTreeViewer != null)
         {
             m_gameTreeViewer.setLabelMode(mode);
-            updateGameTree(true);
+            updateViews(true);
         }
-        updateViews();
+        else
+            updateViews(false);
     }
 
     public void actionTreeSize(int mode)
@@ -1173,27 +1163,27 @@ public class GoGui
         if (m_gameTreeViewer != null)
         {
             m_gameTreeViewer.setSizeMode(mode);
-            updateGameTree(true);
+            updateViews(true);
         }
-        updateViews();
+        else
+            updateViews(false);
     }
 
     public void actionTruncate()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         if (getCurrentNode().getFatherConst() == null)
             return;
         if (! showQuestion("Truncate current?"))
             return;
         m_game.truncate();
-        updateModified();
         boardChangedBegin(false, true);
     }
 
     public void actionTruncateChildren()
     {
-        if (! checkSpecialMode())
+        if (! checkStateChangePossible())
             return;
         int numberChildren = getCurrentNode().getNumberChildren();
         if (numberChildren == 0)
@@ -1201,7 +1191,6 @@ public class GoGui
         if (! showQuestion("Truncate children?"))
             return;
         m_game.truncateChildren();
-        updateModified();
         boardChangedBegin(false, true);
     }
 
@@ -1350,9 +1339,7 @@ public class GoGui
                 color = GoColor.EMPTY;
             setup(p, color);
             m_game.setToMove(toMove);
-            updateGameInfo(true);
-            updateFromGoBoard();
-            updateModified();
+            updateViews(false);
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
                  && ! modifiedSelect)
@@ -1975,8 +1962,7 @@ public class GoGui
                                    boolean gameTreeChanged)
     {
         updateFromGoBoard();
-        updateGameInfo(gameTreeChanged);
-        updateViews();
+        updateViews(gameTreeChanged);
         if (m_gtp != null
             && ! isOutOfSync()
             && m_analyzeCommand != null
@@ -1991,26 +1977,6 @@ public class GoGui
                 checkComputerMove();
         }
     }
-
-    private void cbScoreContinue()
-    {
-        boolean success = endLengthyCommand();
-        clearStatus();
-        PointList isDeadStone = null;
-        if (success)
-        {
-            String response = m_gtp.getResponse();
-            try
-            {
-                isDeadStone = GtpUtil.parsePointList(response, getBoardSize());
-            }
-            catch (GtpError error)
-            {
-                showError(error);
-            }
-        }
-        initScore(isDeadStone);
-    }    
 
     private boolean checkCommandInProgress()
     {
@@ -2132,7 +2098,7 @@ public class GoGui
     }
     
     /** Check if command is in progress or setup or score mode. */
-    private boolean checkSpecialMode()
+    private boolean checkStateChangePossible()
     {
         if (! checkCommandInProgress())
             return false;
@@ -2211,7 +2177,6 @@ public class GoGui
                 }
                 Move move = Move.get(point, toMove);
                 m_game.play(move);
-                updateModified();                
                 m_gtp.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
                     showInfo(m_name + " passes");
@@ -2281,6 +2246,21 @@ public class GoGui
                                m_guiBoard.getMarkSquare(point),
                                m_guiBoard.getMarkTriangle(point),
                                listener);
+    }
+
+    private void createTree()
+    {
+        m_gameTreeViewer = new GameTreeViewer(this, this);
+        m_gameTreeViewer.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    actionToggleShowTree();
+                }
+            });
+        m_gameTreeViewer.setLabelMode(m_treeLabels);
+        m_gameTreeViewer.setSizeMode(m_treeSize);
+        m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
+        restoreSize(m_gameTreeViewer, "tree");
+        m_gameTreeViewer.setVisible(true);
     }
 
     private void createThumbnail(File file)
@@ -2373,7 +2353,6 @@ public class GoGui
             return;
         m_game.setLabel(point, value);
         m_guiBoard.setLabel(point, value);
-        updateModified();                
         updateGuiBoard();
     }
 
@@ -2533,7 +2512,6 @@ public class GoGui
             m_game.haltClock();
             m_game.gotoNode(node);            
         }
-        updateModified();                
         checkLostOnTime(move.getColor());
         m_resigned = false;
         boolean gameTreeChanged = newNodeCreated;
@@ -2564,7 +2542,6 @@ public class GoGui
         }
         m_guiBoard.initSize(getBoard().getSize());
         initGtp();
-        updateModified();
         boardChangedBegin(false, true);
     }
 
@@ -2599,7 +2576,6 @@ public class GoGui
         resetBoard();
         m_game.resetClock();
         m_lostOnTimeShown = false;
-        updateModified();                
         m_resigned = false;
         m_pattern = null;
     }
@@ -2645,7 +2621,6 @@ public class GoGui
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
-        updateGameInfo(true);
         registerSpecialMacHandler();
         initProgressBarTimer();
         // Children dialogs should be set visible after main window, otherwise
@@ -2653,7 +2628,7 @@ public class GoGui
         if (m_gtpShell != null && m_session.isVisible("shell"))
             actionToggleShowShell();
         if (m_session.isVisible("tree"))
-            actionToggleShowTree();
+            createTree();
         if (m_session.isVisible("analyze"))
             actionToggleShowAnalyzeDialog();
         if (! m_initAnalyze.equals(""))
@@ -2667,7 +2642,7 @@ public class GoGui
                 initAnalyzeCommand(analyzeCommand, false, true);
         }
         setTitleFromProgram();
-        updateViews();
+        updateViews(true);
         getLayeredPane().setVisible(true);
         toFrontLater();
         checkComputerMove();
@@ -2800,7 +2775,6 @@ public class GoGui
             m_guiBoard.setMarkSquare(point, mark);
         else if (type == MarkType.TRIANGLE)
             m_guiBoard.setMarkTriangle(point, mark);        
-        updateModified();                
         updateGuiBoard();
     }
 
@@ -2809,7 +2783,6 @@ public class GoGui
         initGame(size);
         initGtp();
         updateFromGoBoard();
-        updateViews();
         setTitle();
         setTitleFromProgram();
         clearStatus();
@@ -2839,9 +2812,6 @@ public class GoGui
     {
         initGame(size);
         loadFile(m_file, move);
-        updateGameInfo(true);
-        updateFromGoBoard();
-        updateViews();
     }
 
     /** Paint point immediately to pretend better responsiveness.
@@ -2965,7 +2935,6 @@ public class GoGui
         createThumbnail(file);
         setFile(file);
         m_game.clearModified();
-        updateModified();                
         return true;
     }
 
@@ -3023,6 +2992,26 @@ public class GoGui
             m_session.saveSize(dialog, this, name + "-" + size);
         m_session.saveVisible(dialog, name);
     }
+
+    private void scoreContinue()
+    {
+        boolean success = endLengthyCommand();
+        clearStatus();
+        PointList isDeadStone = null;
+        if (success)
+        {
+            String response = m_gtp.getResponse();
+            try
+            {
+                isDeadStone = GtpUtil.parsePointList(response, getBoardSize());
+            }
+            catch (GtpError error)
+            {
+                showError(error);
+            }
+        }
+        initScore(isDeadStone);
+    }    
 
     private void sendGtp(Reader reader)
     {
@@ -3105,7 +3094,6 @@ public class GoGui
     private void setFile(File file)
     {
         m_file = file;
-        updateViews();
         setTitle();
     }
 
@@ -3229,7 +3217,6 @@ public class GoGui
         m_game.setToMove(getToMove());
         initGtp();
         setFile(null);
-        updateGameInfo(true);
         boardChangedBegin(false, false);
     }
 
@@ -3342,32 +3329,24 @@ public class GoGui
             });
     }
 
-    private void updateViews()
+    /** Update all views.
+        @param gameTreeChanged If nodes were added to or removed from the game
+        tree, which will trigger a full and potentially slow game tree update
+    */
+    private void updateViews(boolean gameTreeChanged)
     {
         m_actions.update();
         m_toolBar.update();
         GoGuiUtil.updateMoveText(m_statusBar, getGame());
-    }
-
-    private void updateFromGoBoard()
-    {
-        GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), m_showLastMove);
-        if (getCurrentNode().getMove() == null)
-            m_guiBoard.markLastMove(null);
-    }
-
-    private void updateGameInfo(boolean gameTreeChanged)
-    {
         m_gameInfo.update(getCurrentNode(), getBoard());
-        updateGameTree(gameTreeChanged);
         m_comment.setComment(getCurrentNode().getComment());
+        updateFromGoBoard();
         updateGuiBoard();
+        getRootPane().putClientProperty("windowModified",
+                                        Boolean.valueOf(isModified()));
+        setTitle();
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSelectedColor(getToMove());
-    }
-
-    private void updateGameTree(boolean gameTreeChanged)
-    {
         if (m_gameTreeViewer == null)
             return;
         if (! gameTreeChanged)
@@ -3376,6 +3355,13 @@ public class GoGui
             return;
         }
         m_gameTreeViewer.update(getTree(), getCurrentNode());
+    }
+
+    private void updateFromGoBoard()
+    {
+        GuiBoardUtil.updateFromGoBoard(m_guiBoard, getBoard(), m_showLastMove);
+        if (getCurrentNode().getMove() == null)
+            m_guiBoard.markLastMove(null);
     }
 
     private void updateGuiBoard()
@@ -3388,11 +3374,4 @@ public class GoGui
         }
         GuiBoardUtil.showMarkup(m_guiBoard, getCurrentNode());
     }
-
-    private void updateModified()
-    {
-        getRootPane().putClientProperty("windowModified",
-                                        Boolean.valueOf(isModified()));
-        setTitle();
-    }    
 }
