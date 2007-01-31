@@ -74,7 +74,13 @@ public final class AnalyzeDialog
         int minWidth = commandPanel.getPreferredSize().width;
         m_minimumSize = new Dimension(minWidth, 192);
         pack();
-        m_list.requestFocusInWindow();
+        addWindowListener(new WindowAdapter()
+            {
+                public void windowActivated(WindowEvent e)
+                {
+                    m_comboBoxHistory.requestFocusInWindow();
+                }
+            });
     }
 
     public void actionPerformed(ActionEvent event)

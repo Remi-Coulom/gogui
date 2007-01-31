@@ -708,12 +708,8 @@ public class GtpShell
         m_comboBox.setEditable(true);
         m_comboBox.setFont(m_gtpShellText.get().getFont());
         m_comboBox.addActionListener(this);
-        // Necessary for Mac Java 1.4.2, otherwise combobox will not have
-        // focus after window is re-activated
-        addWindowListener(new WindowAdapter()
-            {
-                public void windowActivated(WindowEvent e)
-                {
+        addWindowListener(new WindowAdapter() {
+                public void windowActivated(WindowEvent e) {
                     m_comboBox.requestFocusInWindow();
                     m_textField.requestFocusInWindow();
                 }
