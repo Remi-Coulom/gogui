@@ -619,7 +619,7 @@ public class GameTreePanel
         }
         if (changed)
         {
-            update(m_tree, m_currentNode, m_minWidth, m_minHeight);
+            update(m_tree, m_currentNode, getWidth(), getHeight());
             scrollTo(root);
         }
     }
