@@ -398,15 +398,12 @@ public class GtpShell
         invokeAndWait(r);
     }
     
-    public void setFinalSize(int x, int y, int width, int height)
+    public void setFinalSize(int width, int height)
     {
         if (m_isFinalSizeSet)
-            setBounds(x, y, width, height);
+            setSize(width, height);
         else
-        {
             m_finalSize = new Dimension(width, height);
-            m_finalLocation = new Point(x, y);
-        }
     }
 
     public void setInitialCompletions(ArrayList completions)
@@ -571,8 +568,6 @@ public class GtpShell
     private final GtpShellText m_gtpShellText;
 
     private OptionalMessage m_modifyWarning;
-
-    private Point m_finalLocation;
 
     private final StringBuffer m_commands = new StringBuffer(4096);
 
@@ -871,8 +866,6 @@ public class GtpShell
         if (m_isFinalSizeSet)
             return;
         setSize(m_finalSize);
-        if (m_finalLocation != null)
-            setLocation(m_finalLocation);
         m_isFinalSizeSet = true;
     }
 }

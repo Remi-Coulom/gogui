@@ -60,7 +60,8 @@ public final class Session
         int height = prefs.getInt("height", -1);
         if (x == -1 || y == -1 || width == -1 || height == -1)
             return;
-        setSizeChecked(window, x, y, width, height);
+        setLocationChecked(window, x, y);
+        setSizeChecked(window, width, height);
     }
 
     public void restoreSize(Window window, Window owner, String name)
@@ -83,8 +84,8 @@ public final class Session
             return;
         }
         Point ownerLocation = owner.getLocation();
-        setSizeChecked(window, x + ownerLocation.x,  y + ownerLocation.y,
-                       width, height);
+        setLocationChecked(window, x + ownerLocation.x,  y + ownerLocation.y);
+        setSizeChecked(window, width, height);
     }
 
     public void saveLocation(Window window, String name)
@@ -190,24 +191,17 @@ public final class Session
         window.setLocation(x, y);
     }
 
-    private void setSizeChecked(Window window, int x, int y, int width,
-                                int height)
+    private void setSizeChecked(Window window, int width, int height)
     {
         Dimension screenSize = getScreenSize();
-        x = Math.max(0, x);
-        if (x > screenSize.width)
-            x = 0;
-        y = Math.max(0, y);
-        if (y > screenSize.height)
-            y = 0;
         width = Math.min(width, screenSize.width);
         height = Math.min(height, screenSize.height);
         if (window instanceof GtpShell)
             // Workaround, see GtpShell.setFinalSize()
-            ((GtpShell)window).setFinalSize(x, y, width, height);
+            ((GtpShell)window).setFinalSize(width, height);
         else
         {
-            window.setBounds(x, y, width, height);
+            window.setSize(width, height);
             window.validate();
         }
     }

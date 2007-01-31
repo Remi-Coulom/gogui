@@ -1802,6 +1802,8 @@ public class GoGui
                     actionToggleShowShell();
                 }
             });
+        // Don't restore size yet, see workaround GtpShell.setFinalSize()
+        m_session.restoreLocation(m_gtpShell, "shell");
         m_gtpShell.setProgramCommand(program);
         m_gtpShell.setTimeStamp(m_timeStamp);
         m_gtpShell.setCommandCompletion(m_commandCompletion);
