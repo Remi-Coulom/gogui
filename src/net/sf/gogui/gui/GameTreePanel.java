@@ -211,7 +211,8 @@ public class GameTreePanel
     public void scrollToCurrent()
     {
         scrollRectToVisible(new Rectangle(m_currentNodeX - 2 * m_nodeSize,
-                                          m_currentNodeY, 5 * m_nodeSize,
+                                          m_currentNodeY - m_nodeSize,
+                                          5 * m_nodeSize,
                                           3 * m_nodeSize));
     }
 
