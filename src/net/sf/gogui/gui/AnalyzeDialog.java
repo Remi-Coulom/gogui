@@ -67,15 +67,6 @@ public final class AnalyzeDialog
         m_supportedCommands = supportedCommands;
         m_programAnalyzeCommands = programAnalyzeCommands;
         m_callback = callback;
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        WindowAdapter windowAdapter = new WindowAdapter()
-            {
-                public void windowClosing(WindowEvent event)
-                {
-                    close();
-                }
-            };
-        addWindowListener(windowAdapter);
         Container contentPane = getContentPane();
         JPanel commandPanel = createCommandPanel();
         contentPane.add(commandPanel, BorderLayout.CENTER);
@@ -91,8 +82,6 @@ public final class AnalyzeDialog
         String command = event.getActionCommand();
         if (command.equals("clear"))
             clearCommand();
-        else if (command.equals("close"))
-            close();
         else if (command.equals("comboBoxChanged"))
             comboBoxChanged();
         else if (command.equals("run"))
@@ -101,12 +90,12 @@ public final class AnalyzeDialog
             assert(false);
     }
 
-    public void close()
+    public void dispose()
     {
         if (! m_autoRun.isSelected())
             clearCommand();
         saveRecent();
-        setVisible(false);
+        super.dispose();
     }
 
     public GoColor getSelectedColor()

@@ -44,8 +44,6 @@ public class GameTreeViewer
         void actionPreviousEarlierVariation();
 
         void actionPreviousVariation();
-
-        void disposeGameTree();
     }
 
     public GameTreeViewer(Frame owner, Listener listener)
@@ -113,16 +111,9 @@ public class GameTreeViewer
         m_scrollPane.requestFocusInWindow();
         // Necessary for Mac Java 1.4.2, otherwise scrollpane will not have
         // focus after window is re-activated
-        addWindowListener(new WindowAdapter()
-            {
-                public void windowActivated(WindowEvent e)
-                {
+        addWindowListener(new WindowAdapter() {
+                public void windowActivated(WindowEvent e) {
                     m_scrollPane.requestFocusInWindow();
-                }
-
-                public void windowClosing(WindowEvent event)
-                {
-                    m_listener.disposeGameTree();
                 }
             });
         setMinimumSize(new Dimension(128, 96));

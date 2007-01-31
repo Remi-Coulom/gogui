@@ -178,10 +178,8 @@ public class GoGui
         GuiUtil.removeKeyBinding(m_splitPane, "F8");
         m_splitPane.setResizeWeight(1);
         m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
-        WindowAdapter windowAdapter = new WindowAdapter()
-            {
-                public void windowClosing(WindowEvent event)
-                {
+        WindowAdapter windowAdapter = new WindowAdapter() {
+                public void windowClosing(WindowEvent event) {
                     close();
                 }
             };
@@ -1017,11 +1015,9 @@ public class GoGui
             m_analyzeDialog =
                 new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
                                   m_programAnalyzeCommands, m_gtp);
-            m_analyzeDialog.addWindowListener(new WindowAdapter()
-                {
-                    public void windowClosing(WindowEvent e)
-                    {
-                        updateViews();
+            m_analyzeDialog.addWindowListener(new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        actionToggleShowAnalyzeDialog();
                     }
                 });
             m_analyzeDialog.setBoardSize(getBoardSize());
@@ -1031,8 +1027,8 @@ public class GoGui
         }
         else
         {
-            if (m_analyzeDialog != null)
-                m_analyzeDialog.close();
+            saveSession();
+            m_analyzeDialog.dispose();
             m_analyzeDialog = null;
         }
         updateViews();
@@ -1119,6 +1115,11 @@ public class GoGui
         if (m_gameTreeViewer == null)
         {
             m_gameTreeViewer = new GameTreeViewer(this, this);
+            m_gameTreeViewer.addWindowListener(new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        actionToggleShowTree();
+                    }
+                });
             m_gameTreeViewer.setLabelMode(m_treeLabels);
             m_gameTreeViewer.setSizeMode(m_treeSize);
             m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
@@ -1129,7 +1130,10 @@ public class GoGui
                 m_gameTreeViewer.setVisible(true);
         }
         else
-            disposeGameTree();
+        {
+            m_gameTreeViewer.dispose();
+            m_gameTreeViewer = null;
+        }
         updateViews();
     }
 
@@ -1328,15 +1332,6 @@ public class GoGui
         }
         ContextMenu contextMenu = createContextMenu(point);
         contextMenu.show(invoker, x, y);
-    }
-
-    public void disposeGameTree()
-    {
-        if (m_gameTreeViewer == null)
-            return;
-        m_gameTreeViewer.dispose();
-        m_gameTreeViewer = null;
-        updateViews();
     }
 
     public void fieldClicked(GoPoint p, boolean modifiedSelect)
@@ -1840,12 +1835,9 @@ public class GoGui
             m_gtpShell = null;
         }
         m_gtpShell = new GtpShell(this, this);
-        m_gtpShell.addWindowListener(new WindowAdapter()
-            {
-                public void windowClosing(WindowEvent e)
-                {
-                    updateViews();
-                    saveSession();
+        m_gtpShell.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    actionToggleShowShell();
                 }
             });
         m_gtpShell.setProgramCommand(program);
