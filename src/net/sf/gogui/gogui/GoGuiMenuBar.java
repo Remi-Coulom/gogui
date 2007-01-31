@@ -445,6 +445,7 @@ class JMenuChecked
     {
         item.setIcon(null);
         setMnemonic(item, mnemonic);
+        item.setToolTipText(null);
         add(item);
         return item;
     }
@@ -452,9 +453,7 @@ class JMenuChecked
     public JMenuItem addItem(AbstractAction action, int mnemonic)
     {
         JMenuItem item = new JMenuItem(action);
-        item.setIcon(null);
-        setMnemonic(item, mnemonic);
-        add(item);
+        addItem(item, mnemonic);
         return item;
     }
 
