@@ -153,7 +153,7 @@ public class GuiUtil
         return MONOSPACED_FONT.getSize();
     }
 
-    public static Icon getIcon(String icon, String name)
+    public static ImageIcon getIcon(String icon, String name)
     {
         String resource = "net/sf/gogui/images/" + icon + ".png";
         URL url = GuiUtil.class.getClassLoader().getResource(resource);

@@ -19,6 +19,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.util.HashMap;
 import java.util.HashSet;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -62,7 +63,7 @@ public class GameTreePanel
         setBackground(BACKGROUND);
         m_labelMode = labelMode;
         m_sizeMode = sizeMode;
-        computeSizes(sizeMode);
+        initSize(sizeMode);
         setFocusable(false);
         setFocusTraversalKeysEnabled(false);
         setAutoscrolls(true);
@@ -255,7 +256,7 @@ public class GameTreePanel
             if (mode != m_sizeMode)
             {
                 m_sizeMode = mode;
-                computeSizes(m_sizeMode);
+                initSize(m_sizeMode);
             }
             break;
         default:
@@ -279,9 +280,7 @@ public class GameTreePanel
         }
         assert(! isExpanded(father));
         int moveNumber = NodeUtil.getMoveNumber(node);
-        GameTreeNode gameNode =
-            new GameTreeNode(node, moveNumber, this, m_mouseListener, m_font,
-                             m_preferredNodeSize);
+        GameTreeNode gameNode = createNode(node, moveNumber);
         m_map.put(node, gameNode);
         add(gameNode);
         putConstraint(fatherGameNode, gameNode, m_nodeFullSize, 0);
@@ -448,45 +447,62 @@ public class GameTreePanel
 
     private Point m_popupLocation;
 
-    private void computeSizes(int sizeMode)
+    private ImageIcon m_iconBlack;
+
+    private ImageIcon m_iconWhite;
+
+    private ImageIcon m_iconSetup;
+
+    private void initSize(int sizeMode)
     {
-        double fontScale;
         switch (sizeMode)
         {
         case SIZE_LARGE:
-            fontScale = 1.0;
+            m_nodeSize = 32;
+            m_nodeFullSize = 40;
+            m_iconBlack = GuiUtil.getIcon("gogui-black-32x32", "");
+            m_iconWhite = GuiUtil.getIcon("gogui-white-32x32", "");
+            m_iconSetup = GuiUtil.getIcon("gogui-setup-32x32", "");
             break;
         case SIZE_SMALL:
-            fontScale = 0.5;
+            m_nodeSize = 16;
+            m_nodeFullSize = 20;
+            m_iconBlack = GuiUtil.getIcon("gogui-black-16x16", "");
+            m_iconWhite = GuiUtil.getIcon("gogui-white-16x16", "");
+            m_iconSetup = GuiUtil.getIcon("gogui-setup-16x16", "");
             break;
         case SIZE_TINY:
-            fontScale = 0.2;
+            m_nodeSize = 8;
+            m_nodeFullSize = 10;
+            m_iconBlack = GuiUtil.getIcon("gogui-black-8x8", "");
+            m_iconWhite = GuiUtil.getIcon("gogui-white-8x8", "");
+            m_iconSetup = GuiUtil.getIcon("gogui-setup-8x8", "");
             break;
         default:
             assert(sizeMode == SIZE_NORMAL);
-            fontScale = 0.7;
+            m_nodeSize = 24;
+            m_nodeFullSize = 30;
+            m_iconBlack = GuiUtil.getIcon("gogui-black-24x24", "");
+            m_iconWhite = GuiUtil.getIcon("gogui-white-24x24", "");
+            m_iconSetup = GuiUtil.getIcon("gogui-setup-24x24", "");
         }
-        m_nodeSize = 25;
-        m_nodeFullSize = 35;
         Font font = UIManager.getFont("Label.font");
         if (font != null)
         {
-            Font derivedFont
-                = font.deriveFont((float)(font.getSize() * fontScale));
+            Font derivedFont = font.deriveFont((float)(0.4 * m_nodeSize));
             if (derivedFont != null)
                 font = derivedFont;
         }
-        if (font != null)
-        {
-            m_nodeSize = font.getSize() * 2;
-            if (m_nodeSize % 2 == 0)
-                ++m_nodeSize;
-            m_nodeFullSize = font.getSize() * 3;
-            if (m_nodeFullSize % 2 == 0)
-                ++m_nodeFullSize;
-        }
         m_font = font;
         m_preferredNodeSize = new Dimension(m_nodeFullSize, m_nodeFullSize);
+    }
+
+    private GameTreeNode createNode(ConstNode node, int moveNumber)
+    {
+        return new GameTreeNode(node, moveNumber, this, m_mouseListener,
+                                m_font, m_iconBlack.getImage(),
+                                m_iconWhite.getImage(), m_iconSetup.getImage(),
+                                m_preferredNodeSize);
     }
 
     private int createNodes(Component father, ConstNode node, int x, int y,
@@ -496,9 +512,7 @@ public class GameTreePanel
         m_maxY = Math.max(y, m_maxY);
         if (node.getMove() != null)
             ++moveNumber;
-        GameTreeNode gameNode =
-            new GameTreeNode(node, moveNumber, this, m_mouseListener, m_font,
-                             m_preferredNodeSize);
+        GameTreeNode gameNode = createNode(node, moveNumber);
         m_map.put(node, gameNode);
         add(gameNode);
         putConstraint(father, gameNode, dx, dy);

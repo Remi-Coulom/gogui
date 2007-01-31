@@ -29,7 +29,7 @@ class GameTreeJunction
         int size = m_gameTreePanel.getNodeSize();
         int fullSize = m_gameTreePanel.getNodeFullSize();
         int halfSize = size / 2;
-        graphics.setColor(Color.DARK_GRAY);
+        graphics.setColor(COLOR_GRID);
         int lastDy = m_childrenDy[m_childrenDy.length - 1];
         graphics.drawLine(halfSize, 0, halfSize, lastDy - fullSize);
         for (int i = 1; i < m_childrenDy.length; ++i)
@@ -49,5 +49,6 @@ class GameTreeJunction
 
     private final GameTreePanel m_gameTreePanel;
 
+    private static final Color COLOR_GRID = new Color(148, 148, 148);
 }
 
