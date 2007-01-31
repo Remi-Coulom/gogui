@@ -199,7 +199,7 @@ public class GoGui
             {
                 public void fileSelected(String label, File file)
                 {
-                    if (m_gtpShell == null)
+                    if (m_shell == null)
                         return;
                     sendGtpFile(file);
                     m_menuBar.addRecentGtp(file);
@@ -299,10 +299,10 @@ public class GoGui
             return;
         }
         m_prefs.put("program", m_program);
-        if (m_gtpShell != null && m_session.isVisible("shell"))
-            actionToggleShowShell();
+        if (m_shell != null && m_session.isVisible("shell"))
+            m_shell.setVisible(true);
         if (m_session.isVisible("analyze"))
-            actionToggleShowAnalyzeDialog();
+            m_shell.setVisible(true);
         toFrontLater();
         updateViews(false);
     }
@@ -409,6 +409,27 @@ public class GoGui
         m_prefs.put("program", "");
         updateViews(false);
         return true;
+    }
+
+    public void actionDisposeAnalyzeDialog()
+    {        
+        if (m_analyzeDialog != null)
+        {
+            saveSession();
+            m_analyzeDialog.dispose();
+            m_analyzeDialog = null;
+        }
+    }    
+
+    public void actionDisposeTree()
+    {
+        if (m_gameTreeViewer != null)
+        {
+            saveSession();
+            m_gameTreeViewer.dispose();
+            m_gameTreeViewer = null;
+            updateViews(false);
+        }
     }
 
     public void actionDocumentation()
@@ -683,6 +704,14 @@ public class GoGui
         }
     }
 
+    public void actionHideShell()
+    {
+        if (m_shell == null)
+            return;
+        saveSession();
+        m_shell.setVisible(false);
+    }
+
     public void actionImportTextPosition()
     {
         if (! checkStateChangePossible())
@@ -949,29 +978,64 @@ public class GoGui
 
     public void actionShellSave()
     {
-        if (m_gtpShell == null)
+        if (m_shell == null)
             return;
-        m_gtpShell.saveLog(this);
+        m_shell.saveLog(this);
     }
 
     public void actionShellSaveCommands()
     {
-        if (m_gtpShell == null)
+        if (m_shell == null)
             return;
-        m_gtpShell.saveCommands(this);
+        m_shell.saveCommands(this);
     }
 
     public void actionShellSendFile()
     {
         if (! checkStateChangePossible())
             return;
-        if (m_gtpShell == null)
+        if (m_shell == null)
             return;
         File file = SimpleDialogs.showOpen(this, "Choose GTP file");
         if (file == null)
             return;
         sendGtpFile(file);
         m_menuBar.addRecentGtp(file);
+    }
+
+    public void actionShowAnalyzeDialog()
+    {        
+        if (m_gtp == null)
+            return;
+        if (m_analyzeDialog == null)
+            createAnalyzeDialog();
+        else if (GuiUtil.isActiveWindow(m_analyzeDialog))
+            requestFocus();
+        else
+            m_analyzeDialog.requestFocus();
+    }
+
+    public void actionShowShell()
+    {
+        if (! m_shell.isVisible())
+        {
+            restoreSize(m_shell, "shell");
+            m_shell.setVisible(true);
+        }
+        else if (GuiUtil.isActiveWindow(m_shell))
+            requestFocus();
+        else
+            m_shell.requestFocus();
+    }
+
+    public void actionShowTree()
+    {
+        if (m_gameTreeViewer == null)
+            createTree();
+        else if (GuiUtil.isActiveWindow(m_gameTreeViewer))
+            requestFocus();
+        else
+            m_gameTreeViewer.requestFocus();
     }
 
     public void actionToggleBeepAfterMove()
@@ -997,25 +1061,10 @@ public class GoGui
     public void actionToggleCompletion()
     {
         m_commandCompletion = ! m_commandCompletion;
-        if (m_gtpShell != null)
-            m_gtpShell.setCommandCompletion(m_commandCompletion);
+        if (m_shell != null)
+            m_shell.setCommandCompletion(m_commandCompletion);
         m_prefs.putBoolean("gtpshell-disable-completions",
                            ! m_commandCompletion);
-    }
-
-    public void actionToggleShowAnalyzeDialog()
-    {        
-        if (! checkProgramReady())
-            return;
-        if (m_analyzeDialog == null)
-            createAnalyzeDialog();
-        else
-        {
-            saveSession();
-            m_analyzeDialog.dispose();
-            m_analyzeDialog = null;
-        }
-        updateViews(false);
     }
 
     public void actionToggleShowCursor()
@@ -1052,24 +1101,6 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionToggleShowShell()
-    {
-        if (m_gtpShell == null)
-            return;
-        boolean isVisible = m_gtpShell.isVisible();
-        if (! isVisible)
-        {
-            restoreSize(m_gtpShell, "shell");
-            m_gtpShell.setVisible(true);
-        }
-        else
-        {
-            saveSession();
-            m_gtpShell.setVisible(false);
-        }
-        updateViews(false);
-    }
-
     public void actionToggleShowSubtreeSizes()
     {
         m_showSubtreeSizes = ! m_showSubtreeSizes;
@@ -1095,22 +1126,6 @@ public class GoGui
         updateViews(false);
     }
 
-    public void actionToggleShowTree()
-    {
-        if (m_gameTreeViewer == null)
-        {
-            createTree();
-            updateViews(true);
-        }
-        else
-        {
-            saveSession();
-            m_gameTreeViewer.dispose();
-            m_gameTreeViewer = null;
-            updateViews(false);
-        }
-    }
-
     public void actionToggleShowVariations()
     {
         m_showVariations = ! m_showVariations;
@@ -1122,8 +1137,8 @@ public class GoGui
     public void actionToggleTimeStamp()
     {
         m_timeStamp = ! m_timeStamp;
-        if (m_gtpShell != null)
-            m_gtpShell.setTimeStamp(m_timeStamp);
+        if (m_shell != null)
+            m_shell.setTimeStamp(m_timeStamp);
         m_prefs.putBoolean("gtpshell-timestamp", m_timeStamp);
         updateViews(false);
     }
@@ -1280,7 +1295,7 @@ public class GoGui
 
     public boolean isShellShown()
     {
-        return (m_gtpShell != null && m_gtpShell.isVisible());
+        return (m_shell != null && m_shell.isVisible());
     }
 
     public boolean isToolbarShown()
@@ -1649,7 +1664,7 @@ public class GoGui
 
     private final GameInfo m_gameInfo;    
 
-    private GtpShell m_gtpShell;
+    private GtpShell m_shell;
 
     private GameTreeViewer m_gameTreeViewer;
 
@@ -1802,23 +1817,23 @@ public class GoGui
         if (program.equals(""))
             return false;
         m_program = program;
-        if (m_gtpShell != null)
+        if (m_shell != null)
         {
-            m_gtpShell.dispose();
-            m_gtpShell = null;
+            m_shell.dispose();
+            m_shell = null;
         }
-        m_gtpShell = new GtpShell(this, this);
-        m_actions.registerAll(m_gtpShell.getLayeredPane());
-        m_gtpShell.addWindowListener(new WindowAdapter() {
+        m_shell = new GtpShell(this, this);
+        m_actions.registerAll(m_shell.getLayeredPane());
+        m_shell.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
-                    actionToggleShowShell();
+                    actionHideShell();
                 }
             });
         // Don't restore size yet, see workaround GtpShell.setFinalSize()
-        m_session.restoreLocation(m_gtpShell, "shell");
-        m_gtpShell.setProgramCommand(program);
-        m_gtpShell.setTimeStamp(m_timeStamp);
-        m_gtpShell.setCommandCompletion(m_commandCompletion);
+        m_session.restoreLocation(m_shell, "shell");
+        m_shell.setProgramCommand(program);
+        m_shell.setTimeStamp(m_timeStamp);
+        m_shell.setCommandCompletion(m_commandCompletion);
         m_ignoreInvalidResponses = false;
         GtpClient.InvalidResponseCallback invalidResponseCallback =
             new GtpClient.InvalidResponseCallback()
@@ -1839,29 +1854,29 @@ public class GoGui
             {
                 public void receivedInvalidResponse(String s)
                 {
-                    if (m_gtpShell != null)
-                        m_gtpShell.receivedInvalidResponse(s);
+                    if (m_shell != null)
+                        m_shell.receivedInvalidResponse(s);
                 }
 
                 public void receivedResponse(boolean error, String s)
                 {
-                    if (m_gtpShell != null)
-                        m_gtpShell.receivedResponse(error, s);
+                    if (m_shell != null)
+                        m_shell.receivedResponse(error, s);
                 }
 
                 public void receivedStdErr(String s)
                 {
-                    if (m_gtpShell != null)
+                    if (m_shell != null)
                     {
-                        m_gtpShell.receivedStdErr(s);
+                        m_shell.receivedStdErr(s);
                         m_liveGfx.receivedStdErr(s);
                     }
                 }
 
                 public void sentCommand(String s)
                 {
-                    if (m_gtpShell != null)
-                        m_gtpShell.sentCommand(s);
+                    if (m_shell != null)
+                        m_shell.sentCommand(s);
                 }
 
                 private LiveGfx m_liveGfx =
@@ -1908,7 +1923,7 @@ public class GoGui
         try
         {
             m_version = m_gtp.queryVersion();
-            m_gtpShell.setProgramVersion(m_version);
+            m_shell.setProgramVersion(m_version);
             m_gtp.querySupportedCommands();
             m_gtp.queryInterruptSupport();
         }
@@ -1916,11 +1931,11 @@ public class GoGui
         {
         }        
         m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
-        restoreSize(m_gtpShell, "shell");
-        m_gtpShell.setProgramName(m_name);
+        restoreSize(m_shell, "shell");
+        m_shell.setProgramName(m_name);
         ArrayList supportedCommands =
             m_gtp.getSupportedCommands();
-        m_gtpShell.setInitialCompletions(supportedCommands);
+        m_shell.setInitialCompletions(supportedCommands);
         if (! m_gtpFile.equals(""))
             sendGtpFile(new File(m_gtpFile));
         if (! m_gtpCommand.equals(""))
@@ -1941,7 +1956,7 @@ public class GoGui
     private void beginLengthyCommand()
     {
         m_progressBarTimer.restart();
-        m_gtpShell.setCommandInProgess(true);
+        m_shell.setCommandInProgess(true);
         showStatus("Thinking...");
     }
 
@@ -2218,7 +2233,7 @@ public class GoGui
         m_actions.registerAll(m_analyzeDialog.getLayeredPane());
         m_analyzeDialog.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
-                    actionToggleShowAnalyzeDialog();
+                    actionDisposeAnalyzeDialog();
                 }
             });
         m_analyzeDialog.setBoardSize(getBoardSize());
@@ -2269,7 +2284,7 @@ public class GoGui
         m_gameTreeViewer = new GameTreeViewer(this, this);
         m_gameTreeViewer.addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
-                    actionToggleShowTree();
+                    actionDisposeTree();
                 }
             });
         m_actions.registerAll(m_gameTreeViewer.getLayeredPane());
@@ -2352,8 +2367,8 @@ public class GoGui
         m_gtp = null;
         m_name = null;
         m_version = null;
-        m_gtpShell.dispose();
-        m_gtpShell = null;
+        m_shell.dispose();
+        m_shell = null;
         if (m_analyzeDialog != null)
         {
             m_analyzeDialog.saveRecent();
@@ -2380,8 +2395,8 @@ public class GoGui
     {
         m_statusBar.clearProgress();
         clearStatus();
-        if (m_gtpShell != null)
-            m_gtpShell.setCommandInProgess(false);
+        if (m_shell != null)
+            m_shell.setCommandInProgess(false);
         // Program could have been killed in cbInterrupt
         if (m_gtp == null)
             return false;
@@ -2582,8 +2597,8 @@ public class GoGui
                     m_timeSettings);
         if (size != oldSize)
         {
-            if (m_gtpShell != null)
-                restoreSize(m_gtpShell, "shell");
+            if (m_shell != null)
+                restoreSize(m_shell, "shell");
             if (m_analyzeDialog != null)
             {
                 restoreSize(m_analyzeDialog, "analyze");
@@ -2645,8 +2660,8 @@ public class GoGui
         initProgressBarTimer();
         // Children dialogs should be set visible after main window, otherwise
         // they get minimize window buttons and a taskbar entry (KDE 3.4)
-        if (m_gtpShell != null && m_session.isVisible("shell"))
-            actionToggleShowShell();
+        if (m_shell != null && m_session.isVisible("shell"))
+            m_shell.setVisible(true);
         if (m_session.isVisible("tree"))
             createTree();
         if (m_gtp != null && m_session.isVisible("analyze"))
@@ -2977,8 +2992,8 @@ public class GoGui
     private void saveSession()
     {
         Bookmark.save(m_bookmarks);
-        if (m_gtpShell != null)
-            m_gtpShell.saveHistory();
+        if (m_shell != null)
+            m_shell.saveHistory();
         if (m_analyzeDialog != null)
             m_analyzeDialog.saveRecent();
         if (m_help != null)
@@ -2986,7 +3001,7 @@ public class GoGui
         saveSizeAndVisible(m_gameTreeViewer, "tree");
         if (m_gtp != null)
         {
-            saveSizeAndVisible(m_gtpShell, "shell");
+            saveSizeAndVisible(m_shell, "shell");
             saveSizeAndVisible(m_analyzeDialog, "analyze");
         }
         m_session.saveLocation(this, "main-" + getBoardSize());
@@ -3049,7 +3064,7 @@ public class GoGui
                     String line = in.readLine();
                     if (line == null)
                         break;
-                    if (! m_gtpShell.send(line, this, true))
+                    if (! m_shell.send(line, this, true))
                         break;
                 }
                 catch (IOException e)

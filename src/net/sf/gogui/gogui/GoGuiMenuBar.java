@@ -405,15 +405,9 @@ public class GoGuiMenuBar
             new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowInfoPanel);
         menu.addItem(itemToggleShowInfoPanel, KeyEvent.VK_I);
         menu.addSeparator();
-        GoGuiCheckBoxMenuItem itemToggleShowTree =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowTree);
-        menu.addItem(itemToggleShowTree, KeyEvent.VK_R);
-        GoGuiCheckBoxMenuItem itemToggleShowShell =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowShell);
-        menu.addItem(itemToggleShowShell, KeyEvent.VK_S);
-        GoGuiCheckBoxMenuItem itemToggleShowAnalyzeDialog =
-            new GoGuiCheckBoxMenuItem(actions.m_actionToggleShowAnalyzeDialog);
-        menu.addItem(itemToggleShowAnalyzeDialog, KeyEvent.VK_A);
+        menu.addItem(actions.m_actionShowTree, KeyEvent.VK_R);
+        menu.addItem(actions.m_actionShowShell, KeyEvent.VK_S);
+        menu.addItem(actions.m_actionShowAnalyzeDialog, KeyEvent.VK_A);
         menu.addSeparator();
         menu.add(createMenuConfigureBoard(actions));
         menu.add(createMenuConfigureTree(actions));

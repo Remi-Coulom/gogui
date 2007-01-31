@@ -575,6 +575,27 @@ public class GoGuiActions
                     m_goGui.actionSetupColor(GoColor.WHITE); } },
              "Setup White", "Change setup color to White");
 
+    public final GoGuiAction m_actionShowAnalyzeDialog =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShowAnalyzeDialog(); } },
+             "Show Analyze", "Show window with analyze commands",
+             KeyEvent.VK_F9, getFunctionKeyShortcut());
+
+    public final GoGuiAction m_actionShowShell =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShowShell(); } },
+             "Show Shell", "Show GTP shell window",
+             KeyEvent.VK_F8, getFunctionKeyShortcut());
+
+    public final GoGuiAction m_actionShowTree =
+        new GoGuiAction(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    m_goGui.actionShowTree(); } },
+             "Show Tree", "Show game tree window",
+             KeyEvent.VK_F7, getFunctionKeyShortcut());
+
     public final GoGuiAction m_actionToggleAutoNumber =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -598,13 +619,6 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleCommentMonoFont(); } },
              "Monospace Comment Font", "Use fixed width font for comment");
-
-    public final GoGuiAction m_actionToggleShowAnalyzeDialog =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionToggleShowAnalyzeDialog(); } },
-             "Show Analyze", "Show window with analyze commands",
-             KeyEvent.VK_F9, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionToggleShowCursor =
         new GoGuiAction(new ActionListener() {
@@ -631,13 +645,6 @@ public class GoGuiActions
                     m_goGui.actionToggleShowLastMove(); } },
              "Show Last Move", "Mark last move on board");
 
-    public final GoGuiAction m_actionToggleShowShell =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionToggleShowShell(); } },
-             "Show Shell", "Show GTP shell window",
-             KeyEvent.VK_F8, getFunctionKeyShortcut());
-
     public final GoGuiAction m_actionToggleShowSubtreeSizes =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -649,13 +656,6 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionToggleShowToolbar(); } },
              "Show Tool Bar", "Show tool bar");
-
-    public final GoGuiAction m_actionToggleShowTree =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionToggleShowTree(); } },
-             "Show Tree", "Show game tree window",
-             KeyEvent.VK_F7, getFunctionKeyShortcut());
 
     public final GoGuiAction m_actionToggleShowVariations =
         new GoGuiAction(new ActionListener() {
@@ -735,23 +735,25 @@ public class GoGuiActions
         m_goGui = goGui;
     }
 
-    public void registerAll(JComponent component)
+    public static void register(JComponent component, GoGuiAction action)
     {
         int condition = JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ;
         InputMap inputMap = component.getInputMap(condition);
         ActionMap actionMap = component.getActionMap();
-        for (int i = 0; i < m_allActions.size(); ++i)
+        KeyStroke keyStroke =
+            (KeyStroke)action.getValue(AbstractAction.ACCELERATOR_KEY);
+        if (keyStroke != null)
         {
-            GoGuiAction action = (GoGuiAction)m_allActions.get(i);
-            KeyStroke keyStroke =
-                (KeyStroke)action.getValue(AbstractAction.ACCELERATOR_KEY);
-            if (keyStroke != null)
-            {
-                String name = (String)action.getValue(AbstractAction.NAME);
-                inputMap.put(keyStroke, name);
-                actionMap.put(name, action);
-            }
+            String name = (String)action.getValue(AbstractAction.NAME);
+            inputMap.put(keyStroke, name);
+            actionMap.put(name, action);
         }
+    }
+
+    public void registerAll(JComponent component)
+    {
+        for (int i = 0; i < m_allActions.size(); ++i)
+            register(component, (GoGuiAction)m_allActions.get(i));
     }
 
     public void update()
@@ -843,18 +845,13 @@ public class GoGuiActions
         m_actionToggleCommentMonoFont.setSelected(commentMonoFont);
         m_actionToggleCompletion.setSelected(m_goGui.getCompletion());
         boolean isAnalyzeDialogShown = m_goGui.isAnalyzeDialogShown();
-        m_actionToggleShowAnalyzeDialog.setEnabled(isProgramAttached);
-        m_actionToggleShowAnalyzeDialog.setSelected(isAnalyzeDialogShown);
         m_actionToggleShowCursor.setSelected(guiBoard.getShowCursor());
         m_actionToggleShowGrid.setSelected(guiBoard.getShowGrid());
         m_actionToggleShowInfoPanel.setSelected(m_goGui.isInfoPanelShown());
         m_actionToggleShowLastMove.setSelected(m_goGui.getShowLastMove());
-        m_actionToggleShowShell.setEnabled(isProgramAttached);
-        m_actionToggleShowShell.setSelected(m_goGui.isShellShown());
         boolean showSubtreeSizes = m_goGui.getShowSubtreeSizes();
         m_actionToggleShowSubtreeSizes.setSelected(showSubtreeSizes);
         m_actionToggleShowToolbar.setSelected(m_goGui.isToolbarShown());
-        m_actionToggleShowTree.setSelected(m_goGui.isTreeShown());
         m_actionToggleShowVariations.setSelected(m_goGui.getShowVariations());
         m_actionToggleTimeStamp.setSelected(m_goGui.getTimeStamp());
         m_actionTreeLabelsNumber.setSelected(

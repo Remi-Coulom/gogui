@@ -11,8 +11,10 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.KeyboardFocusManager;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
@@ -215,6 +217,13 @@ public class GuiUtil
                                           "Look and feel not found:\n" +
                                           lookAndFeel);
         }
+    }
+
+    public static boolean isActiveWindow(Window window)
+    {
+        KeyboardFocusManager manager =
+            KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        return (manager.getActiveWindow() == window);
     }
 
     /** Check window for normal state.
