@@ -2630,7 +2630,7 @@ public class GoGui
             actionToggleShowShell();
         if (m_session.isVisible("tree"))
             createTree();
-        if (m_session.isVisible("analyze"))
+        if (m_gtp != null && m_session.isVisible("analyze"))
             createAnalyzeDialog();
         if (! m_initAnalyze.equals(""))
         {
