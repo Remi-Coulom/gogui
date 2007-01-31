@@ -1010,20 +1010,7 @@ public class GoGui
         if (! checkProgramInSync())
             return;
         if (m_analyzeDialog == null)
-        {
-            m_analyzeDialog =
-                new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
-                                  m_programAnalyzeCommands, m_gtp);
-            m_analyzeDialog.addWindowListener(new WindowAdapter() {
-                    public void windowClosing(WindowEvent e) {
-                        actionToggleShowAnalyzeDialog();
-                    }
-                });
-            m_analyzeDialog.setBoardSize(getBoardSize());
-            restoreSize(m_analyzeDialog, "analyze");
-            setTitle();
-            m_analyzeDialog.setVisible(true);
-        }
+            createAnalyzeDialog();
         else
         {
             saveSession();
@@ -2208,6 +2195,21 @@ public class GoGui
             return m_computerWhite;
     }
 
+    private void createAnalyzeDialog()
+    {
+        m_analyzeDialog =
+            new AnalyzeDialog(this, this, m_gtp.getSupportedCommands(),
+                              m_programAnalyzeCommands, m_gtp);
+        m_analyzeDialog.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    actionToggleShowAnalyzeDialog();
+                }
+            });
+        m_analyzeDialog.setBoardSize(getBoardSize());
+        restoreSize(m_analyzeDialog, "analyze");
+        m_analyzeDialog.setVisible(true);
+    }
+
     private ContextMenu createContextMenu(GoPoint point)
     {
         ContextMenu.Listener listener = new ContextMenu.Listener()
@@ -2628,7 +2630,7 @@ public class GoGui
         if (m_session.isVisible("tree"))
             createTree();
         if (m_session.isVisible("analyze"))
-            actionToggleShowAnalyzeDialog();
+            createAnalyzeDialog();
         if (! m_initAnalyze.equals(""))
         {
             AnalyzeCommand analyzeCommand =
