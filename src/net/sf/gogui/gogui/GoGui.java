@@ -177,12 +177,15 @@ public class GoGui
         GuiUtil.removeKeyBinding(m_splitPane, "F8");
         m_splitPane.setResizeWeight(1);
         m_innerPanel.add(m_splitPane, BorderLayout.CENTER);
-        WindowAdapter windowAdapter = new WindowAdapter() {
+        addWindowListener(new WindowAdapter() {
+                public void windowActivated(WindowEvent e) {
+                    m_guiBoard.requestFocusInWindow();
+                }
+
                 public void windowClosing(WindowEvent event) {
                     close();
                 }
-            };
-        addWindowListener(windowAdapter);
+            });
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtil.setGoIcon(this);
         RecentFileMenu.Listener recentListener = new RecentFileMenu.Listener()
@@ -234,7 +237,6 @@ public class GoGui
             m_program = program;
         if (m_program != null && m_program.trim().equals(""))
             m_program = null;
-        m_guiBoard.requestFocusInWindow();
         if (time != null)
             m_timeSettings = TimeSettings.parse(time);
         Runnable callback = new Runnable()
@@ -3365,6 +3367,7 @@ public class GoGui
         SwingUtilities.invokeLater(new Runnable() {
                 public void run()
                 {
+                    requestFocus();
                     toFront();
                 }
             });
