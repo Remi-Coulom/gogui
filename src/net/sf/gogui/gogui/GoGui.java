@@ -1400,6 +1400,14 @@ public class GoGui
         return m_handicap;
     }
 
+    public Dimension getMinimumSize()
+    {
+        if (m_minimumSize == null)
+            return super.getMinimumSize();
+        else
+            return m_minimumSize;
+    }
+
     public boolean getMonoFont()
     {
         return m_comment.getMonoFont();
@@ -1626,6 +1634,9 @@ public class GoGui
         Contains a marker comment for use with serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
+
+    /** setMinimumSize() not yet available in Java 1,4 */
+    private Dimension m_minimumSize;
 
     private final GuiBoard m_guiBoard;
 
@@ -3126,7 +3137,7 @@ public class GoGui
             height += (int)toolBarSize.getHeight();
         }
         height += 224;
-        setMinimumSize(new Dimension(width, height));
+        m_minimumSize = new Dimension(width, height);
     }
 
     private void setResult(String result)

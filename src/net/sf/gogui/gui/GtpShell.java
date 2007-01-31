@@ -250,7 +250,7 @@ public class GtpShell
         m_finalSize = new Dimension(fontSize * 40, fontSize * 30);
         panel.add(m_scrollPane, BorderLayout.CENTER);
         panel.add(createCommandInput(), BorderLayout.SOUTH);
-        setMinimumSize(new Dimension(160, 112));
+        m_minimumSize = new Dimension(160, 112);
         pack();
     }
     
@@ -267,6 +267,14 @@ public class GtpShell
             setVisible(false);
     }
     
+    public Dimension getMinimumSize()
+    {
+        if (m_minimumSize == null)
+            return super.getMinimumSize();
+        else
+            return m_minimumSize;
+    }
+
     public void receivedInvalidResponse(String response)
     {
         if (SwingUtilities.isEventDispatchThread())
@@ -556,6 +564,8 @@ public class GtpShell
     private ComboBoxEditor m_editor;
 
     private Dimension m_finalSize;
+
+    private Dimension m_minimumSize;
 
     private JButton m_runButton;
 
