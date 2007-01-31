@@ -336,7 +336,6 @@ public class GoGui
     {
         if (! checkCommandInProgress())
             return;
-        saveSession();
         newGame(boardSize, false);
         m_gameInfo.updateTimeFromClock(getClock());
         m_prefs.putInt("boardsize", boardSize);
@@ -2570,10 +2569,21 @@ public class GoGui
 
     private void initGame(int size)
     {
-        if (size != getBoardSize())
+        int oldSize = getBoardSize();
+        if (size != oldSize)
         {
+            saveSession();
             m_guiBoard.initSize(size);
             restoreMainWindow(size);
+        }
+        ConstPointList handicap = getBoard().getHandicapStones(m_handicap);
+        if (handicap == null)
+            showWarning("Handicap stone locations not\n" +
+                        "defined for this board size");
+        m_game.init(size, getPrefsKomi(), handicap, m_prefs.get("rules", ""),
+                    m_timeSettings);
+        if (size != oldSize)
+        {
             if (m_gtpShell != null)
                 restoreSize(m_gtpShell, "shell");
             if (m_analyzeDialog != null)
@@ -2584,12 +2594,6 @@ public class GoGui
             if (m_gameTreeViewer != null)
                 restoreSize(m_gameTreeViewer, "tree");
         }
-        ConstPointList handicap = getBoard().getHandicapStones(m_handicap);
-        if (handicap == null)
-            showWarning("Handicap stone locations not\n" +
-                        "defined for this board size");
-        m_game.init(size, getPrefsKomi(), handicap, m_prefs.get("rules", ""),
-                    m_timeSettings);
         updateFromGoBoard();
         resetBoard();
         m_game.resetClock();
