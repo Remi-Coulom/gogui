@@ -2809,7 +2809,8 @@ public class GoGui
     private void newGameFile(int size, int move)
     {
         initGame(size);
-        loadFile(m_file, move);
+        if (! loadFile(m_file, move))
+            m_file = null;
     }
 
     /** Paint point immediately to pretend better responsiveness.
