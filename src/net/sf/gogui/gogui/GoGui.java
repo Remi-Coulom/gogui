@@ -1980,7 +1980,7 @@ public class GoGui
     {
         if (isCommandInProgress())
         {
-            showError("Cannot execute while computer is thinking");
+            showError("Cannot execute while computer is thinking", false);
             return false;
         }
         return true;
@@ -2103,12 +2103,12 @@ public class GoGui
         // TODO: maybe automatically leave setup or score mode instead?
         if (m_setupMode)
         {
-            showError("Cannot execute while in setup mode");
+            showError("Cannot execute while in setup mode", false);
             return false;
         }
         if (m_scoreMode)
         {
-            showError("Cannot execute while in score mode");
+            showError("Cannot execute while in score mode", false);
             return false;
         }
         return true;
@@ -3231,7 +3231,12 @@ public class GoGui
 
     private void showError(String message)
     {
-        SimpleDialogs.showError(this, message);
+        showError(message, true);
+    }
+
+    private void showError(String message, boolean isSignificant)
+    {
+        SimpleDialogs.showError(this, message, isSignificant);
     }
 
     private void showGameFinished()

@@ -49,14 +49,24 @@ public final class SimpleDialogs
         what the file name is used for and if the file already exists.
     */
     public static final int FILE_SELECT = 2;
-
+    
     public static void showError(Component frame, String message)
+    {
+        showError(frame, message, true);
+    }
+
+    public static void showError(Component frame, String message,
+                                 boolean isSignificant)
     {
         String title = "Error";
         if (frame == null)
             title = title + " - " + APP_NAME;
-        JOptionPane.showMessageDialog(frame, message, title,
-                                      JOptionPane.ERROR_MESSAGE);
+        int type;
+        if (isSignificant)
+            type = JOptionPane.ERROR_MESSAGE;
+        else
+            type = JOptionPane.PLAIN_MESSAGE;
+        JOptionPane.showMessageDialog(frame, message, title, type);
     }
 
     public static void showError(Component frame, String message, Exception e)
