@@ -1130,6 +1130,7 @@ public class GoGui
         }
         else
         {
+            saveSession();
             m_gameTreeViewer.dispose();
             m_gameTreeViewer = null;
         }
