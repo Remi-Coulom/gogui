@@ -2034,8 +2034,8 @@ public class GoGui
     {
         if (isOutOfSync())
         {
-            showError("Could not synchronize current\n" +
-                      "position with Go program");
+            showError("Go program is not in sync with current position",
+                      false);
             return false;
         }
         return true;
