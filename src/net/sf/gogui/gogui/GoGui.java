@@ -799,7 +799,7 @@ public class GoGui
     {
         if (! checkStateChangePossible())
             return;
-        if (m_gtp == null || ! checkProgramInSync())
+        if (! checkProgramReady())
             return;
         if (! isSingleMove && ! isComputerBoth())
         {
@@ -1005,9 +1005,7 @@ public class GoGui
 
     public void actionToggleShowAnalyzeDialog()
     {        
-        if (m_gtp == null)
-            return;
-        if (! checkProgramInSync())
+        if (! checkProgramReady())
             return;
         if (m_analyzeDialog == null)
             createAnalyzeDialog();
@@ -1426,9 +1424,7 @@ public class GoGui
     public boolean sendGtpCommand(String command, boolean sync)
         throws GtpError
     {
-        if (isCommandInProgress() || m_gtp == null)
-            return false;
-        if (! checkProgramInSync())
+        if (! checkProgramReady())
             return false;
         if (sync)
         {
@@ -1455,9 +1451,7 @@ public class GoGui
     public void initAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                    boolean clearBoard)
     {
-        if (m_gtp == null)
-            return;
-        if (! checkProgramInSync())
+        if (! checkProgramReady())
             return;
         m_analyzeCommand = command;
         m_analyzeAutoRun = autoRun;
@@ -1487,13 +1481,7 @@ public class GoGui
     public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
                                   boolean clearBoard, boolean oneRunOnly)
     {
-        if (isCommandInProgress())
-        {
-            showError("Cannot run analyze command\n" +
-                      "while command in progress");
-            return;
-        }
-        if (! checkProgramInSync())
+        if (! checkProgramReady())
             return;
         initAnalyzeCommand(command, autoRun, clearBoard);
         m_analyzeOneRunOnly = oneRunOnly;
@@ -2030,8 +2018,21 @@ public class GoGui
         }
     }
 
-    private boolean checkProgramInSync()
+    /** Check if program is attached and ready to receive commands. */
+    private boolean checkProgramReady()
     {
+        if (m_gtp == null)
+        {
+            showError("No Go program is attached", false);
+            return false;
+        }
+        if (! checkCommandInProgress())
+            return false;
+        if (m_gtp.isProgramDead())
+        {
+            showError("Go program has terminated", false);
+            return false;
+        }
         if (isOutOfSync())
         {
             showError("Go program is not in sync with current position",
