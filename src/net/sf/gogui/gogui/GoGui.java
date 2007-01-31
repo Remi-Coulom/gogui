@@ -111,7 +111,7 @@ import net.sf.gogui.version.Version;
 /** Graphical user interface to a Go program. */
 public class GoGui
     extends JFrame
-    implements AnalyzeDialog.Callback, GuiBoard.Listener,
+    implements AnalyzeDialog.Listener, GuiBoard.Listener,
                GameTreeViewer.Listener, GtpShell.Listener,
                ScoreDialog.Listener, GoGuiMenuBar.BookmarkListener
 {
@@ -185,7 +185,7 @@ public class GoGui
         addWindowListener(windowAdapter);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         GuiUtil.setGoIcon(this);
-        RecentFileMenu.Callback recentCallback = new RecentFileMenu.Callback()
+        RecentFileMenu.Listener recentListener = new RecentFileMenu.Listener()
             {
                 public void fileSelected(String label, File file)
                 {
@@ -195,7 +195,7 @@ public class GoGui
                     boardChangedBegin(false, true);
                 }
             };
-        RecentFileMenu.Callback recentGtp = new RecentFileMenu.Callback()
+        RecentFileMenu.Listener recentGtp = new RecentFileMenu.Listener()
             {
                 public void fileSelected(String label, File file)
                 {
@@ -205,7 +205,7 @@ public class GoGui
                     m_menuBar.addRecentGtp(file);
                 }
             };
-        m_menuBar = new GoGuiMenuBar(m_actions, recentCallback, recentGtp,
+        m_menuBar = new GoGuiMenuBar(m_actions, recentListener, recentGtp,
                                      this);
         m_treeLabels = m_prefs.getInt("gametree-labels",
                                       GameTreePanel.LABEL_NUMBER);
@@ -1878,11 +1878,9 @@ public class GoGui
                 private LiveGfx m_liveGfx =
                     new LiveGfx(getBoard(), m_guiBoard, m_statusBar);
             };
-        GtpSynchronizer.Callback synchronizerCallback =
-            new GtpSynchronizer.Callback()
-            {
-                public void run(int moveNumber)
-                {
+        GtpSynchronizer.Listener synchronizerCallback =
+            new GtpSynchronizer.Listener() {
+                public void moveNumberChanged(int moveNumber) {
                     String text = "[" + moveNumber + "]";
                     m_statusBar.immediatelyPaintMoveText(text);
                 }

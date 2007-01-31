@@ -32,17 +32,17 @@ public class GoGuiMenuBar
     }
 
     public GoGuiMenuBar(GoGuiActions actions,
-                        RecentFileMenu.Callback recentCallback,
-                        RecentFileMenu.Callback recentGtpCallback,
+                        RecentFileMenu.Listener recentListener,
+                        RecentFileMenu.Listener recentGtpListener,
                         GoGuiMenuBar.BookmarkListener bookmarkListener)
     {
         m_bookmarkListener = bookmarkListener;
         m_menuBar = new JMenuBar();
-        m_menuBar.add(createMenuFile(actions, recentCallback));
+        m_menuBar.add(createMenuFile(actions, recentListener));
         m_menuBar.add(createMenuGame(actions));
         m_menuBar.add(createMenuEdit(actions));
         m_menuBar.add(createMenuGo(actions));
-        m_menuBar.add(createMenuShell(actions, recentGtpCallback));
+        m_menuBar.add(createMenuShell(actions, recentGtpListener));
         m_menuBookmarks = createMenuBookMarks(actions);
         m_menuBar.add(m_menuBookmarks);
         m_menuBar.add(createMenuSettings(actions));
@@ -307,11 +307,11 @@ public class GoGuiMenuBar
     }
 
     private JMenuChecked createMenuFile(GoGuiActions actions,
-                                        RecentFileMenu.Callback callback)
+                                        RecentFileMenu.Listener listener)
     {
         JMenuChecked menu = createMenu("File", KeyEvent.VK_F);
         menu.addItem(actions.m_actionOpen, KeyEvent.VK_O);
-        menu.add(createRecentMenu(callback));
+        menu.add(createRecentMenu(listener));
         menu.addItem(actions.m_actionSave, KeyEvent.VK_S);
         menu.addItem(actions.m_actionSaveAs, KeyEvent.VK_A);
         menu.addSeparator();
@@ -381,7 +381,7 @@ public class GoGuiMenuBar
     }
 
     private JMenuChecked createMenuShell(GoGuiActions actions,
-                                         RecentFileMenu.Callback callback)
+                                         RecentFileMenu.Listener listener)
     {
         JMenuChecked menu = createMenu("Shell", KeyEvent.VK_L);
         menu.addItem(actions.m_actionShellSave, KeyEvent.VK_L);
@@ -389,7 +389,7 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionShellSendFile, KeyEvent.VK_F);
         m_recentGtp = new RecentFileMenu("Send Recent",
                                          "net/sf/gogui/recentgtpfiles",
-                                         callback);
+                                         listener);
         m_recentGtp.getMenu().setMnemonic(KeyEvent.VK_R);
         menu.add(m_recentGtp.getMenu());
         return menu;
@@ -421,11 +421,11 @@ public class GoGuiMenuBar
         return menu;
     }
 
-    private JMenu createRecentMenu(RecentFileMenu.Callback callback)
+    private JMenu createRecentMenu(RecentFileMenu.Listener listener)
     {
         m_recent = new RecentFileMenu("Open Recent",
                                       "net/sf/gogui/recentfiles",
-                                      callback);
+                                      listener);
         JMenu menu = m_recent.getMenu();
         menu.setMnemonic(KeyEvent.VK_R);
         return menu;

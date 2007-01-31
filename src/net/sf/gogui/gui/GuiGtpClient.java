@@ -29,11 +29,11 @@ public class GuiGtpClient
     extends Thread
 {
     public GuiGtpClient(GtpClient gtp, Component owner,
-                        GtpSynchronizer.Callback callback)
+                        GtpSynchronizer.Listener listener)
     {
         m_gtp = gtp;
         m_owner = owner;
-        m_gtpSynchronizer = new GtpSynchronizer(gtp, callback, false);
+        m_gtpSynchronizer = new GtpSynchronizer(gtp, listener, false);
     }
 
     public void close()

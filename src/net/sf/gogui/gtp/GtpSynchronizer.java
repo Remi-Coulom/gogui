@@ -25,9 +25,9 @@ public class GtpSynchronizer
         Necessary, because sending multiple undo or play commands can be
         a slow operation.
     */
-    public interface Callback
+    public interface Listener
     {
-        void run(int moveNumber);
+        void moveNumberChanged(int moveNumber);
     }
 
     public GtpSynchronizer(GtpClientBase gtp)
@@ -35,12 +35,12 @@ public class GtpSynchronizer
         this(gtp, null, false);
     }
 
-    public GtpSynchronizer(GtpClientBase gtp, Callback callback,
+    public GtpSynchronizer(GtpClientBase gtp, Listener listener,
                            boolean fillPasses)
     {
         m_fillPasses = fillPasses;
         m_gtp = gtp;
-        m_callback = callback;
+        m_listener = listener;
         m_isOutOfSync = true;
     }
 
@@ -154,7 +154,7 @@ public class GtpSynchronizer
     /** Board representing the engine state. */
     private Board m_board;
 
-    private final Callback m_callback;
+    private final Listener m_listener;
 
     private GtpClientBase m_gtp;
 
@@ -361,8 +361,7 @@ public class GtpSynchronizer
             for (int i = 0; i < moves.size(); ++i)
             {
                 play((Move)moves.get(i));
-                if (m_callback != null)
-                    m_callback.run(m_board.getNumberPlacements());
+                updateListener();
             }
         }
     }
@@ -414,9 +413,14 @@ public class GtpSynchronizer
             {
                 m_gtp.send("undo");
                 m_board.undo();
-                if (m_callback != null)
-                    m_callback.run(m_board.getNumberPlacements());
+                updateListener();
             }
         }
+    }
+
+    private void updateListener()
+    {
+        if (m_listener != null)
+            m_listener.moveNumberChanged(m_board.getNumberPlacements());
     }
 }
