@@ -143,21 +143,24 @@ class GuiClock
     public GuiClock(GoColor color)
     {
         super(11);
+        m_color = color;
         setEditable(false);
         setFocusable(false);
         setHorizontalAlignment(SwingConstants.CENTER);
         GuiUtil.setMonospacedFont(this);
+        setMinimumSize(getPreferredSize());
         if (color == GoColor.BLACK)
             setToolTipText("Time used by Black");
         else
             setToolTipText("Time used by White");
-        setMinimumSize(getPreferredSize());
     }
 
     /** Serial version to suppress compiler warning.
         Contains a marker comment for serialver.sourceforge.net
     */
     private static final long serialVersionUID = 0L; // SUID
+
+    private GoColor m_color;
 }
 
 class Prisoners
@@ -165,17 +168,11 @@ class Prisoners
 {
     public Prisoners(GoColor color)
     {
+        m_color = color;
         Icon icon;
         if (color == GoColor.BLACK)
-        {
-            setToolTipText("Black stones captured");
             icon = GuiUtil.getIcon("gogui-black-16x16", "Black");
-        }
-        else
-        {
-            setToolTipText("White stones captured");
             icon = GuiUtil.getIcon("gogui-white-16x16", "White");
-        }
         JLabel labelStone = new JLabel(icon);
         add(labelStone, BorderLayout.WEST);
         m_text = new JLabel();
@@ -186,6 +183,17 @@ class Prisoners
     public void setCount(int n)
     {
         m_text.setText(Integer.toString(n));
+        StringBuffer buffer = new StringBuffer(64);
+        buffer.append(n);
+        if (m_color == GoColor.BLACK)
+            buffer.append(" black");
+        else
+            buffer.append(" white");
+        if (n == 1)
+            buffer.append(" stone captured");
+        else
+            buffer.append(" stones captured");
+        setToolTipText(buffer.toString());
     }
 
     /** Serial version to suppress compiler warning.
@@ -194,4 +202,6 @@ class Prisoners
     private static final long serialVersionUID = 0L; // SUID
 
     private JLabel m_text;
+
+    private GoColor m_color;
 }
