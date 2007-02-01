@@ -7,6 +7,8 @@ package net.sf.gogui.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -73,7 +75,7 @@ public class StatusBar
         m_iconBox.add(m_progressBarDistance);
         m_iconBox.add(GuiUtil.createSmallFiller());
 
-        m_text = new JTextField();
+        m_text = new TextFieldWithToolTip();
         m_text.setEditable(false);
         m_text.setFocusable(false);
         m_text.setBorder(null);
@@ -231,3 +233,18 @@ public class StatusBar
     Box.Filler m_distanceSetup;
 }
 
+/** Text fiel with tool tip if text is truncated. */
+class TextFieldWithToolTip
+    extends JTextField
+{
+    protected void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        setToolTipText(null);
+        FontMetrics metrics = g.getFontMetrics();
+        String text = getText();
+        if (text == null || metrics.stringWidth(text) < getWidth())
+            return;
+        setToolTipText(text);
+    }
+}
