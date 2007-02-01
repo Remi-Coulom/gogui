@@ -153,10 +153,13 @@ public class GoGui
             {
                 public void changed(String comment)
                 {
-                    if (m_gameTreeViewer != null)
-                        m_gameTreeViewer.redrawCurrentNode();
                     m_game.setComment(comment);
-                    updateViews(false);
+                    // Cannot call updateViews, which calls
+                    // Comment.setComment(), in comment callback
+                    SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                updateViews(false);
+                            } });
                 }
 
                 public void textSelected(String text)
@@ -239,14 +242,10 @@ public class GoGui
             m_program = null;
         if (time != null)
             m_timeSettings = TimeSettings.parse(time);
-        Runnable callback = new Runnable()
-            {
-                public void run()
-                {
+        SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
                     initialize();
-                }
-            };
-        SwingUtilities.invokeLater(callback);
+                } });
     }
     
     public void actionAbout()

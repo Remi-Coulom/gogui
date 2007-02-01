@@ -134,8 +134,10 @@ public class Comment
     {
         if (comment == null)
             comment = "";
+        if (comment.equals(m_textPane.get().getText()))
+            return;
         // setText() generates a remove and insert event, and
-        // we don't want to notify the listener about that yet.
+        // we don't want to notify the listener about that yet
         m_duringSetText = true;
         m_textPane.get().setText(comment);
         m_textPane.get().setCaretPosition(0);
