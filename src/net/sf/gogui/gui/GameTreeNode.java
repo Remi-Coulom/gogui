@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 import net.sf.gogui.game.ConstNode;
+import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Move;
 
@@ -36,6 +37,9 @@ class GameTreeNode
         m_imageBlack = imageBlack;
         m_imageWhite = imageWhite;
         m_imageSetup = imageSetup;
+        String comment = NodeUtil.getCommentStart(node, 30);
+        if (comment != null)
+            setToolTipText(comment);
         setPreferredSize(size);
     }
 

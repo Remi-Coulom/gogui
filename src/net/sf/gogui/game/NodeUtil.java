@@ -242,6 +242,33 @@ public final class NodeUtil
         return null;
     }
 
+    /** Get first line of comment, but no more than a maximum number of
+        characters.
+        @return First line of comment, with ellipses appended if trunceted;
+        null, if node has no comment.
+    */
+    public static String getCommentStart(ConstNode node, int maxChar)
+    {
+        String comment = node.getComment();
+        if (comment == null)
+            return null;
+        boolean trimmed = false;
+        int pos = comment.indexOf("\n");
+        if (pos >= 0)
+        {
+            comment = comment.substring(0, pos);
+            trimmed = true;
+        }
+        if (comment.length() > maxChar)
+        {
+            comment = comment.substring(0, maxChar);
+            trimmed = true;
+        }
+        if (trimmed)
+            comment = comment + "...";
+        return comment;
+    }
+
     public static int getDepth(ConstNode node)
     {
         int depth = 0;
@@ -715,25 +742,9 @@ public final class NodeUtil
 
     private static void appendInfoComment(StringBuffer buffer, ConstNode node)
     {
-        String comment = node.getComment();
-        if (comment == null)
-            return;
-        boolean trimmed = false;
-        int pos = comment.indexOf("\n");
-        if (pos >= 0)
-        {
-            comment = comment.substring(0, pos);
-            trimmed = true;
-        }
-        final int maxCharDisplayed = 30;
-        if (comment.length() > maxCharDisplayed)
-        {
-            comment = comment.substring(0, maxCharDisplayed);
-            trimmed = true;
-        }
-        if (trimmed)
-            comment = comment + "...";
-        appendInfo(buffer, "Comment", comment);
+        String comment = getCommentStart(node, 30);
+        if (comment != null)
+            appendInfo(buffer, "Comment", comment);
     }
 
     private static void appendInfoLabel(StringBuffer buffer, String label)
