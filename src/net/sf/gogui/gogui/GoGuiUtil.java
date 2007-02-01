@@ -80,26 +80,23 @@ public final class GoGuiUtil
             moveText.append(variation);
             moveText.append("]");
         }
-        if (moveNumber > 0 || movesLeft > 0)
+        if (move != null)
         {
-            if (move != null)
-            {
-                GoColor c = move.getColor();
-                GoPoint p = move.getPoint();
-                toolTip.append("Last move ");
-                toolTip.append(moveNumber);
-                toolTip.append(c == GoColor.BLACK ? " B " : " W ");
-                toolTip.append(GoPoint.toString(p));
-                toolTip.append(" ");
-            }
+            GoColor c = move.getColor();
+            GoPoint p = move.getPoint();
+            toolTip.append("Last move ");
+            toolTip.append(moveNumber);
+            toolTip.append(c == GoColor.BLACK ? " B " : " W ");
+            toolTip.append(GoPoint.toString(p));
+            toolTip.append(" ");
+        }
+        else
+        {
+            toolTip.append(moveNumber);
+            if (moveNumber == 1)
+                toolTip.append(" move played ");
             else
-            {
-                toolTip.append(moveNumber);
-                if (moveNumber == 1)
-                    toolTip.append(" move played ");
-                else
-                    toolTip.append(" moves played ");
-            }
+                toolTip.append(" moves played ");
         }
         if (movesLeft > 0)
         {

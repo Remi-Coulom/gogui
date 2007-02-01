@@ -14,6 +14,7 @@ import javax.swing.JComponent;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.NodeUtil;
 import net.sf.gogui.go.GoColor;
+import net.sf.gogui.go.GoPoint;
 import net.sf.gogui.go.Move;
 
 class GameTreeNode
@@ -37,9 +38,24 @@ class GameTreeNode
         m_imageBlack = imageBlack;
         m_imageWhite = imageWhite;
         m_imageSetup = imageSetup;
+        Move move = node.getMove();
+        StringBuffer toolTip = new StringBuffer(128);
+        if (move != null)
+        {
+            toolTip.append(moveNumber);
+            toolTip.append(" ");
+            toolTip.append(move.getColor() == GoColor.BLACK ? "B " :"W ");
+            toolTip.append(GoPoint.toString(move.getPoint()));
+        }
         String comment = NodeUtil.getCommentStart(node, 30);
         if (comment != null)
-            setToolTipText(comment);
+        {
+            if (move != null)
+                toolTip.append("  ");
+            toolTip.append(comment);
+        }
+        if (toolTip.length() > 0)
+            setToolTipText(toolTip.toString());
         setPreferredSize(size);
     }
 
