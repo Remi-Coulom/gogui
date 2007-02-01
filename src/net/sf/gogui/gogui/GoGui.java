@@ -3391,7 +3391,7 @@ public class GoGui
         m_actions.update();
         m_toolBar.update();
         GoGuiUtil.updateMoveText(m_statusBar, getGame());
-        m_gameInfo.update(getCurrentNode(), getBoard());
+        m_gameInfo.update(getGame());
         m_comment.setComment(getCurrentNode().getComment());
         updateFromGoBoard();
         updateGuiBoard();

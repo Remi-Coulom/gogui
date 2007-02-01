@@ -15,6 +15,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import net.sf.gogui.game.ConstClock;
+import net.sf.gogui.game.ConstGame;
+import net.sf.gogui.game.ConstGameInformation;
+import net.sf.gogui.game.ConstGameTree;
 import net.sf.gogui.game.ConstNode;
 import net.sf.gogui.game.Clock;
 import net.sf.gogui.game.Game;
@@ -34,10 +37,10 @@ public class GameInfo
         m_game = game;
         Box boxBlack = Box.createVerticalBox();
         panel.add(boxBlack);
-        JLabel iconBlack = new JLabel(GuiUtil.getIcon("gogui-black-32x32",
-                                                      "Black"));
-        iconBlack.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boxBlack.add(iconBlack);
+        m_iconBlack = new JLabel(GuiUtil.getIcon("gogui-black-32x32",
+                                                 "Black"));
+        m_iconBlack.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boxBlack.add(m_iconBlack);
         boxBlack.add(GuiUtil.createFiller());
         m_clockBlack = new GuiClock(GoColor.BLACK);
         m_clockBlack.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -47,10 +50,10 @@ public class GameInfo
 
         Box boxWhite = Box.createVerticalBox();
         panel.add(boxWhite);
-        JLabel iconWhite = new JLabel(GuiUtil.getIcon("gogui-white-32x32",
-                                                      "White"));
-        iconWhite.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boxWhite.add(iconWhite);
+        m_iconWhite = new JLabel(GuiUtil.getIcon("gogui-white-32x32",
+                                                 "White"));
+        m_iconWhite.setAlignmentX(Component.CENTER_ALIGNMENT);
+        boxWhite.add(m_iconWhite);
         boxWhite.add(GuiUtil.createFiller());
         m_clockWhite = new GuiClock(GoColor.WHITE);
         m_clockWhite.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -67,8 +70,16 @@ public class GameInfo
         game.setClockListener(listener);
     }
 
-    public void update(ConstNode node, ConstBoard board)
+    public void update(ConstGame game)
     {
+        ConstBoard board = game.getBoard();
+        ConstNode node = game.getCurrentNode();
+        ConstGameTree tree = game.getTree();
+        ConstGameInformation info = tree.getGameInformationConst();
+        updatePlayerToolTip(m_iconBlack, info.getPlayerBlack(),
+                            info.getRankBlack(), "Black");
+        updatePlayerToolTip(m_iconWhite, info.getPlayerWhite(),
+                            info.getRankWhite(), "White");
         m_prisonersBlack.setCount(board.getCapturedBlack());
         m_prisonersWhite.setCount(board.getCapturedWhite());
         // Usually time left information is stored in a node only for the
@@ -103,6 +114,10 @@ public class GameInfo
 
     private final GuiClock m_clockWhite;
 
+    private JLabel m_iconBlack;
+
+    private JLabel m_iconWhite;
+
     private Prisoners m_prisonersBlack;
 
     private Prisoners m_prisonersWhite;
@@ -110,6 +125,28 @@ public class GameInfo
     private final Game m_game;
 
     private final UpdateTimeRunnable m_updateTime = new UpdateTimeRunnable();
+
+    private void updatePlayerToolTip(JLabel label, String player, String rank,
+                                     String color)
+    {
+        StringBuffer buffer = new StringBuffer(128);
+        buffer.append("Player ");
+        buffer.append(color);
+        buffer.append(" (");
+        if (player != null && ! player.trim().equals(""))
+        {
+            buffer.append(player);
+            if (rank != null && ! rank.trim().equals(""))
+            {
+                buffer.append(" ");
+                buffer.append(rank);
+            }
+        }
+        else
+            buffer.append("unknown name");
+        buffer.append(")");
+        label.setToolTipText(buffer.toString());
+    }
 
     private void updateTimeFromClock(ConstClock clock, GoColor color)
     {
@@ -150,9 +187,9 @@ class GuiClock
         GuiUtil.setMonospacedFont(this);
         setMinimumSize(getPreferredSize());
         if (color == GoColor.BLACK)
-            setToolTipText("Time used by Black");
+            setToolTipText("Time for Black");
         else
-            setToolTipText("Time used by White");
+            setToolTipText("Time for White");
     }
 
     /** Serial version to suppress compiler warning.
@@ -172,6 +209,7 @@ class Prisoners
         Icon icon;
         if (color == GoColor.BLACK)
             icon = GuiUtil.getIcon("gogui-black-16x16", "Black");
+        else
             icon = GuiUtil.getIcon("gogui-white-16x16", "White");
         JLabel labelStone = new JLabel(icon);
         add(labelStone, BorderLayout.WEST);
