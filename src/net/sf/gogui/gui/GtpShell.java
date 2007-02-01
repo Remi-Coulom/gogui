@@ -329,13 +329,7 @@ public class GtpShell
 
     public void setCommandInProgess(boolean commandInProgess)
     {
-        m_comboBox.setEnabled(! commandInProgess);
-        m_runButton.setEnabled(! commandInProgess);
-        if (! commandInProgess)
-        {
-            m_comboBox.requestFocusInWindow();
-            m_textField.requestFocusInWindow();
-        }
+        m_commandInProgress = commandInProgess;
     }
 
     public void setCommandCompletion(boolean commandCompletion)
@@ -351,6 +345,8 @@ public class GtpShell
     /** Send Gtp command to listener.
         If owner != null, send synchronously and display error dialog on
         owner, otherwise send asynchronously.
+        @return false, if command failed and user acknowledged an abort dialog
+        (to abort sending more commands from a sequence)
     */
     public boolean send(String command, Component owner, boolean askContinue)
     {
@@ -364,6 +360,11 @@ public class GtpShell
         }
         else
         {
+            if (m_commandInProgress)
+            {
+                showError("Cannot execute while computer is thinking", false);
+                return false;
+            }
             if (GtpUtil.isStateChangingCommand(c))
             {
                 if (m_modifyWarning == null)
@@ -542,6 +543,8 @@ public class GtpShell
 
     private boolean m_isFinalSizeSet;
 
+    private boolean m_commandInProgress;
+
     private final int m_historyMax;
 
     private final int m_historyMin;
@@ -716,8 +719,10 @@ public class GtpShell
             });
         panel.add(m_comboBox);
         m_runButton = new JButton();
-        m_runButton.setIcon(GuiUtil.getIcon("gogui-exec", "Run"));
+        m_runButton.setIcon(GuiUtil.getIcon("gogui-key_enter", "Run"));
         m_runButton.setActionCommand("run");
+        m_runButton.setFocusable(false);
+        m_runButton.setToolTipText("Send command line");
         m_runButton.addActionListener(this);
         buttonPanel.add(GuiUtil.createSmallFiller(), BorderLayout.WEST);
         buttonPanel.add(m_runButton, BorderLayout.CENTER);
@@ -826,6 +831,11 @@ public class GtpShell
                                           "GoGui: Error",
                                           JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void showError(String message, boolean isSignificant)
+    {
+        SimpleDialogs.showError(this, message, isSignificant);
     }
 
     private void scrollPage(boolean up)
