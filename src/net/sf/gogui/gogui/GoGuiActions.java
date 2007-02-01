@@ -158,7 +158,8 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionBackward(10); } },
              "Backward 10", "Go ten moves backward",
-             KeyEvent.VK_LEFT, getShortcut() | ActionEvent.SHIFT_MASK, null);
+             KeyEvent.VK_LEFT, getShortcut() | ActionEvent.SHIFT_MASK,
+                        "gogui-previous-10");
 
     public final GoGuiAction m_actionBeginning =
         new GoGuiAction(new ActionListener() {
@@ -355,7 +356,8 @@ public class GoGuiActions
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionForward(10); } },
              "Forward 10", "Go ten moves forward", KeyEvent.VK_RIGHT,
-             getShortcut() | ActionEvent.SHIFT_MASK, null);
+                        getShortcut() | ActionEvent.SHIFT_MASK,
+                        "gogui-next-10");
 
     public final GoGuiAction m_actionGameInfo =
         new GoGuiAction(new ActionListener() {

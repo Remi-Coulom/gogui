@@ -34,8 +34,10 @@ public class GoGuiToolBar
         addButton(actions.m_actionInterrupt);
         addSeparator();
         addButton(actions.m_actionBeginning);
-        addRepeatButton(actions.m_actionBackward, actions.m_actionBackwardTen);
-        addRepeatButton(actions.m_actionForward, actions.m_actionForwardTen);
+        addButton(actions.m_actionBackwardTen);
+        addButton(actions.m_actionBackward);
+        addButton(actions.m_actionForward);
+        addButton(actions.m_actionForwardTen);
         addButton(actions.m_actionEnd);
         addSeparator();
         addButton(actions.m_actionNextVariation);
@@ -94,75 +96,5 @@ public class GoGuiToolBar
         // Don't use text unless there is no icon
         if (button.getIcon() != null)
             button.setText(null);
-    }
-}
-
-/** Button that triggers repeated actions when hold down for a longer time. */
-class RepeatButton
-    extends JButton
-{
-    /** Constructor.
-        @param command1 The default command used for clicks
-        @param command2 The command used for the repeated commands
-    */
-    public RepeatButton(AbstractAction action, AbstractAction repeatAction)
-    {
-        setAction(action);
-        m_action = action;
-        m_repeatAction = repeatAction;
-        m_timer = new Timer(1000, new ActionListener() {
-                public void actionPerformed(ActionEvent e)
-                {
-                    ++m_count;
-                    m_repeatAction.actionPerformed(null);
-                }
-            });
-        m_timer.stop();
-        addMouseListener(new MouseAdapter() {
-                public void mouseClicked(MouseEvent event)
-                {
-                    if (contains(event.getPoint()) && m_count == 0)
-                        m_action.actionPerformed(null);
-                    enableAction();
-                }
-
-                public void mousePressed(MouseEvent event)
-                {
-                    disableAction();
-                    m_count = 0;
-                    m_timer.start();
-                }
-
-                public void mouseReleased(MouseEvent event)
-                {
-                    m_timer.stop();
-                }
-            });
-    }
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sourceforge.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
-    private int m_count;
-
-    private Timer m_timer;
-
-    private AbstractAction m_action;
-
-    private AbstractAction m_repeatAction;
-
-    private void disableAction()
-    {
-        setAction(null);
-        setIcon((Icon)m_action.getValue(AbstractAction.SMALL_ICON));
-    }
-
-    private void enableAction()
-    {
-        setAction(m_action);
-        if (getIcon() != null)
-            setText(null);
     }
 }
