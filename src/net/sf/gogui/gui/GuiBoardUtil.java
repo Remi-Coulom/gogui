@@ -283,7 +283,7 @@ public final class GuiBoardUtil
                 if (move.getPoint() != null)
                 {
                     String label = Integer.toString(i + 1);
-                    guiBoard.setColor(move.getPoint(), move.getColor());
+                    guiBoard.setShadowStone(move.getPoint(), move.getColor());
                     guiBoard.setLabel(move.getPoint(), label);
                 }
             }
@@ -294,7 +294,7 @@ public final class GuiBoardUtil
                 if (move.getPoint() != null)
                 {
                     String label = Integer.toString(i + 1);
-                    guiBoard.setColor(move.getPoint(), move.getColor());
+                    guiBoard.setShadowStone(move.getPoint(), move.getColor());
                     guiBoard.setLabel(move.getPoint(), label);
                 }
             }

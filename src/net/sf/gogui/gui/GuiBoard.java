@@ -605,6 +605,16 @@ public final class GuiBoard
         }
     }
 
+    public void setShadowStone(GoPoint point, GoColor color)
+    {
+        GuiField field = getField(point);
+        if (field.getColor() != color || ! field.isShadowStone())
+        {
+            field.setShadowStone(color);
+            m_panel.repaintWithShadow(point);
+        }
+    }
+
     /** Set territory.
         @param point The point.
         @param color The territory color for this point; GoColor.EMPTY for

@@ -131,6 +131,11 @@ public class GuiField
         return m_influenceSet;
     }
 
+    public boolean isShadowStone()
+    {
+        return m_isShadowStone;
+    }
+
     public void setFieldBackground(Color color)
     {
         m_fieldColor = color;
@@ -139,6 +144,7 @@ public class GuiField
     public void setColor(GoColor color)
     {
         m_color = color;
+        m_isShadowStone = false;
     }
 
     public void setCrossHair(boolean crossHair)
@@ -191,6 +197,12 @@ public class GuiField
         m_select = select;
     }
 
+    public void setShadowStone(GoColor color)
+    {
+        m_color = color;
+        m_isShadowStone = true;
+    }
+
     public void setLabel(String s)
     {
         m_label = s;
@@ -205,6 +217,8 @@ public class GuiField
     private boolean m_crossHair;
 
     private boolean m_cursor;
+
+    private boolean m_isShadowStone;
 
     private boolean m_lastMoveMarker;
 
@@ -454,6 +468,8 @@ public class GuiField
         {
             m_graphics.setColor(colorNormal);
         }
+        if (m_isShadowStone)
+            setComposite(COMPOSITE_6);
         m_graphics.fillOval(margin, margin,
                             m_size - 2 * margin, m_size - 2 * margin);
     }
