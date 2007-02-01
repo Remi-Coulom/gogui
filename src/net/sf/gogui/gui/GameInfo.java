@@ -143,7 +143,7 @@ public class GameInfo
             }
         }
         else
-            buffer.append("unknown name");
+            buffer.append("unknown");
         buffer.append(")");
         label.setToolTipText(buffer.toString());
     }
