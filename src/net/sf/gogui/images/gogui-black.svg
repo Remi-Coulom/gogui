@@ -15,7 +15,10 @@
    sodipodi:version="0.32"
    inkscape:version="0.44.1"
    sodipodi:docbase="/home/markus/gogui/src/net/sf/gogui/images"
-   sodipodi:docname="gogui-black.svg">
+   sodipodi:docname="gogui-black.svg"
+   inkscape:export-filename="/home/markus/gogui/src/net/sf/gogui/images/gogui-black-32x32.png"
+   inkscape:export-xdpi="180"
+   inkscape:export-ydpi="180">
   <defs
      id="defs1892">
     <linearGradient
@@ -24,7 +27,7 @@
       <stop
          id="stop9456"
          offset="0"
-         style="stop-color:#eeeeec;stop-opacity:1" />
+         style="stop-color:#b2b2a8;stop-opacity:1" />
       <stop
          id="stop9458"
          offset="1"
@@ -58,8 +61,8 @@
      inkscape:document-units="px"
      inkscape:window-width="868"
      inkscape:window-height="610"
-     inkscape:window-x="223"
-     inkscape:window-y="45" />
+     inkscape:window-x="98"
+     inkscape:window-y="217" />
   <metadata
      id="metadata1895">
     <rdf:RDF>

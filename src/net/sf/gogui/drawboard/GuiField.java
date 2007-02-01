@@ -268,15 +268,15 @@ public class GuiField
 
     private static final Color COLOR_MARK = Color.decode("#4040ff");
 
-    private static final Color COLOR_STONE_BLACK = Color.decode("#202028");
+    private static final Color COLOR_STONE_BLACK = Color.decode("#3b3d3a");
 
     private static final Color COLOR_STONE_BLACK_BRIGHT
-        = Color.decode("#808088");
+        = Color.decode("#99998c");
 
-    private static final Color COLOR_STONE_WHITE = Color.decode("#d7d0c9");
+    private static final Color COLOR_STONE_WHITE = Color.decode("#d3d7cf");
 
     private static final Color COLOR_STONE_WHITE_BRIGHT
-        = Color.decode("#f0f0e9");
+        = Color.decode("#ffffff");
 
     private static Font s_cachedFont;
 
