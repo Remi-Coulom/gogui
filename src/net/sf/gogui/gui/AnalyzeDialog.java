@@ -369,7 +369,7 @@ public final class AnalyzeDialog
     {
         if (m_gtp.isCommandInProgress())
         {
-            SimpleDialogs.showError(this, "Command in progress");
+            SimpleDialogs.showError(this, "Command in progress", false);
             return;
         }
         int index = m_list.getSelectedIndex();        
