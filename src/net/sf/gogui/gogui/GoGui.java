@@ -2293,6 +2293,7 @@ public class GoGui
         m_gameTreeViewer.setSizeMode(m_treeSize);
         m_gameTreeViewer.setShowSubtreeSizes(m_showSubtreeSizes);
         restoreSize(m_gameTreeViewer, "tree");
+        m_gameTreeViewer.update(getTree(), getCurrentNode());
         m_gameTreeViewer.setVisible(true);
     }
 
