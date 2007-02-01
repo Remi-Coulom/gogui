@@ -1018,6 +1018,8 @@ public class GoGui
 
     public void actionShowShell()
     {
+        if (m_gtp == null)
+            return;
         if (! m_shell.isVisible())
         {
             restoreSize(m_shell, "shell");
