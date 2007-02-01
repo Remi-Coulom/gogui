@@ -54,44 +54,66 @@ public final class GoGuiUtil
         String variation = NodeUtil.getVariationString(node);
         StringBuffer moveText = new StringBuffer(128);
         StringBuffer toolTip = new StringBuffer(128);
-        if (moveNumber > 0 || movesLeft > 0)
+        if (moveNumber > 0)
         {
             moveText.append(moveNumber);
-            toolTip.append(moveNumber);
-            if (moveNumber == 1)
-                toolTip.append(" move played");
-            else
-                toolTip.append(" moves played");
+            moveText.append(" ");
         }
+        if (movesLeft > 0)
+        {
+            moveText.append("(");
+            moveText.append(moveNumber + movesLeft);
+            moveText.append(") ");
+        }
+
         if (move != null)
         {
             GoColor c = move.getColor();
             GoPoint p = move.getPoint();
-            moveText.append(c == GoColor.BLACK ? " B " : " W ");
+            moveText.append(c == GoColor.BLACK ? "B " : "W ");
             moveText.append(GoPoint.toString(p));
-            toolTip.append(" (last ");
-            toolTip.append(c == GoColor.BLACK ? "B " : "W ");
-            toolTip.append(GoPoint.toString(p));
-            toolTip.append(")");
-        }
-        if (movesLeft > 0)
-        {
-            moveText.append(" (");
-            moveText.append(moveNumber + movesLeft);
-            moveText.append(")");
-            toolTip.append(" (total ");
-            toolTip.append(moveNumber + movesLeft);
-            toolTip.append(")");
+            moveText.append(" ");
         }
         if (! "".equals(variation))
         {
-            moveText.append(" [");
+            moveText.append("[");
             moveText.append(variation);
             moveText.append("]");
-            toolTip.append(" (variation ");
-            toolTip.append(variation);
-            toolTip.append(")");
         }
+        if (moveNumber > 0 || movesLeft > 0)
+        {
+            if (move != null)
+            {
+                GoColor c = move.getColor();
+                GoPoint p = move.getPoint();
+                toolTip.append("Last move ");
+                toolTip.append(moveNumber);
+                toolTip.append(c == GoColor.BLACK ? " B " : " W ");
+                toolTip.append(GoPoint.toString(p));
+                toolTip.append(" ");
+            }
+            else
+            {
+                toolTip.append(moveNumber);
+                if (moveNumber == 1)
+                    toolTip.append(" move played ");
+                else
+                    toolTip.append(" moves played ");
+            }
+        }
+        if (movesLeft > 0)
+        {
+            toolTip.append("of ");
+            toolTip.append(moveNumber + movesLeft);
+            toolTip.append(" moves ");
+        }
+        if (! "".equals(variation))
+        {
+            toolTip.append("in variation ");
+            toolTip.append(variation);
+        }
+        else
+            toolTip.append("in main variation ");
         statusBar.setMoveText(moveText.toString(), toolTip.toString());
     }
 
