@@ -286,7 +286,9 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionTruncate, KeyEvent.VK_T);
         menu.addItem(actions.m_actionTruncateChildren, KeyEvent.VK_C);
         menu.addSeparator();
-        menu.addItem(actions.m_actionSetup, KeyEvent.VK_S);
+        GoGuiCheckBoxMenuItem itemSetup =
+            new GoGuiCheckBoxMenuItem(actions.m_actionSetup);
+        menu.addItem(itemSetup, KeyEvent.VK_S);
         ButtonGroup group = new ButtonGroup();
         menu.addRadioItem(group, actions.m_actionSetupBlack, KeyEvent.VK_B);
         menu.addRadioItem(group, actions.m_actionSetupWhite, KeyEvent.VK_W);

@@ -831,6 +831,7 @@ public class GoGuiActions
         m_actionPlay.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
+        m_actionSetup.setSelected(setupMode);
         m_actionSetupBlack.setEnabled(setupMode);
         m_actionSetupWhite.setEnabled(setupMode);
         m_actionSetupBlack.setSelected(setupColor == GoColor.BLACK);
