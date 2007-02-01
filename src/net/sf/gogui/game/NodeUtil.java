@@ -265,7 +265,7 @@ public final class NodeUtil
             trimmed = true;
         }
         if (trimmed)
-            comment = comment + "...";
+            comment = comment + " ...";
         return comment;
     }
 

@@ -107,6 +107,22 @@ public class GoGuiMenuBar
                     public void actionPerformed(ActionEvent e) {
                         m_bookmarkListener.actionGotoBookmark(bookmarkIndex);
                     } } );
+            if (bookmark.m_file != null)
+            {
+                StringBuffer toolTip = new StringBuffer(256);
+                toolTip.append(bookmark.m_file.toString());
+                if (bookmark.m_move > 0)
+                {
+                    toolTip.append(" after move ");
+                    toolTip.append(bookmark.m_move);
+                }
+                if (! bookmark.m_variation.trim().equals(""))
+                {
+                    toolTip.append(" in variation ");
+                    toolTip.append(bookmark.m_variation);
+                }
+                item.setToolTipText(toolTip.toString());
+            }
             m_menuBookmarks.add(item);
             m_bookmarkItems.add(item);
         }

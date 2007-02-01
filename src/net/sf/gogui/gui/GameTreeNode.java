@@ -38,24 +38,7 @@ class GameTreeNode
         m_imageBlack = imageBlack;
         m_imageWhite = imageWhite;
         m_imageSetup = imageSetup;
-        Move move = node.getMove();
-        StringBuffer toolTip = new StringBuffer(128);
-        if (move != null)
-        {
-            toolTip.append(moveNumber);
-            toolTip.append(" ");
-            toolTip.append(move.getColor() == GoColor.BLACK ? "B " :"W ");
-            toolTip.append(GoPoint.toString(move.getPoint()));
-        }
-        String comment = NodeUtil.getCommentStart(node, 30);
-        if (comment != null)
-        {
-            if (move != null)
-                toolTip.append("  ");
-            toolTip.append(comment);
-        }
-        if (toolTip.length() > 0)
-            setToolTipText(toolTip.toString());
+        setToolTip();
         setPreferredSize(size);
     }
 
@@ -141,6 +124,50 @@ class GameTreeNode
     private final Image m_imageWhite;
 
     private final Image m_imageSetup;
+
+    private void setToolTip()
+    {
+        StringBuffer toolTip = new StringBuffer(128);
+        Move move = m_node.getMove();
+        if (move != null)
+        {
+            toolTip.append(m_moveNumber);
+            toolTip.append(" ");
+            toolTip.append(move.getColor() == GoColor.BLACK ? "B " :"W ");
+            toolTip.append(GoPoint.toString(move.getPoint()));
+        }
+        else if (m_node.hasSetup())
+        {
+            toolTip.append("Setup");
+            int numberAddBlack = m_node.getNumberAddBlack();
+            int numberAddWhite = m_node.getNumberAddWhite();
+            int numberAddEmpty = m_node.getNumberAddEmpty();
+            if (numberAddBlack > 0)
+            {
+                toolTip.append(" B ");
+                toolTip.append(numberAddBlack);
+            }
+            if (numberAddWhite > 0)
+            {
+                toolTip.append(" W ");
+                toolTip.append(numberAddWhite);
+            }
+            if (numberAddEmpty > 0)
+            {
+                toolTip.append(" E ");
+                toolTip.append(numberAddEmpty);
+            }
+        }
+        String comment = NodeUtil.getCommentStart(m_node, 50);
+        if (comment != null)
+        {
+            if (toolTip.length() > 0)
+                toolTip.append("  ");
+            toolTip.append(comment);
+        }
+        if (toolTip.length() > 0)
+            setToolTipText(toolTip.toString());
+    }
 
     private void drawText(Graphics graphics)
     {
