@@ -167,7 +167,7 @@ public class Comment
     {
         if (m_duringSetText)
             return;
-        String comment = m_textPane.get().getText().trim();
+        String comment = m_textPane.get().getText();
         m_listener.changed(comment);
     }
 
