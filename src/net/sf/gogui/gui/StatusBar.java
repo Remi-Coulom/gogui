@@ -49,7 +49,21 @@ public class StatusBar
                                                    Short.MAX_VALUE));
         setToPlay(GoColor.BLACK);
         m_iconBox.add(m_toPlayLabel);
-        m_iconBox.add(GuiUtil.createSmallFiller());
+        m_labelScore
+            = new JLabel(GuiUtil.getIcon("gogui-score", "Score"));
+        m_labelScore.setToolTipText("Score mode");
+        m_labelScore.setVisible(false);
+        m_iconBox.add(m_labelScore);
+
+        m_labelSetup
+            = new JLabel(GuiUtil.getIcon("gogui-setup-16x16", "Setup"));
+        m_labelSetup.setVisible(false);
+        m_labelSetup.setToolTipText("Setup mode");
+        m_iconBox.add(m_labelSetup);
+        m_distanceSetup = GuiUtil.createFiller();
+        m_distanceSetup.setVisible(false);
+        m_iconBox.add(m_distanceSetup);
+
         m_progressBar = new JProgressBar();
         m_progressBar.setVisible(false);
         m_progressBar.setPreferredSize(new Dimension(72, 16));
@@ -57,6 +71,8 @@ public class StatusBar
         m_progressBarDistance = GuiUtil.createFiller();
         m_progressBarDistance.setVisible(false);
         m_iconBox.add(m_progressBarDistance);
+        m_iconBox.add(GuiUtil.createSmallFiller());
+
         m_text = new JTextField();
         m_text.setEditable(false);
         m_text.setFocusable(false);
@@ -149,6 +165,18 @@ public class StatusBar
         m_moveText.setToolTipText(toolTip);
     }
 
+    public void setSetupMode(boolean enabled)
+    {
+        m_labelSetup.setVisible(enabled);
+        m_distanceSetup.setVisible(enabled);
+    }
+
+    public void setScoreMode(boolean enabled)
+    {
+        m_labelScore.setVisible(enabled);
+        m_toPlayLabel.setVisible(! enabled);
+    }
+
     public void setText(String text)
     {
         m_text.setText(text);
@@ -186,6 +214,10 @@ public class StatusBar
 
     private final JLabel m_toPlayLabel;
 
+    private final JLabel m_labelSetup;
+
+    private final JLabel m_labelScore;
+
     private final JProgressBar m_progressBar;
 
     private final JTextField m_moveText;
@@ -195,5 +227,7 @@ public class StatusBar
     private final JSeparator m_moveTextSeparator;
 
     Box.Filler m_progressBarDistance;
+
+    Box.Filler m_distanceSetup;
 }
 

@@ -907,6 +907,7 @@ public class GoGui
             showInfo("No program is attached.\n" +
                      "Please mark dead groups manually.");
             initScore(null);
+            updateViews(false);
             return;
         }
         if (m_gtp.isSupported("final_status_list"))
@@ -926,6 +927,7 @@ public class GoGui
             showInfo(m_name + " does not support scoring.\n" +
                      "Please mark dead groups manually.");
             initScore(null);
+            updateViews(false);
         }
     }
 
@@ -953,11 +955,11 @@ public class GoGui
         if (m_setupMode)
         {
             setupDone();
+            updateViews(false);
             return;
         }        
         resetBoard();
         m_setupMode = true;
-        showStatus("Setup Black");
         m_game.setToMove(GoColor.BLACK);
         if (getCurrentNode().getMove() != null)
         {
@@ -972,10 +974,6 @@ public class GoGui
     public void actionSetupColor(GoColor color)
     {
         assert(color.isBlackWhite());
-        if (color == GoColor.BLACK)            
-            showStatus("Setup Black");
-        else
-            showStatus("Setup White");
         m_game.setToMove(color);
         updateViews(false);
     }
@@ -3057,6 +3055,7 @@ public class GoGui
             }
         }
         initScore(isDeadStone);
+        updateViews(false);
     }    
 
     private void sendGtp(Reader reader)
@@ -3399,14 +3398,15 @@ public class GoGui
         setTitle();
         if (m_analyzeDialog != null)
             m_analyzeDialog.setSelectedColor(getToMove());
-        if (m_gameTreeViewer == null)
-            return;
-        if (! gameTreeChanged)
+        if (m_gameTreeViewer != null)
         {
-            m_gameTreeViewer.update(getCurrentNode());
-            return;
+            if (! gameTreeChanged)
+                m_gameTreeViewer.update(getCurrentNode());
+            else
+                m_gameTreeViewer.update(getTree(), getCurrentNode());
         }
-        m_gameTreeViewer.update(getTree(), getCurrentNode());
+        m_statusBar.setSetupMode(m_setupMode);
+        m_statusBar.setScoreMode(m_scoreMode);
     }
 
     private void updateFromGoBoard()
