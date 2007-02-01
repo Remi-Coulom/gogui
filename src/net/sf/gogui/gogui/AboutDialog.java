@@ -71,7 +71,7 @@ public final class AboutDialog
                             "<p align=\"center\"><b>" + name + "</b></p>" +
                             versionInfo +
                             "<p align=\"center\" width=\"" + width + "\">" +
-                            "<tt>" + command + "</tt></p>");
+                            command + "</p>");
         }
         else
             programPanel = new JPanel();
