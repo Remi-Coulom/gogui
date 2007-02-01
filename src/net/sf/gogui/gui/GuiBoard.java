@@ -19,6 +19,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -296,28 +297,26 @@ public final class GuiBoard
                 }
             };
         m_panel.addKeyListener(keyAdapter);
-        MouseAdapter mouseAdapter = new MouseAdapter()
-            {
-                public void mousePressed(MouseEvent event)
-                {
-                    GoPoint point = m_panel.getPoint(event);
+        m_panel.addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent e) {
+                    GoPoint point = m_panel.getPoint(e);
                     if (point == null)
                         return;
                     // mousePressed and mouseReleased (platform dependency)
-                    if (event.isPopupTrigger())
+                    if (e.isPopupTrigger())
                     {
                         contextMenu(point);
                         return;
                     }
-                    int button = event.getButton();
-                    int count = event.getClickCount();
+                    int button = e.getButton();
+                    int count = e.getClickCount();
                     if (button != MouseEvent.BUTTON1)
                         return;
                     if (count == 2)
                         fieldClicked(point, true);
                     else
                     {            
-                        int modifiers = event.getModifiers();
+                        int modifiers = e.getModifiers();
                         int mask = (ActionEvent.CTRL_MASK
                                     | ActionEvent.ALT_MASK
                                     | ActionEvent.META_MASK);
@@ -326,19 +325,28 @@ public final class GuiBoard
                     }
                 }
 
-                public void mouseReleased(MouseEvent event)
-                {                    
-                    GoPoint point = m_panel.getPoint(event);
+                public void mouseReleased(MouseEvent e) {
+                    GoPoint point = m_panel.getPoint(e);
                     if (point == null)
                         return;
-                    if (event.isPopupTrigger())
+                    if (e.isPopupTrigger())
                     {
                         contextMenu(point);
                         return;
                     }
                 }
-            };
-        m_panel.addMouseListener(mouseAdapter);
+            });
+        m_panel.addMouseMotionListener(new MouseMotionAdapter() {
+                public void mouseMoved(MouseEvent e) {
+                    m_panel.setToolTipText(null);
+                    GoPoint point = m_panel.getPoint(e);
+                    if (point == null)
+                        return;
+                    String label = getField(point).getLabel();
+                    if (label != null && label.length() > 3)
+                        m_panel.setToolTipText(label);
+                }
+            });
         for (int y = size - 1; y >= 0; --y)
         {
             for (int x = 0; x < size; ++x)
