@@ -933,6 +933,7 @@ public class GoGui
     {
         if (! m_scoreMode)
             return;
+        saveLocation(m_scoreDialog, "score");
         m_scoreDialog.setVisible(false);
         if (accepted)
         {
@@ -942,6 +943,7 @@ public class GoGui
         clearStatus();
         m_guiBoard.clearAll();
         m_scoreMode = false;
+        updateViews(false);
     }
 
     public void actionSetup()
@@ -2709,6 +2711,7 @@ public class GoGui
         m_scoreMode = true;
         if (m_scoreDialog == null)
             m_scoreDialog = new ScoreDialog(this, this);
+        restoreLocation(m_scoreDialog, "score");
         Komi komi = getGameInformation().getKomi();
         m_scoreDialog.showScore(m_countScore.getScore(komi, getRules()));
         m_scoreDialog.setVisible(true);
@@ -2906,6 +2909,11 @@ public class GoGui
         updateGuiBoard();
     }
     
+    private void restoreLocation(JDialog dialog, String name)
+    {
+        m_session.restoreLocation(dialog, this, name + "-" + getBoardSize());
+    }
+
     private void restoreMainWindow(int size)
     {
         setState(Frame.NORMAL);
@@ -3018,9 +3026,9 @@ public class GoGui
         }
     }
 
-    private void saveSize(JDialog dialog, String name)
+    private void saveLocation(JDialog dialog, String name)
     {
-        m_session.saveSize(dialog, name + "-" + getBoardSize());
+        m_session.saveLocation(dialog, this, name + "-" + getBoardSize());
     }
 
     private void saveSizeAndVisible(JDialog dialog, String name)

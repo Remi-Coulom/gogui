@@ -49,6 +49,25 @@ public final class Session
         setLocationChecked(window, x, y);
     }
 
+    public void restoreLocation(Window window, Window owner, String name)
+    {
+        int x = -1;
+        int y = -1;
+        Preferences prefs = getNode(name);
+        if (prefs != null)
+        {
+            x = prefs.getInt("x", -1);
+            y = prefs.getInt("y", -1);
+        }
+        if (x == -1 || y == -1)
+        {
+            window.setLocationRelativeTo(owner);
+            return;
+        }
+        Point ownerLocation = owner.getLocation();
+        setLocationChecked(window, x + ownerLocation.x,  y + ownerLocation.y);
+    }
+
     public void restoreSize(Window window, String name)
     {
         Preferences prefs = getNode(name);
@@ -66,25 +85,18 @@ public final class Session
 
     public void restoreSize(Window window, Window owner, String name)
     {
-        int x = -1;
-        int y = -1;
+        restoreLocation(window, owner, name);
         int width = -1;
         int height = -1;
         Preferences prefs = getNode(name);
         if (prefs != null)
         {
-            x = prefs.getInt("x", -1);
-            y = prefs.getInt("y", -1);
             width = prefs.getInt("width", -1);
             height = prefs.getInt("height", -1);
         }
-        if (x == -1 || y == -1 || width == -1 || height == -1)
-        {
-            window.setLocationRelativeTo(owner);
+        if (width == -1 || height == -1)
             return;
-        }
         Point ownerLocation = owner.getLocation();
-        setLocationChecked(window, x + ownerLocation.x,  y + ownerLocation.y);
         setSizeChecked(window, width, height);
     }
 
