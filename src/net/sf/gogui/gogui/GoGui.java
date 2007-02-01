@@ -2642,6 +2642,8 @@ public class GoGui
 
     private void initialize()
     {
+        m_bookmarks = Bookmark.load();
+        m_menuBar.setBookmarks(m_bookmarks);
         if (m_file == null)
             newGame(getBoardSize());
         else
@@ -2655,8 +2657,6 @@ public class GoGui
         // the window visible, but not draw the window content yet
         getLayeredPane().setVisible(false);
         setVisible(true);
-        m_bookmarks = Bookmark.load();
-        m_menuBar.setBookmarks(m_bookmarks);
         if (m_program != null)
             attachProgram(m_program);
         setTitle();
