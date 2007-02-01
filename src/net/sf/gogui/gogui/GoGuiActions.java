@@ -839,6 +839,8 @@ public class GoGuiActions
         m_actionShellSave.setEnabled(isProgramAttached);
         m_actionShellSaveCommands.setEnabled(isProgramAttached);
         m_actionShellSendFile.setEnabled(isProgramAttached);
+        m_actionShowAnalyzeDialog.setEnabled(isProgramAttached);
+        m_actionShowShell.setEnabled(isProgramAttached);
         m_actionToggleAutoNumber.setSelected(m_goGui.getAutoNumber());
         m_actionToggleBeepAfterMove.setEnabled(isProgramAttached);
         m_actionToggleBeepAfterMove.setSelected(m_goGui.getBeepAfterMove());
