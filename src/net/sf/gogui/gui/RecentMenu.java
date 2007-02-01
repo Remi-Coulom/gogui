@@ -10,6 +10,7 @@ import java.util.prefs.Preferences;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import net.sf.gogui.util.PrefUtil;
+import net.sf.gogui.util.ObjectUtil;
 
 class RecentMenuItem
     extends JMenuItem
@@ -20,6 +21,8 @@ class RecentMenuItem
         super(label);
         m_label = label;
         m_value = value;
+        if (! ObjectUtil.equals(label, value))
+            setToolTipText(value);
         addActionListener(listener);
     }
 
