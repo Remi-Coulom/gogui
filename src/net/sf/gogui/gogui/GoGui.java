@@ -2456,7 +2456,7 @@ public class GoGui
         if (! isSingleMove && m_file == null && playerToMove == null
             && (father == null
                 || (father.getFatherConst() == null
-                    && ObjectUtil.equals(playerOther, m_name))))
+                    && (playerOther == null || playerOther.equals(m_name)))))
         {
             m_game.setPlayer(toMove, m_name);
             updateViews(false);
