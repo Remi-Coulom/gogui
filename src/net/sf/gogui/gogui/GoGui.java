@@ -2061,12 +2061,12 @@ public class GoGui
             return false;
         if (m_gtp.isProgramDead())
         {
-            showError("Go program has terminated", false);
+            showError(m_name + " has terminated", false);
             return false;
         }
         if (isOutOfSync())
         {
-            showError("Go program is not in sync with current position",
+            showError(m_name + " is not in sync with current position",
                       false);
             return false;
         }
