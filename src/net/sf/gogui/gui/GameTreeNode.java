@@ -138,25 +138,30 @@ class GameTreeNode
         }
         else if (m_node.hasSetup())
         {
-            toolTip.append("Setup");
+            toolTip.append("Setup (");
             int numberAddBlack = m_node.getNumberAddBlack();
             int numberAddWhite = m_node.getNumberAddWhite();
             int numberAddEmpty = m_node.getNumberAddEmpty();
             if (numberAddBlack > 0)
             {
-                toolTip.append(" B ");
+                toolTip.append("B ");
                 toolTip.append(numberAddBlack);
             }
             if (numberAddWhite > 0)
             {
-                toolTip.append(" W ");
+                if (numberAddBlack > 0)
+                    toolTip.append(", ");
+                toolTip.append("W ");
                 toolTip.append(numberAddWhite);
             }
             if (numberAddEmpty > 0)
             {
-                toolTip.append(" E ");
+                if (numberAddBlack + numberAddWhite > 0)
+                    toolTip.append(", ");
+                toolTip.append("E ");
                 toolTip.append(numberAddEmpty);
             }
+            toolTip.append(")");
         }
         String comment = NodeUtil.getCommentStart(m_node, 50);
         if (comment != null)
