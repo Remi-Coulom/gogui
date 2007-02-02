@@ -58,19 +58,7 @@ format.
 <note>
 <simpara>
 Only a subset of the SGF definition is supported.
-Most notably game collections and certain kind of setup positions are not
-supported.
-The current GTP standard does not define a setup command.
-Setup stones are always translated to <command>play</command>
-commands for the Go program, which is problematic, if the setup stones lead
-to a Go position that contains blocks with no liberties.
-Currently, no check for this situation is performed, even if it causes the
-Go program to capture the blocks and therefore be out-of-sync with the game
-tree.
-Delete points are sent as <command>play empty</command> commands to
-the Go program, which should respond with an error, because
-<command>play empty</command> is not valid according to the GTP standard.
-Unknown SGF properties are preserved, if the game is saved to a file again.
+Most notably game collections are not supported.
 </simpara>
 </note>
 </para>
@@ -432,35 +420,16 @@ Truncate all children variations of the current node.
 </listitem>
 </varlistentry>
 
-<varlistentry id="setupmode">
-<term><guimenuitem>Setup Mode</guimenuitem></term>
-<listitem>
-<para>
-Enter or leave setup mode.
-In setup mode you can place or remove stones of the current color.
-The current color can be changed with the <guimenuitem>Black</guimenuitem>
-and <guimenuitem>White</guimenuitem> menu item from the
-<guimenu>Setup</guimenu> menu.
-It is also possible to place stones of the other than current color,
-without switching the color, by pressing a modifier key while placing a stone
-(Ctrl, Alt or Meta) or using the right mouse button.
-<note>
-<simpara>
-Setting up a position is not reversible.
-After leaving setup mode, you are in a new game starting with the current
-position and the current color to move.
-</simpara>
-</note>
-</para>
-</listitem>
-</varlistentry>
-
 <varlistentry>
 <term><guimenuitem>Setup Black</guimenuitem></term>
 <listitem>
 <para>
-Set the current color for setting up stones and the color to move
-to Black.
+Enter setup mode and set current color to Black or leave setup mode if already
+in setup mode and current color is Black.
+In setup mode you can place or remove stones of the current color.
+It is also possible to place stones of the other than current color
+without switching the color, by pressing a modifier key while placing a stone
+(Ctrl, Alt or Meta) or using the right mouse button.
 </para>
 </listitem>
 </varlistentry>
@@ -469,8 +438,9 @@ to Black.
 <term><guimenuitem>Setup White</guimenuitem></term>
 <listitem>
 <para>
-Set the current color for setting up stones and the color to move
-to White.
+Enter setup mode and set current color to White or leave setup mode if already
+in setup mode and current color is White.
+See also: <guimenuitem>Setup Black</guimenuitem>.
 </para>
 </listitem>
 </varlistentry>

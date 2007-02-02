@@ -302,12 +302,12 @@ public class GoGuiMenuBar
         menu.addItem(actions.m_actionTruncate, KeyEvent.VK_T);
         menu.addItem(actions.m_actionTruncateChildren, KeyEvent.VK_C);
         menu.addSeparator();
-        GoGuiCheckBoxMenuItem itemSetup =
-            new GoGuiCheckBoxMenuItem(actions.m_actionSetup);
-        menu.addItem(itemSetup, KeyEvent.VK_S);
-        ButtonGroup group = new ButtonGroup();
-        menu.addRadioItem(group, actions.m_actionSetupBlack, KeyEvent.VK_B);
-        menu.addRadioItem(group, actions.m_actionSetupWhite, KeyEvent.VK_W);
+        GoGuiCheckBoxMenuItem itemSetupBlack =
+            new GoGuiCheckBoxMenuItem(actions.m_actionSetupBlack);
+        menu.addItem(itemSetupBlack, KeyEvent.VK_B);
+        GoGuiCheckBoxMenuItem itemSetupWhite =
+            new GoGuiCheckBoxMenuItem(actions.m_actionSetupWhite);
+        menu.addItem(itemSetupWhite, KeyEvent.VK_W);
         return menu;
     }
 

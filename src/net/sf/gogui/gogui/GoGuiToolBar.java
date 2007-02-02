@@ -14,6 +14,8 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
+import net.sf.gogui.gui.GuiUtil;
+
 
 /** Tool bar for GoGui. */
 public class GoGuiToolBar
@@ -32,6 +34,9 @@ public class GoGuiToolBar
         addSeparator();
         addButton(actions.m_actionPlay);
         addButton(actions.m_actionInterrupt);
+        addSeparator();
+        addButton(actions.m_actionSetupBlack);
+        addButton(actions.m_actionSetupWhite);
         addSeparator();
         addButton(actions.m_actionBeginning);
         addButton(actions.m_actionBackwardTen);

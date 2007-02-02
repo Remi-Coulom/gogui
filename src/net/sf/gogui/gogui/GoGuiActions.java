@@ -559,23 +559,17 @@ public class GoGuiActions
                     m_goGui.actionScore(); } },
              "Score", "Score position");
 
-    public final GoGuiAction m_actionSetup =
-        new GoGuiAction(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionSetup(); } },
-             "Setup", "Enter or leave setup mode");
-
     public final GoGuiAction m_actionSetupBlack =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionSetupColor(GoColor.BLACK); } },
-             "Setup Black", "Change setup color to Black");
+                    m_goGui.actionSetup(GoColor.BLACK); } },
+             "Setup Black", "Setup black stones", "gogui-setup-black");
 
     public final GoGuiAction m_actionSetupWhite =
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    m_goGui.actionSetupColor(GoColor.WHITE); } },
-             "Setup White", "Change setup color to White");
+                    m_goGui.actionSetup(GoColor.WHITE); } },
+             "Setup White", "Setup white stones", "gogui-setup-white");
 
     public final GoGuiAction m_actionShowAnalyzeDialog =
         new GoGuiAction(new ActionListener() {
@@ -837,11 +831,8 @@ public class GoGuiActions
         m_actionPlay.setEnabled(isProgramAttached);
         m_actionPreviousVariation.setEnabled(hasPreviousVariation);
         m_actionPreviousEarlierVariation.setEnabled(hasPrevEarlierVariation);
-        m_actionSetup.setSelected(setupMode);
-        m_actionSetupBlack.setEnabled(setupMode);
-        m_actionSetupWhite.setEnabled(setupMode);
-        m_actionSetupBlack.setSelected(setupColor == GoColor.BLACK);
-        m_actionSetupWhite.setSelected(setupColor == GoColor.WHITE);
+        m_actionSetupBlack.setSelected(setupMode && toMove == GoColor.BLACK);
+        m_actionSetupWhite.setSelected(setupMode && toMove == GoColor.WHITE);
         m_actionShellSave.setEnabled(isProgramAttached);
         m_actionShellSaveCommands.setEnabled(isProgramAttached);
         m_actionShellSendFile.setEnabled(isProgramAttached);

@@ -983,34 +983,40 @@ public class GoGui
         analyzeBegin(false);
     }    
 
-    public void actionSetup()
+    public void actionSetup(GoColor color)
     {
+        assert(color.isBlackWhite());
         if (! checkCommandInProgress())
             return;
         if (m_setupMode)
         {
-            setupDone();
+            if (color == m_game.getToMove())
+                setupDone();
+            else
+                m_game.setToMove(color);
             updateViews(false);
-            return;
-        }        
-        resetBoard();
-        m_setupMode = true;
-        m_game.setToMove(GoColor.BLACK);
-        if (getCurrentNode().getMove() != null)
-        {
-            m_game.createNewChild();
-            currentNodeChanged();
-            updateViews(true);
         }
         else
-            updateViews(false);
-    }
-
-    public void actionSetupColor(GoColor color)
-    {
-        assert(color.isBlackWhite());
-        m_game.setToMove(color);
-        updateViews(false);
+        {
+            resetBoard();
+            m_setupMode = true;
+            m_game.setToMove(color);
+            if (getCurrentNode().getMove() != null)
+            {
+                m_game.createNewChild();
+                currentNodeChanged();
+                updateViews(true);
+            }
+            else
+                updateViews(false);
+        }
+        if (m_setupMode)
+        {
+            if (color == GoColor.BLACK)
+                showStatus("Setup black stones");
+            else
+                showStatus("Setup white stones");
+        }
     }
 
     public void actionShellSave()
@@ -2149,12 +2155,13 @@ public class GoGui
                 return;
         if (! checkSaveGame(true))
             return;
-        saveSession();        
         if (m_gtp != null)
         {
             m_analyzeCommand = null;
             detachProgram();
         }
+        else
+            saveSession();
         dispose();
         System.exit(0);
     }
