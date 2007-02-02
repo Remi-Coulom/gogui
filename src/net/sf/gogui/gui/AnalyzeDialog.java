@@ -435,8 +435,9 @@ public final class AnalyzeDialog
         }
         if (command.needsColorArg())
             command.setColorArg(getSelectedColor());
-        boolean autoRun = m_autoRun.isSelected();
-        boolean clearBoard = m_clearBoard.isSelected();
+        boolean autoRun = m_autoRun.isEnabled() && m_autoRun.isSelected();
+        boolean clearBoard =
+            m_clearBoard.isEnabled() && m_clearBoard.isSelected();
         m_listener.actionSetAnalyzeCommand(command, autoRun, clearBoard,
                                            false);
     }
