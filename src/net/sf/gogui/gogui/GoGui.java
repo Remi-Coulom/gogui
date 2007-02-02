@@ -991,7 +991,11 @@ public class GoGui
         if (m_setupMode)
         {
             if (color == m_game.getToMove())
-                setupDone();
+            {
+                m_setupMode = false;
+                m_game.setToMove(getToMove());
+                boardChangedBegin(false, false);
+            }
             else
                 m_game.setToMove(color);
             updateViews(false);
@@ -3293,15 +3297,6 @@ public class GoGui
     {
         assert(point != null);
         m_game.setup(point, color);
-    }
-
-    private void setupDone()
-    {
-        m_setupMode = false;
-        m_game.setToMove(getToMove());
-        initGtp();
-        setFile(null);
-        boardChangedBegin(false, false);
     }
 
     private void showError(String message, Exception e)
