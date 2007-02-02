@@ -268,24 +268,27 @@ public class GtpSynchronizer
         ConstPointList white = setup.getWhite();
         ConstPointList empty = setup.getEmpty();
         GoColor toMove = setup.getToMove();        
-        StringBuffer command = new StringBuffer(128);
-        command.append("gogui-setup");
-        for (int i = 0; i < black.size(); ++i)
+        if (black.size() + white.size() + empty.size() > 0)
         {
-            command.append(" b ");
-            command.append(black.get(i));
+            StringBuffer command = new StringBuffer(128);
+            command.append("gogui-setup");
+            for (int i = 0; i < black.size(); ++i)
+            {
+                command.append(" b ");
+                command.append(black.get(i));
+            }
+            for (int i = 0; i < white.size(); ++i)
+            {
+                command.append(" w ");
+                command.append(white.get(i));
+            }
+            for (int i = 0; i < empty.size(); ++i)
+            {
+                command.append(" e ");
+                command.append(empty.get(i));
+            }        
+            m_gtp.send(command.toString());
         }
-        for (int i = 0; i < white.size(); ++i)
-        {
-            command.append(" w ");
-            command.append(white.get(i));
-        }
-        for (int i = 0; i < empty.size(); ++i)
-        {
-            command.append(" e ");
-            command.append(empty.get(i));
-        }
-        m_gtp.send(command.toString());
         m_board.setup(black, white, empty, toMove);
         if (toMove != null && m_isSupportedSetupPlayer)
             m_gtp.send("gogui-setup_player "
@@ -382,7 +385,10 @@ public class GtpSynchronizer
             Board.Placement placement = m_board.getPlacement(i);
             if (placement instanceof Board.Setup)
             {
-                m_gtp.send("gogui-undo_setup");
+                Board.Setup setup = (Board.Setup)placement;
+                if (setup.getBlack().size() + setup.getWhite().size()
+                    + setup.getEmpty().size() > 0)
+                    m_gtp.send("gogui-undo_setup");
                 m_board.undo();
             }
             else if (placement instanceof Board.Play)

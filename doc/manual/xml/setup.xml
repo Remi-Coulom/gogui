@@ -28,7 +28,7 @@ positions, which will be used if the Go program supports them:
 <term><command>gogui-setup</command></term>
 <listitem>
 <para>
-The argument to this command is a (potentially empty) sequence of color point
+The argument to this command is a sequence of color point
 pairs (like for <command>gogui-play_sequence</command>).
 Stones can be removed from the board by using the color
 <userinput>e</userinput> (empty).
