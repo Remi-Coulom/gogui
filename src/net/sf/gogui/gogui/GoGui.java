@@ -303,7 +303,7 @@ public class GoGui
         if (m_shell != null && m_session.isVisible("shell"))
             m_shell.setVisible(true);
         if (m_session.isVisible("analyze"))
-            m_shell.setVisible(true);
+            createAnalyzeDialog();
         toFrontLater();
         updateViews(false);
     }
