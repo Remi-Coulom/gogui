@@ -1258,6 +1258,14 @@ public class GoGui
         return m_commandCompletion;
     }
 
+    /** Get name of currently attached program.
+        @return Name or null, if no program is attached
+    */
+    public String getProgramName()
+    {
+        return m_name;
+    }
+
     public boolean getShowLastMove()
     {
         return m_showLastMove;
@@ -1905,7 +1913,7 @@ public class GoGui
         catch (GtpError e)
         {
         }
-        if (m_name == null)
+        if (m_name == null || m_name.equals(""))
             m_name = "Unknown Program";
         try
         {

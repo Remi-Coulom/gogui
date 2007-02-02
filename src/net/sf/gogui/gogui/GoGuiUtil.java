@@ -102,7 +102,10 @@ public final class GoGuiUtil
         {
             toolTip.append("of ");
             toolTip.append(moveNumber + movesLeft);
-            toolTip.append(" moves ");
+            if (moveNumber + movesLeft == 1)
+                toolTip.append(" move ");
+            else
+                toolTip.append(" moves ");
         }
         if (! "".equals(variation))
         {

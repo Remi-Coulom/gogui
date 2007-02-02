@@ -455,7 +455,7 @@ public class GoGuiActions
         new GoGuiAction(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     m_goGui.actionInterrupt(); } },
-             "Interrupt", "Interrupt program", KeyEvent.VK_ESCAPE,
+             "Interrupt", "Interrupt", KeyEvent.VK_ESCAPE,
                         "gogui-interrupt");
 
     public final GoGuiAction m_actionKeepOnlyPosition =
@@ -767,6 +767,9 @@ public class GoGuiActions
         File file = m_goGui.getFile();
         boolean isModified = m_goGui.isModified();
         ConstGuiBoard guiBoard = m_goGui.getGuiBoard();
+        String name = m_goGui.getProgramName();
+        if (name == null)
+            name = "computer";
         ConstNode node = game.getCurrentNode();
         boolean hasFather = (node.getFatherConst() != null);
         boolean hasChildren = (node.getNumberChildren() > 0);
@@ -878,9 +881,9 @@ public class GoGuiActions
         m_actionTruncateChildren.setEnabled(hasChildren);
         updateFile(file, isModified);
         if (toMove == GoColor.BLACK)
-            m_actionPlay.setDescription("Make computer play Black");
+            m_actionPlay.setDescription("Make " + name + " play Black");
         else
-            m_actionPlay.setDescription("Make computer play White");
+            m_actionPlay.setDescription("Make " + name + " play White");
     }
 
     private final GoGui m_goGui;
