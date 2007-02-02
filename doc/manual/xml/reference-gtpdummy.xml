@@ -157,6 +157,30 @@ If the argument is "show", the current point list is shown.
 
 <varlistentry>
 <term>
+<command>gtpdummy-file_open</command>
+</term>
+<listitem>
+<para>
+For testing the file open analyze command wildcard.
+Takes a filename argument and returns some information about this file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<command>gtpdummy-file_save</command>
+</term>
+<listitem>
+<para>
+For testing the file save analyze command wildcard.
+Takes a filename argument and writes a test string into the file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
 <command>gtpdummy-gfx</command>
 </term>
 <listitem>

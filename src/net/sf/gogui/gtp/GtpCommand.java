@@ -96,6 +96,12 @@ public class GtpCommand
         return m_hasId; 
     }
 
+    public String getArg() throws GtpError
+    {
+        checkNuArg(1);
+        return getArg(0);
+    }
+
     /** Get argument.
         @param i The index of the argument (starting with zero).
         @return The argument.

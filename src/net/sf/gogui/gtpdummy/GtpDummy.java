@@ -4,6 +4,9 @@
 
 package net.sf.gogui.gtpdummy;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Random;
 import net.sf.gogui.go.GoPoint;
@@ -89,6 +92,37 @@ public class GtpDummy
             cmd.getResponse().append(m_delay);
     }
     
+    public void cmdFileOpen(GtpCommand cmd) throws GtpError
+    {
+        try
+        {
+            File f = new File(cmd.getArg());
+            cmd.setResponse("CanonicalPath: " + f.getCanonicalPath() + "\n" +
+                            "Exists:        " + f.exists() + "\n" +
+                            "CanRead:       " + f.canRead() + "\n" +
+                            "CanWrite:      " + f.canWrite() + "\n");
+        }
+        catch (IOException e)
+        {
+            throw new GtpError(e.getMessage());
+        }
+    }
+
+    public void cmdFileSave(GtpCommand cmd) throws GtpError
+    {
+        File file = new File(cmd.getArg());
+        try
+        {
+            PrintStream out = new PrintStream(new FileOutputStream(file));
+            out.println("Hello world!");
+            out.close();
+        }
+        catch (IOException e)
+        {
+            throw new GtpError(e.getMessage());
+        }
+    }
+
     public void cmdEPList(GtpCommand cmd) throws GtpError
     {
         if (cmd.getNuArg() == 1 && cmd.getArg(0).equals("show"))
@@ -118,18 +152,20 @@ public class GtpDummy
     {
         cmd.checkArgNone();
         String response =
-            "bwboard/Dummy BWBoard/gtpdummy-bwboard\n" +
-            "none/Dummy Crash/gtpdummy-crash\n" +
-            "none/Dummy Delay/gtpdummy-delay %o\n" +
-            "eplist/Dummy EPList/gtpdummy-eplist\n" +
-            "gfx/Dummy Gfx/gtpdummy-gfx\n" +
-            "none/Dummy Invalid/gtpdummy-invalid\n" +
-            "none/Dummy Live Gfx/gtpdummy-live_gfx\n" +
-            "string/Dummy Long Response/gtpdummy-long_response %s\n" +
-            "none/Dummy Next Failure/gtpdummy-next_failure %s\n" +
-            "none/Dummy Next Success/gtpdummy-next_success %s\n" +
-            "none/Dummy Sleep/gtpdummy-sleep %s\n" +
-            "none/Dummy Sleep 20s/gtpdummy-sleep\n";
+            "bwboard/BWBoard/gtpdummy-bwboard\n" +
+            "none/Crash/gtpdummy-crash\n" +
+            "none/Delay/gtpdummy-delay %o\n" +
+            "eplist/EPList/gtpdummy-eplist\n" +
+            "string/File Open/gtpdummy-file_open %r\n" +
+            "none/File Save/gtpdummy-file_save %w\n" +
+            "gfx/Gfx/gtpdummy-gfx\n" +
+            "none/Invalid/gtpdummy-invalid\n" +
+            "none/Live Gfx/gtpdummy-live_gfx\n" +
+            "string/Long Response/gtpdummy-long_response %s\n" +
+            "none/Next Failure/gtpdummy-next_failure %s\n" +
+            "none/Next Success/gtpdummy-next_success %s\n" +
+            "none/Sleep/gtpdummy-sleep %s\n" +
+            "none/Sleep 20s/gtpdummy-sleep\n";
         cmd.setResponse(response);
     }
 
@@ -347,6 +383,12 @@ public class GtpDummy
         register("gtpdummy-eplist", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdEPList(cmd); } });
+        register("gtpdummy-file_open", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdFileOpen(cmd); } });
+        register("gtpdummy-file_save", new GtpCallback() {
+                public void run(GtpCommand cmd) throws GtpError {
+                    cmdFileSave(cmd); } });
         register("gtpdummy-gfx", new GtpCallback() {
                 public void run(GtpCommand cmd) throws GtpError {
                     cmdGfx(cmd); } });
