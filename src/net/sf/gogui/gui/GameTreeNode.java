@@ -106,6 +106,7 @@ class GameTreeNode
     {
         StringBuffer toolTip = new StringBuffer(128);
         Move move = m_node.getMove();
+        GoColor player = m_node.getPlayer();
         if (move != null)
         {
             toolTip.append(m_moveNumber);
@@ -113,7 +114,7 @@ class GameTreeNode
             toolTip.append(move.getColor() == GoColor.BLACK ? "B " :"W ");
             toolTip.append(GoPoint.toString(move.getPoint()));
         }
-        else if (m_node.hasSetup())
+        else if (m_node.hasSetup() || player != null)
         {
             toolTip.append("Setup (");
             int numberAddBlack = m_node.getNumberAddBlack();
@@ -138,7 +139,6 @@ class GameTreeNode
                 toolTip.append("remove ");
                 toolTip.append(numberAddEmpty);
             }
-            GoColor player = m_node.getPlayer();
             if (player != null)
             {
                 if (numberAddBlack + numberAddWhite + numberAddEmpty > 0)

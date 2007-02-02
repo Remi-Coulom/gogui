@@ -322,7 +322,7 @@ public class Game
         m_modified = (! ObjectUtil.equals(color, m_current.getPlayer())
                       || color.equals(m_board.getToMove()));
         m_current.setPlayer(color);
-        m_board.setToMove(color);
+        updateBoard();
     }
 
     public void setTimeSettings(TimeSettings timeSettings)
