@@ -1979,7 +1979,7 @@ public class GoGui
 
     private void checkComputerMove()
     {
-        if (m_gtp == null || isOutOfSync())
+        if (m_gtp == null || isOutOfSync() || m_gtp.isProgramDead())
             return;
         int moveNumber = NodeUtil.getMoveNumber(getCurrentNode());
         boolean bothPassed = (moveNumber >= 2 && getBoard().bothPassed());
@@ -2543,7 +2543,7 @@ public class GoGui
             return;
         if (point != null)
             paintImmediately(point, move.getColor(), true);
-        if (m_gtp != null && ! isOutOfSync())
+        if (m_gtp != null && ! isOutOfSync() && ! m_gtp.isProgramDead())
         {
             try
             {
