@@ -2336,8 +2336,6 @@ public class GoGui
                                      "Could not synchronize current\n" +
                                      "position with " + m_name + ":",
                                      m_name, e);
-            else
-                showWarning("Go program is not in sync with current position");
         }
     }
 
