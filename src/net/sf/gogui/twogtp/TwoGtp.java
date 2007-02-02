@@ -891,8 +891,8 @@ public class TwoGtp
             resultBlack = resultTmp;
             resultReferee = inverseResult(resultReferee);
         }
-        m_game.setPlayerBlack(nameBlack);
-        m_game.setPlayerWhite(nameWhite);
+        m_game.setPlayer(GoColor.BLACK, nameBlack);
+        m_game.setPlayer(GoColor.WHITE, nameWhite);
         if (m_referee != null)
             m_game.setResult(resultReferee);
         else if (resultBlack.equals(resultWhite) && ! resultBlack.equals("?"))

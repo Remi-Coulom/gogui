@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.game.GameInformation;
 import net.sf.gogui.game.TimeSettings;
@@ -42,27 +43,27 @@ public final class GameInfoDialog
         dialog.dispose();
         boolean changed = false;
         String black = getTextFieldContent(gameInfoDialog.m_playerBlack);
-        if (! black.equals(gameInformation.getPlayerBlack()))
+        if (! black.equals(gameInformation.getPlayer(GoColor.BLACK)))
         {
-            gameInformation.setPlayerBlack(black);
+            gameInformation.setPlayer(GoColor.BLACK, black);
             changed = true;
         }
         String white = getTextFieldContent(gameInfoDialog.m_playerWhite);
-        if (! white.equals(gameInformation.getPlayerWhite()))
+        if (! white.equals(gameInformation.getPlayer(GoColor.WHITE)))
         {
-            gameInformation.setPlayerWhite(white);
+            gameInformation.setPlayer(GoColor.WHITE, white);
             changed = true;
         }
         String rankBlack = getTextFieldContent(gameInfoDialog.m_rankBlack);
-        if (! rankBlack.equals(gameInformation.getRankBlack()))
+        if (! rankBlack.equals(gameInformation.getRank(GoColor.BLACK)))
         {
-            gameInformation.setRankBlack(rankBlack);
+            gameInformation.setRank(GoColor.BLACK, rankBlack);
             changed = true;
         }
         String rankWhite = getTextFieldContent(gameInfoDialog.m_rankWhite);
-        if (! rankWhite.equals(gameInformation.getRankWhite()))
+        if (! rankWhite.equals(gameInformation.getRank(GoColor.WHITE)))
         {
-            gameInformation.setRankWhite(rankWhite);
+            gameInformation.setRank(GoColor.WHITE, rankWhite);
             changed = true;
         }
         String rules = getTextFieldContent(gameInfoDialog.m_rules);
@@ -190,13 +191,13 @@ public final class GameInfoDialog
             new JPanel(new GridLayout(0, 1, 0, GuiUtil.SMALL_PAD));
         panel.add(m_panelRight, BorderLayout.CENTER);
         m_playerBlack = createEntry("Black player:",
-                                    gameInformation.getPlayerBlack());
+                                    gameInformation.getPlayer(GoColor.BLACK));
         m_rankBlack = createEntry("Black rank:",
-                                  gameInformation.getRankBlack());
+                                  gameInformation.getRank(GoColor.BLACK));
         m_playerWhite = createEntry("White player:",
-                                    gameInformation.getPlayerWhite());
+                                    gameInformation.getPlayer(GoColor.WHITE));
         m_rankWhite = createEntry("White rank:",
-                                  gameInformation.getRankWhite());
+                                  gameInformation.getRank(GoColor.WHITE));
         m_date = createEntry("Date:", gameInformation.getDate());
         m_rules = createEntry("Rules:", gameInformation.getRules());
         Komi komi = gameInformation.getKomi();

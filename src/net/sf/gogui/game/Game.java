@@ -292,34 +292,20 @@ public class Game
         m_current.setLabel(point, value);
     }
 
-    public void setPlayerBlack(String name)
+    public void setPlayer(GoColor c, String name)
     {
+        assert(c.isBlackWhite());
         GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(name,
-                                         gameInformation.getPlayerBlack());
-        gameInformation.setPlayerBlack(name);
+        m_modified = ! ObjectUtil.equals(name, gameInformation.getPlayer(c));
+        gameInformation.setPlayer(c, name);
     }
 
-    public void setPlayerWhite(String name)
+    public void setRank(GoColor c, String rank)
     {
+        assert(c.isBlackWhite());
         GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(name,
-                                         gameInformation.getPlayerWhite());
-        m_tree.getGameInformation().setPlayerWhite(name);
-    }
-
-    public void setRankBlack(String rank)
-    {
-        GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(rank, gameInformation.getRankBlack());
-        m_tree.getGameInformation().setRankBlack(rank);
-    }
-
-    public void setRankWhite(String rank)
-    {
-        GameInformation gameInformation = m_tree.getGameInformation();
-        m_modified = ! ObjectUtil.equals(rank, gameInformation.getRankWhite());
-        m_tree.getGameInformation().setRankWhite(rank);
+        m_modified = ! ObjectUtil.equals(rank, gameInformation.getRank(c));
+        m_tree.getGameInformation().setRank(c, rank);
     }
 
     public void setResult(String result)

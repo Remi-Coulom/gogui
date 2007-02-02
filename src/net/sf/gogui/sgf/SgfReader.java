@@ -673,7 +673,7 @@ public final class SgfReader
                 }
             }
             else if (p == "BR")
-                m_gameInformation.setRankBlack(v);
+                m_gameInformation.setRank(GoColor.BLACK, v);
             else if (p == "C")
             {
                 String comment;
@@ -806,9 +806,9 @@ public final class SgfReader
                 }
             }
             else if (p == "PB")
-                m_gameInformation.setPlayerBlack(v);
+                m_gameInformation.setPlayer(GoColor.BLACK, v);
             else if (p == "PW")
-                m_gameInformation.setPlayerWhite(v);
+                m_gameInformation.setPlayer(GoColor.WHITE, v);
             else if (p == "PL")
                 node.setPlayer(parseColor(v));
             else if (p == "RE")
@@ -871,7 +871,7 @@ public final class SgfReader
                 }
             }
             else if (p == "WR")
-                m_gameInformation.setRankWhite(v);
+                m_gameInformation.setRank(GoColor.WHITE, v);
             else if (p != "FF" && p != "GN" && p != "AP")
                 addSgfProperty(node, p);
             return true;

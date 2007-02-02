@@ -611,11 +611,11 @@ public class GoGui
         if (! GameInfoDialog.show(this, info))
             return;
         m_game.setDate(info.getDate());
-        m_game.setPlayerBlack(info.getPlayerBlack());
-        m_game.setPlayerWhite(info.getPlayerWhite());
+        m_game.setPlayer(GoColor.BLACK, info.getPlayer(GoColor.BLACK));
+        m_game.setPlayer(GoColor.WHITE, info.getPlayer(GoColor.WHITE));
         m_game.setResult(info.getResult());
-        m_game.setRankBlack(info.getRankBlack());
-        m_game.setRankWhite(info.getRankWhite());
+        m_game.setRank(GoColor.BLACK, info.getRank(GoColor.BLACK));
+        m_game.setRank(GoColor.WHITE, info.getRank(GoColor.WHITE));
         Komi prefsKomi = getPrefsKomi();
         Komi komi = info.getKomi();
         if (komi != null && ! komi.equals(prefsKomi))

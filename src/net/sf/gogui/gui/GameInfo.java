@@ -76,10 +76,10 @@ public class GameInfo
         ConstNode node = game.getCurrentNode();
         ConstGameTree tree = game.getTree();
         ConstGameInformation info = tree.getGameInformationConst();
-        updatePlayerToolTip(m_iconBlack, info.getPlayerBlack(),
-                            info.getRankBlack(), "Black");
-        updatePlayerToolTip(m_iconWhite, info.getPlayerWhite(),
-                            info.getRankWhite(), "White");
+        updatePlayerToolTip(m_iconBlack, info.getPlayer(GoColor.BLACK),
+                            info.getRank(GoColor.BLACK), "Black");
+        updatePlayerToolTip(m_iconWhite, info.getPlayer(GoColor.WHITE),
+                            info.getRank(GoColor.WHITE), "White");
         m_prisonersBlack.setCount(board.getCapturedBlack());
         m_prisonersWhite.setCount(board.getCapturedWhite());
         // Usually time left information is stored in a node only for the

@@ -4,6 +4,7 @@
 
 package net.sf.gogui.game;
 
+import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 
 /** Const functions of game.GameInformation.
@@ -19,13 +20,9 @@ public interface ConstGameInformation
 
     Komi getKomi();
 
-    String getPlayerBlack();
+    String getPlayer(GoColor c);
 
-    String getPlayerWhite();
-
-    String getRankBlack();
-
-    String getRankWhite();
+    String getRank(GoColor c);
 
     String getResult();
 

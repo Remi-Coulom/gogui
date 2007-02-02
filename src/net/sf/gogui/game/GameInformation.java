@@ -6,6 +6,7 @@ package net.sf.gogui.game;
 
 import java.util.Locale;
 import net.sf.gogui.go.Board;
+import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.Komi;
 import net.sf.gogui.util.StringUtil;
 
@@ -25,13 +26,13 @@ public class GameInformation
         m_boardSize = gameInformation.getBoardSize();
         m_handicap = gameInformation.getHandicap();
         m_komi = gameInformation.getKomi();
-        m_rankBlack = gameInformation.getRankBlack();
         m_date = gameInformation.getDate();
-        m_playerBlack = gameInformation.getPlayerBlack();
-        m_playerWhite = gameInformation.getPlayerWhite();
+        m_playerBlack = gameInformation.getPlayer(GoColor.BLACK);
+        m_playerWhite = gameInformation.getPlayer(GoColor.WHITE);
         m_result = gameInformation.getResult();
         m_rules = gameInformation.getRules();
-        m_rankWhite = gameInformation.getRankWhite();
+        m_rankBlack = gameInformation.getRank(GoColor.BLACK);
+        m_rankWhite = gameInformation.getRank(GoColor.WHITE);
         m_timeSettings = gameInformation.getTimeSettings();
     }
 
@@ -58,24 +59,28 @@ public class GameInformation
         return m_komi;
     }
 
-    public String getPlayerBlack()
+    /** Get player name.
+        @return The player name or null if unknown.
+    */
+    public String getPlayer(GoColor c)
     {
-        return m_playerBlack;
+        assert(c.isBlackWhite());
+        if (c == GoColor.BLACK)
+            return m_playerBlack;
+        else
+            return m_playerWhite;
     }
 
-    public String getPlayerWhite()
+    /** Get player rank.
+        @return The player rank or null if unknown.
+    */
+    public String getRank(GoColor c)
     {
-        return m_playerWhite;
-    }
-
-    public String getRankBlack()
-    {
-        return m_rankBlack;
-    }
-
-    public String getRankWhite()
-    {
-        return m_rankWhite;
+        assert(c.isBlackWhite());
+        if (c == GoColor.BLACK)
+            return m_rankBlack;
+        else
+            return m_rankWhite;
     }
 
     public String getResult()
@@ -134,24 +139,22 @@ public class GameInformation
         m_komi = komi;
     }
 
-    public void setPlayerBlack(String name)
+    public void setPlayer(GoColor c, String name)
     {
-        m_playerBlack = name;
+        assert(c.isBlackWhite());
+        if (c == GoColor.BLACK)
+            m_playerBlack = name;
+        else
+            m_playerWhite = name;
     }
 
-    public void setPlayerWhite(String name)
+    public void setRank(GoColor c, String rank)
     {
-        m_playerWhite = name;
-    }
-
-    public void setRankBlack(String rank)
-    {
-        m_rankBlack = rank;
-    }
-
-    public void setRankWhite(String rank)
-    {
-        m_rankWhite = rank;
+        assert(c.isBlackWhite());
+        if (c == GoColor.BLACK)
+            m_rankBlack = rank;
+        else
+            m_rankWhite = rank;
     }
 
     public void setResult(String result)

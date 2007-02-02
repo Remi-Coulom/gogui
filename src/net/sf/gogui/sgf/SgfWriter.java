@@ -42,10 +42,10 @@ public class SgfWriter
             gameTree.getGameInformationConst();
         m_size = gameInformation.getBoardSize();
         String result = gameInformation.getResult();
-        String playerBlack = gameInformation.getPlayerBlack();
-        String playerWhite = gameInformation.getPlayerWhite();
-        String rankBlack = gameInformation.getRankBlack();
-        String rankWhite = gameInformation.getRankWhite();
+        String playerBlack = gameInformation.getPlayer(GoColor.BLACK);
+        String playerWhite = gameInformation.getPlayer(GoColor.WHITE);
+        String rankBlack = gameInformation.getRank(GoColor.BLACK);
+        String rankWhite = gameInformation.getRank(GoColor.WHITE);
         String date = gameInformation.getDate();
         String rules = gameInformation.getRules();
         int handicap = gameInformation.getHandicap();
