@@ -994,6 +994,7 @@ public class GoGui
             {
                 m_setupMode = false;
                 m_game.setToMove(getToMove());
+                currentNodeChanged();
                 boardChangedBegin(false, false);
             }
             else
