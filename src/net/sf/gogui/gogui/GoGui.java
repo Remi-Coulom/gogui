@@ -354,6 +354,13 @@ public class GoGui
         m_gameInfo.updateTimeFromClock(getClock());
     }
     
+    public void actionClearAnalyzeCommand()
+    {
+        if (! checkCommandInProgress())
+            return;
+        clearAnalyzeCommand();
+    }
+
     public void actionClockHalt()
     {
         if (! getClock().isRunning())
@@ -416,6 +423,7 @@ public class GoGui
     {        
         if (m_analyzeDialog != null)
         {
+            clearAnalyzeCommand();
             saveSession();
             m_analyzeDialog.dispose();
             m_analyzeDialog = null;
@@ -947,6 +955,33 @@ public class GoGui
         updateViews(false);
     }
 
+    public void actionSetAnalyzeCommand(AnalyzeCommand command,
+                                        boolean autoRun, boolean clearBoard,
+                                        boolean oneRunOnly)
+    {
+        if (! checkProgramReady())
+            return;
+        initAnalyzeCommand(command, autoRun, clearBoard);
+        m_analyzeOneRunOnly = oneRunOnly;
+        boolean needsPointArg = m_analyzeCommand.needsPointArg();
+        if (needsPointArg && ! m_analyzeCommand.isPointArgMissing())
+        {
+            m_guiBoard.clearAllSelect();
+            m_guiBoard.setSelect(m_analyzeCommand.getPointArg(), true);
+        }
+        else if (needsPointArg || m_analyzeCommand.needsPointListArg())
+        {
+            m_guiBoard.clearAllSelect();
+            if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
+                GuiBoardUtil.setSelect(m_guiBoard,
+                                        m_analyzeCommand.getPointListArg(),
+                                        true);
+            toFront();
+            return;
+        }
+        analyzeBegin(false);
+    }    
+
     public void actionSetup()
     {
         if (! checkCommandInProgress())
@@ -1200,31 +1235,6 @@ public class GoGui
     public void actionQuit()
     {
         close();
-    }
-
-    public void clearAnalyzeCommand()
-    {
-        clearAnalyzeCommand(true);
-    }
-
-    public void clearAnalyzeCommand(boolean resetBoard)
-    {
-        if (m_analyzeCommand != null)
-        {
-            if (isCommandInProgress())
-            {
-                showError("Cannot clear analyze command\n" +
-                          "while command in progress");
-                return;
-            }
-            m_analyzeCommand = null;
-            setBoardCursorDefault();
-        }
-        if (resetBoard)
-        {
-            resetBoard();
-            clearStatus();
-        }
     }
 
     public boolean getAutoNumber()
@@ -1504,32 +1514,6 @@ public class GoGui
         return (m_gtp != null);
     }
 
-    public void setAnalyzeCommand(AnalyzeCommand command, boolean autoRun,
-                                  boolean clearBoard, boolean oneRunOnly)
-    {
-        if (! checkProgramReady())
-            return;
-        initAnalyzeCommand(command, autoRun, clearBoard);
-        m_analyzeOneRunOnly = oneRunOnly;
-        boolean needsPointArg = m_analyzeCommand.needsPointArg();
-        if (needsPointArg && ! m_analyzeCommand.isPointArgMissing())
-        {
-            m_guiBoard.clearAllSelect();
-            m_guiBoard.setSelect(m_analyzeCommand.getPointArg(), true);
-        }
-        else if (needsPointArg || m_analyzeCommand.needsPointListArg())
-        {
-            m_guiBoard.clearAllSelect();
-            if (m_analyzeCommand.getType() == AnalyzeCommand.EPLIST)
-                GuiBoardUtil.setSelect(m_guiBoard,
-                                        m_analyzeCommand.getPointListArg(),
-                                        true);
-            toFront();
-            return;
-        }
-        analyzeBegin(false);
-    }    
-
     private class AnalyzeContinue
         implements Runnable
     {
@@ -1761,10 +1745,16 @@ public class GoGui
             resetBoard();
         if (! endLengthyCommand())
             return;
+        clearStatus();
+        if (m_analyzeCommand == null)
+        {
+            // Program was detached while running the analyze command
+            resetBoard();
+            return;
+        }
         String title = m_analyzeCommand.getResultTitle();
         try
         {
-            clearStatus();
             String response = m_gtp.getResponse();
             AnalyzeShow.show(m_analyzeCommand, m_guiBoard, m_statusBar,
                              getBoard(), response);
@@ -2134,6 +2124,25 @@ public class GoGui
         return true;
     }
 
+    private void clearAnalyzeCommand()
+    {
+        clearAnalyzeCommand(true);
+    }
+
+    private void clearAnalyzeCommand(boolean resetBoard)
+    {
+        if (m_analyzeCommand != null)
+        {
+            m_analyzeCommand = null;
+            setBoardCursorDefault();
+        }
+        if (resetBoard)
+        {
+            resetBoard();
+            clearStatus();
+        }
+    }
+
     private void clearStatus()
     {
         m_statusBar.clear();
@@ -2266,7 +2275,8 @@ public class GoGui
 
                 public void setAnalyzeCommand(AnalyzeCommand command)
                 {
-                    GoGui.this.setAnalyzeCommand(command, false, true, true);
+                    GoGui.this.actionSetAnalyzeCommand(command, false, true,
+                                                       true);
                 }
             };
         ArrayList supportedCommands = null;
@@ -2364,9 +2374,9 @@ public class GoGui
             }
         }
         saveSession();
+        m_gtp = null;
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
-        m_gtp = null;
         m_name = null;
         m_version = null;
         m_shell.dispose();
@@ -2379,6 +2389,7 @@ public class GoGui
         }
         resetBoard();
         clearStatus();
+        m_statusBar.clearProgress();
         setTitle();
     }
 
