@@ -14,7 +14,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -282,31 +282,29 @@ public final class GuiBoard
         m_cursor = null;
         setLayout(new SquareLayout());
         m_panel = new BoardPanel();
-        FocusListener focusListener = new FocusListener()
-            {
-                public void focusGained(FocusEvent event)
-                {
+        m_panel.addFocusListener(new FocusAdapter() {
+                public void focusGained(FocusEvent event) {
                     if (getShowCursor())
                         setCursor(m_cursor, true);
                 }
             
-                public void focusLost(FocusEvent event)
-                {
+                public void focusLost(FocusEvent event) {
                     if (getShowCursor())
                         setCursor(m_cursor, false);
                 }
-            };
-        m_panel.addFocusListener(focusListener);
+            });
+        addFocusListener(new FocusAdapter() {
+                public void focusGained(FocusEvent event) {
+                    m_panel.requestFocusInWindow();
+                }
+            });
         add(m_panel);
         m_panel.requestFocusInWindow();
-        KeyAdapter keyAdapter = new KeyAdapter()
-            {
-                public void keyPressed(KeyEvent event)
-                {
+        m_panel.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent event) {
                     GuiBoard.this.keyPressed(event);
                 }
-            };
-        m_panel.addKeyListener(keyAdapter);
+            });
         m_panel.addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
                     GoPoint point = m_panel.getPoint(e);
