@@ -8,10 +8,10 @@
 <para>
 The GTP version 2 specification contains no commands for setting up
 positions by specifying the location of stones on the board.
-GoGui will send setup stones as moves to the Go program, if possible, which has
-some disadvantages.
+GoGui will send setup stones as moves to the Go program, if possible.
 </para>
 <para>
+This method has disadvantages.
 For example, the program cannot know that these moves are not real moves
 and if it maintains its own game tree for saving information like search
 traces, the internal trees will start with a long series of move nodes, if
@@ -40,6 +40,16 @@ command fails.
 </listitem>
 </varlistentry>
 <varlistentry>
+<term><command>gogui-undo_setup</command></term>
+<listitem>
+<para>
+This command takes no argument and undoes the effects of the previous
+<command>gogui-setup</command> command. It should fail, if the last change
+on the board was not a setup.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
 <term><command>gogui-setup_player</command></term>
 <listitem>
 <para>
@@ -47,19 +57,10 @@ The argument is a color (<userinput>b</userinput> or <userinput>w</userinput>)
 and should set the color to play in the current position.
 This command is only sent, if the color to play is known (e.g. by a player
 property in the SGF file) and if the command is supported by the Go program.
-This command alone is not an undoable action, it should not add an entry to
-the history of the Go program's board. Commands that undo moves or setup
-stones should always restore the color to play before the command.
-</para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><command>gogui-undo_setup</command></term>
-<listitem>
-<para>
-Takes no argument and should undo the effects of the previous
-<command>gogui-setup</command> command. Should fail, if the last change
-on the board was not a setup.
+Support for this command is optional and it is therefore not an undoable
+action. It should not add an entry to the history of the Go program's board.
+Instead <command>gogui-undo_setup</command> should restore the color to
+play before the <command>gogui-setup</command> command.
 </para>
 </listitem>
 </varlistentry>

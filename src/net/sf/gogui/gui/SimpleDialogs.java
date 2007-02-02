@@ -444,7 +444,7 @@ class SgfPreview
         catch (ThumbnailCreator.Error e)
         {
             SimpleDialogs.showError(this, "Preview generation failed:\n" +
-                                    e.getMessage());
+                                    e.getMessage(), false);
             m_image = null;
         }
         m_imagePanel.repaint();
