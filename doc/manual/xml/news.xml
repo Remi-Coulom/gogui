@@ -90,6 +90,11 @@ anymore
 </listitem>
 <listitem>
 <simpara>
+Analyze command wildcard %f is deprecated; use new wildcards %r and %w instead
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 The preferred way to configure analyze commands is now that the program
 implements the command gogui_analyze_commands, otherwise an internal list with
 default commands is used; analyze command configuration files in the .gogui

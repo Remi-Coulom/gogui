@@ -329,14 +329,11 @@ default is the color which is to play.
 <listitem>
 <para>
 Will be replaced by a filename entered by the user.
-If the path to the file contains spaces, it will be quoted with double quotes.
-<warning>
-<simpara>
-There are Go programs that implement filename arguments to GTP commands
-in a way that does not allow the path to the file to contain spaces
-(e.g. <command>printsgf</command> in GNU Go 3.6).
-</simpara>
-</warning>
+<note>
+This wildcard is deprecated and might not be supported in the future.
+It has been superseded by the more specific wildcards <userinput>%r</userinput>
+and <userinput>%w</userinput>.
+</note>
 </para>
 </listitem>
 </varlistentry>
@@ -390,11 +387,31 @@ mouse button.
 </varlistentry>
 
 <varlistentry>
+<term><userinput>%r</userinput></term>
+<listitem>
+<para>
+Will be replaced by a file name for opening a file selected by the user.
+If the path to the file contains spaces, it will be quoted with double quotes.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><userinput>%s</userinput></term>
 <listitem>
 <simpara>
 Will be replaced by an argument entered by the user.
 </simpara>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>%w</userinput></term>
+<listitem>
+<para>
+Will be replaced by a file name for saving selected by the user.
+If the path to the file contains spaces, it will be quoted with double quotes.
+</para>
 </listitem>
 </varlistentry>
 

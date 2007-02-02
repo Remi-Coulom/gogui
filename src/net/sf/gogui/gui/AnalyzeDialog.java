@@ -433,6 +433,20 @@ public final class AnalyzeDialog
                 return;
             command.setFileArg(fileArg);
         }
+        if (command.needsFileOpenArg())
+        {
+            File fileArg = SimpleDialogs.showOpen(this, label);
+            if (fileArg == null)
+                return;
+            command.setFileOpenArg(fileArg);
+        }
+        if (command.needsFileSaveArg())
+        {
+            File fileArg = SimpleDialogs.showSave(this, label);
+            if (fileArg == null)
+                return;
+            command.setFileSaveArg(fileArg);
+        }
         if (command.needsColorArg())
             command.setColorArg(getSelectedColor());
         boolean autoRun = m_autoRun.isEnabled() && m_autoRun.isSelected();

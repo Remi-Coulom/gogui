@@ -38,7 +38,7 @@ string/Is Surrounded/is_surrounded %p
 varpo/Ladder Attack/ladder_attack %p
 none/Level/level %s
 var/Move History/move_history
-none/PrintSgf/printsgf %f
+none/PrintSgf/printsgf %w
 varc/Restricted GenMove/restricted_genmove %c %P
 none/Set Random Seed/set_random_seed %s
 pspairs/Top Moves/top_moves %c
@@ -46,7 +46,7 @@ pspairs/Top Moves Black/top_moves_black
 pspairs/Top Moves White/top_moves_white
 
 # Extensions of other Go programs that could be of general interest
-none/SaveSgf/savesgf %f
+none/SaveSgf/savesgf %w
 
 # Other GNU Go extensions
 pstring/AA Confirm Safety/aa_confirm_safety %c %p
@@ -72,7 +72,7 @@ pstring/Eval Eye/eval_eye %p
 string/Experimental Score/experimental_score %c
 hpstring/Eye Data/eye_data %c %p
 plist/FindLib/findlib %p
-none/Finish SgfTrace/finish_sgftrace %f
+none/Finish SgfTrace/finish_sgftrace %w
 string/Get Connection Node Counter/get_connection_node_counter
 string/Get Life Node Counter/get_life_node_counter
 string/Get Owl Node Counter/get_owl_node_counter

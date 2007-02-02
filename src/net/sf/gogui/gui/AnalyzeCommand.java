@@ -129,6 +129,8 @@ public class AnalyzeCommand
             new AnalyzeCommand(m_type, m_label, m_command);
         command.m_colorArg = m_colorArg;
         command.m_fileArg = m_fileArg;
+        command.m_fileOpenArg = m_fileOpenArg;
+        command.m_fileSaveArg = m_fileSaveArg;
         command.m_optStringArg = m_optStringArg;
         command.m_stringArg = m_stringArg;
         command.m_pointArg = m_pointArg;
@@ -251,11 +253,23 @@ public class AnalyzeCommand
         return (m_command.indexOf("%f") >= 0);
     }
 
+    public boolean needsFileOpenArg()
+    {
+        return (m_command.indexOf("%r") >= 0);
+    }
+
+    public boolean needsFileSaveArg()
+    {
+        return (m_command.indexOf("%w") >= 0);
+    }
+
     public boolean needsOnlyPointArg()
     {
         return (needsPointArg()
                 && ! needsColorArg()
                 && ! needsFileArg()
+                && ! needsFileOpenArg()
+                && ! needsFileSaveArg()
                 && ! needsPointListArg()
                 && ! needsStringArg()
                 && ! needsOptStringArg());
@@ -265,6 +279,8 @@ public class AnalyzeCommand
     {
         return (needsPointArg() && needsColorArg()
                 && ! needsFileArg()
+                && ! needsFileOpenArg()
+                && ! needsFileSaveArg()
                 && ! needsPointListArg()
                 && ! needsStringArg()
                 && ! needsOptStringArg());
@@ -359,6 +375,20 @@ public class AnalyzeCommand
                 fileArg = "\"" + fileArg + "\"";
             result = result.replaceAll("%f", fileArg);
         }
+        if (needsFileOpenArg())
+        {
+            String fileOpenArg = m_fileOpenArg.toString();
+            if (fileOpenArg.indexOf(' ') >= 0)
+                fileOpenArg = "\"" + fileOpenArg + "\"";
+            result = result.replaceAll("%r", fileOpenArg);
+        }
+        if (needsFileSaveArg())
+        {
+            String fileSaveArg = m_fileSaveArg.toString();
+            if (fileSaveArg.indexOf(' ') >= 0)
+                fileSaveArg = "\"" + fileSaveArg + "\"";
+            result = result.replaceAll("%w", fileSaveArg);
+        }
         if (needsStringArg())
         {
             assert(m_stringArg != null);
@@ -393,6 +423,18 @@ public class AnalyzeCommand
         m_fileArg = file;
     }
 
+    public void setFileOpenArg(File file)
+    {
+        assert(needsFileOpenArg());
+        m_fileOpenArg = file;
+    }
+
+    public void setFileSaveArg(File file)
+    {
+        assert(needsFileSaveArg());
+        m_fileSaveArg = file;
+    }
+
     public void setPointArg(GoPoint point)
     {
         m_pointArg = point;
@@ -420,6 +462,10 @@ public class AnalyzeCommand
     private GoColor m_colorArg;
 
     private File m_fileArg;
+
+    private File m_fileOpenArg;
+
+    private File m_fileSaveArg;
 
     private final String m_label;
 
