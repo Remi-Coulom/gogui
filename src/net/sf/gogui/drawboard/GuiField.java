@@ -47,7 +47,9 @@ public class GuiField
         if (m_territory != GoColor.EMPTY && m_graphics2D == null)
             drawTerritoryGraphics();
         if (m_color != GoColor.EMPTY)
-            drawStone();
+            drawStone(m_color, false);
+        if (m_shadowStoneColor != null)
+            drawStone(m_shadowStoneColor, true);
         if (m_territory != GoColor.EMPTY && m_graphics2D != null)
             drawTerritoryGraphics2D();
         if (m_influenceSet)
@@ -111,6 +113,11 @@ public class GuiField
         return m_select;
     }
 
+    public GoColor getShadowStoneColor()
+    {
+        return m_shadowStoneColor;
+    }
+
     public static int getStoneMargin(int size)
     {
         return size / 17;
@@ -131,11 +138,6 @@ public class GuiField
         return m_influenceSet;
     }
 
-    public boolean isShadowStone()
-    {
-        return m_isShadowStone;
-    }
-
     public void setFieldBackground(Color color)
     {
         m_fieldColor = color;
@@ -144,7 +146,6 @@ public class GuiField
     public void setColor(GoColor color)
     {
         m_color = color;
-        m_isShadowStone = false;
     }
 
     public void setCrossHair(boolean crossHair)
@@ -199,8 +200,7 @@ public class GuiField
 
     public void setShadowStone(GoColor color)
     {
-        m_color = color;
-        m_isShadowStone = true;
+        m_shadowStoneColor = color;
     }
 
     public void setLabel(String s)
@@ -217,8 +217,6 @@ public class GuiField
     private boolean m_crossHair;
 
     private boolean m_cursor;
-
-    private boolean m_isShadowStone;
 
     private boolean m_lastMoveMarker;
 
@@ -258,6 +256,9 @@ public class GuiField
     private static final AlphaComposite COMPOSITE_7
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f);
 
+    private static final AlphaComposite COMPOSITE_85
+        = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85f);
+
     private static final AlphaComposite COMPOSITE_95
         = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.95f);
 
@@ -295,6 +296,8 @@ public class GuiField
     private static Font s_cachedFont;
 
     private GoColor m_color = GoColor.EMPTY;
+
+    private GoColor m_shadowStoneColor;
 
     private Graphics m_graphics;
 
@@ -381,10 +384,20 @@ public class GuiField
         int stringHeight = metrics.getAscent();
         int x = Math.max((m_size - stringWidth) / 2, 0);
         int y = stringHeight + (m_size - stringHeight) / 2;
-        if (m_color == GoColor.WHITE)
-            m_graphics.setColor(Color.black);
+        if (m_shadowStoneColor != null)
+        {
+            if (m_shadowStoneColor == GoColor.WHITE)
+                m_graphics.setColor(Color.black);
+            else
+                m_graphics.setColor(Color.white);
+        }
         else
-            m_graphics.setColor(Color.white);
+        {
+            if (m_color == GoColor.WHITE)
+                m_graphics.setColor(Color.black);
+            else
+                m_graphics.setColor(Color.white);
+        }
         Rectangle clip = null;
         if (stringWidth > 0.95 * m_size)
         {
@@ -447,29 +460,32 @@ public class GuiField
         m_graphics.setPaintMode();
     }
 
-    private void drawStone()
+    private void drawStone(GoColor color, boolean isShadowStone)
     {
-        if (m_color == GoColor.BLACK)
-            drawStone(COLOR_STONE_BLACK, COLOR_STONE_BLACK_BRIGHT);
-        else if (m_color == GoColor.WHITE)
-            drawStone(COLOR_STONE_WHITE, COLOR_STONE_WHITE_BRIGHT);
+        if (color == GoColor.BLACK)
+            drawStone(color, COLOR_STONE_BLACK, COLOR_STONE_BLACK_BRIGHT,
+                      isShadowStone);
+        else if (color == GoColor.WHITE)
+            drawStone(color, COLOR_STONE_WHITE, COLOR_STONE_WHITE_BRIGHT,
+                      isShadowStone);
     }
 
-    private void drawStone(Color colorNormal, Color colorBright)
+    private void drawStone(GoColor color, Color colorNormal, Color colorBright,
+                           boolean isShadowStone)
     {
         int margin = getStoneMargin(m_size);
         if (m_graphics2D != null && m_size >= 7)
         {
             RadialGradientPaint paint =
-                getPaint(m_color, m_size, colorNormal, colorBright);
+                getPaint(color, m_size, colorNormal, colorBright);
             m_graphics2D.setPaint(paint);
         }
         else
         {
             m_graphics.setColor(colorNormal);
         }
-        if (m_isShadowStone)
-            setComposite(COMPOSITE_6);
+        if (isShadowStone)
+            setComposite(COMPOSITE_85);
         m_graphics.fillOval(margin, margin,
                             m_size - 2 * margin, m_size - 2 * margin);
     }

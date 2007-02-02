@@ -29,6 +29,7 @@ import net.sf.gogui.drawboard.GuiField;
 import net.sf.gogui.go.BoardConstants;
 import net.sf.gogui.go.GoColor;
 import net.sf.gogui.go.GoPoint;
+import net.sf.gogui.util.ObjectUtil;
 
 /** Graphical display of a Go board.
     This class does not use go.Board, so it can be used with other board
@@ -84,6 +85,7 @@ public final class GuiBoard
         clearAllSelect();
         clearAllInfluence();
         clearAllLabels();
+        clearAllShadowStones();
         clearAllTerritory();
         clearLastMove();
     }
@@ -133,6 +135,14 @@ public final class GuiBoard
         for (int x = 0; x < m_size; ++x)
             for (int y = 0; y < m_size; ++y)
                 setLabel(GoPoint.get(x, y), "");
+    }
+
+    /** Clear all shadow stones. */
+    public void clearAllShadowStones()
+    {
+        for (int x = 0; x < m_size; ++x)
+            for (int y = 0; y < m_size; ++y)
+                setShadowStone(GoPoint.get(x, y), null);
     }
 
     /** Clear all territory. */
@@ -566,6 +576,20 @@ public final class GuiBoard
         m_panel.setPreferredFieldSize();
     }
 
+    /** Set point selection markup.
+        @param point The point.
+        @param select True to set, false to remove.
+    */
+    public void setSelect(GoPoint point, boolean select)
+    {
+        GuiField field = getField(point);
+        if (field.getSelect() != select)
+        {
+            getField(point).setSelect(select);
+            repaint(point);
+        }
+    }
+
     /** Enable or disable cursor.
         @param showCursor true to enable cursor.
     */
@@ -591,24 +615,10 @@ public final class GuiBoard
         }
     }
 
-    /** Set point selection markup.
-        @param point The point.
-        @param select True to set, false to remove.
-    */
-    public void setSelect(GoPoint point, boolean select)
-    {
-        GuiField field = getField(point);
-        if (field.getSelect() != select)
-        {
-            getField(point).setSelect(select);
-            repaint(point);
-        }
-    }
-
     public void setShadowStone(GoPoint point, GoColor color)
     {
         GuiField field = getField(point);
-        if (field.getColor() != color || ! field.isShadowStone())
+        if (! ObjectUtil.equals(field.getShadowStoneColor(), color))
         {
             field.setShadowStone(color);
             m_panel.repaintWithShadow(point);
