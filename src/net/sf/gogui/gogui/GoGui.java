@@ -104,6 +104,7 @@ import net.sf.gogui.thumbnail.ThumbnailCreator;
 import net.sf.gogui.thumbnail.ThumbnailPlatform;
 import net.sf.gogui.util.ErrorMessage;
 import net.sf.gogui.util.FileUtil;
+import net.sf.gogui.util.ObjectUtil;
 import net.sf.gogui.util.Platform;
 import net.sf.gogui.util.ProgressShow;
 import net.sf.gogui.version.Version;
@@ -2170,10 +2171,10 @@ public class GoGui
             return;
         if (m_beepAfterMove)
             Toolkit.getDefaultToolkit().beep();
+        GoColor toMove = getToMove();
         try
         {
             String response = m_gtp.getResponse();
-            GoColor toMove = getToMove();
             checkLostOnTime(toMove);
             boolean gameTreeChanged = false;
             if (response.equalsIgnoreCase("resign"))
@@ -2439,6 +2440,11 @@ public class GoGui
     private void generateMove(boolean isSingleMove)
     {
         GoColor toMove = getToMove();
+        if (getGameInformation().getPlayer(toMove) == null)
+        {
+            m_game.setPlayer(toMove, m_name);
+            updateViews(false);
+        }
         String command;
         if (NodeUtil.isInCleanup(getCurrentNode())
             && m_gtp.isSupported("kgs-genmove_cleanup"))
@@ -3237,7 +3243,8 @@ public class GoGui
         }
         else if (isModified())
             filename = "[modified]";
-        String gameName = getGameInformation().suggestGameName();
+        ConstGameInformation info = getGameInformation();
+        String gameName = info.suggestGameName();
         if (gameName != null)
         {
             if (filename != null)
@@ -3248,7 +3255,13 @@ public class GoGui
         if (gameName == null)
             setTitle(appName);        
         else
-            setTitle(gameName + " - " + appName);
+        {
+            if (ObjectUtil.equals(info.getPlayer(GoColor.BLACK), m_name)
+                || ObjectUtil.equals(info.getPlayer(GoColor.WHITE), m_name))
+                setTitle(gameName);
+            else
+                setTitle(gameName + " - " + appName);
+        }
     }
 
     private void setTitleFromProgram()
