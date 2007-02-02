@@ -716,7 +716,7 @@ public final class GtpClient
                 if (error)
                 {
                     if (m_response.trim().equals(""))
-                        throw new GtpError("GTP command failed");
+                        throw new GtpError("GTP command failed.");
                     else
                         throw new GtpError(m_response);
                 }
@@ -733,7 +733,7 @@ public final class GtpClient
     private void throwProgramDied() throws GtpError
     {
         m_isProgramDead = true;
-        throw new GtpError("Go program terminated unexpectedly");
+        throw new GtpError(getName() + " terminated unexpectedly.");
     }
 
     private Message waitForMessage(long timeout) throws GtpError

@@ -66,7 +66,8 @@ public class GtpDisplay
         }
         else
         {
-            m_name = m_gtp.queryName();
+            m_gtp.queryName();
+            m_name = m_gtp.getName();
             String title = "GtpDisplay: " + m_name;
             m_frame.setTitle(title);
         }

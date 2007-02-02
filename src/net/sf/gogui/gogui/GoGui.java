@@ -254,7 +254,7 @@ public class GoGui
         String command = null;
         if (m_gtp != null)
             command = m_gtp.getProgramCommand();
-        AboutDialog.show(this, m_name, m_version, command);
+        AboutDialog.show(this, getProgramName(), m_version, command);
     }
 
     public void actionAddBookmark()
@@ -932,7 +932,7 @@ public class GoGui
         }
         else
         {
-            showInfo(m_name + " does not support scoring.\n" +
+            showInfo(getProgramName() + " does not support scoring.\n" +
                      "Please mark dead groups manually.");
             initScore(null);
             updateViews(false);
@@ -1263,7 +1263,10 @@ public class GoGui
     */
     public String getProgramName()
     {
-        return m_name;
+        if (m_gtp != null)
+            return m_gtp.getProgramName();
+        else
+            return null;
     }
 
     public boolean getShowLastMove()
@@ -1703,8 +1706,6 @@ public class GoGui
 
     private String m_lastAnalyzeCommand;
 
-    private String m_name;
-
     private String m_program;
 
     private String m_titleFromProgram;
@@ -1904,24 +1905,8 @@ public class GoGui
             showError(e);
             return false;
         }
-        m_name = null;
-        m_titleFromProgram = null;
-        try
-        {
-            m_name = m_gtp.send("name").trim();
-        }
-        catch (GtpError e)
-        {
-        }
-        if (m_name == null || m_name.equals(""))
-            m_name = "Unknown Program";
-        try
-        {
-            m_gtp.queryProtocolVersion();
-        }
-        catch (GtpError e)
-        {
-        }
+        m_gtp.queryName();
+        m_gtp.queryProtocolVersion();
         try
         {
             m_version = m_gtp.queryVersion();
@@ -1934,7 +1919,7 @@ public class GoGui
         }        
         m_programAnalyzeCommands = m_gtp.getAnalyzeCommands();
         restoreSize(m_shell, "shell");
-        m_shell.setProgramName(m_name);
+        m_shell.setProgramName(getProgramName());
         ArrayList supportedCommands =
             m_gtp.getSupportedCommands();
         m_shell.setInitialCompletions(supportedCommands);
@@ -2061,12 +2046,13 @@ public class GoGui
             return false;
         if (m_gtp.isProgramDead())
         {
-            showError(m_name + " has terminated", false);
+            showError(getProgramName() + " has terminated", false);
             return false;
         }
         if (isOutOfSync())
         {
-            showError(m_name + " is not in sync with current position",
+            showError(getProgramName()
+                      + " is not in sync with current position",
                       false);
             return false;
         }
@@ -2188,7 +2174,7 @@ public class GoGui
             if (response.equalsIgnoreCase("resign"))
             {
                 if (! isComputerBoth())
-                    showInfo(m_name + " resigns");
+                    showInfo(getProgramName() + " resigns");
                 m_resigned = true;
                 setResult((toMove == GoColor.BLACK ? "W" : "B") + "+Resign");
             }
@@ -2215,7 +2201,7 @@ public class GoGui
                 m_game.play(move);
                 m_gtp.updateAfterGenmove(getBoard());
                 if (point == null && ! isComputerBoth())
-                    showInfo(m_name + " passes");
+                    showInfo(getProgramName() + " passes");
                 m_resigned = false;
                 gameTreeChanged = true;
                 ConstNode currentNode = getCurrentNode();
@@ -2353,8 +2339,8 @@ public class GoGui
             if (! wasOutOfSync)
                 GuiGtpUtil.showError(this,
                                      "Could not synchronize current\n" +
-                                     "position with " + m_name + ":",
-                                     m_name, e);
+                                     "position with " + getProgramName() + ":",
+                                     getProgramName(), e);
         }
     }
 
@@ -2386,7 +2372,6 @@ public class GoGui
         m_gtp = null;
         if (m_analyzeCommand != null)
             clearAnalyzeCommand();
-        m_name = null;
         m_version = null;
         m_shell.dispose();
         m_shell = null;
@@ -2453,12 +2438,13 @@ public class GoGui
         ConstGameInformation info = getGameInformation();
         String playerToMove = info.getPlayer(toMove);
         String playerOther = info.getPlayer(toMove.otherColor());
+        String name = getProgramName();
         if (! isSingleMove && m_file == null && playerToMove == null
             && (father == null
                 || (father.getFatherConst() == null
-                    && (playerOther == null || playerOther.equals(m_name)))))
+                    && (playerOther == null || playerOther.equals(name)))))
         {
-            m_game.setPlayer(toMove, m_name);
+            m_game.setPlayer(toMove, name);
             updateViews(false);
         }
         String command;
@@ -3177,7 +3163,7 @@ public class GoGui
 
     private void setKomi(Komi komi)
     {
-        GuiGtpUtil.sendKomi(this, komi, m_name, m_gtp);
+        GuiGtpUtil.sendKomi(this, komi, getProgramName(), m_gtp);
     }
 
     private void setMinimumSize()
@@ -3249,7 +3235,7 @@ public class GoGui
         }
         String appName = "GoGui";        
         if (m_gtp != null)
-            appName = m_name;
+            appName = getProgramName();
         String filename = null;
         if (m_file != null)
         {
@@ -3272,8 +3258,9 @@ public class GoGui
             setTitle(appName);        
         else
         {
-            if (ObjectUtil.equals(info.getPlayer(GoColor.BLACK), m_name)
-                || ObjectUtil.equals(info.getPlayer(GoColor.WHITE), m_name))
+            String name = getProgramName();
+            if (ObjectUtil.equals(info.getPlayer(GoColor.BLACK), name)
+                || ObjectUtil.equals(info.getPlayer(GoColor.WHITE), name))
                 setTitle(gameName);
             else
                 setTitle(gameName + " - " + appName);
@@ -3312,7 +3299,7 @@ public class GoGui
 
     private void showError(GtpError error)
     {        
-        GuiGtpUtil.showError(this, m_name, error);
+        GuiGtpUtil.showError(this, getProgramName(), error);
     }
 
     private void showError(String message)

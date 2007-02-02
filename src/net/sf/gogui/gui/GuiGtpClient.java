@@ -24,6 +24,9 @@ import net.sf.gogui.gtp.GtpSynchronizer;
     prevent the GUI to hang, if the program does not respond.
     After the timeout a dialog is opened that allows to kill the program or
     continue to wait.
+
+    @todo Don't derive from thread (naming conflict Thread.getName()
+    GtpClientBase.getName())
 */
 public class GuiGtpClient
     extends Thread
@@ -107,6 +110,12 @@ public class GuiGtpClient
             m_commandInProgress = false;
             return m_exception;
         }
+    }
+
+    public String getProgramName()
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        return m_gtp.getName();
     }
     
     public String getProgramCommand()
@@ -200,7 +209,14 @@ public class GuiGtpClient
         m_gtp.queryInterruptSupport();
     }
 
-    public void queryProtocolVersion() throws GtpError
+    public void queryName()
+    {
+        assert(SwingUtilities.isEventDispatchThread());
+        assert(! m_commandInProgress);
+        m_gtp.queryName();
+    }
+
+    public void queryProtocolVersion()
     {
         assert(SwingUtilities.isEventDispatchThread());
         assert(! m_commandInProgress);

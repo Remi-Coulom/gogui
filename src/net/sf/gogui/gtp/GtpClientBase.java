@@ -122,6 +122,15 @@ public abstract class GtpClientBase
         {
             throw new GtpError("Invalid response to cputime command");
         }
+    }    
+
+    /** Get program name.
+        If queryName() was not called or the name command failed, the
+        string "Unknown Program" is returned.
+    */
+    public String getName()
+    {
+        return m_name;
     }
 
     /** Get protocol version.
@@ -171,48 +180,39 @@ public abstract class GtpClientBase
     public abstract boolean isInterruptSupported();
 
     /** Queries the name.
-        @return Name or "Unknown Program" if name command not supported
+        @see #getName()
     */
-    public String queryName()
+    public void queryName()
     {
         try
         {
-            return send("name");
+            m_name = send("name");
         }
         catch (GtpError e)
         {
-            return "Unknown Program";
-        }
+        }        
     }
 
     /** Query the protocol version.
-        Sets the protocol version to the response or to 2 if protocol_version
-        command fails.
+        Assumes version 2 if the protocol_version command is not available,
+        fails, or returns a version greater 2.
         @see GtpClientBase#getProtocolVersion
-        @throws GtpError if the response to protocol_version is not 1 or 2.
     */
-    public void queryProtocolVersion() throws GtpError
+    public void queryProtocolVersion()
     {
+        m_protocolVersion = 2;
         try
         {            
-            String response;
-            try
-            {
-                response = send("protocol_version");
-            }
-            catch (GtpError e)
-            {
-                m_protocolVersion = 2;
-                return;
-            }
+            String response = send("protocol_version");
             int v = Integer.parseInt(response);
-            if (v < 1 || v > 2)
-                throw new GtpError("Unknown protocol version: " + v);
-            m_protocolVersion = v;
+            if (v == 1 || v == 2)
+                m_protocolVersion = v;
         }
         catch (NumberFormatException e)
         {
-            throw new GtpError("Invalid protocol version");
+        }
+        catch (GtpError e)
+        {
         }
     }
 
@@ -303,6 +303,8 @@ public abstract class GtpClientBase
     private boolean m_lowerCase;
 
     private int m_protocolVersion = 2;
+
+    private String m_name = "Unknown Program";
 
     private String[] m_supportedCommands;
 }
