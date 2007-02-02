@@ -80,16 +80,6 @@ public class GoGuiToolBar
         return addButton(button);
     }
 
-    private void addRepeatButton(AbstractAction action,
-                                 AbstractAction repeatAction)
-    {
-        RepeatButton button = new RepeatButton(action, repeatAction);
-        // Don't use text unless there is no icon
-        if (button.getIcon() != null)
-            button.setText(null);
-        addButton(button);
-    }
-
     private void setAction(JButton button, Action action)
     {
         button.setAction(action);
