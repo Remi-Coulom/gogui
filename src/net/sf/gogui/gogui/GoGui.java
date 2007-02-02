@@ -2440,7 +2440,15 @@ public class GoGui
     private void generateMove(boolean isSingleMove)
     {
         GoColor toMove = getToMove();
-        if (getGameInformation().getPlayer(toMove) == null)
+        ConstNode node = getCurrentNode();
+        ConstNode father = node.getFatherConst();
+        ConstGameInformation info = getGameInformation();
+        String playerToMove = info.getPlayer(toMove);
+        String playerOther = info.getPlayer(toMove.otherColor());
+        if (! isSingleMove && m_file == null && playerToMove == null
+            && (father == null
+                || (father.getFatherConst() == null
+                    && ObjectUtil.equals(playerOther, m_name))))
         {
             m_game.setPlayer(toMove, m_name);
             updateViews(false);
