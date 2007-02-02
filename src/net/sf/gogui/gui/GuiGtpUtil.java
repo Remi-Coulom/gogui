@@ -61,11 +61,17 @@ public final class GuiGtpUtil
     public static void showError(Component parent, String name,
                                  GtpError error)
     {
-        showError(parent, null, name, error);
+        showError(parent, name, error, true);
+    }
+
+    public static void showError(Component parent, String name,
+                                 GtpError error, boolean isSignificant)
+    {
+        showError(parent, null, name, error, isSignificant);
     }
 
     public static void showError(Component parent, String prefix, String name,
-                                 GtpError error)
+                                 GtpError error, boolean isSignificant)
     {        
         String message;
         if (prefix != null)
@@ -80,8 +86,12 @@ public final class GuiGtpUtil
         String title = "Error";
         if (name != null)
             title = title + " - " + name;
-        JOptionPane.showMessageDialog(parent, message, title,
-                                      JOptionPane.ERROR_MESSAGE);
+        int type;
+        if (isSignificant)
+            type = JOptionPane.ERROR_MESSAGE;
+        else
+            type =JOptionPane.PLAIN_MESSAGE;
+        JOptionPane.showMessageDialog(parent, message, title, type);
     }
 
     /** Make constructor unavailable; class is for namespace only. */

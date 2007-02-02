@@ -1753,7 +1753,7 @@ public class GoGui
     {
         if (m_analyzeClearBoard)
             resetBoard();
-        if (! endLengthyCommand())
+        if (! endLengthyCommand(false))
             return;
         clearStatus();
         if (m_analyzeCommand == null)
@@ -2340,7 +2340,7 @@ public class GoGui
                 GuiGtpUtil.showError(this,
                                      "Could not synchronize current\n" +
                                      "position with " + getProgramName() + ":",
-                                     getProgramName(), e);
+                                     getProgramName(), e, true);
         }
     }
 
@@ -2400,6 +2400,11 @@ public class GoGui
 
     private boolean endLengthyCommand()
     {
+        return endLengthyCommand(true);
+    }
+
+    private boolean endLengthyCommand(boolean isSignificant)
+    {
         m_statusBar.clearProgress();
         clearStatus();
         if (m_shell != null)
@@ -2410,7 +2415,7 @@ public class GoGui
         GtpError error = m_gtp.getException();
         if (error != null)
         {
-            showError(error);
+            showError(error, isSignificant);
             return false;
         }
         return true;
@@ -3299,7 +3304,12 @@ public class GoGui
 
     private void showError(GtpError error)
     {        
-        GuiGtpUtil.showError(this, getProgramName(), error);
+        showError(error, true);
+    }
+
+    private void showError(GtpError error, boolean isSignificant)
+    {        
+        GuiGtpUtil.showError(this, getProgramName(), error, isSignificant);
     }
 
     private void showError(String message)
