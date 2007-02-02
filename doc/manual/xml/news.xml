@@ -22,6 +22,11 @@ Use set_free_handicap if supported by the Go engine
 </listitem>
 <listitem>
 <simpara>
+Several changes in the organization of the user interface
+</simpara>
+</listitem>
+<listitem>
+<simpara>
 Remove menu item Configure Analyze / Only Supported Commands; this is the
 default and only behaviour now
 </simpara>
