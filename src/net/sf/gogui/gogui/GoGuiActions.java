@@ -785,6 +785,7 @@ public class GoGuiActions
         boolean hasPattern = (m_goGui.getPattern() != null);
         ConstClock clock = game.getClock();
         int boardSize = game.getSize();
+        GoColor toMove = game.getToMove();
         m_actionBackToMainVariation.setEnabled(! isInMain);
         m_actionBackward.setEnabled(hasFather);
         m_actionBackwardTen.setEnabled(hasFather);
@@ -876,6 +877,10 @@ public class GoGuiActions
         m_actionTruncate.setEnabled(hasFather);
         m_actionTruncateChildren.setEnabled(hasChildren);
         updateFile(file, isModified);
+        if (toMove == GoColor.BLACK)
+            m_actionPlay.setDescription("Make computer play Black");
+        else
+            m_actionPlay.setDescription("Make computer play White");
     }
 
     private final GoGui m_goGui;
