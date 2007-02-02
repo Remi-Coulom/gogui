@@ -38,7 +38,7 @@ class GameTreeNode
         m_imageBlack = imageBlack;
         m_imageWhite = imageWhite;
         m_imageSetup = imageSetup;
-        setToolTip();
+        updateToolTip();
         setPreferredSize(size);
     }
 
@@ -102,30 +102,7 @@ class GameTreeNode
         }
     }
 
-    private final int m_moveNumber;
-
-    /** Serial version to suppress compiler warning.
-        Contains a marker comment for serialver.sourceforge.net
-    */
-    private static final long serialVersionUID = 0L; // SUID
-
-    private static final Color COLOR_LIGHT_BLUE = new Color(103, 122, 164);
-
-    private static final Color COLOR_CURSOR = new Color(142, 168, 226);
-
-    private static final Color COLOR_GRID = new Color(148, 148, 148);
-
-    private final GameTreePanel m_gameTreePanel;
-
-    private final ConstNode m_node;
-
-    private final Image m_imageBlack;
-
-    private final Image m_imageWhite;
-
-    private final Image m_imageSetup;
-
-    private void setToolTip()
+    public void updateToolTip()
     {
         StringBuffer toolTip = new StringBuffer(128);
         Move move = m_node.getMove();
@@ -173,6 +150,29 @@ class GameTreeNode
         if (toolTip.length() > 0)
             setToolTipText(toolTip.toString());
     }
+
+    private final int m_moveNumber;
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
+
+    private static final Color COLOR_LIGHT_BLUE = new Color(103, 122, 164);
+
+    private static final Color COLOR_CURSOR = new Color(142, 168, 226);
+
+    private static final Color COLOR_GRID = new Color(148, 148, 148);
+
+    private final GameTreePanel m_gameTreePanel;
+
+    private final ConstNode m_node;
+
+    private final Image m_imageBlack;
+
+    private final Image m_imageWhite;
+
+    private final Image m_imageSetup;
 
     private void drawText(Graphics graphics)
     {

@@ -375,6 +375,7 @@ public class GameTreePanel
         m_currentNodeX = location.x;
         m_currentNodeY = location.y;
         gameNode.repaint();
+        gameNode.updateToolTip();
         m_currentNode = currentNode;
         scrollToCurrent();
         if (m_scrollPane != null)
