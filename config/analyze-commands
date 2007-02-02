@@ -1,66 +1,33 @@
 # GoGui Default Analyze Commands
+#
+# This list is compiled into GoGui and used if the program does not
+# implement gogui-analyze_commands. It contains:
+# - Standard GTP version 1 and 2 commands
+# - All GNU Go GTP extension commands
+# - A few extensions of other Go programs that could be of general interest
 
-# Standard GTP version 1 and 2 commands
-string/Final Score/final_score
-string/Final Status/final_status %p
-plist/Final Status List Alive/final_status_list alive
-plist/Final Status List Dead/final_status_list dead
-plist/Final Status List Seki/final_status_list seki
-string/Help/help
-string/List Commands/list_commands
-string/Name/name
-string/Protocol Version/protocol_version
-varc/Reg GenMove/reg_genmove %c
-string/ShowBoard/showboard
-none/Time Left/time_left %c %s
-none/Time Settings/time_settings %s
-string/Version/version
-
-# GNU Go extensions that could be of general interest
+pstring/AA Confirm Safety/aa_confirm_safety %c %p
+pstring/AA Confirm Safety MinSize/aa_confirm_safety %c %p %s
+plist/AccurateLib/accuratelib %c %p
+plist/Accurate ApproxLib/accurate_approxlib %c %p
+string/Advance Random Seed/advance_random_seed %s
 plist/All Legal/all_legal %c
 pspairs/All Move Values/all_move_values
+pstring/Analyze Semeai/analyze_semeai %P
+pstring/Analyze Semeai After Move/analyze_semeai_after_move %c %P
 varpo/Attack/attack %p
 string/Attack Either/attack_either %P
+pstring/Block Off/block_off %P
+pstring/Break In/break_in %P
+none/Clear Cache/clear_cache
+varc/Combination Attack/combination_attack %c
+pstring/Combination Defend/combination_defend %c
 varp/Connect/connect %P
 string/CountLib/countlib %p
 string/CpuTime/cputime
 varp/Defend/defend %p
 string/Defend Both/defend_both %P
 varpo/Disconnect/disconnect %P
-string/Estimate Score/estimate_score
-plist/Final Status List Territory/final_status_list %c_territory
-plist/Final Status List Dame/final_status_list dame
-string/Get Handicap/get_handicap
-string/Get Komi/get_komi
-string/Get Random Seed/get_random_seed
-string/Is Legal/is_legal %c %p
-string/Is Surrounded/is_surrounded %p
-varpo/Ladder Attack/ladder_attack %p
-none/Level/level %s
-var/Move History/move_history
-none/PrintSgf/printsgf %w
-varc/Restricted GenMove/restricted_genmove %c %P
-none/Set Random Seed/set_random_seed %s
-pspairs/Top Moves/top_moves %c
-pspairs/Top Moves Black/top_moves_black
-pspairs/Top Moves White/top_moves_white
-
-# Extensions of other Go programs that could be of general interest
-none/SaveSgf/savesgf %w
-
-# Other GNU Go extensions
-pstring/AA Confirm Safety/aa_confirm_safety %c %p
-pstring/AA Confirm Safety MinSize/aa_confirm_safety %c %p %s
-plist/AccurateLib/accuratelib %c %p
-plist/Accurate ApproxLib/accurate_approxlib %c %p
-string/Advance Random Seed/advance_random_seed %s
-pstring/Analyze Semeai/analyze_semeai %P
-pstring/Analyze Semeai After Move/analyze_semeai_after_move %c %P
-pstring/Block Off/block_off %P
-pstring/Break In/break_in %P
-none/Clear Cache/clear_cache
-varc/Combination Attack/combination_attack %c
-pstring/Combination Defend/combination_defend %c
 string/Does Surround/does_surround %P
 hpstring/Dragon Data/dragon_data %p
 hpstring/Dragon Status/dragon_status
@@ -69,22 +36,42 @@ plist/Dragon Stones/dragon_stones %p
 none/Draw Search Area/draw_search_area
 none/Dump Stack/dump_stack
 pstring/Eval Eye/eval_eye %p
+string/Estimate Score/estimate_score
 string/Experimental Score/experimental_score %c
 hpstring/Eye Data/eye_data %c %p
+string/Final Score/final_score
+string/Final Status/final_status %p
+plist/Final Status List Alive/final_status_list alive
+plist/Final Status List Dame/final_status_list dame
+plist/Final Status List Dead/final_status_list dead
+plist/Final Status List Seki/final_status_list seki
+plist/Final Status List Territory/final_status_list %c_territory
 plist/FindLib/findlib %p
 none/Finish SgfTrace/finish_sgftrace %w
 string/Get Connection Node Counter/get_connection_node_counter
+string/Get Handicap/get_handicap
+string/Get Komi/get_komi
 string/Get Life Node Counter/get_life_node_counter
 string/Get Owl Node Counter/get_owl_node_counter
+string/Get Random Seed/get_random_seed
 string/Get Reading Node Counter/get_reading_node_counter
 string/Get TryMove Counter/get_trymove_counter
+string/GoGui SigInt/gogui_sigint
 hpstring/Half Eye Data/half_eye_data %p
+string/Help/help
+string/Is Legal/is_legal %c %p
+string/Is Surrounded/is_surrounded %p
+varpo/Ladder Attack/ladder_attack %p
 pstring/Last Move/last_move
+none/Level/level %s
 none/Limit Search/limit_search %s
+string/List Commands/list_commands
 plist/List Stones/list_stones %c
+var/Move History/move_history
 pspairs/Move Probabilities/move_probabilities
 hpstring/Move Reasons/move_reasons %p
 string/Move Uncertainty/move_uncertainty
+string/Name/name
 varpo/Owl Attack/owl_attack %p
 string/Owl Connection Defends/owl_connection_defends %P
 varp/Owl Defend/owl_defend %p
@@ -93,6 +80,9 @@ string/Owl Does Defend/owl_does_defend %P
 string/Owl Substantial/owl_substantial %p
 pstring/Owl Threaten Attack/owl_threaten_attack %p
 pstring/Owl Threaten Defense/owl_threaten_defense %p
+none/PrintSgf/printsgf %w
+string/Protocol Version/protocol_version
+varc/Reg GenMove/reg_genmove %c
 none/Report Uncertainty/report_uncertainty %s
 none/Reset Connection Node Counter/reset_connection_node_counter
 none/Reset Life Node Counter/reset_life_node_counter
@@ -100,15 +90,22 @@ none/Reset Owl Node Counter/reset_owl_node_counter
 none/Reset Reading Node Counter/reset_reading_node_counter
 none/Reset Search Mask/reset_search_mask
 none/Reset TryMove Counter/reset_trymove_node_counter
+varc/Restricted GenMove/restricted_genmove %c %P
+none/SaveSgf/savesgf %w
+none/Set Random Seed/set_random_seed %s
 none/Set Search Diamond/set_search_diamond %p
 none/Set Search Limit/set_search_limit %p
+string/ShowBoard/showboard
 none/Start SgfTrace/start_sgftrace
 string/Surround Map/surround_map %P
 pstring/Tactical Analyze Semeai/tactical_analyze_semeai %P
 none/Test EyeShape/test_eyeshape %P
+none/Time Left/time_left %c %s
+none/Time Settings/time_settings %s
+pspairs/Top Moves/top_moves %c
+pspairs/Top Moves Black/top_moves_black
+pspairs/Top Moves White/top_moves_white
 string/Unconditional Status/unconditional_status %p
+string/Version/version
 hpstring/Worm Data/worm_data %p
 plist/Worm Stones/worm_stones %p %c
-
-# GoGui extensions
-string/GoGui SigInt/gogui_sigint
