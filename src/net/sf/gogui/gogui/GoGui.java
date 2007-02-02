@@ -988,14 +988,13 @@ public class GoGui
         assert(color.isBlackWhite());
         if (! checkCommandInProgress())
             return;
+        ConstNode node = getCurrentNode();
         if (m_setupMode)
         {
             if (color == m_game.getToMove())
             {
-                m_setupMode = false;
-                m_game.setToMove(getToMove());
-                currentNodeChanged();
-                boardChangedBegin(false, false);
+                setupDone();
+                boardChangedBegin(false, true);
             }
             else
                 m_game.setToMove(color);
@@ -1006,9 +1005,11 @@ public class GoGui
             resetBoard();
             m_setupMode = true;
             m_game.setToMove(color);
-            if (getCurrentNode().getMove() != null)
+            m_setupNodeCreated = false;
+            if (node.getMove() != null)
             {
                 m_game.createNewChild();
+                m_setupNodeCreated = true;
                 currentNodeChanged();
                 updateViews(true);
             }
@@ -1634,6 +1635,8 @@ public class GoGui
     private boolean m_scoreMode;
 
     private boolean m_setupMode;
+
+    private boolean m_setupNodeCreated;
 
     private boolean m_showInfoPanel;
 
@@ -3298,6 +3301,18 @@ public class GoGui
     {
         assert(point != null);
         m_game.setup(point, color);
+    }
+
+    private void setupDone()
+    {
+        if (! m_setupMode)
+            return;
+        m_setupMode = false;
+        if (m_setupNodeCreated && ! getCurrentNode().hasSetup())
+            m_game.truncate();
+        else
+            m_game.setToMove(getToMove());
+        currentNodeChanged();
     }
 
     private void showError(String message, Exception e)
