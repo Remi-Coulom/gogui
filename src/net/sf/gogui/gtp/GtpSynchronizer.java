@@ -52,6 +52,7 @@ public class GtpSynchronizer
 
     public void init(ConstBoard board) throws GtpError
     {
+        initSupportedCommands();
         m_isOutOfSync = true;
         int size = board.getSize();
         m_gtp.sendBoardsize(size);
@@ -67,13 +68,6 @@ public class GtpSynchronizer
 
     public void synchronize(ConstBoard board) throws GtpError
     {
-        m_isSupportedPlaySequence =
-            GtpClientUtil.isPlaySequenceSupported(m_gtp);
-        m_isSupportedUndo = isSupported("undo");
-        m_isSupportedGGUndo = isSupported("gg-undo");
-        m_isSupportedSetup = isSupported("gogui-setup");
-        m_isSupportedSetupPlayer = isSupported("gogui-setup_player");
-        m_isSupportedHandicap = isSupported("set_free_handicap");
         int size = board.getSize();
         if (m_board == null || size != m_board.getSize()
             || getHandicap(board) != getHandicap(m_board))
@@ -334,6 +328,17 @@ public class GtpSynchronizer
         if (! (placement instanceof Board.SetupHandicap))
             return 0;
         return ((Board.SetupHandicap)placement).getBlack().size();
+    }
+
+    private void initSupportedCommands()
+    {
+        m_isSupportedPlaySequence =
+            GtpClientUtil.isPlaySequenceSupported(m_gtp);
+        m_isSupportedUndo = isSupported("undo");
+        m_isSupportedGGUndo = isSupported("gg-undo");
+        m_isSupportedSetup = isSupported("gogui-setup");
+        m_isSupportedSetupPlayer = isSupported("gogui-setup_player");
+        m_isSupportedHandicap = isSupported("set_free_handicap");
     }
 
     private boolean isSupported(String command)
