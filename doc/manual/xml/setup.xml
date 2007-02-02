@@ -28,8 +28,8 @@ positions, which will be used if the Go program supports them:
 <term><command>gogui-setup</command></term>
 <listitem>
 <para>
-The argument to  is a sequence of color point pairs (like for
-<command>gogui-play_sequence</command>).
+The argument to this command is a (potentially empty) sequence of color point
+pairs (like for <command>gogui-play_sequence</command>).
 Stones can be removed from the board by using the color
 <userinput>e</userinput> (empty).
 This command does not have to succeed always. For instance some engines may
@@ -44,12 +44,12 @@ command fails.
 <listitem>
 <para>
 The argument is a color (<userinput>b</userinput> or <userinput>w</userinput>)
-and should set the color to play.
+and should set the color to play in the current position.
 This command is only sent, if the color to play is known (e.g. by a player
 property in the SGF file) and if the command is supported by the Go program.
-Any undo commands (<command>undo</command>,
-<command>gogui-undo_setup</command>) should always restore the old color
-to play.
+This command does not need to be undone explicitely.
+Commands that undo moves or setup stones should always restore the color to
+play before the command.
 </para>
 </listitem>
 </varlistentry>

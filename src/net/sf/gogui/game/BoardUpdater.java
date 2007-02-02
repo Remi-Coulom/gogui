@@ -30,6 +30,7 @@ public class BoardUpdater
         for (int i = m_nodes.size() - 1; i >= 0; --i)
         {
             ConstNode node = (ConstNode)m_nodes.get(i);
+            GoColor player = node.getPlayer();
             if (node.hasSetup())
             {
                 if (isFirstPlacement
@@ -41,6 +42,8 @@ public class BoardUpdater
                     doSetup(node, board);
                 isFirstPlacement = false;
             }
+            else if (player != null && ! board.getToMove().equals(player))
+                doSetup(node, board);
             Move move = node.getMove();
             if (move != null)
             {
