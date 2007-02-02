@@ -185,6 +185,33 @@ public final class GtpSynchronizerTest
         assertExpectQueueEmpty();
     }
 
+    /** Test setup that changes only color to play.
+        Should only send gogui-setup_player (no gogui-setup with no arguments).
+    */
+    public void testSetupOnlyPlayer() throws GtpError
+    {
+        createSynchronizer();
+        expect("list_commands",
+               "gogui-setup\n" +
+               "gogui-setup_player\n" +
+               "gogui-undo_setup\n" +
+               "undo\n");
+        m_gtp.querySupportedCommands();
+        assertExpectQueueEmpty();
+        expect("boardsize 19", "");
+        expect("clear_board", "");
+        synchronize();
+        assertExpectQueueEmpty();
+        m_board.setup(null, null, null, GoColor.WHITE);
+        expect("gogui-setup_player w", "");
+        synchronize();
+        assertExpectQueueEmpty();
+        m_board.undo();
+        expect("gogui-setup_player b", "");
+        synchronize();
+        assertExpectQueueEmpty();
+    }
+
     private Board m_board;
 
     private GtpExpectEngine m_expect;

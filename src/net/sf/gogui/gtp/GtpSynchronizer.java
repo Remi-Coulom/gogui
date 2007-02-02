@@ -390,6 +390,12 @@ public class GtpSynchronizer
                     + setup.getEmpty().size() > 0)
                     m_gtp.send("gogui-undo_setup");
                 m_board.undo();
+                if (setup.getToMove() != null && m_isSupportedSetupPlayer)
+                {
+                    GoColor toMove = m_board.getToMove();
+                    m_gtp.send("gogui-setup_player "
+                               + (toMove == GoColor.BLACK ? "b" : "w"));
+                }
             }
             else if (placement instanceof Board.Play)
             {
