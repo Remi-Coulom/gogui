@@ -8,11 +8,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import javax.swing.JToggleButton;
 import javax.swing.Timer;
 import net.sf.gogui.gui.GuiUtil;
 
@@ -35,8 +39,8 @@ public class GoGuiToolBar
         addButton(actions.m_actionPlay);
         addButton(actions.m_actionInterrupt);
         addSeparator();
-        addButton(actions.m_actionSetupBlack);
-        addButton(actions.m_actionSetupWhite);
+        addToggleButton(actions.m_actionSetupBlack);
+        addToggleButton(actions.m_actionSetupWhite);
         addSeparator();
         addButton(actions.m_actionBeginning);
         addButton(actions.m_actionBackwardTen);
@@ -71,7 +75,7 @@ public class GoGuiToolBar
 
     JButton m_buttonSave;
 
-    private JButton addButton(JButton button)
+    private AbstractButton addButton(AbstractButton button)
     {
         button.setFocusable(false);
         add(button);
@@ -82,14 +86,43 @@ public class GoGuiToolBar
     {
         JButton button = new JButton(action);
         setAction(button, action);
-        return addButton(button);
+        addButton(button);
+        return button;
     }
 
-    private void setAction(JButton button, Action action)
+    private GoGuiToggleButton addToggleButton(AbstractAction action)
+    {
+        GoGuiToggleButton button = new GoGuiToggleButton(action);
+        setAction(button, action);
+        addButton(button);
+        return button;
+    }
+
+    private void setAction(AbstractButton button, Action action)
     {
         button.setAction(action);
         // Don't use text unless there is no icon
         if (button.getIcon() != null)
             button.setText(null);
     }
+}
+
+/** Toggle button with additional "selected" action property. */
+class GoGuiToggleButton
+    extends JToggleButton
+{
+    public GoGuiToggleButton(AbstractAction action)
+    {
+        super(action);
+        action.addPropertyChangeListener(new PropertyChangeListener() {
+                public void  propertyChange(PropertyChangeEvent e) {
+                    if (e.getPropertyName().equals("selected"))
+                        setSelected(((Boolean)e.getNewValue()).booleanValue());
+                } } );
+    }
+
+    /** Serial version to suppress compiler warning.
+        Contains a marker comment for serialver.sourceforge.net
+    */
+    private static final long serialVersionUID = 0L; // SUID
 }
