@@ -44,7 +44,7 @@ public class GtpAdapter
     {
         super(log);
         if (program.equals(""))
-            throw new Exception("No program set");
+            throw new Exception("No program is set.");
         m_gtp = new GtpClient(program, verbose, null);
         if (lowerCase)
             m_gtp.setLowerCase();

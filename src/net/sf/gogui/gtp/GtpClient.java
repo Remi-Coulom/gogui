@@ -102,7 +102,7 @@ public final class GtpClient
         m_program = program;
         if (program == null || program.trim().equals(""))
             throw new GtpError("Command for invoking Go program must be"
-                               + " not empty");
+                               + " not empty.");
         Runtime runtime = Runtime.getRuntime();
         try
         {

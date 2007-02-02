@@ -136,7 +136,7 @@ public final class SgfReader
             catch (IOException e2)
             {
                 throw new SgfError("Could not reset SGF stream after"
-                                   + " charset change");
+                                   + " charset change.");
             }
             try
             {
@@ -928,7 +928,7 @@ public final class SgfReader
         }
         catch (FileNotFoundException e)
         {
-            throw new SgfError("File not found");
+            throw new SgfError("File not found.");
         }
         catch (IOException e)
         {
