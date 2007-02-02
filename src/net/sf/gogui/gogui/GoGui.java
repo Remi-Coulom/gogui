@@ -991,20 +991,20 @@ public class GoGui
         ConstNode node = getCurrentNode();
         if (m_setupMode)
         {
-            if (color == m_game.getToMove())
+            if (color == m_setupColor)
             {
                 setupDone();
                 boardChangedBegin(false, true);
             }
             else
-                m_game.setToMove(color);
+                m_setupColor = color;
             updateViews(false);
         }
         else
         {
             resetBoard();
             m_setupMode = true;
-            m_game.setToMove(color);
+            m_setupColor = color;
             m_setupNodeCreated = false;
             if (node.getMove() != null)
             {
@@ -1018,7 +1018,7 @@ public class GoGui
         }
         if (m_setupMode)
         {
-            if (color == GoColor.BLACK)
+            if (m_setupColor == GoColor.BLACK)
                 showStatus("Setup black stones");
             else
                 showStatus("Setup white stones");
@@ -1281,6 +1281,11 @@ public class GoGui
             return null;
     }
 
+    public GoColor getSetupColor()
+    {
+        return m_setupColor;
+    }
+
     public boolean getShowLastMove()
     {
         return m_showLastMove;
@@ -1366,16 +1371,14 @@ public class GoGui
             return;
         if (m_setupMode)
         {
-            GoColor toMove = getToMove();
             GoColor color;
             if (modifiedSelect)
-                color = toMove.otherColor();
+                color = m_setupColor.otherColor();
             else
-                color = toMove;
+                color = m_setupColor;
             if (getBoard().getColor(p) == color)
                 color = GoColor.EMPTY;
             setup(p, color);
-            m_game.setToMove(toMove);
             updateViews(false);
         }
         else if (m_analyzeCommand != null && m_analyzeCommand.needsPointArg()
@@ -1469,11 +1472,6 @@ public class GoGui
     public Pattern getPattern()
     {
         return m_pattern;
-    }
-
-    public GoColor getSetupColor()
-    {
-        return m_game.getToMove();
     }
 
     public boolean isInSetupMode()
@@ -1692,6 +1690,8 @@ public class GoGui
     private final GoGuiMenuBar m_menuBar;
 
     private Game m_game;
+
+    private GoColor m_setupColor;
 
     private OptionalMessage m_gameFinishedMessage;
 
@@ -3308,10 +3308,12 @@ public class GoGui
         if (! m_setupMode)
             return;
         m_setupMode = false;
-        if (m_setupNodeCreated && ! getCurrentNode().hasSetup())
+        boolean hasSetup =
+            (getCurrentNode().hasSetup() || m_setupColor != getToMove());
+        if (m_setupNodeCreated && ! hasSetup)
             m_game.truncate();
-        else
-            m_game.setToMove(getToMove());
+        else if (hasSetup)
+            m_game.setToMove(m_setupColor);
         currentNodeChanged();
     }
 
@@ -3441,10 +3443,10 @@ public class GoGui
     */
     private void updateViews(boolean gameTreeChanged)
     {
+        ConstGame game = getGame();
         m_actions.update();
         m_toolBar.update();
-        GoGuiUtil.updateMoveText(m_statusBar, getGame());
-        m_gameInfo.update(getGame());
+        m_gameInfo.update(game);
         m_comment.setComment(getCurrentNode().getComment());
         updateFromGoBoard();
         updateGuiBoard();
@@ -3460,7 +3462,10 @@ public class GoGui
             else
                 m_gameTreeViewer.update(getTree(), getCurrentNode());
         }
+        GoGuiUtil.updateMoveText(m_statusBar, game);
         m_statusBar.setSetupMode(m_setupMode);
+        if (m_setupMode)
+            m_statusBar.setToPlay(m_setupColor);
         m_statusBar.setScoreMode(m_scoreMode);
     }
 
